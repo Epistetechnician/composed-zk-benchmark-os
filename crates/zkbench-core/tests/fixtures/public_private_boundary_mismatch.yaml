@@ -1,0 +1,90 @@
+machine:
+  id: public_private_boundary_mismatch
+  description: Public/private boundary mismatch fixture.
+  initial_state: bind
+  semantic_equivalence_class:
+    id: nonce_boundary_v0
+  states:
+    - id: bind
+    - id: done
+  fields:
+    - id: public_nonce
+      type: int
+      initial:
+        int: 7
+      visibility: public
+    - id: secret_nonce
+      type: int
+      initial:
+        int: 7
+      visibility: private
+    - id: matched
+      type: bool
+      initial:
+        bool: false
+      visibility: public
+  public_inputs:
+    - id: declared_public_nonce
+      field: public_nonce
+  private_witnesses:
+    - id: declared_secret_nonce
+      field: secret_nonce
+  witness_policy:
+    public_inputs:
+      - public_nonce
+    private_witnesses:
+      - secret_nonce
+    aliasing_allowed: false
+  transitions:
+    - id: bind_nonce
+      from: bind
+      to: done
+      guard:
+        eq:
+          left:
+            field: public_nonce
+          right:
+            field: secret_nonce
+      actions:
+        - assign:
+            field: matched
+            value:
+              bool: true
+oracle:
+  accepted_traces:
+    - id: matching_nonce
+      steps:
+        - transition: bind_nonce
+      expected_final_state: done
+      expected_final_fields:
+        matched:
+          bool: true
+      expected_verdict: Accept
+  rejected_traces:
+    - id: mismatched_nonce
+      initial_fields:
+        public_nonce:
+          int: 8
+        secret_nonce:
+          int: 7
+      steps:
+        - transition: bind_nonce
+      expected_verdict: Reject
+mutations:
+  - id: alias_secret_as_public
+    class: PublicPrivateBoundaryMismatch
+    kind: Malicious
+    target: witness_policy
+    expected_verdict: UnsoundIfAccepted
+    severity: Critical
+    oracle_rationale: Public/private alias acceptance is an unsound acceptance candidate until replayed and minimized.
+targets:
+  - id: local_oracle
+    kind: local
+    required_capabilities:
+      - public_private_boundary_checks
+evidence:
+  claim_boundary: Level1LocalReplay
+  notes:
+    - Local witness-boundary metadata fixture only.
+

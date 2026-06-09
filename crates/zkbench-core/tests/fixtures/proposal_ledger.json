@@ -1,0 +1,16 @@
+{
+  "version": {
+    "value": "phase-i-evidence-append-proposal-ledger-v0"
+  },
+  "entries": [],
+  "summary": {
+    "entry_count": 0,
+    "status_counts": [],
+    "review_state_counts": [],
+    "claim_boundary_counts": []
+  },
+  "notes": [
+    "Proposal ledger entries are not accepted evidence.",
+    "Evidence append proposals are not accepted evidence."
+  ]
+}

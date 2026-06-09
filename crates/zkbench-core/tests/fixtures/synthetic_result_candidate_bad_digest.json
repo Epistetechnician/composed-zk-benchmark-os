@@ -1,0 +1,70 @@
+{
+  "result_candidate_id": "synthetic_candidate_bad_digest",
+  "source_benchmark_pack_id": "phase_i_local_pack_ref",
+  "dry_run_plan_id": "phase_i_synthetic_plan_ref",
+  "raw_output_artifact_refs": [
+    "artifacts/synthetic_metric_source.json"
+  ],
+  "normalized_metrics": [
+    {
+      "metric_kind": "CandidateStatus",
+      "unit": "Text",
+      "value": "synthetic-only",
+      "source_artifact_ref": "artifacts/synthetic_metric_source.json",
+      "notes": [
+        "candidate metric metadata only"
+      ]
+    }
+  ],
+  "result_status": "PendingReview",
+  "provenance_draft": {
+    "id": "synthetic_provenance_bad_digest",
+    "operator": {
+      "operator_or_agent": "synthetic-test-operator",
+      "execution_date_declared_by_operator": "declared-synthetic-date"
+    },
+    "external_tool": {
+      "external_tool_name": "synthetic-local-tool",
+      "external_tool_version": "synthetic-version",
+      "external_tool_source": "synthetic-fixture",
+      "external_tool_commit_or_release": "synthetic-release"
+    },
+    "environment": {
+      "host_os": "synthetic-os",
+      "hardware_summary": "synthetic-hardware",
+      "network_policy": "network-disabled"
+    },
+    "source": {
+      "command_plan_id": "phase_i_synthetic_plan_ref",
+      "benchmark_pack_id": "phase_i_local_pack_ref",
+      "artifact_digest_set": [
+        {
+          "algorithm": "Sha256",
+          "hex_digest": "0000000000000000000000000000000000000000000000000000000000000000",
+          "byte_len": 27,
+          "kind": "Other",
+          "role": "Output"
+        }
+      ]
+    },
+    "notes": [
+      "synthetic fixture provenance only"
+    ]
+  },
+  "artifact_digests": [
+    {
+      "algorithm": "Sha256",
+      "hex_digest": "0000000000000000000000000000000000000000000000000000000000000000",
+      "byte_len": 27,
+      "kind": "Other",
+      "role": "Output"
+    }
+  ],
+  "claim_boundary_requested": "Level0DesignNote",
+  "claims_official_benchmark_evidence": false,
+  "claims_formal_evidence": false,
+  "claims_proof_system_soundness": false,
+  "notes": [
+    "synthetic result candidate with bad digest"
+  ]
+}

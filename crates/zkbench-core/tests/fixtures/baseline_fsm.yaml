@@ -1,0 +1,80 @@
+machine:
+  id: baseline_fsm
+  description: Simple two-state local semantic fixture.
+  initial_state: start
+  semantic_equivalence_class:
+    id: counter_advance_v0
+  states:
+    - id: start
+    - id: done
+  fields:
+    - id: counter
+      type: int
+      initial:
+        int: 0
+      visibility: private
+  observations:
+    - id: counter_public_observation
+      field: counter
+      visibility: public
+  public_inputs:
+    - id: observed_counter
+      field: counter
+  private_witnesses:
+    - id: private_counter
+      field: counter
+  witness_policy:
+    public_inputs:
+      - counter
+    private_witnesses:
+      - counter
+    aliasing_allowed: false
+  transitions:
+    - id: advance
+      from: start
+      to: done
+      guard:
+        eq:
+          left:
+            field: counter
+          right:
+            int: 0
+      actions:
+        - add_assign:
+            field: counter
+            value:
+              int: 1
+  invariants:
+    - id: counter_nonnegative
+      guard:
+        gte:
+          left:
+            field: counter
+          right:
+            int: 0
+oracle:
+  accepted_traces:
+    - id: happy_path
+      steps:
+        - transition: advance
+      expected_final_state: done
+      expected_final_fields:
+        counter:
+          int: 1
+      expected_verdict: Accept
+  rejected_traces:
+    - id: wrong_initial_counter
+      initial_fields:
+        counter:
+          int: 9
+      steps:
+        - transition: advance
+      expected_verdict: Reject
+targets:
+  - id: local_oracle
+    kind: local
+evidence:
+  claim_boundary: Level1LocalReplay
+  notes:
+    - Local oracle fixture only; no benchmark evidence.
+

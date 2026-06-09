@@ -1,0 +1,78 @@
+machine:
+  id: adversarial_stale_read_machine
+  description: Stale state read risk fixture.
+  initial_state: open
+  semantic_equivalence_class:
+    id: spend_guard_v0
+  states:
+    - id: open
+  fields:
+    - id: balance
+      type: int
+      initial:
+        int: 10
+      visibility: private
+    - id: spent
+      type: int
+      initial:
+        int: 0
+      visibility: public
+    - id: amount
+      type: int
+      initial:
+        int: 5
+      visibility: private
+  transitions:
+    - id: spend
+      from: open
+      to: open
+      guard:
+        gte:
+          left:
+            field: balance
+          right:
+            field: amount
+      actions:
+        - sub_assign:
+            field: balance
+            value:
+              field: amount
+        - add_assign:
+            field: spent
+            value:
+              field: amount
+  invariants:
+    - id: balance_nonnegative
+      guard:
+        gte:
+          left:
+            field: balance
+          right:
+            int: 0
+oracle:
+  accepted_traces:
+    - id: single_spend
+      steps:
+        - transition: spend
+      expected_final_fields:
+        balance:
+          int: 5
+        spent:
+          int: 5
+      expected_verdict: Accept
+mutations:
+  - id: stale_balance_guard
+    class: StaleStateReads
+    kind: Malicious
+    target: spend
+    expected_verdict: UnsoundIfAccepted
+    severity: Critical
+    oracle_rationale: A backend acceptance of a stale balance guard is an unsound acceptance candidate, not a proven exploit.
+targets:
+  - id: local_oracle
+    kind: local
+evidence:
+  claim_boundary: Level1LocalReplay
+  notes:
+    - Local semantic fixture only.
+

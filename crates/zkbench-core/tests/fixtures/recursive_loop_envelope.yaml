@@ -1,0 +1,67 @@
+machine:
+  id: recursive_loop_envelope
+  description: Metadata-rich recursion envelope fixture; no recursion proof.
+  initial_state: envelope
+  semantic_equivalence_class:
+    id: recursion_envelope_v0
+  states:
+    - id: envelope
+  fields:
+    - id: depth
+      type: int
+      initial:
+        int: 0
+      visibility: public
+    - id: max_depth
+      type: int
+      initial:
+        int: 2
+      visibility: public
+    - id: digest
+      type: text
+      initial:
+        text: root
+      visibility: public
+  loops:
+    - id: recurse
+      bound:
+        raw_text: depth <= max_depth with recursive digest binding
+      body:
+        - fold
+      metadata:
+        recursion_depth:
+          int: 2
+  transitions:
+    - id: fold
+      from: envelope
+      to: envelope
+      guard:
+        raw_text: recursive envelope digest check
+      actions:
+        - raw_text: fold digest with depth
+oracle:
+  accepted_traces:
+    - id: recursion_metadata_trace
+      steps:
+        - transition: fold
+      expected_verdict: Inconclusive
+      requires_capabilities:
+        - recursion
+mutations:
+  - id: depth_digest_mismatch
+    class: RecursionEnvelopeMismatch
+    kind: Malicious
+    target: recurse
+    expected_verdict: UnsoundIfAccepted
+    severity: Critical
+    oracle_rationale: Acceptance would be only an unsound candidate until replayed and minimized.
+targets:
+  - id: local_oracle
+    kind: local
+    required_capabilities:
+      - recursion
+evidence:
+  claim_boundary: Level0DesignNote
+  notes:
+    - Recursion metadata only; no recursion proof evidence.
+

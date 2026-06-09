@@ -1,0 +1,36 @@
+{
+  "result_candidate_id": "synthetic_candidate_missing_provenance",
+  "source_benchmark_pack_id": "phase_i_local_pack_ref",
+  "dry_run_plan_id": "phase_i_synthetic_plan_ref",
+  "raw_output_artifact_refs": [
+    "artifacts/synthetic_metric_source.json"
+  ],
+  "normalized_metrics": [
+    {
+      "metric_kind": "CandidateStatus",
+      "unit": "Text",
+      "value": "synthetic-only",
+      "source_artifact_ref": "artifacts/synthetic_metric_source.json",
+      "notes": [
+        "candidate metric metadata only"
+      ]
+    }
+  ],
+  "result_status": "PendingReview",
+  "artifact_digests": [
+    {
+      "algorithm": "Sha256",
+      "hex_digest": "f6f08b6afbd51c2a40a3471fe3493b8397e3274830fef5464f74213a01e45d65",
+      "byte_len": 27,
+      "kind": "Other",
+      "role": "Output"
+    }
+  ],
+  "claim_boundary_requested": "Level0DesignNote",
+  "claims_official_benchmark_evidence": false,
+  "claims_formal_evidence": false,
+  "claims_proof_system_soundness": false,
+  "notes": [
+    "synthetic result candidate missing provenance"
+  ]
+}

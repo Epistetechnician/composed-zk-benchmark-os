@@ -1,0 +1,96 @@
+machine:
+  id: bounded_counter_loop_s1_st2_b2_l3
+  description: Deterministically generated bounded counter loop example; not a benchmark result.
+  initial_state: counting
+  semantic_equivalence_class:
+    id: generated_bounded_counter_loop_v0
+  states:
+    - id: counting
+    - id: finished
+  fields:
+    - id: counter
+      type: int
+      initial:
+        int: 0
+      visibility: public
+    - id: bound
+      type: int
+      initial:
+        int: 3
+      visibility: public
+  loops:
+    - id: count_to_bound
+      bound:
+        lte:
+          left:
+            field: counter
+          right:
+            field: bound
+      body:
+        - increment
+      metadata:
+        max_unroll:
+          int: 3
+  transitions:
+    - id: increment
+      from: counting
+      to: counting
+      guard:
+        lt:
+          left:
+            field: counter
+          right:
+            field: bound
+      actions:
+        - add_assign:
+            field: counter
+            value:
+              int: 1
+    - id: finish
+      from: counting
+      to: finished
+      guard:
+        eq:
+          left:
+            field: counter
+          right:
+            field: bound
+      actions: []
+  invariants:
+    - id: counter_at_or_below_bound
+      guard:
+        lte:
+          left:
+            field: counter
+          right:
+            field: bound
+      scope: trace
+oracle:
+  accepted_traces:
+    - id: generated_accepts_reaching_bound
+      steps:
+        - transition: increment
+        - transition: increment
+        - transition: increment
+        - transition: finish
+      expected_final_state: finished
+      expected_final_fields:
+        counter:
+          int: 3
+      expected_verdict: Accept
+  rejected_traces:
+    - id: generated_rejects_extra_increment
+      steps:
+        - transition: increment
+        - transition: increment
+        - transition: increment
+        - transition: increment
+      expected_verdict: Reject
+targets:
+  - id: local_oracle
+    kind: local
+evidence:
+  claim_boundary: Level1LocalReplay
+  notes:
+    - Generated fixture example only; no official benchmark evidence.
+

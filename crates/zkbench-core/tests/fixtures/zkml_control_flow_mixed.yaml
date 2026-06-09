@@ -1,0 +1,79 @@
+machine:
+  id: zkml_control_flow_mixed
+  description: Narrow metadata-rich zkML/control-flow mixed fixture; no zkML execution.
+  initial_state: pending
+  semantic_equivalence_class:
+    id: zkml_control_flow_v0
+  states:
+    - id: pending
+    - id: accepted
+    - id: rejected
+  fields:
+    - id: confidence
+      type: int
+      initial:
+        int: 91
+      visibility: public
+    - id: threshold
+      type: int
+      initial:
+        int: 90
+      visibility: public
+    - id: label
+      type: text
+      initial:
+        text: candidate
+      visibility: public
+  observations:
+    - id: confidence_observation
+      field: confidence
+      visibility: public
+    - id: label_observation
+      field: label
+      visibility: public
+  transitions:
+    - id: accept_if_confident
+      from: pending
+      to: accepted
+      guard:
+        gte:
+          left:
+            field: confidence
+          right:
+            field: threshold
+      actions: []
+    - id: reject_if_low_confidence
+      from: pending
+      to: rejected
+      guard:
+        lt:
+          left:
+            field: confidence
+          right:
+            field: threshold
+      actions: []
+oracle:
+  accepted_traces:
+    - id: control_flow_accept
+      steps:
+        - transition: accept_if_confident
+      expected_final_state: accepted
+      expected_verdict: Accept
+mutations:
+  - id: omit_confidence_observation
+    class: ObservationOmission
+    kind: NearValid
+    target: confidence_observation
+    expected_verdict: Inconclusive
+    severity: Medium
+    oracle_rationale: Missing observations make zkML/control-flow evidence inconclusive.
+targets:
+  - id: local_oracle
+    kind: local
+    required_capabilities:
+      - zkml_metrics
+evidence:
+  claim_boundary: Level0DesignNote
+  notes:
+    - Metadata-rich control-flow fixture only; no real zkML benchmark result.
+

@@ -1,0 +1,74 @@
+machine:
+  id: baseline_fsm_s1_st3_b2_l3
+  description: Deterministically generated baseline FSM example; not a benchmark result.
+  initial_state: state_0
+  semantic_equivalence_class:
+    id: generated_baseline_fsm_v0
+  states:
+    - id: state_0
+    - id: state_1
+    - id: state_2
+  fields:
+    - id: counter
+      type: int
+      initial:
+        int: 0
+      visibility: private
+  observations:
+    - id: counter_observation
+      field: counter
+      visibility: public
+  transitions:
+    - id: advance_0
+      from: state_0
+      to: state_1
+      guard:
+        eq:
+          left:
+            field: counter
+          right:
+            int: 0
+      actions:
+        - add_assign:
+            field: counter
+            value:
+              int: 1
+    - id: advance_1
+      from: state_1
+      to: state_2
+      guard:
+        eq:
+          left:
+            field: counter
+          right:
+            int: 1
+      actions:
+        - add_assign:
+            field: counter
+            value:
+              int: 1
+oracle:
+  accepted_traces:
+    - id: generated_accepts_linear_path
+      steps:
+        - transition: advance_0
+        - transition: advance_1
+      expected_final_state: state_2
+      expected_final_fields:
+        counter:
+          int: 2
+      expected_verdict: Accept
+  rejected_traces:
+    - id: generated_rejects_wrong_start
+      initial_state: state_0
+      steps:
+        - transition: advance_1
+      expected_verdict: Reject
+targets:
+  - id: local_oracle
+    kind: local
+evidence:
+  claim_boundary: Level1LocalReplay
+  notes:
+    - Generated fixture example only; no official benchmark evidence.
+
