@@ -10,6 +10,9 @@ hsai-claim-envelope = { path = "../hsai-claim-envelope" }
 hsai-agent-case = { path = "../hsai-agent-case" }
 hsai-distinct-agent = { path = "../hsai-distinct-agent" }
 serde = { version = "1", features = ["derive"] }
+sha2 = "0.10"
 
 [dev-dependencies]
+hsai-economy = { path = "../hsai-economy" }
+hsai-membrane = { path = "../hsai-membrane" }
 proptest = { version = "=1.5.0", default-features = false, features = ["std"] }

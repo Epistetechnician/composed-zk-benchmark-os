@@ -1,0 +1,18 @@
+[package]
+name = "hsai-e2e-harness"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "Pure-data adversarial end-to-end harness over the local HSAI crates."
+
+[dependencies]
+hsai-agent-case = { path = "../hsai-agent-case" }
+hsai-attestation = { path = "../hsai-attestation" }
+hsai-claim-envelope = { path = "../hsai-claim-envelope" }
+hsai-distinct-agent = { path = "../hsai-distinct-agent" }
+hsai-economy = { path = "../hsai-economy" }
+hsai-economy-sim = { path = "../hsai-economy-sim" }
+hsai-membrane = { path = "../hsai-membrane" }
+
+[dev-dependencies]
+proptest = { version = "=1.5.0", default-features = false, features = ["std"] }

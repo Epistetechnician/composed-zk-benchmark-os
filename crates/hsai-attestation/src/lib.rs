@@ -11,13 +11,14 @@
 //! # Honesty boundary (the whole point of this phase)
 //!
 //! This is attestation at the *interface* level. The reference
-//! [`ManagedTokenVerifier`] checks the token's anchor id, nonce, measurements,
-//! and freshness, but does **not** cryptographically verify the managed
-//! attestation service's signature over the token (an Azure Attestation / Intel
-//! Trust Authority JWT against the service JWKS, or a vendor quote against its
-//! root cert). That signature check is the single real integration step and the
-//! point at which the stack leaves the pure-data regime. It is deliberately out
-//! of scope here, and is the clean seam the [`AttestationVerifier`] trait marks.
+//! [`ManagedTokenVerifier`] checks the token's anchor id, nonce, report-data
+//! binding, measurements, and freshness, but does **not** cryptographically verify
+//! the managed attestation service's signature over the token (an Azure
+//! Attestation / Intel Trust Authority JWT against the service JWKS, or a vendor
+//! quote against its root cert). That signature check is the single real
+//! integration step and the point at which the stack leaves the pure-data regime.
+//! It is deliberately out of scope here, and is the clean seam the
+//! [`AttestationVerifier`] trait marks.
 //!
 //! Therefore:
 //! - a verified attestation is `Attested`, never `Proven`;
@@ -32,6 +33,7 @@ use hsai_agent_case::{AgentCase, EvidenceLane};
 use hsai_claim_envelope::{ClaimEnvelope, LaneId, Maturity, TimeWindow};
 use hsai_distinct_agent::Anchor;
 use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha256};
 use std::collections::BTreeSet;
 
 /// A managed attestation token. Pure data until a verifier accepts it.
@@ -43,6 +45,8 @@ pub struct Token {
     pub anchor_id: String,
     /// Anti-replay nonce.
     pub nonce: u64,
+    /// Provider custom-data binding. For Phala/dstack this maps to reportData.
+    pub report_data: Vec<u8>,
     /// Measured code/firmware digest.
     pub measurements: Vec<u8>,
     /// Inclusive start of the validity window.
@@ -71,6 +75,8 @@ pub enum VerifyError {
     NonceMismatch,
     /// `token.measurements` did not match the expected measurements.
     MeasurementMismatch,
+    /// `token.report_data` did not match the expected report-data binding.
+    ReportDataMismatch,
     /// `now` was outside `[not_before, not_after]`.
     Expired,
     /// Reserved for real signature-verifying backends. The reference
@@ -91,6 +97,7 @@ pub trait AttestationVerifier {
         &self,
         token: &Token,
         expected_nonce: u64,
+        expected_report_data: &[u8],
         expected_measurements: &[u8],
         anchor_id: &str,
         now: u64,
@@ -100,9 +107,10 @@ pub trait AttestationVerifier {
 /// The reference attestation backend.
 ///
 /// Returns `Ok` iff `token.anchor_id == anchor_id`, `token.nonce ==
-/// expected_nonce`, `token.measurements == expected_measurements`, and
-/// `not_before <= now <= not_after`. It does **not** verify the managed service
-/// signature and never returns [`VerifyError::SignatureUnverified`].
+/// expected_nonce`, `token.report_data == expected_report_data`,
+/// `token.measurements == expected_measurements`, and `not_before <= now <=
+/// not_after`. It does **not** verify the managed service signature and never
+/// returns [`VerifyError::SignatureUnverified`].
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
 pub struct ManagedTokenVerifier;
 
@@ -111,6 +119,7 @@ impl AttestationVerifier for ManagedTokenVerifier {
         &self,
         token: &Token,
         expected_nonce: u64,
+        expected_report_data: &[u8],
         expected_measurements: &[u8],
         anchor_id: &str,
         now: u64,
@@ -120,6 +129,9 @@ impl AttestationVerifier for ManagedTokenVerifier {
         }
         if token.nonce != expected_nonce {
             return Err(VerifyError::NonceMismatch);
+        }
+        if token.report_data != expected_report_data {
+            return Err(VerifyError::ReportDataMismatch);
         }
         if token.measurements != expected_measurements {
             return Err(VerifyError::MeasurementMismatch);
@@ -137,6 +149,23 @@ impl AttestationVerifier for ManagedTokenVerifier {
     }
 }
 
+/// Compute the HSAI report-data binding for managed attestation providers.
+///
+/// The profile binds the provider custom-data field to the exact agent public
+/// key, nonce, and case hash being admitted. Length prefixes avoid ambiguous
+/// concatenations while preserving the PRD's `agent_pubkey || nonce ||
+/// case_hash` intent.
+pub fn report_data_binding(agent_pubkey: &[u8], nonce: u64, case_hash: &[u8]) -> Vec<u8> {
+    let mut hasher = Sha256::new();
+    hasher.update(b"hsai-attestation-report-data:v1");
+    hasher.update((agent_pubkey.len() as u64).to_be_bytes());
+    hasher.update(agent_pubkey);
+    hasher.update(nonce.to_be_bytes());
+    hasher.update((case_hash.len() as u64).to_be_bytes());
+    hasher.update(case_hash);
+    hasher.finalize().to_vec()
+}
+
 /// One attestation to evaluate: an anchor, its token, and the expectations the
 /// verifier checks the token against.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -147,6 +176,8 @@ pub struct AttestationInput {
     pub token: Token,
     /// The nonce the verifier expects in the token.
     pub expected_nonce: u64,
+    /// The provider custom-data binding the verifier expects in the token.
+    pub expected_report_data: Vec<u8>,
     /// The measurements the verifier expects in the token.
     pub expected_measurements: Vec<u8>,
 }
@@ -191,6 +222,7 @@ impl<V: AttestationVerifier> EvidenceLane for AttestationLane<V> {
             if let Ok(verified) = self.verifier.verify(
                 &input.token,
                 input.expected_nonce,
+                &input.expected_report_data,
                 &input.expected_measurements,
                 &input.anchor.anchor_id(),
                 now,
@@ -270,6 +302,7 @@ mod tests {
         Token {
             anchor_id: hw_anchor().anchor_id(),
             nonce: 42,
+            report_data: report_data_binding(b"agent-pubkey", 42, b"case-hash"),
             measurements: vec![1, 2, 3],
             not_before: 100,
             not_after: 300,
@@ -281,6 +314,7 @@ mod tests {
             anchor: hw_anchor(),
             token: good_token(),
             expected_nonce: 42,
+            expected_report_data: report_data_binding(b"agent-pubkey", 42, b"case-hash"),
             expected_measurements: vec![1, 2, 3],
         }
     }
@@ -296,6 +330,7 @@ mod tests {
         ManagedTokenVerifier.verify(
             &input.token,
             input.expected_nonce,
+            &input.expected_report_data,
             &input.expected_measurements,
             &input.anchor.anchor_id(),
             now,
@@ -412,6 +447,36 @@ mod tests {
         assert_eq!(env.maturity, Maturity::Stub);
     }
 
+    // AT-6: report-data mismatch -> verify Err(ReportDataMismatch) -> nothing.
+    #[test]
+    fn at_6_report_data_mismatch_guarantees_nothing() {
+        let case = fixture_case(150);
+        let mut input = good_input();
+        input.expected_report_data = report_data_binding(b"other-agent-pubkey", 42, b"case-hash");
+
+        assert_eq!(
+            verify_input(&input, case.observed_at),
+            Err(VerifyError::ReportDataMismatch)
+        );
+
+        let env = lane(vec![input]).evaluate(&case);
+        assert!(env.guarantees.is_empty());
+        assert_eq!(env.maturity, Maturity::Stub);
+    }
+
+    #[test]
+    fn report_data_binding_is_deterministic_and_domain_separated() {
+        let left = report_data_binding(b"agent-pubkey", 42, b"case-hash");
+        let right = report_data_binding(b"agent-pubkey", 42, b"case-hash");
+        let changed_nonce = report_data_binding(b"agent-pubkey", 43, b"case-hash");
+        let ambiguous_concat = report_data_binding(b"agent", 42, b"-pubkeycase-hash");
+
+        assert_eq!(left, right);
+        assert_eq!(left.len(), 32);
+        assert_ne!(left, changed_nonce);
+        assert_ne!(left, ambiguous_concat);
+    }
+
     // The reference verifier reports anchor mismatch and never claims to have
     // verified a signature.
     #[test]
@@ -456,6 +521,8 @@ mod tests {
             expected_nonce in 0_u64..8,
             token_meas in bytes(),
             expected_meas in bytes(),
+            report_data in bytes(),
+            expected_report_data in bytes(),
             anchor_id_match in any::<bool>(),
             not_before in 0_u64..500,
             dur in 0_u64..500,
@@ -470,11 +537,13 @@ mod tests {
                 token: Token {
                     anchor_id,
                     nonce: token_nonce,
+                    report_data,
                     measurements: token_meas,
                     not_before,
                     not_after: not_before + dur,
                 },
                 expected_nonce,
+                expected_report_data,
                 expected_measurements: expected_meas,
             }
         }
@@ -589,11 +658,13 @@ mod tests {
                     token: Token {
                         anchor_id: anchor.anchor_id(),
                         nonce: 1,
+                        report_data: Vec::new(),
                         measurements: Vec::new(),
                         not_before: 0,
                         not_after: u64::MAX,
                     },
                     expected_nonce: 1,
+                    expected_report_data: Vec::new(),
                     expected_measurements: Vec::new(),
                 })
                 .collect::<Vec<_>>();
