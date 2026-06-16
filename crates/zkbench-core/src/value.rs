@@ -27,7 +27,7 @@ pub enum ValueType {
 }
 
 /// Public/private/internal field visibility.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum FieldVisibility {
     /// Public input or observation.
@@ -35,13 +35,8 @@ pub enum FieldVisibility {
     /// Private witness value.
     Private,
     /// Internal state not intended as public input or witness.
+    #[default]
     Internal,
-}
-
-impl Default for FieldVisibility {
-    fn default() -> Self {
-        Self::Internal
-    }
 }
 
 impl Value {
