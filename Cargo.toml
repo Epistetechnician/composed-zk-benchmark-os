@@ -3,6 +3,7 @@ resolver = "2"
 members = [
     "crates/hsai-agent-case",
     "crates/hsai-attestation",
+    "crates/hsai-attestation-phala",
     "crates/hsai-claim-envelope",
     "crates/hsai-distinct-agent",
     "crates/hsai-economy",
