@@ -108,6 +108,43 @@ Surface DSL
 | [docs/19-phase-i-synthetic-result-import-notes.md](docs/19-phase-i-synthetic-result-import-notes.md) | Phase I synthetic result import, normalization, quarantine, proposal, and proposal ledger notes. |
 | [docs/20-phase-j-reviewed-proposal-acceptance-notes.md](docs/20-phase-j-reviewed-proposal-acceptance-notes.md) | Phase J reviewed proposal acceptance policy, candidates, previews, eligibility, and review ledger notes. |
 | [docs/21-phase-k-local-soak-runner-telemetry-notes.md](docs/21-phase-k-local-soak-runner-telemetry-notes.md) | Phase K local soak runner, internal benchmark OS telemetry, health reports, and failure corpus notes. |
+| [docs/22-hyper-sacred-ai-architecture.md](docs/22-hyper-sacred-ai-architecture.md) | Hyper Sacred AI architecture and claim-boundary framing. |
+| [docs/23-claim-envelope-implementation-spec.md](docs/23-claim-envelope-implementation-spec.md) | HSAI claim-envelope implementation spec. |
+| [docs/24-hsai-implementation-handoff.md](docs/24-hsai-implementation-handoff.md) | HSAI claim-envelope implementation handoff. |
+| [docs/25-hsai-claim-envelope-phase-notes.md](docs/25-hsai-claim-envelope-phase-notes.md) | HSAI claim-envelope phase notes. |
+| [docs/26-agent-case-evidence-lane-spec.md](docs/26-agent-case-evidence-lane-spec.md) | Agent-case and evidence-lane spec. |
+| [docs/27-agent-case-implementation-handoff.md](docs/27-agent-case-implementation-handoff.md) | Agent-case implementation handoff. |
+| [docs/28-hsai-agent-case-phase-notes.md](docs/28-hsai-agent-case-phase-notes.md) | HSAI agent-case phase notes. |
+| [docs/29-distinct-agent-lane-spec.md](docs/29-distinct-agent-lane-spec.md) | Distinct-agent lane spec. |
+| [docs/30-distinct-agent-implementation-handoff.md](docs/30-distinct-agent-implementation-handoff.md) | Distinct-agent implementation handoff. |
+| [docs/31-hsai-distinct-agent-phase-notes.md](docs/31-hsai-distinct-agent-phase-notes.md) | HSAI distinct-agent phase notes. |
+| [docs/32-economy-stub-spec.md](docs/32-economy-stub-spec.md) | HSAI economy stub spec. |
+| [docs/33-economy-implementation-handoff.md](docs/33-economy-implementation-handoff.md) | Economy implementation handoff. |
+| [docs/34-hsai-economy-phase-notes.md](docs/34-hsai-economy-phase-notes.md) | HSAI economy phase notes. |
+| [docs/35-membrane-spec.md](docs/35-membrane-spec.md) | HSAI membrane spec. |
+| [docs/36-membrane-implementation-handoff.md](docs/36-membrane-implementation-handoff.md) | Membrane implementation handoff. |
+| [docs/37-hsai-membrane-phase-notes.md](docs/37-hsai-membrane-phase-notes.md) | HSAI membrane phase notes. |
+| [docs/38-economy-simulation-spec.md](docs/38-economy-simulation-spec.md) | Economy simulation spec. |
+| [docs/39-economy-simulation-handoff.md](docs/39-economy-simulation-handoff.md) | Economy simulation handoff. |
+| [docs/40-hsai-economy-sim-phase-notes.md](docs/40-hsai-economy-sim-phase-notes.md) | HSAI economy simulation phase notes. |
+| [docs/41-funding-rule-sweep-spec.md](docs/41-funding-rule-sweep-spec.md) | Funding-rule sweep spec. |
+| [docs/42-funding-rule-sweep-handoff.md](docs/42-funding-rule-sweep-handoff.md) | Funding-rule sweep handoff. |
+| [docs/43-hsai-funding-rule-sweep-phase-notes.md](docs/43-hsai-funding-rule-sweep-phase-notes.md) | HSAI funding-rule sweep phase notes. |
+| [docs/44-attestation-verification-lane-spec.md](docs/44-attestation-verification-lane-spec.md) | Attestation-verification lane spec. |
+| [docs/45-attestation-verification-handoff.md](docs/45-attestation-verification-handoff.md) | Attestation-verification handoff. |
+| [docs/46-attestation-verification-phase-notes.md](docs/46-attestation-verification-phase-notes.md) | Attestation-verification phase notes. |
+| [docs/47-managed-attestation-proof-of-agent-prd.md](docs/47-managed-attestation-proof-of-agent-prd.md) | Managed-attestation proof-of-agent PRD. |
+| [docs/48-managed-attestation-feasibility.md](docs/48-managed-attestation-feasibility.md) | Managed-attestation feasibility analysis. |
+| [docs/49-pure-data-adversarial-harness-spec.md](docs/49-pure-data-adversarial-harness-spec.md) | Pure-data adversarial harness spec. |
+| [docs/50-phala-attestation-backend-spec.md](docs/50-phala-attestation-backend-spec.md) | Phala attestation backend spec. |
+| [docs/51-managed-attestation-phase1-integration-notes.md](docs/51-managed-attestation-phase1-integration-notes.md) | Managed-attestation Phase 1 integration notes. |
+| [docs/51-proof-of-agent-anchor-registry-spec.md](docs/51-proof-of-agent-anchor-registry-spec.md) | Blocked Phase 4 proof-of-agent anchor registry spec. |
+| [docs/52-managed-attestation-phase2-harness-notes.md](docs/52-managed-attestation-phase2-harness-notes.md) | Managed-attestation Phase 2 harness notes. |
+| [docs/53-managed-attestation-phase3-phala-fixture-notes.md](docs/53-managed-attestation-phase3-phala-fixture-notes.md) | Managed-attestation Phase 3 Phala fixture notes. |
+| [docs/54-proof-of-agent-anchor-phase4-boundary-note.md](docs/54-proof-of-agent-anchor-phase4-boundary-note.md) | Boundary note blocking Phase 4 until real artifact evidence exists. |
+| [docs/55-real-phala-artifact-handoff.md](docs/55-real-phala-artifact-handoff.md) | Real Phala artifact handoff requirements. |
+| [docs/56-managed-attestation-phase3-captured-artifact-notes.md](docs/56-managed-attestation-phase3-captured-artifact-notes.md) | Managed-attestation captured artifact validation notes. |
+| [docs/57-managed-attestation-real-artifact-promotion-spec.md](docs/57-managed-attestation-real-artifact-promotion-spec.md) | HSAI-owned real artifact promotion spec for Phase 3. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -163,6 +200,12 @@ Surface DSL
 - Failure corpus extraction exists with reproduction manifests and minimization metadata only.
 - Result classification exists.
 - Evidence and scoring primitives exist.
+- HSAI Level 1 local crates exist for claim envelopes, agent cases,
+  distinct-agent registration, economy, membrane conversion, economy simulation,
+  managed-attestation verification, pure-data e2e harnessing, and Phala/dstack
+  fixture/captured-artifact validation.
+- Managed-attestation Phase 57 defines the next real-artifact promotion
+  requirements for an HSAI-owned fresh challenge. It does not authorize Phase 4.
 - No external adapters exist.
 - No live zk-Harness execution exists.
 - No live external execution exists.
@@ -180,7 +223,20 @@ Surface DSL
 
 ## Next Implementation Slice
 
-Phase L should run long local soak execution and sampled local report generation only with explicit user approval. It should retain sampled local reports and failure packs outside the repository or under an ignored artifact directory, curate a regression corpus, and keep all reports local-only. It must not run zk-Harness, import real external results, create dashboards, claim official benchmark evidence, or promote Level2+ evidence.
+For the benchmark OS track, Phase L should run long local soak execution and
+sampled local report generation only with explicit user approval. It should
+retain sampled local reports and failure packs outside the repository or under an
+ignored artifact directory, curate a regression corpus, and keep all reports
+local-only. It must not run zk-Harness, import real external results, create
+dashboards, claim official benchmark evidence, or promote Level2+ evidence.
+
+For the managed-attestation track, the next implementation slice is the Phase 57
+real-artifact promotion path in
+`docs/57-managed-attestation-real-artifact-promotion-spec.md`: capture a
+non-secret Phala/dstack artifact generated from an HSAI-owned fresh challenge,
+validate that it carries `report_data_binding(agent_pubkey, nonce, case_hash)`,
+and keep the emitted maturity capped at `Attested`. Do not build Phase 4
+`crates/hsai-agent-anchor-registry` until this prerequisite is met.
 
 ## Non-Goals
 
@@ -201,6 +257,11 @@ zk-Harness dry-run plans are not benchmark results. Manual handoff bundles are n
 Synthetic result candidates are not benchmark results. Evidence append proposals are not accepted evidence. Evidence-record candidates are not accepted evidence. Append previews are not accepted evidence and do not mutate the accepted Evidence Ledger. Level2 eligibility reports are not Level2 evidence. Proposal ledgers and review ledgers are review artifacts only.
 
 Local soak telemetry is not official benchmark evidence. Internal timing telemetry is not ZK backend performance. Failure corpus entries are reproduction aids, not accepted evidence. Future agents must not use soak timing as prover/verifier timing.
+
+Managed-attestation captured artifact validation is not proof, not benchmark
+evidence, not local DCAP quote verification, and not Phase 4 authorization.
+Phase 57 requires an HSAI-owned fresh challenge before any real-artifact
+promotion claim.
 
 ## Validation Checklist
 
