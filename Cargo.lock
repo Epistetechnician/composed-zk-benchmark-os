@@ -163,6 +163,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "hsai-attestation"
+version = "0.1.0"
+dependencies = [
+ "hsai-agent-case",
+ "hsai-claim-envelope",
+ "hsai-distinct-agent",
+ "proptest",
+ "serde",
+]
+
+[[package]]
 name = "hsai-claim-envelope"
 version = "0.1.0"
 dependencies = [
