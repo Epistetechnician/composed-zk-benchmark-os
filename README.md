@@ -146,6 +146,7 @@ Surface DSL
 | [docs/56-managed-attestation-phase3-captured-artifact-notes.md](docs/56-managed-attestation-phase3-captured-artifact-notes.md) | Managed-attestation captured artifact validation notes. |
 | [docs/57-managed-attestation-real-artifact-promotion-spec.md](docs/57-managed-attestation-real-artifact-promotion-spec.md) | HSAI-owned real artifact promotion spec for Phase 3. |
 | [docs/58-managed-attestation-challenge-capture-tooling-notes.md](docs/58-managed-attestation-challenge-capture-tooling-notes.md) | Managed-attestation challenge packet and capture workflow tooling notes. |
+| [docs/59-operator-capture-runbook.md](docs/59-operator-capture-runbook.md) | Operator capture runbook for repo-external Phala/dstack artifact capture. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -205,11 +206,20 @@ Surface DSL
   distinct-agent registration, economy, membrane conversion, economy simulation,
   managed-attestation verification, pure-data e2e harnessing, and Phala/dstack
   fixture/captured-artifact validation.
-- Managed-attestation Phase 57 defines the next real-artifact promotion
-  requirements for an HSAI-owned fresh challenge. It does not authorize Phase 4.
+- Managed-attestation Phase 57 defines the real-artifact promotion
+  requirements for an HSAI-owned fresh challenge. A first real HSAI-owned
+  Phala/dstack artifact has been captured and accepted under this spec
+  (2026-06-16); see
+  [docs/57-managed-attestation-real-artifact-promotion-spec.md](docs/57-managed-attestation-real-artifact-promotion-spec.md).
+  The acceptance is managed-verifier local regression evidence only and does
+  not authorize Phase 4.
 - Managed-attestation challenge packet tooling exists for local, non-secret
   capture preflight. It creates capture inputs only, not real attestation
-  evidence.
+  evidence. The operator-facing preflight example
+  (`crates/hsai-attestation-phala/examples/operator_capture_preflight.rs`)
+  emits a JSON challenge packet and capture manifest from fixed sample inputs,
+  and `docs/59-operator-capture-runbook.md` documents the repo-external
+  capture steps an operator must run to produce a real artifact.
 - No external adapters exist.
 - No live zk-Harness execution exists.
 - No live external execution exists.
@@ -234,13 +244,15 @@ ignored artifact directory, curate a regression corpus, and keep all reports
 local-only. It must not run zk-Harness, import real external results, create
 dashboards, claim official benchmark evidence, or promote Level2+ evidence.
 
-For the managed-attestation track, the next implementation slice is external
-artifact capture using the Phase 57 challenge packet tooling: run an
-operator-controlled Phala/dstack capture, commit only a small non-secret artifact
-fixture if it was actually generated with the HSAI-owned fresh challenge, then
-extend validation for that fixture while keeping emitted maturity capped at
-`Attested`. Do not build Phase 4 `crates/hsai-agent-anchor-registry` until this
-prerequisite is met.
+For the managed-attestation track, the first real HSAI-owned Phala/dstack
+artifact has been captured and accepted (2026-06-16) using the Phase 57
+challenge packet tooling. The fixture
+(`crates/hsai-attestation-phala/tests/fixtures/phala_hsai_owned_real_2026_06_16.json`)
+and integration test
+(`crates/hsai-attestation-phala/tests/phala_hsai_owned_real.rs`) are local
+regression evidence only. Phase 4 `crates/hsai-agent-anchor-registry` may be
+reconsidered only under the Phase 4 Recheck Rule in
+[docs/57-managed-attestation-real-artifact-promotion-spec.md](docs/57-managed-attestation-real-artifact-promotion-spec.md).
 
 ## Non-Goals
 
