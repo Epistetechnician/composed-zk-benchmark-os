@@ -12,6 +12,13 @@ use hsai_distinct_agent::Anchor;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
 
+pub mod artifact;
+pub use artifact::{
+    parse_phala_artifact, validate_phala_artifact, DstackEvent, ManagedVerifierMode,
+    PhalaArtifactAttestationLane, PhalaArtifactBundle, PhalaValidationError, PhalaValidationPolicy,
+    RtmrSet, ValidatedPhalaAttestation,
+};
+
 /// Claim boundary for this crate.
 pub const CLAIM_BOUNDARY: &str =
     "fixture Phala/dstack backend preparation; not real hardware verification or proof";

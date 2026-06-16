@@ -11,6 +11,12 @@ managed-service signatures, JWT/JWKS material, vendor certificates, or live
 Phala API responses. It does not use network access. Accepted fixture evidence
 remains local regression evidence and emits `Attested`, never `Proven`.
 
+`docs/56-managed-attestation-phase3-captured-artifact-notes.md` adds a separate
+captured-artifact validator for a public Phala/dstack Trust Center artifact. That
+add-on is managed-verifier artifact evidence only; it does not replace this
+fixture seam, does not perform local DCAP verification, and does not unlock Phase
+4 by itself.
+
 ## What Shipped
 
 - `PhalaEvidence`

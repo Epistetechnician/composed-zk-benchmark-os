@@ -6,9 +6,11 @@ This note defines the evidence needed before the fixture-oriented
 `hsai-attestation-phala` crate can become a real hardware-backed Phala/dstack
 backend.
 
-The current crate validates deterministic fixture evidence only. It does not
-verify real TDX quote signatures, Intel collateral, Phala managed verifier
-responses, or live CVM endpoints.
+The current crate validates deterministic fixture evidence and, in
+`docs/56-managed-attestation-phase3-captured-artifact-notes.md`, one captured
+public Phala/dstack Trust Center artifact in managed-verifier mode. It does not
+verify real TDX quote signatures, Intel collateral, managed-service signatures,
+JWKS/JWT material, or live CVM endpoints.
 
 ## Required Captured Artifacts
 
@@ -51,7 +53,9 @@ Do not implement `crates/hsai-agent-anchor-registry` from
 backend has accepted at least one captured artifact bundle under the above
 checks.
 
-Fixture acceptance does not satisfy this prerequisite.
+Fixture acceptance does not satisfy this prerequisite. The captured public Trust
+Center artifact also does not satisfy this prerequisite unless a future spec
+accepts managed-verifier artifact evidence without an HSAI-owned fresh challenge.
 
 ## Source Boundary
 
