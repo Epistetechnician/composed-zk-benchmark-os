@@ -168,9 +168,10 @@ impl Default for SoakShardConfig {
 }
 
 /// Soak output policy.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub enum SoakOutputPolicy {
     /// Write no benchmark packs.
+    #[default]
     NoPacks,
     /// Write representative sampled packs up to a local limit.
     SampledPacks {
@@ -204,12 +205,6 @@ impl SoakOutputPolicy {
             }
             Self::FailurePacksOnly { max_failure_packs } => *max_failure_packs,
         }
-    }
-}
-
-impl Default for SoakOutputPolicy {
-    fn default() -> Self {
-        Self::NoPacks
     }
 }
 
