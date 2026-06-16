@@ -15,8 +15,15 @@ pub use crate::dsl::{
 };
 pub use crate::error::{Result, ZkBenchError};
 pub use crate::evidence::{
-    classify_result, compute_artifact_digest, ArtifactDigest, ArtifactKind, ArtifactRef,
-    ArtifactRole, BackendOutcome, ClaimBoundary, EvidenceLedger, EvidenceRecord, ExpectedVerdict,
+    build_default_evidence_acceptance_policy, build_default_evidence_review_checklist,
+    check_level2_eligibility, classify_result, compute_artifact_digest,
+    create_evidence_append_preview, create_evidence_record_candidate,
+    guard_claim_boundary_escalation, review_evidence_append_proposal,
+    validate_evidence_append_preview, validate_evidence_record_candidate,
+    validate_evidence_review_decision, ArtifactDigest, ArtifactKind, ArtifactRef, ArtifactRole,
+    BackendOutcome, ClaimBoundary, EvidenceAcceptancePolicy, EvidenceAppendPreview, EvidenceLedger,
+    EvidenceRecord, EvidenceRecordCandidate, EvidenceReviewDecision, EvidenceReviewDecisionKind,
+    EvidenceReviewerRole, ExpectedVerdict, Level2EligibilityChecker, Level2EligibilityReport,
     ResultClassification,
 };
 pub use crate::external_runner::{
@@ -56,5 +63,18 @@ pub use crate::replay::{
 pub use crate::scoring::{
     score_report_from_evidence, score_report_from_local_mutation_evidence,
     LocalMutationEvidenceSummary, ScoreReport,
+};
+pub use crate::soak::{
+    aggregate_soak_health_reports, build_regression_soak_config, build_smoke_soak_config,
+    build_soak_report_bundle, extract_failure_corpus, plan_soak_shards, resume_local_soak_shard,
+    run_local_soak_shard, validate_failure_corpus_index, validate_soak_health_report,
+    validate_soak_report_bundle, validate_soak_run_config, validate_soak_shard_manifest,
+    validate_soak_telemetry_report, FailureCorpus, FailureCorpusEntry, FailureCorpusIndex,
+    FailureCorpusKind, FailureReproductionManifest, LocalSoakRunner, LocalSoakRunnerConfig,
+    MockTelemetryClock, SoakArtifactLayout, SoakCaseResult, SoakCaseStatus, SoakHealthReport,
+    SoakHealthStatus, SoakLimits, SoakOutputPolicy, SoakReportBundle, SoakRunConfig,
+    SoakRunProfile, SoakRunResult, SoakRunnerErrorPolicy, SoakShardCheckpoint, SoakShardId,
+    SoakShardManifest, SoakShardPlan, SoakShardPlanner, SoakTelemetryCounters,
+    SoakTelemetryDurations, SoakTelemetryReport, SystemTelemetryClock,
 };
 pub use crate::value::{FieldVisibility, Value, ValueType};

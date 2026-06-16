@@ -260,14 +260,10 @@ fn apply_action(
             Ok(None)
         }
         ActionSpec::AddAssign { add_assign: assign } => {
-            apply_int_update(&assign.field, &assign.value, fields, |left, right| {
-                left + right
-            })
+            apply_int_update(&assign.field, &assign.value, fields, i64::checked_add)
         }
         ActionSpec::SubAssign { sub_assign: assign } => {
-            apply_int_update(&assign.field, &assign.value, fields, |left, right| {
-                left - right
-            })
+            apply_int_update(&assign.field, &assign.value, fields, i64::checked_sub)
         }
     }
 }
@@ -276,7 +272,7 @@ fn apply_int_update(
     field: &str,
     operand: &OperandSpec,
     fields: &mut BTreeMap<String, Value>,
-    update: impl FnOnce(i64, i64) -> i64,
+    update: impl FnOnce(i64, i64) -> Option<i64>,
 ) -> Result<Option<OracleOutcome>> {
     let current = match fields.get(field).and_then(Value::as_int) {
         Some(value) => value,
@@ -294,11 +290,14 @@ fn apply_int_update(
             }))
         }
     };
-    fields.insert(
-        field.to_string(),
-        Value::Int {
-            int: update(current, operand),
-        },
-    );
+    let updated = match update(current, operand) {
+        Some(value) => value,
+        None => {
+            return Ok(Some(OracleOutcome::Rejected {
+                reason: format!("integer overflow while updating field '{field}'"),
+            }))
+        }
+    };
+    fields.insert(field.to_string(), Value::Int { int: updated });
     Ok(None)
 }

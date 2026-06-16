@@ -1,0 +1,3 @@
+# HSAI Membrane Phase Notes
+
+This explicit Hyper Sacred AI implementation phase adds only the standalone `hsai-membrane` crate plus the two authorized `hsai-economy` boundary methods, `debit_external` and `credit_external`. The membrane models bounded in-memory conversion between internal `Credits` and opaque `ExternalAmount` units with registration gating, freeze gating, and per-window autonomy-scaled caps from `docs/35-membrane-spec.md`. This phase does not connect to real rails, does not implement settlement, fees, conversion rates, a full off-switch, external resource control, benchmark outputs, or any `zkbench-core` behavior.

@@ -1,0 +1,3 @@
+# HSAI Economy Phase Notes
+
+This explicit Hyper Sacred AI implementation phase adds only the standalone `hsai-economy` crate. The crate defines signed `Credits`, admitted-work reward records, the floor-plus-demand peg stub, demurrage and mutual-credit pool policies, and an in-memory deterministic `Economy` ledger gated on the L2 `IdentityRegistry` from `docs/32-economy-stub-spec.md`. This phase does not claim regenerative economics, does not verify demand signals, does not implement external rails, membrane conversion, real settlement, full corrigibility, benchmark outputs, or any `zkbench-core` behavior.

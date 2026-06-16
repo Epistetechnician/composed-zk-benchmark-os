@@ -36,7 +36,22 @@ The current Rust foundation must pass:
 - synthetic quarantine manifests remain `Level0DesignNote`,
 - normalized synthetic result drafts remain pending review only,
 - evidence append proposals remain not accepted evidence,
+- reviewed proposal decisions validate with manual reviewer roles,
+- evidence acceptance policies block Level2+ actual evidence,
+- evidence-record candidates remain candidate-only metadata,
+- append previews remain preview-only and do not mutate `EvidenceLedger`,
+- Level2 eligibility reports remain `Level0DesignNote` metadata and do not create Level2 evidence,
+- review ledgers persist separately from `EvidenceLedger`,
 - proposal ledgers persist separately from `EvidenceLedger`,
+- soak config JSON round-trips,
+- deterministic shard planning,
+- smoke runner tests,
+- resume checkpoint tests,
+- telemetry label validation,
+- health report validation,
+- failure corpus validation,
+- Phase K reports remain `Level0DesignNote`,
+- local replay artifacts created or referenced during soak remain `Level1LocalReplay` at most,
 - manual handoff bundles remain `Level0DesignNote`,
 - result import candidates remain quarantined or pending review,
 - no external backend command usage exists in the Rust core,
@@ -68,11 +83,16 @@ grep -R "zk-Harness dry-run plans are not benchmark results" "$ROOT/docs" "$ROOT
 grep -R "Manual handoff bundles are not benchmark results" "$ROOT/docs" "$ROOT/README.md" "$ROOT/AGENTS.md" || true
 grep -R "Synthetic result candidates are not benchmark results" "$ROOT/docs" "$ROOT/README.md" "$ROOT/AGENTS.md" || true
 grep -R "Evidence append proposals are not accepted evidence" "$ROOT/docs" "$ROOT/README.md" "$ROOT/AGENTS.md" || true
+grep -R "Evidence-record candidates are not accepted evidence" "$ROOT/docs" "$ROOT/README.md" "$ROOT/AGENTS.md" || true
+grep -R "Level2 eligibility reports are not Level2 evidence" "$ROOT/docs" "$ROOT/README.md" "$ROOT/AGENTS.md" || true
+grep -R "Local soak telemetry is not official benchmark evidence" "$ROOT/docs" "$ROOT/README.md" "$ROOT/AGENTS.md" || true
+grep -R "Internal timing telemetry is not ZK backend performance" "$ROOT/docs" "$ROOT/README.md" "$ROOT/AGENTS.md" || true
+grep -R "Failure corpus entries are reproduction aids" "$ROOT/docs" "$ROOT/README.md" "$ROOT/AGENTS.md" || true
 grep -R "Level1LocalReplay" "$ROOT/crates/zkbench-core" "$ROOT/docs" "$ROOT/README.md" || true
 grep -R "unsound acceptance candidate" "$ROOT/crates/zkbench-core" "$ROOT/docs" "$ROOT/README.md" || true
 grep -R "std::process::Command" "$ROOT/crates/zkbench-core/src" || true
 grep -R "Command::new" "$ROOT/crates/zkbench-core/src" || true
-grep -R "prover_time\|verifier_time\|proof_size\|memory_usage\|constraint_count" "$ROOT/crates/zkbench-core/tests/fixtures" || true
+grep -R "prover_time\|verifier_time\|proof_size\|zk_harness_time\|memory_usage\|constraint_count" "$ROOT/crates/zkbench-core/tests/fixtures" || true
 ```
 
 ## Phase F Artifact Checks
@@ -147,6 +167,56 @@ The Rust tests currently cover:
 - source scans for `std::process::Command` and `Command::new` remain empty.
 
 These checks do not establish real external result import, live zk-Harness execution, official benchmark evidence, performance evidence, or formal evidence.
+
+## Phase J Reviewed Proposal Acceptance Checks
+
+The Rust tests currently cover:
+
+- default review checklist construction,
+- manual review decisions,
+- automated-review-only approval rejection,
+- evidence acceptance policy validation,
+- Level1 local-only claim-boundary guard behavior,
+- Level2+ actual evidence blocking,
+- evidence-record candidate creation and JSON round-trips,
+- candidate rejection for Level2+ or official/formal/soundness claim flags,
+- append preview creation without `EvidenceLedger` mutation,
+- append preview JSON round-trips,
+- Level2 eligibility future-review reports,
+- missing future external artifact capture reported as insufficient information,
+- review ledger append, round-trip, and digest tamper detection,
+- Phase J claim-boundary ordering and preview-only status.
+
+These checks do not establish external replay evidence, official benchmark evidence, reproducible benchmark artifacts, performance evidence, or formal evidence.
+
+## Phase K Local Soak Runner Checks
+
+The Rust tests currently cover:
+
+- smoke and regression soak config validation,
+- NightlyLocal explicit opt-in validation,
+- excessive seed, shard, and pack-write limit rejection,
+- soak config JSON round-trips,
+- deterministic shard planning,
+- stable shard ids and case assignment,
+- shard manifest JSON round-trips and relative refs,
+- tiny local smoke runs through generation, mutation, and local replay,
+- no external adapter or zk-Harness result production,
+- checkpoint write/read and resume skipping,
+- mismatched config digest rejection,
+- telemetry counter increments,
+- deterministic `MockTelemetryClock` durations,
+- forbidden telemetry label rejection,
+- telemetry exclusion from ScoreReport performance fields,
+- health report validation and required warning text,
+- simulated claim-boundary elevation detection,
+- simulated pack validation findings,
+- failure corpus validation and JSON round-trips,
+- reproduction manifest and minimization metadata,
+- Phase K claim-boundary regression tests,
+- source scans for `std::process::Command` and `Command::new`.
+
+These checks do not establish official benchmark evidence, ZK backend performance, external replay evidence, formal evidence, or Level2+ accepted evidence. Local soak telemetry is not official benchmark evidence. Internal timing telemetry is not ZK backend performance. Failure corpus entries are reproduction aids, not accepted evidence.
 
 ## Future Gate Ladder
 

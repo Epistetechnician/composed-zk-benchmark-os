@@ -1,0 +1,33 @@
+{
+  "id": "level2_eligibility_candidate_proposal_normalized_synthetic_candidate_valid",
+  "source_candidate_id": "candidate_proposal_normalized_synthetic_candidate_valid",
+  "status": "EligibleForFutureReview",
+  "requirements": [
+    {
+      "id": "candidate_valid",
+      "description": "candidate validates locally",
+      "required": true,
+      "satisfied": true
+    },
+    {
+      "id": "artifact_digests_present",
+      "description": "artifact digest metadata is present",
+      "required": true,
+      "satisfied": true
+    },
+    {
+      "id": "provenance_present",
+      "description": "provenance summary is present",
+      "required": true,
+      "satisfied": true
+    }
+  ],
+  "findings": [],
+  "blocking_reasons": [],
+  "claim_boundary": "Level0DesignNote",
+  "creates_level2_evidence": false,
+  "notes": [
+    "eligibility report metadata only",
+    "future artifacts and human review required"
+  ]
+}

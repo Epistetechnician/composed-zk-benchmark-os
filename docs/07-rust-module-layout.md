@@ -41,8 +41,8 @@ Surface DSL
 | `generator/` | Expand MachineSpec into Benchmark Family and Benchmark Instance values. |
 | `mutation/` | Apply MutationPass values and attach Expected Verdicts. |
 | `scoring/` | Convert Evidence Records into Score Reports. |
-| `evidence/` | Define Evidence Record, Claim Boundary, Backend Outcome, and provenance. |
-| `external_runner/` | Define Phase H disabled/manual-only external-runner policy, manual handoff bundle, artifact capture contract, provenance contract, result import schema, and quarantine schema. |
+| `evidence/` | Define Evidence Record, Claim Boundary, Backend Outcome, provenance, review decisions, acceptance policies, candidates, append previews, eligibility reports, review ledgers, and local evidence ledgers. |
+| `external_runner/` | Define Phase H/I/J disabled/manual-only external-runner policy, manual handoff bundle, artifact capture contract, provenance contract, result import schema, quarantine schema, proposal workflow, and review-layer aliases. |
 | `adapters/` | Define BackendAdapter traits and capability declarations. |
 | `replay/` | Define Replay Manifest and ReplayRunner behavior. |
 | `pack/` | Define local benchmark pack manifests, readers, writers, and validation. |
@@ -85,6 +85,12 @@ ArtifactCaptureContract
 ProvenanceContract
 ExternalResultImportSchema
 QuarantineManifest
+EvidenceReviewDecision
+EvidenceAcceptancePolicy
+EvidenceRecordCandidate
+EvidenceAppendPreview
+Level2EligibilityReport
+EvidenceReviewLedger
 ```
 
 ## Trait Surface
@@ -113,6 +119,7 @@ RegistryProvider
 | `BackendTarget`, `AdapterCapabilitySet` | `adapters/` | Describes capabilities, not promises. |
 | `ReplayManifest` | `replay/` | Reproducible command plus artifact hashes. |
 | `EvidenceRecord`, `ClaimBoundary` | `evidence/` | Caps claims from adapter results. |
+| `EvidenceReviewDecision`, `EvidenceAcceptancePolicy`, `EvidenceRecordCandidate`, `EvidenceAppendPreview`, `Level2EligibilityReport`, `EvidenceReviewLedger` | `evidence/` | Review and candidate metadata only; no accepted evidence append. |
 | `ScoreReport` | `scoring/` | Multi-axis report; aggregate optional and warned. |
 | `ExternalRunnerPolicy`, `ManualHandoffBundle` | `external_runner/` | Boundary and manual handoff artifacts only; no live execution. |
 
@@ -147,6 +154,8 @@ Errors must distinguish malformed spec, semantic invalidity, backend capability 
 8. `registry/`: implemented static metadata primitive only.
 9. `pack/`: implemented local benchmark pack manifests, readers, writers, and validation.
 10. `external_runner/`: implemented Phase H policy, handoff, artifact capture, provenance, result import, quarantine, validation, and serialization primitives.
+11. `external_runner/`: implemented Phase I synthetic import, normalization, evidence append proposals, and proposal ledger primitives.
+12. `evidence/`: implemented Phase J review decisions, acceptance policy, claim-boundary escalation guard, evidence-record candidates, append previews, Level2 eligibility reports, and review ledger primitives.
 
 ## Implementation Guardrails
 
@@ -156,6 +165,10 @@ Errors must distinguish malformed spec, semantic invalidity, backend capability 
 - No zkML adapter until public/private boundary cases are supported.
 - No live external execution from Phase H handoff bundles.
 - Manual handoff bundles are not benchmark results.
+- Evidence append proposals are not accepted evidence.
+- Evidence-record candidates are not accepted evidence.
+- Append previews do not mutate EvidenceLedger.
+- Level2 eligibility reports are not Level2 evidence.
 - A benchmark pass is not a proof.
 - A recursion proof is not semantic proof.
 - A local replay is not official benchmark evidence.

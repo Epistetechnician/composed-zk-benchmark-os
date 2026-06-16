@@ -161,6 +161,47 @@ Phase I claim boundaries:
 - metric candidates remain candidate-only metadata,
 - no Phase I artifact creates Level2+ evidence.
 
+## Reviewed Proposal Acceptance
+
+Phase J implements a local review layer over evidence append proposals. A manual `EvidenceReviewDecision` can approve a proposal for candidate-only creation. An `EvidenceAcceptancePolicy` validates proposal status, review decision kind, reviewer role, blocking issues, artifact metadata, provenance summary, forbidden claim language, and claim-boundary escalation. A `ClaimBoundaryEscalationGuard` blocks Level2+ actual evidence and formal levels.
+
+An `EvidenceRecordCandidate` is not an `EvidenceRecord`. It can preserve reviewed local-only metadata and may be capped at `Level1LocalReplay`, but it remains candidate-only. An `EvidenceAppendPreview` simulates a future ledger transaction without mutating `EvidenceLedger`. A `Level2EligibilityReport` can report future-review readiness, but it is `Level0DesignNote` metadata and is not Level2 evidence. An `EvidenceReviewLedger` records review decisions and append previews only; it is separate from the accepted Evidence Ledger.
+
+Phase J claim boundaries:
+
+- review policies are `Level0DesignNote`,
+- review decisions are `Level0DesignNote`,
+- acceptance validations are `Level0DesignNote`,
+- append previews are `Level0DesignNote`,
+- Level2 eligibility reports are `Level0DesignNote`,
+- review ledgers are `Level0DesignNote`,
+- strict reviewed local-only candidates may carry `Level1LocalReplay` candidate metadata,
+- no Phase J artifact creates Level2+ accepted evidence,
+- no append preview mutates `EvidenceLedger`,
+- no review ledger mutates `EvidenceLedger`.
+
+## Local Soak Runner And Internal Telemetry
+
+Phase K implements local soak runs over the internal benchmark OS pipeline. A local soak run can generate deterministic Benchmark Instances, apply selected Mutation Variants, evaluate local replay manifests with the local JSON adapter, optionally write sampled local packs, collect internal benchmark OS telemetry, produce local health reports, and extract a failure corpus.
+
+Local soak reports are `Level0DesignNote`. Soak configs, shard plans, shard manifests, checkpoints, telemetry reports, health reports, failure corpus indexes, aggregate summaries, and report bundles are `Level0DesignNote`. Local replay artifacts created or referenced during a soak remain `Level1LocalReplay` at most. Candidate and preview objects remain candidate-only or preview-only.
+
+Local soak telemetry is not benchmark evidence. Internal timing telemetry is not ZK backend performance. Failure corpus entries are not evidence acceptance. Failure corpus entries are reproduction aids only.
+
+Phase K claim boundaries:
+
+- soak configs are `Level0DesignNote`,
+- shard plans and manifests are `Level0DesignNote`,
+- shard checkpoints are `Level0DesignNote`,
+- telemetry reports are `Level0DesignNote`,
+- health reports are `Level0DesignNote`,
+- failure corpus indexes are `Level0DesignNote`,
+- report bundles are `Level0DesignNote`,
+- local replay artifacts remain `Level1LocalReplay` at most,
+- no Phase K artifact creates Level2+ accepted evidence,
+- no soak telemetry populates Score Report performance fields,
+- no failure corpus entry mutates `EvidenceLedger`.
+
 ## Result Classification Matrix
 
 | Expected Verdict | Backend Outcome | Classification |
@@ -208,7 +249,7 @@ Phase D/E generated Benchmark Families and Mutation Variants remain Level1LocalR
 
 Evidence ledger digest validation is a local integrity check, not independent reproduction, not tamper-proof evidence, and not a Merkle proof. A benchmark pack skeleton is a local artifact bundle only; it does not by itself create Level2 reproducible benchmark evidence.
 
-Phase G zk-Harness dry-run plans remain Level0DesignNote. Phase H manual handoff bundles, external-runner policies, artifact capture contracts, provenance contracts, result import schemas, and quarantine manifests remain Level0DesignNote. Phase I synthetic import bundles, normalized drafts, evidence append proposals, and proposal ledgers remain Level0DesignNote. Referenced local packs remain Level1LocalReplay. No Phase G, Phase H, or Phase I artifact creates Level2+ evidence.
+Phase G zk-Harness dry-run plans remain Level0DesignNote. Phase H manual handoff bundles, external-runner policies, artifact capture contracts, provenance contracts, result import schemas, and quarantine manifests remain Level0DesignNote. Phase I synthetic import bundles, normalized drafts, evidence append proposals, and proposal ledgers remain Level0DesignNote. Phase J review decisions, acceptance validations, append previews, Level2 eligibility reports, and review ledgers remain Level0DesignNote. Phase K soak configs, shard plans, checkpoints, telemetry reports, health reports, failure corpus indexes, and report bundles remain Level0DesignNote. Strict reviewed local-only candidates may carry Level1LocalReplay candidate metadata. Referenced local packs and local replay artifacts remain Level1LocalReplay. No Phase G, Phase H, Phase I, Phase J, or Phase K artifact creates Level2+ accepted evidence.
 
 If a mutation removes or corrupts a guard and a previously rejected trace becomes locally accepted, that result is an unsound acceptance candidate under the classification matrix. It is not proof of an exploit, not proof of backend unsoundness, and not formal evidence.
 
@@ -229,4 +270,11 @@ If a mutation removes or corrupts a guard and a previously rejected trace become
 - Result import candidates are quarantined or pending review until validated.
 - Synthetic result candidates are not benchmark results.
 - Evidence append proposals are not accepted evidence.
+- Evidence-record candidates are not accepted evidence.
+- Append previews are not accepted evidence and do not mutate EvidenceLedger.
+- Level2 eligibility reports are not Level2 evidence.
+- Review ledgers are review artifacts only.
+- Local soak telemetry is not official benchmark evidence.
+- Internal timing telemetry is not ZK backend performance.
+- Failure corpus entries are reproduction aids, not accepted evidence.
 - No first-pass document may claim Level 2+ evidence unless artifacts exist in the future.

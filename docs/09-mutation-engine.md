@@ -120,3 +120,9 @@ All other mutation classes remain future implementation work:
 The v0 engine records mutation provenance, expected verdict, safety class, affected transition ids, affected guard/action ids when available, affected field ids when available, claim boundary, and notes. It revalidates the mutated Surface DSL and lowers through Semantic IR. It does not generate backend artifacts.
 
 An accepted mutated trace is an unsound acceptance candidate when paired with an expected rejection. It is not proof of exploit or proof of backend unsoundness.
+
+## Phase K Local Soak Telemetry
+
+Phase K records mutation application coverage and local outcome changes as internal benchmark OS telemetry only. It can count mutation variants generated, mutation no-target events, local replay outcomes, and failure corpus entries for regression detection.
+
+Mutation coverage counts are not soundness proofs. Unsound acceptance candidates remain candidates, not proven exploits. Local soak telemetry is not official benchmark evidence. Internal timing telemetry is not ZK backend performance.

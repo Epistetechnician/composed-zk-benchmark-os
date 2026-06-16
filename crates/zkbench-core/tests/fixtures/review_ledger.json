@@ -1,0 +1,19 @@
+{
+  "id": "phase_j_review_ledger",
+  "version": {
+    "value": "phase-j-evidence-review-ledger-v0"
+  },
+  "entries": [],
+  "summary": {
+    "entry_count": 0,
+    "subject_kind_counts": [],
+    "decision_kind_counts": [],
+    "decision_status_counts": [],
+    "preview_status_counts": []
+  },
+  "claim_boundary": "Level0DesignNote",
+  "notes": [
+    "review ledger metadata only",
+    "does not mutate EvidenceLedger"
+  ]
+}

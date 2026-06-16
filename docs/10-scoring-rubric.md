@@ -132,6 +132,44 @@ Phase I artifacts cannot fill:
 
 Metric candidates with values must have source artifact refs and pass local validation, but they remain candidate-only metadata. Valid synthetic imports may create normalized result drafts and evidence append proposals only. Score reports must continue to represent missing performance, formal, recursion, reproducibility, and portability data unless future accepted evidence exists.
 
+## Phase J Reviewed Proposal Acceptance
+
+Phase J defines review decisions, evidence acceptance policies, evidence-record candidates, append previews, Level2 eligibility reports, and review ledgers. It does not calculate benchmark scores.
+
+Evidence-record candidates are not accepted evidence. Append previews are not accepted evidence and do not mutate `EvidenceLedger`. Level2 eligibility reports are not Level2 evidence. Review ledgers are review artifacts only.
+
+Phase J artifacts cannot fill:
+
+- prover time
+- verifier latency
+- proof size
+- memory use
+- constraint count
+- recursion score
+- formal evidence score
+- reproducibility score
+- adapter portability score
+
+Reviewed local-only candidates may carry `Level1LocalReplay` claim boundaries as candidate metadata only. Candidate metrics remain excluded from Score Reports. Eligibility for future Level2 review is not a Level2 score input.
+
+## Phase K Local Soak Telemetry
+
+Phase K internal telemetry does not fill performance score fields. Internal generation, mutation, local oracle, local replay, pack write/read, proposal-preview, and total runner durations are local engineering metrics only.
+
+Phase K artifacts cannot fill:
+
+- prover time
+- verifier latency
+- proof size
+- memory use
+- constraint count
+- recursion score
+- formal evidence score
+- reproducibility score
+- adapter portability score
+
+Soak reports may inform system readiness but not benchmark scoring. Failure corpus counts do not imply backend soundness or unsoundness. Local soak telemetry is not official benchmark evidence. Internal timing telemetry is not ZK backend performance. Failure corpus entries are reproduction aids, not accepted evidence.
+
 ## Evidence And Claim Boundary Levels
 
 - Level 0: design note only.

@@ -45,3 +45,15 @@ Future families:
 - Formal-only semantic cases.
 
 Generated families are local semantic fixtures. They are not official benchmark evidence and do not carry performance metrics.
+
+## Phase K Local Soak Profiles
+
+Phase K local soak profiles exercise the existing local families only:
+
+- BaselineFsm
+- BranchingFsm
+- BoundedCounterLoop
+
+Local soak profiles do not add new Benchmark Families. They are operational stress tests of the benchmark OS pipeline: deterministic generation, Mutation Variant production, Oracle replay, local pack read/write paths, internal benchmark OS telemetry, local health report creation, and failure corpus extraction.
+
+Soak profiles are not ZK backend benchmark suites. Local soak telemetry is not official benchmark evidence. Internal timing telemetry is not ZK backend performance. Failure corpus entries are reproduction aids, not accepted evidence.

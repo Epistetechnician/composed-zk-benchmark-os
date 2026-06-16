@@ -10,6 +10,7 @@
 //! benchmark evidence, and not a formal proof.
 
 pub mod adapters;
+pub mod dashboard;
 pub mod dsl;
 pub mod error;
 pub mod evidence;
@@ -22,6 +23,7 @@ pub mod prelude;
 pub mod registry;
 pub mod replay;
 pub mod scoring;
+pub mod soak;
 pub mod value;
 
 pub use adapters::{
@@ -50,6 +52,10 @@ pub use adapters::{
     ZkHarnessReviewStatus, ZkHarnessSchemaAssumption, ZkHarnessSourcePolicy, ZkHarnessTraceMapping,
     ZkHarnessUnsupportedFeature, LOCAL_JSON_ADAPTER_ID,
 };
+pub use dashboard::{
+    build_dashboard_model_from_score_report, render_dashboard_markdown, validate_dashboard_model,
+    DashboardAxisRow, DashboardModel, DashboardPanel, DashboardPanelKind,
+};
 pub use dsl::{
     evaluate_trace, lower_to_ir, parse_yaml_ast, parse_yaml_spec, ActionSpec, CanonicalAction,
     CanonicalField, CanonicalGuard, CanonicalInvariant, CanonicalMachine, CanonicalOracle,
@@ -60,13 +66,46 @@ pub use dsl::{
 };
 pub use error::{Result, ZkBenchError};
 pub use evidence::{
-    canonical_json_bytes, classify_result, compute_artifact_digest, compute_artifact_digest_bytes,
-    compute_artifact_digest_for_json, ArtifactDigest, ArtifactDigestAlgorithm, ArtifactKind,
-    ArtifactRef, ArtifactRole, BackendOutcome, ClaimBoundary, EvidenceAppendPolicy,
-    EvidenceChainDigest, EvidenceClass, EvidenceLedger, EvidenceLedgerEntry, EvidenceLedgerSummary,
+    build_default_evidence_acceptance_policy, build_default_evidence_review_checklist,
+    canonical_json_bytes, check_level2_eligibility, classify_result, compute_artifact_digest,
+    compute_artifact_digest_bytes, compute_artifact_digest_for_json,
+    create_evidence_append_preview, create_evidence_record_candidate,
+    deserialize_evidence_acceptance_policy_json, deserialize_evidence_append_preview_json,
+    deserialize_evidence_record_candidate_json, deserialize_evidence_review_checklist_json,
+    deserialize_evidence_review_decision_json, deserialize_evidence_review_ledger_json,
+    deserialize_level2_eligibility_report_json, guard_claim_boundary_escalation,
+    review_evidence_append_proposal, serialize_evidence_acceptance_policy_json,
+    serialize_evidence_append_preview_json, serialize_evidence_record_candidate_json,
+    serialize_evidence_review_checklist_json, serialize_evidence_review_decision_json,
+    serialize_evidence_review_ledger_json, serialize_level2_eligibility_report_json,
+    validate_evidence_acceptance_policy, validate_evidence_append_preview,
+    validate_evidence_record_candidate, validate_evidence_review_decision, ArtifactDigest,
+    ArtifactDigestAlgorithm, ArtifactKind, ArtifactRef, ArtifactRole, BackendOutcome,
+    ClaimBoundary, ClaimBoundaryEscalationGuard, ClaimBoundaryEscalationGuardResult,
+    EvidenceAcceptanceBlockingReason, EvidenceAcceptancePolicy, EvidenceAcceptancePolicyId,
+    EvidenceAcceptancePolicyMode, EvidenceAcceptancePolicyVersion, EvidenceAcceptanceRule,
+    EvidenceAcceptanceRuleResult, EvidenceAcceptanceValidation, EvidenceAcceptanceValidationIssue,
+    EvidenceAppendPolicy, EvidenceAppendPreview, EvidenceAppendPreviewId,
+    EvidenceAppendPreviewIssueKind, EvidenceAppendPreviewStatus, EvidenceAppendPreviewValidation,
+    EvidenceAppendPreviewValidationIssue, EvidenceAppendPreviewVersion, EvidenceChainDigest,
+    EvidenceClass, EvidenceLedger, EvidenceLedgerAppendPreviewEntry,
+    EvidenceLedgerAppendTransactionPreview, EvidenceLedgerEntry, EvidenceLedgerSummary,
     EvidenceLedgerSummaryCount, EvidenceLedgerValidation, EvidenceLedgerValidationError,
-    EvidenceLedgerVersion, EvidenceRecord, EvidenceStrength, ExpectedVerdict, ProvenanceRecord,
-    ResultClassification,
+    EvidenceLedgerVersion, EvidenceRecord, EvidenceRecordCandidate, EvidenceRecordCandidateId,
+    EvidenceRecordCandidateIssueKind, EvidenceRecordCandidateKind, EvidenceRecordCandidateSource,
+    EvidenceRecordCandidateStatus, EvidenceRecordCandidateValidation,
+    EvidenceRecordCandidateValidationIssue, EvidenceRecordCandidateVersion,
+    EvidenceReviewChecklist, EvidenceReviewChecklistItem, EvidenceReviewDecision,
+    EvidenceReviewDecisionId, EvidenceReviewDecisionKind, EvidenceReviewDecisionStatus,
+    EvidenceReviewDecisionVersion, EvidenceReviewFinding, EvidenceReviewFindingSeverity,
+    EvidenceReviewLedger, EvidenceReviewLedgerDigest, EvidenceReviewLedgerEntry,
+    EvidenceReviewLedgerEntrySubject, EvidenceReviewLedgerEntryVersion,
+    EvidenceReviewLedgerSummary, EvidenceReviewLedgerSummaryCount, EvidenceReviewLedgerValidation,
+    EvidenceReviewLedgerValidationIssue, EvidenceReviewLedgerVersion, EvidenceReviewPolicy,
+    EvidenceReviewReport, EvidenceReviewRequirement, EvidenceReviewerRole, EvidenceStrength,
+    ExpectedVerdict, Level2EligibilityBlockingReason, Level2EligibilityChecker,
+    Level2EligibilityFinding, Level2EligibilityReport, Level2EligibilityRequirement,
+    Level2EligibilityStatus, ProvenanceRecord, ResultClassification,
 };
 pub use external_runner::{
     build_default_artifact_capture_contract, build_default_external_result_import_schema,
@@ -102,9 +141,7 @@ pub use external_runner::{
     EvidenceAppendProposalLedgerValidationIssue, EvidenceAppendProposalLedgerVersion,
     EvidenceAppendProposalReviewState, EvidenceAppendProposalStatus,
     EvidenceAppendProposalValidation, EvidenceAppendProposalValidationIssue,
-    EvidenceAppendProposalVersion, EvidenceReviewChecklist, EvidenceReviewDecision,
-    EvidenceReviewDecisionKind, EvidenceReviewFinding, EvidenceReviewRequirement,
-    EvidenceReviewerRole, ExpectedArtifact, ExpectedArtifactFormat, ExpectedArtifactRole,
+    EvidenceAppendProposalVersion, ExpectedArtifact, ExpectedArtifactFormat, ExpectedArtifactRole,
     ExternalClaimBoundaryPolicy, ExternalEnvironmentPolicy, ExternalExecutionGate,
     ExternalExecutionMode, ExternalExecutionReviewStatus, ExternalMetricCandidate,
     ExternalMetricUnit, ExternalNetworkPolicy, ExternalPathPolicy, ExternalResultCandidate,
@@ -167,4 +204,44 @@ pub use scoring::{
     CorrectnessScore, FormalEvidenceScore, LocalMutationEvidenceSummary, PerformanceScore,
     RecursionStressScore, ReproducibilityScore, RiskPenalty, ScoreConfidence, ScoreReport,
     SoundnessFailureDetectionScore,
+};
+pub use soak::{
+    aggregate_soak_health_reports, attach_reproduction_bundle_to_pack, build_failure_corpus_entry,
+    build_regression_soak_config, build_smoke_soak_config, build_soak_report_bundle,
+    deserialize_failure_corpus_index_json, deserialize_failure_reproduction_manifest_json,
+    deserialize_soak_artifact_manifest_json, deserialize_soak_health_report_json,
+    deserialize_soak_report_bundle_json, deserialize_soak_run_config_json,
+    deserialize_soak_shard_checkpoint_json, deserialize_soak_shard_manifest_json,
+    deserialize_soak_shard_plan_json, deserialize_soak_telemetry_report_json,
+    extract_failure_corpus, health_findings_from_telemetry, plan_soak_shards,
+    read_reproduction_bundle_from_pack, read_soak_report_bundle, read_soak_shard_checkpoint,
+    reject_forbidden_metric_label, resume_local_soak_shard, run_local_soak_shard,
+    run_soak_campaign, serialize_failure_corpus_index_json,
+    serialize_failure_reproduction_manifest_json, serialize_soak_artifact_manifest_json,
+    serialize_soak_health_report_json, serialize_soak_report_bundle_json,
+    serialize_soak_run_config_json, serialize_soak_shard_checkpoint_json,
+    serialize_soak_shard_manifest_json, serialize_soak_shard_plan_json,
+    serialize_soak_telemetry_report_json, soak_artifact_manifest, validate_failure_corpus_index,
+    validate_reproduction_bundle, validate_soak_campaign_config, validate_soak_health_report,
+    validate_soak_report_bundle, validate_soak_run_config, validate_soak_shard_checkpoint,
+    validate_soak_shard_manifest, validate_soak_shard_plan, validate_soak_telemetry_report,
+    write_soak_report_bundle, write_soak_shard_checkpoint, FailureArtifactRef, FailureCorpus,
+    FailureCorpusEntry, FailureCorpusEntryId, FailureCorpusEntryInput, FailureCorpusIndex,
+    FailureCorpusKind, FailureCorpusSummary, FailureMinimizationHint, FailureReproductionManifest,
+    FailureTriageStatus, InternalCountMetric, InternalSizeMetric, InternalTimingMetric,
+    InternalTimingMetricKind, LocalSoakRunner, LocalSoakRunnerConfig, MockTelemetryClock,
+    ReproductionBundle, ReproductionBundleAttachment, SoakArtifactDigestSet, SoakArtifactLayout,
+    SoakArtifactManifest, SoakArtifactRole, SoakCampaignApproval, SoakCampaignArtifactRootPolicy,
+    SoakCampaignConfig, SoakCampaignResult, SoakCampaignShardOutcome, SoakCaseFailure, SoakCaseId,
+    SoakCasePlan, SoakCaseResult, SoakCaseStatus, SoakClaimBoundaryPolicy, SoakFamilySelection,
+    SoakHealthFinding, SoakHealthFindingSeverity, SoakHealthRecommendation, SoakHealthReport,
+    SoakHealthReportId, SoakHealthStatus, SoakHealthSummary, SoakLimits, SoakMutationSelection,
+    SoakOutputPolicy, SoakRegressionSignal, SoakReportBundle, SoakReportBundleValidation,
+    SoakRunConfig, SoakRunConfigId, SoakRunConfigVersion, SoakRunProfile, SoakRunRequest,
+    SoakRunResult, SoakRunScope, SoakRunnerErrorPolicy, SoakSeedRange, SoakShardCheckpoint,
+    SoakShardConfig, SoakShardId, SoakShardManifest, SoakShardPlan, SoakShardPlanner,
+    SoakShardProgress, SoakShardResumeToken, SoakShardStatus, SoakShardSummary,
+    SoakShardValidation, SoakShardValidationIssue, SoakTelemetryClassification, SoakTelemetryClock,
+    SoakTelemetryCounters, SoakTelemetryDurations, SoakTelemetryPolicy, SoakTelemetryReport,
+    SoakTelemetryReportId, SoakTelemetrySnapshot, SystemTelemetryClock,
 };

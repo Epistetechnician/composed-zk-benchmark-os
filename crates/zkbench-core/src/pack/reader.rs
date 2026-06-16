@@ -51,6 +51,7 @@ impl BenchmarkPackReader {
         else {
             return Ok(None);
         };
+        validate_relative_path(&file.relative_path)?;
         let path = self.root.join(&file.relative_path);
         let json = fs::read_to_string(&path).map_err(|error| {
             ZkBenchError::evidence_ledger(path.display().to_string(), error.to_string())

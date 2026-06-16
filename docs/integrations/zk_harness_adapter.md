@@ -2,9 +2,9 @@
 
 ## Current Status
 
-Phase G implements zk-Harness dry-run adapter preparation only. Phase H implements an external-runner boundary and manual handoff mapping only. Phase I implements synthetic result candidate import only. The repo still does not implement live zk-Harness execution, does not clone zk-Harness, does not import real zk-Harness data, and does not claim official schema compatibility.
+Phase G implements zk-Harness dry-run adapter preparation only. Phase H implements an external-runner boundary and manual handoff mapping only. Phase I implements synthetic result candidate import only. Phase J implements reviewed proposal acceptance metadata only. The repo still does not implement live zk-Harness execution, does not clone zk-Harness, does not import real zk-Harness data, and does not claim official schema compatibility.
 
-zk-Harness dry-run plans are not benchmark results. Manual handoff bundles are not benchmark results. Synthetic result candidates are not benchmark results. Evidence append proposals are not accepted evidence. External execution is disabled by default.
+zk-Harness dry-run plans are not benchmark results. Manual handoff bundles are not benchmark results. Synthetic result candidates are not benchmark results. Evidence append proposals are not accepted evidence. Evidence-record candidates are not accepted evidence. Append previews are not accepted evidence. Level2 eligibility reports are not Level2 evidence. External execution is disabled by default.
 
 ## Dry-Run-Only Scope
 
@@ -181,6 +181,8 @@ Phase H result import schemas still do not provide metric values. Metric candida
 
 Phase I synthetic import can validate metric candidate shape and source artifact refs, but the values remain candidate-only metadata. They do not populate Score Reports and do not become zk-Harness metrics.
 
+Phase J reviewed proposal acceptance can create candidate-only metadata and append previews. These artifacts still do not populate Score Reports and do not become zk-Harness metrics.
+
 ## Evidence Policy
 
 The evidence policy states:
@@ -196,6 +198,8 @@ The evidence policy states:
 No Phase G code creates Level2 evidence records.
 
 No Phase I code creates Level2 evidence records. Synthetic import bundles, normalized drafts, proposals, and proposal ledgers remain `Level0DesignNote`.
+
+No Phase J code creates Level2 evidence records. Review decisions, acceptance validations, append previews, eligibility reports, and review ledgers remain `Level0DesignNote`. Strict local-only candidates may carry `Level1LocalReplay` candidate metadata only.
 
 ## Claim-Boundary Policy
 
@@ -222,6 +226,18 @@ Unsupported in Phase I:
 - formal evidence,
 - proof-system soundness claims.
 
+Unsupported in Phase J:
+
+- live zk-Harness execution,
+- real zk-Harness result import,
+- automatic evidence ledger append,
+- accepted external evidence,
+- official benchmark evidence,
+- Level2 actual evidence,
+- performance score population,
+- formal evidence,
+- proof-system soundness claims.
+
 ## Future Live-Execution Prerequisites
 
 Before live integration:
@@ -234,8 +250,10 @@ Before live integration:
 6. Review provenance contract.
 7. Review result import validation.
 8. Review synthetic import proposal policy.
-9. Review claim-boundary policy.
-10. Run only with explicit future approval.
+9. Review proposal acceptance policy.
+10. Review Phase K local soak telemetry over generation, mutation, local replay, health reporting, and failure corpus extraction.
+11. Review claim-boundary policy.
+12. Run only with explicit future approval.
 
 ## Result Import And Quarantine
 
@@ -244,6 +262,8 @@ External result candidates must include source pack id, dry-run plan id, raw out
 Rejected or unreviewed candidates become quarantine entries. Quarantine is a local review mechanism only. It is not evidence acceptance and must not affect Score Reports.
 
 Phase I synthetic candidates may normalize into pending-review drafts and evidence append proposals. Those proposals are not accepted evidence and do not mutate `EvidenceLedger`.
+
+Phase J reviewed proposals may create evidence-record candidates and append previews. Those candidates and previews are not accepted evidence and do not mutate `EvidenceLedger`.
 
 ## Risks And Mitigations
 

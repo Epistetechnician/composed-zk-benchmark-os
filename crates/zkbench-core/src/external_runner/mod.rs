@@ -9,10 +9,12 @@ pub mod artifact_capture;
 pub mod handoff;
 pub mod import_bundle;
 pub mod importer;
+pub mod level2_eligibility;
 pub mod normalization;
 pub mod policy;
 pub mod proposal;
 pub mod proposal_ledger;
+pub mod proposal_review;
 pub mod provenance;
 pub mod quarantine;
 pub mod result_import;
@@ -47,6 +49,12 @@ pub use importer::{
     SoundnessClaimDetection, SyntheticImportValidation, SyntheticImportValidationIssue,
     SyntheticImportValidationIssueKind, SyntheticResultImportConfig, SyntheticResultImporter,
 };
+pub use level2_eligibility::{
+    check_level2_eligibility, deserialize_level2_eligibility_report_json,
+    serialize_level2_eligibility_report_json, Level2EligibilityBlockingReason,
+    Level2EligibilityChecker, Level2EligibilityFinding, Level2EligibilityReport,
+    Level2EligibilityRequirement, Level2EligibilityStatus,
+};
 pub use normalization::{
     normalize_synthetic_result_candidate, NormalizationReport, NormalizationWarning,
     NormalizedArtifactRef, NormalizedExternalResultDraft, NormalizedExternalResultDraftId,
@@ -71,6 +79,25 @@ pub use proposal_ledger::{
     EvidenceAppendProposalLedgerValidation, EvidenceAppendProposalLedgerValidationIssue,
     EvidenceAppendProposalLedgerVersion,
 };
+pub use proposal_review::{
+    build_default_evidence_acceptance_policy, create_evidence_append_preview,
+    create_evidence_record_candidate, deserialize_evidence_acceptance_policy_json,
+    deserialize_evidence_append_preview_json, deserialize_evidence_record_candidate_json,
+    serialize_evidence_acceptance_policy_json, serialize_evidence_append_preview_json,
+    serialize_evidence_record_candidate_json, validate_evidence_acceptance_policy,
+    validate_evidence_append_preview, validate_evidence_record_candidate,
+    EvidenceAcceptanceBlockingReason, EvidenceAcceptancePolicy, EvidenceAcceptancePolicyId,
+    EvidenceAcceptancePolicyMode, EvidenceAcceptancePolicyVersion, EvidenceAcceptanceRule,
+    EvidenceAcceptanceRuleResult, EvidenceAcceptanceValidation, EvidenceAcceptanceValidationIssue,
+    EvidenceAppendPreview, EvidenceAppendPreviewId, EvidenceAppendPreviewIssueKind,
+    EvidenceAppendPreviewStatus, EvidenceAppendPreviewValidation,
+    EvidenceAppendPreviewValidationIssue, EvidenceAppendPreviewVersion,
+    EvidenceLedgerAppendPreviewEntry, EvidenceLedgerAppendTransactionPreview,
+    EvidenceRecordCandidate, EvidenceRecordCandidateId, EvidenceRecordCandidateIssueKind,
+    EvidenceRecordCandidateKind, EvidenceRecordCandidateSource, EvidenceRecordCandidateStatus,
+    EvidenceRecordCandidateValidation, EvidenceRecordCandidateValidationIssue,
+    EvidenceRecordCandidateVersion,
+};
 pub use provenance::{
     build_default_provenance_contract, required_provenance_fields,
     validate_external_run_provenance_draft, validate_provenance_contract, EnvironmentProvenance,
@@ -92,8 +119,14 @@ pub use result_import::{
     ExternalResultStatus, ExternalResultValidation, ExternalResultValidationIssue,
 };
 pub use review::{
-    EvidenceReviewChecklist, EvidenceReviewDecision, EvidenceReviewDecisionKind,
-    EvidenceReviewFinding, EvidenceReviewRequirement, EvidenceReviewerRole,
+    build_default_evidence_review_checklist, deserialize_evidence_review_checklist_json,
+    deserialize_evidence_review_decision_json, review_evidence_append_proposal,
+    serialize_evidence_review_checklist_json, serialize_evidence_review_decision_json,
+    validate_evidence_review_decision, EvidenceReviewChecklist, EvidenceReviewChecklistItem,
+    EvidenceReviewDecision, EvidenceReviewDecisionId, EvidenceReviewDecisionKind,
+    EvidenceReviewDecisionStatus, EvidenceReviewDecisionVersion, EvidenceReviewFinding,
+    EvidenceReviewFindingSeverity, EvidenceReviewPolicy, EvidenceReviewReport,
+    EvidenceReviewRequirement, EvidenceReviewerRole,
 };
 pub use serialization::{
     deserialize_artifact_capture_contract_json, deserialize_evidence_append_proposal_json,

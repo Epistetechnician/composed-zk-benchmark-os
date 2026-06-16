@@ -1,0 +1,3 @@
+# HSAI Agent Case Phase Notes
+
+This explicit Hyper Sacred AI implementation phase adds only the standalone `hsai-agent-case` crate. The crate defines local `AgentCase` lowering data, the `CaseSource` and `EvidenceLane` interfaces, and two honest reference lanes from `docs/26-agent-case-evidence-lane-spec.md`: `DeclaredLane`, which establishes no guarantees, and `LocalMemoryLane`, which establishes only local `MemoryIntegrity`. This phase does not add a distinct-agent lane, `IdentityProvider`, real ZK or TEE evidence, network access, economy logic, agent runtime, benchmark outputs, or any `zkbench-core` behavior.

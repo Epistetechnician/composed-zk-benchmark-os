@@ -1,0 +1,3 @@
+# HSAI Claim Envelope Phase Notes
+
+This explicit Hyper Sacred AI implementation phase adds only the standalone `hsai-claim-envelope` crate. The crate implements the Level 1 local claim-envelope data model, `top()`, `conjoin()`, deterministic provenance hashing, and acceptance-policy checks from `docs/23-claim-envelope-implementation-spec.md`; it does not add identity, economy, evidence lanes, external rails, backend execution, benchmark outputs, or any `zkbench-core` behavior. The property tests assert algebraic laws over local data only, and a passing test run does not prove any claim carried by an envelope.

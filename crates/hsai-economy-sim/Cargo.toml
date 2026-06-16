@@ -1,0 +1,16 @@
+[package]
+name = "hsai-economy-sim"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "Deterministic flywheel simulation harness over the HSAI economy."
+
+[dependencies]
+hsai-claim-envelope = { path = "../hsai-claim-envelope" }
+hsai-agent-case = { path = "../hsai-agent-case" }
+hsai-distinct-agent = { path = "../hsai-distinct-agent" }
+hsai-economy = { path = "../hsai-economy" }
+serde = { version = "1", features = ["derive"] }
+
+[dev-dependencies]
+proptest = { version = "=1.5.0", default-features = false, features = ["std"] }

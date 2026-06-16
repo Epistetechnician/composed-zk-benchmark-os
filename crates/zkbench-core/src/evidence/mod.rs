@@ -1,9 +1,16 @@
 //! Evidence, claim-boundary, expected-verdict, backend-outcome, result
 //! classification, artifact digest, and local ledger primitives.
 
+pub mod acceptance_policy;
+pub mod append_preview;
 pub mod artifact;
+pub mod candidate;
 pub mod digest;
+pub mod eligibility;
+pub mod escalation_guard;
 pub mod ledger;
+pub mod review;
+pub mod review_ledger;
 
 use std::fmt;
 
@@ -11,17 +18,67 @@ use serde::{Deserialize, Serialize};
 
 use crate::adapters::BackendTarget;
 
+pub use acceptance_policy::{
+    build_default_evidence_acceptance_policy, deserialize_evidence_acceptance_policy_json,
+    serialize_evidence_acceptance_policy_json, validate_evidence_acceptance_policy,
+    EvidenceAcceptanceBlockingReason, EvidenceAcceptancePolicy, EvidenceAcceptancePolicyId,
+    EvidenceAcceptancePolicyMode, EvidenceAcceptancePolicyVersion, EvidenceAcceptanceRule,
+    EvidenceAcceptanceRuleResult, EvidenceAcceptanceValidation, EvidenceAcceptanceValidationIssue,
+};
+pub use append_preview::{
+    create_evidence_append_preview, deserialize_evidence_append_preview_json,
+    serialize_evidence_append_preview_json, validate_evidence_append_preview,
+    EvidenceAppendPreview, EvidenceAppendPreviewId, EvidenceAppendPreviewIssueKind,
+    EvidenceAppendPreviewStatus, EvidenceAppendPreviewValidation,
+    EvidenceAppendPreviewValidationIssue, EvidenceAppendPreviewVersion,
+    EvidenceLedgerAppendPreviewEntry, EvidenceLedgerAppendTransactionPreview,
+};
 pub use artifact::{
     ArtifactDigest, ArtifactDigestAlgorithm, ArtifactKind, ArtifactRef, ArtifactRole,
+};
+pub use candidate::{
+    create_evidence_record_candidate, deserialize_evidence_record_candidate_json,
+    serialize_evidence_record_candidate_json, validate_evidence_record_candidate,
+    EvidenceRecordCandidate, EvidenceRecordCandidateId, EvidenceRecordCandidateIssueKind,
+    EvidenceRecordCandidateKind, EvidenceRecordCandidateSource, EvidenceRecordCandidateStatus,
+    EvidenceRecordCandidateValidation, EvidenceRecordCandidateValidationIssue,
+    EvidenceRecordCandidateVersion,
 };
 pub use digest::{
     canonical_json_bytes, compute_artifact_digest, compute_artifact_digest_bytes,
     compute_artifact_digest_for_json,
 };
+pub use eligibility::{
+    check_level2_eligibility, deserialize_level2_eligibility_report_json,
+    serialize_level2_eligibility_report_json, Level2EligibilityBlockingReason,
+    Level2EligibilityChecker, Level2EligibilityFinding, Level2EligibilityReport,
+    Level2EligibilityRequirement, Level2EligibilityStatus,
+};
+pub use escalation_guard::{
+    guard_claim_boundary_escalation, ClaimBoundaryEscalationGuard,
+    ClaimBoundaryEscalationGuardResult,
+};
 pub use ledger::{
     EvidenceAppendPolicy, EvidenceChainDigest, EvidenceLedger, EvidenceLedgerEntry,
     EvidenceLedgerSummary, EvidenceLedgerSummaryCount, EvidenceLedgerValidation,
     EvidenceLedgerValidationError, EvidenceLedgerVersion,
+};
+pub use review::{
+    build_default_evidence_review_checklist, deserialize_evidence_review_checklist_json,
+    deserialize_evidence_review_decision_json, review_evidence_append_proposal,
+    serialize_evidence_review_checklist_json, serialize_evidence_review_decision_json,
+    validate_evidence_review_decision, EvidenceReviewChecklist, EvidenceReviewChecklistItem,
+    EvidenceReviewDecision, EvidenceReviewDecisionId, EvidenceReviewDecisionKind,
+    EvidenceReviewDecisionStatus, EvidenceReviewDecisionVersion, EvidenceReviewFinding,
+    EvidenceReviewFindingSeverity, EvidenceReviewPolicy, EvidenceReviewReport,
+    EvidenceReviewRequirement, EvidenceReviewerRole,
+};
+pub use review_ledger::{
+    deserialize_evidence_review_ledger_json, serialize_evidence_review_ledger_json,
+    EvidenceReviewLedger, EvidenceReviewLedgerDigest, EvidenceReviewLedgerEntry,
+    EvidenceReviewLedgerEntrySubject, EvidenceReviewLedgerEntryVersion,
+    EvidenceReviewLedgerSummary, EvidenceReviewLedgerSummaryCount, EvidenceReviewLedgerValidation,
+    EvidenceReviewLedgerValidationIssue, EvidenceReviewLedgerVersion,
 };
 
 /// Expected semantic verdict declared before backend replay.

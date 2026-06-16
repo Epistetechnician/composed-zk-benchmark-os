@@ -89,6 +89,10 @@ pub enum ZkBenchError {
     #[error("evidence review ledger error at {path}: {message}")]
     EvidenceReviewLedger { path: String, message: String },
 
+    /// Local soak runner validation or execution failed.
+    #[error("local soak error at {path}: {message}")]
+    Soak { path: String, message: String },
+
     /// Serialization failed.
     #[error("serialization error at {path}: {message}")]
     Serialization { path: String, message: String },
@@ -216,10 +220,7 @@ impl ZkBenchError {
     }
 
     /// Construct an evidence acceptance policy error.
-    pub fn evidence_acceptance_policy(
-        path: impl Into<String>,
-        message: impl Into<String>,
-    ) -> Self {
+    pub fn evidence_acceptance_policy(path: impl Into<String>, message: impl Into<String>) -> Self {
         Self::EvidenceAcceptancePolicy {
             path: path.into(),
             message: message.into(),
@@ -227,10 +228,7 @@ impl ZkBenchError {
     }
 
     /// Construct an evidence record candidate error.
-    pub fn evidence_record_candidate(
-        path: impl Into<String>,
-        message: impl Into<String>,
-    ) -> Self {
+    pub fn evidence_record_candidate(path: impl Into<String>, message: impl Into<String>) -> Self {
         Self::EvidenceRecordCandidate {
             path: path.into(),
             message: message.into(),
@@ -238,10 +236,7 @@ impl ZkBenchError {
     }
 
     /// Construct an evidence append preview error.
-    pub fn evidence_append_preview(
-        path: impl Into<String>,
-        message: impl Into<String>,
-    ) -> Self {
+    pub fn evidence_append_preview(path: impl Into<String>, message: impl Into<String>) -> Self {
         Self::EvidenceAppendPreview {
             path: path.into(),
             message: message.into(),
@@ -259,6 +254,14 @@ impl ZkBenchError {
     /// Construct an evidence review ledger error.
     pub fn evidence_review_ledger(path: impl Into<String>, message: impl Into<String>) -> Self {
         Self::EvidenceReviewLedger {
+            path: path.into(),
+            message: message.into(),
+        }
+    }
+
+    /// Construct a local soak error.
+    pub fn soak(path: impl Into<String>, message: impl Into<String>) -> Self {
+        Self::Soak {
             path: path.into(),
             message: message.into(),
         }

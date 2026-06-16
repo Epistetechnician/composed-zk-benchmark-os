@@ -1,0 +1,39 @@
+{
+  "id": "review_decision_proposal_normalized_synthetic_candidate_valid_candidate_only",
+  "version": {
+    "value": "phase-j-evidence-review-decision-v0"
+  },
+  "source_proposal_id": "proposal_normalized_synthetic_candidate_valid",
+  "reviewer_role": "Maintainer",
+  "decision_kind": "ApproveForCandidateOnly",
+  "decision_status": "FinalizedCandidateOnly",
+  "checklist": {
+    "items": [
+      {
+        "id": "source_proposal_exists",
+        "description": "source proposal exists",
+        "required": true,
+        "satisfied": true,
+        "finding_severity_if_unsatisfied": "Blocking",
+        "notes": []
+      }
+    ],
+    "requirements": [
+      {
+        "id": "source_proposal_exists",
+        "description": "source proposal exists",
+        "required": true,
+        "satisfied": true,
+        "notes": []
+      }
+    ],
+    "findings": [],
+    "decisions": []
+  },
+  "findings": [],
+  "blocking_issues": [],
+  "claim_boundary_decision": "Level0DesignNote",
+  "notes": [
+    "candidate-only review decision"
+  ]
+}

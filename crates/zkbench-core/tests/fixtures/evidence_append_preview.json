@@ -1,0 +1,90 @@
+{
+  "id": "append_preview_candidate_proposal_normalized_synthetic_candidate_valid",
+  "version": {
+    "value": "phase-j-evidence-append-preview-v0"
+  },
+  "source_candidate_id": "candidate_proposal_normalized_synthetic_candidate_valid",
+  "target_evidence_ledger_id": null,
+  "proposed_append_entries": [
+    {
+      "candidate_id": "candidate_proposal_normalized_synthetic_candidate_valid",
+      "proposed_evidence_class": "LocalReplay",
+      "proposed_claim_boundary": "Level1LocalReplay",
+      "proposed_record_digest": {
+        "algorithm": "Sha256",
+        "hex_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "byte_len": 128,
+        "kind": "EvidenceLedger",
+        "role": "Evidence"
+      },
+      "projected_entry_digest": {
+        "algorithm": "Sha256",
+        "hex_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "byte_len": 96,
+        "kind": "EvidenceLedger",
+        "role": "Digest"
+      },
+      "notes": [
+        "projected entry only"
+      ]
+    }
+  ],
+  "validation": {
+    "valid": true,
+    "issues": []
+  },
+  "claim_boundary": "Level0DesignNote",
+  "status": "PreviewOnly",
+  "transaction_preview": {
+    "target_ledger_id": null,
+    "current_ledger_digest": null,
+    "candidate_entries": [
+      {
+        "candidate_id": "candidate_proposal_normalized_synthetic_candidate_valid",
+        "proposed_evidence_class": "LocalReplay",
+        "proposed_claim_boundary": "Level1LocalReplay",
+        "proposed_record_digest": {
+          "algorithm": "Sha256",
+          "hex_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "byte_len": 128,
+          "kind": "EvidenceLedger",
+          "role": "Evidence"
+        },
+        "projected_entry_digest": {
+          "algorithm": "Sha256",
+          "hex_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "byte_len": 96,
+          "kind": "EvidenceLedger",
+          "role": "Digest"
+        },
+        "notes": [
+          "projected entry only"
+        ]
+      }
+    ],
+    "projected_ledger_summary": {
+      "entry_count": 1,
+      "evidence_class_counts": [
+        {
+          "name": "LocalReplay",
+          "count": 1
+        }
+      ],
+      "claim_boundary_counts": [
+        {
+          "name": "Level1LocalReplay",
+          "count": 1
+        }
+      ]
+    },
+    "validation_issues": [],
+    "notes": [
+      "transaction preview only"
+    ]
+  },
+  "mutates_evidence_ledger": false,
+  "notes": [
+    "append preview metadata only",
+    "future manual append required"
+  ]
+}

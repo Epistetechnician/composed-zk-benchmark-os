@@ -1,0 +1,3 @@
+# HSAI Distinct Agent Phase Notes
+
+This explicit Hyper Sacred AI implementation phase adds only the standalone `hsai-distinct-agent` crate. The crate defines anchor data, the conditional `DistinctAgentLane`, and a minimal deterministic `IdentityRegistry` from `docs/29-distinct-agent-lane-spec.md`; it transcribes anchor evidence into open anchor-validity assumptions and enforces one registered identity per anchor trust root. This phase does not verify attestations, stakes, or credentials, does not add a real ZK or TEE verification lane, does not implement economy, harness, interop, network access, benchmark outputs, or any `zkbench-core` behavior.

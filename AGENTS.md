@@ -17,6 +17,22 @@ Allowed in the current Level 1 state:
 - zk-Harness dry-run adapter preparation types, tests, and docs under `crates/zkbench-core` and `docs/`.
 - External-runner boundary, manual handoff bundle, artifact capture contract, provenance contract, result import validation schema, and quarantine types under `crates/zkbench-core` and `docs/`.
 - Synthetic result import, normalization, quarantine flow, evidence append proposal, review-state, proposal ledger, and small JSON fixtures under `crates/zkbench-core` and `docs/`.
+- Reviewed proposal acceptance policy, manual review decisions, evidence-record candidates, append previews, Level2 eligibility reports, review ledgers, and small JSON fixtures under `crates/zkbench-core` and `docs/`.
+- Local soak run configuration, deterministic shard planning, resumable shard checkpoints, local soak runner APIs, internal benchmark OS telemetry, local health reports, failure corpus extraction, report bundle schemas, tests, and docs under `crates/zkbench-core` and `docs/`.
+
+Explicit HSAI claim-envelope phase now allowed: standalone Rust source, tests, and crate metadata under `crates/hsai-claim-envelope`, workspace membership for that crate, and phase notes under `docs/`. This phase is limited to the Level 1 local claim-envelope data model, deterministic provenance hashing, `top()`, `conjoin()`, and acceptance-policy algebra from `docs/23-claim-envelope-implementation-spec.md`; it does not permit identity, economy, evidence lanes, external rails, backend execution, benchmark outputs, or conflating HSAI code with `zkbench-core`.
+
+Explicit HSAI agent-case phase now allowed: standalone Rust source, tests, and crate metadata under `crates/hsai-agent-case`, workspace membership for that crate, and phase notes under `docs/`. This phase is limited to local `AgentCase` data, the `CaseSource` and `EvidenceLane` interfaces, and the honest `DeclaredLane` and `LocalMemoryLane` reference lanes from `docs/26-agent-case-evidence-lane-spec.md`; it does not permit distinct-agent identity, economy, real ZK or TEE lanes, network access, external rails, backend execution, benchmark outputs, or changes to `zkbench-core` or `hsai-claim-envelope`.
+
+Explicit HSAI distinct-agent phase now allowed: standalone Rust source, tests, and crate metadata under `crates/hsai-distinct-agent`, workspace membership for that crate, and phase notes under `docs/`. This phase is limited to anchor data, conditional `DistinctAgentLane` envelope emission, and the minimal deterministic `IdentityRegistry` from `docs/29-distinct-agent-lane-spec.md`; it does not verify attestations, stakes, or credentials, does not permit economy, harness, interop, network access, real ZK or TEE verification lanes, backend execution, benchmark outputs, or changes to existing crates.
+
+Explicit HSAI economy phase now allowed: standalone Rust source, tests, and crate metadata under `crates/hsai-economy`, workspace membership for that crate, and phase notes under `docs/`. This phase is limited to signed in-memory credits, admitted-work reward records, the floor-plus-demand peg stub, demurrage and mutual-credit pool policies, and a deterministic `Economy` ledger gated on the L2 `IdentityRegistry` from `docs/32-economy-stub-spec.md`; it does not permit regenerative-economy claims, external rails, membrane conversion, real settlement, real demand verification, full corrigibility, backend execution, benchmark outputs, or changes to existing crates.
+
+Explicit HSAI membrane phase now allowed: standalone Rust source, tests, and crate metadata under `crates/hsai-membrane`, workspace membership for that crate, phase notes under `docs/`, and exactly two authorized `hsai-economy` methods, `Economy::debit_external` and `Economy::credit_external`, with focused tests. This phase is limited to bounded in-memory conversion between internal `Credits` and opaque `ExternalAmount` units with L2 registration gating, freeze gating, and per-window autonomy-scaled caps from `docs/35-membrane-spec.md`; it does not permit real rails, settlement, fees, external resource control, full corrigibility, backend execution, benchmark outputs, or other changes to existing crates.
+
+Explicit HSAI economy-simulation phase now allowed: standalone Rust source, tests, and crate metadata under `crates/hsai-economy-sim`, workspace membership for that crate, phase notes under `docs/`, and a measured A5 update under `docs/research/assumption-ledger.md`. This phase is limited to a deterministic integer simulation harness over the shipped HSAI economy from `docs/38-economy-simulation-spec.md`; it does not permit new protocol primitives, empirical economic claims, pool-demurrage economy changes, external rails, backend execution, benchmark outputs, or changes to existing crates.
+
+Explicit HSAI funding-rule sweep phase now allowed: backward-compatible Rust source and tests under `crates/hsai-economy-sim`, phase notes under `docs/`, and an append-only A5 refinement under `docs/research/assumption-ledger.md`. This phase is limited to adding `FundingRule`, `run_with_funding`, `SweepCell`, and `sweep` from `docs/41-funding-rule-sweep-spec.md`; it does not permit changes to any other crate, empirical economic claims, new funding mechanisms beyond the three probes, pool-demurrage economy changes, external rails, backend execution, or benchmark outputs.
 
 Forbidden in the current Level 1 state:
 
@@ -55,8 +71,19 @@ Use these statements as hard boundaries:
 - Future agents must not reinterpret handoff bundles as zk-Harness execution.
 - Synthetic result candidates are not benchmark results.
 - Evidence append proposals are not accepted evidence.
+- Evidence-record candidates are not accepted evidence.
+- Append previews are not accepted evidence and must not mutate the accepted Evidence Ledger.
+- Level2 eligibility reports are not Level2 evidence.
+- Review ledgers are review artifacts only and must not mutate the accepted Evidence Ledger.
 - Proposal ledgers are review ledgers only and must not mutate the accepted Evidence Ledger.
 - Future agents must not treat synthetic metric candidates as performance evidence.
+- Local soak telemetry is not official benchmark evidence.
+- Internal timing telemetry is not ZK backend performance.
+- Failure corpus entries are reproduction aids, not accepted evidence.
+- Future agents must not use soak timing as prover/verifier timing.
+- Future agents must not commit large soak outputs unless explicitly requested.
+- Future agents must run long soak jobs only with explicit user approval and outside normal tests.
+- Future agents must preserve shard resumability and claim-boundary checks.
 
 The architecture docs remain Level 0 design notes. The Rust core crate is Level 1 local implementation foundation only.
 
@@ -81,9 +108,14 @@ grep -R "local replay is not official benchmark evidence" "$ROOT/docs" "$ROOT/RE
 grep -R "Manual handoff bundles are not benchmark results" "$ROOT/docs" "$ROOT/README.md" "$ROOT/AGENTS.md" || true
 grep -R "Synthetic result candidates are not benchmark results" "$ROOT/docs" "$ROOT/README.md" "$ROOT/AGENTS.md" || true
 grep -R "Evidence append proposals are not accepted evidence" "$ROOT/docs" "$ROOT/README.md" "$ROOT/AGENTS.md" || true
+grep -R "Evidence-record candidates are not accepted evidence" "$ROOT/docs" "$ROOT/README.md" "$ROOT/AGENTS.md" || true
+grep -R "Level2 eligibility reports are not Level2 evidence" "$ROOT/docs" "$ROOT/README.md" "$ROOT/AGENTS.md" || true
+grep -R "Local soak telemetry is not official benchmark evidence" "$ROOT/docs" "$ROOT/README.md" "$ROOT/AGENTS.md" || true
+grep -R "Internal timing telemetry is not ZK backend performance" "$ROOT/docs" "$ROOT/README.md" "$ROOT/AGENTS.md" || true
+grep -R "Failure corpus entries are reproduction aids" "$ROOT/docs" "$ROOT/README.md" "$ROOT/AGENTS.md" || true
 grep -R "std::process::Command" "$ROOT/crates/zkbench-core/src" || true
 grep -R "Command::new" "$ROOT/crates/zkbench-core/src" || true
-grep -R "prover_time\|verifier_time\|proof_size\|memory_usage\|constraint_count" "$ROOT/crates/zkbench-core/tests/fixtures" || true
+grep -R "prover_time\|verifier_time\|proof_size\|zk_harness_time\|memory_usage\|constraint_count" "$ROOT/crates/zkbench-core/tests/fixtures" || true
 ```
 
 If package scripts are introduced in a later phase, preserve `pnpm run lint` as the heavy gate and split fast gates into `lint:fast`, `test:focused`, `verify:contracts`, and `verify:full`.
@@ -109,7 +141,7 @@ When changing behavior, document public utilities under `docs/` before claiming 
 
 ## Future Rust Work
 
-The Rust foundation now includes the DSL/core schema, deterministic local generation, the first mutation engine classes, local JSON replay, evidence ledger persistence, deterministic artifact digests, benchmark pack skeletons, zk-Harness dry-run adapter preparation, the reviewed external-runner boundary schema, and a local/synthetic result import prototype. The next slice may define reviewed proposal acceptance policy only. Do not run external benchmarks, claim official evidence, add dashboards, or broaden recursion/zkML support before proposal review, supersession, and future append eligibility are implemented and tested.
+The Rust foundation now includes the DSL/core schema, deterministic local generation, the first mutation engine classes, local JSON replay, evidence ledger persistence, deterministic artifact digests, benchmark pack skeletons, zk-Harness dry-run adapter preparation, the reviewed external-runner boundary schema, a local/synthetic result import prototype, reviewed proposal acceptance primitives, a deterministic local soak runner, internal benchmark OS telemetry, local health reports, and failure corpus extraction. The next slice should run longer local soak execution and sampled local report generation only with explicit user approval. Do not run external benchmarks, claim official evidence, add dashboards, or broaden recursion/zkML support before local soak telemetry proves the internal review/candidate/preview flow remains deterministic.
 
 ## External Repos
 

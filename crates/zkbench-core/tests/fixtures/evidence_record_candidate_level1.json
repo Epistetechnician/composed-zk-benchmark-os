@@ -1,0 +1,69 @@
+{
+  "id": "candidate_proposal_normalized_synthetic_candidate_valid",
+  "version": {
+    "value": "phase-j-evidence-record-candidate-v0"
+  },
+  "status": "CandidateOnly",
+  "source": {
+    "source_proposal_id": "proposal_normalized_synthetic_candidate_valid",
+    "source_normalized_draft_id": "normalized_synthetic_candidate_valid",
+    "source_local_replay_ids": [
+      "local_replay_candidate_review_only"
+    ],
+    "review_decision_id": "review_decision_proposal_normalized_synthetic_candidate_valid_candidate_only",
+    "acceptance_policy_id": "phase_j_level1_local_only_policy"
+  },
+  "kind": "LocalReplayEvidenceCandidate",
+  "proposed_evidence_class": "LocalReplay",
+  "proposed_claim_boundary": "Level1LocalReplay",
+  "proposed_provenance_summary": [
+    "source_candidate=synthetic_candidate_valid",
+    "source_pack=phase_i_local_pack_ref",
+    "dry_run_plan=phase_i_synthetic_plan_ref"
+  ],
+  "proposed_artifact_refs": [
+    {
+      "artifact_ref": "artifacts/synthetic_metric_source.json",
+      "digest": {
+        "algorithm": "Sha256",
+        "hex_digest": "f6f08b6afbd51c2a40a3471fe3493b8397e3274830fef5464f74213a01e45d65",
+        "byte_len": 27,
+        "kind": "Other",
+        "role": "Output"
+      },
+      "verified_by_importer": true,
+      "notes": [
+        "synthetic candidate artifact reference only"
+      ]
+    }
+  ],
+  "validation_report_digest": {
+    "algorithm": "Sha256",
+    "hex_digest": "f6f08b6afbd51c2a40a3471fe3493b8397e3274830fef5464f74213a01e45d65",
+    "byte_len": 27,
+    "kind": "Other",
+    "role": "Digest"
+  },
+  "acceptance_validation": {
+    "valid": true,
+    "issues": [],
+    "rule_results": [
+      {
+        "rule_id": "policy_mode_allows_candidates",
+        "passed": true,
+        "blocking_reason": null,
+        "message": "policy mode allows candidate creation"
+      }
+    ]
+  },
+  "blocking_issues": [],
+  "claims_accepted_evidence": false,
+  "claims_official_benchmark_evidence": false,
+  "claims_formal_evidence": false,
+  "claims_proof_system_soundness": false,
+  "candidate_metrics_are_score_inputs": false,
+  "notes": [
+    "candidate-only metadata",
+    "future manual append required"
+  ]
+}

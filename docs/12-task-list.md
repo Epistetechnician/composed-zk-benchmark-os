@@ -160,27 +160,63 @@ Exit criteria: safe synthetic import and review workflow exists without creating
 
 ## Phase J: Reviewed Proposal Acceptance Policy
 
-Status: future.
+Status: complete for local metadata-only Phase J.
 
 Goal: Define reviewed proposal acceptance policy without live external execution or automatic EvidenceLedger append.
 
 Deliverables: proposal state transitions, review decisions, blocking issue handling, supersession, audit reasons, future append eligibility, and evidence-ledger non-mutation tests.
 
+Implemented: `EvidenceReviewDecision`, `EvidenceReviewChecklist`, `EvidenceAcceptancePolicy`, `ClaimBoundaryEscalationGuard`, `EvidenceRecordCandidate`, `EvidenceAppendPreview`, `Level2EligibilityChecker`, and `EvidenceReviewLedger`.
+
 Dependencies: Phase I.
 
-Validation gate: proposal policy tests, ledger transition tests, claim-boundary tests, and source scans for live execution APIs.
+Validation gate: proposal review tests, acceptance policy tests, candidate tests, append preview tests, Level2 eligibility tests, review ledger tests, claim-boundary tests, and source scans for live execution APIs.
 
 Anti-goals: live zk-Harness execution, accepted external evidence, automatic Level2 promotion, fake performance metrics, single opaque aggregate.
 
-Exit criteria: reviewed proposals can be approved only for future append eligibility and cannot become accepted evidence in the same step.
+Exit criteria: reviewed proposals can be approved only for candidate/preview metadata and cannot become accepted evidence in the same step.
 
-## Phase K: gnark Recursion Adapter
+## Phase K: Local Soak Runner And Internal Telemetry
 
-Goal: Add recursion-envelope stress lane.
+Status: complete for local-only Phase K.
+
+Goal: Repeatedly exercise local-only generation, mutation, local replay, optional sampled local packs, internal benchmark OS telemetry, local health reports, and failure corpus extraction to catch nondeterminism and internal regressions.
+
+Implemented: `SoakRunConfig`, `SoakLimits`, `SoakOutputPolicy`, `SoakShardPlanner`, `SoakShardPlan`, `SoakShardManifest`, `SoakShardCheckpoint`, `LocalSoakRunner`, `SoakTelemetryReport`, `SoakHealthReport`, `FailureCorpusIndex`, `FailureReproductionManifest`, `SoakArtifactLayout`, and `SoakReportBundle`.
+
+Dependencies: Phase J.
+
+Validation gate: soak config tests, sharding tests, runner smoke tests, resume tests, telemetry JSON round-trips, health report tests, failure corpus tests, no external execution source scans, no ZK backend performance labels, and no Level2+ actual evidence tests.
+
+Anti-goals: live zk-Harness execution, external result import, dashboards, fake performance numbers, Level2+ evidence creation.
+
+Exit criteria: small local-only runs produce deterministic shard plans, resumable checkpoints, internal telemetry, local health reports, and failure corpus indexes while preserving claim boundaries.
+
+## Phase L: Long Local Soak Execution And Sampled Reports
+
+Status: future.
+
+Goal: Run longer local soak jobs and publish sampled local-only reports after explicit user approval.
+
+Deliverables: user-approved long-running local jobs, shard output outside the repo or under an ignored artifact directory, smoke/focused/regression/nightly-local profiles, sampled pack retention, failure-pack retention, aggregate telemetry reports, regression corpus curation, and local-only report publishing under strict claim boundaries.
+
+Dependencies: Phase K.
+
+Validation gate: explicit approval record, ignored or external artifact root, aggregate report validation, failure corpus validation, no external execution, no official benchmark evidence, and no ZK backend performance claims.
+
+Anti-goals: live zk-Harness execution, external result import, official benchmark evidence, ZK backend performance claims, dashboards, Level2+ evidence creation.
+
+Exit criteria: long local soak outputs are reproducible, bounded, claim-safe, and organized outside committed source by default.
+
+## Phase M: gnark Recursion Adapter
+
+Status: future.
+
+Goal: Add recursion-envelope stress lane after local soak telemetry exists.
 
 Deliverables: recursion adapter and evidence mapping.
 
-Dependencies: Phase J.
+Dependencies: Phase L and future explicit adapter approval.
 
 Validation gate: scoped recursion replay.
 
@@ -188,13 +224,13 @@ Anti-goals: claiming recursion proof as semantic proof.
 
 Exit criteria: recursion outcomes are evidence-capped.
 
-## Phase L: Narrow zkML Adapter
+## Phase N: Narrow zkML Adapter
 
 Goal: Add mixed control-flow and zkML workload metrics.
 
 Deliverables: manifest shape and narrow adapter.
 
-Dependencies: Phase J.
+Dependencies: Phase L and future explicit adapter approval.
 
 Validation gate: manifest validation and one workload replay.
 
@@ -202,13 +238,13 @@ Anti-goals: becoming a zkML benchmark project.
 
 Exit criteria: zkML metrics are normalized and claim-capped.
 
-## Phase M: Reproducible Benchmark Packs
+## Phase O: Reproducible Benchmark Packs
 
 Goal: Produce deterministic benchmark packs.
 
 Deliverables: pack manifests, artifact hashes, replay commands.
 
-Dependencies: Phase I and future reviewed external replay.
+Dependencies: Phase L and future reviewed external replay.
 
 Validation gate: `verify:full`.
 
@@ -216,13 +252,13 @@ Anti-goals: broad leaderboard claims without reproduction.
 
 Exit criteria: Level 2 evidence for scoped packs.
 
-## Phase N: Dashboard/Reporting
+## Phase P: Dashboard/Reporting
 
 Goal: Visualize Score Reports after the evidence model works.
 
 Deliverables: report renderer or dashboard.
 
-Dependencies: Phase J and M.
+Dependencies: Phase L and reproducible benchmark packs.
 
 Validation gate: report validation and UI tests if applicable.
 

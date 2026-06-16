@@ -1,8 +1,15 @@
 [workspace]
 resolver = "2"
-members = ["crates/zkbench-core"]
+members = [
+    "crates/hsai-agent-case",
+    "crates/hsai-claim-envelope",
+    "crates/hsai-distinct-agent",
+    "crates/hsai-economy",
+    "crates/hsai-economy-sim",
+    "crates/hsai-membrane",
+    "crates/zkbench-core",
+]
 
 [workspace.package]
 edition = "2021"
 rust-version = "1.74"
-

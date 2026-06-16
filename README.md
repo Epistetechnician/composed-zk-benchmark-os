@@ -21,7 +21,7 @@ Core novelty:
 
 ## What This Repo Is
 
-This is now a Level 1 local Rust foundation plus the original Level 0 architecture scaffold. It defines the architecture, vocabulary, repo integration decisions, DSL schema, Rust core crate, deterministic generator, v0 mutation engine, local JSON replay adapter, evidence ledger, benchmark pack skeleton, zk-Harness dry-run adapter preparation, external-runner boundary contracts, manual handoff bundle schema, synthetic result import prototype, evidence append proposal workflow, proposal ledger primitives, scoring primitives, validation gates, and adapter roadmap.
+This is now a Level 1 local Rust foundation plus the original Level 0 architecture scaffold. It defines the architecture, vocabulary, repo integration decisions, DSL schema, Rust core crate, deterministic generator, v0 mutation engine, local JSON replay adapter, evidence ledger, benchmark pack skeleton, zk-Harness dry-run adapter preparation, external-runner boundary contracts, manual handoff bundle schema, synthetic result import prototype, evidence append proposal workflow, reviewed proposal acceptance policy, evidence-record candidate metadata, append previews, Level2 eligibility checks, review ledger primitives, proposal ledger primitives, scoring primitives, validation gates, and adapter roadmap.
 
 ## What This Repo Is Not
 
@@ -106,6 +106,8 @@ Surface DSL
 | [docs/17-phase-g-zk-harness-dry-run-adapter-notes.md](docs/17-phase-g-zk-harness-dry-run-adapter-notes.md) | Phase G zk-Harness dry-run adapter preparation notes. |
 | [docs/18-phase-h-external-runner-boundary-notes.md](docs/18-phase-h-external-runner-boundary-notes.md) | Phase H external-runner boundary and manual handoff notes. |
 | [docs/19-phase-i-synthetic-result-import-notes.md](docs/19-phase-i-synthetic-result-import-notes.md) | Phase I synthetic result import, normalization, quarantine, proposal, and proposal ledger notes. |
+| [docs/20-phase-j-reviewed-proposal-acceptance-notes.md](docs/20-phase-j-reviewed-proposal-acceptance-notes.md) | Phase J reviewed proposal acceptance policy, candidates, previews, eligibility, and review ledger notes. |
+| [docs/21-phase-k-local-soak-runner-telemetry-notes.md](docs/21-phase-k-local-soak-runner-telemetry-notes.md) | Phase K local soak runner, internal benchmark OS telemetry, health reports, and failure corpus notes. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -147,21 +149,38 @@ Surface DSL
 - Invalid synthetic result candidates are quarantined.
 - Valid synthetic result candidates normalize into pending-review drafts only.
 - Evidence append proposal primitives exist.
+- Manual review decision primitives exist.
+- Evidence acceptance policy primitives exist.
+- Evidence-record candidate primitives exist.
+- Evidence append preview primitives exist and do not mutate `EvidenceLedger`.
+- Level2 eligibility checker primitives exist for future-review readiness only.
+- Evidence review ledger persistence exists and remains separate from the accepted `EvidenceLedger`.
 - Proposal ledger persistence exists and is separate from the accepted `EvidenceLedger`.
+- Local soak runner exists for deterministic, sharded, resumable local-only stress studies.
+- Local soak run configuration, deterministic shard planning, shard manifests, checkpointing, report bundles, and artifact layout types exist.
+- Internal benchmark OS telemetry exists for generation, mutation, local oracle, local replay, pack read/write, proposal-preview counters, and local runner duration.
+- Local health report models exist and warn that local soak telemetry is not official benchmark evidence.
+- Failure corpus extraction exists with reproduction manifests and minimization metadata only.
 - Result classification exists.
 - Evidence and scoring primitives exist.
 - No external adapters exist.
 - No live zk-Harness execution exists.
 - No live external execution exists.
 - No real external result import exists.
+- No local soak telemetry is used as ZK backend performance.
+- No failure corpus entry is accepted evidence.
 - No evidence append proposal is accepted evidence.
+- No evidence-record candidate is accepted evidence.
+- No append preview is accepted evidence.
+- No Level2 eligibility report is Level2 evidence.
+- No review ledger entry is accepted evidence.
 - No external adapter evidence exists.
 - No official benchmark evidence exists.
 - No formal evidence exists.
 
 ## Next Implementation Slice
 
-Phase J should implement a reviewed proposal acceptance policy for synthetic/imported candidates. It should define review decisions, blocking issue handling, supersession, and future append eligibility without live external execution and without appending accepted evidence yet. Do not recommend zk-Harness execution until reviewed proposals can be audited and local benchmark instances with expected verdicts remain deterministic.
+Phase L should run long local soak execution and sampled local report generation only with explicit user approval. It should retain sampled local reports and failure packs outside the repository or under an ignored artifact directory, curate a regression corpus, and keep all reports local-only. It must not run zk-Harness, import real external results, create dashboards, claim official benchmark evidence, or promote Level2+ evidence.
 
 ## Non-Goals
 
@@ -179,7 +198,9 @@ A benchmark pass is not a proof. A local replay is not official benchmark eviden
 
 zk-Harness dry-run plans are not benchmark results. Manual handoff bundles are not benchmark results. External execution is disabled by default. Result import candidates are quarantined or pending review until validated.
 
-Synthetic result candidates are not benchmark results. Evidence append proposals are not accepted evidence. Proposal ledgers are review ledgers only and do not mutate the accepted Evidence Ledger.
+Synthetic result candidates are not benchmark results. Evidence append proposals are not accepted evidence. Evidence-record candidates are not accepted evidence. Append previews are not accepted evidence and do not mutate the accepted Evidence Ledger. Level2 eligibility reports are not Level2 evidence. Proposal ledgers and review ledgers are review artifacts only.
+
+Local soak telemetry is not official benchmark evidence. Internal timing telemetry is not ZK backend performance. Failure corpus entries are reproduction aids, not accepted evidence. Future agents must not use soak timing as prover/verifier timing.
 
 ## Validation Checklist
 

@@ -1,0 +1,35 @@
+cd /Users/shaanp/Documents/GitHub/composed-zk-benchmark-os
+
+# 1) clear the stale lock
+rm -f .git/index.lock
+
+# 2) stage everything (identity already set; target/ is ignored)
+git add -A
+git status          # sanity-check the file list
+
+# 3) commit
+git commit -F- <<'MSG'
+Add Hyper Sacred AI protocol stack, simulation, and research ledger
+
+HSAI superstructure on the zkbench-core Level-1 foundation (also included,
+from prior uncommitted Level-1 work). All HSAI crates property-tested on Rust 1.74.
+
+Crates:
+- hsai-claim-envelope: claim-envelope type + meet-only composition algebra (laws proven)
+- hsai-agent-case: AgentCase + EvidenceLane interface with honest reference lanes
+- hsai-distinct-agent: anchor model, DistinctAgentLane, Sybil-resistant IdentityRegistry
+- hsai-economy: registry-gated demurrage/mutual-credit economy with corrigibility freeze
+- hsai-membrane: bounded internal<->external boundary preserving the off-switch
+- hsai-economy-sim: deterministic flywheel simulation + funding-rule sweep
+
+Docs 22-45: end-to-end architecture, claim-envelope spec, per-phase specs/handoffs,
+and the attestation-verification lane spec (capstone, not yet implemented).
+
+Research: autoresearch loop + assumption ledger (A1-A11 backtests) with the
+Rust-confirmed A5 result -- equity is driven by the funding rule, not the currency.
+
+Claim-boundary discipline preserved throughout.
+MSG
+
+# 4) optional: back up to GitHub
+git push origin master
