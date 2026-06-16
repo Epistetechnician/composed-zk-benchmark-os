@@ -160,11 +160,13 @@ Exit criteria: safe synthetic import and review workflow exists without creating
 
 ## Phase J: Reviewed Proposal Acceptance Policy
 
-Status: future.
+Status: complete for reviewed proposal acceptance policy implementation.
 
 Goal: Define reviewed proposal acceptance policy without live external execution or automatic EvidenceLedger append.
 
 Deliverables: proposal state transitions, review decisions, blocking issue handling, supersession, audit reasons, future append eligibility, and evidence-ledger non-mutation tests.
+
+Implemented: `EvidenceAcceptancePolicy`, `ClaimBoundaryEscalationGuard`, `EvidenceReviewDecision`, `EvidenceReviewChecklist`, `EvidenceRecordCandidate`, candidate creation helpers, JSON round-trip helpers, and claim-boundary tests.
 
 Dependencies: Phase I.
 
@@ -176,45 +178,57 @@ Exit criteria: reviewed proposals can be approved only for future append eligibi
 
 ## Phase K: gnark Recursion Adapter
 
+Status: complete for inert adapter preparation.
+
 Goal: Add recursion-envelope stress lane.
 
-Deliverables: recursion adapter and evidence mapping.
+Deliverables: recursion adapter manifest, inert envelope plan, and evidence mapping.
+
+Implemented: `GnarkRecursionAdapterManifest`, `GnarkRecursionEnvelopePlan`, fixture scope for `recursive_loop_envelope`, inert planned commands, evidence mapping, validation, registry entries, and claim-boundary tests.
 
 Dependencies: Phase J.
 
-Validation gate: scoped recursion replay.
+Validation gate: scoped recursion envelope planning, inertness tests, and claim-boundary tests.
 
-Anti-goals: claiming recursion proof as semantic proof.
+Anti-goals: claiming recursion proof as semantic proof, live gnark execution, Level2+ promotion.
 
-Exit criteria: recursion outcomes are evidence-capped.
+Exit criteria: recursion outcomes are evidence-capped at Level0DesignNote for Phase K artifacts.
 
 ## Phase L: Narrow zkML Adapter
+
+Status: complete for inert adapter preparation.
 
 Goal: Add mixed control-flow and zkML workload metrics.
 
 Deliverables: manifest shape and narrow adapter.
 
+Implemented: `ZkmlNarrowAdapterManifest`, `ZkmlNarrowWorkloadPlan`, fixture scope for `zkml_control_flow_mixed`, inert planned commands, evidence mapping, validation, registry entries, and claim-boundary tests.
+
 Dependencies: Phase J.
 
-Validation gate: manifest validation and one workload replay.
+Validation gate: manifest validation, workload plan validation, inertness tests, and claim-boundary tests.
 
-Anti-goals: becoming a zkML benchmark project.
+Anti-goals: becoming a zkML benchmark project, live zkML execution, Level2+ promotion.
 
-Exit criteria: zkML metrics are normalized and claim-capped.
+Exit criteria: zkML metrics are normalized and claim-capped at Level0DesignNote for Phase L artifacts.
 
 ## Phase M: Reproducible Benchmark Packs
+
+Status: slice 1 complete for reproduction metadata and inert external replay plan attachments.
 
 Goal: Produce deterministic benchmark packs.
 
 Deliverables: pack manifests, artifact hashes, replay commands.
 
+Implemented: `BenchmarkPackReproductionMetadata`, `ExternalReplayPlanAttachment`, `attach_reproduction_bundle_to_pack()`, `Level2EligibilityReport`, pack manifest extensions, reader validation, and claim-boundary tests.
+
 Dependencies: Phase I and future reviewed external replay.
 
-Validation gate: `verify:full`.
+Validation gate: reproduction attach tests, claim-boundary tests, and Level2 eligibility tests.
 
-Anti-goals: broad leaderboard claims without reproduction.
+Anti-goals: broad leaderboard claims without reproduction, Level2 promotion without reviewed external artifacts.
 
-Exit criteria: Level 2 evidence for scoped packs.
+Exit criteria: Level 2 evidence for scoped packs remains future; slice 1 delivers Level0 reproduction metadata on Level1 packs only.
 
 ## Phase N: Dashboard/Reporting
 

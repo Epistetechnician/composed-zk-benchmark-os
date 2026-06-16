@@ -148,6 +148,84 @@ The Rust tests currently cover:
 
 These checks do not establish real external result import, live zk-Harness execution, official benchmark evidence, performance evidence, or formal evidence.
 
+## Phase J Reviewed Proposal Acceptance Policy Checks
+
+The Rust tests currently cover:
+
+- `EvidenceAcceptancePolicy` deterministic JSON serialization and deserialization.
+- reviewed append proposals create `EvidenceRecordCandidate` metadata only after human review.
+- escalation guard blocks Level2+ candidate targets and Level0 to Level1 without explicit local-only policy.
+- automated reviewer roles cannot approve candidate creation.
+- evidence-record candidates remain not accepted evidence and do not mutate `EvidenceLedger`.
+- acceptance policy validation rejects Level2+ actual evidence classes.
+- source scans for `std::process::Command` and `Command::new` remain empty in Phase J modules.
+
+These checks do not establish accepted external evidence, official benchmark evidence, performance evidence, or formal evidence.
+
+## Phase K gnark Recursion Adapter Checks
+
+The Rust tests currently cover:
+
+- `GnarkRecursionAdapterManifest` deterministic JSON serialization and deserialization.
+- default manifest remains envelope-planning-only with external execution disabled.
+- `GnarkRecursionEnvelopePlan` deterministic JSON serialization and deserialization.
+- envelope plans remain `Level0DesignNote` and do not emit evidence records.
+- planned commands are inert serializable data scoped to `recursive_loop_envelope`.
+- validation rejects future live execution policies and absolute fixture paths.
+- metric schema entries remain label-only with no observed values.
+- source scans for `std::process::Command` and `Command::new` remain empty in Phase K modules.
+
+These checks do not establish gnark compatibility, external replay evidence, performance evidence, or formal evidence.
+
+## Phase L Narrow zkML Adapter Checks
+
+The Rust tests currently cover:
+
+- `ZkmlNarrowAdapterManifest` deterministic JSON serialization and deserialization.
+- default manifest remains workload-planning-only with external execution disabled.
+- `ZkmlNarrowWorkloadPlan` deterministic JSON serialization and deserialization.
+- workload plans remain `Level0DesignNote` and do not emit evidence records.
+- planned commands are inert serializable data scoped to `zkml_control_flow_mixed`.
+- validation rejects future live execution policies and absolute fixture paths.
+- public/private boundary and observation-omission mutation classes are in scope.
+- metric schema entries remain label-only with no observed values.
+- source scans for `std::process::Command` and `Command::new` remain empty in narrow zkML modules.
+
+These checks do not establish zkML compatibility, external replay evidence, performance evidence, or formal evidence.
+
+## Phase M Reproducible Benchmark Pack Checks
+
+The Rust tests currently cover:
+
+- `attach_reproduction_bundle_to_pack()` writing three inert external replay plans and reproduction metadata.
+- reproduction attach rejection when metadata is already present.
+- reproduction metadata load and JSON round-trip through `BenchmarkPackReader`.
+- pack manifest claim boundary remains `Level1LocalReplay` after reproduction attach.
+- reproduction metadata and Level2 eligibility reports remain `Level0DesignNote`.
+- Level2 eligibility remains blocked without reviewed external artifacts.
+- extended pack validation passes after reproduction attach.
+
+These checks do not establish Level2 evidence, official benchmark evidence, cross-backend reproduction, performance evidence, or formal evidence.
+
+## Phase L Local Soak Checks
+
+The Rust tests currently cover:
+
+- `SoakPlan` and `SoakConfig` deterministic JSON serialization and deserialization.
+- `run_local_soak()` writes benchmark packs for all implemented family kinds and explicit seeds.
+- identical soak inputs produce byte-identical pack artifacts and soak execution reports.
+- soak execution reports remain `Level0DesignNote`.
+- soak benchmark packs remain `Level1LocalReplay`.
+- `ReportBundleReviewPlan` sampled review passes for soak-produced packs.
+- report-bundle review checks digest validation, README warnings, conservative score reports, and ledger evidence-record alignment.
+- report-bundle review reports remain `Level0DesignNote`.
+- source scans for `std::process::Command` and `Command::new` remain empty in Phase L modules.
+- `run_soak_campaign()` quick presets exercise all three implemented families with all three mutation passes.
+- campaign artifacts write sampled per-pack review reports and archive failure packs under `.context/phase-l-artifacts/`.
+- regression corpus curation appends failure and skipped-mutation entries without mutating accepted evidence.
+
+These checks do not establish official benchmark evidence, cross-backend reproduction, performance evidence, or formal evidence.
+
 ## Future Gate Ladder
 
 When package scripts exist in a later phase, preserve:

@@ -13,8 +13,13 @@ crates/zkbench-core/src/
   evidence/
   external_runner/
   adapters/
+    gnark_recursion/
+    local_json/
+    zk_harness/
+    zkml_narrow/
   replay/
   pack/
+  soak/
   registry/
 ```
 
@@ -45,7 +50,8 @@ Surface DSL
 | `external_runner/` | Define Phase H disabled/manual-only external-runner policy, manual handoff bundle, artifact capture contract, provenance contract, result import schema, and quarantine schema. |
 | `adapters/` | Define BackendAdapter traits and capability declarations. |
 | `replay/` | Define Replay Manifest and ReplayRunner behavior. |
-| `pack/` | Define local benchmark pack manifests, readers, writers, and validation. |
+| `pack/` | Define local benchmark pack manifests, readers, writers, validation, and sampled report-bundle review. |
+| `soak/` | Run deterministic long local soak execution across generator families and explicit seeds. |
 | `registry/` | Provide source, adapter, benchmark family, and scoring registry metadata. |
 
 ## Implemented Types
@@ -152,8 +158,8 @@ Errors must distinguish malformed spec, semantic invalidity, backend capability 
 
 - No external backend adapter until DSL and oracle evaluation work.
 - No dashboard until Score Report and Evidence Record are stable.
-- No gnark recursion until mutation, replay, and evidence normalization exist.
-- No zkML adapter until public/private boundary cases are supported.
+- No gnark recursion execution until external-runner boundary and reviewed proposal acceptance exist.
+- No zkML execution until external-runner boundary and reviewed proposal acceptance exist.
 - No live external execution from Phase H handoff bundles.
 - Manual handoff bundles are not benchmark results.
 - A benchmark pass is not a proof.

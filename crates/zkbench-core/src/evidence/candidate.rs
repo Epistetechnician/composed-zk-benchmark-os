@@ -194,7 +194,10 @@ pub fn create_evidence_record_candidate(
     if !policy_validation.valid {
         return Err(ZkBenchError::evidence_acceptance_policy(
             "candidate.policy",
-            format!("acceptance policy is invalid: {:?}", policy_validation.issues),
+            format!(
+                "acceptance policy is invalid: {:?}",
+                policy_validation.issues
+            ),
         ));
     }
     let target_claim_boundary = match policy.mode {
@@ -216,7 +219,10 @@ pub fn create_evidence_record_candidate(
     if !acceptance_validation.valid {
         return Err(ZkBenchError::evidence_record_candidate(
             "candidate.acceptance_validation",
-            format!("candidate acceptance validation failed: {:?}", acceptance_validation.issues),
+            format!(
+                "candidate acceptance validation failed: {:?}",
+                acceptance_validation.issues
+            ),
         ));
     }
 
@@ -269,7 +275,10 @@ pub fn create_evidence_record_candidate(
     } else {
         Err(ZkBenchError::evidence_record_candidate(
             "candidate",
-            format!("created candidate failed validation: {:?}", validation.issues),
+            format!(
+                "created candidate failed validation: {:?}",
+                validation.issues
+            ),
         ))
     }
 }

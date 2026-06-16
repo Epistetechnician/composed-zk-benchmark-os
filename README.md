@@ -21,7 +21,7 @@ Core novelty:
 
 ## What This Repo Is
 
-This is now a Level 1 local Rust foundation plus the original Level 0 architecture scaffold. It defines the architecture, vocabulary, repo integration decisions, DSL schema, Rust core crate, deterministic generator, v0 mutation engine, local JSON replay adapter, evidence ledger, benchmark pack skeleton, zk-Harness dry-run adapter preparation, external-runner boundary contracts, manual handoff bundle schema, synthetic result import prototype, evidence append proposal workflow, proposal ledger primitives, scoring primitives, validation gates, and adapter roadmap.
+This is now a Level 1 local Rust foundation plus the original Level 0 architecture scaffold. It defines the architecture, vocabulary, repo integration decisions, DSL schema, Rust core crate, deterministic generator, v0 mutation engine, local JSON replay adapter, evidence ledger, benchmark pack skeleton, reproduction metadata attachments, zk-Harness dry-run adapter preparation, external-runner boundary contracts, manual handoff bundle schema, synthetic result import prototype, evidence append proposal workflow, proposal ledger primitives, reviewed proposal acceptance policy, inert gnark recursion adapter preparation, inert narrow zkML adapter preparation, scoring primitives, validation gates, and adapter roadmap.
 
 ## What This Repo Is Not
 
@@ -106,6 +106,11 @@ Surface DSL
 | [docs/17-phase-g-zk-harness-dry-run-adapter-notes.md](docs/17-phase-g-zk-harness-dry-run-adapter-notes.md) | Phase G zk-Harness dry-run adapter preparation notes. |
 | [docs/18-phase-h-external-runner-boundary-notes.md](docs/18-phase-h-external-runner-boundary-notes.md) | Phase H external-runner boundary and manual handoff notes. |
 | [docs/19-phase-i-synthetic-result-import-notes.md](docs/19-phase-i-synthetic-result-import-notes.md) | Phase I synthetic result import, normalization, quarantine, proposal, and proposal ledger notes. |
+| [docs/20-phase-l-local-soak-notes.md](docs/20-phase-l-local-soak-notes.md) | Phase L long local soak execution and sampled report-bundle review notes. |
+| [docs/21-phase-j-reviewed-proposal-acceptance-policy-notes.md](docs/21-phase-j-reviewed-proposal-acceptance-policy-notes.md) | Phase J reviewed proposal acceptance policy notes. |
+| [docs/22-phase-k-gnark-recursion-adapter-notes.md](docs/22-phase-k-gnark-recursion-adapter-notes.md) | Phase K inert gnark recursion adapter preparation notes. |
+| [docs/23-phase-l-narrow-zkml-adapter-notes.md](docs/23-phase-l-narrow-zkml-adapter-notes.md) | Phase L inert narrow zkML adapter preparation notes. |
+| [docs/24-phase-m-reproducible-benchmark-pack-notes.md](docs/24-phase-m-reproducible-benchmark-pack-notes.md) | Phase M reproduction metadata and inert external replay plan notes. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -148,6 +153,8 @@ Surface DSL
 - Valid synthetic result candidates normalize into pending-review drafts only.
 - Evidence append proposal primitives exist.
 - Proposal ledger persistence exists and is separate from the accepted `EvidenceLedger`.
+- Long local soak execution exists for implemented generator families and explicit seeds.
+- Sampled report-bundle review exists for soak-produced benchmark packs.
 - Result classification exists.
 - Evidence and scoring primitives exist.
 - No external adapters exist.
@@ -161,7 +168,7 @@ Surface DSL
 
 ## Next Implementation Slice
 
-Phase J should implement a reviewed proposal acceptance policy for synthetic/imported candidates. It should define review decisions, blocking issue handling, supersession, and future append eligibility without live external execution and without appending accepted evidence yet. Do not recommend zk-Harness execution until reviewed proposals can be audited and local benchmark instances with expected verdicts remain deterministic.
+Phase P dashboard/reporting remains last. True Level2 pack promotion waits on reviewed external result candidates, reproducible external artifact digests, and deterministic replay verification through the H–J gate.
 
 ## Non-Goals
 

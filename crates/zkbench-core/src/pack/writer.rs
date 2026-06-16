@@ -215,6 +215,7 @@ impl BenchmarkPackWriter {
                 .map(|result| result.id.clone())
                 .collect(),
             evidence_ledger_ref: Some("evidence/ledger.json".to_string()),
+            reproduction_metadata_ref: None,
             files,
             summary: BenchmarkPackSummary {
                 generated_instance_count: self.generated_instances.len(),
@@ -223,6 +224,8 @@ impl BenchmarkPackWriter {
                 replay_result_count: self.replay_results.len(),
                 evidence_record_count: ledger.summary.entry_count,
                 score_report_count,
+                external_replay_plan_count: 0,
+                reproduction_metadata_count: 0,
                 local_only: true,
             },
             notes: vec![

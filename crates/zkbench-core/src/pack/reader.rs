@@ -61,6 +61,23 @@ impl BenchmarkPackReader {
         Ok(Some(ledger))
     }
 
+    /// Load reproduction metadata when present.
+    pub fn load_reproduction_metadata(
+        &self,
+    ) -> Result<Option<super::reproduction::BenchmarkPackReproductionMetadata>> {
+        let Some(relative_path) = &self.manifest.reproduction_metadata_ref else {
+            return Ok(None);
+        };
+        let path = self.root.join(relative_path);
+        let json = fs::read_to_string(&path).map_err(|error| {
+            ZkBenchError::benchmark_pack(path.display().to_string(), error.to_string())
+        })?;
+        let metadata = super::reproduction::deserialize_benchmark_pack_reproduction_metadata_json(
+            &json,
+        )?;
+        Ok(Some(metadata))
+    }
+
     /// Validate local pack file digests and ledger chain.
     pub fn validate(&self) -> BenchmarkPackValidation {
         let mut errors = Vec::new();
@@ -127,6 +144,23 @@ impl BenchmarkPackReader {
                 path: "pack.json".to_string(),
                 message: "pack manifest claim boundary exceeds Level1LocalReplay".to_string(),
             });
+        }
+
+        if let Ok(Some(metadata)) = self.load_reproduction_metadata() {
+            let metadata_validation =
+                super::reproduction::validate_benchmark_pack_reproduction_metadata(&metadata);
+            for issue in metadata_validation.issues {
+                errors.push(BenchmarkPackValidationError {
+                    path: issue.path,
+                    message: issue.message,
+                });
+            }
+            if metadata.claim_boundary > crate::evidence::ClaimBoundary::Level0DesignNote {
+                errors.push(BenchmarkPackValidationError {
+                    path: "reproduction/metadata.json".to_string(),
+                    message: "reproduction metadata claim boundary exceeds Level0DesignNote".to_string(),
+                });
+            }
         }
 
         BenchmarkPackValidation::from_errors(errors, self.manifest.summary.clone())

@@ -53,6 +53,14 @@ pub enum ZkBenchError {
     #[error("zk-Harness dry-run error at {path}: {message}")]
     ZkHarness { path: String, message: String },
 
+    /// gnark recursion adapter preparation failed.
+    #[error("gnark recursion adapter error at {path}: {message}")]
+    GnarkRecursion { path: String, message: String },
+
+    /// narrow zkML adapter preparation failed.
+    #[error("narrow zkML adapter error at {path}: {message}")]
+    ZkmlNarrow { path: String, message: String },
+
     /// External-runner boundary validation failed.
     #[error("external-runner boundary error at {path}: {message}")]
     ExternalRunner { path: String, message: String },
@@ -183,6 +191,22 @@ impl ZkBenchError {
         }
     }
 
+    /// Construct a gnark recursion adapter preparation error.
+    pub fn gnark_recursion(path: impl Into<String>, message: impl Into<String>) -> Self {
+        Self::GnarkRecursion {
+            path: path.into(),
+            message: message.into(),
+        }
+    }
+
+    /// Construct a narrow zkML adapter preparation error.
+    pub fn zkml_narrow(path: impl Into<String>, message: impl Into<String>) -> Self {
+        Self::ZkmlNarrow {
+            path: path.into(),
+            message: message.into(),
+        }
+    }
+
     /// Construct an external-runner boundary error.
     pub fn external_runner(path: impl Into<String>, message: impl Into<String>) -> Self {
         Self::ExternalRunner {
@@ -216,10 +240,7 @@ impl ZkBenchError {
     }
 
     /// Construct an evidence acceptance policy error.
-    pub fn evidence_acceptance_policy(
-        path: impl Into<String>,
-        message: impl Into<String>,
-    ) -> Self {
+    pub fn evidence_acceptance_policy(path: impl Into<String>, message: impl Into<String>) -> Self {
         Self::EvidenceAcceptancePolicy {
             path: path.into(),
             message: message.into(),
@@ -227,10 +248,7 @@ impl ZkBenchError {
     }
 
     /// Construct an evidence record candidate error.
-    pub fn evidence_record_candidate(
-        path: impl Into<String>,
-        message: impl Into<String>,
-    ) -> Self {
+    pub fn evidence_record_candidate(path: impl Into<String>, message: impl Into<String>) -> Self {
         Self::EvidenceRecordCandidate {
             path: path.into(),
             message: message.into(),
@@ -238,10 +256,7 @@ impl ZkBenchError {
     }
 
     /// Construct an evidence append preview error.
-    pub fn evidence_append_preview(
-        path: impl Into<String>,
-        message: impl Into<String>,
-    ) -> Self {
+    pub fn evidence_append_preview(path: impl Into<String>, message: impl Into<String>) -> Self {
         Self::EvidenceAppendPreview {
             path: path.into(),
             message: message.into(),

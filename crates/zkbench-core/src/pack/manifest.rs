@@ -39,6 +39,10 @@ pub enum BenchmarkPackFileRole {
     ScoreReport,
     /// Pack README.
     Readme,
+    /// Inert external replay plan JSON.
+    ExternalReplayPlan,
+    /// Reproduction metadata JSON.
+    ReproductionMetadata,
 }
 
 impl BenchmarkPackFileRole {
@@ -52,6 +56,7 @@ impl BenchmarkPackFileRole {
             Self::EvidenceLedger => ArtifactKind::EvidenceLedger,
             Self::ScoreReport => ArtifactKind::ScoreReport,
             Self::Readme => ArtifactKind::Readme,
+            Self::ExternalReplayPlan | Self::ReproductionMetadata => ArtifactKind::Other,
         }
     }
 
@@ -65,6 +70,8 @@ impl BenchmarkPackFileRole {
             Self::EvidenceLedger => ArtifactRole::Evidence,
             Self::ScoreReport => ArtifactRole::Report,
             Self::Readme => ArtifactRole::Documentation,
+            Self::ExternalReplayPlan => ArtifactRole::Manifest,
+            Self::ReproductionMetadata => ArtifactRole::Manifest,
         }
     }
 }
@@ -100,6 +107,12 @@ pub struct BenchmarkPackSummary {
     pub evidence_record_count: usize,
     /// Score report count.
     pub score_report_count: usize,
+    /// External replay plan count.
+    #[serde(default)]
+    pub external_replay_plan_count: usize,
+    /// Reproduction metadata count.
+    #[serde(default)]
+    pub reproduction_metadata_count: usize,
     /// True because Phase F packs are local-only artifacts.
     pub local_only: bool,
 }
@@ -134,6 +147,9 @@ pub struct BenchmarkPackManifest {
     /// Evidence ledger file reference.
     #[serde(default)]
     pub evidence_ledger_ref: Option<String>,
+    /// Reproduction metadata file reference.
+    #[serde(default)]
+    pub reproduction_metadata_ref: Option<String>,
     /// File entries. The manifest file itself is excluded to avoid circular
     /// digesting.
     pub files: Vec<BenchmarkPackFile>,

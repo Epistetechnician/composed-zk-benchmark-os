@@ -3,9 +3,13 @@
 use serde::{Deserialize, Serialize};
 
 use crate::adapters::{
-    build_default_zk_harness_adapter_manifest, local_json_capabilities,
-    zk_harness_dry_run_capabilities, BackendTarget, ZkHarnessAdapterRegistryEntry,
-    ZkHarnessDryRunPlanRegistryEntry, ZkHarnessDryRunPlanVersion, LOCAL_JSON_ADAPTER_ID,
+    build_default_gnark_recursion_adapter_manifest, build_default_zk_harness_adapter_manifest,
+    build_default_zkml_narrow_adapter_manifest, local_json_capabilities,
+    zk_harness_dry_run_capabilities, BackendTarget, GnarkRecursionAdapterRegistryEntry,
+    GnarkRecursionEnvelopePlanRegistryEntry, GnarkRecursionEnvelopePlanVersion,
+    ZkHarnessAdapterRegistryEntry, ZkHarnessDryRunPlanRegistryEntry, ZkHarnessDryRunPlanVersion,
+    ZkmlNarrowAdapterRegistryEntry, ZkmlNarrowWorkloadPlanRegistryEntry,
+    ZkmlNarrowWorkloadPlanVersion, LOCAL_JSON_ADAPTER_ID,
 };
 use crate::generator::templates::{all_family_templates, family_template};
 use crate::generator::{FamilyKind, FamilyTemplate};
@@ -88,6 +92,50 @@ pub fn local_benchmark_pack_schema() -> RegistryEntry {
             "Local JSON benchmark pack schema; local replay is not official benchmark evidence."
                 .to_string(),
         ),
+    }
+}
+
+/// Register the Phase K gnark recursion adapter preparation metadata.
+pub fn gnark_recursion_adapter_registry_entry() -> GnarkRecursionAdapterRegistryEntry {
+    let manifest = build_default_gnark_recursion_adapter_manifest();
+    GnarkRecursionAdapterRegistryEntry {
+        id: "gnark_recursion_envelope_adapter_phase_k".to_string(),
+        adapter_manifest_id: manifest.id,
+        notes: vec![
+            "Adapter preparation only; external execution is disabled by default.".to_string(),
+            "Recursion proof is not semantic proof.".to_string(),
+        ],
+    }
+}
+
+/// Register the Phase K gnark recursion envelope plan schema.
+pub fn gnark_recursion_envelope_plan_registry_entry() -> GnarkRecursionEnvelopePlanRegistryEntry {
+    GnarkRecursionEnvelopePlanRegistryEntry {
+        id: "gnark_recursion_envelope_plan_phase_k".to_string(),
+        plan_version: GnarkRecursionEnvelopePlanVersion::default().value,
+        notes: vec!["gnark recursion envelope plans are not benchmark results.".to_string()],
+    }
+}
+
+/// Register the Phase L narrow zkML adapter preparation metadata.
+pub fn zkml_narrow_adapter_registry_entry() -> ZkmlNarrowAdapterRegistryEntry {
+    let manifest = build_default_zkml_narrow_adapter_manifest();
+    ZkmlNarrowAdapterRegistryEntry {
+        id: "zkml_narrow_workload_adapter_phase_l".to_string(),
+        adapter_manifest_id: manifest.id,
+        notes: vec![
+            "Adapter preparation only; external execution is disabled by default.".to_string(),
+            "zkML metrics do not prove semantic soundness.".to_string(),
+        ],
+    }
+}
+
+/// Register the Phase L narrow zkML workload plan schema.
+pub fn zkml_narrow_workload_plan_registry_entry() -> ZkmlNarrowWorkloadPlanRegistryEntry {
+    ZkmlNarrowWorkloadPlanRegistryEntry {
+        id: "zkml_narrow_workload_plan_phase_l".to_string(),
+        plan_version: ZkmlNarrowWorkloadPlanVersion::default().value,
+        notes: vec!["Narrow zkML workload plans are not benchmark results.".to_string()],
     }
 }
 

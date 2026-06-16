@@ -3,8 +3,10 @@
 //! This module intentionally defines contracts only. It does not implement any
 //! external adapters and does not shell out to benchmark or proof systems.
 
+pub mod gnark_recursion;
 pub mod local_json;
 pub mod zk_harness;
+pub mod zkml_narrow;
 
 use serde::{Deserialize, Serialize};
 
@@ -14,6 +16,25 @@ use crate::evidence::EvidenceRecord;
 use crate::generator::BenchmarkInstance;
 use crate::replay::{ReplayManifest, ReplayResult};
 
+pub use gnark_recursion::{
+    build_default_gnark_recursion_adapter_manifest, build_gnark_recursion_envelope_plan,
+    build_gnark_recursion_envelope_plan_from_manifest,
+    default_gnark_recursion_capability_declaration, deserialize_gnark_recursion_envelope_plan_json,
+    deserialize_gnark_recursion_manifest_json, gnark_recursion_capabilities,
+    serialize_gnark_recursion_envelope_plan_json, serialize_gnark_recursion_manifest_json,
+    validate_gnark_recursion_envelope_plan, GnarkRecursionAdapterCapabilityDeclaration,
+    GnarkRecursionAdapterManifest, GnarkRecursionAdapterManifestId,
+    GnarkRecursionAdapterManifestVersion, GnarkRecursionAdapterRegistryEntry,
+    GnarkRecursionAdapterScope, GnarkRecursionAdapterStatus, GnarkRecursionClaimBoundaryPolicy,
+    GnarkRecursionCompatibilityTarget, GnarkRecursionEnvelopePlan, GnarkRecursionEnvelopePlanId,
+    GnarkRecursionEnvelopePlanRegistryEntry, GnarkRecursionEnvelopePlanVersion,
+    GnarkRecursionEnvelopeScope, GnarkRecursionEnvelopeStep, GnarkRecursionEnvelopeStepKind,
+    GnarkRecursionEnvelopeValidation, GnarkRecursionEnvelopeValidationIssue,
+    GnarkRecursionEvidenceMapping, GnarkRecursionEvidencePolicy, GnarkRecursionExecutionPolicy,
+    GnarkRecursionFixtureRef, GnarkRecursionIntegrationPhase, GnarkRecursionPlannedCommand,
+    GnarkRecursionReviewStatus, GnarkRecursionSchemaAssumption, GnarkRecursionSourcePolicy,
+    GnarkRecursionToolRef, GnarkRecursionUnsupportedFeature,
+};
 pub use local_json::{
     local_json_capabilities, LocalJsonAdapter, LocalJsonAdapterConfig, LocalJsonReplayInput,
     LocalJsonReplayOutput, LocalJsonReplaySummary, LOCAL_JSON_ADAPTER_ID,
@@ -41,6 +62,23 @@ pub use zk_harness::{
     ZkHarnessPlanSubject, ZkHarnessPlannedCommand, ZkHarnessResultImportExpectation,
     ZkHarnessReviewStatus, ZkHarnessSchemaAssumption, ZkHarnessSourcePolicy, ZkHarnessTraceMapping,
     ZkHarnessUnsupportedFeature,
+};
+pub use zkml_narrow::{
+    build_default_zkml_narrow_adapter_manifest, build_zkml_narrow_workload_plan,
+    build_zkml_narrow_workload_plan_from_manifest, default_zkml_narrow_capability_declaration,
+    deserialize_zkml_narrow_manifest_json, deserialize_zkml_narrow_workload_plan_json,
+    serialize_zkml_narrow_manifest_json, serialize_zkml_narrow_workload_plan_json,
+    validate_zkml_narrow_workload_plan, zkml_narrow_capabilities,
+    ZkmlNarrowAdapterCapabilityDeclaration, ZkmlNarrowAdapterManifest, ZkmlNarrowAdapterManifestId,
+    ZkmlNarrowAdapterManifestVersion, ZkmlNarrowAdapterRegistryEntry, ZkmlNarrowAdapterScope,
+    ZkmlNarrowAdapterStatus, ZkmlNarrowClaimBoundaryPolicy, ZkmlNarrowCompatibilityTarget,
+    ZkmlNarrowEvidenceMapping, ZkmlNarrowEvidencePolicy, ZkmlNarrowExecutionPolicy,
+    ZkmlNarrowFixtureRef, ZkmlNarrowIntegrationPhase, ZkmlNarrowPlannedCommand,
+    ZkmlNarrowReviewStatus, ZkmlNarrowSchemaAssumption, ZkmlNarrowSourcePolicy, ZkmlNarrowToolRef,
+    ZkmlNarrowUnsupportedFeature, ZkmlNarrowWorkloadPlan, ZkmlNarrowWorkloadPlanId,
+    ZkmlNarrowWorkloadPlanRegistryEntry, ZkmlNarrowWorkloadPlanVersion, ZkmlNarrowWorkloadScope,
+    ZkmlNarrowWorkloadStep, ZkmlNarrowWorkloadStepKind, ZkmlNarrowWorkloadValidation,
+    ZkmlNarrowWorkloadValidationIssue,
 };
 
 /// Backend target metadata.
