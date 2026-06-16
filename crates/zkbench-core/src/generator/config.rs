@@ -20,20 +20,15 @@ impl Default for GeneratorSeed {
 }
 
 /// Generator profile label.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub enum GeneratorProfile {
     /// Small local test profile.
+    #[default]
     Small,
     /// Medium local test profile.
     Medium,
     /// Future placeholder profile for heavier local generation.
     Stress,
-}
-
-impl Default for GeneratorProfile {
-    fn default() -> Self {
-        Self::Small
-    }
 }
 
 /// Generator tunables. Unsupported tunables are recorded in generated metadata
