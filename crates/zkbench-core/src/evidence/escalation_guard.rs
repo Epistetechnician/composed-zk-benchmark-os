@@ -50,8 +50,7 @@ impl ClaimBoundaryEscalationGuard {
         to: ClaimBoundary,
     ) -> ClaimBoundaryEscalationGuardResult {
         let mut blocking_reasons = Vec::new();
-        if to >= ClaimBoundary::Level2ReproducibleBenchmarkArtifact
-            && self.block_level2_plus_actual
+        if to >= ClaimBoundary::Level2ReproducibleBenchmarkArtifact && self.block_level2_plus_actual
         {
             blocking_reasons.push("Level2+ actual evidence is blocked in Phase J".to_string());
         }
@@ -67,7 +66,8 @@ impl ClaimBoundaryEscalationGuard {
             );
         }
         if from > to {
-            blocking_reasons.push("claim boundary downgrade should use explicit supersession".to_string());
+            blocking_reasons
+                .push("claim boundary downgrade should use explicit supersession".to_string());
         }
         ClaimBoundaryEscalationGuardResult {
             allowed: blocking_reasons.is_empty(),
@@ -108,7 +108,10 @@ pub fn guard_claim_boundary_escalation(
     } else {
         Err(ZkBenchError::evidence_acceptance_policy(
             "claim_boundary_escalation_guard",
-            format!("claim boundary escalation blocked: {:?}", result.blocking_reasons),
+            format!(
+                "claim boundary escalation blocked: {:?}",
+                result.blocking_reasons
+            ),
         ))
     }
 }

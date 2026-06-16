@@ -1,9 +1,13 @@
 //! Evidence, claim-boundary, expected-verdict, backend-outcome, result
 //! classification, artifact digest, and local ledger primitives.
 
+pub mod acceptance_policy;
 pub mod artifact;
+pub mod candidate;
 pub mod digest;
+pub mod escalation_guard;
 pub mod ledger;
+pub mod review;
 
 use std::fmt;
 

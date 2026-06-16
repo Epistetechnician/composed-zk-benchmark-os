@@ -216,10 +216,7 @@ impl ZkBenchError {
     }
 
     /// Construct an evidence acceptance policy error.
-    pub fn evidence_acceptance_policy(
-        path: impl Into<String>,
-        message: impl Into<String>,
-    ) -> Self {
+    pub fn evidence_acceptance_policy(path: impl Into<String>, message: impl Into<String>) -> Self {
         Self::EvidenceAcceptancePolicy {
             path: path.into(),
             message: message.into(),
@@ -227,10 +224,7 @@ impl ZkBenchError {
     }
 
     /// Construct an evidence record candidate error.
-    pub fn evidence_record_candidate(
-        path: impl Into<String>,
-        message: impl Into<String>,
-    ) -> Self {
+    pub fn evidence_record_candidate(path: impl Into<String>, message: impl Into<String>) -> Self {
         Self::EvidenceRecordCandidate {
             path: path.into(),
             message: message.into(),
@@ -238,10 +232,7 @@ impl ZkBenchError {
     }
 
     /// Construct an evidence append preview error.
-    pub fn evidence_append_preview(
-        path: impl Into<String>,
-        message: impl Into<String>,
-    ) -> Self {
+    pub fn evidence_append_preview(path: impl Into<String>, message: impl Into<String>) -> Self {
         Self::EvidenceAppendPreview {
             path: path.into(),
             message: message.into(),

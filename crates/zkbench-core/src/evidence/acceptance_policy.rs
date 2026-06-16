@@ -239,8 +239,7 @@ impl EvidenceAcceptancePolicy {
                 EvidenceAcceptanceBlockingReason::ProposalNotReviewable,
             ));
         }
-        if proposal
-            .review_state
+        if proposal.review_state
             == crate::external_runner::EvidenceAppendProposalReviewState::Rejected
             || proposal.status == crate::external_runner::EvidenceAppendProposalStatus::Rejected
         {
@@ -294,7 +293,10 @@ impl EvidenceAcceptancePolicy {
                 EvidenceAcceptanceBlockingReason::InvalidReviewDecision,
             ));
         }
-        if !self.allowed_claim_boundaries.contains(&target_claim_boundary) {
+        if !self
+            .allowed_claim_boundaries
+            .contains(&target_claim_boundary)
+        {
             issues.push(issue(
                 "target_claim_boundary",
                 "target claim boundary is not allowed by policy",
@@ -423,9 +425,7 @@ pub fn serialize_evidence_acceptance_policy_json(
 }
 
 /// Deserialize an acceptance policy from JSON.
-pub fn deserialize_evidence_acceptance_policy_json(
-    json: &str,
-) -> Result<EvidenceAcceptancePolicy> {
+pub fn deserialize_evidence_acceptance_policy_json(json: &str) -> Result<EvidenceAcceptancePolicy> {
     serde_json::from_str(json).map_err(|error| {
         ZkBenchError::deserialization(
             "deserialize_evidence_acceptance_policy_json",
@@ -454,11 +454,7 @@ fn scan_forbidden_text(
     }
 }
 
-fn push_claim_issue(
-    path: String,
-    text: &str,
-    issues: &mut Vec<EvidenceAcceptanceValidationIssue>,
-) {
+fn push_claim_issue(path: String, text: &str, issues: &mut Vec<EvidenceAcceptanceValidationIssue>) {
     if crate::external_runner::contains_official_claim_text(text) {
         issues.push(issue(
             path,

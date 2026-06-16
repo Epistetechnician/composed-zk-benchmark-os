@@ -177,6 +177,7 @@ impl EvidenceReviewChecklist {
                 id: item.id.clone(),
                 description: item.description.clone(),
                 required: item.required,
+                satisfied: item.satisfied,
                 notes: Vec::new(),
             })
             .collect();
@@ -374,7 +375,9 @@ impl EvidenceReviewDecision {
             decision_status: EvidenceReviewDecisionStatus::FinalizedChangesRequested,
             checklist: EvidenceReviewChecklist::phase_j_default(),
             findings: Vec::new(),
-            blocking_issues: vec!["proposal changes requested by manual review decision".to_string()],
+            blocking_issues: vec![
+                "proposal changes requested by manual review decision".to_string()
+            ],
             claim_boundary_decision: crate::evidence::ClaimBoundary::Level0DesignNote,
             notes,
         }
@@ -489,7 +492,10 @@ pub fn serialize_evidence_review_checklist_json(
     checklist: &EvidenceReviewChecklist,
 ) -> Result<String> {
     serde_json::to_string_pretty(checklist).map_err(|error| {
-        ZkBenchError::serialization("serialize_evidence_review_checklist_json", error.to_string())
+        ZkBenchError::serialization(
+            "serialize_evidence_review_checklist_json",
+            error.to_string(),
+        )
     })
 }
 
@@ -516,13 +522,16 @@ fn scan_review_text(decision: &EvidenceReviewDecision, blocking_issues: &mut Vec
     }
     for (index, issue) in decision.blocking_issues.iter().enumerate() {
         if crate::external_runner::contains_forbidden_claim_text(issue) {
-            blocking_issues
-                .push(format!("decision blocking_issues[{index}] contain a forbidden claim"));
+            blocking_issues.push(format!(
+                "decision blocking_issues[{index}] contain a forbidden claim"
+            ));
         }
     }
     for (index, finding) in decision.findings.iter().enumerate() {
         if crate::external_runner::contains_forbidden_claim_text(&finding.message) {
-            blocking_issues.push(format!("decision findings[{index}] contain a forbidden claim"));
+            blocking_issues.push(format!(
+                "decision findings[{index}] contain a forbidden claim"
+            ));
         }
     }
     for (index, item) in decision.checklist.items.iter().enumerate() {

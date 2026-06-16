@@ -31,18 +31,13 @@ impl Default for EvidenceLedgerVersion {
 }
 
 /// Evidence append policy.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 pub enum EvidenceAppendPolicy {
     /// Reject actual evidence above Level1LocalReplay.
+    #[default]
     RejectAboveLevel1Actual,
     /// Allow future metadata. This phase does not use it for actual evidence.
     AllowFutureMetadata,
-}
-
-impl Default for EvidenceAppendPolicy {
-    fn default() -> Self {
-        Self::RejectAboveLevel1Actual
-    }
 }
 
 /// Alias for the current ledger digest.
