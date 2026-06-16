@@ -18,6 +18,14 @@ pub use artifact::{
     PhalaArtifactAttestationLane, PhalaArtifactBundle, PhalaValidationError, PhalaValidationPolicy,
     RtmrSet, ValidatedPhalaAttestation,
 };
+pub mod challenge;
+pub use challenge::{
+    agent_case_hash, build_agent_case_challenge_packet, build_hsai_challenge_packet,
+    capture_workflow_manifest, validate_hsai_challenge_packet, CaptureWorkflowManifest,
+    ChallengeError, ChallengeReplayGuard, HsaiChallengeInput, HsaiChallengePacket,
+    RealArtifactProviderMode, HSAI_CAPTURE_MANIFEST_SCHEMA_VERSION, HSAI_CHALLENGE_SCHEMA_VERSION,
+    PHASE_57_CLAIM_BOUNDARY,
+};
 
 /// Claim boundary for this crate.
 pub const CLAIM_BOUNDARY: &str =

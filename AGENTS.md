@@ -46,6 +46,8 @@ Explicit managed-attestation Phase 3 captured-artifact validation add-on now all
 
 Explicit managed-attestation Phase 57 real-artifact promotion planning now allowed: Markdown spec and navigation updates under `docs/`, `README.md`, and `AGENTS.md`. This phase is limited to defining the HSAI-owned fresh challenge protocol, the non-secret artifact bundle shape, verification order, trust-root disclosure, and Phase 4 recheck rule from `docs/57-managed-attestation-real-artifact-promotion-spec.md`. It does not permit Phase 4 `crates/hsai-agent-anchor-registry`, live Phala API calls, network access, local Intel DCAP implementation, managed-service signature/JWKS/JWT implementation, secrets, external rails, backend execution, benchmark outputs, fabricated artifacts, or claims above `Attested`.
 
+Explicit managed-attestation challenge-capture tooling now allowed: additive Rust source and tests under `crates/hsai-attestation-phala`, plus docs/navigation updates under `docs/`, `README.md`, and `AGENTS.md`. This phase is limited to deterministic HSAI-owned challenge packet construction, local challenge validation, in-memory replay guarding, and non-secret capture workflow manifests from `docs/58-managed-attestation-challenge-capture-tooling-notes.md`. It does not permit live Phala API calls, network access, real quote generation, local Intel DCAP implementation, managed-service signature/JWKS/JWT implementation, secrets, external rails, backend execution, benchmark outputs, fabricated artifacts, claims above `Attested`, or Phase 4 `crates/hsai-agent-anchor-registry`.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, generated benchmark artifacts, or benchmark outputs.
@@ -101,6 +103,7 @@ Use these statements as hard boundaries:
 - Managed-attestation Phase 3 fixture backend results are local regression evidence only unless backed by real validated Phala/dstack artifacts in a future explicit phase.
 - Managed-attestation Phase 3 captured-artifact validation is managed-verifier artifact evidence only, not local DCAP quote verification, not managed-service signature verification, not benchmark evidence, and not proof.
 - Managed-attestation Phase 57 is a promotion spec only; it does not authorize Phase 4 until a real HSAI-owned fresh-challenge artifact is accepted under the spec.
+- Managed-attestation challenge packets and capture manifests are capture inputs only, not attestation evidence, not proof, not benchmark evidence, and not Phase 4 authorization.
 
 The architecture docs remain Level 0 design notes. The Rust core crate is Level 1 local implementation foundation only.
 
