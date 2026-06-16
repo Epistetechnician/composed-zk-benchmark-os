@@ -1,5 +1,9 @@
 # Attestation-Verification Lane — Implementation Handoff
 
+## Preflight (do this first)
+
+Confirm this worktree is branched from `master` (not the repo's initial commit) and that the prior-phase crates are present in `crates/` — if they're missing you're on a stale base: stop and rebase onto `master` before building.
+
 ## Who This Is For
 
 The engineering agent continuing the Hyper Sacred AI build. Seven crates are
@@ -117,7 +121,10 @@ as the ledger A1 sunset trigger fires — a ZK lane that raises distinctness tow
 ## Paste-Ready Kickoff Prompt
 
 > You are continuing the Hyper Sacred AI build in the `composed-zk-benchmark-os`
-> repo. Seven crates are shipped (L0–L3, the L5 membrane, the economy sim). Read
+> repo. Seven crates are shipped (L0–L3, the L5 membrane, the economy sim).
+> Preflight: confirm this worktree is branched from `master` (not the repo's
+> initial commit) and that those prior-phase crates exist in `crates/` — if
+> they're missing, stop and rebase onto `master` before building. Read
 > `docs/45-attestation-verification-handoff.md`, then
 > `docs/44-attestation-verification-lane-spec.md`, then
 > `crates/hsai-distinct-agent/src/lib.rs`, `crates/hsai-agent-case/src/lib.rs`, and
