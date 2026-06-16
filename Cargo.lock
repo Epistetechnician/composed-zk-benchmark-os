@@ -169,8 +169,24 @@ dependencies = [
  "hsai-agent-case",
  "hsai-claim-envelope",
  "hsai-distinct-agent",
+ "hsai-economy",
+ "hsai-membrane",
  "proptest",
  "serde",
+ "sha2",
+]
+
+[[package]]
+name = "hsai-attestation-phala"
+version = "0.1.0"
+dependencies = [
+ "hsai-agent-case",
+ "hsai-attestation",
+ "hsai-claim-envelope",
+ "hsai-distinct-agent",
+ "proptest",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -191,6 +207,20 @@ dependencies = [
  "hsai-claim-envelope",
  "proptest",
  "serde",
+]
+
+[[package]]
+name = "hsai-e2e-harness"
+version = "0.1.0"
+dependencies = [
+ "hsai-agent-case",
+ "hsai-attestation",
+ "hsai-claim-envelope",
+ "hsai-distinct-agent",
+ "hsai-economy",
+ "hsai-economy-sim",
+ "hsai-membrane",
+ "proptest",
 ]
 
 [[package]]

@@ -10,8 +10,9 @@ distinctness envelope has carried open since L2.
 
 Honesty boundary, stated plainly. This phase verifies attestation at the
 *interface* level. The reference `ManagedTokenVerifier` checks a token's nonce,
-measurements, and freshness but does NOT cryptographically verify the managed
-attestation service's signature over that token. That signature check — validating
+provider custom-data/report-data binding, measurements, and freshness but does
+NOT cryptographically verify the managed attestation service's signature over
+that token. That signature check — validating
 an Azure Attestation / Intel Trust Authority JWT against the service JWKS, or a
 vendor quote against its root cert — is the single real integration step, and it is
 the point at which the stack leaves the pure-data regime. It is deliberately out of
@@ -42,6 +43,7 @@ format drift).
 struct Token {
   anchor_id:    String,      // which anchor this attests (must match the Anchor)
   nonce:        u64,         // anti-replay nonce
+  report_data:  Vec<u8>,     // provider custom-data binding
   measurements: Vec<u8>,     // measured code/firmware digest
   not_before:   u64,
   not_after:    u64,
@@ -53,6 +55,7 @@ enum VerifyError {
   AnchorMismatch,        // token.anchor_id != the anchor being checked
   NonceMismatch,
   MeasurementMismatch,
+  ReportDataMismatch,
   Expired,               // now outside [not_before, not_after]
   SignatureUnverified,   // reserved for real backends; the reference impl never returns it
 }
@@ -60,12 +63,14 @@ enum VerifyError {
 trait AttestationVerifier {
   // A real backend FIRST verifies the managed service's signature over the token,
   // then the fields below. The reference impl verifies only the fields.
-  fn verify(&self, token: &Token, expected_nonce: u64, expected_measurements: &[u8],
+  fn verify(&self, token: &Token, expected_nonce: u64, expected_report_data: &[u8],
+            expected_measurements: &[u8],
             anchor_id: &str, now: u64) -> Result<VerifiedAttestation, VerifyError>;
 }
 
 struct ManagedTokenVerifier;   // reference backend; NO signature verification
 // Ok iff token.anchor_id == anchor_id, token.nonce == expected_nonce,
+// token.report_data == expected_report_data,
 // token.measurements == expected_measurements, not_before <= now <= not_after.
 ```
 
@@ -76,6 +81,7 @@ struct AttestationInput {
   anchor:                Anchor,
   token:                 Token,
   expected_nonce:        u64,
+  expected_report_data:  Vec<u8>,
   expected_measurements: Vec<u8>,
 }
 
@@ -90,6 +96,7 @@ impl<V: AttestationVerifier> EvidenceLane for AttestationLane<V> {
     let mut guarantees = {}; let mut roots = {}; let mut window = TimeWindow::all();
     for input in &self.inputs {
       if let Ok(va) = verifier.verify(&input.token, input.expected_nonce,
+                                      &input.expected_report_data,
                                       &input.expected_measurements,
                                       &input.anchor.anchor_id(), now) {
         guarantees |= { input.anchor.validity_assumption(&case.subject) };
@@ -140,7 +147,7 @@ ATI-5  determinism: evaluate is byte-deterministic
 ### AT-1 — A verified token guarantees anchor validity
 
 ```text
-input: anchor=HardwareAttested{nvidia,devX}, token matches expected nonce+measurements,
+input: anchor=HardwareAttested{nvidia,devX}, token matches expected nonce+report_data+measurements,
        window [100,300]; case.subject=agentA, observed_at=150
 AttestationLane.evaluate(case) == {
   guarantees:  { Custom("anchor-valid:hw:nvidia:devX")(agentA) },

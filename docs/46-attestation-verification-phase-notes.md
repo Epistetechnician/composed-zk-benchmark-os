@@ -7,14 +7,15 @@ has carried open since L2. Built per `docs/44-attestation-verification-lane-spec
 ## What shipped
 
 - `Token`, `VerifiedAttestation`, `VerifyError` (`AnchorMismatch`,
-  `NonceMismatch`, `MeasurementMismatch`, `Expired`, and the reserved-but-never-
-  returned `SignatureUnverified`).
+  `NonceMismatch`, `ReportDataMismatch`, `MeasurementMismatch`, `Expired`, and
+  the reserved-but-never-returned `SignatureUnverified`).
 - `AttestationVerifier` trait — the clean seam where a real signature-verifying
   backend (Azure Attestation / Intel Trust Authority JWT, or a vendor quote)
   drops in later.
 - `ManagedTokenVerifier` reference backend — checks `anchor_id`, `nonce`,
-  `measurements`, and freshness (`not_before <= now <= not_after`). Does NOT
-  verify the managed service signature.
+  provider custom-data/report-data binding, `measurements`, and freshness
+  (`not_before <= now <= not_after`). Does NOT verify the managed service
+  signature.
 - `AttestationInput` and `AttestationLane<V>` implementing `EvidenceLane`. Uses
   `case.observed_at` as the verification time and the meet (intersection) of the
   accepted tokens' windows. Each accepted input contributes its anchor's

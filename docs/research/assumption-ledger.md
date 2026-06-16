@@ -449,3 +449,72 @@ Gini in the original A5 result is therefore mostly a property of the even
 redistribution rule, not of demurrage versus mutual credit. A5 narrows to: the
 flywheel circulates under the model; equity is a property of the redistribution
 rule, not the currency alone.
+
+---
+
+## Iteration 0004 — 2026-06-16
+
+Focus: refresh fast-moving and build-adjacent assumptions now that the stub stack
+is complete. Lanes as before (E = empirical, F = formal, $ = economic).
+
+| ID | Assumption | Lane | Verdict | Conf. | Note |
+|---|---|---|---|---|---|
+| A12 | Managed attestation services expose a verifiable signed token a backend can validate | E | Holds (new) | High | De-risks the real `AttestationVerifier` backend |
+| A1 | Frontier-model zkML is infeasible now; TEE still justified; sunset not met | E | Holds | High | Trendline continues toward feasibility, trigger not fired |
+| A10 | Adopt external rails (x402/AP2), don't build | E | Holds (strengthened) | High | Rails now at production scale |
+| A11 | Permeable rails strain the off-switch; the membrane matters | E/$ | Holds (intensified) | High | More real money on agent rails, not less |
+
+### A12 — Attestation backend is well-founded (new, de-risks next build)
+
+Both candidate backends issue attestation as a signed JWT with public verification
+keys: Intel Trust Authority signs with PS384 (RS256 optional) and exposes a JWKS
+of signing certificates; Azure Attestation publishes signing keys via OpenID
+metadata (`jwks_uri` at `/certs`) and embeds the TEE's runtime public keys as a
+`keys` claim under `x-ms-runtime`. This is exactly the doc-44 model: a managed
+service returns a signed token, and the real backend verifies the signature
+against the service JWKS, then checks nonce/measurements/freshness. The reference
+`ManagedTokenVerifier` already does everything except the signature step, so the
+real backend is a bounded addition (fetch JWKS, verify PS384/RS256, then the
+existing field checks). Verdict: Holds, high confidence — proceed when ready.
+
+### A1 — zkML sunset trigger refresh (Holds)
+
+Still minutes-to-hours per LLM inference: ~2.5s for small models, GPT-2 ~1 hour,
+zkLLM ~50x faster than prior zkML but "thousands of times slower than plain
+inference," needing specialized GPU. 2026 commentary is optimistic ("prove modern
+transformers at reasonable cost," "prove anywhere") but it remains research-stage.
+The `Attested -> Proven` sunset trigger has NOT fired; TEE provenance stays
+justified. Adjacent finding worth tracking: "Tool Receipts, Not Zero-Knowledge
+Proofs" (arXiv 2603.10060) proposes lightweight tool-receipt verification for
+agents — a candidate cheap evidence lane alongside TEE/ZK, not a replacement for
+distinctness.
+
+### A10 / A11 — Rails at production scale (Holds, strengthened)
+
+x402 passed ~100M cumulative transactions on Base through Q1 2026 and ~35M on
+Solana by March 2026, ~$600M annualized across chains, ~2.89M monthly transactions
+at ~$0.52 average; production agents use card rails for consumer purchases,
+stablecoin rails for infrastructure (compute/data/inference), and AP2 mandates as
+the authorization layer. This confirms the adopt-don't-build stance (doc 22, A10)
+and intensifies A11: more real value now flows through permeable agent rails, so
+the membrane's bounded, freeze-aware boundary matters more, not less. One adjacent
+signal — commentary on an "approval gap" in agentic micropayments — maps onto the
+corrigibility/authorization question the membrane and AP2 mandates address.
+
+### Stress-test note
+
+These are external-facing assumptions, refreshed and holding. The complementary
+internal stress test — an end-to-end adversarial harness composing L0–L5 and
+asserting expected verdicts under Sybil, expired-attestation, frozen-escape,
+proof-theater, and peg-gaming scenarios — is a code phase, not a research one, and
+is the recommended next build (the system-level analog of the per-crate property
+tests).
+
+### Sources
+
+- [Intel Trust Authority — Attestation Tokens and Claims](https://docs.trustauthority.intel.com/main/articles/concept-attestation-tokens.html)
+- [Azure Attestation — basic concepts / JWT verification](https://learn.microsoft.com/en-us/azure/attestation/basic-concepts)
+- [The Definitive Guide to ZKML (2025)](https://blog.icme.io/the-definitive-guide-to-zkml-2025/)
+- [Tool Receipts, Not Zero-Knowledge Proofs (arXiv 2603.10060)](https://arxiv.org/pdf/2603.10060)
+- [Inside x402: 100M Agentic Payments on Base (Chainalysis)](https://www.chainalysis.com/blog/x402-agentic-payments-adoption/)
+- [Agent Payments Showdown: x402 vs AP2 vs MPP vs ACP in 2026 (AgentLux)](https://agentlux.ai/blog/the-agent-payments-showdown-x402-vs-ap2-vs-mpp-vs-acp-in-2026)
