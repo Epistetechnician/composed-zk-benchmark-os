@@ -1,0 +1,8 @@
+[package]
+name = "hsai-agent-case"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "The agent case: the observation context an evidence lane assesses against, including the verification time and accepted time windows."
+
+[dependencies]

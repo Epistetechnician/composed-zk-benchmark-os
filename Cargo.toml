@@ -1,6 +1,12 @@
 [workspace]
 resolver = "2"
-members = ["crates/zkbench-core"]
+members = [
+    "crates/zkbench-core",
+    "crates/hsai-core",
+    "crates/hsai-agent-case",
+    "crates/hsai-distinct-agent",
+    "crates/hsai-attestation",
+]
 
 [workspace.package]
 edition = "2021"

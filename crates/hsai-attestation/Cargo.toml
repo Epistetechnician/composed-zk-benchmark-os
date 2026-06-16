@@ -1,0 +1,15 @@
+[package]
+name = "hsai-attestation"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "The attestation verification lane: verify managed attestation tokens (nonce/measurements/freshness) and grant an Attested guarantee that discharges the distinct-agent open assumption. The managed service signature is not verified."
+
+[dependencies]
+hsai-core = { path = "../hsai-core" }
+hsai-agent-case = { path = "../hsai-agent-case" }
+thiserror = "1"
+
+[dev-dependencies]
+hsai-distinct-agent = { path = "../hsai-distinct-agent" }
+proptest = "1"

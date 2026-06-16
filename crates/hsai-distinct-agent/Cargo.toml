@@ -1,0 +1,10 @@
+[package]
+name = "hsai-distinct-agent"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "The distinct-agent distinctness envelope: an open assumption that a measurement/nonce binds to a single distinct agent, discharged by a guarantee that reuses the Anchor open assumption."
+
+[dependencies]
+hsai-core = { path = "../hsai-core" }
+thiserror = "1"

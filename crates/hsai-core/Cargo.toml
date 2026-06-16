@@ -1,0 +1,8 @@
+[package]
+name = "hsai-core"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "L0 foundation for the Hyper Sacred AI stack: the trust Anchor, validity assumptions, trust roots, guarantee strength, and the EvidenceLane contract."
+
+[dependencies]
