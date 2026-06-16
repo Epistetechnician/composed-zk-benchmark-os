@@ -18,7 +18,9 @@ not backend execution evidence, and not Phase 4 authorization.
 ```text
 crates/hsai-attestation-phala/src/challenge.rs
 crates/hsai-attestation-phala/src/lib.rs
+crates/hsai-attestation-phala/examples/operator_capture_preflight.rs
 docs/58-managed-attestation-challenge-capture-tooling-notes.md
+docs/59-operator-capture-runbook.md
 README.md
 AGENTS.md
 ```
@@ -88,6 +90,12 @@ The local tests cover:
 The next step is external to normal tests: run an operator-controlled Phala/dstack
 capture using the emitted challenge packet, then commit only a small non-secret
 artifact fixture if it was actually generated with the HSAI-owned challenge.
+
+`docs/59-operator-capture-runbook.md` is the operator capture runbook.
+`crates/hsai-attestation-phala/examples/operator_capture_preflight.rs` is the
+operator-facing preflight example that emits the challenge packet and capture
+manifest from fixed sample inputs. Both are capture inputs only and must not be
+treated as attestation evidence.
 
 Do not fabricate the artifact. Do not commit secrets. Do not build
 `crates/hsai-agent-anchor-registry` until a real HSAI-owned artifact passes the

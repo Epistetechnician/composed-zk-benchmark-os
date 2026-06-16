@@ -220,6 +220,59 @@ cargo doc --workspace --no-deps
 - Benchmark outputs.
 - Any claim above `Attested`.
 
+## First Real HSAI-Owned Artifact Capture Record (2026-06-16)
+
+A first real HSAI-owned Phala/dstack artifact was captured and accepted under
+this spec on 2026-06-16. This section records the exact acceptance facts so that
+future phases can audit the trust roots and non-claims. It does not authorize
+Phase 4 by itself; see the Phase 4 Recheck Rule below.
+
+Capture facts:
+
+- Challenge protocol: HSAI-owned fresh challenge via
+  `build_agent_case_challenge_packet`, producing a 64 hex char (32-byte
+  SHA-256) `expected_report_data_hex` from `report_data_binding`.
+- Capture target: a real `tdx.small` CVM on Phala Cloud, with the HSAI
+  `expected_report_data_hex` injected into the dstack `reportData` field.
+- Binding verification (RA-1): the TDX quote's report data equals the HSAI
+  challenge's `expected_report_data_hex`. The validator recomputes
+  `report_data_binding(pubkey, nonce, case_hash)` and checks equality.
+- Internal consistency: `compose_hash` equals `SHA256(app_compose_json)`; the
+  RTMR3 hash chain replays to the stated RTMR3; the RTMR3 event-log payloads
+  for app-id, instance-id, compose-hash, and os-image-hash match the bundle
+  fields.
+- Agent keypair: a real P-256 key generated for this capture. The public key
+  (SPKI DER, 91 bytes) is in the fixture. The private key is not in the repo.
+- Fixture:
+  `crates/hsai-attestation-phala/tests/fixtures/phala_hsai_owned_real_2026_06_16.json`.
+- Integration test:
+  `crates/hsai-attestation-phala/tests/phala_hsai_owned_real.rs`.
+
+Trust roots relied on (all managed-verifier; none are local DCAP):
+
+- `managed:phala-trust-center` (Phala Trust Center, managed verifier)
+- `managed:intel-trust-authority` (Intel Trust Authority, managed verifier)
+- `dstack-os:<os_image_hash>` (boot measurement, unverified locally)
+- `compose:<compose_hash>` (app compose measurement, unverified locally)
+
+Explicit non-claims for this capture:
+
+- The managed-service signature was not verified locally (JWKS/JWT/DCAP
+  out of scope). Hardware authenticity is managed-verifier only.
+- The fixture is local regression evidence that the HSAI binding mechanism
+  works against real TDX hardware. It is not proof, not benchmark evidence,
+  not backend execution evidence, and not global software-agent uniqueness.
+- The agent keypair is real but single-purpose for this capture. It is not a
+  registered production identity.
+- A replayed or expired challenge would still be rejected (RA-2, RA-3).
+
+Validator change required to accept this artifact: the report-data binding
+check now supports two formats — the Phase 3 captured-artifact format
+(128 hex chars, `nonce_hex || case_hash_hex || ...`) and the Phase 57
+HSAI-owned format (64 hex chars, recomputed `report_data_binding`). The
+discriminator is the hex length. The existing Phase 3 fixture
+(`phala_trust_center_app_2026_06_16.json`) continues to validate unchanged.
+
 ## Phase 4 Recheck Rule
 
 Phase 4 may be reconsidered only after at least one real HSAI-owned artifact
