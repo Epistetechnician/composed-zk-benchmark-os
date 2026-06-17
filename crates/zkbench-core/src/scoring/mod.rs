@@ -322,7 +322,19 @@ pub fn validate_score_report(report: &ScoreReport) -> ScoreReportValidation {
             }
         }
     }
+    if let Some(score) = &report.performance {
+        push_score_value_issue(
+            "performance.normalized_score",
+            score.normalized_score,
+            &mut issues,
+        );
+    }
     if let Some(score) = &report.correctness {
+        push_score_value_issue(
+            "correctness.alignment_score",
+            score.alignment_score,
+            &mut issues,
+        );
         for (index, note) in score.notes.iter().enumerate() {
             push_forbidden_claim_text_issue(
                 format!("correctness.notes[{index}]"),
@@ -332,6 +344,11 @@ pub fn validate_score_report(report: &ScoreReport) -> ScoreReportValidation {
         }
     }
     if let Some(score) = &report.soundness_failure_detection {
+        push_score_value_issue(
+            "soundness_failure_detection.negative_test_coverage",
+            score.negative_test_coverage,
+            &mut issues,
+        );
         for (index, note) in score.notes.iter().enumerate() {
             push_forbidden_claim_text_issue(
                 format!("soundness_failure_detection.notes[{index}]"),
@@ -341,6 +358,11 @@ pub fn validate_score_report(report: &ScoreReport) -> ScoreReportValidation {
         }
     }
     if let Some(score) = &report.recursion_stress {
+        push_score_value_issue(
+            "recursion_stress.recursion_depth_score",
+            score.recursion_depth_score,
+            &mut issues,
+        );
         for (index, note) in score.notes.iter().enumerate() {
             push_forbidden_claim_text_issue(
                 format!("recursion_stress.notes[{index}]"),
@@ -350,6 +372,11 @@ pub fn validate_score_report(report: &ScoreReport) -> ScoreReportValidation {
         }
     }
     if let Some(score) = &report.formal_evidence {
+        push_score_value_issue(
+            "formal_evidence.scoped_proof_score",
+            score.scoped_proof_score,
+            &mut issues,
+        );
         for (index, note) in score.notes.iter().enumerate() {
             push_forbidden_claim_text_issue(
                 format!("formal_evidence.notes[{index}]"),
@@ -359,6 +386,11 @@ pub fn validate_score_report(report: &ScoreReport) -> ScoreReportValidation {
         }
     }
     if let Some(score) = &report.reproducibility {
+        push_score_value_issue(
+            "reproducibility.reproducibility_score",
+            score.reproducibility_score,
+            &mut issues,
+        );
         for (index, note) in score.notes.iter().enumerate() {
             push_forbidden_claim_text_issue(
                 format!("reproducibility.notes[{index}]"),
@@ -368,6 +400,11 @@ pub fn validate_score_report(report: &ScoreReport) -> ScoreReportValidation {
         }
     }
     if let Some(score) = &report.adapter_portability {
+        push_score_value_issue(
+            "adapter_portability.portability_score",
+            score.portability_score,
+            &mut issues,
+        );
         for (index, note) in score.notes.iter().enumerate() {
             push_forbidden_claim_text_issue(
                 format!("adapter_portability.notes[{index}]"),
@@ -392,6 +429,22 @@ fn push_local_axis_issue(
         issues.push(ScoreReportValidationIssue {
             path: path.to_string(),
             message: "local score reports must leave score axes unpopulated".to_string(),
+        });
+    }
+}
+
+fn push_score_value_issue(
+    path: &'static str,
+    value: Option<f64>,
+    issues: &mut Vec<ScoreReportValidationIssue>,
+) {
+    let Some(value) = value else {
+        return;
+    };
+    if !value.is_finite() || !(0.0..=1.0).contains(&value) {
+        issues.push(ScoreReportValidationIssue {
+            path: path.to_string(),
+            message: "score value must be finite and between 0.0 and 1.0".to_string(),
         });
     }
 }

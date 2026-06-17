@@ -1,6 +1,7 @@
 use zkbench_core::{
     score_report_from_local_mutation_evidence, validate_score_report, ClaimBoundary,
-    FormalEvidenceScore, LocalMutationEvidenceSummary, PerformanceScore, ScoreConfidence,
+    FormalEvidenceScore, LocalMutationEvidenceSummary, PerformanceScore, ReproducibilityScore,
+    ScoreConfidence,
 };
 
 #[test]
@@ -74,4 +75,54 @@ fn score_report_rejects_forbidden_positive_claim_text() {
         .issues
         .iter()
         .any(|issue| issue.path == "formal_evidence.notes[0]"));
+}
+
+#[test]
+fn score_report_rejects_out_of_range_score_values() {
+    let mut report = score_report_from_local_mutation_evidence(LocalMutationEvidenceSummary {
+        local_accepted_traces: 1,
+        local_rejected_traces: 1,
+        mutation_variants_generated: 1,
+        outcome_changes_observed: 0,
+        unsound_acceptance_candidates: 0,
+    });
+    report.claim_boundary_max = ClaimBoundary::Level2ReproducibleBenchmarkArtifact;
+    report.performance = Some(PerformanceScore {
+        normalized_score: Some(1.000_001),
+        confidence: ScoreConfidence::High,
+        missing_metrics: Vec::new(),
+    });
+
+    let validation = validate_score_report(&report);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.path == "performance.normalized_score"));
+}
+
+#[test]
+fn score_report_rejects_non_finite_score_values() {
+    let mut report = score_report_from_local_mutation_evidence(LocalMutationEvidenceSummary {
+        local_accepted_traces: 1,
+        local_rejected_traces: 1,
+        mutation_variants_generated: 1,
+        outcome_changes_observed: 0,
+        unsound_acceptance_candidates: 0,
+    });
+    report.claim_boundary_max = ClaimBoundary::Level2ReproducibleBenchmarkArtifact;
+    report.reproducibility = Some(ReproducibilityScore {
+        reproducibility_score: Some(f64::INFINITY),
+        confidence: ScoreConfidence::High,
+        notes: Vec::new(),
+    });
+
+    let validation = validate_score_report(&report);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.path == "reproducibility.reproducibility_score"));
 }
