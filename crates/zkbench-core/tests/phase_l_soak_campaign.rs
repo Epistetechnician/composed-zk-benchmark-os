@@ -287,6 +287,41 @@ fn report_bundle_validation_rejects_duplicate_or_digestless_artifacts() {
 }
 
 #[test]
+fn report_bundle_validation_rejects_shard_cardinality_drift() {
+    let dir = tempdir().expect("tempdir should be available");
+    let soak_config = build_smoke_soak_config()
+        .with_families(vec![FamilyKind::BaselineFsm])
+        .with_mutation_passes(vec![MutationClass::MissingConstraints])
+        .with_seed_range(0..2)
+        .with_shard_count(2);
+    let plan = plan_soak_shards(soak_config).expect("plan should build");
+    let config = approved_config("campaign_cardinality_drift", dir.path().to_path_buf());
+    let mut bundle = run_soak_campaign(&config, plan)
+        .expect("campaign should run")
+        .report_bundle;
+
+    bundle.telemetry_reports.pop();
+    bundle.health_reports.pop();
+    bundle.failure_corpus_indexes.pop();
+
+    let validation = validate_soak_report_bundle(&bundle);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("telemetry_reports count")));
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("health_reports count")));
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("failure_corpus_indexes count")));
+}
+
+#[test]
 fn campaign_refuses_to_run_without_approval() {
     let dir = tempdir().expect("tempdir should be available");
     let soak_config = build_smoke_soak_config()
