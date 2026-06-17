@@ -247,3 +247,45 @@ fn benchmark_pack_reader_rejects_digest_consistent_invalid_score_report() {
             && error.message.contains("leave score axes unpopulated")
     }));
 }
+
+#[test]
+fn benchmark_pack_validation_rejects_forbidden_claim_text_in_manifest_notes() {
+    let dir = tempdir().expect("tempdir should be available");
+    BenchmarkPackWriter::new("phase_f_forbidden_manifest_note")
+        .write_to(dir.path())
+        .expect("valid local pack should write");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("pack should load");
+    let mut manifest = reader.manifest().clone();
+    manifest
+        .notes
+        .push("this is official benchmark evidence".to_string());
+    manifest
+        .files
+        .iter_mut()
+        .find(|file| file.role == BenchmarkPackFileRole::ScoreReport)
+        .expect("pack should include score report file entry")
+        .notes
+        .push("contains official benchmark evidence".to_string());
+    let manifest_bytes =
+        serde_json::to_vec_pretty(&manifest).expect("pack manifest should serialize");
+    std::fs::write(dir.path().join("pack.json"), manifest_bytes)
+        .expect("test should be able to rewrite pack manifest");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("tampered pack should load");
+    let validation = reader.validate();
+
+    assert!(!validation.valid);
+    assert!(validation.errors.iter().any(|error| {
+        error.path.starts_with("pack.json#notes[")
+            && error
+                .message
+                .contains("pack metadata contains forbidden claim language")
+    }));
+    assert!(validation.errors.iter().any(|error| {
+        error.path == "reports/score_report.json#notes[0]"
+            && error
+                .message
+                .contains("pack metadata contains forbidden claim language")
+    }));
+}

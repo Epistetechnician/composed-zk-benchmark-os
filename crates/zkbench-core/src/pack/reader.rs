@@ -95,6 +95,10 @@ impl BenchmarkPackReader {
             });
         }
 
+        for (index, note) in self.manifest.notes.iter().enumerate() {
+            push_forbidden_claim_text_error(format!("pack.json#notes[{index}]"), note, &mut errors);
+        }
+
         for file in &self.manifest.files {
             if let Err(error) = validate_relative_path(&file.relative_path) {
                 errors.push(BenchmarkPackValidationError {
@@ -102,6 +106,13 @@ impl BenchmarkPackReader {
                     message: error.to_string(),
                 });
                 continue;
+            }
+            for (index, note) in file.notes.iter().enumerate() {
+                push_forbidden_claim_text_error(
+                    format!("{}#notes[{index}]", file.relative_path),
+                    note,
+                    &mut errors,
+                );
             }
             let path = self.root.join(&file.relative_path);
             let bytes = match fs::read(&path) {
@@ -171,4 +182,34 @@ impl BenchmarkPackReader {
 
         BenchmarkPackValidation::from_errors(errors, self.manifest.summary.clone())
     }
+}
+
+fn push_forbidden_claim_text_error(
+    path: String,
+    text: &str,
+    errors: &mut Vec<BenchmarkPackValidationError>,
+) {
+    if contains_forbidden_pack_claim_text(text) {
+        errors.push(BenchmarkPackValidationError {
+            path,
+            message: "pack metadata contains forbidden claim language".to_string(),
+        });
+    }
+}
+
+fn contains_forbidden_pack_claim_text(text: &str) -> bool {
+    let lowered = text.to_ascii_lowercase();
+    if lowered.contains("not official benchmark evidence")
+        || lowered.contains("not official benchmark result")
+        || lowered.contains("no official benchmark evidence")
+        || lowered.contains("no official benchmark result")
+        || lowered.contains("does not create official benchmark evidence")
+        || lowered.contains("does not create official benchmark result")
+        || lowered.contains(
+            "no external backend artifacts, proof-system results, or formal evidence are included",
+        )
+    {
+        return false;
+    }
+    crate::external_runner::contains_forbidden_claim_text(text)
 }
