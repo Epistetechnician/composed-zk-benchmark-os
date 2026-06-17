@@ -2,10 +2,11 @@ use tempfile::tempdir;
 use zkbench_core::{
     attach_reproduction_bundle_to_pack, build_failure_corpus_entry, build_smoke_soak_config,
     generate_instance, plan_soak_shards, read_reproduction_bundle_from_pack, run_soak_campaign,
-    validate_soak_campaign_config, BenchmarkPackReader, BenchmarkPackWriter, ClaimBoundary,
-    FailureCorpusEntryInput, FailureCorpusKind, FamilyKind, GeneratorConfig, GeneratorTunables,
-    InstanceParams, LocalSoakRunnerConfig, MutationClass, SoakCampaignApproval,
-    SoakCampaignArtifactRootPolicy, SoakCampaignConfig, SoakOutputPolicy, SoakShardId,
+    validate_soak_campaign_config, validate_soak_report_bundle, BenchmarkPackReader,
+    BenchmarkPackWriter, ClaimBoundary, FailureCorpusEntryInput, FailureCorpusKind, FamilyKind,
+    GeneratorConfig, GeneratorTunables, InstanceParams, LocalSoakRunnerConfig, MutationClass,
+    SoakArtifactRole, SoakCampaignApproval, SoakCampaignArtifactRootPolicy, SoakCampaignConfig,
+    SoakOutputPolicy, SoakShardId,
 };
 
 fn sample_entry(case_id: &str) -> zkbench_core::FailureCorpusEntry {
@@ -134,6 +135,48 @@ fn small_campaign_runs_all_shards_and_aggregates_reports() {
         ClaimBoundary::Level0DesignNote
     );
     assert_eq!(result.report_bundle.health_reports.len(), shard_count);
+    assert_eq!(result.report_bundle.telemetry_reports.len(), shard_count);
+    assert_eq!(
+        result.report_bundle.failure_corpus_indexes.len(),
+        shard_count
+    );
+    assert_eq!(result.report_bundle.shard_manifests.len(), shard_count);
+    let bundle_validation = validate_soak_report_bundle(&result.report_bundle);
+    assert!(
+        bundle_validation.valid,
+        "report bundle invalid: {:?}",
+        bundle_validation.issues
+    );
+    assert_eq!(
+        result.report_bundle.artifact_digest_set.artifacts.len(),
+        1 + shard_count * 3
+    );
+    assert_eq!(
+        result
+            .report_bundle
+            .artifact_digest_set
+            .artifacts
+            .iter()
+            .filter(|artifact| artifact.role == SoakArtifactRole::AggregateReport)
+            .count(),
+        1
+    );
+    for role in [
+        SoakArtifactRole::HealthReport,
+        SoakArtifactRole::Telemetry,
+        SoakArtifactRole::FailureCorpusIndex,
+    ] {
+        assert_eq!(
+            result
+                .report_bundle
+                .artifact_digest_set
+                .artifacts
+                .iter()
+                .filter(|artifact| artifact.role == role)
+                .count(),
+            shard_count
+        );
+    }
     assert_eq!(
         result.aggregate_health_report.claim_boundary,
         ClaimBoundary::Level0DesignNote
