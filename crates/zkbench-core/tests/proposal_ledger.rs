@@ -3,7 +3,7 @@ use zkbench_core::{
     create_evidence_append_proposal, deserialize_evidence_append_proposal_ledger_json,
     deserialize_external_result_candidate_json, normalize_synthetic_result_candidate,
     serialize_evidence_append_proposal_ledger_json, validate_synthetic_result_candidate,
-    EvidenceAppendProposalLedger, ResultCandidateArtifactResolver,
+    ClaimBoundary, EvidenceAppendProposalLedger, ResultCandidateArtifactResolver,
 };
 
 fn resolver() -> ResultCandidateArtifactResolver {
@@ -52,6 +52,21 @@ fn proposal_ledger_appends_valid_proposal_and_roundtrips() {
     let parsed =
         deserialize_evidence_append_proposal_ledger_json(&json).expect("ledger should deserialize");
     assert_eq!(ledger, parsed);
+}
+
+#[test]
+fn proposal_ledger_rejects_invalid_proposal_before_append() {
+    let mut proposal = proposal();
+    proposal.proposed_claim_boundary = ClaimBoundary::Level1LocalReplay;
+    let mut ledger = EvidenceAppendProposalLedger::new();
+
+    let error = ledger
+        .append(proposal)
+        .expect_err("invalid proposal should be rejected before append");
+
+    assert!(error.to_string().contains("proposal validation failed"));
+    assert!(ledger.entries.is_empty());
+    assert_eq!(ledger.summary.entry_count, 0);
 }
 
 #[test]
