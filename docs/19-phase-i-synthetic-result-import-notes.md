@@ -14,7 +14,7 @@ Phase I adds a local/synthetic result import prototype to `zkbench-core`.
 - Synthetic quarantine manifests for rejected candidates.
 - `NormalizedExternalResultDraft` for valid pending-review candidates.
 - `EvidenceAppendProposal` and review-state primitives.
-- `EvidenceAppendProposalLedger` persistence, digest-chain validation, and top-level note claim-language validation.
+- `EvidenceAppendProposalLedger` persistence, digest-chain validation, and top-level plus entry note claim-language validation.
 - JSON fixtures and integration tests for import, digest, provenance, metric, proposal, proposal ledger, and claim-boundary behavior.
 
 ## Deliberately Not Implemented
