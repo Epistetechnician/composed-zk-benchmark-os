@@ -5,6 +5,7 @@
 //! produced the pack so a failure can be replayed locally from the pack alone.
 //! Bundles are reproduction aids only and never evidence.
 
+use std::collections::BTreeSet;
 use std::fs;
 use std::path::Path;
 
@@ -65,13 +66,38 @@ pub fn validate_reproduction_bundle(bundle: &ReproductionBundle) -> Result<()> {
             "reproduction bundles must remain Level0DesignNote",
         ));
     }
+    if bundle.bundle_id.trim().is_empty() {
+        return Err(ZkBenchError::soak(
+            "soak.reproduction_bundle.bundle_id",
+            "reproduction bundle id is empty",
+        ));
+    }
+    if bundle.pack_id.trim().is_empty() {
+        return Err(ZkBenchError::soak(
+            "soak.reproduction_bundle.pack_id",
+            "reproduction bundle pack id is empty",
+        ));
+    }
     if bundle.entries.is_empty() {
         return Err(ZkBenchError::soak(
             "soak.reproduction_bundle.entries",
             "reproduction bundles must carry at least one failure corpus entry",
         ));
     }
+    let mut seen_entry_ids = BTreeSet::new();
     for (entry_index, entry) in bundle.entries.iter().enumerate() {
+        if entry.entry_id.trim().is_empty() {
+            return Err(ZkBenchError::soak(
+                format!("soak.reproduction_bundle.entries[{entry_index}].entry_id"),
+                "reproduction bundle entry id is empty",
+            ));
+        }
+        if !seen_entry_ids.insert(entry.entry_id.clone()) {
+            return Err(ZkBenchError::soak(
+                format!("soak.reproduction_bundle.entries[{entry_index}].entry_id"),
+                "reproduction bundle entry id is duplicated",
+            ));
+        }
         if entry.claim_boundary != ClaimBoundary::Level0DesignNote
             || entry.reproduction_manifest.claim_boundary != ClaimBoundary::Level0DesignNote
         {
