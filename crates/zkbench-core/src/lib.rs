@@ -26,6 +26,7 @@ pub mod replay;
 pub mod scoring;
 pub mod soak;
 pub mod value;
+pub mod zkml;
 
 pub use adapters::{
     build_default_zk_harness_adapter_manifest, build_manual_handoff_bundle_from_zk_harness_plan,
@@ -264,4 +265,11 @@ pub use soak::{
     SoakShardValidationIssue, SoakTelemetryClassification, SoakTelemetryClock,
     SoakTelemetryCounters, SoakTelemetryDurations, SoakTelemetryPolicy, SoakTelemetryReport,
     SoakTelemetryReportId, SoakTelemetrySnapshot, SystemTelemetryClock,
+};
+pub use zkml::{
+    compute_zkml_workload_digest_root, deserialize_zkml_workload_manifest_json,
+    serialize_zkml_workload_manifest_json, validate_zkml_workload_manifest, ZkMlMetric,
+    ZkMlMetricKind, ZkMlModelArtifactRef, ZkMlWorkloadInputKind, ZkMlWorkloadInputRef,
+    ZkMlWorkloadManifest, ZkMlWorkloadManifestVersion, ZkMlWorkloadValidation,
+    ZkMlWorkloadValidationIssue, ZkMlWorkloadValidationIssueKind,
 };

@@ -90,3 +90,8 @@ pub use crate::soak::{
     SoakTelemetryDurations, SoakTelemetryReport, SystemTelemetryClock,
 };
 pub use crate::value::{FieldVisibility, Value, ValueType};
+pub use crate::zkml::{
+    compute_zkml_workload_digest_root, validate_zkml_workload_manifest, ZkMlMetric, ZkMlMetricKind,
+    ZkMlModelArtifactRef, ZkMlWorkloadInputKind, ZkMlWorkloadInputRef, ZkMlWorkloadManifest,
+    ZkMlWorkloadValidation, ZkMlWorkloadValidationIssueKind,
+};

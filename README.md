@@ -21,7 +21,7 @@ Core novelty:
 
 ## What This Repo Is
 
-This is now a Level 1 local Rust foundation plus the original Level 0 architecture scaffold. It defines the architecture, vocabulary, repo integration decisions, DSL schema, Rust core crate, deterministic generator, v0 mutation engine, local JSON replay adapter, evidence ledger, benchmark pack skeleton, zk-Harness dry-run adapter preparation, external-runner boundary contracts, manual handoff bundle schema, synthetic result import prototype, evidence append proposal workflow, reviewed proposal acceptance policy, evidence-record candidate metadata, append previews, Level2 eligibility checks, review ledger primitives, proposal ledger primitives, scoring primitives, validation gates, and adapter roadmap.
+This is now a Level 1 local Rust foundation plus the original Level 0 architecture scaffold. It defines the architecture, vocabulary, repo integration decisions, DSL schema, Rust core crate, deterministic generator, v0 mutation engine, local JSON replay adapter, evidence ledger, benchmark pack skeleton, zk-Harness dry-run adapter preparation, external-runner boundary contracts, manual handoff bundle schema, synthetic result import prototype, evidence append proposal workflow, reviewed proposal acceptance policy, evidence-record candidate metadata, append previews, Level2 eligibility checks, review ledger primitives, proposal ledger primitives, scoring primitives, inert recursion-envelope metadata, inert zkML workload manifest metadata, validation gates, and adapter roadmap.
 
 ## What This Repo Is Not
 
@@ -255,14 +255,15 @@ Surface DSL
 
 ## Next Implementation Slice
 
-For the benchmark OS track, Phase N is open as a docs-first narrow zkML adapter
-boundary contract; see
+For the benchmark OS track, Phase N inert zkML workload manifest metadata is
+implemented; see
 [docs/64-phase-n-narrow-zkml-adapter-spec.md](docs/64-phase-n-narrow-zkml-adapter-spec.md).
-The next Phase N slice must be explicitly authorized before Rust implementation
-or executable work. It must not run live zkML, clone external repos, import
-external results, emit benchmark outputs, claim official benchmark evidence,
-report ZK backend performance, treat model accuracy as proof-system
-correctness, or create Level2+ evidence.
+The next benchmark-OS slice should review Phase O before any reproducible-pack
+claim work because the current repo boundary still forbids creating Level2+
+evidence. Any Phase O opening must preserve local-only benchmark packs, avoid
+external replay, avoid official benchmark evidence, and avoid ZK backend
+performance claims unless a future reviewed evidence phase explicitly changes
+that boundary.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
