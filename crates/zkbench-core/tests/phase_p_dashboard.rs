@@ -49,3 +49,14 @@ fn dashboard_validation_rejects_missing_claim_boundary_panel() {
     let error = validate_dashboard_model(&model).expect_err("missing claim panel should fail");
     assert!(error.to_string().contains("claim boundary panel"));
 }
+
+#[test]
+fn dashboard_validation_rejects_panel_boundary_above_model_max() {
+    let report = score_report_from_evidence(&[]);
+    let mut model = build_dashboard_model_from_score_report("boundary_cap_dashboard", &report);
+    model.panels[0].claim_boundary = ClaimBoundary::Level1LocalReplay;
+
+    let error = validate_dashboard_model(&model).expect_err("panel boundary above max should fail");
+
+    assert!(error.to_string().contains("exceeds the dashboard maximum"));
+}
