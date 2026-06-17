@@ -272,15 +272,42 @@ pub fn validate_soak_report_bundle(bundle: &SoakReportBundle) -> SoakReportBundl
         if let Err(error) = validate_soak_telemetry_report(report) {
             issues.push(format!("telemetry_reports[{index}] invalid: {error}"));
         }
+        if let (Some(report_shard_id), Some(manifest)) =
+            (&report.shard_id, bundle.shard_manifests.get(index))
+        {
+            if report_shard_id != &manifest.shard_id {
+                issues.push(format!(
+                    "telemetry_reports[{index}].shard_id does not match shard_manifests[{index}].shard_id"
+                ));
+            }
+        }
     }
     for (index, report) in bundle.health_reports.iter().enumerate() {
         if let Err(error) = validate_soak_health_report(report) {
             issues.push(format!("health_reports[{index}] invalid: {error}"));
         }
+        if let (Some(report_shard_id), Some(manifest)) =
+            (&report.shard_id, bundle.shard_manifests.get(index))
+        {
+            if report_shard_id != &manifest.shard_id {
+                issues.push(format!(
+                    "health_reports[{index}].shard_id does not match shard_manifests[{index}].shard_id"
+                ));
+            }
+        }
     }
     for (index, failure_corpus) in bundle.failure_corpus_indexes.iter().enumerate() {
         if let Err(error) = validate_failure_corpus_index(failure_corpus) {
             issues.push(format!("failure_corpus_indexes[{index}] invalid: {error}"));
+        }
+        if let Some(manifest) = bundle.shard_manifests.get(index) {
+            for (entry_index, entry) in failure_corpus.entries.iter().enumerate() {
+                if entry.reproduction_manifest.shard_id != manifest.shard_id {
+                    issues.push(format!(
+                        "failure_corpus_indexes[{index}].entries[{entry_index}].reproduction_manifest.shard_id does not match shard_manifests[{index}].shard_id"
+                    ));
+                }
+            }
         }
     }
     let mut artifact_ids = BTreeSet::new();
