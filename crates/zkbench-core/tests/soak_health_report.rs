@@ -2,7 +2,8 @@ use zkbench_core::{
     build_smoke_soak_config, deserialize_soak_health_report_json, plan_soak_shards,
     serialize_soak_health_report_json, validate_soak_health_report, ClaimBoundary, FamilyKind,
     LocalSoakRunner, MockTelemetryClock, MutationClass, SoakHealthFinding,
-    SoakHealthFindingSeverity, SoakHealthStatus, SoakShardId,
+    SoakHealthFindingSeverity, SoakHealthRecommendation, SoakHealthStatus, SoakRegressionSignal,
+    SoakShardId,
 };
 
 fn run_health() -> zkbench_core::SoakHealthReport {
@@ -67,6 +68,68 @@ fn health_report_rejects_stale_summary_counts() {
 
     assert!(error.to_string().contains("generated_instances"));
     assert!(error.to_string().contains("does not match telemetry"));
+}
+
+#[test]
+fn health_report_rejects_empty_identity_fields() {
+    let mut report = run_health();
+    report.report_id = String::new();
+    let error = validate_soak_health_report(&report).expect_err("empty report id should fail");
+    assert!(error.to_string().contains("report id"));
+
+    report = run_health();
+    report.source_config_id = String::new();
+    let error =
+        validate_soak_health_report(&report).expect_err("empty source config id should fail");
+    assert!(error.to_string().contains("source config id"));
+
+    report = run_health();
+    report.shard_id = None;
+    let error =
+        validate_soak_health_report(&report).expect_err("missing scope identity should fail");
+    assert!(error
+        .to_string()
+        .contains("either shard-scoped or aggregate-scoped"));
+}
+
+#[test]
+fn health_report_rejects_ambiguous_scope_identity() {
+    let mut report = run_health();
+    report.aggregate_id = Some("aggregate".to_string());
+
+    let error =
+        validate_soak_health_report(&report).expect_err("ambiguous scope identity should fail");
+
+    assert!(error
+        .to_string()
+        .contains("both shard-scoped and aggregate-scoped"));
+}
+
+#[test]
+fn health_report_rejects_empty_nested_identity_fields() {
+    let mut report = run_health();
+    report.findings[0].id = String::new();
+    let error = validate_soak_health_report(&report).expect_err("empty finding id should fail");
+    assert!(error.to_string().contains("finding id"));
+
+    report = run_health();
+    report.regression_signals.push(SoakRegressionSignal {
+        id: String::new(),
+        active: false,
+        message: "simulated empty signal id".to_string(),
+    });
+    let error =
+        validate_soak_health_report(&report).expect_err("empty regression signal id should fail");
+    assert!(error.to_string().contains("regression signal id"));
+
+    report = run_health();
+    report.recommendations.push(SoakHealthRecommendation {
+        id: String::new(),
+        message: "simulated empty recommendation id".to_string(),
+    });
+    let error =
+        validate_soak_health_report(&report).expect_err("empty recommendation id should fail");
+    assert!(error.to_string().contains("recommendation id"));
 }
 
 #[test]
