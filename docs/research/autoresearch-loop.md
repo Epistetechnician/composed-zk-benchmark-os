@@ -18,6 +18,12 @@ only through the human acceptance step, mirroring the evidence-append proposal
 (doc 19) and reviewed-proposal acceptance (doc 20) workflows. No loop output may
 raise the maturity of any claim in doc 22 on its own.
 
+Local language-model output is advisory only. A local model may summarize
+telemetry, propose next hypotheses, or draft candidate sharpening actions, but it
+is not a verification lane, not benchmark evidence, not review approval, and not
+a source of accepted claims. Any model-suggested change still has to pass the
+same mechanical checks and human acceptance gates as a hand-written proposal.
+
 ## Loop Stages
 
 1. Extract. Enumerate the falsifiable assumptions in doc 22. Each gets a stable
@@ -48,6 +54,40 @@ what a verdict can mean.
   empirical adoption.
 - Economic lane: historical precedent, mechanism analysis, and simulation. Can
   show plausibility and failure modes; precedent is suggestive, often confounded.
+- Local LLM advisory lane: an optional local model may inspect local-only
+  telemetry, health reports, failure-corpus summaries, and the current contract
+  to propose hypotheses for the next bounded iteration. Its output is a
+  prioritization aid only. It cannot score verdicts, validate artifacts, approve
+  proposals, raise maturity, or override any claim boundary.
+
+## Local Model Attachment
+
+The approved overnight Phase L autoresearch soak may attach a local Qwable model
+as an advisory critic:
+
+```sh
+llama-server -hf Mia-AiLab/Qwable-3.6-27b:Q4_K_M -c 8192 --host 127.0.0.1 --port 8080
+```
+
+The model endpoint may receive only non-secret local summaries: the active
+contract, aggregate health report summaries, failure-corpus summaries, and
+candidate next-step notes. It must not receive `.phala-capture/`, private keys,
+raw captures, credentials, or unreviewed external artifacts.
+
+The local model's role is:
+
+1. identify likely next hypotheses after a mechanical verification pass;
+2. flag claim-boundary wording that looks ambiguous;
+3. suggest smaller repro cases for failure-corpus entries;
+4. draft candidate notes for human review.
+
+The local model's role is not:
+
+1. deciding whether a candidate is kept;
+2. validating a soak report bundle;
+3. producing benchmark evidence;
+4. approving an evidence append proposal;
+5. asserting external facts without separate source verification.
 
 ## Verdict Vocabulary
 
@@ -73,3 +113,5 @@ auditable over time.
 - `assumption-ledger.md`: the living, append-only ledger of assumptions, verdicts,
   and proposed/accepted actions, one dated iteration per run.
 - Proposed edits to doc 22, surfaced for human acceptance.
+- Optional local-model advisory notes under the ignored autoresearch run folder.
+  These notes are local planning artifacts only and are not accepted evidence.
