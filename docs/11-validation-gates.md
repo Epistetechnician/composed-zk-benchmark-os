@@ -216,6 +216,7 @@ The Rust tests currently cover:
 - simulated pack validation findings,
 - report bundle artifact digest presence and artifact id/path uniqueness,
 - report bundle shard/report cardinality consistency,
+- report bundle shard manifest content consistency,
 - failure corpus validation and JSON round-trips,
 - reproduction manifest and minimization metadata,
 - Phase K claim-boundary regression tests,

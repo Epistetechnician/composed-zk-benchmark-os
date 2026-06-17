@@ -14,7 +14,10 @@ use crate::evidence::{
 use super::config::SoakRunConfig;
 use super::failure_corpus::{validate_failure_corpus_index, FailureCorpusIndex};
 use super::health::{validate_soak_health_report, SoakHealthReport};
-use super::shard::{SoakShardId, SoakShardManifest, SoakShardPlan};
+use super::shard::{
+    validate_soak_shard_manifest, validate_soak_shard_plan, SoakShardId, SoakShardManifest,
+    SoakShardPlan,
+};
 use super::telemetry::{validate_soak_telemetry_report, SoakTelemetryReport};
 
 /// Soak artifact role.
@@ -191,6 +194,9 @@ pub fn validate_soak_report_bundle(bundle: &SoakReportBundle) -> SoakReportBundl
     if bundle.shard_plan.claim_boundary != ClaimBoundary::Level0DesignNote {
         issues.push("shard plan must remain Level0DesignNote".to_string());
     }
+    if let Err(error) = validate_soak_shard_plan(&bundle.shard_plan) {
+        issues.push(format!("shard_plan invalid: {error}"));
+    }
     let shard_count = bundle.shard_manifests.len();
     push_bundle_count_issue(
         "shard_plan.shard_manifests",
@@ -216,6 +222,22 @@ pub fn validate_soak_report_bundle(bundle: &SoakReportBundle) -> SoakReportBundl
         shard_count,
         &mut issues,
     );
+    for (index, manifest) in bundle.shard_manifests.iter().enumerate() {
+        let validation = validate_soak_shard_manifest(manifest);
+        if !validation.valid {
+            issues.push(format!(
+                "shard_manifests[{index}] invalid: {:?}",
+                validation.issues
+            ));
+        }
+        if let Some(planned_manifest) = bundle.shard_plan.shard_manifests.get(index) {
+            if manifest != planned_manifest {
+                issues.push(format!(
+                    "shard_manifests[{index}] does not match shard_plan.shard_manifests[{index}]"
+                ));
+            }
+        }
+    }
     for (index, report) in bundle.telemetry_reports.iter().enumerate() {
         if let Err(error) = validate_soak_telemetry_report(report) {
             issues.push(format!("telemetry_reports[{index}] invalid: {error}"));
