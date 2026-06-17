@@ -173,6 +173,41 @@ impl BenchmarkPackReader {
             self.count_files_by_role(BenchmarkPackFileRole::ScoreReport),
             &mut errors,
         );
+        push_summary_count_error(
+            "pack.json#generated_instance_ids",
+            self.manifest.generated_instance_ids.len(),
+            self.manifest.summary.generated_instance_count,
+            &mut errors,
+        );
+        push_summary_count_error(
+            "pack.json#mutation_ids",
+            self.manifest.mutation_ids.len(),
+            self.manifest.summary.mutated_instance_count,
+            &mut errors,
+        );
+        push_summary_count_error(
+            "pack.json#replay_manifest_ids",
+            self.manifest.replay_manifest_ids.len(),
+            self.manifest.summary.replay_manifest_count,
+            &mut errors,
+        );
+        push_summary_count_error(
+            "pack.json#replay_result_ids",
+            self.manifest.replay_result_ids.len(),
+            self.manifest.summary.replay_result_count,
+            &mut errors,
+        );
+        match (
+            self.manifest.evidence_ledger_ref.as_deref(),
+            self.first_file_path_by_role(BenchmarkPackFileRole::EvidenceLedger),
+        ) {
+            (Some(reference), Some(path)) if reference == path => {}
+            _ => errors.push(BenchmarkPackValidationError {
+                path: "pack.json#evidence_ledger_ref".to_string(),
+                message: "evidence ledger ref must match the evidence ledger file entry"
+                    .to_string(),
+            }),
+        }
         if !self.manifest.summary.local_only {
             errors.push(BenchmarkPackValidationError {
                 path: "pack.json#summary.local_only".to_string(),
@@ -224,6 +259,14 @@ impl BenchmarkPackReader {
             .iter()
             .filter(|file| file.role == role)
             .count()
+    }
+
+    fn first_file_path_by_role(&self, role: BenchmarkPackFileRole) -> Option<&str> {
+        self.manifest
+            .files
+            .iter()
+            .find(|file| file.role == role)
+            .map(|file| file.relative_path.as_str())
     }
 
     fn validate_score_report_files(&self, errors: &mut Vec<BenchmarkPackValidationError>) {

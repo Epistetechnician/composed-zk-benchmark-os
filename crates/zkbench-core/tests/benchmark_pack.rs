@@ -415,3 +415,42 @@ fn benchmark_pack_validation_rejects_duplicate_file_entries() {
                 .contains("duplicate benchmark pack file entry")
     }));
 }
+
+#[test]
+fn benchmark_pack_validation_rejects_stale_manifest_refs_and_ids() {
+    let dir = tempdir().expect("tempdir should be available");
+    BenchmarkPackWriter::new("phase_f_stale_manifest_refs")
+        .write_to(dir.path())
+        .expect("valid local pack should write");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("pack should load");
+    let mut manifest = reader.manifest().clone();
+    manifest.evidence_ledger_ref = Some("evidence/other-ledger.json".to_string());
+    manifest
+        .generated_instance_ids
+        .push("fake-instance".to_string());
+    manifest
+        .replay_result_ids
+        .push("fake-replay-result".to_string());
+    let manifest_bytes =
+        serde_json::to_vec_pretty(&manifest).expect("pack manifest should serialize");
+    std::fs::write(dir.path().join("pack.json"), manifest_bytes)
+        .expect("test should be able to rewrite pack manifest");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("tampered pack should load");
+    let validation = reader.validate();
+
+    assert!(!validation.valid);
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.path == "pack.json#evidence_ledger_ref"));
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.path == "pack.json#generated_instance_ids"));
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.path == "pack.json#replay_result_ids"));
+}
