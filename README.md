@@ -151,6 +151,7 @@ Surface DSL
 | [docs/61-phase-l-qwable-autoresearch-contract.md](docs/61-phase-l-qwable-autoresearch-contract.md) | Phase L local autoresearch soak contract and guardrails. |
 | [docs/62-phase-l-local-soak-acceptance-notes.md](docs/62-phase-l-local-soak-acceptance-notes.md) | Phase L bounded local soak acceptance notes. |
 | [docs/63-phase-m-recursion-envelope-stress-spec.md](docs/63-phase-m-recursion-envelope-stress-spec.md) | Phase M recursion-envelope stress spec and claim-boundary contract. |
+| [docs/64-phase-n-narrow-zkml-adapter-spec.md](docs/64-phase-n-narrow-zkml-adapter-spec.md) | Phase N narrow zkML adapter docs-first boundary contract. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -254,14 +255,14 @@ Surface DSL
 
 ## Next Implementation Slice
 
-For the benchmark OS track, Phase M inert local recursion-envelope contract
-implementation, adapter-preparation metadata, and manual handoff mapping exist;
-see
-[docs/63-phase-m-recursion-envelope-stress-spec.md](docs/63-phase-m-recursion-envelope-stress-spec.md).
-The next Phase M slice must be explicitly authorized before executable work. It
-must not run live gnark, clone external repos, import external results, emit
-benchmark outputs, claim official benchmark evidence, report ZK backend
-performance, or create Level2+ evidence.
+For the benchmark OS track, Phase N is open as a docs-first narrow zkML adapter
+boundary contract; see
+[docs/64-phase-n-narrow-zkml-adapter-spec.md](docs/64-phase-n-narrow-zkml-adapter-spec.md).
+The next Phase N slice must be explicitly authorized before Rust implementation
+or executable work. It must not run live zkML, clone external repos, import
+external results, emit benchmark outputs, claim official benchmark evidence,
+report ZK backend performance, treat model accuracy as proof-system
+correctness, or create Level2+ evidence.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
