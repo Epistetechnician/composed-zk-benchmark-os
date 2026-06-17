@@ -70,6 +70,24 @@ fn proposal_ledger_rejects_invalid_proposal_before_append() {
 }
 
 #[test]
+fn proposal_ledger_detects_stale_cached_summary() {
+    let mut ledger = EvidenceAppendProposalLedger::new();
+    ledger
+        .append(proposal())
+        .expect("proposal append should work");
+    ledger.summary.entry_count = 0;
+
+    let validation = ledger.validate();
+
+    assert!(!validation.valid);
+    assert_eq!(validation.summary.entry_count, 1);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.message.contains("cached summary")));
+}
+
+#[test]
 fn proposal_ledger_persists_as_json() {
     let mut ledger = EvidenceAppendProposalLedger::new();
     ledger
