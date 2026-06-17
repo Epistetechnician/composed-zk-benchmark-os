@@ -214,6 +214,7 @@ The Rust tests currently cover:
 - health report validation and required warning text,
 - simulated claim-boundary elevation detection,
 - simulated pack validation findings,
+- report bundle artifact digest presence and artifact id/path uniqueness,
 - failure corpus validation and JSON round-trips,
 - reproduction manifest and minimization metadata,
 - Phase K claim-boundary regression tests,
