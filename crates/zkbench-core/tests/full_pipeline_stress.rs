@@ -1,3 +1,5 @@
+use std::collections::BTreeSet;
+
 use zkbench_core::{
     apply_mutation_pass, build_local_replay_manifest_for_instance,
     build_local_replay_manifest_for_mutation, generate_instance, BadCountersPass, ClaimBoundary,
@@ -27,6 +29,7 @@ fn deterministic_generation_mutation_replay_stress_stays_claim_capped() {
     let mut generated_count = 0usize;
     let mut mutation_count = 0usize;
     let mut skipped_mutation_count = 0usize;
+    let mut applied_mutation_classes = BTreeSet::new();
     let mut local_accepts = 0usize;
     let mut local_rejections = 0usize;
 
@@ -81,6 +84,7 @@ fn deterministic_generation_mutation_replay_stress_stays_claim_capped() {
                 };
                 mutation_count += 1;
                 assert_eq!(mutation.mutation_class, mutation_class);
+                applied_mutation_classes.insert(mutation_class);
                 assert!(mutation.claim_boundary <= ClaimBoundary::Level1LocalReplay);
                 let manifest = build_local_replay_manifest_for_mutation(&mutation)
                     .expect("mutation manifest should build");
@@ -129,6 +133,14 @@ fn deterministic_generation_mutation_replay_stress_stays_claim_capped() {
     assert!(
         skipped_mutation_count > 0,
         "stress loop should document non-eligible local mutation combinations"
+    );
+    assert_eq!(
+        applied_mutation_classes,
+        BTreeSet::from([
+            MutationClass::MissingConstraints,
+            MutationClass::CorruptedGuards,
+            MutationClass::BadCounters,
+        ])
     );
     assert!(
         local_accepts > 0,
