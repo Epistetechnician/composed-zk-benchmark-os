@@ -391,6 +391,41 @@ fn report_bundle_validation_rejects_report_artifact_role_drift() {
 }
 
 #[test]
+fn report_bundle_validation_rejects_report_artifact_identity_drift() {
+    let dir = tempdir().expect("tempdir should be available");
+    let soak_config = build_smoke_soak_config()
+        .with_families(vec![FamilyKind::BaselineFsm])
+        .with_mutation_passes(vec![MutationClass::MissingConstraints])
+        .with_seed_range(0..2)
+        .with_shard_count(2);
+    let plan = plan_soak_shards(soak_config).expect("plan should build");
+    let config = approved_config(
+        "campaign_report_artifact_identity_drift",
+        dir.path().to_path_buf(),
+    );
+    let mut bundle = run_soak_campaign(&config, plan)
+        .expect("campaign should run")
+        .report_bundle;
+
+    let telemetry = bundle
+        .artifact_digest_set
+        .artifacts
+        .iter_mut()
+        .find(|artifact| artifact.role == SoakArtifactRole::Telemetry)
+        .expect("bundle should include telemetry artifact");
+    telemetry.artifact_id = "telemetry_wrong_shard".to_string();
+    telemetry.relative_path = "shards/shard-0000/telemetry_wrong.json".to_string();
+
+    let validation = validate_soak_report_bundle(&bundle);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("missing expected Telemetry artifact")));
+}
+
+#[test]
 fn report_bundle_validation_rejects_empty_bundle_identity() {
     let dir = tempdir().expect("tempdir should be available");
     let soak_config = build_smoke_soak_config()
