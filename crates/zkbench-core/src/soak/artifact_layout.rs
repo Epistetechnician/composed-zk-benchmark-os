@@ -222,6 +222,24 @@ pub fn validate_soak_report_bundle(bundle: &SoakReportBundle) -> SoakReportBundl
         shard_count,
         &mut issues,
     );
+    push_bundle_count_issue(
+        "artifact_digest_set.telemetry",
+        count_artifacts_with_role(bundle, SoakArtifactRole::Telemetry),
+        bundle.telemetry_reports.len(),
+        &mut issues,
+    );
+    push_bundle_count_issue(
+        "artifact_digest_set.health_reports",
+        count_artifacts_with_role(bundle, SoakArtifactRole::HealthReport),
+        bundle.health_reports.len(),
+        &mut issues,
+    );
+    push_bundle_count_issue(
+        "artifact_digest_set.failure_corpus_indexes",
+        count_artifacts_with_role(bundle, SoakArtifactRole::FailureCorpusIndex),
+        bundle.failure_corpus_indexes.len(),
+        &mut issues,
+    );
     for (index, manifest) in bundle.shard_manifests.iter().enumerate() {
         let validation = validate_soak_shard_manifest(manifest);
         if !validation.valid {
@@ -301,6 +319,15 @@ fn push_bundle_count_issue(
             "{path} count {actual} does not match shard manifest count {expected}"
         ));
     }
+}
+
+fn count_artifacts_with_role(bundle: &SoakReportBundle, role: SoakArtifactRole) -> usize {
+    bundle
+        .artifact_digest_set
+        .artifacts
+        .iter()
+        .filter(|artifact| artifact.role == role)
+        .count()
 }
 
 /// Write a report bundle to a local directory.
