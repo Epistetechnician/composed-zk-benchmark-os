@@ -8,13 +8,14 @@ tooling.
 
 The runbook itself is documentation only. Following it does not, by itself,
 produce accepted attestation evidence, proof, benchmark output, backend
-execution evidence, or Phase 4 authorization. It merely states how an operator
-may generate a real non-secret artifact bundle that could later be validated.
+execution evidence, or independent Phase 4 authorization. It merely states how
+an operator may generate a real non-secret artifact bundle that could later be
+validated.
 
-Phase 4 remains blocked until at least one real HSAI-owned artifact passes
-validation under `docs/57-managed-attestation-real-artifact-promotion-spec.md`.
-See `docs/54-proof-of-agent-anchor-phase4-boundary-note.md` for the active
-boundary.
+The first real HSAI-owned artifact has now passed validation under
+`docs/57-managed-attestation-real-artifact-promotion-spec.md`, which authorizes
+only the bounded `crates/hsai-agent-anchor-registry` implementation. See
+`docs/54-proof-of-agent-anchor-phase4-boundary-note.md` for the active boundary.
 
 ## What Is In Repo Versus Out Of Repo
 
@@ -253,8 +254,9 @@ Before committing:
 - Confirm no forbidden secret field is present.
 - Confirm the commit records the exact trust roots relied on.
 
-Do not commit a fabricated artifact. Do not commit secrets. Do not build
-`crates/hsai-agent-anchor-registry` until the Phase 57 acceptance record exists.
+Do not commit a fabricated artifact. Do not commit secrets. Build
+`crates/hsai-agent-anchor-registry` only from the Phase 57 acceptance record or
+a stricter successor.
 
 ### First capture record (2026-06-16)
 
@@ -270,6 +272,8 @@ The first real HSAI-owned Phala/dstack artifact was captured and accepted on
 - Maturity: `Attested`, never `Proven`.
 - See `docs/57-managed-attestation-real-artifact-promotion-spec.md` "First Real
   HSAI-Owned Artifact Capture Record" for the full acceptance facts.
+- Phase 4 authorization: bounded `crates/hsai-agent-anchor-registry`
+  implementation only; no broader attestation, proof, or uniqueness claim.
 
 ## What This Runbook Does Not Authorize
 
@@ -278,7 +282,7 @@ The first real HSAI-owned Phala/dstack artifact was captured and accepted on
 - Real Intel DCAP implementation.
 - Real managed-service signature, JWKS, or JWT verification.
 - Fabricated quote, verifier, or benchmark artifacts.
-- Phase 4 `crates/hsai-agent-anchor-registry`.
+- Phase 4 behavior beyond bounded `crates/hsai-agent-anchor-registry`.
 - Any claim above `Attested`.
 
 ## State Slice

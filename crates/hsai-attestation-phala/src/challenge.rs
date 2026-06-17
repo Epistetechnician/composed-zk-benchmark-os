@@ -12,7 +12,7 @@ use std::collections::BTreeSet;
 
 pub const HSAI_CHALLENGE_SCHEMA_VERSION: &str = "hsai-phala-challenge:v1";
 pub const HSAI_CAPTURE_MANIFEST_SCHEMA_VERSION: &str = "hsai-phala-capture-manifest:v1";
-pub const PHASE_57_CLAIM_BOUNDARY: &str = "Phase 57 challenge packets are local capture instructions only; they are not attestation evidence, proof, benchmark output, or Phase 4 authorization.";
+pub const PHASE_57_CLAIM_BOUNDARY: &str = "Phase 57 challenge packets are local capture instructions only; they are not attestation evidence, proof, benchmark output, or independent Phase 4 authorization.";
 
 const CASE_HASH_HEX_LEN: usize = 64;
 const REPORT_DATA_HEX_LEN: usize = 64;
@@ -587,7 +587,7 @@ mod tests {
     }
 
     #[test]
-    fn ra_6_phase4_remains_blocked_without_real_artifact_acceptance() {
+    fn ra_6_phase4_precondition_fails_without_real_artifact_acceptance() {
         let manifest = capture_workflow_manifest(packet(), RealArtifactProviderMode::LocalQuote);
 
         assert!(manifest.claim_boundary.contains("Phase 4 authorization"));
