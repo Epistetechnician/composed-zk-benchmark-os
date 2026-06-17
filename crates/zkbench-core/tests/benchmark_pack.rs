@@ -2,8 +2,9 @@ use tempfile::tempdir;
 use zkbench_core::{
     apply_mutation_pass, build_local_replay_manifest_for_instance,
     build_local_replay_manifest_for_mutation, generate_instance, run_local_replay, BadCountersPass,
-    BenchmarkPackFileRole, BenchmarkPackReader, BenchmarkPackWriter, ClaimBoundary, EvidenceLedger,
-    GeneratorConfig, InstanceParams,
+    BenchmarkPackFileRole, BenchmarkPackReader, BenchmarkPackWriter, ClaimBoundary,
+    EvidenceAppendPolicy, EvidenceClass, EvidenceLedger, EvidenceRecord, GeneratorConfig,
+    InstanceParams, ProvenanceRecord,
 };
 
 #[test]
@@ -132,4 +133,40 @@ fn benchmark_pack_validation_detects_file_tampering() {
         .errors
         .iter()
         .any(|error| error.path == "README.md" && error.message.contains("digest mismatch")));
+}
+
+#[test]
+fn benchmark_pack_validation_rejects_invalid_nested_ledger() {
+    let mut ledger = EvidenceLedger::new();
+    let record = EvidenceRecord {
+        evidence_class: EvidenceClass::ReproducibleBenchmarkArtifact,
+        claim_boundary: ClaimBoundary::Level2ReproducibleBenchmarkArtifact,
+        provenance: ProvenanceRecord {
+            source: "future-metadata-placeholder".to_string(),
+            captured_at: None,
+            command: None,
+            notes: vec!["future metadata only; not accepted pack evidence".to_string()],
+        },
+        artifact_digest: None,
+        notes: Vec::new(),
+        backend_target: None,
+    };
+    ledger
+        .append_with_policy(record, EvidenceAppendPolicy::AllowFutureMetadata)
+        .expect("future metadata policy can record candidate metadata");
+
+    let dir = tempdir().expect("tempdir should be available");
+    BenchmarkPackWriter::new("phase_f_invalid_nested_ledger")
+        .with_evidence_ledger(ledger)
+        .write_to(dir.path())
+        .expect("pack with nested invalid ledger should write for validation");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("pack should load");
+    let validation = reader.validate();
+
+    assert!(!validation.valid);
+    assert!(validation.errors.iter().any(|error| {
+        error.path == "evidence/ledger.json#0"
+            && error.message.contains("exceeds Level1LocalReplay")
+    }));
 }
