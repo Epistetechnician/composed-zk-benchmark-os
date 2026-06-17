@@ -179,6 +179,29 @@ pub enum AgentAnchorError {
     MissingRuntimeValidity(String),
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum RegistryStateError {
+    ActiveRuntimeIndexMismatch {
+        indexed: BTreeSet<String>,
+        derived: BTreeSet<String>,
+    },
+    ActiveBondIndexMismatch {
+        indexed: BTreeSet<String>,
+        derived: BTreeSet<String>,
+    },
+    SponsorUseCountMismatch {
+        indexed: BTreeMap<String, u64>,
+        derived: BTreeMap<String, u64>,
+    },
+    RevokedRuntimeStillActive(String),
+    RegisteredTierMismatch {
+        subject: SubjectId,
+        actual: AnchorTier,
+        expected: AnchorTier,
+    },
+    RevokedRegistrationStillHasActiveTier(SubjectId),
+}
+
 #[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
 pub struct AgentAnchorRegistry {
     active: BTreeMap<SubjectId, RegisteredAgentAnchor>,
@@ -303,6 +326,9 @@ impl AgentAnchorRegistry {
 
         let updated_tier = registration.anchor_set.tier();
         if updated_tier == AnchorTier::ClaimedAgent {
+            registration.tier = AnchorTier::ClaimedAgent;
+            registration.envelope.guarantees =
+                BTreeSet::from([anchor_tier_predicate(subject, &registration.tier)]);
             registration.revoked_at = Some(revoked_at);
         } else {
             registration.tier = updated_tier;
@@ -315,6 +341,100 @@ impl AgentAnchorRegistry {
 
     pub fn registration(&self, subject: &SubjectId) -> Option<&RegisteredAgentAnchor> {
         self.active.get(subject)
+    }
+
+    pub fn active_count(&self) -> usize {
+        self.active
+            .values()
+            .filter(|registration| registration.revoked_at.is_none())
+            .count()
+    }
+
+    pub fn registered_count(&self) -> usize {
+        self.active.len()
+    }
+
+    pub fn used_runtime_anchor_ids(&self) -> BTreeSet<String> {
+        self.used_runtime_anchors.clone()
+    }
+
+    pub fn used_bond_anchor_ids(&self) -> BTreeSet<String> {
+        self.used_bond_anchors.clone()
+    }
+
+    pub fn sponsor_use_count(&self, sponsor: &SponsorAnchor) -> u64 {
+        *self
+            .sponsor_use_counts
+            .get(&sponsor.sponsor_id())
+            .unwrap_or(&0)
+    }
+
+    pub fn revoked_runtime_anchor_ids(&self) -> BTreeSet<String> {
+        self.revoked_runtime_anchors.clone()
+    }
+
+    pub fn validate_internal_state(&self) -> Result<(), RegistryStateError> {
+        let mut derived_runtime = BTreeSet::new();
+        let mut derived_bonds = BTreeSet::new();
+        let mut derived_sponsors = BTreeMap::<String, u64>::new();
+
+        for registration in self.active.values() {
+            let expected_tier = registration.anchor_set.tier();
+            if registration.revoked_at.is_none() {
+                if expected_tier != registration.tier {
+                    return Err(RegistryStateError::RegisteredTierMismatch {
+                        subject: registration.subject.clone(),
+                        actual: registration.tier.clone(),
+                        expected: expected_tier,
+                    });
+                }
+                for anchor in &registration.anchor_set.runtime_anchors {
+                    let anchor_id = anchor.anchor_id();
+                    if self.revoked_runtime_anchors.contains(&anchor_id) {
+                        return Err(RegistryStateError::RevokedRuntimeStillActive(anchor_id));
+                    }
+                    derived_runtime.insert(anchor_id);
+                }
+                derived_bonds.extend(
+                    registration
+                        .anchor_set
+                        .bond_anchors
+                        .iter()
+                        .map(|bond| bond.bond_id.clone()),
+                );
+            } else if registration.tier != AnchorTier::ClaimedAgent
+                && registration.anchor_set.tier() == AnchorTier::ClaimedAgent
+            {
+                return Err(RegistryStateError::RevokedRegistrationStillHasActiveTier(
+                    registration.subject.clone(),
+                ));
+            }
+
+            for sponsor in &registration.anchor_set.sponsor_anchors {
+                *derived_sponsors.entry(sponsor.sponsor_id()).or_insert(0) += 1;
+            }
+        }
+
+        if self.used_runtime_anchors != derived_runtime {
+            return Err(RegistryStateError::ActiveRuntimeIndexMismatch {
+                indexed: self.used_runtime_anchors.clone(),
+                derived: derived_runtime,
+            });
+        }
+        if self.used_bond_anchors != derived_bonds {
+            return Err(RegistryStateError::ActiveBondIndexMismatch {
+                indexed: self.used_bond_anchors.clone(),
+                derived: derived_bonds,
+            });
+        }
+        if self.sponsor_use_counts != derived_sponsors {
+            return Err(RegistryStateError::SponsorUseCountMismatch {
+                indexed: self.sponsor_use_counts.clone(),
+                derived: derived_sponsors,
+            });
+        }
+
+        Ok(())
     }
 }
 
@@ -486,6 +606,224 @@ mod tests {
             require_closed: true,
             at,
         }
+    }
+
+    #[derive(Clone, Debug)]
+    enum RegistryStrategyStep {
+        RegisterRuntime {
+            subject_id: u8,
+            anchor_id: u8,
+        },
+        RegisterSponsor {
+            subject_id: u8,
+            sponsor_id: u8,
+            max_uses: u8,
+        },
+        RegisterComposite {
+            subject_id: u8,
+            anchor_id: u8,
+            sponsor_id: u8,
+        },
+        RevokeRuntime {
+            subject_id: u8,
+            anchor_id: u8,
+        },
+        Nested(Vec<RegistryStrategyStep>),
+    }
+
+    #[derive(Default)]
+    struct StrategyOracle {
+        registered_subjects: BTreeSet<u8>,
+        active_subjects: BTreeSet<u8>,
+        runtime_subjects: BTreeMap<u8, u8>,
+        subject_sponsors: BTreeMap<u8, BTreeSet<u8>>,
+        sponsor_uses: BTreeMap<u8, u64>,
+        revoked_runtime_anchors: BTreeSet<u8>,
+    }
+
+    fn small_subject(id: u8) -> SubjectId {
+        subject(&format!("agent{id}"))
+    }
+
+    fn small_runtime_anchor(id: u8) -> Anchor {
+        runtime_anchor(&format!("cvm-{id}"))
+    }
+
+    fn small_sponsor(id: u8, policy: SponsorshipPolicy) -> SponsorAnchor {
+        sponsor(&format!("human-{id}"), policy)
+    }
+
+    fn strategy_tree() -> impl Strategy<Value = Vec<RegistryStrategyStep>> {
+        let leaf = prop_oneof![
+            (0u8..8, 0u8..8).prop_map(|(subject_id, anchor_id)| {
+                RegistryStrategyStep::RegisterRuntime {
+                    subject_id,
+                    anchor_id,
+                }
+            }),
+            (0u8..8, 0u8..8, 1u8..4).prop_map(|(subject_id, sponsor_id, max_uses)| {
+                RegistryStrategyStep::RegisterSponsor {
+                    subject_id,
+                    sponsor_id,
+                    max_uses,
+                }
+            }),
+            (0u8..8, 0u8..8, 0u8..8).prop_map(|(subject_id, anchor_id, sponsor_id)| {
+                RegistryStrategyStep::RegisterComposite {
+                    subject_id,
+                    anchor_id,
+                    sponsor_id,
+                }
+            }),
+            (0u8..8, 0u8..8).prop_map(|(subject_id, anchor_id)| {
+                RegistryStrategyStep::RevokeRuntime {
+                    subject_id,
+                    anchor_id,
+                }
+            }),
+        ];
+
+        leaf.prop_recursive(3, 32, 4, |inner| {
+            proptest::collection::vec(inner, 1..5).prop_map(RegistryStrategyStep::Nested)
+        })
+        .prop_flat_map(|step| proptest::collection::vec(Just(step), 1..16))
+    }
+
+    fn run_strategy_step(
+        registry: &mut AgentAnchorRegistry,
+        oracle: &mut StrategyOracle,
+        step: &RegistryStrategyStep,
+    ) {
+        match step {
+            RegistryStrategyStep::RegisterRuntime {
+                subject_id,
+                anchor_id,
+            } => {
+                let subject = small_subject(*subject_id);
+                let anchor = small_runtime_anchor(*anchor_id);
+                let result = registry.register(
+                    AgentAnchorSet {
+                        subject: subject.clone(),
+                        runtime_anchors: BTreeSet::from([anchor.clone()]),
+                        ..AgentAnchorSet::default()
+                    },
+                    closed_runtime_evidence(&subject, &anchor, 10),
+                    policy(&subject, 10, Maturity::Attested),
+                );
+                let expected_ok = !oracle.registered_subjects.contains(subject_id)
+                    && !oracle.runtime_subjects.contains_key(anchor_id)
+                    && !oracle.revoked_runtime_anchors.contains(anchor_id);
+                assert_eq!(result.is_ok(), expected_ok);
+                if result.is_ok() {
+                    oracle.registered_subjects.insert(*subject_id);
+                    oracle.active_subjects.insert(*subject_id);
+                    oracle.runtime_subjects.insert(*anchor_id, *subject_id);
+                }
+            }
+            RegistryStrategyStep::RegisterSponsor {
+                subject_id,
+                sponsor_id,
+                max_uses,
+            } => {
+                let subject = small_subject(*subject_id);
+                let sponsor_anchor = small_sponsor(
+                    *sponsor_id,
+                    SponsorshipPolicy::LimitedAgentsPerSponsor {
+                        max: u64::from(*max_uses),
+                    },
+                );
+                let result = registry.register(
+                    AgentAnchorSet {
+                        subject: subject.clone(),
+                        sponsor_anchors: BTreeSet::from([sponsor_anchor]),
+                        ..AgentAnchorSet::default()
+                    },
+                    closed_sponsor_evidence(&subject, 10),
+                    policy(&subject, 10, Maturity::Local),
+                );
+                let current_uses = *oracle.sponsor_uses.get(sponsor_id).unwrap_or(&0);
+                let expected_ok = !oracle.registered_subjects.contains(subject_id)
+                    && current_uses < u64::from(*max_uses);
+                assert_eq!(result.is_ok(), expected_ok);
+                if result.is_ok() {
+                    oracle.registered_subjects.insert(*subject_id);
+                    oracle.active_subjects.insert(*subject_id);
+                    oracle
+                        .subject_sponsors
+                        .entry(*subject_id)
+                        .or_default()
+                        .insert(*sponsor_id);
+                    *oracle.sponsor_uses.entry(*sponsor_id).or_insert(0) += 1;
+                }
+            }
+            RegistryStrategyStep::RegisterComposite {
+                subject_id,
+                anchor_id,
+                sponsor_id,
+            } => {
+                let subject = small_subject(*subject_id);
+                let anchor = small_runtime_anchor(*anchor_id);
+                let sponsor_anchor =
+                    small_sponsor(*sponsor_id, SponsorshipPolicy::OneAgentPerSponsor);
+                let result = registry.register(
+                    AgentAnchorSet {
+                        subject: subject.clone(),
+                        runtime_anchors: BTreeSet::from([anchor.clone()]),
+                        sponsor_anchors: BTreeSet::from([sponsor_anchor]),
+                        ..AgentAnchorSet::default()
+                    },
+                    closed_runtime_evidence(&subject, &anchor, 10),
+                    policy(&subject, 10, Maturity::Attested),
+                );
+                let current_uses = *oracle.sponsor_uses.get(sponsor_id).unwrap_or(&0);
+                let expected_ok = !oracle.registered_subjects.contains(subject_id)
+                    && !oracle.runtime_subjects.contains_key(anchor_id)
+                    && !oracle.revoked_runtime_anchors.contains(anchor_id)
+                    && current_uses == 0;
+                assert_eq!(result.is_ok(), expected_ok);
+                if result.is_ok() {
+                    oracle.registered_subjects.insert(*subject_id);
+                    oracle.active_subjects.insert(*subject_id);
+                    oracle.runtime_subjects.insert(*anchor_id, *subject_id);
+                    oracle
+                        .subject_sponsors
+                        .entry(*subject_id)
+                        .or_default()
+                        .insert(*sponsor_id);
+                    *oracle.sponsor_uses.entry(*sponsor_id).or_insert(0) += 1;
+                }
+            }
+            RegistryStrategyStep::RevokeRuntime {
+                subject_id,
+                anchor_id,
+            } => {
+                let subject = small_subject(*subject_id);
+                let anchor = small_runtime_anchor(*anchor_id);
+                let result = registry.revoke_runtime_anchor(&subject, &anchor, 20);
+                let expected_ok = oracle.runtime_subjects.get(anchor_id) == Some(subject_id);
+                assert_eq!(result.is_ok(), expected_ok);
+                if result.is_ok() {
+                    oracle.runtime_subjects.remove(anchor_id);
+                    oracle.revoked_runtime_anchors.insert(*anchor_id);
+                    if oracle
+                        .subject_sponsors
+                        .get(subject_id)
+                        .map(BTreeSet::is_empty)
+                        .unwrap_or(true)
+                    {
+                        oracle.active_subjects.remove(subject_id);
+                    }
+                }
+            }
+            RegistryStrategyStep::Nested(steps) => {
+                for nested_step in steps {
+                    run_strategy_step(registry, oracle, nested_step);
+                }
+            }
+        }
+        registry
+            .validate_internal_state()
+            .expect("registry indexes must match after every strategy step");
     }
 
     #[test]
@@ -693,6 +1031,72 @@ mod tests {
         assert_eq!(set_one.anchor_set_id(), set_two.anchor_set_id());
     }
 
+    #[test]
+    fn state_1_internal_indexes_match_active_registrations() {
+        let subject = subject("agentA");
+        let anchor = runtime_anchor("cvm-1");
+        let sponsor = sponsor("human-1", SponsorshipPolicy::OneAgentPerSponsor);
+        let bond = bond("bond-1");
+        let mut registry = AgentAnchorRegistry::new();
+
+        registry
+            .register(
+                AgentAnchorSet {
+                    subject: subject.clone(),
+                    runtime_anchors: BTreeSet::from([anchor.clone()]),
+                    sponsor_anchors: BTreeSet::from([sponsor.clone()]),
+                    bond_anchors: BTreeSet::from([bond.clone()]),
+                    ..AgentAnchorSet::default()
+                },
+                closed_runtime_evidence(&subject, &anchor, 10),
+                policy(&subject, 10, Maturity::Attested),
+            )
+            .expect("registration must work");
+
+        assert_eq!(registry.active_count(), 1);
+        assert_eq!(registry.registered_count(), 1);
+        assert!(registry
+            .used_runtime_anchor_ids()
+            .contains(&anchor.anchor_id()));
+        assert!(registry.used_bond_anchor_ids().contains(&bond.bond_id));
+        assert_eq!(registry.sponsor_use_count(&sponsor), 1);
+        assert!(registry.validate_internal_state().is_ok());
+    }
+
+    #[test]
+    fn state_2_revoked_runtime_leaves_consistent_sponsor_state() {
+        let subject = subject("agentA");
+        let anchor = runtime_anchor("cvm-1");
+        let sponsor = sponsor("human-1", SponsorshipPolicy::OneAgentPerSponsor);
+        let mut registry = AgentAnchorRegistry::new();
+
+        registry
+            .register(
+                AgentAnchorSet {
+                    subject: subject.clone(),
+                    runtime_anchors: BTreeSet::from([anchor.clone()]),
+                    sponsor_anchors: BTreeSet::from([sponsor.clone()]),
+                    ..AgentAnchorSet::default()
+                },
+                closed_runtime_evidence(&subject, &anchor, 10),
+                policy(&subject, 10, Maturity::Attested),
+            )
+            .expect("registration must work");
+        registry
+            .revoke_runtime_anchor(&subject, &anchor, 20)
+            .expect("revocation should downgrade");
+
+        assert_eq!(registry.active_count(), 1);
+        assert_eq!(registry.sponsor_use_count(&sponsor), 1);
+        assert!(!registry
+            .used_runtime_anchor_ids()
+            .contains(&anchor.anchor_id()));
+        assert!(registry
+            .revoked_runtime_anchor_ids()
+            .contains(&anchor.anchor_id()));
+        assert!(registry.validate_internal_state().is_ok());
+    }
+
     proptest! {
         #[test]
         fn pap_1_no_active_anchor_reuse(ids in proptest::collection::vec("[a-z]{1,8}", 1..12)) {
@@ -793,6 +1197,27 @@ mod tests {
                 ..AgentAnchorSet::default()
             };
             prop_assert_eq!(set_one.anchor_set_id(), set_two.anchor_set_id());
+        }
+
+        #[test]
+        fn pap_6_recursive_strategy_tree_preserves_registry_state(steps in strategy_tree()) {
+            let mut registry = AgentAnchorRegistry::new();
+            let mut oracle = StrategyOracle::default();
+
+            for step in &steps {
+                run_strategy_step(&mut registry, &mut oracle, step);
+            }
+
+            prop_assert_eq!(registry.active_count(), oracle.active_subjects.len());
+            prop_assert_eq!(
+                registry.used_runtime_anchor_ids().len(),
+                oracle.runtime_subjects.len()
+            );
+            prop_assert_eq!(
+                registry.revoked_runtime_anchor_ids().len(),
+                oracle.revoked_runtime_anchors.len()
+            );
+            prop_assert!(registry.validate_internal_state().is_ok());
         }
     }
 }

@@ -50,6 +50,14 @@ AGENTS.md
 - `anchor_claim_envelope`
 - `anchor_tier_predicate`
 - `tier_strength`
+- `AgentAnchorRegistry::active_count`
+- `AgentAnchorRegistry::registered_count`
+- `AgentAnchorRegistry::used_runtime_anchor_ids`
+- `AgentAnchorRegistry::used_bond_anchor_ids`
+- `AgentAnchorRegistry::sponsor_use_count`
+- `AgentAnchorRegistry::revoked_runtime_anchor_ids`
+- `AgentAnchorRegistry::validate_internal_state`
+- `RegistryStateError`
 - `PHASE_4_CLAIM_BOUNDARY`
 
 ## Validation Coverage
@@ -68,6 +76,22 @@ The crate implements the Phase 4 unit vectors:
 It also includes property tests for active anchor reuse, sponsor policy limits,
 tier monotonicity under added valid anchors, revocation non-strengthening, and
 canonical hash determinism.
+
+The recursive state hardening test generates nested registry strategies:
+
+```text
+strategy
+  -> step
+  -> nested strategy
+  -> step
+  -> nested strategy
+```
+
+Each inner step is applied to both the real `AgentAnchorRegistry` and an
+independent oracle model. After every step, `validate_internal_state` checks that
+runtime-anchor indexes, bond indexes, sponsor-use counts, revocation markers,
+and stored tiers still match the registered anchor sets. This specifically
+guards strategy-within-strategy state drift.
 
 The end-to-end authorization test consumes the accepted real Phala fixture
 through `PhalaArtifactAttestationLane`, conjoins it with `DistinctAgentLane`,
