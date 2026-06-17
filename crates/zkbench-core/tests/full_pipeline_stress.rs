@@ -3,8 +3,9 @@ use std::collections::BTreeSet;
 use zkbench_core::{
     apply_mutation_pass, build_local_replay_manifest_for_instance,
     build_local_replay_manifest_for_mutation, generate_instance, list_available_local_generators,
-    BadCountersPass, ClaimBoundary, CorruptedGuardsPass, FamilyKind, GeneratorConfig,
-    InstanceParams, LocalJsonAdapter, MissingConstraintsPass, MutationClass, ResultClassification,
+    BadCountersPass, ClaimBoundary, CorruptedGuardsPass, EvidenceLedger, FamilyKind,
+    GeneratorConfig, InstanceParams, LocalJsonAdapter, MissingConstraintsPass, MutationClass,
+    ResultClassification,
 };
 
 fn config_for_family(family: FamilyKind, seed: u64) -> GeneratorConfig {
@@ -41,6 +42,7 @@ fn implemented_family_kinds() -> Vec<FamilyKind> {
 fn deterministic_generation_mutation_replay_stress_stays_claim_capped() {
     let adapter = LocalJsonAdapter::default();
     let families = implemented_family_kinds();
+    let mut evidence_ledger = EvidenceLedger::new();
     let mut generated_count = 0usize;
     let mut mutation_count = 0usize;
     let mut skipped_mutation_count = 0usize;
@@ -63,6 +65,9 @@ fn deterministic_generation_mutation_replay_stress_stays_claim_capped() {
             let replay = adapter
                 .replay(&manifest)
                 .expect("generated instance should replay locally");
+            evidence_ledger
+                .append_replay_result(&replay)
+                .expect("generated replay records should append to local ledger");
             assert_eq!(replay.claim_boundary, ClaimBoundary::Level1LocalReplay);
             assert!(replay.trace_results.iter().any(|trace| {
                 trace.result_classification == ResultClassification::ExpectedAcceptAccepted
@@ -107,6 +112,9 @@ fn deterministic_generation_mutation_replay_stress_stays_claim_capped() {
                 let replay = adapter
                     .replay(&manifest)
                     .expect("mutated instance should replay locally");
+                evidence_ledger
+                    .append_replay_result(&replay)
+                    .expect("mutated replay record should append to local ledger");
                 assert_eq!(replay.claim_boundary, ClaimBoundary::Level1LocalReplay);
                 assert_eq!(replay.trace_results.len(), 1);
                 assert_eq!(replay.evidence_records.len(), 1);
@@ -166,4 +174,19 @@ fn deterministic_generation_mutation_replay_stress_stays_claim_capped() {
         local_rejections > 0,
         "stress loop should include rejected local mutation outcomes"
     );
+
+    let ledger_validation = evidence_ledger.validate();
+    assert!(
+        ledger_validation.valid,
+        "full-pipeline stress ledger should validate: {:?}",
+        ledger_validation.errors
+    );
+    assert_eq!(
+        ledger_validation.summary.entry_count,
+        local_accepts + local_rejections
+    );
+    assert!(evidence_ledger
+        .entries
+        .iter()
+        .all(|entry| entry.evidence_record.claim_boundary <= ClaimBoundary::Level1LocalReplay));
 }
