@@ -10,7 +10,7 @@ use crate::evidence::{compute_artifact_digest_bytes, ArtifactDigest, EvidenceLed
 use crate::generator::GeneratedBenchmarkInstance;
 use crate::mutation::MutatedBenchmarkInstance;
 use crate::replay::{ReplayManifest, ReplayResult};
-use crate::scoring::{score_report_from_evidence, ScoreReport};
+use crate::scoring::{score_report_from_evidence, validate_score_report, ScoreReport};
 
 use super::manifest::{
     BenchmarkPackFile, BenchmarkPackFileRole, BenchmarkPackManifest, BenchmarkPackSummary,
@@ -170,7 +170,7 @@ impl BenchmarkPackWriter {
         )?);
 
         let score_report_count = if self.include_score_report {
-            let report = self.resolved_score_report(&ledger);
+            let report = self.resolved_score_report(&ledger)?;
             files.push(write_json_artifact(
                 root,
                 "reports/score_report.json",
@@ -248,15 +248,23 @@ impl BenchmarkPackWriter {
         Ok(ledger)
     }
 
-    fn resolved_score_report(&self, ledger: &EvidenceLedger) -> ScoreReport {
-        self.score_report.clone().unwrap_or_else(|| {
+    fn resolved_score_report(&self, ledger: &EvidenceLedger) -> Result<ScoreReport> {
+        let report = self.score_report.clone().unwrap_or_else(|| {
             let records = ledger
                 .entries
                 .iter()
                 .map(|entry| entry.evidence_record.clone())
                 .collect::<Vec<_>>();
             score_report_from_evidence(&records)
-        })
+        });
+        let validation = validate_score_report(&report);
+        if !validation.valid {
+            return Err(ZkBenchError::benchmark_pack(
+                "reports/score_report.json",
+                format!("score report validation failed: {:?}", validation.issues),
+            ));
+        }
+        Ok(report)
     }
 }
 
