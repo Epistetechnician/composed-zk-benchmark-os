@@ -249,6 +249,10 @@ retain sampled local reports and failure packs outside the repository or under a
 ignored artifact directory, curate a regression corpus, and keep all reports
 local-only. It must not run zk-Harness, import real external results, create
 dashboards, claim official benchmark evidence, or promote Level2+ evidence.
+The optional Qwable local-model attachment for an overnight autoresearch soak is
+documented in
+[docs/61-phase-l-qwable-autoresearch-contract.md](docs/61-phase-l-qwable-autoresearch-contract.md);
+the model is an advisory critic only and is not an evidence lane.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
