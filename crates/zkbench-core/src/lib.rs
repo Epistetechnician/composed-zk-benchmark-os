@@ -200,10 +200,10 @@ pub use replay::{
     ReplayTraceSelection,
 };
 pub use scoring::{
-    score_report_from_evidence, score_report_from_local_mutation_evidence, AdapterPortabilityScore,
-    CorrectnessScore, FormalEvidenceScore, LocalMutationEvidenceSummary, PerformanceScore,
-    RecursionStressScore, ReproducibilityScore, RiskPenalty, ScoreConfidence, ScoreReport,
-    SoundnessFailureDetectionScore,
+    score_report_from_evidence, score_report_from_local_mutation_evidence, validate_score_report,
+    AdapterPortabilityScore, CorrectnessScore, FormalEvidenceScore, LocalMutationEvidenceSummary,
+    PerformanceScore, RecursionStressScore, ReproducibilityScore, RiskPenalty, ScoreConfidence,
+    ScoreReport, ScoreReportValidation, ScoreReportValidationIssue, SoundnessFailureDetectionScore,
 };
 pub use soak::{
     aggregate_soak_health_reports, attach_reproduction_bundle_to_pack, build_failure_corpus_entry,

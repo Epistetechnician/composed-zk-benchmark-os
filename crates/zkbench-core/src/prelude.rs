@@ -61,8 +61,8 @@ pub use crate::replay::{
     run_local_replay, ReplayManifest, ReplayResult, ReplayTraceResult,
 };
 pub use crate::scoring::{
-    score_report_from_evidence, score_report_from_local_mutation_evidence,
-    LocalMutationEvidenceSummary, ScoreReport,
+    score_report_from_evidence, score_report_from_local_mutation_evidence, validate_score_report,
+    LocalMutationEvidenceSummary, ScoreReport, ScoreReportValidation, ScoreReportValidationIssue,
 };
 pub use crate::soak::{
     aggregate_soak_health_reports, build_regression_soak_config, build_smoke_soak_config,
