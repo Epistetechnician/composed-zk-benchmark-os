@@ -301,6 +301,53 @@ pub fn validate_failure_corpus_index(index: &FailureCorpusIndex) -> Result<()> {
                 "failure reproduction manifests must remain Level0DesignNote",
             ));
         }
+        if entry.reproduction_manifest.case_id != entry.source_soak_case_id {
+            return Err(ZkBenchError::soak(
+                format!("soak.failure_corpus.entries[{entry_index}].reproduction_manifest.case_id"),
+                "failure reproduction manifest case id does not match entry source case id",
+            ));
+        }
+        if entry.reproduction_manifest.family_kind != entry.family_kind {
+            return Err(ZkBenchError::soak(
+                format!(
+                    "soak.failure_corpus.entries[{entry_index}].reproduction_manifest.family_kind"
+                ),
+                "failure reproduction manifest family kind does not match entry family kind",
+            ));
+        }
+        if entry.reproduction_manifest.seed != entry.generator_seed {
+            return Err(ZkBenchError::soak(
+                format!("soak.failure_corpus.entries[{entry_index}].reproduction_manifest.seed"),
+                "failure reproduction manifest seed does not match entry generator seed",
+            ));
+        }
+        if entry.reproduction_manifest.tunables != entry.tunables {
+            return Err(ZkBenchError::soak(
+                format!(
+                    "soak.failure_corpus.entries[{entry_index}].reproduction_manifest.tunables"
+                ),
+                "failure reproduction manifest tunables do not match entry tunables",
+            ));
+        }
+        let expected_mutation_selection: Vec<_> = entry.mutation_class.into_iter().collect();
+        if entry.reproduction_manifest.mutation_selection != expected_mutation_selection {
+            return Err(ZkBenchError::soak(
+                format!(
+                    "soak.failure_corpus.entries[{entry_index}].reproduction_manifest.mutation_selection"
+                ),
+                "failure reproduction manifest mutation selection does not match entry mutation class",
+            ));
+        }
+        if let Some(trace_id) = &entry.trace_id {
+            if entry.reproduction_manifest.trace_selection != *trace_id {
+                return Err(ZkBenchError::soak(
+                    format!(
+                        "soak.failure_corpus.entries[{entry_index}].reproduction_manifest.trace_selection"
+                    ),
+                    "failure reproduction manifest trace selection does not match entry trace id",
+                ));
+            }
+        }
         for artifact_ref in &entry.artifact_refs {
             validate_failure_artifact_ref(artifact_ref)?;
         }
