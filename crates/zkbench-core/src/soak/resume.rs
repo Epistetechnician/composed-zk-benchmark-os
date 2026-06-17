@@ -1,5 +1,6 @@
 //! Resumable shard checkpoint support.
 
+use std::collections::BTreeSet;
 use std::fs;
 use std::path::Path;
 
@@ -117,6 +118,12 @@ pub fn validate_soak_shard_checkpoint(
             "shard checkpoints must remain Level0DesignNote",
         ));
     }
+    if checkpoint.shard_id.value.trim().is_empty() {
+        return Err(ZkBenchError::soak(
+            "soak.checkpoint.shard_id",
+            "checkpoint shard id is empty",
+        ));
+    }
     if checkpoint.config_digest != expected_config_digest {
         return Err(ZkBenchError::soak(
             "soak.checkpoint.config_digest",
@@ -127,6 +134,91 @@ pub fn validate_soak_shard_checkpoint(
         return Err(ZkBenchError::soak(
             "soak.checkpoint.resume_token",
             "resume token mismatch",
+        ));
+    }
+    validate_checkpoint_id_list("completed_case_ids", &checkpoint.completed_case_ids)?;
+    validate_checkpoint_id_list("failed_case_ids", &checkpoint.failed_case_ids)?;
+    validate_checkpoint_id_list("skipped_case_ids", &checkpoint.skipped_case_ids)?;
+    validate_checkpoint_id_list("failure_corpus_refs", &checkpoint.failure_corpus_refs)?;
+
+    let completed = checkpoint
+        .completed_case_ids
+        .iter()
+        .cloned()
+        .collect::<BTreeSet<_>>();
+    let failed = checkpoint
+        .failed_case_ids
+        .iter()
+        .cloned()
+        .collect::<BTreeSet<_>>();
+    let skipped = checkpoint
+        .skipped_case_ids
+        .iter()
+        .cloned()
+        .collect::<BTreeSet<_>>();
+    if !completed.is_disjoint(&failed) {
+        return Err(ZkBenchError::soak(
+            "soak.checkpoint.case_ids",
+            "checkpoint completed and failed case ids overlap",
+        ));
+    }
+    if !skipped.is_subset(&completed) {
+        return Err(ZkBenchError::soak(
+            "soak.checkpoint.skipped_case_ids",
+            "checkpoint skipped case ids must be a subset of completed case ids",
+        ));
+    }
+    if !skipped.is_disjoint(&failed) {
+        return Err(ZkBenchError::soak(
+            "soak.checkpoint.skipped_case_ids",
+            "checkpoint skipped and failed case ids overlap",
+        ));
+    }
+    for artifact_ref in &checkpoint.artifact_refs_written {
+        validate_checkpoint_artifact_ref(artifact_ref)?;
+    }
+    Ok(())
+}
+
+fn validate_checkpoint_id_list(path: &str, ids: &[String]) -> Result<()> {
+    let mut seen = BTreeSet::new();
+    for (index, id) in ids.iter().enumerate() {
+        if id.trim().is_empty() {
+            return Err(ZkBenchError::soak(
+                format!("soak.checkpoint.{path}[{index}]"),
+                "checkpoint id is empty",
+            ));
+        }
+        if !seen.insert(id.clone()) {
+            return Err(ZkBenchError::soak(
+                format!("soak.checkpoint.{path}[{index}]"),
+                "checkpoint id is duplicated",
+            ));
+        }
+    }
+    Ok(())
+}
+
+fn validate_checkpoint_artifact_ref(artifact_ref: &FailureArtifactRef) -> Result<()> {
+    if artifact_ref.relative_path.trim().is_empty() {
+        return Err(ZkBenchError::soak(
+            "soak.checkpoint.artifact_ref.relative_path",
+            "checkpoint artifact refs must have a relative path",
+        ));
+    }
+    if artifact_ref.role.trim().is_empty() {
+        return Err(ZkBenchError::soak(
+            "soak.checkpoint.artifact_ref.role",
+            "checkpoint artifact refs must have a role",
+        ));
+    }
+    if artifact_ref.relative_path.starts_with('/')
+        || artifact_ref.relative_path.contains("..")
+        || artifact_ref.relative_path.contains('\\')
+    {
+        return Err(ZkBenchError::soak(
+            "soak.checkpoint.artifact_ref",
+            "checkpoint artifact refs must be relative portable paths",
         ));
     }
     Ok(())
