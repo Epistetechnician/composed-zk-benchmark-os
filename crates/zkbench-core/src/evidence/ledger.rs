@@ -145,8 +145,42 @@ impl EvidenceLedger {
     /// Validate the local digest chain.
     pub fn validate(&self) -> EvidenceLedgerValidation {
         let mut errors = Vec::new();
+        for (index, note) in self.notes.iter().enumerate() {
+            push_forbidden_claim_text_error(
+                self.entries.len() as u64,
+                format!("ledger.notes[{index}]"),
+                note,
+                &mut errors,
+            );
+        }
         let mut previous_digest = None;
         for (index, entry) in self.entries.iter().enumerate() {
+            for (note_index, note) in entry.notes.iter().enumerate() {
+                push_forbidden_claim_text_error(
+                    entry.sequence_number,
+                    format!("ledger.entries[{index}].notes[{note_index}]"),
+                    note,
+                    &mut errors,
+                );
+            }
+            for (note_index, note) in entry.evidence_record.notes.iter().enumerate() {
+                push_forbidden_claim_text_error(
+                    entry.sequence_number,
+                    format!("ledger.entries[{index}].evidence_record.notes[{note_index}]"),
+                    note,
+                    &mut errors,
+                );
+            }
+            for (note_index, note) in entry.evidence_record.provenance.notes.iter().enumerate() {
+                push_forbidden_claim_text_error(
+                    entry.sequence_number,
+                    format!(
+                        "ledger.entries[{index}].evidence_record.provenance.notes[{note_index}]"
+                    ),
+                    note,
+                    &mut errors,
+                );
+            }
             if entry.sequence_number != index as u64 {
                 errors.push(EvidenceLedgerValidationError {
                     sequence_number: entry.sequence_number,
@@ -305,6 +339,34 @@ fn digest_entry(
         Some(ArtifactKind::EvidenceLedger),
         Some(ArtifactRole::Digest),
     )
+}
+
+fn push_forbidden_claim_text_error(
+    sequence_number: u64,
+    path: String,
+    text: &str,
+    errors: &mut Vec<EvidenceLedgerValidationError>,
+) {
+    if contains_forbidden_evidence_ledger_claim_text(text) {
+        errors.push(EvidenceLedgerValidationError {
+            sequence_number,
+            message: format!("{path} contains forbidden claim language"),
+        });
+    }
+}
+
+fn contains_forbidden_evidence_ledger_claim_text(text: &str) -> bool {
+    let lowered = text.to_ascii_lowercase();
+    if lowered.contains("not official benchmark evidence")
+        || lowered.contains("not official benchmark result")
+        || lowered.contains("no official benchmark evidence")
+        || lowered.contains("no official benchmark result")
+        || lowered.contains("does not create official benchmark evidence")
+        || lowered.contains("does not create official benchmark result")
+    {
+        return false;
+    }
+    crate::external_runner::contains_forbidden_claim_text(text)
 }
 
 #[allow(dead_code)]
