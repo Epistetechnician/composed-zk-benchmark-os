@@ -196,6 +196,17 @@ fn soak_artifact_paths_are_portable_and_relative() {
                 .expect_err("non-portable artifact paths should be rejected");
         assert!(error.to_string().contains("portable and relative"));
     }
+
+    for bad_artifact_id in ["", "telemetry/3", "telemetry\\3", "telemetry..3"] {
+        let error = soak_artifact_manifest(
+            bad_artifact_id,
+            SoakArtifactRole::Telemetry,
+            &layout.telemetry_path,
+            &layout,
+        )
+        .expect_err("non-portable artifact ids should be rejected");
+        assert!(error.to_string().contains("portable identifiers"));
+    }
 }
 
 #[test]
@@ -325,6 +336,7 @@ fn report_bundle_validation_rejects_duplicate_or_digestless_artifacts() {
     let mut duplicate = bundle.artifact_digest_set.artifacts[0].clone();
     duplicate.digest = None;
     bundle.artifact_digest_set.artifacts.push(duplicate);
+    bundle.artifact_digest_set.artifacts[1].artifact_id = String::new();
 
     let validation = validate_soak_report_bundle(&bundle);
 
@@ -341,6 +353,10 @@ fn report_bundle_validation_rejects_duplicate_or_digestless_artifacts() {
         .issues
         .iter()
         .any(|issue| issue.contains("missing digest")));
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("artifact id is not portable")));
 }
 
 #[test]

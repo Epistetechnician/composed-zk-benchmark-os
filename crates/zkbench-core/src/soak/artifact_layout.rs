@@ -286,6 +286,12 @@ pub fn validate_soak_report_bundle(bundle: &SoakReportBundle) -> SoakReportBundl
     let mut artifact_ids = BTreeSet::new();
     let mut artifact_paths = BTreeSet::new();
     for artifact in &bundle.artifact_digest_set.artifacts {
+        if !artifact_id_is_portable(&artifact.artifact_id) {
+            issues.push(format!(
+                "artifact id is not portable: {}",
+                artifact.artifact_id
+            ));
+        }
         if !artifact_ids.insert(artifact.artifact_id.clone()) {
             issues.push(format!("duplicate artifact id: {}", artifact.artifact_id));
         }
@@ -386,6 +392,13 @@ pub fn soak_artifact_manifest<T: Serialize>(
     relative_path: impl Into<String>,
     value: &T,
 ) -> Result<SoakArtifactManifest> {
+    let artifact_id = artifact_id.into();
+    if !artifact_id_is_portable(&artifact_id) {
+        return Err(ZkBenchError::soak(
+            "soak.artifact.artifact_id",
+            "soak artifact ids must be non-empty portable identifiers",
+        ));
+    }
     let relative_path = relative_path.into();
     if !relative_path_is_portable(&relative_path) {
         return Err(ZkBenchError::soak(
@@ -394,7 +407,7 @@ pub fn soak_artifact_manifest<T: Serialize>(
         ));
     }
     Ok(SoakArtifactManifest {
-        artifact_id: artifact_id.into(),
+        artifact_id,
         role,
         relative_path,
         digest: Some(compute_artifact_digest(
@@ -405,6 +418,13 @@ pub fn soak_artifact_manifest<T: Serialize>(
         claim_boundary: ClaimBoundary::Level0DesignNote,
         notes: vec!["Soak artifact manifest is local-only.".to_string()],
     })
+}
+
+fn artifact_id_is_portable(artifact_id: &str) -> bool {
+    !artifact_id.trim().is_empty()
+        && !artifact_id.contains('/')
+        && !artifact_id.contains('\\')
+        && !artifact_id.contains("..")
 }
 
 pub(crate) fn relative_path_is_portable(path: &str) -> bool {
