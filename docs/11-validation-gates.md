@@ -52,6 +52,7 @@ The current Rust foundation must pass:
 - telemetry label validation,
 - telemetry counter relationship validation,
 - health report validation,
+- health report summary/status consistency validation,
 - failure corpus validation,
 - Phase K reports remain `Level0DesignNote`,
 - local replay artifacts created or referenced during soak remain `Level1LocalReplay` at most,

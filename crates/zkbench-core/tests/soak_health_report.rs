@@ -59,6 +59,30 @@ fn health_report_detects_forbidden_metric_labels() {
 }
 
 #[test]
+fn health_report_rejects_stale_summary_counts() {
+    let mut report = run_health();
+    report.summary.generated_instances = report.summary.generated_instances.saturating_add(1);
+
+    let error = validate_soak_health_report(&report).expect_err("stale health summary should fail");
+
+    assert!(error.to_string().contains("generated_instances"));
+    assert!(error.to_string().contains("does not match telemetry"));
+}
+
+#[test]
+fn health_report_rejects_healthy_status_with_failure_corpus_entries() {
+    let mut report = run_health();
+    report.health_status = SoakHealthStatus::Healthy;
+    report.summary.failure_corpus_entries = 1;
+
+    let error = validate_soak_health_report(&report)
+        .expect_err("healthy status with failure corpus entries should fail");
+
+    assert!(error.to_string().contains("healthy status"));
+    assert!(error.to_string().contains("failure corpus entries"));
+}
+
+#[test]
 fn health_report_can_represent_pack_validation_failure_without_elevation() {
     let mut report = run_health();
     report.findings.push(SoakHealthFinding {
