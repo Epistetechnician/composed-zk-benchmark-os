@@ -507,6 +507,9 @@ impl LocalSoakRunner {
                 Err(error) => {
                     counters.mutation_no_target_count =
                         counters.mutation_no_target_count.saturating_add(1);
+                    if is_targetless_mutation_error(&error) {
+                        continue;
+                    }
                     let failure = failure(
                         FailureCorpusKind::MutationFailure,
                         "mutation",
@@ -818,6 +821,13 @@ fn apply_selected_mutation(
             format!("{mutation_class:?} is not implemented for Phase K"),
         )),
     }
+}
+
+fn is_targetless_mutation_error(error: &ZkBenchError) -> bool {
+    matches!(
+        error,
+        ZkBenchError::Mutation { path, .. } if path.ends_with(".target")
+    )
 }
 
 fn update_replay_counters(
