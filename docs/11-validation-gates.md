@@ -54,6 +54,7 @@ The current Rust foundation must pass:
 - health report validation,
 - health report summary/status consistency validation,
 - failure corpus validation,
+- failure corpus reproduction-manifest identity validation,
 - reproduction bundle identity and duplicate entry validation,
 - Phase K reports remain `Level0DesignNote`,
 - local replay artifacts created or referenced during soak remain `Level1LocalReplay` at most,
