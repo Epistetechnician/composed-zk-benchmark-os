@@ -105,7 +105,7 @@ The Rust tests currently cover:
 - `ReplayResult` deterministic JSON serialization and deserialization.
 - `EvidenceLedger` append, save, load, digest-chain validation, summary counts, forbidden claim-language rejection in ledger/entry/record notes, and Level2+ actual evidence rejection.
 - `BenchmarkPackWriter` directory skeleton creation, README warnings, relative manifest paths, score report emission, and non-empty directory rejection.
-- `BenchmarkPackReader` file digest validation, evidence ledger validation, all embedded score report validation, pack summary consistency validation, and pack metadata claim-language validation.
+- `BenchmarkPackReader` file path uniqueness, file digest validation, evidence ledger validation, all embedded score report validation, pack summary consistency validation, and pack metadata claim-language validation.
 - `ScoreReport` validation for local score-axis absence, finite `[0.0, 1.0]` score values, and forbidden positive claim-language rejection.
 - Stable artifact digests and byte-identical local pack writes for identical inputs.
 

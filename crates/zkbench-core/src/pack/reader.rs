@@ -1,5 +1,6 @@
 //! Benchmark pack reader and local validator.
 
+use std::collections::BTreeSet;
 use std::fs;
 use std::path::{Path, PathBuf};
 
@@ -99,6 +100,7 @@ impl BenchmarkPackReader {
             push_forbidden_claim_text_error(format!("pack.json#notes[{index}]"), note, &mut errors);
         }
 
+        let mut seen_relative_paths = BTreeSet::new();
         for file in &self.manifest.files {
             if let Err(error) = validate_relative_path(&file.relative_path) {
                 errors.push(BenchmarkPackValidationError {
@@ -106,6 +108,12 @@ impl BenchmarkPackReader {
                     message: error.to_string(),
                 });
                 continue;
+            }
+            if !seen_relative_paths.insert(file.relative_path.clone()) {
+                errors.push(BenchmarkPackValidationError {
+                    path: file.relative_path.clone(),
+                    message: "duplicate benchmark pack file entry".to_string(),
+                });
             }
             for (index, note) in file.notes.iter().enumerate() {
                 push_forbidden_claim_text_error(

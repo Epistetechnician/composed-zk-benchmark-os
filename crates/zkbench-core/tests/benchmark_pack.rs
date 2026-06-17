@@ -381,3 +381,37 @@ fn benchmark_pack_validation_checks_every_score_report_file() {
             && error.message.contains("leave score axes unpopulated")
     }));
 }
+
+#[test]
+fn benchmark_pack_validation_rejects_duplicate_file_entries() {
+    let dir = tempdir().expect("tempdir should be available");
+    BenchmarkPackWriter::new("phase_f_duplicate_file_entry")
+        .write_to(dir.path())
+        .expect("valid local pack should write");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("pack should load");
+    let mut manifest = reader.manifest().clone();
+    let duplicate_file = manifest
+        .files
+        .iter()
+        .find(|file| file.role == BenchmarkPackFileRole::ScoreReport)
+        .expect("pack should include score report file entry")
+        .clone();
+    manifest.files.push(duplicate_file);
+    manifest.summary.score_report_count = 2;
+    let manifest_bytes =
+        serde_json::to_vec_pretty(&manifest).expect("pack manifest should serialize");
+    std::fs::write(dir.path().join("pack.json"), manifest_bytes)
+        .expect("test should be able to rewrite pack manifest");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("tampered pack should load");
+    let validation = reader.validate();
+
+    assert!(!validation.valid);
+    assert!(validation.errors.iter().any(|error| {
+        error.path == "reports/score_report.json"
+            && error
+                .message
+                .contains("duplicate benchmark pack file entry")
+    }));
+}
