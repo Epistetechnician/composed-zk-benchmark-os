@@ -50,6 +50,8 @@ The current Rust foundation must pass:
 - smoke runner tests,
 - resume checkpoint tests,
 - telemetry label validation,
+- telemetry identity validation,
+- telemetry metric classification validation,
 - telemetry counter relationship validation,
 - health report validation,
 - health report identity validation,
