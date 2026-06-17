@@ -82,6 +82,28 @@ fn review_ledger_rejects_invalid_append_preview_before_append() {
 }
 
 #[test]
+fn review_ledger_detects_stale_cached_summary() {
+    let (decision, preview) = reviewed_candidate_preview();
+    let mut ledger = EvidenceReviewLedger::new("phase_j_review_ledger");
+    ledger
+        .append_review_decision(decision)
+        .expect("decision append should work");
+    ledger
+        .append_append_preview(preview)
+        .expect("preview append should work");
+    ledger.summary.entry_count = 1;
+
+    let validation = ledger.validate();
+
+    assert!(!validation.valid);
+    assert_eq!(validation.summary.entry_count, 2);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.path == "ledger.summary"));
+}
+
+#[test]
 fn review_ledger_detects_digest_tampering() {
     let (decision, _) = reviewed_candidate_preview();
     let mut ledger = EvidenceReviewLedger::new("phase_j_review_ledger");
