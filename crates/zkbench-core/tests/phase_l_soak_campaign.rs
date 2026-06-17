@@ -2,12 +2,12 @@ use tempfile::tempdir;
 use zkbench_core::{
     attach_reproduction_bundle_to_pack, build_failure_corpus_entry, build_smoke_soak_config,
     generate_instance, plan_soak_shards, read_reproduction_bundle_from_pack, run_soak_campaign,
-    soak_artifact_manifest, validate_soak_campaign_config, validate_soak_report_bundle,
-    BenchmarkPackReader, BenchmarkPackWriter, ClaimBoundary, FailureCorpusEntryInput,
-    FailureCorpusKind, FamilyKind, GeneratorConfig, GeneratorTunables, InstanceParams,
-    LocalSoakRunnerConfig, MutationClass, SoakArtifactLayout, SoakArtifactRole,
-    SoakCampaignApproval, SoakCampaignArtifactRootPolicy, SoakCampaignConfig, SoakOutputPolicy,
-    SoakShardId,
+    soak_artifact_manifest, validate_reproduction_bundle, validate_soak_campaign_config,
+    validate_soak_report_bundle, BenchmarkPackReader, BenchmarkPackWriter, ClaimBoundary,
+    FailureCorpusEntryInput, FailureCorpusKind, FamilyKind, GeneratorConfig, GeneratorTunables,
+    InstanceParams, LocalSoakRunnerConfig, MutationClass, ReproductionBundle, SoakArtifactLayout,
+    SoakArtifactRole, SoakCampaignApproval, SoakCampaignArtifactRootPolicy, SoakCampaignConfig,
+    SoakOutputPolicy, SoakShardId,
 };
 
 fn sample_entry(case_id: &str) -> zkbench_core::FailureCorpusEntry {
@@ -91,6 +91,45 @@ fn attach_rejects_empty_entries() {
     let error = attach_reproduction_bundle_to_pack(&pack_root, &[])
         .expect_err("empty entries should be rejected");
     assert!(error.to_string().contains("at least one"));
+}
+
+#[test]
+fn reproduction_bundle_rejects_duplicate_entry_ids() {
+    let entry = sample_entry("case_duplicate");
+    let bundle = ReproductionBundle {
+        bundle_id: "bundle_duplicate".to_string(),
+        bundle_version: "phase-l-reproduction-bundle-v0".to_string(),
+        pack_id: "pack_duplicate".to_string(),
+        entries: vec![entry.clone(), entry],
+        claim_boundary: ClaimBoundary::Level0DesignNote,
+        notes: Vec::new(),
+    };
+
+    let error = validate_reproduction_bundle(&bundle)
+        .expect_err("duplicate reproduction entries should fail");
+
+    assert!(error.to_string().contains("entry id"));
+    assert!(error.to_string().contains("duplicated"));
+}
+
+#[test]
+fn reproduction_bundle_rejects_empty_bundle_identity() {
+    let mut bundle = ReproductionBundle {
+        bundle_id: String::new(),
+        bundle_version: "phase-l-reproduction-bundle-v0".to_string(),
+        pack_id: "pack_identity".to_string(),
+        entries: vec![sample_entry("case_identity")],
+        claim_boundary: ClaimBoundary::Level0DesignNote,
+        notes: Vec::new(),
+    };
+
+    let error = validate_reproduction_bundle(&bundle).expect_err("empty bundle id should fail");
+    assert!(error.to_string().contains("bundle id"));
+
+    bundle.bundle_id = "bundle_identity".to_string();
+    bundle.pack_id = String::new();
+    let error = validate_reproduction_bundle(&bundle).expect_err("empty pack id should fail");
+    assert!(error.to_string().contains("pack id"));
 }
 
 #[test]
