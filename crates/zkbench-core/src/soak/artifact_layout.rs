@@ -11,10 +11,10 @@ use crate::evidence::{
 };
 
 use super::config::SoakRunConfig;
-use super::failure_corpus::FailureCorpusIndex;
-use super::health::SoakHealthReport;
+use super::failure_corpus::{validate_failure_corpus_index, FailureCorpusIndex};
+use super::health::{validate_soak_health_report, SoakHealthReport};
 use super::shard::{SoakShardId, SoakShardManifest, SoakShardPlan};
-use super::telemetry::SoakTelemetryReport;
+use super::telemetry::{validate_soak_telemetry_report, SoakTelemetryReport};
 
 /// Soak artifact role.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
@@ -189,6 +189,21 @@ pub fn validate_soak_report_bundle(bundle: &SoakReportBundle) -> SoakReportBundl
     }
     if bundle.shard_plan.claim_boundary != ClaimBoundary::Level0DesignNote {
         issues.push("shard plan must remain Level0DesignNote".to_string());
+    }
+    for (index, report) in bundle.telemetry_reports.iter().enumerate() {
+        if let Err(error) = validate_soak_telemetry_report(report) {
+            issues.push(format!("telemetry_reports[{index}] invalid: {error}"));
+        }
+    }
+    for (index, report) in bundle.health_reports.iter().enumerate() {
+        if let Err(error) = validate_soak_health_report(report) {
+            issues.push(format!("health_reports[{index}] invalid: {error}"));
+        }
+    }
+    for (index, failure_corpus) in bundle.failure_corpus_indexes.iter().enumerate() {
+        if let Err(error) = validate_failure_corpus_index(failure_corpus) {
+            issues.push(format!("failure_corpus_indexes[{index}] invalid: {error}"));
+        }
     }
     for artifact in &bundle.artifact_digest_set.artifacts {
         if !relative_path_is_portable(&artifact.relative_path) {
