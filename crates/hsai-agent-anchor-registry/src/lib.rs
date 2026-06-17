@@ -1097,6 +1097,65 @@ mod tests {
         assert!(registry.validate_internal_state().is_ok());
     }
 
+    #[test]
+    fn state_3_deep_nested_rejections_do_not_drift_registry_state() {
+        let mut registry = AgentAnchorRegistry::new();
+        let mut oracle = StrategyOracle::default();
+        let steps = vec![RegistryStrategyStep::Nested(vec![
+            RegistryStrategyStep::Nested(vec![
+                RegistryStrategyStep::RegisterRuntime {
+                    subject_id: 0,
+                    anchor_id: 0,
+                },
+                RegistryStrategyStep::Nested(vec![
+                    RegistryStrategyStep::RegisterRuntime {
+                        subject_id: 1,
+                        anchor_id: 0,
+                    },
+                    RegistryStrategyStep::RevokeRuntime {
+                        subject_id: 1,
+                        anchor_id: 0,
+                    },
+                ]),
+            ]),
+            RegistryStrategyStep::Nested(vec![
+                RegistryStrategyStep::RevokeRuntime {
+                    subject_id: 0,
+                    anchor_id: 0,
+                },
+                RegistryStrategyStep::RegisterComposite {
+                    subject_id: 2,
+                    anchor_id: 0,
+                    sponsor_id: 0,
+                },
+                RegistryStrategyStep::RegisterSponsor {
+                    subject_id: 2,
+                    sponsor_id: 0,
+                    max_uses: 1,
+                },
+            ]),
+        ])];
+
+        for step in &steps {
+            run_strategy_step(&mut registry, &mut oracle, step);
+        }
+
+        assert_eq!(registry.active_count(), oracle.active_subjects.len());
+        assert_eq!(
+            registry.used_runtime_anchor_ids().len(),
+            oracle.runtime_subjects.len()
+        );
+        assert_eq!(
+            registry.revoked_runtime_anchor_ids().len(),
+            oracle.revoked_runtime_anchors.len()
+        );
+        assert_eq!(
+            registry.registered_count(),
+            oracle.registered_subjects.len()
+        );
+        assert!(registry.validate_internal_state().is_ok());
+    }
+
     proptest! {
         #[test]
         fn pap_1_no_active_anchor_reuse(ids in proptest::collection::vec("[a-z]{1,8}", 1..12)) {
