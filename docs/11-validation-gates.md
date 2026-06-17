@@ -43,6 +43,7 @@ The current Rust foundation must pass:
 - Level2 eligibility reports remain `Level0DesignNote` metadata and do not create Level2 evidence,
 - review ledgers persist separately from `EvidenceLedger`,
 - proposal ledgers persist separately from `EvidenceLedger`,
+- proposal ledgers reject forbidden official/formal/performance claim text in top-level notes,
 - soak config JSON round-trips,
 - deterministic shard planning,
 - smoke runner tests,
