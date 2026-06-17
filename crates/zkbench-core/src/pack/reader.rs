@@ -135,10 +135,52 @@ impl BenchmarkPackReader {
                 });
             }
         }
+        push_summary_count_error(
+            "pack.json#summary.generated_instance_count",
+            self.manifest.summary.generated_instance_count,
+            self.count_files_by_role(BenchmarkPackFileRole::GeneratedInstance),
+            &mut errors,
+        );
+        push_summary_count_error(
+            "pack.json#summary.mutated_instance_count",
+            self.manifest.summary.mutated_instance_count,
+            self.count_files_by_role(BenchmarkPackFileRole::MutatedInstance),
+            &mut errors,
+        );
+        push_summary_count_error(
+            "pack.json#summary.replay_manifest_count",
+            self.manifest.summary.replay_manifest_count,
+            self.count_files_by_role(BenchmarkPackFileRole::ReplayManifest),
+            &mut errors,
+        );
+        push_summary_count_error(
+            "pack.json#summary.replay_result_count",
+            self.manifest.summary.replay_result_count,
+            self.count_files_by_role(BenchmarkPackFileRole::ReplayResult),
+            &mut errors,
+        );
+        push_summary_count_error(
+            "pack.json#summary.score_report_count",
+            self.manifest.summary.score_report_count,
+            self.count_files_by_role(BenchmarkPackFileRole::ScoreReport),
+            &mut errors,
+        );
+        if !self.manifest.summary.local_only {
+            errors.push(BenchmarkPackValidationError {
+                path: "pack.json#summary.local_only".to_string(),
+                message: "benchmark pack summary must remain local-only".to_string(),
+            });
+        }
 
         match self.load_evidence_ledger() {
             Ok(Some(ledger)) => {
                 let validation = ledger.validate();
+                push_summary_count_error(
+                    "pack.json#summary.evidence_record_count",
+                    self.manifest.summary.evidence_record_count,
+                    validation.summary.entry_count,
+                    &mut errors,
+                );
                 for error in validation.errors {
                     errors.push(BenchmarkPackValidationError {
                         path: format!("evidence/ledger.json#{}", error.sequence_number),
@@ -181,6 +223,28 @@ impl BenchmarkPackReader {
         }
 
         BenchmarkPackValidation::from_errors(errors, self.manifest.summary.clone())
+    }
+
+    fn count_files_by_role(&self, role: BenchmarkPackFileRole) -> usize {
+        self.manifest
+            .files
+            .iter()
+            .filter(|file| file.role == role)
+            .count()
+    }
+}
+
+fn push_summary_count_error(
+    path: &'static str,
+    actual: usize,
+    expected: usize,
+    errors: &mut Vec<BenchmarkPackValidationError>,
+) {
+    if actual != expected {
+        errors.push(BenchmarkPackValidationError {
+            path: path.to_string(),
+            message: format!("pack summary count {actual} does not match expected {expected}"),
+        });
     }
 }
 

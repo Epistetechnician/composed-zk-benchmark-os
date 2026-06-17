@@ -289,3 +289,43 @@ fn benchmark_pack_validation_rejects_forbidden_claim_text_in_manifest_notes() {
                 .contains("pack metadata contains forbidden claim language")
     }));
 }
+
+#[test]
+fn benchmark_pack_validation_rejects_stale_manifest_summary() {
+    let dir = tempdir().expect("tempdir should be available");
+    BenchmarkPackWriter::new("phase_f_stale_manifest_summary")
+        .write_to(dir.path())
+        .expect("valid local pack should write");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("pack should load");
+    let mut manifest = reader.manifest().clone();
+    manifest.summary.generated_instance_count = 1;
+    manifest.summary.score_report_count = 0;
+    manifest.summary.evidence_record_count = 10;
+    manifest.summary.local_only = false;
+    let manifest_bytes =
+        serde_json::to_vec_pretty(&manifest).expect("pack manifest should serialize");
+    std::fs::write(dir.path().join("pack.json"), manifest_bytes)
+        .expect("test should be able to rewrite pack manifest");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("tampered pack should load");
+    let validation = reader.validate();
+
+    assert!(!validation.valid);
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.path == "pack.json#summary.generated_instance_count"));
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.path == "pack.json#summary.score_report_count"));
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.path == "pack.json#summary.evidence_record_count"));
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.path == "pack.json#summary.local_only"));
+}
