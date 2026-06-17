@@ -151,6 +151,24 @@ fn campaign_config_requires_approval_and_safe_artifact_root() {
 }
 
 #[test]
+fn campaign_config_rejects_nonportable_campaign_ids() {
+    let dir = tempdir().expect("tempdir should be available");
+    for campaign_id in [
+        "/tmp/escape",
+        "../escape",
+        "campaign/child",
+        "campaign\\child",
+        ".",
+        "..",
+    ] {
+        let config = approved_config(campaign_id, dir.path().to_path_buf());
+        let error = validate_soak_campaign_config(&config)
+            .expect_err("nonportable campaign ids should fail");
+        assert!(error.to_string().contains("portable path segment"));
+    }
+}
+
+#[test]
 fn soak_artifact_paths_are_portable_and_relative() {
     let shard_id = SoakShardId::from_index(3);
     let layout = SoakArtifactLayout::for_shard(&shard_id);

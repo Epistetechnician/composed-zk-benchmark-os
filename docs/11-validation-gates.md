@@ -210,6 +210,7 @@ The Rust tests currently cover:
 - smoke and regression soak config validation,
 - NightlyLocal explicit opt-in validation,
 - excessive seed, shard, and pack-write limit rejection,
+- campaign id path hygiene validation,
 - soak config JSON round-trips,
 - deterministic shard planning,
 - stable shard ids and case assignment,
