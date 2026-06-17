@@ -194,15 +194,15 @@ Exit criteria: small local-only runs produce deterministic shard plans, resumabl
 
 ## Phase L: Long Local Soak Execution And Sampled Reports
 
-Status: future.
+Status: complete for bounded local Phase L. See `docs/62-phase-l-local-soak-acceptance-notes.md`.
 
 Goal: Run longer local soak jobs and publish sampled local-only reports after explicit user approval.
 
-Deliverables: user-approved long-running local jobs, shard output outside the repo or under an ignored artifact directory, smoke/focused/regression/nightly-local profiles, sampled pack retention, failure-pack retention, aggregate telemetry reports, regression corpus curation, and local-only report publishing under strict claim boundaries.
+Implemented: user-approved bounded local soak campaign, shard output under an ignored artifact directory, smoke/focused/regression/nightly-local profiles, sampled pack retention, aggregate telemetry reports, targetless mutation applicability telemetry, and local-only report publishing under strict claim boundaries.
 
 Dependencies: Phase K.
 
-Validation gate: explicit approval record, ignored or external artifact root, aggregate report validation, failure corpus validation, no external execution, no official benchmark evidence, and no ZK backend performance claims.
+Validation gate: explicit approval record, ignored artifact root, aggregate report validation, failure corpus validation, no external execution, no official benchmark evidence, and no ZK backend performance claims. The accepted campaign `phase_l_qwable_local_soak_2026_06_17_extended_256` completed 768 local cases with zero failures, zero failure-corpus entries, a valid aggregate report bundle, and `Level0DesignNote` claim boundary.
 
 Anti-goals: live zk-Harness execution, external result import, official benchmark evidence, ZK backend performance claims, dashboards, Level2+ evidence creation.
 

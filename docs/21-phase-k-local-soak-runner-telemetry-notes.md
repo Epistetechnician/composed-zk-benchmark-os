@@ -175,8 +175,14 @@ Phase K does not implement:
 - long-running NightlyLocal execution inside tests
 - a full failure reducer
 
-## Next Recommended Slice
+## Phase L Acceptance
 
-Phase L should run long local soak execution and sampled local report generation. It should include user-approved long-running local jobs, shard output outside the repo or under an ignored artifact directory, sampled pack retention, failure-pack retention, aggregate telemetry reports, regression corpus curation, and local-only report publishing under strict claim boundaries.
+Phase L has now accepted bounded local soak execution and sampled local report
+generation under `docs/62-phase-l-local-soak-acceptance-notes.md`. The accepted
+campaign is `phase_l_qwable_local_soak_2026_06_17_extended_256`: 768 completed
+local cases, zero failures, zero failure-corpus entries, a valid aggregate
+report bundle, no ZK backend performance claims, and `Level0DesignNote` claim
+boundary.
 
-Do not recommend live zk-Harness execution until local soak telemetry proves the benchmark OS can generate, mutate, replay, pack, validate, review, preview, and report at scale without breaking claim boundaries.
+Do not recommend live zk-Harness execution, external result import, dashboards,
+or Level2+ evidence without a future reviewed phase.
