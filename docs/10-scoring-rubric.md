@@ -68,7 +68,7 @@ Confidence levels:
 
 Phase F may write a conservative `ScoreReport` into a local benchmark pack. That report is a local summary container only. It records evidence count, maximum claim boundary, missing metrics, and low confidence. It does not compute meaningful performance, recursion, formal, portability, or reproducibility scores.
 
-`validate_score_report` rejects populated score axes at local claim boundaries and rejects positive official/formal/performance claim language in score-report metadata. Negative boundary disclaimers remain valid. Local benchmark pack writing and reading apply this validator to embedded score reports.
+`validate_score_report` rejects populated score axes at local claim boundaries, rejects non-finite or out-of-range score values outside `[0.0, 1.0]`, and rejects positive official/formal/performance claim language in score-report metadata. Negative boundary disclaimers remain valid. Local benchmark pack writing and reading apply this validator to embedded score reports.
 
 Phase F score reports must leave these fields missing unless future evidence exists:
 
