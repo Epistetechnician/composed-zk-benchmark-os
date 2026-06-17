@@ -106,6 +106,50 @@ fn evidence_ledger_rejects_level2_actual_evidence_in_phase_f() {
 }
 
 #[test]
+fn evidence_ledger_rejects_forbidden_claim_text_in_notes() {
+    let mut ledger = EvidenceLedger::new();
+    let record = EvidenceRecord {
+        evidence_class: EvidenceClass::LocalReplay,
+        claim_boundary: ClaimBoundary::Level1LocalReplay,
+        provenance: ProvenanceRecord {
+            source: "local-replay".to_string(),
+            captured_at: None,
+            command: None,
+            notes: vec!["this provenance is official benchmark evidence".to_string()],
+        },
+        artifact_digest: None,
+        notes: vec!["this record is a machine-checked proof".to_string()],
+        backend_target: None,
+    };
+
+    ledger.append(record).expect("local record should append");
+    ledger
+        .notes
+        .push("this ledger is an official zk-harness result".to_string());
+    ledger.entries[0]
+        .notes
+        .push("this entry is performance evidence".to_string());
+
+    let validation = ledger.validate();
+
+    assert!(!validation.valid);
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.message.contains("ledger.notes[1]")));
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.message.contains("ledger.entries[0].notes[0]")));
+    assert!(validation.errors.iter().any(|error| error
+        .message
+        .contains("ledger.entries[0].evidence_record.notes[0]")));
+    assert!(validation.errors.iter().any(|error| error
+        .message
+        .contains("ledger.entries[0].evidence_record.provenance.notes[0]")));
+}
+
+#[test]
 fn future_metadata_policy_does_not_make_level2_actual_evidence_valid() {
     let mut ledger = EvidenceLedger::new();
     let record = EvidenceRecord {
