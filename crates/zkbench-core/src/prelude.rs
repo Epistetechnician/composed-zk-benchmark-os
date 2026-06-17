@@ -56,6 +56,13 @@ pub use crate::mutation::{
     MutationEngine, MutationPass, MutationSafetyClass, MutationSpec, MutationVariant,
 };
 pub use crate::pack::{BenchmarkPackManifest, BenchmarkPackReader, BenchmarkPackWriter};
+pub use crate::recursion::{
+    compute_recursion_envelope_digest_chain_root, validate_recursion_envelope_candidate,
+    RecursionEnvelopeCandidate, RecursionEnvelopeInputKind, RecursionEnvelopeInputRef,
+    RecursionEnvelopeMetric, RecursionEnvelopeMetricKind, RecursionEnvelopeValidation,
+    RecursionEnvelopeValidationIssueKind, RecursionEnvelopeVersion,
+    RecursionVerifierAcceptanceStatus,
+};
 pub use crate::replay::{
     build_local_replay_manifest_for_instance, build_local_replay_manifest_for_mutation,
     run_local_replay, ReplayManifest, ReplayResult, ReplayTraceResult,
