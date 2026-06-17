@@ -198,22 +198,7 @@ impl BenchmarkPackReader {
             }),
         }
 
-        match self.load_score_report() {
-            Ok(Some(report)) => {
-                let validation = validate_score_report(&report);
-                for issue in validation.issues {
-                    errors.push(BenchmarkPackValidationError {
-                        path: format!("reports/score_report.json#{}", issue.path),
-                        message: issue.message,
-                    });
-                }
-            }
-            Ok(None) => {}
-            Err(error) => errors.push(BenchmarkPackValidationError {
-                path: "reports/score_report.json".to_string(),
-                message: error.to_string(),
-            }),
-        }
+        self.validate_score_report_files(&mut errors);
 
         if self.manifest.claim_boundary > crate::evidence::ClaimBoundary::Level1LocalReplay {
             errors.push(BenchmarkPackValidationError {
@@ -231,6 +216,51 @@ impl BenchmarkPackReader {
             .iter()
             .filter(|file| file.role == role)
             .count()
+    }
+
+    fn validate_score_report_files(&self, errors: &mut Vec<BenchmarkPackValidationError>) {
+        for file in self
+            .manifest
+            .files
+            .iter()
+            .filter(|file| file.role == BenchmarkPackFileRole::ScoreReport)
+        {
+            if let Err(error) = validate_relative_path(&file.relative_path) {
+                errors.push(BenchmarkPackValidationError {
+                    path: file.relative_path.clone(),
+                    message: error.to_string(),
+                });
+                continue;
+            }
+            let path = self.root.join(&file.relative_path);
+            let json = match fs::read_to_string(&path) {
+                Ok(json) => json,
+                Err(error) => {
+                    errors.push(BenchmarkPackValidationError {
+                        path: file.relative_path.clone(),
+                        message: error.to_string(),
+                    });
+                    continue;
+                }
+            };
+            let report: ScoreReport = match serde_json::from_str(&json) {
+                Ok(report) => report,
+                Err(error) => {
+                    errors.push(BenchmarkPackValidationError {
+                        path: file.relative_path.clone(),
+                        message: error.to_string(),
+                    });
+                    continue;
+                }
+            };
+            let validation = validate_score_report(&report);
+            for issue in validation.issues {
+                errors.push(BenchmarkPackValidationError {
+                    path: format!("{}#{}", file.relative_path, issue.path),
+                    message: issue.message,
+                });
+            }
+        }
     }
 }
 

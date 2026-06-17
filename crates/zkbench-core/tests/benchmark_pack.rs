@@ -329,3 +329,55 @@ fn benchmark_pack_validation_rejects_stale_manifest_summary() {
         .iter()
         .any(|error| error.path == "pack.json#summary.local_only"));
 }
+
+#[test]
+fn benchmark_pack_validation_checks_every_score_report_file() {
+    let dir = tempdir().expect("tempdir should be available");
+    BenchmarkPackWriter::new("phase_f_extra_invalid_score_report")
+        .write_to(dir.path())
+        .expect("valid local pack should write");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("pack should load");
+    let mut manifest = reader.manifest().clone();
+    let mut report = reader
+        .load_score_report()
+        .expect("score report should deserialize")
+        .expect("score report should exist");
+    report.performance = Some(PerformanceScore {
+        normalized_score: Some(1.0),
+        confidence: ScoreConfidence::Low,
+        missing_metrics: Vec::new(),
+    });
+    let extra_report_bytes =
+        serde_json::to_vec_pretty(&report).expect("extra score report should serialize");
+    let extra_report_path = "reports/score_report_extra.json";
+    std::fs::write(dir.path().join(extra_report_path), &extra_report_bytes)
+        .expect("test should be able to write extra score report");
+    let score_report_file = manifest
+        .files
+        .iter()
+        .find(|file| file.role == BenchmarkPackFileRole::ScoreReport)
+        .expect("pack should include score report file entry");
+    let mut extra_file = score_report_file.clone();
+    extra_file.relative_path = extra_report_path.to_string();
+    extra_file.digest = compute_artifact_digest_bytes(
+        &extra_report_bytes,
+        Some(ArtifactKind::ScoreReport),
+        Some(ArtifactRole::Report),
+    );
+    manifest.files.push(extra_file);
+    manifest.summary.score_report_count = 2;
+    let manifest_bytes =
+        serde_json::to_vec_pretty(&manifest).expect("pack manifest should serialize");
+    std::fs::write(dir.path().join("pack.json"), manifest_bytes)
+        .expect("test should be able to rewrite pack manifest");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("tampered pack should load");
+    let validation = reader.validate();
+
+    assert!(!validation.valid);
+    assert!(validation.errors.iter().any(|error| {
+        error.path == "reports/score_report_extra.json#performance"
+            && error.message.contains("leave score axes unpopulated")
+    }));
+}
