@@ -357,6 +357,61 @@ fn report_bundle_validation_rejects_report_artifact_role_drift() {
 }
 
 #[test]
+fn report_bundle_validation_rejects_empty_bundle_identity() {
+    let dir = tempdir().expect("tempdir should be available");
+    let soak_config = build_smoke_soak_config()
+        .with_families(vec![FamilyKind::BaselineFsm])
+        .with_mutation_passes(vec![MutationClass::MissingConstraints])
+        .with_seed_range(0..2)
+        .with_shard_count(2);
+    let plan = plan_soak_shards(soak_config).expect("plan should build");
+    let config = approved_config("campaign_bundle_identity_drift", dir.path().to_path_buf());
+    let mut bundle = run_soak_campaign(&config, plan)
+        .expect("campaign should run")
+        .report_bundle;
+
+    bundle.bundle_id = String::new();
+    bundle.bundle_version = String::new();
+
+    let validation = validate_soak_report_bundle(&bundle);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("bundle id")));
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("bundle version")));
+}
+
+#[test]
+fn report_bundle_validation_rejects_config_drift() {
+    let dir = tempdir().expect("tempdir should be available");
+    let soak_config = build_smoke_soak_config()
+        .with_families(vec![FamilyKind::BaselineFsm])
+        .with_mutation_passes(vec![MutationClass::MissingConstraints])
+        .with_seed_range(0..2)
+        .with_shard_count(2);
+    let plan = plan_soak_shards(soak_config).expect("plan should build");
+    let config = approved_config("campaign_config_drift", dir.path().to_path_buf());
+    let mut bundle = run_soak_campaign(&config, plan)
+        .expect("campaign should run")
+        .report_bundle;
+
+    bundle.config.id = "drifted_config".to_string();
+
+    let validation = validate_soak_report_bundle(&bundle);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("bundle config does not match shard_plan.config")));
+}
+
+#[test]
 fn report_bundle_validation_rejects_shard_cardinality_drift() {
     let dir = tempdir().expect("tempdir should be available");
     let soak_config = build_smoke_soak_config()

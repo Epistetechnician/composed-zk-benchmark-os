@@ -11,7 +11,7 @@ use crate::evidence::{
     compute_artifact_digest, ArtifactDigest, ArtifactKind, ArtifactRole, ClaimBoundary,
 };
 
-use super::config::SoakRunConfig;
+use super::config::{validate_soak_run_config, SoakRunConfig};
 use super::failure_corpus::{validate_failure_corpus_index, FailureCorpusIndex};
 use super::health::{validate_soak_health_report, SoakHealthReport};
 use super::shard::{
@@ -188,8 +188,20 @@ pub struct SoakReportBundle {
 /// Validate a report bundle.
 pub fn validate_soak_report_bundle(bundle: &SoakReportBundle) -> SoakReportBundleValidation {
     let mut issues = Vec::new();
+    if bundle.bundle_id.trim().is_empty() {
+        issues.push("report bundle id is empty".to_string());
+    }
+    if bundle.bundle_version.trim().is_empty() {
+        issues.push("report bundle version is empty".to_string());
+    }
     if bundle.claim_boundary != ClaimBoundary::Level0DesignNote {
         issues.push("report bundle must remain Level0DesignNote".to_string());
+    }
+    if let Err(error) = validate_soak_run_config(&bundle.config) {
+        issues.push(format!("config invalid: {error}"));
+    }
+    if bundle.config != bundle.shard_plan.config {
+        issues.push("bundle config does not match shard_plan.config".to_string());
     }
     if bundle.shard_plan.claim_boundary != ClaimBoundary::Level0DesignNote {
         issues.push("shard plan must remain Level0DesignNote".to_string());

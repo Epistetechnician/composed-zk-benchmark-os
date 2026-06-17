@@ -226,6 +226,7 @@ The Rust tests currently cover:
 - simulated claim-boundary elevation detection,
 - simulated pack validation findings,
 - report bundle artifact digest presence and artifact id/path uniqueness,
+- report bundle identity and config consistency validation,
 - report bundle report-artifact role cardinality consistency,
 - report bundle shard/report cardinality consistency,
 - report bundle shard manifest content consistency,
