@@ -188,12 +188,19 @@ pub use pack::{
     BenchmarkPackValidationError, BenchmarkPackVersion, BenchmarkPackWriter,
 };
 pub use recursion::{
-    compute_recursion_envelope_digest_chain_root, deserialize_recursion_envelope_candidate_json,
-    serialize_recursion_envelope_candidate_json, validate_recursion_envelope_candidate,
-    RecursionEnvelopeCandidate, RecursionEnvelopeInputKind, RecursionEnvelopeInputRef,
-    RecursionEnvelopeMetric, RecursionEnvelopeMetricKind, RecursionEnvelopeValidation,
-    RecursionEnvelopeValidationIssue, RecursionEnvelopeValidationIssueKind,
-    RecursionEnvelopeVersion, RecursionVerifierAcceptanceStatus,
+    compute_recursion_envelope_digest_chain_root,
+    deserialize_recursion_adapter_preparation_plan_json,
+    deserialize_recursion_envelope_candidate_json,
+    serialize_recursion_adapter_preparation_plan_json, serialize_recursion_envelope_candidate_json,
+    validate_recursion_adapter_preparation_plan, validate_recursion_envelope_candidate,
+    RecursionAdapterPreparationArtifact, RecursionAdapterPreparationArtifactRole,
+    RecursionAdapterPreparationIssue, RecursionAdapterPreparationIssueKind,
+    RecursionAdapterPreparationPlan, RecursionAdapterPreparationTarget,
+    RecursionAdapterPreparationValidation, RecursionEnvelopeCandidate, RecursionEnvelopeInputKind,
+    RecursionEnvelopeInputRef, RecursionEnvelopeMetric, RecursionEnvelopeMetricKind,
+    RecursionEnvelopeValidation, RecursionEnvelopeValidationIssue,
+    RecursionEnvelopeValidationIssueKind, RecursionEnvelopeVersion,
+    RecursionVerifierAcceptanceStatus,
 };
 pub use registry::{
     list_available_local_generators, list_local_adapter_targets, local_benchmark_pack_schema,

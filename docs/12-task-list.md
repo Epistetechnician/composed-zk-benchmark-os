@@ -210,11 +210,11 @@ Exit criteria: long local soak outputs are reproducible, bounded, claim-safe, an
 
 ## Phase M: gnark Recursion Adapter
 
-Status: complete for inert local contract implementation. See `docs/63-phase-m-recursion-envelope-stress-spec.md`.
+Status: complete for inert local contract implementation and inert adapter-preparation metadata. See `docs/63-phase-m-recursion-envelope-stress-spec.md`.
 
 Goal: Add recursion-envelope stress lane after local soak telemetry exists.
 
-Implemented: recursion-envelope stress spec, input artifact contract, candidate metric labels, inert Rust contract types, serialization helpers, validation rules, negative tests, and claim-boundary restrictions.
+Implemented: recursion-envelope stress spec, input artifact contract, candidate metric labels, inert Rust contract types, serialization helpers, validation rules, fixture-backed negative tests, source-scan guardrails, inert adapter-preparation metadata, and claim-boundary restrictions.
 
 Future deliverables after explicit executable-adapter approval: recursion adapter execution wiring and evidence mapping.
 
@@ -224,7 +224,7 @@ Validation gate: docs and claim-boundary scans, local contract validation tests,
 
 Anti-goals: claiming recursion proof as semantic proof.
 
-Exit criteria for inert local contract implementation: Phase M spec exists, local contract types validate claim-boundary non-escalation, recursion metric labels remain metadata only, and live gnark execution remains blocked.
+Exit criteria for inert local contract implementation: Phase M spec exists, local contract types validate claim-boundary non-escalation, recursion metric labels remain metadata only, adapter-preparation metadata remains `Level0DesignNote`, and live gnark execution remains blocked.
 
 Future exit criteria after explicit implementation approval: recursion outcomes are evidence-capped.
 
