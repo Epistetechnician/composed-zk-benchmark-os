@@ -1,5 +1,6 @@
 //! Local soak artifact layout and report bundle types.
 
+use std::collections::BTreeSet;
 use std::fs;
 use std::path::Path;
 
@@ -205,7 +206,24 @@ pub fn validate_soak_report_bundle(bundle: &SoakReportBundle) -> SoakReportBundl
             issues.push(format!("failure_corpus_indexes[{index}] invalid: {error}"));
         }
     }
+    let mut artifact_ids = BTreeSet::new();
+    let mut artifact_paths = BTreeSet::new();
     for artifact in &bundle.artifact_digest_set.artifacts {
+        if !artifact_ids.insert(artifact.artifact_id.clone()) {
+            issues.push(format!("duplicate artifact id: {}", artifact.artifact_id));
+        }
+        if !artifact_paths.insert(artifact.relative_path.clone()) {
+            issues.push(format!(
+                "duplicate artifact path: {}",
+                artifact.relative_path
+            ));
+        }
+        if artifact.digest.is_none() {
+            issues.push(format!(
+                "artifact {} is missing digest",
+                artifact.artifact_id
+            ));
+        }
         if !relative_path_is_portable(&artifact.relative_path) {
             issues.push(format!(
                 "artifact path is not portable relative: {}",

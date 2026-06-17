@@ -252,6 +252,41 @@ fn report_bundle_validation_rejects_nested_claim_boundary_elevation() {
 }
 
 #[test]
+fn report_bundle_validation_rejects_duplicate_or_digestless_artifacts() {
+    let dir = tempdir().expect("tempdir should be available");
+    let soak_config = build_smoke_soak_config()
+        .with_families(vec![FamilyKind::BaselineFsm])
+        .with_mutation_passes(vec![MutationClass::MissingConstraints])
+        .with_seed_range(0..1)
+        .with_shard_count(1);
+    let plan = plan_soak_shards(soak_config).expect("plan should build");
+    let config = approved_config("campaign_duplicate_artifact", dir.path().to_path_buf());
+    let mut bundle = run_soak_campaign(&config, plan)
+        .expect("campaign should run")
+        .report_bundle;
+
+    let mut duplicate = bundle.artifact_digest_set.artifacts[0].clone();
+    duplicate.digest = None;
+    bundle.artifact_digest_set.artifacts.push(duplicate);
+
+    let validation = validate_soak_report_bundle(&bundle);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("duplicate artifact id")));
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("duplicate artifact path")));
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("missing digest")));
+}
+
+#[test]
 fn campaign_refuses_to_run_without_approval() {
     let dir = tempdir().expect("tempdir should be available");
     let soak_config = build_smoke_soak_config()
