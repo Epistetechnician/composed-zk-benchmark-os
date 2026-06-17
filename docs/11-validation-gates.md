@@ -57,6 +57,7 @@ The current Rust foundation must pass:
 - failure corpus reproduction-manifest identity validation,
 - failure corpus artifact-reference identity validation,
 - reproduction bundle identity and duplicate entry validation,
+- shard manifest assigned-case and artifact-reference identity validation,
 - Phase K reports remain `Level0DesignNote`,
 - local replay artifacts created or referenced during soak remain `Level1LocalReplay` at most,
 - manual handoff bundles remain `Level0DesignNote`,

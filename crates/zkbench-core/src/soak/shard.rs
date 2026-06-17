@@ -365,6 +365,21 @@ pub fn validate_soak_shard_manifest(manifest: &SoakShardManifest) -> SoakShardVa
             "expected case count does not match assigned case ids",
         ));
     }
+    let mut seen_case_ids = std::collections::BTreeSet::new();
+    for (index, case_id) in manifest.assigned_case_ids.iter().enumerate() {
+        if case_id.trim().is_empty() {
+            issues.push(issue(
+                format!("manifest.assigned_case_ids[{index}]"),
+                "assigned case id is empty",
+            ));
+        }
+        if !seen_case_ids.insert(case_id.clone()) {
+            issues.push(issue(
+                format!("manifest.assigned_case_ids[{index}]"),
+                "assigned case id is duplicated",
+            ));
+        }
+    }
     if manifest.claim_boundary != ClaimBoundary::Level0DesignNote {
         issues.push(issue(
             "manifest.claim_boundary",
@@ -372,7 +387,12 @@ pub fn validate_soak_shard_manifest(manifest: &SoakShardManifest) -> SoakShardVa
         ));
     }
     for (index, artifact_ref) in manifest.relative_artifact_refs.iter().enumerate() {
-        if artifact_ref.starts_with('/')
+        if artifact_ref.trim().is_empty() {
+            issues.push(issue(
+                format!("manifest.relative_artifact_refs[{index}]"),
+                "artifact ref is empty",
+            ));
+        } else if artifact_ref.starts_with('/')
             || artifact_ref.contains("..")
             || artifact_ref.contains('\\')
         {
