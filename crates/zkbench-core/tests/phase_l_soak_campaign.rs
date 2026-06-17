@@ -322,6 +322,38 @@ fn report_bundle_validation_rejects_shard_cardinality_drift() {
 }
 
 #[test]
+fn report_bundle_validation_rejects_shard_manifest_content_drift() {
+    let dir = tempdir().expect("tempdir should be available");
+    let soak_config = build_smoke_soak_config()
+        .with_families(vec![FamilyKind::BaselineFsm])
+        .with_mutation_passes(vec![MutationClass::MissingConstraints])
+        .with_seed_range(0..2)
+        .with_shard_count(2);
+    let plan = plan_soak_shards(soak_config).expect("plan should build");
+    let config = approved_config("campaign_manifest_content_drift", dir.path().to_path_buf());
+    let mut bundle = run_soak_campaign(&config, plan)
+        .expect("campaign should run")
+        .report_bundle;
+
+    bundle.shard_manifests[0]
+        .assigned_case_ids
+        .push("unplanned_case".to_string());
+
+    let validation = validate_soak_report_bundle(&bundle);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue
+            .contains("shard_manifests[0] does not match shard_plan.shard_manifests[0]")));
+    assert!(validation.issues.iter().any(|issue| {
+        issue.contains("shard_manifests[0] invalid")
+            && issue.contains("expected case count does not match assigned case ids")
+    }));
+}
+
+#[test]
 fn campaign_refuses_to_run_without_approval() {
     let dir = tempdir().expect("tempdir should be available");
     let soak_config = build_smoke_soak_config()
