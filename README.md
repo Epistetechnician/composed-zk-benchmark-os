@@ -150,6 +150,7 @@ Surface DSL
 | [docs/60-proof-of-agent-anchor-registry-phase-notes.md](docs/60-proof-of-agent-anchor-registry-phase-notes.md) | Phase 4 proof-of-agent anchor registry implementation notes. |
 | [docs/61-phase-l-qwable-autoresearch-contract.md](docs/61-phase-l-qwable-autoresearch-contract.md) | Phase L local autoresearch soak contract and guardrails. |
 | [docs/62-phase-l-local-soak-acceptance-notes.md](docs/62-phase-l-local-soak-acceptance-notes.md) | Phase L bounded local soak acceptance notes. |
+| [docs/63-phase-m-recursion-envelope-stress-spec.md](docs/63-phase-m-recursion-envelope-stress-spec.md) | Phase M recursion-envelope stress spec and claim-boundary contract. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -207,6 +208,9 @@ Surface DSL
   `phase_l_qwable_local_soak_2026_06_17_extended_256`: 768 completed local
   cases, zero failures, zero failure-corpus entries, a valid report bundle, no
   ZK backend performance claims, and `Level0DesignNote` claim boundary.
+- Phase M is opened for docs-first recursion-envelope stress specification only.
+  It defines local input contracts, metric labels, validation rules, and
+  negative tests, while live gnark execution and Level2+ evidence remain blocked.
 - Result classification exists.
 - Evidence and scoring primitives exist.
 - HSAI Level 1 local crates exist for claim envelopes, agent cases,
@@ -249,16 +253,14 @@ Surface DSL
 
 ## Next Implementation Slice
 
-For the benchmark OS track, Phase L is accepted for bounded local soak execution;
-see
-[docs/62-phase-l-local-soak-acceptance-notes.md](docs/62-phase-l-local-soak-acceptance-notes.md).
-The next benchmark-OS implementation slice must be opened explicitly. Candidate
-tracks are Phase M recursion-envelope stress, Phase N narrow zkML adapter, or
-Phase O reproducible benchmark packs, but none is authorized by Phase L alone.
-Any next phase must preserve the Phase L boundary: no live zk-Harness execution,
-no external result import, no official benchmark evidence, no ZK backend
-performance claims, and no Level2+ evidence creation without a future reviewed
-phase.
+For the benchmark OS track, Phase M is opened for docs-first recursion-envelope
+stress specification only; see
+[docs/63-phase-m-recursion-envelope-stress-spec.md](docs/63-phase-m-recursion-envelope-stress-spec.md).
+The next Phase M implementation slice must be explicitly authorized and should
+remain limited to inert local contract types and validation tests. It must not
+run live gnark, clone external repos, import external results, emit benchmark
+outputs, claim official benchmark evidence, report ZK backend performance, or
+create Level2+ evidence.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57

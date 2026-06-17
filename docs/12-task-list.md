@@ -210,19 +210,23 @@ Exit criteria: long local soak outputs are reproducible, bounded, claim-safe, an
 
 ## Phase M: gnark Recursion Adapter
 
-Status: future.
+Status: opened for docs-first boundary spec only. See `docs/63-phase-m-recursion-envelope-stress-spec.md`.
 
 Goal: Add recursion-envelope stress lane after local soak telemetry exists.
 
-Deliverables: recursion adapter and evidence mapping.
+Current deliverables: recursion-envelope stress spec, input artifact contract, candidate metric labels, validation rules, negative tests, and claim-boundary restrictions.
+
+Future deliverables after explicit implementation approval: recursion adapter contract types, local validation tests, and evidence mapping.
 
 Dependencies: Phase L and future explicit adapter approval.
 
-Validation gate: scoped recursion replay.
+Validation gate: docs and claim-boundary scans now; scoped recursion replay only after a future implementation phase explicitly authorizes executable adapter work.
 
 Anti-goals: claiming recursion proof as semantic proof.
 
-Exit criteria: recursion outcomes are evidence-capped.
+Exit criteria for docs-first opening: Phase M spec exists, next implementation slice is bounded to inert local contract types, and live gnark execution remains blocked.
+
+Future exit criteria after explicit implementation approval: recursion outcomes are evidence-capped.
 
 ## Phase N: Narrow zkML Adapter
 
