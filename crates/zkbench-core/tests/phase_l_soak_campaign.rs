@@ -426,6 +426,51 @@ fn report_bundle_validation_rejects_report_artifact_identity_drift() {
 }
 
 #[test]
+fn report_bundle_validation_rejects_aggregate_report_artifact_drift() {
+    let dir = tempdir().expect("tempdir should be available");
+    let soak_config = build_smoke_soak_config()
+        .with_families(vec![FamilyKind::BaselineFsm])
+        .with_mutation_passes(vec![MutationClass::MissingConstraints])
+        .with_seed_range(0..1)
+        .with_shard_count(1);
+    let plan = plan_soak_shards(soak_config).expect("plan should build");
+    let config = approved_config(
+        "campaign_aggregate_artifact_drift",
+        dir.path().to_path_buf(),
+    );
+    let mut bundle = run_soak_campaign(&config, plan)
+        .expect("campaign should run")
+        .report_bundle;
+
+    let aggregate = bundle
+        .artifact_digest_set
+        .artifacts
+        .iter_mut()
+        .find(|artifact| artifact.role == SoakArtifactRole::AggregateReport)
+        .expect("campaign bundle should include an aggregate report artifact");
+    aggregate.artifact_id = "aggregate_wrong".to_string();
+    aggregate.relative_path = "aggregate/wrong_report.json".to_string();
+    let duplicate = aggregate.clone();
+    bundle.artifact_digest_set.artifacts.push(duplicate);
+
+    let validation = validate_soak_report_bundle(&bundle);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("aggregate_reports count")));
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("aggregate/aggregate_health_report.json")));
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("aggregate_health_")));
+}
+
+#[test]
 fn report_bundle_validation_rejects_empty_bundle_identity() {
     let dir = tempdir().expect("tempdir should be available");
     let soak_config = build_smoke_soak_config()

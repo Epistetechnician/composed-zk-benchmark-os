@@ -252,6 +252,14 @@ pub fn validate_soak_report_bundle(bundle: &SoakReportBundle) -> SoakReportBundl
         bundle.failure_corpus_indexes.len(),
         &mut issues,
     );
+    let aggregate_report_count =
+        count_artifacts_with_role(bundle, SoakArtifactRole::AggregateReport);
+    if aggregate_report_count > 1 {
+        issues.push(format!(
+            "artifact_digest_set.aggregate_reports count {aggregate_report_count} exceeds maximum 1"
+        ));
+    }
+    validate_aggregate_report_artifact_identity(bundle, &mut issues);
     validate_report_artifact_identity(bundle, &mut issues);
     for (index, manifest) in bundle.shard_manifests.iter().enumerate() {
         let validation = validate_soak_shard_manifest(manifest);
@@ -400,6 +408,31 @@ fn validate_report_artifact_identity(bundle: &SoakReportBundle, issues: &mut Vec
             &layout.failure_corpus_index_path,
             issues,
         );
+    }
+}
+
+fn validate_aggregate_report_artifact_identity(
+    bundle: &SoakReportBundle,
+    issues: &mut Vec<String>,
+) {
+    for artifact in bundle
+        .artifact_digest_set
+        .artifacts
+        .iter()
+        .filter(|artifact| artifact.role == SoakArtifactRole::AggregateReport)
+    {
+        if artifact.relative_path != "aggregate/aggregate_health_report.json" {
+            issues.push(format!(
+                "aggregate report artifact {} must use aggregate/aggregate_health_report.json",
+                artifact.artifact_id
+            ));
+        }
+        if !artifact.artifact_id.starts_with("aggregate_health_") {
+            issues.push(format!(
+                "aggregate report artifact id must start with aggregate_health_: {}",
+                artifact.artifact_id
+            ));
+        }
     }
 }
 
