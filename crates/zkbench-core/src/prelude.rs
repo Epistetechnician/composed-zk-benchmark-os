@@ -69,12 +69,12 @@ pub use crate::soak::{
     build_soak_report_bundle, extract_failure_corpus, plan_soak_shards, resume_local_soak_shard,
     run_local_soak_shard, validate_failure_corpus_index, validate_soak_health_report,
     validate_soak_report_bundle, validate_soak_run_config, validate_soak_shard_manifest,
-    validate_soak_telemetry_report, FailureCorpus, FailureCorpusEntry, FailureCorpusIndex,
-    FailureCorpusKind, FailureReproductionManifest, LocalSoakRunner, LocalSoakRunnerConfig,
-    MockTelemetryClock, SoakArtifactLayout, SoakCaseResult, SoakCaseStatus, SoakHealthReport,
-    SoakHealthStatus, SoakLimits, SoakOutputPolicy, SoakReportBundle, SoakRunConfig,
-    SoakRunProfile, SoakRunResult, SoakRunnerErrorPolicy, SoakShardCheckpoint, SoakShardId,
-    SoakShardManifest, SoakShardPlan, SoakShardPlanner, SoakTelemetryCounters,
+    validate_soak_shard_summary, validate_soak_telemetry_report, FailureCorpus, FailureCorpusEntry,
+    FailureCorpusIndex, FailureCorpusKind, FailureReproductionManifest, LocalSoakRunner,
+    LocalSoakRunnerConfig, MockTelemetryClock, SoakArtifactLayout, SoakCaseResult, SoakCaseStatus,
+    SoakHealthReport, SoakHealthStatus, SoakLimits, SoakOutputPolicy, SoakReportBundle,
+    SoakRunConfig, SoakRunProfile, SoakRunResult, SoakRunnerErrorPolicy, SoakShardCheckpoint,
+    SoakShardId, SoakShardManifest, SoakShardPlan, SoakShardPlanner, SoakTelemetryCounters,
     SoakTelemetryDurations, SoakTelemetryReport, SystemTelemetryClock,
 };
 pub use crate::value::{FieldVisibility, Value, ValueType};

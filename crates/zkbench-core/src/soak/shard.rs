@@ -408,6 +408,78 @@ pub fn validate_soak_shard_manifest(manifest: &SoakShardManifest) -> SoakShardVa
     }
 }
 
+/// Validate a shard execution summary.
+pub fn validate_soak_shard_summary(summary: &SoakShardSummary) -> SoakShardValidation {
+    let mut issues = Vec::new();
+    if summary.shard_id.value.trim().is_empty() {
+        issues.push(issue("summary.shard_id", "shard id is empty"));
+    }
+    if summary.claim_boundary != ClaimBoundary::Level0DesignNote {
+        issues.push(issue(
+            "summary.claim_boundary",
+            "shard summary must remain Level0DesignNote",
+        ));
+    }
+    if summary.progress.completed_cases > summary.progress.total_cases {
+        issues.push(issue(
+            "summary.progress.completed_cases",
+            "completed cases cannot exceed total cases",
+        ));
+    }
+    if summary.progress.failed_cases > summary.progress.total_cases {
+        issues.push(issue(
+            "summary.progress.failed_cases",
+            "failed cases cannot exceed total cases",
+        ));
+    }
+    if summary.progress.skipped_cases > summary.progress.completed_cases {
+        issues.push(issue(
+            "summary.progress.skipped_cases",
+            "skipped resume cases cannot exceed completed cases",
+        ));
+    }
+    match summary.status {
+        SoakShardStatus::Planned => {
+            if summary.progress.completed_cases > 0
+                || summary.progress.failed_cases > 0
+                || summary.progress.skipped_cases > 0
+            {
+                issues.push(issue(
+                    "summary.status",
+                    "planned shard summaries cannot report progress",
+                ));
+            }
+        }
+        SoakShardStatus::Completed => {
+            if summary.progress.failed_cases > 0 {
+                issues.push(issue(
+                    "summary.status",
+                    "completed shard summaries cannot report failed cases",
+                ));
+            }
+            if summary.progress.completed_cases != summary.progress.total_cases {
+                issues.push(issue(
+                    "summary.status",
+                    "completed shard summaries must complete all cases",
+                ));
+            }
+        }
+        SoakShardStatus::CompletedWithFailures => {
+            if summary.progress.failed_cases == 0 {
+                issues.push(issue(
+                    "summary.status",
+                    "completed-with-failures shard summaries must report failed cases",
+                ));
+            }
+        }
+        SoakShardStatus::Running | SoakShardStatus::Failed | SoakShardStatus::Resumable => {}
+    }
+    SoakShardValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
 fn issue(path: impl Into<String>, message: impl Into<String>) -> SoakShardValidationIssue {
     SoakShardValidationIssue {
         path: path.into(),

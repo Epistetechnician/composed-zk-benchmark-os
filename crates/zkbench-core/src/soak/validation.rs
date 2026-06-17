@@ -8,8 +8,8 @@ use super::failure_corpus::{validate_failure_corpus_index, FailureCorpusIndex};
 use super::health::{validate_soak_health_report, SoakHealthReport};
 use super::resume::{validate_soak_shard_checkpoint, SoakShardCheckpoint};
 use super::shard::{
-    validate_soak_shard_manifest, validate_soak_shard_plan, SoakShardManifest, SoakShardPlan,
-    SoakShardResumeToken, SoakShardValidation,
+    validate_soak_shard_manifest, validate_soak_shard_plan, validate_soak_shard_summary,
+    SoakShardManifest, SoakShardPlan, SoakShardResumeToken, SoakShardSummary, SoakShardValidation,
 };
 use super::telemetry::{validate_soak_telemetry_report, SoakTelemetryReport};
 
@@ -26,6 +26,11 @@ pub fn validate_shard_plan(plan: &SoakShardPlan) -> Result<()> {
 /// Validate a shard manifest.
 pub fn validate_shard_manifest(manifest: &SoakShardManifest) -> SoakShardValidation {
     validate_soak_shard_manifest(manifest)
+}
+
+/// Validate a shard summary.
+pub fn validate_shard_summary(summary: &SoakShardSummary) -> SoakShardValidation {
+    validate_soak_shard_summary(summary)
 }
 
 /// Validate a checkpoint.
