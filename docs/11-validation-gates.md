@@ -215,6 +215,7 @@ The Rust tests currently cover:
 - deterministic shard planning,
 - stable shard ids and case assignment,
 - shard manifest JSON round-trips and relative refs,
+- artifact manifest id hygiene validation,
 - tiny local smoke runs through generation, mutation, and local replay,
 - no external adapter or zk-Harness result production,
 - checkpoint write/read and resume skipping,
