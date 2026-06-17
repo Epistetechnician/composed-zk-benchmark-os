@@ -1,11 +1,12 @@
 use tempfile::tempdir;
 use zkbench_core::{
     apply_mutation_pass, build_local_replay_manifest_for_instance,
-    build_local_replay_manifest_for_mutation, generate_instance, run_local_replay,
-    score_report_from_local_mutation_evidence, BadCountersPass, BenchmarkPackFileRole,
-    BenchmarkPackReader, BenchmarkPackWriter, ClaimBoundary, EvidenceAppendPolicy, EvidenceClass,
-    EvidenceLedger, EvidenceRecord, GeneratorConfig, InstanceParams, LocalMutationEvidenceSummary,
-    PerformanceScore, ProvenanceRecord, ScoreConfidence,
+    build_local_replay_manifest_for_mutation, compute_artifact_digest_bytes, generate_instance,
+    run_local_replay, score_report_from_local_mutation_evidence, ArtifactKind, ArtifactRole,
+    BadCountersPass, BenchmarkPackFileRole, BenchmarkPackReader, BenchmarkPackWriter,
+    ClaimBoundary, EvidenceAppendPolicy, EvidenceClass, EvidenceLedger, EvidenceRecord,
+    GeneratorConfig, InstanceParams, LocalMutationEvidenceSummary, PerformanceScore,
+    ProvenanceRecord, ScoreConfidence,
 };
 
 #[test]
@@ -194,4 +195,55 @@ fn benchmark_pack_writer_rejects_invalid_score_report() {
         .expect_err("invalid score report should be rejected");
 
     assert!(error.to_string().contains("score report validation failed"));
+}
+
+#[test]
+fn benchmark_pack_reader_rejects_digest_consistent_invalid_score_report() {
+    let dir = tempdir().expect("tempdir should be available");
+    BenchmarkPackWriter::new("phase_f_digest_consistent_invalid_score_report")
+        .write_to(dir.path())
+        .expect("valid local pack should write");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("pack should load");
+    let mut manifest = reader.manifest().clone();
+    let mut report = reader
+        .load_score_report()
+        .expect("score report should deserialize")
+        .expect("score report should exist");
+    report.performance = Some(PerformanceScore {
+        normalized_score: Some(1.0),
+        confidence: ScoreConfidence::Low,
+        missing_metrics: Vec::new(),
+    });
+    let score_report_bytes =
+        serde_json::to_vec_pretty(&report).expect("invalid score report should serialize");
+    std::fs::write(
+        dir.path().join("reports/score_report.json"),
+        &score_report_bytes,
+    )
+    .expect("test should be able to rewrite score report");
+
+    let score_report_file = manifest
+        .files
+        .iter_mut()
+        .find(|file| file.role == BenchmarkPackFileRole::ScoreReport)
+        .expect("pack should include score report file entry");
+    score_report_file.digest = compute_artifact_digest_bytes(
+        &score_report_bytes,
+        Some(ArtifactKind::ScoreReport),
+        Some(ArtifactRole::Report),
+    );
+    let manifest_bytes =
+        serde_json::to_vec_pretty(&manifest).expect("pack manifest should serialize");
+    std::fs::write(dir.path().join("pack.json"), manifest_bytes)
+        .expect("test should be able to rewrite pack manifest");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("tampered pack should load");
+    let validation = reader.validate();
+
+    assert!(!validation.valid);
+    assert!(validation.errors.iter().any(|error| {
+        error.path == "reports/score_report.json#performance"
+            && error.message.contains("leave score axes unpopulated")
+    }));
 }
