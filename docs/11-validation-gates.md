@@ -221,6 +221,18 @@ The Rust tests currently cover:
 
 These checks do not establish official benchmark evidence, ZK backend performance, external replay evidence, formal evidence, or Level2+ accepted evidence. Local soak telemetry is not official benchmark evidence. Internal timing telemetry is not ZK backend performance. Failure corpus entries are reproduction aids, not accepted evidence.
 
+## Phase P Dashboard Checks
+
+The Rust tests currently cover:
+
+- dashboard model construction from conservative score reports,
+- claim-boundary panel presence,
+- rejection of panel claim boundaries above the model maximum,
+- rejection of populated score axes at local claim boundaries,
+- Markdown rendering with explicit claim-boundary text.
+
+Dashboards are read-only views over existing local reports. They do not create official benchmark evidence, ZK backend performance evidence, or formal evidence.
+
 ## Future Gate Ladder
 
 When package scripts exist in a later phase, preserve:

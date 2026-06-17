@@ -225,6 +225,18 @@ pub fn validate_dashboard_model(model: &DashboardModel) -> Result<()> {
                 "panel claim boundary exceeds the dashboard maximum",
             ));
         }
+        if model.claim_boundary_max <= ClaimBoundary::Level1LocalReplay
+            && panel.kind == DashboardPanelKind::AxisScores
+            && panel
+                .axis_rows
+                .iter()
+                .any(|row| row.score.is_some() || !row.no_evidence)
+        {
+            return Err(ZkBenchError::validation(
+                format!("dashboard.panels.{}", panel.panel_id),
+                "local dashboard score axes must remain unpopulated",
+            ));
+        }
     }
     let has_claim_panel = model
         .panels
