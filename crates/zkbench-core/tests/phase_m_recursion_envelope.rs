@@ -1,3 +1,6 @@
+use std::fs;
+use std::path::Path;
+
 use zkbench_core::{
     compute_recursion_envelope_digest_chain_root, deserialize_recursion_envelope_candidate_json,
     serialize_recursion_envelope_candidate_json, validate_recursion_envelope_candidate,
@@ -98,6 +101,81 @@ fn issue_kinds(
         .into_iter()
         .map(|issue| issue.kind)
         .collect()
+}
+
+#[test]
+fn valid_fixture_recursion_envelope_candidate_validates() {
+    let candidate = deserialize_recursion_envelope_candidate_json(include_str!(
+        "fixtures/phase_m_recursion_envelope_valid.json"
+    ))
+    .expect("valid Phase M fixture should deserialize");
+
+    let validation = validate_recursion_envelope_candidate(&candidate);
+
+    assert!(validation.valid, "issues: {:?}", validation.issues);
+    assert_eq!(candidate, valid_candidate());
+    assert_eq!(validation.claim_boundary, ClaimBoundary::Level0DesignNote);
+}
+
+#[test]
+fn invalid_fixture_recursion_envelope_candidate_fails_closed() {
+    let candidate = deserialize_recursion_envelope_candidate_json(include_str!(
+        "fixtures/phase_m_recursion_envelope_invalid.json"
+    ))
+    .expect("invalid Phase M fixture should deserialize");
+
+    let kinds = issue_kinds(&candidate);
+
+    assert!(kinds.contains(&RecursionEnvelopeValidationIssueKind::AppendPreviewBoundary));
+    assert!(kinds.contains(&RecursionEnvelopeValidationIssueKind::Level2EligibilityBoundary));
+    assert!(kinds.contains(&RecursionEnvelopeValidationIssueKind::DigestChainRootMismatch));
+    assert!(kinds.contains(&RecursionEnvelopeValidationIssueKind::ClaimBoundaryEscalation));
+    assert!(kinds.contains(&RecursionEnvelopeValidationIssueKind::UnauthorizedVerifierStatus));
+    assert!(kinds.contains(&RecursionEnvelopeValidationIssueKind::UnauthorizedExecutableMetric));
+    assert!(kinds.contains(&RecursionEnvelopeValidationIssueKind::MissingLimitation));
+}
+
+#[test]
+fn phase_m_files_do_not_gain_executable_adapter_hooks() {
+    let crate_root = Path::new(env!("CARGO_MANIFEST_DIR"));
+    let scanned_paths = [
+        crate_root.join("src/recursion.rs"),
+        crate_root.join("tests/phase_m_recursion_envelope.rs"),
+        crate_root.join("tests/fixtures/phase_m_recursion_envelope_valid.json"),
+        crate_root.join("tests/fixtures/phase_m_recursion_envelope_invalid.json"),
+    ];
+    let forbidden_markers = [
+        concat!("std::process::", "Command"),
+        concat!("Command", "::new"),
+        concat!("std::net", "::"),
+        concat!("Tcp", "Stream"),
+        concat!("Udp", "Socket"),
+        concat!("req", "west"),
+        concat!("u", "req"),
+        concat!("go", " run"),
+        concat!("git", " clone"),
+        concat!("gnark", ".Prove"),
+        concat!("gnark", ".Verify"),
+        concat!("prover", "_time"),
+        concat!("verifier", "_time"),
+        concat!("proof", "_size"),
+        concat!("memory", "_usage"),
+    ];
+
+    let mut findings = Vec::new();
+    for path in scanned_paths {
+        let text = fs::read_to_string(&path).expect("Phase M file should be readable");
+        for marker in forbidden_markers {
+            if text.contains(marker) {
+                findings.push(format!("{} contains {marker}", path.display()));
+            }
+        }
+    }
+
+    assert!(
+        findings.is_empty(),
+        "Phase M local contract files must remain inert: {findings:?}"
+    );
 }
 
 #[test]
