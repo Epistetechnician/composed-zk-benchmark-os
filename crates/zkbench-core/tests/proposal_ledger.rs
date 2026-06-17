@@ -107,6 +107,25 @@ fn proposal_ledger_rejects_forbidden_claim_text_in_notes() {
 }
 
 #[test]
+fn proposal_ledger_rejects_forbidden_claim_text_in_entry_notes() {
+    let mut ledger = EvidenceAppendProposalLedger::new();
+    ledger
+        .append(proposal())
+        .expect("proposal append should work");
+    ledger.entries[0]
+        .notes
+        .push("this proposal ledger entry is official benchmark evidence".to_string());
+
+    let validation = ledger.validate();
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.message.contains("entries[0].notes[0]")));
+}
+
+#[test]
 fn proposal_ledger_persists_as_json() {
     let mut ledger = EvidenceAppendProposalLedger::new();
     ledger

@@ -67,6 +67,7 @@ The Phase J tests cover:
 - append preview creation without ledger mutation
 - Level2 eligibility future-review reporting
 - review ledger digest-chain validation
+- review ledger top-level and entry note claim-language validation
 - JSON fixture parsing and round-trips
 - claim-boundary ordering and Phase J overclaim rejection
 

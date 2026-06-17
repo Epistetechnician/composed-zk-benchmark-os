@@ -208,6 +208,16 @@ impl EvidenceAppendProposalLedger {
         }
         let mut previous_digest = None;
         for (index, entry) in self.entries.iter().enumerate() {
+            for (note_index, note) in entry.notes.iter().enumerate() {
+                if contains_forbidden_claim_text(note) {
+                    issues.push(EvidenceAppendProposalLedgerValidationIssue {
+                        sequence_number: entry.sequence_number,
+                        message: format!(
+                            "proposal ledger entries[{index}].notes[{note_index}] contain forbidden claim language"
+                        ),
+                    });
+                }
+            }
             if entry.sequence_number != index as u64 {
                 issues.push(EvidenceAppendProposalLedgerValidationIssue {
                     sequence_number: entry.sequence_number,
