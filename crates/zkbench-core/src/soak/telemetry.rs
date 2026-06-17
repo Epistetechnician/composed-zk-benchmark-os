@@ -382,6 +382,7 @@ pub fn validate_soak_telemetry_report(report: &SoakTelemetryReport) -> Result<()
             "telemetry must be InternalOnly and NotZkBackendPerformance",
         ));
     }
+    validate_telemetry_counter_relationships(&report.snapshot.counters)?;
     for metric in &report.snapshot.durations.internal_timing_metrics {
         reject_forbidden_metric_label(&metric.metric_name)?;
     }
@@ -390,6 +391,32 @@ pub fn validate_soak_telemetry_report(report: &SoakTelemetryReport) -> Result<()
     }
     for metric in &report.snapshot.counters.bytes_written_by_artifact_role {
         reject_forbidden_metric_label(&metric.metric_name)?;
+    }
+    Ok(())
+}
+
+fn validate_telemetry_counter_relationships(counters: &SoakTelemetryCounters) -> Result<()> {
+    let oracle_total = counters
+        .local_oracle_accepted_count
+        .saturating_add(counters.local_oracle_rejected_count)
+        .saturating_add(counters.local_oracle_capability_gap_count);
+    if oracle_total > counters.traces_evaluated {
+        return Err(ZkBenchError::soak(
+            "soak.telemetry.counters.local_oracle",
+            "local oracle outcome counts exceed traces_evaluated",
+        ));
+    }
+    let replay_total = counters
+        .local_replay_completed_count
+        .saturating_add(counters.local_replay_failed_count);
+    let replay_inputs = counters
+        .generated_instance_count
+        .saturating_add(counters.mutation_variant_count);
+    if replay_total > replay_inputs {
+        return Err(ZkBenchError::soak(
+            "soak.telemetry.counters.local_replay",
+            "local replay attempts exceed generated instances plus mutation variants",
+        ));
     }
     Ok(())
 }

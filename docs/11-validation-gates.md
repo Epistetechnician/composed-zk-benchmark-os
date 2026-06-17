@@ -50,6 +50,7 @@ The current Rust foundation must pass:
 - smoke runner tests,
 - resume checkpoint tests,
 - telemetry label validation,
+- telemetry counter relationship validation,
 - health report validation,
 - failure corpus validation,
 - Phase K reports remain `Level0DesignNote`,
