@@ -154,3 +154,17 @@ fn rejected_candidate_can_be_quarantined_and_serialized() {
     assert_eq!(manifest, parsed);
     assert_eq!(json, json_again);
 }
+
+#[test]
+fn quarantine_manifest_rejects_elevated_entry_boundary() {
+    let mut candidate = candidate();
+    candidate.claim_boundary_requested = ClaimBoundary::Level2ReproducibleBenchmarkArtifact;
+    let manifest = quarantine_external_result_candidate(&candidate);
+
+    let validation = validate_quarantine_manifest(&manifest);
+
+    assert!(!validation.valid);
+    assert!(validation.issues.iter().any(|issue| {
+        issue.path.contains("claim_boundary") && issue.message.contains("Phase H local limits")
+    }));
+}
