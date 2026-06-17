@@ -513,6 +513,50 @@ fn report_bundle_validation_rejects_shard_manifest_content_drift() {
 }
 
 #[test]
+fn report_bundle_validation_rejects_nested_report_shard_identity_drift() {
+    let dir = tempdir().expect("tempdir should be available");
+    let soak_config = build_smoke_soak_config()
+        .with_families(vec![FamilyKind::BaselineFsm])
+        .with_mutation_passes(vec![MutationClass::MissingConstraints])
+        .with_seed_range(0..2)
+        .with_shard_count(2);
+    let plan = plan_soak_shards(soak_config).expect("plan should build");
+    let config = approved_config(
+        "campaign_report_shard_identity_drift",
+        dir.path().to_path_buf(),
+    );
+    let mut bundle = run_soak_campaign(&config, plan)
+        .expect("campaign should run")
+        .report_bundle;
+
+    bundle.telemetry_reports[0].shard_id = Some(bundle.shard_manifests[1].shard_id.clone());
+    bundle.health_reports[0].shard_id = Some(bundle.shard_manifests[1].shard_id.clone());
+    let mut entry = sample_entry("case_bundle_shard_mismatch");
+    entry.reproduction_manifest.shard_id = bundle.shard_manifests[1].shard_id.clone();
+    bundle.failure_corpus_indexes[0].summary.entry_count = 1;
+    bundle.failure_corpus_indexes[0]
+        .summary
+        .replay_failure_count = 1;
+    bundle.failure_corpus_indexes[0].entries.push(entry);
+
+    let validation = validate_soak_report_bundle(&bundle);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("telemetry_reports[0].shard_id")));
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("health_reports[0].shard_id")));
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("failure_corpus_indexes[0].entries[0]")));
+}
+
+#[test]
 fn campaign_refuses_to_run_without_approval() {
     let dir = tempdir().expect("tempdir should be available");
     let soak_config = build_smoke_soak_config()

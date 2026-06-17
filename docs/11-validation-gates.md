@@ -231,6 +231,7 @@ The Rust tests currently cover:
 - report bundle identity and config consistency validation,
 - report bundle report-artifact role cardinality consistency,
 - report bundle shard/report cardinality consistency,
+- report bundle nested shard identity consistency,
 - report bundle shard manifest content consistency,
 - failure corpus summary and duplicate entry-id validation,
 - failure corpus validation and JSON round-trips,
