@@ -219,6 +219,7 @@ pub fn validate_soak_health_report(report: &SoakHealthReport) -> Result<()> {
             "soak health reports must remain Level0DesignNote",
         ));
     }
+    validate_health_summary(report)?;
     for finding in &report.findings {
         if finding.claim_boundary != ClaimBoundary::Level0DesignNote {
             return Err(ZkBenchError::soak(
@@ -235,6 +236,42 @@ pub fn validate_soak_health_report(report: &SoakHealthReport) -> Result<()> {
                 "health report must not imply ZK backend performance",
             ));
         }
+    }
+    Ok(())
+}
+
+fn validate_health_summary(report: &SoakHealthReport) -> Result<()> {
+    if report.summary.generated_instances != report.telemetry_summary.generated_instance_count {
+        return Err(ZkBenchError::soak(
+            "soak.health.summary.generated_instances",
+            "health summary generated_instances does not match telemetry",
+        ));
+    }
+    if report.summary.mutation_variants != report.telemetry_summary.mutation_variant_count {
+        return Err(ZkBenchError::soak(
+            "soak.health.summary.mutation_variants",
+            "health summary mutation_variants does not match telemetry",
+        ));
+    }
+    if report.summary.local_replays != report.telemetry_summary.local_replay_completed_count {
+        return Err(ZkBenchError::soak(
+            "soak.health.summary.local_replays",
+            "health summary local_replays does not match telemetry",
+        ));
+    }
+    if report.summary.failures != report.telemetry_summary.failure_count {
+        return Err(ZkBenchError::soak(
+            "soak.health.summary.failures",
+            "health summary failures does not match telemetry",
+        ));
+    }
+    if report.summary.failure_corpus_entries > 0
+        && report.health_status == SoakHealthStatus::Healthy
+    {
+        return Err(ZkBenchError::soak(
+            "soak.health.status",
+            "healthy status cannot report failure corpus entries",
+        ));
     }
     Ok(())
 }
