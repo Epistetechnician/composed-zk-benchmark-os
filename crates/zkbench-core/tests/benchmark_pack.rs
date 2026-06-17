@@ -1,10 +1,11 @@
 use tempfile::tempdir;
 use zkbench_core::{
     apply_mutation_pass, build_local_replay_manifest_for_instance,
-    build_local_replay_manifest_for_mutation, generate_instance, run_local_replay, BadCountersPass,
-    BenchmarkPackFileRole, BenchmarkPackReader, BenchmarkPackWriter, ClaimBoundary,
-    EvidenceAppendPolicy, EvidenceClass, EvidenceLedger, EvidenceRecord, GeneratorConfig,
-    InstanceParams, ProvenanceRecord,
+    build_local_replay_manifest_for_mutation, generate_instance, run_local_replay,
+    score_report_from_local_mutation_evidence, BadCountersPass, BenchmarkPackFileRole,
+    BenchmarkPackReader, BenchmarkPackWriter, ClaimBoundary, EvidenceAppendPolicy, EvidenceClass,
+    EvidenceLedger, EvidenceRecord, GeneratorConfig, InstanceParams, LocalMutationEvidenceSummary,
+    PerformanceScore, ProvenanceRecord, ScoreConfidence,
 };
 
 #[test]
@@ -169,4 +170,28 @@ fn benchmark_pack_validation_rejects_invalid_nested_ledger() {
         error.path == "evidence/ledger.json#0"
             && error.message.contains("exceeds Level1LocalReplay")
     }));
+}
+
+#[test]
+fn benchmark_pack_writer_rejects_invalid_score_report() {
+    let dir = tempdir().expect("tempdir should be available");
+    let mut report = score_report_from_local_mutation_evidence(LocalMutationEvidenceSummary {
+        local_accepted_traces: 1,
+        local_rejected_traces: 1,
+        mutation_variants_generated: 1,
+        outcome_changes_observed: 0,
+        unsound_acceptance_candidates: 0,
+    });
+    report.performance = Some(PerformanceScore {
+        normalized_score: Some(1.0),
+        confidence: ScoreConfidence::Low,
+        missing_metrics: Vec::new(),
+    });
+
+    let error = BenchmarkPackWriter::new("phase_f_invalid_score_report")
+        .with_score_report(report)
+        .write_to(dir.path())
+        .expect_err("invalid score report should be rejected");
+
+    assert!(error.to_string().contains("score report validation failed"));
 }

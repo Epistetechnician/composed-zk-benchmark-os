@@ -5,6 +5,7 @@ use std::path::{Path, PathBuf};
 
 use crate::error::{Result, ZkBenchError};
 use crate::evidence::EvidenceLedger;
+use crate::scoring::{validate_score_report, ScoreReport};
 
 use super::manifest::{BenchmarkPackFileRole, BenchmarkPackManifest};
 use super::validation::{BenchmarkPackValidation, BenchmarkPackValidationError};
@@ -60,6 +61,27 @@ impl BenchmarkPackReader {
             ZkBenchError::deserialization("benchmark_pack.evidence_ledger", error.to_string())
         })?;
         Ok(Some(ledger))
+    }
+
+    /// Load the Score Report when present.
+    pub fn load_score_report(&self) -> Result<Option<ScoreReport>> {
+        let Some(file) = self
+            .manifest
+            .files
+            .iter()
+            .find(|file| file.role == BenchmarkPackFileRole::ScoreReport)
+        else {
+            return Ok(None);
+        };
+        validate_relative_path(&file.relative_path)?;
+        let path = self.root.join(&file.relative_path);
+        let json = fs::read_to_string(&path).map_err(|error| {
+            ZkBenchError::benchmark_pack(path.display().to_string(), error.to_string())
+        })?;
+        let report = serde_json::from_str(&json).map_err(|error| {
+            ZkBenchError::deserialization("benchmark_pack.score_report", error.to_string())
+        })?;
+        Ok(Some(report))
     }
 
     /// Validate local pack file digests and ledger chain.
@@ -119,6 +141,23 @@ impl BenchmarkPackReader {
             }),
             Err(error) => errors.push(BenchmarkPackValidationError {
                 path: "evidence/ledger.json".to_string(),
+                message: error.to_string(),
+            }),
+        }
+
+        match self.load_score_report() {
+            Ok(Some(report)) => {
+                let validation = validate_score_report(&report);
+                for issue in validation.issues {
+                    errors.push(BenchmarkPackValidationError {
+                        path: format!("reports/score_report.json#{}", issue.path),
+                        message: issue.message,
+                    });
+                }
+            }
+            Ok(None) => {}
+            Err(error) => errors.push(BenchmarkPackValidationError {
+                path: "reports/score_report.json".to_string(),
                 message: error.to_string(),
             }),
         }
