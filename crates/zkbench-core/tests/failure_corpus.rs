@@ -5,6 +5,23 @@ use zkbench_core::{
     GeneratorTunables, MutationClass, SoakShardId,
 };
 
+fn sample_entry(
+    case_id: &str,
+    failure_kind: FailureCorpusKind,
+) -> zkbench_core::FailureCorpusEntry {
+    build_failure_corpus_entry(FailureCorpusEntryInput {
+        shard_id: SoakShardId::from_index(0),
+        case_id: case_id.to_string(),
+        family_kind: FamilyKind::BaselineFsm,
+        generator_seed: 7,
+        tunables: GeneratorTunables::default(),
+        mutation_class: Some(MutationClass::MissingConstraints),
+        trace_id: None,
+        failure_kind,
+        local_error_summary: "simulated failure".to_string(),
+    })
+}
+
 #[test]
 fn failure_corpus_starts_empty_and_validates() {
     let corpus = FailureCorpus::empty("empty_failure_corpus");
@@ -86,4 +103,34 @@ fn failure_corpus_roundtrips_and_does_not_claim_acceptance() {
     let roundtrip =
         deserialize_failure_corpus_index_json(&json).expect("corpus should deserialize");
     assert_eq!(roundtrip, corpus.index);
+}
+
+#[test]
+fn failure_corpus_rejects_stale_summary() {
+    let mut corpus = FailureCorpus::empty("stale_summary_failure_corpus");
+    corpus.push(sample_entry(
+        "case_summary",
+        FailureCorpusKind::ReplayFailure,
+    ));
+    corpus.index.summary.entry_count = 0;
+
+    let error =
+        validate_failure_corpus_index(&corpus.index).expect_err("stale summary should be rejected");
+
+    assert!(error.to_string().contains("summary"));
+    assert!(error.to_string().contains("does not match entries"));
+}
+
+#[test]
+fn failure_corpus_rejects_duplicate_entry_ids() {
+    let mut corpus = FailureCorpus::empty("duplicate_failure_corpus");
+    let entry = sample_entry("case_duplicate", FailureCorpusKind::ReplayFailure);
+    corpus.push(entry.clone());
+    corpus.push(entry);
+
+    let error = validate_failure_corpus_index(&corpus.index)
+        .expect_err("duplicate entry ids should be rejected");
+
+    assert!(error.to_string().contains("entry id"));
+    assert!(error.to_string().contains("duplicated"));
 }
