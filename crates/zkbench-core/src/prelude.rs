@@ -57,10 +57,13 @@ pub use crate::mutation::{
 };
 pub use crate::pack::{BenchmarkPackManifest, BenchmarkPackReader, BenchmarkPackWriter};
 pub use crate::recursion::{
-    compute_recursion_envelope_digest_chain_root, validate_recursion_envelope_candidate,
-    RecursionEnvelopeCandidate, RecursionEnvelopeInputKind, RecursionEnvelopeInputRef,
-    RecursionEnvelopeMetric, RecursionEnvelopeMetricKind, RecursionEnvelopeValidation,
-    RecursionEnvelopeValidationIssueKind, RecursionEnvelopeVersion,
+    compute_recursion_envelope_digest_chain_root, validate_recursion_adapter_preparation_plan,
+    validate_recursion_envelope_candidate, RecursionAdapterPreparationArtifact,
+    RecursionAdapterPreparationArtifactRole, RecursionAdapterPreparationIssueKind,
+    RecursionAdapterPreparationPlan, RecursionAdapterPreparationTarget,
+    RecursionAdapterPreparationValidation, RecursionEnvelopeCandidate, RecursionEnvelopeInputKind,
+    RecursionEnvelopeInputRef, RecursionEnvelopeMetric, RecursionEnvelopeMetricKind,
+    RecursionEnvelopeValidation, RecursionEnvelopeValidationIssueKind, RecursionEnvelopeVersion,
     RecursionVerifierAcceptanceStatus,
 };
 pub use crate::replay::{

@@ -2,14 +2,16 @@
 
 ## Status And Claim Boundary
 
-Phase M is implemented for inert local contract types.
+Phase M is implemented for inert local contract types and inert
+adapter-preparation metadata.
 
 This phase defines the recursion-envelope stress lane after Phase L local soak
 acceptance. The current implementation slice includes local Rust data types,
-serialization helpers, validation results, and claim-boundary tests only. It
-does not authorize live gnark execution, Go code, external repository checkout,
-external result import, benchmark outputs, official benchmark evidence, Level2+
-evidence creation, or any claim that a recursion proof is semantic proof.
+serialization helpers, validation results, claim-boundary tests, fixture-backed
+validation checks, and adapter-preparation metadata only. It does not authorize
+live gnark execution, Go code, external repository checkout, external result
+import, benchmark outputs, official benchmark evidence, Level2+ evidence
+creation, or any claim that a recursion proof is semantic proof.
 
 The current authorized state slice is:
 
@@ -123,6 +125,19 @@ fixtures for executable-adapter affordances such as process spawning, network
 socket/client markers, Go runner markers, external clone markers, gnark prove or
 verify markers, and forbidden pre-authorization performance metric labels.
 
+The adapter-preparation metadata slice adds:
+
+- `RecursionAdapterPreparationPlan`;
+- `RecursionAdapterPreparationArtifact`;
+- `RecursionAdapterPreparationTarget`;
+- `RecursionAdapterPreparationValidation`.
+
+These structures describe only future adapter readiness metadata. Validation
+rejects missing source inputs, missing expected artifacts, non-portable artifact
+references, claim boundaries above `Level0DesignNote`, executable adapter
+authorization, executable step lists, and missing recursion-proof limitation
+text.
+
 ## Required Negative Tests
 
 Future implementation must reject:
@@ -152,8 +167,8 @@ Future implementation must reject:
 
 ## Implemented Slice
 
-The implemented Phase M slice is local Rust contract types and validation tests
-only:
+The implemented Phase M slice is local Rust contract types, adapter-preparation
+metadata, and validation tests only:
 
 ```text
 RecursionEnvelopeCandidate
@@ -163,6 +178,7 @@ claim-boundary non-escalation tests
 metric-label absence tests
 fixture-backed valid and invalid candidate checks
 source-scan checks for forbidden executable-adapter hooks
+adapter-preparation metadata and validation tests
 ```
 
 This slice still avoids live gnark execution and does not produce benchmark

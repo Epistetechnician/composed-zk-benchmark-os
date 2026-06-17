@@ -2,10 +2,15 @@ use std::fs;
 use std::path::Path;
 
 use zkbench_core::{
-    compute_recursion_envelope_digest_chain_root, deserialize_recursion_envelope_candidate_json,
-    serialize_recursion_envelope_candidate_json, validate_recursion_envelope_candidate,
+    compute_recursion_envelope_digest_chain_root,
+    deserialize_recursion_adapter_preparation_plan_json,
+    deserialize_recursion_envelope_candidate_json,
+    serialize_recursion_adapter_preparation_plan_json, serialize_recursion_envelope_candidate_json,
+    validate_recursion_adapter_preparation_plan, validate_recursion_envelope_candidate,
     ArtifactDigest, ArtifactDigestAlgorithm, ArtifactKind, ArtifactRole, ClaimBoundary,
-    EvidenceClass, RecursionEnvelopeCandidate, RecursionEnvelopeInputKind,
+    EvidenceClass, RecursionAdapterPreparationArtifact, RecursionAdapterPreparationArtifactRole,
+    RecursionAdapterPreparationIssueKind, RecursionAdapterPreparationPlan,
+    RecursionAdapterPreparationTarget, RecursionEnvelopeCandidate, RecursionEnvelopeInputKind,
     RecursionEnvelopeInputRef, RecursionEnvelopeMetric, RecursionEnvelopeMetricKind,
     RecursionEnvelopeValidationIssueKind, RecursionEnvelopeVersion,
     RecursionVerifierAcceptanceStatus,
@@ -101,6 +106,88 @@ fn issue_kinds(
         .into_iter()
         .map(|issue| issue.kind)
         .collect()
+}
+
+fn preparation_plan() -> RecursionAdapterPreparationPlan {
+    RecursionAdapterPreparationPlan {
+        plan_id: "phase_m_adapter_preparation".to_string(),
+        version: RecursionEnvelopeVersion::default(),
+        target: RecursionAdapterPreparationTarget::GnarkGroth16,
+        source_inputs: valid_candidate().inputs,
+        expected_artifacts: vec![
+            RecursionAdapterPreparationArtifact {
+                artifact_id: "recursion_input_manifest".to_string(),
+                artifact_uri: "artifacts/recursion_input_manifest.json".to_string(),
+                role: RecursionAdapterPreparationArtifactRole::InputManifest,
+                required: true,
+                notes: Vec::new(),
+            },
+            RecursionAdapterPreparationArtifact {
+                artifact_id: "recursion_evidence_mapping".to_string(),
+                artifact_uri: "artifacts/recursion_evidence_mapping.json".to_string(),
+                role: RecursionAdapterPreparationArtifactRole::EvidenceMapping,
+                required: true,
+                notes: Vec::new(),
+            },
+        ],
+        executable_adapter_authorized: false,
+        executable_steps: Vec::new(),
+        claim_boundary: ClaimBoundary::Level0DesignNote,
+        limitations: vec![
+            "recursion proof is not semantic proof".to_string(),
+            "adapter-preparation metadata is not execution evidence".to_string(),
+        ],
+        notes: Vec::new(),
+    }
+}
+
+fn preparation_issue_kinds(
+    plan: &RecursionAdapterPreparationPlan,
+) -> Vec<RecursionAdapterPreparationIssueKind> {
+    validate_recursion_adapter_preparation_plan(plan)
+        .issues
+        .into_iter()
+        .map(|issue| issue.kind)
+        .collect()
+}
+
+#[test]
+fn valid_adapter_preparation_plan_validates_as_level0_metadata() {
+    let plan = preparation_plan();
+    let validation = validate_recursion_adapter_preparation_plan(&plan);
+
+    assert!(validation.valid, "issues: {:?}", validation.issues);
+    assert_eq!(validation.claim_boundary, ClaimBoundary::Level0DesignNote);
+}
+
+#[test]
+fn adapter_preparation_plan_round_trips_as_json() {
+    let plan = preparation_plan();
+    let json =
+        serialize_recursion_adapter_preparation_plan_json(&plan).expect("plan should serialize");
+    let round_trip = deserialize_recursion_adapter_preparation_plan_json(&json)
+        .expect("plan should deserialize");
+
+    assert_eq!(round_trip, plan);
+}
+
+#[test]
+fn adapter_preparation_plan_rejects_execution_and_path_escape() {
+    let mut plan = preparation_plan();
+    plan.claim_boundary = ClaimBoundary::Level1LocalReplay;
+    plan.executable_adapter_authorized = true;
+    plan.executable_steps = vec!["future execution step".to_string()];
+    plan.limitations.clear();
+    plan.source_inputs[0].artifact_uri = "/tmp/replay_manifest.json".to_string();
+    plan.expected_artifacts[0].artifact_uri = "../recursion_input_manifest.json".to_string();
+
+    let kinds = preparation_issue_kinds(&plan);
+
+    assert!(kinds.contains(&RecursionAdapterPreparationIssueKind::ClaimBoundaryEscalation));
+    assert!(kinds.contains(&RecursionAdapterPreparationIssueKind::ExecutableAdapterAuthorized));
+    assert!(kinds.contains(&RecursionAdapterPreparationIssueKind::ExecutableStepPresent));
+    assert!(kinds.contains(&RecursionAdapterPreparationIssueKind::InvalidArtifactRef));
+    assert!(kinds.contains(&RecursionAdapterPreparationIssueKind::MissingLimitation));
 }
 
 #[test]

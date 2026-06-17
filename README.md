@@ -255,13 +255,12 @@ Surface DSL
 ## Next Implementation Slice
 
 For the benchmark OS track, Phase M inert local recursion-envelope contract
-implementation exists; see
+implementation and adapter-preparation metadata exist; see
 [docs/63-phase-m-recursion-envelope-stress-spec.md](docs/63-phase-m-recursion-envelope-stress-spec.md).
-The next Phase M slice must be explicitly authorized and should remain limited
-to local validation hardening or adapter-preparation metadata unless a future
-phase opens executable work. It must not run live gnark, clone external repos,
-import external results, emit benchmark outputs, claim official benchmark
-evidence, report ZK backend performance, or create Level2+ evidence.
+The next Phase M slice must be explicitly authorized before executable work. It
+must not run live gnark, clone external repos, import external results, emit
+benchmark outputs, claim official benchmark evidence, report ZK backend
+performance, or create Level2+ evidence.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
