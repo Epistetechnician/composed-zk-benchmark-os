@@ -2,27 +2,32 @@
 
 ## Status And Claim Boundary
 
-Phase N is opened as a docs-first boundary contract only.
+Phase N is implemented through the inert manifest-contract slice.
 
 This phase defines the narrow zkML/control-flow adapter lane after Phase L local
 soak acceptance and Phase M inert recursion-envelope metadata. The current
-slice is limited to Markdown spec and navigation updates. It does not authorize
-Rust implementation, live zkML execution, external repository checkout,
-external result import, benchmark outputs, official benchmark evidence, ZK
-backend performance claims, Level2+ evidence creation, dashboard work, broad
-zkML benchmarking, or treating model accuracy as proof-system soundness.
+implementation is limited to inert Rust manifest metadata, validation,
+serialization, source-scan tests, and docs/navigation updates. It does not
+authorize live zkML execution, external repository checkout, external result
+import, benchmark outputs, official benchmark evidence, ZK backend performance
+claims, Level2+ evidence creation, dashboard work, broad zkML benchmarking, or
+treating model accuracy as proof-system soundness.
 
 The current authorized state slice is:
 
 ```text
+crates/zkbench-core/src/zkml.rs
+crates/zkbench-core/src/lib.rs
+crates/zkbench-core/src/prelude.rs
+crates/zkbench-core/tests/phase_n_zkml_manifest.rs
 docs/64-phase-n-narrow-zkml-adapter-spec.md
 docs/12-task-list.md
 README.md
 AGENTS.md
 ```
 
-All Phase N artifacts remain `Level0DesignNote` until a future explicit phase
-opens inert Rust contract work or executable adapter work.
+All Phase N manifest artifacts remain `Level0DesignNote` until a future
+explicit phase opens executable adapter work.
 
 ## Purpose
 
@@ -61,8 +66,7 @@ fail closed.
 
 ## Narrow Manifest Model
 
-A future `ZkMlWorkloadManifest` should remain inert metadata. It should
-describe:
+`ZkMlWorkloadManifest` remains inert metadata. It describes:
 
 - manifest id;
 - workload family id;
@@ -77,15 +81,13 @@ describe:
 - output claim boundary;
 - explicit limitations.
 
-The manifest output claim boundary must be the minimum supported by the input
-evidence and the workload statement. In the current Level 1 foundation, this
-means `Level0DesignNote` for manifest metadata and at most `Level1LocalReplay`
-for referenced local replay evidence.
+The manifest output claim boundary must remain `Level0DesignNote` in the
+current inert implementation, even when referenced local replay inputs carry
+`Level1LocalReplay` boundaries.
 
 ## Candidate Metrics
 
-Phase N may define metric names but must not populate official benchmark scores
-in this docs-first slice.
+Phase N defines metric names but does not populate official benchmark scores.
 
 Candidate metric labels:
 
@@ -103,22 +105,22 @@ Candidate metric labels:
 - `zkml_memory_bytes`.
 
 Timing, memory, proof-size, constraint-count, and accuracy labels are future
-adapter metrics only. They must not be produced by local soak telemetry and
-must not be reported as ZK backend performance without a future explicit
+adapter metrics only. The validator rejects populated values for those labels
+in the inert manifest slice. They must not be produced by local soak telemetry
+and must not be reported as ZK backend performance without a future explicit
 execution phase.
 
 ## Validation Rules
 
-Future Phase N implementation must validate:
+The Phase N inert implementation validates:
 
 - every workload input has a stable digest;
 - every input claim boundary is explicit;
 - output claim boundary does not exceed the weakest input boundary;
-- model artifact references are local metadata unless a future phase opens
-  captured external artifacts;
+- model artifact references are local `Level0DesignNote` metadata;
 - model accuracy is never treated as proof-system correctness;
-- zkML metrics are absent unless a future execution phase is explicitly
-  authorized;
+- future executable zkML metric values are absent unless a future execution
+  phase is explicitly authorized;
 - public/private boundary mismatches remain local negative-test evidence;
 - append previews remain previews and do not mutate `EvidenceLedger`;
 - Level2 eligibility reports remain not Level2 evidence;
@@ -127,7 +129,7 @@ Future Phase N implementation must validate:
 
 ## Required Negative Tests
 
-Future implementation must reject:
+The Phase N tests reject:
 
 - manifest output claiming semantic proof from zkML workload metadata;
 - manifest output claiming official benchmark evidence from local telemetry;
@@ -157,12 +159,17 @@ Future implementation must reject:
 
 ## Implemented Slice
 
-The implemented Phase N slice is docs-first boundary metadata only:
+The implemented Phase N slice is inert manifest metadata only:
 
 ```text
 Phase N narrow zkML purpose
 input contract
 candidate metric labels
+ZkMlWorkloadManifest data model
+ZkMlWorkloadInputRef and ZkMlModelArtifactRef data model
+ZkMlMetric metadata
+workload digest-root validation
+JSON serialization helpers
 validation rules
 required negative tests
 non-goals

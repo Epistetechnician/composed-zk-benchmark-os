@@ -230,29 +230,30 @@ Future exit criteria after explicit implementation approval: recursion outcomes 
 
 ## Phase N: Narrow zkML Adapter
 
-Status: opened for docs-first boundary contract only. See `docs/64-phase-n-narrow-zkml-adapter-spec.md`.
+Status: complete for inert manifest-contract implementation. See `docs/64-phase-n-narrow-zkml-adapter-spec.md`.
 
 Goal: Add mixed control-flow and zkML workload metrics.
 
 Implemented: narrow zkML/control-flow adapter spec, input contract, candidate
-metric labels, validation rules, negative tests, and claim-boundary
-restrictions.
+metric labels, inert `ZkMlWorkloadManifest` data model, local model artifact
+metadata references, digest-root validation, JSON serialization helpers,
+validation rules, negative tests, and claim-boundary restrictions.
 
-Future deliverables after explicit implementation approval: inert manifest
-contract types, local validation tests, and manual handoff metadata. Executable
-zkML adapter work requires a separate explicit phase.
+Future deliverables after explicit approval: manual handoff metadata.
+Executable zkML adapter work requires a separate explicit phase.
 
 Dependencies: Phase L and future explicit adapter approval.
 
-Validation gate: docs and claim-boundary scans for this docs-first slice.
-Future Rust slices require local contract validation tests, serialization
-round-trips, and source scans that keep executable adapter work absent.
+Validation gate: local contract validation tests, serialization round-trips,
+source scans that keep executable adapter work absent, and full workspace
+validation.
 
 Anti-goals: becoming a zkML benchmark project.
 
-Exit criteria for docs-first opening: Phase N spec exists and keeps zkML metrics
-as metadata only. Future exit criteria after explicit implementation approval:
-zkML metrics are normalized and claim-capped.
+Exit criteria for inert implementation: Phase N spec exists, manifest metrics
+are metadata only, executable zkML metrics remain unpopulated, and all outputs
+remain `Level0DesignNote`. Future exit criteria after executable-adapter
+approval: zkML metrics are normalized and claim-capped.
 
 ## Phase O: Reproducible Benchmark Packs
 
