@@ -86,3 +86,57 @@ fn shard_manifest_roundtrips_and_uses_relative_refs() {
         deserialize_soak_shard_manifest_json(&json).expect("manifest should deserialize");
     assert_eq!(&roundtrip, manifest);
 }
+
+#[test]
+fn shard_manifest_rejects_duplicate_and_empty_case_ids() {
+    let plan = plan_soak_shards(
+        build_smoke_soak_config()
+            .with_families(vec![FamilyKind::BaselineFsm])
+            .with_seed_range(0..2)
+            .with_shard_count(1),
+    )
+    .expect("plan should build");
+    let mut manifest = plan.shard_manifests[0].clone();
+    manifest
+        .assigned_case_ids
+        .push(manifest.assigned_case_ids[0].clone());
+    manifest.expected_case_count = manifest.assigned_case_ids.len();
+
+    let validation = validate_soak_shard_manifest(&manifest);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.message.contains("duplicated")));
+
+    manifest.assigned_case_ids[1] = String::new();
+    let validation = validate_soak_shard_manifest(&manifest);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.message.contains("empty")));
+}
+
+#[test]
+fn shard_manifest_rejects_empty_artifact_refs() {
+    let plan = plan_soak_shards(
+        build_smoke_soak_config()
+            .with_families(vec![FamilyKind::BaselineFsm])
+            .with_seed_range(0..1)
+            .with_shard_count(1),
+    )
+    .expect("plan should build");
+    let mut manifest = plan.shard_manifests[0].clone();
+    manifest.relative_artifact_refs.push(String::new());
+
+    let validation = validate_soak_shard_manifest(&manifest);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.message.contains("artifact ref is empty")));
+}
