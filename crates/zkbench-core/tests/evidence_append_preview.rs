@@ -1,13 +1,14 @@
 use zkbench_core::{
-    create_evidence_append_preview, create_evidence_append_proposal,
-    create_evidence_record_candidate, deserialize_evidence_append_preview_json,
-    deserialize_external_result_candidate_json, normalize_synthetic_result_candidate,
-    review_evidence_append_proposal, serialize_evidence_append_preview_json,
-    validate_evidence_append_preview, validate_evidence_append_proposal,
-    validate_evidence_record_candidate, validate_synthetic_result_candidate, ClaimBoundary,
-    EvidenceAcceptancePolicy, EvidenceAppendPreview, EvidenceAppendPreviewStatus, EvidenceLedger,
+    build_local_replay_manifest_for_instance, create_evidence_append_preview,
+    create_evidence_append_proposal, create_evidence_record_candidate,
+    deserialize_evidence_append_preview_json, deserialize_external_result_candidate_json,
+    generate_instance, normalize_synthetic_result_candidate, review_evidence_append_proposal,
+    run_local_replay, serialize_evidence_append_preview_json, validate_evidence_append_preview,
+    validate_evidence_append_proposal, validate_evidence_record_candidate,
+    validate_synthetic_result_candidate, ClaimBoundary, EvidenceAcceptancePolicy,
+    EvidenceAppendPreview, EvidenceAppendPreviewStatus, EvidenceLedger,
     EvidenceRecordCandidateStatus, EvidenceReviewChecklist, EvidenceReviewDecisionKind,
-    EvidenceReviewerRole, ResultCandidateArtifactResolver,
+    EvidenceReviewerRole, GeneratorConfig, InstanceParams, ResultCandidateArtifactResolver,
 };
 
 fn candidate() -> zkbench_core::EvidenceRecordCandidate {
@@ -28,6 +29,22 @@ fn candidate() -> zkbench_core::EvidenceRecordCandidate {
         .expect("reviewed candidate should build")
 }
 
+fn populated_ledger() -> EvidenceLedger {
+    let instance = generate_instance(
+        GeneratorConfig::baseline_fsm().seed(79),
+        InstanceParams::default(),
+    )
+    .expect("generated instance should be available");
+    let manifest =
+        build_local_replay_manifest_for_instance(&instance).expect("manifest should build");
+    let result = run_local_replay(&manifest).expect("local replay should run");
+    let mut ledger = EvidenceLedger::new();
+    ledger
+        .append_replay_result(&result)
+        .expect("local replay evidence should append");
+    ledger
+}
+
 #[test]
 fn append_preview_does_not_mutate_evidence_ledger() {
     let candidate = candidate();
@@ -46,6 +63,43 @@ fn append_preview_does_not_mutate_evidence_ledger() {
             .entry_count,
         1
     );
+}
+
+#[test]
+fn append_preview_from_existing_ledger_preserves_tip_and_snapshot() {
+    let candidate = candidate();
+    let ledger = populated_ledger();
+    let before = ledger.clone();
+    let current_tip = ledger
+        .entries
+        .last()
+        .expect("populated ledger should have a tip")
+        .entry_digest
+        .clone();
+
+    let preview =
+        create_evidence_append_preview(&candidate, Some(&ledger)).expect("preview should build");
+
+    assert_eq!(ledger, before);
+    assert_eq!(
+        preview.transaction_preview.current_ledger_digest,
+        Some(current_tip)
+    );
+    assert_eq!(
+        preview
+            .transaction_preview
+            .projected_ledger_summary
+            .entry_count,
+        before.summary.entry_count + 1
+    );
+    assert_eq!(
+        preview.proposed_append_entries,
+        preview.transaction_preview.candidate_entries
+    );
+    assert!(preview.validation.valid, "{:?}", preview.validation.issues);
+    assert!(!preview.mutates_ledger());
+    assert!(!preview.mutates_evidence_ledger);
+    assert!(ledger.validate().valid);
 }
 
 #[test]
