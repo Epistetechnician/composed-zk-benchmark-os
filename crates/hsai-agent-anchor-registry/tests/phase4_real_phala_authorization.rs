@@ -114,4 +114,7 @@ fn accepted_real_phala_artifact_authorizes_phase4_registry_start() {
         ),
     }));
     assert!(PHASE_4_CLAIM_BOUNDARY.contains("not global software-agent uniqueness"));
+    assert_eq!(registry.active_count(), 1);
+    assert_eq!(registry.registered_count(), 1);
+    assert!(registry.validate_internal_state().is_ok());
 }
