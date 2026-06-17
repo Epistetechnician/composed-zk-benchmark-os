@@ -2,13 +2,16 @@ use std::fs;
 use std::path::Path;
 
 use zkbench_core::{
-    compute_recursion_envelope_digest_chain_root,
+    build_recursion_adapter_manual_handoff_bundle, compute_recursion_envelope_digest_chain_root,
+    deserialize_recursion_adapter_manual_handoff_bundle_json,
     deserialize_recursion_adapter_preparation_plan_json,
     deserialize_recursion_envelope_candidate_json,
+    serialize_recursion_adapter_manual_handoff_bundle_json,
     serialize_recursion_adapter_preparation_plan_json, serialize_recursion_envelope_candidate_json,
-    validate_recursion_adapter_preparation_plan, validate_recursion_envelope_candidate,
-    ArtifactDigest, ArtifactDigestAlgorithm, ArtifactKind, ArtifactRole, ClaimBoundary,
-    EvidenceClass, RecursionAdapterPreparationArtifact, RecursionAdapterPreparationArtifactRole,
+    validate_recursion_adapter_manual_handoff_bundle, validate_recursion_adapter_preparation_plan,
+    validate_recursion_envelope_candidate, ArtifactDigest, ArtifactDigestAlgorithm, ArtifactKind,
+    ArtifactRole, ClaimBoundary, EvidenceClass, ExternalExecutionMode, ManualHandoffStepKind,
+    RecursionAdapterPreparationArtifact, RecursionAdapterPreparationArtifactRole,
     RecursionAdapterPreparationIssueKind, RecursionAdapterPreparationPlan,
     RecursionAdapterPreparationTarget, RecursionEnvelopeCandidate, RecursionEnvelopeInputKind,
     RecursionEnvelopeInputRef, RecursionEnvelopeMetric, RecursionEnvelopeMetricKind,
@@ -188,6 +191,83 @@ fn adapter_preparation_plan_rejects_execution_and_path_escape() {
     assert!(kinds.contains(&RecursionAdapterPreparationIssueKind::ExecutableStepPresent));
     assert!(kinds.contains(&RecursionAdapterPreparationIssueKind::InvalidArtifactRef));
     assert!(kinds.contains(&RecursionAdapterPreparationIssueKind::MissingLimitation));
+}
+
+#[test]
+fn recursion_adapter_manual_handoff_builds_from_preparation_plan() {
+    let plan = preparation_plan();
+    let bundle =
+        build_recursion_adapter_manual_handoff_bundle(&plan).expect("handoff should build");
+
+    assert_eq!(bundle.mapping.preparation_plan_id, plan.plan_id);
+    assert_eq!(bundle.claim_boundary, ClaimBoundary::Level0DesignNote);
+    assert_eq!(
+        bundle.handoff_bundle.claim_boundary,
+        ClaimBoundary::Level0DesignNote
+    );
+    assert!(!bundle.emits_recursion_adapter_result);
+    assert!(!bundle.handoff_bundle.allows_live_execution());
+    assert!(bundle.handoff_bundle.contains_manual_instructions_only());
+    assert!(bundle
+        .handoff_bundle
+        .steps
+        .iter()
+        .any(|step| step.kind == ManualHandoffStepKind::RunExternalToolManually));
+
+    let validation = validate_recursion_adapter_manual_handoff_bundle(&bundle);
+    assert!(
+        validation.valid,
+        "validation errors: {:?}",
+        validation.issues
+    );
+}
+
+#[test]
+fn recursion_adapter_manual_handoff_round_trips_as_json() {
+    let plan = preparation_plan();
+    let bundle =
+        build_recursion_adapter_manual_handoff_bundle(&plan).expect("handoff should build");
+    let json = serialize_recursion_adapter_manual_handoff_bundle_json(&bundle)
+        .expect("handoff should serialize");
+    let parsed = deserialize_recursion_adapter_manual_handoff_bundle_json(&json)
+        .expect("handoff should deserialize");
+
+    assert_eq!(parsed, bundle);
+    assert!(!json.contains(concat!("Command", "::new")));
+    assert!(!json.contains("/tmp/"));
+    assert!(!json.contains("official benchmark evidence\": true"));
+}
+
+#[test]
+fn recursion_adapter_manual_handoff_rejects_invalid_preparation_plan() {
+    let mut plan = preparation_plan();
+    plan.executable_adapter_authorized = true;
+
+    let err = build_recursion_adapter_manual_handoff_bundle(&plan)
+        .expect_err("invalid prep metadata should reject handoff build");
+
+    assert!(err.to_string().contains("preparation plan is invalid"));
+}
+
+#[test]
+fn recursion_adapter_manual_handoff_validation_rejects_result_or_live_execution() {
+    let plan = preparation_plan();
+    let mut bundle =
+        build_recursion_adapter_manual_handoff_bundle(&plan).expect("handoff should build");
+    bundle.emits_recursion_adapter_result = true;
+    bundle.handoff_bundle.external_runner_policy.mode =
+        ExternalExecutionMode::FutureLiveExecutionNotImplemented;
+
+    let validation = validate_recursion_adapter_manual_handoff_bundle(&bundle);
+
+    assert!(!validation.valid);
+    assert!(validation.issues.iter().any(|issue| issue
+        .message
+        .contains("must not emit recursion adapter results")));
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.message.contains("live execution")));
 }
 
 #[test]
