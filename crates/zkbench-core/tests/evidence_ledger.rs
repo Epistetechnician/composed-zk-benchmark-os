@@ -1,8 +1,8 @@
 use tempfile::tempdir;
 use zkbench_core::{
     build_local_replay_manifest_for_instance, generate_instance, run_local_replay, ClaimBoundary,
-    EvidenceClass, EvidenceLedger, EvidenceRecord, GeneratorConfig, InstanceParams,
-    ProvenanceRecord,
+    EvidenceAppendPolicy, EvidenceClass, EvidenceLedger, EvidenceRecord, GeneratorConfig,
+    InstanceParams, ProvenanceRecord,
 };
 
 #[test]
@@ -103,4 +103,33 @@ fn evidence_ledger_rejects_level2_actual_evidence_in_phase_f() {
         .append(record)
         .expect_err("Phase F ledger must reject actual Level2 evidence");
     assert!(error.to_string().contains("exceeds Level1LocalReplay"));
+}
+
+#[test]
+fn future_metadata_policy_does_not_make_level2_actual_evidence_valid() {
+    let mut ledger = EvidenceLedger::new();
+    let record = EvidenceRecord {
+        evidence_class: EvidenceClass::ReproducibleBenchmarkArtifact,
+        claim_boundary: ClaimBoundary::Level2ReproducibleBenchmarkArtifact,
+        provenance: ProvenanceRecord {
+            source: "future-metadata-placeholder".to_string(),
+            captured_at: None,
+            command: None,
+            notes: vec!["future metadata only; not accepted Phase F evidence".to_string()],
+        },
+        artifact_digest: None,
+        notes: vec!["must remain invalid as actual evidence".to_string()],
+        backend_target: None,
+    };
+
+    ledger
+        .append_with_policy(record, EvidenceAppendPolicy::AllowFutureMetadata)
+        .expect("future metadata policy records the candidate for validation");
+
+    let validation = ledger.validate();
+    assert!(!validation.valid);
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.message.contains("exceeds Level1LocalReplay")));
 }
