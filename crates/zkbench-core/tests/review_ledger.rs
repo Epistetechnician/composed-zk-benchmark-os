@@ -122,6 +122,26 @@ fn review_ledger_rejects_artifact_claim_boundary_elevation() {
 }
 
 #[test]
+fn review_ledger_rejects_forbidden_claim_text_in_notes() {
+    let (decision, _) = reviewed_candidate_preview();
+    let mut ledger = EvidenceReviewLedger::new("phase_j_review_ledger");
+    ledger
+        .append_review_decision(decision)
+        .expect("decision append should work");
+    ledger
+        .notes
+        .push("this review ledger is official benchmark evidence".to_string());
+
+    let validation = ledger.validate();
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.path == "ledger.notes[2]"));
+}
+
+#[test]
 fn review_ledger_detects_digest_tampering() {
     let (decision, _) = reviewed_candidate_preview();
     let mut ledger = EvidenceReviewLedger::new("phase_j_review_ledger");
