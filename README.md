@@ -255,7 +255,8 @@ Surface DSL
 ## Next Implementation Slice
 
 For the benchmark OS track, Phase M inert local recursion-envelope contract
-implementation and adapter-preparation metadata exist; see
+implementation, adapter-preparation metadata, and manual handoff mapping exist;
+see
 [docs/63-phase-m-recursion-envelope-stress-spec.md](docs/63-phase-m-recursion-envelope-stress-spec.md).
 The next Phase M slice must be explicitly authorized before executable work. It
 must not run live gnark, clone external repos, import external results, emit

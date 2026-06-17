@@ -8,10 +8,11 @@ adapter-preparation metadata.
 This phase defines the recursion-envelope stress lane after Phase L local soak
 acceptance. The current implementation slice includes local Rust data types,
 serialization helpers, validation results, claim-boundary tests, fixture-backed
-validation checks, and adapter-preparation metadata only. It does not authorize
-live gnark execution, Go code, external repository checkout, external result
-import, benchmark outputs, official benchmark evidence, Level2+ evidence
-creation, or any claim that a recursion proof is semantic proof.
+validation checks, adapter-preparation metadata, and manual handoff mapping
+metadata only. It does not authorize live gnark execution, Go code, external
+repository checkout, external result import, benchmark outputs, official
+benchmark evidence, Level2+ evidence creation, or any claim that a recursion
+proof is semantic proof.
 
 The current authorized state slice is:
 
@@ -138,6 +139,19 @@ references, claim boundaries above `Level0DesignNote`, executable adapter
 authorization, executable step lists, and missing recursion-proof limitation
 text.
 
+The manual handoff mapping slice adds:
+
+- `RecursionAdapterManualHandoffBundle`;
+- `RecursionAdapterManualHandoffMapping`;
+- `build_recursion_adapter_manual_handoff_bundle`;
+- `validate_recursion_adapter_manual_handoff_bundle`.
+
+This slice reuses the existing external-runner `ManualHandoffBundle` contract
+for future reviewed recursion-adapter work. It emits manual-only instructions,
+uses `ManualHandoffOnly` policy, keeps exports and mappings at
+`Level0DesignNote`, emits no recursion-adapter result, and rejects live
+execution or result-emission mutation.
+
 ## Required Negative Tests
 
 Future implementation must reject:
@@ -152,6 +166,10 @@ Future implementation must reject:
   before executable adapter authorization;
 - append preview treated as accepted evidence;
 - Level2 eligibility report treated as Level2 evidence.
+- manual handoff metadata that enables live execution;
+- manual handoff metadata that emits a recursion-adapter result;
+- manual handoff metadata that raises its mapping or export above
+  `Level0DesignNote`.
 
 ## Non-Goals
 
@@ -168,7 +186,7 @@ Future implementation must reject:
 ## Implemented Slice
 
 The implemented Phase M slice is local Rust contract types, adapter-preparation
-metadata, and validation tests only:
+metadata, manual handoff metadata, and validation tests only:
 
 ```text
 RecursionEnvelopeCandidate
@@ -179,6 +197,7 @@ metric-label absence tests
 fixture-backed valid and invalid candidate checks
 source-scan checks for forbidden executable-adapter hooks
 adapter-preparation metadata and validation tests
+manual handoff mapping and validation tests
 ```
 
 This slice still avoids live gnark execution and does not produce benchmark
