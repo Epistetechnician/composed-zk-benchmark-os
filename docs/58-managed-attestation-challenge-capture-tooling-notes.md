@@ -11,7 +11,7 @@ network, does not verify quotes, does not verify managed-service signatures, and
 does not create real attestation evidence.
 
 The output remains capture input only. It is not proof, not benchmark evidence,
-not backend execution evidence, and not Phase 4 authorization.
+not backend execution evidence, and not independent Phase 4 authorization.
 
 ## State Slice
 
@@ -83,7 +83,7 @@ The local tests cover:
 - RA-4 wrong case-hash rejection;
 - challenge-id tamper rejection;
 - RA-5 managed-verifier trust-root disclosure through the capture manifest;
-- RA-6 Phase 4 still blocked without a real accepted artifact.
+- RA-6 Phase 4 precondition fails without a real accepted artifact.
 
 ## Next Step
 
@@ -97,6 +97,6 @@ operator-facing preflight example that emits the challenge packet and capture
 manifest from fixed sample inputs. Both are capture inputs only and must not be
 treated as attestation evidence.
 
-Do not fabricate the artifact. Do not commit secrets. Do not build
-`crates/hsai-agent-anchor-registry` until a real HSAI-owned artifact passes the
-validator.
+Do not fabricate the artifact. Do not commit secrets. The accepted 2026-06-16
+real HSAI-owned artifact is the sole authorization source for
+`crates/hsai-agent-anchor-registry`.

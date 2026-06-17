@@ -5,7 +5,8 @@
 //! dstack `reportData` field via `getQuote`, and capturing the non-secret
 //! artifact bundle. It is local regression evidence that the HSAI binding
 //! mechanism works against real TDX hardware. It is not proof, not benchmark
-//! evidence, not backend execution evidence, and not Phase 4 authorization.
+//! evidence, not backend execution evidence, and not broader Phase 4 evidence
+//! beyond the bounded anchor-registry start condition.
 //!
 //! The agent keypair is a real P-256 key generated for this capture. The private
 //! key is not in the repo. Hardware authenticity is managed-verifier only;

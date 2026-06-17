@@ -3,8 +3,10 @@
 ## Status And Claim Boundary
 
 This is the implementation spec for Phase 4 of the managed-attestation track. It
-must not start until Phase 3 has demonstrated at least one real hardware-backed
-attestation backend that can close an existing distinct-agent assumption.
+could not start until Phase 3 demonstrated at least one real hardware-backed
+attestation backend that can close an existing distinct-agent assumption. The
+2026-06-16 HSAI-owned Phala/dstack artifact acceptance satisfies that start
+condition for this bounded local crate.
 
 This phase does not claim global uniqueness of software agents. Software is
 copyable. The strongest honest claim is:

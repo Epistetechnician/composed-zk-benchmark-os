@@ -138,15 +138,16 @@ Surface DSL
 | [docs/49-pure-data-adversarial-harness-spec.md](docs/49-pure-data-adversarial-harness-spec.md) | Pure-data adversarial harness spec. |
 | [docs/50-phala-attestation-backend-spec.md](docs/50-phala-attestation-backend-spec.md) | Phala attestation backend spec. |
 | [docs/51-managed-attestation-phase1-integration-notes.md](docs/51-managed-attestation-phase1-integration-notes.md) | Managed-attestation Phase 1 integration notes. |
-| [docs/51-proof-of-agent-anchor-registry-spec.md](docs/51-proof-of-agent-anchor-registry-spec.md) | Blocked Phase 4 proof-of-agent anchor registry spec. |
+| [docs/51-proof-of-agent-anchor-registry-spec.md](docs/51-proof-of-agent-anchor-registry-spec.md) | Phase 4 proof-of-agent anchor registry spec. |
 | [docs/52-managed-attestation-phase2-harness-notes.md](docs/52-managed-attestation-phase2-harness-notes.md) | Managed-attestation Phase 2 harness notes. |
 | [docs/53-managed-attestation-phase3-phala-fixture-notes.md](docs/53-managed-attestation-phase3-phala-fixture-notes.md) | Managed-attestation Phase 3 Phala fixture notes. |
-| [docs/54-proof-of-agent-anchor-phase4-boundary-note.md](docs/54-proof-of-agent-anchor-phase4-boundary-note.md) | Boundary note blocking Phase 4 until real artifact evidence exists. |
+| [docs/54-proof-of-agent-anchor-phase4-boundary-note.md](docs/54-proof-of-agent-anchor-phase4-boundary-note.md) | Boundary note recording Phase 4 authorization after real artifact acceptance. |
 | [docs/55-real-phala-artifact-handoff.md](docs/55-real-phala-artifact-handoff.md) | Real Phala artifact handoff requirements. |
 | [docs/56-managed-attestation-phase3-captured-artifact-notes.md](docs/56-managed-attestation-phase3-captured-artifact-notes.md) | Managed-attestation captured artifact validation notes. |
 | [docs/57-managed-attestation-real-artifact-promotion-spec.md](docs/57-managed-attestation-real-artifact-promotion-spec.md) | HSAI-owned real artifact promotion spec for Phase 3. |
 | [docs/58-managed-attestation-challenge-capture-tooling-notes.md](docs/58-managed-attestation-challenge-capture-tooling-notes.md) | Managed-attestation challenge packet and capture workflow tooling notes. |
 | [docs/59-operator-capture-runbook.md](docs/59-operator-capture-runbook.md) | Operator capture runbook for repo-external Phala/dstack artifact capture. |
+| [docs/60-proof-of-agent-anchor-registry-phase-notes.md](docs/60-proof-of-agent-anchor-registry-phase-notes.md) | Phase 4 proof-of-agent anchor registry implementation notes. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -211,8 +212,13 @@ Surface DSL
   Phala/dstack artifact has been captured and accepted under this spec
   (2026-06-16); see
   [docs/57-managed-attestation-real-artifact-promotion-spec.md](docs/57-managed-attestation-real-artifact-promotion-spec.md).
-  The acceptance is managed-verifier local regression evidence only and does
-  not authorize Phase 4.
+  The acceptance is managed-verifier local regression evidence only. It
+  authorizes only the bounded Phase 4 anchor-registry crate and no stronger
+  attestation or uniqueness claim.
+- `hsai-agent-anchor-registry` implements the Phase 4 local Proof of Agent
+  anchor registry. It records one active HSAI identity per accepted,
+  non-reused registered anchor set; it does not prove global software-agent
+  uniqueness.
 - Managed-attestation challenge packet tooling exists for local, non-secret
   capture preflight. It creates capture inputs only, not real attestation
   evidence. The operator-facing preflight example
@@ -250,8 +256,8 @@ challenge packet tooling. The fixture
 (`crates/hsai-attestation-phala/tests/fixtures/phala_hsai_owned_real_2026_06_16.json`)
 and integration test
 (`crates/hsai-attestation-phala/tests/phala_hsai_owned_real.rs`) are local
-regression evidence only. Phase 4 `crates/hsai-agent-anchor-registry` may be
-reconsidered only under the Phase 4 Recheck Rule in
+regression evidence only. Phase 4 `crates/hsai-agent-anchor-registry` is now
+authorized and implemented under the Phase 4 Recheck Rule in
 [docs/57-managed-attestation-real-artifact-promotion-spec.md](docs/57-managed-attestation-real-artifact-promotion-spec.md).
 
 ## Non-Goals
@@ -275,11 +281,11 @@ Synthetic result candidates are not benchmark results. Evidence append proposals
 Local soak telemetry is not official benchmark evidence. Internal timing telemetry is not ZK backend performance. Failure corpus entries are reproduction aids, not accepted evidence. Future agents must not use soak timing as prover/verifier timing.
 
 Managed-attestation captured artifact validation is not proof, not benchmark
-evidence, not local DCAP quote verification, and not Phase 4 authorization.
-Phase 57 requires an HSAI-owned fresh challenge before any real-artifact
-promotion claim.
+evidence, and not local DCAP quote verification. The first accepted
+HSAI-owned real artifact authorizes only the bounded Phase 4 anchor-registry
+crate.
 Managed-attestation challenge packets and capture manifests are capture inputs
-only, not attestation evidence or Phase 4 authorization.
+only, not attestation evidence or independent Phase 4 authorization.
 
 ## Validation Checklist
 
