@@ -104,6 +104,24 @@ fn review_ledger_detects_stale_cached_summary() {
 }
 
 #[test]
+fn review_ledger_rejects_artifact_claim_boundary_elevation() {
+    let (decision, _) = reviewed_candidate_preview();
+    let mut ledger = EvidenceReviewLedger::new("phase_j_review_ledger");
+    ledger
+        .append_review_decision(decision)
+        .expect("decision append should work");
+    ledger.claim_boundary = ClaimBoundary::Level1LocalReplay;
+
+    let validation = ledger.validate();
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.path == "ledger.claim_boundary"));
+}
+
+#[test]
 fn review_ledger_detects_digest_tampering() {
     let (decision, _) = reviewed_candidate_preview();
     let mut ledger = EvidenceReviewLedger::new("phase_j_review_ledger");
