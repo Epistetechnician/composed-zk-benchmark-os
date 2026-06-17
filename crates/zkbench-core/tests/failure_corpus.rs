@@ -1,8 +1,8 @@
 use zkbench_core::{
     build_failure_corpus_entry, deserialize_failure_corpus_index_json,
     serialize_failure_corpus_index_json, validate_failure_corpus_index, ClaimBoundary,
-    FailureCorpus, FailureCorpusEntryInput, FailureCorpusKind, FailureTriageStatus, FamilyKind,
-    GeneratorTunables, MutationClass, SoakShardId,
+    FailureArtifactRef, FailureCorpus, FailureCorpusEntryInput, FailureCorpusKind,
+    FailureTriageStatus, FamilyKind, GeneratorTunables, MutationClass, SoakShardId,
 };
 
 fn sample_entry(
@@ -204,4 +204,38 @@ fn failure_corpus_rejects_explicit_trace_manifest_drift() {
         .expect_err("manifest trace selection drift should be rejected");
 
     assert!(error.to_string().contains("trace selection"));
+}
+
+#[test]
+fn failure_corpus_rejects_empty_artifact_refs() {
+    let mut corpus = FailureCorpus::empty("empty_artifact_ref_failure_corpus");
+    corpus.push(sample_entry(
+        "case_empty_artifact_ref",
+        FailureCorpusKind::ReplayFailure,
+    ));
+    corpus.index.entries[0]
+        .artifact_refs
+        .push(FailureArtifactRef {
+            relative_path: String::new(),
+            role: "local_replay_manifest".to_string(),
+            notes: Vec::new(),
+        });
+
+    let error = validate_failure_corpus_index(&corpus.index)
+        .expect_err("empty artifact ref path should be rejected");
+    assert!(error.to_string().contains("relative path"));
+
+    corpus.index.entries[0].artifact_refs.clear();
+    corpus.index.entries[0]
+        .reproduction_manifest
+        .artifact_refs
+        .push(FailureArtifactRef {
+            relative_path: "replay/manifest.json".to_string(),
+            role: String::new(),
+            notes: Vec::new(),
+        });
+
+    let error = validate_failure_corpus_index(&corpus.index)
+        .expect_err("empty reproduction artifact ref role should be rejected");
+    assert!(error.to_string().contains("role"));
 }

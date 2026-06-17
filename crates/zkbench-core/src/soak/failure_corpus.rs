@@ -423,6 +423,18 @@ pub fn build_failure_corpus_entry(input: FailureCorpusEntryInput) -> FailureCorp
 }
 
 fn validate_failure_artifact_ref(artifact_ref: &FailureArtifactRef) -> Result<()> {
+    if artifact_ref.relative_path.trim().is_empty() {
+        return Err(ZkBenchError::soak(
+            "soak.failure_corpus.artifact_ref.relative_path",
+            "failure artifact refs must have a relative path",
+        ));
+    }
+    if artifact_ref.role.trim().is_empty() {
+        return Err(ZkBenchError::soak(
+            "soak.failure_corpus.artifact_ref.role",
+            "failure artifact refs must have a role",
+        ));
+    }
     if artifact_ref.relative_path.starts_with('/')
         || artifact_ref.relative_path.contains("..")
         || artifact_ref.relative_path.contains('\\')
