@@ -18,6 +18,7 @@ use super::proposal::{
     validate_evidence_append_proposal, EvidenceAppendProposal, EvidenceAppendProposalReviewState,
     EvidenceAppendProposalStatus,
 };
+use super::validation::contains_forbidden_claim_text;
 
 /// Alias for proposal ledger entry digests.
 pub type EvidenceAppendProposalDigest = ArtifactDigest;
@@ -195,6 +196,16 @@ impl EvidenceAppendProposalLedger {
     /// Validate the local digest chain and proposal boundaries.
     pub fn validate(&self) -> EvidenceAppendProposalLedgerValidation {
         let mut issues = Vec::new();
+        for (index, note) in self.notes.iter().enumerate() {
+            if contains_forbidden_claim_text(note) {
+                issues.push(EvidenceAppendProposalLedgerValidationIssue {
+                    sequence_number: self.entries.len() as u64,
+                    message: format!(
+                        "proposal ledger notes[{index}] contain forbidden claim language"
+                    ),
+                });
+            }
+        }
         let mut previous_digest = None;
         for (index, entry) in self.entries.iter().enumerate() {
             if entry.sequence_number != index as u64 {

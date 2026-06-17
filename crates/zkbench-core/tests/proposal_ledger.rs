@@ -88,6 +88,25 @@ fn proposal_ledger_detects_stale_cached_summary() {
 }
 
 #[test]
+fn proposal_ledger_rejects_forbidden_claim_text_in_notes() {
+    let mut ledger = EvidenceAppendProposalLedger::new();
+    ledger
+        .append(proposal())
+        .expect("proposal append should work");
+    ledger
+        .notes
+        .push("this proposal ledger is official benchmark evidence".to_string());
+
+    let validation = ledger.validate();
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.message.contains("notes[2]")));
+}
+
+#[test]
 fn proposal_ledger_persists_as_json() {
     let mut ledger = EvidenceAppendProposalLedger::new();
     ledger
