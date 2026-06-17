@@ -2,11 +2,12 @@ use tempfile::tempdir;
 use zkbench_core::{
     attach_reproduction_bundle_to_pack, build_failure_corpus_entry, build_smoke_soak_config,
     generate_instance, plan_soak_shards, read_reproduction_bundle_from_pack, run_soak_campaign,
-    validate_soak_campaign_config, validate_soak_report_bundle, BenchmarkPackReader,
-    BenchmarkPackWriter, ClaimBoundary, FailureCorpusEntryInput, FailureCorpusKind, FamilyKind,
-    GeneratorConfig, GeneratorTunables, InstanceParams, LocalSoakRunnerConfig, MutationClass,
-    SoakArtifactRole, SoakCampaignApproval, SoakCampaignArtifactRootPolicy, SoakCampaignConfig,
-    SoakOutputPolicy, SoakShardId,
+    soak_artifact_manifest, validate_soak_campaign_config, validate_soak_report_bundle,
+    BenchmarkPackReader, BenchmarkPackWriter, ClaimBoundary, FailureCorpusEntryInput,
+    FailureCorpusKind, FamilyKind, GeneratorConfig, GeneratorTunables, InstanceParams,
+    LocalSoakRunnerConfig, MutationClass, SoakArtifactLayout, SoakArtifactRole,
+    SoakCampaignApproval, SoakCampaignArtifactRootPolicy, SoakCampaignConfig, SoakOutputPolicy,
+    SoakShardId,
 };
 
 fn sample_entry(case_id: &str) -> zkbench_core::FailureCorpusEntry {
@@ -108,6 +109,36 @@ fn campaign_config_requires_approval_and_safe_artifact_root() {
 
     config.artifact_root_policy.artifact_root = "relative/dir".into();
     assert!(validate_soak_campaign_config(&config).is_err());
+}
+
+#[test]
+fn soak_artifact_paths_are_portable_and_relative() {
+    let shard_id = SoakShardId::from_index(3);
+    let layout = SoakArtifactLayout::for_shard(&shard_id);
+    assert!(layout.uses_relative_paths_only());
+
+    let manifest = soak_artifact_manifest(
+        "telemetry_shard_3",
+        SoakArtifactRole::Telemetry,
+        &layout.telemetry_path,
+        &layout,
+    )
+    .expect("documented layout path should be accepted");
+    assert_eq!(manifest.relative_path, layout.telemetry_path);
+    assert_eq!(manifest.claim_boundary, ClaimBoundary::Level0DesignNote);
+
+    for bad_path in [
+        "",
+        "/tmp/telemetry.json",
+        "../telemetry.json",
+        "shards/../telemetry.json",
+        "shards\\telemetry.json",
+    ] {
+        let error =
+            soak_artifact_manifest("bad_path", SoakArtifactRole::Telemetry, bad_path, &layout)
+                .expect_err("non-portable artifact paths should be rejected");
+        assert!(error.to_string().contains("portable and relative"));
+    }
 }
 
 #[test]
