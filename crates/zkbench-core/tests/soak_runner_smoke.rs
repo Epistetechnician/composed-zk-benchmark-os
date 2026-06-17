@@ -1,8 +1,8 @@
 use tempfile::tempdir;
 use zkbench_core::{
-    build_smoke_soak_config, plan_soak_shards, ClaimBoundary, FamilyKind, LocalSoakRunner,
-    MockTelemetryClock, MutationClass, SoakCaseStatus, SoakHealthStatus, SoakOutputPolicy,
-    SoakShardId,
+    build_smoke_soak_config, plan_soak_shards, ClaimBoundary, FailureCorpusKind, FamilyKind,
+    LocalSoakRunner, MockTelemetryClock, MutationClass, SoakCaseStatus, SoakHealthStatus,
+    SoakOutputPolicy, SoakShardId,
 };
 
 #[test]
@@ -85,4 +85,64 @@ fn smoke_run_outputs_no_external_or_zk_harness_result_claims() {
         result.failure_corpus_index.claim_boundary,
         ClaimBoundary::Level0DesignNote
     );
+}
+
+#[test]
+fn default_smoke_scope_runs_all_implemented_families_without_generation_failures() {
+    let config = build_smoke_soak_config()
+        .with_seed_range(0..1)
+        .with_shard_count(1)
+        .with_output_policy(SoakOutputPolicy::NoPacks);
+    let plan = plan_soak_shards(config).expect("default all-family plan should build");
+    let mut runner = LocalSoakRunner::new(plan).with_clock(MockTelemetryClock::default());
+
+    let result = runner
+        .run_shard(SoakShardId::from_index(0))
+        .expect("default all-family smoke run should complete");
+
+    assert_eq!(
+        result
+            .telemetry_report
+            .snapshot
+            .counters
+            .generated_instance_count,
+        3
+    );
+    assert!(!result
+        .failure_corpus_index
+        .entries
+        .iter()
+        .any(|entry| entry.failure_kind == FailureCorpusKind::GenerationFailure));
+}
+
+#[test]
+fn targetless_mutation_combination_is_counted_not_failed() {
+    let config = build_smoke_soak_config()
+        .with_families(vec![FamilyKind::BranchingFsm])
+        .with_mutation_passes(vec![MutationClass::BadCounters])
+        .with_seed_range(0..1)
+        .with_shard_count(1)
+        .with_output_policy(SoakOutputPolicy::NoPacks);
+    let plan = plan_soak_shards(config).expect("branching fsm bad-counters plan should build");
+    let mut runner = LocalSoakRunner::new(plan).with_clock(MockTelemetryClock::default());
+
+    let result = runner
+        .run_shard(SoakShardId::from_index(0))
+        .expect("targetless local mutation should not fail the shard");
+
+    assert_eq!(result.shard_summary.progress.failed_cases, 0);
+    assert_eq!(
+        result
+            .telemetry_report
+            .snapshot
+            .counters
+            .mutation_no_target_count,
+        1
+    );
+    assert_eq!(result.telemetry_report.snapshot.counters.failure_count, 0);
+    assert!(result.failure_corpus_index.entries.is_empty());
+    assert!(result.case_results.iter().all(|case| matches!(
+        case.status,
+        SoakCaseStatus::Completed | SoakCaseStatus::CompletedWithLocalRejections
+    )));
 }

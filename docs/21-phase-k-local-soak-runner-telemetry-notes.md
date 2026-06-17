@@ -62,6 +62,10 @@ A benchmark pass is not proof. Local replay is not official benchmark evidence. 
 
 Default limits are small. `NightlyLocal` requires explicit opt-in and larger explicit limits. Tests use only tiny smoke-like profiles. Long local soak jobs must run only with explicit user approval.
 
+The default soak scope selects all implemented v0 families and uses shared generator tunables that are valid for each selected family. `BranchingFsm` needs at least four states so it can form `start`, two branch states, and `final`; default soak tunables therefore use `state_count = 4` and `trace_length = 3`.
+
+Targetless local mutation combinations are applicability telemetry, not failure evidence. For example, `BadCounters` requires an accepted trace action with an integer counter update, so a `BranchingFsm` case that lacks that target increments `mutation_no_target_count` without adding a failure-corpus entry or failing the case.
+
 ## Deterministic Sharding Summary
 
 Shard planning uses stable case ids derived from family kind and seed, sorted case order, and deterministic index partitioning. Shard ids use `shard-0000` style ids. Shard manifests include the source config digest, assigned case ids, expected case count, output policy, claim boundary, resume token, and relative artifact refs.
