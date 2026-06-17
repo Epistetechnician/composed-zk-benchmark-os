@@ -1,8 +1,9 @@
 use zkbench_core::{
     create_evidence_append_preview, create_evidence_record_candidate,
     deserialize_evidence_review_ledger_json, review_evidence_append_proposal,
-    serialize_evidence_review_ledger_json, EvidenceAcceptancePolicy, EvidenceReviewChecklist,
-    EvidenceReviewDecisionKind, EvidenceReviewLedger, EvidenceReviewerRole,
+    serialize_evidence_review_ledger_json, ClaimBoundary, EvidenceAcceptancePolicy,
+    EvidenceReviewChecklist, EvidenceReviewDecisionKind, EvidenceReviewLedger,
+    EvidenceReviewerRole,
 };
 
 fn proposal() -> zkbench_core::EvidenceAppendProposal {
@@ -63,6 +64,21 @@ fn review_ledger_records_decision_and_preview() {
     let json = serialize_evidence_review_ledger_json(&ledger).expect("ledger should serialize");
     let parsed = deserialize_evidence_review_ledger_json(&json).expect("ledger should deserialize");
     assert_eq!(ledger, parsed);
+}
+
+#[test]
+fn review_ledger_rejects_invalid_append_preview_before_append() {
+    let (_, mut preview) = reviewed_candidate_preview();
+    preview.claim_boundary = ClaimBoundary::Level1LocalReplay;
+    let mut ledger = EvidenceReviewLedger::new("phase_j_review_ledger");
+
+    let error = ledger
+        .append_append_preview(preview)
+        .expect_err("invalid nested append preview should be rejected");
+
+    assert!(error.to_string().contains("append preview invalid"));
+    assert!(ledger.entries.is_empty());
+    assert_eq!(ledger.summary.entry_count, 0);
 }
 
 #[test]
