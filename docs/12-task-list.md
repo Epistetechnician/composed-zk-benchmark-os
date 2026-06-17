@@ -230,17 +230,29 @@ Future exit criteria after explicit implementation approval: recursion outcomes 
 
 ## Phase N: Narrow zkML Adapter
 
+Status: opened for docs-first boundary contract only. See `docs/64-phase-n-narrow-zkml-adapter-spec.md`.
+
 Goal: Add mixed control-flow and zkML workload metrics.
 
-Deliverables: manifest shape and narrow adapter.
+Implemented: narrow zkML/control-flow adapter spec, input contract, candidate
+metric labels, validation rules, negative tests, and claim-boundary
+restrictions.
+
+Future deliverables after explicit implementation approval: inert manifest
+contract types, local validation tests, and manual handoff metadata. Executable
+zkML adapter work requires a separate explicit phase.
 
 Dependencies: Phase L and future explicit adapter approval.
 
-Validation gate: manifest validation and one workload replay.
+Validation gate: docs and claim-boundary scans for this docs-first slice.
+Future Rust slices require local contract validation tests, serialization
+round-trips, and source scans that keep executable adapter work absent.
 
 Anti-goals: becoming a zkML benchmark project.
 
-Exit criteria: zkML metrics are normalized and claim-capped.
+Exit criteria for docs-first opening: Phase N spec exists and keeps zkML metrics
+as metadata only. Future exit criteria after explicit implementation approval:
+zkML metrics are normalized and claim-capped.
 
 ## Phase O: Reproducible Benchmark Packs
 
