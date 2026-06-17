@@ -2,8 +2,8 @@ use std::collections::BTreeSet;
 
 use zkbench_core::{
     build_smoke_soak_config, deserialize_soak_shard_manifest_json, plan_soak_shards,
-    serialize_soak_shard_manifest_json, validate_soak_shard_manifest, ClaimBoundary, FamilyKind,
-    MutationClass,
+    serialize_soak_shard_manifest_json, validate_soak_shard_manifest, validate_soak_shard_summary,
+    ClaimBoundary, FamilyKind, MutationClass, SoakShardProgress, SoakShardStatus, SoakShardSummary,
 };
 
 #[test]
@@ -139,4 +139,72 @@ fn shard_manifest_rejects_empty_artifact_refs() {
         .issues
         .iter()
         .any(|issue| issue.message.contains("artifact ref is empty")));
+}
+
+#[test]
+fn shard_summary_validates_status_and_progress_consistency() {
+    let summary = SoakShardSummary {
+        shard_id: zkbench_core::SoakShardId::from_index(0),
+        status: SoakShardStatus::Completed,
+        progress: SoakShardProgress {
+            total_cases: 2,
+            completed_cases: 2,
+            failed_cases: 0,
+            skipped_cases: 1,
+        },
+        claim_boundary: ClaimBoundary::Level0DesignNote,
+        notes: Vec::new(),
+    };
+
+    let validation = validate_soak_shard_summary(&summary);
+
+    assert!(validation.valid, "summary issues: {:?}", validation.issues);
+}
+
+#[test]
+fn shard_summary_rejects_impossible_status_and_progress() {
+    let mut summary = SoakShardSummary {
+        shard_id: zkbench_core::SoakShardId::from_index(0),
+        status: SoakShardStatus::Completed,
+        progress: SoakShardProgress {
+            total_cases: 2,
+            completed_cases: 1,
+            failed_cases: 1,
+            skipped_cases: 0,
+        },
+        claim_boundary: ClaimBoundary::Level0DesignNote,
+        notes: Vec::new(),
+    };
+
+    let validation = validate_soak_shard_summary(&summary);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.message.contains("failed cases")));
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.message.contains("complete all cases")));
+
+    summary.status = SoakShardStatus::CompletedWithFailures;
+    summary.progress.failed_cases = 0;
+    let validation = validate_soak_shard_summary(&summary);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.message.contains("must report failed cases")));
+
+    summary.status = SoakShardStatus::Planned;
+    summary.progress.completed_cases = 1;
+    let validation = validate_soak_shard_summary(&summary);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.message.contains("cannot report progress")));
 }
