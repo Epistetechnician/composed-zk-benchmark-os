@@ -20,6 +20,8 @@ README.md
 AGENTS.md
 crates/zkbench-core/src/recursion.rs
 crates/zkbench-core/tests/phase_m_recursion_envelope.rs
+crates/zkbench-core/tests/fixtures/phase_m_recursion_envelope_valid.json
+crates/zkbench-core/tests/fixtures/phase_m_recursion_envelope_invalid.json
 ```
 
 All Phase M Rust artifacts are inert local contract data until a future explicit
@@ -114,6 +116,13 @@ Phase M implementation validates:
 - recursion aggregation cannot hide rejected, quarantined, or inconclusive
   input state.
 
+The validation-hardening slice adds fixture-backed JSON checks for one valid
+local envelope candidate and one fail-closed invalid candidate. It also scans
+the Phase M Rust contract file, Phase M integration test, and Phase M JSON
+fixtures for executable-adapter affordances such as process spawning, network
+socket/client markers, Go runner markers, external clone markers, gnark prove or
+verify markers, and forbidden pre-authorization performance metric labels.
+
 ## Required Negative Tests
 
 Future implementation must reject:
@@ -152,6 +161,8 @@ RecursionEnvelopeInputRef
 RecursionEnvelopeValidation
 claim-boundary non-escalation tests
 metric-label absence tests
+fixture-backed valid and invalid candidate checks
+source-scan checks for forbidden executable-adapter hooks
 ```
 
 This slice still avoids live gnark execution and does not produce benchmark

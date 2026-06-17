@@ -1,0 +1,69 @@
+{
+  "envelope_id": "phase_m_envelope_candidate",
+  "version": {
+    "value": "phase-m-recursion-envelope-v0"
+  },
+  "inputs": [
+    {
+      "input_id": "replay_manifest",
+      "artifact_uri": "artifacts/replay_manifest.json",
+      "kind": "LocalReplayManifest",
+      "digest": {
+        "algorithm": "Sha256",
+        "hex_digest": "0101010101010101010101010101010101010101010101010101010101010101",
+        "byte_len": 64,
+        "kind": "Other",
+        "role": "Digest"
+      },
+      "evidence_class": "LocalReplay",
+      "claim_boundary": "Level1LocalReplay",
+      "notes": []
+    },
+    {
+      "input_id": "append_preview",
+      "artifact_uri": "artifacts/append_preview.json",
+      "kind": "EvidenceAppendPreview",
+      "digest": {
+        "algorithm": "Sha256",
+        "hex_digest": "0202020202020202020202020202020202020202020202020202020202020202",
+        "byte_len": 64,
+        "kind": "Other",
+        "role": "Digest"
+      },
+      "evidence_class": "DesignNote",
+      "claim_boundary": "Level0DesignNote",
+      "notes": []
+    }
+  ],
+  "recursion_depth": 2,
+  "aggregation_width": 2,
+  "digest_chain_root": {
+    "algorithm": "Sha256",
+    "hex_digest": "2b9b26de0187321ae9ad45ad648cda606670ffefa7b4711aa8a20960eb3bbeda",
+    "byte_len": 687,
+    "kind": "Other",
+    "role": "Digest"
+  },
+  "verifier_acceptance_status": null,
+  "executable_adapter_authorized": false,
+  "metrics": [
+    {
+      "kind": "RecursionDepth",
+      "value": 2,
+      "claim_boundary": "Level0DesignNote",
+      "notes": []
+    },
+    {
+      "kind": "EnvelopeInputCount",
+      "value": 2,
+      "claim_boundary": "Level0DesignNote",
+      "notes": []
+    }
+  ],
+  "output_claim_boundary": "Level0DesignNote",
+  "limitations": [
+    "recursion proof is not semantic proof",
+    "local replay remains local replay"
+  ],
+  "notes": []
+}
