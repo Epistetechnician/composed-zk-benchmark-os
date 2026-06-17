@@ -191,6 +191,31 @@ pub fn validate_soak_report_bundle(bundle: &SoakReportBundle) -> SoakReportBundl
     if bundle.shard_plan.claim_boundary != ClaimBoundary::Level0DesignNote {
         issues.push("shard plan must remain Level0DesignNote".to_string());
     }
+    let shard_count = bundle.shard_manifests.len();
+    push_bundle_count_issue(
+        "shard_plan.shard_manifests",
+        bundle.shard_plan.shard_manifests.len(),
+        shard_count,
+        &mut issues,
+    );
+    push_bundle_count_issue(
+        "telemetry_reports",
+        bundle.telemetry_reports.len(),
+        shard_count,
+        &mut issues,
+    );
+    push_bundle_count_issue(
+        "health_reports",
+        bundle.health_reports.len(),
+        shard_count,
+        &mut issues,
+    );
+    push_bundle_count_issue(
+        "failure_corpus_indexes",
+        bundle.failure_corpus_indexes.len(),
+        shard_count,
+        &mut issues,
+    );
     for (index, report) in bundle.telemetry_reports.iter().enumerate() {
         if let Err(error) = validate_soak_telemetry_report(report) {
             issues.push(format!("telemetry_reports[{index}] invalid: {error}"));
@@ -240,6 +265,19 @@ pub fn validate_soak_report_bundle(bundle: &SoakReportBundle) -> SoakReportBundl
     SoakReportBundleValidation {
         valid: issues.is_empty(),
         issues,
+    }
+}
+
+fn push_bundle_count_issue(
+    path: &'static str,
+    actual: usize,
+    expected: usize,
+    issues: &mut Vec<String>,
+) {
+    if actual != expected {
+        issues.push(format!(
+            "{path} count {actual} does not match shard manifest count {expected}"
+        ));
     }
 }
 
