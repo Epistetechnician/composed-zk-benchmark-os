@@ -148,6 +148,8 @@ Surface DSL
 | [docs/58-managed-attestation-challenge-capture-tooling-notes.md](docs/58-managed-attestation-challenge-capture-tooling-notes.md) | Managed-attestation challenge packet and capture workflow tooling notes. |
 | [docs/59-operator-capture-runbook.md](docs/59-operator-capture-runbook.md) | Operator capture runbook for repo-external Phala/dstack artifact capture. |
 | [docs/60-proof-of-agent-anchor-registry-phase-notes.md](docs/60-proof-of-agent-anchor-registry-phase-notes.md) | Phase 4 proof-of-agent anchor registry implementation notes. |
+| [docs/61-phase-l-qwable-autoresearch-contract.md](docs/61-phase-l-qwable-autoresearch-contract.md) | Phase L local autoresearch soak contract and guardrails. |
+| [docs/62-phase-l-local-soak-acceptance-notes.md](docs/62-phase-l-local-soak-acceptance-notes.md) | Phase L bounded local soak acceptance notes. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -201,6 +203,10 @@ Surface DSL
 - Internal benchmark OS telemetry exists for generation, mutation, local oracle, local replay, pack read/write, proposal-preview counters, and local runner duration.
 - Local health report models exist and warn that local soak telemetry is not official benchmark evidence.
 - Failure corpus extraction exists with reproduction manifests and minimization metadata only.
+- Phase L bounded local soak acceptance exists for
+  `phase_l_qwable_local_soak_2026_06_17_extended_256`: 768 completed local
+  cases, zero failures, zero failure-corpus entries, a valid report bundle, no
+  ZK backend performance claims, and `Level0DesignNote` claim boundary.
 - Result classification exists.
 - Evidence and scoring primitives exist.
 - HSAI Level 1 local crates exist for claim envelopes, agent cases,
@@ -243,16 +249,16 @@ Surface DSL
 
 ## Next Implementation Slice
 
-For the benchmark OS track, Phase L should run long local soak execution and
-sampled local report generation only with explicit user approval. It should
-retain sampled local reports and failure packs outside the repository or under an
-ignored artifact directory, curate a regression corpus, and keep all reports
-local-only. It must not run zk-Harness, import real external results, create
-dashboards, claim official benchmark evidence, or promote Level2+ evidence.
-The optional Qwable local-model attachment for an overnight autoresearch soak is
-documented in
-[docs/61-phase-l-qwable-autoresearch-contract.md](docs/61-phase-l-qwable-autoresearch-contract.md);
-the model is an advisory critic only and is not an evidence lane.
+For the benchmark OS track, Phase L is accepted for bounded local soak execution;
+see
+[docs/62-phase-l-local-soak-acceptance-notes.md](docs/62-phase-l-local-soak-acceptance-notes.md).
+The next benchmark-OS implementation slice must be opened explicitly. Candidate
+tracks are Phase M recursion-envelope stress, Phase N narrow zkML adapter, or
+Phase O reproducible benchmark packs, but none is authorized by Phase L alone.
+Any next phase must preserve the Phase L boundary: no live zk-Harness execution,
+no external result import, no official benchmark evidence, no ZK backend
+performance claims, and no Level2+ evidence creation without a future reviewed
+phase.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
