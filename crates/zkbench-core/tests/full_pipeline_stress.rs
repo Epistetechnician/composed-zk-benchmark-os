@@ -2,9 +2,9 @@ use std::collections::BTreeSet;
 
 use zkbench_core::{
     apply_mutation_pass, build_local_replay_manifest_for_instance,
-    build_local_replay_manifest_for_mutation, generate_instance, BadCountersPass, ClaimBoundary,
-    CorruptedGuardsPass, FamilyKind, GeneratorConfig, InstanceParams, LocalJsonAdapter,
-    MissingConstraintsPass, MutationClass, ResultClassification,
+    build_local_replay_manifest_for_mutation, generate_instance, list_available_local_generators,
+    BadCountersPass, ClaimBoundary, CorruptedGuardsPass, FamilyKind, GeneratorConfig,
+    InstanceParams, LocalJsonAdapter, MissingConstraintsPass, MutationClass, ResultClassification,
 };
 
 fn config_for_family(family: FamilyKind, seed: u64) -> GeneratorConfig {
@@ -14,18 +14,33 @@ fn config_for_family(family: FamilyKind, seed: u64) -> GeneratorConfig {
         FamilyKind::BoundedCounterLoop => GeneratorConfig::bounded_counter_loop()
             .seed(seed)
             .loop_bound(3),
-        _ => unreachable!("stress test only enumerates implemented v0 families"),
+        other => panic!("add full-pipeline stress config for implemented family {other:?}"),
     }
+}
+
+fn implemented_family_kinds() -> Vec<FamilyKind> {
+    let families: Vec<_> = list_available_local_generators()
+        .into_iter()
+        .filter(|template| template.implemented)
+        .map(|template| template.kind)
+        .collect();
+    assert!(
+        !families.is_empty(),
+        "full-pipeline stress requires at least one implemented family"
+    );
+    for family in &families {
+        assert!(
+            family.is_implemented(),
+            "registry marks {family:?} implemented but FamilyKind disagrees"
+        );
+    }
+    families
 }
 
 #[test]
 fn deterministic_generation_mutation_replay_stress_stays_claim_capped() {
     let adapter = LocalJsonAdapter::default();
-    let families = [
-        FamilyKind::BaselineFsm,
-        FamilyKind::BranchingFsm,
-        FamilyKind::BoundedCounterLoop,
-    ];
+    let families = implemented_family_kinds();
     let mut generated_count = 0usize;
     let mut mutation_count = 0usize;
     let mut skipped_mutation_count = 0usize;
@@ -33,7 +48,8 @@ fn deterministic_generation_mutation_replay_stress_stays_claim_capped() {
     let mut local_accepts = 0usize;
     let mut local_rejections = 0usize;
 
-    for family in families {
+    for family in &families {
+        let family = *family;
         assert!(family.is_implemented());
         for seed in 0..2 {
             let instance =
@@ -125,7 +141,7 @@ fn deterministic_generation_mutation_replay_stress_stays_claim_capped() {
         }
     }
 
-    assert_eq!(generated_count, 6);
+    assert_eq!(generated_count, families.len() * 2);
     assert!(
         mutation_count >= 12,
         "stress loop should apply most implemented mutation passes"
