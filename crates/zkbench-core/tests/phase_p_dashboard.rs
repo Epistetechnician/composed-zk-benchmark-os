@@ -1,6 +1,6 @@
 use zkbench_core::{
     build_dashboard_model_from_score_report, render_dashboard_markdown, score_report_from_evidence,
-    validate_dashboard_model, ClaimBoundary, DashboardPanelKind,
+    validate_dashboard_model, ClaimBoundary, DashboardPanelKind, PerformanceScore, ScoreConfidence,
 };
 
 #[test]
@@ -59,4 +59,21 @@ fn dashboard_validation_rejects_panel_boundary_above_model_max() {
     let error = validate_dashboard_model(&model).expect_err("panel boundary above max should fail");
 
     assert!(error.to_string().contains("exceeds the dashboard maximum"));
+}
+
+#[test]
+fn dashboard_validation_rejects_local_populated_score_axes() {
+    let mut report = score_report_from_evidence(&[]);
+    report.claim_boundary_max = ClaimBoundary::Level1LocalReplay;
+    report.performance = Some(PerformanceScore {
+        normalized_score: Some(0.5),
+        confidence: ScoreConfidence::Low,
+        missing_metrics: Vec::new(),
+    });
+    let model = build_dashboard_model_from_score_report("local_score_axis_dashboard", &report);
+
+    let error =
+        validate_dashboard_model(&model).expect_err("local populated score axis should fail");
+
+    assert!(error.to_string().contains("score axes"));
 }
