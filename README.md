@@ -208,9 +208,10 @@ Surface DSL
   `phase_l_qwable_local_soak_2026_06_17_extended_256`: 768 completed local
   cases, zero failures, zero failure-corpus entries, a valid report bundle, no
   ZK backend performance claims, and `Level0DesignNote` claim boundary.
-- Phase M is opened for docs-first recursion-envelope stress specification only.
-  It defines local input contracts, metric labels, validation rules, and
-  negative tests, while live gnark execution and Level2+ evidence remain blocked.
+- Phase M inert local recursion-envelope contract implementation exists.
+  It defines local input contracts, metric labels, validation rules, negative
+  tests, serialization helpers, and claim-boundary non-escalation checks, while
+  live gnark execution and Level2+ evidence remain blocked.
 - Result classification exists.
 - Evidence and scoring primitives exist.
 - HSAI Level 1 local crates exist for claim envelopes, agent cases,
@@ -253,14 +254,14 @@ Surface DSL
 
 ## Next Implementation Slice
 
-For the benchmark OS track, Phase M is opened for docs-first recursion-envelope
-stress specification only; see
+For the benchmark OS track, Phase M inert local recursion-envelope contract
+implementation exists; see
 [docs/63-phase-m-recursion-envelope-stress-spec.md](docs/63-phase-m-recursion-envelope-stress-spec.md).
-The next Phase M implementation slice must be explicitly authorized and should
-remain limited to inert local contract types and validation tests. It must not
-run live gnark, clone external repos, import external results, emit benchmark
-outputs, claim official benchmark evidence, report ZK backend performance, or
-create Level2+ evidence.
+The next Phase M slice must be explicitly authorized and should remain limited
+to local validation hardening or adapter-preparation metadata unless a future
+phase opens executable work. It must not run live gnark, clone external repos,
+import external results, emit benchmark outputs, claim official benchmark
+evidence, report ZK backend performance, or create Level2+ evidence.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57

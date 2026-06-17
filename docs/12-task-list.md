@@ -210,21 +210,21 @@ Exit criteria: long local soak outputs are reproducible, bounded, claim-safe, an
 
 ## Phase M: gnark Recursion Adapter
 
-Status: opened for docs-first boundary spec only. See `docs/63-phase-m-recursion-envelope-stress-spec.md`.
+Status: complete for inert local contract implementation. See `docs/63-phase-m-recursion-envelope-stress-spec.md`.
 
 Goal: Add recursion-envelope stress lane after local soak telemetry exists.
 
-Current deliverables: recursion-envelope stress spec, input artifact contract, candidate metric labels, validation rules, negative tests, and claim-boundary restrictions.
+Implemented: recursion-envelope stress spec, input artifact contract, candidate metric labels, inert Rust contract types, serialization helpers, validation rules, negative tests, and claim-boundary restrictions.
 
-Future deliverables after explicit implementation approval: recursion adapter contract types, local validation tests, and evidence mapping.
+Future deliverables after explicit executable-adapter approval: recursion adapter execution wiring and evidence mapping.
 
 Dependencies: Phase L and future explicit adapter approval.
 
-Validation gate: docs and claim-boundary scans now; scoped recursion replay only after a future implementation phase explicitly authorizes executable adapter work.
+Validation gate: docs and claim-boundary scans, local contract validation tests, serialization round-trips, and source scans that keep executable adapter work absent. Scoped recursion replay only after a future phase explicitly authorizes executable adapter work.
 
 Anti-goals: claiming recursion proof as semantic proof.
 
-Exit criteria for docs-first opening: Phase M spec exists, next implementation slice is bounded to inert local contract types, and live gnark execution remains blocked.
+Exit criteria for inert local contract implementation: Phase M spec exists, local contract types validate claim-boundary non-escalation, recursion metric labels remain metadata only, and live gnark execution remains blocked.
 
 Future exit criteria after explicit implementation approval: recursion outcomes are evidence-capped.
 

@@ -2,13 +2,14 @@
 
 ## Status And Claim Boundary
 
-Phase M is opened for docs-first boundary specification only.
+Phase M is implemented for inert local contract types.
 
 This phase defines the recursion-envelope stress lane after Phase L local soak
-acceptance. It does not authorize implementation code, live gnark execution,
-external repository checkout, external result import, benchmark outputs,
-official benchmark evidence, Level2+ evidence creation, or any claim that a
-recursion proof is semantic proof.
+acceptance. The current implementation slice includes local Rust data types,
+serialization helpers, validation results, and claim-boundary tests only. It
+does not authorize live gnark execution, Go code, external repository checkout,
+external result import, benchmark outputs, official benchmark evidence, Level2+
+evidence creation, or any claim that a recursion proof is semantic proof.
 
 The current authorized state slice is:
 
@@ -17,10 +18,12 @@ docs/63-phase-m-recursion-envelope-stress-spec.md
 docs/12-task-list.md
 README.md
 AGENTS.md
+crates/zkbench-core/src/recursion.rs
+crates/zkbench-core/tests/phase_m_recursion_envelope.rs
 ```
 
-All artifacts described here are design contracts until a future explicit phase
-opens implementation.
+All Phase M Rust artifacts are inert local contract data until a future explicit
+phase opens executable adapter work.
 
 ## Purpose
 
@@ -55,8 +58,7 @@ boundary, forbidden positive claim text, or unclassified input must fail closed.
 
 ## Recursion Envelope Model
 
-A future `RecursionEnvelopeCandidate` should be inert Rust data. It should
-describe:
+`RecursionEnvelopeCandidate` is inert Rust data. It describes:
 
 - envelope id;
 - source artifact digest set;
@@ -65,7 +67,8 @@ describe:
 - recursion depth;
 - aggregation width;
 - digest-chain root;
-- verifier acceptance status, if a future executable adapter is authorized;
+- optional verifier acceptance status, which remains metadata only unless a
+  future executable adapter is authorized;
 - output claim boundary;
 - explicit limitations.
 
@@ -97,7 +100,7 @@ performance without a future explicit execution phase.
 
 ## Validation Rules
 
-Future Phase M implementation should validate:
+Phase M implementation validates:
 
 - every envelope input has a stable digest;
 - every input claim boundary is explicit;
@@ -138,10 +141,10 @@ Future implementation must reject:
 - No claim that recursion proof is semantic proof.
 - No claim that verifier acceptance proves the source spec was meaningful.
 
-## Next Implementation Slice
+## Implemented Slice
 
-The next Phase M slice, if explicitly authorized, should be local Rust contract
-types and validation tests only:
+The implemented Phase M slice is local Rust contract types and validation tests
+only:
 
 ```text
 RecursionEnvelopeCandidate
@@ -151,5 +154,5 @@ claim-boundary non-escalation tests
 metric-label absence tests
 ```
 
-That future slice should still avoid live gnark execution and should not produce
-benchmark outputs.
+This slice still avoids live gnark execution and does not produce benchmark
+outputs.
