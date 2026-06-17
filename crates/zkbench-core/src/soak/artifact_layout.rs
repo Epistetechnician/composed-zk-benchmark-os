@@ -252,6 +252,7 @@ pub fn validate_soak_report_bundle(bundle: &SoakReportBundle) -> SoakReportBundl
         bundle.failure_corpus_indexes.len(),
         &mut issues,
     );
+    validate_report_artifact_identity(bundle, &mut issues);
     for (index, manifest) in bundle.shard_manifests.iter().enumerate() {
         let validation = validate_soak_shard_manifest(manifest);
         if !validation.valid {
@@ -373,6 +374,51 @@ fn count_artifacts_with_role(bundle: &SoakReportBundle, role: SoakArtifactRole) 
         .iter()
         .filter(|artifact| artifact.role == role)
         .count()
+}
+
+fn validate_report_artifact_identity(bundle: &SoakReportBundle, issues: &mut Vec<String>) {
+    for manifest in &bundle.shard_manifests {
+        let layout = SoakArtifactLayout::for_shard(&manifest.shard_id);
+        push_missing_expected_report_artifact(
+            bundle,
+            SoakArtifactRole::Telemetry,
+            &format!("telemetry_{}", manifest.shard_id.value),
+            &layout.telemetry_path,
+            issues,
+        );
+        push_missing_expected_report_artifact(
+            bundle,
+            SoakArtifactRole::HealthReport,
+            &format!("health_{}", manifest.shard_id.value),
+            &layout.health_report_path,
+            issues,
+        );
+        push_missing_expected_report_artifact(
+            bundle,
+            SoakArtifactRole::FailureCorpusIndex,
+            &format!("failure_corpus_{}", manifest.shard_id.value),
+            &layout.failure_corpus_index_path,
+            issues,
+        );
+    }
+}
+
+fn push_missing_expected_report_artifact(
+    bundle: &SoakReportBundle,
+    role: SoakArtifactRole,
+    artifact_id: &str,
+    relative_path: &str,
+    issues: &mut Vec<String>,
+) {
+    if !bundle.artifact_digest_set.artifacts.iter().any(|artifact| {
+        artifact.role == role
+            && artifact.artifact_id == artifact_id
+            && artifact.relative_path == relative_path
+    }) {
+        issues.push(format!(
+            "missing expected {role:?} artifact {artifact_id} at {relative_path}"
+        ));
+    }
 }
 
 /// Write a report bundle to a local directory.
