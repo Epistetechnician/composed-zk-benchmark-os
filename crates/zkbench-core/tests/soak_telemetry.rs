@@ -58,6 +58,41 @@ fn telemetry_rejects_forbidden_backend_metric_labels() {
 }
 
 #[test]
+fn telemetry_rejects_oracle_counts_exceeding_traces() {
+    let mut telemetry = run_tiny();
+    telemetry.snapshot.counters.traces_evaluated = 1;
+    telemetry.snapshot.counters.local_oracle_accepted_count = 2;
+    telemetry.snapshot.counters.local_oracle_rejected_count = 1;
+    telemetry
+        .snapshot
+        .counters
+        .local_oracle_capability_gap_count = 1;
+
+    let error = validate_soak_telemetry_report(&telemetry)
+        .expect_err("impossible oracle counts should fail");
+
+    assert!(error.to_string().contains("local oracle"));
+    assert!(error.to_string().contains("exceed traces_evaluated"));
+}
+
+#[test]
+fn telemetry_rejects_replay_attempts_without_inputs() {
+    let mut telemetry = run_tiny();
+    telemetry.snapshot.counters.generated_instance_count = 1;
+    telemetry.snapshot.counters.mutation_variant_count = 0;
+    telemetry.snapshot.counters.local_replay_completed_count = 2;
+    telemetry.snapshot.counters.local_replay_failed_count = 1;
+
+    let error = validate_soak_telemetry_report(&telemetry)
+        .expect_err("impossible replay counts should fail");
+
+    assert!(error.to_string().contains("local replay"));
+    assert!(error
+        .to_string()
+        .contains("generated instances plus mutation variants"));
+}
+
+#[test]
 fn telemetry_is_internal_and_does_not_populate_score_performance() {
     let telemetry = run_tiny();
     assert!(telemetry.is_internal_only());
