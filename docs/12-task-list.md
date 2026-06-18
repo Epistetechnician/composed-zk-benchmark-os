@@ -459,3 +459,37 @@ assumption at `Attested` maturity; invalid signature, algorithm, key id, issuer,
 freshness, report-data, measurement, and anchor mappings fail closed; verifier
 trust roots are visible; rejected tokens emit no guarantees or roots; docs state
 all non-claims.
+
+## Managed-Attestation Track: Phala Live Managed-Verifier Boundary
+
+Status: complete for docs-first boundary only. See
+`docs/78-phala-live-managed-verifier-boundary-spec.md`.
+
+Goal: define the exact Phala/dstack live managed-verifier boundary before any
+runtime implementation, network-enabled provider client, live API call, local
+DCAP path, or Phase 4 registry change exists.
+
+Implemented: provider and mode selection (`Phala/dstack`,
+`live-managed-verifier`), source attribution for Phala/dstack docs and repos,
+future input and response contracts, verification order, trust-root disclosure,
+replay/freshness rules, future negative-test requirements, forbidden runtime
+effects, and future code-phase exit criteria.
+
+Dependencies: managed-signature boundary spec, offline managed-JWT verification,
+Phala/dstack fixture and captured-artifact validation, accepted HSAI-owned
+Phala/dstack artifact fixture, and Phase 4 anchor-registry claim boundaries.
+
+Validation gate: documentation navigation checks, source-index update,
+claim-boundary text checks, no Rust source changes, no Cargo metadata changes,
+no package runtime files, no fixture changes, no generated artifacts, no network
+code, and no accepted Evidence Ledger mutation.
+
+Anti-goals: Rust implementation, live Phala API calls, Phala deployment
+orchestration, local Intel DCAP quote verification, PCCS or collateral handling,
+generic JWKS/JWT fetch implementation, Azure/Intel provider work, TLS or
+attested-TLS channel binding, secrets, backend execution, benchmark outputs,
+Level2+ evidence, global uniqueness claims, or claims above `Attested`.
+
+Exit criteria: the boundary names exactly one provider and one verification
+mode; README, AGENTS, task list, and source index point to it; and future
+implementation remains blocked until a separate explicit code phase.
