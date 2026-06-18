@@ -231,11 +231,13 @@ pub use replay::{
 };
 pub use report_bundle::{
     build_report_bundle_manifest_from_reports, compute_report_bundle_manifest_digest,
-    deserialize_report_bundle_manifest_json, serialize_report_bundle_manifest_json,
-    validate_report_bundle_manifest, ReportBundleInputKind, ReportBundleInputRef,
-    ReportBundleManifest, ReportBundlePackReadinessInput, ReportBundleRenderedReport,
-    ReportBundleValidation, ReportBundleValidationIssue, ReportBundleValidationIssueKind,
-    ReportBundleVersion,
+    deserialize_report_bundle_manifest_json, read_report_bundle_outputs,
+    serialize_report_bundle_manifest_json, validate_report_bundle_manifest,
+    write_report_bundle_outputs, ReportBundleInputKind, ReportBundleInputRef, ReportBundleManifest,
+    ReportBundleMaterializedReport, ReportBundleOutput, ReportBundlePackReadinessInput,
+    ReportBundleRenderedMarkdown, ReportBundleRenderedReport, ReportBundleValidation,
+    ReportBundleValidationIssue, ReportBundleValidationIssueKind, ReportBundleVersion,
+    REPORT_BUNDLE_MANIFEST_DIGEST_PATH, REPORT_BUNDLE_MANIFEST_PATH, REPORT_BUNDLE_RENDERED_DIR,
 };
 pub use scoring::{
     score_report_from_evidence, score_report_from_local_mutation_evidence, validate_score_report,

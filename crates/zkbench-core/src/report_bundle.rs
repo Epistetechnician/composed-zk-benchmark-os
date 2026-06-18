@@ -4,7 +4,9 @@
 //! accepted evidence, do not execute replay commands, do not claim official
 //! benchmark evidence, and do not report ZK backend performance.
 
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
+use std::fs;
+use std::path::{Component, Path};
 
 use serde::{Deserialize, Serialize};
 
@@ -19,6 +21,15 @@ use crate::evidence::{
 };
 use crate::pack::{PackReadinessReport, PackReadinessValidation};
 use crate::scoring::ScoreReport;
+
+/// Relative manifest path inside a materialized local report bundle.
+pub const REPORT_BUNDLE_MANIFEST_PATH: &str = "report-bundle-manifest.json";
+
+/// Relative rendered Markdown directory inside a materialized local report bundle.
+pub const REPORT_BUNDLE_RENDERED_DIR: &str = "rendered";
+
+/// Relative manifest digest sidecar path inside a materialized local report bundle.
+pub const REPORT_BUNDLE_MANIFEST_DIGEST_PATH: &str = "digests/report-bundle-manifest.sha256";
 
 /// Phase Q report-bundle schema version.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -211,6 +222,46 @@ pub struct ReportBundleValidation {
     pub claim_boundary: ClaimBoundary,
 }
 
+/// Caller-supplied rendered Markdown payload for Phase Q-D materialization.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ReportBundleRenderedMarkdown {
+    /// Rendered report id matching a manifest entry.
+    pub rendered_report_id: String,
+    /// Markdown bytes as UTF-8 text.
+    pub markdown: String,
+}
+
+/// Materialized rendered Markdown file summary.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ReportBundleMaterializedReport {
+    /// Rendered report id.
+    pub rendered_report_id: String,
+    /// Relative path written or read under the report-bundle root.
+    pub relative_path: String,
+    /// Digest over the Markdown bytes.
+    pub markdown_digest: ArtifactDigest,
+}
+
+/// Local output summary for adjacent report-bundle files.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ReportBundleOutput {
+    /// Relative path of the manifest JSON.
+    pub manifest_relative_path: String,
+    /// Digest over the manifest JSON bytes.
+    pub manifest_digest: ArtifactDigest,
+    /// Relative path of the manifest digest sidecar.
+    pub manifest_digest_relative_path: String,
+    /// Rendered Markdown file summaries.
+    #[serde(default)]
+    pub rendered_reports: Vec<ReportBundleMaterializedReport>,
+    /// Manifest that was written or read.
+    pub manifest: ReportBundleManifest,
+    /// Validation result for the manifest.
+    pub validation: ReportBundleValidation,
+    /// Output claim boundary.
+    pub output_claim_boundary: ClaimBoundary,
+}
+
 /// Build an inert report-bundle manifest from existing local report metadata.
 ///
 /// This function does not write files, execute replay commands, call external
@@ -357,6 +408,177 @@ pub fn serialize_report_bundle_manifest_json(manifest: &ReportBundleManifest) ->
 pub fn deserialize_report_bundle_manifest_json(json: &str) -> Result<ReportBundleManifest> {
     serde_json::from_str(json)
         .map_err(|error| ZkBenchError::deserialization("report_bundle.manifest", error.to_string()))
+}
+
+/// Write adjacent local report-bundle output files.
+///
+/// The supplied `output_root` is the local `report-bundle/` directory. This
+/// function writes only the manifest JSON, rendered Markdown files declared by
+/// the manifest, and the manifest digest sidecar. It does not mutate source
+/// packs, source reports, or accepted Evidence Ledgers.
+pub fn write_report_bundle_outputs(
+    output_root: impl AsRef<Path>,
+    manifest: &ReportBundleManifest,
+    rendered_markdown: &[ReportBundleRenderedMarkdown],
+    overwrite: bool,
+) -> Result<ReportBundleOutput> {
+    let output_root = output_root.as_ref();
+    validate_output_root(output_root)?;
+    if output_root.exists() && !output_root.is_dir() {
+        return Err(report_bundle_io_error(
+            output_root.display().to_string(),
+            "report-bundle output root exists and is not a directory",
+        ));
+    }
+
+    let validation = validate_report_bundle_manifest(manifest);
+    if !validation.valid {
+        return Err(report_bundle_io_error(
+            "report_bundle.manifest",
+            format!("manifest validation failed: {:?}", validation.issues),
+        ));
+    }
+
+    let targets = materialized_target_paths(manifest)?;
+    if output_root.exists() && !overwrite && directory_has_entries(output_root)? {
+        return Err(report_bundle_io_error(
+            output_root.display().to_string(),
+            "report-bundle output root is non-empty; explicit overwrite approval is required",
+        ));
+    }
+    if output_root.exists() && overwrite {
+        reject_unexpected_existing_files(output_root, &targets)?;
+    }
+
+    let payloads = rendered_markdown_by_id(rendered_markdown)?;
+    let mut materialized_reports = Vec::new();
+    let mut rendered_writes = Vec::new();
+    for rendered in &manifest.rendered_reports {
+        let markdown = payloads
+            .get(rendered.rendered_report_id.as_str())
+            .ok_or_else(|| {
+                report_bundle_io_error(
+                    format!("rendered_markdown.{}", rendered.rendered_report_id),
+                    "missing rendered Markdown payload for manifest entry",
+                )
+            })?;
+        let digest = digest_markdown_bytes(markdown.as_bytes());
+        if digest != rendered.markdown_digest {
+            return Err(report_bundle_io_error(
+                rendered.artifact_uri.clone(),
+                "rendered Markdown digest does not match manifest",
+            ));
+        }
+        materialized_reports.push(ReportBundleMaterializedReport {
+            rendered_report_id: rendered.rendered_report_id.clone(),
+            relative_path: rendered.artifact_uri.clone(),
+            markdown_digest: digest.clone(),
+        });
+        rendered_writes.push((rendered.artifact_uri.clone(), markdown.as_bytes().to_vec()));
+    }
+    if payloads.len() != manifest.rendered_reports.len() {
+        return Err(report_bundle_io_error(
+            "rendered_markdown",
+            "extra rendered Markdown payload exists without a manifest entry",
+        ));
+    }
+
+    let manifest_json = serialize_report_bundle_manifest_json(manifest)?;
+    let manifest_bytes = manifest_json.as_bytes();
+    let manifest_digest = digest_report_bundle_output_bytes(manifest_bytes);
+    for (relative_path, markdown_bytes) in rendered_writes {
+        write_relative_bytes(output_root, &relative_path, &markdown_bytes)?;
+    }
+    write_relative_bytes(output_root, REPORT_BUNDLE_MANIFEST_PATH, manifest_bytes)?;
+    write_relative_bytes(
+        output_root,
+        REPORT_BUNDLE_MANIFEST_DIGEST_PATH,
+        format!("{}\n", manifest_digest.hex_digest).as_bytes(),
+    )?;
+
+    Ok(ReportBundleOutput {
+        manifest_relative_path: REPORT_BUNDLE_MANIFEST_PATH.to_string(),
+        manifest_digest,
+        manifest_digest_relative_path: REPORT_BUNDLE_MANIFEST_DIGEST_PATH.to_string(),
+        rendered_reports: materialized_reports,
+        manifest: manifest.clone(),
+        validation,
+        output_claim_boundary: ClaimBoundary::Level0DesignNote,
+    })
+}
+
+/// Read and validate adjacent local report-bundle output files.
+///
+/// A successful read confirms local file integrity only. It is not accepted
+/// evidence, not official benchmark evidence, and not ZK backend performance
+/// evidence.
+pub fn read_report_bundle_outputs(output_root: impl AsRef<Path>) -> Result<ReportBundleOutput> {
+    let output_root = output_root.as_ref();
+    validate_output_root(output_root)?;
+
+    let manifest_bytes = read_relative_bytes(output_root, REPORT_BUNDLE_MANIFEST_PATH)?;
+    let digest_sidecar = String::from_utf8(read_relative_bytes(
+        output_root,
+        REPORT_BUNDLE_MANIFEST_DIGEST_PATH,
+    )?)
+    .map_err(|error| {
+        report_bundle_io_error(
+            REPORT_BUNDLE_MANIFEST_DIGEST_PATH,
+            format!("manifest digest sidecar is not UTF-8: {error}"),
+        )
+    })?;
+    let manifest_digest = digest_report_bundle_output_bytes(&manifest_bytes);
+    if digest_sidecar.trim() != manifest_digest.hex_digest {
+        return Err(report_bundle_io_error(
+            REPORT_BUNDLE_MANIFEST_DIGEST_PATH,
+            "manifest JSON bytes do not match digest sidecar",
+        ));
+    }
+
+    let manifest_json = String::from_utf8(manifest_bytes).map_err(|error| {
+        report_bundle_io_error(
+            REPORT_BUNDLE_MANIFEST_PATH,
+            format!("manifest JSON is not UTF-8: {error}"),
+        )
+    })?;
+    let manifest = deserialize_report_bundle_manifest_json(&manifest_json)?;
+    let validation = validate_report_bundle_manifest(&manifest);
+    if !validation.valid {
+        return Err(report_bundle_io_error(
+            "report_bundle.manifest",
+            format!("manifest validation failed: {:?}", validation.issues),
+        ));
+    }
+
+    let expected_paths = rendered_report_paths(&manifest)?;
+    reject_extra_rendered_files(output_root, &expected_paths)?;
+
+    let mut materialized_reports = Vec::new();
+    for rendered in &manifest.rendered_reports {
+        let markdown_bytes = read_relative_bytes(output_root, &rendered.artifact_uri)?;
+        let markdown_digest = digest_markdown_bytes(&markdown_bytes);
+        if markdown_digest != rendered.markdown_digest {
+            return Err(report_bundle_io_error(
+                rendered.artifact_uri.clone(),
+                "rendered Markdown bytes do not match manifest digest",
+            ));
+        }
+        materialized_reports.push(ReportBundleMaterializedReport {
+            rendered_report_id: rendered.rendered_report_id.clone(),
+            relative_path: rendered.artifact_uri.clone(),
+            markdown_digest,
+        });
+    }
+
+    Ok(ReportBundleOutput {
+        manifest_relative_path: REPORT_BUNDLE_MANIFEST_PATH.to_string(),
+        manifest_digest,
+        manifest_digest_relative_path: REPORT_BUNDLE_MANIFEST_DIGEST_PATH.to_string(),
+        rendered_reports: materialized_reports,
+        manifest,
+        validation,
+        output_claim_boundary: ClaimBoundary::Level0DesignNote,
+    })
 }
 
 /// Validate inert report-bundle metadata.
@@ -739,4 +961,250 @@ fn push_issue(
         path: path.into(),
         message: message.into(),
     });
+}
+
+fn rendered_markdown_by_id(
+    rendered_markdown: &[ReportBundleRenderedMarkdown],
+) -> Result<BTreeMap<&str, &str>> {
+    let mut payloads = BTreeMap::new();
+    for payload in rendered_markdown {
+        validate_output_identity(
+            "rendered_markdown.rendered_report_id",
+            &payload.rendered_report_id,
+        )?;
+        if payload.markdown.is_empty() {
+            return Err(report_bundle_io_error(
+                format!("rendered_markdown.{}", payload.rendered_report_id),
+                "rendered Markdown payload must not be empty",
+            ));
+        }
+        if payloads
+            .insert(
+                payload.rendered_report_id.as_str(),
+                payload.markdown.as_str(),
+            )
+            .is_some()
+        {
+            return Err(report_bundle_io_error(
+                format!("rendered_markdown.{}", payload.rendered_report_id),
+                "duplicate rendered Markdown payload id",
+            ));
+        }
+    }
+    Ok(payloads)
+}
+
+fn materialized_target_paths(manifest: &ReportBundleManifest) -> Result<BTreeSet<String>> {
+    let mut targets = BTreeSet::from([
+        REPORT_BUNDLE_MANIFEST_PATH.to_string(),
+        REPORT_BUNDLE_MANIFEST_DIGEST_PATH.to_string(),
+    ]);
+    for rendered in &manifest.rendered_reports {
+        validate_rendered_markdown_path(&rendered.artifact_uri)?;
+        if !targets.insert(rendered.artifact_uri.clone()) {
+            return Err(report_bundle_io_error(
+                rendered.artifact_uri.clone(),
+                "duplicate materialized report output path",
+            ));
+        }
+    }
+    Ok(targets)
+}
+
+fn rendered_report_paths(manifest: &ReportBundleManifest) -> Result<BTreeSet<String>> {
+    manifest
+        .rendered_reports
+        .iter()
+        .map(|rendered| {
+            validate_rendered_markdown_path(&rendered.artifact_uri)?;
+            Ok(rendered.artifact_uri.clone())
+        })
+        .collect()
+}
+
+fn validate_output_root(root: &Path) -> Result<()> {
+    let value = root.as_os_str().to_string_lossy();
+    if value.trim().is_empty() || value.contains("://") || value.contains('\\') {
+        return Err(report_bundle_io_error(
+            value.to_string(),
+            "invalid report-bundle output root",
+        ));
+    }
+    if root
+        .components()
+        .any(|component| matches!(component, Component::ParentDir))
+    {
+        return Err(report_bundle_io_error(
+            value.to_string(),
+            "report-bundle output root must not contain parent-directory components",
+        ));
+    }
+    Ok(())
+}
+
+fn validate_rendered_markdown_path(relative_path: &str) -> Result<()> {
+    validate_relative_output_path(relative_path)?;
+    if !relative_path.starts_with(&format!("{REPORT_BUNDLE_RENDERED_DIR}/"))
+        || !relative_path.ends_with(".md")
+    {
+        return Err(report_bundle_io_error(
+            relative_path,
+            "rendered report path must live under rendered/ and end with .md",
+        ));
+    }
+    Ok(())
+}
+
+fn validate_relative_output_path(relative_path: &str) -> Result<()> {
+    let path = Path::new(relative_path);
+    if relative_path.trim().is_empty()
+        || path.is_absolute()
+        || relative_path.contains("..")
+        || relative_path.contains('\\')
+        || relative_path.contains("://")
+        || contains_shell_payload(relative_path)
+    {
+        return Err(report_bundle_io_error(
+            relative_path,
+            "invalid report-bundle relative output path",
+        ));
+    }
+    Ok(())
+}
+
+fn validate_output_identity(path: &str, value: &str) -> Result<()> {
+    if value.trim().is_empty() || contains_shell_payload(value) || value.contains('/') {
+        return Err(report_bundle_io_error(
+            path,
+            "invalid report-bundle output identity",
+        ));
+    }
+    Ok(())
+}
+
+fn read_relative_bytes(root: &Path, relative_path: &str) -> Result<Vec<u8>> {
+    validate_relative_output_path(relative_path)?;
+    let path = root.join(relative_path);
+    fs::read(&path).map_err(|error| report_bundle_io_error(path.display().to_string(), error))
+}
+
+fn write_relative_bytes(root: &Path, relative_path: &str, bytes: &[u8]) -> Result<()> {
+    validate_relative_output_path(relative_path)?;
+    let path = root.join(relative_path);
+    if let Some(parent) = path.parent() {
+        fs::create_dir_all(parent)
+            .map_err(|error| report_bundle_io_error(parent.display().to_string(), error))?;
+    }
+    fs::write(&path, bytes)
+        .map_err(|error| report_bundle_io_error(path.display().to_string(), error))
+}
+
+fn directory_has_entries(path: &Path) -> Result<bool> {
+    let mut entries = fs::read_dir(path)
+        .map_err(|error| report_bundle_io_error(path.display().to_string(), error))?;
+    entries
+        .next()
+        .transpose()
+        .map(|entry| entry.is_some())
+        .map_err(|error| report_bundle_io_error(path.display().to_string(), error))
+}
+
+fn reject_unexpected_existing_files(root: &Path, expected: &BTreeSet<String>) -> Result<()> {
+    let existing = collect_relative_files(root)?;
+    for relative_path in existing {
+        if !expected.contains(&relative_path) {
+            return Err(report_bundle_io_error(
+                relative_path,
+                "existing report-bundle output root contains an unexpected file",
+            ));
+        }
+    }
+    Ok(())
+}
+
+fn reject_extra_rendered_files(root: &Path, expected: &BTreeSet<String>) -> Result<()> {
+    let rendered_root = root.join(REPORT_BUNDLE_RENDERED_DIR);
+    if !rendered_root.exists() {
+        return Ok(());
+    }
+    for relative_path in collect_relative_files(&rendered_root)? {
+        let bundle_relative_path = format!("{REPORT_BUNDLE_RENDERED_DIR}/{relative_path}");
+        if !expected.contains(&bundle_relative_path) {
+            return Err(report_bundle_io_error(
+                bundle_relative_path,
+                "rendered Markdown file exists without a manifest entry",
+            ));
+        }
+    }
+    Ok(())
+}
+
+fn collect_relative_files(root: &Path) -> Result<BTreeSet<String>> {
+    let mut files = BTreeSet::new();
+    if !root.exists() {
+        return Ok(files);
+    }
+    collect_relative_files_inner(root, root, &mut files)?;
+    Ok(files)
+}
+
+fn collect_relative_files_inner(
+    root: &Path,
+    current: &Path,
+    files: &mut BTreeSet<String>,
+) -> Result<()> {
+    for entry in fs::read_dir(current)
+        .map_err(|error| report_bundle_io_error(current.display().to_string(), error))?
+    {
+        let entry =
+            entry.map_err(|error| report_bundle_io_error(current.display().to_string(), error))?;
+        let file_type = entry
+            .file_type()
+            .map_err(|error| report_bundle_io_error(entry.path().display().to_string(), error))?;
+        if file_type.is_symlink() {
+            return Err(report_bundle_io_error(
+                entry.path().display().to_string(),
+                "report-bundle output must not contain symlinks",
+            ));
+        }
+        if file_type.is_dir() {
+            collect_relative_files_inner(root, &entry.path(), files)?;
+        } else if file_type.is_file() {
+            let relative_path = slash_relative_path(root, &entry.path())?;
+            validate_relative_output_path(&relative_path)?;
+            files.insert(relative_path);
+        }
+    }
+    Ok(())
+}
+
+fn slash_relative_path(root: &Path, path: &Path) -> Result<String> {
+    let relative_path = path
+        .strip_prefix(root)
+        .map_err(|error| report_bundle_io_error(path.display().to_string(), error))?;
+    let mut parts = Vec::new();
+    for component in relative_path.components() {
+        match component {
+            Component::Normal(value) => parts.push(value.to_string_lossy().to_string()),
+            _ => {
+                return Err(report_bundle_io_error(
+                    relative_path.display().to_string(),
+                    "invalid report-bundle relative path component",
+                ))
+            }
+        }
+    }
+    Ok(parts.join("/"))
+}
+
+fn digest_report_bundle_output_bytes(bytes: &[u8]) -> ArtifactDigest {
+    compute_artifact_digest_bytes(bytes, Some(ArtifactKind::Other), Some(ArtifactRole::Report))
+}
+
+fn digest_markdown_bytes(bytes: &[u8]) -> ArtifactDigest {
+    compute_artifact_digest_bytes(bytes, Some(ArtifactKind::Other), Some(ArtifactRole::Report))
+}
+
+fn report_bundle_io_error(path: impl Into<String>, message: impl ToString) -> ZkBenchError {
+    ZkBenchError::benchmark_pack(path, message.to_string())
 }

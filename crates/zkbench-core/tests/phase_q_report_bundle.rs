@@ -1,11 +1,16 @@
+use std::fs;
+
 use zkbench_core::{
+    build_dashboard_model_from_pack_readiness, build_dashboard_model_from_score_report,
     build_report_bundle_manifest_from_reports, compute_report_bundle_manifest_digest,
-    deserialize_report_bundle_manifest_json, serialize_report_bundle_manifest_json,
-    validate_report_bundle_manifest, ArtifactDigest, ArtifactDigestAlgorithm, ArtifactKind,
+    deserialize_report_bundle_manifest_json, read_report_bundle_outputs, render_dashboard_markdown,
+    serialize_report_bundle_manifest_json, validate_report_bundle_manifest,
+    write_report_bundle_outputs, ArtifactDigest, ArtifactDigestAlgorithm, ArtifactKind,
     ArtifactRole, ClaimBoundary, EvidenceClass, PackReadinessCheck, PackReadinessCheckKind,
     PackReadinessInputKind, PackReadinessInputRef, PackReadinessReport, PackReadinessValidation,
     PackReadinessValidationIssue, PackReadinessValidationIssueKind, PackReadinessVersion,
-    ReportBundlePackReadinessInput, ReportBundleValidationIssueKind, ScoreConfidence, ScoreReport,
+    ReportBundlePackReadinessInput, ReportBundleRenderedMarkdown, ReportBundleValidationIssueKind,
+    ScoreConfidence, ScoreReport,
 };
 
 fn digest(label: &str, kind: ArtifactKind, role: ArtifactRole) -> ArtifactDigest {
@@ -121,6 +126,47 @@ fn valid_manifest() -> zkbench_core::ReportBundleManifest {
     .expect("report bundle manifest builds")
 }
 
+fn valid_manifest_with_payloads() -> (
+    zkbench_core::ReportBundleManifest,
+    Vec<ReportBundleRenderedMarkdown>,
+) {
+    let score = score_report();
+    let readiness_input = ReportBundlePackReadinessInput {
+        report: readiness_report(false),
+        validation: readiness_validation(true),
+    };
+    let manifest = build_report_bundle_manifest_from_reports(
+        "phase_q_bundle",
+        std::slice::from_ref(&score),
+        std::slice::from_ref(&readiness_input),
+    )
+    .expect("report bundle manifest builds");
+
+    let score_markdown = render_dashboard_markdown(&build_dashboard_model_from_score_report(
+        "phase_q_bundle_score_report_0_dashboard",
+        &score,
+    ));
+    let readiness_markdown = render_dashboard_markdown(&build_dashboard_model_from_pack_readiness(
+        "phase_q_bundle_pack_readiness_report_0_dashboard",
+        &readiness_input.report,
+        &readiness_input.validation,
+    ));
+
+    (
+        manifest,
+        vec![
+            ReportBundleRenderedMarkdown {
+                rendered_report_id: "score_report_0_markdown".to_string(),
+                markdown: score_markdown,
+            },
+            ReportBundleRenderedMarkdown {
+                rendered_report_id: "pack_readiness_report_0_markdown".to_string(),
+                markdown: readiness_markdown,
+            },
+        ],
+    )
+}
+
 fn issue_kinds(
     manifest: &zkbench_core::ReportBundleManifest,
 ) -> Vec<ReportBundleValidationIssueKind> {
@@ -214,4 +260,124 @@ fn report_bundle_validation_requires_failed_readiness_visibility() {
     manifest.rendered_reports[0].failed_readiness_visible = false;
     let kinds = issue_kinds(&manifest);
     assert!(kinds.contains(&ReportBundleValidationIssueKind::FailedReadinessHidden));
+}
+
+#[test]
+fn report_bundle_outputs_write_read_and_preserve_source_files() {
+    let (manifest, payloads) = valid_manifest_with_payloads();
+    let dir = tempfile::tempdir().expect("tempdir");
+    let source_root = dir.path().join("source");
+    fs::create_dir_all(source_root.join("reports")).expect("source dirs");
+    fs::write(source_root.join("pack.json"), b"{\"id\":\"source_pack\"}\n").expect("pack source");
+    fs::write(
+        source_root.join("reports/score_report.json"),
+        b"{\"report\":\"source\"}\n",
+    )
+    .expect("report source");
+    let pack_before = fs::read(source_root.join("pack.json")).expect("pack before");
+    let report_before =
+        fs::read(source_root.join("reports/score_report.json")).expect("report before");
+
+    let output_root = dir.path().join("report-bundle");
+    let output = write_report_bundle_outputs(&output_root, &manifest, &payloads, false)
+        .expect("report-bundle output writes");
+    assert_eq!(
+        output.output_claim_boundary,
+        ClaimBoundary::Level0DesignNote
+    );
+    assert!(output.validation.valid, "{:?}", output.validation.issues);
+    assert_eq!(
+        output.rendered_reports.len(),
+        manifest.rendered_reports.len()
+    );
+    assert!(output_root.join("report-bundle-manifest.json").is_file());
+    assert!(output_root
+        .join("digests/report-bundle-manifest.sha256")
+        .is_file());
+    assert!(output_root.join("rendered/score_report_0.md").is_file());
+    assert!(output_root
+        .join("rendered/pack_readiness_report_0.md")
+        .is_file());
+
+    let read_output = read_report_bundle_outputs(&output_root).expect("report-bundle output reads");
+    assert_eq!(read_output.manifest, manifest);
+    assert_eq!(read_output.manifest_digest, output.manifest_digest);
+    assert_eq!(read_output.rendered_reports, output.rendered_reports);
+    assert_eq!(
+        fs::read(source_root.join("pack.json")).expect("pack after"),
+        pack_before
+    );
+    assert_eq!(
+        fs::read(source_root.join("reports/score_report.json")).expect("report after"),
+        report_before
+    );
+}
+
+#[test]
+fn report_bundle_outputs_reject_payload_and_overwrite_drift() {
+    let (manifest, mut payloads) = valid_manifest_with_payloads();
+    let dir = tempfile::tempdir().expect("tempdir");
+    let output_root = dir.path().join("report-bundle");
+
+    let missing_payload_error =
+        write_report_bundle_outputs(&output_root, &manifest, &payloads[..1], false)
+            .expect_err("missing rendered Markdown payload should fail");
+    assert!(missing_payload_error
+        .to_string()
+        .contains("missing rendered Markdown payload"));
+
+    payloads[0].markdown.push_str("\nlocal tamper\n");
+    let digest_error = write_report_bundle_outputs(&output_root, &manifest, &payloads, false)
+        .expect_err("rendered Markdown digest drift should fail");
+    assert!(digest_error
+        .to_string()
+        .contains("rendered Markdown digest does not match manifest"));
+
+    let (_, payloads) = valid_manifest_with_payloads();
+    write_report_bundle_outputs(&output_root, &manifest, &payloads, false)
+        .expect("initial write succeeds");
+    let overwrite_error = write_report_bundle_outputs(&output_root, &manifest, &payloads, false)
+        .expect_err("non-empty root without overwrite should fail");
+    assert!(overwrite_error
+        .to_string()
+        .contains("explicit overwrite approval is required"));
+}
+
+#[test]
+fn report_bundle_outputs_reject_materialized_file_drift() {
+    let (manifest, payloads) = valid_manifest_with_payloads();
+    let dir = tempfile::tempdir().expect("tempdir");
+    let output_root = dir.path().join("report-bundle");
+    write_report_bundle_outputs(&output_root, &manifest, &payloads, false)
+        .expect("initial write succeeds");
+
+    fs::write(
+        output_root.join("rendered/score_report_0.md"),
+        b"# tampered rendered report\n",
+    )
+    .expect("tamper rendered Markdown");
+    let markdown_error =
+        read_report_bundle_outputs(&output_root).expect_err("tampered Markdown should fail");
+    assert!(markdown_error
+        .to_string()
+        .contains("rendered Markdown bytes do not match manifest digest"));
+
+    write_report_bundle_outputs(&output_root, &manifest, &payloads, true)
+        .expect("overwrite declared outputs");
+    fs::write(output_root.join("rendered/extra.md"), b"# extra\n").expect("extra rendered file");
+    let extra_error =
+        read_report_bundle_outputs(&output_root).expect_err("extra rendered file should fail");
+    assert!(extra_error.to_string().contains("without a manifest entry"));
+
+    fs::remove_file(output_root.join("rendered/extra.md")).expect("remove extra file");
+    fs::write(
+        output_root.join("digests/report-bundle-manifest.sha256"),
+        b"0000000000000000000000000000000000000000000000000000000000000000\n",
+    )
+    .expect("tamper manifest digest");
+    let manifest_error =
+        read_report_bundle_outputs(&output_root).expect_err("stale manifest sidecar should fail");
+    assert!(manifest_error
+        .to_string()
+        .contains("manifest JSON bytes do not match digest sidecar"));
 }
