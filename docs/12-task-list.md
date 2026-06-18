@@ -320,3 +320,33 @@ or Level2+ evidence creation.
 Exit criteria for read-only reporting boundary: reports show axes, confidence,
 pack-readiness status, and claim boundaries without creating or promoting
 evidence. Future UI exit criteria require a separate explicit phase.
+
+## Phase Q: Report Bundles
+
+Status: open for docs-first boundary only. See
+`docs/68-phase-q-report-bundle-boundary-spec.md`.
+
+Goal: define a richer read-only report-bundle contract before any implementation
+or UI work broadens Phase P reporting.
+
+Implemented: Phase Q-A boundary spec covering allowed inputs, bundle contents,
+required validation rules, claim labels, non-goals, and future implementation
+exit criteria.
+
+Dependencies: Phase O pack-readiness metadata and Phase P read-only reporting.
+
+Validation gate: documentation navigation checks, claim-boundary text checks,
+and future implementation tests for digest validation, portable source refs,
+failed-readiness visibility, no external execution hooks, and no accepted
+Evidence Ledger mutation.
+
+Anti-goals: UI dashboard, replay-command execution, external replay, official
+benchmark evidence claims, ZK backend performance claims, Level2+ evidence
+creation, accepted Evidence Ledger mutation, score-axis population from
+local-only evidence, broad leaderboard claims, generated benchmark artifacts, or
+package-script/runtime additions.
+
+Exit criteria for docs-first boundary: Phase Q-A spec exists, navigation points
+to it, and `AGENTS.md` authorizes only Markdown planning for the report-bundle
+contract. Future report-bundle implementation requires a separate explicit
+phase.
