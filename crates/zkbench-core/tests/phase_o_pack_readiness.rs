@@ -5,12 +5,14 @@ use tempfile::tempdir;
 use zkbench_core::{
     build_local_replay_manifest_for_instance, build_pack_readiness_report_from_reader,
     compute_pack_readiness_report_digest, deserialize_pack_readiness_report_json,
-    generate_instance, run_local_replay, serialize_pack_readiness_report_json,
-    validate_pack_readiness_report, ArtifactDigest, ArtifactDigestAlgorithm, ArtifactKind,
+    generate_instance, read_pack_readiness_report, read_pack_readiness_validation,
+    run_local_replay, serialize_pack_readiness_report_json, validate_pack_readiness_report,
+    write_pack_readiness_outputs_for_pack, ArtifactDigest, ArtifactDigestAlgorithm, ArtifactKind,
     ArtifactRole, BenchmarkPackReader, BenchmarkPackWriter, ClaimBoundary, EvidenceClass,
     EvidenceLedger, GeneratorConfig, InstanceParams, PackReadinessCheck, PackReadinessCheckKind,
     PackReadinessInputKind, PackReadinessInputRef, PackReadinessReplayCommandMetadata,
     PackReadinessReport, PackReadinessValidationIssueKind, PackReadinessVersion,
+    PACK_READINESS_REPORT_PATH, PACK_READINESS_VALIDATION_PATH, PACK_VALIDATION_REPORT_PATH,
 };
 
 fn digest(byte: u8) -> ArtifactDigest {
@@ -214,6 +216,87 @@ fn pack_readiness_builds_from_existing_local_pack_reader() {
         .iter()
         .any(|input| input.kind == PackReadinessInputKind::LocalReplayManifest));
     assert!(report.replay_commands.iter().all(|command| command.inert));
+}
+
+#[test]
+fn pack_readiness_outputs_write_adjacent_metadata_without_manifest_mutation() {
+    let dir = write_sample_pack("phase_o_readiness_output_pack");
+    let output = write_pack_readiness_outputs_for_pack(dir.path())
+        .expect("readiness outputs should write next to the local pack");
+
+    assert_eq!(
+        output.pack_validation_relative_path,
+        PACK_VALIDATION_REPORT_PATH
+    );
+    assert_eq!(output.report_relative_path, PACK_READINESS_REPORT_PATH);
+    assert_eq!(
+        output.readiness_validation_relative_path,
+        PACK_READINESS_VALIDATION_PATH
+    );
+    assert_eq!(
+        output.output_claim_boundary,
+        ClaimBoundary::Level0DesignNote
+    );
+    assert!(output.readiness_validation.valid);
+    assert_eq!(
+        output.readiness_validation.claim_boundary,
+        ClaimBoundary::Level0DesignNote
+    );
+    assert!(dir.path().join(PACK_VALIDATION_REPORT_PATH).is_file());
+    assert!(dir.path().join(PACK_READINESS_REPORT_PATH).is_file());
+    assert!(dir.path().join(PACK_READINESS_VALIDATION_PATH).is_file());
+    assert!(output.pack_validation_digest.byte_len > 0);
+    assert!(output.report_digest.byte_len > 0);
+    assert!(output.readiness_validation_digest.byte_len > 0);
+
+    let read_report = read_pack_readiness_report(dir.path()).expect("report should read back");
+    let read_validation =
+        read_pack_readiness_validation(dir.path()).expect("validation should read back");
+    assert_eq!(read_report, output.report);
+    assert_eq!(read_validation, output.readiness_validation);
+    assert!(!read_report.external_replay_authorized);
+    assert!(!read_report.creates_level2_evidence);
+    assert!(!read_report.official_benchmark_evidence);
+    assert!(!read_report.zk_backend_performance_claims);
+
+    let reader =
+        BenchmarkPackReader::read(dir.path()).expect("pack reader should still load pack.json");
+    assert!(reader.validate().valid);
+    assert!(!reader
+        .manifest()
+        .files
+        .iter()
+        .any(|file| file.relative_path.starts_with("readiness/")));
+}
+
+#[test]
+fn pack_readiness_outputs_write_failed_local_validation_without_claim_elevation() {
+    let dir = write_sample_pack("phase_o_readiness_invalid_pack");
+    fs::write(dir.path().join("reports/score_report.json"), "{}")
+        .expect("test should tamper score report");
+
+    let output = write_pack_readiness_outputs_for_pack(dir.path())
+        .expect("failed local validation should still produce bounded metadata");
+    let read_report = read_pack_readiness_report(dir.path()).expect("report should read back");
+    let read_validation =
+        read_pack_readiness_validation(dir.path()).expect("validation should read back");
+    let kinds: Vec<_> = read_validation
+        .issues
+        .iter()
+        .map(|issue| issue.kind)
+        .collect();
+
+    assert!(!output.readiness_validation.valid);
+    assert!(!read_validation.valid);
+    assert!(kinds.contains(&PackReadinessValidationIssueKind::FailedCheck));
+    assert_eq!(
+        read_report.output_claim_boundary,
+        ClaimBoundary::Level0DesignNote
+    );
+    assert!(!read_report.external_replay_authorized);
+    assert!(!read_report.creates_level2_evidence);
+    assert!(!read_report.official_benchmark_evidence);
+    assert!(!read_report.zk_backend_performance_claims);
 }
 
 #[test]

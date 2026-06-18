@@ -2,8 +2,8 @@
 
 ## Status And Claim Boundary
 
-Phase O-C implements inert local reproducible-pack readiness construction
-helpers over existing local pack reader and validation metadata.
+Phase O-D implements inert local reproducible-pack readiness output plumbing
+over existing local pack reader and validation metadata.
 
 This phase corrects the Phase O target and adds local readiness metadata: the
 current repository may define and validate local reproducible-pack readiness,
@@ -67,6 +67,7 @@ The readiness contract requires:
   boundaries are local;
 - replay command metadata is inert/non-shell data;
 - sampled pack validation is reproducible from the committed local code;
+- adjacent readiness output files stay outside `pack.json`;
 - all output claims remain at or below the weakest local input boundary.
 
 ## Replay Command Metadata
@@ -124,7 +125,7 @@ The Phase O tests reject:
 
 ## Implemented Slice
 
-The implemented Phase O-B/O-C slice is inert readiness metadata only:
+The implemented Phase O-B/O-C/O-D slice is inert readiness metadata only:
 
 ```text
 local pack-readiness target
@@ -135,8 +136,12 @@ PackReadinessCheck data model
 pack-readiness report digest helper
 JSON serialization helpers
 build_pack_readiness_report_from_reader helper
+write_pack_readiness_outputs_for_pack helper
+read_pack_readiness_report helper
+read_pack_readiness_validation helper
 BenchmarkPackReader and BenchmarkPackValidation metadata binding
 local validation-derived readiness checks
+adjacent readiness output files under readiness/
 local readiness contract
 inert replay-command metadata rules
 future Level2 promotion preconditions
@@ -150,4 +155,18 @@ The Phase O-C helper builds a `PackReadinessReport` from an already-read local
 replay commands, write pack outputs, import external results, mutate the
 accepted `EvidenceLedger`, or create Level2 evidence.
 
-This slice does not create pack outputs, benchmark results, or Level2 evidence.
+The Phase O-D helper writes adjacent metadata files only:
+
+```text
+readiness/pack-validation-report.json
+readiness/pack-readiness-report.json
+readiness/pack-readiness-validation.json
+```
+
+These files are not added to `pack.json`, are not accepted evidence, and remain
+`Level0DesignNote` readiness metadata. Failed local pack validation may produce
+a failed readiness validation report, but it must not authorize external replay
+or elevate claim boundaries.
+
+This slice does not create benchmark results, accepted evidence, external
+replay evidence, or Level2 evidence.

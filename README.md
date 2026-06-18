@@ -153,6 +153,7 @@ Surface DSL
 | [docs/63-phase-m-recursion-envelope-stress-spec.md](docs/63-phase-m-recursion-envelope-stress-spec.md) | Phase M recursion-envelope stress spec and claim-boundary contract. |
 | [docs/64-phase-n-narrow-zkml-adapter-spec.md](docs/64-phase-n-narrow-zkml-adapter-spec.md) | Phase N narrow zkML adapter docs-first boundary contract. |
 | [docs/65-phase-o-local-reproducible-pack-readiness-spec.md](docs/65-phase-o-local-reproducible-pack-readiness-spec.md) | Phase O local reproducible-pack readiness boundary contract. |
+| [docs/66-managed-signature-verification-boundary-spec.md](docs/66-managed-signature-verification-boundary-spec.md) | Managed-signature verification docs-first boundary and source attribution. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -232,6 +233,14 @@ Surface DSL
   anchor registry. It records one active HSAI identity per accepted,
   non-reused registered anchor set; it does not prove global software-agent
   uniqueness.
+- `hsai-e2e-harness` now composes the Phase 4 anchor registry over the pure-data
+  managed-attestation harness path. This is local regression evidence only, not
+  backend verification, external attestation evidence, proof, or benchmark
+  output.
+- `docs/66-managed-signature-verification-boundary-spec.md` records the next
+  managed-attestation boundary as docs-first source attribution for future
+  managed-service signature/JWKS/JWT or quote verification. It authorizes no
+  implementation code.
 - Managed-attestation challenge packet tooling exists for local, non-secret
   capture preflight. It creates capture inputs only, not real attestation
   evidence. The operator-facing preflight example
@@ -257,13 +266,15 @@ Surface DSL
 ## Next Implementation Slice
 
 For the benchmark OS track, Phase O inert local reproducible-pack readiness
-metadata and construction helpers are implemented; see
+metadata, construction helpers, and adjacent output plumbing are implemented;
+see
 [docs/65-phase-o-local-reproducible-pack-readiness-spec.md](docs/65-phase-o-local-reproducible-pack-readiness-spec.md).
-The next Phase O slice must be explicitly authorized before sampled pack-output
-readiness plumbing. It must preserve local-only benchmark packs, keep replay
-command metadata inert, avoid external replay, avoid official benchmark
-evidence, avoid ZK backend performance claims, and avoid Level2+ evidence
-unless a future reviewed evidence phase explicitly changes that boundary.
+The next benchmark-OS slice should reconcile Phase P reporting against the
+existing claim-boundary model before adding any dashboard surface. It must
+preserve local-only benchmark packs, keep replay command metadata inert, avoid
+external replay, avoid official benchmark evidence, avoid ZK backend
+performance claims, and avoid Level2+ evidence unless a future reviewed
+evidence phase explicitly changes that boundary.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
@@ -274,6 +285,12 @@ and integration test
 regression evidence only. Phase 4 `crates/hsai-agent-anchor-registry` is now
 authorized and implemented under the Phase 4 Recheck Rule in
 [docs/57-managed-attestation-real-artifact-promotion-spec.md](docs/57-managed-attestation-real-artifact-promotion-spec.md).
+The immediate next managed-attestation slice is docs-first only:
+[docs/66-managed-signature-verification-boundary-spec.md](docs/66-managed-signature-verification-boundary-spec.md)
+defines the source-cited boundary for a future managed-service
+signature/JWKS/JWT or quote-verification implementation. That future code phase
+must be explicitly authorized before any network, JWKS, JWT, DCAP, PCCS, TLS, or
+transport-bound attestation work.
 
 ## Non-Goals
 
