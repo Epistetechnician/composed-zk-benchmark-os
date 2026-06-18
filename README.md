@@ -159,6 +159,7 @@ Surface DSL
 | [docs/69-phase-q-report-bundle-implementation-notes.md](docs/69-phase-q-report-bundle-implementation-notes.md) | Phase Q inert in-memory report-bundle metadata implementation notes. |
 | [docs/70-phase-q-report-bundle-output-plumbing-spec.md](docs/70-phase-q-report-bundle-output-plumbing-spec.md) | Phase Q report-bundle adjacent local output-plumbing boundary. |
 | [docs/71-phase-q-report-bundle-output-implementation-notes.md](docs/71-phase-q-report-bundle-output-implementation-notes.md) | Phase Q report-bundle adjacent local output implementation notes. |
+| [docs/72-phase-q-report-bundle-ergonomics-hardening-notes.md](docs/72-phase-q-report-bundle-ergonomics-hardening-notes.md) | Phase Q report-bundle local ergonomics hardening notes. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -270,16 +271,15 @@ Surface DSL
 
 ## Next Implementation Slice
 
-For the benchmark OS track, Phase Q-D now implements adjacent local
-report-bundle output plumbing over Phase Q-B in-memory metadata;
+For the benchmark OS track, Phase Q-E now hardens adjacent local report-bundle
+output ergonomics over Phase Q-D output plumbing;
 see
-[docs/71-phase-q-report-bundle-output-implementation-notes.md](docs/71-phase-q-report-bundle-output-implementation-notes.md).
-The next benchmark-OS slice should either harden report-bundle ergonomics with
-additional local-only validation around existing outputs, or open a new
-docs-first boundary before broadening beyond local metadata. It must not add a UI
-dashboard, command-line tool, external replay, official benchmark evidence, ZK
-backend performance claims, or Level2+ evidence promotion without a separate
-explicit boundary.
+[docs/72-phase-q-report-bundle-ergonomics-hardening-notes.md](docs/72-phase-q-report-bundle-ergonomics-hardening-notes.md).
+The next benchmark-OS slice should open a new docs-first boundary before
+broadening beyond local metadata, report-bundle ergonomics, or read-only
+reporting. It must not add a UI dashboard, command-line tool, external replay,
+official benchmark evidence, ZK backend performance claims, or Level2+ evidence
+promotion without a separate explicit boundary.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
