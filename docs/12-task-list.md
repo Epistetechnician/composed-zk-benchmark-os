@@ -383,3 +383,34 @@ Markdown payloads can be derived from known source reports without caller-side
 dashboard-id reconstruction, source drift fails closed, duplicate rendered paths
 are rejected, unsafe roots and symlinks are rejected, and report bundles remain
 local integrity metadata only.
+
+## Phase R: Local Audit Index
+
+Status: complete for docs-first boundary only. See
+`docs/73-phase-r-local-audit-index-boundary-spec.md`.
+
+Goal: define a read-only local audit-index contract over existing local metadata
+outputs before any implementation broadens beyond report-bundle ergonomics.
+
+Implemented: Phase R boundary spec covering allowed local inputs, future inert
+index metadata shape, required validation rules, claim labels, non-goals, and
+future implementation exit criteria.
+
+Dependencies: Phase O pack-readiness metadata, Phase P read-only reporting, and
+Phase Q report-bundle metadata/output plumbing.
+
+Validation gate: documentation navigation checks, claim-boundary text checks,
+portable source refs, digest validation, failed-readiness visibility, no source
+pack/report/report-bundle mutation, no external execution hooks, and no accepted
+Evidence Ledger mutation.
+
+Anti-goals: UI dashboard, command-line tools, replay-command execution, external
+replay, official benchmark evidence claims, ZK backend performance claims,
+Level2+ evidence creation, accepted Evidence Ledger mutation, score-axis
+population from local-only evidence, broad leaderboard claims, generated
+benchmark artifacts, or package-script/runtime additions.
+
+Exit criteria for docs-first boundary: Phase R spec exists, navigation points to
+it, and `AGENTS.md` authorizes only Markdown planning for a local audit index.
+Future audit-index implementation requires a separate explicit phase and must
+remain local metadata only.
