@@ -1,16 +1,15 @@
 use std::fs;
 
 use zkbench_core::{
-    build_dashboard_model_from_pack_readiness, build_dashboard_model_from_score_report,
-    build_report_bundle_manifest_from_reports, compute_report_bundle_manifest_digest,
-    deserialize_report_bundle_manifest_json, read_report_bundle_outputs, render_dashboard_markdown,
-    serialize_report_bundle_manifest_json, validate_report_bundle_manifest,
-    write_report_bundle_outputs, ArtifactDigest, ArtifactDigestAlgorithm, ArtifactKind,
-    ArtifactRole, ClaimBoundary, EvidenceClass, PackReadinessCheck, PackReadinessCheckKind,
-    PackReadinessInputKind, PackReadinessInputRef, PackReadinessReport, PackReadinessValidation,
-    PackReadinessValidationIssue, PackReadinessValidationIssueKind, PackReadinessVersion,
-    ReportBundlePackReadinessInput, ReportBundleRenderedMarkdown, ReportBundleValidationIssueKind,
-    ScoreConfidence, ScoreReport,
+    build_report_bundle_manifest_from_reports, build_report_bundle_rendered_markdown_payloads,
+    compute_report_bundle_manifest_digest, deserialize_report_bundle_manifest_json,
+    read_report_bundle_outputs, serialize_report_bundle_manifest_json,
+    validate_report_bundle_manifest, write_report_bundle_outputs, ArtifactDigest,
+    ArtifactDigestAlgorithm, ArtifactKind, ArtifactRole, ClaimBoundary, EvidenceClass,
+    PackReadinessCheck, PackReadinessCheckKind, PackReadinessInputKind, PackReadinessInputRef,
+    PackReadinessReport, PackReadinessValidation, PackReadinessValidationIssue,
+    PackReadinessValidationIssueKind, PackReadinessVersion, ReportBundlePackReadinessInput,
+    ReportBundleRenderedMarkdown, ReportBundleValidationIssueKind, ScoreConfidence, ScoreReport,
 };
 
 fn digest(label: &str, kind: ArtifactKind, role: ArtifactRole) -> ArtifactDigest {
@@ -142,29 +141,14 @@ fn valid_manifest_with_payloads() -> (
     )
     .expect("report bundle manifest builds");
 
-    let score_markdown = render_dashboard_markdown(&build_dashboard_model_from_score_report(
-        "phase_q_bundle_score_report_0_dashboard",
-        &score,
-    ));
-    let readiness_markdown = render_dashboard_markdown(&build_dashboard_model_from_pack_readiness(
-        "phase_q_bundle_pack_readiness_report_0_dashboard",
-        &readiness_input.report,
-        &readiness_input.validation,
-    ));
-
-    (
-        manifest,
-        vec![
-            ReportBundleRenderedMarkdown {
-                rendered_report_id: "score_report_0_markdown".to_string(),
-                markdown: score_markdown,
-            },
-            ReportBundleRenderedMarkdown {
-                rendered_report_id: "pack_readiness_report_0_markdown".to_string(),
-                markdown: readiness_markdown,
-            },
-        ],
+    let payloads = build_report_bundle_rendered_markdown_payloads(
+        &manifest,
+        std::slice::from_ref(&score),
+        std::slice::from_ref(&readiness_input),
     )
+    .expect("rendered Markdown payloads build");
+
+    (manifest, payloads)
 }
 
 fn issue_kinds(
@@ -380,4 +364,96 @@ fn report_bundle_outputs_reject_materialized_file_drift() {
     assert!(manifest_error
         .to_string()
         .contains("manifest JSON bytes do not match digest sidecar"));
+}
+
+#[test]
+fn report_bundle_rendered_payload_helper_rejects_source_drift() {
+    let score = score_report();
+    let readiness_input = ReportBundlePackReadinessInput {
+        report: readiness_report(false),
+        validation: readiness_validation(true),
+    };
+    let manifest = build_report_bundle_manifest_from_reports(
+        "phase_q_bundle",
+        std::slice::from_ref(&score),
+        std::slice::from_ref(&readiness_input),
+    )
+    .expect("report bundle manifest builds");
+
+    let payloads = build_report_bundle_rendered_markdown_payloads(
+        &manifest,
+        std::slice::from_ref(&score),
+        std::slice::from_ref(&readiness_input),
+    )
+    .expect("matching sources produce payloads");
+    assert_eq!(payloads.len(), manifest.rendered_reports.len());
+
+    let mut drifted_score = score;
+    drifted_score
+        .notes
+        .push("source report drift after manifest build".to_string());
+    let error = build_report_bundle_rendered_markdown_payloads(
+        &manifest,
+        std::slice::from_ref(&drifted_score),
+        std::slice::from_ref(&readiness_input),
+    )
+    .expect_err("source drift should fail");
+    assert!(error
+        .to_string()
+        .contains("source reports do not match report-bundle manifest inputs"));
+}
+
+#[test]
+fn report_bundle_outputs_reject_duplicate_rendered_paths_and_unsafe_roots() {
+    let (mut manifest, payloads) = valid_manifest_with_payloads();
+    manifest.rendered_reports[1].artifact_uri = manifest.rendered_reports[0].artifact_uri.clone();
+    let validation = validate_report_bundle_manifest(&manifest);
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.kind == ReportBundleValidationIssueKind::InvalidArtifactRef));
+
+    let dir = tempfile::tempdir().expect("tempdir");
+    let unsafe_root = dir.path().join("../report-bundle");
+    let error = write_report_bundle_outputs(&unsafe_root, &manifest, &payloads, false)
+        .expect_err("unsafe root should fail");
+    assert!(error
+        .to_string()
+        .contains("must not contain parent-directory components"));
+}
+
+#[test]
+fn report_bundle_outputs_reject_unexpected_files_on_overwrite() {
+    let (manifest, payloads) = valid_manifest_with_payloads();
+    let dir = tempfile::tempdir().expect("tempdir");
+    let output_root = dir.path().join("report-bundle");
+    write_report_bundle_outputs(&output_root, &manifest, &payloads, false)
+        .expect("initial write succeeds");
+    fs::write(output_root.join("unexpected.txt"), b"stale\n").expect("unexpected file");
+
+    let error = write_report_bundle_outputs(&output_root, &manifest, &payloads, true)
+        .expect_err("unexpected file should fail even with overwrite");
+    assert!(error.to_string().contains("contains an unexpected file"));
+}
+
+#[cfg(unix)]
+#[test]
+fn report_bundle_outputs_reject_symlinks_on_overwrite() {
+    use std::os::unix::fs::symlink;
+
+    let (manifest, payloads) = valid_manifest_with_payloads();
+    let dir = tempfile::tempdir().expect("tempdir");
+    let output_root = dir.path().join("report-bundle");
+    fs::create_dir_all(&output_root).expect("output root");
+    fs::write(dir.path().join("outside.md"), b"# outside\n").expect("outside file");
+    symlink(
+        dir.path().join("outside.md"),
+        output_root.join("report-bundle-manifest.json"),
+    )
+    .expect("symlink");
+
+    let error = write_report_bundle_outputs(&output_root, &manifest, &payloads, true)
+        .expect_err("symlink should fail");
+    assert!(error.to_string().contains("must not contain symlinks"));
 }

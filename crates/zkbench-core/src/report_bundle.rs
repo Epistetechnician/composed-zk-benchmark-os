@@ -387,6 +387,37 @@ pub fn build_report_bundle_manifest_from_reports(
     })
 }
 
+/// Build rendered Markdown payloads for an existing report-bundle manifest.
+///
+/// This helper recomputes the Phase Q rendered Markdown from the supplied
+/// source reports, verifies that the rebuilt manifest matches the supplied
+/// manifest, and returns payloads suitable for `write_report_bundle_outputs`.
+/// It does not write files, execute replay commands, or mutate source metadata.
+pub fn build_report_bundle_rendered_markdown_payloads(
+    manifest: &ReportBundleManifest,
+    score_reports: &[ScoreReport],
+    readiness_inputs: &[ReportBundlePackReadinessInput],
+) -> Result<Vec<ReportBundleRenderedMarkdown>> {
+    let rebuilt_manifest = build_report_bundle_manifest_from_reports(
+        manifest.bundle_id.clone(),
+        score_reports,
+        readiness_inputs,
+    )?;
+    if rebuilt_manifest.inputs != manifest.inputs {
+        return Err(report_bundle_io_error(
+            "report_bundle.inputs",
+            "source reports do not match report-bundle manifest inputs",
+        ));
+    }
+    if rebuilt_manifest.rendered_reports != manifest.rendered_reports {
+        return Err(report_bundle_io_error(
+            "report_bundle.rendered_reports",
+            "source reports do not match report-bundle rendered report metadata",
+        ));
+    }
+    build_rendered_markdown_payloads_unchecked(&manifest.bundle_id, score_reports, readiness_inputs)
+}
+
 /// Compute a deterministic digest for a report-bundle manifest.
 pub fn compute_report_bundle_manifest_digest(
     manifest: &ReportBundleManifest,
@@ -637,6 +668,7 @@ pub fn validate_report_bundle_manifest(manifest: &ReportBundleManifest) -> Repor
     }
 
     let mut rendered_ids = BTreeSet::new();
+    let mut rendered_artifact_uris = BTreeSet::new();
     for (index, rendered) in manifest.rendered_reports.iter().enumerate() {
         let path = format!("rendered_reports[{index}]");
         validate_identity(
@@ -659,6 +691,14 @@ pub fn validate_report_bundle_manifest(manifest: &ReportBundleManifest) -> Repor
                 ReportBundleValidationIssueKind::InvalidArtifactRef,
                 format!("{path}.artifact_uri"),
                 "rendered report URI must be portable relative metadata",
+            );
+        }
+        if !rendered_artifact_uris.insert(rendered.artifact_uri.clone()) {
+            push_issue(
+                &mut issues,
+                ReportBundleValidationIssueKind::InvalidArtifactRef,
+                format!("{path}.artifact_uri"),
+                "rendered report output URIs must be unique",
             );
         }
         validate_digest(
@@ -809,6 +849,38 @@ fn rendered_report(
         claim_boundary: ClaimBoundary::Level0DesignNote,
         notes: vec!["rendered Markdown is read-only local reporting metadata".to_string()],
     }
+}
+
+fn build_rendered_markdown_payloads_unchecked(
+    bundle_id: &str,
+    score_reports: &[ScoreReport],
+    readiness_inputs: &[ReportBundlePackReadinessInput],
+) -> Result<Vec<ReportBundleRenderedMarkdown>> {
+    let mut payloads = Vec::new();
+    for (index, report) in score_reports.iter().enumerate() {
+        let input_id = format!("score_report_{index}");
+        let dashboard_id = format!("{bundle_id}_{input_id}_dashboard");
+        let model = build_dashboard_model_from_score_report(&dashboard_id, report);
+        payloads.push(ReportBundleRenderedMarkdown {
+            rendered_report_id: format!("{input_id}_markdown"),
+            markdown: render_dashboard_markdown(&model),
+        });
+    }
+
+    for (index, source) in readiness_inputs.iter().enumerate() {
+        let report_input_id = format!("pack_readiness_report_{index}");
+        let dashboard_id = format!("{bundle_id}_{report_input_id}_dashboard");
+        let model = build_dashboard_model_from_pack_readiness(
+            &dashboard_id,
+            &source.report,
+            &source.validation,
+        );
+        payloads.push(ReportBundleRenderedMarkdown {
+            rendered_report_id: format!("{report_input_id}_markdown"),
+            markdown: render_dashboard_markdown(&model),
+        });
+    }
+    Ok(payloads)
 }
 
 fn readiness_failed(report: &PackReadinessReport, validation: &PackReadinessValidation) -> bool {

@@ -325,11 +325,12 @@ evidence. Future UI exit criteria require a separate explicit phase.
 
 Status: complete for docs-first boundary, inert in-memory metadata
 implementation, adjacent output-plumbing boundary, and adjacent local output
-implementation. See
+implementation, and local ergonomics hardening. See
 `docs/68-phase-q-report-bundle-boundary-spec.md`,
 `docs/69-phase-q-report-bundle-implementation-notes.md`, and
 `docs/70-phase-q-report-bundle-output-plumbing-spec.md`, and
-`docs/71-phase-q-report-bundle-output-implementation-notes.md`.
+`docs/71-phase-q-report-bundle-output-implementation-notes.md`, and
+`docs/72-phase-q-report-bundle-ergonomics-hardening-notes.md`.
 
 Goal: define a richer read-only report-bundle contract before any implementation
 or UI work broadens Phase P reporting.
@@ -345,7 +346,10 @@ future adjacent local output plumbing around Q-B metadata. Phase Q-D adds
 `write_report_bundle_outputs`, `read_report_bundle_outputs`,
 `ReportBundleRenderedMarkdown`, `ReportBundleOutput`, materialized manifest and
 Markdown digest checks, overwrite gating, extra-file rejection, and
-source-immutability tests.
+source-immutability tests. Phase Q-E adds
+`build_report_bundle_rendered_markdown_payloads`, source-drift rejection,
+duplicate rendered output path validation, unsafe-root coverage, unexpected
+overwrite-file coverage, and symlink rejection coverage.
 
 Dependencies: Phase O pack-readiness metadata and Phase P read-only reporting.
 
@@ -353,7 +357,9 @@ Validation gate: documentation navigation checks, claim-boundary text checks,
 focused Phase Q report-bundle tests, digest validation, portable source refs,
 failed-readiness visibility, no external execution hooks, and no accepted
 Evidence Ledger mutation. Output-plumbing implementation coverage must include
-materialized-file digest tests and source-immutability tests.
+materialized-file digest tests and source-immutability tests. Ergonomics
+hardening coverage must include source-drift rejection and output-root
+hardening.
 
 Anti-goals: UI dashboard, replay-command execution, external replay, official
 benchmark evidence claims, ZK backend performance claims, Level2+ evidence
@@ -372,4 +378,8 @@ implementation: writer and reader materialize only declared local report-bundle
 files, verify manifest and Markdown digests, reject extra rendered files,
 preserve source metadata, keep output `Level0DesignNote`, and leave UI, CLI,
 external replay, official evidence, ZK backend performance claims, and Level2+
-promotion unauthorized.
+promotion unauthorized. Exit criteria for ergonomics hardening: rendered
+Markdown payloads can be derived from known source reports without caller-side
+dashboard-id reconstruction, source drift fails closed, duplicate rendered paths
+are rejected, unsafe roots and symlinks are rejected, and report bundles remain
+local integrity metadata only.
