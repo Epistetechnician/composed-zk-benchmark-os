@@ -161,6 +161,7 @@ Surface DSL
 | [docs/71-phase-q-report-bundle-output-implementation-notes.md](docs/71-phase-q-report-bundle-output-implementation-notes.md) | Phase Q report-bundle adjacent local output implementation notes. |
 | [docs/72-phase-q-report-bundle-ergonomics-hardening-notes.md](docs/72-phase-q-report-bundle-ergonomics-hardening-notes.md) | Phase Q report-bundle local ergonomics hardening notes. |
 | [docs/73-phase-r-local-audit-index-boundary-spec.md](docs/73-phase-r-local-audit-index-boundary-spec.md) | Phase R local audit-index docs-first boundary over existing local metadata outputs. |
+| [docs/74-phase-r-local-audit-index-implementation-notes.md](docs/74-phase-r-local-audit-index-implementation-notes.md) | Phase R inert in-memory local audit-index metadata implementation notes. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -214,6 +215,9 @@ Surface DSL
 - Internal benchmark OS telemetry exists for generation, mutation, local oracle, local replay, pack read/write, proposal-preview counters, and local runner duration.
 - Local health report models exist and warn that local soak telemetry is not official benchmark evidence.
 - Failure corpus extraction exists with reproduction manifests and minimization metadata only.
+- Inert local audit-index metadata exists for summarizing existing local
+  report-bundle metadata without writing files, executing replay commands,
+  mutating source packs/reports/bundles, or creating accepted evidence.
 - Phase L bounded local soak acceptance exists for
   `phase_l_qwable_local_soak_2026_06_17_extended_256`: 768 completed local
   cases, zero failures, zero failure-corpus entries, a valid report bundle, no
@@ -272,16 +276,16 @@ Surface DSL
 
 ## Next Implementation Slice
 
-For the benchmark OS track, Phase R now defines a docs-first boundary for a
-read-only local audit index over existing local metadata outputs;
+For the benchmark OS track, Phase R now implements inert in-memory local
+audit-index metadata over existing report-bundle metadata;
 see
-[docs/73-phase-r-local-audit-index-boundary-spec.md](docs/73-phase-r-local-audit-index-boundary-spec.md).
-The next benchmark-OS slice may implement inert in-memory audit-index metadata
-only if it preserves portable refs, digest checks, failed-readiness visibility,
-source immutability, and `Level0DesignNote` output. It must not add a UI
-dashboard, command-line tool, external replay, official benchmark evidence, ZK
-backend performance claims, or Level2+ evidence promotion without a separate
-explicit boundary.
+[docs/74-phase-r-local-audit-index-implementation-notes.md](docs/74-phase-r-local-audit-index-implementation-notes.md).
+The next benchmark-OS slice should open a docs-first boundary before adding
+audit-index output plumbing. It must preserve portable refs, digest checks,
+failed-readiness visibility, source immutability, and `Level0DesignNote`
+output, and it must not add a UI dashboard, command-line tool, external replay,
+official benchmark evidence, ZK backend performance claims, or Level2+ evidence
+promotion without a separate explicit boundary.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57

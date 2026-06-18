@@ -386,22 +386,24 @@ local integrity metadata only.
 
 ## Phase R: Local Audit Index
 
-Status: complete for docs-first boundary only. See
-`docs/73-phase-r-local-audit-index-boundary-spec.md`.
+Status: complete for docs-first boundary and inert in-memory implementation.
+See `docs/73-phase-r-local-audit-index-boundary-spec.md` and
+`docs/74-phase-r-local-audit-index-implementation-notes.md`.
 
 Goal: define a read-only local audit-index contract over existing local metadata
 outputs before any implementation broadens beyond report-bundle ergonomics.
 
-Implemented: Phase R boundary spec covering allowed local inputs, future inert
-index metadata shape, required validation rules, claim labels, non-goals, and
-future implementation exit criteria.
+Implemented: Phase R boundary spec plus `LocalAuditIndexManifest` metadata,
+source input refs, deterministic manifest digesting, JSON helpers, validation
+rules, and construction from existing `ReportBundleManifest` metadata.
 
 Dependencies: Phase O pack-readiness metadata, Phase P read-only reporting, and
 Phase Q report-bundle metadata/output plumbing.
 
 Validation gate: documentation navigation checks, claim-boundary text checks,
-portable source refs, digest validation, failed-readiness visibility, no source
-pack/report/report-bundle mutation, no external execution hooks, and no accepted
+portable source refs, digest validation, failed-readiness visibility, local-only
+warning visibility, no source pack/report/report-bundle mutation, no external
+execution hooks, no audit-index output writer or reader APIs, and no accepted
 Evidence Ledger mutation.
 
 Anti-goals: UI dashboard, command-line tools, replay-command execution, external
@@ -410,7 +412,7 @@ Level2+ evidence creation, accepted Evidence Ledger mutation, score-axis
 population from local-only evidence, broad leaderboard claims, generated
 benchmark artifacts, or package-script/runtime additions.
 
-Exit criteria for docs-first boundary: Phase R spec exists, navigation points to
-it, and `AGENTS.md` authorizes only Markdown planning for a local audit index.
-Future audit-index implementation requires a separate explicit phase and must
-remain local metadata only.
+Exit criteria: Phase R spec exists, navigation points to the implementation
+notes, `AGENTS.md` authorizes only inert in-memory audit-index metadata, focused
+tests cover validation and source-scan boundaries, and future audit-index output
+plumbing remains blocked until a separate explicit docs-first phase.
