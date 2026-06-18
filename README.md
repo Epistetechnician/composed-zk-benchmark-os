@@ -152,6 +152,7 @@ Surface DSL
 | [docs/62-phase-l-local-soak-acceptance-notes.md](docs/62-phase-l-local-soak-acceptance-notes.md) | Phase L bounded local soak acceptance notes. |
 | [docs/63-phase-m-recursion-envelope-stress-spec.md](docs/63-phase-m-recursion-envelope-stress-spec.md) | Phase M recursion-envelope stress spec and claim-boundary contract. |
 | [docs/64-phase-n-narrow-zkml-adapter-spec.md](docs/64-phase-n-narrow-zkml-adapter-spec.md) | Phase N narrow zkML adapter docs-first boundary contract. |
+| [docs/65-phase-o-local-reproducible-pack-readiness-spec.md](docs/65-phase-o-local-reproducible-pack-readiness-spec.md) | Phase O local reproducible-pack readiness boundary contract. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -255,15 +256,14 @@ Surface DSL
 
 ## Next Implementation Slice
 
-For the benchmark OS track, Phase N inert zkML workload manifest metadata is
-implemented; see
-[docs/64-phase-n-narrow-zkml-adapter-spec.md](docs/64-phase-n-narrow-zkml-adapter-spec.md).
-The next benchmark-OS slice should review Phase O before any reproducible-pack
-claim work because the current repo boundary still forbids creating Level2+
-evidence. Any Phase O opening must preserve local-only benchmark packs, avoid
-external replay, avoid official benchmark evidence, and avoid ZK backend
-performance claims unless a future reviewed evidence phase explicitly changes
-that boundary.
+For the benchmark OS track, Phase O is open as a docs-first local
+reproducible-pack readiness boundary contract; see
+[docs/65-phase-o-local-reproducible-pack-readiness-spec.md](docs/65-phase-o-local-reproducible-pack-readiness-spec.md).
+The next Phase O slice must be explicitly authorized before Rust implementation
+or pack-output work. It must preserve local-only benchmark packs, keep replay
+command metadata inert, avoid external replay, avoid official benchmark
+evidence, avoid ZK backend performance claims, and avoid Level2+ evidence
+unless a future reviewed evidence phase explicitly changes that boundary.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
