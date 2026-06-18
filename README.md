@@ -157,6 +157,7 @@ Surface DSL
 | [docs/67-phase-p-read-only-reporting-boundary-notes.md](docs/67-phase-p-read-only-reporting-boundary-notes.md) | Phase P read-only reporting boundary over score and pack-readiness metadata. |
 | [docs/68-phase-q-report-bundle-boundary-spec.md](docs/68-phase-q-report-bundle-boundary-spec.md) | Phase Q report-bundle docs-first boundary over read-only reporting metadata. |
 | [docs/69-phase-q-report-bundle-implementation-notes.md](docs/69-phase-q-report-bundle-implementation-notes.md) | Phase Q inert in-memory report-bundle metadata implementation notes. |
+| [docs/70-phase-q-report-bundle-output-plumbing-spec.md](docs/70-phase-q-report-bundle-output-plumbing-spec.md) | Phase Q report-bundle adjacent local output-plumbing boundary. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -268,15 +269,16 @@ Surface DSL
 
 ## Next Implementation Slice
 
-For the benchmark OS track, Phase Q-B now implements inert in-memory
-report-bundle metadata over conservative Score Reports, Phase O pack-readiness
-metadata, and Phase P rendered reporting metadata; see
-[docs/69-phase-q-report-bundle-implementation-notes.md](docs/69-phase-q-report-bundle-implementation-notes.md).
-The next benchmark-OS slice may define adjacent local report-bundle output
-plumbing only if it preserves portable source refs, digest checks,
-failed-readiness visibility, and `Level0DesignNote` output. It must not add a UI
-dashboard, external replay, official benchmark evidence, ZK backend performance
-claims, or Level2+ evidence promotion without a separate explicit boundary.
+For the benchmark OS track, Phase Q-C now defines the docs-first boundary for
+adjacent local report-bundle output plumbing over Phase Q-B in-memory metadata;
+see
+[docs/70-phase-q-report-bundle-output-plumbing-spec.md](docs/70-phase-q-report-bundle-output-plumbing-spec.md).
+The next benchmark-OS slice may implement that adjacent local output plumbing
+only if it preserves portable source refs, digest checks, failed-readiness
+visibility, source immutability, and `Level0DesignNote` output. It must not add
+a UI dashboard, external replay, official benchmark evidence, ZK backend
+performance claims, or Level2+ evidence promotion without a separate explicit
+boundary.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
