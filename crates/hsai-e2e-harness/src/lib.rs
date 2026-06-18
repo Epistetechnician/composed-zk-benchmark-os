@@ -98,6 +98,7 @@ mod tests {
         AttestationInput {
             anchor: anchor.clone(),
             token: Token {
+                signed_jwt: None,
                 anchor_id: anchor.anchor_id(),
                 nonce: GOOD_NONCE,
                 report_data: report_data.clone(),

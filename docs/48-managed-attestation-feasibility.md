@@ -279,17 +279,120 @@ Apple/Darkbloom-style attestation should not be the first backend. It should be 
 second profile after Phala or Intel/Azure: `provider-key attestation`, with a
 different claim boundary than CVM/container attestation.
 
+## Backend 5: Transport-Bound Attestation Channel (flashbots/attested-tls)
+
+Classification: `reference-only` in the current Level 1 state. Candidate reference
+implementation for the deferred leave-pure-data step, not a backend to integrate now.
+
+### Why It Is Listed Here
+
+This entry does not change the `viable-first` verdict for Phala/dstack. It is a
+distinct category: a transport-bound attestation channel rather than a token
+verifier. It is recorded because it is the most relevant external reference
+implementation for the single deliberately-deferred step named in
+`docs/44-attestation-verification-lane-spec.md` — verifying the managed service
+signature over the token, and binding attestation to the channel that carries it.
+
+### Feasibility Facts
+
+The flashbots/attested-tls Rust workspace (MIT, 100% Rust) provides primitives for
+binding confidential-computing attestation evidence to TLS certificates. It
+contains six crates:
+
+- `attested-tls`: attested TLS via X.509 certificate extensions and a custom
+  certificate verifier that checks the embedded attestation during the handshake.
+- `nested-tls`: two stacked TLS sessions — an outer session authenticating a
+  service with a standard CA-signed certificate, and an inner session using a
+  certificate whose extension carries attestation evidence bound to that
+  certificate.
+- `attestation`: attestation generation, verification, and measurement handling.
+- `pccs`: DCAP collateral fetching and caching for real DCAP verification
+  (network-bound).
+- `mock-tdx`: deterministic mock TDX DCAP quotes, collateral, and trust roots for
+  tests and development on non-TDX hardware.
+- `attestation-provider-server`: an HTTP server and client for attestation
+  generation and verification (network-bound).
+
+The stated design intent is that the outer identity proves domain ownership and
+may persist across CVM restarts, while the inner identity represents a particular
+CVM lifetime and must not persist across CVM reboots or image updates.
+
+### HSAI Binding (For A Future Phase, Not Now)
+
+A future phase that is explicitly authorized to leave pure-data could use this
+workspace as the reference for:
+
+- real TDX quote and collateral verification behind the shipped
+  `AttestationVerifier` trait, replacing the current fixture stub strings in
+  `crates/hsai-attestation-phala`;
+- the deterministic mock-TDX crate as a fixture source that is honest about being
+  non-hardware, replacing the `fixture-tdx-quote:` prefix convention;
+- the measurement-handling surface, which mirrors HSAI's
+  `report_data_binding(agent_pubkey, nonce, case_hash)` profile;
+- a transport binding where the attested `AgentCase` emitter in a CVM carries its
+  attestation inside its channel to the verifier, preventing token substitution.
+
+The transport binding is a question the current HSAI spec does not ask yet. It is
+recorded here as future scope, not as current design.
+
+### Why It Cannot Be Integrated In The Current State
+
+The current Level 1 state forbids everything that gives this workspace its real
+strength:
+
+- network access is forbidden, and `pccs` and `attestation-provider-server` are
+  network-bound;
+- local Intel DCAP implementation is forbidden unless a future spec allows it;
+- managed-service signature, JWKS, and JWT verification are forbidden unless a
+  future spec allows it;
+- external repo clones and vendored source are forbidden by default;
+- output is capped at `Maturity::Attested` and Level 1 local evidence only.
+
+Pulling it in as a dependency, forking it, or vendoring it would each violate
+multiple current-phase state-slice rules.
+
+### Trust Roots This Would Introduce
+
+If a future phase integrates any of these primitives, the emitted
+`ClaimEnvelope` must list at minimum:
+
+- Intel TDX hardware root certificates (for local DCAP);
+- the CA that signed the outer TLS certificate (for nested-TLS outer identity);
+- any managed verifier service relied on (for managed-verifier modes);
+- the flashbots/attested-tls components actually relied on, labeled as a software
+  trust root.
+
+### Failure Modes To Test (Future Phase)
+
+- outer TLS presented but inner attestation missing or invalid;
+- attestation bound to a different certificate than the one presented;
+- stale CVM-lifetime identity reused across a reboot or image update;
+- collateral fetch failure or stale collateral cache;
+- mock-TDX fixture accidentally accepted as real TDX evidence;
+- channel-bound token replayed on a different channel.
+
+### Verdict
+
+Reference-only now. When a future explicit phase authorizes leaving pure-data,
+this workspace is the recommended reference implementation for real quote
+verification, collateral handling, deterministic non-hardware fixtures, and
+transport-bound attestation. Per `AGENTS.md` the default integration posture is
+wrap or reference, not fork — fork only if an adapter cannot be written without
+changing upstream. Do not integrate, depend on, vendor, or fork this workspace
+under the current phase.
+
 ## Comparison Against HSAI Requirements
 
-| Requirement | Phala/dstack | Azure Attestation | Intel Trust Authority | Apple/Darkbloom-style |
-|---|---|---|---|---|
-| Nonce binding | Viable through report data / quote path | Viable through selected token profile, needs exact mapping | Viable through verifier nonce / user data path | Viable through challenge-response |
-| Measurement binding | Viable: compose hash, Docker image/runtime data, event logs | Viable, exact claims depend on TEE mode | Viable: TDX/SGX measurement claims | Partial: provider binary/code identity, not CVM runtime measurement |
-| Agent pubkey + case hash binding | Viable through `reportData` | Viable if encoded into runtime/custom data profile | Viable if encoded into user data/report data profile | Viable if challenge payload signs those fields |
-| Local verification | Viable but needs implementation work | Viable JWT verification; TEE evidence path depends on mode | Viable JWT verification; quote appraisal delegated to ITA | Viable only through Apple/provider evidence chain, not general TEE quote |
-| Managed API verification | Available through Phala verifier API | Native managed service | Native managed service | Depends on MDM/Apple/provider infrastructure |
-| Trust-root clarity | Good if labeled: Intel TDX plus dstack/Phala components | Good: Azure Attestation plus hardware TEE roots | Good: Intel Trust Authority plus hardware TEE roots | Good if labeled: Apple MDA/MDM/APNs/Secure Enclave/provider |
-| First E2E HSAI fit | Best | Good if Azure is deployment target | Good generic TDX verifier | Later profile |
+| Requirement | Phala/dstack | Azure Attestation | Intel Trust Authority | Apple/Darkbloom-style | flashbots/attested-tls (reference-only) |
+|---|---|---|---|---|---|
+| Nonce binding | Viable through report data / quote path | Viable through selected token profile, needs exact mapping | Viable through verifier nonce / user data path | Viable through challenge-response | Viable: carried in attestation bound to the inner TLS certificate |
+| Measurement binding | Viable: compose hash, Docker image/runtime data, event logs | Viable, exact claims depend on TEE mode | Viable: TDX/SGX measurement claims | Partial: provider binary/code identity, not CVM runtime measurement | Viable: `attestation` crate measurement handling plus mock-TDX fixtures |
+| Agent pubkey + case hash binding | Viable through `reportData` | Viable if encoded into runtime/custom data profile | Viable if encoded into user data/report data profile | Viable if challenge payload signs those fields | Viable if encoded into report data, then channel-bound |
+| Local verification | Viable but needs implementation work | Viable JWT verification; TEE evidence path depends on mode | Viable JWT verification; quote appraisal delegated to ITA | Viable only through Apple/provider evidence chain, not general TEE quote | Reference impl exists: `attestation` + `pccs` for real DCAP; forbidden in current phase |
+| Managed API verification | Available through Phala verifier API | Native managed service | Native managed service | Depends on MDM/Apple/provider infrastructure | Out of scope for the library; caller wires in a managed verifier |
+| Trust-root clarity | Good if labeled: Intel TDX plus dstack/Phala components | Good: Azure Attestation plus hardware TEE roots | Good: Intel Trust Authority plus hardware TEE roots | Good if labeled: Apple MDA/MDM/APNs/Secure Enclave/provider | Good if labeled: Intel TDX roots plus flashbots components plus any outer CA |
+| Transport binding | None: token is consumed by the verifier | None: token is consumed by the verifier | None: token is consumed by the verifier | None: token is consumed by the verifier | Yes: attestation bound to the inner TLS cert and verified in-handshake |
+| First E2E HSAI fit | Best | Good if Azure is deployment target | Good generic TDX verifier | Later profile | Not applicable now; reference for a future leave-pure-data phase |
 
 ## Recommended Phase 2 Input
 
@@ -383,3 +486,4 @@ The economy is regenerative.
 - Darkbloom d-inference repository: https://github.com/Layr-Labs/d-inference
 - Darkbloom terms: https://www.darkbloom.dev/terms.html
 - Project Darkbloom writeup: https://blog.eigencloud.xyz/project-darkbloom-unlocking-idle-compute-for-ai/
+- flashbots/attested-tls (reference-only, not integrated in current phase): https://github.com/flashbots/attested-tls

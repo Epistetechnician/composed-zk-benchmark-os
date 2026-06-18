@@ -164,6 +164,7 @@ Surface DSL
 | [docs/74-phase-r-local-audit-index-implementation-notes.md](docs/74-phase-r-local-audit-index-implementation-notes.md) | Phase R inert in-memory local audit-index metadata implementation notes. |
 | [docs/75-phase-r-audit-index-output-plumbing-spec.md](docs/75-phase-r-audit-index-output-plumbing-spec.md) | Phase R audit-index adjacent local output-plumbing boundary. |
 | [docs/76-phase-r-audit-index-output-implementation-notes.md](docs/76-phase-r-audit-index-output-implementation-notes.md) | Phase R audit-index adjacent local output implementation notes. |
+| [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -255,10 +256,14 @@ Surface DSL
   managed-attestation harness path. This is local regression evidence only, not
   backend verification, external attestation evidence, proof, or benchmark
   output.
-- `docs/66-managed-signature-verification-boundary-spec.md` records the next
-  managed-attestation boundary as docs-first source attribution for future
-  managed-service signature/JWKS/JWT or quote verification. It authorizes no
-  implementation code.
+- `docs/66-managed-signature-verification-boundary-spec.md` records the
+  managed-attestation boundary as source attribution for managed-service
+  signature/JWKS/JWT or quote verification.
+- `docs/77-managed-jwt-signature-verification-notes.md` records the first
+  bounded implementation of that boundary: an offline ES256 managed-JWT verifier
+  over local in-memory public keys. It performs no JWKS fetch, no live service
+  call, no DCAP quote verification, no network access, and no claim above
+  `Attested`.
 - Managed-attestation challenge packet tooling exists for local, non-secret
   capture preflight. It creates capture inputs only, not real attestation
   evidence. The operator-facing preflight example
@@ -301,12 +306,15 @@ and integration test
 regression evidence only. Phase 4 `crates/hsai-agent-anchor-registry` is now
 authorized and implemented under the Phase 4 Recheck Rule in
 [docs/57-managed-attestation-real-artifact-promotion-spec.md](docs/57-managed-attestation-real-artifact-promotion-spec.md).
-The immediate next managed-attestation slice is docs-first only:
+The managed-signature boundary:
 [docs/66-managed-signature-verification-boundary-spec.md](docs/66-managed-signature-verification-boundary-spec.md)
-defines the source-cited boundary for a future managed-service
-signature/JWKS/JWT or quote-verification implementation. That future code phase
-must be explicitly authorized before any network, JWKS, JWT, DCAP, PCCS, TLS, or
-transport-bound attestation work.
+defined the source-cited boundary for managed-service signature/JWKS/JWT or
+quote-verification implementation. The first bounded code slice is now
+implemented in
+[docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md):
+offline ES256 managed-JWT signature verification against caller-provided local
+public keys. Future live-service verification, JWKS fetching, DCAP, PCCS, TLS,
+or transport-bound attestation work still requires a separate explicit phase.
 
 ## Non-Goals
 

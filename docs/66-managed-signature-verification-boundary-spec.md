@@ -2,11 +2,18 @@
 
 ## Status And Claim Boundary
 
-This is a docs-first boundary for the next managed-attestation phase after the
-pure-data harness and Phase 4 anchor registry. It authorizes no Rust
-implementation. It defines the conditions a future implementation must satisfy
-before this repository leaves pure-data and verifies managed-service signatures,
-JWKS/JWT material, or local quote evidence.
+This was the docs-first boundary for the next managed-attestation phase after
+the pure-data harness and Phase 4 anchor registry. The original docs-first slice
+authorized no Rust implementation. It defined the conditions a later
+implementation had to satisfy before this repository left pure-data and verified
+managed-service signatures, JWKS/JWT material, or local quote evidence.
+
+Follow-up status: `docs/77-managed-jwt-signature-verification-notes.md`
+implements the first bounded subset of this boundary: offline ES256 managed-JWT
+signature verification against caller-provided local public keys. That follow-up
+does not authorize JWKS fetching, live managed-service calls, local DCAP quote
+verification, PCCS or collateral handling, TLS channel binding, backend
+execution, benchmark outputs, or claims above `Attested`.
 
 The strongest possible output remains `Attested`, never `Proven`. Signature or
 quote verification can strengthen the provenance of an anchor-validity envelope,
