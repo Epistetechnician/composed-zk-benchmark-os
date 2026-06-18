@@ -531,3 +531,41 @@ Exit criteria: README, AGENTS, and task list point to this spec; the future code
 surface is bounded to hermetic provider-client abstraction and deterministic
 test doubles; and implementation remains blocked until a separate explicit
 implementation phase.
+
+## Managed-Attestation Track: Phala Hermetic Live-Verifier Implementation
+
+Status: complete for hermetic local implementation only. See
+`docs/80-phala-hermetic-live-verifier-implementation-notes.md`.
+
+Goal: implement the Phase 79 local interface surface in
+`hsai-attestation-phala` without live calls, network access, credentials, local
+DCAP, Cargo dependency changes, benchmark output, or claims above `Attested`.
+
+Implemented: `PhalaManagedVerifierClient`,
+`InMemoryPhalaManagedVerifierClient`, `PhalaManagedVerifierRequest`,
+`PhalaManagedVerifierResponse`, `PhalaManagedVerifierVerdict`,
+`PhalaManagedVerifierError`, `PhalaReplayGuard`, `PhalaLiveManagedVerifier`,
+normalized response validation, replay/freshness checks, trust-root prefix
+validation, local expectation trust-root mapping, `AttestationVerifier`
+integration, and hermetic tests over accepted and rejected fake responses.
+
+Dependencies: Phase 79 implementation spec, existing `hsai-attestation` seam,
+existing `hsai-attestation-phala` fixture/captured-artifact crate, and Phase 4
+claim boundaries.
+
+Validation gate: focused Phala tests, no process/network source hooks, no Cargo
+metadata changes, no fixture changes, no generated benchmark artifacts, root
+Cargo validation, and claim-boundary text checks.
+
+Anti-goals: live Phala API calls, operator live tests, credentials or secret
+handling, network access, local Intel DCAP quote verification, PCCS or
+collateral handling, generic JWKS/JWT fetching, TLS or attested-TLS channel
+binding, deployment orchestration, external repo clones, backend execution,
+benchmark outputs, accepted Evidence Ledger mutation, Phase 4 registry semantic
+changes, Level2+ evidence, global uniqueness claims, or claims above
+`Attested`.
+
+Exit criteria: accepted fake responses produce `Attested` only; rejected fake
+responses emit no guarantees or trust roots; managed-verifier trust roots are
+visible; replay and freshness checks fail closed; normal tests remain hermetic;
+and documentation states the non-claims.

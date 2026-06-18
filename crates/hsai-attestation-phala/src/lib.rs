@@ -7,10 +7,11 @@
 
 use hsai_agent_case::{AgentCase, EvidenceLane};
 use hsai_attestation::{AttestationInput, AttestationVerifier, VerifiedAttestation, VerifyError};
-use hsai_claim_envelope::{ClaimEnvelope, LaneId, Maturity, TimeWindow, TrustRoot, VkId};
+use hsai_claim_envelope::{ClaimEnvelope, LaneId, Maturity, TimeWindow, TrustRoot, VendorId, VkId};
 use hsai_distinct_agent::Anchor;
 use serde::{Deserialize, Serialize};
-use std::collections::BTreeSet;
+use std::cell::RefCell;
+use std::collections::{BTreeMap, BTreeSet};
 
 pub mod artifact;
 pub use artifact::{
@@ -34,6 +35,8 @@ pub const CLAIM_BOUNDARY: &str =
 const LOCAL_FIXTURE_QUOTE_PREFIX: &str = "fixture-tdx-quote:";
 const MANAGED_API_ACCEPTED: &str = "managed-api:accepted";
 const PHALA_MANAGED_VERIFIER_ROOT: &str = "phala-managed-verifier-api";
+const PHALA_LIVE_PROVIDER: &str = "phala-dstack";
+const PHALA_LIVE_MODE: &str = "live-managed-verifier";
 
 /// Fixture-oriented Phala/dstack evidence.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -324,6 +327,358 @@ pub fn verify_phala_quote_or_report(
         return Err(PhalaError::EventLogReplayMismatch);
     }
     verify_freshness(evidence, policy.now)
+}
+
+/// Non-secret request passed to a caller-supplied Phala managed-verifier client.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PhalaManagedVerifierRequest {
+    pub anchor_id: String,
+    pub agent_pubkey: Vec<u8>,
+    pub case_hash: Vec<u8>,
+    pub nonce: u64,
+    pub expected_report_data_binding: Vec<u8>,
+    pub expected_compose_hash: Vec<u8>,
+    pub expected_runtime_measurements: BTreeSet<String>,
+    pub expected_image_digest: String,
+    pub freshness_window: u64,
+    pub managed_verifier_endpoint_id: String,
+    pub request_time: u64,
+}
+
+/// Provider verdict after response normalization.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub enum PhalaManagedVerifierVerdict {
+    Accepted,
+    Rejected,
+}
+
+/// Normalized Phala managed-verifier response used by hermetic tests.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PhalaManagedVerifierResponse {
+    pub provider: String,
+    pub verification_mode: String,
+    pub provider_verdict: PhalaManagedVerifierVerdict,
+    pub anchor_id: String,
+    pub nonce: u64,
+    pub report_data: Vec<u8>,
+    pub compose_hash: Vec<u8>,
+    pub runtime_measurements: BTreeSet<String>,
+    pub image_digest: String,
+    pub issued_at: u64,
+    pub expires_at: u64,
+    pub raw_response_digest: Vec<u8>,
+    pub provider_trust_roots: BTreeSet<TrustRoot>,
+}
+
+/// Failure taxonomy for hermetic Phala managed-verifier preparation.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub enum PhalaManagedVerifierError {
+    ClientUnavailable,
+    MalformedResponse,
+    WrongProvider,
+    UnsupportedMode,
+    ProviderRejected,
+    StaleResponse,
+    ReplayedNonce,
+    AnchorMismatch,
+    NonceMismatch,
+    ReportDataMismatch,
+    ComposeHashMismatch,
+    RuntimeMeasurementMismatch,
+    ImageDigestMismatch,
+    MissingTrustRoot,
+    ClaimBoundaryViolation,
+}
+
+impl PhalaManagedVerifierError {
+    fn as_verify_error(&self) -> VerifyError {
+        match self {
+            Self::AnchorMismatch => VerifyError::AnchorMismatch,
+            Self::NonceMismatch => VerifyError::NonceMismatch,
+            Self::ReportDataMismatch => VerifyError::ReportDataMismatch,
+            Self::ComposeHashMismatch
+            | Self::RuntimeMeasurementMismatch
+            | Self::ImageDigestMismatch => VerifyError::MeasurementMismatch,
+            Self::StaleResponse => VerifyError::Expired,
+            Self::ClientUnavailable
+            | Self::MalformedResponse
+            | Self::WrongProvider
+            | Self::UnsupportedMode
+            | Self::ProviderRejected
+            | Self::ReplayedNonce
+            | Self::MissingTrustRoot
+            | Self::ClaimBoundaryViolation => VerifyError::SignatureUnverified,
+        }
+    }
+}
+
+/// Caller-owned Phala managed-verifier boundary.
+///
+/// Implementations may call a provider outside this crate, but normal workspace
+/// tests use [`InMemoryPhalaManagedVerifierClient`] and perform no network I/O.
+pub trait PhalaManagedVerifierClient {
+    fn verify(
+        &self,
+        request: &PhalaManagedVerifierRequest,
+    ) -> Result<PhalaManagedVerifierResponse, PhalaManagedVerifierError>;
+}
+
+/// Deterministic fake client for hermetic tests and local verification plumbing.
+#[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+pub struct InMemoryPhalaManagedVerifierClient {
+    responses:
+        BTreeMap<(String, u64), Result<PhalaManagedVerifierResponse, PhalaManagedVerifierError>>,
+}
+
+impl InMemoryPhalaManagedVerifierClient {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn with_response(
+        mut self,
+        anchor_id: impl Into<String>,
+        nonce: u64,
+        response: PhalaManagedVerifierResponse,
+    ) -> Self {
+        self.responses
+            .insert((anchor_id.into(), nonce), Ok(response));
+        self
+    }
+
+    pub fn with_error(
+        mut self,
+        anchor_id: impl Into<String>,
+        nonce: u64,
+        error: PhalaManagedVerifierError,
+    ) -> Self {
+        self.responses.insert((anchor_id.into(), nonce), Err(error));
+        self
+    }
+}
+
+impl PhalaManagedVerifierClient for InMemoryPhalaManagedVerifierClient {
+    fn verify(
+        &self,
+        request: &PhalaManagedVerifierRequest,
+    ) -> Result<PhalaManagedVerifierResponse, PhalaManagedVerifierError> {
+        self.responses
+            .get(&(request.anchor_id.clone(), request.nonce))
+            .cloned()
+            .unwrap_or(Err(PhalaManagedVerifierError::ClientUnavailable))
+    }
+}
+
+/// In-memory nonce replay guard for one verifier instance.
+#[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PhalaReplayGuard {
+    seen: BTreeSet<(String, u64)>,
+}
+
+impl PhalaReplayGuard {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn check_and_record(
+        &mut self,
+        anchor_id: &str,
+        nonce: u64,
+    ) -> Result<(), PhalaManagedVerifierError> {
+        if !self.seen.insert((anchor_id.to_owned(), nonce)) {
+            return Err(PhalaManagedVerifierError::ReplayedNonce);
+        }
+        Ok(())
+    }
+}
+
+/// Hermetic Phala live managed-verifier preparation.
+///
+/// This type owns no credentials and performs no network calls. All provider
+/// behavior enters through an injected client trait.
+#[derive(Debug)]
+pub struct PhalaLiveManagedVerifier<C> {
+    pub client: C,
+    pub agent_pubkey: Vec<u8>,
+    pub case_hash: Vec<u8>,
+    pub managed_verifier_endpoint_id: String,
+    pub freshness_window: u64,
+    pub expected_runtime_measurements: BTreeSet<String>,
+    pub expected_image_digest: String,
+    replay_guard: RefCell<PhalaReplayGuard>,
+}
+
+impl<C> PhalaLiveManagedVerifier<C> {
+    pub fn new(
+        client: C,
+        agent_pubkey: impl Into<Vec<u8>>,
+        case_hash: impl Into<Vec<u8>>,
+        managed_verifier_endpoint_id: impl Into<String>,
+        freshness_window: u64,
+        expected_runtime_measurements: BTreeSet<String>,
+        expected_image_digest: impl Into<String>,
+    ) -> Self {
+        Self {
+            client,
+            agent_pubkey: agent_pubkey.into(),
+            case_hash: case_hash.into(),
+            managed_verifier_endpoint_id: managed_verifier_endpoint_id.into(),
+            freshness_window,
+            expected_runtime_measurements,
+            expected_image_digest: expected_image_digest.into(),
+            replay_guard: RefCell::new(PhalaReplayGuard::new()),
+        }
+    }
+}
+
+impl<C: PhalaManagedVerifierClient> PhalaLiveManagedVerifier<C> {
+    pub fn verify_request(
+        &self,
+        request: &PhalaManagedVerifierRequest,
+    ) -> Result<VerifiedAttestation, PhalaManagedVerifierError> {
+        let response = self.client.verify(request)?;
+        self.verify_response(request, response)
+    }
+
+    fn verify_response(
+        &self,
+        request: &PhalaManagedVerifierRequest,
+        response: PhalaManagedVerifierResponse,
+    ) -> Result<VerifiedAttestation, PhalaManagedVerifierError> {
+        validate_phala_managed_response(request, &response)?;
+        self.replay_guard
+            .borrow_mut()
+            .check_and_record(&request.anchor_id, request.nonce)?;
+
+        let mut verifier_trust_roots = response.provider_trust_roots;
+        verifier_trust_roots.insert(TrustRoot::HardwareVendor(VendorId(format!(
+            "expected-compose-hash:{}",
+            hex_lower(&request.expected_compose_hash)
+        ))));
+        verifier_trust_roots.insert(TrustRoot::HardwareVendor(VendorId(format!(
+            "expected-image-digest:{}",
+            request.expected_image_digest
+        ))));
+
+        Ok(VerifiedAttestation {
+            anchor_id: response.anchor_id,
+            not_before: response.issued_at,
+            not_after: response.expires_at,
+            verifier_trust_roots,
+        })
+    }
+}
+
+impl<C: PhalaManagedVerifierClient> AttestationVerifier for PhalaLiveManagedVerifier<C> {
+    fn verify(
+        &self,
+        token: &hsai_attestation::Token,
+        expected_nonce: u64,
+        expected_report_data: &[u8],
+        expected_measurements: &[u8],
+        anchor_id: &str,
+        now: u64,
+    ) -> Result<VerifiedAttestation, VerifyError> {
+        if token.anchor_id != anchor_id {
+            return Err(VerifyError::AnchorMismatch);
+        }
+        if token.nonce != expected_nonce {
+            return Err(VerifyError::NonceMismatch);
+        }
+        if token.report_data != expected_report_data {
+            return Err(VerifyError::ReportDataMismatch);
+        }
+        if token.measurements != expected_measurements {
+            return Err(VerifyError::MeasurementMismatch);
+        }
+
+        let request = PhalaManagedVerifierRequest {
+            anchor_id: anchor_id.to_owned(),
+            agent_pubkey: self.agent_pubkey.clone(),
+            case_hash: self.case_hash.clone(),
+            nonce: expected_nonce,
+            expected_report_data_binding: expected_report_data.to_vec(),
+            expected_compose_hash: expected_measurements.to_vec(),
+            expected_runtime_measurements: self.expected_runtime_measurements.clone(),
+            expected_image_digest: self.expected_image_digest.clone(),
+            freshness_window: self.freshness_window,
+            managed_verifier_endpoint_id: self.managed_verifier_endpoint_id.clone(),
+            request_time: now,
+        };
+
+        self.verify_request(&request)
+            .map_err(|error| error.as_verify_error())
+    }
+}
+
+fn validate_phala_managed_response(
+    request: &PhalaManagedVerifierRequest,
+    response: &PhalaManagedVerifierResponse,
+) -> Result<(), PhalaManagedVerifierError> {
+    if response.raw_response_digest.is_empty() || response.expires_at < response.issued_at {
+        return Err(PhalaManagedVerifierError::MalformedResponse);
+    }
+    if response.provider != PHALA_LIVE_PROVIDER {
+        return Err(PhalaManagedVerifierError::WrongProvider);
+    }
+    if response.verification_mode != PHALA_LIVE_MODE {
+        return Err(PhalaManagedVerifierError::UnsupportedMode);
+    }
+    if response.provider_verdict != PhalaManagedVerifierVerdict::Accepted {
+        return Err(PhalaManagedVerifierError::ProviderRejected);
+    }
+    if request.request_time < response.issued_at
+        || request.request_time > response.expires_at
+        || request.request_time.saturating_sub(response.issued_at) > request.freshness_window
+    {
+        return Err(PhalaManagedVerifierError::StaleResponse);
+    }
+    if response.anchor_id != request.anchor_id {
+        return Err(PhalaManagedVerifierError::AnchorMismatch);
+    }
+    if response.nonce != request.nonce {
+        return Err(PhalaManagedVerifierError::NonceMismatch);
+    }
+    if response.report_data != request.expected_report_data_binding {
+        return Err(PhalaManagedVerifierError::ReportDataMismatch);
+    }
+    if response.compose_hash != request.expected_compose_hash {
+        return Err(PhalaManagedVerifierError::ComposeHashMismatch);
+    }
+    if response.runtime_measurements != request.expected_runtime_measurements {
+        return Err(PhalaManagedVerifierError::RuntimeMeasurementMismatch);
+    }
+    if response.image_digest != request.expected_image_digest {
+        return Err(PhalaManagedVerifierError::ImageDigestMismatch);
+    }
+    if !has_hardware_root_prefix(
+        &response.provider_trust_roots,
+        &format!(
+            "phala-managed-verifier:{}",
+            request.managed_verifier_endpoint_id
+        ),
+    ) || !has_hardware_root_prefix(&response.provider_trust_roots, "dstack-runtime-format:")
+        || !has_hardware_root_prefix(
+            &response.provider_trust_roots,
+            "provider-disclosed-hardware-root:",
+        )
+    {
+        return Err(PhalaManagedVerifierError::MissingTrustRoot);
+    }
+    Ok(())
+}
+
+fn has_hardware_root_prefix(roots: &BTreeSet<TrustRoot>, prefix: &str) -> bool {
+    roots.iter().any(|root| {
+        matches!(
+            root,
+            TrustRoot::HardwareVendor(VendorId(value)) if value.starts_with(prefix)
+        )
+    })
+}
+
+fn hex_lower(bytes: &[u8]) -> String {
+    bytes.iter().map(|byte| format!("{byte:02x}")).collect()
 }
 
 #[cfg(test)]
