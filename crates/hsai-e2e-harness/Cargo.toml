@@ -6,6 +6,7 @@ rust-version.workspace = true
 description = "Pure-data adversarial end-to-end harness over the local HSAI crates."
 
 [dependencies]
+hsai-agent-anchor-registry = { path = "../hsai-agent-anchor-registry" }
 hsai-agent-case = { path = "../hsai-agent-case" }
 hsai-attestation = { path = "../hsai-attestation" }
 hsai-claim-envelope = { path = "../hsai-claim-envelope" }
