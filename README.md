@@ -160,6 +160,7 @@ Surface DSL
 | [docs/70-phase-q-report-bundle-output-plumbing-spec.md](docs/70-phase-q-report-bundle-output-plumbing-spec.md) | Phase Q report-bundle adjacent local output-plumbing boundary. |
 | [docs/71-phase-q-report-bundle-output-implementation-notes.md](docs/71-phase-q-report-bundle-output-implementation-notes.md) | Phase Q report-bundle adjacent local output implementation notes. |
 | [docs/72-phase-q-report-bundle-ergonomics-hardening-notes.md](docs/72-phase-q-report-bundle-ergonomics-hardening-notes.md) | Phase Q report-bundle local ergonomics hardening notes. |
+| [docs/73-phase-r-local-audit-index-boundary-spec.md](docs/73-phase-r-local-audit-index-boundary-spec.md) | Phase R local audit-index docs-first boundary over existing local metadata outputs. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -271,15 +272,16 @@ Surface DSL
 
 ## Next Implementation Slice
 
-For the benchmark OS track, Phase Q-E now hardens adjacent local report-bundle
-output ergonomics over Phase Q-D output plumbing;
+For the benchmark OS track, Phase R now defines a docs-first boundary for a
+read-only local audit index over existing local metadata outputs;
 see
-[docs/72-phase-q-report-bundle-ergonomics-hardening-notes.md](docs/72-phase-q-report-bundle-ergonomics-hardening-notes.md).
-The next benchmark-OS slice should open a new docs-first boundary before
-broadening beyond local metadata, report-bundle ergonomics, or read-only
-reporting. It must not add a UI dashboard, command-line tool, external replay,
-official benchmark evidence, ZK backend performance claims, or Level2+ evidence
-promotion without a separate explicit boundary.
+[docs/73-phase-r-local-audit-index-boundary-spec.md](docs/73-phase-r-local-audit-index-boundary-spec.md).
+The next benchmark-OS slice may implement inert in-memory audit-index metadata
+only if it preserves portable refs, digest checks, failed-readiness visibility,
+source immutability, and `Level0DesignNote` output. It must not add a UI
+dashboard, command-line tool, external replay, official benchmark evidence, ZK
+backend performance claims, or Level2+ evidence promotion without a separate
+explicit boundary.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
