@@ -293,14 +293,30 @@ Level2 exit criteria require a separate reviewed evidence-promotion phase.
 
 ## Phase P: Dashboard/Reporting
 
+Status: complete for read-only reporting boundary over Score Reports and
+pack-readiness metadata. See
+`docs/67-phase-p-read-only-reporting-boundary-notes.md`.
+
 Goal: Visualize Score Reports after the evidence model works.
 
-Deliverables: report renderer or dashboard.
+Implemented: `DashboardPanelKind::PackReadiness`,
+`build_dashboard_model_from_pack_readiness`, Markdown rendering through the
+existing renderer, and validation that pack-readiness panels remain
+`Level0DesignNote`.
+
+Future deliverables after explicit approval: richer report bundles or a UI
+dashboard. Any UI dashboard must remain read-only and preserve claim-boundary
+labels.
 
 Dependencies: Phase L and reproducible benchmark packs.
 
-Validation gate: report validation and UI tests if applicable.
+Validation gate: report validation, Phase P dashboard/reporting tests, and
+claim-boundary tests.
 
-Anti-goals: dashboard-first development.
+Anti-goals: dashboard-first development, score-axis population from local-only
+evidence, official benchmark evidence claims, ZK backend performance claims,
+or Level2+ evidence creation.
 
-Exit criteria: dashboard shows axes, confidence, and claim boundaries.
+Exit criteria for read-only reporting boundary: reports show axes, confidence,
+pack-readiness status, and claim boundaries without creating or promoting
+evidence. Future UI exit criteria require a separate explicit phase.

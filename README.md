@@ -154,6 +154,7 @@ Surface DSL
 | [docs/64-phase-n-narrow-zkml-adapter-spec.md](docs/64-phase-n-narrow-zkml-adapter-spec.md) | Phase N narrow zkML adapter docs-first boundary contract. |
 | [docs/65-phase-o-local-reproducible-pack-readiness-spec.md](docs/65-phase-o-local-reproducible-pack-readiness-spec.md) | Phase O local reproducible-pack readiness boundary contract. |
 | [docs/66-managed-signature-verification-boundary-spec.md](docs/66-managed-signature-verification-boundary-spec.md) | Managed-signature verification docs-first boundary and source attribution. |
+| [docs/67-phase-p-read-only-reporting-boundary-notes.md](docs/67-phase-p-read-only-reporting-boundary-notes.md) | Phase P read-only reporting boundary over score and pack-readiness metadata. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -265,16 +266,12 @@ Surface DSL
 
 ## Next Implementation Slice
 
-For the benchmark OS track, Phase O inert local reproducible-pack readiness
-metadata, construction helpers, and adjacent output plumbing are implemented;
-see
-[docs/65-phase-o-local-reproducible-pack-readiness-spec.md](docs/65-phase-o-local-reproducible-pack-readiness-spec.md).
-The next benchmark-OS slice should reconcile Phase P reporting against the
-existing claim-boundary model before adding any dashboard surface. It must
-preserve local-only benchmark packs, keep replay command metadata inert, avoid
-external replay, avoid official benchmark evidence, avoid ZK backend
-performance claims, and avoid Level2+ evidence unless a future reviewed
-evidence phase explicitly changes that boundary.
+For the benchmark OS track, Phase P read-only reporting over conservative
+Score Reports and Phase O pack-readiness metadata is implemented; see
+[docs/67-phase-p-read-only-reporting-boundary-notes.md](docs/67-phase-p-read-only-reporting-boundary-notes.md).
+The next benchmark-OS slice should define a separate explicit boundary before
+any UI dashboard, external replay, official benchmark evidence, ZK backend
+performance claim, or Level2+ evidence promotion.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57

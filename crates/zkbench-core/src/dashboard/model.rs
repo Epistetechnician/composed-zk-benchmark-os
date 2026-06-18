@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::error::{Result, ZkBenchError};
 use crate::evidence::ClaimBoundary;
+use crate::pack::{PackReadinessReport, PackReadinessValidation};
 use crate::scoring::{ScoreConfidence, ScoreReport};
 
 /// Dashboard panel kind.
@@ -17,6 +18,8 @@ pub enum DashboardPanelKind {
     ClaimBoundary,
     /// Risk penalties.
     RiskPenalties,
+    /// Local pack-readiness metadata summary.
+    PackReadiness,
 }
 
 /// One axis row in the axis panel.
@@ -187,6 +190,71 @@ pub fn build_dashboard_model_from_score_report(
     }
 }
 
+/// Build a read-only dashboard model from local pack-readiness metadata.
+pub fn build_dashboard_model_from_pack_readiness(
+    dashboard_id: impl Into<String>,
+    report: &PackReadinessReport,
+    validation: &PackReadinessValidation,
+) -> DashboardModel {
+    let passed_checks = report.checks.iter().filter(|check| check.passed).count();
+    let failed_checks = report.checks.len().saturating_sub(passed_checks);
+    let panels = vec![
+        DashboardPanel {
+            panel_id: "pack_readiness".to_string(),
+            title: "Pack Readiness".to_string(),
+            kind: DashboardPanelKind::PackReadiness,
+            axis_rows: Vec::new(),
+            lines: vec![
+                format!("source pack: {}", report.source_pack_id),
+                format!("readiness validation: {}", validation.valid),
+                format!("checks passed: {passed_checks}"),
+                format!("checks failed: {failed_checks}"),
+                format!(
+                    "external replay authorized: {}",
+                    report.external_replay_authorized
+                ),
+                format!(
+                    "creates Level2 evidence: {}",
+                    report.creates_level2_evidence
+                ),
+                format!(
+                    "official benchmark evidence: {}",
+                    report.official_benchmark_evidence
+                ),
+                format!(
+                    "ZK backend performance claims: {}",
+                    report.zk_backend_performance_claims
+                ),
+            ],
+            claim_boundary: ClaimBoundary::Level0DesignNote,
+        },
+        DashboardPanel {
+            panel_id: "claim_boundary".to_string(),
+            title: "Claim Boundary".to_string(),
+            kind: DashboardPanelKind::ClaimBoundary,
+            axis_rows: Vec::new(),
+            lines: vec![
+                "maximum claim boundary: Level0DesignNote".to_string(),
+                "pack-readiness is not Level2 evidence".to_string(),
+                "local replay is not official benchmark evidence".to_string(),
+                "replay command metadata is not execution evidence".to_string(),
+            ],
+            claim_boundary: ClaimBoundary::Level0DesignNote,
+        },
+    ];
+    DashboardModel {
+        dashboard_id: dashboard_id.into(),
+        model_version: "phase-p-dashboard-v0".to_string(),
+        panels,
+        claim_boundary_max: ClaimBoundary::Level0DesignNote,
+        notes: vec![
+            "Dashboard is a read-only view of existing pack-readiness metadata.".to_string(),
+            "No ZK backend performance claims are displayed.".to_string(),
+            "No official benchmark evidence is displayed.".to_string(),
+        ],
+    }
+}
+
 fn axis_row(axis: &str, score: Option<(Option<f64>, ScoreConfidence)>) -> DashboardAxisRow {
     match score {
         Some((score, confidence)) => DashboardAxisRow {
@@ -223,6 +291,15 @@ pub fn validate_dashboard_model(model: &DashboardModel) -> Result<()> {
             return Err(ZkBenchError::validation(
                 format!("dashboard.panels.{}", panel.panel_id),
                 "panel claim boundary exceeds the dashboard maximum",
+            ));
+        }
+        if model.claim_boundary_max <= ClaimBoundary::Level1LocalReplay
+            && panel.kind == DashboardPanelKind::PackReadiness
+            && panel.claim_boundary != ClaimBoundary::Level0DesignNote
+        {
+            return Err(ZkBenchError::validation(
+                format!("dashboard.panels.{}", panel.panel_id),
+                "pack-readiness panels must remain Level0DesignNote",
             ));
         }
         if model.claim_boundary_max <= ClaimBoundary::Level1LocalReplay
