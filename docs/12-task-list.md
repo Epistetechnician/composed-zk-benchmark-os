@@ -569,3 +569,41 @@ Exit criteria: accepted fake responses produce `Attested` only; rejected fake
 responses emit no guarantees or trust roots; managed-verifier trust roots are
 visible; replay and freshness checks fail closed; normal tests remain hermetic;
 and documentation states the non-claims.
+
+## Managed-Attestation Track: Phala Operator Live Path Boundary
+
+Status: complete for docs-first boundary only. See
+`docs/81-phala-operator-live-path-boundary-spec.md`.
+
+Goal: define the future operator-only live Phala/dstack managed-verifier path
+before any ignored or feature-gated live run exists, while preserving the
+hermetic verifier surface and `Attested`-only claim boundary.
+
+Implemented: docs-first boundary for secret handling outside git, explicit
+operator acknowledgement, future environment contract, non-secret request
+contract, local output-bundle shape, redaction rules, timeout and retry policy,
+audit output schema, future verification order, required future tests, and
+forbidden runtime effects.
+
+Dependencies: Phase 78 Phala live managed-verifier boundary, Phase 79 hermetic
+implementation spec, Phase 80 hermetic fake-client implementation, existing
+challenge-capture runbook, and Phase 4 claim boundaries.
+
+Validation gate: documentation navigation checks, claim-boundary text checks,
+no Rust source changes, no Cargo metadata changes, no package runtime files, no
+fixture changes, no generated artifacts, no network code, no live Phala calls,
+no operator secrets, and no accepted Evidence Ledger mutation.
+
+Anti-goals: Rust implementation, live Phala API calls, operator live tests,
+examples or scripts that call Phala, credential handling code, secret fixtures,
+network access, local Intel DCAP quote verification, PCCS or collateral
+handling, generic JWKS/JWT fetching, TLS or attested-TLS channel binding,
+deployment orchestration, external repo clones, backend execution, benchmark
+outputs, accepted Evidence Ledger mutation, Phase 4 registry semantic changes,
+Level2+ evidence, global uniqueness claims, or claims above `Attested`.
+
+Exit criteria: the future operator-live boundary is named, README and AGENTS
+point to it, normal test paths remain hermetic, future live calls require
+explicit acknowledgement, future credentials stay outside git, future output
+artifacts are redacted and digest-bound, and all successful future responses
+remain capped at `Attested`.
