@@ -165,6 +165,7 @@ Surface DSL
 | [docs/75-phase-r-audit-index-output-plumbing-spec.md](docs/75-phase-r-audit-index-output-plumbing-spec.md) | Phase R audit-index adjacent local output-plumbing boundary. |
 | [docs/76-phase-r-audit-index-output-implementation-notes.md](docs/76-phase-r-audit-index-output-implementation-notes.md) | Phase R audit-index adjacent local output implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
+| [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -264,6 +265,11 @@ Surface DSL
   over local in-memory public keys. It performs no JWKS fetch, no live service
   call, no DCAP quote verification, no network access, and no claim above
   `Attested`.
+- `docs/78-phala-live-managed-verifier-boundary-spec.md` opens the next
+  docs-first managed-attestation boundary: Phala/dstack live managed-verifier
+  planning only. It permits no Rust implementation, network access, live Phala
+  calls, secrets, local DCAP, backend execution, benchmark output, Phase 4
+  semantic changes, or claims above `Attested`.
 - Managed-attestation challenge packet tooling exists for local, non-secret
   capture preflight. It creates capture inputs only, not real attestation
   evidence. The operator-facing preflight example
@@ -315,6 +321,11 @@ implemented in
 offline ES256 managed-JWT signature verification against caller-provided local
 public keys. Future live-service verification, JWKS fetching, DCAP, PCCS, TLS,
 or transport-bound attestation work still requires a separate explicit phase.
+The next managed-attestation slice is a docs-first Phala/dstack live
+managed-verifier boundary in
+[docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md).
+It names Phala/dstack live managed verification as the only future provider mode
+under discussion, while continuing to forbid implementation and runtime effects.
 
 ## Non-Goals
 
