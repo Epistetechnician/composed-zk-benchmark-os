@@ -1,14 +1,17 @@
 use zkbench_core::{
     build_local_audit_index_manifest_from_report_bundles,
     build_report_bundle_manifest_from_reports, compute_local_audit_index_manifest_digest,
-    deserialize_local_audit_index_manifest_json, serialize_local_audit_index_manifest_json,
-    validate_local_audit_index_manifest, ArtifactDigest, ArtifactDigestAlgorithm, ArtifactKind,
+    deserialize_local_audit_index_manifest_json, read_local_audit_index_outputs,
+    serialize_local_audit_index_manifest_json, validate_local_audit_index_manifest,
+    write_local_audit_index_outputs, ArtifactDigest, ArtifactDigestAlgorithm, ArtifactKind,
     ArtifactRole, ClaimBoundary, EvidenceClass, LocalAuditIndexInputKind,
     LocalAuditIndexValidationIssueKind, PackReadinessCheck, PackReadinessCheckKind,
     PackReadinessInputKind, PackReadinessInputRef, PackReadinessReport, PackReadinessValidation,
     PackReadinessValidationIssue, PackReadinessValidationIssueKind, PackReadinessVersion,
     ReportBundlePackReadinessInput, ScoreConfidence, ScoreReport,
 };
+
+use std::fs;
 
 fn digest(label: &str, kind: ArtifactKind, role: ArtifactRole) -> ArtifactDigest {
     let mut hex = format!("{label:0<64}");
@@ -265,19 +268,176 @@ fn audit_index_validation_requires_local_only_warning_visibility() {
 }
 
 #[test]
-fn audit_index_source_exposes_no_output_writer_or_execution_hooks() {
+fn audit_index_outputs_write_read_and_preserve_source_files() {
+    let manifest = valid_manifest();
+    let dir = tempfile::tempdir().expect("tempdir");
+    let source_root = dir.path().join("source");
+    fs::create_dir_all(source_root.join("report-bundles")).expect("source dirs");
+    fs::write(
+        source_root.join("report-bundles/report-bundle-manifest.json"),
+        b"{\"bundle\":\"source\"}\n",
+    )
+    .expect("source manifest");
+    let source_before = fs::read(source_root.join("report-bundles/report-bundle-manifest.json"))
+        .expect("source before");
+
+    let output_root = dir.path().join("audit-index");
+    let output = write_local_audit_index_outputs(&output_root, &manifest, false)
+        .expect("audit-index output writes");
+    assert_eq!(
+        output.output_claim_boundary,
+        ClaimBoundary::Level0DesignNote
+    );
+    assert!(output.validation.valid, "{:?}", output.validation.issues);
+    assert_eq!(output.manifest, manifest);
+    assert!(output_root.join("audit-index-manifest.json").is_file());
+    assert!(output_root
+        .join("digests/audit-index-manifest.sha256")
+        .is_file());
+
+    let read_output =
+        read_local_audit_index_outputs(&output_root).expect("audit-index output reads");
+    assert_eq!(read_output.manifest, manifest);
+    assert_eq!(read_output.manifest_digest, output.manifest_digest);
+    assert_eq!(
+        fs::read(source_root.join("report-bundles/report-bundle-manifest.json"))
+            .expect("source after"),
+        source_before
+    );
+}
+
+#[test]
+fn audit_index_outputs_reject_invalid_manifest_and_unsafe_roots() {
+    let mut manifest = valid_manifest();
+    manifest.creates_level2_evidence = true;
+    let dir = tempfile::tempdir().expect("tempdir");
+    let output_root = dir.path().join("audit-index");
+    let validation_error = write_local_audit_index_outputs(&output_root, &manifest, false)
+        .expect_err("invalid manifest should fail");
+    assert!(validation_error
+        .to_string()
+        .contains("manifest validation failed"));
+
+    let manifest = valid_manifest();
+    let unsafe_root = dir.path().join("../audit-index");
+    let root_error = write_local_audit_index_outputs(&unsafe_root, &manifest, false)
+        .expect_err("unsafe root should fail");
+    assert!(root_error
+        .to_string()
+        .contains("must not contain parent-directory components"));
+}
+
+#[test]
+fn audit_index_outputs_reject_overwrite_and_manifest_drift() {
+    let manifest = valid_manifest();
+    let dir = tempfile::tempdir().expect("tempdir");
+    let output_root = dir.path().join("audit-index");
+    write_local_audit_index_outputs(&output_root, &manifest, false)
+        .expect("initial write succeeds");
+
+    let overwrite_error = write_local_audit_index_outputs(&output_root, &manifest, false)
+        .expect_err("non-empty root without overwrite should fail");
+    assert!(overwrite_error
+        .to_string()
+        .contains("explicit overwrite approval is required"));
+
+    let mut drifted_manifest = manifest.clone();
+    drifted_manifest.index_id = "phase_r_audit_index_drifted".to_string();
+    let drift_error = write_local_audit_index_outputs(&output_root, &drifted_manifest, true)
+        .expect_err("overwrite drift should fail");
+    assert!(drift_error
+        .to_string()
+        .contains("does not match supplied manifest"));
+}
+
+#[test]
+fn audit_index_outputs_reject_materialized_file_drift() {
+    let manifest = valid_manifest();
+    let dir = tempfile::tempdir().expect("tempdir");
+    let output_root = dir.path().join("audit-index");
+    write_local_audit_index_outputs(&output_root, &manifest, false)
+        .expect("initial write succeeds");
+
+    fs::write(
+        output_root.join("digests/audit-index-manifest.sha256"),
+        b"0000000000000000000000000000000000000000000000000000000000000000\n",
+    )
+    .expect("tamper digest");
+    let digest_error =
+        read_local_audit_index_outputs(&output_root).expect_err("stale digest should fail");
+    assert!(digest_error
+        .to_string()
+        .contains("manifest JSON bytes do not match digest sidecar"));
+
+    let output_root = dir.path().join("audit-index-tampered-manifest");
+    write_local_audit_index_outputs(&output_root, &manifest, false)
+        .expect("initial tampered-manifest fixture write succeeds");
+    fs::write(
+        output_root.join("audit-index-manifest.json"),
+        b"{\"index_id\":\"tampered\"}\n",
+    )
+    .expect("tamper manifest");
+    let manifest_error =
+        read_local_audit_index_outputs(&output_root).expect_err("tampered manifest should fail");
+    assert!(manifest_error
+        .to_string()
+        .contains("manifest JSON bytes do not match digest sidecar"));
+}
+
+#[test]
+fn audit_index_outputs_reject_unexpected_files_on_read_and_overwrite() {
+    let manifest = valid_manifest();
+    let dir = tempfile::tempdir().expect("tempdir");
+    let output_root = dir.path().join("audit-index");
+    write_local_audit_index_outputs(&output_root, &manifest, false)
+        .expect("initial write succeeds");
+    fs::write(output_root.join("unexpected.txt"), b"stale\n").expect("unexpected file");
+
+    let read_error =
+        read_local_audit_index_outputs(&output_root).expect_err("unexpected file should fail");
+    assert!(read_error
+        .to_string()
+        .contains("contains an unexpected file"));
+
+    let write_error = write_local_audit_index_outputs(&output_root, &manifest, true)
+        .expect_err("unexpected file should fail even with overwrite");
+    assert!(write_error
+        .to_string()
+        .contains("contains an unexpected file"));
+}
+
+#[cfg(unix)]
+#[test]
+fn audit_index_outputs_reject_symlinks_on_read_and_overwrite() {
+    use std::os::unix::fs::symlink;
+
+    let manifest = valid_manifest();
+    let dir = tempfile::tempdir().expect("tempdir");
+    let output_root = dir.path().join("audit-index");
+    fs::create_dir_all(&output_root).expect("output root");
+    fs::write(dir.path().join("outside.json"), b"{}\n").expect("outside file");
+    symlink(
+        dir.path().join("outside.json"),
+        output_root.join("audit-index-manifest.json"),
+    )
+    .expect("symlink");
+
+    let read_error =
+        read_local_audit_index_outputs(&output_root).expect_err("symlink read should fail");
+    assert!(read_error.to_string().contains("must not contain symlinks"));
+
+    let write_error = write_local_audit_index_outputs(&output_root, &manifest, true)
+        .expect_err("symlink write should fail");
+    assert!(write_error
+        .to_string()
+        .contains("must not contain symlinks"));
+}
+
+#[test]
+fn audit_index_source_exposes_no_external_execution_hooks() {
     let source = include_str!("../src/audit_index.rs");
 
-    for forbidden in [
-        "std::process",
-        "Command::new",
-        "std::net",
-        "TcpStream",
-        "write_local_audit_index",
-        "read_local_audit_index",
-        "create_dir",
-        "fs::write",
-    ] {
+    for forbidden in ["std::process", "Command::new", "std::net", "TcpStream"] {
         assert!(
             !source.contains(forbidden),
             "audit_index.rs must not expose {forbidden}"
