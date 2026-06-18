@@ -10,6 +10,7 @@
 //! benchmark evidence, and not a formal proof.
 
 pub mod adapters;
+pub mod audit_index;
 pub mod dashboard;
 pub mod dsl;
 pub mod error;
@@ -54,6 +55,14 @@ pub use adapters::{
     ZkHarnessPlanSubject, ZkHarnessPlannedCommand, ZkHarnessResultImportExpectation,
     ZkHarnessReviewStatus, ZkHarnessSchemaAssumption, ZkHarnessSourcePolicy, ZkHarnessTraceMapping,
     ZkHarnessUnsupportedFeature, LOCAL_JSON_ADAPTER_ID,
+};
+pub use audit_index::{
+    build_local_audit_index_manifest_from_report_bundles,
+    compute_local_audit_index_manifest_digest, deserialize_local_audit_index_manifest_json,
+    serialize_local_audit_index_manifest_json, validate_local_audit_index_manifest,
+    LocalAuditIndexInputKind, LocalAuditIndexInputRef, LocalAuditIndexManifest,
+    LocalAuditIndexValidation, LocalAuditIndexValidationIssue, LocalAuditIndexValidationIssueKind,
+    LocalAuditIndexVersion,
 };
 pub use dashboard::{
     build_dashboard_model_from_pack_readiness, build_dashboard_model_from_score_report,
