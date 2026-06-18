@@ -59,10 +59,11 @@ pub use adapters::{
 pub use audit_index::{
     build_local_audit_index_manifest_from_report_bundles,
     compute_local_audit_index_manifest_digest, deserialize_local_audit_index_manifest_json,
-    serialize_local_audit_index_manifest_json, validate_local_audit_index_manifest,
-    LocalAuditIndexInputKind, LocalAuditIndexInputRef, LocalAuditIndexManifest,
+    read_local_audit_index_outputs, serialize_local_audit_index_manifest_json,
+    validate_local_audit_index_manifest, write_local_audit_index_outputs, LocalAuditIndexInputKind,
+    LocalAuditIndexInputRef, LocalAuditIndexManifest, LocalAuditIndexOutput,
     LocalAuditIndexValidation, LocalAuditIndexValidationIssue, LocalAuditIndexValidationIssueKind,
-    LocalAuditIndexVersion,
+    LocalAuditIndexVersion, AUDIT_INDEX_MANIFEST_DIGEST_PATH, AUDIT_INDEX_MANIFEST_PATH,
 };
 pub use dashboard::{
     build_dashboard_model_from_pack_readiness, build_dashboard_model_from_score_report,

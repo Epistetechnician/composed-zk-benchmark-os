@@ -5,6 +5,8 @@
 //! claim official benchmark evidence, or report ZK backend performance.
 
 use std::collections::BTreeSet;
+use std::fs;
+use std::path::{Component, Path};
 
 use serde::{Deserialize, Serialize};
 
@@ -17,6 +19,13 @@ use crate::report_bundle::{
     compute_report_bundle_manifest_digest, ReportBundleInputKind, ReportBundleManifest,
     REPORT_BUNDLE_MANIFEST_DIGEST_PATH, REPORT_BUNDLE_MANIFEST_PATH,
 };
+
+/// Adjacent local audit-index manifest path below an `audit-index/` root.
+pub const AUDIT_INDEX_MANIFEST_PATH: &str = "audit-index-manifest.json";
+
+/// Adjacent local audit-index manifest digest sidecar path below an
+/// `audit-index/` root.
+pub const AUDIT_INDEX_MANIFEST_DIGEST_PATH: &str = "digests/audit-index-manifest.sha256";
 
 /// Phase R audit-index schema version.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -211,6 +220,23 @@ pub struct LocalAuditIndexValidation {
     pub claim_boundary: ClaimBoundary,
 }
 
+/// Materialized adjacent local audit-index output summary.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LocalAuditIndexOutput {
+    /// Manifest path relative to the caller-supplied `audit-index/` root.
+    pub manifest_relative_path: String,
+    /// Digest over the materialized manifest JSON bytes.
+    pub manifest_digest: ArtifactDigest,
+    /// Digest sidecar path relative to the caller-supplied `audit-index/` root.
+    pub manifest_digest_relative_path: String,
+    /// Parsed and validated manifest.
+    pub manifest: LocalAuditIndexManifest,
+    /// Validation result for the parsed manifest.
+    pub validation: LocalAuditIndexValidation,
+    /// Output claim boundary.
+    pub output_claim_boundary: ClaimBoundary,
+}
+
 /// Build an inert local audit-index manifest from existing report-bundle
 /// metadata.
 ///
@@ -369,6 +395,132 @@ pub fn serialize_local_audit_index_manifest_json(
 pub fn deserialize_local_audit_index_manifest_json(json: &str) -> Result<LocalAuditIndexManifest> {
     serde_json::from_str(json)
         .map_err(|error| ZkBenchError::deserialization("audit_index.manifest", error.to_string()))
+}
+
+/// Write adjacent local audit-index output files.
+///
+/// The supplied `output_root` is the local `audit-index/` directory. This
+/// function writes only `audit-index-manifest.json` and
+/// `digests/audit-index-manifest.sha256`. It does not mutate source packs,
+/// source reports, report bundles, or accepted Evidence Ledgers.
+pub fn write_local_audit_index_outputs(
+    output_root: impl AsRef<Path>,
+    manifest: &LocalAuditIndexManifest,
+    overwrite: bool,
+) -> Result<LocalAuditIndexOutput> {
+    let output_root = output_root.as_ref();
+    validate_output_root(output_root)?;
+    if output_root.exists() && !output_root.is_dir() {
+        return Err(audit_index_io_error(
+            output_root.display().to_string(),
+            "audit-index output root exists and is not a directory",
+        ));
+    }
+
+    let validation = validate_local_audit_index_manifest(manifest);
+    if !validation.valid {
+        return Err(audit_index_io_error(
+            "audit_index.manifest",
+            format!("manifest validation failed: {:?}", validation.issues),
+        ));
+    }
+
+    let targets = audit_index_target_paths();
+    if output_root.exists() && !overwrite && directory_has_entries(output_root)? {
+        return Err(audit_index_io_error(
+            output_root.display().to_string(),
+            "audit-index output root is non-empty; explicit overwrite approval is required",
+        ));
+    }
+    if output_root.exists() && overwrite {
+        reject_unexpected_existing_files(output_root, &targets)?;
+        let existing = collect_relative_files(output_root)?;
+        if !existing.is_empty() {
+            let existing_output = read_local_audit_index_outputs(output_root)?;
+            if existing_output.manifest != *manifest {
+                return Err(audit_index_io_error(
+                    output_root.display().to_string(),
+                    "existing audit-index output does not match supplied manifest",
+                ));
+            }
+        }
+    }
+
+    let manifest_json = serialize_local_audit_index_manifest_json(manifest)?;
+    let manifest_bytes = manifest_json.as_bytes();
+    let manifest_digest = digest_audit_index_output_bytes(manifest_bytes);
+
+    write_relative_bytes(output_root, AUDIT_INDEX_MANIFEST_PATH, manifest_bytes)?;
+    write_relative_bytes(
+        output_root,
+        AUDIT_INDEX_MANIFEST_DIGEST_PATH,
+        format!("{}\n", manifest_digest.hex_digest).as_bytes(),
+    )?;
+
+    Ok(LocalAuditIndexOutput {
+        manifest_relative_path: AUDIT_INDEX_MANIFEST_PATH.to_string(),
+        manifest_digest,
+        manifest_digest_relative_path: AUDIT_INDEX_MANIFEST_DIGEST_PATH.to_string(),
+        manifest: manifest.clone(),
+        validation,
+        output_claim_boundary: ClaimBoundary::Level0DesignNote,
+    })
+}
+
+/// Read and validate adjacent local audit-index output files.
+///
+/// A successful read confirms local file integrity only. It is not accepted
+/// evidence, not official benchmark evidence, and not ZK backend performance
+/// evidence.
+pub fn read_local_audit_index_outputs(
+    output_root: impl AsRef<Path>,
+) -> Result<LocalAuditIndexOutput> {
+    let output_root = output_root.as_ref();
+    validate_output_root(output_root)?;
+    reject_unexpected_existing_files(output_root, &audit_index_target_paths())?;
+
+    let manifest_bytes = read_relative_bytes(output_root, AUDIT_INDEX_MANIFEST_PATH)?;
+    let digest_sidecar = String::from_utf8(read_relative_bytes(
+        output_root,
+        AUDIT_INDEX_MANIFEST_DIGEST_PATH,
+    )?)
+    .map_err(|error| {
+        audit_index_io_error(
+            AUDIT_INDEX_MANIFEST_DIGEST_PATH,
+            format!("manifest digest sidecar is not UTF-8: {error}"),
+        )
+    })?;
+    let manifest_digest = digest_audit_index_output_bytes(&manifest_bytes);
+    if digest_sidecar.trim() != manifest_digest.hex_digest {
+        return Err(audit_index_io_error(
+            AUDIT_INDEX_MANIFEST_DIGEST_PATH,
+            "manifest JSON bytes do not match digest sidecar",
+        ));
+    }
+
+    let manifest_json = String::from_utf8(manifest_bytes).map_err(|error| {
+        audit_index_io_error(
+            AUDIT_INDEX_MANIFEST_PATH,
+            format!("manifest JSON is not UTF-8: {error}"),
+        )
+    })?;
+    let manifest = deserialize_local_audit_index_manifest_json(&manifest_json)?;
+    let validation = validate_local_audit_index_manifest(&manifest);
+    if !validation.valid {
+        return Err(audit_index_io_error(
+            "audit_index.manifest",
+            format!("manifest validation failed: {:?}", validation.issues),
+        ));
+    }
+
+    Ok(LocalAuditIndexOutput {
+        manifest_relative_path: AUDIT_INDEX_MANIFEST_PATH.to_string(),
+        manifest_digest,
+        manifest_digest_relative_path: AUDIT_INDEX_MANIFEST_DIGEST_PATH.to_string(),
+        manifest,
+        validation,
+        output_claim_boundary: ClaimBoundary::Level0DesignNote,
+    })
 }
 
 /// Validate local audit-index metadata.
@@ -698,4 +850,157 @@ fn push_issue(
         path: path.into(),
         message: message.into(),
     });
+}
+
+fn audit_index_target_paths() -> BTreeSet<String> {
+    BTreeSet::from([
+        AUDIT_INDEX_MANIFEST_PATH.to_string(),
+        AUDIT_INDEX_MANIFEST_DIGEST_PATH.to_string(),
+    ])
+}
+
+fn validate_output_root(root: &Path) -> Result<()> {
+    let value = root.as_os_str().to_string_lossy();
+    if value.trim().is_empty()
+        || value.contains("://")
+        || value.contains('\\')
+        || contains_shell_payload(&value)
+    {
+        return Err(audit_index_io_error(
+            value.to_string(),
+            "invalid audit-index output root",
+        ));
+    }
+    if root
+        .components()
+        .any(|component| matches!(component, Component::ParentDir))
+    {
+        return Err(audit_index_io_error(
+            value.to_string(),
+            "audit-index output root must not contain parent-directory components",
+        ));
+    }
+    Ok(())
+}
+
+fn validate_relative_output_path(relative_path: &str) -> Result<()> {
+    let path = Path::new(relative_path);
+    if relative_path.trim().is_empty()
+        || path.is_absolute()
+        || relative_path.contains("..")
+        || relative_path.contains('\\')
+        || relative_path.contains("://")
+        || contains_shell_payload(relative_path)
+    {
+        return Err(audit_index_io_error(
+            relative_path,
+            "invalid audit-index relative output path",
+        ));
+    }
+    Ok(())
+}
+
+fn read_relative_bytes(root: &Path, relative_path: &str) -> Result<Vec<u8>> {
+    validate_relative_output_path(relative_path)?;
+    let path = root.join(relative_path);
+    fs::read(&path).map_err(|error| audit_index_io_error(path.display().to_string(), error))
+}
+
+fn write_relative_bytes(root: &Path, relative_path: &str, bytes: &[u8]) -> Result<()> {
+    validate_relative_output_path(relative_path)?;
+    let path = root.join(relative_path);
+    if let Some(parent) = path.parent() {
+        fs::create_dir_all(parent)
+            .map_err(|error| audit_index_io_error(parent.display().to_string(), error))?;
+    }
+    fs::write(&path, bytes).map_err(|error| audit_index_io_error(path.display().to_string(), error))
+}
+
+fn directory_has_entries(path: &Path) -> Result<bool> {
+    let mut entries = fs::read_dir(path)
+        .map_err(|error| audit_index_io_error(path.display().to_string(), error))?;
+    entries
+        .next()
+        .transpose()
+        .map(|entry| entry.is_some())
+        .map_err(|error| audit_index_io_error(path.display().to_string(), error))
+}
+
+fn reject_unexpected_existing_files(root: &Path, expected: &BTreeSet<String>) -> Result<()> {
+    let existing = collect_relative_files(root)?;
+    for relative_path in existing {
+        if !expected.contains(&relative_path) {
+            return Err(audit_index_io_error(
+                relative_path,
+                "existing audit-index output root contains an unexpected file",
+            ));
+        }
+    }
+    Ok(())
+}
+
+fn collect_relative_files(root: &Path) -> Result<BTreeSet<String>> {
+    let mut files = BTreeSet::new();
+    if !root.exists() {
+        return Ok(files);
+    }
+    collect_relative_files_inner(root, root, &mut files)?;
+    Ok(files)
+}
+
+fn collect_relative_files_inner(
+    root: &Path,
+    current: &Path,
+    files: &mut BTreeSet<String>,
+) -> Result<()> {
+    for entry in fs::read_dir(current)
+        .map_err(|error| audit_index_io_error(current.display().to_string(), error))?
+    {
+        let entry =
+            entry.map_err(|error| audit_index_io_error(current.display().to_string(), error))?;
+        let file_type = entry
+            .file_type()
+            .map_err(|error| audit_index_io_error(entry.path().display().to_string(), error))?;
+        if file_type.is_symlink() {
+            return Err(audit_index_io_error(
+                entry.path().display().to_string(),
+                "audit-index output must not contain symlinks",
+            ));
+        }
+        if file_type.is_dir() {
+            collect_relative_files_inner(root, &entry.path(), files)?;
+        } else if file_type.is_file() {
+            let relative_path = slash_relative_path(root, &entry.path())?;
+            validate_relative_output_path(&relative_path)?;
+            files.insert(relative_path);
+        }
+    }
+    Ok(())
+}
+
+fn slash_relative_path(root: &Path, path: &Path) -> Result<String> {
+    let relative_path = path
+        .strip_prefix(root)
+        .map_err(|error| audit_index_io_error(path.display().to_string(), error))?;
+    let mut parts = Vec::new();
+    for component in relative_path.components() {
+        match component {
+            Component::Normal(value) => parts.push(value.to_string_lossy().to_string()),
+            _ => {
+                return Err(audit_index_io_error(
+                    relative_path.display().to_string(),
+                    "invalid audit-index relative path component",
+                ))
+            }
+        }
+    }
+    Ok(parts.join("/"))
+}
+
+fn digest_audit_index_output_bytes(bytes: &[u8]) -> ArtifactDigest {
+    compute_artifact_digest_bytes(bytes, Some(ArtifactKind::Other), Some(ArtifactRole::Report))
+}
+
+fn audit_index_io_error(path: impl Into<String>, message: impl ToString) -> ZkBenchError {
+    ZkBenchError::benchmark_pack(path, message.to_string())
 }
