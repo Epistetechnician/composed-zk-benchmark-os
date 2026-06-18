@@ -1,13 +1,16 @@
 use std::fs;
 use std::path::Path;
 
+use tempfile::tempdir;
 use zkbench_core::{
+    build_local_replay_manifest_for_instance, build_pack_readiness_report_from_reader,
     compute_pack_readiness_report_digest, deserialize_pack_readiness_report_json,
-    serialize_pack_readiness_report_json, validate_pack_readiness_report, ArtifactDigest,
-    ArtifactDigestAlgorithm, ArtifactKind, ArtifactRole, ClaimBoundary, EvidenceClass,
-    PackReadinessCheck, PackReadinessCheckKind, PackReadinessInputKind, PackReadinessInputRef,
-    PackReadinessReplayCommandMetadata, PackReadinessReport, PackReadinessValidationIssueKind,
-    PackReadinessVersion,
+    generate_instance, run_local_replay, serialize_pack_readiness_report_json,
+    validate_pack_readiness_report, ArtifactDigest, ArtifactDigestAlgorithm, ArtifactKind,
+    ArtifactRole, BenchmarkPackReader, BenchmarkPackWriter, ClaimBoundary, EvidenceClass,
+    EvidenceLedger, GeneratorConfig, InstanceParams, PackReadinessCheck, PackReadinessCheckKind,
+    PackReadinessInputKind, PackReadinessInputRef, PackReadinessReplayCommandMetadata,
+    PackReadinessReport, PackReadinessValidationIssueKind, PackReadinessVersion,
 };
 
 fn digest(byte: u8) -> ArtifactDigest {
@@ -118,6 +121,32 @@ fn issue_kinds(report: &PackReadinessReport) -> Vec<PackReadinessValidationIssue
         .collect()
 }
 
+fn write_sample_pack(pack_id: &str) -> tempfile::TempDir {
+    let instance = generate_instance(
+        GeneratorConfig::baseline_fsm().seed(111),
+        InstanceParams::default(),
+    )
+    .expect("baseline instance should generate");
+    let replay_manifest =
+        build_local_replay_manifest_for_instance(&instance).expect("replay manifest should build");
+    let replay_result = run_local_replay(&replay_manifest).expect("local replay should run");
+
+    let mut ledger = EvidenceLedger::new();
+    ledger
+        .append_replay_result(&replay_result)
+        .expect("local replay evidence should append");
+
+    let dir = tempdir().expect("tempdir should be available for pack write");
+    BenchmarkPackWriter::new(pack_id)
+        .with_generated_instance(instance)
+        .with_replay_manifest(replay_manifest)
+        .with_replay_result(replay_result)
+        .with_evidence_ledger(ledger)
+        .write_to(dir.path())
+        .expect("sample pack should write");
+    dir
+}
+
 #[test]
 fn valid_pack_readiness_report_validates_as_level0_metadata() {
     let report = valid_report();
@@ -145,6 +174,67 @@ fn pack_readiness_report_round_trips_as_json_and_digests() {
     assert!(!json.contains(concat!("Command", "::new")));
     assert!(!json.contains("official benchmark evidence\": true"));
     assert!(!json.contains("creates_level2_evidence\": true"));
+}
+
+#[test]
+fn pack_readiness_builds_from_existing_local_pack_reader() {
+    let dir = write_sample_pack("phase_o_constructed_readiness_pack");
+    let reader = BenchmarkPackReader::read(dir.path()).expect("pack reader should load");
+    let pack_validation = reader.validate();
+    assert!(
+        pack_validation.valid,
+        "pack validation errors: {:?}",
+        pack_validation.errors
+    );
+
+    let report = build_pack_readiness_report_from_reader(&reader, &pack_validation)
+        .expect("readiness report should build from local pack metadata");
+    let validation = validate_pack_readiness_report(&report);
+
+    assert!(validation.valid, "issues: {:?}", validation.issues);
+    assert_eq!(report.source_pack_id, reader.manifest().id);
+    assert_eq!(
+        report.output_claim_boundary,
+        ClaimBoundary::Level0DesignNote
+    );
+    assert!(!report.external_replay_authorized);
+    assert!(!report.creates_level2_evidence);
+    assert!(!report.official_benchmark_evidence);
+    assert!(!report.zk_backend_performance_claims);
+    assert!(report
+        .inputs
+        .iter()
+        .any(|input| input.kind == PackReadinessInputKind::BenchmarkPackManifest));
+    assert!(report
+        .inputs
+        .iter()
+        .any(|input| input.kind == PackReadinessInputKind::BenchmarkPackValidationReport));
+    assert!(report
+        .inputs
+        .iter()
+        .any(|input| input.kind == PackReadinessInputKind::LocalReplayManifest));
+    assert!(report.replay_commands.iter().all(|command| command.inert));
+}
+
+#[test]
+fn pack_readiness_builder_fails_closed_when_pack_validation_fails() {
+    let dir = write_sample_pack("phase_o_invalid_readiness_pack");
+    fs::write(dir.path().join("reports/score_report.json"), "{}")
+        .expect("test should tamper score report");
+    let reader = BenchmarkPackReader::read(dir.path()).expect("pack reader should load");
+    let pack_validation = reader.validate();
+    assert!(!pack_validation.valid);
+
+    let report = build_pack_readiness_report_from_reader(&reader, &pack_validation)
+        .expect("readiness report should build from invalid local validation metadata");
+    let validation = validate_pack_readiness_report(&report);
+    let kinds: Vec<_> = validation.issues.iter().map(|issue| issue.kind).collect();
+
+    assert!(!validation.valid);
+    assert!(kinds.contains(&PackReadinessValidationIssueKind::FailedCheck));
+    assert!(!kinds.contains(&PackReadinessValidationIssueKind::ExternalReplayAuthorized));
+    assert!(!report.external_replay_authorized);
+    assert!(!report.creates_level2_evidence);
 }
 
 #[test]

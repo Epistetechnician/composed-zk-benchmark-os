@@ -257,14 +257,13 @@ Surface DSL
 ## Next Implementation Slice
 
 For the benchmark OS track, Phase O inert local reproducible-pack readiness
-metadata is implemented; see
+metadata and construction helpers are implemented; see
 [docs/65-phase-o-local-reproducible-pack-readiness-spec.md](docs/65-phase-o-local-reproducible-pack-readiness-spec.md).
-The next Phase O slice must be explicitly authorized before pack-output work or
-sampled pack readiness construction helpers. It must preserve local-only
-benchmark packs, keep replay command metadata inert, avoid external replay,
-avoid official benchmark evidence, avoid ZK backend performance claims, and
-avoid Level2+ evidence unless a future reviewed evidence phase explicitly
-changes that boundary.
+The next Phase O slice must be explicitly authorized before sampled pack-output
+readiness plumbing. It must preserve local-only benchmark packs, keep replay
+command metadata inert, avoid external replay, avoid official benchmark
+evidence, avoid ZK backend performance claims, and avoid Level2+ evidence
+unless a future reviewed evidence phase explicitly changes that boundary.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
