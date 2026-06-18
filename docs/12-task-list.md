@@ -324,10 +324,12 @@ evidence. Future UI exit criteria require a separate explicit phase.
 ## Phase Q: Report Bundles
 
 Status: complete for docs-first boundary, inert in-memory metadata
-implementation, and adjacent output-plumbing boundary. See
+implementation, adjacent output-plumbing boundary, and adjacent local output
+implementation. See
 `docs/68-phase-q-report-bundle-boundary-spec.md`,
 `docs/69-phase-q-report-bundle-implementation-notes.md`, and
-`docs/70-phase-q-report-bundle-output-plumbing-spec.md`.
+`docs/70-phase-q-report-bundle-output-plumbing-spec.md`, and
+`docs/71-phase-q-report-bundle-output-implementation-notes.md`.
 
 Goal: define a richer read-only report-bundle contract before any implementation
 or UI work broadens Phase P reporting.
@@ -339,14 +341,18 @@ exit criteria. Phase Q-B adds `ReportBundleManifest`,
 `ReportBundlePackReadinessInput`, deterministic manifest digesting, JSON
 serialization helpers, `build_report_bundle_manifest_from_reports`, and
 `validate_report_bundle_manifest`. Phase Q-C defines the docs-first boundary for
-future adjacent local output plumbing around Q-B metadata.
+future adjacent local output plumbing around Q-B metadata. Phase Q-D adds
+`write_report_bundle_outputs`, `read_report_bundle_outputs`,
+`ReportBundleRenderedMarkdown`, `ReportBundleOutput`, materialized manifest and
+Markdown digest checks, overwrite gating, extra-file rejection, and
+source-immutability tests.
 
 Dependencies: Phase O pack-readiness metadata and Phase P read-only reporting.
 
 Validation gate: documentation navigation checks, claim-boundary text checks,
 focused Phase Q report-bundle tests, digest validation, portable source refs,
 failed-readiness visibility, no external execution hooks, and no accepted
-Evidence Ledger mutation. Future output-plumbing implementation must add
+Evidence Ledger mutation. Output-plumbing implementation coverage must include
 materialized-file digest tests and source-immutability tests.
 
 Anti-goals: UI dashboard, replay-command execution, external replay, official
@@ -361,5 +367,9 @@ pack-readiness remains visible, output stays `Level0DesignNote`, and
 `AGENTS.md` forbids report-bundle materialization beyond the current in-memory
 surface. Exit criteria for output-plumbing boundary: Phase Q-C spec exists,
 navigation points to it, and `AGENTS.md` authorizes only Markdown planning for
-adjacent local output plumbing. Future report-bundle output implementation
-requires a separate explicit phase.
+adjacent local output plumbing. Exit criteria for adjacent local output
+implementation: writer and reader materialize only declared local report-bundle
+files, verify manifest and Markdown digests, reject extra rendered files,
+preserve source metadata, keep output `Level0DesignNote`, and leave UI, CLI,
+external replay, official evidence, ZK backend performance claims, and Level2+
+promotion unauthorized.
