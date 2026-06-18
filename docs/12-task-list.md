@@ -323,20 +323,25 @@ evidence. Future UI exit criteria require a separate explicit phase.
 
 ## Phase Q: Report Bundles
 
-Status: open for docs-first boundary only. See
-`docs/68-phase-q-report-bundle-boundary-spec.md`.
+Status: complete for docs-first boundary and inert in-memory metadata
+implementation. See `docs/68-phase-q-report-bundle-boundary-spec.md` and
+`docs/69-phase-q-report-bundle-implementation-notes.md`.
 
 Goal: define a richer read-only report-bundle contract before any implementation
 or UI work broadens Phase P reporting.
 
 Implemented: Phase Q-A boundary spec covering allowed inputs, bundle contents,
 required validation rules, claim labels, non-goals, and future implementation
-exit criteria.
+exit criteria. Phase Q-B adds `ReportBundleManifest`,
+`ReportBundleInputRef`, `ReportBundleRenderedReport`,
+`ReportBundlePackReadinessInput`, deterministic manifest digesting, JSON
+serialization helpers, `build_report_bundle_manifest_from_reports`, and
+`validate_report_bundle_manifest`.
 
 Dependencies: Phase O pack-readiness metadata and Phase P read-only reporting.
 
 Validation gate: documentation navigation checks, claim-boundary text checks,
-and future implementation tests for digest validation, portable source refs,
+focused Phase Q report-bundle tests, digest validation, portable source refs,
 failed-readiness visibility, no external execution hooks, and no accepted
 Evidence Ledger mutation.
 
@@ -346,7 +351,9 @@ creation, accepted Evidence Ledger mutation, score-axis population from
 local-only evidence, broad leaderboard claims, generated benchmark artifacts, or
 package-script/runtime additions.
 
-Exit criteria for docs-first boundary: Phase Q-A spec exists, navigation points
-to it, and `AGENTS.md` authorizes only Markdown planning for the report-bundle
-contract. Future report-bundle implementation requires a separate explicit
+Exit criteria for inert in-memory metadata: Phase Q-A spec exists, Phase Q-B
+metadata validates, rendered Markdown digests are deterministic, failed
+pack-readiness remains visible, output stays `Level0DesignNote`, and
+`AGENTS.md` forbids report-bundle materialization beyond the current in-memory
+surface. Future report-bundle output plumbing requires a separate explicit
 phase.
