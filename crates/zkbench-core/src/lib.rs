@@ -55,8 +55,9 @@ pub use adapters::{
     ZkHarnessUnsupportedFeature, LOCAL_JSON_ADAPTER_ID,
 };
 pub use dashboard::{
-    build_dashboard_model_from_score_report, render_dashboard_markdown, validate_dashboard_model,
-    DashboardAxisRow, DashboardModel, DashboardPanel, DashboardPanelKind,
+    build_dashboard_model_from_pack_readiness, build_dashboard_model_from_score_report,
+    render_dashboard_markdown, validate_dashboard_model, DashboardAxisRow, DashboardModel,
+    DashboardPanel, DashboardPanelKind,
 };
 pub use dsl::{
     evaluate_trace, lower_to_ir, parse_yaml_ast, parse_yaml_spec, ActionSpec, CanonicalAction,
