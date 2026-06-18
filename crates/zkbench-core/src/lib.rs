@@ -23,6 +23,7 @@ pub mod prelude;
 pub mod recursion;
 pub mod registry;
 pub mod replay;
+pub mod report_bundle;
 pub mod scoring;
 pub mod soak;
 pub mod value;
@@ -227,6 +228,14 @@ pub use replay::{
     ReplayExpectedOutcome, ReplayFailureMode, ReplayManifest, ReplayMode, ReplayResult,
     ReplaySerializationVersion, ReplayStatus, ReplaySubject, ReplaySubjectKind, ReplayTraceResult,
     ReplayTraceSelection,
+};
+pub use report_bundle::{
+    build_report_bundle_manifest_from_reports, compute_report_bundle_manifest_digest,
+    deserialize_report_bundle_manifest_json, serialize_report_bundle_manifest_json,
+    validate_report_bundle_manifest, ReportBundleInputKind, ReportBundleInputRef,
+    ReportBundleManifest, ReportBundlePackReadinessInput, ReportBundleRenderedReport,
+    ReportBundleValidation, ReportBundleValidationIssue, ReportBundleValidationIssueKind,
+    ReportBundleVersion,
 };
 pub use scoring::{
     score_report_from_evidence, score_report_from_local_mutation_evidence, validate_score_report,

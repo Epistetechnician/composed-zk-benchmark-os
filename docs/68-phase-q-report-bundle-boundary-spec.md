@@ -8,6 +8,11 @@ dashboard work, external replay, live backend execution, official benchmark
 evidence, ZK backend performance claims, Level2+ evidence creation, broad
 leaderboard claims, or accepted Evidence Ledger mutation.
 
+Follow-up status: Phase Q-B implements only the inert in-memory metadata subset
+of this contract. Report-bundle materialization, writer/reader APIs, CLI
+surface, UI dashboard work, execution, and evidence promotion still require a
+separate explicit phase.
+
 ## State Slice
 
 This phase is limited to Markdown specification and navigation updates under:
@@ -107,9 +112,9 @@ Phase Q-A does not permit:
 - score-axis population from local-only evidence;
 - broad leaderboard claims.
 
-## Future Implementation Exit Criteria
+## Future Materialization Exit Criteria
 
-A future implementation phase must include:
+A future materialization phase must include:
 
 - deterministic serialization for the report-bundle manifest;
 - digest validation for every included local input;

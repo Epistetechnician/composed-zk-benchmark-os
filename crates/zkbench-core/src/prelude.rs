@@ -80,6 +80,13 @@ pub use crate::replay::{
     build_local_replay_manifest_for_instance, build_local_replay_manifest_for_mutation,
     run_local_replay, ReplayManifest, ReplayResult, ReplayTraceResult,
 };
+pub use crate::report_bundle::{
+    build_report_bundle_manifest_from_reports, compute_report_bundle_manifest_digest,
+    deserialize_report_bundle_manifest_json, serialize_report_bundle_manifest_json,
+    validate_report_bundle_manifest, ReportBundleInputKind, ReportBundleInputRef,
+    ReportBundleManifest, ReportBundlePackReadinessInput, ReportBundleRenderedReport,
+    ReportBundleValidation, ReportBundleValidationIssueKind,
+};
 pub use crate::scoring::{
     score_report_from_evidence, score_report_from_local_mutation_evidence, validate_score_report,
     LocalMutationEvidenceSummary, ScoreReport, ScoreReportValidation, ScoreReportValidationIssue,
