@@ -56,10 +56,13 @@ pub use crate::mutation::{
     MutationEngine, MutationPass, MutationSafetyClass, MutationSpec, MutationVariant,
 };
 pub use crate::pack::{
-    build_pack_readiness_report_from_reader, validate_pack_readiness_report, BenchmarkPackManifest,
-    BenchmarkPackReader, BenchmarkPackWriter, PackReadinessCheck, PackReadinessCheckKind,
-    PackReadinessInputKind, PackReadinessInputRef, PackReadinessReplayCommandMetadata,
+    build_pack_readiness_report_from_reader, read_pack_readiness_report,
+    read_pack_readiness_validation, validate_pack_readiness_report,
+    write_pack_readiness_outputs_for_pack, BenchmarkPackManifest, BenchmarkPackReader,
+    BenchmarkPackWriter, PackReadinessCheck, PackReadinessCheckKind, PackReadinessInputKind,
+    PackReadinessInputRef, PackReadinessOutput, PackReadinessReplayCommandMetadata,
     PackReadinessReport, PackReadinessValidation, PackReadinessValidationIssueKind,
+    PACK_READINESS_REPORT_PATH, PACK_READINESS_VALIDATION_PATH, PACK_VALIDATION_REPORT_PATH,
 };
 pub use crate::recursion::{
     build_recursion_adapter_manual_handoff_bundle, compute_recursion_envelope_digest_chain_root,

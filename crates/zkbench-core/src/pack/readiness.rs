@@ -4,17 +4,30 @@
 //! evidence, do not execute replay commands, do not import external results,
 //! and do not mutate accepted evidence ledgers.
 
+use std::fs;
+use std::path::Path;
+
 use serde::{Deserialize, Serialize};
 
-use crate::error::Result;
+use crate::error::{Result, ZkBenchError};
 use crate::evidence::{
-    compute_artifact_digest, ArtifactDigest, ArtifactDigestAlgorithm, ArtifactKind, ArtifactRole,
-    ClaimBoundary, EvidenceClass,
+    compute_artifact_digest, compute_artifact_digest_bytes, ArtifactDigest,
+    ArtifactDigestAlgorithm, ArtifactKind, ArtifactRole, ClaimBoundary, EvidenceClass,
 };
 
 use super::manifest::{BenchmarkPackFileRole, BenchmarkPackManifest};
 use super::reader::BenchmarkPackReader;
 use super::validation::BenchmarkPackValidation;
+use super::writer::validate_relative_path;
+
+/// Relative location for the local pack validation report emitted by Phase O-D.
+pub const PACK_VALIDATION_REPORT_PATH: &str = "readiness/pack-validation-report.json";
+
+/// Relative location for the local pack-readiness report emitted by Phase O-D.
+pub const PACK_READINESS_REPORT_PATH: &str = "readiness/pack-readiness-report.json";
+
+/// Relative location for the pack-readiness validation report emitted by Phase O-D.
+pub const PACK_READINESS_VALIDATION_PATH: &str = "readiness/pack-readiness-validation.json";
 
 /// Phase O pack-readiness schema version.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -237,6 +250,29 @@ pub struct PackReadinessValidation {
     pub claim_boundary: ClaimBoundary,
 }
 
+/// Local output summary for adjacent pack-readiness files.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct PackReadinessOutput {
+    /// Relative path of the local pack validation report.
+    pub pack_validation_relative_path: String,
+    /// Digest of the local pack validation report bytes.
+    pub pack_validation_digest: ArtifactDigest,
+    /// Relative path of the pack-readiness report.
+    pub report_relative_path: String,
+    /// Digest of the pack-readiness report bytes.
+    pub report_digest: ArtifactDigest,
+    /// Relative path of the pack-readiness validation report.
+    pub readiness_validation_relative_path: String,
+    /// Digest of the pack-readiness validation report bytes.
+    pub readiness_validation_digest: ArtifactDigest,
+    /// Readiness report that was written.
+    pub report: PackReadinessReport,
+    /// Validation result for the readiness report that was written.
+    pub readiness_validation: PackReadinessValidation,
+    /// Output claim boundary.
+    pub output_claim_boundary: ClaimBoundary,
+}
+
 /// Compute a deterministic digest for a pack-readiness report.
 pub fn compute_pack_readiness_report_digest(
     report: &PackReadinessReport,
@@ -246,6 +282,90 @@ pub fn compute_pack_readiness_report_digest(
         Some(ArtifactKind::ScoreReport),
         Some(ArtifactRole::Report),
     )
+}
+
+/// Write adjacent local pack-readiness metadata for an existing local pack.
+///
+/// The output files live under `readiness/` beside the pack's `pack.json`.
+/// They are not inserted into the pack manifest and are not accepted evidence.
+/// This function reads and validates local pack metadata only; it does not
+/// execute replay commands or invoke any external backend.
+pub fn write_pack_readiness_outputs_for_pack(
+    pack_root: impl AsRef<Path>,
+) -> Result<PackReadinessOutput> {
+    let pack_root = pack_root.as_ref();
+    let reader = BenchmarkPackReader::read(pack_root)?;
+    let pack_validation = reader.validate();
+    let report = build_pack_readiness_report_from_reader(&reader, &pack_validation)?;
+    let readiness_validation = validate_pack_readiness_report(&report);
+
+    let pack_validation_bytes = serde_json::to_vec_pretty(&pack_validation).map_err(|error| {
+        ZkBenchError::serialization("pack_readiness.pack_validation", error.to_string())
+    })?;
+    let report_bytes = serde_json::to_vec_pretty(&report)
+        .map_err(|error| ZkBenchError::serialization("pack_readiness.report", error.to_string()))?;
+    let readiness_validation_bytes =
+        serde_json::to_vec_pretty(&readiness_validation).map_err(|error| {
+            ZkBenchError::serialization("pack_readiness.validation", error.to_string())
+        })?;
+
+    write_relative_bytes(
+        pack_root,
+        PACK_VALIDATION_REPORT_PATH,
+        &pack_validation_bytes,
+    )?;
+    write_relative_bytes(pack_root, PACK_READINESS_REPORT_PATH, &report_bytes)?;
+    write_relative_bytes(
+        pack_root,
+        PACK_READINESS_VALIDATION_PATH,
+        &readiness_validation_bytes,
+    )?;
+
+    Ok(PackReadinessOutput {
+        pack_validation_relative_path: PACK_VALIDATION_REPORT_PATH.to_string(),
+        pack_validation_digest: digest_output_bytes(
+            &pack_validation_bytes,
+            ArtifactKind::Other,
+            ArtifactRole::Report,
+        ),
+        report_relative_path: PACK_READINESS_REPORT_PATH.to_string(),
+        report_digest: digest_output_bytes(
+            &report_bytes,
+            ArtifactKind::Other,
+            ArtifactRole::Report,
+        ),
+        readiness_validation_relative_path: PACK_READINESS_VALIDATION_PATH.to_string(),
+        readiness_validation_digest: digest_output_bytes(
+            &readiness_validation_bytes,
+            ArtifactKind::Other,
+            ArtifactRole::Report,
+        ),
+        report,
+        readiness_validation,
+        output_claim_boundary: ClaimBoundary::Level0DesignNote,
+    })
+}
+
+/// Read the adjacent local pack-readiness report from a pack root.
+pub fn read_pack_readiness_report(pack_root: impl AsRef<Path>) -> Result<PackReadinessReport> {
+    let path = pack_root.as_ref().join(PACK_READINESS_REPORT_PATH);
+    let json = fs::read_to_string(&path).map_err(|error| {
+        ZkBenchError::benchmark_pack(path.display().to_string(), error.to_string())
+    })?;
+    deserialize_pack_readiness_report_json(&json)
+}
+
+/// Read the adjacent local pack-readiness validation report from a pack root.
+pub fn read_pack_readiness_validation(
+    pack_root: impl AsRef<Path>,
+) -> Result<PackReadinessValidation> {
+    let path = pack_root.as_ref().join(PACK_READINESS_VALIDATION_PATH);
+    let json = fs::read_to_string(&path).map_err(|error| {
+        ZkBenchError::benchmark_pack(path.display().to_string(), error.to_string())
+    })?;
+    serde_json::from_str(&json).map_err(|error| {
+        ZkBenchError::deserialization("read_pack_readiness_validation", error.to_string())
+    })
 }
 
 /// Build inert pack-readiness metadata from an existing local pack reader and
@@ -259,12 +379,8 @@ pub fn build_pack_readiness_report_from_reader(
     pack_validation: &BenchmarkPackValidation,
 ) -> Result<PackReadinessReport> {
     let manifest = reader.manifest();
-    let manifest_digest = compute_manifest_digest(manifest)?;
-    let validation_digest = compute_artifact_digest(
-        pack_validation,
-        Some(ArtifactKind::Other),
-        Some(ArtifactRole::Report),
-    )?;
+    let manifest_digest = compute_manifest_file_digest(reader)?;
+    let validation_digest = compute_pack_validation_report_digest(pack_validation)?;
     let relative_paths_ready = manifest.uses_relative_paths_only();
     let digest_coverage_ready = manifest.files.iter().all(|file| {
         file.digest.algorithm == ArtifactDigestAlgorithm::Sha256
@@ -587,12 +703,29 @@ pub fn validate_pack_readiness_report(report: &PackReadinessReport) -> PackReadi
     }
 }
 
-fn compute_manifest_digest(manifest: &BenchmarkPackManifest) -> Result<ArtifactDigest> {
-    compute_artifact_digest(
-        manifest,
+fn compute_manifest_file_digest(reader: &BenchmarkPackReader) -> Result<ArtifactDigest> {
+    let path = reader.root().join("pack.json");
+    let bytes = fs::read(&path).map_err(|error| {
+        ZkBenchError::benchmark_pack(path.display().to_string(), error.to_string())
+    })?;
+    Ok(compute_artifact_digest_bytes(
+        &bytes,
         Some(ArtifactKind::BenchmarkPackManifest),
         Some(ArtifactRole::Manifest),
-    )
+    ))
+}
+
+fn compute_pack_validation_report_digest(
+    pack_validation: &BenchmarkPackValidation,
+) -> Result<ArtifactDigest> {
+    let bytes = serde_json::to_vec_pretty(pack_validation).map_err(|error| {
+        ZkBenchError::serialization("pack_readiness.pack_validation", error.to_string())
+    })?;
+    Ok(digest_output_bytes(
+        &bytes,
+        ArtifactKind::Other,
+        ArtifactRole::Report,
+    ))
 }
 
 fn build_pack_readiness_inputs(
@@ -612,7 +745,7 @@ fn build_pack_readiness_inputs(
         },
         PackReadinessInputRef {
             input_id: format!("{}_validation", manifest.id),
-            artifact_uri: "readiness/pack-validation-report.json".to_string(),
+            artifact_uri: PACK_VALIDATION_REPORT_PATH.to_string(),
             kind: PackReadinessInputKind::BenchmarkPackValidationReport,
             digest: validation_digest.clone(),
             evidence_class: EvidenceClass::DesignNote,
@@ -830,4 +963,21 @@ fn push_issue(
         path: path.into(),
         message: message.into(),
     });
+}
+
+fn write_relative_bytes(root: &Path, relative_path: &str, bytes: &[u8]) -> Result<()> {
+    validate_relative_path(relative_path)?;
+    let path = root.join(relative_path);
+    if let Some(parent) = path.parent() {
+        fs::create_dir_all(parent).map_err(|error| {
+            ZkBenchError::benchmark_pack(parent.display().to_string(), error.to_string())
+        })?;
+    }
+    fs::write(&path, bytes).map_err(|error| {
+        ZkBenchError::benchmark_pack(path.display().to_string(), error.to_string())
+    })
+}
+
+fn digest_output_bytes(bytes: &[u8], kind: ArtifactKind, role: ArtifactRole) -> ArtifactDigest {
+    compute_artifact_digest_bytes(bytes, Some(kind), Some(role))
 }
