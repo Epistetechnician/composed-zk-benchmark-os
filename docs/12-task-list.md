@@ -493,3 +493,41 @@ Level2+ evidence, global uniqueness claims, or claims above `Attested`.
 Exit criteria: the boundary names exactly one provider and one verification
 mode; README, AGENTS, task list, and source index point to it; and future
 implementation remains blocked until a separate explicit code phase.
+
+## Managed-Attestation Track: Phala Hermetic Live-Verifier Implementation Spec
+
+Status: complete for code-phase authorization spec only. See
+`docs/79-phala-hermetic-live-verifier-implementation-spec.md`.
+
+Goal: authorize the smallest future hermetic Phala/dstack verifier code surface
+before implementation: provider client trait, offline test double, normalized
+response type, failure taxonomy, trust-root mapping, replay/freshness checks,
+and `Attested`-only envelope mapping.
+
+Implemented: future code state slice, provider boundary, future public surface,
+request contract, response normalization contract, failure taxonomy,
+verification order, replay/freshness rules, trust-root mapping, hermetic test
+requirements, operator-only live-path constraints, forbidden effects, and future
+implementation exit criteria.
+
+Dependencies: Phase 78 Phala live managed-verifier boundary, offline
+managed-JWT verification, Phala/dstack fixture and captured-artifact validation,
+accepted HSAI-owned Phala/dstack artifact fixture, and Phase 4 anchor-registry
+claim boundaries.
+
+Validation gate: documentation navigation checks, claim-boundary text checks, no
+Rust source changes, no Cargo metadata changes, no package runtime files, no
+fixture changes, no generated artifacts, no network code, and no accepted
+Evidence Ledger mutation.
+
+Anti-goals: Rust implementation in this spec slice, live Phala API calls, normal
+tests requiring network or credentials, Phala deployment orchestration, local
+Intel DCAP quote verification, PCCS or collateral handling, generic JWKS/JWT
+fetch implementation, Azure/Intel provider work, TLS or attested-TLS channel
+binding, secrets, backend execution, benchmark outputs, Level2+ evidence, global
+uniqueness claims, or claims above `Attested`.
+
+Exit criteria: README, AGENTS, and task list point to this spec; the future code
+surface is bounded to hermetic provider-client abstraction and deterministic
+test doubles; and implementation remains blocked until a separate explicit
+implementation phase.
