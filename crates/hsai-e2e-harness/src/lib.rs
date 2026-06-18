@@ -9,6 +9,10 @@ pub const CLAIM_BOUNDARY: &str =
 
 #[cfg(test)]
 mod tests {
+    use hsai_agent_anchor_registry::{
+        anchor_acceptance_policy, anchor_tier_predicate, AgentAnchorError, AgentAnchorRegistry,
+        AgentAnchorSet, AnchorTier, PHASE_4_CLAIM_BOUNDARY,
+    };
     use hsai_agent_case::{
         ActionId, AgentCase, EvidenceLane, MemoryRoot, ModelId, OracleContract, Verdict,
     };
@@ -189,6 +193,33 @@ mod tests {
             )
             .expect("valid harness identity registers");
         registry
+    }
+
+    fn phase4_policy(subject: &SubjectId, at: u64) -> AcceptancePolicy {
+        anchor_acceptance_policy(subject, at, Maturity::Attested)
+    }
+
+    fn phase4_anchor_set(subject: SubjectId, anchor: Anchor) -> AgentAnchorSet {
+        AgentAnchorSet {
+            subject,
+            runtime_anchors: BTreeSet::from([anchor]),
+            ..AgentAnchorSet::default()
+        }
+    }
+
+    fn register_phase4(
+        registry: &mut AgentAnchorRegistry,
+        case: &AgentCase,
+        anchor: Anchor,
+        env: ClaimEnvelope,
+    ) -> Result<AnchorTier, AgentAnchorError> {
+        registry
+            .register(
+                phase4_anchor_set(case.subject.clone(), anchor),
+                env,
+                phase4_policy(&case.subject, case.observed_at),
+            )
+            .map(|registered| registered.tier.clone())
     }
 
     fn open_assumption_rejection(rejections: &[Rejection], case: &AgentCase, anchor: &Anchor) {
@@ -483,10 +514,177 @@ mod tests {
         assert_eq!(run(base), run_with_funding(base, FundingRule::Even));
     }
 
+    #[test]
+    fn eh_11_phase4_anchor_registry_accepts_closed_attested_path() {
+        let case = harness_case();
+        let anchor = harness_anchor();
+        let env = joined_env(&case, attestation_input(&case, anchor.clone()));
+
+        let mut registry = AgentAnchorRegistry::new();
+        let registered = registry
+            .register(
+                phase4_anchor_set(case.subject.clone(), anchor),
+                env,
+                phase4_policy(&case.subject, case.observed_at),
+            )
+            .expect("closed attested harness envelope should register in Phase 4");
+
+        assert_eq!(registered.tier, AnchorTier::HardwareAnchoredAgent);
+        assert_eq!(registered.envelope.maturity, Maturity::Attested);
+        assert!(registered
+            .envelope
+            .guarantees
+            .contains(&anchor_tier_predicate(
+                &case.subject,
+                &AnchorTier::HardwareAnchoredAgent
+            )));
+        assert!(registered.envelope.excludes.contains(&Predicate {
+            subject: case.subject.clone(),
+            property: PropertyKind::Custom(
+                "does-not-prove:global-software-agent-uniqueness".to_owned()
+            ),
+        }));
+        assert!(PHASE_4_CLAIM_BOUNDARY.contains("not global software-agent uniqueness"));
+        assert!(registry
+            .used_runtime_anchor_ids()
+            .contains(&harness_anchor().anchor_id()));
+        assert_eq!(registry.active_count(), 1);
+        assert_eq!(registry.registered_count(), 1);
+        assert!(registry.validate_internal_state().is_ok());
+    }
+
+    #[test]
+    fn eh_12_phase4_rejects_expired_attestation_without_state_mutation() {
+        let case = case_for(harness_subject(), GOOD_NOT_AFTER + 1);
+        let anchor = harness_anchor();
+        let env = joined_env(&case, attestation_input(&case, anchor.clone()));
+        let mut registry = AgentAnchorRegistry::new();
+
+        assert!(matches!(
+            register_phase4(&mut registry, &case, anchor, env),
+            Err(AgentAnchorError::NotAdmitted(_))
+        ));
+        assert_eq!(registry.active_count(), 0);
+        assert_eq!(registry.registered_count(), 0);
+        assert!(registry.validate_internal_state().is_ok());
+    }
+
+    #[test]
+    fn eh_13_phase4_rejects_reused_runtime_anchor_without_extra_identity() {
+        let case_a = case_for(subject("agent-a"), OBSERVED_AT);
+        let case_b = case_for(subject("agent-b"), OBSERVED_AT);
+        let anchor = harness_anchor();
+        let mut registry = AgentAnchorRegistry::new();
+
+        assert_eq!(
+            register_phase4(
+                &mut registry,
+                &case_a,
+                anchor.clone(),
+                joined_env(&case_a, attestation_input(&case_a, anchor.clone())),
+            ),
+            Ok(AnchorTier::HardwareAnchoredAgent)
+        );
+
+        assert_eq!(
+            register_phase4(
+                &mut registry,
+                &case_b,
+                anchor.clone(),
+                joined_env(&case_b, attestation_input(&case_b, anchor.clone())),
+            ),
+            Err(AgentAnchorError::AnchorReuse(anchor.anchor_id()))
+        );
+        assert_eq!(registry.active_count(), 1);
+        assert_eq!(registry.registered_count(), 1);
+        assert!(registry.validate_internal_state().is_ok());
+    }
+
+    #[test]
+    fn eh_14_phase4_rejects_proof_theater_missing_runtime_validity() {
+        let case = harness_case();
+        let anchor = harness_anchor();
+        let env = ClaimEnvelope::new(
+            BTreeSet::from([distinctness(&case.subject)]),
+            BTreeSet::new(),
+            BTreeSet::new(),
+            Maturity::Attested,
+            BTreeSet::from([anchor.trust_root()]),
+            TimeWindow::all(),
+            LaneId::Named("proof-theater".to_owned()),
+        );
+        let mut registry = AgentAnchorRegistry::new();
+
+        assert_eq!(
+            register_phase4(&mut registry, &case, anchor.clone(), env),
+            Err(AgentAnchorError::MissingRuntimeValidity(anchor.anchor_id()))
+        );
+        assert_eq!(registry.active_count(), 0);
+        assert_eq!(registry.registered_count(), 0);
+        assert!(registry.validate_internal_state().is_ok());
+    }
+
+    #[test]
+    fn eh_15_phase4_rejects_anchor_set_that_does_not_match_attested_runtime() {
+        let case = harness_case();
+        let attested_anchor = harness_anchor();
+        let requested_anchor = hardware_anchor("harness", "dev-1");
+        let env = joined_env(&case, attestation_input(&case, attested_anchor.clone()));
+        let mut registry = AgentAnchorRegistry::new();
+
+        assert_eq!(
+            register_phase4(&mut registry, &case, requested_anchor.clone(), env),
+            Err(AgentAnchorError::MissingRuntimeValidity(
+                requested_anchor.anchor_id()
+            ))
+        );
+        assert_eq!(registry.active_count(), 0);
+        assert_eq!(registry.registered_count(), 0);
+        assert!(registry.validate_internal_state().is_ok());
+    }
+
+    #[test]
+    fn eh_16_phase4_rejects_revoked_runtime_anchor_for_new_identity() {
+        let case_a = case_for(subject("agent-a"), OBSERVED_AT);
+        let case_b = case_for(subject("agent-b"), OBSERVED_AT);
+        let anchor = harness_anchor();
+        let mut registry = AgentAnchorRegistry::new();
+
+        assert_eq!(
+            register_phase4(
+                &mut registry,
+                &case_a,
+                anchor.clone(),
+                joined_env(&case_a, attestation_input(&case_a, anchor.clone())),
+            ),
+            Ok(AnchorTier::HardwareAnchoredAgent)
+        );
+        registry
+            .revoke_runtime_anchor(&case_a.subject, &anchor, OBSERVED_AT + 1)
+            .expect("registered runtime anchor can be revoked");
+
+        assert_eq!(
+            register_phase4(
+                &mut registry,
+                &case_b,
+                anchor.clone(),
+                joined_env(&case_b, attestation_input(&case_b, anchor.clone())),
+            ),
+            Err(AgentAnchorError::RevokedAnchor(anchor.anchor_id()))
+        );
+        assert_eq!(registry.active_count(), 0);
+        assert_eq!(registry.registered_count(), 1);
+        assert!(registry
+            .revoked_runtime_anchor_ids()
+            .contains(&anchor.anchor_id()));
+        assert!(registry.validate_internal_state().is_ok());
+    }
+
     #[derive(Clone, Copy, Debug)]
     enum Fault {
         Nonce,
         Measurement,
+        ReportData,
         Expired,
         AnchorId,
     }
@@ -495,6 +693,7 @@ mod tests {
         match fault {
             Fault::Nonce => input.expected_nonce = input.expected_nonce.saturating_add(1),
             Fault::Measurement => input.expected_measurements.push(99),
+            Fault::ReportData => input.expected_report_data.push(42),
             Fault::Expired => input.token.not_after = OBSERVED_AT - 1,
             Fault::AnchorId => input.token.anchor_id = "wrong-anchor".to_owned(),
         }
@@ -504,6 +703,7 @@ mod tests {
         prop_oneof![
             Just(Fault::Nonce),
             Just(Fault::Measurement),
+            Just(Fault::ReportData),
             Just(Fault::Expired),
             Just(Fault::AnchorId),
         ]
@@ -623,6 +823,24 @@ mod tests {
             );
             prop_assert_eq!(economy, before_economy);
             prop_assert_eq!(membrane, before_membrane);
+        }
+
+        #[test]
+        fn ehp_5_phase4_single_faults_leave_registry_empty(fault in fault_strategy()) {
+            let case = harness_case();
+            let anchor = harness_anchor();
+            let mut input = attestation_input(&case, anchor.clone());
+            apply_fault(&mut input, fault);
+            let env = joined_env(&case, input);
+            let mut registry = AgentAnchorRegistry::new();
+
+            prop_assert!(matches!(
+                register_phase4(&mut registry, &case, anchor, env),
+                Err(AgentAnchorError::NotAdmitted(_))
+            ));
+            prop_assert_eq!(registry.active_count(), 0);
+            prop_assert_eq!(registry.registered_count(), 0);
+            prop_assert!(registry.validate_internal_state().is_ok());
         }
     }
 }

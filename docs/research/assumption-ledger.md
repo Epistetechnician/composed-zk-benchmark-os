@@ -518,3 +518,49 @@ tests).
 - [Tool Receipts, Not Zero-Knowledge Proofs (arXiv 2603.10060)](https://arxiv.org/pdf/2603.10060)
 - [Inside x402: 100M Agentic Payments on Base (Chainalysis)](https://www.chainalysis.com/blog/x402-agentic-payments-adoption/)
 - [Agent Payments Showdown: x402 vs AP2 vs MPP vs ACP in 2026 (AgentLux)](https://agentlux.ai/blog/the-agent-payments-showdown-x402-vs-ap2-vs-mpp-vs-acp-in-2026)
+
+---
+
+## Iteration 0005 — 2026-06-18
+
+Focus: close the stale "recommended next build" loop after the Phase 4 harness
+composition landed, and route the next step through a docs-first source-cited
+boundary before any real managed-signature work.
+
+| ID | Assumption | Lane | Verdict | Conf. | Note |
+|---|---|---|---|---|---|
+| A12a | The internal L0-L5/Phase 4 adversarial harness is the next build | F/E | Complete as local regression evidence | High | `crates/hsai-e2e-harness` now composes `AgentCase -> DistinctAgentLane -> AttestationLane<ManagedTokenVerifier> -> AgentAnchorRegistry` under valid and adversarial cases |
+| A13 | The next real managed-attestation step needs a source-cited signature/JWKS/JWT boundary before code | E/F | Holds | High | `docs/66-managed-signature-verification-boundary-spec.md` is the next docs-first boundary; implementation remains blocked until a later explicit phase |
+
+### A12a — Internal Stress Test Complete
+
+The prior stress-test note named an internal adversarial harness composing L0-L5
+and checking Sybil, expired-attestation, frozen-escape, proof-theater, and
+peg-gaming behavior as the recommended next build. That local code phase is now
+complete as local regression evidence only. It does not create external
+attestation evidence, backend verification, proof, benchmark output, or global
+software-agent uniqueness.
+
+### A13 — Next Boundary
+
+The next managed-attestation boundary is not another local pure-data primitive.
+It is the docs-first managed-signature boundary that cites source repositories
+and primary provider documentation before any implementation leaves pure-data.
+Relevant source families include zk-Harness for future benchmark harnessing,
+gnark recursion for recursion-envelope context, zkonduit zkML benchmarks for
+narrow zkML workload context, Phala/dstack and Trust Center for captured
+managed-verifier evidence, Azure Attestation and Intel Trust Authority for
+managed JWT verification, and flashbots/attested-tls for transport-bound
+attestation reference work. None of those sources are integrated, cloned,
+vendored, executed, or treated as local evidence by this ledger update.
+
+### Sources
+
+- [zkCollective/zk-Harness](https://github.com/zkCollective/zk-Harness)
+- [Consensys/gnark](https://github.com/Consensys/gnark)
+- [zkonduit/zkml-framework-benchmarks](https://github.com/zkonduit/zkml-framework-benchmarks)
+- [Dstack-TEE/dstack](https://github.com/Dstack-TEE/dstack)
+- [Phala-Network/trust-center](https://github.com/Phala-Network/trust-center)
+- [Microsoft Azure Attestation basic concepts](https://learn.microsoft.com/en-us/azure/attestation/basic-concepts)
+- [Intel Trust Authority attestation tokens](https://docs.trustauthority.intel.com/main/articles/articles/ita/concept-attestation-tokens.html)
+- [flashbots/attested-tls](https://github.com/flashbots/attested-tls)
