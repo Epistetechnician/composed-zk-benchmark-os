@@ -386,16 +386,19 @@ local integrity metadata only.
 
 ## Phase R: Local Audit Index
 
-Status: complete for docs-first boundary and inert in-memory implementation.
+Status: complete for docs-first boundary, inert in-memory implementation, and
+docs-first output-plumbing boundary.
 See `docs/73-phase-r-local-audit-index-boundary-spec.md` and
-`docs/74-phase-r-local-audit-index-implementation-notes.md`.
+`docs/74-phase-r-local-audit-index-implementation-notes.md`, plus
+`docs/75-phase-r-audit-index-output-plumbing-spec.md`.
 
 Goal: define a read-only local audit-index contract over existing local metadata
 outputs before any implementation broadens beyond report-bundle ergonomics.
 
-Implemented: Phase R boundary spec plus `LocalAuditIndexManifest` metadata,
-source input refs, deterministic manifest digesting, JSON helpers, validation
-rules, and construction from existing `ReportBundleManifest` metadata.
+Implemented: Phase R boundary spec, `LocalAuditIndexManifest` metadata, source
+input refs, deterministic manifest digesting, JSON helpers, validation rules,
+construction from existing `ReportBundleManifest` metadata, and a docs-first
+boundary for adjacent local audit-index output plumbing.
 
 Dependencies: Phase O pack-readiness metadata, Phase P read-only reporting, and
 Phase Q report-bundle metadata/output plumbing.
@@ -403,8 +406,8 @@ Phase Q report-bundle metadata/output plumbing.
 Validation gate: documentation navigation checks, claim-boundary text checks,
 portable source refs, digest validation, failed-readiness visibility, local-only
 warning visibility, no source pack/report/report-bundle mutation, no external
-execution hooks, no audit-index output writer or reader APIs, and no accepted
-Evidence Ledger mutation.
+execution hooks, no audit-index output writer or reader APIs in this docs-first
+slice, and no accepted Evidence Ledger mutation.
 
 Anti-goals: UI dashboard, command-line tools, replay-command execution, external
 replay, official benchmark evidence claims, ZK backend performance claims,
@@ -412,7 +415,8 @@ Level2+ evidence creation, accepted Evidence Ledger mutation, score-axis
 population from local-only evidence, broad leaderboard claims, generated
 benchmark artifacts, or package-script/runtime additions.
 
-Exit criteria: Phase R spec exists, navigation points to the implementation
-notes, `AGENTS.md` authorizes only inert in-memory audit-index metadata, focused
-tests cover validation and source-scan boundaries, and future audit-index output
-plumbing remains blocked until a separate explicit docs-first phase.
+Exit criteria: Phase R specs exist, navigation points to the implementation and
+output-plumbing notes, `AGENTS.md` authorizes only docs-first audit-index output
+planning beyond inert in-memory metadata, focused tests cover validation and
+source-scan boundaries, and future audit-index output implementation remains
+blocked until a separate explicit implementation phase.
