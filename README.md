@@ -21,7 +21,7 @@ Core novelty:
 
 ## What This Repo Is
 
-This is now a Level 1 local Rust foundation plus the original Level 0 architecture scaffold. It defines the architecture, vocabulary, repo integration decisions, DSL schema, Rust core crate, deterministic generator, v0 mutation engine, local JSON replay adapter, evidence ledger, benchmark pack skeleton, zk-Harness dry-run adapter preparation, external-runner boundary contracts, manual handoff bundle schema, synthetic result import prototype, evidence append proposal workflow, reviewed proposal acceptance policy, evidence-record candidate metadata, append previews, Level2 eligibility checks, review ledger primitives, proposal ledger primitives, scoring primitives, inert recursion-envelope metadata, inert zkML workload manifest metadata, validation gates, and adapter roadmap.
+This is now a Level 1 local Rust foundation plus the original Level 0 architecture scaffold. It defines the architecture, vocabulary, repo integration decisions, DSL schema, Rust core crate, deterministic generator, v0 mutation engine, local JSON replay adapter, evidence ledger, benchmark pack skeleton, zk-Harness dry-run adapter preparation, external-runner boundary contracts, manual handoff bundle schema, synthetic result import prototype, evidence append proposal workflow, reviewed proposal acceptance policy, evidence-record candidate metadata, append previews, Level2 eligibility checks, review ledger primitives, proposal ledger primitives, scoring primitives, inert recursion-envelope metadata, inert zkML workload manifest metadata, inert pack-readiness metadata, validation gates, and adapter roadmap.
 
 ## What This Repo Is Not
 
@@ -256,14 +256,15 @@ Surface DSL
 
 ## Next Implementation Slice
 
-For the benchmark OS track, Phase O is open as a docs-first local
-reproducible-pack readiness boundary contract; see
+For the benchmark OS track, Phase O inert local reproducible-pack readiness
+metadata is implemented; see
 [docs/65-phase-o-local-reproducible-pack-readiness-spec.md](docs/65-phase-o-local-reproducible-pack-readiness-spec.md).
-The next Phase O slice must be explicitly authorized before Rust implementation
-or pack-output work. It must preserve local-only benchmark packs, keep replay
-command metadata inert, avoid external replay, avoid official benchmark
-evidence, avoid ZK backend performance claims, and avoid Level2+ evidence
-unless a future reviewed evidence phase explicitly changes that boundary.
+The next Phase O slice must be explicitly authorized before pack-output work or
+sampled pack readiness construction helpers. It must preserve local-only
+benchmark packs, keep replay command metadata inert, avoid external replay,
+avoid official benchmark evidence, avoid ZK backend performance claims, and
+avoid Level2+ evidence unless a future reviewed evidence phase explicitly
+changes that boundary.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57

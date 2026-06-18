@@ -184,9 +184,14 @@ pub use mutation::{
 };
 pub use mutation::{MutationClass, MutationKind, MutationSeverity, MutationSpec, MutationVariant};
 pub use pack::{
-    BenchmarkPackFile, BenchmarkPackFileRole, BenchmarkPackId, BenchmarkPackManifest,
-    BenchmarkPackReader, BenchmarkPackSummary, BenchmarkPackValidation,
-    BenchmarkPackValidationError, BenchmarkPackVersion, BenchmarkPackWriter,
+    compute_pack_readiness_report_digest, deserialize_pack_readiness_report_json,
+    serialize_pack_readiness_report_json, validate_pack_readiness_report, BenchmarkPackFile,
+    BenchmarkPackFileRole, BenchmarkPackId, BenchmarkPackManifest, BenchmarkPackReader,
+    BenchmarkPackSummary, BenchmarkPackValidation, BenchmarkPackValidationError,
+    BenchmarkPackVersion, BenchmarkPackWriter, PackReadinessCheck, PackReadinessCheckKind,
+    PackReadinessInputKind, PackReadinessInputRef, PackReadinessReplayCommandMetadata,
+    PackReadinessReport, PackReadinessValidation, PackReadinessValidationIssue,
+    PackReadinessValidationIssueKind, PackReadinessVersion,
 };
 pub use recursion::{
     build_recursion_adapter_manual_handoff_bundle, compute_recursion_envelope_digest_chain_root,

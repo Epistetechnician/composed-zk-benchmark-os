@@ -257,33 +257,36 @@ approval: zkML metrics are normalized and claim-capped.
 
 ## Phase O: Reproducible Benchmark Packs
 
-Status: opened for docs-first local reproducible-pack readiness only. See `docs/65-phase-o-local-reproducible-pack-readiness-spec.md`.
+Status: complete for inert local reproducible-pack readiness contract implementation. See `docs/65-phase-o-local-reproducible-pack-readiness-spec.md`.
 
 Goal: Produce deterministic benchmark packs.
 
-Implemented: local reproducible-pack readiness spec, local readiness contract,
-inert replay-command metadata rules, future Level2 promotion preconditions,
-required negative tests, non-goals, and claim-boundary restrictions.
+Implemented: local reproducible-pack readiness spec, inert `PackReadinessReport`
+data model, input refs, inert replay-command metadata, readiness checks,
+report digest helper, JSON serialization helpers, validation rules, future
+Level2 promotion preconditions, required negative tests, non-goals, and
+claim-boundary restrictions.
 
-Future deliverables after explicit implementation approval: local
-pack-readiness contract types, validation over existing `BenchmarkPackManifest`
-and local pack readers, sampled local pack validation, and serialization
-round-trips. True Level2 promotion requires a separate future reviewed evidence
-phase.
+Future deliverables after explicit implementation approval: validation over
+existing `BenchmarkPackManifest` and local pack readers, sampled local pack
+validation, and readiness report construction helpers. True Level2 promotion
+requires a separate future reviewed evidence phase.
 
 Dependencies: Phase L and future reviewed external replay.
 
-Validation gate: docs and claim-boundary scans for this docs-first slice.
-Future Rust slices require local pack-readiness validation tests, source scans
-that keep replay commands inert, and full workspace validation.
+Validation gate: local pack-readiness validation tests, serialization
+round-trips, source scans that keep replay commands inert, and full workspace
+validation.
 
 Anti-goals: broad leaderboard claims without reproduction.
 
-Exit criteria for docs-first opening: Phase O spec exists and keeps
-reproducible-pack work at local readiness only. Future exit criteria after
-explicit implementation approval: deterministic local packs are readiness-checked
-without creating Level2+ evidence. Future Level2 exit criteria require a
-separate reviewed evidence-promotion phase.
+Exit criteria for inert implementation: Phase O spec exists, readiness reports
+remain `Level0DesignNote`, replay command metadata remains inert, and
+readiness validation rejects Level2+ evidence, official benchmark evidence,
+external replay, and ZK backend performance claims. Future exit criteria after
+explicit implementation approval: deterministic local packs are
+readiness-checked without creating Level2+ evidence. Future Level2 exit
+criteria require a separate reviewed evidence-promotion phase.
 
 ## Phase P: Dashboard/Reporting
 

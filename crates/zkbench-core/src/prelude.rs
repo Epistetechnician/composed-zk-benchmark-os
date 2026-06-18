@@ -55,7 +55,12 @@ pub use crate::mutation::{
     CorruptedGuardsPass, MissingConstraintsPass, MutatedBenchmarkInstance, MutationClass,
     MutationEngine, MutationPass, MutationSafetyClass, MutationSpec, MutationVariant,
 };
-pub use crate::pack::{BenchmarkPackManifest, BenchmarkPackReader, BenchmarkPackWriter};
+pub use crate::pack::{
+    validate_pack_readiness_report, BenchmarkPackManifest, BenchmarkPackReader,
+    BenchmarkPackWriter, PackReadinessCheck, PackReadinessCheckKind, PackReadinessInputKind,
+    PackReadinessInputRef, PackReadinessReplayCommandMetadata, PackReadinessReport,
+    PackReadinessValidation, PackReadinessValidationIssueKind,
+};
 pub use crate::recursion::{
     build_recursion_adapter_manual_handoff_bundle, compute_recursion_envelope_digest_chain_root,
     validate_recursion_adapter_manual_handoff_bundle, validate_recursion_adapter_preparation_plan,
