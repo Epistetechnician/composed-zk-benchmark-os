@@ -168,6 +168,7 @@ Surface DSL
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
 | [docs/80-phala-hermetic-live-verifier-implementation-notes.md](docs/80-phala-hermetic-live-verifier-implementation-notes.md) | Phala/dstack hermetic live-verifier implementation notes. |
+| [docs/81-phala-operator-live-path-boundary-spec.md](docs/81-phala-operator-live-path-boundary-spec.md) | Phala/dstack operator-only live path docs-first boundary. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -284,6 +285,12 @@ Surface DSL
   response validation, replay/freshness guard, trust-root mapping, and
   `Attested`-only output. It still performs no live calls, network access,
   local DCAP, credential handling, or benchmark work.
+- `docs/81-phala-operator-live-path-boundary-spec.md` records the docs-first
+  operator-only live-path boundary: secret handling outside git, explicit
+  operator acknowledgement, timeout and retry limits, redaction, audit output,
+  ignored/feature-gated live behavior, and `Attested`-only claim limits. It
+  authorizes no Rust implementation, examples, credentials, generated
+  artifacts, or live Phala calls in this slice.
 - Managed-attestation challenge packet tooling exists for local, non-secret
   capture preflight. It creates capture inputs only, not real attestation
   evidence. The operator-facing preflight example
@@ -347,6 +354,11 @@ operator-only and unauthorized for normal tests.
 That hermetic surface is implemented in
 [docs/80-phala-hermetic-live-verifier-implementation-notes.md](docs/80-phala-hermetic-live-verifier-implementation-notes.md)
 using deterministic fake-client tests only.
+The next managed-attestation boundary is
+[docs/81-phala-operator-live-path-boundary-spec.md](docs/81-phala-operator-live-path-boundary-spec.md).
+It defines the future operator-only live path contract while still forbidding
+Rust implementation, credentials, generated artifacts, and live Phala calls in
+this slice.
 
 ## Non-Goals
 
