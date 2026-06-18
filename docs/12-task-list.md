@@ -424,3 +424,38 @@ output-plumbing notes, `AGENTS.md` authorizes the bounded local audit-index
 output implementation, focused tests cover validation, output safety, and
 source-scan boundaries, and any broader audit-index work remains blocked until a
 separate explicit implementation phase.
+
+## Managed-Attestation Track: Managed JWT Signature Verification
+
+Status: complete for offline ES256 managed-JWT verification. See
+`docs/66-managed-signature-verification-boundary-spec.md` and
+`docs/77-managed-jwt-signature-verification-notes.md`.
+
+Goal: implement the first managed-signature verifier behind
+`hsai-attestation::AttestationVerifier` without adding live service calls,
+network access, DCAP verification, backend execution, benchmark outputs, or
+claims above `Attested`.
+
+Implemented: `Token::signed_jwt`, `VerifiedAttestation::verifier_trust_roots`,
+`ManagedJwtEs256Key`, `ManagedJwtVerifier`, compact-JWT parsing, offline ES256
+signature verification against caller-provided local P-256 public keys, issuer,
+algorithm, key-id, freshness, nonce, report-data, measurement, and anchor
+mapping checks, plus verifier trust-root disclosure through `AttestationLane`.
+
+Dependencies: HSAI attestation lane, managed-signature boundary spec, and Phase
+4 anchor-registry claim boundaries.
+
+Validation gate: focused `hsai-attestation` tests, adversarial JWT tests, trust
+root visibility tests, no network/JWKS/DCAP behavior, and root Cargo gates.
+
+Anti-goals: JWKS fetching, Azure/Intel/Phala live calls, local Intel DCAP quote
+verification, PCCS or collateral handling, TLS or attested-TLS channel binding,
+external rails, backend execution, benchmark outputs, Level2+ evidence, global
+software-agent uniqueness claims, semantic correctness claims, or changes to
+Phase 4 registry semantics.
+
+Exit criteria: valid local ES256 JWTs close the existing anchor-validity
+assumption at `Attested` maturity; invalid signature, algorithm, key id, issuer,
+freshness, report-data, measurement, and anchor mappings fail closed; verifier
+trust roots are visible; rejected tokens emit no guarantees or roots; docs state
+all non-claims.

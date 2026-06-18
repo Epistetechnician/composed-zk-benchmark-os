@@ -285,6 +285,7 @@ pub fn map_phala_to_verified_attestation(evidence: &PhalaEvidence) -> VerifiedAt
         anchor_id: evidence.anchor_id.clone(),
         not_before: evidence.not_before,
         not_after: evidence.not_after,
+        verifier_trust_roots: BTreeSet::new(),
     }
 }
 
@@ -414,6 +415,7 @@ mod tests {
         AttestationInput {
             anchor: anchor(),
             token: Token {
+                signed_jwt: None,
                 anchor_id: anchor().anchor_id(),
                 nonce: NONCE,
                 report_data: report_data(),
