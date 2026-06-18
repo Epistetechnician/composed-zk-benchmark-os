@@ -2,7 +2,8 @@
 
 ## Status And Claim Boundary
 
-Phase O-B implements the inert local reproducible-pack readiness contract.
+Phase O-C implements inert local reproducible-pack readiness construction
+helpers over existing local pack reader and validation metadata.
 
 This phase corrects the Phase O target and adds local readiness metadata: the
 current repository may define and validate local reproducible-pack readiness,
@@ -23,9 +24,9 @@ README.md
 AGENTS.md
 ```
 
-All Phase O-B readiness artifacts remain `Level0DesignNote`. Existing local benchmark
-packs remain local pack artifacts at `Level1LocalReplay` or lower. A local
-pack-readiness statement is not Level2 evidence.
+All Phase O readiness artifacts remain `Level0DesignNote`. Existing local
+benchmark packs remain local pack artifacts at `Level1LocalReplay` or lower. A
+local pack-readiness statement is not Level2 evidence.
 
 ## Purpose
 
@@ -123,7 +124,7 @@ The Phase O tests reject:
 
 ## Implemented Slice
 
-The implemented Phase O-B slice is inert readiness metadata only:
+The implemented Phase O-B/O-C slice is inert readiness metadata only:
 
 ```text
 local pack-readiness target
@@ -133,6 +134,9 @@ PackReadinessReplayCommandMetadata data model
 PackReadinessCheck data model
 pack-readiness report digest helper
 JSON serialization helpers
+build_pack_readiness_report_from_reader helper
+BenchmarkPackReader and BenchmarkPackValidation metadata binding
+local validation-derived readiness checks
 local readiness contract
 inert replay-command metadata rules
 future Level2 promotion preconditions
@@ -140,5 +144,10 @@ required negative tests
 non-goals
 claim-boundary restrictions
 ```
+
+The Phase O-C helper builds a `PackReadinessReport` from an already-read local
+`BenchmarkPackReader` and its `BenchmarkPackValidation`. It does not execute
+replay commands, write pack outputs, import external results, mutate the
+accepted `EvidenceLedger`, or create Level2 evidence.
 
 This slice does not create pack outputs, benchmark results, or Level2 evidence.

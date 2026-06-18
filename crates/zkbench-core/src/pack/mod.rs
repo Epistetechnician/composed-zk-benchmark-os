@@ -15,11 +15,12 @@ pub use manifest::{
 };
 pub use reader::BenchmarkPackReader;
 pub use readiness::{
-    compute_pack_readiness_report_digest, deserialize_pack_readiness_report_json,
-    serialize_pack_readiness_report_json, validate_pack_readiness_report, PackReadinessCheck,
-    PackReadinessCheckKind, PackReadinessInputKind, PackReadinessInputRef,
-    PackReadinessReplayCommandMetadata, PackReadinessReport, PackReadinessValidation,
-    PackReadinessValidationIssue, PackReadinessValidationIssueKind, PackReadinessVersion,
+    build_pack_readiness_report_from_reader, compute_pack_readiness_report_digest,
+    deserialize_pack_readiness_report_json, serialize_pack_readiness_report_json,
+    validate_pack_readiness_report, PackReadinessCheck, PackReadinessCheckKind,
+    PackReadinessInputKind, PackReadinessInputRef, PackReadinessReplayCommandMetadata,
+    PackReadinessReport, PackReadinessValidation, PackReadinessValidationIssue,
+    PackReadinessValidationIssueKind, PackReadinessVersion,
 };
 pub use validation::{BenchmarkPackValidation, BenchmarkPackValidationError};
 pub use writer::BenchmarkPackWriter;

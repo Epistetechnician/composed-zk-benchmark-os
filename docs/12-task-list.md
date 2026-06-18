@@ -257,20 +257,23 @@ approval: zkML metrics are normalized and claim-capped.
 
 ## Phase O: Reproducible Benchmark Packs
 
-Status: complete for inert local reproducible-pack readiness contract implementation. See `docs/65-phase-o-local-reproducible-pack-readiness-spec.md`.
+Status: complete for inert local reproducible-pack readiness contract and
+construction-helper implementation. See
+`docs/65-phase-o-local-reproducible-pack-readiness-spec.md`.
 
 Goal: Produce deterministic benchmark packs.
 
 Implemented: local reproducible-pack readiness spec, inert `PackReadinessReport`
 data model, input refs, inert replay-command metadata, readiness checks,
-report digest helper, JSON serialization helpers, validation rules, future
-Level2 promotion preconditions, required negative tests, non-goals, and
+report digest helper, JSON serialization helpers,
+`build_pack_readiness_report_from_reader`, validation over existing
+`BenchmarkPackReader` / `BenchmarkPackValidation` metadata, validation rules,
+future Level2 promotion preconditions, required negative tests, non-goals, and
 claim-boundary restrictions.
 
-Future deliverables after explicit implementation approval: validation over
-existing `BenchmarkPackManifest` and local pack readers, sampled local pack
-validation, and readiness report construction helpers. True Level2 promotion
-requires a separate future reviewed evidence phase.
+Future deliverables after explicit implementation approval: sampled local pack
+validation and pack-output readiness plumbing. True Level2 promotion requires a
+separate future reviewed evidence phase.
 
 Dependencies: Phase L and future reviewed external replay.
 
