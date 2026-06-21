@@ -549,6 +549,53 @@ symlinks, unexpected files, partial bundles, stale digests, and drift fail
 closed; corrupted roots are not repaired; normal test paths remain hermetic; and
 all cross-bundle output remains capped at `Level0DesignNote`.
 
+## Benchmark OS Track: Phase U Local Benchmark Artifact Boundary
+
+Status: complete for docs-first boundary only. See
+`docs/95-phase-u-local-benchmark-artifact-boundary-spec.md`.
+
+Goal: define the future local benchmark artifact generation boundary before any
+generated local artifact bundle is created.
+
+Implemented: docs-first boundary for future local benchmark artifact bundles
+assembled from already-valid local inputs: local benchmark packs,
+pack-readiness metadata, report-bundle metadata, audit-index metadata, Phase S
+ergonomics metadata, Phase T cross-bundle metadata, and local replay/evidence
+artifacts already referenced by valid local packs. The boundary requires
+declared-file output shape, digest sidecars, source-input digest summaries,
+claim-boundary summaries capped at the weakest local input, required limitation
+labels, protected-path overlap rejection, corrupted-root non-repair, accepted
+Evidence Ledger non-mutation, and score-axis non-population from local-only
+evidence.
+
+Dependencies: Phase O local reproducible-pack readiness, Phase Q report-bundle
+metadata/output plumbing, Phase R audit-index metadata/output plumbing, Phase S
+audit-index ergonomics/output plumbing, and Phase T cross-bundle audit-index
+metadata/output plumbing.
+
+Validation gate for the docs-first slice: documentation navigation checks,
+claim-boundary text checks, repo hygiene checks, no Rust source changes, no
+generated benchmark artifact files, no package runtime files, no command-line
+tools, no UI dashboards, no external execution hooks, no score-axis
+population, and no accepted Evidence Ledger mutation.
+
+Anti-goals: Rust implementation in this docs-first slice, generated benchmark
+artifact files, command-line tools, UI dashboards, browser apps,
+JavaScript/TypeScript/package runtime additions, source pack mutation, source
+report mutation, report-bundle mutation, audit-index output mutation, Phase S
+ergonomics output mutation, Phase T cross-bundle output mutation, accepted
+Evidence Ledger mutation, replay-command execution, external replay, live
+backend execution, external repo clones, external result import, official
+benchmark evidence, ZK backend performance claims, Level2+ evidence creation,
+score-axis population from local-only evidence, broad leaderboard claims, or
+treating local generated artifacts as accepted evidence.
+
+Exit criteria: Phase U boundary spec exists; README and AGENTS point to it; the
+future input classes, output shape, protected-path policy, overwrite policy,
+required limitation labels, future negative tests, and promotion boundary are
+explicit; and the docs preserve that local benchmark artifacts are packaging
+only until a separate reviewed promotion phase creates stronger evidence.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
