@@ -1684,12 +1684,14 @@ fn validate_output_root(root: &Path) -> Result<()> {
 }
 
 fn reject_protected_path_overlap(root: &Path, protected_paths: &[impl AsRef<Path>]) -> Result<()> {
+    let comparable_root = comparable_output_path(root)?;
     for protected_path in protected_paths {
         let protected_path = protected_path.as_ref();
         validate_protected_path(protected_path)?;
-        if root == protected_path
-            || root.starts_with(protected_path)
-            || protected_path.starts_with(root)
+        let comparable_protected = comparable_output_path(protected_path)?;
+        if comparable_root == comparable_protected
+            || comparable_root.starts_with(&comparable_protected)
+            || comparable_protected.starts_with(&comparable_root)
         {
             return Err(audit_index_io_error(
                 root.display().to_string(),
@@ -1701,6 +1703,31 @@ fn reject_protected_path_overlap(root: &Path, protected_paths: &[impl AsRef<Path
         }
     }
     Ok(())
+}
+
+fn comparable_output_path(path: &Path) -> Result<std::path::PathBuf> {
+    let base = if path.is_absolute() {
+        std::path::PathBuf::new()
+    } else {
+        std::env::current_dir()
+            .map_err(|error| audit_index_io_error(path.display().to_string(), error))?
+    };
+    let mut comparable = base;
+    for component in path.components() {
+        match component {
+            Component::Prefix(prefix) => comparable.push(prefix.as_os_str()),
+            Component::RootDir => comparable.push(component.as_os_str()),
+            Component::CurDir => {}
+            Component::ParentDir => {
+                return Err(audit_index_io_error(
+                    path.display().to_string(),
+                    "audit-index ergonomics paths must not contain parent-directory components",
+                ))
+            }
+            Component::Normal(value) => comparable.push(value),
+        }
+    }
+    Ok(comparable)
 }
 
 fn validate_protected_path(path: &Path) -> Result<()> {
