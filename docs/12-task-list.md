@@ -487,33 +487,35 @@ surface requires a separate docs-first boundary.
 
 ## Benchmark OS Track: Phase T Cross-Bundle Audit Index
 
-Status: complete for docs-first boundary only. See
-`docs/91-phase-t-cross-bundle-audit-index-boundary-spec.md`.
+Status: complete for docs-first boundary and in-memory implementation. See
+`docs/91-phase-t-cross-bundle-audit-index-boundary-spec.md` and
+`docs/92-phase-t-cross-bundle-audit-index-implementation-notes.md`.
 
 Goal: define the future cross-bundle audit-index planning boundary before any
 implementation broadens beyond the Phase S single-index local output surface.
 
-Implemented: docs-first boundary for future local presentation metadata over
-two or more existing valid `LocalAuditIndexManifest` values. The boundary names
-the future input contract, duplicate and conflict handling, deterministic
-grouping and sorting constraints, protected-path overlap rules across source
-packs, source reports, report bundles, audit-index outputs, Phase S ergonomics
-outputs, accepted Evidence Ledgers, and future cross-bundle output roots,
-non-repair behavior for corrupted output roots, required limitation labels, and
-`Level0DesignNote` claim limits.
+Implemented: docs-first boundary for local presentation metadata over two or
+more existing valid `LocalAuditIndexManifest` values, plus an in-memory
+implementation that validates source manifests, computes deterministic source
+summaries, groups, duplicate/conflict signals, warning summaries, required
+limitation labels, deterministic Markdown, and JSON round trips. The boundary
+also names future protected-path overlap rules across source packs, source
+reports, report bundles, audit-index outputs, Phase S ergonomics outputs,
+accepted Evidence Ledgers, and future cross-bundle output roots, plus
+non-repair behavior for corrupted output roots.
 
 Dependencies: Phase R local audit-index metadata, Phase R adjacent local
 audit-index output plumbing, Phase S single-index ergonomics, and Phase S local
 ergonomics output plumbing.
 
-Validation gate: documentation navigation checks, claim-boundary text checks,
-repo hygiene checks, no Rust source changes, no generated cross-bundle files, no
-package runtime files, no command-line tools, no UI dashboards, no external
-execution hooks, no score-axis population, and no accepted Evidence Ledger
-mutation.
+Validation gate: focused Phase T cross-bundle tests, documentation navigation
+checks, claim-boundary text checks, repo hygiene checks, no generated
+cross-bundle files, no package runtime files, no command-line tools, no UI
+dashboards, no external execution hooks, no score-axis population, and no
+accepted Evidence Ledger mutation.
 
-Anti-goals: Rust implementation, generated cross-bundle files, cross-bundle
-writer or reader APIs, command-line tools, UI dashboards, browser apps,
+Anti-goals: generated cross-bundle files, cross-bundle writer or reader APIs,
+command-line tools, UI dashboards, browser apps,
 JavaScript/TypeScript/package runtime additions, source pack mutation, source
 report mutation, report-bundle mutation, audit-index output mutation, Phase S
 ergonomics output mutation, accepted Evidence Ledger mutation, replay-command
@@ -523,10 +525,12 @@ evidence, ZK backend performance claims, Level2+ evidence creation, score-axis
 population from local-only evidence, broad leaderboard claims, or treating
 cross-bundle audit-index metadata as evidence.
 
-Exit criteria: Phase T boundary spec exists, README and AGENTS point to it, the
-future implementation input/output rules are explicit, protected-path overlap
-and non-repair rules are documented, required future negative tests are named,
-and all future cross-bundle output remains capped at `Level0DesignNote`.
+Exit criteria: Phase T boundary spec and implementation notes exist, README and
+AGENTS point to them, the in-memory input/output rules are explicit, duplicate
+and conflict signals are tested, invalid manifests fail closed, protected-path
+overlap and non-repair rules for future output plumbing are documented, and all
+cross-bundle output remains capped at `Level0DesignNote`. Future materialized
+output-root plumbing requires a separate docs-first boundary.
 
 ## Managed-Attestation Track: Managed JWT Signature Verification
 

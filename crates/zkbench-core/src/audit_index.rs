@@ -1,4 +1,5 @@
-//! Phase R inert local audit-index metadata and Phase S in-memory ergonomics views.
+//! Phase R inert local audit-index metadata, Phase S in-memory ergonomics views,
+//! and Phase T in-memory cross-bundle audit-index views.
 //!
 //! Audit indexes are read-only local integrity summaries over existing local
 //! metadata. They do not create accepted evidence, execute replay commands,
@@ -441,6 +442,208 @@ pub struct LocalAuditIndexErgonomicsView {
     #[serde(default)]
     pub limitation_labels: Vec<String>,
     /// Output claim boundary. Phase S remains `Level0DesignNote`.
+    pub output_claim_boundary: ClaimBoundary,
+    /// Deterministic Markdown rendering.
+    pub markdown: String,
+}
+
+/// Phase T input for in-memory cross-bundle audit-index planning.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LocalAuditIndexCrossBundleInput {
+    /// Caller-supplied logical source id for this manifest.
+    pub source_id: String,
+    /// Existing valid local audit-index manifest.
+    pub manifest: LocalAuditIndexManifest,
+}
+
+/// Phase T grouping key for cross-bundle audit-index sources.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+pub enum LocalAuditIndexCrossBundleGroupKey {
+    /// Group by indexed pack id.
+    IndexedPackId,
+    /// Group by source manifest output claim boundary.
+    OutputClaimBoundary,
+    /// Group by failed-readiness visibility.
+    FailedReadinessVisible,
+    /// Group by local-only warning visibility.
+    LocalOnlyWarningsVisible,
+}
+
+/// Phase T deterministic sort key for cross-bundle audit-index sources.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+pub enum LocalAuditIndexCrossBundleSortKey {
+    /// Sort by caller-supplied source id.
+    SourceId,
+    /// Sort by source manifest index id.
+    IndexId,
+    /// Sort by indexed pack id, then source id.
+    IndexedPackId,
+}
+
+/// Phase T in-memory cross-bundle audit-index request.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LocalAuditIndexCrossBundleRequest {
+    /// Existing source manifests. Phase T requires at least two.
+    #[serde(default)]
+    pub inputs: Vec<LocalAuditIndexCrossBundleInput>,
+    /// Deterministic grouping key.
+    pub group_by: LocalAuditIndexCrossBundleGroupKey,
+    /// Deterministic sort key.
+    pub sort_by: LocalAuditIndexCrossBundleSortKey,
+}
+
+/// Phase T cross-bundle validation issue kind.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum LocalAuditIndexCrossBundleIssueKind {
+    /// Fewer than two source manifests were supplied.
+    TooFewManifests,
+    /// Source id is empty.
+    EmptySourceId,
+    /// Source id uses path, URL, shell, wildcard, or expression syntax.
+    InvalidSourceId,
+    /// Source ids must be unique.
+    DuplicateSourceId,
+    /// Source manifest failed existing local audit-index validation.
+    InvalidManifest,
+    /// Source manifest digest computation failed.
+    ManifestDigestFailed,
+}
+
+/// Phase T cross-bundle validation issue.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LocalAuditIndexCrossBundleIssue {
+    /// Issue kind.
+    pub kind: LocalAuditIndexCrossBundleIssueKind,
+    /// Issue path.
+    pub path: String,
+    /// Issue message.
+    pub message: String,
+}
+
+/// Phase T cross-bundle validation result.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LocalAuditIndexCrossBundleValidation {
+    /// Whether validation passed.
+    pub valid: bool,
+    /// Validation issues.
+    #[serde(default)]
+    pub issues: Vec<LocalAuditIndexCrossBundleIssue>,
+    /// Claim boundary of this validation report.
+    pub claim_boundary: ClaimBoundary,
+}
+
+/// Phase T local audit signal kind.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+pub enum LocalAuditIndexCrossBundleSignalKind {
+    /// Duplicate source manifest id with identical digest.
+    DuplicateManifestIdSameDigest,
+    /// Duplicate source manifest id with different digest.
+    DuplicateManifestIdConflictingDigest,
+    /// Duplicate local input id with identical artifact URI.
+    DuplicateInputIdSameArtifact,
+    /// Duplicate local input id with conflicting artifact URI.
+    DuplicateInputIdConflictingArtifact,
+    /// Failed-readiness state appears in multiple source manifests.
+    RepeatedFailedReadiness,
+    /// Local-only warning visibility is hidden by at least one source manifest.
+    HiddenLocalOnlyWarnings,
+    /// Source manifests expose different input claim-boundary ceilings.
+    ClaimBoundaryCeilingMismatch,
+    /// Source manifests do not carry the same limitation-label set.
+    LimitationLabelMismatch,
+}
+
+/// Phase T local audit signal.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LocalAuditIndexCrossBundleSignal {
+    /// Signal kind.
+    pub kind: LocalAuditIndexCrossBundleSignalKind,
+    /// Deterministic signal key.
+    pub key: String,
+    /// Source ids participating in the signal.
+    #[serde(default)]
+    pub source_ids: Vec<String>,
+    /// Human-readable local warning.
+    pub message: String,
+}
+
+/// Phase T source manifest digest summary.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LocalAuditIndexCrossBundleSourceSummary {
+    /// Caller-supplied source id.
+    pub source_id: String,
+    /// Source manifest index id.
+    pub index_id: String,
+    /// Source manifest indexed pack id.
+    pub indexed_pack_id: String,
+    /// Digest over the source manifest.
+    pub manifest_digest: ArtifactDigest,
+    /// Number of inputs in this source manifest.
+    pub input_count: usize,
+    /// Whether failed-readiness state remains visible at source-manifest level.
+    pub failed_readiness_visible: bool,
+    /// Number of source inputs with failed-readiness state.
+    pub failed_readiness_input_count: usize,
+    /// Whether local-only warnings remain visible at source-manifest level.
+    pub local_only_warnings_visible: bool,
+    /// Number of source inputs with hidden local-only warnings.
+    pub hidden_local_only_warning_input_count: usize,
+    /// Output claim boundary for the source manifest.
+    pub output_claim_boundary: ClaimBoundary,
+    /// Highest claim boundary among source inputs.
+    pub max_input_claim_boundary: ClaimBoundary,
+}
+
+/// Phase T cross-bundle group summary.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LocalAuditIndexCrossBundleGroupSummary {
+    /// Group key.
+    pub group_key: LocalAuditIndexCrossBundleGroupKey,
+    /// Deterministic group value.
+    pub group_value: String,
+    /// Source manifest count in the group.
+    pub source_count: usize,
+    /// Total source input count in the group.
+    pub input_count: usize,
+    /// Number of sources in the group with failed-readiness state.
+    pub failed_readiness_source_count: usize,
+    /// Number of sources in the group hiding local-only warnings.
+    pub hidden_local_only_warning_source_count: usize,
+}
+
+/// Phase T warning summary for cross-bundle audit-index planning.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LocalAuditIndexCrossBundleWarningSummary {
+    /// Source manifest count.
+    pub source_manifest_count: usize,
+    /// Total input count across all source manifests.
+    pub total_input_count: usize,
+    /// Number of source manifests with failed-readiness inputs.
+    pub failed_readiness_source_count: usize,
+    /// Number of source manifests hiding local-only warnings.
+    pub hidden_local_only_warning_source_count: usize,
+    /// Number of local audit signals.
+    pub signal_count: usize,
+}
+
+/// Phase T in-memory cross-bundle audit-index view.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LocalAuditIndexCrossBundleView {
+    /// Source manifest summaries in deterministic order.
+    #[serde(default)]
+    pub sources: Vec<LocalAuditIndexCrossBundleSourceSummary>,
+    /// Group summaries over source manifests.
+    #[serde(default)]
+    pub groups: Vec<LocalAuditIndexCrossBundleGroupSummary>,
+    /// Duplicate/conflict/local-warning signals.
+    #[serde(default)]
+    pub signals: Vec<LocalAuditIndexCrossBundleSignal>,
+    /// Warning summary across source manifests.
+    pub warning_summary: LocalAuditIndexCrossBundleWarningSummary,
+    /// Required claim-boundary limitation labels repeated in the view.
+    #[serde(default)]
+    pub limitation_labels: Vec<String>,
+    /// Output claim boundary. Phase T remains `Level0DesignNote`.
     pub output_claim_boundary: ClaimBoundary,
     /// Deterministic Markdown rendering.
     pub markdown: String,
@@ -1074,6 +1277,206 @@ pub fn read_local_audit_index_ergonomics_outputs(
     })
 }
 
+/// Required Phase T cross-bundle audit-index limitation labels.
+pub fn required_local_audit_index_cross_bundle_limitations() -> Vec<String> {
+    vec![
+        "Cross-bundle audit indexes are not accepted evidence.".to_string(),
+        "Cross-bundle audit indexes are local presentation metadata only.".to_string(),
+        "Cross-bundle audit indexes do not create official benchmark evidence.".to_string(),
+        "Cross-bundle audit indexes do not create Level2+ evidence.".to_string(),
+        "Cross-bundle audit indexes do not prove backend performance.".to_string(),
+        "Duplicate local metadata is an audit signal, not independent confirmation.".to_string(),
+        "Local replay artifacts are not official benchmark evidence.".to_string(),
+        "Internal timing telemetry is not ZK backend performance.".to_string(),
+    ]
+}
+
+/// Validate a Phase T in-memory cross-bundle request.
+///
+/// This validates only supplied local metadata. It does not read files, write
+/// files, execute replay commands, call external services, repair outputs, or
+/// mutate source metadata.
+pub fn validate_local_audit_index_cross_bundle_request(
+    request: &LocalAuditIndexCrossBundleRequest,
+) -> LocalAuditIndexCrossBundleValidation {
+    let mut issues = Vec::new();
+
+    if request.inputs.len() < 2 {
+        push_cross_bundle_issue(
+            &mut issues,
+            LocalAuditIndexCrossBundleIssueKind::TooFewManifests,
+            "inputs",
+            "cross-bundle audit-index planning requires at least two source manifests",
+        );
+    }
+
+    let mut source_ids = BTreeSet::new();
+    for (index, input) in request.inputs.iter().enumerate() {
+        let source_path = format!("inputs[{index}].source_id");
+        if input.source_id.trim().is_empty() {
+            push_cross_bundle_issue(
+                &mut issues,
+                LocalAuditIndexCrossBundleIssueKind::EmptySourceId,
+                &source_path,
+                "cross-bundle source id must not be empty",
+            );
+        } else if !is_safe_ergonomics_filter_value(&input.source_id) {
+            push_cross_bundle_issue(
+                &mut issues,
+                LocalAuditIndexCrossBundleIssueKind::InvalidSourceId,
+                &source_path,
+                "cross-bundle source id must not use path, URL, shell, wildcard, or expression syntax",
+            );
+        }
+        if !source_ids.insert(input.source_id.clone()) {
+            push_cross_bundle_issue(
+                &mut issues,
+                LocalAuditIndexCrossBundleIssueKind::DuplicateSourceId,
+                &source_path,
+                "cross-bundle source ids must be unique",
+            );
+        }
+
+        let manifest_validation = validate_local_audit_index_manifest(&input.manifest);
+        if !manifest_validation.valid {
+            push_cross_bundle_issue(
+                &mut issues,
+                LocalAuditIndexCrossBundleIssueKind::InvalidManifest,
+                format!("inputs[{index}].manifest"),
+                format!(
+                    "cross-bundle input requires a valid local audit-index manifest: {:?}",
+                    manifest_validation.issues
+                ),
+            );
+        }
+        if let Err(error) = compute_local_audit_index_manifest_digest(&input.manifest) {
+            push_cross_bundle_issue(
+                &mut issues,
+                LocalAuditIndexCrossBundleIssueKind::ManifestDigestFailed,
+                format!("inputs[{index}].manifest"),
+                format!("source manifest digest computation failed: {error}"),
+            );
+        }
+    }
+
+    LocalAuditIndexCrossBundleValidation {
+        valid: issues.is_empty(),
+        issues,
+        claim_boundary: ClaimBoundary::Level0DesignNote,
+    }
+}
+
+/// Build a Phase T in-memory cross-bundle audit-index view.
+///
+/// The view is local presentation metadata over supplied valid
+/// `LocalAuditIndexManifest` values. It does not write files, execute replay
+/// commands, import results, mutate source metadata, populate score axes, or
+/// create accepted/official/Level2+ evidence.
+pub fn build_local_audit_index_cross_bundle_view(
+    request: &LocalAuditIndexCrossBundleRequest,
+) -> Result<LocalAuditIndexCrossBundleView> {
+    let validation = validate_local_audit_index_cross_bundle_request(request);
+    if !validation.valid {
+        return Err(ZkBenchError::validation(
+            "audit_index.cross_bundle",
+            format!(
+                "cross-bundle audit-index validation failed: {:?}",
+                validation.issues
+            ),
+        ));
+    }
+
+    let mut inputs = request.inputs.iter().collect::<Vec<_>>();
+    sort_cross_bundle_inputs(&mut inputs, request.sort_by);
+
+    let mut sources = Vec::new();
+    for input in inputs {
+        let manifest = &input.manifest;
+        sources.push(LocalAuditIndexCrossBundleSourceSummary {
+            source_id: input.source_id.clone(),
+            index_id: manifest.index_id.clone(),
+            indexed_pack_id: manifest.indexed_pack_id.clone(),
+            manifest_digest: compute_local_audit_index_manifest_digest(manifest)?,
+            input_count: manifest.inputs.len(),
+            failed_readiness_visible: manifest.failed_readiness_visible,
+            failed_readiness_input_count: manifest
+                .inputs
+                .iter()
+                .filter(|source_input| source_input.failed_readiness)
+                .count(),
+            local_only_warnings_visible: manifest.local_only_warnings_visible,
+            hidden_local_only_warning_input_count: manifest
+                .inputs
+                .iter()
+                .filter(|source_input| !source_input.local_only_warnings_visible)
+                .count(),
+            output_claim_boundary: manifest.output_claim_boundary,
+            max_input_claim_boundary: max_input_claim_boundary(manifest),
+        });
+    }
+
+    let groups = build_cross_bundle_groups(&sources, request.group_by);
+    let mut signals = build_cross_bundle_signals(request, &sources);
+    signals.sort_by(|left, right| {
+        left.kind
+            .cmp(&right.kind)
+            .then_with(|| left.key.cmp(&right.key))
+            .then_with(|| left.source_ids.cmp(&right.source_ids))
+    });
+    let warning_summary = LocalAuditIndexCrossBundleWarningSummary {
+        source_manifest_count: sources.len(),
+        total_input_count: sources.iter().map(|source| source.input_count).sum(),
+        failed_readiness_source_count: sources
+            .iter()
+            .filter(|source| source.failed_readiness_input_count > 0)
+            .count(),
+        hidden_local_only_warning_source_count: sources
+            .iter()
+            .filter(|source| {
+                !source.local_only_warnings_visible
+                    || source.hidden_local_only_warning_input_count > 0
+            })
+            .count(),
+        signal_count: signals.len(),
+    };
+    let limitation_labels = required_local_audit_index_cross_bundle_limitations();
+    let markdown = render_local_audit_index_cross_bundle_markdown(
+        &sources,
+        &groups,
+        &signals,
+        &warning_summary,
+        &limitation_labels,
+    );
+
+    Ok(LocalAuditIndexCrossBundleView {
+        sources,
+        groups,
+        signals,
+        warning_summary,
+        limitation_labels,
+        output_claim_boundary: ClaimBoundary::Level0DesignNote,
+        markdown,
+    })
+}
+
+/// Serialize a Phase T cross-bundle audit-index view to pretty JSON.
+pub fn serialize_local_audit_index_cross_bundle_view_json(
+    view: &LocalAuditIndexCrossBundleView,
+) -> Result<String> {
+    serde_json::to_string_pretty(view).map_err(|error| {
+        ZkBenchError::serialization("audit_index.cross_bundle_view", error.to_string())
+    })
+}
+
+/// Deserialize a Phase T cross-bundle audit-index view from JSON.
+pub fn deserialize_local_audit_index_cross_bundle_view_json(
+    json: &str,
+) -> Result<LocalAuditIndexCrossBundleView> {
+    serde_json::from_str(json).map_err(|error| {
+        ZkBenchError::deserialization("audit_index.cross_bundle_view", error.to_string())
+    })
+}
+
 /// Validate local audit-index metadata.
 pub fn validate_local_audit_index_manifest(
     manifest: &LocalAuditIndexManifest,
@@ -1480,6 +1883,362 @@ fn render_local_audit_index_ergonomics_markdown(
     markdown
 }
 
+fn sort_cross_bundle_inputs(
+    inputs: &mut Vec<&LocalAuditIndexCrossBundleInput>,
+    sort_by: LocalAuditIndexCrossBundleSortKey,
+) {
+    match sort_by {
+        LocalAuditIndexCrossBundleSortKey::SourceId => {
+            inputs.sort_by(|left, right| left.source_id.cmp(&right.source_id));
+        }
+        LocalAuditIndexCrossBundleSortKey::IndexId => {
+            inputs.sort_by(|left, right| {
+                left.manifest
+                    .index_id
+                    .cmp(&right.manifest.index_id)
+                    .then_with(|| left.source_id.cmp(&right.source_id))
+            });
+        }
+        LocalAuditIndexCrossBundleSortKey::IndexedPackId => {
+            inputs.sort_by(|left, right| {
+                left.manifest
+                    .indexed_pack_id
+                    .cmp(&right.manifest.indexed_pack_id)
+                    .then_with(|| left.source_id.cmp(&right.source_id))
+            });
+        }
+    }
+}
+
+fn build_cross_bundle_groups(
+    sources: &[LocalAuditIndexCrossBundleSourceSummary],
+    group_by: LocalAuditIndexCrossBundleGroupKey,
+) -> Vec<LocalAuditIndexCrossBundleGroupSummary> {
+    let mut grouped: BTreeMap<String, LocalAuditIndexCrossBundleGroupSummary> = BTreeMap::new();
+    for source in sources {
+        let group_value = cross_bundle_group_value(source, group_by);
+        let entry = grouped.entry(group_value.clone()).or_insert_with(|| {
+            LocalAuditIndexCrossBundleGroupSummary {
+                group_key: group_by,
+                group_value,
+                source_count: 0,
+                input_count: 0,
+                failed_readiness_source_count: 0,
+                hidden_local_only_warning_source_count: 0,
+            }
+        });
+        entry.source_count += 1;
+        entry.input_count += source.input_count;
+        if source.failed_readiness_input_count > 0 {
+            entry.failed_readiness_source_count += 1;
+        }
+        if !source.local_only_warnings_visible || source.hidden_local_only_warning_input_count > 0 {
+            entry.hidden_local_only_warning_source_count += 1;
+        }
+    }
+    grouped.into_values().collect()
+}
+
+fn cross_bundle_group_value(
+    source: &LocalAuditIndexCrossBundleSourceSummary,
+    group_by: LocalAuditIndexCrossBundleGroupKey,
+) -> String {
+    match group_by {
+        LocalAuditIndexCrossBundleGroupKey::IndexedPackId => source.indexed_pack_id.clone(),
+        LocalAuditIndexCrossBundleGroupKey::OutputClaimBoundary => {
+            format!("{:?}", source.output_claim_boundary)
+        }
+        LocalAuditIndexCrossBundleGroupKey::FailedReadinessVisible => {
+            source.failed_readiness_visible.to_string()
+        }
+        LocalAuditIndexCrossBundleGroupKey::LocalOnlyWarningsVisible => {
+            source.local_only_warnings_visible.to_string()
+        }
+    }
+}
+
+fn build_cross_bundle_signals(
+    request: &LocalAuditIndexCrossBundleRequest,
+    sources: &[LocalAuditIndexCrossBundleSourceSummary],
+) -> Vec<LocalAuditIndexCrossBundleSignal> {
+    let mut signals = Vec::new();
+
+    let mut manifest_id_sources: BTreeMap<String, Vec<&LocalAuditIndexCrossBundleSourceSummary>> =
+        BTreeMap::new();
+    for source in sources {
+        manifest_id_sources
+            .entry(source.index_id.clone())
+            .or_default()
+            .push(source);
+    }
+    for (index_id, duplicate_sources) in manifest_id_sources {
+        if duplicate_sources.len() < 2 {
+            continue;
+        }
+        let digest_set = duplicate_sources
+            .iter()
+            .map(|source| source.manifest_digest.hex_digest.clone())
+            .collect::<BTreeSet<_>>();
+        let source_ids = duplicate_sources
+            .iter()
+            .map(|source| source.source_id.clone())
+            .collect::<Vec<_>>();
+        if digest_set.len() == 1 {
+            push_cross_bundle_signal(
+                &mut signals,
+                LocalAuditIndexCrossBundleSignalKind::DuplicateManifestIdSameDigest,
+                index_id,
+                source_ids,
+                "duplicate manifest id has identical digest; this is an audit signal, not independent confirmation",
+            );
+        } else {
+            push_cross_bundle_signal(
+                &mut signals,
+                LocalAuditIndexCrossBundleSignalKind::DuplicateManifestIdConflictingDigest,
+                index_id,
+                source_ids,
+                "duplicate manifest id has conflicting digests",
+            );
+        }
+    }
+
+    let mut input_id_sources: BTreeMap<String, BTreeMap<String, BTreeSet<String>>> =
+        BTreeMap::new();
+    for input in &request.inputs {
+        for source_input in &input.manifest.inputs {
+            input_id_sources
+                .entry(source_input.input_id.clone())
+                .or_default()
+                .entry(source_input.artifact_uri.clone())
+                .or_default()
+                .insert(input.source_id.clone());
+        }
+    }
+    for (input_id, artifact_sources) in input_id_sources {
+        let all_sources = artifact_sources
+            .values()
+            .flat_map(|source_ids| source_ids.iter().cloned())
+            .collect::<BTreeSet<_>>();
+        if all_sources.len() < 2 {
+            continue;
+        }
+        let source_ids = all_sources.into_iter().collect::<Vec<_>>();
+        if artifact_sources.len() == 1 {
+            push_cross_bundle_signal(
+                &mut signals,
+                LocalAuditIndexCrossBundleSignalKind::DuplicateInputIdSameArtifact,
+                input_id,
+                source_ids,
+                "duplicate input id references the same local artifact URI",
+            );
+        } else {
+            push_cross_bundle_signal(
+                &mut signals,
+                LocalAuditIndexCrossBundleSignalKind::DuplicateInputIdConflictingArtifact,
+                input_id,
+                source_ids,
+                "duplicate input id references conflicting local artifact URIs",
+            );
+        }
+    }
+
+    let failed_sources = sources
+        .iter()
+        .filter(|source| source.failed_readiness_input_count > 0)
+        .map(|source| source.source_id.clone())
+        .collect::<Vec<_>>();
+    if failed_sources.len() > 1 {
+        push_cross_bundle_signal(
+            &mut signals,
+            LocalAuditIndexCrossBundleSignalKind::RepeatedFailedReadiness,
+            "failed_readiness".to_string(),
+            failed_sources,
+            "failed-readiness state appears in multiple source manifests",
+        );
+    }
+
+    let hidden_warning_sources = sources
+        .iter()
+        .filter(|source| {
+            !source.local_only_warnings_visible || source.hidden_local_only_warning_input_count > 0
+        })
+        .map(|source| source.source_id.clone())
+        .collect::<Vec<_>>();
+    if !hidden_warning_sources.is_empty() {
+        push_cross_bundle_signal(
+            &mut signals,
+            LocalAuditIndexCrossBundleSignalKind::HiddenLocalOnlyWarnings,
+            "local_only_warnings".to_string(),
+            hidden_warning_sources,
+            "at least one source manifest hides local-only warning visibility",
+        );
+    }
+
+    let claim_boundary_set = sources
+        .iter()
+        .map(|source| source.max_input_claim_boundary)
+        .collect::<BTreeSet<_>>();
+    if claim_boundary_set.len() > 1 {
+        push_cross_bundle_signal(
+            &mut signals,
+            LocalAuditIndexCrossBundleSignalKind::ClaimBoundaryCeilingMismatch,
+            "max_input_claim_boundary".to_string(),
+            sources
+                .iter()
+                .map(|source| source.source_id.clone())
+                .collect::<Vec<_>>(),
+            "source manifests expose different input claim-boundary ceilings",
+        );
+    }
+
+    let limitation_sets = request
+        .inputs
+        .iter()
+        .map(|input| {
+            (
+                input.source_id.clone(),
+                input
+                    .manifest
+                    .limitations
+                    .iter()
+                    .cloned()
+                    .collect::<BTreeSet<_>>(),
+            )
+        })
+        .collect::<Vec<_>>();
+    let unique_limitation_sets = limitation_sets
+        .iter()
+        .map(|(_, set)| set.clone())
+        .collect::<BTreeSet<_>>();
+    if unique_limitation_sets.len() > 1 {
+        push_cross_bundle_signal(
+            &mut signals,
+            LocalAuditIndexCrossBundleSignalKind::LimitationLabelMismatch,
+            "limitations".to_string(),
+            limitation_sets
+                .into_iter()
+                .map(|(source_id, _)| source_id)
+                .collect::<Vec<_>>(),
+            "source manifests do not carry identical limitation-label sets",
+        );
+    }
+
+    signals
+}
+
+fn max_input_claim_boundary(manifest: &LocalAuditIndexManifest) -> ClaimBoundary {
+    manifest
+        .inputs
+        .iter()
+        .map(|input| input.claim_boundary)
+        .max()
+        .unwrap_or(ClaimBoundary::Level0DesignNote)
+}
+
+fn push_cross_bundle_signal(
+    signals: &mut Vec<LocalAuditIndexCrossBundleSignal>,
+    kind: LocalAuditIndexCrossBundleSignalKind,
+    key: impl Into<String>,
+    mut source_ids: Vec<String>,
+    message: impl Into<String>,
+) {
+    source_ids.sort();
+    source_ids.dedup();
+    signals.push(LocalAuditIndexCrossBundleSignal {
+        kind,
+        key: key.into(),
+        source_ids,
+        message: message.into(),
+    });
+}
+
+fn render_local_audit_index_cross_bundle_markdown(
+    sources: &[LocalAuditIndexCrossBundleSourceSummary],
+    groups: &[LocalAuditIndexCrossBundleGroupSummary],
+    signals: &[LocalAuditIndexCrossBundleSignal],
+    warning_summary: &LocalAuditIndexCrossBundleWarningSummary,
+    limitation_labels: &[String],
+) -> String {
+    let mut markdown = String::new();
+    markdown.push_str("# Cross-Bundle Audit-Index View\n\n");
+    markdown.push_str("- output_claim_boundary: Level0DesignNote\n");
+    markdown.push_str(&format!(
+        "- source_manifest_count: {}\n",
+        warning_summary.source_manifest_count
+    ));
+    markdown.push_str(&format!(
+        "- total_input_count: {}\n",
+        warning_summary.total_input_count
+    ));
+    markdown.push_str(&format!(
+        "- signal_count: {}\n\n",
+        warning_summary.signal_count
+    ));
+
+    markdown.push_str("## Limitation Labels\n\n");
+    for label in limitation_labels {
+        markdown.push_str(&format!("- {label}\n"));
+    }
+
+    markdown.push_str("\n## Warning Summary\n\n");
+    markdown.push_str(&format!(
+        "- failed_readiness_source_count: {}\n",
+        warning_summary.failed_readiness_source_count
+    ));
+    markdown.push_str(&format!(
+        "- hidden_local_only_warning_source_count: {}\n",
+        warning_summary.hidden_local_only_warning_source_count
+    ));
+    markdown.push_str(
+        "- duplicate local metadata is an audit signal, not independent confirmation\n\n",
+    );
+
+    markdown.push_str("## Sources\n\n");
+    markdown.push_str("| source | index | pack | inputs | digest | max input boundary |\n");
+    markdown.push_str("| --- | --- | --- | ---: | --- | --- |\n");
+    for source in sources {
+        markdown.push_str(&format!(
+            "| {} | {} | {} | {} | {} | {:?} |\n",
+            source.source_id,
+            source.index_id,
+            source.indexed_pack_id,
+            source.input_count,
+            source.manifest_digest.hex_digest,
+            source.max_input_claim_boundary
+        ));
+    }
+
+    markdown.push_str("\n## Groups\n\n");
+    markdown.push_str("| key | value | sources | inputs | failed readiness | hidden warnings |\n");
+    markdown.push_str("| --- | --- | ---: | ---: | ---: | ---: |\n");
+    for group in groups {
+        markdown.push_str(&format!(
+            "| {:?} | {} | {} | {} | {} | {} |\n",
+            group.group_key,
+            group.group_value,
+            group.source_count,
+            group.input_count,
+            group.failed_readiness_source_count,
+            group.hidden_local_only_warning_source_count
+        ));
+    }
+
+    markdown.push_str("\n## Signals\n\n");
+    markdown.push_str("| kind | key | sources | message |\n");
+    markdown.push_str("| --- | --- | --- | --- |\n");
+    for signal in signals {
+        markdown.push_str(&format!(
+            "| {:?} | {} | {} | {} |\n",
+            signal.kind,
+            signal.key,
+            signal.source_ids.join(","),
+            signal.message
+        ));
+    }
+
+    markdown
+}
+
 trait ReportBundleWarningVisibility {
     fn local_only_warnings_visible(&self) -> bool;
 }
@@ -1604,6 +2363,19 @@ fn push_issue(
     message: impl Into<String>,
 ) {
     issues.push(LocalAuditIndexValidationIssue {
+        kind,
+        path: path.into(),
+        message: message.into(),
+    });
+}
+
+fn push_cross_bundle_issue(
+    issues: &mut Vec<LocalAuditIndexCrossBundleIssue>,
+    kind: LocalAuditIndexCrossBundleIssueKind,
+    path: impl Into<String>,
+    message: impl Into<String>,
+) {
+    issues.push(LocalAuditIndexCrossBundleIssue {
         kind,
         path: path.into(),
         message: message.into(),
