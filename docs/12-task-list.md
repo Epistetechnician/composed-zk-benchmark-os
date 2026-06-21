@@ -728,3 +728,46 @@ point to it, future output-root rules are explicit, future write/read policies
 reuse Phase 83 validation, future raw response retention remains forbidden by
 default, normal test paths remain hermetic, and all successful future responses
 remain capped at `Attested`.
+
+## Managed-Attestation Track: Phala Operator Live Artifact Output Plumbing Implementation
+
+Status: complete for local output-root plumbing. See
+`docs/85-phala-operator-live-artifact-output-plumbing-implementation-notes.md`.
+
+Goal: implement the Phase 84 materialized output-root contract for local
+operator-live artifact bundles without adding live provider behavior,
+credentials, generated operator artifacts, or claims above `Attested`.
+
+Implemented: `PhalaOperatorLiveOutputOverwriteMode`,
+`write_phala_operator_live_artifact_output_root`, and
+`read_phala_operator_live_artifact_output_root` in `hsai-attestation-phala`.
+The writer validates in-memory bundles first, materializes only the six declared
+`operator-live/*` files under a caller-owned output root, stages writes before
+publishing, requires explicit overwrite for existing bundles, and rereads the
+materialized bundle through the Phase 83 validator. The reader rejects undeclared
+files, partial bundles, symlinks, stale digests, invalid JSON, invalid UTF-8, and
+raw response body retention by default before returning validated metadata.
+
+Dependencies: Phase 81 operator-live path boundary, Phase 82 artifact-plumbing
+boundary, Phase 83 in-memory artifact-plumbing implementation, Phase 84
+output-plumbing boundary, and Phase 4 claim boundaries.
+
+Validation gate: focused Phala operator-live artifact tests, claim-boundary text
+checks, no Cargo metadata changes, no package runtime files, no fixture changes,
+no generated operator artifacts, no network code, no live Phala calls, no
+operator secrets, and no accepted Evidence Ledger mutation.
+
+Anti-goals: live Phala API calls, operator live tests, credential handling code,
+secret fixtures, generated operator artifacts, raw response body retention,
+network access, local Intel DCAP quote verification, PCCS or collateral
+handling, generic JWKS/JWT fetching, TLS or attested-TLS channel binding,
+deployment orchestration, external repo clones, backend execution, benchmark
+outputs, accepted Evidence Ledger mutation, Phase 4 registry semantic changes,
+Level2+ evidence, global uniqueness claims, semantic-correctness claims, or
+claims above `Attested`.
+
+Exit criteria: valid materialized bundles write and read under a temporary
+caller-owned root; repository-root, empty-root, symlink-root, symlink-file,
+unexpected-file, partial-bundle, stale-digest, raw-response-body, and implicit
+overwrite paths fail closed; normal tests remain hermetic; and all successful
+validation remains capped at `Attested`.

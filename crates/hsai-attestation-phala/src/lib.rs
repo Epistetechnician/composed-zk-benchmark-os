@@ -13,6 +13,9 @@ use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::cell::RefCell;
 use std::collections::{BTreeMap, BTreeSet};
+use std::fs;
+use std::path::{Path, PathBuf};
+use std::time::{SystemTime, UNIX_EPOCH};
 
 pub mod artifact;
 pub use artifact::{
@@ -453,6 +456,13 @@ pub struct ValidatedPhalaOperatorLiveArtifact {
     pub trust_roots: BTreeSet<TrustRoot>,
 }
 
+/// Explicit overwrite mode for local operator-live output roots.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub enum PhalaOperatorLiveOutputOverwriteMode {
+    RefuseExisting,
+    ReplaceExisting,
+}
+
 /// Failure taxonomy for hermetic Phala managed-verifier preparation.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub enum PhalaManagedVerifierError {
@@ -503,6 +513,16 @@ pub enum PhalaOperatorLiveArtifactError {
     RedactionSecretRetained(String),
     ClaimBoundaryViolation,
     MissingNonClaim(String),
+    OutputRootInvalid {
+        path: String,
+        reason: String,
+    },
+    ExistingBundleRequiresOverwrite(String),
+    SymlinkPath(String),
+    Filesystem {
+        path: String,
+        message: String,
+    },
     ManagedVerifier(PhalaManagedVerifierError),
 }
 
@@ -655,6 +675,63 @@ pub fn validate_phala_operator_live_artifact_files(
 ) -> Result<ValidatedPhalaOperatorLiveArtifact, PhalaOperatorLiveArtifactError> {
     let bundle = parse_phala_operator_live_artifact_files(files)?;
     validate_phala_operator_live_artifact_bundle(&bundle)
+}
+
+/// Write a validated operator-live artifact bundle under a caller-owned output root.
+///
+/// This performs local filesystem I/O only. It does not call Phala, load
+/// credentials, retain raw response bodies, or create evidence stronger than the
+/// Phase 83 in-memory validation result.
+pub fn write_phala_operator_live_artifact_output_root(
+    output_root: impl AsRef<Path>,
+    bundle: &PhalaOperatorLiveArtifactBundle,
+    overwrite: PhalaOperatorLiveOutputOverwriteMode,
+) -> Result<ValidatedPhalaOperatorLiveArtifact, PhalaOperatorLiveArtifactError> {
+    let validated = validate_phala_operator_live_artifact_bundle(bundle)?;
+    let files = serialize_operator_live_artifact_bundle(bundle)?;
+    let output_root = validate_operator_live_output_root(output_root.as_ref())?;
+    prepare_operator_live_output_root(&output_root, overwrite)?;
+
+    let staging_root = output_root.join(operator_live_staging_dir_name());
+    if staging_root.exists() {
+        remove_dir_all(&staging_root)?;
+    }
+    create_dir(&staging_root)?;
+
+    let write_result = write_operator_live_files_to_root(&staging_root, &files)
+        .and_then(|_| read_phala_operator_live_artifact_output_root(&staging_root))
+        .and_then(|staged| {
+            if staged != validated {
+                return Err(PhalaOperatorLiveArtifactError::DigestMismatch {
+                    field: "materialized.staged_bundle".to_owned(),
+                    actual: staged.request_digest,
+                    expected: validated.request_digest.clone(),
+                });
+            }
+            let target = output_root.join("operator-live");
+            if target.exists() {
+                remove_dir_all(&target)?;
+            }
+            rename_path(&staging_root.join("operator-live"), &target)?;
+            remove_dir_all(&staging_root)?;
+            read_phala_operator_live_artifact_output_root(&output_root)
+        });
+
+    let _ = fs::remove_dir_all(&staging_root);
+
+    write_result
+}
+
+/// Read a materialized operator-live artifact bundle from a caller-owned output root.
+///
+/// The returned metadata is produced only after parsing the declared local files
+/// and passing them through the Phase 83 in-memory validator.
+pub fn read_phala_operator_live_artifact_output_root(
+    output_root: impl AsRef<Path>,
+) -> Result<ValidatedPhalaOperatorLiveArtifact, PhalaOperatorLiveArtifactError> {
+    let output_root = validate_operator_live_output_root(output_root.as_ref())?;
+    let files = collect_operator_live_materialized_files(&output_root)?;
+    validate_phala_operator_live_artifact_files(&files)
 }
 
 /// Deterministic SHA-256 digest over the crate-local JSON representation.
@@ -932,6 +1009,286 @@ fn validate_operator_live_file_set(
     Ok(())
 }
 
+fn serialize_operator_live_artifact_bundle(
+    bundle: &PhalaOperatorLiveArtifactBundle,
+) -> Result<BTreeMap<String, Vec<u8>>, PhalaOperatorLiveArtifactError> {
+    Ok(BTreeMap::from([
+        (
+            PHALA_OPERATOR_LIVE_REQUEST_PATH.to_owned(),
+            serialize_operator_live_json(PHALA_OPERATOR_LIVE_REQUEST_PATH, &bundle.request)?,
+        ),
+        (
+            PHALA_OPERATOR_LIVE_NORMALIZED_RESPONSE_PATH.to_owned(),
+            serialize_operator_live_json(
+                PHALA_OPERATOR_LIVE_NORMALIZED_RESPONSE_PATH,
+                &bundle.normalized_response,
+            )?,
+        ),
+        (
+            PHALA_OPERATOR_LIVE_TRUST_ROOTS_PATH.to_owned(),
+            serialize_operator_live_json(
+                PHALA_OPERATOR_LIVE_TRUST_ROOTS_PATH,
+                &bundle.trust_roots,
+            )?,
+        ),
+        (
+            PHALA_OPERATOR_LIVE_REDACTION_REPORT_PATH.to_owned(),
+            serialize_operator_live_json(
+                PHALA_OPERATOR_LIVE_REDACTION_REPORT_PATH,
+                &bundle.redaction_report,
+            )?,
+        ),
+        (
+            PHALA_OPERATOR_LIVE_AUDIT_PATH.to_owned(),
+            serialize_operator_live_json(PHALA_OPERATOR_LIVE_AUDIT_PATH, &bundle.audit)?,
+        ),
+        (
+            PHALA_OPERATOR_LIVE_RAW_RESPONSE_DIGEST_PATH.to_owned(),
+            bundle.raw_response_sha256.as_bytes().to_vec(),
+        ),
+    ]))
+}
+
+fn serialize_operator_live_json<T: Serialize>(
+    path: &str,
+    value: &T,
+) -> Result<Vec<u8>, PhalaOperatorLiveArtifactError> {
+    serde_json::to_vec(value).map_err(|error| PhalaOperatorLiveArtifactError::InvalidJson {
+        path: path.to_owned(),
+        message: error.to_string(),
+    })
+}
+
+fn validate_operator_live_output_root(
+    output_root: &Path,
+) -> Result<PathBuf, PhalaOperatorLiveArtifactError> {
+    if output_root.as_os_str().is_empty() {
+        return Err(PhalaOperatorLiveArtifactError::OutputRootInvalid {
+            path: path_display(output_root),
+            reason: "empty output root".to_owned(),
+        });
+    }
+    reject_symlink_path(output_root)?;
+    let metadata = fs::metadata(output_root).map_err(|error| {
+        PhalaOperatorLiveArtifactError::OutputRootInvalid {
+            path: path_display(output_root),
+            reason: error.to_string(),
+        }
+    })?;
+    if !metadata.is_dir() {
+        return Err(PhalaOperatorLiveArtifactError::OutputRootInvalid {
+            path: path_display(output_root),
+            reason: "output root is not a directory".to_owned(),
+        });
+    }
+
+    let canonical = fs::canonicalize(output_root).map_err(|error| {
+        PhalaOperatorLiveArtifactError::OutputRootInvalid {
+            path: path_display(output_root),
+            reason: error.to_string(),
+        }
+    })?;
+    if looks_like_workspace_repo_root(&canonical) {
+        return Err(PhalaOperatorLiveArtifactError::OutputRootInvalid {
+            path: path_display(output_root),
+            reason: "repository root is not an operator artifact output root".to_owned(),
+        });
+    }
+    Ok(canonical)
+}
+
+fn looks_like_workspace_repo_root(path: &Path) -> bool {
+    path.join(".git").exists()
+        && path.join("Cargo.toml").is_file()
+        && path.join("crates").is_dir()
+        && path.join("docs").is_dir()
+}
+
+fn prepare_operator_live_output_root(
+    output_root: &Path,
+    overwrite: PhalaOperatorLiveOutputOverwriteMode,
+) -> Result<(), PhalaOperatorLiveArtifactError> {
+    let mut has_operator_live = false;
+    for entry in read_dir(output_root)? {
+        let entry = dir_entry(entry, output_root)?;
+        let path = entry.path();
+        reject_symlink_path(&path)?;
+        let name = entry_file_name(&entry)?;
+        if name == "operator-live" {
+            has_operator_live = true;
+            if !entry_file_type(&entry)?.is_dir() {
+                return Err(PhalaOperatorLiveArtifactError::UnexpectedFile(name));
+            }
+        } else {
+            return Err(PhalaOperatorLiveArtifactError::UnexpectedFile(name));
+        }
+    }
+
+    if has_operator_live {
+        read_phala_operator_live_artifact_output_root(output_root)?;
+        if overwrite == PhalaOperatorLiveOutputOverwriteMode::RefuseExisting {
+            return Err(
+                PhalaOperatorLiveArtifactError::ExistingBundleRequiresOverwrite(
+                    "operator-live".to_owned(),
+                ),
+            );
+        }
+    }
+    Ok(())
+}
+
+fn write_operator_live_files_to_root(
+    root: &Path,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<(), PhalaOperatorLiveArtifactError> {
+    validate_operator_live_file_set(files)?;
+    for (logical_path, bytes) in files {
+        validate_operator_live_path(logical_path)?;
+        let destination = root.join(logical_path);
+        if let Some(parent) = destination.parent() {
+            create_dir_all(parent)?;
+        }
+        if destination.exists() {
+            return Err(PhalaOperatorLiveArtifactError::UnexpectedFile(
+                logical_path.clone(),
+            ));
+        }
+        fs::write(&destination, bytes).map_err(|error| {
+            PhalaOperatorLiveArtifactError::Filesystem {
+                path: path_display(&destination),
+                message: error.to_string(),
+            }
+        })?;
+        reject_symlink_path(&destination)?;
+    }
+    Ok(())
+}
+
+fn collect_operator_live_materialized_files(
+    output_root: &Path,
+) -> Result<BTreeMap<String, Vec<u8>>, PhalaOperatorLiveArtifactError> {
+    let mut files = BTreeMap::new();
+    let mut saw_operator_live = false;
+    for entry in read_dir(output_root)? {
+        let entry = dir_entry(entry, output_root)?;
+        let path = entry.path();
+        reject_symlink_path(&path)?;
+        let name = entry_file_name(&entry)?;
+        if name != "operator-live" {
+            return Err(PhalaOperatorLiveArtifactError::UnexpectedFile(name));
+        }
+        if !entry_file_type(&entry)?.is_dir() {
+            return Err(PhalaOperatorLiveArtifactError::UnexpectedFile(name));
+        }
+        saw_operator_live = true;
+        for child in read_dir(&path)? {
+            let child = dir_entry(child, &path)?;
+            let child_path = child.path();
+            reject_symlink_path(&child_path)?;
+            let child_name = entry_file_name(&child)?;
+            let logical_path = format!("operator-live/{child_name}");
+            validate_operator_live_path(&logical_path)?;
+            if !entry_file_type(&child)?.is_file() {
+                return Err(PhalaOperatorLiveArtifactError::UnexpectedFile(logical_path));
+            }
+            let bytes = fs::read(&child_path).map_err(|error| {
+                PhalaOperatorLiveArtifactError::Filesystem {
+                    path: path_display(&child_path),
+                    message: error.to_string(),
+                }
+            })?;
+            files.insert(logical_path, bytes);
+        }
+    }
+    if !saw_operator_live {
+        return Err(PhalaOperatorLiveArtifactError::MissingFile(
+            PHALA_OPERATOR_LIVE_REQUEST_PATH.to_owned(),
+        ));
+    }
+    Ok(files)
+}
+
+fn read_dir(path: &Path) -> Result<fs::ReadDir, PhalaOperatorLiveArtifactError> {
+    fs::read_dir(path).map_err(|error| PhalaOperatorLiveArtifactError::Filesystem {
+        path: path_display(path),
+        message: error.to_string(),
+    })
+}
+
+fn dir_entry(
+    entry: Result<fs::DirEntry, std::io::Error>,
+    parent: &Path,
+) -> Result<fs::DirEntry, PhalaOperatorLiveArtifactError> {
+    entry.map_err(|error| PhalaOperatorLiveArtifactError::Filesystem {
+        path: path_display(parent),
+        message: error.to_string(),
+    })
+}
+
+fn create_dir(path: &Path) -> Result<(), PhalaOperatorLiveArtifactError> {
+    fs::create_dir(path).map_err(|error| PhalaOperatorLiveArtifactError::Filesystem {
+        path: path_display(path),
+        message: error.to_string(),
+    })
+}
+
+fn create_dir_all(path: &Path) -> Result<(), PhalaOperatorLiveArtifactError> {
+    fs::create_dir_all(path).map_err(|error| PhalaOperatorLiveArtifactError::Filesystem {
+        path: path_display(path),
+        message: error.to_string(),
+    })
+}
+
+fn remove_dir_all(path: &Path) -> Result<(), PhalaOperatorLiveArtifactError> {
+    fs::remove_dir_all(path).map_err(|error| PhalaOperatorLiveArtifactError::Filesystem {
+        path: path_display(path),
+        message: error.to_string(),
+    })
+}
+
+fn rename_path(from: &Path, to: &Path) -> Result<(), PhalaOperatorLiveArtifactError> {
+    fs::rename(from, to).map_err(|error| PhalaOperatorLiveArtifactError::Filesystem {
+        path: format!("{} -> {}", path_display(from), path_display(to)),
+        message: error.to_string(),
+    })
+}
+
+fn reject_symlink_path(path: &Path) -> Result<(), PhalaOperatorLiveArtifactError> {
+    if fs::symlink_metadata(path)
+        .map(|metadata| metadata.file_type().is_symlink())
+        .unwrap_or(false)
+    {
+        return Err(PhalaOperatorLiveArtifactError::SymlinkPath(path_display(
+            path,
+        )));
+    }
+    Ok(())
+}
+
+fn entry_file_name(entry: &fs::DirEntry) -> Result<String, PhalaOperatorLiveArtifactError> {
+    entry
+        .file_name()
+        .into_string()
+        .map_err(|_| PhalaOperatorLiveArtifactError::UnsafePath(path_display(&entry.path())))
+}
+
+fn entry_file_type(entry: &fs::DirEntry) -> Result<fs::FileType, PhalaOperatorLiveArtifactError> {
+    entry
+        .file_type()
+        .map_err(|error| PhalaOperatorLiveArtifactError::Filesystem {
+            path: path_display(&entry.path()),
+            message: error.to_string(),
+        })
+}
+
+fn operator_live_staging_dir_name() -> String {
+    let nanos = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|duration| duration.as_nanos())
+        .unwrap_or_default();
+    format!(".operator-live.tmp.{nanos}")
+}
+
 fn required_operator_live_paths() -> BTreeSet<&'static str> {
     BTreeSet::from([
         PHALA_OPERATOR_LIVE_REQUEST_PATH,
@@ -954,6 +1311,10 @@ fn validate_operator_live_path(path: &str) -> Result<(), PhalaOperatorLiveArtifa
         return Err(PhalaOperatorLiveArtifactError::UnsafePath(path.to_owned()));
     }
     Ok(())
+}
+
+fn path_display(path: &Path) -> String {
+    path.display().to_string()
 }
 
 fn parse_operator_live_json<T: for<'de> Deserialize<'de>>(
