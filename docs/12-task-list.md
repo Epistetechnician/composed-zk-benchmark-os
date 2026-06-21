@@ -487,9 +487,11 @@ surface requires a separate docs-first boundary.
 
 ## Benchmark OS Track: Phase T Cross-Bundle Audit Index
 
-Status: complete for docs-first boundary and in-memory implementation. See
+Status: complete for docs-first boundary, in-memory implementation, and
+docs-first output-plumbing boundary. See
 `docs/91-phase-t-cross-bundle-audit-index-boundary-spec.md` and
-`docs/92-phase-t-cross-bundle-audit-index-implementation-notes.md`.
+`docs/92-phase-t-cross-bundle-audit-index-implementation-notes.md`, and
+`docs/93-phase-t-cross-bundle-audit-index-output-plumbing-spec.md`.
 
 Goal: define the future cross-bundle audit-index planning boundary before any
 implementation broadens beyond the Phase S single-index local output surface.
@@ -502,17 +504,22 @@ limitation labels, deterministic Markdown, and JSON round trips. The boundary
 also names future protected-path overlap rules across source packs, source
 reports, report bundles, audit-index outputs, Phase S ergonomics outputs,
 accepted Evidence Ledgers, and future cross-bundle output roots, plus
-non-repair behavior for corrupted output roots.
+non-repair behavior for corrupted output roots. The output-plumbing docs-first
+boundary narrows the future materialized shape to one canonical cross-bundle
+view JSON file, one rendered Markdown file, and two digest sidecars below a
+caller-selected `cross-bundle-audit-index/` output root.
 
 Dependencies: Phase R local audit-index metadata, Phase R adjacent local
 audit-index output plumbing, Phase S single-index ergonomics, and Phase S local
 ergonomics output plumbing.
 
-Validation gate: focused Phase T cross-bundle tests, documentation navigation
-checks, claim-boundary text checks, repo hygiene checks, no generated
-cross-bundle files, no package runtime files, no command-line tools, no UI
-dashboards, no external execution hooks, no score-axis population, and no
-accepted Evidence Ledger mutation.
+Validation gate: focused Phase T cross-bundle tests for implementation slices,
+documentation navigation checks, claim-boundary text checks, repo hygiene
+checks, no generated cross-bundle files, no package runtime files, no
+command-line tools, no UI dashboards, no external execution hooks, no
+score-axis population, and no accepted Evidence Ledger mutation. Future
+output-plumbing implementation coverage must include protected-path overlap
+rejection before writes and corrupted-output-root non-repair.
 
 Anti-goals: generated cross-bundle files, cross-bundle writer or reader APIs,
 command-line tools, UI dashboards, browser apps,
@@ -525,12 +532,13 @@ evidence, ZK backend performance claims, Level2+ evidence creation, score-axis
 population from local-only evidence, broad leaderboard claims, or treating
 cross-bundle audit-index metadata as evidence.
 
-Exit criteria: Phase T boundary spec and implementation notes exist, README and
-AGENTS point to them, the in-memory input/output rules are explicit, duplicate
-and conflict signals are tested, invalid manifests fail closed, protected-path
-overlap and non-repair rules for future output plumbing are documented, and all
-cross-bundle output remains capped at `Level0DesignNote`. Future materialized
-output-root plumbing requires a separate docs-first boundary.
+Exit criteria: Phase T boundary spec, implementation notes, and output-plumbing
+spec exist, README and AGENTS point to them, the in-memory input/output rules
+are explicit, duplicate and conflict signals are tested, invalid manifests fail
+closed, protected-path overlap and non-repair rules for future output plumbing
+are documented, and all cross-bundle output remains capped at
+`Level0DesignNote`. Future materialized output-root implementation must stay
+inside `docs/93-phase-t-cross-bundle-audit-index-output-plumbing-spec.md`.
 
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
