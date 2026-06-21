@@ -175,6 +175,9 @@ Surface DSL
 | [docs/94-phase-t-cross-bundle-audit-index-output-implementation-notes.md](docs/94-phase-t-cross-bundle-audit-index-output-implementation-notes.md) | Phase T cross-bundle audit-index output implementation notes. |
 | [docs/95-phase-u-local-benchmark-artifact-boundary-spec.md](docs/95-phase-u-local-benchmark-artifact-boundary-spec.md) | Phase U local benchmark artifact docs-first boundary. |
 | [docs/96-phase-u-local-benchmark-artifact-implementation-notes.md](docs/96-phase-u-local-benchmark-artifact-implementation-notes.md) | Phase U local benchmark artifact implementation notes. |
+| [docs/97-phala-operator-live-invocation-boundary-spec.md](docs/97-phala-operator-live-invocation-boundary-spec.md) | Phala/dstack operator-live invocation docs-first boundary. |
+| [docs/98-phase-v-local-artifact-campaign-boundary-spec.md](docs/98-phase-v-local-artifact-campaign-boundary-spec.md) | Phase V durable local artifact campaign docs-first boundary. |
+| [docs/99-phase-w-reviewed-evidence-promotion-boundary-spec.md](docs/99-phase-w-reviewed-evidence-promotion-boundary-spec.md) | Phase W reviewed evidence-promotion and official-submission docs-first boundary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -310,6 +313,17 @@ Surface DSL
   symlink-resolved protected overlap, stale digests, symlinks, unexpected
   files, partial bundles, and repair overwrites, and remains local
   reproducibility packaging only.
+- `docs/98-phase-v-local-artifact-campaign-boundary-spec.md` records the
+  docs-first boundary for a future user-approved durable local artifact
+  campaign under an ignored output root. It authorizes no Rust implementation,
+  generated campaign files, external replay, official submission, accepted
+  Evidence Ledger mutation, score-axis population, ZK backend performance
+  claim, or Level2+ promotion in this slice.
+- `docs/99-phase-w-reviewed-evidence-promotion-boundary-spec.md` records the
+  docs-first boundary for future reviewed accepted-evidence mutation and
+  official benchmark submission. It authorizes no accepted Evidence Ledger
+  mutation, official submission package, external replay, live backend
+  execution, score-axis population, or Level2+ evidence creation in this slice.
 - Phase L bounded local soak acceptance exists for
   `phase_l_qwable_local_soak_2026_06_17_extended_256`: 768 completed local
   cases, zero failures, zero failure-corpus entries, a valid report bundle, no
@@ -403,6 +417,12 @@ Surface DSL
   loading, live Phala calls, operator live tests, local DCAP, managed-service
   signature verification, generated operator artifact acceptance, or benchmark
   work.
+- `docs/97-phala-operator-live-invocation-boundary-spec.md` records the
+  docs-first boundary for a future operator-owned live Phala/dstack invocation
+  path. It authorizes no Rust implementation, examples, scripts, credentials,
+  generated operator artifacts, operator live tests, network access, live Phala
+  calls, local DCAP, PCCS, JWKS fetching, TLS channel binding, accepted Evidence
+  Ledger mutation, benchmark output, or claims above `Attested` in this slice.
 - Managed-attestation challenge packet tooling exists for local, non-secret
   capture preflight. It creates capture inputs only, not real attestation
   evidence. The operator-facing preflight example
@@ -428,12 +448,16 @@ Surface DSL
 ## Next Implementation Slice
 
 For the benchmark OS track,
-[docs/96-phase-u-local-benchmark-artifact-implementation-notes.md](docs/96-phase-u-local-benchmark-artifact-implementation-notes.md)
-now records local artifact-bundle packaging implementation. The next benchmark
-OS slice must move back to a docs-first boundary before any durable generated
-artifact campaign, external replay, official benchmark evidence, accepted
-Evidence Ledger mutation, CLI/UI/package runtime, ZK backend performance claim,
-score-axis population, or Level2+ promotion.
+[docs/98-phase-v-local-artifact-campaign-boundary-spec.md](docs/98-phase-v-local-artifact-campaign-boundary-spec.md)
+now records the docs-first boundary for a future durable local artifact campaign,
+and
+[docs/99-phase-w-reviewed-evidence-promotion-boundary-spec.md](docs/99-phase-w-reviewed-evidence-promotion-boundary-spec.md)
+records the docs-first boundary for future accepted-evidence promotion and
+official submission. The next implementation slice must stay inside one of
+those contracts and still cannot create official benchmark evidence, accepted
+Evidence Ledger entries, external replay evidence, score-axis population, ZK
+backend performance claims, or Level2+ evidence without the separately
+authorized implementation phase.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
@@ -487,6 +511,13 @@ using hermetic filesystem tests only. It still forbids examples, scripts,
 credentials, generated operator artifacts, operator live tests, network access,
 live Phala calls, local DCAP, managed-service signature verification, benchmark
 evidence, and claims above `Attested`.
+The follow-on docs-first boundary is
+[docs/97-phala-operator-live-invocation-boundary-spec.md](docs/97-phala-operator-live-invocation-boundary-spec.md).
+It defines the future operator-owned live invocation contract while still
+forbidding Rust implementation, credentials, generated artifacts, operator live
+tests, network access, live Phala calls, local DCAP, PCCS, JWKS fetching, TLS
+channel binding, benchmark output, accepted Evidence Ledger mutation, and claims
+above `Attested`.
 
 ## Non-Goals
 
