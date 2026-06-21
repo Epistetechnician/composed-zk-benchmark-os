@@ -18,6 +18,7 @@ pub mod evidence;
 pub mod external_runner;
 pub mod generator;
 pub mod ids;
+pub mod local_benchmark_artifact;
 pub mod mutation;
 pub mod pack;
 pub mod prelude;
@@ -62,16 +63,18 @@ pub use audit_index::{
     compute_local_audit_index_manifest_digest,
     deserialize_local_audit_index_cross_bundle_view_json,
     deserialize_local_audit_index_ergonomics_view_json,
-    deserialize_local_audit_index_manifest_json, read_local_audit_index_ergonomics_outputs,
-    read_local_audit_index_outputs, required_local_audit_index_cross_bundle_limitations,
+    deserialize_local_audit_index_manifest_json, read_local_audit_index_cross_bundle_outputs,
+    read_local_audit_index_ergonomics_outputs, read_local_audit_index_outputs,
+    required_local_audit_index_cross_bundle_limitations,
     required_local_audit_index_ergonomics_limitations,
     serialize_local_audit_index_cross_bundle_view_json,
     serialize_local_audit_index_ergonomics_view_json, serialize_local_audit_index_manifest_json,
     validate_local_audit_index_cross_bundle_request, validate_local_audit_index_ergonomics_request,
-    validate_local_audit_index_manifest, write_local_audit_index_ergonomics_outputs,
-    write_local_audit_index_outputs, LocalAuditIndexCrossBundleGroupKey,
-    LocalAuditIndexCrossBundleGroupSummary, LocalAuditIndexCrossBundleInput,
-    LocalAuditIndexCrossBundleIssue, LocalAuditIndexCrossBundleIssueKind,
+    validate_local_audit_index_manifest, write_local_audit_index_cross_bundle_outputs,
+    write_local_audit_index_ergonomics_outputs, write_local_audit_index_outputs,
+    LocalAuditIndexCrossBundleGroupKey, LocalAuditIndexCrossBundleGroupSummary,
+    LocalAuditIndexCrossBundleInput, LocalAuditIndexCrossBundleIssue,
+    LocalAuditIndexCrossBundleIssueKind, LocalAuditIndexCrossBundleOutput,
     LocalAuditIndexCrossBundleRequest, LocalAuditIndexCrossBundleSignal,
     LocalAuditIndexCrossBundleSignalKind, LocalAuditIndexCrossBundleSortKey,
     LocalAuditIndexCrossBundleSourceSummary, LocalAuditIndexCrossBundleValidation,
@@ -85,6 +88,8 @@ pub use audit_index::{
     LocalAuditIndexInputKind, LocalAuditIndexInputRef, LocalAuditIndexManifest,
     LocalAuditIndexOutput, LocalAuditIndexValidation, LocalAuditIndexValidationIssue,
     LocalAuditIndexValidationIssueKind, LocalAuditIndexVersion,
+    AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_DIGEST_PATH, AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_PATH,
+    AUDIT_INDEX_CROSS_BUNDLE_VIEW_DIGEST_PATH, AUDIT_INDEX_CROSS_BUNDLE_VIEW_PATH,
     AUDIT_INDEX_ERGONOMICS_MARKDOWN_DIGEST_PATH, AUDIT_INDEX_ERGONOMICS_MARKDOWN_PATH,
     AUDIT_INDEX_ERGONOMICS_VIEW_DIGEST_PATH, AUDIT_INDEX_ERGONOMICS_VIEW_PATH,
     AUDIT_INDEX_MANIFEST_DIGEST_PATH, AUDIT_INDEX_MANIFEST_PATH,
@@ -211,6 +216,18 @@ pub use generator::{
     BenchmarkInstance, DeterministicGenerator, FamilyKind, FamilyTemplate,
     GeneratedBenchmarkFamily, GeneratedBenchmarkInstance, GenerationProvenance, GeneratorConfig,
     GeneratorLimits, GeneratorProfile, GeneratorSeed, GeneratorTunables, InstanceParams,
+};
+pub use local_benchmark_artifact::{
+    compute_local_benchmark_artifact_manifest_digest,
+    deserialize_local_benchmark_artifact_manifest_json, read_local_benchmark_artifact_outputs,
+    render_local_benchmark_artifact_markdown, required_local_benchmark_artifact_limitations,
+    serialize_local_benchmark_artifact_manifest_json, validate_local_benchmark_artifact_manifest,
+    write_local_benchmark_artifact_outputs, LocalBenchmarkArtifactInputKind,
+    LocalBenchmarkArtifactInputRef, LocalBenchmarkArtifactManifest, LocalBenchmarkArtifactOutput,
+    LocalBenchmarkArtifactValidation, LocalBenchmarkArtifactValidationIssue,
+    LocalBenchmarkArtifactValidationIssueKind, LocalBenchmarkArtifactVersion,
+    LOCAL_BENCHMARK_ARTIFACT_MANIFEST_DIGEST_PATH, LOCAL_BENCHMARK_ARTIFACT_MANIFEST_PATH,
+    LOCAL_BENCHMARK_ARTIFACT_MARKDOWN_DIGEST_PATH, LOCAL_BENCHMARK_ARTIFACT_MARKDOWN_PATH,
 };
 pub use mutation::{
     apply_default_mutations, apply_mutation_pass, evaluate_mutated_instance, BadCountersPass,

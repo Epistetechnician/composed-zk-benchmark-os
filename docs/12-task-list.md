@@ -487,9 +487,12 @@ surface requires a separate docs-first boundary.
 
 ## Benchmark OS Track: Phase T Cross-Bundle Audit Index
 
-Status: complete for docs-first boundary and in-memory implementation. See
+Status: complete for docs-first boundary, in-memory implementation, docs-first
+output-plumbing boundary, and local output-root implementation. See
 `docs/91-phase-t-cross-bundle-audit-index-boundary-spec.md` and
-`docs/92-phase-t-cross-bundle-audit-index-implementation-notes.md`.
+`docs/92-phase-t-cross-bundle-audit-index-implementation-notes.md`, and
+`docs/93-phase-t-cross-bundle-audit-index-output-plumbing-spec.md`, and
+`docs/94-phase-t-cross-bundle-audit-index-output-implementation-notes.md`.
 
 Goal: define the future cross-bundle audit-index planning boundary before any
 implementation broadens beyond the Phase S single-index local output surface.
@@ -502,20 +505,32 @@ limitation labels, deterministic Markdown, and JSON round trips. The boundary
 also names future protected-path overlap rules across source packs, source
 reports, report bundles, audit-index outputs, Phase S ergonomics outputs,
 accepted Evidence Ledgers, and future cross-bundle output roots, plus
-non-repair behavior for corrupted output roots.
+non-repair behavior for corrupted output roots. The output-plumbing docs-first
+boundary narrows the future materialized shape to one canonical cross-bundle
+view JSON file, one rendered Markdown file, and two digest sidecars below a
+caller-selected `cross-bundle-audit-index/` output root. The local output-root
+implementation adds declared-file-only materialization for
+`cross-bundle-view.json`, `rendered/cross-bundle-view.md`,
+`digests/cross-bundle-view-json.sha256`, and
+`digests/cross-bundle-view-markdown.sha256`; deterministic request/view
+rederivation; protected path overlap rejection; stale digest rejection; symlink
+and unexpected-file rejection; partial-bundle rejection; corrupted-root
+non-repair; source immutability; and `Level0DesignNote` claim limits.
 
 Dependencies: Phase R local audit-index metadata, Phase R adjacent local
 audit-index output plumbing, Phase S single-index ergonomics, and Phase S local
 ergonomics output plumbing.
 
-Validation gate: focused Phase T cross-bundle tests, documentation navigation
-checks, claim-boundary text checks, repo hygiene checks, no generated
-cross-bundle files, no package runtime files, no command-line tools, no UI
-dashboards, no external execution hooks, no score-axis population, and no
-accepted Evidence Ledger mutation.
+Validation gate: focused Phase T cross-bundle tests for implementation slices,
+documentation navigation checks, claim-boundary text checks, repo hygiene
+checks, no committed generated cross-bundle files, no package runtime files, no
+command-line tools, no UI dashboards, no external execution hooks, no
+score-axis population, and no accepted Evidence Ledger mutation. Output-plumbing
+implementation coverage must include protected-path overlap rejection before
+writes and corrupted-output-root non-repair.
 
-Anti-goals: generated cross-bundle files, cross-bundle writer or reader APIs,
-command-line tools, UI dashboards, browser apps,
+Anti-goals: generated committed cross-bundle files, command-line tools, UI
+dashboards, browser apps,
 JavaScript/TypeScript/package runtime additions, source pack mutation, source
 report mutation, report-bundle mutation, audit-index output mutation, Phase S
 ergonomics output mutation, accepted Evidence Ledger mutation, replay-command
@@ -525,12 +540,69 @@ evidence, ZK backend performance claims, Level2+ evidence creation, score-axis
 population from local-only evidence, broad leaderboard claims, or treating
 cross-bundle audit-index metadata as evidence.
 
-Exit criteria: Phase T boundary spec and implementation notes exist, README and
-AGENTS point to them, the in-memory input/output rules are explicit, duplicate
-and conflict signals are tested, invalid manifests fail closed, protected-path
-overlap and non-repair rules for future output plumbing are documented, and all
-cross-bundle output remains capped at `Level0DesignNote`. Future materialized
-output-root plumbing requires a separate docs-first boundary.
+Exit criteria: Phase T boundary spec, implementation notes, output-plumbing
+spec, and output implementation notes exist; README and AGENTS point to them;
+the in-memory and materialized input/output rules are explicit; duplicate and
+conflict signals are tested; invalid manifests fail closed; materialized JSON
+and Markdown bytes are bound to digest sidecars; protected-path overlap,
+symlinks, unexpected files, partial bundles, stale digests, and drift fail
+closed; corrupted roots are not repaired; normal test paths remain hermetic; and
+all cross-bundle output remains capped at `Level0DesignNote`.
+
+## Benchmark OS Track: Phase U Local Benchmark Artifact Boundary
+
+Status: complete for docs-first boundary and local implementation. See
+`docs/95-phase-u-local-benchmark-artifact-boundary-spec.md` and
+`docs/96-phase-u-local-benchmark-artifact-implementation-notes.md`.
+
+Goal: define the future local benchmark artifact generation boundary before any
+generated local artifact bundle is created.
+
+Implemented: docs-first boundary for future local benchmark artifact bundles
+assembled from already-valid local inputs: local benchmark packs,
+pack-readiness metadata, report-bundle metadata, audit-index metadata, Phase S
+ergonomics metadata, Phase T cross-bundle metadata, and local replay/evidence
+artifacts already referenced by valid local packs. The boundary requires
+declared-file output shape, digest sidecars, source-input digest summaries,
+claim-boundary summaries capped at the weakest local input, required limitation
+labels, protected-path overlap rejection, corrupted-root non-repair, accepted
+Evidence Ledger non-mutation, and score-axis non-population from local-only
+evidence. The local implementation adds `LocalBenchmarkArtifactManifest`,
+manifest validation, deterministic JSON serialization, deterministic Markdown
+rendering, manifest digesting, declared-file-only output writing and reading,
+digest sidecars, protected-path overlap rejection, stale-digest rejection,
+symlink rejection, unexpected-file rejection, partial-bundle rejection, and
+repair-overwrite rejection.
+
+Dependencies: Phase O local reproducible-pack readiness, Phase Q report-bundle
+metadata/output plumbing, Phase R audit-index metadata/output plumbing, Phase S
+audit-index ergonomics/output plumbing, and Phase T cross-bundle audit-index
+metadata/output plumbing.
+
+Validation gate: documentation navigation checks, claim-boundary text checks,
+repo hygiene checks, focused Phase U local benchmark artifact tests, no
+committed generated benchmark artifact files, no package runtime files, no
+command-line tools, no UI dashboards, no external execution hooks, no
+score-axis population, and no accepted Evidence Ledger mutation.
+
+Anti-goals: committed generated benchmark artifact files, command-line tools,
+UI dashboards, browser apps,
+JavaScript/TypeScript/package runtime additions, source pack mutation, source
+report mutation, report-bundle mutation, audit-index output mutation, Phase S
+ergonomics output mutation, Phase T cross-bundle output mutation, accepted
+Evidence Ledger mutation, replay-command execution, external replay, live
+backend execution, external repo clones, external result import, official
+benchmark evidence, ZK backend performance claims, Level2+ evidence creation,
+score-axis population from local-only evidence, broad leaderboard claims, or
+treating local generated artifacts as accepted evidence.
+
+Exit criteria: Phase U boundary spec and implementation notes exist; README and
+AGENTS point to them; input classes, output shape, protected-path policy,
+overwrite policy, required limitation labels, negative tests, and promotion
+boundary are explicit; the local writer/reader uses declared files and digest
+sidecars only; and the docs preserve that local benchmark artifacts are
+packaging only until a separate reviewed promotion phase creates stronger
+evidence.
 
 ## Managed-Attestation Track: Managed JWT Signature Verification
 

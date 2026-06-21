@@ -45,6 +45,23 @@ pub const AUDIT_INDEX_ERGONOMICS_VIEW_DIGEST_PATH: &str = "digests/ergonomics-vi
 pub const AUDIT_INDEX_ERGONOMICS_MARKDOWN_DIGEST_PATH: &str =
     "digests/ergonomics-view-markdown.sha256";
 
+/// Phase T cross-bundle view JSON path below a
+/// `cross-bundle-audit-index/` root.
+pub const AUDIT_INDEX_CROSS_BUNDLE_VIEW_PATH: &str = "cross-bundle-view.json";
+
+/// Phase T cross-bundle rendered Markdown path below a
+/// `cross-bundle-audit-index/` root.
+pub const AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_PATH: &str = "rendered/cross-bundle-view.md";
+
+/// Phase T cross-bundle view JSON digest sidecar path below a
+/// `cross-bundle-audit-index/` root.
+pub const AUDIT_INDEX_CROSS_BUNDLE_VIEW_DIGEST_PATH: &str = "digests/cross-bundle-view-json.sha256";
+
+/// Phase T cross-bundle rendered Markdown digest sidecar path below a
+/// `cross-bundle-audit-index/` root.
+pub const AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_DIGEST_PATH: &str =
+    "digests/cross-bundle-view-markdown.sha256";
+
 /// Phase R audit-index schema version.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct LocalAuditIndexVersion {
@@ -279,6 +296,32 @@ pub struct LocalAuditIndexErgonomicsOutput {
     pub view: LocalAuditIndexErgonomicsView,
     /// Validation result for the source manifest/request.
     pub validation: LocalAuditIndexErgonomicsValidation,
+    /// Output claim boundary.
+    pub output_claim_boundary: ClaimBoundary,
+}
+
+/// Materialized adjacent local Phase T cross-bundle audit-index output summary.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LocalAuditIndexCrossBundleOutput {
+    /// Cross-bundle view JSON path relative to the caller-supplied
+    /// `cross-bundle-audit-index/` root.
+    pub view_relative_path: String,
+    /// Digest over the materialized cross-bundle view JSON bytes.
+    pub view_digest: ArtifactDigest,
+    /// Cross-bundle view digest sidecar path relative to the output root.
+    pub view_digest_relative_path: String,
+    /// Rendered Markdown path relative to the output root.
+    pub markdown_relative_path: String,
+    /// Digest over the materialized Markdown bytes.
+    pub markdown_digest: ArtifactDigest,
+    /// Rendered Markdown digest sidecar path relative to the output root.
+    pub markdown_digest_relative_path: String,
+    /// Source request used to validate and rederive the view.
+    pub request: LocalAuditIndexCrossBundleRequest,
+    /// Parsed and validated cross-bundle view.
+    pub view: LocalAuditIndexCrossBundleView,
+    /// Validation result for the source request.
+    pub validation: LocalAuditIndexCrossBundleValidation,
     /// Output claim boundary.
     pub output_claim_boundary: ClaimBoundary,
 }
@@ -1477,6 +1520,198 @@ pub fn deserialize_local_audit_index_cross_bundle_view_json(
     })
 }
 
+/// Write adjacent local Phase T cross-bundle audit-index output files.
+///
+/// The supplied `output_root` is the local `cross-bundle-audit-index/`
+/// directory. This function writes only the cross-bundle view JSON,
+/// deterministic rendered Markdown, and two SHA-256 digest sidecars. It
+/// rederives the supplied view from the request before writing and does not
+/// mutate source packs, source reports, report bundles, audit-index outputs,
+/// Phase S ergonomics outputs, or accepted Evidence Ledgers.
+pub fn write_local_audit_index_cross_bundle_outputs(
+    output_root: impl AsRef<Path>,
+    request: &LocalAuditIndexCrossBundleRequest,
+    view: &LocalAuditIndexCrossBundleView,
+    overwrite: bool,
+    protected_paths: &[impl AsRef<Path>],
+) -> Result<LocalAuditIndexCrossBundleOutput> {
+    let output_root = output_root.as_ref();
+    validate_output_root(output_root)?;
+    reject_protected_path_overlap(output_root, protected_paths)?;
+    if output_root.exists() && !output_root.is_dir() {
+        return Err(audit_index_io_error(
+            output_root.display().to_string(),
+            "cross-bundle audit-index output root exists and is not a directory",
+        ));
+    }
+
+    let validation = validate_local_audit_index_cross_bundle_request(request);
+    if !validation.valid {
+        return Err(audit_index_io_error(
+            "audit_index.cross_bundle",
+            format!("cross-bundle validation failed: {:?}", validation.issues),
+        ));
+    }
+    let expected_view = build_local_audit_index_cross_bundle_view(request)?;
+    validate_materialized_cross_bundle_view(&expected_view, view)?;
+
+    let targets = audit_index_cross_bundle_target_paths();
+    if output_root.exists() && !overwrite && directory_has_entries(output_root)? {
+        return Err(audit_index_io_error(
+            output_root.display().to_string(),
+            "cross-bundle audit-index output root is non-empty; explicit overwrite approval is required",
+        ));
+    }
+    if output_root.exists() && overwrite {
+        reject_unexpected_existing_files(output_root, &targets)?;
+        let existing = collect_relative_files(output_root)?;
+        if !existing.is_empty() {
+            let existing_output =
+                read_local_audit_index_cross_bundle_outputs(output_root, request, protected_paths)?;
+            if existing_output.view != *view {
+                return Err(audit_index_io_error(
+                    output_root.display().to_string(),
+                    "existing cross-bundle audit-index output does not match supplied view",
+                ));
+            }
+        }
+    }
+
+    let view_json = serialize_local_audit_index_cross_bundle_view_json(view)?;
+    let view_bytes = view_json.as_bytes();
+    let markdown_bytes = view.markdown.as_bytes();
+    let view_digest = digest_audit_index_output_bytes(view_bytes);
+    let markdown_digest = digest_audit_index_output_bytes(markdown_bytes);
+
+    write_relative_bytes(output_root, AUDIT_INDEX_CROSS_BUNDLE_VIEW_PATH, view_bytes)?;
+    write_relative_bytes(
+        output_root,
+        AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_PATH,
+        markdown_bytes,
+    )?;
+    write_relative_bytes(
+        output_root,
+        AUDIT_INDEX_CROSS_BUNDLE_VIEW_DIGEST_PATH,
+        format!("{}\n", view_digest.hex_digest).as_bytes(),
+    )?;
+    write_relative_bytes(
+        output_root,
+        AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_DIGEST_PATH,
+        format!("{}\n", markdown_digest.hex_digest).as_bytes(),
+    )?;
+
+    Ok(LocalAuditIndexCrossBundleOutput {
+        view_relative_path: AUDIT_INDEX_CROSS_BUNDLE_VIEW_PATH.to_string(),
+        view_digest,
+        view_digest_relative_path: AUDIT_INDEX_CROSS_BUNDLE_VIEW_DIGEST_PATH.to_string(),
+        markdown_relative_path: AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_PATH.to_string(),
+        markdown_digest,
+        markdown_digest_relative_path: AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_DIGEST_PATH.to_string(),
+        request: request.clone(),
+        view: view.clone(),
+        validation,
+        output_claim_boundary: ClaimBoundary::Level0DesignNote,
+    })
+}
+
+/// Read and validate adjacent local Phase T cross-bundle audit-index output
+/// files.
+///
+/// A successful read confirms local file integrity and deterministic
+/// rederivation from the supplied request only. It is not accepted evidence,
+/// not official benchmark evidence, and not ZK backend performance evidence.
+pub fn read_local_audit_index_cross_bundle_outputs(
+    output_root: impl AsRef<Path>,
+    request: &LocalAuditIndexCrossBundleRequest,
+    protected_paths: &[impl AsRef<Path>],
+) -> Result<LocalAuditIndexCrossBundleOutput> {
+    let output_root = output_root.as_ref();
+    validate_output_root(output_root)?;
+    reject_protected_path_overlap(output_root, protected_paths)?;
+    reject_unexpected_existing_files(output_root, &audit_index_cross_bundle_target_paths())?;
+
+    let view_bytes = read_relative_bytes(output_root, AUDIT_INDEX_CROSS_BUNDLE_VIEW_PATH)?;
+    let markdown_bytes = read_relative_bytes(output_root, AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_PATH)?;
+    let view_digest_sidecar = String::from_utf8(read_relative_bytes(
+        output_root,
+        AUDIT_INDEX_CROSS_BUNDLE_VIEW_DIGEST_PATH,
+    )?)
+    .map_err(|error| {
+        audit_index_io_error(
+            AUDIT_INDEX_CROSS_BUNDLE_VIEW_DIGEST_PATH,
+            format!("cross-bundle view digest sidecar is not UTF-8: {error}"),
+        )
+    })?;
+    let markdown_digest_sidecar = String::from_utf8(read_relative_bytes(
+        output_root,
+        AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_DIGEST_PATH,
+    )?)
+    .map_err(|error| {
+        audit_index_io_error(
+            AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_DIGEST_PATH,
+            format!("cross-bundle Markdown digest sidecar is not UTF-8: {error}"),
+        )
+    })?;
+
+    let view_digest = digest_audit_index_output_bytes(&view_bytes);
+    if view_digest_sidecar.trim() != view_digest.hex_digest {
+        return Err(audit_index_io_error(
+            AUDIT_INDEX_CROSS_BUNDLE_VIEW_DIGEST_PATH,
+            "cross-bundle view JSON bytes do not match digest sidecar",
+        ));
+    }
+    let markdown_digest = digest_audit_index_output_bytes(&markdown_bytes);
+    if markdown_digest_sidecar.trim() != markdown_digest.hex_digest {
+        return Err(audit_index_io_error(
+            AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_DIGEST_PATH,
+            "cross-bundle Markdown bytes do not match digest sidecar",
+        ));
+    }
+
+    let view_json = String::from_utf8(view_bytes).map_err(|error| {
+        audit_index_io_error(
+            AUDIT_INDEX_CROSS_BUNDLE_VIEW_PATH,
+            format!("cross-bundle view JSON is not UTF-8: {error}"),
+        )
+    })?;
+    let markdown = String::from_utf8(markdown_bytes).map_err(|error| {
+        audit_index_io_error(
+            AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_PATH,
+            format!("cross-bundle Markdown is not UTF-8: {error}"),
+        )
+    })?;
+    let view = deserialize_local_audit_index_cross_bundle_view_json(&view_json)?;
+    if view.markdown != markdown {
+        return Err(audit_index_io_error(
+            AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_PATH,
+            "cross-bundle Markdown bytes do not match selected view",
+        ));
+    }
+
+    let validation = validate_local_audit_index_cross_bundle_request(request);
+    if !validation.valid {
+        return Err(audit_index_io_error(
+            "audit_index.cross_bundle",
+            format!("cross-bundle validation failed: {:?}", validation.issues),
+        ));
+    }
+    let expected_view = build_local_audit_index_cross_bundle_view(request)?;
+    validate_materialized_cross_bundle_view(&expected_view, &view)?;
+
+    Ok(LocalAuditIndexCrossBundleOutput {
+        view_relative_path: AUDIT_INDEX_CROSS_BUNDLE_VIEW_PATH.to_string(),
+        view_digest,
+        view_digest_relative_path: AUDIT_INDEX_CROSS_BUNDLE_VIEW_DIGEST_PATH.to_string(),
+        markdown_relative_path: AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_PATH.to_string(),
+        markdown_digest,
+        markdown_digest_relative_path: AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_DIGEST_PATH.to_string(),
+        request: request.clone(),
+        view,
+        validation,
+        output_claim_boundary: ClaimBoundary::Level0DesignNote,
+    })
+}
+
 /// Validate local audit-index metadata.
 pub fn validate_local_audit_index_manifest(
     manifest: &LocalAuditIndexManifest,
@@ -2398,6 +2633,15 @@ fn audit_index_ergonomics_target_paths() -> BTreeSet<String> {
     ])
 }
 
+fn audit_index_cross_bundle_target_paths() -> BTreeSet<String> {
+    BTreeSet::from([
+        AUDIT_INDEX_CROSS_BUNDLE_VIEW_PATH.to_string(),
+        AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_PATH.to_string(),
+        AUDIT_INDEX_CROSS_BUNDLE_VIEW_DIGEST_PATH.to_string(),
+        AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_DIGEST_PATH.to_string(),
+    ])
+}
+
 fn validate_materialized_ergonomics_view(
     expected: &LocalAuditIndexErgonomicsView,
     supplied: &LocalAuditIndexErgonomicsView,
@@ -2426,6 +2670,39 @@ fn validate_materialized_ergonomics_view(
         return Err(audit_index_io_error(
             "audit_index.ergonomics",
             "supplied audit-index ergonomics view does not match deterministic source manifest/request derivation",
+        ));
+    }
+    Ok(())
+}
+
+fn validate_materialized_cross_bundle_view(
+    expected: &LocalAuditIndexCrossBundleView,
+    supplied: &LocalAuditIndexCrossBundleView,
+) -> Result<()> {
+    if supplied.output_claim_boundary != ClaimBoundary::Level0DesignNote {
+        return Err(audit_index_io_error(
+            "audit_index.cross_bundle.output_claim_boundary",
+            "cross-bundle audit-index output must remain Level0DesignNote",
+        ));
+    }
+    for limitation in required_local_audit_index_cross_bundle_limitations() {
+        if !supplied.limitation_labels.contains(&limitation) {
+            return Err(audit_index_io_error(
+                "audit_index.cross_bundle.limitation_labels",
+                format!("missing required cross-bundle limitation label: {limitation}"),
+            ));
+        }
+        if !supplied.markdown.contains(&limitation) {
+            return Err(audit_index_io_error(
+                "audit_index.cross_bundle.markdown",
+                format!("materialized cross-bundle Markdown omits limitation label: {limitation}"),
+            ));
+        }
+    }
+    if supplied != expected {
+        return Err(audit_index_io_error(
+            "audit_index.cross_bundle",
+            "supplied cross-bundle audit-index view does not match deterministic source request derivation",
         ));
     }
     Ok(())
