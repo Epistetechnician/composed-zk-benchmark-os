@@ -169,6 +169,8 @@ Surface DSL
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
 | [docs/80-phala-hermetic-live-verifier-implementation-notes.md](docs/80-phala-hermetic-live-verifier-implementation-notes.md) | Phala/dstack hermetic live-verifier implementation notes. |
 | [docs/81-phala-operator-live-path-boundary-spec.md](docs/81-phala-operator-live-path-boundary-spec.md) | Phala/dstack operator-only live path docs-first boundary. |
+| [docs/82-phala-operator-live-artifact-plumbing-spec.md](docs/82-phala-operator-live-artifact-plumbing-spec.md) | Phala/dstack operator-live artifact plumbing docs-first boundary. |
+| [docs/83-phala-operator-live-artifact-plumbing-implementation-notes.md](docs/83-phala-operator-live-artifact-plumbing-implementation-notes.md) | Phala/dstack operator-live artifact plumbing implementation notes. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -291,6 +293,21 @@ Surface DSL
   ignored/feature-gated live behavior, and `Attested`-only claim limits. It
   authorizes no Rust implementation, examples, credentials, generated
   artifacts, or live Phala calls in this slice.
+- `docs/82-phala-operator-live-artifact-plumbing-spec.md` records the
+  docs-first operator-live artifact plumbing boundary: local output-bundle file
+  roles, digest and schema rules, redaction-report validation, deterministic
+  validation requirements, future code touch surface, hermetic test
+  requirements, and `Attested`-only claim limits. It authorizes no Rust
+  implementation, examples, scripts, credentials, generated artifacts, operator
+  live tests, network access, or live Phala calls in this slice.
+- `docs/83-phala-operator-live-artifact-plumbing-implementation-notes.md`
+  records the local in-memory implementation of that artifact-plumbing surface
+  in `hsai-attestation-phala`: declared logical file parsing, portable path
+  checks, schema and SHA-256 digest validation, redaction-report validation,
+  provider/trust-root consistency checks, existing hermetic response validation,
+  and `Attested`-only output metadata. It performs no filesystem writes, network
+  access, credential loading, live Phala calls, operator live tests, local DCAP,
+  or benchmark work.
 - Managed-attestation challenge packet tooling exists for local, non-secret
   capture preflight. It creates capture inputs only, not real attestation
   evidence. The operator-facing preflight example
@@ -354,11 +371,22 @@ operator-only and unauthorized for normal tests.
 That hermetic surface is implemented in
 [docs/80-phala-hermetic-live-verifier-implementation-notes.md](docs/80-phala-hermetic-live-verifier-implementation-notes.md)
 using deterministic fake-client tests only.
-The next managed-attestation boundary is
+The operator-live boundary is
 [docs/81-phala-operator-live-path-boundary-spec.md](docs/81-phala-operator-live-path-boundary-spec.md).
 It defines the future operator-only live path contract while still forbidding
 Rust implementation, credentials, generated artifacts, and live Phala calls in
 this slice.
+The follow-on artifact-plumbing boundary is
+[docs/82-phala-operator-live-artifact-plumbing-spec.md](docs/82-phala-operator-live-artifact-plumbing-spec.md).
+It narrows the future local output-bundle contract and first code-phase touch
+surface while still forbidding Rust implementation, examples, scripts,
+credentials, generated artifacts, operator live tests, network access, and live
+Phala calls in this slice.
+That local artifact-plumbing surface is implemented in
+[docs/83-phala-operator-live-artifact-plumbing-implementation-notes.md](docs/83-phala-operator-live-artifact-plumbing-implementation-notes.md)
+using in-memory logical files and hermetic tests only. It still forbids
+filesystem writes, examples, scripts, credentials, generated operator
+artifacts, operator live tests, network access, and live Phala calls.
 
 ## Non-Goals
 
