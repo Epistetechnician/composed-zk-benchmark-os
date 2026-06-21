@@ -1,10 +1,12 @@
 use hsai_attestation::report_data_binding;
 use hsai_attestation_phala::{
     parse_phala_operator_live_artifact_files, phala_operator_live_json_digest,
-    validate_phala_operator_live_artifact_files, PhalaManagedVerifierError,
+    read_phala_operator_live_artifact_output_root, validate_phala_operator_live_artifact_files,
+    write_phala_operator_live_artifact_output_root, PhalaManagedVerifierError,
     PhalaManagedVerifierRequest, PhalaManagedVerifierResponse, PhalaManagedVerifierVerdict,
     PhalaOperatorLiveArtifactBundle, PhalaOperatorLiveArtifactError, PhalaOperatorLiveAudit,
-    PhalaOperatorLiveRedactionReport, PhalaOperatorLiveRetainedField, PhalaOperatorLiveTrustRoots,
+    PhalaOperatorLiveOutputOverwriteMode, PhalaOperatorLiveRedactionReport,
+    PhalaOperatorLiveRetainedField, PhalaOperatorLiveTrustRoots,
     PHALA_OPERATOR_LIVE_ARTIFACT_SCHEMA_VERSION, PHALA_OPERATOR_LIVE_AUDIT_PATH,
     PHALA_OPERATOR_LIVE_CLAIM_BOUNDARY, PHALA_OPERATOR_LIVE_NORMALIZED_RESPONSE_PATH,
     PHALA_OPERATOR_LIVE_RAW_RESPONSE_DIGEST_PATH, PHALA_OPERATOR_LIVE_REDACTION_REPORT_PATH,
@@ -13,6 +15,11 @@ use hsai_attestation_phala::{
 use hsai_claim_envelope::{TrustRoot, VendorId};
 use hsai_distinct_agent::Anchor;
 use std::collections::{BTreeMap, BTreeSet};
+use std::fs;
+use std::path::{Path, PathBuf};
+use std::sync::atomic::{AtomicU64, Ordering};
+
+static TEMP_COUNTER: AtomicU64 = AtomicU64::new(0);
 
 const NOW: u64 = 2_000;
 const NONCE: u64 = 777;
@@ -196,6 +203,24 @@ fn error_for(bundle: PhalaOperatorLiveArtifactBundle) -> PhalaOperatorLiveArtifa
     validate_phala_operator_live_artifact_files(&files_for(&bundle)).expect_err("bundle rejects")
 }
 
+fn temp_output_root(label: &str) -> PathBuf {
+    let unique = TEMP_COUNTER.fetch_add(1, Ordering::SeqCst);
+    let nanos = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|duration| duration.as_nanos())
+        .unwrap_or_default();
+    let root =
+        std::env::temp_dir().join(format!("hsai-phala-operator-live-{label}-{nanos}-{unique}"));
+    let _ = fs::remove_dir_all(&root);
+    fs::create_dir(&root).expect("temp output root created");
+    root
+}
+
+fn cleanup(path: &Path) {
+    let _ = fs::remove_dir_all(path);
+    let _ = fs::remove_file(path);
+}
+
 #[test]
 fn valid_operator_live_bundle_round_trips_without_live_io() {
     let files = files_for(&bundle());
@@ -206,6 +231,161 @@ fn valid_operator_live_bundle_round_trips_without_live_io() {
     assert_eq!(validated.claim_boundary, PHALA_OPERATOR_LIVE_CLAIM_BOUNDARY);
     assert_eq!(validated.provider, "phala-dstack");
     assert_eq!(validated.trust_roots, required_roots());
+}
+
+#[test]
+fn materialized_operator_live_bundle_writes_and_reads_without_live_io() {
+    let root = temp_output_root("roundtrip");
+    let validated = write_phala_operator_live_artifact_output_root(
+        &root,
+        &bundle(),
+        PhalaOperatorLiveOutputOverwriteMode::RefuseExisting,
+    )
+    .expect("bundle writes");
+    let read_back =
+        read_phala_operator_live_artifact_output_root(&root).expect("bundle reads back");
+
+    assert_eq!(validated, read_back);
+    assert_eq!(read_back.claim_boundary, PHALA_OPERATOR_LIVE_CLAIM_BOUNDARY);
+    assert!(root.join(PHALA_OPERATOR_LIVE_REQUEST_PATH).is_file());
+    assert!(!root.join("operator-live/raw-response.json").exists());
+    cleanup(&root);
+}
+
+#[test]
+fn materialized_output_root_rejects_repo_root_and_empty_paths() {
+    let repo_root = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .parent()
+        .and_then(Path::parent)
+        .expect("repo root");
+
+    assert!(matches!(
+        write_phala_operator_live_artifact_output_root(
+            repo_root,
+            &bundle(),
+            PhalaOperatorLiveOutputOverwriteMode::RefuseExisting,
+        ),
+        Err(PhalaOperatorLiveArtifactError::OutputRootInvalid { .. })
+    ));
+
+    assert!(matches!(
+        write_phala_operator_live_artifact_output_root(
+            Path::new(""),
+            &bundle(),
+            PhalaOperatorLiveOutputOverwriteMode::RefuseExisting,
+        ),
+        Err(PhalaOperatorLiveArtifactError::OutputRootInvalid { .. })
+    ));
+}
+
+#[test]
+fn materialized_output_requires_explicit_overwrite() {
+    let root = temp_output_root("overwrite");
+    write_phala_operator_live_artifact_output_root(
+        &root,
+        &bundle(),
+        PhalaOperatorLiveOutputOverwriteMode::RefuseExisting,
+    )
+    .expect("initial write succeeds");
+
+    assert!(matches!(
+        write_phala_operator_live_artifact_output_root(
+            &root,
+            &bundle(),
+            PhalaOperatorLiveOutputOverwriteMode::RefuseExisting,
+        ),
+        Err(PhalaOperatorLiveArtifactError::ExistingBundleRequiresOverwrite(_))
+    ));
+
+    write_phala_operator_live_artifact_output_root(
+        &root,
+        &bundle(),
+        PhalaOperatorLiveOutputOverwriteMode::ReplaceExisting,
+    )
+    .expect("explicit overwrite succeeds");
+    cleanup(&root);
+}
+
+#[test]
+fn materialized_output_rejects_partial_extra_and_stale_files() {
+    let partial = temp_output_root("partial");
+    fs::create_dir(partial.join("operator-live")).expect("operator dir");
+    fs::write(
+        partial.join(PHALA_OPERATOR_LIVE_REQUEST_PATH),
+        serde_json::to_vec(&bundle().request).expect("request serializes"),
+    )
+    .expect("partial file");
+    assert!(matches!(
+        read_phala_operator_live_artifact_output_root(&partial),
+        Err(PhalaOperatorLiveArtifactError::MissingFile(_))
+    ));
+    cleanup(&partial);
+
+    let extra = temp_output_root("extra");
+    write_phala_operator_live_artifact_output_root(
+        &extra,
+        &bundle(),
+        PhalaOperatorLiveOutputOverwriteMode::RefuseExisting,
+    )
+    .expect("bundle writes");
+    fs::write(extra.join("operator-live/raw-response.json"), b"{}").expect("extra raw body");
+    assert_eq!(
+        read_phala_operator_live_artifact_output_root(&extra),
+        Err(PhalaOperatorLiveArtifactError::UnexpectedFile(
+            "operator-live/raw-response.json".to_owned()
+        ))
+    );
+    cleanup(&extra);
+
+    let stale = temp_output_root("stale");
+    write_phala_operator_live_artifact_output_root(
+        &stale,
+        &bundle(),
+        PhalaOperatorLiveOutputOverwriteMode::RefuseExisting,
+    )
+    .expect("bundle writes");
+    fs::write(
+        stale.join(PHALA_OPERATOR_LIVE_RAW_RESPONSE_DIGEST_PATH),
+        b"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    )
+    .expect("stale digest");
+    assert!(matches!(
+        read_phala_operator_live_artifact_output_root(&stale),
+        Err(PhalaOperatorLiveArtifactError::DigestMismatch { .. })
+    ));
+    cleanup(&stale);
+}
+
+#[cfg(unix)]
+#[test]
+fn materialized_output_rejects_symlink_roots_and_bundle_files() {
+    use std::os::unix::fs::symlink;
+
+    let target = temp_output_root("symlink-target");
+    let link = target.with_extension("link");
+    cleanup(&link);
+    symlink(&target, &link).expect("root symlink");
+    assert!(matches!(
+        write_phala_operator_live_artifact_output_root(
+            &link,
+            &bundle(),
+            PhalaOperatorLiveOutputOverwriteMode::RefuseExisting,
+        ),
+        Err(PhalaOperatorLiveArtifactError::SymlinkPath(_))
+    ));
+    cleanup(&link);
+    cleanup(&target);
+
+    let root = temp_output_root("symlink-file");
+    fs::create_dir(root.join("operator-live")).expect("operator dir");
+    let target_file = root.join("request-target.json");
+    fs::write(&target_file, b"{}").expect("target file");
+    symlink(&target_file, root.join(PHALA_OPERATOR_LIVE_REQUEST_PATH)).expect("bundle symlink");
+    assert!(matches!(
+        read_phala_operator_live_artifact_output_root(&root),
+        Err(PhalaOperatorLiveArtifactError::SymlinkPath(_))
+    ));
+    cleanup(&root);
 }
 
 #[test]
