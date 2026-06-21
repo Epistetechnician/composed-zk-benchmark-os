@@ -172,6 +172,7 @@ Surface DSL
 | [docs/82-phala-operator-live-artifact-plumbing-spec.md](docs/82-phala-operator-live-artifact-plumbing-spec.md) | Phala/dstack operator-live artifact plumbing docs-first boundary. |
 | [docs/83-phala-operator-live-artifact-plumbing-implementation-notes.md](docs/83-phala-operator-live-artifact-plumbing-implementation-notes.md) | Phala/dstack operator-live artifact plumbing implementation notes. |
 | [docs/84-phala-operator-live-artifact-output-plumbing-boundary-spec.md](docs/84-phala-operator-live-artifact-output-plumbing-boundary-spec.md) | Phala/dstack operator-live artifact output plumbing docs-first boundary. |
+| [docs/85-phala-operator-live-artifact-output-plumbing-implementation-notes.md](docs/85-phala-operator-live-artifact-output-plumbing-implementation-notes.md) | Phala/dstack operator-live artifact output plumbing implementation notes. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -317,6 +318,15 @@ Surface DSL
   implementation, filesystem writes, examples, scripts, credentials, generated
   operator artifacts, operator live tests, network access, or live Phala calls
   in this slice.
+- `docs/85-phala-operator-live-artifact-output-plumbing-implementation-notes.md`
+  records the local output-root implementation of that materialized artifact
+  surface in `hsai-attestation-phala`: explicit output-root validation,
+  symlink rejection, explicit overwrite mode, staged writes, declared-file-only
+  reads, stale digest rejection, raw-response body retention rejection, and
+  Phase 83 in-memory validation reuse. It performs no network access, credential
+  loading, live Phala calls, operator live tests, local DCAP, managed-service
+  signature verification, generated operator artifact acceptance, or benchmark
+  work.
 - Managed-attestation challenge packet tooling exists for local, non-secret
   capture preflight. It creates capture inputs only, not real attestation
   evidence. The operator-facing preflight example
@@ -396,12 +406,12 @@ That local artifact-plumbing surface is implemented in
 using in-memory logical files and hermetic tests only. It still forbids
 filesystem writes, examples, scripts, credentials, generated operator
 artifacts, operator live tests, network access, and live Phala calls.
-The next managed-attestation boundary is
-[docs/84-phala-operator-live-artifact-output-plumbing-boundary-spec.md](docs/84-phala-operator-live-artifact-output-plumbing-boundary-spec.md).
-It defines future materialized output-root rules while still forbidding Rust
-implementation, filesystem writes, examples, scripts, credentials, generated
-operator artifacts, operator live tests, network access, and live Phala calls in
-this slice.
+That local output-root plumbing surface is implemented in
+[docs/85-phala-operator-live-artifact-output-plumbing-implementation-notes.md](docs/85-phala-operator-live-artifact-output-plumbing-implementation-notes.md)
+using hermetic filesystem tests only. It still forbids examples, scripts,
+credentials, generated operator artifacts, operator live tests, network access,
+live Phala calls, local DCAP, managed-service signature verification, benchmark
+evidence, and claims above `Attested`.
 
 ## Non-Goals
 
