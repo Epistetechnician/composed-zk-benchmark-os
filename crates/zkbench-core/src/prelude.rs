@@ -50,6 +50,13 @@ pub use crate::generator::{
     BenchmarkInstance, DeterministicGenerator, FamilyKind, GeneratedBenchmarkFamily,
     GeneratedBenchmarkInstance, GeneratorConfig, GeneratorLimits, InstanceParams,
 };
+pub use crate::local_benchmark_artifact::{
+    compute_local_benchmark_artifact_manifest_digest, read_local_benchmark_artifact_outputs,
+    render_local_benchmark_artifact_markdown, validate_local_benchmark_artifact_manifest,
+    write_local_benchmark_artifact_outputs, LocalBenchmarkArtifactInputKind,
+    LocalBenchmarkArtifactInputRef, LocalBenchmarkArtifactManifest, LocalBenchmarkArtifactOutput,
+    LOCAL_BENCHMARK_ARTIFACT_MANIFEST_PATH, LOCAL_BENCHMARK_ARTIFACT_MARKDOWN_PATH,
+};
 pub use crate::mutation::{
     apply_default_mutations, apply_mutation_pass, evaluate_mutated_instance, BadCountersPass,
     CorruptedGuardsPass, MissingConstraintsPass, MutatedBenchmarkInstance, MutationClass,
