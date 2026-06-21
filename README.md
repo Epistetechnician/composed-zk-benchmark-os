@@ -168,6 +168,7 @@ Surface DSL
 | [docs/87-phase-s-audit-index-ergonomics-implementation-notes.md](docs/87-phase-s-audit-index-ergonomics-implementation-notes.md) | Phase S in-memory audit-index ergonomics implementation notes. |
 | [docs/88-phase-s-audit-index-ergonomics-output-plumbing-spec.md](docs/88-phase-s-audit-index-ergonomics-output-plumbing-spec.md) | Phase S audit-index ergonomics output-plumbing docs-first boundary. |
 | [docs/89-phase-s-audit-index-ergonomics-output-plumbing-implementation-notes.md](docs/89-phase-s-audit-index-ergonomics-output-plumbing-implementation-notes.md) | Phase S audit-index ergonomics output-plumbing implementation notes. |
+| [docs/90-whole-codebase-validation-report.md](docs/90-whole-codebase-validation-report.md) | Whole-codebase local validation report and claim-boundary summary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -259,6 +260,12 @@ Surface DSL
   manifest/request, rejects protected path overlap, stale digests, symlinks,
   unexpected files, partial bundles, and drift, and remains `Level0DesignNote`
   local presentation metadata only.
+- `docs/90-whole-codebase-validation-report.md` records the full local
+  validation suite run after Phase S hardening, maps the suite to implemented
+  subsystems, and states the remaining coverage and live-execution gaps. It does
+  not claim per-function proof, line coverage, production readiness, official
+  benchmark evidence, ZK backend performance, Level2+ evidence, or accepted
+  Evidence Ledger mutation.
 - Phase L bounded local soak acceptance exists for
   `phase_l_qwable_local_soak_2026_06_17_extended_256`: 768 completed local
   cases, zero failures, zero failure-corpus entries, a valid report bundle, no
