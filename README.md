@@ -172,6 +172,7 @@ Surface DSL
 | [docs/91-phase-t-cross-bundle-audit-index-boundary-spec.md](docs/91-phase-t-cross-bundle-audit-index-boundary-spec.md) | Phase T cross-bundle audit-index docs-first boundary. |
 | [docs/92-phase-t-cross-bundle-audit-index-implementation-notes.md](docs/92-phase-t-cross-bundle-audit-index-implementation-notes.md) | Phase T in-memory cross-bundle audit-index implementation notes. |
 | [docs/93-phase-t-cross-bundle-audit-index-output-plumbing-spec.md](docs/93-phase-t-cross-bundle-audit-index-output-plumbing-spec.md) | Phase T cross-bundle audit-index output-plumbing docs-first boundary. |
+| [docs/94-phase-t-cross-bundle-audit-index-output-implementation-notes.md](docs/94-phase-t-cross-bundle-audit-index-output-implementation-notes.md) | Phase T cross-bundle audit-index output implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -287,6 +288,13 @@ Surface DSL
   command-line surface, UI dashboard, package runtime, external replay, official
   benchmark evidence, ZK backend performance claim, score-axis population, or
   Level2+ evidence promotion.
+- Phase T cross-bundle audit-index output plumbing now materializes exactly
+  `cross-bundle-audit-index/cross-bundle-view.json`,
+  `cross-bundle-audit-index/rendered/cross-bundle-view.md`, and two digest
+  sidecars under a caller-owned local root. It rederives the view from the
+  supplied request, rejects protected path overlap, stale digests, symlinks,
+  unexpected files, partial bundles, and drift, and remains `Level0DesignNote`
+  local presentation metadata only.
 - Phase L bounded local soak acceptance exists for
   `phase_l_qwable_local_soak_2026_06_17_extended_256`: 768 completed local
   cases, zero failures, zero failure-corpus entries, a valid report bundle, no
@@ -405,14 +413,13 @@ Surface DSL
 ## Next Implementation Slice
 
 For the benchmark OS track,
-[docs/93-phase-t-cross-bundle-audit-index-output-plumbing-spec.md](docs/93-phase-t-cross-bundle-audit-index-output-plumbing-spec.md)
-now records the docs-first boundary for future materialized Phase T output-root
-plumbing. The next benchmark OS implementation slice is a local filesystem
-Phase T output writer/reader only if it stays inside that spec: declared files
-only, protected-path overlap rejection before writes, corrupted-output-root
-non-repair, source/evidence immutability, no CLI/UI/package runtime, no external
-replay, no official benchmark evidence, no ZK backend performance claim, no
-score-axis population, and no Level2+ evidence promotion.
+[docs/94-phase-t-cross-bundle-audit-index-output-implementation-notes.md](docs/94-phase-t-cross-bundle-audit-index-output-implementation-notes.md)
+now records the local output-root implementation for materialized Phase T
+cross-bundle audit-index output. The next benchmark OS boundary is generated
+local benchmark artifact planning; that remains docs-first only until a future
+slice explicitly authorizes artifact construction, generated files, external
+replay, official benchmark evidence, accepted Evidence Ledger mutation,
+score-axis population, or Level2+ promotion.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
