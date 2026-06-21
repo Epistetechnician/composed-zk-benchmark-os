@@ -164,6 +164,7 @@ Surface DSL
 | [docs/74-phase-r-local-audit-index-implementation-notes.md](docs/74-phase-r-local-audit-index-implementation-notes.md) | Phase R inert in-memory local audit-index metadata implementation notes. |
 | [docs/75-phase-r-audit-index-output-plumbing-spec.md](docs/75-phase-r-audit-index-output-plumbing-spec.md) | Phase R audit-index adjacent local output-plumbing boundary. |
 | [docs/76-phase-r-audit-index-output-implementation-notes.md](docs/76-phase-r-audit-index-output-implementation-notes.md) | Phase R audit-index adjacent local output implementation notes. |
+| [docs/86-phase-s-audit-index-ergonomics-boundary-spec.md](docs/86-phase-s-audit-index-ergonomics-boundary-spec.md) | Phase S audit-index ergonomics docs-first boundary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -234,6 +235,13 @@ Surface DSL
   `audit-index/digests/audit-index-manifest.sha256`. The output remains a
   `Level0DesignNote` local integrity summary and is not accepted evidence,
   official benchmark evidence, ZK backend performance, or Level2+ evidence.
+- `docs/86-phase-s-audit-index-ergonomics-boundary-spec.md` records the
+  docs-first boundary for future single-index audit-index ergonomics: validated
+  filters, grouping, sorting, warning summaries, limitation-label preservation,
+  and deterministic Markdown rendering over one existing `LocalAuditIndexManifest`.
+  It authorizes no Rust implementation, generated ergonomics files, CLI, UI,
+  package runtime files, cross-bundle index construction, external replay,
+  benchmark evidence, score-axis population, or Level2+ evidence.
 - Phase L bounded local soak acceptance exists for
   `phase_l_qwable_local_soak_2026_06_17_extended_256`: 768 completed local
   cases, zero failures, zero failure-corpus entries, a valid report bundle, no
@@ -355,10 +363,13 @@ For the benchmark OS track, Phase R now implements adjacent local audit-index
 output plumbing;
 see
 [docs/76-phase-r-audit-index-output-implementation-notes.md](docs/76-phase-r-audit-index-output-implementation-notes.md).
-The next benchmark-OS slice should open a new docs-first boundary before
-broadening audit-index ergonomics, cross-bundle index construction, command-line
-surfaces, UI dashboards, external replay, official benchmark evidence, ZK
-backend performance claims, or Level2+ evidence promotion.
+The next docs-first boundary is
+[docs/86-phase-s-audit-index-ergonomics-boundary-spec.md](docs/86-phase-s-audit-index-ergonomics-boundary-spec.md).
+It narrows future audit-index ergonomics to a single validated
+`LocalAuditIndexManifest` while still forbidding Rust implementation, generated
+ergonomics files, cross-bundle index construction, command-line surfaces, UI
+dashboards, external replay, official benchmark evidence, ZK backend performance
+claims, score-axis population, or Level2+ evidence promotion in this slice.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
