@@ -18,6 +18,7 @@ pub mod evidence;
 pub mod external_runner;
 pub mod generator;
 pub mod ids;
+pub mod local_benchmark_artifact;
 pub mod mutation;
 pub mod pack;
 pub mod prelude;
@@ -215,6 +216,18 @@ pub use generator::{
     BenchmarkInstance, DeterministicGenerator, FamilyKind, FamilyTemplate,
     GeneratedBenchmarkFamily, GeneratedBenchmarkInstance, GenerationProvenance, GeneratorConfig,
     GeneratorLimits, GeneratorProfile, GeneratorSeed, GeneratorTunables, InstanceParams,
+};
+pub use local_benchmark_artifact::{
+    compute_local_benchmark_artifact_manifest_digest,
+    deserialize_local_benchmark_artifact_manifest_json, read_local_benchmark_artifact_outputs,
+    render_local_benchmark_artifact_markdown, required_local_benchmark_artifact_limitations,
+    serialize_local_benchmark_artifact_manifest_json, validate_local_benchmark_artifact_manifest,
+    write_local_benchmark_artifact_outputs, LocalBenchmarkArtifactInputKind,
+    LocalBenchmarkArtifactInputRef, LocalBenchmarkArtifactManifest, LocalBenchmarkArtifactOutput,
+    LocalBenchmarkArtifactValidation, LocalBenchmarkArtifactValidationIssue,
+    LocalBenchmarkArtifactValidationIssueKind, LocalBenchmarkArtifactVersion,
+    LOCAL_BENCHMARK_ARTIFACT_MANIFEST_DIGEST_PATH, LOCAL_BENCHMARK_ARTIFACT_MANIFEST_PATH,
+    LOCAL_BENCHMARK_ARTIFACT_MARKDOWN_DIGEST_PATH, LOCAL_BENCHMARK_ARTIFACT_MARKDOWN_PATH,
 };
 pub use mutation::{
     apply_default_mutations, apply_mutation_pass, evaluate_mutated_instance, BadCountersPass,
