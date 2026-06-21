@@ -37,6 +37,8 @@ cargo clippy --workspace --all-targets -- -D warnings
 cargo doc --workspace --no-deps
 cargo test -p zkbench-core --test repo_hygiene
 cargo test -p zkbench-core --test repo_claim_boundary_docs
+cargo llvm-cov --workspace --summary-only
+cargo llvm-cov --workspace --features external-runner --summary-only
 git diff --check
 ```
 
@@ -45,8 +47,15 @@ All commands passed.
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-`cargo llvm-cov` is not installed in this environment, so this report does not
-claim line, branch, or per-function coverage percentages.
+`cargo-llvm-cov 0.8.7` was available, but the local Rust installation required
+explicit `LLVM_COV` and `LLVM_PROFDATA` environment variables pointing at the
+rustup `llvm-tools-preview` binaries. With those variables set, the default
+workspace pass and the `external-runner` feature pass reported the same totals:
+`79.32%` region coverage, `80.29%` function execution, and `82.72%` line
+coverage. Branch coverage was not reported by this run. These coverage
+percentages are local test instrumentation only; they are not production
+readiness, semantic correctness, official benchmark evidence, accepted Evidence
+Ledger mutation, or Level2+ evidence.
 
 ## Efficacy Map
 
@@ -71,6 +80,10 @@ The suite exercises the repo as a set of bounded local systems:
 - Phase S audit-index ergonomics, materialized output plumbing, stale-digest
   rejection, symlink rejection, partial-bundle rejection, non-repair overwrite
   behavior, and protected-path overlap hardening.
+- Phase T cross-bundle audit-index in-memory views and materialized output
+  plumbing, duplicate/conflict signal preservation, declared-file output,
+  digest sidecars, stale-digest rejection, symlink rejection, partial-bundle
+  rejection, corrupted-root non-repair, and protected-path overlap hardening.
 - HSAI claim-envelope algebra, agent-case lanes, distinct-agent registry,
   managed attestation, offline managed-JWT verification, Phala fixture and
   captured-artifact validation, hermetic fake-client live-verifier surface,
@@ -113,14 +126,14 @@ claim-boundary escalation.
 
 ## Residual Gaps
 
-- No coverage tool was available in this environment.
 - No live external backend, live Phala call, DCAP/PCCS/JWKS fetching, TLS
   channel binding, or operator-live credential path was exercised.
 - No generated benchmark artifacts, official benchmark submissions, or accepted
-  Evidence Ledger entries were created.
-- No cross-bundle audit-index construction or broader Phase S ergonomics surface
-  was authorized or tested beyond the implemented single-index local output
-  boundary.
+  Evidence Ledger entries were created. Phase U now defines the docs-first
+  boundary for future local benchmark artifact generation, but it does not
+  create those artifacts or promote them.
+- No broader Phase S ergonomics surface was authorized or tested beyond the
+  implemented single-index local output boundary.
 
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
