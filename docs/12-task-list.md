@@ -425,6 +425,45 @@ output implementation, focused tests cover validation, output safety, and
 source-scan boundaries, and any broader audit-index work remains blocked until a
 separate explicit implementation phase.
 
+## Benchmark OS Track: Phase S Audit Index Ergonomics Boundary
+
+Status: complete for docs-first boundary only. See
+`docs/86-phase-s-audit-index-ergonomics-boundary-spec.md`.
+
+Goal: define the future single-index audit-index ergonomics contract before any
+implementation adds filters, grouping, sorting, rendered summaries, generated
+ergonomics files, command-line surfaces, UI dashboards, or cross-bundle index
+construction.
+
+Implemented: docs-first boundary for future read-only ergonomics over one valid
+`LocalAuditIndexManifest`: caller-provided filters over manifest fields,
+grouping and sorting over manifest fields, selected-view metadata, warning
+summaries, limitation-label preservation, deterministic Markdown rendering, and
+`Level0DesignNote` claim limits.
+
+Dependencies: Phase R local audit-index metadata and Phase R adjacent local
+audit-index output plumbing.
+
+Validation gate: documentation navigation checks, claim-boundary text checks, no
+Rust source changes, no generated ergonomics files, no package runtime files, no
+cross-bundle construction, no command-line tools, no UI dashboards, no external
+execution hooks, no score-axis population, and no accepted Evidence Ledger
+mutation.
+
+Anti-goals: Rust implementation, generated ergonomics files, command-line tools,
+UI dashboards, browser apps, JavaScript/TypeScript/package runtime additions,
+cross-bundle audit-index construction, replay-command execution, external replay,
+live backend execution, external repo clones, external result import, generated
+benchmark artifacts, official benchmark evidence, ZK backend performance claims,
+Level2+ evidence creation, score-axis population from local-only evidence, broad
+leaderboard claims, source mutation, audit-index output mutation, or accepted
+Evidence Ledger mutation.
+
+Exit criteria: the Phase S boundary spec exists, README and AGENTS point to it,
+future ergonomics input/output rules are explicit, limitation-label preservation
+is required, normal test paths remain hermetic, and all future output remains
+capped at `Level0DesignNote`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
