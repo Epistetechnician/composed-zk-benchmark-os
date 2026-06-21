@@ -3,7 +3,7 @@ use zkbench_core::{
     create_evidence_append_proposal, deserialize_evidence_append_proposal_ledger_json,
     deserialize_external_result_candidate_json, normalize_synthetic_result_candidate,
     serialize_evidence_append_proposal_ledger_json, validate_synthetic_result_candidate,
-    EvidenceAppendProposalLedger, ResultCandidateArtifactResolver,
+    ClaimBoundary, EvidenceAppendProposalLedger, ResultCandidateArtifactResolver,
 };
 
 fn resolver() -> ResultCandidateArtifactResolver {
@@ -52,6 +52,77 @@ fn proposal_ledger_appends_valid_proposal_and_roundtrips() {
     let parsed =
         deserialize_evidence_append_proposal_ledger_json(&json).expect("ledger should deserialize");
     assert_eq!(ledger, parsed);
+}
+
+#[test]
+fn proposal_ledger_rejects_invalid_proposal_before_append() {
+    let mut proposal = proposal();
+    proposal.proposed_claim_boundary = ClaimBoundary::Level1LocalReplay;
+    let mut ledger = EvidenceAppendProposalLedger::new();
+
+    let error = ledger
+        .append(proposal)
+        .expect_err("invalid proposal should be rejected before append");
+
+    assert!(error.to_string().contains("proposal validation failed"));
+    assert!(ledger.entries.is_empty());
+    assert_eq!(ledger.summary.entry_count, 0);
+}
+
+#[test]
+fn proposal_ledger_detects_stale_cached_summary() {
+    let mut ledger = EvidenceAppendProposalLedger::new();
+    ledger
+        .append(proposal())
+        .expect("proposal append should work");
+    ledger.summary.entry_count = 0;
+
+    let validation = ledger.validate();
+
+    assert!(!validation.valid);
+    assert_eq!(validation.summary.entry_count, 1);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.message.contains("cached summary")));
+}
+
+#[test]
+fn proposal_ledger_rejects_forbidden_claim_text_in_notes() {
+    let mut ledger = EvidenceAppendProposalLedger::new();
+    ledger
+        .append(proposal())
+        .expect("proposal append should work");
+    ledger
+        .notes
+        .push("this proposal ledger is official benchmark evidence".to_string());
+
+    let validation = ledger.validate();
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.message.contains("notes[2]")));
+}
+
+#[test]
+fn proposal_ledger_rejects_forbidden_claim_text_in_entry_notes() {
+    let mut ledger = EvidenceAppendProposalLedger::new();
+    ledger
+        .append(proposal())
+        .expect("proposal append should work");
+    ledger.entries[0]
+        .notes
+        .push("this proposal ledger entry is official benchmark evidence".to_string());
+
+    let validation = ledger.validate();
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.message.contains("entries[0].notes[0]")));
 }
 
 #[test]

@@ -284,10 +284,10 @@ impl GeneratorConfig {
                 }
             }
             FamilyKind::BranchingFsm => {
-                if self.tunables.state_count < 3 {
+                if self.tunables.state_count < 4 {
                     return Err(ZkBenchError::generation(
                         "generator.tunables.state_count",
-                        "BranchingFsm requires state_count >= 3",
+                        "BranchingFsm requires state_count >= 4",
                     ));
                 }
                 if self.tunables.branching_factor < 2 {

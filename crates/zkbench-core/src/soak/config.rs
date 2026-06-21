@@ -320,7 +320,7 @@ impl Default for SoakLimits {
 }
 
 /// Soak pipeline scope.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SoakRunScope {
     /// Selected families.
     pub family_selection: SoakFamilySelection,
@@ -330,6 +330,21 @@ pub struct SoakRunScope {
     pub mutation_selection: SoakMutationSelection,
     /// Generator tunables shared by planned cases.
     pub generator_tunables: GeneratorTunables,
+}
+
+impl Default for SoakRunScope {
+    fn default() -> Self {
+        Self {
+            family_selection: SoakFamilySelection::default(),
+            seed_range: SoakSeedRange::default(),
+            mutation_selection: SoakMutationSelection::default(),
+            generator_tunables: GeneratorTunables {
+                state_count: 4,
+                trace_length: 3,
+                ..GeneratorTunables::default()
+            },
+        }
+    }
 }
 
 /// Full local soak run configuration.

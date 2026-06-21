@@ -1,0 +1,983 @@
+//! Phase O local reproducible-pack readiness metadata.
+//!
+//! Readiness reports are local metadata only. They do not create Level2
+//! evidence, do not execute replay commands, do not import external results,
+//! and do not mutate accepted evidence ledgers.
+
+use std::fs;
+use std::path::Path;
+
+use serde::{Deserialize, Serialize};
+
+use crate::error::{Result, ZkBenchError};
+use crate::evidence::{
+    compute_artifact_digest, compute_artifact_digest_bytes, ArtifactDigest,
+    ArtifactDigestAlgorithm, ArtifactKind, ArtifactRole, ClaimBoundary, EvidenceClass,
+};
+
+use super::manifest::{BenchmarkPackFileRole, BenchmarkPackManifest};
+use super::reader::BenchmarkPackReader;
+use super::validation::BenchmarkPackValidation;
+use super::writer::validate_relative_path;
+
+/// Relative location for the local pack validation report emitted by Phase O-D.
+pub const PACK_VALIDATION_REPORT_PATH: &str = "readiness/pack-validation-report.json";
+
+/// Relative location for the local pack-readiness report emitted by Phase O-D.
+pub const PACK_READINESS_REPORT_PATH: &str = "readiness/pack-readiness-report.json";
+
+/// Relative location for the pack-readiness validation report emitted by Phase O-D.
+pub const PACK_READINESS_VALIDATION_PATH: &str = "readiness/pack-readiness-validation.json";
+
+/// Phase O pack-readiness schema version.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct PackReadinessVersion {
+    /// Logical version string.
+    pub value: String,
+}
+
+impl Default for PackReadinessVersion {
+    fn default() -> Self {
+        Self {
+            value: "phase-o-local-pack-readiness-v0".to_string(),
+        }
+    }
+}
+
+/// Local pack-readiness input kind.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+pub enum PackReadinessInputKind {
+    /// Benchmark pack manifest metadata.
+    BenchmarkPackManifest,
+    /// Benchmark pack validation report metadata.
+    BenchmarkPackValidationReport,
+    /// Local replay manifest metadata.
+    LocalReplayManifest,
+    /// Local replay result metadata.
+    LocalReplayResult,
+    /// Local evidence ledger metadata.
+    EvidenceLedger,
+    /// Local score report metadata.
+    ScoreReport,
+    /// Local soak report bundle metadata.
+    SoakReportBundle,
+    /// Failure corpus metadata.
+    FailureCorpus,
+    /// Reproduction bundle metadata.
+    ReproductionBundle,
+    /// Evidence append preview metadata.
+    EvidenceAppendPreview,
+    /// Level2 eligibility report metadata.
+    Level2EligibilityReport,
+    /// Other local metadata.
+    OtherLocalMetadata,
+}
+
+/// Local pack-readiness input reference.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct PackReadinessInputRef {
+    /// Logical input id.
+    pub input_id: String,
+    /// Portable artifact URI or logical artifact id.
+    pub artifact_uri: String,
+    /// Input kind.
+    pub kind: PackReadinessInputKind,
+    /// Stable input digest.
+    pub digest: ArtifactDigest,
+    /// Input evidence class.
+    pub evidence_class: EvidenceClass,
+    /// Input claim boundary.
+    pub claim_boundary: ClaimBoundary,
+    /// Notes.
+    #[serde(default)]
+    pub notes: Vec<String>,
+}
+
+/// Inert replay-command metadata for future local pack readiness checks.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct PackReadinessReplayCommandMetadata {
+    /// Logical command id.
+    pub command_id: String,
+    /// Human-readable local action label.
+    pub action_label: String,
+    /// Portable input artifact URI or logical artifact id.
+    pub input_artifact_uri: String,
+    /// Portable output artifact URI or logical artifact id.
+    pub output_artifact_uri: String,
+    /// Whether this is inert metadata only.
+    pub inert: bool,
+    /// Notes.
+    #[serde(default)]
+    pub notes: Vec<String>,
+}
+
+/// Local pack-readiness check kind.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+pub enum PackReadinessCheckKind {
+    /// Pack paths are relative and portable.
+    RelativePathCoverage,
+    /// Pack files have SHA-256 digest coverage.
+    Sha256DigestCoverage,
+    /// Manifest summary counts match referenced local artifacts.
+    ManifestSummaryConsistency,
+    /// Replay manifests/results are deterministic metadata.
+    ReplayRoundTripReady,
+    /// Evidence ledger digest chain validation is represented.
+    EvidenceLedgerDigestChainReady,
+    /// Local score reports are claim-capped.
+    ScoreReportClaimCap,
+    /// Replay commands remain inert metadata.
+    InertReplayCommandMetadata,
+    /// Output claim boundary is capped by local inputs.
+    WeakestClaimBoundaryCap,
+    /// No Level2 evidence is created.
+    NoLevel2Evidence,
+    /// No external replay evidence is claimed.
+    NoExternalReplay,
+}
+
+/// Local pack-readiness check result.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct PackReadinessCheck {
+    /// Check kind.
+    pub kind: PackReadinessCheckKind,
+    /// Whether this local readiness check passed.
+    pub passed: bool,
+    /// Claim boundary for this check.
+    pub claim_boundary: ClaimBoundary,
+    /// Notes.
+    #[serde(default)]
+    pub notes: Vec<String>,
+}
+
+/// Local reproducible-pack readiness report.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct PackReadinessReport {
+    /// Report id.
+    pub report_id: String,
+    /// Schema version.
+    pub version: PackReadinessVersion,
+    /// Source benchmark pack id.
+    pub source_pack_id: String,
+    /// Source pack digest.
+    pub source_pack_digest: ArtifactDigest,
+    /// Source metadata inputs.
+    #[serde(default)]
+    pub inputs: Vec<PackReadinessInputRef>,
+    /// Inert replay-command metadata.
+    #[serde(default)]
+    pub replay_commands: Vec<PackReadinessReplayCommandMetadata>,
+    /// Local readiness checks.
+    #[serde(default)]
+    pub checks: Vec<PackReadinessCheck>,
+    /// Whether external replay is authorized or claimed.
+    #[serde(default)]
+    pub external_replay_authorized: bool,
+    /// Whether this report claims to create Level2 evidence.
+    #[serde(default)]
+    pub creates_level2_evidence: bool,
+    /// Whether this report claims official benchmark evidence.
+    #[serde(default)]
+    pub official_benchmark_evidence: bool,
+    /// Whether this report claims ZK backend performance evidence.
+    #[serde(default)]
+    pub zk_backend_performance_claims: bool,
+    /// Output claim boundary.
+    pub output_claim_boundary: ClaimBoundary,
+    /// Explicit limitations.
+    #[serde(default)]
+    pub limitations: Vec<String>,
+    /// Notes.
+    #[serde(default)]
+    pub notes: Vec<String>,
+}
+
+/// Pack-readiness validation issue kind.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum PackReadinessValidationIssueKind {
+    /// Required identity field is empty.
+    EmptyIdentity,
+    /// Source inputs are missing.
+    MissingInputs,
+    /// Required checks are missing.
+    MissingRequiredCheck,
+    /// Digest is missing, unsupported, or malformed.
+    InvalidDigest,
+    /// Artifact reference is not portable relative metadata.
+    InvalidArtifactRef,
+    /// Output or check claim boundary is too high.
+    ClaimBoundaryEscalation,
+    /// External replay was authorized or claimed.
+    ExternalReplayAuthorized,
+    /// Report claimed to create Level2 evidence.
+    Level2EvidenceClaim,
+    /// Report claimed official benchmark evidence.
+    OfficialBenchmarkEvidenceClaim,
+    /// Report claimed ZK backend performance.
+    ZkBackendPerformanceClaim,
+    /// Replay command metadata is executable or unsafe.
+    NonInertReplayCommand,
+    /// A required readiness check failed.
+    FailedCheck,
+    /// Append preview was treated above Level0 metadata.
+    AppendPreviewBoundary,
+    /// Level2 eligibility report was treated as Level2 evidence.
+    Level2EligibilityBoundary,
+    /// Required limitation text is missing.
+    MissingLimitation,
+}
+
+/// Pack-readiness validation issue.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct PackReadinessValidationIssue {
+    /// Issue kind.
+    pub kind: PackReadinessValidationIssueKind,
+    /// Path.
+    pub path: String,
+    /// Message.
+    pub message: String,
+}
+
+/// Pack-readiness validation report.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct PackReadinessValidation {
+    /// Whether validation passed.
+    pub valid: bool,
+    /// Issues.
+    #[serde(default)]
+    pub issues: Vec<PackReadinessValidationIssue>,
+    /// Claim boundary of the validation report.
+    pub claim_boundary: ClaimBoundary,
+}
+
+/// Local output summary for adjacent pack-readiness files.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct PackReadinessOutput {
+    /// Relative path of the local pack validation report.
+    pub pack_validation_relative_path: String,
+    /// Digest of the local pack validation report bytes.
+    pub pack_validation_digest: ArtifactDigest,
+    /// Relative path of the pack-readiness report.
+    pub report_relative_path: String,
+    /// Digest of the pack-readiness report bytes.
+    pub report_digest: ArtifactDigest,
+    /// Relative path of the pack-readiness validation report.
+    pub readiness_validation_relative_path: String,
+    /// Digest of the pack-readiness validation report bytes.
+    pub readiness_validation_digest: ArtifactDigest,
+    /// Readiness report that was written.
+    pub report: PackReadinessReport,
+    /// Validation result for the readiness report that was written.
+    pub readiness_validation: PackReadinessValidation,
+    /// Output claim boundary.
+    pub output_claim_boundary: ClaimBoundary,
+}
+
+/// Compute a deterministic digest for a pack-readiness report.
+pub fn compute_pack_readiness_report_digest(
+    report: &PackReadinessReport,
+) -> Result<ArtifactDigest> {
+    compute_artifact_digest(
+        report,
+        Some(ArtifactKind::ScoreReport),
+        Some(ArtifactRole::Report),
+    )
+}
+
+/// Write adjacent local pack-readiness metadata for an existing local pack.
+///
+/// The output files live under `readiness/` beside the pack's `pack.json`.
+/// They are not inserted into the pack manifest and are not accepted evidence.
+/// This function reads and validates local pack metadata only; it does not
+/// execute replay commands or invoke any external backend.
+pub fn write_pack_readiness_outputs_for_pack(
+    pack_root: impl AsRef<Path>,
+) -> Result<PackReadinessOutput> {
+    let pack_root = pack_root.as_ref();
+    let reader = BenchmarkPackReader::read(pack_root)?;
+    let pack_validation = reader.validate();
+    let report = build_pack_readiness_report_from_reader(&reader, &pack_validation)?;
+    let readiness_validation = validate_pack_readiness_report(&report);
+
+    let pack_validation_bytes = serde_json::to_vec_pretty(&pack_validation).map_err(|error| {
+        ZkBenchError::serialization("pack_readiness.pack_validation", error.to_string())
+    })?;
+    let report_bytes = serde_json::to_vec_pretty(&report)
+        .map_err(|error| ZkBenchError::serialization("pack_readiness.report", error.to_string()))?;
+    let readiness_validation_bytes =
+        serde_json::to_vec_pretty(&readiness_validation).map_err(|error| {
+            ZkBenchError::serialization("pack_readiness.validation", error.to_string())
+        })?;
+
+    write_relative_bytes(
+        pack_root,
+        PACK_VALIDATION_REPORT_PATH,
+        &pack_validation_bytes,
+    )?;
+    write_relative_bytes(pack_root, PACK_READINESS_REPORT_PATH, &report_bytes)?;
+    write_relative_bytes(
+        pack_root,
+        PACK_READINESS_VALIDATION_PATH,
+        &readiness_validation_bytes,
+    )?;
+
+    Ok(PackReadinessOutput {
+        pack_validation_relative_path: PACK_VALIDATION_REPORT_PATH.to_string(),
+        pack_validation_digest: digest_output_bytes(
+            &pack_validation_bytes,
+            ArtifactKind::Other,
+            ArtifactRole::Report,
+        ),
+        report_relative_path: PACK_READINESS_REPORT_PATH.to_string(),
+        report_digest: digest_output_bytes(
+            &report_bytes,
+            ArtifactKind::Other,
+            ArtifactRole::Report,
+        ),
+        readiness_validation_relative_path: PACK_READINESS_VALIDATION_PATH.to_string(),
+        readiness_validation_digest: digest_output_bytes(
+            &readiness_validation_bytes,
+            ArtifactKind::Other,
+            ArtifactRole::Report,
+        ),
+        report,
+        readiness_validation,
+        output_claim_boundary: ClaimBoundary::Level0DesignNote,
+    })
+}
+
+/// Read the adjacent local pack-readiness report from a pack root.
+pub fn read_pack_readiness_report(pack_root: impl AsRef<Path>) -> Result<PackReadinessReport> {
+    let path = pack_root.as_ref().join(PACK_READINESS_REPORT_PATH);
+    let json = fs::read_to_string(&path).map_err(|error| {
+        ZkBenchError::benchmark_pack(path.display().to_string(), error.to_string())
+    })?;
+    deserialize_pack_readiness_report_json(&json)
+}
+
+/// Read the adjacent local pack-readiness validation report from a pack root.
+pub fn read_pack_readiness_validation(
+    pack_root: impl AsRef<Path>,
+) -> Result<PackReadinessValidation> {
+    let path = pack_root.as_ref().join(PACK_READINESS_VALIDATION_PATH);
+    let json = fs::read_to_string(&path).map_err(|error| {
+        ZkBenchError::benchmark_pack(path.display().to_string(), error.to_string())
+    })?;
+    serde_json::from_str(&json).map_err(|error| {
+        ZkBenchError::deserialization("read_pack_readiness_validation", error.to_string())
+    })
+}
+
+/// Build inert pack-readiness metadata from an existing local pack reader and
+/// its local validation report.
+///
+/// This helper does not execute replay commands, write pack outputs, import
+/// external results, or create accepted evidence. It only translates already
+/// observed local pack metadata into a `Level0DesignNote` readiness report.
+pub fn build_pack_readiness_report_from_reader(
+    reader: &BenchmarkPackReader,
+    pack_validation: &BenchmarkPackValidation,
+) -> Result<PackReadinessReport> {
+    let manifest = reader.manifest();
+    let manifest_digest = compute_manifest_file_digest(reader)?;
+    let validation_digest = compute_pack_validation_report_digest(pack_validation)?;
+    let relative_paths_ready = manifest.uses_relative_paths_only();
+    let digest_coverage_ready = manifest.files.iter().all(|file| {
+        file.digest.algorithm == ArtifactDigestAlgorithm::Sha256
+            && file.digest.hex_digest.len() == 64
+            && file
+                .digest
+                .hex_digest
+                .chars()
+                .all(|ch| ch.is_ascii_hexdigit())
+            && file.digest.byte_len > 0
+    });
+    let manifest_summary_ready = pack_validation.valid;
+    let replay_round_trip_ready = pack_validation.valid
+        && manifest.summary.replay_manifest_count == manifest.replay_manifest_ids.len()
+        && manifest.summary.replay_result_count == manifest.replay_result_ids.len();
+    let evidence_ledger_ready = pack_validation.valid && manifest.evidence_ledger_ref.is_some();
+    let score_report_claim_cap_ready =
+        pack_validation.valid && manifest.claim_boundary <= ClaimBoundary::Level1LocalReplay;
+    let weakest_claim_boundary_ready = manifest.claim_boundary <= ClaimBoundary::Level1LocalReplay;
+
+    Ok(PackReadinessReport {
+        report_id: format!("{}_pack_readiness", manifest.id),
+        version: PackReadinessVersion::default(),
+        source_pack_id: manifest.id.clone(),
+        source_pack_digest: manifest_digest.clone(),
+        inputs: build_pack_readiness_inputs(manifest, &manifest_digest, &validation_digest),
+        replay_commands: build_inert_replay_command_metadata(manifest),
+        checks: vec![
+            readiness_check(
+                PackReadinessCheckKind::RelativePathCoverage,
+                relative_paths_ready,
+                "pack manifest file paths are relative local metadata",
+            ),
+            readiness_check(
+                PackReadinessCheckKind::Sha256DigestCoverage,
+                digest_coverage_ready,
+                "pack manifest files carry SHA-256 digest metadata",
+            ),
+            readiness_check(
+                PackReadinessCheckKind::ManifestSummaryConsistency,
+                manifest_summary_ready,
+                "pack validation checked manifest summary consistency",
+            ),
+            readiness_check(
+                PackReadinessCheckKind::ReplayRoundTripReady,
+                replay_round_trip_ready,
+                "replay manifest/result refs are present as local metadata only",
+            ),
+            readiness_check(
+                PackReadinessCheckKind::EvidenceLedgerDigestChainReady,
+                evidence_ledger_ready,
+                "evidence ledger validation is represented by local pack validation",
+            ),
+            readiness_check(
+                PackReadinessCheckKind::ScoreReportClaimCap,
+                score_report_claim_cap_ready,
+                "score report validation remains capped by local pack validation",
+            ),
+            readiness_check(
+                PackReadinessCheckKind::InertReplayCommandMetadata,
+                true,
+                "replay command metadata is inert and non-executable",
+            ),
+            readiness_check(
+                PackReadinessCheckKind::WeakestClaimBoundaryCap,
+                weakest_claim_boundary_ready,
+                "readiness output remains capped below accepted evidence",
+            ),
+            readiness_check(
+                PackReadinessCheckKind::NoLevel2Evidence,
+                true,
+                "readiness metadata does not create Level2 evidence",
+            ),
+            readiness_check(
+                PackReadinessCheckKind::NoExternalReplay,
+                true,
+                "readiness metadata does not authorize external replay",
+            ),
+        ],
+        external_replay_authorized: false,
+        creates_level2_evidence: false,
+        official_benchmark_evidence: false,
+        zk_backend_performance_claims: false,
+        output_claim_boundary: ClaimBoundary::Level0DesignNote,
+        limitations: vec![
+            "pack-readiness is not Level2 evidence".to_string(),
+            "local replay is not official benchmark evidence".to_string(),
+            "replay command metadata is not execution evidence".to_string(),
+        ],
+        notes: vec![
+            "constructed from existing local pack manifest and validation metadata only"
+                .to_string(),
+        ],
+    })
+}
+
+/// Validate local reproducible-pack readiness metadata.
+pub fn validate_pack_readiness_report(report: &PackReadinessReport) -> PackReadinessValidation {
+    let mut issues = Vec::new();
+
+    validate_identity(&mut issues, "report_id", &report.report_id);
+    validate_identity(&mut issues, "version.value", &report.version.value);
+    validate_identity(&mut issues, "source_pack_id", &report.source_pack_id);
+    validate_digest(
+        &mut issues,
+        "source_pack_digest",
+        &report.source_pack_digest,
+    );
+
+    if report.inputs.is_empty() {
+        push_issue(
+            &mut issues,
+            PackReadinessValidationIssueKind::MissingInputs,
+            "inputs",
+            "pack-readiness report must bind at least one source input",
+        );
+    }
+
+    for (index, input) in report.inputs.iter().enumerate() {
+        let path = format!("inputs[{index}]");
+        validate_identity(&mut issues, format!("{path}.input_id"), &input.input_id);
+        if !is_portable_relative_artifact_ref(&input.artifact_uri) {
+            push_issue(
+                &mut issues,
+                PackReadinessValidationIssueKind::InvalidArtifactRef,
+                format!("{path}.artifact_uri"),
+                "input artifact URI must be portable relative metadata",
+            );
+        }
+        validate_digest(&mut issues, format!("{path}.digest"), &input.digest);
+        if input.claim_boundary > ClaimBoundary::Level1LocalReplay {
+            push_issue(
+                &mut issues,
+                PackReadinessValidationIssueKind::ClaimBoundaryEscalation,
+                format!("{path}.claim_boundary"),
+                "Phase O local readiness inputs must remain Level1LocalReplay or lower",
+            );
+        }
+        if input.kind == PackReadinessInputKind::EvidenceAppendPreview
+            && input.claim_boundary != ClaimBoundary::Level0DesignNote
+        {
+            push_issue(
+                &mut issues,
+                PackReadinessValidationIssueKind::AppendPreviewBoundary,
+                format!("{path}.claim_boundary"),
+                "append previews are metadata only and must remain Level0DesignNote",
+            );
+        }
+        if input.kind == PackReadinessInputKind::Level2EligibilityReport
+            && input.claim_boundary != ClaimBoundary::Level0DesignNote
+        {
+            push_issue(
+                &mut issues,
+                PackReadinessValidationIssueKind::Level2EligibilityBoundary,
+                format!("{path}.claim_boundary"),
+                "Level2 eligibility reports are not Level2 evidence",
+            );
+        }
+    }
+
+    for (index, command) in report.replay_commands.iter().enumerate() {
+        let path = format!("replay_commands[{index}]");
+        validate_identity(
+            &mut issues,
+            format!("{path}.command_id"),
+            &command.command_id,
+        );
+        validate_identity(
+            &mut issues,
+            format!("{path}.action_label"),
+            &command.action_label,
+        );
+        if !command.inert {
+            push_issue(
+                &mut issues,
+                PackReadinessValidationIssueKind::NonInertReplayCommand,
+                format!("{path}.inert"),
+                "replay command metadata must be inert",
+            );
+        }
+        if !is_portable_relative_artifact_ref(&command.input_artifact_uri) {
+            push_issue(
+                &mut issues,
+                PackReadinessValidationIssueKind::InvalidArtifactRef,
+                format!("{path}.input_artifact_uri"),
+                "replay command input artifact URI must be portable relative metadata",
+            );
+        }
+        if !is_portable_relative_artifact_ref(&command.output_artifact_uri) {
+            push_issue(
+                &mut issues,
+                PackReadinessValidationIssueKind::InvalidArtifactRef,
+                format!("{path}.output_artifact_uri"),
+                "replay command output artifact URI must be portable relative metadata",
+            );
+        }
+        if contains_shell_payload(&command.action_label) {
+            push_issue(
+                &mut issues,
+                PackReadinessValidationIssueKind::NonInertReplayCommand,
+                format!("{path}.action_label"),
+                "replay command metadata must not contain shell payloads",
+            );
+        }
+    }
+
+    for required in required_check_kinds() {
+        if !report
+            .checks
+            .iter()
+            .any(|check| check.kind == required && check.passed)
+        {
+            push_issue(
+                &mut issues,
+                PackReadinessValidationIssueKind::MissingRequiredCheck,
+                "checks",
+                format!("required readiness check {required:?} is missing or not passed"),
+            );
+        }
+    }
+
+    for (index, check) in report.checks.iter().enumerate() {
+        if !check.passed {
+            push_issue(
+                &mut issues,
+                PackReadinessValidationIssueKind::FailedCheck,
+                format!("checks[{index}].passed"),
+                "readiness check failed",
+            );
+        }
+        if check.claim_boundary > ClaimBoundary::Level0DesignNote {
+            push_issue(
+                &mut issues,
+                PackReadinessValidationIssueKind::ClaimBoundaryEscalation,
+                format!("checks[{index}].claim_boundary"),
+                "readiness checks are Level0DesignNote metadata",
+            );
+        }
+    }
+
+    if report.external_replay_authorized {
+        push_issue(
+            &mut issues,
+            PackReadinessValidationIssueKind::ExternalReplayAuthorized,
+            "external_replay_authorized",
+            "Phase O local readiness must not authorize external replay",
+        );
+    }
+    if report.creates_level2_evidence {
+        push_issue(
+            &mut issues,
+            PackReadinessValidationIssueKind::Level2EvidenceClaim,
+            "creates_level2_evidence",
+            "local pack-readiness metadata is not Level2 evidence",
+        );
+    }
+    if report.official_benchmark_evidence {
+        push_issue(
+            &mut issues,
+            PackReadinessValidationIssueKind::OfficialBenchmarkEvidenceClaim,
+            "official_benchmark_evidence",
+            "local pack-readiness metadata is not official benchmark evidence",
+        );
+    }
+    if report.zk_backend_performance_claims {
+        push_issue(
+            &mut issues,
+            PackReadinessValidationIssueKind::ZkBackendPerformanceClaim,
+            "zk_backend_performance_claims",
+            "local pack-readiness metadata is not ZK backend performance evidence",
+        );
+    }
+    if report.output_claim_boundary != ClaimBoundary::Level0DesignNote {
+        push_issue(
+            &mut issues,
+            PackReadinessValidationIssueKind::ClaimBoundaryEscalation,
+            "output_claim_boundary",
+            "pack-readiness reports remain Level0DesignNote",
+        );
+    }
+
+    if !has_limitation(
+        &report.limitations,
+        &["pack-readiness", "not level2 evidence"],
+    ) {
+        push_issue(
+            &mut issues,
+            PackReadinessValidationIssueKind::MissingLimitation,
+            "limitations",
+            "limitations must state that pack-readiness is not Level2 evidence",
+        );
+    }
+    if !has_limitation(
+        &report.limitations,
+        &["local replay", "not official benchmark evidence"],
+    ) {
+        push_issue(
+            &mut issues,
+            PackReadinessValidationIssueKind::MissingLimitation,
+            "limitations",
+            "limitations must state that local replay is not official benchmark evidence",
+        );
+    }
+    if !has_limitation(
+        &report.limitations,
+        &["replay command metadata", "not execution evidence"],
+    ) {
+        push_issue(
+            &mut issues,
+            PackReadinessValidationIssueKind::MissingLimitation,
+            "limitations",
+            "limitations must state that replay command metadata is not execution evidence",
+        );
+    }
+
+    PackReadinessValidation {
+        valid: issues.is_empty(),
+        issues,
+        claim_boundary: ClaimBoundary::Level0DesignNote,
+    }
+}
+
+fn compute_manifest_file_digest(reader: &BenchmarkPackReader) -> Result<ArtifactDigest> {
+    let path = reader.root().join("pack.json");
+    let bytes = fs::read(&path).map_err(|error| {
+        ZkBenchError::benchmark_pack(path.display().to_string(), error.to_string())
+    })?;
+    Ok(compute_artifact_digest_bytes(
+        &bytes,
+        Some(ArtifactKind::BenchmarkPackManifest),
+        Some(ArtifactRole::Manifest),
+    ))
+}
+
+fn compute_pack_validation_report_digest(
+    pack_validation: &BenchmarkPackValidation,
+) -> Result<ArtifactDigest> {
+    let bytes = serde_json::to_vec_pretty(pack_validation).map_err(|error| {
+        ZkBenchError::serialization("pack_readiness.pack_validation", error.to_string())
+    })?;
+    Ok(digest_output_bytes(
+        &bytes,
+        ArtifactKind::Other,
+        ArtifactRole::Report,
+    ))
+}
+
+fn build_pack_readiness_inputs(
+    manifest: &BenchmarkPackManifest,
+    manifest_digest: &ArtifactDigest,
+    validation_digest: &ArtifactDigest,
+) -> Vec<PackReadinessInputRef> {
+    let mut inputs = vec![
+        PackReadinessInputRef {
+            input_id: format!("{}_manifest", manifest.id),
+            artifact_uri: "pack.json".to_string(),
+            kind: PackReadinessInputKind::BenchmarkPackManifest,
+            digest: manifest_digest.clone(),
+            evidence_class: EvidenceClass::LocalReplay,
+            claim_boundary: manifest.claim_boundary,
+            notes: vec!["source local benchmark pack manifest".to_string()],
+        },
+        PackReadinessInputRef {
+            input_id: format!("{}_validation", manifest.id),
+            artifact_uri: PACK_VALIDATION_REPORT_PATH.to_string(),
+            kind: PackReadinessInputKind::BenchmarkPackValidationReport,
+            digest: validation_digest.clone(),
+            evidence_class: EvidenceClass::DesignNote,
+            claim_boundary: ClaimBoundary::Level0DesignNote,
+            notes: vec!["local pack validation metadata, not accepted evidence".to_string()],
+        },
+    ];
+
+    inputs.extend(manifest.files.iter().map(|file| PackReadinessInputRef {
+        input_id: format!(
+            "{}_{}",
+            input_kind_label(file.role),
+            sanitize_input_id(&file.relative_path)
+        ),
+        artifact_uri: file.relative_path.clone(),
+        kind: input_kind_for_file_role(file.role),
+        digest: file.digest.clone(),
+        evidence_class: EvidenceClass::LocalReplay,
+        claim_boundary: manifest.claim_boundary,
+        notes: vec!["referenced local benchmark pack file".to_string()],
+    }));
+
+    inputs
+}
+
+fn build_inert_replay_command_metadata(
+    manifest: &BenchmarkPackManifest,
+) -> Vec<PackReadinessReplayCommandMetadata> {
+    manifest
+        .replay_manifest_ids
+        .iter()
+        .enumerate()
+        .map(
+            |(index, replay_manifest_id)| PackReadinessReplayCommandMetadata {
+                command_id: format!("{}_local_replay_roundtrip_{index}", manifest.id),
+                action_label: "local replay roundtrip metadata check".to_string(),
+                input_artifact_uri: replay_manifest_id.clone(),
+                output_artifact_uri: format!(
+                    "readiness/{}_roundtrip.json",
+                    sanitize_input_id(replay_manifest_id)
+                ),
+                inert: true,
+                notes: vec![
+                    "metadata only; this helper does not execute the replay command".to_string(),
+                ],
+            },
+        )
+        .collect()
+}
+
+fn readiness_check(
+    kind: PackReadinessCheckKind,
+    passed: bool,
+    note: impl Into<String>,
+) -> PackReadinessCheck {
+    PackReadinessCheck {
+        kind,
+        passed,
+        claim_boundary: ClaimBoundary::Level0DesignNote,
+        notes: vec![note.into()],
+    }
+}
+
+fn input_kind_for_file_role(role: BenchmarkPackFileRole) -> PackReadinessInputKind {
+    match role {
+        BenchmarkPackFileRole::GeneratedInstance
+        | BenchmarkPackFileRole::MutatedInstance
+        | BenchmarkPackFileRole::Readme => PackReadinessInputKind::OtherLocalMetadata,
+        BenchmarkPackFileRole::ReplayManifest => PackReadinessInputKind::LocalReplayManifest,
+        BenchmarkPackFileRole::ReplayResult => PackReadinessInputKind::LocalReplayResult,
+        BenchmarkPackFileRole::EvidenceLedger => PackReadinessInputKind::EvidenceLedger,
+        BenchmarkPackFileRole::ScoreReport => PackReadinessInputKind::ScoreReport,
+    }
+}
+
+fn input_kind_label(role: BenchmarkPackFileRole) -> &'static str {
+    match role {
+        BenchmarkPackFileRole::GeneratedInstance => "generated_instance",
+        BenchmarkPackFileRole::MutatedInstance => "mutated_instance",
+        BenchmarkPackFileRole::ReplayManifest => "replay_manifest",
+        BenchmarkPackFileRole::ReplayResult => "replay_result",
+        BenchmarkPackFileRole::EvidenceLedger => "evidence_ledger",
+        BenchmarkPackFileRole::ScoreReport => "score_report",
+        BenchmarkPackFileRole::Readme => "readme",
+    }
+}
+
+fn sanitize_input_id(value: &str) -> String {
+    value
+        .chars()
+        .map(|ch| {
+            if ch.is_ascii_alphanumeric() || ch == '_' || ch == '-' {
+                ch
+            } else {
+                '_'
+            }
+        })
+        .collect()
+}
+
+/// Serialize a pack-readiness report as deterministic pretty JSON.
+pub fn serialize_pack_readiness_report_json(report: &PackReadinessReport) -> Result<String> {
+    serde_json::to_string_pretty(report).map_err(|error| {
+        crate::error::ZkBenchError::serialization(
+            "serialize_pack_readiness_report_json",
+            error.to_string(),
+        )
+    })
+}
+
+/// Deserialize a pack-readiness report from JSON.
+pub fn deserialize_pack_readiness_report_json(json: &str) -> Result<PackReadinessReport> {
+    serde_json::from_str(json).map_err(|error| {
+        crate::error::ZkBenchError::serialization(
+            "deserialize_pack_readiness_report_json",
+            error.to_string(),
+        )
+    })
+}
+
+fn required_check_kinds() -> [PackReadinessCheckKind; 5] {
+    [
+        PackReadinessCheckKind::RelativePathCoverage,
+        PackReadinessCheckKind::Sha256DigestCoverage,
+        PackReadinessCheckKind::InertReplayCommandMetadata,
+        PackReadinessCheckKind::WeakestClaimBoundaryCap,
+        PackReadinessCheckKind::NoLevel2Evidence,
+    ]
+}
+
+fn validate_identity(
+    issues: &mut Vec<PackReadinessValidationIssue>,
+    path: impl Into<String>,
+    value: &str,
+) {
+    if value.trim().is_empty() {
+        push_issue(
+            issues,
+            PackReadinessValidationIssueKind::EmptyIdentity,
+            path,
+            "identity field must not be empty",
+        );
+    }
+}
+
+fn validate_digest(
+    issues: &mut Vec<PackReadinessValidationIssue>,
+    path: impl Into<String>,
+    digest: &ArtifactDigest,
+) {
+    let path = path.into();
+    if digest.algorithm != ArtifactDigestAlgorithm::Sha256 {
+        push_issue(
+            issues,
+            PackReadinessValidationIssueKind::InvalidDigest,
+            &path,
+            "digest algorithm must be sha256",
+        );
+    }
+    if digest.hex_digest.len() != 64 || !digest.hex_digest.chars().all(|ch| ch.is_ascii_hexdigit())
+    {
+        push_issue(
+            issues,
+            PackReadinessValidationIssueKind::InvalidDigest,
+            &path,
+            "digest must be 64 hex characters",
+        );
+    }
+    if digest.byte_len == 0 {
+        push_issue(
+            issues,
+            PackReadinessValidationIssueKind::InvalidDigest,
+            &path,
+            "digest byte length must be non-zero",
+        );
+    }
+}
+
+fn is_portable_relative_artifact_ref(value: &str) -> bool {
+    let trimmed = value.trim();
+    !trimmed.is_empty()
+        && !trimmed.starts_with('/')
+        && !trimmed.starts_with('\\')
+        && !trimmed.contains("..")
+        && !trimmed.contains("://")
+        && !trimmed.contains('\\')
+        && !contains_shell_payload(trimmed)
+}
+
+fn contains_shell_payload(value: &str) -> bool {
+    value.contains(';')
+        || value.contains('|')
+        || value.contains('&')
+        || value.contains('$')
+        || value.contains('`')
+        || value.contains("&&")
+        || value.contains("||")
+}
+
+fn has_limitation(limitations: &[String], required_terms: &[&str]) -> bool {
+    limitations.iter().any(|limitation| {
+        let lower = limitation.to_ascii_lowercase();
+        required_terms.iter().all(|term| lower.contains(term))
+    })
+}
+
+fn push_issue(
+    issues: &mut Vec<PackReadinessValidationIssue>,
+    kind: PackReadinessValidationIssueKind,
+    path: impl Into<String>,
+    message: impl Into<String>,
+) {
+    issues.push(PackReadinessValidationIssue {
+        kind,
+        path: path.into(),
+        message: message.into(),
+    });
+}
+
+fn write_relative_bytes(root: &Path, relative_path: &str, bytes: &[u8]) -> Result<()> {
+    validate_relative_path(relative_path)?;
+    let path = root.join(relative_path);
+    if let Some(parent) = path.parent() {
+        fs::create_dir_all(parent).map_err(|error| {
+            ZkBenchError::benchmark_pack(parent.display().to_string(), error.to_string())
+        })?;
+    }
+    fs::write(&path, bytes).map_err(|error| {
+        ZkBenchError::benchmark_pack(path.display().to_string(), error.to_string())
+    })
+}
+
+fn digest_output_bytes(bytes: &[u8], kind: ArtifactKind, role: ArtifactRole) -> ArtifactDigest {
+    compute_artifact_digest_bytes(bytes, Some(kind), Some(role))
+}

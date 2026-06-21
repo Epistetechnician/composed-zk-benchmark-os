@@ -55,26 +55,58 @@ pub use crate::mutation::{
     CorruptedGuardsPass, MissingConstraintsPass, MutatedBenchmarkInstance, MutationClass,
     MutationEngine, MutationPass, MutationSafetyClass, MutationSpec, MutationVariant,
 };
-pub use crate::pack::{BenchmarkPackManifest, BenchmarkPackReader, BenchmarkPackWriter};
+pub use crate::pack::{
+    build_pack_readiness_report_from_reader, read_pack_readiness_report,
+    read_pack_readiness_validation, validate_pack_readiness_report,
+    write_pack_readiness_outputs_for_pack, BenchmarkPackManifest, BenchmarkPackReader,
+    BenchmarkPackWriter, PackReadinessCheck, PackReadinessCheckKind, PackReadinessInputKind,
+    PackReadinessInputRef, PackReadinessOutput, PackReadinessReplayCommandMetadata,
+    PackReadinessReport, PackReadinessValidation, PackReadinessValidationIssueKind,
+    PACK_READINESS_REPORT_PATH, PACK_READINESS_VALIDATION_PATH, PACK_VALIDATION_REPORT_PATH,
+};
+pub use crate::recursion::{
+    build_recursion_adapter_manual_handoff_bundle, compute_recursion_envelope_digest_chain_root,
+    validate_recursion_adapter_manual_handoff_bundle, validate_recursion_adapter_preparation_plan,
+    validate_recursion_envelope_candidate, RecursionAdapterManualHandoffBundle,
+    RecursionAdapterManualHandoffMapping, RecursionAdapterPreparationArtifact,
+    RecursionAdapterPreparationArtifactRole, RecursionAdapterPreparationIssueKind,
+    RecursionAdapterPreparationPlan, RecursionAdapterPreparationTarget,
+    RecursionAdapterPreparationValidation, RecursionEnvelopeCandidate, RecursionEnvelopeInputKind,
+    RecursionEnvelopeInputRef, RecursionEnvelopeMetric, RecursionEnvelopeMetricKind,
+    RecursionEnvelopeValidation, RecursionEnvelopeValidationIssueKind, RecursionEnvelopeVersion,
+    RecursionVerifierAcceptanceStatus,
+};
 pub use crate::replay::{
     build_local_replay_manifest_for_instance, build_local_replay_manifest_for_mutation,
     run_local_replay, ReplayManifest, ReplayResult, ReplayTraceResult,
 };
+pub use crate::report_bundle::{
+    build_report_bundle_manifest_from_reports, compute_report_bundle_manifest_digest,
+    deserialize_report_bundle_manifest_json, serialize_report_bundle_manifest_json,
+    validate_report_bundle_manifest, ReportBundleInputKind, ReportBundleInputRef,
+    ReportBundleManifest, ReportBundlePackReadinessInput, ReportBundleRenderedReport,
+    ReportBundleValidation, ReportBundleValidationIssueKind,
+};
 pub use crate::scoring::{
-    score_report_from_evidence, score_report_from_local_mutation_evidence,
-    LocalMutationEvidenceSummary, ScoreReport,
+    score_report_from_evidence, score_report_from_local_mutation_evidence, validate_score_report,
+    LocalMutationEvidenceSummary, ScoreReport, ScoreReportValidation, ScoreReportValidationIssue,
 };
 pub use crate::soak::{
     aggregate_soak_health_reports, build_regression_soak_config, build_smoke_soak_config,
     build_soak_report_bundle, extract_failure_corpus, plan_soak_shards, resume_local_soak_shard,
     run_local_soak_shard, validate_failure_corpus_index, validate_soak_health_report,
     validate_soak_report_bundle, validate_soak_run_config, validate_soak_shard_manifest,
-    validate_soak_telemetry_report, FailureCorpus, FailureCorpusEntry, FailureCorpusIndex,
-    FailureCorpusKind, FailureReproductionManifest, LocalSoakRunner, LocalSoakRunnerConfig,
-    MockTelemetryClock, SoakArtifactLayout, SoakCaseResult, SoakCaseStatus, SoakHealthReport,
-    SoakHealthStatus, SoakLimits, SoakOutputPolicy, SoakReportBundle, SoakRunConfig,
-    SoakRunProfile, SoakRunResult, SoakRunnerErrorPolicy, SoakShardCheckpoint, SoakShardId,
-    SoakShardManifest, SoakShardPlan, SoakShardPlanner, SoakTelemetryCounters,
+    validate_soak_shard_summary, validate_soak_telemetry_report, FailureCorpus, FailureCorpusEntry,
+    FailureCorpusIndex, FailureCorpusKind, FailureReproductionManifest, LocalSoakRunner,
+    LocalSoakRunnerConfig, MockTelemetryClock, SoakArtifactLayout, SoakCaseResult, SoakCaseStatus,
+    SoakHealthReport, SoakHealthStatus, SoakLimits, SoakOutputPolicy, SoakReportBundle,
+    SoakRunConfig, SoakRunProfile, SoakRunResult, SoakRunnerErrorPolicy, SoakShardCheckpoint,
+    SoakShardId, SoakShardManifest, SoakShardPlan, SoakShardPlanner, SoakTelemetryCounters,
     SoakTelemetryDurations, SoakTelemetryReport, SystemTelemetryClock,
 };
 pub use crate::value::{FieldVisibility, Value, ValueType};
+pub use crate::zkml::{
+    compute_zkml_workload_digest_root, validate_zkml_workload_manifest, ZkMlMetric, ZkMlMetricKind,
+    ZkMlModelArtifactRef, ZkMlWorkloadInputKind, ZkMlWorkloadInputRef, ZkMlWorkloadManifest,
+    ZkMlWorkloadValidation, ZkMlWorkloadValidationIssueKind,
+};

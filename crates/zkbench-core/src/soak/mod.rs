@@ -75,10 +75,10 @@ pub use serialization::{
     serialize_soak_shard_plan_json, serialize_soak_telemetry_report_json,
 };
 pub use shard::{
-    plan_soak_shards, validate_soak_shard_manifest, validate_soak_shard_plan, SoakCaseId,
-    SoakCasePlan, SoakShardId, SoakShardManifest, SoakShardPlan, SoakShardPlanner,
-    SoakShardProgress, SoakShardResumeToken, SoakShardStatus, SoakShardSummary,
-    SoakShardValidation, SoakShardValidationIssue,
+    plan_soak_shards, validate_soak_shard_manifest, validate_soak_shard_plan,
+    validate_soak_shard_summary, SoakCaseId, SoakCasePlan, SoakShardId, SoakShardManifest,
+    SoakShardPlan, SoakShardPlanner, SoakShardProgress, SoakShardResumeToken, SoakShardStatus,
+    SoakShardSummary, SoakShardValidation, SoakShardValidationIssue,
 };
 pub use telemetry::{
     reject_forbidden_metric_label, validate_soak_telemetry_report, InternalCountMetric,

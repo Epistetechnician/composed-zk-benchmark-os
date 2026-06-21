@@ -368,6 +368,7 @@ impl SoakTelemetryClock for MockTelemetryClock {
 
 /// Validate telemetry labels and claim boundary.
 pub fn validate_soak_telemetry_report(report: &SoakTelemetryReport) -> Result<()> {
+    validate_telemetry_identity(report)?;
     if report.claim_boundary != ClaimBoundary::Level0DesignNote
         || report.snapshot.claim_boundary != ClaimBoundary::Level0DesignNote
     {
@@ -382,16 +383,103 @@ pub fn validate_soak_telemetry_report(report: &SoakTelemetryReport) -> Result<()
             "telemetry must be InternalOnly and NotZkBackendPerformance",
         ));
     }
+    validate_telemetry_counter_relationships(&report.snapshot.counters)?;
     for metric in &report.snapshot.durations.internal_timing_metrics {
         reject_forbidden_metric_label(&metric.metric_name)?;
+        validate_telemetry_classification(
+            "soak.telemetry.durations.internal_timing_metrics.classification",
+            &metric.classification,
+        )?;
     }
     for metric in &report.snapshot.counters.failure_count_by_phase {
         reject_forbidden_metric_label(&metric.metric_name)?;
+        validate_telemetry_classification(
+            "soak.telemetry.counters.failure_count_by_phase.classification",
+            &metric.classification,
+        )?;
     }
     for metric in &report.snapshot.counters.bytes_written_by_artifact_role {
         reject_forbidden_metric_label(&metric.metric_name)?;
+        validate_telemetry_classification(
+            "soak.telemetry.counters.bytes_written_by_artifact_role.classification",
+            &metric.classification,
+        )?;
     }
     Ok(())
+}
+
+fn validate_telemetry_identity(report: &SoakTelemetryReport) -> Result<()> {
+    if report.report_id.trim().is_empty() {
+        return Err(ZkBenchError::soak(
+            "soak.telemetry.report_id",
+            "telemetry report id is empty",
+        ));
+    }
+    if report.report_version.trim().is_empty() {
+        return Err(ZkBenchError::soak(
+            "soak.telemetry.report_version",
+            "telemetry report version is empty",
+        ));
+    }
+    if report.source_config_id.trim().is_empty() {
+        return Err(ZkBenchError::soak(
+            "soak.telemetry.source_config_id",
+            "telemetry report source config id is empty",
+        ));
+    }
+    match &report.shard_id {
+        Some(shard_id) if !shard_id.value.trim().is_empty() => Ok(()),
+        Some(_) => Err(ZkBenchError::soak(
+            "soak.telemetry.shard_id",
+            "telemetry report shard id is empty",
+        )),
+        None => Err(ZkBenchError::soak(
+            "soak.telemetry.shard_id",
+            "telemetry report must be shard-scoped",
+        )),
+    }
+}
+
+fn validate_telemetry_counter_relationships(counters: &SoakTelemetryCounters) -> Result<()> {
+    let oracle_total = counters
+        .local_oracle_accepted_count
+        .saturating_add(counters.local_oracle_rejected_count)
+        .saturating_add(counters.local_oracle_capability_gap_count);
+    if oracle_total > counters.traces_evaluated {
+        return Err(ZkBenchError::soak(
+            "soak.telemetry.counters.local_oracle",
+            "local oracle outcome counts exceed traces_evaluated",
+        ));
+    }
+    let replay_total = counters
+        .local_replay_completed_count
+        .saturating_add(counters.local_replay_failed_count);
+    let replay_inputs = counters
+        .generated_instance_count
+        .saturating_add(counters.mutation_variant_count);
+    if replay_total > replay_inputs {
+        return Err(ZkBenchError::soak(
+            "soak.telemetry.counters.local_replay",
+            "local replay attempts exceed generated instances plus mutation variants",
+        ));
+    }
+    Ok(())
+}
+
+fn validate_telemetry_classification(
+    field: impl Into<String>,
+    classification: &[SoakTelemetryClassification],
+) -> Result<()> {
+    if classification.contains(&SoakTelemetryClassification::InternalOnly)
+        && classification.contains(&SoakTelemetryClassification::NotZkBackendPerformance)
+        && classification.contains(&SoakTelemetryClassification::NotOfficialBenchmarkEvidence)
+    {
+        return Ok(());
+    }
+    Err(ZkBenchError::soak(
+        field,
+        "telemetry metric classification must be InternalOnly, NotZkBackendPerformance, and NotOfficialBenchmarkEvidence",
+    ))
 }
 
 /// Reject forbidden ZK backend performance labels.

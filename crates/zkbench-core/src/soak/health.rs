@@ -219,7 +219,15 @@ pub fn validate_soak_health_report(report: &SoakHealthReport) -> Result<()> {
             "soak health reports must remain Level0DesignNote",
         ));
     }
-    for finding in &report.findings {
+    validate_health_identity(report)?;
+    validate_health_summary(report)?;
+    for (index, finding) in report.findings.iter().enumerate() {
+        if finding.id.trim().is_empty() {
+            return Err(ZkBenchError::soak(
+                format!("soak.health.findings[{index}].id"),
+                "health finding id is empty",
+            ));
+        }
         if finding.claim_boundary != ClaimBoundary::Level0DesignNote {
             return Err(ZkBenchError::soak(
                 "soak.health.findings.claim_boundary",
@@ -235,6 +243,110 @@ pub fn validate_soak_health_report(report: &SoakHealthReport) -> Result<()> {
                 "health report must not imply ZK backend performance",
             ));
         }
+    }
+    for (index, signal) in report.regression_signals.iter().enumerate() {
+        if signal.id.trim().is_empty() {
+            return Err(ZkBenchError::soak(
+                format!("soak.health.regression_signals[{index}].id"),
+                "health regression signal id is empty",
+            ));
+        }
+    }
+    for (index, recommendation) in report.recommendations.iter().enumerate() {
+        if recommendation.id.trim().is_empty() {
+            return Err(ZkBenchError::soak(
+                format!("soak.health.recommendations[{index}].id"),
+                "health recommendation id is empty",
+            ));
+        }
+    }
+    Ok(())
+}
+
+fn validate_health_identity(report: &SoakHealthReport) -> Result<()> {
+    if report.report_id.trim().is_empty() {
+        return Err(ZkBenchError::soak(
+            "soak.health.report_id",
+            "health report id is empty",
+        ));
+    }
+    if report.report_version.trim().is_empty() {
+        return Err(ZkBenchError::soak(
+            "soak.health.report_version",
+            "health report version is empty",
+        ));
+    }
+    if report.source_config_id.trim().is_empty() {
+        return Err(ZkBenchError::soak(
+            "soak.health.source_config_id",
+            "health report source config id is empty",
+        ));
+    }
+    match (&report.shard_id, &report.aggregate_id) {
+        (Some(_), Some(_)) => {
+            return Err(ZkBenchError::soak(
+                "soak.health.identity",
+                "health report cannot be both shard-scoped and aggregate-scoped",
+            ));
+        }
+        (None, None) => {
+            return Err(ZkBenchError::soak(
+                "soak.health.identity",
+                "health report must be either shard-scoped or aggregate-scoped",
+            ));
+        }
+        (Some(shard_id), None) => {
+            if shard_id.value.trim().is_empty() {
+                return Err(ZkBenchError::soak(
+                    "soak.health.shard_id",
+                    "health report shard id is empty",
+                ));
+            }
+        }
+        (None, Some(aggregate_id)) => {
+            if aggregate_id.trim().is_empty() {
+                return Err(ZkBenchError::soak(
+                    "soak.health.aggregate_id",
+                    "health report aggregate id is empty",
+                ));
+            }
+        }
+    }
+    Ok(())
+}
+
+fn validate_health_summary(report: &SoakHealthReport) -> Result<()> {
+    if report.summary.generated_instances != report.telemetry_summary.generated_instance_count {
+        return Err(ZkBenchError::soak(
+            "soak.health.summary.generated_instances",
+            "health summary generated_instances does not match telemetry",
+        ));
+    }
+    if report.summary.mutation_variants != report.telemetry_summary.mutation_variant_count {
+        return Err(ZkBenchError::soak(
+            "soak.health.summary.mutation_variants",
+            "health summary mutation_variants does not match telemetry",
+        ));
+    }
+    if report.summary.local_replays != report.telemetry_summary.local_replay_completed_count {
+        return Err(ZkBenchError::soak(
+            "soak.health.summary.local_replays",
+            "health summary local_replays does not match telemetry",
+        ));
+    }
+    if report.summary.failures != report.telemetry_summary.failure_count {
+        return Err(ZkBenchError::soak(
+            "soak.health.summary.failures",
+            "health summary failures does not match telemetry",
+        ));
+    }
+    if report.summary.failure_corpus_entries > 0
+        && report.health_status == SoakHealthStatus::Healthy
+    {
+        return Err(ZkBenchError::soak(
+            "soak.health.status",
+            "healthy status cannot report failure corpus entries",
+        ));
     }
     Ok(())
 }

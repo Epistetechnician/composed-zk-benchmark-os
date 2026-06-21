@@ -1,5 +1,7 @@
 //! Local failure corpus for soak reproducibility.
 
+use std::collections::BTreeSet;
+
 use serde::{Deserialize, Serialize};
 
 use crate::error::{Result, ZkBenchError};
@@ -252,27 +254,7 @@ impl FailureCorpus {
 
     /// Recompute summary.
     pub fn recompute_summary(&mut self) {
-        self.index.summary = FailureCorpusSummary {
-            entry_count: self.index.entries.len(),
-            claim_boundary_violation_count: self
-                .index
-                .entries
-                .iter()
-                .filter(|entry| entry.failure_kind == FailureCorpusKind::ClaimBoundaryViolation)
-                .count(),
-            replay_failure_count: self
-                .index
-                .entries
-                .iter()
-                .filter(|entry| entry.failure_kind == FailureCorpusKind::ReplayFailure)
-                .count(),
-            mutation_failure_count: self
-                .index
-                .entries
-                .iter()
-                .filter(|entry| entry.failure_kind == FailureCorpusKind::MutationFailure)
-                .count(),
-        };
+        self.index.summary = summarize_failure_corpus_entries(&self.index.entries);
     }
 }
 
@@ -284,11 +266,25 @@ pub fn validate_failure_corpus_index(index: &FailureCorpusIndex) -> Result<()> {
             "failure corpus indexes must remain Level0DesignNote",
         ));
     }
+    let expected_summary = summarize_failure_corpus_entries(&index.entries);
+    if index.summary != expected_summary {
+        return Err(ZkBenchError::soak(
+            "soak.failure_corpus.summary",
+            "failure corpus summary does not match entries",
+        ));
+    }
+    let mut seen_entry_ids = BTreeSet::new();
     for (entry_index, entry) in index.entries.iter().enumerate() {
         if entry.entry_id.trim().is_empty() {
             return Err(ZkBenchError::soak(
                 format!("soak.failure_corpus.entries[{entry_index}].entry_id"),
                 "failure corpus entry id is empty",
+            ));
+        }
+        if !seen_entry_ids.insert(entry.entry_id.clone()) {
+            return Err(ZkBenchError::soak(
+                format!("soak.failure_corpus.entries[{entry_index}].entry_id"),
+                "failure corpus entry id is duplicated",
             ));
         }
         if entry.claim_boundary != ClaimBoundary::Level0DesignNote {
@@ -305,6 +301,53 @@ pub fn validate_failure_corpus_index(index: &FailureCorpusIndex) -> Result<()> {
                 "failure reproduction manifests must remain Level0DesignNote",
             ));
         }
+        if entry.reproduction_manifest.case_id != entry.source_soak_case_id {
+            return Err(ZkBenchError::soak(
+                format!("soak.failure_corpus.entries[{entry_index}].reproduction_manifest.case_id"),
+                "failure reproduction manifest case id does not match entry source case id",
+            ));
+        }
+        if entry.reproduction_manifest.family_kind != entry.family_kind {
+            return Err(ZkBenchError::soak(
+                format!(
+                    "soak.failure_corpus.entries[{entry_index}].reproduction_manifest.family_kind"
+                ),
+                "failure reproduction manifest family kind does not match entry family kind",
+            ));
+        }
+        if entry.reproduction_manifest.seed != entry.generator_seed {
+            return Err(ZkBenchError::soak(
+                format!("soak.failure_corpus.entries[{entry_index}].reproduction_manifest.seed"),
+                "failure reproduction manifest seed does not match entry generator seed",
+            ));
+        }
+        if entry.reproduction_manifest.tunables != entry.tunables {
+            return Err(ZkBenchError::soak(
+                format!(
+                    "soak.failure_corpus.entries[{entry_index}].reproduction_manifest.tunables"
+                ),
+                "failure reproduction manifest tunables do not match entry tunables",
+            ));
+        }
+        let expected_mutation_selection: Vec<_> = entry.mutation_class.into_iter().collect();
+        if entry.reproduction_manifest.mutation_selection != expected_mutation_selection {
+            return Err(ZkBenchError::soak(
+                format!(
+                    "soak.failure_corpus.entries[{entry_index}].reproduction_manifest.mutation_selection"
+                ),
+                "failure reproduction manifest mutation selection does not match entry mutation class",
+            ));
+        }
+        if let Some(trace_id) = &entry.trace_id {
+            if entry.reproduction_manifest.trace_selection != *trace_id {
+                return Err(ZkBenchError::soak(
+                    format!(
+                        "soak.failure_corpus.entries[{entry_index}].reproduction_manifest.trace_selection"
+                    ),
+                    "failure reproduction manifest trace selection does not match entry trace id",
+                ));
+            }
+        }
         for artifact_ref in &entry.artifact_refs {
             validate_failure_artifact_ref(artifact_ref)?;
         }
@@ -313,6 +356,24 @@ pub fn validate_failure_corpus_index(index: &FailureCorpusIndex) -> Result<()> {
         }
     }
     Ok(())
+}
+
+fn summarize_failure_corpus_entries(entries: &[FailureCorpusEntry]) -> FailureCorpusSummary {
+    FailureCorpusSummary {
+        entry_count: entries.len(),
+        claim_boundary_violation_count: entries
+            .iter()
+            .filter(|entry| entry.failure_kind == FailureCorpusKind::ClaimBoundaryViolation)
+            .count(),
+        replay_failure_count: entries
+            .iter()
+            .filter(|entry| entry.failure_kind == FailureCorpusKind::ReplayFailure)
+            .count(),
+        mutation_failure_count: entries
+            .iter()
+            .filter(|entry| entry.failure_kind == FailureCorpusKind::MutationFailure)
+            .count(),
+    }
 }
 
 /// Build a failure corpus entry.
@@ -362,6 +423,18 @@ pub fn build_failure_corpus_entry(input: FailureCorpusEntryInput) -> FailureCorp
 }
 
 fn validate_failure_artifact_ref(artifact_ref: &FailureArtifactRef) -> Result<()> {
+    if artifact_ref.relative_path.trim().is_empty() {
+        return Err(ZkBenchError::soak(
+            "soak.failure_corpus.artifact_ref.relative_path",
+            "failure artifact refs must have a relative path",
+        ));
+    }
+    if artifact_ref.role.trim().is_empty() {
+        return Err(ZkBenchError::soak(
+            "soak.failure_corpus.artifact_ref.role",
+            "failure artifact refs must have a role",
+        ));
+    }
     if artifact_ref.relative_path.starts_with('/')
         || artifact_ref.relative_path.contains("..")
         || artifact_ref.relative_path.contains('\\')

@@ -11,14 +11,16 @@ network, does not verify quotes, does not verify managed-service signatures, and
 does not create real attestation evidence.
 
 The output remains capture input only. It is not proof, not benchmark evidence,
-not backend execution evidence, and not Phase 4 authorization.
+not backend execution evidence, and not independent Phase 4 authorization.
 
 ## State Slice
 
 ```text
 crates/hsai-attestation-phala/src/challenge.rs
 crates/hsai-attestation-phala/src/lib.rs
+crates/hsai-attestation-phala/examples/operator_capture_preflight.rs
 docs/58-managed-attestation-challenge-capture-tooling-notes.md
+docs/59-operator-capture-runbook.md
 README.md
 AGENTS.md
 ```
@@ -81,7 +83,7 @@ The local tests cover:
 - RA-4 wrong case-hash rejection;
 - challenge-id tamper rejection;
 - RA-5 managed-verifier trust-root disclosure through the capture manifest;
-- RA-6 Phase 4 still blocked without a real accepted artifact.
+- RA-6 Phase 4 precondition fails without a real accepted artifact.
 
 ## Next Step
 
@@ -89,6 +91,12 @@ The next step is external to normal tests: run an operator-controlled Phala/dsta
 capture using the emitted challenge packet, then commit only a small non-secret
 artifact fixture if it was actually generated with the HSAI-owned challenge.
 
-Do not fabricate the artifact. Do not commit secrets. Do not build
-`crates/hsai-agent-anchor-registry` until a real HSAI-owned artifact passes the
-validator.
+`docs/59-operator-capture-runbook.md` is the operator capture runbook.
+`crates/hsai-attestation-phala/examples/operator_capture_preflight.rs` is the
+operator-facing preflight example that emits the challenge packet and capture
+manifest from fixed sample inputs. Both are capture inputs only and must not be
+treated as attestation evidence.
+
+Do not fabricate the artifact. Do not commit secrets. The accepted 2026-06-16
+real HSAI-owned artifact is the sole authorization source for
+`crates/hsai-agent-anchor-registry`.

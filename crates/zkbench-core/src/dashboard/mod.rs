@@ -9,7 +9,7 @@ pub mod model;
 pub mod render;
 
 pub use model::{
-    build_dashboard_model_from_score_report, validate_dashboard_model, DashboardAxisRow,
-    DashboardModel, DashboardPanel, DashboardPanelKind,
+    build_dashboard_model_from_pack_readiness, build_dashboard_model_from_score_report,
+    validate_dashboard_model, DashboardAxisRow, DashboardModel, DashboardPanel, DashboardPanelKind,
 };
 pub use render::render_dashboard_markdown;

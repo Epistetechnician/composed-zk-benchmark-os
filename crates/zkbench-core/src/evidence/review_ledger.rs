@@ -231,6 +231,14 @@ impl EvidenceReviewLedger {
         }
         let mut previous_digest = None;
         for (index, entry) in self.entries.iter().enumerate() {
+            for (note_index, note) in entry.notes.iter().enumerate() {
+                if crate::external_runner::contains_forbidden_claim_text(note) {
+                    issues.push(issue(
+                        format!("ledger.entries[{index}].notes[{note_index}]"),
+                        "review ledger entry notes contain forbidden claim language",
+                    ));
+                }
+            }
             if entry.sequence_number != index as u64 {
                 issues.push(issue(
                     format!("ledger.entries[{index}].sequence_number"),

@@ -101,6 +101,8 @@ Unsupported features should normalize to `CapabilityGap` or `Inconclusive` in th
 
 Phase F implements `LocalJsonAdapter` as a local-only adapter. It consumes `ReplayManifest` values, evaluates selected traces with the local oracle, and emits `ReplayResult` plus Level1LocalReplay `EvidenceRecord` values.
 
+`EvidenceLedger` validation checks digest-chain integrity, Level1LocalReplay caps for actual evidence, and forbidden official/formal/performance claim language in ledger notes, entry notes, evidence-record notes, and evidence provenance notes.
+
 The local adapter mapping is deliberately narrow:
 
 - local oracle accepted maps to `BackendOutcome::Accepted` only inside local replay,

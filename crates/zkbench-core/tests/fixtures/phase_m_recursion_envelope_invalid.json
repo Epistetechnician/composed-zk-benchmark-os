@@ -1,0 +1,60 @@
+{
+  "envelope_id": "phase_m_invalid_envelope_candidate",
+  "version": {
+    "value": "phase-m-recursion-envelope-v0"
+  },
+  "inputs": [
+    {
+      "input_id": "append_preview",
+      "artifact_uri": "artifacts/append_preview.json",
+      "kind": "EvidenceAppendPreview",
+      "digest": {
+        "algorithm": "Sha256",
+        "hex_digest": "0202020202020202020202020202020202020202020202020202020202020202",
+        "byte_len": 64,
+        "kind": "Other",
+        "role": "Digest"
+      },
+      "evidence_class": "DesignNote",
+      "claim_boundary": "Level1LocalReplay",
+      "notes": []
+    },
+    {
+      "input_id": "level2_eligibility",
+      "artifact_uri": "artifacts/level2_eligibility.json",
+      "kind": "Level2EligibilityReport",
+      "digest": {
+        "algorithm": "Sha256",
+        "hex_digest": "0303030303030303030303030303030303030303030303030303030303030303",
+        "byte_len": 64,
+        "kind": "Other",
+        "role": "Digest"
+      },
+      "evidence_class": "DesignNote",
+      "claim_boundary": "Level2ReproducibleBenchmarkArtifact",
+      "notes": []
+    }
+  ],
+  "recursion_depth": 2,
+  "aggregation_width": 2,
+  "digest_chain_root": {
+    "algorithm": "Sha256",
+    "hex_digest": "0909090909090909090909090909090909090909090909090909090909090909",
+    "byte_len": 64,
+    "kind": "Other",
+    "role": "Digest"
+  },
+  "verifier_acceptance_status": "Accepted",
+  "executable_adapter_authorized": false,
+  "metrics": [
+    {
+      "kind": "RecursionVerifierTimeMs",
+      "value": 10,
+      "claim_boundary": "Level1LocalReplay",
+      "notes": []
+    }
+  ],
+  "output_claim_boundary": "Level2ReproducibleBenchmarkArtifact",
+  "limitations": [],
+  "notes": []
+}

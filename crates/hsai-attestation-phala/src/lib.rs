@@ -7,10 +7,12 @@
 
 use hsai_agent_case::{AgentCase, EvidenceLane};
 use hsai_attestation::{AttestationInput, AttestationVerifier, VerifiedAttestation, VerifyError};
-use hsai_claim_envelope::{ClaimEnvelope, LaneId, Maturity, TimeWindow, TrustRoot, VkId};
+use hsai_claim_envelope::{ClaimEnvelope, LaneId, Maturity, TimeWindow, TrustRoot, VendorId, VkId};
 use hsai_distinct_agent::Anchor;
 use serde::{Deserialize, Serialize};
-use std::collections::BTreeSet;
+use sha2::{Digest, Sha256};
+use std::cell::RefCell;
+use std::collections::{BTreeMap, BTreeSet};
 
 pub mod artifact;
 pub use artifact::{
@@ -34,6 +36,18 @@ pub const CLAIM_BOUNDARY: &str =
 const LOCAL_FIXTURE_QUOTE_PREFIX: &str = "fixture-tdx-quote:";
 const MANAGED_API_ACCEPTED: &str = "managed-api:accepted";
 const PHALA_MANAGED_VERIFIER_ROOT: &str = "phala-managed-verifier-api";
+const PHALA_LIVE_PROVIDER: &str = "phala-dstack";
+const PHALA_LIVE_MODE: &str = "live-managed-verifier";
+pub const PHALA_OPERATOR_LIVE_ARTIFACT_SCHEMA_VERSION: &str =
+    "hsai.phala.operator-live-artifact.v1";
+pub const PHALA_OPERATOR_LIVE_CLAIM_BOUNDARY: &str = "Attested";
+pub const PHALA_OPERATOR_LIVE_REQUEST_PATH: &str = "operator-live/request.json";
+pub const PHALA_OPERATOR_LIVE_NORMALIZED_RESPONSE_PATH: &str =
+    "operator-live/normalized-response.json";
+pub const PHALA_OPERATOR_LIVE_TRUST_ROOTS_PATH: &str = "operator-live/trust-roots.json";
+pub const PHALA_OPERATOR_LIVE_REDACTION_REPORT_PATH: &str = "operator-live/redaction-report.json";
+pub const PHALA_OPERATOR_LIVE_AUDIT_PATH: &str = "operator-live/audit.json";
+pub const PHALA_OPERATOR_LIVE_RAW_RESPONSE_DIGEST_PATH: &str = "operator-live/raw-response.sha256";
 
 /// Fixture-oriented Phala/dstack evidence.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -285,6 +299,7 @@ pub fn map_phala_to_verified_attestation(evidence: &PhalaEvidence) -> VerifiedAt
         anchor_id: evidence.anchor_id.clone(),
         not_before: evidence.not_before,
         not_after: evidence.not_after,
+        verifier_trust_roots: BTreeSet::new(),
     }
 }
 
@@ -323,6 +338,821 @@ pub fn verify_phala_quote_or_report(
         return Err(PhalaError::EventLogReplayMismatch);
     }
     verify_freshness(evidence, policy.now)
+}
+
+/// Non-secret request passed to a caller-supplied Phala managed-verifier client.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PhalaManagedVerifierRequest {
+    pub anchor_id: String,
+    pub agent_pubkey: Vec<u8>,
+    pub case_hash: Vec<u8>,
+    pub nonce: u64,
+    pub expected_report_data_binding: Vec<u8>,
+    pub expected_compose_hash: Vec<u8>,
+    pub expected_runtime_measurements: BTreeSet<String>,
+    pub expected_image_digest: String,
+    pub freshness_window: u64,
+    pub managed_verifier_endpoint_id: String,
+    pub request_time: u64,
+}
+
+/// Provider verdict after response normalization.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub enum PhalaManagedVerifierVerdict {
+    Accepted,
+    Rejected,
+}
+
+/// Normalized Phala managed-verifier response used by hermetic tests.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PhalaManagedVerifierResponse {
+    pub provider: String,
+    pub verification_mode: String,
+    pub provider_verdict: PhalaManagedVerifierVerdict,
+    pub anchor_id: String,
+    pub nonce: u64,
+    pub report_data: Vec<u8>,
+    pub compose_hash: Vec<u8>,
+    pub runtime_measurements: BTreeSet<String>,
+    pub image_digest: String,
+    pub issued_at: u64,
+    pub expires_at: u64,
+    pub raw_response_digest: Vec<u8>,
+    pub provider_trust_roots: BTreeSet<TrustRoot>,
+}
+
+/// Trust-root disclosure sidecar for future operator-live bundles.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PhalaOperatorLiveTrustRoots {
+    pub schema_version: String,
+    pub provider: String,
+    pub verification_mode: String,
+    pub roots: BTreeSet<TrustRoot>,
+}
+
+/// Retained non-secret field plus the rationale for retaining it.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PhalaOperatorLiveRetainedField {
+    pub value: String,
+    pub rationale: String,
+}
+
+/// Redaction report sidecar for future operator-live bundles.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PhalaOperatorLiveRedactionReport {
+    pub schema_version: String,
+    pub digest_algorithm: String,
+    pub removed_fields: BTreeSet<String>,
+    pub hashed_fields: BTreeSet<String>,
+    pub retained_fields: BTreeMap<String, PhalaOperatorLiveRetainedField>,
+    pub dropped_secret_shaped_fields: BTreeSet<String>,
+}
+
+/// Audit sidecar binding the future operator-live bundle together.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PhalaOperatorLiveAudit {
+    pub schema_version: String,
+    pub operator_run_id: String,
+    pub provider: String,
+    pub verification_mode: String,
+    pub request_digest: String,
+    pub normalized_response_digest: String,
+    pub trust_roots_digest: String,
+    pub redaction_report_digest: String,
+    pub raw_response_digest: String,
+    pub started_at: u64,
+    pub finished_at: u64,
+    pub timeout_seconds: u64,
+    pub retry_limit: u64,
+    pub provider_verdict: PhalaManagedVerifierVerdict,
+    pub claim_boundary: String,
+    pub non_claims: BTreeSet<String>,
+}
+
+/// In-memory representation of the declared operator-live artifact files.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PhalaOperatorLiveArtifactBundle {
+    pub request: PhalaManagedVerifierRequest,
+    pub normalized_response: PhalaManagedVerifierResponse,
+    pub trust_roots: PhalaOperatorLiveTrustRoots,
+    pub redaction_report: PhalaOperatorLiveRedactionReport,
+    pub audit: PhalaOperatorLiveAudit,
+    pub raw_response_sha256: String,
+}
+
+/// Validated operator-live artifact metadata.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct ValidatedPhalaOperatorLiveArtifact {
+    pub anchor_id: String,
+    pub operator_run_id: String,
+    pub provider: String,
+    pub verification_mode: String,
+    pub claim_boundary: String,
+    pub request_digest: String,
+    pub normalized_response_digest: String,
+    pub trust_roots: BTreeSet<TrustRoot>,
+}
+
+/// Failure taxonomy for hermetic Phala managed-verifier preparation.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub enum PhalaManagedVerifierError {
+    ClientUnavailable,
+    MalformedResponse,
+    WrongProvider,
+    UnsupportedMode,
+    ProviderRejected,
+    StaleResponse,
+    ReplayedNonce,
+    AnchorMismatch,
+    NonceMismatch,
+    ReportDataMismatch,
+    ComposeHashMismatch,
+    RuntimeMeasurementMismatch,
+    ImageDigestMismatch,
+    MissingTrustRoot,
+    ClaimBoundaryViolation,
+}
+
+/// Failure taxonomy for local operator-live artifact plumbing.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub enum PhalaOperatorLiveArtifactError {
+    MissingFile(String),
+    UnexpectedFile(String),
+    UnsafePath(String),
+    InvalidJson {
+        path: String,
+        message: String,
+    },
+    InvalidUtf8(String),
+    InvalidDigest {
+        field: String,
+        value: String,
+    },
+    SchemaVersionMismatch {
+        field: String,
+        actual: String,
+    },
+    DigestMismatch {
+        field: String,
+        actual: String,
+        expected: String,
+    },
+    ProviderMismatch,
+    TrustRootMismatch,
+    RedactionRationaleMissing(String),
+    RedactionSecretRetained(String),
+    ClaimBoundaryViolation,
+    MissingNonClaim(String),
+    ManagedVerifier(PhalaManagedVerifierError),
+}
+
+impl std::fmt::Display for PhalaOperatorLiveArtifactError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{self:?}")
+    }
+}
+
+impl std::error::Error for PhalaOperatorLiveArtifactError {}
+
+impl PhalaManagedVerifierError {
+    fn as_verify_error(&self) -> VerifyError {
+        match self {
+            Self::AnchorMismatch => VerifyError::AnchorMismatch,
+            Self::NonceMismatch => VerifyError::NonceMismatch,
+            Self::ReportDataMismatch => VerifyError::ReportDataMismatch,
+            Self::ComposeHashMismatch
+            | Self::RuntimeMeasurementMismatch
+            | Self::ImageDigestMismatch => VerifyError::MeasurementMismatch,
+            Self::StaleResponse => VerifyError::Expired,
+            Self::ClientUnavailable
+            | Self::MalformedResponse
+            | Self::WrongProvider
+            | Self::UnsupportedMode
+            | Self::ProviderRejected
+            | Self::ReplayedNonce
+            | Self::MissingTrustRoot
+            | Self::ClaimBoundaryViolation => VerifyError::SignatureUnverified,
+        }
+    }
+}
+
+/// Caller-owned Phala managed-verifier boundary.
+///
+/// Implementations may call a provider outside this crate, but normal workspace
+/// tests use [`InMemoryPhalaManagedVerifierClient`] and perform no network I/O.
+pub trait PhalaManagedVerifierClient {
+    fn verify(
+        &self,
+        request: &PhalaManagedVerifierRequest,
+    ) -> Result<PhalaManagedVerifierResponse, PhalaManagedVerifierError>;
+}
+
+/// Parse and validate a declared in-memory operator-live artifact file set.
+///
+/// This performs no filesystem I/O and no provider I/O. Callers provide the
+/// exact logical file names and bytes that would later be materialized under an
+/// operator-owned output directory.
+pub fn parse_phala_operator_live_artifact_files(
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<PhalaOperatorLiveArtifactBundle, PhalaOperatorLiveArtifactError> {
+    validate_operator_live_file_set(files)?;
+
+    let request = parse_operator_live_json(
+        PHALA_OPERATOR_LIVE_REQUEST_PATH,
+        files
+            .get(PHALA_OPERATOR_LIVE_REQUEST_PATH)
+            .expect("required path checked"),
+    )?;
+    let normalized_response = parse_operator_live_json(
+        PHALA_OPERATOR_LIVE_NORMALIZED_RESPONSE_PATH,
+        files
+            .get(PHALA_OPERATOR_LIVE_NORMALIZED_RESPONSE_PATH)
+            .expect("required path checked"),
+    )?;
+    let trust_roots = parse_operator_live_json(
+        PHALA_OPERATOR_LIVE_TRUST_ROOTS_PATH,
+        files
+            .get(PHALA_OPERATOR_LIVE_TRUST_ROOTS_PATH)
+            .expect("required path checked"),
+    )?;
+    let redaction_report = parse_operator_live_json(
+        PHALA_OPERATOR_LIVE_REDACTION_REPORT_PATH,
+        files
+            .get(PHALA_OPERATOR_LIVE_REDACTION_REPORT_PATH)
+            .expect("required path checked"),
+    )?;
+    let audit = parse_operator_live_json(
+        PHALA_OPERATOR_LIVE_AUDIT_PATH,
+        files
+            .get(PHALA_OPERATOR_LIVE_AUDIT_PATH)
+            .expect("required path checked"),
+    )?;
+    let raw_response_sha256 = String::from_utf8(
+        files
+            .get(PHALA_OPERATOR_LIVE_RAW_RESPONSE_DIGEST_PATH)
+            .expect("required path checked")
+            .clone(),
+    )
+    .map_err(|_| {
+        PhalaOperatorLiveArtifactError::InvalidUtf8(
+            PHALA_OPERATOR_LIVE_RAW_RESPONSE_DIGEST_PATH.to_owned(),
+        )
+    })?
+    .trim()
+    .to_owned();
+
+    Ok(PhalaOperatorLiveArtifactBundle {
+        request,
+        normalized_response,
+        trust_roots,
+        redaction_report,
+        audit,
+        raw_response_sha256,
+    })
+}
+
+/// Validate an in-memory operator-live artifact bundle.
+pub fn validate_phala_operator_live_artifact_bundle(
+    bundle: &PhalaOperatorLiveArtifactBundle,
+) -> Result<ValidatedPhalaOperatorLiveArtifact, PhalaOperatorLiveArtifactError> {
+    validate_operator_live_schema(
+        "trust_roots.schema_version",
+        &bundle.trust_roots.schema_version,
+    )?;
+    validate_operator_live_schema(
+        "redaction_report.schema_version",
+        &bundle.redaction_report.schema_version,
+    )?;
+    validate_operator_live_schema("audit.schema_version", &bundle.audit.schema_version)?;
+
+    if bundle.audit.claim_boundary != PHALA_OPERATOR_LIVE_CLAIM_BOUNDARY {
+        return Err(PhalaOperatorLiveArtifactError::ClaimBoundaryViolation);
+    }
+    validate_operator_live_non_claims(&bundle.audit.non_claims)?;
+    validate_operator_live_digest("raw_response_sha256", &bundle.raw_response_sha256)?;
+    validate_operator_live_redaction_report(&bundle.redaction_report)?;
+    validate_phala_managed_response(&bundle.request, &bundle.normalized_response)
+        .map_err(PhalaOperatorLiveArtifactError::ManagedVerifier)?;
+    validate_operator_live_provider_consistency(bundle)?;
+    validate_operator_live_trust_roots(bundle)?;
+    validate_operator_live_audit_digests(bundle)?;
+
+    Ok(ValidatedPhalaOperatorLiveArtifact {
+        anchor_id: bundle.request.anchor_id.clone(),
+        operator_run_id: bundle.audit.operator_run_id.clone(),
+        provider: bundle.audit.provider.clone(),
+        verification_mode: bundle.audit.verification_mode.clone(),
+        claim_boundary: bundle.audit.claim_boundary.clone(),
+        request_digest: bundle.audit.request_digest.clone(),
+        normalized_response_digest: bundle.audit.normalized_response_digest.clone(),
+        trust_roots: bundle.trust_roots.roots.clone(),
+    })
+}
+
+/// Parse and validate an in-memory operator-live artifact file set.
+pub fn validate_phala_operator_live_artifact_files(
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<ValidatedPhalaOperatorLiveArtifact, PhalaOperatorLiveArtifactError> {
+    let bundle = parse_phala_operator_live_artifact_files(files)?;
+    validate_phala_operator_live_artifact_bundle(&bundle)
+}
+
+/// Deterministic SHA-256 digest over the crate-local JSON representation.
+pub fn phala_operator_live_json_digest<T: Serialize>(
+    value: &T,
+) -> Result<String, PhalaOperatorLiveArtifactError> {
+    let bytes =
+        serde_json::to_vec(value).map_err(|error| PhalaOperatorLiveArtifactError::InvalidJson {
+            path: "in-memory-json".to_owned(),
+            message: error.to_string(),
+        })?;
+    Ok(sha256_hex(&bytes))
+}
+
+/// Deterministic fake client for hermetic tests and local verification plumbing.
+#[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+pub struct InMemoryPhalaManagedVerifierClient {
+    responses:
+        BTreeMap<(String, u64), Result<PhalaManagedVerifierResponse, PhalaManagedVerifierError>>,
+}
+
+impl InMemoryPhalaManagedVerifierClient {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn with_response(
+        mut self,
+        anchor_id: impl Into<String>,
+        nonce: u64,
+        response: PhalaManagedVerifierResponse,
+    ) -> Self {
+        self.responses
+            .insert((anchor_id.into(), nonce), Ok(response));
+        self
+    }
+
+    pub fn with_error(
+        mut self,
+        anchor_id: impl Into<String>,
+        nonce: u64,
+        error: PhalaManagedVerifierError,
+    ) -> Self {
+        self.responses.insert((anchor_id.into(), nonce), Err(error));
+        self
+    }
+}
+
+impl PhalaManagedVerifierClient for InMemoryPhalaManagedVerifierClient {
+    fn verify(
+        &self,
+        request: &PhalaManagedVerifierRequest,
+    ) -> Result<PhalaManagedVerifierResponse, PhalaManagedVerifierError> {
+        self.responses
+            .get(&(request.anchor_id.clone(), request.nonce))
+            .cloned()
+            .unwrap_or(Err(PhalaManagedVerifierError::ClientUnavailable))
+    }
+}
+
+/// In-memory nonce replay guard for one verifier instance.
+#[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PhalaReplayGuard {
+    seen: BTreeSet<(String, u64)>,
+}
+
+impl PhalaReplayGuard {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn check_and_record(
+        &mut self,
+        anchor_id: &str,
+        nonce: u64,
+    ) -> Result<(), PhalaManagedVerifierError> {
+        if !self.seen.insert((anchor_id.to_owned(), nonce)) {
+            return Err(PhalaManagedVerifierError::ReplayedNonce);
+        }
+        Ok(())
+    }
+}
+
+/// Hermetic Phala live managed-verifier preparation.
+///
+/// This type owns no credentials and performs no network calls. All provider
+/// behavior enters through an injected client trait.
+#[derive(Debug)]
+pub struct PhalaLiveManagedVerifier<C> {
+    pub client: C,
+    pub agent_pubkey: Vec<u8>,
+    pub case_hash: Vec<u8>,
+    pub managed_verifier_endpoint_id: String,
+    pub freshness_window: u64,
+    pub expected_runtime_measurements: BTreeSet<String>,
+    pub expected_image_digest: String,
+    replay_guard: RefCell<PhalaReplayGuard>,
+}
+
+impl<C> PhalaLiveManagedVerifier<C> {
+    pub fn new(
+        client: C,
+        agent_pubkey: impl Into<Vec<u8>>,
+        case_hash: impl Into<Vec<u8>>,
+        managed_verifier_endpoint_id: impl Into<String>,
+        freshness_window: u64,
+        expected_runtime_measurements: BTreeSet<String>,
+        expected_image_digest: impl Into<String>,
+    ) -> Self {
+        Self {
+            client,
+            agent_pubkey: agent_pubkey.into(),
+            case_hash: case_hash.into(),
+            managed_verifier_endpoint_id: managed_verifier_endpoint_id.into(),
+            freshness_window,
+            expected_runtime_measurements,
+            expected_image_digest: expected_image_digest.into(),
+            replay_guard: RefCell::new(PhalaReplayGuard::new()),
+        }
+    }
+}
+
+impl<C: PhalaManagedVerifierClient> PhalaLiveManagedVerifier<C> {
+    pub fn verify_request(
+        &self,
+        request: &PhalaManagedVerifierRequest,
+    ) -> Result<VerifiedAttestation, PhalaManagedVerifierError> {
+        let response = self.client.verify(request)?;
+        self.verify_response(request, response)
+    }
+
+    fn verify_response(
+        &self,
+        request: &PhalaManagedVerifierRequest,
+        response: PhalaManagedVerifierResponse,
+    ) -> Result<VerifiedAttestation, PhalaManagedVerifierError> {
+        validate_phala_managed_response(request, &response)?;
+        self.replay_guard
+            .borrow_mut()
+            .check_and_record(&request.anchor_id, request.nonce)?;
+
+        let mut verifier_trust_roots = response.provider_trust_roots;
+        verifier_trust_roots.insert(TrustRoot::HardwareVendor(VendorId(format!(
+            "expected-compose-hash:{}",
+            hex_lower(&request.expected_compose_hash)
+        ))));
+        verifier_trust_roots.insert(TrustRoot::HardwareVendor(VendorId(format!(
+            "expected-image-digest:{}",
+            request.expected_image_digest
+        ))));
+
+        Ok(VerifiedAttestation {
+            anchor_id: response.anchor_id,
+            not_before: response.issued_at,
+            not_after: response.expires_at,
+            verifier_trust_roots,
+        })
+    }
+}
+
+impl<C: PhalaManagedVerifierClient> AttestationVerifier for PhalaLiveManagedVerifier<C> {
+    fn verify(
+        &self,
+        token: &hsai_attestation::Token,
+        expected_nonce: u64,
+        expected_report_data: &[u8],
+        expected_measurements: &[u8],
+        anchor_id: &str,
+        now: u64,
+    ) -> Result<VerifiedAttestation, VerifyError> {
+        if token.anchor_id != anchor_id {
+            return Err(VerifyError::AnchorMismatch);
+        }
+        if token.nonce != expected_nonce {
+            return Err(VerifyError::NonceMismatch);
+        }
+        if token.report_data != expected_report_data {
+            return Err(VerifyError::ReportDataMismatch);
+        }
+        if token.measurements != expected_measurements {
+            return Err(VerifyError::MeasurementMismatch);
+        }
+
+        let request = PhalaManagedVerifierRequest {
+            anchor_id: anchor_id.to_owned(),
+            agent_pubkey: self.agent_pubkey.clone(),
+            case_hash: self.case_hash.clone(),
+            nonce: expected_nonce,
+            expected_report_data_binding: expected_report_data.to_vec(),
+            expected_compose_hash: expected_measurements.to_vec(),
+            expected_runtime_measurements: self.expected_runtime_measurements.clone(),
+            expected_image_digest: self.expected_image_digest.clone(),
+            freshness_window: self.freshness_window,
+            managed_verifier_endpoint_id: self.managed_verifier_endpoint_id.clone(),
+            request_time: now,
+        };
+
+        self.verify_request(&request)
+            .map_err(|error| error.as_verify_error())
+    }
+}
+
+fn validate_phala_managed_response(
+    request: &PhalaManagedVerifierRequest,
+    response: &PhalaManagedVerifierResponse,
+) -> Result<(), PhalaManagedVerifierError> {
+    if response.raw_response_digest.is_empty() || response.expires_at < response.issued_at {
+        return Err(PhalaManagedVerifierError::MalformedResponse);
+    }
+    if response.provider != PHALA_LIVE_PROVIDER {
+        return Err(PhalaManagedVerifierError::WrongProvider);
+    }
+    if response.verification_mode != PHALA_LIVE_MODE {
+        return Err(PhalaManagedVerifierError::UnsupportedMode);
+    }
+    if response.provider_verdict != PhalaManagedVerifierVerdict::Accepted {
+        return Err(PhalaManagedVerifierError::ProviderRejected);
+    }
+    if request.request_time < response.issued_at
+        || request.request_time > response.expires_at
+        || request.request_time.saturating_sub(response.issued_at) > request.freshness_window
+    {
+        return Err(PhalaManagedVerifierError::StaleResponse);
+    }
+    if response.anchor_id != request.anchor_id {
+        return Err(PhalaManagedVerifierError::AnchorMismatch);
+    }
+    if response.nonce != request.nonce {
+        return Err(PhalaManagedVerifierError::NonceMismatch);
+    }
+    if response.report_data != request.expected_report_data_binding {
+        return Err(PhalaManagedVerifierError::ReportDataMismatch);
+    }
+    if response.compose_hash != request.expected_compose_hash {
+        return Err(PhalaManagedVerifierError::ComposeHashMismatch);
+    }
+    if response.runtime_measurements != request.expected_runtime_measurements {
+        return Err(PhalaManagedVerifierError::RuntimeMeasurementMismatch);
+    }
+    if response.image_digest != request.expected_image_digest {
+        return Err(PhalaManagedVerifierError::ImageDigestMismatch);
+    }
+    if !has_hardware_root_prefix(
+        &response.provider_trust_roots,
+        &format!(
+            "phala-managed-verifier:{}",
+            request.managed_verifier_endpoint_id
+        ),
+    ) || !has_hardware_root_prefix(&response.provider_trust_roots, "dstack-runtime-format:")
+        || !has_hardware_root_prefix(
+            &response.provider_trust_roots,
+            "provider-disclosed-hardware-root:",
+        )
+    {
+        return Err(PhalaManagedVerifierError::MissingTrustRoot);
+    }
+    Ok(())
+}
+
+fn validate_operator_live_file_set(
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<(), PhalaOperatorLiveArtifactError> {
+    let required = required_operator_live_paths();
+    for path in files.keys() {
+        validate_operator_live_path(path)?;
+        if !required.contains(path.as_str()) {
+            return Err(PhalaOperatorLiveArtifactError::UnexpectedFile(path.clone()));
+        }
+    }
+    for path in required {
+        if !files.contains_key(path) {
+            return Err(PhalaOperatorLiveArtifactError::MissingFile(path.to_owned()));
+        }
+    }
+    Ok(())
+}
+
+fn required_operator_live_paths() -> BTreeSet<&'static str> {
+    BTreeSet::from([
+        PHALA_OPERATOR_LIVE_REQUEST_PATH,
+        PHALA_OPERATOR_LIVE_NORMALIZED_RESPONSE_PATH,
+        PHALA_OPERATOR_LIVE_TRUST_ROOTS_PATH,
+        PHALA_OPERATOR_LIVE_REDACTION_REPORT_PATH,
+        PHALA_OPERATOR_LIVE_AUDIT_PATH,
+        PHALA_OPERATOR_LIVE_RAW_RESPONSE_DIGEST_PATH,
+    ])
+}
+
+fn validate_operator_live_path(path: &str) -> Result<(), PhalaOperatorLiveArtifactError> {
+    if path.is_empty()
+        || path.starts_with('/')
+        || path.contains('\\')
+        || path
+            .split('/')
+            .any(|segment| segment.is_empty() || segment == "." || segment == "..")
+    {
+        return Err(PhalaOperatorLiveArtifactError::UnsafePath(path.to_owned()));
+    }
+    Ok(())
+}
+
+fn parse_operator_live_json<T: for<'de> Deserialize<'de>>(
+    path: &str,
+    bytes: &[u8],
+) -> Result<T, PhalaOperatorLiveArtifactError> {
+    serde_json::from_slice(bytes).map_err(|error| PhalaOperatorLiveArtifactError::InvalidJson {
+        path: path.to_owned(),
+        message: error.to_string(),
+    })
+}
+
+fn validate_operator_live_schema(
+    field: &str,
+    actual: &str,
+) -> Result<(), PhalaOperatorLiveArtifactError> {
+    if actual != PHALA_OPERATOR_LIVE_ARTIFACT_SCHEMA_VERSION {
+        return Err(PhalaOperatorLiveArtifactError::SchemaVersionMismatch {
+            field: field.to_owned(),
+            actual: actual.to_owned(),
+        });
+    }
+    Ok(())
+}
+
+fn validate_operator_live_provider_consistency(
+    bundle: &PhalaOperatorLiveArtifactBundle,
+) -> Result<(), PhalaOperatorLiveArtifactError> {
+    if bundle.audit.provider != PHALA_LIVE_PROVIDER
+        || bundle.audit.verification_mode != PHALA_LIVE_MODE
+        || bundle.audit.provider_verdict != bundle.normalized_response.provider_verdict
+        || bundle.trust_roots.provider != PHALA_LIVE_PROVIDER
+        || bundle.trust_roots.verification_mode != PHALA_LIVE_MODE
+        || bundle.normalized_response.provider != PHALA_LIVE_PROVIDER
+        || bundle.normalized_response.verification_mode != PHALA_LIVE_MODE
+    {
+        return Err(PhalaOperatorLiveArtifactError::ProviderMismatch);
+    }
+    Ok(())
+}
+
+fn validate_operator_live_trust_roots(
+    bundle: &PhalaOperatorLiveArtifactBundle,
+) -> Result<(), PhalaOperatorLiveArtifactError> {
+    if bundle.trust_roots.roots != bundle.normalized_response.provider_trust_roots {
+        return Err(PhalaOperatorLiveArtifactError::TrustRootMismatch);
+    }
+    Ok(())
+}
+
+fn validate_operator_live_audit_digests(
+    bundle: &PhalaOperatorLiveArtifactBundle,
+) -> Result<(), PhalaOperatorLiveArtifactError> {
+    expect_digest_match(
+        "audit.request_digest",
+        &bundle.audit.request_digest,
+        &phala_operator_live_json_digest(&bundle.request)?,
+    )?;
+    expect_digest_match(
+        "audit.normalized_response_digest",
+        &bundle.audit.normalized_response_digest,
+        &phala_operator_live_json_digest(&bundle.normalized_response)?,
+    )?;
+    expect_digest_match(
+        "audit.trust_roots_digest",
+        &bundle.audit.trust_roots_digest,
+        &phala_operator_live_json_digest(&bundle.trust_roots)?,
+    )?;
+    expect_digest_match(
+        "audit.redaction_report_digest",
+        &bundle.audit.redaction_report_digest,
+        &phala_operator_live_json_digest(&bundle.redaction_report)?,
+    )?;
+    expect_digest_match(
+        "audit.raw_response_digest",
+        &bundle.audit.raw_response_digest,
+        &bundle.raw_response_sha256,
+    )?;
+    expect_digest_match(
+        "response.raw_response_digest",
+        &hex_lower(&bundle.normalized_response.raw_response_digest),
+        &bundle.raw_response_sha256,
+    )?;
+    Ok(())
+}
+
+fn expect_digest_match(
+    field: &str,
+    actual: &str,
+    expected: &str,
+) -> Result<(), PhalaOperatorLiveArtifactError> {
+    validate_operator_live_digest(field, actual)?;
+    validate_operator_live_digest(field, expected)?;
+    if actual != expected {
+        return Err(PhalaOperatorLiveArtifactError::DigestMismatch {
+            field: field.to_owned(),
+            actual: actual.to_owned(),
+            expected: expected.to_owned(),
+        });
+    }
+    Ok(())
+}
+
+fn validate_operator_live_digest(
+    field: &str,
+    value: &str,
+) -> Result<(), PhalaOperatorLiveArtifactError> {
+    if value.len() != 64
+        || !value
+            .as_bytes()
+            .iter()
+            .all(|byte| byte.is_ascii_digit() || (b'a'..=b'f').contains(byte))
+    {
+        return Err(PhalaOperatorLiveArtifactError::InvalidDigest {
+            field: field.to_owned(),
+            value: value.to_owned(),
+        });
+    }
+    Ok(())
+}
+
+fn validate_operator_live_redaction_report(
+    report: &PhalaOperatorLiveRedactionReport,
+) -> Result<(), PhalaOperatorLiveArtifactError> {
+    if report.digest_algorithm != "sha256" {
+        return Err(PhalaOperatorLiveArtifactError::InvalidDigest {
+            field: "redaction_report.digest_algorithm".to_owned(),
+            value: report.digest_algorithm.clone(),
+        });
+    }
+
+    for (field, retained) in &report.retained_fields {
+        if retained.rationale.trim().is_empty() {
+            return Err(PhalaOperatorLiveArtifactError::RedactionRationaleMissing(
+                field.clone(),
+            ));
+        }
+        if looks_secret_shaped(field) || looks_secret_shaped(&retained.value) {
+            return Err(PhalaOperatorLiveArtifactError::RedactionSecretRetained(
+                field.clone(),
+            ));
+        }
+    }
+    Ok(())
+}
+
+fn validate_operator_live_non_claims(
+    non_claims: &BTreeSet<String>,
+) -> Result<(), PhalaOperatorLiveArtifactError> {
+    for required in [
+        "not proof",
+        "not local DCAP verification",
+        "not benchmark evidence",
+        "not global software-agent uniqueness",
+        "not semantic correctness",
+    ] {
+        if !non_claims.iter().any(|claim| claim == required) {
+            return Err(PhalaOperatorLiveArtifactError::MissingNonClaim(
+                required.to_owned(),
+            ));
+        }
+    }
+    Ok(())
+}
+
+fn looks_secret_shaped(value: &str) -> bool {
+    let value = value.to_ascii_lowercase();
+    [
+        "authorization",
+        "bearer ",
+        "api_key",
+        "apikey",
+        "private_key",
+        "cookie",
+        "secret",
+        "token",
+        "aws_access_key",
+        "aws_secret",
+        "credential",
+    ]
+    .iter()
+    .any(|needle| value.contains(needle))
+}
+
+fn has_hardware_root_prefix(roots: &BTreeSet<TrustRoot>, prefix: &str) -> bool {
+    roots.iter().any(|root| {
+        matches!(
+            root,
+            TrustRoot::HardwareVendor(VendorId(value)) if value.starts_with(prefix)
+        )
+    })
+}
+
+fn hex_lower(bytes: &[u8]) -> String {
+    bytes.iter().map(|byte| format!("{byte:02x}")).collect()
+}
+
+fn sha256_hex(bytes: &[u8]) -> String {
+    hex_lower(&Sha256::digest(bytes))
 }
 
 #[cfg(test)]
@@ -414,6 +1244,7 @@ mod tests {
         AttestationInput {
             anchor: anchor(),
             token: Token {
+                signed_jwt: None,
                 anchor_id: anchor().anchor_id(),
                 nonce: NONCE,
                 report_data: report_data(),

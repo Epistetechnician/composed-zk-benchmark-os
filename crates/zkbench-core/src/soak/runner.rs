@@ -30,8 +30,8 @@ use super::resume::{
     SoakShardCheckpoint,
 };
 use super::shard::{
-    SoakCaseId, SoakCasePlan, SoakShardId, SoakShardManifest, SoakShardPlan, SoakShardProgress,
-    SoakShardStatus, SoakShardSummary,
+    validate_soak_shard_summary, SoakCaseId, SoakCasePlan, SoakShardId, SoakShardManifest,
+    SoakShardPlan, SoakShardProgress, SoakShardStatus, SoakShardSummary,
 };
 use super::telemetry::{
     default_classification, validate_soak_telemetry_report, InternalCountMetric,
@@ -348,6 +348,13 @@ impl LocalSoakRunner {
             claim_boundary: ClaimBoundary::Level0DesignNote,
             notes: vec!["Shard summary is local health metadata only.".to_string()],
         };
+        let summary_validation = validate_soak_shard_summary(&shard_summary);
+        if !summary_validation.valid {
+            return Err(ZkBenchError::soak(
+                "soak.runner.shard_summary",
+                format!("invalid shard summary: {:?}", summary_validation.issues),
+            ));
+        }
         let telemetry_report = SoakTelemetryReport {
             report_id: format!("telemetry_{}", manifest.shard_id.value),
             report_version: "phase-k-soak-telemetry-v0".to_string(),
@@ -500,6 +507,9 @@ impl LocalSoakRunner {
                 Err(error) => {
                     counters.mutation_no_target_count =
                         counters.mutation_no_target_count.saturating_add(1);
+                    if is_targetless_mutation_error(&error) {
+                        continue;
+                    }
                     let failure = failure(
                         FailureCorpusKind::MutationFailure,
                         "mutation",
@@ -811,6 +821,13 @@ fn apply_selected_mutation(
             format!("{mutation_class:?} is not implemented for Phase K"),
         )),
     }
+}
+
+fn is_targetless_mutation_error(error: &ZkBenchError) -> bool {
+    matches!(
+        error,
+        ZkBenchError::Mutation { path, .. } if path.ends_with(".target")
+    )
 }
 
 fn update_replay_counters(

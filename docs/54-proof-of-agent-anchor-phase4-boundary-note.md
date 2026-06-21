@@ -6,26 +6,35 @@
 not start until Phase 3 has demonstrated at least one real hardware-backed
 attestation backend that can close an existing distinct-agent assumption.
 
-The current Phase 3 implementation is a deterministic fixture-oriented
-Phala/dstack preparation crate. It does not verify real TDX quotes, managed
-service signatures, JWT/JWKS material, vendor certificates, or live Phala API
-responses. Therefore it does not satisfy the Phase 4 prerequisite.
+That start condition is now satisfied for the bounded local registry slice. The
+first real HSAI-owned Phala/dstack artifact was accepted on 2026-06-16 under
+`docs/57-managed-attestation-real-artifact-promotion-spec.md`, and the Phase 4
+integration test registers the resulting closed `Attested` anchor set.
 
 ## Decision
 
-Do not build `crates/hsai-agent-anchor-registry` in the current state.
+Build `crates/hsai-agent-anchor-registry` under the exact boundary in
+`docs/51-proof-of-agent-anchor-registry-spec.md`.
 
-The next allowed implementation step is a future explicit phase that introduces
-real validated Phala/dstack artifacts, or another real hardware-backed
-attestation backend, while preserving the `Attested`, never `Proven`, boundary.
-
-## Claim Boundary
-
-The blocked Phase 4 registry must not be used to claim global software-agent
-uniqueness. The honest future target remains:
+Do not broaden the claim beyond the accepted registry output:
 
 ```text
 One active HSAI identity per accepted, non-reused registered anchor set.
 ```
 
-No current fixture result is external attestation evidence or proof.
+The real Phala artifact remains managed-verifier evidence. It does not add local
+Intel DCAP verification, managed-service signature/JWKS/JWT verification, or any
+claim above `Attested`.
+
+## Claim Boundary
+
+The Phase 4 registry must not be used to claim global software-agent
+uniqueness. The honest current target is:
+
+```text
+One active HSAI identity per accepted, non-reused registered anchor set.
+```
+
+No fixture or managed-verifier result is proof, benchmark evidence, backend
+execution evidence, local DCAP verification, or managed-service signature
+verification.

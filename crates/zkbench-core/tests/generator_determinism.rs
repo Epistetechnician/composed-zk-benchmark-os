@@ -56,3 +56,13 @@ fn generator_limits_reject_excessive_values() {
     let error = generate_family(config).expect_err("loop limit should reject config");
     assert!(error.to_string().contains("exceeds max_loop_bound"));
 }
+
+#[test]
+fn branching_fsm_validation_rejects_too_few_states_before_generation() {
+    let error = GeneratorConfig::branching_fsm()
+        .state_count(3)
+        .validate()
+        .expect_err("branching fsm with one branch state should fail validation");
+
+    assert!(error.to_string().contains("state_count >= 4"));
+}
