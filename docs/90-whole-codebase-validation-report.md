@@ -37,6 +37,8 @@ cargo clippy --workspace --all-targets -- -D warnings
 cargo doc --workspace --no-deps
 cargo test -p zkbench-core --test repo_hygiene
 cargo test -p zkbench-core --test repo_claim_boundary_docs
+cargo llvm-cov --workspace --summary-only
+cargo llvm-cov --workspace --features external-runner --summary-only
 git diff --check
 ```
 
@@ -45,8 +47,13 @@ All commands passed.
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-`cargo llvm-cov` is not installed in this environment, so this report does not
-claim line, branch, or per-function coverage percentages.
+`cargo-llvm-cov 0.8.7` was installed with Homebrew and used for local coverage
+measurement. The default workspace pass and the `external-runner` feature pass
+reported the same totals: `84.29%` region coverage, `80.56%` function execution,
+and `82.27%` line coverage. Branch coverage was not reported by this run. These
+coverage percentages are local test instrumentation only; they are not
+production readiness, semantic correctness, official benchmark evidence,
+accepted Evidence Ledger mutation, or Level2+ evidence.
 
 ## Efficacy Map
 
@@ -113,7 +120,6 @@ claim-boundary escalation.
 
 ## Residual Gaps
 
-- No coverage tool was available in this environment.
 - No live external backend, live Phala call, DCAP/PCCS/JWKS fetching, TLS
   channel binding, or operator-live credential path was exercised.
 - No generated benchmark artifacts, official benchmark submissions, or accepted
