@@ -169,6 +169,7 @@ Surface DSL
 | [docs/88-phase-s-audit-index-ergonomics-output-plumbing-spec.md](docs/88-phase-s-audit-index-ergonomics-output-plumbing-spec.md) | Phase S audit-index ergonomics output-plumbing docs-first boundary. |
 | [docs/89-phase-s-audit-index-ergonomics-output-plumbing-implementation-notes.md](docs/89-phase-s-audit-index-ergonomics-output-plumbing-implementation-notes.md) | Phase S audit-index ergonomics output-plumbing implementation notes. |
 | [docs/90-whole-codebase-validation-report.md](docs/90-whole-codebase-validation-report.md) | Whole-codebase local validation report and claim-boundary summary. |
+| [docs/91-phase-t-cross-bundle-audit-index-boundary-spec.md](docs/91-phase-t-cross-bundle-audit-index-boundary-spec.md) | Phase T cross-bundle audit-index docs-first boundary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -266,6 +267,12 @@ Surface DSL
   not claim per-function proof, line coverage, production readiness, official
   benchmark evidence, ZK backend performance, Level2+ evidence, or accepted
   Evidence Ledger mutation.
+- `docs/91-phase-t-cross-bundle-audit-index-boundary-spec.md` records the
+  docs-first boundary for future cross-bundle audit-index planning over
+  multiple existing local audit-index manifests. It authorizes no Rust
+  implementation, generated cross-bundle files, CLI, UI, package runtime files,
+  external replay, score-axis population, accepted Evidence Ledger mutation, or
+  Level2+ evidence.
 - Phase L bounded local soak acceptance exists for
   `phase_l_qwable_local_soak_2026_06_17_extended_256`: 768 completed local
   cases, zero failures, zero failure-corpus entries, a valid report bundle, no
@@ -386,12 +393,13 @@ Surface DSL
 For the benchmark OS track,
 [docs/89-phase-s-audit-index-ergonomics-output-plumbing-implementation-notes.md](docs/89-phase-s-audit-index-ergonomics-output-plumbing-implementation-notes.md)
 now records the local output-root implementation for materialized ergonomics
-outputs. The next benchmark OS slice, if needed, must be a separate docs-first
-boundary before broadening beyond this exact single-index local output surface.
-Generated committed ergonomics files, cross-bundle index construction,
-command-line surfaces, UI dashboards, external replay, official benchmark
-evidence, ZK backend performance claims, score-axis population, and Level2+
-evidence promotion remain blocked.
+outputs. The next benchmark OS docs-first boundary is
+[docs/91-phase-t-cross-bundle-audit-index-boundary-spec.md](docs/91-phase-t-cross-bundle-audit-index-boundary-spec.md).
+It defines future cross-bundle audit-index planning over multiple existing local
+audit-index manifests while keeping generated cross-bundle files,
+implementation code, command-line surfaces, UI dashboards, external replay,
+official benchmark evidence, ZK backend performance claims, score-axis
+population, and Level2+ evidence promotion blocked.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
