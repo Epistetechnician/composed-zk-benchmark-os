@@ -950,3 +950,119 @@ caller-owned root; repository-root, empty-root, symlink-root, symlink-file,
 unexpected-file, partial-bundle, stale-digest, raw-response-body, and implicit
 overwrite paths fail closed; normal tests remain hermetic; and all successful
 validation remains capped at `Attested`.
+
+## Benchmark OS Track: Phase V Local Artifact Campaign Boundary
+
+Status: complete for docs-first boundary only. See
+`docs/98-phase-v-local-artifact-campaign-boundary-spec.md`.
+
+Goal: define the future user-approved durable local artifact campaign boundary
+after Phase U local artifact packaging, before any campaign execution or durable
+generated local artifact root exists.
+
+Implemented: docs-first boundary for future campaign ids, ignored output roots,
+valid local input classes, protected-path policy, retention policy, campaign
+manifest shape, validation report shape, digest sidecars, required limitation
+labels, accepted Evidence Ledger non-mutation, score-axis non-population, and
+promotion non-goals.
+
+Dependencies: Phase U local benchmark artifact packaging, Phase T cross-bundle
+audit-index outputs, Phase S ergonomics outputs, Phase R audit-index outputs,
+Phase Q report bundles, Phase O pack-readiness metadata, and local benchmark
+packs.
+
+Validation gate: documentation navigation checks, claim-boundary text checks,
+repo hygiene checks, no Rust source changes, no Cargo metadata changes, no
+generated campaign files, no package runtime files, no CLI/UI, no external
+execution hooks, no official submission, and no accepted Evidence Ledger
+mutation.
+
+Anti-goals: Rust implementation in this slice, generated committed artifacts,
+durable campaign outputs, external replay, live backend execution, official
+benchmark evidence, accepted Evidence Ledger mutation, ZK backend performance
+claims, score-axis population, Level2+ evidence creation, broad leaderboard
+claims, command-line tools, UI dashboards, package runtime files, credentials,
+or secrets.
+
+Exit criteria: Phase V campaign boundary spec exists; README and AGENTS point
+to it; source input classes, ignored output-root rules, required limitation
+labels, retention rules, validation rules, and promotion boundary are explicit;
+and all implementation remains blocked until a separate explicit phase.
+
+## Benchmark OS Track: Phase W Reviewed Evidence Promotion Boundary
+
+Status: complete for docs-first boundary only. See
+`docs/99-phase-w-reviewed-evidence-promotion-boundary-spec.md`.
+
+Goal: define the future reviewed accepted-evidence mutation and official
+submission boundary before any accepted Evidence Ledger append, official
+submission package, score-axis population, or Level2+ promotion exists.
+
+Implemented: docs-first boundary for future promotion preconditions, accepted
+Evidence Ledger mutation policy, official submission package preconditions,
+evidence class separation, required future tests, required non-claims, and
+blocked local-only promotion paths.
+
+Dependencies: Phase J reviewed proposal acceptance metadata, Phase O
+pack-readiness, Phase U local artifact packaging, Phase V local artifact
+campaign boundary, future external replay authority, future external result
+import, and future manual review approval.
+
+Validation gate: documentation navigation checks, claim-boundary text checks,
+repo hygiene checks, no Rust source changes, no Cargo metadata changes, no
+generated artifacts, no package runtime files, no external replay, no official
+submission, no accepted Evidence Ledger mutation, no score report mutation, and
+no Level2+ evidence creation.
+
+Anti-goals: implementation in this slice, accepted Evidence Ledger append,
+official benchmark submission, external replay, live backend execution, network
+access, credentials, external result import, score-axis population, ZK backend
+performance claims, formal/soundness claims without scoped evidence, Level2+
+evidence creation, broad leaderboard claims, command-line tools, UI dashboards,
+or package runtime files.
+
+Exit criteria: Phase W promotion boundary spec exists; README and AGENTS point
+to it; accepted-ledger mutation and official-submission preconditions are
+explicit; local-only evidence remains blocked from promotion; and all mutation
+or submission implementation remains blocked until a separate explicit phase.
+
+## Managed-Attestation Track: Phala Operator Live Invocation Boundary
+
+Status: complete for docs-first boundary only. See
+`docs/97-phala-operator-live-invocation-boundary-spec.md`.
+
+Goal: define the future operator-owned live Phala/dstack invocation contract
+after local operator artifact output plumbing, before any live provider call,
+credential path, network code, or operator live test exists.
+
+Implemented: docs-first boundary for the single allowed provider/mode
+(`Phala/dstack`, operator-owned live managed-verifier invocation), future
+declared invocation inputs, credential boundary, fail-closed invocation order,
+normal-test exclusion, required future hermetic tests, required non-claims, and
+explicit blocks for DCAP/PCCS/JWKS/TLS and accepted evidence mutation.
+
+Dependencies: Phase 81 operator-live path boundary, Phase 82 artifact-plumbing
+boundary, Phase 83 in-memory artifact-plumbing implementation, Phase 84
+output-plumbing boundary, Phase 85 local output-root plumbing implementation,
+and Phase 4 claim boundaries.
+
+Validation gate: documentation navigation checks, claim-boundary text checks,
+repo hygiene checks, no Rust source changes, no Cargo metadata changes, no
+fixtures, no generated operator artifacts, no package runtime files, no
+network code, no live Phala calls, no credentials, no operator live tests, no
+benchmark outputs, and no accepted Evidence Ledger mutation.
+
+Anti-goals: implementation in this slice, examples or scripts, package runtime
+files, network access, live Phala API calls, credentials or secret fixtures,
+operator live tests, generated operator artifacts, local Intel DCAP quote
+verification, PCCS or collateral fetching, generic JWKS/JWT fetching, TLS or
+attested-TLS channel binding, deployment orchestration, external repo clones,
+backend execution, benchmark outputs, accepted Evidence Ledger mutation,
+Phase 4 registry semantic changes, Level2+ evidence, global uniqueness claims,
+or claims above `Attested`.
+
+Exit criteria: Phase 97 invocation boundary spec exists; README and AGENTS
+point to it; future live calls remain operator-only and excluded from normal
+tests; future credentials stay outside git; future output flows through the
+existing redacted digest-bound operator artifact plumbing; and all successful
+future invocation output remains capped at `Attested`.
