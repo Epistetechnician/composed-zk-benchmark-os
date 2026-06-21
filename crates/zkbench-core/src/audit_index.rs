@@ -2734,13 +2734,14 @@ fn validate_output_root(root: &Path) -> Result<()> {
 
 fn reject_protected_path_overlap(root: &Path, protected_paths: &[impl AsRef<Path>]) -> Result<()> {
     let comparable_root = comparable_output_path(root)?;
+    let resolved_root = resolved_comparable_path(root)?;
     for protected_path in protected_paths {
         let protected_path = protected_path.as_ref();
         validate_protected_path(protected_path)?;
         let comparable_protected = comparable_output_path(protected_path)?;
-        if comparable_root == comparable_protected
-            || comparable_root.starts_with(&comparable_protected)
-            || comparable_protected.starts_with(&comparable_root)
+        let resolved_protected = resolved_comparable_path(protected_path)?;
+        if paths_overlap(&comparable_root, &comparable_protected)
+            || paths_overlap(&resolved_root, &resolved_protected)
         {
             return Err(audit_index_io_error(
                 root.display().to_string(),
@@ -2777,6 +2778,42 @@ fn comparable_output_path(path: &Path) -> Result<std::path::PathBuf> {
         }
     }
     Ok(comparable)
+}
+
+fn resolved_comparable_path(path: &Path) -> Result<std::path::PathBuf> {
+    let comparable = comparable_output_path(path)?;
+    let mut missing = Vec::new();
+    let mut cursor = comparable.as_path();
+    loop {
+        match fs::canonicalize(cursor) {
+            Ok(mut resolved) => {
+                for segment in missing.iter().rev() {
+                    resolved.push(segment);
+                }
+                return Ok(resolved);
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {
+                let Some(segment) = cursor.file_name() else {
+                    return Ok(comparable);
+                };
+                missing.push(segment.to_os_string());
+                let Some(parent) = cursor.parent() else {
+                    return Ok(comparable);
+                };
+                cursor = parent;
+            }
+            Err(error) => {
+                return Err(audit_index_io_error(
+                    cursor.display().to_string(),
+                    error.to_string(),
+                ));
+            }
+        }
+    }
+}
+
+fn paths_overlap(left: &Path, right: &Path) -> bool {
+    left == right || left.starts_with(right) || right.starts_with(left)
 }
 
 fn validate_protected_path(path: &Path) -> Result<()> {

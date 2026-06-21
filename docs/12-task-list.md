@@ -551,8 +551,9 @@ all cross-bundle output remains capped at `Level0DesignNote`.
 
 ## Benchmark OS Track: Phase U Local Benchmark Artifact Boundary
 
-Status: complete for docs-first boundary only. See
-`docs/95-phase-u-local-benchmark-artifact-boundary-spec.md`.
+Status: complete for docs-first boundary and local implementation. See
+`docs/95-phase-u-local-benchmark-artifact-boundary-spec.md` and
+`docs/96-phase-u-local-benchmark-artifact-implementation-notes.md`.
 
 Goal: define the future local benchmark artifact generation boundary before any
 generated local artifact bundle is created.
@@ -566,21 +567,26 @@ declared-file output shape, digest sidecars, source-input digest summaries,
 claim-boundary summaries capped at the weakest local input, required limitation
 labels, protected-path overlap rejection, corrupted-root non-repair, accepted
 Evidence Ledger non-mutation, and score-axis non-population from local-only
-evidence.
+evidence. The local implementation adds `LocalBenchmarkArtifactManifest`,
+manifest validation, deterministic JSON serialization, deterministic Markdown
+rendering, manifest digesting, declared-file-only output writing and reading,
+digest sidecars, protected-path overlap rejection including symlink-resolved
+overlap, stale-digest rejection, symlink rejection, unexpected-file rejection,
+partial-bundle rejection, and repair-overwrite rejection.
 
 Dependencies: Phase O local reproducible-pack readiness, Phase Q report-bundle
 metadata/output plumbing, Phase R audit-index metadata/output plumbing, Phase S
 audit-index ergonomics/output plumbing, and Phase T cross-bundle audit-index
 metadata/output plumbing.
 
-Validation gate for the docs-first slice: documentation navigation checks,
-claim-boundary text checks, repo hygiene checks, no Rust source changes, no
-generated benchmark artifact files, no package runtime files, no command-line
-tools, no UI dashboards, no external execution hooks, no score-axis
-population, and no accepted Evidence Ledger mutation.
+Validation gate: documentation navigation checks, claim-boundary text checks,
+repo hygiene checks, focused Phase U local benchmark artifact tests, no
+committed generated benchmark artifact files, no package runtime files, no
+command-line tools, no UI dashboards, no external execution hooks, no
+score-axis population, and no accepted Evidence Ledger mutation.
 
-Anti-goals: Rust implementation in this docs-first slice, generated benchmark
-artifact files, command-line tools, UI dashboards, browser apps,
+Anti-goals: committed generated benchmark artifact files, command-line tools,
+UI dashboards, browser apps,
 JavaScript/TypeScript/package runtime additions, source pack mutation, source
 report mutation, report-bundle mutation, audit-index output mutation, Phase S
 ergonomics output mutation, Phase T cross-bundle output mutation, accepted
@@ -590,11 +596,13 @@ benchmark evidence, ZK backend performance claims, Level2+ evidence creation,
 score-axis population from local-only evidence, broad leaderboard claims, or
 treating local generated artifacts as accepted evidence.
 
-Exit criteria: Phase U boundary spec exists; README and AGENTS point to it; the
-future input classes, output shape, protected-path policy, overwrite policy,
-required limitation labels, future negative tests, and promotion boundary are
-explicit; and the docs preserve that local benchmark artifacts are packaging
-only until a separate reviewed promotion phase creates stronger evidence.
+Exit criteria: Phase U boundary spec and implementation notes exist; README and
+AGENTS point to them; input classes, output shape, protected-path policy,
+overwrite policy, required limitation labels, negative tests, and promotion
+boundary are explicit; the local writer/reader uses declared files and digest
+sidecars only; and the docs preserve that local benchmark artifacts are
+packaging only until a separate reviewed promotion phase creates stronger
+evidence.
 
 ## Managed-Attestation Track: Managed JWT Signature Verification
 

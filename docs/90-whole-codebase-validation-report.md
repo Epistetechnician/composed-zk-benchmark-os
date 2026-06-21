@@ -51,7 +51,7 @@ gate is available.
 explicit `LLVM_COV` and `LLVM_PROFDATA` environment variables pointing at the
 rustup `llvm-tools-preview` binaries. With those variables set, the default
 workspace pass and the `external-runner` feature pass reported the same totals:
-`79.32%` region coverage, `80.29%` function execution, and `82.72%` line
+`79.22%` region coverage, `79.89%` function execution, and `82.55%` line
 coverage. Branch coverage was not reported by this run. These coverage
 percentages are local test instrumentation only; they are not production
 readiness, semantic correctness, official benchmark evidence, accepted Evidence
@@ -84,6 +84,12 @@ The suite exercises the repo as a set of bounded local systems:
   plumbing, duplicate/conflict signal preservation, declared-file output,
   digest sidecars, stale-digest rejection, symlink rejection, partial-bundle
   rejection, corrupted-root non-repair, and protected-path overlap hardening.
+- Phase U local benchmark artifact manifest validation, deterministic Markdown
+  rendering, declared-file output, digest sidecars, stale-digest rejection,
+  symlink-resolved protected overlap rejection, symlink rejection,
+  partial-bundle rejection, corrupted-root non-repair, accepted Evidence Ledger
+  non-mutation, score-axis non-population, and protected-path overlap
+  hardening.
 - HSAI claim-envelope algebra, agent-case lanes, distinct-agent registry,
   managed attestation, offline managed-JWT verification, Phala fixture and
   captured-artifact validation, hermetic fake-client live-verifier surface,
@@ -128,10 +134,10 @@ claim-boundary escalation.
 
 - No live external backend, live Phala call, DCAP/PCCS/JWKS fetching, TLS
   channel binding, or operator-live credential path was exercised.
-- No generated benchmark artifacts, official benchmark submissions, or accepted
-  Evidence Ledger entries were created. Phase U now defines the docs-first
-  boundary for future local benchmark artifact generation, but it does not
-  create those artifacts or promote them.
+- No committed generated benchmark artifact bundle, official benchmark
+  submission, or accepted Evidence Ledger entry was created. Phase U now
+  implements local artifact-bundle packaging APIs and hermetic temp-root tests,
+  but it does not create durable submitted artifacts or promote them.
 - No broader Phase S ergonomics surface was authorized or tested beyond the
   implemented single-index local output boundary.
 

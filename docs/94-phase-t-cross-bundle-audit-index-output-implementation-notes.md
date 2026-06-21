@@ -60,6 +60,7 @@ The implementation fails closed for:
 
 - invalid output roots;
 - protected-path overlap before writes;
+- symlink-resolved protected-path overlap before writes;
 - output roots that are existing files;
 - non-empty output roots without explicit overwrite;
 - unexpected files;
@@ -95,6 +96,7 @@ It verifies:
 - unexpected-file rejection;
 - protected-path overlap rejection before writes;
 - relative/absolute protected-path overlap equivalence;
+- symlink-resolved protected-path overlap rejection;
 - symlink rejection;
 - source immutability;
 - duplicate/conflict signal preservation through the existing Phase T view
