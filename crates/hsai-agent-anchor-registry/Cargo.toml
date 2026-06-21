@@ -1,0 +1,19 @@
+[package]
+name = "hsai-agent-anchor-registry"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "Phase 4 Proof of Agent anchor registry: one active HSAI identity per accepted, non-reused registered anchor set."
+
+[dependencies]
+hsai-claim-envelope = { path = "../hsai-claim-envelope" }
+hsai-distinct-agent = { path = "../hsai-distinct-agent" }
+hsai-attestation = { path = "../hsai-attestation" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+
+[dev-dependencies]
+hsai-agent-case = { path = "../hsai-agent-case" }
+hsai-attestation-phala = { path = "../hsai-attestation-phala" }
+proptest = { version = "=1.5.0", default-features = false, features = ["std"] }

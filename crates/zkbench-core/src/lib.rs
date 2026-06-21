@@ -10,6 +10,7 @@
 //! benchmark evidence, and not a formal proof.
 
 pub mod adapters;
+pub mod audit_index;
 pub mod dashboard;
 pub mod dsl;
 pub mod error;
@@ -20,11 +21,14 @@ pub mod ids;
 pub mod mutation;
 pub mod pack;
 pub mod prelude;
+pub mod recursion;
 pub mod registry;
 pub mod replay;
+pub mod report_bundle;
 pub mod scoring;
 pub mod soak;
 pub mod value;
+pub mod zkml;
 
 pub use adapters::{
     build_default_zk_harness_adapter_manifest, build_manual_handoff_bundle_from_zk_harness_plan,
@@ -52,9 +56,19 @@ pub use adapters::{
     ZkHarnessReviewStatus, ZkHarnessSchemaAssumption, ZkHarnessSourcePolicy, ZkHarnessTraceMapping,
     ZkHarnessUnsupportedFeature, LOCAL_JSON_ADAPTER_ID,
 };
+pub use audit_index::{
+    build_local_audit_index_manifest_from_report_bundles,
+    compute_local_audit_index_manifest_digest, deserialize_local_audit_index_manifest_json,
+    read_local_audit_index_outputs, serialize_local_audit_index_manifest_json,
+    validate_local_audit_index_manifest, write_local_audit_index_outputs, LocalAuditIndexInputKind,
+    LocalAuditIndexInputRef, LocalAuditIndexManifest, LocalAuditIndexOutput,
+    LocalAuditIndexValidation, LocalAuditIndexValidationIssue, LocalAuditIndexValidationIssueKind,
+    LocalAuditIndexVersion, AUDIT_INDEX_MANIFEST_DIGEST_PATH, AUDIT_INDEX_MANIFEST_PATH,
+};
 pub use dashboard::{
-    build_dashboard_model_from_score_report, render_dashboard_markdown, validate_dashboard_model,
-    DashboardAxisRow, DashboardModel, DashboardPanel, DashboardPanelKind,
+    build_dashboard_model_from_pack_readiness, build_dashboard_model_from_score_report,
+    render_dashboard_markdown, validate_dashboard_model, DashboardAxisRow, DashboardModel,
+    DashboardPanel, DashboardPanelKind,
 };
 pub use dsl::{
     evaluate_trace, lower_to_ir, parse_yaml_ast, parse_yaml_spec, ActionSpec, CanonicalAction,
@@ -182,9 +196,35 @@ pub use mutation::{
 };
 pub use mutation::{MutationClass, MutationKind, MutationSeverity, MutationSpec, MutationVariant};
 pub use pack::{
-    BenchmarkPackFile, BenchmarkPackFileRole, BenchmarkPackId, BenchmarkPackManifest,
-    BenchmarkPackReader, BenchmarkPackSummary, BenchmarkPackValidation,
-    BenchmarkPackValidationError, BenchmarkPackVersion, BenchmarkPackWriter,
+    build_pack_readiness_report_from_reader, compute_pack_readiness_report_digest,
+    deserialize_pack_readiness_report_json, read_pack_readiness_report,
+    read_pack_readiness_validation, serialize_pack_readiness_report_json,
+    validate_pack_readiness_report, write_pack_readiness_outputs_for_pack, BenchmarkPackFile,
+    BenchmarkPackFileRole, BenchmarkPackId, BenchmarkPackManifest, BenchmarkPackReader,
+    BenchmarkPackSummary, BenchmarkPackValidation, BenchmarkPackValidationError,
+    BenchmarkPackVersion, BenchmarkPackWriter, PackReadinessCheck, PackReadinessCheckKind,
+    PackReadinessInputKind, PackReadinessInputRef, PackReadinessOutput,
+    PackReadinessReplayCommandMetadata, PackReadinessReport, PackReadinessValidation,
+    PackReadinessValidationIssue, PackReadinessValidationIssueKind, PackReadinessVersion,
+    PACK_READINESS_REPORT_PATH, PACK_READINESS_VALIDATION_PATH, PACK_VALIDATION_REPORT_PATH,
+};
+pub use recursion::{
+    build_recursion_adapter_manual_handoff_bundle, compute_recursion_envelope_digest_chain_root,
+    deserialize_recursion_adapter_manual_handoff_bundle_json,
+    deserialize_recursion_adapter_preparation_plan_json,
+    deserialize_recursion_envelope_candidate_json,
+    serialize_recursion_adapter_manual_handoff_bundle_json,
+    serialize_recursion_adapter_preparation_plan_json, serialize_recursion_envelope_candidate_json,
+    validate_recursion_adapter_manual_handoff_bundle, validate_recursion_adapter_preparation_plan,
+    validate_recursion_envelope_candidate, RecursionAdapterManualHandoffBundle,
+    RecursionAdapterManualHandoffMapping, RecursionAdapterPreparationArtifact,
+    RecursionAdapterPreparationArtifactRole, RecursionAdapterPreparationIssue,
+    RecursionAdapterPreparationIssueKind, RecursionAdapterPreparationPlan,
+    RecursionAdapterPreparationTarget, RecursionAdapterPreparationValidation,
+    RecursionEnvelopeCandidate, RecursionEnvelopeInputKind, RecursionEnvelopeInputRef,
+    RecursionEnvelopeMetric, RecursionEnvelopeMetricKind, RecursionEnvelopeValidation,
+    RecursionEnvelopeValidationIssue, RecursionEnvelopeValidationIssueKind,
+    RecursionEnvelopeVersion, RecursionVerifierAcceptanceStatus,
 };
 pub use registry::{
     list_available_local_generators, list_local_adapter_targets, local_benchmark_pack_schema,
@@ -199,11 +239,22 @@ pub use replay::{
     ReplaySerializationVersion, ReplayStatus, ReplaySubject, ReplaySubjectKind, ReplayTraceResult,
     ReplayTraceSelection,
 };
+pub use report_bundle::{
+    build_report_bundle_manifest_from_reports, build_report_bundle_rendered_markdown_payloads,
+    compute_report_bundle_manifest_digest, deserialize_report_bundle_manifest_json,
+    read_report_bundle_outputs, serialize_report_bundle_manifest_json,
+    validate_report_bundle_manifest, write_report_bundle_outputs, ReportBundleInputKind,
+    ReportBundleInputRef, ReportBundleManifest, ReportBundleMaterializedReport, ReportBundleOutput,
+    ReportBundlePackReadinessInput, ReportBundleRenderedMarkdown, ReportBundleRenderedReport,
+    ReportBundleValidation, ReportBundleValidationIssue, ReportBundleValidationIssueKind,
+    ReportBundleVersion, REPORT_BUNDLE_MANIFEST_DIGEST_PATH, REPORT_BUNDLE_MANIFEST_PATH,
+    REPORT_BUNDLE_RENDERED_DIR,
+};
 pub use scoring::{
-    score_report_from_evidence, score_report_from_local_mutation_evidence, AdapterPortabilityScore,
-    CorrectnessScore, FormalEvidenceScore, LocalMutationEvidenceSummary, PerformanceScore,
-    RecursionStressScore, ReproducibilityScore, RiskPenalty, ScoreConfidence, ScoreReport,
-    SoundnessFailureDetectionScore,
+    score_report_from_evidence, score_report_from_local_mutation_evidence, validate_score_report,
+    AdapterPortabilityScore, CorrectnessScore, FormalEvidenceScore, LocalMutationEvidenceSummary,
+    PerformanceScore, RecursionStressScore, ReproducibilityScore, RiskPenalty, ScoreConfidence,
+    ScoreReport, ScoreReportValidation, ScoreReportValidationIssue, SoundnessFailureDetectionScore,
 };
 pub use soak::{
     aggregate_soak_health_reports, attach_reproduction_bundle_to_pack, build_failure_corpus_entry,
@@ -224,24 +275,32 @@ pub use soak::{
     serialize_soak_telemetry_report_json, soak_artifact_manifest, validate_failure_corpus_index,
     validate_reproduction_bundle, validate_soak_campaign_config, validate_soak_health_report,
     validate_soak_report_bundle, validate_soak_run_config, validate_soak_shard_checkpoint,
-    validate_soak_shard_manifest, validate_soak_shard_plan, validate_soak_telemetry_report,
-    write_soak_report_bundle, write_soak_shard_checkpoint, FailureArtifactRef, FailureCorpus,
-    FailureCorpusEntry, FailureCorpusEntryId, FailureCorpusEntryInput, FailureCorpusIndex,
-    FailureCorpusKind, FailureCorpusSummary, FailureMinimizationHint, FailureReproductionManifest,
-    FailureTriageStatus, InternalCountMetric, InternalSizeMetric, InternalTimingMetric,
-    InternalTimingMetricKind, LocalSoakRunner, LocalSoakRunnerConfig, MockTelemetryClock,
-    ReproductionBundle, ReproductionBundleAttachment, SoakArtifactDigestSet, SoakArtifactLayout,
-    SoakArtifactManifest, SoakArtifactRole, SoakCampaignApproval, SoakCampaignArtifactRootPolicy,
-    SoakCampaignConfig, SoakCampaignResult, SoakCampaignShardOutcome, SoakCaseFailure, SoakCaseId,
-    SoakCasePlan, SoakCaseResult, SoakCaseStatus, SoakClaimBoundaryPolicy, SoakFamilySelection,
-    SoakHealthFinding, SoakHealthFindingSeverity, SoakHealthRecommendation, SoakHealthReport,
-    SoakHealthReportId, SoakHealthStatus, SoakHealthSummary, SoakLimits, SoakMutationSelection,
-    SoakOutputPolicy, SoakRegressionSignal, SoakReportBundle, SoakReportBundleValidation,
-    SoakRunConfig, SoakRunConfigId, SoakRunConfigVersion, SoakRunProfile, SoakRunRequest,
-    SoakRunResult, SoakRunScope, SoakRunnerErrorPolicy, SoakSeedRange, SoakShardCheckpoint,
-    SoakShardConfig, SoakShardId, SoakShardManifest, SoakShardPlan, SoakShardPlanner,
-    SoakShardProgress, SoakShardResumeToken, SoakShardStatus, SoakShardSummary,
-    SoakShardValidation, SoakShardValidationIssue, SoakTelemetryClassification, SoakTelemetryClock,
+    validate_soak_shard_manifest, validate_soak_shard_plan, validate_soak_shard_summary,
+    validate_soak_telemetry_report, write_soak_report_bundle, write_soak_shard_checkpoint,
+    FailureArtifactRef, FailureCorpus, FailureCorpusEntry, FailureCorpusEntryId,
+    FailureCorpusEntryInput, FailureCorpusIndex, FailureCorpusKind, FailureCorpusSummary,
+    FailureMinimizationHint, FailureReproductionManifest, FailureTriageStatus, InternalCountMetric,
+    InternalSizeMetric, InternalTimingMetric, InternalTimingMetricKind, LocalSoakRunner,
+    LocalSoakRunnerConfig, MockTelemetryClock, ReproductionBundle, ReproductionBundleAttachment,
+    SoakArtifactDigestSet, SoakArtifactLayout, SoakArtifactManifest, SoakArtifactRole,
+    SoakCampaignApproval, SoakCampaignArtifactRootPolicy, SoakCampaignConfig, SoakCampaignResult,
+    SoakCampaignShardOutcome, SoakCaseFailure, SoakCaseId, SoakCasePlan, SoakCaseResult,
+    SoakCaseStatus, SoakClaimBoundaryPolicy, SoakFamilySelection, SoakHealthFinding,
+    SoakHealthFindingSeverity, SoakHealthRecommendation, SoakHealthReport, SoakHealthReportId,
+    SoakHealthStatus, SoakHealthSummary, SoakLimits, SoakMutationSelection, SoakOutputPolicy,
+    SoakRegressionSignal, SoakReportBundle, SoakReportBundleValidation, SoakRunConfig,
+    SoakRunConfigId, SoakRunConfigVersion, SoakRunProfile, SoakRunRequest, SoakRunResult,
+    SoakRunScope, SoakRunnerErrorPolicy, SoakSeedRange, SoakShardCheckpoint, SoakShardConfig,
+    SoakShardId, SoakShardManifest, SoakShardPlan, SoakShardPlanner, SoakShardProgress,
+    SoakShardResumeToken, SoakShardStatus, SoakShardSummary, SoakShardValidation,
+    SoakShardValidationIssue, SoakTelemetryClassification, SoakTelemetryClock,
     SoakTelemetryCounters, SoakTelemetryDurations, SoakTelemetryPolicy, SoakTelemetryReport,
     SoakTelemetryReportId, SoakTelemetrySnapshot, SystemTelemetryClock,
+};
+pub use zkml::{
+    compute_zkml_workload_digest_root, deserialize_zkml_workload_manifest_json,
+    serialize_zkml_workload_manifest_json, validate_zkml_workload_manifest, ZkMlMetric,
+    ZkMlMetricKind, ZkMlModelArtifactRef, ZkMlWorkloadInputKind, ZkMlWorkloadInputRef,
+    ZkMlWorkloadManifest, ZkMlWorkloadManifestVersion, ZkMlWorkloadValidation,
+    ZkMlWorkloadValidationIssue, ZkMlWorkloadValidationIssueKind,
 };

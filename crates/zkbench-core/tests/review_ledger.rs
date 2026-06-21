@@ -1,8 +1,9 @@
 use zkbench_core::{
     create_evidence_append_preview, create_evidence_record_candidate,
     deserialize_evidence_review_ledger_json, review_evidence_append_proposal,
-    serialize_evidence_review_ledger_json, EvidenceAcceptancePolicy, EvidenceReviewChecklist,
-    EvidenceReviewDecisionKind, EvidenceReviewLedger, EvidenceReviewerRole,
+    serialize_evidence_review_ledger_json, ClaimBoundary, EvidenceAcceptancePolicy,
+    EvidenceReviewChecklist, EvidenceReviewDecisionKind, EvidenceReviewLedger,
+    EvidenceReviewerRole,
 };
 
 fn proposal() -> zkbench_core::EvidenceAppendProposal {
@@ -63,6 +64,101 @@ fn review_ledger_records_decision_and_preview() {
     let json = serialize_evidence_review_ledger_json(&ledger).expect("ledger should serialize");
     let parsed = deserialize_evidence_review_ledger_json(&json).expect("ledger should deserialize");
     assert_eq!(ledger, parsed);
+}
+
+#[test]
+fn review_ledger_rejects_invalid_append_preview_before_append() {
+    let (_, mut preview) = reviewed_candidate_preview();
+    preview.claim_boundary = ClaimBoundary::Level1LocalReplay;
+    let mut ledger = EvidenceReviewLedger::new("phase_j_review_ledger");
+
+    let error = ledger
+        .append_append_preview(preview)
+        .expect_err("invalid nested append preview should be rejected");
+
+    assert!(error.to_string().contains("append preview invalid"));
+    assert!(ledger.entries.is_empty());
+    assert_eq!(ledger.summary.entry_count, 0);
+}
+
+#[test]
+fn review_ledger_detects_stale_cached_summary() {
+    let (decision, preview) = reviewed_candidate_preview();
+    let mut ledger = EvidenceReviewLedger::new("phase_j_review_ledger");
+    ledger
+        .append_review_decision(decision)
+        .expect("decision append should work");
+    ledger
+        .append_append_preview(preview)
+        .expect("preview append should work");
+    ledger.summary.entry_count = 1;
+
+    let validation = ledger.validate();
+
+    assert!(!validation.valid);
+    assert_eq!(validation.summary.entry_count, 2);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.path == "ledger.summary"));
+}
+
+#[test]
+fn review_ledger_rejects_artifact_claim_boundary_elevation() {
+    let (decision, _) = reviewed_candidate_preview();
+    let mut ledger = EvidenceReviewLedger::new("phase_j_review_ledger");
+    ledger
+        .append_review_decision(decision)
+        .expect("decision append should work");
+    ledger.claim_boundary = ClaimBoundary::Level1LocalReplay;
+
+    let validation = ledger.validate();
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.path == "ledger.claim_boundary"));
+}
+
+#[test]
+fn review_ledger_rejects_forbidden_claim_text_in_notes() {
+    let (decision, _) = reviewed_candidate_preview();
+    let mut ledger = EvidenceReviewLedger::new("phase_j_review_ledger");
+    ledger
+        .append_review_decision(decision)
+        .expect("decision append should work");
+    ledger
+        .notes
+        .push("this review ledger is official benchmark evidence".to_string());
+
+    let validation = ledger.validate();
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.path == "ledger.notes[2]"));
+}
+
+#[test]
+fn review_ledger_rejects_forbidden_claim_text_in_entry_notes() {
+    let (decision, _) = reviewed_candidate_preview();
+    let mut ledger = EvidenceReviewLedger::new("phase_j_review_ledger");
+    ledger
+        .append_review_decision(decision)
+        .expect("decision append should work");
+    ledger.entries[0]
+        .notes
+        .push("this review ledger entry is official benchmark evidence".to_string());
+
+    let validation = ledger.validate();
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.path == "ledger.entries[0].notes[0]"));
 }
 
 #[test]

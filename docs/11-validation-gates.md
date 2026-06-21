@@ -42,14 +42,27 @@ The current Rust foundation must pass:
 - append previews remain preview-only and do not mutate `EvidenceLedger`,
 - Level2 eligibility reports remain `Level0DesignNote` metadata and do not create Level2 evidence,
 - review ledgers persist separately from `EvidenceLedger`,
+- review ledgers reject forbidden official/formal/performance claim text in top-level and entry notes,
 - proposal ledgers persist separately from `EvidenceLedger`,
+- proposal ledgers reject forbidden official/formal/performance claim text in top-level and entry notes,
 - soak config JSON round-trips,
 - deterministic shard planning,
 - smoke runner tests,
 - resume checkpoint tests,
 - telemetry label validation,
+- telemetry identity validation,
+- telemetry metric classification validation,
+- telemetry counter relationship validation,
 - health report validation,
+- health report identity validation,
+- health report summary/status consistency validation,
 - failure corpus validation,
+- failure corpus reproduction-manifest identity validation,
+- failure corpus artifact-reference identity validation,
+- reproduction bundle identity and duplicate entry validation,
+- shard manifest assigned-case and artifact-reference identity validation,
+- shard summary status/progress consistency validation,
+- resumable shard checkpoint identity and artifact-reference validation,
 - Phase K reports remain `Level0DesignNote`,
 - local replay artifacts created or referenced during soak remain `Level1LocalReplay` at most,
 - manual handoff bundles remain `Level0DesignNote`,
@@ -101,9 +114,10 @@ The Rust tests currently cover:
 
 - `ReplayManifest` deterministic JSON serialization and deserialization.
 - `ReplayResult` deterministic JSON serialization and deserialization.
-- `EvidenceLedger` append, save, load, digest-chain validation, summary counts, and Level2+ actual evidence rejection.
+- `EvidenceLedger` append, save, load, digest-chain validation, summary counts, forbidden claim-language rejection in ledger/entry/record notes, and Level2+ actual evidence rejection.
 - `BenchmarkPackWriter` directory skeleton creation, README warnings, relative manifest paths, score report emission, and non-empty directory rejection.
-- `BenchmarkPackReader` file digest validation and evidence ledger validation.
+- `BenchmarkPackReader` file path uniqueness, file digest validation, evidence ledger validation, all embedded score report validation, pack summary consistency validation, manifest reference/id consistency validation, and pack metadata claim-language validation.
+- `ScoreReport` validation for local score-axis absence, finite `[0.0, 1.0]` score values, and forbidden positive claim-language rejection.
 - Stable artifact digests and byte-identical local pack writes for identical inputs.
 
 These checks are local integrity and reproducibility checks only. They do not establish official benchmark evidence, cross-backend reproduction, or formal evidence.
@@ -196,10 +210,12 @@ The Rust tests currently cover:
 - smoke and regression soak config validation,
 - NightlyLocal explicit opt-in validation,
 - excessive seed, shard, and pack-write limit rejection,
+- campaign id path hygiene validation,
 - soak config JSON round-trips,
 - deterministic shard planning,
 - stable shard ids and case assignment,
 - shard manifest JSON round-trips and relative refs,
+- artifact manifest id hygiene validation,
 - tiny local smoke runs through generation, mutation, and local replay,
 - no external adapter or zk-Harness result production,
 - checkpoint write/read and resume skipping,
@@ -211,12 +227,33 @@ The Rust tests currently cover:
 - health report validation and required warning text,
 - simulated claim-boundary elevation detection,
 - simulated pack validation findings,
+- report bundle artifact digest presence and artifact id/path uniqueness,
+- report bundle aggregate-report artifact identity and path consistency,
+- report bundle identity and config consistency validation,
+- report bundle report-artifact identity and path consistency validation,
+- report bundle report-artifact role cardinality consistency,
+- report bundle shard/report cardinality consistency,
+- report bundle nested shard identity consistency,
+- report bundle shard manifest content consistency,
+- failure corpus summary and duplicate entry-id validation,
 - failure corpus validation and JSON round-trips,
 - reproduction manifest and minimization metadata,
 - Phase K claim-boundary regression tests,
 - source scans for `std::process::Command` and `Command::new`.
 
 These checks do not establish official benchmark evidence, ZK backend performance, external replay evidence, formal evidence, or Level2+ accepted evidence. Local soak telemetry is not official benchmark evidence. Internal timing telemetry is not ZK backend performance. Failure corpus entries are reproduction aids, not accepted evidence.
+
+## Phase P Dashboard Checks
+
+The Rust tests currently cover:
+
+- dashboard model construction from conservative score reports,
+- claim-boundary panel presence,
+- rejection of panel claim boundaries above the model maximum,
+- rejection of populated score axes at local claim boundaries,
+- Markdown rendering with explicit claim-boundary text.
+
+Dashboards are read-only views over existing local reports. They do not create official benchmark evidence, ZK backend performance evidence, or formal evidence.
 
 ## Future Gate Ladder
 

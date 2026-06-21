@@ -5,7 +5,7 @@
 //! bundles to retained failure packs, and aggregates local-only reports.
 //! Campaign outputs are local health artifacts and never benchmark evidence.
 
-use std::path::{Path, PathBuf};
+use std::path::{Component, Path, PathBuf};
 
 use serde::{Deserialize, Serialize};
 
@@ -103,6 +103,12 @@ pub fn validate_soak_campaign_config(config: &SoakCampaignConfig) -> Result<()> 
             "campaign id is empty",
         ));
     }
+    if !campaign_id_is_portable_segment(&config.campaign_id) {
+        return Err(ZkBenchError::soak(
+            "soak.campaign.campaign_id",
+            "campaign id must be one portable path segment",
+        ));
+    }
     if config.approval.approved_by.trim().is_empty()
         || config.approval.approval_statement.trim().is_empty()
     {
@@ -124,6 +130,18 @@ pub fn validate_soak_campaign_config(config: &SoakCampaignConfig) -> Result<()> 
         ));
     }
     Ok(())
+}
+
+fn campaign_id_is_portable_segment(campaign_id: &str) -> bool {
+    let trimmed = campaign_id.trim();
+    if trimmed.is_empty() || trimmed.contains('\\') {
+        return false;
+    }
+    let mut components = Path::new(trimmed).components();
+    matches!(
+        components.next(),
+        Some(Component::Normal(component)) if component == trimmed
+    ) && components.next().is_none()
 }
 
 /// Run every shard of a plan as one approved local campaign.

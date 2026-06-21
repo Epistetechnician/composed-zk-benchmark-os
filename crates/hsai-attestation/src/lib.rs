@@ -30,17 +30,25 @@
 //! [`Anchor`]: hsai_distinct_agent::Anchor
 
 use hsai_agent_case::{AgentCase, EvidenceLane};
-use hsai_claim_envelope::{ClaimEnvelope, LaneId, Maturity, TimeWindow};
+use hsai_claim_envelope::{ClaimEnvelope, LaneId, Maturity, TimeWindow, TrustRoot, VkId};
 use hsai_distinct_agent::Anchor;
+use p256::ecdsa::{signature::Verifier, Signature, VerifyingKey};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 
 /// A managed attestation token. Pure data until a verifier accepts it.
 ///
 /// `[not_before, not_after]` is the token's validity window (inclusive).
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct Token {
+    /// Optional compact managed-attestation JWT carrying the same fields.
+    ///
+    /// The reference [`ManagedTokenVerifier`] ignores this field. Signature
+    /// verifying backends require it and reject tokens whose local fields do not
+    /// match the signed claims.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub signed_jwt: Option<String>,
     /// Which anchor this token attests; must equal the `Anchor`'s id.
     pub anchor_id: String,
     /// Anti-replay nonce.
@@ -64,6 +72,13 @@ pub struct VerifiedAttestation {
     pub not_before: u64,
     /// Inclusive end of the accepted window.
     pub not_after: u64,
+    /// Trust roots relied on by the verifier backend itself.
+    ///
+    /// Anchor trust roots are still emitted separately by [`AttestationLane`].
+    /// Signature-verifying backends use this field to disclose the accepted
+    /// managed verifier key or provider root.
+    #[serde(default, skip_serializing_if = "BTreeSet::is_empty")]
+    pub verifier_trust_roots: BTreeSet<TrustRoot>,
 }
 
 /// Why a token failed verification.
@@ -145,7 +160,248 @@ impl AttestationVerifier for ManagedTokenVerifier {
             anchor_id: token.anchor_id.clone(),
             not_before: token.not_before,
             not_after: token.not_after,
+            verifier_trust_roots: BTreeSet::new(),
         })
+    }
+}
+
+/// One local ES256 verification key for a managed attestation JWT issuer.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct ManagedJwtEs256Key {
+    /// JWT `kid` accepted for this key.
+    pub kid: String,
+    /// P-256 public key x-coordinate, 32 bytes.
+    pub x: Vec<u8>,
+    /// P-256 public key y-coordinate, 32 bytes.
+    pub y: Vec<u8>,
+    /// Verifying-key trust root disclosed when this key accepts a token.
+    pub trust_root: TrustRoot,
+}
+
+impl ManagedJwtEs256Key {
+    /// Construct a local ES256 key and its default verifying-key trust root.
+    pub fn new(kid: impl Into<String>, x: Vec<u8>, y: Vec<u8>) -> Self {
+        let kid = kid.into();
+        let trust_root = TrustRoot::VerifyingKey(VkId(format!("managed-jwt-es256:{kid}")));
+        Self {
+            kid,
+            x,
+            y,
+            trust_root,
+        }
+    }
+}
+
+/// Offline managed-JWT verifier for one issuer and one verification mode.
+///
+/// This backend performs local ES256 signature verification against an in-memory
+/// key set. It does not fetch JWKS, call a managed attestation service, verify
+/// DCAP quotes, use network access, or emit `Proven`.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct ManagedJwtVerifier {
+    /// Required JWT issuer.
+    pub issuer: String,
+    keys_by_kid: BTreeMap<String, ManagedJwtEs256Key>,
+}
+
+impl ManagedJwtVerifier {
+    /// Build a verifier from an expected issuer and local ES256 keys.
+    pub fn new(issuer: impl Into<String>, keys: Vec<ManagedJwtEs256Key>) -> Self {
+        Self {
+            issuer: issuer.into(),
+            keys_by_kid: keys.into_iter().map(|key| (key.kid.clone(), key)).collect(),
+        }
+    }
+
+    fn verify_signature(
+        &self,
+        header: &ManagedJwtHeader,
+        signing_input: &str,
+        signature: &[u8],
+    ) -> Result<&ManagedJwtEs256Key, VerifyError> {
+        if header.alg != "ES256" {
+            return Err(VerifyError::SignatureUnverified);
+        }
+        let key = self
+            .keys_by_kid
+            .get(&header.kid)
+            .ok_or(VerifyError::SignatureUnverified)?;
+        if key.x.len() != 32 || key.y.len() != 32 {
+            return Err(VerifyError::SignatureUnverified);
+        }
+
+        let mut sec1 = Vec::with_capacity(65);
+        sec1.push(0x04);
+        sec1.extend_from_slice(&key.x);
+        sec1.extend_from_slice(&key.y);
+        let verifying_key =
+            VerifyingKey::from_sec1_bytes(&sec1).map_err(|_| VerifyError::SignatureUnverified)?;
+        let signature =
+            Signature::from_slice(signature).map_err(|_| VerifyError::SignatureUnverified)?;
+        verifying_key
+            .verify(signing_input.as_bytes(), &signature)
+            .map_err(|_| VerifyError::SignatureUnverified)?;
+        Ok(key)
+    }
+}
+
+impl AttestationVerifier for ManagedJwtVerifier {
+    fn verify(
+        &self,
+        token: &Token,
+        expected_nonce: u64,
+        expected_report_data: &[u8],
+        expected_measurements: &[u8],
+        anchor_id: &str,
+        now: u64,
+    ) -> Result<VerifiedAttestation, VerifyError> {
+        let signed_jwt = token
+            .signed_jwt
+            .as_deref()
+            .ok_or(VerifyError::SignatureUnverified)?;
+        let parsed = parse_managed_jwt(signed_jwt)?;
+        let key =
+            self.verify_signature(&parsed.header, &parsed.signing_input, &parsed.signature)?;
+        let claims = parsed.claims;
+
+        if claims.iss != self.issuer {
+            return Err(VerifyError::SignatureUnverified);
+        }
+        if now < claims.nbf || now > claims.exp {
+            return Err(VerifyError::Expired);
+        }
+        if claims.anchor_id != anchor_id || token.anchor_id != claims.anchor_id {
+            return Err(VerifyError::AnchorMismatch);
+        }
+        if claims.nonce != expected_nonce || token.nonce != claims.nonce {
+            return Err(VerifyError::NonceMismatch);
+        }
+
+        let report_data =
+            decode_hex(&claims.report_data_hex).map_err(|_| VerifyError::SignatureUnverified)?;
+        if report_data != expected_report_data || token.report_data != report_data {
+            return Err(VerifyError::ReportDataMismatch);
+        }
+
+        let measurements =
+            decode_hex(&claims.measurements_hex).map_err(|_| VerifyError::SignatureUnverified)?;
+        if measurements != expected_measurements || token.measurements != measurements {
+            return Err(VerifyError::MeasurementMismatch);
+        }
+        if token.not_before != claims.nbf || token.not_after != claims.exp {
+            return Err(VerifyError::SignatureUnverified);
+        }
+
+        Ok(VerifiedAttestation {
+            anchor_id: claims.anchor_id,
+            not_before: claims.nbf,
+            not_after: claims.exp,
+            verifier_trust_roots: BTreeSet::from([key.trust_root.clone()]),
+        })
+    }
+}
+
+#[derive(Debug, Deserialize)]
+struct ManagedJwtHeader {
+    alg: String,
+    kid: String,
+}
+
+#[derive(Debug, Deserialize)]
+struct ManagedJwtClaims {
+    iss: String,
+    anchor_id: String,
+    nonce: u64,
+    report_data_hex: String,
+    measurements_hex: String,
+    nbf: u64,
+    exp: u64,
+}
+
+struct ParsedManagedJwt {
+    header: ManagedJwtHeader,
+    claims: ManagedJwtClaims,
+    signing_input: String,
+    signature: Vec<u8>,
+}
+
+fn parse_managed_jwt(jwt: &str) -> Result<ParsedManagedJwt, VerifyError> {
+    let mut parts = jwt.split('.');
+    let header_b64 = parts.next().ok_or(VerifyError::SignatureUnverified)?;
+    let claims_b64 = parts.next().ok_or(VerifyError::SignatureUnverified)?;
+    let signature_b64 = parts.next().ok_or(VerifyError::SignatureUnverified)?;
+    if parts.next().is_some() {
+        return Err(VerifyError::SignatureUnverified);
+    }
+
+    let header = serde_json::from_slice(&base64url_decode(header_b64)?)
+        .map_err(|_| VerifyError::SignatureUnverified)?;
+    let claims = serde_json::from_slice(&base64url_decode(claims_b64)?)
+        .map_err(|_| VerifyError::SignatureUnverified)?;
+    let signature = base64url_decode(signature_b64)?;
+    let signing_input = format!("{header_b64}.{claims_b64}");
+
+    Ok(ParsedManagedJwt {
+        header,
+        claims,
+        signing_input,
+        signature,
+    })
+}
+
+fn base64url_decode(input: &str) -> Result<Vec<u8>, VerifyError> {
+    let mut out = Vec::new();
+    let mut buffer = 0_u32;
+    let mut bits = 0_u8;
+
+    for byte in input.bytes() {
+        if byte == b'=' {
+            return Err(VerifyError::SignatureUnverified);
+        }
+        let value = match byte {
+            b'A'..=b'Z' => byte - b'A',
+            b'a'..=b'z' => byte - b'a' + 26,
+            b'0'..=b'9' => byte - b'0' + 52,
+            b'-' => 62,
+            b'_' => 63,
+            _ => return Err(VerifyError::SignatureUnverified),
+        } as u32;
+        buffer = (buffer << 6) | value;
+        bits += 6;
+        while bits >= 8 {
+            bits -= 8;
+            out.push(((buffer >> bits) & 0xff) as u8);
+        }
+    }
+
+    let mask = if bits == 0 { 0 } else { (1_u32 << bits) - 1 };
+    if buffer & mask != 0 {
+        return Err(VerifyError::SignatureUnverified);
+    }
+    Ok(out)
+}
+
+fn decode_hex(input: &str) -> Result<Vec<u8>, ()> {
+    if input.len() % 2 != 0 {
+        return Err(());
+    }
+    input
+        .as_bytes()
+        .chunks_exact(2)
+        .map(|pair| {
+            let hi = hex_nibble(pair[0])?;
+            let lo = hex_nibble(pair[1])?;
+            Ok((hi << 4) | lo)
+        })
+        .collect()
+}
+
+fn hex_nibble(byte: u8) -> Result<u8, ()> {
+    match byte {
+        b'0'..=b'9' => Ok(byte - b'0'),
+        b'a'..=b'f' => Ok(byte - b'a' + 10),
+        b'A'..=b'F' => Ok(byte - b'A' + 10),
+        _ => Err(()),
     }
 }
 
@@ -229,6 +485,7 @@ impl<V: AttestationVerifier> EvidenceLane for AttestationLane<V> {
             ) {
                 guarantees.insert(input.anchor.validity_assumption(&case.subject));
                 trust_roots.insert(input.anchor.trust_root());
+                trust_roots.extend(verified.verifier_trust_roots);
                 window = window.intersect(&TimeWindow {
                     start: verified.not_before,
                     end: verified.not_after,
@@ -269,8 +526,10 @@ mod tests {
     use hsai_agent_case::{ActionId, MemoryRoot, ModelId, OracleContract, Verdict};
     use hsai_claim_envelope::{admits, conjoin, AcceptancePolicy, SubjectId};
     use hsai_distinct_agent::{distinctness, AnchorBundle, DistinctAgentLane};
+    use p256::ecdsa::{signature::Signer, SigningKey};
     use proptest::collection::{btree_set, vec as pvec};
     use proptest::prelude::*;
+    use serde_json::json;
 
     fn subject(id: &str) -> SubjectId {
         SubjectId(id.to_owned())
@@ -300,6 +559,7 @@ mod tests {
 
     fn good_token() -> Token {
         Token {
+            signed_jwt: None,
             anchor_id: hw_anchor().anchor_id(),
             nonce: 42,
             report_data: report_data_binding(b"agent-pubkey", 42, b"case-hash"),
@@ -317,6 +577,107 @@ mod tests {
             expected_report_data: report_data_binding(b"agent-pubkey", 42, b"case-hash"),
             expected_measurements: vec![1, 2, 3],
         }
+    }
+
+    fn jwt_key(seed: u8, kid: &str) -> (SigningKey, ManagedJwtEs256Key) {
+        let bytes = [seed; 32];
+        let signing_key = SigningKey::from_bytes((&bytes).into()).expect("valid test key");
+        let encoded = signing_key.verifying_key().to_encoded_point(false);
+        let x = encoded.x().expect("uncompressed point has x").to_vec();
+        let y = encoded.y().expect("uncompressed point has y").to_vec();
+        (signing_key, ManagedJwtEs256Key::new(kid, x, y))
+    }
+
+    fn base64url_encode(input: &[u8]) -> String {
+        const ALPHABET: &[u8; 64] =
+            b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+        let mut out = String::new();
+        for chunk in input.chunks(3) {
+            let b0 = chunk[0];
+            let b1 = *chunk.get(1).unwrap_or(&0);
+            let b2 = *chunk.get(2).unwrap_or(&0);
+            let triple = ((b0 as u32) << 16) | ((b1 as u32) << 8) | b2 as u32;
+            out.push(ALPHABET[((triple >> 18) & 0x3f) as usize] as char);
+            out.push(ALPHABET[((triple >> 12) & 0x3f) as usize] as char);
+            if chunk.len() > 1 {
+                out.push(ALPHABET[((triple >> 6) & 0x3f) as usize] as char);
+            }
+            if chunk.len() > 2 {
+                out.push(ALPHABET[(triple & 0x3f) as usize] as char);
+            }
+        }
+        out
+    }
+
+    fn hex_encode(input: &[u8]) -> String {
+        input.iter().map(|byte| format!("{byte:02x}")).collect()
+    }
+
+    struct JwtFixture {
+        signing_key: SigningKey,
+        key: ManagedJwtEs256Key,
+        token: Token,
+        input: AttestationInput,
+    }
+
+    fn signed_jwt(
+        signing_key: &SigningKey,
+        kid: &str,
+        alg: &str,
+        issuer: &str,
+        token: &Token,
+    ) -> String {
+        let header = serde_json::to_vec(&json!({
+            "alg": alg,
+            "kid": kid,
+            "typ": "JWT",
+        }))
+        .expect("header serializes");
+        let claims = serde_json::to_vec(&json!({
+            "iss": issuer,
+            "anchor_id": token.anchor_id,
+            "nonce": token.nonce,
+            "report_data_hex": hex_encode(&token.report_data),
+            "measurements_hex": hex_encode(&token.measurements),
+            "nbf": token.not_before,
+            "exp": token.not_after,
+        }))
+        .expect("claims serialize");
+        let signing_input = format!(
+            "{}.{}",
+            base64url_encode(&header),
+            base64url_encode(&claims)
+        );
+        let signature: Signature = signing_key.sign(signing_input.as_bytes());
+        let signature_bytes = signature.to_bytes();
+        format!(
+            "{}.{}",
+            signing_input,
+            base64url_encode(signature_bytes.as_ref())
+        )
+    }
+
+    fn jwt_fixture(issuer: &str, kid: &str) -> JwtFixture {
+        let (signing_key, key) = jwt_key(7, kid);
+        let mut token = good_token();
+        token.signed_jwt = Some(signed_jwt(&signing_key, kid, "ES256", issuer, &token));
+        let input = AttestationInput {
+            anchor: hw_anchor(),
+            token: token.clone(),
+            expected_nonce: 42,
+            expected_report_data: report_data_binding(b"agent-pubkey", 42, b"case-hash"),
+            expected_measurements: vec![1, 2, 3],
+        };
+        JwtFixture {
+            signing_key,
+            key,
+            token,
+            input,
+        }
+    }
+
+    fn jwt_verifier(issuer: &str, key: ManagedJwtEs256Key) -> ManagedJwtVerifier {
+        ManagedJwtVerifier::new(issuer, vec![key])
     }
 
     fn lane(inputs: Vec<AttestationInput>) -> AttestationLane<ManagedTokenVerifier> {
@@ -491,6 +852,190 @@ mod tests {
         assert!(lane(vec![input]).evaluate(&case).guarantees.is_empty());
     }
 
+    #[test]
+    fn managed_jwt_verifier_closes_distinctness_and_discloses_key_root() {
+        let issuer = "https://managed.example/issuer";
+        let fixture = jwt_fixture(issuer, "kid-1");
+        let case = fixture_case(150);
+        let verifier = jwt_verifier(issuer, fixture.key.clone());
+
+        let env = AttestationLane::new(verifier, vec![fixture.input.clone()]).evaluate(&case);
+
+        assert_eq!(env.maturity, Maturity::Attested);
+        assert!(env.maturity < Maturity::Proven);
+        assert_eq!(
+            env.guarantees,
+            BTreeSet::from([hw_anchor().validity_assumption(&case.subject)])
+        );
+        assert_eq!(
+            env.trust_roots,
+            BTreeSet::from([hw_anchor().trust_root(), fixture.key.trust_root.clone()])
+        );
+
+        let closed = conjoin(
+            DistinctAgentLane::new(AnchorBundle(BTreeSet::from([hw_anchor()]))).evaluate(&case),
+            env,
+        );
+        assert!(closed.assumptions.is_empty());
+        assert_eq!(closed.maturity, Maturity::Attested);
+        assert_eq!(
+            admits(
+                AcceptancePolicy {
+                    require: BTreeSet::from([distinctness(&case.subject)]),
+                    min_maturity: Maturity::Attested,
+                    forbid_roots: BTreeSet::new(),
+                    require_closed: true,
+                    at: 150,
+                },
+                closed,
+            ),
+            Ok(())
+        );
+    }
+
+    #[test]
+    fn managed_jwt_rejects_bad_signature_algorithm_kid_and_issuer() {
+        let issuer = "https://managed.example/issuer";
+        let fixture = jwt_fixture(issuer, "kid-1");
+        let verifier = jwt_verifier(issuer, fixture.key.clone());
+
+        let mut bad_sig = fixture.token.clone();
+        let signed = bad_sig.signed_jwt.as_mut().expect("jwt present");
+        signed.pop();
+        signed.push('A');
+        assert_eq!(
+            verifier.verify(
+                &bad_sig,
+                42,
+                &fixture.input.expected_report_data,
+                &fixture.input.expected_measurements,
+                &hw_anchor().anchor_id(),
+                150,
+            ),
+            Err(VerifyError::SignatureUnverified)
+        );
+
+        let mut bad_alg = good_token();
+        bad_alg.signed_jwt = Some(signed_jwt(
+            &fixture.signing_key,
+            "kid-1",
+            "HS256",
+            issuer,
+            &bad_alg,
+        ));
+        assert_eq!(
+            verifier.verify(
+                &bad_alg,
+                42,
+                &fixture.input.expected_report_data,
+                &fixture.input.expected_measurements,
+                &hw_anchor().anchor_id(),
+                150,
+            ),
+            Err(VerifyError::SignatureUnverified)
+        );
+
+        let mut unknown_kid = good_token();
+        unknown_kid.signed_jwt = Some(signed_jwt(
+            &fixture.signing_key,
+            "kid-other",
+            "ES256",
+            issuer,
+            &unknown_kid,
+        ));
+        assert_eq!(
+            verifier.verify(
+                &unknown_kid,
+                42,
+                &fixture.input.expected_report_data,
+                &fixture.input.expected_measurements,
+                &hw_anchor().anchor_id(),
+                150,
+            ),
+            Err(VerifyError::SignatureUnverified)
+        );
+
+        let wrong_issuer = jwt_verifier("https://managed.example/other", fixture.key);
+        assert_eq!(
+            wrong_issuer.verify(
+                &fixture.token,
+                42,
+                &fixture.input.expected_report_data,
+                &fixture.input.expected_measurements,
+                &hw_anchor().anchor_id(),
+                150,
+            ),
+            Err(VerifyError::SignatureUnverified)
+        );
+    }
+
+    #[test]
+    fn managed_jwt_rejects_stale_and_mapping_mismatches_without_roots() {
+        let issuer = "https://managed.example/issuer";
+        let fixture = jwt_fixture(issuer, "kid-1");
+        let verifier = jwt_verifier(issuer, fixture.key.clone());
+
+        assert_eq!(
+            verifier.verify(
+                &fixture.token,
+                42,
+                &fixture.input.expected_report_data,
+                &fixture.input.expected_measurements,
+                &hw_anchor().anchor_id(),
+                400,
+            ),
+            Err(VerifyError::Expired)
+        );
+
+        let mut wrong_report = fixture.input.clone();
+        wrong_report.expected_report_data = report_data_binding(b"other", 42, b"case-hash");
+        assert_eq!(
+            verifier.verify(
+                &wrong_report.token,
+                wrong_report.expected_nonce,
+                &wrong_report.expected_report_data,
+                &wrong_report.expected_measurements,
+                &wrong_report.anchor.anchor_id(),
+                150,
+            ),
+            Err(VerifyError::ReportDataMismatch)
+        );
+
+        let mut wrong_measurement = fixture.input.clone();
+        wrong_measurement.expected_measurements = vec![9, 9, 9];
+        assert_eq!(
+            verifier.verify(
+                &wrong_measurement.token,
+                wrong_measurement.expected_nonce,
+                &wrong_measurement.expected_report_data,
+                &wrong_measurement.expected_measurements,
+                &wrong_measurement.anchor.anchor_id(),
+                150,
+            ),
+            Err(VerifyError::MeasurementMismatch)
+        );
+
+        let mut wrong_anchor = fixture.input.clone();
+        wrong_anchor.token.anchor_id = "hw:other:anchor".to_owned();
+        assert_eq!(
+            verifier.verify(
+                &wrong_anchor.token,
+                wrong_anchor.expected_nonce,
+                &wrong_anchor.expected_report_data,
+                &wrong_anchor.expected_measurements,
+                &wrong_anchor.anchor.anchor_id(),
+                150,
+            ),
+            Err(VerifyError::AnchorMismatch)
+        );
+
+        let rejected_env =
+            AttestationLane::new(verifier, vec![wrong_measurement]).evaluate(&fixture_case(150));
+        assert!(rejected_env.guarantees.is_empty());
+        assert!(rejected_env.trust_roots.is_empty());
+        assert_eq!(rejected_env.maturity, Maturity::Stub);
+    }
+
     // --- ATI-1..5 invariants ---
 
     fn anchor_strategy() -> impl Strategy<Value = Anchor> {
@@ -535,6 +1080,7 @@ mod tests {
             AttestationInput {
                 anchor,
                 token: Token {
+                    signed_jwt: None,
                     anchor_id,
                     nonce: token_nonce,
                     report_data,
@@ -656,6 +1202,7 @@ mod tests {
                 .map(|anchor| AttestationInput {
                     anchor: anchor.clone(),
                     token: Token {
+                        signed_jwt: None,
                         anchor_id: anchor.anchor_id(),
                         nonce: 1,
                         report_data: Vec::new(),

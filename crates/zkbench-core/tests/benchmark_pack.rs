@@ -1,9 +1,12 @@
 use tempfile::tempdir;
 use zkbench_core::{
     apply_mutation_pass, build_local_replay_manifest_for_instance,
-    build_local_replay_manifest_for_mutation, generate_instance, run_local_replay, BadCountersPass,
-    BenchmarkPackFileRole, BenchmarkPackReader, BenchmarkPackWriter, ClaimBoundary, EvidenceLedger,
-    GeneratorConfig, InstanceParams,
+    build_local_replay_manifest_for_mutation, compute_artifact_digest_bytes, generate_instance,
+    run_local_replay, score_report_from_local_mutation_evidence, ArtifactKind, ArtifactRole,
+    BadCountersPass, BenchmarkPackFileRole, BenchmarkPackReader, BenchmarkPackWriter,
+    ClaimBoundary, EvidenceAppendPolicy, EvidenceClass, EvidenceLedger, EvidenceRecord,
+    GeneratorConfig, InstanceParams, LocalMutationEvidenceSummary, PerformanceScore,
+    ProvenanceRecord, ScoreConfidence,
 };
 
 #[test]
@@ -132,4 +135,322 @@ fn benchmark_pack_validation_detects_file_tampering() {
         .errors
         .iter()
         .any(|error| error.path == "README.md" && error.message.contains("digest mismatch")));
+}
+
+#[test]
+fn benchmark_pack_validation_rejects_invalid_nested_ledger() {
+    let mut ledger = EvidenceLedger::new();
+    let record = EvidenceRecord {
+        evidence_class: EvidenceClass::ReproducibleBenchmarkArtifact,
+        claim_boundary: ClaimBoundary::Level2ReproducibleBenchmarkArtifact,
+        provenance: ProvenanceRecord {
+            source: "future-metadata-placeholder".to_string(),
+            captured_at: None,
+            command: None,
+            notes: vec!["future metadata only; not accepted pack evidence".to_string()],
+        },
+        artifact_digest: None,
+        notes: Vec::new(),
+        backend_target: None,
+    };
+    ledger
+        .append_with_policy(record, EvidenceAppendPolicy::AllowFutureMetadata)
+        .expect("future metadata policy can record candidate metadata");
+
+    let dir = tempdir().expect("tempdir should be available");
+    BenchmarkPackWriter::new("phase_f_invalid_nested_ledger")
+        .with_evidence_ledger(ledger)
+        .write_to(dir.path())
+        .expect("pack with nested invalid ledger should write for validation");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("pack should load");
+    let validation = reader.validate();
+
+    assert!(!validation.valid);
+    assert!(validation.errors.iter().any(|error| {
+        error.path == "evidence/ledger.json#0"
+            && error.message.contains("exceeds Level1LocalReplay")
+    }));
+}
+
+#[test]
+fn benchmark_pack_writer_rejects_invalid_score_report() {
+    let dir = tempdir().expect("tempdir should be available");
+    let mut report = score_report_from_local_mutation_evidence(LocalMutationEvidenceSummary {
+        local_accepted_traces: 1,
+        local_rejected_traces: 1,
+        mutation_variants_generated: 1,
+        outcome_changes_observed: 0,
+        unsound_acceptance_candidates: 0,
+    });
+    report.performance = Some(PerformanceScore {
+        normalized_score: Some(1.0),
+        confidence: ScoreConfidence::Low,
+        missing_metrics: Vec::new(),
+    });
+
+    let error = BenchmarkPackWriter::new("phase_f_invalid_score_report")
+        .with_score_report(report)
+        .write_to(dir.path())
+        .expect_err("invalid score report should be rejected");
+
+    assert!(error.to_string().contains("score report validation failed"));
+}
+
+#[test]
+fn benchmark_pack_reader_rejects_digest_consistent_invalid_score_report() {
+    let dir = tempdir().expect("tempdir should be available");
+    BenchmarkPackWriter::new("phase_f_digest_consistent_invalid_score_report")
+        .write_to(dir.path())
+        .expect("valid local pack should write");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("pack should load");
+    let mut manifest = reader.manifest().clone();
+    let mut report = reader
+        .load_score_report()
+        .expect("score report should deserialize")
+        .expect("score report should exist");
+    report.performance = Some(PerformanceScore {
+        normalized_score: Some(1.0),
+        confidence: ScoreConfidence::Low,
+        missing_metrics: Vec::new(),
+    });
+    let score_report_bytes =
+        serde_json::to_vec_pretty(&report).expect("invalid score report should serialize");
+    std::fs::write(
+        dir.path().join("reports/score_report.json"),
+        &score_report_bytes,
+    )
+    .expect("test should be able to rewrite score report");
+
+    let score_report_file = manifest
+        .files
+        .iter_mut()
+        .find(|file| file.role == BenchmarkPackFileRole::ScoreReport)
+        .expect("pack should include score report file entry");
+    score_report_file.digest = compute_artifact_digest_bytes(
+        &score_report_bytes,
+        Some(ArtifactKind::ScoreReport),
+        Some(ArtifactRole::Report),
+    );
+    let manifest_bytes =
+        serde_json::to_vec_pretty(&manifest).expect("pack manifest should serialize");
+    std::fs::write(dir.path().join("pack.json"), manifest_bytes)
+        .expect("test should be able to rewrite pack manifest");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("tampered pack should load");
+    let validation = reader.validate();
+
+    assert!(!validation.valid);
+    assert!(validation.errors.iter().any(|error| {
+        error.path == "reports/score_report.json#performance"
+            && error.message.contains("leave score axes unpopulated")
+    }));
+}
+
+#[test]
+fn benchmark_pack_validation_rejects_forbidden_claim_text_in_manifest_notes() {
+    let dir = tempdir().expect("tempdir should be available");
+    BenchmarkPackWriter::new("phase_f_forbidden_manifest_note")
+        .write_to(dir.path())
+        .expect("valid local pack should write");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("pack should load");
+    let mut manifest = reader.manifest().clone();
+    manifest
+        .notes
+        .push("this is official benchmark evidence".to_string());
+    manifest
+        .files
+        .iter_mut()
+        .find(|file| file.role == BenchmarkPackFileRole::ScoreReport)
+        .expect("pack should include score report file entry")
+        .notes
+        .push("contains official benchmark evidence".to_string());
+    let manifest_bytes =
+        serde_json::to_vec_pretty(&manifest).expect("pack manifest should serialize");
+    std::fs::write(dir.path().join("pack.json"), manifest_bytes)
+        .expect("test should be able to rewrite pack manifest");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("tampered pack should load");
+    let validation = reader.validate();
+
+    assert!(!validation.valid);
+    assert!(validation.errors.iter().any(|error| {
+        error.path.starts_with("pack.json#notes[")
+            && error
+                .message
+                .contains("pack metadata contains forbidden claim language")
+    }));
+    assert!(validation.errors.iter().any(|error| {
+        error.path == "reports/score_report.json#notes[0]"
+            && error
+                .message
+                .contains("pack metadata contains forbidden claim language")
+    }));
+}
+
+#[test]
+fn benchmark_pack_validation_rejects_stale_manifest_summary() {
+    let dir = tempdir().expect("tempdir should be available");
+    BenchmarkPackWriter::new("phase_f_stale_manifest_summary")
+        .write_to(dir.path())
+        .expect("valid local pack should write");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("pack should load");
+    let mut manifest = reader.manifest().clone();
+    manifest.summary.generated_instance_count = 1;
+    manifest.summary.score_report_count = 0;
+    manifest.summary.evidence_record_count = 10;
+    manifest.summary.local_only = false;
+    let manifest_bytes =
+        serde_json::to_vec_pretty(&manifest).expect("pack manifest should serialize");
+    std::fs::write(dir.path().join("pack.json"), manifest_bytes)
+        .expect("test should be able to rewrite pack manifest");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("tampered pack should load");
+    let validation = reader.validate();
+
+    assert!(!validation.valid);
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.path == "pack.json#summary.generated_instance_count"));
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.path == "pack.json#summary.score_report_count"));
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.path == "pack.json#summary.evidence_record_count"));
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.path == "pack.json#summary.local_only"));
+}
+
+#[test]
+fn benchmark_pack_validation_checks_every_score_report_file() {
+    let dir = tempdir().expect("tempdir should be available");
+    BenchmarkPackWriter::new("phase_f_extra_invalid_score_report")
+        .write_to(dir.path())
+        .expect("valid local pack should write");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("pack should load");
+    let mut manifest = reader.manifest().clone();
+    let mut report = reader
+        .load_score_report()
+        .expect("score report should deserialize")
+        .expect("score report should exist");
+    report.performance = Some(PerformanceScore {
+        normalized_score: Some(1.0),
+        confidence: ScoreConfidence::Low,
+        missing_metrics: Vec::new(),
+    });
+    let extra_report_bytes =
+        serde_json::to_vec_pretty(&report).expect("extra score report should serialize");
+    let extra_report_path = "reports/score_report_extra.json";
+    std::fs::write(dir.path().join(extra_report_path), &extra_report_bytes)
+        .expect("test should be able to write extra score report");
+    let score_report_file = manifest
+        .files
+        .iter()
+        .find(|file| file.role == BenchmarkPackFileRole::ScoreReport)
+        .expect("pack should include score report file entry");
+    let mut extra_file = score_report_file.clone();
+    extra_file.relative_path = extra_report_path.to_string();
+    extra_file.digest = compute_artifact_digest_bytes(
+        &extra_report_bytes,
+        Some(ArtifactKind::ScoreReport),
+        Some(ArtifactRole::Report),
+    );
+    manifest.files.push(extra_file);
+    manifest.summary.score_report_count = 2;
+    let manifest_bytes =
+        serde_json::to_vec_pretty(&manifest).expect("pack manifest should serialize");
+    std::fs::write(dir.path().join("pack.json"), manifest_bytes)
+        .expect("test should be able to rewrite pack manifest");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("tampered pack should load");
+    let validation = reader.validate();
+
+    assert!(!validation.valid);
+    assert!(validation.errors.iter().any(|error| {
+        error.path == "reports/score_report_extra.json#performance"
+            && error.message.contains("leave score axes unpopulated")
+    }));
+}
+
+#[test]
+fn benchmark_pack_validation_rejects_duplicate_file_entries() {
+    let dir = tempdir().expect("tempdir should be available");
+    BenchmarkPackWriter::new("phase_f_duplicate_file_entry")
+        .write_to(dir.path())
+        .expect("valid local pack should write");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("pack should load");
+    let mut manifest = reader.manifest().clone();
+    let duplicate_file = manifest
+        .files
+        .iter()
+        .find(|file| file.role == BenchmarkPackFileRole::ScoreReport)
+        .expect("pack should include score report file entry")
+        .clone();
+    manifest.files.push(duplicate_file);
+    manifest.summary.score_report_count = 2;
+    let manifest_bytes =
+        serde_json::to_vec_pretty(&manifest).expect("pack manifest should serialize");
+    std::fs::write(dir.path().join("pack.json"), manifest_bytes)
+        .expect("test should be able to rewrite pack manifest");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("tampered pack should load");
+    let validation = reader.validate();
+
+    assert!(!validation.valid);
+    assert!(validation.errors.iter().any(|error| {
+        error.path == "reports/score_report.json"
+            && error
+                .message
+                .contains("duplicate benchmark pack file entry")
+    }));
+}
+
+#[test]
+fn benchmark_pack_validation_rejects_stale_manifest_refs_and_ids() {
+    let dir = tempdir().expect("tempdir should be available");
+    BenchmarkPackWriter::new("phase_f_stale_manifest_refs")
+        .write_to(dir.path())
+        .expect("valid local pack should write");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("pack should load");
+    let mut manifest = reader.manifest().clone();
+    manifest.evidence_ledger_ref = Some("evidence/other-ledger.json".to_string());
+    manifest
+        .generated_instance_ids
+        .push("fake-instance".to_string());
+    manifest
+        .replay_result_ids
+        .push("fake-replay-result".to_string());
+    let manifest_bytes =
+        serde_json::to_vec_pretty(&manifest).expect("pack manifest should serialize");
+    std::fs::write(dir.path().join("pack.json"), manifest_bytes)
+        .expect("test should be able to rewrite pack manifest");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("tampered pack should load");
+    let validation = reader.validate();
+
+    assert!(!validation.valid);
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.path == "pack.json#evidence_ledger_ref"));
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.path == "pack.json#generated_instance_ids"));
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.path == "pack.json#replay_result_ids"));
 }

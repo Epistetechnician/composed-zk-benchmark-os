@@ -194,15 +194,15 @@ Exit criteria: small local-only runs produce deterministic shard plans, resumabl
 
 ## Phase L: Long Local Soak Execution And Sampled Reports
 
-Status: future.
+Status: complete for bounded local Phase L. See `docs/62-phase-l-local-soak-acceptance-notes.md`.
 
 Goal: Run longer local soak jobs and publish sampled local-only reports after explicit user approval.
 
-Deliverables: user-approved long-running local jobs, shard output outside the repo or under an ignored artifact directory, smoke/focused/regression/nightly-local profiles, sampled pack retention, failure-pack retention, aggregate telemetry reports, regression corpus curation, and local-only report publishing under strict claim boundaries.
+Implemented: user-approved bounded local soak campaign, shard output under an ignored artifact directory, smoke/focused/regression/nightly-local profiles, sampled pack retention, aggregate telemetry reports, targetless mutation applicability telemetry, and local-only report publishing under strict claim boundaries.
 
 Dependencies: Phase K.
 
-Validation gate: explicit approval record, ignored or external artifact root, aggregate report validation, failure corpus validation, no external execution, no official benchmark evidence, and no ZK backend performance claims.
+Validation gate: explicit approval record, ignored artifact root, aggregate report validation, failure corpus validation, no external execution, no official benchmark evidence, and no ZK backend performance claims. The accepted campaign `phase_l_qwable_local_soak_2026_06_17_extended_256` completed 768 local cases with zero failures, zero failure-corpus entries, a valid aggregate report bundle, and `Level0DesignNote` claim boundary.
 
 Anti-goals: live zk-Harness execution, external result import, official benchmark evidence, ZK backend performance claims, dashboards, Level2+ evidence creation.
 
@@ -210,58 +210,521 @@ Exit criteria: long local soak outputs are reproducible, bounded, claim-safe, an
 
 ## Phase M: gnark Recursion Adapter
 
-Status: future.
+Status: complete for inert local contract implementation, inert adapter-preparation metadata, and manual handoff mapping. See `docs/63-phase-m-recursion-envelope-stress-spec.md`.
 
 Goal: Add recursion-envelope stress lane after local soak telemetry exists.
 
-Deliverables: recursion adapter and evidence mapping.
+Implemented: recursion-envelope stress spec, input artifact contract, candidate metric labels, inert Rust contract types, serialization helpers, validation rules, fixture-backed negative tests, source-scan guardrails, inert adapter-preparation metadata, manual handoff mapping, and claim-boundary restrictions.
+
+Future deliverables after explicit executable-adapter approval: actual recursion adapter execution implementation and result import review.
 
 Dependencies: Phase L and future explicit adapter approval.
 
-Validation gate: scoped recursion replay.
+Validation gate: docs and claim-boundary scans, local contract validation tests, serialization round-trips, and source scans that keep executable adapter work absent. Scoped recursion replay only after a future phase explicitly authorizes executable adapter work.
 
 Anti-goals: claiming recursion proof as semantic proof.
 
-Exit criteria: recursion outcomes are evidence-capped.
+Exit criteria for inert local contract implementation: Phase M spec exists, local contract types validate claim-boundary non-escalation, recursion metric labels remain metadata only, adapter-preparation metadata remains `Level0DesignNote`, manual handoff mapping emits no result, and live gnark execution remains blocked.
+
+Future exit criteria after explicit implementation approval: recursion outcomes are evidence-capped.
 
 ## Phase N: Narrow zkML Adapter
 
+Status: complete for inert manifest-contract implementation. See `docs/64-phase-n-narrow-zkml-adapter-spec.md`.
+
 Goal: Add mixed control-flow and zkML workload metrics.
 
-Deliverables: manifest shape and narrow adapter.
+Implemented: narrow zkML/control-flow adapter spec, input contract, candidate
+metric labels, inert `ZkMlWorkloadManifest` data model, local model artifact
+metadata references, digest-root validation, JSON serialization helpers,
+validation rules, negative tests, and claim-boundary restrictions.
+
+Future deliverables after explicit approval: manual handoff metadata.
+Executable zkML adapter work requires a separate explicit phase.
 
 Dependencies: Phase L and future explicit adapter approval.
 
-Validation gate: manifest validation and one workload replay.
+Validation gate: local contract validation tests, serialization round-trips,
+source scans that keep executable adapter work absent, and full workspace
+validation.
 
 Anti-goals: becoming a zkML benchmark project.
 
-Exit criteria: zkML metrics are normalized and claim-capped.
+Exit criteria for inert implementation: Phase N spec exists, manifest metrics
+are metadata only, executable zkML metrics remain unpopulated, and all outputs
+remain `Level0DesignNote`. Future exit criteria after executable-adapter
+approval: zkML metrics are normalized and claim-capped.
 
 ## Phase O: Reproducible Benchmark Packs
 
+Status: complete for inert local reproducible-pack readiness contract,
+construction-helper implementation, and adjacent output plumbing. See
+`docs/65-phase-o-local-reproducible-pack-readiness-spec.md`.
+
 Goal: Produce deterministic benchmark packs.
 
-Deliverables: pack manifests, artifact hashes, replay commands.
+Implemented: local reproducible-pack readiness spec, inert `PackReadinessReport`
+data model, input refs, inert replay-command metadata, readiness checks,
+report digest helper, JSON serialization helpers,
+`build_pack_readiness_report_from_reader`, validation over existing
+`BenchmarkPackReader` / `BenchmarkPackValidation` metadata,
+`write_pack_readiness_outputs_for_pack`, adjacent `readiness/` output files
+that stay outside `pack.json`, validation rules, future Level2 promotion
+preconditions, required negative tests, non-goals, and claim-boundary
+restrictions.
+
+Future deliverables after explicit implementation approval: none inside Phase O.
+True Level2 promotion requires a separate future reviewed evidence phase.
 
 Dependencies: Phase L and future reviewed external replay.
 
-Validation gate: `verify:full`.
+Validation gate: local pack-readiness validation tests, serialization
+round-trips, source scans that keep replay commands inert, and full workspace
+validation.
 
 Anti-goals: broad leaderboard claims without reproduction.
 
-Exit criteria: Level 2 evidence for scoped packs.
+Exit criteria for inert implementation: Phase O spec exists, readiness reports
+remain `Level0DesignNote`, replay command metadata remains inert,
+deterministic local packs can emit adjacent readiness metadata without mutating
+`pack.json`, and readiness validation rejects Level2+ evidence, official
+benchmark evidence, external replay, and ZK backend performance claims. Future
+Level2 exit criteria require a separate reviewed evidence-promotion phase.
 
 ## Phase P: Dashboard/Reporting
 
+Status: complete for read-only reporting boundary over Score Reports and
+pack-readiness metadata. See
+`docs/67-phase-p-read-only-reporting-boundary-notes.md`.
+
 Goal: Visualize Score Reports after the evidence model works.
 
-Deliverables: report renderer or dashboard.
+Implemented: `DashboardPanelKind::PackReadiness`,
+`build_dashboard_model_from_pack_readiness`, Markdown rendering through the
+existing renderer, and validation that pack-readiness panels remain
+`Level0DesignNote`.
+
+Future deliverables after explicit approval: richer report bundles or a UI
+dashboard. Any UI dashboard must remain read-only and preserve claim-boundary
+labels.
 
 Dependencies: Phase L and reproducible benchmark packs.
 
-Validation gate: report validation and UI tests if applicable.
+Validation gate: report validation, Phase P dashboard/reporting tests, and
+claim-boundary tests.
 
-Anti-goals: dashboard-first development.
+Anti-goals: dashboard-first development, score-axis population from local-only
+evidence, official benchmark evidence claims, ZK backend performance claims,
+or Level2+ evidence creation.
 
-Exit criteria: dashboard shows axes, confidence, and claim boundaries.
+Exit criteria for read-only reporting boundary: reports show axes, confidence,
+pack-readiness status, and claim boundaries without creating or promoting
+evidence. Future UI exit criteria require a separate explicit phase.
+
+## Phase Q: Report Bundles
+
+Status: complete for docs-first boundary, inert in-memory metadata
+implementation, adjacent output-plumbing boundary, and adjacent local output
+implementation, and local ergonomics hardening. See
+`docs/68-phase-q-report-bundle-boundary-spec.md`,
+`docs/69-phase-q-report-bundle-implementation-notes.md`, and
+`docs/70-phase-q-report-bundle-output-plumbing-spec.md`, and
+`docs/71-phase-q-report-bundle-output-implementation-notes.md`, and
+`docs/72-phase-q-report-bundle-ergonomics-hardening-notes.md`.
+
+Goal: define a richer read-only report-bundle contract before any implementation
+or UI work broadens Phase P reporting.
+
+Implemented: Phase Q-A boundary spec covering allowed inputs, bundle contents,
+required validation rules, claim labels, non-goals, and future implementation
+exit criteria. Phase Q-B adds `ReportBundleManifest`,
+`ReportBundleInputRef`, `ReportBundleRenderedReport`,
+`ReportBundlePackReadinessInput`, deterministic manifest digesting, JSON
+serialization helpers, `build_report_bundle_manifest_from_reports`, and
+`validate_report_bundle_manifest`. Phase Q-C defines the docs-first boundary for
+future adjacent local output plumbing around Q-B metadata. Phase Q-D adds
+`write_report_bundle_outputs`, `read_report_bundle_outputs`,
+`ReportBundleRenderedMarkdown`, `ReportBundleOutput`, materialized manifest and
+Markdown digest checks, overwrite gating, extra-file rejection, and
+source-immutability tests. Phase Q-E adds
+`build_report_bundle_rendered_markdown_payloads`, source-drift rejection,
+duplicate rendered output path validation, unsafe-root coverage, unexpected
+overwrite-file coverage, and symlink rejection coverage.
+
+Dependencies: Phase O pack-readiness metadata and Phase P read-only reporting.
+
+Validation gate: documentation navigation checks, claim-boundary text checks,
+focused Phase Q report-bundle tests, digest validation, portable source refs,
+failed-readiness visibility, no external execution hooks, and no accepted
+Evidence Ledger mutation. Output-plumbing implementation coverage must include
+materialized-file digest tests and source-immutability tests. Ergonomics
+hardening coverage must include source-drift rejection and output-root
+hardening.
+
+Anti-goals: UI dashboard, replay-command execution, external replay, official
+benchmark evidence claims, ZK backend performance claims, Level2+ evidence
+creation, accepted Evidence Ledger mutation, score-axis population from
+local-only evidence, broad leaderboard claims, generated benchmark artifacts, or
+package-script/runtime additions.
+
+Exit criteria for inert in-memory metadata: Phase Q-A spec exists, Phase Q-B
+metadata validates, rendered Markdown digests are deterministic, failed
+pack-readiness remains visible, output stays `Level0DesignNote`, and
+`AGENTS.md` forbids report-bundle materialization beyond the current in-memory
+surface. Exit criteria for output-plumbing boundary: Phase Q-C spec exists,
+navigation points to it, and `AGENTS.md` authorizes only Markdown planning for
+adjacent local output plumbing. Exit criteria for adjacent local output
+implementation: writer and reader materialize only declared local report-bundle
+files, verify manifest and Markdown digests, reject extra rendered files,
+preserve source metadata, keep output `Level0DesignNote`, and leave UI, CLI,
+external replay, official evidence, ZK backend performance claims, and Level2+
+promotion unauthorized. Exit criteria for ergonomics hardening: rendered
+Markdown payloads can be derived from known source reports without caller-side
+dashboard-id reconstruction, source drift fails closed, duplicate rendered paths
+are rejected, unsafe roots and symlinks are rejected, and report bundles remain
+local integrity metadata only.
+
+## Phase R: Local Audit Index
+
+Status: complete for docs-first boundary, inert in-memory implementation,
+docs-first output-plumbing boundary, and adjacent local output plumbing.
+See `docs/73-phase-r-local-audit-index-boundary-spec.md` and
+`docs/74-phase-r-local-audit-index-implementation-notes.md`, plus
+`docs/75-phase-r-audit-index-output-plumbing-spec.md` and
+`docs/76-phase-r-audit-index-output-implementation-notes.md`.
+
+Goal: define a read-only local audit-index contract over existing local metadata
+outputs before any implementation broadens beyond report-bundle ergonomics.
+
+Implemented: Phase R boundary spec, `LocalAuditIndexManifest` metadata, source
+input refs, deterministic manifest digesting, JSON helpers, validation rules,
+construction from existing `ReportBundleManifest` metadata, a docs-first
+boundary for adjacent local audit-index output plumbing, and writer/reader APIs
+for exactly `audit-index/audit-index-manifest.json` and
+`audit-index/digests/audit-index-manifest.sha256`.
+
+Dependencies: Phase O pack-readiness metadata, Phase P read-only reporting, and
+Phase Q report-bundle metadata/output plumbing.
+
+Validation gate: documentation navigation checks, claim-boundary text checks,
+portable source refs, digest validation, failed-readiness visibility, local-only
+warning visibility, no source pack/report/report-bundle mutation, output-root
+safety, stale-digest rejection, overwrite-drift rejection, unexpected-file and
+symlink rejection, no external execution hooks, and no accepted Evidence Ledger
+mutation.
+
+Anti-goals: UI dashboard, command-line tools, replay-command execution, external
+replay, official benchmark evidence claims, ZK backend performance claims,
+Level2+ evidence creation, accepted Evidence Ledger mutation, score-axis
+population from local-only evidence, broad leaderboard claims, generated
+benchmark artifacts, or package-script/runtime additions.
+
+Exit criteria: Phase R specs exist, navigation points to the implementation and
+output-plumbing notes, `AGENTS.md` authorizes the bounded local audit-index
+output implementation, focused tests cover validation, output safety, and
+source-scan boundaries, and any broader audit-index work remains blocked until a
+separate explicit implementation phase.
+
+## Managed-Attestation Track: Managed JWT Signature Verification
+
+Status: complete for offline ES256 managed-JWT verification. See
+`docs/66-managed-signature-verification-boundary-spec.md` and
+`docs/77-managed-jwt-signature-verification-notes.md`.
+
+Goal: implement the first managed-signature verifier behind
+`hsai-attestation::AttestationVerifier` without adding live service calls,
+network access, DCAP verification, backend execution, benchmark outputs, or
+claims above `Attested`.
+
+Implemented: `Token::signed_jwt`, `VerifiedAttestation::verifier_trust_roots`,
+`ManagedJwtEs256Key`, `ManagedJwtVerifier`, compact-JWT parsing, offline ES256
+signature verification against caller-provided local P-256 public keys, issuer,
+algorithm, key-id, freshness, nonce, report-data, measurement, and anchor
+mapping checks, plus verifier trust-root disclosure through `AttestationLane`.
+
+Dependencies: HSAI attestation lane, managed-signature boundary spec, and Phase
+4 anchor-registry claim boundaries.
+
+Validation gate: focused `hsai-attestation` tests, adversarial JWT tests, trust
+root visibility tests, no network/JWKS/DCAP behavior, and root Cargo gates.
+
+Anti-goals: JWKS fetching, Azure/Intel/Phala live calls, local Intel DCAP quote
+verification, PCCS or collateral handling, TLS or attested-TLS channel binding,
+external rails, backend execution, benchmark outputs, Level2+ evidence, global
+software-agent uniqueness claims, semantic correctness claims, or changes to
+Phase 4 registry semantics.
+
+Exit criteria: valid local ES256 JWTs close the existing anchor-validity
+assumption at `Attested` maturity; invalid signature, algorithm, key id, issuer,
+freshness, report-data, measurement, and anchor mappings fail closed; verifier
+trust roots are visible; rejected tokens emit no guarantees or roots; docs state
+all non-claims.
+
+## Managed-Attestation Track: Phala Live Managed-Verifier Boundary
+
+Status: complete for docs-first boundary only. See
+`docs/78-phala-live-managed-verifier-boundary-spec.md`.
+
+Goal: define the exact Phala/dstack live managed-verifier boundary before any
+runtime implementation, network-enabled provider client, live API call, local
+DCAP path, or Phase 4 registry change exists.
+
+Implemented: provider and mode selection (`Phala/dstack`,
+`live-managed-verifier`), source attribution for Phala/dstack docs and repos,
+future input and response contracts, verification order, trust-root disclosure,
+replay/freshness rules, future negative-test requirements, forbidden runtime
+effects, and future code-phase exit criteria.
+
+Dependencies: managed-signature boundary spec, offline managed-JWT verification,
+Phala/dstack fixture and captured-artifact validation, accepted HSAI-owned
+Phala/dstack artifact fixture, and Phase 4 anchor-registry claim boundaries.
+
+Validation gate: documentation navigation checks, source-index update,
+claim-boundary text checks, no Rust source changes, no Cargo metadata changes,
+no package runtime files, no fixture changes, no generated artifacts, no network
+code, and no accepted Evidence Ledger mutation.
+
+Anti-goals: Rust implementation, live Phala API calls, Phala deployment
+orchestration, local Intel DCAP quote verification, PCCS or collateral handling,
+generic JWKS/JWT fetch implementation, Azure/Intel provider work, TLS or
+attested-TLS channel binding, secrets, backend execution, benchmark outputs,
+Level2+ evidence, global uniqueness claims, or claims above `Attested`.
+
+Exit criteria: the boundary names exactly one provider and one verification
+mode; README, AGENTS, task list, and source index point to it; and future
+implementation remains blocked until a separate explicit code phase.
+
+## Managed-Attestation Track: Phala Hermetic Live-Verifier Implementation Spec
+
+Status: complete for code-phase authorization spec only. See
+`docs/79-phala-hermetic-live-verifier-implementation-spec.md`.
+
+Goal: authorize the smallest future hermetic Phala/dstack verifier code surface
+before implementation: provider client trait, offline test double, normalized
+response type, failure taxonomy, trust-root mapping, replay/freshness checks,
+and `Attested`-only envelope mapping.
+
+Implemented: future code state slice, provider boundary, future public surface,
+request contract, response normalization contract, failure taxonomy,
+verification order, replay/freshness rules, trust-root mapping, hermetic test
+requirements, operator-only live-path constraints, forbidden effects, and future
+implementation exit criteria.
+
+Dependencies: Phase 78 Phala live managed-verifier boundary, offline
+managed-JWT verification, Phala/dstack fixture and captured-artifact validation,
+accepted HSAI-owned Phala/dstack artifact fixture, and Phase 4 anchor-registry
+claim boundaries.
+
+Validation gate: documentation navigation checks, claim-boundary text checks, no
+Rust source changes, no Cargo metadata changes, no package runtime files, no
+fixture changes, no generated artifacts, no network code, and no accepted
+Evidence Ledger mutation.
+
+Anti-goals: Rust implementation in this spec slice, live Phala API calls, normal
+tests requiring network or credentials, Phala deployment orchestration, local
+Intel DCAP quote verification, PCCS or collateral handling, generic JWKS/JWT
+fetch implementation, Azure/Intel provider work, TLS or attested-TLS channel
+binding, secrets, backend execution, benchmark outputs, Level2+ evidence, global
+uniqueness claims, or claims above `Attested`.
+
+Exit criteria: README, AGENTS, and task list point to this spec; the future code
+surface is bounded to hermetic provider-client abstraction and deterministic
+test doubles; and implementation remains blocked until a separate explicit
+implementation phase.
+
+## Managed-Attestation Track: Phala Hermetic Live-Verifier Implementation
+
+Status: complete for hermetic local implementation only. See
+`docs/80-phala-hermetic-live-verifier-implementation-notes.md`.
+
+Goal: implement the Phase 79 local interface surface in
+`hsai-attestation-phala` without live calls, network access, credentials, local
+DCAP, Cargo dependency changes, benchmark output, or claims above `Attested`.
+
+Implemented: `PhalaManagedVerifierClient`,
+`InMemoryPhalaManagedVerifierClient`, `PhalaManagedVerifierRequest`,
+`PhalaManagedVerifierResponse`, `PhalaManagedVerifierVerdict`,
+`PhalaManagedVerifierError`, `PhalaReplayGuard`, `PhalaLiveManagedVerifier`,
+normalized response validation, replay/freshness checks, trust-root prefix
+validation, local expectation trust-root mapping, `AttestationVerifier`
+integration, and hermetic tests over accepted and rejected fake responses.
+
+Dependencies: Phase 79 implementation spec, existing `hsai-attestation` seam,
+existing `hsai-attestation-phala` fixture/captured-artifact crate, and Phase 4
+claim boundaries.
+
+Validation gate: focused Phala tests, no process/network source hooks, no Cargo
+metadata changes, no fixture changes, no generated benchmark artifacts, root
+Cargo validation, and claim-boundary text checks.
+
+Anti-goals: live Phala API calls, operator live tests, credentials or secret
+handling, network access, local Intel DCAP quote verification, PCCS or
+collateral handling, generic JWKS/JWT fetching, TLS or attested-TLS channel
+binding, deployment orchestration, external repo clones, backend execution,
+benchmark outputs, accepted Evidence Ledger mutation, Phase 4 registry semantic
+changes, Level2+ evidence, global uniqueness claims, or claims above
+`Attested`.
+
+Exit criteria: accepted fake responses produce `Attested` only; rejected fake
+responses emit no guarantees or trust roots; managed-verifier trust roots are
+visible; replay and freshness checks fail closed; normal tests remain hermetic;
+and documentation states the non-claims.
+
+## Managed-Attestation Track: Phala Operator Live Path Boundary
+
+Status: complete for docs-first boundary only. See
+`docs/81-phala-operator-live-path-boundary-spec.md`.
+
+Goal: define the future operator-only live Phala/dstack managed-verifier path
+before any ignored or feature-gated live run exists, while preserving the
+hermetic verifier surface and `Attested`-only claim boundary.
+
+Implemented: docs-first boundary for secret handling outside git, explicit
+operator acknowledgement, future environment contract, non-secret request
+contract, local output-bundle shape, redaction rules, timeout and retry policy,
+audit output schema, future verification order, required future tests, and
+forbidden runtime effects.
+
+Dependencies: Phase 78 Phala live managed-verifier boundary, Phase 79 hermetic
+implementation spec, Phase 80 hermetic fake-client implementation, existing
+challenge-capture runbook, and Phase 4 claim boundaries.
+
+Validation gate: documentation navigation checks, claim-boundary text checks,
+no Rust source changes, no Cargo metadata changes, no package runtime files, no
+fixture changes, no generated artifacts, no network code, no live Phala calls,
+no operator secrets, and no accepted Evidence Ledger mutation.
+
+Anti-goals: Rust implementation, live Phala API calls, operator live tests,
+examples or scripts that call Phala, credential handling code, secret fixtures,
+network access, local Intel DCAP quote verification, PCCS or collateral
+handling, generic JWKS/JWT fetching, TLS or attested-TLS channel binding,
+deployment orchestration, external repo clones, backend execution, benchmark
+outputs, accepted Evidence Ledger mutation, Phase 4 registry semantic changes,
+Level2+ evidence, global uniqueness claims, or claims above `Attested`.
+
+Exit criteria: the future operator-live boundary is named, README and AGENTS
+point to it, normal test paths remain hermetic, future live calls require
+explicit acknowledgement, future credentials stay outside git, future output
+artifacts are redacted and digest-bound, and all successful future responses
+remain capped at `Attested`.
+
+## Managed-Attestation Track: Phala Operator Live Artifact Plumbing Boundary
+
+Status: complete for docs-first boundary only. See
+`docs/82-phala-operator-live-artifact-plumbing-spec.md`.
+
+Goal: define the future local artifact plumbing contract for an operator-only
+Phala/dstack managed-verifier run before any code writes, reads, or validates
+operator-live output bundles.
+
+Implemented: docs-first boundary for operator-live output-bundle file roles,
+future code touch surface, portable bundle path constraints, digest and schema
+rules, redaction-report validation, future deterministic validation behavior,
+required hermetic tests, and `Attested`-only claim limits.
+
+Dependencies: Phase 78 Phala live managed-verifier boundary, Phase 79 hermetic
+implementation spec, Phase 80 hermetic fake-client implementation, Phase 81
+operator-live path boundary, existing challenge-capture runbook, and Phase 4
+claim boundaries.
+
+Validation gate: documentation navigation checks, claim-boundary text checks,
+no Rust source changes, no Cargo metadata changes, no package runtime files, no
+fixture changes, no generated artifacts, no network code, no live Phala calls,
+no operator secrets, and no accepted Evidence Ledger mutation.
+
+Anti-goals: Rust implementation, examples or scripts, live Phala API calls,
+operator live tests, credential handling code, secret fixtures, generated
+operator artifacts, network access, local Intel DCAP quote verification, PCCS
+or collateral handling, generic JWKS/JWT fetching, TLS or attested-TLS channel
+binding, deployment orchestration, external repo clones, backend execution,
+benchmark outputs, accepted Evidence Ledger mutation, Phase 4 registry semantic
+changes, Level2+ evidence, global uniqueness claims, or claims above
+`Attested`.
+
+Exit criteria: the future artifact-plumbing boundary is named, README and
+AGENTS point to it, future bundle files have declared roles, future validation
+rules fail closed, future redaction validation is required, normal test paths
+remain hermetic, and all successful future responses remain capped at
+`Attested`.
+
+## Managed-Attestation Track: Phala Operator Live Artifact Plumbing Implementation
+
+Status: complete for local in-memory implementation only. See
+`docs/83-phala-operator-live-artifact-plumbing-implementation-notes.md`.
+
+Goal: implement the Phase 82 local operator-live artifact-plumbing contract in
+`hsai-attestation-phala` without provider HTTP, filesystem writes, network
+access, credentials, operator live tests, local DCAP, generated operator
+artifacts, benchmark output, or claims above `Attested`.
+
+Implemented: in-memory logical file parsing for the declared `operator-live/*`
+bundle, portable path checks, required-file and extra-file validation, schema
+checks, SHA-256 digest checks, redaction-report validation, provider and mode
+consistency checks, trust-root consistency checks, existing hermetic
+managed-verifier response validation, validated local artifact metadata, and
+focused hermetic tests.
+
+Dependencies: Phase 78 Phala live managed-verifier boundary, Phase 79 hermetic
+implementation spec, Phase 80 hermetic fake-client implementation, Phase 81
+operator-live path boundary, Phase 82 artifact-plumbing boundary, and Phase 4
+claim boundaries.
+
+Validation gate: focused Phala operator-live artifact tests, no process/network
+source hooks, no Cargo metadata changes, no fixture changes, no generated
+operator artifacts, root Cargo validation, and claim-boundary text checks.
+
+Anti-goals: provider HTTP, filesystem writes, examples or scripts, live Phala
+API calls, operator live tests, credential handling code, secret fixtures,
+generated operator artifacts, network access, local Intel DCAP quote
+verification, PCCS or collateral handling, generic JWKS/JWT fetching, TLS or
+attested-TLS channel binding, deployment orchestration, external repo clones,
+backend execution, benchmark outputs, accepted Evidence Ledger mutation, Phase
+4 registry semantic changes, Level2+ evidence, global uniqueness claims, or
+claims above `Attested`.
+
+Exit criteria: valid in-memory bundles round trip; missing, extra, and unsafe
+paths fail closed; schema and digest drift fail closed; stale responses and
+missing trust roots fail closed; retained secret-shaped values fail closed;
+rejected provider verdicts emit no validated artifact; normal test paths remain
+hermetic; and successful validation remains capped at `Attested`.
+
+## Managed-Attestation Track: Phala Operator Live Artifact Output Plumbing Boundary
+
+Status: complete for docs-first boundary only. See
+`docs/84-phala-operator-live-artifact-output-plumbing-boundary-spec.md`.
+
+Goal: define the future materialized output-root contract for operator-live
+artifact bundles before any implementation writes, reads, overwrites, or
+validates files on disk.
+
+Implemented: docs-first boundary for caller-selected output roots, declared
+`operator-live/*` materialized file shape, write policy, read policy, overwrite
+policy, symlink rejection, path-traversal rejection, partial-bundle rejection,
+raw-response retention limits, future code touch surface, required hermetic
+tests, and `Attested`-only claim limits.
+
+Dependencies: Phase 81 operator-live path boundary, Phase 82 artifact-plumbing
+boundary, Phase 83 in-memory artifact-plumbing implementation, and Phase 4
+claim boundaries.
+
+Validation gate: documentation navigation checks, claim-boundary text checks,
+no Rust source changes, no Cargo metadata changes, no package runtime files, no
+fixture changes, no generated artifacts, no filesystem implementation, no
+network code, no live Phala calls, no operator secrets, and no accepted
+Evidence Ledger mutation.
+
+Anti-goals: Rust implementation, filesystem write/read implementation, examples
+or scripts, live Phala API calls, operator live tests, credential handling
+code, secret fixtures, generated operator artifacts, raw response body
+retention, network access, local Intel DCAP quote verification, PCCS or
+collateral handling, generic JWKS/JWT fetching, TLS or attested-TLS channel
+binding, deployment orchestration, external repo clones, backend execution,
+benchmark outputs, accepted Evidence Ledger mutation, Phase 4 registry semantic
+changes, Level2+ evidence, global uniqueness claims, or claims above
+`Attested`.
+
+Exit criteria: the future output-plumbing boundary is named, README and AGENTS
+point to it, future output-root rules are explicit, future write/read policies
+reuse Phase 83 validation, future raw response retention remains forbidden by
+default, normal test paths remain hermetic, and all successful future responses
+remain capped at `Attested`.

@@ -59,6 +59,7 @@ fn phase1_input(case: &AgentCase) -> AttestationInput {
     AttestationInput {
         anchor: anchor.clone(),
         token: Token {
+            signed_jwt: None,
             anchor_id: anchor.anchor_id(),
             nonce,
             report_data: report_data.clone(),

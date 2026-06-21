@@ -1,8 +1,9 @@
 use zkbench_core::{
-    build_default_evidence_acceptance_policy, guard_claim_boundary_escalation,
-    review_evidence_append_proposal, validate_evidence_acceptance_policy, ClaimBoundary,
-    EvidenceAcceptanceBlockingReason, EvidenceAcceptancePolicy, EvidenceReviewChecklist,
-    EvidenceReviewDecisionKind, EvidenceReviewerRole,
+    build_default_evidence_acceptance_policy, create_evidence_record_candidate,
+    guard_claim_boundary_escalation, review_evidence_append_proposal,
+    validate_evidence_acceptance_policy, ClaimBoundary, EvidenceAcceptanceBlockingReason,
+    EvidenceAcceptancePolicy, EvidenceReviewChecklist, EvidenceReviewDecisionKind,
+    EvidenceReviewerRole,
 };
 
 fn proposal() -> zkbench_core::EvidenceAppendProposal {
@@ -63,6 +64,40 @@ fn policy_blocks_level2_actual_evidence() {
     assert!(validation.issues.iter().any(|issue| {
         issue.blocking_reason == EvidenceAcceptanceBlockingReason::Level2ActualEvidenceBlocked
     }));
+}
+
+#[test]
+fn policy_blocks_non_approving_review_decisions_from_candidate_creation() {
+    let proposal = proposal();
+    let policy = build_default_evidence_acceptance_policy();
+
+    for decision_kind in [
+        EvidenceReviewDecisionKind::Reject,
+        EvidenceReviewDecisionKind::RequestChanges,
+    ] {
+        let decision = review_evidence_append_proposal(
+            &proposal,
+            EvidenceReviewerRole::Maintainer,
+            decision_kind,
+            EvidenceReviewChecklist::phase_j_default(),
+        )
+        .expect("non-approving review decision should build");
+
+        let validation = policy.validate_proposal_for_candidate(
+            &proposal,
+            &decision,
+            ClaimBoundary::Level0DesignNote,
+        );
+
+        assert!(!validation.valid);
+        assert!(validation.issues.iter().any(|issue| {
+            issue.blocking_reason == EvidenceAcceptanceBlockingReason::InvalidReviewDecision
+        }));
+        assert!(
+            create_evidence_record_candidate(&policy, &proposal, &decision).is_err(),
+            "non-approving review decision must not create a candidate: {decision_kind:?}"
+        );
+    }
 }
 
 #[test]

@@ -48,6 +48,24 @@ pub struct ScoreReport {
     pub notes: Vec<String>,
 }
 
+/// Score report validation issue.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ScoreReportValidationIssue {
+    /// Issue path.
+    pub path: String,
+    /// Issue message.
+    pub message: String,
+}
+
+/// Score report validation result.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ScoreReportValidation {
+    /// True when validation found no issues.
+    pub valid: bool,
+    /// Validation issues.
+    pub issues: Vec<ScoreReportValidationIssue>,
+}
+
 /// Score confidence.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ScoreConfidence {
@@ -246,4 +264,214 @@ pub fn score_report_from_local_mutation_evidence(
         summary.unsound_acceptance_candidates
     ));
     report
+}
+
+/// Validate that a score report stays within current local claim boundaries.
+pub fn validate_score_report(report: &ScoreReport) -> ScoreReportValidation {
+    let mut issues = Vec::new();
+    if report.claim_boundary_max <= ClaimBoundary::Level1LocalReplay {
+        push_local_axis_issue("performance", report.performance.is_some(), &mut issues);
+        push_local_axis_issue("correctness", report.correctness.is_some(), &mut issues);
+        push_local_axis_issue(
+            "soundness_failure_detection",
+            report.soundness_failure_detection.is_some(),
+            &mut issues,
+        );
+        push_local_axis_issue(
+            "recursion_stress",
+            report.recursion_stress.is_some(),
+            &mut issues,
+        );
+        push_local_axis_issue(
+            "formal_evidence",
+            report.formal_evidence.is_some(),
+            &mut issues,
+        );
+        push_local_axis_issue(
+            "reproducibility",
+            report.reproducibility.is_some(),
+            &mut issues,
+        );
+        push_local_axis_issue(
+            "adapter_portability",
+            report.adapter_portability.is_some(),
+            &mut issues,
+        );
+    }
+
+    for (index, note) in report.notes.iter().enumerate() {
+        push_forbidden_claim_text_issue(format!("notes[{index}]"), note, &mut issues);
+    }
+    for (index, penalty) in report.risk_penalties.iter().enumerate() {
+        match penalty {
+            RiskPenalty::MissingEvidence { reason }
+            | RiskPenalty::OverclaimRisk { reason }
+            | RiskPenalty::Inconclusive { reason } => {
+                push_forbidden_claim_text_issue(
+                    format!("risk_penalties[{index}].reason"),
+                    reason,
+                    &mut issues,
+                );
+            }
+            RiskPenalty::CapabilityGap { capability } => {
+                push_forbidden_claim_text_issue(
+                    format!("risk_penalties[{index}].capability"),
+                    capability,
+                    &mut issues,
+                );
+            }
+        }
+    }
+    if let Some(score) = &report.performance {
+        push_score_value_issue(
+            "performance.normalized_score",
+            score.normalized_score,
+            &mut issues,
+        );
+    }
+    if let Some(score) = &report.correctness {
+        push_score_value_issue(
+            "correctness.alignment_score",
+            score.alignment_score,
+            &mut issues,
+        );
+        for (index, note) in score.notes.iter().enumerate() {
+            push_forbidden_claim_text_issue(
+                format!("correctness.notes[{index}]"),
+                note,
+                &mut issues,
+            );
+        }
+    }
+    if let Some(score) = &report.soundness_failure_detection {
+        push_score_value_issue(
+            "soundness_failure_detection.negative_test_coverage",
+            score.negative_test_coverage,
+            &mut issues,
+        );
+        for (index, note) in score.notes.iter().enumerate() {
+            push_forbidden_claim_text_issue(
+                format!("soundness_failure_detection.notes[{index}]"),
+                note,
+                &mut issues,
+            );
+        }
+    }
+    if let Some(score) = &report.recursion_stress {
+        push_score_value_issue(
+            "recursion_stress.recursion_depth_score",
+            score.recursion_depth_score,
+            &mut issues,
+        );
+        for (index, note) in score.notes.iter().enumerate() {
+            push_forbidden_claim_text_issue(
+                format!("recursion_stress.notes[{index}]"),
+                note,
+                &mut issues,
+            );
+        }
+    }
+    if let Some(score) = &report.formal_evidence {
+        push_score_value_issue(
+            "formal_evidence.scoped_proof_score",
+            score.scoped_proof_score,
+            &mut issues,
+        );
+        for (index, note) in score.notes.iter().enumerate() {
+            push_forbidden_claim_text_issue(
+                format!("formal_evidence.notes[{index}]"),
+                note,
+                &mut issues,
+            );
+        }
+    }
+    if let Some(score) = &report.reproducibility {
+        push_score_value_issue(
+            "reproducibility.reproducibility_score",
+            score.reproducibility_score,
+            &mut issues,
+        );
+        for (index, note) in score.notes.iter().enumerate() {
+            push_forbidden_claim_text_issue(
+                format!("reproducibility.notes[{index}]"),
+                note,
+                &mut issues,
+            );
+        }
+    }
+    if let Some(score) = &report.adapter_portability {
+        push_score_value_issue(
+            "adapter_portability.portability_score",
+            score.portability_score,
+            &mut issues,
+        );
+        for (index, note) in score.notes.iter().enumerate() {
+            push_forbidden_claim_text_issue(
+                format!("adapter_portability.notes[{index}]"),
+                note,
+                &mut issues,
+            );
+        }
+    }
+
+    ScoreReportValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+fn push_local_axis_issue(
+    path: &'static str,
+    present: bool,
+    issues: &mut Vec<ScoreReportValidationIssue>,
+) {
+    if present {
+        issues.push(ScoreReportValidationIssue {
+            path: path.to_string(),
+            message: "local score reports must leave score axes unpopulated".to_string(),
+        });
+    }
+}
+
+fn push_score_value_issue(
+    path: &'static str,
+    value: Option<f64>,
+    issues: &mut Vec<ScoreReportValidationIssue>,
+) {
+    let Some(value) = value else {
+        return;
+    };
+    if !value.is_finite() || !(0.0..=1.0).contains(&value) {
+        issues.push(ScoreReportValidationIssue {
+            path: path.to_string(),
+            message: "score value must be finite and between 0.0 and 1.0".to_string(),
+        });
+    }
+}
+
+fn push_forbidden_claim_text_issue(
+    path: String,
+    text: &str,
+    issues: &mut Vec<ScoreReportValidationIssue>,
+) {
+    if contains_forbidden_score_report_claim_text(text) {
+        issues.push(ScoreReportValidationIssue {
+            path,
+            message: "score report text contains forbidden claim language".to_string(),
+        });
+    }
+}
+
+fn contains_forbidden_score_report_claim_text(text: &str) -> bool {
+    let lowered = text.to_ascii_lowercase();
+    if lowered.contains("not official benchmark evidence")
+        || lowered.contains("not official benchmark result")
+        || lowered.contains("no official benchmark evidence")
+        || lowered.contains("no official benchmark result")
+        || lowered.contains("does not create official benchmark evidence")
+        || lowered.contains("does not create official benchmark result")
+    {
+        return false;
+    }
+    crate::external_runner::contains_forbidden_claim_text(text)
 }

@@ -96,3 +96,18 @@ fn manual_handoff_validation_fails_if_live_execution_is_requested() {
         .iter()
         .any(|issue| issue.message.contains("live execution")));
 }
+
+#[test]
+fn manual_handoff_validation_rejects_nested_contract_boundary_elevation() {
+    let plan = dry_run_plan();
+    let mut bundle = build_manual_handoff_bundle_from_zk_harness_plan(&plan)
+        .expect("manual handoff should build");
+    bundle.artifact_capture_contract.claim_boundary = ClaimBoundary::Level1LocalReplay;
+
+    let validation = validate_manual_handoff_bundle(&bundle);
+
+    assert!(!validation.valid);
+    assert!(validation.issues.iter().any(|issue| {
+        issue.path.contains("artifact_capture_contract") && issue.path.contains("claim_boundary")
+    }));
+}

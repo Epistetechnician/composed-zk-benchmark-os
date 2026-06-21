@@ -5,6 +5,7 @@
 //! signature verification, JWKS/JWT validation, or network calls.
 
 use hsai_agent_case::{AgentCase, EvidenceLane};
+use hsai_attestation::report_data_binding;
 use hsai_claim_envelope::{ClaimEnvelope, LaneId, Maturity, TimeWindow, TrustRoot, VendorId};
 use hsai_distinct_agent::Anchor;
 use serde::{Deserialize, Serialize};
@@ -12,6 +13,7 @@ use sha2::{Digest, Sha256, Sha384};
 use std::collections::BTreeSet;
 
 const REPORT_DATA_HEX_LEN: usize = 128;
+const HSAI_OWNED_REPORT_DATA_HEX_LEN: usize = 64;
 const HASH256_HEX_LEN: usize = 64;
 const RTMR_HEX_LEN: usize = 96;
 
@@ -194,23 +196,19 @@ pub fn validate_phala_artifact(
     validate_freshness(bundle.observed_timestamp, now, policy.max_age_seconds)?;
 
     let quote_hex = normalize_hex("quote_hex", &bundle.quote_hex, None)?;
-    let report_data = normalize_hex(
-        "report_data_hex",
-        &bundle.report_data_hex,
-        Some(REPORT_DATA_HEX_LEN),
-    )?;
+    let report_data = normalize_hex("report_data_hex", &bundle.report_data_hex, None)?;
     let expected_report_data = normalize_hex(
         "expected_report_data_hex",
         &policy.expected_report_data_hex,
-        Some(REPORT_DATA_HEX_LEN),
+        None,
     )?;
-    let nonce = normalize_hex("nonce_hex", &bundle.nonce_hex, None)?;
+    let nonce_hex = normalize_hex("nonce_hex", &bundle.nonce_hex, None)?;
     let case_hash = normalize_hex(
         "case_hash_hex",
         &bundle.case_hash_hex,
         Some(HASH256_HEX_LEN),
     )?;
-    normalize_hex(
+    let agent_pubkey_hex = normalize_hex(
         "agent_public_key_spki_hex",
         &bundle.agent_public_key_spki_hex,
         None,
@@ -222,9 +220,12 @@ pub fn validate_phala_artifact(
             expected: expected_report_data,
         });
     }
-    if !expected_report_data.starts_with(&format!("{nonce}{case_hash}")) {
-        return Err(PhalaValidationError::ReportDataBindingMismatch);
-    }
+    validate_report_data_binding(
+        &expected_report_data,
+        &nonce_hex,
+        &case_hash,
+        &agent_pubkey_hex,
+    )?;
     if !quote_hex.contains(&expected_report_data) {
         return Err(PhalaValidationError::QuoteReportDataMissing);
     }
@@ -351,6 +352,52 @@ fn validate_managed_verifier(mode: &ManagedVerifierMode) -> Result<(), PhalaVali
     Ok(())
 }
 
+/// Validate the report-data binding against either the Phase 3 captured-artifact
+/// format (128 hex chars: `nonce_hex || case_hash_hex || ...`) or the Phase 57
+/// HSAI-owned format (64 hex chars: SHA-256 over the agent pubkey, nonce, and
+/// case hash via `report_data_binding`).
+fn validate_report_data_binding(
+    expected_report_data_hex: &str,
+    nonce_hex: &str,
+    case_hash_hex: &str,
+    agent_pubkey_spki_hex: &str,
+) -> Result<(), PhalaValidationError> {
+    match expected_report_data_hex.len() {
+        HSAI_OWNED_REPORT_DATA_HEX_LEN => {
+            // Phase 57 HSAI-owned binding: recompute the shipped digest.
+            let agent_pubkey =
+                decode_hex("agent_public_key_spki_hex", agent_pubkey_spki_hex, None)?;
+            let case_hash = decode_hex("case_hash_hex", case_hash_hex, Some(HASH256_HEX_LEN))?;
+            let nonce_bytes = decode_hex("nonce_hex", nonce_hex, None)?;
+            if nonce_bytes.len() > 8 {
+                return Err(PhalaValidationError::ReportDataBindingMismatch);
+            }
+            let mut nonce_padded = [0u8; 8];
+            nonce_padded[8 - nonce_bytes.len()..].copy_from_slice(&nonce_bytes);
+            let nonce = u64::from_be_bytes(nonce_padded);
+            let recomputed = encode_hex(&report_data_binding(&agent_pubkey, nonce, &case_hash));
+            if recomputed == expected_report_data_hex {
+                Ok(())
+            } else {
+                Err(PhalaValidationError::ReportDataBindingMismatch)
+            }
+        }
+        REPORT_DATA_HEX_LEN => {
+            // Phase 3 captured-artifact binding: literal prefix.
+            if expected_report_data_hex.starts_with(&format!("{nonce_hex}{case_hash_hex}")) {
+                Ok(())
+            } else {
+                Err(PhalaValidationError::ReportDataBindingMismatch)
+            }
+        }
+        _ => Err(PhalaValidationError::InvalidHexLength {
+            field: "expected_report_data_hex".to_owned(),
+            actual: expected_report_data_hex.len(),
+            expected: HSAI_OWNED_REPORT_DATA_HEX_LEN,
+        }),
+    }
+}
+
 fn validate_freshness(
     observed: u64,
     now: u64,
@@ -376,17 +423,20 @@ fn validate_static_fields(
 ) -> Result<(), PhalaValidationError> {
     let app_id = normalize_hex("app_id", &bundle.app_id, Some(40))?;
     let instance_id = normalize_hex("instance_id", &bundle.instance_id, Some(40))?;
-    normalize_hex("device_id", &bundle.device_id, Some(HASH256_HEX_LEN))?;
+    // device_id is informational on real TDX hardware (processor/moniker) and
+    // is not part of any binding check; accept any hex length or empty.
+    if !bundle.device_id.is_empty() {
+        normalize_hex("device_id", &bundle.device_id, None)?;
+    }
     let os_image_hash = normalize_hex(
         "os_image_hash",
         &bundle.os_image_hash,
         Some(HASH256_HEX_LEN),
     )?;
-    normalize_hex(
-        "mr_aggregated",
-        &bundle.mr_aggregated,
-        Some(HASH256_HEX_LEN),
-    )?;
+    normalize_hex("mr_aggregated", &bundle.mr_aggregated, None)?;
+    // mr_aggregated is a SHA-384 digest on real TDX hardware (96 hex chars).
+    // Synthetic Phase 3 fixtures may use a 32-byte (64 hex char) placeholder;
+    // accept either length.
 
     let expected_app_id = normalize_hex("expected_app_id", &policy.expected_app_id, Some(40))?;
     if app_id != expected_app_id {

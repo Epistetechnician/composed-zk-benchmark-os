@@ -16,8 +16,10 @@ attestation evidence, backend verification, benchmark evidence, or proof.
 - New workspace crate `hsai-e2e-harness`.
 - Deterministic fixture helpers for one `AgentCase`, one hardware anchor, one
   good token, distinctness policy, work policy, demurrage economy, and membrane.
-- EH-1..EH-10 unit tests.
-- EHP-1..EHP-4 property tests.
+- Phase 4 `AgentAnchorRegistry` composition over the same pure-data harness
+  inputs.
+- EH-1..EH-16 unit tests.
+- EHP-1..EHP-5 property tests.
 
 ## Covered Path
 
@@ -32,6 +34,16 @@ AgentCase
   -> Membrane
 ```
 
+Additional Phase 4 harness path:
+
+```text
+AgentCase
+  -> DistinctAgentLane
+  -> AttestationLane<ManagedTokenVerifier>
+  -> conjoin
+  -> AgentAnchorRegistry
+```
+
 ## Tests
 
 - Valid attestation closes distinctness and registers.
@@ -42,6 +54,11 @@ AgentCase
 - Frozen workers cannot cross the membrane.
 - Forbidden hardware roots are rejected.
 - Funding-rule sweep invariants remain bounded.
+- Phase 4 anchor-registry admission accepts only closed `Attested` runtime
+  anchors and preserves the Phase 4 claim boundary.
+- Expired attestations, reused runtime anchors, mismatched attested/requested
+  runtime anchors, revoked runtime anchors, proof-theater envelopes, and single
+  attestation faults do not mutate Phase 4 registry state.
 
 ## Out Of Scope
 

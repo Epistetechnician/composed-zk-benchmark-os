@@ -4,7 +4,8 @@ use crate::error::Result;
 use crate::evidence::ClaimBoundary;
 
 use super::artifact_layout::{
-    soak_artifact_manifest, SoakArtifactDigestSet, SoakArtifactRole, SoakReportBundle,
+    soak_artifact_manifest, SoakArtifactDigestSet, SoakArtifactLayout, SoakArtifactRole,
+    SoakReportBundle,
 };
 use super::failure_corpus::FailureCorpusIndex;
 use super::health::SoakHealthReport;
@@ -20,7 +21,7 @@ pub fn build_soak_report_bundle(
     failure_corpus_indexes: Vec<FailureCorpusIndex>,
 ) -> Result<SoakReportBundle> {
     let bundle_id = bundle_id.into();
-    let artifacts = vec![
+    let mut artifacts = vec![
         soak_artifact_manifest(
             "soak_run_config",
             SoakArtifactRole::RunConfig,
@@ -34,6 +35,37 @@ pub fn build_soak_report_bundle(
             &shard_plan,
         )?,
     ];
+    for (manifest, report) in shard_plan.shard_manifests.iter().zip(&telemetry_reports) {
+        let layout = SoakArtifactLayout::for_shard(&manifest.shard_id);
+        artifacts.push(soak_artifact_manifest(
+            format!("telemetry_{}", manifest.shard_id.value),
+            SoakArtifactRole::Telemetry,
+            layout.telemetry_path,
+            report,
+        )?);
+    }
+    for (manifest, report) in shard_plan.shard_manifests.iter().zip(&health_reports) {
+        let layout = SoakArtifactLayout::for_shard(&manifest.shard_id);
+        artifacts.push(soak_artifact_manifest(
+            format!("health_{}", manifest.shard_id.value),
+            SoakArtifactRole::HealthReport,
+            layout.health_report_path,
+            report,
+        )?);
+    }
+    for (manifest, report) in shard_plan
+        .shard_manifests
+        .iter()
+        .zip(&failure_corpus_indexes)
+    {
+        let layout = SoakArtifactLayout::for_shard(&manifest.shard_id);
+        artifacts.push(soak_artifact_manifest(
+            format!("failure_corpus_{}", manifest.shard_id.value),
+            SoakArtifactRole::FailureCorpusIndex,
+            layout.failure_corpus_index_path,
+            report,
+        )?);
+    }
     Ok(SoakReportBundle {
         bundle_id,
         bundle_version: "phase-k-soak-report-bundle-v0".to_string(),

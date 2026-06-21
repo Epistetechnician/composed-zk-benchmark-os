@@ -1,5 +1,6 @@
 //! Local soak artifact layout and report bundle types.
 
+use std::collections::BTreeSet;
 use std::fs;
 use std::path::Path;
 
@@ -10,11 +11,14 @@ use crate::evidence::{
     compute_artifact_digest, ArtifactDigest, ArtifactKind, ArtifactRole, ClaimBoundary,
 };
 
-use super::config::SoakRunConfig;
-use super::failure_corpus::FailureCorpusIndex;
-use super::health::SoakHealthReport;
-use super::shard::{SoakShardId, SoakShardManifest, SoakShardPlan};
-use super::telemetry::SoakTelemetryReport;
+use super::config::{validate_soak_run_config, SoakRunConfig};
+use super::failure_corpus::{validate_failure_corpus_index, FailureCorpusIndex};
+use super::health::{validate_soak_health_report, SoakHealthReport};
+use super::shard::{
+    validate_soak_shard_manifest, validate_soak_shard_plan, SoakShardId, SoakShardManifest,
+    SoakShardPlan,
+};
+use super::telemetry::{validate_soak_telemetry_report, SoakTelemetryReport};
 
 /// Soak artifact role.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
@@ -184,13 +188,161 @@ pub struct SoakReportBundle {
 /// Validate a report bundle.
 pub fn validate_soak_report_bundle(bundle: &SoakReportBundle) -> SoakReportBundleValidation {
     let mut issues = Vec::new();
+    if bundle.bundle_id.trim().is_empty() {
+        issues.push("report bundle id is empty".to_string());
+    }
+    if bundle.bundle_version.trim().is_empty() {
+        issues.push("report bundle version is empty".to_string());
+    }
     if bundle.claim_boundary != ClaimBoundary::Level0DesignNote {
         issues.push("report bundle must remain Level0DesignNote".to_string());
+    }
+    if let Err(error) = validate_soak_run_config(&bundle.config) {
+        issues.push(format!("config invalid: {error}"));
+    }
+    if bundle.config != bundle.shard_plan.config {
+        issues.push("bundle config does not match shard_plan.config".to_string());
     }
     if bundle.shard_plan.claim_boundary != ClaimBoundary::Level0DesignNote {
         issues.push("shard plan must remain Level0DesignNote".to_string());
     }
+    if let Err(error) = validate_soak_shard_plan(&bundle.shard_plan) {
+        issues.push(format!("shard_plan invalid: {error}"));
+    }
+    let shard_count = bundle.shard_manifests.len();
+    push_bundle_count_issue(
+        "shard_plan.shard_manifests",
+        bundle.shard_plan.shard_manifests.len(),
+        shard_count,
+        &mut issues,
+    );
+    push_bundle_count_issue(
+        "telemetry_reports",
+        bundle.telemetry_reports.len(),
+        shard_count,
+        &mut issues,
+    );
+    push_bundle_count_issue(
+        "health_reports",
+        bundle.health_reports.len(),
+        shard_count,
+        &mut issues,
+    );
+    push_bundle_count_issue(
+        "failure_corpus_indexes",
+        bundle.failure_corpus_indexes.len(),
+        shard_count,
+        &mut issues,
+    );
+    push_bundle_count_issue(
+        "artifact_digest_set.telemetry",
+        count_artifacts_with_role(bundle, SoakArtifactRole::Telemetry),
+        bundle.telemetry_reports.len(),
+        &mut issues,
+    );
+    push_bundle_count_issue(
+        "artifact_digest_set.health_reports",
+        count_artifacts_with_role(bundle, SoakArtifactRole::HealthReport),
+        bundle.health_reports.len(),
+        &mut issues,
+    );
+    push_bundle_count_issue(
+        "artifact_digest_set.failure_corpus_indexes",
+        count_artifacts_with_role(bundle, SoakArtifactRole::FailureCorpusIndex),
+        bundle.failure_corpus_indexes.len(),
+        &mut issues,
+    );
+    let aggregate_report_count =
+        count_artifacts_with_role(bundle, SoakArtifactRole::AggregateReport);
+    if aggregate_report_count > 1 {
+        issues.push(format!(
+            "artifact_digest_set.aggregate_reports count {aggregate_report_count} exceeds maximum 1"
+        ));
+    }
+    validate_aggregate_report_artifact_identity(bundle, &mut issues);
+    validate_report_artifact_identity(bundle, &mut issues);
+    for (index, manifest) in bundle.shard_manifests.iter().enumerate() {
+        let validation = validate_soak_shard_manifest(manifest);
+        if !validation.valid {
+            issues.push(format!(
+                "shard_manifests[{index}] invalid: {:?}",
+                validation.issues
+            ));
+        }
+        if let Some(planned_manifest) = bundle.shard_plan.shard_manifests.get(index) {
+            if manifest != planned_manifest {
+                issues.push(format!(
+                    "shard_manifests[{index}] does not match shard_plan.shard_manifests[{index}]"
+                ));
+            }
+        }
+    }
+    for (index, report) in bundle.telemetry_reports.iter().enumerate() {
+        if let Err(error) = validate_soak_telemetry_report(report) {
+            issues.push(format!("telemetry_reports[{index}] invalid: {error}"));
+        }
+        if let (Some(report_shard_id), Some(manifest)) =
+            (&report.shard_id, bundle.shard_manifests.get(index))
+        {
+            if report_shard_id != &manifest.shard_id {
+                issues.push(format!(
+                    "telemetry_reports[{index}].shard_id does not match shard_manifests[{index}].shard_id"
+                ));
+            }
+        }
+    }
+    for (index, report) in bundle.health_reports.iter().enumerate() {
+        if let Err(error) = validate_soak_health_report(report) {
+            issues.push(format!("health_reports[{index}] invalid: {error}"));
+        }
+        if let (Some(report_shard_id), Some(manifest)) =
+            (&report.shard_id, bundle.shard_manifests.get(index))
+        {
+            if report_shard_id != &manifest.shard_id {
+                issues.push(format!(
+                    "health_reports[{index}].shard_id does not match shard_manifests[{index}].shard_id"
+                ));
+            }
+        }
+    }
+    for (index, failure_corpus) in bundle.failure_corpus_indexes.iter().enumerate() {
+        if let Err(error) = validate_failure_corpus_index(failure_corpus) {
+            issues.push(format!("failure_corpus_indexes[{index}] invalid: {error}"));
+        }
+        if let Some(manifest) = bundle.shard_manifests.get(index) {
+            for (entry_index, entry) in failure_corpus.entries.iter().enumerate() {
+                if entry.reproduction_manifest.shard_id != manifest.shard_id {
+                    issues.push(format!(
+                        "failure_corpus_indexes[{index}].entries[{entry_index}].reproduction_manifest.shard_id does not match shard_manifests[{index}].shard_id"
+                    ));
+                }
+            }
+        }
+    }
+    let mut artifact_ids = BTreeSet::new();
+    let mut artifact_paths = BTreeSet::new();
     for artifact in &bundle.artifact_digest_set.artifacts {
+        if !artifact_id_is_portable(&artifact.artifact_id) {
+            issues.push(format!(
+                "artifact id is not portable: {}",
+                artifact.artifact_id
+            ));
+        }
+        if !artifact_ids.insert(artifact.artifact_id.clone()) {
+            issues.push(format!("duplicate artifact id: {}", artifact.artifact_id));
+        }
+        if !artifact_paths.insert(artifact.relative_path.clone()) {
+            issues.push(format!(
+                "duplicate artifact path: {}",
+                artifact.relative_path
+            ));
+        }
+        if artifact.digest.is_none() {
+            issues.push(format!(
+                "artifact {} is missing digest",
+                artifact.artifact_id
+            ));
+        }
         if !relative_path_is_portable(&artifact.relative_path) {
             issues.push(format!(
                 "artifact path is not portable relative: {}",
@@ -207,6 +359,98 @@ pub fn validate_soak_report_bundle(bundle: &SoakReportBundle) -> SoakReportBundl
     SoakReportBundleValidation {
         valid: issues.is_empty(),
         issues,
+    }
+}
+
+fn push_bundle_count_issue(
+    path: &'static str,
+    actual: usize,
+    expected: usize,
+    issues: &mut Vec<String>,
+) {
+    if actual != expected {
+        issues.push(format!(
+            "{path} count {actual} does not match shard manifest count {expected}"
+        ));
+    }
+}
+
+fn count_artifacts_with_role(bundle: &SoakReportBundle, role: SoakArtifactRole) -> usize {
+    bundle
+        .artifact_digest_set
+        .artifacts
+        .iter()
+        .filter(|artifact| artifact.role == role)
+        .count()
+}
+
+fn validate_report_artifact_identity(bundle: &SoakReportBundle, issues: &mut Vec<String>) {
+    for manifest in &bundle.shard_manifests {
+        let layout = SoakArtifactLayout::for_shard(&manifest.shard_id);
+        push_missing_expected_report_artifact(
+            bundle,
+            SoakArtifactRole::Telemetry,
+            &format!("telemetry_{}", manifest.shard_id.value),
+            &layout.telemetry_path,
+            issues,
+        );
+        push_missing_expected_report_artifact(
+            bundle,
+            SoakArtifactRole::HealthReport,
+            &format!("health_{}", manifest.shard_id.value),
+            &layout.health_report_path,
+            issues,
+        );
+        push_missing_expected_report_artifact(
+            bundle,
+            SoakArtifactRole::FailureCorpusIndex,
+            &format!("failure_corpus_{}", manifest.shard_id.value),
+            &layout.failure_corpus_index_path,
+            issues,
+        );
+    }
+}
+
+fn validate_aggregate_report_artifact_identity(
+    bundle: &SoakReportBundle,
+    issues: &mut Vec<String>,
+) {
+    for artifact in bundle
+        .artifact_digest_set
+        .artifacts
+        .iter()
+        .filter(|artifact| artifact.role == SoakArtifactRole::AggregateReport)
+    {
+        if artifact.relative_path != "aggregate/aggregate_health_report.json" {
+            issues.push(format!(
+                "aggregate report artifact {} must use aggregate/aggregate_health_report.json",
+                artifact.artifact_id
+            ));
+        }
+        if !artifact.artifact_id.starts_with("aggregate_health_") {
+            issues.push(format!(
+                "aggregate report artifact id must start with aggregate_health_: {}",
+                artifact.artifact_id
+            ));
+        }
+    }
+}
+
+fn push_missing_expected_report_artifact(
+    bundle: &SoakReportBundle,
+    role: SoakArtifactRole,
+    artifact_id: &str,
+    relative_path: &str,
+    issues: &mut Vec<String>,
+) {
+    if !bundle.artifact_digest_set.artifacts.iter().any(|artifact| {
+        artifact.role == role
+            && artifact.artifact_id == artifact_id
+            && artifact.relative_path == relative_path
+    }) {
+        issues.push(format!(
+            "missing expected {role:?} artifact {artifact_id} at {relative_path}"
+        ));
     }
 }
 
@@ -254,6 +498,13 @@ pub fn soak_artifact_manifest<T: Serialize>(
     relative_path: impl Into<String>,
     value: &T,
 ) -> Result<SoakArtifactManifest> {
+    let artifact_id = artifact_id.into();
+    if !artifact_id_is_portable(&artifact_id) {
+        return Err(ZkBenchError::soak(
+            "soak.artifact.artifact_id",
+            "soak artifact ids must be non-empty portable identifiers",
+        ));
+    }
     let relative_path = relative_path.into();
     if !relative_path_is_portable(&relative_path) {
         return Err(ZkBenchError::soak(
@@ -262,7 +513,7 @@ pub fn soak_artifact_manifest<T: Serialize>(
         ));
     }
     Ok(SoakArtifactManifest {
-        artifact_id: artifact_id.into(),
+        artifact_id,
         role,
         relative_path,
         digest: Some(compute_artifact_digest(
@@ -273,6 +524,13 @@ pub fn soak_artifact_manifest<T: Serialize>(
         claim_boundary: ClaimBoundary::Level0DesignNote,
         notes: vec!["Soak artifact manifest is local-only.".to_string()],
     })
+}
+
+fn artifact_id_is_portable(artifact_id: &str) -> bool {
+    !artifact_id.trim().is_empty()
+        && !artifact_id.contains('/')
+        && !artifact_id.contains('\\')
+        && !artifact_id.contains("..")
 }
 
 pub(crate) fn relative_path_is_portable(path: &str) -> bool {

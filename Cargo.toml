@@ -2,6 +2,7 @@
 resolver = "2"
 members = [
     "crates/hsai-agent-case",
+    "crates/hsai-agent-anchor-registry",
     "crates/hsai-attestation",
     "crates/hsai-attestation-phala",
     "crates/hsai-claim-envelope",

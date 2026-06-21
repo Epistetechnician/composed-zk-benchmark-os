@@ -1,10 +1,12 @@
 //! Benchmark pack reader and local validator.
 
+use std::collections::BTreeSet;
 use std::fs;
 use std::path::{Path, PathBuf};
 
 use crate::error::{Result, ZkBenchError};
 use crate::evidence::EvidenceLedger;
+use crate::scoring::{validate_score_report, ScoreReport};
 
 use super::manifest::{BenchmarkPackFileRole, BenchmarkPackManifest};
 use super::validation::{BenchmarkPackValidation, BenchmarkPackValidationError};
@@ -62,6 +64,27 @@ impl BenchmarkPackReader {
         Ok(Some(ledger))
     }
 
+    /// Load the Score Report when present.
+    pub fn load_score_report(&self) -> Result<Option<ScoreReport>> {
+        let Some(file) = self
+            .manifest
+            .files
+            .iter()
+            .find(|file| file.role == BenchmarkPackFileRole::ScoreReport)
+        else {
+            return Ok(None);
+        };
+        validate_relative_path(&file.relative_path)?;
+        let path = self.root.join(&file.relative_path);
+        let json = fs::read_to_string(&path).map_err(|error| {
+            ZkBenchError::benchmark_pack(path.display().to_string(), error.to_string())
+        })?;
+        let report = serde_json::from_str(&json).map_err(|error| {
+            ZkBenchError::deserialization("benchmark_pack.score_report", error.to_string())
+        })?;
+        Ok(Some(report))
+    }
+
     /// Validate local pack file digests and ledger chain.
     pub fn validate(&self) -> BenchmarkPackValidation {
         let mut errors = Vec::new();
@@ -73,6 +96,11 @@ impl BenchmarkPackReader {
             });
         }
 
+        for (index, note) in self.manifest.notes.iter().enumerate() {
+            push_forbidden_claim_text_error(format!("pack.json#notes[{index}]"), note, &mut errors);
+        }
+
+        let mut seen_relative_paths = BTreeSet::new();
         for file in &self.manifest.files {
             if let Err(error) = validate_relative_path(&file.relative_path) {
                 errors.push(BenchmarkPackValidationError {
@@ -80,6 +108,19 @@ impl BenchmarkPackReader {
                     message: error.to_string(),
                 });
                 continue;
+            }
+            if !seen_relative_paths.insert(file.relative_path.clone()) {
+                errors.push(BenchmarkPackValidationError {
+                    path: file.relative_path.clone(),
+                    message: "duplicate benchmark pack file entry".to_string(),
+                });
+            }
+            for (index, note) in file.notes.iter().enumerate() {
+                push_forbidden_claim_text_error(
+                    format!("{}#notes[{index}]", file.relative_path),
+                    note,
+                    &mut errors,
+                );
             }
             let path = self.root.join(&file.relative_path);
             let bytes = match fs::read(&path) {
@@ -102,10 +143,87 @@ impl BenchmarkPackReader {
                 });
             }
         }
+        push_summary_count_error(
+            "pack.json#summary.generated_instance_count",
+            self.manifest.summary.generated_instance_count,
+            self.count_files_by_role(BenchmarkPackFileRole::GeneratedInstance),
+            &mut errors,
+        );
+        push_summary_count_error(
+            "pack.json#summary.mutated_instance_count",
+            self.manifest.summary.mutated_instance_count,
+            self.count_files_by_role(BenchmarkPackFileRole::MutatedInstance),
+            &mut errors,
+        );
+        push_summary_count_error(
+            "pack.json#summary.replay_manifest_count",
+            self.manifest.summary.replay_manifest_count,
+            self.count_files_by_role(BenchmarkPackFileRole::ReplayManifest),
+            &mut errors,
+        );
+        push_summary_count_error(
+            "pack.json#summary.replay_result_count",
+            self.manifest.summary.replay_result_count,
+            self.count_files_by_role(BenchmarkPackFileRole::ReplayResult),
+            &mut errors,
+        );
+        push_summary_count_error(
+            "pack.json#summary.score_report_count",
+            self.manifest.summary.score_report_count,
+            self.count_files_by_role(BenchmarkPackFileRole::ScoreReport),
+            &mut errors,
+        );
+        push_summary_count_error(
+            "pack.json#generated_instance_ids",
+            self.manifest.generated_instance_ids.len(),
+            self.manifest.summary.generated_instance_count,
+            &mut errors,
+        );
+        push_summary_count_error(
+            "pack.json#mutation_ids",
+            self.manifest.mutation_ids.len(),
+            self.manifest.summary.mutated_instance_count,
+            &mut errors,
+        );
+        push_summary_count_error(
+            "pack.json#replay_manifest_ids",
+            self.manifest.replay_manifest_ids.len(),
+            self.manifest.summary.replay_manifest_count,
+            &mut errors,
+        );
+        push_summary_count_error(
+            "pack.json#replay_result_ids",
+            self.manifest.replay_result_ids.len(),
+            self.manifest.summary.replay_result_count,
+            &mut errors,
+        );
+        match (
+            self.manifest.evidence_ledger_ref.as_deref(),
+            self.first_file_path_by_role(BenchmarkPackFileRole::EvidenceLedger),
+        ) {
+            (Some(reference), Some(path)) if reference == path => {}
+            _ => errors.push(BenchmarkPackValidationError {
+                path: "pack.json#evidence_ledger_ref".to_string(),
+                message: "evidence ledger ref must match the evidence ledger file entry"
+                    .to_string(),
+            }),
+        }
+        if !self.manifest.summary.local_only {
+            errors.push(BenchmarkPackValidationError {
+                path: "pack.json#summary.local_only".to_string(),
+                message: "benchmark pack summary must remain local-only".to_string(),
+            });
+        }
 
         match self.load_evidence_ledger() {
             Ok(Some(ledger)) => {
                 let validation = ledger.validate();
+                push_summary_count_error(
+                    "pack.json#summary.evidence_record_count",
+                    self.manifest.summary.evidence_record_count,
+                    validation.summary.entry_count,
+                    &mut errors,
+                );
                 for error in validation.errors {
                     errors.push(BenchmarkPackValidationError {
                         path: format!("evidence/ledger.json#{}", error.sequence_number),
@@ -123,6 +241,8 @@ impl BenchmarkPackReader {
             }),
         }
 
+        self.validate_score_report_files(&mut errors);
+
         if self.manifest.claim_boundary > crate::evidence::ClaimBoundary::Level1LocalReplay {
             errors.push(BenchmarkPackValidationError {
                 path: "pack.json".to_string(),
@@ -132,4 +252,109 @@ impl BenchmarkPackReader {
 
         BenchmarkPackValidation::from_errors(errors, self.manifest.summary.clone())
     }
+
+    fn count_files_by_role(&self, role: BenchmarkPackFileRole) -> usize {
+        self.manifest
+            .files
+            .iter()
+            .filter(|file| file.role == role)
+            .count()
+    }
+
+    fn first_file_path_by_role(&self, role: BenchmarkPackFileRole) -> Option<&str> {
+        self.manifest
+            .files
+            .iter()
+            .find(|file| file.role == role)
+            .map(|file| file.relative_path.as_str())
+    }
+
+    fn validate_score_report_files(&self, errors: &mut Vec<BenchmarkPackValidationError>) {
+        for file in self
+            .manifest
+            .files
+            .iter()
+            .filter(|file| file.role == BenchmarkPackFileRole::ScoreReport)
+        {
+            if let Err(error) = validate_relative_path(&file.relative_path) {
+                errors.push(BenchmarkPackValidationError {
+                    path: file.relative_path.clone(),
+                    message: error.to_string(),
+                });
+                continue;
+            }
+            let path = self.root.join(&file.relative_path);
+            let json = match fs::read_to_string(&path) {
+                Ok(json) => json,
+                Err(error) => {
+                    errors.push(BenchmarkPackValidationError {
+                        path: file.relative_path.clone(),
+                        message: error.to_string(),
+                    });
+                    continue;
+                }
+            };
+            let report: ScoreReport = match serde_json::from_str(&json) {
+                Ok(report) => report,
+                Err(error) => {
+                    errors.push(BenchmarkPackValidationError {
+                        path: file.relative_path.clone(),
+                        message: error.to_string(),
+                    });
+                    continue;
+                }
+            };
+            let validation = validate_score_report(&report);
+            for issue in validation.issues {
+                errors.push(BenchmarkPackValidationError {
+                    path: format!("{}#{}", file.relative_path, issue.path),
+                    message: issue.message,
+                });
+            }
+        }
+    }
+}
+
+fn push_summary_count_error(
+    path: &'static str,
+    actual: usize,
+    expected: usize,
+    errors: &mut Vec<BenchmarkPackValidationError>,
+) {
+    if actual != expected {
+        errors.push(BenchmarkPackValidationError {
+            path: path.to_string(),
+            message: format!("pack summary count {actual} does not match expected {expected}"),
+        });
+    }
+}
+
+fn push_forbidden_claim_text_error(
+    path: String,
+    text: &str,
+    errors: &mut Vec<BenchmarkPackValidationError>,
+) {
+    if contains_forbidden_pack_claim_text(text) {
+        errors.push(BenchmarkPackValidationError {
+            path,
+            message: "pack metadata contains forbidden claim language".to_string(),
+        });
+    }
+}
+
+fn contains_forbidden_pack_claim_text(text: &str) -> bool {
+    let lowered = text.to_ascii_lowercase();
+    if lowered.contains("not official benchmark evidence")
+        || lowered.contains("not official benchmark result")
+        || lowered.contains("no official benchmark evidence")
+        || lowered.contains("no official benchmark result")
+        || lowered.contains("does not create official benchmark evidence")
+        || lowered.contains("does not create official benchmark result")
+        || lowered.contains(
+            "no external backend artifacts, proof-system results, or formal evidence are included",
+        )
+    {
+        return false;
+    }
+    crate::external_runner::contains_forbidden_claim_text(text)
 }

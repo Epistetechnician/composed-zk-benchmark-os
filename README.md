@@ -21,7 +21,7 @@ Core novelty:
 
 ## What This Repo Is
 
-This is now a Level 1 local Rust foundation plus the original Level 0 architecture scaffold. It defines the architecture, vocabulary, repo integration decisions, DSL schema, Rust core crate, deterministic generator, v0 mutation engine, local JSON replay adapter, evidence ledger, benchmark pack skeleton, zk-Harness dry-run adapter preparation, external-runner boundary contracts, manual handoff bundle schema, synthetic result import prototype, evidence append proposal workflow, reviewed proposal acceptance policy, evidence-record candidate metadata, append previews, Level2 eligibility checks, review ledger primitives, proposal ledger primitives, scoring primitives, validation gates, and adapter roadmap.
+This is now a Level 1 local Rust foundation plus the original Level 0 architecture scaffold. It defines the architecture, vocabulary, repo integration decisions, DSL schema, Rust core crate, deterministic generator, v0 mutation engine, local JSON replay adapter, evidence ledger, benchmark pack skeleton, zk-Harness dry-run adapter preparation, external-runner boundary contracts, manual handoff bundle schema, synthetic result import prototype, evidence append proposal workflow, reviewed proposal acceptance policy, evidence-record candidate metadata, append previews, Level2 eligibility checks, review ledger primitives, proposal ledger primitives, scoring primitives, inert recursion-envelope metadata, inert zkML workload manifest metadata, inert pack-readiness metadata, validation gates, and adapter roadmap.
 
 ## What This Repo Is Not
 
@@ -138,14 +138,40 @@ Surface DSL
 | [docs/49-pure-data-adversarial-harness-spec.md](docs/49-pure-data-adversarial-harness-spec.md) | Pure-data adversarial harness spec. |
 | [docs/50-phala-attestation-backend-spec.md](docs/50-phala-attestation-backend-spec.md) | Phala attestation backend spec. |
 | [docs/51-managed-attestation-phase1-integration-notes.md](docs/51-managed-attestation-phase1-integration-notes.md) | Managed-attestation Phase 1 integration notes. |
-| [docs/51-proof-of-agent-anchor-registry-spec.md](docs/51-proof-of-agent-anchor-registry-spec.md) | Blocked Phase 4 proof-of-agent anchor registry spec. |
+| [docs/51-proof-of-agent-anchor-registry-spec.md](docs/51-proof-of-agent-anchor-registry-spec.md) | Phase 4 proof-of-agent anchor registry spec. |
 | [docs/52-managed-attestation-phase2-harness-notes.md](docs/52-managed-attestation-phase2-harness-notes.md) | Managed-attestation Phase 2 harness notes. |
 | [docs/53-managed-attestation-phase3-phala-fixture-notes.md](docs/53-managed-attestation-phase3-phala-fixture-notes.md) | Managed-attestation Phase 3 Phala fixture notes. |
-| [docs/54-proof-of-agent-anchor-phase4-boundary-note.md](docs/54-proof-of-agent-anchor-phase4-boundary-note.md) | Boundary note blocking Phase 4 until real artifact evidence exists. |
+| [docs/54-proof-of-agent-anchor-phase4-boundary-note.md](docs/54-proof-of-agent-anchor-phase4-boundary-note.md) | Boundary note recording Phase 4 authorization after real artifact acceptance. |
 | [docs/55-real-phala-artifact-handoff.md](docs/55-real-phala-artifact-handoff.md) | Real Phala artifact handoff requirements. |
 | [docs/56-managed-attestation-phase3-captured-artifact-notes.md](docs/56-managed-attestation-phase3-captured-artifact-notes.md) | Managed-attestation captured artifact validation notes. |
 | [docs/57-managed-attestation-real-artifact-promotion-spec.md](docs/57-managed-attestation-real-artifact-promotion-spec.md) | HSAI-owned real artifact promotion spec for Phase 3. |
 | [docs/58-managed-attestation-challenge-capture-tooling-notes.md](docs/58-managed-attestation-challenge-capture-tooling-notes.md) | Managed-attestation challenge packet and capture workflow tooling notes. |
+| [docs/59-operator-capture-runbook.md](docs/59-operator-capture-runbook.md) | Operator capture runbook for repo-external Phala/dstack artifact capture. |
+| [docs/60-proof-of-agent-anchor-registry-phase-notes.md](docs/60-proof-of-agent-anchor-registry-phase-notes.md) | Phase 4 proof-of-agent anchor registry implementation notes. |
+| [docs/61-phase-l-qwable-autoresearch-contract.md](docs/61-phase-l-qwable-autoresearch-contract.md) | Phase L local autoresearch soak contract and guardrails. |
+| [docs/62-phase-l-local-soak-acceptance-notes.md](docs/62-phase-l-local-soak-acceptance-notes.md) | Phase L bounded local soak acceptance notes. |
+| [docs/63-phase-m-recursion-envelope-stress-spec.md](docs/63-phase-m-recursion-envelope-stress-spec.md) | Phase M recursion-envelope stress spec and claim-boundary contract. |
+| [docs/64-phase-n-narrow-zkml-adapter-spec.md](docs/64-phase-n-narrow-zkml-adapter-spec.md) | Phase N narrow zkML adapter docs-first boundary contract. |
+| [docs/65-phase-o-local-reproducible-pack-readiness-spec.md](docs/65-phase-o-local-reproducible-pack-readiness-spec.md) | Phase O local reproducible-pack readiness boundary contract. |
+| [docs/66-managed-signature-verification-boundary-spec.md](docs/66-managed-signature-verification-boundary-spec.md) | Managed-signature verification docs-first boundary and source attribution. |
+| [docs/67-phase-p-read-only-reporting-boundary-notes.md](docs/67-phase-p-read-only-reporting-boundary-notes.md) | Phase P read-only reporting boundary over score and pack-readiness metadata. |
+| [docs/68-phase-q-report-bundle-boundary-spec.md](docs/68-phase-q-report-bundle-boundary-spec.md) | Phase Q report-bundle docs-first boundary over read-only reporting metadata. |
+| [docs/69-phase-q-report-bundle-implementation-notes.md](docs/69-phase-q-report-bundle-implementation-notes.md) | Phase Q inert in-memory report-bundle metadata implementation notes. |
+| [docs/70-phase-q-report-bundle-output-plumbing-spec.md](docs/70-phase-q-report-bundle-output-plumbing-spec.md) | Phase Q report-bundle adjacent local output-plumbing boundary. |
+| [docs/71-phase-q-report-bundle-output-implementation-notes.md](docs/71-phase-q-report-bundle-output-implementation-notes.md) | Phase Q report-bundle adjacent local output implementation notes. |
+| [docs/72-phase-q-report-bundle-ergonomics-hardening-notes.md](docs/72-phase-q-report-bundle-ergonomics-hardening-notes.md) | Phase Q report-bundle local ergonomics hardening notes. |
+| [docs/73-phase-r-local-audit-index-boundary-spec.md](docs/73-phase-r-local-audit-index-boundary-spec.md) | Phase R local audit-index docs-first boundary over existing local metadata outputs. |
+| [docs/74-phase-r-local-audit-index-implementation-notes.md](docs/74-phase-r-local-audit-index-implementation-notes.md) | Phase R inert in-memory local audit-index metadata implementation notes. |
+| [docs/75-phase-r-audit-index-output-plumbing-spec.md](docs/75-phase-r-audit-index-output-plumbing-spec.md) | Phase R audit-index adjacent local output-plumbing boundary. |
+| [docs/76-phase-r-audit-index-output-implementation-notes.md](docs/76-phase-r-audit-index-output-implementation-notes.md) | Phase R audit-index adjacent local output implementation notes. |
+| [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
+| [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
+| [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
+| [docs/80-phala-hermetic-live-verifier-implementation-notes.md](docs/80-phala-hermetic-live-verifier-implementation-notes.md) | Phala/dstack hermetic live-verifier implementation notes. |
+| [docs/81-phala-operator-live-path-boundary-spec.md](docs/81-phala-operator-live-path-boundary-spec.md) | Phala/dstack operator-only live path docs-first boundary. |
+| [docs/82-phala-operator-live-artifact-plumbing-spec.md](docs/82-phala-operator-live-artifact-plumbing-spec.md) | Phala/dstack operator-live artifact plumbing docs-first boundary. |
+| [docs/83-phala-operator-live-artifact-plumbing-implementation-notes.md](docs/83-phala-operator-live-artifact-plumbing-implementation-notes.md) | Phala/dstack operator-live artifact plumbing implementation notes. |
+| [docs/84-phala-operator-live-artifact-output-plumbing-boundary-spec.md](docs/84-phala-operator-live-artifact-output-plumbing-boundary-spec.md) | Phala/dstack operator-live artifact output plumbing docs-first boundary. |
 | [docs/integrations/zk_harness_adapter.md](docs/integrations/zk_harness_adapter.md) | Future zk-Harness adapter plan. |
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
@@ -199,17 +225,105 @@ Surface DSL
 - Internal benchmark OS telemetry exists for generation, mutation, local oracle, local replay, pack read/write, proposal-preview counters, and local runner duration.
 - Local health report models exist and warn that local soak telemetry is not official benchmark evidence.
 - Failure corpus extraction exists with reproduction manifests and minimization metadata only.
+- Inert local audit-index metadata exists for summarizing existing local
+  report-bundle metadata without writing files, executing replay commands,
+  mutating source packs/reports/bundles, or creating accepted evidence.
+- Adjacent local audit-index output plumbing exists for exactly
+  `audit-index/audit-index-manifest.json` and
+  `audit-index/digests/audit-index-manifest.sha256`. The output remains a
+  `Level0DesignNote` local integrity summary and is not accepted evidence,
+  official benchmark evidence, ZK backend performance, or Level2+ evidence.
+- Phase L bounded local soak acceptance exists for
+  `phase_l_qwable_local_soak_2026_06_17_extended_256`: 768 completed local
+  cases, zero failures, zero failure-corpus entries, a valid report bundle, no
+  ZK backend performance claims, and `Level0DesignNote` claim boundary.
+- Phase M inert local recursion-envelope contract implementation exists.
+  It defines local input contracts, metric labels, validation rules, negative
+  tests, serialization helpers, and claim-boundary non-escalation checks, while
+  live gnark execution and Level2+ evidence remain blocked.
 - Result classification exists.
 - Evidence and scoring primitives exist.
 - HSAI Level 1 local crates exist for claim envelopes, agent cases,
   distinct-agent registration, economy, membrane conversion, economy simulation,
   managed-attestation verification, pure-data e2e harnessing, and Phala/dstack
   fixture/captured-artifact validation.
-- Managed-attestation Phase 57 defines the next real-artifact promotion
-  requirements for an HSAI-owned fresh challenge. It does not authorize Phase 4.
+- Managed-attestation Phase 57 defines the real-artifact promotion
+  requirements for an HSAI-owned fresh challenge. A first real HSAI-owned
+  Phala/dstack artifact has been captured and accepted under this spec
+  (2026-06-16); see
+  [docs/57-managed-attestation-real-artifact-promotion-spec.md](docs/57-managed-attestation-real-artifact-promotion-spec.md).
+  The acceptance is managed-verifier local regression evidence only. It
+  authorizes only the bounded Phase 4 anchor-registry crate and no stronger
+  attestation or uniqueness claim.
+- `hsai-agent-anchor-registry` implements the Phase 4 local Proof of Agent
+  anchor registry. It records one active HSAI identity per accepted,
+  non-reused registered anchor set; it does not prove global software-agent
+  uniqueness.
+- `hsai-e2e-harness` now composes the Phase 4 anchor registry over the pure-data
+  managed-attestation harness path. This is local regression evidence only, not
+  backend verification, external attestation evidence, proof, or benchmark
+  output.
+- `docs/66-managed-signature-verification-boundary-spec.md` records the
+  managed-attestation boundary as source attribution for managed-service
+  signature/JWKS/JWT or quote verification.
+- `docs/77-managed-jwt-signature-verification-notes.md` records the first
+  bounded implementation of that boundary: an offline ES256 managed-JWT verifier
+  over local in-memory public keys. It performs no JWKS fetch, no live service
+  call, no DCAP quote verification, no network access, and no claim above
+  `Attested`.
+- `docs/78-phala-live-managed-verifier-boundary-spec.md` opens the next
+  docs-first managed-attestation boundary: Phala/dstack live managed-verifier
+  planning only. It permits no Rust implementation, network access, live Phala
+  calls, secrets, local DCAP, backend execution, benchmark output, Phase 4
+  semantic changes, or claims above `Attested`.
+- `docs/79-phala-hermetic-live-verifier-implementation-spec.md` records the
+  code-phase authorization spec for a future hermetic Phala/dstack verifier
+  surface: provider trait, offline test double, response normalization, failure
+  taxonomy, trust-root mapping, replay/freshness checks, and `Attested`-only
+  output. This spec itself adds no Rust code and still forbids live calls in
+  normal tests.
+- `docs/80-phala-hermetic-live-verifier-implementation-notes.md` records the
+  implementation of that hermetic surface in `hsai-attestation-phala`: injected
+  provider-client trait, deterministic in-memory fake client, normalized
+  response validation, replay/freshness guard, trust-root mapping, and
+  `Attested`-only output. It still performs no live calls, network access,
+  local DCAP, credential handling, or benchmark work.
+- `docs/81-phala-operator-live-path-boundary-spec.md` records the docs-first
+  operator-only live-path boundary: secret handling outside git, explicit
+  operator acknowledgement, timeout and retry limits, redaction, audit output,
+  ignored/feature-gated live behavior, and `Attested`-only claim limits. It
+  authorizes no Rust implementation, examples, credentials, generated
+  artifacts, or live Phala calls in this slice.
+- `docs/82-phala-operator-live-artifact-plumbing-spec.md` records the
+  docs-first operator-live artifact plumbing boundary: local output-bundle file
+  roles, digest and schema rules, redaction-report validation, deterministic
+  validation requirements, future code touch surface, hermetic test
+  requirements, and `Attested`-only claim limits. It authorizes no Rust
+  implementation, examples, scripts, credentials, generated artifacts, operator
+  live tests, network access, or live Phala calls in this slice.
+- `docs/83-phala-operator-live-artifact-plumbing-implementation-notes.md`
+  records the local in-memory implementation of that artifact-plumbing surface
+  in `hsai-attestation-phala`: declared logical file parsing, portable path
+  checks, schema and SHA-256 digest validation, redaction-report validation,
+  provider/trust-root consistency checks, existing hermetic response validation,
+  and `Attested`-only output metadata. It performs no filesystem writes, network
+  access, credential loading, live Phala calls, operator live tests, local DCAP,
+  or benchmark work.
+- `docs/84-phala-operator-live-artifact-output-plumbing-boundary-spec.md`
+  records the docs-first boundary for future materialized output plumbing:
+  caller-selected output-root rules, write/read policy, overwrite policy,
+  symlink and path-traversal rejection, raw-response retention limits, future
+  tests, and `Attested`-only claim limits. It authorizes no Rust
+  implementation, filesystem writes, examples, scripts, credentials, generated
+  operator artifacts, operator live tests, network access, or live Phala calls
+  in this slice.
 - Managed-attestation challenge packet tooling exists for local, non-secret
   capture preflight. It creates capture inputs only, not real attestation
-  evidence.
+  evidence. The operator-facing preflight example
+  (`crates/hsai-attestation-phala/examples/operator_capture_preflight.rs`)
+  emits a JSON challenge packet and capture manifest from fixed sample inputs,
+  and `docs/59-operator-capture-runbook.md` documents the repo-external
+  capture steps an operator must run to produce a real artifact.
 - No external adapters exist.
 - No live zk-Harness execution exists.
 - No live external execution exists.
@@ -227,20 +341,67 @@ Surface DSL
 
 ## Next Implementation Slice
 
-For the benchmark OS track, Phase L should run long local soak execution and
-sampled local report generation only with explicit user approval. It should
-retain sampled local reports and failure packs outside the repository or under an
-ignored artifact directory, curate a regression corpus, and keep all reports
-local-only. It must not run zk-Harness, import real external results, create
-dashboards, claim official benchmark evidence, or promote Level2+ evidence.
+For the benchmark OS track, Phase R now implements adjacent local audit-index
+output plumbing;
+see
+[docs/76-phase-r-audit-index-output-implementation-notes.md](docs/76-phase-r-audit-index-output-implementation-notes.md).
+The next benchmark-OS slice should open a new docs-first boundary before
+broadening audit-index ergonomics, cross-bundle index construction, command-line
+surfaces, UI dashboards, external replay, official benchmark evidence, ZK
+backend performance claims, or Level2+ evidence promotion.
 
-For the managed-attestation track, the next implementation slice is external
-artifact capture using the Phase 57 challenge packet tooling: run an
-operator-controlled Phala/dstack capture, commit only a small non-secret artifact
-fixture if it was actually generated with the HSAI-owned fresh challenge, then
-extend validation for that fixture while keeping emitted maturity capped at
-`Attested`. Do not build Phase 4 `crates/hsai-agent-anchor-registry` until this
-prerequisite is met.
+For the managed-attestation track, the first real HSAI-owned Phala/dstack
+artifact has been captured and accepted (2026-06-16) using the Phase 57
+challenge packet tooling. The fixture
+(`crates/hsai-attestation-phala/tests/fixtures/phala_hsai_owned_real_2026_06_16.json`)
+and integration test
+(`crates/hsai-attestation-phala/tests/phala_hsai_owned_real.rs`) are local
+regression evidence only. Phase 4 `crates/hsai-agent-anchor-registry` is now
+authorized and implemented under the Phase 4 Recheck Rule in
+[docs/57-managed-attestation-real-artifact-promotion-spec.md](docs/57-managed-attestation-real-artifact-promotion-spec.md).
+The managed-signature boundary:
+[docs/66-managed-signature-verification-boundary-spec.md](docs/66-managed-signature-verification-boundary-spec.md)
+defined the source-cited boundary for managed-service signature/JWKS/JWT or
+quote-verification implementation. The first bounded code slice is now
+implemented in
+[docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md):
+offline ES256 managed-JWT signature verification against caller-provided local
+public keys. Future live-service verification, JWKS fetching, DCAP, PCCS, TLS,
+or transport-bound attestation work still requires a separate explicit phase.
+The next managed-attestation slice is a docs-first Phala/dstack live
+managed-verifier boundary in
+[docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md).
+It names Phala/dstack live managed verification as the only future provider mode
+under discussion, while continuing to forbid implementation and runtime effects.
+The follow-on authorization spec is
+[docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md).
+It defines the smallest future hermetic code surface and keeps live Phala calls
+operator-only and unauthorized for normal tests.
+That hermetic surface is implemented in
+[docs/80-phala-hermetic-live-verifier-implementation-notes.md](docs/80-phala-hermetic-live-verifier-implementation-notes.md)
+using deterministic fake-client tests only.
+The operator-live boundary is
+[docs/81-phala-operator-live-path-boundary-spec.md](docs/81-phala-operator-live-path-boundary-spec.md).
+It defines the future operator-only live path contract while still forbidding
+Rust implementation, credentials, generated artifacts, and live Phala calls in
+this slice.
+The follow-on artifact-plumbing boundary is
+[docs/82-phala-operator-live-artifact-plumbing-spec.md](docs/82-phala-operator-live-artifact-plumbing-spec.md).
+It narrows the future local output-bundle contract and first code-phase touch
+surface while still forbidding Rust implementation, examples, scripts,
+credentials, generated artifacts, operator live tests, network access, and live
+Phala calls in this slice.
+That local artifact-plumbing surface is implemented in
+[docs/83-phala-operator-live-artifact-plumbing-implementation-notes.md](docs/83-phala-operator-live-artifact-plumbing-implementation-notes.md)
+using in-memory logical files and hermetic tests only. It still forbids
+filesystem writes, examples, scripts, credentials, generated operator
+artifacts, operator live tests, network access, and live Phala calls.
+The next managed-attestation boundary is
+[docs/84-phala-operator-live-artifact-output-plumbing-boundary-spec.md](docs/84-phala-operator-live-artifact-output-plumbing-boundary-spec.md).
+It defines future materialized output-root rules while still forbidding Rust
+implementation, filesystem writes, examples, scripts, credentials, generated
+operator artifacts, operator live tests, network access, and live Phala calls in
+this slice.
 
 ## Non-Goals
 
@@ -263,11 +424,11 @@ Synthetic result candidates are not benchmark results. Evidence append proposals
 Local soak telemetry is not official benchmark evidence. Internal timing telemetry is not ZK backend performance. Failure corpus entries are reproduction aids, not accepted evidence. Future agents must not use soak timing as prover/verifier timing.
 
 Managed-attestation captured artifact validation is not proof, not benchmark
-evidence, not local DCAP quote verification, and not Phase 4 authorization.
-Phase 57 requires an HSAI-owned fresh challenge before any real-artifact
-promotion claim.
+evidence, and not local DCAP quote verification. The first accepted
+HSAI-owned real artifact authorizes only the bounded Phase 4 anchor-registry
+crate.
 Managed-attestation challenge packets and capture manifests are capture inputs
-only, not attestation evidence or Phase 4 authorization.
+only, not attestation evidence or independent Phase 4 authorization.
 
 ## Validation Checklist
 
