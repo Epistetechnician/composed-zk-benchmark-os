@@ -792,6 +792,36 @@ fn cross_bundle_outputs_reject_symlinks() {
         .contains("must not contain symlinks"));
 }
 
+#[cfg(unix)]
+#[test]
+fn cross_bundle_outputs_reject_symlink_parent_into_protected_root() {
+    use std::os::unix::fs::symlink;
+
+    let request = simple_cross_bundle_request();
+    let view = build_local_audit_index_cross_bundle_view(&request).expect("view builds");
+    let dir = tempfile::tempdir().expect("tempdir");
+    let protected_root = dir.path().join("source");
+    fs::create_dir_all(&protected_root).expect("protected root");
+    fs::write(protected_root.join("audit-index.json"), b"{}\n").expect("protected file");
+
+    let linked_root = dir.path().join("linked-source");
+    symlink(&protected_root, &linked_root).expect("symlink protected root");
+    let output_root = linked_root.join("cross-bundle-audit-index");
+
+    let write_error = write_local_audit_index_cross_bundle_outputs(
+        &output_root,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect_err("symlink parent into protected root should fail");
+    assert!(write_error
+        .to_string()
+        .contains("must not overlap protected path"));
+    assert!(!output_root.exists());
+}
+
 #[test]
 fn cross_bundle_audit_index_source_exposes_no_runtime_surface() {
     let source = include_str!("../src/audit_index.rs");
