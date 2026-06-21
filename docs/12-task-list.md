@@ -485,6 +485,49 @@ fail closed; normal test paths remain hermetic; and all output remains capped at
 `Level0DesignNote`. Future broadening beyond this single-index local output
 surface requires a separate docs-first boundary.
 
+## Benchmark OS Track: Phase T Cross-Bundle Audit Index
+
+Status: complete for docs-first boundary only. See
+`docs/91-phase-t-cross-bundle-audit-index-boundary-spec.md`.
+
+Goal: define the future cross-bundle audit-index planning boundary before any
+implementation broadens beyond the Phase S single-index local output surface.
+
+Implemented: docs-first boundary for future local presentation metadata over
+two or more existing valid `LocalAuditIndexManifest` values. The boundary names
+the future input contract, duplicate and conflict handling, deterministic
+grouping and sorting constraints, protected-path overlap rules across source
+packs, source reports, report bundles, audit-index outputs, Phase S ergonomics
+outputs, accepted Evidence Ledgers, and future cross-bundle output roots,
+non-repair behavior for corrupted output roots, required limitation labels, and
+`Level0DesignNote` claim limits.
+
+Dependencies: Phase R local audit-index metadata, Phase R adjacent local
+audit-index output plumbing, Phase S single-index ergonomics, and Phase S local
+ergonomics output plumbing.
+
+Validation gate: documentation navigation checks, claim-boundary text checks,
+repo hygiene checks, no Rust source changes, no generated cross-bundle files, no
+package runtime files, no command-line tools, no UI dashboards, no external
+execution hooks, no score-axis population, and no accepted Evidence Ledger
+mutation.
+
+Anti-goals: Rust implementation, generated cross-bundle files, cross-bundle
+writer or reader APIs, command-line tools, UI dashboards, browser apps,
+JavaScript/TypeScript/package runtime additions, source pack mutation, source
+report mutation, report-bundle mutation, audit-index output mutation, Phase S
+ergonomics output mutation, accepted Evidence Ledger mutation, replay-command
+execution, external replay, live backend execution, external repo clones,
+external result import, generated benchmark artifacts, official benchmark
+evidence, ZK backend performance claims, Level2+ evidence creation, score-axis
+population from local-only evidence, broad leaderboard claims, or treating
+cross-bundle audit-index metadata as evidence.
+
+Exit criteria: Phase T boundary spec exists, README and AGENTS point to it, the
+future implementation input/output rules are explicit, protected-path overlap
+and non-repair rules are documented, required future negative tests are named,
+and all future cross-bundle output remains capped at `Level0DesignNote`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
