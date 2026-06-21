@@ -27,6 +27,23 @@ pub const AUDIT_INDEX_MANIFEST_PATH: &str = "audit-index-manifest.json";
 /// `audit-index/` root.
 pub const AUDIT_INDEX_MANIFEST_DIGEST_PATH: &str = "digests/audit-index-manifest.sha256";
 
+/// Phase S ergonomics selected-view JSON path below an
+/// `audit-index-ergonomics/` root.
+pub const AUDIT_INDEX_ERGONOMICS_VIEW_PATH: &str = "ergonomics-view.json";
+
+/// Phase S ergonomics rendered Markdown path below an
+/// `audit-index-ergonomics/` root.
+pub const AUDIT_INDEX_ERGONOMICS_MARKDOWN_PATH: &str = "rendered/ergonomics-view.md";
+
+/// Phase S ergonomics selected-view JSON digest sidecar path below an
+/// `audit-index-ergonomics/` root.
+pub const AUDIT_INDEX_ERGONOMICS_VIEW_DIGEST_PATH: &str = "digests/ergonomics-view-json.sha256";
+
+/// Phase S ergonomics rendered Markdown digest sidecar path below an
+/// `audit-index-ergonomics/` root.
+pub const AUDIT_INDEX_ERGONOMICS_MARKDOWN_DIGEST_PATH: &str =
+    "digests/ergonomics-view-markdown.sha256";
+
 /// Phase R audit-index schema version.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct LocalAuditIndexVersion {
@@ -233,6 +250,34 @@ pub struct LocalAuditIndexOutput {
     pub manifest: LocalAuditIndexManifest,
     /// Validation result for the parsed manifest.
     pub validation: LocalAuditIndexValidation,
+    /// Output claim boundary.
+    pub output_claim_boundary: ClaimBoundary,
+}
+
+/// Materialized adjacent local Phase S audit-index ergonomics output summary.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LocalAuditIndexErgonomicsOutput {
+    /// Selected-view JSON path relative to the caller-supplied
+    /// `audit-index-ergonomics/` root.
+    pub view_relative_path: String,
+    /// Digest over the materialized selected-view JSON bytes.
+    pub view_digest: ArtifactDigest,
+    /// Selected-view digest sidecar path relative to the output root.
+    pub view_digest_relative_path: String,
+    /// Rendered Markdown path relative to the output root.
+    pub markdown_relative_path: String,
+    /// Digest over the materialized Markdown bytes.
+    pub markdown_digest: ArtifactDigest,
+    /// Rendered Markdown digest sidecar path relative to the output root.
+    pub markdown_digest_relative_path: String,
+    /// Source manifest used to validate and rederive the view.
+    pub manifest: LocalAuditIndexManifest,
+    /// Source request used to validate and rederive the view.
+    pub request: LocalAuditIndexErgonomicsRequest,
+    /// Parsed and validated ergonomics view.
+    pub view: LocalAuditIndexErgonomicsView,
+    /// Validation result for the source manifest/request.
+    pub validation: LocalAuditIndexErgonomicsValidation,
     /// Output claim boundary.
     pub output_claim_boundary: ClaimBoundary,
 }
@@ -811,6 +856,224 @@ pub fn build_local_audit_index_ergonomics_view(
     })
 }
 
+/// Serialize a Phase S audit-index ergonomics view to pretty JSON.
+pub fn serialize_local_audit_index_ergonomics_view_json(
+    view: &LocalAuditIndexErgonomicsView,
+) -> Result<String> {
+    serde_json::to_string_pretty(view).map_err(|error| {
+        ZkBenchError::serialization("audit_index.ergonomics_view", error.to_string())
+    })
+}
+
+/// Deserialize a Phase S audit-index ergonomics view from JSON.
+pub fn deserialize_local_audit_index_ergonomics_view_json(
+    json: &str,
+) -> Result<LocalAuditIndexErgonomicsView> {
+    serde_json::from_str(json).map_err(|error| {
+        ZkBenchError::deserialization("audit_index.ergonomics_view", error.to_string())
+    })
+}
+
+/// Write adjacent local Phase S audit-index ergonomics output files.
+///
+/// The supplied `output_root` is the local `audit-index-ergonomics/` directory.
+/// This function writes only the selected-view JSON, deterministic rendered
+/// Markdown, and two SHA-256 digest sidecars. It rederives the supplied view
+/// from the source manifest and request before writing and does not mutate
+/// source packs, source reports, report bundles, audit-index outputs, or
+/// accepted Evidence Ledgers.
+pub fn write_local_audit_index_ergonomics_outputs(
+    output_root: impl AsRef<Path>,
+    manifest: &LocalAuditIndexManifest,
+    request: &LocalAuditIndexErgonomicsRequest,
+    view: &LocalAuditIndexErgonomicsView,
+    overwrite: bool,
+    protected_paths: &[impl AsRef<Path>],
+) -> Result<LocalAuditIndexErgonomicsOutput> {
+    let output_root = output_root.as_ref();
+    validate_output_root(output_root)?;
+    reject_protected_path_overlap(output_root, protected_paths)?;
+    if output_root.exists() && !output_root.is_dir() {
+        return Err(audit_index_io_error(
+            output_root.display().to_string(),
+            "audit-index ergonomics output root exists and is not a directory",
+        ));
+    }
+
+    let validation = validate_local_audit_index_ergonomics_request(manifest, request);
+    if !validation.valid {
+        return Err(audit_index_io_error(
+            "audit_index.ergonomics",
+            format!("ergonomics validation failed: {:?}", validation.issues),
+        ));
+    }
+    let expected_view = build_local_audit_index_ergonomics_view(manifest, request)?;
+    validate_materialized_ergonomics_view(&expected_view, view)?;
+
+    let targets = audit_index_ergonomics_target_paths();
+    if output_root.exists() && !overwrite && directory_has_entries(output_root)? {
+        return Err(audit_index_io_error(
+            output_root.display().to_string(),
+            "audit-index ergonomics output root is non-empty; explicit overwrite approval is required",
+        ));
+    }
+    if output_root.exists() && overwrite {
+        reject_unexpected_existing_files(output_root, &targets)?;
+        let existing = collect_relative_files(output_root)?;
+        if !existing.is_empty() {
+            let existing_output = read_local_audit_index_ergonomics_outputs(
+                output_root,
+                manifest,
+                request,
+                protected_paths,
+            )?;
+            if existing_output.view != *view {
+                return Err(audit_index_io_error(
+                    output_root.display().to_string(),
+                    "existing audit-index ergonomics output does not match supplied view",
+                ));
+            }
+        }
+    }
+
+    let view_json = serialize_local_audit_index_ergonomics_view_json(view)?;
+    let view_bytes = view_json.as_bytes();
+    let markdown_bytes = view.markdown.as_bytes();
+    let view_digest = digest_audit_index_output_bytes(view_bytes);
+    let markdown_digest = digest_audit_index_output_bytes(markdown_bytes);
+
+    write_relative_bytes(output_root, AUDIT_INDEX_ERGONOMICS_VIEW_PATH, view_bytes)?;
+    write_relative_bytes(
+        output_root,
+        AUDIT_INDEX_ERGONOMICS_MARKDOWN_PATH,
+        markdown_bytes,
+    )?;
+    write_relative_bytes(
+        output_root,
+        AUDIT_INDEX_ERGONOMICS_VIEW_DIGEST_PATH,
+        format!("{}\n", view_digest.hex_digest).as_bytes(),
+    )?;
+    write_relative_bytes(
+        output_root,
+        AUDIT_INDEX_ERGONOMICS_MARKDOWN_DIGEST_PATH,
+        format!("{}\n", markdown_digest.hex_digest).as_bytes(),
+    )?;
+
+    Ok(LocalAuditIndexErgonomicsOutput {
+        view_relative_path: AUDIT_INDEX_ERGONOMICS_VIEW_PATH.to_string(),
+        view_digest,
+        view_digest_relative_path: AUDIT_INDEX_ERGONOMICS_VIEW_DIGEST_PATH.to_string(),
+        markdown_relative_path: AUDIT_INDEX_ERGONOMICS_MARKDOWN_PATH.to_string(),
+        markdown_digest,
+        markdown_digest_relative_path: AUDIT_INDEX_ERGONOMICS_MARKDOWN_DIGEST_PATH.to_string(),
+        manifest: manifest.clone(),
+        request: request.clone(),
+        view: view.clone(),
+        validation,
+        output_claim_boundary: ClaimBoundary::Level0DesignNote,
+    })
+}
+
+/// Read and validate adjacent local Phase S audit-index ergonomics output files.
+///
+/// A successful read confirms local file integrity and deterministic
+/// rederivation from the supplied source manifest/request only. It is not
+/// accepted evidence, not official benchmark evidence, and not ZK backend
+/// performance evidence.
+pub fn read_local_audit_index_ergonomics_outputs(
+    output_root: impl AsRef<Path>,
+    manifest: &LocalAuditIndexManifest,
+    request: &LocalAuditIndexErgonomicsRequest,
+    protected_paths: &[impl AsRef<Path>],
+) -> Result<LocalAuditIndexErgonomicsOutput> {
+    let output_root = output_root.as_ref();
+    validate_output_root(output_root)?;
+    reject_protected_path_overlap(output_root, protected_paths)?;
+    reject_unexpected_existing_files(output_root, &audit_index_ergonomics_target_paths())?;
+
+    let view_bytes = read_relative_bytes(output_root, AUDIT_INDEX_ERGONOMICS_VIEW_PATH)?;
+    let markdown_bytes = read_relative_bytes(output_root, AUDIT_INDEX_ERGONOMICS_MARKDOWN_PATH)?;
+    let view_digest_sidecar = String::from_utf8(read_relative_bytes(
+        output_root,
+        AUDIT_INDEX_ERGONOMICS_VIEW_DIGEST_PATH,
+    )?)
+    .map_err(|error| {
+        audit_index_io_error(
+            AUDIT_INDEX_ERGONOMICS_VIEW_DIGEST_PATH,
+            format!("ergonomics view digest sidecar is not UTF-8: {error}"),
+        )
+    })?;
+    let markdown_digest_sidecar = String::from_utf8(read_relative_bytes(
+        output_root,
+        AUDIT_INDEX_ERGONOMICS_MARKDOWN_DIGEST_PATH,
+    )?)
+    .map_err(|error| {
+        audit_index_io_error(
+            AUDIT_INDEX_ERGONOMICS_MARKDOWN_DIGEST_PATH,
+            format!("ergonomics Markdown digest sidecar is not UTF-8: {error}"),
+        )
+    })?;
+
+    let view_digest = digest_audit_index_output_bytes(&view_bytes);
+    if view_digest_sidecar.trim() != view_digest.hex_digest {
+        return Err(audit_index_io_error(
+            AUDIT_INDEX_ERGONOMICS_VIEW_DIGEST_PATH,
+            "ergonomics view JSON bytes do not match digest sidecar",
+        ));
+    }
+    let markdown_digest = digest_audit_index_output_bytes(&markdown_bytes);
+    if markdown_digest_sidecar.trim() != markdown_digest.hex_digest {
+        return Err(audit_index_io_error(
+            AUDIT_INDEX_ERGONOMICS_MARKDOWN_DIGEST_PATH,
+            "ergonomics Markdown bytes do not match digest sidecar",
+        ));
+    }
+
+    let view_json = String::from_utf8(view_bytes).map_err(|error| {
+        audit_index_io_error(
+            AUDIT_INDEX_ERGONOMICS_VIEW_PATH,
+            format!("ergonomics view JSON is not UTF-8: {error}"),
+        )
+    })?;
+    let markdown = String::from_utf8(markdown_bytes).map_err(|error| {
+        audit_index_io_error(
+            AUDIT_INDEX_ERGONOMICS_MARKDOWN_PATH,
+            format!("ergonomics Markdown is not UTF-8: {error}"),
+        )
+    })?;
+    let view = deserialize_local_audit_index_ergonomics_view_json(&view_json)?;
+    if view.markdown != markdown {
+        return Err(audit_index_io_error(
+            AUDIT_INDEX_ERGONOMICS_MARKDOWN_PATH,
+            "ergonomics Markdown bytes do not match selected view",
+        ));
+    }
+
+    let validation = validate_local_audit_index_ergonomics_request(manifest, request);
+    if !validation.valid {
+        return Err(audit_index_io_error(
+            "audit_index.ergonomics",
+            format!("ergonomics validation failed: {:?}", validation.issues),
+        ));
+    }
+    let expected_view = build_local_audit_index_ergonomics_view(manifest, request)?;
+    validate_materialized_ergonomics_view(&expected_view, &view)?;
+
+    Ok(LocalAuditIndexErgonomicsOutput {
+        view_relative_path: AUDIT_INDEX_ERGONOMICS_VIEW_PATH.to_string(),
+        view_digest,
+        view_digest_relative_path: AUDIT_INDEX_ERGONOMICS_VIEW_DIGEST_PATH.to_string(),
+        markdown_relative_path: AUDIT_INDEX_ERGONOMICS_MARKDOWN_PATH.to_string(),
+        markdown_digest,
+        markdown_digest_relative_path: AUDIT_INDEX_ERGONOMICS_MARKDOWN_DIGEST_PATH.to_string(),
+        manifest: manifest.clone(),
+        request: request.clone(),
+        view,
+        validation,
+        output_claim_boundary: ClaimBoundary::Level0DesignNote,
+    })
+}
+
 /// Validate local audit-index metadata.
 pub fn validate_local_audit_index_manifest(
     manifest: &LocalAuditIndexManifest,
@@ -1354,6 +1617,48 @@ fn audit_index_target_paths() -> BTreeSet<String> {
     ])
 }
 
+fn audit_index_ergonomics_target_paths() -> BTreeSet<String> {
+    BTreeSet::from([
+        AUDIT_INDEX_ERGONOMICS_VIEW_PATH.to_string(),
+        AUDIT_INDEX_ERGONOMICS_MARKDOWN_PATH.to_string(),
+        AUDIT_INDEX_ERGONOMICS_VIEW_DIGEST_PATH.to_string(),
+        AUDIT_INDEX_ERGONOMICS_MARKDOWN_DIGEST_PATH.to_string(),
+    ])
+}
+
+fn validate_materialized_ergonomics_view(
+    expected: &LocalAuditIndexErgonomicsView,
+    supplied: &LocalAuditIndexErgonomicsView,
+) -> Result<()> {
+    if supplied.output_claim_boundary != ClaimBoundary::Level0DesignNote {
+        return Err(audit_index_io_error(
+            "audit_index.ergonomics.output_claim_boundary",
+            "audit-index ergonomics output must remain Level0DesignNote",
+        ));
+    }
+    for limitation in required_local_audit_index_ergonomics_limitations() {
+        if !supplied.limitation_labels.contains(&limitation) {
+            return Err(audit_index_io_error(
+                "audit_index.ergonomics.limitation_labels",
+                format!("missing required ergonomics limitation label: {limitation}"),
+            ));
+        }
+        if !supplied.markdown.contains(&limitation) {
+            return Err(audit_index_io_error(
+                "audit_index.ergonomics.markdown",
+                format!("materialized ergonomics Markdown omits limitation label: {limitation}"),
+            ));
+        }
+    }
+    if supplied != expected {
+        return Err(audit_index_io_error(
+            "audit_index.ergonomics",
+            "supplied audit-index ergonomics view does not match deterministic source manifest/request derivation",
+        ));
+    }
+    Ok(())
+}
+
 fn validate_output_root(root: &Path) -> Result<()> {
     let value = root.as_os_str().to_string_lossy();
     if value.trim().is_empty()
@@ -1373,6 +1678,50 @@ fn validate_output_root(root: &Path) -> Result<()> {
         return Err(audit_index_io_error(
             value.to_string(),
             "audit-index output root must not contain parent-directory components",
+        ));
+    }
+    Ok(())
+}
+
+fn reject_protected_path_overlap(root: &Path, protected_paths: &[impl AsRef<Path>]) -> Result<()> {
+    for protected_path in protected_paths {
+        let protected_path = protected_path.as_ref();
+        validate_protected_path(protected_path)?;
+        if root == protected_path
+            || root.starts_with(protected_path)
+            || protected_path.starts_with(root)
+        {
+            return Err(audit_index_io_error(
+                root.display().to_string(),
+                format!(
+                    "audit-index ergonomics output root must not overlap protected path {}",
+                    protected_path.display()
+                ),
+            ));
+        }
+    }
+    Ok(())
+}
+
+fn validate_protected_path(path: &Path) -> Result<()> {
+    let value = path.as_os_str().to_string_lossy();
+    if value.trim().is_empty()
+        || value.contains("://")
+        || value.contains('\\')
+        || contains_shell_payload(&value)
+    {
+        return Err(audit_index_io_error(
+            value.to_string(),
+            "invalid protected audit-index ergonomics path",
+        ));
+    }
+    if path
+        .components()
+        .any(|component| matches!(component, Component::ParentDir))
+    {
+        return Err(audit_index_io_error(
+            value.to_string(),
+            "protected audit-index ergonomics paths must not contain parent-directory components",
         ));
     }
     Ok(())

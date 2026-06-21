@@ -428,10 +428,11 @@ separate explicit implementation phase.
 ## Benchmark OS Track: Phase S Audit Index Ergonomics
 
 Status: complete for docs-first boundary, in-memory single-index implementation,
-and docs-first output-plumbing boundary. See
+docs-first output-plumbing boundary, and local output-root implementation. See
 `docs/86-phase-s-audit-index-ergonomics-boundary-spec.md`,
 `docs/87-phase-s-audit-index-ergonomics-implementation-notes.md`, and
-`docs/88-phase-s-audit-index-ergonomics-output-plumbing-spec.md`.
+`docs/88-phase-s-audit-index-ergonomics-output-plumbing-spec.md`, and
+`docs/89-phase-s-audit-index-ergonomics-output-plumbing-implementation-notes.md`.
 
 Goal: define and implement a single-index audit-index ergonomics contract, then
 define the future materialized-output boundary before any generated ergonomics
@@ -446,17 +447,24 @@ claim limits. The output-plumbing boundary defines the future
 `audit-index-ergonomics/` file shape, selected-view JSON, rendered Markdown,
 digest sidecars, output-root safety, overwrite-drift rejection, source
 immutability, required limitation-label preservation, and `Level0DesignNote`
-claim limits.
+claim limits. The output-plumbing implementation adds declared-file-only local
+materialization for `ergonomics-view.json`, `rendered/ergonomics-view.md`,
+`digests/ergonomics-view-json.sha256`, and
+`digests/ergonomics-view-markdown.sha256`; deterministic source
+manifest/request rederivation; protected path overlap rejection; stale digest
+rejection; symlink and unexpected-file rejection; partial-bundle rejection; and
+source immutability.
 
 Dependencies: Phase R local audit-index metadata and Phase R adjacent local
 audit-index output plumbing.
 
 Validation gate: documentation navigation checks, claim-boundary text checks,
 focused Phase S ergonomics tests for implementation slices, Phase R audit-index
-regression tests for implementation slices, no generated ergonomics files, no
-package runtime files, no cross-bundle construction, no command-line tools, no UI
-dashboards, no external execution hooks, no score-axis population, and no
-accepted Evidence Ledger mutation.
+regression tests for implementation slices, docs claim-boundary checks, repo
+hygiene checks, no generated committed ergonomics files, no package runtime
+files, no cross-bundle construction, no command-line tools, no UI dashboards, no
+external execution hooks, no score-axis population, and no accepted Evidence
+Ledger mutation.
 
 Anti-goals: generated ergonomics files, command-line tools, UI dashboards,
 browser apps, JavaScript/TypeScript/package runtime additions, cross-bundle
@@ -467,13 +475,15 @@ evidence creation, score-axis population from local-only evidence, broad
 leaderboard claims, source mutation, audit-index output mutation, or accepted
 Evidence Ledger mutation.
 
-Exit criteria: Phase S boundary, implementation notes, and output-plumbing
-boundary exist; README and AGENTS point to them; ergonomics input/output rules
-are explicit; limitation labels are preserved in rendered Markdown; invalid
-filters and invalid source manifests fail closed in the implemented in-memory
-surface; normal test paths remain hermetic; and all output remains capped at
-`Level0DesignNote`. Future materialized ergonomics output implementation
-requires a separate explicit implementation phase.
+Exit criteria: Phase S boundary, implementation notes, output-plumbing boundary,
+and output-plumbing implementation notes exist; README and AGENTS point to them;
+ergonomics input/output rules are explicit; limitation labels are preserved in
+rendered Markdown; invalid filters and invalid source manifests fail closed;
+materialized JSON and Markdown bytes are bound to digest sidecars; protected path
+overlap, symlinks, unexpected files, partial bundles, stale digests, and drift
+fail closed; normal test paths remain hermetic; and all output remains capped at
+`Level0DesignNote`. Future broadening beyond this single-index local output
+surface requires a separate docs-first boundary.
 
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
