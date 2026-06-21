@@ -607,3 +607,83 @@ point to it, normal test paths remain hermetic, future live calls require
 explicit acknowledgement, future credentials stay outside git, future output
 artifacts are redacted and digest-bound, and all successful future responses
 remain capped at `Attested`.
+
+## Managed-Attestation Track: Phala Operator Live Artifact Plumbing Boundary
+
+Status: complete for docs-first boundary only. See
+`docs/82-phala-operator-live-artifact-plumbing-spec.md`.
+
+Goal: define the future local artifact plumbing contract for an operator-only
+Phala/dstack managed-verifier run before any code writes, reads, or validates
+operator-live output bundles.
+
+Implemented: docs-first boundary for operator-live output-bundle file roles,
+future code touch surface, portable bundle path constraints, digest and schema
+rules, redaction-report validation, future deterministic validation behavior,
+required hermetic tests, and `Attested`-only claim limits.
+
+Dependencies: Phase 78 Phala live managed-verifier boundary, Phase 79 hermetic
+implementation spec, Phase 80 hermetic fake-client implementation, Phase 81
+operator-live path boundary, existing challenge-capture runbook, and Phase 4
+claim boundaries.
+
+Validation gate: documentation navigation checks, claim-boundary text checks,
+no Rust source changes, no Cargo metadata changes, no package runtime files, no
+fixture changes, no generated artifacts, no network code, no live Phala calls,
+no operator secrets, and no accepted Evidence Ledger mutation.
+
+Anti-goals: Rust implementation, examples or scripts, live Phala API calls,
+operator live tests, credential handling code, secret fixtures, generated
+operator artifacts, network access, local Intel DCAP quote verification, PCCS
+or collateral handling, generic JWKS/JWT fetching, TLS or attested-TLS channel
+binding, deployment orchestration, external repo clones, backend execution,
+benchmark outputs, accepted Evidence Ledger mutation, Phase 4 registry semantic
+changes, Level2+ evidence, global uniqueness claims, or claims above
+`Attested`.
+
+Exit criteria: the future artifact-plumbing boundary is named, README and
+AGENTS point to it, future bundle files have declared roles, future validation
+rules fail closed, future redaction validation is required, normal test paths
+remain hermetic, and all successful future responses remain capped at
+`Attested`.
+
+## Managed-Attestation Track: Phala Operator Live Artifact Plumbing Implementation
+
+Status: complete for local in-memory implementation only. See
+`docs/83-phala-operator-live-artifact-plumbing-implementation-notes.md`.
+
+Goal: implement the Phase 82 local operator-live artifact-plumbing contract in
+`hsai-attestation-phala` without provider HTTP, filesystem writes, network
+access, credentials, operator live tests, local DCAP, generated operator
+artifacts, benchmark output, or claims above `Attested`.
+
+Implemented: in-memory logical file parsing for the declared `operator-live/*`
+bundle, portable path checks, required-file and extra-file validation, schema
+checks, SHA-256 digest checks, redaction-report validation, provider and mode
+consistency checks, trust-root consistency checks, existing hermetic
+managed-verifier response validation, validated local artifact metadata, and
+focused hermetic tests.
+
+Dependencies: Phase 78 Phala live managed-verifier boundary, Phase 79 hermetic
+implementation spec, Phase 80 hermetic fake-client implementation, Phase 81
+operator-live path boundary, Phase 82 artifact-plumbing boundary, and Phase 4
+claim boundaries.
+
+Validation gate: focused Phala operator-live artifact tests, no process/network
+source hooks, no Cargo metadata changes, no fixture changes, no generated
+operator artifacts, root Cargo validation, and claim-boundary text checks.
+
+Anti-goals: provider HTTP, filesystem writes, examples or scripts, live Phala
+API calls, operator live tests, credential handling code, secret fixtures,
+generated operator artifacts, network access, local Intel DCAP quote
+verification, PCCS or collateral handling, generic JWKS/JWT fetching, TLS or
+attested-TLS channel binding, deployment orchestration, external repo clones,
+backend execution, benchmark outputs, accepted Evidence Ledger mutation, Phase
+4 registry semantic changes, Level2+ evidence, global uniqueness claims, or
+claims above `Attested`.
+
+Exit criteria: valid in-memory bundles round trip; missing, extra, and unsafe
+paths fail closed; schema and digest drift fail closed; stale responses and
+missing trust roots fail closed; retained secret-shaped values fail closed;
+rejected provider verdicts emit no validated artifact; normal test paths remain
+hermetic; and successful validation remains capped at `Attested`.
