@@ -57,13 +57,20 @@ pub use adapters::{
     ZkHarnessUnsupportedFeature, LOCAL_JSON_ADAPTER_ID,
 };
 pub use audit_index::{
-    build_local_audit_index_manifest_from_report_bundles,
+    build_local_audit_index_ergonomics_view, build_local_audit_index_manifest_from_report_bundles,
     compute_local_audit_index_manifest_digest, deserialize_local_audit_index_manifest_json,
-    read_local_audit_index_outputs, serialize_local_audit_index_manifest_json,
-    validate_local_audit_index_manifest, write_local_audit_index_outputs, LocalAuditIndexInputKind,
-    LocalAuditIndexInputRef, LocalAuditIndexManifest, LocalAuditIndexOutput,
-    LocalAuditIndexValidation, LocalAuditIndexValidationIssue, LocalAuditIndexValidationIssueKind,
-    LocalAuditIndexVersion, AUDIT_INDEX_MANIFEST_DIGEST_PATH, AUDIT_INDEX_MANIFEST_PATH,
+    read_local_audit_index_outputs, required_local_audit_index_ergonomics_limitations,
+    serialize_local_audit_index_manifest_json, validate_local_audit_index_ergonomics_request,
+    validate_local_audit_index_manifest, write_local_audit_index_outputs,
+    LocalAuditIndexErgonomicsFilter, LocalAuditIndexErgonomicsFilterField,
+    LocalAuditIndexErgonomicsGroupKey, LocalAuditIndexErgonomicsGroupSummary,
+    LocalAuditIndexErgonomicsIssue, LocalAuditIndexErgonomicsIssueKind,
+    LocalAuditIndexErgonomicsRequest, LocalAuditIndexErgonomicsSortKey,
+    LocalAuditIndexErgonomicsValidation, LocalAuditIndexErgonomicsView,
+    LocalAuditIndexErgonomicsWarningSummary, LocalAuditIndexInputKind, LocalAuditIndexInputRef,
+    LocalAuditIndexManifest, LocalAuditIndexOutput, LocalAuditIndexValidation,
+    LocalAuditIndexValidationIssue, LocalAuditIndexValidationIssueKind, LocalAuditIndexVersion,
+    AUDIT_INDEX_MANIFEST_DIGEST_PATH, AUDIT_INDEX_MANIFEST_PATH,
 };
 pub use dashboard::{
     build_dashboard_model_from_pack_readiness, build_dashboard_model_from_score_report,

@@ -1,10 +1,10 @@
-//! Phase R inert local audit-index metadata.
+//! Phase R inert local audit-index metadata and Phase S in-memory ergonomics views.
 //!
 //! Audit indexes are read-only local integrity summaries over existing local
 //! metadata. They do not create accepted evidence, execute replay commands,
 //! claim official benchmark evidence, or report ZK backend performance.
 
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::path::{Component, Path};
 
@@ -235,6 +235,170 @@ pub struct LocalAuditIndexOutput {
     pub validation: LocalAuditIndexValidation,
     /// Output claim boundary.
     pub output_claim_boundary: ClaimBoundary,
+}
+
+/// Phase S exact-match filter field for in-memory audit-index ergonomics.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+pub enum LocalAuditIndexErgonomicsFilterField {
+    /// Filter on `LocalAuditIndexInputRef.kind`.
+    InputKind,
+    /// Filter on `LocalAuditIndexInputRef.claim_boundary`.
+    ClaimBoundary,
+    /// Filter on `LocalAuditIndexInputRef.failed_readiness`.
+    FailedReadiness,
+    /// Filter on `LocalAuditIndexInputRef.local_only_warnings_visible`.
+    LocalOnlyWarningsVisible,
+}
+
+/// Phase S exact-match filter over already-present manifest fields.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LocalAuditIndexErgonomicsFilter {
+    /// Manifest field selected by the filter.
+    pub field: LocalAuditIndexErgonomicsFilterField,
+    /// Exact string value. No path, URL, shell, or expression syntax is accepted.
+    pub value: String,
+}
+
+/// Phase S grouping key for selected audit-index inputs.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+pub enum LocalAuditIndexErgonomicsGroupKey {
+    /// Group by input kind.
+    InputKind,
+    /// Group by claim boundary.
+    ClaimBoundary,
+    /// Group by failed-readiness flag.
+    FailedReadiness,
+    /// Group by local-only-warning visibility flag.
+    LocalOnlyWarningsVisible,
+}
+
+/// Phase S deterministic sort key for selected audit-index inputs.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+pub enum LocalAuditIndexErgonomicsSortKey {
+    /// Sort by input id.
+    InputId,
+    /// Sort by artifact URI.
+    ArtifactUri,
+    /// Sort by input kind, then input id.
+    InputKind,
+    /// Sort by claim boundary, then input id.
+    ClaimBoundary,
+}
+
+/// Phase S in-memory audit-index ergonomics request.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LocalAuditIndexErgonomicsRequest {
+    /// Exact-match filters over manifest fields.
+    #[serde(default)]
+    pub filters: Vec<LocalAuditIndexErgonomicsFilter>,
+    /// Deterministic grouping key.
+    pub group_by: LocalAuditIndexErgonomicsGroupKey,
+    /// Deterministic sort key.
+    pub sort_by: LocalAuditIndexErgonomicsSortKey,
+}
+
+impl Default for LocalAuditIndexErgonomicsRequest {
+    fn default() -> Self {
+        Self {
+            filters: Vec::new(),
+            group_by: LocalAuditIndexErgonomicsGroupKey::InputKind,
+            sort_by: LocalAuditIndexErgonomicsSortKey::InputId,
+        }
+    }
+}
+
+/// Phase S ergonomics validation issue kind.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum LocalAuditIndexErgonomicsIssueKind {
+    /// Source manifest failed the existing local audit-index validation.
+    InvalidManifest,
+    /// Filter value used unsafe or expression-like syntax.
+    InvalidFilterValue,
+    /// Bool filter value was not `true` or `false`.
+    InvalidBooleanFilterValue,
+}
+
+/// Phase S ergonomics validation issue.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LocalAuditIndexErgonomicsIssue {
+    /// Issue kind.
+    pub kind: LocalAuditIndexErgonomicsIssueKind,
+    /// Issue path.
+    pub path: String,
+    /// Issue message.
+    pub message: String,
+}
+
+/// Phase S ergonomics validation result.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LocalAuditIndexErgonomicsValidation {
+    /// Whether validation passed.
+    pub valid: bool,
+    /// Validation issues.
+    #[serde(default)]
+    pub issues: Vec<LocalAuditIndexErgonomicsIssue>,
+    /// Claim boundary of this validation report.
+    pub claim_boundary: ClaimBoundary,
+}
+
+/// Phase S group summary for selected audit-index inputs.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LocalAuditIndexErgonomicsGroupSummary {
+    /// Group key.
+    pub group_key: LocalAuditIndexErgonomicsGroupKey,
+    /// Deterministic group value.
+    pub group_value: String,
+    /// Number of selected inputs in the group.
+    pub input_count: usize,
+    /// Number of selected inputs that carry failed-readiness state.
+    pub failed_readiness_input_count: usize,
+    /// Number of selected inputs with hidden local-only warnings.
+    pub hidden_local_only_warning_input_count: usize,
+}
+
+/// Phase S warning summary for selected audit-index inputs.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LocalAuditIndexErgonomicsWarningSummary {
+    /// Whether failed-readiness state remains visible at manifest level.
+    pub failed_readiness_visible: bool,
+    /// Number of selected inputs with failed-readiness state.
+    pub failed_readiness_input_count: usize,
+    /// Whether local-only warnings remain visible at manifest level.
+    pub local_only_warnings_visible: bool,
+    /// Number of selected inputs with hidden local-only warnings.
+    pub hidden_local_only_warning_input_count: usize,
+    /// Whether the manifest claims any source mutation.
+    pub source_mutation_claimed: bool,
+    /// Source mutation flags present on the manifest.
+    #[serde(default)]
+    pub source_mutation_flags: Vec<String>,
+}
+
+/// Phase S in-memory audit-index ergonomics view.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct LocalAuditIndexErgonomicsView {
+    /// Source audit-index id.
+    pub index_id: String,
+    /// Source pack id.
+    pub indexed_pack_id: String,
+    /// Selected input ids after validation, filtering, and sorting.
+    #[serde(default)]
+    pub selected_input_ids: Vec<String>,
+    /// Rejected filter diagnostics. Successful builds keep this empty.
+    #[serde(default)]
+    pub rejected_filters: Vec<LocalAuditIndexErgonomicsIssue>,
+    /// Group summaries for selected inputs.
+    #[serde(default)]
+    pub groups: Vec<LocalAuditIndexErgonomicsGroupSummary>,
+    /// Warning summary for selected inputs.
+    pub warning_summary: LocalAuditIndexErgonomicsWarningSummary,
+    /// Required claim-boundary limitation labels repeated in the view.
+    #[serde(default)]
+    pub limitation_labels: Vec<String>,
+    /// Output claim boundary. Phase S remains `Level0DesignNote`.
+    pub output_claim_boundary: ClaimBoundary,
+    /// Deterministic Markdown rendering.
+    pub markdown: String,
 }
 
 /// Build an inert local audit-index manifest from existing report-bundle
@@ -523,6 +687,130 @@ pub fn read_local_audit_index_outputs(
     })
 }
 
+/// Required Phase S audit-index ergonomics limitation labels.
+pub fn required_local_audit_index_ergonomics_limitations() -> Vec<String> {
+    vec![
+        "Audit-index ergonomics are not accepted evidence.".to_string(),
+        "Audit-index ergonomics are local presentation metadata only.".to_string(),
+        "Audit-index ergonomics do not create official benchmark evidence.".to_string(),
+        "Audit-index ergonomics do not create Level2+ evidence.".to_string(),
+        "Audit-index ergonomics do not prove backend performance.".to_string(),
+        "Local replay artifacts are not official benchmark evidence.".to_string(),
+        "Internal timing telemetry is not ZK backend performance.".to_string(),
+    ]
+}
+
+/// Validate a Phase S in-memory ergonomics request against one audit-index
+/// manifest. This does not write files, run commands, or call external services.
+pub fn validate_local_audit_index_ergonomics_request(
+    manifest: &LocalAuditIndexManifest,
+    request: &LocalAuditIndexErgonomicsRequest,
+) -> LocalAuditIndexErgonomicsValidation {
+    let mut issues = Vec::new();
+    let manifest_validation = validate_local_audit_index_manifest(manifest);
+    if !manifest_validation.valid {
+        issues.push(LocalAuditIndexErgonomicsIssue {
+            kind: LocalAuditIndexErgonomicsIssueKind::InvalidManifest,
+            path: "manifest".to_string(),
+            message: format!(
+                "audit-index ergonomics require a valid local audit-index manifest: {:?}",
+                manifest_validation.issues
+            ),
+        });
+    }
+
+    for (index, filter) in request.filters.iter().enumerate() {
+        let path = format!("filters[{index}].value");
+        if !is_safe_ergonomics_filter_value(&filter.value) {
+            issues.push(LocalAuditIndexErgonomicsIssue {
+                kind: LocalAuditIndexErgonomicsIssueKind::InvalidFilterValue,
+                path,
+                message: "filter values must be exact manifest-field values without path, URL, shell, wildcard, or expression syntax".to_string(),
+            });
+            continue;
+        }
+        if matches!(
+            filter.field,
+            LocalAuditIndexErgonomicsFilterField::FailedReadiness
+                | LocalAuditIndexErgonomicsFilterField::LocalOnlyWarningsVisible
+        ) && !matches!(filter.value.as_str(), "true" | "false")
+        {
+            issues.push(LocalAuditIndexErgonomicsIssue {
+                kind: LocalAuditIndexErgonomicsIssueKind::InvalidBooleanFilterValue,
+                path,
+                message: "boolean ergonomics filters must use exactly true or false".to_string(),
+            });
+        }
+    }
+
+    LocalAuditIndexErgonomicsValidation {
+        valid: issues.is_empty(),
+        issues,
+        claim_boundary: ClaimBoundary::Level0DesignNote,
+    }
+}
+
+/// Build a Phase S in-memory audit-index ergonomics view.
+///
+/// The view is presentation metadata over one valid `LocalAuditIndexManifest`.
+/// It does not write files, execute replay commands, import results, mutate
+/// source metadata, populate score axes, or create accepted/official/Level2+
+/// evidence.
+pub fn build_local_audit_index_ergonomics_view(
+    manifest: &LocalAuditIndexManifest,
+    request: &LocalAuditIndexErgonomicsRequest,
+) -> Result<LocalAuditIndexErgonomicsView> {
+    let validation = validate_local_audit_index_ergonomics_request(manifest, request);
+    if !validation.valid {
+        return Err(ZkBenchError::validation(
+            "audit_index.ergonomics",
+            format!(
+                "audit-index ergonomics validation failed: {:?}",
+                validation.issues
+            ),
+        ));
+    }
+
+    let mut selected: Vec<&LocalAuditIndexInputRef> = manifest
+        .inputs
+        .iter()
+        .filter(|input| {
+            request
+                .filters
+                .iter()
+                .all(|filter| ergonomics_filter_matches(input, filter))
+        })
+        .collect();
+    sort_ergonomics_inputs(&mut selected, request.sort_by);
+
+    let selected_input_ids = selected
+        .iter()
+        .map(|input| input.input_id.clone())
+        .collect::<Vec<_>>();
+    let groups = build_ergonomics_groups(&selected, request.group_by);
+    let warning_summary = build_ergonomics_warning_summary(manifest, &selected);
+    let limitation_labels = required_local_audit_index_ergonomics_limitations();
+    let markdown = render_local_audit_index_ergonomics_markdown(
+        manifest,
+        &selected_input_ids,
+        &groups,
+        &warning_summary,
+        &limitation_labels,
+    );
+
+    Ok(LocalAuditIndexErgonomicsView {
+        index_id: manifest.index_id.clone(),
+        indexed_pack_id: manifest.indexed_pack_id.clone(),
+        selected_input_ids,
+        rejected_filters: Vec::new(),
+        groups,
+        warning_summary,
+        limitation_labels,
+        output_claim_boundary: ClaimBoundary::Level0DesignNote,
+        markdown,
+    })
+}
+
 /// Validate local audit-index metadata.
 pub fn validate_local_audit_index_manifest(
     manifest: &LocalAuditIndexManifest,
@@ -739,6 +1027,196 @@ fn map_report_bundle_input_kind(kind: ReportBundleInputKind) -> LocalAuditIndexI
     }
 }
 
+fn ergonomics_filter_matches(
+    input: &LocalAuditIndexInputRef,
+    filter: &LocalAuditIndexErgonomicsFilter,
+) -> bool {
+    let value = match filter.field {
+        LocalAuditIndexErgonomicsFilterField::InputKind => format!("{:?}", input.kind),
+        LocalAuditIndexErgonomicsFilterField::ClaimBoundary => {
+            format!("{:?}", input.claim_boundary)
+        }
+        LocalAuditIndexErgonomicsFilterField::FailedReadiness => input.failed_readiness.to_string(),
+        LocalAuditIndexErgonomicsFilterField::LocalOnlyWarningsVisible => {
+            input.local_only_warnings_visible.to_string()
+        }
+    };
+    value == filter.value
+}
+
+fn sort_ergonomics_inputs(
+    inputs: &mut Vec<&LocalAuditIndexInputRef>,
+    sort_by: LocalAuditIndexErgonomicsSortKey,
+) {
+    match sort_by {
+        LocalAuditIndexErgonomicsSortKey::InputId => {
+            inputs.sort_by(|left, right| left.input_id.cmp(&right.input_id));
+        }
+        LocalAuditIndexErgonomicsSortKey::ArtifactUri => {
+            inputs.sort_by(|left, right| {
+                left.artifact_uri
+                    .cmp(&right.artifact_uri)
+                    .then_with(|| left.input_id.cmp(&right.input_id))
+            });
+        }
+        LocalAuditIndexErgonomicsSortKey::InputKind => {
+            inputs.sort_by(|left, right| {
+                left.kind
+                    .cmp(&right.kind)
+                    .then_with(|| left.input_id.cmp(&right.input_id))
+            });
+        }
+        LocalAuditIndexErgonomicsSortKey::ClaimBoundary => {
+            inputs.sort_by(|left, right| {
+                left.claim_boundary
+                    .cmp(&right.claim_boundary)
+                    .then_with(|| left.input_id.cmp(&right.input_id))
+            });
+        }
+    }
+}
+
+fn build_ergonomics_groups(
+    selected: &[&LocalAuditIndexInputRef],
+    group_by: LocalAuditIndexErgonomicsGroupKey,
+) -> Vec<LocalAuditIndexErgonomicsGroupSummary> {
+    let mut grouped: BTreeMap<String, LocalAuditIndexErgonomicsGroupSummary> = BTreeMap::new();
+    for input in selected {
+        let group_value = ergonomics_group_value(input, group_by);
+        let entry = grouped.entry(group_value.clone()).or_insert_with(|| {
+            LocalAuditIndexErgonomicsGroupSummary {
+                group_key: group_by,
+                group_value,
+                input_count: 0,
+                failed_readiness_input_count: 0,
+                hidden_local_only_warning_input_count: 0,
+            }
+        });
+        entry.input_count += 1;
+        if input.failed_readiness {
+            entry.failed_readiness_input_count += 1;
+        }
+        if !input.local_only_warnings_visible {
+            entry.hidden_local_only_warning_input_count += 1;
+        }
+    }
+    grouped.into_values().collect()
+}
+
+fn ergonomics_group_value(
+    input: &LocalAuditIndexInputRef,
+    group_by: LocalAuditIndexErgonomicsGroupKey,
+) -> String {
+    match group_by {
+        LocalAuditIndexErgonomicsGroupKey::InputKind => format!("{:?}", input.kind),
+        LocalAuditIndexErgonomicsGroupKey::ClaimBoundary => format!("{:?}", input.claim_boundary),
+        LocalAuditIndexErgonomicsGroupKey::FailedReadiness => input.failed_readiness.to_string(),
+        LocalAuditIndexErgonomicsGroupKey::LocalOnlyWarningsVisible => {
+            input.local_only_warnings_visible.to_string()
+        }
+    }
+}
+
+fn build_ergonomics_warning_summary(
+    manifest: &LocalAuditIndexManifest,
+    selected: &[&LocalAuditIndexInputRef],
+) -> LocalAuditIndexErgonomicsWarningSummary {
+    let mut source_mutation_flags = Vec::new();
+    if manifest.mutates_source_pack {
+        source_mutation_flags.push("mutates_source_pack".to_string());
+    }
+    if manifest.mutates_source_report {
+        source_mutation_flags.push("mutates_source_report".to_string());
+    }
+    if manifest.mutates_report_bundle {
+        source_mutation_flags.push("mutates_report_bundle".to_string());
+    }
+
+    LocalAuditIndexErgonomicsWarningSummary {
+        failed_readiness_visible: manifest.failed_readiness_visible,
+        failed_readiness_input_count: selected
+            .iter()
+            .filter(|input| input.failed_readiness)
+            .count(),
+        local_only_warnings_visible: manifest.local_only_warnings_visible,
+        hidden_local_only_warning_input_count: selected
+            .iter()
+            .filter(|input| !input.local_only_warnings_visible)
+            .count(),
+        source_mutation_claimed: !source_mutation_flags.is_empty(),
+        source_mutation_flags,
+    }
+}
+
+fn render_local_audit_index_ergonomics_markdown(
+    manifest: &LocalAuditIndexManifest,
+    selected_input_ids: &[String],
+    groups: &[LocalAuditIndexErgonomicsGroupSummary],
+    warning_summary: &LocalAuditIndexErgonomicsWarningSummary,
+    limitation_labels: &[String],
+) -> String {
+    let mut markdown = String::new();
+    markdown.push_str("# Local Audit-Index Ergonomics View\n\n");
+    markdown.push_str(&format!("- index_id: {}\n", manifest.index_id));
+    markdown.push_str(&format!(
+        "- indexed_pack_id: {}\n",
+        manifest.indexed_pack_id
+    ));
+    markdown.push_str("- output_claim_boundary: Level0DesignNote\n");
+    markdown.push_str(&format!(
+        "- selected_input_count: {}\n\n",
+        selected_input_ids.len()
+    ));
+
+    markdown.push_str("## Limitation Labels\n\n");
+    for label in limitation_labels {
+        markdown.push_str(&format!("- {label}\n"));
+    }
+
+    markdown.push_str("\n## Warning Summary\n\n");
+    markdown.push_str(&format!(
+        "- failed_readiness_visible: {}\n",
+        warning_summary.failed_readiness_visible
+    ));
+    markdown.push_str(&format!(
+        "- failed_readiness_input_count: {}\n",
+        warning_summary.failed_readiness_input_count
+    ));
+    markdown.push_str(&format!(
+        "- local_only_warnings_visible: {}\n",
+        warning_summary.local_only_warnings_visible
+    ));
+    markdown.push_str(&format!(
+        "- hidden_local_only_warning_input_count: {}\n",
+        warning_summary.hidden_local_only_warning_input_count
+    ));
+    markdown.push_str(&format!(
+        "- source_mutation_claimed: {}\n\n",
+        warning_summary.source_mutation_claimed
+    ));
+
+    markdown.push_str("## Groups\n\n");
+    markdown.push_str("| key | value | inputs | failed readiness | hidden local-only warnings |\n");
+    markdown.push_str("| --- | --- | ---: | ---: | ---: |\n");
+    for group in groups {
+        markdown.push_str(&format!(
+            "| {:?} | {} | {} | {} | {} |\n",
+            group.group_key,
+            group.group_value,
+            group.input_count,
+            group.failed_readiness_input_count,
+            group.hidden_local_only_warning_input_count
+        ));
+    }
+
+    markdown.push_str("\n## Selected Inputs\n\n");
+    for input_id in selected_input_ids {
+        markdown.push_str(&format!("- {input_id}\n"));
+    }
+
+    markdown
+}
+
 trait ReportBundleWarningVisibility {
     fn local_only_warnings_visible(&self) -> bool;
 }
@@ -818,6 +1296,23 @@ fn contains_shell_payload(value: &str) -> bool {
         || value.contains('`')
         || value.contains("&&")
         || value.contains("||")
+}
+
+fn is_safe_ergonomics_filter_value(value: &str) -> bool {
+    let trimmed = value.trim();
+    !trimmed.is_empty()
+        && trimmed == value
+        && !trimmed.contains('/')
+        && !trimmed.contains('\\')
+        && !trimmed.contains("..")
+        && !trimmed.contains("://")
+        && !contains_shell_payload(trimmed)
+        && !trimmed.chars().any(|ch| {
+            matches!(
+                ch,
+                '*' | '?' | '[' | ']' | '(' | ')' | '{' | '}' | '^' | '+' | '<' | '>'
+            )
+        })
 }
 
 fn require_limitation(
