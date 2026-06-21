@@ -1,14 +1,20 @@
+use std::fs;
+
 use zkbench_core::{
     build_local_audit_index_cross_bundle_view,
     deserialize_local_audit_index_cross_bundle_view_json,
+    read_local_audit_index_cross_bundle_outputs,
     required_local_audit_index_cross_bundle_limitations,
     serialize_local_audit_index_cross_bundle_view_json,
-    validate_local_audit_index_cross_bundle_request, ArtifactDigest, ArtifactDigestAlgorithm,
-    ArtifactKind, ArtifactRole, ClaimBoundary, LocalAuditIndexCrossBundleGroupKey,
-    LocalAuditIndexCrossBundleInput, LocalAuditIndexCrossBundleIssueKind,
-    LocalAuditIndexCrossBundleRequest, LocalAuditIndexCrossBundleSignalKind,
-    LocalAuditIndexCrossBundleSortKey, LocalAuditIndexInputKind, LocalAuditIndexInputRef,
-    LocalAuditIndexManifest, LocalAuditIndexVersion,
+    validate_local_audit_index_cross_bundle_request, write_local_audit_index_cross_bundle_outputs,
+    ArtifactDigest, ArtifactDigestAlgorithm, ArtifactKind, ArtifactRole, ClaimBoundary,
+    LocalAuditIndexCrossBundleGroupKey, LocalAuditIndexCrossBundleInput,
+    LocalAuditIndexCrossBundleIssueKind, LocalAuditIndexCrossBundleRequest,
+    LocalAuditIndexCrossBundleSignalKind, LocalAuditIndexCrossBundleSortKey,
+    LocalAuditIndexInputKind, LocalAuditIndexInputRef, LocalAuditIndexManifest,
+    LocalAuditIndexVersion, AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_DIGEST_PATH,
+    AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_PATH, AUDIT_INDEX_CROSS_BUNDLE_VIEW_DIGEST_PATH,
+    AUDIT_INDEX_CROSS_BUNDLE_VIEW_PATH,
 };
 
 fn digest(label: &str, kind: ArtifactKind, role: ArtifactRole) -> ArtifactDigest {
@@ -108,6 +114,31 @@ fn cross_bundle_request(
         group_by: LocalAuditIndexCrossBundleGroupKey::IndexedPackId,
         sort_by: LocalAuditIndexCrossBundleSortKey::SourceId,
     }
+}
+
+fn simple_cross_bundle_request() -> LocalAuditIndexCrossBundleRequest {
+    cross_bundle_request(
+        valid_manifest(
+            "audit_a",
+            "pack_a",
+            vec![input(
+                "left",
+                "reports/left.json",
+                ClaimBoundary::Level0DesignNote,
+                false,
+            )],
+        ),
+        valid_manifest(
+            "audit_b",
+            "pack_b",
+            vec![input(
+                "right",
+                "reports/right.json",
+                ClaimBoundary::Level0DesignNote,
+                false,
+            )],
+        ),
+    )
 }
 
 #[test]
@@ -368,12 +399,413 @@ fn cross_bundle_view_round_trips_as_local_metadata_only() {
 }
 
 #[test]
-fn cross_bundle_audit_index_source_exposes_no_phase_t_output_surface() {
+fn cross_bundle_outputs_write_and_read_declared_files_only() {
+    let request = cross_bundle_request(
+        valid_manifest(
+            "audit_a",
+            "pack_shared",
+            vec![input(
+                "shared_readiness",
+                "reports/shared-readiness.json",
+                ClaimBoundary::Level0DesignNote,
+                true,
+            )],
+        ),
+        valid_manifest(
+            "audit_b",
+            "pack_shared",
+            vec![input(
+                "shared_readiness",
+                "reports/shared-readiness.json",
+                ClaimBoundary::Level1LocalReplay,
+                true,
+            )],
+        ),
+    );
+    let view = build_local_audit_index_cross_bundle_view(&request).expect("view builds");
+    let dir = tempfile::tempdir().expect("tempdir");
+    let source_root = dir.path().join("source-audit-index");
+    fs::create_dir_all(&source_root).expect("source root");
+    let source_file = source_root.join("audit-index-manifest.json");
+    fs::write(&source_file, b"{\"source\":true}\n").expect("source file");
+    let source_before = fs::read(&source_file).expect("source before");
+    let output_root = dir.path().join("cross-bundle-audit-index");
+
+    let output = write_local_audit_index_cross_bundle_outputs(
+        &output_root,
+        &request,
+        &view,
+        false,
+        &[source_root.as_path()],
+    )
+    .expect("cross-bundle outputs write");
+
+    assert_eq!(
+        output.output_claim_boundary,
+        ClaimBoundary::Level0DesignNote
+    );
+    assert!(output_root
+        .join(AUDIT_INDEX_CROSS_BUNDLE_VIEW_PATH)
+        .is_file());
+    assert!(output_root
+        .join(AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_PATH)
+        .is_file());
+    assert!(output_root
+        .join(AUDIT_INDEX_CROSS_BUNDLE_VIEW_DIGEST_PATH)
+        .is_file());
+    assert!(output_root
+        .join(AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_DIGEST_PATH)
+        .is_file());
+    assert_eq!(
+        fs::read_to_string(output_root.join(AUDIT_INDEX_CROSS_BUNDLE_VIEW_PATH))
+            .expect("view json"),
+        serialize_local_audit_index_cross_bundle_view_json(&view).expect("view json")
+    );
+    assert_eq!(
+        fs::read_to_string(output_root.join(AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_PATH))
+            .expect("markdown"),
+        view.markdown
+    );
+
+    let read_output = read_local_audit_index_cross_bundle_outputs(
+        &output_root,
+        &request,
+        &[source_root.as_path()],
+    )
+    .expect("cross-bundle outputs read");
+    assert_eq!(read_output.view, view);
+    assert_eq!(read_output.view_digest, output.view_digest);
+    assert_eq!(read_output.markdown_digest, output.markdown_digest);
+    assert_eq!(fs::read(source_file).expect("source after"), source_before);
+}
+
+#[test]
+fn cross_bundle_outputs_reject_invalid_and_drifted_views() {
+    let valid_left = valid_manifest(
+        "audit_a",
+        "pack_a",
+        vec![input(
+            "left",
+            "reports/left.json",
+            ClaimBoundary::Level0DesignNote,
+            false,
+        )],
+    );
+    let valid_right = valid_manifest(
+        "audit_b",
+        "pack_b",
+        vec![input(
+            "right",
+            "reports/right.json",
+            ClaimBoundary::Level0DesignNote,
+            false,
+        )],
+    );
+    let request = cross_bundle_request(valid_left.clone(), valid_right.clone());
+    let view = build_local_audit_index_cross_bundle_view(&request).expect("view builds");
+    let dir = tempfile::tempdir().expect("tempdir");
+    let protected_root = dir.path().join("source");
+    fs::create_dir_all(&protected_root).expect("protected root");
+
+    let mut invalid_manifest = valid_left;
+    invalid_manifest.creates_level2_evidence = true;
+    let invalid_request = cross_bundle_request(invalid_manifest, valid_right);
+    let validation_error = write_local_audit_index_cross_bundle_outputs(
+        dir.path().join("invalid-request"),
+        &invalid_request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect_err("invalid request should fail");
+    assert!(validation_error
+        .to_string()
+        .contains("cross-bundle validation failed"));
+
+    let mut drifted_view = view.clone();
+    drifted_view.sources.pop();
+    let drift_error = write_local_audit_index_cross_bundle_outputs(
+        dir.path().join("drifted-view"),
+        &request,
+        &drifted_view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect_err("drifted view should fail");
+    assert!(drift_error
+        .to_string()
+        .contains("does not match deterministic source request derivation"));
+
+    let mut escalated_view = view.clone();
+    escalated_view.output_claim_boundary = ClaimBoundary::Level1LocalReplay;
+    let claim_error = write_local_audit_index_cross_bundle_outputs(
+        dir.path().join("claim-escalation"),
+        &request,
+        &escalated_view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect_err("claim escalation should fail");
+    assert!(claim_error
+        .to_string()
+        .contains("must remain Level0DesignNote"));
+
+    let mut missing_limitation_view = view;
+    missing_limitation_view.limitation_labels.pop();
+    let limitation_error = write_local_audit_index_cross_bundle_outputs(
+        dir.path().join("missing-limitation"),
+        &request,
+        &missing_limitation_view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect_err("missing limitation should fail");
+    assert!(limitation_error
+        .to_string()
+        .contains("missing required cross-bundle limitation label"));
+}
+
+#[test]
+fn cross_bundle_outputs_reject_overwrite_and_materialized_drift() {
+    let request = simple_cross_bundle_request();
+    let view = build_local_audit_index_cross_bundle_view(&request).expect("view builds");
+    let dir = tempfile::tempdir().expect("tempdir");
+    let protected_root = dir.path().join("source");
+    fs::create_dir_all(&protected_root).expect("protected root");
+    let output_root = dir.path().join("cross-bundle-audit-index");
+
+    write_local_audit_index_cross_bundle_outputs(
+        &output_root,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect("initial write succeeds");
+
+    let overwrite_error = write_local_audit_index_cross_bundle_outputs(
+        &output_root,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect_err("non-empty root without overwrite should fail");
+    assert!(overwrite_error
+        .to_string()
+        .contains("explicit overwrite approval is required"));
+
+    fs::write(
+        output_root.join(AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_PATH),
+        b"# tampered\n",
+    )
+    .expect("tamper markdown");
+    let markdown_error = read_local_audit_index_cross_bundle_outputs(
+        &output_root,
+        &request,
+        &[protected_root.as_path()],
+    )
+    .expect_err("tampered Markdown should fail");
+    assert!(markdown_error
+        .to_string()
+        .contains("cross-bundle Markdown bytes do not match digest sidecar"));
+
+    let drift_overwrite_error = write_local_audit_index_cross_bundle_outputs(
+        &output_root,
+        &request,
+        &view,
+        true,
+        &[protected_root.as_path()],
+    )
+    .expect_err("overwrite should reject materialized drift");
+    assert!(drift_overwrite_error
+        .to_string()
+        .contains("cross-bundle Markdown bytes do not match digest sidecar"));
+
+    fs::remove_dir_all(&output_root).expect("remove drifted output");
+    write_local_audit_index_cross_bundle_outputs(
+        &output_root,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect("rewrite clean output");
+    fs::write(
+        output_root.join(AUDIT_INDEX_CROSS_BUNDLE_VIEW_DIGEST_PATH),
+        b"0000000000000000000000000000000000000000000000000000000000000000\n",
+    )
+    .expect("tamper view digest");
+    let view_error = read_local_audit_index_cross_bundle_outputs(
+        &output_root,
+        &request,
+        &[protected_root.as_path()],
+    )
+    .expect_err("stale view digest should fail");
+    assert!(view_error
+        .to_string()
+        .contains("cross-bundle view JSON bytes do not match digest sidecar"));
+}
+
+#[test]
+fn cross_bundle_outputs_reject_partial_unexpected_and_protected_roots() {
+    let request = simple_cross_bundle_request();
+    let view = build_local_audit_index_cross_bundle_view(&request).expect("view builds");
+    let dir = tempfile::tempdir().expect("tempdir");
+    let protected_root = dir.path().join("source");
+    fs::create_dir_all(&protected_root).expect("protected root");
+
+    let nested_error = write_local_audit_index_cross_bundle_outputs(
+        protected_root.join("cross-bundle-audit-index"),
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect_err("nested protected root should fail");
+    assert!(nested_error
+        .to_string()
+        .contains("must not overlap protected path"));
+
+    let parent_root = dir.path().join("parent-output");
+    let child_protected = parent_root.join("source.json");
+    let parent_error = write_local_audit_index_cross_bundle_outputs(
+        &parent_root,
+        &request,
+        &view,
+        false,
+        &[child_protected.as_path()],
+    )
+    .expect_err("parent of protected path should fail");
+    assert!(parent_error
+        .to_string()
+        .contains("must not overlap protected path"));
+
+    let output_root = dir.path().join("cross-bundle-audit-index");
+    write_local_audit_index_cross_bundle_outputs(
+        &output_root,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect("initial write succeeds");
+    fs::remove_file(output_root.join(AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_PATH))
+        .expect("remove Markdown");
+    let partial_error = read_local_audit_index_cross_bundle_outputs(
+        &output_root,
+        &request,
+        &[protected_root.as_path()],
+    )
+    .expect_err("partial bundle should fail");
+    assert!(partial_error.to_string().contains("cross-bundle-view.md"));
+
+    fs::remove_dir_all(&output_root).expect("remove partial output");
+    write_local_audit_index_cross_bundle_outputs(
+        &output_root,
+        &request,
+        &view,
+        true,
+        &[protected_root.as_path()],
+    )
+    .expect("overwrite restores complete bundle");
+    fs::write(output_root.join("unexpected.txt"), b"stale\n").expect("unexpected file");
+    let unexpected_error = read_local_audit_index_cross_bundle_outputs(
+        &output_root,
+        &request,
+        &[protected_root.as_path()],
+    )
+    .expect_err("unexpected file should fail");
+    assert!(unexpected_error
+        .to_string()
+        .contains("contains an unexpected file"));
+}
+
+#[test]
+fn cross_bundle_outputs_reject_relative_absolute_protected_overlap() {
+    let request = simple_cross_bundle_request();
+    let view = build_local_audit_index_cross_bundle_view(&request).expect("view builds");
+    let relative_protected_root = std::path::PathBuf::from("target/phase-t-cross-bundle-source");
+    let relative_output_root = relative_protected_root.join("cross-bundle-audit-index");
+    let absolute_protected_root = std::env::current_dir()
+        .expect("current dir")
+        .join(&relative_protected_root);
+    let _ = fs::remove_dir_all(&relative_protected_root);
+    fs::create_dir_all(&relative_protected_root).expect("protected root");
+
+    let overlap_error = write_local_audit_index_cross_bundle_outputs(
+        &relative_output_root,
+        &request,
+        &view,
+        false,
+        &[absolute_protected_root.as_path()],
+    )
+    .expect_err("relative output under absolute protected path should fail");
+    assert!(overlap_error
+        .to_string()
+        .contains("must not overlap protected path"));
+    assert!(
+        !relative_output_root.exists(),
+        "overlap rejection must happen before any output directory is written"
+    );
+
+    fs::remove_dir_all(&relative_protected_root).expect("cleanup protected root");
+}
+
+#[cfg(unix)]
+#[test]
+fn cross_bundle_outputs_reject_symlinks() {
+    use std::os::unix::fs::symlink;
+
+    let request = simple_cross_bundle_request();
+    let view = build_local_audit_index_cross_bundle_view(&request).expect("view builds");
+    let dir = tempfile::tempdir().expect("tempdir");
+    let protected_root = dir.path().join("source");
+    fs::create_dir_all(&protected_root).expect("protected root");
+    let output_root = dir.path().join("cross-bundle-audit-index");
+    fs::create_dir_all(&output_root).expect("output root");
+    fs::write(dir.path().join("outside.json"), b"{}\n").expect("outside file");
+    symlink(
+        dir.path().join("outside.json"),
+        output_root.join(AUDIT_INDEX_CROSS_BUNDLE_VIEW_PATH),
+    )
+    .expect("symlink");
+
+    let read_error = read_local_audit_index_cross_bundle_outputs(
+        &output_root,
+        &request,
+        &[protected_root.as_path()],
+    )
+    .expect_err("symlink read should fail");
+    assert!(read_error.to_string().contains("must not contain symlinks"));
+
+    let write_error = write_local_audit_index_cross_bundle_outputs(
+        &output_root,
+        &request,
+        &view,
+        true,
+        &[protected_root.as_path()],
+    )
+    .expect_err("symlink write should fail");
+    assert!(write_error
+        .to_string()
+        .contains("must not contain symlinks"));
+}
+
+#[test]
+fn cross_bundle_audit_index_source_exposes_no_runtime_surface() {
     let source = include_str!("../src/audit_index.rs");
-    assert!(!source.contains("write_local_audit_index_cross_bundle"));
-    assert!(!source.contains("read_local_audit_index_cross_bundle"));
-    assert!(!source.contains("AUDIT_INDEX_CROSS_BUNDLE"));
-    for forbidden in ["std::process::Command", "tokio::process", "reqwest", "ureq"] {
+    for forbidden in [
+        "std::process::Command",
+        "Command::new",
+        "tokio::process",
+        "reqwest",
+        "ureq",
+        "std::net",
+        "TcpStream",
+        "package.json",
+        "node_modules",
+    ] {
         assert!(
             !source.contains(forbidden),
             "audit_index.rs must not expose {forbidden}"
