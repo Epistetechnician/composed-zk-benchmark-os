@@ -687,3 +687,44 @@ paths fail closed; schema and digest drift fail closed; stale responses and
 missing trust roots fail closed; retained secret-shaped values fail closed;
 rejected provider verdicts emit no validated artifact; normal test paths remain
 hermetic; and successful validation remains capped at `Attested`.
+
+## Managed-Attestation Track: Phala Operator Live Artifact Output Plumbing Boundary
+
+Status: complete for docs-first boundary only. See
+`docs/84-phala-operator-live-artifact-output-plumbing-boundary-spec.md`.
+
+Goal: define the future materialized output-root contract for operator-live
+artifact bundles before any implementation writes, reads, overwrites, or
+validates files on disk.
+
+Implemented: docs-first boundary for caller-selected output roots, declared
+`operator-live/*` materialized file shape, write policy, read policy, overwrite
+policy, symlink rejection, path-traversal rejection, partial-bundle rejection,
+raw-response retention limits, future code touch surface, required hermetic
+tests, and `Attested`-only claim limits.
+
+Dependencies: Phase 81 operator-live path boundary, Phase 82 artifact-plumbing
+boundary, Phase 83 in-memory artifact-plumbing implementation, and Phase 4
+claim boundaries.
+
+Validation gate: documentation navigation checks, claim-boundary text checks,
+no Rust source changes, no Cargo metadata changes, no package runtime files, no
+fixture changes, no generated artifacts, no filesystem implementation, no
+network code, no live Phala calls, no operator secrets, and no accepted
+Evidence Ledger mutation.
+
+Anti-goals: Rust implementation, filesystem write/read implementation, examples
+or scripts, live Phala API calls, operator live tests, credential handling
+code, secret fixtures, generated operator artifacts, raw response body
+retention, network access, local Intel DCAP quote verification, PCCS or
+collateral handling, generic JWKS/JWT fetching, TLS or attested-TLS channel
+binding, deployment orchestration, external repo clones, backend execution,
+benchmark outputs, accepted Evidence Ledger mutation, Phase 4 registry semantic
+changes, Level2+ evidence, global uniqueness claims, or claims above
+`Attested`.
+
+Exit criteria: the future output-plumbing boundary is named, README and AGENTS
+point to it, future output-root rules are explicit, future write/read policies
+reuse Phase 83 validation, future raw response retention remains forbidden by
+default, normal test paths remain hermetic, and all successful future responses
+remain capped at `Attested`.
