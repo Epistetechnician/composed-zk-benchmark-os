@@ -1,11 +1,17 @@
+use std::fs;
+
 use zkbench_core::{
-    build_local_audit_index_ergonomics_view, required_local_audit_index_ergonomics_limitations,
-    validate_local_audit_index_ergonomics_request, ArtifactDigest, ArtifactDigestAlgorithm,
-    ArtifactKind, ArtifactRole, ClaimBoundary, LocalAuditIndexErgonomicsFilter,
-    LocalAuditIndexErgonomicsFilterField, LocalAuditIndexErgonomicsGroupKey,
-    LocalAuditIndexErgonomicsIssueKind, LocalAuditIndexErgonomicsRequest,
-    LocalAuditIndexErgonomicsSortKey, LocalAuditIndexInputKind, LocalAuditIndexInputRef,
-    LocalAuditIndexManifest, LocalAuditIndexVersion,
+    build_local_audit_index_ergonomics_view, read_local_audit_index_ergonomics_outputs,
+    required_local_audit_index_ergonomics_limitations,
+    serialize_local_audit_index_ergonomics_view_json,
+    validate_local_audit_index_ergonomics_request, write_local_audit_index_ergonomics_outputs,
+    ArtifactDigest, ArtifactDigestAlgorithm, ArtifactKind, ArtifactRole, ClaimBoundary,
+    LocalAuditIndexErgonomicsFilter, LocalAuditIndexErgonomicsFilterField,
+    LocalAuditIndexErgonomicsGroupKey, LocalAuditIndexErgonomicsIssueKind,
+    LocalAuditIndexErgonomicsRequest, LocalAuditIndexErgonomicsSortKey, LocalAuditIndexInputKind,
+    LocalAuditIndexInputRef, LocalAuditIndexManifest, LocalAuditIndexVersion,
+    AUDIT_INDEX_ERGONOMICS_MARKDOWN_DIGEST_PATH, AUDIT_INDEX_ERGONOMICS_MARKDOWN_PATH,
+    AUDIT_INDEX_ERGONOMICS_VIEW_DIGEST_PATH, AUDIT_INDEX_ERGONOMICS_VIEW_PATH,
 };
 
 fn digest(label: &str, kind: ArtifactKind, role: ArtifactRole) -> ArtifactDigest {
@@ -201,15 +207,365 @@ fn audit_index_ergonomics_fail_closed_on_invalid_source_manifest() {
 }
 
 #[test]
+fn audit_index_ergonomics_outputs_write_and_read_declared_files_only() {
+    let manifest = valid_manifest();
+    let request = LocalAuditIndexErgonomicsRequest::default();
+    let view = build_local_audit_index_ergonomics_view(&manifest, &request)
+        .expect("valid ergonomics view");
+    let dir = tempfile::tempdir().expect("tempdir");
+    let source_root = dir.path().join("source");
+    fs::create_dir_all(&source_root).expect("source root");
+    let source_file = source_root.join("audit-index-manifest.json");
+    fs::write(&source_file, b"{\"source\":true}\n").expect("source file");
+    let source_before = fs::read(&source_file).expect("source before");
+    let output_root = dir.path().join("audit-index-ergonomics");
+
+    let output = write_local_audit_index_ergonomics_outputs(
+        &output_root,
+        &manifest,
+        &request,
+        &view,
+        false,
+        &[source_root.as_path()],
+    )
+    .expect("ergonomics outputs write");
+
+    assert_eq!(
+        output.output_claim_boundary,
+        ClaimBoundary::Level0DesignNote
+    );
+    assert!(output_root.join(AUDIT_INDEX_ERGONOMICS_VIEW_PATH).is_file());
+    assert!(output_root
+        .join(AUDIT_INDEX_ERGONOMICS_MARKDOWN_PATH)
+        .is_file());
+    assert!(output_root
+        .join(AUDIT_INDEX_ERGONOMICS_VIEW_DIGEST_PATH)
+        .is_file());
+    assert!(output_root
+        .join(AUDIT_INDEX_ERGONOMICS_MARKDOWN_DIGEST_PATH)
+        .is_file());
+    assert_eq!(
+        fs::read_to_string(output_root.join(AUDIT_INDEX_ERGONOMICS_VIEW_PATH)).expect("view json"),
+        serialize_local_audit_index_ergonomics_view_json(&view).expect("view json")
+    );
+    assert_eq!(
+        fs::read_to_string(output_root.join(AUDIT_INDEX_ERGONOMICS_MARKDOWN_PATH))
+            .expect("markdown"),
+        view.markdown
+    );
+
+    let read_output = read_local_audit_index_ergonomics_outputs(
+        &output_root,
+        &manifest,
+        &request,
+        &[source_root.as_path()],
+    )
+    .expect("ergonomics outputs read");
+    assert_eq!(read_output.view, view);
+    assert_eq!(read_output.view_digest, output.view_digest);
+    assert_eq!(read_output.markdown_digest, output.markdown_digest);
+    assert_eq!(fs::read(source_file).expect("source after"), source_before);
+}
+
+#[test]
+fn audit_index_ergonomics_outputs_reject_invalid_and_drifted_views() {
+    let manifest = valid_manifest();
+    let request = LocalAuditIndexErgonomicsRequest::default();
+    let view = build_local_audit_index_ergonomics_view(&manifest, &request)
+        .expect("valid ergonomics view");
+    let dir = tempfile::tempdir().expect("tempdir");
+    let protected_root = dir.path().join("source");
+    fs::create_dir_all(&protected_root).expect("protected root");
+
+    let mut invalid_manifest = manifest.clone();
+    invalid_manifest.creates_level2_evidence = true;
+    let validation_error = write_local_audit_index_ergonomics_outputs(
+        dir.path().join("invalid-manifest"),
+        &invalid_manifest,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect_err("invalid manifest should fail");
+    assert!(validation_error
+        .to_string()
+        .contains("ergonomics validation failed"));
+
+    let mut drifted_view = view.clone();
+    drifted_view
+        .selected_input_ids
+        .push("not_derived".to_string());
+    let drift_error = write_local_audit_index_ergonomics_outputs(
+        dir.path().join("drifted-view"),
+        &manifest,
+        &request,
+        &drifted_view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect_err("drifted view should fail");
+    assert!(drift_error
+        .to_string()
+        .contains("does not match deterministic source manifest/request derivation"));
+
+    let mut escalated_view = view.clone();
+    escalated_view.output_claim_boundary = ClaimBoundary::Level1LocalReplay;
+    let claim_error = write_local_audit_index_ergonomics_outputs(
+        dir.path().join("claim-escalation"),
+        &manifest,
+        &request,
+        &escalated_view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect_err("claim escalation should fail");
+    assert!(claim_error
+        .to_string()
+        .contains("must remain Level0DesignNote"));
+
+    let mut missing_limitation_view = view.clone();
+    missing_limitation_view.limitation_labels.pop();
+    let limitation_error = write_local_audit_index_ergonomics_outputs(
+        dir.path().join("missing-limitation"),
+        &manifest,
+        &request,
+        &missing_limitation_view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect_err("missing limitation should fail");
+    assert!(limitation_error
+        .to_string()
+        .contains("missing required ergonomics limitation label"));
+}
+
+#[test]
+fn audit_index_ergonomics_outputs_reject_overwrite_and_materialized_drift() {
+    let manifest = valid_manifest();
+    let request = LocalAuditIndexErgonomicsRequest::default();
+    let view = build_local_audit_index_ergonomics_view(&manifest, &request)
+        .expect("valid ergonomics view");
+    let dir = tempfile::tempdir().expect("tempdir");
+    let protected_root = dir.path().join("source");
+    fs::create_dir_all(&protected_root).expect("protected root");
+    let output_root = dir.path().join("audit-index-ergonomics");
+
+    write_local_audit_index_ergonomics_outputs(
+        &output_root,
+        &manifest,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect("initial write succeeds");
+
+    let overwrite_error = write_local_audit_index_ergonomics_outputs(
+        &output_root,
+        &manifest,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect_err("non-empty root without overwrite should fail");
+    assert!(overwrite_error
+        .to_string()
+        .contains("explicit overwrite approval is required"));
+
+    fs::write(
+        output_root.join(AUDIT_INDEX_ERGONOMICS_MARKDOWN_PATH),
+        b"# tampered\n",
+    )
+    .expect("tamper markdown");
+    let markdown_error = read_local_audit_index_ergonomics_outputs(
+        &output_root,
+        &manifest,
+        &request,
+        &[protected_root.as_path()],
+    )
+    .expect_err("tampered Markdown should fail");
+    assert!(markdown_error
+        .to_string()
+        .contains("ergonomics Markdown bytes do not match digest sidecar"));
+
+    let drift_overwrite_error = write_local_audit_index_ergonomics_outputs(
+        &output_root,
+        &manifest,
+        &request,
+        &view,
+        true,
+        &[protected_root.as_path()],
+    )
+    .expect_err("overwrite should reject materialized drift");
+    assert!(drift_overwrite_error
+        .to_string()
+        .contains("ergonomics Markdown bytes do not match digest sidecar"));
+
+    fs::remove_dir_all(&output_root).expect("remove drifted output");
+    write_local_audit_index_ergonomics_outputs(
+        &output_root,
+        &manifest,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect("rewrite clean output");
+    fs::write(
+        output_root.join(AUDIT_INDEX_ERGONOMICS_VIEW_DIGEST_PATH),
+        b"0000000000000000000000000000000000000000000000000000000000000000\n",
+    )
+    .expect("tamper view digest");
+    let view_error = read_local_audit_index_ergonomics_outputs(
+        &output_root,
+        &manifest,
+        &request,
+        &[protected_root.as_path()],
+    )
+    .expect_err("stale view digest should fail");
+    assert!(view_error
+        .to_string()
+        .contains("ergonomics view JSON bytes do not match digest sidecar"));
+}
+
+#[test]
+fn audit_index_ergonomics_outputs_reject_partial_unexpected_and_protected_roots() {
+    let manifest = valid_manifest();
+    let request = LocalAuditIndexErgonomicsRequest::default();
+    let view = build_local_audit_index_ergonomics_view(&manifest, &request)
+        .expect("valid ergonomics view");
+    let dir = tempfile::tempdir().expect("tempdir");
+    let protected_root = dir.path().join("source");
+    fs::create_dir_all(&protected_root).expect("protected root");
+
+    let nested_error = write_local_audit_index_ergonomics_outputs(
+        protected_root.join("audit-index-ergonomics"),
+        &manifest,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect_err("nested protected root should fail");
+    assert!(nested_error
+        .to_string()
+        .contains("must not overlap protected path"));
+
+    let parent_root = dir.path().join("parent-output");
+    let child_protected = parent_root.join("source.json");
+    let parent_error = write_local_audit_index_ergonomics_outputs(
+        &parent_root,
+        &manifest,
+        &request,
+        &view,
+        false,
+        &[child_protected.as_path()],
+    )
+    .expect_err("parent of protected path should fail");
+    assert!(parent_error
+        .to_string()
+        .contains("must not overlap protected path"));
+
+    let output_root = dir.path().join("audit-index-ergonomics");
+    write_local_audit_index_ergonomics_outputs(
+        &output_root,
+        &manifest,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect("initial write succeeds");
+    fs::remove_file(output_root.join(AUDIT_INDEX_ERGONOMICS_MARKDOWN_PATH))
+        .expect("remove Markdown");
+    let partial_error = read_local_audit_index_ergonomics_outputs(
+        &output_root,
+        &manifest,
+        &request,
+        &[protected_root.as_path()],
+    )
+    .expect_err("partial bundle should fail");
+    assert!(partial_error.to_string().contains("ergonomics-view.md"));
+
+    fs::remove_dir_all(&output_root).expect("remove partial output");
+    write_local_audit_index_ergonomics_outputs(
+        &output_root,
+        &manifest,
+        &request,
+        &view,
+        true,
+        &[protected_root.as_path()],
+    )
+    .expect("overwrite restores complete bundle");
+    fs::write(output_root.join("unexpected.txt"), b"stale\n").expect("unexpected file");
+    let unexpected_error = read_local_audit_index_ergonomics_outputs(
+        &output_root,
+        &manifest,
+        &request,
+        &[protected_root.as_path()],
+    )
+    .expect_err("unexpected file should fail");
+    assert!(unexpected_error
+        .to_string()
+        .contains("contains an unexpected file"));
+}
+
+#[cfg(unix)]
+#[test]
+fn audit_index_ergonomics_outputs_reject_symlinks() {
+    use std::os::unix::fs::symlink;
+
+    let manifest = valid_manifest();
+    let request = LocalAuditIndexErgonomicsRequest::default();
+    let view = build_local_audit_index_ergonomics_view(&manifest, &request)
+        .expect("valid ergonomics view");
+    let dir = tempfile::tempdir().expect("tempdir");
+    let protected_root = dir.path().join("source");
+    fs::create_dir_all(&protected_root).expect("protected root");
+    let output_root = dir.path().join("audit-index-ergonomics");
+    fs::create_dir_all(&output_root).expect("output root");
+    fs::write(dir.path().join("outside.json"), b"{}\n").expect("outside file");
+    symlink(
+        dir.path().join("outside.json"),
+        output_root.join(AUDIT_INDEX_ERGONOMICS_VIEW_PATH),
+    )
+    .expect("symlink");
+
+    let read_error = read_local_audit_index_ergonomics_outputs(
+        &output_root,
+        &manifest,
+        &request,
+        &[protected_root.as_path()],
+    )
+    .expect_err("symlink read should fail");
+    assert!(read_error.to_string().contains("must not contain symlinks"));
+
+    let write_error = write_local_audit_index_ergonomics_outputs(
+        &output_root,
+        &manifest,
+        &request,
+        &view,
+        true,
+        &[protected_root.as_path()],
+    )
+    .expect_err("symlink write should fail");
+    assert!(write_error
+        .to_string()
+        .contains("must not contain symlinks"));
+}
+
+#[test]
 fn audit_index_ergonomics_source_exposes_no_runtime_surface() {
     let source = include_str!("../src/audit_index.rs");
 
     for forbidden in [
-        "write_local_audit_index_ergonomics",
-        "read_local_audit_index_ergonomics",
         "Command::new",
         "std::net",
         "TcpStream",
+        "package.json",
+        "node_modules",
     ] {
         assert!(
             !source.contains(forbidden),
