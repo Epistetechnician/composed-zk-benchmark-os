@@ -134,10 +134,21 @@ claim-boundary escalation.
 
 - No live external backend, live Phala call, DCAP/PCCS/JWKS fetching, TLS
   channel binding, or operator-live credential path was exercised.
+  `docs/97-phala-operator-live-invocation-boundary-spec.md` now defines the
+  future docs-first invocation boundary, but no invocation implementation,
+  credential path, live call, DCAP/PCCS/JWKS/TLS path, operator live test, or
+  generated operator artifact exists.
 - No committed generated benchmark artifact bundle, official benchmark
   submission, or accepted Evidence Ledger entry was created. Phase U now
   implements local artifact-bundle packaging APIs and hermetic temp-root tests,
   but it does not create durable submitted artifacts or promote them.
+  `docs/98-phase-v-local-artifact-campaign-boundary-spec.md` now defines the
+  future durable local artifact campaign boundary, and
+  `docs/99-phase-w-reviewed-evidence-promotion-boundary-spec.md` now defines the
+  future reviewed accepted-evidence and official-submission boundary. No durable
+  campaign output, official submission package, accepted Evidence Ledger
+  mutation, score-axis population, external replay evidence, or Level2+ evidence
+  exists.
 - No broader Phase S ergonomics surface was authorized or tested beyond the
   implemented single-index local output boundary.
 
