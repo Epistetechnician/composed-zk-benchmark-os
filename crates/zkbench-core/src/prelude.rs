@@ -50,6 +50,15 @@ pub use crate::generator::{
     BenchmarkInstance, DeterministicGenerator, FamilyKind, GeneratedBenchmarkFamily,
     GeneratedBenchmarkInstance, GeneratorConfig, GeneratorLimits, InstanceParams,
 };
+pub use crate::local_artifact_campaign::{
+    build_local_artifact_campaign_input_from_phase_u_output, read_local_artifact_campaign_outputs,
+    render_local_artifact_campaign_markdown, required_local_artifact_campaign_limitations,
+    validate_local_artifact_campaign_manifest, write_local_artifact_campaign_outputs,
+    LocalArtifactCampaignInputKind, LocalArtifactCampaignInputRef, LocalArtifactCampaignManifest,
+    LocalArtifactCampaignOutput, LocalArtifactCampaignRetentionPolicy,
+    LOCAL_ARTIFACT_CAMPAIGN_MANIFEST_PATH, LOCAL_ARTIFACT_CAMPAIGN_MARKDOWN_PATH,
+    LOCAL_ARTIFACT_CAMPAIGN_VALIDATION_PATH,
+};
 pub use crate::local_benchmark_artifact::{
     compute_local_benchmark_artifact_manifest_digest, read_local_benchmark_artifact_outputs,
     render_local_benchmark_artifact_markdown, validate_local_benchmark_artifact_manifest,

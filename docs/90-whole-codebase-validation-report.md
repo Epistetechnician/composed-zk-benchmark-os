@@ -96,6 +96,13 @@ The suite exercises the repo as a set of bounded local systems:
   partial-bundle rejection, corrupted-root non-repair, accepted Evidence Ledger
   non-mutation, score-axis non-population, and protected-path overlap
   hardening.
+- Phase V local artifact campaign manifest validation, Phase U output-root
+  validation before campaign input construction, deterministic validation
+  reports and Markdown rendering, declared-file output, digest sidecars,
+  stale-digest rejection, symlink-resolved protected overlap rejection, symlink
+  rejection, partial-campaign rejection, corrupted-root non-repair, accepted
+  Evidence Ledger non-mutation, score-axis non-population, and protected-path
+  overlap hardening.
 - HSAI claim-envelope algebra, agent-case lanes, distinct-agent registry,
   managed attestation, offline managed-JWT verification, Phala fixture and
   captured-artifact validation, hermetic fake-client live-verifier surface,
@@ -162,11 +169,16 @@ claim-boundary escalation.
   submission, or accepted Evidence Ledger entry was created. Phase U now
   implements local artifact-bundle packaging APIs and hermetic temp-root tests,
   but it does not create durable submitted artifacts or promote them.
-  `docs/98-phase-v-local-artifact-campaign-boundary-spec.md` now defines the
-  future durable local artifact campaign boundary, and
+  `docs/98-phase-v-local-artifact-campaign-boundary-spec.md` defines the
+  durable local artifact campaign boundary, and
+  `docs/103-phase-v-local-artifact-campaign-implementation-notes.md` records
+  local campaign output-plumbing APIs and hermetic tests. No committed durable
+  campaign output, official submission package, accepted Evidence Ledger
+  mutation, score-axis population, external replay evidence, or Level2+
+  evidence exists.
   `docs/99-phase-w-reviewed-evidence-promotion-boundary-spec.md` now defines the
   future reviewed accepted-evidence and official-submission boundary. No durable
-  campaign output, official submission package, accepted Evidence Ledger
+  submitted artifact, official submission package, accepted Evidence Ledger
   mutation, score-axis population, external replay evidence, or Level2+ evidence
   exists.
 - No broader Phase S ergonomics surface was authorized or tested beyond the
