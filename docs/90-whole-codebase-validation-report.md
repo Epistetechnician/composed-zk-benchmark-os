@@ -3,8 +3,9 @@
 Status: local validation report only.
 
 This report records the end-to-end local validation run after Phase S
-audit-index ergonomics output plumbing, protected-path overlap hardening, and
-the Phase 102 opt-in Phala provider-client implementation. It
+audit-index ergonomics output plumbing, protected-path overlap hardening, the
+Phase 102 opt-in Phala provider-client implementation, and the Phase 105
+operator-only live runner implementation. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
 running the available workspace gates and mapping those gates to the repo's
 major behavioral surfaces.
@@ -28,17 +29,19 @@ tools, or UI artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 102 validation.
+Run from repository root during Phase 105 validation.
 
 ```sh
 cargo fmt --all --check
 cargo test -p hsai-attestation-phala
 cargo test -p hsai-attestation-phala --features operator-live-provider
+cargo test -p hsai-attestation-phala --test phala_operator_live_runner_contract
 cargo test -p hsai-e2e-harness --test claim_boundary_source_scan
 cargo test --workspace
 cargo test --workspace --features external-runner
 cargo clippy --workspace --all-targets -- -D warnings
 cargo clippy -p hsai-attestation-phala --all-targets --features operator-live-provider -- -D warnings
+cargo clippy -p hsai-attestation-phala --features operator-live-provider --examples -- -D warnings
 cargo doc --workspace --no-deps
 cargo doc -p hsai-attestation-phala --features operator-live-provider --no-deps
 cargo test -p zkbench-core --test repo_hygiene
@@ -53,7 +56,7 @@ No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
 `cargo-llvm-cov 0.8.7` was available. The default workspace coverage pass
-reported `84.70%` region coverage, `81.19%` function execution, and `82.68%`
+reported `84.49%` region coverage, `80.65%` function execution, and `82.53%`
 line coverage. Branch coverage was not reported by this run. The optional
 `operator-live-provider` feature was validated by feature-specific test, clippy,
 and doc gates above; it is not included in the default workspace coverage
@@ -107,8 +110,8 @@ The suite exercises the repo as a set of bounded local systems:
   managed attestation, offline managed-JWT verification, Phala fixture and
   captured-artifact validation, hermetic fake-client live-verifier surface,
   operator-live artifact plumbing, opt-in Phala provider-client plumbing,
-  Phase 4 anchor registry, economy, membrane, economy simulation, and e2e
-  harness invariants.
+  operator-live runner source-contract checks, Phase 4 anchor registry,
+  economy, membrane, economy simulation, and e2e harness invariants.
 
 The strongest local statement supported by this run is:
 
@@ -162,9 +165,15 @@ claim-boundary escalation.
   records an opt-in feature-gated provider-client implementation with a
   transport seam, allowlisted environment credential provider, ureq-backed HTTP
   transport, raw-response digest replacement, and hermetic fake-transport
-  tests. No operator-run live Phala call, operator live test, generated
-  operator artifact, local DCAP/PCCS/JWKS/TLS path, accepted Evidence Ledger
-  mutation, or claim above `Attested` exists.
+  tests. `docs/104-phala-operator-live-runner-boundary-spec.md` defines the
+  operator-only runner boundary, and
+  `docs/105-phala-operator-live-runner-implementation-notes.md` records the
+  feature-gated `operator_live_run` example that requires explicit
+  acknowledgement, non-secret invocation JSON, matching credential-source
+  declaration, and an operator-owned credential environment. No operator-run
+  live Phala call was executed in this environment, no generated operator
+  artifact is committed, and no local DCAP/PCCS/JWKS/TLS path, accepted
+  Evidence Ledger mutation, or claim above `Attested` exists.
 - No committed generated benchmark artifact bundle, official benchmark
   submission, or accepted Evidence Ledger entry was created. Phase U now
   implements local artifact-bundle packaging APIs and hermetic temp-root tests,
