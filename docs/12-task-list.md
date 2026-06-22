@@ -1244,3 +1244,88 @@ environment sources, sends secrets only as outbound bearer material, never
 writes raw responses or credential material, normalizes accepted responses
 before the Phase 100 orchestrator validates them, and normal workspace tests
 remain hermetic.
+
+## Managed-Attestation Track: Phala Operator Live Runner Boundary
+
+Status: complete for docs-first boundary only. See
+`docs/104-phala-operator-live-runner-boundary-spec.md`.
+
+Goal: define the future operator-only live runner after Phase 102 provider
+client plumbing, before any command wiring, operator live test, generated live
+artifact, accepted evidence, official submission, or DCAP/PCCS/JWKS/TLS path
+exists.
+
+Implemented: docs-first boundary for a feature-gated example surface, explicit
+operator acknowledgement, non-secret invocation JSON path, matching
+credential-source declaration, allowlisted environment credential loading,
+existing Phase 100 invocation seam, existing Phase 85 output writer, normal
+test exclusion, source-contract tests, and `Attested`-only claim limits.
+
+Dependencies: Phase 85 operator-live output-root plumbing, Phase 100
+operator-live invocation plumbing, Phase 102 provider-client implementation,
+current Phala/dstack documentation re-check, and Phase 4 claim boundaries.
+
+Validation gate: documentation navigation checks, claim-boundary text checks,
+repo hygiene checks, no Rust source changes, no Cargo metadata changes, no
+fixtures, no generated operator artifacts, no package runtime files, no live
+Phala calls, no credentials, no operator live tests, no benchmark outputs, and
+no accepted Evidence Ledger mutation.
+
+Anti-goals: implementation in this slice, live Phala calls, operator live
+tests, real credentials, credential fixtures, generated operator artifacts,
+local Intel DCAP quote verification, PCCS or collateral fetching, generic
+JWKS/JWT fetching, TLS or attested-TLS channel binding, deployment
+orchestration, backend execution, benchmark outputs, official benchmark
+submission, accepted Evidence Ledger mutation, Level2+ evidence, global
+uniqueness claims, or claims above `Attested`.
+
+Exit criteria: Phase 104 runner boundary spec exists; README and AGENTS point
+to it; the future runner is constrained to the existing Phase 100 invocation
+seam and Phase 85 output writer; normal tests remain hermetic; and any future
+successful run remains capped at `Attested`.
+
+## Managed-Attestation Track: Phala Operator Live Runner Implementation
+
+Status: complete for operator-only example runner only. See
+`docs/105-phala-operator-live-runner-implementation-notes.md`.
+
+Goal: implement the smallest operator-owned runner over the Phase 102 provider
+client while keeping the path feature-gated, explicitly acknowledged,
+credential-free in git, excluded from normal tests, and capped at `Attested`.
+
+Implemented: `crates/hsai-attestation-phala/examples/operator_live_run.rs`,
+which requires `--features operator-live-provider`,
+`HSAI_PHALA_OPERATOR_ACK=I_ACKNOWLEDGE_OPERATOR_LIVE_PHALA_RUN`,
+`HSAI_PHALA_OPERATOR_INPUT_JSON`, and
+`HSAI_PHALA_OPERATOR_CREDENTIAL_SOURCE`. The runner reads a non-secret
+invocation JSON, requires the declared credential source to match the JSON,
+allowlists exactly that credential source, constructs
+`PhalaOperatorLiveProviderClient<UreqPhalaOperatorLiveTransport>`, invokes
+through `PhalaOperatorLiveInvocation`, writes only the existing redacted
+`operator-live/*` bundle, and prints only non-secret validated metadata.
+
+Dependencies: Phase 85 operator-live output-root plumbing, Phase 100
+operator-live invocation plumbing, Phase 102 provider-client implementation,
+Phase 104 runner boundary, and Phase 4 claim boundaries.
+
+Validation gate: runner contract tests, Phala crate tests with and without
+`--features operator-live-provider`, example clippy with
+`--features operator-live-provider --examples`, workspace tests, clippy, docs,
+no committed credentials, no secret fixtures, no generated committed operator
+artifacts, no normal test network access, no DCAP/PCCS/JWKS/TLS path, no
+benchmark outputs, and no accepted Evidence Ledger mutation.
+
+Anti-goals: normal tests requiring credentials, committed real credentials,
+secret fixtures, generated committed operator artifacts, hard-coded provider
+endpoint schemas, local Intel DCAP quote verification, PCCS or collateral
+fetching, generic JWKS/JWT fetching, managed-service signature verification,
+TLS or attested-TLS channel binding, deployment orchestration, external repo
+clones, vendored source, benchmark outputs, official benchmark submission,
+accepted Evidence Ledger mutation, Phase 4 registry semantic changes, Level2+
+evidence, global uniqueness claims, or claims above `Attested`.
+
+Exit criteria: the runner compiles only as an operator-owned feature-gated path,
+requires explicit acknowledgement and matching credential source declaration,
+contains no hard-coded endpoint or secret, writes no raw response body, uses
+the existing invocation/output plumbing, normal workspace tests remain
+hermetic, and this repository still commits no live operator artifact.
