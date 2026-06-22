@@ -989,6 +989,50 @@ to it; source input classes, ignored output-root rules, required limitation
 labels, retention rules, validation rules, and promotion boundary are explicit;
 and all implementation remains blocked until a separate explicit phase.
 
+## Benchmark OS Track: Phase V Local Artifact Campaign Implementation
+
+Status: complete for local artifact-campaign output plumbing only. See
+`docs/103-phase-v-local-artifact-campaign-implementation-notes.md`.
+
+Goal: implement durable local artifact campaign metadata and output-root
+plumbing after the Phase V boundary, without creating committed campaign
+outputs, official benchmark evidence, accepted evidence, external replay
+evidence, score-axis population, or Level2+ evidence.
+
+Implemented: `LocalArtifactCampaignManifest`, campaign input refs, retention
+policy, validation report, required limitation labels, deterministic JSON and
+Markdown rendering, manifest digesting, exactly six declared campaign output
+files, digest sidecars for every campaign-level file, Phase U output-root
+validation before campaign input construction, protected-path overlap rejection,
+symlink-resolved overlap rejection, stale-digest rejection, partial-campaign
+rejection, unexpected-file rejection, symlink rejection, and non-repair
+overwrite behavior. `.local-artifact-campaigns/` is ignored as a default
+operator-owned local output root.
+
+Dependencies: Phase U local benchmark artifact packaging, Phase V docs-first
+boundary, local output-root patterns from Phases Q/R/S/T/U, and Phase W
+promotion non-goals.
+
+Validation gate: focused Phase V campaign tests, Phase U artifact tests,
+repository claim-boundary checks, repo hygiene checks, workspace tests, clippy,
+docs, no Cargo metadata changes, no package runtime files, no generated
+committed campaign files, no CLI/UI, no external replay hooks, no network or
+credential path, no official submission, and no accepted Evidence Ledger
+mutation.
+
+Anti-goals: generated committed campaign outputs, external replay, live backend
+execution, official benchmark evidence, accepted Evidence Ledger mutation, ZK
+backend performance claims, score-axis population, Level2+ evidence creation,
+broad leaderboard claims, command-line tools, UI dashboards, package runtime
+files, credentials, or secrets.
+
+Exit criteria: valid campaign manifests serialize, validate, render, write, and
+read deterministically; invalid campaign ids, missing Phase U outputs, claim
+elevation, unsafe refs, missing limitation labels, stale digests, partial
+outputs, unexpected files, protected overlap, symlinks, and repair overwrites
+fail closed; normal workspace tests remain hermetic; and campaign outputs remain
+local durability metadata only.
+
 ## Benchmark OS Track: Phase W Reviewed Evidence Promotion Boundary
 
 Status: complete for docs-first boundary only. See
