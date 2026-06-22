@@ -1374,3 +1374,53 @@ Exit criteria: an operator can run Phala Cloud verification outside normal
 tests, save the raw response outside git, materialize the local redacted
 operator-live artifact outside git, validate it through the existing output-root
 reader, and keep the repository free of generated live artifacts.
+
+## Managed-Attestation Track: Phala DCAP/PCCS Collateral Materialization
+
+Status: complete for operator-only Phala Cloud collateral response
+materialization only. See
+`docs/107-phala-dcap-pccs-collateral-implementation-notes.md`.
+
+Goal: bridge an operator-run Phala Cloud
+`/attestations/collateral/<checksum>` response into digest-only local metadata
+without adding network access to normal tests, retaining raw collateral in the
+materialized output, operating a local PCCS, or claiming local DCAP
+verification.
+
+Implemented:
+`crates/hsai-attestation-phala/examples/operator_live_dcap_pccs_artifact.rs`,
+which requires
+`HSAI_PHALA_OPERATOR_ACK=I_ACKNOWLEDGE_OPERATOR_LIVE_PHALA_RUN` and
+`HSAI_PHALA_DCAP_PCCS_INPUT_JSON`. The example reads a non-secret input JSON,
+loads repo-external saved Phala `/attestations/verify` and
+`/attestations/collateral/<checksum>` responses, checks `success`, quote
+`verified`, `TEE_TDX`, checksum consistency, and required collateral field
+presence, hashes the raw responses and each required collateral field, writes
+only digest-only `dcap-pccs/*` files outside git, and retains no raw response
+body in the materialized output.
+
+Dependencies: Phase 106 operator-run Phala Cloud verification response,
+operator-owned collateral fetch outside normal tests, and repo-external ignored
+artifact storage.
+
+Validation gate: source-contract tests, Phala crate tests, feature-specific
+tests, clippy, docs, no committed credentials, no secret fixtures, no generated
+committed operator artifacts, no normal test network access, no local
+DCAP/QVL quote-signature verification, no local PCCS operation, no
+JWKS/JWT/TLS path, no benchmark outputs, and no accepted Evidence Ledger
+mutation.
+
+Anti-goals: normal tests requiring credentials, committed real credentials,
+secret fixtures, generated committed operator artifacts, direct network APIs in
+normal source, local Intel QVL/DCAP quote-signature verification, local PCCS
+service operation, generic JWKS/JWT fetching, managed-service signature
+verification beyond consuming the saved provider response, TLS or attested-TLS
+channel binding, deployment orchestration, external repo clones, vendored
+source, benchmark outputs, official benchmark submission, accepted Evidence
+Ledger mutation, Phase 4 registry semantic changes, Level2+ evidence, global
+uniqueness claims, or claims above `Attested`.
+
+Exit criteria: an operator can fetch Phala collateral outside normal tests, save
+the raw collateral response outside git, materialize local digest-only
+`dcap-pccs/*` metadata outside git, validate required collateral fields by
+presence and digest, and keep the repository free of generated live artifacts.
