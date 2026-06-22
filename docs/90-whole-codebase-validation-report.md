@@ -6,7 +6,8 @@ This report records the end-to-end local validation run after Phase S
 audit-index ergonomics output plumbing, protected-path overlap hardening, the
 Phase 102 opt-in Phala provider-client implementation, the Phase 105
 operator-only live runner implementation, and the Phase 106 Phala Cloud API
-live artifact materialization implementation. It
+live artifact materialization implementation, and the Phase 107 Phala DCAP/PCCS
+collateral materialization implementation. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
 running the available workspace gates and mapping those gates to the repo's
 major behavioral surfaces.
@@ -23,8 +24,12 @@ This report touches only:
 - `crates/hsai-attestation-phala/examples/operator_live_phala_api_artifact.rs`
 - `crates/hsai-attestation-phala/tests/phala_operator_live_api_artifact_contract.rs`
 - `docs/106-phala-cloud-api-live-artifact-implementation-notes.md`
+- `crates/hsai-attestation-phala/examples/operator_live_dcap_pccs_artifact.rs`
+- `crates/hsai-attestation-phala/tests/phala_operator_live_dcap_pccs_contract.rs`
+- `docs/107-phala-dcap-pccs-collateral-implementation-notes.md`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
+- `docs/research/zk_external_source_index.md`
 - `README.md`
 - `AGENTS.md`
 
@@ -35,7 +40,7 @@ operator-only example, or UI artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 106 validation.
+Run from repository root during Phase 107 validation.
 
 ```sh
 cargo fmt --all --check
@@ -43,6 +48,7 @@ cargo test -p hsai-attestation-phala
 cargo test -p hsai-attestation-phala --features operator-live-provider
 cargo test -p hsai-attestation-phala --test phala_operator_live_runner_contract
 cargo test -p hsai-attestation-phala --test phala_operator_live_api_artifact_contract
+cargo test -p hsai-attestation-phala --test phala_operator_live_dcap_pccs_contract
 cargo test -p hsai-e2e-harness --test claim_boundary_source_scan
 cargo test --workspace
 cargo test --workspace --features external-runner
@@ -117,8 +123,10 @@ The suite exercises the repo as a set of bounded local systems:
   managed attestation, offline managed-JWT verification, Phala fixture and
   captured-artifact validation, hermetic fake-client live-verifier surface,
   operator-live artifact plumbing, opt-in Phala provider-client plumbing,
-  operator-live runner source-contract checks, Phase 4 anchor registry,
-  economy, membrane, economy simulation, and e2e harness invariants.
+  operator-live runner source-contract checks, Phala API artifact
+  materialization source-contract checks, Phala DCAP/PCCS collateral
+  materialization source-contract checks, Phase 4 anchor registry, economy,
+  membrane, economy simulation, and e2e harness invariants.
 
 The strongest local statement supported by this run is:
 
@@ -156,7 +164,8 @@ claim-boundary escalation.
 
 ## Residual Gaps
 
-- No live external backend, live Phala call, DCAP/PCCS/JWKS fetching, or TLS
+- No live external backend beyond the operator-run Phala calls, no local
+  DCAP/PCCS verification, no JWKS fetching, and no TLS
   channel binding was exercised.
   `docs/97-phala-operator-live-invocation-boundary-spec.md` now defines the
   docs-first invocation boundary, and
@@ -187,6 +196,17 @@ claim-boundary escalation.
   generated operator artifact is committed, and no local DCAP/PCCS/JWKS/TLS
   path, accepted Evidence Ledger mutation, official benchmark submission, or
   claim above `Attested` exists.
+  `docs/107-phala-dcap-pccs-collateral-implementation-notes.md` records the
+  operator-only Phala Cloud collateral materialization path. During Phase 107,
+  an operator-run Phala Cloud `/attestations/collateral/<checksum>` call
+  returned the required collateral fields for checksum
+  `5c99c72274ed0745f7788cdf272cc359099c07629833306d1a13f1b8e34596bd`, and a
+  digest-only local `dcap-pccs/*` artifact was generated outside git. No raw
+  collateral response is retained in the materialized output, no generated
+  collateral artifact is committed, no local Intel QVL/DCAP quote-signature
+  verification or local PCCS service operation exists, and no JWKS/TLS path,
+  accepted Evidence Ledger mutation, official benchmark submission, or claim
+  above `Attested` exists.
 - No committed generated benchmark artifact bundle, official benchmark
   submission, or accepted Evidence Ledger entry was created. Phase U now
   implements local artifact-bundle packaging APIs and hermetic temp-root tests,
