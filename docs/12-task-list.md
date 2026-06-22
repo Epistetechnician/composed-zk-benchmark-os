@@ -1154,3 +1154,49 @@ invocation seam; future live calls remain operator-only and excluded from
 normal tests; future credentials stay outside git; future output flows through
 the existing redacted digest-bound operator artifact plumbing; and all
 successful future provider-client output remains capped at `Attested`.
+
+## Managed-Attestation Track: Phala Operator Live Provider Client Implementation
+
+Status: complete for opt-in operator-owned provider-client plumbing only. See
+`docs/102-phala-operator-live-provider-client-implementation-notes.md`.
+
+Goal: implement the smallest concrete Phala/dstack provider client behind the
+Phase 100 injected-client seam while keeping the HTTP path feature-gated,
+operator-owned, excluded from normal tests, and capped at `Attested`.
+
+Implemented: optional `operator-live-provider` feature, provider-client config,
+allowlisted environment credential provider, transport seam, ureq-backed HTTP
+transport with bounded timeout and redirects disabled, concrete
+`PhalaOperatorLiveClient` implementation, raw-response digest replacement,
+authentication/status/transport/malformed-response error mapping, and hermetic
+fake-transport tests flowing through the existing Phase 100 invocation
+orchestrator and Phase 85 redacted output-root plumbing.
+
+Dependencies: Phase 85 operator-live output-root plumbing, Phase 100 local
+operator-live invocation plumbing, Phase 101 provider-client boundary, current
+Phala/dstack documentation re-check, and Phase 4 claim boundaries.
+
+Validation gate: Phala crate tests with and without
+`--features operator-live-provider`, workspace tests, clippy, docs,
+repository claim-boundary checks, repo hygiene checks, no examples or scripts,
+no package runtime files, no committed credentials, no secret fixtures, no
+generated operator artifacts, no operator live tests, no live Phala calls, no
+DCAP/PCCS/JWKS/TLS path, no benchmark outputs, and no accepted Evidence Ledger
+mutation.
+
+Anti-goals: default network access, normal tests requiring credentials,
+operator live tests, committed real credentials, secret fixtures, generated
+operator artifacts, hard-coded provider endpoint schemas, local Intel DCAP quote
+verification, PCCS or collateral fetching, generic JWKS/JWT fetching, managed
+signature verification, TLS or attested-TLS channel binding, deployment
+orchestration, external repo clones, vendored source, backend execution,
+benchmark outputs, accepted Evidence Ledger mutation, Phase 4 registry semantic
+changes, Level2+ evidence, global uniqueness claims, or claims above
+`Attested`.
+
+Exit criteria: the feature-gated provider client validates controls before
+transport use, loads credentials only from allowlisted operator-declared
+environment sources, sends secrets only as outbound bearer material, never
+writes raw responses or credential material, normalizes accepted responses
+before the Phase 100 orchestrator validates them, and normal workspace tests
+remain hermetic.

@@ -180,6 +180,7 @@ Surface DSL
 | [docs/99-phase-w-reviewed-evidence-promotion-boundary-spec.md](docs/99-phase-w-reviewed-evidence-promotion-boundary-spec.md) | Phase W reviewed evidence-promotion and official-submission docs-first boundary. |
 | [docs/100-phala-operator-live-invocation-implementation-notes.md](docs/100-phala-operator-live-invocation-implementation-notes.md) | Phala/dstack operator-live invocation local plumbing implementation notes. |
 | [docs/101-phala-operator-live-provider-client-boundary-spec.md](docs/101-phala-operator-live-provider-client-boundary-spec.md) | Phala/dstack operator-live provider-client docs-first boundary. |
+| [docs/102-phala-operator-live-provider-client-implementation-notes.md](docs/102-phala-operator-live-provider-client-implementation-notes.md) | Phala/dstack operator-live provider-client opt-in implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -443,6 +444,16 @@ Surface DSL
   generated operator artifacts, local DCAP, PCCS, JWKS fetching, TLS channel
   binding, benchmark output, accepted Evidence Ledger mutation, or claims above
   `Attested` in this slice.
+- `docs/102-phala-operator-live-provider-client-implementation-notes.md`
+  records the opt-in Phala/dstack provider-client implementation behind the
+  existing Phase 100 seam. The `operator-live-provider` feature adds explicit
+  configuration, an allowlisted environment credential provider, a transport
+  seam, a ureq-backed HTTP transport, normalized response parsing, and
+  raw-response digest replacement. It is disabled by default, has hermetic fake
+  transport tests, commits no credentials or generated operator artifacts, runs
+  no operator live test, performs no live Phala call in normal gates, implements
+  no DCAP/PCCS/JWKS/TLS path, creates no benchmark output, mutates no accepted
+  Evidence Ledger, and claims nothing above `Attested`.
 - Managed-attestation challenge packet tooling exists for local, non-secret
   capture preflight. It creates capture inputs only, not real attestation
   evidence. The operator-facing preflight example
@@ -552,6 +563,12 @@ injected-client seam while still forbidding implementation, network access,
 live Phala calls, operator live tests, real credentials, generated artifacts,
 DCAP/PCCS/JWKS/TLS work, benchmark output, accepted Evidence Ledger mutation,
 and claims above `Attested`.
+The opt-in provider-client implementation is recorded in
+[docs/102-phala-operator-live-provider-client-implementation-notes.md](docs/102-phala-operator-live-provider-client-implementation-notes.md).
+It adds a feature-gated concrete client, allowlisted environment credential
+provider, and HTTP transport seam while preserving hermetic normal tests. It is
+still not a live Phala run, local DCAP/PCCS/JWKS/TLS verification, benchmark
+evidence, accepted Evidence Ledger mutation, or a claim above `Attested`.
 
 ## Non-Goals
 
