@@ -7,7 +7,8 @@ audit-index ergonomics output plumbing, protected-path overlap hardening, the
 Phase 102 opt-in Phala provider-client implementation, the Phase 105
 operator-only live runner implementation, and the Phase 106 Phala Cloud API
 live artifact materialization implementation, and the Phase 107 Phala DCAP/PCCS
-collateral materialization implementation. It
+collateral materialization implementation, and the Phase 108 Phala local
+DCAP/QVL verification artifact implementation. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
 running the available workspace gates and mapping those gates to the repo's
 major behavioral surfaces.
@@ -27,6 +28,9 @@ This report touches only:
 - `crates/hsai-attestation-phala/examples/operator_live_dcap_pccs_artifact.rs`
 - `crates/hsai-attestation-phala/tests/phala_operator_live_dcap_pccs_contract.rs`
 - `docs/107-phala-dcap-pccs-collateral-implementation-notes.md`
+- `crates/hsai-attestation-phala/examples/operator_live_dcap_qvl_artifact.rs`
+- `crates/hsai-attestation-phala/tests/phala_operator_live_dcap_qvl_contract.rs`
+- `docs/108-phala-local-dcap-qvl-verification-notes.md`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
 - `docs/research/zk_external_source_index.md`
@@ -40,7 +44,7 @@ operator-only example, or UI artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 107 validation.
+Run from repository root during Phase 108 validation.
 
 ```sh
 cargo fmt --all --check
@@ -49,6 +53,7 @@ cargo test -p hsai-attestation-phala --features operator-live-provider
 cargo test -p hsai-attestation-phala --test phala_operator_live_runner_contract
 cargo test -p hsai-attestation-phala --test phala_operator_live_api_artifact_contract
 cargo test -p hsai-attestation-phala --test phala_operator_live_dcap_pccs_contract
+cargo test -p hsai-attestation-phala --test phala_operator_live_dcap_qvl_contract
 cargo test -p hsai-e2e-harness --test claim_boundary_source_scan
 cargo test --workspace
 cargo test --workspace --features external-runner
@@ -125,8 +130,9 @@ The suite exercises the repo as a set of bounded local systems:
   operator-live artifact plumbing, opt-in Phala provider-client plumbing,
   operator-live runner source-contract checks, Phala API artifact
   materialization source-contract checks, Phala DCAP/PCCS collateral
-  materialization source-contract checks, Phase 4 anchor registry, economy,
-  membrane, economy simulation, and e2e harness invariants.
+  materialization source-contract checks, Phala local DCAP/QVL verification
+  artifact source-contract checks, Phase 4 anchor registry, economy, membrane,
+  economy simulation, and e2e harness invariants.
 
 The strongest local statement supported by this run is:
 
@@ -164,9 +170,9 @@ claim-boundary escalation.
 
 ## Residual Gaps
 
-- No live external backend beyond the operator-run Phala calls, no local
-  DCAP/PCCS verification, no JWKS fetching, and no TLS
-  channel binding was exercised.
+- No live external backend beyond the operator-run Phala calls and
+  operator-run local QVL verification, no local PCCS service operation, no JWKS
+  fetching, and no TLS channel binding was exercised.
   `docs/97-phala-operator-live-invocation-boundary-spec.md` now defines the
   docs-first invocation boundary, and
   `docs/100-phala-operator-live-invocation-implementation-notes.md` now records
@@ -207,6 +213,18 @@ claim-boundary escalation.
   verification or local PCCS service operation exists, and no JWKS/TLS path,
   accepted Evidence Ledger mutation, official benchmark submission, or claim
   above `Attested` exists.
+  `docs/108-phala-local-dcap-qvl-verification-notes.md` records the
+  operator-only local DCAP/QVL verification artifact path. During Phase 108,
+  the raw quote for checksum
+  `5c99c72274ed0745f7788cdf272cc359099c07629833306d1a13f1b8e34596bd` was
+  downloaded as a 5010-byte binary attachment with SHA-256
+  `7c92c34ddc9634c873ea1ca4953a45883ed5692a0c3865323e2044fc58aaf26e`, and
+  `dcap-qvl` 0.5.2 verified it with QVL, QE, and platform status `UpToDate`
+  and empty advisory IDs. The digest-only local `dcap-qvl/*` artifact was
+  generated outside git. No raw quote or QVL report is committed, no repo-native
+  DCAP verifier implementation exists, no local PCCS service operation exists,
+  and no JWKS/TLS path, accepted Evidence Ledger mutation, official benchmark
+  submission, or claim above `Attested` exists.
 - No committed generated benchmark artifact bundle, official benchmark
   submission, or accepted Evidence Ledger entry was created. Phase U now
   implements local artifact-bundle packaging APIs and hermetic temp-root tests,
