@@ -179,6 +179,7 @@ Surface DSL
 | [docs/98-phase-v-local-artifact-campaign-boundary-spec.md](docs/98-phase-v-local-artifact-campaign-boundary-spec.md) | Phase V durable local artifact campaign docs-first boundary. |
 | [docs/99-phase-w-reviewed-evidence-promotion-boundary-spec.md](docs/99-phase-w-reviewed-evidence-promotion-boundary-spec.md) | Phase W reviewed evidence-promotion and official-submission docs-first boundary. |
 | [docs/100-phala-operator-live-invocation-implementation-notes.md](docs/100-phala-operator-live-invocation-implementation-notes.md) | Phala/dstack operator-live invocation local plumbing implementation notes. |
+| [docs/101-phala-operator-live-provider-client-boundary-spec.md](docs/101-phala-operator-live-provider-client-boundary-spec.md) | Phala/dstack operator-live provider-client docs-first boundary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -434,6 +435,14 @@ Surface DSL
   live tests, implements no local DCAP/PCCS/JWKS/TLS path, creates no benchmark
   output, mutates no accepted Evidence Ledger, and claims nothing above
   `Attested`.
+- `docs/101-phala-operator-live-provider-client-boundary-spec.md` records the
+  docs-first boundary for a future concrete Phala/dstack provider client behind
+  the existing Phase 100 injected-client seam. It authorizes no Rust
+  implementation, Cargo metadata, examples, scripts, package runtime files,
+  network access, live Phala calls, operator live tests, real credentials,
+  generated operator artifacts, local DCAP, PCCS, JWKS fetching, TLS channel
+  binding, benchmark output, accepted Evidence Ledger mutation, or claims above
+  `Attested` in this slice.
 - Managed-attestation challenge packet tooling exists for local, non-secret
   capture preflight. It creates capture inputs only, not real attestation
   evidence. The operator-facing preflight example
@@ -536,6 +545,13 @@ bounded retry, replay, response validation, redaction, and output-bundle flow
 with hermetic tests only. A real operator-owned Phala run, real credential
 source, network client, DCAP/PCCS/JWKS/TLS verification, benchmark output, and
 accepted Evidence Ledger mutation remain separate future slices.
+The next managed-attestation boundary is
+[docs/101-phala-operator-live-provider-client-boundary-spec.md](docs/101-phala-operator-live-provider-client-boundary-spec.md).
+It defines the future concrete provider-client contract behind the existing
+injected-client seam while still forbidding implementation, network access,
+live Phala calls, operator live tests, real credentials, generated artifacts,
+DCAP/PCCS/JWKS/TLS work, benchmark output, accepted Evidence Ledger mutation,
+and claims above `Attested`.
 
 ## Non-Goals
 
