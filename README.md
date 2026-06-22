@@ -182,6 +182,8 @@ Surface DSL
 | [docs/101-phala-operator-live-provider-client-boundary-spec.md](docs/101-phala-operator-live-provider-client-boundary-spec.md) | Phala/dstack operator-live provider-client docs-first boundary. |
 | [docs/102-phala-operator-live-provider-client-implementation-notes.md](docs/102-phala-operator-live-provider-client-implementation-notes.md) | Phala/dstack operator-live provider-client opt-in implementation notes. |
 | [docs/103-phase-v-local-artifact-campaign-implementation-notes.md](docs/103-phase-v-local-artifact-campaign-implementation-notes.md) | Phase V local artifact campaign output-plumbing implementation notes. |
+| [docs/104-phala-operator-live-runner-boundary-spec.md](docs/104-phala-operator-live-runner-boundary-spec.md) | Phala/dstack operator-live runner docs-first boundary. |
+| [docs/105-phala-operator-live-runner-implementation-notes.md](docs/105-phala-operator-live-runner-implementation-notes.md) | Phala/dstack operator-live runner implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -463,6 +465,18 @@ Surface DSL
   no operator live test, performs no live Phala call in normal gates, implements
   no DCAP/PCCS/JWKS/TLS path, creates no benchmark output, mutates no accepted
   Evidence Ledger, and claims nothing above `Attested`.
+- `docs/104-phala-operator-live-runner-boundary-spec.md` records the
+  docs-first boundary for a future operator-only live runner over the existing
+  provider-client and invocation plumbing. It keeps live calls explicit,
+  feature-gated, credential-free in git, excluded from normal tests, and capped
+  at `Attested`.
+- `docs/105-phala-operator-live-runner-implementation-notes.md` records the
+  operator-only `operator_live_run` example. It requires explicit
+  acknowledgement, a non-secret invocation JSON path, a matching credential
+  source declaration, and `--features operator-live-provider`; it writes only
+  the existing redacted `operator-live/*` bundle. No operator live artifact is
+  generated unless a real operator supplies endpoint, credential, and input JSON
+  outside git.
 - Managed-attestation challenge packet tooling exists for local, non-secret
   capture preflight. It creates capture inputs only, not real attestation
   evidence. The operator-facing preflight example
@@ -583,6 +597,11 @@ It adds a feature-gated concrete client, allowlisted environment credential
 provider, and HTTP transport seam while preserving hermetic normal tests. It is
 still not a live Phala run, local DCAP/PCCS/JWKS/TLS verification, benchmark
 evidence, accepted Evidence Ledger mutation, or a claim above `Attested`.
+The operator-only live runner is recorded in
+[docs/105-phala-operator-live-runner-implementation-notes.md](docs/105-phala-operator-live-runner-implementation-notes.md).
+It provides executable wiring for a real operator-owned Phala call, but this
+repository still has no committed live artifact, no credential, and no normal
+test that calls Phala.
 
 ## Non-Goals
 
