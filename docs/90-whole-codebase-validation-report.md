@@ -4,8 +4,9 @@ Status: local validation report only.
 
 This report records the end-to-end local validation run after Phase S
 audit-index ergonomics output plumbing, protected-path overlap hardening, the
-Phase 102 opt-in Phala provider-client implementation, and the Phase 105
-operator-only live runner implementation. It
+Phase 102 opt-in Phala provider-client implementation, the Phase 105
+operator-only live runner implementation, and the Phase 106 Phala Cloud API
+live artifact materialization implementation. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
 running the available workspace gates and mapping those gates to the repo's
 major behavioral surfaces.
@@ -19,23 +20,29 @@ correctness, or global software-agent uniqueness.
 
 This report touches only:
 
+- `crates/hsai-attestation-phala/examples/operator_live_phala_api_artifact.rs`
+- `crates/hsai-attestation-phala/tests/phala_operator_live_api_artifact_contract.rs`
+- `docs/106-phala-cloud-api-live-artifact-implementation-notes.md`
+- `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
 - `README.md`
+- `AGENTS.md`
 
-It does not change Rust source, tests, Cargo metadata, fixtures, generated
-artifacts, accepted Evidence Ledgers, benchmark packs, report bundles,
-audit-index outputs, ergonomics outputs, package runtime files, command-line
-tools, or UI artifacts.
+It does not change Cargo metadata, fixtures, generated artifacts, accepted
+Evidence Ledgers, benchmark packs, report bundles, audit-index outputs,
+ergonomics outputs, package runtime files, command-line tools outside the
+operator-only example, or UI artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 105 validation.
+Run from repository root during Phase 106 validation.
 
 ```sh
 cargo fmt --all --check
 cargo test -p hsai-attestation-phala
 cargo test -p hsai-attestation-phala --features operator-live-provider
 cargo test -p hsai-attestation-phala --test phala_operator_live_runner_contract
+cargo test -p hsai-attestation-phala --test phala_operator_live_api_artifact_contract
 cargo test -p hsai-e2e-harness --test claim_boundary_source_scan
 cargo test --workspace
 cargo test --workspace --features external-runner
@@ -170,10 +177,16 @@ claim-boundary escalation.
   `docs/105-phala-operator-live-runner-implementation-notes.md` records the
   feature-gated `operator_live_run` example that requires explicit
   acknowledgement, non-secret invocation JSON, matching credential-source
-  declaration, and an operator-owned credential environment. No operator-run
-  live Phala call was executed in this environment, no generated operator
-  artifact is committed, and no local DCAP/PCCS/JWKS/TLS path, accepted
-  Evidence Ledger mutation, or claim above `Attested` exists.
+  declaration, and an operator-owned credential environment.
+  `docs/106-phala-cloud-api-live-artifact-implementation-notes.md` records the
+  Phala Cloud API response materialization path. During Phase 106, an
+  operator-run Phala Cloud `/attestations/verify` call accepted the submitted
+  TDX quote with checksum
+  `5c99c72274ed0745f7788cdf272cc359099c07629833306d1a13f1b8e34596bd`, and a
+  local redacted `operator-live/*` artifact was generated outside git. No
+  generated operator artifact is committed, and no local DCAP/PCCS/JWKS/TLS
+  path, accepted Evidence Ledger mutation, official benchmark submission, or
+  claim above `Attested` exists.
 - No committed generated benchmark artifact bundle, official benchmark
   submission, or accepted Evidence Ledger entry was created. Phase U now
   implements local artifact-bundle packaging APIs and hermetic temp-root tests,

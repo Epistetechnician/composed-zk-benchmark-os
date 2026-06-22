@@ -1329,3 +1329,48 @@ requires explicit acknowledgement and matching credential source declaration,
 contains no hard-coded endpoint or secret, writes no raw response body, uses
 the existing invocation/output plumbing, normal workspace tests remain
 hermetic, and this repository still commits no live operator artifact.
+
+## Managed-Attestation Track: Phala Cloud API Live Artifact Materialization
+
+Status: complete for operator-only Phala Cloud API response materialization
+only. See `docs/106-phala-cloud-api-live-artifact-implementation-notes.md`.
+
+Goal: bridge an operator-run Phala Cloud `/attestations/verify` response into
+the existing redacted `operator-live/*` artifact format without adding network
+access to normal tests or committing generated live artifacts.
+
+Implemented:
+`crates/hsai-attestation-phala/examples/operator_live_phala_api_artifact.rs`,
+which requires
+`HSAI_PHALA_OPERATOR_ACK=I_ACKNOWLEDGE_OPERATOR_LIVE_PHALA_RUN` and
+`HSAI_PHALA_API_ARTIFACT_INPUT_JSON`. The example reads a non-secret input JSON,
+loads a repo-external captured artifact bundle and a repo-external raw Phala
+verification response, checks `success`, quote `verified`, `TEE_TDX`, and
+captured report-data prefix binding, maps the response into the existing
+normalized `PhalaManagedVerifierResponse`, hashes but does not retain the raw
+response body, writes only the existing redacted `operator-live/*` bundle, and
+reads it back through the validator.
+
+Dependencies: Phase 85 operator-live output-root plumbing, Phase 83 in-memory
+operator-live artifact validation, Phase 105 runner/output boundary, and a
+repo-external operator-run Phala Cloud API response.
+
+Validation gate: source-contract tests, Phala crate tests, workspace tests,
+clippy, docs, no committed credentials, no secret fixtures, no generated
+committed operator artifacts, no normal test network access, no
+DCAP/PCCS/JWKS/TLS path, no benchmark outputs, and no accepted Evidence Ledger
+mutation.
+
+Anti-goals: normal tests requiring credentials, committed real credentials,
+secret fixtures, generated committed operator artifacts, direct network APIs in
+normal source, local Intel DCAP quote verification, PCCS or collateral
+fetching, generic JWKS/JWT fetching, managed-service signature verification,
+TLS or attested-TLS channel binding, deployment orchestration, external repo
+clones, vendored source, benchmark outputs, official benchmark submission,
+accepted Evidence Ledger mutation, Phase 4 registry semantic changes, Level2+
+evidence, global uniqueness claims, or claims above `Attested`.
+
+Exit criteria: an operator can run Phala Cloud verification outside normal
+tests, save the raw response outside git, materialize the local redacted
+operator-live artifact outside git, validate it through the existing output-root
+reader, and keep the repository free of generated live artifacts.
