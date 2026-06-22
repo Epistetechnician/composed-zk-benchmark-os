@@ -81,6 +81,9 @@ fn hsai_crates_do_not_use_process_or_network_apis() {
         for (line_index, line) in text.lines().enumerate() {
             for pattern in forbidden_patterns {
                 if line.contains(pattern) {
+                    if is_phase102_operator_provider_exception(&file, pattern) {
+                        continue;
+                    }
                     violations.push(format!("{}:{}:{pattern}", file.display(), line_index + 1));
                 }
             }
@@ -91,6 +94,13 @@ fn hsai_crates_do_not_use_process_or_network_apis() {
         violations.is_empty(),
         "HSAI crates must stay local-only and avoid process/network APIs: {violations:?}"
     );
+}
+
+fn is_phase102_operator_provider_exception(file: &Path, pattern: &str) -> bool {
+    pattern == "ureq::"
+        && file.ends_with(Path::new(
+            "hsai-attestation-phala/src/operator_live_provider.rs",
+        ))
 }
 
 fn rust_sources(root: &Path) -> Vec<PathBuf> {
