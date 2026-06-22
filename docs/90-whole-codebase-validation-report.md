@@ -12,7 +12,8 @@ DCAP/QVL verification artifact implementation, and the Phase 109 managed JWKS
 fetch artifact implementation, and the Phase 110 Phala local PCCS-compatible
 service artifact implementation, and the Phase 111 Phala direct Intel PCS
 artifact implementation, the docs-first Phase 112 TLS channel-binding boundary,
-and the Phase 113 Phala TLS channel-binding artifact implementation, plus the
+the Phase 113 Phala TLS channel-binding artifact implementation, and the
+docs-first Phase 114 reviewed promotion preflight implementation boundary, plus the
 coverage-hardening follow-up for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
@@ -23,6 +24,12 @@ It does not claim per-function formal correctness, line coverage, accepted
 Evidence Ledger mutation, official benchmark evidence, ZK backend performance,
 Level2+ evidence, live provider evidence, production readiness, semantic
 correctness, or global software-agent uniqueness.
+
+Phase 114 authorizes only inert Phase W preflight metadata and fail-closed
+validation. It does not authorize accepted Evidence Ledger mutation, official
+benchmark submission, external replay, live backend execution, generated
+benchmark artifacts, score-axis population, ZK backend performance claims, or
+Level2+ evidence creation.
 
 ## State Slice
 
