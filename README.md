@@ -186,6 +186,7 @@ Surface DSL
 | [docs/105-phala-operator-live-runner-implementation-notes.md](docs/105-phala-operator-live-runner-implementation-notes.md) | Phala/dstack operator-live runner implementation notes. |
 | [docs/106-phala-cloud-api-live-artifact-implementation-notes.md](docs/106-phala-cloud-api-live-artifact-implementation-notes.md) | Phala Cloud API live verification response to local operator artifact materialization notes. |
 | [docs/107-phala-dcap-pccs-collateral-implementation-notes.md](docs/107-phala-dcap-pccs-collateral-implementation-notes.md) | Phala DCAP/PCCS collateral fetch and digest-only materialization notes. |
+| [docs/108-phala-local-dcap-qvl-verification-notes.md](docs/108-phala-local-dcap-qvl-verification-notes.md) | Phala raw quote local DCAP/QVL verification artifact notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -491,6 +492,12 @@ Surface DSL
   and the example writes digest-only `dcap-pccs/*` metadata outside git. It does
   not implement local Intel QVL/DCAP quote-signature verification or operate a
   local PCCS.
+- `docs/108-phala-local-dcap-qvl-verification-notes.md` records the
+  operator-only local DCAP/QVL verification artifact path. The raw quote is
+  downloaded outside normal tests, verified by the operator-installed
+  `dcap-qvl` CLI, and the example writes digest-only `dcap-qvl/*` metadata
+  outside git. It does not add a repo-native DCAP verifier or operate a local
+  PCCS service.
 - Managed-attestation challenge packet tooling exists for local, non-secret
   capture preflight. It creates capture inputs only, not real attestation
   evidence. The operator-facing preflight example
@@ -617,6 +624,8 @@ and
 [docs/106-phala-cloud-api-live-artifact-implementation-notes.md](docs/106-phala-cloud-api-live-artifact-implementation-notes.md).
 The Phala DCAP/PCCS collateral materialization path is
 [docs/107-phala-dcap-pccs-collateral-implementation-notes.md](docs/107-phala-dcap-pccs-collateral-implementation-notes.md).
+The Phala local DCAP/QVL verification artifact path is
+[docs/108-phala-local-dcap-qvl-verification-notes.md](docs/108-phala-local-dcap-qvl-verification-notes.md).
 It provides executable wiring for a real operator-owned Phala call, but this
 repository still has no committed live artifact, no credential, and no normal
 test that calls Phala.
