@@ -1521,3 +1521,52 @@ Exit criteria: an operator can fetch public OpenID metadata and JWKS outside
 normal tests, materialize digest-only `managed-jwks/*` metadata outside git,
 validate metadata/JWKS consistency, and keep the repository free of generated
 live artifacts.
+
+## Managed-Attestation Track: Local PCCS-Compatible Service Artifact
+
+Status: complete for operator-only localhost PCCS-compatible replay service
+artifact materialization only. See
+`docs/110-phala-local-pccs-service-artifact-notes.md`.
+
+Goal: bridge one local PCCS service-operation run into digest-only local
+metadata by serving saved Phala collateral from a localhost-only PCCS-shaped
+service and running `dcap-qvl verify` with `PCCS_URL` pointed at that service,
+without adding network access to normal tests, committing raw local PCCS logs,
+or claiming production Intel PCS/PCCS operation.
+
+Implemented:
+`crates/hsai-attestation-phala/examples/operator_live_local_pccs_artifact.rs`,
+which requires
+`HSAI_PHALA_OPERATOR_ACK=I_ACKNOWLEDGE_OPERATOR_LIVE_PHALA_RUN` and
+`HSAI_PHALA_LOCAL_PCCS_INPUT_JSON`. The example reads a non-secret input JSON,
+loads repo-external saved raw quote, PCK info, local-QVL report, local PCCS
+access log, and saved local PCCS response bodies, checks localhost-only
+`pccs_url`, TDX PCK roles, QVL/QE/platform `UpToDate` status, empty advisory
+IDs, expected PCCS routes, response-file names, and response digests, then
+writes only digest-only `local-pccs/*` files outside git.
+
+Dependencies: Phase 107 collateral response materialization, Phase 108 local
+QVL verification, operator-installed `dcap-qvl` 0.5.2, a localhost-only
+PCCS-shaped replay service, and repo-external ignored artifact storage.
+
+Validation gate: source-contract tests, `hsai-attestation-phala` tests, clippy,
+docs, no committed credentials, no secret fixtures, no generated committed raw
+quote, no generated committed QVL report, no generated committed access log, no
+normal test network access, no production Intel PCS/PCCS operation, no
+managed-JWT signature verification, no TLS channel binding, no benchmark
+outputs, and no accepted Evidence Ledger mutation.
+
+Anti-goals: normal tests requiring network access or credentials, committed raw
+local PCCS access logs, committed local PCCS response bodies, committed real
+credentials, secret fixtures, production Intel PCS/PCCS operation, fresh
+collateral authority claims, repo-native DCAP verifier implementation, token
+acceptance, live managed-JWT signature verification, TLS or attested-TLS channel
+binding, deployment orchestration, external repo clones, vendored source,
+benchmark outputs, official benchmark submission, accepted Evidence Ledger
+mutation, Phase 4 registry semantic changes, Level2+ evidence, global
+uniqueness claims, or claims above `Attested`.
+
+Exit criteria: an operator can run `dcap-qvl verify` against a localhost
+PCCS-compatible replay service outside normal tests, materialize digest-only
+`local-pccs/*` metadata outside git, validate local service accesses and QVL
+status, and keep the repository free of generated live artifacts.
