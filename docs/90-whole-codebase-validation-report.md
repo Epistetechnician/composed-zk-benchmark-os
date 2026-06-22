@@ -332,6 +332,12 @@ claim-boundary escalation.
   explicit inputs. It authorizes no Rust implementation and no accepted Evidence
   Ledger mutation. No accepted ledger entry, official benchmark submission,
   external replay evidence, score-axis population, or Level2+ evidence exists.
+  `docs/117-phase-w-accepted-ledger-append-implementation-notes.md` records the
+  guarded local implementation of that transaction surface. It can append a
+  Level1-or-below reviewed record into a caller-supplied in-memory
+  `EvidenceLedger` only after preflight, candidate, review, preview, digest,
+  and ledger-tip validation pass. No official benchmark submission, external
+  replay evidence, score-axis population, or Level2+ evidence exists.
 - No broader Phase S ergonomics surface was authorized or tested beyond the
   implemented single-index local output boundary.
 
