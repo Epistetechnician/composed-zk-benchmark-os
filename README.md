@@ -191,6 +191,7 @@ Surface DSL
 | [docs/110-phala-local-pccs-service-artifact-notes.md](docs/110-phala-local-pccs-service-artifact-notes.md) | Phala localhost PCCS-compatible replay service artifact notes. |
 | [docs/111-phala-intel-pcs-direct-artifact-notes.md](docs/111-phala-intel-pcs-direct-artifact-notes.md) | Phala raw quote direct Intel PCS QVL artifact notes. |
 | [docs/112-phala-tls-channel-binding-artifact-boundary-spec.md](docs/112-phala-tls-channel-binding-artifact-boundary-spec.md) | Phala operator-only TLS 1.3 channel-binding artifact docs-first boundary. |
+| [docs/113-phala-tls-channel-binding-artifact-implementation-notes.md](docs/113-phala-tls-channel-binding-artifact-implementation-notes.md) | Phala operator-only TLS 1.3 channel-binding artifact implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -671,6 +672,12 @@ It specifies a future operator-only TLS 1.3 `tls-exporter` artifact from the
 same connection as a Phala verification response. This docs-first slice adds no
 TLS code, network call, generated artifact, RA-TLS claim, official evidence, or
 accepted Evidence Ledger mutation.
+That operator-only path is now implemented and exercised in
+[docs/113-phala-tls-channel-binding-artifact-implementation-notes.md](docs/113-phala-tls-channel-binding-artifact-implementation-notes.md).
+It recorded one TLS 1.3 RFC 9266 exporter and accepted Phala verification
+response from the same client connection as digest-only repo-external metadata.
+It is client-local connection evidence, not RA-TLS, an attested server
+certificate, proof, official benchmark evidence, or accepted evidence.
 These provide operator-owned live artifact wiring, but this repository still
 has no committed live artifact, no credential, and no normal test that calls a
 live provider.

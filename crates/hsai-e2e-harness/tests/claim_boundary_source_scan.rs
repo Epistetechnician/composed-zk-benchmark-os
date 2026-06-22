@@ -84,6 +84,9 @@ fn hsai_crates_do_not_use_process_or_network_apis() {
                     if is_phase102_operator_provider_exception(&file, pattern) {
                         continue;
                     }
+                    if is_phase113_tls_channel_exception(&file, pattern) {
+                        continue;
+                    }
                     violations.push(format!("{}:{}:{pattern}", file.display(), line_index + 1));
                 }
             }
@@ -101,6 +104,20 @@ fn is_phase102_operator_provider_exception(file: &Path, pattern: &str) -> bool {
         && file.ends_with(Path::new(
             "hsai-attestation-phala/src/operator_live_provider.rs",
         ))
+}
+
+fn is_phase113_tls_channel_exception(file: &Path, pattern: &str) -> bool {
+    let tls_example = file.ends_with(Path::new(
+        "hsai-attestation-phala/examples/operator_live_tls_channel_artifact.rs",
+    ));
+    let tls_contract_test = file.ends_with(Path::new(
+        "hsai-attestation-phala/tests/phala_operator_live_tls_channel_contract.rs",
+    ));
+    if tls_example {
+        matches!(pattern, "std::net" | "TcpStream" | "std::process")
+    } else {
+        tls_contract_test && matches!(pattern, "reqwest::" | "ureq::" | "Command::new")
+    }
 }
 
 fn rust_sources(root: &Path) -> Vec<PathBuf> {
