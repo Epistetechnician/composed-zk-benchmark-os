@@ -190,6 +190,7 @@ Surface DSL
 | [docs/109-managed-jwks-fetch-artifact-notes.md](docs/109-managed-jwks-fetch-artifact-notes.md) | Managed OpenID/JWKS live fetch digest-only artifact notes. |
 | [docs/110-phala-local-pccs-service-artifact-notes.md](docs/110-phala-local-pccs-service-artifact-notes.md) | Phala localhost PCCS-compatible replay service artifact notes. |
 | [docs/111-phala-intel-pcs-direct-artifact-notes.md](docs/111-phala-intel-pcs-direct-artifact-notes.md) | Phala raw quote direct Intel PCS QVL artifact notes. |
+| [docs/112-phala-tls-channel-binding-artifact-boundary-spec.md](docs/112-phala-tls-channel-binding-artifact-boundary-spec.md) | Phala operator-only TLS 1.3 channel-binding artifact docs-first boundary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -664,6 +665,12 @@ The Phala local PCCS-compatible service artifact path is
 [docs/110-phala-local-pccs-service-artifact-notes.md](docs/110-phala-local-pccs-service-artifact-notes.md).
 The Phala direct Intel PCS artifact path is
 [docs/111-phala-intel-pcs-direct-artifact-notes.md](docs/111-phala-intel-pcs-direct-artifact-notes.md).
+The next transport boundary is
+[docs/112-phala-tls-channel-binding-artifact-boundary-spec.md](docs/112-phala-tls-channel-binding-artifact-boundary-spec.md).
+It specifies a future operator-only TLS 1.3 `tls-exporter` artifact from the
+same connection as a Phala verification response. This docs-first slice adds no
+TLS code, network call, generated artifact, RA-TLS claim, official evidence, or
+accepted Evidence Ledger mutation.
 These provide operator-owned live artifact wiring, but this repository still
 has no committed live artifact, no credential, and no normal test that calls a
 live provider.

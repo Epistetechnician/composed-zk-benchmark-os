@@ -1615,3 +1615,39 @@ Exit criteria: an operator can run direct Intel PCS-backed `dcap-qvl verify`
 outside normal tests, materialize digest-only `intel-pcs/*` metadata outside
 git, validate QVL status, and keep the repository free of generated live
 artifacts.
+
+## Managed-Attestation Track: Phala TLS Channel-Binding Artifact Boundary
+
+Status: docs-first boundary complete. See
+`docs/112-phala-tls-channel-binding-artifact-boundary-spec.md`.
+
+Goal: define the smallest future operator-only TLS 1.3 channel-binding artifact
+for a Phala verification request before adding TLS code, live transport, or
+generated artifacts.
+
+Implemented: a documentation-only contract for one future Phala Cloud
+`/api/v1/attestations/verify` connection using Web PKI validation, TLS 1.3,
+the RFC 9266 `EXPORTER-Channel-Binding` label, empty context, 32-byte exporter,
+same-connection request/response capture, digest-only output, hermetic source
+tests, and explicit claim limits.
+
+Dependencies: Phase 106 Phala Cloud API artifact materialization, RFC 9266,
+RFC 8446 section 7.5, dstack transport architecture, and the Phase 66
+transport-bound attestation separation.
+
+Validation gate: docs links and source attribution, explicit state slice,
+normal-test hermeticity requirements, no Rust source, no Cargo changes, no
+network access, no live Phala call, no generated artifact, no credential, no
+RA-TLS claim, no benchmark output, and no accepted Evidence Ledger mutation.
+
+Anti-goals: implementation in this slice, TLS 1.2, redirects, proxies, custom
+trust roots, insecure certificate bypasses, connection reuse, raw exporter or
+response retention, attested server certificates, RA-TLS, proof, benchmark
+evidence, official submission, accepted Evidence Ledger mutation, Phase 4
+registry semantic changes, Level2+ evidence, global uniqueness claims, or
+claims above `Attested`.
+
+Exit criteria: this boundary spec exists; README, AGENTS, task ledger, and
+source index point to it; the future artifact shape and tests are explicit; and
+the docs state that a client-local TLS exporter capture is not independently
+verifiable attested TLS.
