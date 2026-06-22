@@ -635,6 +635,34 @@ promotion rejections, official-submission rejection before accepted evidence,
 digest determinism, serialization round trips, and source-scan boundaries; and
 all Phase W output remains metadata only.
 
+## Benchmark OS Track: Phase W Accepted Ledger Append Boundary
+
+Status: complete for docs-first boundary. See
+`docs/116-phase-w-accepted-ledger-append-boundary-spec.md`.
+
+Goal: define the next possible local accepted Evidence Ledger append
+transaction contract after Phase W preflight without authorizing the append
+implementation or creating accepted evidence.
+
+Scope: Markdown boundary updates only. The future transaction must require a
+valid preflight report, exact candidate/review/append-preview alignment, current
+ledger-tip agreement, artifact digest bindings, external replay provenance for
+Level2+, no unresolved quarantine or blocking review markers, and explicit
+non-claim labels.
+
+Anti-goals: Rust source changes, accepted Evidence Ledger mutation, official
+benchmark submission, external replay, live backend execution, generated
+benchmark artifacts, durable campaign outputs, command-line tools, UI
+dashboards, package runtime additions, score-axis population, ZK backend
+performance claims, Level2+ evidence creation, or treating this boundary as
+accepted evidence.
+
+Exit criteria: Phase 116 boundary spec exists; README, validation report, and
+AGENTS point to it; the future append transaction is constrained to explicit
+local inputs and append-only behavior; and no accepted ledger entry, official
+submission package, external replay evidence, or score-axis population is
+created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

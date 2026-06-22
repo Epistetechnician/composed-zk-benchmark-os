@@ -327,6 +327,11 @@ claim-boundary escalation.
   submitted artifact, materialized official submission package, accepted Evidence Ledger
   mutation, score-axis population, external replay evidence, or Level2+ evidence
   exists.
+  `docs/116-phase-w-accepted-ledger-append-boundary-spec.md` defines the next
+  docs-first boundary for a future local accepted-ledger append transaction over
+  explicit inputs. It authorizes no Rust implementation and no accepted Evidence
+  Ledger mutation. No accepted ledger entry, official benchmark submission,
+  external replay evidence, score-axis population, or Level2+ evidence exists.
 - No broader Phase S ergonomics surface was authorized or tested beyond the
   implemented single-index local output boundary.
 
