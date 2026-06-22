@@ -606,20 +606,21 @@ evidence.
 
 ## Benchmark OS Track: Phase W Reviewed Promotion Preflight
 
-Status: boundary authorized for inert implementation. See
+Status: complete for inert implementation. See
 `docs/99-phase-w-reviewed-evidence-promotion-boundary-spec.md` and
-`docs/114-phase-w-promotion-preflight-boundary-spec.md`.
+`docs/114-phase-w-promotion-preflight-boundary-spec.md`, plus
+`docs/115-phase-w-promotion-preflight-implementation-notes.md`.
 
 Goal: implement a metadata-only preflight layer that makes accepted-evidence
 promotion and official-submission prerequisites explicit and fail-closed before
 any accepted Evidence Ledger mutation or official submission operation exists.
 
-Authorized: additive Rust metadata, validation, deterministic digesting,
+Implemented: additive Rust metadata, validation, deterministic digesting,
 Markdown rendering, serialization helpers, and hermetic tests under
 `crates/zkbench-core`, plus implementation notes and navigation updates. The
-surface must reject local-only promotion, stale append previews, missing human
+surface rejects local-only promotion, stale append previews, missing human
 review, missing external replay provenance for Level2+ promotion, unresolved
-blocking/quarantine markers, forbidden claim text, and official submission
+blocking/quarantine markers, forbidden claim text, and official-submission
 package construction before accepted evidence ids exist.
 
 Anti-goals: accepted Evidence Ledger mutation, official benchmark submission,

@@ -9,6 +9,7 @@ pub mod digest;
 pub mod eligibility;
 pub mod escalation_guard;
 pub mod ledger;
+pub mod promotion_preflight;
 pub mod review;
 pub mod review_ledger;
 
@@ -62,6 +63,23 @@ pub use ledger::{
     EvidenceAppendPolicy, EvidenceChainDigest, EvidenceLedger, EvidenceLedgerEntry,
     EvidenceLedgerSummary, EvidenceLedgerSummaryCount, EvidenceLedgerValidation,
     EvidenceLedgerValidationError, EvidenceLedgerVersion,
+};
+pub use promotion_preflight::{
+    build_reviewed_promotion_preflight_report, compute_official_submission_package_metadata_digest,
+    compute_reviewed_promotion_preflight_report_digest,
+    deserialize_official_submission_package_metadata_json,
+    deserialize_reviewed_promotion_preflight_report_json,
+    render_official_submission_package_markdown, render_reviewed_promotion_preflight_markdown,
+    required_reviewed_promotion_preflight_non_claims,
+    serialize_official_submission_package_metadata_json,
+    serialize_reviewed_promotion_preflight_report_json,
+    validate_official_submission_package_metadata, validate_reviewed_promotion_preflight_request,
+    OfficialSubmissionPackageIssue, OfficialSubmissionPackageIssueKind,
+    OfficialSubmissionPackageMetadata, OfficialSubmissionPackageValidation,
+    OfficialSubmissionPackageVersion, ReviewedPromotionPreflightIssue,
+    ReviewedPromotionPreflightIssueKind, ReviewedPromotionPreflightReport,
+    ReviewedPromotionPreflightRequest, ReviewedPromotionPreflightValidation,
+    ReviewedPromotionPreflightVersion, ReviewedPromotionSourceSummary,
 };
 pub use review::{
     build_default_evidence_review_checklist, deserialize_evidence_review_checklist_json,
