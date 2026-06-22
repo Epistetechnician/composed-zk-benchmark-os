@@ -7,7 +7,8 @@ use zkbench_core::{
     deserialize_external_result_candidate_json, deserialize_external_result_import_schema_json,
     deserialize_external_runner_policy_json, deserialize_manual_handoff_bundle_json,
     deserialize_normalized_external_result_draft_json, deserialize_provenance_contract_json,
-    deserialize_quarantine_manifest_json, deserialize_synthetic_result_import_bundle_json,
+    deserialize_quarantine_manifest_json, deserialize_replay_manifest_json,
+    deserialize_replay_result_json, deserialize_synthetic_result_import_bundle_json,
     generate_instance, import_synthetic_result_candidate_json,
     normalize_synthetic_result_candidate, plan_soak_shards, run_local_replay,
     serialize_artifact_capture_contract_json, serialize_evidence_append_proposal_json,
@@ -20,7 +21,7 @@ use zkbench_core::{
     BenchmarkPackWriter, ClaimBoundary, EvidenceLedger, EvidenceRecord, FamilyKind,
     GeneratorConfig, InstanceParams, LocalSoakRunner, MockTelemetryClock, MutationClass,
     ReplayManifest, ReplayResult, ResultCandidateArtifactResolver, SemanticIr, SoakArtifactRole,
-    SoakOutputPolicy, SoakShardId,
+    SoakOutputPolicy, SoakShardId, ZkBenchError,
 };
 
 fn tiny_soak_run() -> (zkbench_core::SoakShardPlan, zkbench_core::SoakRunResult) {
@@ -43,6 +44,17 @@ fn resolver() -> ResultCandidateArtifactResolver {
         "artifacts/synthetic_metric_source.json".to_string(),
         b"synthetic metric source v1\n".to_vec(),
     )])
+}
+
+fn assert_deserialization_path<T>(result: zkbench_core::Result<T>, expected_path: &str) {
+    match result {
+        Err(ZkBenchError::Deserialization { path, message }) => {
+            assert_eq!(path, expected_path);
+            assert!(!message.is_empty());
+        }
+        Err(other) => panic!("expected deserialization error, got {other:?}"),
+        Ok(_) => panic!("expected deserialization error, got success"),
+    }
 }
 
 fn dry_run_plan() -> zkbench_core::ZkHarnessDryRunPlan {
@@ -347,4 +359,176 @@ fn external_runner_serialization_helpers_roundtrip_valid_local_artifacts() {
             .expect("ledger should deserialize"),
         ledger
     );
+}
+
+#[test]
+fn external_runner_and_replay_deserializers_preserve_error_context() {
+    let invalid_json = "{";
+
+    assert_deserialization_path(
+        deserialize_external_runner_policy_json(invalid_json),
+        "deserialize_external_runner_policy_json",
+    );
+    assert_deserialization_path(
+        deserialize_manual_handoff_bundle_json(invalid_json),
+        "deserialize_manual_handoff_bundle_json",
+    );
+    assert_deserialization_path(
+        deserialize_artifact_capture_contract_json(invalid_json),
+        "deserialize_artifact_capture_contract_json",
+    );
+    assert_deserialization_path(
+        deserialize_provenance_contract_json(invalid_json),
+        "deserialize_provenance_contract_json",
+    );
+    assert_deserialization_path(
+        deserialize_external_result_import_schema_json(invalid_json),
+        "deserialize_external_result_import_schema_json",
+    );
+    assert_deserialization_path(
+        deserialize_external_result_candidate_json(invalid_json),
+        "deserialize_external_result_candidate_json",
+    );
+    assert_deserialization_path(
+        deserialize_quarantine_manifest_json(invalid_json),
+        "deserialize_quarantine_manifest_json",
+    );
+    assert_deserialization_path(
+        deserialize_synthetic_result_import_bundle_json(invalid_json),
+        "deserialize_synthetic_result_import_bundle_json",
+    );
+    assert_deserialization_path(
+        deserialize_normalized_external_result_draft_json(invalid_json),
+        "deserialize_normalized_external_result_draft_json",
+    );
+    assert_deserialization_path(
+        deserialize_evidence_append_proposal_json(invalid_json),
+        "deserialize_evidence_append_proposal_json",
+    );
+    assert_deserialization_path(
+        deserialize_evidence_append_proposal_ledger_json(invalid_json),
+        "deserialize_evidence_append_proposal_ledger_json",
+    );
+    assert_deserialization_path(
+        deserialize_replay_manifest_json(invalid_json),
+        "deserialize_replay_manifest_json",
+    );
+    assert_deserialization_path(
+        deserialize_replay_result_json(invalid_json),
+        "deserialize_replay_result_json",
+    );
+}
+
+#[test]
+fn zkbench_error_constructors_and_parse_conversions_keep_context() {
+    let cases = [
+        (
+            ZkBenchError::validation("surface.states", "missing initial state"),
+            "validation error at surface.states: missing initial state",
+        ),
+        (
+            ZkBenchError::lowering("machine.transitions", "unknown target"),
+            "lowering error at machine.transitions: unknown target",
+        ),
+        (
+            ZkBenchError::oracle("trace[1]", "guard mismatch"),
+            "oracle error at trace[1]: guard mismatch",
+        ),
+        (
+            ZkBenchError::generation("seed", "out of range"),
+            "generation error at seed: out of range",
+        ),
+        (
+            ZkBenchError::mutation("pass", "no target"),
+            "mutation error at pass: no target",
+        ),
+        (
+            ZkBenchError::replay("manifest", "missing adapter"),
+            "replay error at manifest: missing adapter",
+        ),
+        (
+            ZkBenchError::evidence_ledger("ledger[0]", "stale digest"),
+            "evidence ledger error at ledger[0]: stale digest",
+        ),
+        (
+            ZkBenchError::artifact("artifacts/result.json", "digest mismatch"),
+            "artifact error at artifacts/result.json: digest mismatch",
+        ),
+        (
+            ZkBenchError::benchmark_pack("pack", "missing manifest"),
+            "benchmark pack error at pack: missing manifest",
+        ),
+        (
+            ZkBenchError::zk_harness("dry_run", "live mode forbidden"),
+            "zk-Harness dry-run error at dry_run: live mode forbidden",
+        ),
+        (
+            ZkBenchError::external_runner("policy", "manual handoff required"),
+            "external-runner boundary error at policy: manual handoff required",
+        ),
+        (
+            ZkBenchError::synthetic_import("candidate", "missing provenance"),
+            "synthetic result import error at candidate: missing provenance",
+        ),
+        (
+            ZkBenchError::evidence_append_proposal("proposal", "not reviewed"),
+            "evidence append proposal error at proposal: not reviewed",
+        ),
+        (
+            ZkBenchError::evidence_review("decision", "missing reviewer"),
+            "evidence review error at decision: missing reviewer",
+        ),
+        (
+            ZkBenchError::evidence_acceptance_policy("policy", "level2 blocked"),
+            "evidence acceptance policy error at policy: level2 blocked",
+        ),
+        (
+            ZkBenchError::evidence_record_candidate("candidate", "claim too high"),
+            "evidence record candidate error at candidate: claim too high",
+        ),
+        (
+            ZkBenchError::evidence_append_preview("preview", "accepted evidence forbidden"),
+            "evidence append preview error at preview: accepted evidence forbidden",
+        ),
+        (
+            ZkBenchError::level2_eligibility("report", "insufficient information"),
+            "Level2 eligibility error at report: insufficient information",
+        ),
+        (
+            ZkBenchError::evidence_review_ledger("ledger", "tampered"),
+            "evidence review ledger error at ledger: tampered",
+        ),
+        (
+            ZkBenchError::soak("shard", "checkpoint mismatch"),
+            "local soak error at shard: checkpoint mismatch",
+        ),
+        (
+            ZkBenchError::serialization("writer", "unsupported value"),
+            "serialization error at writer: unsupported value",
+        ),
+        (
+            ZkBenchError::deserialization("reader", "bad json"),
+            "deserialization error at reader: bad json",
+        ),
+        (
+            ZkBenchError::ClaimBoundary {
+                message: "cannot exceed Level1LocalReplay".to_string(),
+            },
+            "claim boundary error: cannot exceed Level1LocalReplay",
+        ),
+    ];
+
+    for (error, display) in cases {
+        assert_eq!(error.to_string(), display);
+    }
+
+    let json_error: ZkBenchError = serde_json::from_str::<serde_json::Value>("{")
+        .expect_err("invalid JSON should fail")
+        .into();
+    assert!(matches!(json_error, ZkBenchError::Parse { .. }));
+
+    let yaml_error: ZkBenchError = serde_yaml::from_str::<serde_yaml::Value>(": bad")
+        .expect_err("invalid YAML should fail")
+        .into();
+    assert!(matches!(yaml_error, ZkBenchError::Parse { .. }));
 }

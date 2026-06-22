@@ -11,7 +11,8 @@ collateral materialization implementation, and the Phase 108 Phala local
 DCAP/QVL verification artifact implementation, and the Phase 109 managed JWKS
 fetch artifact implementation, and the Phase 110 Phala local PCCS-compatible
 service artifact implementation, and the Phase 111 Phala direct Intel PCS
-artifact implementation. It
+artifact implementation, plus the coverage-hardening follow-up for
+serialization error paths and crate error constructors. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
 running the available workspace gates and mapping those gates to the repo's
 major behavioral surfaces.
@@ -43,6 +44,7 @@ This report touches only:
 - `crates/hsai-attestation-phala/examples/operator_live_intel_pcs_artifact.rs`
 - `crates/hsai-attestation-phala/tests/phala_operator_live_intel_pcs_contract.rs`
 - `docs/111-phala-intel-pcs-direct-artifact-notes.md`
+- `crates/zkbench-core/tests/phase_v_coverage_hardening.rs`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
 - `docs/research/zk_external_source_index.md`
@@ -56,7 +58,8 @@ operator-only example, or UI artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 111 validation.
+Run from repository root during Phase 111 validation and the coverage-hardening
+follow-up.
 
 ```sh
 cargo fmt --all --check
@@ -70,6 +73,7 @@ cargo test -p hsai-attestation-phala --test phala_operator_live_local_pccs_contr
 cargo test -p hsai-attestation-phala --test phala_operator_live_intel_pcs_contract
 cargo test -p hsai-attestation --test managed_jwks_artifact_contract
 cargo test -p hsai-e2e-harness --test claim_boundary_source_scan
+cargo test -p zkbench-core --test phase_v_coverage_hardening
 cargo test --workspace
 cargo test --workspace --features external-runner
 cargo clippy --workspace --all-targets -- -D warnings
@@ -89,7 +93,7 @@ No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
 `cargo-llvm-cov 0.8.7` was available. The default workspace coverage pass
-reported `84.49%` region coverage, `80.65%` function execution, and `82.53%`
+reported `84.92%` region coverage, `81.91%` function execution, and `82.99%`
 line coverage. Branch coverage was not reported by this run. The optional
 `operator-live-provider` feature was validated by feature-specific test, clippy,
 and doc gates above; it is not included in the default workspace coverage
