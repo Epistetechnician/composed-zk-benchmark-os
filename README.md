@@ -195,6 +195,7 @@ Surface DSL
 | [docs/114-phase-w-promotion-preflight-boundary-spec.md](docs/114-phase-w-promotion-preflight-boundary-spec.md) | Phase W inert reviewed promotion preflight implementation boundary. |
 | [docs/115-phase-w-promotion-preflight-implementation-notes.md](docs/115-phase-w-promotion-preflight-implementation-notes.md) | Phase W inert reviewed promotion preflight implementation notes. |
 | [docs/116-phase-w-accepted-ledger-append-boundary-spec.md](docs/116-phase-w-accepted-ledger-append-boundary-spec.md) | Phase W accepted Evidence Ledger append transaction docs-first boundary. |
+| [docs/117-phase-w-accepted-ledger-append-implementation-notes.md](docs/117-phase-w-accepted-ledger-append-implementation-notes.md) | Phase W accepted Evidence Ledger append transaction implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -581,6 +582,13 @@ transaction over explicit inputs. This boundary still does not authorize Rust
 implementation, accepted Evidence Ledger mutation, official submission,
 external replay, live backend execution, score-axis population, or Level2+
 evidence.
+[docs/117-phase-w-accepted-ledger-append-implementation-notes.md](docs/117-phase-w-accepted-ledger-append-implementation-notes.md)
+records the guarded local implementation of that append transaction in
+`zkbench-core`. It can append only Level1-or-below reviewed evidence into a
+caller-supplied local `EvidenceLedger` after preflight, candidate, review,
+preview, digest, and ledger-tip validation. It still creates no official
+benchmark submission, external replay evidence, score-axis population, or
+Level2+ evidence.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57

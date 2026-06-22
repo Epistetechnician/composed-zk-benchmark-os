@@ -663,6 +663,34 @@ local inputs and append-only behavior; and no accepted ledger entry, official
 submission package, external replay evidence, or score-axis population is
 created.
 
+## Benchmark OS Track: Phase W Accepted Ledger Append Implementation
+
+Status: complete for guarded local implementation. See
+`docs/117-phase-w-accepted-ledger-append-implementation-notes.md`.
+
+Goal: implement the Phase 116 local accepted-ledger append transaction over
+explicit caller-supplied inputs without creating official submission, external
+replay, score-axis, or Level2+ evidence surfaces.
+
+Implemented: additive Rust transaction request, validation, report, candidate
+to `EvidenceRecord` conversion, and fail-closed append application under
+`crates/zkbench-core/src/evidence/accepted_append.rs`, plus focused hermetic
+tests. The implementation requires valid preflight, candidate/review/preview
+alignment, candidate digest agreement, current ledger-tip agreement, source
+artifact digests, and Level1-or-below local evidence.
+
+Anti-goals: filesystem persistence, official benchmark submission, external
+replay, live backend execution, network access, credentials or secrets,
+generated benchmark artifacts, durable campaign outputs, command-line tools, UI
+dashboards, package runtime additions, score-axis population, ZK backend
+performance claims, Level2+ evidence creation, formal evidence creation, or
+broad leaderboard claims.
+
+Exit criteria: accepted append transaction APIs are exported; focused tests
+cover valid append, stale-tip rejection, candidate digest mismatch rejection,
+official/score/Level2+ rejection, and source-scan boundaries; and full workspace
+validation passes.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

@@ -2,6 +2,7 @@
 //! classification, artifact digest, and local ledger primitives.
 
 pub mod acceptance_policy;
+pub mod accepted_append;
 pub mod append_preview;
 pub mod artifact;
 pub mod candidate;
@@ -25,6 +26,13 @@ pub use acceptance_policy::{
     EvidenceAcceptanceBlockingReason, EvidenceAcceptancePolicy, EvidenceAcceptancePolicyId,
     EvidenceAcceptancePolicyMode, EvidenceAcceptancePolicyVersion, EvidenceAcceptanceRule,
     EvidenceAcceptanceRuleResult, EvidenceAcceptanceValidation, EvidenceAcceptanceValidationIssue,
+};
+pub use accepted_append::{
+    apply_accepted_ledger_append_transaction, build_evidence_record_from_transaction,
+    validate_accepted_ledger_append_transaction_request, AcceptedLedgerAppendTransactionIssue,
+    AcceptedLedgerAppendTransactionIssueKind, AcceptedLedgerAppendTransactionReport,
+    AcceptedLedgerAppendTransactionRequest, AcceptedLedgerAppendTransactionValidation,
+    AcceptedLedgerAppendTransactionVersion,
 };
 pub use append_preview::{
     create_evidence_append_preview, deserialize_evidence_append_preview_json,
