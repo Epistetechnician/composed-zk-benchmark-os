@@ -181,6 +181,7 @@ Surface DSL
 | [docs/100-phala-operator-live-invocation-implementation-notes.md](docs/100-phala-operator-live-invocation-implementation-notes.md) | Phala/dstack operator-live invocation local plumbing implementation notes. |
 | [docs/101-phala-operator-live-provider-client-boundary-spec.md](docs/101-phala-operator-live-provider-client-boundary-spec.md) | Phala/dstack operator-live provider-client docs-first boundary. |
 | [docs/102-phala-operator-live-provider-client-implementation-notes.md](docs/102-phala-operator-live-provider-client-implementation-notes.md) | Phala/dstack operator-live provider-client opt-in implementation notes. |
+| [docs/103-phase-v-local-artifact-campaign-implementation-notes.md](docs/103-phase-v-local-artifact-campaign-implementation-notes.md) | Phase V local artifact campaign output-plumbing implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -322,6 +323,14 @@ Surface DSL
   generated campaign files, external replay, official submission, accepted
   Evidence Ledger mutation, score-axis population, ZK backend performance
   claim, or Level2+ promotion in this slice.
+- Phase V local artifact campaign output plumbing now exists as a Rust API. It
+  validates campaign manifests, validates Phase U output roots before building
+  campaign inputs, renders deterministic Markdown, writes one manifest JSON
+  file, one validation JSON file, one rendered Markdown file, and three digest
+  sidecars under a caller-owned output root, rejects protected-path overlap,
+  stale digests, symlinks, unexpected files, partial campaigns, and repair
+  overwrites, and remains local durability metadata only. `.local-artifact-campaigns/`
+  is ignored for operator-owned durable local outputs.
 - `docs/99-phase-w-reviewed-evidence-promotion-boundary-spec.md` records the
   docs-first boundary for future reviewed accepted-evidence mutation and
   official benchmark submission. It authorizes no accepted Evidence Ledger
@@ -482,6 +491,11 @@ For the benchmark OS track,
 [docs/98-phase-v-local-artifact-campaign-boundary-spec.md](docs/98-phase-v-local-artifact-campaign-boundary-spec.md)
 now records the docs-first boundary for a future durable local artifact campaign,
 and
+[docs/103-phase-v-local-artifact-campaign-implementation-notes.md](docs/103-phase-v-local-artifact-campaign-implementation-notes.md)
+records the local output-plumbing implementation for that campaign boundary.
+It still does not create official benchmark evidence, accepted Evidence Ledger
+entries, external replay evidence, score-axis population, ZK backend performance
+claims, or Level2+ evidence.
 [docs/99-phase-w-reviewed-evidence-promotion-boundary-spec.md](docs/99-phase-w-reviewed-evidence-promotion-boundary-spec.md)
 records the docs-first boundary for future accepted-evidence promotion and
 official submission. The next implementation slice must stay inside one of
