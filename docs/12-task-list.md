@@ -1570,3 +1570,48 @@ Exit criteria: an operator can run `dcap-qvl verify` against a localhost
 PCCS-compatible replay service outside normal tests, materialize digest-only
 `local-pccs/*` metadata outside git, validate local service accesses and QVL
 status, and keep the repository free of generated live artifacts.
+
+## Managed-Attestation Track: Direct Intel PCS QVL Artifact
+
+Status: complete for operator-only direct Intel PCS-backed QVL artifact
+materialization only. See
+`docs/111-phala-intel-pcs-direct-artifact-notes.md`.
+
+Goal: bridge one direct Intel PCS-backed QVL run into digest-only local
+metadata by running `dcap-qvl verify` with
+`PCCS_URL=https://api.trustedservices.intel.com`, without adding network access
+to normal tests, committing raw QVL outputs, or claiming proof.
+
+Implemented:
+`crates/hsai-attestation-phala/examples/operator_live_intel_pcs_artifact.rs`,
+which requires
+`HSAI_PHALA_OPERATOR_ACK=I_ACKNOWLEDGE_OPERATOR_LIVE_PHALA_RUN` and
+`HSAI_PHALA_INTEL_PCS_INPUT_JSON`. The example reads a non-secret input JSON,
+loads repo-external saved raw quote, PCK info, direct Intel PCS QVL report, and
+QVL stderr, checks the Intel PCS URL, TDX PCK roles, QVL/QE/platform
+`UpToDate` status, and empty advisory IDs, then writes only digest-only
+`intel-pcs/*` files outside git.
+
+Dependencies: Phase 108 raw quote capture, operator-installed `dcap-qvl` 0.5.2,
+Intel public PCS availability, and repo-external ignored artifact storage.
+
+Validation gate: source-contract tests, `hsai-attestation-phala` tests, clippy,
+docs, no committed credentials, no secret fixtures, no generated committed raw
+quote, no generated committed QVL report, no normal test network access, no
+repo-native DCAP verifier implementation, no managed-JWT signature
+verification, no TLS channel binding, no benchmark outputs, and no accepted
+Evidence Ledger mutation.
+
+Anti-goals: normal tests requiring network access or credentials, committed raw
+QVL outputs, committed real credentials, secret fixtures, repo-native DCAP
+verifier implementation, token acceptance, live managed-JWT signature
+verification, TLS or attested-TLS channel binding, deployment orchestration,
+external repo clones, vendored source, benchmark outputs, official benchmark
+submission, accepted Evidence Ledger mutation, Phase 4 registry semantic
+changes, Level2+ evidence, global uniqueness claims, or claims above
+`Attested`.
+
+Exit criteria: an operator can run direct Intel PCS-backed `dcap-qvl verify`
+outside normal tests, materialize digest-only `intel-pcs/*` metadata outside
+git, validate QVL status, and keep the repository free of generated live
+artifacts.

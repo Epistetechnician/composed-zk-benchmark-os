@@ -189,6 +189,7 @@ Surface DSL
 | [docs/108-phala-local-dcap-qvl-verification-notes.md](docs/108-phala-local-dcap-qvl-verification-notes.md) | Phala raw quote local DCAP/QVL verification artifact notes. |
 | [docs/109-managed-jwks-fetch-artifact-notes.md](docs/109-managed-jwks-fetch-artifact-notes.md) | Managed OpenID/JWKS live fetch digest-only artifact notes. |
 | [docs/110-phala-local-pccs-service-artifact-notes.md](docs/110-phala-local-pccs-service-artifact-notes.md) | Phala localhost PCCS-compatible replay service artifact notes. |
+| [docs/111-phala-intel-pcs-direct-artifact-notes.md](docs/111-phala-intel-pcs-direct-artifact-notes.md) | Phala raw quote direct Intel PCS QVL artifact notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -511,6 +512,11 @@ Surface DSL
   is run with `PCCS_URL` pointed at `127.0.0.1`, and the example writes
   digest-only `local-pccs/*` metadata outside git. It does not operate Intel
   PCS or a production PCCS.
+- `docs/111-phala-intel-pcs-direct-artifact-notes.md` records the
+  operator-only direct Intel PCS QVL artifact path. The raw quote is verified
+  by `dcap-qvl` with `PCCS_URL=https://api.trustedservices.intel.com`, and the
+  example writes digest-only `intel-pcs/*` metadata outside git. It does not
+  add a repo-native DCAP verifier.
 - Managed-attestation challenge packet tooling exists for local, non-secret
   capture preflight. It creates capture inputs only, not real attestation
   evidence. The operator-facing preflight example
@@ -579,6 +585,10 @@ The Phala local PCCS-compatible service artifact path is
 [docs/110-phala-local-pccs-service-artifact-notes.md](docs/110-phala-local-pccs-service-artifact-notes.md):
 operator-only localhost collateral replay consumed by `dcap-qvl`, not
 production Intel PCS/PCCS operation or fresh collateral authority.
+The Phala direct Intel PCS artifact path is
+[docs/111-phala-intel-pcs-direct-artifact-notes.md](docs/111-phala-intel-pcs-direct-artifact-notes.md):
+operator-only direct Intel PCS-backed `dcap-qvl` verification, not a repo-native
+DCAP verifier or proof.
 The next managed-attestation slice is a docs-first Phala/dstack live
 managed-verifier boundary in
 [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md).
@@ -652,6 +662,8 @@ The managed JWKS fetch artifact path is
 [docs/109-managed-jwks-fetch-artifact-notes.md](docs/109-managed-jwks-fetch-artifact-notes.md).
 The Phala local PCCS-compatible service artifact path is
 [docs/110-phala-local-pccs-service-artifact-notes.md](docs/110-phala-local-pccs-service-artifact-notes.md).
+The Phala direct Intel PCS artifact path is
+[docs/111-phala-intel-pcs-direct-artifact-notes.md](docs/111-phala-intel-pcs-direct-artifact-notes.md).
 These provide operator-owned live artifact wiring, but this repository still
 has no committed live artifact, no credential, and no normal test that calls a
 live provider.
