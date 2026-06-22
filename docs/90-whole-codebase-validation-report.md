@@ -3,7 +3,8 @@
 Status: local validation report only.
 
 This report records the end-to-end local validation run after Phase S
-audit-index ergonomics output plumbing and protected-path overlap hardening. It
+audit-index ergonomics output plumbing, protected-path overlap hardening, and
+the Phase 102 opt-in Phala provider-client implementation. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
 running the available workspace gates and mapping those gates to the repo's
 major behavioral surfaces.
@@ -27,18 +28,22 @@ tools, or UI artifacts.
 
 ## Validation Commands
 
-Run from repository root on `master` after merge commit `696702e`.
+Run from repository root during Phase 102 validation.
 
 ```sh
 cargo fmt --all --check
+cargo test -p hsai-attestation-phala
+cargo test -p hsai-attestation-phala --features operator-live-provider
+cargo test -p hsai-e2e-harness --test claim_boundary_source_scan
 cargo test --workspace
 cargo test --workspace --features external-runner
 cargo clippy --workspace --all-targets -- -D warnings
+cargo clippy -p hsai-attestation-phala --all-targets --features operator-live-provider -- -D warnings
 cargo doc --workspace --no-deps
+cargo doc -p hsai-attestation-phala --features operator-live-provider --no-deps
 cargo test -p zkbench-core --test repo_hygiene
 cargo test -p zkbench-core --test repo_claim_boundary_docs
 cargo llvm-cov --workspace --summary-only
-cargo llvm-cov --workspace --features external-runner --summary-only
 git diff --check
 ```
 
@@ -47,15 +52,16 @@ All commands passed.
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-`cargo-llvm-cov 0.8.7` was available, but the local Rust installation required
-explicit `LLVM_COV` and `LLVM_PROFDATA` environment variables pointing at the
-rustup `llvm-tools-preview` binaries. With those variables set, the default
-workspace pass and the `external-runner` feature pass reported the same totals:
-`79.22%` region coverage, `79.89%` function execution, and `82.55%` line
-coverage. Branch coverage was not reported by this run. These coverage
-percentages are local test instrumentation only; they are not production
-readiness, semantic correctness, official benchmark evidence, accepted Evidence
-Ledger mutation, or Level2+ evidence.
+`cargo-llvm-cov 0.8.7` was available. The default workspace coverage pass
+reported `84.70%` region coverage, `81.19%` function execution, and `82.68%`
+line coverage. Branch coverage was not reported by this run. The optional
+`operator-live-provider` feature was validated by feature-specific test, clippy,
+and doc gates above; it is not included in the default workspace coverage
+summary unless coverage is run again with that feature enabled.
+
+These coverage percentages are local test instrumentation only; they are not
+100% coverage, production readiness, semantic correctness, official benchmark
+evidence, accepted Evidence Ledger mutation, or Level2+ evidence.
 
 ## Efficacy Map
 
@@ -93,8 +99,9 @@ The suite exercises the repo as a set of bounded local systems:
 - HSAI claim-envelope algebra, agent-case lanes, distinct-agent registry,
   managed attestation, offline managed-JWT verification, Phala fixture and
   captured-artifact validation, hermetic fake-client live-verifier surface,
-  operator-live artifact plumbing, Phase 4 anchor registry, economy, membrane,
-  economy simulation, and e2e harness invariants.
+  operator-live artifact plumbing, opt-in Phala provider-client plumbing,
+  Phase 4 anchor registry, economy, membrane, economy simulation, and e2e
+  harness invariants.
 
 The strongest local statement supported by this run is:
 
@@ -143,9 +150,14 @@ claim-boundary escalation.
   operator credential source, operator live test, DCAP/PCCS/JWKS/TLS path, or
   generated operator artifact exists.
   `docs/101-phala-operator-live-provider-client-boundary-spec.md` now defines
-  the future concrete provider-client boundary behind the Phase 100 seam, but
-  no provider-client implementation, network path, real credential source, live
-  call, operator live test, or generated operator artifact exists.
+  the future concrete provider-client boundary behind the Phase 100 seam.
+  `docs/102-phala-operator-live-provider-client-implementation-notes.md` now
+  records an opt-in feature-gated provider-client implementation with a
+  transport seam, allowlisted environment credential provider, ureq-backed HTTP
+  transport, raw-response digest replacement, and hermetic fake-transport
+  tests. No operator-run live Phala call, operator live test, generated
+  operator artifact, local DCAP/PCCS/JWKS/TLS path, accepted Evidence Ledger
+  mutation, or claim above `Attested` exists.
 - No committed generated benchmark artifact bundle, official benchmark
   submission, or accepted Evidence Ledger entry was created. Phase U now
   implements local artifact-bundle packaging APIs and hermetic temp-root tests,
