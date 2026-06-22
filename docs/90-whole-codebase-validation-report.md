@@ -10,7 +10,8 @@ live artifact materialization implementation, and the Phase 107 Phala DCAP/PCCS
 collateral materialization implementation, and the Phase 108 Phala local
 DCAP/QVL verification artifact implementation, and the Phase 109 managed JWKS
 fetch artifact implementation, and the Phase 110 Phala local PCCS-compatible
-service artifact implementation. It
+service artifact implementation, and the Phase 111 Phala direct Intel PCS
+artifact implementation. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
 running the available workspace gates and mapping those gates to the repo's
 major behavioral surfaces.
@@ -39,6 +40,9 @@ This report touches only:
 - `crates/hsai-attestation-phala/examples/operator_live_local_pccs_artifact.rs`
 - `crates/hsai-attestation-phala/tests/phala_operator_live_local_pccs_contract.rs`
 - `docs/110-phala-local-pccs-service-artifact-notes.md`
+- `crates/hsai-attestation-phala/examples/operator_live_intel_pcs_artifact.rs`
+- `crates/hsai-attestation-phala/tests/phala_operator_live_intel_pcs_contract.rs`
+- `docs/111-phala-intel-pcs-direct-artifact-notes.md`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
 - `docs/research/zk_external_source_index.md`
@@ -52,7 +56,7 @@ operator-only example, or UI artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 110 validation.
+Run from repository root during Phase 111 validation.
 
 ```sh
 cargo fmt --all --check
@@ -63,6 +67,7 @@ cargo test -p hsai-attestation-phala --test phala_operator_live_api_artifact_con
 cargo test -p hsai-attestation-phala --test phala_operator_live_dcap_pccs_contract
 cargo test -p hsai-attestation-phala --test phala_operator_live_dcap_qvl_contract
 cargo test -p hsai-attestation-phala --test phala_operator_live_local_pccs_contract
+cargo test -p hsai-attestation-phala --test phala_operator_live_intel_pcs_contract
 cargo test -p hsai-attestation --test managed_jwks_artifact_contract
 cargo test -p hsai-e2e-harness --test claim_boundary_source_scan
 cargo test --workspace
@@ -182,10 +187,10 @@ claim-boundary escalation.
 ## Residual Gaps
 
 - No live external backend beyond the operator-run Phala calls, operator-run
-  local QVL verification, operator-run managed JWKS fetch, and operator-run
-  localhost PCCS-compatible replay service was exercised. No live managed-JWT
-  token acceptance, production Intel PCS/PCCS operation, fresh collateral
-  authority, or TLS channel binding was exercised.
+  local QVL verification, operator-run managed JWKS fetch, operator-run
+  localhost PCCS-compatible replay service, and operator-run direct Intel PCS
+  QVL verification was exercised. No live managed-JWT token acceptance or TLS
+  channel binding was exercised.
   `docs/97-phala-operator-live-invocation-boundary-spec.md` now defines the
   docs-first invocation boundary, and
   `docs/100-phala-operator-live-invocation-implementation-notes.md` now records
@@ -264,6 +269,18 @@ claim-boundary escalation.
   PCS/PCCS operation exists, no fresh collateral authority is claimed, and no
   TLS path, accepted Evidence Ledger mutation, official benchmark submission,
   or claim above `Attested` exists.
+  `docs/111-phala-intel-pcs-direct-artifact-notes.md` records the
+  operator-only direct Intel PCS QVL artifact path. During Phase 111,
+  `PCCS_URL=https://api.trustedservices.intel.com dcap-qvl verify` returned
+  QVL, QE, and platform status `UpToDate` with empty advisory IDs. The QVL
+  report SHA-256 was
+  `36edac15ac8c8c00da61953afa46b2cc428f1047ef8cc664df528938d329c0a7`, and
+  verifier stderr SHA-256 was
+  `0e49aa6e694e9654fb3686b74644d340269946900cdfc67954b35254af30474c`.
+  The digest-only local `intel-pcs/*` artifact was generated outside git. No
+  raw QVL report or raw quote is committed, no repo-native DCAP verifier exists,
+  and no TLS path, accepted Evidence Ledger mutation, official benchmark
+  submission, or claim above `Attested` exists.
 - No committed generated benchmark artifact bundle, official benchmark
   submission, or accepted Evidence Ledger entry was created. Phase U now
   implements local artifact-bundle packaging APIs and hermetic temp-root tests,
