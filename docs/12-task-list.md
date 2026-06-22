@@ -1066,3 +1066,47 @@ point to it; future live calls remain operator-only and excluded from normal
 tests; future credentials stay outside git; future output flows through the
 existing redacted digest-bound operator artifact plumbing; and all successful
 future invocation output remains capped at `Attested`.
+
+## Managed-Attestation Track: Phala Operator Live Invocation Implementation
+
+Status: complete for local invocation plumbing only. See
+`docs/100-phala-operator-live-invocation-implementation-notes.md`.
+
+Goal: implement the smallest operator-owned invocation orchestrator after the
+Phase 97 boundary, without shipping a network client, loading real credentials,
+running live Phala calls, or raising claims above `Attested`.
+
+Implemented: additive `hsai-attestation-phala` invocation input types, opaque
+credential type, credential-provider trait, hermetic in-memory credential
+provider, credential-aware injected client trait, invocation orchestrator,
+fail-closed acknowledgement/endpoint/credential/timeout/retry validation,
+bounded retry exhaustion mapping, normalized response validation, replay
+rejection, redacted artifact-bundle assembly, Phase 85 output-root reuse, and
+hermetic tests.
+
+Dependencies: Phase 80 hermetic live-verifier response validation, Phase 83
+in-memory operator artifact plumbing, Phase 85 output-root plumbing, and Phase
+97 invocation boundary.
+
+Validation gate: Phala crate tests, workspace tests, clippy, docs, repository
+claim-boundary checks, repo hygiene checks, no Cargo metadata changes, no
+examples or scripts, no package runtime files, no network client, no process
+environment credential loader, no real credentials, no generated operator
+artifacts, no operator live tests, no live Phala calls, no benchmark outputs,
+and no accepted Evidence Ledger mutation.
+
+Anti-goals: shipped HTTP client, process environment loading, network access,
+live Phala API calls, operator live tests, real operator credentials, secret
+fixtures, generated operator artifacts, local Intel DCAP quote verification,
+PCCS or collateral fetching, generic JWKS/JWT fetching, TLS or attested-TLS
+channel binding, deployment orchestration, external repo clones, backend
+execution, benchmark outputs, accepted Evidence Ledger mutation, Phase 4
+registry semantic changes, Level2+ evidence, global uniqueness claims, or
+claims above `Attested`.
+
+Exit criteria: the invocation orchestrator rejects missing controls before
+client invocation, loads credentials only through caller-owned providers, never
+serializes credential material to artifacts, validates accepted responses,
+fails closed on retry exhaustion/provider rejection/replay, writes only the
+declared Phase 85 operator-live artifact files, and normal workspace tests
+remain hermetic.
