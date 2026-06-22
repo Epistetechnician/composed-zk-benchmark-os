@@ -193,6 +193,7 @@ Surface DSL
 | [docs/112-phala-tls-channel-binding-artifact-boundary-spec.md](docs/112-phala-tls-channel-binding-artifact-boundary-spec.md) | Phala operator-only TLS 1.3 channel-binding artifact docs-first boundary. |
 | [docs/113-phala-tls-channel-binding-artifact-implementation-notes.md](docs/113-phala-tls-channel-binding-artifact-implementation-notes.md) | Phala operator-only TLS 1.3 channel-binding artifact implementation notes. |
 | [docs/114-phase-w-promotion-preflight-boundary-spec.md](docs/114-phase-w-promotion-preflight-boundary-spec.md) | Phase W inert reviewed promotion preflight implementation boundary. |
+| [docs/115-phase-w-promotion-preflight-implementation-notes.md](docs/115-phase-w-promotion-preflight-implementation-notes.md) | Phase W inert reviewed promotion preflight implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -568,6 +569,11 @@ official-submission package metadata that remains blocked until accepted
 evidence ids exist. It still does not authorize accepted Evidence Ledger
 mutation, official submission, external replay, live backend execution,
 score-axis population, or Level2+ evidence.
+[docs/115-phase-w-promotion-preflight-implementation-notes.md](docs/115-phase-w-promotion-preflight-implementation-notes.md)
+records the implementation of that inert preflight surface in `zkbench-core`.
+It validates promotion prerequisites and official-submission package metadata,
+but still creates no accepted Evidence Ledger entry and performs no official
+submission.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57

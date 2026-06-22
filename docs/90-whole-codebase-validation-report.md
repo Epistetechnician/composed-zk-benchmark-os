@@ -12,8 +12,9 @@ DCAP/QVL verification artifact implementation, and the Phase 109 managed JWKS
 fetch artifact implementation, and the Phase 110 Phala local PCCS-compatible
 service artifact implementation, and the Phase 111 Phala direct Intel PCS
 artifact implementation, the docs-first Phase 112 TLS channel-binding boundary,
-the Phase 113 Phala TLS channel-binding artifact implementation, and the
-docs-first Phase 114 reviewed promotion preflight implementation boundary, plus the
+the Phase 113 Phala TLS channel-binding artifact implementation, the
+docs-first Phase 114 reviewed promotion preflight implementation boundary, and
+the Phase 115 reviewed promotion preflight implementation, plus the
 coverage-hardening follow-up for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
@@ -30,6 +31,13 @@ validation. It does not authorize accepted Evidence Ledger mutation, official
 benchmark submission, external replay, live backend execution, generated
 benchmark artifacts, score-axis population, ZK backend performance claims, or
 Level2+ evidence creation.
+
+Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
+preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
+required non-claim labels, fail-closed validation, and official-submission
+package metadata validation. It still creates no accepted Evidence Ledger entry,
+performs no official submission, runs no external replay, creates no generated
+benchmark artifact, and populates no score axes.
 
 ## State Slice
 
@@ -62,6 +70,10 @@ This report touches only:
 - `Cargo.lock`
 - `crates/zkbench-core/tests/soak_runner_smoke.rs`
 - `crates/zkbench-core/tests/phase_v_coverage_hardening.rs`
+- `crates/zkbench-core/src/evidence/promotion_preflight.rs`
+- `crates/zkbench-core/tests/phase_w_promotion_preflight.rs`
+- `docs/114-phase-w-promotion-preflight-boundary-spec.md`
+- `docs/115-phase-w-promotion-preflight-implementation-notes.md`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
 - `docs/research/zk_external_source_index.md`
@@ -75,13 +87,14 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 113 validation.
+Run from repository root during Phase 115 validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
 cargo test -p hsai-attestation-phala --test phala_operator_live_tls_channel_contract
 cargo test -p hsai-attestation-phala --example operator_live_tls_channel_artifact --features operator-live-tls-channel
+cargo test -p zkbench-core --test phase_w_promotion_preflight
 cargo test --workspace --all-features
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 RUSTDOCFLAGS='-D warnings' cargo doc --workspace --all-features --no-deps
@@ -95,7 +108,7 @@ No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
 `cargo-llvm-cov 0.8.7` was available. The all-feature workspace coverage pass
-reported `85.63%` region coverage, `82.52%` function execution, and `83.66%`
+reported `85.53%` region coverage, `82.63%` function execution, and `83.27%`
 line coverage. Branch coverage was not reported by this run.
 
 These coverage percentages are local test instrumentation only; they are not
@@ -305,12 +318,13 @@ claim-boundary escalation.
   durable local artifact campaign boundary, and
   `docs/103-phase-v-local-artifact-campaign-implementation-notes.md` records
   local campaign output-plumbing APIs and hermetic tests. No committed durable
-  campaign output, official submission package, accepted Evidence Ledger
+  campaign output, materialized official submission package, accepted Evidence Ledger
   mutation, score-axis population, external replay evidence, or Level2+
   evidence exists.
   `docs/99-phase-w-reviewed-evidence-promotion-boundary-spec.md` now defines the
-  future reviewed accepted-evidence and official-submission boundary. No durable
-  submitted artifact, official submission package, accepted Evidence Ledger
+  future reviewed accepted-evidence and official-submission boundary. Phase 115
+  adds inert official-submission package metadata validation only. No durable
+  submitted artifact, materialized official submission package, accepted Evidence Ledger
   mutation, score-axis population, external replay evidence, or Level2+ evidence
   exists.
 - No broader Phase S ergonomics surface was authorized or tested beyond the
