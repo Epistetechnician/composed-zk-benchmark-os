@@ -1,11 +1,12 @@
 //! Deterministic fixture-oriented Phala/dstack attestation backend preparation.
 //!
 //! This crate does not perform real TDX quote verification, managed-service
-//! signature verification, JWKS/JWT validation, or ship a network client. It
-//! validates a small local evidence model so the HSAI attestation seam can be
-//! tested before real Phala artifacts are introduced. Operator-live invocation
-//! plumbing accepts caller-supplied clients and credentials, but normal tests use
-//! hermetic in-memory implementations only.
+//! signature verification or JWKS/JWT validation. It validates a small local
+//! evidence model so the HSAI attestation seam can be tested before real Phala
+//! artifacts are introduced. Operator-live invocation plumbing accepts
+//! caller-supplied clients and credentials, but normal tests use hermetic
+//! in-memory implementations only. The optional `operator-live-provider` feature
+//! exposes an operator-owned HTTP client boundary; it is disabled by default.
 
 use hsai_agent_case::{AgentCase, EvidenceLane};
 use hsai_attestation::{AttestationInput, AttestationVerifier, VerifiedAttestation, VerifyError};
@@ -32,6 +33,14 @@ pub use challenge::{
     ChallengeError, ChallengeReplayGuard, HsaiChallengeInput, HsaiChallengePacket,
     RealArtifactProviderMode, HSAI_CAPTURE_MANIFEST_SCHEMA_VERSION, HSAI_CHALLENGE_SCHEMA_VERSION,
     PHASE_57_CLAIM_BOUNDARY,
+};
+#[cfg(feature = "operator-live-provider")]
+pub mod operator_live_provider;
+#[cfg(feature = "operator-live-provider")]
+pub use operator_live_provider::{
+    PhalaEnvCredentialProvider, PhalaOperatorLiveProviderClient, PhalaOperatorLiveProviderConfig,
+    PhalaOperatorLiveProviderError, PhalaOperatorLiveRawResponse, PhalaOperatorLiveTransport,
+    UreqPhalaOperatorLiveTransport,
 };
 
 /// Claim boundary for this crate.
@@ -675,6 +684,9 @@ where
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub enum PhalaManagedVerifierError {
     ClientUnavailable,
+    TransportUnavailable,
+    AuthenticationFailed,
+    UnexpectedHttpStatus(u16),
     MalformedResponse,
     WrongProvider,
     UnsupportedMode,
@@ -788,6 +800,9 @@ impl PhalaManagedVerifierError {
             | Self::ImageDigestMismatch => VerifyError::MeasurementMismatch,
             Self::StaleResponse => VerifyError::Expired,
             Self::ClientUnavailable
+            | Self::TransportUnavailable
+            | Self::AuthenticationFailed
+            | Self::UnexpectedHttpStatus(_)
             | Self::MalformedResponse
             | Self::WrongProvider
             | Self::UnsupportedMode
