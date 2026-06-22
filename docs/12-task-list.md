@@ -1424,3 +1424,52 @@ Exit criteria: an operator can fetch Phala collateral outside normal tests, save
 the raw collateral response outside git, materialize local digest-only
 `dcap-pccs/*` metadata outside git, validate required collateral fields by
 presence and digest, and keep the repository free of generated live artifacts.
+
+## Managed-Attestation Track: Phala Local DCAP/QVL Verification Artifact
+
+Status: complete for operator-only local QVL verification artifact
+materialization only. See
+`docs/108-phala-local-dcap-qvl-verification-notes.md`.
+
+Goal: bridge a real raw Phala quote and operator-run local `dcap-qvl`
+verification output into digest-only local metadata without adding network
+access to normal tests, committing raw quote/QVL artifacts, operating a local
+PCCS, or claiming proof.
+
+Implemented:
+`crates/hsai-attestation-phala/examples/operator_live_dcap_qvl_artifact.rs`,
+which requires
+`HSAI_PHALA_OPERATOR_ACK=I_ACKNOWLEDGE_OPERATOR_LIVE_PHALA_RUN` and
+`HSAI_PHALA_DCAP_QVL_INPUT_JSON`. The example reads a non-secret input JSON,
+loads repo-external saved Phala `/attestations/verify`, raw quote, decoded
+quote, PCK info, and QVL report files, checks `TEE_TDX`, TDX quote version 4,
+PCK certificate chain roles, QVL/QE/platform `UpToDate` statuses, empty
+advisory IDs, and measurement equality across Phala parsed quote, decoded raw
+quote, and QVL report, then writes only digest-only `dcap-qvl/*` files outside
+git.
+
+Dependencies: Phase 106 Phala verification response, Phase 107 raw collateral
+context, Phala raw quote download, operator-installed `dcap-qvl` 0.5.2, and
+repo-external ignored artifact storage.
+
+Validation gate: source-contract tests, Phala crate tests, feature-specific
+tests, clippy, docs, no committed credentials, no secret fixtures, no generated
+committed raw quote or QVL artifacts, no normal test network access, no
+repo-native DCAP verifier implementation, no local PCCS service operation, no
+JWKS/JWT/TLS path, no benchmark outputs, and no accepted Evidence Ledger
+mutation.
+
+Anti-goals: normal tests requiring credentials, committed real credentials,
+secret fixtures, committed raw quote or QVL artifacts, direct network APIs in
+normal source, repo-native Intel QVL/DCAP verifier implementation, local PCCS
+service operation, generic JWKS/JWT fetching, managed-service signature
+verification beyond consuming saved provider/QVL outputs, TLS or attested-TLS
+channel binding, deployment orchestration, external repo clones, vendored
+source, benchmark outputs, official benchmark submission, accepted Evidence
+Ledger mutation, Phase 4 registry semantic changes, Level2+ evidence, global
+uniqueness claims, or claims above `Attested`.
+
+Exit criteria: an operator can download the raw quote outside normal tests, run
+local `dcap-qvl` verification outside normal tests, materialize digest-only
+`dcap-qvl/*` metadata outside git, validate QVL statuses and measurement
+binding, and keep the repository free of generated live artifacts.
