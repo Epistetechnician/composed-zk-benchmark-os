@@ -8,7 +8,8 @@ Phase 102 opt-in Phala provider-client implementation, the Phase 105
 operator-only live runner implementation, and the Phase 106 Phala Cloud API
 live artifact materialization implementation, and the Phase 107 Phala DCAP/PCCS
 collateral materialization implementation, and the Phase 108 Phala local
-DCAP/QVL verification artifact implementation. It
+DCAP/QVL verification artifact implementation, and the Phase 109 managed JWKS
+fetch artifact implementation. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
 running the available workspace gates and mapping those gates to the repo's
 major behavioral surfaces.
@@ -31,6 +32,9 @@ This report touches only:
 - `crates/hsai-attestation-phala/examples/operator_live_dcap_qvl_artifact.rs`
 - `crates/hsai-attestation-phala/tests/phala_operator_live_dcap_qvl_contract.rs`
 - `docs/108-phala-local-dcap-qvl-verification-notes.md`
+- `crates/hsai-attestation/examples/operator_live_jwks_artifact.rs`
+- `crates/hsai-attestation/tests/managed_jwks_artifact_contract.rs`
+- `docs/109-managed-jwks-fetch-artifact-notes.md`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
 - `docs/research/zk_external_source_index.md`
@@ -44,7 +48,7 @@ operator-only example, or UI artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 108 validation.
+Run from repository root during Phase 109 validation.
 
 ```sh
 cargo fmt --all --check
@@ -54,6 +58,7 @@ cargo test -p hsai-attestation-phala --test phala_operator_live_runner_contract
 cargo test -p hsai-attestation-phala --test phala_operator_live_api_artifact_contract
 cargo test -p hsai-attestation-phala --test phala_operator_live_dcap_pccs_contract
 cargo test -p hsai-attestation-phala --test phala_operator_live_dcap_qvl_contract
+cargo test -p hsai-attestation --test managed_jwks_artifact_contract
 cargo test -p hsai-e2e-harness --test claim_boundary_source_scan
 cargo test --workspace
 cargo test --workspace --features external-runner
@@ -131,8 +136,9 @@ The suite exercises the repo as a set of bounded local systems:
   operator-live runner source-contract checks, Phala API artifact
   materialization source-contract checks, Phala DCAP/PCCS collateral
   materialization source-contract checks, Phala local DCAP/QVL verification
-  artifact source-contract checks, Phase 4 anchor registry, economy, membrane,
-  economy simulation, and e2e harness invariants.
+  artifact source-contract checks, managed JWKS artifact source-contract
+  checks, Phase 4 anchor registry, economy, membrane, economy simulation, and
+  e2e harness invariants.
 
 The strongest local statement supported by this run is:
 
@@ -170,17 +176,18 @@ claim-boundary escalation.
 
 ## Residual Gaps
 
-- No live external backend beyond the operator-run Phala calls and
-  operator-run local QVL verification, no local PCCS service operation, no JWKS
-  fetching, and no TLS channel binding was exercised.
+- No live external backend beyond the operator-run Phala calls, operator-run
+  local QVL verification, and operator-run managed JWKS fetch was exercised. No
+  local PCCS service operation, live managed-JWT token acceptance, or TLS
+  channel binding was exercised.
   `docs/97-phala-operator-live-invocation-boundary-spec.md` now defines the
   docs-first invocation boundary, and
   `docs/100-phala-operator-live-invocation-implementation-notes.md` now records
   local invocation plumbing with a hermetic credential-provider boundary,
   injected client boundary, redacted artifact-bundle assembly, replay checks,
   and fail-closed tests. No shipped network client, live Phala call, real
-  operator credential source, operator live test, DCAP/PCCS/JWKS/TLS path, or
-  generated operator artifact exists.
+  operator credential source, operator live test, DCAP/PCCS/TLS path in that
+  Phala invocation slice, or generated operator artifact exists.
   `docs/101-phala-operator-live-provider-client-boundary-spec.md` now defines
   the future concrete provider-client boundary behind the Phase 100 seam.
   `docs/102-phala-operator-live-provider-client-implementation-notes.md` now
@@ -199,9 +206,9 @@ claim-boundary escalation.
   TDX quote with checksum
   `5c99c72274ed0745f7788cdf272cc359099c07629833306d1a13f1b8e34596bd`, and a
   local redacted `operator-live/*` artifact was generated outside git. No
-  generated operator artifact is committed, and no local DCAP/PCCS/JWKS/TLS
-  path, accepted Evidence Ledger mutation, official benchmark submission, or
-  claim above `Attested` exists.
+  generated operator artifact is committed, and no local DCAP/PCCS/TLS path,
+  accepted Evidence Ledger mutation, official benchmark submission, or claim
+  above `Attested` exists.
   `docs/107-phala-dcap-pccs-collateral-implementation-notes.md` records the
   operator-only Phala Cloud collateral materialization path. During Phase 107,
   an operator-run Phala Cloud `/attestations/collateral/<checksum>` call
@@ -210,7 +217,7 @@ claim-boundary escalation.
   digest-only local `dcap-pccs/*` artifact was generated outside git. No raw
   collateral response is retained in the materialized output, no generated
   collateral artifact is committed, no local Intel QVL/DCAP quote-signature
-  verification or local PCCS service operation exists, and no JWKS/TLS path,
+  verification or local PCCS service operation exists, and no TLS path,
   accepted Evidence Ledger mutation, official benchmark submission, or claim
   above `Attested` exists.
   `docs/108-phala-local-dcap-qvl-verification-notes.md` records the
@@ -223,7 +230,21 @@ claim-boundary escalation.
   and empty advisory IDs. The digest-only local `dcap-qvl/*` artifact was
   generated outside git. No raw quote or QVL report is committed, no repo-native
   DCAP verifier implementation exists, no local PCCS service operation exists,
-  and no JWKS/TLS path, accepted Evidence Ledger mutation, official benchmark
+  and no TLS path, accepted Evidence Ledger mutation, official benchmark
+  submission, or claim above `Attested` exists.
+  `docs/109-managed-jwks-fetch-artifact-notes.md` records the operator-only
+  managed JWKS fetch artifact path. During Phase 109, Intel Trust Authority
+  OpenID metadata was fetched from
+  `https://portal.trustauthority.intel.com/.well-known/openid-configuration`
+  as a 663-byte JSON response with SHA-256
+  `a330c2032a986845f959284c4202972bc5e698d7ea652423ca5cebc4ea33edea`, and
+  JWKS was fetched from `https://portal.trustauthority.intel.com/certs` as an
+  11562-byte JSON response with SHA-256
+  `4e1d55c79b698cde4987d791594495e70432879be621a1b6e42a9daafc84bee3`.
+  The digest-only local `managed-jwks/*` artifact was generated outside git. No
+  raw OpenID or JWKS response is committed, no token is accepted, no live
+  managed-JWT signature verification exists, no local PCCS service operation
+  exists, and no TLS path, accepted Evidence Ledger mutation, official benchmark
   submission, or claim above `Attested` exists.
 - No committed generated benchmark artifact bundle, official benchmark
   submission, or accepted Evidence Ledger entry was created. Phase U now

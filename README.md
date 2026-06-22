@@ -187,6 +187,7 @@ Surface DSL
 | [docs/106-phala-cloud-api-live-artifact-implementation-notes.md](docs/106-phala-cloud-api-live-artifact-implementation-notes.md) | Phala Cloud API live verification response to local operator artifact materialization notes. |
 | [docs/107-phala-dcap-pccs-collateral-implementation-notes.md](docs/107-phala-dcap-pccs-collateral-implementation-notes.md) | Phala DCAP/PCCS collateral fetch and digest-only materialization notes. |
 | [docs/108-phala-local-dcap-qvl-verification-notes.md](docs/108-phala-local-dcap-qvl-verification-notes.md) | Phala raw quote local DCAP/QVL verification artifact notes. |
+| [docs/109-managed-jwks-fetch-artifact-notes.md](docs/109-managed-jwks-fetch-artifact-notes.md) | Managed OpenID/JWKS live fetch digest-only artifact notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -466,8 +467,8 @@ Surface DSL
   raw-response digest replacement. It is disabled by default, has hermetic fake
   transport tests, commits no credentials or generated operator artifacts, runs
   no operator live test, performs no live Phala call in normal gates, implements
-  no DCAP/PCCS/JWKS/TLS path, creates no benchmark output, mutates no accepted
-  Evidence Ledger, and claims nothing above `Attested`.
+  no DCAP/PCCS/TLS or token-verification path, creates no benchmark output,
+  mutates no accepted Evidence Ledger, and claims nothing above `Attested`.
 - `docs/104-phala-operator-live-runner-boundary-spec.md` records the
   docs-first boundary for a future operator-only live runner over the existing
   provider-client and invocation plumbing. It keeps live calls explicit,
@@ -498,6 +499,11 @@ Surface DSL
   `dcap-qvl` CLI, and the example writes digest-only `dcap-qvl/*` metadata
   outside git. It does not add a repo-native DCAP verifier or operate a local
   PCCS service.
+- `docs/109-managed-jwks-fetch-artifact-notes.md` records the operator-only
+  managed JWKS fetch artifact path. Intel Trust Authority OpenID metadata and
+  JWKS are fetched outside normal tests, and the example writes digest-only
+  `managed-jwks/*` metadata outside git. It does not accept tokens, verify a
+  live managed JWT, or add network access to normal tests.
 - Managed-attestation challenge packet tooling exists for local, non-secret
   capture preflight. It creates capture inputs only, not real attestation
   evidence. The operator-facing preflight example
@@ -507,7 +513,8 @@ Surface DSL
   capture steps an operator must run to produce a real artifact.
 - No external adapters exist.
 - No live zk-Harness execution exists.
-- No live external execution exists.
+- No live external execution exists beyond the operator-only Phala and managed
+  JWKS artifact paths recorded above.
 - No real external result import exists.
 - No local soak telemetry is used as ZK backend performance.
 - No failure corpus entry is accepted evidence.
@@ -555,8 +562,12 @@ quote-verification implementation. The first bounded code slice is now
 implemented in
 [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md):
 offline ES256 managed-JWT signature verification against caller-provided local
-public keys. Future live-service verification, JWKS fetching, DCAP, PCCS, TLS,
-or transport-bound attestation work still requires a separate explicit phase.
+public keys. Future live-service token verification, DCAP, PCCS, TLS, or
+transport-bound attestation work still requires a separate explicit phase.
+The managed JWKS fetch artifact path is
+[docs/109-managed-jwks-fetch-artifact-notes.md](docs/109-managed-jwks-fetch-artifact-notes.md):
+operator-only live OpenID/JWKS fetching mapped to digest-only local metadata,
+not token acceptance or managed-JWT signature verification.
 The next managed-attestation slice is a docs-first Phala/dstack live
 managed-verifier boundary in
 [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md).
@@ -626,9 +637,11 @@ The Phala DCAP/PCCS collateral materialization path is
 [docs/107-phala-dcap-pccs-collateral-implementation-notes.md](docs/107-phala-dcap-pccs-collateral-implementation-notes.md).
 The Phala local DCAP/QVL verification artifact path is
 [docs/108-phala-local-dcap-qvl-verification-notes.md](docs/108-phala-local-dcap-qvl-verification-notes.md).
-It provides executable wiring for a real operator-owned Phala call, but this
-repository still has no committed live artifact, no credential, and no normal
-test that calls Phala.
+The managed JWKS fetch artifact path is
+[docs/109-managed-jwks-fetch-artifact-notes.md](docs/109-managed-jwks-fetch-artifact-notes.md).
+These provide operator-owned live artifact wiring, but this repository still
+has no committed live artifact, no credential, and no normal test that calls a
+live provider.
 
 ## Non-Goals
 
