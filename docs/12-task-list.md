@@ -1110,3 +1110,47 @@ serializes credential material to artifacts, validates accepted responses,
 fails closed on retry exhaustion/provider rejection/replay, writes only the
 declared Phase 85 operator-live artifact files, and normal workspace tests
 remain hermetic.
+
+## Managed-Attestation Track: Phala Operator Live Provider Client Boundary
+
+Status: complete for docs-first boundary only. See
+`docs/101-phala-operator-live-provider-client-boundary-spec.md`.
+
+Goal: define the future concrete Phala/dstack provider-client boundary behind
+the existing Phase 100 injected-client seam before any shipped network client,
+real credential source, operator live test, or live Phala call exists.
+
+Implemented: docs-first boundary for the single allowed provider/mode
+(`Phala/dstack`, operator-owned live managed-verifier provider client), future
+provider-client touch surface, credential source contract, bounded network and
+retry contract, operator-only test/command contract, source refresh
+requirement, required future hermetic tests, required non-claims, and explicit
+blocks for DCAP/PCCS/JWKS/TLS and accepted evidence mutation.
+
+Dependencies: Phase 85 operator-live output-root plumbing, Phase 100 local
+operator-live invocation plumbing, current Phala/dstack upstream documentation
+re-check before implementation hard-codes endpoint or response semantics, and
+Phase 4 claim boundaries.
+
+Validation gate: documentation navigation checks, claim-boundary text checks,
+repo hygiene checks, no Rust source changes, no Cargo metadata changes, no
+fixtures, no examples or scripts, no generated operator artifacts, no package
+runtime files, no network code, no live Phala calls, no credentials, no
+operator live tests, no benchmark outputs, and no accepted Evidence Ledger
+mutation.
+
+Anti-goals: implementation in this slice, shipped HTTP client, process
+environment loading, network access, live Phala API calls, operator live tests,
+real operator credentials, secret fixtures, generated operator artifacts, local
+Intel DCAP quote verification, PCCS or collateral fetching, generic JWKS/JWT
+fetching, TLS or attested-TLS channel binding, deployment orchestration,
+external repo clones, backend execution, benchmark outputs, accepted Evidence
+Ledger mutation, Phase 4 registry semantic changes, Level2+ evidence, global
+uniqueness claims, or claims above `Attested`.
+
+Exit criteria: Phase 101 provider-client boundary spec exists; README and
+AGENTS point to it; the future client is constrained to the existing Phase 100
+invocation seam; future live calls remain operator-only and excluded from
+normal tests; future credentials stay outside git; future output flows through
+the existing redacted digest-bound operator artifact plumbing; and all
+successful future provider-client output remains capped at `Attested`.

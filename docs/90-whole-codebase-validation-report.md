@@ -142,6 +142,10 @@ claim-boundary escalation.
   and fail-closed tests. No shipped network client, live Phala call, real
   operator credential source, operator live test, DCAP/PCCS/JWKS/TLS path, or
   generated operator artifact exists.
+  `docs/101-phala-operator-live-provider-client-boundary-spec.md` now defines
+  the future concrete provider-client boundary behind the Phase 100 seam, but
+  no provider-client implementation, network path, real credential source, live
+  call, operator live test, or generated operator artifact exists.
 - No committed generated benchmark artifact bundle, official benchmark
   submission, or accepted Evidence Ledger entry was created. Phase U now
   implements local artifact-bundle packaging APIs and hermetic temp-root tests,
