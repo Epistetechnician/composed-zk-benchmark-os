@@ -11,9 +11,10 @@ collateral materialization implementation, and the Phase 108 Phala local
 DCAP/QVL verification artifact implementation, and the Phase 109 managed JWKS
 fetch artifact implementation, and the Phase 110 Phala local PCCS-compatible
 service artifact implementation, and the Phase 111 Phala direct Intel PCS
-artifact implementation, plus the coverage-hardening follow-up for
-serialization error paths, crate error constructors, and local soak runner
-resume/output/error-policy paths. It
+artifact implementation, the docs-first Phase 112 TLS channel-binding boundary,
+and the Phase 113 Phala TLS channel-binding artifact implementation, plus the
+coverage-hardening follow-up for serialization error paths, crate error
+constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
 running the available workspace gates and mapping those gates to the repo's
 major behavioral surfaces.
@@ -45,6 +46,13 @@ This report touches only:
 - `crates/hsai-attestation-phala/examples/operator_live_intel_pcs_artifact.rs`
 - `crates/hsai-attestation-phala/tests/phala_operator_live_intel_pcs_contract.rs`
 - `docs/111-phala-intel-pcs-direct-artifact-notes.md`
+- `crates/hsai-attestation-phala/examples/operator_live_tls_channel_artifact.rs`
+- `crates/hsai-attestation-phala/tests/phala_operator_live_tls_channel_contract.rs`
+- `crates/hsai-e2e-harness/tests/claim_boundary_source_scan.rs`
+- `docs/112-phala-tls-channel-binding-artifact-boundary-spec.md`
+- `docs/113-phala-tls-channel-binding-artifact-implementation-notes.md`
+- `crates/hsai-attestation-phala/Cargo.toml`
+- `Cargo.lock`
 - `crates/zkbench-core/tests/soak_runner_smoke.rs`
 - `crates/zkbench-core/tests/phase_v_coverage_hardening.rs`
 - `docs/12-task-list.md`
@@ -53,41 +61,25 @@ This report touches only:
 - `README.md`
 - `AGENTS.md`
 
-It does not change Cargo metadata, fixtures, generated artifacts, accepted
-Evidence Ledgers, benchmark packs, report bundles, audit-index outputs,
-ergonomics outputs, package runtime files, command-line tools outside the
-operator-only example, or UI artifacts.
+It does not change fixtures, generated artifacts, accepted Evidence Ledgers,
+benchmark packs, report bundles, audit-index outputs, ergonomics outputs,
+package runtime files, command-line tools outside operator-only examples, or UI
+artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 111 validation and the coverage-hardening
-follow-up.
+Run from repository root during Phase 113 validation.
 
 ```sh
-cargo fmt --all --check
-cargo test -p hsai-attestation-phala
-cargo test -p hsai-attestation-phala --features operator-live-provider
-cargo test -p hsai-attestation-phala --test phala_operator_live_runner_contract
-cargo test -p hsai-attestation-phala --test phala_operator_live_api_artifact_contract
-cargo test -p hsai-attestation-phala --test phala_operator_live_dcap_pccs_contract
-cargo test -p hsai-attestation-phala --test phala_operator_live_dcap_qvl_contract
-cargo test -p hsai-attestation-phala --test phala_operator_live_local_pccs_contract
-cargo test -p hsai-attestation-phala --test phala_operator_live_intel_pcs_contract
-cargo test -p hsai-attestation --test managed_jwks_artifact_contract
-cargo test -p hsai-e2e-harness --test claim_boundary_source_scan
-cargo test -p zkbench-core --test soak_runner_smoke
-cargo test -p zkbench-core --test phase_v_coverage_hardening
-cargo test --workspace
-cargo test --workspace --features external-runner
-cargo clippy --workspace --all-targets -- -D warnings
-cargo clippy -p hsai-attestation-phala --all-targets --features operator-live-provider -- -D warnings
-cargo clippy -p hsai-attestation-phala --features operator-live-provider --examples -- -D warnings
-cargo doc --workspace --no-deps
-cargo doc -p hsai-attestation-phala --features operator-live-provider --no-deps
-cargo test -p zkbench-core --test repo_hygiene
-cargo test -p zkbench-core --test repo_claim_boundary_docs
-cargo llvm-cov --workspace --summary-only
+cargo fmt --all -- --check
 git diff --check
+cargo test -p hsai-attestation-phala --test phala_operator_live_tls_channel_contract
+cargo test -p hsai-attestation-phala --example operator_live_tls_channel_artifact --features operator-live-tls-channel
+cargo test --workspace --all-features
+cargo clippy --workspace --all-targets --all-features -- -D warnings
+RUSTDOCFLAGS='-D warnings' cargo doc --workspace --all-features --no-deps
+cargo llvm-cov --workspace --all-features --summary-only
+HSAI_PHALA_OPERATOR_ACK=I_ACKNOWLEDGE_OPERATOR_LIVE_PHALA_RUN HSAI_PHALA_TLS_CHANNEL_INPUT_JSON=<repo-external-input> cargo run -p hsai-attestation-phala --example operator_live_tls_channel_artifact --features operator-live-tls-channel
 ```
 
 All commands passed.
@@ -95,12 +87,9 @@ All commands passed.
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-`cargo-llvm-cov 0.8.7` was available. The default workspace coverage pass
-reported `85.77%` region coverage, `82.56%` function execution, and `83.74%`
-line coverage. Branch coverage was not reported by this run. The optional
-`operator-live-provider` feature was validated by feature-specific test, clippy,
-and doc gates above; it is not included in the default workspace coverage
-summary unless coverage is run again with that feature enabled.
+`cargo-llvm-cov 0.8.7` was available. The all-feature workspace coverage pass
+reported `85.63%` region coverage, `82.52%` function execution, and `83.66%`
+line coverage. Branch coverage was not reported by this run.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
@@ -288,6 +277,19 @@ claim-boundary escalation.
   raw QVL report or raw quote is committed, no repo-native DCAP verifier exists,
   and no TLS path, accepted Evidence Ledger mutation, official benchmark
   submission, or claim above `Attested` exists.
+  `docs/113-phala-tls-channel-binding-artifact-implementation-notes.md`
+  records the operator-only TLS 1.3 channel artifact path. During Phase 113,
+  rustls negotiated `TLS13_AES_256_GCM_SHA384` with
+  `cloud-api.phala.com`, validated a three-certificate Web PKI chain, derived a
+  32-byte RFC 9266 `EXPORTER-Channel-Binding` value, and received HTTP 200 for
+  accepted TDX checksum
+  `5c99c72274ed0745f7788cdf272cc359099c07629833306d1a13f1b8e34596bd`
+  on that same connection. The exporter SHA-256 was
+  `a88d764e3daf48ec6a56cb31890304d3cbc5c4a8d6b140e07b5504d485bde9d7`.
+  Exactly five digest-bound files were generated outside git. No credential,
+  raw exporter, raw response, or peer certificate is committed. This is
+  client-local connection evidence, not RA-TLS, an attested server
+  certificate, independent evidence, accepted evidence, or proof.
 - No committed generated benchmark artifact bundle, official benchmark
   submission, or accepted Evidence Ledger entry was created. Phase U now
   implements local artifact-bundle packaging APIs and hermetic temp-root tests,

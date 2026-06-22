@@ -1651,3 +1651,39 @@ Exit criteria: this boundary spec exists; README, AGENTS, task ledger, and
 source index point to it; the future artifact shape and tests are explicit; and
 the docs state that a client-local TLS exporter capture is not independently
 verifiable attested TLS.
+
+## Managed-Attestation Track: Phala TLS Channel-Binding Artifact Implementation
+
+Status: complete for operator-only TLS 1.3 connection artifact materialization.
+See `docs/113-phala-tls-channel-binding-artifact-implementation-notes.md`.
+
+Goal: capture one RFC 9266 exporter and one accepted Phala verification
+response from the same operator-owned TLS 1.3 connection, then retain only
+digest-bound local metadata outside git.
+
+Implemented: a disabled-by-default `operator-live-tls-channel` feature and
+`operator_live_tls_channel_artifact` example using rustls, Web PKI roots, TLS
+1.3 only, fixed Phala host and path, one HTTP/1.1 request with connection close,
+bounded transport, RFC 9266 exporter derivation, accepted TDX response checks,
+staged five-file output, overwrite validation, and hermetic tests.
+
+Dependencies: Phase 112 boundary, Phase 106 Phala response semantics, rustls
+0.23, webpki-roots 0.26, RFC 9266, and the accepted non-secret Phala TDX quote.
+
+Validation gate: feature-enabled example tests and compilation, source-contract
+tests, Phala crate tests, workspace tests, clippy, docs, coverage, one explicit
+operator live run, no normal-test network, no credential, no committed generated
+artifact, no raw exporter/request/response/certificate output, no RA-TLS claim,
+no benchmark output, and no accepted Evidence Ledger mutation.
+
+Anti-goals: TLS 1.2, redirects, proxies, custom roots, certificate bypasses,
+connection reuse, raw transport retention, attested server certificates,
+endpoint-key quote binding, RA-TLS, proof, official benchmark submission,
+accepted Evidence Ledger mutation, Phase 4 registry semantic changes, Level2+
+evidence, global uniqueness claims, semantic correctness claims, or claims
+above `Attested`.
+
+Exit criteria: the operator example compiles only behind its feature, normal
+tests remain hermetic, one live run records TLS 1.3 and a 32-byte RFC 9266
+exporter with the accepted Phala response on the same connection, exactly five
+digest-bound files exist outside git, and all non-claims remain explicit.
