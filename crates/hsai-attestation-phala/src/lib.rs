@@ -1,9 +1,11 @@
 //! Deterministic fixture-oriented Phala/dstack attestation backend preparation.
 //!
 //! This crate does not perform real TDX quote verification, managed-service
-//! signature verification, JWKS/JWT validation, or network calls. It validates a
-//! small local evidence model so the HSAI attestation seam can be tested before
-//! real Phala artifacts are introduced.
+//! signature verification, JWKS/JWT validation, or ship a network client. It
+//! validates a small local evidence model so the HSAI attestation seam can be
+//! tested before real Phala artifacts are introduced. Operator-live invocation
+//! plumbing accepts caller-supplied clients and credentials, but normal tests use
+//! hermetic in-memory implementations only.
 
 use hsai_agent_case::{AgentCase, EvidenceLane};
 use hsai_attestation::{AttestationInput, AttestationVerifier, VerifiedAttestation, VerifyError};
@@ -44,6 +46,8 @@ const PHALA_LIVE_MODE: &str = "live-managed-verifier";
 pub const PHALA_OPERATOR_LIVE_ARTIFACT_SCHEMA_VERSION: &str =
     "hsai.phala.operator-live-artifact.v1";
 pub const PHALA_OPERATOR_LIVE_CLAIM_BOUNDARY: &str = "Attested";
+pub const PHALA_OPERATOR_LIVE_MAX_TIMEOUT_SECONDS: u64 = 300;
+pub const PHALA_OPERATOR_LIVE_MAX_RETRY_LIMIT: u64 = 3;
 pub const PHALA_OPERATOR_LIVE_REQUEST_PATH: &str = "operator-live/request.json";
 pub const PHALA_OPERATOR_LIVE_NORMALIZED_RESPONSE_PATH: &str =
     "operator-live/normalized-response.json";
@@ -463,6 +467,210 @@ pub enum PhalaOperatorLiveOutputOverwriteMode {
     ReplaceExisting,
 }
 
+/// Caller-declared inputs for an operator-owned Phala live invocation.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct PhalaOperatorLiveInvocationInput {
+    pub operator_run_id: String,
+    pub operator_acknowledged: bool,
+    pub provider_endpoint: String,
+    pub credential_source: String,
+    pub timeout_seconds: u64,
+    pub retry_limit: u64,
+    pub anchor_id: String,
+    pub agent_pubkey: Vec<u8>,
+    pub case_hash: Vec<u8>,
+    pub nonce: u64,
+    pub expected_report_data_binding: Vec<u8>,
+    pub expected_compose_hash: Vec<u8>,
+    pub expected_runtime_measurements: BTreeSet<String>,
+    pub expected_image_digest: String,
+    pub request_time: u64,
+    pub started_at: u64,
+    pub output_root: PathBuf,
+    pub overwrite: PhalaOperatorLiveOutputOverwriteMode,
+}
+
+/// Opaque operator credential loaded outside repo fixtures and artifacts.
+#[derive(Clone, Eq, PartialEq)]
+pub struct PhalaOperatorLiveCredential {
+    source_id: String,
+    secret: Vec<u8>,
+}
+
+impl std::fmt::Debug for PhalaOperatorLiveCredential {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("PhalaOperatorLiveCredential")
+            .field("source_id", &self.source_id)
+            .field("secret", &"<redacted>")
+            .finish()
+    }
+}
+
+impl PhalaOperatorLiveCredential {
+    pub fn new(
+        source_id: impl Into<String>,
+        secret: impl Into<Vec<u8>>,
+    ) -> Result<Self, PhalaOperatorLiveInvocationError> {
+        let source_id = source_id.into();
+        let secret = secret.into();
+        if source_id.trim().is_empty() {
+            return Err(PhalaOperatorLiveInvocationError::MissingCredentialSource);
+        }
+        if secret.is_empty() {
+            return Err(PhalaOperatorLiveInvocationError::CredentialUnavailable(
+                source_id,
+            ));
+        }
+        Ok(Self { source_id, secret })
+    }
+
+    pub fn source_id(&self) -> &str {
+        &self.source_id
+    }
+
+    pub fn secret_bytes(&self) -> &[u8] {
+        &self.secret
+    }
+}
+
+/// Credential loader boundary. Implementations must keep secrets outside git.
+pub trait PhalaOperatorLiveCredentialProvider {
+    fn load(
+        &self,
+        source_id: &str,
+    ) -> Result<PhalaOperatorLiveCredential, PhalaOperatorLiveInvocationError>;
+}
+
+/// In-memory credential provider for hermetic tests.
+#[derive(Clone, Default)]
+pub struct InMemoryPhalaOperatorLiveCredentialProvider {
+    credentials: BTreeMap<String, Vec<u8>>,
+}
+
+impl std::fmt::Debug for InMemoryPhalaOperatorLiveCredentialProvider {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("InMemoryPhalaOperatorLiveCredentialProvider")
+            .field("credential_count", &self.credentials.len())
+            .finish()
+    }
+}
+
+impl InMemoryPhalaOperatorLiveCredentialProvider {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn with_credential(
+        mut self,
+        source_id: impl Into<String>,
+        secret: impl Into<Vec<u8>>,
+    ) -> Self {
+        self.credentials.insert(source_id.into(), secret.into());
+        self
+    }
+}
+
+impl PhalaOperatorLiveCredentialProvider for InMemoryPhalaOperatorLiveCredentialProvider {
+    fn load(
+        &self,
+        source_id: &str,
+    ) -> Result<PhalaOperatorLiveCredential, PhalaOperatorLiveInvocationError> {
+        let secret = self.credentials.get(source_id).cloned().ok_or_else(|| {
+            PhalaOperatorLiveInvocationError::CredentialUnavailable(source_id.to_owned())
+        })?;
+        PhalaOperatorLiveCredential::new(source_id.to_owned(), secret)
+    }
+}
+
+/// Credential-aware live invocation client boundary.
+pub trait PhalaOperatorLiveClient {
+    fn verify_with_credential(
+        &self,
+        request: &PhalaManagedVerifierRequest,
+        credential: &PhalaOperatorLiveCredential,
+    ) -> Result<PhalaManagedVerifierResponse, PhalaManagedVerifierError>;
+}
+
+impl<T: PhalaManagedVerifierClient> PhalaOperatorLiveClient for T {
+    fn verify_with_credential(
+        &self,
+        request: &PhalaManagedVerifierRequest,
+        _credential: &PhalaOperatorLiveCredential,
+    ) -> Result<PhalaManagedVerifierResponse, PhalaManagedVerifierError> {
+        self.verify(request)
+    }
+}
+
+/// Operator-live invocation orchestrator.
+#[derive(Debug)]
+pub struct PhalaOperatorLiveInvocation<C, P> {
+    pub client: C,
+    pub credential_provider: P,
+    replay_guard: RefCell<PhalaReplayGuard>,
+}
+
+impl<C, P> PhalaOperatorLiveInvocation<C, P> {
+    pub fn new(client: C, credential_provider: P) -> Self {
+        Self {
+            client,
+            credential_provider,
+            replay_guard: RefCell::new(PhalaReplayGuard::new()),
+        }
+    }
+}
+
+impl<C, P> PhalaOperatorLiveInvocation<C, P>
+where
+    C: PhalaOperatorLiveClient,
+    P: PhalaOperatorLiveCredentialProvider,
+{
+    pub fn invoke(
+        &self,
+        input: &PhalaOperatorLiveInvocationInput,
+    ) -> Result<ValidatedPhalaOperatorLiveArtifact, PhalaOperatorLiveInvocationError> {
+        validate_phala_operator_live_invocation_input(input)?;
+        let credential = self.credential_provider.load(&input.credential_source)?;
+        if credential.source_id() != input.credential_source {
+            return Err(PhalaOperatorLiveInvocationError::CredentialSourceMismatch {
+                expected: input.credential_source.clone(),
+                actual: credential.source_id().to_owned(),
+            });
+        }
+
+        let request = phala_operator_live_invocation_request(input);
+        let response = self.invoke_with_retries(&request, &credential, input.retry_limit)?;
+        validate_phala_managed_response(&request, &response)
+            .map_err(PhalaOperatorLiveInvocationError::ManagedVerifier)?;
+        self.replay_guard
+            .borrow_mut()
+            .check_and_record(&request.anchor_id, request.nonce)
+            .map_err(PhalaOperatorLiveInvocationError::ManagedVerifier)?;
+
+        let bundle = build_phala_operator_live_invocation_bundle(input, request, response)?;
+        write_phala_operator_live_artifact_output_root(&input.output_root, &bundle, input.overwrite)
+            .map_err(PhalaOperatorLiveInvocationError::Artifact)
+    }
+
+    fn invoke_with_retries(
+        &self,
+        request: &PhalaManagedVerifierRequest,
+        credential: &PhalaOperatorLiveCredential,
+        retry_limit: u64,
+    ) -> Result<PhalaManagedVerifierResponse, PhalaOperatorLiveInvocationError> {
+        let mut last_error = PhalaManagedVerifierError::ClientUnavailable;
+        for _attempt in 0..=retry_limit {
+            match self.client.verify_with_credential(request, credential) {
+                Ok(response) => return Ok(response),
+                Err(error) => last_error = error,
+            }
+        }
+        Err(PhalaOperatorLiveInvocationError::RetryExhausted {
+            attempts: retry_limit + 1,
+            last_error,
+        })
+    }
+}
+
 /// Failure taxonomy for hermetic Phala managed-verifier preparation.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub enum PhalaManagedVerifierError {
@@ -533,6 +741,41 @@ impl std::fmt::Display for PhalaOperatorLiveArtifactError {
 }
 
 impl std::error::Error for PhalaOperatorLiveArtifactError {}
+
+/// Failure taxonomy for operator-owned invocation plumbing.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum PhalaOperatorLiveInvocationError {
+    MissingOperatorAcknowledgement,
+    MissingCredentialSource,
+    EmptyEndpoint,
+    TimeoutOutOfBounds {
+        actual: u64,
+        max: u64,
+    },
+    RetryLimitOutOfBounds {
+        actual: u64,
+        max: u64,
+    },
+    CredentialUnavailable(String),
+    CredentialSourceMismatch {
+        expected: String,
+        actual: String,
+    },
+    RetryExhausted {
+        attempts: u64,
+        last_error: PhalaManagedVerifierError,
+    },
+    ManagedVerifier(PhalaManagedVerifierError),
+    Artifact(PhalaOperatorLiveArtifactError),
+}
+
+impl std::fmt::Display for PhalaOperatorLiveInvocationError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{self:?}")
+    }
+}
+
+impl std::error::Error for PhalaOperatorLiveInvocationError {}
 
 impl PhalaManagedVerifierError {
     fn as_verify_error(&self) -> VerifyError {
@@ -732,6 +975,129 @@ pub fn read_phala_operator_live_artifact_output_root(
     let output_root = validate_operator_live_output_root(output_root.as_ref())?;
     let files = collect_operator_live_materialized_files(&output_root)?;
     validate_phala_operator_live_artifact_files(&files)
+}
+
+fn validate_phala_operator_live_invocation_input(
+    input: &PhalaOperatorLiveInvocationInput,
+) -> Result<(), PhalaOperatorLiveInvocationError> {
+    if !input.operator_acknowledged {
+        return Err(PhalaOperatorLiveInvocationError::MissingOperatorAcknowledgement);
+    }
+    if input.credential_source.trim().is_empty() {
+        return Err(PhalaOperatorLiveInvocationError::MissingCredentialSource);
+    }
+    if input.provider_endpoint.trim().is_empty() {
+        return Err(PhalaOperatorLiveInvocationError::EmptyEndpoint);
+    }
+    if input.timeout_seconds == 0 || input.timeout_seconds > PHALA_OPERATOR_LIVE_MAX_TIMEOUT_SECONDS
+    {
+        return Err(PhalaOperatorLiveInvocationError::TimeoutOutOfBounds {
+            actual: input.timeout_seconds,
+            max: PHALA_OPERATOR_LIVE_MAX_TIMEOUT_SECONDS,
+        });
+    }
+    if input.retry_limit > PHALA_OPERATOR_LIVE_MAX_RETRY_LIMIT {
+        return Err(PhalaOperatorLiveInvocationError::RetryLimitOutOfBounds {
+            actual: input.retry_limit,
+            max: PHALA_OPERATOR_LIVE_MAX_RETRY_LIMIT,
+        });
+    }
+    Ok(())
+}
+
+fn phala_operator_live_invocation_request(
+    input: &PhalaOperatorLiveInvocationInput,
+) -> PhalaManagedVerifierRequest {
+    PhalaManagedVerifierRequest {
+        anchor_id: input.anchor_id.clone(),
+        agent_pubkey: input.agent_pubkey.clone(),
+        case_hash: input.case_hash.clone(),
+        nonce: input.nonce,
+        expected_report_data_binding: input.expected_report_data_binding.clone(),
+        expected_compose_hash: input.expected_compose_hash.clone(),
+        expected_runtime_measurements: input.expected_runtime_measurements.clone(),
+        expected_image_digest: input.expected_image_digest.clone(),
+        freshness_window: input.timeout_seconds,
+        managed_verifier_endpoint_id: input.provider_endpoint.clone(),
+        request_time: input.request_time,
+    }
+}
+
+fn build_phala_operator_live_invocation_bundle(
+    input: &PhalaOperatorLiveInvocationInput,
+    request: PhalaManagedVerifierRequest,
+    normalized_response: PhalaManagedVerifierResponse,
+) -> Result<PhalaOperatorLiveArtifactBundle, PhalaOperatorLiveInvocationError> {
+    let raw_response_sha256 = hex_lower(&normalized_response.raw_response_digest);
+    let trust_roots = PhalaOperatorLiveTrustRoots {
+        schema_version: PHALA_OPERATOR_LIVE_ARTIFACT_SCHEMA_VERSION.to_owned(),
+        provider: PHALA_LIVE_PROVIDER.to_owned(),
+        verification_mode: PHALA_LIVE_MODE.to_owned(),
+        roots: normalized_response.provider_trust_roots.clone(),
+    };
+    let redaction_report = PhalaOperatorLiveRedactionReport {
+        schema_version: PHALA_OPERATOR_LIVE_ARTIFACT_SCHEMA_VERSION.to_owned(),
+        digest_algorithm: "sha256".to_owned(),
+        removed_fields: BTreeSet::from([
+            "authorization_header".to_owned(),
+            "credential_source_value".to_owned(),
+        ]),
+        hashed_fields: BTreeSet::from(["raw_response_body".to_owned()]),
+        retained_fields: BTreeMap::from([(
+            "managed_verifier_endpoint_id".to_owned(),
+            PhalaOperatorLiveRetainedField {
+                value: input.provider_endpoint.clone(),
+                rationale: "public provider endpoint label".to_owned(),
+            },
+        )]),
+        dropped_secret_shaped_fields: BTreeSet::from([
+            "bearer_token".to_owned(),
+            "operator_credential".to_owned(),
+        ]),
+    };
+    let audit = PhalaOperatorLiveAudit {
+        schema_version: PHALA_OPERATOR_LIVE_ARTIFACT_SCHEMA_VERSION.to_owned(),
+        operator_run_id: input.operator_run_id.clone(),
+        provider: PHALA_LIVE_PROVIDER.to_owned(),
+        verification_mode: PHALA_LIVE_MODE.to_owned(),
+        request_digest: phala_operator_live_json_digest(&request)
+            .map_err(PhalaOperatorLiveInvocationError::Artifact)?,
+        normalized_response_digest: phala_operator_live_json_digest(&normalized_response)
+            .map_err(PhalaOperatorLiveInvocationError::Artifact)?,
+        trust_roots_digest: phala_operator_live_json_digest(&trust_roots)
+            .map_err(PhalaOperatorLiveInvocationError::Artifact)?,
+        redaction_report_digest: phala_operator_live_json_digest(&redaction_report)
+            .map_err(PhalaOperatorLiveInvocationError::Artifact)?,
+        raw_response_digest: raw_response_sha256.clone(),
+        started_at: input.started_at,
+        finished_at: input.request_time,
+        timeout_seconds: input.timeout_seconds,
+        retry_limit: input.retry_limit,
+        provider_verdict: normalized_response.provider_verdict,
+        claim_boundary: PHALA_OPERATOR_LIVE_CLAIM_BOUNDARY.to_owned(),
+        non_claims: operator_live_invocation_non_claims(),
+    };
+
+    Ok(PhalaOperatorLiveArtifactBundle {
+        request,
+        normalized_response,
+        trust_roots,
+        redaction_report,
+        audit,
+        raw_response_sha256,
+    })
+}
+
+fn operator_live_invocation_non_claims() -> BTreeSet<String> {
+    BTreeSet::from([
+        "not proof".to_owned(),
+        "not local DCAP verification".to_owned(),
+        "not managed-service signature/JWKS/JWT verification".to_owned(),
+        "not TLS channel binding".to_owned(),
+        "not benchmark evidence".to_owned(),
+        "not global software-agent uniqueness".to_owned(),
+        "not semantic correctness".to_owned(),
+    ])
 }
 
 /// Deterministic SHA-256 digest over the crate-local JSON representation.

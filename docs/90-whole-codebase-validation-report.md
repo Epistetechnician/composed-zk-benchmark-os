@@ -132,11 +132,15 @@ claim-boundary escalation.
 
 ## Residual Gaps
 
-- No live external backend, live Phala call, DCAP/PCCS/JWKS fetching, TLS
-  channel binding, or operator-live credential path was exercised.
+- No live external backend, live Phala call, DCAP/PCCS/JWKS fetching, or TLS
+  channel binding was exercised.
   `docs/97-phala-operator-live-invocation-boundary-spec.md` now defines the
-  future docs-first invocation boundary, but no invocation implementation,
-  credential path, live call, DCAP/PCCS/JWKS/TLS path, operator live test, or
+  docs-first invocation boundary, and
+  `docs/100-phala-operator-live-invocation-implementation-notes.md` now records
+  local invocation plumbing with a hermetic credential-provider boundary,
+  injected client boundary, redacted artifact-bundle assembly, replay checks,
+  and fail-closed tests. No shipped network client, live Phala call, real
+  operator credential source, operator live test, DCAP/PCCS/JWKS/TLS path, or
   generated operator artifact exists.
 - No committed generated benchmark artifact bundle, official benchmark
   submission, or accepted Evidence Ledger entry was created. Phase U now
