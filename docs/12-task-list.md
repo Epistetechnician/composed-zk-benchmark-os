@@ -1473,3 +1473,51 @@ Exit criteria: an operator can download the raw quote outside normal tests, run
 local `dcap-qvl` verification outside normal tests, materialize digest-only
 `dcap-qvl/*` metadata outside git, validate QVL statuses and measurement
 binding, and keep the repository free of generated live artifacts.
+
+## Managed-Attestation Track: Managed JWKS Fetch Artifact
+
+Status: complete for operator-only managed OpenID/JWKS fetch artifact
+materialization only. See
+`docs/109-managed-jwks-fetch-artifact-notes.md`.
+
+Goal: bridge one real public managed-attestation OpenID/JWKS fetch into
+digest-only local metadata without adding network access to normal tests,
+committing raw OpenID/JWKS responses, accepting tokens, or claiming managed-JWT
+signature verification.
+
+Implemented:
+`crates/hsai-attestation/examples/operator_live_jwks_artifact.rs`, which
+requires
+`HSAI_MANAGED_JWKS_OPERATOR_ACK=I_ACKNOWLEDGE_OPERATOR_LIVE_JWKS_FETCH` and
+`HSAI_MANAGED_JWKS_INPUT_JSON`. The example reads a non-secret input JSON,
+loads repo-external saved OpenID metadata and JWKS responses, checks HTTPS
+issuer and endpoint declarations, OpenID issuer and `jwks_uri` consistency,
+`id_token` response support, required `iss`/`exp`/`nbf` claims, non-empty
+signing algorithms, non-empty RSA JWKS keys, advertised key algorithms, and
+unique `kid` plus algorithm pairs, then writes only digest-only
+`managed-jwks/*` files outside git.
+
+Dependencies: managed-signature boundary spec, offline managed-JWT verification,
+Intel Trust Authority OpenID/JWKS documentation, live public OpenID/JWKS fetch,
+and repo-external ignored artifact storage.
+
+Validation gate: source-contract tests, `hsai-attestation` tests, clippy, docs,
+no committed credentials, no secret fixtures, no generated committed OpenID or
+JWKS responses, no normal test network access, no token acceptance, no
+managed-JWT signature verification, no DCAP/PCCS/TLS path, no benchmark outputs,
+and no accepted Evidence Ledger mutation.
+
+Anti-goals: normal tests requiring network access or credentials, committed raw
+OpenID/JWKS responses, committed real credentials, secret fixtures, token
+acceptance, live managed-JWT signature verification, Azure provider
+implementation, Phala managed-signature verification, local DCAP quote
+verification, local PCCS service operation, TLS or attested-TLS channel binding,
+deployment orchestration, external repo clones, vendored source, benchmark
+outputs, official benchmark submission, accepted Evidence Ledger mutation,
+Phase 4 registry semantic changes, Level2+ evidence, global uniqueness claims,
+or claims above `Attested`.
+
+Exit criteria: an operator can fetch public OpenID metadata and JWKS outside
+normal tests, materialize digest-only `managed-jwks/*` metadata outside git,
+validate metadata/JWKS consistency, and keep the repository free of generated
+live artifacts.
