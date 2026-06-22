@@ -18,6 +18,7 @@ pub mod evidence;
 pub mod external_runner;
 pub mod generator;
 pub mod ids;
+pub mod local_artifact_campaign;
 pub mod local_benchmark_artifact;
 pub mod mutation;
 pub mod pack;
@@ -216,6 +217,22 @@ pub use generator::{
     BenchmarkInstance, DeterministicGenerator, FamilyKind, FamilyTemplate,
     GeneratedBenchmarkFamily, GeneratedBenchmarkInstance, GenerationProvenance, GeneratorConfig,
     GeneratorLimits, GeneratorProfile, GeneratorSeed, GeneratorTunables, InstanceParams,
+};
+pub use local_artifact_campaign::{
+    build_local_artifact_campaign_input_from_phase_u_output,
+    compute_local_artifact_campaign_manifest_digest,
+    deserialize_local_artifact_campaign_manifest_json, read_local_artifact_campaign_outputs,
+    render_local_artifact_campaign_markdown, required_local_artifact_campaign_limitations,
+    serialize_local_artifact_campaign_manifest_json,
+    serialize_local_artifact_campaign_validation_json, validate_local_artifact_campaign_manifest,
+    write_local_artifact_campaign_outputs, LocalArtifactCampaignInputKind,
+    LocalArtifactCampaignInputRef, LocalArtifactCampaignManifest, LocalArtifactCampaignOutput,
+    LocalArtifactCampaignRetentionPolicy, LocalArtifactCampaignValidation,
+    LocalArtifactCampaignValidationIssue, LocalArtifactCampaignValidationIssueKind,
+    LocalArtifactCampaignVersion, LOCAL_ARTIFACT_CAMPAIGN_MANIFEST_DIGEST_PATH,
+    LOCAL_ARTIFACT_CAMPAIGN_MANIFEST_PATH, LOCAL_ARTIFACT_CAMPAIGN_MARKDOWN_DIGEST_PATH,
+    LOCAL_ARTIFACT_CAMPAIGN_MARKDOWN_PATH, LOCAL_ARTIFACT_CAMPAIGN_VALIDATION_DIGEST_PATH,
+    LOCAL_ARTIFACT_CAMPAIGN_VALIDATION_PATH,
 };
 pub use local_benchmark_artifact::{
     compute_local_benchmark_artifact_manifest_digest,
