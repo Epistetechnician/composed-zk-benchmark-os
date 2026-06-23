@@ -721,6 +721,38 @@ rejection, directory-target rejection, invalid-ledger rejection, stale-tip
 rejection, symlink rejection on Unix platforms, path traversal rejection, and
 source-scan boundaries; and full workspace validation passes.
 
+## Benchmark OS Track: Phase W Official Submission Package Materialization Boundary
+
+Status: complete for docs-first boundary. See
+`docs/120-phase-w-official-submission-package-materialization-boundary-spec.md`.
+
+Goal: define the future local official-submission package output-root contract
+after Phase W accepted-ledger materialization without authorizing package
+generation, official endpoint submission, score-axis population, or Level2+
+evidence creation.
+
+Scope: Markdown boundary updates only. The future materializer must require
+valid `OfficialSubmissionPackageMetadata`, a caller-selected valid accepted
+ledger JSON file, accepted evidence ids that exist in that ledger, external
+replay provenance, artifact digests, required non-claim labels,
+`submits_to_official_endpoint == false`, deterministic JSON and Markdown
+outputs, digest sidecars, protected-root rejection, symlink rejection,
+path-traversal rejection, and source scans proving no network/process/
+credential/submission path exists.
+
+Anti-goals: Rust source changes, tests, Cargo metadata changes, generated
+package files, committed official-submission package artifacts, official
+benchmark submission, external replay execution, live backend execution,
+network access, credentials or secrets, command-line tools, UI dashboards,
+package runtime additions, score-axis population, ZK backend performance
+claims, Level2+ evidence creation, formal evidence creation, broad leaderboard
+claims, or treating local package output as an official benchmark submission.
+
+Exit criteria: Phase 120 boundary spec exists; README, validation report, task
+list, and AGENTS point to it; the future output shape and required rejections
+are explicit; and no Rust source, generated package output, official endpoint
+call, score-axis population, or Level2+ evidence is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
