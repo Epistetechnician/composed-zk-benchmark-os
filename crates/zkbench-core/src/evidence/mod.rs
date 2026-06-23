@@ -10,6 +10,7 @@ pub mod candidate;
 pub mod digest;
 pub mod eligibility;
 pub mod escalation_guard;
+pub mod external_submission_preflight;
 pub mod ledger;
 pub mod official_submission_output;
 pub mod promotion_preflight;
@@ -71,6 +72,19 @@ pub use eligibility::{
 pub use escalation_guard::{
     guard_claim_boundary_escalation, ClaimBoundaryEscalationGuard,
     ClaimBoundaryEscalationGuardResult,
+};
+pub use external_submission_preflight::{
+    build_external_replay_submission_preflight_report,
+    compute_external_replay_submission_preflight_report_digest,
+    deserialize_external_replay_submission_preflight_report_json,
+    render_external_replay_submission_preflight_markdown,
+    required_external_replay_submission_preflight_non_claims,
+    serialize_external_replay_submission_preflight_report_json,
+    validate_external_replay_submission_preflight_request, ExternalReplayBenchmarkTarget,
+    ExternalReplaySubmissionPreflightIssue, ExternalReplaySubmissionPreflightIssueKind,
+    ExternalReplaySubmissionPreflightReport, ExternalReplaySubmissionPreflightRequest,
+    ExternalReplaySubmissionPreflightValidation, ExternalReplaySubmissionPreflightVersion,
+    ExternalReplaySubmissionSourceSummary,
 };
 pub use ledger::{
     EvidenceAppendPolicy, EvidenceChainDigest, EvidenceLedger, EvidenceLedgerEntry,

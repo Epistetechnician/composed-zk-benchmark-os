@@ -1,21 +1,29 @@
 use std::path::Path;
 
 use zkbench_core::{
-    apply_accepted_ledger_append_transaction, build_reviewed_promotion_preflight_report,
-    compute_artifact_digest_bytes, compute_official_submission_package_metadata_digest,
+    apply_accepted_ledger_append_transaction, build_external_replay_submission_preflight_report,
+    build_reviewed_promotion_preflight_report, compute_artifact_digest_bytes,
+    compute_external_replay_submission_preflight_report_digest,
+    compute_official_submission_package_metadata_digest,
     compute_reviewed_promotion_preflight_report_digest, create_evidence_append_preview,
-    create_evidence_record_candidate, deserialize_official_submission_package_metadata_json,
+    create_evidence_record_candidate, deserialize_external_replay_submission_preflight_report_json,
+    deserialize_official_submission_package_metadata_json,
     deserialize_reviewed_promotion_preflight_report_json, read_official_submission_package_outputs,
+    render_external_replay_submission_preflight_markdown,
     render_official_submission_package_markdown, render_reviewed_promotion_preflight_markdown,
     required_reviewed_promotion_preflight_non_claims, review_evidence_append_proposal,
+    serialize_external_replay_submission_preflight_report_json,
     serialize_official_submission_package_metadata_json,
     serialize_reviewed_promotion_preflight_report_json,
     validate_accepted_ledger_append_transaction_request,
+    validate_external_replay_submission_preflight_request,
     validate_official_submission_package_metadata, validate_reviewed_promotion_preflight_request,
     write_official_submission_package_outputs, AcceptedLedgerAppendTransactionRequest,
     AcceptedLedgerAppendTransactionVersion, ArtifactDigest, ArtifactKind, ArtifactRole,
     ClaimBoundary, EvidenceAcceptancePolicy, EvidenceAppendPreviewStatus, EvidenceClass,
     EvidenceLedger, EvidenceReviewChecklist, EvidenceReviewDecisionKind, EvidenceReviewerRole,
+    ExternalReplayBenchmarkTarget, ExternalReplaySubmissionPreflightIssueKind,
+    ExternalReplaySubmissionPreflightRequest, ExternalReplaySubmissionPreflightVersion,
     OfficialSubmissionPackageIssueKind, OfficialSubmissionPackageMetadata,
     OfficialSubmissionPackageOutputRequest, OfficialSubmissionPackageVersion,
     ReviewedPromotionPreflightIssueKind, ReviewedPromotionPreflightRequest,
@@ -144,6 +152,64 @@ fn accepted_ledger_and_package() -> (EvidenceLedger, OfficialSubmissionPackageMe
         submits_to_official_endpoint: false,
     };
     (ledger, package)
+}
+
+fn valid_external_replay_submission_preflight_request(
+    dir: &tempfile::TempDir,
+) -> ExternalReplaySubmissionPreflightRequest {
+    let ledger_path = dir.path().join("accepted-ledger.json");
+    let package_output_root = dir.path().join("package-output");
+    let future_output_root = dir.path().join("external-replay-submission-output");
+    let (ledger, package) = accepted_ledger_and_package();
+    ledger
+        .save_json(&ledger_path)
+        .expect("accepted ledger should save");
+    let output =
+        write_official_submission_package_outputs(&OfficialSubmissionPackageOutputRequest {
+            output_root: package_output_root.clone(),
+            accepted_ledger_path: ledger_path.clone(),
+            package: package.clone(),
+            protected_paths: Vec::new(),
+            overwrite: false,
+        })
+        .expect("package output should write");
+
+    ExternalReplaySubmissionPreflightRequest {
+        id: "phase_w_external_submission_preflight".to_string(),
+        version: ExternalReplaySubmissionPreflightVersion::default(),
+        accepted_ledger_path: ledger_path.clone(),
+        package_output_root,
+        expected_package_metadata_digest: output.package_metadata_digest,
+        expected_validation_report_digest: output.validation_report_digest,
+        benchmark_target: ExternalReplayBenchmarkTarget {
+            benchmark_suite_id: package.benchmark_suite_id,
+            backend_id: package.backend_id,
+            backend_version: package.backend_version,
+            target_label: "operator-selected-fixture-target".to_string(),
+        },
+        external_replay_provenance: vec![
+            "future external replay provenance digest declared by operator".to_string(),
+        ],
+        source_artifact_digests: package.artifact_digests,
+        operator_acknowledged: true,
+        future_output_root,
+        protected_paths: vec![ledger_path],
+        overwrite: false,
+        redaction_policy: vec![
+            "retain digests and schemas only; exclude raw credentials and responses".to_string(),
+        ],
+        requested_evidence_class: EvidenceClass::ReproducibleBenchmarkArtifact,
+        requested_claim_boundary: ClaimBoundary::Level2ReproducibleBenchmarkArtifact,
+        populates_score_axes: false,
+        official_endpoint_submission_requested: false,
+        unresolved_quarantine_markers: Vec::new(),
+        blocking_markers: Vec::new(),
+        claim_text: vec!["local preflight only; no endpoint submission".to_string()],
+        non_claims: zkbench_core::required_external_replay_submission_preflight_non_claims()
+            .into_iter()
+            .map(str::to_string)
+            .collect(),
+    }
 }
 
 #[test]
@@ -480,6 +546,140 @@ fn official_submission_package_outputs_reject_stale_digest_and_unexpected_files(
     assert!(unexpected
         .to_string()
         .contains("unexpected file or directory"));
+}
+
+#[test]
+fn external_replay_submission_preflight_validates_local_inputs_without_side_effects() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let request = valid_external_replay_submission_preflight_request(&dir);
+    let validation = validate_external_replay_submission_preflight_request(&request);
+    assert!(validation.valid, "{:?}", validation.issues);
+
+    let report = build_external_replay_submission_preflight_report(&request);
+    assert!(report.validation.valid, "{:?}", report.validation.issues);
+    assert!(!report.runs_external_replay);
+    assert!(!report.submits_to_official_endpoint);
+    assert!(!report.mutates_accepted_evidence_ledger);
+    assert!(!report.writes_generated_artifacts);
+    assert!(!report.populates_score_axes);
+    assert_eq!(report.claim_boundary, ClaimBoundary::Level0DesignNote);
+    assert_eq!(report.source_summary.accepted_ledger_entry_count, 1);
+    assert_eq!(report.source_summary.matched_accepted_evidence_id_count, 1);
+
+    let json = serialize_external_replay_submission_preflight_report_json(&report)
+        .expect("preflight report should serialize");
+    let reparsed = deserialize_external_replay_submission_preflight_report_json(&json)
+        .expect("preflight report should deserialize");
+    assert_eq!(report, reparsed);
+    let markdown = render_external_replay_submission_preflight_markdown(&report)
+        .expect("preflight markdown should render");
+    assert!(markdown.contains("External replay run: `false`"));
+    assert!(markdown.contains("Official endpoint submitted: `false`"));
+    assert_eq!(
+        compute_external_replay_submission_preflight_report_digest(&report)
+            .expect("digest should compute"),
+        compute_external_replay_submission_preflight_report_digest(&reparsed)
+            .expect("digest should recompute")
+    );
+}
+
+#[test]
+fn external_replay_submission_preflight_rejects_digest_drift() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let mut request = valid_external_replay_submission_preflight_request(&dir);
+    request.expected_package_metadata_digest = digest("different package digest");
+
+    let validation = validate_external_replay_submission_preflight_request(&request);
+    assert!(!validation.valid);
+    assert!(validation.issues.iter().any(|issue| {
+        issue.kind == ExternalReplaySubmissionPreflightIssueKind::PackageDigestMismatch
+    }));
+}
+
+#[test]
+fn external_replay_submission_preflight_rejects_missing_operator_acknowledgement() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let mut request = valid_external_replay_submission_preflight_request(&dir);
+    request.operator_acknowledged = false;
+
+    let validation = validate_external_replay_submission_preflight_request(&request);
+    assert!(!validation.valid);
+    assert!(validation.issues.iter().any(|issue| {
+        issue.kind == ExternalReplaySubmissionPreflightIssueKind::MissingOperatorAcknowledgement
+    }));
+}
+
+#[test]
+fn external_replay_submission_preflight_rejects_local_only_and_score_axis_requests() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let mut request = valid_external_replay_submission_preflight_request(&dir);
+    request.requested_evidence_class = EvidenceClass::LocalReplay;
+    request.requested_claim_boundary = ClaimBoundary::Level1LocalReplay;
+    request.populates_score_axes = true;
+
+    let validation = validate_external_replay_submission_preflight_request(&request);
+    assert!(!validation.valid);
+    assert!(validation.issues.iter().any(|issue| {
+        issue.kind == ExternalReplaySubmissionPreflightIssueKind::UnsupportedEvidenceClass
+    }));
+    assert!(validation.issues.iter().any(|issue| {
+        issue.kind == ExternalReplaySubmissionPreflightIssueKind::LocalOnlyEvidencePromotion
+    }));
+    assert!(validation.issues.iter().any(|issue| {
+        issue.kind
+            == ExternalReplaySubmissionPreflightIssueKind::ScoreAxisPopulationWithoutEvidenceClass
+    }));
+}
+
+#[test]
+fn external_replay_submission_preflight_rejects_endpoint_attempt_and_protected_root() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let mut request = valid_external_replay_submission_preflight_request(&dir);
+    request.official_endpoint_submission_requested = true;
+    request
+        .protected_paths
+        .push(request.future_output_root.clone());
+
+    let validation = validate_external_replay_submission_preflight_request(&request);
+    assert!(!validation.valid);
+    assert!(validation.issues.iter().any(|issue| {
+        issue.kind == ExternalReplaySubmissionPreflightIssueKind::EndpointSubmissionAttempt
+    }));
+    assert!(validation.issues.iter().any(|issue| {
+        issue.kind == ExternalReplaySubmissionPreflightIssueKind::UnsafeOutputRoot
+    }));
+}
+
+#[test]
+fn external_replay_submission_preflight_source_scan_exposes_no_live_runtime_surface() {
+    let source_path = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("src")
+        .join("evidence")
+        .join("external_submission_preflight.rs");
+    let source = std::fs::read_to_string(source_path).expect("source should read");
+
+    for forbidden in [
+        "std::process",
+        "Command::new",
+        "std::net",
+        "TcpStream",
+        "reqwest",
+        "ureq",
+        "hyper",
+        "std::env::var",
+        "submit_to_official",
+        "populate_score_axes",
+    ] {
+        assert!(
+            !source.contains(forbidden),
+            "external submission preflight must not expose {forbidden}"
+        );
+    }
+    assert!(source.contains("runs_external_replay: false"));
+    assert!(source.contains("submits_to_official_endpoint: false"));
+    assert!(source.contains("mutates_accepted_evidence_ledger: false"));
+    assert!(source.contains("writes_generated_artifacts: false"));
+    assert!(source.contains("populates_score_axes: false"));
 }
 
 #[test]
