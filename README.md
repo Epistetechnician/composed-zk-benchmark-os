@@ -215,6 +215,7 @@ Surface DSL
 | [docs/134-pcsm-governed-agent-admission-boundary-spec.md](docs/134-pcsm-governed-agent-admission-boundary-spec.md) | PCSM-governed agent-output admission docs-first boundary. |
 | [docs/135-phase-zk-harness-validation-coverage-notes.md](docs/135-phase-zk-harness-validation-coverage-notes.md) | Local zk-Harness validation coverage campaign notes. |
 | [docs/136-phase-hsai-agent-admission-core-notes.md](docs/136-phase-hsai-agent-admission-core-notes.md) | HSAI local agent admission core implementation notes. |
+| [docs/137-phase-hsai-admission-e2e-harness-notes.md](docs/137-phase-hsai-admission-e2e-harness-notes.md) | HSAI admission-gated e2e harness implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -750,6 +751,14 @@ performs no provider call, mutates no accepted Evidence Ledger, populates no
 score axes, creates no Level2+ evidence, and does not claim semantic
 correctness, production readiness, proof, benchmark evidence, or global
 software-agent uniqueness.
+[docs/137-phase-hsai-admission-e2e-harness-notes.md](docs/137-phase-hsai-admission-e2e-harness-notes.md)
+records the admission-gated HSAI e2e harness integration. The
+`hsai-e2e-harness` crate now depends on `hsai-agent-admission` and covers
+accepted, rejected, and quarantined admission decisions before downstream
+registry, economy, or membrane use. It performs no provider call, mutates no
+accepted Evidence Ledger, creates no live/external evidence, populates no score
+axes, and does not claim proof, benchmark evidence, semantic correctness,
+production readiness, or global software-agent uniqueness.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57

@@ -1318,6 +1318,41 @@ HSAI source scans pass; repo claim-boundary and hygiene docs tests pass; full
 workspace tests pass; normal gates remain hermetic; and no live/external
 evidence surface is created.
 
+## HSAI Track: Phase 137 Admission E2E Harness
+
+Status: complete for local admission-gated HSAI e2e harness coverage. See
+`docs/137-phase-hsai-admission-e2e-harness-notes.md`.
+
+Goal: start leveraging the Phase 136 admission core inside the existing
+pure-data HSAI e2e harness before downstream registry, economy, or membrane
+state is used.
+
+Scope: `crates/hsai-e2e-harness` dependency wiring, focused harness tests,
+phase notes, and navigation/status updates only.
+
+Implemented: `hsai-e2e-harness` now depends on `hsai-agent-admission`. The
+harness covers a closed attested claim-envelope proposal that passes local
+admission and then reaches Phase 4 anchor registration, a rejected candidate
+that appends auditable journal metadata but exports no accepted envelope, and a
+raw provider-shaped candidate that is quarantined before registry or economy
+use.
+
+Anti-goals: recoverable-ghost runtime import or vendoring, recoverable-ghost
+artifact import, provider calls, network access, credentials or secrets,
+operator-live Phala calls, external replay execution, accepted Evidence Ledger
+mutation, official benchmark submission, generated artifact writes,
+score-axis population, DCAP/PCCS/JWKS/JWT/TLS implementation changes,
+command-line tools, UI dashboards, package runtime additions, ZK backend
+performance claims, Level2+ evidence creation, formal evidence creation,
+production-readiness claims, semantic-correctness claims, proof claims,
+benchmark-evidence claims, or global software-agent uniqueness claims.
+
+Exit criteria: Phase 137 notes exist; README, AGENTS, task list, and
+validation report point to them; `cargo test -p hsai-e2e-harness` passes;
+`cargo test -p hsai-agent-admission` passes; HSAI source scans pass; repo
+claim-boundary and hygiene docs tests pass; full workspace tests pass; normal
+gates remain hermetic; and no live/external evidence surface is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
