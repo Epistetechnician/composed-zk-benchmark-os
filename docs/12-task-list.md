@@ -691,6 +691,36 @@ cover valid append, stale-tip rejection, candidate digest mismatch rejection,
 official/score/Level2+ rejection, and source-scan boundaries; and full workspace
 validation passes.
 
+## Benchmark OS Track: Phase W Accepted Ledger Materialization
+
+Status: complete for local JSON materialization. See
+`docs/118-phase-w-accepted-ledger-materialization-boundary-spec.md` and
+`docs/119-phase-w-accepted-ledger-materialization-implementation-notes.md`.
+
+Goal: materialize the guarded Phase W accepted-ledger append transaction to one
+explicit caller-selected local JSON ledger path without creating official
+submission, external replay, score-axis, or Level2+ evidence surfaces.
+
+Implemented: additive Rust materialization request and helper under
+`crates/zkbench-core/src/evidence/accepted_append_output.rs`, exports, and
+focused hermetic tests. The implementation validates the ledger path, rejects
+parent-directory components and symlinks, loads and validates existing ledgers,
+requires explicit creation permission for missing ledgers, applies the Phase
+117 transaction, and writes through a same-directory temporary JSON file.
+
+Anti-goals: official benchmark submission, external replay, live backend
+execution, network access, credentials or secrets, generated benchmark
+artifacts, durable campaign outputs, command-line tools, UI dashboards, package
+runtime additions, score-axis population, ZK backend performance claims,
+Level2+ evidence creation, formal evidence creation, broad leaderboard claims,
+or treating local ledger JSON as official benchmark evidence.
+
+Exit criteria: materialized append APIs are exported; focused tests cover
+create-if-missing, second append, missing-file rejection, missing-parent
+rejection, directory-target rejection, invalid-ledger rejection, stale-tip
+rejection, symlink rejection on Unix platforms, path traversal rejection, and
+source-scan boundaries; and full workspace validation passes.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

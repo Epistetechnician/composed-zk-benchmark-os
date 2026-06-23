@@ -13,18 +13,22 @@ fetch artifact implementation, and the Phase 110 Phala local PCCS-compatible
 service artifact implementation, and the Phase 111 Phala direct Intel PCS
 artifact implementation, the docs-first Phase 112 TLS channel-binding boundary,
 the Phase 113 Phala TLS channel-binding artifact implementation, the
-docs-first Phase 114 reviewed promotion preflight implementation boundary, and
-the Phase 115 reviewed promotion preflight implementation, plus the
+docs-first Phase 114 reviewed promotion preflight implementation boundary,
+the Phase 115 reviewed promotion preflight implementation, the docs-first
+Phase 116 accepted-ledger append boundary, the Phase 117 accepted-ledger append
+implementation, the docs-first Phase 118 accepted-ledger materialization
+boundary, and the Phase 119 accepted-ledger materialization implementation,
+plus the
 coverage-hardening follow-up for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
 running the available workspace gates and mapping those gates to the repo's
 major behavioral surfaces.
 
-It does not claim per-function formal correctness, line coverage, accepted
-Evidence Ledger mutation, official benchmark evidence, ZK backend performance,
-Level2+ evidence, live provider evidence, production readiness, semantic
-correctness, or global software-agent uniqueness.
+It does not claim per-function formal correctness, 100% line coverage, official
+accepted Evidence Ledger mutation, official benchmark evidence, ZK backend
+performance, Level2+ evidence, live provider evidence, production readiness,
+semantic correctness, or global software-agent uniqueness.
 
 Phase 114 authorizes only inert Phase W preflight metadata and fail-closed
 validation. It does not authorize accepted Evidence Ledger mutation, official
@@ -38,6 +42,14 @@ required non-claim labels, fail-closed validation, and official-submission
 package metadata validation. It still creates no accepted Evidence Ledger entry,
 performs no official submission, runs no external replay, creates no generated
 benchmark artifact, and populates no score axes.
+
+Phase 117 implements the guarded local append transaction over a caller-supplied
+in-memory `EvidenceLedger`. Phase 119 implements the corresponding local JSON
+materialization path for exactly one caller-selected ledger file. These phases
+create local accepted-ledger entries only under explicit Level1-or-below
+transaction inputs. They do not create official accepted evidence, perform
+official submission, run external replay, create generated benchmark artifacts,
+or populate score axes.
 
 ## State Slice
 
@@ -71,9 +83,16 @@ This report touches only:
 - `crates/zkbench-core/tests/soak_runner_smoke.rs`
 - `crates/zkbench-core/tests/phase_v_coverage_hardening.rs`
 - `crates/zkbench-core/src/evidence/promotion_preflight.rs`
+- `crates/zkbench-core/src/evidence/accepted_append.rs`
+- `crates/zkbench-core/src/evidence/accepted_append_output.rs`
 - `crates/zkbench-core/tests/phase_w_promotion_preflight.rs`
+- `crates/zkbench-core/tests/phase_w_accepted_ledger_append.rs`
 - `docs/114-phase-w-promotion-preflight-boundary-spec.md`
 - `docs/115-phase-w-promotion-preflight-implementation-notes.md`
+- `docs/116-phase-w-accepted-ledger-append-boundary-spec.md`
+- `docs/117-phase-w-accepted-ledger-append-implementation-notes.md`
+- `docs/118-phase-w-accepted-ledger-materialization-boundary-spec.md`
+- `docs/119-phase-w-accepted-ledger-materialization-implementation-notes.md`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
 - `docs/research/zk_external_source_index.md`
@@ -87,19 +106,18 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 115 validation.
+Run from repository root during Phase 119 validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
-cargo test -p hsai-attestation-phala --test phala_operator_live_tls_channel_contract
-cargo test -p hsai-attestation-phala --example operator_live_tls_channel_artifact --features operator-live-tls-channel
+cargo test -p zkbench-core --test phase_w_accepted_ledger_append
 cargo test -p zkbench-core --test phase_w_promotion_preflight
+cargo test -p zkbench-core --test repo_claim_boundary_docs
 cargo test --workspace --all-features
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 RUSTDOCFLAGS='-D warnings' cargo doc --workspace --all-features --no-deps
 cargo llvm-cov --workspace --all-features --summary-only
-HSAI_PHALA_OPERATOR_ACK=I_ACKNOWLEDGE_OPERATOR_LIVE_PHALA_RUN HSAI_PHALA_TLS_CHANNEL_INPUT_JSON=<repo-external-input> cargo run -p hsai-attestation-phala --example operator_live_tls_channel_artifact --features operator-live-tls-channel
 ```
 
 All commands passed.
@@ -108,12 +126,12 @@ No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
 `cargo-llvm-cov 0.8.7` was available. The all-feature workspace coverage pass
-reported `85.53%` region coverage, `82.63%` function execution, and `83.27%`
+reported `85.49%` region coverage, `82.52%` function execution, and `83.22%`
 line coverage. Branch coverage was not reported by this run.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
-evidence, accepted Evidence Ledger mutation, or Level2+ evidence.
+evidence, official accepted Evidence Ledger mutation, or Level2+ evidence.
 
 ## Efficacy Map
 
@@ -311,7 +329,8 @@ claim-boundary escalation.
   client-local connection evidence, not RA-TLS, an attested server
   certificate, independent evidence, accepted evidence, or proof.
 - No committed generated benchmark artifact bundle, official benchmark
-  submission, or accepted Evidence Ledger entry was created. Phase U now
+  submission, or committed accepted Evidence Ledger JSON file was created.
+  Phase U now
   implements local artifact-bundle packaging APIs and hermetic temp-root tests,
   but it does not create durable submitted artifacts or promote them.
   `docs/98-phase-v-local-artifact-campaign-boundary-spec.md` defines the
@@ -338,6 +357,13 @@ claim-boundary escalation.
   `EvidenceLedger` only after preflight, candidate, review, preview, digest,
   and ledger-tip validation pass. No official benchmark submission, external
   replay evidence, score-axis population, or Level2+ evidence exists.
+  `docs/118-phase-w-accepted-ledger-materialization-boundary-spec.md` and
+  `docs/119-phase-w-accepted-ledger-materialization-implementation-notes.md`
+  record local JSON materialization for that guarded append. It can load or
+  create one explicit local ledger file, reject unsafe paths, apply the Phase
+  117 transaction, and write the appended ledger through a same-directory
+  temporary JSON file. No official benchmark submission, external replay
+  evidence, score-axis population, or Level2+ evidence exists.
 - No broader Phase S ergonomics surface was authorized or tested beyond the
   implemented single-index local output boundary.
 

@@ -196,6 +196,8 @@ Surface DSL
 | [docs/115-phase-w-promotion-preflight-implementation-notes.md](docs/115-phase-w-promotion-preflight-implementation-notes.md) | Phase W inert reviewed promotion preflight implementation notes. |
 | [docs/116-phase-w-accepted-ledger-append-boundary-spec.md](docs/116-phase-w-accepted-ledger-append-boundary-spec.md) | Phase W accepted Evidence Ledger append transaction docs-first boundary. |
 | [docs/117-phase-w-accepted-ledger-append-implementation-notes.md](docs/117-phase-w-accepted-ledger-append-implementation-notes.md) | Phase W accepted Evidence Ledger append transaction implementation notes. |
+| [docs/118-phase-w-accepted-ledger-materialization-boundary-spec.md](docs/118-phase-w-accepted-ledger-materialization-boundary-spec.md) | Phase W accepted Evidence Ledger materialization docs-first boundary. |
+| [docs/119-phase-w-accepted-ledger-materialization-implementation-notes.md](docs/119-phase-w-accepted-ledger-materialization-implementation-notes.md) | Phase W accepted Evidence Ledger materialization implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -589,6 +591,14 @@ caller-supplied local `EvidenceLedger` after preflight, candidate, review,
 preview, digest, and ledger-tip validation. It still creates no official
 benchmark submission, external replay evidence, score-axis population, or
 Level2+ evidence.
+[docs/118-phase-w-accepted-ledger-materialization-boundary-spec.md](docs/118-phase-w-accepted-ledger-materialization-boundary-spec.md)
+and
+[docs/119-phase-w-accepted-ledger-materialization-implementation-notes.md](docs/119-phase-w-accepted-ledger-materialization-implementation-notes.md)
+record the local JSON materialization path for that guarded append. It can load
+or create one explicit local ledger file and write the appended local ledger
+through a same-directory temporary file. It still creates no official benchmark
+submission, external replay evidence, score-axis population, or Level2+
+evidence.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
