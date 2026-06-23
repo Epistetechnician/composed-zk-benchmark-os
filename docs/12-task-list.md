@@ -1426,6 +1426,46 @@ validation report point to it; repo claim-boundary and hygiene docs tests pass;
 normal workspace tests remain hermetic; no PCSM code or recoverable-ghost
 artifact is imported; and no live/external evidence surface is created.
 
+## HSAI Track: Phase 140 PCSM Bounded-Proof Handoff Intake Metadata
+
+Status: complete for local structured PCSM bounded-proof handoff intake
+metadata validation. See
+`docs/140-phase-pcsm-bounded-proof-handoff-intake-metadata-notes.md`.
+
+Goal: implement the smallest local metadata validator authorized by Phase 139
+without reading recoverable-ghost files, importing PCSM code, running source
+repo commands, or promoting the handoff into accepted benchmark evidence.
+
+Scope: `crates/hsai-agent-admission/src/lib.rs`, phase notes, and
+navigation/status updates only.
+
+Implemented: `PcsmBoundedProofHandoffIntake`, source repo status and verifier
+status types, `PcsmHandoffIntakeError`, required nonclaim helpers, fail-closed
+validation for committed clean source identity and bounded-proof fields, and
+`pcsm_bounded_proof_handoff_candidate` mapping to
+`AdmissionSourceKind::PcsmBoundedProofHandoff` with `LocalOnly` claim boundary
+and no accepted claim envelope.
+
+Anti-goals: filesystem parsing, source repo inspection, source repo command
+execution, PCSM runtime import or vendoring, recoverable-ghost artifact import,
+dirty or staged-only source snapshot intake, generated output files, committed
+intake bundles, admission-journal materialization, package runtime additions,
+command-line tools, provider calls, network access, credentials or secrets,
+accepted Evidence Ledger mutation, official benchmark submission, external
+replay execution, live backend execution, score-axis population,
+DCAP/PCCS/JWKS/JWT/TLS implementation changes, ZK backend performance claims,
+Level2+ evidence creation, formal evidence creation,
+full breakthrough-threshold admission claims, production-readiness claims,
+semantic-correctness claims, proof claims, benchmark-evidence claims, or global
+software-agent uniqueness claims.
+
+Exit criteria: Phase 140 notes exist; README, AGENTS, task list, and
+validation report point to them; `cargo test -p hsai-agent-admission` passes;
+HSAI source scans pass; repo claim-boundary and hygiene docs tests pass; full
+workspace tests pass; normal gates remain hermetic; no PCSM code or
+recoverable-ghost artifact is imported; and no live/external evidence surface
+is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

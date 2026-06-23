@@ -218,6 +218,7 @@ Surface DSL
 | [docs/137-phase-hsai-admission-e2e-harness-notes.md](docs/137-phase-hsai-admission-e2e-harness-notes.md) | HSAI admission-gated e2e harness implementation notes. |
 | [docs/138-phase-hsai-admission-journal-materialization-boundary-spec.md](docs/138-phase-hsai-admission-journal-materialization-boundary-spec.md) | HSAI admission journal materialization docs-first boundary. |
 | [docs/139-phase-pcsm-bounded-proof-handoff-intake-boundary-spec.md](docs/139-phase-pcsm-bounded-proof-handoff-intake-boundary-spec.md) | PCSM CL12 bounded-proof handoff intake docs-first boundary. |
+| [docs/140-phase-pcsm-bounded-proof-handoff-intake-metadata-notes.md](docs/140-phase-pcsm-bounded-proof-handoff-intake-metadata-notes.md) | PCSM CL12 bounded-proof handoff intake metadata implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -779,6 +780,15 @@ PCSM code or artifacts, accepts no dirty or staged-only source snapshot, mutates
 no accepted Evidence Ledger, performs no external replay or official
 submission, and creates no proof, benchmark evidence, score axes, or Level2+
 evidence.
+[docs/140-phase-pcsm-bounded-proof-handoff-intake-metadata-notes.md](docs/140-phase-pcsm-bounded-proof-handoff-intake-metadata-notes.md)
+implements the local structured metadata validator for that boundary inside
+`hsai-agent-admission`. It validates clean committed source identity, bounded
+proof fields, verifier statuses, blocked-preflight status,
+`threshold_admitted=false`, digest-only source artifacts, and required
+nonclaims before mapping to an `AdmissionSourceKind::PcsmBoundedProofHandoff`
+candidate. It reads no recoverable-ghost files, imports no PCSM code or
+artifacts, accepts no staged or dirty source snapshot, and exports no accepted
+claim envelope by itself.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
