@@ -1387,6 +1387,45 @@ validation report point to it; repo claim-boundary and hygiene docs tests pass;
 normal workspace tests remain hermetic; and no live/external evidence surface
 is created.
 
+## HSAI Track: Phase 139 PCSM Bounded-Proof Handoff Intake Boundary
+
+Status: complete for docs-first PCSM CL12 bounded-proof handoff intake
+boundary. See
+`docs/139-phase-pcsm-bounded-proof-handoff-intake-boundary-spec.md`.
+
+Goal: define how a future phase may intake a committed, digest-stable
+recoverable-ghost-states PCSM CL12 bounded-proof handoff as local admission
+metadata without importing PCSM code, replaying PCSM runtime behavior, or
+promoting the handoff into accepted benchmark evidence.
+
+Scope: Markdown boundary, README, AGENTS, task list, and validation report
+updates only.
+
+Defined: required source repo identity, committed source revision, source
+handoff path, handoff SHA-256 digest, verifier-status fields, bounded-proof
+fields, blocked-preflight preservation, `threshold_admitted=false`
+preservation, digest-only source artifact references, required nonclaims,
+future HSAI admission mapping limits, rejection rules, and future
+implementation exit criteria.
+
+Anti-goals: Rust source changes, tests, Cargo metadata changes, `Cargo.lock`
+changes, PCSM runtime import or vendoring, recoverable-ghost artifact import,
+dirty or staged-only source snapshot intake, generated output files, committed
+intake bundles, admission-journal materialization, package runtime additions,
+command-line tools, provider calls, network access, credentials or secrets,
+accepted Evidence Ledger mutation, official benchmark submission, external
+replay execution, source repo command execution in normal gates, live backend
+execution, score-axis population, DCAP/PCCS/JWKS/JWT/TLS implementation
+changes, ZK backend performance claims, Level2+ evidence creation, formal
+evidence creation, full breakthrough-threshold admission claims,
+production-readiness claims, semantic-correctness claims, proof claims,
+benchmark-evidence claims, or global software-agent uniqueness claims.
+
+Exit criteria: Phase 139 boundary spec exists; README, AGENTS, task list, and
+validation report point to it; repo claim-boundary and hygiene docs tests pass;
+normal workspace tests remain hermetic; no PCSM code or recoverable-ghost
+artifact is imported; and no live/external evidence surface is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

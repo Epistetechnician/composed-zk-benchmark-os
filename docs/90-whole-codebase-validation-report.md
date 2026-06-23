@@ -33,7 +33,8 @@ campaign, and the Phase 133 zk-Harness export helper coverage campaign, and the
 docs-first Phase 134 PCSM-governed agent admission boundary, and the Phase 135
 zk-Harness dry-run validation coverage campaign, and the Phase 136 HSAI agent
 admission core, the Phase 137 HSAI admission e2e harness integration, and the
-docs-first Phase 138 HSAI admission journal materialization boundary, plus
+docs-first Phase 138 HSAI admission journal materialization boundary, and the
+docs-first Phase 139 PCSM bounded-proof handoff intake boundary, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -239,6 +240,21 @@ backend, creates no benchmark artifact, populates no score axes, creates no
 Level2+ evidence, and does not claim proof, benchmark evidence, semantic
 correctness, production readiness, or global software-agent uniqueness.
 
+Phase 139 opens a docs-first boundary for future intake of a committed
+recoverable-ghost-states PCSM CL12 bounded-proof handoff. It defines source
+repo identity, committed source revision, source handoff path, handoff SHA-256
+digest binding, verifier-status fields, bounded-proof fields, blocked-preflight
+preservation, `threshold_admitted=false` preservation, digest-only source
+artifact references, required nonclaims, future HSAI admission mapping limits,
+and fail-closed rejection rules. It changes no Rust source, imports no PCSM
+runtime or recoverable-ghost artifacts, accepts no dirty or staged-only source
+snapshot, adds no generated output, performs no provider call, uses no
+credentials, mutates no accepted Evidence Ledger, runs no external replay,
+runs no live backend, creates no benchmark artifact, populates no score axes,
+creates no Level2+ evidence, and does not claim full breakthrough-threshold
+admission, proof, benchmark evidence, semantic correctness, production
+readiness, or global software-agent uniqueness.
+
 ## State Slice
 
 This report touches only:
@@ -316,6 +332,7 @@ This report touches only:
 - `crates/hsai-e2e-harness/Cargo.toml`
 - `crates/hsai-e2e-harness/src/lib.rs`
 - `docs/138-phase-hsai-admission-journal-materialization-boundary-spec.md`
+- `docs/139-phase-pcsm-bounded-proof-handoff-intake-boundary-spec.md`
 - `Cargo.lock`
 - `Cargo.toml`
 - `docs/12-task-list.md`
@@ -330,7 +347,7 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 138 validation.
+Run from repository root during Phase 139 validation.
 
 ```sh
 cargo fmt --all -- --check
@@ -357,16 +374,16 @@ RUSTDOCFLAGS='-D warnings' cargo doc --workspace --all-features --no-deps
 rg --files -g 'package.json' -g 'pnpm-lock.yaml' || true
 ```
 
-Phase 138 docs and workspace commands passed. `cargo test --workspace
+Phase 139 docs and workspace commands passed. `cargo test --workspace
 --all-features`, workspace clippy, and workspace docs also passed after the
-docs-first boundary was added. The `rg` package-surface check returned no
+docs-first intake boundary was added. The `rg` package-surface check returned no
 files.
 
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
 `cargo-llvm-cov 0.8.7` was available during the latest Phase 135 all-feature
-workspace coverage pass. Phase 138 did not rerun coverage because this slice is
+workspace coverage pass. Phase 139 did not rerun coverage because this slice is
 documentation-only rather than a coverage-hardening campaign. The latest Phase
 135 pass reported `86.09%` region coverage, `83.22%` function execution, and
 `84.43%` line coverage. The targeted
