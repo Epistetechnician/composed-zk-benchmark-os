@@ -299,7 +299,8 @@ Phase 133 Rust/doc/coverage commands passed. Phase 134 is docs-only and was
 rechecked with `cargo fmt --all -- --check`, `git diff --check`,
 `cargo test -p zkbench-core --test repo_claim_boundary_docs`,
 `cargo test -p zkbench-core --test repo_hygiene`, and the package-surface
-check. The `rg` package-surface check returned no files.
+check. `cargo test --workspace --all-features` also passed after the Phase 134
+docs update. The `rg` package-surface check returned no files.
 
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
