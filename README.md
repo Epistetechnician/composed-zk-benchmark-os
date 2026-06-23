@@ -212,6 +212,7 @@ Surface DSL
 | [docs/131-phase-phala-artifact-coverage-notes.md](docs/131-phase-phala-artifact-coverage-notes.md) | Local Phala captured-artifact validation coverage campaign notes. |
 | [docs/132-phase-local-json-adapter-coverage-notes.md](docs/132-phase-local-json-adapter-coverage-notes.md) | Local JSON adapter coverage campaign notes. |
 | [docs/133-phase-zk-harness-export-coverage-notes.md](docs/133-phase-zk-harness-export-coverage-notes.md) | Local zk-Harness export helper coverage campaign notes. |
+| [docs/134-pcsm-governed-agent-admission-boundary-spec.md](docs/134-pcsm-governed-agent-admission-boundary-spec.md) | PCSM-governed agent-output admission docs-first boundary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -587,6 +588,13 @@ official-submission package metadata that remains blocked until accepted
 evidence ids exist. It still does not authorize accepted Evidence Ledger
 mutation, official submission, external replay, live backend execution,
 score-axis population, or Level2+ evidence.
+[docs/134-pcsm-governed-agent-admission-boundary-spec.md](docs/134-pcsm-governed-agent-admission-boundary-spec.md)
+records a separate docs-first HSAI admission-governance boundary. A future code
+phase may use the PCSM pattern only as a local hermetic design template between
+raw agent/provider output and governed state mutation. That future phase would
+still need separate authorization and must not bypass Phase W review,
+accepted-ledger append validation, official-submission packaging, external
+replay preflight, or managed-attestation claim boundaries.
 [docs/115-phase-w-promotion-preflight-implementation-notes.md](docs/115-phase-w-promotion-preflight-implementation-notes.md)
 records the implementation of that inert preflight surface in `zkbench-core`.
 It validates promotion prerequisites and official-submission package metadata,
@@ -711,6 +719,15 @@ manifest JSON round-trip, and malformed JSON rejection. It changes no
 production API and does not add zk-Harness execution, live external execution,
 external replay, official submission, accepted Evidence Ledger mutation,
 score-axis population, Level2+ evidence, or 100% coverage.
+[docs/134-pcsm-governed-agent-admission-boundary-spec.md](docs/134-pcsm-governed-agent-admission-boundary-spec.md)
+records a docs-first PCSM-governed agent-output admission boundary from the
+recoverable-ghost-states handoff. It treats PCSM as an admission-governance
+template for strict typed candidates, deterministic accept/reject decisions,
+append-only journals, source digest binding, and explicit nonclaims. It imports
+no recoverable-ghost artifacts, changes no Rust code, creates no accepted
+Evidence Ledger entry, and does not claim PCSM evidence, benchmark evidence,
+Level2+ evidence, production readiness, semantic correctness, or global
+software-agent uniqueness in this repository.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57

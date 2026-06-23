@@ -29,7 +29,8 @@ coverage campaign, and the Phase 128 soak serialization coverage campaign, and
 the Phase 129 proposal validation coverage campaign, and the Phase 130 Phala
 provider-client coverage campaign, and the Phase 131 Phala captured-artifact
 validation coverage campaign, and the Phase 132 local JSON adapter coverage
-campaign, and the Phase 133 zk-Harness export helper coverage campaign, plus
+campaign, and the Phase 133 zk-Harness export helper coverage campaign, and the
+docs-first Phase 134 PCSM-governed agent admission boundary, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -178,6 +179,16 @@ calls no endpoint, uses no credentials, creates no generated benchmark
 artifacts, mutates no accepted Evidence Ledger, populates no score axes,
 creates no Level2+ evidence, and does not claim 100% coverage.
 
+Phase 134 is a docs-first architecture boundary for PCSM-governed agent-output
+admission. It maps the recoverable-ghost-states PCSM handoff into a future local
+admission-governance template for typed candidates, deterministic admission
+decisions, append-only admission journals, source-digest binding, and explicit
+nonclaims. It imports no recoverable-ghost runtime or artifact, changes no Rust
+source, mutates no accepted Evidence Ledger, runs no external replay, runs no
+live backend, creates no generated benchmark artifact, populates no score axes,
+creates no Level2+ evidence, and does not claim semantic correctness,
+production readiness, or global software-agent uniqueness.
+
 ## State Slice
 
 This report touches only:
@@ -245,8 +256,10 @@ This report touches only:
 - `crates/zkbench-core/tests/local_json_adapter.rs`
 - `docs/133-phase-zk-harness-export-coverage-notes.md`
 - `crates/zkbench-core/tests/zk_harness_pack_mapping.rs`
+- `docs/134-pcsm-governed-agent-admission-boundary-spec.md`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
+- `docs/research/assumption-ledger.md`
 - `docs/research/zk_external_source_index.md`
 - `README.md`
 - `AGENTS.md`
@@ -258,7 +271,7 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 133 validation.
+Run from repository root during Phase 134 validation.
 
 ```sh
 cargo fmt --all -- --check
@@ -282,15 +295,19 @@ cargo llvm-cov --workspace --all-features --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml' || true
 ```
 
-All Rust/doc/coverage commands passed. The `rg` package-surface check returned
-no files.
+Phase 133 Rust/doc/coverage commands passed. Phase 134 is docs-only and was
+rechecked with `cargo fmt --all -- --check`, `git diff --check`,
+`cargo test -p zkbench-core --test repo_claim_boundary_docs`,
+`cargo test -p zkbench-core --test repo_hygiene`, and the package-surface
+check. The `rg` package-surface check returned no files.
 
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-`cargo-llvm-cov 0.8.7` was available during the Phase 133 all-feature workspace
-coverage pass. That pass reported `85.94%` region coverage, `83.17%` function
-execution, and `84.22%` line coverage. The targeted
+`cargo-llvm-cov 0.8.7` was available during the latest all-feature workspace
+coverage pass. Phase 134 is docs-only and does not change coverage. The latest
+Phase 133 pass reported `85.94%` region coverage, `83.17%` function execution,
+and `84.22%` line coverage. The targeted
 `zkbench-core/src/adapters/zk_harness/export.rs` file reported `79.37%` region
 coverage, `80.00%` function execution, and `78.26%` line coverage. Branch
 coverage was not reported by that run.
