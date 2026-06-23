@@ -17,8 +17,9 @@ docs-first Phase 114 reviewed promotion preflight implementation boundary,
 the Phase 115 reviewed promotion preflight implementation, the docs-first
 Phase 116 accepted-ledger append boundary, the Phase 117 accepted-ledger append
 implementation, the docs-first Phase 118 accepted-ledger materialization
-boundary, and the Phase 119 accepted-ledger materialization implementation,
-plus the
+boundary, the Phase 119 accepted-ledger materialization implementation, and the
+docs-first Phase 120 official-submission package materialization boundary, plus
+the
 coverage-hardening follow-up for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
@@ -50,6 +51,11 @@ create local accepted-ledger entries only under explicit Level1-or-below
 transaction inputs. They do not create official accepted evidence, perform
 official submission, run external replay, create generated benchmark artifacts,
 or populate score axes.
+
+Phase 120 opens the docs-first boundary for a future local official-submission
+package output root. It authorizes no Rust implementation, no generated package
+files, no official endpoint call, no score-axis population, and no Level2+
+evidence.
 
 ## State Slice
 
@@ -93,6 +99,7 @@ This report touches only:
 - `docs/117-phase-w-accepted-ledger-append-implementation-notes.md`
 - `docs/118-phase-w-accepted-ledger-materialization-boundary-spec.md`
 - `docs/119-phase-w-accepted-ledger-materialization-implementation-notes.md`
+- `docs/120-phase-w-official-submission-package-materialization-boundary-spec.md`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
 - `docs/research/zk_external_source_index.md`
@@ -106,18 +113,16 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 119 validation.
+Run from repository root during Phase 120 validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
-cargo test -p zkbench-core --test phase_w_accepted_ledger_append
-cargo test -p zkbench-core --test phase_w_promotion_preflight
 cargo test -p zkbench-core --test repo_claim_boundary_docs
+cargo test -p zkbench-core --test repo_hygiene
 cargo test --workspace --all-features
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 RUSTDOCFLAGS='-D warnings' cargo doc --workspace --all-features --no-deps
-cargo llvm-cov --workspace --all-features --summary-only
 ```
 
 All commands passed.
@@ -125,9 +130,11 @@ All commands passed.
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-`cargo-llvm-cov 0.8.7` was available. The all-feature workspace coverage pass
-reported `85.49%` region coverage, `82.52%` function execution, and `83.22%`
-line coverage. Branch coverage was not reported by this run.
+`cargo-llvm-cov 0.8.7` was available during the most recent Phase 119
+all-feature workspace coverage pass. That pass reported `85.49%` region
+coverage, `82.52%` function execution, and `83.22%` line coverage. Branch
+coverage was not reported by that run. Phase 120 is documentation-only and did
+not rerun coverage.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
@@ -364,6 +371,11 @@ claim-boundary escalation.
   117 transaction, and write the appended ledger through a same-directory
   temporary JSON file. No official benchmark submission, external replay
   evidence, score-axis population, or Level2+ evidence exists.
+  `docs/120-phase-w-official-submission-package-materialization-boundary-spec.md`
+  defines the next docs-first boundary for future local package materialization
+  from valid official-submission metadata plus an accepted ledger JSON file.
+  It authorizes no Rust implementation, generated package output, official
+  endpoint call, score-axis population, or Level2+ evidence.
 - No broader Phase S ergonomics surface was authorized or tested beyond the
   implemented single-index local output boundary.
 
