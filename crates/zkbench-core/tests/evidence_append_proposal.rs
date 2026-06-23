@@ -2,7 +2,10 @@ use zkbench_core::{
     create_evidence_append_proposal, deserialize_evidence_append_proposal_json,
     deserialize_external_result_candidate_json, normalize_synthetic_result_candidate,
     validate_evidence_append_proposal, validate_synthetic_result_candidate, ClaimBoundary,
-    EvidenceAppendProposalStatus, EvidenceClass, EvidenceLedger, ResultCandidateArtifactResolver,
+    EvidenceAppendProposalStatus, EvidenceClass, EvidenceLedger, EvidenceReviewFinding,
+    EvidenceReviewFindingSeverity, EvidenceReviewRequirement, ExternalValidationIssueSeverity,
+    ResultCandidateArtifactResolver, SyntheticImportValidationIssue,
+    SyntheticImportValidationIssueKind,
 };
 
 fn resolver() -> ResultCandidateArtifactResolver {
@@ -77,4 +80,93 @@ fn proposal_workflow_does_not_mutate_evidence_ledger() {
 
     assert!(!proposal.is_accepted_evidence());
     assert_eq!(ledger.entries.len(), 0);
+}
+
+#[test]
+fn proposal_validation_reports_all_local_metadata_rejection_paths() {
+    let mut proposal = deserialize_evidence_append_proposal_json(include_str!(
+        "fixtures/evidence_append_proposal.json"
+    ))
+    .expect("proposal fixture should parse");
+
+    proposal.id = String::new();
+    proposal.source_normalized_draft_id = String::new();
+    proposal.proposed_evidence_class = EvidenceClass::ReproducibleBenchmarkArtifact;
+    proposal.proposed_claim_boundary = ClaimBoundary::Level2ReproducibleBenchmarkArtifact;
+    proposal.claims_accepted_evidence = true;
+    proposal.proposed_artifact_refs[0].artifact_ref = String::new();
+    proposal
+        .blocking_issues
+        .push(SyntheticImportValidationIssue {
+            path: "candidate.notes[0]".to_string(),
+            message: "official benchmark evidence claim".to_string(),
+            severity: ExternalValidationIssueSeverity::Error,
+            kind: SyntheticImportValidationIssueKind::OfficialClaimDetected,
+        });
+    proposal
+        .blocking_issues
+        .push(SyntheticImportValidationIssue::error(
+            SyntheticImportValidationIssueKind::ClaimBoundaryTooHigh,
+            "candidate.claim_boundary",
+            "claim boundary too high",
+        ));
+    proposal
+        .notes
+        .push("this is official benchmark evidence".to_string());
+    proposal
+        .proposed_provenance_summary
+        .push("formal proof was accepted".to_string());
+    proposal
+        .reviewer_checklist
+        .requirements
+        .push(EvidenceReviewRequirement {
+            id: "bad_requirement".to_string(),
+            description: "contains forbidden wording".to_string(),
+            required: true,
+            satisfied: false,
+            notes: vec!["machine-checked proof exists".to_string()],
+        });
+    proposal
+        .reviewer_checklist
+        .findings
+        .push(EvidenceReviewFinding {
+            id: "bad_finding".to_string(),
+            message: "this proves soundness".to_string(),
+            severity: EvidenceReviewFindingSeverity::Blocking,
+            blocking: true,
+        });
+
+    let validation = validate_evidence_append_proposal(&proposal);
+    let issue_paths = validation
+        .issues
+        .iter()
+        .map(|issue| issue.path.as_str())
+        .collect::<Vec<_>>();
+
+    assert!(!validation.valid);
+    for expected in [
+        "proposal.id",
+        "proposal.source_normalized_draft_id",
+        "proposal.proposed_evidence_class",
+        "proposal.proposed_claim_boundary",
+        "proposal.claims_accepted_evidence",
+        "proposal.proposed_artifact_refs[0].artifact_ref",
+        "proposal.blocking_issues[0]",
+        "proposal.blocking_issues[0].kind",
+        "proposal.blocking_issues[1]",
+        "proposal.blocking_issues[1].kind",
+        "proposal.notes[2]",
+        "proposal.proposed_provenance_summary[3]",
+        "proposal.reviewer_checklist.requirements[2].notes[0]",
+        "proposal.reviewer_checklist.findings[0].message",
+    ] {
+        assert!(
+            issue_paths.contains(&expected),
+            "missing expected issue path {expected}; got {issue_paths:?}"
+        );
+    }
+    assert!(validation
+        .issues
+        .iter()
+        .all(|issue| issue.severity == ExternalValidationIssueSeverity::Error));
 }
