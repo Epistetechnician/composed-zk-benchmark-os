@@ -213,6 +213,7 @@ Surface DSL
 | [docs/132-phase-local-json-adapter-coverage-notes.md](docs/132-phase-local-json-adapter-coverage-notes.md) | Local JSON adapter coverage campaign notes. |
 | [docs/133-phase-zk-harness-export-coverage-notes.md](docs/133-phase-zk-harness-export-coverage-notes.md) | Local zk-Harness export helper coverage campaign notes. |
 | [docs/134-pcsm-governed-agent-admission-boundary-spec.md](docs/134-pcsm-governed-agent-admission-boundary-spec.md) | PCSM-governed agent-output admission docs-first boundary. |
+| [docs/135-phase-zk-harness-validation-coverage-notes.md](docs/135-phase-zk-harness-validation-coverage-notes.md) | Local zk-Harness validation coverage campaign notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -728,6 +729,15 @@ no recoverable-ghost artifacts, changes no Rust code, creates no accepted
 Evidence Ledger entry, and does not claim PCSM evidence, benchmark evidence,
 Level2+ evidence, production readiness, semantic correctness, or global
 software-agent uniqueness in this repository.
+[docs/135-phase-zk-harness-validation-coverage-notes.md](docs/135-phase-zk-harness-validation-coverage-notes.md)
+records a bounded local zk-Harness validation coverage campaign. It adds
+hermetic fail-closed tests for dry-run validation issue paths across identifier
+drift, unsupported-feature warning behavior, metric drift, inert command drift,
+relative-path rejection, artifact/family/trace mapping drift, and forbidden
+benchmark-evidence language. It changes no production API and does not add
+zk-Harness execution, live external execution, external replay, official
+submission, accepted Evidence Ledger mutation, score-axis population, Level2+
+evidence, or 100% coverage.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
