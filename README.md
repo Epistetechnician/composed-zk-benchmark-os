@@ -206,6 +206,7 @@ Surface DSL
 | [docs/125-phase-w-external-replay-preflight-output-implementation-notes.md](docs/125-phase-w-external-replay-preflight-output-implementation-notes.md) | Phase W external replay preflight output implementation notes. |
 | [docs/126-phase-w-coverage-hardening-notes.md](docs/126-phase-w-coverage-hardening-notes.md) | Phase W external replay preflight output coverage hardening notes. |
 | [docs/127-phase-dsl-coverage-campaign-notes.md](docs/127-phase-dsl-coverage-campaign-notes.md) | Local DSL/oracle coverage campaign notes. |
+| [docs/128-phase-soak-serialization-coverage-notes.md](docs/128-phase-soak-serialization-coverage-notes.md) | Local soak serialization coverage campaign notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -660,6 +661,12 @@ rejections, and claim-boundary parsing behavior. It changes no production API
 and does not add live execution, external replay, official submission, accepted
 Evidence Ledger mutation, score-axis population, Level2+ evidence, or 100%
 coverage.
+[docs/128-phase-soak-serialization-coverage-notes.md](docs/128-phase-soak-serialization-coverage-notes.md)
+records a bounded local soak serialization coverage campaign. It adds hermetic
+round-trip and malformed-JSON error-context tests for local soak artifact JSON
+helpers. It changes no production API and does not add live execution, external
+replay, official submission, accepted Evidence Ledger mutation, score-axis
+population, Level2+ evidence, or 100% coverage.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57

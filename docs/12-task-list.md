@@ -992,6 +992,39 @@ validation report point to them; focused DSL/oracle tests pass; all-feature
 workspace coverage improves from Phase 126; normal gates remain hermetic; and
 no live/external evidence surface is created.
 
+## Benchmark OS Track: Phase 128 Soak Serialization Coverage
+
+Status: complete for local soak serialization coverage hardening. See
+`docs/128-phase-soak-serialization-coverage-notes.md`.
+
+Goal: improve local line coverage over the hermetic soak JSON serialization
+surface without production API changes, runtime execution broadening, live
+provider work, external replay, official submission, accepted Evidence Ledger
+mutation, score-axis population, Level2+ evidence, or 100% coverage claims.
+
+Scope: focused tests under `crates/zkbench-core/tests/soak_serialization.rs`,
+plus phase notes and navigation/status updates.
+
+Implemented: successful pretty-JSON round-trip tests for soak run configs,
+shard plans, shard manifests, shard checkpoints, telemetry reports, health
+reports, failure corpus indexes, failure reproduction manifests, artifact
+manifests, and report bundles; malformed JSON tests for every corresponding
+soak deserializer wrapper path.
+
+Anti-goals: production source changes, new APIs, generated artifacts, external
+replay execution, official endpoint calls, credentials or secrets, accepted
+Evidence Ledger mutation, official benchmark submission, live backend
+execution, network access, command-line tools, UI dashboards, package runtime
+additions, score-axis population, ZK backend performance claims, Level2+
+evidence creation, formal evidence creation, SOTA claims, broad leaderboard
+claims, production-readiness claims, semantic-correctness claims, or claiming
+100% coverage.
+
+Exit criteria: Phase 128 notes exist; README, AGENTS, task list, and
+validation report point to them; focused soak serialization tests pass;
+all-feature workspace coverage improves from Phase 127; normal gates remain
+hermetic; and no live/external evidence surface is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
