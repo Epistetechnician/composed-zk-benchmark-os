@@ -1353,6 +1353,40 @@ validation report point to them; `cargo test -p hsai-e2e-harness` passes;
 claim-boundary and hygiene docs tests pass; full workspace tests pass; normal
 gates remain hermetic; and no live/external evidence surface is created.
 
+## HSAI Track: Phase 138 Admission Journal Materialization Boundary
+
+Status: complete for docs-first local admission-journal materialization
+boundary. See
+`docs/138-phase-hsai-admission-journal-materialization-boundary-spec.md`.
+
+Goal: define the future local JSON output-root contract for a reviewable HSAI
+admission journal bundle without promoting that trace into accepted evidence.
+
+Scope: Markdown boundary, README, AGENTS, task list, and validation report
+updates only.
+
+Defined: declared `admission-journal/*` files, digest sidecars, manifest
+fields, serialized journal validation rules, decision JSONL review-index
+rules, source-digest disclosure, required non-claims, output-root safety,
+replay and stale-tip checks, redaction-report requirements, rejected and
+quarantined audit retention, and future implementation exit criteria.
+
+Anti-goals: Rust source changes, tests, Cargo metadata changes, `Cargo.lock`
+changes, filesystem materialization code, generated output files, committed
+admission journal bundles, package runtime additions, command-line tools,
+provider calls, network access, credentials or secrets, accepted Evidence
+Ledger mutation, official benchmark submission, external replay execution,
+live backend execution, score-axis population, DCAP/PCCS/JWKS/JWT/TLS
+implementation changes, recoverable-ghost runtime import or vendoring, ZK
+backend performance claims, Level2+ evidence creation, formal evidence
+creation, production-readiness claims, semantic-correctness claims, proof
+claims, benchmark-evidence claims, or global software-agent uniqueness claims.
+
+Exit criteria: Phase 138 boundary spec exists; README, AGENTS, task list, and
+validation report point to it; repo claim-boundary and hygiene docs tests pass;
+normal workspace tests remain hermetic; and no live/external evidence surface
+is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
