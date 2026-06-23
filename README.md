@@ -216,6 +216,7 @@ Surface DSL
 | [docs/135-phase-zk-harness-validation-coverage-notes.md](docs/135-phase-zk-harness-validation-coverage-notes.md) | Local zk-Harness validation coverage campaign notes. |
 | [docs/136-phase-hsai-agent-admission-core-notes.md](docs/136-phase-hsai-agent-admission-core-notes.md) | HSAI local agent admission core implementation notes. |
 | [docs/137-phase-hsai-admission-e2e-harness-notes.md](docs/137-phase-hsai-admission-e2e-harness-notes.md) | HSAI admission-gated e2e harness implementation notes. |
+| [docs/138-phase-hsai-admission-journal-materialization-boundary-spec.md](docs/138-phase-hsai-admission-journal-materialization-boundary-spec.md) | HSAI admission journal materialization docs-first boundary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -759,6 +760,14 @@ registry, economy, or membrane use. It performs no provider call, mutates no
 accepted Evidence Ledger, creates no live/external evidence, populates no score
 axes, and does not claim proof, benchmark evidence, semantic correctness,
 production readiness, or global software-agent uniqueness.
+[docs/138-phase-hsai-admission-journal-materialization-boundary-spec.md](docs/138-phase-hsai-admission-journal-materialization-boundary-spec.md)
+defines the docs-first boundary for a future local admission-journal output
+bundle. It specifies declared `admission-journal/*` files, digest sidecars,
+manifest fields, stale-tip and replay checks, rejected/quarantined audit
+retention, source-digest disclosure, redaction requirements, and explicit
+non-claims. It authorizes no Rust implementation, no generated output, no
+accepted Evidence Ledger mutation, no official submission, no provider call,
+no score-axis population, and no Level2+ evidence.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
