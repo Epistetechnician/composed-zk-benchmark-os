@@ -11,6 +11,7 @@ pub mod digest;
 pub mod eligibility;
 pub mod escalation_guard;
 pub mod external_submission_preflight;
+pub mod external_submission_preflight_output;
 pub mod ledger;
 pub mod official_submission_output;
 pub mod promotion_preflight;
@@ -85,6 +86,23 @@ pub use external_submission_preflight::{
     ExternalReplaySubmissionPreflightReport, ExternalReplaySubmissionPreflightRequest,
     ExternalReplaySubmissionPreflightValidation, ExternalReplaySubmissionPreflightVersion,
     ExternalReplaySubmissionSourceSummary,
+};
+pub use external_submission_preflight_output::{
+    read_external_replay_submission_preflight_outputs,
+    write_external_replay_submission_preflight_outputs,
+    ExternalReplaySubmissionPackageDigestSummary, ExternalReplaySubmissionPreflightInputManifest,
+    ExternalReplaySubmissionPreflightOutput, ExternalReplaySubmissionPreflightOutputRequest,
+    ExternalReplaySubmissionPreflightRedactionReport,
+    EXTERNAL_REPLAY_PREFLIGHT_INPUT_MANIFEST_DIGEST_PATH,
+    EXTERNAL_REPLAY_PREFLIGHT_INPUT_MANIFEST_PATH,
+    EXTERNAL_REPLAY_PREFLIGHT_NON_CLAIMS_DIGEST_PATH, EXTERNAL_REPLAY_PREFLIGHT_NON_CLAIMS_PATH,
+    EXTERNAL_REPLAY_PREFLIGHT_PACKAGE_DIGESTS_DIGEST_PATH,
+    EXTERNAL_REPLAY_PREFLIGHT_PACKAGE_DIGESTS_PATH,
+    EXTERNAL_REPLAY_PREFLIGHT_REDACTION_REPORT_DIGEST_PATH,
+    EXTERNAL_REPLAY_PREFLIGHT_REDACTION_REPORT_PATH,
+    EXTERNAL_REPLAY_PREFLIGHT_REPORT_JSON_DIGEST_PATH, EXTERNAL_REPLAY_PREFLIGHT_REPORT_JSON_PATH,
+    EXTERNAL_REPLAY_PREFLIGHT_REPORT_MARKDOWN_DIGEST_PATH,
+    EXTERNAL_REPLAY_PREFLIGHT_REPORT_MARKDOWN_PATH,
 };
 pub use ledger::{
     EvidenceAppendPolicy, EvidenceChainDigest, EvidenceLedger, EvidenceLedgerEntry,

@@ -23,7 +23,8 @@ the Phase 121 official-submission package materialization implementation, and
 the docs-first Phase 122 external replay and official-submission promotion
 boundary, and the Phase 123 external replay submission preflight
 implementation, and the docs-first Phase 124 external replay preflight output
-boundary, plus the
+boundary, and the Phase 125 external replay preflight output implementation,
+plus the
 coverage-hardening follow-up for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
@@ -89,6 +90,14 @@ implementation, generated output, committed artifact, external replay,
 endpoint call, credential access, accepted Evidence Ledger mutation,
 score-axis population, or Level2+ evidence.
 
+Phase 125 implements that local output-root surface in `zkbench-core`. It
+materializes deterministic declared `external-replay-submission/*` review files
+and digest sidecars from a valid Phase 123 request/report pair, validates
+readback, rejects request/report drift, rejects raw-material retention, rejects
+protected roots and repair overwrites, and still runs no external replay, calls
+no endpoint, uses no credentials, mutates no accepted Evidence Ledger,
+populates no score axes, and creates no Level2+ evidence.
+
 ## State Slice
 
 This report touches only:
@@ -125,6 +134,7 @@ This report touches only:
 - `crates/zkbench-core/src/evidence/accepted_append_output.rs`
 - `crates/zkbench-core/src/evidence/official_submission_output.rs`
 - `crates/zkbench-core/src/evidence/external_submission_preflight.rs`
+- `crates/zkbench-core/src/evidence/external_submission_preflight_output.rs`
 - `crates/zkbench-core/tests/phase_w_promotion_preflight.rs`
 - `crates/zkbench-core/tests/phase_w_accepted_ledger_append.rs`
 - `docs/114-phase-w-promotion-preflight-boundary-spec.md`
@@ -138,6 +148,7 @@ This report touches only:
 - `docs/122-phase-w-external-replay-official-submission-boundary-spec.md`
 - `docs/123-phase-w-external-replay-submission-preflight-implementation-notes.md`
 - `docs/124-phase-w-external-replay-preflight-output-boundary-spec.md`
+- `docs/125-phase-w-external-replay-preflight-output-implementation-notes.md`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
 - `docs/research/zk_external_source_index.md`
@@ -151,27 +162,32 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 124 docs-only validation.
+Run from repository root during Phase 125 validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
+cargo test -p zkbench-core --test phase_w_promotion_preflight
+cargo test -p zkbench-core --test phase_w_accepted_ledger_append
 cargo test -p zkbench-core --test repo_claim_boundary_docs
 cargo test -p zkbench-core --test repo_hygiene
+cargo test --workspace --all-features
+cargo clippy --workspace --all-targets --all-features -- -D warnings
+RUSTDOCFLAGS='-D warnings' cargo doc --workspace --all-features --no-deps
+cargo llvm-cov --workspace --all-features --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml' || true
 ```
 
-The Rust doc-boundary and hygiene commands passed. The `rg` package-surface
-check returned no files.
+All Rust/doc/coverage commands passed. The `rg` package-surface check returned
+no files.
 
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-`cargo-llvm-cov 0.8.7` was available during the most recent Phase 123
-all-feature workspace coverage pass. That pass reported `84.95%` region
-coverage, `82.08%` function execution, and `82.73%` line coverage. Branch
-coverage was not reported by that run. Phase 124 is documentation-only and does
-not change Rust coverage.
+`cargo-llvm-cov 0.8.7` was available during the Phase 125 all-feature workspace
+coverage pass. That pass reported `84.76%` region coverage, `81.77%` function
+execution, and `82.63%` line coverage. Branch coverage was not reported by that
+run.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
@@ -441,6 +457,12 @@ claim-boundary escalation.
   committed artifact, external replay execution, official endpoint call,
   credential access, accepted Evidence Ledger mutation, score-axis population,
   or Level2+ evidence.
+  `docs/125-phase-w-external-replay-preflight-output-implementation-notes.md`
+  records local output plumbing for those preflight reports. It writes and
+  reads declared digest-bound review files only, rejects drift and
+  raw-material retention, and still performs no external replay, endpoint call,
+  credential access, accepted Evidence Ledger mutation, score-axis population,
+  or Level2+ evidence creation.
 - No broader Phase S ergonomics surface was authorized or tested beyond the
   implemented single-index local output boundary.
 

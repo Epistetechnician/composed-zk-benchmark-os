@@ -884,6 +884,46 @@ retention is rejected; and no Rust source, generated output, external replay,
 endpoint call, credential use, accepted Evidence Ledger mutation, score-axis
 population, or Level2+ evidence is created.
 
+## Benchmark OS Track: Phase W External Replay Preflight Output Implementation
+
+Status: complete for local review metadata output plumbing. See
+`docs/125-phase-w-external-replay-preflight-output-implementation-notes.md`.
+
+Goal: implement the local output-root materializer for valid Phase 123 external
+replay submission preflight request/report pairs, without external replay,
+official submission, credential use, accepted Evidence Ledger mutation,
+score-axis population, or Level2+ evidence.
+
+Scope: additive Rust source and focused tests under `crates/zkbench-core`, plus
+phase notes and navigation/status updates. The implementation writes and reads
+only declared `external-replay-submission/*` review metadata files and digest
+sidecars under a caller-selected repo-external output root.
+
+Implemented: deterministic input manifest JSON, preflight report JSON,
+preflight report Markdown, redaction report JSON, package digest summary JSON,
+non-claims Markdown, SHA-256 sidecars, readback validation, protected-root
+checks, repository-root rejection, stale/partial/unexpected output rejection,
+repair-overwrite rejection, request/report drift rejection, raw-retention
+rejection, and no-live-runtime source scans.
+
+Anti-goals: external replay execution, official endpoint calls, credentials or
+secrets, committed generated output, accepted Evidence Ledger mutation,
+official benchmark submission, live backend execution, network access,
+command-line tools, UI dashboards, package runtime additions, score-axis
+population, ZK backend performance claims, Level2+ evidence creation, formal
+evidence creation, SOTA claims, broad leaderboard claims, production-readiness
+claims, or semantic-correctness claims.
+
+Exit criteria: Phase 125 implementation notes exist; output request/manifest,
+redaction report, package digest summary, output summary, declared paths,
+writer, and reader are exported from `zkbench-core`; focused tests cover valid
+materialization, request/report drift, side-effect rejection, protected-root
+rejection, overwrite drift, stale digest rejection, unexpected-file rejection,
+raw-retention rejection, incomplete redaction policy rejection, and no live
+runtime surface; and no external replay, endpoint call, credential use,
+accepted Evidence Ledger mutation, score-axis population, or Level2+ evidence
+is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
