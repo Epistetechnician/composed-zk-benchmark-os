@@ -24,7 +24,8 @@ the docs-first Phase 122 external replay and official-submission promotion
 boundary, and the Phase 123 external replay submission preflight
 implementation, and the docs-first Phase 124 external replay preflight output
 boundary, the Phase 125 external replay preflight output implementation, and
-the Phase 126 Phase W coverage-hardening follow-up, plus earlier
+the Phase 126 Phase W coverage-hardening follow-up, and the Phase 127 DSL
+coverage campaign, plus earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
@@ -106,6 +107,14 @@ production API, runs no external replay, calls no endpoint, uses no credentials,
 mutates no accepted Evidence Ledger, populates no score axes, creates no
 Level2+ evidence, and does not claim 100% coverage.
 
+Phase 127 hardens focused local regression coverage for the hermetic
+DSL/oracle/validation path. It adds guard/action combinator tests,
+expression-helper tests, oracle rejection tests, arithmetic error tests,
+missing-initial-value tests, and parser/lowering validation rejection tests.
+It changes no production API, runs no external replay, calls no endpoint, uses
+no credentials, mutates no accepted Evidence Ledger, populates no score axes,
+creates no Level2+ evidence, and does not claim 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -158,6 +167,9 @@ This report touches only:
 - `docs/124-phase-w-external-replay-preflight-output-boundary-spec.md`
 - `docs/125-phase-w-external-replay-preflight-output-implementation-notes.md`
 - `docs/126-phase-w-coverage-hardening-notes.md`
+- `docs/127-phase-dsl-coverage-campaign-notes.md`
+- `crates/zkbench-core/tests/oracle_eval.rs`
+- `crates/zkbench-core/tests/lowering.rs`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
 - `docs/research/zk_external_source_index.md`
@@ -171,11 +183,13 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 126 validation.
+Run from repository root during Phase 127 validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
+cargo test -p zkbench-core --test oracle_eval
+cargo test -p zkbench-core --test lowering
 cargo test -p zkbench-core --test phase_w_promotion_preflight
 cargo test -p zkbench-core --test phase_w_accepted_ledger_append
 cargo test -p zkbench-core --test repo_claim_boundary_docs
@@ -193,9 +207,9 @@ no files.
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-`cargo-llvm-cov 0.8.7` was available during the Phase 126 all-feature workspace
-coverage pass. That pass reported `84.89%` region coverage, `81.86%` function
-execution, and `82.82%` line coverage. Branch coverage was not reported by that
+`cargo-llvm-cov 0.8.7` was available during the Phase 127 all-feature workspace
+coverage pass. That pass reported `85.32%` region coverage, `82.13%` function
+execution, and `83.45%` line coverage. Branch coverage was not reported by that
 run.
 
 These coverage percentages are local test instrumentation only; they are not
