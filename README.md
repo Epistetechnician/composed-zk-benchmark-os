@@ -210,6 +210,7 @@ Surface DSL
 | [docs/129-phase-proposal-validation-coverage-notes.md](docs/129-phase-proposal-validation-coverage-notes.md) | Local evidence append proposal validation coverage campaign notes. |
 | [docs/130-phase-phala-provider-coverage-notes.md](docs/130-phase-phala-provider-coverage-notes.md) | Local Phala operator-live provider-client coverage campaign notes. |
 | [docs/131-phase-phala-artifact-coverage-notes.md](docs/131-phase-phala-artifact-coverage-notes.md) | Local Phala captured-artifact validation coverage campaign notes. |
+| [docs/132-phase-local-json-adapter-coverage-notes.md](docs/132-phase-local-json-adapter-coverage-notes.md) | Local JSON adapter coverage campaign notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -693,6 +694,14 @@ rejection, managed-verifier trust rejection, event-log payload drift, Docker
 digest shape, and RTMR event index drift. It changes no production API and
 does not add live Phala calls, operator live tests, credentials, generated
 operator artifacts, accepted Evidence Ledger mutation, score-axis population,
+Level2+ evidence, or 100% coverage.
+[docs/132-phase-local-json-adapter-coverage-notes.md](docs/132-phase-local-json-adapter-coverage-notes.md)
+records a bounded local JSON adapter coverage campaign. It adds hermetic
+fail-closed tests for claim-boundary and adapter drift, missing subject
+payloads, selected-trace drift, mock replay command/status handling, legacy
+manifest preparation, and empty-evidence normalization. It changes no
+production API and does not add live external execution, external replay,
+official submission, accepted Evidence Ledger mutation, score-axis population,
 Level2+ evidence, or 100% coverage.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack

@@ -1,9 +1,9 @@
 use zkbench_core::{
     apply_mutation_pass, build_local_replay_manifest_for_instance,
     build_local_replay_manifest_for_mutation, generate_instance, local_json_capabilities,
-    BackendOutcome, ClaimBoundary, ExpectedVerdict, GeneratorConfig, InstanceParams,
-    LocalJsonAdapter, LocalJsonReplayInput, MissingConstraintsPass, ReplayCommand, ReplayMode,
-    ResultClassification,
+    BackendAdapter, BackendOutcome, BenchmarkInstance, ClaimBoundary, ExpectedVerdict,
+    GeneratorConfig, InstanceParams, LocalJsonAdapter, LocalJsonReplayInput,
+    MissingConstraintsPass, ReplayCommand, ReplayMode, ReplayStatus, ResultClassification,
 };
 
 #[test]
@@ -131,4 +131,144 @@ fn mock_backend_outcome_classifies_unsound_acceptance_candidate_without_proving_
         .notes
         .iter()
         .any(|note| note.contains("candidate")));
+    assert_eq!(result.status, ReplayStatus::Completed);
+}
+
+#[test]
+fn local_json_adapter_rejects_claim_adapter_and_subject_drift() {
+    let instance = generate_instance(
+        GeneratorConfig::baseline_fsm().seed(41),
+        InstanceParams::default(),
+    )
+    .expect("generated instance should be available");
+    let manifest =
+        build_local_replay_manifest_for_instance(&instance).expect("manifest should build");
+    let adapter = LocalJsonAdapter::default();
+
+    let mut elevated = manifest.clone();
+    elevated.claim_boundary = ClaimBoundary::Level2ReproducibleBenchmarkArtifact;
+    assert!(adapter.replay(&elevated).is_err());
+
+    let mut wrong_adapter = manifest.clone();
+    wrong_adapter.adapter_id = "other_adapter".to_string();
+    assert!(adapter.replay(&wrong_adapter).is_err());
+
+    let mut missing_generated_payload = manifest.clone();
+    missing_generated_payload.subject.generated_instance = None;
+    assert!(adapter.replay(&missing_generated_payload).is_err());
+
+    let mut unknown_trace = manifest.clone();
+    unknown_trace.selected_traces[0].trace_id = "missing_trace".to_string();
+    assert!(adapter.replay(&unknown_trace).is_err());
+}
+
+#[test]
+fn local_json_adapter_rejects_mutated_payload_and_trace_drift() {
+    let instance = generate_instance(
+        GeneratorConfig::branching_fsm().seed(43),
+        InstanceParams::default(),
+    )
+    .expect("branching generated instance should be available");
+    let mutation = apply_mutation_pass(&instance, &MissingConstraintsPass)
+        .expect("missing constraints mutation should apply");
+    let manifest = build_local_replay_manifest_for_mutation(&mutation)
+        .expect("mutation manifest should build");
+    let adapter = LocalJsonAdapter::default();
+
+    let mut missing_mutation_payload = manifest.clone();
+    missing_mutation_payload.subject.mutated_instance = None;
+    assert!(adapter.replay(&missing_mutation_payload).is_err());
+
+    let mut wrong_mutation_trace = manifest.clone();
+    wrong_mutation_trace.selected_traces[0].trace_id = "wrong_mutation_trace".to_string();
+    assert!(adapter.replay(&wrong_mutation_trace).is_err());
+}
+
+#[test]
+fn mock_mode_statuses_and_missing_command_fail_closed() {
+    let instance = generate_instance(
+        GeneratorConfig::baseline_fsm().seed(47),
+        InstanceParams::default(),
+    )
+    .expect("generated instance should be available");
+    let mut manifest =
+        build_local_replay_manifest_for_instance(&instance).expect("manifest should build");
+    manifest.replay_mode = ReplayMode::MockOutcome;
+    manifest.selected_traces.truncate(1);
+    manifest.expected_outcomes.truncate(1);
+
+    let mut missing_mock_command = manifest.clone();
+    missing_mock_command.commands = vec![ReplayCommand::LocalOracleEvaluation];
+    assert!(LocalJsonAdapter::default()
+        .replay(&missing_mock_command)
+        .is_err());
+
+    let mut capability_gap = manifest.clone();
+    capability_gap.commands = vec![ReplayCommand::MockOutcomeEvaluation {
+        outcome: BackendOutcome::CapabilityGap,
+    }];
+    let capability_gap_output = LocalJsonAdapter::default()
+        .replay_with_summary(LocalJsonReplayInput {
+            manifest: capability_gap,
+        })
+        .expect("mock capability gap should replay");
+    assert_eq!(
+        capability_gap_output.replay_result.status,
+        ReplayStatus::CapabilityGap
+    );
+    assert_eq!(capability_gap_output.summary.inconclusive_count, 1);
+
+    let mut inconclusive = manifest;
+    inconclusive.commands = vec![ReplayCommand::MockOutcomeEvaluation {
+        outcome: BackendOutcome::Inconclusive,
+    }];
+    let inconclusive_output = LocalJsonAdapter::default()
+        .replay_with_summary(LocalJsonReplayInput {
+            manifest: inconclusive,
+        })
+        .expect("mock inconclusive should replay");
+    assert_eq!(
+        inconclusive_output.replay_result.status,
+        ReplayStatus::Inconclusive
+    );
+    assert_eq!(inconclusive_output.summary.inconclusive_count, 1);
+}
+
+#[test]
+fn backend_adapter_trait_methods_stay_local_and_fail_closed() {
+    let instance = generate_instance(
+        GeneratorConfig::baseline_fsm().seed(53),
+        InstanceParams::default(),
+    )
+    .expect("generated instance should be available");
+    let legacy_instance = BenchmarkInstance {
+        id: instance.id.clone(),
+        family_id: instance.family_id.clone(),
+        machine_id: "local-machine".to_string(),
+        trace_ids: instance
+            .accepted_traces
+            .iter()
+            .chain(instance.rejected_traces.iter())
+            .map(|trace| trace.id.clone())
+            .collect(),
+        mutation_variant_id: None,
+        expected_verdict: ExpectedVerdict::Accept,
+        claim_boundary_max: ClaimBoundary::Level1LocalReplay,
+    };
+    let adapter = LocalJsonAdapter::default();
+    let prepared = adapter
+        .prepare_replay(&instance.semantic_ir, &legacy_instance)
+        .expect("legacy manifest preparation should succeed");
+    assert_eq!(prepared.adapter_id, "local_json_adapter_v0");
+    assert!(prepared.subject.generated_instance.is_none());
+    assert!(adapter.replay(&prepared).is_err());
+
+    let valid_manifest =
+        build_local_replay_manifest_for_instance(&instance).expect("manifest should build");
+    let mut result = adapter
+        .replay(&valid_manifest)
+        .expect("local replay should produce evidence records");
+    assert!(adapter.normalize_result(&result).is_ok());
+    result.evidence_records.clear();
+    assert!(adapter.normalize_result(&result).is_err());
 }
