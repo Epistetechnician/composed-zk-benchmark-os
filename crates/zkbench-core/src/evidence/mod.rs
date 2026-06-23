@@ -3,6 +3,7 @@
 
 pub mod acceptance_policy;
 pub mod accepted_append;
+pub mod accepted_append_output;
 pub mod append_preview;
 pub mod artifact;
 pub mod candidate;
@@ -33,6 +34,9 @@ pub use accepted_append::{
     AcceptedLedgerAppendTransactionIssueKind, AcceptedLedgerAppendTransactionReport,
     AcceptedLedgerAppendTransactionRequest, AcceptedLedgerAppendTransactionValidation,
     AcceptedLedgerAppendTransactionVersion,
+};
+pub use accepted_append_output::{
+    apply_materialized_accepted_ledger_append_transaction, MaterializedAcceptedLedgerAppendRequest,
 };
 pub use append_preview::{
     create_evidence_append_preview, deserialize_evidence_append_preview_json,

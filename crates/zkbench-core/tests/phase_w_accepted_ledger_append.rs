@@ -1,14 +1,16 @@
 use std::path::Path;
 
 use zkbench_core::{
-    apply_accepted_ledger_append_transaction, build_reviewed_promotion_preflight_report,
-    compute_artifact_digest_bytes, create_evidence_append_preview,
-    create_evidence_record_candidate, required_reviewed_promotion_preflight_non_claims,
-    review_evidence_append_proposal, validate_accepted_ledger_append_transaction_request,
-    AcceptedLedgerAppendTransactionIssueKind, AcceptedLedgerAppendTransactionRequest,
-    AcceptedLedgerAppendTransactionVersion, ArtifactDigest, ArtifactKind, ArtifactRole,
-    ClaimBoundary, EvidenceAcceptancePolicy, EvidenceAppendPreviewStatus, EvidenceClass,
-    EvidenceLedger, EvidenceReviewChecklist, EvidenceReviewDecisionKind, EvidenceReviewerRole,
+    apply_accepted_ledger_append_transaction,
+    apply_materialized_accepted_ledger_append_transaction,
+    build_reviewed_promotion_preflight_report, compute_artifact_digest_bytes,
+    create_evidence_append_preview, create_evidence_record_candidate,
+    required_reviewed_promotion_preflight_non_claims, review_evidence_append_proposal,
+    validate_accepted_ledger_append_transaction_request, AcceptedLedgerAppendTransactionIssueKind,
+    AcceptedLedgerAppendTransactionRequest, AcceptedLedgerAppendTransactionVersion, ArtifactDigest,
+    ArtifactKind, ArtifactRole, ClaimBoundary, EvidenceAcceptancePolicy,
+    EvidenceAppendPreviewStatus, EvidenceClass, EvidenceLedger, EvidenceReviewChecklist,
+    EvidenceReviewDecisionKind, EvidenceReviewerRole, MaterializedAcceptedLedgerAppendRequest,
     ReviewedPromotionPreflightRequest, ReviewedPromotionPreflightVersion,
 };
 
@@ -100,6 +102,26 @@ fn valid_transaction() -> (EvidenceLedger, AcceptedLedgerAppendTransactionReques
             notes: vec!["local append transaction stays below Level2".to_string()],
         },
     )
+}
+
+fn transaction_for_ledger(ledger: &EvidenceLedger) -> AcceptedLedgerAppendTransactionRequest {
+    let preflight_request = valid_preflight_request(ledger);
+    let preflight_report = build_reviewed_promotion_preflight_report(&preflight_request);
+    assert!(
+        preflight_report.validation.valid,
+        "{:?}",
+        preflight_report.validation.issues
+    );
+
+    AcceptedLedgerAppendTransactionRequest {
+        transaction_id: format!("accepted_append_tx_local_level1_{}", ledger.entries.len()),
+        version: AcceptedLedgerAppendTransactionVersion::default(),
+        target_evidence_ledger_id: "accepted-ledger-local-fixture".to_string(),
+        expected_current_ledger_tip: preflight_request.expected_current_ledger_tip.clone(),
+        preflight_request,
+        preflight_report,
+        notes: vec!["local append transaction stays below Level2".to_string()],
+    }
 }
 
 fn digest(label: &str) -> ArtifactDigest {
@@ -214,6 +236,168 @@ fn transaction_rejects_official_submission_score_axes_and_level2_claims() {
 }
 
 #[test]
+fn materialized_transaction_creates_and_then_appends_local_ledger_json() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let ledger_path = dir.path().join("accepted-ledger.json");
+    let (_, first_transaction) = valid_transaction();
+    let first_request = MaterializedAcceptedLedgerAppendRequest {
+        ledger_path: ledger_path.clone(),
+        create_if_missing: true,
+        transaction: first_transaction,
+    };
+
+    let first_report = apply_materialized_accepted_ledger_append_transaction(&first_request)
+        .expect("first materialized append should create ledger");
+    assert_eq!(first_report.appended_sequence_number, Some(0));
+    let first_ledger = EvidenceLedger::load_json(&ledger_path).expect("ledger should load");
+    assert_eq!(first_ledger.entries.len(), 1);
+    assert!(first_ledger.validate().valid);
+
+    let second_transaction = transaction_for_ledger(&first_ledger);
+    let second_request = MaterializedAcceptedLedgerAppendRequest {
+        ledger_path: ledger_path.clone(),
+        create_if_missing: false,
+        transaction: second_transaction,
+    };
+    let second_report = apply_materialized_accepted_ledger_append_transaction(&second_request)
+        .expect("second materialized append should extend ledger");
+    assert_eq!(second_report.appended_sequence_number, Some(1));
+    let second_ledger = EvidenceLedger::load_json(&ledger_path).expect("ledger should reload");
+    assert_eq!(second_ledger.entries.len(), 2);
+    assert!(second_ledger.validate().valid);
+}
+
+#[test]
+fn materialized_transaction_rejects_missing_file_without_create() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let ledger_path = dir.path().join("missing-ledger.json");
+    let (_, transaction) = valid_transaction();
+    let request = MaterializedAcceptedLedgerAppendRequest {
+        ledger_path: ledger_path.clone(),
+        create_if_missing: false,
+        transaction,
+    };
+
+    let error = apply_materialized_accepted_ledger_append_transaction(&request)
+        .expect_err("missing ledger without create should reject");
+    assert!(error.to_string().contains("create_if_missing is false"));
+    assert!(!ledger_path.exists());
+}
+
+#[test]
+fn materialized_transaction_rejects_missing_parent_directory() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let (_, transaction) = valid_transaction();
+    let request = MaterializedAcceptedLedgerAppendRequest {
+        ledger_path: dir.path().join("missing").join("accepted-ledger.json"),
+        create_if_missing: true,
+        transaction,
+    };
+
+    let error = apply_materialized_accepted_ledger_append_transaction(&request)
+        .expect_err("missing parent directory should reject");
+    assert!(error.to_string().contains("parent directory must exist"));
+}
+
+#[test]
+fn materialized_transaction_rejects_directory_target() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let ledger_path = dir.path().join("accepted-ledger-directory");
+    std::fs::create_dir(&ledger_path).expect("directory target should create");
+    let (_, transaction) = valid_transaction();
+    let request = MaterializedAcceptedLedgerAppendRequest {
+        ledger_path,
+        create_if_missing: false,
+        transaction,
+    };
+
+    let error = apply_materialized_accepted_ledger_append_transaction(&request)
+        .expect_err("directory target should reject");
+    assert!(error.to_string().contains("must be a JSON file"));
+}
+
+#[test]
+fn materialized_transaction_rejects_invalid_existing_ledger_json() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let ledger_path = dir.path().join("accepted-ledger.json");
+    std::fs::write(&ledger_path, b"{").expect("invalid ledger bytes should write");
+    let (_, transaction) = valid_transaction();
+    let request = MaterializedAcceptedLedgerAppendRequest {
+        ledger_path: ledger_path.clone(),
+        create_if_missing: false,
+        transaction,
+    };
+
+    apply_materialized_accepted_ledger_append_transaction(&request)
+        .expect_err("invalid existing ledger JSON should reject");
+    assert_eq!(
+        std::fs::read(&ledger_path).expect("invalid ledger should remain"),
+        b"{"
+    );
+}
+
+#[cfg(unix)]
+#[test]
+fn materialized_transaction_rejects_symlink_target() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let real_path = dir.path().join("real-ledger.json");
+    let symlink_path = dir.path().join("accepted-ledger.json");
+    std::fs::write(&real_path, b"{").expect("real target should write");
+    std::os::unix::fs::symlink(&real_path, &symlink_path).expect("symlink should create");
+    let (_, transaction) = valid_transaction();
+    let request = MaterializedAcceptedLedgerAppendRequest {
+        ledger_path: symlink_path,
+        create_if_missing: false,
+        transaction,
+    };
+
+    let error = apply_materialized_accepted_ledger_append_transaction(&request)
+        .expect_err("symlink ledger path should reject");
+    assert!(error.to_string().contains("must not be a symlink"));
+}
+
+#[test]
+fn materialized_transaction_rejects_stale_existing_ledger_without_repair() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let ledger_path = dir.path().join("accepted-ledger.json");
+    let mut existing_ledger = EvidenceLedger::new();
+    let (_, first_transaction) = valid_transaction();
+    apply_accepted_ledger_append_transaction(&first_transaction, &mut existing_ledger)
+        .expect("seed append should work");
+    existing_ledger
+        .save_json(&ledger_path)
+        .expect("seed ledger should save");
+
+    let (_, stale_transaction) = valid_transaction();
+    let request = MaterializedAcceptedLedgerAppendRequest {
+        ledger_path: ledger_path.clone(),
+        create_if_missing: false,
+        transaction: stale_transaction,
+    };
+
+    let error = apply_materialized_accepted_ledger_append_transaction(&request)
+        .expect_err("stale transaction should reject existing ledger");
+    assert!(error.to_string().contains("StaleLedgerTip"));
+    let reloaded = EvidenceLedger::load_json(&ledger_path).expect("ledger should still load");
+    assert_eq!(reloaded, existing_ledger);
+}
+
+#[test]
+fn materialized_transaction_rejects_parent_directory_path_components() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let (_, transaction) = valid_transaction();
+    let request = MaterializedAcceptedLedgerAppendRequest {
+        ledger_path: dir.path().join("nested").join("..").join("ledger.json"),
+        create_if_missing: true,
+        transaction,
+    };
+
+    let error = apply_materialized_accepted_ledger_append_transaction(&request)
+        .expect_err("parent-directory component should reject");
+    assert!(error.to_string().contains("parent-directory components"));
+}
+
+#[test]
 fn accepted_append_source_scan_exposes_no_runtime_submission_or_filesystem_surface() {
     let source_path = Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("src")
@@ -241,4 +425,32 @@ fn accepted_append_source_scan_exposes_no_runtime_submission_or_filesystem_surfa
         );
     }
     assert!(source.contains("ledger.append("));
+}
+
+#[test]
+fn materialized_accepted_append_source_scan_exposes_no_runtime_or_submission_surface() {
+    let source_path = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("src")
+        .join("evidence")
+        .join("accepted_append_output.rs");
+    let source = std::fs::read_to_string(source_path).expect("source should read");
+
+    for forbidden in [
+        "std::process",
+        "Command::new",
+        "std::net",
+        "TcpStream",
+        "reqwest",
+        "ureq",
+        "submit_to_",
+        "http://",
+        "https://",
+    ] {
+        assert!(
+            !source.contains(forbidden),
+            "materialized accepted append must not expose {forbidden}"
+        );
+    }
+    assert!(source.contains("EvidenceLedger::load_json"));
+    assert!(source.contains("ledger.save_json"));
 }

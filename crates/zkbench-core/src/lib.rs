@@ -110,11 +110,13 @@ pub use dsl::{
 };
 pub use error::{Result, ZkBenchError};
 pub use evidence::{
-    apply_accepted_ledger_append_transaction, build_default_evidence_acceptance_policy,
-    build_default_evidence_review_checklist, build_evidence_record_from_transaction,
-    build_reviewed_promotion_preflight_report, canonical_json_bytes, check_level2_eligibility,
-    classify_result, compute_artifact_digest, compute_artifact_digest_bytes,
-    compute_artifact_digest_for_json, compute_official_submission_package_metadata_digest,
+    apply_accepted_ledger_append_transaction,
+    apply_materialized_accepted_ledger_append_transaction,
+    build_default_evidence_acceptance_policy, build_default_evidence_review_checklist,
+    build_evidence_record_from_transaction, build_reviewed_promotion_preflight_report,
+    canonical_json_bytes, check_level2_eligibility, classify_result, compute_artifact_digest,
+    compute_artifact_digest_bytes, compute_artifact_digest_for_json,
+    compute_official_submission_package_metadata_digest,
     compute_reviewed_promotion_preflight_report_digest, create_evidence_append_preview,
     create_evidence_record_candidate, deserialize_evidence_acceptance_policy_json,
     deserialize_evidence_append_preview_json, deserialize_evidence_record_candidate_json,
@@ -160,7 +162,8 @@ pub use evidence::{
     EvidenceReviewReport, EvidenceReviewRequirement, EvidenceReviewerRole, EvidenceStrength,
     ExpectedVerdict, Level2EligibilityBlockingReason, Level2EligibilityChecker,
     Level2EligibilityFinding, Level2EligibilityReport, Level2EligibilityRequirement,
-    Level2EligibilityStatus, OfficialSubmissionPackageIssue, OfficialSubmissionPackageIssueKind,
+    Level2EligibilityStatus, MaterializedAcceptedLedgerAppendRequest,
+    OfficialSubmissionPackageIssue, OfficialSubmissionPackageIssueKind,
     OfficialSubmissionPackageMetadata, OfficialSubmissionPackageValidation,
     OfficialSubmissionPackageVersion, ProvenanceRecord, ResultClassification,
     ReviewedPromotionPreflightIssue, ReviewedPromotionPreflightIssueKind,
