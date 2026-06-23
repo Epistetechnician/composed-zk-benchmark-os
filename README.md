@@ -203,6 +203,7 @@ Surface DSL
 | [docs/122-phase-w-external-replay-official-submission-boundary-spec.md](docs/122-phase-w-external-replay-official-submission-boundary-spec.md) | Phase W external replay and official-submission promotion docs-first boundary. |
 | [docs/123-phase-w-external-replay-submission-preflight-implementation-notes.md](docs/123-phase-w-external-replay-submission-preflight-implementation-notes.md) | Phase W external replay and official-submission preflight implementation notes. |
 | [docs/124-phase-w-external-replay-preflight-output-boundary-spec.md](docs/124-phase-w-external-replay-preflight-output-boundary-spec.md) | Phase W external replay preflight output docs-first boundary. |
+| [docs/125-phase-w-external-replay-preflight-output-implementation-notes.md](docs/125-phase-w-external-replay-preflight-output-implementation-notes.md) | Phase W external replay preflight output implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -636,6 +637,13 @@ sidecars, redaction requirements, protected-root rules, and future hermetic
 tests. It authorizes no Rust implementation, generated output, committed
 artifact, external replay, endpoint call, credential access, accepted Evidence
 Ledger mutation, score-axis population, or Level2+ evidence.
+[docs/125-phase-w-external-replay-preflight-output-implementation-notes.md](docs/125-phase-w-external-replay-preflight-output-implementation-notes.md)
+records the local output materializer for that boundary. It writes and reads
+declared digest-bound `external-replay-submission/*` review files from a valid
+Phase 123 request/report pair, rejects drift and raw-material retention, and
+still runs no external replay, calls no endpoint, reads no credentials, mutates
+no accepted Evidence Ledger, populates no score axes, and creates no Level2+
+evidence.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
