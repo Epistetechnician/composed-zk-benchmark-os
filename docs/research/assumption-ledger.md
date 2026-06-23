@@ -564,3 +564,41 @@ vendored, executed, or treated as local evidence by this ledger update.
 - [Microsoft Azure Attestation basic concepts](https://learn.microsoft.com/en-us/azure/attestation/basic-concepts)
 - [Intel Trust Authority attestation tokens](https://docs.trustauthority.intel.com/main/articles/articles/ita/concept-attestation-tokens.html)
 - [flashbots/attested-tls](https://github.com/flashbots/attested-tls)
+
+---
+
+## Iteration 0006 — 2026-06-23
+
+Focus: map the recoverable-ghost-states PCSM handoff into Hyper Sacred AI
+without importing its artifacts or promoting its metrics as evidence in this
+repository.
+
+| ID | Assumption | Lane | Verdict | Conf. | Note |
+|---|---|---|---|---|---|
+| A14 | Raw agent or provider output needs a governed admission boundary before it can mutate HSAI state | F/E | Holds as architecture boundary | High | `docs/134-pcsm-governed-agent-admission-boundary-spec.md` records PCSM as a future admission-governance template, not as imported evidence |
+
+### A14 — PCSM-Governed Admission Boundary
+
+The recoverable-ghost-states handoff describes a locally verified PCSM pattern:
+provider/model output is decoded into a strict PCSMO1 candidate, evaluated by a
+deterministic admission kernel, applied only when accepted, and appended to a
+PCSMJ1 journal. The useful HSAI lesson is not the specific runtime or metrics.
+It is the state-governance rule: model output may propose, but only admitted
+typed transitions may mutate governed state.
+
+This sharpens the L0-L5 HSAI roadmap. Future agent cases, claim envelopes,
+identity/reputation updates, credit minting, membrane authority, and
+corrigibility-gated actions should flow through a deterministic admission
+boundary before any mutable authority is granted. Rejected transitions should
+remain auditable without mutating state.
+
+This ledger entry is architecture evidence only. It does not import
+recoverable-ghost artifacts, does not claim PCSM evidence in this repository,
+does not create accepted Evidence Ledger entries, and does not authorize Rust
+implementation. Exact recoverable-ghost metrics must be reverified in that
+repository before being cited as current.
+
+### Sources
+
+- Local handoff: `/Users/shaanp/.codex/attachments/ecdb4436-66a3-4ef6-890f-b57b0a1e1152/pasted-text.txt`
+- Boundary: `docs/134-pcsm-governed-agent-admission-boundary-spec.md`

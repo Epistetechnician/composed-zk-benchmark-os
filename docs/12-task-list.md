@@ -1198,6 +1198,52 @@ validation report point to them; focused zk-Harness pack mapping/export tests
 pass; all-feature workspace coverage improves from Phase 132; normal gates
 remain hermetic; and no live/external evidence surface is created.
 
+## HSAI Track: Phase 134 PCSM-Governed Agent Admission Boundary
+
+Status: complete for docs-first PCSM-governed agent-output admission boundary.
+See `docs/134-pcsm-governed-agent-admission-boundary-spec.md`.
+
+Goal: map the recoverable-ghost-states PCSM handoff into this repository as an
+admission-governance boundary for Hyper Sacred AI without importing artifacts,
+claiming PCSM evidence, changing Rust code, mutating accepted Evidence Ledgers,
+or authorizing implementation.
+
+Scope: Markdown boundary and navigation/status updates only. The boundary
+defines the future pattern:
+
+```text
+untrusted agent/provider output
+-> strict typed candidate
+-> deterministic admission or rejection
+-> accepted state mutation or rejected audit record
+-> append-only admission journal
+-> source digest binding
+-> explicit nonclaims
+```
+
+Implemented: a docs-first boundary that maps PCSM admission governance across
+HSAI L0 through L5, names the relationship to existing Phase W append rules,
+defines future local hermetic surfaces, and records rejection behavior for
+direct provider authority, stale tips, replayed candidates, claim-boundary
+elevation, missing source digests, missing nonclaims, accepted-ledger bypass,
+local-only Level2+ claims, and score-axis population.
+
+Anti-goals: Rust source changes, tests, Cargo metadata changes, `Cargo.lock`
+changes, PCSM runtime import or vendoring, recoverable-ghost artifact import,
+accepted Evidence Ledger mutation, official benchmark submission, external
+replay execution, live backend execution, network access, credentials or
+secrets, generated benchmark artifacts, operator-live Phala calls, DCAP/PCCS/
+JWKS/JWT/TLS implementation changes, command-line tools, UI dashboards,
+package runtime additions, score-axis population, ZK backend performance
+claims, Level2+ evidence creation, formal evidence creation, production
+readiness claims, semantic-correctness claims, or global software-agent
+uniqueness claims.
+
+Exit criteria: Phase 134 boundary exists; README, AGENTS, task list,
+assumption ledger, and validation report point to it; repo claim-boundary and
+hygiene docs tests pass; normal gates remain hermetic; and no live/external
+evidence surface is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
