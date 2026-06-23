@@ -217,6 +217,7 @@ Surface DSL
 | [docs/136-phase-hsai-agent-admission-core-notes.md](docs/136-phase-hsai-agent-admission-core-notes.md) | HSAI local agent admission core implementation notes. |
 | [docs/137-phase-hsai-admission-e2e-harness-notes.md](docs/137-phase-hsai-admission-e2e-harness-notes.md) | HSAI admission-gated e2e harness implementation notes. |
 | [docs/138-phase-hsai-admission-journal-materialization-boundary-spec.md](docs/138-phase-hsai-admission-journal-materialization-boundary-spec.md) | HSAI admission journal materialization docs-first boundary. |
+| [docs/139-phase-pcsm-bounded-proof-handoff-intake-boundary-spec.md](docs/139-phase-pcsm-bounded-proof-handoff-intake-boundary-spec.md) | PCSM CL12 bounded-proof handoff intake docs-first boundary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -768,6 +769,16 @@ retention, source-digest disclosure, redaction requirements, and explicit
 non-claims. It authorizes no Rust implementation, no generated output, no
 accepted Evidence Ledger mutation, no official submission, no provider call,
 no score-axis population, and no Level2+ evidence.
+[docs/139-phase-pcsm-bounded-proof-handoff-intake-boundary-spec.md](docs/139-phase-pcsm-bounded-proof-handoff-intake-boundary-spec.md)
+defines the docs-first boundary for future intake of a committed
+recoverable-ghost-states PCSM CL12 bounded-proof handoff. It requires source
+repo commit identity, source handoff path, SHA-256 digest binding, verifier
+status fields, blocked-preflight and `threshold_admitted=false` preservation,
+and explicit nonclaims before any typed local parser can exist. It imports no
+PCSM code or artifacts, accepts no dirty or staged-only source snapshot, mutates
+no accepted Evidence Ledger, performs no external replay or official
+submission, and creates no proof, benchmark evidence, score axes, or Level2+
+evidence.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
