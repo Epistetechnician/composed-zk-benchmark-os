@@ -852,6 +852,38 @@ external replay, endpoint call, credential use, generated output, accepted
 Evidence Ledger mutation, score-axis population, or Level2+ evidence is
 created.
 
+## Benchmark OS Track: Phase W External Replay Preflight Output Boundary
+
+Status: complete for docs-first boundary only. See
+`docs/124-phase-w-external-replay-preflight-output-boundary-spec.md`.
+
+Goal: define the future local output-root contract for materializing Phase 123
+external replay submission preflight reports as deterministic review metadata,
+without authorizing the materializer implementation, external replay, official
+submission, credentials, accepted Evidence Ledger mutation, score-axis
+population, or Level2+ evidence.
+
+Scope: Markdown boundary and navigation/status updates only. The boundary
+defines future explicit inputs, declared output files, digest sidecars,
+redaction requirements, protected-root rules, fail-closed rejection cases, and
+future hermetic tests.
+
+Anti-goals: Rust implementation in this slice, generated output files,
+committed external replay artifacts, committed official-submission artifacts,
+accepted Evidence Ledger mutation, official benchmark submission, external
+replay execution, live backend execution, network access, credentials or
+secrets, command-line tools, UI dashboards, package runtime additions,
+score-axis population, ZK backend performance claims, Level2+ evidence
+creation, broad leaderboard claims, SOTA claims, production-readiness claims,
+or semantic-correctness claims.
+
+Exit criteria: Phase 124 boundary spec exists; README, AGENTS, task list, and
+validation report point to it; future local output-root rules are explicit; raw
+credential, token, request, response, transcript, and operator-private material
+retention is rejected; and no Rust source, generated output, external replay,
+endpoint call, credential use, accepted Evidence Ledger mutation, score-axis
+population, or Level2+ evidence is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
