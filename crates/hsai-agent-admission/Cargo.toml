@@ -1,0 +1,13 @@
+[package]
+name = "hsai-agent-admission"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "Local PCSM-governed admission core for Hyper Sacred AI agent outputs."
+
+[dependencies]
+hsai-agent-case = { path = "../hsai-agent-case" }
+hsai-claim-envelope = { path = "../hsai-claim-envelope" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"

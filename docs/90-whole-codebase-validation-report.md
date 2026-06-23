@@ -31,7 +31,8 @@ provider-client coverage campaign, and the Phase 131 Phala captured-artifact
 validation coverage campaign, and the Phase 132 local JSON adapter coverage
 campaign, and the Phase 133 zk-Harness export helper coverage campaign, and the
 docs-first Phase 134 PCSM-governed agent admission boundary, and the Phase 135
-zk-Harness dry-run validation coverage campaign, plus
+zk-Harness dry-run validation coverage campaign, and the Phase 136 HSAI agent
+admission core, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -200,6 +201,19 @@ endpoint, uses no credentials, creates no generated benchmark artifacts, mutates
 no accepted Evidence Ledger, populates no score axes, creates no Level2+
 evidence, and does not claim 100% coverage.
 
+Phase 136 implements the local HSAI agent admission core in a new
+`hsai-agent-admission` crate. It adds strict typed admission candidates,
+deterministic admission policies, accepted/rejected/quarantined decisions,
+append-only in-memory admission journal validation, replay and stale-chain
+guards, source digest binding, required nonclaim enforcement, and accepted
+claim-envelope handoff from admitted claim-envelope proposals. It imports no
+recoverable-ghost runtime or artifact, performs no provider call, uses no
+credentials, mutates no accepted Evidence Ledger, runs no external replay,
+runs no live backend, creates no generated benchmark artifact, populates no
+score axes, creates no Level2+ evidence, and does not claim proof, benchmark
+evidence, semantic correctness, production readiness, or global software-agent
+uniqueness.
+
 ## State Slice
 
 This report touches only:
@@ -270,10 +284,12 @@ This report touches only:
 - `docs/134-pcsm-governed-agent-admission-boundary-spec.md`
 - `docs/135-phase-zk-harness-validation-coverage-notes.md`
 - `crates/zkbench-core/tests/zk_harness_dry_run_plan.rs`
+- `docs/136-phase-hsai-agent-admission-core-notes.md`
+- `crates/hsai-agent-admission/Cargo.toml`
+- `crates/hsai-agent-admission/src/lib.rs`
+- `Cargo.toml`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
-- `docs/research/assumption-ledger.md`
-- `docs/research/zk_external_source_index.md`
 - `README.md`
 - `AGENTS.md`
 
@@ -284,11 +300,13 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 135 validation.
+Run from repository root during Phase 136 validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
+cargo test -p hsai-agent-admission
+cargo test -p hsai-e2e-harness --test claim_boundary_source_scan
 cargo test -p zkbench-core --test zk_harness_dry_run_plan
 cargo test -p zkbench-core --test zk_harness_pack_mapping
 cargo test -p zkbench-core --test local_json_adapter
@@ -309,18 +327,21 @@ cargo llvm-cov --workspace --all-features --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml' || true
 ```
 
-Phase 135 Rust/doc/coverage commands passed. The `rg` package-surface check
-returned no files.
+Phase 136 focused Rust/doc commands passed. `cargo test --workspace
+--all-features`, workspace clippy, and workspace docs also passed after the new
+crate was added. The `rg` package-surface check returned no files.
 
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-`cargo-llvm-cov 0.8.7` was available during the Phase 135 all-feature workspace
-coverage pass. That pass reported `86.09%` region coverage, `83.22%` function
+`cargo-llvm-cov 0.8.7` was available during the latest Phase 135 all-feature
+workspace coverage pass. Phase 136 did not rerun coverage because this slice
+adds a new HSAI admission crate rather than a coverage-hardening campaign. The
+latest Phase 135 pass reported `86.09%` region coverage, `83.22%` function
 execution, and `84.43%` line coverage. The targeted
 `zkbench-core/src/adapters/zk_harness/validation.rs` file reported `94.87%`
-region coverage, `100.00%` function execution, and `93.45%` line coverage. Branch
-coverage was not reported by that run.
+region coverage, `100.00%` function execution, and `93.45%` line coverage.
+Branch coverage was not reported by that run.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

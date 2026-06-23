@@ -214,6 +214,7 @@ Surface DSL
 | [docs/133-phase-zk-harness-export-coverage-notes.md](docs/133-phase-zk-harness-export-coverage-notes.md) | Local zk-Harness export helper coverage campaign notes. |
 | [docs/134-pcsm-governed-agent-admission-boundary-spec.md](docs/134-pcsm-governed-agent-admission-boundary-spec.md) | PCSM-governed agent-output admission docs-first boundary. |
 | [docs/135-phase-zk-harness-validation-coverage-notes.md](docs/135-phase-zk-harness-validation-coverage-notes.md) | Local zk-Harness validation coverage campaign notes. |
+| [docs/136-phase-hsai-agent-admission-core-notes.md](docs/136-phase-hsai-agent-admission-core-notes.md) | HSAI local agent admission core implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -379,9 +380,10 @@ Surface DSL
 - Result classification exists.
 - Evidence and scoring primitives exist.
 - HSAI Level 1 local crates exist for claim envelopes, agent cases,
-  distinct-agent registration, economy, membrane conversion, economy simulation,
-  managed-attestation verification, pure-data e2e harnessing, and Phala/dstack
-  fixture/captured-artifact validation.
+  PCSM-governed local admission, distinct-agent registration, economy,
+  membrane conversion, economy simulation, managed-attestation verification,
+  pure-data e2e harnessing, and Phala/dstack fixture/captured-artifact
+  validation.
 - Managed-attestation Phase 57 defines the real-artifact promotion
   requirements for an HSAI-owned fresh challenge. A first real HSAI-owned
   Phala/dstack artifact has been captured and accepted under this spec
@@ -738,6 +740,16 @@ benchmark-evidence language. It changes no production API and does not add
 zk-Harness execution, live external execution, external replay, official
 submission, accepted Evidence Ledger mutation, score-axis population, Level2+
 evidence, or 100% coverage.
+[docs/136-phase-hsai-agent-admission-core-notes.md](docs/136-phase-hsai-agent-admission-core-notes.md)
+records the local HSAI agent admission core. The `hsai-agent-admission` crate
+implements strict typed `AgentAdmissionCandidate` inputs,
+`AgentAdmissionPolicy`, `AgentAdmissionDecision`, append-only in-memory
+`AgentAdmissionJournal` validation, and accepted-envelope handoff from admitted
+claim-envelope proposals. It imports no recoverable-ghost runtime or artifact,
+performs no provider call, mutates no accepted Evidence Ledger, populates no
+score axes, creates no Level2+ evidence, and does not claim semantic
+correctness, production readiness, proof, benchmark evidence, or global
+software-agent uniqueness.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
