@@ -1094,6 +1094,41 @@ validation report point to them; focused Phala provider-client tests pass;
 all-feature workspace coverage improves from Phase 129; normal gates remain
 hermetic; and no live/external evidence surface is created.
 
+## Benchmark OS Track: Phase 131 Phala Artifact Coverage
+
+Status: complete for local Phala captured-artifact validation coverage
+hardening. See `docs/131-phase-phala-artifact-coverage-notes.md`.
+
+Goal: improve local line coverage over the existing captured-artifact parser
+and validator without production API changes, live Phala calls, operator live
+tests, network requirements, credentials, generated operator artifacts,
+official submission, accepted Evidence Ledger mutation, score-axis population,
+Level2+ evidence, or 100% coverage claims.
+
+Scope: focused tests under
+`crates/hsai-attestation-phala/tests/phala_artifact.rs`, plus phase notes and
+navigation/status updates.
+
+Implemented: invalid JSON rejection, malformed quote hex rejection, invalid
+case-hash length rejection, future observation rejection, untrusted
+managed-verifier kind/status rejection, missing required event-log entry
+rejection, mismatched event payload rejection, invalid Docker digest rejection,
+and wrong RTMR event-index rejection.
+
+Anti-goals: production source changes, new APIs, live Phala calls, operator
+live tests, network access, credentials or secrets, generated operator
+artifacts, external replay execution, official endpoint calls, accepted
+Evidence Ledger mutation, official benchmark submission, command-line tools,
+UI dashboards, package runtime additions, score-axis population, ZK backend
+performance claims, Level2+ evidence creation, formal evidence creation, SOTA
+claims, broad leaderboard claims, production-readiness claims,
+semantic-correctness claims, or claiming 100% coverage.
+
+Exit criteria: Phase 131 notes exist; README, AGENTS, task list, and
+validation report point to them; focused Phala artifact validation tests pass;
+all-feature workspace coverage improves from Phase 130; normal gates remain
+hermetic; and no live/external evidence surface is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

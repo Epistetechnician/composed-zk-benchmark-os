@@ -27,7 +27,8 @@ boundary, the Phase 125 external replay preflight output implementation, and
 the Phase 126 Phase W coverage-hardening follow-up, and the Phase 127 DSL
 coverage campaign, and the Phase 128 soak serialization coverage campaign, and
 the Phase 129 proposal validation coverage campaign, and the Phase 130 Phala
-provider-client coverage campaign, plus
+provider-client coverage campaign, and the Phase 131 Phala captured-artifact
+validation coverage campaign, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -146,6 +147,16 @@ creates no operator live test, uses no real credentials, mutates no accepted
 Evidence Ledger, populates no score axes, creates no Level2+ evidence, and
 does not claim 100% coverage.
 
+Phase 131 hardens focused local regression coverage for the existing Phala
+captured-artifact parser and validator. It adds rejection-path coverage for
+invalid JSON, malformed quote hex, invalid case-hash length, future
+observations, untrusted managed-verifier kind/status, missing required event
+log entries, mismatched event payloads, invalid Docker digest shape, and wrong
+RTMR event indexes. It changes no production API, runs no live Phala call,
+creates no operator live test, uses no real credentials, mutates no accepted
+Evidence Ledger, populates no score axes, creates no Level2+ evidence, and
+does not claim 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -207,6 +218,8 @@ This report touches only:
 - `crates/zkbench-core/tests/evidence_append_proposal.rs`
 - `docs/130-phase-phala-provider-coverage-notes.md`
 - `crates/hsai-attestation-phala/tests/phala_operator_live_provider_client.rs`
+- `docs/131-phase-phala-artifact-coverage-notes.md`
+- `crates/hsai-attestation-phala/tests/phala_artifact.rs`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
 - `docs/research/zk_external_source_index.md`
@@ -220,11 +233,12 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 130 validation.
+Run from repository root during Phase 131 validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
+cargo test -p hsai-attestation-phala --test phala_artifact
 cargo test -p hsai-attestation-phala --features operator-live-provider --test phala_operator_live_provider_client
 cargo test -p zkbench-core --test evidence_append_proposal
 cargo test -p zkbench-core --test oracle_eval
@@ -247,10 +261,12 @@ no files.
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-`cargo-llvm-cov 0.8.7` was available during the Phase 130 all-feature workspace
-coverage pass. That pass reported `85.58%` region coverage, `82.59%` function
-execution, and `83.76%` line coverage. Branch coverage was not reported by that
-run.
+`cargo-llvm-cov 0.8.7` was available during the Phase 131 all-feature workspace
+coverage pass. That pass reported `85.68%` region coverage, `82.68%` function
+execution, and `83.88%` line coverage. The targeted
+`hsai-attestation-phala/src/artifact.rs` file reported `87.78%` region
+coverage, `89.29%` function execution, and `86.55%` line coverage. Branch
+coverage was not reported by that run.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

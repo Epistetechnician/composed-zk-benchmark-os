@@ -195,3 +195,95 @@ fn mutated_rtmr_event_log_rejects() {
         Err(PhalaValidationError::RtmrReplayMismatch { .. })
     ));
 }
+
+#[test]
+fn artifact_parser_and_hex_validation_fail_closed() {
+    assert!(matches!(
+        parse_phala_artifact("{not json"),
+        Err(PhalaValidationError::InvalidJson(_))
+    ));
+
+    let bundle = bundle();
+    let policy = PhalaValidationPolicy::for_bundle(&bundle, 600);
+    let mut bad_quote = bundle.clone();
+    bad_quote.quote_hex = "not-hex".to_owned();
+    assert!(matches!(
+        validate_phala_artifact(&bad_quote, &policy, bundle.observed_timestamp),
+        Err(PhalaValidationError::InvalidHex { field, .. }) if field == "quote_hex"
+    ));
+
+    let mut bad_case_hash = bundle.clone();
+    bad_case_hash.case_hash_hex.pop();
+    assert!(matches!(
+        validate_phala_artifact(&bad_case_hash, &policy, bundle.observed_timestamp),
+        Err(PhalaValidationError::InvalidHexLength { field, .. }) if field == "case_hash_hex"
+    ));
+}
+
+#[test]
+fn freshness_and_managed_verifier_rejections_are_explicit() {
+    let bundle = bundle();
+    let policy = PhalaValidationPolicy::for_bundle(&bundle, 600);
+
+    assert!(matches!(
+        validate_phala_artifact(&bundle, &policy, bundle.observed_timestamp - 1),
+        Err(PhalaValidationError::ObservationInFuture { .. })
+    ));
+
+    let mut wrong_kind = bundle.clone();
+    wrong_kind.verifier_mode.kind = "other-managed-verifier".to_owned();
+    assert!(matches!(
+        validate_phala_artifact(&wrong_kind, &policy, bundle.observed_timestamp),
+        Err(PhalaValidationError::ManagedVerifierUntrusted(value))
+            if value == "other-managed-verifier"
+    ));
+
+    let mut wrong_status = bundle.clone();
+    wrong_status.verifier_mode.verification_status = "OutOfDate".to_owned();
+    assert!(matches!(
+        validate_phala_artifact(&wrong_status, &policy, bundle.observed_timestamp),
+        Err(PhalaValidationError::ManagedVerifierUntrusted(value)) if value == "OutOfDate"
+    ));
+}
+
+#[test]
+fn event_payload_docker_digest_and_rtmr_shape_rejections_are_explicit() {
+    let bundle = bundle();
+    let policy = PhalaValidationPolicy::for_bundle(&bundle, 600);
+
+    let mut missing_event = bundle.clone();
+    missing_event
+        .rtmr3_event_log
+        .retain(|event| event.event != "compose-hash");
+    assert!(matches!(
+        validate_phala_artifact(&missing_event, &policy, bundle.observed_timestamp),
+        Err(PhalaValidationError::MissingEvent(event)) if event == "compose-hash"
+    ));
+
+    let mut bad_event_payload = bundle.clone();
+    let app_event = bad_event_payload
+        .rtmr3_event_log
+        .iter_mut()
+        .find(|event| event.event == "app-id")
+        .expect("fixture has app-id event");
+    mutate_first_hex_char(&mut app_event.event_payload);
+    assert!(matches!(
+        validate_phala_artifact(&bad_event_payload, &policy, bundle.observed_timestamp),
+        Err(PhalaValidationError::EventPayloadMismatch { event, .. }) if event == "app-id"
+    ));
+
+    let mut bad_docker_digest = bundle.clone();
+    bad_docker_digest.docker_image_digests[0] = "sha512:not-supported".to_owned();
+    assert!(matches!(
+        validate_phala_artifact(&bad_docker_digest, &policy, bundle.observed_timestamp),
+        Err(PhalaValidationError::InvalidHex { field, .. }) if field == "docker_image_digest"
+    ));
+
+    let mut wrong_imr = bundle.clone();
+    wrong_imr.rtmr3_event_log[0].imr = 2;
+    assert!(matches!(
+        validate_phala_artifact(&wrong_imr, &policy, bundle.observed_timestamp),
+        Err(PhalaValidationError::RtmrReplayMismatch { actual, expected })
+            if actual == "2" && expected == "3"
+    ));
+}
