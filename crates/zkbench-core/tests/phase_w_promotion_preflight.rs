@@ -29,10 +29,16 @@ use zkbench_core::{
     OfficialSubmissionPackageIssueKind, OfficialSubmissionPackageMetadata,
     OfficialSubmissionPackageOutputRequest, OfficialSubmissionPackageVersion,
     ReviewedPromotionPreflightIssueKind, ReviewedPromotionPreflightRequest,
-    ReviewedPromotionPreflightVersion, EXTERNAL_REPLAY_PREFLIGHT_INPUT_MANIFEST_PATH,
+    ReviewedPromotionPreflightVersion, EXTERNAL_REPLAY_PREFLIGHT_INPUT_MANIFEST_DIGEST_PATH,
+    EXTERNAL_REPLAY_PREFLIGHT_INPUT_MANIFEST_PATH,
+    EXTERNAL_REPLAY_PREFLIGHT_NON_CLAIMS_DIGEST_PATH, EXTERNAL_REPLAY_PREFLIGHT_NON_CLAIMS_PATH,
+    EXTERNAL_REPLAY_PREFLIGHT_PACKAGE_DIGESTS_DIGEST_PATH,
+    EXTERNAL_REPLAY_PREFLIGHT_PACKAGE_DIGESTS_PATH,
     EXTERNAL_REPLAY_PREFLIGHT_REDACTION_REPORT_DIGEST_PATH,
     EXTERNAL_REPLAY_PREFLIGHT_REDACTION_REPORT_PATH,
     EXTERNAL_REPLAY_PREFLIGHT_REPORT_JSON_DIGEST_PATH, EXTERNAL_REPLAY_PREFLIGHT_REPORT_JSON_PATH,
+    EXTERNAL_REPLAY_PREFLIGHT_REPORT_MARKDOWN_DIGEST_PATH,
+    EXTERNAL_REPLAY_PREFLIGHT_REPORT_MARKDOWN_PATH,
     OFFICIAL_SUBMISSION_PACKAGE_MARKDOWN_DIGEST_PATH,
 };
 
@@ -105,6 +111,22 @@ fn digest(label: &str) -> ArtifactDigest {
         Some(ArtifactKind::Other),
         Some(ArtifactRole::Report),
     )
+}
+
+fn write_external_preflight_file_with_digest(
+    output_root: &Path,
+    relative_path: &str,
+    digest_path: &str,
+    bytes: &[u8],
+) {
+    let file_digest =
+        compute_artifact_digest_bytes(bytes, Some(ArtifactKind::Other), Some(ArtifactRole::Report));
+    fs::write(output_root.join(relative_path), bytes).expect("materialized file should tamper");
+    fs::write(
+        output_root.join(digest_path),
+        format!("{}\n", file_digest.hex_digest).as_bytes(),
+    )
+    .expect("digest sidecar should update");
 }
 
 fn valid_append_transaction() -> (EvidenceLedger, AcceptedLedgerAppendTransactionRequest) {
@@ -792,6 +814,59 @@ fn external_replay_preflight_outputs_reject_unsafe_roots_and_overwrite_drift() {
 }
 
 #[test]
+fn external_replay_preflight_outputs_reject_file_repo_parent_and_symlink_roots() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let mut request = valid_external_replay_preflight_output_request(&dir);
+    let file_root = dir.path().join("not-a-directory");
+    fs::write(&file_root, b"occupied").expect("file root should create");
+    request.output_root = file_root;
+    request.preflight_request.future_output_root = request.output_root.clone();
+    request.preflight_report =
+        build_external_replay_submission_preflight_report(&request.preflight_request);
+    let file = write_external_replay_submission_preflight_outputs(&request)
+        .expect_err("existing file output root should reject");
+    assert!(file.to_string().contains("existing file"));
+
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let mut request = valid_external_replay_preflight_output_request(&dir);
+    request.output_root = std::env::current_dir()
+        .expect("current dir should read")
+        .join("phase126-forbidden-output");
+    request.preflight_request.future_output_root = request.output_root.clone();
+    request.preflight_report =
+        build_external_replay_submission_preflight_report(&request.preflight_request);
+    let repo = write_external_replay_submission_preflight_outputs(&request)
+        .expect_err("repository-overlapping output root should reject");
+    assert!(repo.to_string().contains("repository root"));
+
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let mut request = valid_external_replay_preflight_output_request(&dir);
+    request.output_root = dir.path().join("..").join("escaped-output");
+    request.preflight_request.future_output_root = request.output_root.clone();
+    request.preflight_report =
+        build_external_replay_submission_preflight_report(&request.preflight_request);
+    let parent = write_external_replay_submission_preflight_outputs(&request)
+        .expect_err("parent-directory output root should reject");
+    assert!(parent.to_string().contains("parent-directory"));
+
+    #[cfg(unix)]
+    {
+        let dir = tempfile::tempdir().expect("tempdir should be available");
+        let mut request = valid_external_replay_preflight_output_request(&dir);
+        let symlink_root = dir.path().join("symlink-output");
+        std::os::unix::fs::symlink(dir.path(), &symlink_root)
+            .expect("symlink output root should create");
+        request.output_root = symlink_root;
+        request.preflight_request.future_output_root = request.output_root.clone();
+        request.preflight_report =
+            build_external_replay_submission_preflight_report(&request.preflight_request);
+        let symlink = write_external_replay_submission_preflight_outputs(&request)
+            .expect_err("symlink output root should reject");
+        assert!(symlink.to_string().contains("symlink"));
+    }
+}
+
+#[test]
 fn external_replay_preflight_outputs_reject_stale_unexpected_and_raw_retention() {
     let dir = tempfile::tempdir().expect("tempdir should be available");
     let request = valid_external_replay_preflight_output_request(&dir);
@@ -871,6 +946,124 @@ fn external_replay_preflight_outputs_reject_stale_unexpected_and_raw_retention()
     )
     .expect_err("raw retention should reject");
     assert!(raw_retention.to_string().contains("redaction report"));
+}
+
+#[test]
+fn external_replay_preflight_outputs_reject_malformed_json_utf8_and_markdown_drift() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let request = valid_external_replay_preflight_output_request(&dir);
+    write_external_replay_submission_preflight_outputs(&request)
+        .expect("preflight outputs should write");
+    write_external_preflight_file_with_digest(
+        &request.output_root,
+        EXTERNAL_REPLAY_PREFLIGHT_INPUT_MANIFEST_PATH,
+        EXTERNAL_REPLAY_PREFLIGHT_INPUT_MANIFEST_DIGEST_PATH,
+        b"{",
+    );
+    let malformed = read_external_replay_submission_preflight_outputs(
+        &request.output_root,
+        &request.protected_paths,
+    )
+    .expect_err("malformed input manifest should reject");
+    assert!(malformed.to_string().contains("deserialize"));
+
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let request = valid_external_replay_preflight_output_request(&dir);
+    write_external_replay_submission_preflight_outputs(&request)
+        .expect("preflight outputs should write");
+    write_external_preflight_file_with_digest(
+        &request.output_root,
+        EXTERNAL_REPLAY_PREFLIGHT_INPUT_MANIFEST_PATH,
+        EXTERNAL_REPLAY_PREFLIGHT_INPUT_MANIFEST_DIGEST_PATH,
+        &[0xff, 0xfe, 0xfd],
+    );
+    let utf8 = read_external_replay_submission_preflight_outputs(
+        &request.output_root,
+        &request.protected_paths,
+    )
+    .expect_err("non-UTF-8 input manifest should reject");
+    assert!(utf8.to_string().contains("not UTF-8"));
+
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let request = valid_external_replay_preflight_output_request(&dir);
+    write_external_replay_submission_preflight_outputs(&request)
+        .expect("preflight outputs should write");
+    write_external_preflight_file_with_digest(
+        &request.output_root,
+        EXTERNAL_REPLAY_PREFLIGHT_REPORT_MARKDOWN_PATH,
+        EXTERNAL_REPLAY_PREFLIGHT_REPORT_MARKDOWN_DIGEST_PATH,
+        b"# Drifted Preflight Report\n",
+    );
+    let markdown = read_external_replay_submission_preflight_outputs(
+        &request.output_root,
+        &request.protected_paths,
+    )
+    .expect_err("drifted report markdown should reject");
+    assert!(markdown.to_string().contains("Markdown does not match"));
+}
+
+#[test]
+fn external_replay_preflight_outputs_reject_manifest_package_and_non_claim_drift() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let request = valid_external_replay_preflight_output_request(&dir);
+    let output = write_external_replay_submission_preflight_outputs(&request)
+        .expect("preflight outputs should write");
+    let mut manifest =
+        serde_json::to_value(&output.input_manifest).expect("input manifest should convert");
+    manifest["declared_files"] = serde_json::Value::Array(Vec::new());
+    let manifest_json =
+        serde_json::to_string_pretty(&manifest).expect("input manifest should serialize");
+    write_external_preflight_file_with_digest(
+        &request.output_root,
+        EXTERNAL_REPLAY_PREFLIGHT_INPUT_MANIFEST_PATH,
+        EXTERNAL_REPLAY_PREFLIGHT_INPUT_MANIFEST_DIGEST_PATH,
+        manifest_json.as_bytes(),
+    );
+    let manifest = read_external_replay_submission_preflight_outputs(
+        &request.output_root,
+        &request.protected_paths,
+    )
+    .expect_err("manifest declared-file drift should reject");
+    assert!(manifest.to_string().contains("declared files"));
+
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let request = valid_external_replay_preflight_output_request(&dir);
+    let output = write_external_replay_submission_preflight_outputs(&request)
+        .expect("preflight outputs should write");
+    let mut package = serde_json::to_value(&output.package_digest_summary)
+        .expect("package digest summary should convert");
+    package["source_artifact_digests"] = serde_json::Value::Array(Vec::new());
+    let package_json =
+        serde_json::to_string_pretty(&package).expect("package digest summary should serialize");
+    write_external_preflight_file_with_digest(
+        &request.output_root,
+        EXTERNAL_REPLAY_PREFLIGHT_PACKAGE_DIGESTS_PATH,
+        EXTERNAL_REPLAY_PREFLIGHT_PACKAGE_DIGESTS_DIGEST_PATH,
+        package_json.as_bytes(),
+    );
+    let package = read_external_replay_submission_preflight_outputs(
+        &request.output_root,
+        &request.protected_paths,
+    )
+    .expect_err("package digest summary drift should reject");
+    assert!(package.to_string().contains("package digest summary"));
+
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let request = valid_external_replay_preflight_output_request(&dir);
+    write_external_replay_submission_preflight_outputs(&request)
+        .expect("preflight outputs should write");
+    write_external_preflight_file_with_digest(
+        &request.output_root,
+        EXTERNAL_REPLAY_PREFLIGHT_NON_CLAIMS_PATH,
+        EXTERNAL_REPLAY_PREFLIGHT_NON_CLAIMS_DIGEST_PATH,
+        b"# External Replay Submission Preflight Non-Claims\n\n- drifted non-claim\n",
+    );
+    let non_claims = read_external_replay_submission_preflight_outputs(
+        &request.output_root,
+        &request.protected_paths,
+    )
+    .expect_err("non-claims markdown drift should reject");
+    assert!(non_claims.to_string().contains("non-claims Markdown"));
 }
 
 #[test]

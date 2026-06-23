@@ -924,6 +924,41 @@ runtime surface; and no external replay, endpoint call, credential use,
 accepted Evidence Ledger mutation, score-axis population, or Level2+ evidence
 is created.
 
+## Benchmark OS Track: Phase W Coverage Hardening
+
+Status: complete for local Phase W output-plumbing coverage hardening. See
+`docs/126-phase-w-coverage-hardening-notes.md`.
+
+Goal: improve local regression coverage over the Phase 125 external replay
+preflight output-root implementation without changing production APIs or
+authorizing any live provider, external replay, official submission, accepted
+Evidence Ledger, score-axis, or Level2+ path.
+
+Scope: focused tests under
+`crates/zkbench-core/tests/phase_w_promotion_preflight.rs`, plus phase notes
+and navigation/status updates.
+
+Implemented: additional fail-closed tests for existing-file output roots,
+repository-root overlap, parent-directory output roots, Unix symlink roots,
+digest-consistent malformed JSON, digest-consistent non-UTF-8 materialized
+files, digest-consistent report Markdown drift, input-manifest declared-file
+drift, submission-package digest-summary drift, and non-claims Markdown drift.
+
+Anti-goals: production source changes, new APIs, generated artifacts, external
+replay execution, official endpoint calls, credentials or secrets, accepted
+Evidence Ledger mutation, official benchmark submission, live backend
+execution, network access, command-line tools, UI dashboards, package runtime
+additions, score-axis population, ZK backend performance claims, Level2+
+evidence creation, formal evidence creation, SOTA claims, broad leaderboard
+claims, production-readiness claims, semantic-correctness claims, or claiming
+100% coverage.
+
+Exit criteria: Phase 126 notes exist; README, AGENTS, task list, and validation
+report point to them; focused tests cover digest-consistent readback drift and
+output-root safety branches; focused Phase W coverage improves for the Phase
+125 output module; normal gates remain hermetic; and no live/external evidence
+surface is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
