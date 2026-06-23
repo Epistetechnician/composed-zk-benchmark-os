@@ -786,6 +786,40 @@ external-submission rejection, and no endpoint runtime surface; and no generated
 package artifact, official endpoint call, score-axis population, or Level2+
 evidence is created.
 
+## Benchmark OS Track: Phase W External Replay Official Submission Boundary
+
+Status: complete for docs-first boundary. See
+`docs/122-phase-w-external-replay-official-submission-boundary-spec.md`.
+
+Goal: define the future boundary between local Phase W package materialization
+and any external replay or official-submission promotion path, without
+authorizing implementation, endpoint access, credentials, generated artifacts,
+accepted Evidence Ledger mutation, score-axis population, or Level2+ evidence.
+
+Scope: Markdown boundary updates only. The future path must require valid
+accepted ledger JSON, valid Phase 121 package output, expected package digests,
+non-secret benchmark target metadata, backend id and version, benchmark-suite
+id, external replay provenance, source artifact digests, explicit operator
+acknowledgement, an output root outside git, redaction rules, and claim-class
+separation across local, external replay, official submission, performance,
+formal, and soundness evidence.
+
+Anti-goals: Rust source changes, tests, Cargo metadata changes, generated
+output files, committed external replay artifacts, committed
+official-submission artifacts, accepted Evidence Ledger mutation, official
+benchmark submission, external replay execution, live backend execution,
+network access, credentials or secrets, command-line tools, UI dashboards,
+package runtime additions, score-axis population, ZK backend performance
+claims, Level2+ evidence creation, formal evidence creation, SOTA claims,
+broad leaderboard claims, production-readiness claims, or semantic-correctness
+claims.
+
+Exit criteria: Phase 122 boundary spec exists; README, validation report, task
+list, and AGENTS point to it; the future input contract, validation order,
+artifact shape, rejection list, and required tests are explicit; and no Rust
+source, generated output, official endpoint call, accepted Evidence Ledger
+mutation, score-axis population, or Level2+ evidence is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

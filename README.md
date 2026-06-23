@@ -200,6 +200,7 @@ Surface DSL
 | [docs/119-phase-w-accepted-ledger-materialization-implementation-notes.md](docs/119-phase-w-accepted-ledger-materialization-implementation-notes.md) | Phase W accepted Evidence Ledger materialization implementation notes. |
 | [docs/120-phase-w-official-submission-package-materialization-boundary-spec.md](docs/120-phase-w-official-submission-package-materialization-boundary-spec.md) | Phase W official-submission package materialization docs-first boundary. |
 | [docs/121-phase-w-official-submission-package-materialization-implementation-notes.md](docs/121-phase-w-official-submission-package-materialization-implementation-notes.md) | Phase W official-submission package materialization implementation notes. |
+| [docs/122-phase-w-external-replay-official-submission-boundary-spec.md](docs/122-phase-w-external-replay-official-submission-boundary-spec.md) | Phase W external replay and official-submission promotion docs-first boundary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -610,6 +611,13 @@ ledger JSON file, rejects package drift, stale digests, unexpected files,
 unsafe paths, endpoint submission, and score-axis population. It still creates
 no committed generated package artifact, official endpoint call, official
 benchmark submission, external replay evidence, or Level2+ evidence.
+[docs/122-phase-w-external-replay-official-submission-boundary-spec.md](docs/122-phase-w-external-replay-official-submission-boundary-spec.md)
+opens the next docs-first boundary for a future external replay and official
+submission promotion path. It defines required inputs, validation order,
+future generated-output shape, redaction rules, operator acknowledgement, and
+claim separation. It authorizes no Rust implementation, external replay,
+network access, credentials, official endpoint call, generated artifact,
+accepted Evidence Ledger mutation, score-axis population, or Level2+ evidence.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
