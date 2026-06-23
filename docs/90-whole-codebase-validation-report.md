@@ -19,8 +19,9 @@ Phase 116 accepted-ledger append boundary, the Phase 117 accepted-ledger append
 implementation, the docs-first Phase 118 accepted-ledger materialization
 boundary, the Phase 119 accepted-ledger materialization implementation, the
 docs-first Phase 120 official-submission package materialization boundary, and
-the Phase 121 official-submission package materialization implementation, plus
-the
+the Phase 121 official-submission package materialization implementation, and
+the docs-first Phase 122 external replay and official-submission promotion
+boundary, plus the
 coverage-hardening follow-up for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
@@ -60,6 +61,14 @@ declared local package files and digest sidecars after fail-closed validation.
 It creates no committed generated package artifact, performs no official
 endpoint call, submits no official benchmark result, populates no score axes,
 and creates no Level2+ evidence.
+
+Phase 122 opens the docs-first boundary for a future external replay and
+official-submission promotion path. It defines required inputs, validation
+order, future artifact shape, redaction requirements, operator acknowledgement,
+and evidence-class separation. It authorizes no implementation, external
+replay execution, network access, credentials, generated artifacts, accepted
+Evidence Ledger mutation, official benchmark submission, score-axis
+population, or Level2+ evidence.
 
 ## State Slice
 
@@ -106,6 +115,7 @@ This report touches only:
 - `docs/119-phase-w-accepted-ledger-materialization-implementation-notes.md`
 - `docs/120-phase-w-official-submission-package-materialization-boundary-spec.md`
 - `docs/121-phase-w-official-submission-package-materialization-implementation-notes.md`
+- `docs/122-phase-w-external-replay-official-submission-boundary-spec.md`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
 - `docs/research/zk_external_source_index.md`
@@ -119,30 +129,27 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 121 validation.
+Run from repository root during Phase 122 docs-only validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
-cargo test -p zkbench-core --test phase_w_promotion_preflight
-cargo test -p zkbench-core --test phase_w_accepted_ledger_append
 cargo test -p zkbench-core --test repo_claim_boundary_docs
 cargo test -p zkbench-core --test repo_hygiene
-cargo test --workspace --all-features
-cargo clippy --workspace --all-targets --all-features -- -D warnings
-RUSTDOCFLAGS='-D warnings' cargo doc --workspace --all-features --no-deps
-cargo llvm-cov --workspace --all-features --summary-only
+rg --files -g 'package.json' -g 'pnpm-lock.yaml' || true
 ```
 
-All commands passed.
+The Rust/doc hygiene commands passed. The `rg` package-surface check returned
+no files.
 
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-`cargo-llvm-cov 0.8.7` was available during the Phase 121 all-feature workspace
-coverage pass. That pass reported `85.24%` region coverage, `82.07%` function
-execution, and `83.10%` line coverage. Branch coverage was not reported by that
-run.
+`cargo-llvm-cov 0.8.7` was available during the most recent Phase 121
+all-feature workspace coverage pass. That pass reported `85.24%` region
+coverage, `82.07%` function execution, and `83.10%` line coverage. Branch
+coverage was not reported by that run. Phase 122 is documentation-only and did
+not rerun coverage.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
@@ -393,6 +400,11 @@ claim-boundary escalation.
   review files only. No committed generated package output, official endpoint
   call, official benchmark submission, score-axis population, or Level2+
   evidence exists.
+  `docs/122-phase-w-external-replay-official-submission-boundary-spec.md`
+  defines the next docs-first boundary for future external replay and official
+  submission promotion. It authorizes no implementation, external replay
+  execution, official endpoint call, credentials, generated output, accepted
+  Evidence Ledger mutation, score-axis population, or Level2+ evidence.
 - No broader Phase S ergonomics surface was authorized or tested beyond the
   implemented single-index local output boundary.
 
