@@ -23,9 +23,9 @@ the Phase 121 official-submission package materialization implementation, and
 the docs-first Phase 122 external replay and official-submission promotion
 boundary, and the Phase 123 external replay submission preflight
 implementation, and the docs-first Phase 124 external replay preflight output
-boundary, and the Phase 125 external replay preflight output implementation,
-plus the
-coverage-hardening follow-up for serialization error paths, crate error
+boundary, the Phase 125 external replay preflight output implementation, and
+the Phase 126 Phase W coverage-hardening follow-up, plus earlier
+coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
 running the available workspace gates and mapping those gates to the repo's
@@ -98,6 +98,14 @@ protected roots and repair overwrites, and still runs no external replay, calls
 no endpoint, uses no credentials, mutates no accepted Evidence Ledger,
 populates no score axes, and creates no Level2+ evidence.
 
+Phase 126 hardens focused local regression coverage for the Phase 125
+output-root surface. It adds digest-consistent negative tests for malformed
+materialized files and readback drift, plus output-root safety tests for files,
+repository overlap, parent-directory components, and symlinks. It changes no
+production API, runs no external replay, calls no endpoint, uses no credentials,
+mutates no accepted Evidence Ledger, populates no score axes, creates no
+Level2+ evidence, and does not claim 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -149,6 +157,7 @@ This report touches only:
 - `docs/123-phase-w-external-replay-submission-preflight-implementation-notes.md`
 - `docs/124-phase-w-external-replay-preflight-output-boundary-spec.md`
 - `docs/125-phase-w-external-replay-preflight-output-implementation-notes.md`
+- `docs/126-phase-w-coverage-hardening-notes.md`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
 - `docs/research/zk_external_source_index.md`
@@ -162,7 +171,7 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 125 validation.
+Run from repository root during Phase 126 validation.
 
 ```sh
 cargo fmt --all -- --check
@@ -184,9 +193,9 @@ no files.
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-`cargo-llvm-cov 0.8.7` was available during the Phase 125 all-feature workspace
-coverage pass. That pass reported `84.76%` region coverage, `81.77%` function
-execution, and `82.63%` line coverage. Branch coverage was not reported by that
+`cargo-llvm-cov 0.8.7` was available during the Phase 126 all-feature workspace
+coverage pass. That pass reported `84.89%` region coverage, `81.86%` function
+execution, and `82.82%` line coverage. Branch coverage was not reported by that
 run.
 
 These coverage percentages are local test instrumentation only; they are not
