@@ -209,6 +209,7 @@ Surface DSL
 | [docs/128-phase-soak-serialization-coverage-notes.md](docs/128-phase-soak-serialization-coverage-notes.md) | Local soak serialization coverage campaign notes. |
 | [docs/129-phase-proposal-validation-coverage-notes.md](docs/129-phase-proposal-validation-coverage-notes.md) | Local evidence append proposal validation coverage campaign notes. |
 | [docs/130-phase-phala-provider-coverage-notes.md](docs/130-phase-phala-provider-coverage-notes.md) | Local Phala operator-live provider-client coverage campaign notes. |
+| [docs/131-phase-phala-artifact-coverage-notes.md](docs/131-phase-phala-artifact-coverage-notes.md) | Local Phala captured-artifact validation coverage campaign notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -685,6 +686,14 @@ mapping, and non-UTF-8 bearer-token rejection before network construction. It
 changes no production API and does not add live Phala calls, operator live
 tests, credentials, generated operator artifacts, accepted Evidence Ledger
 mutation, score-axis population, Level2+ evidence, or 100% coverage.
+[docs/131-phase-phala-artifact-coverage-notes.md](docs/131-phase-phala-artifact-coverage-notes.md)
+records a bounded local Phala captured-artifact validation coverage campaign.
+It adds hermetic fail-closed tests for invalid JSON and hex inputs, freshness
+rejection, managed-verifier trust rejection, event-log payload drift, Docker
+digest shape, and RTMR event index drift. It changes no production API and
+does not add live Phala calls, operator live tests, credentials, generated
+operator artifacts, accepted Evidence Ledger mutation, score-axis population,
+Level2+ evidence, or 100% coverage.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
