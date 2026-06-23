@@ -300,6 +300,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "hsai-agent-admission"
+version = "0.1.0"
+dependencies = [
+ "hsai-agent-case",
+ "hsai-claim-envelope",
+ "serde",
+ "serde_json",
+ "sha2",
+]
+
+[[package]]
 name = "hsai-agent-anchor-registry"
 version = "0.1.0"
 dependencies = [

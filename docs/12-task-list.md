@@ -1279,6 +1279,45 @@ validation report point to them; focused zk-Harness dry-run validation tests
 pass; all-feature workspace coverage improves from Phase 134; normal gates
 remain hermetic; and no live/external evidence surface is created.
 
+## HSAI Track: Phase 136 Agent Admission Core
+
+Status: complete for local PCSM-governed HSAI agent admission core. See
+`docs/136-phase-hsai-agent-admission-core-notes.md`.
+
+Goal: implement the smallest local Rust core that starts leveraging the Phase
+134 PCSM-governed admission boundary: strict typed candidates, deterministic
+policy admission or rejection, append-only audit journaling, source digest
+binding, required nonclaims, and accepted claim-envelope handoff.
+
+Scope: new standalone `crates/hsai-agent-admission` crate, workspace
+membership, phase notes, and navigation/status updates only.
+
+Implemented: `AgentAdmissionCandidate`, `AgentAdmissionPolicy`,
+`AgentAdmissionDecision`, `AgentAdmissionJournalEntry`,
+`AgentAdmissionJournal`, `evaluate_admission`, and
+`accepted_claim_envelope`. The crate rejects raw untyped provider output,
+provider direct-authority requests, claim-boundary elevation, missing source
+digests, missing required nonclaims, accepted-ledger mutation requests,
+score-axis population requests, and external/formal evidence claims in the
+local path. The journal validates sequence numbers, previous-entry digests,
+candidate digests, decision digests, and replayed candidate digests.
+
+Anti-goals: recoverable-ghost runtime import or vendoring, recoverable-ghost
+artifact import, provider calls, network access, credentials or secrets,
+operator-live Phala calls, external replay execution, accepted Evidence Ledger
+mutation, official benchmark submission, generated artifact writes,
+score-axis population, DCAP/PCCS/JWKS/JWT/TLS implementation changes,
+command-line tools, UI dashboards, package runtime additions, ZK backend
+performance claims, Level2+ evidence creation, formal evidence creation,
+production-readiness claims, semantic-correctness claims, proof claims,
+benchmark-evidence claims, or global software-agent uniqueness claims.
+
+Exit criteria: Phase 136 notes exist; README, AGENTS, task list, and
+validation report point to them; `cargo test -p hsai-agent-admission` passes;
+HSAI source scans pass; repo claim-boundary and hygiene docs tests pass; full
+workspace tests pass; normal gates remain hermetic; and no live/external
+evidence surface is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
