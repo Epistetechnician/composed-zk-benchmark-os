@@ -42,6 +42,21 @@ struct FakeTransport {
     seen_credential: RefCell<Vec<u8>>,
 }
 
+#[derive(Debug)]
+struct PanicTransport;
+
+impl PhalaOperatorLiveTransport for PanicTransport {
+    fn post_json(
+        &self,
+        _endpoint: &str,
+        _bearer_token: &[u8],
+        _timeout_seconds: u64,
+        _body: &[u8],
+    ) -> Result<PhalaOperatorLiveRawResponse, PhalaOperatorLiveProviderError> {
+        panic!("transport must not be called after local preflight rejection")
+    }
+}
+
 impl FakeTransport {
     fn accepted() -> Self {
         let body = serde_json::to_vec(&response_with_raw_digest(vec![0; 32]))
@@ -236,6 +251,16 @@ fn provider_client_rejects_config_errors_before_transport() {
         Err(PhalaOperatorLiveProviderError::EmptyEndpoint)
     );
 
+    let mut zero_timeout = config();
+    zero_timeout.timeout_seconds = 0;
+    assert_eq!(
+        zero_timeout.validate(),
+        Err(PhalaOperatorLiveProviderError::TimeoutOutOfBounds {
+            actual: 0,
+            max: PHALA_OPERATOR_LIVE_MAX_TIMEOUT_SECONDS,
+        })
+    );
+
     let mut unbounded_timeout = config();
     unbounded_timeout.timeout_seconds = PHALA_OPERATOR_LIVE_MAX_TIMEOUT_SECONDS + 1;
     assert_eq!(
@@ -251,6 +276,22 @@ fn provider_client_rejects_config_errors_before_transport() {
     assert_eq!(
         no_sources.validate(),
         Err(PhalaOperatorLiveProviderError::MissingAllowedCredentialSource)
+    );
+}
+
+#[test]
+fn provider_client_rejects_unapproved_credential_before_transport() {
+    let request = request();
+    let credential = PhalaOperatorLiveCredential::new(
+        "env:HSAI_TEST_UNAPPROVED_PROVIDER_TOKEN",
+        CREDENTIAL_VALUE.as_bytes(),
+    )
+    .expect("credential");
+    let client = PhalaOperatorLiveProviderClient::new(config(), PanicTransport);
+
+    assert_eq!(
+        client.verify_with_credential(&request, &credential),
+        Err(PhalaManagedVerifierError::ClientUnavailable)
     );
 }
 
@@ -309,6 +350,18 @@ fn provider_client_maps_fail_closed_http_and_transport_errors() {
         Err(PhalaManagedVerifierError::AuthenticationFailed)
     );
 
+    let forbidden = PhalaOperatorLiveProviderClient::new(
+        config(),
+        FakeTransport::new(Ok(PhalaOperatorLiveRawResponse {
+            status_code: 403,
+            body: br#"{"error":"forbidden"}"#.to_vec(),
+        })),
+    );
+    assert_eq!(
+        forbidden.verify_with_credential(&request, &credential),
+        Err(PhalaManagedVerifierError::AuthenticationFailed)
+    );
+
     let status = PhalaOperatorLiveProviderClient::new(
         config(),
         FakeTransport::new(Ok(PhalaOperatorLiveRawResponse {
@@ -340,6 +393,15 @@ fn provider_client_maps_fail_closed_http_and_transport_errors() {
     assert_eq!(
         transport.verify_with_credential(&request, &credential),
         Err(PhalaManagedVerifierError::TransportUnavailable)
+    );
+}
+
+#[test]
+fn ureq_transport_rejects_non_utf8_credential_before_network() {
+    let transport = hsai_attestation_phala::UreqPhalaOperatorLiveTransport;
+    assert_eq!(
+        transport.post_json(ENDPOINT, &[0xff, 0xfe], 30, b"{}"),
+        Err(PhalaOperatorLiveProviderError::CredentialNotUtf8)
     );
 }
 

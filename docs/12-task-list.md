@@ -1061,6 +1061,39 @@ validation report point to them; focused evidence append proposal tests pass;
 all-feature workspace coverage improves from Phase 128; normal gates remain
 hermetic; and no live/external evidence surface is created.
 
+## Benchmark OS Track: Phase 130 Phala Provider Coverage
+
+Status: complete for local Phala operator-live provider-client coverage
+hardening. See `docs/130-phase-phala-provider-coverage-notes.md`.
+
+Goal: improve local line coverage over the opt-in Phala/dstack provider-client
+fail-closed surface without production API changes, live Phala calls, operator
+live tests, network requirements, credentials, generated operator artifacts,
+official submission, accepted Evidence Ledger mutation, score-axis population,
+Level2+ evidence, or 100% coverage claims.
+
+Scope: focused tests under
+`crates/hsai-attestation-phala/tests/phala_operator_live_provider_client.rs`,
+plus phase notes and navigation/status updates.
+
+Implemented: zero-timeout config rejection, unapproved credential-source
+rejection before transport, HTTP `403` auth mapping, and non-UTF-8 bearer-token
+rejection before network construction.
+
+Anti-goals: production source changes, new APIs, live Phala calls, operator
+live tests, network access, credentials or secrets, generated operator
+artifacts, external replay execution, official endpoint calls, accepted
+Evidence Ledger mutation, official benchmark submission, command-line tools,
+UI dashboards, package runtime additions, score-axis population, ZK backend
+performance claims, Level2+ evidence creation, formal evidence creation, SOTA
+claims, broad leaderboard claims, production-readiness claims,
+semantic-correctness claims, or claiming 100% coverage.
+
+Exit criteria: Phase 130 notes exist; README, AGENTS, task list, and
+validation report point to them; focused Phala provider-client tests pass;
+all-feature workspace coverage improves from Phase 129; normal gates remain
+hermetic; and no live/external evidence surface is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
