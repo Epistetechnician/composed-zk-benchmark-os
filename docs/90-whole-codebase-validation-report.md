@@ -25,7 +25,8 @@ boundary, and the Phase 123 external replay submission preflight
 implementation, and the docs-first Phase 124 external replay preflight output
 boundary, the Phase 125 external replay preflight output implementation, and
 the Phase 126 Phase W coverage-hardening follow-up, and the Phase 127 DSL
-coverage campaign, and the Phase 128 soak serialization coverage campaign, plus
+coverage campaign, and the Phase 128 soak serialization coverage campaign, and
+the Phase 129 proposal validation coverage campaign, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -124,6 +125,17 @@ runs no external replay, calls no endpoint, uses no credentials, mutates no
 accepted Evidence Ledger, populates no score axes, creates no Level2+ evidence,
 and does not claim 100% coverage.
 
+Phase 129 hardens focused local regression coverage for the hermetic evidence
+append proposal validation path. It adds rejection-path coverage for empty
+proposal identifiers, non-design evidence class, Level2 claim boundary,
+accepted-evidence flag assertion, empty artifact reference, unresolved blocking
+import issues, blocked claim-boundary issue kinds, forbidden official-evidence
+text, forbidden formal-proof text, and forbidden soundness-proof wording across
+proposal notes, provenance summaries, review requirement notes, and review
+findings. It changes no production API, runs no external replay, calls no
+endpoint, uses no credentials, mutates no accepted Evidence Ledger, populates
+no score axes, creates no Level2+ evidence, and does not claim 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -181,6 +193,8 @@ This report touches only:
 - `crates/zkbench-core/tests/lowering.rs`
 - `docs/128-phase-soak-serialization-coverage-notes.md`
 - `crates/zkbench-core/tests/soak_serialization.rs`
+- `docs/129-phase-proposal-validation-coverage-notes.md`
+- `crates/zkbench-core/tests/evidence_append_proposal.rs`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
 - `docs/research/zk_external_source_index.md`
@@ -194,14 +208,15 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 128 validation.
+Run from repository root during Phase 129 validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
-cargo test -p zkbench-core --test soak_serialization
+cargo test -p zkbench-core --test evidence_append_proposal
 cargo test -p zkbench-core --test oracle_eval
 cargo test -p zkbench-core --test lowering
+cargo test -p zkbench-core --test soak_serialization
 cargo test -p zkbench-core --test phase_w_promotion_preflight
 cargo test -p zkbench-core --test phase_w_accepted_ledger_append
 cargo test -p zkbench-core --test repo_claim_boundary_docs
@@ -219,9 +234,9 @@ no files.
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-`cargo-llvm-cov 0.8.7` was available during the Phase 128 all-feature workspace
-coverage pass. That pass reported `85.46%` region coverage, `82.54%` function
-execution, and `83.55%` line coverage. Branch coverage was not reported by that
+`cargo-llvm-cov 0.8.7` was available during the Phase 129 all-feature workspace
+coverage pass. That pass reported `85.58%` region coverage, `82.59%` function
+execution, and `83.74%` line coverage. Branch coverage was not reported by that
 run.
 
 These coverage percentages are local test instrumentation only; they are not
