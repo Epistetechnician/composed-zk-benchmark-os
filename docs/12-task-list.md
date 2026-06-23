@@ -1244,6 +1244,41 @@ assumption ledger, and validation report point to it; repo claim-boundary and
 hygiene docs tests pass; normal gates remain hermetic; and no live/external
 evidence surface is created.
 
+## Benchmark OS Track: Phase 135 zk-Harness Validation Coverage
+
+Status: complete for local zk-Harness dry-run validation coverage hardening.
+See `docs/135-phase-zk-harness-validation-coverage-notes.md`.
+
+Goal: improve local line coverage over the existing zk-Harness dry-run
+validation surface without production API changes, zk-Harness execution, live
+external backend execution, external replay execution, generated benchmark
+artifacts, official submission, accepted Evidence Ledger mutation, score-axis
+population, Level2+ evidence, or 100% coverage claims.
+
+Scope: focused tests under
+`crates/zkbench-core/tests/zk_harness_dry_run_plan.rs`, plus phase notes and
+navigation/status updates.
+
+Implemented: exact fail-closed validation issue-path assertions for empty plan
+identifiers, unsupported-feature warnings, planned-only and observed metric
+drift, dry-run/inert command drift, relative-path and shell-payload rejection,
+artifact local-only and digest drift, family label drift, trace local-only
+drift, and forbidden benchmark-evidence language.
+
+Anti-goals: production source changes, new APIs, zk-Harness execution, live
+external backend execution, external replay execution, network access,
+credentials or secrets, generated benchmark artifacts, official endpoint
+calls, accepted Evidence Ledger mutation, official benchmark submission,
+command-line tools, UI dashboards, package runtime additions, score-axis
+population, ZK backend performance claims, Level2+ evidence creation, formal
+evidence creation, SOTA claims, broad leaderboard claims, production-readiness
+claims, semantic-correctness claims, or claiming 100% coverage.
+
+Exit criteria: Phase 135 notes exist; README, AGENTS, task list, and
+validation report point to them; focused zk-Harness dry-run validation tests
+pass; all-feature workspace coverage improves from Phase 134; normal gates
+remain hermetic; and no live/external evidence surface is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

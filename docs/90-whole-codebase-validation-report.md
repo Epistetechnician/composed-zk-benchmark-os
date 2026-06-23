@@ -30,7 +30,8 @@ the Phase 129 proposal validation coverage campaign, and the Phase 130 Phala
 provider-client coverage campaign, and the Phase 131 Phala captured-artifact
 validation coverage campaign, and the Phase 132 local JSON adapter coverage
 campaign, and the Phase 133 zk-Harness export helper coverage campaign, and the
-docs-first Phase 134 PCSM-governed agent admission boundary, plus
+docs-first Phase 134 PCSM-governed agent admission boundary, and the Phase 135
+zk-Harness dry-run validation coverage campaign, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -189,6 +190,16 @@ live backend, creates no generated benchmark artifact, populates no score axes,
 creates no Level2+ evidence, and does not claim semantic correctness,
 production readiness, or global software-agent uniqueness.
 
+Phase 135 hardens focused local regression coverage for the existing
+zk-Harness dry-run validation surface. It adds exact issue-path coverage for
+empty identifiers, unsupported-feature warnings, metric drift, command inertness
+and relative-path drift, artifact mapping drift, family label drift, trace
+local-only drift, and forbidden benchmark-evidence language. It changes no
+production API, runs no zk-Harness execution, runs no external replay, calls no
+endpoint, uses no credentials, creates no generated benchmark artifacts, mutates
+no accepted Evidence Ledger, populates no score axes, creates no Level2+
+evidence, and does not claim 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -257,6 +268,8 @@ This report touches only:
 - `docs/133-phase-zk-harness-export-coverage-notes.md`
 - `crates/zkbench-core/tests/zk_harness_pack_mapping.rs`
 - `docs/134-pcsm-governed-agent-admission-boundary-spec.md`
+- `docs/135-phase-zk-harness-validation-coverage-notes.md`
+- `crates/zkbench-core/tests/zk_harness_dry_run_plan.rs`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
 - `docs/research/assumption-ledger.md`
@@ -271,11 +284,12 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 134 validation.
+Run from repository root during Phase 135 validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
+cargo test -p zkbench-core --test zk_harness_dry_run_plan
 cargo test -p zkbench-core --test zk_harness_pack_mapping
 cargo test -p zkbench-core --test local_json_adapter
 cargo test -p hsai-attestation-phala --test phala_artifact
@@ -295,22 +309,17 @@ cargo llvm-cov --workspace --all-features --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml' || true
 ```
 
-Phase 133 Rust/doc/coverage commands passed. Phase 134 is docs-only and was
-rechecked with `cargo fmt --all -- --check`, `git diff --check`,
-`cargo test -p zkbench-core --test repo_claim_boundary_docs`,
-`cargo test -p zkbench-core --test repo_hygiene`, and the package-surface
-check. `cargo test --workspace --all-features` also passed after the Phase 134
-docs update. The `rg` package-surface check returned no files.
+Phase 135 Rust/doc/coverage commands passed. The `rg` package-surface check
+returned no files.
 
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-`cargo-llvm-cov 0.8.7` was available during the latest all-feature workspace
-coverage pass. Phase 134 is docs-only and does not change coverage. The latest
-Phase 133 pass reported `85.94%` region coverage, `83.17%` function execution,
-and `84.22%` line coverage. The targeted
-`zkbench-core/src/adapters/zk_harness/export.rs` file reported `79.37%` region
-coverage, `80.00%` function execution, and `78.26%` line coverage. Branch
+`cargo-llvm-cov 0.8.7` was available during the Phase 135 all-feature workspace
+coverage pass. That pass reported `86.09%` region coverage, `83.22%` function
+execution, and `84.43%` line coverage. The targeted
+`zkbench-core/src/adapters/zk_harness/validation.rs` file reported `94.87%`
+region coverage, `100.00%` function execution, and `93.45%` line coverage. Branch
 coverage was not reported by that run.
 
 These coverage percentages are local test instrumentation only; they are not
