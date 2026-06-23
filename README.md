@@ -199,6 +199,7 @@ Surface DSL
 | [docs/118-phase-w-accepted-ledger-materialization-boundary-spec.md](docs/118-phase-w-accepted-ledger-materialization-boundary-spec.md) | Phase W accepted Evidence Ledger materialization docs-first boundary. |
 | [docs/119-phase-w-accepted-ledger-materialization-implementation-notes.md](docs/119-phase-w-accepted-ledger-materialization-implementation-notes.md) | Phase W accepted Evidence Ledger materialization implementation notes. |
 | [docs/120-phase-w-official-submission-package-materialization-boundary-spec.md](docs/120-phase-w-official-submission-package-materialization-boundary-spec.md) | Phase W official-submission package materialization docs-first boundary. |
+| [docs/121-phase-w-official-submission-package-materialization-implementation-notes.md](docs/121-phase-w-official-submission-package-materialization-implementation-notes.md) | Phase W official-submission package materialization implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -601,12 +602,14 @@ through a same-directory temporary file. It still creates no official benchmark
 submission, external replay evidence, score-axis population, or Level2+
 evidence.
 [docs/120-phase-w-official-submission-package-materialization-boundary-spec.md](docs/120-phase-w-official-submission-package-materialization-boundary-spec.md)
-opens the next docs-first boundary for a future local official-submission
-package output root. That future package must be derived from valid package
-metadata plus an accepted ledger JSON file and must remain digest-bound local
-review material only. This boundary authorizes no Rust implementation, no
-generated package files, no official endpoint call, no score-axis population,
-and no Level2+ evidence.
+and
+[docs/121-phase-w-official-submission-package-materialization-implementation-notes.md](docs/121-phase-w-official-submission-package-materialization-implementation-notes.md)
+record the local official-submission package output-root path. It materializes
+digest-bound local review files from valid package metadata plus an accepted
+ledger JSON file, rejects package drift, stale digests, unexpected files,
+unsafe paths, endpoint submission, and score-axis population. It still creates
+no committed generated package artifact, official endpoint call, official
+benchmark submission, external replay evidence, or Level2+ evidence.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
