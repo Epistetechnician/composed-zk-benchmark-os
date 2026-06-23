@@ -1466,6 +1466,44 @@ workspace tests pass; normal gates remain hermetic; no PCSM code or
 recoverable-ghost artifact is imported; and no live/external evidence surface
 is created.
 
+## HSAI Track: Phase 141 Admission Journal Materialization Implementation
+
+Status: complete for local admission-journal output-root materialization. See
+`docs/141-phase-hsai-admission-journal-materialization-implementation-notes.md`.
+
+Goal: implement the Phase 138 local review-bundle contract so admitted,
+rejected, and quarantined decisions can be materialized as digest-bound local
+admission metadata without becoming accepted evidence.
+
+Scope: `crates/hsai-agent-admission/src/lib.rs`, phase notes, and
+navigation/status updates only.
+
+Implemented: `AdmissionJournalMaterializationRequest`,
+`AdmissionJournalBundleManifest`, review-row, source-digest, redaction-report,
+validation-report, and materialization error types; required nonclaim helper;
+`materialize_admission_journal_bundle`; and `read_admission_journal_bundle`.
+The implementation writes only declared `admission-journal/*` files with
+SHA-256 sidecars, validates readback, preserves rejected/quarantined decisions
+as audit metadata, and rejects stale tips, invalid journals, protected roots,
+symlink roots, undeclared files, stale digests, and missing nonclaims.
+
+Anti-goals: PCSM runtime import or vendoring, recoverable-ghost artifact
+import, recoverable-ghost file parsing, source repo command execution, provider
+calls, network access, credentials or secrets, committed generated bundles,
+package runtime additions, command-line tools, accepted Evidence Ledger
+mutation, official benchmark submission, external replay execution, live
+backend execution, score-axis population, DCAP/PCCS/JWKS/JWT/TLS
+implementation changes, ZK backend performance claims, Level2+ evidence
+creation, formal evidence creation, full breakthrough-threshold admission
+claims, production-readiness claims, semantic-correctness claims, proof claims,
+benchmark-evidence claims, or global software-agent uniqueness claims.
+
+Exit criteria: Phase 141 notes exist; README, AGENTS, task list, and
+validation report point to them; `cargo test -p hsai-agent-admission` passes;
+HSAI source scans pass; repo claim-boundary and hygiene docs tests pass; full
+workspace tests pass; normal gates remain hermetic; no committed generated
+bundle is added; and no live/external evidence surface is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
