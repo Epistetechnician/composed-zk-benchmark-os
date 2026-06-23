@@ -32,7 +32,7 @@ validation coverage campaign, and the Phase 132 local JSON adapter coverage
 campaign, and the Phase 133 zk-Harness export helper coverage campaign, and the
 docs-first Phase 134 PCSM-governed agent admission boundary, and the Phase 135
 zk-Harness dry-run validation coverage campaign, and the Phase 136 HSAI agent
-admission core, plus
+admission core, and the Phase 137 HSAI admission e2e harness integration, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -214,6 +214,18 @@ score axes, creates no Level2+ evidence, and does not claim proof, benchmark
 evidence, semantic correctness, production readiness, or global software-agent
 uniqueness.
 
+Phase 137 integrates the Phase 136 admission core into the existing pure-data
+HSAI e2e harness. It adds local regression checks showing that an admitted
+closed attested claim-envelope proposal can append to the admission journal and
+then reach Phase 4 anchor registration, while rejected candidates export no
+accepted envelope and raw provider-shaped candidates are quarantined before
+registry or economy use. It imports no recoverable-ghost runtime or artifact,
+performs no provider call, uses no credentials, mutates no accepted Evidence
+Ledger, runs no external replay, runs no live backend, creates no generated
+benchmark artifact, populates no score axes, creates no Level2+ evidence, and
+does not claim proof, benchmark evidence, semantic correctness, production
+readiness, or global software-agent uniqueness.
+
 ## State Slice
 
 This report touches only:
@@ -287,6 +299,10 @@ This report touches only:
 - `docs/136-phase-hsai-agent-admission-core-notes.md`
 - `crates/hsai-agent-admission/Cargo.toml`
 - `crates/hsai-agent-admission/src/lib.rs`
+- `docs/137-phase-hsai-admission-e2e-harness-notes.md`
+- `crates/hsai-e2e-harness/Cargo.toml`
+- `crates/hsai-e2e-harness/src/lib.rs`
+- `Cargo.lock`
 - `Cargo.toml`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
@@ -300,12 +316,13 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 136 validation.
+Run from repository root during Phase 137 validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
 cargo test -p hsai-agent-admission
+cargo test -p hsai-e2e-harness
 cargo test -p hsai-e2e-harness --test claim_boundary_source_scan
 cargo test -p zkbench-core --test zk_harness_dry_run_plan
 cargo test -p zkbench-core --test zk_harness_pack_mapping
@@ -323,22 +340,21 @@ cargo test -p zkbench-core --test repo_hygiene
 cargo test --workspace --all-features
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 RUSTDOCFLAGS='-D warnings' cargo doc --workspace --all-features --no-deps
-cargo llvm-cov --workspace --all-features --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml' || true
 ```
 
-Phase 136 focused Rust/doc commands passed. `cargo test --workspace
---all-features`, workspace clippy, and workspace docs also passed after the new
-crate was added. The `rg` package-surface check returned no files.
+Phase 137 focused Rust/doc commands passed. `cargo test --workspace
+--all-features`, workspace clippy, and workspace docs also passed after the
+harness dependency was added. The `rg` package-surface check returned no files.
 
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
 `cargo-llvm-cov 0.8.7` was available during the latest Phase 135 all-feature
-workspace coverage pass. Phase 136 did not rerun coverage because this slice
-adds a new HSAI admission crate rather than a coverage-hardening campaign. The
-latest Phase 135 pass reported `86.09%` region coverage, `83.22%` function
-execution, and `84.43%` line coverage. The targeted
+workspace coverage pass. Phase 137 did not rerun coverage because this slice
+adds local HSAI admission-gated harness coverage rather than a
+coverage-hardening campaign. The latest Phase 135 pass reported `86.09%`
+region coverage, `83.22%` function execution, and `84.43%` line coverage. The targeted
 `zkbench-core/src/adapters/zk_harness/validation.rs` file reported `94.87%`
 region coverage, `100.00%` function execution, and `93.45%` line coverage.
 Branch coverage was not reported by that run.

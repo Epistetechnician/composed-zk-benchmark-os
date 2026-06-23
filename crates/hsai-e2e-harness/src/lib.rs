@@ -9,6 +9,11 @@ pub const CLAIM_BOUNDARY: &str =
 
 #[cfg(test)]
 mod tests {
+    use hsai_agent_admission::{
+        accepted_claim_envelope, evaluate_admission, AdmissionClaimBoundary, AdmissionSourceKind,
+        AdmissionVerdict, AgentAdmissionCandidate, AgentAdmissionJournal, AgentAdmissionPolicy,
+        ArtifactDigest, NonClaimLabel,
+    };
     use hsai_agent_anchor_registry::{
         anchor_acceptance_policy, anchor_tier_predicate, AgentAnchorError, AgentAnchorRegistry,
         AgentAnchorSet, AnchorTier, PHASE_4_CLAIM_BOUNDARY,
@@ -20,7 +25,7 @@ mod tests {
         report_data_binding, AttestationInput, AttestationLane, ManagedTokenVerifier, Token,
     };
     use hsai_claim_envelope::{
-        admits, conjoin, AcceptancePolicy, ClaimEnvelope, LaneId, Maturity, Predicate,
+        admits, conjoin, AcceptancePolicy, ClaimEnvelope, Hash, LaneId, Maturity, Predicate,
         PropertyKind, Rejection, SubjectId, TimeWindow, TrustRootClass,
     };
     use hsai_distinct_agent::{
@@ -170,6 +175,66 @@ mod tests {
             require_closed: true,
             at: OBSERVED_AT,
         }
+    }
+
+    fn admission_nonclaim(value: &str) -> NonClaimLabel {
+        NonClaimLabel(value.to_owned())
+    }
+
+    fn admission_artifact(id: &str, byte: u8) -> ArtifactDigest {
+        ArtifactDigest {
+            id: id.to_owned(),
+            sha256: Hash([byte; 32]),
+        }
+    }
+
+    fn admission_policy() -> AgentAdmissionPolicy {
+        AgentAdmissionPolicy::local_default(BTreeSet::from([
+            admission_nonclaim("not accepted evidence"),
+            admission_nonclaim("not semantic correctness"),
+            admission_nonclaim("not proof"),
+        ]))
+    }
+
+    fn admission_nonclaims() -> BTreeSet<NonClaimLabel> {
+        BTreeSet::from([
+            admission_nonclaim("not accepted evidence"),
+            admission_nonclaim("not semantic correctness"),
+            admission_nonclaim("not proof"),
+        ])
+    }
+
+    fn admission_artifacts() -> BTreeSet<ArtifactDigest> {
+        BTreeSet::from([
+            admission_artifact("agent-case", 1),
+            admission_artifact("claim-envelope", 2),
+        ])
+    }
+
+    fn admission_candidate(
+        id: &str,
+        subject: SubjectId,
+        envelope: ClaimEnvelope,
+    ) -> AgentAdmissionCandidate {
+        AgentAdmissionCandidate::from_envelope(
+            id,
+            subject,
+            envelope,
+            admission_artifacts(),
+            admission_nonclaims(),
+        )
+    }
+
+    fn accepted_through_admission(
+        journal: &mut AgentAdmissionJournal,
+        candidate: &AgentAdmissionCandidate,
+    ) -> Option<ClaimEnvelope> {
+        let decision = evaluate_admission(candidate, &admission_policy());
+        let accepted = accepted_claim_envelope(&decision).cloned();
+        journal
+            .append_decision(candidate, decision)
+            .expect("valid admission decision appends to journal");
+        accepted
     }
 
     fn economy_policy() -> DemurragePolicy {
@@ -679,6 +744,91 @@ mod tests {
             .revoked_runtime_anchor_ids()
             .contains(&anchor.anchor_id()));
         assert!(registry.validate_internal_state().is_ok());
+    }
+
+    #[test]
+    fn eh_17_phase4_registration_can_be_gated_by_agent_admission() {
+        let case = harness_case();
+        let anchor = harness_anchor();
+        let envelope = joined_env(&case, attestation_input(&case, anchor.clone()));
+        let candidate =
+            admission_candidate("candidate-e2e-accepted", case.subject.clone(), envelope);
+        let mut journal = AgentAdmissionJournal::default();
+        let accepted = accepted_through_admission(&mut journal, &candidate)
+            .expect("valid local claim-envelope proposal should be admitted");
+
+        let mut registry = AgentAnchorRegistry::new();
+        let tier = register_phase4(&mut registry, &case, anchor, accepted)
+            .expect("admitted closed attested envelope can reach Phase 4 registry");
+
+        assert_eq!(tier, AnchorTier::HardwareAnchoredAgent);
+        assert_eq!(journal.entries.len(), 1);
+        assert!(journal.validate().is_empty());
+        assert_eq!(
+            journal.entries[0].decision.verdict,
+            AdmissionVerdict::Accepted
+        );
+        assert_eq!(registry.active_count(), 1);
+        assert!(registry.validate_internal_state().is_ok());
+    }
+
+    #[test]
+    fn eh_18_rejected_agent_admission_candidate_does_not_export_envelope() {
+        let case = harness_case();
+        let anchor = harness_anchor();
+        let envelope = joined_env(&case, attestation_input(&case, anchor));
+        let mut candidate =
+            admission_candidate("candidate-e2e-rejected", case.subject.clone(), envelope);
+        candidate.provider_direct_authority_requested = true;
+        candidate.requested_claim_boundary = AdmissionClaimBoundary::Level2OrHigher;
+
+        let decision = evaluate_admission(&candidate, &admission_policy());
+        assert_eq!(decision.verdict, AdmissionVerdict::Rejected);
+        assert!(accepted_claim_envelope(&decision).is_none());
+
+        let mut journal = AgentAdmissionJournal::default();
+        journal
+            .append_decision(&candidate, decision)
+            .expect("rejected decision is still auditable");
+        assert!(journal.validate().is_empty());
+
+        let registry = AgentAnchorRegistry::new();
+        assert_eq!(registry.active_count(), 0);
+        assert_eq!(registry.registered_count(), 0);
+    }
+
+    #[test]
+    fn eh_19_raw_provider_admission_candidate_is_quarantined_before_economy() {
+        let case = harness_case();
+        let anchor = harness_anchor();
+        let envelope = joined_env(&case, attestation_input(&case, anchor));
+        let mut candidate =
+            admission_candidate("candidate-e2e-quarantined", case.subject.clone(), envelope);
+        candidate.source_kind = AdmissionSourceKind::ProviderResponse;
+        candidate.strict_typed = false;
+
+        let decision = evaluate_admission(&candidate, &admission_policy());
+        assert_eq!(decision.verdict, AdmissionVerdict::Quarantined);
+        assert!(accepted_claim_envelope(&decision).is_none());
+
+        let mut journal = AgentAdmissionJournal::default();
+        journal
+            .append_decision(&candidate, decision)
+            .expect("quarantined decision is still auditable");
+        assert!(journal.validate().is_empty());
+
+        let registry = IdentityRegistry::new();
+        let mut economy = Economy::new(economy_policy());
+        assert_eq!(
+            economy.earn(
+                &registry,
+                case.subject.clone(),
+                work_env(&case.subject),
+                work_policy(&case.subject),
+                0,
+            ),
+            Err(EconomyError::NotRegistered(case.subject))
+        );
     }
 
     #[derive(Clone, Copy, Debug)]

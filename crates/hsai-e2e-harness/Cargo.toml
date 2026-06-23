@@ -7,6 +7,7 @@ description = "Pure-data adversarial end-to-end harness over the local HSAI crat
 
 [dependencies]
 hsai-agent-anchor-registry = { path = "../hsai-agent-anchor-registry" }
+hsai-agent-admission = { path = "../hsai-agent-admission" }
 hsai-agent-case = { path = "../hsai-agent-case" }
 hsai-attestation = { path = "../hsai-attestation" }
 hsai-claim-envelope = { path = "../hsai-claim-envelope" }

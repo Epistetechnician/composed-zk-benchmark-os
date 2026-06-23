@@ -391,6 +391,7 @@ dependencies = [
 name = "hsai-e2e-harness"
 version = "0.1.0"
 dependencies = [
+ "hsai-agent-admission",
  "hsai-agent-anchor-registry",
  "hsai-agent-case",
  "hsai-attestation",
