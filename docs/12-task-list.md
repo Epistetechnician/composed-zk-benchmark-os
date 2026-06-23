@@ -1164,6 +1164,40 @@ validation report point to them; focused local JSON adapter tests pass;
 all-feature workspace coverage improves from Phase 131; normal gates remain
 hermetic; and no live/external evidence surface is created.
 
+## Benchmark OS Track: Phase 133 zk-Harness Export Coverage
+
+Status: complete for local zk-Harness export helper coverage hardening. See
+`docs/133-phase-zk-harness-export-coverage-notes.md`.
+
+Goal: improve local line coverage over the existing zk-Harness dry-run export
+helper surface without production API changes, zk-Harness execution, live
+external backend execution, external replay execution, generated benchmark
+artifacts, official submission, accepted Evidence Ledger mutation, score-axis
+population, Level2+ evidence, or 100% coverage claims.
+
+Scope: focused tests under
+`crates/zkbench-core/tests/zk_harness_pack_mapping.rs`, plus phase notes and
+navigation/status updates.
+
+Implemented: direct pack export helper coverage, dry-run plan JSON
+serialization/deserialization round-trip coverage, adapter manifest JSON
+serialization/deserialization round-trip coverage, and malformed JSON
+deserialization rejection for both helper families.
+
+Anti-goals: production source changes, new APIs, zk-Harness execution, live
+external backend execution, external replay execution, network access,
+credentials or secrets, generated benchmark artifacts, official endpoint
+calls, accepted Evidence Ledger mutation, official benchmark submission,
+command-line tools, UI dashboards, package runtime additions, score-axis
+population, ZK backend performance claims, Level2+ evidence creation, formal
+evidence creation, SOTA claims, broad leaderboard claims, production-readiness
+claims, semantic-correctness claims, or claiming 100% coverage.
+
+Exit criteria: Phase 133 notes exist; README, AGENTS, task list, and
+validation report point to them; focused zk-Harness pack mapping/export tests
+pass; all-feature workspace coverage improves from Phase 132; normal gates
+remain hermetic; and no live/external evidence surface is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
