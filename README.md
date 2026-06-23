@@ -219,6 +219,7 @@ Surface DSL
 | [docs/138-phase-hsai-admission-journal-materialization-boundary-spec.md](docs/138-phase-hsai-admission-journal-materialization-boundary-spec.md) | HSAI admission journal materialization docs-first boundary. |
 | [docs/139-phase-pcsm-bounded-proof-handoff-intake-boundary-spec.md](docs/139-phase-pcsm-bounded-proof-handoff-intake-boundary-spec.md) | PCSM CL12 bounded-proof handoff intake docs-first boundary. |
 | [docs/140-phase-pcsm-bounded-proof-handoff-intake-metadata-notes.md](docs/140-phase-pcsm-bounded-proof-handoff-intake-metadata-notes.md) | PCSM CL12 bounded-proof handoff intake metadata implementation notes. |
+| [docs/141-phase-hsai-admission-journal-materialization-implementation-notes.md](docs/141-phase-hsai-admission-journal-materialization-implementation-notes.md) | HSAI admission journal materialization implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -789,6 +790,15 @@ nonclaims before mapping to an `AdmissionSourceKind::PcsmBoundedProofHandoff`
 candidate. It reads no recoverable-ghost files, imports no PCSM code or
 artifacts, accepts no staged or dirty source snapshot, and exports no accepted
 claim envelope by itself.
+[docs/141-phase-hsai-admission-journal-materialization-implementation-notes.md](docs/141-phase-hsai-admission-journal-materialization-implementation-notes.md)
+implements local admission-journal bundle materialization in
+`hsai-agent-admission`. It writes only declared `admission-journal/*` files
+with SHA-256 sidecars under a caller-selected output root, validates readback,
+preserves accepted/rejected/quarantined decisions as local review metadata, and
+rejects protected roots, stale tips, undeclared files, stale digests, missing
+nonclaims, symlink roots, and invalid journals. It creates no committed bundle,
+accepted Evidence Ledger mutation, proof, benchmark evidence, score axes, or
+Level2+ evidence.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
