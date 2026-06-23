@@ -29,7 +29,7 @@ coverage campaign, and the Phase 128 soak serialization coverage campaign, and
 the Phase 129 proposal validation coverage campaign, and the Phase 130 Phala
 provider-client coverage campaign, and the Phase 131 Phala captured-artifact
 validation coverage campaign, and the Phase 132 local JSON adapter coverage
-campaign, plus
+campaign, and the Phase 133 zk-Harness export helper coverage campaign, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -168,6 +168,16 @@ endpoint, uses no credentials, creates no generated benchmark artifacts,
 mutates no accepted Evidence Ledger, populates no score axes, creates no
 Level2+ evidence, and does not claim 100% coverage.
 
+Phase 133 hardens focused local regression coverage for the existing
+zk-Harness dry-run export helper surface. It adds direct pack export helper
+coverage, dry-run plan JSON serialization/deserialization round-trip coverage,
+adapter manifest JSON serialization/deserialization round-trip coverage, and
+malformed JSON deserialization rejection for both helper families. It changes
+no production API, runs no zk-Harness execution, runs no external replay,
+calls no endpoint, uses no credentials, creates no generated benchmark
+artifacts, mutates no accepted Evidence Ledger, populates no score axes,
+creates no Level2+ evidence, and does not claim 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -233,6 +243,8 @@ This report touches only:
 - `crates/hsai-attestation-phala/tests/phala_artifact.rs`
 - `docs/132-phase-local-json-adapter-coverage-notes.md`
 - `crates/zkbench-core/tests/local_json_adapter.rs`
+- `docs/133-phase-zk-harness-export-coverage-notes.md`
+- `crates/zkbench-core/tests/zk_harness_pack_mapping.rs`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
 - `docs/research/zk_external_source_index.md`
@@ -246,11 +258,12 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 132 validation.
+Run from repository root during Phase 133 validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
+cargo test -p zkbench-core --test zk_harness_pack_mapping
 cargo test -p zkbench-core --test local_json_adapter
 cargo test -p hsai-attestation-phala --test phala_artifact
 cargo test -p hsai-attestation-phala --features operator-live-provider --test phala_operator_live_provider_client
@@ -275,11 +288,11 @@ no files.
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-`cargo-llvm-cov 0.8.7` was available during the Phase 132 all-feature workspace
-coverage pass. That pass reported `85.91%` region coverage, `83.08%` function
-execution, and `84.19%` line coverage. The targeted
-`zkbench-core/src/adapters/local_json.rs` file reported `95.56%` region
-coverage, `96.67%` function execution, and `96.44%` line coverage. Branch
+`cargo-llvm-cov 0.8.7` was available during the Phase 133 all-feature workspace
+coverage pass. That pass reported `85.94%` region coverage, `83.17%` function
+execution, and `84.22%` line coverage. The targeted
+`zkbench-core/src/adapters/zk_harness/export.rs` file reported `79.37%` region
+coverage, `80.00%` function execution, and `78.26%` line coverage. Branch
 coverage was not reported by that run.
 
 These coverage percentages are local test instrumentation only; they are not

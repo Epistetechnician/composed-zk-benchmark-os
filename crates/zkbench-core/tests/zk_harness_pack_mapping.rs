@@ -1,7 +1,10 @@
 use tempfile::tempdir;
 use zkbench_core::{
-    apply_mutation_pass, build_local_replay_manifest_for_instance,
-    build_zk_harness_dry_run_plan_from_pack, generate_instance, run_local_replay, BadCountersPass,
+    apply_mutation_pass, build_default_zk_harness_adapter_manifest,
+    build_local_replay_manifest_for_instance, build_zk_harness_dry_run_plan_from_pack,
+    deserialize_zk_harness_dry_run_plan_json, deserialize_zk_harness_manifest_json,
+    export_pack_to_zk_harness_dry_run_plan, generate_instance, run_local_replay,
+    serialize_zk_harness_dry_run_plan_json, serialize_zk_harness_manifest_json, BadCountersPass,
     BenchmarkPackFileRole, BenchmarkPackReader, BenchmarkPackWriter, CorruptedGuardsPass,
     EvidenceLedger, ExpectedVerdict, GeneratorConfig, InstanceParams, MissingConstraintsPass,
     MutationClass,
@@ -125,4 +128,49 @@ fn pack_mapping_preserves_ids_digests_and_candidate_labels() {
     assert!(mapping.artifact_mappings.iter().any(|artifact| {
         artifact.source_role == BenchmarkPackFileRole::ReplayResult && artifact.local_only
     }));
+}
+
+#[test]
+fn zk_harness_export_helpers_roundtrip_and_fail_closed() {
+    let baseline = generate_instance(
+        GeneratorConfig::baseline_fsm().seed(91),
+        InstanceParams::default(),
+    )
+    .expect("baseline should generate");
+    let replay_manifest = build_local_replay_manifest_for_instance(&baseline)
+        .expect("baseline manifest should build");
+    let replay_result = run_local_replay(&replay_manifest).expect("local replay should run");
+
+    let dir = tempdir().expect("tempdir should be available");
+    BenchmarkPackWriter::new("phase_g_export_pack")
+        .with_generated_instance(baseline)
+        .with_replay_manifest(replay_manifest)
+        .with_replay_result(replay_result)
+        .write_to(dir.path())
+        .expect("export pack should write");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("pack reader should load");
+    let plan = export_pack_to_zk_harness_dry_run_plan(&reader)
+        .expect("direct export helper should build a valid dry-run plan");
+    assert_eq!(plan.pack_mapping.source_pack_id, "phase_g_export_pack");
+
+    let plan_json = serialize_zk_harness_dry_run_plan_json(&plan).expect("plan should serialize");
+    let parsed_plan =
+        deserialize_zk_harness_dry_run_plan_json(&plan_json).expect("plan should deserialize");
+    assert_eq!(parsed_plan.id, plan.id);
+    assert_eq!(
+        parsed_plan.pack_mapping.source_pack_id,
+        plan.pack_mapping.source_pack_id
+    );
+
+    let manifest = build_default_zk_harness_adapter_manifest();
+    let manifest_json =
+        serialize_zk_harness_manifest_json(&manifest).expect("manifest should serialize");
+    let parsed_manifest =
+        deserialize_zk_harness_manifest_json(&manifest_json).expect("manifest should deserialize");
+    assert_eq!(parsed_manifest.id, manifest.id);
+    assert_eq!(parsed_manifest.scope, manifest.scope);
+
+    assert!(deserialize_zk_harness_manifest_json("{not json").is_err());
+    assert!(deserialize_zk_harness_dry_run_plan_json("{not json").is_err());
 }
