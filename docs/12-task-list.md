@@ -1129,6 +1129,41 @@ validation report point to them; focused Phala artifact validation tests pass;
 all-feature workspace coverage improves from Phase 130; normal gates remain
 hermetic; and no live/external evidence surface is created.
 
+## Benchmark OS Track: Phase 132 Local JSON Adapter Coverage
+
+Status: complete for local JSON adapter coverage hardening. See
+`docs/132-phase-local-json-adapter-coverage-notes.md`.
+
+Goal: improve local line coverage over the existing local JSON adapter without
+production API changes, live external backend execution, external replay
+execution, generated benchmark artifacts, official submission, accepted
+Evidence Ledger mutation, score-axis population, Level2+ evidence, or 100%
+coverage claims.
+
+Scope: focused tests under `crates/zkbench-core/tests/local_json_adapter.rs`,
+plus phase notes and navigation/status updates.
+
+Implemented: claim-boundary rejection, adapter-id mismatch rejection, missing
+generated subject payload rejection, missing mutated subject payload rejection,
+selected-trace drift rejection, mock replay mode without a mock command
+rejection, mock capability-gap and inconclusive status mapping, legacy
+`BackendAdapter::prepare_replay` manifest behavior, and
+`BackendAdapter::normalize_result` empty-evidence rejection.
+
+Anti-goals: production source changes, new APIs, live external backend
+execution, external replay execution, network access, credentials or secrets,
+generated benchmark artifacts, official endpoint calls, accepted Evidence
+Ledger mutation, official benchmark submission, command-line tools,
+UI dashboards, package runtime additions, score-axis population, ZK backend
+performance claims, Level2+ evidence creation, formal evidence creation, SOTA
+claims, broad leaderboard claims, production-readiness claims,
+semantic-correctness claims, or claiming 100% coverage.
+
+Exit criteria: Phase 132 notes exist; README, AGENTS, task list, and
+validation report point to them; focused local JSON adapter tests pass;
+all-feature workspace coverage improves from Phase 131; normal gates remain
+hermetic; and no live/external evidence surface is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
