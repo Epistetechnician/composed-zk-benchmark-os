@@ -820,6 +820,38 @@ artifact shape, rejection list, and required tests are explicit; and no Rust
 source, generated output, official endpoint call, accepted Evidence Ledger
 mutation, score-axis population, or Level2+ evidence is created.
 
+## Benchmark OS Track: Phase W External Replay Submission Preflight Implementation
+
+Status: complete for local preflight metadata. See
+`docs/123-phase-w-external-replay-submission-preflight-implementation-notes.md`.
+
+Goal: implement the local Phase W preflight that validates accepted-ledger JSON,
+Phase 121 package output, expected digests, operator acknowledgement, future
+output-root safety, redaction policy, and claim-class separation before any
+future external replay or official-submission operation.
+
+Scope: additive Rust source and focused tests under `crates/zkbench-core`, plus
+phase notes and navigation/status updates. The implementation emits local
+metadata only and keeps all external replay, endpoint submission,
+accepted-ledger mutation, generated-artifact write, and score-axis flags false.
+
+Anti-goals: external replay execution, official endpoint calls, credentials or
+secrets, generated output materialization, accepted Evidence Ledger mutation,
+official benchmark submission, live backend execution, network access,
+command-line tools, UI dashboards, package runtime additions, score-axis
+population, ZK backend performance claims, Level2+ evidence creation, formal
+evidence creation, SOTA claims, broad leaderboard claims, production-readiness
+claims, or semantic-correctness claims.
+
+Exit criteria: Phase 123 implementation notes exist; preflight request/report,
+validation, deterministic JSON, Markdown, and digest helpers are exported from
+`zkbench-core`; focused tests cover valid local preflight, digest drift,
+operator acknowledgement, local-only promotion, score-axis rejection, endpoint
+attempt rejection, protected-root rejection, and no live runtime surface; and no
+external replay, endpoint call, credential use, generated output, accepted
+Evidence Ledger mutation, score-axis population, or Level2+ evidence is
+created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
