@@ -753,6 +753,39 @@ list, and AGENTS point to it; the future output shape and required rejections
 are explicit; and no Rust source, generated package output, official endpoint
 call, score-axis population, or Level2+ evidence is created.
 
+## Benchmark OS Track: Phase W Official Submission Package Materialization Implementation
+
+Status: complete for local output-root implementation. See
+`docs/121-phase-w-official-submission-package-materialization-implementation-notes.md`.
+
+Goal: materialize the Phase W official-submission package as digest-bound local
+review files after accepted-ledger validation, without creating an official
+benchmark submission, committed package artifact, score-axis population, or
+Level2+ evidence.
+
+Scope: additive Rust source and focused tests under `crates/zkbench-core`, plus
+phase notes and navigation/status updates. The implementation requires valid
+`OfficialSubmissionPackageMetadata`, an existing valid accepted ledger JSON
+file, accepted-evidence ids present in that ledger, required non-claim labels,
+`submits_to_official_endpoint == false`, deterministic JSON and Markdown
+outputs, digest sidecars, protected-root rejection, symlink rejection,
+path-traversal rejection, stale-digest rejection, unexpected-file rejection,
+and overwrite package-drift rejection.
+
+Anti-goals: generated committed package artifacts, official benchmark
+submission, external replay execution, live backend execution, network access,
+credentials or secrets, command-line tools, UI dashboards, package runtime
+additions, score-axis population, ZK backend performance claims, Level2+
+evidence creation, formal evidence creation, broad leaderboard claims, or
+treating local package output as an official benchmark submission.
+
+Exit criteria: Phase 121 implementation notes exist; the local package writer
+and reader are exported from `zkbench-core`; focused tests cover declared files,
+accepted-ledger validation, unsafe paths, digest drift, overwrite drift,
+external-submission rejection, and no endpoint runtime surface; and no generated
+package artifact, official endpoint call, score-axis population, or Level2+
+evidence is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

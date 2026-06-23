@@ -1,22 +1,25 @@
 use std::path::Path;
 
 use zkbench_core::{
-    build_reviewed_promotion_preflight_report, compute_artifact_digest_bytes,
-    compute_official_submission_package_metadata_digest,
+    apply_accepted_ledger_append_transaction, build_reviewed_promotion_preflight_report,
+    compute_artifact_digest_bytes, compute_official_submission_package_metadata_digest,
     compute_reviewed_promotion_preflight_report_digest, create_evidence_append_preview,
     create_evidence_record_candidate, deserialize_official_submission_package_metadata_json,
-    deserialize_reviewed_promotion_preflight_report_json,
+    deserialize_reviewed_promotion_preflight_report_json, read_official_submission_package_outputs,
     render_official_submission_package_markdown, render_reviewed_promotion_preflight_markdown,
     required_reviewed_promotion_preflight_non_claims, review_evidence_append_proposal,
     serialize_official_submission_package_metadata_json,
     serialize_reviewed_promotion_preflight_report_json,
+    validate_accepted_ledger_append_transaction_request,
     validate_official_submission_package_metadata, validate_reviewed_promotion_preflight_request,
-    ArtifactDigest, ArtifactKind, ArtifactRole, ClaimBoundary, EvidenceAcceptancePolicy,
-    EvidenceAppendPreviewStatus, EvidenceClass, EvidenceLedger, EvidenceReviewChecklist,
-    EvidenceReviewDecisionKind, EvidenceReviewerRole, OfficialSubmissionPackageIssueKind,
-    OfficialSubmissionPackageMetadata, OfficialSubmissionPackageVersion,
+    write_official_submission_package_outputs, AcceptedLedgerAppendTransactionRequest,
+    AcceptedLedgerAppendTransactionVersion, ArtifactDigest, ArtifactKind, ArtifactRole,
+    ClaimBoundary, EvidenceAcceptancePolicy, EvidenceAppendPreviewStatus, EvidenceClass,
+    EvidenceLedger, EvidenceReviewChecklist, EvidenceReviewDecisionKind, EvidenceReviewerRole,
+    OfficialSubmissionPackageIssueKind, OfficialSubmissionPackageMetadata,
+    OfficialSubmissionPackageOutputRequest, OfficialSubmissionPackageVersion,
     ReviewedPromotionPreflightIssueKind, ReviewedPromotionPreflightRequest,
-    ReviewedPromotionPreflightVersion,
+    ReviewedPromotionPreflightVersion, OFFICIAL_SUBMISSION_PACKAGE_MARKDOWN_DIGEST_PATH,
 };
 
 fn candidate_and_decision() -> (
@@ -88,6 +91,59 @@ fn digest(label: &str) -> ArtifactDigest {
         Some(ArtifactKind::Other),
         Some(ArtifactRole::Report),
     )
+}
+
+fn valid_append_transaction() -> (EvidenceLedger, AcceptedLedgerAppendTransactionRequest) {
+    let ledger = EvidenceLedger::new();
+    let preflight_request = valid_request();
+    let preflight_report = build_reviewed_promotion_preflight_report(&preflight_request);
+    assert!(
+        preflight_report.validation.valid,
+        "{:?}",
+        preflight_report.validation.issues
+    );
+    let request = AcceptedLedgerAppendTransactionRequest {
+        transaction_id: "phase_w_submission_package_seed_append".to_string(),
+        version: AcceptedLedgerAppendTransactionVersion::default(),
+        target_evidence_ledger_id: "accepted-ledger-local-fixture".to_string(),
+        expected_current_ledger_tip: preflight_request.expected_current_ledger_tip.clone(),
+        preflight_request,
+        preflight_report,
+        notes: vec!["local append transaction stays below Level2".to_string()],
+    };
+    let validation = validate_accepted_ledger_append_transaction_request(&request, &ledger);
+    assert!(validation.valid, "{:?}", validation.issues);
+    (ledger, request)
+}
+
+fn accepted_ledger_and_package() -> (EvidenceLedger, OfficialSubmissionPackageMetadata) {
+    let (mut ledger, transaction) = valid_append_transaction();
+    apply_accepted_ledger_append_transaction(&transaction, &mut ledger)
+        .expect("seed accepted ledger append should work");
+    let accepted_id = ledger.entries[0].entry_digest.hex_digest.clone();
+    let package = OfficialSubmissionPackageMetadata {
+        package_id: "phase_w_local_submission_package".to_string(),
+        version: OfficialSubmissionPackageVersion::default(),
+        benchmark_suite_id: "zkbench-local-suite".to_string(),
+        backend_id: "external-backend-fixture".to_string(),
+        backend_version: "0.0.0-fixture".to_string(),
+        source_pack_ids: vec!["pack_local_fixture".to_string()],
+        external_replay_environment_provenance: vec![
+            "environment provenance digest declared by reviewed evidence".to_string(),
+        ],
+        artifact_digests: vec![digest("submission artifact")],
+        accepted_evidence_ledger_entry_ids: vec![accepted_id],
+        review_decision_ids: vec!["review_decision_fixture".to_string()],
+        claim_boundary: ClaimBoundary::Level1LocalReplay,
+        non_claims: required_reviewed_promotion_preflight_non_claims()
+            .into_iter()
+            .map(str::to_string)
+            .collect(),
+        reproduction_instructions: vec!["reproduce from declared package inputs".to_string()],
+        known_limitations: vec!["scope is limited to reviewed entry ids".to_string()],
+        submits_to_official_endpoint: false,
+    };
+    (ledger, package)
 }
 
 #[test]
@@ -235,6 +291,198 @@ fn official_submission_metadata_requires_accepted_evidence_and_remains_inert() {
 }
 
 #[test]
+fn official_submission_package_outputs_write_read_declared_files_only() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let ledger_path = dir.path().join("accepted-ledger.json");
+    let output_root = dir.path().join("package-output");
+    let (ledger, package) = accepted_ledger_and_package();
+    ledger
+        .save_json(&ledger_path)
+        .expect("accepted ledger should save");
+
+    let request = OfficialSubmissionPackageOutputRequest {
+        output_root: output_root.clone(),
+        accepted_ledger_path: ledger_path.clone(),
+        package: package.clone(),
+        protected_paths: vec![ledger_path],
+        overwrite: false,
+    };
+    let output =
+        write_official_submission_package_outputs(&request).expect("package output should write");
+    assert!(!output.validation_report.creates_official_submission);
+    assert!(!output.validation_report.submits_to_official_endpoint);
+    assert!(!output.validation_report.populates_score_axes);
+    assert_eq!(
+        output
+            .validation_report
+            .matched_accepted_evidence_ledger_entry_ids,
+        package.accepted_evidence_ledger_entry_ids
+    );
+
+    let read = read_official_submission_package_outputs(&output_root, &request.protected_paths)
+        .expect("package output should read");
+    assert_eq!(output, read);
+}
+
+#[test]
+fn official_submission_package_outputs_reject_missing_accepted_ledger() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let (_, package) = accepted_ledger_and_package();
+    let request = OfficialSubmissionPackageOutputRequest {
+        output_root: dir.path().join("package-output"),
+        accepted_ledger_path: dir.path().join("missing-ledger.json"),
+        package,
+        protected_paths: Vec::new(),
+        overwrite: false,
+    };
+
+    let error = write_official_submission_package_outputs(&request)
+        .expect_err("missing accepted ledger should reject");
+    assert!(error
+        .to_string()
+        .contains("accepted ledger file is missing"));
+}
+
+#[test]
+fn official_submission_package_outputs_reject_absent_accepted_evidence_id() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let ledger_path = dir.path().join("accepted-ledger.json");
+    let (ledger, mut package) = accepted_ledger_and_package();
+    ledger
+        .save_json(&ledger_path)
+        .expect("accepted ledger should save");
+    package.accepted_evidence_ledger_entry_ids = vec!["absent-entry".to_string()];
+    let request = OfficialSubmissionPackageOutputRequest {
+        output_root: dir.path().join("package-output"),
+        accepted_ledger_path: ledger_path,
+        package,
+        protected_paths: Vec::new(),
+        overwrite: false,
+    };
+
+    let error = write_official_submission_package_outputs(&request)
+        .expect_err("absent accepted evidence id should reject");
+    assert!(error.to_string().contains("absent from accepted ledger"));
+}
+
+#[test]
+fn official_submission_package_outputs_reject_external_submission_flag() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let ledger_path = dir.path().join("accepted-ledger.json");
+    let (ledger, mut package) = accepted_ledger_and_package();
+    ledger
+        .save_json(&ledger_path)
+        .expect("accepted ledger should save");
+    package.submits_to_official_endpoint = true;
+    let request = OfficialSubmissionPackageOutputRequest {
+        output_root: dir.path().join("package-output"),
+        accepted_ledger_path: ledger_path,
+        package,
+        protected_paths: Vec::new(),
+        overwrite: false,
+    };
+
+    let error = write_official_submission_package_outputs(&request)
+        .expect_err("external submission flag should reject");
+    assert!(error.to_string().contains("ExternalSubmissionAttempted"));
+}
+
+#[test]
+fn official_submission_package_outputs_reject_protected_overlap() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let ledger_path = dir.path().join("accepted-ledger.json");
+    let (ledger, package) = accepted_ledger_and_package();
+    ledger
+        .save_json(&ledger_path)
+        .expect("accepted ledger should save");
+    let request = OfficialSubmissionPackageOutputRequest {
+        output_root: dir.path().join("package-output"),
+        accepted_ledger_path: ledger_path,
+        package,
+        protected_paths: vec![dir.path().to_path_buf()],
+        overwrite: false,
+    };
+
+    let error = write_official_submission_package_outputs(&request)
+        .expect_err("protected root overlap should reject");
+    assert!(error.to_string().contains("overlaps protected path"));
+}
+
+#[test]
+fn official_submission_package_outputs_reject_overwrite_package_drift() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let ledger_path = dir.path().join("accepted-ledger.json");
+    let output_root = dir.path().join("package-output");
+    let (ledger, package) = accepted_ledger_and_package();
+    ledger
+        .save_json(&ledger_path)
+        .expect("accepted ledger should save");
+    let request = OfficialSubmissionPackageOutputRequest {
+        output_root: output_root.clone(),
+        accepted_ledger_path: ledger_path.clone(),
+        package,
+        protected_paths: Vec::new(),
+        overwrite: false,
+    };
+    write_official_submission_package_outputs(&request).expect("package output should write");
+
+    let mut drifted_request = request.clone();
+    drifted_request.package.review_decision_ids = vec!["different-review-decision".to_string()];
+    drifted_request.overwrite = true;
+
+    let error = write_official_submission_package_outputs(&drifted_request)
+        .expect_err("overwrite drift should reject");
+    assert!(error
+        .to_string()
+        .contains("does not match supplied package"));
+}
+
+#[test]
+fn official_submission_package_outputs_reject_stale_digest_and_unexpected_files() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let ledger_path = dir.path().join("accepted-ledger.json");
+    let output_root = dir.path().join("package-output");
+    let (ledger, package) = accepted_ledger_and_package();
+    ledger
+        .save_json(&ledger_path)
+        .expect("accepted ledger should save");
+    let request = OfficialSubmissionPackageOutputRequest {
+        output_root: output_root.clone(),
+        accepted_ledger_path: ledger_path,
+        package,
+        protected_paths: Vec::new(),
+        overwrite: false,
+    };
+    let output =
+        write_official_submission_package_outputs(&request).expect("package output should write");
+
+    std::fs::write(
+        output_root.join(OFFICIAL_SUBMISSION_PACKAGE_MARKDOWN_DIGEST_PATH),
+        b"stale\n",
+    )
+    .expect("digest sidecar should tamper");
+    let stale = read_official_submission_package_outputs(&output_root, &[])
+        .expect_err("stale digest should reject");
+    assert!(stale.to_string().contains("digest sidecar"));
+
+    std::fs::write(
+        output_root.join(OFFICIAL_SUBMISSION_PACKAGE_MARKDOWN_DIGEST_PATH),
+        format!("{}\n", output.package_markdown_digest.hex_digest).as_bytes(),
+    )
+    .expect("digest sidecar should restore");
+    std::fs::write(
+        output_root.join("official-submission-package/extra.txt"),
+        b"extra",
+    )
+    .expect("extra file should write");
+    let unexpected = read_official_submission_package_outputs(&output_root, &[])
+        .expect_err("unexpected file should reject");
+    assert!(unexpected
+        .to_string()
+        .contains("unexpected file or directory"));
+}
+
+#[test]
 fn phase_w_source_scan_exposes_no_mutation_runtime_or_submission_surface() {
     let source_path = Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("src")
@@ -261,4 +509,33 @@ fn phase_w_source_scan_exposes_no_mutation_runtime_or_submission_surface() {
             "Phase W preflight must not expose {forbidden}"
         );
     }
+}
+
+#[test]
+fn official_submission_output_source_scan_exposes_no_endpoint_runtime_or_credentials() {
+    let source_path = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("src")
+        .join("evidence")
+        .join("official_submission_output.rs");
+    let source = std::fs::read_to_string(source_path).expect("source should read");
+
+    for forbidden in [
+        "std::process",
+        "Command::new",
+        "std::net",
+        "TcpStream",
+        "reqwest",
+        "ureq",
+        "submit_to_",
+        "http://",
+        "https://",
+        "std::env::var",
+    ] {
+        assert!(
+            !source.contains(forbidden),
+            "official submission output must not expose {forbidden}"
+        );
+    }
+    assert!(source.contains("EvidenceLedger::load_json"));
+    assert!(source.contains("submits_to_official_endpoint: false"));
 }

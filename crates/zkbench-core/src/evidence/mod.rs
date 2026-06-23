@@ -11,6 +11,7 @@ pub mod digest;
 pub mod eligibility;
 pub mod escalation_guard;
 pub mod ledger;
+pub mod official_submission_output;
 pub mod promotion_preflight;
 pub mod review;
 pub mod review_ledger;
@@ -75,6 +76,15 @@ pub use ledger::{
     EvidenceAppendPolicy, EvidenceChainDigest, EvidenceLedger, EvidenceLedgerEntry,
     EvidenceLedgerSummary, EvidenceLedgerSummaryCount, EvidenceLedgerValidation,
     EvidenceLedgerValidationError, EvidenceLedgerVersion,
+};
+pub use official_submission_output::{
+    read_official_submission_package_outputs, write_official_submission_package_outputs,
+    OfficialSubmissionPackageOutput, OfficialSubmissionPackageOutputRequest,
+    OfficialSubmissionPackageOutputValidationReport,
+    OFFICIAL_SUBMISSION_PACKAGE_MARKDOWN_DIGEST_PATH, OFFICIAL_SUBMISSION_PACKAGE_MARKDOWN_PATH,
+    OFFICIAL_SUBMISSION_PACKAGE_METADATA_DIGEST_PATH, OFFICIAL_SUBMISSION_PACKAGE_METADATA_PATH,
+    OFFICIAL_SUBMISSION_PACKAGE_VALIDATION_DIGEST_PATH,
+    OFFICIAL_SUBMISSION_PACKAGE_VALIDATION_PATH,
 };
 pub use promotion_preflight::{
     build_reviewed_promotion_preflight_report, compute_official_submission_package_metadata_digest,

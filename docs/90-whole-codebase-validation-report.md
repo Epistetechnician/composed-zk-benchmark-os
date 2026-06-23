@@ -17,8 +17,9 @@ docs-first Phase 114 reviewed promotion preflight implementation boundary,
 the Phase 115 reviewed promotion preflight implementation, the docs-first
 Phase 116 accepted-ledger append boundary, the Phase 117 accepted-ledger append
 implementation, the docs-first Phase 118 accepted-ledger materialization
-boundary, the Phase 119 accepted-ledger materialization implementation, and the
-docs-first Phase 120 official-submission package materialization boundary, plus
+boundary, the Phase 119 accepted-ledger materialization implementation, the
+docs-first Phase 120 official-submission package materialization boundary, and
+the Phase 121 official-submission package materialization implementation, plus
 the
 coverage-hardening follow-up for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -52,10 +53,13 @@ transaction inputs. They do not create official accepted evidence, perform
 official submission, run external replay, create generated benchmark artifacts,
 or populate score axes.
 
-Phase 120 opens the docs-first boundary for a future local official-submission
-package output root. It authorizes no Rust implementation, no generated package
-files, no official endpoint call, no score-axis population, and no Level2+
-evidence.
+Phase 120 opens the docs-first boundary for a local official-submission package
+output root. Phase 121 implements that local output plumbing in `zkbench-core`:
+valid package metadata plus a valid accepted ledger JSON can materialize
+declared local package files and digest sidecars after fail-closed validation.
+It creates no committed generated package artifact, performs no official
+endpoint call, submits no official benchmark result, populates no score axes,
+and creates no Level2+ evidence.
 
 ## State Slice
 
@@ -91,6 +95,7 @@ This report touches only:
 - `crates/zkbench-core/src/evidence/promotion_preflight.rs`
 - `crates/zkbench-core/src/evidence/accepted_append.rs`
 - `crates/zkbench-core/src/evidence/accepted_append_output.rs`
+- `crates/zkbench-core/src/evidence/official_submission_output.rs`
 - `crates/zkbench-core/tests/phase_w_promotion_preflight.rs`
 - `crates/zkbench-core/tests/phase_w_accepted_ledger_append.rs`
 - `docs/114-phase-w-promotion-preflight-boundary-spec.md`
@@ -100,6 +105,7 @@ This report touches only:
 - `docs/118-phase-w-accepted-ledger-materialization-boundary-spec.md`
 - `docs/119-phase-w-accepted-ledger-materialization-implementation-notes.md`
 - `docs/120-phase-w-official-submission-package-materialization-boundary-spec.md`
+- `docs/121-phase-w-official-submission-package-materialization-implementation-notes.md`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
 - `docs/research/zk_external_source_index.md`
@@ -113,16 +119,19 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 120 validation.
+Run from repository root during Phase 121 validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
+cargo test -p zkbench-core --test phase_w_promotion_preflight
+cargo test -p zkbench-core --test phase_w_accepted_ledger_append
 cargo test -p zkbench-core --test repo_claim_boundary_docs
 cargo test -p zkbench-core --test repo_hygiene
 cargo test --workspace --all-features
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 RUSTDOCFLAGS='-D warnings' cargo doc --workspace --all-features --no-deps
+cargo llvm-cov --workspace --all-features --summary-only
 ```
 
 All commands passed.
@@ -130,11 +139,10 @@ All commands passed.
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-`cargo-llvm-cov 0.8.7` was available during the most recent Phase 119
-all-feature workspace coverage pass. That pass reported `85.49%` region
-coverage, `82.52%` function execution, and `83.22%` line coverage. Branch
-coverage was not reported by that run. Phase 120 is documentation-only and did
-not rerun coverage.
+`cargo-llvm-cov 0.8.7` was available during the Phase 121 all-feature workspace
+coverage pass. That pass reported `85.24%` region coverage, `82.07%` function
+execution, and `83.10%` line coverage. Branch coverage was not reported by that
+run.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
@@ -180,6 +188,12 @@ The suite exercises the repo as a set of bounded local systems:
   rejection, partial-campaign rejection, corrupted-root non-repair, accepted
   Evidence Ledger non-mutation, score-axis non-population, and protected-path
   overlap hardening.
+- Phase W reviewed promotion preflight metadata, accepted-ledger append
+  validation, local accepted-ledger JSON materialization, local
+  official-submission package output plumbing, accepted-ledger id matching,
+  deterministic package JSON/Markdown output, digest sidecars, stale-digest
+  rejection, unexpected-file rejection, overwrite package-drift rejection,
+  official-endpoint non-submission, and score-axis non-population.
 - HSAI claim-envelope algebra, agent-case lanes, distinct-agent registry,
   managed attestation, offline managed-JWT verification, Phala fixture and
   captured-artifact validation, hermetic fake-client live-verifier surface,
@@ -372,10 +386,13 @@ claim-boundary escalation.
   temporary JSON file. No official benchmark submission, external replay
   evidence, score-axis population, or Level2+ evidence exists.
   `docs/120-phase-w-official-submission-package-materialization-boundary-spec.md`
-  defines the next docs-first boundary for future local package materialization
-  from valid official-submission metadata plus an accepted ledger JSON file.
-  It authorizes no Rust implementation, generated package output, official
-  endpoint call, score-axis population, or Level2+ evidence.
+  and
+  `docs/121-phase-w-official-submission-package-materialization-implementation-notes.md`
+  record local package materialization from valid official-submission metadata
+  plus an accepted ledger JSON file. It can write declared digest-bound local
+  review files only. No committed generated package output, official endpoint
+  call, official benchmark submission, score-axis population, or Level2+
+  evidence exists.
 - No broader Phase S ergonomics surface was authorized or tested beyond the
   implemented single-index local output boundary.
 
