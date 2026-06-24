@@ -205,6 +205,8 @@ pub enum PcsmHandoffIntakeError {
     ReplicationStatusNotBlockedPreflight,
     BlockedItemMismatch,
     MissingPcsmCounts,
+    PcsmCountOverflow,
+    PcsmCountMismatch,
     ProviderDirectAuthorityClaimed,
     ProductionAuthorityClaimed,
     RawProviderPayloadsCommitted,
@@ -213,7 +215,12 @@ pub enum PcsmHandoffIntakeError {
     PcsmJournalMissing,
     MissingVerifierStatus(&'static str),
     FailedVerifierStatus(String),
+    DuplicateVerifierStatus(String),
+    UnexpectedVerifierStatus(String),
     MissingSourceArtifactDigest,
+    InvalidSourceArtifactId(String),
+    ZeroSourceArtifactDigest(String),
+    ConflictingSourceArtifactDigestId(String),
     ReservedIntakeDigestCollision,
     MissingRequiredNonclaim(String),
     AcceptedLedgerMutationRequested,
@@ -303,6 +310,15 @@ pub fn validate_pcsm_bounded_proof_handoff_intake(
     {
         errors.push(PcsmHandoffIntakeError::MissingPcsmCounts);
     }
+    match intake.pcsm_accepted.checked_add(intake.pcsm_rejected) {
+        None => errors.push(PcsmHandoffIntakeError::PcsmCountOverflow),
+        Some(total)
+            if total != intake.pcsm_inputs || intake.pcsm_journal_entries != intake.pcsm_inputs =>
+        {
+            errors.push(PcsmHandoffIntakeError::PcsmCountMismatch);
+        }
+        Some(_) => {}
+    }
     if intake.provider_direct_authority {
         errors.push(PcsmHandoffIntakeError::ProviderDirectAuthorityClaimed);
     }
@@ -322,15 +338,29 @@ pub fn validate_pcsm_bounded_proof_handoff_intake(
         errors.push(PcsmHandoffIntakeError::PcsmJournalMissing);
     }
 
-    for required in REQUIRED_PCSM_VERIFIERS {
-        match intake
-            .verifier_statuses
-            .iter()
-            .find(|status| status.name == *required)
-        {
-            Some(status) if status.outcome == PcsmVerifierOutcome::Pass => {}
-            Some(status) => errors.push(PcsmHandoffIntakeError::FailedVerifierStatus(
+    let required_verifiers: BTreeSet<&str> = REQUIRED_PCSM_VERIFIERS.iter().copied().collect();
+    let mut verifier_outcomes = BTreeMap::new();
+    for status in &intake.verifier_statuses {
+        if !required_verifiers.contains(status.name.as_str()) {
+            errors.push(PcsmHandoffIntakeError::UnexpectedVerifierStatus(
                 status.name.clone(),
+            ));
+            continue;
+        }
+        if verifier_outcomes
+            .insert(status.name.as_str(), &status.outcome)
+            .is_some()
+        {
+            errors.push(PcsmHandoffIntakeError::DuplicateVerifierStatus(
+                status.name.clone(),
+            ));
+        }
+    }
+    for required in REQUIRED_PCSM_VERIFIERS {
+        match verifier_outcomes.get(required) {
+            Some(status) if **status == PcsmVerifierOutcome::Pass => {}
+            Some(_) => errors.push(PcsmHandoffIntakeError::FailedVerifierStatus(
+                (*required).to_owned(),
             )),
             None => errors.push(PcsmHandoffIntakeError::MissingVerifierStatus(required)),
         }
@@ -338,6 +368,21 @@ pub fn validate_pcsm_bounded_proof_handoff_intake(
 
     if intake.source_artifact_digests.is_empty() {
         errors.push(PcsmHandoffIntakeError::MissingSourceArtifactDigest);
+    }
+    for artifact_error in validate_artifact_digests(&intake.source_artifact_digests) {
+        match artifact_error {
+            ArtifactDigestValidationError::InvalidId(id) => {
+                errors.push(PcsmHandoffIntakeError::InvalidSourceArtifactId(id));
+            }
+            ArtifactDigestValidationError::ZeroDigest(id) => {
+                errors.push(PcsmHandoffIntakeError::ZeroSourceArtifactDigest(id));
+            }
+            ArtifactDigestValidationError::ConflictingId(id) => {
+                errors.push(PcsmHandoffIntakeError::ConflictingSourceArtifactDigestId(
+                    id,
+                ));
+            }
+        }
     }
     if intake
         .source_artifact_digests
@@ -413,6 +458,46 @@ const REQUIRED_PCSM_VERIFIERS: &[&str] = &[
 
 const PCSM_BOUNDED_PROOF_INTAKE_DIGEST_ID: &str = "pcsm-bounded-proof-intake";
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+enum ArtifactDigestValidationError {
+    InvalidId(String),
+    ZeroDigest(String),
+    ConflictingId(String),
+}
+
+fn validate_artifact_digests(
+    digests: &BTreeSet<ArtifactDigest>,
+) -> Vec<ArtifactDigestValidationError> {
+    let mut errors = Vec::new();
+    let mut by_id = BTreeMap::new();
+    for digest in digests {
+        if !is_portable_artifact_id(&digest.id) {
+            errors.push(ArtifactDigestValidationError::InvalidId(digest.id.clone()));
+        }
+        if digest.sha256 == Hash([0; 32]) {
+            errors.push(ArtifactDigestValidationError::ZeroDigest(digest.id.clone()));
+        }
+        if let Some(existing) = by_id.insert(digest.id.clone(), digest.sha256) {
+            if existing != digest.sha256 {
+                errors.push(ArtifactDigestValidationError::ConflictingId(
+                    digest.id.clone(),
+                ));
+            }
+        }
+    }
+    errors
+}
+
+fn is_portable_artifact_id(id: &str) -> bool {
+    let trimmed = id.trim();
+    !trimmed.is_empty()
+        && trimmed == id
+        && !trimmed.contains("..")
+        && trimmed
+            .chars()
+            .all(|ch| ch.is_ascii_alphanumeric() || matches!(ch, '-' | '_' | '.'))
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub enum AdmissionVerdict {
     Accepted,
@@ -450,6 +535,71 @@ pub fn evaluate_admission(
 ) -> AgentAdmissionDecision {
     let mut reasons = Vec::new();
 
+    match candidate.source_kind {
+        AdmissionSourceKind::AgentCase => {
+            if candidate.case.is_none() {
+                reasons.push(reason("agent_case_payload_required"));
+            }
+            if candidate.proposed_envelope.is_some() {
+                reasons.push(reason("agent_case_envelope_forbidden"));
+            }
+            if candidate
+                .case
+                .as_ref()
+                .is_some_and(|case| case.subject != candidate.subject)
+            {
+                reasons.push(reason("agent_case_subject_mismatch"));
+            }
+        }
+        AdmissionSourceKind::ClaimEnvelopeProposal => {
+            if candidate.case.is_some() {
+                reasons.push(reason("claim_envelope_case_forbidden"));
+            }
+            if candidate.proposed_envelope.is_none() {
+                reasons.push(reason("claim_envelope_payload_required"));
+            }
+        }
+        AdmissionSourceKind::ProviderResponse => {
+            if candidate.case.is_some() {
+                reasons.push(reason("provider_response_case_forbidden"));
+            }
+            if candidate.proposed_envelope.is_some() {
+                reasons.push(reason("provider_response_envelope_forbidden"));
+            }
+            if candidate.strict_typed {
+                reasons.push(reason("provider_response_requires_typed_conversion"));
+            }
+        }
+        AdmissionSourceKind::BenchmarkResultProposal => {
+            if candidate.case.is_some() {
+                reasons.push(reason("benchmark_result_case_forbidden"));
+            }
+            if candidate.proposed_envelope.is_some() {
+                reasons.push(reason("benchmark_result_envelope_forbidden"));
+            }
+        }
+        AdmissionSourceKind::PcsmBoundedProofHandoff => {
+            if candidate.case.is_some() {
+                reasons.push(reason("pcsm_handoff_case_forbidden"));
+            }
+            if candidate.proposed_envelope.is_some() {
+                reasons.push(reason("pcsm_handoff_envelope_forbidden"));
+            }
+        }
+    }
+    for artifact_error in validate_artifact_digests(&candidate.source_artifact_digests) {
+        match artifact_error {
+            ArtifactDigestValidationError::InvalidId(id) => {
+                reasons.push(AdmissionReason(format!("invalid_source_artifact_id:{id}")))
+            }
+            ArtifactDigestValidationError::ZeroDigest(id) => {
+                reasons.push(AdmissionReason(format!("zero_source_artifact_digest:{id}")))
+            }
+            ArtifactDigestValidationError::ConflictingId(id) => reasons.push(AdmissionReason(
+                format!("conflicting_source_artifact_digest_id:{id}"),
+            )),
+        }
+    }
     if !candidate.strict_typed {
         reasons.push(reason("strict_typed_candidate_required"));
     }
@@ -1042,15 +1192,9 @@ fn parse_strict_json_bytes<T: for<'de> Deserialize<'de> + Serialize>(
 }
 
 fn has_conflicting_artifact_digest_ids(digests: &BTreeSet<ArtifactDigest>) -> bool {
-    let mut by_id = BTreeMap::new();
-    for digest in digests {
-        if let Some(existing) = by_id.insert(digest.id.clone(), digest.sha256) {
-            if existing != digest.sha256 {
-                return true;
-            }
-        }
-    }
-    false
+    validate_artifact_digests(digests)
+        .iter()
+        .any(|error| matches!(error, ArtifactDigestValidationError::ConflictingId(_)))
 }
 
 fn validate_materialization_request(
@@ -1822,9 +1966,148 @@ mod tests {
         assert_eq!(decision.verdict, AdmissionVerdict::Quarantined);
         assert_eq!(
             decision.reasons,
-            vec![reason("strict_typed_candidate_required")]
+            vec![
+                reason("provider_response_envelope_forbidden"),
+                reason("strict_typed_candidate_required"),
+            ]
         );
         assert!(decision.accepted_envelope.is_none());
+    }
+
+    #[test]
+    fn admission_rejects_source_kind_shape_drift() {
+        let mut missing_envelope = accepted_candidate();
+        missing_envelope.proposed_envelope = None;
+        assert!(evaluate_admission(&missing_envelope, &policy())
+            .reasons
+            .contains(&reason("claim_envelope_payload_required")));
+
+        let mut injected_case = accepted_candidate();
+        injected_case.case = Some(case());
+        assert!(evaluate_admission(&injected_case, &policy())
+            .reasons
+            .contains(&reason("claim_envelope_case_forbidden")));
+
+        let mut case_with_envelope = AgentAdmissionCandidate::from_case(
+            "case-with-envelope",
+            case(),
+            BTreeSet::from([artifact("case", 1)]),
+            policy().required_nonclaims,
+        );
+        case_with_envelope.proposed_envelope = Some(envelope());
+        assert!(evaluate_admission(&case_with_envelope, &policy())
+            .reasons
+            .contains(&reason("agent_case_envelope_forbidden")));
+
+        let mut subject_mismatch = case_with_envelope;
+        subject_mismatch.proposed_envelope = None;
+        subject_mismatch.subject = subject("different-agent");
+        assert!(evaluate_admission(&subject_mismatch, &policy())
+            .reasons
+            .contains(&reason("agent_case_subject_mismatch")));
+
+        let mut strict_provider = accepted_candidate();
+        strict_provider.source_kind = AdmissionSourceKind::ProviderResponse;
+        strict_provider.proposed_envelope = None;
+        assert_eq!(
+            evaluate_admission(&strict_provider, &policy()).verdict,
+            AdmissionVerdict::Rejected
+        );
+        assert!(evaluate_admission(&strict_provider, &policy())
+            .reasons
+            .contains(&reason("provider_response_requires_typed_conversion")));
+
+        let mut benchmark_with_envelope = accepted_candidate();
+        benchmark_with_envelope.source_kind = AdmissionSourceKind::BenchmarkResultProposal;
+        assert!(evaluate_admission(&benchmark_with_envelope, &policy())
+            .reasons
+            .contains(&reason("benchmark_result_envelope_forbidden")));
+
+        let intake = valid_pcsm_intake();
+        let mut pcsm = pcsm_bounded_proof_handoff_candidate("pcsm-shape", subject("pcsm"), &intake)
+            .expect("valid PCSM candidate maps");
+        pcsm.proposed_envelope = Some(envelope());
+        assert!(evaluate_admission(
+            &pcsm,
+            &AgentAdmissionPolicy::local_default(pcsm_bounded_proof_required_nonclaims())
+        )
+        .reasons
+        .contains(&reason("pcsm_handoff_envelope_forbidden")));
+    }
+
+    #[test]
+    fn admission_rejects_invalid_artifact_digests() {
+        let mut candidate = accepted_candidate();
+        candidate.source_artifact_digests = BTreeSet::from([
+            artifact("", 5),
+            artifact(" bad", 1),
+            artifact("bad$id", 6),
+            artifact("bad..id", 7),
+            artifact("path/artifact", 2),
+            artifact("zero", 0),
+            artifact("conflict", 3),
+            artifact("conflict", 4),
+        ]);
+
+        let reasons = evaluate_admission(&candidate, &policy()).reasons;
+        assert!(reasons.contains(&AdmissionReason("invalid_source_artifact_id:".to_owned())));
+        assert!(reasons.contains(&AdmissionReason(
+            "invalid_source_artifact_id: bad".to_owned()
+        )));
+        assert!(reasons.contains(&AdmissionReason(
+            "invalid_source_artifact_id:bad$id".to_owned()
+        )));
+        assert!(reasons.contains(&AdmissionReason(
+            "invalid_source_artifact_id:bad..id".to_owned()
+        )));
+        assert!(reasons.contains(&AdmissionReason(
+            "invalid_source_artifact_id:path/artifact".to_owned()
+        )));
+        assert!(reasons.contains(&AdmissionReason(
+            "zero_source_artifact_digest:zero".to_owned()
+        )));
+        assert!(reasons.contains(&AdmissionReason(
+            "conflicting_source_artifact_digest_id:conflict".to_owned()
+        )));
+
+        let mut intake = valid_pcsm_intake();
+        intake.source_artifact_digests = candidate.source_artifact_digests;
+        let errors = validate_pcsm_bounded_proof_handoff_intake(&intake);
+        assert!(
+            errors.contains(&PcsmHandoffIntakeError::InvalidSourceArtifactId(
+                String::new()
+            ))
+        );
+        assert!(
+            errors.contains(&PcsmHandoffIntakeError::InvalidSourceArtifactId(
+                " bad".to_owned()
+            ))
+        );
+        assert!(
+            errors.contains(&PcsmHandoffIntakeError::InvalidSourceArtifactId(
+                "bad$id".to_owned()
+            ))
+        );
+        assert!(
+            errors.contains(&PcsmHandoffIntakeError::InvalidSourceArtifactId(
+                "bad..id".to_owned()
+            ))
+        );
+        assert!(
+            errors.contains(&PcsmHandoffIntakeError::InvalidSourceArtifactId(
+                "path/artifact".to_owned()
+            ))
+        );
+        assert!(
+            errors.contains(&PcsmHandoffIntakeError::ZeroSourceArtifactDigest(
+                "zero".to_owned()
+            ))
+        );
+        assert!(
+            errors.contains(&PcsmHandoffIntakeError::ConflictingSourceArtifactDigestId(
+                "conflict".to_owned()
+            ))
+        );
     }
 
     #[test]
@@ -2009,6 +2292,59 @@ mod tests {
             ))
         );
         assert!(errors.contains(&PcsmHandoffIntakeError::MissingSourceArtifactDigest));
+    }
+
+    #[test]
+    fn pcsm_bounded_handoff_rejects_inconsistent_and_overflowing_counts() {
+        let mut inconsistent = valid_pcsm_intake();
+        inconsistent.pcsm_accepted = 5;
+        inconsistent.pcsm_rejected = 1;
+        assert!(validate_pcsm_bounded_proof_handoff_intake(&inconsistent)
+            .contains(&PcsmHandoffIntakeError::PcsmCountMismatch));
+
+        let mut journal_mismatch = valid_pcsm_intake();
+        journal_mismatch.pcsm_journal_entries = 4;
+        assert!(
+            validate_pcsm_bounded_proof_handoff_intake(&journal_mismatch)
+                .contains(&PcsmHandoffIntakeError::PcsmCountMismatch)
+        );
+
+        let mut overflowing = valid_pcsm_intake();
+        overflowing.pcsm_inputs = u64::MAX;
+        overflowing.pcsm_accepted = u64::MAX;
+        overflowing.pcsm_rejected = 1;
+        overflowing.pcsm_journal_entries = u64::MAX;
+        assert!(validate_pcsm_bounded_proof_handoff_intake(&overflowing)
+            .contains(&PcsmHandoffIntakeError::PcsmCountOverflow));
+    }
+
+    #[test]
+    fn pcsm_bounded_handoff_rejects_duplicate_and_unknown_verifiers() {
+        let mut intake = valid_pcsm_intake();
+        intake.verifier_statuses.insert(PcsmVerifierStatus {
+            name: "verify_native_pcsm".to_owned(),
+            outcome: PcsmVerifierOutcome::Fail,
+        });
+        intake
+            .verifier_statuses
+            .insert(pcsm_verifier("unknown_verifier"));
+
+        let errors = validate_pcsm_bounded_proof_handoff_intake(&intake);
+        assert!(
+            errors.contains(&PcsmHandoffIntakeError::DuplicateVerifierStatus(
+                "verify_native_pcsm".to_owned()
+            ))
+        );
+        assert!(
+            errors.contains(&PcsmHandoffIntakeError::FailedVerifierStatus(
+                "verify_native_pcsm".to_owned()
+            ))
+        );
+        assert!(
+            errors.contains(&PcsmHandoffIntakeError::UnexpectedVerifierStatus(
+                "unknown_verifier".to_owned()
+            ))
+        );
     }
 
     #[test]
