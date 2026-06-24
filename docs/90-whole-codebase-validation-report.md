@@ -46,7 +46,8 @@ boundary, and the Phase 147 HSAI admission provenance and transaction integrity
 implementation, and the docs-first Phase 148 HSAI admission input semantic
 integrity boundary, and the Phase 149 HSAI admission input semantic integrity
 implementation, and the docs-first Phase 150 HSAI admission candidate semantic
-closure boundary, plus
+closure boundary, and the Phase 151 HSAI admission candidate semantic closure
+implementation, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -411,6 +412,19 @@ parses no recoverable-ghost file, creates no generated output, mutates no
 accepted Evidence Ledger, populates no score axes, creates no Level2+ evidence,
 and creates no stronger claim.
 
+Phase 151 implements the Phase 150 candidate semantic closure. Admission now
+rejects ambiguous candidate IDs and subjects, requires exact source-kind claim
+boundaries, limits accepted-envelope creation to accepted envelope proposals,
+and enforces reserved PCSM intake digest placement. The public envelope helper
+now requires candidate, policy, and decision inputs and re-evaluates them
+before export. HSAI e2e callers were updated without changing serialized
+journal shape. Focused tests cover every source kind and claim boundary,
+identity drift, reserved-ID misuse, forged decision export, and valid case,
+envelope, provider-quarantine, and PCSM paths. This phase parses no
+recoverable-ghost file, creates no committed generated output, mutates no
+accepted Evidence Ledger, populates no score axes, creates no Level2+ evidence,
+and creates no stronger claim.
+
 ## State Slice
 
 This report touches only:
@@ -500,6 +514,7 @@ This report touches only:
 - `docs/148-phase-hsai-admission-input-semantic-integrity-boundary-spec.md`
 - `docs/149-phase-hsai-admission-input-semantic-integrity-implementation-notes.md`
 - `docs/150-phase-hsai-admission-candidate-semantic-closure-boundary-spec.md`
+- `docs/151-phase-hsai-admission-candidate-semantic-closure-implementation-notes.md`
 - `Cargo.lock`
 - `Cargo.toml`
 - `docs/12-task-list.md`
@@ -514,7 +529,7 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 149 validation.
+Run from repository root during Phase 151 validation.
 
 ```sh
 cargo fmt --all -- --check
@@ -542,17 +557,17 @@ cargo llvm-cov -p hsai-agent-admission --all-features --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml' || true
 ```
 
-Phase 149 focused Rust/doc commands passed. `cargo test --workspace
+Phase 151 focused Rust/doc commands passed. `cargo test --workspace
 --all-features`, workspace clippy, and workspace docs also passed with the
-admission input semantic-integrity invariants implemented. Focused
-`hsai-agent-admission` coverage reported `97.20%` regions, `95.45%` functions,
-and `97.90%` lines. The `rg` package-surface check returned no files.
+candidate semantic-closure invariants implemented. Focused
+`hsai-agent-admission` coverage reported `97.49%` regions, `95.62%` functions,
+and `98.09%` lines. The `rg` package-surface check returned no files.
 
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
 `cargo-llvm-cov 0.8.7` was available during the latest Phase 135 all-feature
-workspace coverage pass and the Phase 149 focused admission coverage pass. The
+workspace coverage pass and the Phase 151 focused admission coverage pass. The
 latest all-feature workspace Phase
 135 pass reported `86.09%` region coverage, `83.22%` function execution, and
 `84.43%` line coverage. The targeted

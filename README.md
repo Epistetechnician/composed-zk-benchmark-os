@@ -229,6 +229,7 @@ Surface DSL
 | [docs/148-phase-hsai-admission-input-semantic-integrity-boundary-spec.md](docs/148-phase-hsai-admission-input-semantic-integrity-boundary-spec.md) | HSAI admission input semantic integrity docs-first boundary. |
 | [docs/149-phase-hsai-admission-input-semantic-integrity-implementation-notes.md](docs/149-phase-hsai-admission-input-semantic-integrity-implementation-notes.md) | HSAI admission input semantic integrity implementation notes. |
 | [docs/150-phase-hsai-admission-candidate-semantic-closure-boundary-spec.md](docs/150-phase-hsai-admission-candidate-semantic-closure-boundary-spec.md) | HSAI admission candidate semantic closure docs-first boundary. |
+| [docs/151-phase-hsai-admission-candidate-semantic-closure-implementation-notes.md](docs/151-phase-hsai-admission-candidate-semantic-closure-implementation-notes.md) | HSAI admission candidate semantic closure implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -862,6 +863,10 @@ defines the next docs-first hardening boundary. It requires unambiguous
 candidate identity, exact source-kind claim boundaries, envelope export only
 for accepted envelope proposals, and correct placement of the reserved PCSM
 intake digest. It authorizes no Rust implementation or stronger claim.
+[docs/151-phase-hsai-admission-candidate-semantic-closure-implementation-notes.md](docs/151-phase-hsai-admission-candidate-semantic-closure-implementation-notes.md)
+implements the boundary. Candidate identities and exact source boundaries now
+fail closed, reserved PCSM digest placement is enforced, and envelope export
+requires exact candidate-policy decision recomputation.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57

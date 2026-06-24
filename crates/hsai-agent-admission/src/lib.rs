@@ -519,14 +519,6 @@ impl AgentAdmissionDecision {
     pub fn digest(&self) -> Hash {
         hash_tagged("hsai-agent-admission:decision:v1", self)
     }
-
-    pub fn accepted_envelope(&self) -> Option<&ClaimEnvelope> {
-        if self.verdict == AdmissionVerdict::Accepted {
-            self.accepted_envelope.as_ref()
-        } else {
-            None
-        }
-    }
 }
 
 pub fn evaluate_admission(
@@ -535,6 +527,12 @@ pub fn evaluate_admission(
 ) -> AgentAdmissionDecision {
     let mut reasons = Vec::new();
 
+    if !is_portable_candidate_id(&candidate.id.0) {
+        reasons.push(reason("invalid_candidate_id"));
+    }
+    if candidate.subject.0.trim().is_empty() || candidate.subject.0.trim() != candidate.subject.0 {
+        reasons.push(reason("invalid_candidate_subject"));
+    }
     match candidate.source_kind {
         AdmissionSourceKind::AgentCase => {
             if candidate.case.is_none() {
@@ -587,6 +585,20 @@ pub fn evaluate_admission(
             }
         }
     }
+    if candidate.requested_claim_boundary != expected_claim_boundary(&candidate.source_kind) {
+        reasons.push(reason("source_kind_claim_boundary_mismatch"));
+    }
+    let has_reserved_pcsm_digest = candidate
+        .source_artifact_digests
+        .iter()
+        .any(|digest| digest.id == PCSM_BOUNDED_PROOF_INTAKE_DIGEST_ID);
+    if candidate.source_kind == AdmissionSourceKind::PcsmBoundedProofHandoff {
+        if !has_reserved_pcsm_digest {
+            reasons.push(reason("pcsm_intake_digest_required"));
+        }
+    } else if has_reserved_pcsm_digest {
+        reasons.push(reason("pcsm_intake_digest_forbidden"));
+    }
     for artifact_error in validate_artifact_digests(&candidate.source_artifact_digests) {
         match artifact_error {
             ArtifactDigestValidationError::InvalidId(id) => {
@@ -634,7 +646,9 @@ pub fn evaluate_admission(
     } else {
         AdmissionVerdict::Quarantined
     };
-    let accepted_envelope = if verdict == AdmissionVerdict::Accepted {
+    let accepted_envelope = if verdict == AdmissionVerdict::Accepted
+        && candidate.source_kind == AdmissionSourceKind::ClaimEnvelopeProposal
+    {
         candidate.proposed_envelope.clone()
     } else {
         None
@@ -647,6 +661,20 @@ pub fn evaluate_admission(
         reasons,
         candidate_digest: candidate.digest(),
         accepted_envelope,
+    }
+}
+
+fn is_portable_candidate_id(id: &str) -> bool {
+    is_portable_artifact_id(id)
+}
+
+fn expected_claim_boundary(source_kind: &AdmissionSourceKind) -> AdmissionClaimBoundary {
+    match source_kind {
+        AdmissionSourceKind::ClaimEnvelopeProposal => AdmissionClaimBoundary::Level1Local,
+        AdmissionSourceKind::AgentCase
+        | AdmissionSourceKind::ProviderResponse
+        | AdmissionSourceKind::BenchmarkResultProposal
+        | AdmissionSourceKind::PcsmBoundedProofHandoff => AdmissionClaimBoundary::LocalOnly,
     }
 }
 
@@ -1441,8 +1469,15 @@ fn redaction_report() -> AdmissionJournalRedactionReport {
     }
 }
 
-pub fn accepted_claim_envelope(decision: &AgentAdmissionDecision) -> Option<&ClaimEnvelope> {
-    if decision.verdict == AdmissionVerdict::Accepted {
+pub fn accepted_claim_envelope<'a>(
+    candidate: &AgentAdmissionCandidate,
+    policy: &AgentAdmissionPolicy,
+    decision: &'a AgentAdmissionDecision,
+) -> Option<&'a ClaimEnvelope> {
+    if candidate.source_kind == AdmissionSourceKind::ClaimEnvelopeProposal
+        && decision == &evaluate_admission(candidate, policy)
+        && decision.verdict == AdmissionVerdict::Accepted
+    {
         decision.accepted_envelope.as_ref()
     } else {
         None
@@ -1876,7 +1911,7 @@ mod tests {
         assert_eq!(decision.verdict, AdmissionVerdict::Accepted);
         assert!(decision.reasons.is_empty());
         assert_eq!(
-            accepted_claim_envelope(&decision),
+            accepted_claim_envelope(&candidate, &admission_policy, &decision),
             candidate.proposed_envelope.as_ref()
         );
 
@@ -1916,7 +1951,7 @@ mod tests {
                 "provider_direct_authority_forbidden".to_owned()
             )]
         );
-        assert!(accepted_claim_envelope(&decision).is_none());
+        assert!(accepted_claim_envelope(&candidate, &admission_policy, &decision).is_none());
 
         let mut journal = AgentAdmissionJournal::default();
         let entry = journal
@@ -1944,6 +1979,7 @@ mod tests {
         assert_eq!(
             decision.reasons,
             vec![
+                reason("source_kind_claim_boundary_mismatch"),
                 reason("claim_boundary_elevation_forbidden"),
                 reason("source_artifact_digest_required"),
                 AdmissionReason("missing_nonclaim:not accepted evidence".to_owned()),
@@ -1968,6 +2004,7 @@ mod tests {
             decision.reasons,
             vec![
                 reason("provider_response_envelope_forbidden"),
+                reason("source_kind_claim_boundary_mismatch"),
                 reason("strict_typed_candidate_required"),
             ]
         );
@@ -2111,6 +2148,134 @@ mod tests {
     }
 
     #[test]
+    fn admission_rejects_invalid_identity_boundary_and_reserved_digest_placement() {
+        for invalid_id in [
+            "",
+            " ",
+            " candidate",
+            "candidate ",
+            "a/b",
+            r"a\b",
+            "a..b",
+            "a$b",
+        ] {
+            let mut candidate = accepted_candidate();
+            candidate.id = AdmissionCandidateId(invalid_id.to_owned());
+            assert!(evaluate_admission(&candidate, &policy())
+                .reasons
+                .contains(&reason("invalid_candidate_id")));
+        }
+
+        for invalid_subject in ["", " ", " agent-a", "agent-a "] {
+            let mut candidate = accepted_candidate();
+            candidate.subject = subject(invalid_subject);
+            assert!(evaluate_admission(&candidate, &policy())
+                .reasons
+                .contains(&reason("invalid_candidate_subject")));
+        }
+
+        let boundaries = [
+            AdmissionClaimBoundary::LocalOnly,
+            AdmissionClaimBoundary::Level1Local,
+            AdmissionClaimBoundary::Level2OrHigher,
+            AdmissionClaimBoundary::Formal,
+        ];
+        for (source_kind, expected) in [
+            (
+                AdmissionSourceKind::AgentCase,
+                AdmissionClaimBoundary::LocalOnly,
+            ),
+            (
+                AdmissionSourceKind::ClaimEnvelopeProposal,
+                AdmissionClaimBoundary::Level1Local,
+            ),
+            (
+                AdmissionSourceKind::ProviderResponse,
+                AdmissionClaimBoundary::LocalOnly,
+            ),
+            (
+                AdmissionSourceKind::BenchmarkResultProposal,
+                AdmissionClaimBoundary::LocalOnly,
+            ),
+            (
+                AdmissionSourceKind::PcsmBoundedProofHandoff,
+                AdmissionClaimBoundary::LocalOnly,
+            ),
+        ] {
+            for boundary in &boundaries {
+                let mut candidate = accepted_candidate();
+                candidate.source_kind = source_kind.clone();
+                candidate.requested_claim_boundary = boundary.clone();
+                candidate.case = None;
+                candidate.proposed_envelope =
+                    (source_kind == AdmissionSourceKind::ClaimEnvelopeProposal).then(envelope);
+                if source_kind == AdmissionSourceKind::ProviderResponse {
+                    candidate.strict_typed = false;
+                }
+                if source_kind == AdmissionSourceKind::PcsmBoundedProofHandoff {
+                    candidate.source_artifact_digests.insert(ArtifactDigest {
+                        id: PCSM_BOUNDED_PROOF_INTAKE_DIGEST_ID.to_owned(),
+                        sha256: Hash([9; 32]),
+                    });
+                }
+                let reasons = evaluate_admission(&candidate, &policy()).reasons;
+                assert_eq!(
+                    reasons.contains(&reason("source_kind_claim_boundary_mismatch")),
+                    *boundary != expected
+                );
+            }
+        }
+
+        let mut non_pcsm = accepted_candidate();
+        non_pcsm.source_artifact_digests.insert(ArtifactDigest {
+            id: PCSM_BOUNDED_PROOF_INTAKE_DIGEST_ID.to_owned(),
+            sha256: Hash([9; 32]),
+        });
+        assert!(evaluate_admission(&non_pcsm, &policy())
+            .reasons
+            .contains(&reason("pcsm_intake_digest_forbidden")));
+
+        let intake = valid_pcsm_intake();
+        let pcsm_policy =
+            AgentAdmissionPolicy::local_default(pcsm_bounded_proof_required_nonclaims());
+        let mut pcsm =
+            pcsm_bounded_proof_handoff_candidate("pcsm-reserved", subject("pcsm"), &intake)
+                .expect("valid PCSM candidate maps");
+        pcsm.source_artifact_digests
+            .retain(|digest| digest.id != PCSM_BOUNDED_PROOF_INTAKE_DIGEST_ID);
+        assert!(evaluate_admission(&pcsm, &pcsm_policy)
+            .reasons
+            .contains(&reason("pcsm_intake_digest_required")));
+    }
+
+    #[test]
+    fn accepted_envelope_export_requires_exact_evaluated_envelope_candidate() {
+        let candidate = accepted_candidate();
+        let admission_policy = policy();
+        let decision = evaluate_admission(&candidate, &admission_policy);
+        assert_eq!(
+            accepted_claim_envelope(&candidate, &admission_policy, &decision),
+            candidate.proposed_envelope.as_ref()
+        );
+
+        let mut forged = decision.clone();
+        forged.reasons.push(reason("forged"));
+        assert!(accepted_claim_envelope(&candidate, &admission_policy, &forged).is_none());
+
+        let case_candidate = AgentAdmissionCandidate::from_case(
+            "case-no-export",
+            case(),
+            BTreeSet::from([artifact("case", 1)]),
+            admission_policy.required_nonclaims.clone(),
+        );
+        let case_decision = evaluate_admission(&case_candidate, &admission_policy);
+        assert_eq!(case_decision.verdict, AdmissionVerdict::Accepted);
+        assert!(
+            accepted_claim_envelope(&case_candidate, &admission_policy, &case_decision).is_none()
+        );
+    }
+
+    #[test]
     fn journal_rejects_replay_and_detects_stale_tip() {
         let candidate = accepted_candidate();
         let admission_policy = policy();
@@ -2195,7 +2360,7 @@ mod tests {
             AgentAdmissionPolicy::local_default(pcsm_bounded_proof_required_nonclaims());
         let decision = evaluate_admission(&candidate, &pcsm_policy);
         assert_eq!(decision.verdict, AdmissionVerdict::Accepted);
-        assert!(accepted_claim_envelope(&decision).is_none());
+        assert!(accepted_claim_envelope(&candidate, &pcsm_policy, &decision).is_none());
 
         let mut journal = AgentAdmissionJournal::default();
         journal
@@ -3145,8 +3310,7 @@ mod tests {
             decision
                 .reasons
                 .push(reason("adversarial_non_accepted_envelope"));
-            assert!(decision.accepted_envelope().is_none());
-            assert!(accepted_claim_envelope(&decision).is_none());
+            assert!(accepted_claim_envelope(&candidate, &admission_policy, &decision).is_none());
 
             let mut journal = AgentAdmissionJournal::default();
             let entry = AgentAdmissionJournalEntry {
