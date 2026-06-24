@@ -39,7 +39,8 @@ docs-first Phase 139 PCSM bounded-proof handoff intake boundary, and the Phase
 141 HSAI admission journal materialization implementation, and the docs-first
 Phase 142 HSAI admission journal semantic readback boundary, and the Phase 143
 HSAI admission journal semantic readback implementation, and the docs-first
-Phase 144 HSAI admission journal adversarial invariant boundary, plus
+Phase 144 HSAI admission journal adversarial invariant boundary, and the Phase
+145 HSAI admission journal adversarial invariant implementation, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -334,6 +335,18 @@ source, parses no recoverable-ghost file, creates no generated output, mutates
 no accepted Evidence Ledger, populates no score axes, creates no Level2+
 evidence, and creates no stronger claim.
 
+Phase 145 implements the Phase 144 invariants inside `hsai-agent-admission`.
+Decision envelope access is verdict-aware; journal validation rejects retained
+envelopes under rejected or quarantined verdicts; strict typed JSON round-trip
+validation rejects recursively unknown fields; and readback rejects symlink or
+non-directory roots and bundle directories. Expanded fail-closed tests cover
+malformed, partial, substituted, drifted, unsafe, and adversarial states.
+Focused coverage measured `96.80%` regions, `94.92%` functions, and `97.45%`
+lines without a 100% claim. This phase parses no recoverable-ghost file,
+creates no committed generated output, mutates no accepted Evidence Ledger,
+populates no score axes, creates no Level2+ evidence, and creates no stronger
+claim.
+
 ## State Slice
 
 This report touches only:
@@ -417,6 +430,7 @@ This report touches only:
 - `docs/142-phase-hsai-admission-journal-semantic-readback-boundary-spec.md`
 - `docs/143-phase-hsai-admission-journal-semantic-readback-implementation-notes.md`
 - `docs/144-phase-hsai-admission-journal-adversarial-invariant-boundary-spec.md`
+- `docs/145-phase-hsai-admission-journal-adversarial-invariant-implementation-notes.md`
 - `Cargo.lock`
 - `Cargo.toml`
 - `docs/12-task-list.md`
@@ -431,7 +445,7 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 143 validation.
+Run from repository root during Phase 145 validation.
 
 ```sh
 cargo fmt --all -- --check
@@ -455,21 +469,22 @@ cargo test -p zkbench-core --test phase_w_accepted_ledger_append
 cargo test --workspace --all-features
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 RUSTDOCFLAGS='-D warnings' cargo doc --workspace --all-features --no-deps
+cargo llvm-cov -p hsai-agent-admission --all-features --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml' || true
 ```
 
-Phase 143 focused Rust/doc commands passed. `cargo test --workspace
---all-features`, workspace clippy, and workspace docs also passed with semantic
-readback hardening implemented. The `rg` package-surface check returned no
-files.
+Phase 145 focused Rust/doc commands passed. `cargo test --workspace
+--all-features`, workspace clippy, and workspace docs also passed with the
+adversarial invariants implemented. Focused `hsai-agent-admission` coverage
+reported `96.80%` regions, `94.92%` functions, and `97.45%` lines. The `rg`
+package-surface check returned no files.
 
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
 `cargo-llvm-cov 0.8.7` was available during the latest Phase 135 all-feature
-workspace coverage pass. Phase 143 did not rerun coverage because this slice is
-a focused HSAI semantic-readback implementation rather than a
-coverage-hardening campaign. The latest Phase
+workspace coverage pass and the Phase 145 focused admission coverage pass. The
+latest all-feature workspace Phase
 135 pass reported `86.09%` region coverage, `83.22%` function execution, and
 `84.43%` line coverage. The targeted
 `zkbench-core/src/adapters/zk_harness/validation.rs` file reported `94.87%`

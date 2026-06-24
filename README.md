@@ -223,6 +223,7 @@ Surface DSL
 | [docs/142-phase-hsai-admission-journal-semantic-readback-boundary-spec.md](docs/142-phase-hsai-admission-journal-semantic-readback-boundary-spec.md) | HSAI admission journal semantic readback docs-first boundary. |
 | [docs/143-phase-hsai-admission-journal-semantic-readback-implementation-notes.md](docs/143-phase-hsai-admission-journal-semantic-readback-implementation-notes.md) | HSAI admission journal semantic readback implementation notes. |
 | [docs/144-phase-hsai-admission-journal-adversarial-invariant-boundary-spec.md](docs/144-phase-hsai-admission-journal-adversarial-invariant-boundary-spec.md) | HSAI admission journal adversarial invariant docs-first boundary. |
+| [docs/145-phase-hsai-admission-journal-adversarial-invariant-implementation-notes.md](docs/145-phase-hsai-admission-journal-adversarial-invariant-implementation-notes.md) | HSAI admission journal adversarial invariant implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -825,6 +826,12 @@ strict unknown-field rejection across serialized journal structures, and
 readback rejection for symlink output roots and bundle directories. It
 authorizes no Rust implementation, accepted evidence, PCSM source parsing, or
 stronger claim.
+[docs/145-phase-hsai-admission-journal-adversarial-invariant-implementation-notes.md](docs/145-phase-hsai-admission-journal-adversarial-invariant-implementation-notes.md)
+implements the boundary. Rejected and quarantined decisions cannot expose or
+validate retained envelopes, declared JSON rejects recursively unknown fields,
+and readback rejects symlink roots and bundle directories. Focused fail-closed
+coverage now exercises malformed, partial, substituted, drifted, and unsafe
+bundle states without changing the claim boundary.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
