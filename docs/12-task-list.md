@@ -1787,6 +1787,35 @@ source-scan, claim-boundary, and hygiene tests pass; full workspace tests,
 clippy, rustdoc, and focused coverage pass; no source checkout is parsed; no
 generated bundle is committed; and no stronger claim is created.
 
+## HSAI Track: Phase 150 Admission Candidate Semantic Closure Boundary
+
+Status: complete for docs-first authorization only. See
+`docs/150-phase-hsai-admission-candidate-semantic-closure-boundary-spec.md`.
+
+Goal: define the final local candidate-model semantic checks before admission
+journal parser or filesystem hardening.
+
+Scope: Phase 150 boundary, README, AGENTS, task-list, and validation-report
+navigation only.
+
+Required future behavior: portable nonempty candidate IDs; nonempty trimmed
+subjects; exact source-kind claim boundaries; envelope export only from
+accepted `ClaimEnvelopeProposal` candidates; mandatory reserved PCSM intake
+digest on PCSM candidates; and reserved-ID rejection on every non-PCSM source.
+
+Anti-goals: Rust implementation in this phase, duplicate JSON or raw-array
+detection, failure-atomic overwrite, descriptor-relative no-follow access,
+randomized staging, committed-source parsing, recoverable-ghost inspection or
+commands, PCSM runtime import, provider calls, network access, credentials,
+generated bundles, accepted Evidence Ledger mutation, official submission,
+external replay, score-axis population, Level2+ evidence, proof, semantic
+correctness, production readiness, or global uniqueness.
+
+Exit criteria: Phase 150 boundary exists; README, AGENTS, task list, and
+validation report point to it; docs contract and hygiene gates pass; no Rust,
+Cargo, fixture, package-runtime, generated-output, or source-checkout surface
+changes; and no stronger claim is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

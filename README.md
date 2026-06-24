@@ -228,6 +228,7 @@ Surface DSL
 | [docs/147-phase-hsai-admission-provenance-transaction-integrity-implementation-notes.md](docs/147-phase-hsai-admission-provenance-transaction-integrity-implementation-notes.md) | HSAI admission provenance and transaction integrity implementation notes. |
 | [docs/148-phase-hsai-admission-input-semantic-integrity-boundary-spec.md](docs/148-phase-hsai-admission-input-semantic-integrity-boundary-spec.md) | HSAI admission input semantic integrity docs-first boundary. |
 | [docs/149-phase-hsai-admission-input-semantic-integrity-implementation-notes.md](docs/149-phase-hsai-admission-input-semantic-integrity-implementation-notes.md) | HSAI admission input semantic integrity implementation notes. |
+| [docs/150-phase-hsai-admission-candidate-semantic-closure-boundary-spec.md](docs/150-phase-hsai-admission-candidate-semantic-closure-boundary-spec.md) | HSAI admission candidate semantic closure docs-first boundary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -856,6 +857,11 @@ verifier set. It authorizes no Rust implementation or stronger claim.
 implements the boundary. Admission now rejects source-kind payload drift and
 invalid artifact identities, while PCSM intake requires count conservation,
 journal-count agreement, and an exact passing required verifier set.
+[docs/150-phase-hsai-admission-candidate-semantic-closure-boundary-spec.md](docs/150-phase-hsai-admission-candidate-semantic-closure-boundary-spec.md)
+defines the next docs-first hardening boundary. It requires unambiguous
+candidate identity, exact source-kind claim boundaries, envelope export only
+for accepted envelope proposals, and correct placement of the reserved PCSM
+intake digest. It authorizes no Rust implementation or stronger claim.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57

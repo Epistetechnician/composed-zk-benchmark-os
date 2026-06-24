@@ -45,7 +45,8 @@ docs-first Phase 146 HSAI admission provenance and transaction integrity
 boundary, and the Phase 147 HSAI admission provenance and transaction integrity
 implementation, and the docs-first Phase 148 HSAI admission input semantic
 integrity boundary, and the Phase 149 HSAI admission input semantic integrity
-implementation, plus
+implementation, and the docs-first Phase 150 HSAI admission candidate semantic
+closure boundary, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -399,6 +400,17 @@ no recoverable-ghost file, creates no committed generated output, mutates no
 accepted Evidence Ledger, populates no score axes, creates no Level2+ evidence,
 and creates no stronger claim.
 
+Phase 150 opens the docs-first boundary for the remaining candidate-model
+semantic gaps. It requires portable nonempty candidate IDs, nonempty trimmed
+subjects, exact source-kind claim-boundary coupling, accepted-envelope export
+only for accepted envelope proposals, and mandatory reserved PCSM intake digest
+placement only on PCSM candidates. It defines deterministic reason ordering,
+adversarial tests, compatibility rules, deferred parser and filesystem
+findings, and future implementation exit criteria. It changes no Rust source,
+parses no recoverable-ghost file, creates no generated output, mutates no
+accepted Evidence Ledger, populates no score axes, creates no Level2+ evidence,
+and creates no stronger claim.
+
 ## State Slice
 
 This report touches only:
@@ -487,6 +499,7 @@ This report touches only:
 - `docs/147-phase-hsai-admission-provenance-transaction-integrity-implementation-notes.md`
 - `docs/148-phase-hsai-admission-input-semantic-integrity-boundary-spec.md`
 - `docs/149-phase-hsai-admission-input-semantic-integrity-implementation-notes.md`
+- `docs/150-phase-hsai-admission-candidate-semantic-closure-boundary-spec.md`
 - `Cargo.lock`
 - `Cargo.toml`
 - `docs/12-task-list.md`
