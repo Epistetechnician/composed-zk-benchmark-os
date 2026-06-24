@@ -47,7 +47,8 @@ implementation, and the docs-first Phase 148 HSAI admission input semantic
 integrity boundary, and the Phase 149 HSAI admission input semantic integrity
 implementation, and the docs-first Phase 150 HSAI admission candidate semantic
 closure boundary, and the Phase 151 HSAI admission candidate semantic closure
-implementation, plus
+implementation, and the docs-first Phase 152 HSAI admission journal duplicate
+JSON boundary, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -425,6 +426,17 @@ recoverable-ghost file, creates no committed generated output, mutates no
 accepted Evidence Ledger, populates no score axes, creates no Level2+ evidence,
 and creates no stronger claim.
 
+Phase 152 opens the docs-first boundary for recursive duplicate JSON object-key
+rejection in admission-journal semantic readback. It requires a dependency-free
+Serde visitor before the existing typed canonical round-trip, complete-input
+validation, nested object and array traversal, existing malformed-file error
+mapping, and adversarial coverage for all declared JSON documents and decision
+JSONL rows. It explicitly defers repeated array-element checks and filesystem
+transaction hardening. It changes no Rust source, parses no recoverable-ghost
+file, creates no generated output, mutates no accepted Evidence Ledger,
+populates no score axes, creates no Level2+ evidence, and creates no stronger
+claim.
+
 ## State Slice
 
 This report touches only:
@@ -515,6 +527,7 @@ This report touches only:
 - `docs/149-phase-hsai-admission-input-semantic-integrity-implementation-notes.md`
 - `docs/150-phase-hsai-admission-candidate-semantic-closure-boundary-spec.md`
 - `docs/151-phase-hsai-admission-candidate-semantic-closure-implementation-notes.md`
+- `docs/152-phase-hsai-admission-journal-duplicate-json-boundary-spec.md`
 - `Cargo.lock`
 - `Cargo.toml`
 - `docs/12-task-list.md`
