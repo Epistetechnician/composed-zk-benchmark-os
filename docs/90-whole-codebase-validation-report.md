@@ -43,7 +43,8 @@ Phase 144 HSAI admission journal adversarial invariant boundary, and the Phase
 145 HSAI admission journal adversarial invariant implementation, and the
 docs-first Phase 146 HSAI admission provenance and transaction integrity
 boundary, and the Phase 147 HSAI admission provenance and transaction integrity
-implementation, plus
+implementation, and the docs-first Phase 148 HSAI admission input semantic
+integrity boundary, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -373,6 +374,17 @@ This phase parses no recoverable-ghost file, creates no committed generated
 output, mutates no accepted Evidence Ledger, populates no score axes, creates no
 Level2+ evidence, and creates no stronger claim.
 
+Phase 148 opens the docs-first boundary for the remaining local admission input
+semantic gaps. It requires exact source-kind payload shapes, raw provider
+non-admissibility, portable nonzero artifact digests with one digest per
+logical id, checked PCSM count conservation, journal-entry count agreement,
+and an exact duplicate-free required verifier set whose outcomes all pass. It
+defines deterministic reason ordering, adversarial tests, compatibility rules,
+deferred filesystem and JSON-parser findings, and future implementation exit
+criteria. It changes no Rust source, parses no recoverable-ghost file, creates
+no generated output, mutates no accepted Evidence Ledger, populates no score
+axes, creates no Level2+ evidence, and creates no stronger claim.
+
 ## State Slice
 
 This report touches only:
@@ -459,6 +471,7 @@ This report touches only:
 - `docs/145-phase-hsai-admission-journal-adversarial-invariant-implementation-notes.md`
 - `docs/146-phase-hsai-admission-provenance-transaction-integrity-boundary-spec.md`
 - `docs/147-phase-hsai-admission-provenance-transaction-integrity-implementation-notes.md`
+- `docs/148-phase-hsai-admission-input-semantic-integrity-boundary-spec.md`
 - `Cargo.lock`
 - `Cargo.toml`
 - `docs/12-task-list.md`
