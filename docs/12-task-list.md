@@ -1586,6 +1586,36 @@ repo claim-boundary and hygiene tests pass; full workspace tests, clippy, and
 rustdoc pass; no source checkout is parsed; no generated bundle is committed;
 and no live/external evidence surface is created.
 
+## HSAI Track: Phase 144 Admission Journal Adversarial Invariant Boundary
+
+Status: complete for the docs-first admission-decision and journal-readback
+adversarial invariant boundary. See
+`docs/144-phase-hsai-admission-journal-adversarial-invariant-boundary-spec.md`.
+
+Goal: define fail-closed behavior for three remaining local gaps: envelopes
+retained under rejected or quarantined verdicts, unknown JSON fields silently
+discarded during readback, and symlinked output roots or bundle directories.
+
+Scope: Markdown boundary, README, AGENTS, task list, and validation report
+updates only.
+
+Defined: the verdict-envelope invariant, strict recursive declared-file schema
+requirements, root and bundle-directory symlink rejection, required future
+errors and adversarial tests, compatible test-only coverage hardening, claim
+limits, source-checkout recheck, and future implementation exit criteria.
+
+Anti-goals: Rust source or test changes, Cargo metadata changes, generated
+artifacts, recoverable-ghost file parsing or git inspection, source repo
+commands, PCSM runtime import, provider calls, network access, credentials,
+accepted Evidence Ledger mutation, official submission, external replay,
+score-axis population, Level2+ evidence, proof, semantic correctness,
+production readiness, global software-agent uniqueness, or 100% coverage.
+
+Exit criteria: Phase 144 boundary exists; README, AGENTS, task list, and
+validation report point to it; docs contract and hygiene gates pass; normal
+tests remain hermetic; no source checkout is parsed; no generated bundle is
+committed; and no stronger claim is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
