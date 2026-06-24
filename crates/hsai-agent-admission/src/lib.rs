@@ -420,7 +420,11 @@ impl AgentAdmissionDecision {
     }
 
     pub fn accepted_envelope(&self) -> Option<&ClaimEnvelope> {
-        self.accepted_envelope.as_ref()
+        if self.verdict == AdmissionVerdict::Accepted {
+            self.accepted_envelope.as_ref()
+        } else {
+            None
+        }
     }
 }
 
@@ -608,6 +612,7 @@ pub enum JournalError {
     SequenceMismatch { expected: u64, actual: u64 },
     PreviousDigestMismatch,
     ReplayedCandidate(Hash),
+    NonAcceptedVerdictRetainsEnvelope,
     InvalidExistingJournal,
 }
 
@@ -674,6 +679,11 @@ impl AgentAdmissionJournal {
             }
             if entry.decision.digest() != entry.decision_digest {
                 errors.push(JournalError::DecisionDigestMismatch);
+            }
+            if entry.decision.verdict != AdmissionVerdict::Accepted
+                && entry.decision.accepted_envelope.is_some()
+            {
+                errors.push(JournalError::NonAcceptedVerdictRetainsEnvelope);
             }
             if !seen.insert(entry.candidate_digest) {
                 errors.push(JournalError::ReplayedCandidate(entry.candidate_digest));
@@ -749,6 +759,27 @@ pub fn materialize_admission_journal_bundle(
 pub fn read_admission_journal_bundle(
     output_root: &Path,
 ) -> Result<AdmissionJournalBundleManifest, AdmissionJournalMaterializationError> {
+    let output_metadata = fs::symlink_metadata(output_root).map_err(materialization_io_error)?;
+    if output_metadata.file_type().is_symlink() {
+        return Err(AdmissionJournalMaterializationError::OutputRootIsSymlink);
+    }
+    if !output_metadata.is_dir() {
+        return Err(AdmissionJournalMaterializationError::OutputRootIsFile);
+    }
+    let bundle_dir = output_root.join("admission-journal");
+    let bundle_metadata = fs::symlink_metadata(&bundle_dir).map_err(materialization_io_error)?;
+    if bundle_metadata.file_type().is_symlink() {
+        return Err(AdmissionJournalMaterializationError::BundleFileIsSymlink(
+            "admission-journal".to_owned(),
+        ));
+    }
+    if !bundle_metadata.is_dir() {
+        return Err(
+            AdmissionJournalMaterializationError::DeclaredFileTypeMismatch(
+                "admission-journal".to_owned(),
+            ),
+        );
+    }
     reject_undeclared_bundle_files(output_root)?;
     let mut file_bytes = BTreeMap::new();
     for logical_path in ADMISSION_JOURNAL_DECLARED_FILES {
@@ -817,13 +848,10 @@ fn validate_admission_journal_bundle_semantics(
             if line.is_empty() {
                 return Err(AdmissionJournalMaterializationError::DecisionIndexMismatch);
             }
-            parsed_rows.push(
-                serde_json::from_slice::<AdmissionDecisionReviewRow>(line).map_err(|_| {
-                    AdmissionJournalMaterializationError::MalformedDeclaredFile(
-                        "admission-journal/decisions.jsonl".to_owned(),
-                    )
-                })?,
-            );
+            parsed_rows.push(parse_strict_json_bytes::<AdmissionDecisionReviewRow>(
+                line,
+                "admission-journal/decisions.jsonl",
+            )?);
         }
     }
     let expected_rows = decision_rows(&journal);
@@ -944,13 +972,30 @@ fn declared_bytes<'a>(
     })
 }
 
-fn parse_declared_json<T: for<'de> Deserialize<'de>>(
+fn parse_declared_json<T: for<'de> Deserialize<'de> + Serialize>(
     files: &BTreeMap<String, Vec<u8>>,
     logical_path: &str,
 ) -> Result<T, AdmissionJournalMaterializationError> {
-    serde_json::from_slice(declared_bytes(files, logical_path)?).map_err(|_| {
+    parse_strict_json_bytes(declared_bytes(files, logical_path)?, logical_path)
+}
+
+fn parse_strict_json_bytes<T: for<'de> Deserialize<'de> + Serialize>(
+    bytes: &[u8],
+    logical_path: &str,
+) -> Result<T, AdmissionJournalMaterializationError> {
+    let original: serde_json::Value = serde_json::from_slice(bytes).map_err(|_| {
         AdmissionJournalMaterializationError::MalformedDeclaredFile(logical_path.to_owned())
-    })
+    })?;
+    let parsed: T = serde_json::from_value(original.clone()).map_err(|_| {
+        AdmissionJournalMaterializationError::MalformedDeclaredFile(logical_path.to_owned())
+    })?;
+    let canonical = serde_json::to_value(&parsed).map_err(materialization_serde_error)?;
+    if canonical != original {
+        return Err(AdmissionJournalMaterializationError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        ));
+    }
+    Ok(parsed)
 }
 
 fn has_conflicting_artifact_digest_ids(digests: &BTreeSet<ArtifactDigest>) -> bool {
@@ -1514,6 +1559,39 @@ mod tests {
         );
     }
 
+    fn materialized_test_bundle(name: &str) -> (PathBuf, AgentAdmissionJournal) {
+        let output_root = temp_output_root(name);
+        let journal = two_entry_journal();
+        materialize_admission_journal_bundle(
+            &output_root,
+            &journal,
+            &materialization_request(name, &output_root),
+        )
+        .expect("test bundle materializes");
+        (output_root, journal)
+    }
+
+    fn assert_malformed_declared_json(logical_path: &str) {
+        let name = logical_path
+            .rsplit('/')
+            .next()
+            .expect("logical path has a filename")
+            .replace('.', "-");
+        let (output_root, _) = materialized_test_bundle(&format!("malformed-{name}"));
+        if logical_path == "admission-journal/manifest.json" {
+            rewrite_bundle_file(&output_root, logical_path, b"{");
+        } else {
+            rewrite_content_and_manifest_digest(&output_root, logical_path, b"{");
+        }
+        assert_eq!(
+            read_admission_journal_bundle(&output_root),
+            Err(AdmissionJournalMaterializationError::MalformedDeclaredFile(
+                logical_path.to_owned()
+            ))
+        );
+        fs::remove_dir_all(&output_root).expect("malformed bundle cleanup succeeds");
+    }
+
     fn two_entry_journal() -> AgentAdmissionJournal {
         let accepted = accepted_candidate();
         let rejected = {
@@ -1871,6 +1949,33 @@ mod tests {
     }
 
     #[test]
+    fn pcsm_bounded_handoff_rejects_missing_identity_and_governance_prerequisites() {
+        let mut intake = valid_pcsm_intake();
+        intake.source_repo_remote.clear();
+        intake.source_repo_branch.clear();
+        intake.source_handoff_schema.clear();
+        intake.source_handoff_state_slice.clear();
+        intake.bounded_breakthrough_evidence_admitted = false;
+        intake.local_mlx_surrogate_runtime = false;
+        intake.native_pcsm_governed_state = false;
+        intake.pcsm_journaled = false;
+
+        let errors = validate_pcsm_bounded_proof_handoff_intake(&intake);
+        for field in [
+            "source_repo_remote",
+            "source_repo_branch",
+            "source_handoff_schema",
+            "source_handoff_state_slice",
+        ] {
+            assert!(errors.contains(&PcsmHandoffIntakeError::MissingSourceIdentity(field)));
+        }
+        assert!(errors.contains(&PcsmHandoffIntakeError::BoundedEvidenceNotAdmitted));
+        assert!(errors.contains(&PcsmHandoffIntakeError::LocalMlxSurrogateMissing));
+        assert!(errors.contains(&PcsmHandoffIntakeError::NativePcsmGovernanceMissing));
+        assert!(errors.contains(&PcsmHandoffIntakeError::PcsmJournalMissing));
+    }
+
+    #[test]
     fn admission_journal_bundle_materializes_declared_files_and_sidecars() {
         let output_root = temp_output_root("bundle");
         let journal = two_entry_journal();
@@ -2221,5 +2326,513 @@ mod tests {
             ))
         );
         fs::remove_dir_all(&output_root).expect("sidecar test cleanup succeeds");
+    }
+
+    #[test]
+    fn admission_journal_readback_rejects_missing_partial_and_digest_drift() {
+        let (missing_primary_root, _) = materialized_test_bundle("missing-primary");
+        fs::remove_file(missing_primary_root.join("admission-journal/journal.json"))
+            .expect("primary file removal succeeds");
+        assert!(matches!(
+            read_admission_journal_bundle(&missing_primary_root),
+            Err(AdmissionJournalMaterializationError::Io(message))
+                if message.contains("declared file missing")
+        ));
+        fs::remove_dir_all(&missing_primary_root).expect("missing primary cleanup succeeds");
+
+        let (missing_sidecar_root, _) = materialized_test_bundle("missing-sidecar");
+        fs::remove_file(missing_sidecar_root.join("admission-journal/journal.json.sha256"))
+            .expect("sidecar removal succeeds");
+        assert!(matches!(
+            read_admission_journal_bundle(&missing_sidecar_root),
+            Err(AdmissionJournalMaterializationError::Io(message))
+                if message.contains("declared file missing")
+        ));
+        fs::remove_dir_all(&missing_sidecar_root).expect("missing sidecar cleanup succeeds");
+
+        let (digest_root, _) = materialized_test_bundle("digest-drift");
+        fs::write(
+            digest_root.join("admission-journal/journal.json"),
+            b"digest drift",
+        )
+        .expect("digest drift writes");
+        assert_eq!(
+            read_admission_journal_bundle(&digest_root),
+            Err(AdmissionJournalMaterializationError::DigestMismatch(
+                "admission-journal/journal.json".to_owned()
+            ))
+        );
+        fs::remove_dir_all(&digest_root).expect("digest drift cleanup succeeds");
+
+        let (nested_root, _) = materialized_test_bundle("nested-undeclared");
+        fs::create_dir(nested_root.join("admission-journal/unexpected"))
+            .expect("undeclared directory creation succeeds");
+        assert_eq!(
+            read_admission_journal_bundle(&nested_root),
+            Err(AdmissionJournalMaterializationError::UndeclaredFile(
+                "admission-journal/unexpected".to_owned()
+            ))
+        );
+        fs::remove_dir_all(&nested_root).expect("nested directory cleanup succeeds");
+    }
+
+    #[test]
+    fn admission_journal_readback_rejects_malformed_declared_json() {
+        for logical_path in [
+            "admission-journal/manifest.json",
+            "admission-journal/journal.json",
+            "admission-journal/source-digests.json",
+            "admission-journal/redaction-report.json",
+            "admission-journal/validation-report.json",
+        ] {
+            assert_malformed_declared_json(logical_path);
+        }
+    }
+
+    #[test]
+    fn admission_journal_readback_rejects_decision_index_shape_drift() {
+        for (name, mutate) in [
+            ("missing-newline", "remove-final-newline"),
+            ("blank-row", "insert-blank-row"),
+            ("malformed-row", "malformed-row"),
+            ("duplicate-row", "duplicate-row"),
+            ("omitted-row", "omit-row"),
+            ("reordered-row", "reorder-row"),
+        ] {
+            let (output_root, _) = materialized_test_bundle(name);
+            let original =
+                fs::read_to_string(output_root.join("admission-journal/decisions.jsonl"))
+                    .expect("decision rows read");
+            let rows: Vec<&str> = original.lines().collect();
+            let changed = match mutate {
+                "remove-final-newline" => original.trim_end_matches('\n').to_owned(),
+                "insert-blank-row" => format!("{}\n\n{}\n", rows[0], rows[1]),
+                "malformed-row" => format!("{{\n{}\n", rows[1]),
+                "duplicate-row" => format!("{}\n{}\n{}\n", rows[0], rows[0], rows[1]),
+                "omit-row" => format!("{}\n", rows[0]),
+                "reorder-row" => format!("{}\n{}\n", rows[1], rows[0]),
+                _ => unreachable!("known mutation"),
+            };
+            rewrite_content_and_manifest_digest(
+                &output_root,
+                "admission-journal/decisions.jsonl",
+                changed.as_bytes(),
+            );
+            assert!(matches!(
+                read_admission_journal_bundle(&output_root),
+                Err(AdmissionJournalMaterializationError::DecisionIndexMismatch)
+                    | Err(AdmissionJournalMaterializationError::MalformedDeclaredFile(
+                        _
+                    ))
+            ));
+            fs::remove_dir_all(&output_root).expect("decision mutation cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn admission_journal_readback_rejects_manifest_contract_drift() {
+        for drift in [
+            "schema",
+            "bundle-id",
+            "declared-order",
+            "digest-map",
+            "claim-boundary",
+            "policy",
+            "tip",
+        ] {
+            let (output_root, _) = materialized_test_bundle(&format!("manifest-{drift}"));
+            let manifest_path = output_root.join("admission-journal/manifest.json");
+            let mut manifest: AdmissionJournalBundleManifest =
+                serde_json::from_slice(&fs::read(&manifest_path).expect("manifest reads"))
+                    .expect("manifest parses");
+            match drift {
+                "schema" => manifest.schema_version = "unknown".to_owned(),
+                "bundle-id" => manifest.bundle_id = "../unsafe".to_owned(),
+                "declared-order" => manifest.declared_files.swap(0, 1),
+                "digest-map" => {
+                    manifest
+                        .declared_file_digests
+                        .remove("admission-journal/journal.json");
+                }
+                "claim-boundary" => manifest.claim_boundary = "accepted evidence".to_owned(),
+                "policy" => {
+                    manifest.admission_policy_id = AdmissionPolicyId("other-policy".to_owned())
+                }
+                "tip" => manifest.journal_tip_digest_after = Some(Hash([42; 32])),
+                _ => unreachable!("known drift"),
+            }
+            rewrite_bundle_file(
+                &output_root,
+                "admission-journal/manifest.json",
+                &serde_json::to_vec_pretty(&manifest).expect("manifest serializes"),
+            );
+            assert_eq!(
+                read_admission_journal_bundle(&output_root),
+                Err(AdmissionJournalMaterializationError::ManifestSemanticMismatch)
+            );
+            fs::remove_dir_all(&output_root).expect("manifest drift cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn admission_journal_materialization_rejects_unsafe_roots_and_allows_overwrite() {
+        let journal = two_entry_journal();
+        let empty_request = AdmissionJournalMaterializationRequest {
+            bundle_id: "empty-root".to_owned(),
+            created_at_unix: 1_800_000_000,
+            admission_policy_id: policy().id,
+            journal_tip_digest_before: None,
+            nonclaims: admission_journal_required_nonclaims(),
+            overwrite: false,
+            protected_roots: Vec::new(),
+        };
+        assert_eq!(
+            materialize_admission_journal_bundle(Path::new(""), &journal, &empty_request),
+            Err(AdmissionJournalMaterializationError::EmptyOutputRoot)
+        );
+
+        let file_root = temp_output_root("file-root");
+        fs::write(&file_root, b"file").expect("file root writes");
+        assert_eq!(
+            materialize_admission_journal_bundle(
+                &file_root,
+                &journal,
+                &materialization_request("file-root", &file_root),
+            ),
+            Err(AdmissionJournalMaterializationError::OutputRootIsFile)
+        );
+        fs::remove_file(&file_root).expect("file root cleanup succeeds");
+
+        let existing_root = temp_output_root("existing-root");
+        let request = materialization_request("existing-root", &existing_root);
+        materialize_admission_journal_bundle(&existing_root, &journal, &request)
+            .expect("initial materialization succeeds");
+        assert_eq!(
+            materialize_admission_journal_bundle(&existing_root, &journal, &request),
+            Err(AdmissionJournalMaterializationError::OutputRootExistsWithoutOverwrite)
+        );
+        let mut overwrite = request;
+        overwrite.overwrite = true;
+        assert_eq!(
+            materialize_admission_journal_bundle(&existing_root, &journal, &overwrite)
+                .expect("explicit overwrite succeeds")
+                .entry_count,
+            2
+        );
+        fs::remove_dir_all(&existing_root).expect("existing root cleanup succeeds");
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn admission_journal_readback_rejects_primary_symlink_and_file_directories() {
+        use std::os::unix::fs::symlink;
+
+        let (symlink_root, _) = materialized_test_bundle("primary-symlink");
+        let journal_path = symlink_root.join("admission-journal/journal.json");
+        fs::remove_file(&journal_path).expect("journal removal succeeds");
+        symlink(
+            symlink_root.join("admission-journal/manifest.json"),
+            &journal_path,
+        )
+        .expect("primary symlink creation succeeds");
+        assert_eq!(
+            read_admission_journal_bundle(&symlink_root),
+            Err(AdmissionJournalMaterializationError::BundleFileIsSymlink(
+                "admission-journal/journal.json".to_owned()
+            ))
+        );
+        fs::remove_dir_all(&symlink_root).expect("primary symlink cleanup succeeds");
+
+        let (directory_root, _) = materialized_test_bundle("primary-directory");
+        let source_path = directory_root.join("admission-journal/source-digests.json");
+        fs::remove_file(&source_path).expect("source index removal succeeds");
+        fs::create_dir(&source_path).expect("source directory substitution succeeds");
+        assert_eq!(
+            read_admission_journal_bundle(&directory_root),
+            Err(
+                AdmissionJournalMaterializationError::DeclaredFileTypeMismatch(
+                    "admission-journal/source-digests.json".to_owned()
+                )
+            )
+        );
+        fs::remove_dir_all(&directory_root).expect("primary directory cleanup succeeds");
+
+        let symlink_output = temp_output_root("output-symlink");
+        let target = temp_output_root("output-symlink-target");
+        fs::create_dir(&target).expect("symlink target creation succeeds");
+        symlink(&target, &symlink_output).expect("output symlink creation succeeds");
+        assert_eq!(
+            materialize_admission_journal_bundle(
+                &symlink_output,
+                &two_entry_journal(),
+                &materialization_request("output-symlink", &symlink_output),
+            ),
+            Err(AdmissionJournalMaterializationError::OutputRootIsSymlink)
+        );
+        fs::remove_file(&symlink_output).expect("output symlink cleanup succeeds");
+        fs::remove_dir_all(&target).expect("output symlink target cleanup succeeds");
+    }
+
+    #[test]
+    fn non_accepted_decisions_never_expose_or_validate_retained_envelopes() {
+        for verdict in [AdmissionVerdict::Rejected, AdmissionVerdict::Quarantined] {
+            let candidate = accepted_candidate();
+            let mut decision = evaluate_admission(&candidate, &policy());
+            decision.verdict = verdict;
+            decision
+                .reasons
+                .push(reason("adversarial_non_accepted_envelope"));
+            assert!(decision.accepted_envelope().is_none());
+            assert!(accepted_claim_envelope(&decision).is_none());
+
+            let mut journal = AgentAdmissionJournal::default();
+            let entry = AgentAdmissionJournalEntry {
+                sequence_number: 0,
+                previous_entry_digest: None,
+                candidate_id: candidate.id.clone(),
+                candidate_digest: candidate.digest(),
+                decision_digest: decision.digest(),
+                source_artifact_digests: candidate.source_artifact_digests.clone(),
+                decision,
+            };
+            journal.entries.push(entry);
+            assert!(journal
+                .validate()
+                .contains(&JournalError::NonAcceptedVerdictRetainsEnvelope));
+            assert_eq!(
+                journal.append_decision(&candidate, evaluate_admission(&candidate, &policy())),
+                Err(JournalError::InvalidExistingJournal)
+            );
+
+            let output_root = temp_output_root("invalid-retained-envelope");
+            assert!(matches!(
+                materialize_admission_journal_bundle(
+                    &output_root,
+                    &journal,
+                    &materialization_request("invalid-retained-envelope", &output_root),
+                ),
+                Err(AdmissionJournalMaterializationError::InvalidJournal(errors))
+                    if errors.contains(&JournalError::NonAcceptedVerdictRetainsEnvelope)
+            ));
+            assert!(!output_root.exists());
+        }
+
+        let candidate = accepted_candidate();
+        let mut journal = AgentAdmissionJournal::default();
+        journal
+            .append_decision(&candidate, evaluate_admission(&candidate, &policy()))
+            .expect("accepted decision appends");
+        let output_root = temp_output_root("rehashed-retained-envelope");
+        materialize_admission_journal_bundle(
+            &output_root,
+            &journal,
+            &materialization_request("rehashed-retained-envelope", &output_root),
+        )
+        .expect("baseline bundle materializes");
+        let mut tampered: AgentAdmissionJournal = serde_json::from_slice(
+            &fs::read(output_root.join("admission-journal/journal.json")).expect("journal reads"),
+        )
+        .expect("journal parses");
+        tampered.entries[0].decision.verdict = AdmissionVerdict::Rejected;
+        tampered.entries[0]
+            .decision
+            .reasons
+            .push(reason("adversarial_rehashed_rejection"));
+        tampered.entries[0].decision_digest = tampered.entries[0].decision.digest();
+        rewrite_content_and_manifest_digest(
+            &output_root,
+            "admission-journal/journal.json",
+            &serde_json::to_vec_pretty(&tampered).expect("tampered journal serializes"),
+        );
+        assert!(matches!(
+            read_admission_journal_bundle(&output_root),
+            Err(AdmissionJournalMaterializationError::InvalidSerializedJournal(errors))
+                if errors.contains(&JournalError::NonAcceptedVerdictRetainsEnvelope)
+        ));
+        fs::remove_dir_all(&output_root).expect("rehashed bundle cleanup succeeds");
+    }
+
+    #[test]
+    fn admission_journal_readback_rejects_unknown_json_fields() {
+        for (name, logical_path, field) in [
+            (
+                "unknown-manifest",
+                "admission-journal/manifest.json",
+                "raw_provider_response",
+            ),
+            (
+                "unknown-journal",
+                "admission-journal/journal.json",
+                "raw_network_transcript",
+            ),
+            (
+                "unknown-source",
+                "admission-journal/source-digests.json",
+                "raw_artifact",
+            ),
+            (
+                "unknown-redaction",
+                "admission-journal/redaction-report.json",
+                "raw_secret",
+            ),
+            (
+                "unknown-validation",
+                "admission-journal/validation-report.json",
+                "raw_response",
+            ),
+        ] {
+            let (output_root, _) = materialized_test_bundle(name);
+            let path = output_root.join(logical_path);
+            let mut value: serde_json::Value =
+                serde_json::from_slice(&fs::read(&path).expect("declared JSON reads"))
+                    .expect("declared JSON parses");
+            value
+                .as_object_mut()
+                .expect("top-level JSON is an object")
+                .insert(field.to_owned(), serde_json::json!("retained"));
+            let bytes = serde_json::to_vec_pretty(&value).expect("unknown-field JSON serializes");
+            if logical_path == "admission-journal/manifest.json" {
+                rewrite_bundle_file(&output_root, logical_path, &bytes);
+            } else {
+                rewrite_content_and_manifest_digest(&output_root, logical_path, &bytes);
+            }
+            assert_eq!(
+                read_admission_journal_bundle(&output_root),
+                Err(AdmissionJournalMaterializationError::MalformedDeclaredFile(
+                    logical_path.to_owned()
+                ))
+            );
+            fs::remove_dir_all(&output_root).expect("unknown-field cleanup succeeds");
+        }
+
+        let (decision_root, _) = materialized_test_bundle("unknown-decision-row");
+        let decisions_path = decision_root.join("admission-journal/decisions.jsonl");
+        let original = fs::read_to_string(&decisions_path).expect("decision rows read");
+        let mut rows = Vec::new();
+        for line in original.lines() {
+            let mut row: serde_json::Value =
+                serde_json::from_str(line).expect("decision row parses");
+            row.as_object_mut().expect("decision row is object").insert(
+                "raw_provider_response".to_owned(),
+                serde_json::json!("retained"),
+            );
+            rows.push(serde_json::to_string(&row).expect("decision row serializes"));
+        }
+        let changed = format!("{}\n", rows.join("\n"));
+        rewrite_content_and_manifest_digest(
+            &decision_root,
+            "admission-journal/decisions.jsonl",
+            changed.as_bytes(),
+        );
+        assert_eq!(
+            read_admission_journal_bundle(&decision_root),
+            Err(AdmissionJournalMaterializationError::MalformedDeclaredFile(
+                "admission-journal/decisions.jsonl".to_owned()
+            ))
+        );
+        fs::remove_dir_all(&decision_root).expect("unknown decision cleanup succeeds");
+
+        let (nested_root, _) = materialized_test_bundle("unknown-nested-decision");
+        let journal_path = nested_root.join("admission-journal/journal.json");
+        let mut journal_value: serde_json::Value =
+            serde_json::from_slice(&fs::read(&journal_path).expect("journal reads"))
+                .expect("journal parses");
+        journal_value["entries"][0]["decision"]
+            .as_object_mut()
+            .expect("nested decision is object")
+            .insert(
+                "raw_provider_response".to_owned(),
+                serde_json::json!("retained"),
+            );
+        rewrite_content_and_manifest_digest(
+            &nested_root,
+            "admission-journal/journal.json",
+            &serde_json::to_vec_pretty(&journal_value).expect("journal serializes"),
+        );
+        assert_eq!(
+            read_admission_journal_bundle(&nested_root),
+            Err(AdmissionJournalMaterializationError::MalformedDeclaredFile(
+                "admission-journal/journal.json".to_owned()
+            ))
+        );
+        fs::remove_dir_all(&nested_root).expect("unknown nested cleanup succeeds");
+
+        let (entry_root, _) = materialized_test_bundle("unknown-journal-entry");
+        let mut entry_value: serde_json::Value = serde_json::from_slice(
+            &fs::read(entry_root.join("admission-journal/journal.json")).expect("journal reads"),
+        )
+        .expect("journal parses");
+        entry_value["entries"][0]
+            .as_object_mut()
+            .expect("journal entry is object")
+            .insert("raw_payload".to_owned(), serde_json::json!("retained"));
+        rewrite_content_and_manifest_digest(
+            &entry_root,
+            "admission-journal/journal.json",
+            &serde_json::to_vec_pretty(&entry_value).expect("journal serializes"),
+        );
+        assert_eq!(
+            read_admission_journal_bundle(&entry_root),
+            Err(AdmissionJournalMaterializationError::MalformedDeclaredFile(
+                "admission-journal/journal.json".to_owned()
+            ))
+        );
+        fs::remove_dir_all(&entry_root).expect("unknown entry cleanup succeeds");
+
+        let (artifact_root, _) = materialized_test_bundle("unknown-source-artifact");
+        let mut artifact_value: serde_json::Value = serde_json::from_slice(
+            &fs::read(artifact_root.join("admission-journal/source-digests.json"))
+                .expect("source index reads"),
+        )
+        .expect("source index parses");
+        artifact_value["source_artifact_digests"][0]
+            .as_object_mut()
+            .expect("artifact digest is object")
+            .insert("raw_artifact".to_owned(), serde_json::json!("retained"));
+        rewrite_content_and_manifest_digest(
+            &artifact_root,
+            "admission-journal/source-digests.json",
+            &serde_json::to_vec_pretty(&artifact_value).expect("source index serializes"),
+        );
+        assert_eq!(
+            read_admission_journal_bundle(&artifact_root),
+            Err(AdmissionJournalMaterializationError::MalformedDeclaredFile(
+                "admission-journal/source-digests.json".to_owned()
+            ))
+        );
+        fs::remove_dir_all(&artifact_root).expect("unknown artifact cleanup succeeds");
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn admission_journal_readback_rejects_root_and_bundle_directory_symlinks() {
+        use std::os::unix::fs::symlink;
+
+        let (target_root, _) = materialized_test_bundle("readback-root-target");
+        let symlink_root = temp_output_root("readback-root-symlink");
+        symlink(&target_root, &symlink_root).expect("root symlink creation succeeds");
+        assert_eq!(
+            read_admission_journal_bundle(&symlink_root),
+            Err(AdmissionJournalMaterializationError::OutputRootIsSymlink)
+        );
+        fs::remove_file(&symlink_root).expect("root symlink cleanup succeeds");
+        fs::remove_dir_all(&target_root).expect("root target cleanup succeeds");
+
+        let (bundle_target_root, _) = materialized_test_bundle("bundle-dir-target");
+        let bundle_symlink_root = temp_output_root("bundle-dir-symlink");
+        fs::create_dir(&bundle_symlink_root).expect("bundle symlink root creation succeeds");
+        symlink(
+            bundle_target_root.join("admission-journal"),
+            bundle_symlink_root.join("admission-journal"),
+        )
+        .expect("bundle directory symlink creation succeeds");
+        assert_eq!(
+            read_admission_journal_bundle(&bundle_symlink_root),
+            Err(AdmissionJournalMaterializationError::BundleFileIsSymlink(
+                "admission-journal".to_owned()
+            ))
+        );
+        fs::remove_dir_all(&bundle_symlink_root).expect("bundle symlink cleanup succeeds");
+        fs::remove_dir_all(&bundle_target_root).expect("bundle target cleanup succeeds");
     }
 }

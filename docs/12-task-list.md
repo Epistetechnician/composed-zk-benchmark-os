@@ -1616,6 +1616,40 @@ validation report point to it; docs contract and hygiene gates pass; normal
 tests remain hermetic; no source checkout is parsed; no generated bundle is
 committed; and no stronger claim is created.
 
+## HSAI Track: Phase 145 Admission Journal Adversarial Invariant Implementation
+
+Status: complete for fail-closed admission-decision and journal-readback
+hardening. See
+`docs/145-phase-hsai-admission-journal-adversarial-invariant-implementation-notes.md`.
+
+Goal: implement the Phase 144 verdict-envelope, strict JSON, and root-symlink
+invariants while closing missing fail-closed test branches.
+
+Scope: `crates/hsai-agent-admission/src/lib.rs`, phase notes, and
+navigation/status updates only.
+
+Implemented: verdict-aware envelope access; journal rejection for envelopes
+under rejected or quarantined verdicts; pre-materialization rejection of
+invalid journals; typed JSON value round-trip checks that reject recursively
+unknown fields; output-root and bundle-directory type and symlink checks; and
+expanded hermetic failure coverage.
+
+Measured focused coverage: `96.80%` regions, `94.92%` functions, and `97.45%`
+lines. These values are local coverage measurements, not 100% coverage.
+
+Anti-goals: committed-source parsing, recoverable-ghost inspection or command
+execution, PCSM runtime import, provider calls, network access, credentials,
+committed generated bundles, package runtime additions, accepted Evidence
+Ledger mutation, official submission, external replay, score-axis population,
+Level2+ evidence, proof, semantic correctness, production readiness, global
+software-agent uniqueness, or 100% coverage.
+
+Exit criteria: Phase 145 notes exist; README, AGENTS, task list, and validation
+report point to them; 27 focused tests pass; source scans, claim-boundary, and
+hygiene tests pass; full workspace tests, clippy, rustdoc, and focused coverage
+pass; no source checkout is parsed; no generated bundle is committed; and no
+stronger claim is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
