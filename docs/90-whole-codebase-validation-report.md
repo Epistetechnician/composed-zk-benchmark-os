@@ -40,7 +40,9 @@ docs-first Phase 139 PCSM bounded-proof handoff intake boundary, and the Phase
 Phase 142 HSAI admission journal semantic readback boundary, and the Phase 143
 HSAI admission journal semantic readback implementation, and the docs-first
 Phase 144 HSAI admission journal adversarial invariant boundary, and the Phase
-145 HSAI admission journal adversarial invariant implementation, plus
+145 HSAI admission journal adversarial invariant implementation, and the
+docs-first Phase 146 HSAI admission provenance and transaction integrity
+boundary, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -347,6 +349,17 @@ creates no committed generated output, mutates no accepted Evidence Ledger,
 populates no score axes, creates no Level2+ evidence, and creates no stronger
 claim.
 
+Phase 146 opens the docs-first boundary for three high-severity local integrity
+gaps: caller-supplied decisions must equal deterministic policy evaluation,
+PCSM candidates must bind the complete validated intake digest, and protected
+root overlap must reject output ancestors before overwrite deletion. It defines
+required candidate and policy snapshots, append and journal validation rules,
+reserved digest behavior, symmetric path checks, adversarial tests, deferred
+medium findings, and implementation exit criteria. It changes no Rust source,
+parses no recoverable-ghost file, creates no generated output, mutates no
+accepted Evidence Ledger, populates no score axes, creates no Level2+ evidence,
+and creates no stronger claim.
+
 ## State Slice
 
 This report touches only:
@@ -431,6 +444,7 @@ This report touches only:
 - `docs/143-phase-hsai-admission-journal-semantic-readback-implementation-notes.md`
 - `docs/144-phase-hsai-admission-journal-adversarial-invariant-boundary-spec.md`
 - `docs/145-phase-hsai-admission-journal-adversarial-invariant-implementation-notes.md`
+- `docs/146-phase-hsai-admission-provenance-transaction-integrity-boundary-spec.md`
 - `Cargo.lock`
 - `Cargo.toml`
 - `docs/12-task-list.md`

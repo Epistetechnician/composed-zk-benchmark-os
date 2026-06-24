@@ -1650,6 +1650,36 @@ hygiene tests pass; full workspace tests, clippy, rustdoc, and focused coverage
 pass; no source checkout is parsed; no generated bundle is committed; and no
 stronger claim is created.
 
+## HSAI Track: Phase 146 Admission Provenance And Transaction Integrity Boundary
+
+Status: complete for the docs-first admission provenance and output-root
+transaction integrity boundary. See
+`docs/146-phase-hsai-admission-provenance-transaction-integrity-boundary-spec.md`.
+
+Goal: define fail-closed behavior for caller-forgeable decisions, unbound PCSM
+intake metadata, and overwrite roots that are ancestors of protected paths.
+
+Scope: Markdown boundary, README, AGENTS, task list, and validation report
+updates only.
+
+Defined: stored candidate and policy snapshots, deterministic decision
+recomputation, explicit policy append inputs, reserved PCSM intake digest
+binding, symmetric protected-root overlap rejection, required future tests,
+deferred medium findings, source-checkout recheck, claim limits, and future
+implementation exit criteria.
+
+Anti-goals: Rust source or test changes, Cargo metadata changes, generated
+artifacts, committed-source parsing, recoverable-ghost inspection or commands,
+PCSM runtime import, provider calls, network access, credentials, accepted
+Evidence Ledger mutation, official submission, external replay, score-axis
+population, Level2+ evidence, proof, semantic correctness, production
+readiness, global software-agent uniqueness, or 100% coverage.
+
+Exit criteria: Phase 146 boundary exists; README, AGENTS, task list, and
+validation report point to it; docs contract and hygiene gates pass; no source
+checkout is parsed; no generated bundle is committed; and no stronger claim is
+created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
