@@ -28,8 +28,8 @@ verifier names. Four candidate-level semantic gaps remain.
 
 `AdmissionCandidateId` and `SubjectId` are public string wrappers. Admission
 currently permits empty, whitespace-only, or whitespace-padded identities.
-Candidate IDs are journal and replay identities, so ambiguous values must fail
-before acceptance.
+Candidate IDs are journal-facing identities, while replay is keyed by the full
+candidate digest. Ambiguous IDs must still fail before acceptance.
 
 ### Source-Kind Claim Boundary
 
@@ -118,10 +118,10 @@ candidate shape.
 
 ## Deterministic Reason Ordering
 
-Future identity reasons must precede source-kind reasons. Source-kind boundary
-and reserved-ID reasons must follow source payload-shape reasons and precede
-general artifact and policy reasons. Stable ordering is required because
-decision digests are journaled.
+Future reasons must use this order: identity, source payload shape, exact
+source boundary, reserved PCSM placement, general artifacts, strict typing,
+then policy and authority checks. Stable ordering is required because decision
+digests are journaled.
 
 ## Required Future Tests
 
@@ -130,7 +130,8 @@ A later implementation phase must prove:
 - empty, whitespace-only, padded, path-like, traversal-like, and
   invalid-character candidate IDs fail closed;
 - empty, whitespace-only, and padded subjects fail closed;
-- each source kind accepts only its exact claim boundary;
+- each source kind avoids the boundary-mismatch reason only at its exact claim
+  boundary;
 - lower as well as higher source-boundary drift fails closed;
 - only an accepted `ClaimEnvelopeProposal` exports an envelope;
 - non-envelope source kinds cannot export an accepted envelope;
@@ -139,8 +140,8 @@ A later implementation phase must prove:
 - the existing PCSM mapper still installs the exact intake digest;
 - valid case, envelope, and PCSM candidates remain accepted under their
   existing policies;
-- journal recomputation and semantic readback reject fully rehashed candidate
-  semantic drift;
+- journal recomputation and semantic readback reject candidate semantic drift
+  that retains a stale or forged accepted decision;
 - normal tests remain process-free, network-free, and source-repo independent.
 
 ## Compatibility Rules

@@ -231,7 +231,7 @@ mod tests {
     ) -> Option<ClaimEnvelope> {
         let policy = admission_policy();
         let decision = evaluate_admission(candidate, &policy);
-        let accepted = accepted_claim_envelope(&decision).cloned();
+        let accepted = accepted_claim_envelope(candidate, &policy, &decision).cloned();
         journal
             .append_decision(candidate, &policy, decision)
             .expect("valid admission decision appends to journal");
@@ -786,7 +786,7 @@ mod tests {
         let policy = admission_policy();
         let decision = evaluate_admission(&candidate, &policy);
         assert_eq!(decision.verdict, AdmissionVerdict::Rejected);
-        assert!(accepted_claim_envelope(&decision).is_none());
+        assert!(accepted_claim_envelope(&candidate, &policy, &decision).is_none());
 
         let mut journal = AgentAdmissionJournal::default();
         journal
@@ -812,7 +812,7 @@ mod tests {
         let policy = admission_policy();
         let decision = evaluate_admission(&candidate, &policy);
         assert_eq!(decision.verdict, AdmissionVerdict::Quarantined);
-        assert!(accepted_claim_envelope(&decision).is_none());
+        assert!(accepted_claim_envelope(&candidate, &policy, &decision).is_none());
 
         let mut journal = AgentAdmissionJournal::default();
         journal

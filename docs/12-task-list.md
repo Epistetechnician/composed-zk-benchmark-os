@@ -1816,6 +1816,42 @@ validation report point to it; docs contract and hygiene gates pass; no Rust,
 Cargo, fixture, package-runtime, generated-output, or source-checkout surface
 changes; and no stronger claim is created.
 
+## HSAI Track: Phase 151 Admission Candidate Semantic Closure Implementation
+
+Status: complete for deterministic local candidate identity, source-boundary,
+envelope-export, and reserved-digest validation. See
+`docs/151-phase-hsai-admission-candidate-semantic-closure-implementation-notes.md`.
+
+Goal: implement the Phase 150 candidate semantic closure.
+
+Scope: `crates/hsai-agent-admission/src/lib.rs`,
+`crates/hsai-e2e-harness/src/lib.rs`, Phase 150 corrections, Phase 151 notes,
+and navigation/status updates only.
+
+Implemented: portable nonempty candidate IDs; nonempty trimmed subjects; exact
+source-kind claim boundaries; envelope creation only for accepted envelope
+proposals; candidate-policy-decision authenticated envelope export; mandatory
+reserved PCSM intake digest placement on PCSM candidates; and reserved-ID
+rejection on non-PCSM candidates.
+
+Focused admission tests increased from 34 to 36. Measured focused coverage:
+`97.49%` regions, `95.62%` functions, and `98.09%` lines. These values are
+local coverage measurements, not 100% coverage.
+
+Anti-goals: arbitrary PCSM digest authentication, duplicate JSON or raw-array
+detection, failure-atomic overwrite, descriptor-relative no-follow access,
+randomized staging, committed-source parsing, recoverable-ghost inspection or
+commands, PCSM runtime import, provider calls, network access, credentials,
+generated bundles, accepted Evidence Ledger mutation, official submission,
+external replay, score-axis population, Level2+ evidence, proof, semantic
+correctness, production readiness, or global uniqueness.
+
+Exit criteria: Phase 151 notes exist; README, AGENTS, task list, and validation
+report point to them; 36 admission tests and 24 HSAI harness tests pass;
+source-scan, claim-boundary, and hygiene tests pass; full workspace tests,
+clippy, rustdoc, and focused coverage pass; no source checkout is parsed; no
+generated bundle is committed; and no stronger claim is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
