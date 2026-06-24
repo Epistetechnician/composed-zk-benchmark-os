@@ -1852,6 +1852,37 @@ source-scan, claim-boundary, and hygiene tests pass; full workspace tests,
 clippy, rustdoc, and focused coverage pass; no source checkout is parsed; no
 generated bundle is committed; and no stronger claim is created.
 
+## HSAI Track: Phase 152 Admission Journal Duplicate JSON Boundary
+
+Status: complete for docs-first authorization only. See
+`docs/152-phase-hsai-admission-journal-duplicate-json-boundary-spec.md`.
+
+Goal: define recursive duplicate JSON object-key rejection before existing
+typed canonical admission-journal readback.
+
+Scope: Phase 152 boundary, README, AGENTS, task-list, and validation-report
+navigation only.
+
+Required future behavior: one complete JSON value; recursive duplicate
+object-key rejection; nested array/object coverage; trailing-data rejection;
+normal `serde_json::Value` preservation; integration before typed
+deserialization; and existing malformed-file error mapping for every declared
+JSON file and decision JSONL row.
+
+Anti-goals: Rust implementation in this phase, repeated array-element
+rejection, raw PCSM array parsing, failure-atomic overwrite,
+descriptor-relative no-follow access, randomized staging, committed-source
+parsing, recoverable-ghost inspection or commands, PCSM runtime import,
+provider calls, network access, credentials, generated bundles, accepted
+Evidence Ledger mutation, official submission, external replay, score-axis
+population, Level2+ evidence, proof, semantic correctness, production
+readiness, or global uniqueness.
+
+Exit criteria: Phase 152 boundary exists; README, AGENTS, task list, and
+validation report point to it; docs contract and hygiene gates pass; no Rust,
+Cargo, fixture, package-runtime, generated-output, or source-checkout surface
+changes; and no stronger claim is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

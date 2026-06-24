@@ -230,6 +230,7 @@ Surface DSL
 | [docs/149-phase-hsai-admission-input-semantic-integrity-implementation-notes.md](docs/149-phase-hsai-admission-input-semantic-integrity-implementation-notes.md) | HSAI admission input semantic integrity implementation notes. |
 | [docs/150-phase-hsai-admission-candidate-semantic-closure-boundary-spec.md](docs/150-phase-hsai-admission-candidate-semantic-closure-boundary-spec.md) | HSAI admission candidate semantic closure docs-first boundary. |
 | [docs/151-phase-hsai-admission-candidate-semantic-closure-implementation-notes.md](docs/151-phase-hsai-admission-candidate-semantic-closure-implementation-notes.md) | HSAI admission candidate semantic closure implementation notes. |
+| [docs/152-phase-hsai-admission-journal-duplicate-json-boundary-spec.md](docs/152-phase-hsai-admission-journal-duplicate-json-boundary-spec.md) | HSAI admission journal duplicate JSON key docs-first boundary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -867,6 +868,10 @@ intake digest. It authorizes no Rust implementation or stronger claim.
 implements the boundary. Candidate identities and exact source boundaries now
 fail closed, reserved PCSM digest placement is enforced, and envelope export
 requires exact candidate-policy decision recomputation.
+[docs/152-phase-hsai-admission-journal-duplicate-json-boundary-spec.md](docs/152-phase-hsai-admission-journal-duplicate-json-boundary-spec.md)
+defines the next docs-first parser hardening boundary. It requires recursive
+duplicate object-key rejection before typed canonical JSON validation across
+every declared admission-journal JSON document and decision JSONL row.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
