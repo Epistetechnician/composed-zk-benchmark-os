@@ -1680,6 +1680,45 @@ validation report point to it; docs contract and hygiene gates pass; no source
 checkout is parsed; no generated bundle is committed; and no stronger claim is
 created.
 
+## HSAI Track: Phase 147 Admission Provenance And Transaction Integrity Implementation
+
+Status: complete for deterministic admission provenance and symmetric
+protected-root safety. See
+`docs/147-phase-hsai-admission-provenance-transaction-integrity-implementation-notes.md`.
+
+Goal: implement the Phase 146 decision-recomputation, PCSM intake-binding, and
+protected-root overlap invariants.
+
+Scope: `crates/hsai-agent-admission/src/lib.rs`,
+`crates/hsai-e2e-harness/src/lib.rs`, phase notes, and navigation/status updates
+only.
+
+Implemented: typed candidate and policy snapshots in journal entries;
+policy-explicit append; exact deterministic decision recomputation during
+append and journal validation; candidate, policy, source-digest, and decision
+snapshot checks; reserved PCSM intake digest binding and collision rejection;
+and symmetric protected-root overlap rejection before mutation.
+
+Focused admission tests increased from 27 to 30. HSAI harness callers now
+provide the evaluated policy explicitly.
+
+Measured focused coverage: `97.19%` regions, `95.97%` functions, and `97.75%`
+lines. These values are local coverage measurements, not 100% coverage.
+
+Anti-goals: committed-source parsing, recoverable-ghost inspection or commands,
+source-kind shape validation, general artifact validation, PCSM count/verifier
+hardening, duplicate JSON key detection, failure-atomic overwrite, no-follow
+descriptor access, PCSM runtime import, provider calls, network access,
+credentials, committed generated bundles, accepted Evidence Ledger mutation,
+official submission, external replay, score-axis population, Level2+ evidence,
+proof, semantic correctness, production readiness, or global uniqueness.
+
+Exit criteria: Phase 147 notes exist; README, AGENTS, task list, and validation
+report point to them; 30 admission tests and 24 HSAI harness tests pass;
+source-scan, claim-boundary, and hygiene tests pass; full workspace tests,
+clippy, rustdoc, and focused coverage pass; no source checkout is parsed; no
+generated bundle is committed; and no stronger claim is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

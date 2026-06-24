@@ -229,10 +229,11 @@ mod tests {
         journal: &mut AgentAdmissionJournal,
         candidate: &AgentAdmissionCandidate,
     ) -> Option<ClaimEnvelope> {
-        let decision = evaluate_admission(candidate, &admission_policy());
+        let policy = admission_policy();
+        let decision = evaluate_admission(candidate, &policy);
         let accepted = accepted_claim_envelope(&decision).cloned();
         journal
-            .append_decision(candidate, decision)
+            .append_decision(candidate, &policy, decision)
             .expect("valid admission decision appends to journal");
         accepted
     }
@@ -782,13 +783,14 @@ mod tests {
         candidate.provider_direct_authority_requested = true;
         candidate.requested_claim_boundary = AdmissionClaimBoundary::Level2OrHigher;
 
-        let decision = evaluate_admission(&candidate, &admission_policy());
+        let policy = admission_policy();
+        let decision = evaluate_admission(&candidate, &policy);
         assert_eq!(decision.verdict, AdmissionVerdict::Rejected);
         assert!(accepted_claim_envelope(&decision).is_none());
 
         let mut journal = AgentAdmissionJournal::default();
         journal
-            .append_decision(&candidate, decision)
+            .append_decision(&candidate, &policy, decision)
             .expect("rejected decision is still auditable");
         assert!(journal.validate().is_empty());
 
@@ -807,13 +809,14 @@ mod tests {
         candidate.source_kind = AdmissionSourceKind::ProviderResponse;
         candidate.strict_typed = false;
 
-        let decision = evaluate_admission(&candidate, &admission_policy());
+        let policy = admission_policy();
+        let decision = evaluate_admission(&candidate, &policy);
         assert_eq!(decision.verdict, AdmissionVerdict::Quarantined);
         assert!(accepted_claim_envelope(&decision).is_none());
 
         let mut journal = AgentAdmissionJournal::default();
         journal
-            .append_decision(&candidate, decision)
+            .append_decision(&candidate, &policy, decision)
             .expect("quarantined decision is still auditable");
         assert!(journal.validate().is_empty());
 
