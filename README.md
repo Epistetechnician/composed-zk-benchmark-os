@@ -225,6 +225,7 @@ Surface DSL
 | [docs/144-phase-hsai-admission-journal-adversarial-invariant-boundary-spec.md](docs/144-phase-hsai-admission-journal-adversarial-invariant-boundary-spec.md) | HSAI admission journal adversarial invariant docs-first boundary. |
 | [docs/145-phase-hsai-admission-journal-adversarial-invariant-implementation-notes.md](docs/145-phase-hsai-admission-journal-adversarial-invariant-implementation-notes.md) | HSAI admission journal adversarial invariant implementation notes. |
 | [docs/146-phase-hsai-admission-provenance-transaction-integrity-boundary-spec.md](docs/146-phase-hsai-admission-provenance-transaction-integrity-boundary-spec.md) | HSAI admission provenance and transaction integrity docs-first boundary. |
+| [docs/147-phase-hsai-admission-provenance-transaction-integrity-implementation-notes.md](docs/147-phase-hsai-admission-provenance-transaction-integrity-implementation-notes.md) | HSAI admission provenance and transaction integrity implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -839,6 +840,11 @@ decision recomputation from stored candidate and policy snapshots, mandatory
 binding of the full PCSM intake digest, and symmetric protected-root overlap
 rejection so overwrite cannot delete a protected descendant. It authorizes no
 Rust implementation, source parsing, accepted evidence, or stronger claim.
+[docs/147-phase-hsai-admission-provenance-transaction-integrity-implementation-notes.md](docs/147-phase-hsai-admission-provenance-transaction-integrity-implementation-notes.md)
+implements the boundary. Journal entries now retain candidate and policy
+snapshots and re-evaluate every decision, PCSM candidates bind the complete
+validated intake digest under a reserved id, and protected-root overlap is
+rejected in both directions before overwrite mutation.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57

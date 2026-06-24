@@ -214,6 +214,7 @@ pub enum PcsmHandoffIntakeError {
     MissingVerifierStatus(&'static str),
     FailedVerifierStatus(String),
     MissingSourceArtifactDigest,
+    ReservedIntakeDigestCollision,
     MissingRequiredNonclaim(String),
     AcceptedLedgerMutationRequested,
     OfficialSubmissionRequested,
@@ -338,6 +339,13 @@ pub fn validate_pcsm_bounded_proof_handoff_intake(
     if intake.source_artifact_digests.is_empty() {
         errors.push(PcsmHandoffIntakeError::MissingSourceArtifactDigest);
     }
+    if intake
+        .source_artifact_digests
+        .iter()
+        .any(|digest| digest.id == PCSM_BOUNDED_PROOF_INTAKE_DIGEST_ID)
+    {
+        errors.push(PcsmHandoffIntakeError::ReservedIntakeDigestCollision);
+    }
     for required in pcsm_bounded_proof_required_nonclaims() {
         if !intake.nonclaims.contains(&required) {
             errors.push(PcsmHandoffIntakeError::MissingRequiredNonclaim(required.0));
@@ -372,6 +380,12 @@ pub fn pcsm_bounded_proof_handoff_candidate(
         return Err(errors);
     }
 
+    let mut source_artifact_digests = intake.source_artifact_digests.clone();
+    source_artifact_digests.insert(ArtifactDigest {
+        id: PCSM_BOUNDED_PROOF_INTAKE_DIGEST_ID.to_owned(),
+        sha256: intake.digest(),
+    });
+
     Ok(AgentAdmissionCandidate {
         id: AdmissionCandidateId(id.into()),
         subject,
@@ -380,7 +394,7 @@ pub fn pcsm_bounded_proof_handoff_candidate(
         case: None,
         proposed_envelope: None,
         requested_claim_boundary: AdmissionClaimBoundary::LocalOnly,
-        source_artifact_digests: intake.source_artifact_digests.clone(),
+        source_artifact_digests,
         nonclaims: intake.nonclaims.clone(),
         provider_direct_authority_requested: intake.provider_direct_authority,
         accepted_ledger_mutation_requested: intake.accepted_ledger_mutation_requested,
@@ -396,6 +410,8 @@ const REQUIRED_PCSM_VERIFIERS: &[&str] = &[
     "verify_native_pcsm",
     "source_lint_gate",
 ];
+
+const PCSM_BOUNDED_PROOF_INTAKE_DIGEST_ID: &str = "pcsm-bounded-proof-intake";
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub enum AdmissionVerdict {
@@ -492,6 +508,8 @@ pub struct AgentAdmissionJournalEntry {
     pub candidate_digest: Hash,
     pub decision_digest: Hash,
     pub source_artifact_digests: BTreeSet<ArtifactDigest>,
+    pub candidate: AgentAdmissionCandidate,
+    pub policy: AgentAdmissionPolicy,
     pub decision: AgentAdmissionDecision,
 }
 
@@ -608,6 +626,10 @@ pub enum AdmissionJournalMaterializationError {
 pub enum JournalError {
     CandidateMismatch,
     CandidateDigestMismatch,
+    CandidateSnapshotMismatch,
+    PolicySnapshotMismatch,
+    SourceArtifactSnapshotMismatch,
+    DecisionEvaluationMismatch,
     DecisionDigestMismatch,
     SequenceMismatch { expected: u64, actual: u64 },
     PreviousDigestMismatch,
@@ -620,6 +642,7 @@ impl AgentAdmissionJournal {
     pub fn append_decision(
         &mut self,
         candidate: &AgentAdmissionCandidate,
+        policy: &AgentAdmissionPolicy,
         decision: AgentAdmissionDecision,
     ) -> Result<&AgentAdmissionJournalEntry, JournalError> {
         if !self.validate().is_empty() {
@@ -630,6 +653,9 @@ impl AgentAdmissionJournal {
         }
         if decision.candidate_digest != candidate.digest() {
             return Err(JournalError::CandidateDigestMismatch);
+        }
+        if decision != evaluate_admission(candidate, policy) {
+            return Err(JournalError::DecisionEvaluationMismatch);
         }
         if self
             .entries
@@ -646,6 +672,8 @@ impl AgentAdmissionJournal {
             candidate_digest: candidate.digest(),
             decision_digest: decision.digest(),
             source_artifact_digests: candidate.source_artifact_digests.clone(),
+            candidate: candidate.clone(),
+            policy: policy.clone(),
             decision,
         };
         self.entries.push(entry);
@@ -674,8 +702,23 @@ impl AgentAdmissionJournal {
             if entry.decision.candidate_id != entry.candidate_id {
                 errors.push(JournalError::CandidateMismatch);
             }
+            if entry.candidate.id != entry.candidate_id {
+                errors.push(JournalError::CandidateSnapshotMismatch);
+            }
+            if entry.candidate.digest() != entry.candidate_digest {
+                errors.push(JournalError::CandidateDigestMismatch);
+            }
             if entry.decision.candidate_digest != entry.candidate_digest {
                 errors.push(JournalError::CandidateDigestMismatch);
+            }
+            if entry.policy.id != entry.decision.policy_id {
+                errors.push(JournalError::PolicySnapshotMismatch);
+            }
+            if entry.source_artifact_digests != entry.candidate.source_artifact_digests {
+                errors.push(JournalError::SourceArtifactSnapshotMismatch);
+            }
+            if entry.decision != evaluate_admission(&entry.candidate, &entry.policy) {
+                errors.push(JournalError::DecisionEvaluationMismatch);
             }
             if entry.decision.digest() != entry.decision_digest {
                 errors.push(JournalError::DecisionDigestMismatch);
@@ -1077,6 +1120,7 @@ fn validate_output_root(
         let normalized_protected = normalize_for_prefix_check(protected)?;
         if normalized_output == normalized_protected
             || normalized_output.starts_with(&normalized_protected)
+            || normalized_protected.starts_with(&normalized_output)
         {
             return Err(AdmissionJournalMaterializationError::ProtectedOutputRoot);
         }
@@ -1608,12 +1652,21 @@ mod tests {
             candidate
         };
 
+        let admission_policy = policy();
         let mut journal = AgentAdmissionJournal::default();
         journal
-            .append_decision(&accepted, evaluate_admission(&accepted, &policy()))
+            .append_decision(
+                &accepted,
+                &admission_policy,
+                evaluate_admission(&accepted, &admission_policy),
+            )
             .expect("accepted decision appends");
         journal
-            .append_decision(&rejected, evaluate_admission(&rejected, &policy()))
+            .append_decision(
+                &rejected,
+                &admission_policy,
+                evaluate_admission(&rejected, &admission_policy),
+            )
             .expect("rejected decision appends");
         journal
     }
@@ -1673,7 +1726,8 @@ mod tests {
     #[test]
     fn accepted_candidate_exports_envelope_and_appends_journal_entry() {
         let candidate = accepted_candidate();
-        let decision = evaluate_admission(&candidate, &policy());
+        let admission_policy = policy();
+        let decision = evaluate_admission(&candidate, &admission_policy);
 
         assert_eq!(decision.verdict, AdmissionVerdict::Accepted);
         assert!(decision.reasons.is_empty());
@@ -1684,7 +1738,7 @@ mod tests {
 
         let mut journal = AgentAdmissionJournal::default();
         let entry = journal
-            .append_decision(&candidate, decision)
+            .append_decision(&candidate, &admission_policy, decision)
             .expect("accepted decision should append");
 
         assert_eq!(entry.sequence_number, 0);
@@ -1709,7 +1763,8 @@ mod tests {
         );
         candidate.provider_direct_authority_requested = true;
 
-        let decision = evaluate_admission(&candidate, &policy());
+        let admission_policy = policy();
+        let decision = evaluate_admission(&candidate, &admission_policy);
         assert_eq!(decision.verdict, AdmissionVerdict::Rejected);
         assert_eq!(
             decision.reasons,
@@ -1721,7 +1776,7 @@ mod tests {
 
         let mut journal = AgentAdmissionJournal::default();
         let entry = journal
-            .append_decision(&candidate, decision)
+            .append_decision(&candidate, &admission_policy, decision)
             .expect("rejected decision should still append audit metadata");
         assert_eq!(entry.sequence_number, 0);
         assert_eq!(entry.decision.verdict, AdmissionVerdict::Rejected);
@@ -1775,14 +1830,15 @@ mod tests {
     #[test]
     fn journal_rejects_replay_and_detects_stale_tip() {
         let candidate = accepted_candidate();
-        let decision = evaluate_admission(&candidate, &policy());
+        let admission_policy = policy();
+        let decision = evaluate_admission(&candidate, &admission_policy);
         let mut journal = AgentAdmissionJournal::default();
         journal
-            .append_decision(&candidate, decision.clone())
+            .append_decision(&candidate, &admission_policy, decision.clone())
             .expect("first append should work");
 
         assert_eq!(
-            journal.append_decision(&candidate, decision),
+            journal.append_decision(&candidate, &admission_policy, decision),
             Err(JournalError::ReplayedCandidate(candidate.digest()))
         );
 
@@ -1805,10 +1861,11 @@ mod tests {
     #[test]
     fn decision_digest_binds_decision_content() {
         let candidate = accepted_candidate();
-        let decision = evaluate_admission(&candidate, &policy());
+        let admission_policy = policy();
+        let decision = evaluate_admission(&candidate, &admission_policy);
         let mut journal = AgentAdmissionJournal::default();
         journal
-            .append_decision(&candidate, decision)
+            .append_decision(&candidate, &admission_policy, decision)
             .expect("append should work");
 
         let mut tampered = journal.clone();
@@ -1839,21 +1896,27 @@ mod tests {
             AdmissionClaimBoundary::LocalOnly
         );
         assert!(candidate.proposed_envelope.is_none());
+        assert!(intake
+            .source_artifact_digests
+            .is_subset(&candidate.source_artifact_digests));
         assert_eq!(
-            candidate.source_artifact_digests,
-            intake.source_artifact_digests
+            candidate
+                .source_artifact_digests
+                .iter()
+                .find(|digest| digest.id == PCSM_BOUNDED_PROOF_INTAKE_DIGEST_ID)
+                .map(|digest| digest.sha256),
+            Some(intake.digest())
         );
 
-        let decision = evaluate_admission(
-            &candidate,
-            &AgentAdmissionPolicy::local_default(pcsm_bounded_proof_required_nonclaims()),
-        );
+        let pcsm_policy =
+            AgentAdmissionPolicy::local_default(pcsm_bounded_proof_required_nonclaims());
+        let decision = evaluate_admission(&candidate, &pcsm_policy);
         assert_eq!(decision.verdict, AdmissionVerdict::Accepted);
         assert!(accepted_claim_envelope(&decision).is_none());
 
         let mut journal = AgentAdmissionJournal::default();
         journal
-            .append_decision(&candidate, decision)
+            .append_decision(&candidate, &pcsm_policy, decision)
             .expect("local metadata admission decision should append");
         assert!(journal.validate().is_empty());
     }
@@ -1973,6 +2036,106 @@ mod tests {
         assert!(errors.contains(&PcsmHandoffIntakeError::LocalMlxSurrogateMissing));
         assert!(errors.contains(&PcsmHandoffIntakeError::NativePcsmGovernanceMissing));
         assert!(errors.contains(&PcsmHandoffIntakeError::PcsmJournalMissing));
+    }
+
+    #[test]
+    fn pcsm_bounded_handoff_binds_full_intake_digest_and_rejects_reserved_collision() {
+        let intake = valid_pcsm_intake();
+        let candidate =
+            pcsm_bounded_proof_handoff_candidate("pcsm-bound", subject("pcsm"), &intake)
+                .expect("valid intake maps");
+        assert_eq!(
+            candidate
+                .source_artifact_digests
+                .iter()
+                .find(|digest| digest.id == PCSM_BOUNDED_PROOF_INTAKE_DIGEST_ID),
+            Some(&ArtifactDigest {
+                id: PCSM_BOUNDED_PROOF_INTAKE_DIGEST_ID.to_owned(),
+                sha256: intake.digest(),
+            })
+        );
+
+        let mut changed = intake.clone();
+        changed.source_repo_commit = "fedcba9876543210fedcba9876543210fedcba98".to_owned();
+        let changed_candidate =
+            pcsm_bounded_proof_handoff_candidate("pcsm-bound", subject("pcsm"), &changed)
+                .expect("changed valid intake maps");
+        assert_ne!(candidate.digest(), changed_candidate.digest());
+
+        let mut collision = intake;
+        collision.source_artifact_digests.insert(ArtifactDigest {
+            id: PCSM_BOUNDED_PROOF_INTAKE_DIGEST_ID.to_owned(),
+            sha256: Hash([44; 32]),
+        });
+        assert!(validate_pcsm_bounded_proof_handoff_intake(&collision)
+            .contains(&PcsmHandoffIntakeError::ReservedIntakeDigestCollision));
+    }
+
+    #[test]
+    fn journal_rejects_forged_decisions_and_snapshot_drift() {
+        let mut rejected_candidate = accepted_candidate();
+        rejected_candidate.provider_direct_authority_requested = true;
+        let admission_policy = policy();
+        let expected_rejected = evaluate_admission(&rejected_candidate, &admission_policy);
+        assert_eq!(expected_rejected.verdict, AdmissionVerdict::Rejected);
+
+        let mut forged_accepted = expected_rejected.clone();
+        forged_accepted.verdict = AdmissionVerdict::Accepted;
+        forged_accepted.reasons.clear();
+        forged_accepted.accepted_envelope = rejected_candidate.proposed_envelope.clone();
+        assert_eq!(
+            AgentAdmissionJournal::default().append_decision(
+                &rejected_candidate,
+                &admission_policy,
+                forged_accepted,
+            ),
+            Err(JournalError::DecisionEvaluationMismatch)
+        );
+
+        let accepted = accepted_candidate();
+        let expected_accepted = evaluate_admission(&accepted, &admission_policy);
+        let mut forged_rejected = expected_accepted.clone();
+        forged_rejected.verdict = AdmissionVerdict::Rejected;
+        forged_rejected.reasons = vec![reason("forged_rejection")];
+        forged_rejected.accepted_envelope = None;
+        assert_eq!(
+            AgentAdmissionJournal::default().append_decision(
+                &accepted,
+                &admission_policy,
+                forged_rejected,
+            ),
+            Err(JournalError::DecisionEvaluationMismatch)
+        );
+
+        let mut journal = AgentAdmissionJournal::default();
+        journal
+            .append_decision(&accepted, &admission_policy, expected_accepted)
+            .expect("valid decision appends");
+
+        let mut candidate_drift = journal.clone();
+        candidate_drift.entries[0].candidate.id =
+            AdmissionCandidateId("candidate-drift".to_owned());
+        assert!(candidate_drift
+            .validate()
+            .contains(&JournalError::CandidateSnapshotMismatch));
+
+        let mut policy_drift = journal.clone();
+        policy_drift.entries[0].policy.max_claim_boundary = AdmissionClaimBoundary::LocalOnly;
+        assert!(policy_drift
+            .validate()
+            .contains(&JournalError::DecisionEvaluationMismatch));
+
+        let mut policy_id_drift = journal.clone();
+        policy_id_drift.entries[0].policy.id = AdmissionPolicyId("policy-drift".to_owned());
+        assert!(policy_id_drift
+            .validate()
+            .contains(&JournalError::PolicySnapshotMismatch));
+
+        let mut source_drift = journal;
+        source_drift.entries[0].source_artifact_digests.clear();
+        assert!(source_drift
+            .validate()
+            .contains(&JournalError::SourceArtifactSnapshotMismatch));
     }
 
     #[test]
@@ -2281,7 +2444,7 @@ mod tests {
 
         let mut journal = AgentAdmissionJournal::default();
         journal
-            .append_decision(&candidate, decision)
+            .append_decision(&candidate, &pcsm_policy, decision)
             .expect("PCSM decision appends");
         let output_root = temp_output_root("pcsm-semantic-roundtrip");
         let mut request = materialization_request("pcsm-semantic-roundtrip", &output_root);
@@ -2520,6 +2683,69 @@ mod tests {
             2
         );
         fs::remove_dir_all(&existing_root).expect("existing root cleanup succeeds");
+
+        let ancestor_root = temp_output_root("ancestor-root");
+        let protected_descendant = ancestor_root.join("protected");
+        fs::create_dir_all(&protected_descendant).expect("protected descendant creates");
+        let mut ancestor_request = materialization_request("ancestor-root", &ancestor_root);
+        ancestor_request.overwrite = true;
+        ancestor_request.protected_roots = vec![protected_descendant.clone()];
+        assert_eq!(
+            materialize_admission_journal_bundle(&ancestor_root, &journal, &ancestor_request),
+            Err(AdmissionJournalMaterializationError::ProtectedOutputRoot)
+        );
+        assert!(protected_descendant.is_dir());
+        fs::remove_dir_all(&ancestor_root).expect("ancestor root cleanup succeeds");
+
+        let sibling_root = temp_output_root("sibling-root");
+        let sibling_protected = sibling_root
+            .parent()
+            .expect("sibling root has parent")
+            .join("sibling-protected");
+        fs::create_dir_all(&sibling_protected).expect("sibling protected creates");
+        let mut sibling_request = materialization_request("sibling-root", &sibling_root);
+        sibling_request.protected_roots = vec![sibling_protected.clone()];
+        assert_eq!(
+            materialize_admission_journal_bundle(&sibling_root, &journal, &sibling_request)
+                .expect("sibling output remains allowed")
+                .entry_count,
+            2
+        );
+        fs::remove_dir_all(&sibling_root).expect("sibling output cleanup succeeds");
+        fs::remove_dir_all(&sibling_protected).expect("sibling protected cleanup succeeds");
+    }
+
+    #[test]
+    fn semantic_readback_rejects_fully_rehashed_candidate_and_policy_snapshot_drift() {
+        for drift in ["candidate", "policy", "source"] {
+            let (output_root, _) = materialized_test_bundle(&format!("snapshot-{drift}"));
+            let journal_path = output_root.join("admission-journal/journal.json");
+            let mut journal: AgentAdmissionJournal =
+                serde_json::from_slice(&fs::read(&journal_path).expect("journal reads"))
+                    .expect("journal parses");
+            match drift {
+                "candidate" => {
+                    journal.entries[0].candidate.id =
+                        AdmissionCandidateId("snapshot-drift".to_owned());
+                }
+                "policy" => {
+                    journal.entries[0].policy.max_claim_boundary =
+                        AdmissionClaimBoundary::LocalOnly;
+                }
+                "source" => journal.entries[0].source_artifact_digests.clear(),
+                _ => unreachable!("known drift"),
+            }
+            rewrite_content_and_manifest_digest(
+                &output_root,
+                "admission-journal/journal.json",
+                &serde_json::to_vec_pretty(&journal).expect("journal serializes"),
+            );
+            assert!(matches!(
+                read_admission_journal_bundle(&output_root),
+                Err(AdmissionJournalMaterializationError::InvalidSerializedJournal(_))
+            ));
+            fs::remove_dir_all(&output_root).expect("snapshot drift cleanup succeeds");
+        }
     }
 
     #[cfg(unix)]
@@ -2577,7 +2803,8 @@ mod tests {
     fn non_accepted_decisions_never_expose_or_validate_retained_envelopes() {
         for verdict in [AdmissionVerdict::Rejected, AdmissionVerdict::Quarantined] {
             let candidate = accepted_candidate();
-            let mut decision = evaluate_admission(&candidate, &policy());
+            let admission_policy = policy();
+            let mut decision = evaluate_admission(&candidate, &admission_policy);
             decision.verdict = verdict;
             decision
                 .reasons
@@ -2593,6 +2820,8 @@ mod tests {
                 candidate_digest: candidate.digest(),
                 decision_digest: decision.digest(),
                 source_artifact_digests: candidate.source_artifact_digests.clone(),
+                candidate: candidate.clone(),
+                policy: admission_policy.clone(),
                 decision,
             };
             journal.entries.push(entry);
@@ -2600,7 +2829,11 @@ mod tests {
                 .validate()
                 .contains(&JournalError::NonAcceptedVerdictRetainsEnvelope));
             assert_eq!(
-                journal.append_decision(&candidate, evaluate_admission(&candidate, &policy())),
+                journal.append_decision(
+                    &candidate,
+                    &admission_policy,
+                    evaluate_admission(&candidate, &admission_policy)
+                ),
                 Err(JournalError::InvalidExistingJournal)
             );
 
@@ -2618,9 +2851,14 @@ mod tests {
         }
 
         let candidate = accepted_candidate();
+        let admission_policy = policy();
         let mut journal = AgentAdmissionJournal::default();
         journal
-            .append_decision(&candidate, evaluate_admission(&candidate, &policy()))
+            .append_decision(
+                &candidate,
+                &admission_policy,
+                evaluate_admission(&candidate, &admission_policy),
+            )
             .expect("accepted decision appends");
         let output_root = temp_output_root("rehashed-retained-envelope");
         materialize_admission_journal_bundle(

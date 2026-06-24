@@ -42,7 +42,8 @@ HSAI admission journal semantic readback implementation, and the docs-first
 Phase 144 HSAI admission journal adversarial invariant boundary, and the Phase
 145 HSAI admission journal adversarial invariant implementation, and the
 docs-first Phase 146 HSAI admission provenance and transaction integrity
-boundary, plus
+boundary, and the Phase 147 HSAI admission provenance and transaction integrity
+implementation, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -360,6 +361,18 @@ parses no recoverable-ghost file, creates no generated output, mutates no
 accepted Evidence Ledger, populates no score axes, creates no Level2+ evidence,
 and creates no stronger claim.
 
+Phase 147 implements the Phase 146 invariants. Journal entries retain complete
+candidate and policy snapshots, append requires the explicit policy, and
+journal validation independently recomputes the decision and verifies all
+snapshot and digest relationships. PCSM candidates bind the full validated
+intake digest under a reserved id. Output-root validation rejects protected
+overlap in both directions before overwrite deletion. Focused tests reject
+forged decisions, snapshot drift, reserved digest collision, fully rehashed
+tampering, and protected ancestor deletion while preserving valid HSAI flows.
+This phase parses no recoverable-ghost file, creates no committed generated
+output, mutates no accepted Evidence Ledger, populates no score axes, creates no
+Level2+ evidence, and creates no stronger claim.
+
 ## State Slice
 
 This report touches only:
@@ -445,6 +458,7 @@ This report touches only:
 - `docs/144-phase-hsai-admission-journal-adversarial-invariant-boundary-spec.md`
 - `docs/145-phase-hsai-admission-journal-adversarial-invariant-implementation-notes.md`
 - `docs/146-phase-hsai-admission-provenance-transaction-integrity-boundary-spec.md`
+- `docs/147-phase-hsai-admission-provenance-transaction-integrity-implementation-notes.md`
 - `Cargo.lock`
 - `Cargo.toml`
 - `docs/12-task-list.md`
@@ -459,7 +473,7 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 145 validation.
+Run from repository root during Phase 147 validation.
 
 ```sh
 cargo fmt --all -- --check
@@ -487,17 +501,17 @@ cargo llvm-cov -p hsai-agent-admission --all-features --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml' || true
 ```
 
-Phase 145 focused Rust/doc commands passed. `cargo test --workspace
+Phase 147 focused Rust/doc commands passed. `cargo test --workspace
 --all-features`, workspace clippy, and workspace docs also passed with the
-adversarial invariants implemented. Focused `hsai-agent-admission` coverage
-reported `96.80%` regions, `94.92%` functions, and `97.45%` lines. The `rg`
-package-surface check returned no files.
+provenance and transaction-integrity invariants implemented. Focused
+`hsai-agent-admission` coverage reported `97.19%` regions, `95.97%` functions,
+and `97.75%` lines. The `rg` package-surface check returned no files.
 
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
 `cargo-llvm-cov 0.8.7` was available during the latest Phase 135 all-feature
-workspace coverage pass and the Phase 145 focused admission coverage pass. The
+workspace coverage pass and the Phase 147 focused admission coverage pass. The
 latest all-feature workspace Phase
 135 pass reported `86.09%` region coverage, `83.22%` function execution, and
 `84.43%` line coverage. The targeted
