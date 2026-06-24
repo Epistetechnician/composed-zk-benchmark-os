@@ -1719,6 +1719,37 @@ source-scan, claim-boundary, and hygiene tests pass; full workspace tests,
 clippy, rustdoc, and focused coverage pass; no source checkout is parsed; no
 generated bundle is committed; and no stronger claim is created.
 
+## HSAI Track: Phase 148 Admission Input Semantic Integrity Boundary
+
+Status: complete for docs-first authorization only. See
+`docs/148-phase-hsai-admission-input-semantic-integrity-boundary-spec.md`.
+
+Goal: define the next fail-closed local semantic validation contract for
+admission candidate source shape, artifact identity, and PCSM intake
+consistency.
+
+Scope: Phase 148 boundary, README, AGENTS, task-list, and validation-report
+navigation only.
+
+Required future behavior: exact source-kind payload shapes; raw provider
+non-admissibility; AgentCase subject agreement; portable nonempty artifact
+IDs; nonzero SHA-256 values; one digest per logical ID; checked PCSM count
+conservation; journal-entry count equality; and an exact duplicate-free
+required verifier set whose outcomes all pass.
+
+Anti-goals: Rust implementation in this phase, duplicate JSON key detection,
+failure-atomic overwrite, descriptor-relative no-follow access, randomized
+staging, committed-source parsing, recoverable-ghost inspection or commands,
+PCSM runtime import, provider calls, network access, credentials, generated
+bundles, accepted Evidence Ledger mutation, official submission, external
+replay, score-axis population, Level2+ evidence, proof, semantic correctness,
+production readiness, or global uniqueness.
+
+Exit criteria: Phase 148 boundary exists; README, AGENTS, task list, and
+validation report point to it; docs contract and hygiene gates pass; no Rust,
+Cargo, fixture, package-runtime, generated-output, or source-checkout surface
+changes; and no stronger claim is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
