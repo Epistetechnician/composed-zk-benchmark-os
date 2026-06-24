@@ -584,8 +584,18 @@ pub enum AdmissionJournalMaterializationError {
     OutputRootIsFile,
     OutputRootIsSymlink,
     BundleFileIsSymlink(String),
+    SidecarIsSymlink(String),
+    DeclaredFileTypeMismatch(String),
     UndeclaredFile(String),
     DigestMismatch(String),
+    MalformedDeclaredFile(String),
+    ManifestSemanticMismatch,
+    InvalidSerializedJournal(Vec<JournalError>),
+    DecisionIndexMismatch,
+    SourceDigestIndexMismatch,
+    NonclaimMismatch,
+    UnsafeRedactionReport,
+    ValidationReportMismatch,
     Io(String),
     Serialization(String),
 }
@@ -740,29 +750,219 @@ pub fn read_admission_journal_bundle(
     output_root: &Path,
 ) -> Result<AdmissionJournalBundleManifest, AdmissionJournalMaterializationError> {
     reject_undeclared_bundle_files(output_root)?;
+    let mut file_bytes = BTreeMap::new();
     for logical_path in ADMISSION_JOURNAL_DECLARED_FILES {
         let path = output_root.join(logical_path);
-        if fs::symlink_metadata(&path)
-            .map_err(materialization_io_error)?
-            .file_type()
-            .is_symlink()
-        {
+        let metadata = fs::symlink_metadata(&path).map_err(materialization_io_error)?;
+        if metadata.file_type().is_symlink() {
             return Err(AdmissionJournalMaterializationError::BundleFileIsSymlink(
                 (*logical_path).to_owned(),
             ));
         }
+        if !metadata.is_file() {
+            return Err(
+                AdmissionJournalMaterializationError::DeclaredFileTypeMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        let sidecar = sidecar_path(&path);
+        let sidecar_metadata = fs::symlink_metadata(&sidecar).map_err(materialization_io_error)?;
+        if sidecar_metadata.file_type().is_symlink() {
+            return Err(AdmissionJournalMaterializationError::SidecarIsSymlink(
+                format!("{logical_path}.sha256"),
+            ));
+        }
+        if !sidecar_metadata.is_file() {
+            return Err(
+                AdmissionJournalMaterializationError::DeclaredFileTypeMismatch(format!(
+                    "{logical_path}.sha256"
+                )),
+            );
+        }
         let bytes = fs::read(&path).map_err(materialization_io_error)?;
-        let expected = fs::read_to_string(sidecar_path(&path)).map_err(materialization_io_error)?;
+        let expected = fs::read_to_string(sidecar).map_err(materialization_io_error)?;
         if expected != hash_hex(hash_bytes(&bytes)) {
             return Err(AdmissionJournalMaterializationError::DigestMismatch(
                 (*logical_path).to_owned(),
             ));
         }
+        file_bytes.insert((*logical_path).to_owned(), bytes);
     }
 
-    let manifest_bytes = fs::read(output_root.join("admission-journal/manifest.json"))
-        .map_err(materialization_io_error)?;
-    serde_json::from_slice(&manifest_bytes).map_err(materialization_serde_error)
+    validate_admission_journal_bundle_semantics(&file_bytes)
+}
+
+fn validate_admission_journal_bundle_semantics(
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<AdmissionJournalBundleManifest, AdmissionJournalMaterializationError> {
+    let manifest: AdmissionJournalBundleManifest =
+        parse_declared_json(files, "admission-journal/manifest.json")?;
+    let journal: AgentAdmissionJournal =
+        parse_declared_json(files, "admission-journal/journal.json")?;
+    let journal_errors = journal.validate();
+    if !journal_errors.is_empty() {
+        return Err(AdmissionJournalMaterializationError::InvalidSerializedJournal(journal_errors));
+    }
+
+    validate_manifest_semantics(&manifest, &journal, files)?;
+
+    let decisions_bytes = declared_bytes(files, "admission-journal/decisions.jsonl")?;
+    let mut parsed_rows = Vec::new();
+    if !decisions_bytes.is_empty() {
+        if !decisions_bytes.ends_with(b"\n") {
+            return Err(AdmissionJournalMaterializationError::DecisionIndexMismatch);
+        }
+        for line in decisions_bytes[..decisions_bytes.len() - 1].split(|byte| *byte == b'\n') {
+            if line.is_empty() {
+                return Err(AdmissionJournalMaterializationError::DecisionIndexMismatch);
+            }
+            parsed_rows.push(
+                serde_json::from_slice::<AdmissionDecisionReviewRow>(line).map_err(|_| {
+                    AdmissionJournalMaterializationError::MalformedDeclaredFile(
+                        "admission-journal/decisions.jsonl".to_owned(),
+                    )
+                })?,
+            );
+        }
+    }
+    let expected_rows = decision_rows(&journal);
+    if parsed_rows != expected_rows {
+        return Err(AdmissionJournalMaterializationError::DecisionIndexMismatch);
+    }
+
+    let source_index: AdmissionSourceDigestIndex =
+        parse_declared_json(files, "admission-journal/source-digests.json")?;
+    let expected_source_index = source_digest_index(&journal);
+    if source_index != expected_source_index
+        || has_conflicting_artifact_digest_ids(&source_index.source_artifact_digests)
+    {
+        return Err(AdmissionJournalMaterializationError::SourceDigestIndexMismatch);
+    }
+
+    let nonclaims_bytes = declared_bytes(files, "admission-journal/non-claims.md")?;
+    if nonclaims_bytes != nonclaims_markdown(&manifest.non_claims).as_bytes() {
+        return Err(AdmissionJournalMaterializationError::NonclaimMismatch);
+    }
+
+    let redaction: AdmissionJournalRedactionReport =
+        parse_declared_json(files, "admission-journal/redaction-report.json")?;
+    if redaction != redaction_report() {
+        return Err(AdmissionJournalMaterializationError::UnsafeRedactionReport);
+    }
+
+    let validation: AdmissionJournalValidationReport =
+        parse_declared_json(files, "admission-journal/validation-report.json")?;
+    let expected_validation = AdmissionJournalValidationReport {
+        schema_version: "hsai-admission-journal-validation-v1".to_owned(),
+        bundle_id: manifest.bundle_id.clone(),
+        valid: true,
+        journal_error_count: 0,
+        claim_boundary: ADMISSION_JOURNAL_CLAIM_BOUNDARY.to_owned(),
+        checked_files: canonical_declared_files(),
+    };
+    if validation != expected_validation {
+        return Err(AdmissionJournalMaterializationError::ValidationReportMismatch);
+    }
+
+    Ok(manifest)
+}
+
+fn validate_manifest_semantics(
+    manifest: &AdmissionJournalBundleManifest,
+    journal: &AgentAdmissionJournal,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<(), AdmissionJournalMaterializationError> {
+    let expected_digest_paths: BTreeSet<String> = ADMISSION_JOURNAL_DECLARED_FILES
+        .iter()
+        .filter(|path| **path != "admission-journal/manifest.json")
+        .map(|path| (*path).to_owned())
+        .collect();
+    let actual_digest_paths: BTreeSet<String> =
+        manifest.declared_file_digests.keys().cloned().collect();
+    let required_nonclaims = admission_journal_required_nonclaims();
+    let first_previous_tip = journal
+        .entries
+        .first()
+        .and_then(|entry| entry.previous_entry_digest);
+
+    if manifest.schema_version != "hsai-admission-journal-bundle-v1"
+        || manifest.bundle_id.trim().is_empty()
+        || !is_safe_relative_path(&manifest.bundle_id)
+        || manifest.bundle_id.contains(['/', '\\'])
+        || manifest.declared_files != canonical_declared_files()
+        || actual_digest_paths != expected_digest_paths
+        || manifest.claim_boundary != ADMISSION_JOURNAL_CLAIM_BOUNDARY
+        || !required_nonclaims.is_subset(&manifest.non_claims)
+        || manifest.journal_tip_digest_before != first_previous_tip
+        || manifest.journal_tip_digest_after
+            != journal
+                .entries
+                .last()
+                .map(AgentAdmissionJournalEntry::digest)
+        || manifest.entry_count != journal.entries.len() as u64
+        || manifest.accepted_count != verdict_count(journal, AdmissionVerdict::Accepted)
+        || manifest.rejected_count != verdict_count(journal, AdmissionVerdict::Rejected)
+        || manifest.quarantined_count != verdict_count(journal, AdmissionVerdict::Quarantined)
+        || journal
+            .entries
+            .iter()
+            .any(|entry| entry.decision.policy_id != manifest.admission_policy_id)
+    {
+        return Err(AdmissionJournalMaterializationError::ManifestSemanticMismatch);
+    }
+
+    for (logical_path, expected_digest) in &manifest.declared_file_digests {
+        if hash_bytes(declared_bytes(files, logical_path)?) != *expected_digest {
+            return Err(AdmissionJournalMaterializationError::ManifestSemanticMismatch);
+        }
+    }
+    Ok(())
+}
+
+fn canonical_declared_files() -> Vec<String> {
+    ADMISSION_JOURNAL_DECLARED_FILES
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
+fn verdict_count(journal: &AgentAdmissionJournal, verdict: AdmissionVerdict) -> u64 {
+    journal
+        .entries
+        .iter()
+        .filter(|entry| entry.decision.verdict == verdict)
+        .count() as u64
+}
+
+fn declared_bytes<'a>(
+    files: &'a BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<&'a [u8], AdmissionJournalMaterializationError> {
+    files.get(logical_path).map(Vec::as_slice).ok_or_else(|| {
+        AdmissionJournalMaterializationError::Io(format!("declared file missing: {logical_path}"))
+    })
+}
+
+fn parse_declared_json<T: for<'de> Deserialize<'de>>(
+    files: &BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<T, AdmissionJournalMaterializationError> {
+    serde_json::from_slice(declared_bytes(files, logical_path)?).map_err(|_| {
+        AdmissionJournalMaterializationError::MalformedDeclaredFile(logical_path.to_owned())
+    })
+}
+
+fn has_conflicting_artifact_digest_ids(digests: &BTreeSet<ArtifactDigest>) -> bool {
+    let mut by_id = BTreeMap::new();
+    for digest in digests {
+        if let Some(existing) = by_id.insert(digest.id.clone(), digest.sha256) {
+            if existing != digest.sha256 {
+                return true;
+            }
+        }
+    }
+    false
 }
 
 fn validate_materialization_request(
@@ -786,6 +986,16 @@ fn validate_materialization_request(
         return Err(AdmissionJournalMaterializationError::InvalidJournal(
             journal_errors,
         ));
+    }
+    if has_conflicting_artifact_digest_ids(&source_digest_index(journal).source_artifact_digests) {
+        return Err(AdmissionJournalMaterializationError::SourceDigestIndexMismatch);
+    }
+    if journal
+        .entries
+        .iter()
+        .any(|entry| entry.decision.policy_id != request.admission_policy_id)
+    {
+        return Err(AdmissionJournalMaterializationError::ManifestSemanticMismatch);
     }
     let first_previous_tip = journal
         .entries
@@ -935,8 +1145,18 @@ fn decision_rows_jsonl(
     journal: &AgentAdmissionJournal,
 ) -> Result<Vec<u8>, AdmissionJournalMaterializationError> {
     let mut out = Vec::new();
-    for entry in &journal.entries {
-        let row = AdmissionDecisionReviewRow {
+    for row in decision_rows(journal) {
+        out.extend(serde_json::to_vec(&row).map_err(materialization_serde_error)?);
+        out.push(b'\n');
+    }
+    Ok(out)
+}
+
+fn decision_rows(journal: &AgentAdmissionJournal) -> Vec<AdmissionDecisionReviewRow> {
+    journal
+        .entries
+        .iter()
+        .map(|entry| AdmissionDecisionReviewRow {
             candidate_id: entry.candidate_id.clone(),
             policy_id: entry.decision.policy_id.clone(),
             verdict: entry.decision.verdict.clone(),
@@ -949,11 +1169,8 @@ fn decision_rows_jsonl(
                 .map(|digest| digest.id.clone())
                 .collect(),
             accepted_envelope_exists: entry.decision.accepted_envelope.is_some(),
-        };
-        out.extend(serde_json::to_vec(&row).map_err(materialization_serde_error)?);
-        out.push(b'\n');
-    }
-    Ok(out)
+        })
+        .collect()
 }
 
 fn source_digest_index(journal: &AgentAdmissionJournal) -> AdmissionSourceDigestIndex {
@@ -1269,13 +1486,41 @@ mod tests {
         std::env::temp_dir().join(format!("hsai-agent-admission-{name}-{nonce}"))
     }
 
+    fn rewrite_bundle_file(output_root: &Path, logical_path: &str, bytes: &[u8]) {
+        let path = output_root.join(logical_path);
+        fs::write(&path, bytes).expect("tampered declared file writes");
+        fs::write(
+            sidecar_path(&path),
+            hash_hex(hash_bytes(bytes)).into_bytes(),
+        )
+        .expect("tampered sidecar writes");
+    }
+
+    fn rewrite_content_and_manifest_digest(output_root: &Path, logical_path: &str, bytes: &[u8]) {
+        rewrite_bundle_file(output_root, logical_path, bytes);
+        let manifest_path = output_root.join("admission-journal/manifest.json");
+        let mut manifest: AdmissionJournalBundleManifest =
+            serde_json::from_slice(&fs::read(&manifest_path).expect("manifest reads for mutation"))
+                .expect("manifest parses for mutation");
+        manifest
+            .declared_file_digests
+            .insert(logical_path.to_owned(), hash_bytes(bytes));
+        let manifest_bytes =
+            serde_json::to_vec_pretty(&manifest).expect("mutated manifest serializes");
+        rewrite_bundle_file(
+            output_root,
+            "admission-journal/manifest.json",
+            &manifest_bytes,
+        );
+    }
+
     fn two_entry_journal() -> AgentAdmissionJournal {
         let accepted = accepted_candidate();
         let rejected = {
             let mut candidate = AgentAdmissionCandidate::from_case(
                 "candidate-rejected-materialized",
                 case(),
-                BTreeSet::from([artifact("case", 11)]),
+                BTreeSet::from([artifact("case-rejected", 11)]),
                 BTreeSet::from([
                     nonclaim("not semantic correctness"),
                     nonclaim("not accepted evidence"),
@@ -1749,5 +1994,232 @@ mod tests {
         );
 
         fs::remove_dir_all(&output_root).expect("temp bundle cleanup succeeds");
+    }
+
+    #[test]
+    fn admission_journal_semantic_readback_rejects_digest_consistent_drift() {
+        let journal = two_entry_journal();
+
+        let manifest_root = temp_output_root("semantic-manifest");
+        materialize_admission_journal_bundle(
+            &manifest_root,
+            &journal,
+            &materialization_request("semantic-manifest", &manifest_root),
+        )
+        .expect("manifest test bundle materializes");
+        let manifest_path = manifest_root.join("admission-journal/manifest.json");
+        let mut manifest: AdmissionJournalBundleManifest =
+            serde_json::from_slice(&fs::read(&manifest_path).expect("manifest reads"))
+                .expect("manifest parses");
+        manifest.accepted_count = 99;
+        rewrite_bundle_file(
+            &manifest_root,
+            "admission-journal/manifest.json",
+            &serde_json::to_vec_pretty(&manifest).expect("manifest serializes"),
+        );
+        assert_eq!(
+            read_admission_journal_bundle(&manifest_root),
+            Err(AdmissionJournalMaterializationError::ManifestSemanticMismatch)
+        );
+        fs::remove_dir_all(&manifest_root).expect("manifest test cleanup succeeds");
+
+        let journal_root = temp_output_root("semantic-journal");
+        materialize_admission_journal_bundle(
+            &journal_root,
+            &journal,
+            &materialization_request("semantic-journal", &journal_root),
+        )
+        .expect("journal test bundle materializes");
+        let mut serialized_journal: AgentAdmissionJournal = serde_json::from_slice(
+            &fs::read(journal_root.join("admission-journal/journal.json")).expect("journal reads"),
+        )
+        .expect("journal parses");
+        serialized_journal.entries[0].sequence_number = 9;
+        rewrite_content_and_manifest_digest(
+            &journal_root,
+            "admission-journal/journal.json",
+            &serde_json::to_vec_pretty(&serialized_journal).expect("journal serializes"),
+        );
+        assert!(matches!(
+            read_admission_journal_bundle(&journal_root),
+            Err(AdmissionJournalMaterializationError::InvalidSerializedJournal(_))
+        ));
+        fs::remove_dir_all(&journal_root).expect("journal test cleanup succeeds");
+
+        let decisions_root = temp_output_root("semantic-decisions");
+        materialize_admission_journal_bundle(
+            &decisions_root,
+            &journal,
+            &materialization_request("semantic-decisions", &decisions_root),
+        )
+        .expect("decisions test bundle materializes");
+        let mut decisions =
+            fs::read_to_string(decisions_root.join("admission-journal/decisions.jsonl"))
+                .expect("decisions read");
+        decisions = decisions.replacen(
+            "\"accepted_envelope_exists\":true",
+            "\"accepted_envelope_exists\":false",
+            1,
+        );
+        rewrite_content_and_manifest_digest(
+            &decisions_root,
+            "admission-journal/decisions.jsonl",
+            decisions.as_bytes(),
+        );
+        assert_eq!(
+            read_admission_journal_bundle(&decisions_root),
+            Err(AdmissionJournalMaterializationError::DecisionIndexMismatch)
+        );
+        fs::remove_dir_all(&decisions_root).expect("decisions test cleanup succeeds");
+    }
+
+    #[test]
+    fn admission_journal_semantic_readback_rejects_policy_file_drift() {
+        let journal = two_entry_journal();
+
+        let source_root = temp_output_root("semantic-source");
+        materialize_admission_journal_bundle(
+            &source_root,
+            &journal,
+            &materialization_request("semantic-source", &source_root),
+        )
+        .expect("source test bundle materializes");
+        let empty_source = serde_json::to_vec_pretty(&AdmissionSourceDigestIndex {
+            source_artifact_digests: BTreeSet::new(),
+        })
+        .expect("source index serializes");
+        rewrite_content_and_manifest_digest(
+            &source_root,
+            "admission-journal/source-digests.json",
+            &empty_source,
+        );
+        assert_eq!(
+            read_admission_journal_bundle(&source_root),
+            Err(AdmissionJournalMaterializationError::SourceDigestIndexMismatch)
+        );
+        fs::remove_dir_all(&source_root).expect("source test cleanup succeeds");
+
+        let nonclaim_root = temp_output_root("semantic-nonclaim");
+        materialize_admission_journal_bundle(
+            &nonclaim_root,
+            &journal,
+            &materialization_request("semantic-nonclaim", &nonclaim_root),
+        )
+        .expect("nonclaim test bundle materializes");
+        rewrite_content_and_manifest_digest(
+            &nonclaim_root,
+            "admission-journal/non-claims.md",
+            b"# Admission Journal Non-Claims\n\n- not proof\n",
+        );
+        assert_eq!(
+            read_admission_journal_bundle(&nonclaim_root),
+            Err(AdmissionJournalMaterializationError::NonclaimMismatch)
+        );
+        fs::remove_dir_all(&nonclaim_root).expect("nonclaim test cleanup succeeds");
+
+        let redaction_root = temp_output_root("semantic-redaction");
+        materialize_admission_journal_bundle(
+            &redaction_root,
+            &journal,
+            &materialization_request("semantic-redaction", &redaction_root),
+        )
+        .expect("redaction test bundle materializes");
+        let mut redaction = redaction_report();
+        redaction.retains_credentials_or_secrets = true;
+        rewrite_content_and_manifest_digest(
+            &redaction_root,
+            "admission-journal/redaction-report.json",
+            &serde_json::to_vec_pretty(&redaction).expect("redaction serializes"),
+        );
+        assert_eq!(
+            read_admission_journal_bundle(&redaction_root),
+            Err(AdmissionJournalMaterializationError::UnsafeRedactionReport)
+        );
+        fs::remove_dir_all(&redaction_root).expect("redaction test cleanup succeeds");
+
+        let validation_root = temp_output_root("semantic-validation");
+        materialize_admission_journal_bundle(
+            &validation_root,
+            &journal,
+            &materialization_request("semantic-validation", &validation_root),
+        )
+        .expect("validation test bundle materializes");
+        let mut validation: AdmissionJournalValidationReport = serde_json::from_slice(
+            &fs::read(validation_root.join("admission-journal/validation-report.json"))
+                .expect("validation report reads"),
+        )
+        .expect("validation report parses");
+        validation.valid = false;
+        rewrite_content_and_manifest_digest(
+            &validation_root,
+            "admission-journal/validation-report.json",
+            &serde_json::to_vec_pretty(&validation).expect("validation report serializes"),
+        );
+        assert_eq!(
+            read_admission_journal_bundle(&validation_root),
+            Err(AdmissionJournalMaterializationError::ValidationReportMismatch)
+        );
+        fs::remove_dir_all(&validation_root).expect("validation test cleanup succeeds");
+    }
+
+    #[test]
+    fn pcsm_intake_round_trips_through_semantic_bundle_readback() {
+        let intake = valid_pcsm_intake();
+        let candidate =
+            pcsm_bounded_proof_handoff_candidate("pcsm-semantic", subject("pcsm"), &intake)
+                .expect("valid PCSM intake maps to local candidate");
+        let pcsm_policy =
+            AgentAdmissionPolicy::local_default(pcsm_bounded_proof_required_nonclaims());
+        let decision = evaluate_admission(&candidate, &pcsm_policy);
+        assert_eq!(decision.verdict, AdmissionVerdict::Accepted);
+        assert!(decision.accepted_envelope.is_none());
+
+        let mut journal = AgentAdmissionJournal::default();
+        journal
+            .append_decision(&candidate, decision)
+            .expect("PCSM decision appends");
+        let output_root = temp_output_root("pcsm-semantic-roundtrip");
+        let mut request = materialization_request("pcsm-semantic-roundtrip", &output_root);
+        request.admission_policy_id = pcsm_policy.id;
+        let manifest = materialize_admission_journal_bundle(&output_root, &journal, &request)
+            .expect("PCSM journal materializes and validates semantically");
+        assert_eq!(
+            read_admission_journal_bundle(&output_root).expect("semantic readback succeeds"),
+            manifest
+        );
+        assert_eq!(manifest.entry_count, 1);
+        assert_eq!(manifest.accepted_count, 1);
+        fs::remove_dir_all(&output_root).expect("PCSM roundtrip cleanup succeeds");
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn admission_journal_semantic_readback_rejects_sidecar_symlink() {
+        use std::os::unix::fs::symlink;
+
+        let output_root = temp_output_root("semantic-sidecar-symlink");
+        let journal = two_entry_journal();
+        materialize_admission_journal_bundle(
+            &output_root,
+            &journal,
+            &materialization_request("semantic-sidecar-symlink", &output_root),
+        )
+        .expect("sidecar test bundle materializes");
+        let journal_path = output_root.join("admission-journal/journal.json");
+        let sidecar = sidecar_path(&journal_path);
+        fs::remove_file(&sidecar).expect("sidecar removal succeeds");
+        symlink(
+            output_root.join("admission-journal/manifest.json.sha256"),
+            &sidecar,
+        )
+        .expect("sidecar symlink creation succeeds");
+
+        assert_eq!(
+            read_admission_journal_bundle(&output_root),
+            Err(AdmissionJournalMaterializationError::SidecarIsSymlink(
+                "admission-journal/journal.json.sha256".to_owned()
+            ))
+        );
+        fs::remove_dir_all(&output_root).expect("sidecar test cleanup succeeds");
     }
 }

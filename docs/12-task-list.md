@@ -1545,6 +1545,47 @@ normal workspace tests remain hermetic; no source checkout is parsed or
 mutated; no generated bundle is committed; and no live/external evidence
 surface is created.
 
+## HSAI Track: Phase 143 Admission Journal Semantic Readback Implementation
+
+Status: complete for local admission-journal semantic readback hardening. See
+`docs/143-phase-hsai-admission-journal-semantic-readback-implementation-notes.md`.
+
+Goal: close the Phase 142 integrity gap so recomputed sidecars cannot conceal
+cross-file semantic inconsistency in a Phase 141 bundle.
+
+Scope: `crates/hsai-agent-admission/src/lib.rs`, phase notes, and
+navigation/status updates only.
+
+Implemented: regular-file and sidecar-symlink checks; parsing of every declared
+file; serialized journal validation; manifest count, tip, policy, declaration,
+and content-digest recomputation; exact decision-row and source-index
+recomputation; conflicting artifact-id rejection; canonical nonclaim matching;
+strict redaction report validation; validation-report recomputation; and
+explicit semantic-readback errors.
+
+Regression coverage includes digest-consistent drift across the manifest,
+journal, decisions, source digests, nonclaims, redaction report, and validation
+report, plus sidecar symlinks and one complete hermetic PCSM metadata path
+through semantic bundle readback.
+
+Anti-goals: recoverable-ghost file parsing or git inspection, source repo
+command execution, PCSM runtime import or vendoring, recoverable-ghost artifact
+import, provider calls, network access, credentials or secrets, committed
+generated bundles, package runtime additions, command-line tools, accepted
+Evidence Ledger mutation, official benchmark submission, external replay
+execution, live backend execution, score-axis population,
+DCAP/PCCS/JWKS/JWT/TLS implementation changes, ZK backend performance claims,
+Level2+ evidence creation, formal evidence creation, full
+breakthrough-threshold admission claims, production-readiness claims,
+semantic-correctness claims, proof claims, benchmark-evidence claims, or global
+software-agent uniqueness claims.
+
+Exit criteria: Phase 143 notes exist; README, AGENTS, task list, and validation
+report point to them; focused admission tests pass; HSAI source scans pass;
+repo claim-boundary and hygiene tests pass; full workspace tests, clippy, and
+rustdoc pass; no source checkout is parsed; no generated bundle is committed;
+and no live/external evidence surface is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
