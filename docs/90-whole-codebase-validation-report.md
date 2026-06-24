@@ -38,7 +38,8 @@ docs-first Phase 139 PCSM bounded-proof handoff intake boundary, and the Phase
 140 PCSM bounded-proof handoff intake metadata implementation, and the Phase
 141 HSAI admission journal materialization implementation, and the docs-first
 Phase 142 HSAI admission journal semantic readback boundary, and the Phase 143
-HSAI admission journal semantic readback implementation, plus
+HSAI admission journal semantic readback implementation, and the docs-first
+Phase 144 HSAI admission journal adversarial invariant boundary, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -323,6 +324,16 @@ creates no Level2+ evidence, and does not claim threshold admission, proof,
 benchmark evidence, semantic correctness, production readiness, or global
 software-agent uniqueness.
 
+Phase 144 opens the docs-first boundary for three remaining local adversarial
+invariants: rejected and quarantined decisions cannot retain or expose accepted
+envelopes, serialized admission-journal structures must reject unknown JSON
+fields, and readback must reject symlink output roots and bundle directories.
+It defines required future errors, adversarial tests, compatible test-only
+coverage hardening, and implementation exit criteria. It changes no Rust
+source, parses no recoverable-ghost file, creates no generated output, mutates
+no accepted Evidence Ledger, populates no score axes, creates no Level2+
+evidence, and creates no stronger claim.
+
 ## State Slice
 
 This report touches only:
@@ -405,6 +416,7 @@ This report touches only:
 - `docs/141-phase-hsai-admission-journal-materialization-implementation-notes.md`
 - `docs/142-phase-hsai-admission-journal-semantic-readback-boundary-spec.md`
 - `docs/143-phase-hsai-admission-journal-semantic-readback-implementation-notes.md`
+- `docs/144-phase-hsai-admission-journal-adversarial-invariant-boundary-spec.md`
 - `Cargo.lock`
 - `Cargo.toml`
 - `docs/12-task-list.md`
