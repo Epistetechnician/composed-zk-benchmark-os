@@ -220,6 +220,7 @@ Surface DSL
 | [docs/139-phase-pcsm-bounded-proof-handoff-intake-boundary-spec.md](docs/139-phase-pcsm-bounded-proof-handoff-intake-boundary-spec.md) | PCSM CL12 bounded-proof handoff intake docs-first boundary. |
 | [docs/140-phase-pcsm-bounded-proof-handoff-intake-metadata-notes.md](docs/140-phase-pcsm-bounded-proof-handoff-intake-metadata-notes.md) | PCSM CL12 bounded-proof handoff intake metadata implementation notes. |
 | [docs/141-phase-hsai-admission-journal-materialization-implementation-notes.md](docs/141-phase-hsai-admission-journal-materialization-implementation-notes.md) | HSAI admission journal materialization implementation notes. |
+| [docs/142-phase-hsai-admission-journal-semantic-readback-boundary-spec.md](docs/142-phase-hsai-admission-journal-semantic-readback-boundary-spec.md) | HSAI admission journal semantic readback docs-first boundary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -799,6 +800,15 @@ rejects protected roots, stale tips, undeclared files, stale digests, missing
 nonclaims, symlink roots, and invalid journals. It creates no committed bundle,
 accepted Evidence Ledger mutation, proof, benchmark evidence, score axes, or
 Level2+ evidence.
+[docs/142-phase-hsai-admission-journal-semantic-readback-boundary-spec.md](docs/142-phase-hsai-admission-journal-semantic-readback-boundary-spec.md)
+defines the next docs-first boundary for independently cross-validating every
+Phase 141 bundle file during readback. It targets digest-consistent semantic
+tampering across the journal, manifest, decisions, source digests, nonclaims,
+redaction report, validation report, and sidecars. It authorizes no Rust
+implementation, source-repo parsing or commands, PCSM import, generated bundle,
+accepted Evidence Ledger mutation, benchmark evidence, score axes, or Level2+
+evidence. Actual source intake remains blocked while the
+recoverable-ghost-states handoff is staged in a dirty checkout.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57

@@ -36,7 +36,8 @@ admission core, the Phase 137 HSAI admission e2e harness integration, and the
 docs-first Phase 138 HSAI admission journal materialization boundary, and the
 docs-first Phase 139 PCSM bounded-proof handoff intake boundary, and the Phase
 140 PCSM bounded-proof handoff intake metadata implementation, and the Phase
-141 HSAI admission journal materialization implementation, plus
+141 HSAI admission journal materialization implementation, and the docs-first
+Phase 142 HSAI admission journal semantic readback boundary, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -291,6 +292,22 @@ does not claim full breakthrough-threshold admission, proof, benchmark
 evidence, semantic correctness, production readiness, or global
 software-agent uniqueness.
 
+Phase 142 opens the docs-first boundary for future semantic readback hardening
+of Phase 141 admission-journal bundles. It requires independent parsing and
+cross-validation of the manifest, serialized journal, decision JSONL, source
+digest index, nonclaims, redaction report, validation report, declared file
+digests, and primary/sidecar file types so digest-consistent tampering is
+rejected. It defines explicit error surfaces, hermetic mutation tests, one
+future PCSM-intake-through-semantic-readback path, and future implementation
+exit criteria. It changes no Rust source, parses no recoverable-ghost file,
+runs no source repo command, imports no PCSM runtime or artifact, creates no
+generated output, mutates no accepted Evidence Ledger, populates no score axes,
+creates no Level2+ evidence, and does not claim threshold admission, proof,
+benchmark evidence, semantic correctness, production readiness, or global
+software-agent uniqueness. Actual cross-repo intake remains blocked because
+the source handoff was staged in a dirty recoverable-ghost-states checkout on
+2026-06-23.
+
 ## State Slice
 
 This report touches only:
@@ -371,6 +388,7 @@ This report touches only:
 - `docs/139-phase-pcsm-bounded-proof-handoff-intake-boundary-spec.md`
 - `docs/140-phase-pcsm-bounded-proof-handoff-intake-metadata-notes.md`
 - `docs/141-phase-hsai-admission-journal-materialization-implementation-notes.md`
+- `docs/142-phase-hsai-admission-journal-semantic-readback-boundary-spec.md`
 - `Cargo.lock`
 - `Cargo.toml`
 - `docs/12-task-list.md`
@@ -385,7 +403,7 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 141 validation.
+Run from repository root during Phase 142 validation.
 
 ```sh
 cargo fmt --all -- --check
@@ -412,9 +430,9 @@ RUSTDOCFLAGS='-D warnings' cargo doc --workspace --all-features --no-deps
 rg --files -g 'package.json' -g 'pnpm-lock.yaml' || true
 ```
 
-Phase 141 focused Rust/doc commands passed. `cargo test --workspace
---all-features`, workspace clippy, and workspace docs also passed after the
-admission-journal materializer was added. The `rg` package-surface check returned no
+Phase 142 focused doc-contract commands passed. `cargo test --workspace
+--all-features`, workspace clippy, and workspace docs also passed with the
+semantic-readback boundary added. The `rg` package-surface check returned no
 files.
 
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
