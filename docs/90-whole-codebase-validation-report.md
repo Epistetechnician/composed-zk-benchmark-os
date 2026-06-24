@@ -37,7 +37,8 @@ docs-first Phase 138 HSAI admission journal materialization boundary, and the
 docs-first Phase 139 PCSM bounded-proof handoff intake boundary, and the Phase
 140 PCSM bounded-proof handoff intake metadata implementation, and the Phase
 141 HSAI admission journal materialization implementation, and the docs-first
-Phase 142 HSAI admission journal semantic readback boundary, plus
+Phase 142 HSAI admission journal semantic readback boundary, and the Phase 143
+HSAI admission journal semantic readback implementation, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -308,6 +309,20 @@ software-agent uniqueness. Actual cross-repo intake remains blocked because
 the source handoff was staged in a dirty recoverable-ghost-states checkout on
 2026-06-23.
 
+Phase 143 implements that semantic readback hardening inside
+`hsai-agent-admission`. It validates primary and sidecar file types, parses
+every declared file, validates the serialized journal, recomputes manifest
+counts and tips, compares decision rows and source digests, rejects conflicting
+artifact ids, requires canonical nonclaims and strict redaction, and validates
+the derived validation report. Focused mutation tests cover digest-consistent
+drift across every semantic surface plus a complete local PCSM metadata path
+through materialization and readback. It parses no recoverable-ghost file, runs
+no source repo command, imports no PCSM runtime or artifact, commits no
+generated bundle, mutates no accepted Evidence Ledger, populates no score axes,
+creates no Level2+ evidence, and does not claim threshold admission, proof,
+benchmark evidence, semantic correctness, production readiness, or global
+software-agent uniqueness.
+
 ## State Slice
 
 This report touches only:
@@ -389,6 +404,7 @@ This report touches only:
 - `docs/140-phase-pcsm-bounded-proof-handoff-intake-metadata-notes.md`
 - `docs/141-phase-hsai-admission-journal-materialization-implementation-notes.md`
 - `docs/142-phase-hsai-admission-journal-semantic-readback-boundary-spec.md`
+- `docs/143-phase-hsai-admission-journal-semantic-readback-implementation-notes.md`
 - `Cargo.lock`
 - `Cargo.toml`
 - `docs/12-task-list.md`
@@ -403,7 +419,7 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 142 validation.
+Run from repository root during Phase 143 validation.
 
 ```sh
 cargo fmt --all -- --check
@@ -430,18 +446,18 @@ RUSTDOCFLAGS='-D warnings' cargo doc --workspace --all-features --no-deps
 rg --files -g 'package.json' -g 'pnpm-lock.yaml' || true
 ```
 
-Phase 142 focused doc-contract commands passed. `cargo test --workspace
---all-features`, workspace clippy, and workspace docs also passed with the
-semantic-readback boundary added. The `rg` package-surface check returned no
+Phase 143 focused Rust/doc commands passed. `cargo test --workspace
+--all-features`, workspace clippy, and workspace docs also passed with semantic
+readback hardening implemented. The `rg` package-surface check returned no
 files.
 
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
 `cargo-llvm-cov 0.8.7` was available during the latest Phase 135 all-feature
-workspace coverage pass. Phase 141 did not rerun coverage because this slice is
-a focused HSAI materialization implementation rather than a coverage-hardening
-campaign. The latest Phase
+workspace coverage pass. Phase 143 did not rerun coverage because this slice is
+a focused HSAI semantic-readback implementation rather than a
+coverage-hardening campaign. The latest Phase
 135 pass reported `86.09%` region coverage, `83.22%` function execution, and
 `84.43%` line coverage. The targeted
 `zkbench-core/src/adapters/zk_harness/validation.rs` file reported `94.87%`

@@ -221,6 +221,7 @@ Surface DSL
 | [docs/140-phase-pcsm-bounded-proof-handoff-intake-metadata-notes.md](docs/140-phase-pcsm-bounded-proof-handoff-intake-metadata-notes.md) | PCSM CL12 bounded-proof handoff intake metadata implementation notes. |
 | [docs/141-phase-hsai-admission-journal-materialization-implementation-notes.md](docs/141-phase-hsai-admission-journal-materialization-implementation-notes.md) | HSAI admission journal materialization implementation notes. |
 | [docs/142-phase-hsai-admission-journal-semantic-readback-boundary-spec.md](docs/142-phase-hsai-admission-journal-semantic-readback-boundary-spec.md) | HSAI admission journal semantic readback docs-first boundary. |
+| [docs/143-phase-hsai-admission-journal-semantic-readback-implementation-notes.md](docs/143-phase-hsai-admission-journal-semantic-readback-implementation-notes.md) | HSAI admission journal semantic readback implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -809,6 +810,13 @@ implementation, source-repo parsing or commands, PCSM import, generated bundle,
 accepted Evidence Ledger mutation, benchmark evidence, score axes, or Level2+
 evidence. Actual source intake remains blocked while the
 recoverable-ghost-states handoff is staged in a dirty checkout.
+[docs/143-phase-hsai-admission-journal-semantic-readback-implementation-notes.md](docs/143-phase-hsai-admission-journal-semantic-readback-implementation-notes.md)
+implements that hardening in `hsai-agent-admission`. Readback now parses and
+cross-validates every declared file, recomputes journal-derived views and
+manifest metadata, rejects digest-consistent semantic drift, and rejects
+sidecar symlinks. A hermetic PCSM bounded-proof metadata path now reaches
+admission, journaling, materialization, and semantic readback without exporting
+an accepted claim envelope or reading the recoverable-ghost-states checkout.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57
