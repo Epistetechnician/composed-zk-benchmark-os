@@ -1504,6 +1504,47 @@ HSAI source scans pass; repo claim-boundary and hygiene docs tests pass; full
 workspace tests pass; normal gates remain hermetic; no committed generated
 bundle is added; and no live/external evidence surface is created.
 
+## HSAI Track: Phase 142 Admission Journal Semantic Readback Boundary
+
+Status: complete for the docs-first local admission-journal semantic readback
+boundary. See
+`docs/142-phase-hsai-admission-journal-semantic-readback-boundary-spec.md`.
+
+Goal: define the next local correctness boundary for independently parsing and
+cross-validating every Phase 141 admission-journal bundle file so recomputed
+sidecars cannot conceal semantic inconsistency.
+
+Scope: Markdown boundary, README, AGENTS, task list, and validation report
+updates only.
+
+Defined: manifest, journal, decision-index, source-digest, nonclaim, redaction,
+validation-report, and filesystem cross-checks; explicit semantic error
+surfaces; sidecar-symlink rejection; digest-consistent tampering tests; one
+future PCSM-intake-through-semantic-readback test; local-only claim limits;
+source-checkout recheck; and future implementation exit criteria.
+
+Current blocker: on 2026-06-23, the recoverable-ghost-states handoff remained
+staged in a dirty checkout. Phase 142 therefore admits no current source commit
+or handoff digest and authorizes no actual cross-repo intake.
+
+Anti-goals: Rust source changes, tests, Cargo metadata changes, `Cargo.lock`
+changes, recoverable-ghost file parsing or git inspection, source repo command
+execution, PCSM runtime import or vendoring, recoverable-ghost artifact import,
+provider calls, network access, credentials or secrets, committed generated
+bundles, package runtime additions, command-line tools, accepted Evidence
+Ledger mutation, official benchmark submission, external replay execution,
+live backend execution, score-axis population, DCAP/PCCS/JWKS/JWT/TLS
+implementation changes, ZK backend performance claims, Level2+ evidence
+creation, formal evidence creation, full breakthrough-threshold admission
+claims, production-readiness claims, semantic-correctness claims, proof claims,
+benchmark-evidence claims, or global software-agent uniqueness claims.
+
+Exit criteria: Phase 142 boundary exists; README, AGENTS, task list, and
+validation report point to it; repo claim-boundary and hygiene docs tests pass;
+normal workspace tests remain hermetic; no source checkout is parsed or
+mutated; no generated bundle is committed; and no live/external evidence
+surface is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
