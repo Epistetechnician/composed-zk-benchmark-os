@@ -267,7 +267,7 @@ pub use external_runner::{
 };
 pub use formal::{
     derive_formal_property_assertion_template, evaluate_formal_lane_pipeline,
-    mandatory_cross_product_nonclaims, mandatory_lane_outcome_nonclaims,
+    formal_pipeline_nonclaims, mandatory_cross_product_nonclaims, mandatory_lane_outcome_nonclaims,
     mutation_class_formal_stress, pipeline_outcome_is_declared_only, FormalLane, FormalLaneError,
     FormalLaneOutcome, FormalLanePipelineOutcome, FormalLaneProof, FormalLaneProofStatus,
     FormalPropertyAssertion, FormalPropertyScope, FormalPropertyScopeKind, FormalVerifier,

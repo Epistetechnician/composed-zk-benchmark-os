@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::error::{Result, ZkBenchError};
 use crate::evidence::ClaimBoundary;
+use crate::formal::{FormalLanePipelineOutcome, FormalLaneProofStatus, FormalPropertyScopeKind};
 
 use super::shard::SoakShardId;
 
@@ -142,6 +143,15 @@ pub struct SoakTelemetryCounters {
     /// Formal lane outcomes at `DeclaredOnly`.
     #[serde(default)]
     pub formal_lane_declared_only_count: usize,
+    /// Formal lane passes where no assertion template could be derived.
+    #[serde(default)]
+    pub formal_lane_no_template_count: usize,
+    /// Formal lane pipeline count by primary formal scope kind.
+    #[serde(default)]
+    pub formal_lane_count_by_scope: Vec<InternalCountMetric>,
+    /// Formal lane pipeline count by proof status.
+    #[serde(default)]
+    pub formal_lane_count_by_status: Vec<InternalCountMetric>,
 }
 
 impl SoakTelemetryCounters {
@@ -215,6 +225,13 @@ impl SoakTelemetryCounters {
         self.formal_lane_declared_only_count = self
             .formal_lane_declared_only_count
             .saturating_add(other.formal_lane_declared_only_count);
+        self.formal_lane_no_template_count = self
+            .formal_lane_no_template_count
+            .saturating_add(other.formal_lane_no_template_count);
+        self.formal_lane_count_by_scope
+            .extend(other.formal_lane_count_by_scope.clone());
+        self.formal_lane_count_by_status
+            .extend(other.formal_lane_count_by_status.clone());
     }
 
     /// Record one observed mutation distinguishability axis from local replay.
@@ -257,10 +274,69 @@ impl SoakTelemetryCounters {
             self.formal_lane_template_derived_count =
                 self.formal_lane_template_derived_count.saturating_add(1);
             self.formal_lane_evaluation_count = self.formal_lane_evaluation_count.saturating_add(1);
+        } else {
+            self.formal_lane_no_template_count =
+                self.formal_lane_no_template_count.saturating_add(1);
         }
         if declared_only {
             self.formal_lane_declared_only_count =
                 self.formal_lane_declared_only_count.saturating_add(1);
+        }
+    }
+
+    /// Record one formal-lane pipeline outcome with scope and status detail.
+    pub fn record_formal_lane_pipeline_outcome(&mut self, outcome: &FormalLanePipelineOutcome) {
+        self.record_formal_lane_pipeline(
+            outcome.template_derived,
+            outcome.proof_status == Some(FormalLaneProofStatus::DeclaredOnly),
+        );
+        increment_count_metric(
+            &mut self.formal_lane_count_by_scope,
+            formal_scope_metric_name(outcome.primary_formal_scope),
+        );
+        if let Some(status) = outcome.proof_status {
+            increment_count_metric(
+                &mut self.formal_lane_count_by_status,
+                formal_status_metric_name(status),
+            );
+        }
+    }
+}
+
+fn increment_count_metric(metrics: &mut Vec<InternalCountMetric>, metric_name: &'static str) {
+    if let Some(metric) = metrics
+        .iter_mut()
+        .find(|metric| metric.metric_name == metric_name)
+    {
+        metric.count = metric.count.saturating_add(1);
+        return;
+    }
+    metrics.push(InternalCountMetric {
+        metric_name: metric_name.to_string(),
+        count: 1,
+        classification: default_classification(),
+    });
+}
+
+fn formal_scope_metric_name(scope: FormalPropertyScopeKind) -> &'static str {
+    match scope {
+        FormalPropertyScopeKind::TransitionGuard => "formal_lane_scope_transition_guard_count",
+        FormalPropertyScopeKind::Invariant => "formal_lane_scope_invariant_count",
+        FormalPropertyScopeKind::LoopBound => "formal_lane_scope_loop_bound_count",
+        FormalPropertyScopeKind::Machine => "formal_lane_scope_machine_count",
+        FormalPropertyScopeKind::NotApplicable => "formal_lane_scope_not_applicable_count",
+    }
+}
+
+fn formal_status_metric_name(status: FormalLaneProofStatus) -> &'static str {
+    match status {
+        FormalLaneProofStatus::DeclaredOnly => "formal_lane_status_declared_only_count",
+        FormalLaneProofStatus::ProofAttempted => "formal_lane_status_proof_attempted_count",
+        FormalLaneProofStatus::MachineCheckedScoped => {
+            "formal_lane_status_machine_checked_scoped_count"
+        }
+        FormalLaneProofStatus::IndependentlyReproduced => {
+            "formal_lane_status_independently_reproduced_count"
         }
     }
 }
@@ -500,6 +576,20 @@ pub fn validate_soak_telemetry_report(report: &SoakTelemetryReport) -> Result<()
             &metric.classification,
         )?;
     }
+    for metric in &report.snapshot.counters.formal_lane_count_by_scope {
+        reject_forbidden_metric_label(&metric.metric_name)?;
+        validate_telemetry_classification(
+            "soak.telemetry.counters.formal_lane_count_by_scope.classification",
+            &metric.classification,
+        )?;
+    }
+    for metric in &report.snapshot.counters.formal_lane_count_by_status {
+        reject_forbidden_metric_label(&metric.metric_name)?;
+        validate_telemetry_classification(
+            "soak.telemetry.counters.formal_lane_count_by_status.classification",
+            &metric.classification,
+        )?;
+    }
     Ok(())
 }
 
@@ -556,6 +646,18 @@ fn validate_telemetry_counter_relationships(counters: &SoakTelemetryCounters) ->
         return Err(ZkBenchError::soak(
             "soak.telemetry.counters.local_replay",
             "local replay attempts exceed generated instances plus mutation variants",
+        ));
+    }
+    if counters.formal_lane_evaluation_count > counters.formal_lane_template_derived_count {
+        return Err(ZkBenchError::soak(
+            "soak.telemetry.counters.formal_lane_evaluation",
+            "formal lane evaluations exceed derived templates",
+        ));
+    }
+    if counters.formal_lane_declared_only_count > counters.formal_lane_evaluation_count {
+        return Err(ZkBenchError::soak(
+            "soak.telemetry.counters.formal_lane_declared_only",
+            "declared-only formal lane outcomes exceed evaluations",
         ));
     }
     Ok(())

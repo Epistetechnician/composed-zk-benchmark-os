@@ -135,6 +135,34 @@ fn telemetry_rejects_metric_classification_drift() {
     let error = validate_soak_telemetry_report(&telemetry)
         .expect_err("size metric classification drift should fail");
     assert!(error.to_string().contains("metric classification"));
+
+    telemetry = run_tiny();
+    telemetry
+        .snapshot
+        .counters
+        .formal_lane_count_by_scope
+        .push(InternalCountMetric {
+            metric_name: "formal_lane_scope_machine_count".to_string(),
+            count: 1,
+            classification: vec![SoakTelemetryClassification::InternalOnly],
+        });
+    let error = validate_soak_telemetry_report(&telemetry)
+        .expect_err("formal scope metric classification drift should fail");
+    assert!(error.to_string().contains("metric classification"));
+
+    telemetry = run_tiny();
+    telemetry
+        .snapshot
+        .counters
+        .formal_lane_count_by_status
+        .push(InternalCountMetric {
+            metric_name: "formal_lane_status_declared_only_count".to_string(),
+            count: 1,
+            classification: vec![SoakTelemetryClassification::InternalOnly],
+        });
+    let error = validate_soak_telemetry_report(&telemetry)
+        .expect_err("formal status metric classification drift should fail");
+    assert!(error.to_string().contains("metric classification"));
 }
 
 #[test]
@@ -170,6 +198,54 @@ fn telemetry_rejects_replay_attempts_without_inputs() {
     assert!(error
         .to_string()
         .contains("generated instances plus mutation variants"));
+}
+
+#[test]
+fn telemetry_rejects_impossible_formal_lane_counter_relationships() {
+    let mut telemetry = run_tiny();
+    telemetry
+        .snapshot
+        .counters
+        .formal_lane_template_derived_count = 0;
+    telemetry.snapshot.counters.formal_lane_evaluation_count = 1;
+    let error = validate_soak_telemetry_report(&telemetry)
+        .expect_err("evaluation without template should fail");
+    assert!(error.to_string().contains("formal lane evaluations"));
+
+    telemetry = run_tiny();
+    telemetry
+        .snapshot
+        .counters
+        .formal_lane_template_derived_count = 1;
+    telemetry.snapshot.counters.formal_lane_evaluation_count = 1;
+    telemetry.snapshot.counters.formal_lane_declared_only_count = 2;
+    let error = validate_soak_telemetry_report(&telemetry)
+        .expect_err("declared-only without evaluation should fail");
+    assert!(error.to_string().contains("declared-only formal lane"));
+}
+
+#[test]
+fn telemetry_records_formal_lane_scope_and_status_metrics() {
+    let telemetry = run_tiny();
+    assert!(telemetry
+        .snapshot
+        .counters
+        .formal_lane_count_by_scope
+        .iter()
+        .any(
+            |metric| metric.metric_name == "formal_lane_scope_transition_guard_count"
+                && metric.count > 0
+        ));
+    assert!(telemetry
+        .snapshot
+        .counters
+        .formal_lane_count_by_status
+        .iter()
+        .any(
+            |metric| metric.metric_name == "formal_lane_status_declared_only_count"
+                && metric.count > 0
+        ));
+    assert!(validate_soak_telemetry_report(&telemetry).is_ok());
 }
 
 #[test]

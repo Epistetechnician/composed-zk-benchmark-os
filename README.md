@@ -250,6 +250,7 @@ Surface DSL
 | [docs/162-phase-distinguishability-soak-telemetry-implementation-notes.md](docs/162-phase-distinguishability-soak-telemetry-implementation-notes.md) | Phase 162 distinguishability soak telemetry implementation notes. |
 | [docs/163-phase-formal-lane-pipeline-implementation-notes.md](docs/163-phase-formal-lane-pipeline-implementation-notes.md) | Phase 163 formal lane pipeline implementation notes. |
 | [docs/164-phase-remaining-benchmark-families-implementation-notes.md](docs/164-phase-remaining-benchmark-families-implementation-notes.md) | Phase 164 remaining benchmark families implementation notes. |
+| [docs/165-phase-formal-pipeline-observability-hardening-notes.md](docs/165-phase-formal-pipeline-observability-hardening-notes.md) | Phase 165 formal pipeline observability hardening notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |

@@ -58,7 +58,8 @@ lane interface stub implementation, and the Phase 160 mutation × formal
 cross-product mapping implementation, and the Phase 161 mutation engine
 completion implementation, and the Phase 162 distinguishability soak telemetry
 implementation, and the Phase 163 formal lane pipeline implementation, and the
-Phase 164 remaining benchmark families implementation, plus earlier
+Phase 164 remaining benchmark families implementation, and the Phase 165 formal
+pipeline observability hardening implementation, plus earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
@@ -628,6 +629,18 @@ local oracle evaluation, registry exposure, local JSON replay, soak handling,
 and `Level1LocalReplay` claim caps. Phase 164 adds no live ZK backend, no zkML
 execution, no benchmark evidence, no Level2+ evidence, and no stronger claim.
 
+Phase 165 hardens the formal-lane pipeline observability layer without changing
+claim strength. `FormalLanePipelineOutcome` now records the source
+`MutationClass`, primary `FormalPropertyScopeKind`, optional proof status,
+no-template reason, and mandatory nonclaims. Soak telemetry records
+no-template, scope-count, and proof-status metrics, and validation rejects
+impossible formal-lane counter relationships and classification drift. Focused
+tests in `crates/zkbench-core/tests/phase_163_formal_lane_pipeline.rs` and
+`crates/zkbench-core/tests/soak_telemetry.rs` verify derived and no-template
+paths. Phase 165 calls no formal tool, creates no proof, creates no formal
+evidence, creates no benchmark evidence, and does not escalate above
+`Level0DesignNote` formal-lane metadata.
+
 ## State Slice
 
 This report touches only:
@@ -738,6 +751,7 @@ This report touches only:
 - `docs/162-phase-distinguishability-soak-telemetry-implementation-notes.md`
 - `docs/163-phase-formal-lane-pipeline-implementation-notes.md`
 - `docs/164-phase-remaining-benchmark-families-implementation-notes.md`
+- `docs/165-phase-formal-pipeline-observability-hardening-notes.md`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
@@ -770,6 +784,7 @@ This report touches only:
 - `crates/zkbench-core/tests/phase_162_distinguishability_telemetry.rs`
 - `crates/zkbench-core/tests/phase_163_formal_lane_pipeline.rs`
 - `crates/zkbench-core/tests/phase_164_remaining_families.rs`
+- `crates/zkbench-core/tests/soak_telemetry.rs`
 - `Cargo.lock`
 - `Cargo.toml`
 - `docs/12-task-list.md`
@@ -784,13 +799,15 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 164 polish validation.
+Run from repository root during Phase 165 polish validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
 cargo test -p zkbench-core --test repo_claim_boundary_docs
 cargo test -p zkbench-core --test repo_hygiene
+cargo test -p zkbench-core --test phase_163_formal_lane_pipeline
+cargo test -p zkbench-core --test soak_telemetry
 cargo check -p zkbench-core --examples
 cargo test -p hsai-agent-admission
 cargo test -p hsai-e2e-harness
@@ -803,12 +820,14 @@ cargo llvm-cov -p zkbench-core --all-features --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 164 polish validation passed. `cargo test --workspace --all-features`,
+Phase 165 polish validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. The `rg` package-surface check returned no package files
+mutation engine. Focused Phase 165 checks verify formal pipeline outcome
+metadata, no-template reasons, scope/status telemetry, and fail-closed
+formal-lane counter validation. The `rg` package-surface check returned no package files
 (exit code 1 with empty output), confirming no `package.json` or
 `pnpm-lock.yaml` surface exists.
 

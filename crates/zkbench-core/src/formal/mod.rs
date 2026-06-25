@@ -197,7 +197,8 @@ pub use cross_product::{
     CROSS_PRODUCT_CLAIM_BOUNDARY,
 };
 pub use pipeline::{
-    evaluate_formal_lane_pipeline, pipeline_outcome_is_declared_only, FormalLanePipelineOutcome,
+    evaluate_formal_lane_pipeline, formal_pipeline_nonclaims, pipeline_outcome_is_declared_only,
+    FormalLanePipelineOutcome,
 };
 
 impl<V: FormalVerifier> FormalLane<V> {
