@@ -6,6 +6,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
+use std::str::FromStr;
 
 #[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct AdmissionCandidateId(pub String);
@@ -1200,11 +1201,210 @@ fn parse_declared_json<T: for<'de> Deserialize<'de> + Serialize>(
     parse_strict_json_bytes(declared_bytes(files, logical_path)?, logical_path)
 }
 
+fn parse_json_value_rejecting_duplicate_keys(bytes: &[u8]) -> Result<serde_json::Value, ()> {
+    let mut parser = DuplicateRejectingJsonParser::new(bytes);
+    let value = parser.parse_value()?;
+    parser.skip_whitespace();
+    if parser.peek().is_some() {
+        return Err(());
+    }
+    Ok(value)
+}
+
+struct DuplicateRejectingJsonParser<'a> {
+    input: &'a [u8],
+    pos: usize,
+}
+
+impl<'a> DuplicateRejectingJsonParser<'a> {
+    fn new(input: &'a [u8]) -> Self {
+        Self { input, pos: 0 }
+    }
+
+    fn remaining(&self) -> &'a [u8] {
+        &self.input[self.pos..]
+    }
+
+    fn peek(&self) -> Option<u8> {
+        self.remaining().first().copied()
+    }
+
+    fn bump(&mut self) -> Option<u8> {
+        let byte = self.peek()?;
+        self.pos += 1;
+        Some(byte)
+    }
+
+    fn skip_whitespace(&mut self) {
+        while matches!(self.peek(), Some(b' ' | b'\n' | b'\r' | b'\t')) {
+            self.pos += 1;
+        }
+    }
+
+    fn expect_byte(&mut self, expected: u8) -> Result<(), ()> {
+        if self.bump() == Some(expected) {
+            Ok(())
+        } else {
+            Err(())
+        }
+    }
+
+    fn parse_value(&mut self) -> Result<serde_json::Value, ()> {
+        self.skip_whitespace();
+        match self.peek() {
+            Some(b'n') => self.parse_null(),
+            Some(b't') | Some(b'f') => self.parse_bool(),
+            Some(b'"') => self.parse_string().map(serde_json::Value::String),
+            Some(b'[') => self.parse_array(),
+            Some(b'{') => self.parse_object(),
+            Some(b'0'..=b'9') | Some(b'-') => self.parse_number(),
+            _ => Err(()),
+        }
+    }
+
+    fn parse_null(&mut self) -> Result<serde_json::Value, ()> {
+        if self.remaining().starts_with(b"null") {
+            self.pos += 4;
+            Ok(serde_json::Value::Null)
+        } else {
+            Err(())
+        }
+    }
+
+    fn parse_bool(&mut self) -> Result<serde_json::Value, ()> {
+        if self.remaining().starts_with(b"true") {
+            self.pos += 4;
+            Ok(serde_json::Value::Bool(true))
+        } else if self.remaining().starts_with(b"false") {
+            self.pos += 5;
+            Ok(serde_json::Value::Bool(false))
+        } else {
+            Err(())
+        }
+    }
+
+    fn parse_string(&mut self) -> Result<String, ()> {
+        let start = self.pos;
+        self.expect_byte(b'"')?;
+        loop {
+            let byte = self.bump().ok_or(())?;
+            match byte {
+                b'"' => {
+                    return serde_json::from_slice(&self.input[start..self.pos]).map_err(|_| ());
+                }
+                b'\\' => {
+                    self.bump().ok_or(())?;
+                }
+                _ => {}
+            }
+        }
+    }
+
+    fn parse_number(&mut self) -> Result<serde_json::Value, ()> {
+        let start = self.pos;
+        if self.peek() == Some(b'-') {
+            self.pos += 1;
+        }
+        if self.peek() == Some(b'0') {
+            self.pos += 1;
+        } else {
+            while matches!(self.peek(), Some(b'0'..=b'9')) {
+                self.pos += 1;
+            }
+        }
+        if self.peek() == Some(b'.') {
+            self.pos += 1;
+            if !matches!(self.peek(), Some(b'0'..=b'9')) {
+                return Err(());
+            }
+            while matches!(self.peek(), Some(b'0'..=b'9')) {
+                self.pos += 1;
+            }
+        }
+        if matches!(self.peek(), Some(b'e' | b'E')) {
+            self.pos += 1;
+            if matches!(self.peek(), Some(b'+' | b'-')) {
+                self.pos += 1;
+            }
+            if !matches!(self.peek(), Some(b'0'..=b'9')) {
+                return Err(());
+            }
+            while matches!(self.peek(), Some(b'0'..=b'9')) {
+                self.pos += 1;
+            }
+        }
+        let number_text = std::str::from_utf8(&self.input[start..self.pos]).map_err(|_| ())?;
+        let number = serde_json::Number::from_str(number_text).map_err(|_| ())?;
+        Ok(serde_json::Value::Number(number))
+    }
+
+    fn parse_array(&mut self) -> Result<serde_json::Value, ()> {
+        self.expect_byte(b'[')?;
+        self.skip_whitespace();
+        let mut values = Vec::new();
+        if self.peek() == Some(b']') {
+            self.pos += 1;
+            return Ok(serde_json::Value::Array(values));
+        }
+        loop {
+            values.push(self.parse_value()?);
+            self.skip_whitespace();
+            match self.peek() {
+                Some(b',') => {
+                    self.pos += 1;
+                    self.skip_whitespace();
+                }
+                Some(b']') => {
+                    self.pos += 1;
+                    break;
+                }
+                _ => return Err(()),
+            }
+        }
+        Ok(serde_json::Value::Array(values))
+    }
+
+    fn parse_object(&mut self) -> Result<serde_json::Value, ()> {
+        self.expect_byte(b'{')?;
+        self.skip_whitespace();
+        let mut map = serde_json::Map::new();
+        let mut keys = BTreeSet::new();
+        if self.peek() == Some(b'}') {
+            self.pos += 1;
+            return Ok(serde_json::Value::Object(map));
+        }
+        loop {
+            self.skip_whitespace();
+            let key = self.parse_string()?;
+            if !keys.insert(key.clone()) {
+                return Err(());
+            }
+            self.skip_whitespace();
+            self.expect_byte(b':')?;
+            let value = self.parse_value()?;
+            map.insert(key, value);
+            self.skip_whitespace();
+            match self.peek() {
+                Some(b',') => {
+                    self.pos += 1;
+                    self.skip_whitespace();
+                }
+                Some(b'}') => {
+                    self.pos += 1;
+                    break;
+                }
+                _ => return Err(()),
+            }
+        }
+        Ok(serde_json::Value::Object(map))
+    }
+}
+
 fn parse_strict_json_bytes<T: for<'de> Deserialize<'de> + Serialize>(
     bytes: &[u8],
     logical_path: &str,
 ) -> Result<T, AdmissionJournalMaterializationError> {
-    let original: serde_json::Value = serde_json::from_slice(bytes).map_err(|_| {
+    let original = parse_json_value_rejecting_duplicate_keys(bytes).map_err(|_| {
         AdmissionJournalMaterializationError::MalformedDeclaredFile(logical_path.to_owned())
     })?;
     let parsed: T = serde_json::from_value(original.clone()).map_err(|_| {
@@ -3539,6 +3739,353 @@ mod tests {
             ))
         );
         fs::remove_dir_all(&artifact_root).expect("unknown artifact cleanup succeeds");
+    }
+
+    fn inject_duplicate_key_after_open_brace(bytes: &[u8], key: &str, value: &str) -> Vec<u8> {
+        assert_eq!(bytes.first(), Some(&b'{'));
+        let mut out = Vec::with_capacity(bytes.len() + key.len() + value.len() + 8);
+        out.push(b'{');
+        out.extend_from_slice(format!(r#""{key}":"{value}","#).as_bytes());
+        out.extend_from_slice(&bytes[1..]);
+        out
+    }
+
+    fn inject_duplicate_key_in_nested_object(
+        bytes: &[u8],
+        parent_key: &str,
+        dup_key: &str,
+        dup_value: &str,
+    ) -> Vec<u8> {
+        let text = std::str::from_utf8(bytes).expect("declared JSON is UTF-8");
+        let parent_needle = format!("\"{parent_key}\":");
+        let parent_pos = text.find(&parent_needle).expect("parent key present");
+        let brace_pos = text[parent_pos..]
+            .find('{')
+            .map(|offset| parent_pos + offset)
+            .expect("parent object brace");
+        let mut out = String::with_capacity(text.len() + dup_key.len() + dup_value.len() + 16);
+        out.push_str(&text[..=brace_pos]);
+        out.push_str(&format!(r#""{dup_key}":"{dup_value}","#));
+        out.push_str(&text[brace_pos + 1..]);
+        out.into_bytes()
+    }
+
+    fn inject_duplicate_top_level_key(bytes: &[u8], key: &str, value: &str) -> Vec<u8> {
+        let text = std::str::from_utf8(bytes).expect("declared JSON is UTF-8");
+        let needle = format!("\"{key}\":");
+        let pos = text.find(&needle).expect("top-level key present");
+        let mut out = String::with_capacity(text.len() + key.len() + value.len() + 8);
+        out.push_str(&text[..pos]);
+        out.push_str(&format!(r#""{key}":"{value}","#));
+        out.push_str(&text[pos..]);
+        out.into_bytes()
+    }
+
+    fn inject_duplicate_key_in_first_array_object(
+        bytes: &[u8],
+        array_key: &str,
+        dup_key: &str,
+        dup_value: &str,
+    ) -> Vec<u8> {
+        let text = std::str::from_utf8(bytes).expect("declared JSON is UTF-8");
+        let array_needle = format!("\"{array_key}\":");
+        let array_pos = text.find(&array_needle).expect("array key present");
+        let brace_pos = text[array_pos..]
+            .find('{')
+            .map(|offset| array_pos + offset)
+            .expect("first array object brace");
+        let mut out = String::with_capacity(text.len() + dup_key.len() + dup_value.len() + 16);
+        out.push_str(&text[..=brace_pos]);
+        out.push_str(&format!(r#""{dup_key}":"{dup_value}","#));
+        out.push_str(&text[brace_pos + 1..]);
+        out.into_bytes()
+    }
+
+    fn assert_duplicate_key_rejected_on_root(
+        output_root: &Path,
+        logical_path: &str,
+        tampered_bytes: Vec<u8>,
+    ) {
+        if logical_path == "admission-journal/manifest.json" {
+            rewrite_bundle_file(output_root, logical_path, &tampered_bytes);
+        } else {
+            rewrite_content_and_manifest_digest(output_root, logical_path, &tampered_bytes);
+        }
+        assert_eq!(
+            read_admission_journal_bundle(output_root),
+            Err(AdmissionJournalMaterializationError::MalformedDeclaredFile(
+                logical_path.to_owned()
+            ))
+        );
+    }
+
+    #[test]
+    fn duplicate_json_parser_allows_same_key_in_separate_scopes() {
+        let bytes = br#"{"outer":{"name":"a"},"inner":{"name":"b"}}"#;
+        let value =
+            parse_json_value_rejecting_duplicate_keys(bytes).expect("separate scopes parse");
+        assert_eq!(value["outer"]["name"], "a");
+        assert_eq!(value["inner"]["name"], "b");
+    }
+
+    #[test]
+    fn duplicate_json_parser_rejects_trailing_data() {
+        assert!(parse_json_value_rejecting_duplicate_keys(br#"{"valid":true} trailing"#).is_err());
+    }
+
+    #[test]
+    fn duplicate_json_parser_preserves_valid_unicode_strings() {
+        let mut bytes = br#"{"raw":"Sacred AI "#.to_vec();
+        bytes.extend_from_slice(&[0xF0, 0x9F, 0x94, 0x92]);
+        bytes.extend_from_slice(br#"","escaped":"\uD83D\uDD12","accent":"caf\u00e9"}"#);
+        let value =
+            parse_json_value_rejecting_duplicate_keys(&bytes).expect("unicode JSON strings parse");
+        assert_eq!(value["raw"], "Sacred AI \u{1f512}");
+        assert_eq!(value["escaped"], "\u{1f512}");
+        assert_eq!(value["accent"], "caf\u{e9}");
+    }
+
+    #[test]
+    fn duplicate_json_parser_rejects_unicode_equivalent_duplicate_keys() {
+        assert!(parse_json_value_rejecting_duplicate_keys(br#"{"name":1,"\u006eame":2}"#).is_err());
+    }
+
+    #[test]
+    fn admission_journal_readback_rejects_duplicate_json_keys() {
+        let (manifest_root, _) = materialized_test_bundle("dup-manifest-top");
+        let manifest_bytes = fs::read(manifest_root.join("admission-journal/manifest.json"))
+            .expect("manifest reads");
+        assert_duplicate_key_rejected_on_root(
+            &manifest_root,
+            "admission-journal/manifest.json",
+            inject_duplicate_key_after_open_brace(&manifest_bytes, "bundle_id", "dup"),
+        );
+        fs::remove_dir_all(&manifest_root).expect("dup manifest root cleanup succeeds");
+
+        let (digest_root, _) = materialized_test_bundle("dup-manifest-digest");
+        let digest_bytes =
+            fs::read(digest_root.join("admission-journal/manifest.json")).expect("manifest reads");
+        assert_duplicate_key_rejected_on_root(
+            &digest_root,
+            "admission-journal/manifest.json",
+            inject_duplicate_key_in_nested_object(
+                &digest_bytes,
+                "declared_file_digests",
+                "admission-journal/journal.json",
+                "dup",
+            ),
+        );
+        fs::remove_dir_all(&digest_root).expect("dup digest root cleanup succeeds");
+
+        let (journal_root, _) = materialized_test_bundle("dup-journal-top");
+        let journal_bytes =
+            fs::read(journal_root.join("admission-journal/journal.json")).expect("journal reads");
+        assert_duplicate_key_rejected_on_root(
+            &journal_root,
+            "admission-journal/journal.json",
+            inject_duplicate_key_after_open_brace(&journal_bytes, "entries", "[]"),
+        );
+        fs::remove_dir_all(&journal_root).expect("dup journal root cleanup succeeds");
+
+        let (candidate_root, _) = materialized_test_bundle("dup-journal-candidate");
+        let candidate_bytes =
+            fs::read(candidate_root.join("admission-journal/journal.json")).expect("journal reads");
+        assert_duplicate_key_rejected_on_root(
+            &candidate_root,
+            "admission-journal/journal.json",
+            inject_duplicate_key_in_nested_object(
+                &candidate_bytes,
+                "candidate",
+                "id",
+                "dup-candidate",
+            ),
+        );
+        fs::remove_dir_all(&candidate_root).expect("dup candidate root cleanup succeeds");
+
+        let (policy_root, _) = materialized_test_bundle("dup-journal-policy");
+        let policy_bytes =
+            fs::read(policy_root.join("admission-journal/journal.json")).expect("journal reads");
+        assert_duplicate_key_rejected_on_root(
+            &policy_root,
+            "admission-journal/journal.json",
+            inject_duplicate_key_in_nested_object(&policy_bytes, "policy", "id", "dup-policy"),
+        );
+        fs::remove_dir_all(&policy_root).expect("dup policy root cleanup succeeds");
+
+        let (decision_root, _) = materialized_test_bundle("dup-journal-decision");
+        let decision_bytes =
+            fs::read(decision_root.join("admission-journal/journal.json")).expect("journal reads");
+        assert_duplicate_key_rejected_on_root(
+            &decision_root,
+            "admission-journal/journal.json",
+            inject_duplicate_key_in_nested_object(
+                &decision_bytes,
+                "decision",
+                "policy_id",
+                "dup-policy",
+            ),
+        );
+        fs::remove_dir_all(&decision_root).expect("dup decision root cleanup succeeds");
+
+        let (artifact_root, _) = materialized_test_bundle("dup-journal-artifact");
+        let artifact_bytes =
+            fs::read(artifact_root.join("admission-journal/journal.json")).expect("journal reads");
+        assert_duplicate_key_rejected_on_root(
+            &artifact_root,
+            "admission-journal/journal.json",
+            inject_duplicate_key_in_first_array_object(
+                &artifact_bytes,
+                "source_artifact_digests",
+                "id",
+                "dup-artifact",
+            ),
+        );
+        fs::remove_dir_all(&artifact_root).expect("dup artifact root cleanup succeeds");
+
+        let (row_root, _) = materialized_test_bundle("dup-decision-row");
+        let decisions =
+            fs::read(row_root.join("admission-journal/decisions.jsonl")).expect("decisions read");
+        let first_line_end = decisions
+            .iter()
+            .position(|byte| *byte == b'\n')
+            .expect("newline");
+        let first_line = &decisions[..first_line_end];
+        let tampered_line =
+            inject_duplicate_key_after_open_brace(first_line, "candidate_id", "dup");
+        let tampered = format!(
+            "{}\n{}",
+            std::str::from_utf8(&tampered_line).expect("utf8"),
+            {
+                let rest = &decisions[first_line_end + 1..];
+                std::str::from_utf8(rest).expect("utf8")
+            }
+        );
+        assert_duplicate_key_rejected_on_root(
+            &row_root,
+            "admission-journal/decisions.jsonl",
+            tampered.into_bytes(),
+        );
+        fs::remove_dir_all(&row_root).expect("dup row root cleanup succeeds");
+
+        let (source_root, _) = materialized_test_bundle("dup-source-index");
+        let source_bytes = fs::read(source_root.join("admission-journal/source-digests.json"))
+            .expect("source index reads");
+        assert_duplicate_key_rejected_on_root(
+            &source_root,
+            "admission-journal/source-digests.json",
+            inject_duplicate_key_after_open_brace(&source_bytes, "source_artifact_digests", "[]"),
+        );
+        fs::remove_dir_all(&source_root).expect("dup source root cleanup succeeds");
+
+        let (source_artifact_root, _) = materialized_test_bundle("dup-source-artifact");
+        let source_artifact_bytes =
+            fs::read(source_artifact_root.join("admission-journal/source-digests.json"))
+                .expect("source index reads");
+        assert_duplicate_key_rejected_on_root(
+            &source_artifact_root,
+            "admission-journal/source-digests.json",
+            inject_duplicate_key_in_first_array_object(
+                &source_artifact_bytes,
+                "source_artifact_digests",
+                "id",
+                "dup-artifact",
+            ),
+        );
+        fs::remove_dir_all(&source_artifact_root)
+            .expect("dup source artifact root cleanup succeeds");
+
+        let (redaction_root, _) = materialized_test_bundle("dup-redaction");
+        let redaction_bytes =
+            fs::read(redaction_root.join("admission-journal/redaction-report.json"))
+                .expect("redaction reads");
+        assert_duplicate_key_rejected_on_root(
+            &redaction_root,
+            "admission-journal/redaction-report.json",
+            inject_duplicate_key_after_open_brace(
+                &redaction_bytes,
+                "retains_credentials_or_secrets",
+                "true",
+            ),
+        );
+        fs::remove_dir_all(&redaction_root).expect("dup redaction root cleanup succeeds");
+
+        let (validation_root, _) = materialized_test_bundle("dup-validation");
+        let validation_bytes =
+            fs::read(validation_root.join("admission-journal/validation-report.json"))
+                .expect("validation reads");
+        assert_duplicate_key_rejected_on_root(
+            &validation_root,
+            "admission-journal/validation-report.json",
+            inject_duplicate_key_after_open_brace(&validation_bytes, "valid", "false"),
+        );
+        fs::remove_dir_all(&validation_root).expect("dup validation root cleanup succeeds");
+
+        let (equal_root, _) = materialized_test_bundle("dup-equal-values");
+        let equal_bytes = fs::read(equal_root.join("admission-journal/validation-report.json"))
+            .expect("validation reads");
+        assert_duplicate_key_rejected_on_root(
+            &equal_root,
+            "admission-journal/validation-report.json",
+            inject_duplicate_top_level_key(&equal_bytes, "valid", "true"),
+        );
+        fs::remove_dir_all(&equal_root).expect("dup equal root cleanup succeeds");
+
+        let (array_root, _) = materialized_test_bundle("dup-array-nested");
+        let array_bytes =
+            fs::read(array_root.join("admission-journal/journal.json")).expect("journal reads");
+        let array_text = std::str::from_utf8(&array_bytes).expect("journal UTF-8");
+        let entries_pos = array_text
+            .find("\"entries\":")
+            .expect("entries array present");
+        let bracket_pos = array_text[entries_pos..]
+            .find('[')
+            .map(|offset| entries_pos + offset)
+            .expect("entries array bracket");
+        let tampered_array = format!(
+            "{}{}",
+            &array_text[..=bracket_pos],
+            r#"{"dup_in_array":1,"dup_in_array":2},"#
+        );
+        let tampered_array = format!("{}{}", tampered_array, &array_text[bracket_pos + 1..]);
+        assert_duplicate_key_rejected_on_root(
+            &array_root,
+            "admission-journal/journal.json",
+            tampered_array.into_bytes(),
+        );
+        fs::remove_dir_all(&array_root).expect("dup array root cleanup succeeds");
+
+        let (trailing_root, _) = materialized_test_bundle("dup-trailing");
+        let trailing_bytes =
+            fs::read(trailing_root.join("admission-journal/redaction-report.json"))
+                .expect("redaction reads");
+        let mut trailing = trailing_bytes;
+        trailing.extend_from_slice(b" trailing");
+        assert_duplicate_key_rejected_on_root(
+            &trailing_root,
+            "admission-journal/redaction-report.json",
+            trailing,
+        );
+        fs::remove_dir_all(&trailing_root).expect("dup trailing root cleanup succeeds");
+
+        let (digest_consistent_root, _) = materialized_test_bundle("dup-digest-consistent");
+        let digest_consistent_bytes =
+            fs::read(digest_consistent_root.join("admission-journal/validation-report.json"))
+                .expect("validation reads");
+        let tampered =
+            inject_duplicate_key_after_open_brace(&digest_consistent_bytes, "valid", "true");
+        rewrite_content_and_manifest_digest(
+            &digest_consistent_root,
+            "admission-journal/validation-report.json",
+            &tampered,
+        );
+        assert_eq!(
+            read_admission_journal_bundle(&digest_consistent_root),
+            Err(AdmissionJournalMaterializationError::MalformedDeclaredFile(
+                "admission-journal/validation-report.json".to_owned()
+            ))
+        );
+        fs::remove_dir_all(&digest_consistent_root)
+            .expect("dup digest consistent cleanup succeeds");
     }
 
     #[cfg(unix)]

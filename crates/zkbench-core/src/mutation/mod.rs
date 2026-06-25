@@ -3,25 +3,48 @@
 pub mod apply;
 pub mod bad_counters;
 pub mod corrupted_guards;
+pub mod invalid_unroll_bounds;
+pub mod invariant_strengthening;
+pub mod invariant_weakening;
 pub mod missing_constraints;
+pub mod nondeterministic_transition_injection;
+pub mod observation_omission;
 pub mod pass;
 pub mod provenance;
+pub mod public_private_boundary_mismatch;
+pub mod recursion_envelope_mismatch;
+pub mod semantic_no_op_drift;
+pub mod stale_state_reads;
+pub mod trace_ordering_corruption;
+pub mod witness_aliasing;
 
 use serde::{Deserialize, Serialize};
 
 use crate::evidence::{ArtifactDigest, ClaimBoundary, ExpectedVerdict};
 
 pub use apply::{
-    apply_default_mutations, apply_mutation_pass, evaluate_mutated_instance, MutationEngine,
+    apply_default_mutations, apply_mutation_for_class, apply_mutation_pass,
+    evaluate_mutated_instance, MutationEngine,
 };
 pub use bad_counters::BadCountersPass;
 pub use corrupted_guards::CorruptedGuardsPass;
+pub use invalid_unroll_bounds::InvalidUnrollBoundsPass;
+pub use invariant_strengthening::InvariantStrengtheningPass;
+pub use invariant_weakening::InvariantWeakeningPass;
 pub use missing_constraints::MissingConstraintsPass;
+pub use nondeterministic_transition_injection::NondeterministicTransitionInjectionPass;
+pub use observation_omission::ObservationOmissionPass;
 pub use pass::{
     MutatedBenchmarkInstance, MutationApplication, MutationExpectedVerdict, MutationInput,
     MutationOutput, MutationPass, MutationPlan, MutationSafetyClass,
 };
 pub use provenance::MutationProvenance;
+pub use public_private_boundary_mismatch::PublicPrivateBoundaryMismatchPass;
+pub use recursion_envelope_mismatch::RecursionEnvelopeMismatchPass;
+pub use semantic_no_op_drift::SemanticNoOpDriftPass;
+pub use stale_state_reads::StaleStateReadsPass;
+pub use trace_ordering_corruption::TraceOrderingCorruptionPass;
+pub use witness_aliasing::WitnessAliasingPass;
 
 /// Required mutation class taxonomy.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]

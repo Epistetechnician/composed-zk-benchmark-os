@@ -10,8 +10,10 @@ pub use crate::adapters::{
     ZkHarnessMetricMapping, ZkHarnessPackMapping, ZkHarnessPlannedCommand,
 };
 pub use crate::dsl::{
-    evaluate_trace, lower_to_ir, parse_yaml_ast, parse_yaml_spec, ActionSpec, GuardSpec,
-    MachineSpec, OracleOutcome, ParsedAst, SemanticIr, SurfaceSpec, TraceSpec,
+    audit_oracle_completeness, evaluate_trace, lower_to_ir, parse_yaml_ast, parse_yaml_spec,
+    ActionSpec, GuardSpec, MachineSpec, OracleCompletenessAudit, OracleCompletenessConstruct,
+    OracleCompletenessConstructKind, OracleCompletenessLabel, OracleOutcome, ParsedAst, SemanticIr,
+    SurfaceSpec, TraceSpec,
 };
 pub use crate::error::{Result, ZkBenchError};
 pub use crate::evidence::{
@@ -45,6 +47,13 @@ pub use crate::external_runner::{
     ResultCandidateArtifactResolver, SyntheticImportValidation, SyntheticResultImportBundle,
     SyntheticResultImporter,
 };
+pub use crate::formal::{
+    derive_formal_property_assertion_template, mandatory_cross_product_nonclaims,
+    mandatory_lane_outcome_nonclaims, mutation_class_formal_stress, FormalLane, FormalLaneError,
+    FormalLaneOutcome, FormalLaneProof, FormalLaneProofStatus, FormalPropertyAssertion,
+    FormalPropertyScope, FormalPropertyScopeKind, FormalVerifier, MutationFormalStressProfile,
+    NoopFormalVerifier,
+};
 pub use crate::generator::{
     evaluate_generated_instance, generate_family, generate_instance, BenchmarkFamily,
     BenchmarkInstance, DeterministicGenerator, FamilyKind, GeneratedBenchmarkFamily,
@@ -67,9 +76,13 @@ pub use crate::local_benchmark_artifact::{
     LOCAL_BENCHMARK_ARTIFACT_MANIFEST_PATH, LOCAL_BENCHMARK_ARTIFACT_MARKDOWN_PATH,
 };
 pub use crate::mutation::{
-    apply_default_mutations, apply_mutation_pass, evaluate_mutated_instance, BadCountersPass,
-    CorruptedGuardsPass, MissingConstraintsPass, MutatedBenchmarkInstance, MutationClass,
-    MutationEngine, MutationPass, MutationSafetyClass, MutationSpec, MutationVariant,
+    apply_default_mutations, apply_mutation_for_class, apply_mutation_pass,
+    evaluate_mutated_instance, BadCountersPass, CorruptedGuardsPass, InvalidUnrollBoundsPass,
+    InvariantStrengtheningPass, InvariantWeakeningPass, MissingConstraintsPass,
+    MutatedBenchmarkInstance, MutationClass, MutationEngine, MutationPass, MutationSafetyClass,
+    MutationSpec, MutationVariant, NondeterministicTransitionInjectionPass,
+    ObservationOmissionPass, PublicPrivateBoundaryMismatchPass, RecursionEnvelopeMismatchPass,
+    SemanticNoOpDriftPass, StaleStateReadsPass, TraceOrderingCorruptionPass, WitnessAliasingPass,
 };
 pub use crate::pack::{
     build_pack_readiness_report_from_reader, read_pack_readiness_report,
@@ -104,8 +117,12 @@ pub use crate::report_bundle::{
     ReportBundleValidation, ReportBundleValidationIssueKind,
 };
 pub use crate::scoring::{
-    score_report_from_evidence, score_report_from_local_mutation_evidence, validate_score_report,
-    LocalMutationEvidenceSummary, ScoreReport, ScoreReportValidation, ScoreReportValidationIssue,
+    classify_mutation_distinguishability, mandatory_distinguishability_nonclaims,
+    score_report_from_evidence, score_report_from_local_mutation_evidence,
+    summarize_mutation_distinguishability, validate_score_report, LocalMutationEvidenceSummary,
+    MutationDistinguishabilityAxis, MutationDistinguishabilityCell,
+    MutationDistinguishabilityMatrix, MutationDistinguishabilitySummary, ScoreReport,
+    ScoreReportValidation, ScoreReportValidationIssue,
 };
 pub use crate::soak::{
     aggregate_soak_health_reports, build_regression_soak_config, build_smoke_soak_config,

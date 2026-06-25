@@ -118,6 +118,30 @@ pub struct SoakTelemetryCounters {
     /// Bytes written by local artifact role.
     #[serde(default)]
     pub bytes_written_by_artifact_role: Vec<InternalSizeMetric>,
+    /// Observed distinguishability axis: true positive.
+    #[serde(default)]
+    pub distinguishability_true_positive_count: usize,
+    /// Observed distinguishability axis: detected rejection.
+    #[serde(default)]
+    pub distinguishability_detected_rejection_count: usize,
+    /// Observed distinguishability axis: unsound acceptance candidate.
+    #[serde(default)]
+    pub distinguishability_unsound_acceptance_candidate_count: usize,
+    /// Observed distinguishability axis: false rejection candidate.
+    #[serde(default)]
+    pub distinguishability_false_rejection_candidate_count: usize,
+    /// Observed distinguishability axis: inconclusive.
+    #[serde(default)]
+    pub distinguishability_inconclusive_count: usize,
+    /// Formal property templates derived from mutation × surface cross-product.
+    #[serde(default)]
+    pub formal_lane_template_derived_count: usize,
+    /// Formal lane evaluations attempted.
+    #[serde(default)]
+    pub formal_lane_evaluation_count: usize,
+    /// Formal lane outcomes at `DeclaredOnly`.
+    #[serde(default)]
+    pub formal_lane_declared_only_count: usize,
 }
 
 impl SoakTelemetryCounters {
@@ -167,6 +191,77 @@ impl SoakTelemetryCounters {
             .extend(other.failure_count_by_phase.clone());
         self.bytes_written_by_artifact_role
             .extend(other.bytes_written_by_artifact_role.clone());
+        self.distinguishability_true_positive_count = self
+            .distinguishability_true_positive_count
+            .saturating_add(other.distinguishability_true_positive_count);
+        self.distinguishability_detected_rejection_count = self
+            .distinguishability_detected_rejection_count
+            .saturating_add(other.distinguishability_detected_rejection_count);
+        self.distinguishability_unsound_acceptance_candidate_count = self
+            .distinguishability_unsound_acceptance_candidate_count
+            .saturating_add(other.distinguishability_unsound_acceptance_candidate_count);
+        self.distinguishability_false_rejection_candidate_count = self
+            .distinguishability_false_rejection_candidate_count
+            .saturating_add(other.distinguishability_false_rejection_candidate_count);
+        self.distinguishability_inconclusive_count = self
+            .distinguishability_inconclusive_count
+            .saturating_add(other.distinguishability_inconclusive_count);
+        self.formal_lane_template_derived_count = self
+            .formal_lane_template_derived_count
+            .saturating_add(other.formal_lane_template_derived_count);
+        self.formal_lane_evaluation_count = self
+            .formal_lane_evaluation_count
+            .saturating_add(other.formal_lane_evaluation_count);
+        self.formal_lane_declared_only_count = self
+            .formal_lane_declared_only_count
+            .saturating_add(other.formal_lane_declared_only_count);
+    }
+
+    /// Record one observed mutation distinguishability axis from local replay.
+    pub fn record_distinguishability_axis(
+        &mut self,
+        axis: crate::scoring::MutationDistinguishabilityAxis,
+    ) {
+        use crate::scoring::MutationDistinguishabilityAxis;
+        match axis {
+            MutationDistinguishabilityAxis::TruePositive => {
+                self.distinguishability_true_positive_count = self
+                    .distinguishability_true_positive_count
+                    .saturating_add(1);
+            }
+            MutationDistinguishabilityAxis::DetectedRejection => {
+                self.distinguishability_detected_rejection_count = self
+                    .distinguishability_detected_rejection_count
+                    .saturating_add(1);
+            }
+            MutationDistinguishabilityAxis::UnsoundAcceptanceCandidate => {
+                self.distinguishability_unsound_acceptance_candidate_count = self
+                    .distinguishability_unsound_acceptance_candidate_count
+                    .saturating_add(1);
+            }
+            MutationDistinguishabilityAxis::FalseRejectionCandidate => {
+                self.distinguishability_false_rejection_candidate_count = self
+                    .distinguishability_false_rejection_candidate_count
+                    .saturating_add(1);
+            }
+            MutationDistinguishabilityAxis::Inconclusive => {
+                self.distinguishability_inconclusive_count =
+                    self.distinguishability_inconclusive_count.saturating_add(1);
+            }
+        }
+    }
+
+    /// Record one formal-lane pipeline outcome.
+    pub fn record_formal_lane_pipeline(&mut self, template_derived: bool, declared_only: bool) {
+        if template_derived {
+            self.formal_lane_template_derived_count =
+                self.formal_lane_template_derived_count.saturating_add(1);
+            self.formal_lane_evaluation_count = self.formal_lane_evaluation_count.saturating_add(1);
+        }
+        if declared_only {
+            self.formal_lane_declared_only_count =
+                self.formal_lane_declared_only_count.saturating_add(1);
+        }
     }
 }
 

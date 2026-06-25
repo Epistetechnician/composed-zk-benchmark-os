@@ -15,7 +15,20 @@ fn config_for_family(family: FamilyKind, seed: u64) -> GeneratorConfig {
         FamilyKind::BoundedCounterLoop => GeneratorConfig::bounded_counter_loop()
             .seed(seed)
             .loop_bound(3),
-        other => panic!("add full-pipeline stress config for implemented family {other:?}"),
+        FamilyKind::NestedLoop => GeneratorConfig::nested_loop().seed(seed).loop_bound(2),
+        FamilyKind::GuardHeavyMachine => GeneratorConfig::guard_heavy_machine()
+            .seed(seed)
+            .loop_bound(2),
+        FamilyKind::RecursiveEnvelope => GeneratorConfig::recursive_envelope()
+            .seed(seed)
+            .loop_bound(2),
+        FamilyKind::MemoryHeavyStateMachine => {
+            GeneratorConfig::memory_heavy_state_machine().seed(seed)
+        }
+        FamilyKind::PublicPrivateBoundaryStress => {
+            GeneratorConfig::public_private_boundary_stress().seed(seed)
+        }
+        FamilyKind::ZkMlControlFlowMixed => GeneratorConfig::zkml_control_flow_mixed().seed(seed),
     }
 }
 

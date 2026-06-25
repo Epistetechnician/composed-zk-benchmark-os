@@ -5,8 +5,9 @@ use std::collections::BTreeMap;
 use crate::dsl::{
     evaluate_trace, lower_to_ir, validate_surface_spec, ActionSpec, AssignAction, BinaryGuard,
     EvidenceSpec, FieldSpec, GuardExpr, GuardSpec, InvariantSpec, LoopSpec, MachineSpec,
-    ObserveSpec, OracleOutcome, OracleSpec, ParsedAst, SemanticEquivalenceClass, StateSpec,
-    SurfaceSpec, TargetSpec, TraceSpec, TraceStepSpec, TransitionSpec,
+    ObserveSpec, OracleOutcome, OracleSpec, ParsedAst, PrivateWitnessSpec, PublicInputSpec,
+    SemanticEquivalenceClass, StateSpec, SurfaceSpec, TargetSpec, TraceSpec, TraceStepSpec,
+    TransitionSpec, WitnessPolicy,
 };
 use crate::error::{Result, ZkBenchError};
 use crate::evidence::{ClaimBoundary, ExpectedVerdict};
@@ -46,17 +47,14 @@ impl DeterministicGenerator {
             FamilyKind::BaselineFsm => build_baseline_fsm(&self.config)?,
             FamilyKind::BranchingFsm => build_branching_fsm(&self.config)?,
             FamilyKind::BoundedCounterLoop => build_bounded_counter_loop(&self.config)?,
-            FamilyKind::NestedLoop
-            | FamilyKind::RecursiveEnvelope
-            | FamilyKind::MemoryHeavyStateMachine
-            | FamilyKind::GuardHeavyMachine
-            | FamilyKind::PublicPrivateBoundaryStress
-            | FamilyKind::ZkMlControlFlowMixed => {
-                return Err(ZkBenchError::generation(
-                    "generator.family_kind",
-                    "future placeholder family kind is not implemented",
-                ))
+            FamilyKind::NestedLoop => build_nested_loop(&self.config)?,
+            FamilyKind::GuardHeavyMachine => build_guard_heavy_machine(&self.config)?,
+            FamilyKind::RecursiveEnvelope => build_recursive_envelope(&self.config)?,
+            FamilyKind::MemoryHeavyStateMachine => build_memory_heavy_state_machine(&self.config)?,
+            FamilyKind::PublicPrivateBoundaryStress => {
+                build_public_private_boundary_stress(&self.config)?
             }
+            FamilyKind::ZkMlControlFlowMixed => build_zkml_control_flow_mixed(&self.config)?,
         };
 
         validate_surface_spec(&surface_spec)?;
@@ -491,6 +489,907 @@ fn build_bounded_counter_loop(config: &GeneratorConfig) -> Result<SurfaceSpec> {
     ))
 }
 
+fn build_nested_loop(config: &GeneratorConfig) -> Result<SurfaceSpec> {
+    let bound = config.tunables.loop_bound.max(1) as i64;
+    let machine_id = family_id(config.family_kind, config.seed, &config.tunables);
+
+    let mut expected_final_fields = BTreeMap::new();
+    expected_final_fields.insert("outer".to_string(), Value::Int { int: bound });
+
+    let mut accepted_steps = vec![TraceStepSpec {
+        transition: "enter_counting".to_string(),
+    }];
+    for _ in 0..bound {
+        for _ in 0..bound {
+            accepted_steps.push(TraceStepSpec {
+                transition: "increment_inner".to_string(),
+            });
+        }
+        accepted_steps.push(TraceStepSpec {
+            transition: "step_outer".to_string(),
+        });
+    }
+    accepted_steps.push(TraceStepSpec {
+        transition: "finish".to_string(),
+    });
+
+    let mut rejected_steps = vec![TraceStepSpec {
+        transition: "enter_counting".to_string(),
+    }];
+    for _ in 0..bound {
+        rejected_steps.push(TraceStepSpec {
+            transition: "increment_inner".to_string(),
+        });
+    }
+    rejected_steps.push(TraceStepSpec {
+        transition: "increment_inner".to_string(),
+    });
+
+    Ok(base_surface(
+        MachineSpec {
+            id: machine_id,
+            description: Some("Deterministically generated nested bounded loops.".to_string()),
+            initial_state: "start".to_string(),
+            semantic_equivalence_class: Some(SemanticEquivalenceClass {
+                id: "generated_nested_loop_v0".to_string(),
+                description: None,
+            }),
+            states: vec![
+                StateSpec {
+                    id: "start".to_string(),
+                    description: None,
+                },
+                StateSpec {
+                    id: "counting".to_string(),
+                    description: None,
+                },
+                StateSpec {
+                    id: "finished".to_string(),
+                    description: None,
+                },
+            ],
+            fields: vec![
+                FieldSpec {
+                    id: "inner".to_string(),
+                    field_type: ValueType::Int,
+                    initial: Some(Value::Int { int: 0 }),
+                    visibility: FieldVisibility::Private,
+                },
+                FieldSpec {
+                    id: "outer".to_string(),
+                    field_type: ValueType::Int,
+                    initial: Some(Value::Int { int: 0 }),
+                    visibility: FieldVisibility::Public,
+                },
+                FieldSpec {
+                    id: "bound".to_string(),
+                    field_type: ValueType::Int,
+                    initial: Some(Value::Int { int: bound }),
+                    visibility: FieldVisibility::Public,
+                },
+            ],
+            transitions: vec![
+                TransitionSpec {
+                    id: "enter_counting".to_string(),
+                    from: "start".to_string(),
+                    to: "counting".to_string(),
+                    guard: GuardSpec::Bool(true),
+                    actions: Vec::new(),
+                },
+                TransitionSpec {
+                    id: "increment_inner".to_string(),
+                    from: "counting".to_string(),
+                    to: "counting".to_string(),
+                    guard: lt_field_field("inner", "bound"),
+                    actions: vec![add_assign_int("inner", 1)],
+                },
+                TransitionSpec {
+                    id: "step_outer".to_string(),
+                    from: "counting".to_string(),
+                    to: "counting".to_string(),
+                    guard: eq_field_field("inner", "bound"),
+                    actions: vec![
+                        add_assign_int("outer", 1),
+                        ActionSpec::Assign {
+                            assign: AssignAction {
+                                field: "inner".to_string(),
+                                value: int_operand(0),
+                            },
+                        },
+                    ],
+                },
+                TransitionSpec {
+                    id: "finish".to_string(),
+                    from: "counting".to_string(),
+                    to: "finished".to_string(),
+                    guard: eq_field_field("outer", "bound"),
+                    actions: Vec::new(),
+                },
+            ],
+            loops: vec![
+                LoopSpec {
+                    id: "inner_loop".to_string(),
+                    bound: Some(lte_field_field("inner", "bound")),
+                    body: vec!["increment_inner".to_string()],
+                    metadata: BTreeMap::from([(
+                        "max_unroll".to_string(),
+                        Value::Int { int: bound },
+                    )]),
+                },
+                LoopSpec {
+                    id: "outer_loop".to_string(),
+                    bound: Some(lte_field_field("outer", "bound")),
+                    body: vec!["step_outer".to_string()],
+                    metadata: BTreeMap::from([(
+                        "max_unroll".to_string(),
+                        Value::Int { int: bound },
+                    )]),
+                },
+            ],
+            invariants: vec![InvariantSpec {
+                id: "inner_at_or_below_bound".to_string(),
+                guard: lte_field_field("inner", "bound"),
+                scope: Some("trace".to_string()),
+            }],
+            observations: vec![ObserveSpec {
+                id: "outer_observation".to_string(),
+                field: "outer".to_string(),
+                visibility: FieldVisibility::Public,
+            }],
+            witness_policy: Default::default(),
+            public_inputs: Vec::new(),
+            private_witnesses: Vec::new(),
+        },
+        OracleSpec {
+            accepted_traces: vec![TraceSpec {
+                id: "generated_accepts_nested_reach_outer_bound".to_string(),
+                initial_state: None,
+                initial_fields: BTreeMap::new(),
+                steps: accepted_steps,
+                expected_final_state: Some("finished".to_string()),
+                expected_final_fields,
+                expected_verdict: Some(ExpectedVerdict::Accept),
+                requires_capabilities: Vec::new(),
+            }],
+            rejected_traces: vec![TraceSpec {
+                id: "generated_rejects_inner_overflow".to_string(),
+                initial_state: None,
+                initial_fields: BTreeMap::new(),
+                steps: rejected_steps,
+                expected_final_state: None,
+                expected_final_fields: BTreeMap::new(),
+                expected_verdict: Some(ExpectedVerdict::Reject),
+                requires_capabilities: Vec::new(),
+            }],
+        },
+    ))
+}
+
+fn build_guard_heavy_machine(config: &GeneratorConfig) -> Result<SurfaceSpec> {
+    let bound = config.tunables.loop_bound.max(1) as i64;
+    let machine_id = family_id(config.family_kind, config.seed, &config.tunables);
+
+    let mut expected_final_fields = BTreeMap::new();
+    expected_final_fields.insert("value".to_string(), Value::Int { int: bound });
+    expected_final_fields.insert("locked".to_string(), Value::Bool { bool: false });
+
+    let mut accepted_steps = vec![TraceStepSpec {
+        transition: "acquire".to_string(),
+    }];
+    for _ in 0..bound {
+        accepted_steps.push(TraceStepSpec {
+            transition: "advance".to_string(),
+        });
+    }
+    accepted_steps.push(TraceStepSpec {
+        transition: "finish".to_string(),
+    });
+
+    let rejected_steps = vec![
+        TraceStepSpec {
+            transition: "acquire".to_string(),
+        },
+        TraceStepSpec {
+            transition: "advance".to_string(),
+        },
+        TraceStepSpec {
+            transition: "release".to_string(),
+        },
+        TraceStepSpec {
+            transition: "advance".to_string(),
+        },
+    ];
+
+    Ok(base_surface(
+        MachineSpec {
+            id: machine_id,
+            description: Some("Deterministically generated guard-heavy machine.".to_string()),
+            initial_state: "open".to_string(),
+            semantic_equivalence_class: Some(SemanticEquivalenceClass {
+                id: "generated_guard_heavy_machine_v0".to_string(),
+                description: None,
+            }),
+            states: vec![
+                StateSpec {
+                    id: "open".to_string(),
+                    description: None,
+                },
+                StateSpec {
+                    id: "guarded".to_string(),
+                    description: None,
+                },
+                StateSpec {
+                    id: "done".to_string(),
+                    description: None,
+                },
+            ],
+            fields: vec![
+                FieldSpec {
+                    id: "value".to_string(),
+                    field_type: ValueType::Int,
+                    initial: Some(Value::Int { int: 0 }),
+                    visibility: FieldVisibility::Public,
+                },
+                FieldSpec {
+                    id: "bound".to_string(),
+                    field_type: ValueType::Int,
+                    initial: Some(Value::Int { int: bound }),
+                    visibility: FieldVisibility::Public,
+                },
+                FieldSpec {
+                    id: "locked".to_string(),
+                    field_type: ValueType::Bool,
+                    initial: Some(Value::Bool { bool: false }),
+                    visibility: FieldVisibility::Private,
+                },
+            ],
+            transitions: vec![
+                TransitionSpec {
+                    id: "acquire".to_string(),
+                    from: "open".to_string(),
+                    to: "guarded".to_string(),
+                    guard: eq_field_bool("locked", false),
+                    actions: vec![assign_bool("locked", true)],
+                },
+                TransitionSpec {
+                    id: "release".to_string(),
+                    from: "guarded".to_string(),
+                    to: "open".to_string(),
+                    guard: eq_field_bool("locked", true),
+                    actions: vec![assign_bool("locked", false)],
+                },
+                TransitionSpec {
+                    id: "advance".to_string(),
+                    from: "guarded".to_string(),
+                    to: "guarded".to_string(),
+                    guard: and_guard(
+                        eq_field_bool("locked", true),
+                        lt_field_field("value", "bound"),
+                    ),
+                    actions: vec![add_assign_int("value", 1)],
+                },
+                TransitionSpec {
+                    id: "finish".to_string(),
+                    from: "guarded".to_string(),
+                    to: "done".to_string(),
+                    guard: and_guard(
+                        eq_field_bool("locked", true),
+                        eq_field_field("value", "bound"),
+                    ),
+                    actions: vec![assign_bool("locked", false)],
+                },
+            ],
+            loops: vec![LoopSpec {
+                id: "advance_until_bound".to_string(),
+                bound: Some(lte_field_field("value", "bound")),
+                body: vec!["advance".to_string()],
+                metadata: BTreeMap::from([("max_unroll".to_string(), Value::Int { int: bound })]),
+            }],
+            invariants: vec![InvariantSpec {
+                id: "locked_implies_value_at_or_below_bound".to_string(),
+                guard: or_guard(
+                    eq_field_bool("locked", false),
+                    lte_field_field("value", "bound"),
+                ),
+                scope: Some("trace".to_string()),
+            }],
+            observations: vec![ObserveSpec {
+                id: "value_observation".to_string(),
+                field: "value".to_string(),
+                visibility: FieldVisibility::Public,
+            }],
+            witness_policy: Default::default(),
+            public_inputs: Vec::new(),
+            private_witnesses: Vec::new(),
+        },
+        OracleSpec {
+            accepted_traces: vec![TraceSpec {
+                id: "generated_accepts_guarded_advance_to_bound".to_string(),
+                initial_state: None,
+                initial_fields: BTreeMap::new(),
+                steps: accepted_steps,
+                expected_final_state: Some("done".to_string()),
+                expected_final_fields,
+                expected_verdict: Some(ExpectedVerdict::Accept),
+                requires_capabilities: Vec::new(),
+            }],
+            rejected_traces: vec![TraceSpec {
+                id: "generated_rejects_advance_after_release".to_string(),
+                initial_state: None,
+                initial_fields: BTreeMap::new(),
+                steps: rejected_steps,
+                expected_final_state: None,
+                expected_final_fields: BTreeMap::new(),
+                expected_verdict: Some(ExpectedVerdict::Reject),
+                requires_capabilities: Vec::new(),
+            }],
+        },
+    ))
+}
+
+fn build_recursive_envelope(config: &GeneratorConfig) -> Result<SurfaceSpec> {
+    let bound = config.tunables.loop_bound.max(1) as i64;
+    let machine_id = family_id(config.family_kind, config.seed, &config.tunables);
+    let envelope_digest = format!("envelope-{machine_id}");
+
+    let mut expected_final_fields = BTreeMap::new();
+    expected_final_fields.insert("depth".to_string(), Value::Int { int: bound });
+
+    let mut accepted_steps = Vec::new();
+    for _ in 0..bound {
+        accepted_steps.push(TraceStepSpec {
+            transition: "unfold".to_string(),
+        });
+    }
+    accepted_steps.push(TraceStepSpec {
+        transition: "seal".to_string(),
+    });
+
+    let mut rejected_steps = Vec::new();
+    for _ in 0..bound {
+        rejected_steps.push(TraceStepSpec {
+            transition: "unfold".to_string(),
+        });
+    }
+    rejected_steps.push(TraceStepSpec {
+        transition: "unfold".to_string(),
+    });
+
+    Ok(base_surface(
+        MachineSpec {
+            id: machine_id,
+            description: Some(
+                "Deterministically generated recursion-envelope bounded fold.".to_string(),
+            ),
+            initial_state: "folding".to_string(),
+            semantic_equivalence_class: Some(SemanticEquivalenceClass {
+                id: "generated_recursive_envelope_v0".to_string(),
+                description: None,
+            }),
+            states: vec![
+                StateSpec {
+                    id: "folding".to_string(),
+                    description: None,
+                },
+                StateSpec {
+                    id: "sealed".to_string(),
+                    description: None,
+                },
+            ],
+            fields: vec![
+                FieldSpec {
+                    id: "depth".to_string(),
+                    field_type: ValueType::Int,
+                    initial: Some(Value::Int { int: 0 }),
+                    visibility: FieldVisibility::Public,
+                },
+                FieldSpec {
+                    id: "bound".to_string(),
+                    field_type: ValueType::Int,
+                    initial: Some(Value::Int { int: bound }),
+                    visibility: FieldVisibility::Public,
+                },
+            ],
+            transitions: vec![
+                TransitionSpec {
+                    id: "unfold".to_string(),
+                    from: "folding".to_string(),
+                    to: "folding".to_string(),
+                    guard: lt_field_field("depth", "bound"),
+                    actions: vec![add_assign_int("depth", 1)],
+                },
+                TransitionSpec {
+                    id: "seal".to_string(),
+                    from: "folding".to_string(),
+                    to: "sealed".to_string(),
+                    guard: eq_field_field("depth", "bound"),
+                    actions: Vec::new(),
+                },
+            ],
+            loops: vec![LoopSpec {
+                id: "recursion_envelope".to_string(),
+                bound: Some(lte_field_field("depth", "bound")),
+                body: vec!["unfold".to_string()],
+                metadata: BTreeMap::from([
+                    ("max_unroll".to_string(), Value::Int { int: bound }),
+                    (
+                        "envelope_digest".to_string(),
+                        Value::Text {
+                            text: envelope_digest.clone(),
+                        },
+                    ),
+                ]),
+            }],
+            invariants: vec![InvariantSpec {
+                id: "depth_at_or_below_bound".to_string(),
+                guard: lte_field_field("depth", "bound"),
+                scope: Some("trace".to_string()),
+            }],
+            observations: vec![ObserveSpec {
+                id: "depth_observation".to_string(),
+                field: "depth".to_string(),
+                visibility: FieldVisibility::Public,
+            }],
+            witness_policy: Default::default(),
+            public_inputs: Vec::new(),
+            private_witnesses: Vec::new(),
+        },
+        OracleSpec {
+            accepted_traces: vec![TraceSpec {
+                id: "generated_accepts_envelope_seal".to_string(),
+                initial_state: None,
+                initial_fields: BTreeMap::new(),
+                steps: accepted_steps,
+                expected_final_state: Some("sealed".to_string()),
+                expected_final_fields,
+                expected_verdict: Some(ExpectedVerdict::Accept),
+                requires_capabilities: Vec::new(),
+            }],
+            rejected_traces: vec![TraceSpec {
+                id: "generated_rejects_envelope_overflow".to_string(),
+                initial_state: None,
+                initial_fields: BTreeMap::new(),
+                steps: rejected_steps,
+                expected_final_state: None,
+                expected_final_fields: BTreeMap::new(),
+                expected_verdict: Some(ExpectedVerdict::Reject),
+                requires_capabilities: Vec::new(),
+            }],
+        },
+    ))
+}
+
+fn build_memory_heavy_state_machine(config: &GeneratorConfig) -> Result<SurfaceSpec> {
+    let memory_slots = config.tunables.memory_fields.max(2);
+    let machine_id = family_id(config.family_kind, config.seed, &config.tunables);
+
+    let mut fields = vec![
+        FieldSpec {
+            id: "cursor".to_string(),
+            field_type: ValueType::Int,
+            initial: Some(Value::Int { int: 0 }),
+            visibility: FieldVisibility::Private,
+        },
+        FieldSpec {
+            id: "ready".to_string(),
+            field_type: ValueType::Bool,
+            initial: Some(Value::Bool { bool: false }),
+            visibility: FieldVisibility::Public,
+        },
+    ];
+    for index in 0..memory_slots {
+        fields.push(FieldSpec {
+            id: format!("mem_{index}"),
+            field_type: ValueType::Int,
+            initial: Some(Value::Int { int: 0 }),
+            visibility: FieldVisibility::Private,
+        });
+    }
+
+    let mut accepted_steps = vec![
+        TraceStepSpec {
+            transition: "write_slot_0".to_string(),
+        },
+        TraceStepSpec {
+            transition: "write_slot_1".to_string(),
+        },
+        TraceStepSpec {
+            transition: "read_slot_0".to_string(),
+        },
+        TraceStepSpec {
+            transition: "finish".to_string(),
+        },
+    ];
+    if memory_slots > 2 {
+        accepted_steps.insert(
+            2,
+            TraceStepSpec {
+                transition: "write_slot_2".to_string(),
+            },
+        );
+    }
+
+    let rejected_steps = vec![
+        TraceStepSpec {
+            transition: "read_slot_0".to_string(),
+        },
+        TraceStepSpec {
+            transition: "finish".to_string(),
+        },
+    ];
+
+    let mut expected_final_fields = BTreeMap::new();
+    expected_final_fields.insert("ready".to_string(), Value::Bool { bool: true });
+    expected_final_fields.insert("cursor".to_string(), Value::Int { int: 1 });
+
+    let mut transitions = vec![
+        TransitionSpec {
+            id: "write_slot_0".to_string(),
+            from: "buffering".to_string(),
+            to: "buffering".to_string(),
+            guard: GuardSpec::Bool(true),
+            actions: vec![ActionSpec::Assign {
+                assign: AssignAction {
+                    field: "mem_0".to_string(),
+                    value: int_operand(1),
+                },
+            }],
+        },
+        TransitionSpec {
+            id: "write_slot_1".to_string(),
+            from: "buffering".to_string(),
+            to: "buffering".to_string(),
+            guard: GuardSpec::Bool(true),
+            actions: vec![ActionSpec::Assign {
+                assign: AssignAction {
+                    field: "mem_1".to_string(),
+                    value: int_operand(2),
+                },
+            }],
+        },
+        TransitionSpec {
+            id: "read_slot_0".to_string(),
+            from: "buffering".to_string(),
+            to: "buffering".to_string(),
+            guard: GuardSpec::Bool(true),
+            actions: vec![ActionSpec::Assign {
+                assign: AssignAction {
+                    field: "cursor".to_string(),
+                    value: field_operand("mem_0"),
+                },
+            }],
+        },
+        TransitionSpec {
+            id: "finish".to_string(),
+            from: "buffering".to_string(),
+            to: "done".to_string(),
+            guard: eq_field_int("cursor", 1),
+            actions: vec![assign_bool("ready", true)],
+        },
+    ];
+    if memory_slots > 2 {
+        transitions.insert(
+            2,
+            TransitionSpec {
+                id: "write_slot_2".to_string(),
+                from: "buffering".to_string(),
+                to: "buffering".to_string(),
+                guard: GuardSpec::Bool(true),
+                actions: vec![ActionSpec::Assign {
+                    assign: AssignAction {
+                        field: "mem_2".to_string(),
+                        value: int_operand(3),
+                    },
+                }],
+            },
+        );
+    }
+
+    Ok(base_surface(
+        MachineSpec {
+            id: machine_id,
+            description: Some(
+                "Deterministically generated memory-heavy state machine.".to_string(),
+            ),
+            initial_state: "buffering".to_string(),
+            semantic_equivalence_class: Some(SemanticEquivalenceClass {
+                id: "generated_memory_heavy_state_machine_v0".to_string(),
+                description: None,
+            }),
+            states: vec![
+                StateSpec {
+                    id: "buffering".to_string(),
+                    description: None,
+                },
+                StateSpec {
+                    id: "done".to_string(),
+                    description: None,
+                },
+            ],
+            fields,
+            transitions,
+            loops: Vec::new(),
+            invariants: vec![InvariantSpec {
+                id: "cursor_non_negative".to_string(),
+                guard: GuardSpec::Expr(GuardExpr::Gte {
+                    gte: BinaryGuard {
+                        left: field_operand("cursor"),
+                        right: int_operand(0),
+                    },
+                }),
+                scope: Some("trace".to_string()),
+            }],
+            observations: vec![ObserveSpec {
+                id: "ready_observation".to_string(),
+                field: "ready".to_string(),
+                visibility: FieldVisibility::Public,
+            }],
+            witness_policy: Default::default(),
+            public_inputs: Vec::new(),
+            private_witnesses: Vec::new(),
+        },
+        OracleSpec {
+            accepted_traces: vec![TraceSpec {
+                id: "generated_accepts_write_then_read".to_string(),
+                initial_state: None,
+                initial_fields: BTreeMap::new(),
+                steps: accepted_steps,
+                expected_final_state: Some("done".to_string()),
+                expected_final_fields,
+                expected_verdict: Some(ExpectedVerdict::Accept),
+                requires_capabilities: Vec::new(),
+            }],
+            rejected_traces: vec![TraceSpec {
+                id: "generated_rejects_stale_read".to_string(),
+                initial_state: None,
+                initial_fields: BTreeMap::new(),
+                steps: rejected_steps,
+                expected_final_state: None,
+                expected_final_fields: BTreeMap::new(),
+                expected_verdict: Some(ExpectedVerdict::Reject),
+                requires_capabilities: Vec::new(),
+            }],
+        },
+    ))
+}
+
+fn build_public_private_boundary_stress(config: &GeneratorConfig) -> Result<SurfaceSpec> {
+    let nonce = config.seed.value as i64;
+    let machine_id = family_id(config.family_kind, config.seed, &config.tunables);
+
+    let mut expected_final_fields = BTreeMap::new();
+    expected_final_fields.insert("matched".to_string(), Value::Bool { bool: true });
+
+    Ok(base_surface(
+        MachineSpec {
+            id: machine_id,
+            description: Some(
+                "Deterministically generated public/private boundary stress machine.".to_string(),
+            ),
+            initial_state: "bind".to_string(),
+            semantic_equivalence_class: Some(SemanticEquivalenceClass {
+                id: "generated_public_private_boundary_stress_v0".to_string(),
+                description: None,
+            }),
+            states: vec![
+                StateSpec {
+                    id: "bind".to_string(),
+                    description: None,
+                },
+                StateSpec {
+                    id: "done".to_string(),
+                    description: None,
+                },
+            ],
+            fields: vec![
+                FieldSpec {
+                    id: "public_nonce".to_string(),
+                    field_type: ValueType::Int,
+                    initial: Some(Value::Int { int: nonce }),
+                    visibility: FieldVisibility::Public,
+                },
+                FieldSpec {
+                    id: "secret_nonce".to_string(),
+                    field_type: ValueType::Int,
+                    initial: Some(Value::Int { int: nonce }),
+                    visibility: FieldVisibility::Private,
+                },
+                FieldSpec {
+                    id: "matched".to_string(),
+                    field_type: ValueType::Bool,
+                    initial: Some(Value::Bool { bool: false }),
+                    visibility: FieldVisibility::Public,
+                },
+            ],
+            transitions: vec![TransitionSpec {
+                id: "bind_nonce".to_string(),
+                from: "bind".to_string(),
+                to: "done".to_string(),
+                guard: eq_field_field("public_nonce", "secret_nonce"),
+                actions: vec![assign_bool("matched", true)],
+            }],
+            loops: Vec::new(),
+            invariants: Vec::new(),
+            observations: vec![ObserveSpec {
+                id: "matched_observation".to_string(),
+                field: "matched".to_string(),
+                visibility: FieldVisibility::Public,
+            }],
+            witness_policy: WitnessPolicy {
+                public_inputs: vec!["public_nonce".to_string()],
+                private_witnesses: vec!["secret_nonce".to_string()],
+                aliasing_allowed: false,
+            },
+            public_inputs: vec![PublicInputSpec {
+                id: "declared_public_nonce".to_string(),
+                field: "public_nonce".to_string(),
+                description: None,
+            }],
+            private_witnesses: vec![PrivateWitnessSpec {
+                id: "declared_secret_nonce".to_string(),
+                field: "secret_nonce".to_string(),
+                description: None,
+            }],
+        },
+        OracleSpec {
+            accepted_traces: vec![TraceSpec {
+                id: "generated_accepts_matching_nonce".to_string(),
+                initial_state: None,
+                initial_fields: BTreeMap::new(),
+                steps: vec![TraceStepSpec {
+                    transition: "bind_nonce".to_string(),
+                }],
+                expected_final_state: Some("done".to_string()),
+                expected_final_fields,
+                expected_verdict: Some(ExpectedVerdict::Accept),
+                requires_capabilities: Vec::new(),
+            }],
+            rejected_traces: vec![TraceSpec {
+                id: "generated_rejects_mismatched_nonce".to_string(),
+                initial_state: None,
+                initial_fields: BTreeMap::from([(
+                    "public_nonce".to_string(),
+                    Value::Int {
+                        int: nonce.saturating_add(1),
+                    },
+                )]),
+                steps: vec![TraceStepSpec {
+                    transition: "bind_nonce".to_string(),
+                }],
+                expected_final_state: None,
+                expected_final_fields: BTreeMap::new(),
+                expected_verdict: Some(ExpectedVerdict::Reject),
+                requires_capabilities: Vec::new(),
+            }],
+        },
+    ))
+}
+
+fn build_zkml_control_flow_mixed(config: &GeneratorConfig) -> Result<SurfaceSpec> {
+    let threshold = config.tunables.loop_bound.max(1) as i64;
+    let confidence = threshold.saturating_add(1);
+    let machine_id = family_id(config.family_kind, config.seed, &config.tunables);
+
+    Ok(base_surface(
+        MachineSpec {
+            id: machine_id,
+            description: Some(
+                "Deterministically generated zkML/control-flow mixed machine.".to_string(),
+            ),
+            initial_state: "pending".to_string(),
+            semantic_equivalence_class: Some(SemanticEquivalenceClass {
+                id: "generated_zkml_control_flow_mixed_v0".to_string(),
+                description: None,
+            }),
+            states: vec![
+                StateSpec {
+                    id: "pending".to_string(),
+                    description: None,
+                },
+                StateSpec {
+                    id: "accepted".to_string(),
+                    description: None,
+                },
+                StateSpec {
+                    id: "rejected".to_string(),
+                    description: None,
+                },
+            ],
+            fields: vec![
+                FieldSpec {
+                    id: "confidence".to_string(),
+                    field_type: ValueType::Int,
+                    initial: Some(Value::Int { int: confidence }),
+                    visibility: FieldVisibility::Public,
+                },
+                FieldSpec {
+                    id: "threshold".to_string(),
+                    field_type: ValueType::Int,
+                    initial: Some(Value::Int { int: threshold }),
+                    visibility: FieldVisibility::Public,
+                },
+                FieldSpec {
+                    id: "label".to_string(),
+                    field_type: ValueType::Text,
+                    initial: Some(Value::Text {
+                        text: "candidate".to_string(),
+                    }),
+                    visibility: FieldVisibility::Public,
+                },
+            ],
+            transitions: vec![
+                TransitionSpec {
+                    id: "accept_if_confident".to_string(),
+                    from: "pending".to_string(),
+                    to: "accepted".to_string(),
+                    guard: gte_field_field("confidence", "threshold"),
+                    actions: Vec::new(),
+                },
+                TransitionSpec {
+                    id: "reject_if_low_confidence".to_string(),
+                    from: "pending".to_string(),
+                    to: "rejected".to_string(),
+                    guard: GuardSpec::Expr(GuardExpr::Lt {
+                        lt: BinaryGuard {
+                            left: field_operand("confidence"),
+                            right: field_operand("threshold"),
+                        },
+                    }),
+                    actions: Vec::new(),
+                },
+            ],
+            loops: Vec::new(),
+            invariants: Vec::new(),
+            observations: vec![
+                ObserveSpec {
+                    id: "confidence_observation".to_string(),
+                    field: "confidence".to_string(),
+                    visibility: FieldVisibility::Public,
+                },
+                ObserveSpec {
+                    id: "label_observation".to_string(),
+                    field: "label".to_string(),
+                    visibility: FieldVisibility::Public,
+                },
+            ],
+            witness_policy: Default::default(),
+            public_inputs: Vec::new(),
+            private_witnesses: Vec::new(),
+        },
+        OracleSpec {
+            accepted_traces: vec![TraceSpec {
+                id: "generated_accepts_control_flow".to_string(),
+                initial_state: None,
+                initial_fields: BTreeMap::new(),
+                steps: vec![TraceStepSpec {
+                    transition: "accept_if_confident".to_string(),
+                }],
+                expected_final_state: Some("accepted".to_string()),
+                expected_final_fields: BTreeMap::new(),
+                expected_verdict: Some(ExpectedVerdict::Accept),
+                requires_capabilities: Vec::new(),
+            }],
+            rejected_traces: vec![TraceSpec {
+                id: "generated_rejects_low_confidence_accept_attempt".to_string(),
+                initial_state: None,
+                initial_fields: BTreeMap::from([(
+                    "confidence".to_string(),
+                    Value::Int {
+                        int: threshold.saturating_sub(1),
+                    },
+                )]),
+                steps: vec![TraceStepSpec {
+                    transition: "accept_if_confident".to_string(),
+                }],
+                expected_final_state: None,
+                expected_final_fields: BTreeMap::new(),
+                expected_verdict: Some(ExpectedVerdict::Reject),
+                requires_capabilities: Vec::new(),
+            }],
+        },
+    ))
+}
+
 fn base_surface(machine: MachineSpec, oracle: OracleSpec) -> SurfaceSpec {
     SurfaceSpec {
         machine,
@@ -530,6 +1429,36 @@ fn eq_field_int(field: &str, value: i64) -> GuardSpec {
     })
 }
 
+fn eq_field_bool(field: &str, value: bool) -> GuardSpec {
+    GuardSpec::Expr(GuardExpr::Eq {
+        eq: BinaryGuard {
+            left: field_operand(field),
+            right: crate::dsl::expr::OperandSpec::Literal(Value::Bool { bool: value }),
+        },
+    })
+}
+
+fn and_guard(left: GuardSpec, right: GuardSpec) -> GuardSpec {
+    GuardSpec::Expr(GuardExpr::And {
+        and: vec![left, right],
+    })
+}
+
+fn or_guard(left: GuardSpec, right: GuardSpec) -> GuardSpec {
+    GuardSpec::Expr(GuardExpr::Or {
+        or: vec![left, right],
+    })
+}
+
+fn assign_bool(field: &str, value: bool) -> ActionSpec {
+    ActionSpec::Assign {
+        assign: AssignAction {
+            field: field.to_string(),
+            value: crate::dsl::expr::OperandSpec::Literal(Value::Bool { bool: value }),
+        },
+    }
+}
+
 fn eq_field_field(left: &str, right: &str) -> GuardSpec {
     GuardSpec::Expr(GuardExpr::Eq {
         eq: BinaryGuard {
@@ -551,6 +1480,15 @@ fn lt_field_field(left: &str, right: &str) -> GuardSpec {
 fn lte_field_field(left: &str, right: &str) -> GuardSpec {
     GuardSpec::Expr(GuardExpr::Lte {
         lte: BinaryGuard {
+            left: field_operand(left),
+            right: field_operand(right),
+        },
+    })
+}
+
+fn gte_field_field(left: &str, right: &str) -> GuardSpec {
+    GuardSpec::Expr(GuardExpr::Gte {
+        gte: BinaryGuard {
             left: field_operand(left),
             right: field_operand(right),
         },

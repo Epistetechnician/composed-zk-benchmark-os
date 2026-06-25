@@ -1883,6 +1883,441 @@ validation report point to it; docs contract and hygiene gates pass; no Rust,
 Cargo, fixture, package-runtime, generated-output, or source-checkout surface
 changes; and no stronger claim is created.
 
+## HSAI Track: Phase 153 Admission Journal Duplicate JSON Implementation
+
+Status: complete. See
+`docs/153-phase-hsai-admission-journal-duplicate-json-implementation-notes.md`.
+
+Goal: reject recursive duplicate JSON object keys before typed canonical
+admission-journal readback.
+
+Scope: `hsai-agent-admission` parser hardening, adversarial tests, and
+navigation/status docs only.
+
+Implemented: `parse_json_value_rejecting_duplicate_keys`, integration inside
+`parse_strict_json_bytes`, trailing-data rejection, existing malformed-file
+error mapping, and adversarial coverage across every declared admission-journal
+JSON document and decision JSONL row.
+
+Anti-goals: Cargo metadata changes, dependencies, repeated array-element
+rejection, raw PCSM array parsing, failure-atomic overwrite,
+descriptor-relative no-follow access, randomized staging, committed-source
+parsing, recoverable-ghost inspection or commands, PCSM runtime import,
+provider calls, network access, credentials, generated bundles, accepted
+Evidence Ledger mutation, official submission, external replay, score-axis
+population, Level2+ evidence, proof, semantic correctness, production
+readiness, or global uniqueness.
+
+Exit criteria: duplicate keys fail closed before typed deserialization; valid
+generated bundles still read successfully; 39 admission tests pass; docs and
+hygiene gates pass; no committed bundle or stronger claim is created.
+
+## Benchmark Track: Phase 154 New Benchmark Families
+
+Status: complete. See
+`docs/154-phase-new-benchmark-families-implementation-notes.md`.
+
+Goal: unblock two future benchmark families (`NestedLoop` and
+`GuardHeavyMachine`) as deterministic local generators over the existing
+Surface DSL, Semantic IR, Oracle, and `Level1LocalReplay` claim boundary.
+
+Scope: additive Rust source and tests under `crates/zkbench-core` plus
+navigation/status docs only. State slice listed in
+`docs/154-phase-new-benchmark-families-boundary-spec.md`.
+
+Implemented: `build_nested_loop` (two stacked bounded loops, inner/outer
+counters, two `LoopSpec` entries, one invariant, accepted/rejected traces),
+`build_guard_heavy_machine` (acquire/release/advance/finish transitions
+exercising `GuardExpr::And`/`GuardExpr::Or`, one `LoopSpec`, one invariant,
+accepted/rejected traces), `FamilyKind::is_implemented` extension, family
+template registry update, `GeneratorConfig::nested_loop` and
+`GeneratorConfig::guard_heavy_machine` constructors, generator dispatch,
+zk-Harness inert `candidate_family_label` extension, soak runner dispatch for
+explicitly selected new families, and 10 Phase 154 tests covering generation,
+oracle evaluation, registry state, determinism, local JSON replay, zk-Harness
+dry-run labels, mutation applicability, and soak campaign behavior.
+
+Anti-goals: Cargo metadata changes, dependencies, new DSL types, new mutation
+passes, live zk-Harness execution, external repo clones, vendored source,
+external result import, external replay, backend execution, benchmark outputs,
+official submission, accepted Evidence Ledger mutation, score-axis population,
+ZK backend performance claims, Level2+ evidence, formal evidence, proof,
+semantic correctness, production readiness, global uniqueness, 100% coverage
+claims, or implementation of `RecursiveEnvelope`, `MemoryHeavyStateMachine`,
+`PublicPrivateBoundaryStress`, or `ZkMlControlFlowMixed`.
+
+Exit criteria: both families generate, validate, lower, and evaluate with
+matching oracle outcomes; `Level1LocalReplay` and local-fixture nonclaims are
+preserved; zk-Harness labels are inert and surfaced through the dry-run plan;
+soak campaigns stay `Level0DesignNote`; no stronger claim is created.
+
+## Benchmark Track: Phase 155 Operator Soak Campaign Runner
+
+Status: complete. See
+`docs/155-phase-operator-soak-campaign-runner-implementation-notes.md`.
+
+Goal: unblock the soak campaign runner by adding a single operator-facing
+example binary that wraps the existing shipped `plan_soak_shards` and
+`run_soak_campaign` library surface, so an operator can run an approved,
+repo-external local soak campaign without writing Rust.
+
+Scope: additive example and hermetic source-contract test under
+`crates/zkbench-core/examples/` and `crates/zkbench-core/tests/` plus
+navigation/status docs only. State slice listed in
+`docs/155-phase-operator-soak-campaign-runner-boundary-spec.md`.
+
+Implemented: `operator_soak_campaign` example reading a fixed authorized set
+of environment variables (`ZKBENCH_SOAK_ACK`, `ZKBENCH_SOAK_CAMPAIGN_ID`,
+`ZKBENCH_SOAK_ARTIFACT_ROOT`, `ZKBENCH_SOAK_APPROVED_BY`,
+`ZKBENCH_SOAK_APPROVAL_STATEMENT`, and optional `ZKBENCH_SOAK_PROFILE`,
+`ZKBENCH_SOAK_FAMILIES`, `ZKBENCH_SOAK_SEED_START`, `ZKBENCH_SOAK_SEED_END`,
+`ZKBENCH_SOAK_SHARD_COUNT`); fixed acknowledgement gate; fail-closed input
+validation; existing `SoakRunConfig::validate` and
+`validate_soak_campaign_config` reuse; `plan_soak_shards` and
+`run_soak_campaign` invocation; `Level0DesignNote` cap enforcement; non-secret
+summary JSON output; and 9 hermetic source-contract tests over the example
+bytes.
+
+Anti-goals: Cargo metadata changes, `Cargo.lock` changes, dependencies, CLI
+argument parsing, `std::env::args` inspection, `clap`, `structopt`, a shipped
+`[[bin]]` target, installable command, package runtime file, new library API,
+new soak profile, new claim boundary, change to existing soak semantics,
+change to existing artifact layouts, change to existing validation, network
+access, credential path, secret fixture, generated committed artifact,
+accepted Evidence Ledger mutation, official benchmark submission, external
+replay execution, live backend execution, score-axis population, ZK backend
+performance claim, Level2+ evidence, formal evidence, proof, semantic
+correctness, production readiness, global software-agent uniqueness, or 100%
+coverage claim.
+
+Exit criteria: example builds and runs end-to-end; fail-closed paths reject
+bad ack, missing required inputs, non-absolute root, bad profile, and unknown
+family; hermetic source-contract tests pass; no authorized surface is
+exceeded; `Level0DesignNote` cap and required nonclaims are preserved; no
+stronger claim is created.
+
+## Benchmark Track: Phase 156 Mutation Engine Depth
+
+Status: complete. See
+`docs/156-phase-mutation-engine-depth-implementation-notes.md`.
+
+Goal: advance the "adversarial mutation scoring" SOTA wedge by widening the
+runnable mutation surface from 3 of 14 declared `MutationClass` variants to
+8 of 14.
+
+Scope: additive Rust source and tests under
+`crates/zkbench-core/src/mutation/` and `crates/zkbench-core/tests/` plus
+navigation/status docs only. State slice listed in
+`docs/156-phase-mutation-engine-depth-boundary-spec.md`.
+
+Implemented: five new deterministic `MutationPass` impls
+(`InvariantWeakeningPass`, `InvariantStrengtheningPass`, `StaleStateReadsPass`,
+`InvalidUnrollBoundsPass`, `ObservationOmissionPass`); five shared `pub(crate)`
+helpers in `apply.rs` (`select_primary_trace`, `invariant_mut`, `loop_mut`,
+`guard_read_fields`, `action_write_fields`, `guard_is_executable_expr`);
+re-exports from `mutation/mod.rs`, `prelude.rs`, and `lib.rs`; preserved
+`apply_default_mutations` (strict engine contract retained, new passes
+individually runnable via `apply_mutation_pass` and composable via
+`MutationEngine::with_pass`); and 11 focused tests in
+`crates/zkbench-core/tests/phase_156_mutation_depth.rs` covering each new
+pass's applies path, the no-eligible-target path, custom-engine determinism,
+and a `MutationClass` scope guard.
+
+Anti-goals: new `MutationClass`/`MutationKind`/`MutationSafetyClass`/
+`ExpectedVerdict` variants, changes to `MutationPass`/`MutationBuild`/DSL/
+oracle/scoring/evidence ledgers/accepted append/promotion preflight/
+official-submission package/external replay preflight/zk-Harness mapping
+beyond the existing future-class `None` branch, Cargo metadata changes,
+`Cargo.lock` changes, dependencies, external execution, external repo clones,
+vendored source, network access, credentials, command-line tools, UI
+dashboards, browser apps, JavaScript or TypeScript runtime files, package
+runtime files, committed generated benchmark artifact files, the remaining
+six inert mutation classes, Level2+ evidence, formal evidence, accepted
+Evidence Ledger mutation, official benchmark submission, score-axis
+population, ZK backend performance claims, SOTA claims, broad leaderboard
+claims, production readiness, semantic correctness, proof, benchmark evidence,
+global software-agent uniqueness, or 100% coverage claims.
+
+Exit criteria: all five new passes apply to eligible generated instances with
+the documented `expected_verdict`, `safety_class`, non-empty affected ids, and
+`ClaimBoundary::Level1LocalReplay`; no-eligible-target paths return
+descriptive `ZkBenchError::mutation` errors; a custom engine composition over
+the new passes is deterministic; `MutationClass` still has exactly 14
+variants with no duplicates; workspace tests pass on default and
+`external-runner` feature configurations.
+
+## Benchmark Track: Phase 157 Mutation Distinguishability Scoring
+
+Status: complete. See
+`docs/157-phase-mutation-distinguishability-scoring-implementation-notes.md`.
+
+Goal: advance the "adversarial mutation scoring" SOTA wedge by adding an
+analytical lens over the widened mutation surface: a local distinguishability
+matrix composing each mutation's declared `ExpectedVerdict` with each
+`BackendOutcome` variant via the existing `classify_result`.
+
+Scope: additive Rust source and tests under
+`crates/zkbench-core/src/scoring/` and `crates/zkbench-core/tests/` plus
+navigation/status docs only. State slice listed in
+`docs/157-phase-mutation-distinguishability-scoring-boundary-spec.md`.
+
+Implemented: `MutationDistinguishabilityAxis` (`TruePositive`,
+`DetectedRejection`, `UnsoundAcceptanceCandidate`, `FalseRejectionCandidate`,
+`Inconclusive`) with `axis_severity`; `MutationDistinguishabilityCell`;
+`MutationDistinguishabilityMatrix`; `MutationDistinguishabilitySummary`;
+`classify_mutation_distinguishability` (one cell per `BackendOutcome`
+variant, deterministic and complete); `summarize_mutation_distinguishability`;
+`mandatory_distinguishability_nonclaims`;
+`DISTINGUISHABILITY_CLAIM_BOUNDARY` pinned at `Level1LocalReplay`; re-exports
+from `scoring/mod.rs`, `prelude.rs`, and `lib.rs`; 11 focused tests in
+`crates/zkbench-core/tests/phase_157_distinguishability.rs` covering every
+verdict × outcome pairing, matrix completeness per mutation class, the four
+interesting axis mappings, summary aggregation, mandatory nonclaims,
+severity monotonicity, determinism, and an `ExpectedVerdict`/
+`BackendOutcome`/`ResultClassification` scope guard.
+
+Anti-goals: changes to `ExpectedVerdict`/`BackendOutcome`/
+`ResultClassification`/`classify_result`/`ScoreReport`/
+`LocalMutationEvidenceSummary`/any scoring constructor, changes to any
+`MutationClass`/mutation pass/`MutationPass`/DSL/oracle, score-axis
+population on `ScoreReport`, Cargo metadata changes, `Cargo.lock` changes,
+dependencies, external execution, external repo clones, vendored source,
+network access, credentials, command-line tools, UI dashboards, browser apps,
+JavaScript or TypeScript runtime files, package runtime files, committed
+generated benchmark artifact files, Level2+ evidence, formal evidence,
+accepted Evidence Ledger mutation, official benchmark submission, ZK backend
+performance claims, SOTA claims, broad leaderboard claims, production
+readiness, semantic correctness, proof, benchmark evidence, global
+software-agent uniqueness, or 100% coverage claims.
+
+Exit criteria: matrix is complete and deterministic for every mutation
+class; `UnsoundAcceptanceCandidate`/`DetectedRejection`/
+`FalseRejectionCandidate`/`TruePositive` axes are reachable and correctly
+derived from `classify_result`; summary aggregates counts correctly and
+carries mandatory nonclaims; `axis_severity` is monotonic; workspace tests
+pass.
+
+## Benchmark Track: Phase 158 Oracle Completeness Audit
+
+Status: complete. See
+`docs/158-phase-oracle-completeness-audit-implementation-notes.md`.
+
+Goal: advance the SOTA wedge by making the v0 oracle's completeness over the
+generated surface auditable, so downstream mutation and formal phases can
+reason about gaps honestly.
+
+Scope: additive Rust source and tests under
+`crates/zkbench-core/src/dsl/` and `crates/zkbench-core/tests/` plus
+navigation/status docs only. State slice listed in
+`docs/158-phase-oracle-completeness-audit-boundary-spec.md`.
+
+Implemented: `OracleCompletenessLabel` (`Executable`,
+`RawTextCapabilityGap`, `NonExecutableOperandCapabilityGap`,
+`StructurallyIncapable`); `OracleCompletenessConstructKind`;
+`OracleCompletenessConstruct`; `OracleCompletenessAudit`;
+`audit_oracle_completeness` walking every transition guard, transition
+action, invariant guard, and loop bound in declaration order and classifying
+each via the existing `contains_raw_text` helpers plus a local integer-operand
+check; re-exports from `dsl/mod.rs`, `prelude.rs`, and `lib.rs`; 6 focused
+integration tests in `crates/zkbench-core/tests/phase_158_oracle_completeness.rs`
+plus inline unit tests verifying shipped families are fully executable, count
+consistency, determinism, and absence of structurally incapable constructs.
+
+Anti-goals: changes to `evaluate_trace`/`OracleOutcome`/oracle logic/any
+guard-action expression type/any DSL type, Cargo metadata changes,
+`Cargo.lock` changes, dependencies, external execution, external repo clones,
+vendored source, network access, credentials, command-line tools, UI
+dashboards, browser apps, JavaScript or TypeScript runtime files, package
+runtime files, committed generated benchmark artifact files, Level2+
+evidence, formal evidence, accepted Evidence Ledger mutation, official
+benchmark submission, score-axis population, ZK backend performance claims,
+SOTA claims, broad leaderboard claims, production readiness, semantic
+correctness, proof, benchmark evidence, global software-agent uniqueness, or
+100% coverage claims.
+
+Exit criteria: every shipped family audits as fully executable with zero
+capability gaps; raw-text guards/actions and non-integer comparison operands
+are flagged correctly; counts are self-consistent; audit is deterministic;
+no shipped family produces a structurally incapable construct; workspace
+tests pass.
+
+## Benchmark Track: Phase 159 Formal Lane Interface Stub
+
+Status: complete. See
+`docs/159-phase-formal-lane-interface-stub-implementation-notes.md`.
+
+Goal: advance the "formal hooks" half of the SOTA wedge by introducing the
+inert formal-lane interface seam — a trait, a reference verifier that always
+returns "declared only", and a `FormalLane` wrapper — without claiming
+anything is proven.
+
+Scope: additive Rust source under a new `crates/zkbench-core/src/formal/`
+module and tests under `crates/zkbench-core/tests/` plus navigation/status
+docs only. State slice listed in
+`docs/159-phase-formal-lane-interface-stub-boundary-spec.md`.
+
+Implemented: `FormalPropertyScope`; `FormalPropertyAssertion` with
+`mandatory_nonclaims`; `FormalLaneProofStatus` with `claim_boundary` mapping;
+`FormalLaneProof`; `FormalLaneError`; `FormalVerifier` trait mirroring
+`hsai-attestation::AttestationVerifier`; `NoopFormalVerifier` always returning
+`DeclaredOnly` and `Level0DesignNote`; `FormalLane<V>` wrapper with
+`evaluate`; `FormalLaneOutcome`; `mandatory_lane_outcome_nonclaims`; module
+declaration and re-exports from `lib.rs` and `prelude.rs`; 6 focused
+integration tests in `crates/zkbench-core/tests/phase_159_formal_lane.rs`
+plus inline unit tests verifying noop behavior, no escalation, malformed
+input rejection, mandatory nonclaims, and scope-guard variant counts, plus a
+source-scan test proving the module contains no forbidden formal-tool or
+network/filesystem integrations.
+
+Anti-goals: new Cargo dependencies, `Cargo.toml` changes, `Cargo.lock`
+changes, integration with any real formal tool (clean, zkLean, Garden, Coq,
+Lean, Rocq, F*, Dafny, etc.), reading or writing any formal proof artifact
+file, a new crate, `hsai-formal`, any change to any HSAI crate, changes to
+`ClaimEnvelope`/`EvidenceLane`/`AttestationVerifier`/`ScoreReport`/
+`EvidenceRecord`/`EvidenceLedger`/accepted-ledger append/promotion preflight/
+official-submission package/external replay preflight/any evidence
+classification, Level2+ evidence, accepted Evidence Ledger mutation, official
+benchmark submission, score-axis population, ZK backend performance claims,
+SOTA claims, broad leaderboard claims, production readiness, semantic
+correctness, proof, benchmark evidence, global software-agent uniqueness, or
+100% coverage claims.
+
+Exit criteria: `NoopFormalVerifier` returns `DeclaredOnly` and
+`Level0DesignNote` for every scope and never escalates above `Level0`;
+`FormalLane::evaluate` carries mandatory nonclaims; malformed assertions are
+rejected; source-scan proves no forbidden integration exists; workspace
+tests pass.
+
+## Benchmark Track: Phase 160 Mutation × Formal Cross-Product Mapping
+
+Status: complete. See
+`docs/160-phase-mutation-formal-cross-product-implementation-notes.md`.
+
+Goal: advance the SOTA wedge by connecting the mutation and formal halves —
+mapping each of the 14 declared `MutationClass` variants to the
+`FormalPropertyScope` it most directly stress-tests and deriving a
+`FormalPropertyAssertion` template from an existing `SurfaceSpec`.
+
+Scope: additive Rust source under `crates/zkbench-core/src/formal/cross_product.rs`
+and tests under `crates/zkbench-core/tests/` plus navigation/status docs only.
+State slice listed in
+`docs/160-phase-mutation-formal-cross-product-boundary-spec.md`.
+
+Implemented: `FormalPropertyScopeKind` (`TransitionGuard`, `Invariant`,
+`LoopBound`, `Machine`, `NotApplicable`); `MutationFormalStressProfile`;
+`mutation_class_formal_stress` returning a deterministic profile for each of
+the 14 declared `MutationClass` variants; `derive_formal_property_assertion_template`
+returning `Option<FormalPropertyAssertion>` over an existing `SurfaceSpec`;
+`mandatory_cross_product_nonclaims`; `CROSS_PRODUCT_CLAIM_BOUNDARY` pinned at
+`Level0DesignNote`; re-exports from `formal/mod.rs`, `lib.rs`, and
+`prelude.rs`; 12 focused integration tests in
+`crates/zkbench-core/tests/phase_160_cross_product.rs` plus inline unit tests
+verifying profile coverage, scope mapping correctness, nonclaim presence,
+template derivation `Some`/`None` paths, determinism, and scope-guard variant
+counts.
+
+Anti-goals: changes to `MutationClass`/`FormalPropertyAssertion`/
+`FormalPropertyScope`/`FormalLaneProof`/`FormalLaneProofStatus`/
+`FormalVerifier`/`NoopFormalVerifier`/`FormalLane`/`FormalLaneOutcome`/any
+mutation pass/DSL/oracle/scoring outside the new formal-module additions,
+Cargo metadata changes, `Cargo.lock` changes, dependencies, calling any real
+formal tool, external execution, external repo clones, vendored source,
+network access, credentials, command-line tools, UI dashboards, browser apps,
+JavaScript or TypeScript runtime files, package runtime files, committed
+generated benchmark artifact files, Level2+ evidence, accepted Evidence
+Ledger mutation, official benchmark submission, score-axis population, ZK
+backend performance claims, SOTA claims, broad leaderboard claims, production
+readiness, semantic correctness, proof, benchmark evidence, global
+software-agent uniqueness, or 100% coverage claims.
+
+Exit criteria: every mutation class has a non-`NotApplicable` profile;
+implemented classes map to the documented scopes; template derivation
+returns `Some` when a matching construct exists and `None` otherwise;
+profiles and templates carry "not proof" nonclaims; mapping is deterministic;
+workspace tests pass.
+
+## Benchmark Track: Phase 161 Mutation Engine Completion
+
+Status: complete. See
+`docs/161-phase-mutation-engine-completion-implementation-notes.md`.
+
+Goal: complete the local mutation-engine dispatch surface for all 14 declared
+`MutationClass` variants without changing the default three-pass engine.
+
+Implemented: six additional deterministic `MutationPass` impls,
+`apply_mutation_for_class`, soak-runner dispatch through that helper, and
+focused tests covering each new pass plus all 14 dispatcher outputs.
+
+Anti-goals: new mutation variants, default-engine broadening, score-axis
+population, external execution, accepted Evidence Ledger mutation, official
+benchmark submission, Level2+ evidence, proof, or backend-performance claims.
+
+Exit criteria: every declared mutation class dispatches to a concrete pass
+returning the same class on a known-applicable local fixture; every mutated
+instance remains `Level1LocalReplay`; workspace tests pass.
+
+## Benchmark Track: Phase 162 Distinguishability Soak Telemetry
+
+Status: complete. See
+`docs/162-phase-distinguishability-soak-telemetry-implementation-notes.md`.
+
+Goal: carry internal distinguishability counters through soak telemetry without
+populating official score axes.
+
+Implemented: `observed_distinguishability_axis`, serde-default telemetry
+counters, `record_distinguishability_axis`, soak-runner recording after
+successful mutation replay, and focused counter/merge tests.
+
+Anti-goals: `ScoreReport` axis population, benchmark evidence, external
+execution, Level2+ evidence, production-readiness claims, or 100% coverage
+claims.
+
+Exit criteria: telemetry records expected accept/reject × backend outcome
+axes, merge behavior remains deterministic, and telemetry stays internal-only.
+
+## Benchmark Track: Phase 163 Formal Lane Pipeline Wiring
+
+Status: complete. See
+`docs/163-phase-formal-lane-pipeline-implementation-notes.md`.
+
+Goal: run the declared-only formal-lane pipeline from local soak mutation
+processing without invoking any real formal tool.
+
+Implemented: `evaluate_formal_lane_pipeline`, `FormalLanePipelineOutcome`,
+`pipeline_outcome_is_declared_only`, soak-runner invocation, and formal-lane
+telemetry counters.
+
+Anti-goals: real formal-tool integration, machine-checked proof claims,
+accepted evidence, benchmark evidence, score-axis population, external
+execution, Level2+ evidence, or claims above `Level0DesignNote` for the formal
+pipeline.
+
+Exit criteria: pipeline outputs remain declared-only, soak telemetry records
+derived/evaluated/declared-only counts, and workspace tests pass.
+
+## Benchmark Track: Phase 164 Remaining Benchmark Families
+
+Status: complete. See
+`docs/164-phase-remaining-benchmark-families-implementation-notes.md`.
+
+Goal: implement the four remaining deterministic local generator families over
+the existing Surface DSL while preserving `Level1LocalReplay`.
+
+Implemented: `RecursiveEnvelope`, `MemoryHeavyStateMachine`,
+`PublicPrivateBoundaryStress`, and `ZkMlControlFlowMixed` generators; registry,
+template, config, soak, zk-Harness label, and full-pipeline updates; focused
+tests for all nine implemented local families and derived resource-limit
+validation.
+
+Anti-goals: zkML execution, live ZK backend execution, new DSL types,
+dependencies, score-axis population, accepted Evidence Ledger mutation,
+official benchmark submission, Level2+ evidence, proof, semantic-correctness
+claims, or 100% coverage claims.
+
+Exit criteria: all nine families are implemented, generate/evaluate locally,
+respect configured resource limits, carry `Level1LocalReplay`, and pass full
+workspace validation.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

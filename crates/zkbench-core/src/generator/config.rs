@@ -157,6 +157,103 @@ impl GeneratorConfig {
         }
     }
 
+    /// Nested loop config.
+    pub fn nested_loop() -> Self {
+        Self {
+            family_kind: FamilyKind::NestedLoop,
+            seed: GeneratorSeed::default(),
+            profile: GeneratorProfile::default(),
+            tunables: GeneratorTunables {
+                state_count: 3,
+                trace_length: 8,
+                loop_bound: 2,
+                ..GeneratorTunables::default()
+            },
+            limits: GeneratorLimits::default(),
+        }
+    }
+
+    /// Guard-heavy machine config.
+    pub fn guard_heavy_machine() -> Self {
+        Self {
+            family_kind: FamilyKind::GuardHeavyMachine,
+            seed: GeneratorSeed::default(),
+            profile: GeneratorProfile::default(),
+            tunables: GeneratorTunables {
+                state_count: 3,
+                trace_length: 4,
+                loop_bound: 2,
+                guard_complexity: 1,
+                ..GeneratorTunables::default()
+            },
+            limits: GeneratorLimits::default(),
+        }
+    }
+
+    /// Recursive envelope config.
+    pub fn recursive_envelope() -> Self {
+        Self {
+            family_kind: FamilyKind::RecursiveEnvelope,
+            seed: GeneratorSeed::default(),
+            profile: GeneratorProfile::default(),
+            tunables: GeneratorTunables {
+                state_count: 2,
+                trace_length: 4,
+                loop_bound: 2,
+                ..GeneratorTunables::default()
+            },
+            limits: GeneratorLimits::default(),
+        }
+    }
+
+    /// Memory-heavy state machine config.
+    pub fn memory_heavy_state_machine() -> Self {
+        Self {
+            family_kind: FamilyKind::MemoryHeavyStateMachine,
+            seed: GeneratorSeed::default(),
+            profile: GeneratorProfile::default(),
+            tunables: GeneratorTunables {
+                state_count: 2,
+                trace_length: 4,
+                memory_fields: 2,
+                ..GeneratorTunables::default()
+            },
+            limits: GeneratorLimits::default(),
+        }
+    }
+
+    /// Public/private boundary stress config.
+    pub fn public_private_boundary_stress() -> Self {
+        Self {
+            family_kind: FamilyKind::PublicPrivateBoundaryStress,
+            seed: GeneratorSeed::default(),
+            profile: GeneratorProfile::default(),
+            tunables: GeneratorTunables {
+                state_count: 2,
+                trace_length: 2,
+                public_private_boundary_complexity: 1,
+                ..GeneratorTunables::default()
+            },
+            limits: GeneratorLimits::default(),
+        }
+    }
+
+    /// zkML/control-flow mixed config.
+    pub fn zkml_control_flow_mixed() -> Self {
+        Self {
+            family_kind: FamilyKind::ZkMlControlFlowMixed,
+            seed: GeneratorSeed::default(),
+            profile: GeneratorProfile::default(),
+            tunables: GeneratorTunables {
+                state_count: 3,
+                trace_length: 2,
+                loop_bound: 10,
+                ..GeneratorTunables::default()
+            },
+            limits: GeneratorLimits::default(),
+        }
+    }
+
     /// Set seed value.
     pub fn seed(mut self, value: u64) -> Self {
         self.seed = GeneratorSeed { value };
@@ -238,12 +335,12 @@ impl GeneratorConfig {
                 2usize.saturating_add(self.tunables.memory_fields)
             }
             FamilyKind::NestedLoop
-            | FamilyKind::RecursiveEnvelope
-            | FamilyKind::MemoryHeavyStateMachine
             | FamilyKind::GuardHeavyMachine
             | FamilyKind::PublicPrivateBoundaryStress
-            | FamilyKind::ZkMlControlFlowMixed => {
-                1usize.saturating_add(self.tunables.memory_fields)
+            | FamilyKind::ZkMlControlFlowMixed => 3,
+            FamilyKind::RecursiveEnvelope => 2,
+            FamilyKind::MemoryHeavyStateMachine => {
+                2usize.saturating_add(self.tunables.memory_fields.max(2))
             }
         };
         if field_count > self.limits.max_fields {
@@ -252,6 +349,60 @@ impl GeneratorConfig {
                 format!(
                     "requested field count {} exceeds max_fields {}",
                     field_count, self.limits.max_fields
+                ),
+            ));
+        }
+
+        let transition_count = match self.family_kind {
+            FamilyKind::BaselineFsm => self.tunables.state_count.saturating_sub(1),
+            FamilyKind::BranchingFsm => self
+                .tunables
+                .branching_factor
+                .min(self.tunables.state_count.saturating_sub(2))
+                .saturating_mul(2),
+            FamilyKind::BoundedCounterLoop => 2,
+            FamilyKind::NestedLoop | FamilyKind::GuardHeavyMachine => 4,
+            FamilyKind::RecursiveEnvelope | FamilyKind::ZkMlControlFlowMixed => 2,
+            FamilyKind::MemoryHeavyStateMachine => {
+                4usize.saturating_add(usize::from(self.tunables.memory_fields.max(2) > 2))
+            }
+            FamilyKind::PublicPrivateBoundaryStress => 1,
+        };
+        if transition_count > self.limits.max_transitions {
+            return Err(ZkBenchError::generation(
+                "generator.limits.max_transitions",
+                format!(
+                    "generated transition count {transition_count} exceeds max_transitions {}",
+                    self.limits.max_transitions
+                ),
+            ));
+        }
+
+        let generated_trace_steps = match self.family_kind {
+            FamilyKind::BaselineFsm => self.tunables.state_count.saturating_sub(1),
+            FamilyKind::BranchingFsm => 2,
+            FamilyKind::BoundedCounterLoop => self.tunables.loop_bound.saturating_add(1),
+            FamilyKind::NestedLoop => self
+                .tunables
+                .loop_bound
+                .max(1)
+                .saturating_mul(self.tunables.loop_bound.max(1))
+                .saturating_add(self.tunables.loop_bound.max(1))
+                .saturating_add(2),
+            FamilyKind::GuardHeavyMachine | FamilyKind::RecursiveEnvelope => {
+                self.tunables.loop_bound.max(1).saturating_add(2)
+            }
+            FamilyKind::MemoryHeavyStateMachine => {
+                4usize.saturating_add(usize::from(self.tunables.memory_fields.max(2) > 2))
+            }
+            FamilyKind::PublicPrivateBoundaryStress | FamilyKind::ZkMlControlFlowMixed => 1,
+        };
+        if generated_trace_steps > self.limits.max_trace_steps {
+            return Err(ZkBenchError::generation(
+                "generator.limits.max_trace_steps",
+                format!(
+                    "generated trace steps {generated_trace_steps} exceed max_trace_steps {}",
+                    self.limits.max_trace_steps
                 ),
             ));
         }
