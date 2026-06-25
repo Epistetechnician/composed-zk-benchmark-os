@@ -16,6 +16,7 @@ pub mod dsl;
 pub mod error;
 pub mod evidence;
 pub mod external_runner;
+pub mod formal;
 pub mod generator;
 pub mod ids;
 pub mod local_artifact_campaign;
@@ -101,10 +102,12 @@ pub use dashboard::{
     DashboardPanel, DashboardPanelKind,
 };
 pub use dsl::{
-    evaluate_trace, lower_to_ir, parse_yaml_ast, parse_yaml_spec, ActionSpec, CanonicalAction,
-    CanonicalField, CanonicalGuard, CanonicalInvariant, CanonicalMachine, CanonicalOracle,
-    CanonicalState, CanonicalTransition, EvidenceSpec, FieldSpec, GuardSpec, InvariantSpec,
-    LoopSpec, MachineSpec, ObserveSpec, OracleOutcome, OracleSpec, ParsedAst, PrivateWitnessSpec,
+    audit_oracle_completeness, evaluate_trace, lower_to_ir, parse_yaml_ast, parse_yaml_spec,
+    ActionSpec, CanonicalAction, CanonicalField, CanonicalGuard, CanonicalInvariant,
+    CanonicalMachine, CanonicalOracle, CanonicalState, CanonicalTransition, EvidenceSpec,
+    FieldSpec, GuardSpec, InvariantSpec, LoopSpec, MachineSpec, ObserveSpec,
+    OracleCompletenessAudit, OracleCompletenessConstruct, OracleCompletenessConstructKind,
+    OracleCompletenessLabel, OracleOutcome, OracleSpec, ParsedAst, PrivateWitnessSpec,
     PublicInputSpec, SemanticEquivalenceClass, SemanticIr, StateSpec, SurfaceSpec, TargetSpec,
     TraceSpec, TraceStepSpec, TransitionSpec, WitnessPolicy,
 };
@@ -262,6 +265,14 @@ pub use external_runner::{
     SyntheticResultImportConfig, SyntheticResultImportReport, SyntheticResultImporter,
     SyntheticValidationIssueCount, PHASE_I_SYNTHETIC_CLAIM_BOUNDARY,
 };
+pub use formal::{
+    derive_formal_property_assertion_template, evaluate_formal_lane_pipeline,
+    mandatory_cross_product_nonclaims, mandatory_lane_outcome_nonclaims,
+    mutation_class_formal_stress, pipeline_outcome_is_declared_only, FormalLane, FormalLaneError,
+    FormalLaneOutcome, FormalLanePipelineOutcome, FormalLaneProof, FormalLaneProofStatus,
+    FormalPropertyAssertion, FormalPropertyScope, FormalPropertyScopeKind, FormalVerifier,
+    MutationFormalStressProfile, NoopFormalVerifier, CROSS_PRODUCT_CLAIM_BOUNDARY,
+};
 pub use generator::{
     evaluate_generated_instance, generate_family, generate_instance, BenchmarkFamily,
     BenchmarkInstance, DeterministicGenerator, FamilyKind, FamilyTemplate,
@@ -297,10 +308,14 @@ pub use local_benchmark_artifact::{
     LOCAL_BENCHMARK_ARTIFACT_MARKDOWN_DIGEST_PATH, LOCAL_BENCHMARK_ARTIFACT_MARKDOWN_PATH,
 };
 pub use mutation::{
-    apply_default_mutations, apply_mutation_pass, evaluate_mutated_instance, BadCountersPass,
-    CorruptedGuardsPass, MissingConstraintsPass, MutatedBenchmarkInstance, MutationApplication,
-    MutationEngine, MutationExpectedVerdict, MutationInput, MutationOutput, MutationPass,
-    MutationPlan, MutationProvenance, MutationSafetyClass,
+    apply_default_mutations, apply_mutation_for_class, apply_mutation_pass,
+    evaluate_mutated_instance, BadCountersPass, CorruptedGuardsPass, InvalidUnrollBoundsPass,
+    InvariantStrengtheningPass, InvariantWeakeningPass, MissingConstraintsPass,
+    MutatedBenchmarkInstance, MutationApplication, MutationEngine, MutationExpectedVerdict,
+    MutationInput, MutationOutput, MutationPass, MutationPlan, MutationProvenance,
+    MutationSafetyClass, NondeterministicTransitionInjectionPass, ObservationOmissionPass,
+    PublicPrivateBoundaryMismatchPass, RecursionEnvelopeMismatchPass, SemanticNoOpDriftPass,
+    StaleStateReadsPass, TraceOrderingCorruptionPass, WitnessAliasingPass,
 };
 pub use mutation::{MutationClass, MutationKind, MutationSeverity, MutationSpec, MutationVariant};
 pub use pack::{
@@ -359,10 +374,15 @@ pub use report_bundle::{
     REPORT_BUNDLE_RENDERED_DIR,
 };
 pub use scoring::{
-    score_report_from_evidence, score_report_from_local_mutation_evidence, validate_score_report,
-    AdapterPortabilityScore, CorrectnessScore, FormalEvidenceScore, LocalMutationEvidenceSummary,
-    PerformanceScore, RecursionStressScore, ReproducibilityScore, RiskPenalty, ScoreConfidence,
-    ScoreReport, ScoreReportValidation, ScoreReportValidationIssue, SoundnessFailureDetectionScore,
+    classify_mutation_distinguishability, mandatory_distinguishability_nonclaims,
+    observed_distinguishability_axis, score_report_from_evidence,
+    score_report_from_local_mutation_evidence, summarize_mutation_distinguishability,
+    validate_score_report, AdapterPortabilityScore, CorrectnessScore, FormalEvidenceScore,
+    LocalMutationEvidenceSummary, MutationDistinguishabilityAxis, MutationDistinguishabilityCell,
+    MutationDistinguishabilityMatrix, MutationDistinguishabilitySummary, PerformanceScore,
+    RecursionStressScore, ReproducibilityScore, RiskPenalty, ScoreConfidence, ScoreReport,
+    ScoreReportValidation, ScoreReportValidationIssue, SoundnessFailureDetectionScore,
+    DISTINGUISHABILITY_CLAIM_BOUNDARY,
 };
 pub use soak::{
     aggregate_soak_health_reports, attach_reproduction_bundle_to_pack, build_failure_corpus_entry,

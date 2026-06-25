@@ -32,15 +32,21 @@ Implemented locally in Phase D/E:
 - Branching FSMs: deterministic generator with guarded branch selection, accepted/rejected traces, local oracle evaluation.
 - Bounded loops / bounded counter loops: deterministic generator with counter, bound, invariant, accepted/rejected traces, local oracle evaluation.
 
+Implemented locally in Phase 154:
+
+- Nested loops: deterministic generator with two stacked bounded loops, inner/outer counters, inner/outer `LoopSpec` entries, an inner-bounded invariant, accepted/rejected traces, local oracle evaluation.
+- Guard-heavy machines: deterministic generator with acquire/release/advance/finish transitions exercising `GuardExpr::And`/`GuardExpr::Or`, an `advance_until_bound` `LoopSpec`, a `locked_implies_value_at_or_below_bound` invariant, accepted/rejected traces, local oracle evaluation.
+
+Implemented locally in Phase 164:
+
+- Recursive envelopes: bounded unfold/seal machine with `envelope_digest` loop metadata, accepted/rejected traces, local oracle evaluation.
+- Memory-heavy state machines: multi-slot write/read ordering machine, accepted/rejected traces, local oracle evaluation.
+- Public/private boundary stress: nonce binding with witness-policy metadata, accepted/rejected traces, local oracle evaluation.
+- zkML/control-flow mixed workloads: confidence/threshold guarded control-flow machine with observations, accepted/rejected traces, local oracle evaluation (metadata only; no zkML execution).
+
 Future families:
 
-- Nested loops.
-- Recursive envelopes.
-- Memory-heavy state machines.
-- Guard-heavy machines.
 - Nondeterministic machines.
-- Public/private boundary stress beyond metadata.
-- zkML/control-flow mixed workloads.
 - Recursion aggregation cases.
 - Formal-only semantic cases.
 

@@ -3,9 +3,8 @@ use std::fs;
 use tempfile::tempdir;
 use zkbench_core::{
     build_smoke_soak_config, plan_soak_shards, ClaimBoundary, FailureCorpusKind, FamilyKind,
-    LocalSoakRunner, LocalSoakRunnerConfig, MockTelemetryClock, MutationClass, SoakArtifactLayout,
-    SoakCaseStatus, SoakHealthStatus, SoakOutputPolicy, SoakRunRequest, SoakRunnerErrorPolicy,
-    SoakShardId,
+    LocalSoakRunner, MockTelemetryClock, MutationClass, SoakArtifactLayout, SoakCaseStatus,
+    SoakHealthStatus, SoakOutputPolicy, SoakRunRequest, SoakShardId,
 };
 
 #[test]
@@ -327,40 +326,37 @@ fn runner_reports_unknown_shard_missing_resume_token_and_missing_case_plan() {
 }
 
 #[test]
-fn stop_on_first_failure_halts_after_unimplemented_mutation_class() {
+fn recursion_envelope_mismatch_on_baseline_fsm_records_no_target_without_failure() {
     let config = build_smoke_soak_config()
         .with_families(vec![FamilyKind::BaselineFsm])
         .with_mutation_passes(vec![MutationClass::MissingConstraints])
-        .with_seed_range(0..2)
+        .with_seed_range(0..1)
         .with_shard_count(1)
         .with_output_policy(SoakOutputPolicy::NoPacks);
     let mut plan = plan_soak_shards(config).expect("plan should build");
     for case_plan in &mut plan.case_plans {
-        case_plan.mutation_classes = vec![MutationClass::StaleStateReads];
+        case_plan.mutation_classes = vec![MutationClass::RecursionEnvelopeMismatch];
     }
-    let runner_config = LocalSoakRunnerConfig {
-        error_policy: SoakRunnerErrorPolicy::StopOnFirstFailure,
-        ..LocalSoakRunnerConfig::default()
-    };
-    let mut runner = LocalSoakRunner::new(plan)
-        .with_runner_config(runner_config)
-        .with_clock(MockTelemetryClock::default());
+    let mut runner = LocalSoakRunner::new(plan).with_clock(MockTelemetryClock::default());
 
     let result = runner
         .run_shard(SoakShardId::from_index(0))
-        .expect("mutation failure should be recorded, not thrown");
+        .expect("targetless mutation should not fail the shard");
 
     assert_eq!(result.case_results.len(), 1);
-    assert_eq!(
+    assert!(matches!(
         result.case_results[0].status,
-        SoakCaseStatus::FailedMutation
-    );
-    assert_eq!(result.shard_summary.progress.failed_cases, 1);
-    assert_eq!(result.shard_summary.progress.completed_cases, 0);
-    assert_eq!(result.failure_corpus_index.entries.len(), 1);
+        SoakCaseStatus::Completed | SoakCaseStatus::CompletedWithLocalRejections
+    ));
+    assert_eq!(result.shard_summary.progress.failed_cases, 0);
+    assert_eq!(result.shard_summary.progress.completed_cases, 1);
     assert_eq!(
-        result.failure_corpus_index.entries[0].failure_kind,
-        FailureCorpusKind::MutationFailure
+        result
+            .telemetry_report
+            .snapshot
+            .counters
+            .mutation_no_target_count,
+        1
     );
 }
 

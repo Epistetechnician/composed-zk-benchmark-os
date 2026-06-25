@@ -231,6 +231,25 @@ Surface DSL
 | [docs/150-phase-hsai-admission-candidate-semantic-closure-boundary-spec.md](docs/150-phase-hsai-admission-candidate-semantic-closure-boundary-spec.md) | HSAI admission candidate semantic closure docs-first boundary. |
 | [docs/151-phase-hsai-admission-candidate-semantic-closure-implementation-notes.md](docs/151-phase-hsai-admission-candidate-semantic-closure-implementation-notes.md) | HSAI admission candidate semantic closure implementation notes. |
 | [docs/152-phase-hsai-admission-journal-duplicate-json-boundary-spec.md](docs/152-phase-hsai-admission-journal-duplicate-json-boundary-spec.md) | HSAI admission journal duplicate JSON key docs-first boundary. |
+| [docs/153-phase-hsai-admission-journal-duplicate-json-implementation-notes.md](docs/153-phase-hsai-admission-journal-duplicate-json-implementation-notes.md) | HSAI admission journal duplicate JSON key implementation notes. |
+| [docs/154-phase-new-benchmark-families-boundary-spec.md](docs/154-phase-new-benchmark-families-boundary-spec.md) | Phase 154 new benchmark families docs-first boundary (`NestedLoop`, `GuardHeavyMachine`). |
+| [docs/154-phase-new-benchmark-families-implementation-notes.md](docs/154-phase-new-benchmark-families-implementation-notes.md) | Phase 154 new benchmark families implementation notes. |
+| [docs/155-phase-operator-soak-campaign-runner-boundary-spec.md](docs/155-phase-operator-soak-campaign-runner-boundary-spec.md) | Phase 155 operator soak campaign runner docs-first boundary. |
+| [docs/155-phase-operator-soak-campaign-runner-implementation-notes.md](docs/155-phase-operator-soak-campaign-runner-implementation-notes.md) | Phase 155 operator soak campaign runner implementation notes. |
+| [docs/156-phase-mutation-engine-depth-boundary-spec.md](docs/156-phase-mutation-engine-depth-boundary-spec.md) | Phase 156 mutation engine depth docs-first boundary (five new `MutationPass` impls). |
+| [docs/156-phase-mutation-engine-depth-implementation-notes.md](docs/156-phase-mutation-engine-depth-implementation-notes.md) | Phase 156 mutation engine depth implementation notes. |
+| [docs/157-phase-mutation-distinguishability-scoring-boundary-spec.md](docs/157-phase-mutation-distinguishability-scoring-boundary-spec.md) | Phase 157 mutation distinguishability scoring docs-first boundary. |
+| [docs/157-phase-mutation-distinguishability-scoring-implementation-notes.md](docs/157-phase-mutation-distinguishability-scoring-implementation-notes.md) | Phase 157 mutation distinguishability scoring implementation notes. |
+| [docs/158-phase-oracle-completeness-audit-boundary-spec.md](docs/158-phase-oracle-completeness-audit-boundary-spec.md) | Phase 158 oracle completeness audit docs-first boundary. |
+| [docs/158-phase-oracle-completeness-audit-implementation-notes.md](docs/158-phase-oracle-completeness-audit-implementation-notes.md) | Phase 158 oracle completeness audit implementation notes. |
+| [docs/159-phase-formal-lane-interface-stub-boundary-spec.md](docs/159-phase-formal-lane-interface-stub-boundary-spec.md) | Phase 159 formal lane interface stub docs-first boundary. |
+| [docs/159-phase-formal-lane-interface-stub-implementation-notes.md](docs/159-phase-formal-lane-interface-stub-implementation-notes.md) | Phase 159 formal lane interface stub implementation notes. |
+| [docs/160-phase-mutation-formal-cross-product-boundary-spec.md](docs/160-phase-mutation-formal-cross-product-boundary-spec.md) | Phase 160 mutation × formal cross-product mapping docs-first boundary. |
+| [docs/160-phase-mutation-formal-cross-product-implementation-notes.md](docs/160-phase-mutation-formal-cross-product-implementation-notes.md) | Phase 160 mutation × formal cross-product mapping implementation notes. |
+| [docs/161-phase-mutation-engine-completion-implementation-notes.md](docs/161-phase-mutation-engine-completion-implementation-notes.md) | Phase 161 mutation engine completion implementation notes. |
+| [docs/162-phase-distinguishability-soak-telemetry-implementation-notes.md](docs/162-phase-distinguishability-soak-telemetry-implementation-notes.md) | Phase 162 distinguishability soak telemetry implementation notes. |
+| [docs/163-phase-formal-lane-pipeline-implementation-notes.md](docs/163-phase-formal-lane-pipeline-implementation-notes.md) | Phase 163 formal lane pipeline implementation notes. |
+| [docs/164-phase-remaining-benchmark-families-implementation-notes.md](docs/164-phase-remaining-benchmark-families-implementation-notes.md) | Phase 164 remaining benchmark families implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -253,9 +272,13 @@ Surface DSL
 - YAML fixtures parse.
 - Semantic IR lowering exists.
 - The local oracle evaluates executable traces for a small v0 subset.
-- Deterministic generation exists for BaselineFsm, BranchingFsm, and BoundedCounterLoop.
+- Deterministic generation exists for BaselineFsm, BranchingFsm, BoundedCounterLoop, NestedLoop, GuardHeavyMachine, RecursiveEnvelope, MemoryHeavyStateMachine, PublicPrivateBoundaryStress, and ZkMlControlFlowMixed.
 - Concrete generated Benchmark Instances carry config, provenance, Surface DSL, Semantic IR, traces, expected verdicts, and Level1LocalReplay claim boundaries.
-- Mutation engine v0 exists for MissingConstraints, CorruptedGuards, and BadCounters.
+- Mutation engine v0 exists for all 14 declared `MutationClass` variants.
+- Mutation distinguishability scoring composes each mutation's `ExpectedVerdict` with each `BackendOutcome` via the existing `classify_result` into a deterministic matrix (`Level1LocalReplay`).
+- Oracle completeness audit reports which generated constructs the shipped v0 oracle can evaluate locally (`Level0DesignNote`).
+- Formal lane interface stub provides the `FormalVerifier`/`NoopFormalVerifier`/`FormalLane` seam for the "formal hooks" half of the SOTA wedge; the shipped verifier is declared-only and capped at `Level0DesignNote`.
+- Mutation × formal cross-product mapping maps each of the 14 declared `MutationClass` variants to the `FormalPropertyScope` it most directly stress-tests (`Level0DesignNote`).
 - Mutation provenance records affected machine, transitions, guards/actions, fields when available, expected verdict, safety class, claim boundary, and notes.
 - Local JSON adapter exists for local oracle replay only.
 - Replay manifest serialization exists.
@@ -290,6 +313,7 @@ Surface DSL
 - Proposal ledger persistence exists and is separate from the accepted `EvidenceLedger`.
 - Local soak runner exists for deterministic, sharded, resumable local-only stress studies.
 - Local soak run configuration, deterministic shard planning, shard manifests, checkpointing, report bundles, and artifact layout types exist.
+- An operator-facing `operator_soak_campaign` example exists under `crates/zkbench-core/examples/` for running an approved, repo-external local soak campaign through the shipped library surface without writing Rust. It reads a fixed authorized set of environment variables, requires an explicit acknowledgement, and emits a non-secret `Level0DesignNote` summary JSON.
 - Internal benchmark OS telemetry exists for generation, mutation, local oracle, local replay, pack read/write, proposal-preview counters, and local runner duration.
 - Local health report models exist and warn that local soak telemetry is not official benchmark evidence.
 - Failure corpus extraction exists with reproduction manifests and minimization metadata only.
@@ -869,9 +893,12 @@ implements the boundary. Candidate identities and exact source boundaries now
 fail closed, reserved PCSM digest placement is enforced, and envelope export
 requires exact candidate-policy decision recomputation.
 [docs/152-phase-hsai-admission-journal-duplicate-json-boundary-spec.md](docs/152-phase-hsai-admission-journal-duplicate-json-boundary-spec.md)
-defines the next docs-first parser hardening boundary. It requires recursive
-duplicate object-key rejection before typed canonical JSON validation across
-every declared admission-journal JSON document and decision JSONL row.
+defines the parser hardening boundary for recursive duplicate object-key
+rejection before typed canonical JSON validation across every declared
+admission-journal JSON document and decision JSONL row.
+[docs/153-phase-hsai-admission-journal-duplicate-json-implementation-notes.md](docs/153-phase-hsai-admission-journal-duplicate-json-implementation-notes.md)
+implements that boundary with a dependency-free duplicate-aware parser ahead of
+the existing typed canonical round-trip.
 
 For the managed-attestation track, the first real HSAI-owned Phala/dstack
 artifact has been captured and accepted (2026-06-16) using the Phase 57

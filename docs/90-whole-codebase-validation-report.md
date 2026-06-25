@@ -48,8 +48,17 @@ integrity boundary, and the Phase 149 HSAI admission input semantic integrity
 implementation, and the docs-first Phase 150 HSAI admission candidate semantic
 closure boundary, and the Phase 151 HSAI admission candidate semantic closure
 implementation, and the docs-first Phase 152 HSAI admission journal duplicate
-JSON boundary, plus
-earlier
+JSON boundary, and the Phase 153 HSAI admission journal duplicate JSON
+implementation, and the Phase 154 new benchmark families (`NestedLoop` and
+`GuardHeavyMachine`) implementation, and the Phase 155 operator soak campaign
+runner example, and the Phase 156 mutation engine depth implementation, and
+the Phase 157 mutation distinguishability scoring implementation, and the
+Phase 158 oracle completeness audit implementation, and the Phase 159 formal
+lane interface stub implementation, and the Phase 160 mutation × formal
+cross-product mapping implementation, and the Phase 161 mutation engine
+completion implementation, and the Phase 162 distinguishability soak telemetry
+implementation, and the Phase 163 formal lane pipeline implementation, and the
+Phase 164 remaining benchmark families implementation, plus earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
@@ -437,6 +446,188 @@ file, creates no generated output, mutates no accepted Evidence Ledger,
 populates no score axes, creates no Level2+ evidence, and creates no stronger
 claim.
 
+Phase 153 implements the Phase 152 duplicate JSON parser hardening inside
+`hsai-agent-admission`. `parse_json_value_rejecting_duplicate_keys` now runs
+before typed canonical round-trip validation, rejects recursive duplicate object
+keys and trailing non-whitespace, maps failures to the existing
+`MalformedDeclaredFile` surface, and preserves separate-scope key validity.
+Focused tests cover every declared admission-journal JSON document and decision
+JSONL row. This phase adds no Cargo metadata or dependencies, parses no
+recoverable-ghost file, creates no committed generated output, mutates no
+accepted Evidence Ledger, populates no score axes, creates no Level2+ evidence,
+and creates no stronger claim.
+
+Phase 154 unblocks two future benchmark families as deterministic local
+generators over the existing Surface DSL: `NestedLoop` (two stacked bounded
+loops with inner/outer counters, two `LoopSpec` entries, and one invariant) and
+`GuardHeavyMachine` (acquire/release/advance/finish transitions exercising
+`GuardExpr::And` and `GuardExpr::Or`, one `LoopSpec`, and one invariant). It
+extends `FamilyKind::is_implemented`, the family template registry,
+`GeneratorConfig::nested_loop` and `GeneratorConfig::guard_heavy_machine`
+constructors, the generator dispatch in `DeterministicGenerator::generate_family`,
+the zk-Harness inert `candidate_family_label` mapping, and the local soak
+runner's `generator_config_for_case`. Both families preserve
+`ClaimBoundary::Level1LocalReplay`, the local-semantic-fixture nonclaim,
+deterministic family ids, and local JSON replay behavior. Phase 154 adds no
+Cargo metadata change, dependency, new DSL type, or new mutation pass; the four
+remaining family implementations are handled later by Phase 164. zk-Harness
+labels remain inert dry-run metadata only. Soak campaign results stay
+`Level0DesignNote`.
+
+Phase 155 unblocks the soak campaign runner by adding a single operator-facing
+example binary `operator_soak_campaign` under
+`crates/zkbench-core/examples/`. It wraps the existing shipped
+`plan_soak_shards` and `run_soak_campaign` library surface, reads a fixed
+authorized set of environment variables, requires an explicit fixed
+acknowledgement, validates inputs through the existing
+`SoakRunConfig::validate` and `validate_soak_campaign_config`, enforces the
+`Level0DesignNote` cap, and emits a non-secret summary JSON to stdout. It is
+not a CLI tool (no argument parsing, no `clap`, no `std::env::args`), not a
+shipped `[[bin]]` target, and not a package runtime file. Nine hermetic
+source-contract tests over the example bytes assert the acknowledgement gate,
+the authorized env var surface, the shipped library usage, the required
+nonclaims, the absence of subprocess/network/CLI-parsing substrings, the
+absence of unauthorized env var prefixes, the absence of hardcoded roots or
+campaign ids, fail-closed input validation, and the claim boundary cap. Phase
+155 adds no Cargo metadata change, dependency, library API, library behavior,
+soak semantics, claim boundary, validation, or artifact layout change.
+
+Phase 156 widens the mutation engine from 3 of 14 declared `MutationClass`
+variants to 8 of 14 by adding five new deterministic `MutationPass` impls
+(`InvariantWeakeningPass`, `InvariantStrengtheningPass`, `StaleStateReadsPass`,
+`InvalidUnrollBoundsPass`, `ObservationOmissionPass`) under
+`crates/zkbench-core/src/mutation/`. It reuses the existing `finish_mutation`
+helper unchanged so `validate_surface_spec`, `lower_to_ir`, provenance,
+deterministic id derivation, and `ClaimBoundary::Level1LocalReplay` are
+preserved. It adds five shared `pub(crate)` helpers in `apply.rs`
+(`select_primary_trace`, `invariant_mut`, `loop_mut`, `guard_read_fields`,
+`action_write_fields`, `guard_is_executable_expr`). `apply_default_mutations`
+is deliberately unchanged so the strict engine contract (every configured
+pass must find an eligible target on the supplied instance) is preserved;
+the new passes are individually runnable via `apply_mutation_pass` and
+composable via `MutationEngine::default().with_pass(...)`. Eleven focused
+tests in `crates/zkbench-core/tests/phase_156_mutation_depth.rs` cover each
+new pass's applies path, the no-eligible-target path for passes that have a
+clean non-applicable family, a custom-engine determinism check, and a
+`MutationClass` scope guard. Phase 156 adds no new `MutationClass` variant,
+no DSL/oracle/scoring/evidence change, no Cargo metadata change, no
+dependency, and no stronger claim; every mutated instance remains
+`Level1LocalReplay`.
+
+Phase 157 adds the analytical lens over the widened mutation surface:
+`crates/zkbench-core/src/scoring/distinguishability.rs` composes each
+mutation's declared `ExpectedVerdict` with each `BackendOutcome` variant via
+the existing `classify_result` to produce a deterministic complete matrix.
+`MutationDistinguishabilityAxis` (`TruePositive`, `DetectedRejection`,
+`UnsoundAcceptanceCandidate`, `FalseRejectionCandidate`, `Inconclusive`)
+carries `axis_severity` as a local-only triage hint (not a score).
+`classify_mutation_distinguishability` iterates over all `BackendOutcome`
+variants so the matrix is complete and deterministic by construction.
+`summarize_mutation_distinguishability` aggregates counts per axis across
+multiple matrices and carries mandatory nonclaims. Eleven focused tests in
+`crates/zkbench-core/tests/phase_157_distinguishability.rs` cover every
+verdict × outcome pairing, matrix completeness per mutation class, the four
+interesting axis mappings, summary aggregation, mandatory nonclaims,
+severity monotonicity, determinism, and an `ExpectedVerdict`/
+`BackendOutcome`/`ResultClassification` scope guard. Phase 157 adds no new
+verdict/outcome/classification variant, no `ScoreReport` axis population,
+no Cargo metadata change, no dependency, and no stronger claim; every
+matrix is `Level1LocalReplay`.
+
+Phase 158 makes the v0 oracle's completeness over the generated surface
+auditable: `crates/zkbench-core/src/dsl/oracle_completeness.rs` walks every
+transition guard, transition action, invariant guard, and loop bound in
+declaration order and classifies each via the existing `contains_raw_text`
+helpers plus a local integer-operand check, producing an
+`OracleCompletenessAudit` with per-construct labels (`Executable`,
+`RawTextCapabilityGap`, `NonExecutableOperandCapabilityGap`,
+`StructurallyIncapable`). The audit mirrors the shipped oracle over the bounded
+raw-text static checks because it reuses the oracle's own raw-text detection
+helpers. Six focused integration tests in
+`crates/zkbench-core/tests/phase_158_oracle_completeness.rs`
+plus inline unit tests verify shipped families are fully executable, count
+consistency, determinism, and absence of structurally incapable constructs.
+Phase 158 adds no `evaluate_trace`/`OracleOutcome`/DSL change, no Cargo
+metadata change, no dependency, and no stronger claim; the audit is
+`Level0DesignNote`.
+
+Phase 159 introduces the formal-lane interface seam: a new
+`crates/zkbench-core/src/formal/` module with `FormalPropertyScope`,
+`FormalPropertyAssertion`, `FormalLaneProofStatus` (with `claim_boundary`
+mapping), `FormalLaneProof`, `FormalLaneError`, the `FormalVerifier` trait
+(mirroring `hsai-attestation::AttestationVerifier`), the `NoopFormalVerifier`
+reference impl that always returns `DeclaredOnly` and `Level0DesignNote`,
+the `FormalLane<V>` wrapper with `evaluate`, and `FormalLaneOutcome`. The
+`NoopFormalVerifier` never escalates above `Level0DesignNote` and never
+returns `MachineCheckedScoped` or `IndependentlyReproduced`; those statuses
+and their Level 5/6 claim-boundary mappings exist only so a future
+implementation phase can reuse them. Six focused integration tests in
+`crates/zkbench-core/tests/phase_159_formal_lane.rs` plus inline unit tests
+verify noop behavior, no escalation, malformed input rejection, mandatory
+nonclaims, and scope-guard variant counts, plus a source-scan test proving
+the module contains no forbidden formal-tool or network/filesystem
+integrations. Phase 159 adds no Cargo dependency, no real formal-tool
+integration, no `ClaimEnvelope` coupling, no HSAI-crate change, and no
+stronger claim; every `FormalLaneProof` is `Level0DesignNote`.
+
+Phase 160 connects the mutation and formal halves: a new
+`crates/zkbench-core/src/formal/cross_product.rs` module maps each of the 14
+declared `MutationClass` variants to the `FormalPropertyScope` it most
+directly stress-tests via `mutation_class_formal_stress`, and derives a
+`FormalPropertyAssertion` template from an existing `SurfaceSpec` via
+`derive_formal_property_assertion_template` (returning `Some` when a matching
+construct exists, `None` otherwise). `FormalPropertyScopeKind` carries the
+scope *kind* without binding to ids, distinct from `FormalPropertyScope`.
+Twelve focused integration tests in
+`crates/zkbench-core/tests/phase_160_cross_product.rs` plus inline unit tests
+verify profile coverage, scope mapping correctness, nonclaim presence,
+template derivation `Some`/`None` paths, determinism, and scope-guard variant
+counts. Phase 160 adds no `MutationClass`/formal-type change, no Cargo
+metadata change, no dependency, no real formal-tool call, and no stronger
+claim; the mapping is `Level0DesignNote`.
+
+Phase 161 completes the local mutation-engine surface for the six remaining
+declared `MutationClass` variants: nondeterministic transition injection,
+recursion-envelope mismatch, public/private boundary mismatch, witness aliasing,
+semantic no-op drift, and trace-ordering corruption. It also adds central
+`apply_mutation_for_class` dispatch for all 14 variants and routes the soak
+runner through that dispatch. Seven focused tests in
+`crates/zkbench-core/tests/phase_161_mutation_completion.rs` verify each added
+pass, no-target handling where applicable, and full dispatch coverage. Phase
+161 adds no new `MutationClass` variant, no Cargo metadata change, no dependency,
+no external execution, no accepted Evidence Ledger mutation, no official
+benchmark submission, no score-axis population, no Level2+ evidence, and no
+stronger claim; every mutated instance remains `Level1LocalReplay`.
+
+Phase 162 adds internal distinguishability telemetry to soak runs. It exposes
+`observed_distinguishability_axis`, backward-compatible serde-default telemetry
+fields, and soak-runner recording for successful mutation replays. Two focused
+tests in `crates/zkbench-core/tests/phase_162_distinguishability_telemetry.rs`
+verify counter recording and merge behavior. Phase 162 does not populate
+`ScoreReport` axes, does not create benchmark evidence, does not add external
+execution, and does not create a stronger claim; telemetry remains internal
+local metadata.
+
+Phase 163 wires the formal-lane pipeline into the local soak path. The shipped
+pipeline derives declared-only formal assertion templates when possible,
+evaluates them through the shipped `NoopFormalVerifier`, and records declared
+only formal-lane telemetry counters. Two focused tests in
+`crates/zkbench-core/tests/phase_163_formal_lane_pipeline.rs` verify the
+declared-only pipeline and soak telemetry. Phase 163 calls no formal tool,
+creates no proof, creates no benchmark evidence, and does not escalate above
+`Level0DesignNote` formal-lane metadata.
+
+Phase 164 implements the four remaining deterministic local benchmark families:
+`RecursiveEnvelope`, `MemoryHeavyStateMachine`, `PublicPrivateBoundaryStress`,
+and `ZkMlControlFlowMixed`. It updates the family registry, generator config
+constructors, template registry, soak generator mapping, zk-Harness dry-run
+labels, and full-pipeline stress path. Focused tests in
+`crates/zkbench-core/tests/phase_154_new_families.rs` and
+`crates/zkbench-core/tests/phase_164_remaining_families.rs` verify generation,
+local oracle evaluation, registry exposure, local JSON replay, soak handling,
+and `Level1LocalReplay` claim caps. Phase 164 adds no live ZK backend, no zkML
+execution, no benchmark evidence, no Level2+ evidence, and no stronger claim.
+
 ## State Slice
 
 This report touches only:
@@ -528,6 +719,57 @@ This report touches only:
 - `docs/150-phase-hsai-admission-candidate-semantic-closure-boundary-spec.md`
 - `docs/151-phase-hsai-admission-candidate-semantic-closure-implementation-notes.md`
 - `docs/152-phase-hsai-admission-journal-duplicate-json-boundary-spec.md`
+- `docs/153-phase-hsai-admission-journal-duplicate-json-implementation-notes.md`
+- `docs/154-phase-new-benchmark-families-boundary-spec.md`
+- `docs/154-phase-new-benchmark-families-implementation-notes.md`
+- `docs/155-phase-operator-soak-campaign-runner-boundary-spec.md`
+- `docs/155-phase-operator-soak-campaign-runner-implementation-notes.md`
+- `docs/156-phase-mutation-engine-depth-boundary-spec.md`
+- `docs/156-phase-mutation-engine-depth-implementation-notes.md`
+- `docs/157-phase-mutation-distinguishability-scoring-boundary-spec.md`
+- `docs/157-phase-mutation-distinguishability-scoring-implementation-notes.md`
+- `docs/158-phase-oracle-completeness-audit-boundary-spec.md`
+- `docs/158-phase-oracle-completeness-audit-implementation-notes.md`
+- `docs/159-phase-formal-lane-interface-stub-boundary-spec.md`
+- `docs/159-phase-formal-lane-interface-stub-implementation-notes.md`
+- `docs/160-phase-mutation-formal-cross-product-boundary-spec.md`
+- `docs/160-phase-mutation-formal-cross-product-implementation-notes.md`
+- `docs/161-phase-mutation-engine-completion-implementation-notes.md`
+- `docs/162-phase-distinguishability-soak-telemetry-implementation-notes.md`
+- `docs/163-phase-formal-lane-pipeline-implementation-notes.md`
+- `docs/164-phase-remaining-benchmark-families-implementation-notes.md`
+- `crates/zkbench-core/examples/operator_soak_campaign.rs`
+- `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
+- `crates/zkbench-core/src/dsl/oracle_completeness.rs`
+- `crates/zkbench-core/src/formal/`
+- `crates/zkbench-core/src/generator/config.rs`
+- `crates/zkbench-core/src/generator/deterministic.rs`
+- `crates/zkbench-core/src/generator/templates.rs`
+- `crates/zkbench-core/src/mutation/apply.rs`
+- `crates/zkbench-core/src/mutation/invalid_unroll_bounds.rs`
+- `crates/zkbench-core/src/mutation/invariant_strengthening.rs`
+- `crates/zkbench-core/src/mutation/invariant_weakening.rs`
+- `crates/zkbench-core/src/mutation/nondeterministic_transition_injection.rs`
+- `crates/zkbench-core/src/mutation/observation_omission.rs`
+- `crates/zkbench-core/src/mutation/public_private_boundary_mismatch.rs`
+- `crates/zkbench-core/src/mutation/recursion_envelope_mismatch.rs`
+- `crates/zkbench-core/src/mutation/semantic_no_op_drift.rs`
+- `crates/zkbench-core/src/mutation/stale_state_reads.rs`
+- `crates/zkbench-core/src/mutation/trace_ordering_corruption.rs`
+- `crates/zkbench-core/src/mutation/witness_aliasing.rs`
+- `crates/zkbench-core/src/scoring/distinguishability.rs`
+- `crates/zkbench-core/src/soak/telemetry.rs`
+- `crates/zkbench-core/tests/operator_soak_campaign_contract.rs`
+- `crates/zkbench-core/tests/phase_154_new_families.rs`
+- `crates/zkbench-core/tests/phase_156_mutation_depth.rs`
+- `crates/zkbench-core/tests/phase_157_distinguishability.rs`
+- `crates/zkbench-core/tests/phase_158_oracle_completeness.rs`
+- `crates/zkbench-core/tests/phase_159_formal_lane.rs`
+- `crates/zkbench-core/tests/phase_160_cross_product.rs`
+- `crates/zkbench-core/tests/phase_161_mutation_completion.rs`
+- `crates/zkbench-core/tests/phase_162_distinguishability_telemetry.rs`
+- `crates/zkbench-core/tests/phase_163_formal_lane_pipeline.rs`
+- `crates/zkbench-core/tests/phase_164_remaining_families.rs`
 - `Cargo.lock`
 - `Cargo.toml`
 - `docs/12-task-list.md`
@@ -542,51 +784,42 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 151 validation.
+Run from repository root during Phase 164 polish validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
 cargo test -p zkbench-core --test repo_claim_boundary_docs
 cargo test -p zkbench-core --test repo_hygiene
+cargo check -p zkbench-core --examples
 cargo test -p hsai-agent-admission
 cargo test -p hsai-e2e-harness
-cargo test -p hsai-e2e-harness --test claim_boundary_source_scan
-cargo test -p zkbench-core --test zk_harness_dry_run_plan
-cargo test -p zkbench-core --test zk_harness_pack_mapping
-cargo test -p zkbench-core --test local_json_adapter
-cargo test -p hsai-attestation-phala --test phala_artifact
-cargo test -p hsai-attestation-phala --features operator-live-provider --test phala_operator_live_provider_client
-cargo test -p zkbench-core --test evidence_append_proposal
-cargo test -p zkbench-core --test oracle_eval
-cargo test -p zkbench-core --test lowering
-cargo test -p zkbench-core --test soak_serialization
-cargo test -p zkbench-core --test phase_w_promotion_preflight
-cargo test -p zkbench-core --test phase_w_accepted_ledger_append
+cargo test -p zkbench-core
 cargo test --workspace --all-features
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 RUSTDOCFLAGS='-D warnings' cargo doc --workspace --all-features --no-deps
 cargo llvm-cov -p hsai-agent-admission --all-features --summary-only
-rg --files -g 'package.json' -g 'pnpm-lock.yaml' || true
+cargo llvm-cov -p zkbench-core --all-features --summary-only
+rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 151 focused Rust/doc commands passed. `cargo test --workspace
---all-features`, workspace clippy, and workspace docs also passed with the
-candidate semantic-closure invariants implemented. Focused
-`hsai-agent-admission` coverage reported `97.49%` regions, `95.62%` functions,
-and `98.09%` lines. The `rg` package-surface check returned no files.
+Phase 164 polish validation passed. `cargo test --workspace --all-features`,
+workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
+`cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
+`cargo test -p zkbench-core` all passed with all nine local generator families
+implemented and all 14 declared mutation classes dispatching through the local
+mutation engine. The `rg` package-surface check returned no package files
+(exit code 1 with empty output), confirming no `package.json` or
+`pnpm-lock.yaml` surface exists.
 
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-`cargo-llvm-cov 0.8.7` was available during the latest Phase 135 all-feature
-workspace coverage pass and the Phase 151 focused admission coverage pass. The
-latest all-feature workspace Phase
-135 pass reported `86.09%` region coverage, `83.22%` function execution, and
-`84.43%` line coverage. The targeted
-`zkbench-core/src/adapters/zk_harness/validation.rs` file reported `94.87%`
-region coverage, `100.00%` function execution, and `93.45%` line coverage.
-Branch coverage was not reported by that run.
+`cargo llvm-cov -p hsai-agent-admission --all-features --summary-only`
+reported `97.08%` region coverage, `96.36%` function execution, and `97.57%`
+line coverage. `cargo llvm-cov -p zkbench-core --all-features --summary-only`
+reported `84.20%` region coverage, `79.84%` function execution, and `82.80%`
+line coverage. Branch coverage was not reported by these runs.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

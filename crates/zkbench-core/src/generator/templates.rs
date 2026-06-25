@@ -11,17 +11,17 @@ pub enum FamilyKind {
     BranchingFsm,
     /// Implemented v0 bounded counter loop generator.
     BoundedCounterLoop,
-    /// Future placeholder.
+    /// Implemented v0 nested loop generator.
     NestedLoop,
-    /// Future placeholder.
+    /// Implemented v0 recursive envelope generator.
     RecursiveEnvelope,
-    /// Future placeholder.
+    /// Implemented v0 memory-heavy state machine generator.
     MemoryHeavyStateMachine,
-    /// Future placeholder.
+    /// Implemented v0 guard-heavy machine generator.
     GuardHeavyMachine,
-    /// Future placeholder.
+    /// Implemented v0 public/private boundary stress generator.
     PublicPrivateBoundaryStress,
-    /// Future placeholder.
+    /// Implemented v0 zkML/control-flow mixed generator.
     ZkMlControlFlowMixed,
 }
 
@@ -30,7 +30,15 @@ impl FamilyKind {
     pub fn is_implemented(self) -> bool {
         matches!(
             self,
-            Self::BaselineFsm | Self::BranchingFsm | Self::BoundedCounterLoop
+            Self::BaselineFsm
+                | Self::BranchingFsm
+                | Self::BoundedCounterLoop
+                | Self::NestedLoop
+                | Self::GuardHeavyMachine
+                | Self::RecursiveEnvelope
+                | Self::MemoryHeavyStateMachine
+                | Self::PublicPrivateBoundaryStress
+                | Self::ZkMlControlFlowMixed
         )
     }
 
@@ -111,17 +119,100 @@ pub fn family_template(kind: FamilyKind) -> FamilyTemplate {
                 "backend_constraint_count".to_string(),
             ],
         },
-        FamilyKind::NestedLoop
-        | FamilyKind::RecursiveEnvelope
-        | FamilyKind::MemoryHeavyStateMachine
-        | FamilyKind::GuardHeavyMachine
-        | FamilyKind::PublicPrivateBoundaryStress
-        | FamilyKind::ZkMlControlFlowMixed => FamilyTemplate {
+        FamilyKind::NestedLoop => FamilyTemplate {
             kind,
-            description: format!("{kind:?} is registered as a future local generator placeholder."),
-            implemented: false,
-            supported_oracle_features: Vec::new(),
-            unsupported_features: vec!["future_placeholder".to_string()],
+            description:
+                "Generated nested bounded loops with inner/outer counter dependency ordering."
+                    .to_string(),
+            implemented: true,
+            supported_oracle_features: vec![
+                "int_fields".to_string(),
+                "nested_loop_bounds".to_string(),
+                "add_assign".to_string(),
+                "invariants".to_string(),
+            ],
+            unsupported_features: vec![
+                "unbounded_nesting".to_string(),
+                "backend_constraint_count".to_string(),
+            ],
+        },
+        FamilyKind::GuardHeavyMachine => FamilyTemplate {
+            kind,
+            description:
+                "Generated guarded machine exercising boolean and integer conjunction guards."
+                    .to_string(),
+            implemented: true,
+            supported_oracle_features: vec![
+                "int_fields".to_string(),
+                "bool_fields".to_string(),
+                "conjunction_guards".to_string(),
+                "invariants".to_string(),
+            ],
+            unsupported_features: vec![
+                "symbolic_unroll".to_string(),
+                "formal_evidence".to_string(),
+            ],
+        },
+        FamilyKind::RecursiveEnvelope => FamilyTemplate {
+            kind,
+            description: "Generated recursion-envelope bounded fold with digest metadata."
+                .to_string(),
+            implemented: true,
+            supported_oracle_features: vec![
+                "int_fields".to_string(),
+                "loop_bounds".to_string(),
+                "envelope_digest_metadata".to_string(),
+                "invariants".to_string(),
+            ],
+            unsupported_features: vec![
+                "live_gnark_recursion".to_string(),
+                "backend_proof_size".to_string(),
+            ],
+        },
+        FamilyKind::MemoryHeavyStateMachine => FamilyTemplate {
+            kind,
+            description: "Generated memory-heavy machine with multi-slot write/read ordering."
+                .to_string(),
+            implemented: true,
+            supported_oracle_features: vec![
+                "int_fields".to_string(),
+                "bool_fields".to_string(),
+                "memory_slots".to_string(),
+                "invariants".to_string(),
+            ],
+            unsupported_features: vec![
+                "backend_memory_usage".to_string(),
+                "formal_evidence".to_string(),
+            ],
+        },
+        FamilyKind::PublicPrivateBoundaryStress => FamilyTemplate {
+            kind,
+            description: "Generated public/private nonce binding with witness-policy metadata."
+                .to_string(),
+            implemented: true,
+            supported_oracle_features: vec![
+                "int_fields".to_string(),
+                "bool_fields".to_string(),
+                "witness_policy".to_string(),
+                "public_inputs".to_string(),
+            ],
+            unsupported_features: vec![
+                "zkml_execution".to_string(),
+                "backend_boundary_checks".to_string(),
+            ],
+        },
+        FamilyKind::ZkMlControlFlowMixed => FamilyTemplate {
+            kind,
+            description: "Generated confidence/threshold control-flow machine with observations."
+                .to_string(),
+            implemented: true,
+            supported_oracle_features: vec![
+                "int_fields".to_string(),
+                "text_fields".to_string(),
+                "observations".to_string(),
+                "gte_guards".to_string(),
+            ],
+            unsupported_features: vec!["zkml_execution".to_string(), "model_accuracy".to_string()],
         },
     }
 }

@@ -2,21 +2,34 @@
 
 use crate::dsl::{
     evaluate_trace, lower_to_ir, validate_surface_spec, ActionSpec, GuardExpr, GuardSpec,
-    ParsedAst, SemanticIr, SurfaceSpec, TraceSpec, TransitionSpec,
+    InvariantSpec, LoopSpec, ParsedAst, SemanticIr, SurfaceSpec, TraceSpec, TransitionSpec,
 };
 use crate::error::{Result, ZkBenchError};
 use crate::evidence::{ClaimBoundary, ExpectedVerdict};
 use crate::generator::GeneratedBenchmarkInstance;
 use crate::value::Value;
 
+use std::collections::BTreeSet;
+
 use super::bad_counters::BadCountersPass;
 use super::corrupted_guards::CorruptedGuardsPass;
+use super::invalid_unroll_bounds::InvalidUnrollBoundsPass;
+use super::invariant_strengthening::InvariantStrengtheningPass;
+use super::invariant_weakening::InvariantWeakeningPass;
 use super::missing_constraints::MissingConstraintsPass;
+use super::nondeterministic_transition_injection::NondeterministicTransitionInjectionPass;
+use super::observation_omission::ObservationOmissionPass;
 use super::pass::{
     MutatedBenchmarkInstance, MutationApplication, MutationInput, MutationPass, MutationPlan,
     MutationSafetyClass,
 };
 use super::provenance::MutationProvenance;
+use super::public_private_boundary_mismatch::PublicPrivateBoundaryMismatchPass;
+use super::recursion_envelope_mismatch::RecursionEnvelopeMismatchPass;
+use super::semantic_no_op_drift::SemanticNoOpDriftPass;
+use super::stale_state_reads::StaleStateReadsPass;
+use super::trace_ordering_corruption::TraceOrderingCorruptionPass;
+use super::witness_aliasing::WitnessAliasingPass;
 use super::{MutationClass, MutationKind, MutationSeverity, MutationSpec};
 
 /// Local mutation engine.
@@ -52,6 +65,43 @@ pub fn apply_mutation_pass(
 ) -> Result<MutatedBenchmarkInstance> {
     pass.apply(&MutationInput { instance })
         .map(|application| application.output)
+}
+
+/// Apply a mutation pass selected by `MutationClass`.
+pub fn apply_mutation_for_class(
+    instance: &GeneratedBenchmarkInstance,
+    mutation_class: MutationClass,
+) -> Result<MutatedBenchmarkInstance> {
+    match mutation_class {
+        MutationClass::MissingConstraints => apply_mutation_pass(instance, &MissingConstraintsPass),
+        MutationClass::CorruptedGuards => apply_mutation_pass(instance, &CorruptedGuardsPass),
+        MutationClass::BadCounters => apply_mutation_pass(instance, &BadCountersPass),
+        MutationClass::StaleStateReads => apply_mutation_pass(instance, &StaleStateReadsPass),
+        MutationClass::InvalidUnrollBounds => {
+            apply_mutation_pass(instance, &InvalidUnrollBoundsPass)
+        }
+        MutationClass::NondeterministicTransitionInjection => {
+            apply_mutation_pass(instance, &NondeterministicTransitionInjectionPass)
+        }
+        MutationClass::RecursionEnvelopeMismatch => {
+            apply_mutation_pass(instance, &RecursionEnvelopeMismatchPass)
+        }
+        MutationClass::PublicPrivateBoundaryMismatch => {
+            apply_mutation_pass(instance, &PublicPrivateBoundaryMismatchPass)
+        }
+        MutationClass::WitnessAliasing => apply_mutation_pass(instance, &WitnessAliasingPass),
+        MutationClass::InvariantWeakening => apply_mutation_pass(instance, &InvariantWeakeningPass),
+        MutationClass::InvariantStrengthening => {
+            apply_mutation_pass(instance, &InvariantStrengtheningPass)
+        }
+        MutationClass::ObservationOmission => {
+            apply_mutation_pass(instance, &ObservationOmissionPass)
+        }
+        MutationClass::SemanticNoOpDrift => apply_mutation_pass(instance, &SemanticNoOpDriftPass),
+        MutationClass::TraceOrderingCorruption => {
+            apply_mutation_pass(instance, &TraceOrderingCorruptionPass)
+        }
+    }
 }
 
 /// Apply the default Phase D/E mutation passes.
@@ -269,4 +319,69 @@ pub(crate) fn bad_counter_action(action: &ActionSpec) -> Option<(ActionSpec, Str
         },
         ActionSpec::Noop { .. } | ActionSpec::Assign { .. } | ActionSpec::RawText { .. } => None,
     }
+}
+
+/// Select a primary trace for a mutation pass: the first accepted trace if any,
+/// otherwise the first rejected trace. Returns `None` when the instance declares
+/// no traces at all.
+pub(crate) fn select_primary_trace(instance: &GeneratedBenchmarkInstance) -> Option<TraceSpec> {
+    instance
+        .accepted_traces
+        .first()
+        .or_else(|| instance.rejected_traces.first())
+        .cloned()
+}
+
+/// Mutable accessor for an invariant by id.
+pub(crate) fn invariant_mut<'a>(
+    surface: &'a mut SurfaceSpec,
+    invariant_id: &str,
+) -> Result<&'a mut InvariantSpec> {
+    surface
+        .machine
+        .invariants
+        .iter_mut()
+        .find(|invariant| invariant.id == invariant_id)
+        .ok_or_else(|| {
+            ZkBenchError::mutation(
+                "mutation.target",
+                format!("invariant '{invariant_id}' was not found"),
+            )
+        })
+}
+
+/// Mutable accessor for a loop by id.
+pub(crate) fn loop_mut<'a>(
+    surface: &'a mut SurfaceSpec,
+    loop_id: &str,
+) -> Result<&'a mut LoopSpec> {
+    surface
+        .machine
+        .loops
+        .iter_mut()
+        .find(|entry| entry.id == loop_id)
+        .ok_or_else(|| {
+            ZkBenchError::mutation("mutation.target", format!("loop '{loop_id}' was not found"))
+        })
+}
+
+/// Return the set of field ids a guard reads.
+pub(crate) fn guard_read_fields(guard: &GuardSpec) -> BTreeSet<String> {
+    let mut refs = BTreeSet::new();
+    guard.collect_field_references(&mut refs);
+    refs
+}
+
+/// Return the set of field ids an action writes.
+pub(crate) fn action_write_fields(action: &ActionSpec) -> BTreeSet<String> {
+    let mut refs = BTreeSet::new();
+    action.collect_field_references(&mut refs);
+    refs
+}
+
+/// Return true if the guard is a non-trivial executable expression (not `Bool`
+/// and not `RawText`). Used by invariant-strengthening and invariant-weakening
+/// passes to skip trivial guards where mutation would be meaningless.
+pub(crate) fn guard_is_executable_expr(guard: &GuardSpec) -> bool {
+    matches!(guard, GuardSpec::Expr(expr) if !matches!(expr, GuardExpr::RawText { .. }))
 }

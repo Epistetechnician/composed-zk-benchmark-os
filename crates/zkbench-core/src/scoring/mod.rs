@@ -3,9 +3,19 @@
 //! The current implementation intentionally avoids fake performance or formal
 //! scores. It can produce a low-confidence report that records missing evidence.
 
+pub mod distinguishability;
+
 use serde::{Deserialize, Serialize};
 
 use crate::evidence::{ClaimBoundary, EvidenceRecord};
+
+pub use distinguishability::{
+    classify_mutation_distinguishability, mandatory_distinguishability_nonclaims,
+    observed_distinguishability_axis, summarize_mutation_distinguishability,
+    MutationDistinguishabilityAxis, MutationDistinguishabilityCell,
+    MutationDistinguishabilityMatrix, MutationDistinguishabilitySummary,
+    DISTINGUISHABILITY_CLAIM_BOUNDARY,
+};
 
 /// Multi-axis Score Report primitive.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]

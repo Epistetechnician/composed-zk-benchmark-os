@@ -7,16 +7,15 @@ use serde::{Deserialize, Serialize};
 use crate::adapters::{LocalJsonAdapter, LocalJsonReplayInput, LocalJsonReplaySummary};
 use crate::error::{Result, ZkBenchError};
 use crate::evidence::ClaimBoundary;
+use crate::formal::{evaluate_formal_lane_pipeline, pipeline_outcome_is_declared_only};
 use crate::generator::{generate_instance, FamilyKind, GeneratorConfig, InstanceParams};
-use crate::mutation::{
-    apply_mutation_pass, BadCountersPass, CorruptedGuardsPass, MissingConstraintsPass,
-    MutatedBenchmarkInstance, MutationClass,
-};
+use crate::mutation::{apply_mutation_for_class, MutatedBenchmarkInstance, MutationClass};
 use crate::pack::{BenchmarkPackReader, BenchmarkPackWriter};
 use crate::replay::{
     build_local_replay_manifest_for_instance, build_local_replay_manifest_for_mutation,
     ReplayManifest, ReplayResult, ReplayStatus,
 };
+use crate::scoring::observed_distinguishability_axis;
 
 use super::artifact_layout::{write_json, SoakArtifactLayout};
 use super::config::{SoakOutputPolicy, SoakRunConfig};
@@ -474,12 +473,27 @@ impl LocalSoakRunner {
                 Ok(mutated) => {
                     counters.mutation_variant_count =
                         counters.mutation_variant_count.saturating_add(1);
+                    if let Ok(pipeline_outcome) =
+                        evaluate_formal_lane_pipeline(*mutation_class, &mutated.surface_spec)
+                    {
+                        counters.record_formal_lane_pipeline(
+                            pipeline_outcome.template_derived,
+                            pipeline_outcome_is_declared_only(&pipeline_outcome),
+                        );
+                    }
                     let replay_start = self.clock.now_ms();
                     match build_local_replay_manifest_for_mutation(&mutated)
                         .and_then(|manifest| self.replay_manifest(manifest))
                     {
                         Ok((manifest, result, summary)) => {
                             update_replay_counters(counters, &result, &summary);
+                            if let Some(trace) = result.trace_results.first() {
+                                let axis = observed_distinguishability_axis(
+                                    mutated.expected_verdict,
+                                    trace.backend_outcome,
+                                );
+                                counters.record_distinguishability_axis(axis);
+                            }
                             replay_manifests.push(manifest);
                             replay_results.push(result);
                             mutation_outputs.push(mutated);
@@ -791,16 +805,25 @@ fn generator_config_for_case(
         FamilyKind::BaselineFsm => GeneratorConfig::baseline_fsm(),
         FamilyKind::BranchingFsm => GeneratorConfig::branching_fsm(),
         FamilyKind::BoundedCounterLoop => GeneratorConfig::bounded_counter_loop(),
-        _ => {
-            return Err(ZkBenchError::soak(
-                "soak.runner.family_kind",
-                format!("{:?} is not implemented", case_plan.family_kind),
-            ))
+        FamilyKind::NestedLoop => GeneratorConfig::nested_loop(),
+        FamilyKind::GuardHeavyMachine => GeneratorConfig::guard_heavy_machine(),
+        FamilyKind::RecursiveEnvelope => GeneratorConfig::recursive_envelope(),
+        FamilyKind::MemoryHeavyStateMachine => GeneratorConfig::memory_heavy_state_machine(),
+        FamilyKind::PublicPrivateBoundaryStress => {
+            GeneratorConfig::public_private_boundary_stress()
         }
+        FamilyKind::ZkMlControlFlowMixed => GeneratorConfig::zkml_control_flow_mixed(),
     }
     .seed(case_plan.generator_seed);
     generator_config.tunables = case_plan.generator_tunables.clone();
-    if case_plan.family_kind == FamilyKind::BoundedCounterLoop {
+    if matches!(
+        case_plan.family_kind,
+        FamilyKind::BoundedCounterLoop
+            | FamilyKind::NestedLoop
+            | FamilyKind::GuardHeavyMachine
+            | FamilyKind::RecursiveEnvelope
+            | FamilyKind::ZkMlControlFlowMixed
+    ) {
         generator_config.tunables.trace_length =
             generator_config.tunables.loop_bound.saturating_add(1);
     }
@@ -812,15 +835,7 @@ fn apply_selected_mutation(
     instance: &crate::generator::GeneratedBenchmarkInstance,
     mutation_class: MutationClass,
 ) -> Result<MutatedBenchmarkInstance> {
-    match mutation_class {
-        MutationClass::MissingConstraints => apply_mutation_pass(instance, &MissingConstraintsPass),
-        MutationClass::CorruptedGuards => apply_mutation_pass(instance, &CorruptedGuardsPass),
-        MutationClass::BadCounters => apply_mutation_pass(instance, &BadCountersPass),
-        _ => Err(ZkBenchError::soak(
-            "soak.runner.mutation_class",
-            format!("{mutation_class:?} is not implemented for Phase K"),
-        )),
-    }
+    apply_mutation_for_class(instance, mutation_class)
 }
 
 fn is_targetless_mutation_error(error: &ZkBenchError) -> bool {

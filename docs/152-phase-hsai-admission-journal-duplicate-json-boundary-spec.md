@@ -1,7 +1,7 @@
 # Phase 152 HSAI Admission Journal Duplicate JSON Boundary Spec
 
-Status: docs-first boundary for future recursive duplicate object-key
-rejection in admission-journal semantic readback.
+Status: boundary complete; implementation landed in
+`docs/153-phase-hsai-admission-journal-duplicate-json-implementation-notes.md`.
 
 ## State Slice
 

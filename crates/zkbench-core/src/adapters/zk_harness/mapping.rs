@@ -300,12 +300,14 @@ pub fn candidate_family_label(kind: FamilyKind) -> Option<&'static str> {
         FamilyKind::BaselineFsm => Some("control_flow_baseline_fsm"),
         FamilyKind::BranchingFsm => Some("control_flow_branching_fsm"),
         FamilyKind::BoundedCounterLoop => Some("control_flow_bounded_counter_loop"),
-        FamilyKind::NestedLoop
-        | FamilyKind::RecursiveEnvelope
-        | FamilyKind::MemoryHeavyStateMachine
-        | FamilyKind::GuardHeavyMachine
-        | FamilyKind::PublicPrivateBoundaryStress
-        | FamilyKind::ZkMlControlFlowMixed => None,
+        FamilyKind::NestedLoop => Some("control_flow_nested_loop"),
+        FamilyKind::GuardHeavyMachine => Some("control_flow_guard_heavy_machine"),
+        FamilyKind::RecursiveEnvelope => Some("control_flow_recursive_envelope"),
+        FamilyKind::MemoryHeavyStateMachine => Some("control_flow_memory_heavy_state_machine"),
+        FamilyKind::PublicPrivateBoundaryStress => {
+            Some("control_flow_public_private_boundary_stress")
+        }
+        FamilyKind::ZkMlControlFlowMixed => Some("control_flow_zkml_control_flow_mixed"),
     }
 }
 

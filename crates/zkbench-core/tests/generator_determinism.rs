@@ -58,6 +58,30 @@ fn generator_limits_reject_excessive_values() {
 }
 
 #[test]
+fn generator_limits_reject_derived_new_family_resource_counts() {
+    let limits = GeneratorLimits {
+        max_trace_steps: 7,
+        ..GeneratorLimits::default()
+    };
+    let error = GeneratorConfig::nested_loop()
+        .loop_bound(2)
+        .limits(limits)
+        .validate()
+        .expect_err("nested loop derived trace length should be checked");
+    assert!(error.to_string().contains("generated trace steps"));
+
+    let limits = GeneratorLimits {
+        max_fields: 3,
+        ..GeneratorLimits::default()
+    };
+    let error = GeneratorConfig::memory_heavy_state_machine()
+        .limits(limits)
+        .validate()
+        .expect_err("memory-heavy derived field count should be checked");
+    assert!(error.to_string().contains("requested field count"));
+}
+
+#[test]
 fn branching_fsm_validation_rejects_too_few_states_before_generation() {
     let error = GeneratorConfig::branching_fsm()
         .state_count(3)
