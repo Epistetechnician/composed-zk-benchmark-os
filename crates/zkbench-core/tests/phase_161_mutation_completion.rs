@@ -1,11 +1,11 @@
 //! Phase 161 — complete the remaining six mutation passes (14/14).
 
 use zkbench_core::{
-    apply_mutation_for_class, apply_mutation_pass, generate_instance, ClaimBoundary,
-    ExpectedVerdict, GeneratorConfig, InstanceParams, MutationClass, MutationSafetyClass,
-    NondeterministicTransitionInjectionPass, PublicPrivateBoundaryMismatchPass,
-    RecursionEnvelopeMismatchPass, SemanticNoOpDriftPass, TraceOrderingCorruptionPass,
-    WitnessAliasingPass,
+    apply_mutation_for_class, apply_mutation_pass, generate_instance, value::FieldVisibility,
+    ClaimBoundary, ExpectedVerdict, GeneratorConfig, InstanceParams, MutationClass, MutationPass,
+    MutationSafetyClass, NondeterministicTransitionInjectionPass,
+    PublicPrivateBoundaryMismatchPass, RecursionEnvelopeMismatchPass, SemanticNoOpDriftPass,
+    TraceOrderingCorruptionPass, WitnessAliasingPass,
 };
 
 fn bounded_counter_loop() -> GeneratorConfig {
@@ -64,6 +64,160 @@ fn public_private_boundary_mismatch_applies_on_public_field_family() {
     );
     assert_eq!(mutated.expected_verdict, ExpectedVerdict::Reject);
     assert_eq!(mutated.claim_boundary, ClaimBoundary::Level1LocalReplay);
+}
+
+#[test]
+fn public_private_boundary_mismatch_reports_its_class() {
+    assert_eq!(
+        PublicPrivateBoundaryMismatchPass.mutation_class(),
+        MutationClass::PublicPrivateBoundaryMismatch
+    );
+}
+
+#[test]
+fn public_private_boundary_mismatch_moves_public_input_policy_first() {
+    let instance = generate_instance(
+        GeneratorConfig::public_private_boundary_stress(),
+        InstanceParams::default(),
+    )
+    .expect("public/private family should generate");
+    let public_input = instance.surface_spec.machine.witness_policy.public_inputs[0].clone();
+
+    let mutated = apply_mutation_pass(&instance, &PublicPrivateBoundaryMismatchPass)
+        .expect("public/private mismatch should apply");
+
+    assert!(mutated
+        .provenance
+        .description
+        .contains("moved public input"));
+    assert!(mutated
+        .surface_spec
+        .machine
+        .witness_policy
+        .private_witnesses
+        .contains(&public_input));
+    assert!(!mutated
+        .surface_spec
+        .machine
+        .witness_policy
+        .public_inputs
+        .contains(&public_input));
+    assert_eq!(mutated.provenance.affected_field_ids, vec![public_input]);
+}
+
+#[test]
+fn public_private_boundary_mismatch_reclassifies_public_field_when_policy_is_empty() {
+    let mut instance = generate_instance(bounded_counter_loop(), InstanceParams::default())
+        .expect("bounded counter loop should generate");
+    instance
+        .surface_spec
+        .machine
+        .witness_policy
+        .public_inputs
+        .clear();
+    instance
+        .surface_spec
+        .machine
+        .witness_policy
+        .private_witnesses
+        .clear();
+    let public_field = instance
+        .surface_spec
+        .machine
+        .fields
+        .iter()
+        .find(|field| field.visibility == FieldVisibility::Public)
+        .expect("generated fixture should contain public field")
+        .id
+        .clone();
+
+    let mutated = apply_mutation_pass(&instance, &PublicPrivateBoundaryMismatchPass)
+        .expect("public field mismatch should apply");
+
+    assert!(mutated
+        .provenance
+        .description
+        .contains("reclassified public field"));
+    assert_eq!(
+        mutated.provenance.affected_field_ids,
+        vec![public_field.clone()]
+    );
+    assert_eq!(
+        mutated
+            .surface_spec
+            .machine
+            .fields
+            .iter()
+            .find(|field| field.id == public_field)
+            .expect("affected field should remain declared")
+            .visibility,
+        FieldVisibility::Private
+    );
+}
+
+#[test]
+fn public_private_boundary_mismatch_reclassifies_observed_field_when_fields_are_private() {
+    let mut instance = generate_instance(
+        GeneratorConfig::public_private_boundary_stress(),
+        InstanceParams::default(),
+    )
+    .expect("public/private family should generate");
+    instance
+        .surface_spec
+        .machine
+        .witness_policy
+        .public_inputs
+        .clear();
+    for field in &mut instance.surface_spec.machine.fields {
+        field.visibility = FieldVisibility::Private;
+    }
+    let observed_field = instance.surface_spec.machine.observations[0].field.clone();
+
+    let mutated = apply_mutation_pass(&instance, &PublicPrivateBoundaryMismatchPass)
+        .expect("observed field mismatch should apply");
+
+    assert!(mutated
+        .provenance
+        .description
+        .contains("reclassified observed field"));
+    assert_eq!(mutated.provenance.affected_field_ids, vec![observed_field]);
+}
+
+#[test]
+fn public_private_boundary_mismatch_fails_without_public_or_observed_target() {
+    let mut instance = generate_instance(bounded_counter_loop(), InstanceParams::default())
+        .expect("bounded counter loop should generate");
+    instance
+        .surface_spec
+        .machine
+        .witness_policy
+        .public_inputs
+        .clear();
+    instance.surface_spec.machine.observations.clear();
+    for field in &mut instance.surface_spec.machine.fields {
+        field.visibility = FieldVisibility::Private;
+    }
+
+    let error = apply_mutation_pass(&instance, &PublicPrivateBoundaryMismatchPass)
+        .expect_err("no eligible public/private target should fail");
+
+    assert!(error.to_string().contains("no public input"));
+}
+
+#[test]
+fn public_private_boundary_mismatch_fails_without_declared_trace() {
+    let mut instance = generate_instance(
+        GeneratorConfig::public_private_boundary_stress(),
+        InstanceParams::default(),
+    )
+    .expect("public/private family should generate");
+    instance.accepted_traces.clear();
+    instance.rejected_traces.clear();
+
+    let error = apply_mutation_pass(&instance, &PublicPrivateBoundaryMismatchPass)
+        .expect_err("no declared trace should fail before mutation");
+
+    assert!(error.to_string().contains("no declared trace"));
 }
 
 #[test]
