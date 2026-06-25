@@ -2318,6 +2318,29 @@ Exit criteria: all nine families are implemented, generate/evaluate locally,
 respect configured resource limits, carry `Level1LocalReplay`, and pass full
 workspace validation.
 
+## Benchmark Track: Phase 165 Formal Pipeline Observability Hardening
+
+Status: complete. See
+`docs/165-phase-formal-pipeline-observability-hardening-notes.md`.
+
+Goal: make the declared-only formal-lane pipeline explainable in local soak
+telemetry without changing claim strength.
+
+Implemented: formal pipeline outcomes now carry `MutationClass`,
+`FormalPropertyScopeKind`, optional `FormalLaneProofStatus`, no-template
+reasons, and mandatory nonclaims; soak telemetry records no-template,
+scope-count, and proof-status metrics; validation rejects impossible
+formal-lane counter relationships and classification drift.
+
+Anti-goals: real formal-tool integration, machine-checked proof claims, formal
+evidence, accepted evidence, benchmark evidence, score-axis population,
+external execution, Level2+ evidence, semantic-correctness claims, production
+readiness, or 100% coverage claims.
+
+Exit criteria: formal pipeline outcomes explain both derived and no-template
+paths, telemetry remains internal-only, impossible formal-lane counters fail
+closed, and focused workspace tests pass.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

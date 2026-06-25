@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 use crate::adapters::{LocalJsonAdapter, LocalJsonReplayInput, LocalJsonReplaySummary};
 use crate::error::{Result, ZkBenchError};
 use crate::evidence::ClaimBoundary;
-use crate::formal::{evaluate_formal_lane_pipeline, pipeline_outcome_is_declared_only};
+use crate::formal::evaluate_formal_lane_pipeline;
 use crate::generator::{generate_instance, FamilyKind, GeneratorConfig, InstanceParams};
 use crate::mutation::{apply_mutation_for_class, MutatedBenchmarkInstance, MutationClass};
 use crate::pack::{BenchmarkPackReader, BenchmarkPackWriter};
@@ -476,10 +476,7 @@ impl LocalSoakRunner {
                     if let Ok(pipeline_outcome) =
                         evaluate_formal_lane_pipeline(*mutation_class, &mutated.surface_spec)
                     {
-                        counters.record_formal_lane_pipeline(
-                            pipeline_outcome.template_derived,
-                            pipeline_outcome_is_declared_only(&pipeline_outcome),
-                        );
+                        counters.record_formal_lane_pipeline_outcome(&pipeline_outcome);
                     }
                     let replay_start = self.clock.now_ms();
                     match build_local_replay_manifest_for_mutation(&mutated)

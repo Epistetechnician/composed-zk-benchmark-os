@@ -48,11 +48,11 @@ pub use crate::external_runner::{
     SyntheticResultImporter,
 };
 pub use crate::formal::{
-    derive_formal_property_assertion_template, mandatory_cross_product_nonclaims,
-    mandatory_lane_outcome_nonclaims, mutation_class_formal_stress, FormalLane, FormalLaneError,
-    FormalLaneOutcome, FormalLaneProof, FormalLaneProofStatus, FormalPropertyAssertion,
-    FormalPropertyScope, FormalPropertyScopeKind, FormalVerifier, MutationFormalStressProfile,
-    NoopFormalVerifier,
+    derive_formal_property_assertion_template, formal_pipeline_nonclaims,
+    mandatory_cross_product_nonclaims, mandatory_lane_outcome_nonclaims,
+    mutation_class_formal_stress, FormalLane, FormalLaneError, FormalLaneOutcome, FormalLaneProof,
+    FormalLaneProofStatus, FormalPropertyAssertion, FormalPropertyScope, FormalPropertyScopeKind,
+    FormalVerifier, MutationFormalStressProfile, NoopFormalVerifier,
 };
 pub use crate::generator::{
     evaluate_generated_instance, generate_family, generate_instance, BenchmarkFamily,
