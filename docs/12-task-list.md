@@ -2341,6 +2341,32 @@ Exit criteria: formal pipeline outcomes explain both derived and no-template
 paths, telemetry remains internal-only, impossible formal-lane counters fail
 closed, and focused workspace tests pass.
 
+## Benchmark Track: Phase 166 Mutation Coverage First Tranche
+
+Status: complete. See
+`docs/166-phase-mutation-coverage-first-tranche-notes.md`.
+
+Goal: start the path toward higher end-to-end coverage by hardening one bounded
+local mutation module without changing runtime behavior or claim strength.
+
+Implemented: focused regression tests for
+`PublicPrivateBoundaryMismatchPass`, covering the class reporter,
+public-input witness-policy movement, public-field reclassification,
+observed-field reclassification, no-public-target failure, and no-declared
+trace failure.
+
+Coverage result: `public_private_boundary_mismatch.rs` moved from `50.00%`
+line / `20.00%` function coverage to `100.00%` line / `100.00%` function
+coverage, with one LLVM region still uncovered.
+
+Anti-goals: runtime behavior changes, mutation semantics changes, evidence
+promotion, benchmark evidence, external execution, Level2+ evidence,
+semantic-correctness claims, production readiness, or whole-workspace 100%
+coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches
+complete line/function coverage, and root validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

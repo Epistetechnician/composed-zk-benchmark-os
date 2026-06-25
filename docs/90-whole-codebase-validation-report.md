@@ -59,7 +59,8 @@ cross-product mapping implementation, and the Phase 161 mutation engine
 completion implementation, and the Phase 162 distinguishability soak telemetry
 implementation, and the Phase 163 formal lane pipeline implementation, and the
 Phase 164 remaining benchmark families implementation, and the Phase 165 formal
-pipeline observability hardening implementation, plus earlier
+pipeline observability hardening implementation, and the Phase 166 mutation
+coverage first tranche, plus earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
@@ -641,6 +642,17 @@ paths. Phase 165 calls no formal tool, creates no proof, creates no formal
 evidence, creates no benchmark evidence, and does not escalate above
 `Level0DesignNote` formal-lane metadata.
 
+Phase 166 starts a bounded coverage campaign over local mutation code. It adds
+focused tests for `PublicPrivateBoundaryMismatchPass` covering the class
+reporter, public-input witness-policy movement, public-field reclassification,
+observed-field reclassification, no-public-target failure, and
+no-declared-trace failure. The targeted module moved from `50.00%` line /
+`20.00%` function coverage to `100.00%` line / `100.00%` function coverage
+under `cargo llvm-cov -p zkbench-core --all-features --summary-only`; one LLVM
+region remains uncovered. Phase 166 changes no production Rust source, creates
+no benchmark evidence, creates no Level2+ evidence, and does not claim
+whole-workspace 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -752,6 +764,7 @@ This report touches only:
 - `docs/163-phase-formal-lane-pipeline-implementation-notes.md`
 - `docs/164-phase-remaining-benchmark-families-implementation-notes.md`
 - `docs/165-phase-formal-pipeline-observability-hardening-notes.md`
+- `docs/166-phase-mutation-coverage-first-tranche-notes.md`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
@@ -799,13 +812,14 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 165 polish validation.
+Run from repository root during Phase 166 coverage validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
 cargo test -p zkbench-core --test repo_claim_boundary_docs
 cargo test -p zkbench-core --test repo_hygiene
+cargo test -p zkbench-core --test phase_161_mutation_completion
 cargo test -p zkbench-core --test phase_163_formal_lane_pipeline
 cargo test -p zkbench-core --test soak_telemetry
 cargo check -p zkbench-core --examples
@@ -815,30 +829,34 @@ cargo test -p zkbench-core
 cargo test --workspace --all-features
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 RUSTDOCFLAGS='-D warnings' cargo doc --workspace --all-features --no-deps
-cargo llvm-cov -p hsai-agent-admission --all-features --summary-only
+cargo llvm-cov --workspace --all-features --summary-only
 cargo llvm-cov -p zkbench-core --all-features --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 165 polish validation passed. `cargo test --workspace --all-features`,
+Phase 166 coverage validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. Focused Phase 165 checks verify formal pipeline outcome
-metadata, no-template reasons, scope/status telemetry, and fail-closed
-formal-lane counter validation. The `rg` package-surface check returned no package files
-(exit code 1 with empty output), confirming no `package.json` or
-`pnpm-lock.yaml` surface exists.
+mutation engine. Focused Phase 166 checks verify the public/private boundary
+mismatch pass class reporter, witness-policy movement, field reclassification
+paths, and fail-closed no-target/no-trace paths. The `rg` package-surface check
+returned no package files (exit code 1 with empty output), confirming no
+`package.json` or `pnpm-lock.yaml` surface exists.
 
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-`cargo llvm-cov -p hsai-agent-admission --all-features --summary-only`
-reported `97.08%` region coverage, `96.36%` function execution, and `97.57%`
-line coverage. `cargo llvm-cov -p zkbench-core --all-features --summary-only`
-reported `84.20%` region coverage, `79.84%` function execution, and `82.80%`
-line coverage. Branch coverage was not reported by these runs.
+The pre-tranche `cargo llvm-cov --workspace --all-features --summary-only`
+baseline reported `87.94%` region coverage, `84.18%` function execution, and
+`86.40%` line coverage. The post-tranche
+`cargo llvm-cov -p zkbench-core --all-features --summary-only` run reported
+`84.36%` region coverage, `80.23%` function execution, and `83.01%` line
+coverage for `zkbench-core`; the targeted
+`public_private_boundary_mismatch.rs` module reported `98.65%` region coverage,
+`100.00%` function execution, and `100.00%` line coverage. Branch coverage was
+not reported by these runs.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
