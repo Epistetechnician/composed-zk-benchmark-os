@@ -2471,6 +2471,32 @@ readiness, or whole-workspace 100% coverage claims.
 Exit criteria: the focused test suite passes, the targeted module reaches
 complete region/line/function coverage, and root validation remains green.
 
+## Benchmark Track: Phase 171 Mutation Coverage Sixth Tranche
+
+Status: complete for local mutation coverage sixth tranche. See
+`docs/171-phase-mutation-coverage-sixth-tranche-notes.md`.
+
+Goal: continue the path toward higher end-to-end coverage by hardening the next
+bounded low-coverage mutation module while preserving local claim boundaries.
+
+Implemented: focused regression tests for `CorruptedGuardsPass`, covering the
+class reporter, guard-provenance metadata, no-accepted-trace failure, missing
+trace-step transition skip behavior, and no-corruptible-guard failure. The pass
+also now carries the selected transition index through target selection to
+remove an impossible fallible re-lookup edge without changing emitted
+provenance or mutation semantics.
+
+Coverage result: `corrupted_guards.rs` moved from `80.39%` line / `33.33%`
+function / `85.33%` region coverage to `100.00%` line / `100.00%` function /
+`100.00%` region coverage.
+
+Anti-goals: mutation semantics changes, evidence promotion, benchmark evidence,
+external execution, Level2+ evidence, semantic-correctness claims, production
+readiness, or whole-workspace 100% coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches
+complete region/line/function coverage, and root validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
