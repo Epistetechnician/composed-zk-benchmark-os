@@ -2672,6 +2672,37 @@ Exit criteria: the focused test suite passes, the targeted module reaches the
 highest honest public-API coverage without semantic changes, and root
 validation remains green.
 
+## Benchmark Track: Phase 178 Proposal Ledger Coverage Thirteenth Tranche
+
+Status: complete for local evidence append proposal ledger coverage thirteenth
+tranche. See
+`docs/178-phase-proposal-ledger-coverage-thirteenth-tranche-notes.md`.
+
+Goal: continue the path toward higher end-to-end coverage by hardening the
+next bounded low-coverage local proposal ledger module while preserving claim
+boundaries.
+
+Implemented: focused regression tests for default construction, multi-entry
+append chaining, previous-digest linkage, sequence drift, previous-digest drift,
+stored-entry proposal-validation forwarding, future-append proposal state
+mismatch, entry-digest mismatch, save-to-directory failure, missing-file load
+failure, and malformed JSON load failure. No production code changed in this
+tranche.
+
+Coverage result: `proposal_ledger.rs` moved from `71.50%` line / `62.50%`
+function / `76.50%` region coverage to `92.27%` line / `93.75%` function /
+`93.59%` region coverage. The remaining uncovered target-file spans are
+defensive or unreachable through normal public construction.
+
+Anti-goals: proposal-ledger semantics changes, evidence promotion, benchmark
+evidence, external execution, Level2+ evidence, semantic-correctness claims,
+production readiness, unsafe coverage forcing, coverage suppression, or
+whole-workspace 100% coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches the
+highest honest public-API coverage without semantic changes, and root
+validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

@@ -3,7 +3,8 @@ use zkbench_core::{
     create_evidence_append_proposal, deserialize_evidence_append_proposal_ledger_json,
     deserialize_external_result_candidate_json, normalize_synthetic_result_candidate,
     serialize_evidence_append_proposal_ledger_json, validate_synthetic_result_candidate,
-    ClaimBoundary, EvidenceAppendProposalLedger, ResultCandidateArtifactResolver,
+    ClaimBoundary, EvidenceAppendProposalLedger, EvidenceAppendProposalReviewState,
+    EvidenceAppendProposalStatus, ResultCandidateArtifactResolver,
 };
 
 fn resolver() -> ResultCandidateArtifactResolver {
@@ -52,6 +53,32 @@ fn proposal_ledger_appends_valid_proposal_and_roundtrips() {
     let parsed =
         deserialize_evidence_append_proposal_ledger_json(&json).expect("ledger should deserialize");
     assert_eq!(ledger, parsed);
+}
+
+#[test]
+fn proposal_ledger_default_matches_new_and_chains_multiple_entries() {
+    let mut ledger = EvidenceAppendProposalLedger::default();
+    assert_eq!(ledger, EvidenceAppendProposalLedger::new());
+
+    let first = proposal();
+    let mut second = proposal();
+    second.id.push_str("_second");
+    second.source_normalized_draft_id.push_str("_second");
+
+    ledger.append(first).expect("first proposal should append");
+    ledger
+        .append(second)
+        .expect("second proposal should append");
+
+    let validation = ledger.validate();
+    assert!(validation.valid, "{:?}", validation.issues);
+    assert_eq!(validation.summary.entry_count, 2);
+    assert_eq!(ledger.entries[0].sequence_number, 0);
+    assert_eq!(ledger.entries[1].sequence_number, 1);
+    assert_eq!(
+        ledger.entries[1].previous_digest,
+        Some(ledger.entries[0].entry_digest.clone())
+    );
 }
 
 #[test]
@@ -157,4 +184,75 @@ fn proposal_ledger_detects_tampering() {
         .issues
         .iter()
         .any(|issue| issue.message.contains("digest mismatch")));
+}
+
+#[test]
+fn proposal_ledger_detects_sequence_previous_digest_and_proposal_state_drift() {
+    let mut ledger = EvidenceAppendProposalLedger::new();
+    ledger
+        .append(proposal())
+        .expect("first proposal append should work");
+    let mut second = proposal();
+    second.id.push_str("_second");
+    second.source_normalized_draft_id.push_str("_second");
+    ledger
+        .append(second)
+        .expect("second proposal append should work");
+
+    ledger.entries[1].sequence_number = 7;
+    ledger.entries[1].previous_digest = None;
+    ledger.entries[1].proposal.proposed_artifact_refs[0]
+        .artifact_ref
+        .clear();
+    ledger.entries[1].proposal.status = EvidenceAppendProposalStatus::ApprovedForFutureAppendOnly;
+    ledger.entries[1].proposal.review_state = EvidenceAppendProposalReviewState::PendingReview;
+
+    let validation = ledger.validate();
+
+    assert!(!validation.valid);
+    for expected in [
+        "sequence number 7 does not match index 1",
+        "previous digest does not match prior entry",
+        "proposal validation failed",
+        "proposal state does not authorize accepted evidence",
+        "entry digest mismatch",
+    ] {
+        assert!(
+            validation
+                .issues
+                .iter()
+                .any(|issue| issue.message.contains(expected)),
+            "missing expected validation issue containing {expected:?}: {:?}",
+            validation.issues
+        );
+    }
+}
+
+#[test]
+fn proposal_ledger_json_file_errors_are_reported() {
+    let mut ledger = EvidenceAppendProposalLedger::new();
+    ledger
+        .append(proposal())
+        .expect("proposal append should work");
+    let dir = tempdir().expect("tempdir should be available");
+
+    let save_error = ledger
+        .save_json(dir.path())
+        .expect_err("saving JSON to a directory should fail");
+    assert!(save_error
+        .to_string()
+        .contains(&dir.path().display().to_string()));
+
+    let missing_path = dir.path().join("missing-ledger.json");
+    let read_error = EvidenceAppendProposalLedger::load_json(&missing_path)
+        .expect_err("missing ledger file should fail to load");
+    assert!(read_error.to_string().contains("missing-ledger.json"));
+
+    let malformed_path = dir.path().join("malformed-ledger.json");
+    std::fs::write(&malformed_path, b"{not-json").expect("malformed fixture should write");
+    let parse_error = EvidenceAppendProposalLedger::load_json(&malformed_path)
+        .expect_err("malformed ledger JSON should fail to parse");
+    assert!(parse_error
+        .to_string()
+        .contains("proposal_ledger.load_json"));
 }

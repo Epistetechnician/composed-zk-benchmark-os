@@ -68,7 +68,8 @@ handoff coverage seventh tranche, and the Phase 173 external quarantine
 coverage eighth tranche, and the Phase 174 external synthetic coverage ninth
 tranche, and the Phase 175 acceptance policy coverage tenth tranche, and the
 Phase 176 evidence candidate coverage eleventh tranche, and the Phase 177
-promotion preflight coverage twelfth tranche, plus
+promotion preflight coverage twelfth tranche, and the Phase 178 proposal ledger
+coverage thirteenth tranche, plus
 earlier coverage-hardening follow-up work for serialization error paths, crate
 error constructors, and local soak runner
 resume/output/error-policy paths. It
@@ -805,6 +806,20 @@ external-provenance scanner loop edge. Phase 177 changes no production code,
 creates no benchmark evidence, creates no Level2+ evidence, and does not claim
 whole-workspace 100% coverage.
 
+Phase 178 continues that bounded coverage campaign over local proposal ledger
+validation code. It adds focused tests for default construction, multi-entry
+append chaining, previous-digest linkage, sequence drift, previous-digest drift,
+stored-entry proposal-validation forwarding, future-append proposal state
+mismatch, entry-digest mismatch, save-to-directory failure, missing-file load
+failure, and malformed JSON load failure. The targeted module moved from
+`71.50%` line / `62.50%` function / `76.50%` region coverage to `92.27%` line
+/ `93.75%` function / `93.59%` region coverage under
+`cargo llvm-cov -p zkbench-core --all-features --json --summary-only`. The
+remaining uncovered target-file spans are defensive or unreachable through
+normal public construction. Phase 178 changes no production code, creates no
+benchmark evidence, creates no Level2+ evidence, and does not claim
+whole-workspace 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -930,6 +945,8 @@ This report touches only:
 - `crates/zkbench-core/tests/evidence_record_candidate.rs`
 - `docs/177-phase-promotion-preflight-coverage-twelfth-tranche-notes.md`
 - `crates/zkbench-core/tests/phase_w_promotion_preflight.rs`
+- `docs/178-phase-proposal-ledger-coverage-thirteenth-tranche-notes.md`
+- `crates/zkbench-core/tests/proposal_ledger.rs`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
@@ -985,12 +1002,12 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 177 coverage validation.
+Run from repository root during Phase 178 coverage validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
-cargo test -p zkbench-core --test phase_w_promotion_preflight
+cargo test -p zkbench-core --test proposal_ledger
 cargo test -p zkbench-core --test repo_claim_boundary_docs
 cargo test -p zkbench-core --test repo_hygiene
 cargo test -p zkbench-core --test phase_161_mutation_completion
@@ -1009,16 +1026,16 @@ cargo llvm-cov -p zkbench-core --all-features --json --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 177 coverage validation passed. `cargo test --workspace --all-features`,
+Phase 178 coverage validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. Focused Phase 177 checks verify reviewed-promotion preflight
-shape, candidate, append-preview, review-decision, digest, marker, nonclaim,
-score-axis, forbidden-text, Markdown, and malformed-JSON rejection paths, plus
-official-submission package shape, digest, nonclaim, forbidden-text, Markdown,
-and malformed-JSON rejection paths. The `rg`
+mutation engine. Focused Phase 178 checks verify proposal-ledger default
+construction, multi-entry append chaining, previous-digest linkage, sequence
+drift, previous-digest drift, stored-entry proposal-validation forwarding,
+future-append proposal state mismatch, entry-digest mismatch, save-to-directory
+failure, missing-file load failure, and malformed JSON load failure. The `rg`
 package-surface check
 returned no package files (exit code 1 with empty output), confirming no
 `package.json` or `pnpm-lock.yaml` surface exists.
@@ -1026,18 +1043,17 @@ returned no package files (exit code 1 with empty output), confirming no
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-The Phase 177 post-tranche
+The Phase 178 post-tranche
 `cargo llvm-cov --workspace --all-features --json --summary-only` run reported
-`89.06%` region coverage, `85.48%` function execution, and `88.24%` line
-coverage across the workspace. The Phase 177 post-tranche
+`89.16%` region coverage, `85.68%` function execution, and `88.36%` line
+coverage across the workspace. The Phase 178 post-tranche
 `cargo llvm-cov -p zkbench-core --all-features --json --summary-only` run
-reported `85.95%` region coverage, `81.83%` function execution, and `85.44%`
+reported `86.10%` region coverage, `82.12%` function execution, and `85.61%`
 line coverage for `zkbench-core`; the targeted
-`promotion_preflight.rs` module reported `98.05%` region coverage, `94.29%`
-function execution, and `98.62%` line coverage. Branch coverage was not
-reported by these runs. The remaining uncovered target-file spans are
-serialization-error closures for structurally serializable metadata structs and
-a narrow already-covered external-provenance scanner loop edge.
+`proposal_ledger.rs` module reported `93.59%` region coverage, `93.75%`
+function execution, and `92.27%` line coverage. Branch coverage was not
+reported by these runs. The remaining uncovered target-file spans are defensive
+or unreachable through normal public construction.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
