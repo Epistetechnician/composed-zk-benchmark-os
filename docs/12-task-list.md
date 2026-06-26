@@ -2827,6 +2827,37 @@ Exit criteria: the focused test suite passes, the targeted module reaches the
 highest honest public-API coverage without semantic changes, and root
 validation remains green.
 
+## Benchmark Track: Phase 183 Local Benchmark Artifact Coverage Eighteenth Tranche
+
+Status: complete for local benchmark artifact coverage eighteenth tranche. See
+`docs/183-phase-local-benchmark-artifact-coverage-eighteenth-tranche-notes.md`.
+
+Goal: continue the path toward higher end-to-end coverage by hardening the
+next bounded low-coverage Phase U local benchmark artifact packaging surface
+while preserving claim boundaries.
+
+Implemented: focused regression tests for manifest identity and duplicate
+rejection, missing input and benchmark-pack requirements, invalid digest and
+claim-boundary rejection, portable artifact URI rejection, invalid
+render/deserialize paths, output-root file rejection, matching overwrite
+idempotence, digest sidecar UTF-8 rejection, digest drift, and non-UTF-8
+Markdown rejection. No production code changed in this tranche.
+
+Coverage result: `local_benchmark_artifact.rs` moved from `74.42%` line /
+`62.00%` function / `76.62%` region coverage to `90.08%` line / `70.00%`
+function / `84.20%` region coverage. The next package coverage floor is
+`evidence/accepted_append_output.rs` at `74.55%` line coverage.
+
+Anti-goals: artifact semantics changes, production source changes, external
+execution, generated artifact materialization, accepted Evidence Ledger
+mutation, benchmark evidence, score-axis population, Level2+ evidence,
+semantic-correctness claims, production readiness, unsafe coverage forcing,
+coverage suppression, or whole-workspace 100% coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches the
+highest honest public-API coverage without semantic changes, and root
+validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
