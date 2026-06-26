@@ -62,7 +62,8 @@ Phase 164 remaining benchmark families implementation, and the Phase 165 formal
 pipeline observability hardening implementation, and the Phase 166 mutation
 coverage first tranche, and the Phase 167 mutation coverage second tranche,
 and the Phase 168 mutation coverage third tranche, and the Phase 169 mutation
-coverage fourth tranche, plus earlier
+coverage fourth tranche, and the Phase 170 mutation coverage fifth tranche,
+plus earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
@@ -686,6 +687,20 @@ no-distinct-bypass-target failure. The targeted module moved from `76.92%` line
 169 changes no production Rust source, creates no benchmark evidence, creates
 no Level2+ evidence, and does not claim whole-workspace 100% coverage.
 
+Phase 170 continues that bounded coverage campaign over local mutation code. It
+adds focused tests for `SemanticNoOpDriftPass` covering the class reporter,
+existing-noop replacement after an earlier non-noop action, inserted drift
+assignment when no noop exists, no-declared-trace failure,
+no-true-guarded-transition failure, and no-integer-field failure. The targeted
+module moved from `73.56%` line / `57.14%` function / `76.42%` region coverage
+to `100.00%` line / `100.00%` function / `100.00%` region coverage under
+`cargo llvm-cov -p zkbench-core --all-features --json --summary-only`. Phase
+170 also carries the selected transition index through target selection before
+mutating the cloned surface, removing an impossible fallible re-lookup edge
+without changing emitted provenance or mutation semantics. Phase 170 creates no
+benchmark evidence, creates no Level2+ evidence, and does not claim
+whole-workspace 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -801,6 +816,7 @@ This report touches only:
 - `docs/167-phase-mutation-coverage-second-tranche-notes.md`
 - `docs/168-phase-mutation-coverage-third-tranche-notes.md`
 - `docs/169-phase-mutation-coverage-fourth-tranche-notes.md`
+- `docs/170-phase-mutation-coverage-fifth-tranche-notes.md`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
@@ -848,7 +864,7 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 169 coverage validation.
+Run from repository root during Phase 170 coverage validation.
 
 ```sh
 cargo fmt --all -- --check
@@ -871,31 +887,32 @@ cargo llvm-cov -p zkbench-core --all-features --json --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 169 coverage validation passed. `cargo test --workspace --all-features`,
+Phase 170 coverage validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. Focused Phase 169 checks verify the nondeterministic
-transition injection pass class reporter, injected unconditional bypass
-transition shape, provenance metadata, and fail-closed no-trace, no-transition,
-and no-distinct-bypass-target paths. The `rg` package-surface check
+mutation engine. Focused Phase 170 checks verify the semantic no-op drift pass
+class reporter, existing-noop replacement after an earlier non-noop action,
+inserted drift assignment when no noop exists, and fail-closed no-trace,
+no-true-guarded-transition, and no-integer-field paths. The `rg`
+package-surface check
 returned no package files (exit code 1 with empty output), confirming no
 `package.json` or `pnpm-lock.yaml` surface exists.
 
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-The Phase 169 post-tranche
+The Phase 170 post-tranche
 `cargo llvm-cov --workspace --all-features --summary-only` run reported
-`88.12%` region coverage, `84.73%` function execution, and `86.63%` line
-coverage across the workspace. The Phase 169 post-tranche
+`88.18%` region coverage, `84.84%` function execution, and `86.70%` line
+coverage across the workspace. The Phase 170 post-tranche
 `cargo llvm-cov -p zkbench-core --all-features --json --summary-only` run
-reported `84.51%` region coverage, `80.74%` function execution, and `83.17%`
+reported `84.60%` region coverage, `80.91%` function execution, and `83.27%`
 line coverage for `zkbench-core`; the targeted
-`nondeterministic_transition_injection.rs` module reported `100.00%` region
-coverage, `100.00%` function execution, and `100.00%` line coverage. Branch
-coverage was not reported by these runs.
+`semantic_no_op_drift.rs` module reported `100.00%` region coverage,
+`100.00%` function execution, and `100.00%` line coverage. Branch coverage was
+not reported by these runs.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

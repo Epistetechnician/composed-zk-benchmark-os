@@ -5,9 +5,7 @@ use crate::error::{Result, ZkBenchError};
 use crate::evidence::ExpectedVerdict;
 use crate::value::Value;
 
-use super::apply::{
-    finish_mutation, guard_is_true, select_primary_trace, transition_mut, MutationBuild,
-};
+use super::apply::{finish_mutation, guard_is_true, select_primary_trace, MutationBuild};
 use super::pass::{MutationApplication, MutationInput, MutationPass, MutationSafetyClass};
 use super::MutationClass;
 
@@ -30,13 +28,15 @@ impl MutationPass for SemanticNoOpDriftPass {
         })?;
 
         let mut selected = None;
-        for transition in &instance.surface_spec.machine.transitions {
+        for (transition_index, transition) in
+            instance.surface_spec.machine.transitions.iter().enumerate()
+        {
             if !guard_is_true(&transition.guard) {
                 continue;
             }
             for (index, action) in transition.actions.iter().enumerate() {
                 if let ActionSpec::Noop { .. } = action {
-                    selected = Some((transition.id.clone(), index));
+                    selected = Some((transition_index, transition.id.clone(), index));
                     break;
                 }
             }
@@ -45,22 +45,29 @@ impl MutationPass for SemanticNoOpDriftPass {
             }
         }
 
-        let (transition_id, action_index, inserted) = if let Some(found) = selected {
-            (found.0, found.1, false)
-        } else if let Some(transition) = instance
-            .surface_spec
-            .machine
-            .transitions
-            .iter()
-            .find(|transition| guard_is_true(&transition.guard))
-        {
-            (transition.id.clone(), transition.actions.len(), true)
-        } else {
-            return Err(ZkBenchError::mutation(
-                "semantic_no_op_drift.target",
-                "no guarded transition with a replaceable action was eligible",
-            ));
-        };
+        let (transition_index, transition_id, action_index, inserted) =
+            if let Some(found) = selected {
+                (found.0, found.1, found.2, false)
+            } else if let Some(transition) = instance
+                .surface_spec
+                .machine
+                .transitions
+                .iter()
+                .enumerate()
+                .find(|transition| guard_is_true(&transition.1.guard))
+            {
+                (
+                    transition.0,
+                    transition.1.id.clone(),
+                    transition.1.actions.len(),
+                    true,
+                )
+            } else {
+                return Err(ZkBenchError::mutation(
+                    "semantic_no_op_drift.target",
+                    "no guarded transition with a replaceable action was eligible",
+                ));
+            };
 
         let field_id = instance
             .surface_spec
@@ -77,7 +84,7 @@ impl MutationPass for SemanticNoOpDriftPass {
             })?;
 
         let mut surface_spec = instance.surface_spec.clone();
-        let transition = transition_mut(&mut surface_spec, &transition_id)?;
+        let transition = &mut surface_spec.machine.transitions[transition_index];
         let before = transition.actions.get(action_index).cloned();
         let replacement = ActionSpec::Assign {
             assign: AssignAction {

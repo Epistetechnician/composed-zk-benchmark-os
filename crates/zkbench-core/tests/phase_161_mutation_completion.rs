@@ -1,9 +1,12 @@
 //! Phase 161 — complete the remaining six mutation passes (14/14).
 
 use zkbench_core::{
-    apply_mutation_for_class, apply_mutation_pass, generate_instance, value::FieldVisibility,
-    ClaimBoundary, ExpectedVerdict, GeneratorConfig, GuardSpec, InstanceParams, MutationClass,
-    MutationPass, MutationSafetyClass, NondeterministicTransitionInjectionPass,
+    apply_mutation_for_class, apply_mutation_pass,
+    dsl::{AssignAction, OperandSpec},
+    generate_instance,
+    value::{FieldVisibility, Value, ValueType},
+    ActionSpec, ClaimBoundary, ExpectedVerdict, GeneratorConfig, GuardSpec, InstanceParams,
+    MutationClass, MutationPass, MutationSafetyClass, NondeterministicTransitionInjectionPass,
     PublicPrivateBoundaryMismatchPass, RecursionEnvelopeMismatchPass, SemanticNoOpDriftPass,
     TraceOrderingCorruptionPass, WitnessAliasingPass,
 };
@@ -452,6 +455,159 @@ fn semantic_no_op_drift_applies() {
     assert_eq!(mutated.mutation_class, MutationClass::SemanticNoOpDrift);
     assert_eq!(mutated.expected_verdict, ExpectedVerdict::Reject);
     assert_eq!(mutated.claim_boundary, ClaimBoundary::Level1LocalReplay);
+}
+
+#[test]
+fn semantic_no_op_drift_reports_its_class() {
+    assert_eq!(
+        SemanticNoOpDriftPass.mutation_class(),
+        MutationClass::SemanticNoOpDrift
+    );
+}
+
+#[test]
+fn semantic_no_op_drift_replaces_existing_noop_on_true_guard() {
+    let mut instance = generate_instance(nested_loop(), InstanceParams::default())
+        .expect("nested loop should generate");
+    let field_id = instance
+        .surface_spec
+        .machine
+        .fields
+        .iter()
+        .find(|field| matches!(field.field_type, ValueType::Int))
+        .expect("generated fixture should contain an integer field")
+        .id
+        .clone();
+    let transition = instance
+        .surface_spec
+        .machine
+        .transitions
+        .iter_mut()
+        .find(|transition| transition.guard == GuardSpec::Bool(true))
+        .expect("generated fixture should contain a true-guarded transition");
+    let transition_id = transition.id.clone();
+    transition.actions.push(ActionSpec::Assign {
+        assign: AssignAction {
+            field: field_id.clone(),
+            value: OperandSpec::Literal(Value::Int { int: 0 }),
+        },
+    });
+    transition.actions.push(ActionSpec::Noop { noop: true });
+
+    let mutated = apply_mutation_pass(&instance, &SemanticNoOpDriftPass)
+        .expect("semantic no-op drift should replace inserted noop");
+
+    let mutated_transition = mutated
+        .surface_spec
+        .machine
+        .transitions
+        .iter()
+        .find(|transition| transition.id == transition_id)
+        .expect("affected transition should remain present");
+    assert_eq!(
+        mutated_transition.actions[1],
+        ActionSpec::Assign {
+            assign: AssignAction {
+                field: field_id.clone(),
+                value: OperandSpec::Literal(Value::Int { int: -1 }),
+            },
+        }
+    );
+    assert_eq!(
+        mutated.provenance.affected_action_ids,
+        vec![format!("{transition_id}.actions[1]")]
+    );
+    assert_eq!(mutated.provenance.affected_field_ids, vec![field_id]);
+    assert!(mutated
+        .provenance
+        .notes
+        .iter()
+        .any(|note| note.contains("before action: Some(Noop")));
+}
+
+#[test]
+fn semantic_no_op_drift_inserts_assign_when_no_noop_exists() {
+    let instance = generate_instance(nested_loop(), InstanceParams::default())
+        .expect("nested loop should generate");
+    let transition = instance
+        .surface_spec
+        .machine
+        .transitions
+        .iter()
+        .find(|transition| transition.guard == GuardSpec::Bool(true))
+        .expect("generated fixture should contain a true-guarded transition");
+    let transition_id = transition.id.clone();
+    let original_action_count = transition.actions.len();
+
+    let mutated = apply_mutation_pass(&instance, &SemanticNoOpDriftPass)
+        .expect("semantic no-op drift should insert replacement action");
+
+    let mutated_transition = mutated
+        .surface_spec
+        .machine
+        .transitions
+        .iter()
+        .find(|transition| transition.id == transition_id)
+        .expect("affected transition should remain present");
+    assert_eq!(mutated_transition.actions.len(), original_action_count + 1);
+    assert!(matches!(
+        mutated_transition.actions[original_action_count],
+        ActionSpec::Assign { .. }
+    ));
+    assert_eq!(
+        mutated.provenance.affected_action_ids,
+        vec![format!("{transition_id}.actions[{original_action_count}]")]
+    );
+    assert!(mutated
+        .provenance
+        .notes
+        .iter()
+        .any(|note| note == "before action: None"));
+    assert!(mutated
+        .provenance
+        .description
+        .contains("hidden semantic drift"));
+}
+
+#[test]
+fn semantic_no_op_drift_fails_without_trace() {
+    let mut instance = generate_instance(nested_loop(), InstanceParams::default())
+        .expect("nested loop should generate");
+    instance.accepted_traces.clear();
+    instance.rejected_traces.clear();
+
+    let error = apply_mutation_pass(&instance, &SemanticNoOpDriftPass)
+        .expect_err("missing traces should fail before target selection");
+
+    assert!(error.to_string().contains("no declared trace"));
+}
+
+#[test]
+fn semantic_no_op_drift_fails_without_true_guarded_transition() {
+    let mut instance = generate_instance(nested_loop(), InstanceParams::default())
+        .expect("nested loop should generate");
+    for transition in &mut instance.surface_spec.machine.transitions {
+        transition.guard = GuardSpec::Bool(false);
+    }
+
+    let error = apply_mutation_pass(&instance, &SemanticNoOpDriftPass)
+        .expect_err("missing true-guarded transition should fail");
+
+    assert!(error.to_string().contains("no guarded transition"));
+}
+
+#[test]
+fn semantic_no_op_drift_fails_without_integer_field() {
+    let mut instance = generate_instance(nested_loop(), InstanceParams::default())
+        .expect("nested loop should generate");
+    for field in &mut instance.surface_spec.machine.fields {
+        field.field_type = ValueType::Bool;
+    }
+
+    let error = apply_mutation_pass(&instance, &SemanticNoOpDriftPass)
+        .expect_err("missing integer field should fail");
+
+    assert!(error.to_string().contains("no integer field"));
 }
 
 #[test]
