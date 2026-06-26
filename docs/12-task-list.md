@@ -3098,6 +3098,44 @@ Exit criteria: the focused test suite passes, the targeted module reaches the
 highest honest public-API coverage without semantic changes, and root
 validation remains green.
 
+## Phase 191 Recursion Coverage Twenty-Sixth Tranche
+
+Status: complete. See
+`docs/191-phase-recursion-coverage-twenty-sixth-tranche-notes.md`.
+
+Goal: continue the bounded local coverage campaign by targeting the next
+reachable `zkbench-core` floor after confirming the serializer-wrapper floors
+remain capped by structurally unreachable `serde_json::to_string_pretty` error
+mappings.
+
+Implemented: focused regression tests for recursion-envelope empty identity and
+missing-input validation, invalid digest algorithm/byte-length/hex-shape
+validation, metric claim-boundary escalation, recursion-adapter preparation
+empty plan shape, nested source-input and expected-artifact rejection,
+manual-handoff wrapper and mapping claim-boundary drift, and malformed JSON
+deserialization contexts. No production code changed in this tranche.
+
+Coverage result: `recursion.rs` moved from `77.29%` line / `84.21%` function /
+`84.30%` region coverage to `97.05%` line / `92.11%` function / `96.83%`
+region coverage. The package floor remains `replay/serialization.rs` at
+`75.00%` line coverage, and the next visible floor is
+`external_runner/serialization.rs` at `76.65%` line coverage; both are
+serializer-wrapper files capped by structurally unreachable concrete-type
+serialization error mappings. The next reachable `zkbench-core` floors are
+`pack/reader.rs` and `evidence/review.rs`, tied at `77.40%` line coverage.
+
+Anti-goals: recursion-envelope semantics changes, recursion-adapter semantics
+changes, production source changes, external execution, generated artifact
+materialization, accepted Evidence Ledger policy changes, benchmark evidence,
+real score-axis population, Level2+ evidence, semantic-correctness claims,
+production readiness, unsafe coverage forcing, coverage suppression,
+structurally unreachable serialization-error forcing, or whole-workspace 100%
+coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches the
+highest honest public-API coverage without semantic changes, and root
+validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
