@@ -63,9 +63,10 @@ pipeline observability hardening implementation, and the Phase 166 mutation
 coverage first tranche, and the Phase 167 mutation coverage second tranche,
 and the Phase 168 mutation coverage third tranche, and the Phase 169 mutation
 coverage fourth tranche, and the Phase 170 mutation coverage fifth tranche,
-and the Phase 171 mutation coverage sixth tranche, plus earlier
-coverage-hardening follow-up work for serialization error paths, crate error
-constructors, and local soak runner resume/output/error-policy paths. It
+and the Phase 171 mutation coverage sixth tranche, and the Phase 172 external
+handoff coverage seventh tranche, plus earlier coverage-hardening follow-up
+work for serialization error paths, crate error constructors, and local soak
+runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
 running the available workspace gates and mapping those gates to the repo's
 major behavioral surfaces.
@@ -714,6 +715,20 @@ without changing emitted provenance or mutation semantics. Phase 171 creates no
 benchmark evidence, creates no Level2+ evidence, and does not claim
 whole-workspace 100% coverage.
 
+Phase 172 continues that bounded coverage campaign over local external-runner
+manual handoff validation code. It adds focused tests for bundle and subject
+shape rejection, step instruction drift rejection, export shape rejection,
+nested provenance-contract and result-import-schema issue forwarding, and
+manual-only step false branches. The targeted module moved from `65.64%` line /
+`100.00%` function / `75.69%` region coverage to `100.00%` line /
+`100.00%` function / `100.00%` region coverage under
+`cargo llvm-cov -p zkbench-core --all-features --json --summary-only`. Phase
+172 also delegates the manual-handoff mode check to
+`ExternalExecutionMode::is_phase_h_allowed()`, removing a redundant live-mode
+disjunction without changing validation behavior. Phase 172 creates no
+benchmark evidence, creates no Level2+ evidence, and does not claim
+whole-workspace 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -831,9 +846,11 @@ This report touches only:
 - `docs/169-phase-mutation-coverage-fourth-tranche-notes.md`
 - `docs/170-phase-mutation-coverage-fifth-tranche-notes.md`
 - `docs/171-phase-mutation-coverage-sixth-tranche-notes.md`
+- `docs/172-phase-external-handoff-coverage-seventh-tranche-notes.md`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
+- `crates/zkbench-core/src/external_runner/handoff.rs`
 - `crates/zkbench-core/src/formal/`
 - `crates/zkbench-core/src/generator/config.rs`
 - `crates/zkbench-core/src/generator/deterministic.rs`
@@ -853,6 +870,7 @@ This report touches only:
 - `crates/zkbench-core/src/mutation/witness_aliasing.rs`
 - `crates/zkbench-core/src/scoring/distinguishability.rs`
 - `crates/zkbench-core/src/soak/telemetry.rs`
+- `crates/zkbench-core/tests/manual_handoff_bundle.rs`
 - `crates/zkbench-core/tests/mutation_engine.rs`
 - `crates/zkbench-core/tests/operator_soak_campaign_contract.rs`
 - `crates/zkbench-core/tests/phase_154_new_families.rs`
@@ -880,12 +898,12 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 171 coverage validation.
+Run from repository root during Phase 172 coverage validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
-cargo test -p zkbench-core --test mutation_engine
+cargo test -p zkbench-core --test manual_handoff_bundle
 cargo test -p zkbench-core --test repo_claim_boundary_docs
 cargo test -p zkbench-core --test repo_hygiene
 cargo test -p zkbench-core --test phase_161_mutation_completion
@@ -904,15 +922,15 @@ cargo llvm-cov -p zkbench-core --all-features --json --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 171 coverage validation passed. `cargo test --workspace --all-features`,
+Phase 172 coverage validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. Focused Phase 171 checks verify the corrupted guards pass
-class reporter, guard-provenance metadata, no-accepted-trace failure,
-missing-trace-step-transition skip behavior, and no-corruptible-guard failure
-paths. The `rg`
+mutation engine. Focused Phase 172 checks verify manual handoff bundle and
+subject shape rejection, step instruction drift rejection, export shape
+rejection, nested provenance-contract and result-import-schema issue
+forwarding, and manual-only step false branches. The `rg`
 package-surface check
 returned no package files (exit code 1 with empty output), confirming no
 `package.json` or `pnpm-lock.yaml` surface exists.
@@ -920,14 +938,14 @@ returned no package files (exit code 1 with empty output), confirming no
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-The Phase 171 post-tranche
+The Phase 172 post-tranche
 `cargo llvm-cov --workspace --all-features --json --summary-only` run reported
-`88.23%` region coverage, `84.97%` function execution, and `86.75%` line
-coverage across the workspace. The Phase 171 post-tranche
+`88.40%` region coverage, `85.05%` function execution, and `87.03%` line
+coverage across the workspace. The Phase 172 post-tranche
 `cargo llvm-cov -p zkbench-core --all-features --json --summary-only` run
-reported `84.65%` region coverage, `81.04%` function execution, and `83.33%`
+reported `84.91%` region coverage, `81.09%` function execution, and `83.73%`
 line coverage for `zkbench-core`; the targeted
-`corrupted_guards.rs` module reported `100.00%` region coverage,
+`handoff.rs` module reported `100.00%` region coverage,
 `100.00%` function execution, and `100.00%` line coverage. Branch coverage was
 not reported by these runs.
 

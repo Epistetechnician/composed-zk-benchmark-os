@@ -5,6 +5,7 @@ use zkbench_core::{
     generate_instance, run_local_replay, serialize_manual_handoff_bundle_json,
     validate_manual_handoff_bundle, BenchmarkPackReader, BenchmarkPackWriter, ClaimBoundary,
     EvidenceLedger, ExternalExecutionMode, GeneratorConfig, InstanceParams,
+    ManualHandoffValidation,
 };
 
 fn dry_run_plan() -> zkbench_core::ZkHarnessDryRunPlan {
@@ -110,4 +111,155 @@ fn manual_handoff_validation_rejects_nested_contract_boundary_elevation() {
     assert!(validation.issues.iter().any(|issue| {
         issue.path.contains("artifact_capture_contract") && issue.path.contains("claim_boundary")
     }));
+}
+
+#[test]
+fn manual_handoff_validation_rejects_bundle_subject_and_empty_steps() {
+    let plan = dry_run_plan();
+    let mut bundle = build_manual_handoff_bundle_from_zk_harness_plan(&plan)
+        .expect("manual handoff should build");
+    bundle.id = "  ".to_string();
+    bundle.claim_boundary = ClaimBoundary::Level2ReproducibleBenchmarkArtifact;
+    bundle.subject.dry_run_plan_id.clear();
+    bundle.subject.source_benchmark_pack_id = "  ".to_string();
+    bundle.subject.local_pack_claim_boundary = ClaimBoundary::Level2ReproducibleBenchmarkArtifact;
+    bundle.steps.clear();
+
+    let validation = validate_manual_handoff_bundle(&bundle);
+
+    assert!(!validation.valid);
+    assert_issue_path(&validation, "bundle.id");
+    assert_issue_path(&validation, "bundle.claim_boundary");
+    assert_issue_path(&validation, "bundle.subject.dry_run_plan_id");
+    assert_issue_path(&validation, "bundle.subject.source_benchmark_pack_id");
+    assert_issue_path(&validation, "bundle.subject.local_pack_claim_boundary");
+    assert_issue_path(&validation, "bundle.steps");
+}
+
+#[test]
+fn manual_handoff_validation_rejects_step_instruction_drift() {
+    let plan = dry_run_plan();
+    let mut bundle = build_manual_handoff_bundle_from_zk_harness_plan(&plan)
+        .expect("manual handoff should build");
+    let step = bundle
+        .steps
+        .first_mut()
+        .expect("manual handoff should include steps");
+    step.id = " ".to_string();
+    step.instruction.manual_only = false;
+    step.instruction.title = "../escape".to_string();
+    step.instruction.detail = "copy && execute".to_string();
+    step.instruction.inert_planned_program_name = Some("/usr/bin/zk-harness".to_string());
+    step.instruction.inert_arguments = vec!["alpha || beta".to_string()];
+    step.instruction.artifact_refs = vec!["../pack/manifest.json".to_string()];
+
+    let validation = validate_manual_handoff_bundle(&bundle);
+
+    assert!(!validation.valid);
+    assert_issue_path(&validation, "bundle.steps[0].id");
+    assert_issue_path(&validation, "bundle.steps[0].instruction.manual_only");
+    assert_issue_path(&validation, "bundle.steps[0].instruction.title");
+    assert_issue_path(&validation, "bundle.steps[0].instruction.detail");
+    assert_issue_path(
+        &validation,
+        "bundle.steps[0].instruction.inert_planned_program_name",
+    );
+    assert_issue_path(
+        &validation,
+        "bundle.steps[0].instruction.inert_arguments[0]",
+    );
+    assert_issue_path(&validation, "bundle.steps[0].instruction.artifact_refs[0]");
+}
+
+#[test]
+fn manual_handoff_validation_rejects_export_shape_drift() {
+    let plan = dry_run_plan();
+    let mut bundle = build_manual_handoff_bundle_from_zk_harness_plan(&plan)
+        .expect("manual handoff should build");
+    bundle.export.id.clear();
+    bundle.export.relative_uri = "/tmp/manual-handoff.json".to_string();
+    bundle.export.claim_boundary = ClaimBoundary::Level1LocalReplay;
+
+    let validation = validate_manual_handoff_bundle(&bundle);
+
+    assert!(!validation.valid);
+    assert_issue_path(&validation, "bundle.export.id");
+    assert_issue_path(&validation, "bundle.export.relative_uri");
+    assert_issue_path(&validation, "bundle.export.claim_boundary");
+}
+
+#[test]
+fn manual_handoff_validation_rejects_nested_provenance_and_import_schema_drift() {
+    let plan = dry_run_plan();
+    let mut bundle = build_manual_handoff_bundle_from_zk_harness_plan(&plan)
+        .expect("manual handoff should build");
+    bundle.provenance_contract.id.clear();
+    bundle.provenance_contract.claim_boundary = ClaimBoundary::Level1LocalReplay;
+    bundle.provenance_contract.required_fields.clear();
+    bundle.result_import_schema.id = " ".to_string();
+    bundle.result_import_schema.claim_boundary = ClaimBoundary::Level1LocalReplay;
+    bundle
+        .result_import_schema
+        .required_provenance_fields
+        .clear();
+
+    let validation = validate_manual_handoff_bundle(&bundle);
+
+    assert!(!validation.valid);
+    assert_issue_path(&validation, "bundle.provenance_contract.contract.id");
+    assert_issue_path(
+        &validation,
+        "bundle.provenance_contract.contract.claim_boundary",
+    );
+    assert!(validation.issues.iter().any(|issue| {
+        issue
+            .path
+            .starts_with("bundle.provenance_contract.contract.required_fields.")
+    }));
+    assert_issue_path(&validation, "bundle.result_import_schema.schema.id");
+    assert_issue_path(
+        &validation,
+        "bundle.result_import_schema.schema.claim_boundary",
+    );
+    assert!(validation.issues.iter().any(|issue| {
+        issue
+            .path
+            .starts_with("bundle.result_import_schema.schema.required_provenance_fields.")
+    }));
+}
+
+#[test]
+fn manual_handoff_manual_only_check_requires_valid_step_validation() {
+    let plan = dry_run_plan();
+    let mut bundle = build_manual_handoff_bundle_from_zk_harness_plan(&plan)
+        .expect("manual handoff should build");
+    let step = bundle
+        .steps
+        .first_mut()
+        .expect("manual handoff should include steps");
+    step.validation.valid = false;
+
+    assert!(!bundle.contains_manual_instructions_only());
+}
+
+#[test]
+fn manual_handoff_manual_only_check_requires_manual_only_steps() {
+    let plan = dry_run_plan();
+    let mut bundle = build_manual_handoff_bundle_from_zk_harness_plan(&plan)
+        .expect("manual handoff should build");
+    let step = bundle
+        .steps
+        .first_mut()
+        .expect("manual handoff should include steps");
+    step.instruction.manual_only = false;
+
+    assert!(!bundle.contains_manual_instructions_only());
+}
+
+fn assert_issue_path(validation: &ManualHandoffValidation, path: &str) {
+    assert!(
+        validation.issues.iter().any(|issue| issue.path == path),
+        "expected validation issue at {path}, got {:?}",
+        validation.issues
+    );
 }

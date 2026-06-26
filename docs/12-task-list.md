@@ -2497,6 +2497,34 @@ readiness, or whole-workspace 100% coverage claims.
 Exit criteria: the focused test suite passes, the targeted module reaches
 complete region/line/function coverage, and root validation remains green.
 
+## Benchmark Track: Phase 172 External Handoff Coverage Seventh Tranche
+
+Status: complete for local external handoff coverage seventh tranche. See
+`docs/172-phase-external-handoff-coverage-seventh-tranche-notes.md`.
+
+Goal: continue the path toward higher end-to-end coverage by hardening the
+next bounded low-coverage local external-runner module while preserving manual
+handoff claim boundaries.
+
+Implemented: focused regression tests for the manual handoff validator,
+covering bundle and subject shape rejection, step instruction drift rejection,
+export shape rejection, nested provenance-contract and result-import-schema
+issue forwarding, and false branches for manual-only step checks. The validator
+also now uses the existing `ExternalExecutionMode::is_phase_h_allowed()`
+predicate directly, removing a redundant live-mode disjunction without
+changing manual handoff validation behavior.
+
+Coverage result: `handoff.rs` moved from `65.64%` line / `100.00%` function /
+`75.69%` region coverage to `100.00%` line / `100.00%` function / `100.00%`
+region coverage.
+
+Anti-goals: manual handoff semantics changes, evidence promotion, benchmark
+evidence, external execution, Level2+ evidence, semantic-correctness claims,
+production readiness, or whole-workspace 100% coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches
+complete region/line/function coverage, and root validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

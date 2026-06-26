@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 use crate::evidence::{ArtifactDigest, ClaimBoundary};
 
 use super::artifact_capture::{validate_artifact_capture_contract, ArtifactCaptureContract};
-use super::policy::{validate_external_runner_policy, ExternalExecutionMode, ExternalRunnerPolicy};
+use super::policy::{validate_external_runner_policy, ExternalRunnerPolicy};
 use super::provenance::{validate_provenance_contract, ProvenanceContract};
 use super::result_import::{validate_external_result_import_schema, ExternalResultImportSchema};
 use super::validation::{
@@ -219,12 +219,7 @@ pub fn validate_manual_handoff_bundle(bundle: &ManualHandoffBundle) -> ManualHan
             "manual handoff bundles must remain Level0DesignNote",
         ));
     }
-    if bundle.allows_live_execution()
-        || !matches!(
-            bundle.external_runner_policy.mode,
-            ExternalExecutionMode::Disabled | ExternalExecutionMode::ManualHandoffOnly
-        )
-    {
+    if !bundle.external_runner_policy.mode.is_phase_h_allowed() {
         issues.push(ManualHandoffValidationIssue::error(
             "bundle.external_runner_policy.mode",
             "manual handoff bundle requested live execution",
