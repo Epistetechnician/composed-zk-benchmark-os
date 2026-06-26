@@ -72,7 +72,8 @@ promotion preflight coverage twelfth tranche, and the Phase 178 proposal ledger
 coverage thirteenth tranche, and the Phase 179 zkML coverage fourteenth tranche,
 and the Phase 180 external submission preflight coverage fifteenth tranche, and
 the Phase 181 soak shard coverage sixteenth tranche, and the Phase 182 evidence
-eligibility coverage seventeenth tranche, plus
+eligibility coverage seventeenth tranche, and the Phase 183 local benchmark
+artifact coverage eighteenth tranche, plus
 earlier coverage-hardening follow-up work for serialization error paths, crate
 error constructors, and local soak runner
 resume/output/error-policy paths. It
@@ -876,6 +877,21 @@ package coverage floor is `local_benchmark_artifact.rs` at `74.42%` line
 coverage. Phase 182 changes no production code, creates no benchmark evidence,
 creates no Level2+ evidence, and does not claim whole-workspace 100% coverage.
 
+Phase 183 continues that bounded coverage campaign over the Phase U local
+benchmark artifact packaging surface. It adds focused tests for manifest
+identity and duplicate rejection, missing input and benchmark-pack
+requirements, invalid digest and claim-boundary rejection, portable artifact
+URI rejection, invalid render/deserialize paths, output-root file rejection,
+matching overwrite idempotence, digest sidecar UTF-8 rejection, digest drift,
+and non-UTF-8 Markdown rejection. The targeted module moved from `74.42%` line
+/ `62.00%` function / `76.62%` region coverage to `90.08%` line / `70.00%`
+function / `84.20%` region coverage under
+`cargo llvm-cov -p zkbench-core --all-features --json --summary-only`. The next
+package coverage floor is `evidence/accepted_append_output.rs` at `74.55%`
+line coverage. Phase 183 changes no production code, creates no benchmark
+evidence, creates no Level2+ evidence, and does not claim whole-workspace 100%
+coverage.
+
 ## State Slice
 
 This report touches only:
@@ -1011,6 +1027,8 @@ This report touches only:
 - `crates/zkbench-core/tests/phase_181_soak_shard_coverage.rs`
 - `docs/182-phase-evidence-eligibility-coverage-seventeenth-tranche-notes.md`
 - `crates/zkbench-core/tests/phase_182_evidence_eligibility_coverage.rs`
+- `docs/183-phase-local-benchmark-artifact-coverage-eighteenth-tranche-notes.md`
+- `crates/zkbench-core/tests/phase_183_local_benchmark_artifact_coverage.rs`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
@@ -1066,11 +1084,12 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 182 coverage validation.
+Run from repository root during Phase 183 coverage validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
+cargo test -p zkbench-core --test phase_183_local_benchmark_artifact_coverage
 cargo test -p zkbench-core --test phase_182_evidence_eligibility_coverage
 cargo test -p zkbench-core --test phase_181_soak_shard_coverage
 cargo test -p zkbench-core --test phase_180_external_submission_preflight_coverage
@@ -1094,12 +1113,17 @@ cargo llvm-cov -p zkbench-core --all-features --json --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 182 coverage validation passed. `cargo test --workspace --all-features`,
+Phase 183 coverage validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. Focused Phase 182 checks verify required
+mutation engine. Focused Phase 183 checks verify manifest identity and
+duplicate rejection, missing input and benchmark-pack requirements, invalid
+digest and claim-boundary rejection, portable artifact URI rejection, invalid
+render/deserialize paths, output-root file rejection, matching overwrite
+idempotence, digest sidecar UTF-8 rejection, digest drift, and non-UTF-8
+Markdown rejection. Focused Phase 182 checks verify required
 external-artifact-capture and replay-manifest marker paths, invalid candidate
 blocking and finding metadata, missing artifact/provenance reasons, forbidden
 claim flags, Level2 boundary blocking, malformed eligibility report JSON
@@ -1123,16 +1147,17 @@ returned no package files (exit code 1 with empty output), confirming no
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-The Phase 182 post-tranche
+The Phase 183 post-tranche
 `cargo llvm-cov --workspace --all-features --json --summary-only` run reported
-`89.67%` region coverage, `85.99%` function execution, and `89.26%` line
-coverage across the workspace. The Phase 182 post-tranche
+`89.82%` region coverage, `86.15%` function execution, and `89.56%` line
+coverage across the workspace. The Phase 183 post-tranche
 `cargo llvm-cov -p zkbench-core --all-features --json --summary-only` run
-reported `86.88%` region coverage, `82.57%` function execution, and `86.88%`
-line coverage for `zkbench-core`; the targeted `evidence/eligibility.rs` module
-reported `95.88%` region coverage, `92.86%` function execution, and `96.25%`
-line coverage. Branch coverage was not reported by these runs. The next package
-coverage floor is `local_benchmark_artifact.rs` at `74.42%` line coverage.
+reported `87.12%` region coverage, `82.80%` function execution, and `87.30%`
+line coverage for `zkbench-core`; the targeted `local_benchmark_artifact.rs`
+module reported `84.20%` region coverage, `70.00%` function execution, and
+`90.08%` line coverage. Branch coverage was not reported by these runs. The
+next package coverage floor is `evidence/accepted_append_output.rs` at `74.55%`
+line coverage.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
