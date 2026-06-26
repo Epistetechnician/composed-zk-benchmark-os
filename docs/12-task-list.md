@@ -2956,6 +2956,39 @@ Exit criteria: the focused test suite passes, the targeted module reaches the
 highest honest public-API coverage without semantic changes, and root
 validation remains green.
 
+## Benchmark Track: Phase 187 Scoring Coverage Twenty-Second Tranche
+
+Status: complete for scoring coverage twenty-second tranche. See
+`docs/187-phase-scoring-coverage-twenty-second-tranche-notes.md`.
+
+Goal: continue the path toward higher end-to-end coverage by hardening the
+next reachable low-coverage score-report validation surface while preserving
+claim boundaries.
+
+Implemented: focused regression tests for higher-boundary confidence mapping,
+safe higher-boundary axis validation, local populated-axis rejection across all
+axes, invalid axis value rejection, forbidden axis-note text rejection, and
+`CapabilityGap` risk-penalty text validation. No production code changed in
+this tranche.
+
+Coverage result: `scoring/mod.rs` moved from `76.60%` line / `100.00%`
+function / `76.86%` region coverage to `100.00%` line / `100.00%` function /
+`100.00%` region coverage. The package floor remains `replay/serialization.rs`
+at `75.00%` line coverage because its remaining uncovered lines are
+structurally unreachable `serde_json::to_string_pretty` error mappings for
+concrete derived replay structs.
+
+Anti-goals: scoring semantics changes, production source changes, external
+execution, generated artifact materialization, accepted Evidence Ledger policy
+changes, benchmark evidence, real score-axis population, Level2+ evidence,
+semantic-correctness claims, production readiness, unsafe coverage forcing,
+coverage suppression, structurally unreachable serialization-error forcing, or
+whole-workspace 100% coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches the
+highest honest public-API coverage without semantic changes, and root
+validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
