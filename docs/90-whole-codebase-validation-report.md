@@ -66,7 +66,8 @@ coverage fourth tranche, and the Phase 170 mutation coverage fifth tranche,
 and the Phase 171 mutation coverage sixth tranche, and the Phase 172 external
 handoff coverage seventh tranche, and the Phase 173 external quarantine
 coverage eighth tranche, and the Phase 174 external synthetic coverage ninth
-tranche, and the Phase 175 acceptance policy coverage tenth tranche, plus
+tranche, and the Phase 175 acceptance policy coverage tenth tranche, and the
+Phase 176 evidence candidate coverage eleventh tranche, plus
 earlier coverage-hardening follow-up work for serialization error paths, crate
 error constructors, and local soak runner
 resume/output/error-policy paths. It
@@ -773,6 +774,21 @@ serializable policy type. Phase 175 changes no production code, creates no
 benchmark evidence, creates no Level2+ evidence, and does not claim
 whole-workspace 100% coverage.
 
+Phase 176 continues that bounded coverage campaign over local evidence-record
+candidate validation code. It adds focused tests for candidate-only design-note
+creation, invalid policy rejection, non-candidate policy mode rejection,
+candidate status behavior, malformed candidate JSON error mapping,
+acceptance-validation failure, Level2+ boundary rejection, individual claim
+flags, disallowed evidence classes, local metadata rejection, forbidden claim
+text, and missing-provenance rejection. The targeted module moved from `69.92%`
+line / `78.57%` function / `76.33%` region coverage to `93.50%` line /
+`92.86%` function / `96.14%` region coverage under
+`cargo llvm-cov -p zkbench-core --all-features --json --summary-only`. The
+remaining uncovered target-file spans are defensive or unreachable through the
+public constructor and validator. Phase 176 changes no production code, creates
+no benchmark evidence, creates no Level2+ evidence, and does not claim
+whole-workspace 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -894,6 +910,8 @@ This report touches only:
 - `docs/173-phase-external-quarantine-coverage-eighth-tranche-notes.md`
 - `docs/174-phase-external-synthetic-coverage-ninth-tranche-notes.md`
 - `docs/175-phase-acceptance-policy-coverage-tenth-tranche-notes.md`
+- `docs/176-phase-evidence-candidate-coverage-eleventh-tranche-notes.md`
+- `crates/zkbench-core/tests/evidence_record_candidate.rs`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
@@ -949,12 +967,12 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 175 coverage validation.
+Run from repository root during Phase 176 coverage validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
-cargo test -p zkbench-core --test proposal_acceptance_policy
+cargo test -p zkbench-core --test evidence_record_candidate
 cargo test -p zkbench-core --test repo_claim_boundary_docs
 cargo test -p zkbench-core --test repo_hygiene
 cargo test -p zkbench-core --test phase_161_mutation_completion
@@ -973,16 +991,16 @@ cargo llvm-cov -p zkbench-core --all-features --json --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 175 coverage validation passed. `cargo test --workspace --all-features`,
+Phase 176 coverage validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. Focused Phase 175 checks verify acceptance policy JSON round
-trip, malformed JSON error mapping, default policy behavior, static policy
-rejection, proposal-only rule-result rejection, source proposal rejection,
-changes-requested review state, invalid review decisions, automated review
-rejection, and official/formal/soundness text rejection. The `rg`
+mutation engine. Focused Phase 176 checks verify evidence-record candidate
+creation, status behavior, malformed JSON error mapping, acceptance-validation
+failure, Level2+ boundary rejection, individual claim-flag rejection,
+disallowed evidence-class rejection, local metadata rejection, forbidden claim
+text rejection, and missing-provenance rejection. The `rg`
 package-surface check
 returned no package files (exit code 1 with empty output), confirming no
 `package.json` or `pnpm-lock.yaml` surface exists.
@@ -990,17 +1008,18 @@ returned no package files (exit code 1 with empty output), confirming no
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-The Phase 175 post-tranche
+The Phase 176 post-tranche
 `cargo llvm-cov --workspace --all-features --json --summary-only` run reported
-`88.72%` region coverage, `85.32%` function execution, and `87.52%` line
-coverage across the workspace. The Phase 175 post-tranche
+`88.82%` region coverage, `85.40%` function execution, and `87.69%` line
+coverage across the workspace. The Phase 176 post-tranche
 `cargo llvm-cov -p zkbench-core --all-features --json --summary-only` run
-reported `85.42%` region coverage, `81.61%` function execution, and `84.42%`
+reported `85.58%` region coverage, `81.72%` function execution, and `84.66%`
 line coverage for `zkbench-core`; the targeted
-`acceptance_policy.rs` module reported `98.26%` region coverage,
-`94.74%` function execution, and `98.82%` line coverage. Branch coverage was
-not reported by these runs. The remaining uncovered target-file branch is the
-impossible `serde_json::to_string_pretty` serialization-error closure.
+`candidate.rs` module reported `96.14%` region coverage, `92.86%` function
+execution, and `93.50%` line coverage. Branch coverage was not reported by
+these runs. The remaining uncovered target-file spans are defensive or
+unreachable through the public constructor and validator, including the
+`serde_json::to_string_pretty` serialization-error closure.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
