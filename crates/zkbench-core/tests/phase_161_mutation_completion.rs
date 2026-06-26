@@ -232,6 +232,117 @@ fn witness_aliasing_applies() {
 }
 
 #[test]
+fn witness_aliasing_reports_its_class() {
+    assert_eq!(
+        WitnessAliasingPass.mutation_class(),
+        MutationClass::WitnessAliasing
+    );
+}
+
+#[test]
+fn witness_aliasing_uses_existing_private_witness_slot() {
+    let instance = generate_instance(
+        GeneratorConfig::public_private_boundary_stress(),
+        InstanceParams::default(),
+    )
+    .expect("public/private family should generate");
+    let witness = instance.surface_spec.machine.private_witnesses[0].clone();
+    let alias_id = format!("{}_alias", witness.id);
+
+    let mutated = apply_mutation_pass(&instance, &WitnessAliasingPass)
+        .expect("witness aliasing should apply");
+
+    assert!(mutated.surface_spec.machine.witness_policy.aliasing_allowed);
+    assert!(mutated
+        .surface_spec
+        .machine
+        .private_witnesses
+        .iter()
+        .any(|entry| entry.id == alias_id
+            && entry.field == witness.field
+            && entry.description.as_deref() == Some("aliased private witness slot")));
+    assert!(mutated
+        .surface_spec
+        .machine
+        .witness_policy
+        .private_witnesses
+        .contains(&witness.field));
+    assert_eq!(
+        mutated.provenance.affected_field_ids,
+        vec![witness.field.clone()]
+    );
+    assert!(mutated.provenance.description.contains(&format!(
+        "aliased private witness slots for '{}'",
+        witness.id
+    )));
+    assert!(mutated
+        .provenance
+        .notes
+        .contains(&format!("added aliased witness '{alias_id}'")));
+    assert!(mutated
+        .provenance
+        .notes
+        .contains(&"witness_policy.aliasing_allowed set to true".to_string()));
+}
+
+#[test]
+fn witness_aliasing_synthesizes_private_witness_from_first_field() {
+    let mut instance = generate_instance(guard_heavy_machine(), InstanceParams::default())
+        .expect("guard-heavy machine should generate");
+    instance.surface_spec.machine.private_witnesses.clear();
+    instance
+        .surface_spec
+        .machine
+        .witness_policy
+        .private_witnesses
+        .clear();
+    let field_id = instance.surface_spec.machine.fields[0].id.clone();
+    let synthetic_witness_id = format!("private_{field_id}");
+    let alias_id = format!("{synthetic_witness_id}_alias");
+
+    let mutated = apply_mutation_pass(&instance, &WitnessAliasingPass)
+        .expect("field fallback should synthesize an aliased witness");
+
+    assert!(mutated
+        .surface_spec
+        .machine
+        .private_witnesses
+        .iter()
+        .any(|entry| entry.id == alias_id && entry.field == field_id));
+    assert_eq!(mutated.provenance.affected_field_ids, vec![field_id]);
+    assert!(mutated
+        .provenance
+        .description
+        .contains(&synthetic_witness_id));
+}
+
+#[test]
+fn witness_aliasing_fails_without_trace() {
+    let mut instance = generate_instance(guard_heavy_machine(), InstanceParams::default())
+        .expect("guard-heavy machine should generate");
+    instance.accepted_traces.clear();
+    instance.rejected_traces.clear();
+
+    let error = apply_mutation_pass(&instance, &WitnessAliasingPass)
+        .expect_err("missing traces should fail before witness selection");
+
+    assert!(error.to_string().contains("no declared trace"));
+}
+
+#[test]
+fn witness_aliasing_fails_without_private_witness_or_field() {
+    let mut instance = generate_instance(guard_heavy_machine(), InstanceParams::default())
+        .expect("guard-heavy machine should generate");
+    instance.surface_spec.machine.private_witnesses.clear();
+    instance.surface_spec.machine.fields.clear();
+
+    let error = apply_mutation_pass(&instance, &WitnessAliasingPass)
+        .expect_err("missing witness and field target should fail");
+
+    assert!(error.to_string().contains("no private witness or field"));
+}
+
+#[test]
 fn semantic_no_op_drift_applies() {
     let instance = generate_instance(nested_loop(), InstanceParams::default())
         .expect("nested loop should generate");

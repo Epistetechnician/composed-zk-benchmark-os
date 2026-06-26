@@ -61,7 +61,7 @@ implementation, and the Phase 163 formal lane pipeline implementation, and the
 Phase 164 remaining benchmark families implementation, and the Phase 165 formal
 pipeline observability hardening implementation, and the Phase 166 mutation
 coverage first tranche, and the Phase 167 mutation coverage second tranche,
-plus earlier
+and the Phase 168 mutation coverage third tranche, plus earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
@@ -664,6 +664,16 @@ moved from `69.44%` line / `33.33%` function / `83.33%` region coverage to
 changes no production Rust source, creates no benchmark evidence, creates no
 Level2+ evidence, and does not claim whole-workspace 100% coverage.
 
+Phase 168 continues that bounded coverage campaign over local mutation code. It
+adds focused tests for `WitnessAliasingPass` covering the class reporter,
+existing private-witness aliasing, fallback field-derived witness synthesis,
+provenance metadata, no-declared-trace failure, and no-target failure. The
+targeted module moved from `78.18%` line / `33.33%` function / `81.25%` region
+coverage to `100.00%` line / `100.00%` function / `100.00%` region coverage
+under `cargo llvm-cov -p zkbench-core --all-features --summary-only`. Phase 168
+changes no production Rust source, creates no benchmark evidence, creates no
+Level2+ evidence, and does not claim whole-workspace 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -777,6 +787,7 @@ This report touches only:
 - `docs/165-phase-formal-pipeline-observability-hardening-notes.md`
 - `docs/166-phase-mutation-coverage-first-tranche-notes.md`
 - `docs/167-phase-mutation-coverage-second-tranche-notes.md`
+- `docs/168-phase-mutation-coverage-third-tranche-notes.md`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
@@ -824,7 +835,7 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 167 coverage validation.
+Run from repository root during Phase 168 coverage validation.
 
 ```sh
 cargo fmt --all -- --check
@@ -846,30 +857,30 @@ cargo llvm-cov -p zkbench-core --all-features --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 167 coverage validation passed. `cargo test --workspace --all-features`,
+Phase 168 coverage validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. Focused Phase 167 checks verify the trace-ordering corruption
-pass class reporter, deterministic first-two-step swapping, provenance
-metadata, and fail-closed no-accepted-trace/single-step-trace paths. The `rg`
-package-surface check
+mutation engine. Focused Phase 168 checks verify the witness-aliasing pass
+class reporter, existing private-witness aliasing path, fallback field-derived
+witness path, provenance metadata, and fail-closed no-trace/no-target paths.
+The `rg` package-surface check
 returned no package files (exit code 1 with empty output), confirming no
 `package.json` or `pnpm-lock.yaml` surface exists.
 
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-The Phase 167 post-tranche
+The Phase 168 post-tranche
 `cargo llvm-cov --workspace --all-features --summary-only` run reported
-`88.05%` region coverage, `84.45%` function execution, and `86.55%` line
-coverage across the workspace. The Phase 167 post-tranche
+`88.08%` region coverage, `84.57%` function execution, and `86.59%` line
+coverage across the workspace. The Phase 168 post-tranche
 `cargo llvm-cov -p zkbench-core --all-features --summary-only` run reported
-`84.39%` region coverage, `80.34%` function execution, and `83.05%` line
-coverage for `zkbench-core`; the targeted `trace_ordering_corruption.rs` module
-reported `100.00%` region coverage, `100.00%` function execution, and
-`100.00%` line coverage. Branch coverage was not reported by these runs.
+`84.45%` region coverage, `80.51%` function execution, and `83.11%` line
+coverage for `zkbench-core`; the targeted `witness_aliasing.rs` module reported
+`100.00%` region coverage, `100.00%` function execution, and `100.00%` line
+coverage. Branch coverage was not reported by these runs.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
