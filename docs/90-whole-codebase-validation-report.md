@@ -66,8 +66,9 @@ coverage fourth tranche, and the Phase 170 mutation coverage fifth tranche,
 and the Phase 171 mutation coverage sixth tranche, and the Phase 172 external
 handoff coverage seventh tranche, and the Phase 173 external quarantine
 coverage eighth tranche, and the Phase 174 external synthetic coverage ninth
-tranche, plus earlier coverage-hardening follow-up work for serialization error
-paths, crate error constructors, and local soak runner
+tranche, and the Phase 175 acceptance policy coverage tenth tranche, plus
+earlier coverage-hardening follow-up work for serialization error paths, crate
+error constructors, and local soak runner
 resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
 running the available workspace gates and mapping those gates to the repo's
@@ -753,9 +754,24 @@ provenance, metric, pending-review fallback, and multiple-issue priority
 paths. The targeted module moved from `69.05%` line / `72.73%` function /
 `69.88%` region coverage to `100.00%` line / `100.00%` function /
 `100.00%` region coverage under
-`cargo llvm-cov -p zkbench-core --all-features --json --summary-only`. Phase
-174 changes no production code, creates no benchmark evidence, creates no
-Level2+ evidence, and does not claim whole-workspace 100% coverage.
+`cargo llvm-cov -p zkbench-core --all-features --json --summary-only`.
+Phase 174 changes no production code, creates no benchmark evidence, creates
+no Level2+ evidence, and does not claim whole-workspace 100% coverage.
+
+Phase 175 continues that bounded coverage campaign over local evidence
+acceptance policy validation code. It adds focused tests for policy JSON round
+trip, malformed JSON error mapping, the `Default` policy path, static policy
+rejection, proposal-only rule-result rejection, source proposal rejection
+paths, changes-requested review state, invalid review decisions, automated
+review rejection, and official/formal/soundness text rejection. The targeted
+module moved from `69.23%` line / `73.68%` function / `73.61%` region
+coverage to `98.82%` line / `94.74%` function / `98.26%` region coverage
+under `cargo llvm-cov -p zkbench-core --all-features --json --summary-only`.
+The remaining uncovered target-file branch is the impossible
+`serde_json::to_string_pretty` serialization-error closure for a structurally
+serializable policy type. Phase 175 changes no production code, creates no
+benchmark evidence, creates no Level2+ evidence, and does not claim
+whole-workspace 100% coverage.
 
 ## State Slice
 
@@ -877,6 +893,7 @@ This report touches only:
 - `docs/172-phase-external-handoff-coverage-seventh-tranche-notes.md`
 - `docs/173-phase-external-quarantine-coverage-eighth-tranche-notes.md`
 - `docs/174-phase-external-synthetic-coverage-ninth-tranche-notes.md`
+- `docs/175-phase-acceptance-policy-coverage-tenth-tranche-notes.md`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
@@ -904,6 +921,7 @@ This report touches only:
 - `crates/zkbench-core/tests/manual_handoff_bundle.rs`
 - `crates/zkbench-core/tests/mutation_engine.rs`
 - `crates/zkbench-core/tests/operator_soak_campaign_contract.rs`
+- `crates/zkbench-core/tests/proposal_acceptance_policy.rs`
 - `crates/zkbench-core/tests/result_import_validation.rs`
 - `crates/zkbench-core/tests/synthetic_result_import.rs`
 - `crates/zkbench-core/tests/phase_154_new_families.rs`
@@ -931,12 +949,12 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 174 coverage validation.
+Run from repository root during Phase 175 coverage validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
-cargo test -p zkbench-core --test synthetic_result_import
+cargo test -p zkbench-core --test proposal_acceptance_policy
 cargo test -p zkbench-core --test repo_claim_boundary_docs
 cargo test -p zkbench-core --test repo_hygiene
 cargo test -p zkbench-core --test phase_161_mutation_completion
@@ -955,15 +973,16 @@ cargo llvm-cov -p zkbench-core --all-features --json --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 174 coverage validation passed. `cargo test --workspace --all-features`,
+Phase 175 coverage validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. Focused Phase 174 checks verify synthetic quarantine reason
-selection for claim-boundary, official benchmark, formal, soundness, digest
-mismatch, invalid digest, provenance, metric, pending-review fallback, and
-multiple-issue priority cases. The `rg`
+mutation engine. Focused Phase 175 checks verify acceptance policy JSON round
+trip, malformed JSON error mapping, default policy behavior, static policy
+rejection, proposal-only rule-result rejection, source proposal rejection,
+changes-requested review state, invalid review decisions, automated review
+rejection, and official/formal/soundness text rejection. The `rg`
 package-surface check
 returned no package files (exit code 1 with empty output), confirming no
 `package.json` or `pnpm-lock.yaml` surface exists.
@@ -971,16 +990,17 @@ returned no package files (exit code 1 with empty output), confirming no
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-The Phase 174 post-tranche
+The Phase 175 post-tranche
 `cargo llvm-cov --workspace --all-features --json --summary-only` run reported
-`88.55%` region coverage, `85.24%` function execution, and `87.23%` line
-coverage across the workspace. The Phase 174 post-tranche
+`88.72%` region coverage, `85.32%` function execution, and `87.52%` line
+coverage across the workspace. The Phase 175 post-tranche
 `cargo llvm-cov -p zkbench-core --all-features --json --summary-only` run
-reported `85.14%` region coverage, `81.38%` function execution, and `84.01%`
+reported `85.42%` region coverage, `81.61%` function execution, and `84.42%`
 line coverage for `zkbench-core`; the targeted
-`synthetic.rs` module reported `100.00%` region coverage,
-`100.00%` function execution, and `100.00%` line coverage. Branch coverage was
-not reported by these runs.
+`acceptance_policy.rs` module reported `98.26%` region coverage,
+`94.74%` function execution, and `98.82%` line coverage. Branch coverage was
+not reported by these runs. The remaining uncovered target-file branch is the
+impossible `serde_json::to_string_pretty` serialization-error closure.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

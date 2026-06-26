@@ -2579,6 +2579,37 @@ claims, production readiness, or whole-workspace 100% coverage claims.
 Exit criteria: the focused test suite passes, the targeted module reaches
 complete region/line/function coverage, and root validation remains green.
 
+## Benchmark Track: Phase 175 Acceptance Policy Coverage Tenth Tranche
+
+Status: complete for local evidence acceptance policy coverage tenth tranche.
+See `docs/175-phase-acceptance-policy-coverage-tenth-tranche-notes.md`.
+
+Goal: continue the path toward higher end-to-end coverage by hardening the
+next bounded low-coverage local evidence policy module while preserving claim
+boundaries.
+
+Implemented: focused regression tests for policy JSON round trip, malformed
+JSON error mapping, the default policy path, static policy rejection, proposal
+mode rule-result rejection, source proposal rejection paths, changes-requested
+review state, invalid review decisions, automated review rejection, and
+official/formal/soundness text rejection. No production code changed in this
+tranche.
+
+Coverage result: `acceptance_policy.rs` moved from `69.23%` line / `73.68%`
+function / `73.61%` region coverage to `98.82%` line / `94.74%` function /
+`98.26%` region coverage. The remaining uncovered target-file branch is the
+impossible `serde_json::to_string_pretty` serialization-error closure for a
+structurally serializable policy type.
+
+Anti-goals: policy semantics changes, evidence promotion, benchmark evidence,
+external execution, Level2+ evidence, semantic-correctness claims, production
+readiness, unsafe coverage forcing, coverage suppression, or whole-workspace
+100% coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches the
+highest honest public-API coverage without semantic changes, and root
+validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
