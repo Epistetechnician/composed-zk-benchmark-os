@@ -3061,6 +3061,43 @@ Exit criteria: the focused test suite passes, the targeted module reaches the
 highest honest public-API coverage without semantic changes, and root
 validation remains green.
 
+## Phase 190 Generator Instance Coverage Twenty-Fifth Tranche
+
+Status: complete. See
+`docs/190-phase-generator-instance-coverage-twenty-fifth-tranche-notes.md`.
+
+Goal: continue the bounded local coverage campaign by targeting the next
+reachable `zkbench-core` floor after confirming the serializer-wrapper floors
+remain capped by structurally unreachable `serde_json::to_string_pretty` error
+mappings.
+
+Implemented: one focused regression test for generated instance fallback
+behavior when the semantic oracle has no accepted or rejected traces: fallback
+primary-trace identity, empty initial/final fields, empty steps, empty required
+capabilities, `ExpectedVerdict::Inconclusive`, empty expected-verdict
+collection, custom suffix preservation, and family claim-boundary preservation.
+No production code changed in this tranche.
+
+Coverage result: `generator/instance.rs` moved from `77.27%` line / `50.00%`
+function / `76.47%` region coverage to `100.00%` line / `100.00%` function /
+`100.00%` region coverage. The package floor remains `replay/serialization.rs`
+at `75.00%` line coverage, and the next visible floor is
+`external_runner/serialization.rs` at `76.65%` line coverage; both are
+serializer-wrapper files capped by structurally unreachable concrete-type
+serialization error mappings. The next reachable `zkbench-core` floor is
+`recursion.rs` at `77.29%` line coverage.
+
+Anti-goals: generator instance semantics changes, production source changes,
+external execution, generated artifact materialization, accepted Evidence
+Ledger policy changes, benchmark evidence, real score-axis population, Level2+
+evidence, semantic-correctness claims, production readiness, unsafe coverage
+forcing, coverage suppression, structurally unreachable serialization-error
+forcing, or whole-workspace 100% coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches the
+highest honest public-API coverage without semantic changes, and root
+validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

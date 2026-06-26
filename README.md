@@ -275,6 +275,7 @@ Surface DSL
 | [docs/187-phase-scoring-coverage-twenty-second-tranche-notes.md](docs/187-phase-scoring-coverage-twenty-second-tranche-notes.md) | Phase 187 scoring coverage twenty-second tranche notes. |
 | [docs/188-phase-soak-reproduction-coverage-twenty-third-tranche-notes.md](docs/188-phase-soak-reproduction-coverage-twenty-third-tranche-notes.md) | Phase 188 soak reproduction coverage twenty-third tranche notes. |
 | [docs/189-phase-external-runner-importer-coverage-twenty-fourth-tranche-notes.md](docs/189-phase-external-runner-importer-coverage-twenty-fourth-tranche-notes.md) | Phase 189 external runner importer coverage twenty-fourth tranche notes. |
+| [docs/190-phase-generator-instance-coverage-twenty-fifth-tranche-notes.md](docs/190-phase-generator-instance-coverage-twenty-fifth-tranche-notes.md) | Phase 190 generator instance coverage twenty-fifth tranche notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
