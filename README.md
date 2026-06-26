@@ -259,6 +259,7 @@ Surface DSL
 | [docs/171-phase-mutation-coverage-sixth-tranche-notes.md](docs/171-phase-mutation-coverage-sixth-tranche-notes.md) | Phase 171 mutation coverage sixth tranche notes. |
 | [docs/172-phase-external-handoff-coverage-seventh-tranche-notes.md](docs/172-phase-external-handoff-coverage-seventh-tranche-notes.md) | Phase 172 external handoff coverage seventh tranche notes. |
 | [docs/173-phase-external-quarantine-coverage-eighth-tranche-notes.md](docs/173-phase-external-quarantine-coverage-eighth-tranche-notes.md) | Phase 173 external quarantine coverage eighth tranche notes. |
+| [docs/174-phase-external-synthetic-coverage-ninth-tranche-notes.md](docs/174-phase-external-synthetic-coverage-ninth-tranche-notes.md) | Phase 174 external synthetic coverage ninth tranche notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |

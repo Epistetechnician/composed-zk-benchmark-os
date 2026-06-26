@@ -1,6 +1,9 @@
 use zkbench_core::{
-    import_synthetic_result_candidate_json, score_report_from_evidence,
-    serialize_synthetic_result_import_bundle_json, ClaimBoundary, ResultCandidateArtifactResolver,
+    deserialize_external_result_candidate_json, import_synthetic_result_candidate_json,
+    quarantine_synthetic_result_candidate, score_report_from_evidence,
+    serialize_synthetic_result_import_bundle_json, validate_synthetic_result_candidate,
+    ClaimBoundary, QuarantineReason, ResultCandidateArtifactResolver,
+    SyntheticImportValidationIssue, SyntheticImportValidationIssueKind,
 };
 
 fn resolver() -> ResultCandidateArtifactResolver {
@@ -68,4 +71,123 @@ fn synthetic_metric_candidates_do_not_create_score_values() {
 
     assert!(report.performance.is_none());
     assert!(report.formal_evidence.is_none());
+}
+
+#[test]
+fn quarantine_reason_matches_synthetic_rejection_kind() {
+    let candidate = deserialize_external_result_candidate_json(include_str!(
+        "fixtures/synthetic_result_candidate_valid.json"
+    ))
+    .expect("fixture should parse");
+    let base_validation = validate_synthetic_result_candidate(&candidate, &resolver());
+    assert!(base_validation.valid, "{:?}", base_validation.issues);
+
+    for (issue_kind, expected_reason) in [
+        (
+            SyntheticImportValidationIssueKind::ClaimBoundaryTooHigh,
+            QuarantineReason::ClaimBoundaryTooHigh,
+        ),
+        (
+            SyntheticImportValidationIssueKind::OfficialClaimDetected,
+            QuarantineReason::OfficialClaimDetected,
+        ),
+        (
+            SyntheticImportValidationIssueKind::FormalClaimDetected,
+            QuarantineReason::FormalClaimDetected,
+        ),
+        (
+            SyntheticImportValidationIssueKind::SoundnessClaimDetected,
+            QuarantineReason::SoundnessClaimDetected,
+        ),
+        (
+            SyntheticImportValidationIssueKind::ArtifactDigestMismatch,
+            QuarantineReason::ArtifactDigestMismatch,
+        ),
+        (
+            SyntheticImportValidationIssueKind::ArtifactDigestMissing,
+            QuarantineReason::InvalidDigest,
+        ),
+        (
+            SyntheticImportValidationIssueKind::ArtifactDigestUnsupported,
+            QuarantineReason::InvalidDigest,
+        ),
+        (
+            SyntheticImportValidationIssueKind::ArtifactLookupMissing,
+            QuarantineReason::InvalidDigest,
+        ),
+        (
+            SyntheticImportValidationIssueKind::ProvenanceValidationFailed,
+            QuarantineReason::ProvenanceValidationFailed,
+        ),
+        (
+            SyntheticImportValidationIssueKind::MetricValidationFailed,
+            QuarantineReason::MetricValidationFailed,
+        ),
+    ] {
+        let mut validation = base_validation.clone();
+        validation.valid = false;
+        validation.issues = vec![SyntheticImportValidationIssue::error(
+            issue_kind,
+            "candidate.synthetic_check",
+            "synthetic rejection branch",
+        )];
+
+        let manifest = quarantine_synthetic_result_candidate(&candidate, &validation);
+
+        assert_eq!(manifest.entries[0].reason, expected_reason);
+        assert_eq!(manifest.entries[0].validation_issues.len(), 1);
+        assert_eq!(
+            manifest.entries[0].validation_issues[0].path,
+            "candidate.synthetic_check"
+        );
+    }
+}
+
+#[test]
+fn quarantine_reason_falls_back_to_pending_review_for_non_classified_issues() {
+    let candidate = deserialize_external_result_candidate_json(include_str!(
+        "fixtures/synthetic_result_candidate_valid.json"
+    ))
+    .expect("fixture should parse");
+    let mut validation = validate_synthetic_result_candidate(&candidate, &resolver());
+    validation.valid = false;
+    validation.issues = vec![SyntheticImportValidationIssue::error(
+        SyntheticImportValidationIssueKind::SchemaValidationFailed,
+        "candidate.schema",
+        "schema rejection does not map to a more specific quarantine reason",
+    )];
+
+    let manifest = quarantine_synthetic_result_candidate(&candidate, &validation);
+
+    assert_eq!(manifest.entries[0].reason, QuarantineReason::PendingReview);
+}
+
+#[test]
+fn quarantine_reason_prefers_highest_boundary_risk_when_multiple_issues_exist() {
+    let candidate = deserialize_external_result_candidate_json(include_str!(
+        "fixtures/synthetic_result_candidate_valid.json"
+    ))
+    .expect("fixture should parse");
+    let mut validation = validate_synthetic_result_candidate(&candidate, &resolver());
+    validation.valid = false;
+    validation.issues = vec![
+        SyntheticImportValidationIssue::error(
+            SyntheticImportValidationIssueKind::MetricValidationFailed,
+            "candidate.normalized_metrics[0].value",
+            "metric rejection",
+        ),
+        SyntheticImportValidationIssue::error(
+            SyntheticImportValidationIssueKind::ClaimBoundaryTooHigh,
+            "candidate.claim_boundary_requested",
+            "boundary rejection",
+        ),
+    ];
+
+    let manifest = quarantine_synthetic_result_candidate(&candidate, &validation);
+
+    assert_eq!(
+        manifest.entries[0].reason,
+        QuarantineReason::ClaimBoundaryTooHigh
+    );
+    assert_eq!(manifest.entries[0].validation_issues.len(), 2);
 }
