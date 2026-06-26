@@ -2858,6 +2858,38 @@ Exit criteria: the focused test suite passes, the targeted module reaches the
 highest honest public-API coverage without semantic changes, and root
 validation remains green.
 
+## Benchmark Track: Phase 184 Accepted Append Output Coverage Nineteenth Tranche
+
+Status: complete for accepted append output coverage nineteenth tranche. See
+`docs/184-phase-accepted-append-output-coverage-nineteenth-tranche-notes.md`.
+
+Goal: continue the path toward higher end-to-end coverage by hardening the
+next bounded low-coverage Phase W materialized accepted-ledger append output
+surface while preserving claim boundaries.
+
+Implemented: focused regression tests for empty materialized ledger path
+rejection, bare relative ledger path rejection before repository-root writes,
+parseable invalid existing ledger rejection without repair, stale temporary
+file replacement during atomic JSON write, Unix symlink parent-directory
+rejection, and local JSON-only atomic-write source-boundary checks. No
+production code changed in this tranche.
+
+Coverage result: `evidence/accepted_append_output.rs` moved from `74.55%` line
+/ `57.14%` function / `74.34%` region coverage to `86.36%` line / `57.14%`
+function / `78.95%` region coverage. The next package coverage floor is
+`replay/serialization.rs` at `75.00%` line coverage.
+
+Anti-goals: accepted-ledger append semantics changes, production source
+changes, external execution, generated artifact materialization, accepted
+Evidence Ledger policy changes, benchmark evidence, score-axis population,
+Level2+ evidence, semantic-correctness claims, production readiness, unsafe
+coverage forcing, coverage suppression, or whole-workspace 100% coverage
+claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches the
+highest honest public-API coverage without semantic changes, and root
+validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
