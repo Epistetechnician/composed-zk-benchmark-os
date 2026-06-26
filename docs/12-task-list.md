@@ -2766,6 +2766,36 @@ Exit criteria: the focused test suite passes, the targeted module reaches the
 highest honest public-API coverage without semantic changes, and root
 validation remains green.
 
+## Benchmark Track: Phase 181 Soak Shard Coverage Sixteenth Tranche
+
+Status: complete for local soak shard coverage sixteenth tranche. See
+`docs/181-phase-soak-shard-coverage-sixteenth-tranche-notes.md`.
+
+Goal: continue the path toward higher end-to-end coverage by hardening the next
+bounded low-coverage local soak shard planning and validation module while
+preserving claim boundaries.
+
+Implemented: focused regression tests for public shard progress/id/resume-token
+and planner helpers, max-cases-per-shard overflow, shard-plan drift,
+shard-manifest shape/boundary/path rejection, and shard-summary
+boundary/progress/status validation. No production code changed in this
+tranche.
+
+Coverage result: `soak/shard.rs` moved from `73.55%` line / `75.00%` function /
+`84.88%` region coverage to `98.91%` line / `100.00%` function / `97.94%`
+region coverage. The next package coverage floor is `evidence/eligibility.rs`
+at `73.75%` line coverage.
+
+Anti-goals: soak semantics changes, production source changes, external
+execution, generated artifact materialization, accepted Evidence Ledger
+mutation, benchmark evidence, score-axis population, Level2+ evidence,
+semantic-correctness claims, production readiness, unsafe coverage forcing,
+coverage suppression, or whole-workspace 100% coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches the
+highest honest public-API coverage without semantic changes, and root
+validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

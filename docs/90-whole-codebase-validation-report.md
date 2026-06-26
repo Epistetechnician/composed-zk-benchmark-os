@@ -70,7 +70,8 @@ tranche, and the Phase 175 acceptance policy coverage tenth tranche, and the
 Phase 176 evidence candidate coverage eleventh tranche, and the Phase 177
 promotion preflight coverage twelfth tranche, and the Phase 178 proposal ledger
 coverage thirteenth tranche, and the Phase 179 zkML coverage fourteenth tranche,
-and the Phase 180 external submission preflight coverage fifteenth tranche, plus
+and the Phase 180 external submission preflight coverage fifteenth tranche, and
+the Phase 181 soak shard coverage sixteenth tranche, plus
 earlier coverage-hardening follow-up work for serialization error paths, crate
 error constructors, and local soak runner
 resume/output/error-policy paths. It
@@ -849,6 +850,18 @@ package coverage floor is `soak/shard.rs` at `73.55%` line coverage. Phase 180
 changes no production code, creates no benchmark evidence, creates no Level2+
 evidence, and does not claim whole-workspace 100% coverage.
 
+Phase 181 continues that bounded coverage campaign over deterministic local
+soak shard planning and validation code. It adds focused tests for public shard
+progress/id/resume-token/planner helpers, max-cases-per-shard overflow,
+shard-plan drift, shard-manifest shape/boundary/path rejection, and
+shard-summary boundary/progress/status validation. The targeted module moved
+from `73.55%` line / `75.00%` function / `84.88%` region coverage to `98.91%`
+line / `100.00%` function / `97.94%` region coverage under
+`cargo llvm-cov -p zkbench-core --all-features --json --summary-only`. The next
+package coverage floor is `evidence/eligibility.rs` at `73.75%` line coverage.
+Phase 181 changes no production code, creates no benchmark evidence, creates no
+Level2+ evidence, and does not claim whole-workspace 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -980,6 +993,8 @@ This report touches only:
 - `crates/zkbench-core/tests/phase_179_zkml_coverage.rs`
 - `docs/180-phase-external-submission-preflight-coverage-fifteenth-tranche-notes.md`
 - `crates/zkbench-core/tests/phase_180_external_submission_preflight_coverage.rs`
+- `docs/181-phase-soak-shard-coverage-sixteenth-tranche-notes.md`
+- `crates/zkbench-core/tests/phase_181_soak_shard_coverage.rs`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
@@ -1035,11 +1050,12 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 180 coverage validation.
+Run from repository root during Phase 181 coverage validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
+cargo test -p zkbench-core --test phase_181_soak_shard_coverage
 cargo test -p zkbench-core --test phase_180_external_submission_preflight_coverage
 cargo test -p zkbench-core --test phase_179_zkml_coverage
 cargo test -p zkbench-core --test phase_n_zkml_manifest
@@ -1061,12 +1077,16 @@ cargo llvm-cov -p zkbench-core --all-features --json --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 180 coverage validation passed. `cargo test --workspace --all-features`,
+Phase 181 coverage validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. Focused Phase 180 checks verify aggregate request-shape
+mutation engine. Focused Phase 181 checks verify public shard
+progress/id/resume-token/planner helpers, max-cases-per-shard overflow,
+shard-plan drift, shard-manifest shape/boundary/path rejection, and
+shard-summary boundary/progress/status validation. Focused Phase 180 checks
+verify aggregate request-shape
 rejection, accepted-ledger path rejection, future output-root safety rejection,
 digest-consistent package validation-report drift, malformed report JSON error
 context, and Markdown nonclaim fail-closed behavior. Focused Phase 179 checks
@@ -1082,17 +1102,16 @@ returned no package files (exit code 1 with empty output), confirming no
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-The Phase 180 post-tranche
+The Phase 181 post-tranche
 `cargo llvm-cov --workspace --all-features --json --summary-only` run reported
-`89.48%` region coverage, `85.79%` function execution, and `88.95%` line
-coverage across the workspace. The Phase 180 post-tranche
+`89.57%` region coverage, `85.91%` function execution, and `89.16%` line
+coverage across the workspace. The Phase 181 post-tranche
 `cargo llvm-cov -p zkbench-core --all-features --json --summary-only` run
-reported `86.59%` region coverage, `82.29%` function execution, and `86.45%`
-line coverage for `zkbench-core`; the targeted
-`external_submission_preflight.rs` module reported `88.50%` region coverage,
-`90.00%` function execution, and `89.02%` line coverage. Branch coverage was
-not reported by these runs. The next package coverage floor is `soak/shard.rs`
-at `73.55%` line coverage.
+reported `86.73%` region coverage, `82.46%` function execution, and `86.74%`
+line coverage for `zkbench-core`; the targeted `soak/shard.rs` module reported
+`97.94%` region coverage, `100.00%` function execution, and `98.91%` line
+coverage. Branch coverage was not reported by these runs. The next package
+coverage floor is `evidence/eligibility.rs` at `73.75%` line coverage.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
