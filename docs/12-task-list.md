@@ -2553,6 +2553,32 @@ production readiness, or whole-workspace 100% coverage claims.
 Exit criteria: the focused test suite passes, the targeted module reaches
 complete region/line/function coverage, and root validation remains green.
 
+## Benchmark Track: Phase 174 External Synthetic Coverage Ninth Tranche
+
+Status: complete for local external synthetic coverage ninth tranche. See
+`docs/174-phase-external-synthetic-coverage-ninth-tranche-notes.md`.
+
+Goal: continue the path toward higher end-to-end coverage by hardening the
+next bounded low-coverage local external-runner synthetic quarantine helper
+while preserving claim boundaries.
+
+Implemented: focused regression tests for synthetic quarantine reason
+selection, covering claim-boundary, official benchmark, formal evidence,
+proof-system soundness, digest mismatch, invalid digest, provenance, metric,
+pending-review fallback, and multiple-issue priority paths. No production code
+changed in this tranche.
+
+Coverage result: `synthetic.rs` moved from `69.05%` line / `72.73%` function /
+`69.88%` region coverage to `100.00%` line / `100.00%` function / `100.00%`
+region coverage.
+
+Anti-goals: synthetic quarantine semantics changes, evidence promotion,
+benchmark evidence, external execution, Level2+ evidence, semantic-correctness
+claims, production readiness, or whole-workspace 100% coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches
+complete region/line/function coverage, and root validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
