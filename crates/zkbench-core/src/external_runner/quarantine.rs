@@ -215,15 +215,15 @@ fn choose_reason(
     }
     if issues
         .iter()
-        .any(|issue| issue.path.contains("artifact_ref") || issue.path.contains("unit"))
-    {
-        return QuarantineReason::UnsupportedMetric;
-    }
-    if issues
-        .iter()
         .any(|issue| issue.message.contains("absolute"))
     {
         return QuarantineReason::AbsolutePathRejected;
+    }
+    if issues
+        .iter()
+        .any(|issue| issue.path.contains("artifact_ref") || issue.path.contains("unit"))
+    {
+        return QuarantineReason::UnsupportedMetric;
     }
     if candidate.source_benchmark_pack_id.trim().is_empty()
         || candidate.dry_run_plan_id.trim().is_empty()
