@@ -2610,6 +2610,37 @@ Exit criteria: the focused test suite passes, the targeted module reaches the
 highest honest public-API coverage without semantic changes, and root
 validation remains green.
 
+## Benchmark Track: Phase 176 Evidence Candidate Coverage Eleventh Tranche
+
+Status: complete for local evidence-record candidate coverage eleventh tranche.
+See `docs/176-phase-evidence-candidate-coverage-eleventh-tranche-notes.md`.
+
+Goal: continue the path toward higher end-to-end coverage by hardening the
+next bounded low-coverage local evidence candidate module while preserving
+claim boundaries.
+
+Implemented: focused regression tests for candidate-only design-note creation,
+invalid policy rejection, non-candidate policy mode rejection, rejected and
+superseded candidate status behavior, malformed candidate JSON error mapping,
+acceptance-validation failure, Level2+ boundary rejection, individual claim
+flags, disallowed evidence classes, missing local metadata, missing artifact
+digest, invalid acceptance validation, forbidden claim text, and missing
+provenance. No production code changed in this tranche.
+
+Coverage result: `candidate.rs` moved from `69.92%` line / `78.57%` function /
+`76.33%` region coverage to `93.50%` line / `92.86%` function / `96.14%`
+region coverage. The remaining uncovered target-file spans are defensive or
+unreachable through the public constructor and validator.
+
+Anti-goals: candidate semantics changes, evidence promotion, benchmark
+evidence, external execution, Level2+ evidence, semantic-correctness claims,
+production readiness, unsafe coverage forcing, coverage suppression, or
+whole-workspace 100% coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches the
+highest honest public-API coverage without semantic changes, and root
+validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
