@@ -2734,6 +2734,38 @@ Exit criteria: the focused test suite passes, the targeted module reaches the
 highest honest public-API coverage without semantic changes, and root
 validation remains green.
 
+## Benchmark Track: Phase 180 External Submission Preflight Coverage Fifteenth Tranche
+
+Status: complete for local external submission preflight coverage fifteenth
+tranche. See
+`docs/180-phase-external-submission-preflight-coverage-fifteenth-tranche-notes.md`.
+
+Goal: continue the path toward higher end-to-end coverage by hardening the next
+bounded low-coverage local external replay / official-submission preflight
+validation module while preserving claim boundaries.
+
+Implemented: focused regression tests for aggregate request-shape rejection,
+accepted-ledger path rejection, future output-root safety rejection,
+digest-consistent package validation-report drift, malformed report JSON error
+context, and Markdown nonclaim fail-closed behavior. No production code changed
+in this tranche.
+
+Coverage result: `external_submission_preflight.rs` moved from `72.63%` line /
+`85.00%` function / `76.70%` region coverage to `89.02%` line / `90.00%`
+function / `88.50%` region coverage. The next package coverage floor is
+`soak/shard.rs` at `73.55%` line coverage.
+
+Anti-goals: preflight semantics changes, production source changes, external
+execution, endpoint calls, credential handling, official submission, generated
+artifact materialization, accepted Evidence Ledger mutation, benchmark
+evidence, score-axis population, Level2+ evidence, semantic-correctness claims,
+production readiness, unsafe coverage forcing, coverage suppression, or
+whole-workspace 100% coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches the
+highest honest public-API coverage without semantic changes, and root
+validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

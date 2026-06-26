@@ -70,7 +70,7 @@ tranche, and the Phase 175 acceptance policy coverage tenth tranche, and the
 Phase 176 evidence candidate coverage eleventh tranche, and the Phase 177
 promotion preflight coverage twelfth tranche, and the Phase 178 proposal ledger
 coverage thirteenth tranche, and the Phase 179 zkML coverage fourteenth tranche,
-plus
+and the Phase 180 external submission preflight coverage fifteenth tranche, plus
 earlier coverage-hardening follow-up work for serialization error paths, crate
 error constructors, and local soak runner
 resume/output/error-policy paths. It
@@ -836,6 +836,19 @@ public construction without changing semantics. Phase 179 changes no production
 code, creates no benchmark evidence, creates no Level2+ evidence, and does not
 claim whole-workspace 100% coverage.
 
+Phase 180 continues that bounded coverage campaign over local external replay /
+official-submission preflight validation code. It adds focused tests for
+aggregate request-shape rejection, accepted-ledger path rejection, future
+output-root safety rejection, digest-consistent package validation-report drift,
+malformed report JSON error context, and Markdown nonclaim fail-closed
+behavior. The targeted module moved from `72.63%` line / `85.00%` function /
+`76.70%` region coverage to `89.02%` line / `90.00%` function / `88.50%`
+region coverage under
+`cargo llvm-cov -p zkbench-core --all-features --json --summary-only`. The next
+package coverage floor is `soak/shard.rs` at `73.55%` line coverage. Phase 180
+changes no production code, creates no benchmark evidence, creates no Level2+
+evidence, and does not claim whole-workspace 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -965,6 +978,8 @@ This report touches only:
 - `crates/zkbench-core/tests/proposal_ledger.rs`
 - `docs/179-phase-zkml-coverage-fourteenth-tranche-notes.md`
 - `crates/zkbench-core/tests/phase_179_zkml_coverage.rs`
+- `docs/180-phase-external-submission-preflight-coverage-fifteenth-tranche-notes.md`
+- `crates/zkbench-core/tests/phase_180_external_submission_preflight_coverage.rs`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
@@ -1020,11 +1035,12 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 179 coverage validation.
+Run from repository root during Phase 180 coverage validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
+cargo test -p zkbench-core --test phase_180_external_submission_preflight_coverage
 cargo test -p zkbench-core --test phase_179_zkml_coverage
 cargo test -p zkbench-core --test phase_n_zkml_manifest
 cargo test -p zkbench-core --test repo_claim_boundary_docs
@@ -1045,16 +1061,20 @@ cargo llvm-cov -p zkbench-core --all-features --json --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 179 coverage validation passed. `cargo test --workspace --all-features`,
+Phase 180 coverage validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. Focused Phase 179 checks verify inert zkML manifest default
-version behavior, metric executable-adapter classification, top-level shape
-rejection, input/model artifact identity/ref/digest/boundary rejection paths,
-output and metric boundary rejection paths, executable-adapter authorization
-rejection, missing limitation rejection, and malformed JSON error context. The
+mutation engine. Focused Phase 180 checks verify aggregate request-shape
+rejection, accepted-ledger path rejection, future output-root safety rejection,
+digest-consistent package validation-report drift, malformed report JSON error
+context, and Markdown nonclaim fail-closed behavior. Focused Phase 179 checks
+continue to verify inert zkML manifest default version behavior, metric
+executable-adapter classification, top-level shape rejection, input/model
+artifact identity/ref/digest/boundary rejection paths, output and metric
+boundary rejection paths, executable-adapter authorization rejection, missing
+limitation rejection, and malformed JSON error context. The
 `rg` package-surface check
 returned no package files (exit code 1 with empty output), confirming no
 `package.json` or `pnpm-lock.yaml` surface exists.
@@ -1062,17 +1082,17 @@ returned no package files (exit code 1 with empty output), confirming no
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-The Phase 179 post-tranche
+The Phase 180 post-tranche
 `cargo llvm-cov --workspace --all-features --json --summary-only` run reported
-`89.27%` region coverage, `85.71%` function execution, and `88.63%` line
-coverage across the workspace. The Phase 179 post-tranche
+`89.48%` region coverage, `85.79%` function execution, and `88.95%` line
+coverage across the workspace. The Phase 180 post-tranche
 `cargo llvm-cov -p zkbench-core --all-features --json --summary-only` run
-reported `86.26%` region coverage, `82.18%` function execution, and `85.99%`
+reported `86.59%` region coverage, `82.29%` function execution, and `86.45%`
 line coverage for `zkbench-core`; the targeted
-`zkml.rs` module reported `97.80%` region coverage, `93.75%` function
-execution, and `98.53%` line coverage. Branch coverage was not reported by
-these runs. The remaining uncovered target-file spans are defensive or
-unreachable through normal public construction.
+`external_submission_preflight.rs` module reported `88.50%` region coverage,
+`90.00%` function execution, and `89.02%` line coverage. Branch coverage was
+not reported by these runs. The next package coverage floor is `soak/shard.rs`
+at `73.55%` line coverage.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
