@@ -2641,6 +2641,37 @@ Exit criteria: the focused test suite passes, the targeted module reaches the
 highest honest public-API coverage without semantic changes, and root
 validation remains green.
 
+## Benchmark Track: Phase 177 Promotion Preflight Coverage Twelfth Tranche
+
+Status: complete for local reviewed promotion preflight coverage twelfth
+tranche. See
+`docs/177-phase-promotion-preflight-coverage-twelfth-tranche-notes.md`.
+
+Goal: continue the path toward higher end-to-end coverage by hardening the
+next bounded low-coverage local promotion preflight module while preserving
+claim boundaries.
+
+Implemented: focused regression tests for reviewed-promotion preflight shape,
+candidate, append-preview, review-decision, digest, marker, nonclaim,
+score-axis, forbidden-text, Markdown, and malformed-JSON rejection paths, plus
+official-submission package shape, digest, nonclaim, forbidden-text, Markdown,
+and malformed-JSON rejection paths. No production code changed in this tranche.
+
+Coverage result: `promotion_preflight.rs` moved from `70.49%` line / `88.57%`
+function / `81.35%` region coverage to `98.62%` line / `94.29%` function /
+`98.05%` region coverage. The remaining uncovered target-file spans are
+serialization-error closures for structurally serializable metadata structs and
+a narrow already-covered external-provenance scanner loop edge.
+
+Anti-goals: promotion semantics changes, evidence promotion, benchmark
+evidence, external execution, Level2+ evidence, semantic-correctness claims,
+production readiness, unsafe coverage forcing, coverage suppression, or
+whole-workspace 100% coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches the
+highest honest public-API coverage without semantic changes, and root
+validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
