@@ -2,8 +2,8 @@
 
 use zkbench_core::{
     apply_mutation_for_class, apply_mutation_pass, generate_instance, value::FieldVisibility,
-    ClaimBoundary, ExpectedVerdict, GeneratorConfig, InstanceParams, MutationClass, MutationPass,
-    MutationSafetyClass, NondeterministicTransitionInjectionPass,
+    ClaimBoundary, ExpectedVerdict, GeneratorConfig, GuardSpec, InstanceParams, MutationClass,
+    MutationPass, MutationSafetyClass, NondeterministicTransitionInjectionPass,
     PublicPrivateBoundaryMismatchPass, RecursionEnvelopeMismatchPass, SemanticNoOpDriftPass,
     TraceOrderingCorruptionPass, WitnessAliasingPass,
 };
@@ -33,6 +33,107 @@ fn nondeterministic_transition_injection_applies() {
     assert_eq!(mutated.expected_verdict, ExpectedVerdict::Reject);
     assert_eq!(mutated.safety_class, MutationSafetyClass::Malicious);
     assert_eq!(mutated.claim_boundary, ClaimBoundary::Level1LocalReplay);
+}
+
+#[test]
+fn nondeterministic_transition_injection_reports_its_class() {
+    assert_eq!(
+        NondeterministicTransitionInjectionPass.mutation_class(),
+        MutationClass::NondeterministicTransitionInjection
+    );
+}
+
+#[test]
+fn nondeterministic_transition_injection_adds_unconditional_bypass_transition() {
+    let instance = generate_instance(bounded_counter_loop(), InstanceParams::default())
+        .expect("bounded counter loop should generate");
+    let first_transition = instance.surface_spec.machine.transitions[0].clone();
+    let bypass_target = instance
+        .surface_spec
+        .machine
+        .states
+        .last()
+        .expect("generated fixture should contain states")
+        .id
+        .clone();
+    let original_transition_count = instance.surface_spec.machine.transitions.len();
+
+    let mutated = apply_mutation_pass(&instance, &NondeterministicTransitionInjectionPass)
+        .expect("nondeterministic injection should apply");
+
+    assert_eq!(
+        mutated.surface_spec.machine.transitions.len(),
+        original_transition_count + 1
+    );
+    let injected = mutated
+        .surface_spec
+        .machine
+        .transitions
+        .iter()
+        .find(|transition| transition.id == "injected_nondeterministic")
+        .expect("injected transition should be present");
+    assert_eq!(injected.from, first_transition.from);
+    assert_eq!(injected.to, bypass_target);
+    assert_eq!(injected.guard, GuardSpec::Bool(true));
+    assert!(injected.actions.is_empty());
+    assert_eq!(
+        mutated.provenance.affected_transition_ids,
+        vec!["injected_nondeterministic".to_string()]
+    );
+    assert_eq!(
+        mutated.provenance.affected_guard_ids,
+        vec!["injected_nondeterministic.guard".to_string()]
+    );
+    assert!(mutated
+        .provenance
+        .description
+        .contains("injected unconditional transition"));
+    assert!(mutated
+        .provenance
+        .notes
+        .contains(&"Injected transition is outside the declared semantic relation.".to_string()));
+}
+
+#[test]
+fn nondeterministic_transition_injection_fails_without_trace() {
+    let mut instance = generate_instance(bounded_counter_loop(), InstanceParams::default())
+        .expect("bounded counter loop should generate");
+    instance.accepted_traces.clear();
+    instance.rejected_traces.clear();
+
+    let error = apply_mutation_pass(&instance, &NondeterministicTransitionInjectionPass)
+        .expect_err("missing traces should fail before transition selection");
+
+    assert!(error.to_string().contains("no declared trace"));
+}
+
+#[test]
+fn nondeterministic_transition_injection_fails_without_transition() {
+    let mut instance = generate_instance(bounded_counter_loop(), InstanceParams::default())
+        .expect("bounded counter loop should generate");
+    instance.surface_spec.machine.transitions.clear();
+
+    let error = apply_mutation_pass(&instance, &NondeterministicTransitionInjectionPass)
+        .expect_err("missing transitions should fail");
+
+    assert!(error.to_string().contains("no transition"));
+}
+
+#[test]
+fn nondeterministic_transition_injection_fails_without_bypass_target() {
+    let mut instance = generate_instance(bounded_counter_loop(), InstanceParams::default())
+        .expect("bounded counter loop should generate");
+    let first_target = instance.surface_spec.machine.transitions[0].to.clone();
+    instance
+        .surface_spec
+        .machine
+        .states
+        .retain(|state| state.id == first_target);
+
+    let error = apply_mutation_pass(&instance, &NondeterministicTransitionInjectionPass)
+        .expect_err("missing bypass target should fail");
+
+    assert!(error.to_string().contains("no bypass target state"));
 }
 
 #[test]
