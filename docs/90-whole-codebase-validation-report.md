@@ -78,7 +78,7 @@ coverage nineteenth tranche, and the Phase 185 mutation apply coverage
 twentieth tranche, and the Phase 186 official submission output coverage
 twenty-first tranche, and the Phase 187 scoring coverage twenty-second
 tranche, and the Phase 188 soak reproduction coverage twenty-third tranche,
-plus
+and the Phase 189 external runner importer coverage twenty-fourth tranche, plus
 earlier coverage-hardening follow-up work for serialization error paths, crate
 error constructors, and local soak runner
 resume/output/error-policy paths. It
@@ -1122,6 +1122,8 @@ This report touches only:
 - `crates/zkbench-core/tests/phase_187_scoring_coverage.rs`
 - `docs/188-phase-soak-reproduction-coverage-twenty-third-tranche-notes.md`
 - `crates/zkbench-core/tests/phase_188_soak_reproduction_coverage.rs`
+- `docs/189-phase-external-runner-importer-coverage-twenty-fourth-tranche-notes.md`
+- `crates/zkbench-core/tests/phase_189_external_runner_importer_coverage.rs`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
@@ -1177,11 +1179,12 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 188 coverage validation.
+Run from repository root during Phase 189 coverage validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
+cargo test -p zkbench-core --test phase_189_external_runner_importer_coverage
 cargo test -p zkbench-core --test phase_188_soak_reproduction_coverage
 cargo test -p zkbench-core --test phase_187_scoring_coverage
 cargo test -p zkbench-core --test phase_186_official_submission_output_coverage
@@ -1211,12 +1214,17 @@ cargo llvm-cov -p zkbench-core --all-features --json --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 188 coverage validation passed. `cargo test --workspace --all-features`,
+Phase 189 coverage validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. Focused Phase 188 checks verify reproduction-bundle
+mutation engine. Focused Phase 189 checks verify relative-file resolver
+success and rejection paths, malformed importer JSON context, explicit
+config/source quarantine preservation, invalid capture-contract forwarding,
+resolver digest algorithm and byte-drift rejection, missing candidate digest
+rejection, metric parse and path rejection, and nested
+official/formal/soundness claim-text scans. Focused Phase 188 checks verify reproduction-bundle
 claim-boundary elevation rejection, empty entry-id rejection, entry and
 reproduction-manifest claim-boundary elevation rejection, post-sidecar pack
 validation failure reporting after declared pack-file digest drift, and
@@ -1266,21 +1274,21 @@ returned no package files (exit code 1 with empty output), confirming no
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-The Phase 188 post-tranche
+The Phase 189 post-tranche
 `cargo llvm-cov --workspace --all-features --json --summary-only` run reported
-`90.22%` region coverage, `86.42%` function execution, and `90.11%` line
-coverage across the workspace. The Phase 188 post-tranche
+`90.50%` region coverage, `86.62%` function execution, and `90.42%` line
+coverage across the workspace. The Phase 189 post-tranche
 `cargo llvm-cov -p zkbench-core --all-features --json --summary-only` run
-reported `87.72%` region coverage, `83.20%` function execution, and `88.08%`
-line coverage for `zkbench-core`; the targeted `soak/reproduction.rs` module
-reported `89.26%` region coverage, `80.00%` function execution, and `97.20%`
-line coverage. Branch
-coverage was not reported by these runs. The package
-coverage floor remains `replay/serialization.rs` at `75.00%` line coverage
-because its remaining uncovered lines are structurally unreachable
-`serde_json::to_string_pretty` error mappings for concrete derived replay
-structs. The next reachable `zkbench-core` floor is
-`external_runner/serialization.rs` at `76.65%` line coverage.
+reported `88.14%` region coverage, `83.49%` function execution, and `88.51%`
+line coverage for `zkbench-core`; the targeted `external_runner/importer.rs`
+module reported `93.11%` region coverage, `93.18%` function execution, and
+`92.84%` line coverage. Branch coverage was not reported by these runs. The
+package coverage floor remains `replay/serialization.rs` at `75.00%` line
+coverage. The next visible floor is `external_runner/serialization.rs` at
+`76.65%` line coverage. Both remaining serializer-wrapper floors are capped by
+structurally unreachable `serde_json::to_string_pretty` error mappings for
+concrete derived structs. The next reachable `zkbench-core` floor is
+`generator/instance.rs` at `77.27%` line coverage.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
