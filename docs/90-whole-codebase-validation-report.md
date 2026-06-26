@@ -64,9 +64,10 @@ coverage first tranche, and the Phase 167 mutation coverage second tranche,
 and the Phase 168 mutation coverage third tranche, and the Phase 169 mutation
 coverage fourth tranche, and the Phase 170 mutation coverage fifth tranche,
 and the Phase 171 mutation coverage sixth tranche, and the Phase 172 external
-handoff coverage seventh tranche, plus earlier coverage-hardening follow-up
-work for serialization error paths, crate error constructors, and local soak
-runner resume/output/error-policy paths. It
+handoff coverage seventh tranche, and the Phase 173 external quarantine
+coverage eighth tranche, plus earlier coverage-hardening follow-up work for
+serialization error paths, crate error constructors, and local soak runner
+resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
 running the available workspace gates and mapping those gates to the repo's
 major behavioral surfaces.
@@ -729,6 +730,20 @@ disjunction without changing validation behavior. Phase 172 creates no
 benchmark evidence, creates no Level2+ evidence, and does not claim
 whole-workspace 100% coverage.
 
+Phase 173 continues that bounded coverage campaign over local external-runner
+quarantine code. It adds focused tests for specific quarantine reasons covering
+Level2+ boundary, official benchmark, formal evidence, proof-system soundness,
+absolute-path, unsupported-metric, unknown-source, and pending-review paths,
+plus manifest id, entry id, source-artifact reference, and status-summary
+validation. The targeted module moved from `68.32%` line / `66.67%` function /
+`72.48%` region coverage to `100.00%` line / `100.00%` function / `100.00%`
+region coverage under
+`cargo llvm-cov -p zkbench-core --all-features --json --summary-only`. Phase
+173 also checks absolute-path validation issues before the generic
+artifact-ref/unit bucket, reporting those failures as `AbsolutePathRejected`.
+Phase 173 creates no benchmark evidence, creates no Level2+ evidence, and does
+not claim whole-workspace 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -847,10 +862,12 @@ This report touches only:
 - `docs/170-phase-mutation-coverage-fifth-tranche-notes.md`
 - `docs/171-phase-mutation-coverage-sixth-tranche-notes.md`
 - `docs/172-phase-external-handoff-coverage-seventh-tranche-notes.md`
+- `docs/173-phase-external-quarantine-coverage-eighth-tranche-notes.md`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
 - `crates/zkbench-core/src/external_runner/handoff.rs`
+- `crates/zkbench-core/src/external_runner/quarantine.rs`
 - `crates/zkbench-core/src/formal/`
 - `crates/zkbench-core/src/generator/config.rs`
 - `crates/zkbench-core/src/generator/deterministic.rs`
@@ -873,6 +890,7 @@ This report touches only:
 - `crates/zkbench-core/tests/manual_handoff_bundle.rs`
 - `crates/zkbench-core/tests/mutation_engine.rs`
 - `crates/zkbench-core/tests/operator_soak_campaign_contract.rs`
+- `crates/zkbench-core/tests/result_import_validation.rs`
 - `crates/zkbench-core/tests/phase_154_new_families.rs`
 - `crates/zkbench-core/tests/phase_156_mutation_depth.rs`
 - `crates/zkbench-core/tests/phase_157_distinguishability.rs`
@@ -898,12 +916,12 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 172 coverage validation.
+Run from repository root during Phase 173 coverage validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
-cargo test -p zkbench-core --test manual_handoff_bundle
+cargo test -p zkbench-core --test result_import_validation
 cargo test -p zkbench-core --test repo_claim_boundary_docs
 cargo test -p zkbench-core --test repo_hygiene
 cargo test -p zkbench-core --test phase_161_mutation_completion
@@ -922,15 +940,15 @@ cargo llvm-cov -p zkbench-core --all-features --json --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 172 coverage validation passed. `cargo test --workspace --all-features`,
+Phase 173 coverage validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. Focused Phase 172 checks verify manual handoff bundle and
-subject shape rejection, step instruction drift rejection, export shape
-rejection, nested provenance-contract and result-import-schema issue
-forwarding, and manual-only step false branches. The `rg`
+mutation engine. Focused Phase 173 checks verify quarantine reason selection
+for claim-boundary, official benchmark, formal, soundness, absolute-path,
+unsupported-metric, unknown-source, and pending-review cases, plus manifest
+id, entry id, source-artifact reference, and status-summary validation. The `rg`
 package-surface check
 returned no package files (exit code 1 with empty output), confirming no
 `package.json` or `pnpm-lock.yaml` surface exists.
@@ -938,14 +956,14 @@ returned no package files (exit code 1 with empty output), confirming no
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-The Phase 172 post-tranche
+The Phase 173 post-tranche
 `cargo llvm-cov --workspace --all-features --json --summary-only` run reported
-`88.40%` region coverage, `85.05%` function execution, and `87.03%` line
-coverage across the workspace. The Phase 172 post-tranche
+`88.49%` region coverage, `85.13%` function execution, and `87.15%` line
+coverage across the workspace. The Phase 173 post-tranche
 `cargo llvm-cov -p zkbench-core --all-features --json --summary-only` run
-reported `84.91%` region coverage, `81.09%` function execution, and `83.73%`
+reported `85.05%` region coverage, `81.21%` function execution, and `83.90%`
 line coverage for `zkbench-core`; the targeted
-`handoff.rs` module reported `100.00%` region coverage,
+`quarantine.rs` module reported `100.00%` region coverage,
 `100.00%` function execution, and `100.00%` line coverage. Branch coverage was
 not reported by these runs.
 

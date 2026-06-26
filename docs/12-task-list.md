@@ -2525,6 +2525,34 @@ production readiness, or whole-workspace 100% coverage claims.
 Exit criteria: the focused test suite passes, the targeted module reaches
 complete region/line/function coverage, and root validation remains green.
 
+## Benchmark Track: Phase 173 External Quarantine Coverage Eighth Tranche
+
+Status: complete for local external quarantine coverage eighth tranche. See
+`docs/173-phase-external-quarantine-coverage-eighth-tranche-notes.md`.
+
+Goal: continue the path toward higher end-to-end coverage by hardening the
+next bounded low-coverage local external-runner quarantine module while
+preserving claim boundaries.
+
+Implemented: focused regression tests for external quarantine reason selection
+and manifest validation, covering Level2+ boundary, official benchmark, formal
+evidence, proof-system soundness, absolute-path, unsupported-metric,
+unknown-source, and pending-review reason paths, plus manifest id, entry id,
+source-artifact reference, and valid status-summary validation. The quarantine
+reason selector now checks absolute-path issues before the generic
+artifact-ref/unit bucket, returning `AbsolutePathRejected` for those failures.
+
+Coverage result: `quarantine.rs` moved from `68.32%` line / `66.67%` function /
+`72.48%` region coverage to `100.00%` line / `100.00%` function / `100.00%`
+region coverage.
+
+Anti-goals: quarantine semantics escalation, evidence promotion, benchmark
+evidence, external execution, Level2+ evidence, semantic-correctness claims,
+production readiness, or whole-workspace 100% coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches
+complete region/line/function coverage, and root validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

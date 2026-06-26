@@ -5,7 +5,8 @@ use zkbench_core::{
     validate_external_result_import_schema, validate_quarantine_manifest, ArtifactKind,
     ArtifactRole, ClaimBoundary, EnvironmentProvenance, ExternalMetricCandidate,
     ExternalMetricUnit, ExternalResultCandidate, ExternalResultStatus, ExternalRunProvenanceDraft,
-    ExternalToolProvenance, OperatorProvenance, QuarantineReason, SourceProvenance,
+    ExternalToolProvenance, OperatorProvenance, QuarantineReason, QuarantineStatus,
+    QuarantineValidation, SourceProvenance,
 };
 
 fn provenance() -> ExternalRunProvenanceDraft {
@@ -156,6 +157,74 @@ fn rejected_candidate_can_be_quarantined_and_serialized() {
 }
 
 #[test]
+fn quarantine_reason_selection_reports_specific_claim_failures() {
+    let mut elevated = candidate();
+    elevated.claim_boundary_requested = ClaimBoundary::Level2ReproducibleBenchmarkArtifact;
+    assert_eq!(
+        quarantine_external_result_candidate(&elevated).entries[0].reason,
+        QuarantineReason::ClaimBoundaryTooHigh
+    );
+
+    let mut official = candidate();
+    official.claims_official_benchmark_evidence = true;
+    assert_eq!(
+        quarantine_external_result_candidate(&official).entries[0].reason,
+        QuarantineReason::OfficialClaimRejected
+    );
+
+    let mut formal = candidate();
+    formal.claims_formal_evidence = true;
+    assert_eq!(
+        quarantine_external_result_candidate(&formal).entries[0].reason,
+        QuarantineReason::FormalClaimRejected
+    );
+
+    let mut soundness = candidate();
+    soundness.claims_proof_system_soundness = true;
+    assert_eq!(
+        quarantine_external_result_candidate(&soundness).entries[0].reason,
+        QuarantineReason::FormalClaimRejected
+    );
+}
+
+#[test]
+fn quarantine_reason_selection_reports_metric_path_source_and_pending_review() {
+    let mut absolute = candidate();
+    absolute.raw_output_artifact_refs = vec!["/tmp/raw-output.json".to_string()];
+    assert_eq!(
+        quarantine_external_result_candidate(&absolute).entries[0].reason,
+        QuarantineReason::AbsolutePathRejected
+    );
+
+    let mut unsupported_metric = candidate();
+    unsupported_metric
+        .normalized_metrics
+        .push(ExternalMetricCandidate {
+            metric_kind: "synthetic_metric".to_string(),
+            unit: ExternalMetricUnit::Unknown,
+            value: None,
+            source_artifact_ref: Some("artifacts/metric.json".to_string()),
+            notes: Vec::new(),
+        });
+    assert_eq!(
+        quarantine_external_result_candidate(&unsupported_metric).entries[0].reason,
+        QuarantineReason::UnsupportedMetric
+    );
+
+    let mut unknown_source = candidate();
+    unknown_source.source_benchmark_pack_id.clear();
+    assert_eq!(
+        quarantine_external_result_candidate(&unknown_source).entries[0].reason,
+        QuarantineReason::UnknownSource
+    );
+
+    assert_eq!(
+        quarantine_external_result_candidate(&candidate()).entries[0].reason,
+        QuarantineReason::PendingReview
+    );
+}
+
+#[test]
 fn quarantine_manifest_rejects_elevated_entry_boundary() {
     let mut candidate = candidate();
     candidate.claim_boundary_requested = ClaimBoundary::Level2ReproducibleBenchmarkArtifact;
@@ -167,4 +236,43 @@ fn quarantine_manifest_rejects_elevated_entry_boundary() {
     assert!(validation.issues.iter().any(|issue| {
         issue.path.contains("claim_boundary") && issue.message.contains("Phase H local limits")
     }));
+}
+
+#[test]
+fn quarantine_manifest_validation_rejects_manifest_entry_and_ref_drift() {
+    let mut manifest = quarantine_external_result_candidate(&candidate());
+    manifest.quarantine_id = " ".to_string();
+    let entry = manifest
+        .entries
+        .first_mut()
+        .expect("quarantine manifest should carry one entry");
+    entry.candidate_result_id.clear();
+    entry.source_artifact_refs = vec!["../escape/raw-output.json".to_string()];
+
+    let validation = validate_quarantine_manifest(&manifest);
+
+    assert!(!validation.valid);
+    assert_eq!(validation.status, QuarantineStatus::Rejected);
+    assert_issue_path(&validation, "manifest.quarantine_id");
+    assert_issue_path(&validation, "manifest.entries[0].candidate_result_id");
+    assert_issue_path(&validation, "manifest.entries[0].source_artifact_refs[0]");
+}
+
+#[test]
+fn quarantine_manifest_validation_preserves_valid_status_summary() {
+    let mut manifest = quarantine_external_result_candidate(&candidate());
+    manifest.validation_status = QuarantineStatus::PendingReview;
+
+    let validation = validate_quarantine_manifest(&manifest);
+
+    assert!(validation.valid, "issues: {:?}", validation.issues);
+    assert_eq!(validation.status, QuarantineStatus::PendingReview);
+}
+
+fn assert_issue_path(validation: &QuarantineValidation, path: &str) {
+    assert!(
+        validation.issues.iter().any(|issue| issue.path == path),
+        "expected validation issue at {path}, got {:?}",
+        validation.issues
+    );
 }
