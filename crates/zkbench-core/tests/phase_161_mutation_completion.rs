@@ -257,6 +257,64 @@ fn trace_ordering_corruption_applies() {
 }
 
 #[test]
+fn trace_ordering_corruption_reports_its_class() {
+    assert_eq!(
+        TraceOrderingCorruptionPass.mutation_class(),
+        MutationClass::TraceOrderingCorruption
+    );
+}
+
+#[test]
+fn trace_ordering_corruption_swaps_first_two_accepted_trace_steps() {
+    let instance = generate_instance(nested_loop(), InstanceParams::default())
+        .expect("nested loop should generate");
+    let original_first = instance.accepted_traces[0].steps[0].transition.clone();
+    let original_second = instance.accepted_traces[0].steps[1].transition.clone();
+
+    let mutated = apply_mutation_pass(&instance, &TraceOrderingCorruptionPass)
+        .expect("trace ordering corruption should apply");
+
+    assert_eq!(mutated.primary_trace.steps[0].transition, original_second);
+    assert_eq!(mutated.primary_trace.steps[1].transition, original_first);
+    assert_eq!(
+        mutated.provenance.affected_transition_ids,
+        vec![original_second.clone(), original_first.clone()]
+    );
+    assert!(mutated
+        .provenance
+        .description
+        .contains("swapped trace steps"));
+    assert!(mutated
+        .provenance
+        .notes
+        .contains(&"Trace ordering corruption mutates the primary trace only.".to_string()));
+}
+
+#[test]
+fn trace_ordering_corruption_fails_without_accepted_trace() {
+    let mut instance = generate_instance(nested_loop(), InstanceParams::default())
+        .expect("nested loop should generate");
+    instance.accepted_traces.clear();
+
+    let error = apply_mutation_pass(&instance, &TraceOrderingCorruptionPass)
+        .expect_err("missing accepted trace should fail");
+
+    assert!(error.to_string().contains("no accepted trace"));
+}
+
+#[test]
+fn trace_ordering_corruption_fails_on_single_step_trace() {
+    let mut instance = generate_instance(nested_loop(), InstanceParams::default())
+        .expect("nested loop should generate");
+    instance.accepted_traces[0].steps.truncate(1);
+
+    let error = apply_mutation_pass(&instance, &TraceOrderingCorruptionPass)
+        .expect_err("single-step accepted trace should fail");
+
+    assert!(error.to_string().contains("at least two steps"));
+}
+
+#[test]
 fn apply_mutation_for_class_dispatches_all_fourteen_variants() {
     let cases = [
         (
