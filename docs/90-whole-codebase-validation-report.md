@@ -77,7 +77,8 @@ artifact coverage eighteenth tranche, and the Phase 184 accepted append output
 coverage nineteenth tranche, and the Phase 185 mutation apply coverage
 twentieth tranche, and the Phase 186 official submission output coverage
 twenty-first tranche, and the Phase 187 scoring coverage twenty-second
-tranche, plus
+tranche, and the Phase 188 soak reproduction coverage twenty-third tranche,
+plus
 earlier coverage-hardening follow-up work for serialization error paths, crate
 error constructors, and local soak runner
 resume/output/error-policy paths. It
@@ -958,6 +959,22 @@ structs. Phase 187 changes no production code, creates no benchmark evidence,
 creates no Level2+ evidence, does not force unreachable serialization-error
 branches, and does not claim whole-workspace 100% coverage.
 
+Phase 188 continues that bounded coverage campaign over soak reproduction-bundle
+validation and readback behavior. It adds focused tests for reproduction-bundle
+claim-boundary elevation rejection, empty entry-id rejection, entry and
+reproduction-manifest claim-boundary elevation rejection, post-sidecar pack
+validation failure reporting after declared pack-file digest drift, and
+malformed reproduction sidecar JSON readback rejection. The targeted module
+moved from `76.64%` line / `60.00%` function / `82.64%` region coverage to
+`97.20%` line / `80.00%` function / `89.26%` region coverage under
+`cargo llvm-cov -p zkbench-core --all-features --json --summary-only`. The
+package floor remains `replay/serialization.rs` at `75.00%` line coverage; its
+remaining uncovered lines are structurally unreachable
+`serde_json::to_string_pretty` error mappings for concrete derived replay
+structs. Phase 188 changes no production code, creates no benchmark evidence,
+creates no Level2+ evidence, does not force unreachable serialization-error
+branches, and does not claim whole-workspace 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -1103,6 +1120,8 @@ This report touches only:
 - `crates/zkbench-core/tests/phase_186_official_submission_output_coverage.rs`
 - `docs/187-phase-scoring-coverage-twenty-second-tranche-notes.md`
 - `crates/zkbench-core/tests/phase_187_scoring_coverage.rs`
+- `docs/188-phase-soak-reproduction-coverage-twenty-third-tranche-notes.md`
+- `crates/zkbench-core/tests/phase_188_soak_reproduction_coverage.rs`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
@@ -1158,11 +1177,12 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 187 coverage validation.
+Run from repository root during Phase 188 coverage validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
+cargo test -p zkbench-core --test phase_188_soak_reproduction_coverage
 cargo test -p zkbench-core --test phase_187_scoring_coverage
 cargo test -p zkbench-core --test phase_186_official_submission_output_coverage
 cargo test -p zkbench-core --test phase_185_mutation_apply_coverage
@@ -1191,12 +1211,17 @@ cargo llvm-cov -p zkbench-core --all-features --json --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 187 coverage validation passed. `cargo test --workspace --all-features`,
+Phase 188 coverage validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. Focused Phase 187 checks verify higher-boundary confidence
+mutation engine. Focused Phase 188 checks verify reproduction-bundle
+claim-boundary elevation rejection, empty entry-id rejection, entry and
+reproduction-manifest claim-boundary elevation rejection, post-sidecar pack
+validation failure reporting after declared pack-file digest drift, and
+malformed reproduction sidecar JSON readback rejection. Focused Phase 187
+checks verify higher-boundary confidence
 mapping, safe higher-boundary axis validation, local populated-axis rejection
 across all axes, invalid axis value rejection, forbidden axis-note text
 rejection, and `CapabilityGap` risk-penalty text validation. Focused Phase 186
@@ -1241,20 +1266,21 @@ returned no package files (exit code 1 with empty output), confirming no
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-The Phase 187 post-tranche
+The Phase 188 post-tranche
 `cargo llvm-cov --workspace --all-features --json --summary-only` run reported
-`90.20%` region coverage, `86.38%` function execution, and `90.05%` line
-coverage across the workspace. The Phase 187 post-tranche
+`90.22%` region coverage, `86.42%` function execution, and `90.11%` line
+coverage across the workspace. The Phase 188 post-tranche
 `cargo llvm-cov -p zkbench-core --all-features --json --summary-only` run
-reported `87.69%` region coverage, `83.14%` function execution, and `87.99%`
-line coverage for `zkbench-core`; the targeted `scoring/mod.rs` module
-reported `100.00%` region coverage, `100.00%` function execution, and
-`100.00%` line coverage. Branch
+reported `87.72%` region coverage, `83.20%` function execution, and `88.08%`
+line coverage for `zkbench-core`; the targeted `soak/reproduction.rs` module
+reported `89.26%` region coverage, `80.00%` function execution, and `97.20%`
+line coverage. Branch
 coverage was not reported by these runs. The package
 coverage floor remains `replay/serialization.rs` at `75.00%` line coverage
 because its remaining uncovered lines are structurally unreachable
 `serde_json::to_string_pretty` error mappings for concrete derived replay
-structs.
+structs. The next reachable `zkbench-core` floor is
+`external_runner/serialization.rs` at `76.65%` line coverage.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
