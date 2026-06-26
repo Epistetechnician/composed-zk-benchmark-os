@@ -2392,6 +2392,32 @@ coverage claims.
 Exit criteria: the focused test suite passes, the targeted module reaches
 complete region/line/function coverage, and root validation remains green.
 
+## Benchmark Track: Phase 168 Mutation Coverage Third Tranche
+
+Status: complete. See
+`docs/168-phase-mutation-coverage-third-tranche-notes.md`.
+
+Goal: continue the path toward higher end-to-end coverage by hardening the next
+bounded local mutation module without changing runtime behavior or claim
+strength.
+
+Implemented: focused regression tests for `WitnessAliasingPass`, covering the
+class reporter, existing private-witness aliasing path, fallback field-derived
+witness path, provenance metadata, no-declared-trace failure, and no-target
+failure.
+
+Coverage result: `witness_aliasing.rs` moved from `78.18%` line / `33.33%`
+function / `81.25%` region coverage to `100.00%` line / `100.00%` function /
+`100.00%` region coverage.
+
+Anti-goals: runtime behavior changes, mutation semantics changes, evidence
+promotion, benchmark evidence, external execution, Level2+ evidence,
+semantic-correctness claims, production readiness, or whole-workspace 100%
+coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches
+complete region/line/function coverage, and root validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
