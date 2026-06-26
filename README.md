@@ -279,6 +279,7 @@ Surface DSL
 | [docs/191-phase-recursion-coverage-twenty-sixth-tranche-notes.md](docs/191-phase-recursion-coverage-twenty-sixth-tranche-notes.md) | Phase 191 recursion coverage twenty-sixth tranche notes. |
 | [docs/192-phase-evidence-review-coverage-twenty-seventh-tranche-notes.md](docs/192-phase-evidence-review-coverage-twenty-seventh-tranche-notes.md) | Phase 192 evidence review coverage twenty-seventh tranche notes. |
 | [docs/193-phase-pack-reader-coverage-twenty-eighth-tranche-notes.md](docs/193-phase-pack-reader-coverage-twenty-eighth-tranche-notes.md) | Phase 193 pack reader coverage twenty-eighth tranche notes. |
+| [docs/194-phase-local-artifact-campaign-coverage-twenty-ninth-tranche-notes.md](docs/194-phase-local-artifact-campaign-coverage-twenty-ninth-tranche-notes.md) | Phase 194 local artifact campaign coverage twenty-ninth tranche notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
