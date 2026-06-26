@@ -67,7 +67,8 @@ and the Phase 171 mutation coverage sixth tranche, and the Phase 172 external
 handoff coverage seventh tranche, and the Phase 173 external quarantine
 coverage eighth tranche, and the Phase 174 external synthetic coverage ninth
 tranche, and the Phase 175 acceptance policy coverage tenth tranche, and the
-Phase 176 evidence candidate coverage eleventh tranche, plus
+Phase 176 evidence candidate coverage eleventh tranche, and the Phase 177
+promotion preflight coverage twelfth tranche, plus
 earlier coverage-hardening follow-up work for serialization error paths, crate
 error constructors, and local soak runner
 resume/output/error-policy paths. It
@@ -789,6 +790,21 @@ public constructor and validator. Phase 176 changes no production code, creates
 no benchmark evidence, creates no Level2+ evidence, and does not claim
 whole-workspace 100% coverage.
 
+Phase 177 continues that bounded coverage campaign over local promotion
+preflight validation code. It adds focused tests for reviewed-promotion
+preflight shape, candidate, append-preview, review-decision, digest, marker,
+nonclaim, score-axis, forbidden-text, Markdown, and malformed-JSON rejection
+paths, plus official-submission package shape, digest, nonclaim, forbidden-text,
+Markdown, and malformed-JSON rejection paths. The targeted module moved from
+`70.49%` line / `88.57%` function / `81.35%` region coverage to `98.62%`
+line / `94.29%` function / `98.05%` region coverage under
+`cargo llvm-cov -p zkbench-core --all-features --json --summary-only`. The
+remaining uncovered target-file spans are serialization-error closures for
+structurally serializable metadata structs and a narrow already-covered
+external-provenance scanner loop edge. Phase 177 changes no production code,
+creates no benchmark evidence, creates no Level2+ evidence, and does not claim
+whole-workspace 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -912,6 +928,8 @@ This report touches only:
 - `docs/175-phase-acceptance-policy-coverage-tenth-tranche-notes.md`
 - `docs/176-phase-evidence-candidate-coverage-eleventh-tranche-notes.md`
 - `crates/zkbench-core/tests/evidence_record_candidate.rs`
+- `docs/177-phase-promotion-preflight-coverage-twelfth-tranche-notes.md`
+- `crates/zkbench-core/tests/phase_w_promotion_preflight.rs`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
@@ -967,12 +985,12 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 176 coverage validation.
+Run from repository root during Phase 177 coverage validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
-cargo test -p zkbench-core --test evidence_record_candidate
+cargo test -p zkbench-core --test phase_w_promotion_preflight
 cargo test -p zkbench-core --test repo_claim_boundary_docs
 cargo test -p zkbench-core --test repo_hygiene
 cargo test -p zkbench-core --test phase_161_mutation_completion
@@ -991,16 +1009,16 @@ cargo llvm-cov -p zkbench-core --all-features --json --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 176 coverage validation passed. `cargo test --workspace --all-features`,
+Phase 177 coverage validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. Focused Phase 176 checks verify evidence-record candidate
-creation, status behavior, malformed JSON error mapping, acceptance-validation
-failure, Level2+ boundary rejection, individual claim-flag rejection,
-disallowed evidence-class rejection, local metadata rejection, forbidden claim
-text rejection, and missing-provenance rejection. The `rg`
+mutation engine. Focused Phase 177 checks verify reviewed-promotion preflight
+shape, candidate, append-preview, review-decision, digest, marker, nonclaim,
+score-axis, forbidden-text, Markdown, and malformed-JSON rejection paths, plus
+official-submission package shape, digest, nonclaim, forbidden-text, Markdown,
+and malformed-JSON rejection paths. The `rg`
 package-surface check
 returned no package files (exit code 1 with empty output), confirming no
 `package.json` or `pnpm-lock.yaml` surface exists.
@@ -1008,18 +1026,18 @@ returned no package files (exit code 1 with empty output), confirming no
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-The Phase 176 post-tranche
+The Phase 177 post-tranche
 `cargo llvm-cov --workspace --all-features --json --summary-only` run reported
-`88.82%` region coverage, `85.40%` function execution, and `87.69%` line
-coverage across the workspace. The Phase 176 post-tranche
+`89.06%` region coverage, `85.48%` function execution, and `88.24%` line
+coverage across the workspace. The Phase 177 post-tranche
 `cargo llvm-cov -p zkbench-core --all-features --json --summary-only` run
-reported `85.58%` region coverage, `81.72%` function execution, and `84.66%`
+reported `85.95%` region coverage, `81.83%` function execution, and `85.44%`
 line coverage for `zkbench-core`; the targeted
-`candidate.rs` module reported `96.14%` region coverage, `92.86%` function
-execution, and `93.50%` line coverage. Branch coverage was not reported by
-these runs. The remaining uncovered target-file spans are defensive or
-unreachable through the public constructor and validator, including the
-`serde_json::to_string_pretty` serialization-error closure.
+`promotion_preflight.rs` module reported `98.05%` region coverage, `94.29%`
+function execution, and `98.62%` line coverage. Branch coverage was not
+reported by these runs. The remaining uncovered target-file spans are
+serialization-error closures for structurally serializable metadata structs and
+a narrow already-covered external-provenance scanner loop edge.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

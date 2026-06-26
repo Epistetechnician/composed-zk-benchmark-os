@@ -23,13 +23,14 @@ use zkbench_core::{
     AcceptedLedgerAppendTransactionRequest, AcceptedLedgerAppendTransactionVersion, ArtifactDigest,
     ArtifactKind, ArtifactRole, ClaimBoundary, EvidenceAcceptancePolicy,
     EvidenceAppendPreviewStatus, EvidenceClass, EvidenceLedger, EvidenceReviewChecklist,
-    EvidenceReviewDecisionKind, EvidenceReviewerRole, ExternalReplayBenchmarkTarget,
-    ExternalReplaySubmissionPreflightIssueKind, ExternalReplaySubmissionPreflightOutputRequest,
-    ExternalReplaySubmissionPreflightRequest, ExternalReplaySubmissionPreflightVersion,
-    OfficialSubmissionPackageIssueKind, OfficialSubmissionPackageMetadata,
-    OfficialSubmissionPackageOutputRequest, OfficialSubmissionPackageVersion,
-    ReviewedPromotionPreflightIssueKind, ReviewedPromotionPreflightRequest,
-    ReviewedPromotionPreflightVersion, EXTERNAL_REPLAY_PREFLIGHT_INPUT_MANIFEST_DIGEST_PATH,
+    EvidenceReviewDecisionKind, EvidenceReviewDecisionStatus, EvidenceReviewerRole,
+    ExternalReplayBenchmarkTarget, ExternalReplaySubmissionPreflightIssueKind,
+    ExternalReplaySubmissionPreflightOutputRequest, ExternalReplaySubmissionPreflightRequest,
+    ExternalReplaySubmissionPreflightVersion, OfficialSubmissionPackageIssueKind,
+    OfficialSubmissionPackageMetadata, OfficialSubmissionPackageOutputRequest,
+    OfficialSubmissionPackageVersion, ReviewedPromotionPreflightIssueKind,
+    ReviewedPromotionPreflightRequest, ReviewedPromotionPreflightVersion,
+    EXTERNAL_REPLAY_PREFLIGHT_INPUT_MANIFEST_DIGEST_PATH,
     EXTERNAL_REPLAY_PREFLIGHT_INPUT_MANIFEST_PATH,
     EXTERNAL_REPLAY_PREFLIGHT_NON_CLAIMS_DIGEST_PATH, EXTERNAL_REPLAY_PREFLIGHT_NON_CLAIMS_PATH,
     EXTERNAL_REPLAY_PREFLIGHT_PACKAGE_DIGESTS_DIGEST_PATH,
@@ -337,6 +338,22 @@ fn promotion_preflight_rejects_missing_human_review_and_score_population() {
 }
 
 #[test]
+fn promotion_preflight_rejects_score_axes_for_local_class_even_at_level2_request() {
+    let mut request = valid_request();
+    request.requested_claim_boundary = ClaimBoundary::Level2ReproducibleBenchmarkArtifact;
+    request.requested_evidence_class = EvidenceClass::LocalReplay;
+    request.external_replay_provenance = vec!["external replay provenance declared".to_string()];
+    request.populates_score_axes = true;
+
+    let validation = validate_reviewed_promotion_preflight_request(&request);
+
+    assert!(!validation.valid);
+    assert!(validation.issues.iter().any(|issue| {
+        issue.kind == ReviewedPromotionPreflightIssueKind::ScoreAxisPopulationWithoutEvidenceClass
+    }));
+}
+
+#[test]
 fn promotion_preflight_rejects_submission_request_before_accepted_evidence() {
     let mut request = valid_request();
     request.official_submission_package_requested = true;
@@ -346,6 +363,114 @@ fn promotion_preflight_rejects_submission_request_before_accepted_evidence() {
     assert!(validation.issues.iter().any(|issue| {
         issue.kind == ReviewedPromotionPreflightIssueKind::OfficialSubmissionBeforeAcceptedEvidence
     }));
+}
+
+#[test]
+fn promotion_preflight_reports_shape_digest_marker_and_text_rejections() {
+    let mut request = valid_request();
+    request.id.clear();
+    request.candidate.id.clear();
+    request.append_preview.id.clear();
+    request.append_preview.source_candidate_id = "candidate_drift".to_string();
+    request.append_preview.status = EvidenceAppendPreviewStatus::Blocked;
+    request.append_preview.mutates_evidence_ledger = true;
+    request.review_decision.id = "review_drift".to_string();
+    request.review_decision.source_proposal_id = "proposal_drift".to_string();
+    request.review_decision.decision_kind = EvidenceReviewDecisionKind::Reject;
+    request.review_decision.decision_status = EvidenceReviewDecisionStatus::FinalizedRejected;
+    request.source_artifact_digests[0].hex_digest = "not-a-sha256".to_string();
+    request.non_claims.pop();
+    request
+        .unresolved_quarantine_markers
+        .push("quarantine marker remains unresolved".to_string());
+    request
+        .blocking_markers
+        .push("blocking marker remains unresolved".to_string());
+    request.claim_text = vec![
+        "official benchmark leaderboard claim".to_string(),
+        "local soak zk backend performance claim".to_string(),
+    ];
+    request
+        .external_replay_provenance
+        .push("formal proof claim".to_string());
+
+    let validation = validate_reviewed_promotion_preflight_request(&request);
+    let kinds = validation
+        .issues
+        .iter()
+        .map(|issue| issue.kind)
+        .collect::<Vec<_>>();
+
+    assert!(!validation.valid);
+    for expected in [
+        ReviewedPromotionPreflightIssueKind::EmptyIdentity,
+        ReviewedPromotionPreflightIssueKind::InvalidCandidate,
+        ReviewedPromotionPreflightIssueKind::InvalidAppendPreview,
+        ReviewedPromotionPreflightIssueKind::AppendPreviewMutatesLedger,
+        ReviewedPromotionPreflightIssueKind::CandidatePreviewMismatch,
+        ReviewedPromotionPreflightIssueKind::MissingHumanReviewApproval,
+        ReviewedPromotionPreflightIssueKind::MissingSourceArtifactDigest,
+        ReviewedPromotionPreflightIssueKind::MissingRequiredNonClaim,
+        ReviewedPromotionPreflightIssueKind::UnresolvedBlockingMarker,
+        ReviewedPromotionPreflightIssueKind::ForbiddenClaimText,
+        ReviewedPromotionPreflightIssueKind::LocalSoakTelemetryPerformancePromotion,
+    ] {
+        assert!(
+            kinds.contains(&expected),
+            "missing expected issue kind {expected:?}; got {kinds:?}"
+        );
+    }
+}
+
+#[test]
+fn promotion_preflight_reports_missing_source_digests_and_render_nonclaims() {
+    let mut request = valid_request();
+    request.source_artifact_digests.clear();
+
+    let validation = validate_reviewed_promotion_preflight_request(&request);
+
+    assert!(!validation.valid);
+    assert!(validation.issues.iter().any(|issue| {
+        issue.kind == ReviewedPromotionPreflightIssueKind::MissingSourceArtifactDigest
+            && issue.path == "request.source_artifact_digests"
+    }));
+
+    let mut report = build_reviewed_promotion_preflight_report(&valid_request());
+    report.non_claims.clear();
+    let error = render_reviewed_promotion_preflight_markdown(&report)
+        .expect_err("report missing nonclaims should not render");
+
+    assert!(error
+        .to_string()
+        .contains("reviewed_promotion_preflight.non_claims"));
+}
+
+#[test]
+fn promotion_preflight_markdown_lists_invalid_report_issues() {
+    let mut request = valid_request();
+    request.id.clear();
+    let report = build_reviewed_promotion_preflight_report(&request);
+
+    let markdown = render_reviewed_promotion_preflight_markdown(&report)
+        .expect("invalid report should render");
+
+    assert!(markdown.contains("EmptyIdentity"));
+    assert!(markdown.contains("request.id"));
+}
+
+#[test]
+fn promotion_preflight_json_deserializers_report_errors() {
+    let promotion_error = deserialize_reviewed_promotion_preflight_report_json("{not-json")
+        .expect_err("malformed promotion preflight JSON should fail");
+    assert!(promotion_error
+        .to_string()
+        .contains("deserialize_reviewed_promotion_preflight_report_json"));
+
+    let package_error = deserialize_official_submission_package_metadata_json("{not-json")
+        .expect_err("malformed official package JSON should fail");
+    assert!(package_error
+        .to_string()
+        .contains("deserialize_official_submission_package_metadata_json"));
 }
 
 #[test]
@@ -401,6 +526,55 @@ fn official_submission_metadata_requires_accepted_evidence_and_remains_inert() {
         render_official_submission_package_markdown(&package).expect("markdown should render");
     assert!(markdown.contains("Submitted to official endpoint: `false`"));
     assert!(markdown.contains("accepted-ledger-entry-fixture"));
+}
+
+#[test]
+fn official_submission_metadata_reports_shape_digest_and_text_rejections() {
+    let (_, mut package) = accepted_ledger_and_package();
+    package.package_id.clear();
+    package.source_pack_ids.clear();
+    package.external_replay_environment_provenance.clear();
+    package.artifact_digests[0].hex_digest = "not-a-sha256".to_string();
+    package.non_claims.pop();
+    package
+        .reproduction_instructions
+        .push("official benchmark ranking claim".to_string());
+
+    let validation = validate_official_submission_package_metadata(&package);
+    let kinds = validation
+        .issues
+        .iter()
+        .map(|issue| issue.kind)
+        .collect::<Vec<_>>();
+
+    assert!(!validation.valid);
+    for expected in [
+        OfficialSubmissionPackageIssueKind::EmptyIdentity,
+        OfficialSubmissionPackageIssueKind::MissingExternalReplayProvenance,
+        OfficialSubmissionPackageIssueKind::MissingArtifactDigest,
+        OfficialSubmissionPackageIssueKind::MissingRequiredNonClaim,
+        OfficialSubmissionPackageIssueKind::ForbiddenClaimText,
+    ] {
+        assert!(
+            kinds.contains(&expected),
+            "missing expected issue kind {expected:?}; got {kinds:?}"
+        );
+    }
+    let render_error = render_official_submission_package_markdown(&package)
+        .expect_err("invalid official package should not render");
+    assert!(render_error
+        .to_string()
+        .contains("official_submission_package"));
+
+    let (_, mut package_without_digests) = accepted_ledger_and_package();
+    package_without_digests.artifact_digests.clear();
+    let missing_digest_validation =
+        validate_official_submission_package_metadata(&package_without_digests);
+    assert!(!missing_digest_validation.valid);
+    assert!(missing_digest_validation.issues.iter().any(|issue| {
+        issue.kind == OfficialSubmissionPackageIssueKind::MissingArtifactDigest
+            && issue.path == "package.artifact_digests"
+    }));
 }
 
 #[test]
