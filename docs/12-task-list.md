@@ -2890,6 +2890,38 @@ Exit criteria: the focused test suite passes, the targeted module reaches the
 highest honest public-API coverage without semantic changes, and root
 validation remains green.
 
+## Benchmark Track: Phase 185 Mutation Apply Coverage Twentieth Tranche
+
+Status: complete for mutation apply coverage twentieth tranche. See
+`docs/185-phase-mutation-apply-coverage-twentieth-tranche-notes.md`.
+
+Goal: continue the path toward higher end-to-end coverage by hardening the
+next reachable low-coverage mutation-application surface while preserving claim
+boundaries.
+
+Implemented: focused regression tests for default Phase D/E mutation bundle
+execution, public primary-trace evaluation, bad-counter mutation handling for
+`add_assign` integer operands other than `1`, and bad-counter mutation handling
+for `sub_assign` integer updates. No production code changed in this tranche.
+
+Coverage result: `mutation/apply.rs` moved from `75.37%` line / `82.76%`
+function / `76.59%` region coverage to `89.93%` line / `89.66%` function /
+`87.29%` region coverage. The package floor remains
+`replay/serialization.rs` at `75.00%` line coverage because its remaining
+uncovered lines are structurally unreachable `serde_json::to_string_pretty`
+error mappings for concrete derived replay structs.
+
+Anti-goals: mutation semantics changes, production source changes, external
+execution, generated artifact materialization, accepted Evidence Ledger policy
+changes, benchmark evidence, score-axis population, Level2+ evidence,
+semantic-correctness claims, production readiness, unsafe coverage forcing,
+coverage suppression, structurally unreachable serialization-error forcing, or
+whole-workspace 100% coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches the
+highest honest public-API coverage without semantic changes, and root
+validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
