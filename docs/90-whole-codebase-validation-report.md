@@ -63,7 +63,7 @@ pipeline observability hardening implementation, and the Phase 166 mutation
 coverage first tranche, and the Phase 167 mutation coverage second tranche,
 and the Phase 168 mutation coverage third tranche, and the Phase 169 mutation
 coverage fourth tranche, and the Phase 170 mutation coverage fifth tranche,
-plus earlier
+and the Phase 171 mutation coverage sixth tranche, plus earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
@@ -701,6 +701,19 @@ without changing emitted provenance or mutation semantics. Phase 170 creates no
 benchmark evidence, creates no Level2+ evidence, and does not claim
 whole-workspace 100% coverage.
 
+Phase 171 continues that bounded coverage campaign over local mutation code. It
+adds focused tests for `CorruptedGuardsPass` covering the class reporter,
+guard-provenance metadata, no-accepted-trace failure, missing trace-step
+transition skip behavior, and no-corruptible-guard failure. The targeted module
+moved from `80.39%` line / `33.33%` function / `85.33%` region coverage to
+`100.00%` line / `100.00%` function / `100.00%` region coverage under
+`cargo llvm-cov -p zkbench-core --all-features --json --summary-only`. Phase
+171 also carries the selected transition index through target selection before
+mutating the cloned surface, removing an impossible fallible re-lookup edge
+without changing emitted provenance or mutation semantics. Phase 171 creates no
+benchmark evidence, creates no Level2+ evidence, and does not claim
+whole-workspace 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -817,6 +830,7 @@ This report touches only:
 - `docs/168-phase-mutation-coverage-third-tranche-notes.md`
 - `docs/169-phase-mutation-coverage-fourth-tranche-notes.md`
 - `docs/170-phase-mutation-coverage-fifth-tranche-notes.md`
+- `docs/171-phase-mutation-coverage-sixth-tranche-notes.md`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
@@ -825,6 +839,7 @@ This report touches only:
 - `crates/zkbench-core/src/generator/deterministic.rs`
 - `crates/zkbench-core/src/generator/templates.rs`
 - `crates/zkbench-core/src/mutation/apply.rs`
+- `crates/zkbench-core/src/mutation/corrupted_guards.rs`
 - `crates/zkbench-core/src/mutation/invalid_unroll_bounds.rs`
 - `crates/zkbench-core/src/mutation/invariant_strengthening.rs`
 - `crates/zkbench-core/src/mutation/invariant_weakening.rs`
@@ -838,6 +853,7 @@ This report touches only:
 - `crates/zkbench-core/src/mutation/witness_aliasing.rs`
 - `crates/zkbench-core/src/scoring/distinguishability.rs`
 - `crates/zkbench-core/src/soak/telemetry.rs`
+- `crates/zkbench-core/tests/mutation_engine.rs`
 - `crates/zkbench-core/tests/operator_soak_campaign_contract.rs`
 - `crates/zkbench-core/tests/phase_154_new_families.rs`
 - `crates/zkbench-core/tests/phase_156_mutation_depth.rs`
@@ -864,11 +880,12 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 170 coverage validation.
+Run from repository root during Phase 171 coverage validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
+cargo test -p zkbench-core --test mutation_engine
 cargo test -p zkbench-core --test repo_claim_boundary_docs
 cargo test -p zkbench-core --test repo_hygiene
 cargo test -p zkbench-core --test phase_161_mutation_completion
@@ -881,21 +898,21 @@ cargo test -p zkbench-core
 cargo test --workspace --all-features
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 RUSTDOCFLAGS='-D warnings' cargo doc --workspace --all-features --no-deps
-cargo llvm-cov --workspace --all-features --summary-only
+cargo llvm-cov --workspace --all-features --json --summary-only
 cargo llvm-cov -p zkbench-core --all-features --summary-only
 cargo llvm-cov -p zkbench-core --all-features --json --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 170 coverage validation passed. `cargo test --workspace --all-features`,
+Phase 171 coverage validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. Focused Phase 170 checks verify the semantic no-op drift pass
-class reporter, existing-noop replacement after an earlier non-noop action,
-inserted drift assignment when no noop exists, and fail-closed no-trace,
-no-true-guarded-transition, and no-integer-field paths. The `rg`
+mutation engine. Focused Phase 171 checks verify the corrupted guards pass
+class reporter, guard-provenance metadata, no-accepted-trace failure,
+missing-trace-step-transition skip behavior, and no-corruptible-guard failure
+paths. The `rg`
 package-surface check
 returned no package files (exit code 1 with empty output), confirming no
 `package.json` or `pnpm-lock.yaml` surface exists.
@@ -903,14 +920,14 @@ returned no package files (exit code 1 with empty output), confirming no
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-The Phase 170 post-tranche
-`cargo llvm-cov --workspace --all-features --summary-only` run reported
-`88.18%` region coverage, `84.84%` function execution, and `86.70%` line
-coverage across the workspace. The Phase 170 post-tranche
+The Phase 171 post-tranche
+`cargo llvm-cov --workspace --all-features --json --summary-only` run reported
+`88.23%` region coverage, `84.97%` function execution, and `86.75%` line
+coverage across the workspace. The Phase 171 post-tranche
 `cargo llvm-cov -p zkbench-core --all-features --json --summary-only` run
-reported `84.60%` region coverage, `80.91%` function execution, and `83.27%`
+reported `84.65%` region coverage, `81.04%` function execution, and `83.33%`
 line coverage for `zkbench-core`; the targeted
-`semantic_no_op_drift.rs` module reported `100.00%` region coverage,
+`corrupted_guards.rs` module reported `100.00%` region coverage,
 `100.00%` function execution, and `100.00%` line coverage. Branch coverage was
 not reported by these runs.
 

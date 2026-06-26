@@ -3,7 +3,7 @@
 use crate::error::{Result, ZkBenchError};
 use crate::evidence::ExpectedVerdict;
 
-use super::apply::{corrupt_guard, finish_mutation, transition, transition_mut, MutationBuild};
+use super::apply::{corrupt_guard, finish_mutation, MutationBuild};
 use super::pass::{MutationApplication, MutationInput, MutationPass, MutationSafetyClass};
 use super::MutationClass;
 
@@ -21,11 +21,19 @@ impl MutationPass for CorruptedGuardsPass {
         let mut selected = None;
         for trace in &instance.accepted_traces {
             for step in trace.steps.iter().rev() {
-                if let Some(candidate) = transition(&instance.surface_spec, &step.transition) {
+                if let Some((transition_index, candidate)) = instance
+                    .surface_spec
+                    .machine
+                    .transitions
+                    .iter()
+                    .enumerate()
+                    .find(|(_, transition)| transition.id == step.transition)
+                {
                     let corrupted = corrupt_guard(&candidate.guard);
                     if corrupted != candidate.guard {
                         selected = Some((
                             trace.clone(),
+                            transition_index,
                             candidate.id.clone(),
                             candidate.guard.clone(),
                             corrupted,
@@ -39,8 +47,8 @@ impl MutationPass for CorruptedGuardsPass {
             }
         }
 
-        let (primary_trace, transition_id, before_guard, after_guard) =
-            selected.ok_or_else(|| {
+        let (primary_trace, transition_index, transition_id, before_guard, after_guard) = selected
+            .ok_or_else(|| {
                 ZkBenchError::mutation(
                     "corrupted_guards.target",
                     "no accepted trace step with an executable guard was eligible",
@@ -48,7 +56,7 @@ impl MutationPass for CorruptedGuardsPass {
             })?;
 
         let mut surface_spec = instance.surface_spec.clone();
-        transition_mut(&mut surface_spec, &transition_id)?.guard = after_guard.clone();
+        surface_spec.machine.transitions[transition_index].guard = after_guard.clone();
 
         finish_mutation(MutationBuild {
             mutation_id: format!("{}_corrupted_guards_{}", instance.id, transition_id),
