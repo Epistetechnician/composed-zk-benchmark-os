@@ -264,6 +264,7 @@ Surface DSL
 | [docs/176-phase-evidence-candidate-coverage-eleventh-tranche-notes.md](docs/176-phase-evidence-candidate-coverage-eleventh-tranche-notes.md) | Phase 176 evidence candidate coverage eleventh tranche notes. |
 | [docs/177-phase-promotion-preflight-coverage-twelfth-tranche-notes.md](docs/177-phase-promotion-preflight-coverage-twelfth-tranche-notes.md) | Phase 177 promotion preflight coverage twelfth tranche notes. |
 | [docs/178-phase-proposal-ledger-coverage-thirteenth-tranche-notes.md](docs/178-phase-proposal-ledger-coverage-thirteenth-tranche-notes.md) | Phase 178 proposal ledger coverage thirteenth tranche notes. |
+| [docs/179-phase-zkml-coverage-fourteenth-tranche-notes.md](docs/179-phase-zkml-coverage-fourteenth-tranche-notes.md) | Phase 179 zkML coverage fourteenth tranche notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |

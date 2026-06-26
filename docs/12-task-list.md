@@ -2703,6 +2703,37 @@ Exit criteria: the focused test suite passes, the targeted module reaches the
 highest honest public-API coverage without semantic changes, and root
 validation remains green.
 
+## Benchmark Track: Phase 179 zkML Coverage Fourteenth Tranche
+
+Status: complete for local inert zkML workload manifest coverage fourteenth
+tranche. See `docs/179-phase-zkml-coverage-fourteenth-tranche-notes.md`.
+
+Goal: continue the path toward higher end-to-end coverage by hardening the next
+bounded low-coverage local `zkml.rs` validation module while preserving claim
+boundaries.
+
+Implemented: focused regression tests for default manifest version, metric
+executable-adapter classification, top-level shape rejection, input/model
+artifact identity/ref/digest/boundary rejection paths, output and metric
+boundary rejection paths, executable-adapter authorization rejection, missing
+limitation rejection, and malformed JSON error context. No production code
+changed in this tranche.
+
+Coverage result: `zkml.rs` moved from `71.68%` line / `87.50%` function /
+`82.42%` region coverage to `98.53%` line / `93.75%` function / `97.80%`
+region coverage. The remaining counted target-file spans are defensive
+digest-root compute and serialization-error branches that are not reachable
+through ordinary valid public construction without changing semantics.
+
+Anti-goals: zkML execution, zkML adapter implementation, zkML semantics changes,
+evidence promotion, benchmark evidence, external execution, Level2+ evidence,
+semantic-correctness claims, production readiness, unsafe coverage forcing,
+coverage suppression, or whole-workspace 100% coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches the
+highest honest public-API coverage without semantic changes, and root
+validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
