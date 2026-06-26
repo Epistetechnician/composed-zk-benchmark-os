@@ -71,7 +71,8 @@ Phase 176 evidence candidate coverage eleventh tranche, and the Phase 177
 promotion preflight coverage twelfth tranche, and the Phase 178 proposal ledger
 coverage thirteenth tranche, and the Phase 179 zkML coverage fourteenth tranche,
 and the Phase 180 external submission preflight coverage fifteenth tranche, and
-the Phase 181 soak shard coverage sixteenth tranche, plus
+the Phase 181 soak shard coverage sixteenth tranche, and the Phase 182 evidence
+eligibility coverage seventeenth tranche, plus
 earlier coverage-hardening follow-up work for serialization error paths, crate
 error constructors, and local soak runner
 resume/output/error-policy paths. It
@@ -862,6 +863,19 @@ package coverage floor is `evidence/eligibility.rs` at `73.75%` line coverage.
 Phase 181 changes no production code, creates no benchmark evidence, creates no
 Level2+ evidence, and does not claim whole-workspace 100% coverage.
 
+Phase 182 continues that bounded coverage campaign over the local Level2
+eligibility review-metadata checker. It adds focused tests for required
+external-artifact-capture and replay-manifest marker paths, invalid candidate
+blocking and finding metadata, missing artifact/provenance reasons, forbidden
+official/formal/soundness claim flags, Level2 boundary blocking, malformed
+eligibility report JSON context, and no-evidence-creation checks. The targeted
+module moved from `73.75%` line / `78.57%` function / `72.94%` region coverage
+to `96.25%` line / `92.86%` function / `95.88%` region coverage under
+`cargo llvm-cov -p zkbench-core --all-features --json --summary-only`. The next
+package coverage floor is `local_benchmark_artifact.rs` at `74.42%` line
+coverage. Phase 182 changes no production code, creates no benchmark evidence,
+creates no Level2+ evidence, and does not claim whole-workspace 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -995,6 +1009,8 @@ This report touches only:
 - `crates/zkbench-core/tests/phase_180_external_submission_preflight_coverage.rs`
 - `docs/181-phase-soak-shard-coverage-sixteenth-tranche-notes.md`
 - `crates/zkbench-core/tests/phase_181_soak_shard_coverage.rs`
+- `docs/182-phase-evidence-eligibility-coverage-seventeenth-tranche-notes.md`
+- `crates/zkbench-core/tests/phase_182_evidence_eligibility_coverage.rs`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
@@ -1050,11 +1066,12 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 181 coverage validation.
+Run from repository root during Phase 182 coverage validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
+cargo test -p zkbench-core --test phase_182_evidence_eligibility_coverage
 cargo test -p zkbench-core --test phase_181_soak_shard_coverage
 cargo test -p zkbench-core --test phase_180_external_submission_preflight_coverage
 cargo test -p zkbench-core --test phase_179_zkml_coverage
@@ -1077,12 +1094,16 @@ cargo llvm-cov -p zkbench-core --all-features --json --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 181 coverage validation passed. `cargo test --workspace --all-features`,
+Phase 182 coverage validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. Focused Phase 181 checks verify public shard
+mutation engine. Focused Phase 182 checks verify required
+external-artifact-capture and replay-manifest marker paths, invalid candidate
+blocking and finding metadata, missing artifact/provenance reasons, forbidden
+claim flags, Level2 boundary blocking, malformed eligibility report JSON
+context, and no-evidence-creation checks. Focused Phase 181 checks verify public shard
 progress/id/resume-token/planner helpers, max-cases-per-shard overflow,
 shard-plan drift, shard-manifest shape/boundary/path rejection, and
 shard-summary boundary/progress/status validation. Focused Phase 180 checks
@@ -1102,16 +1123,16 @@ returned no package files (exit code 1 with empty output), confirming no
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-The Phase 181 post-tranche
+The Phase 182 post-tranche
 `cargo llvm-cov --workspace --all-features --json --summary-only` run reported
-`89.57%` region coverage, `85.91%` function execution, and `89.16%` line
-coverage across the workspace. The Phase 181 post-tranche
+`89.67%` region coverage, `85.99%` function execution, and `89.26%` line
+coverage across the workspace. The Phase 182 post-tranche
 `cargo llvm-cov -p zkbench-core --all-features --json --summary-only` run
-reported `86.73%` region coverage, `82.46%` function execution, and `86.74%`
-line coverage for `zkbench-core`; the targeted `soak/shard.rs` module reported
-`97.94%` region coverage, `100.00%` function execution, and `98.91%` line
-coverage. Branch coverage was not reported by these runs. The next package
-coverage floor is `evidence/eligibility.rs` at `73.75%` line coverage.
+reported `86.88%` region coverage, `82.57%` function execution, and `86.88%`
+line coverage for `zkbench-core`; the targeted `evidence/eligibility.rs` module
+reported `95.88%` region coverage, `92.86%` function execution, and `96.25%`
+line coverage. Branch coverage was not reported by these runs. The next package
+coverage floor is `local_benchmark_artifact.rs` at `74.42%` line coverage.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

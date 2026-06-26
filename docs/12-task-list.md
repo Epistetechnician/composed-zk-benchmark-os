@@ -2796,6 +2796,37 @@ Exit criteria: the focused test suite passes, the targeted module reaches the
 highest honest public-API coverage without semantic changes, and root
 validation remains green.
 
+## Benchmark Track: Phase 182 Evidence Eligibility Coverage Seventeenth Tranche
+
+Status: complete for local evidence eligibility coverage seventeenth tranche.
+See `docs/182-phase-evidence-eligibility-coverage-seventeenth-tranche-notes.md`.
+
+Goal: continue the path toward higher end-to-end coverage by hardening the next
+bounded low-coverage local Level2 eligibility review-metadata checker while
+preserving claim boundaries.
+
+Implemented: focused regression tests for required external-artifact-capture
+and replay-manifest marker paths, invalid candidate blocking and finding
+metadata, missing artifact/provenance reasons, forbidden official/formal/
+soundness claim flags, Level2 boundary blocking, malformed eligibility report
+JSON context, and no-evidence-creation checks. No production code changed in
+this tranche.
+
+Coverage result: `evidence/eligibility.rs` moved from `73.75%` line / `78.57%`
+function / `72.94%` region coverage to `96.25%` line / `92.86%` function /
+`95.88%` region coverage. The next package coverage floor is
+`local_benchmark_artifact.rs` at `74.42%` line coverage.
+
+Anti-goals: eligibility semantics changes, production source changes, external
+execution, generated artifact materialization, accepted Evidence Ledger
+mutation, benchmark evidence, score-axis population, Level2+ evidence,
+semantic-correctness claims, production readiness, unsafe coverage forcing,
+coverage suppression, or whole-workspace 100% coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches the
+highest honest public-API coverage without semantic changes, and root
+validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
