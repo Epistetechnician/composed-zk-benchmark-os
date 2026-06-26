@@ -79,8 +79,9 @@ twentieth tranche, and the Phase 186 official submission output coverage
 twenty-first tranche, and the Phase 187 scoring coverage twenty-second
 tranche, and the Phase 188 soak reproduction coverage twenty-third tranche,
 and the Phase 189 external runner importer coverage twenty-fourth tranche, and
-the Phase 190 generator instance coverage twenty-fifth tranche, and the Phase
-191 recursion coverage twenty-sixth tranche, plus
+the Phase 190 generator instance coverage twenty-fifth tranche, the Phase 191
+recursion coverage twenty-sixth tranche, and the Phase 192 evidence review
+coverage twenty-seventh tranche, plus
 earlier coverage-hardening follow-up work for serialization error paths, crate
 error constructors, and local soak runner
 resume/output/error-policy paths. It
@@ -1027,6 +1028,23 @@ structs. Phase 191 changes no production code, creates no benchmark evidence,
 creates no Level2+ evidence, does not force unreachable serialization-error
 branches, and does not claim whole-workspace 100% coverage.
 
+Phase 192 continues that bounded coverage campaign over manual evidence-review
+policy and decision behavior. It adds focused tests for review-policy defaults,
+reviewer-role classification, rejection and changes-requested builders, future
+append-preview routing, candidate-only approval blocking validation, forbidden
+claim-language scanning across decision notes, blocking issues, findings, and
+checklist-item notes, checklist helper behavior, and malformed checklist and
+decision JSON deserialization contexts. The targeted module moved from
+`77.40%` line / `76.67%` function / `73.60%` region coverage to `95.36%`
+line / `93.33%` function / `95.03%` region coverage under
+`cargo llvm-cov -p zkbench-core --all-features --json --summary-only`. The
+package floor remains `replay/serialization.rs` at `75.00%` line coverage; its
+remaining uncovered lines are structurally unreachable
+`serde_json::to_string_pretty` error mappings for concrete derived replay
+structs. Phase 192 changes no production code, creates no benchmark evidence,
+creates no Level2+ evidence, does not force unreachable serialization-error
+branches, and does not claim whole-workspace 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -1180,6 +1198,8 @@ This report touches only:
 - `crates/zkbench-core/tests/phase_190_generator_instance_coverage.rs`
 - `docs/191-phase-recursion-coverage-twenty-sixth-tranche-notes.md`
 - `crates/zkbench-core/tests/phase_191_recursion_coverage.rs`
+- `docs/192-phase-evidence-review-coverage-twenty-seventh-tranche-notes.md`
+- `crates/zkbench-core/tests/phase_192_evidence_review_coverage.rs`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
@@ -1235,11 +1255,12 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 191 coverage validation.
+Run from repository root during Phase 192 coverage validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
+cargo test -p zkbench-core --test phase_192_evidence_review_coverage
 cargo test -p zkbench-core --test phase_191_recursion_coverage
 cargo test -p zkbench-core --test phase_190_generator_instance_coverage
 cargo test -p zkbench-core --test phase_189_external_runner_importer_coverage
@@ -1272,12 +1293,17 @@ cargo llvm-cov -p zkbench-core --all-features --json --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 191 coverage validation passed. `cargo test --workspace --all-features`,
+Phase 192 coverage validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. Focused Phase 191 checks verify recursion-envelope empty
+mutation engine. Focused Phase 192 checks verify evidence-review policy
+defaults, reviewer-role classification, rejection and changes-requested review
+decision builders, future append-preview review routing, candidate-only
+approval blocking validation, forbidden claim-language scanning, checklist
+helper behavior, checklist JSON round-trip, and malformed checklist/decision
+JSON deserialization contexts. Focused Phase 191 checks verify recursion-envelope empty
 identity and missing-input validation, invalid digest
 algorithm/byte-length/hex-shape validation, metric claim-boundary escalation,
 recursion-adapter preparation empty plan shape, nested source-input and
@@ -1341,21 +1367,21 @@ returned no package files (exit code 1 with empty output), confirming no
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-The Phase 191 post-tranche
+The Phase 192 post-tranche
 `cargo llvm-cov --workspace --all-features --json --summary-only` run reported
-`90.70%` region coverage, `86.81%` function execution, and `90.83%` line
-coverage across the workspace. The Phase 191 post-tranche
+`90.87%` region coverage, `87.01%` function execution, and `91.00%` line
+coverage across the workspace. The Phase 192 post-tranche
 `cargo llvm-cov -p zkbench-core --all-features --json --summary-only` run
-reported `88.46%` region coverage, `83.77%` function execution, and `89.10%`
-line coverage for `zkbench-core`; the targeted `recursion.rs` module reported
-`96.83%` region coverage, `92.11%` function execution, and `97.05%` line
+reported `88.73%` region coverage, `84.05%` function execution, and `89.34%`
+line coverage for `zkbench-core`; the targeted `evidence/review.rs` module reported
+`95.03%` region coverage, `93.33%` function execution, and `95.36%` line
 coverage. Branch coverage was not reported by these runs. The
 package coverage floor remains `replay/serialization.rs` at `75.00%` line
 coverage. The next visible floor is `external_runner/serialization.rs` at
 `76.65%` line coverage. Both remaining serializer-wrapper floors are capped by
 structurally unreachable `serde_json::to_string_pretty` error mappings for
-concrete derived structs. The next reachable `zkbench-core` floors are
-`pack/reader.rs` and `evidence/review.rs`, tied at `77.40%` line coverage.
+concrete derived structs. The next reachable `zkbench-core` floor is
+`pack/reader.rs` at `77.40%` line coverage.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
