@@ -84,7 +84,8 @@ recursion coverage twenty-sixth tranche, the Phase 192 evidence review
 coverage twenty-seventh tranche, the Phase 193 pack reader coverage
 twenty-eighth tranche, the Phase 194 local artifact campaign coverage
 twenty-ninth tranche, and the Phase 195 evidence digest coverage thirtieth
-tranche, and the Phase 196 soak config coverage thirty-first tranche, plus
+tranche, the Phase 196 soak config coverage thirty-first tranche, and the Phase
+197 zk-Harness export coverage thirty-second tranche, plus
 earlier coverage-hardening follow-up work for serialization error paths, crate
 error constructors, and local soak runner
 resume/output/error-policy paths. It
@@ -1115,6 +1116,22 @@ structs. Phase 196 changes no production code, creates no benchmark evidence,
 creates no Level2+ evidence, does not force unreachable serialization-error
 branches, and does not claim whole-workspace 100% coverage.
 
+Phase 197 continues that bounded coverage campaign over zk-Harness dry-run
+export helper behavior. It adds focused tests for public helper delegation to
+direct export, source-pack id preservation, dry-run plan id binding into the
+export manifest, export-time rejection of a locally valid source pack whose id
+is unsafe for inert planned-command argument text, and validation
+context/path/message preservation on fail-closed export. The targeted module
+moved from `78.26%` line / `80.00%` function / `79.37%` region coverage to
+`86.96%` line / `80.00%` function / `80.95%` region coverage under
+`cargo llvm-cov -p zkbench-core --all-features --json --summary-only`. The
+package floor remains `replay/serialization.rs` at `75.00%` line coverage; its
+remaining uncovered lines are structurally unreachable
+`serde_json::to_string_pretty` error mappings for concrete derived replay
+structs. Phase 197 changes no production code, creates no benchmark evidence,
+creates no Level2+ evidence, does not force unreachable serialization-error
+branches, and does not claim whole-workspace 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -1274,6 +1291,12 @@ This report touches only:
 - `crates/zkbench-core/tests/phase_193_pack_reader_coverage.rs`
 - `docs/194-phase-local-artifact-campaign-coverage-twenty-ninth-tranche-notes.md`
 - `crates/zkbench-core/tests/phase_194_local_artifact_campaign_coverage.rs`
+- `docs/195-phase-evidence-digest-coverage-thirtieth-tranche-notes.md`
+- `crates/zkbench-core/tests/phase_195_evidence_digest_coverage.rs`
+- `docs/196-phase-soak-config-coverage-thirty-first-tranche-notes.md`
+- `crates/zkbench-core/tests/phase_196_soak_config_coverage.rs`
+- `docs/197-phase-zk-harness-export-coverage-thirty-second-tranche-notes.md`
+- `crates/zkbench-core/tests/phase_197_zk_harness_export_coverage.rs`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
@@ -1329,11 +1352,12 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 196 coverage validation.
+Run from repository root during Phase 197 coverage validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
+cargo test -p zkbench-core --test phase_197_zk_harness_export_coverage
 cargo test -p zkbench-core --test phase_196_soak_config_coverage
 cargo test -p zkbench-core --test phase_195_evidence_digest_coverage
 cargo test -p zkbench-core --test phase_194_local_artifact_campaign_coverage
@@ -1371,12 +1395,15 @@ cargo llvm-cov -p zkbench-core --all-features --json --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 196 coverage validation passed. `cargo test --workspace --all-features`,
+Phase 197 coverage validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. Focused Phase 196 checks verify local soak config helper
+mutation engine. Focused Phase 197 checks verify zk-Harness export helper
+delegation, source-pack id preservation, dry-run plan id binding into the
+export manifest, and fail-closed export-time validation for locally valid source
+pack ids that are unsafe in inert planned-command argument text. Focused Phase 196 checks verify local soak config helper
 normalization/counting, output-policy accounting, profile validation,
 boundary/scope rejection paths, unimplemented mutation rejection, and
 family/instance/mutation/shard/pack limit rejection. Focused Phase 195 checks verify deterministic digest
@@ -1458,21 +1485,21 @@ returned no package files (exit code 1 with empty output), confirming no
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-The Phase 196 post-tranche
+The Phase 197 post-tranche
 `cargo llvm-cov --workspace --all-features --json --summary-only` run reported
-`91.37%` region coverage, `87.72%` function execution, and `91.72%` line
-coverage across the workspace. The Phase 196 post-tranche
+`91.38%` region coverage, `87.72%` function execution, and `91.73%` line
+coverage across the workspace. The Phase 197 post-tranche
 `cargo llvm-cov -p zkbench-core --all-features --json --summary-only` run
-reported `89.49%` region coverage, `85.08%` function execution, and `90.34%`
-line coverage for `zkbench-core`; the targeted `soak/config.rs`
-module reported `99.26%` region coverage, `100.00%` function execution, and
-`98.88%` line coverage. Branch coverage was not reported by these runs. The
+reported `89.49%` region coverage, `85.08%` function execution, and `90.36%`
+line coverage for `zkbench-core`; the targeted `adapters/zk_harness/export.rs`
+module reported `80.95%` region coverage, `80.00%` function execution, and
+`86.96%` line coverage. Branch coverage was not reported by these runs. The
 package coverage floor remains `replay/serialization.rs` at `75.00%` line
 coverage. The next visible floor is `external_runner/serialization.rs` at
 `76.65%` line coverage. Both remaining serializer-wrapper floors are capped by
 structurally unreachable `serde_json::to_string_pretty` error mappings for
 concrete derived structs. The next reachable `zkbench-core` floor is
-`adapters/zk_harness/export.rs` at `78.26%` line coverage.
+`soak/runner.rs` at `78.41%` line coverage.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
