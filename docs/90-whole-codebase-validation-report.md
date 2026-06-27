@@ -84,7 +84,7 @@ recursion coverage twenty-sixth tranche, the Phase 192 evidence review
 coverage twenty-seventh tranche, the Phase 193 pack reader coverage
 twenty-eighth tranche, the Phase 194 local artifact campaign coverage
 twenty-ninth tranche, and the Phase 195 evidence digest coverage thirtieth
-tranche, plus
+tranche, and the Phase 196 soak config coverage thirty-first tranche, plus
 earlier coverage-hardening follow-up work for serialization error paths, crate
 error constructors, and local soak runner
 resume/output/error-policy paths. It
@@ -1098,6 +1098,23 @@ replay structs. Phase 195 changes no production code, creates no benchmark
 evidence, creates no Level2+ evidence, does not force unreachable
 serialization-error branches, and does not claim whole-workspace 100% coverage.
 
+Phase 196 continues that bounded coverage campaign over local soak
+configuration behavior. It adds focused tests for seed-range helpers, family and
+mutation selection normalization, planned case and mutation counts,
+output-policy pack-write accounting, smoke/regression/focused/custom/nightly
+profile validation, config version and local-only note preservation, boundary
+and empty-scope rejection paths, unimplemented mutation rejection, and
+family/instance/mutation/shard/pack limit rejection. The targeted module moved
+from `78.21%` line / `90.24%` function / `86.35%` region coverage to `98.88%`
+line / `100.00%` function / `99.26%` region coverage under
+`cargo llvm-cov -p zkbench-core --all-features --json --summary-only`. The
+package floor remains `replay/serialization.rs` at `75.00%` line coverage; its
+remaining uncovered lines are structurally unreachable
+`serde_json::to_string_pretty` error mappings for concrete derived replay
+structs. Phase 196 changes no production code, creates no benchmark evidence,
+creates no Level2+ evidence, does not force unreachable serialization-error
+branches, and does not claim whole-workspace 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -1312,11 +1329,12 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 195 coverage validation.
+Run from repository root during Phase 196 coverage validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
+cargo test -p zkbench-core --test phase_196_soak_config_coverage
 cargo test -p zkbench-core --test phase_195_evidence_digest_coverage
 cargo test -p zkbench-core --test phase_194_local_artifact_campaign_coverage
 cargo test -p zkbench-core --test phase_193_pack_reader_coverage
@@ -1353,12 +1371,15 @@ cargo llvm-cov -p zkbench-core --all-features --json --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 195 coverage validation passed. `cargo test --workspace --all-features`,
+Phase 196 coverage validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. Focused Phase 195 checks verify deterministic digest
+mutation engine. Focused Phase 196 checks verify local soak config helper
+normalization/counting, output-policy accounting, profile validation,
+boundary/scope rejection paths, unimplemented mutation rejection, and
+family/instance/mutation/shard/pack limit rejection. Focused Phase 195 checks verify deterministic digest
 serialization, struct/raw digest parity, byte-level JSON digest behavior,
 metadata preservation, empty payload hashing, and serialization-error
 propagation. Focused Phase 194 checks verify local artifact campaign
@@ -1437,21 +1458,21 @@ returned no package files (exit code 1 with empty output), confirming no
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-The Phase 195 post-tranche
+The Phase 196 post-tranche
 `cargo llvm-cov --workspace --all-features --json --summary-only` run reported
-`91.29%` region coverage, `87.56%` function execution, and `91.50%` line
-coverage across the workspace. The Phase 195 post-tranche
+`91.37%` region coverage, `87.72%` function execution, and `91.72%` line
+coverage across the workspace. The Phase 196 post-tranche
 `cargo llvm-cov -p zkbench-core --all-features --json --summary-only` run
-reported `89.36%` region coverage, `84.85%` function execution, and `90.04%`
-line coverage for `zkbench-core`; the targeted `evidence/digest.rs`
-module reported `97.44%` region coverage, `100.00%` function execution, and
-`100.00%` line coverage. Branch coverage was not reported by these runs. The
+reported `89.49%` region coverage, `85.08%` function execution, and `90.34%`
+line coverage for `zkbench-core`; the targeted `soak/config.rs`
+module reported `99.26%` region coverage, `100.00%` function execution, and
+`98.88%` line coverage. Branch coverage was not reported by these runs. The
 package coverage floor remains `replay/serialization.rs` at `75.00%` line
 coverage. The next visible floor is `external_runner/serialization.rs` at
 `76.65%` line coverage. Both remaining serializer-wrapper floors are capped by
 structurally unreachable `serde_json::to_string_pretty` error mappings for
 concrete derived structs. The next reachable `zkbench-core` floor is
-`soak/config.rs` at `78.21%` line coverage.
+`adapters/zk_harness/export.rs` at `78.26%` line coverage.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
