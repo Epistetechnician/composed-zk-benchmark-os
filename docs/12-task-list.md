@@ -3366,6 +3366,81 @@ Exit criteria: the focused test suite passes, the targeted module reaches the
 highest honest public-API coverage without semantic changes, and root
 validation remains green.
 
+## Phase 198 Soak Runner Coverage Thirty-Third Tranche
+
+Status: complete. See
+`docs/198-phase-soak-runner-coverage-thirty-third-tranche-notes.md`.
+
+Goal: continue the bounded local coverage campaign by targeting the next
+reachable pure-data `zkbench-core` floor after confirming the serializer-wrapper
+floors remain capped by structurally unreachable
+`serde_json::to_string_pretty` error mappings.
+
+Implemented: focused regression tests for public shard wrapper run/resume
+behavior, checkpoint-backed skipped-by-resume status, stop-on-first-failure
+replay-failure recording, failure-pack-only output and telemetry,
+failure-corpus extraction, and overwrite-enabled sampled-pack output over a
+stale directory. No production code changed in this tranche.
+
+Coverage result: `soak/runner.rs` moved from `78.41%` line / `83.67%`
+function / `78.48%` region coverage to `89.42%` line / `95.92%` function /
+`90.08%` region coverage. The package floor remains
+`replay/serialization.rs` at `75.00%` line coverage, and the next visible floor
+is `external_runner/serialization.rs` at `76.65%` line coverage; both are
+serializer-wrapper files capped by structurally unreachable concrete-type
+serialization error mappings. The next reachable `zkbench-core` floor is
+`soak/resume.rs` at `78.61%` line coverage.
+
+Anti-goals: local soak runner semantics changes, resume semantics changes,
+output-pack semantics changes, failure-corpus semantics changes, telemetry
+semantics changes, production source changes, external execution, generated
+artifact materialization, accepted Evidence Ledger policy changes, benchmark
+evidence, real score-axis population, Level2+ evidence, semantic-correctness
+claims, production readiness, unsafe coverage forcing, coverage suppression,
+structurally unreachable serialization-error forcing, or whole-workspace 100%
+coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches the
+highest honest public-API coverage without semantic changes, and root
+validation remains green.
+
+## Phase 199 Soak Resume Coverage Thirty-Fourth Tranche
+
+Status: complete. See
+`docs/199-phase-soak-resume-coverage-thirty-fourth-tranche-notes.md`.
+
+Goal: continue the bounded local coverage campaign by targeting the next
+reachable pure-data `zkbench-core` floor after confirming the serializer-wrapper
+floors remain capped by structurally unreachable
+`serde_json::to_string_pretty` error mappings.
+
+Implemented: focused regression tests for elevated-boundary, empty-shard,
+resume-token, case-overlap, artifact-reference, empty failed-case id,
+parent-directory creation, readback, missing-file, and malformed-JSON checkpoint
+paths. No production code changed in this tranche.
+
+Coverage result: `soak/resume.rs` moved from `78.61%` line / `66.67%`
+function / `78.10%` region coverage to `93.58%` line / `77.78%` function /
+`88.10%` region coverage. The package floor remains
+`replay/serialization.rs` at `75.00%` line coverage, and the next visible floor
+is `external_runner/serialization.rs` at `76.65%` line coverage; both are
+serializer-wrapper files capped by structurally unreachable concrete-type
+serialization error mappings. The next reachable `zkbench-core` floor is
+`mutation/invalid_unroll_bounds.rs` at `78.87%` line coverage.
+
+Anti-goals: local soak checkpoint semantics changes, resume semantics changes,
+artifact-reference semantics changes, checkpoint persistence semantics changes,
+production source changes, external execution, generated artifact
+materialization, accepted Evidence Ledger policy changes, benchmark evidence,
+real score-axis population, Level2+ evidence, semantic-correctness claims,
+production readiness, unsafe coverage forcing, coverage suppression,
+structurally unreachable serialization-error forcing, or whole-workspace 100%
+coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches the
+highest honest public-API coverage without semantic changes, and root
+validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
