@@ -283,6 +283,8 @@ Surface DSL
 | [docs/195-phase-evidence-digest-coverage-thirtieth-tranche-notes.md](docs/195-phase-evidence-digest-coverage-thirtieth-tranche-notes.md) | Phase 195 evidence digest coverage thirtieth tranche notes. |
 | [docs/196-phase-soak-config-coverage-thirty-first-tranche-notes.md](docs/196-phase-soak-config-coverage-thirty-first-tranche-notes.md) | Phase 196 soak config coverage thirty-first tranche notes. |
 | [docs/197-phase-zk-harness-export-coverage-thirty-second-tranche-notes.md](docs/197-phase-zk-harness-export-coverage-thirty-second-tranche-notes.md) | Phase 197 zk-Harness export coverage thirty-second tranche notes. |
+| [docs/198-phase-soak-runner-coverage-thirty-third-tranche-notes.md](docs/198-phase-soak-runner-coverage-thirty-third-tranche-notes.md) | Phase 198 soak runner coverage thirty-third tranche notes. |
+| [docs/199-phase-soak-resume-coverage-thirty-fourth-tranche-notes.md](docs/199-phase-soak-resume-coverage-thirty-fourth-tranche-notes.md) | Phase 199 soak resume coverage thirty-fourth tranche notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
