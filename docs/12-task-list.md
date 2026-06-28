@@ -3441,6 +3441,47 @@ Exit criteria: the focused test suite passes, the targeted module reaches the
 highest honest public-API coverage without semantic changes, and root
 validation remains green.
 
+## Phase 200 Mutation Invalid Unroll Bounds Coverage Thirty-Fifth Tranche
+
+Status: complete. See
+`docs/200-phase-mutation-invalid-unroll-bounds-coverage-thirty-fifth-tranche-notes.md`.
+
+Goal: continue the bounded local coverage campaign by targeting the next
+reachable pure-data `zkbench-core` floor after confirming the serializer-wrapper
+floors remain capped by structurally unreachable
+`serde_json::to_string_pretty` error mappings.
+
+Implemented: focused regression tests for `InvalidUnrollBoundsPass` mutation
+class reporting, no-primary-trace fail-closed behavior, primary-trace and
+claim-boundary preservation, and affected-guard-id binding for an eligible
+bounded-counter-loop instance. No production code changed in this tranche.
+
+Coverage result: `mutation/invalid_unroll_bounds.rs` moved from `78.87%`
+line / `57.14%` function / `81.18%` region coverage to `88.73%` line /
+`85.71%` function / `89.41%` region coverage. The package floor remains
+`replay/serialization.rs` at `75.00%` line coverage, and the next visible floor
+is `external_runner/serialization.rs` at `76.65%` line coverage; both are
+serializer-wrapper files capped by structurally unreachable concrete-type
+serialization error mappings. The remaining uncovered lines in
+`mutation/invalid_unroll_bounds.rs` are structurally unreachable per the
+selector contract (`target.bound.is_none()` and the `negate_bound` `Bool` and
+`RawText` arms). After the two known serializer-wrapper caps, the next visible
+non-serializer `zkbench-core` floor requiring audit is
+`evidence/accepted_append.rs` at `78.99%` line coverage.
+
+Anti-goals: mutation pass semantics changes, selector semantics changes,
+`negate_bound` semantics changes, DSL types, oracle semantics, scoring
+semantics, production source changes, external execution, generated artifact
+materialization, accepted Evidence Ledger policy changes, benchmark evidence,
+real score-axis population, Level2+ evidence, semantic-correctness claims,
+production readiness, unsafe coverage forcing, coverage suppression,
+structurally unreachable serialization-error forcing, or whole-workspace 100%
+coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches the
+highest honest public-API coverage without semantic changes, and root
+validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
