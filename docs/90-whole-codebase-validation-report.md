@@ -87,7 +87,8 @@ twenty-ninth tranche, and the Phase 195 evidence digest coverage thirtieth
 tranche, the Phase 196 soak config coverage thirty-first tranche, and the Phase
 197 zk-Harness export coverage thirty-second tranche, and the Phase 198 soak
 runner coverage thirty-third tranche, and the Phase 199 soak resume coverage
-thirty-fourth tranche, plus
+thirty-fourth tranche, and the Phase 200 mutation invalid unroll bounds
+coverage thirty-fifth tranche, plus
 earlier coverage-hardening follow-up work for serialization error paths, crate
 error constructors, and local soak runner
 resume/output/error-policy paths. It
@@ -1164,6 +1165,25 @@ structs. Phase 199 changes no production code, creates no benchmark evidence,
 creates no Level2+ evidence, does not force unreachable serialization-error
 branches, and does not claim whole-workspace 100% coverage.
 
+Phase 200 continues that bounded coverage campaign over `InvalidUnrollBoundsPass`
+behavior. It adds focused tests for `InvalidUnrollBoundsPass::mutation_class()`
+reporting, no-primary-trace fail-closed behavior, primary-trace and
+claim-boundary preservation, and affected-guard-id binding for an eligible
+bounded-counter-loop instance. The targeted module moved from `78.87%` line /
+`57.14%` function / `81.18%` region coverage to `88.73%` line / `85.71%`
+function / `89.41%` region coverage under
+`cargo llvm-cov -p zkbench-core --all-features --json --summary-only`. The
+package floor remains `replay/serialization.rs` at `75.00%` line coverage; its
+remaining uncovered lines are structurally unreachable
+`serde_json::to_string_pretty` error mappings for concrete derived replay
+structs. The remaining uncovered lines in `mutation/invalid_unroll_bounds.rs`
+are structurally unreachable per the selector contract (`target.bound.is_none()`
+and the `negate_bound` `Bool` and `RawText` arms). Phase 200 changes no
+production code, creates no benchmark evidence, creates no Level2+ evidence,
+does not force unreachable serialization-error branches, does not force
+structurally unreachable selector-restricted branches, and does not claim
+whole-workspace 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -1333,6 +1353,8 @@ This report touches only:
 - `crates/zkbench-core/tests/phase_198_soak_runner_coverage.rs`
 - `docs/199-phase-soak-resume-coverage-thirty-fourth-tranche-notes.md`
 - `crates/zkbench-core/tests/phase_199_soak_resume_coverage.rs`
+- `docs/200-phase-mutation-invalid-unroll-bounds-coverage-thirty-fifth-tranche-notes.md`
+- `crates/zkbench-core/tests/phase_200_mutation_invalid_unroll_bounds_coverage.rs`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
@@ -1388,11 +1410,12 @@ artifacts.
 
 ## Validation Commands
 
-Run from repository root during Phase 199 coverage validation.
+Run from repository root during Phase 200 coverage validation.
 
 ```sh
 cargo fmt --all -- --check
 git diff --check
+cargo test -p zkbench-core --test phase_200_mutation_invalid_unroll_bounds_coverage
 cargo test -p zkbench-core --test phase_199_soak_resume_coverage
 cargo test -p zkbench-core --test phase_198_soak_runner_coverage
 cargo test -p zkbench-core --test phase_197_zk_harness_export_coverage
@@ -1433,12 +1456,15 @@ cargo llvm-cov -p zkbench-core --all-features --json --summary-only
 rg --files -g 'package.json' -g 'pnpm-lock.yaml'
 ```
 
-Phase 199 coverage validation passed. `cargo test --workspace --all-features`,
+Phase 200 coverage validation passed. `cargo test --workspace --all-features`,
 workspace clippy, workspace docs, `cargo check -p zkbench-core --examples`,
 `cargo test -p hsai-agent-admission`, `cargo test -p hsai-e2e-harness`, and
 `cargo test -p zkbench-core` all passed with all nine local generator families
 implemented and all 14 declared mutation classes dispatching through the local
-mutation engine. Focused Phase 199 checks verify elevated-boundary,
+mutation engine. Focused Phase 200 checks verify `InvalidUnrollBoundsPass`
+mutation class reporting, no-primary-trace fail-closed behavior, primary-trace
+and claim-boundary preservation, and affected-guard-id binding for an eligible
+bounded-counter-loop instance. Focused Phase 199 checks verify elevated-boundary,
 empty-shard, resume-token, case-overlap, artifact-reference, empty failed-case
 id, parent-directory creation, readback, missing-file, and malformed-JSON
 checkpoint paths. Focused Phase 198 checks verify public shard wrapper run and
@@ -1530,21 +1556,23 @@ returned no package files (exit code 1 with empty output), confirming no
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-The Phase 199 post-tranche
+The Phase 200 post-tranche
 `cargo llvm-cov --workspace --all-features --json --summary-only` run reported
-`91.69%` region coverage, `88.03%` function execution, and `92.03%` line
-coverage across the workspace. The Phase 199 post-tranche
+`91.71%` region coverage, `88.11%` function execution, and `92.05%` line
+coverage across the workspace. The Phase 200 post-tranche
 `cargo llvm-cov -p zkbench-core --all-features --json --summary-only` run
-reported `89.98%` region coverage, `85.54%` function execution, and `90.79%`
-line coverage for `zkbench-core`; the targeted `soak/resume.rs` module reported
-`88.10%` region coverage, `77.78%` function execution, and `93.58%` line
+reported `90.00%` region coverage, `85.65%` function execution, and `90.82%`
+line coverage for `zkbench-core`; the targeted
+`mutation/invalid_unroll_bounds.rs` module reported `89.41%` region coverage,
+`85.71%` function execution, and `88.73%` line
 coverage. Branch coverage was not reported by these runs. The
 package coverage floor remains `replay/serialization.rs` at `75.00%` line
 coverage. The next visible floor is `external_runner/serialization.rs` at
 `76.65%` line coverage. Both remaining serializer-wrapper floors are capped by
 structurally unreachable `serde_json::to_string_pretty` error mappings for
-concrete derived structs. The next reachable `zkbench-core` floor is
-`mutation/invalid_unroll_bounds.rs` at `78.87%` line coverage.
+concrete derived structs. After those two known caps, the next visible
+non-serializer `zkbench-core` floor requiring audit is
+`evidence/accepted_append.rs` at `78.99%` line coverage.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
