@@ -3482,6 +3482,44 @@ Exit criteria: the focused test suite passes, the targeted module reaches the
 highest honest public-API coverage without semantic changes, and root
 validation remains green.
 
+## Phase 201 Evidence Accepted Append Coverage Thirty-Sixth Tranche
+
+Status: complete. See
+`docs/201-phase-evidence-accepted-append-coverage-thirty-sixth-tranche-notes.md`.
+
+Goal: continue the bounded local coverage campaign by targeting the next
+visible non-serializer `zkbench-core` floor after confirming the two serializer
+wrapper floors remain capped by structurally unreachable concrete-type
+serialization error mappings.
+
+Implemented: focused regression tests for accepted-ledger append validation
+around empty identities, invalid ledgers, tampered preflight reports, current
+tip drift, append-preview candidate/entry metadata drift, missing source
+digests, forbidden transaction notes, and post-append ledger validation of
+forbidden transaction-id text. No production code changed in this tranche.
+
+Coverage result: `evidence/accepted_append.rs` moved from `79.77%` line /
+`84.62%` function coverage to `98.29%` line / `92.31%` function coverage. The
+`zkbench-core` package moved from `90.00%` region / `85.65%` function /
+`90.82%` line coverage to `90.13%` region / `85.71%` function / `91.11%` line
+coverage. The remaining uncovered lines in `evidence/accepted_append.rs` are
+the defensive empty-ledger-after-success guard and the concrete candidate digest
+serialization error mapping. The next package floor is `soak/health.rs` at
+`79.00%` line coverage.
+
+Anti-goals: accepted-append semantics changes, preflight semantics changes,
+evidence-ledger semantics changes, candidate digest semantics changes,
+production source changes, external execution, generated artifact
+materialization, accepted Evidence Ledger policy changes, benchmark evidence,
+real score-axis population, Level2+ evidence, semantic-correctness claims,
+production readiness, unsafe coverage forcing, coverage suppression,
+structurally unreachable serialization-error forcing, defensive
+post-append-empty-ledger guard forcing, or whole-workspace 100% coverage claims.
+
+Exit criteria: the focused test suite passes, the targeted module reaches the
+highest honest public-API coverage without semantic changes, and root
+validation remains green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
