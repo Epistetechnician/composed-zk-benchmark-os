@@ -295,6 +295,7 @@ Surface DSL
 | [docs/207-hsai-gateway-corpus-output-run-notes.md](docs/207-hsai-gateway-corpus-output-run-notes.md) | Phase 207 HSAI Gateway corpus output-run implementation notes. |
 | [docs/208-hsai-gateway-cost-router-notes.md](docs/208-hsai-gateway-cost-router-notes.md) | Phase 208 HSAI Gateway cost-router implementation notes. |
 | [docs/209-hsai-gateway-model-lane-registry-notes.md](docs/209-hsai-gateway-model-lane-registry-notes.md) | Phase 209 HSAI Gateway model-lane registry implementation notes. |
+| [docs/210-hsai-gateway-adversarial-corpus-notes.md](docs/210-hsai-gateway-adversarial-corpus-notes.md) | Phase 210 HSAI Gateway adversarial-corpus validation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1189,6 +1190,18 @@ call, runtime routing, network access, credential access, external replay,
 signer/tool integration, accepted Evidence Ledger mutation, score-axis
 population, benchmark output, production-readiness claim, semantic-correctness
 claim, global uniqueness claim, or Level2+ evidence.
+
+[docs/210-hsai-gateway-adversarial-corpus-notes.md](docs/210-hsai-gateway-adversarial-corpus-notes.md)
+records the local HSAI Gateway adversarial-corpus validation surface inside
+`hsai-agent-admission`. Typed corpora can now be checked for a portable corpus
+id, unique action ids, required adversarial threat-label coverage, an accepted
+benign control, non-accepted adversarial expectations, registered model-lane
+provenance, and a valid model-lane registry. It performs no corpus generation,
+model execution, model download, prompt storage, hosted-model call, network
+access, credential access, external replay, signer/tool integration, accepted
+Evidence Ledger mutation, score-axis population, benchmark output,
+production-readiness claim, semantic-correctness claim, global uniqueness
+claim, or Level2+ evidence.
 
 ## Validation Checklist
 

@@ -123,6 +123,26 @@ pub enum GatewayModelLaneRegistryIssue {
     UnboundedRentedModelMetadata(String),
 }
 
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayAdversarialCorpus {
+    pub schema_version: String,
+    pub corpus_id: String,
+    pub cases: Vec<GatewayCorpusCase>,
+    pub required_threat_labels: BTreeSet<GatewayThreatLabel>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayAdversarialCorpusIssue {
+    InvalidCorpusId,
+    EmptyCorpus,
+    DuplicateCaseId(GatewayActionId),
+    MissingRequiredThreatLabel(GatewayThreatLabel),
+    MissingAcceptedBenignCase,
+    UnsafeThreatExpectedAccepted(GatewayActionId),
+    UnknownModelLane(GatewayActionId),
+    InvalidModelLaneRegistry,
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 pub enum GatewayCostRoute {
     DeterministicOnly,
@@ -2134,6 +2154,92 @@ pub fn validate_gateway_model_lane_registry(
     issues
 }
 
+pub fn gateway_required_adversarial_threat_labels() -> BTreeSet<GatewayThreatLabel> {
+    BTreeSet::from([
+        GatewayThreatLabel::PromptInjectionPayment,
+        GatewayThreatLabel::WrongCounterparty,
+        GatewayThreatLabel::AmountLimitBypass,
+        GatewayThreatLabel::SourceDigestDrift,
+        GatewayThreatLabel::StaleApprovalReplay,
+        GatewayThreatLabel::DuplicateJsonKeyPayload,
+        GatewayThreatLabel::PolicyDowngrade,
+        GatewayThreatLabel::DirectAuthorityRequest,
+        GatewayThreatLabel::ForgedAcceptedDecision,
+        GatewayThreatLabel::MissingNonclaim,
+        GatewayThreatLabel::MissingSourceDigest,
+        GatewayThreatLabel::StaleJournalTip,
+        GatewayThreatLabel::SignerBeforeAdmission,
+    ])
+}
+
+pub fn validate_gateway_adversarial_corpus(
+    corpus: &GatewayAdversarialCorpus,
+    model_lane_registry: &GatewayModelLaneRegistry,
+) -> Vec<GatewayAdversarialCorpusIssue> {
+    let mut issues = Vec::new();
+    let mut seen_case_ids = BTreeSet::new();
+    let mut covered_threat_labels = BTreeSet::new();
+    let mut has_accepted_benign_case = false;
+
+    if !is_portable_artifact_id(&corpus.corpus_id) {
+        issues.push(GatewayAdversarialCorpusIssue::InvalidCorpusId);
+    }
+    if corpus.cases.is_empty() {
+        issues.push(GatewayAdversarialCorpusIssue::EmptyCorpus);
+    }
+    if !validate_gateway_model_lane_registry(model_lane_registry).is_empty() {
+        issues.push(GatewayAdversarialCorpusIssue::InvalidModelLaneRegistry);
+    }
+
+    for case in &corpus.cases {
+        if !seen_case_ids.insert(case.proposal.id.clone()) {
+            issues.push(GatewayAdversarialCorpusIssue::DuplicateCaseId(
+                case.proposal.id.clone(),
+            ));
+        }
+
+        covered_threat_labels.extend(case.proposal.threat_labels.iter().cloned());
+
+        let has_non_benign_threat = case
+            .proposal
+            .threat_labels
+            .iter()
+            .any(|label| label != &GatewayThreatLabel::Benign);
+        if has_non_benign_threat && case.expected_verdict == AdmissionVerdict::Accepted {
+            issues.push(GatewayAdversarialCorpusIssue::UnsafeThreatExpectedAccepted(
+                case.proposal.id.clone(),
+            ));
+        }
+        if !has_non_benign_threat
+            && case
+                .proposal
+                .threat_labels
+                .contains(&GatewayThreatLabel::Benign)
+            && case.expected_verdict == AdmissionVerdict::Accepted
+        {
+            has_accepted_benign_case = true;
+        }
+        if !gateway_model_lane_registry_contains(model_lane_registry, &case.proposal.model_lane) {
+            issues.push(GatewayAdversarialCorpusIssue::UnknownModelLane(
+                case.proposal.id.clone(),
+            ));
+        }
+    }
+
+    for label in &corpus.required_threat_labels {
+        if !covered_threat_labels.contains(label) {
+            issues.push(GatewayAdversarialCorpusIssue::MissingRequiredThreatLabel(
+                label.clone(),
+            ));
+        }
+    }
+    if !has_accepted_benign_case {
+        issues.push(GatewayAdversarialCorpusIssue::MissingAcceptedBenignCase);
+    }
+
+    issues
+}
+
 pub fn gateway_cost_router_default_policy(id: impl Into<String>) -> GatewayCostRouterPolicy {
     GatewayCostRouterPolicy {
         id: AdmissionPolicyId(id.into()),
@@ -3301,6 +3407,16 @@ fn gateway_model_lane_requires_external_bounds(kind: &GatewayModelLaneKind) -> b
     )
 }
 
+fn gateway_model_lane_registry_contains(
+    registry: &GatewayModelLaneRegistry,
+    provenance: &GatewayModelLaneProvenance,
+) -> bool {
+    registry
+        .entries
+        .iter()
+        .any(|entry| &entry.provenance == provenance)
+}
+
 fn gateway_cost_route_decision(
     proposal: &GatewayActionProposal,
     router_policy: &GatewayCostRouterPolicy,
@@ -3466,6 +3582,16 @@ mod tests {
         }
     }
 
+    fn gateway_model_lane_registry() -> GatewayModelLaneRegistry {
+        GatewayModelLaneRegistry {
+            schema_version: "hsai-gateway-model-lane-registry-v1".to_owned(),
+            entries: vec![gateway_model_lane_registry_entry(
+                "local-qwen",
+                gateway_model_lane(),
+            )],
+        }
+    }
+
     fn gateway_policy() -> GatewayActionPolicy {
         gateway_local_default_policy(
             "gateway-local-policy-v1",
@@ -3496,6 +3622,71 @@ mod tests {
             threat_labels: BTreeSet::from([GatewayThreatLabel::Benign]),
             direct_authority_requested: false,
             signer_or_tool_requested_before_admission: false,
+        }
+    }
+
+    fn gateway_adversarial_case(id: &str, threat_label: GatewayThreatLabel) -> GatewayCorpusCase {
+        let mut proposal = gateway_proposal(id);
+        proposal.threat_labels = BTreeSet::from([threat_label.clone()]);
+        match threat_label {
+            GatewayThreatLabel::Benign => GatewayCorpusCase {
+                proposal,
+                expected_verdict: AdmissionVerdict::Accepted,
+            },
+            GatewayThreatLabel::WrongCounterparty => {
+                proposal.target = "wrong-counterparty".to_owned();
+                GatewayCorpusCase {
+                    proposal,
+                    expected_verdict: AdmissionVerdict::Rejected,
+                }
+            }
+            GatewayThreatLabel::AmountLimitBypass => {
+                proposal.value_units = 500;
+                GatewayCorpusCase {
+                    proposal,
+                    expected_verdict: AdmissionVerdict::Rejected,
+                }
+            }
+            GatewayThreatLabel::DirectAuthorityRequest => {
+                proposal.direct_authority_requested = true;
+                GatewayCorpusCase {
+                    proposal,
+                    expected_verdict: AdmissionVerdict::Rejected,
+                }
+            }
+            GatewayThreatLabel::SignerBeforeAdmission => {
+                proposal.signer_or_tool_requested_before_admission = true;
+                GatewayCorpusCase {
+                    proposal,
+                    expected_verdict: AdmissionVerdict::Rejected,
+                }
+            }
+            _ => GatewayCorpusCase {
+                proposal,
+                expected_verdict: AdmissionVerdict::Rejected,
+            },
+        }
+    }
+
+    fn gateway_full_adversarial_corpus() -> GatewayAdversarialCorpus {
+        let mut cases = vec![gateway_adversarial_case(
+            "gateway-corpus-benign",
+            GatewayThreatLabel::Benign,
+        )];
+        for (index, label) in gateway_required_adversarial_threat_labels()
+            .into_iter()
+            .enumerate()
+        {
+            cases.push(gateway_adversarial_case(
+                &format!("gateway-corpus-threat-{index}"),
+                label,
+            ));
+        }
+        GatewayAdversarialCorpus {
+            schema_version: "hsai-gateway-adversarial-corpus-v1".to_owned(),
+            corpus_id: "gateway-local-adversarial-corpus-v1".to_owned(),
+            cases,
+            required_threat_labels: gateway_required_adversarial_threat_labels(),
         }
     }
 
@@ -3882,6 +4073,124 @@ mod tests {
             vec![
                 GatewayModelLaneRegistryIssue::DuplicateLaneId("duplicate-lane".to_owned()),
                 GatewayModelLaneRegistryIssue::InvalidLaneId("bad lane id".to_owned()),
+            ]
+        );
+    }
+
+    #[test]
+    fn gateway_adversarial_corpus_accepts_full_required_threat_coverage() {
+        let corpus = gateway_full_adversarial_corpus();
+
+        assert_eq!(corpus.cases.len(), 14);
+        assert_eq!(
+            validate_gateway_adversarial_corpus(&corpus, &gateway_model_lane_registry()),
+            Vec::<GatewayAdversarialCorpusIssue>::new()
+        );
+    }
+
+    #[test]
+    fn gateway_adversarial_corpus_rejects_invalid_empty_and_missing_benign() {
+        let corpus = GatewayAdversarialCorpus {
+            schema_version: "hsai-gateway-adversarial-corpus-v1".to_owned(),
+            corpus_id: "bad corpus id".to_owned(),
+            cases: Vec::new(),
+            required_threat_labels: BTreeSet::new(),
+        };
+
+        assert_eq!(
+            validate_gateway_adversarial_corpus(&corpus, &gateway_model_lane_registry()),
+            vec![
+                GatewayAdversarialCorpusIssue::InvalidCorpusId,
+                GatewayAdversarialCorpusIssue::EmptyCorpus,
+                GatewayAdversarialCorpusIssue::MissingAcceptedBenignCase,
+            ]
+        );
+    }
+
+    #[test]
+    fn gateway_adversarial_corpus_rejects_duplicate_case_ids() {
+        let case = gateway_adversarial_case("gateway-corpus-duplicate", GatewayThreatLabel::Benign);
+        let corpus = GatewayAdversarialCorpus {
+            schema_version: "hsai-gateway-adversarial-corpus-v1".to_owned(),
+            corpus_id: "gateway-duplicate-corpus".to_owned(),
+            cases: vec![case.clone(), case],
+            required_threat_labels: BTreeSet::new(),
+        };
+
+        assert_eq!(
+            validate_gateway_adversarial_corpus(&corpus, &gateway_model_lane_registry()),
+            vec![GatewayAdversarialCorpusIssue::DuplicateCaseId(
+                GatewayActionId("gateway-corpus-duplicate".to_owned())
+            )]
+        );
+    }
+
+    #[test]
+    fn gateway_adversarial_corpus_rejects_missing_required_threat_label() {
+        let corpus = GatewayAdversarialCorpus {
+            schema_version: "hsai-gateway-adversarial-corpus-v1".to_owned(),
+            corpus_id: "gateway-missing-threat-corpus".to_owned(),
+            cases: vec![gateway_adversarial_case(
+                "gateway-corpus-benign-only",
+                GatewayThreatLabel::Benign,
+            )],
+            required_threat_labels: BTreeSet::from([GatewayThreatLabel::WrongCounterparty]),
+        };
+
+        assert_eq!(
+            validate_gateway_adversarial_corpus(&corpus, &gateway_model_lane_registry()),
+            vec![GatewayAdversarialCorpusIssue::MissingRequiredThreatLabel(
+                GatewayThreatLabel::WrongCounterparty
+            )]
+        );
+    }
+
+    #[test]
+    fn gateway_adversarial_corpus_rejects_unsafe_expected_acceptance() {
+        let mut case = gateway_adversarial_case(
+            "gateway-corpus-unsafe-accepted",
+            GatewayThreatLabel::PromptInjectionPayment,
+        );
+        case.expected_verdict = AdmissionVerdict::Accepted;
+        let corpus = GatewayAdversarialCorpus {
+            schema_version: "hsai-gateway-adversarial-corpus-v1".to_owned(),
+            corpus_id: "gateway-unsafe-accepted-corpus".to_owned(),
+            cases: vec![
+                gateway_adversarial_case("gateway-corpus-benign", GatewayThreatLabel::Benign),
+                case,
+            ],
+            required_threat_labels: BTreeSet::new(),
+        };
+
+        assert_eq!(
+            validate_gateway_adversarial_corpus(&corpus, &gateway_model_lane_registry()),
+            vec![GatewayAdversarialCorpusIssue::UnsafeThreatExpectedAccepted(
+                GatewayActionId("gateway-corpus-unsafe-accepted".to_owned())
+            )]
+        );
+    }
+
+    #[test]
+    fn gateway_adversarial_corpus_rejects_unknown_or_invalid_model_lanes() {
+        let mut case =
+            gateway_adversarial_case("gateway-corpus-unknown-lane", GatewayThreatLabel::Benign);
+        case.proposal.model_lane.artifact_id = "unregistered-model".to_owned();
+        let corpus = GatewayAdversarialCorpus {
+            schema_version: "hsai-gateway-adversarial-corpus-v1".to_owned(),
+            corpus_id: "gateway-unknown-lane-corpus".to_owned(),
+            cases: vec![case],
+            required_threat_labels: BTreeSet::new(),
+        };
+        let mut registry = gateway_model_lane_registry();
+        registry.entries[0].provenance.non_secret = false;
+
+        assert_eq!(
+            validate_gateway_adversarial_corpus(&corpus, &registry),
+            vec![
+                GatewayAdversarialCorpusIssue::InvalidModelLaneRegistry,
+                GatewayAdversarialCorpusIssue::UnknownModelLane(GatewayActionId(
+                    "gateway-corpus-unknown-lane".to_owned()
+                )),
             ]
         );
     }
