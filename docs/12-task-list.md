@@ -3767,6 +3767,37 @@ prompt digests, non-secret statements, stale output digests, duplicate lane
 ids, and unbounded rented metadata fail closed; README navigation, validation
 report, and AGENTS scope rules point to the notes.
 
+## Phase 210 HSAI Gateway Adversarial Corpus Validation
+
+Status: complete for local hermetic implementation. See
+`docs/210-hsai-gateway-adversarial-corpus-notes.md`.
+
+Goal: implement the first deterministic local adversarial-corpus validation
+surface so typed gateway corpora can be checked before local replay or report
+generation.
+
+Implemented: `GatewayAdversarialCorpus`, `GatewayAdversarialCorpusIssue`,
+`gateway_required_adversarial_threat_labels`, and
+`validate_gateway_adversarial_corpus`. The validator rejects invalid corpus
+ids, empty corpora, duplicate case ids, missing required threat labels, missing
+accepted benign controls, adversarial cases that expect acceptance, unknown
+model-lane provenance, and invalid model-lane registries.
+
+Anti-goals: Cargo metadata changes, dependencies, package runtime files,
+CLI/server/UI/dashboard work, corpus generation, model execution/download,
+prompt storage, provider calls, verifier-agent runtime, generated
+corpora/output bundles, secrets, credentials, external replay execution,
+signer/wallet/exchange/custody/ACP/MCP integration code, accepted Evidence
+Ledger mutation, score-axis population, benchmark output, Level2+ evidence,
+production-readiness claims, semantic-correctness claims, global software-agent
+uniqueness claims, "fully secure" claims, or claims above `Attested`.
+
+Exit criteria: focused adversarial-corpus tests pass; full required threat
+coverage validates; invalid/empty corpora, duplicate ids, missing threat
+labels, unsafe expected acceptance, unknown model lanes, and invalid registries
+fail closed; README navigation, validation report, and AGENTS scope rules point
+to the notes.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
