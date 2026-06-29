@@ -3704,6 +3704,39 @@ before output creation; protected roots fail through the existing output safety
 path; README navigation, validation report, and AGENTS scope rules point to the
 notes.
 
+## Phase 208 HSAI Gateway Cost Router
+
+Status: complete for local hermetic implementation. See
+`docs/208-hsai-gateway-cost-router-notes.md`.
+
+Goal: implement the first deterministic local cost-router surface for the HSAI
+Agent Approval Gateway so review effort can be routed by typed risk, value, and
+budget without giving raw model output authority.
+
+Implemented: `GatewayCostRoute`, `GatewayCostRouteReason`,
+`GatewayCostRouterPolicy`, `GatewayCostRouteDecision`,
+`gateway_cost_router_default_policy`, and `route_gateway_action_cost`. The
+router maps deterministic policy violations to zero-cost deterministic handling,
+moderate clean actions to local open-weight review, threat-labeled actions to a
+verifier mixture route, high-value actions to premium escalation only inside the
+configured budget, and deployment or over-ceiling actions to operator review.
+Every route preserves `authority_granted = false`.
+
+Anti-goals: Cargo metadata changes, dependencies, package runtime files,
+CLI/server/UI/dashboard work, model execution/download, verifier-agent runtime,
+hosted model calls, generated corpora/output bundles, secrets, credentials,
+external replay execution, signer/wallet/exchange/custody/ACP/MCP integration
+code, accepted Evidence Ledger mutation, score-axis population, benchmark
+output, Level2+ evidence, production-readiness claims, semantic-correctness
+claims, global software-agent uniqueness claims, "fully secure" claims, or
+claims above `Attested`.
+
+Exit criteria: focused cost-router tests pass; deterministic rejects avoid
+model-review cost; threat-labeled cases route to verifier mixture; premium
+budget exhaustion fails closed to operator review; operator-only deployments
+require operator review; README navigation, validation report, and AGENTS scope
+rules point to the notes.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

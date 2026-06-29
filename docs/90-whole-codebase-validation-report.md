@@ -93,12 +93,12 @@ coverage thirty-sixth tranche, and the docs-first Phase 202 HSAI Gateway SOTA
 bridge boundary, the Phase 203 HSAI Agent Approval Gateway PRD, and the Phase
 204 HSAI Agent Approval Gateway local MVP, and the Phase 205 HSAI Gateway
 report artifact surface, and the Phase 206 HSAI Gateway report output-plumbing
-surface, and the Phase 207 HSAI Gateway corpus output-run surface, plus earlier
-coverage-hardening follow-up work for serialization error paths, crate error
-constructors, and local soak runner resume/output/error-policy paths. It
-evaluates the implemented codebase as a local Level 1 Rust foundation by
-running the available workspace gates and mapping those gates to the repo's
-major behavioral surfaces.
+surface, the Phase 207 HSAI Gateway corpus output-run surface, and the Phase
+208 HSAI Gateway cost-router surface, plus earlier coverage-hardening follow-up
+work for serialization error paths, crate error constructors, and local soak
+runner resume/output/error-policy paths. It evaluates the implemented codebase
+as a local Level 1 Rust foundation by running the available workspace gates and
+mapping those gates to the repo's major behavioral surfaces.
 
 It does not claim per-function formal correctness, 100% line coverage, official
 accepted Evidence Ledger mutation, official benchmark evidence, ZK backend
@@ -182,6 +182,21 @@ generated corpora, external replay, signer/tool/payment/custody integration,
 accepted Evidence Ledger mutation, score-axis population, benchmark output,
 Level2+ evidence, production-readiness claims, semantic-correctness claims,
 global uniqueness claims, "fully secure" claims, or claims above `Attested`.
+
+Phase 208 implements a local hermetic HSAI Gateway cost-router surface inside
+`hsai-agent-admission`. It routes typed gateway proposals through deterministic
+review-effort policy before admission: deterministic policy violations consume
+no model-review cost, moderate clean actions route to local open-weight review,
+threat-labeled actions route to verifier mixture review, high-value actions
+route to premium escalation only when budget allows, and deployments or
+over-ceiling values fail closed to operator review. Every route preserves
+`authority_granted = false`. It does not authorize package runtime files, model
+execution, model downloads, verifier-agent runtime, hosted model calls,
+generated corpora, generated output bundles, external replay,
+signer/tool/payment/custody integration, accepted Evidence Ledger mutation,
+score-axis population, benchmark output, Level2+ evidence, production-readiness
+claims, semantic-correctness claims, global uniqueness claims, "fully secure"
+claims, or claims above `Attested`.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,

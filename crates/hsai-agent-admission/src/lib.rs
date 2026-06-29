@@ -97,6 +97,51 @@ pub struct GatewayModelLaneProvenance {
     pub non_secret: bool,
 }
 
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayCostRoute {
+    DeterministicOnly,
+    LocalOpenWeightReview,
+    VerifierMixture,
+    PremiumEscalation,
+    OperatorReviewRequired,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayCostRouteReason {
+    DeterministicPolicyViolation,
+    RoutineLowValueAction,
+    LocalReviewForModerateValue,
+    ThreatLabelNeedsVerifierMixture,
+    HighValueNeedsPremiumEscalation,
+    PremiumEscalationBudgetExceeded,
+    OperatorOnlyActionKind,
+    OperatorValueLimitExceeded,
+    NoAuthorityGrantedByRouter,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayCostRouterPolicy {
+    pub id: AdmissionPolicyId,
+    pub local_review_value_ceiling: u64,
+    pub verifier_mixture_value_ceiling: u64,
+    pub premium_escalation_value_ceiling: u64,
+    pub local_review_cost_units: u64,
+    pub verifier_mixture_cost_units: u64,
+    pub premium_escalation_cost_units: u64,
+    pub operator_review_cost_units: u64,
+    pub premium_escalation_budget_units: u64,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayCostRouteDecision {
+    pub action_id: GatewayActionId,
+    pub policy_id: AdmissionPolicyId,
+    pub route: GatewayCostRoute,
+    pub reasons: BTreeSet<GatewayCostRouteReason>,
+    pub estimated_cost_units: u64,
+    pub authority_granted: bool,
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GatewayActionProposal {
     pub id: GatewayActionId,
@@ -2009,6 +2054,117 @@ pub fn gateway_local_default_policy(
     }
 }
 
+pub fn gateway_cost_router_default_policy(id: impl Into<String>) -> GatewayCostRouterPolicy {
+    GatewayCostRouterPolicy {
+        id: AdmissionPolicyId(id.into()),
+        local_review_value_ceiling: 25,
+        verifier_mixture_value_ceiling: 100,
+        premium_escalation_value_ceiling: 500,
+        local_review_cost_units: 1,
+        verifier_mixture_cost_units: 3,
+        premium_escalation_cost_units: 20,
+        operator_review_cost_units: 50,
+        premium_escalation_budget_units: 20,
+    }
+}
+
+pub fn route_gateway_action_cost(
+    proposal: &GatewayActionProposal,
+    gateway_policy: &GatewayActionPolicy,
+    router_policy: &GatewayCostRouterPolicy,
+) -> GatewayCostRouteDecision {
+    let candidate = gateway_action_candidate(proposal, gateway_policy);
+    let mut reasons = BTreeSet::from([GatewayCostRouteReason::NoAuthorityGrantedByRouter]);
+
+    if !candidate.gateway_policy_violations.is_empty() {
+        reasons.insert(GatewayCostRouteReason::DeterministicPolicyViolation);
+        return GatewayCostRouteDecision {
+            action_id: proposal.id.clone(),
+            policy_id: router_policy.id.clone(),
+            route: GatewayCostRoute::DeterministicOnly,
+            reasons,
+            estimated_cost_units: 0,
+            authority_granted: false,
+        };
+    }
+
+    if proposal.action_kind == GatewayActionKind::Deployment {
+        reasons.insert(GatewayCostRouteReason::OperatorOnlyActionKind);
+        return gateway_cost_route_decision(
+            proposal,
+            router_policy,
+            GatewayCostRoute::OperatorReviewRequired,
+            reasons,
+            router_policy.operator_review_cost_units,
+        );
+    }
+
+    if proposal.value_units > router_policy.premium_escalation_value_ceiling {
+        reasons.insert(GatewayCostRouteReason::OperatorValueLimitExceeded);
+        return gateway_cost_route_decision(
+            proposal,
+            router_policy,
+            GatewayCostRoute::OperatorReviewRequired,
+            reasons,
+            router_policy.operator_review_cost_units,
+        );
+    }
+
+    if proposal.value_units > router_policy.verifier_mixture_value_ceiling {
+        reasons.insert(GatewayCostRouteReason::HighValueNeedsPremiumEscalation);
+        if router_policy.premium_escalation_cost_units
+            <= router_policy.premium_escalation_budget_units
+        {
+            return gateway_cost_route_decision(
+                proposal,
+                router_policy,
+                GatewayCostRoute::PremiumEscalation,
+                reasons,
+                router_policy.premium_escalation_cost_units,
+            );
+        }
+        reasons.insert(GatewayCostRouteReason::PremiumEscalationBudgetExceeded);
+        return gateway_cost_route_decision(
+            proposal,
+            router_policy,
+            GatewayCostRoute::OperatorReviewRequired,
+            reasons,
+            router_policy.operator_review_cost_units,
+        );
+    }
+
+    if gateway_threat_labels_need_verifier_mixture(&proposal.threat_labels) {
+        reasons.insert(GatewayCostRouteReason::ThreatLabelNeedsVerifierMixture);
+        return gateway_cost_route_decision(
+            proposal,
+            router_policy,
+            GatewayCostRoute::VerifierMixture,
+            reasons,
+            router_policy.verifier_mixture_cost_units,
+        );
+    }
+
+    if proposal.value_units > router_policy.local_review_value_ceiling {
+        reasons.insert(GatewayCostRouteReason::LocalReviewForModerateValue);
+        return gateway_cost_route_decision(
+            proposal,
+            router_policy,
+            GatewayCostRoute::LocalOpenWeightReview,
+            reasons,
+            router_policy.local_review_cost_units,
+        );
+    }
+
+    reasons.insert(GatewayCostRouteReason::RoutineLowValueAction);
+    gateway_cost_route_decision(
+        proposal,
+        router_policy,
+        GatewayCostRoute::DeterministicOnly,
+        reasons,
+        0,
+    )
+}
+
 pub fn gateway_action_candidate(
     proposal: &GatewayActionProposal,
     policy: &GatewayActionPolicy,
@@ -3056,6 +3212,29 @@ fn model_lane_provenance_is_complete(lane: &GatewayModelLaneProvenance) -> bool 
         && lane.output_bundle_digest != Hash([0; 32])
 }
 
+fn gateway_cost_route_decision(
+    proposal: &GatewayActionProposal,
+    router_policy: &GatewayCostRouterPolicy,
+    route: GatewayCostRoute,
+    reasons: BTreeSet<GatewayCostRouteReason>,
+    estimated_cost_units: u64,
+) -> GatewayCostRouteDecision {
+    GatewayCostRouteDecision {
+        action_id: proposal.id.clone(),
+        policy_id: router_policy.id.clone(),
+        route,
+        reasons,
+        estimated_cost_units,
+        authority_granted: false,
+    }
+}
+
+fn gateway_threat_labels_need_verifier_mixture(labels: &BTreeSet<GatewayThreatLabel>) -> bool {
+    labels
+        .iter()
+        .any(|label| label != &GatewayThreatLabel::Benign)
+}
+
 fn gateway_violation_reason(violation: &GatewayPolicyViolation) -> AdmissionReason {
     reason(match violation {
         GatewayPolicyViolation::InvalidActionId => "gateway_invalid_action_id",
@@ -3196,6 +3375,10 @@ mod tests {
             BTreeSet::from(["treasury-safe".to_owned(), "mcp-safe-tool".to_owned()]),
             100,
         )
+    }
+
+    fn gateway_cost_policy() -> GatewayCostRouterPolicy {
+        gateway_cost_router_default_policy("gateway-cost-router-v1")
     }
 
     fn gateway_proposal(id: &str) -> GatewayActionProposal {
@@ -3503,6 +3686,110 @@ mod tests {
             "gateway_signer_or_tool_requested_before_admission".to_owned()
         )));
         assert!(journal.validate().is_empty());
+    }
+
+    #[test]
+    fn gateway_cost_router_uses_no_model_for_deterministic_policy_violation() {
+        let mut proposal = gateway_proposal("gateway-cost-reject");
+        proposal.target = "attacker-wallet".to_owned();
+        proposal.value_units = 500;
+        proposal
+            .threat_labels
+            .insert(GatewayThreatLabel::WrongCounterparty);
+
+        let decision =
+            route_gateway_action_cost(&proposal, &gateway_policy(), &gateway_cost_policy());
+
+        assert_eq!(decision.route, GatewayCostRoute::DeterministicOnly);
+        assert_eq!(decision.estimated_cost_units, 0);
+        assert!(!decision.authority_granted);
+        assert!(decision
+            .reasons
+            .contains(&GatewayCostRouteReason::DeterministicPolicyViolation));
+        assert!(decision
+            .reasons
+            .contains(&GatewayCostRouteReason::NoAuthorityGrantedByRouter));
+    }
+
+    #[test]
+    fn gateway_cost_router_routes_moderate_clean_actions_to_local_review() {
+        let mut proposal = gateway_proposal("gateway-cost-local-review");
+        proposal.value_units = 50;
+
+        let decision =
+            route_gateway_action_cost(&proposal, &gateway_policy(), &gateway_cost_policy());
+
+        assert_eq!(decision.route, GatewayCostRoute::LocalOpenWeightReview);
+        assert_eq!(decision.estimated_cost_units, 1);
+        assert!(!decision.authority_granted);
+        assert!(decision
+            .reasons
+            .contains(&GatewayCostRouteReason::LocalReviewForModerateValue));
+    }
+
+    #[test]
+    fn gateway_cost_router_uses_verifier_mixture_for_threat_labels() {
+        let mut proposal = gateway_proposal("gateway-cost-verifier");
+        proposal.value_units = 20;
+        proposal
+            .threat_labels
+            .insert(GatewayThreatLabel::PromptInjectionPayment);
+
+        let decision =
+            route_gateway_action_cost(&proposal, &gateway_policy(), &gateway_cost_policy());
+
+        assert_eq!(decision.route, GatewayCostRoute::VerifierMixture);
+        assert_eq!(decision.estimated_cost_units, 3);
+        assert!(!decision.authority_granted);
+        assert!(decision
+            .reasons
+            .contains(&GatewayCostRouteReason::ThreatLabelNeedsVerifierMixture));
+    }
+
+    #[test]
+    fn gateway_cost_router_premium_budget_exhaustion_fails_to_operator_review() {
+        let mut proposal = gateway_proposal("gateway-cost-budget");
+        proposal.value_units = 250;
+        let gateway_policy = gateway_local_default_policy(
+            "gateway-cost-high-value-policy",
+            BTreeSet::from([GatewayActionKind::Payment]),
+            BTreeSet::from(["treasury-safe".to_owned()]),
+            500,
+        );
+        let mut router_policy = gateway_cost_policy();
+        router_policy.premium_escalation_budget_units = 19;
+
+        let decision = route_gateway_action_cost(&proposal, &gateway_policy, &router_policy);
+
+        assert_eq!(decision.route, GatewayCostRoute::OperatorReviewRequired);
+        assert_eq!(decision.estimated_cost_units, 50);
+        assert!(!decision.authority_granted);
+        assert!(decision
+            .reasons
+            .contains(&GatewayCostRouteReason::HighValueNeedsPremiumEscalation));
+        assert!(decision
+            .reasons
+            .contains(&GatewayCostRouteReason::PremiumEscalationBudgetExceeded));
+    }
+
+    #[test]
+    fn gateway_cost_router_never_routes_deployments_without_operator_review() {
+        let mut proposal = gateway_proposal("gateway-cost-deploy");
+        proposal.action_kind = GatewayActionKind::Deployment;
+        proposal.target = "mcp-safe-tool".to_owned();
+        let mut policy = gateway_policy();
+        policy
+            .allowed_action_kinds
+            .insert(GatewayActionKind::Deployment);
+
+        let decision = route_gateway_action_cost(&proposal, &policy, &gateway_cost_policy());
+
+        assert_eq!(decision.route, GatewayCostRoute::OperatorReviewRequired);
+        assert_eq!(decision.estimated_cost_units, 50);
+        assert!(!decision.authority_granted);
+        assert!(decision
+            .reasons
+            .contains(&GatewayCostRouteReason::OperatorOnlyActionKind));
     }
 
     #[test]
