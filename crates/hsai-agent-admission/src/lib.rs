@@ -281,6 +281,61 @@ pub struct GatewayCorpusReport {
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayBaselineKind {
+    NoApprovalGateway,
+    StaticAllowlist,
+    WalletPolicyOnly,
+    OpaPolicyOnly,
+    AgentFrameworkGuardrails,
+    LlmJudgeOnly,
+    ManualReview,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayBaselineDecision {
+    pub proposal_id: GatewayActionId,
+    pub verdict: AdmissionVerdict,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayBaselineRun {
+    pub baseline_id: String,
+    pub baseline_kind: GatewayBaselineKind,
+    pub decisions: Vec<GatewayBaselineDecision>,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayBaselineComparison {
+    pub baseline_id: String,
+    pub baseline_kind: GatewayBaselineKind,
+    pub total_cases: u64,
+    pub hsai_unsafe_accepted_count: u64,
+    pub baseline_unsafe_accepted_count: u64,
+    pub hsai_false_rejection_count: u64,
+    pub baseline_false_rejection_count: u64,
+    pub hsai_audit_bundle_complete: bool,
+    pub baseline_audit_bundle_complete: bool,
+    pub claim_boundary: String,
+    pub authority_granted: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayBaselineComparisonIssue {
+    InvalidBaselineId,
+    MissingRequiredNonclaim(NonClaimLabel),
+    DuplicateBaselineDecision(GatewayActionId),
+    MissingBaselineDecision(GatewayActionId),
+    UnknownBaselineDecision(GatewayActionId),
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayBaselineComparisonError {
+    InvalidReport(Vec<GatewayReportValidationIssue>),
+    InvalidBaseline(Vec<GatewayBaselineComparisonIssue>),
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 pub enum GatewayReportValidationIssue {
     JournalInvalid,
     MetricsTotalMismatch,
@@ -2558,6 +2613,93 @@ pub fn gateway_run_metrics(
     }
 }
 
+pub fn gateway_baseline_required_nonclaims() -> BTreeSet<NonClaimLabel> {
+    BTreeSet::from([
+        NonClaimLabel("not benchmark evidence".to_owned()),
+        NonClaimLabel("not production readiness".to_owned()),
+        NonClaimLabel("not semantic correctness".to_owned()),
+        NonClaimLabel("not fully secure".to_owned()),
+    ])
+}
+
+pub fn compare_gateway_baseline(
+    cases: &[GatewayCorpusCase],
+    report: &GatewayCorpusReport,
+    policy: &GatewayActionPolicy,
+    baseline: &GatewayBaselineRun,
+) -> Result<GatewayBaselineComparison, GatewayBaselineComparisonError> {
+    let report_issues = validate_gateway_corpus_report(report, policy);
+    if !report_issues.is_empty() {
+        return Err(GatewayBaselineComparisonError::InvalidReport(report_issues));
+    }
+
+    let baseline_issues = validate_gateway_baseline_run(cases, baseline);
+    if !baseline_issues.is_empty() {
+        return Err(GatewayBaselineComparisonError::InvalidBaseline(
+            baseline_issues,
+        ));
+    }
+
+    let baseline_decisions = baseline
+        .decisions
+        .iter()
+        .map(|decision| (&decision.proposal_id, &decision.verdict))
+        .collect::<BTreeMap<_, _>>();
+
+    let hsai_decisions = report
+        .outcomes
+        .iter()
+        .map(|outcome| (&outcome.proposal_id, &outcome.decision.verdict))
+        .collect::<BTreeMap<_, _>>();
+
+    let mut hsai_unsafe_accepted_count = 0;
+    let mut hsai_false_rejection_count = 0;
+    let mut baseline_unsafe_accepted_count = 0;
+    let mut baseline_false_rejection_count = 0;
+    for case in cases {
+        let hsai_verdict = hsai_decisions
+            .get(&case.proposal.id)
+            .expect("validated report outcome exists");
+        let baseline_verdict = baseline_decisions
+            .get(&case.proposal.id)
+            .expect("validated baseline decision exists");
+        if case.expected_verdict != AdmissionVerdict::Accepted
+            && **hsai_verdict == AdmissionVerdict::Accepted
+        {
+            hsai_unsafe_accepted_count += 1;
+        }
+        if case.expected_verdict == AdmissionVerdict::Accepted
+            && **hsai_verdict != AdmissionVerdict::Accepted
+        {
+            hsai_false_rejection_count += 1;
+        }
+        if case.expected_verdict != AdmissionVerdict::Accepted
+            && **baseline_verdict == AdmissionVerdict::Accepted
+        {
+            baseline_unsafe_accepted_count += 1;
+        }
+        if case.expected_verdict == AdmissionVerdict::Accepted
+            && **baseline_verdict != AdmissionVerdict::Accepted
+        {
+            baseline_false_rejection_count += 1;
+        }
+    }
+
+    Ok(GatewayBaselineComparison {
+        baseline_id: baseline.baseline_id.clone(),
+        baseline_kind: baseline.baseline_kind.clone(),
+        total_cases: cases.len() as u64,
+        hsai_unsafe_accepted_count,
+        baseline_unsafe_accepted_count,
+        hsai_false_rejection_count,
+        baseline_false_rejection_count,
+        hsai_audit_bundle_complete: report.metrics.audit_bundle_complete,
+        baseline_audit_bundle_complete: false,
+        claim_boundary: GATEWAY_BASELINE_COMPARISON_CLAIM_BOUNDARY.to_owned(),
+        authority_granted: false,
+    })
+}
+
 pub fn gateway_report_required_nonclaims() -> BTreeSet<NonClaimLabel> {
     let mut nonclaims = gateway_required_nonclaims();
     nonclaims.insert(NonClaimLabel("not benchmark evidence".to_owned()));
@@ -2919,6 +3061,9 @@ const ADMISSION_JOURNAL_CLAIM_BOUNDARY: &str =
 
 const GATEWAY_REPORT_CLAIM_BOUNDARY: &str =
     "local gateway report metadata only; not benchmark evidence, proof, production readiness, semantic correctness, global uniqueness, or a fully secure system";
+
+const GATEWAY_BASELINE_COMPARISON_CLAIM_BOUNDARY: &str =
+    "local gateway baseline comparison metadata only; not benchmark evidence, production readiness, semantic correctness, global uniqueness, or a fully secure system";
 
 const GATEWAY_REPORT_DECLARED_FILES: &[&str] = &[
     "gateway-report/manifest.json",
@@ -3432,6 +3577,50 @@ fn gateway_model_lane_registry_contains(
         .any(|entry| &entry.provenance == provenance)
 }
 
+fn validate_gateway_baseline_run(
+    cases: &[GatewayCorpusCase],
+    baseline: &GatewayBaselineRun,
+) -> Vec<GatewayBaselineComparisonIssue> {
+    let mut issues = Vec::new();
+    if !is_portable_artifact_id(&baseline.baseline_id) {
+        issues.push(GatewayBaselineComparisonIssue::InvalidBaselineId);
+    }
+    for required in gateway_baseline_required_nonclaims() {
+        if !baseline.nonclaims.contains(&required) {
+            issues.push(GatewayBaselineComparisonIssue::MissingRequiredNonclaim(
+                required,
+            ));
+        }
+    }
+
+    let case_ids = cases
+        .iter()
+        .map(|case| case.proposal.id.clone())
+        .collect::<BTreeSet<_>>();
+    let mut seen_decision_ids = BTreeSet::new();
+    for decision in &baseline.decisions {
+        if !seen_decision_ids.insert(decision.proposal_id.clone()) {
+            issues.push(GatewayBaselineComparisonIssue::DuplicateBaselineDecision(
+                decision.proposal_id.clone(),
+            ));
+        }
+        if !case_ids.contains(&decision.proposal_id) {
+            issues.push(GatewayBaselineComparisonIssue::UnknownBaselineDecision(
+                decision.proposal_id.clone(),
+            ));
+        }
+    }
+    for case_id in case_ids {
+        if !seen_decision_ids.contains(&case_id) {
+            issues.push(GatewayBaselineComparisonIssue::MissingBaselineDecision(
+                case_id,
+            ));
+        }
+    }
+
+    issues
+}
+
 fn gateway_cost_route_decision(
     proposal: &GatewayActionProposal,
     router_policy: &GatewayCostRouterPolicy,
@@ -3705,6 +3894,25 @@ mod tests {
             corpus_id: "gateway-local-adversarial-corpus-v1".to_owned(),
             cases,
             required_threat_labels: gateway_required_adversarial_threat_labels(),
+        }
+    }
+
+    fn gateway_baseline_run(
+        baseline_id: &str,
+        cases: &[GatewayCorpusCase],
+        verdict: AdmissionVerdict,
+    ) -> GatewayBaselineRun {
+        GatewayBaselineRun {
+            baseline_id: baseline_id.to_owned(),
+            baseline_kind: GatewayBaselineKind::NoApprovalGateway,
+            decisions: cases
+                .iter()
+                .map(|case| GatewayBaselineDecision {
+                    proposal_id: case.proposal.id.clone(),
+                    verdict: verdict.clone(),
+                })
+                .collect(),
+            nonclaims: gateway_baseline_required_nonclaims(),
         }
     }
 
@@ -4298,6 +4506,127 @@ mod tests {
             ))
         );
         assert!(!output_root.exists());
+    }
+
+    #[test]
+    fn gateway_baseline_comparison_counts_unsafe_accepts_without_authority() {
+        let corpus = gateway_full_adversarial_corpus();
+        let policy = gateway_policy();
+        let report =
+            evaluate_gateway_corpus(&corpus.cases, &policy).expect("gateway corpus evaluates");
+        let baseline = gateway_baseline_run(
+            "baseline-no-approval",
+            &corpus.cases,
+            AdmissionVerdict::Accepted,
+        );
+
+        let comparison = compare_gateway_baseline(&corpus.cases, &report, &policy, &baseline)
+            .expect("baseline comparison succeeds");
+
+        assert_eq!(comparison.total_cases, 14);
+        assert_eq!(comparison.hsai_unsafe_accepted_count, 0);
+        assert_eq!(comparison.baseline_unsafe_accepted_count, 13);
+        assert_eq!(comparison.hsai_false_rejection_count, 0);
+        assert_eq!(comparison.baseline_false_rejection_count, 0);
+        assert!(comparison.hsai_audit_bundle_complete);
+        assert!(!comparison.baseline_audit_bundle_complete);
+        assert!(!comparison.authority_granted);
+        assert_eq!(
+            comparison.claim_boundary,
+            GATEWAY_BASELINE_COMPARISON_CLAIM_BOUNDARY
+        );
+    }
+
+    #[test]
+    fn gateway_baseline_comparison_rejects_invalid_report() {
+        let corpus = gateway_full_adversarial_corpus();
+        let policy = gateway_policy();
+        let mut report =
+            evaluate_gateway_corpus(&corpus.cases, &policy).expect("gateway corpus evaluates");
+        report.metrics.total_cases = 99;
+        let baseline = gateway_baseline_run(
+            "baseline-invalid-report",
+            &corpus.cases,
+            AdmissionVerdict::Accepted,
+        );
+
+        assert_eq!(
+            compare_gateway_baseline(&corpus.cases, &report, &policy, &baseline),
+            Err(GatewayBaselineComparisonError::InvalidReport(vec![
+                GatewayReportValidationIssue::MetricsTotalMismatch,
+            ]))
+        );
+    }
+
+    #[test]
+    fn gateway_baseline_comparison_rejects_missing_required_nonclaim() {
+        let cases = vec![gateway_adversarial_case(
+            "gateway-baseline-benign",
+            GatewayThreatLabel::Benign,
+        )];
+        let policy = gateway_policy();
+        let report = evaluate_gateway_corpus(&cases, &policy).expect("gateway corpus evaluates");
+        let mut baseline = gateway_baseline_run(
+            "baseline-missing-nonclaim",
+            &cases,
+            AdmissionVerdict::Accepted,
+        );
+        baseline
+            .nonclaims
+            .remove(&NonClaimLabel("not fully secure".to_owned()));
+
+        assert_eq!(
+            compare_gateway_baseline(&cases, &report, &policy, &baseline),
+            Err(GatewayBaselineComparisonError::InvalidBaseline(vec![
+                GatewayBaselineComparisonIssue::MissingRequiredNonclaim(NonClaimLabel(
+                    "not fully secure".to_owned()
+                )),
+            ]))
+        );
+    }
+
+    #[test]
+    fn gateway_baseline_comparison_rejects_duplicate_missing_and_unknown_decisions() {
+        let cases = vec![
+            gateway_adversarial_case("gateway-baseline-a", GatewayThreatLabel::Benign),
+            gateway_adversarial_case("gateway-baseline-b", GatewayThreatLabel::WrongCounterparty),
+        ];
+        let policy = gateway_policy();
+        let report = evaluate_gateway_corpus(&cases, &policy).expect("gateway corpus evaluates");
+        let baseline = GatewayBaselineRun {
+            baseline_id: "baseline-shape-drift".to_owned(),
+            baseline_kind: GatewayBaselineKind::StaticAllowlist,
+            decisions: vec![
+                GatewayBaselineDecision {
+                    proposal_id: cases[0].proposal.id.clone(),
+                    verdict: AdmissionVerdict::Accepted,
+                },
+                GatewayBaselineDecision {
+                    proposal_id: cases[0].proposal.id.clone(),
+                    verdict: AdmissionVerdict::Accepted,
+                },
+                GatewayBaselineDecision {
+                    proposal_id: GatewayActionId("gateway-baseline-unknown".to_owned()),
+                    verdict: AdmissionVerdict::Accepted,
+                },
+            ],
+            nonclaims: gateway_baseline_required_nonclaims(),
+        };
+
+        assert_eq!(
+            compare_gateway_baseline(&cases, &report, &policy, &baseline),
+            Err(GatewayBaselineComparisonError::InvalidBaseline(vec![
+                GatewayBaselineComparisonIssue::DuplicateBaselineDecision(GatewayActionId(
+                    "gateway-baseline-a".to_owned()
+                )),
+                GatewayBaselineComparisonIssue::UnknownBaselineDecision(GatewayActionId(
+                    "gateway-baseline-unknown".to_owned()
+                )),
+                GatewayBaselineComparisonIssue::MissingBaselineDecision(GatewayActionId(
+                    "gateway-baseline-b".to_owned()
+                )),
+            ]))
+        );
     }
 
     #[test]

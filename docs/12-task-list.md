@@ -3827,6 +3827,39 @@ metadata stops before output creation; valid corpora materialize the existing
 existing materialization safety path; README navigation, validation report, and
 AGENTS scope rules point to the notes.
 
+## Phase 212 HSAI Gateway Baseline Comparison
+
+Status: complete for local hermetic implementation. See
+`docs/212-hsai-gateway-baseline-comparison-notes.md`.
+
+Goal: implement the first local baseline-comparison surface so validated HSAI
+gateway reports can be compared against simple baseline decisions without
+making benchmark or production claims.
+
+Implemented: `GatewayBaselineKind`, `GatewayBaselineDecision`,
+`GatewayBaselineRun`, `GatewayBaselineComparison`,
+`GatewayBaselineComparisonIssue`, `GatewayBaselineComparisonError`,
+`gateway_baseline_required_nonclaims`, and `compare_gateway_baseline`. The
+comparison validates the HSAI report and baseline shape, requires local
+nonclaims, computes unsafe accepted counts and false rejection counts for HSAI
+and the baseline, carries audit-bundle completeness, records a local claim
+boundary, and preserves `authority_granted = false`.
+
+Anti-goals: Cargo metadata changes, dependencies, package runtime files,
+CLI/server/UI/dashboard work, live baseline execution, model execution/download,
+LLM judge runtime, provider calls, verifier-agent runtime, generated
+corpora/output bundles, secrets, credentials, external replay execution,
+signer/wallet/exchange/custody/ACP/MCP integration code, accepted Evidence
+Ledger mutation, score-axis population, benchmark output, Level2+ evidence,
+production-readiness claims, semantic-correctness claims, global software-agent
+uniqueness claims, "fully secure" claims, or claims above `Attested`.
+
+Exit criteria: focused baseline-comparison tests pass; no-approval baseline
+unsafe accepts are counted; invalid HSAI reports fail closed; missing nonclaims
+fail closed; duplicate, missing, and unknown baseline decisions fail closed;
+README navigation, validation report, and AGENTS scope rules point to the
+notes.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
