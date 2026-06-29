@@ -99,7 +99,8 @@ model-lane registry surface, and the Phase 210 HSAI Gateway adversarial-corpus
 validation surface, and the Phase 211 HSAI Gateway adversarial-corpus
 output-run surface, and the Phase 212 HSAI Gateway baseline-comparison surface,
 the Phase 213 HSAI Gateway effectiveness-metrics surface, and the Phase 214 HSAI
-Gateway local demo runbook/example surface, plus earlier
+Gateway local demo runbook/example surface, and the Phase 215 soak health
+coverage thirty-seventh tranche, plus earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
@@ -288,6 +289,24 @@ signer/tool/payment/custody integration, accepted Evidence Ledger mutation,
 score-axis population, benchmark output, Level2+ evidence, production-readiness
 claims, semantic-correctness claims, global uniqueness claims, "fully secure"
 claims, or claims above `Attested`.
+
+Phase 215 adds focused local regression coverage for `soak/health.rs` inside
+`zkbench-core`. The tests now cover additional identity failures, nested
+claim-boundary elevation, unsafe ZK-backend-performance note rejection, summary
+counter drift, aggregate warning propagation, aggregate status precedence, and
+telemetry-derived health findings. It changes no production source, local soak
+semantics, generated artifacts, accepted Evidence Ledger state, score-axis
+state, benchmark evidence, Level2+ evidence, production-readiness claims,
+semantic-correctness claims, or whole-workspace 100% coverage claims.
+
+The Phase 215 local package coverage run
+`cargo llvm-cov -p zkbench-core --all-features --summary-only` reported
+`90.28%` region coverage, `85.76%` function execution, and `91.35%` line
+coverage for `zkbench-core`. The targeted `soak/health.rs` module reported
+`97.49%` region coverage, `100.00%` function execution, and `98.67%` line
+coverage. The package floor moved away from `soak/health.rs`; in this local
+package run, the lowest line-coverage file was `replay/serialization.rs` at
+`75.00%`.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
@@ -1768,9 +1787,11 @@ reported `90.13%` region coverage, `85.71%` function execution, and `91.11%`
 line coverage for `zkbench-core`; the targeted `evidence/accepted_append.rs`
 module reported `98.29%` line coverage and `92.31%` function execution under
 LCOV line-level auditing. Branch coverage was not reported by these runs. The
-package coverage floor is now `soak/health.rs` at `79.00%` line coverage. The
-known lower serializer-wrapper floors remain capped by structurally unreachable
-`serde_json::to_string_pretty` error mappings for concrete derived structs.
+Phase 215 post-tranche local package run moved `soak/health.rs` to `98.67%`
+line coverage; the package floor is now `replay/serialization.rs` at `75.00%`
+line coverage. The known lower serializer-wrapper floors remain capped by
+structurally unreachable `serde_json::to_string_pretty` error mappings for
+concrete derived structs.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

@@ -3919,6 +3919,35 @@ Exit criteria: the example compiles; the source-contract test passes; the
 runbook names the exact env contract and generated files; repo hygiene and
 claim-boundary checks pass; the generated demo root remains ignored.
 
+## Phase 215 Soak Health Coverage Thirty-Seventh Tranche
+
+Status: complete for focused local coverage hardening. See
+`docs/215-phase-soak-health-coverage-thirty-seventh-tranche-notes.md`.
+
+Goal: add focused regression coverage for
+`crates/zkbench-core/src/soak/health.rs` without changing production health
+semantics.
+
+Implemented: `soak_health_report` tests now cover empty report version, empty
+shard id, empty aggregate id, nested finding claim-boundary elevation, unsafe
+ZK-backend-performance notes, mutation/local-replay/failure summary drift,
+aggregate warning propagation, aggregate status precedence, aggregate regression
+signal activation, telemetry replay-failure findings, and telemetry validation
+failure findings.
+
+Anti-goals: production source changes, health semantics changes, status
+precedence changes, telemetry semantics changes, failure-corpus semantics
+changes, Cargo metadata changes, dependencies, external execution, generated
+artifact materialization, accepted Evidence Ledger policy changes, formal
+evidence, benchmark evidence, score-axis population, Level2+ evidence,
+semantic-correctness claims, production-readiness claims, unsafe coverage
+forcing, coverage suppression, structurally unreachable branch forcing, or
+whole-workspace 100% coverage claims.
+
+Exit criteria: focused `soak_health_report` tests pass; repo hygiene and
+claim-boundary checks pass; full workspace tests pass; docs record the claim
+boundary and non-goals.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

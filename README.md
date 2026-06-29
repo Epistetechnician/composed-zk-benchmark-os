@@ -301,6 +301,7 @@ Surface DSL
 | [docs/213-hsai-gateway-effectiveness-metrics-notes.md](docs/213-hsai-gateway-effectiveness-metrics-notes.md) | Phase 213 HSAI Gateway effectiveness-metrics notes. |
 | [docs/213-hsai-gateway-public-proof-packet.md](docs/213-hsai-gateway-public-proof-packet.md) | Phase 213 HSAI Gateway public proof packet for the green Phase 204-212 public state. |
 | [docs/214-hsai-gateway-local-demo-runbook.md](docs/214-hsai-gateway-local-demo-runbook.md) | Phase 214 HSAI Gateway local demo runbook. |
+| [docs/215-phase-soak-health-coverage-thirty-seventh-tranche-notes.md](docs/215-phase-soak-health-coverage-thirty-seventh-tranche-notes.md) | Phase 215 soak health coverage thirty-seventh tranche notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1260,6 +1261,19 @@ does not execute models, call providers, perform external replay, integrate
 signers/tools, mutate accepted Evidence Ledgers, populate score axes, create
 benchmark evidence, claim production readiness, claim semantic correctness,
 claim global uniqueness, or grant authority.
+
+[docs/215-phase-soak-health-coverage-thirty-seventh-tranche-notes.md](docs/215-phase-soak-health-coverage-thirty-seventh-tranche-notes.md)
+records a bounded local coverage tranche for `zkbench-core` soak health
+reports. It adds focused integration coverage for health report identity
+validation, nested claim-boundary validation, unsafe note rejection, summary
+counter drift, aggregate report status precedence, aggregate warning
+propagation, and telemetry-derived health findings. The local package
+`cargo llvm-cov -p zkbench-core --all-features --summary-only` run reported
+`soak/health.rs` at `98.67%` line coverage and `zkbench-core` at `91.35%` line
+coverage. It changes no production source, local soak semantics, generated
+artifacts, accepted Evidence Ledger state, score-axis state, benchmark evidence,
+production-readiness claim, semantic-correctness claim, Level2+ evidence, or
+100% coverage claim.
 
 ## Validation Checklist
 
