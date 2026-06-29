@@ -97,11 +97,12 @@ surface, the Phase 207 HSAI Gateway corpus output-run surface, and the Phase
 208 HSAI Gateway cost-router surface, and the Phase 209 HSAI Gateway
 model-lane registry surface, and the Phase 210 HSAI Gateway adversarial-corpus
 validation surface, and the Phase 211 HSAI Gateway adversarial-corpus
-output-run surface, plus earlier coverage-hardening follow-up work for
-serialization error paths, crate error constructors, and local soak runner
-resume/output/error-policy paths. It evaluates the implemented codebase as a
-local Level 1 Rust foundation by running the available workspace gates and
-mapping those gates to the repo's major behavioral surfaces.
+output-run surface, and the Phase 212 HSAI Gateway baseline-comparison surface,
+plus earlier coverage-hardening follow-up work for serialization error paths,
+crate error constructors, and local soak runner resume/output/error-policy
+paths. It evaluates the implemented codebase as a local Level 1 Rust foundation
+by running the available workspace gates and mapping those gates to the repo's
+major behavioral surfaces.
 
 It does not claim per-function formal correctness, 100% line coverage, official
 accepted Evidence Ledger mutation, official benchmark evidence, ZK backend
@@ -236,6 +237,21 @@ corpus metadata stops before output creation, and output-root safety failures
 still propagate through the existing Phase 206 materialization contract. It
 does not authorize package runtime files, corpus generation, prompt storage,
 model execution, model downloads, hosted-model calls, verifier-agent runtime,
+generated corpora, generated output bundles, external replay,
+signer/tool/payment/custody integration, accepted Evidence Ledger mutation,
+score-axis population, benchmark output, Level2+ evidence, production-readiness
+claims, semantic-correctness claims, global uniqueness claims, "fully secure"
+claims, or claims above `Attested`.
+
+Phase 212 implements a local hermetic HSAI Gateway baseline-comparison surface
+inside `hsai-agent-admission`. It compares validated HSAI gateway corpus
+reports against local baseline decisions, computing unsafe accepted counts,
+false rejection counts, audit-bundle completeness, explicit local claim
+boundary metadata, and `authority_granted = false`. It rejects invalid HSAI
+reports, missing baseline nonclaims, duplicate baseline decisions, missing
+baseline decisions, and unknown baseline decisions. It does not authorize
+package runtime files, live baseline execution, LLM judge runtime, model
+execution, model downloads, hosted-model calls, verifier-agent runtime,
 generated corpora, generated output bundles, external replay,
 signer/tool/payment/custody integration, accepted Evidence Ledger mutation,
 score-axis population, benchmark output, Level2+ evidence, production-readiness

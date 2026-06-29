@@ -297,6 +297,7 @@ Surface DSL
 | [docs/209-hsai-gateway-model-lane-registry-notes.md](docs/209-hsai-gateway-model-lane-registry-notes.md) | Phase 209 HSAI Gateway model-lane registry implementation notes. |
 | [docs/210-hsai-gateway-adversarial-corpus-notes.md](docs/210-hsai-gateway-adversarial-corpus-notes.md) | Phase 210 HSAI Gateway adversarial-corpus validation notes. |
 | [docs/211-hsai-gateway-adversarial-corpus-output-run-notes.md](docs/211-hsai-gateway-adversarial-corpus-output-run-notes.md) | Phase 211 HSAI Gateway adversarial-corpus output-run notes. |
+| [docs/212-hsai-gateway-baseline-comparison-notes.md](docs/212-hsai-gateway-baseline-comparison-notes.md) | Phase 212 HSAI Gateway baseline-comparison notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1215,6 +1216,17 @@ model download, prompt storage, hosted-model call, network access, credential
 access, external replay, signer/tool integration, accepted Evidence Ledger
 mutation, score-axis population, benchmark output, production-readiness claim,
 semantic-correctness claim, global uniqueness claim, or Level2+ evidence.
+
+[docs/212-hsai-gateway-baseline-comparison-notes.md](docs/212-hsai-gateway-baseline-comparison-notes.md)
+records the local HSAI Gateway baseline-comparison surface inside
+`hsai-agent-admission`. Local baseline decisions can now be compared against a
+validated HSAI gateway corpus report for unsafe accepted counts, false
+rejection counts, audit-bundle completeness, explicit local claim boundaries,
+and `authority_granted = false`. It performs no live baseline run, model
+execution, LLM judge review, network access, credential access, external
+replay, signer/tool integration, accepted Evidence Ledger mutation, score-axis
+population, benchmark output, production-readiness claim, semantic-correctness
+claim, global uniqueness claim, or Level2+ evidence.
 
 ## Validation Checklist
 
