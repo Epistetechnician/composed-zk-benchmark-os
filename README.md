@@ -298,6 +298,7 @@ Surface DSL
 | [docs/210-hsai-gateway-adversarial-corpus-notes.md](docs/210-hsai-gateway-adversarial-corpus-notes.md) | Phase 210 HSAI Gateway adversarial-corpus validation notes. |
 | [docs/211-hsai-gateway-adversarial-corpus-output-run-notes.md](docs/211-hsai-gateway-adversarial-corpus-output-run-notes.md) | Phase 211 HSAI Gateway adversarial-corpus output-run notes. |
 | [docs/212-hsai-gateway-baseline-comparison-notes.md](docs/212-hsai-gateway-baseline-comparison-notes.md) | Phase 212 HSAI Gateway baseline-comparison notes. |
+| [docs/213-hsai-gateway-effectiveness-metrics-notes.md](docs/213-hsai-gateway-effectiveness-metrics-notes.md) | Phase 213 HSAI Gateway effectiveness-metrics notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1225,6 +1226,17 @@ rejection counts, audit-bundle completeness, explicit local claim boundaries,
 and `authority_granted = false`. It performs no live baseline run, model
 execution, LLM judge review, network access, credential access, external
 replay, signer/tool integration, accepted Evidence Ledger mutation, score-axis
+population, benchmark output, production-readiness claim, semantic-correctness
+claim, global uniqueness claim, or Level2+ evidence.
+
+[docs/213-hsai-gateway-effectiveness-metrics-notes.md](docs/213-hsai-gateway-effectiveness-metrics-notes.md)
+records the local HSAI Gateway effectiveness-metrics surface inside
+`hsai-agent-admission`. Validated gateway corpus reports can now produce local
+summary metrics for unsafe action block rate, false rejection rate, quarantine
+rate, decision recomputation agreement, audit-bundle completeness, covered
+threat labels, and per-threat coverage. It performs no live metric collection,
+model execution, network access, credential access, external replay,
+signer/tool integration, accepted Evidence Ledger mutation, score-axis
 population, benchmark output, production-readiness claim, semantic-correctness
 claim, global uniqueness claim, or Level2+ evidence.
 

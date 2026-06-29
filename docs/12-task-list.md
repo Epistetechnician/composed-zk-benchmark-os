@@ -3860,6 +3860,35 @@ fail closed; duplicate, missing, and unknown baseline decisions fail closed;
 README navigation, validation report, and AGENTS scope rules point to the
 notes.
 
+## Phase 213 HSAI Gateway Effectiveness Metrics
+
+Status: complete for local hermetic implementation. See
+`docs/213-hsai-gateway-effectiveness-metrics-notes.md`.
+
+Goal: implement a local effectiveness-summary surface for validated HSAI
+gateway corpus reports.
+
+Implemented: `GatewayThreatCoverageRow`, `GatewayEffectivenessSummary`, and
+`gateway_effectiveness_summary`. The summary validates the HSAI report, then
+computes unsafe case count, benign expected-accept count, unsafe action block
+rate, false rejection rate, quarantine rate, decision recomputation agreement
+rate, audit-bundle completeness, covered threat labels, per-threat coverage,
+local claim-boundary metadata, and `authority_granted = false`.
+
+Anti-goals: Cargo metadata changes, dependencies, package runtime files,
+CLI/server/UI/dashboard work, live metrics collection, model execution/download,
+LLM judge runtime, provider calls, verifier-agent runtime, generated
+corpora/output bundles, secrets, credentials, external replay execution,
+signer/wallet/exchange/custody/ACP/MCP integration code, accepted Evidence
+Ledger mutation, score-axis population, benchmark output, Level2+ evidence,
+production-readiness claims, semantic-correctness claims, global software-agent
+uniqueness claims, "fully secure" claims, or claims above `Attested`.
+
+Exit criteria: focused effectiveness-metrics tests pass; full adversarial
+corpus rates and per-threat coverage compute; invalid reports fail closed;
+zero-denominator local rate handling is deterministic; README navigation,
+validation report, and AGENTS scope rules point to the notes.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
