@@ -234,6 +234,58 @@ pub struct GatewayReportArtifact {
     pub report_markdown: Vec<u8>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct GatewayReportMaterializationRequest {
+    pub bundle_id: String,
+    pub created_at_unix: u64,
+    pub overwrite: bool,
+    pub protected_roots: Vec<PathBuf>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayReportOutputManifest {
+    pub schema_version: String,
+    pub bundle_id: String,
+    pub created_at_unix: u64,
+    pub gateway_policy: GatewayActionPolicy,
+    pub artifact_manifest: GatewayReportArtifactManifest,
+    pub declared_files: Vec<String>,
+    pub declared_file_digests: BTreeMap<String, Hash>,
+    pub claim_boundary: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayReportOutputValidationReport {
+    pub schema_version: String,
+    pub bundle_id: String,
+    pub valid: bool,
+    pub report_issue_count: u64,
+    pub claim_boundary: String,
+    pub checked_files: Vec<String>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayReportMaterializationError {
+    EmptyBundleId,
+    InvalidReport(Vec<GatewayReportValidationIssue>),
+    EmptyOutputRoot,
+    ProtectedOutputRoot,
+    OutputRootExistsWithoutOverwrite,
+    OutputRootIsFile,
+    OutputRootIsSymlink,
+    BundleFileIsSymlink(String),
+    SidecarIsSymlink(String),
+    DeclaredFileTypeMismatch(String),
+    UndeclaredFile(String),
+    DigestMismatch(String),
+    MalformedDeclaredFile(String),
+    ManifestSemanticMismatch,
+    NonclaimMismatch,
+    ValidationReportMismatch,
+    Io(String),
+    Serialization(String),
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct AgentAdmissionCandidate {
     pub id: AdmissionCandidateId,
@@ -2374,11 +2426,130 @@ pub fn render_gateway_report_markdown(
     markdown
 }
 
+pub fn materialize_gateway_report_bundle(
+    output_root: &Path,
+    report: &GatewayCorpusReport,
+    policy: &GatewayActionPolicy,
+    request: &GatewayReportMaterializationRequest,
+) -> Result<GatewayReportOutputManifest, GatewayReportMaterializationError> {
+    validate_gateway_report_materialization_request(output_root, report, policy, request)?;
+
+    let staging_root = gateway_staging_root_for(output_root, &request.bundle_id)?;
+    if staging_root.exists() {
+        remove_gateway_dir_all_checked(&staging_root)?;
+    }
+    fs::create_dir_all(staging_root.join("gateway-report")).map_err(gateway_io_error)?;
+
+    let artifact = gateway_report_artifact(report, policy).map_err(gateway_artifact_error)?;
+    let files = build_gateway_report_bundle_files(&artifact, policy, request)?;
+    for (logical_path, bytes) in &files {
+        let target = staging_root.join(logical_path);
+        if let Some(parent) = target.parent() {
+            fs::create_dir_all(parent).map_err(gateway_io_error)?;
+        }
+        fs::write(&target, bytes).map_err(gateway_io_error)?;
+        fs::write(
+            sidecar_path(&target),
+            hash_hex(hash_bytes(bytes)).into_bytes(),
+        )
+        .map_err(gateway_io_error)?;
+    }
+
+    if output_root.exists() {
+        if !request.overwrite {
+            remove_gateway_dir_all_checked(&staging_root)?;
+            return Err(GatewayReportMaterializationError::OutputRootExistsWithoutOverwrite);
+        }
+        remove_gateway_dir_all_checked(output_root)?;
+    }
+    fs::rename(&staging_root, output_root).map_err(gateway_io_error)?;
+    read_gateway_report_bundle(output_root)
+}
+
+pub fn read_gateway_report_bundle(
+    output_root: &Path,
+) -> Result<GatewayReportOutputManifest, GatewayReportMaterializationError> {
+    let output_metadata = fs::symlink_metadata(output_root).map_err(gateway_io_error)?;
+    if output_metadata.file_type().is_symlink() {
+        return Err(GatewayReportMaterializationError::OutputRootIsSymlink);
+    }
+    if !output_metadata.is_dir() {
+        return Err(GatewayReportMaterializationError::OutputRootIsFile);
+    }
+    let bundle_dir = output_root.join("gateway-report");
+    let bundle_metadata = fs::symlink_metadata(&bundle_dir).map_err(gateway_io_error)?;
+    if bundle_metadata.file_type().is_symlink() {
+        return Err(GatewayReportMaterializationError::BundleFileIsSymlink(
+            "gateway-report".to_owned(),
+        ));
+    }
+    if !bundle_metadata.is_dir() {
+        return Err(GatewayReportMaterializationError::DeclaredFileTypeMismatch(
+            "gateway-report".to_owned(),
+        ));
+    }
+
+    reject_undeclared_gateway_report_files(output_root)?;
+    let mut file_bytes = BTreeMap::new();
+    for logical_path in GATEWAY_REPORT_DECLARED_FILES {
+        let path = output_root.join(logical_path);
+        let metadata = fs::symlink_metadata(&path).map_err(gateway_io_error)?;
+        if metadata.file_type().is_symlink() {
+            return Err(GatewayReportMaterializationError::BundleFileIsSymlink(
+                (*logical_path).to_owned(),
+            ));
+        }
+        if !metadata.is_file() {
+            return Err(GatewayReportMaterializationError::DeclaredFileTypeMismatch(
+                (*logical_path).to_owned(),
+            ));
+        }
+        let sidecar = sidecar_path(&path);
+        let sidecar_metadata = fs::symlink_metadata(&sidecar).map_err(gateway_io_error)?;
+        if sidecar_metadata.file_type().is_symlink() {
+            return Err(GatewayReportMaterializationError::SidecarIsSymlink(
+                format!("{logical_path}.sha256"),
+            ));
+        }
+        if !sidecar_metadata.is_file() {
+            return Err(GatewayReportMaterializationError::DeclaredFileTypeMismatch(
+                format!("{logical_path}.sha256"),
+            ));
+        }
+        let bytes = fs::read(&path).map_err(gateway_io_error)?;
+        let expected = fs::read_to_string(sidecar).map_err(gateway_io_error)?;
+        if expected != hash_hex(hash_bytes(&bytes)) {
+            return Err(GatewayReportMaterializationError::DigestMismatch(
+                (*logical_path).to_owned(),
+            ));
+        }
+        file_bytes.insert((*logical_path).to_owned(), bytes);
+    }
+
+    validate_gateway_report_bundle_semantics(&file_bytes)
+}
+
 const ADMISSION_JOURNAL_CLAIM_BOUNDARY: &str =
     "local admission-trace metadata only; not accepted evidence, proof, or benchmark evidence";
 
 const GATEWAY_REPORT_CLAIM_BOUNDARY: &str =
     "local gateway report metadata only; not benchmark evidence, proof, production readiness, semantic correctness, global uniqueness, or a fully secure system";
+
+const GATEWAY_REPORT_DECLARED_FILES: &[&str] = &[
+    "gateway-report/manifest.json",
+    "gateway-report/report.json",
+    "gateway-report/report.md",
+    "gateway-report/non-claims.md",
+    "gateway-report/validation-report.json",
+];
+
+const GATEWAY_REPORT_DECLARED_SIDECARS: &[&str] = &[
+    "gateway-report/manifest.json.sha256",
+    "gateway-report/report.json.sha256",
+    "gateway-report/report.md.sha256",
+    "gateway-report/non-claims.md.sha256",
+    "gateway-report/validation-report.json.sha256",
+];
 
 const ADMISSION_JOURNAL_DECLARED_FILES: &[&str] = &[
     "admission-journal/manifest.json",
@@ -2435,6 +2606,318 @@ fn append_metric_row(markdown: &mut String, name: &str, value: u64) {
     markdown.push_str(" | ");
     markdown.push_str(&value.to_string());
     markdown.push_str(" |\n");
+}
+
+fn validate_gateway_report_materialization_request(
+    output_root: &Path,
+    report: &GatewayCorpusReport,
+    policy: &GatewayActionPolicy,
+    request: &GatewayReportMaterializationRequest,
+) -> Result<(), GatewayReportMaterializationError> {
+    if request.bundle_id.trim().is_empty()
+        || !is_safe_relative_path(&request.bundle_id)
+        || request.bundle_id.contains(['/', '\\'])
+    {
+        return Err(GatewayReportMaterializationError::EmptyBundleId);
+    }
+    let issues = validate_gateway_corpus_report(report, policy);
+    if !issues.is_empty() {
+        return Err(GatewayReportMaterializationError::InvalidReport(issues));
+    }
+    validate_gateway_output_root(output_root, &request.protected_roots, request.overwrite)
+}
+
+fn build_gateway_report_bundle_files(
+    artifact: &GatewayReportArtifact,
+    policy: &GatewayActionPolicy,
+    request: &GatewayReportMaterializationRequest,
+) -> Result<BTreeMap<String, Vec<u8>>, GatewayReportMaterializationError> {
+    let nonclaims = gateway_report_nonclaims_markdown(&artifact.manifest.nonclaims).into_bytes();
+    let validation = GatewayReportOutputValidationReport {
+        schema_version: "hsai-gateway-report-output-validation-v1".to_owned(),
+        bundle_id: request.bundle_id.clone(),
+        valid: true,
+        report_issue_count: 0,
+        claim_boundary: GATEWAY_REPORT_CLAIM_BOUNDARY.to_owned(),
+        checked_files: gateway_report_declared_files(),
+    };
+    let validation_bytes = serde_json::to_vec_pretty(&validation).map_err(gateway_serde_error)?;
+    let mut files = BTreeMap::from([
+        (
+            "gateway-report/report.json".to_owned(),
+            artifact.report_json.clone(),
+        ),
+        (
+            "gateway-report/report.md".to_owned(),
+            artifact.report_markdown.clone(),
+        ),
+        ("gateway-report/non-claims.md".to_owned(), nonclaims),
+        (
+            "gateway-report/validation-report.json".to_owned(),
+            validation_bytes,
+        ),
+    ]);
+    let manifest = gateway_report_output_manifest_for_files(artifact, policy, request, &files);
+    files.insert(
+        "gateway-report/manifest.json".to_owned(),
+        serde_json::to_vec_pretty(&manifest).map_err(gateway_serde_error)?,
+    );
+    Ok(files)
+}
+
+fn gateway_report_output_manifest_for_files(
+    artifact: &GatewayReportArtifact,
+    policy: &GatewayActionPolicy,
+    request: &GatewayReportMaterializationRequest,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> GatewayReportOutputManifest {
+    let mut declared_file_digests = BTreeMap::new();
+    for (logical_path, bytes) in files {
+        declared_file_digests.insert(logical_path.clone(), hash_bytes(bytes));
+    }
+    GatewayReportOutputManifest {
+        schema_version: "hsai-gateway-report-output-v1".to_owned(),
+        bundle_id: request.bundle_id.clone(),
+        created_at_unix: request.created_at_unix,
+        gateway_policy: policy.clone(),
+        artifact_manifest: artifact.manifest.clone(),
+        declared_files: gateway_report_declared_files(),
+        declared_file_digests,
+        claim_boundary: GATEWAY_REPORT_CLAIM_BOUNDARY.to_owned(),
+    }
+}
+
+fn validate_gateway_report_bundle_semantics(
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<GatewayReportOutputManifest, GatewayReportMaterializationError> {
+    let manifest: GatewayReportOutputManifest =
+        parse_gateway_declared_json(files, "gateway-report/manifest.json")?;
+    let report: GatewayCorpusReport =
+        parse_gateway_declared_json(files, "gateway-report/report.json")?;
+    let issues = validate_gateway_corpus_report(&report, &manifest.gateway_policy);
+    if !issues.is_empty() {
+        return Err(GatewayReportMaterializationError::InvalidReport(issues));
+    }
+
+    validate_gateway_report_manifest_semantics(&manifest, &report, files)?;
+
+    let report_markdown = declared_gateway_bytes(files, "gateway-report/report.md")?;
+    if report_markdown
+        != render_gateway_report_markdown(&report, &manifest.gateway_policy).as_bytes()
+    {
+        return Err(GatewayReportMaterializationError::ManifestSemanticMismatch);
+    }
+
+    let nonclaims = declared_gateway_bytes(files, "gateway-report/non-claims.md")?;
+    if nonclaims
+        != gateway_report_nonclaims_markdown(&manifest.artifact_manifest.nonclaims).as_bytes()
+    {
+        return Err(GatewayReportMaterializationError::NonclaimMismatch);
+    }
+
+    let validation: GatewayReportOutputValidationReport =
+        parse_gateway_declared_json(files, "gateway-report/validation-report.json")?;
+    let expected_validation = GatewayReportOutputValidationReport {
+        schema_version: "hsai-gateway-report-output-validation-v1".to_owned(),
+        bundle_id: manifest.bundle_id.clone(),
+        valid: true,
+        report_issue_count: 0,
+        claim_boundary: GATEWAY_REPORT_CLAIM_BOUNDARY.to_owned(),
+        checked_files: gateway_report_declared_files(),
+    };
+    if validation != expected_validation {
+        return Err(GatewayReportMaterializationError::ValidationReportMismatch);
+    }
+
+    Ok(manifest)
+}
+
+fn validate_gateway_report_manifest_semantics(
+    manifest: &GatewayReportOutputManifest,
+    report: &GatewayCorpusReport,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<(), GatewayReportMaterializationError> {
+    let expected_digest_paths: BTreeSet<String> = GATEWAY_REPORT_DECLARED_FILES
+        .iter()
+        .filter(|path| **path != "gateway-report/manifest.json")
+        .map(|path| (*path).to_owned())
+        .collect();
+    let actual_digest_paths: BTreeSet<String> =
+        manifest.declared_file_digests.keys().cloned().collect();
+    let expected_artifact = gateway_report_artifact(report, &manifest.gateway_policy)
+        .map_err(gateway_artifact_error)?;
+
+    if manifest.schema_version != "hsai-gateway-report-output-v1"
+        || manifest.bundle_id.trim().is_empty()
+        || !is_safe_relative_path(&manifest.bundle_id)
+        || manifest.bundle_id.contains(['/', '\\'])
+        || manifest.declared_files != gateway_report_declared_files()
+        || actual_digest_paths != expected_digest_paths
+        || manifest.claim_boundary != GATEWAY_REPORT_CLAIM_BOUNDARY
+        || manifest.artifact_manifest != expected_artifact.manifest
+    {
+        return Err(GatewayReportMaterializationError::ManifestSemanticMismatch);
+    }
+
+    for (logical_path, expected_digest) in &manifest.declared_file_digests {
+        if hash_bytes(declared_gateway_bytes(files, logical_path)?) != *expected_digest {
+            return Err(GatewayReportMaterializationError::ManifestSemanticMismatch);
+        }
+    }
+    Ok(())
+}
+
+fn gateway_report_declared_files() -> Vec<String> {
+    GATEWAY_REPORT_DECLARED_FILES
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
+fn declared_gateway_bytes<'a>(
+    files: &'a BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<&'a [u8], GatewayReportMaterializationError> {
+    files.get(logical_path).map(Vec::as_slice).ok_or_else(|| {
+        GatewayReportMaterializationError::Io(format!("declared file missing: {logical_path}"))
+    })
+}
+
+fn parse_gateway_declared_json<T: for<'de> Deserialize<'de> + Serialize>(
+    files: &BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<T, GatewayReportMaterializationError> {
+    let bytes = declared_gateway_bytes(files, logical_path)?;
+    let original = parse_json_value_rejecting_duplicate_keys(bytes).map_err(|_| {
+        GatewayReportMaterializationError::MalformedDeclaredFile(logical_path.to_owned())
+    })?;
+    let parsed: T = serde_json::from_value(original.clone()).map_err(|_| {
+        GatewayReportMaterializationError::MalformedDeclaredFile(logical_path.to_owned())
+    })?;
+    let canonical = serde_json::to_value(&parsed).map_err(gateway_serde_error)?;
+    if canonical != original {
+        return Err(GatewayReportMaterializationError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        ));
+    }
+    Ok(parsed)
+}
+
+fn gateway_report_nonclaims_markdown(nonclaims: &BTreeSet<NonClaimLabel>) -> String {
+    let mut out = String::from("# Gateway Report Non-Claims\n\n");
+    for nonclaim in nonclaims {
+        out.push_str("- ");
+        out.push_str(&nonclaim.0);
+        out.push('\n');
+    }
+    out
+}
+
+fn reject_undeclared_gateway_report_files(
+    output_root: &Path,
+) -> Result<(), GatewayReportMaterializationError> {
+    let mut declared: BTreeSet<String> = GATEWAY_REPORT_DECLARED_FILES
+        .iter()
+        .chain(GATEWAY_REPORT_DECLARED_SIDECARS.iter())
+        .map(|value| (*value).to_owned())
+        .collect();
+    let bundle_dir = output_root.join("gateway-report");
+    for entry in fs::read_dir(&bundle_dir).map_err(gateway_io_error)? {
+        let entry = entry.map_err(gateway_io_error)?;
+        let logical_path = entry
+            .path()
+            .strip_prefix(output_root)
+            .map_err(|error| GatewayReportMaterializationError::Io(error.to_string()))?
+            .to_string_lossy()
+            .replace('\\', "/");
+        if !declared.remove(&logical_path) {
+            return Err(GatewayReportMaterializationError::UndeclaredFile(
+                logical_path,
+            ));
+        }
+    }
+    if let Some(missing) = declared.into_iter().next() {
+        return Err(GatewayReportMaterializationError::Io(format!(
+            "declared file missing: {missing}"
+        )));
+    }
+    Ok(())
+}
+
+fn validate_gateway_output_root(
+    output_root: &Path,
+    protected_roots: &[PathBuf],
+    overwrite: bool,
+) -> Result<(), GatewayReportMaterializationError> {
+    match validate_output_root(output_root, protected_roots, overwrite) {
+        Ok(()) => Ok(()),
+        Err(AdmissionJournalMaterializationError::EmptyOutputRoot) => {
+            Err(GatewayReportMaterializationError::EmptyOutputRoot)
+        }
+        Err(AdmissionJournalMaterializationError::ProtectedOutputRoot) => {
+            Err(GatewayReportMaterializationError::ProtectedOutputRoot)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootExistsWithoutOverwrite) => {
+            Err(GatewayReportMaterializationError::OutputRootExistsWithoutOverwrite)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootIsFile) => {
+            Err(GatewayReportMaterializationError::OutputRootIsFile)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootIsSymlink) => {
+            Err(GatewayReportMaterializationError::OutputRootIsSymlink)
+        }
+        Err(AdmissionJournalMaterializationError::Io(error)) => {
+            Err(GatewayReportMaterializationError::Io(error))
+        }
+        Err(other) => Err(GatewayReportMaterializationError::Io(format!("{other:?}"))),
+    }
+}
+
+fn gateway_staging_root_for(
+    output_root: &Path,
+    bundle_id: &str,
+) -> Result<PathBuf, GatewayReportMaterializationError> {
+    let parent = output_root
+        .parent()
+        .ok_or(GatewayReportMaterializationError::EmptyOutputRoot)?;
+    let name = output_root
+        .file_name()
+        .map(|value| value.to_string_lossy().into_owned())
+        .ok_or(GatewayReportMaterializationError::EmptyOutputRoot)?;
+    Ok(parent.join(format!(".{name}.{bundle_id}.staging")))
+}
+
+fn remove_gateway_dir_all_checked(path: &Path) -> Result<(), GatewayReportMaterializationError> {
+    if !path.exists() {
+        return Ok(());
+    }
+    if fs::symlink_metadata(path)
+        .map_err(gateway_io_error)?
+        .file_type()
+        .is_symlink()
+    {
+        return Err(GatewayReportMaterializationError::OutputRootIsSymlink);
+    }
+    fs::remove_dir_all(path).map_err(gateway_io_error)
+}
+
+fn gateway_artifact_error(error: GatewayReportArtifactError) -> GatewayReportMaterializationError {
+    match error {
+        GatewayReportArtifactError::InvalidReport(issues) => {
+            GatewayReportMaterializationError::InvalidReport(issues)
+        }
+        GatewayReportArtifactError::Serialization(error) => {
+            GatewayReportMaterializationError::Serialization(error)
+        }
+    }
+}
+
+fn gateway_io_error(error: io::Error) -> GatewayReportMaterializationError {
+    GatewayReportMaterializationError::Io(error.to_string())
+}
+
+fn gateway_serde_error(error: serde_json::Error) -> GatewayReportMaterializationError {
+    GatewayReportMaterializationError::Serialization(error.to_string())
 }
 
 fn sidecar_path(path: &Path) -> PathBuf {
@@ -2721,6 +3204,21 @@ mod tests {
         }
     }
 
+    fn gateway_report_request(
+        bundle_id: &str,
+        output_root: &Path,
+    ) -> GatewayReportMaterializationRequest {
+        GatewayReportMaterializationRequest {
+            bundle_id: bundle_id.to_owned(),
+            created_at_unix: 1_800_000_001,
+            overwrite: false,
+            protected_roots: vec![output_root
+                .parent()
+                .expect("temp output root has a parent")
+                .join("protected-repo")],
+        }
+    }
+
     fn temp_output_root(name: &str) -> PathBuf {
         let nonce = SystemTime::now()
             .duration_since(UNIX_EPOCH)
@@ -2737,6 +3235,26 @@ mod tests {
             hash_hex(hash_bytes(bytes)).into_bytes(),
         )
         .expect("tampered sidecar writes");
+    }
+
+    fn rewrite_gateway_file_and_manifest_digest(
+        output_root: &Path,
+        logical_path: &str,
+        bytes: &[u8],
+    ) {
+        rewrite_bundle_file(output_root, logical_path, bytes);
+        let manifest_path = output_root.join("gateway-report/manifest.json");
+        let mut manifest: GatewayReportOutputManifest =
+            serde_json::from_slice(&fs::read(&manifest_path).expect("gateway manifest reads"))
+                .expect("gateway manifest parses");
+        manifest
+            .declared_file_digests
+            .insert(logical_path.to_owned(), hash_bytes(bytes));
+        rewrite_bundle_file(
+            output_root,
+            "gateway-report/manifest.json",
+            &serde_json::to_vec_pretty(&manifest).expect("gateway manifest serializes"),
+        );
     }
 
     fn rewrite_content_and_manifest_digest(output_root: &Path, logical_path: &str, bytes: &[u8]) {
@@ -3095,6 +3613,137 @@ mod tests {
                 GatewayReportValidationIssue::MetricsVerdictCountMismatch,
             ]))
         );
+    }
+
+    #[test]
+    fn gateway_report_bundle_materializes_declared_files_and_readback() {
+        let cases = vec![
+            GatewayCorpusCase {
+                proposal: gateway_proposal("gateway-output-accepted"),
+                expected_verdict: AdmissionVerdict::Accepted,
+            },
+            GatewayCorpusCase {
+                proposal: {
+                    let mut proposal = gateway_proposal("gateway-output-rejected");
+                    proposal.target = "unknown-target".to_owned();
+                    proposal
+                        .threat_labels
+                        .insert(GatewayThreatLabel::PolicyDowngrade);
+                    proposal
+                },
+                expected_verdict: AdmissionVerdict::Rejected,
+            },
+        ];
+        let policy = gateway_policy();
+        let report =
+            evaluate_gateway_corpus(&cases, &policy).expect("gateway corpus should evaluate");
+        let output_root = temp_output_root("gateway-report-bundle");
+        let request = gateway_report_request("gateway-report-bundle", &output_root);
+
+        let manifest = materialize_gateway_report_bundle(&output_root, &report, &policy, &request)
+            .expect("valid gateway report materializes");
+
+        assert_eq!(manifest.bundle_id, "gateway-report-bundle");
+        assert_eq!(manifest.gateway_policy, policy);
+        assert_eq!(manifest.artifact_manifest.metrics.total_cases, 2);
+        assert_eq!(manifest.artifact_manifest.metrics.accepted_count, 1);
+        assert_eq!(manifest.artifact_manifest.metrics.rejected_count, 1);
+        assert!(manifest
+            .declared_files
+            .contains(&"gateway-report/manifest.json".to_owned()));
+        assert!(!manifest
+            .declared_file_digests
+            .contains_key("gateway-report/manifest.json"));
+
+        for logical_path in GATEWAY_REPORT_DECLARED_FILES {
+            let path = output_root.join(logical_path);
+            assert!(path.is_file(), "{logical_path} should exist");
+            assert!(
+                sidecar_path(&path).is_file(),
+                "{logical_path} sidecar should exist"
+            );
+        }
+
+        let markdown = fs::read_to_string(output_root.join("gateway-report/report.md"))
+            .expect("gateway report markdown is readable");
+        assert!(markdown.contains("gateway-output-accepted"));
+        assert!(markdown.contains("gateway-output-rejected"));
+        assert!(markdown.contains("local gateway report metadata only"));
+
+        let readback = read_gateway_report_bundle(&output_root).expect("readback validates");
+        assert_eq!(readback, manifest);
+
+        fs::remove_dir_all(&output_root).expect("temp gateway report cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_report_bundle_rejects_protected_roots_and_undeclared_files() {
+        let cases = vec![GatewayCorpusCase {
+            proposal: gateway_proposal("gateway-output-protected"),
+            expected_verdict: AdmissionVerdict::Accepted,
+        }];
+        let policy = gateway_policy();
+        let report =
+            evaluate_gateway_corpus(&cases, &policy).expect("gateway corpus should evaluate");
+        let output_root = temp_output_root("gateway-report-protected");
+        let protected = output_root
+            .parent()
+            .expect("temp output root has parent")
+            .to_path_buf();
+        let mut request = gateway_report_request("gateway-report-protected", &output_root);
+        request.protected_roots = vec![protected];
+
+        assert_eq!(
+            materialize_gateway_report_bundle(&output_root, &report, &policy, &request),
+            Err(GatewayReportMaterializationError::ProtectedOutputRoot)
+        );
+
+        let request = gateway_report_request("gateway-report-undeclared", &output_root);
+        materialize_gateway_report_bundle(&output_root, &report, &policy, &request)
+            .expect("valid gateway report materializes");
+        fs::write(
+            output_root.join("gateway-report/unexpected.txt"),
+            b"unexpected",
+        )
+        .expect("unexpected gateway file writes");
+        assert_eq!(
+            read_gateway_report_bundle(&output_root),
+            Err(GatewayReportMaterializationError::UndeclaredFile(
+                "gateway-report/unexpected.txt".to_owned()
+            ))
+        );
+
+        fs::remove_dir_all(&output_root).expect("temp gateway report cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_report_bundle_readback_rejects_tampered_report() {
+        let cases = vec![GatewayCorpusCase {
+            proposal: gateway_proposal("gateway-output-tamper"),
+            expected_verdict: AdmissionVerdict::Accepted,
+        }];
+        let policy = gateway_policy();
+        let mut report =
+            evaluate_gateway_corpus(&cases, &policy).expect("gateway corpus should evaluate");
+        let output_root = temp_output_root("gateway-report-tamper");
+        let request = gateway_report_request("gateway-report-tamper", &output_root);
+        materialize_gateway_report_bundle(&output_root, &report, &policy, &request)
+            .expect("valid gateway report materializes");
+
+        report.metrics.total_cases = 99;
+        rewrite_gateway_file_and_manifest_digest(
+            &output_root,
+            "gateway-report/report.json",
+            &serde_json::to_vec_pretty(&report).expect("tampered report serializes"),
+        );
+        assert_eq!(
+            read_gateway_report_bundle(&output_root),
+            Err(GatewayReportMaterializationError::InvalidReport(vec![
+                GatewayReportValidationIssue::MetricsTotalMismatch,
+            ]))
+        );
+
+        fs::remove_dir_all(&output_root).expect("temp gateway report cleanup succeeds");
     }
 
     #[test]
