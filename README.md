@@ -299,6 +299,8 @@ Surface DSL
 | [docs/211-hsai-gateway-adversarial-corpus-output-run-notes.md](docs/211-hsai-gateway-adversarial-corpus-output-run-notes.md) | Phase 211 HSAI Gateway adversarial-corpus output-run notes. |
 | [docs/212-hsai-gateway-baseline-comparison-notes.md](docs/212-hsai-gateway-baseline-comparison-notes.md) | Phase 212 HSAI Gateway baseline-comparison notes. |
 | [docs/213-hsai-gateway-effectiveness-metrics-notes.md](docs/213-hsai-gateway-effectiveness-metrics-notes.md) | Phase 213 HSAI Gateway effectiveness-metrics notes. |
+| [docs/213-hsai-gateway-public-proof-packet.md](docs/213-hsai-gateway-public-proof-packet.md) | Phase 213 HSAI Gateway public proof packet for the green Phase 204-212 public state. |
+| [docs/214-hsai-gateway-local-demo-runbook.md](docs/214-hsai-gateway-local-demo-runbook.md) | Phase 214 HSAI Gateway local demo runbook. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1239,6 +1241,25 @@ model execution, network access, credential access, external replay,
 signer/tool integration, accepted Evidence Ledger mutation, score-axis
 population, benchmark output, production-readiness claim, semantic-correctness
 claim, global uniqueness claim, or Level2+ evidence.
+
+[docs/213-hsai-gateway-public-proof-packet.md](docs/213-hsai-gateway-public-proof-packet.md)
+records the bounded public proof packet for the green public Phase 204-212
+gateway state at commit `4dfa3e6dfddd8ab79f558691bc10c48b74f47bf7`. The packet
+names the exact verifier commands, the local hermetic gateway surfaces, the
+public claim, the reproduction checklist, and the explicit nonclaims. It does
+not promote local tests into production readiness, semantic correctness, live
+provider evidence, accepted Evidence Ledger mutation, benchmark evidence, or
+Level2+ evidence.
+
+[docs/214-hsai-gateway-local-demo-runbook.md](docs/214-hsai-gateway-local-demo-runbook.md)
+records the local HSAI Gateway demo-run surface inside `hsai-agent-admission`.
+The `gateway_demo_report` Cargo example writes the existing declared
+`gateway-report/*` bundle under the ignored `.gateway-demo-runs/` root, reads it
+back through the existing validator, and prints a non-secret summary JSON. It
+does not execute models, call providers, perform external replay, integrate
+signers/tools, mutate accepted Evidence Ledgers, populate score axes, create
+benchmark evidence, claim production readiness, claim semantic correctness,
+claim global uniqueness, or grant authority.
 
 ## Validation Checklist
 
