@@ -98,10 +98,11 @@ surface, the Phase 207 HSAI Gateway corpus output-run surface, and the Phase
 model-lane registry surface, and the Phase 210 HSAI Gateway adversarial-corpus
 validation surface, and the Phase 211 HSAI Gateway adversarial-corpus
 output-run surface, and the Phase 212 HSAI Gateway baseline-comparison surface,
-plus earlier coverage-hardening follow-up work for serialization error paths,
-crate error constructors, and local soak runner resume/output/error-policy
-paths. It evaluates the implemented codebase as a local Level 1 Rust foundation
-by running the available workspace gates and mapping those gates to the repo's
+and the Phase 213 HSAI Gateway effectiveness-metrics surface, plus earlier
+coverage-hardening follow-up work for serialization error paths, crate error
+constructors, and local soak runner resume/output/error-policy paths. It
+evaluates the implemented codebase as a local Level 1 Rust foundation by
+running the available workspace gates and mapping those gates to the repo's
 major behavioral surfaces.
 
 It does not claim per-function formal correctness, 100% line coverage, official
@@ -257,6 +258,20 @@ signer/tool/payment/custody integration, accepted Evidence Ledger mutation,
 score-axis population, benchmark output, Level2+ evidence, production-readiness
 claims, semantic-correctness claims, global uniqueness claims, "fully secure"
 claims, or claims above `Attested`.
+
+Phase 213 implements a local hermetic HSAI Gateway effectiveness-metrics
+surface inside `hsai-agent-admission`. It validates an HSAI gateway corpus
+report and derives local summary metrics: unsafe action block rate, false
+rejection rate, quarantine rate, decision recomputation agreement rate,
+audit-bundle completeness, covered threat labels, per-threat case counts, and
+per-threat blocked counts. The summary carries a local claim boundary and
+`authority_granted = false`. It does not authorize package runtime files, live
+metrics collection, LLM judge runtime, model execution, model downloads,
+hosted-model calls, verifier-agent runtime, generated corpora, generated output
+bundles, external replay, signer/tool/payment/custody integration, accepted
+Evidence Ledger mutation, score-axis population, benchmark output, Level2+
+evidence, production-readiness claims, semantic-correctness claims, global
+uniqueness claims, "fully secure" claims, or claims above `Attested`.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,

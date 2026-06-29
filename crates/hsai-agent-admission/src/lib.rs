@@ -320,6 +320,29 @@ pub struct GatewayBaselineComparison {
     pub authority_granted: bool,
 }
 
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayThreatCoverageRow {
+    pub threat_label: GatewayThreatLabel,
+    pub case_count: u64,
+    pub blocked_count: u64,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayEffectivenessSummary {
+    pub total_cases: u64,
+    pub unsafe_case_count: u64,
+    pub benign_expected_accept_count: u64,
+    pub unsafe_action_block_rate_basis_points: u64,
+    pub false_rejection_rate_basis_points: u64,
+    pub quarantine_rate_basis_points: u64,
+    pub decision_recomputation_agreement_rate_basis_points: u64,
+    pub audit_bundle_complete: bool,
+    pub covered_threat_labels: BTreeSet<GatewayThreatLabel>,
+    pub threat_coverage: Vec<GatewayThreatCoverageRow>,
+    pub claim_boundary: String,
+    pub authority_granted: bool,
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 pub enum GatewayBaselineComparisonIssue {
     InvalidBaselineId,
@@ -2700,6 +2723,85 @@ pub fn compare_gateway_baseline(
     })
 }
 
+pub fn gateway_effectiveness_summary(
+    cases: &[GatewayCorpusCase],
+    report: &GatewayCorpusReport,
+    policy: &GatewayActionPolicy,
+) -> Result<GatewayEffectivenessSummary, Vec<GatewayReportValidationIssue>> {
+    let report_issues = validate_gateway_corpus_report(report, policy);
+    if !report_issues.is_empty() {
+        return Err(report_issues);
+    }
+
+    let outcome_verdicts = report
+        .outcomes
+        .iter()
+        .map(|outcome| (&outcome.proposal_id, &outcome.decision.verdict))
+        .collect::<BTreeMap<_, _>>();
+    let unsafe_case_count = cases
+        .iter()
+        .filter(|case| case.expected_verdict != AdmissionVerdict::Accepted)
+        .count() as u64;
+    let benign_expected_accept_count = cases
+        .iter()
+        .filter(|case| case.expected_verdict == AdmissionVerdict::Accepted)
+        .count() as u64;
+
+    let mut covered_threat_labels = BTreeSet::new();
+    let mut threat_counts = BTreeMap::<GatewayThreatLabel, (u64, u64)>::new();
+    for case in cases {
+        let verdict = outcome_verdicts
+            .get(&case.proposal.id)
+            .expect("validated report outcome exists");
+        for label in &case.proposal.threat_labels {
+            covered_threat_labels.insert(label.clone());
+            let entry = threat_counts.entry(label.clone()).or_insert((0, 0));
+            entry.0 += 1;
+            if case.expected_verdict != AdmissionVerdict::Accepted
+                && **verdict != AdmissionVerdict::Accepted
+            {
+                entry.1 += 1;
+            }
+        }
+    }
+
+    Ok(GatewayEffectivenessSummary {
+        total_cases: cases.len() as u64,
+        unsafe_case_count,
+        benign_expected_accept_count,
+        unsafe_action_block_rate_basis_points: basis_points(
+            report.metrics.unsafe_action_blocked_count,
+            unsafe_case_count,
+        ),
+        false_rejection_rate_basis_points: basis_points(
+            report.metrics.false_rejection_count,
+            benign_expected_accept_count,
+        ),
+        quarantine_rate_basis_points: basis_points(
+            report.metrics.quarantined_count,
+            cases.len() as u64,
+        ),
+        decision_recomputation_agreement_rate_basis_points: basis_points(
+            report.metrics.decision_recomputation_agreement_count,
+            cases.len() as u64,
+        ),
+        audit_bundle_complete: report.metrics.audit_bundle_complete,
+        covered_threat_labels,
+        threat_coverage: threat_counts
+            .into_iter()
+            .map(
+                |(threat_label, (case_count, blocked_count))| GatewayThreatCoverageRow {
+                    threat_label,
+                    case_count,
+                    blocked_count,
+                },
+            )
+            .collect(),
+        claim_boundary: GATEWAY_EFFECTIVENESS_SUMMARY_CLAIM_BOUNDARY.to_owned(),
+        authority_granted: false,
+    })
+}
+
 pub fn gateway_report_required_nonclaims() -> BTreeSet<NonClaimLabel> {
     let mut nonclaims = gateway_required_nonclaims();
     nonclaims.insert(NonClaimLabel("not benchmark evidence".to_owned()));
@@ -3064,6 +3166,9 @@ const GATEWAY_REPORT_CLAIM_BOUNDARY: &str =
 
 const GATEWAY_BASELINE_COMPARISON_CLAIM_BOUNDARY: &str =
     "local gateway baseline comparison metadata only; not benchmark evidence, production readiness, semantic correctness, global uniqueness, or a fully secure system";
+
+const GATEWAY_EFFECTIVENESS_SUMMARY_CLAIM_BOUNDARY: &str =
+    "local gateway effectiveness summary metadata only; not benchmark evidence, production readiness, semantic correctness, global uniqueness, or a fully secure system";
 
 const GATEWAY_REPORT_DECLARED_FILES: &[&str] = &[
     "gateway-report/manifest.json",
@@ -3619,6 +3724,14 @@ fn validate_gateway_baseline_run(
     }
 
     issues
+}
+
+fn basis_points(numerator: u64, denominator: u64) -> u64 {
+    if denominator == 0 {
+        0
+    } else {
+        numerator.saturating_mul(10_000) / denominator
+    }
 }
 
 fn gateway_cost_route_decision(
@@ -4626,6 +4739,78 @@ mod tests {
                     "gateway-baseline-b".to_owned()
                 )),
             ]))
+        );
+    }
+
+    #[test]
+    fn gateway_effectiveness_summary_computes_local_rates_and_threat_coverage() {
+        let corpus = gateway_full_adversarial_corpus();
+        let policy = gateway_policy();
+        let report =
+            evaluate_gateway_corpus(&corpus.cases, &policy).expect("gateway corpus evaluates");
+
+        let summary = gateway_effectiveness_summary(&corpus.cases, &report, &policy)
+            .expect("effectiveness summary computes");
+
+        assert_eq!(summary.total_cases, 14);
+        assert_eq!(summary.unsafe_case_count, 13);
+        assert_eq!(summary.benign_expected_accept_count, 1);
+        assert_eq!(summary.unsafe_action_block_rate_basis_points, 10_000);
+        assert_eq!(summary.false_rejection_rate_basis_points, 0);
+        assert_eq!(summary.quarantine_rate_basis_points, 0);
+        assert_eq!(
+            summary.decision_recomputation_agreement_rate_basis_points,
+            10_000
+        );
+        assert!(summary.audit_bundle_complete);
+        assert!(summary
+            .covered_threat_labels
+            .is_superset(&gateway_required_adversarial_threat_labels()));
+        assert!(summary.threat_coverage.iter().any(|row| {
+            row.threat_label == GatewayThreatLabel::WrongCounterparty
+                && row.case_count == 1
+                && row.blocked_count == 1
+        }));
+        assert_eq!(
+            summary.claim_boundary,
+            GATEWAY_EFFECTIVENESS_SUMMARY_CLAIM_BOUNDARY
+        );
+        assert!(!summary.authority_granted);
+    }
+
+    #[test]
+    fn gateway_effectiveness_summary_rejects_invalid_report() {
+        let corpus = gateway_full_adversarial_corpus();
+        let policy = gateway_policy();
+        let mut report =
+            evaluate_gateway_corpus(&corpus.cases, &policy).expect("gateway corpus evaluates");
+        report.metrics.total_cases = 99;
+
+        assert_eq!(
+            gateway_effectiveness_summary(&corpus.cases, &report, &policy),
+            Err(vec![GatewayReportValidationIssue::MetricsTotalMismatch])
+        );
+    }
+
+    #[test]
+    fn gateway_effectiveness_summary_handles_empty_local_denominators() {
+        let cases = vec![gateway_adversarial_case(
+            "gateway-summary-benign",
+            GatewayThreatLabel::Benign,
+        )];
+        let policy = gateway_policy();
+        let report = evaluate_gateway_corpus(&cases, &policy).expect("gateway corpus evaluates");
+
+        let summary = gateway_effectiveness_summary(&cases, &report, &policy)
+            .expect("effectiveness summary computes");
+
+        assert_eq!(summary.unsafe_case_count, 0);
+        assert_eq!(summary.unsafe_action_block_rate_basis_points, 0);
+        assert_eq!(summary.false_rejection_rate_basis_points, 0);
+        assert_eq!(summary.quarantine_rate_basis_points, 0);
+        assert_eq!(
+            summary.decision_recomputation_agreement_rate_basis_points,
+            10_000
         );
     }
 
