@@ -33,6 +33,7 @@ pub enum AdmissionSourceKind {
     ProviderResponse,
     BenchmarkResultProposal,
     PcsmBoundedProofHandoff,
+    GatewayActionProposal,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
@@ -43,6 +44,196 @@ pub enum AdmissionClaimBoundary {
     Formal,
 }
 
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub struct GatewayActionId(pub String);
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayActionKind {
+    Payment,
+    Trade,
+    ToolCall,
+    DataAccess,
+    ComputeRental,
+    Deployment,
+    Checkout,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayThreatLabel {
+    Benign,
+    PromptInjectionPayment,
+    WrongCounterparty,
+    AmountLimitBypass,
+    SourceDigestDrift,
+    StaleApprovalReplay,
+    DuplicateJsonKeyPayload,
+    PolicyDowngrade,
+    DirectAuthorityRequest,
+    ForgedAcceptedDecision,
+    MissingNonclaim,
+    MissingSourceDigest,
+    StaleJournalTip,
+    SignerBeforeAdmission,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayModelLaneKind {
+    Deterministic,
+    LocalOpenWeight,
+    RentedOpenWeight,
+    HostedSmall,
+    PremiumEscalation,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayModelLaneProvenance {
+    pub lane_kind: GatewayModelLaneKind,
+    pub model_family: String,
+    pub artifact_id: String,
+    pub runtime: String,
+    pub prompt_template_digest: Hash,
+    pub input_corpus_digest: Hash,
+    pub output_bundle_digest: Hash,
+    pub non_secret: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayActionProposal {
+    pub id: GatewayActionId,
+    pub subject: SubjectId,
+    pub action_kind: GatewayActionKind,
+    pub target: String,
+    pub value_units: u64,
+    pub source_artifact_digests: BTreeSet<ArtifactDigest>,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+    pub model_lane: GatewayModelLaneProvenance,
+    pub threat_labels: BTreeSet<GatewayThreatLabel>,
+    pub direct_authority_requested: bool,
+    pub signer_or_tool_requested_before_admission: bool,
+}
+
+impl GatewayActionProposal {
+    pub fn digest(&self) -> Hash {
+        hash_tagged("hsai-agent-admission:gateway-action-proposal:v1", self)
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayPolicyViolation {
+    InvalidActionId,
+    InvalidTarget,
+    UnsupportedActionKind,
+    UnauthorizedTarget,
+    AmountLimitExceeded,
+    MissingModelLaneProvenance,
+    ModelLaneNotNonSecret,
+    DirectAuthorityRequested,
+    SignerOrToolRequestedBeforeAdmission,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayActionPolicy {
+    pub id: AdmissionPolicyId,
+    pub admission_policy: AgentAdmissionPolicy,
+    pub allowed_action_kinds: BTreeSet<GatewayActionKind>,
+    pub allowed_targets: BTreeSet<String>,
+    pub max_value_units: u64,
+    pub require_non_secret_model_lane: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayAcceptedHandoff {
+    pub action_id: GatewayActionId,
+    pub subject: SubjectId,
+    pub action_kind: GatewayActionKind,
+    pub target: String,
+    pub value_units: u64,
+    pub candidate_digest: Hash,
+    pub decision_digest: Hash,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayActionOutcome {
+    pub proposal_id: GatewayActionId,
+    pub candidate_id: AdmissionCandidateId,
+    pub action_digest: Hash,
+    pub decision: AgentAdmissionDecision,
+    pub accepted_handoff: Option<GatewayAcceptedHandoff>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayCorpusCase {
+    pub proposal: GatewayActionProposal,
+    pub expected_verdict: AdmissionVerdict,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayRunMetrics {
+    pub total_cases: u64,
+    pub accepted_count: u64,
+    pub rejected_count: u64,
+    pub quarantined_count: u64,
+    pub unsafe_action_blocked_count: u64,
+    pub false_rejection_count: u64,
+    pub replay_or_tamper_detection_count: u64,
+    pub duplicate_key_detection_count: u64,
+    pub policy_downgrade_detection_count: u64,
+    pub decision_recomputation_agreement_count: u64,
+    pub audit_bundle_complete: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayCorpusReport {
+    pub journal: AgentAdmissionJournal,
+    pub outcomes: Vec<GatewayActionOutcome>,
+    pub metrics: GatewayRunMetrics,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayReportValidationIssue {
+    JournalInvalid,
+    MetricsTotalMismatch,
+    MetricsVerdictCountMismatch,
+    MetricsAcceptedHandoffMismatch,
+    MetricsDecisionRecomputationMismatch,
+    MetricsAuditBundleCompletenessMismatch,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayReportArtifactError {
+    InvalidReport(Vec<GatewayReportValidationIssue>),
+    Serialization(String),
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayReportArtifactManifest {
+    pub schema_version: String,
+    pub claim_boundary: String,
+    pub policy_id: AdmissionPolicyId,
+    pub report_digest: Hash,
+    pub journal_tip_digest_after: Option<Hash>,
+    pub report_json_sha256: Hash,
+    pub report_markdown_sha256: Hash,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+    pub metrics: GatewayRunMetrics,
+}
+
+impl GatewayReportArtifactManifest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-report-artifact-manifest:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct GatewayReportArtifact {
+    pub manifest: GatewayReportArtifactManifest,
+    pub report_json: Vec<u8>,
+    pub report_markdown: Vec<u8>,
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct AgentAdmissionCandidate {
     pub id: AdmissionCandidateId,
@@ -51,6 +242,10 @@ pub struct AgentAdmissionCandidate {
     pub strict_typed: bool,
     pub case: Option<AgentCase>,
     pub proposed_envelope: Option<ClaimEnvelope>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub gateway_action: Option<GatewayActionProposal>,
+    #[serde(default, skip_serializing_if = "BTreeSet::is_empty")]
+    pub gateway_policy_violations: BTreeSet<GatewayPolicyViolation>,
     pub requested_claim_boundary: AdmissionClaimBoundary,
     pub source_artifact_digests: BTreeSet<ArtifactDigest>,
     pub nonclaims: BTreeSet<NonClaimLabel>,
@@ -74,6 +269,8 @@ impl AgentAdmissionCandidate {
             strict_typed: true,
             case: Some(case),
             proposed_envelope: None,
+            gateway_action: None,
+            gateway_policy_violations: BTreeSet::new(),
             requested_claim_boundary: AdmissionClaimBoundary::LocalOnly,
             source_artifact_digests,
             nonclaims,
@@ -98,6 +295,8 @@ impl AgentAdmissionCandidate {
             strict_typed: true,
             case: None,
             proposed_envelope: Some(envelope),
+            gateway_action: None,
+            gateway_policy_violations: BTreeSet::new(),
             requested_claim_boundary: AdmissionClaimBoundary::Level1Local,
             source_artifact_digests,
             nonclaims,
@@ -439,6 +638,8 @@ pub fn pcsm_bounded_proof_handoff_candidate(
         strict_typed: true,
         case: None,
         proposed_envelope: None,
+        gateway_action: None,
+        gateway_policy_violations: BTreeSet::new(),
         requested_claim_boundary: AdmissionClaimBoundary::LocalOnly,
         source_artifact_digests,
         nonclaims: intake.nonclaims.clone(),
@@ -542,6 +743,9 @@ pub fn evaluate_admission(
             if candidate.proposed_envelope.is_some() {
                 reasons.push(reason("agent_case_envelope_forbidden"));
             }
+            if candidate.gateway_action.is_some() {
+                reasons.push(reason("agent_case_gateway_action_forbidden"));
+            }
             if candidate
                 .case
                 .as_ref()
@@ -557,6 +761,9 @@ pub fn evaluate_admission(
             if candidate.proposed_envelope.is_none() {
                 reasons.push(reason("claim_envelope_payload_required"));
             }
+            if candidate.gateway_action.is_some() {
+                reasons.push(reason("claim_envelope_gateway_action_forbidden"));
+            }
         }
         AdmissionSourceKind::ProviderResponse => {
             if candidate.case.is_some() {
@@ -564,6 +771,9 @@ pub fn evaluate_admission(
             }
             if candidate.proposed_envelope.is_some() {
                 reasons.push(reason("provider_response_envelope_forbidden"));
+            }
+            if candidate.gateway_action.is_some() {
+                reasons.push(reason("provider_response_gateway_action_forbidden"));
             }
             if candidate.strict_typed {
                 reasons.push(reason("provider_response_requires_typed_conversion"));
@@ -576,6 +786,9 @@ pub fn evaluate_admission(
             if candidate.proposed_envelope.is_some() {
                 reasons.push(reason("benchmark_result_envelope_forbidden"));
             }
+            if candidate.gateway_action.is_some() {
+                reasons.push(reason("benchmark_result_gateway_action_forbidden"));
+            }
         }
         AdmissionSourceKind::PcsmBoundedProofHandoff => {
             if candidate.case.is_some() {
@@ -584,7 +797,26 @@ pub fn evaluate_admission(
             if candidate.proposed_envelope.is_some() {
                 reasons.push(reason("pcsm_handoff_envelope_forbidden"));
             }
+            if candidate.gateway_action.is_some() {
+                reasons.push(reason("pcsm_handoff_gateway_action_forbidden"));
+            }
         }
+        AdmissionSourceKind::GatewayActionProposal => {
+            if candidate.case.is_some() {
+                reasons.push(reason("gateway_action_case_forbidden"));
+            }
+            if candidate.proposed_envelope.is_some() {
+                reasons.push(reason("gateway_action_envelope_forbidden"));
+            }
+            match &candidate.gateway_action {
+                Some(action) if action.subject == candidate.subject => {}
+                Some(_) => reasons.push(reason("gateway_action_subject_mismatch")),
+                None => reasons.push(reason("gateway_action_payload_required")),
+            }
+        }
+    }
+    for violation in &candidate.gateway_policy_violations {
+        reasons.push(gateway_violation_reason(violation));
     }
     if candidate.requested_claim_boundary != expected_claim_boundary(&candidate.source_kind) {
         reasons.push(reason("source_kind_claim_boundary_mismatch"));
@@ -675,7 +907,8 @@ fn expected_claim_boundary(source_kind: &AdmissionSourceKind) -> AdmissionClaimB
         AdmissionSourceKind::AgentCase
         | AdmissionSourceKind::ProviderResponse
         | AdmissionSourceKind::BenchmarkResultProposal
-        | AdmissionSourceKind::PcsmBoundedProofHandoff => AdmissionClaimBoundary::LocalOnly,
+        | AdmissionSourceKind::PcsmBoundedProofHandoff
+        | AdmissionSourceKind::GatewayActionProposal => AdmissionClaimBoundary::LocalOnly,
     }
 }
 
@@ -1684,8 +1917,468 @@ pub fn accepted_claim_envelope<'a>(
     }
 }
 
+pub fn gateway_required_nonclaims() -> BTreeSet<NonClaimLabel> {
+    BTreeSet::from([
+        NonClaimLabel("not direct authority".to_owned()),
+        NonClaimLabel("not model-granted authority".to_owned()),
+        NonClaimLabel("not semantic correctness".to_owned()),
+        NonClaimLabel("not production readiness".to_owned()),
+        NonClaimLabel("not Level2+ evidence".to_owned()),
+        NonClaimLabel("not accepted Evidence Ledger mutation".to_owned()),
+        NonClaimLabel("no score-axis population".to_owned()),
+    ])
+}
+
+pub fn gateway_local_default_policy(
+    id: impl Into<String>,
+    allowed_action_kinds: BTreeSet<GatewayActionKind>,
+    allowed_targets: BTreeSet<String>,
+    max_value_units: u64,
+) -> GatewayActionPolicy {
+    GatewayActionPolicy {
+        id: AdmissionPolicyId(id.into()),
+        admission_policy: AgentAdmissionPolicy::local_default(gateway_required_nonclaims()),
+        allowed_action_kinds,
+        allowed_targets,
+        max_value_units,
+        require_non_secret_model_lane: true,
+    }
+}
+
+pub fn gateway_action_candidate(
+    proposal: &GatewayActionProposal,
+    policy: &GatewayActionPolicy,
+) -> AgentAdmissionCandidate {
+    let mut violations = BTreeSet::new();
+
+    if !is_portable_candidate_id(&proposal.id.0) {
+        violations.insert(GatewayPolicyViolation::InvalidActionId);
+    }
+    if !is_gateway_target_safe(&proposal.target) {
+        violations.insert(GatewayPolicyViolation::InvalidTarget);
+    }
+    if !policy.allowed_action_kinds.contains(&proposal.action_kind) {
+        violations.insert(GatewayPolicyViolation::UnsupportedActionKind);
+    }
+    if !policy.allowed_targets.contains(&proposal.target) {
+        violations.insert(GatewayPolicyViolation::UnauthorizedTarget);
+    }
+    if proposal.value_units > policy.max_value_units {
+        violations.insert(GatewayPolicyViolation::AmountLimitExceeded);
+    }
+    if !model_lane_provenance_is_complete(&proposal.model_lane) {
+        violations.insert(GatewayPolicyViolation::MissingModelLaneProvenance);
+    }
+    if policy.require_non_secret_model_lane && !proposal.model_lane.non_secret {
+        violations.insert(GatewayPolicyViolation::ModelLaneNotNonSecret);
+    }
+    if proposal.direct_authority_requested {
+        violations.insert(GatewayPolicyViolation::DirectAuthorityRequested);
+    }
+    if proposal.signer_or_tool_requested_before_admission {
+        violations.insert(GatewayPolicyViolation::SignerOrToolRequestedBeforeAdmission);
+    }
+
+    AgentAdmissionCandidate {
+        id: AdmissionCandidateId(proposal.id.0.clone()),
+        subject: proposal.subject.clone(),
+        source_kind: AdmissionSourceKind::GatewayActionProposal,
+        strict_typed: true,
+        case: None,
+        proposed_envelope: None,
+        gateway_action: Some(proposal.clone()),
+        gateway_policy_violations: violations,
+        requested_claim_boundary: AdmissionClaimBoundary::LocalOnly,
+        source_artifact_digests: proposal.source_artifact_digests.clone(),
+        nonclaims: proposal.nonclaims.clone(),
+        provider_direct_authority_requested: proposal.direct_authority_requested,
+        accepted_ledger_mutation_requested: false,
+        score_axis_population_requested: false,
+        external_or_formal_evidence_claimed: false,
+    }
+}
+
+pub fn evaluate_gateway_action(
+    proposal: &GatewayActionProposal,
+    policy: &GatewayActionPolicy,
+    journal: &mut AgentAdmissionJournal,
+) -> Result<GatewayActionOutcome, JournalError> {
+    let candidate = gateway_action_candidate(proposal, policy);
+    let decision = evaluate_admission(&candidate, &policy.admission_policy);
+    journal.append_decision(&candidate, &policy.admission_policy, decision.clone())?;
+    let accepted_handoff =
+        accepted_gateway_handoff(&candidate, &policy.admission_policy, &decision);
+
+    Ok(GatewayActionOutcome {
+        proposal_id: proposal.id.clone(),
+        candidate_id: candidate.id,
+        action_digest: proposal.digest(),
+        decision,
+        accepted_handoff,
+    })
+}
+
+pub fn accepted_gateway_handoff(
+    candidate: &AgentAdmissionCandidate,
+    policy: &AgentAdmissionPolicy,
+    decision: &AgentAdmissionDecision,
+) -> Option<GatewayAcceptedHandoff> {
+    if candidate.source_kind != AdmissionSourceKind::GatewayActionProposal
+        || decision != &evaluate_admission(candidate, policy)
+        || decision.verdict != AdmissionVerdict::Accepted
+    {
+        return None;
+    }
+    let action = candidate.gateway_action.as_ref()?;
+    Some(GatewayAcceptedHandoff {
+        action_id: action.id.clone(),
+        subject: action.subject.clone(),
+        action_kind: action.action_kind.clone(),
+        target: action.target.clone(),
+        value_units: action.value_units,
+        candidate_digest: candidate.digest(),
+        decision_digest: decision.digest(),
+    })
+}
+
+pub fn evaluate_gateway_corpus(
+    cases: &[GatewayCorpusCase],
+    policy: &GatewayActionPolicy,
+) -> Result<GatewayCorpusReport, JournalError> {
+    let mut journal = AgentAdmissionJournal::default();
+    let mut outcomes = Vec::new();
+    for case in cases {
+        outcomes.push(evaluate_gateway_action(
+            &case.proposal,
+            policy,
+            &mut journal,
+        )?);
+    }
+    let metrics = gateway_run_metrics(cases, &outcomes, &journal, policy);
+    Ok(GatewayCorpusReport {
+        journal,
+        outcomes,
+        metrics,
+    })
+}
+
+pub fn gateway_run_metrics(
+    cases: &[GatewayCorpusCase],
+    outcomes: &[GatewayActionOutcome],
+    journal: &AgentAdmissionJournal,
+    policy: &GatewayActionPolicy,
+) -> GatewayRunMetrics {
+    let mut unsafe_action_blocked_count = 0;
+    let mut false_rejection_count = 0;
+    let mut replay_or_tamper_detection_count = 0;
+    let mut duplicate_key_detection_count = 0;
+    let mut policy_downgrade_detection_count = 0;
+    let mut decision_recomputation_agreement_count = 0;
+
+    for (case, outcome) in cases.iter().zip(outcomes) {
+        if case.expected_verdict != AdmissionVerdict::Accepted
+            && outcome.decision.verdict != AdmissionVerdict::Accepted
+        {
+            unsafe_action_blocked_count += 1;
+        }
+        if case.expected_verdict == AdmissionVerdict::Accepted
+            && outcome.decision.verdict != AdmissionVerdict::Accepted
+        {
+            false_rejection_count += 1;
+        }
+        if case
+            .proposal
+            .threat_labels
+            .contains(&GatewayThreatLabel::StaleApprovalReplay)
+            || case
+                .proposal
+                .threat_labels
+                .contains(&GatewayThreatLabel::SourceDigestDrift)
+            || case
+                .proposal
+                .threat_labels
+                .contains(&GatewayThreatLabel::ForgedAcceptedDecision)
+        {
+            replay_or_tamper_detection_count +=
+                u64::from(outcome.decision.verdict != AdmissionVerdict::Accepted);
+        }
+        if case
+            .proposal
+            .threat_labels
+            .contains(&GatewayThreatLabel::DuplicateJsonKeyPayload)
+        {
+            duplicate_key_detection_count +=
+                u64::from(outcome.decision.verdict != AdmissionVerdict::Accepted);
+        }
+        if case
+            .proposal
+            .threat_labels
+            .contains(&GatewayThreatLabel::PolicyDowngrade)
+        {
+            policy_downgrade_detection_count +=
+                u64::from(outcome.decision.verdict != AdmissionVerdict::Accepted);
+        }
+    }
+
+    for entry in &journal.entries {
+        if entry.decision == evaluate_admission(&entry.candidate, &policy.admission_policy) {
+            decision_recomputation_agreement_count += 1;
+        }
+    }
+
+    GatewayRunMetrics {
+        total_cases: outcomes.len() as u64,
+        accepted_count: outcomes
+            .iter()
+            .filter(|outcome| outcome.decision.verdict == AdmissionVerdict::Accepted)
+            .count() as u64,
+        rejected_count: outcomes
+            .iter()
+            .filter(|outcome| outcome.decision.verdict == AdmissionVerdict::Rejected)
+            .count() as u64,
+        quarantined_count: outcomes
+            .iter()
+            .filter(|outcome| outcome.decision.verdict == AdmissionVerdict::Quarantined)
+            .count() as u64,
+        unsafe_action_blocked_count,
+        false_rejection_count,
+        replay_or_tamper_detection_count,
+        duplicate_key_detection_count,
+        policy_downgrade_detection_count,
+        decision_recomputation_agreement_count,
+        audit_bundle_complete: journal.validate().is_empty()
+            && journal.entries.len() == outcomes.len(),
+    }
+}
+
+pub fn gateway_report_required_nonclaims() -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims = gateway_required_nonclaims();
+    nonclaims.insert(NonClaimLabel("not benchmark evidence".to_owned()));
+    nonclaims.insert(NonClaimLabel("not model evaluation".to_owned()));
+    nonclaims.insert(NonClaimLabel("not fully secure".to_owned()));
+    nonclaims
+}
+
+pub fn validate_gateway_corpus_report(
+    report: &GatewayCorpusReport,
+    policy: &GatewayActionPolicy,
+) -> Vec<GatewayReportValidationIssue> {
+    let mut issues = Vec::new();
+    let journal_errors = report.journal.validate();
+    if !journal_errors.is_empty() {
+        issues.push(GatewayReportValidationIssue::JournalInvalid);
+    }
+
+    if report.metrics.total_cases != report.outcomes.len() as u64 {
+        issues.push(GatewayReportValidationIssue::MetricsTotalMismatch);
+    }
+
+    let accepted_count = report
+        .outcomes
+        .iter()
+        .filter(|outcome| outcome.decision.verdict == AdmissionVerdict::Accepted)
+        .count() as u64;
+    let rejected_count = report
+        .outcomes
+        .iter()
+        .filter(|outcome| outcome.decision.verdict == AdmissionVerdict::Rejected)
+        .count() as u64;
+    let quarantined_count = report
+        .outcomes
+        .iter()
+        .filter(|outcome| outcome.decision.verdict == AdmissionVerdict::Quarantined)
+        .count() as u64;
+    if report.metrics.accepted_count != accepted_count
+        || report.metrics.rejected_count != rejected_count
+        || report.metrics.quarantined_count != quarantined_count
+        || accepted_count + rejected_count + quarantined_count != report.outcomes.len() as u64
+    {
+        issues.push(GatewayReportValidationIssue::MetricsVerdictCountMismatch);
+    }
+
+    let accepted_handoff_count = report
+        .outcomes
+        .iter()
+        .filter(|outcome| outcome.accepted_handoff.is_some())
+        .count() as u64;
+    if accepted_handoff_count != accepted_count {
+        issues.push(GatewayReportValidationIssue::MetricsAcceptedHandoffMismatch);
+    }
+
+    let recomputed_agreement_count = report
+        .journal
+        .entries
+        .iter()
+        .filter(|entry| {
+            entry.decision == evaluate_admission(&entry.candidate, &policy.admission_policy)
+        })
+        .count() as u64;
+    if report.metrics.decision_recomputation_agreement_count != recomputed_agreement_count {
+        issues.push(GatewayReportValidationIssue::MetricsDecisionRecomputationMismatch);
+    }
+
+    let audit_bundle_complete =
+        journal_errors.is_empty() && report.journal.entries.len() == report.outcomes.len();
+    if report.metrics.audit_bundle_complete != audit_bundle_complete {
+        issues.push(GatewayReportValidationIssue::MetricsAuditBundleCompletenessMismatch);
+    }
+
+    issues
+}
+
+pub fn gateway_report_artifact(
+    report: &GatewayCorpusReport,
+    policy: &GatewayActionPolicy,
+) -> Result<GatewayReportArtifact, GatewayReportArtifactError> {
+    let issues = validate_gateway_corpus_report(report, policy);
+    if !issues.is_empty() {
+        return Err(GatewayReportArtifactError::InvalidReport(issues));
+    }
+
+    let report_json = serde_json::to_vec_pretty(report)
+        .map_err(|error| GatewayReportArtifactError::Serialization(error.to_string()))?;
+    let report_markdown = render_gateway_report_markdown(report, policy).into_bytes();
+    let manifest = GatewayReportArtifactManifest {
+        schema_version: "hsai-gateway-report-artifact-v1".to_owned(),
+        claim_boundary: GATEWAY_REPORT_CLAIM_BOUNDARY.to_owned(),
+        policy_id: policy.id.clone(),
+        report_digest: hash_tagged("hsai-agent-admission:gateway-corpus-report:v1", report),
+        journal_tip_digest_after: report
+            .journal
+            .entries
+            .last()
+            .map(AgentAdmissionJournalEntry::digest),
+        report_json_sha256: hash_bytes(&report_json),
+        report_markdown_sha256: hash_bytes(&report_markdown),
+        nonclaims: gateway_report_required_nonclaims(),
+        metrics: report.metrics.clone(),
+    };
+
+    Ok(GatewayReportArtifact {
+        manifest,
+        report_json,
+        report_markdown,
+    })
+}
+
+pub fn render_gateway_report_markdown(
+    report: &GatewayCorpusReport,
+    policy: &GatewayActionPolicy,
+) -> String {
+    let mut markdown = String::new();
+    markdown.push_str("# HSAI Gateway Local Report\n\n");
+    markdown.push_str(GATEWAY_REPORT_CLAIM_BOUNDARY);
+    markdown.push_str("\n\n");
+    markdown.push_str("## Policy\n\n");
+    markdown.push_str("- policy_id: `");
+    markdown.push_str(&policy.id.0);
+    markdown.push_str("`\n");
+    markdown.push_str("- max_value_units: `");
+    markdown.push_str(&policy.max_value_units.to_string());
+    markdown.push_str("`\n");
+    markdown.push_str("- require_non_secret_model_lane: `");
+    markdown.push_str(if policy.require_non_secret_model_lane {
+        "true"
+    } else {
+        "false"
+    });
+    markdown.push_str("`\n\n");
+
+    markdown.push_str("## Metrics\n\n");
+    markdown.push_str("| metric | value |\n");
+    markdown.push_str("| --- | ---: |\n");
+    append_metric_row(&mut markdown, "total_cases", report.metrics.total_cases);
+    append_metric_row(
+        &mut markdown,
+        "accepted_count",
+        report.metrics.accepted_count,
+    );
+    append_metric_row(
+        &mut markdown,
+        "rejected_count",
+        report.metrics.rejected_count,
+    );
+    append_metric_row(
+        &mut markdown,
+        "quarantined_count",
+        report.metrics.quarantined_count,
+    );
+    append_metric_row(
+        &mut markdown,
+        "unsafe_action_blocked_count",
+        report.metrics.unsafe_action_blocked_count,
+    );
+    append_metric_row(
+        &mut markdown,
+        "false_rejection_count",
+        report.metrics.false_rejection_count,
+    );
+    append_metric_row(
+        &mut markdown,
+        "replay_or_tamper_detection_count",
+        report.metrics.replay_or_tamper_detection_count,
+    );
+    append_metric_row(
+        &mut markdown,
+        "duplicate_key_detection_count",
+        report.metrics.duplicate_key_detection_count,
+    );
+    append_metric_row(
+        &mut markdown,
+        "policy_downgrade_detection_count",
+        report.metrics.policy_downgrade_detection_count,
+    );
+    append_metric_row(
+        &mut markdown,
+        "decision_recomputation_agreement_count",
+        report.metrics.decision_recomputation_agreement_count,
+    );
+    markdown.push_str("| audit_bundle_complete | ");
+    markdown.push_str(if report.metrics.audit_bundle_complete {
+        "true"
+    } else {
+        "false"
+    });
+    markdown.push_str(" |\n\n");
+
+    markdown.push_str("## Outcomes\n\n");
+    markdown.push_str("| proposal | verdict | handoff | action_digest |\n");
+    markdown.push_str("| --- | --- | --- | --- |\n");
+    for outcome in &report.outcomes {
+        markdown.push_str("| `");
+        markdown.push_str(&outcome.proposal_id.0);
+        markdown.push_str("` | `");
+        markdown.push_str(match outcome.decision.verdict {
+            AdmissionVerdict::Accepted => "accepted",
+            AdmissionVerdict::Rejected => "rejected",
+            AdmissionVerdict::Quarantined => "quarantined",
+        });
+        markdown.push_str("` | `");
+        markdown.push_str(if outcome.accepted_handoff.is_some() {
+            "accepted-only"
+        } else {
+            "none"
+        });
+        markdown.push_str("` | `");
+        markdown.push_str(&hash_hex(outcome.action_digest));
+        markdown.push_str("` |\n");
+    }
+
+    markdown.push_str("\n## Nonclaims\n\n");
+    for label in gateway_report_required_nonclaims() {
+        markdown.push_str("- ");
+        markdown.push_str(&label.0);
+        markdown.push('\n');
+    }
+
+    markdown
+}
+
 const ADMISSION_JOURNAL_CLAIM_BOUNDARY: &str =
     "local admission-trace metadata only; not accepted evidence, proof, or benchmark evidence";
+
+const GATEWAY_REPORT_CLAIM_BOUNDARY: &str =
+    "local gateway report metadata only; not benchmark evidence, proof, production readiness, semantic correctness, global uniqueness, or a fully secure system";
 
 const ADMISSION_JOURNAL_DECLARED_FILES: &[&str] = &[
     "admission-journal/manifest.json",
@@ -1734,6 +2427,14 @@ fn hash_hex(hash: Hash) -> String {
         out.push_str(&format!("{byte:02x}"));
     }
     out
+}
+
+fn append_metric_row(markdown: &mut String, name: &str, value: u64) {
+    markdown.push_str("| ");
+    markdown.push_str(name);
+    markdown.push_str(" | ");
+    markdown.push_str(&value.to_string());
+    markdown.push_str(" |\n");
 }
 
 fn sidecar_path(path: &Path) -> PathBuf {
@@ -1828,6 +2529,38 @@ fn materialization_io_error(error: io::Error) -> AdmissionJournalMaterialization
 
 fn materialization_serde_error(error: serde_json::Error) -> AdmissionJournalMaterializationError {
     AdmissionJournalMaterializationError::Serialization(error.to_string())
+}
+
+fn is_gateway_target_safe(target: &str) -> bool {
+    is_portable_artifact_id(target)
+}
+
+fn model_lane_provenance_is_complete(lane: &GatewayModelLaneProvenance) -> bool {
+    is_portable_artifact_id(&lane.model_family)
+        && is_portable_artifact_id(&lane.artifact_id)
+        && !lane.runtime.trim().is_empty()
+        && lane.runtime.trim() == lane.runtime
+        && lane.prompt_template_digest != Hash([0; 32])
+        && lane.input_corpus_digest != Hash([0; 32])
+        && lane.output_bundle_digest != Hash([0; 32])
+}
+
+fn gateway_violation_reason(violation: &GatewayPolicyViolation) -> AdmissionReason {
+    reason(match violation {
+        GatewayPolicyViolation::InvalidActionId => "gateway_invalid_action_id",
+        GatewayPolicyViolation::InvalidTarget => "gateway_invalid_target",
+        GatewayPolicyViolation::UnsupportedActionKind => "gateway_unsupported_action_kind",
+        GatewayPolicyViolation::UnauthorizedTarget => "gateway_unauthorized_target",
+        GatewayPolicyViolation::AmountLimitExceeded => "gateway_amount_limit_exceeded",
+        GatewayPolicyViolation::MissingModelLaneProvenance => {
+            "gateway_missing_model_lane_provenance"
+        }
+        GatewayPolicyViolation::ModelLaneNotNonSecret => "gateway_model_lane_not_non_secret",
+        GatewayPolicyViolation::DirectAuthorityRequested => "gateway_direct_authority_requested",
+        GatewayPolicyViolation::SignerOrToolRequestedBeforeAdmission => {
+            "gateway_signer_or_tool_requested_before_admission"
+        }
+    })
 }
 
 fn reason(value: &str) -> AdmissionReason {
@@ -1926,6 +2659,48 @@ mod tests {
                 nonclaim("not accepted evidence"),
             ]),
         )
+    }
+
+    fn gateway_model_lane() -> GatewayModelLaneProvenance {
+        GatewayModelLaneProvenance {
+            lane_kind: GatewayModelLaneKind::LocalOpenWeight,
+            model_family: "qwen-small".to_owned(),
+            artifact_id: "qwen-small-q4".to_owned(),
+            runtime: "llama-server-local".to_owned(),
+            prompt_template_digest: Hash([21; 32]),
+            input_corpus_digest: Hash([22; 32]),
+            output_bundle_digest: Hash([23; 32]),
+            non_secret: true,
+        }
+    }
+
+    fn gateway_policy() -> GatewayActionPolicy {
+        gateway_local_default_policy(
+            "gateway-local-policy-v1",
+            BTreeSet::from([
+                GatewayActionKind::Payment,
+                GatewayActionKind::ToolCall,
+                GatewayActionKind::ComputeRental,
+            ]),
+            BTreeSet::from(["treasury-safe".to_owned(), "mcp-safe-tool".to_owned()]),
+            100,
+        )
+    }
+
+    fn gateway_proposal(id: &str) -> GatewayActionProposal {
+        GatewayActionProposal {
+            id: GatewayActionId(id.to_owned()),
+            subject: subject("agent-a"),
+            action_kind: GatewayActionKind::Payment,
+            target: "treasury-safe".to_owned(),
+            value_units: 50,
+            source_artifact_digests: BTreeSet::from([artifact("gateway-action", 20)]),
+            nonclaims: gateway_required_nonclaims(),
+            model_lane: gateway_model_lane(),
+            threat_labels: BTreeSet::from([GatewayThreatLabel::Benign]),
+            direct_authority_requested: false,
+            signer_or_tool_requested_before_admission: false,
+        }
     }
 
     fn materialization_request(
@@ -2127,6 +2902,215 @@ mod tests {
             candidate.source_artifact_digests
         );
         assert!(journal.validate().is_empty());
+    }
+
+    #[test]
+    fn gateway_action_acceptance_exposes_handoff_only_after_admission() {
+        let proposal = gateway_proposal("gateway-payment-1");
+        let policy = gateway_policy();
+        let mut journal = AgentAdmissionJournal::default();
+
+        let outcome = evaluate_gateway_action(&proposal, &policy, &mut journal)
+            .expect("gateway proposal should evaluate and append");
+
+        assert_eq!(outcome.decision.verdict, AdmissionVerdict::Accepted);
+        assert!(outcome.decision.accepted_envelope.is_none());
+        let handoff = outcome
+            .accepted_handoff
+            .expect("accepted gateway action exposes accepted handoff");
+        assert_eq!(handoff.action_id, proposal.id);
+        assert_eq!(handoff.target, "treasury-safe");
+        assert_eq!(journal.entries.len(), 1);
+        assert!(journal.validate().is_empty());
+    }
+
+    #[test]
+    fn gateway_action_rejection_preserves_audit_without_handoff() {
+        let mut proposal = gateway_proposal("gateway-payment-rejected");
+        proposal.target = "attacker-wallet".to_owned();
+        proposal.value_units = 500;
+        proposal.direct_authority_requested = true;
+        proposal.signer_or_tool_requested_before_admission = true;
+        proposal
+            .threat_labels
+            .insert(GatewayThreatLabel::WrongCounterparty);
+        proposal
+            .threat_labels
+            .insert(GatewayThreatLabel::AmountLimitBypass);
+
+        let policy = gateway_policy();
+        let mut journal = AgentAdmissionJournal::default();
+        let outcome = evaluate_gateway_action(&proposal, &policy, &mut journal)
+            .expect("rejected gateway proposal should still append audit metadata");
+
+        assert_eq!(outcome.decision.verdict, AdmissionVerdict::Rejected);
+        assert!(outcome.accepted_handoff.is_none());
+        assert!(outcome
+            .decision
+            .reasons
+            .contains(&AdmissionReason("gateway_unauthorized_target".to_owned())));
+        assert!(outcome
+            .decision
+            .reasons
+            .contains(&AdmissionReason("gateway_amount_limit_exceeded".to_owned())));
+        assert!(outcome.decision.reasons.contains(&AdmissionReason(
+            "gateway_signer_or_tool_requested_before_admission".to_owned()
+        )));
+        assert!(journal.validate().is_empty());
+    }
+
+    #[test]
+    fn gateway_corpus_metrics_cover_blocking_and_recomputation() {
+        let accepted = GatewayCorpusCase {
+            proposal: gateway_proposal("gateway-benign"),
+            expected_verdict: AdmissionVerdict::Accepted,
+        };
+        let mut duplicate_key = gateway_proposal("gateway-duplicate-key");
+        duplicate_key.signer_or_tool_requested_before_admission = true;
+        duplicate_key
+            .threat_labels
+            .insert(GatewayThreatLabel::DuplicateJsonKeyPayload);
+        let mut policy_downgrade = gateway_proposal("gateway-policy-downgrade");
+        policy_downgrade.target = "unknown-target".to_owned();
+        policy_downgrade
+            .threat_labels
+            .insert(GatewayThreatLabel::PolicyDowngrade);
+        let cases = vec![
+            accepted,
+            GatewayCorpusCase {
+                proposal: duplicate_key,
+                expected_verdict: AdmissionVerdict::Rejected,
+            },
+            GatewayCorpusCase {
+                proposal: policy_downgrade,
+                expected_verdict: AdmissionVerdict::Rejected,
+            },
+        ];
+
+        let report = evaluate_gateway_corpus(&cases, &gateway_policy())
+            .expect("gateway corpus should evaluate");
+
+        assert_eq!(report.metrics.total_cases, 3);
+        assert_eq!(report.metrics.accepted_count, 1);
+        assert_eq!(report.metrics.rejected_count, 2);
+        assert_eq!(report.metrics.unsafe_action_blocked_count, 2);
+        assert_eq!(report.metrics.false_rejection_count, 0);
+        assert_eq!(report.metrics.duplicate_key_detection_count, 1);
+        assert_eq!(report.metrics.policy_downgrade_detection_count, 1);
+        assert_eq!(report.metrics.decision_recomputation_agreement_count, 3);
+        assert!(report.metrics.audit_bundle_complete);
+    }
+
+    #[test]
+    fn gateway_report_artifact_binds_json_markdown_and_nonclaims() {
+        let cases = vec![GatewayCorpusCase {
+            proposal: gateway_proposal("gateway-report-benign"),
+            expected_verdict: AdmissionVerdict::Accepted,
+        }];
+        let policy = gateway_policy();
+        let report =
+            evaluate_gateway_corpus(&cases, &policy).expect("gateway corpus should evaluate");
+
+        let artifact =
+            gateway_report_artifact(&report, &policy).expect("valid report should render");
+
+        assert_eq!(
+            artifact.manifest.schema_version,
+            "hsai-gateway-report-artifact-v1"
+        );
+        assert_eq!(artifact.manifest.policy_id, policy.id);
+        assert_eq!(
+            artifact.manifest.report_json_sha256,
+            hash_bytes(&artifact.report_json)
+        );
+        assert_eq!(
+            artifact.manifest.report_markdown_sha256,
+            hash_bytes(&artifact.report_markdown)
+        );
+        assert!(artifact
+            .manifest
+            .nonclaims
+            .contains(&NonClaimLabel("not benchmark evidence".to_owned())));
+        assert!(artifact
+            .manifest
+            .nonclaims
+            .contains(&NonClaimLabel("not fully secure".to_owned())));
+
+        let markdown =
+            String::from_utf8(artifact.report_markdown).expect("gateway report markdown is utf-8");
+        assert!(markdown.contains("local gateway report metadata only"));
+        assert!(markdown.contains("gateway-report-benign"));
+        assert!(markdown.contains("accepted-only"));
+        assert!(markdown.contains("not production readiness"));
+    }
+
+    #[test]
+    fn gateway_report_artifact_is_deterministic_for_same_report() {
+        let cases = vec![
+            GatewayCorpusCase {
+                proposal: gateway_proposal("gateway-report-a"),
+                expected_verdict: AdmissionVerdict::Accepted,
+            },
+            GatewayCorpusCase {
+                proposal: {
+                    let mut proposal = gateway_proposal("gateway-report-b");
+                    proposal.target = "unknown-target".to_owned();
+                    proposal
+                        .threat_labels
+                        .insert(GatewayThreatLabel::PolicyDowngrade);
+                    proposal
+                },
+                expected_verdict: AdmissionVerdict::Rejected,
+            },
+        ];
+        let policy = gateway_policy();
+        let report =
+            evaluate_gateway_corpus(&cases, &policy).expect("gateway corpus should evaluate");
+
+        let first = gateway_report_artifact(&report, &policy).expect("first render succeeds");
+        let second = gateway_report_artifact(&report, &policy).expect("second render succeeds");
+
+        assert_eq!(first.manifest, second.manifest);
+        assert_eq!(first.manifest.digest(), second.manifest.digest());
+        assert_eq!(first.report_json, second.report_json);
+        assert_eq!(first.report_markdown, second.report_markdown);
+    }
+
+    #[test]
+    fn gateway_report_artifact_rejects_stale_metrics() {
+        let cases = vec![GatewayCorpusCase {
+            proposal: gateway_proposal("gateway-report-stale"),
+            expected_verdict: AdmissionVerdict::Accepted,
+        }];
+        let policy = gateway_policy();
+        let mut report =
+            evaluate_gateway_corpus(&cases, &policy).expect("gateway corpus should evaluate");
+        report.metrics.total_cases = 99;
+        report.metrics.accepted_count = 0;
+
+        assert_eq!(
+            gateway_report_artifact(&report, &policy),
+            Err(GatewayReportArtifactError::InvalidReport(vec![
+                GatewayReportValidationIssue::MetricsTotalMismatch,
+                GatewayReportValidationIssue::MetricsVerdictCountMismatch,
+            ]))
+        );
+    }
+
+    #[test]
+    fn gateway_replay_rejected_by_existing_journal_chain() {
+        let proposal = gateway_proposal("gateway-replayed");
+        let policy = gateway_policy();
+        let mut journal = AgentAdmissionJournal::default();
+
+        evaluate_gateway_action(&proposal, &policy, &mut journal)
+            .expect("first gateway action appends");
+        assert_eq!(
+            evaluate_gateway_action(&proposal, &policy, &mut journal),
+            Err(JournalError::ReplayedCandidate(
+                gateway_action_candidate(&proposal, &policy).digest()
+            ))
+        );
     }
 
     #[test]

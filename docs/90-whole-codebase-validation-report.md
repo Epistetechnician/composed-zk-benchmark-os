@@ -89,9 +89,11 @@ tranche, the Phase 196 soak config coverage thirty-first tranche, and the Phase
 runner coverage thirty-third tranche, and the Phase 199 soak resume coverage
 thirty-fourth tranche, and the Phase 200 mutation invalid unroll bounds
 coverage thirty-fifth tranche, and the Phase 201 evidence accepted append
-coverage thirty-sixth tranche, plus
-earlier coverage-hardening follow-up work for serialization error paths, crate
-error constructors, and local soak runner
+coverage thirty-sixth tranche, and the docs-first Phase 202 HSAI Gateway SOTA
+bridge boundary, the Phase 203 HSAI Agent Approval Gateway PRD, and the Phase
+204 HSAI Agent Approval Gateway local MVP, and the Phase 205 HSAI Gateway
+report artifact surface, plus earlier coverage-hardening follow-up work for
+serialization error paths, crate error constructors, and local soak runner
 resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
 running the available workspace gates and mapping those gates to the repo's
@@ -107,6 +109,53 @@ validation. It does not authorize accepted Evidence Ledger mutation, official
 benchmark submission, external replay, live backend execution, generated
 benchmark artifacts, score-axis population, ZK backend performance claims, or
 Level2+ evidence creation.
+
+Phase 202 opens only a docs-first HSAI Agent Approval Gateway SOTA bridge
+boundary. It records the current local Apple M4 Max / 36 GB memory baseline,
+separates local low-parameter open-weight model adversarial generation from a
+future rented open-weight adversarial lane, requires model outputs to remain
+proposal-only, defines strict typed admission and audit expectations, and orders
+the future evidence ladder toward reproducible and independently reproduced
+artifacts. It does not authorize Rust implementation, model downloads, generated
+corpora, package runtime files, signer or tool integrations, external replay,
+accepted Evidence Ledger mutation, score-axis population, benchmark output,
+Level2+ evidence, production-readiness claims, semantic-correctness claims, or
+claims above `Attested`.
+
+Phase 203 records the long-form HSAI Agent Approval Gateway PRD. It defines the
+buyer wedge, product solution, user stories, deep modules, trust model, cost
+router, product tiers, baseline comparisons, testing strategy, success metrics,
+rollout plan, and source references for an evidence-aware authorization layer
+between autonomous-agent proposals and downstream authority. It does not
+authorize implementation code, Cargo metadata changes, dependencies, package
+runtime files, model execution, generated corpora, generated output bundles,
+external replay, signer/tool/payment/custody integration, accepted Evidence
+Ledger mutation, score-axis population, benchmark output, Level2+ evidence,
+production-readiness claims, semantic-correctness claims, global uniqueness
+claims, "fully secure" claims, or claims above `Attested`.
+
+Phase 204 implements the local hermetic HSAI Agent Approval Gateway MVP inside
+`hsai-agent-admission`. It maps typed action proposals into admission
+candidates, records local model-lane provenance, converts gateway policy
+violations into deterministic admission reasons, exposes handoff metadata only
+after accepted local admission, and produces local corpus metrics for blocking
+and audit completeness. It does not authorize model execution, model downloads,
+generated corpora, generated output bundles, external replay,
+signer/tool/payment/custody integration, accepted Evidence Ledger mutation,
+score-axis population, benchmark output, Level2+ evidence, production-readiness
+claims, semantic-correctness claims, global uniqueness claims, "fully secure"
+claims, or claims above `Attested`.
+
+Phase 205 implements the local hermetic HSAI Gateway report artifact surface
+inside `hsai-agent-admission`. It validates `GatewayCorpusReport` consistency,
+then renders deterministic JSON and Markdown bytes with SHA-256 bindings,
+policy id, report digest, journal tip digest, local metrics, and required
+nonclaims. It does not authorize filesystem materialization, package runtime
+files, model execution, model downloads, generated corpora, generated output
+bundles, external replay, signer/tool/payment/custody integration, accepted
+Evidence Ledger mutation, score-axis population, benchmark output, Level2+
+evidence, production-readiness claims, semantic-correctness claims, global
+uniqueness claims, "fully secure" claims, or claims above `Attested`.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,

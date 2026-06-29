@@ -3520,6 +3520,129 @@ Exit criteria: the focused test suite passes, the targeted module reaches the
 highest honest public-API coverage without semantic changes, and root
 validation remains green.
 
+## Phase 202 HSAI Gateway SOTA Bridge Boundary
+
+Status: complete for docs-first boundary. See
+`docs/202-phase-hsai-gateway-sota-bridge-boundary-spec.md`.
+
+Goal: define the smallest credible bridge from the local HSAI admission stack
+to a marketable SOTA-level Agent Approval Gateway proof path, using
+hardware-respectful local open-weight model adversarial generation first and a
+rented open-weight adversarial lane only when it adds measurable coverage.
+
+Implemented: the boundary names the observed local Apple M4 Max / 36 GB memory
+baseline, separates local 1B-14B open-weight model use from rented GPU
+adversarial generation, keeps all model outputs proposal-only, requires strict
+typed candidate intake before admission, defines adversarial corpus labels,
+defines local/rented provenance fields, lists gateway metrics, and orders the
+evidence ladder from local corpus replay through future independent
+reproduction.
+
+Anti-goals: Rust implementation, package runtime files, CLI/server/UI,
+dashboard, model downloads, committed prompts, committed generated corpora,
+output bundles, secrets, credential handling, external replay execution,
+signer/wallet/exchange/custody/ACP/MCP integration code, accepted Evidence
+Ledger mutation, score-axis population, benchmark output, Level2+ evidence,
+production-readiness claims, semantic-correctness claims, global
+software-agent uniqueness claims, or claims above `Attested`.
+
+Exit criteria: README navigation, task list, validation report, and AGENTS
+scope rules point to the boundary; local and rented model lanes are separated;
+trust-native rules are explicit; adversarial corpus shape is explicit; and the
+spec authorizes no runtime surface.
+
+## Phase 203 HSAI Agent Approval Gateway PRD
+
+Status: complete for long-form PRD. See
+`docs/203-hsai-agent-approval-gateway-prd.md`.
+
+Goal: turn the Phase 202 bridge boundary and current product strategy into a
+durable product requirements document for an HSAI Agent Approval Gateway.
+
+Implemented: the PRD defines the problem statement, product solution, extensive
+user stories, implementation decisions, deep modules, trust model, cost and
+pricing decisions, product tiers, baselines to beat, testing decisions, success
+metrics, out-of-scope boundaries, rollout plan, and source references. It frames
+HSAI as an evidence-aware authorization layer between autonomous-agent proposals
+and downstream authority, not as a wallet, custodian, model host, checkout
+provider, or proof system.
+
+Anti-goals: implementation code, Cargo metadata changes, dependencies, package
+runtime files, CLI/server/UI/dashboard work, model execution, generated corpora,
+generated output bundles, secrets, credentials, external replay execution,
+signer/wallet/exchange/custody/ACP/MCP integration code, accepted Evidence
+Ledger mutation, score-axis population, benchmark output, Level2+ evidence,
+production-readiness claims, semantic-correctness claims, global
+software-agent uniqueness claims, "fully secure" claims, or claims above
+`Attested`.
+
+Exit criteria: README navigation, task list, validation report, and AGENTS scope
+rules point to the PRD; the PRD preserves Phase 202 trust-native rules; and
+documentation validation passes.
+
+## Phase 204 HSAI Agent Approval Gateway Local MVP
+
+Status: complete for local hermetic implementation. See
+`docs/204-hsai-agent-approval-gateway-local-mvp-notes.md`.
+
+Goal: implement the first local Agent Approval Gateway surface over the existing
+HSAI admission journal without model execution, external integrations, or
+authority-bearing runtime paths.
+
+Implemented: `GatewayActionProposal`, gateway action kinds, threat labels,
+model-lane provenance, gateway policy, gateway policy violations, accepted
+handoff metadata, corpus cases, local metrics, gateway candidate mapping,
+action evaluation, accepted handoff extraction, corpus evaluation, and metrics.
+The implementation maps typed proposals into
+`AdmissionSourceKind::GatewayActionProposal`, turns gateway violations into
+deterministic admission reasons, reuses `AgentAdmissionJournal`, and exposes
+handoff metadata only after accepted local admission.
+
+Anti-goals: Cargo metadata changes, dependencies, package runtime files,
+CLI/server/UI/dashboard work, model execution/download, generated corpora,
+generated output bundles, secrets, credentials, external replay execution,
+signer/wallet/exchange/custody/ACP/MCP integration code, accepted Evidence
+Ledger mutation, score-axis population, benchmark output, Level2+ evidence,
+production-readiness claims, semantic-correctness claims, global
+software-agent uniqueness claims, "fully secure" claims, or claims above
+`Attested`.
+
+Exit criteria: focused gateway admission tests pass, README navigation, task
+list, validation report, and AGENTS scope rules point to the implementation
+notes; accepted actions expose handoff metadata; rejected and quarantined cases
+remain auditable; metrics remain local and non-benchmark.
+
+## Phase 205 HSAI Gateway Report Artifact
+
+Status: complete for local hermetic implementation. See
+`docs/205-hsai-gateway-report-artifact-notes.md`.
+
+Goal: add a deterministic local report artifact surface over
+`GatewayCorpusReport` without filesystem materialization, package runtime code,
+model execution, external integrations, or benchmark evidence.
+
+Implemented: `GatewayReportValidationIssue`, `GatewayReportArtifactError`,
+`GatewayReportArtifactManifest`, `GatewayReportArtifact`,
+`gateway_report_required_nonclaims`, `validate_gateway_corpus_report`,
+`gateway_report_artifact`, and `render_gateway_report_markdown`. The report
+artifact binds deterministic JSON bytes, deterministic Markdown bytes, the
+policy id, report digest, journal tip digest, local metrics, SHA-256 sidecars,
+and required nonclaims.
+
+Anti-goals: Cargo metadata changes, dependencies, package runtime files,
+filesystem materialization, CLI/server/UI/dashboard work, model
+execution/download, generated corpora/output bundles, secrets, credentials,
+external replay execution, signer/wallet/exchange/custody/ACP/MCP integration
+code, accepted Evidence Ledger mutation, score-axis population, benchmark
+output, Level2+ evidence, production-readiness claims, semantic-correctness
+claims, global software-agent uniqueness claims, "fully secure" claims, or
+claims above `Attested`.
+
+Exit criteria: focused gateway report tests pass, deterministic JSON and
+Markdown hashes are bound in the manifest, stale metrics fail closed before
+rendering, README navigation, validation report, and AGENTS scope rules point to
+the notes, and metrics remain local and non-benchmark.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
