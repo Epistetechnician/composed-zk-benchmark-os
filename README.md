@@ -287,6 +287,10 @@ Surface DSL
 | [docs/199-phase-soak-resume-coverage-thirty-fourth-tranche-notes.md](docs/199-phase-soak-resume-coverage-thirty-fourth-tranche-notes.md) | Phase 199 soak resume coverage thirty-fourth tranche notes. |
 | [docs/200-phase-mutation-invalid-unroll-bounds-coverage-thirty-fifth-tranche-notes.md](docs/200-phase-mutation-invalid-unroll-bounds-coverage-thirty-fifth-tranche-notes.md) | Phase 200 mutation invalid unroll bounds coverage thirty-fifth tranche notes. |
 | [docs/201-phase-evidence-accepted-append-coverage-thirty-sixth-tranche-notes.md](docs/201-phase-evidence-accepted-append-coverage-thirty-sixth-tranche-notes.md) | Phase 201 evidence accepted append coverage thirty-sixth tranche notes. |
+| [docs/202-phase-hsai-gateway-sota-bridge-boundary-spec.md](docs/202-phase-hsai-gateway-sota-bridge-boundary-spec.md) | Phase 202 HSAI Agent Approval Gateway SOTA bridge docs-first boundary. |
+| [docs/203-hsai-agent-approval-gateway-prd.md](docs/203-hsai-agent-approval-gateway-prd.md) | Phase 203 HSAI Agent Approval Gateway long-form PRD. |
+| [docs/204-hsai-agent-approval-gateway-local-mvp-notes.md](docs/204-hsai-agent-approval-gateway-local-mvp-notes.md) | Phase 204 HSAI Agent Approval Gateway local MVP implementation notes. |
+| [docs/205-hsai-gateway-report-artifact-notes.md](docs/205-hsai-gateway-report-artifact-notes.md) | Phase 205 HSAI Gateway report artifact implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1084,6 +1088,54 @@ HSAI-owned real artifact authorizes only the bounded Phase 4 anchor-registry
 crate.
 Managed-attestation challenge packets and capture manifests are capture inputs
 only, not attestation evidence or independent Phase 4 authorization.
+
+[docs/202-phase-hsai-gateway-sota-bridge-boundary-spec.md](docs/202-phase-hsai-gateway-sota-bridge-boundary-spec.md)
+defines the docs-first boundary for turning the local HSAI admission stack into
+an Agent Approval Gateway proof path. It separates the local low-parameter
+open-weight model lane from a rented open-weight adversarial lane, names the
+current local M4 Max / 36 GB memory baseline, fixes trust-native rules for model
+output as proposal-only, defines the first adversarial corpus shape, and orders
+the evidence ladder from local replay through future independent reproduction.
+It authorizes no Rust implementation, model download, package runtime, generated
+corpus, external replay, signer/tool integration, accepted Evidence Ledger
+mutation, score-axis population, benchmark output, Level2+ evidence,
+production-readiness claim, semantic-correctness claim, or claim above
+`Attested`.
+
+[docs/203-hsai-agent-approval-gateway-prd.md](docs/203-hsai-agent-approval-gateway-prd.md)
+records the long-form product requirements for the HSAI Agent Approval Gateway.
+It frames HSAI as an evidence-aware authorization layer between autonomous-agent
+proposals and downstream authority, defines the buyer wedge, user stories, deep
+modules, trust model, cost router, product tiers, baseline comparisons, testing
+strategy, rollout plan, and strict nonclaims. It authorizes no implementation,
+runtime integration, model execution, generated artifact, accepted Evidence
+Ledger mutation, score-axis population, benchmark output, Level2+ evidence,
+production-readiness claim, semantic-correctness claim, global uniqueness claim,
+or claim above `Attested`.
+
+[docs/204-hsai-agent-approval-gateway-local-mvp-notes.md](docs/204-hsai-agent-approval-gateway-local-mvp-notes.md)
+records the local Agent Approval Gateway MVP inside `hsai-agent-admission`.
+Gateway action proposals now map into local admission candidates, gateway policy
+violations become deterministic admission reasons, accepted gateway actions
+expose only accepted handoff metadata, corpus metrics summarize local blocking
+and audit completeness, and the existing admission journal remains the
+append-only audit path. It performs no model execution, model download, network
+access, credential access, external replay, signer/tool integration, accepted
+Evidence Ledger mutation, score-axis population, benchmark output,
+production-readiness claim, semantic-correctness claim, global uniqueness claim,
+or Level2+ evidence.
+
+[docs/205-hsai-gateway-report-artifact-notes.md](docs/205-hsai-gateway-report-artifact-notes.md)
+records the local HSAI Gateway report artifact surface inside
+`hsai-agent-admission`. Gateway corpus reports now render into deterministic
+JSON and Markdown bytes with SHA-256 bindings, policy id, report digest,
+journal tip digest, local metrics, and required nonclaims. Validation rejects
+stale metrics and invalid local journals before rendering. It performs no
+filesystem materialization, model execution, model download, network access,
+credential access, external replay, signer/tool integration, accepted Evidence
+Ledger mutation, score-axis population, benchmark output, production-readiness
+claim, semantic-correctness claim, global uniqueness claim, or Level2+
+evidence.
 
 ## Validation Checklist
 
