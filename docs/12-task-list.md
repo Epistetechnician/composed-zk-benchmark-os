@@ -3889,6 +3889,36 @@ corpus rates and per-threat coverage compute; invalid reports fail closed;
 zero-denominator local rate handling is deterministic; README navigation,
 validation report, and AGENTS scope rules point to the notes.
 
+## Phase 214 HSAI Gateway Local Demo Runbook
+
+Status: complete for local ignored demo output. See
+`docs/214-hsai-gateway-local-demo-runbook.md`.
+
+Goal: add an operator-facing, reproducible local demo path for the existing
+`gateway-report/*` output bundle.
+
+Implemented: `.gateway-demo-runs/` is now ignored; `gateway_demo_report` is an
+env-driven Cargo example under `hsai-agent-admission`; the example builds a
+fixed non-secret local adversarial corpus, validates it against a local
+model-lane registry, materializes the existing declared `gateway-report/*`
+bundle, reads it back through the existing validator, and prints a summary JSON
+with `authority_granted = false`. A source-contract test verifies the env
+contract, ignored-root constraint, nonclaim text, and absence of provider or
+process runtime surfaces.
+
+Anti-goals: new gateway semantics, package runtime files, dependencies, CLI
+argument parsing, server/UI/dashboard work, model execution/download, provider
+calls, verifier-agent runtime, hosted model calls, committed generated bundles,
+secrets, credentials, external replay execution, signer/wallet/exchange/custody
+/ACP/MCP/tool integration, accepted Evidence Ledger mutation, score-axis
+population, benchmark output, Level2+ evidence, production-readiness claims,
+semantic-correctness claims, global software-agent uniqueness claims, "fully
+secure" claims, or claims above `Attested`.
+
+Exit criteria: the example compiles; the source-contract test passes; the
+runbook names the exact env contract and generated files; repo hygiene and
+claim-boundary checks pass; the generated demo root remains ignored.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

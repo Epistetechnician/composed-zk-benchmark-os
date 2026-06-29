@@ -98,7 +98,8 @@ surface, the Phase 207 HSAI Gateway corpus output-run surface, and the Phase
 model-lane registry surface, and the Phase 210 HSAI Gateway adversarial-corpus
 validation surface, and the Phase 211 HSAI Gateway adversarial-corpus
 output-run surface, and the Phase 212 HSAI Gateway baseline-comparison surface,
-and the Phase 213 HSAI Gateway effectiveness-metrics surface, plus earlier
+the Phase 213 HSAI Gateway effectiveness-metrics surface, and the Phase 214 HSAI
+Gateway local demo runbook/example surface, plus earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
@@ -272,6 +273,21 @@ bundles, external replay, signer/tool/payment/custody integration, accepted
 Evidence Ledger mutation, score-axis population, benchmark output, Level2+
 evidence, production-readiness claims, semantic-correctness claims, global
 uniqueness claims, "fully secure" claims, or claims above `Attested`.
+
+Phase 214 implements a local HSAI Gateway demo-run surface inside
+`hsai-agent-admission`. The `gateway_demo_report` example requires explicit
+acknowledgement, requires an absolute output root under ignored
+`.gateway-demo-runs/`, builds a fixed non-secret local adversarial corpus,
+validates it through the existing model-lane and adversarial-corpus checks,
+materializes the existing declared `gateway-report/*` bundle, validates
+readback, and emits a non-secret summary JSON with `authority_granted = false`.
+It does not authorize package runtime files, new gateway semantics, model
+execution, model downloads, hosted-model calls, provider calls, verifier-agent
+runtime, committed generated bundles, external replay,
+signer/tool/payment/custody integration, accepted Evidence Ledger mutation,
+score-axis population, benchmark output, Level2+ evidence, production-readiness
+claims, semantic-correctness claims, global uniqueness claims, "fully secure"
+claims, or claims above `Attested`.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
