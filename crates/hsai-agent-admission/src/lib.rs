@@ -286,6 +286,18 @@ pub enum GatewayReportMaterializationError {
     Serialization(String),
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct GatewayCorpusOutputRun {
+    pub report: GatewayCorpusReport,
+    pub output_manifest: GatewayReportOutputManifest,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayCorpusOutputRunError {
+    Evaluation(JournalError),
+    Materialization(GatewayReportMaterializationError),
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct AgentAdmissionCandidate {
     pub id: AdmissionCandidateId,
@@ -2529,6 +2541,22 @@ pub fn read_gateway_report_bundle(
     validate_gateway_report_bundle_semantics(&file_bytes)
 }
 
+pub fn materialize_gateway_corpus_output_run(
+    output_root: &Path,
+    cases: &[GatewayCorpusCase],
+    policy: &GatewayActionPolicy,
+    request: &GatewayReportMaterializationRequest,
+) -> Result<GatewayCorpusOutputRun, GatewayCorpusOutputRunError> {
+    let report =
+        evaluate_gateway_corpus(cases, policy).map_err(GatewayCorpusOutputRunError::Evaluation)?;
+    let output_manifest = materialize_gateway_report_bundle(output_root, &report, policy, request)
+        .map_err(GatewayCorpusOutputRunError::Materialization)?;
+    Ok(GatewayCorpusOutputRun {
+        report,
+        output_manifest,
+    })
+}
+
 const ADMISSION_JOURNAL_CLAIM_BOUNDARY: &str =
     "local admission-trace metadata only; not accepted evidence, proof, or benchmark evidence";
 
@@ -3744,6 +3772,92 @@ mod tests {
         );
 
         fs::remove_dir_all(&output_root).expect("temp gateway report cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_corpus_output_run_evaluates_and_materializes() {
+        let cases = vec![
+            GatewayCorpusCase {
+                proposal: gateway_proposal("gateway-run-accepted"),
+                expected_verdict: AdmissionVerdict::Accepted,
+            },
+            GatewayCorpusCase {
+                proposal: {
+                    let mut proposal = gateway_proposal("gateway-run-rejected");
+                    proposal.target = "unknown-target".to_owned();
+                    proposal
+                        .threat_labels
+                        .insert(GatewayThreatLabel::PolicyDowngrade);
+                    proposal
+                },
+                expected_verdict: AdmissionVerdict::Rejected,
+            },
+        ];
+        let policy = gateway_policy();
+        let output_root = temp_output_root("gateway-output-run");
+        let request = gateway_report_request("gateway-output-run", &output_root);
+
+        let run = materialize_gateway_corpus_output_run(&output_root, &cases, &policy, &request)
+            .expect("gateway output run succeeds");
+
+        assert_eq!(run.report.metrics.total_cases, 2);
+        assert_eq!(run.report.metrics.accepted_count, 1);
+        assert_eq!(run.output_manifest.bundle_id, "gateway-output-run");
+        assert_eq!(
+            read_gateway_report_bundle(&output_root).expect("output run readback validates"),
+            run.output_manifest
+        );
+
+        fs::remove_dir_all(&output_root).expect("temp gateway output run cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_corpus_output_run_stops_before_output_on_evaluation_error() {
+        let proposal = gateway_proposal("gateway-run-duplicate");
+        let cases = vec![
+            GatewayCorpusCase {
+                proposal: proposal.clone(),
+                expected_verdict: AdmissionVerdict::Accepted,
+            },
+            GatewayCorpusCase {
+                proposal,
+                expected_verdict: AdmissionVerdict::Accepted,
+            },
+        ];
+        let policy = gateway_policy();
+        let output_root = temp_output_root("gateway-output-run-duplicate");
+        let request = gateway_report_request("gateway-output-run-duplicate", &output_root);
+
+        assert!(matches!(
+            materialize_gateway_corpus_output_run(&output_root, &cases, &policy, &request),
+            Err(GatewayCorpusOutputRunError::Evaluation(
+                JournalError::ReplayedCandidate(_)
+            ))
+        ));
+        assert!(!output_root.exists());
+    }
+
+    #[test]
+    fn gateway_corpus_output_run_propagates_output_rejection() {
+        let cases = vec![GatewayCorpusCase {
+            proposal: gateway_proposal("gateway-run-protected"),
+            expected_verdict: AdmissionVerdict::Accepted,
+        }];
+        let policy = gateway_policy();
+        let output_root = temp_output_root("gateway-output-run-protected");
+        let mut request = gateway_report_request("gateway-output-run-protected", &output_root);
+        request.protected_roots = vec![output_root
+            .parent()
+            .expect("temp output root has parent")
+            .to_path_buf()];
+
+        assert_eq!(
+            materialize_gateway_corpus_output_run(&output_root, &cases, &policy, &request),
+            Err(GatewayCorpusOutputRunError::Materialization(
+                GatewayReportMaterializationError::ProtectedOutputRoot
+            ))
+        );
+        assert!(!output_root.exists());
     }
 
     #[test]

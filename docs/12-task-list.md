@@ -3675,6 +3675,35 @@ materialize; readback equals the written manifest; protected roots, undeclared
 files, and digest-consistent tampered reports fail closed; README navigation,
 validation report, and AGENTS scope rules point to the notes.
 
+## Phase 207 HSAI Gateway Corpus Output Run
+
+Status: complete for local hermetic implementation. See
+`docs/207-hsai-gateway-corpus-output-run-notes.md`.
+
+Goal: provide a single local API that evaluates typed gateway corpus cases and
+materializes the validated Phase 206 report bundle only after successful
+evaluation and report validation.
+
+Implemented: `GatewayCorpusOutputRun`, `GatewayCorpusOutputRunError`, and
+`materialize_gateway_corpus_output_run`. The helper composes the existing
+gateway corpus evaluator, report artifact validation, and output writer without
+adding model execution, external replay, signer/tool integration, or package
+runtime code.
+
+Anti-goals: Cargo metadata changes, dependencies, package runtime files,
+CLI/server/UI/dashboard work, model execution/download, committed generated
+gateway report bundles, generated corpora/output bundles, secrets, credentials,
+external replay execution, signer/wallet/exchange/custody/ACP/MCP integration
+code, accepted Evidence Ledger mutation, score-axis population, benchmark
+output, Level2+ evidence, production-readiness claims, semantic-correctness
+claims, global software-agent uniqueness claims, "fully secure" claims, or
+claims above `Attested`.
+
+Exit criteria: focused gateway output-run tests pass; replayed candidates fail
+before output creation; protected roots fail through the existing output safety
+path; README navigation, validation report, and AGENTS scope rules point to the
+notes.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

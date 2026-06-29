@@ -93,9 +93,9 @@ coverage thirty-sixth tranche, and the docs-first Phase 202 HSAI Gateway SOTA
 bridge boundary, the Phase 203 HSAI Agent Approval Gateway PRD, and the Phase
 204 HSAI Agent Approval Gateway local MVP, and the Phase 205 HSAI Gateway
 report artifact surface, and the Phase 206 HSAI Gateway report output-plumbing
-surface, plus earlier coverage-hardening follow-up work for serialization error
-paths, crate error constructors, and local soak runner resume/output/error-policy
-paths. It
+surface, and the Phase 207 HSAI Gateway corpus output-run surface, plus earlier
+coverage-hardening follow-up work for serialization error paths, crate error
+constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
 running the available workspace gates and mapping those gates to the repo's
 major behavioral surfaces.
@@ -170,6 +170,18 @@ integration, accepted Evidence Ledger mutation, score-axis population,
 benchmark output, Level2+ evidence, production-readiness claims,
 semantic-correctness claims, global uniqueness claims, "fully secure" claims,
 or claims above `Attested`.
+
+Phase 207 implements a local hermetic one-shot gateway corpus output run inside
+`hsai-agent-admission`. It evaluates typed gateway corpus cases, produces the
+validated gateway corpus report, and materializes the Phase 206 output bundle
+only after evaluation succeeds. Evaluation errors stop before output creation,
+and output-root safety errors propagate without weakening the declared
+`gateway-report/*` contract. It does not authorize package runtime files, model
+execution, model downloads, committed generated gateway report bundles,
+generated corpora, external replay, signer/tool/payment/custody integration,
+accepted Evidence Ledger mutation, score-axis population, benchmark output,
+Level2+ evidence, production-readiness claims, semantic-correctness claims,
+global uniqueness claims, "fully secure" claims, or claims above `Attested`.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
