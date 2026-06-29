@@ -293,6 +293,7 @@ Surface DSL
 | [docs/205-hsai-gateway-report-artifact-notes.md](docs/205-hsai-gateway-report-artifact-notes.md) | Phase 205 HSAI Gateway report artifact implementation notes. |
 | [docs/206-hsai-gateway-report-output-plumbing-notes.md](docs/206-hsai-gateway-report-output-plumbing-notes.md) | Phase 206 HSAI Gateway report output-plumbing implementation notes. |
 | [docs/207-hsai-gateway-corpus-output-run-notes.md](docs/207-hsai-gateway-corpus-output-run-notes.md) | Phase 207 HSAI Gateway corpus output-run implementation notes. |
+| [docs/208-hsai-gateway-cost-router-notes.md](docs/208-hsai-gateway-cost-router-notes.md) | Phase 208 HSAI Gateway cost-router implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1161,6 +1162,20 @@ execution, model download, network access, credential access, external replay,
 signer/tool integration, accepted Evidence Ledger mutation, score-axis
 population, benchmark output, production-readiness claim, semantic-correctness
 claim, global uniqueness claim, or Level2+ evidence.
+
+[docs/208-hsai-gateway-cost-router-notes.md](docs/208-hsai-gateway-cost-router-notes.md)
+records the local HSAI Gateway cost-router surface inside
+`hsai-agent-admission`. Typed gateway proposals can now be routed through a
+deterministic review-effort policy before admission: obvious policy violations
+consume no model-review cost, moderate clean actions route to local
+open-weight review, threat-labeled actions route to verifier mixture review,
+high-value actions route to premium escalation only inside budget, and
+operator-only or over-ceiling cases fail closed to operator review. The router
+never grants authority and performs no model execution, runtime routing,
+network access, credential access, external replay, signer/tool integration,
+accepted Evidence Ledger mutation, score-axis population, benchmark output,
+production-readiness claim, semantic-correctness claim, global uniqueness
+claim, or Level2+ evidence.
 
 ## Validation Checklist
 
