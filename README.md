@@ -292,6 +292,7 @@ Surface DSL
 | [docs/204-hsai-agent-approval-gateway-local-mvp-notes.md](docs/204-hsai-agent-approval-gateway-local-mvp-notes.md) | Phase 204 HSAI Agent Approval Gateway local MVP implementation notes. |
 | [docs/205-hsai-gateway-report-artifact-notes.md](docs/205-hsai-gateway-report-artifact-notes.md) | Phase 205 HSAI Gateway report artifact implementation notes. |
 | [docs/206-hsai-gateway-report-output-plumbing-notes.md](docs/206-hsai-gateway-report-output-plumbing-notes.md) | Phase 206 HSAI Gateway report output-plumbing implementation notes. |
+| [docs/207-hsai-gateway-corpus-output-run-notes.md](docs/207-hsai-gateway-corpus-output-run-notes.md) | Phase 207 HSAI Gateway corpus output-run implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1147,6 +1148,17 @@ roots, undeclared files, symlinks, stale digests, malformed declared JSON,
 manifest drift, nonclaim drift, and validation-report drift. It performs no
 model execution, model download, network access, credential access, external
 replay, signer/tool integration, accepted Evidence Ledger mutation, score-axis
+population, benchmark output, production-readiness claim, semantic-correctness
+claim, global uniqueness claim, or Level2+ evidence.
+
+[docs/207-hsai-gateway-corpus-output-run-notes.md](docs/207-hsai-gateway-corpus-output-run-notes.md)
+records the local HSAI Gateway corpus output-run surface inside
+`hsai-agent-admission`. A caller can now evaluate typed gateway corpus cases and
+materialize the resulting validated report bundle through one fail-closed API.
+Evaluation errors stop before output creation, and output-root safety errors are
+propagated without weakening the Phase 206 bundle contract. It performs no model
+execution, model download, network access, credential access, external replay,
+signer/tool integration, accepted Evidence Ledger mutation, score-axis
 population, benchmark output, production-readiness claim, semantic-correctness
 claim, global uniqueness claim, or Level2+ evidence.
 
