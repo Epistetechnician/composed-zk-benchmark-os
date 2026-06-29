@@ -96,7 +96,8 @@ report artifact surface, and the Phase 206 HSAI Gateway report output-plumbing
 surface, the Phase 207 HSAI Gateway corpus output-run surface, and the Phase
 208 HSAI Gateway cost-router surface, and the Phase 209 HSAI Gateway
 model-lane registry surface, and the Phase 210 HSAI Gateway adversarial-corpus
-validation surface, plus earlier coverage-hardening follow-up work for
+validation surface, and the Phase 211 HSAI Gateway adversarial-corpus
+output-run surface, plus earlier coverage-hardening follow-up work for
 serialization error paths, crate error constructors, and local soak runner
 resume/output/error-policy paths. It evaluates the implemented codebase as a
 local Level 1 Rust foundation by running the available workspace gates and
@@ -226,6 +227,20 @@ integration, accepted Evidence Ledger mutation, score-axis population,
 benchmark output, Level2+ evidence, production-readiness claims,
 semantic-correctness claims, global uniqueness claims, "fully secure" claims,
 or claims above `Attested`.
+
+Phase 211 implements a local hermetic HSAI Gateway adversarial-corpus
+output-run surface inside `hsai-agent-admission`. It validates a typed
+adversarial corpus and model-lane registry before invoking the existing
+one-shot corpus replay and `gateway-report/*` materialization path. Invalid
+corpus metadata stops before output creation, and output-root safety failures
+still propagate through the existing Phase 206 materialization contract. It
+does not authorize package runtime files, corpus generation, prompt storage,
+model execution, model downloads, hosted-model calls, verifier-agent runtime,
+generated corpora, generated output bundles, external replay,
+signer/tool/payment/custody integration, accepted Evidence Ledger mutation,
+score-axis population, benchmark output, Level2+ evidence, production-readiness
+claims, semantic-correctness claims, global uniqueness claims, "fully secure"
+claims, or claims above `Attested`.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,

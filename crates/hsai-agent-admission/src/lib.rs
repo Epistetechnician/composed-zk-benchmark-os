@@ -385,6 +385,7 @@ pub struct GatewayCorpusOutputRun {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum GatewayCorpusOutputRunError {
+    CorpusValidation(Vec<GatewayAdversarialCorpusIssue>),
     Evaluation(JournalError),
     Materialization(GatewayReportMaterializationError),
 }
@@ -2899,6 +2900,20 @@ pub fn materialize_gateway_corpus_output_run(
     })
 }
 
+pub fn materialize_gateway_adversarial_corpus_output_run(
+    output_root: &Path,
+    corpus: &GatewayAdversarialCorpus,
+    model_lane_registry: &GatewayModelLaneRegistry,
+    policy: &GatewayActionPolicy,
+    request: &GatewayReportMaterializationRequest,
+) -> Result<GatewayCorpusOutputRun, GatewayCorpusOutputRunError> {
+    let corpus_issues = validate_gateway_adversarial_corpus(corpus, model_lane_registry);
+    if !corpus_issues.is_empty() {
+        return Err(GatewayCorpusOutputRunError::CorpusValidation(corpus_issues));
+    }
+    materialize_gateway_corpus_output_run(output_root, &corpus.cases, policy, request)
+}
+
 const ADMISSION_JOURNAL_CLAIM_BOUNDARY: &str =
     "local admission-trace metadata only; not accepted evidence, proof, or benchmark evidence";
 
@@ -3661,10 +3676,13 @@ mod tests {
                     expected_verdict: AdmissionVerdict::Rejected,
                 }
             }
-            _ => GatewayCorpusCase {
-                proposal,
-                expected_verdict: AdmissionVerdict::Rejected,
-            },
+            _ => {
+                proposal.direct_authority_requested = true;
+                GatewayCorpusCase {
+                    proposal,
+                    expected_verdict: AdmissionVerdict::Rejected,
+                }
+            }
         }
     }
 
@@ -4193,6 +4211,93 @@ mod tests {
                 )),
             ]
         );
+    }
+
+    #[test]
+    fn gateway_adversarial_corpus_output_run_validates_and_materializes() {
+        let corpus = gateway_full_adversarial_corpus();
+        let model_lane_registry = gateway_model_lane_registry();
+        let policy = gateway_policy();
+        let output_root = temp_output_root("gateway-adversarial-output-run");
+        let request = gateway_report_request("gateway-adversarial-output-run", &output_root);
+
+        let run = materialize_gateway_adversarial_corpus_output_run(
+            &output_root,
+            &corpus,
+            &model_lane_registry,
+            &policy,
+            &request,
+        )
+        .expect("valid adversarial corpus output run succeeds");
+
+        assert_eq!(run.report.metrics.total_cases, 14);
+        assert_eq!(run.report.metrics.accepted_count, 1);
+        assert_eq!(run.report.metrics.rejected_count, 13);
+        assert_eq!(
+            run.output_manifest.bundle_id,
+            "gateway-adversarial-output-run"
+        );
+        assert_eq!(
+            read_gateway_report_bundle(&output_root)
+                .expect("adversarial output readback validates"),
+            run.output_manifest
+        );
+
+        fs::remove_dir_all(&output_root).expect("temp gateway adversarial output cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_adversarial_corpus_output_run_stops_before_output_on_validation_error() {
+        let corpus = GatewayAdversarialCorpus {
+            schema_version: "hsai-gateway-adversarial-corpus-v1".to_owned(),
+            corpus_id: "bad corpus id".to_owned(),
+            cases: Vec::new(),
+            required_threat_labels: BTreeSet::new(),
+        };
+        let output_root = temp_output_root("gateway-adversarial-output-invalid");
+        let request = gateway_report_request("gateway-adversarial-output-invalid", &output_root);
+
+        assert_eq!(
+            materialize_gateway_adversarial_corpus_output_run(
+                &output_root,
+                &corpus,
+                &gateway_model_lane_registry(),
+                &gateway_policy(),
+                &request,
+            ),
+            Err(GatewayCorpusOutputRunError::CorpusValidation(vec![
+                GatewayAdversarialCorpusIssue::InvalidCorpusId,
+                GatewayAdversarialCorpusIssue::EmptyCorpus,
+                GatewayAdversarialCorpusIssue::MissingAcceptedBenignCase,
+            ]))
+        );
+        assert!(!output_root.exists());
+    }
+
+    #[test]
+    fn gateway_adversarial_corpus_output_run_propagates_materialization_rejection() {
+        let corpus = gateway_full_adversarial_corpus();
+        let output_root = temp_output_root("gateway-adversarial-output-protected");
+        let mut request =
+            gateway_report_request("gateway-adversarial-output-protected", &output_root);
+        request.protected_roots = vec![output_root
+            .parent()
+            .expect("temp output root has parent")
+            .to_path_buf()];
+
+        assert_eq!(
+            materialize_gateway_adversarial_corpus_output_run(
+                &output_root,
+                &corpus,
+                &gateway_model_lane_registry(),
+                &gateway_policy(),
+                &request,
+            ),
+            Err(GatewayCorpusOutputRunError::Materialization(
+                GatewayReportMaterializationError::ProtectedOutputRoot
+            ))
+        );
+        assert!(!output_root.exists());
     }
 
     #[test]

@@ -3798,6 +3798,35 @@ labels, unsafe expected acceptance, unknown model lanes, and invalid registries
 fail closed; README navigation, validation report, and AGENTS scope rules point
 to the notes.
 
+## Phase 211 HSAI Gateway Adversarial Corpus Output Run
+
+Status: complete for local hermetic implementation. See
+`docs/211-hsai-gateway-adversarial-corpus-output-run-notes.md`.
+
+Goal: compose adversarial-corpus validation with the existing one-shot gateway
+corpus replay and report materialization path.
+
+Implemented: `GatewayCorpusOutputRunError::CorpusValidation` and
+`materialize_gateway_adversarial_corpus_output_run`. The helper validates the
+typed adversarial corpus and model-lane registry before evaluating cases or
+creating output, then reuses the existing Phase 207 output-run and Phase 206
+report-bundle materialization path.
+
+Anti-goals: Cargo metadata changes, dependencies, package runtime files,
+CLI/server/UI/dashboard work, corpus generation, model execution/download,
+prompt storage, provider calls, verifier-agent runtime, generated
+corpora/output bundles, secrets, credentials, external replay execution,
+signer/wallet/exchange/custody/ACP/MCP integration code, accepted Evidence
+Ledger mutation, score-axis population, benchmark output, Level2+ evidence,
+production-readiness claims, semantic-correctness claims, global software-agent
+uniqueness claims, "fully secure" claims, or claims above `Attested`.
+
+Exit criteria: focused adversarial-corpus output-run tests pass; invalid corpus
+metadata stops before output creation; valid corpora materialize the existing
+`gateway-report/*` bundle; protected output roots still fail through the
+existing materialization safety path; README navigation, validation report, and
+AGENTS scope rules point to the notes.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
