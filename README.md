@@ -294,6 +294,7 @@ Surface DSL
 | [docs/206-hsai-gateway-report-output-plumbing-notes.md](docs/206-hsai-gateway-report-output-plumbing-notes.md) | Phase 206 HSAI Gateway report output-plumbing implementation notes. |
 | [docs/207-hsai-gateway-corpus-output-run-notes.md](docs/207-hsai-gateway-corpus-output-run-notes.md) | Phase 207 HSAI Gateway corpus output-run implementation notes. |
 | [docs/208-hsai-gateway-cost-router-notes.md](docs/208-hsai-gateway-cost-router-notes.md) | Phase 208 HSAI Gateway cost-router implementation notes. |
+| [docs/209-hsai-gateway-model-lane-registry-notes.md](docs/209-hsai-gateway-model-lane-registry-notes.md) | Phase 209 HSAI Gateway model-lane registry implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1176,6 +1177,18 @@ network access, credential access, external replay, signer/tool integration,
 accepted Evidence Ledger mutation, score-axis population, benchmark output,
 production-readiness claim, semantic-correctness claim, global uniqueness
 claim, or Level2+ evidence.
+
+[docs/209-hsai-gateway-model-lane-registry-notes.md](docs/209-hsai-gateway-model-lane-registry-notes.md)
+records the local HSAI Gateway model-lane registry surface inside
+`hsai-agent-admission`. Model-lane provenance can now be validated before it is
+used as proposal metadata: the registry rejects invalid or duplicate lane ids,
+missing model ids, missing prompt-template digests, missing non-secret
+statements, stale output-bundle digests, and unbounded rented/hosted/premium
+lane metadata. It performs no model execution, model download, hosted-model
+call, runtime routing, network access, credential access, external replay,
+signer/tool integration, accepted Evidence Ledger mutation, score-axis
+population, benchmark output, production-readiness claim, semantic-correctness
+claim, global uniqueness claim, or Level2+ evidence.
 
 ## Validation Checklist
 

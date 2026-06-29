@@ -97,6 +97,32 @@ pub struct GatewayModelLaneProvenance {
     pub non_secret: bool,
 }
 
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayModelLaneRegistryEntry {
+    pub lane_id: String,
+    pub provenance: GatewayModelLaneProvenance,
+    pub expected_output_bundle_digest: Hash,
+    pub max_cases_per_run: Option<u64>,
+    pub max_cost_units_per_case: Option<u64>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayModelLaneRegistry {
+    pub schema_version: String,
+    pub entries: Vec<GatewayModelLaneRegistryEntry>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayModelLaneRegistryIssue {
+    InvalidLaneId(String),
+    DuplicateLaneId(String),
+    MissingModelId(String),
+    MissingPromptTemplateDigest(String),
+    MissingNonSecretStatement(String),
+    StaleOutputDigest(String),
+    UnboundedRentedModelMetadata(String),
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 pub enum GatewayCostRoute {
     DeterministicOnly,
@@ -2054,6 +2080,60 @@ pub fn gateway_local_default_policy(
     }
 }
 
+pub fn validate_gateway_model_lane_registry(
+    registry: &GatewayModelLaneRegistry,
+) -> Vec<GatewayModelLaneRegistryIssue> {
+    let mut issues = Vec::new();
+    let mut seen_lane_ids = BTreeSet::new();
+
+    for entry in &registry.entries {
+        if !is_portable_artifact_id(&entry.lane_id) {
+            issues.push(GatewayModelLaneRegistryIssue::InvalidLaneId(
+                entry.lane_id.clone(),
+            ));
+        }
+        if !seen_lane_ids.insert(entry.lane_id.clone()) {
+            issues.push(GatewayModelLaneRegistryIssue::DuplicateLaneId(
+                entry.lane_id.clone(),
+            ));
+        }
+        if !is_portable_artifact_id(&entry.provenance.model_family)
+            || !is_portable_artifact_id(&entry.provenance.artifact_id)
+        {
+            issues.push(GatewayModelLaneRegistryIssue::MissingModelId(
+                entry.lane_id.clone(),
+            ));
+        }
+        if entry.provenance.prompt_template_digest == Hash([0; 32]) {
+            issues.push(GatewayModelLaneRegistryIssue::MissingPromptTemplateDigest(
+                entry.lane_id.clone(),
+            ));
+        }
+        if !entry.provenance.non_secret {
+            issues.push(GatewayModelLaneRegistryIssue::MissingNonSecretStatement(
+                entry.lane_id.clone(),
+            ));
+        }
+        if entry.expected_output_bundle_digest == Hash([0; 32])
+            || entry.expected_output_bundle_digest != entry.provenance.output_bundle_digest
+        {
+            issues.push(GatewayModelLaneRegistryIssue::StaleOutputDigest(
+                entry.lane_id.clone(),
+            ));
+        }
+        if gateway_model_lane_requires_external_bounds(&entry.provenance.lane_kind)
+            && (entry.max_cases_per_run.unwrap_or(0) == 0
+                || entry.max_cost_units_per_case.unwrap_or(0) == 0)
+        {
+            issues.push(GatewayModelLaneRegistryIssue::UnboundedRentedModelMetadata(
+                entry.lane_id.clone(),
+            ));
+        }
+    }
+
+    issues
+}
+
 pub fn gateway_cost_router_default_policy(id: impl Into<String>) -> GatewayCostRouterPolicy {
     GatewayCostRouterPolicy {
         id: AdmissionPolicyId(id.into()),
@@ -3212,6 +3292,15 @@ fn model_lane_provenance_is_complete(lane: &GatewayModelLaneProvenance) -> bool 
         && lane.output_bundle_digest != Hash([0; 32])
 }
 
+fn gateway_model_lane_requires_external_bounds(kind: &GatewayModelLaneKind) -> bool {
+    matches!(
+        kind,
+        GatewayModelLaneKind::RentedOpenWeight
+            | GatewayModelLaneKind::HostedSmall
+            | GatewayModelLaneKind::PremiumEscalation
+    )
+}
+
 fn gateway_cost_route_decision(
     proposal: &GatewayActionProposal,
     router_policy: &GatewayCostRouterPolicy,
@@ -3361,6 +3450,19 @@ mod tests {
             input_corpus_digest: Hash([22; 32]),
             output_bundle_digest: Hash([23; 32]),
             non_secret: true,
+        }
+    }
+
+    fn gateway_model_lane_registry_entry(
+        lane_id: &str,
+        provenance: GatewayModelLaneProvenance,
+    ) -> GatewayModelLaneRegistryEntry {
+        GatewayModelLaneRegistryEntry {
+            lane_id: lane_id.to_owned(),
+            expected_output_bundle_digest: provenance.output_bundle_digest,
+            provenance,
+            max_cases_per_run: Some(16),
+            max_cost_units_per_case: Some(2),
         }
     }
 
@@ -3686,6 +3788,102 @@ mod tests {
             "gateway_signer_or_tool_requested_before_admission".to_owned()
         )));
         assert!(journal.validate().is_empty());
+    }
+
+    #[test]
+    fn gateway_model_lane_registry_accepts_bounded_local_and_rented_lanes() {
+        let local = gateway_model_lane_registry_entry("local-qwen", gateway_model_lane());
+        let mut rented_provenance = gateway_model_lane();
+        rented_provenance.lane_kind = GatewayModelLaneKind::RentedOpenWeight;
+        rented_provenance.artifact_id = "rented-qwen-q4".to_owned();
+        rented_provenance.output_bundle_digest = Hash([31; 32]);
+        let rented = gateway_model_lane_registry_entry("rented-qwen", rented_provenance);
+        let registry = GatewayModelLaneRegistry {
+            schema_version: "hsai-gateway-model-lane-registry-v1".to_owned(),
+            entries: vec![local, rented],
+        };
+
+        assert!(validate_gateway_model_lane_registry(&registry).is_empty());
+    }
+
+    #[test]
+    fn gateway_model_lane_registry_rejects_missing_model_and_prompt_metadata() {
+        let mut provenance = gateway_model_lane();
+        provenance.model_family.clear();
+        provenance.artifact_id.clear();
+        provenance.prompt_template_digest = Hash([0; 32]);
+        let registry = GatewayModelLaneRegistry {
+            schema_version: "hsai-gateway-model-lane-registry-v1".to_owned(),
+            entries: vec![gateway_model_lane_registry_entry("bad-model", provenance)],
+        };
+
+        assert_eq!(
+            validate_gateway_model_lane_registry(&registry),
+            vec![
+                GatewayModelLaneRegistryIssue::MissingModelId("bad-model".to_owned()),
+                GatewayModelLaneRegistryIssue::MissingPromptTemplateDigest("bad-model".to_owned()),
+            ]
+        );
+    }
+
+    #[test]
+    fn gateway_model_lane_registry_rejects_missing_nonsecret_and_stale_output() {
+        let mut provenance = gateway_model_lane();
+        provenance.non_secret = false;
+        provenance.output_bundle_digest = Hash([41; 32]);
+        let mut entry = gateway_model_lane_registry_entry("stale-output", provenance);
+        entry.expected_output_bundle_digest = Hash([42; 32]);
+        let registry = GatewayModelLaneRegistry {
+            schema_version: "hsai-gateway-model-lane-registry-v1".to_owned(),
+            entries: vec![entry],
+        };
+
+        assert_eq!(
+            validate_gateway_model_lane_registry(&registry),
+            vec![
+                GatewayModelLaneRegistryIssue::MissingNonSecretStatement("stale-output".to_owned()),
+                GatewayModelLaneRegistryIssue::StaleOutputDigest("stale-output".to_owned()),
+            ]
+        );
+    }
+
+    #[test]
+    fn gateway_model_lane_registry_rejects_unbounded_rented_metadata() {
+        let mut provenance = gateway_model_lane();
+        provenance.lane_kind = GatewayModelLaneKind::RentedOpenWeight;
+        let mut entry = gateway_model_lane_registry_entry("rented-unbounded", provenance);
+        entry.max_cases_per_run = None;
+        entry.max_cost_units_per_case = Some(0);
+        let registry = GatewayModelLaneRegistry {
+            schema_version: "hsai-gateway-model-lane-registry-v1".to_owned(),
+            entries: vec![entry],
+        };
+
+        assert_eq!(
+            validate_gateway_model_lane_registry(&registry),
+            vec![GatewayModelLaneRegistryIssue::UnboundedRentedModelMetadata(
+                "rented-unbounded".to_owned()
+            )]
+        );
+    }
+
+    #[test]
+    fn gateway_model_lane_registry_rejects_invalid_and_duplicate_lane_ids() {
+        let first = gateway_model_lane_registry_entry("duplicate-lane", gateway_model_lane());
+        let duplicate = gateway_model_lane_registry_entry("duplicate-lane", gateway_model_lane());
+        let invalid = gateway_model_lane_registry_entry("bad lane id", gateway_model_lane());
+        let registry = GatewayModelLaneRegistry {
+            schema_version: "hsai-gateway-model-lane-registry-v1".to_owned(),
+            entries: vec![first, duplicate, invalid],
+        };
+
+        assert_eq!(
+            validate_gateway_model_lane_registry(&registry),
+            vec![
+                GatewayModelLaneRegistryIssue::DuplicateLaneId("duplicate-lane".to_owned()),
+                GatewayModelLaneRegistryIssue::InvalidLaneId("bad lane id".to_owned()),
+            ]
+        );
     }
 
     #[test]
