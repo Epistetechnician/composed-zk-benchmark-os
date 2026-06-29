@@ -3737,6 +3737,36 @@ budget exhaustion fails closed to operator review; operator-only deployments
 require operator review; README navigation, validation report, and AGENTS scope
 rules point to the notes.
 
+## Phase 209 HSAI Gateway Model Lane Registry
+
+Status: complete for local hermetic implementation. See
+`docs/209-hsai-gateway-model-lane-registry-notes.md`.
+
+Goal: implement the first deterministic local model-lane registry surface so
+local, rented, hosted, and premium model provenance can be validated before it
+is treated as proposal metadata in the gateway proof path.
+
+Implemented: `GatewayModelLaneRegistryEntry`, `GatewayModelLaneRegistry`,
+`GatewayModelLaneRegistryIssue`, and `validate_gateway_model_lane_registry`.
+The validator rejects invalid or duplicate lane ids, missing model family /
+artifact ids, missing prompt-template digests, missing non-secret statements,
+stale output-bundle digests, and unbounded rented, hosted-small, or
+premium-escalation lane metadata.
+
+Anti-goals: Cargo metadata changes, dependencies, package runtime files,
+CLI/server/UI/dashboard work, model execution/download, provider calls,
+verifier-agent runtime, generated corpora/output bundles, secrets,
+credentials, external replay execution, signer/wallet/exchange/custody/ACP/MCP
+integration code, accepted Evidence Ledger mutation, score-axis population,
+benchmark output, Level2+ evidence, production-readiness claims,
+semantic-correctness claims, global software-agent uniqueness claims, "fully
+secure" claims, or claims above `Attested`.
+
+Exit criteria: focused model-lane registry tests pass; missing model ids,
+prompt digests, non-secret statements, stale output digests, duplicate lane
+ids, and unbounded rented metadata fail closed; README navigation, validation
+report, and AGENTS scope rules point to the notes.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
