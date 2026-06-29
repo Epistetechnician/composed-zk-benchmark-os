@@ -296,6 +296,7 @@ Surface DSL
 | [docs/208-hsai-gateway-cost-router-notes.md](docs/208-hsai-gateway-cost-router-notes.md) | Phase 208 HSAI Gateway cost-router implementation notes. |
 | [docs/209-hsai-gateway-model-lane-registry-notes.md](docs/209-hsai-gateway-model-lane-registry-notes.md) | Phase 209 HSAI Gateway model-lane registry implementation notes. |
 | [docs/210-hsai-gateway-adversarial-corpus-notes.md](docs/210-hsai-gateway-adversarial-corpus-notes.md) | Phase 210 HSAI Gateway adversarial-corpus validation notes. |
+| [docs/211-hsai-gateway-adversarial-corpus-output-run-notes.md](docs/211-hsai-gateway-adversarial-corpus-output-run-notes.md) | Phase 211 HSAI Gateway adversarial-corpus output-run notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1202,6 +1203,18 @@ access, credential access, external replay, signer/tool integration, accepted
 Evidence Ledger mutation, score-axis population, benchmark output,
 production-readiness claim, semantic-correctness claim, global uniqueness
 claim, or Level2+ evidence.
+
+[docs/211-hsai-gateway-adversarial-corpus-output-run-notes.md](docs/211-hsai-gateway-adversarial-corpus-output-run-notes.md)
+records the local HSAI Gateway adversarial-corpus output-run surface inside
+`hsai-agent-admission`. A typed adversarial corpus and model-lane registry are
+now validated before the existing one-shot corpus replay and `gateway-report/*`
+materialization path runs. Invalid corpus metadata stops before output
+creation, while protected output roots still fail through the existing
+materialization safety path. It performs no corpus generation, model execution,
+model download, prompt storage, hosted-model call, network access, credential
+access, external replay, signer/tool integration, accepted Evidence Ledger
+mutation, score-axis population, benchmark output, production-readiness claim,
+semantic-correctness claim, global uniqueness claim, or Level2+ evidence.
 
 ## Validation Checklist
 
