@@ -88,7 +88,8 @@ tranche, the Phase 196 soak config coverage thirty-first tranche, and the Phase
 197 zk-Harness export coverage thirty-second tranche, and the Phase 198 soak
 runner coverage thirty-third tranche, and the Phase 199 soak resume coverage
 thirty-fourth tranche, and the Phase 200 mutation invalid unroll bounds
-coverage thirty-fifth tranche, plus
+coverage thirty-fifth tranche, and the Phase 201 evidence accepted append
+coverage thirty-sixth tranche, plus
 earlier coverage-hardening follow-up work for serialization error paths, crate
 error constructors, and local soak runner
 resume/output/error-policy paths. It
@@ -1184,6 +1185,25 @@ does not force unreachable serialization-error branches, does not force
 structurally unreachable selector-restricted branches, and does not claim
 whole-workspace 100% coverage.
 
+Phase 201 continues that bounded coverage campaign over accepted-ledger append
+transaction validation. It adds focused tests for empty transaction and target
+ledger identities, invalid target ledgers, tampered preflight reports, invalid
+preflight requests, current-tip drift across all three tip sources,
+append-preview source and entry metadata drift, missing source artifact digests,
+forbidden transaction notes, and post-append ledger validation of forbidden
+transaction-id text once materialized into an evidence-record note. The targeted
+module moved from `79.77%` line / `84.62%` function coverage to `98.29%` line /
+`92.31%` function coverage under LCOV line-level auditing, and the package moved
+from `90.00%` region / `85.65%` function / `90.82%` line coverage to `90.13%`
+region / `85.71%` function / `91.11%` line coverage under
+`cargo llvm-cov -p zkbench-core --all-features --json --summary-only`. The
+remaining uncovered lines in `evidence/accepted_append.rs` are the defensive
+empty-ledger-after-success guard and the concrete candidate digest
+serialization-error mapping. Phase 201 changes no production code, creates no
+benchmark evidence, creates no Level2+ evidence, does not force unreachable
+serialization-error branches, does not force defensive impossible-state guards,
+and does not claim whole-workspace 100% coverage.
+
 ## State Slice
 
 This report touches only:
@@ -1355,6 +1375,8 @@ This report touches only:
 - `crates/zkbench-core/tests/phase_199_soak_resume_coverage.rs`
 - `docs/200-phase-mutation-invalid-unroll-bounds-coverage-thirty-fifth-tranche-notes.md`
 - `crates/zkbench-core/tests/phase_200_mutation_invalid_unroll_bounds_coverage.rs`
+- `docs/201-phase-evidence-accepted-append-coverage-thirty-sixth-tranche-notes.md`
+- `crates/zkbench-core/tests/phase_201_evidence_accepted_append_coverage.rs`
 - `crates/zkbench-core/examples/operator_soak_campaign.rs`
 - `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`
 - `crates/zkbench-core/src/dsl/oracle_completeness.rs`
@@ -1556,23 +1578,18 @@ returned no package files (exit code 1 with empty output), confirming no
 No `package.json` or `pnpm-lock.yaml` exists in this repository, so no `pnpm`
 gate is available.
 
-The Phase 200 post-tranche
+The Phase 201 post-tranche
 `cargo llvm-cov --workspace --all-features --json --summary-only` run reported
-`91.71%` region coverage, `88.11%` function execution, and `92.05%` line
-coverage across the workspace. The Phase 200 post-tranche
+`91.79%` region coverage, `88.15%` function execution, and `92.26%` line
+coverage across the workspace. The Phase 201 post-tranche
 `cargo llvm-cov -p zkbench-core --all-features --json --summary-only` run
-reported `90.00%` region coverage, `85.65%` function execution, and `90.82%`
-line coverage for `zkbench-core`; the targeted
-`mutation/invalid_unroll_bounds.rs` module reported `89.41%` region coverage,
-`85.71%` function execution, and `88.73%` line
-coverage. Branch coverage was not reported by these runs. The
-package coverage floor remains `replay/serialization.rs` at `75.00%` line
-coverage. The next visible floor is `external_runner/serialization.rs` at
-`76.65%` line coverage. Both remaining serializer-wrapper floors are capped by
-structurally unreachable `serde_json::to_string_pretty` error mappings for
-concrete derived structs. After those two known caps, the next visible
-non-serializer `zkbench-core` floor requiring audit is
-`evidence/accepted_append.rs` at `78.99%` line coverage.
+reported `90.13%` region coverage, `85.71%` function execution, and `91.11%`
+line coverage for `zkbench-core`; the targeted `evidence/accepted_append.rs`
+module reported `98.29%` line coverage and `92.31%` function execution under
+LCOV line-level auditing. Branch coverage was not reported by these runs. The
+package coverage floor is now `soak/health.rs` at `79.00%` line coverage. The
+known lower serializer-wrapper floors remain capped by structurally unreachable
+`serde_json::to_string_pretty` error mappings for concrete derived structs.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
