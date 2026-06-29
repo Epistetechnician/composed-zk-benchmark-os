@@ -92,9 +92,10 @@ coverage thirty-fifth tranche, and the Phase 201 evidence accepted append
 coverage thirty-sixth tranche, and the docs-first Phase 202 HSAI Gateway SOTA
 bridge boundary, the Phase 203 HSAI Agent Approval Gateway PRD, and the Phase
 204 HSAI Agent Approval Gateway local MVP, and the Phase 205 HSAI Gateway
-report artifact surface, plus earlier coverage-hardening follow-up work for
-serialization error paths, crate error constructors, and local soak runner
-resume/output/error-policy paths. It
+report artifact surface, and the Phase 206 HSAI Gateway report output-plumbing
+surface, plus earlier coverage-hardening follow-up work for serialization error
+paths, crate error constructors, and local soak runner resume/output/error-policy
+paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
 running the available workspace gates and mapping those gates to the repo's
 major behavioral surfaces.
@@ -156,6 +157,19 @@ bundles, external replay, signer/tool/payment/custody integration, accepted
 Evidence Ledger mutation, score-axis population, benchmark output, Level2+
 evidence, production-readiness claims, semantic-correctness claims, global
 uniqueness claims, "fully secure" claims, or claims above `Attested`.
+
+Phase 206 implements local hermetic materialization and readback for HSAI
+Gateway report artifacts inside `hsai-agent-admission`. It writes declared
+`gateway-report/*` files with SHA-256 sidecars under a caller-selected output
+root, validates protected-root and symlink safety, rejects undeclared files,
+checks digest sidecars, and revalidates report, manifest, nonclaim, and
+validation-report semantics on readback. It does not authorize package runtime
+files, model execution, model downloads, committed generated gateway report
+bundles, generated corpora, external replay, signer/tool/payment/custody
+integration, accepted Evidence Ledger mutation, score-axis population,
+benchmark output, Level2+ evidence, production-readiness claims,
+semantic-correctness claims, global uniqueness claims, "fully secure" claims,
+or claims above `Attested`.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,

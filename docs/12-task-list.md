@@ -3643,6 +3643,38 @@ Markdown hashes are bound in the manifest, stale metrics fail closed before
 rendering, README navigation, validation report, and AGENTS scope rules point to
 the notes, and metrics remain local and non-benchmark.
 
+## Phase 206 HSAI Gateway Report Output Plumbing
+
+Status: complete for local hermetic implementation. See
+`docs/206-hsai-gateway-report-output-plumbing-notes.md`.
+
+Goal: materialize Phase 205 gateway report artifacts under a caller-selected
+local output root with declared files, SHA-256 sidecars, and strict readback
+validation, without package runtime code, model execution, external
+integrations, committed generated bundles, or benchmark evidence.
+
+Implemented: `GatewayReportMaterializationRequest`,
+`GatewayReportOutputManifest`, `GatewayReportOutputValidationReport`,
+`GatewayReportMaterializationError`, `materialize_gateway_report_bundle`, and
+`read_gateway_report_bundle`. The output bundle writes declared
+`gateway-report/*` files and sidecars, rejects protected roots and unsafe output
+roots, rejects undeclared files, and validates report, manifest, nonclaim, and
+validation-report semantics on readback.
+
+Anti-goals: Cargo metadata changes, dependencies, package runtime files,
+CLI/server/UI/dashboard work, model execution/download, committed generated
+gateway report bundles, generated corpora/output bundles, secrets, credentials,
+external replay execution, signer/wallet/exchange/custody/ACP/MCP integration
+code, accepted Evidence Ledger mutation, score-axis population, benchmark
+output, Level2+ evidence, production-readiness claims, semantic-correctness
+claims, global software-agent uniqueness claims, "fully secure" claims, or
+claims above `Attested`.
+
+Exit criteria: focused gateway output tests pass; declared files and sidecars
+materialize; readback equals the written manifest; protected roots, undeclared
+files, and digest-consistent tampered reports fail closed; README navigation,
+validation report, and AGENTS scope rules point to the notes.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
