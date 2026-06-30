@@ -311,6 +311,7 @@ Surface DSL
 | [docs/223-phase-external-submission-preflight-output-coverage-notes.md](docs/223-phase-external-submission-preflight-output-coverage-notes.md) | Phase 223 external submission preflight output coverage notes. |
 | [docs/224-phase-report-bundle-coverage-notes.md](docs/224-phase-report-bundle-coverage-notes.md) | Phase 224 report bundle coverage notes. |
 | [docs/225-phase-soak-artifact-layout-coverage-notes.md](docs/225-phase-soak-artifact-layout-coverage-notes.md) | Phase 225 soak artifact layout coverage notes. |
+| [docs/226-phase-observation-omission-coverage-notes.md](docs/226-phase-observation-omission-coverage-notes.md) | Phase 226 observation omission coverage notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1385,6 +1386,19 @@ missing bundle JSON, and malformed bundle JSON. The local package coverage run
 moved `soak/artifact_layout.rs` from `83.81%` to `93.73%` line coverage and
 `zkbench-core` from `92.33%` to `92.48%` line coverage. It changes no
 production source, soak artifact-layout semantics, report-bundle semantics,
+external replay behavior, generated artifacts, accepted Evidence Ledger state,
+benchmark evidence, score-axis state, Level2+ evidence, production-readiness
+claim, semantic-correctness claim, or 100% coverage claim.
+
+[docs/226-phase-observation-omission-coverage-notes.md](docs/226-phase-observation-omission-coverage-notes.md)
+records focused local coverage hardening for
+`mutation/observation_omission.rs`. It adds tests for no-observation and
+no-trace fail-closed paths, accepted-trace rewrite behavior, rejected-trace
+fallback rewrite behavior, observation removal, sentinel final-field mismatch
+injection, and diagnostic notes. The local package coverage run moved
+`mutation/observation_omission.rs` from `83.33%` to `95.45%` line coverage and
+`zkbench-core` from `92.48%` to `92.51%` line coverage. It changes no
+production source, mutation semantics, oracle semantics, generator semantics,
 external replay behavior, generated artifacts, accepted Evidence Ledger state,
 benchmark evidence, score-axis state, Level2+ evidence, production-readiness
 claim, semantic-correctness claim, or 100% coverage claim.
