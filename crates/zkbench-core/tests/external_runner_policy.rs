@@ -1,7 +1,7 @@
 use zkbench_core::{
     build_default_external_runner_policy, deserialize_external_runner_policy_json,
     serialize_external_runner_policy_json, validate_external_runner_policy, ClaimBoundary,
-    ExternalExecutionMode,
+    ExternalExecutionMode, ExternalRunnerPolicy,
 };
 
 #[test]
@@ -19,6 +19,21 @@ fn default_policy_is_disabled_and_requires_review_gates() {
 }
 
 #[test]
+fn phase_h_default_and_manual_handoff_policy_helpers_are_bounded() {
+    let default = ExternalRunnerPolicy::phase_h_default();
+    let manual = ExternalRunnerPolicy::phase_h_manual_handoff_only();
+
+    assert_eq!(default, build_default_external_runner_policy());
+    assert_eq!(manual.mode, ExternalExecutionMode::ManualHandoffOnly);
+    assert!(!manual.allows_live_execution());
+    assert!(validate_external_runner_policy(&manual).is_empty());
+    assert!(manual
+        .notes
+        .iter()
+        .any(|note| note.contains("no live execution API")));
+}
+
+#[test]
 fn default_claim_policy_rejects_level2_actual_evidence() {
     let policy = build_default_external_runner_policy();
 
@@ -28,6 +43,35 @@ fn default_claim_policy_rejects_level2_actual_evidence() {
     assert!(!policy
         .claim_boundary_policy
         .permits_actual_claim_boundary(ClaimBoundary::Level2ReproducibleBenchmarkArtifact));
+}
+
+#[test]
+fn policy_validation_reports_identity_boundary_gate_and_path_flags() {
+    let mut policy = build_default_external_runner_policy();
+    policy.id.clear();
+    policy.claim_boundary = ClaimBoundary::Level1LocalReplay;
+    policy.claim_boundary_policy.maximum_actual_claim_boundary = ClaimBoundary::Level0DesignNote;
+    policy.gate.requires_manual_review = false;
+    policy.path_policy.allow_absolute_paths = true;
+
+    let issues = validate_external_runner_policy(&policy);
+    let paths = issues
+        .iter()
+        .map(|issue| issue.path.as_str())
+        .collect::<Vec<_>>();
+
+    for expected_path in [
+        "policy.id",
+        "policy.claim_boundary",
+        "policy.claim_boundary_policy",
+        "policy.gate",
+        "policy.path_policy.allow_absolute_paths",
+    ] {
+        assert!(
+            paths.contains(&expected_path),
+            "missing expected issue path {expected_path}; got {issues:?}"
+        );
+    }
 }
 
 #[test]
