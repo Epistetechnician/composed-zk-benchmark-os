@@ -4958,6 +4958,44 @@ claim-boundary checks remain green; full workspace tests pass; package coverage
 summary records the local coverage movement and next low non-serializer
 surface.
 
+## Phase 243 Pack Writer Coverage
+
+Status: complete. See `docs/243-phase-pack-writer-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer surface after Phase 242:
+`crates/zkbench-core/src/pack/writer.rs`.
+
+Implemented: focused benchmark-pack writer tests for file-root rejection, root
+parent conflicts, README path conflicts, dynamic artifact id path drift for
+generated instances, mutated instances, replay manifests, and replay results,
+plus parent-conflict reporting for generated, mutated, replay, evidence, and
+score-report artifact families.
+
+Coverage result: `pack/writer.rs` moved from `82.96%` region / `80.56%`
+function / `86.91%` line coverage to `90.86%` region / `88.89%` function /
+`92.62%` line coverage. The local `zkbench-core` package summary moved from
+`92.54%` region / `89.02%` function / `94.37%` line coverage to `92.66%`
+region / `89.19%` function / `94.44%` line coverage.
+
+Residual cap: remaining misses are serialization-error wrappers for currently
+serializable pack-manifest and JSON artifact values, plus low-level file-write
+or read-dir operating-system error wrappers that would require brittle
+permission or filesystem forcing.
+
+Anti-goals: production source changes, pack writer semantics changes, accepted
+Evidence Ledger mutation, accepted evidence state changes, endpoint submission
+behavior, credential handling, generated artifact materialization beyond temp
+test dirs, formal evidence, benchmark evidence, score-axis population, Level2+
+evidence, semantic-correctness claims, production-readiness claims, SOTA
+claims, breakthrough claims, unsafe coverage forcing, coverage suppression,
+structurally unreachable branch forcing, or whole-workspace 100% coverage
+claims.
+
+Exit criteria: focused benchmark-pack writer tests pass; repo hygiene and
+claim-boundary checks remain green; full workspace tests pass; package coverage
+summary records the local coverage movement and next low non-serializer
+surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

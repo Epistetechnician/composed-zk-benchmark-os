@@ -104,6 +104,161 @@ fn benchmark_pack_writer_refuses_non_empty_directory_without_overwrite() {
 }
 
 #[test]
+fn benchmark_pack_writer_rejects_file_root_and_dynamic_artifact_path_drift() {
+    let instance = generate_instance(
+        GeneratorConfig::baseline_fsm().seed(61),
+        InstanceParams::default(),
+    )
+    .expect("baseline instance should generate");
+    let mutated = apply_mutation_pass(&instance, &BadCountersPass)
+        .expect("bad counter mutation should apply");
+    let manifest =
+        build_local_replay_manifest_for_instance(&instance).expect("manifest should build");
+    let result = run_local_replay(&manifest).expect("local replay should run");
+
+    let file_root = tempdir().expect("tempdir should be available");
+    let file_root_path = file_root.path().join("pack-file-root");
+    std::fs::write(&file_root_path, "not a directory\n")
+        .expect("test should be able to create file root");
+    let error = BenchmarkPackWriter::new("phase_f_file_root")
+        .write_to(&file_root_path)
+        .expect_err("writer should reject file roots");
+    assert!(error.to_string().contains("not a directory"));
+
+    let mut invalid_generated = instance.clone();
+    invalid_generated.id = "../generated_escape".to_string();
+    let dir = tempdir().expect("tempdir should be available");
+    let error = BenchmarkPackWriter::new("phase_f_invalid_generated_path")
+        .with_generated_instance(instance.clone())
+        .with_generated_instance(invalid_generated)
+        .write_to(dir.path())
+        .expect_err("invalid generated id should fail path validation");
+    assert!(error.to_string().contains("invalid pack relative path"));
+
+    let mut invalid_mutated = mutated;
+    invalid_mutated.id = "../mutated_escape".to_string();
+    let dir = tempdir().expect("tempdir should be available");
+    let error = BenchmarkPackWriter::new("phase_f_invalid_mutated_path")
+        .with_mutated_instance(invalid_mutated)
+        .write_to(dir.path())
+        .expect_err("invalid mutated id should fail path validation");
+    assert!(error.to_string().contains("invalid pack relative path"));
+
+    let mut invalid_manifest = manifest.clone();
+    invalid_manifest.id = "../manifest_escape".to_string();
+    let dir = tempdir().expect("tempdir should be available");
+    let error = BenchmarkPackWriter::new("phase_f_invalid_manifest_path")
+        .with_replay_manifest(invalid_manifest)
+        .write_to(dir.path())
+        .expect_err("invalid replay manifest id should fail path validation");
+    assert!(error.to_string().contains("invalid pack relative path"));
+
+    let mut invalid_result = result;
+    invalid_result.id = "../result_escape".to_string();
+    let dir = tempdir().expect("tempdir should be available");
+    let error = BenchmarkPackWriter::new("phase_f_invalid_result_path")
+        .with_replay_result(invalid_result)
+        .write_to(dir.path())
+        .expect_err("invalid replay result id should fail path validation");
+    assert!(error.to_string().contains("invalid pack relative path"));
+}
+
+#[test]
+fn benchmark_pack_writer_reports_parent_conflicts_for_artifact_families() {
+    let instance = generate_instance(
+        GeneratorConfig::baseline_fsm().seed(62),
+        InstanceParams::default(),
+    )
+    .expect("baseline instance should generate");
+    let mutated = apply_mutation_pass(&instance, &BadCountersPass)
+        .expect("bad counter mutation should apply");
+    let manifest =
+        build_local_replay_manifest_for_instance(&instance).expect("manifest should build");
+    let result = run_local_replay(&manifest).expect("local replay should run");
+    let mut ledger = EvidenceLedger::new();
+    ledger
+        .append_replay_result(&result)
+        .expect("result should append to ledger");
+
+    let root_parent_dir = tempdir().expect("tempdir should be available");
+    let root_parent_file = root_parent_dir.path().join("pack-parent-file");
+    std::fs::write(&root_parent_file, "not a directory\n")
+        .expect("test should create root parent conflict");
+    let error = BenchmarkPackWriter::new("phase_f_root_parent_conflict")
+        .write_to(root_parent_file.join("child-pack"))
+        .expect_err("root parent conflict should fail");
+    assert!(error.to_string().contains("pack-parent-file"));
+
+    let readme_dir = tempdir().expect("tempdir should be available");
+    std::fs::create_dir(readme_dir.path().join("README.md"))
+        .expect("test should create README path conflict");
+    let error = BenchmarkPackWriter::new("phase_f_readme_path_conflict")
+        .overwrite(true)
+        .write_to(readme_dir.path())
+        .expect_err("README path conflict should fail");
+    assert!(error.to_string().contains("README.md"));
+
+    let generated_dir = tempdir().expect("tempdir should be available");
+    std::fs::write(generated_dir.path().join("specs"), "not a directory\n")
+        .expect("test should create specs parent conflict");
+    let error = BenchmarkPackWriter::new("phase_f_generated_parent_conflict")
+        .with_generated_instance(instance)
+        .overwrite(true)
+        .write_to(generated_dir.path())
+        .expect_err("generated parent conflict should fail");
+    assert!(error.to_string().contains("specs"));
+
+    let mutated_dir = tempdir().expect("tempdir should be available");
+    std::fs::write(mutated_dir.path().join("specs"), "not a directory\n")
+        .expect("test should create specs parent conflict");
+    let error = BenchmarkPackWriter::new("phase_f_mutated_parent_conflict")
+        .with_mutated_instance(mutated)
+        .overwrite(true)
+        .write_to(mutated_dir.path())
+        .expect_err("mutated parent conflict should fail");
+    assert!(error.to_string().contains("specs"));
+
+    let manifest_dir = tempdir().expect("tempdir should be available");
+    std::fs::write(manifest_dir.path().join("replay"), "not a directory\n")
+        .expect("test should create replay parent conflict");
+    let error = BenchmarkPackWriter::new("phase_f_manifest_parent_conflict")
+        .with_replay_manifest(manifest)
+        .overwrite(true)
+        .write_to(manifest_dir.path())
+        .expect_err("manifest parent conflict should fail");
+    assert!(error.to_string().contains("replay"));
+
+    let result_dir = tempdir().expect("tempdir should be available");
+    std::fs::write(result_dir.path().join("replay"), "not a directory\n")
+        .expect("test should create replay parent conflict");
+    let error = BenchmarkPackWriter::new("phase_f_result_parent_conflict")
+        .with_replay_result(result)
+        .overwrite(true)
+        .write_to(result_dir.path())
+        .expect_err("result parent conflict should fail");
+    assert!(error.to_string().contains("replay"));
+
+    let ledger_dir = tempdir().expect("tempdir should be available");
+    std::fs::write(ledger_dir.path().join("evidence"), "not a directory\n")
+        .expect("test should create evidence parent conflict");
+    let error = BenchmarkPackWriter::new("phase_f_ledger_parent_conflict")
+        .with_evidence_ledger(ledger)
+        .overwrite(true)
+        .write_to(ledger_dir.path())
+        .expect_err("ledger parent conflict should fail");
+    assert!(error.to_string().contains("evidence"));
+
+    let report_dir = tempdir().expect("tempdir should be available");
+    std::fs::write(report_dir.path().join("reports"), "not a directory\n")
+        .expect("test should create reports parent conflict");
+    let error = BenchmarkPackWriter::new("phase_f_report_parent_conflict")
+        .overwrite(true)
+        .write_to(report_dir.path())
+        .expect_err("score report parent conflict should fail");
+    assert!(error.to_string().contains("reports"));
+}
+
+#[test]
 fn benchmark_pack_validation_detects_file_tampering() {
     let instance = generate_instance(
         GeneratorConfig::baseline_fsm().seed(53),

@@ -611,6 +611,15 @@ to `100.00%` line coverage without changing production source, soak semantics,
 accepted Evidence Ledger policy, endpoint submission behavior, credential
 handling, or accepted evidence state.
 
+Phase 243 adds focused local regression coverage for `pack/writer.rs`, the
+next low non-serializer surface routed by the Phase 242 notes. It covers
+file-root rejection, root parent conflicts, README path conflicts, dynamic
+artifact id path drift, and parent-conflict reporting for generated, mutated,
+replay, evidence, and score-report artifact families. The package coverage run
+moved that module from `86.91%` to `92.62%` line coverage without changing
+production source, pack writer semantics, accepted Evidence Ledger policy,
+endpoint submission behavior, credential handling, or accepted evidence state.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2244,6 +2253,12 @@ The Phase 242 tranche moved `soak/failure_corpus.rs` from `86.54%` to
 `92.54%` region coverage, `89.02%` function execution, and `94.37%` line
 coverage. The lowest remaining non-serializer line-coverage candidate in the
 current package summary is `pack/writer.rs` at `86.91%`, subject to
+missing-line audit before mutation.
+The Phase 243 tranche moved `pack/writer.rs` from `86.91%` to `92.62%` line
+coverage and moved the local `zkbench-core` package summary to `92.66%` region
+coverage, `89.19%` function execution, and `94.44%` line coverage. The lowest
+remaining non-serializer line-coverage candidate in the current package summary
+is `evidence/external_submission_preflight_output.rs` at `87.03%`, subject to
 missing-line audit before mutation.
 
 These coverage percentages are local test instrumentation only; they are not
