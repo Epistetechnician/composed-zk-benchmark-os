@@ -316,6 +316,7 @@ Surface DSL
 | [docs/228-phase-append-preview-coverage-notes.md](docs/228-phase-append-preview-coverage-notes.md) | Phase 228 evidence append-preview coverage notes. |
 | [docs/229-phase-pack-readiness-coverage-notes.md](docs/229-phase-pack-readiness-coverage-notes.md) | Phase 229 pack-readiness coverage notes. |
 | [docs/230-phase-audit-index-coverage-notes.md](docs/230-phase-audit-index-coverage-notes.md) | Phase 230 audit-index coverage notes. |
+| [docs/231-phase-accepted-append-output-coverage-notes.md](docs/231-phase-accepted-append-output-coverage-notes.md) | Phase 231 accepted append output coverage notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1456,6 +1457,17 @@ ergonomics semantics, cross-bundle audit-index semantics, external replay
 behavior, generated artifacts, accepted Evidence Ledger state, benchmark
 evidence, score-axis state, Level2+ evidence, production-readiness claim,
 semantic-correctness claim, or 100% coverage claim.
+
+[docs/231-phase-accepted-append-output-coverage-notes.md](docs/231-phase-accepted-append-output-coverage-notes.md)
+records focused local coverage hardening for `evidence/accepted_append_output.rs`.
+It adds the remaining reachable public root-path rejection coverage for
+materialized accepted-ledger append requests. The local package coverage run
+moved `evidence/accepted_append_output.rs` from `86.36%` to `90.00%` line
+coverage and `zkbench-core` from `93.20%` to `93.21%` line coverage. It changes
+no production source, accepted-append semantics, accepted-append output
+semantics, endpoint submission behavior, generated artifacts, accepted Evidence
+Ledger policy, benchmark evidence, score-axis state, Level2+ evidence,
+production-readiness claim, semantic-correctness claim, or 100% coverage claim.
 
 ## Validation Checklist
 
