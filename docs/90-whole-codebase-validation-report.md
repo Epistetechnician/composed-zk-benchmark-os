@@ -115,7 +115,8 @@ readiness coverage tranche, the Phase 230 audit-index coverage tranche, and
 the Phase 231 accepted append output coverage tranche, the Phase 232 DSL IR
 coverage tranche, the Phase 233 review-ledger coverage tranche, the Phase 234
 invariant-weakening coverage tranche, the Phase 235 external-runner policy
-coverage tranche, and the Phase 236 soak-campaign coverage tranche, plus
+coverage tranche, the Phase 236 soak-campaign coverage tranche, and the Phase
+237 invariant-strengthening coverage tranche, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -557,6 +558,15 @@ moved that module from `85.79%` to `97.49%` line coverage without adding live
 external execution, non-local adapter execution, accepted Evidence Ledger
 policy changes, endpoint submission behavior, credential handling, or accepted
 evidence state.
+
+Phase 237 adds focused local regression coverage for
+`mutation/invariant_strengthening.rs`, the next low non-serializer surface
+routed by the Phase 236 coverage notes. It covers the pass mutation-class
+reporter and the eligible-invariant/no-trace failure path. The package coverage
+run moved that module from `86.00%` to `100.00%` line coverage without changing
+production source, mutation semantics, generator semantics, oracle semantics,
+accepted Evidence Ledger policy, endpoint submission behavior, credential
+handling, or accepted evidence state.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
@@ -2157,6 +2167,12 @@ coverage, `87.71%` function execution, and `93.56%` line coverage. The lowest
 remaining non-serializer line-coverage candidate in the current package summary
 is `mutation/invariant_strengthening.rs` at `86.00%`, subject to missing-line
 audit before mutation.
+The Phase 237 tranche moved `mutation/invariant_strengthening.rs` from `86.00%`
+to `100.00%` line coverage and moved the local `zkbench-core` package summary
+to `91.86%` region coverage, `87.83%` function execution, and `93.59%` line
+coverage. The lowest remaining non-serializer line-coverage candidate in the
+current package summary is `mutation/recursion_envelope_mismatch.rs` at
+`86.44%`, subject to missing-line audit before mutation.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
