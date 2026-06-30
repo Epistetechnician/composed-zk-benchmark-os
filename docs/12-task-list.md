@@ -4582,6 +4582,43 @@ Exit criteria: focused lowering tests pass; repo hygiene and claim-boundary
 checks pass; full workspace tests pass; package coverage summary records the
 local coverage movement and next low non-serializer surface.
 
+## Phase 233 Review Ledger Coverage
+
+Status: complete for local coverage hardening. See
+`docs/233-phase-review-ledger-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer surface after Phase 232:
+`crates/zkbench-core/src/evidence/review_ledger.rs`.
+
+Implemented: added focused review-ledger coverage in
+`crates/zkbench-core/tests/review_ledger.rs` for default construction,
+malformed ledger JSON, invalid nested review-decision append rejection, empty
+ledger id, entry sequence drift, previous-digest drift, and nested
+review-decision/append-preview validation drift.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`91.55%` region / `87.36%` function / `93.23%` line coverage to `91.65%`
+region / `87.47%` function / `93.34%` line coverage.
+`evidence/review_ledger.rs` moved from `85.23%` region / `84.21%` function /
+`85.27%` line coverage to `94.70%` region / `94.74%` function / `97.32%` line
+coverage.
+
+Audit decision: no production source was changed. Remaining misses are the
+digest serialization error path and pretty-JSON serialization wrapper path,
+which are not forced through the public serializable review-ledger data model.
+
+Anti-goals: production source changes, review-ledger semantics changes,
+EvidenceLedger mutation, accepted Evidence Ledger policy changes, endpoint
+submission behavior, credential handling, generated artifact materialization,
+formal evidence, benchmark evidence, score-axis population, Level2+ evidence,
+semantic-correctness claims, production-readiness claims, unsafe coverage
+forcing, coverage suppression, structurally unreachable branch forcing, or
+whole-workspace 100% coverage claims.
+
+Exit criteria: focused review-ledger tests pass; repo hygiene and
+claim-boundary checks pass; full workspace tests pass; package coverage summary
+records the local coverage movement and next low non-serializer surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
