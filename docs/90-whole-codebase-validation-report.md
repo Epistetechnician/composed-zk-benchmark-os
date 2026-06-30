@@ -111,8 +111,8 @@ Phase 224 report bundle coverage tranche, and the Phase 225 soak artifact
 layout coverage tranche, and the Phase 226 observation omission coverage
 tranche, and the Phase 227 external runner result-import coverage tranche, and
 the Phase 228 evidence append-preview coverage tranche, the Phase 229 pack
-readiness coverage tranche, and the Phase 230 audit-index coverage tranche,
-plus
+readiness coverage tranche, the Phase 230 audit-index coverage tranche, and
+the Phase 231 accepted append output coverage tranche, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -495,6 +495,16 @@ behavior, endpoint submission behavior, credential handling, or accepted
 Evidence Ledger state. Remaining misses are concentrated in Phase S/Phase T
 materialized-view readback and protected-path branch combinations,
 cross-bundle grouping/sorting variants, and filesystem error paths.
+
+Phase 231 adds focused local regression coverage for
+`evidence/accepted_append_output.rs`, the next low non-serializer surface after
+Phase 230. It covers public root-path rejection for materialized
+accepted-ledger append requests. The package coverage run moved that module
+from `86.36%` to `90.00%` line coverage without changing production source,
+accepted-append semantics, accepted-append output semantics, endpoint
+submission behavior, credential handling, or accepted Evidence Ledger policy.
+Remaining misses are internal `write_ledger_atomically` parent/file-name error
+closures that the public path validator makes unreachable.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
@@ -2058,6 +2068,13 @@ coverage, `87.19%` function execution, and `93.20%` line coverage. After
 serializer-wrapper floors already audited in Phases 217 and 218, the next
 visible low non-serializer surface in the current coverage table is
 `evidence/accepted_append_output.rs` at `86.36%` line coverage.
+The Phase 231 tranche moved `evidence/accepted_append_output.rs` from `86.36%`
+to `90.00%` line coverage and moved the local `zkbench-core` package summary
+to `91.53%` region coverage, `87.24%` function execution, and `93.21%` line
+coverage. After serializer-wrapper floors already audited in Phases 217 and
+218, the next visible low non-serializer file in the current coverage table is
+`dsl/ir.rs` at `85.19%` line coverage, subject to missing-line audit before
+mutation.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

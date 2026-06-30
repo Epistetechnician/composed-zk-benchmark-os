@@ -4513,6 +4513,42 @@ Exit criteria: focused audit-index tests pass; repo hygiene and claim-boundary
 checks pass; full workspace tests pass; package coverage summary records the
 local coverage movement and next low non-serializer surface.
 
+## Phase 231 Accepted Append Output Coverage
+
+Status: complete for local coverage hardening. See
+`docs/231-phase-accepted-append-output-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer surface after Phase 230:
+`crates/zkbench-core/src/evidence/accepted_append_output.rs`.
+
+Implemented: added focused root-path rejection coverage in
+`crates/zkbench-core/tests/phase_184_accepted_append_output_coverage.rs` for
+materialized accepted-ledger append requests.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`91.51%` region / `87.19%` function / `93.20%` line coverage to `91.53%`
+region / `87.24%` function / `93.21%` line coverage.
+`evidence/accepted_append_output.rs` moved from `78.95%` region / `57.14%`
+function / `86.36%` line coverage to `82.24%` region / `64.29%` function /
+`90.00%` line coverage.
+
+Audit decision: no production source was changed. Remaining misses are the
+internal `write_ledger_atomically` parent/file-name error closures, which are
+unreachable through the public API because `validate_ledger_path` rejects
+non-materializable paths before atomic writing starts.
+
+Anti-goals: production source changes, accepted-append semantics changes,
+accepted-append output semantics changes, endpoint submission behavior,
+credential handling, accepted Evidence Ledger policy changes, generated
+artifact materialization, formal evidence, benchmark evidence, score-axis
+population, Level2+ evidence, semantic-correctness claims, production-readiness
+claims, unsafe coverage forcing, coverage suppression, structurally unreachable
+branch forcing, or whole-workspace 100% coverage claims.
+
+Exit criteria: focused accepted-append-output tests pass; repo hygiene and
+claim-boundary checks pass; full workspace tests pass; package coverage summary
+records the local coverage movement and next low non-serializer surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

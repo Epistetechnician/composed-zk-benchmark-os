@@ -126,6 +126,17 @@ fn materialized_append_rejects_empty_and_bare_relative_paths_without_writing() {
 }
 
 #[test]
+fn materialized_append_rejects_root_path_without_writing() {
+    let root = request_for_path(PathBuf::from("/"), true);
+    let error = apply_materialized_accepted_ledger_append_transaction(&root)
+        .expect_err("root path has no materializable ledger parent");
+
+    assert!(error
+        .to_string()
+        .contains("accepted ledger path must have a parent directory"));
+}
+
+#[test]
 fn materialized_append_rejects_parseable_invalid_existing_ledger_without_repair() {
     let dir = tempfile::tempdir().expect("tempdir should be available");
     let ledger_path = dir.path().join("accepted-ledger.json");
