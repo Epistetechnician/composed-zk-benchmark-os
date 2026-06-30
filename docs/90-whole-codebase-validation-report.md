@@ -638,6 +638,14 @@ that module from `87.14%` to `92.86%` line coverage without changing production
 source, mutation semantics, accepted Evidence Ledger policy, endpoint
 submission behavior, credential handling, or accepted evidence state.
 
+Phase 246 records the current HSAI public proof refresh. It names commit
+`977d198c3a12f3161580c2c580aa8218e85b900a`, validates the current green
+Phases 204-245 public state, records the exact local verifier commands that
+passed, preserves buyer-facing wording, and explicitly states that the packet
+is not production readiness, semantic correctness, SOTA status, breakthrough
+status, official benchmark evidence, live provider evidence, accepted Evidence
+Ledger mutation, or Level2+ evidence.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2290,6 +2298,10 @@ The Phase 245 tranche moved `mutation/bad_counters.rs` from `87.14%` to
 coverage. The lowest remaining non-serializer line-coverage candidate in the
 current package summary is `evidence/official_submission_output.rs` at
 `87.45%`, subject to missing-line audit before mutation.
+Phase 246 adds no code and changes no coverage. It refreshes the public proof
+packet for the current green head and routes the SOTA-breakthrough bridge to a
+local gateway demo bundle, first real external evidence lane, accepted evidence
+promotion, and public baseline comparison.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
