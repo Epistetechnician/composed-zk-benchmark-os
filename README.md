@@ -330,6 +330,7 @@ Surface DSL
 | [docs/242-phase-failure-corpus-coverage-notes.md](docs/242-phase-failure-corpus-coverage-notes.md) | Phase 242 failure corpus coverage notes. |
 | [docs/243-phase-pack-writer-coverage-notes.md](docs/243-phase-pack-writer-coverage-notes.md) | Phase 243 pack-writer coverage notes. |
 | [docs/244-phase-external-submission-preflight-output-coverage-notes.md](docs/244-phase-external-submission-preflight-output-coverage-notes.md) | Phase 244 external-submission preflight-output coverage notes. |
+| [docs/245-phase-bad-counters-coverage-notes.md](docs/245-phase-bad-counters-coverage-notes.md) | Phase 245 bad-counters coverage notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |

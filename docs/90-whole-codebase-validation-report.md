@@ -630,6 +630,14 @@ line coverage without changing production source, output bundle semantics,
 accepted Evidence Ledger policy, endpoint submission behavior, credential
 handling, or accepted evidence state.
 
+Phase 245 adds focused local regression coverage for `mutation/bad_counters.rs`,
+the next low non-serializer surface routed by the Phase 244 notes. It covers
+the bad-counters pass class metadata and the missing-transition scan branch
+before a later eligible counter update target. The package coverage run moved
+that module from `87.14%` to `92.86%` line coverage without changing production
+source, mutation semantics, accepted Evidence Ledger policy, endpoint
+submission behavior, credential handling, or accepted evidence state.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2276,6 +2284,12 @@ package summary to `92.72%` region coverage, `89.31%` function execution, and
 `94.50%` line coverage. The lowest remaining non-serializer line-coverage
 candidate in the current package summary is `mutation/bad_counters.rs` at
 `87.14%`, subject to missing-line audit before mutation.
+The Phase 245 tranche moved `mutation/bad_counters.rs` from `87.14%` to
+`92.86%` line coverage and moved the local `zkbench-core` package summary to
+`92.74%` region coverage, `89.36%` function execution, and `94.51%` line
+coverage. The lowest remaining non-serializer line-coverage candidate in the
+current package summary is `evidence/official_submission_output.rs` at
+`87.45%`, subject to missing-line audit before mutation.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
