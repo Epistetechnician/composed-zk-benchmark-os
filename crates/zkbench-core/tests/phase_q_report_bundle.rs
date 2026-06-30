@@ -227,6 +227,59 @@ fn report_bundle_validation_rejects_path_digest_and_source_drift() {
 }
 
 #[test]
+fn report_bundle_validation_reports_identity_digest_limitation_and_rendered_metadata_gaps() {
+    let mut manifest = valid_manifest();
+    manifest.bundle_id = "   ".to_string();
+    manifest.version.value.clear();
+    manifest.inputs[0].input_id.clear();
+    manifest.inputs[1].input_id = manifest.inputs[0].input_id.clone();
+    manifest.inputs[0].digest.algorithm = ArtifactDigestAlgorithm::Unsupported;
+    manifest.inputs[1].digest.byte_len = 0;
+    manifest.inputs[2].claim_boundary = ClaimBoundary::Level2ReproducibleBenchmarkArtifact;
+    manifest.rendered_reports[0].rendered_report_id.clear();
+    manifest.rendered_reports[0].title.clear();
+    manifest.rendered_reports[0].source_input_ids.clear();
+    manifest.rendered_reports[0].claim_boundary = ClaimBoundary::Level1LocalReplay;
+    manifest.rendered_reports[0].local_only_warnings_visible = false;
+    manifest.limitations.clear();
+
+    let validation = validate_report_bundle_manifest(&manifest);
+    assert!(!validation.valid);
+    let kinds = validation
+        .issues
+        .iter()
+        .map(|issue| issue.kind)
+        .collect::<Vec<_>>();
+
+    assert!(kinds.contains(&ReportBundleValidationIssueKind::EmptyIdentity));
+    assert!(kinds.contains(&ReportBundleValidationIssueKind::DuplicateInputId));
+    assert!(kinds.contains(&ReportBundleValidationIssueKind::InvalidDigest));
+    assert!(kinds.contains(&ReportBundleValidationIssueKind::ClaimBoundaryEscalation));
+    assert!(kinds.contains(&ReportBundleValidationIssueKind::MissingSourceRef));
+    assert!(kinds.contains(&ReportBundleValidationIssueKind::MissingLimitation));
+}
+
+#[test]
+fn report_bundle_validation_rejects_missing_inputs_rendered_reports_and_shell_refs() {
+    let mut manifest = valid_manifest();
+    manifest.inputs.clear();
+    manifest.rendered_reports.clear();
+    let missing = issue_kinds(&manifest);
+    assert!(missing.contains(&ReportBundleValidationIssueKind::MissingInputs));
+    assert!(missing.contains(&ReportBundleValidationIssueKind::MissingRenderedReport));
+
+    let mut manifest = valid_manifest();
+    manifest.inputs[0].artifact_uri = "score_reports/score.json;rm".to_string();
+    manifest.rendered_reports[0].artifact_uri = "score_reports/not-rendered.txt".to_string();
+    let validation = validate_report_bundle_manifest(&manifest);
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.kind == ReportBundleValidationIssueKind::InvalidArtifactRef));
+}
+
+#[test]
 fn report_bundle_validation_requires_failed_readiness_visibility() {
     let mut manifest = build_report_bundle_manifest_from_reports(
         "phase_q_bundle_with_failure",
@@ -325,6 +378,113 @@ fn report_bundle_outputs_reject_payload_and_overwrite_drift() {
     assert!(overwrite_error
         .to_string()
         .contains("explicit overwrite approval is required"));
+}
+
+#[test]
+fn report_bundle_outputs_reject_invalid_empty_duplicate_and_extra_payloads() {
+    let (manifest, payloads) = valid_manifest_with_payloads();
+    let dir = tempfile::tempdir().expect("tempdir");
+
+    let mut empty_id = payloads.clone();
+    empty_id[0].rendered_report_id.clear();
+    let error =
+        write_report_bundle_outputs(dir.path().join("empty-id"), &manifest, &empty_id, false)
+            .expect_err("empty payload id should reject");
+    assert!(error
+        .to_string()
+        .contains("invalid report-bundle output identity"));
+
+    let mut empty_markdown = payloads.clone();
+    empty_markdown[0].markdown.clear();
+    let error = write_report_bundle_outputs(
+        dir.path().join("empty-markdown"),
+        &manifest,
+        &empty_markdown,
+        false,
+    )
+    .expect_err("empty markdown payload should reject");
+    assert!(error
+        .to_string()
+        .contains("rendered Markdown payload must not be empty"));
+
+    let mut duplicate = payloads.clone();
+    duplicate.push(duplicate[0].clone());
+    let error = write_report_bundle_outputs(
+        dir.path().join("duplicate-payload"),
+        &manifest,
+        &duplicate,
+        false,
+    )
+    .expect_err("duplicate payload id should reject");
+    assert!(error
+        .to_string()
+        .contains("duplicate rendered Markdown payload id"));
+
+    let mut extra = payloads.clone();
+    extra.push(ReportBundleRenderedMarkdown {
+        rendered_report_id: "extra_rendered_payload".to_string(),
+        markdown: "# Extra rendered payload\n".to_string(),
+    });
+    let error =
+        write_report_bundle_outputs(dir.path().join("extra-payload"), &manifest, &extra, false)
+            .expect_err("extra payload should reject");
+    assert!(error
+        .to_string()
+        .contains("extra rendered Markdown payload exists"));
+}
+
+#[test]
+fn report_bundle_outputs_reject_file_roots_invalid_roots_and_manifest_readback_failures() {
+    let (manifest, payloads) = valid_manifest_with_payloads();
+    let dir = tempfile::tempdir().expect("tempdir");
+
+    let file_root = dir.path().join("not-a-directory");
+    fs::write(&file_root, b"occupied").expect("file root should write");
+    let error = write_report_bundle_outputs(&file_root, &manifest, &payloads, false)
+        .expect_err("file output root should reject");
+    assert!(error.to_string().contains("not a directory"));
+
+    let error = write_report_bundle_outputs("bad://report-bundle", &manifest, &payloads, false)
+        .expect_err("invalid output root should reject");
+    assert!(error
+        .to_string()
+        .contains("invalid report-bundle output root"));
+
+    let output_root = dir.path().join("report-bundle-readback");
+    write_report_bundle_outputs(&output_root, &manifest, &payloads, false)
+        .expect("initial write succeeds");
+
+    fs::write(
+        output_root.join("digests/report-bundle-manifest.sha256"),
+        &[0xff, 0xfe, 0xfd],
+    )
+    .expect("non-UTF-8 digest sidecar should write");
+    let error =
+        read_report_bundle_outputs(&output_root).expect_err("non-UTF-8 sidecar should reject");
+    assert!(error
+        .to_string()
+        .contains("manifest digest sidecar is not UTF-8"));
+
+    write_report_bundle_outputs(&output_root, &manifest, &payloads, true)
+        .expect("repair output succeeds");
+    fs::write(
+        output_root.join("report-bundle-manifest.json"),
+        &[0xff, 0xfe, 0xfd],
+    )
+    .expect("non-UTF-8 manifest should write");
+    let manifest_digest = zkbench_core::compute_artifact_digest_bytes(
+        &[0xff, 0xfe, 0xfd],
+        Some(ArtifactKind::Other),
+        Some(ArtifactRole::Report),
+    );
+    fs::write(
+        output_root.join("digests/report-bundle-manifest.sha256"),
+        format!("{}\n", manifest_digest.hex_digest).as_bytes(),
+    )
+    .expect("digest sidecar should repair");
+    let error =
+        read_report_bundle_outputs(&output_root).expect_err("non-UTF-8 manifest should reject");
+    assert!(error.to_string().contains("manifest JSON is not UTF-8"));
 }
 
 #[test]

@@ -309,6 +309,7 @@ Surface DSL
 | [docs/221-phase-mutation-missing-constraints-coverage-notes.md](docs/221-phase-mutation-missing-constraints-coverage-notes.md) | Phase 221 mutation missing-constraints coverage notes. |
 | [docs/222-phase-zk-harness-mapping-coverage-notes.md](docs/222-phase-zk-harness-mapping-coverage-notes.md) | Phase 222 zk-Harness mapping coverage notes. |
 | [docs/223-phase-external-submission-preflight-output-coverage-notes.md](docs/223-phase-external-submission-preflight-output-coverage-notes.md) | Phase 223 external submission preflight output coverage notes. |
+| [docs/224-phase-report-bundle-coverage-notes.md](docs/224-phase-report-bundle-coverage-notes.md) | Phase 224 report bundle coverage notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1362,6 +1363,17 @@ changes no production source, external replay behavior, endpoint submission
 behavior, credential handling, generated artifacts, accepted Evidence Ledger
 state, benchmark evidence, score-axis state, Level2+ evidence,
 production-readiness claim, semantic-correctness claim, or 100% coverage claim.
+
+[docs/224-phase-report-bundle-coverage-notes.md](docs/224-phase-report-bundle-coverage-notes.md)
+records focused local coverage hardening for `report_bundle.rs`. It adds tests
+for identity, digest, limitation, source-reference, rendered metadata, payload,
+output-root, and manifest readback rejection paths. The local package coverage
+run moved `report_bundle.rs` from `82.30%` to `92.90%` line coverage and
+`zkbench-core` from `91.93%` to `92.33%` line coverage. It changes no
+production source, report-bundle semantics, external replay behavior,
+generated artifacts, accepted Evidence Ledger state, benchmark evidence,
+score-axis state, Level2+ evidence, production-readiness claim,
+semantic-correctness claim, or 100% coverage claim.
 
 ## Validation Checklist
 
