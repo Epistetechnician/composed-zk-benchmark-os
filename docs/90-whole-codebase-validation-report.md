@@ -693,6 +693,16 @@ production-readiness claims, semantic-correctness claims, SOTA claims, and
 breakthrough claims. It remains preflight metadata only and commits no generated
 output.
 
+Phase 252 implements the candidate-only acceptance preview for the Phase 251
+preflight report in `hsai-agent-admission`. It binds to the preflight report
+digest, requires an `ApproveCandidateOnly` decision, requires
+`candidate_only=true`, and rejects invalid source preflight reports, digest
+drift, accepted Evidence Ledger mutation, Level2+ evidence, score-axis
+population, authority grants, raw provider artifact retention, credential
+retention, live-provider evidence claims, production-readiness claims,
+semantic-correctness claims, SOTA claims, and breakthrough claims. It remains
+preview metadata only and commits no generated output.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2371,6 +2381,9 @@ Phase 251 completes that reviewed local promotion preflight. The next bridge
 candidate is a local reviewed acceptance preview for the preflight report that
 still remains candidate-only and still does not mutate an accepted Evidence
 Ledger.
+Phase 252 completes that candidate-only acceptance preview. The next bridge
+candidate is an ignored local preview bundle/run artifact for the Phase 252
+report that remains reproducible, ignored, and non-mutating.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

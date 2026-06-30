@@ -558,6 +558,96 @@ impl GatewayOperatorBridgePromotionPreflightReport {
     }
 }
 
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayOperatorBridgeAcceptancePreviewDecision {
+    ApproveCandidateOnly,
+    Reject,
+    Unreviewed,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayOperatorBridgeAcceptancePreviewRequest {
+    pub schema_version: String,
+    pub preview_id: String,
+    pub reviewer_id: String,
+    pub decision: GatewayOperatorBridgeAcceptancePreviewDecision,
+    pub source_preflight_report: GatewayOperatorBridgePromotionPreflightReport,
+    pub expected_preflight_report_digest: Hash,
+    pub requested_claim_boundary: String,
+    pub candidate_only: bool,
+    pub accepted_evidence_mutation_requested: bool,
+    pub level2_evidence_requested: bool,
+    pub score_axis_population_requested: bool,
+    pub production_readiness_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub live_provider_evidence_claimed: bool,
+    pub raw_provider_artifact_retention_requested: bool,
+    pub credential_retention_requested: bool,
+    pub authority_grant_requested: bool,
+    pub claim_text: Vec<String>,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayOperatorBridgeAcceptancePreviewIssue {
+    InvalidSchemaVersion,
+    InvalidPreviewId,
+    MissingReviewer,
+    ReviewNotCandidateOnlyApproval,
+    SourcePreflightInvalid,
+    PreflightDigestMismatch,
+    RequestedClaimBoundaryMismatch,
+    NotCandidateOnly,
+    AcceptedEvidenceMutationRequested,
+    Level2EvidenceRequested,
+    ScoreAxisPopulationRequested,
+    ProductionReadinessClaimed,
+    SemanticCorrectnessClaimed,
+    LiveProviderEvidenceClaimed,
+    RawProviderArtifactRetentionRequested,
+    CredentialRetentionRequested,
+    AuthorityGrantRequested,
+    ForbiddenClaimText(String),
+    MissingRequiredNonclaim(String),
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayOperatorBridgeAcceptancePreviewValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayOperatorBridgeAcceptancePreviewIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayOperatorBridgeAcceptancePreviewReport {
+    pub schema_version: String,
+    pub preview_id: String,
+    pub source_preflight_report_digest: Hash,
+    pub bridge_bundle_digest: Hash,
+    pub bridge_manifest_digest: Hash,
+    pub gateway_report_digest: Hash,
+    pub attestation_binding_digest: Hash,
+    pub operator_artifact_reference_digest: Hash,
+    pub validation: GatewayOperatorBridgeAcceptancePreviewValidation,
+    pub claim_boundary: String,
+    pub candidate_only: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub grants_authority: bool,
+    pub retains_raw_provider_artifacts: bool,
+    pub retains_credentials_or_secrets: bool,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl GatewayOperatorBridgeAcceptancePreviewReport {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-operator-bridge-acceptance-preview-report:v1",
+            self,
+        )
+    }
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GatewayOperatorBridgeValidationReport {
     pub schema_version: String,
@@ -2662,6 +2752,25 @@ pub fn gateway_operator_bridge_promotion_preflight_claim_boundary() -> String {
     "reviewed local gateway/operator bridge preflight metadata only; not promotion, accepted evidence, Level2+ evidence, live provider evidence, production readiness, semantic correctness, SOTA, breakthrough, full security, score-axis population, or authority to execute an action".to_owned()
 }
 
+pub fn gateway_operator_bridge_acceptance_preview_required_nonclaims() -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims = gateway_operator_bridge_promotion_preflight_required_nonclaims();
+    nonclaims.extend([
+        NonClaimLabel("not accepted bridge evidence".to_owned()),
+        NonClaimLabel("candidate-only acceptance preview".to_owned()),
+        NonClaimLabel("not ledger append".to_owned()),
+        NonClaimLabel("not final acceptance".to_owned()),
+    ]);
+    nonclaims
+}
+
+pub fn gateway_operator_bridge_acceptance_preview_request_schema_version() -> &'static str {
+    GATEWAY_OPERATOR_BRIDGE_ACCEPTANCE_PREVIEW_REQUEST_SCHEMA_VERSION
+}
+
+pub fn gateway_operator_bridge_acceptance_preview_claim_boundary() -> String {
+    "candidate-only gateway/operator bridge acceptance preview metadata; not accepted evidence, final acceptance, ledger append, Level2+ evidence, live provider evidence, production readiness, semantic correctness, SOTA, breakthrough, full security, score-axis population, or authority to execute an action".to_owned()
+}
+
 pub fn build_gateway_operator_bridge_bundle(
     gateway_report_manifest: &GatewayReportOutputManifest,
     attestation_binding: GatewayAttestationChallengeBinding,
@@ -2851,6 +2960,136 @@ pub fn validate_gateway_operator_bridge_promotion_preflight_request(
         }
     }
     GatewayOperatorBridgePromotionPreflightValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+pub fn build_gateway_operator_bridge_acceptance_preview_report(
+    request: &GatewayOperatorBridgeAcceptancePreviewRequest,
+) -> GatewayOperatorBridgeAcceptancePreviewReport {
+    GatewayOperatorBridgeAcceptancePreviewReport {
+        schema_version: GATEWAY_OPERATOR_BRIDGE_ACCEPTANCE_PREVIEW_REPORT_SCHEMA_VERSION.to_owned(),
+        preview_id: request.preview_id.clone(),
+        source_preflight_report_digest: request.source_preflight_report.digest(),
+        bridge_bundle_digest: request.source_preflight_report.bridge_bundle_digest,
+        bridge_manifest_digest: request.source_preflight_report.bridge_manifest_digest,
+        gateway_report_digest: request.source_preflight_report.gateway_report_digest,
+        attestation_binding_digest: request.source_preflight_report.attestation_binding_digest,
+        operator_artifact_reference_digest: request
+            .source_preflight_report
+            .operator_artifact_reference_digest,
+        validation: validate_gateway_operator_bridge_acceptance_preview_request(request),
+        claim_boundary: gateway_operator_bridge_acceptance_preview_claim_boundary(),
+        candidate_only: true,
+        mutates_accepted_evidence_ledger: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        grants_authority: false,
+        retains_raw_provider_artifacts: false,
+        retains_credentials_or_secrets: false,
+        nonclaims: gateway_operator_bridge_acceptance_preview_required_nonclaims(),
+    }
+}
+
+pub fn validate_gateway_operator_bridge_acceptance_preview_request(
+    request: &GatewayOperatorBridgeAcceptancePreviewRequest,
+) -> GatewayOperatorBridgeAcceptancePreviewValidation {
+    let mut issues = Vec::new();
+    if request.schema_version != GATEWAY_OPERATOR_BRIDGE_ACCEPTANCE_PREVIEW_REQUEST_SCHEMA_VERSION {
+        issues.push(GatewayOperatorBridgeAcceptancePreviewIssue::InvalidSchemaVersion);
+    }
+    if request.preview_id.trim().is_empty()
+        || !is_safe_relative_path(&request.preview_id)
+        || request.preview_id.contains(['/', '\\'])
+    {
+        issues.push(GatewayOperatorBridgeAcceptancePreviewIssue::InvalidPreviewId);
+    }
+    if request.reviewer_id.trim().is_empty() {
+        issues.push(GatewayOperatorBridgeAcceptancePreviewIssue::MissingReviewer);
+    }
+    if request.decision != GatewayOperatorBridgeAcceptancePreviewDecision::ApproveCandidateOnly {
+        issues.push(GatewayOperatorBridgeAcceptancePreviewIssue::ReviewNotCandidateOnlyApproval);
+    }
+    if !request.source_preflight_report.validation.valid
+        || request
+            .source_preflight_report
+            .mutates_accepted_evidence_ledger
+        || request.source_preflight_report.creates_level2_evidence
+        || request.source_preflight_report.populates_score_axes
+        || request.source_preflight_report.grants_authority
+        || request
+            .source_preflight_report
+            .retains_raw_provider_artifacts
+        || request
+            .source_preflight_report
+            .retains_credentials_or_secrets
+        || request.source_preflight_report.claim_boundary
+            != gateway_operator_bridge_promotion_preflight_claim_boundary()
+    {
+        issues.push(GatewayOperatorBridgeAcceptancePreviewIssue::SourcePreflightInvalid);
+    }
+    if request.expected_preflight_report_digest != request.source_preflight_report.digest() {
+        issues.push(GatewayOperatorBridgeAcceptancePreviewIssue::PreflightDigestMismatch);
+    }
+    if request.requested_claim_boundary
+        != gateway_operator_bridge_acceptance_preview_claim_boundary()
+    {
+        issues.push(GatewayOperatorBridgeAcceptancePreviewIssue::RequestedClaimBoundaryMismatch);
+    }
+    if !request.candidate_only {
+        issues.push(GatewayOperatorBridgeAcceptancePreviewIssue::NotCandidateOnly);
+    }
+    if request.accepted_evidence_mutation_requested {
+        issues.push(GatewayOperatorBridgeAcceptancePreviewIssue::AcceptedEvidenceMutationRequested);
+    }
+    if request.level2_evidence_requested {
+        issues.push(GatewayOperatorBridgeAcceptancePreviewIssue::Level2EvidenceRequested);
+    }
+    if request.score_axis_population_requested {
+        issues.push(GatewayOperatorBridgeAcceptancePreviewIssue::ScoreAxisPopulationRequested);
+    }
+    if request.production_readiness_claimed {
+        issues.push(GatewayOperatorBridgeAcceptancePreviewIssue::ProductionReadinessClaimed);
+    }
+    if request.semantic_correctness_claimed {
+        issues.push(GatewayOperatorBridgeAcceptancePreviewIssue::SemanticCorrectnessClaimed);
+    }
+    if request.live_provider_evidence_claimed {
+        issues.push(GatewayOperatorBridgeAcceptancePreviewIssue::LiveProviderEvidenceClaimed);
+    }
+    if request.raw_provider_artifact_retention_requested {
+        issues.push(
+            GatewayOperatorBridgeAcceptancePreviewIssue::RawProviderArtifactRetentionRequested,
+        );
+    }
+    if request.credential_retention_requested {
+        issues.push(GatewayOperatorBridgeAcceptancePreviewIssue::CredentialRetentionRequested);
+    }
+    if request.authority_grant_requested {
+        issues.push(GatewayOperatorBridgeAcceptancePreviewIssue::AuthorityGrantRequested);
+    }
+    for forbidden in gateway_operator_bridge_promotion_forbidden_claim_fragments() {
+        if request
+            .claim_text
+            .iter()
+            .any(|text| text.to_ascii_lowercase().contains(forbidden))
+        {
+            issues.push(
+                GatewayOperatorBridgeAcceptancePreviewIssue::ForbiddenClaimText(
+                    (*forbidden).to_owned(),
+                ),
+            );
+        }
+    }
+    for required in gateway_operator_bridge_acceptance_preview_required_nonclaims() {
+        if !request.nonclaims.contains(&required) {
+            issues.push(
+                GatewayOperatorBridgeAcceptancePreviewIssue::MissingRequiredNonclaim(required.0),
+            );
+        }
+    }
+    GatewayOperatorBridgeAcceptancePreviewValidation {
         valid: issues.is_empty(),
         issues,
     }
@@ -3991,6 +4230,12 @@ const GATEWAY_OPERATOR_BRIDGE_PROMOTION_PREFLIGHT_REQUEST_SCHEMA_VERSION: &str =
 
 const GATEWAY_OPERATOR_BRIDGE_PROMOTION_PREFLIGHT_REPORT_SCHEMA_VERSION: &str =
     "hsai-gateway-operator-bridge-promotion-preflight-report-v1";
+
+const GATEWAY_OPERATOR_BRIDGE_ACCEPTANCE_PREVIEW_REQUEST_SCHEMA_VERSION: &str =
+    "hsai-gateway-operator-bridge-acceptance-preview-request-v1";
+
+const GATEWAY_OPERATOR_BRIDGE_ACCEPTANCE_PREVIEW_REPORT_SCHEMA_VERSION: &str =
+    "hsai-gateway-operator-bridge-acceptance-preview-report-v1";
 
 const GATEWAY_REPORT_DECLARED_FILES: &[&str] = &[
     "gateway-report/manifest.json",
@@ -5660,6 +5905,42 @@ mod tests {
         }
     }
 
+    fn gateway_operator_bridge_acceptance_preview_request(
+        proposal: &GatewayActionProposal,
+        report_manifest: &GatewayReportOutputManifest,
+        output_root: &Path,
+    ) -> GatewayOperatorBridgeAcceptancePreviewRequest {
+        let preflight_request = gateway_operator_bridge_promotion_preflight_request(
+            proposal,
+            report_manifest,
+            output_root,
+        );
+        let preflight_report =
+            build_gateway_operator_bridge_promotion_preflight_report(&preflight_request);
+        GatewayOperatorBridgeAcceptancePreviewRequest {
+            schema_version: gateway_operator_bridge_acceptance_preview_request_schema_version()
+                .to_owned(),
+            preview_id: "gateway-operator-bridge-acceptance-preview".to_owned(),
+            reviewer_id: "local-reviewer".to_owned(),
+            decision: GatewayOperatorBridgeAcceptancePreviewDecision::ApproveCandidateOnly,
+            expected_preflight_report_digest: preflight_report.digest(),
+            source_preflight_report: preflight_report,
+            requested_claim_boundary: gateway_operator_bridge_acceptance_preview_claim_boundary(),
+            candidate_only: true,
+            accepted_evidence_mutation_requested: false,
+            level2_evidence_requested: false,
+            score_axis_population_requested: false,
+            production_readiness_claimed: false,
+            semantic_correctness_claimed: false,
+            live_provider_evidence_claimed: false,
+            raw_provider_artifact_retention_requested: false,
+            credential_retention_requested: false,
+            authority_grant_requested: false,
+            claim_text: Vec::new(),
+            nonclaims: gateway_operator_bridge_acceptance_preview_required_nonclaims(),
+        }
+    }
+
     #[test]
     fn accepted_candidate_exports_envelope_and_appends_journal_entry() {
         let candidate = accepted_candidate();
@@ -6085,6 +6366,164 @@ mod tests {
         assert!(validation.issues.contains(
             &GatewayOperatorBridgePromotionPreflightIssue::ForbiddenClaimText(
                 "breakthrough".to_owned()
+            )
+        ));
+        let _ = fs::remove_dir_all(report_root);
+        let _ = fs::remove_dir_all(output_root);
+    }
+
+    #[test]
+    fn gateway_operator_bridge_acceptance_preview_accepts_candidate_only_metadata() {
+        let proposal = gateway_proposal("gateway-bridge-acceptance-preview-action");
+        let report_root = temp_output_root("gateway-bridge-acceptance-preview-report");
+        let report_manifest = gateway_report_manifest_for_bridge(proposal.clone(), &report_root);
+        let output_root = temp_output_root("gateway-bridge-acceptance-preview");
+        let request = gateway_operator_bridge_acceptance_preview_request(
+            &proposal,
+            &report_manifest,
+            &output_root,
+        );
+
+        let report = build_gateway_operator_bridge_acceptance_preview_report(&request);
+
+        assert!(report.validation.valid);
+        assert_eq!(report.preview_id, request.preview_id);
+        assert_eq!(
+            report.source_preflight_report_digest,
+            request.source_preflight_report.digest()
+        );
+        assert_eq!(
+            report.bridge_bundle_digest,
+            request.source_preflight_report.bridge_bundle_digest
+        );
+        assert!(report.candidate_only);
+        assert!(!report.mutates_accepted_evidence_ledger);
+        assert!(!report.creates_level2_evidence);
+        assert!(!report.populates_score_axes);
+        assert!(!report.grants_authority);
+        assert!(!report.retains_raw_provider_artifacts);
+        assert!(!report.retains_credentials_or_secrets);
+        assert_eq!(
+            report.nonclaims,
+            gateway_operator_bridge_acceptance_preview_required_nonclaims()
+        );
+        assert_ne!(report.digest(), Hash([0; 32]));
+        let _ = fs::remove_dir_all(report_root);
+        let _ = fs::remove_dir_all(output_root);
+    }
+
+    #[test]
+    fn gateway_operator_bridge_acceptance_preview_rejects_ledger_and_authority_escalation() {
+        let proposal = gateway_proposal("gateway-bridge-acceptance-escalation-action");
+        let report_root = temp_output_root("gateway-bridge-acceptance-escalation-report");
+        let report_manifest = gateway_report_manifest_for_bridge(proposal.clone(), &report_root);
+        let output_root = temp_output_root("gateway-bridge-acceptance-escalation");
+        let mut request = gateway_operator_bridge_acceptance_preview_request(
+            &proposal,
+            &report_manifest,
+            &output_root,
+        );
+        request.candidate_only = false;
+        request.accepted_evidence_mutation_requested = true;
+        request.level2_evidence_requested = true;
+        request.score_axis_population_requested = true;
+        request.authority_grant_requested = true;
+
+        let validation = validate_gateway_operator_bridge_acceptance_preview_request(&request);
+
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&GatewayOperatorBridgeAcceptancePreviewIssue::NotCandidateOnly));
+        assert!(validation.issues.contains(
+            &GatewayOperatorBridgeAcceptancePreviewIssue::AcceptedEvidenceMutationRequested
+        ));
+        assert!(validation
+            .issues
+            .contains(&GatewayOperatorBridgeAcceptancePreviewIssue::Level2EvidenceRequested));
+        assert!(validation
+            .issues
+            .contains(&GatewayOperatorBridgeAcceptancePreviewIssue::ScoreAxisPopulationRequested));
+        assert!(validation
+            .issues
+            .contains(&GatewayOperatorBridgeAcceptancePreviewIssue::AuthorityGrantRequested));
+        let _ = fs::remove_dir_all(report_root);
+        let _ = fs::remove_dir_all(output_root);
+    }
+
+    #[test]
+    fn gateway_operator_bridge_acceptance_preview_rejects_preflight_digest_drift() {
+        let proposal = gateway_proposal("gateway-bridge-acceptance-digest-action");
+        let report_root = temp_output_root("gateway-bridge-acceptance-digest-report");
+        let report_manifest = gateway_report_manifest_for_bridge(proposal.clone(), &report_root);
+        let output_root = temp_output_root("gateway-bridge-acceptance-digest");
+        let mut request = gateway_operator_bridge_acceptance_preview_request(
+            &proposal,
+            &report_manifest,
+            &output_root,
+        );
+        request.expected_preflight_report_digest = Hash([7; 32]);
+
+        let validation = validate_gateway_operator_bridge_acceptance_preview_request(&request);
+
+        assert_eq!(
+            validation.issues,
+            vec![GatewayOperatorBridgeAcceptancePreviewIssue::PreflightDigestMismatch]
+        );
+        let _ = fs::remove_dir_all(report_root);
+        let _ = fs::remove_dir_all(output_root);
+    }
+
+    #[test]
+    fn gateway_operator_bridge_acceptance_preview_rejects_invalid_source_preflight() {
+        let proposal = gateway_proposal("gateway-bridge-acceptance-source-action");
+        let report_root = temp_output_root("gateway-bridge-acceptance-source-report");
+        let report_manifest = gateway_report_manifest_for_bridge(proposal.clone(), &report_root);
+        let output_root = temp_output_root("gateway-bridge-acceptance-source");
+        let mut request = gateway_operator_bridge_acceptance_preview_request(
+            &proposal,
+            &report_manifest,
+            &output_root,
+        );
+        request
+            .source_preflight_report
+            .mutates_accepted_evidence_ledger = true;
+        request.expected_preflight_report_digest = request.source_preflight_report.digest();
+
+        let validation = validate_gateway_operator_bridge_acceptance_preview_request(&request);
+
+        assert_eq!(
+            validation.issues,
+            vec![GatewayOperatorBridgeAcceptancePreviewIssue::SourcePreflightInvalid]
+        );
+        let _ = fs::remove_dir_all(report_root);
+        let _ = fs::remove_dir_all(output_root);
+    }
+
+    #[test]
+    fn gateway_operator_bridge_acceptance_preview_rejects_production_claim_text() {
+        let proposal = gateway_proposal("gateway-bridge-acceptance-claim-action");
+        let report_root = temp_output_root("gateway-bridge-acceptance-claim-report");
+        let report_manifest = gateway_report_manifest_for_bridge(proposal.clone(), &report_root);
+        let output_root = temp_output_root("gateway-bridge-acceptance-claim");
+        let mut request = gateway_operator_bridge_acceptance_preview_request(
+            &proposal,
+            &report_manifest,
+            &output_root,
+        );
+        request.claim_text = vec!["Production ready accepted evidence.".to_owned()];
+
+        let validation = validate_gateway_operator_bridge_acceptance_preview_request(&request);
+
+        assert!(!validation.valid);
+        assert!(validation.issues.contains(
+            &GatewayOperatorBridgeAcceptancePreviewIssue::ForbiddenClaimText(
+                "production ready".to_owned()
+            )
+        ));
+        assert!(validation.issues.contains(
+            &GatewayOperatorBridgeAcceptancePreviewIssue::ForbiddenClaimText(
+                "accepted evidence".to_owned()
             )
         ));
         let _ = fs::remove_dir_all(report_root);
