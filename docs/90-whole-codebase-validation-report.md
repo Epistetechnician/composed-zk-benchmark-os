@@ -683,6 +683,16 @@ ignored demo run wrote `.gateway-demo-runs/phase-250-gateway-bridge/*`,
 validated readback, preserved `authority_granted=false`, preserved
 `accepted_evidence_mutation=false`, and committed no generated output.
 
+Phase 251 implements the reviewed local promotion preflight for that bridge
+bundle in `hsai-agent-admission`. It validates bridge bundle and manifest
+metadata, requires an `ApprovedMetadataOnly` review decision, checks the
+repo-external operator artifact reference digest, and rejects raw provider
+artifact retention, credential retention, accepted Evidence Ledger mutation,
+Level2+ evidence, score-axis population, live-provider evidence claims,
+production-readiness claims, semantic-correctness claims, SOTA claims, and
+breakthrough claims. It remains preflight metadata only and commits no generated
+output.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2357,6 +2367,10 @@ Phase 250 completes that ignored local bridge bundle. The next bridge candidate
 is a reviewed promotion preflight that validates only local metadata and
 repo-external operator artifact digests while still blocking raw provider
 payloads, credentials, accepted Evidence Ledger mutation, and Level2+ claims.
+Phase 251 completes that reviewed local promotion preflight. The next bridge
+candidate is a local reviewed acceptance preview for the preflight report that
+still remains candidate-only and still does not mutate an accepted Evidence
+Ledger.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

@@ -336,6 +336,7 @@ Surface DSL
 | [docs/248-hsai-first-real-external-evidence-lane.md](docs/248-hsai-first-real-external-evidence-lane.md) | Phase 248 HSAI first real external evidence lane map. |
 | [docs/249-hsai-gateway-attestation-binding-notes.md](docs/249-hsai-gateway-attestation-binding-notes.md) | Phase 249 HSAI Gateway-to-attestation binding implementation notes. |
 | [docs/250-hsai-gateway-operator-bridge-bundle-notes.md](docs/250-hsai-gateway-operator-bridge-bundle-notes.md) | Phase 250 HSAI Gateway operator bridge bundle implementation and ignored run notes. |
+| [docs/251-hsai-gateway-bridge-promotion-preflight-notes.md](docs/251-hsai-gateway-bridge-promotion-preflight-notes.md) | Phase 251 HSAI Gateway bridge reviewed promotion preflight implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1316,6 +1317,13 @@ records the local `gateway-bridge/*` output bundle and ignored demo run that
 combines one gateway report digest, one gateway attestation binding, and one
 repo-external operator-live artifact reference digest. It remains local
 metadata only and does not create accepted evidence.
+
+[docs/251-hsai-gateway-bridge-promotion-preflight-notes.md](docs/251-hsai-gateway-bridge-promotion-preflight-notes.md)
+records the reviewed local promotion preflight for that bridge bundle. The
+preflight validates bridge metadata and repo-external operator artifact
+reference digests while blocking raw provider artifacts, credentials, accepted
+Evidence Ledger mutation, Level2+ evidence, score-axis population, and stronger
+claims.
 
 [docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md](docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md)
 records a bounded local coverage tranche for `zkbench-core` soak health
