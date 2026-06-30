@@ -4619,6 +4619,44 @@ Exit criteria: focused review-ledger tests pass; repo hygiene and
 claim-boundary checks pass; full workspace tests pass; package coverage summary
 records the local coverage movement and next low non-serializer surface.
 
+## Phase 234 Invariant Weakening Coverage
+
+Status: complete for local coverage hardening. See
+`docs/234-phase-invariant-weakening-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer surface after Phase 233:
+`crates/zkbench-core/src/mutation/invariant_weakening.rs`.
+
+Implemented: added focused mutation-depth coverage in
+`crates/zkbench-core/tests/phase_156_mutation_depth.rs` for
+`InvariantWeakeningPass::mutation_class()` and the eligible-invariant/no-trace
+failure path.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`91.65%` region / `87.47%` function / `93.34%` line coverage to `91.67%`
+region / `87.59%` function / `93.37%` line coverage.
+`mutation/invariant_weakening.rs` moved from `87.30%` region / `60.00%`
+function / `85.71%` line coverage to `98.41%` region / `100.00%` function /
+`100.00%` line coverage.
+
+Audit decision: no production source was changed. `invariant_weakening.rs` has
+no remaining missed lines in the local coverage report; one region remains
+unexecuted without forcing artificial behavior beyond the current public
+generated-instance API.
+
+Anti-goals: production source changes, mutation semantics changes, generator
+semantics changes, oracle semantics changes, accepted Evidence Ledger mutation,
+accepted Evidence Ledger policy changes, endpoint submission behavior,
+credential handling, generated artifact materialization, formal evidence,
+benchmark evidence, score-axis population, Level2+ evidence,
+semantic-correctness claims, production-readiness claims, unsafe coverage
+forcing, coverage suppression, structurally unreachable branch forcing, or
+whole-workspace 100% coverage claims.
+
+Exit criteria: focused mutation-depth tests pass; repo hygiene and
+claim-boundary checks pass; full workspace tests pass; package coverage summary
+records the local coverage movement and next low non-serializer surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

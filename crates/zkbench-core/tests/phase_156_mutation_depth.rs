@@ -8,7 +8,7 @@ use zkbench_core::value::Value;
 use zkbench_core::{
     apply_mutation_pass, generate_instance, ClaimBoundary, ExpectedVerdict, GeneratorConfig,
     InstanceParams, InvalidUnrollBoundsPass, InvariantStrengtheningPass, InvariantWeakeningPass,
-    MutationClass, MutationEngine, MutationSafetyClass, ObservationOmissionPass,
+    MutationClass, MutationEngine, MutationPass, MutationSafetyClass, ObservationOmissionPass,
     StaleStateReadsPass,
 };
 
@@ -19,6 +19,14 @@ fn bounded_counter_loop() -> GeneratorConfig {
 }
 
 // ---------- InvariantWeakeningPass ----------
+
+#[test]
+fn invariant_weakening_reports_its_mutation_class() {
+    assert_eq!(
+        InvariantWeakeningPass.mutation_class(),
+        MutationClass::InvariantWeakening
+    );
+}
 
 #[test]
 fn invariant_weakening_applies_to_eligible_generated_instance() {
@@ -42,6 +50,24 @@ fn invariant_weakening_handles_no_eligible_target_without_panic() {
     assert!(error
         .to_string()
         .contains("no invariant with a non-trivial"));
+}
+
+#[test]
+fn invariant_weakening_fails_after_target_selection_when_no_trace_exists() {
+    let mut instance = generate_instance(bounded_counter_loop(), InstanceParams::default())
+        .expect("bounded counter loop instance should generate");
+    assert!(!instance.surface_spec.machine.invariants.is_empty());
+    instance.accepted_traces.clear();
+    instance.rejected_traces.clear();
+    instance.surface_spec.oracle.accepted_traces.clear();
+    instance.surface_spec.oracle.rejected_traces.clear();
+
+    let error = apply_mutation_pass(&instance, &InvariantWeakeningPass)
+        .expect_err("eligible invariant without traces should reject");
+
+    assert!(error
+        .to_string()
+        .contains("source instance declares no accepted or rejected trace"));
 }
 
 // ---------- InvariantStrengtheningPass ----------
