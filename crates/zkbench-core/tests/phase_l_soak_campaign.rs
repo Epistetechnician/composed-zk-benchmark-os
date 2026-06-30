@@ -1,13 +1,16 @@
+use std::fs;
+
 use tempfile::tempdir;
 use zkbench_core::{
     attach_reproduction_bundle_to_pack, build_failure_corpus_entry, build_smoke_soak_config,
-    generate_instance, plan_soak_shards, read_reproduction_bundle_from_pack, run_soak_campaign,
-    soak_artifact_manifest, validate_reproduction_bundle, validate_soak_campaign_config,
-    validate_soak_report_bundle, BenchmarkPackReader, BenchmarkPackWriter, ClaimBoundary,
+    generate_instance, plan_soak_shards, read_reproduction_bundle_from_pack,
+    read_soak_report_bundle, run_soak_campaign, soak_artifact_manifest,
+    validate_reproduction_bundle, validate_soak_campaign_config, validate_soak_report_bundle,
+    write_soak_report_bundle, BenchmarkPackReader, BenchmarkPackWriter, ClaimBoundary,
     FailureCorpusEntryInput, FailureCorpusKind, FamilyKind, GeneratorConfig, GeneratorTunables,
     InstanceParams, LocalSoakRunnerConfig, MutationClass, ReproductionBundle, SoakArtifactLayout,
     SoakArtifactRole, SoakCampaignApproval, SoakCampaignArtifactRootPolicy, SoakCampaignConfig,
-    SoakOutputPolicy, SoakShardId,
+    SoakOutputPolicy, SoakReportBundle, SoakShardId,
 };
 
 fn sample_entry(case_id: &str) -> zkbench_core::FailureCorpusEntry {
@@ -52,6 +55,20 @@ fn approved_config(campaign_id: &str, artifact_root: std::path::PathBuf) -> Soak
         runner_config: LocalSoakRunnerConfig::default(),
         notes: Vec::new(),
     }
+}
+
+fn campaign_bundle(campaign_id: &str, shard_count: usize) -> SoakReportBundle {
+    let dir = tempdir().expect("tempdir should be available");
+    let soak_config = build_smoke_soak_config()
+        .with_families(vec![FamilyKind::BaselineFsm])
+        .with_mutation_passes(vec![MutationClass::MissingConstraints])
+        .with_seed_range(0..shard_count as u64)
+        .with_shard_count(shard_count);
+    let plan = plan_soak_shards(soak_config).expect("plan should build");
+    let config = approved_config(campaign_id, dir.path().to_path_buf());
+    run_soak_campaign(&config, plan)
+        .expect("campaign should run")
+        .report_bundle
 }
 
 #[test]
@@ -320,6 +337,25 @@ fn report_bundle_validation_rejects_nested_claim_boundary_elevation() {
 }
 
 #[test]
+fn report_bundle_validation_rejects_bundle_and_plan_boundary_drift() {
+    let mut bundle = campaign_bundle("campaign_phase_225_boundary_drift", 1);
+    bundle.claim_boundary = ClaimBoundary::Level1LocalReplay;
+    bundle.shard_plan.claim_boundary = ClaimBoundary::Level1LocalReplay;
+
+    let validation = validate_soak_report_bundle(&bundle);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("report bundle must remain Level0DesignNote")));
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("shard plan must remain Level0DesignNote")));
+}
+
+#[test]
 fn report_bundle_validation_rejects_duplicate_or_digestless_artifacts() {
     let dir = tempdir().expect("tempdir should be available");
     let soak_config = build_smoke_soak_config()
@@ -360,6 +396,31 @@ fn report_bundle_validation_rejects_duplicate_or_digestless_artifacts() {
 }
 
 #[test]
+fn report_bundle_validation_rejects_artifact_path_and_boundary_drift() {
+    let mut bundle = campaign_bundle("campaign_phase_225_artifact_path_drift", 1);
+    let artifact = bundle
+        .artifact_digest_set
+        .artifacts
+        .iter_mut()
+        .find(|artifact| artifact.role == SoakArtifactRole::HealthReport)
+        .expect("campaign bundle should include a health artifact");
+    artifact.relative_path = "../health_report.json".to_string();
+    artifact.claim_boundary = ClaimBoundary::Level1LocalReplay;
+
+    let validation = validate_soak_report_bundle(&bundle);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("artifact path is not portable relative")));
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("exceeded Level0DesignNote")));
+}
+
+#[test]
 fn report_bundle_validation_rejects_report_artifact_role_drift() {
     let dir = tempdir().expect("tempdir should be available");
     let soak_config = build_smoke_soak_config()
@@ -388,6 +449,29 @@ fn report_bundle_validation_rejects_report_artifact_role_drift() {
         .issues
         .iter()
         .any(|issue| issue.contains("artifact_digest_set.telemetry count")));
+}
+
+#[test]
+fn report_bundle_validation_rejects_health_and_failure_artifact_count_drift() {
+    let mut bundle = campaign_bundle("campaign_phase_225_artifact_count_drift", 1);
+    bundle.artifact_digest_set.artifacts.retain(|artifact| {
+        !matches!(
+            artifact.role,
+            SoakArtifactRole::HealthReport | SoakArtifactRole::FailureCorpusIndex
+        )
+    });
+
+    let validation = validate_soak_report_bundle(&bundle);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("artifact_digest_set.health_reports count")));
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("artifact_digest_set.failure_corpus_indexes count")));
 }
 
 #[test]
@@ -634,6 +718,52 @@ fn report_bundle_validation_rejects_nested_report_shard_identity_drift() {
         .issues
         .iter()
         .any(|issue| issue.contains("failure_corpus_indexes[0].entries[0]")));
+}
+
+#[test]
+fn soak_report_bundle_io_rejects_file_roots_non_empty_roots_and_invalid_bundles() {
+    let bundle = campaign_bundle("campaign_phase_225_bundle_io", 1);
+    let dir = tempdir().expect("tempdir should be available");
+
+    let file_root = dir.path().join("bundle-file");
+    fs::write(&file_root, b"occupied").expect("file root should write");
+    let error = write_soak_report_bundle(&file_root, &bundle)
+        .expect_err("file root should reject before writing");
+    assert!(error.to_string().contains("not a directory"));
+
+    let non_empty_root = dir.path().join("non-empty-root");
+    fs::create_dir_all(&non_empty_root).expect("non-empty root should create");
+    fs::write(non_empty_root.join("existing.txt"), b"occupied")
+        .expect("existing file should write");
+    let error = write_soak_report_bundle(&non_empty_root, &bundle)
+        .expect_err("non-empty root should reject");
+    assert!(error.to_string().contains("non-empty"));
+
+    let mut invalid_bundle = bundle.clone();
+    invalid_bundle.bundle_id.clear();
+    let error = write_soak_report_bundle(dir.path().join("invalid-bundle"), &invalid_bundle)
+        .expect_err("invalid bundle should reject before write");
+    assert!(error.to_string().contains("invalid bundle"));
+}
+
+#[test]
+fn soak_report_bundle_io_round_trips_and_rejects_missing_or_malformed_json() {
+    let bundle = campaign_bundle("campaign_phase_225_bundle_readback", 1);
+    let dir = tempdir().expect("tempdir should be available");
+    let output_root = dir.path().join("bundle-output");
+
+    write_soak_report_bundle(&output_root, &bundle).expect("bundle should write");
+    let read_back = read_soak_report_bundle(&output_root).expect("bundle should read");
+    assert_eq!(read_back, bundle);
+
+    let missing_root = dir.path().join("missing-output");
+    let error = read_soak_report_bundle(&missing_root).expect_err("missing bundle should reject");
+    assert!(error.to_string().contains("soak_report_bundle.json"));
+
+    fs::write(output_root.join("soak_report_bundle.json"), b"{not json")
+        .expect("malformed bundle JSON should write");
+    let error = read_soak_report_bundle(&output_root).expect_err("malformed JSON should reject");
+    assert!(error.to_string().contains("read_soak_report_bundle"));
 }
 
 #[test]

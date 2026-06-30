@@ -4280,6 +4280,48 @@ Exit criteria: focused Phase Q report-bundle tests pass; repo hygiene and
 claim-boundary checks pass; full workspace tests pass; package coverage summary
 records the local coverage movement and next low non-serializer surface.
 
+## Phase 225 Soak Artifact Layout Coverage
+
+Status: complete for local coverage hardening. See
+`docs/225-phase-soak-artifact-layout-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer surface after Phase 224:
+`crates/zkbench-core/src/soak/artifact_layout.rs`.
+
+Implemented: added focused tests in
+`crates/zkbench-core/tests/phase_l_soak_campaign.rs` for report-bundle
+claim-boundary drift, nested shard-plan claim-boundary drift, artifact
+relative-path drift, artifact claim-boundary drift, health-report artifact
+count drift, failure-corpus-index artifact count drift, file-root write
+rejection, non-empty directory write rejection, invalid-bundle write rejection,
+successful write/read round trip, missing bundle JSON readback rejection, and
+malformed bundle JSON readback rejection.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`90.82%` region / `86.28%` function / `92.33%` line coverage to `91.03%`
+region / `86.56%` function / `92.48%` line coverage.
+`soak/artifact_layout.rs` moved from `77.19%` region / `60.71%` function /
+`83.81%` line coverage to `88.49%` region / `78.57%` function / `93.73%`
+line coverage.
+
+Audit decision: no production source was changed. Remaining misses are mostly
+filesystem error closures, serde serialization error closures for infallible
+in-memory structs, digest computation error closures, and platform-specific
+path component branches.
+
+Anti-goals: production source changes, soak artifact-layout semantics changes,
+report-bundle semantics changes, external replay behavior changes, endpoint
+submission behavior, credential handling, accepted Evidence Ledger policy
+changes, generated artifact materialization, formal evidence, benchmark
+evidence, score-axis population, Level2+ evidence, semantic-correctness claims,
+production-readiness claims, unsafe coverage forcing, coverage suppression,
+structurally unreachable branch forcing, or whole-workspace 100% coverage
+claims.
+
+Exit criteria: focused Phase L soak-campaign tests pass; repo hygiene and
+claim-boundary checks pass; full workspace tests pass; package coverage summary
+records the local coverage movement and next low non-serializer surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
