@@ -655,6 +655,16 @@ the phase creates no production-readiness, semantic-correctness, SOTA,
 breakthrough, official benchmark, live-provider, accepted-ledger, or Level2+
 claim.
 
+Phase 248 records the first bounded gateway-facing external-evidence lane map.
+It connects the Phase 247 local gateway surface to the existing real/operator
+external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
+Phase 106 Phala Cloud API materialization, Phase 108 local QVL artifact
+materialization, Phase 109 managed JWKS artifact materialization, and Phase 113
+TLS channel artifact materialization. It also names the remaining gap: no
+gateway admission case is yet bound into a fresh external attestation challenge
+and no accepted Evidence Ledger has admitted a combined gateway plus external
+evidence record.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2315,6 +2325,11 @@ Phase 247 completes that local gateway demo-bundle step. The next
 SOTA-breakthrough bridge candidate is the first real external evidence lane;
 more local-only coverage or docs will not by itself cross the breakthrough
 threshold.
+Phase 248 completes the public first-real-external-evidence lane map. The next
+SOTA-breakthrough bridge candidate is a gateway-to-attestation binding that
+derives an attestation challenge from one concrete gateway admission case and
+keeps any generated live artifacts outside git until a separate reviewed
+promotion phase.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
