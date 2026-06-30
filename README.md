@@ -314,6 +314,7 @@ Surface DSL
 | [docs/226-phase-observation-omission-coverage-notes.md](docs/226-phase-observation-omission-coverage-notes.md) | Phase 226 observation omission coverage notes. |
 | [docs/227-phase-result-import-coverage-notes.md](docs/227-phase-result-import-coverage-notes.md) | Phase 227 external runner result-import coverage notes. |
 | [docs/228-phase-append-preview-coverage-notes.md](docs/228-phase-append-preview-coverage-notes.md) | Phase 228 evidence append-preview coverage notes. |
+| [docs/229-phase-pack-readiness-coverage-notes.md](docs/229-phase-pack-readiness-coverage-notes.md) | Phase 229 pack-readiness coverage notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1429,6 +1430,18 @@ production source, append-preview semantics, candidate semantics, external
 replay behavior, generated artifacts, accepted Evidence Ledger state,
 benchmark evidence, score-axis state, Level2+ evidence, production-readiness
 claim, semantic-correctness claim, or 100% coverage claim.
+
+[docs/229-phase-pack-readiness-coverage-notes.md](docs/229-phase-pack-readiness-coverage-notes.md)
+records focused local coverage hardening for `pack/readiness.rs`. It adds tests
+for malformed readiness JSON, missing and malformed readback files, empty
+identity fields, invalid digest and artifact refs, check boundary escalation,
+and missing inputs. The local package coverage run moved `pack/readiness.rs`
+from `86.24%` to `94.19%` line coverage and `zkbench-core` from `92.75%` to
+`92.97%` line coverage. It changes no production source, pack-readiness
+semantics, pack writer/reader semantics, external replay behavior, generated
+artifacts, accepted Evidence Ledger state, benchmark evidence, score-axis
+state, Level2+ evidence, production-readiness claim, semantic-correctness
+claim, or 100% coverage claim.
 
 ## Validation Checklist
 
