@@ -4,13 +4,14 @@ use tempfile::tempdir;
 use zkbench_core::{
     attach_reproduction_bundle_to_pack, build_failure_corpus_entry, build_smoke_soak_config,
     generate_instance, plan_soak_shards, read_reproduction_bundle_from_pack,
-    read_soak_report_bundle, run_soak_campaign, soak_artifact_manifest,
-    validate_reproduction_bundle, validate_soak_campaign_config, validate_soak_report_bundle,
-    write_soak_report_bundle, BenchmarkPackReader, BenchmarkPackWriter, ClaimBoundary,
-    FailureCorpusEntryInput, FailureCorpusKind, FamilyKind, GeneratorConfig, GeneratorTunables,
-    InstanceParams, LocalSoakRunnerConfig, MutationClass, ReproductionBundle, SoakArtifactLayout,
-    SoakArtifactRole, SoakCampaignApproval, SoakCampaignArtifactRootPolicy, SoakCampaignConfig,
-    SoakOutputPolicy, SoakReportBundle, SoakShardId,
+    read_soak_report_bundle, run_soak_campaign, run_soak_campaign_with_local_json_adapter,
+    soak_artifact_manifest, validate_reproduction_bundle, validate_soak_campaign_config,
+    validate_soak_report_bundle, write_soak_report_bundle, BenchmarkPackReader,
+    BenchmarkPackWriter, ClaimBoundary, FailureCorpusEntryInput, FailureCorpusKind, FamilyKind,
+    GeneratorConfig, GeneratorTunables, InstanceParams, LocalJsonAdapter, LocalJsonAdapterConfig,
+    LocalSoakRunnerConfig, MutationClass, ReproductionBundle, SoakArtifactLayout, SoakArtifactRole,
+    SoakCampaignApproval, SoakCampaignArtifactRootPolicy, SoakCampaignConfig, SoakCaseStatus,
+    SoakOutputPolicy, SoakReportBundle, SoakRunnerErrorPolicy, SoakShardId,
 };
 
 fn sample_entry(case_id: &str) -> zkbench_core::FailureCorpusEntry {
@@ -54,6 +55,15 @@ fn approved_config(campaign_id: &str, artifact_root: std::path::PathBuf) -> Soak
         },
         runner_config: LocalSoakRunnerConfig::default(),
         notes: Vec::new(),
+    }
+}
+
+fn adapter_with_wrong_id() -> LocalJsonAdapter {
+    LocalJsonAdapter {
+        config: LocalJsonAdapterConfig {
+            adapter_id: "phase_236_wrong_local_adapter".to_string(),
+            ..LocalJsonAdapterConfig::default()
+        },
     }
 }
 
@@ -165,6 +175,18 @@ fn campaign_config_requires_approval_and_safe_artifact_root() {
 
     config.artifact_root_policy.artifact_root = "relative/dir".into();
     assert!(validate_soak_campaign_config(&config).is_err());
+}
+
+#[test]
+fn campaign_config_rejects_empty_campaign_id_before_portability_check() {
+    let dir = tempdir().expect("tempdir should be available");
+
+    for campaign_id in ["", "   "] {
+        let config = approved_config(campaign_id, dir.path().to_path_buf());
+        let error =
+            validate_soak_campaign_config(&config).expect_err("empty campaign id should fail");
+        assert!(error.to_string().contains("campaign id is empty"));
+    }
 }
 
 #[test]
@@ -309,6 +331,122 @@ fn small_campaign_runs_all_shards_and_aggregates_reports() {
         .exists());
     assert!(campaign_root
         .join("aggregate/report_bundle/soak_report_bundle.json")
+        .exists());
+}
+
+#[test]
+fn campaign_records_pack_write_failures_without_missing_reproduction_pack_attachment() {
+    let dir = tempdir().expect("tempdir should be available");
+    let campaign_id = "campaign_missing_failure_pack_attachment";
+    let soak_config = build_smoke_soak_config()
+        .with_families(vec![FamilyKind::BaselineFsm])
+        .with_mutation_passes(vec![MutationClass::MissingConstraints])
+        .with_seed_range(0..1)
+        .with_shard_count(1)
+        .with_output_policy(SoakOutputPolicy::SampledPacks { max_packs: 1 });
+    let plan = plan_soak_shards(soak_config).expect("plan should build");
+    let shard_id = SoakShardId::from_index(0);
+    let layout = SoakArtifactLayout::for_shard(&shard_id);
+    let case_id = plan.shard_manifests[0].assigned_case_ids[0].clone();
+    let stale_pack_dir = dir
+        .path()
+        .join(campaign_id)
+        .join(&layout.sampled_packs_dir)
+        .join(&case_id);
+    fs::create_dir_all(&stale_pack_dir).expect("stale pack directory should be creatable");
+    fs::write(stale_pack_dir.join("stale.txt"), b"stale").expect("stale marker should write");
+    let config = approved_config(campaign_id, dir.path().to_path_buf());
+
+    let result = run_soak_campaign(&config, plan).expect("campaign should record pack failure");
+
+    let outcome = &result.shard_outcomes[0];
+    assert_eq!(outcome.run_result.case_results.len(), 1);
+    assert_eq!(
+        outcome.run_result.case_results[0].status,
+        SoakCaseStatus::FailedPackWrite
+    );
+    assert_eq!(
+        outcome.run_result.case_results[0].failures[0].failure_kind,
+        FailureCorpusKind::PackValidationFailure
+    );
+    assert!(
+        outcome.reproduction_bundle_attachments.is_empty(),
+        "pack-write failures without a retained failure pack must not attach reproduction bundles"
+    );
+}
+
+#[test]
+fn campaign_with_explicit_adapter_attaches_reproduction_bundle_to_failure_pack() {
+    let dir = tempdir().expect("tempdir should be available");
+    let campaign_id = "campaign_failure_pack_reproduction_attachment";
+    let soak_config = build_smoke_soak_config()
+        .with_families(vec![FamilyKind::BaselineFsm])
+        .with_mutation_passes(vec![MutationClass::MissingConstraints])
+        .with_seed_range(0..3)
+        .with_shard_count(1)
+        .with_output_policy(SoakOutputPolicy::FailurePacksOnly {
+            max_failure_packs: 1,
+        });
+    let plan = plan_soak_shards(soak_config).expect("plan should build");
+    let shard_id = SoakShardId::from_index(0);
+    let layout = SoakArtifactLayout::for_shard(&shard_id);
+    let mut config = approved_config(campaign_id, dir.path().to_path_buf());
+    config.runner_config = LocalSoakRunnerConfig {
+        error_policy: SoakRunnerErrorPolicy::StopOnFirstFailure,
+        ..LocalSoakRunnerConfig::default()
+    };
+
+    let result = run_soak_campaign_with_local_json_adapter(&config, plan, adapter_with_wrong_id())
+        .expect("campaign should retain failed pack and attach reproduction bundle");
+
+    let outcome = &result.shard_outcomes[0];
+    assert_eq!(outcome.run_result.case_results.len(), 1);
+    assert_eq!(
+        outcome.run_result.case_results[0].status,
+        SoakCaseStatus::FailedReplay
+    );
+    assert_eq!(outcome.reproduction_bundle_attachments.len(), 1);
+    assert_eq!(
+        outcome.reproduction_bundle_attachments[0].entry_count,
+        outcome.run_result.case_results[0].failures.len()
+    );
+    let pack_root = dir
+        .path()
+        .join(campaign_id)
+        .join(&layout.failure_packs_dir)
+        .join(&outcome.run_result.case_results[0].case_id);
+    let bundle =
+        read_reproduction_bundle_from_pack(&pack_root).expect("reproduction bundle should read");
+    assert_eq!(
+        bundle.entries,
+        outcome.run_result.failure_corpus_index.entries
+    );
+    assert_eq!(bundle.claim_boundary, ClaimBoundary::Level0DesignNote);
+}
+
+#[test]
+fn campaign_reports_bundle_write_failure_after_aggregate_json_write() {
+    let dir = tempdir().expect("tempdir should be available");
+    let campaign_id = "campaign_report_bundle_file_collision";
+    let campaign_root = dir.path().join(campaign_id);
+    fs::create_dir_all(campaign_root.join("aggregate"))
+        .expect("aggregate directory should be creatable");
+    fs::write(campaign_root.join("aggregate/report_bundle"), b"occupied")
+        .expect("colliding report-bundle file should write");
+    let soak_config = build_smoke_soak_config()
+        .with_families(vec![FamilyKind::BaselineFsm])
+        .with_mutation_passes(vec![MutationClass::MissingConstraints])
+        .with_seed_range(0..1)
+        .with_shard_count(1);
+    let plan = plan_soak_shards(soak_config).expect("plan should build");
+    let config = approved_config(campaign_id, dir.path().to_path_buf());
+
+    let error = run_soak_campaign(&config, plan)
+        .expect_err("campaign should fail when report bundle root is a file");
+
+    assert!(error.to_string().contains("not a directory"));
+    assert!(campaign_root
+        .join("aggregate/aggregate_health_report.json")
         .exists());
 }
 

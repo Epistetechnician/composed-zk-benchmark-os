@@ -25,8 +25,8 @@ pub use artifact_layout::{
     SoakArtifactRole, SoakReportBundle, SoakReportBundleValidation,
 };
 pub use campaign::{
-    run_soak_campaign, validate_soak_campaign_config, SoakCampaignApproval,
-    SoakCampaignArtifactRootPolicy, SoakCampaignConfig, SoakCampaignResult,
+    run_soak_campaign, run_soak_campaign_with_local_json_adapter, validate_soak_campaign_config,
+    SoakCampaignApproval, SoakCampaignArtifactRootPolicy, SoakCampaignConfig, SoakCampaignResult,
     SoakCampaignShardOutcome,
 };
 pub use clock::{MockTelemetryClock, SoakTelemetryClock, SystemTelemetryClock};

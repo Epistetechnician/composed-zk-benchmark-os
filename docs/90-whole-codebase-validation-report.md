@@ -114,8 +114,8 @@ the Phase 228 evidence append-preview coverage tranche, the Phase 229 pack
 readiness coverage tranche, the Phase 230 audit-index coverage tranche, and
 the Phase 231 accepted append output coverage tranche, the Phase 232 DSL IR
 coverage tranche, the Phase 233 review-ledger coverage tranche, the Phase 234
-invariant-weakening coverage tranche, and the Phase 235 external-runner policy
-coverage tranche, plus
+invariant-weakening coverage tranche, the Phase 235 external-runner policy
+coverage tranche, and the Phase 236 soak-campaign coverage tranche, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -546,6 +546,17 @@ to `97.63%` line coverage without changing production source, external-runner
 policy semantics, live external execution behavior, accepted Evidence Ledger
 policy, endpoint submission behavior, credential handling, or accepted evidence
 state.
+
+Phase 236 adds focused local regression coverage for `soak/campaign.rs`, the
+next low non-serializer surface routed by the Phase 235 coverage notes. It
+covers empty campaign id validation, campaign report-bundle write failure
+propagation, pack-write failures without retained failure packs, and retained
+failure-pack reproduction-bundle attachment through the bounded
+`run_soak_campaign_with_local_json_adapter` helper. The package coverage run
+moved that module from `85.79%` to `97.49%` line coverage without adding live
+external execution, non-local adapter execution, accepted Evidence Ledger
+policy changes, endpoint submission behavior, credential handling, or accepted
+evidence state.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
@@ -2134,6 +2145,18 @@ The Phase 234 tranche moved `mutation/invariant_weakening.rs` from `85.71%` to
 coverage. The lowest remaining non-serializer line-coverage candidate in the
 current package summary is `external_runner/policy.rs` at `85.78%`, subject to
 missing-line audit before mutation.
+The Phase 235 tranche moved `external_runner/policy.rs` from `85.78%` to
+`97.63%` line coverage and moved the local `zkbench-core` package summary to
+`91.72%` region coverage, `87.64%` function execution, and `93.47%` line
+coverage. The lowest remaining non-serializer line-coverage candidate in the
+current package summary is `soak/campaign.rs` at `85.79%`, subject to
+missing-line audit before mutation.
+The Phase 236 tranche moved `soak/campaign.rs` from `85.79%` to `97.49%` line
+coverage and moved the local `zkbench-core` package summary to `91.83%` region
+coverage, `87.71%` function execution, and `93.56%` line coverage. The lowest
+remaining non-serializer line-coverage candidate in the current package summary
+is `mutation/invariant_strengthening.rs` at `86.00%`, subject to missing-line
+audit before mutation.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

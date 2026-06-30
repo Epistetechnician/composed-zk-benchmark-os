@@ -9,6 +9,7 @@ use std::path::{Component, Path, PathBuf};
 
 use serde::{Deserialize, Serialize};
 
+use crate::adapters::LocalJsonAdapter;
 use crate::error::{Result, ZkBenchError};
 use crate::evidence::ClaimBoundary;
 
@@ -149,6 +150,25 @@ pub fn run_soak_campaign(
     config: &SoakCampaignConfig,
     plan: SoakShardPlan,
 ) -> Result<SoakCampaignResult> {
+    let runner = LocalSoakRunner::new(plan.clone());
+    run_soak_campaign_with_runner(config, plan, runner)
+}
+
+/// Run every shard of a plan with an explicit local JSON adapter.
+pub fn run_soak_campaign_with_local_json_adapter(
+    config: &SoakCampaignConfig,
+    plan: SoakShardPlan,
+    adapter: LocalJsonAdapter,
+) -> Result<SoakCampaignResult> {
+    let runner = LocalSoakRunner::new(plan.clone()).with_local_json_adapter(adapter);
+    run_soak_campaign_with_runner(config, plan, runner)
+}
+
+fn run_soak_campaign_with_runner(
+    config: &SoakCampaignConfig,
+    plan: SoakShardPlan,
+    runner: LocalSoakRunner,
+) -> Result<SoakCampaignResult> {
     validate_soak_campaign_config(config)?;
     let campaign_root = config
         .artifact_root_policy
@@ -161,7 +181,7 @@ pub fn run_soak_campaign(
         .collect();
     let shard_manifests = plan.shard_manifests.clone();
     let run_config = plan.config.clone();
-    let mut runner = LocalSoakRunner::new(plan.clone())
+    let mut runner = runner
         .with_temp_or_user_output_dir(&campaign_root)
         .with_runner_config(config.runner_config.clone());
 
