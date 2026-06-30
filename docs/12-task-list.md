@@ -4697,6 +4697,46 @@ Exit criteria: focused external-runner policy tests pass; repo hygiene and
 claim-boundary checks pass; full workspace tests pass; package coverage summary
 records the local coverage movement and next low non-serializer surface.
 
+## Phase 236 Soak Campaign Coverage
+
+Status: complete for local coverage hardening. See
+`docs/236-phase-soak-campaign-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer surface after Phase 235:
+`crates/zkbench-core/src/soak/campaign.rs`.
+
+Implemented: added focused soak-campaign coverage in
+`crates/zkbench-core/tests/phase_l_soak_campaign.rs` for empty campaign id
+validation, campaign report-bundle write failure propagation, pack-write
+failures without retained failure packs, and retained failure-pack reproduction
+bundle attachment. Added the bounded public
+`run_soak_campaign_with_local_json_adapter` helper so the retained failure-pack
+path is testable through a real approved local campaign surface.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`91.72%` region / `87.64%` function / `93.47%` line coverage to `91.83%`
+region / `87.71%` function / `93.56%` line coverage. `soak/campaign.rs` moved
+from `85.42%` region / `90.91%` function / `85.79%` line coverage to `96.15%`
+region / `100.00%` function / `97.49%` line coverage.
+
+Audit decision: the remaining missed lines are defensive error returns from
+internally constructed artifact manifests and the retained-failure-pack-without
+matching-corpus-entry guard. This tranche does not weaken campaign id, shard id,
+artifact-layout, or runner corpus invariants to force those branches.
+
+Anti-goals: live external execution behavior, non-local adapter execution,
+endpoint submission behavior, credential handling, generated benchmark artifact
+claims, accepted Evidence Ledger mutation, accepted Evidence Ledger policy
+changes, formal evidence, benchmark evidence, score-axis population, Level2+
+evidence, semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, unsafe coverage forcing, coverage suppression,
+structurally unreachable branch forcing, or whole-workspace 100% coverage
+claims.
+
+Exit criteria: focused soak-campaign tests pass; repo hygiene and
+claim-boundary checks pass; full workspace tests pass; package coverage summary
+records the local coverage movement and next low non-serializer surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

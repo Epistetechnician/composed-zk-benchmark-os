@@ -321,6 +321,7 @@ Surface DSL
 | [docs/233-phase-review-ledger-coverage-notes.md](docs/233-phase-review-ledger-coverage-notes.md) | Phase 233 review-ledger coverage notes. |
 | [docs/234-phase-invariant-weakening-coverage-notes.md](docs/234-phase-invariant-weakening-coverage-notes.md) | Phase 234 invariant-weakening coverage notes. |
 | [docs/235-phase-external-runner-policy-coverage-notes.md](docs/235-phase-external-runner-policy-coverage-notes.md) | Phase 235 external-runner policy coverage notes. |
+| [docs/236-phase-soak-campaign-coverage-notes.md](docs/236-phase-soak-campaign-coverage-notes.md) | Phase 236 soak campaign coverage notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
