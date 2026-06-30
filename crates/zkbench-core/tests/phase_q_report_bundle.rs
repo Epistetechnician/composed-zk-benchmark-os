@@ -456,7 +456,7 @@ fn report_bundle_outputs_reject_file_roots_invalid_roots_and_manifest_readback_f
 
     fs::write(
         output_root.join("digests/report-bundle-manifest.sha256"),
-        &[0xff, 0xfe, 0xfd],
+        [0xff, 0xfe, 0xfd],
     )
     .expect("non-UTF-8 digest sidecar should write");
     let error =
@@ -469,7 +469,7 @@ fn report_bundle_outputs_reject_file_roots_invalid_roots_and_manifest_readback_f
         .expect("repair output succeeds");
     fs::write(
         output_root.join("report-bundle-manifest.json"),
-        &[0xff, 0xfe, 0xfd],
+        [0xff, 0xfe, 0xfd],
     )
     .expect("non-UTF-8 manifest should write");
     let manifest_digest = zkbench_core::compute_artifact_digest_bytes(

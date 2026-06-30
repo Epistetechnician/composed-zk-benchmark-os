@@ -1204,11 +1204,12 @@ fn external_replay_preflight_outputs_reject_malformed_json_utf8_and_markdown_dri
     let request = valid_external_replay_preflight_output_request(&dir);
     write_external_replay_submission_preflight_outputs(&request)
         .expect("preflight outputs should write");
+    let invalid_digest = [0xff, 0xfe, 0xfd];
     write_external_preflight_file_with_digest(
         &request.output_root,
         EXTERNAL_REPLAY_PREFLIGHT_INPUT_MANIFEST_PATH,
         EXTERNAL_REPLAY_PREFLIGHT_INPUT_MANIFEST_DIGEST_PATH,
-        &[0xff, 0xfe, 0xfd],
+        &invalid_digest,
     );
     let utf8 = read_external_replay_submission_preflight_outputs(
         &request.output_root,
@@ -1587,7 +1588,7 @@ fn external_replay_preflight_outputs_reject_raw_markers_and_non_utf8_sidecars() 
         request
             .output_root
             .join(EXTERNAL_REPLAY_PREFLIGHT_INPUT_MANIFEST_DIGEST_PATH),
-        &[0xff, 0xfe, 0xfd],
+        [0xff, 0xfe, 0xfd],
     )
     .expect("digest sidecar should tamper");
     let sidecar = read_external_replay_submission_preflight_outputs(
