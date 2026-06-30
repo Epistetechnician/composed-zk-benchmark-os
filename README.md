@@ -304,6 +304,7 @@ Surface DSL
 | [docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md](docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md) | Phase 216 soak health coverage thirty-seventh tranche notes. |
 | [docs/217-phase-replay-serialization-coverage-audit-notes.md](docs/217-phase-replay-serialization-coverage-audit-notes.md) | Phase 217 replay serialization coverage audit notes. |
 | [docs/218-phase-external-runner-serialization-coverage-audit-notes.md](docs/218-phase-external-runner-serialization-coverage-audit-notes.md) | Phase 218 external-runner serialization coverage audit notes. |
+| [docs/219-phase-external-runner-artifact-capture-coverage-notes.md](docs/219-phase-external-runner-artifact-capture-coverage-notes.md) | Phase 219 external-runner artifact-capture coverage notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1294,6 +1295,18 @@ JSON deserializer paths are already exercised. No Rust test was added because
 forcing those serializer failures would require behavior not exposed by the
 current public API. The next coverage tranche should move to a reachable
 non-serializer public surface after a fresh missing-line audit.
+
+[docs/219-phase-external-runner-artifact-capture-coverage-notes.md](docs/219-phase-external-runner-artifact-capture-coverage-notes.md)
+records focused local coverage hardening for
+`external_runner/artifact_capture.rs`. It adds tests for the default expected
+artifact matrix and fail-closed validation of empty identities, claim-boundary
+elevation, traversal path hints, captured-artifact warnings, unreviewed capture
+warnings, and unsafe captured URIs. The local package coverage run moved
+`external_runner/artifact_capture.rs` from `80.84%` to `99.40%` line coverage
+and `zkbench-core` from `91.35%` to `91.48%` line coverage. It changes no
+production source, artifact-capture semantics, generated artifacts, accepted
+Evidence Ledger state, benchmark evidence, score-axis state, Level2+ evidence,
+production-readiness claim, semantic-correctness claim, or 100% coverage claim.
 
 ## Validation Checklist
 
