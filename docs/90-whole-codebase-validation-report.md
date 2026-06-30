@@ -109,7 +109,8 @@ coverage tranche, and the Phase 222 zk-Harness mapping coverage tranche, and
 the Phase 223 external submission preflight output coverage tranche, and the
 Phase 224 report bundle coverage tranche, and the Phase 225 soak artifact
 layout coverage tranche, and the Phase 226 observation omission coverage
-tranche, and the Phase 227 external runner result-import coverage tranche, plus
+tranche, and the Phase 227 external runner result-import coverage tranche, and
+the Phase 228 evidence append-preview coverage tranche, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -457,6 +458,17 @@ source, result-import semantics, quarantine semantics, external replay
 behavior, endpoint submission behavior, credential handling, or accepted
 Evidence Ledger state. Remaining misses are limited to currently unforced local
 branch combinations inside the result-import validation helpers.
+
+Phase 228 adds focused local regression coverage for
+`evidence/append_preview.rs`, the next low non-serializer surface after Phase
+227. It covers invalid-candidate creation rejection, empty preview/source ids,
+preview and proposed-entry claim-boundary drift, forbidden claim text in preview
+and transaction notes, and malformed preview JSON. The package coverage run
+moved that module from `83.87%` to `94.47%` line coverage without changing
+production source, append-preview semantics, candidate semantics, external
+replay behavior, endpoint submission behavior, credential handling, or accepted
+Evidence Ledger state. Remaining misses are limited to currently unforced local
+branch combinations inside append-preview projection and serialization helpers.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
@@ -2002,6 +2014,12 @@ to `91.15%` region coverage, `86.73%` function execution, and `92.66%` line
 coverage. After serializer-wrapper floors already audited in Phases 217 and
 218, the next visible low non-serializer surface is `evidence/append_preview.rs`
 at `83.87%` line coverage.
+The Phase 228 tranche moved `evidence/append_preview.rs` from `83.87%` to
+`94.47%` line coverage and moved the local `zkbench-core` package summary to
+`91.22%` region coverage, `86.79%` function execution, and `92.75%` line
+coverage. After serializer-wrapper floors already audited in Phases 217 and
+218, the next visible low non-serializer surface is `pack/readiness.rs` at
+`86.24%` line coverage.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

@@ -4399,6 +4399,44 @@ Exit criteria: focused result-import validation tests pass; repo hygiene and
 claim-boundary checks pass; full workspace tests pass; package coverage summary
 records the local coverage movement and next low non-serializer surface.
 
+## Phase 228 Append Preview Coverage
+
+Status: complete for local coverage hardening. See
+`docs/228-phase-append-preview-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer surface after Phase 227:
+`crates/zkbench-core/src/evidence/append_preview.rs`.
+
+Implemented: added focused tests in
+`crates/zkbench-core/tests/evidence_append_preview.rs` for invalid-candidate
+creation rejection, empty preview/source ids, preview and proposed-entry
+claim-boundary drift, forbidden claim text in preview and transaction notes,
+and malformed preview JSON.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`91.15%` region / `86.73%` function / `92.66%` line coverage to `91.22%`
+region / `86.79%` function / `92.75%` line coverage.
+`evidence/append_preview.rs` moved from `88.79%` region / `88.24%` function /
+`83.87%` line coverage to `96.41%` region / `94.12%` function / `94.47%`
+line coverage.
+
+Audit decision: no production source was changed. Remaining misses are limited
+to currently unforced local branch combinations inside append-preview
+projection and serialization helpers.
+
+Anti-goals: production source changes, append-preview semantics changes,
+candidate semantics changes, external replay behavior changes, endpoint
+submission behavior, credential handling, accepted Evidence Ledger policy
+changes, generated artifact materialization, formal evidence, benchmark
+evidence, score-axis population, Level2+ evidence, semantic-correctness
+claims, production-readiness claims, unsafe coverage forcing, coverage
+suppression, structurally unreachable branch forcing, or whole-workspace 100%
+coverage claims.
+
+Exit criteria: focused append-preview validation tests pass; repo hygiene and
+claim-boundary checks pass; full workspace tests pass; package coverage summary
+records the local coverage movement and next low non-serializer surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
