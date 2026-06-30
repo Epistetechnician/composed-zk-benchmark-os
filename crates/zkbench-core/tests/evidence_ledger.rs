@@ -5,12 +5,33 @@ use zkbench_core::{
     InstanceParams, ProvenanceRecord,
 };
 
+fn local_record(source: &str) -> EvidenceRecord {
+    EvidenceRecord {
+        evidence_class: EvidenceClass::LocalReplay,
+        claim_boundary: ClaimBoundary::Level1LocalReplay,
+        provenance: ProvenanceRecord {
+            source: source.to_string(),
+            captured_at: None,
+            command: None,
+            notes: Vec::new(),
+        },
+        artifact_digest: None,
+        notes: Vec::new(),
+        backend_target: None,
+    }
+}
+
 #[test]
 fn empty_evidence_ledger_validates() {
     let ledger = EvidenceLedger::new();
     let validation = ledger.validate();
     assert!(validation.valid);
     assert_eq!(validation.summary.entry_count, 0);
+}
+
+#[test]
+fn default_evidence_ledger_matches_new() {
+    assert_eq!(EvidenceLedger::default(), EvidenceLedger::new());
 }
 
 #[test]
@@ -55,6 +76,35 @@ fn evidence_ledger_persists_replay_records_and_validates_chain() {
 }
 
 #[test]
+fn evidence_ledger_json_file_errors_are_reported() {
+    let dir = tempdir().expect("tempdir should be available for file error checks");
+    let ledger = EvidenceLedger::new();
+    let directory_path = dir.path();
+
+    let save_error = ledger
+        .save_json(directory_path)
+        .expect_err("saving JSON to a directory should fail");
+    assert!(save_error
+        .to_string()
+        .contains(directory_path.to_string_lossy().as_ref()));
+
+    let missing_path = dir.path().join("missing-ledger.json");
+    let load_error =
+        EvidenceLedger::load_json(&missing_path).expect_err("missing ledger should fail to load");
+    assert!(load_error
+        .to_string()
+        .contains(missing_path.to_string_lossy().as_ref()));
+
+    let malformed_path = dir.path().join("malformed-ledger.json");
+    std::fs::write(&malformed_path, b"{not-json").expect("malformed fixture should write");
+    let malformed_error =
+        EvidenceLedger::load_json(&malformed_path).expect_err("malformed ledger should fail");
+    assert!(malformed_error
+        .to_string()
+        .contains("evidence_ledger.load_json"));
+}
+
+#[test]
 fn evidence_ledger_detects_tampered_evidence_record() {
     let instance = generate_instance(
         GeneratorConfig::baseline_fsm().seed(43),
@@ -83,6 +133,37 @@ fn evidence_ledger_detects_tampered_evidence_record() {
 }
 
 #[test]
+fn evidence_ledger_detects_sequence_previous_digest_and_summary_drift() {
+    let mut ledger = EvidenceLedger::new();
+    ledger
+        .append(local_record("phase-239-first"))
+        .expect("first record should append");
+    ledger
+        .append(local_record("phase-239-second"))
+        .expect("second record should append");
+
+    ledger.entries[0].sequence_number = 7;
+    ledger.entries[1].previous_digest = ledger.entries[1].entry_digest.clone().into();
+    ledger.summary.entry_count = 99;
+
+    let validation = ledger.validate();
+
+    assert!(!validation.valid);
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.message.contains("sequence number 7")));
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.message.contains("previous digest")));
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.message.contains("cached summary")));
+}
+
+#[test]
 fn evidence_ledger_rejects_level2_actual_evidence_in_phase_f() {
     let mut ledger = EvidenceLedger::new();
     let record = EvidenceRecord {
@@ -103,6 +184,31 @@ fn evidence_ledger_rejects_level2_actual_evidence_in_phase_f() {
         .append(record)
         .expect_err("Phase F ledger must reject actual Level2 evidence");
     assert!(error.to_string().contains("exceeds Level1LocalReplay"));
+}
+
+#[test]
+fn evidence_ledger_allows_explicit_nonclaim_language() {
+    let mut ledger = EvidenceLedger::new();
+    let mut record = local_record("phase-239-nonclaim");
+    record
+        .notes
+        .push("local replay only; not official benchmark evidence".to_string());
+    record
+        .provenance
+        .notes
+        .push("does not create official benchmark result".to_string());
+
+    ledger
+        .append(record)
+        .expect("nonclaim record should append");
+    ledger
+        .notes
+        .push("no official benchmark evidence is created here".to_string());
+    ledger.entries[0]
+        .notes
+        .push("not official benchmark result".to_string());
+
+    assert!(ledger.validate().valid);
 }
 
 #[test]
