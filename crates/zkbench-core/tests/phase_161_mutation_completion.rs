@@ -140,6 +140,16 @@ fn nondeterministic_transition_injection_fails_without_bypass_target() {
 }
 
 #[test]
+fn recursion_envelope_mismatch_reports_its_mutation_class() {
+    let pass = RecursionEnvelopeMismatchPass::default();
+
+    assert_eq!(
+        pass.mutation_class(),
+        MutationClass::RecursionEnvelopeMismatch
+    );
+}
+
+#[test]
 fn recursion_envelope_mismatch_applies() {
     let instance = generate_instance(bounded_counter_loop(), InstanceParams::default())
         .expect("bounded counter loop should generate");
@@ -151,6 +161,63 @@ fn recursion_envelope_mismatch_applies() {
     );
     assert_eq!(mutated.expected_verdict, ExpectedVerdict::Reject);
     assert_eq!(mutated.claim_boundary, ClaimBoundary::Level1LocalReplay);
+}
+
+#[test]
+fn recursion_envelope_mismatch_records_prior_digest_when_max_unroll_is_absent() {
+    let mut instance = generate_instance(bounded_counter_loop(), InstanceParams::default())
+        .expect("bounded counter loop should generate");
+    let loop_entry = instance
+        .surface_spec
+        .machine
+        .loops
+        .first_mut()
+        .expect("bounded counter loop should contain a loop");
+    loop_entry.metadata.remove("max_unroll");
+    loop_entry.metadata.insert(
+        "envelope_digest".to_string(),
+        Value::Text {
+            text: "prior-envelope-digest".to_string(),
+        },
+    );
+
+    let mutated = apply_mutation_pass(&instance, &RecursionEnvelopeMismatchPass)
+        .expect("recursion envelope mismatch should apply through digest fallback");
+
+    assert!(mutated
+        .provenance
+        .notes
+        .iter()
+        .any(|note| note.contains("prior-envelope-digest")));
+}
+
+#[test]
+fn recursion_envelope_mismatch_fails_without_declared_trace() {
+    let mut instance = generate_instance(bounded_counter_loop(), InstanceParams::default())
+        .expect("bounded counter loop should generate");
+    assert!(!instance.surface_spec.machine.loops.is_empty());
+    instance.accepted_traces.clear();
+    instance.rejected_traces.clear();
+    instance.surface_spec.oracle.accepted_traces.clear();
+    instance.surface_spec.oracle.rejected_traces.clear();
+
+    let error = apply_mutation_pass(&instance, &RecursionEnvelopeMismatchPass)
+        .expect_err("loop without traces should fail");
+
+    assert!(error.to_string().contains("no declared trace was eligible"));
+}
+
+#[test]
+fn recursion_envelope_mismatch_fails_without_loop_after_trace_selection() {
+    let instance = generate_instance(GeneratorConfig::baseline_fsm(), InstanceParams::default())
+        .expect("baseline FSM should generate");
+    assert!(instance.surface_spec.machine.loops.is_empty());
+    assert!(!instance.accepted_traces.is_empty());
+
+    let error = apply_mutation_pass(&instance, &RecursionEnvelopeMismatchPass)
+        .expect_err("traced instance without loops should fail");
+
+    assert!(error.to_string().contains("no loop was eligible"));
 }
 
 #[test]

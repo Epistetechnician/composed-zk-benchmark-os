@@ -4776,6 +4776,46 @@ Exit criteria: focused mutation-depth tests pass; repo hygiene and
 claim-boundary checks pass; full workspace tests pass; package coverage summary
 records the local coverage movement and next low non-serializer surface.
 
+## Phase 238 Recursion Envelope Mismatch Coverage
+
+Status: complete for local coverage hardening. See
+`docs/238-phase-recursion-envelope-mismatch-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer surface after Phase 237:
+`crates/zkbench-core/src/mutation/recursion_envelope_mismatch.rs`.
+
+Implemented: added focused mutation-completion coverage in
+`crates/zkbench-core/tests/phase_161_mutation_completion.rs` for
+`RecursionEnvelopeMismatchPass::mutation_class()`, no-declared-trace failure,
+no-loop-after-trace-selection failure, and prior-envelope-digest fallback
+metadata recording.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`91.86%` region / `87.83%` function / `93.59%` line coverage to `91.90%`
+region / `88.00%` function / `93.62%` line coverage.
+`mutation/recursion_envelope_mismatch.rs` moved from `84.00%` region /
+`50.00%` function / `86.44%` line coverage to `98.67%` region / `100.00%`
+function / `100.00%` line coverage.
+
+Audit decision: no production source was changed.
+`mutation/recursion_envelope_mismatch.rs` has no remaining missed lines or
+missed functions in the local coverage report; one defensive region remains
+unexecuted without corrupting the internal loop-id selection invariant.
+
+Anti-goals: production source changes, mutation semantics changes, generator
+semantics changes, oracle semantics changes, accepted Evidence Ledger mutation,
+accepted Evidence Ledger policy changes, endpoint submission behavior,
+credential handling, generated artifact materialization, formal evidence,
+benchmark evidence, score-axis population, Level2+ evidence,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, unsafe coverage forcing, coverage suppression,
+structurally unreachable branch forcing, or whole-workspace 100% coverage
+claims.
+
+Exit criteria: focused mutation-completion tests pass; repo hygiene and
+claim-boundary checks pass; full workspace tests pass; package coverage summary
+records the local coverage movement and next low non-serializer surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

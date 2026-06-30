@@ -568,6 +568,16 @@ production source, mutation semantics, generator semantics, oracle semantics,
 accepted Evidence Ledger policy, endpoint submission behavior, credential
 handling, or accepted evidence state.
 
+Phase 238 adds focused local regression coverage for
+`mutation/recursion_envelope_mismatch.rs`, the next low non-serializer surface
+routed by the Phase 237 coverage notes. It covers the pass mutation-class
+reporter, no-declared-trace failure, no-loop-after-trace-selection failure, and
+the prior-envelope-digest fallback metadata path. The package coverage run
+moved that module from `86.44%` to `100.00%` line coverage without changing
+production source, mutation semantics, generator semantics, oracle semantics,
+accepted Evidence Ledger policy, endpoint submission behavior, credential
+handling, or accepted evidence state.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2173,6 +2183,12 @@ to `91.86%` region coverage, `87.83%` function execution, and `93.59%` line
 coverage. The lowest remaining non-serializer line-coverage candidate in the
 current package summary is `mutation/recursion_envelope_mismatch.rs` at
 `86.44%`, subject to missing-line audit before mutation.
+The Phase 238 tranche moved `mutation/recursion_envelope_mismatch.rs` from
+`86.44%` to `100.00%` line coverage and moved the local `zkbench-core` package
+summary to `91.90%` region coverage, `88.00%` function execution, and `93.62%`
+line coverage. The lowest remaining non-serializer line-coverage candidate in
+the current package summary is `evidence/ledger.rs` at `86.78%`, subject to
+missing-line audit before mutation.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
