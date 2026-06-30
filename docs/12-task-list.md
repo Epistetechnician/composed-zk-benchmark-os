@@ -4437,6 +4437,43 @@ Exit criteria: focused append-preview validation tests pass; repo hygiene and
 claim-boundary checks pass; full workspace tests pass; package coverage summary
 records the local coverage movement and next low non-serializer surface.
 
+## Phase 229 Pack Readiness Coverage
+
+Status: complete for local coverage hardening. See
+`docs/229-phase-pack-readiness-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer surface after Phase 228:
+`crates/zkbench-core/src/pack/readiness.rs`.
+
+Implemented: added focused tests in
+`crates/zkbench-core/tests/phase_o_pack_readiness.rs` for malformed readiness
+JSON, missing and malformed readback files, empty identity fields, invalid
+digest and artifact refs, check boundary escalation, and missing inputs.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`91.22%` region / `86.79%` function / `92.75%` line coverage to `91.38%`
+region / `87.02%` function / `92.97%` line coverage.
+`pack/readiness.rs` moved from `84.18%` region / `74.47%` function / `86.24%`
+line coverage to `90.60%` region / `82.98%` function / `94.19%` line
+coverage.
+
+Audit decision: no production source was changed. Remaining misses are limited
+to currently unforced local branch combinations inside pack-readiness output
+writing, helper mapping, and filesystem error paths.
+
+Anti-goals: production source changes, pack-readiness semantics changes, pack
+writer/reader semantics changes, external replay behavior changes, endpoint
+submission behavior, credential handling, accepted Evidence Ledger policy
+changes, generated artifact materialization, formal evidence, benchmark
+evidence, score-axis population, Level2+ evidence, semantic-correctness
+claims, production-readiness claims, unsafe coverage forcing, coverage
+suppression, structurally unreachable branch forcing, or whole-workspace 100%
+coverage claims.
+
+Exit criteria: focused pack-readiness tests pass; repo hygiene and
+claim-boundary checks pass; full workspace tests pass; package coverage summary
+records the local coverage movement and next low non-serializer surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

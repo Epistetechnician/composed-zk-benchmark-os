@@ -11,8 +11,9 @@ use zkbench_core::{
     ArtifactRole, BenchmarkPackReader, BenchmarkPackWriter, ClaimBoundary, EvidenceClass,
     EvidenceLedger, GeneratorConfig, InstanceParams, PackReadinessCheck, PackReadinessCheckKind,
     PackReadinessInputKind, PackReadinessInputRef, PackReadinessReplayCommandMetadata,
-    PackReadinessReport, PackReadinessValidationIssueKind, PackReadinessVersion,
-    PACK_READINESS_REPORT_PATH, PACK_READINESS_VALIDATION_PATH, PACK_VALIDATION_REPORT_PATH,
+    PackReadinessReport, PackReadinessValidation, PackReadinessValidationIssueKind,
+    PackReadinessVersion, PACK_READINESS_REPORT_PATH, PACK_READINESS_VALIDATION_PATH,
+    PACK_VALIDATION_REPORT_PATH,
 };
 
 fn digest(byte: u8) -> ArtifactDigest {
@@ -123,6 +124,21 @@ fn issue_kinds(report: &PackReadinessReport) -> Vec<PackReadinessValidationIssue
         .collect()
 }
 
+fn assert_issue(
+    validation: &PackReadinessValidation,
+    path: &str,
+    kind: PackReadinessValidationIssueKind,
+) {
+    assert!(
+        validation
+            .issues
+            .iter()
+            .any(|issue| issue.path == path && issue.kind == kind),
+        "expected {kind:?} issue at {path}, got {:?}",
+        validation.issues
+    );
+}
+
 fn write_sample_pack(pack_id: &str) -> tempfile::TempDir {
     let instance = generate_instance(
         GeneratorConfig::baseline_fsm().seed(111),
@@ -179,6 +195,14 @@ fn pack_readiness_report_round_trips_as_json_and_digests() {
 }
 
 #[test]
+fn pack_readiness_deserialization_rejects_malformed_json() {
+    let error = deserialize_pack_readiness_report_json("{not valid readiness json")
+        .expect_err("malformed readiness report JSON should fail");
+
+    assert!(format!("{error}").contains("deserialize_pack_readiness_report_json"));
+}
+
+#[test]
 fn pack_readiness_builds_from_existing_local_pack_reader() {
     let dir = write_sample_pack("phase_o_constructed_readiness_pack");
     let reader = BenchmarkPackReader::read(dir.path()).expect("pack reader should load");
@@ -216,6 +240,32 @@ fn pack_readiness_builds_from_existing_local_pack_reader() {
         .iter()
         .any(|input| input.kind == PackReadinessInputKind::LocalReplayManifest));
     assert!(report.replay_commands.iter().all(|command| command.inert));
+}
+
+#[test]
+fn pack_readiness_readback_reports_missing_and_malformed_validation_files() {
+    let dir = tempdir().expect("tempdir should be available");
+    let missing_report_error =
+        read_pack_readiness_report(dir.path()).expect_err("missing readiness report should fail");
+    let missing_validation_error = read_pack_readiness_validation(dir.path())
+        .expect_err("missing readiness validation should fail");
+
+    assert!(format!("{missing_report_error}").contains(PACK_READINESS_REPORT_PATH));
+    assert!(format!("{missing_validation_error}").contains(PACK_READINESS_VALIDATION_PATH));
+
+    let validation_path = dir.path().join(PACK_READINESS_VALIDATION_PATH);
+    fs::create_dir_all(
+        validation_path
+            .parent()
+            .expect("validation path has parent"),
+    )
+    .expect("test should create readiness directory");
+    fs::write(&validation_path, "{not valid validation json")
+        .expect("test should write malformed validation JSON");
+
+    let malformed_validation_error = read_pack_readiness_validation(dir.path())
+        .expect_err("malformed readiness validation should fail");
+    assert!(format!("{malformed_validation_error}").contains("read_pack_readiness_validation"));
 }
 
 #[test]
@@ -338,6 +388,86 @@ fn pack_readiness_rejects_level2_official_external_and_performance_claims() {
     assert!(kinds.contains(&PackReadinessValidationIssueKind::OfficialBenchmarkEvidenceClaim));
     assert!(kinds.contains(&PackReadinessValidationIssueKind::ZkBackendPerformanceClaim));
     assert!(kinds.contains(&PackReadinessValidationIssueKind::MissingLimitation));
+}
+
+#[test]
+fn pack_readiness_validation_reports_identity_input_digest_and_check_boundary_paths() {
+    let mut report = valid_report();
+    report.report_id = " ".to_string();
+    report.version.value.clear();
+    report.source_pack_id.clear();
+    report.source_pack_digest = ArtifactDigest {
+        algorithm: ArtifactDigestAlgorithm::Sha256,
+        hex_digest: "not-hex".to_string(),
+        byte_len: 0,
+        kind: Some(ArtifactKind::Other),
+        role: Some(ArtifactRole::Digest),
+    };
+    report.inputs[0].input_id.clear();
+    report.inputs[0].artifact_uri = "https://example.invalid/pack.json".to_string();
+    report.inputs[0].digest.hex_digest = "abc".to_string();
+    report.inputs[0].digest.byte_len = 0;
+    report.checks[0].claim_boundary = ClaimBoundary::Level1LocalReplay;
+
+    let validation = validate_pack_readiness_report(&report);
+
+    assert!(!validation.valid);
+    assert_issue(
+        &validation,
+        "report_id",
+        PackReadinessValidationIssueKind::EmptyIdentity,
+    );
+    assert_issue(
+        &validation,
+        "version.value",
+        PackReadinessValidationIssueKind::EmptyIdentity,
+    );
+    assert_issue(
+        &validation,
+        "source_pack_id",
+        PackReadinessValidationIssueKind::EmptyIdentity,
+    );
+    assert_issue(
+        &validation,
+        "source_pack_digest",
+        PackReadinessValidationIssueKind::InvalidDigest,
+    );
+    assert_issue(
+        &validation,
+        "inputs[0].input_id",
+        PackReadinessValidationIssueKind::EmptyIdentity,
+    );
+    assert_issue(
+        &validation,
+        "inputs[0].artifact_uri",
+        PackReadinessValidationIssueKind::InvalidArtifactRef,
+    );
+    assert_issue(
+        &validation,
+        "inputs[0].digest",
+        PackReadinessValidationIssueKind::InvalidDigest,
+    );
+    assert_issue(
+        &validation,
+        "checks[0].claim_boundary",
+        PackReadinessValidationIssueKind::ClaimBoundaryEscalation,
+    );
+}
+
+#[test]
+fn pack_readiness_validation_reports_missing_inputs_without_promoting_claims() {
+    let mut report = valid_report();
+    report.inputs.clear();
+
+    let validation = validate_pack_readiness_report(&report);
+
+    assert!(!validation.valid);
+    assert_eq!(validation.claim_boundary, ClaimBoundary::Level0DesignNote);
+    assert_issue(
+        &validation,
+        "inputs",
+        PackReadinessValidationIssueKind::MissingInputs,
+    );
 }
 
 #[test]
