@@ -333,6 +333,7 @@ Surface DSL
 | [docs/245-phase-bad-counters-coverage-notes.md](docs/245-phase-bad-counters-coverage-notes.md) | Phase 245 bad-counters coverage notes. |
 | [docs/246-hsai-public-proof-refresh.md](docs/246-hsai-public-proof-refresh.md) | Phase 246 HSAI public proof refresh for current green head. |
 | [docs/247-hsai-gateway-local-demo-bundle-run.md](docs/247-hsai-gateway-local-demo-bundle-run.md) | Phase 247 HSAI Gateway ignored local demo bundle run. |
+| [docs/248-hsai-first-real-external-evidence-lane.md](docs/248-hsai-first-real-external-evidence-lane.md) | Phase 248 HSAI first real external evidence lane map. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1292,6 +1293,14 @@ does not execute models, call providers, perform external replay, integrate
 signers/tools, mutate accepted Evidence Ledgers, populate score axes, create
 benchmark evidence, claim production readiness, claim semantic correctness,
 claim global uniqueness, or grant authority.
+
+[docs/248-hsai-first-real-external-evidence-lane.md](docs/248-hsai-first-real-external-evidence-lane.md)
+records the bounded public bridge between the local gateway stack and the
+existing real/operator external-evidence surfaces. It names the accepted
+HSAI-owned Phala/dstack fixture, operator-only Phala API materialization, local
+QVL materialization, managed JWKS materialization, and TLS channel artifact
+surfaces, then states the missing gateway-to-attestation binding before any
+accepted evidence or SOTA claim.
 
 [docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md](docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md)
 records a bounded local coverage tranche for `zkbench-core` soak health

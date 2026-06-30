@@ -5129,6 +5129,34 @@ Exit criteria: ignored demo bundle exists locally; generated files are not
 committed; exact run command and digests are recorded; claim-boundary checks
 remain green.
 
+## Phase 248 HSAI First Real External Evidence Lane
+
+Status: complete. See
+`docs/248-hsai-first-real-external-evidence-lane.md`.
+
+Goal: connect the local HSAI Gateway demo/report stack to the already-existing
+real/operator external-evidence surfaces without promoting the claim beyond the
+evidence.
+
+Implemented: a bounded public evidence-lane map naming the Phase 247 gateway
+demo surface, the Phase 57 HSAI-owned Phala/dstack real fixture, the Phase 106
+operator-only Phala Cloud API materialization path, the Phase 108 local QVL
+artifact path, the Phase 109 managed JWKS artifact path, and the Phase 113 TLS
+channel artifact path. The artifact states what the gateway can rely on
+tangibly, what remains missing before accepted external gateway evidence, exact
+reproduction checks, buyer-facing wording, and explicit nonclaims.
+
+Nonclaims: no production readiness, semantic correctness, SOTA status,
+breakthrough status, live gateway execution, live model behavior,
+verifier-agent runtime behavior, accepted Evidence Ledger mutation,
+score-axis population, official benchmark evidence, Level2+ evidence, live
+baseline execution, deployment safety, global software-agent uniqueness, full
+security, or claim above `Attested`.
+
+Exit criteria: public evidence-lane map exists; current external-evidence
+surfaces are named; the gateway-to-attestation binding gap is explicit;
+claim-boundary checks remain green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
