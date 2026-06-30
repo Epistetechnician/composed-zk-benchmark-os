@@ -1,7 +1,7 @@
 use std::fs;
 
 use zkbench_core::{
-    build_local_audit_index_cross_bundle_view,
+    build_local_audit_index_cross_bundle_view, compute_artifact_digest_bytes,
     deserialize_local_audit_index_cross_bundle_view_json,
     read_local_audit_index_cross_bundle_outputs,
     required_local_audit_index_cross_bundle_limitations,
@@ -223,6 +223,125 @@ fn cross_bundle_builds_deterministic_local_view_with_audit_signals() {
 }
 
 #[test]
+fn cross_bundle_sorts_groups_and_signals_remaining_variants() {
+    let mut left_manifest = valid_manifest(
+        "audit_z",
+        "pack_z",
+        vec![input(
+            "left",
+            "reports/left.json",
+            ClaimBoundary::Level0DesignNote,
+            false,
+        )],
+    );
+    left_manifest.inputs[0].local_only_warnings_visible = false;
+    left_manifest
+        .limitations
+        .push("left-only limitation".to_string());
+    let right_manifest = valid_manifest(
+        "audit_a",
+        "pack_a",
+        vec![input(
+            "right",
+            "reports/right.json",
+            ClaimBoundary::Level0DesignNote,
+            false,
+        )],
+    );
+
+    let by_index_id =
+        build_local_audit_index_cross_bundle_view(&LocalAuditIndexCrossBundleRequest {
+            inputs: vec![
+                LocalAuditIndexCrossBundleInput {
+                    source_id: "source_z".to_string(),
+                    manifest: left_manifest.clone(),
+                },
+                LocalAuditIndexCrossBundleInput {
+                    source_id: "source_a".to_string(),
+                    manifest: right_manifest.clone(),
+                },
+            ],
+            group_by: LocalAuditIndexCrossBundleGroupKey::LocalOnlyWarningsVisible,
+            sort_by: LocalAuditIndexCrossBundleSortKey::IndexId,
+        })
+        .expect("index-id sorted cross-bundle view should build");
+    assert_eq!(by_index_id.sources[0].index_id, "audit_a");
+    assert_eq!(by_index_id.sources[1].index_id, "audit_z");
+    assert!(by_index_id.groups.iter().any(|group| {
+        group.group_key == LocalAuditIndexCrossBundleGroupKey::LocalOnlyWarningsVisible
+            && group.group_value == "true"
+    }));
+    assert!(by_index_id.signals.iter().any(|signal| {
+        signal.kind == LocalAuditIndexCrossBundleSignalKind::HiddenLocalOnlyWarnings
+    }));
+    assert!(by_index_id.signals.iter().any(|signal| {
+        signal.kind == LocalAuditIndexCrossBundleSignalKind::LimitationLabelMismatch
+    }));
+
+    let by_pack_id =
+        build_local_audit_index_cross_bundle_view(&LocalAuditIndexCrossBundleRequest {
+            inputs: vec![
+                LocalAuditIndexCrossBundleInput {
+                    source_id: "source_z".to_string(),
+                    manifest: left_manifest,
+                },
+                LocalAuditIndexCrossBundleInput {
+                    source_id: "source_a".to_string(),
+                    manifest: right_manifest,
+                },
+            ],
+            group_by: LocalAuditIndexCrossBundleGroupKey::FailedReadinessVisible,
+            sort_by: LocalAuditIndexCrossBundleSortKey::IndexedPackId,
+        })
+        .expect("pack-id sorted cross-bundle view should build");
+    assert_eq!(by_pack_id.sources[0].indexed_pack_id, "pack_a");
+    assert_eq!(by_pack_id.sources[1].indexed_pack_id, "pack_z");
+    assert!(by_pack_id.groups.iter().any(|group| {
+        group.group_key == LocalAuditIndexCrossBundleGroupKey::FailedReadinessVisible
+            && group.group_value == "false"
+    }));
+
+    let by_output_claim_boundary =
+        build_local_audit_index_cross_bundle_view(&LocalAuditIndexCrossBundleRequest {
+            inputs: vec![
+                LocalAuditIndexCrossBundleInput {
+                    source_id: "source_z".to_string(),
+                    manifest: valid_manifest(
+                        "audit_z",
+                        "pack_z",
+                        vec![input(
+                            "left",
+                            "reports/left.json",
+                            ClaimBoundary::Level0DesignNote,
+                            false,
+                        )],
+                    ),
+                },
+                LocalAuditIndexCrossBundleInput {
+                    source_id: "source_a".to_string(),
+                    manifest: valid_manifest(
+                        "audit_a",
+                        "pack_a",
+                        vec![input(
+                            "right",
+                            "reports/right.json",
+                            ClaimBoundary::Level0DesignNote,
+                            false,
+                        )],
+                    ),
+                },
+            ],
+            group_by: LocalAuditIndexCrossBundleGroupKey::OutputClaimBoundary,
+            sort_by: LocalAuditIndexCrossBundleSortKey::SourceId,
+        })
+        .expect("output-claim-boundary grouped view should build");
+    assert!(by_output_claim_boundary.groups.iter().any(|group| {
+        group.group_key == LocalAuditIndexCrossBundleGroupKey::OutputClaimBoundary
+            && group.group_value == "Level0DesignNote"
+    }));
+}
+
+#[test]
 fn cross_bundle_distinguishes_duplicate_manifest_digest_cases() {
     let manifest = valid_manifest(
         "audit_same",
@@ -325,7 +444,7 @@ fn cross_bundle_request_fails_closed_on_invalid_inputs() {
         inputs: vec![
             LocalAuditIndexCrossBundleInput {
                 source_id: "source_a".to_string(),
-                manifest,
+                manifest: manifest.clone(),
             },
             LocalAuditIndexCrossBundleInput {
                 source_id: "../source_b".to_string(),
@@ -345,6 +464,30 @@ fn cross_bundle_request_fails_closed_on_invalid_inputs() {
     assert!(kinds.contains(&LocalAuditIndexCrossBundleIssueKind::InvalidSourceId));
     assert!(kinds.contains(&LocalAuditIndexCrossBundleIssueKind::InvalidManifest));
     assert!(build_local_audit_index_cross_bundle_view(&invalid_request).is_err());
+
+    let duplicate_empty_source_ids = LocalAuditIndexCrossBundleRequest {
+        inputs: vec![
+            LocalAuditIndexCrossBundleInput {
+                source_id: " ".to_string(),
+                manifest: manifest.clone(),
+            },
+            LocalAuditIndexCrossBundleInput {
+                source_id: " ".to_string(),
+                manifest,
+            },
+        ],
+        group_by: LocalAuditIndexCrossBundleGroupKey::IndexedPackId,
+        sort_by: LocalAuditIndexCrossBundleSortKey::SourceId,
+    };
+    let source_id_validation =
+        validate_local_audit_index_cross_bundle_request(&duplicate_empty_source_ids);
+    let source_id_kinds = source_id_validation
+        .issues
+        .iter()
+        .map(|issue| issue.kind)
+        .collect::<Vec<_>>();
+    assert!(source_id_kinds.contains(&LocalAuditIndexCrossBundleIssueKind::EmptySourceId));
+    assert!(source_id_kinds.contains(&LocalAuditIndexCrossBundleIssueKind::DuplicateSourceId));
 }
 
 #[test]
@@ -645,6 +788,182 @@ fn cross_bundle_outputs_reject_overwrite_and_materialized_drift() {
     assert!(view_error
         .to_string()
         .contains("cross-bundle view JSON bytes do not match digest sidecar"));
+}
+
+#[test]
+fn cross_bundle_outputs_reject_readback_encoding_and_view_drift() {
+    let request = simple_cross_bundle_request();
+    let view = build_local_audit_index_cross_bundle_view(&request).expect("view builds");
+    let dir = tempfile::tempdir().expect("tempdir");
+    let protected_root = dir.path().join("source");
+    fs::create_dir_all(&protected_root).expect("protected root");
+
+    let file_root = dir.path().join("cross-bundle-file-root");
+    fs::write(&file_root, b"not a directory\n").expect("file root");
+    let file_root_error = write_local_audit_index_cross_bundle_outputs(
+        &file_root,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect_err("file output root should fail");
+    assert!(file_root_error
+        .to_string()
+        .contains("output root exists and is not a directory"));
+
+    let non_utf8_view_sidecar = dir.path().join("non-utf8-view-sidecar");
+    write_local_audit_index_cross_bundle_outputs(
+        &non_utf8_view_sidecar,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect("fixture writes");
+    fs::write(
+        non_utf8_view_sidecar.join(AUDIT_INDEX_CROSS_BUNDLE_VIEW_DIGEST_PATH),
+        [0xff, 0xfe, 0xfd],
+    )
+    .expect("tamper view digest sidecar");
+    let view_sidecar_error = read_local_audit_index_cross_bundle_outputs(
+        &non_utf8_view_sidecar,
+        &request,
+        &[protected_root.as_path()],
+    )
+    .expect_err("non-UTF-8 view digest sidecar should fail");
+    assert!(view_sidecar_error
+        .to_string()
+        .contains("cross-bundle view digest sidecar is not UTF-8"));
+
+    let non_utf8_markdown_sidecar = dir.path().join("non-utf8-markdown-sidecar");
+    write_local_audit_index_cross_bundle_outputs(
+        &non_utf8_markdown_sidecar,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect("fixture writes");
+    fs::write(
+        non_utf8_markdown_sidecar.join(AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_DIGEST_PATH),
+        [0xff, 0xfe, 0xfd],
+    )
+    .expect("tamper Markdown digest sidecar");
+    let markdown_sidecar_error = read_local_audit_index_cross_bundle_outputs(
+        &non_utf8_markdown_sidecar,
+        &request,
+        &[protected_root.as_path()],
+    )
+    .expect_err("non-UTF-8 Markdown digest sidecar should fail");
+    assert!(markdown_sidecar_error
+        .to_string()
+        .contains("cross-bundle Markdown digest sidecar is not UTF-8"));
+
+    let non_utf8_view = dir.path().join("non-utf8-view");
+    write_local_audit_index_cross_bundle_outputs(
+        &non_utf8_view,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect("fixture writes");
+    let invalid_view_bytes = vec![0xff, 0xfe, 0xfd];
+    let invalid_view_digest = compute_artifact_digest_bytes(
+        &invalid_view_bytes,
+        Some(ArtifactKind::Other),
+        Some(ArtifactRole::Report),
+    );
+    fs::write(
+        non_utf8_view.join(AUDIT_INDEX_CROSS_BUNDLE_VIEW_PATH),
+        &invalid_view_bytes,
+    )
+    .expect("tamper view bytes");
+    fs::write(
+        non_utf8_view.join(AUDIT_INDEX_CROSS_BUNDLE_VIEW_DIGEST_PATH),
+        format!("{}\n", invalid_view_digest.hex_digest),
+    )
+    .expect("matching digest sidecar");
+    let view_error = read_local_audit_index_cross_bundle_outputs(
+        &non_utf8_view,
+        &request,
+        &[protected_root.as_path()],
+    )
+    .expect_err("non-UTF-8 view JSON should fail after digest check");
+    assert!(view_error
+        .to_string()
+        .contains("cross-bundle view JSON is not UTF-8"));
+
+    let non_utf8_markdown = dir.path().join("non-utf8-markdown");
+    write_local_audit_index_cross_bundle_outputs(
+        &non_utf8_markdown,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect("fixture writes");
+    let invalid_markdown_bytes = vec![0xff, 0xfe, 0xfd];
+    let invalid_markdown_digest = compute_artifact_digest_bytes(
+        &invalid_markdown_bytes,
+        Some(ArtifactKind::Other),
+        Some(ArtifactRole::Report),
+    );
+    fs::write(
+        non_utf8_markdown.join(AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_PATH),
+        &invalid_markdown_bytes,
+    )
+    .expect("tamper Markdown bytes");
+    fs::write(
+        non_utf8_markdown.join(AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_DIGEST_PATH),
+        format!("{}\n", invalid_markdown_digest.hex_digest),
+    )
+    .expect("matching Markdown digest sidecar");
+    let markdown_error = read_local_audit_index_cross_bundle_outputs(
+        &non_utf8_markdown,
+        &request,
+        &[protected_root.as_path()],
+    )
+    .expect_err("non-UTF-8 Markdown should fail after digest check");
+    assert!(markdown_error
+        .to_string()
+        .contains("cross-bundle Markdown is not UTF-8"));
+
+    let markdown_mismatch = dir.path().join("markdown-mismatch");
+    write_local_audit_index_cross_bundle_outputs(
+        &markdown_mismatch,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect("fixture writes");
+    let mismatched_markdown = b"# different but digest-consistent\n";
+    let mismatched_digest = compute_artifact_digest_bytes(
+        mismatched_markdown,
+        Some(ArtifactKind::Other),
+        Some(ArtifactRole::Report),
+    );
+    fs::write(
+        markdown_mismatch.join(AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_PATH),
+        mismatched_markdown,
+    )
+    .expect("tamper Markdown bytes");
+    fs::write(
+        markdown_mismatch.join(AUDIT_INDEX_CROSS_BUNDLE_MARKDOWN_DIGEST_PATH),
+        format!("{}\n", mismatched_digest.hex_digest),
+    )
+    .expect("matching Markdown digest");
+    let mismatch_error = read_local_audit_index_cross_bundle_outputs(
+        &markdown_mismatch,
+        &request,
+        &[protected_root.as_path()],
+    )
+    .expect_err("digest-consistent Markdown mismatch should fail");
+    assert!(mismatch_error
+        .to_string()
+        .contains("cross-bundle Markdown bytes do not match selected view"));
 }
 
 #[test]

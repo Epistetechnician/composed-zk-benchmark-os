@@ -4887,6 +4887,44 @@ claims.
 Exit criteria: missing-line audit is recorded; repo hygiene and claim-boundary
 checks remain green; next low non-serializer surface is routed.
 
+## Phase 241 Audit Index Coverage
+
+Status: complete. See `docs/241-phase-audit-index-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer surface after Phase 240:
+`crates/zkbench-core/src/audit_index.rs`.
+
+Implemented: focused Phase S and Phase T audit-index tests for filter, sort,
+group, signal, source-id validation, invalid root, protected-path, file-root,
+readback encoding, digest-consistent drift, and materialized Markdown/view
+failure paths.
+
+Coverage result: `audit_index.rs` moved from `85.51%` region / `74.07%`
+function / `86.49%` line coverage to `91.14%` region / `85.19%` function /
+`93.14%` line coverage. The local `zkbench-core` package summary moved from
+`91.99%` region / `88.17%` function / `93.71%` line coverage to `92.50%`
+region / `89.02%` function / `94.26%` line coverage.
+
+Residual cap: remaining misses are mostly serialization-error wrappers,
+overwrite mismatch branches that are not reachable without violating
+deterministic readback assumptions, filesystem error edges, and validation
+branches that require impossible digest or claim-boundary states under current
+public constructors.
+
+Anti-goals: production source changes, audit-index semantics changes, accepted
+Evidence Ledger mutation, accepted evidence state changes, endpoint submission
+behavior, credential handling, generated artifact materialization, formal
+evidence, benchmark evidence, score-axis population, Level2+ evidence,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, unsafe coverage forcing, coverage suppression,
+structurally unreachable branch forcing, or whole-workspace 100% coverage
+claims.
+
+Exit criteria: focused Phase S/T audit-index tests pass; repo hygiene and
+claim-boundary checks remain green; full workspace tests pass; package coverage
+summary records the local coverage movement and next low non-serializer
+surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
