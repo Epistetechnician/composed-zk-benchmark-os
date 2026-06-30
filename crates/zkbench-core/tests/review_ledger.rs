@@ -3,7 +3,7 @@ use zkbench_core::{
     deserialize_evidence_review_ledger_json, review_evidence_append_proposal,
     serialize_evidence_review_ledger_json, ClaimBoundary, EvidenceAcceptancePolicy,
     EvidenceReviewChecklist, EvidenceReviewDecisionKind, EvidenceReviewLedger,
-    EvidenceReviewerRole,
+    EvidenceReviewLedgerEntrySubject, EvidenceReviewerRole,
 };
 
 fn proposal() -> zkbench_core::EvidenceAppendProposal {
@@ -45,6 +45,21 @@ fn empty_review_ledger_fixture_validates() {
 }
 
 #[test]
+fn review_ledger_default_and_malformed_json_paths_are_bounded() {
+    let ledger = EvidenceReviewLedger::default();
+    let validation = ledger.validate();
+
+    assert_eq!(ledger.id, "phase_j_review_ledger");
+    assert!(validation.valid, "{:?}", validation.issues);
+
+    let error = deserialize_evidence_review_ledger_json("{not json")
+        .expect_err("malformed review ledger json should fail closed");
+    assert!(error
+        .to_string()
+        .contains("deserialize_evidence_review_ledger_json"));
+}
+
+#[test]
 fn review_ledger_records_decision_and_preview() {
     let (decision, preview) = reviewed_candidate_preview();
     let mut ledger = EvidenceReviewLedger::new("phase_j_review_ledger");
@@ -67,6 +82,21 @@ fn review_ledger_records_decision_and_preview() {
 }
 
 #[test]
+fn review_ledger_rejects_invalid_review_decision_before_append() {
+    let (mut decision, _) = reviewed_candidate_preview();
+    decision.id.clear();
+    let mut ledger = EvidenceReviewLedger::new("phase_j_review_ledger");
+
+    let error = ledger
+        .append_review_decision(decision)
+        .expect_err("invalid nested review decision should be rejected");
+
+    assert!(error.to_string().contains("review decision invalid"));
+    assert!(ledger.entries.is_empty());
+    assert_eq!(ledger.summary.entry_count, 0);
+}
+
+#[test]
 fn review_ledger_rejects_invalid_append_preview_before_append() {
     let (_, mut preview) = reviewed_candidate_preview();
     preview.claim_boundary = ClaimBoundary::Level1LocalReplay;
@@ -79,6 +109,51 @@ fn review_ledger_rejects_invalid_append_preview_before_append() {
     assert!(error.to_string().contains("append preview invalid"));
     assert!(ledger.entries.is_empty());
     assert_eq!(ledger.summary.entry_count, 0);
+}
+
+#[test]
+fn review_ledger_validation_reports_identity_chain_and_nested_subject_drift() {
+    let (decision, preview) = reviewed_candidate_preview();
+    let mut ledger = EvidenceReviewLedger::new("phase_j_review_ledger");
+    ledger
+        .append_review_decision(decision)
+        .expect("decision append should work");
+    ledger
+        .append_append_preview(preview)
+        .expect("preview append should work");
+
+    ledger.id = "   ".to_string();
+    ledger.entries[0].sequence_number = 7;
+    if let EvidenceReviewLedgerEntrySubject::ReviewDecision(decision) =
+        &mut ledger.entries[0].subject
+    {
+        decision.id.clear();
+    }
+    ledger.entries[1].previous_digest = None;
+    if let EvidenceReviewLedgerEntrySubject::AppendPreview(preview) = &mut ledger.entries[1].subject
+    {
+        preview.claim_boundary = ClaimBoundary::Level1LocalReplay;
+    }
+
+    let validation = ledger.validate();
+
+    assert!(!validation.valid);
+    for expected_path in [
+        "ledger.id",
+        "ledger.entries[0].sequence_number",
+        "ledger.entries[1].previous_digest",
+        "ledger.entries[0].subject.review_decision",
+        "ledger.entries[1].subject.append_preview",
+    ] {
+        assert!(
+            validation
+                .issues
+                .iter()
+                .any(|issue| issue.path == expected_path),
+            "missing expected issue path {expected_path}; got {:?}",
+            validation.issues
+        );
+    }
 }
 
 #[test]
