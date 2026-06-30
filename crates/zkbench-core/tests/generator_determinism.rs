@@ -90,3 +90,62 @@ fn branching_fsm_validation_rejects_too_few_states_before_generation() {
 
     assert!(error.to_string().contains("state_count >= 4"));
 }
+
+#[test]
+fn generator_config_validation_reports_reachable_limit_edges() {
+    let trace_limit_error = GeneratorConfig::baseline_fsm()
+        .trace_length(65)
+        .validate()
+        .expect_err("explicit trace length over max_trace_steps should fail");
+    assert!(trace_limit_error
+        .to_string()
+        .contains("trace_length 65 exceeds max_trace_steps 64"));
+
+    let transition_limit_error = GeneratorConfig::branching_fsm()
+        .branching_factor(3)
+        .limits(GeneratorLimits {
+            max_transitions: 3,
+            ..GeneratorLimits::default()
+        })
+        .validate()
+        .expect_err("derived branching transitions over max_transitions should fail");
+    assert!(transition_limit_error
+        .to_string()
+        .contains("generated transition count 4 exceeds max_transitions 3"));
+}
+
+#[test]
+fn generator_config_validation_reports_family_specific_reachable_edges() {
+    let baseline_state_error = GeneratorConfig::baseline_fsm()
+        .state_count(1)
+        .validate()
+        .expect_err("baseline with fewer than two states should fail");
+    assert!(baseline_state_error
+        .to_string()
+        .contains("BaselineFsm requires state_count >= 2"));
+
+    let baseline_trace_error = GeneratorConfig::baseline_fsm()
+        .state_count(4)
+        .trace_length(2)
+        .validate()
+        .expect_err("baseline trace shorter than required transitions should fail");
+    assert!(baseline_trace_error
+        .to_string()
+        .contains("BaselineFsm requires trace_length >= state_count - 1 (3)"));
+
+    let branching_factor_error = GeneratorConfig::branching_fsm()
+        .branching_factor(1)
+        .validate()
+        .expect_err("branching fsm with one branch should fail validation");
+    assert!(branching_factor_error
+        .to_string()
+        .contains("BranchingFsm requires branching_factor >= 2"));
+
+    let bounded_loop_error = GeneratorConfig::bounded_counter_loop()
+        .loop_bound(0)
+        .validate()
+        .expect_err("bounded counter loop with zero bound should fail validation");
+    assert!(bounded_loop_error
+        .to_string()
+        .contains("BoundedCounterLoop requires loop_bound >= 1"));
+}

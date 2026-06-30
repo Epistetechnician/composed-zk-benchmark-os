@@ -103,7 +103,8 @@ Gateway public proof packet, the Phase 215 HSAI Gateway local demo
 runbook/example surface, the Phase 216 soak health coverage thirty-seventh
 tranche, the Phase 217 replay serialization coverage audit, and the Phase 218
 external-runner serialization coverage audit, and the Phase 219
-external-runner artifact-capture coverage tranche, plus earlier
+external-runner artifact-capture coverage tranche, and the Phase 220 generator
+config coverage tranche, plus earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
@@ -350,6 +351,16 @@ traversal path-hint rejection, captured-artifact warnings, unreviewed
 captured-artifact warnings, and captured-artifact traversal URI rejection.
 The package coverage run moved that module from `80.84%` to `99.40%` line
 coverage without changing production source or artifact-capture semantics.
+
+Phase 220 adds focused local regression coverage for `generator/config.rs`,
+the next low non-serializer public surface after Phase 219. It covers
+trace-length limit rejection, derived transition-count limit rejection,
+baseline FSM state and trace requirements, branching-factor requirements,
+bounded counter loop bound requirements, and the public `branching_factor`
+builder. The package coverage run moved that module from `80.23%` to `90.70%`
+line coverage without changing production source or generator semantics.
+Remaining generator-config misses are capped by the current enum/API shape and
+validation order.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
@@ -1847,6 +1858,12 @@ line coverage. After the serializer-wrapper floors, the next fresh low
 non-serializer surfaces include `generator/config.rs` at `80.23%` line
 coverage, `mutation/missing_constraints.rs` at `80.43%` line coverage, and
 `adapters/zk_harness/mapping.rs` at `82.05%` line coverage.
+The Phase 220 tranche moved `generator/config.rs` from `80.23%` to `90.70%`
+line coverage and moved the local `zkbench-core` package summary to `90.41%`
+region coverage, `85.88%` function execution, and `91.62%` line coverage.
+After serializer-wrapper floors already audited in Phases 217 and 218, the
+next visible low non-serializer surface is `mutation/missing_constraints.rs`
+at `80.43%` line coverage.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
