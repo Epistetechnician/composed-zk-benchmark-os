@@ -1,8 +1,8 @@
 use std::fs;
 
 use zkbench_core::{
-    build_local_audit_index_ergonomics_view, read_local_audit_index_ergonomics_outputs,
-    required_local_audit_index_ergonomics_limitations,
+    build_local_audit_index_ergonomics_view, compute_artifact_digest_bytes,
+    read_local_audit_index_ergonomics_outputs, required_local_audit_index_ergonomics_limitations,
     serialize_local_audit_index_ergonomics_view_json,
     validate_local_audit_index_ergonomics_request, write_local_audit_index_ergonomics_outputs,
     ArtifactDigest, ArtifactDigestAlgorithm, ArtifactKind, ArtifactRole, ClaimBoundary,
@@ -151,6 +151,60 @@ fn audit_index_ergonomics_builds_filtered_grouped_markdown_view() {
     assert!(!view
         .markdown
         .contains("zk_backend_performance_claims: true"));
+}
+
+#[test]
+fn audit_index_ergonomics_filters_sorts_and_groups_remaining_variants() {
+    let manifest = valid_manifest();
+
+    let by_claim_boundary = build_local_audit_index_ergonomics_view(
+        &manifest,
+        &LocalAuditIndexErgonomicsRequest {
+            filters: vec![LocalAuditIndexErgonomicsFilter {
+                field: LocalAuditIndexErgonomicsFilterField::ClaimBoundary,
+                value: "Level0DesignNote".to_string(),
+            }],
+            group_by: LocalAuditIndexErgonomicsGroupKey::ClaimBoundary,
+            sort_by: LocalAuditIndexErgonomicsSortKey::ArtifactUri,
+        },
+    )
+    .expect("claim-boundary ergonomics view should build");
+    assert_eq!(by_claim_boundary.groups[0].group_value, "Level0DesignNote");
+    assert_eq!(
+        by_claim_boundary.selected_input_ids,
+        vec!["pack_manifest", "readiness_report", "bundle_manifest"]
+    );
+
+    let by_local_warning_visibility = build_local_audit_index_ergonomics_view(
+        &manifest,
+        &LocalAuditIndexErgonomicsRequest {
+            filters: vec![LocalAuditIndexErgonomicsFilter {
+                field: LocalAuditIndexErgonomicsFilterField::LocalOnlyWarningsVisible,
+                value: "true".to_string(),
+            }],
+            group_by: LocalAuditIndexErgonomicsGroupKey::LocalOnlyWarningsVisible,
+            sort_by: LocalAuditIndexErgonomicsSortKey::InputKind,
+        },
+    )
+    .expect("local-warning ergonomics view should build");
+    assert_eq!(by_local_warning_visibility.groups[0].group_value, "true");
+
+    let by_failed_readiness = build_local_audit_index_ergonomics_view(
+        &manifest,
+        &LocalAuditIndexErgonomicsRequest {
+            filters: vec![LocalAuditIndexErgonomicsFilter {
+                field: LocalAuditIndexErgonomicsFilterField::FailedReadiness,
+                value: "false".to_string(),
+            }],
+            group_by: LocalAuditIndexErgonomicsGroupKey::InputKind,
+            sort_by: LocalAuditIndexErgonomicsSortKey::ClaimBoundary,
+        },
+    )
+    .expect("failed-readiness ergonomics view should build");
+    assert_eq!(
+        by_failed_readiness.selected_input_ids,
+        vec!["bundle_manifest", "pack_manifest"]
+    );
 }
 
 #[test]
@@ -428,6 +482,223 @@ fn audit_index_ergonomics_outputs_reject_overwrite_and_materialized_drift() {
     assert!(view_error
         .to_string()
         .contains("ergonomics view JSON bytes do not match digest sidecar"));
+}
+
+#[test]
+fn audit_index_ergonomics_outputs_reject_readback_encoding_and_view_drift() {
+    let manifest = valid_manifest();
+    let request = LocalAuditIndexErgonomicsRequest::default();
+    let view = build_local_audit_index_ergonomics_view(&manifest, &request)
+        .expect("valid ergonomics view");
+    let dir = tempfile::tempdir().expect("tempdir");
+    let protected_root = dir.path().join("source");
+    fs::create_dir_all(&protected_root).expect("protected root");
+
+    let invalid_output_root = dir.path().join("bad;root");
+    let invalid_root_error = write_local_audit_index_ergonomics_outputs(
+        &invalid_output_root,
+        &manifest,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect_err("shell-like output root should fail");
+    assert!(invalid_root_error
+        .to_string()
+        .contains("invalid audit-index output root"));
+
+    let invalid_protected = dir.path().join("bad;protected");
+    let invalid_protected_error = write_local_audit_index_ergonomics_outputs(
+        dir.path().join("invalid-protected"),
+        &manifest,
+        &request,
+        &view,
+        false,
+        &[invalid_protected.as_path()],
+    )
+    .expect_err("shell-like protected root should fail");
+    assert!(invalid_protected_error
+        .to_string()
+        .contains("invalid protected audit-index ergonomics path"));
+
+    let file_root = dir.path().join("audit-index-ergonomics-file-root");
+    fs::write(&file_root, b"not a directory\n").expect("file root");
+    let file_root_error = write_local_audit_index_ergonomics_outputs(
+        &file_root,
+        &manifest,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect_err("file output root should fail");
+    assert!(file_root_error
+        .to_string()
+        .contains("output root exists and is not a directory"));
+
+    let non_utf8_view_sidecar = dir.path().join("non-utf8-view-sidecar");
+    write_local_audit_index_ergonomics_outputs(
+        &non_utf8_view_sidecar,
+        &manifest,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect("fixture writes");
+    fs::write(
+        non_utf8_view_sidecar.join(AUDIT_INDEX_ERGONOMICS_VIEW_DIGEST_PATH),
+        [0xff, 0xfe, 0xfd],
+    )
+    .expect("tamper view digest sidecar");
+    let view_sidecar_error = read_local_audit_index_ergonomics_outputs(
+        &non_utf8_view_sidecar,
+        &manifest,
+        &request,
+        &[protected_root.as_path()],
+    )
+    .expect_err("non-UTF-8 view digest sidecar should fail");
+    assert!(view_sidecar_error
+        .to_string()
+        .contains("ergonomics view digest sidecar is not UTF-8"));
+
+    let non_utf8_markdown_sidecar = dir.path().join("non-utf8-markdown-sidecar");
+    write_local_audit_index_ergonomics_outputs(
+        &non_utf8_markdown_sidecar,
+        &manifest,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect("fixture writes");
+    fs::write(
+        non_utf8_markdown_sidecar.join(AUDIT_INDEX_ERGONOMICS_MARKDOWN_DIGEST_PATH),
+        [0xff, 0xfe, 0xfd],
+    )
+    .expect("tamper Markdown digest sidecar");
+    let markdown_sidecar_error = read_local_audit_index_ergonomics_outputs(
+        &non_utf8_markdown_sidecar,
+        &manifest,
+        &request,
+        &[protected_root.as_path()],
+    )
+    .expect_err("non-UTF-8 Markdown digest sidecar should fail");
+    assert!(markdown_sidecar_error
+        .to_string()
+        .contains("ergonomics Markdown digest sidecar is not UTF-8"));
+
+    let non_utf8_view = dir.path().join("non-utf8-view");
+    write_local_audit_index_ergonomics_outputs(
+        &non_utf8_view,
+        &manifest,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect("fixture writes");
+    let invalid_view_bytes = vec![0xff, 0xfe, 0xfd];
+    let invalid_view_digest = compute_artifact_digest_bytes(
+        &invalid_view_bytes,
+        Some(ArtifactKind::Other),
+        Some(ArtifactRole::Report),
+    );
+    fs::write(
+        non_utf8_view.join(AUDIT_INDEX_ERGONOMICS_VIEW_PATH),
+        &invalid_view_bytes,
+    )
+    .expect("tamper view bytes");
+    fs::write(
+        non_utf8_view.join(AUDIT_INDEX_ERGONOMICS_VIEW_DIGEST_PATH),
+        format!("{}\n", invalid_view_digest.hex_digest),
+    )
+    .expect("matching digest sidecar");
+    let view_error = read_local_audit_index_ergonomics_outputs(
+        &non_utf8_view,
+        &manifest,
+        &request,
+        &[protected_root.as_path()],
+    )
+    .expect_err("non-UTF-8 view JSON should fail after digest check");
+    assert!(view_error
+        .to_string()
+        .contains("ergonomics view JSON is not UTF-8"));
+
+    let non_utf8_markdown = dir.path().join("non-utf8-markdown");
+    write_local_audit_index_ergonomics_outputs(
+        &non_utf8_markdown,
+        &manifest,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect("fixture writes");
+    let invalid_markdown_bytes = vec![0xff, 0xfe, 0xfd];
+    let invalid_markdown_digest = compute_artifact_digest_bytes(
+        &invalid_markdown_bytes,
+        Some(ArtifactKind::Other),
+        Some(ArtifactRole::Report),
+    );
+    fs::write(
+        non_utf8_markdown.join(AUDIT_INDEX_ERGONOMICS_MARKDOWN_PATH),
+        &invalid_markdown_bytes,
+    )
+    .expect("tamper Markdown bytes");
+    fs::write(
+        non_utf8_markdown.join(AUDIT_INDEX_ERGONOMICS_MARKDOWN_DIGEST_PATH),
+        format!("{}\n", invalid_markdown_digest.hex_digest),
+    )
+    .expect("matching Markdown digest sidecar");
+    let markdown_error = read_local_audit_index_ergonomics_outputs(
+        &non_utf8_markdown,
+        &manifest,
+        &request,
+        &[protected_root.as_path()],
+    )
+    .expect_err("non-UTF-8 Markdown should fail after digest check");
+    assert!(markdown_error
+        .to_string()
+        .contains("ergonomics Markdown is not UTF-8"));
+
+    let markdown_mismatch = dir.path().join("markdown-mismatch");
+    write_local_audit_index_ergonomics_outputs(
+        &markdown_mismatch,
+        &manifest,
+        &request,
+        &view,
+        false,
+        &[protected_root.as_path()],
+    )
+    .expect("fixture writes");
+    let mismatched_markdown = b"# different but digest-consistent\n";
+    let mismatched_digest = compute_artifact_digest_bytes(
+        mismatched_markdown,
+        Some(ArtifactKind::Other),
+        Some(ArtifactRole::Report),
+    );
+    fs::write(
+        markdown_mismatch.join(AUDIT_INDEX_ERGONOMICS_MARKDOWN_PATH),
+        mismatched_markdown,
+    )
+    .expect("tamper Markdown bytes");
+    fs::write(
+        markdown_mismatch.join(AUDIT_INDEX_ERGONOMICS_MARKDOWN_DIGEST_PATH),
+        format!("{}\n", mismatched_digest.hex_digest),
+    )
+    .expect("matching Markdown digest");
+    let mismatch_error = read_local_audit_index_ergonomics_outputs(
+        &markdown_mismatch,
+        &manifest,
+        &request,
+        &[protected_root.as_path()],
+    )
+    .expect_err("digest-consistent Markdown mismatch should fail");
+    assert!(mismatch_error
+        .to_string()
+        .contains("ergonomics Markdown bytes do not match selected view"));
 }
 
 #[test]
