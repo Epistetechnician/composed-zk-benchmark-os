@@ -19,6 +19,74 @@ fn missing_constraints_applies_to_eligible_generated_instance() {
 }
 
 #[test]
+fn missing_constraints_reports_its_class() {
+    assert_eq!(
+        MissingConstraintsPass.mutation_class(),
+        MutationClass::MissingConstraints
+    );
+}
+
+#[test]
+fn missing_constraints_fails_without_rejected_trace_target() {
+    let mut instance =
+        generate_instance(GeneratorConfig::branching_fsm(), InstanceParams::default())
+            .expect("branching instance should generate");
+    instance.rejected_traces.clear();
+
+    let error = apply_mutation_pass(&instance, &MissingConstraintsPass)
+        .expect_err("missing rejected traces should fail");
+
+    assert!(error
+        .to_string()
+        .contains("no rejected trace step with a non-trivial guard was eligible"));
+}
+
+#[test]
+fn missing_constraints_skips_ineligible_rejected_traces_before_target() {
+    let mut instance =
+        generate_instance(GeneratorConfig::branching_fsm(), InstanceParams::default())
+            .expect("branching instance should generate");
+    instance.rejected_traces.insert(
+        0,
+        TraceSpec {
+            id: "empty_rejected_trace".to_string(),
+            initial_state: None,
+            initial_fields: Default::default(),
+            steps: Vec::new(),
+            expected_final_state: None,
+            expected_final_fields: Default::default(),
+            expected_verdict: Some(ExpectedVerdict::Reject),
+            requires_capabilities: Vec::new(),
+        },
+    );
+    instance.rejected_traces.insert(
+        1,
+        TraceSpec {
+            id: "unknown_transition_rejected_trace".to_string(),
+            initial_state: None,
+            initial_fields: Default::default(),
+            steps: vec![TraceStepSpec {
+                transition: "missing-transition".to_string(),
+            }],
+            expected_final_state: None,
+            expected_final_fields: Default::default(),
+            expected_verdict: Some(ExpectedVerdict::Reject),
+            requires_capabilities: Vec::new(),
+        },
+    );
+
+    let mutated = apply_mutation_pass(&instance, &MissingConstraintsPass)
+        .expect("later rejected trace should still provide a target");
+
+    assert_ne!(mutated.primary_trace.id, "empty_rejected_trace");
+    assert_ne!(
+        mutated.primary_trace.id,
+        "unknown_transition_rejected_trace"
+    );
+    assert!(!mutated.provenance.affected_transition_ids.is_empty());
+}
+
+#[test]
 fn corrupted_guards_applies_to_eligible_generated_instance() {
     let instance = generate_instance(
         GeneratorConfig::bounded_counter_loop().loop_bound(3),
