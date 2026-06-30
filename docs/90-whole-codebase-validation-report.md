@@ -101,7 +101,8 @@ output-run surface, and the Phase 212 HSAI Gateway baseline-comparison surface,
 the Phase 213 HSAI Gateway effectiveness-metrics surface, the Phase 214 HSAI
 Gateway public proof packet, the Phase 215 HSAI Gateway local demo
 runbook/example surface, the Phase 216 soak health coverage thirty-seventh
-tranche, and the Phase 217 replay serialization coverage audit, plus earlier
+tranche, the Phase 217 replay serialization coverage audit, and the Phase 218
+external-runner serialization coverage audit, plus earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
@@ -329,6 +330,15 @@ exercised. The audit records those serializer branches as structurally capped
 under the current concrete public API and routes the next audit-first coverage
 slice to `external_runner/serialization.rs`, which remains visible at `76.65%`
 line coverage in the same package run.
+
+Phase 218 audits `external_runner/serialization.rs` without changing Rust
+source. Missing-line inspection shows the only uncovered lines are the
+`serde_json::to_string_pretty` error closures for concrete external-runner
+boundary types; the malformed JSON deserializer error paths are already
+exercised by the Phase V coverage-hardening tests. The audit records those
+serializer branches as structurally capped under the current concrete public API
+and routes the next coverage slice away from serializer wrappers toward a
+reachable public-API module after a fresh missing-line audit.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
@@ -1815,7 +1825,10 @@ line coverage. The Phase 217 audit confirmed that `replay/serialization.rs`
 is capped by structurally unreachable `serde_json::to_string_pretty` error
 mappings for concrete derived structs. The next visible serializer-wrapper
 floor is `external_runner/serialization.rs` at `76.65%` line coverage and
-requires the same audit-first treatment.
+requires the same audit-first treatment. The Phase 218 audit confirmed that
+`external_runner/serialization.rs` is also capped by structurally unreachable
+`serde_json::to_string_pretty` error mappings for concrete derived structs, so
+the next coverage tranche should move to a reachable non-serializer module.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

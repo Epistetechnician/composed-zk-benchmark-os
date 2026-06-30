@@ -4008,6 +4008,42 @@ serialization paths; focused replay serialization tests still pass; repo
 hygiene and claim-boundary checks pass; full workspace tests pass; docs record
 the cap and next audit target.
 
+## Phase 218 External Runner Serialization Coverage Audit
+
+Status: complete for local coverage-floor audit. See
+`docs/218-phase-external-runner-serialization-coverage-audit-notes.md`.
+
+Goal: audit the next visible serializer-wrapper floor at
+`crates/zkbench-core/src/external_runner/serialization.rs` before adding any
+coverage tests.
+
+Implemented: the local package coverage run still reports `zkbench-core` at
+`90.28%` region coverage, `85.76%` function execution, and `91.35%` line
+coverage. The audited file reports `76.65%` line / `75.00%` function /
+`75.00%` region coverage. Missing-line inspection shows only concrete-type
+serializer `serde_json::to_string_pretty` error closures remain uncovered;
+malformed JSON deserializer branches are already exercised by
+`phase_v_coverage_hardening.rs`.
+
+Audit decision: no Rust tests were added because reaching those serializer
+closures would require fabricated concrete-type serialization failures or
+production API changes. The next coverage slice should move past
+serializer-wrapper floors and target a reachable public-API module after a
+fresh missing-line audit.
+
+Anti-goals: production source changes, serialization semantics changes, Cargo
+metadata changes, dependencies, external execution, generated artifact
+materialization, accepted Evidence Ledger policy changes, formal evidence,
+benchmark evidence, score-axis population, Level2+ evidence,
+semantic-correctness claims, production-readiness claims, unsafe coverage
+forcing, coverage suppression, structurally unreachable branch forcing, or
+whole-workspace 100% coverage claims.
+
+Exit criteria: missing-line audit identifies the reachable and capped
+external-runner serialization paths; focused Phase V coverage hardening tests
+still pass; repo hygiene and claim-boundary checks pass; full workspace tests
+pass; docs record the cap and next reachable target class.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
