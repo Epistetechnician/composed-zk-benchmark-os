@@ -4,6 +4,7 @@
 //! instance, plus the "no eligible target" path where applicable. All mutated
 //! instances must remain `ClaimBoundary::Level1LocalReplay`.
 
+use zkbench_core::value::Value;
 use zkbench_core::{
     apply_mutation_pass, generate_instance, ClaimBoundary, ExpectedVerdict, GeneratorConfig,
     InstanceParams, InvalidUnrollBoundsPass, InvariantStrengtheningPass, InvariantWeakeningPass,
@@ -148,6 +149,116 @@ fn observation_omission_applies_to_eligible_generated_instance() {
     assert_eq!(mutated.safety_class, MutationSafetyClass::Diagnostic);
     assert!(!mutated.provenance.affected_field_ids.is_empty());
     assert_eq!(mutated.claim_boundary, ClaimBoundary::Level1LocalReplay);
+}
+
+#[test]
+fn observation_omission_fails_without_public_observation() {
+    let mut instance =
+        generate_instance(GeneratorConfig::baseline_fsm(), InstanceParams::default())
+            .expect("baseline instance should generate");
+    instance.surface_spec.machine.observations.clear();
+
+    let error = apply_mutation_pass(&instance, &ObservationOmissionPass)
+        .expect_err("instances without observations should reject");
+
+    assert!(error
+        .to_string()
+        .contains("source instance declares no public observation"));
+}
+
+#[test]
+fn observation_omission_fails_without_trace_after_observation_target_exists() {
+    let mut instance =
+        generate_instance(GeneratorConfig::baseline_fsm(), InstanceParams::default())
+            .expect("baseline instance should generate");
+    assert!(!instance.surface_spec.machine.observations.is_empty());
+    instance.accepted_traces.clear();
+    instance.rejected_traces.clear();
+    instance.surface_spec.oracle.accepted_traces.clear();
+    instance.surface_spec.oracle.rejected_traces.clear();
+
+    let error = apply_mutation_pass(&instance, &ObservationOmissionPass)
+        .expect_err("instances without traces should reject");
+
+    assert!(error
+        .to_string()
+        .contains("source instance declares no accepted or rejected trace"));
+}
+
+#[test]
+fn observation_omission_removes_observation_and_rewrites_accepted_trace() {
+    let instance = generate_instance(GeneratorConfig::baseline_fsm(), InstanceParams::default())
+        .expect("baseline instance should generate");
+    let observation = instance.surface_spec.machine.observations[0].clone();
+    let source_trace = instance.accepted_traces[0].clone();
+
+    let mutated = apply_mutation_pass(&instance, &ObservationOmissionPass)
+        .expect("observation omission should apply");
+
+    assert!(!mutated
+        .surface_spec
+        .machine
+        .observations
+        .iter()
+        .any(|candidate| candidate.id == observation.id));
+    assert_eq!(
+        mutated
+            .primary_trace
+            .expected_final_fields
+            .get(&observation.field),
+        Some(&Value::Int { int: i64::MIN })
+    );
+    let stored_trace = mutated
+        .surface_spec
+        .oracle
+        .accepted_traces
+        .iter()
+        .find(|trace| trace.id == source_trace.id)
+        .expect("accepted primary trace should be replaced");
+    assert_eq!(
+        stored_trace.expected_final_fields.get(&observation.field),
+        Some(&Value::Int { int: i64::MIN })
+    );
+    assert!(mutated
+        .provenance
+        .notes
+        .iter()
+        .any(|note| note.contains("injected sentinel final-field mismatch")));
+}
+
+#[test]
+fn observation_omission_rewrites_rejected_trace_when_no_accepted_trace_exists() {
+    let mut instance =
+        generate_instance(GeneratorConfig::baseline_fsm(), InstanceParams::default())
+            .expect("baseline instance should generate");
+    let observation = instance.surface_spec.machine.observations[0].clone();
+    instance.accepted_traces.clear();
+    instance.surface_spec.oracle.accepted_traces.clear();
+    let source_trace = instance.rejected_traces[0].clone();
+
+    let mutated = apply_mutation_pass(&instance, &ObservationOmissionPass)
+        .expect("observation omission should use the rejected trace fallback");
+
+    assert_eq!(mutated.primary_trace.id, source_trace.id);
+    assert_eq!(
+        mutated
+            .primary_trace
+            .expected_final_fields
+            .get(&observation.field),
+        Some(&Value::Int { int: i64::MIN })
+    );
+    assert!(mutated.surface_spec.oracle.accepted_traces.is_empty());
+    let stored_trace = mutated
+        .surface_spec
+        .oracle
+        .rejected_traces
+        .iter()
+        .find(|trace| trace.id == source_trace.id)
+        .expect("rejected primary trace should be replaced");
+    assert_eq!(
+        stored_trace.expected_final_fields.get(&observation.field),
+        Some(&Value::Int { int: i64::MIN })
+    );
 }
 
 // ---------- Composition and determinism ----------

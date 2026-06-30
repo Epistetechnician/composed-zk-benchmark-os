@@ -4322,6 +4322,45 @@ Exit criteria: focused Phase L soak-campaign tests pass; repo hygiene and
 claim-boundary checks pass; full workspace tests pass; package coverage summary
 records the local coverage movement and next low non-serializer surface.
 
+## Phase 226 Observation Omission Coverage
+
+Status: complete for local coverage hardening. See
+`docs/226-phase-observation-omission-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer surface after Phase 225:
+`crates/zkbench-core/src/mutation/observation_omission.rs`.
+
+Implemented: added focused tests in
+`crates/zkbench-core/tests/phase_156_mutation_depth.rs` for no-observation
+fail-closed rejection, no-trace fail-closed rejection after an observation
+target exists, accepted-trace rewrite behavior, rejected-trace fallback rewrite
+behavior, observation removal, sentinel final-field mismatch injection, and
+diagnostic-note preservation.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`91.03%` region / `86.56%` function / `92.48%` line coverage to `91.06%`
+region / `86.67%` function / `92.51%` line coverage.
+`mutation/observation_omission.rs` moved from `87.50%` region / `57.14%`
+function / `83.33%` line coverage to `96.59%` region / `85.71%` function /
+`95.45%` line coverage.
+
+Audit decision: no production source was changed. Remaining misses are capped
+by the current helper shape around in-slice trace replacement and validation
+composition.
+
+Anti-goals: production source changes, mutation semantics changes, oracle
+semantics changes, generator semantics changes, external replay behavior
+changes, endpoint submission behavior, credential handling, accepted Evidence
+Ledger policy changes, generated artifact materialization, formal evidence,
+benchmark evidence, score-axis population, Level2+ evidence,
+semantic-correctness claims, production-readiness claims, unsafe coverage
+forcing, coverage suppression, structurally unreachable branch forcing, or
+whole-workspace 100% coverage claims.
+
+Exit criteria: focused Phase 156 mutation-depth tests pass; repo hygiene and
+claim-boundary checks pass; full workspace tests pass; package coverage summary
+records the local coverage movement and next low non-serializer surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
