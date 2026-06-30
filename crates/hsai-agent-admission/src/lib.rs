@@ -393,6 +393,125 @@ pub enum GatewayAttestationBindingError {
     MissingRequiredNonclaim(String),
 }
 
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayOperatorArtifactReference {
+    pub reference_id: String,
+    pub provider: String,
+    pub artifact_kind: String,
+    pub operator_run_id: String,
+    pub artifact_digest: ArtifactDigest,
+    pub repo_external: bool,
+    pub claim_boundary: String,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl GatewayOperatorArtifactReference {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-operator-artifact-reference:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayOperatorBridgeBundle {
+    pub schema_version: String,
+    pub bundle_id: String,
+    pub created_at_unix: u64,
+    pub gateway_report_digest: Hash,
+    pub gateway_report_manifest_digest: Hash,
+    pub attestation_binding: GatewayAttestationChallengeBinding,
+    pub operator_artifact_reference: GatewayOperatorArtifactReference,
+    pub claim_boundary: String,
+    pub authority_granted: bool,
+    pub accepted_evidence_mutation: bool,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl GatewayOperatorBridgeBundle {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-operator-bridge-bundle:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayOperatorBridgeMaterializationRequest {
+    pub bundle_id: String,
+    pub created_at_unix: u64,
+    pub overwrite: bool,
+    pub protected_roots: Vec<PathBuf>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayOperatorBridgeOutputManifest {
+    pub schema_version: String,
+    pub bundle_id: String,
+    pub created_at_unix: u64,
+    pub bridge_bundle_digest: Hash,
+    pub gateway_report_digest: Hash,
+    pub gateway_report_manifest_digest: Hash,
+    pub attestation_binding_digest: Hash,
+    pub operator_artifact_reference_digest: Hash,
+    pub declared_files: Vec<String>,
+    pub declared_file_digests: BTreeMap<String, Hash>,
+    pub claim_boundary: String,
+    pub authority_granted: bool,
+    pub accepted_evidence_mutation: bool,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayOperatorBridgeValidationReport {
+    pub schema_version: String,
+    pub bundle_id: String,
+    pub valid: bool,
+    pub issue_count: u64,
+    pub checked_files: Vec<String>,
+    pub claim_boundary: String,
+    pub authority_granted: bool,
+    pub accepted_evidence_mutation: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayOperatorBridgeIssue {
+    InvalidBundleId,
+    MissingGatewayReportDigest,
+    MissingGatewayReportManifestDigest,
+    InvalidAttestationBinding,
+    InvalidOperatorReference,
+    OperatorArtifactNotRepoExternal,
+    AuthorityGranted,
+    AcceptedEvidenceMutationRequested,
+    ClaimBoundaryMismatch,
+    MissingRequiredNonclaim(String),
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayOperatorBridgeMaterializationError {
+    InvalidBundle(Vec<GatewayOperatorBridgeIssue>),
+    EmptyBundleId,
+    EmptyOutputRoot,
+    ProtectedOutputRoot,
+    OutputRootExistsWithoutOverwrite,
+    OutputRootIsFile,
+    OutputRootIsSymlink,
+    BundleFileIsSymlink(String),
+    SidecarIsSymlink(String),
+    DeclaredFileTypeMismatch(String),
+    UndeclaredFile(String),
+    DigestMismatch(String),
+    MalformedDeclaredFile(String),
+    ManifestSemanticMismatch,
+    NonclaimMismatch,
+    ValidationReportMismatch,
+    Io(String),
+    Serialization(String),
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 pub enum GatewayBaselineComparisonIssue {
     InvalidBaselineId,
@@ -471,6 +590,15 @@ pub struct GatewayReportOutputManifest {
     pub declared_files: Vec<String>,
     pub declared_file_digests: BTreeMap<String, Hash>,
     pub claim_boundary: String,
+}
+
+impl GatewayReportOutputManifest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-report-output-manifest:v1",
+            self,
+        )
+    }
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -2400,6 +2528,214 @@ pub fn validate_gateway_attestation_challenge_binding(
     errors
 }
 
+pub fn gateway_operator_bridge_required_nonclaims() -> BTreeSet<NonClaimLabel> {
+    BTreeSet::from([
+        NonClaimLabel("not attestation evidence".to_owned()),
+        NonClaimLabel("not proof".to_owned()),
+        NonClaimLabel("not live provider evidence".to_owned()),
+        NonClaimLabel("not accepted Evidence Ledger mutation".to_owned()),
+        NonClaimLabel("not benchmark evidence".to_owned()),
+        NonClaimLabel("not SOTA status".to_owned()),
+        NonClaimLabel("not breakthrough status".to_owned()),
+        NonClaimLabel("not production readiness".to_owned()),
+        NonClaimLabel("not semantic correctness".to_owned()),
+        NonClaimLabel("not authority to execute an action".to_owned()),
+    ])
+}
+
+pub fn gateway_operator_bridge_claim_boundary() -> String {
+    "local gateway/operator bridge metadata only; not attestation evidence, proof, live provider evidence, accepted evidence, benchmark evidence, production readiness, semantic correctness, SOTA, breakthrough, full security, or authority to execute an action".to_owned()
+}
+
+pub fn build_gateway_operator_bridge_bundle(
+    gateway_report_manifest: &GatewayReportOutputManifest,
+    attestation_binding: GatewayAttestationChallengeBinding,
+    operator_artifact_reference: GatewayOperatorArtifactReference,
+    request: &GatewayOperatorBridgeMaterializationRequest,
+) -> Result<GatewayOperatorBridgeBundle, Vec<GatewayOperatorBridgeIssue>> {
+    let bundle = GatewayOperatorBridgeBundle {
+        schema_version: GATEWAY_OPERATOR_BRIDGE_BUNDLE_SCHEMA_VERSION.to_owned(),
+        bundle_id: request.bundle_id.clone(),
+        created_at_unix: request.created_at_unix,
+        gateway_report_digest: gateway_report_manifest.artifact_manifest.report_digest,
+        gateway_report_manifest_digest: gateway_report_manifest.digest(),
+        attestation_binding,
+        operator_artifact_reference,
+        claim_boundary: gateway_operator_bridge_claim_boundary(),
+        authority_granted: false,
+        accepted_evidence_mutation: false,
+        nonclaims: gateway_operator_bridge_required_nonclaims(),
+    };
+    let issues = validate_gateway_operator_bridge_bundle(&bundle);
+    if issues.is_empty() {
+        Ok(bundle)
+    } else {
+        Err(issues)
+    }
+}
+
+pub fn validate_gateway_operator_bridge_bundle(
+    bundle: &GatewayOperatorBridgeBundle,
+) -> Vec<GatewayOperatorBridgeIssue> {
+    let mut issues = Vec::new();
+    if bundle.schema_version != GATEWAY_OPERATOR_BRIDGE_BUNDLE_SCHEMA_VERSION
+        || bundle.bundle_id.trim().is_empty()
+        || !is_safe_relative_path(&bundle.bundle_id)
+        || bundle.bundle_id.contains(['/', '\\'])
+    {
+        issues.push(GatewayOperatorBridgeIssue::InvalidBundleId);
+    }
+    if bundle.gateway_report_digest == Hash([0; 32]) {
+        issues.push(GatewayOperatorBridgeIssue::MissingGatewayReportDigest);
+    }
+    if bundle.gateway_report_manifest_digest == Hash([0; 32]) {
+        issues.push(GatewayOperatorBridgeIssue::MissingGatewayReportManifestDigest);
+    }
+    if bundle.attestation_binding.schema_version != GATEWAY_ATTESTATION_BINDING_SCHEMA_VERSION
+        || bundle.attestation_binding.authority_granted
+        || bundle.attestation_binding.claim_boundary != GATEWAY_ATTESTATION_BINDING_CLAIM_BOUNDARY
+    {
+        issues.push(GatewayOperatorBridgeIssue::InvalidAttestationBinding);
+    }
+    if validate_operator_artifact_reference(&bundle.operator_artifact_reference).is_err() {
+        issues.push(GatewayOperatorBridgeIssue::InvalidOperatorReference);
+    }
+    if !bundle.operator_artifact_reference.repo_external {
+        issues.push(GatewayOperatorBridgeIssue::OperatorArtifactNotRepoExternal);
+    }
+    if bundle.authority_granted {
+        issues.push(GatewayOperatorBridgeIssue::AuthorityGranted);
+    }
+    if bundle.accepted_evidence_mutation {
+        issues.push(GatewayOperatorBridgeIssue::AcceptedEvidenceMutationRequested);
+    }
+    if bundle.claim_boundary != gateway_operator_bridge_claim_boundary() {
+        issues.push(GatewayOperatorBridgeIssue::ClaimBoundaryMismatch);
+    }
+    for required in gateway_operator_bridge_required_nonclaims() {
+        if !bundle.nonclaims.contains(&required) {
+            issues.push(GatewayOperatorBridgeIssue::MissingRequiredNonclaim(
+                required.0,
+            ));
+        }
+    }
+    issues
+}
+
+pub fn materialize_gateway_operator_bridge_bundle(
+    output_root: &Path,
+    bundle: &GatewayOperatorBridgeBundle,
+    request: &GatewayOperatorBridgeMaterializationRequest,
+) -> Result<GatewayOperatorBridgeOutputManifest, GatewayOperatorBridgeMaterializationError> {
+    validate_gateway_operator_bridge_materialization_request(output_root, bundle, request)?;
+
+    let staging_root = gateway_staging_root_for(output_root, &request.bundle_id)
+        .map_err(gateway_bridge_from_report_error)?;
+    if staging_root.exists() {
+        remove_gateway_dir_all_checked(&staging_root).map_err(gateway_bridge_from_report_error)?;
+    }
+    fs::create_dir_all(staging_root.join("gateway-bridge")).map_err(gateway_bridge_io_error)?;
+
+    let files = build_gateway_operator_bridge_files(bundle)?;
+    for (logical_path, bytes) in &files {
+        let target = staging_root.join(logical_path);
+        if let Some(parent) = target.parent() {
+            fs::create_dir_all(parent).map_err(gateway_bridge_io_error)?;
+        }
+        fs::write(&target, bytes).map_err(gateway_bridge_io_error)?;
+        fs::write(
+            sidecar_path(&target),
+            hash_hex(hash_bytes(bytes)).into_bytes(),
+        )
+        .map_err(gateway_bridge_io_error)?;
+    }
+
+    if output_root.exists() {
+        if !request.overwrite {
+            remove_gateway_dir_all_checked(&staging_root)
+                .map_err(gateway_bridge_from_report_error)?;
+            return Err(
+                GatewayOperatorBridgeMaterializationError::OutputRootExistsWithoutOverwrite,
+            );
+        }
+        remove_gateway_dir_all_checked(output_root).map_err(gateway_bridge_from_report_error)?;
+    }
+    fs::rename(&staging_root, output_root).map_err(gateway_bridge_io_error)?;
+    read_gateway_operator_bridge_bundle(output_root)
+}
+
+pub fn read_gateway_operator_bridge_bundle(
+    output_root: &Path,
+) -> Result<GatewayOperatorBridgeOutputManifest, GatewayOperatorBridgeMaterializationError> {
+    let output_metadata = fs::symlink_metadata(output_root).map_err(gateway_bridge_io_error)?;
+    if output_metadata.file_type().is_symlink() {
+        return Err(GatewayOperatorBridgeMaterializationError::OutputRootIsSymlink);
+    }
+    if !output_metadata.is_dir() {
+        return Err(GatewayOperatorBridgeMaterializationError::OutputRootIsFile);
+    }
+    let bundle_dir = output_root.join("gateway-bridge");
+    let bundle_metadata = fs::symlink_metadata(&bundle_dir).map_err(gateway_bridge_io_error)?;
+    if bundle_metadata.file_type().is_symlink() {
+        return Err(
+            GatewayOperatorBridgeMaterializationError::BundleFileIsSymlink(
+                "gateway-bridge".to_owned(),
+            ),
+        );
+    }
+    if !bundle_metadata.is_dir() {
+        return Err(
+            GatewayOperatorBridgeMaterializationError::DeclaredFileTypeMismatch(
+                "gateway-bridge".to_owned(),
+            ),
+        );
+    }
+
+    reject_undeclared_gateway_bridge_files(output_root)?;
+    let mut file_bytes = BTreeMap::new();
+    for logical_path in GATEWAY_OPERATOR_BRIDGE_DECLARED_FILES {
+        let path = output_root.join(logical_path);
+        let metadata = fs::symlink_metadata(&path).map_err(gateway_bridge_io_error)?;
+        if metadata.file_type().is_symlink() {
+            return Err(
+                GatewayOperatorBridgeMaterializationError::BundleFileIsSymlink(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        if !metadata.is_file() {
+            return Err(
+                GatewayOperatorBridgeMaterializationError::DeclaredFileTypeMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        let sidecar = sidecar_path(&path);
+        let sidecar_metadata = fs::symlink_metadata(&sidecar).map_err(gateway_bridge_io_error)?;
+        if sidecar_metadata.file_type().is_symlink() {
+            return Err(GatewayOperatorBridgeMaterializationError::SidecarIsSymlink(
+                format!("{logical_path}.sha256"),
+            ));
+        }
+        if !sidecar_metadata.is_file() {
+            return Err(
+                GatewayOperatorBridgeMaterializationError::DeclaredFileTypeMismatch(format!(
+                    "{logical_path}.sha256"
+                )),
+            );
+        }
+        let bytes = fs::read(&path).map_err(gateway_bridge_io_error)?;
+        let expected = fs::read_to_string(sidecar).map_err(gateway_bridge_io_error)?;
+        if expected != hash_hex(hash_bytes(&bytes)) {
+            return Err(GatewayOperatorBridgeMaterializationError::DigestMismatch(
+                (*logical_path).to_owned(),
+            ));
+        }
+        file_bytes.insert((*logical_path).to_owned(), bytes);
+    }
+    validate_gateway_operator_bridge_files(&file_bytes)
+}
+
 pub fn gateway_local_default_policy(
     id: impl Into<String>,
     allowed_action_kinds: BTreeSet<GatewayActionKind>,
@@ -3407,6 +3743,15 @@ const GATEWAY_BASELINE_COMPARISON_CLAIM_BOUNDARY: &str =
 const GATEWAY_EFFECTIVENESS_SUMMARY_CLAIM_BOUNDARY: &str =
     "local gateway effectiveness summary metadata only; not benchmark evidence, production readiness, semantic correctness, global uniqueness, or a fully secure system";
 
+const GATEWAY_OPERATOR_BRIDGE_BUNDLE_SCHEMA_VERSION: &str =
+    "hsai-gateway-operator-bridge-bundle-v1";
+
+const GATEWAY_OPERATOR_BRIDGE_OUTPUT_SCHEMA_VERSION: &str =
+    "hsai-gateway-operator-bridge-output-v1";
+
+const GATEWAY_OPERATOR_BRIDGE_VALIDATION_SCHEMA_VERSION: &str =
+    "hsai-gateway-operator-bridge-validation-v1";
+
 const GATEWAY_REPORT_DECLARED_FILES: &[&str] = &[
     "gateway-report/manifest.json",
     "gateway-report/report.json",
@@ -3421,6 +3766,24 @@ const GATEWAY_REPORT_DECLARED_SIDECARS: &[&str] = &[
     "gateway-report/report.md.sha256",
     "gateway-report/non-claims.md.sha256",
     "gateway-report/validation-report.json.sha256",
+];
+
+const GATEWAY_OPERATOR_BRIDGE_DECLARED_FILES: &[&str] = &[
+    "gateway-bridge/manifest.json",
+    "gateway-bridge/bridge-bundle.json",
+    "gateway-bridge/attestation-binding.json",
+    "gateway-bridge/operator-artifact-reference.json",
+    "gateway-bridge/non-claims.md",
+    "gateway-bridge/validation-report.json",
+];
+
+const GATEWAY_OPERATOR_BRIDGE_DECLARED_SIDECARS: &[&str] = &[
+    "gateway-bridge/manifest.json.sha256",
+    "gateway-bridge/bridge-bundle.json.sha256",
+    "gateway-bridge/attestation-binding.json.sha256",
+    "gateway-bridge/operator-artifact-reference.json.sha256",
+    "gateway-bridge/non-claims.md.sha256",
+    "gateway-bridge/validation-report.json.sha256",
 ];
 
 const ADMISSION_JOURNAL_DECLARED_FILES: &[&str] = &[
@@ -3685,6 +4048,291 @@ fn validate_gateway_report_bundle_semantics(
     Ok(manifest)
 }
 
+fn validate_operator_artifact_reference(
+    reference: &GatewayOperatorArtifactReference,
+) -> Result<(), ()> {
+    if !is_portable_artifact_id(&reference.reference_id)
+        || reference.provider.trim().is_empty()
+        || reference.artifact_kind.trim().is_empty()
+        || reference.operator_run_id.trim().is_empty()
+        || reference.artifact_digest.sha256 == Hash([0; 32])
+        || !is_portable_artifact_id(&reference.artifact_digest.id)
+        || !reference.repo_external
+        || reference.claim_boundary.trim().is_empty()
+    {
+        return Err(());
+    }
+    for required in gateway_operator_bridge_required_nonclaims() {
+        if !reference.nonclaims.contains(&required) {
+            return Err(());
+        }
+    }
+    Ok(())
+}
+
+fn validate_gateway_operator_bridge_materialization_request(
+    output_root: &Path,
+    bundle: &GatewayOperatorBridgeBundle,
+    request: &GatewayOperatorBridgeMaterializationRequest,
+) -> Result<(), GatewayOperatorBridgeMaterializationError> {
+    if request.bundle_id.trim().is_empty()
+        || !is_safe_relative_path(&request.bundle_id)
+        || request.bundle_id.contains(['/', '\\'])
+        || request.bundle_id != bundle.bundle_id
+    {
+        return Err(GatewayOperatorBridgeMaterializationError::EmptyBundleId);
+    }
+    let issues = validate_gateway_operator_bridge_bundle(bundle);
+    if !issues.is_empty() {
+        return Err(GatewayOperatorBridgeMaterializationError::InvalidBundle(
+            issues,
+        ));
+    }
+    validate_gateway_output_root(output_root, &request.protected_roots, request.overwrite)
+        .map_err(gateway_bridge_from_report_error)
+}
+
+fn build_gateway_operator_bridge_files(
+    bundle: &GatewayOperatorBridgeBundle,
+) -> Result<BTreeMap<String, Vec<u8>>, GatewayOperatorBridgeMaterializationError> {
+    let nonclaims = gateway_bridge_nonclaims_markdown(&bundle.nonclaims).into_bytes();
+    let validation = GatewayOperatorBridgeValidationReport {
+        schema_version: GATEWAY_OPERATOR_BRIDGE_VALIDATION_SCHEMA_VERSION.to_owned(),
+        bundle_id: bundle.bundle_id.clone(),
+        valid: true,
+        issue_count: 0,
+        checked_files: gateway_operator_bridge_declared_files(),
+        claim_boundary: bundle.claim_boundary.clone(),
+        authority_granted: false,
+        accepted_evidence_mutation: false,
+    };
+    let validation_bytes =
+        serde_json::to_vec_pretty(&validation).map_err(gateway_bridge_serde_error)?;
+    let mut files = BTreeMap::from([
+        (
+            "gateway-bridge/bridge-bundle.json".to_owned(),
+            serde_json::to_vec_pretty(bundle).map_err(gateway_bridge_serde_error)?,
+        ),
+        (
+            "gateway-bridge/attestation-binding.json".to_owned(),
+            serde_json::to_vec_pretty(&bundle.attestation_binding)
+                .map_err(gateway_bridge_serde_error)?,
+        ),
+        (
+            "gateway-bridge/operator-artifact-reference.json".to_owned(),
+            serde_json::to_vec_pretty(&bundle.operator_artifact_reference)
+                .map_err(gateway_bridge_serde_error)?,
+        ),
+        ("gateway-bridge/non-claims.md".to_owned(), nonclaims),
+        (
+            "gateway-bridge/validation-report.json".to_owned(),
+            validation_bytes,
+        ),
+    ]);
+    let manifest = gateway_operator_bridge_output_manifest_for_files(bundle, &files);
+    files.insert(
+        "gateway-bridge/manifest.json".to_owned(),
+        serde_json::to_vec_pretty(&manifest).map_err(gateway_bridge_serde_error)?,
+    );
+    Ok(files)
+}
+
+fn gateway_operator_bridge_output_manifest_for_files(
+    bundle: &GatewayOperatorBridgeBundle,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> GatewayOperatorBridgeOutputManifest {
+    let mut declared_file_digests = BTreeMap::new();
+    for (logical_path, bytes) in files {
+        declared_file_digests.insert(logical_path.clone(), hash_bytes(bytes));
+    }
+    GatewayOperatorBridgeOutputManifest {
+        schema_version: GATEWAY_OPERATOR_BRIDGE_OUTPUT_SCHEMA_VERSION.to_owned(),
+        bundle_id: bundle.bundle_id.clone(),
+        created_at_unix: bundle.created_at_unix,
+        bridge_bundle_digest: bundle.digest(),
+        gateway_report_digest: bundle.gateway_report_digest,
+        gateway_report_manifest_digest: bundle.gateway_report_manifest_digest,
+        attestation_binding_digest: bundle.attestation_binding.digest(),
+        operator_artifact_reference_digest: bundle.operator_artifact_reference.digest(),
+        declared_files: gateway_operator_bridge_declared_files(),
+        declared_file_digests,
+        claim_boundary: bundle.claim_boundary.clone(),
+        authority_granted: false,
+        accepted_evidence_mutation: false,
+        nonclaims: bundle.nonclaims.clone(),
+    }
+}
+
+fn validate_gateway_operator_bridge_files(
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<GatewayOperatorBridgeOutputManifest, GatewayOperatorBridgeMaterializationError> {
+    let manifest: GatewayOperatorBridgeOutputManifest =
+        parse_gateway_bridge_declared_json(files, "gateway-bridge/manifest.json")?;
+    let bundle: GatewayOperatorBridgeBundle =
+        parse_gateway_bridge_declared_json(files, "gateway-bridge/bridge-bundle.json")?;
+    let binding: GatewayAttestationChallengeBinding =
+        parse_gateway_bridge_declared_json(files, "gateway-bridge/attestation-binding.json")?;
+    let reference: GatewayOperatorArtifactReference = parse_gateway_bridge_declared_json(
+        files,
+        "gateway-bridge/operator-artifact-reference.json",
+    )?;
+
+    if binding != bundle.attestation_binding || reference != bundle.operator_artifact_reference {
+        return Err(GatewayOperatorBridgeMaterializationError::ManifestSemanticMismatch);
+    }
+    let issues = validate_gateway_operator_bridge_bundle(&bundle);
+    if !issues.is_empty() {
+        return Err(GatewayOperatorBridgeMaterializationError::InvalidBundle(
+            issues,
+        ));
+    }
+    validate_gateway_operator_bridge_manifest_semantics(&manifest, &bundle, files)?;
+
+    let nonclaims = declared_gateway_bridge_bytes(files, "gateway-bridge/non-claims.md")?;
+    if nonclaims != gateway_bridge_nonclaims_markdown(&bundle.nonclaims).as_bytes() {
+        return Err(GatewayOperatorBridgeMaterializationError::NonclaimMismatch);
+    }
+
+    let validation: GatewayOperatorBridgeValidationReport =
+        parse_gateway_bridge_declared_json(files, "gateway-bridge/validation-report.json")?;
+    let expected_validation = GatewayOperatorBridgeValidationReport {
+        schema_version: GATEWAY_OPERATOR_BRIDGE_VALIDATION_SCHEMA_VERSION.to_owned(),
+        bundle_id: bundle.bundle_id.clone(),
+        valid: true,
+        issue_count: 0,
+        checked_files: gateway_operator_bridge_declared_files(),
+        claim_boundary: bundle.claim_boundary.clone(),
+        authority_granted: false,
+        accepted_evidence_mutation: false,
+    };
+    if validation != expected_validation {
+        return Err(GatewayOperatorBridgeMaterializationError::ValidationReportMismatch);
+    }
+
+    Ok(manifest)
+}
+
+fn validate_gateway_operator_bridge_manifest_semantics(
+    manifest: &GatewayOperatorBridgeOutputManifest,
+    bundle: &GatewayOperatorBridgeBundle,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<(), GatewayOperatorBridgeMaterializationError> {
+    let expected_digest_paths: BTreeSet<String> = GATEWAY_OPERATOR_BRIDGE_DECLARED_FILES
+        .iter()
+        .filter(|path| **path != "gateway-bridge/manifest.json")
+        .map(|path| (*path).to_owned())
+        .collect();
+    let actual_digest_paths: BTreeSet<String> =
+        manifest.declared_file_digests.keys().cloned().collect();
+
+    if manifest.schema_version != GATEWAY_OPERATOR_BRIDGE_OUTPUT_SCHEMA_VERSION
+        || manifest.bundle_id != bundle.bundle_id
+        || manifest.created_at_unix != bundle.created_at_unix
+        || manifest.bridge_bundle_digest != bundle.digest()
+        || manifest.gateway_report_digest != bundle.gateway_report_digest
+        || manifest.gateway_report_manifest_digest != bundle.gateway_report_manifest_digest
+        || manifest.attestation_binding_digest != bundle.attestation_binding.digest()
+        || manifest.operator_artifact_reference_digest
+            != bundle.operator_artifact_reference.digest()
+        || manifest.declared_files != gateway_operator_bridge_declared_files()
+        || actual_digest_paths != expected_digest_paths
+        || manifest.claim_boundary != bundle.claim_boundary
+        || manifest.authority_granted
+        || manifest.accepted_evidence_mutation
+        || manifest.nonclaims != bundle.nonclaims
+    {
+        return Err(GatewayOperatorBridgeMaterializationError::ManifestSemanticMismatch);
+    }
+
+    for (logical_path, expected_digest) in &manifest.declared_file_digests {
+        if hash_bytes(declared_gateway_bridge_bytes(files, logical_path)?) != *expected_digest {
+            return Err(GatewayOperatorBridgeMaterializationError::ManifestSemanticMismatch);
+        }
+    }
+    Ok(())
+}
+
+fn gateway_operator_bridge_declared_files() -> Vec<String> {
+    GATEWAY_OPERATOR_BRIDGE_DECLARED_FILES
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
+fn declared_gateway_bridge_bytes<'a>(
+    files: &'a BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<&'a [u8], GatewayOperatorBridgeMaterializationError> {
+    files.get(logical_path).map(Vec::as_slice).ok_or_else(|| {
+        GatewayOperatorBridgeMaterializationError::Io(format!(
+            "declared file missing: {logical_path}"
+        ))
+    })
+}
+
+fn parse_gateway_bridge_declared_json<T: for<'de> Deserialize<'de> + Serialize>(
+    files: &BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<T, GatewayOperatorBridgeMaterializationError> {
+    let bytes = declared_gateway_bridge_bytes(files, logical_path)?;
+    let original = parse_json_value_rejecting_duplicate_keys(bytes).map_err(|_| {
+        GatewayOperatorBridgeMaterializationError::MalformedDeclaredFile(logical_path.to_owned())
+    })?;
+    let parsed: T = serde_json::from_value(original.clone()).map_err(|_| {
+        GatewayOperatorBridgeMaterializationError::MalformedDeclaredFile(logical_path.to_owned())
+    })?;
+    let canonical = serde_json::to_value(&parsed).map_err(gateway_bridge_serde_error)?;
+    if canonical != original {
+        return Err(
+            GatewayOperatorBridgeMaterializationError::MalformedDeclaredFile(
+                logical_path.to_owned(),
+            ),
+        );
+    }
+    Ok(parsed)
+}
+
+fn gateway_bridge_nonclaims_markdown(nonclaims: &BTreeSet<NonClaimLabel>) -> String {
+    let mut out = String::from("# Gateway Operator Bridge Non-Claims\n\n");
+    for nonclaim in nonclaims {
+        out.push_str("- ");
+        out.push_str(&nonclaim.0);
+        out.push('\n');
+    }
+    out
+}
+
+fn reject_undeclared_gateway_bridge_files(
+    output_root: &Path,
+) -> Result<(), GatewayOperatorBridgeMaterializationError> {
+    let mut declared: BTreeSet<String> = GATEWAY_OPERATOR_BRIDGE_DECLARED_FILES
+        .iter()
+        .chain(GATEWAY_OPERATOR_BRIDGE_DECLARED_SIDECARS.iter())
+        .map(|value| (*value).to_owned())
+        .collect();
+    let bundle_dir = output_root.join("gateway-bridge");
+    for entry in fs::read_dir(&bundle_dir).map_err(gateway_bridge_io_error)? {
+        let entry = entry.map_err(gateway_bridge_io_error)?;
+        let logical_path = entry
+            .path()
+            .strip_prefix(output_root)
+            .map_err(|error| GatewayOperatorBridgeMaterializationError::Io(error.to_string()))?
+            .to_string_lossy()
+            .replace('\\', "/");
+        if !declared.remove(&logical_path) {
+            return Err(GatewayOperatorBridgeMaterializationError::UndeclaredFile(
+                logical_path,
+            ));
+        }
+    }
+    if let Some(missing) = declared.into_iter().next() {
+        return Err(GatewayOperatorBridgeMaterializationError::Io(format!(
+            "declared file missing: {missing}"
+        )));
+    }
+    Ok(())
+}
+
 fn validate_gateway_report_manifest_semantics(
     manifest: &GatewayReportOutputManifest,
     report: &GatewayCorpusReport,
@@ -3871,6 +4519,45 @@ fn gateway_io_error(error: io::Error) -> GatewayReportMaterializationError {
 
 fn gateway_serde_error(error: serde_json::Error) -> GatewayReportMaterializationError {
     GatewayReportMaterializationError::Serialization(error.to_string())
+}
+
+fn gateway_bridge_from_report_error(
+    error: GatewayReportMaterializationError,
+) -> GatewayOperatorBridgeMaterializationError {
+    match error {
+        GatewayReportMaterializationError::EmptyOutputRoot => {
+            GatewayOperatorBridgeMaterializationError::EmptyOutputRoot
+        }
+        GatewayReportMaterializationError::ProtectedOutputRoot => {
+            GatewayOperatorBridgeMaterializationError::ProtectedOutputRoot
+        }
+        GatewayReportMaterializationError::OutputRootExistsWithoutOverwrite => {
+            GatewayOperatorBridgeMaterializationError::OutputRootExistsWithoutOverwrite
+        }
+        GatewayReportMaterializationError::OutputRootIsFile => {
+            GatewayOperatorBridgeMaterializationError::OutputRootIsFile
+        }
+        GatewayReportMaterializationError::OutputRootIsSymlink => {
+            GatewayOperatorBridgeMaterializationError::OutputRootIsSymlink
+        }
+        GatewayReportMaterializationError::Io(error) => {
+            GatewayOperatorBridgeMaterializationError::Io(error)
+        }
+        GatewayReportMaterializationError::Serialization(error) => {
+            GatewayOperatorBridgeMaterializationError::Serialization(error)
+        }
+        other => GatewayOperatorBridgeMaterializationError::Io(format!("{other:?}")),
+    }
+}
+
+fn gateway_bridge_io_error(error: io::Error) -> GatewayOperatorBridgeMaterializationError {
+    GatewayOperatorBridgeMaterializationError::Io(error.to_string())
+}
+
+fn gateway_bridge_serde_error(
+    error: serde_json::Error,
+) -> GatewayOperatorBridgeMaterializationError {
+    GatewayOperatorBridgeMaterializationError::Serialization(error.to_string())
 }
 
 fn sidecar_path(path: &Path) -> PathBuf {
@@ -4573,6 +5260,85 @@ mod tests {
         .expect("gateway attestation binding should build")
     }
 
+    fn gateway_operator_bridge_request(
+        bundle_id: &str,
+        output_root: &Path,
+    ) -> GatewayOperatorBridgeMaterializationRequest {
+        GatewayOperatorBridgeMaterializationRequest {
+            bundle_id: bundle_id.to_owned(),
+            created_at_unix: 1_800_000_250,
+            overwrite: false,
+            protected_roots: vec![output_root
+                .parent()
+                .expect("temp output root has a parent")
+                .join("protected-repo")],
+        }
+    }
+
+    fn gateway_operator_reference() -> GatewayOperatorArtifactReference {
+        GatewayOperatorArtifactReference {
+            reference_id: "phase-250-operator-live-reference".to_owned(),
+            provider: "phala-dstack".to_owned(),
+            artifact_kind: "operator-live".to_owned(),
+            operator_run_id: "phase-250-repo-external-run".to_owned(),
+            artifact_digest: ArtifactDigest {
+                id: "repo-external-operator-live-bundle".to_owned(),
+                sha256: Hash([88; 32]),
+            },
+            repo_external: true,
+            claim_boundary: "operator-live artifact reference only; not accepted evidence"
+                .to_owned(),
+            nonclaims: gateway_operator_bridge_required_nonclaims(),
+        }
+    }
+
+    fn gateway_report_manifest_for_bridge(
+        proposal: GatewayActionProposal,
+        output_root: &Path,
+    ) -> GatewayReportOutputManifest {
+        let policy = gateway_policy();
+        let report = evaluate_gateway_corpus(
+            &[GatewayCorpusCase {
+                proposal,
+                expected_verdict: AdmissionVerdict::Accepted,
+            }],
+            &policy,
+        )
+        .expect("gateway report evaluates");
+        materialize_gateway_report_bundle(
+            output_root,
+            &report,
+            &policy,
+            &gateway_report_request("gateway-report-for-bridge", output_root),
+        )
+        .expect("gateway report materializes")
+    }
+
+    fn gateway_operator_bridge_bundle(
+        proposal: &GatewayActionProposal,
+        report_manifest: &GatewayReportOutputManifest,
+        output_root: &Path,
+    ) -> GatewayOperatorBridgeBundle {
+        let request = gateway_operator_bridge_request("gateway-operator-bridge", output_root);
+        let binding = build_gateway_attestation_challenge_binding(
+            proposal,
+            AdmissionPolicyId("gateway-attestation-policy-v1".to_owned()),
+            "anchor-gateway-runtime-1",
+            gateway_attestation_pubkey_hex(),
+            42,
+            100,
+            200,
+        )
+        .expect("binding builds");
+        build_gateway_operator_bridge_bundle(
+            report_manifest,
+            binding,
+            gateway_operator_reference(),
+            &request,
+        )
+        .expect("bridge bundle builds")
+    }
+
     #[test]
     fn accepted_candidate_exports_envelope_and_appends_journal_entry() {
         let candidate = accepted_candidate();
@@ -4766,6 +5532,112 @@ mod tests {
             error,
             GatewayAttestationBindingError::ChallengeIdMismatch { .. }
         )));
+    }
+
+    #[test]
+    fn gateway_operator_bridge_bundle_materializes_declared_files_and_readback() {
+        let proposal = gateway_proposal("gateway-bridge-action");
+        let report_root = temp_output_root("gateway-bridge-report");
+        let report_manifest = gateway_report_manifest_for_bridge(proposal.clone(), &report_root);
+        let output_root = temp_output_root("gateway-bridge-bundle");
+        let bundle = gateway_operator_bridge_bundle(&proposal, &report_manifest, &output_root);
+        let request = gateway_operator_bridge_request("gateway-operator-bridge", &output_root);
+
+        let manifest = materialize_gateway_operator_bridge_bundle(&output_root, &bundle, &request)
+            .expect("bridge bundle materializes");
+
+        assert_eq!(manifest.bundle_id, "gateway-operator-bridge");
+        assert_eq!(
+            manifest.declared_files,
+            gateway_operator_bridge_declared_files()
+        );
+        assert_eq!(
+            manifest.gateway_report_digest,
+            report_manifest.artifact_manifest.report_digest
+        );
+        assert_eq!(
+            manifest.attestation_binding_digest,
+            bundle.attestation_binding.digest()
+        );
+        assert_eq!(
+            manifest.operator_artifact_reference_digest,
+            bundle.operator_artifact_reference.digest()
+        );
+        assert!(!manifest.authority_granted);
+        assert!(!manifest.accepted_evidence_mutation);
+        assert_eq!(
+            read_gateway_operator_bridge_bundle(&output_root).expect("readback validates"),
+            manifest
+        );
+        let _ = fs::remove_dir_all(report_root);
+        let _ = fs::remove_dir_all(output_root);
+    }
+
+    #[test]
+    fn gateway_operator_bridge_bundle_rejects_raw_operator_artifacts() {
+        let proposal = gateway_proposal("gateway-bridge-action");
+        let report_root = temp_output_root("gateway-bridge-raw-report");
+        let report_manifest = gateway_report_manifest_for_bridge(proposal.clone(), &report_root);
+        let output_root = temp_output_root("gateway-bridge-raw");
+        let bundle = gateway_operator_bridge_bundle(&proposal, &report_manifest, &output_root);
+        let request = gateway_operator_bridge_request("gateway-operator-bridge", &output_root);
+        materialize_gateway_operator_bridge_bundle(&output_root, &bundle, &request)
+            .expect("bridge bundle materializes");
+        fs::write(output_root.join("gateway-bridge/raw-response.json"), b"{}")
+            .expect("raw extra writes");
+
+        assert_eq!(
+            read_gateway_operator_bridge_bundle(&output_root),
+            Err(GatewayOperatorBridgeMaterializationError::UndeclaredFile(
+                "gateway-bridge/raw-response.json".to_owned()
+            ))
+        );
+        let _ = fs::remove_dir_all(report_root);
+        let _ = fs::remove_dir_all(output_root);
+    }
+
+    #[test]
+    fn gateway_operator_bridge_bundle_rejects_accepted_evidence_escalation() {
+        let proposal = gateway_proposal("gateway-bridge-action");
+        let report_root = temp_output_root("gateway-bridge-escalation-report");
+        let report_manifest = gateway_report_manifest_for_bridge(proposal.clone(), &report_root);
+        let output_root = temp_output_root("gateway-bridge-escalation");
+        let mut bundle = gateway_operator_bridge_bundle(&proposal, &report_manifest, &output_root);
+        bundle.accepted_evidence_mutation = true;
+        let request = gateway_operator_bridge_request("gateway-operator-bridge", &output_root);
+
+        assert!(matches!(
+            materialize_gateway_operator_bridge_bundle(&output_root, &bundle, &request),
+            Err(GatewayOperatorBridgeMaterializationError::InvalidBundle(issues))
+                if issues.contains(&GatewayOperatorBridgeIssue::AcceptedEvidenceMutationRequested)
+        ));
+        let _ = fs::remove_dir_all(report_root);
+    }
+
+    #[test]
+    fn gateway_operator_bridge_readback_rejects_binding_drift() {
+        let proposal = gateway_proposal("gateway-bridge-action");
+        let report_root = temp_output_root("gateway-bridge-drift-report");
+        let report_manifest = gateway_report_manifest_for_bridge(proposal.clone(), &report_root);
+        let output_root = temp_output_root("gateway-bridge-drift");
+        let bundle = gateway_operator_bridge_bundle(&proposal, &report_manifest, &output_root);
+        let request = gateway_operator_bridge_request("gateway-operator-bridge", &output_root);
+        materialize_gateway_operator_bridge_bundle(&output_root, &bundle, &request)
+            .expect("bridge bundle materializes");
+        let mut tampered = bundle.attestation_binding.clone();
+        tampered.nonce += 1;
+        rewrite_bundle_file(
+            &output_root,
+            "gateway-bridge/attestation-binding.json",
+            &serde_json::to_vec_pretty(&tampered).expect("tampered binding serializes"),
+        );
+
+        assert_eq!(
+            read_gateway_operator_bridge_bundle(&output_root),
+            Err(GatewayOperatorBridgeMaterializationError::ManifestSemanticMismatch)
+        );
+        let _ = fs::remove_dir_all(report_root);
+        let _ = fs::remove_dir_all(output_root);
     }
 
     #[test]

@@ -675,6 +675,14 @@ provider response, generated operator artifact, accepted Evidence Ledger
 mutation, official benchmark evidence, SOTA claim, breakthrough claim, or
 production-readiness claim.
 
+Phase 250 implements the local gateway/operator bridge bundle in
+`hsai-agent-admission`. It materializes declared `gateway-bridge/*` files that
+combine one gateway report digest, one gateway attestation challenge binding,
+and one repo-external operator-live artifact reference digest. The Phase 250
+ignored demo run wrote `.gateway-demo-runs/phase-250-gateway-bridge/*`,
+validated readback, preserved `authority_granted=false`, preserved
+`accepted_evidence_mutation=false`, and committed no generated output.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2345,6 +2353,10 @@ candidate is an ignored operator bundle that places a gateway report digest, a
 gateway attestation challenge binding, and a repo-external operator-live
 attestation artifact reference into one reproducible local bundle without
 mutating accepted evidence.
+Phase 250 completes that ignored local bridge bundle. The next bridge candidate
+is a reviewed promotion preflight that validates only local metadata and
+repo-external operator artifact digests while still blocking raw provider
+payloads, credentials, accepted Evidence Ledger mutation, and Level2+ claims.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

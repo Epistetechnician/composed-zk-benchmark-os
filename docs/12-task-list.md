@@ -5190,6 +5190,37 @@ Exit criteria: gateway action proposals can deterministically produce and
 validate attestation challenge input metadata while preserving
 `authority_granted=false` and explicit nonclaims.
 
+## Phase 250 HSAI Gateway Operator Bridge Bundle
+
+Status: complete. See
+`docs/250-hsai-gateway-operator-bridge-bundle-notes.md`.
+
+Goal: materialize a reproducible local bridge bundle that joins one gateway
+report digest, one gateway attestation challenge binding, and one repo-external
+operator-live artifact reference.
+
+Implemented: `hsai-agent-admission` now provides the `GatewayOperatorBridge`
+bundle model, operator artifact reference model, declared `gateway-bridge/*`
+output files, digest sidecars, materialization/readback helpers, validation
+reports, and focused drift/escalation tests. The operator-facing
+`gateway_operator_bridge_bundle` example writes a gateway report output and a
+gateway bridge output under `.gateway-demo-runs/phase-250-gateway-bridge`.
+
+Validation gate: focused `gateway_operator_bridge` unit tests,
+`gateway_operator_bridge_bundle_contract`, example compilation, ignored demo
+run, repo hygiene, claim-boundary docs, and full workspace tests.
+
+Anti-goals: raw provider artifact retention, credential handling, provider
+calls, live attestation capture, model execution, signer/tool integration,
+accepted Evidence Ledger mutation, score-axis population, official benchmark
+evidence, Level2+ evidence, production-readiness claims, semantic-correctness
+claims, SOTA claims, breakthrough claims, full-security claims, or claims above
+`Attested`.
+
+Exit criteria: ignored bridge bundle exists locally; generated files are not
+committed; exact run command and digests are recorded; claim-boundary checks
+remain green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
