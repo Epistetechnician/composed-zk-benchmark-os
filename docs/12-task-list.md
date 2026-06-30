@@ -5070,6 +5070,35 @@ claim-boundary checks remain green; full workspace tests pass; package coverage
 summary records the local coverage movement and next low non-serializer
 surface.
 
+## Phase 246 HSAI Public Proof Refresh
+
+Status: complete. See `docs/246-hsai-public-proof-refresh.md`.
+
+Goal: convert the current green public state into a bounded public proof
+refresh before stronger SOTA-bridge evidence work starts.
+
+Proof target: commit `977d198c3a12f3161580c2c580aa8218e85b900a`, validated
+Phases 204-245, and current `origin/master` state.
+
+Implemented: a docs-only public proof refresh naming the exact verifier
+commands that passed, the current `zkbench-core` coverage summary, the
+validated local gateway and Level 1 Rust surfaces, reproduction steps,
+buyer-facing wording, nonclaims, and the next evidence bridge:
+Phase 247 local gateway demo bundle, Phase 248 first real external evidence
+lane, Phase 249 accepted evidence promotion, and Phase 250 public baseline
+comparison.
+
+Nonclaims: no production readiness, semantic correctness, SOTA status,
+breakthrough status, model execution, hosted model behavior, live provider
+evidence, verifier-agent runtime behavior, external replay, accepted Evidence
+Ledger mutation, score-axis population, official benchmark evidence, Level2+
+evidence, live baseline execution, deployment safety, global software-agent
+uniqueness, full security, or claim above `Attested`.
+
+Exit criteria: the current green head is named; exact verifier commands are
+listed; reproduction steps are bounded; buyer-facing wording remains honest;
+claim-boundary checks remain green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
