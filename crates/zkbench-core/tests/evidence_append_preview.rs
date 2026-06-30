@@ -6,9 +6,10 @@ use zkbench_core::{
     run_local_replay, serialize_evidence_append_preview_json, validate_evidence_append_preview,
     validate_evidence_append_proposal, validate_evidence_record_candidate,
     validate_synthetic_result_candidate, ClaimBoundary, EvidenceAcceptancePolicy,
-    EvidenceAppendPreview, EvidenceAppendPreviewStatus, EvidenceLedger,
-    EvidenceRecordCandidateStatus, EvidenceReviewChecklist, EvidenceReviewDecisionKind,
-    EvidenceReviewerRole, GeneratorConfig, InstanceParams, ResultCandidateArtifactResolver,
+    EvidenceAppendPreview, EvidenceAppendPreviewIssueKind, EvidenceAppendPreviewStatus,
+    EvidenceAppendPreviewValidation, EvidenceLedger, EvidenceRecordCandidateStatus,
+    EvidenceReviewChecklist, EvidenceReviewDecisionKind, EvidenceReviewerRole, GeneratorConfig,
+    InstanceParams, ResultCandidateArtifactResolver,
 };
 
 fn candidate() -> zkbench_core::EvidenceRecordCandidate {
@@ -186,4 +187,102 @@ fn append_preview_validation_rejects_mutation_flag() {
         .issues
         .iter()
         .any(|issue| issue.path.contains("mutates_evidence_ledger")));
+}
+
+#[test]
+fn append_preview_creation_rejects_invalid_candidates_before_projection() {
+    let mut candidate = candidate();
+    candidate.id.clear();
+
+    let error = create_evidence_append_preview(&candidate, None)
+        .expect_err("invalid candidate should not produce an append preview");
+
+    assert!(format!("{error}").contains("append_preview.candidate"));
+}
+
+#[test]
+fn append_preview_validation_reports_identity_and_boundary_drift() {
+    let candidate = candidate();
+    let mut preview =
+        create_evidence_append_preview(&candidate, None).expect("preview should build");
+    preview.id = " ".to_string();
+    preview.source_candidate_id.clear();
+    preview.claim_boundary = ClaimBoundary::Level1LocalReplay;
+    preview.proposed_append_entries[0].proposed_claim_boundary =
+        ClaimBoundary::Level2ReproducibleBenchmarkArtifact;
+
+    let validation = validate_evidence_append_preview(&preview);
+
+    assert!(!validation.valid);
+    assert_preview_issue(
+        &validation,
+        "preview.id",
+        EvidenceAppendPreviewIssueKind::EmptyId,
+    );
+    assert_preview_issue(
+        &validation,
+        "preview.source_candidate_id",
+        EvidenceAppendPreviewIssueKind::EmptyId,
+    );
+    assert_preview_issue(
+        &validation,
+        "preview.claim_boundary",
+        EvidenceAppendPreviewIssueKind::ClaimBoundaryTooHigh,
+    );
+    assert_preview_issue(
+        &validation,
+        "preview.proposed_append_entries[0].proposed_claim_boundary",
+        EvidenceAppendPreviewIssueKind::ClaimBoundaryTooHigh,
+    );
+}
+
+#[test]
+fn append_preview_validation_rejects_forbidden_claim_text_in_notes() {
+    let candidate = candidate();
+    let mut preview =
+        create_evidence_append_preview(&candidate, None).expect("preview should build");
+    preview
+        .notes
+        .push("this is official benchmark evidence".to_string());
+    preview
+        .transaction_preview
+        .notes
+        .push("this is formal evidence".to_string());
+
+    let validation = validate_evidence_append_preview(&preview);
+
+    assert!(!validation.valid);
+    assert_preview_issue(
+        &validation,
+        "preview.notes[2]",
+        EvidenceAppendPreviewIssueKind::ForbiddenClaimLanguage,
+    );
+    assert_preview_issue(
+        &validation,
+        "preview.transaction_preview.notes[1]",
+        EvidenceAppendPreviewIssueKind::ForbiddenClaimLanguage,
+    );
+}
+
+#[test]
+fn append_preview_deserialization_rejects_malformed_json() {
+    let error = deserialize_evidence_append_preview_json("{not valid json")
+        .expect_err("malformed preview json should fail");
+
+    assert!(format!("{error}").contains("deserialize_evidence_append_preview_json"));
+}
+
+fn assert_preview_issue(
+    validation: &EvidenceAppendPreviewValidation,
+    path: &str,
+    kind: EvidenceAppendPreviewIssueKind,
+) {
+    assert!(
+        validation
+            .issues
+            .iter()
+            .any(|issue| issue.path == path && issue.kind == kind),
+        "expected {kind:?} issue at {path}, got {:?}",
+        validation.issues
+    );
 }
