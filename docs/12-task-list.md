@@ -4854,6 +4854,39 @@ Exit criteria: focused Evidence Ledger tests pass; repo hygiene and
 claim-boundary checks pass; full workspace tests pass; package coverage summary
 records the local coverage movement and next low non-serializer surface.
 
+## Phase 240 zk-Harness Export Coverage Audit
+
+Status: complete as an audit-only coverage tranche. See
+`docs/240-phase-zk-harness-export-coverage-audit-notes.md`.
+
+Goal: audit the next apparent low non-serializer surface after Phase 239:
+`crates/zkbench-core/src/adapters/zk_harness/export.rs`.
+
+Implemented: no Rust source or test changes. The missing-line audit found only
+serialization error wrappers for serializable manifest and dry-run plan types.
+
+Coverage state: `adapters/zk_harness/export.rs` remains at `80.95%` region /
+`80.00%` function / `86.96%` line coverage. The local `zkbench-core` package
+summary after Phase 239 remains `91.99%` region / `88.17%` function / `93.71%`
+line coverage.
+
+Audit decision: forcing the remaining serialization-error closures would
+require fake non-serializable data, production test hooks, or serializer
+indirection. This tranche records the cap and routes to the next candidate
+instead.
+
+Anti-goals: production source changes, test-only serializer hooks, fake
+non-serializable zk-Harness data, live zk-Harness execution, endpoint submission
+behavior, credential handling, generated artifact materialization, formal
+evidence, benchmark evidence, score-axis population, Level2+ evidence,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, unsafe coverage forcing, coverage suppression,
+structurally unreachable branch forcing, or whole-workspace 100% coverage
+claims.
+
+Exit criteria: missing-line audit is recorded; repo hygiene and claim-boundary
+checks remain green; next low non-serializer surface is routed.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

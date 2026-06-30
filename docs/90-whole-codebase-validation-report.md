@@ -587,6 +587,13 @@ from `86.78%` to `96.04%` line coverage without changing production source,
 Evidence Ledger policy, accepted Evidence Ledger mutation behavior, endpoint
 submission behavior, credential handling, or accepted evidence state.
 
+Phase 240 audits `adapters/zk_harness/export.rs`, the apparent next low
+non-serializer surface routed by the Phase 239 coverage notes. The audit found
+only serialization error wrappers for serializable manifest and dry-run plan
+types, so no Rust source or test mutation was made. The package remains at
+`93.71%` line coverage after Phase 239, and the next routed candidate is
+`audit_index.rs`.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2204,6 +2211,11 @@ region coverage, `88.17%` function execution, and `93.71%` line coverage. The
 lowest remaining non-serializer line-coverage candidate in the current package
 summary is `adapters/zk_harness/export.rs` at `86.96%`, subject to missing-line
 audit before mutation.
+The Phase 240 audit left `adapters/zk_harness/export.rs` unchanged after
+classifying its remaining missed lines as serialization-error wrappers that are
+not worth forcing under the current public data model. The lowest remaining
+non-serializer line-coverage candidate in the current package summary is
+`audit_index.rs` at `86.49%`, subject to missing-line audit before mutation.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
