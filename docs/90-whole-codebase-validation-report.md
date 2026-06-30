@@ -646,6 +646,15 @@ is not production readiness, semantic correctness, SOTA status, breakthrough
 status, official benchmark evidence, live provider evidence, accepted Evidence
 Ledger mutation, or Level2+ evidence.
 
+Phase 247 records a concrete ignored local HSAI Gateway demo bundle run. It
+uses the existing Phase 215 `gateway_demo_report` example to materialize
+`.gateway-demo-runs/phase-247-gateway-demo/gateway-report/*`, verifies the
+declared files and primary digests, records the summary metrics, and preserves
+`authority_granted=false`. The generated bundle is ignored and not committed;
+the phase creates no production-readiness, semantic-correctness, SOTA,
+breakthrough, official benchmark, live-provider, accepted-ledger, or Level2+
+claim.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2302,6 +2311,10 @@ Phase 246 adds no code and changes no coverage. It refreshes the public proof
 packet for the current green head and routes the SOTA-breakthrough bridge to a
 local gateway demo bundle, first real external evidence lane, accepted evidence
 promotion, and public baseline comparison.
+Phase 247 completes that local gateway demo-bundle step. The next
+SOTA-breakthrough bridge candidate is the first real external evidence lane;
+more local-only coverage or docs will not by itself cross the breakthrough
+threshold.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

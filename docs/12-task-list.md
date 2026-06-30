@@ -5099,6 +5099,36 @@ Exit criteria: the current green head is named; exact verifier commands are
 listed; reproduction steps are bounded; buyer-facing wording remains honest;
 claim-boundary checks remain green.
 
+## Phase 247 HSAI Gateway Local Demo Bundle Run
+
+Status: complete. See `docs/247-hsai-gateway-local-demo-bundle-run.md`.
+
+Goal: produce and record a concrete local gateway demo bundle under the ignored
+`.gateway-demo-runs/` root without committing generated bundle contents or
+inflating the public claim.
+
+Implemented: ran the existing Phase 215 `gateway_demo_report` example with
+fixed acknowledgement, fixed bundle id `phase-247-gateway-demo`, fixed
+timestamp `0`, and ignored output root
+`.gateway-demo-runs/phase-247-gateway-demo`; verified the declared
+`gateway-report/*` files, ignored status, primary file digests, summary metrics,
+and `authority_granted=false`.
+
+Result: the local demo produced 14 cases, 1 accepted benign control, 13
+rejected unsafe cases, 0 quarantined cases, 13 unsafe actions blocked, 0 false
+rejections, 14 recomputation agreements, and a complete audit bundle.
+
+Nonclaims: no production readiness, semantic correctness, SOTA status,
+breakthrough status, model execution, hosted model behavior, live provider
+evidence, verifier-agent runtime behavior, external replay, accepted Evidence
+Ledger mutation, score-axis population, official benchmark evidence, Level2+
+evidence, live baseline execution, deployment safety, global software-agent
+uniqueness, full security, or claim above `Attested`.
+
+Exit criteria: ignored demo bundle exists locally; generated files are not
+committed; exact run command and digests are recorded; claim-boundary checks
+remain green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
