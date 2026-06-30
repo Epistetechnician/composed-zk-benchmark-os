@@ -141,7 +141,7 @@ fn nondeterministic_transition_injection_fails_without_bypass_target() {
 
 #[test]
 fn recursion_envelope_mismatch_reports_its_mutation_class() {
-    let pass = RecursionEnvelopeMismatchPass::default();
+    let pass = RecursionEnvelopeMismatchPass;
 
     assert_eq!(
         pass.mutation_class(),
