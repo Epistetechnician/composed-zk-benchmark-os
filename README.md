@@ -305,6 +305,7 @@ Surface DSL
 | [docs/217-phase-replay-serialization-coverage-audit-notes.md](docs/217-phase-replay-serialization-coverage-audit-notes.md) | Phase 217 replay serialization coverage audit notes. |
 | [docs/218-phase-external-runner-serialization-coverage-audit-notes.md](docs/218-phase-external-runner-serialization-coverage-audit-notes.md) | Phase 218 external-runner serialization coverage audit notes. |
 | [docs/219-phase-external-runner-artifact-capture-coverage-notes.md](docs/219-phase-external-runner-artifact-capture-coverage-notes.md) | Phase 219 external-runner artifact-capture coverage notes. |
+| [docs/220-phase-generator-config-coverage-notes.md](docs/220-phase-generator-config-coverage-notes.md) | Phase 220 generator config coverage notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1307,6 +1308,18 @@ and `zkbench-core` from `91.35%` to `91.48%` line coverage. It changes no
 production source, artifact-capture semantics, generated artifacts, accepted
 Evidence Ledger state, benchmark evidence, score-axis state, Level2+ evidence,
 production-readiness claim, semantic-correctness claim, or 100% coverage claim.
+
+[docs/220-phase-generator-config-coverage-notes.md](docs/220-phase-generator-config-coverage-notes.md)
+records focused local coverage hardening for `generator/config.rs`. It adds
+tests for reachable generator validation paths: trace-length limits, derived
+transition-count limits, baseline state and trace requirements, branching-factor
+requirements, bounded-loop requirements, and the public branching-factor
+builder. The local package coverage run moved `generator/config.rs` from
+`80.23%` to `90.70%` line coverage and `zkbench-core` from `91.48%` to
+`91.62%` line coverage. It changes no production source, generator semantics,
+generated artifacts, accepted Evidence Ledger state, benchmark evidence,
+score-axis state, Level2+ evidence, production-readiness claim,
+semantic-correctness claim, or 100% coverage claim.
 
 ## Validation Checklist
 

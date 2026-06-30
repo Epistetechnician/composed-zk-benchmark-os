@@ -4079,6 +4079,44 @@ Exit criteria: focused artifact-capture tests pass; repo hygiene and
 claim-boundary checks pass; full workspace tests pass; package coverage summary
 records the local coverage movement and next low non-serializer surfaces.
 
+## Phase 220 Generator Config Coverage
+
+Status: complete for local coverage hardening. See
+`docs/220-phase-generator-config-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer public API surface after Phase
+219: `crates/zkbench-core/src/generator/config.rs`.
+
+Implemented: added focused tests in
+`crates/zkbench-core/tests/generator_determinism.rs` for explicit
+trace-length limit rejection, derived transition-count limit rejection,
+baseline FSM state and trace requirements, branching FSM branching-factor
+requirements, bounded counter loop bound requirements, and the public
+`branching_factor` builder.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`90.37%` region / `85.82%` function / `91.48%` line coverage to `90.41%`
+region / `85.88%` function / `91.62%` line coverage. `generator/config.rs`
+moved from `92.68%` region / `94.74%` function / `80.23%` line coverage to
+`97.56%` region / `100.00%` function / `90.70%` line coverage.
+
+Audit decision: no production source was changed. Remaining generator-config
+misses are capped by the current API and validation order: all current
+`FamilyKind` variants are implemented, and generic transition/trace limit
+checks fail before duplicate family-specific transition/trace branches.
+
+Anti-goals: production source changes, generator semantics changes, generated
+family semantics changes, mutation semantics changes, Cargo metadata changes,
+dependencies, external execution, generated artifact materialization, accepted
+Evidence Ledger policy changes, formal evidence, benchmark evidence, score-axis
+population, Level2+ evidence, semantic-correctness claims, production-readiness
+claims, unsafe coverage forcing, coverage suppression, structurally unreachable
+branch forcing, or whole-workspace 100% coverage claims.
+
+Exit criteria: focused generator config tests pass; repo hygiene and
+claim-boundary checks pass; full workspace tests pass; package coverage summary
+records the local coverage movement and next low non-serializer surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
