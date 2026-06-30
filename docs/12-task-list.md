@@ -4816,6 +4816,44 @@ Exit criteria: focused mutation-completion tests pass; repo hygiene and
 claim-boundary checks pass; full workspace tests pass; package coverage summary
 records the local coverage movement and next low non-serializer surface.
 
+## Phase 239 Evidence Ledger Coverage
+
+Status: complete for local coverage hardening. See
+`docs/239-phase-evidence-ledger-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer surface after Phase 238:
+`crates/zkbench-core/src/evidence/ledger.rs`.
+
+Implemented: added focused Evidence Ledger coverage in
+`crates/zkbench-core/tests/evidence_ledger.rs` for `EvidenceLedger::default()`,
+filesystem save/load error wrapping, malformed JSON deserialization,
+sequence-number, previous-digest, and cached-summary validation drift, and
+explicit nonclaim text handling.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`91.90%` region / `88.00%` function / `93.62%` line coverage to `91.99%`
+region / `88.17%` function / `93.71%` line coverage. `evidence/ledger.rs`
+moved from `84.73%` region / `76.19%` function / `86.78%` line coverage to
+`94.27%` region / `90.48%` function / `96.04%` line coverage.
+
+Audit decision: no production source was changed. Remaining missed lines are
+serialization-error branches inside digest/save helpers and the private docs-
+only class marker; this tranche does not introduce fake non-serializable data,
+test-only production hooks, or dead-code forcing.
+
+Anti-goals: production source changes, Evidence Ledger policy changes, accepted
+Evidence Ledger mutation, accepted evidence state changes, endpoint submission
+behavior, credential handling, generated artifact materialization, formal
+evidence, benchmark evidence, score-axis population, Level2+ evidence,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, unsafe coverage forcing, coverage suppression,
+structurally unreachable branch forcing, or whole-workspace 100% coverage
+claims.
+
+Exit criteria: focused Evidence Ledger tests pass; repo hygiene and
+claim-boundary checks pass; full workspace tests pass; package coverage summary
+records the local coverage movement and next low non-serializer surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

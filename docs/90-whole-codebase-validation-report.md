@@ -578,6 +578,15 @@ production source, mutation semantics, generator semantics, oracle semantics,
 accepted Evidence Ledger policy, endpoint submission behavior, credential
 handling, or accepted evidence state.
 
+Phase 239 adds focused local regression coverage for `evidence/ledger.rs`, the
+next low non-serializer surface routed by the Phase 238 coverage notes. It
+covers ledger defaulting, filesystem and deserialization error context,
+sequence-number, previous-digest, and cached-summary validation drift, and
+explicit nonclaim language handling. The package coverage run moved that module
+from `86.78%` to `96.04%` line coverage without changing production source,
+Evidence Ledger policy, accepted Evidence Ledger mutation behavior, endpoint
+submission behavior, credential handling, or accepted evidence state.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2189,6 +2198,12 @@ summary to `91.90%` region coverage, `88.00%` function execution, and `93.62%`
 line coverage. The lowest remaining non-serializer line-coverage candidate in
 the current package summary is `evidence/ledger.rs` at `86.78%`, subject to
 missing-line audit before mutation.
+The Phase 239 tranche moved `evidence/ledger.rs` from `86.78%` to `96.04%`
+line coverage and moved the local `zkbench-core` package summary to `91.99%`
+region coverage, `88.17%` function execution, and `93.71%` line coverage. The
+lowest remaining non-serializer line-coverage candidate in the current package
+summary is `adapters/zk_harness/export.rs` at `86.96%`, subject to missing-line
+audit before mutation.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
