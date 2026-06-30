@@ -4549,6 +4549,39 @@ Exit criteria: focused accepted-append-output tests pass; repo hygiene and
 claim-boundary checks pass; full workspace tests pass; package coverage summary
 records the local coverage movement and next low non-serializer surface.
 
+## Phase 232 DSL IR Coverage
+
+Status: complete for local coverage hardening. See
+`docs/232-phase-dsl-ir-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer surface after Phase 231:
+`crates/zkbench-core/src/dsl/ir.rs`.
+
+Implemented: added focused present/missing field lookup coverage in
+`crates/zkbench-core/tests/lowering.rs` for `SemanticIr::field()`.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`91.53%` region / `87.24%` function / `93.21%` line coverage to `91.55%`
+region / `87.36%` function / `93.23%` line coverage. `dsl/ir.rs` moved from
+`84.62%` region / `75.00%` function / `85.19%` line coverage to `100.00%`
+region / `100.00%` function / `100.00%` line coverage.
+
+Audit decision: no production source was changed. The missing-line audit showed
+that the only uncovered executable path in `dsl/ir.rs` was the public
+`SemanticIr::field()` lookup helper.
+
+Anti-goals: production source changes, DSL semantics changes, lowering
+semantics changes, oracle semantics changes, endpoint submission behavior,
+credential handling, accepted Evidence Ledger policy changes, generated
+artifact materialization, formal evidence, benchmark evidence, score-axis
+population, Level2+ evidence, semantic-correctness claims, production-readiness
+claims, unsafe coverage forcing, coverage suppression, structurally unreachable
+branch forcing, or whole-workspace 100% coverage claims.
+
+Exit criteria: focused lowering tests pass; repo hygiene and claim-boundary
+checks pass; full workspace tests pass; package coverage summary records the
+local coverage movement and next low non-serializer surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
