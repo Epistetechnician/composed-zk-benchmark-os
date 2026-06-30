@@ -239,6 +239,42 @@ fn bad_counters_applies_to_eligible_generated_instance() {
 }
 
 #[test]
+fn bad_counters_reports_its_class() {
+    assert_eq!(BadCountersPass.mutation_class(), MutationClass::BadCounters);
+}
+
+#[test]
+fn bad_counters_skips_missing_trace_step_transition() {
+    let mut instance = generate_instance(
+        GeneratorConfig::bounded_counter_loop().loop_bound(3),
+        InstanceParams::default(),
+    )
+    .expect("bounded instance should generate");
+    instance.accepted_traces.insert(
+        0,
+        TraceSpec {
+            id: "unknown_transition_trace".to_string(),
+            initial_state: None,
+            initial_fields: Default::default(),
+            steps: vec![TraceStepSpec {
+                transition: "missing-transition".to_string(),
+            }],
+            expected_final_state: None,
+            expected_final_fields: Default::default(),
+            expected_verdict: Some(ExpectedVerdict::Accept),
+            requires_capabilities: Vec::new(),
+        },
+    );
+
+    let mutated =
+        apply_mutation_pass(&instance, &BadCountersPass).expect("later accepted trace should work");
+
+    assert_ne!(mutated.primary_trace.id, "unknown_transition_trace");
+    assert_eq!(mutated.mutation_class, MutationClass::BadCounters);
+    assert!(!mutated.provenance.affected_action_ids.is_empty());
+}
+
+#[test]
 fn mutation_application_is_deterministic() {
     let instance = generate_instance(
         GeneratorConfig::bounded_counter_loop().loop_bound(3),

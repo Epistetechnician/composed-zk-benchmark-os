@@ -5035,6 +5035,41 @@ claim-boundary checks remain green; full workspace tests pass; package coverage
 summary records the local coverage movement and next low non-serializer
 surface.
 
+## Phase 245 Bad Counters Coverage
+
+Status: complete. See `docs/245-phase-bad-counters-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer surface after Phase 244:
+`crates/zkbench-core/src/mutation/bad_counters.rs`.
+
+Implemented: focused mutation-engine tests for `BadCountersPass` class
+metadata and skipping an accepted trace step whose transition id is absent
+before finding a later eligible counter update target.
+
+Coverage result: `mutation/bad_counters.rs` moved from `90.65%` region /
+`50.00%` function / `87.14%` line coverage to `94.39%` region / `75.00%`
+function / `92.86%` line coverage. The local `zkbench-core` package summary
+moved from `92.72%` region / `89.31%` function / `94.50%` line coverage to
+`92.74%` region / `89.36%` function / `94.51%` line coverage.
+
+Residual cap: remaining misses are the defensive action-index drift wrapper and
+the fallback affected-field match arm that is unreachable through the current
+`bad_counter_action` selector.
+
+Anti-goals: production source changes, mutation semantics changes, accepted
+Evidence Ledger mutation, accepted evidence state changes, endpoint submission
+behavior, credential handling, generated artifact materialization, formal
+evidence, benchmark evidence, score-axis population, Level2+ evidence,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, unsafe coverage forcing, coverage suppression,
+structurally unreachable branch forcing, test-only hooks, or whole-workspace
+100% coverage claims.
+
+Exit criteria: focused mutation-engine tests pass; repo hygiene and
+claim-boundary checks remain green; full workspace tests pass; package coverage
+summary records the local coverage movement and next low non-serializer
+surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
