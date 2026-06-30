@@ -4657,6 +4657,46 @@ Exit criteria: focused mutation-depth tests pass; repo hygiene and
 claim-boundary checks pass; full workspace tests pass; package coverage summary
 records the local coverage movement and next low non-serializer surface.
 
+## Phase 235 External Runner Policy Coverage
+
+Status: complete for local coverage hardening. See
+`docs/235-phase-external-runner-policy-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer surface after Phase 234:
+`crates/zkbench-core/src/external_runner/policy.rs`.
+
+Implemented: added focused external-runner policy coverage in
+`crates/zkbench-core/tests/external_runner_policy.rs` for the Phase H default
+and manual-handoff policy helpers, empty policy id validation, elevated policy
+claim-boundary validation, claim-boundary-policy mismatch validation, missing
+manual-review gate validation, and absolute-path flag validation.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`91.67%` region / `87.59%` function / `93.37%` line coverage to `91.72%`
+region / `87.64%` function / `93.47%` line coverage.
+`external_runner/policy.rs` moved from `91.18%` region / `93.75%` function /
+`85.78%` line coverage to `98.82%` region / `100.00%` function / `97.63%`
+line coverage.
+
+Audit decision: no production source was changed. The remaining missed lines
+are the explicit Level2+ actual-claim rejection branch, which is structurally
+capped by the public Phase H claim-boundary guard before validator reachability;
+this tranche does not force that branch by weakening the guard or adding
+test-only entry points.
+
+Anti-goals: production source changes, external-runner policy semantics
+changes, live external execution behavior, endpoint submission behavior,
+credential handling, generated artifact materialization, accepted Evidence
+Ledger mutation, accepted Evidence Ledger policy changes, formal evidence,
+benchmark evidence, score-axis population, Level2+ evidence,
+semantic-correctness claims, production-readiness claims, unsafe coverage
+forcing, coverage suppression, structurally unreachable branch forcing, or
+whole-workspace 100% coverage claims.
+
+Exit criteria: focused external-runner policy tests pass; repo hygiene and
+claim-boundary checks pass; full workspace tests pass; package coverage summary
+records the local coverage movement and next low non-serializer surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

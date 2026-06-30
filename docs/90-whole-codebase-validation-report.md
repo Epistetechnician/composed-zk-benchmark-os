@@ -113,8 +113,9 @@ tranche, and the Phase 227 external runner result-import coverage tranche, and
 the Phase 228 evidence append-preview coverage tranche, the Phase 229 pack
 readiness coverage tranche, the Phase 230 audit-index coverage tranche, and
 the Phase 231 accepted append output coverage tranche, the Phase 232 DSL IR
-coverage tranche, the Phase 233 review-ledger coverage tranche, and the Phase
-234 invariant-weakening coverage tranche, plus
+coverage tranche, the Phase 233 review-ledger coverage tranche, the Phase 234
+invariant-weakening coverage tranche, and the Phase 235 external-runner policy
+coverage tranche, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -534,6 +535,17 @@ that module from `85.71%` to `100.00%` line coverage without changing
 production source, mutation semantics, generator semantics, oracle semantics,
 accepted Evidence Ledger policy, endpoint submission behavior, credential
 handling, or accepted evidence state.
+
+Phase 235 adds focused local regression coverage for `external_runner/policy.rs`,
+the next low non-serializer surface routed by the Phase 234 coverage notes. It
+covers the Phase H default and manual-handoff policy helpers plus reachable
+validator rejection paths for empty policy ids, elevated policy claim
+boundaries, claim-boundary-policy mismatch, missing manual-review gates, and
+absolute-path flags. The package coverage run moved that module from `85.78%`
+to `97.63%` line coverage without changing production source, external-runner
+policy semantics, live external execution behavior, accepted Evidence Ledger
+policy, endpoint submission behavior, credential handling, or accepted evidence
+state.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
