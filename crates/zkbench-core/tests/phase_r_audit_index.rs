@@ -1,14 +1,15 @@
 use zkbench_core::{
     build_local_audit_index_manifest_from_report_bundles,
-    build_report_bundle_manifest_from_reports, compute_local_audit_index_manifest_digest,
-    deserialize_local_audit_index_manifest_json, read_local_audit_index_outputs,
-    serialize_local_audit_index_manifest_json, validate_local_audit_index_manifest,
-    write_local_audit_index_outputs, ArtifactDigest, ArtifactDigestAlgorithm, ArtifactKind,
-    ArtifactRole, ClaimBoundary, EvidenceClass, LocalAuditIndexInputKind,
-    LocalAuditIndexValidationIssueKind, PackReadinessCheck, PackReadinessCheckKind,
-    PackReadinessInputKind, PackReadinessInputRef, PackReadinessReport, PackReadinessValidation,
-    PackReadinessValidationIssue, PackReadinessValidationIssueKind, PackReadinessVersion,
-    ReportBundlePackReadinessInput, ScoreConfidence, ScoreReport,
+    build_report_bundle_manifest_from_reports, compute_artifact_digest_bytes,
+    compute_local_audit_index_manifest_digest, deserialize_local_audit_index_manifest_json,
+    read_local_audit_index_outputs, serialize_local_audit_index_manifest_json,
+    validate_local_audit_index_manifest, write_local_audit_index_outputs, ArtifactDigest,
+    ArtifactDigestAlgorithm, ArtifactKind, ArtifactRole, ClaimBoundary, EvidenceClass,
+    LocalAuditIndexInputKind, LocalAuditIndexValidation, LocalAuditIndexValidationIssueKind,
+    PackReadinessCheck, PackReadinessCheckKind, PackReadinessInputKind, PackReadinessInputRef,
+    PackReadinessReport, PackReadinessValidation, PackReadinessValidationIssue,
+    PackReadinessValidationIssueKind, PackReadinessVersion, ReportBundlePackReadinessInput,
+    ScoreConfidence, ScoreReport, AUDIT_INDEX_MANIFEST_DIGEST_PATH, AUDIT_INDEX_MANIFEST_PATH,
 };
 
 use std::fs;
@@ -145,6 +146,21 @@ fn issue_kinds(
         .collect()
 }
 
+fn assert_issue(
+    validation: &LocalAuditIndexValidation,
+    path: &str,
+    kind: LocalAuditIndexValidationIssueKind,
+) {
+    assert!(
+        validation
+            .issues
+            .iter()
+            .any(|issue| issue.path == path && issue.kind == kind),
+        "expected {kind:?} issue at {path}, got {:?}",
+        validation.issues
+    );
+}
+
 #[test]
 fn audit_index_manifest_builds_from_report_bundle_metadata_and_validates() {
     let manifest = valid_manifest();
@@ -188,6 +204,14 @@ fn audit_index_manifest_round_trips_and_digests_deterministically() {
 }
 
 #[test]
+fn audit_index_manifest_deserialization_rejects_malformed_json() {
+    let error = deserialize_local_audit_index_manifest_json("{not valid audit index json")
+        .expect_err("malformed audit-index JSON should fail");
+
+    assert!(format!("{error}").contains("audit_index.manifest"));
+}
+
+#[test]
 fn audit_index_validation_rejects_claim_elevation_and_evidence_claims() {
     let mut manifest = valid_manifest();
     manifest.output_claim_boundary = ClaimBoundary::Level2ReproducibleBenchmarkArtifact;
@@ -210,6 +234,67 @@ fn audit_index_validation_rejects_claim_elevation_and_evidence_claims() {
     assert!(kinds.contains(&LocalAuditIndexValidationIssueKind::ExternalReplayAuthorized));
     assert!(kinds.contains(&LocalAuditIndexValidationIssueKind::ReplayCommandExecutionOutput));
     assert!(kinds.contains(&LocalAuditIndexValidationIssueKind::LocalOnlyScoreAxisPopulation));
+}
+
+#[test]
+fn audit_index_validation_reports_identity_duplicate_input_and_limitation_paths() {
+    let mut manifest = valid_manifest();
+    manifest.index_id = " ".to_string();
+    manifest.version.value.clear();
+    manifest.indexed_pack_id.clear();
+    manifest.inputs[1].input_id = manifest.inputs[0].input_id.clone();
+    manifest.inputs[1].artifact_uri = manifest.inputs[0].artifact_uri.clone();
+    manifest.limitations.clear();
+
+    let validation = validate_local_audit_index_manifest(&manifest);
+
+    assert!(!validation.valid);
+    assert_issue(
+        &validation,
+        "index_id",
+        LocalAuditIndexValidationIssueKind::EmptyIdentity,
+    );
+    assert_issue(
+        &validation,
+        "version.value",
+        LocalAuditIndexValidationIssueKind::EmptyIdentity,
+    );
+    assert_issue(
+        &validation,
+        "indexed_pack_id",
+        LocalAuditIndexValidationIssueKind::EmptyIdentity,
+    );
+    assert_issue(
+        &validation,
+        "inputs[1].input_id",
+        LocalAuditIndexValidationIssueKind::DuplicateInputId,
+    );
+    assert_issue(
+        &validation,
+        "inputs[1].artifact_uri",
+        LocalAuditIndexValidationIssueKind::DuplicateArtifactUri,
+    );
+    assert_issue(
+        &validation,
+        "limitations",
+        LocalAuditIndexValidationIssueKind::MissingLimitation,
+    );
+}
+
+#[test]
+fn audit_index_validation_reports_missing_inputs_without_claim_promotion() {
+    let mut manifest = valid_manifest();
+    manifest.inputs.clear();
+
+    let validation = validate_local_audit_index_manifest(&manifest);
+
+    assert!(!validation.valid);
+    assert_eq!(validation.claim_boundary, ClaimBoundary::Level0DesignNote);
+    assert_issue(
+        &validation,
+        "inputs",
+        LocalAuditIndexValidationIssueKind::MissingInputs,
+    );
 }
 
 #[test]
@@ -265,6 +350,106 @@ fn audit_index_validation_requires_local_only_warning_visibility() {
 
     let kinds = issue_kinds(&manifest);
     assert!(kinds.contains(&LocalAuditIndexValidationIssueKind::LocalOnlyWarningsHidden));
+}
+
+#[test]
+fn audit_index_outputs_reject_file_roots_missing_files_and_invalid_utf8() {
+    let manifest = valid_manifest();
+    let dir = tempfile::tempdir().expect("tempdir");
+
+    let file_root = dir.path().join("audit-index-file-root");
+    fs::write(&file_root, b"not a directory\n").expect("file root");
+    let file_root_error = write_local_audit_index_outputs(&file_root, &manifest, false)
+        .expect_err("file output root should fail");
+    assert!(file_root_error
+        .to_string()
+        .contains("output root exists and is not a directory"));
+
+    let missing_root = dir.path().join("audit-index-missing");
+    let missing_error =
+        read_local_audit_index_outputs(&missing_root).expect_err("missing files should fail");
+    assert!(missing_error
+        .to_string()
+        .contains(AUDIT_INDEX_MANIFEST_PATH));
+
+    let non_utf8_sidecar_root = dir.path().join("audit-index-non-utf8-sidecar");
+    fs::create_dir_all(non_utf8_sidecar_root.join("digests")).expect("digest dir");
+    let manifest_json =
+        serialize_local_audit_index_manifest_json(&manifest).expect("manifest json");
+    fs::write(
+        non_utf8_sidecar_root.join(AUDIT_INDEX_MANIFEST_PATH),
+        manifest_json.as_bytes(),
+    )
+    .expect("manifest file");
+    fs::write(
+        non_utf8_sidecar_root.join(AUDIT_INDEX_MANIFEST_DIGEST_PATH),
+        [0xff, 0xfe, 0xfd],
+    )
+    .expect("non-utf8 digest sidecar");
+    let sidecar_error = read_local_audit_index_outputs(&non_utf8_sidecar_root)
+        .expect_err("non-UTF-8 digest sidecar should fail");
+    assert!(sidecar_error
+        .to_string()
+        .contains("manifest digest sidecar is not UTF-8"));
+
+    let non_utf8_manifest_root = dir.path().join("audit-index-non-utf8-manifest");
+    fs::create_dir_all(non_utf8_manifest_root.join("digests")).expect("digest dir");
+    let manifest_bytes = vec![0xff, 0xfe, 0xfd];
+    let manifest_digest = compute_artifact_digest_bytes(
+        &manifest_bytes,
+        Some(ArtifactKind::Other),
+        Some(ArtifactRole::Report),
+    );
+    fs::write(
+        non_utf8_manifest_root.join(AUDIT_INDEX_MANIFEST_PATH),
+        &manifest_bytes,
+    )
+    .expect("non-utf8 manifest");
+    fs::write(
+        non_utf8_manifest_root.join(AUDIT_INDEX_MANIFEST_DIGEST_PATH),
+        format!("{}\n", manifest_digest.hex_digest),
+    )
+    .expect("matching digest sidecar");
+    let manifest_error = read_local_audit_index_outputs(&non_utf8_manifest_root)
+        .expect_err("non-UTF-8 manifest should fail after digest check");
+    assert!(manifest_error
+        .to_string()
+        .contains("manifest JSON is not UTF-8"));
+}
+
+#[test]
+fn audit_index_outputs_reject_digest_consistent_invalid_manifest() {
+    let dir = tempfile::tempdir().expect("tempdir");
+    let output_root = dir.path().join("audit-index-invalid-manifest");
+    fs::create_dir_all(output_root.join("digests")).expect("digest dir");
+    let invalid_manifest_json = br#"{
+  "index_id": "",
+  "version": { "value": "" },
+  "indexed_pack_id": "",
+  "inputs": [],
+  "output_claim_boundary": "Level0DesignNote",
+  "limitations": []
+}
+"#;
+    let digest = compute_artifact_digest_bytes(
+        invalid_manifest_json,
+        Some(ArtifactKind::Other),
+        Some(ArtifactRole::Report),
+    );
+    fs::write(
+        output_root.join(AUDIT_INDEX_MANIFEST_PATH),
+        invalid_manifest_json,
+    )
+    .expect("invalid manifest");
+    fs::write(
+        output_root.join(AUDIT_INDEX_MANIFEST_DIGEST_PATH),
+        format!("{}\n", digest.hex_digest),
+    )
+    .expect("matching digest");
+
+    let error = read_local_audit_index_outputs(&output_root)
+        .expect_err("digest-consistent invalid manifest should fail validation");
+    assert!(error.to_string().contains("manifest validation failed"));
 }
 
 #[test]

@@ -315,6 +315,7 @@ Surface DSL
 | [docs/227-phase-result-import-coverage-notes.md](docs/227-phase-result-import-coverage-notes.md) | Phase 227 external runner result-import coverage notes. |
 | [docs/228-phase-append-preview-coverage-notes.md](docs/228-phase-append-preview-coverage-notes.md) | Phase 228 evidence append-preview coverage notes. |
 | [docs/229-phase-pack-readiness-coverage-notes.md](docs/229-phase-pack-readiness-coverage-notes.md) | Phase 229 pack-readiness coverage notes. |
+| [docs/230-phase-audit-index-coverage-notes.md](docs/230-phase-audit-index-coverage-notes.md) | Phase 230 audit-index coverage notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1442,6 +1443,19 @@ semantics, pack writer/reader semantics, external replay behavior, generated
 artifacts, accepted Evidence Ledger state, benchmark evidence, score-axis
 state, Level2+ evidence, production-readiness claim, semantic-correctness
 claim, or 100% coverage claim.
+
+[docs/230-phase-audit-index-coverage-notes.md](docs/230-phase-audit-index-coverage-notes.md)
+records focused local coverage hardening for `audit_index.rs`. It adds tests
+for malformed audit-index JSON, empty identities, duplicate input and artifact
+refs, missing limitation labels, missing inputs, file roots, missing readback
+files, non-UTF-8 sidecars/manifests, and digest-consistent invalid manifests.
+The local package coverage run moved `audit_index.rs` from `83.71%` to
+`86.49%` line coverage and `zkbench-core` from `92.97%` to `93.20%` line
+coverage. It changes no production source, audit-index semantics, audit-index
+ergonomics semantics, cross-bundle audit-index semantics, external replay
+behavior, generated artifacts, accepted Evidence Ledger state, benchmark
+evidence, score-axis state, Level2+ evidence, production-readiness claim,
+semantic-correctness claim, or 100% coverage claim.
 
 ## Validation Checklist
 

@@ -4474,6 +4474,45 @@ Exit criteria: focused pack-readiness tests pass; repo hygiene and
 claim-boundary checks pass; full workspace tests pass; package coverage summary
 records the local coverage movement and next low non-serializer surface.
 
+## Phase 230 Audit Index Coverage
+
+Status: complete for local coverage hardening. See
+`docs/230-phase-audit-index-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer surface after Phase 229:
+`crates/zkbench-core/src/audit_index.rs`.
+
+Implemented: added focused tests in
+`crates/zkbench-core/tests/phase_r_audit_index.rs` for malformed audit-index
+JSON, empty identities, duplicate input and artifact refs, missing limitation
+labels, missing inputs, file roots, missing readback files, non-UTF-8
+sidecars/manifests, and digest-consistent invalid manifests.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`91.38%` region / `87.02%` function / `92.97%` line coverage to `91.51%`
+region / `87.19%` function / `93.20%` line coverage.
+`audit_index.rs` moved from `83.71%` line coverage to `85.51%` region /
+`74.07%` function / `86.49%` line coverage.
+
+Audit decision: no production source was changed. Remaining misses are
+concentrated in Phase S/Phase T materialized-view readback and protected-path
+branch combinations, cross-bundle grouping/sorting variants, and filesystem
+error paths.
+
+Anti-goals: production source changes, audit-index semantics changes,
+audit-index ergonomics semantics changes, cross-bundle audit-index semantics
+changes, pack writer/reader semantics changes, external replay behavior
+changes, endpoint submission behavior, credential handling, accepted Evidence
+Ledger policy changes, generated artifact materialization, formal evidence,
+benchmark evidence, score-axis population, Level2+ evidence,
+semantic-correctness claims, production-readiness claims, unsafe coverage
+forcing, coverage suppression, structurally unreachable branch forcing, or
+whole-workspace 100% coverage claims.
+
+Exit criteria: focused audit-index tests pass; repo hygiene and claim-boundary
+checks pass; full workspace tests pass; package coverage summary records the
+local coverage movement and next low non-serializer surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
