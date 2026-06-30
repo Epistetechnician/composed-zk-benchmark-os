@@ -1136,6 +1136,52 @@ fn external_replay_preflight_outputs_reject_stale_unexpected_and_raw_retention()
 }
 
 #[test]
+fn external_replay_preflight_outputs_reject_each_stale_digest_sidecar() {
+    let cases = [
+        (
+            EXTERNAL_REPLAY_PREFLIGHT_INPUT_MANIFEST_DIGEST_PATH,
+            "input manifest bytes do not match digest sidecar",
+        ),
+        (
+            EXTERNAL_REPLAY_PREFLIGHT_REPORT_JSON_DIGEST_PATH,
+            "preflight report JSON bytes do not match digest sidecar",
+        ),
+        (
+            EXTERNAL_REPLAY_PREFLIGHT_REPORT_MARKDOWN_DIGEST_PATH,
+            "preflight report Markdown bytes do not match digest sidecar",
+        ),
+        (
+            EXTERNAL_REPLAY_PREFLIGHT_REDACTION_REPORT_DIGEST_PATH,
+            "redaction report bytes do not match digest sidecar",
+        ),
+        (
+            EXTERNAL_REPLAY_PREFLIGHT_PACKAGE_DIGESTS_DIGEST_PATH,
+            "submission package digest summary bytes do not match digest sidecar",
+        ),
+        (
+            EXTERNAL_REPLAY_PREFLIGHT_NON_CLAIMS_DIGEST_PATH,
+            "non-claims bytes do not match digest sidecar",
+        ),
+    ];
+
+    for (digest_path, expected_message) in cases {
+        let dir = tempfile::tempdir().expect("tempdir should be available");
+        let request = valid_external_replay_preflight_output_request(&dir);
+        write_external_replay_submission_preflight_outputs(&request)
+            .expect("preflight outputs should write");
+        fs::write(request.output_root.join(digest_path), b"stale\n")
+            .expect("digest sidecar should tamper");
+
+        let error = read_external_replay_submission_preflight_outputs(
+            &request.output_root,
+            &request.protected_paths,
+        )
+        .expect_err("stale digest sidecar should reject");
+        assert!(error.to_string().contains(expected_message), "{error}");
+    }
+}
+
+#[test]
 fn external_replay_preflight_outputs_reject_malformed_json_utf8_and_markdown_drift() {
     let dir = tempfile::tempdir().expect("tempdir should be available");
     let request = valid_external_replay_preflight_output_request(&dir);
@@ -1187,6 +1233,44 @@ fn external_replay_preflight_outputs_reject_malformed_json_utf8_and_markdown_dri
     )
     .expect_err("drifted report markdown should reject");
     assert!(markdown.to_string().contains("Markdown does not match"));
+
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let request = valid_external_replay_preflight_output_request(&dir);
+    write_external_replay_submission_preflight_outputs(&request)
+        .expect("preflight outputs should write");
+    write_external_preflight_file_with_digest(
+        &request.output_root,
+        EXTERNAL_REPLAY_PREFLIGHT_REDACTION_REPORT_PATH,
+        EXTERNAL_REPLAY_PREFLIGHT_REDACTION_REPORT_DIGEST_PATH,
+        b"{",
+    );
+    let malformed = read_external_replay_submission_preflight_outputs(
+        &request.output_root,
+        &request.protected_paths,
+    )
+    .expect_err("malformed redaction report should reject");
+    assert!(malformed
+        .to_string()
+        .contains("deserialize_external_replay_submission_preflight_redaction_report_json"));
+
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let request = valid_external_replay_preflight_output_request(&dir);
+    write_external_replay_submission_preflight_outputs(&request)
+        .expect("preflight outputs should write");
+    write_external_preflight_file_with_digest(
+        &request.output_root,
+        EXTERNAL_REPLAY_PREFLIGHT_PACKAGE_DIGESTS_PATH,
+        EXTERNAL_REPLAY_PREFLIGHT_PACKAGE_DIGESTS_DIGEST_PATH,
+        b"{",
+    );
+    let malformed = read_external_replay_submission_preflight_outputs(
+        &request.output_root,
+        &request.protected_paths,
+    )
+    .expect_err("malformed package digest summary should reject");
+    assert!(malformed
+        .to_string()
+        .contains("deserialize_external_replay_submission_package_digest_summary_json"));
 }
 
 #[test]
