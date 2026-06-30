@@ -4361,6 +4361,44 @@ Exit criteria: focused Phase 156 mutation-depth tests pass; repo hygiene and
 claim-boundary checks pass; full workspace tests pass; package coverage summary
 records the local coverage movement and next low non-serializer surface.
 
+## Phase 227 Result Import Coverage
+
+Status: complete for local coverage hardening. See
+`docs/227-phase-result-import-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer surface after Phase 226:
+`crates/zkbench-core/src/external_runner/result_import.rs`.
+
+Implemented: added focused tests in
+`crates/zkbench-core/tests/result_import_validation.rs` for schema drift,
+candidate identity/status/path/provenance rejection, metric and note forbidden
+claim text, policy-controlled validation toggles, and direct quarantine-record
+context.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`91.06%` region / `86.67%` function / `92.51%` line coverage to `91.15%`
+region / `86.73%` function / `92.66%` line coverage.
+`external_runner/result_import.rs` moved from `87.39%` region / `88.89%`
+function / `83.61%` line coverage to `97.83%` region / `100.00%` function /
+`97.95%` line coverage.
+
+Audit decision: no production source was changed. Remaining misses are limited
+to currently unforced local branch combinations inside the result-import
+validation helpers.
+
+Anti-goals: production source changes, result-import semantics changes,
+quarantine semantics changes, external replay behavior changes, endpoint
+submission behavior, credential handling, accepted Evidence Ledger policy
+changes, generated artifact materialization, formal evidence, benchmark
+evidence, score-axis population, Level2+ evidence, semantic-correctness
+claims, production-readiness claims, unsafe coverage forcing, coverage
+suppression, structurally unreachable branch forcing, or whole-workspace 100%
+coverage claims.
+
+Exit criteria: focused result-import validation tests pass; repo hygiene and
+claim-boundary checks pass; full workspace tests pass; package coverage summary
+records the local coverage movement and next low non-serializer surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

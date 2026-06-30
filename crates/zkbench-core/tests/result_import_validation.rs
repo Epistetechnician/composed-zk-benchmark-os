@@ -1,12 +1,13 @@
 use zkbench_core::{
     build_default_external_result_import_schema, compute_artifact_digest_bytes,
-    deserialize_quarantine_manifest_json, quarantine_external_result_candidate,
-    serialize_quarantine_manifest_json, validate_external_result_candidate,
+    deserialize_quarantine_manifest_json, external_result_quarantine_record,
+    quarantine_external_result_candidate, serialize_quarantine_manifest_json,
+    validate_external_result_candidate, validate_external_result_candidate_with_schema,
     validate_external_result_import_schema, validate_quarantine_manifest, ArtifactKind,
     ArtifactRole, ClaimBoundary, EnvironmentProvenance, ExternalMetricCandidate,
-    ExternalMetricUnit, ExternalResultCandidate, ExternalResultStatus, ExternalRunProvenanceDraft,
-    ExternalToolProvenance, OperatorProvenance, QuarantineReason, QuarantineStatus,
-    QuarantineValidation, SourceProvenance,
+    ExternalMetricUnit, ExternalResultCandidate, ExternalResultStatus, ExternalResultValidation,
+    ExternalRunProvenanceDraft, ExternalToolProvenance, OperatorProvenance, QuarantineReason,
+    QuarantineStatus, QuarantineValidation, SourceProvenance,
 };
 
 fn provenance() -> ExternalRunProvenanceDraft {
@@ -73,6 +74,26 @@ fn default_result_import_schema_builds_and_validates() {
 }
 
 #[test]
+fn schema_validation_reports_identity_boundary_unknown_units_and_missing_fields() {
+    let mut schema = build_default_external_result_import_schema();
+    schema.id = " ".to_string();
+    schema.claim_boundary = ClaimBoundary::Level2ReproducibleBenchmarkArtifact;
+    schema.allowed_units.push(ExternalMetricUnit::Unknown);
+    schema.required_provenance_fields.clear();
+
+    let validation = validate_external_result_import_schema(&schema);
+
+    assert!(!validation.valid);
+    assert_result_issue_path(&validation, "schema.id");
+    assert_result_issue_path(&validation, "schema.claim_boundary");
+    assert_result_issue_path(&validation, "schema.allowed_units");
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.path.starts_with("schema.required_provenance_fields.")));
+}
+
+#[test]
 fn missing_provenance_is_rejected() {
     let mut candidate = candidate();
     candidate.provenance_draft = None;
@@ -102,6 +123,94 @@ fn elevated_or_forbidden_claims_are_rejected() {
     let mut soundness = candidate();
     soundness.claims_proof_system_soundness = true;
     assert!(!validate_external_result_candidate(&soundness).valid);
+}
+
+#[test]
+fn candidate_validation_reports_identity_status_path_and_provenance_gaps() {
+    let mut candidate = candidate();
+    candidate.result_candidate_id = " ".to_string();
+    candidate.source_benchmark_pack_id = " ".to_string();
+    candidate.dry_run_plan_id = " ".to_string();
+    candidate.raw_output_artifact_refs = vec![
+        "/tmp/raw-output.json".to_string(),
+        "../escape/raw-output.json".to_string(),
+    ];
+    candidate.result_status = ExternalResultStatus::AcceptedAsLocalImportOnly;
+    candidate.provenance_draft = None;
+
+    let validation = validate_external_result_candidate(&candidate);
+
+    assert!(!validation.valid);
+    assert_result_issue_path(&validation, "candidate.result_candidate_id");
+    assert_result_issue_path(&validation, "candidate.source_benchmark_pack_id");
+    assert_result_issue_path(&validation, "candidate.dry_run_plan_id");
+    assert_result_issue_path(&validation, "candidate.provenance_draft");
+    assert_result_issue_path(&validation, "candidate.raw_output_artifact_refs[0]");
+    assert_result_issue_path(&validation, "candidate.raw_output_artifact_refs[1]");
+    assert_result_issue_path(&validation, "candidate.result_status");
+}
+
+#[test]
+fn candidate_validation_reports_metric_identity_paths_and_forbidden_notes() {
+    let mut candidate = candidate();
+    candidate.notes = vec!["this is official benchmark evidence".to_string()];
+    candidate.normalized_metrics.push(ExternalMetricCandidate {
+        metric_kind: " ".to_string(),
+        unit: ExternalMetricUnit::Count,
+        value: None,
+        source_artifact_ref: Some("../escape/metric.json".to_string()),
+        notes: vec!["formal evidence claim".to_string()],
+    });
+
+    let validation = validate_external_result_candidate(&candidate);
+
+    assert!(!validation.valid);
+    assert_result_issue_path(&validation, "candidate.normalized_metrics[0].metric_kind");
+    assert_result_issue_path(
+        &validation,
+        "candidate.normalized_metrics[0].source_artifact_ref",
+    );
+    assert_result_issue_path(&validation, "candidate.normalized_metrics[0].notes[0]");
+    assert_result_issue_path(&validation, "candidate.notes[0]");
+}
+
+#[test]
+fn relaxed_import_policy_allows_policy_controlled_local_drift() {
+    let mut schema = build_default_external_result_import_schema();
+    schema.import_policy.require_source_benchmark_pack_id = false;
+    schema.import_policy.require_dry_run_plan_id = false;
+    schema.import_policy.require_provenance = false;
+    schema.import_policy.reject_level2_plus_claim_requests = false;
+    schema.import_policy.reject_official_benchmark_claims = false;
+    schema.import_policy.reject_formal_evidence_claims = false;
+    schema.import_policy.reject_proof_system_soundness_claims = false;
+    schema.import_policy.reject_absolute_paths = false;
+    schema.import_policy.require_metric_source_artifact_refs = false;
+
+    let mut candidate = candidate();
+    candidate.source_benchmark_pack_id.clear();
+    candidate.dry_run_plan_id.clear();
+    candidate.raw_output_artifact_refs = vec!["/tmp/raw-output.json".to_string()];
+    candidate.provenance_draft = None;
+    candidate.claim_boundary_requested = ClaimBoundary::Level2ReproducibleBenchmarkArtifact;
+    candidate.claims_official_benchmark_evidence = true;
+    candidate.claims_formal_evidence = true;
+    candidate.claims_proof_system_soundness = true;
+    candidate.normalized_metrics.push(ExternalMetricCandidate {
+        metric_kind: "synthetic_metric".to_string(),
+        unit: ExternalMetricUnit::Count,
+        value: Some("1".to_string()),
+        source_artifact_ref: Some("artifacts/metric.json".to_string()),
+        notes: Vec::new(),
+    });
+
+    let validation = validate_external_result_candidate_with_schema(&candidate, &schema);
+
+    assert!(
+        validation.valid,
+        "validation issues: {:?}",
+        validation.issues
+    );
 }
 
 #[test]
@@ -154,6 +263,27 @@ fn rejected_candidate_can_be_quarantined_and_serialized() {
         serialize_quarantine_manifest_json(&parsed).expect("manifest should serialize again");
     assert_eq!(manifest, parsed);
     assert_eq!(json, json_again);
+}
+
+#[test]
+fn direct_quarantine_record_preserves_validation_context_without_manifest_claims() {
+    let mut candidate = candidate();
+    candidate.result_candidate_id = "candidate_bad_path".to_string();
+    candidate.raw_output_artifact_refs = vec!["../escape/raw-output.json".to_string()];
+
+    let record = external_result_quarantine_record(&candidate);
+
+    assert_eq!(record.result_candidate_id, "candidate_bad_path");
+    assert_eq!(record.status, ExternalResultStatus::Quarantined);
+    assert_eq!(
+        record.claim_boundary_requested,
+        ClaimBoundary::Level0DesignNote
+    );
+    assert!(record
+        .validation_issues
+        .iter()
+        .any(|issue| issue.path == "candidate.raw_output_artifact_refs[0]"));
+    assert!(record.notes.iter().any(|note| note.contains("quarantined")));
 }
 
 #[test]
@@ -270,6 +400,14 @@ fn quarantine_manifest_validation_preserves_valid_status_summary() {
 }
 
 fn assert_issue_path(validation: &QuarantineValidation, path: &str) {
+    assert!(
+        validation.issues.iter().any(|issue| issue.path == path),
+        "expected validation issue at {path}, got {:?}",
+        validation.issues
+    );
+}
+
+fn assert_result_issue_path(validation: &ExternalResultValidation, path: &str) {
     assert!(
         validation.issues.iter().any(|issue| issue.path == path),
         "expected validation issue at {path}, got {:?}",
