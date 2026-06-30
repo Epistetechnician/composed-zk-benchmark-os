@@ -105,7 +105,8 @@ tranche, the Phase 217 replay serialization coverage audit, and the Phase 218
 external-runner serialization coverage audit, and the Phase 219
 external-runner artifact-capture coverage tranche, and the Phase 220 generator
 config coverage tranche, and the Phase 221 mutation missing-constraints
-coverage tranche, and the Phase 222 zk-Harness mapping coverage tranche, plus
+coverage tranche, and the Phase 222 zk-Harness mapping coverage tranche, and
+the Phase 223 external submission preflight output coverage tranche, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -386,6 +387,21 @@ production source or zk-Harness adapter semantics. Remaining mapping misses are
 capped by the current API shape: all current `FamilyKind` variants have
 candidate labels, and `compute_artifact_digest` over the concrete pack
 manifest is not expected to fail during local mapping.
+
+Phase 223 adds focused local regression coverage for
+`evidence/external_submission_preflight_output.rs`, the next low
+non-serializer public surface after Phase 222. It covers non-empty output-root
+rejection, file-root readback rejection, matching overwrite, `not retain`
+redaction-policy wording, tampered report validation, forbidden report side
+effects, missing report non-claims, tampered manifest side effects, manifest
+identity drift, raw-retention Markdown markers, and non-UTF-8 digest sidecars.
+The package coverage run moved that module from `82.11%` to `87.03%` line
+coverage without changing production source, external replay behavior,
+endpoint submission behavior, credential handling, or accepted Evidence Ledger
+state. Remaining misses are mostly filesystem error closures, serde
+serialization error closures for infallible in-memory structs, portable-path
+helper branches not reachable through public constants, and platform-specific
+path component branches.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
@@ -1901,6 +1917,12 @@ The Phase 222 tranche moved `adapters/zk_harness/mapping.rs` from `82.05%` to
 coverage. After serializer-wrapper floors already audited in Phases 217 and
 218, the next visible low non-serializer surface is
 `evidence/external_submission_preflight_output.rs` at `82.11%` line coverage.
+The Phase 223 tranche moved `evidence/external_submission_preflight_output.rs`
+from `82.11%` to `87.03%` line coverage and moved the local `zkbench-core`
+package summary to `90.64%` region coverage, `86.16%` function execution, and
+`91.93%` line coverage. After serializer-wrapper floors already audited in
+Phases 217 and 218, the next visible low non-serializer surface is
+`report_bundle.rs` at `82.30%` line coverage.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

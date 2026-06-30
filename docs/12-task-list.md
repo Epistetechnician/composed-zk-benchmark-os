@@ -4198,6 +4198,47 @@ Exit criteria: focused zk-Harness mapping tests pass; repo hygiene and
 claim-boundary checks pass; full workspace tests pass; package coverage summary
 records the local coverage movement and next low non-serializer surface.
 
+## Phase 223 External Submission Preflight Output Coverage
+
+Status: complete for local coverage hardening. See
+`docs/223-phase-external-submission-preflight-output-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer public API surface after Phase
+222: `crates/zkbench-core/src/evidence/external_submission_preflight_output.rs`.
+
+Implemented: added focused tests in
+`crates/zkbench-core/tests/phase_w_promotion_preflight.rs` for non-empty
+output-root rejection without explicit overwrite, readback file-root rejection,
+matching overwrite with a persisted overwrite-enabled preflight request,
+`not retain` redaction-policy wording, invalid tampered preflight reports,
+forbidden report side effects, missing report non-claim labels, forbidden
+manifest side effects, manifest report-id and request-id drift, raw-retention
+markers in rendered Markdown, and non-UTF-8 digest sidecars.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`90.56%` region / `86.10%` function / `91.76%` line coverage to `90.64%`
+region / `86.16%` function / `91.93%` line coverage.
+`evidence/external_submission_preflight_output.rs` moved from `79.84%` region
+/ `72.58%` function / `82.11%` line coverage to `81.89%` region / `74.19%`
+function / `87.03%` line coverage.
+
+Audit decision: no production source was changed. Remaining misses are mostly
+filesystem error closures, serde serialization error closures for infallible
+in-memory structs, portable-path helper branches not reachable through public
+constants, and platform-specific path component branches.
+
+Anti-goals: production source changes, external replay behavior changes,
+endpoint submission behavior, credential handling, accepted Evidence Ledger
+policy changes, generated artifact materialization, formal evidence, benchmark
+evidence, score-axis population, Level2+ evidence, semantic-correctness claims,
+production-readiness claims, unsafe coverage forcing, coverage suppression,
+structurally unreachable branch forcing, or whole-workspace 100% coverage
+claims.
+
+Exit criteria: focused Phase W promotion-preflight tests pass; repo hygiene and
+claim-boundary checks pass; full workspace tests pass; package coverage summary
+records the local coverage movement and next low non-serializer surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
