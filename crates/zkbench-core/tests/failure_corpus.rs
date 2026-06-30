@@ -239,3 +239,85 @@ fn failure_corpus_rejects_empty_artifact_refs() {
         .expect_err("empty reproduction artifact ref role should be rejected");
     assert!(error.to_string().contains("role"));
 }
+
+#[test]
+fn failure_corpus_rejects_claim_boundary_entry_id_and_portable_path_drift() {
+    let mut corpus = FailureCorpus::empty("claim_boundary_failure_corpus");
+    corpus.push(sample_entry(
+        "case_boundary_drift",
+        FailureCorpusKind::ReplayFailure,
+    ));
+
+    corpus.index.claim_boundary = ClaimBoundary::Level1LocalReplay;
+    let error = validate_failure_corpus_index(&corpus.index)
+        .expect_err("index claim-boundary drift should be rejected");
+    assert!(error.to_string().contains("claim_boundary"));
+    assert!(error.to_string().contains("failure corpus indexes"));
+
+    corpus.index.claim_boundary = ClaimBoundary::Level0DesignNote;
+    corpus.index.entries[0].entry_id = " ".to_string();
+    let error = validate_failure_corpus_index(&corpus.index)
+        .expect_err("empty entry id should be rejected");
+    assert!(error.to_string().contains("entry id is empty"));
+
+    corpus.index.entries[0].entry_id = "failure_case_boundary_drift_MissingConstraints".to_string();
+    corpus.index.entries[0].claim_boundary = ClaimBoundary::Level1LocalReplay;
+    let error = validate_failure_corpus_index(&corpus.index)
+        .expect_err("entry claim-boundary drift should be rejected");
+    assert!(error.to_string().contains("entries[0].claim_boundary"));
+
+    corpus.index.entries[0].claim_boundary = ClaimBoundary::Level0DesignNote;
+    corpus.index.entries[0].reproduction_manifest.claim_boundary = ClaimBoundary::Level1LocalReplay;
+    let error = validate_failure_corpus_index(&corpus.index)
+        .expect_err("reproduction claim-boundary drift should be rejected");
+    assert!(error
+        .to_string()
+        .contains("reproduction_manifest.claim_boundary"));
+
+    corpus.index.entries[0].reproduction_manifest.claim_boundary = ClaimBoundary::Level0DesignNote;
+    corpus.index.entries[0]
+        .artifact_refs
+        .push(FailureArtifactRef {
+            relative_path: "replay/manifest.json".to_string(),
+            role: "local_replay_manifest".to_string(),
+            notes: Vec::new(),
+        });
+    validate_failure_corpus_index(&corpus.index).expect("portable artifact ref should validate");
+
+    corpus.index.entries[0].artifact_refs.clear();
+    corpus.index.entries[0]
+        .artifact_refs
+        .push(FailureArtifactRef {
+            relative_path: "/absolute/replay.json".to_string(),
+            role: "local_replay_manifest".to_string(),
+            notes: Vec::new(),
+        });
+    let error = validate_failure_corpus_index(&corpus.index)
+        .expect_err("absolute artifact ref should be rejected");
+    assert!(error.to_string().contains("relative portable paths"));
+
+    corpus.index.entries[0].artifact_refs.clear();
+    corpus.index.entries[0]
+        .artifact_refs
+        .push(FailureArtifactRef {
+            relative_path: "replay/../manifest.json".to_string(),
+            role: "local_replay_manifest".to_string(),
+            notes: Vec::new(),
+        });
+    let error = validate_failure_corpus_index(&corpus.index)
+        .expect_err("parent-directory artifact ref should be rejected");
+    assert!(error.to_string().contains("relative portable paths"));
+
+    corpus.index.entries[0].artifact_refs.clear();
+    corpus.index.entries[0]
+        .reproduction_manifest
+        .artifact_refs
+        .push(FailureArtifactRef {
+            relative_path: "replay\\manifest.json".to_string(),
+            role: "local_replay_manifest".to_string(),
+            notes: Vec::new(),
+        });
+    let error = validate_failure_corpus_index(&corpus.index)
+        .expect_err("backslash artifact ref should be rejected");
+    assert!(error.to_string().contains("relative portable paths"));
+}
