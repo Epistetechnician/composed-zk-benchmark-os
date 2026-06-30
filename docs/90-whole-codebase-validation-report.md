@@ -106,7 +106,8 @@ external-runner serialization coverage audit, and the Phase 219
 external-runner artifact-capture coverage tranche, and the Phase 220 generator
 config coverage tranche, and the Phase 221 mutation missing-constraints
 coverage tranche, and the Phase 222 zk-Harness mapping coverage tranche, and
-the Phase 223 external submission preflight output coverage tranche, plus
+the Phase 223 external submission preflight output coverage tranche, and the
+Phase 224 report bundle coverage tranche, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -402,6 +403,20 @@ state. Remaining misses are mostly filesystem error closures, serde
 serialization error closures for infallible in-memory structs, portable-path
 helper branches not reachable through public constants, and platform-specific
 path component branches.
+
+Phase 224 adds focused local regression coverage for `report_bundle.rs`, the
+next low non-serializer public surface after Phase 223. It covers empty and
+duplicate identities, unsupported and zero-length digest metadata, missing
+limitations, missing source references, missing inputs, missing rendered
+reports, shell-like artifact references, invalid rendered Markdown payload
+metadata, extra payload rejection, regular-file output-root rejection, invalid
+output-root syntax, non-UTF-8 digest sidecars, and non-UTF-8 manifest JSON.
+The package coverage run moved that module from `82.30%` to `92.90%` line
+coverage without changing production source, report-bundle semantics, external
+replay behavior, endpoint submission behavior, credential handling, or accepted
+Evidence Ledger state. Remaining misses are mostly filesystem error closures,
+serde serialization error closures for infallible in-memory structs, digest
+computation error closures, and platform-specific path component branches.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
@@ -1923,6 +1938,12 @@ package summary to `90.64%` region coverage, `86.16%` function execution, and
 `91.93%` line coverage. After serializer-wrapper floors already audited in
 Phases 217 and 218, the next visible low non-serializer surface is
 `report_bundle.rs` at `82.30%` line coverage.
+The Phase 224 tranche moved `report_bundle.rs` from `82.30%` to `92.90%` line
+coverage and moved the local `zkbench-core` package summary to `90.82%` region
+coverage, `86.28%` function execution, and `92.33%` line coverage. After
+serializer-wrapper floors already audited in Phases 217 and 218, the next
+visible low non-serializer surface is `soak/artifact_layout.rs` at `83.81%`
+line coverage.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

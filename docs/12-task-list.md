@@ -4239,6 +4239,47 @@ Exit criteria: focused Phase W promotion-preflight tests pass; repo hygiene and
 claim-boundary checks pass; full workspace tests pass; package coverage summary
 records the local coverage movement and next low non-serializer surface.
 
+## Phase 224 Report Bundle Coverage
+
+Status: complete for local coverage hardening. See
+`docs/224-phase-report-bundle-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer public API surface after Phase
+223: `crates/zkbench-core/src/report_bundle.rs`.
+
+Implemented: added focused tests in
+`crates/zkbench-core/tests/phase_q_report_bundle.rs` for empty and duplicate
+identities, unsupported digest algorithms, zero-length digest metadata, missing
+required local limitations, missing source references, missing inputs, missing
+rendered reports, shell-like artifact references, empty rendered Markdown
+payload identifiers and bodies, duplicate rendered Markdown payloads, extra
+rendered Markdown payloads, regular-file output roots, syntactically invalid
+output roots, non-UTF-8 manifest digest sidecars, and non-UTF-8 manifest JSON
+with matching digest sidecars.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`90.64%` region / `86.16%` function / `91.93%` line coverage to `90.82%`
+region / `86.28%` function / `92.33%` line coverage. `report_bundle.rs` moved
+from `86.84%` region / `79.37%` function / `82.30%` line coverage to `91.35%`
+region / `82.54%` function / `92.90%` line coverage.
+
+Audit decision: no production source was changed. Remaining misses are mostly
+filesystem error closures, serde serialization error closures for infallible
+in-memory structs, digest computation error closures, and platform-specific
+path component branches.
+
+Anti-goals: production source changes, report-bundle semantics changes,
+external replay behavior changes, endpoint submission behavior, credential
+handling, accepted Evidence Ledger policy changes, generated artifact
+materialization, formal evidence, benchmark evidence, score-axis population,
+Level2+ evidence, semantic-correctness claims, production-readiness claims,
+unsafe coverage forcing, coverage suppression, structurally unreachable branch
+forcing, or whole-workspace 100% coverage claims.
+
+Exit criteria: focused Phase Q report-bundle tests pass; repo hygiene and
+claim-boundary checks pass; full workspace tests pass; package coverage summary
+records the local coverage movement and next low non-serializer surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
