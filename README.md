@@ -334,6 +334,7 @@ Surface DSL
 | [docs/246-hsai-public-proof-refresh.md](docs/246-hsai-public-proof-refresh.md) | Phase 246 HSAI public proof refresh for current green head. |
 | [docs/247-hsai-gateway-local-demo-bundle-run.md](docs/247-hsai-gateway-local-demo-bundle-run.md) | Phase 247 HSAI Gateway ignored local demo bundle run. |
 | [docs/248-hsai-first-real-external-evidence-lane.md](docs/248-hsai-first-real-external-evidence-lane.md) | Phase 248 HSAI first real external evidence lane map. |
+| [docs/249-hsai-gateway-attestation-binding-notes.md](docs/249-hsai-gateway-attestation-binding-notes.md) | Phase 249 HSAI Gateway-to-attestation binding implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1301,6 +1302,13 @@ HSAI-owned Phala/dstack fixture, operator-only Phala API materialization, local
 QVL materialization, managed JWKS materialization, and TLS channel artifact
 surfaces, then states the missing gateway-to-attestation binding before any
 accepted evidence or SOTA claim.
+
+[docs/249-hsai-gateway-attestation-binding-notes.md](docs/249-hsai-gateway-attestation-binding-notes.md)
+records the local pure-data bridge from one gateway action proposal to an
+attestation challenge binding. `hsai-agent-admission` now derives a gateway case
+hash from `GatewayActionProposal::digest()` and feeds it into the canonical
+`report_data_binding()` function, producing capture input metadata only with
+`authority_granted=false`.
 
 [docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md](docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md)
 records a bounded local coverage tranche for `zkbench-core` soak health
