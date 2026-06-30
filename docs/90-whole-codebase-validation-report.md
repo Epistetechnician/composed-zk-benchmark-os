@@ -102,7 +102,8 @@ the Phase 213 HSAI Gateway effectiveness-metrics surface, the Phase 214 HSAI
 Gateway public proof packet, the Phase 215 HSAI Gateway local demo
 runbook/example surface, the Phase 216 soak health coverage thirty-seventh
 tranche, the Phase 217 replay serialization coverage audit, and the Phase 218
-external-runner serialization coverage audit, plus earlier
+external-runner serialization coverage audit, and the Phase 219
+external-runner artifact-capture coverage tranche, plus earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
@@ -339,6 +340,16 @@ exercised by the Phase V coverage-hardening tests. The audit records those
 serializer branches as structurally capped under the current concrete public API
 and routes the next coverage slice away from serializer wrappers toward a
 reachable public-API module after a fresh missing-line audit.
+
+Phase 219 adds focused local regression coverage for
+`external_runner/artifact_capture.rs`, the first reachable non-serializer
+surface selected after the Phase 217/218 serializer audits. It covers the
+default expected artifact matrix plus empty contract id rejection,
+claim-boundary elevation rejection, empty expected-artifact id rejection,
+traversal path-hint rejection, captured-artifact warnings, unreviewed
+captured-artifact warnings, and captured-artifact traversal URI rejection.
+The package coverage run moved that module from `80.84%` to `99.40%` line
+coverage without changing production source or artifact-capture semantics.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
@@ -1829,6 +1840,13 @@ requires the same audit-first treatment. The Phase 218 audit confirmed that
 `external_runner/serialization.rs` is also capped by structurally unreachable
 `serde_json::to_string_pretty` error mappings for concrete derived structs, so
 the next coverage tranche should move to a reachable non-serializer module.
+The Phase 219 tranche moved `external_runner/artifact_capture.rs` from
+`80.84%` to `99.40%` line coverage and moved the local `zkbench-core` package
+summary to `90.37%` region coverage, `85.82%` function execution, and `91.48%`
+line coverage. After the serializer-wrapper floors, the next fresh low
+non-serializer surfaces include `generator/config.rs` at `80.23%` line
+coverage, `mutation/missing_constraints.rs` at `80.43%` line coverage, and
+`adapters/zk_harness/mapping.rs` at `82.05%` line coverage.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

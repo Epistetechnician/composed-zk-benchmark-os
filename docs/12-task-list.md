@@ -4044,6 +4044,41 @@ external-runner serialization paths; focused Phase V coverage hardening tests
 still pass; repo hygiene and claim-boundary checks pass; full workspace tests
 pass; docs record the cap and next reachable target class.
 
+## Phase 219 External Runner Artifact Capture Coverage
+
+Status: complete for local coverage hardening. See
+`docs/219-phase-external-runner-artifact-capture-coverage-notes.md`.
+
+Goal: harden the first reachable non-serializer public API surface after the
+Phase 217/218 serializer-wrapper audits:
+`crates/zkbench-core/src/external_runner/artifact_capture.rs`.
+
+Implemented: added focused tests in
+`crates/zkbench-core/tests/artifact_capture_contract.rs` for the default
+artifact matrix and validator branches covering empty contract id,
+claim-boundary elevation, empty expected-artifact id, expected-artifact
+traversal hints, captured-artifact warning emission, unreviewed captured
+artifact warnings, and captured-artifact traversal URI rejection.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`90.28%` region / `85.76%` function / `91.35%` line coverage to `90.37%`
+region / `85.82%` function / `91.48%` line coverage.
+`external_runner/artifact_capture.rs` moved from `82.69%` region / `87.50%`
+function / `80.84%` line coverage to `98.08%` region / `100.00%` function /
+`99.40%` line coverage.
+
+Anti-goals: production source changes, artifact-capture semantics changes,
+external-runner semantics changes, Cargo metadata changes, dependencies,
+external execution, generated artifact materialization, accepted Evidence
+Ledger policy changes, formal evidence, benchmark evidence, score-axis
+population, Level2+ evidence, semantic-correctness claims, production-readiness
+claims, unsafe coverage forcing, coverage suppression, structurally unreachable
+branch forcing, or whole-workspace 100% coverage claims.
+
+Exit criteria: focused artifact-capture tests pass; repo hygiene and
+claim-boundary checks pass; full workspace tests pass; package coverage summary
+records the local coverage movement and next low non-serializer surfaces.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
