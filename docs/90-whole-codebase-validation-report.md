@@ -105,7 +105,8 @@ tranche, the Phase 217 replay serialization coverage audit, and the Phase 218
 external-runner serialization coverage audit, and the Phase 219
 external-runner artifact-capture coverage tranche, and the Phase 220 generator
 config coverage tranche, and the Phase 221 mutation missing-constraints
-coverage tranche, plus earlier
+coverage tranche, and the Phase 222 zk-Harness mapping coverage tranche, plus
+earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
@@ -373,6 +374,18 @@ production source or mutation semantics. The remaining uncovered region is
 capped by the current API shape: the mutable transition lookup uses a
 transition id selected from the same surface spec immediately before the cloned
 mutation surface is edited.
+
+Phase 222 adds focused local regression coverage for
+`adapters/zk_harness/mapping.rs`, the next low non-serializer public surface
+after Phase 221. It covers current family labels, unsupported mutation labels,
+invalid source-pack rejection, malformed generated and mutated payload
+rejection, missing optional generated payload rejection, unsupported mutation
+warnings, and non-default expected outcome labels. The package coverage run
+moved that module from `82.05%` to `94.36%` line coverage without changing
+production source or zk-Harness adapter semantics. Remaining mapping misses are
+capped by the current API shape: all current `FamilyKind` variants have
+candidate labels, and `compute_artifact_digest` over the concrete pack
+manifest is not expected to fail during local mapping.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
@@ -1882,6 +1895,12 @@ The Phase 221 tranche moved `mutation/missing_constraints.rs` from `80.43%` to
 coverage. After serializer-wrapper floors already audited in Phases 217 and
 218, the next visible low non-serializer surface is
 `adapters/zk_harness/mapping.rs` at `82.05%` line coverage.
+The Phase 222 tranche moved `adapters/zk_harness/mapping.rs` from `82.05%` to
+`94.36%` line coverage and moved the local `zkbench-core` package summary to
+`90.56%` region coverage, `86.10%` function execution, and `91.76%` line
+coverage. After serializer-wrapper floors already audited in Phases 217 and
+218, the next visible low non-serializer surface is
+`evidence/external_submission_preflight_output.rs` at `82.11%` line coverage.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

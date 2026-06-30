@@ -307,6 +307,7 @@ Surface DSL
 | [docs/219-phase-external-runner-artifact-capture-coverage-notes.md](docs/219-phase-external-runner-artifact-capture-coverage-notes.md) | Phase 219 external-runner artifact-capture coverage notes. |
 | [docs/220-phase-generator-config-coverage-notes.md](docs/220-phase-generator-config-coverage-notes.md) | Phase 220 generator config coverage notes. |
 | [docs/221-phase-mutation-missing-constraints-coverage-notes.md](docs/221-phase-mutation-missing-constraints-coverage-notes.md) | Phase 221 mutation missing-constraints coverage notes. |
+| [docs/222-phase-zk-harness-mapping-coverage-notes.md](docs/222-phase-zk-harness-mapping-coverage-notes.md) | Phase 222 zk-Harness mapping coverage notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1333,6 +1334,18 @@ coverage. It changes no production source, mutation semantics, generated
 artifacts, accepted Evidence Ledger state, benchmark evidence, score-axis
 state, Level2+ evidence, production-readiness claim, semantic-correctness
 claim, or 100% coverage claim.
+
+[docs/222-phase-zk-harness-mapping-coverage-notes.md](docs/222-phase-zk-harness-mapping-coverage-notes.md)
+records focused local coverage hardening for `adapters/zk_harness/mapping.rs`.
+It adds tests for current family labels, unsupported mutation labels, invalid
+source-pack rejection, malformed generated and mutated payload rejection,
+missing optional payload rejection, unsupported mutation warnings, and
+non-default expected outcome labels. The local package coverage run moved
+`adapters/zk_harness/mapping.rs` from `82.05%` to `94.36%` line coverage and
+`zkbench-core` from `91.66%` to `91.76%` line coverage. It changes no
+production source, zk-Harness adapter semantics, generated artifacts, accepted
+Evidence Ledger state, benchmark evidence, score-axis state, Level2+ evidence,
+production-readiness claim, semantic-correctness claim, or 100% coverage claim.
 
 ## Validation Checklist
 

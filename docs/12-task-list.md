@@ -4156,6 +4156,48 @@ Exit criteria: focused mutation-engine tests pass; repo hygiene and
 claim-boundary checks pass; full workspace tests pass; package coverage summary
 records the local coverage movement and next low non-serializer surface.
 
+## Phase 222 zk-Harness Mapping Coverage
+
+Status: complete for local coverage hardening. See
+`docs/222-phase-zk-harness-mapping-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer public API surface after Phase
+221: `crates/zkbench-core/src/adapters/zk_harness/mapping.rs`.
+
+Implemented: added focused tests in
+`crates/zkbench-core/tests/zk_harness_pack_mapping.rs` for current family-label
+helper coverage, unsupported mutation-label helper coverage, invalid
+source-pack rejection before mapping, malformed generated-instance payload
+rejection, malformed mutated-instance payload rejection, missing optional
+generated-instance payload rejection, unsupported mutation-class warning and
+unsupported-feature recording, and non-default expected-outcome labels for
+backend-error, capability-gap, and inconclusive traces.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`90.44%` region / `85.99%` function / `91.66%` line coverage to `90.56%`
+region / `86.10%` function / `91.76%` line coverage.
+`adapters/zk_harness/mapping.rs` moved from `81.33%` region / `85.71%`
+function / `82.05%` line coverage to `94.67%` region / `100.00%` function /
+`94.36%` line coverage.
+
+Audit decision: no production source was changed. Remaining mapping misses are
+capped by the current API shape: all current `FamilyKind` variants have
+candidate labels, and `compute_artifact_digest` over the concrete pack manifest
+is not expected to fail during local mapping.
+
+Anti-goals: production source changes, zk-Harness adapter semantics changes,
+pack semantics changes, mutation semantics changes, generator semantics
+changes, Cargo metadata changes, dependencies, external execution, generated
+artifact materialization, accepted Evidence Ledger policy changes, formal
+evidence, benchmark evidence, score-axis population, Level2+ evidence,
+semantic-correctness claims, production-readiness claims, unsafe coverage
+forcing, coverage suppression, structurally unreachable branch forcing, or
+whole-workspace 100% coverage claims.
+
+Exit criteria: focused zk-Harness mapping tests pass; repo hygiene and
+claim-boundary checks pass; full workspace tests pass; package coverage summary
+records the local coverage movement and next low non-serializer surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
