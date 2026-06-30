@@ -3889,10 +3889,35 @@ corpus rates and per-threat coverage compute; invalid reports fail closed;
 zero-denominator local rate handling is deterministic; README navigation,
 validation report, and AGENTS scope rules point to the notes.
 
-## Phase 214 HSAI Gateway Local Demo Runbook
+## Phase 214 HSAI Gateway Public Proof Packet
+
+Status: complete for bounded public proof packaging. See
+`docs/214-hsai-gateway-public-proof-packet.md`.
+
+Goal: publish a shareable claim packet for the green public Phase 204-212 HSAI
+Gateway state without expanding the technical claim.
+
+Implemented: the packet names public commit
+`4dfa3e6dfddd8ab79f558691bc10c48b74f47bf7`, the validated Phase 204-212
+surfaces, the exact local verifier commands, reproduction checklist, public
+claim text, buyer-facing wording, and explicit nonclaims.
+
+Anti-goals: Rust source changes, tests, Cargo metadata changes, package runtime
+files, generated demo bundles, model execution/download, provider calls,
+verifier-agent runtime, external replay execution, signer/wallet/exchange/
+custody/ACP/MCP/tool integration, accepted Evidence Ledger mutation,
+score-axis population, benchmark output, Level2+ evidence,
+production-readiness claims, semantic-correctness claims, global software-agent
+uniqueness claims, "fully secure" claims, or claims above `Attested`.
+
+Exit criteria: the proof packet names the public commit and verifier commands,
+preserves all Phase 204-212 claim boundaries, and README navigation points to
+the packet.
+
+## Phase 215 HSAI Gateway Local Demo Runbook
 
 Status: complete for local ignored demo output. See
-`docs/214-hsai-gateway-local-demo-runbook.md`.
+`docs/215-hsai-gateway-local-demo-runbook.md`.
 
 Goal: add an operator-facing, reproducible local demo path for the existing
 `gateway-report/*` output bundle.
@@ -3919,10 +3944,10 @@ Exit criteria: the example compiles; the source-contract test passes; the
 runbook names the exact env contract and generated files; repo hygiene and
 claim-boundary checks pass; the generated demo root remains ignored.
 
-## Phase 215 Soak Health Coverage Thirty-Seventh Tranche
+## Phase 216 Soak Health Coverage Thirty-Seventh Tranche
 
 Status: complete for focused local coverage hardening. See
-`docs/215-phase-soak-health-coverage-thirty-seventh-tranche-notes.md`.
+`docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md`.
 
 Goal: add focused regression coverage for
 `crates/zkbench-core/src/soak/health.rs` without changing production health
@@ -3947,6 +3972,41 @@ whole-workspace 100% coverage claims.
 Exit criteria: focused `soak_health_report` tests pass; repo hygiene and
 claim-boundary checks pass; full workspace tests pass; docs record the claim
 boundary and non-goals.
+
+## Phase 217 Replay Serialization Coverage Audit
+
+Status: complete for local coverage-floor audit. See
+`docs/217-phase-replay-serialization-coverage-audit-notes.md`.
+
+Goal: audit the current package coverage floor at
+`crates/zkbench-core/src/replay/serialization.rs` before adding any coverage
+tests.
+
+Implemented: the local package coverage run still reports `zkbench-core` at
+`90.28%` region coverage, `85.76%` function execution, and `91.35%` line
+coverage. The measured floor remains `replay/serialization.rs` at `75.00%`
+line / `75.00%` function / `75.00%` region coverage. Missing-line inspection
+shows only the serializer `serde_json::to_string_pretty` error closures remain
+uncovered; malformed JSON deserializer branches are already exercised.
+
+Audit decision: no Rust tests were added because reaching those serializer
+closures would require fabricated concrete-type serialization failures or
+production API changes. The next visible low file is
+`external_runner/serialization.rs` at `76.65%` line coverage and should be
+audited before any test expansion.
+
+Anti-goals: production source changes, serialization semantics changes, Cargo
+metadata changes, dependencies, external execution, generated artifact
+materialization, accepted Evidence Ledger policy changes, formal evidence,
+benchmark evidence, score-axis population, Level2+ evidence,
+semantic-correctness claims, production-readiness claims, unsafe coverage
+forcing, coverage suppression, structurally unreachable branch forcing, or
+whole-workspace 100% coverage claims.
+
+Exit criteria: missing-line audit identifies the reachable and capped replay
+serialization paths; focused replay serialization tests still pass; repo
+hygiene and claim-boundary checks pass; full workspace tests pass; docs record
+the cap and next audit target.
 
 ## Managed-Attestation Track: Managed JWT Signature Verification
 

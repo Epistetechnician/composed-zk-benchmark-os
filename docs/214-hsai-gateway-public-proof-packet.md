@@ -1,4 +1,4 @@
-# Phase 213 HSAI Gateway Public Proof Packet
+# Phase 214 HSAI Gateway Public Proof Packet
 
 Status: bounded public claim packet for the green public gateway state.
 

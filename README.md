@@ -299,9 +299,10 @@ Surface DSL
 | [docs/211-hsai-gateway-adversarial-corpus-output-run-notes.md](docs/211-hsai-gateway-adversarial-corpus-output-run-notes.md) | Phase 211 HSAI Gateway adversarial-corpus output-run notes. |
 | [docs/212-hsai-gateway-baseline-comparison-notes.md](docs/212-hsai-gateway-baseline-comparison-notes.md) | Phase 212 HSAI Gateway baseline-comparison notes. |
 | [docs/213-hsai-gateway-effectiveness-metrics-notes.md](docs/213-hsai-gateway-effectiveness-metrics-notes.md) | Phase 213 HSAI Gateway effectiveness-metrics notes. |
-| [docs/213-hsai-gateway-public-proof-packet.md](docs/213-hsai-gateway-public-proof-packet.md) | Phase 213 HSAI Gateway public proof packet for the green Phase 204-212 public state. |
-| [docs/214-hsai-gateway-local-demo-runbook.md](docs/214-hsai-gateway-local-demo-runbook.md) | Phase 214 HSAI Gateway local demo runbook. |
-| [docs/215-phase-soak-health-coverage-thirty-seventh-tranche-notes.md](docs/215-phase-soak-health-coverage-thirty-seventh-tranche-notes.md) | Phase 215 soak health coverage thirty-seventh tranche notes. |
+| [docs/214-hsai-gateway-public-proof-packet.md](docs/214-hsai-gateway-public-proof-packet.md) | Phase 214 HSAI Gateway public proof packet for the green Phase 204-212 public state. |
+| [docs/215-hsai-gateway-local-demo-runbook.md](docs/215-hsai-gateway-local-demo-runbook.md) | Phase 215 HSAI Gateway local demo runbook. |
+| [docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md](docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md) | Phase 216 soak health coverage thirty-seventh tranche notes. |
+| [docs/217-phase-replay-serialization-coverage-audit-notes.md](docs/217-phase-replay-serialization-coverage-audit-notes.md) | Phase 217 replay serialization coverage audit notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1243,7 +1244,7 @@ signer/tool integration, accepted Evidence Ledger mutation, score-axis
 population, benchmark output, production-readiness claim, semantic-correctness
 claim, global uniqueness claim, or Level2+ evidence.
 
-[docs/213-hsai-gateway-public-proof-packet.md](docs/213-hsai-gateway-public-proof-packet.md)
+[docs/214-hsai-gateway-public-proof-packet.md](docs/214-hsai-gateway-public-proof-packet.md)
 records the bounded public proof packet for the green public Phase 204-212
 gateway state at commit `4dfa3e6dfddd8ab79f558691bc10c48b74f47bf7`. The packet
 names the exact verifier commands, the local hermetic gateway surfaces, the
@@ -1252,7 +1253,7 @@ not promote local tests into production readiness, semantic correctness, live
 provider evidence, accepted Evidence Ledger mutation, benchmark evidence, or
 Level2+ evidence.
 
-[docs/214-hsai-gateway-local-demo-runbook.md](docs/214-hsai-gateway-local-demo-runbook.md)
+[docs/215-hsai-gateway-local-demo-runbook.md](docs/215-hsai-gateway-local-demo-runbook.md)
 records the local HSAI Gateway demo-run surface inside `hsai-agent-admission`.
 The `gateway_demo_report` Cargo example writes the existing declared
 `gateway-report/*` bundle under the ignored `.gateway-demo-runs/` root, reads it
@@ -1262,7 +1263,7 @@ signers/tools, mutate accepted Evidence Ledgers, populate score axes, create
 benchmark evidence, claim production readiness, claim semantic correctness,
 claim global uniqueness, or grant authority.
 
-[docs/215-phase-soak-health-coverage-thirty-seventh-tranche-notes.md](docs/215-phase-soak-health-coverage-thirty-seventh-tranche-notes.md)
+[docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md](docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md)
 records a bounded local coverage tranche for `zkbench-core` soak health
 reports. It adds focused integration coverage for health report identity
 validation, nested claim-boundary validation, unsafe note rejection, summary
@@ -1274,6 +1275,15 @@ coverage. It changes no production source, local soak semantics, generated
 artifacts, accepted Evidence Ledger state, score-axis state, benchmark evidence,
 production-readiness claim, semantic-correctness claim, Level2+ evidence, or
 100% coverage claim.
+
+[docs/217-phase-replay-serialization-coverage-audit-notes.md](docs/217-phase-replay-serialization-coverage-audit-notes.md)
+records the bounded audit of the current `zkbench-core` coverage floor at
+`replay/serialization.rs`. The audit confirms the remaining uncovered lines are
+only the two concrete-type `serde_json::to_string_pretty` error closures, while
+the malformed JSON deserializer paths are already exercised. No Rust test was
+added because forcing those serializer failures would require behavior not
+exposed by the current public API. The next audit-first coverage target is
+`external_runner/serialization.rs`.
 
 ## Validation Checklist
 

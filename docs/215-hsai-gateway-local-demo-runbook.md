@@ -1,4 +1,4 @@
-# Phase 214 HSAI Gateway Local Demo Runbook
+# Phase 215 HSAI Gateway Local Demo Runbook
 
 Status: complete for a local, ignored gateway demo bundle runner.
 
@@ -9,7 +9,7 @@ This phase touched only:
 - `.gitignore`
 - `crates/hsai-agent-admission/examples/gateway_demo_report.rs`
 - `crates/hsai-agent-admission/tests/gateway_demo_report_contract.rs`
-- `docs/214-hsai-gateway-local-demo-runbook.md`
+- `docs/215-hsai-gateway-local-demo-runbook.md`
 - `README.md`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
@@ -19,7 +19,7 @@ No generated gateway report bundle is committed.
 
 ## Purpose
 
-Phase 214 turns the existing local gateway report plumbing into a reproducible
+Phase 215 turns the existing local gateway report plumbing into a reproducible
 operator-facing demo run. The demo writes the declared Phase 206
 `gateway-report/*` bundle under `.gateway-demo-runs/`, which is now ignored by
 git.
@@ -106,7 +106,7 @@ The output root must be absolute and nested under the repository's ignored
 
 ## Implemented
 
-Phase 214 adds:
+Phase 215 adds:
 
 - ignored default root `/.gateway-demo-runs/`;
 - `gateway_demo_report` Cargo example for `hsai-agent-admission`;
@@ -120,7 +120,7 @@ Phase 214 adds:
 
 ## Claim Boundary
 
-The Phase 214 demo bundle is local gateway metadata only. It is not production
+The Phase 215 demo bundle is local gateway metadata only. It is not production
 readiness, not semantic correctness, not model execution evidence, not live
 provider evidence, not external replay, not accepted Evidence Ledger mutation,
 not score-axis population, not benchmark evidence, not Level2+ evidence, not

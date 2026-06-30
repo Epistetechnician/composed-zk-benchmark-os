@@ -98,9 +98,10 @@ surface, the Phase 207 HSAI Gateway corpus output-run surface, and the Phase
 model-lane registry surface, and the Phase 210 HSAI Gateway adversarial-corpus
 validation surface, and the Phase 211 HSAI Gateway adversarial-corpus
 output-run surface, and the Phase 212 HSAI Gateway baseline-comparison surface,
-the Phase 213 HSAI Gateway effectiveness-metrics surface, and the Phase 214 HSAI
-Gateway local demo runbook/example surface, and the Phase 215 soak health
-coverage thirty-seventh tranche, plus earlier
+the Phase 213 HSAI Gateway effectiveness-metrics surface, the Phase 214 HSAI
+Gateway public proof packet, the Phase 215 HSAI Gateway local demo
+runbook/example surface, the Phase 216 soak health coverage thirty-seventh
+tranche, and the Phase 217 replay serialization coverage audit, plus earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
@@ -275,7 +276,19 @@ Evidence Ledger mutation, score-axis population, benchmark output, Level2+
 evidence, production-readiness claims, semantic-correctness claims, global
 uniqueness claims, "fully secure" claims, or claims above `Attested`.
 
-Phase 214 implements a local HSAI Gateway demo-run surface inside
+Phase 214 records the bounded HSAI Gateway public proof packet. It names public
+commit `4dfa3e6dfddd8ab79f558691bc10c48b74f47bf7`, the validated Phase 204-212
+surfaces, the exact verifier commands, the local hermetic gateway claim,
+reproduction steps, buyer-facing wording, and explicit nonclaims. It does not
+authorize Rust source changes, tests, package runtime files, generated demo
+bundles, model execution, model downloads, hosted-model calls, provider calls,
+verifier-agent runtime, external replay, signer/tool/payment/custody
+integration, accepted Evidence Ledger mutation, score-axis population,
+benchmark output, Level2+ evidence, production-readiness claims,
+semantic-correctness claims, global uniqueness claims, "fully secure" claims,
+or claims above `Attested`.
+
+Phase 215 implements a local HSAI Gateway demo-run surface inside
 `hsai-agent-admission`. The `gateway_demo_report` example requires explicit
 acknowledgement, requires an absolute output root under ignored
 `.gateway-demo-runs/`, builds a fixed non-secret local adversarial corpus,
@@ -290,7 +303,7 @@ score-axis population, benchmark output, Level2+ evidence, production-readiness
 claims, semantic-correctness claims, global uniqueness claims, "fully secure"
 claims, or claims above `Attested`.
 
-Phase 215 adds focused local regression coverage for `soak/health.rs` inside
+Phase 216 adds focused local regression coverage for `soak/health.rs` inside
 `zkbench-core`. The tests now cover additional identity failures, nested
 claim-boundary elevation, unsafe ZK-backend-performance note rejection, summary
 counter drift, aggregate warning propagation, aggregate status precedence, and
@@ -299,7 +312,7 @@ semantics, generated artifacts, accepted Evidence Ledger state, score-axis
 state, benchmark evidence, Level2+ evidence, production-readiness claims,
 semantic-correctness claims, or whole-workspace 100% coverage claims.
 
-The Phase 215 local package coverage run
+The Phase 216 local package coverage run
 `cargo llvm-cov -p zkbench-core --all-features --summary-only` reported
 `90.28%` region coverage, `85.76%` function execution, and `91.35%` line
 coverage for `zkbench-core`. The targeted `soak/health.rs` module reported
@@ -307,6 +320,15 @@ coverage for `zkbench-core`. The targeted `soak/health.rs` module reported
 coverage. The package floor moved away from `soak/health.rs`; in this local
 package run, the lowest line-coverage file was `replay/serialization.rs` at
 `75.00%`.
+
+Phase 217 audits that package floor without changing Rust source. Missing-line
+inspection shows the only uncovered `replay/serialization.rs` lines are the
+`serde_json::to_string_pretty` error closures for `ReplayManifest` and
+`ReplayResult`; the malformed JSON deserializer error paths are already
+exercised. The audit records those serializer branches as structurally capped
+under the current concrete public API and routes the next audit-first coverage
+slice to `external_runner/serialization.rs`, which remains visible at `76.65%`
+line coverage in the same package run.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
@@ -1787,11 +1809,13 @@ reported `90.13%` region coverage, `85.71%` function execution, and `91.11%`
 line coverage for `zkbench-core`; the targeted `evidence/accepted_append.rs`
 module reported `98.29%` line coverage and `92.31%` function execution under
 LCOV line-level auditing. Branch coverage was not reported by these runs. The
-Phase 215 post-tranche local package run moved `soak/health.rs` to `98.67%`
+Phase 216 post-tranche local package run moved `soak/health.rs` to `98.67%`
 line coverage; the package floor is now `replay/serialization.rs` at `75.00%`
-line coverage. The known lower serializer-wrapper floors remain capped by
-structurally unreachable `serde_json::to_string_pretty` error mappings for
-concrete derived structs.
+line coverage. The Phase 217 audit confirmed that `replay/serialization.rs`
+is capped by structurally unreachable `serde_json::to_string_pretty` error
+mappings for concrete derived structs. The next visible serializer-wrapper
+floor is `external_runner/serialization.rs` at `76.65%` line coverage and
+requires the same audit-first treatment.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
