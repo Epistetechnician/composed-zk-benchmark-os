@@ -5221,6 +5221,36 @@ Exit criteria: ignored bridge bundle exists locally; generated files are not
 committed; exact run command and digests are recorded; claim-boundary checks
 remain green.
 
+## Phase 251 HSAI Gateway Bridge Promotion Preflight
+
+Status: complete. See
+`docs/251-hsai-gateway-bridge-promotion-preflight-notes.md`.
+
+Goal: add a reviewed local preflight report for the Phase 250 bridge bundle
+that validates bridge metadata and repo-external operator artifact reference
+digests without promoting accepted evidence.
+
+Implemented: `hsai-agent-admission` now provides the
+`GatewayOperatorBridgePromotionPreflightRequest`,
+`GatewayOperatorBridgePromotionPreflightReport`, review-decision, validation,
+issue, nonclaim, claim-boundary, report-builder, and request-validation
+surfaces. The preflight requires `ApprovedMetadataOnly`, matching
+bundle/manifest digests, repo-external operator artifact reference, false
+raw-artifact and credential flags, false accepted-ledger mutation, false
+Level2+ evidence, false score-axis population, and no stronger claim text.
+
+Validation gate: focused promotion-preflight unit tests, bridge regression
+tests, repo hygiene, claim-boundary docs, and full workspace tests.
+
+Anti-goals: bridge promotion, accepted Evidence Ledger mutation, raw provider
+artifact retention, credential handling, provider calls, live attestation
+capture, score-axis population, official benchmark evidence, Level2+ evidence,
+production-readiness claims, semantic-correctness claims, SOTA claims,
+breakthrough claims, full-security claims, or claims above `Attested`.
+
+Exit criteria: valid preflight report remains local metadata only; escalation
+flags and forbidden claim text fail closed; no generated output is committed.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

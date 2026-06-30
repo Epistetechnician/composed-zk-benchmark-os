@@ -464,6 +464,100 @@ pub struct GatewayOperatorBridgeOutputManifest {
     pub nonclaims: BTreeSet<NonClaimLabel>,
 }
 
+impl GatewayOperatorBridgeOutputManifest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-operator-bridge-output-manifest:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayOperatorBridgePromotionReviewDecision {
+    ApprovedMetadataOnly,
+    Rejected,
+    Unreviewed,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayOperatorBridgePromotionPreflightRequest {
+    pub schema_version: String,
+    pub preflight_id: String,
+    pub reviewer_id: String,
+    pub review_decision: GatewayOperatorBridgePromotionReviewDecision,
+    pub bridge_bundle: GatewayOperatorBridgeBundle,
+    pub bridge_manifest: GatewayOperatorBridgeOutputManifest,
+    pub requested_claim_boundary: String,
+    pub retains_raw_provider_artifacts: bool,
+    pub retains_credentials_or_secrets: bool,
+    pub accepted_evidence_mutation_requested: bool,
+    pub level2_evidence_requested: bool,
+    pub score_axis_population_requested: bool,
+    pub production_readiness_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub live_provider_evidence_claimed: bool,
+    pub claim_text: Vec<String>,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayOperatorBridgePromotionPreflightIssue {
+    InvalidSchemaVersion,
+    InvalidPreflightId,
+    MissingReviewer,
+    ReviewNotApprovedMetadataOnly,
+    InvalidBridgeBundle,
+    BridgeManifestMismatch,
+    OperatorArtifactNotRepoExternal,
+    RawProviderArtifactRetained,
+    CredentialsOrSecretsRetained,
+    AcceptedEvidenceMutationRequested,
+    Level2EvidenceRequested,
+    ScoreAxisPopulationRequested,
+    ProductionReadinessClaimed,
+    SemanticCorrectnessClaimed,
+    LiveProviderEvidenceClaimed,
+    RequestedClaimBoundaryMismatch,
+    ForbiddenClaimText(String),
+    MissingRequiredNonclaim(String),
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayOperatorBridgePromotionPreflightValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayOperatorBridgePromotionPreflightIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayOperatorBridgePromotionPreflightReport {
+    pub schema_version: String,
+    pub preflight_id: String,
+    pub bridge_bundle_digest: Hash,
+    pub bridge_manifest_digest: Hash,
+    pub gateway_report_digest: Hash,
+    pub attestation_binding_digest: Hash,
+    pub operator_artifact_reference_digest: Hash,
+    pub validation: GatewayOperatorBridgePromotionPreflightValidation,
+    pub claim_boundary: String,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub grants_authority: bool,
+    pub retains_raw_provider_artifacts: bool,
+    pub retains_credentials_or_secrets: bool,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl GatewayOperatorBridgePromotionPreflightReport {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-operator-bridge-promotion-preflight-report:v1",
+            self,
+        )
+    }
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GatewayOperatorBridgeValidationReport {
     pub schema_version: String,
@@ -2547,6 +2641,27 @@ pub fn gateway_operator_bridge_claim_boundary() -> String {
     "local gateway/operator bridge metadata only; not attestation evidence, proof, live provider evidence, accepted evidence, benchmark evidence, production readiness, semantic correctness, SOTA, breakthrough, full security, or authority to execute an action".to_owned()
 }
 
+pub fn gateway_operator_bridge_promotion_preflight_required_nonclaims() -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims = gateway_operator_bridge_required_nonclaims();
+    nonclaims.extend([
+        NonClaimLabel("not bridge promotion".to_owned()),
+        NonClaimLabel("not reviewed evidence acceptance".to_owned()),
+        NonClaimLabel("not Level2+ evidence".to_owned()),
+        NonClaimLabel("not score-axis population".to_owned()),
+        NonClaimLabel("not raw provider artifact validation".to_owned()),
+        NonClaimLabel("not credential handling".to_owned()),
+    ]);
+    nonclaims
+}
+
+pub fn gateway_operator_bridge_promotion_preflight_request_schema_version() -> &'static str {
+    GATEWAY_OPERATOR_BRIDGE_PROMOTION_PREFLIGHT_REQUEST_SCHEMA_VERSION
+}
+
+pub fn gateway_operator_bridge_promotion_preflight_claim_boundary() -> String {
+    "reviewed local gateway/operator bridge preflight metadata only; not promotion, accepted evidence, Level2+ evidence, live provider evidence, production readiness, semantic correctness, SOTA, breakthrough, full security, score-axis population, or authority to execute an action".to_owned()
+}
+
 pub fn build_gateway_operator_bridge_bundle(
     gateway_report_manifest: &GatewayReportOutputManifest,
     attestation_binding: GatewayAttestationChallengeBinding,
@@ -2620,6 +2735,125 @@ pub fn validate_gateway_operator_bridge_bundle(
         }
     }
     issues
+}
+
+pub fn build_gateway_operator_bridge_promotion_preflight_report(
+    request: &GatewayOperatorBridgePromotionPreflightRequest,
+) -> GatewayOperatorBridgePromotionPreflightReport {
+    GatewayOperatorBridgePromotionPreflightReport {
+        schema_version: GATEWAY_OPERATOR_BRIDGE_PROMOTION_PREFLIGHT_REPORT_SCHEMA_VERSION
+            .to_owned(),
+        preflight_id: request.preflight_id.clone(),
+        bridge_bundle_digest: request.bridge_bundle.digest(),
+        bridge_manifest_digest: request.bridge_manifest.digest(),
+        gateway_report_digest: request.bridge_manifest.gateway_report_digest,
+        attestation_binding_digest: request.bridge_manifest.attestation_binding_digest,
+        operator_artifact_reference_digest: request
+            .bridge_manifest
+            .operator_artifact_reference_digest,
+        validation: validate_gateway_operator_bridge_promotion_preflight_request(request),
+        claim_boundary: gateway_operator_bridge_promotion_preflight_claim_boundary(),
+        mutates_accepted_evidence_ledger: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        grants_authority: false,
+        retains_raw_provider_artifacts: false,
+        retains_credentials_or_secrets: false,
+        nonclaims: gateway_operator_bridge_promotion_preflight_required_nonclaims(),
+    }
+}
+
+pub fn validate_gateway_operator_bridge_promotion_preflight_request(
+    request: &GatewayOperatorBridgePromotionPreflightRequest,
+) -> GatewayOperatorBridgePromotionPreflightValidation {
+    let mut issues = Vec::new();
+    if request.schema_version != GATEWAY_OPERATOR_BRIDGE_PROMOTION_PREFLIGHT_REQUEST_SCHEMA_VERSION
+    {
+        issues.push(GatewayOperatorBridgePromotionPreflightIssue::InvalidSchemaVersion);
+    }
+    if request.preflight_id.trim().is_empty()
+        || !is_safe_relative_path(&request.preflight_id)
+        || request.preflight_id.contains(['/', '\\'])
+    {
+        issues.push(GatewayOperatorBridgePromotionPreflightIssue::InvalidPreflightId);
+    }
+    if request.reviewer_id.trim().is_empty() {
+        issues.push(GatewayOperatorBridgePromotionPreflightIssue::MissingReviewer);
+    }
+    if request.review_decision != GatewayOperatorBridgePromotionReviewDecision::ApprovedMetadataOnly
+    {
+        issues.push(GatewayOperatorBridgePromotionPreflightIssue::ReviewNotApprovedMetadataOnly);
+    }
+    if !validate_gateway_operator_bridge_bundle(&request.bridge_bundle).is_empty() {
+        issues.push(GatewayOperatorBridgePromotionPreflightIssue::InvalidBridgeBundle);
+    }
+    if !request
+        .bridge_bundle
+        .operator_artifact_reference
+        .repo_external
+    {
+        issues.push(GatewayOperatorBridgePromotionPreflightIssue::OperatorArtifactNotRepoExternal);
+    }
+    if !gateway_operator_bridge_manifest_matches_bundle(
+        &request.bridge_manifest,
+        &request.bridge_bundle,
+    ) {
+        issues.push(GatewayOperatorBridgePromotionPreflightIssue::BridgeManifestMismatch);
+    }
+    if request.retains_raw_provider_artifacts {
+        issues.push(GatewayOperatorBridgePromotionPreflightIssue::RawProviderArtifactRetained);
+    }
+    if request.retains_credentials_or_secrets {
+        issues.push(GatewayOperatorBridgePromotionPreflightIssue::CredentialsOrSecretsRetained);
+    }
+    if request.accepted_evidence_mutation_requested {
+        issues
+            .push(GatewayOperatorBridgePromotionPreflightIssue::AcceptedEvidenceMutationRequested);
+    }
+    if request.level2_evidence_requested {
+        issues.push(GatewayOperatorBridgePromotionPreflightIssue::Level2EvidenceRequested);
+    }
+    if request.score_axis_population_requested {
+        issues.push(GatewayOperatorBridgePromotionPreflightIssue::ScoreAxisPopulationRequested);
+    }
+    if request.production_readiness_claimed {
+        issues.push(GatewayOperatorBridgePromotionPreflightIssue::ProductionReadinessClaimed);
+    }
+    if request.semantic_correctness_claimed {
+        issues.push(GatewayOperatorBridgePromotionPreflightIssue::SemanticCorrectnessClaimed);
+    }
+    if request.live_provider_evidence_claimed {
+        issues.push(GatewayOperatorBridgePromotionPreflightIssue::LiveProviderEvidenceClaimed);
+    }
+    if request.requested_claim_boundary
+        != gateway_operator_bridge_promotion_preflight_claim_boundary()
+    {
+        issues.push(GatewayOperatorBridgePromotionPreflightIssue::RequestedClaimBoundaryMismatch);
+    }
+    for forbidden in gateway_operator_bridge_promotion_forbidden_claim_fragments() {
+        if request
+            .claim_text
+            .iter()
+            .any(|text| text.to_ascii_lowercase().contains(forbidden))
+        {
+            issues.push(
+                GatewayOperatorBridgePromotionPreflightIssue::ForbiddenClaimText(
+                    (*forbidden).to_owned(),
+                ),
+            );
+        }
+    }
+    for required in gateway_operator_bridge_promotion_preflight_required_nonclaims() {
+        if !request.nonclaims.contains(&required) {
+            issues.push(
+                GatewayOperatorBridgePromotionPreflightIssue::MissingRequiredNonclaim(required.0),
+            );
+        }
+    }
+    GatewayOperatorBridgePromotionPreflightValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
 }
 
 pub fn materialize_gateway_operator_bridge_bundle(
@@ -3752,6 +3986,12 @@ const GATEWAY_OPERATOR_BRIDGE_OUTPUT_SCHEMA_VERSION: &str =
 const GATEWAY_OPERATOR_BRIDGE_VALIDATION_SCHEMA_VERSION: &str =
     "hsai-gateway-operator-bridge-validation-v1";
 
+const GATEWAY_OPERATOR_BRIDGE_PROMOTION_PREFLIGHT_REQUEST_SCHEMA_VERSION: &str =
+    "hsai-gateway-operator-bridge-promotion-preflight-request-v1";
+
+const GATEWAY_OPERATOR_BRIDGE_PROMOTION_PREFLIGHT_REPORT_SCHEMA_VERSION: &str =
+    "hsai-gateway-operator-bridge-promotion-preflight-report-v1";
+
 const GATEWAY_REPORT_DECLARED_FILES: &[&str] = &[
     "gateway-report/manifest.json",
     "gateway-report/report.json",
@@ -4068,6 +4308,56 @@ fn validate_operator_artifact_reference(
         }
     }
     Ok(())
+}
+
+fn gateway_operator_bridge_manifest_matches_bundle(
+    manifest: &GatewayOperatorBridgeOutputManifest,
+    bundle: &GatewayOperatorBridgeBundle,
+) -> bool {
+    let expected_digest_paths: BTreeSet<String> = GATEWAY_OPERATOR_BRIDGE_DECLARED_FILES
+        .iter()
+        .filter(|path| **path != "gateway-bridge/manifest.json")
+        .map(|path| (*path).to_owned())
+        .collect();
+    let actual_digest_paths: BTreeSet<String> =
+        manifest.declared_file_digests.keys().cloned().collect();
+    manifest.schema_version == GATEWAY_OPERATOR_BRIDGE_OUTPUT_SCHEMA_VERSION
+        && manifest.bundle_id == bundle.bundle_id
+        && manifest.created_at_unix == bundle.created_at_unix
+        && manifest.bridge_bundle_digest == bundle.digest()
+        && manifest.gateway_report_digest == bundle.gateway_report_digest
+        && manifest.gateway_report_manifest_digest == bundle.gateway_report_manifest_digest
+        && manifest.attestation_binding_digest == bundle.attestation_binding.digest()
+        && manifest.operator_artifact_reference_digest
+            == bundle.operator_artifact_reference.digest()
+        && manifest.declared_files == gateway_operator_bridge_declared_files()
+        && actual_digest_paths == expected_digest_paths
+        && manifest
+            .declared_file_digests
+            .values()
+            .all(|digest| *digest != Hash([0; 32]))
+        && manifest.claim_boundary == bundle.claim_boundary
+        && !manifest.authority_granted
+        && !manifest.accepted_evidence_mutation
+        && manifest.nonclaims == bundle.nonclaims
+}
+
+fn gateway_operator_bridge_promotion_forbidden_claim_fragments() -> &'static [&'static str] {
+    &[
+        "sota",
+        "state of the art",
+        "breakthrough",
+        "production ready",
+        "production readiness",
+        "semantically correct",
+        "semantic correctness",
+        "live provider evidence",
+        "level2",
+        "level 2",
+        "accepted evidence",
+        "fully secure",
+        "full security",
+    ]
 }
 
 fn validate_gateway_operator_bridge_materialization_request(
@@ -5339,6 +5629,37 @@ mod tests {
         .expect("bridge bundle builds")
     }
 
+    fn gateway_operator_bridge_promotion_preflight_request(
+        proposal: &GatewayActionProposal,
+        report_manifest: &GatewayReportOutputManifest,
+        output_root: &Path,
+    ) -> GatewayOperatorBridgePromotionPreflightRequest {
+        let bundle = gateway_operator_bridge_bundle(proposal, report_manifest, output_root);
+        let request = gateway_operator_bridge_request("gateway-operator-bridge", output_root);
+        let manifest = materialize_gateway_operator_bridge_bundle(output_root, &bundle, &request)
+            .expect("bridge bundle materializes for preflight");
+        GatewayOperatorBridgePromotionPreflightRequest {
+            schema_version: gateway_operator_bridge_promotion_preflight_request_schema_version()
+                .to_owned(),
+            preflight_id: "gateway-operator-bridge-promotion-preflight".to_owned(),
+            reviewer_id: "local-reviewer".to_owned(),
+            review_decision: GatewayOperatorBridgePromotionReviewDecision::ApprovedMetadataOnly,
+            bridge_bundle: bundle,
+            bridge_manifest: manifest,
+            requested_claim_boundary: gateway_operator_bridge_promotion_preflight_claim_boundary(),
+            retains_raw_provider_artifacts: false,
+            retains_credentials_or_secrets: false,
+            accepted_evidence_mutation_requested: false,
+            level2_evidence_requested: false,
+            score_axis_population_requested: false,
+            production_readiness_claimed: false,
+            semantic_correctness_claimed: false,
+            live_provider_evidence_claimed: false,
+            claim_text: Vec::new(),
+            nonclaims: gateway_operator_bridge_promotion_preflight_required_nonclaims(),
+        }
+    }
+
     #[test]
     fn accepted_candidate_exports_envelope_and_appends_journal_entry() {
         let candidate = accepted_candidate();
@@ -5636,6 +5957,136 @@ mod tests {
             read_gateway_operator_bridge_bundle(&output_root),
             Err(GatewayOperatorBridgeMaterializationError::ManifestSemanticMismatch)
         );
+        let _ = fs::remove_dir_all(report_root);
+        let _ = fs::remove_dir_all(output_root);
+    }
+
+    #[test]
+    fn gateway_operator_bridge_promotion_preflight_accepts_local_metadata_only() {
+        let proposal = gateway_proposal("gateway-bridge-preflight-action");
+        let report_root = temp_output_root("gateway-bridge-preflight-report");
+        let report_manifest = gateway_report_manifest_for_bridge(proposal.clone(), &report_root);
+        let output_root = temp_output_root("gateway-bridge-preflight");
+        let request = gateway_operator_bridge_promotion_preflight_request(
+            &proposal,
+            &report_manifest,
+            &output_root,
+        );
+
+        let report = build_gateway_operator_bridge_promotion_preflight_report(&request);
+
+        assert!(report.validation.valid);
+        assert_eq!(report.preflight_id, request.preflight_id);
+        assert_eq!(report.bridge_bundle_digest, request.bridge_bundle.digest());
+        assert_eq!(
+            report.bridge_manifest_digest,
+            request.bridge_manifest.digest()
+        );
+        assert_eq!(
+            report.operator_artifact_reference_digest,
+            request.bridge_bundle.operator_artifact_reference.digest()
+        );
+        assert!(!report.mutates_accepted_evidence_ledger);
+        assert!(!report.creates_level2_evidence);
+        assert!(!report.populates_score_axes);
+        assert!(!report.grants_authority);
+        assert!(!report.retains_raw_provider_artifacts);
+        assert!(!report.retains_credentials_or_secrets);
+        assert_eq!(
+            report.nonclaims,
+            gateway_operator_bridge_promotion_preflight_required_nonclaims()
+        );
+        assert_ne!(report.digest(), Hash([0; 32]));
+        let _ = fs::remove_dir_all(report_root);
+        let _ = fs::remove_dir_all(output_root);
+    }
+
+    #[test]
+    fn gateway_operator_bridge_promotion_preflight_rejects_escalation_flags() {
+        let proposal = gateway_proposal("gateway-bridge-preflight-escalation-action");
+        let report_root = temp_output_root("gateway-bridge-preflight-escalation-report");
+        let report_manifest = gateway_report_manifest_for_bridge(proposal.clone(), &report_root);
+        let output_root = temp_output_root("gateway-bridge-preflight-escalation");
+        let mut request = gateway_operator_bridge_promotion_preflight_request(
+            &proposal,
+            &report_manifest,
+            &output_root,
+        );
+        request.retains_raw_provider_artifacts = true;
+        request.retains_credentials_or_secrets = true;
+        request.accepted_evidence_mutation_requested = true;
+        request.level2_evidence_requested = true;
+        request.score_axis_population_requested = true;
+
+        let validation = validate_gateway_operator_bridge_promotion_preflight_request(&request);
+
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&GatewayOperatorBridgePromotionPreflightIssue::RawProviderArtifactRetained));
+        assert!(validation
+            .issues
+            .contains(&GatewayOperatorBridgePromotionPreflightIssue::CredentialsOrSecretsRetained));
+        assert!(validation.issues.contains(
+            &GatewayOperatorBridgePromotionPreflightIssue::AcceptedEvidenceMutationRequested
+        ));
+        assert!(validation
+            .issues
+            .contains(&GatewayOperatorBridgePromotionPreflightIssue::Level2EvidenceRequested));
+        assert!(validation
+            .issues
+            .contains(&GatewayOperatorBridgePromotionPreflightIssue::ScoreAxisPopulationRequested));
+        let _ = fs::remove_dir_all(report_root);
+        let _ = fs::remove_dir_all(output_root);
+    }
+
+    #[test]
+    fn gateway_operator_bridge_promotion_preflight_rejects_manifest_drift() {
+        let proposal = gateway_proposal("gateway-bridge-preflight-drift-action");
+        let report_root = temp_output_root("gateway-bridge-preflight-drift-report");
+        let report_manifest = gateway_report_manifest_for_bridge(proposal.clone(), &report_root);
+        let output_root = temp_output_root("gateway-bridge-preflight-drift");
+        let mut request = gateway_operator_bridge_promotion_preflight_request(
+            &proposal,
+            &report_manifest,
+            &output_root,
+        );
+        request.bridge_manifest.operator_artifact_reference_digest = Hash([9; 32]);
+
+        let validation = validate_gateway_operator_bridge_promotion_preflight_request(&request);
+
+        assert_eq!(
+            validation.issues,
+            vec![GatewayOperatorBridgePromotionPreflightIssue::BridgeManifestMismatch]
+        );
+        let _ = fs::remove_dir_all(report_root);
+        let _ = fs::remove_dir_all(output_root);
+    }
+
+    #[test]
+    fn gateway_operator_bridge_promotion_preflight_rejects_breakthrough_claim_text() {
+        let proposal = gateway_proposal("gateway-bridge-preflight-claim-action");
+        let report_root = temp_output_root("gateway-bridge-preflight-claim-report");
+        let report_manifest = gateway_report_manifest_for_bridge(proposal.clone(), &report_root);
+        let output_root = temp_output_root("gateway-bridge-preflight-claim");
+        let mut request = gateway_operator_bridge_promotion_preflight_request(
+            &proposal,
+            &report_manifest,
+            &output_root,
+        );
+        request.claim_text = vec!["This is a SOTA breakthrough bridge.".to_owned()];
+
+        let validation = validate_gateway_operator_bridge_promotion_preflight_request(&request);
+
+        assert!(!validation.valid);
+        assert!(validation.issues.contains(
+            &GatewayOperatorBridgePromotionPreflightIssue::ForbiddenClaimText("sota".to_owned())
+        ));
+        assert!(validation.issues.contains(
+            &GatewayOperatorBridgePromotionPreflightIssue::ForbiddenClaimText(
+                "breakthrough".to_owned()
+            )
+        ));
         let _ = fs::remove_dir_all(report_root);
         let _ = fs::remove_dir_all(output_root);
     }
