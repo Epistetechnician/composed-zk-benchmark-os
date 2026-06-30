@@ -126,7 +126,7 @@ fn model_lane_registry(lane: &GatewayModelLaneProvenance) -> GatewayModelLaneReg
         entries: vec![GatewayModelLaneRegistryEntry {
             lane_id: "local-demo-qwen".to_owned(),
             provenance: lane.clone(),
-            expected_output_bundle_digest: lane.output_bundle_digest.clone(),
+            expected_output_bundle_digest: lane.output_bundle_digest,
             max_cases_per_run: Some(16),
             max_cost_units_per_case: Some(2),
         }],

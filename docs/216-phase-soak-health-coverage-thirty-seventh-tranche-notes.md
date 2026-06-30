@@ -1,4 +1,4 @@
-# Phase 215 Soak Health Coverage Thirty-Seventh Tranche Notes
+# Phase 216 Soak Health Coverage Thirty-Seventh Tranche Notes
 
 Status: complete for focused local coverage hardening.
 
@@ -7,7 +7,7 @@ Status: complete for focused local coverage hardening.
 This phase touched only:
 
 - `crates/zkbench-core/tests/soak_health_report.rs`
-- `docs/215-phase-soak-health-coverage-thirty-seventh-tranche-notes.md`
+- `docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md`
 - `README.md`
 - `docs/12-task-list.md`
 - `docs/90-whole-codebase-validation-report.md`
