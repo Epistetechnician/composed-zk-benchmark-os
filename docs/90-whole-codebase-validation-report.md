@@ -104,7 +104,8 @@ runbook/example surface, the Phase 216 soak health coverage thirty-seventh
 tranche, the Phase 217 replay serialization coverage audit, and the Phase 218
 external-runner serialization coverage audit, and the Phase 219
 external-runner artifact-capture coverage tranche, and the Phase 220 generator
-config coverage tranche, plus earlier
+config coverage tranche, and the Phase 221 mutation missing-constraints
+coverage tranche, plus earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
 evaluates the implemented codebase as a local Level 1 Rust foundation by
@@ -361,6 +362,17 @@ builder. The package coverage run moved that module from `80.23%` to `90.70%`
 line coverage without changing production source or generator semantics.
 Remaining generator-config misses are capped by the current enum/API shape and
 validation order.
+
+Phase 221 adds focused local regression coverage for
+`mutation/missing_constraints.rs`, the next low non-serializer public surface
+after Phase 220. It covers the pass class reporter, fail-closed no-target
+behavior, empty rejected-trace skip-ahead behavior, and unknown-transition
+skip-ahead behavior before a later eligible target. The package coverage run
+moved that module from `80.43%` to `100.00%` line coverage without changing
+production source or mutation semantics. The remaining uncovered region is
+capped by the current API shape: the mutable transition lookup uses a
+transition id selected from the same surface spec immediately before the cloned
+mutation surface is edited.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
@@ -1864,6 +1876,12 @@ region coverage, `85.88%` function execution, and `91.62%` line coverage.
 After serializer-wrapper floors already audited in Phases 217 and 218, the
 next visible low non-serializer surface is `mutation/missing_constraints.rs`
 at `80.43%` line coverage.
+The Phase 221 tranche moved `mutation/missing_constraints.rs` from `80.43%` to
+`100.00%` line coverage and moved the local `zkbench-core` package summary to
+`90.44%` region coverage, `85.99%` function execution, and `91.66%` line
+coverage. After serializer-wrapper floors already audited in Phases 217 and
+218, the next visible low non-serializer surface is
+`adapters/zk_harness/mapping.rs` at `82.05%` line coverage.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

@@ -306,6 +306,7 @@ Surface DSL
 | [docs/218-phase-external-runner-serialization-coverage-audit-notes.md](docs/218-phase-external-runner-serialization-coverage-audit-notes.md) | Phase 218 external-runner serialization coverage audit notes. |
 | [docs/219-phase-external-runner-artifact-capture-coverage-notes.md](docs/219-phase-external-runner-artifact-capture-coverage-notes.md) | Phase 219 external-runner artifact-capture coverage notes. |
 | [docs/220-phase-generator-config-coverage-notes.md](docs/220-phase-generator-config-coverage-notes.md) | Phase 220 generator config coverage notes. |
+| [docs/221-phase-mutation-missing-constraints-coverage-notes.md](docs/221-phase-mutation-missing-constraints-coverage-notes.md) | Phase 221 mutation missing-constraints coverage notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1320,6 +1321,18 @@ builder. The local package coverage run moved `generator/config.rs` from
 generated artifacts, accepted Evidence Ledger state, benchmark evidence,
 score-axis state, Level2+ evidence, production-readiness claim,
 semantic-correctness claim, or 100% coverage claim.
+
+[docs/221-phase-mutation-missing-constraints-coverage-notes.md](docs/221-phase-mutation-missing-constraints-coverage-notes.md)
+records focused local coverage hardening for `mutation/missing_constraints.rs`.
+It adds tests for the pass class reporter, fail-closed no-target behavior, and
+skip-ahead handling for empty rejected traces and rejected trace steps that
+reference unknown transitions before a later eligible target. The local package
+coverage run moved `mutation/missing_constraints.rs` from `80.43%` to
+`100.00%` line coverage and `zkbench-core` from `91.62%` to `91.66%` line
+coverage. It changes no production source, mutation semantics, generated
+artifacts, accepted Evidence Ledger state, benchmark evidence, score-axis
+state, Level2+ evidence, production-readiness claim, semantic-correctness
+claim, or 100% coverage claim.
 
 ## Validation Checklist
 

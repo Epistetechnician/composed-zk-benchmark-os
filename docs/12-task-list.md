@@ -4117,6 +4117,45 @@ Exit criteria: focused generator config tests pass; repo hygiene and
 claim-boundary checks pass; full workspace tests pass; package coverage summary
 records the local coverage movement and next low non-serializer surface.
 
+## Phase 221 Mutation Missing Constraints Coverage
+
+Status: complete for local coverage hardening. See
+`docs/221-phase-mutation-missing-constraints-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer public API surface after Phase
+220: `crates/zkbench-core/src/mutation/missing_constraints.rs`.
+
+Implemented: added focused tests in
+`crates/zkbench-core/tests/mutation_engine.rs` for
+`MissingConstraintsPass::mutation_class`, fail-closed behavior when no
+rejected trace provides an eligible target, skip-ahead behavior for empty
+rejected traces, and skip-ahead behavior for rejected trace steps that
+reference an unknown transition before a later eligible target.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`90.41%` region / `85.88%` function / `91.62%` line coverage to `90.44%`
+region / `85.99%` function / `91.66%` line coverage.
+`mutation/missing_constraints.rs` moved from `85.92%` region / `33.33%`
+function / `80.43%` line coverage to `98.59%` region / `100.00%` function /
+`100.00%` line coverage.
+
+Audit decision: no production source was changed. The remaining uncovered
+region is capped by the current API shape because the mutable transition lookup
+uses a transition id selected from the same surface spec immediately before the
+surface is cloned and edited.
+
+Anti-goals: production source changes, mutation semantics changes, generated
+family semantics changes, generator semantics changes, Cargo metadata changes,
+dependencies, external execution, generated artifact materialization, accepted
+Evidence Ledger policy changes, formal evidence, benchmark evidence, score-axis
+population, Level2+ evidence, semantic-correctness claims, production-readiness
+claims, unsafe coverage forcing, coverage suppression, structurally unreachable
+branch forcing, or whole-workspace 100% coverage claims.
+
+Exit criteria: focused mutation-engine tests pass; repo hygiene and
+claim-boundary checks pass; full workspace tests pass; package coverage summary
+records the local coverage movement and next low non-serializer surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
