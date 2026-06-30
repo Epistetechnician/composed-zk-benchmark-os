@@ -4925,6 +4925,39 @@ claim-boundary checks remain green; full workspace tests pass; package coverage
 summary records the local coverage movement and next low non-serializer
 surface.
 
+## Phase 242 Failure Corpus Coverage
+
+Status: complete. See `docs/242-phase-failure-corpus-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer surface after Phase 241:
+`crates/zkbench-core/src/soak/failure_corpus.rs`.
+
+Implemented: focused failure-corpus tests for index claim-boundary escalation,
+empty entry ids, entry and reproduction-manifest claim-boundary escalation,
+valid portable artifact refs, and absolute, parent-directory, and backslash
+artifact-ref rejection paths.
+
+Coverage result: `soak/failure_corpus.rs` moved from `93.89%` region /
+`100.00%` function / `86.54%` line coverage to `100.00%` region /
+`100.00%` function / `100.00%` line coverage. The local `zkbench-core`
+package summary moved from `92.50%` region / `89.02%` function / `94.26%`
+line coverage to `92.54%` region / `89.02%` function / `94.37%` line
+coverage.
+
+Anti-goals: production source changes, soak semantics changes, accepted
+Evidence Ledger mutation, accepted evidence state changes, endpoint submission
+behavior, credential handling, generated artifact materialization, formal
+evidence, benchmark evidence, score-axis population, Level2+ evidence,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, unsafe coverage forcing, coverage suppression,
+structurally unreachable branch forcing, or whole-workspace 100% coverage
+claims.
+
+Exit criteria: focused failure-corpus tests pass; repo hygiene and
+claim-boundary checks remain green; full workspace tests pass; package coverage
+summary records the local coverage movement and next low non-serializer
+surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

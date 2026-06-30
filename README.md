@@ -327,6 +327,7 @@ Surface DSL
 | [docs/239-phase-evidence-ledger-coverage-notes.md](docs/239-phase-evidence-ledger-coverage-notes.md) | Phase 239 evidence-ledger coverage notes. |
 | [docs/240-phase-zk-harness-export-coverage-audit-notes.md](docs/240-phase-zk-harness-export-coverage-audit-notes.md) | Phase 240 zk-Harness export coverage audit notes. |
 | [docs/241-phase-audit-index-coverage-notes.md](docs/241-phase-audit-index-coverage-notes.md) | Phase 241 audit-index coverage notes. |
+| [docs/242-phase-failure-corpus-coverage-notes.md](docs/242-phase-failure-corpus-coverage-notes.md) | Phase 242 failure corpus coverage notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
