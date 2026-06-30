@@ -4996,6 +4996,45 @@ claim-boundary checks remain green; full workspace tests pass; package coverage
 summary records the local coverage movement and next low non-serializer
 surface.
 
+## Phase 244 External Submission Preflight Output Coverage
+
+Status: complete. See
+`docs/244-phase-external-submission-preflight-output-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer surface after Phase 243:
+`crates/zkbench-core/src/evidence/external_submission_preflight_output.rs`.
+
+Implemented: focused Phase W external replay preflight output tests for each
+stale digest sidecar rejection path and malformed redaction-report and
+submission-package digest-summary JSON deserialization context.
+
+Coverage result: `evidence/external_submission_preflight_output.rs` moved from
+`81.89%` region / `74.19%` function / `87.03%` line coverage to `83.45%`
+region / `77.42%` function / `88.60%` line coverage. The local `zkbench-core`
+package summary moved from `92.66%` region / `89.19%` function / `94.44%`
+line coverage to `92.72%` region / `89.31%` function / `94.50%` line
+coverage.
+
+Residual cap: remaining misses are mostly output-root guards, write-side OS
+wrappers, serialization-error wrappers for currently serializable local output
+data, private relative-path guards over constant paths, directory iteration OS
+wrappers, symlink rejection branches, current-directory wrappers, and
+path-normalization platform branches.
+
+Anti-goals: production source changes, preflight output semantics changes,
+accepted Evidence Ledger mutation, accepted evidence state changes, endpoint
+submission behavior, credential handling, generated artifact materialization
+beyond temp test dirs, formal evidence, benchmark evidence, score-axis
+population, Level2+ evidence, semantic-correctness claims, production-readiness
+claims, SOTA claims, breakthrough claims, unsafe coverage forcing, coverage
+suppression, structurally unreachable branch forcing, or whole-workspace 100%
+coverage claims.
+
+Exit criteria: focused Phase W promotion-preflight tests pass; repo hygiene and
+claim-boundary checks remain green; full workspace tests pass; package coverage
+summary records the local coverage movement and next low non-serializer
+surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

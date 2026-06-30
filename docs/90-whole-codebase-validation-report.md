@@ -620,6 +620,16 @@ moved that module from `86.91%` to `92.62%` line coverage without changing
 production source, pack writer semantics, accepted Evidence Ledger policy,
 endpoint submission behavior, credential handling, or accepted evidence state.
 
+Phase 244 adds focused local regression coverage for
+`evidence/external_submission_preflight_output.rs`, the next low non-serializer
+surface routed by the Phase 243 notes. It covers stale digest sidecar rejection
+for every declared external replay preflight output sidecar plus malformed
+redaction-report and submission-package digest-summary JSON deserialization
+context. The package coverage run moved that module from `87.03%` to `88.60%`
+line coverage without changing production source, output bundle semantics,
+accepted Evidence Ledger policy, endpoint submission behavior, credential
+handling, or accepted evidence state.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2260,6 +2270,12 @@ coverage, `89.19%` function execution, and `94.44%` line coverage. The lowest
 remaining non-serializer line-coverage candidate in the current package summary
 is `evidence/external_submission_preflight_output.rs` at `87.03%`, subject to
 missing-line audit before mutation.
+The Phase 244 tranche moved `evidence/external_submission_preflight_output.rs`
+from `87.03%` to `88.60%` line coverage and moved the local `zkbench-core`
+package summary to `92.72%` region coverage, `89.31%` function execution, and
+`94.50%` line coverage. The lowest remaining non-serializer line-coverage
+candidate in the current package summary is `mutation/bad_counters.rs` at
+`87.14%`, subject to missing-line audit before mutation.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
