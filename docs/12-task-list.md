@@ -5251,6 +5251,38 @@ breakthrough claims, full-security claims, or claims above `Attested`.
 Exit criteria: valid preflight report remains local metadata only; escalation
 flags and forbidden claim text fail closed; no generated output is committed.
 
+## Phase 252 HSAI Gateway Bridge Acceptance Preview
+
+Status: complete. See
+`docs/252-hsai-gateway-bridge-acceptance-preview-notes.md`.
+
+Goal: add a candidate-only local acceptance preview for the Phase 251 bridge
+promotion preflight report without mutating accepted evidence.
+
+Implemented: `hsai-agent-admission` now provides
+`GatewayOperatorBridgeAcceptancePreviewRequest`,
+`GatewayOperatorBridgeAcceptancePreviewReport`, preview decision, validation,
+issue, nonclaim, schema-version, claim-boundary, report-builder, and
+request-validation surfaces. The preview requires `ApproveCandidateOnly`, a
+valid non-escalating source preflight report, exact preflight digest binding,
+`candidate_only=true`, false accepted-ledger mutation, false Level2+ evidence,
+false score-axis population, false authority grant, false raw-artifact and
+credential retention, and no stronger claim text.
+
+Validation gate: focused acceptance-preview unit tests, promotion-preflight
+regression tests, repo hygiene, claim-boundary docs, and full workspace tests.
+
+Anti-goals: final bridge acceptance, accepted Evidence Ledger mutation, ledger
+append, raw provider artifact retention, credential handling, provider calls,
+live attestation capture, score-axis population, official benchmark evidence,
+Level2+ evidence, production-readiness claims, semantic-correctness claims,
+SOTA claims, breakthrough claims, full-security claims, or claims above
+`Attested`.
+
+Exit criteria: valid preview report remains candidate-only metadata; digest
+drift, invalid source preflight, escalation flags, and forbidden claim text fail
+closed; no generated output is committed.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

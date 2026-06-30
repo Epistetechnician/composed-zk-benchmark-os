@@ -337,6 +337,7 @@ Surface DSL
 | [docs/249-hsai-gateway-attestation-binding-notes.md](docs/249-hsai-gateway-attestation-binding-notes.md) | Phase 249 HSAI Gateway-to-attestation binding implementation notes. |
 | [docs/250-hsai-gateway-operator-bridge-bundle-notes.md](docs/250-hsai-gateway-operator-bridge-bundle-notes.md) | Phase 250 HSAI Gateway operator bridge bundle implementation and ignored run notes. |
 | [docs/251-hsai-gateway-bridge-promotion-preflight-notes.md](docs/251-hsai-gateway-bridge-promotion-preflight-notes.md) | Phase 251 HSAI Gateway bridge reviewed promotion preflight implementation notes. |
+| [docs/252-hsai-gateway-bridge-acceptance-preview-notes.md](docs/252-hsai-gateway-bridge-acceptance-preview-notes.md) | Phase 252 HSAI Gateway bridge candidate-only acceptance preview implementation notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1323,6 +1324,13 @@ records the reviewed local promotion preflight for that bridge bundle. The
 preflight validates bridge metadata and repo-external operator artifact
 reference digests while blocking raw provider artifacts, credentials, accepted
 Evidence Ledger mutation, Level2+ evidence, score-axis population, and stronger
+claims.
+
+[docs/252-hsai-gateway-bridge-acceptance-preview-notes.md](docs/252-hsai-gateway-bridge-acceptance-preview-notes.md)
+records the candidate-only acceptance preview for the Phase 251 preflight
+report. The preview binds to the preflight digest and still blocks accepted
+Evidence Ledger mutation, final acceptance, Level2+ evidence, score-axis
+population, authority grants, raw artifact retention, credentials, and stronger
 claims.
 
 [docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md](docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md)
