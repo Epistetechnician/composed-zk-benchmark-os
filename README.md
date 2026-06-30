@@ -303,6 +303,7 @@ Surface DSL
 | [docs/215-hsai-gateway-local-demo-runbook.md](docs/215-hsai-gateway-local-demo-runbook.md) | Phase 215 HSAI Gateway local demo runbook. |
 | [docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md](docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md) | Phase 216 soak health coverage thirty-seventh tranche notes. |
 | [docs/217-phase-replay-serialization-coverage-audit-notes.md](docs/217-phase-replay-serialization-coverage-audit-notes.md) | Phase 217 replay serialization coverage audit notes. |
+| [docs/218-phase-external-runner-serialization-coverage-audit-notes.md](docs/218-phase-external-runner-serialization-coverage-audit-notes.md) | Phase 218 external-runner serialization coverage audit notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1284,6 +1285,15 @@ the malformed JSON deserializer paths are already exercised. No Rust test was
 added because forcing those serializer failures would require behavior not
 exposed by the current public API. The next audit-first coverage target is
 `external_runner/serialization.rs`.
+
+[docs/218-phase-external-runner-serialization-coverage-audit-notes.md](docs/218-phase-external-runner-serialization-coverage-audit-notes.md)
+records the matching audit for `external_runner/serialization.rs`. The audit
+confirms the remaining uncovered lines are only concrete-type
+`serde_json::to_string_pretty` serializer error closures, while the malformed
+JSON deserializer paths are already exercised. No Rust test was added because
+forcing those serializer failures would require behavior not exposed by the
+current public API. The next coverage tranche should move to a reachable
+non-serializer public surface after a fresh missing-line audit.
 
 ## Validation Checklist
 
