@@ -29,6 +29,19 @@ fn bounded_counter_fixture_lowers_to_semantic_ir() {
 }
 
 #[test]
+fn semantic_ir_field_lookup_returns_present_and_missing_fields() {
+    let ast = parse_yaml_ast(include_str!("fixtures/baseline_fsm.yaml"))
+        .expect("baseline fixture should parse");
+    let ir = lower_to_ir(ast).expect("baseline fixture should lower");
+
+    assert_eq!(
+        ir.field("counter").expect("counter field should exist").id,
+        "counter"
+    );
+    assert!(ir.field("missing").is_none());
+}
+
+#[test]
 fn duplicate_state_ids_are_rejected() {
     let yaml = r#"
 machine:

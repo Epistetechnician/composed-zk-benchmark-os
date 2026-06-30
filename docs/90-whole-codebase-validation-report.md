@@ -112,7 +112,8 @@ layout coverage tranche, and the Phase 226 observation omission coverage
 tranche, and the Phase 227 external runner result-import coverage tranche, and
 the Phase 228 evidence append-preview coverage tranche, the Phase 229 pack
 readiness coverage tranche, the Phase 230 audit-index coverage tranche, and
-the Phase 231 accepted append output coverage tranche, plus
+the Phase 231 accepted append output coverage tranche, and the Phase 232 DSL IR
+coverage tranche, plus
 earlier
 coverage-hardening follow-up work for serialization error paths, crate error
 constructors, and local soak runner resume/output/error-policy paths. It
@@ -505,6 +506,14 @@ accepted-append semantics, accepted-append output semantics, endpoint
 submission behavior, credential handling, or accepted Evidence Ledger policy.
 Remaining misses are internal `write_ledger_atomically` parent/file-name error
 closures that the public path validator makes unreachable.
+
+Phase 232 adds focused local regression coverage for `dsl/ir.rs`, the next
+low non-serializer surface routed by the Phase 231 coverage notes. It covers
+the public `SemanticIr::field()` helper for present and missing field lookups.
+The package coverage run moved that module from `85.19%` to `100.00%` line
+coverage without changing production source, DSL semantics, lowering semantics,
+oracle semantics, endpoint submission behavior, credential handling, or
+accepted Evidence Ledger policy.
 
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
@@ -2074,6 +2083,12 @@ to `91.53%` region coverage, `87.24%` function execution, and `93.21%` line
 coverage. After serializer-wrapper floors already audited in Phases 217 and
 218, the next visible low non-serializer file in the current coverage table is
 `dsl/ir.rs` at `85.19%` line coverage, subject to missing-line audit before
+mutation.
+The Phase 232 tranche moved `dsl/ir.rs` from `85.19%` to `100.00%` line
+coverage and moved the local `zkbench-core` package summary to `91.55%` region
+coverage, `87.36%` function execution, and `93.23%` line coverage. The lowest
+remaining non-serializer line-coverage candidate in the current package summary
+is `evidence/review_ledger.rs` at `85.27%`, subject to missing-line audit before
 mutation.
 
 These coverage percentages are local test instrumentation only; they are not
