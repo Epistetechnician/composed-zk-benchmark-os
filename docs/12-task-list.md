@@ -4737,6 +4737,45 @@ Exit criteria: focused soak-campaign tests pass; repo hygiene and
 claim-boundary checks pass; full workspace tests pass; package coverage summary
 records the local coverage movement and next low non-serializer surface.
 
+## Phase 237 Invariant Strengthening Coverage
+
+Status: complete for local coverage hardening. See
+`docs/237-phase-invariant-strengthening-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer surface after Phase 236:
+`crates/zkbench-core/src/mutation/invariant_strengthening.rs`.
+
+Implemented: added focused mutation-depth coverage in
+`crates/zkbench-core/tests/phase_156_mutation_depth.rs` for
+`InvariantStrengtheningPass::mutation_class()` and the
+eligible-invariant/no-trace failure path.
+
+Coverage result: the local package coverage run moved `zkbench-core` from
+`91.83%` region / `87.71%` function / `93.56%` line coverage to `91.86%`
+region / `87.83%` function / `93.59%` line coverage.
+`mutation/invariant_strengthening.rs` moved from `87.88%` region / `60.00%`
+function / `86.00%` line coverage to `98.48%` region / `100.00%` function /
+`100.00%` line coverage.
+
+Audit decision: no production source was changed.
+`mutation/invariant_strengthening.rs` has no remaining missed lines in the
+local coverage report; one region remains unexecuted without forcing artificial
+behavior beyond the current generated-instance API.
+
+Anti-goals: production source changes, mutation semantics changes, generator
+semantics changes, oracle semantics changes, accepted Evidence Ledger mutation,
+accepted Evidence Ledger policy changes, endpoint submission behavior,
+credential handling, generated artifact materialization, formal evidence,
+benchmark evidence, score-axis population, Level2+ evidence,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, unsafe coverage forcing, coverage suppression,
+structurally unreachable branch forcing, or whole-workspace 100% coverage
+claims.
+
+Exit criteria: focused mutation-depth tests pass; repo hygiene and
+claim-boundary checks pass; full workspace tests pass; package coverage summary
+records the local coverage movement and next low non-serializer surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
