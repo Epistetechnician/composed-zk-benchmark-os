@@ -1,4 +1,5 @@
 use hsai_agent_case::AgentCase;
+use hsai_attestation::report_data_binding;
 use hsai_claim_envelope::{ClaimEnvelope, Hash, SubjectId};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -341,6 +342,55 @@ pub struct GatewayEffectivenessSummary {
     pub threat_coverage: Vec<GatewayThreatCoverageRow>,
     pub claim_boundary: String,
     pub authority_granted: bool,
+}
+
+pub const GATEWAY_ATTESTATION_BINDING_SCHEMA_VERSION: &str = "hsai-gateway-attestation-binding:v1";
+pub const GATEWAY_ATTESTATION_BINDING_CLAIM_BOUNDARY: &str = "Gateway-to-attestation challenge binding only; not attestation evidence, proof, live provider evidence, accepted evidence, benchmark evidence, SOTA, breakthrough, production readiness, semantic correctness, full security, or authority to execute an action.";
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayAttestationChallengeBinding {
+    pub schema_version: String,
+    pub challenge_id: String,
+    pub proposal_id: GatewayActionId,
+    pub subject: SubjectId,
+    pub policy_id: AdmissionPolicyId,
+    pub anchor_id: String,
+    pub agent_pubkey_spki_hex: String,
+    pub nonce: u64,
+    pub challenge_created_at: u64,
+    pub challenge_expires_at: u64,
+    pub gateway_case_hash_hex: String,
+    pub expected_report_data_hex: String,
+    pub claim_boundary: String,
+    pub authority_granted: bool,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl GatewayAttestationChallengeBinding {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-attestation-challenge-binding:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayAttestationBindingError {
+    EmptyField(&'static str),
+    InvalidHex { field: &'static str, value: String },
+    InvalidWindow { created_at: u64, expires_at: u64 },
+    NotYetValid { now: u64, created_at: u64 },
+    ExpiredChallenge { now: u64, expires_at: u64 },
+    SchemaMismatch(String),
+    ProposalIdMismatch,
+    SubjectMismatch,
+    PolicyIdMismatch,
+    GatewayCaseHashMismatch { actual: String, expected: String },
+    ReportDataMismatch { actual: String, expected: String },
+    ChallengeIdMismatch { actual: String, expected: String },
+    AuthorityGranted,
+    MissingRequiredNonclaim(String),
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
@@ -2163,6 +2213,193 @@ pub fn gateway_required_nonclaims() -> BTreeSet<NonClaimLabel> {
     ])
 }
 
+pub fn gateway_attestation_binding_required_nonclaims() -> BTreeSet<NonClaimLabel> {
+    BTreeSet::from([
+        NonClaimLabel("not attestation evidence".to_owned()),
+        NonClaimLabel("not proof".to_owned()),
+        NonClaimLabel("not live provider evidence".to_owned()),
+        NonClaimLabel("not accepted Evidence Ledger mutation".to_owned()),
+        NonClaimLabel("not benchmark evidence".to_owned()),
+        NonClaimLabel("not SOTA status".to_owned()),
+        NonClaimLabel("not breakthrough status".to_owned()),
+        NonClaimLabel("not production readiness".to_owned()),
+        NonClaimLabel("not semantic correctness".to_owned()),
+        NonClaimLabel("not authority to execute an action".to_owned()),
+    ])
+}
+
+pub fn build_gateway_attestation_challenge_binding(
+    proposal: &GatewayActionProposal,
+    policy_id: AdmissionPolicyId,
+    anchor_id: impl Into<String>,
+    agent_pubkey_spki_hex: impl Into<String>,
+    nonce: u64,
+    challenge_created_at: u64,
+    challenge_expires_at: u64,
+) -> Result<GatewayAttestationChallengeBinding, Vec<GatewayAttestationBindingError>> {
+    let anchor_id = anchor_id.into();
+    let agent_pubkey_spki_hex = agent_pubkey_spki_hex.into();
+    let mut errors = Vec::new();
+
+    if policy_id.0.trim().is_empty() {
+        errors.push(GatewayAttestationBindingError::EmptyField("policy_id"));
+    }
+    if anchor_id.trim().is_empty() {
+        errors.push(GatewayAttestationBindingError::EmptyField("anchor_id"));
+    }
+    if challenge_created_at >= challenge_expires_at {
+        errors.push(GatewayAttestationBindingError::InvalidWindow {
+            created_at: challenge_created_at,
+            expires_at: challenge_expires_at,
+        });
+    }
+    let agent_pubkey = match decode_lower_hex("agent_pubkey_spki_hex", &agent_pubkey_spki_hex) {
+        Ok(bytes) if !bytes.is_empty() => bytes,
+        Ok(_) => {
+            errors.push(GatewayAttestationBindingError::EmptyField(
+                "agent_pubkey_spki_hex",
+            ));
+            Vec::new()
+        }
+        Err(error) => {
+            errors.push(error);
+            Vec::new()
+        }
+    };
+    if !errors.is_empty() {
+        return Err(errors);
+    }
+
+    let gateway_case_hash = proposal.digest();
+    let expected_report_data =
+        report_data_binding(&agent_pubkey, nonce, gateway_case_hash.0.as_slice());
+    let mut binding = GatewayAttestationChallengeBinding {
+        schema_version: GATEWAY_ATTESTATION_BINDING_SCHEMA_VERSION.to_owned(),
+        challenge_id: String::new(),
+        proposal_id: proposal.id.clone(),
+        subject: proposal.subject.clone(),
+        policy_id,
+        anchor_id,
+        agent_pubkey_spki_hex: normalize_lower_hex(&agent_pubkey_spki_hex),
+        nonce,
+        challenge_created_at,
+        challenge_expires_at,
+        gateway_case_hash_hex: hash_hex(gateway_case_hash),
+        expected_report_data_hex: bytes_hex(&expected_report_data),
+        claim_boundary: GATEWAY_ATTESTATION_BINDING_CLAIM_BOUNDARY.to_owned(),
+        authority_granted: false,
+        nonclaims: gateway_attestation_binding_required_nonclaims(),
+    };
+    binding.challenge_id = gateway_attestation_challenge_id(&binding);
+    Ok(binding)
+}
+
+pub fn validate_gateway_attestation_challenge_binding(
+    proposal: &GatewayActionProposal,
+    policy_id: &AdmissionPolicyId,
+    binding: &GatewayAttestationChallengeBinding,
+    now: u64,
+) -> Vec<GatewayAttestationBindingError> {
+    let mut errors = Vec::new();
+    if binding.schema_version != GATEWAY_ATTESTATION_BINDING_SCHEMA_VERSION {
+        errors.push(GatewayAttestationBindingError::SchemaMismatch(
+            binding.schema_version.clone(),
+        ));
+    }
+    if binding.proposal_id != proposal.id {
+        errors.push(GatewayAttestationBindingError::ProposalIdMismatch);
+    }
+    if binding.subject != proposal.subject {
+        errors.push(GatewayAttestationBindingError::SubjectMismatch);
+    }
+    if &binding.policy_id != policy_id {
+        errors.push(GatewayAttestationBindingError::PolicyIdMismatch);
+    }
+    if binding.anchor_id.trim().is_empty() {
+        errors.push(GatewayAttestationBindingError::EmptyField("anchor_id"));
+    }
+    if binding.challenge_created_at >= binding.challenge_expires_at {
+        errors.push(GatewayAttestationBindingError::InvalidWindow {
+            created_at: binding.challenge_created_at,
+            expires_at: binding.challenge_expires_at,
+        });
+    } else if now < binding.challenge_created_at {
+        errors.push(GatewayAttestationBindingError::NotYetValid {
+            now,
+            created_at: binding.challenge_created_at,
+        });
+    } else if now > binding.challenge_expires_at {
+        errors.push(GatewayAttestationBindingError::ExpiredChallenge {
+            now,
+            expires_at: binding.challenge_expires_at,
+        });
+    }
+
+    let expected_case_hash = hash_hex(proposal.digest());
+    if binding.gateway_case_hash_hex != expected_case_hash {
+        errors.push(GatewayAttestationBindingError::GatewayCaseHashMismatch {
+            actual: binding.gateway_case_hash_hex.clone(),
+            expected: expected_case_hash.clone(),
+        });
+    }
+
+    let agent_pubkey =
+        match decode_lower_hex("agent_pubkey_spki_hex", &binding.agent_pubkey_spki_hex) {
+            Ok(bytes) if !bytes.is_empty() => Some(bytes),
+            Ok(_) => {
+                errors.push(GatewayAttestationBindingError::EmptyField(
+                    "agent_pubkey_spki_hex",
+                ));
+                None
+            }
+            Err(error) => {
+                errors.push(error);
+                None
+            }
+        };
+    match decode_lower_hex(
+        "expected_report_data_hex",
+        &binding.expected_report_data_hex,
+    ) {
+        Ok(bytes) if bytes.len() == 32 => {}
+        Ok(_) => errors.push(GatewayAttestationBindingError::InvalidHex {
+            field: "expected_report_data_hex",
+            value: binding.expected_report_data_hex.clone(),
+        }),
+        Err(error) => errors.push(error),
+    }
+    if let Some(agent_pubkey) = agent_pubkey {
+        let expected_report_data =
+            report_data_binding(&agent_pubkey, binding.nonce, proposal.digest().0.as_slice());
+        let expected_report_data_hex = bytes_hex(&expected_report_data);
+        if binding.expected_report_data_hex != expected_report_data_hex {
+            errors.push(GatewayAttestationBindingError::ReportDataMismatch {
+                actual: binding.expected_report_data_hex.clone(),
+                expected: expected_report_data_hex,
+            });
+        }
+    }
+
+    if binding.authority_granted {
+        errors.push(GatewayAttestationBindingError::AuthorityGranted);
+    }
+    for required in gateway_attestation_binding_required_nonclaims() {
+        if !binding.nonclaims.contains(&required) {
+            errors.push(GatewayAttestationBindingError::MissingRequiredNonclaim(
+                required.0,
+            ));
+        }
+    }
+    let expected_challenge_id = gateway_attestation_challenge_id(binding);
+    if binding.challenge_id != expected_challenge_id {
+        errors.push(GatewayAttestationBindingError::ChallengeIdMismatch {
+            actual: binding.challenge_id.clone(),
+            expected: expected_challenge_id,
+        });
+    }
+    errors
+}
+
 pub fn gateway_local_default_policy(
     id: impl Into<String>,
     allowed_action_kinds: BTreeSet<GatewayActionKind>,
@@ -3235,6 +3472,87 @@ fn hash_hex(hash: Hash) -> String {
     out
 }
 
+fn bytes_hex(bytes: &[u8]) -> String {
+    let mut out = String::with_capacity(bytes.len() * 2);
+    for byte in bytes {
+        out.push_str(&format!("{byte:02x}"));
+    }
+    out
+}
+
+fn normalize_lower_hex(value: &str) -> String {
+    value.trim().to_ascii_lowercase()
+}
+
+fn decode_lower_hex(
+    field: &'static str,
+    value: &str,
+) -> Result<Vec<u8>, GatewayAttestationBindingError> {
+    let normalized = normalize_lower_hex(value);
+    if normalized.is_empty() || normalized.len() % 2 != 0 {
+        return Err(GatewayAttestationBindingError::InvalidHex {
+            field,
+            value: value.to_owned(),
+        });
+    }
+    let mut out = Vec::with_capacity(normalized.len() / 2);
+    for chunk in normalized.as_bytes().chunks_exact(2) {
+        let hex =
+            std::str::from_utf8(chunk).map_err(|_| GatewayAttestationBindingError::InvalidHex {
+                field,
+                value: value.to_owned(),
+            })?;
+        let byte = u8::from_str_radix(hex, 16).map_err(|_| {
+            GatewayAttestationBindingError::InvalidHex {
+                field,
+                value: value.to_owned(),
+            }
+        })?;
+        out.push(byte);
+    }
+    Ok(out)
+}
+
+fn gateway_attestation_challenge_id(binding: &GatewayAttestationChallengeBinding) -> String {
+    #[derive(Serialize)]
+    struct ChallengeIdMaterial<'a> {
+        schema_version: &'a str,
+        proposal_id: &'a GatewayActionId,
+        subject: &'a SubjectId,
+        policy_id: &'a AdmissionPolicyId,
+        anchor_id: &'a str,
+        agent_pubkey_spki_hex: &'a str,
+        nonce: u64,
+        challenge_created_at: u64,
+        challenge_expires_at: u64,
+        gateway_case_hash_hex: &'a str,
+        expected_report_data_hex: &'a str,
+        claim_boundary: &'a str,
+        authority_granted: bool,
+        nonclaims: &'a BTreeSet<NonClaimLabel>,
+    }
+
+    hash_hex(hash_tagged(
+        "hsai-agent-admission:gateway-attestation-challenge-id:v1",
+        &ChallengeIdMaterial {
+            schema_version: &binding.schema_version,
+            proposal_id: &binding.proposal_id,
+            subject: &binding.subject,
+            policy_id: &binding.policy_id,
+            anchor_id: &binding.anchor_id,
+            agent_pubkey_spki_hex: &binding.agent_pubkey_spki_hex,
+            nonce: binding.nonce,
+            challenge_created_at: binding.challenge_created_at,
+            challenge_expires_at: binding.challenge_expires_at,
+            gateway_case_hash_hex: &binding.gateway_case_hash_hex,
+            expected_report_data_hex: &binding.expected_report_data_hex,
+            claim_boundary: &binding.claim_boundary,
+            authority_granted: binding.authority_granted,
+            nonclaims: &binding.nonclaims,
+        },
+    ))
+}
+
 fn append_metric_row(markdown: &mut String, name: &str, value: u64) {
     markdown.push_str("| ");
     markdown.push_str(name);
@@ -4238,6 +4556,23 @@ mod tests {
         }
     }
 
+    fn gateway_attestation_pubkey_hex() -> String {
+        "a1".repeat(91)
+    }
+
+    fn gateway_attestation_binding() -> GatewayAttestationChallengeBinding {
+        build_gateway_attestation_challenge_binding(
+            &gateway_proposal("gateway-attestation-action"),
+            AdmissionPolicyId("gateway-attestation-policy-v1".to_owned()),
+            "anchor-gateway-runtime-1",
+            gateway_attestation_pubkey_hex(),
+            42,
+            100,
+            200,
+        )
+        .expect("gateway attestation binding should build")
+    }
+
     #[test]
     fn accepted_candidate_exports_envelope_and_appends_journal_entry() {
         let candidate = accepted_candidate();
@@ -4263,6 +4598,174 @@ mod tests {
             candidate.source_artifact_digests
         );
         assert!(journal.validate().is_empty());
+    }
+
+    #[test]
+    fn gateway_attestation_binding_uses_proposal_digest_as_case_hash() {
+        let proposal = gateway_proposal("gateway-attestation-action");
+        let binding = build_gateway_attestation_challenge_binding(
+            &proposal,
+            AdmissionPolicyId("gateway-attestation-policy-v1".to_owned()),
+            "anchor-gateway-runtime-1",
+            gateway_attestation_pubkey_hex(),
+            42,
+            100,
+            200,
+        )
+        .expect("gateway attestation binding should build");
+
+        let pubkey = decode_lower_hex("agent_pubkey_spki_hex", &gateway_attestation_pubkey_hex())
+            .expect("test pubkey hex decodes");
+        let expected = bytes_hex(&report_data_binding(
+            &pubkey,
+            42,
+            proposal.digest().0.as_slice(),
+        ));
+
+        assert_eq!(
+            binding.schema_version,
+            GATEWAY_ATTESTATION_BINDING_SCHEMA_VERSION
+        );
+        assert_eq!(binding.gateway_case_hash_hex, hash_hex(proposal.digest()));
+        assert_eq!(binding.expected_report_data_hex, expected);
+        assert_eq!(
+            validate_gateway_attestation_challenge_binding(
+                &proposal,
+                &AdmissionPolicyId("gateway-attestation-policy-v1".to_owned()),
+                &binding,
+                150,
+            ),
+            Vec::new()
+        );
+        assert!(!binding.challenge_id.is_empty());
+        assert!(!binding.authority_granted);
+    }
+
+    #[test]
+    fn gateway_attestation_binding_is_deterministic_and_nonce_sensitive() {
+        let proposal = gateway_proposal("gateway-attestation-action");
+        let first = build_gateway_attestation_challenge_binding(
+            &proposal,
+            AdmissionPolicyId("gateway-attestation-policy-v1".to_owned()),
+            "anchor-gateway-runtime-1",
+            gateway_attestation_pubkey_hex(),
+            42,
+            100,
+            200,
+        )
+        .expect("first binding builds");
+        let second = build_gateway_attestation_challenge_binding(
+            &proposal,
+            AdmissionPolicyId("gateway-attestation-policy-v1".to_owned()),
+            "anchor-gateway-runtime-1",
+            gateway_attestation_pubkey_hex(),
+            42,
+            100,
+            200,
+        )
+        .expect("second binding builds");
+        let changed_nonce = build_gateway_attestation_challenge_binding(
+            &proposal,
+            AdmissionPolicyId("gateway-attestation-policy-v1".to_owned()),
+            "anchor-gateway-runtime-1",
+            gateway_attestation_pubkey_hex(),
+            43,
+            100,
+            200,
+        )
+        .expect("changed nonce binding builds");
+
+        assert_eq!(first, second);
+        assert_ne!(
+            first.expected_report_data_hex,
+            changed_nonce.expected_report_data_hex
+        );
+        assert_ne!(first.challenge_id, changed_nonce.challenge_id);
+    }
+
+    #[test]
+    fn gateway_attestation_binding_rejects_gateway_case_tamper() {
+        let original = gateway_proposal("gateway-attestation-action");
+        let mut tampered = original.clone();
+        tampered.target = "wrong-counterparty".to_owned();
+        let binding = build_gateway_attestation_challenge_binding(
+            &original,
+            AdmissionPolicyId("gateway-attestation-policy-v1".to_owned()),
+            "anchor-gateway-runtime-1",
+            gateway_attestation_pubkey_hex(),
+            42,
+            100,
+            200,
+        )
+        .expect("binding builds");
+
+        let errors = validate_gateway_attestation_challenge_binding(
+            &tampered,
+            &AdmissionPolicyId("gateway-attestation-policy-v1".to_owned()),
+            &binding,
+            150,
+        );
+
+        assert!(errors.iter().any(|error| matches!(
+            error,
+            GatewayAttestationBindingError::GatewayCaseHashMismatch { .. }
+        )));
+        assert!(errors.iter().any(|error| matches!(
+            error,
+            GatewayAttestationBindingError::ReportDataMismatch { .. }
+        )));
+    }
+
+    #[test]
+    fn gateway_attestation_binding_rejects_expiry_and_challenge_id_tamper() {
+        let proposal = gateway_proposal("gateway-attestation-action");
+        let mut binding = gateway_attestation_binding();
+        binding.challenge_id.replace_range(0..2, "ff");
+
+        let errors = validate_gateway_attestation_challenge_binding(
+            &proposal,
+            &AdmissionPolicyId("gateway-attestation-policy-v1".to_owned()),
+            &binding,
+            201,
+        );
+
+        assert!(errors.iter().any(|error| matches!(
+            error,
+            GatewayAttestationBindingError::ExpiredChallenge { .. }
+        )));
+        assert!(errors.iter().any(|error| matches!(
+            error,
+            GatewayAttestationBindingError::ChallengeIdMismatch { .. }
+        )));
+    }
+
+    #[test]
+    fn gateway_attestation_binding_rejects_authority_and_missing_nonclaim() {
+        let proposal = gateway_proposal("gateway-attestation-action");
+        let mut binding = gateway_attestation_binding();
+        binding.authority_granted = true;
+        binding
+            .nonclaims
+            .remove(&NonClaimLabel("not proof".to_owned()));
+
+        let errors = validate_gateway_attestation_challenge_binding(
+            &proposal,
+            &AdmissionPolicyId("gateway-attestation-policy-v1".to_owned()),
+            &binding,
+            150,
+        );
+
+        assert!(errors
+            .iter()
+            .any(|error| error == &GatewayAttestationBindingError::AuthorityGranted));
+        assert!(errors.iter().any(|error| {
+            error
+                == &GatewayAttestationBindingError::MissingRequiredNonclaim("not proof".to_owned())
+        }));
+        assert!(errors.iter().any(|error| matches!(
+            error,
+            GatewayAttestationBindingError::ChallengeIdMismatch { .. }
+        )));
     }
 
     #[test]

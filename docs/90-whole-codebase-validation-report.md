@@ -665,6 +665,16 @@ gateway admission case is yet bound into a fresh external attestation challenge
 and no accepted Evidence Ledger has admitted a combined gateway plus external
 evidence record.
 
+Phase 249 implements the local gateway-to-attestation binding in
+`hsai-agent-admission`. It derives a gateway case hash from a concrete
+`GatewayActionProposal::digest()`, feeds that hash into the canonical
+`hsai-attestation::report_data_binding()` function with an agent public key and
+nonce, and emits provider-neutral challenge input metadata with
+`authority_granted=false`. It still creates no live attestation evidence,
+provider response, generated operator artifact, accepted Evidence Ledger
+mutation, official benchmark evidence, SOTA claim, breakthrough claim, or
+production-readiness claim.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2330,6 +2340,11 @@ SOTA-breakthrough bridge candidate is a gateway-to-attestation binding that
 derives an attestation challenge from one concrete gateway admission case and
 keeps any generated live artifacts outside git until a separate reviewed
 promotion phase.
+Phase 249 completes that local gateway-to-attestation binding. The next bridge
+candidate is an ignored operator bundle that places a gateway report digest, a
+gateway attestation challenge binding, and a repo-external operator-live
+attestation artifact reference into one reproducible local bundle without
+mutating accepted evidence.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

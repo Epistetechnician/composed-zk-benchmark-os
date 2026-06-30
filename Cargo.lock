@@ -304,6 +304,7 @@ name = "hsai-agent-admission"
 version = "0.1.0"
 dependencies = [
  "hsai-agent-case",
+ "hsai-attestation",
  "hsai-claim-envelope",
  "serde",
  "serde_json",

@@ -5157,6 +5157,39 @@ Exit criteria: public evidence-lane map exists; current external-evidence
 surfaces are named; the gateway-to-attestation binding gap is explicit;
 claim-boundary checks remain green.
 
+## Phase 249 HSAI Gateway-To-Attestation Binding
+
+Status: complete. See
+`docs/249-hsai-gateway-attestation-binding-notes.md`.
+
+Goal: implement the pure-data bridge from a concrete gateway action proposal to
+an attestation challenge input.
+
+Implemented: `hsai-agent-admission` now uses the canonical
+`hsai-attestation::report_data_binding` function to derive
+`GatewayAttestationChallengeBinding` from `GatewayActionProposal::digest()`, an
+anchor id, agent public key, nonce, validity window, and admission policy id.
+Validation rejects schema drift, proposal drift, policy drift, challenge-window
+errors, report-data drift, challenge-id drift, missing nonclaims, and any
+authority grant.
+
+Dependencies: Phase 248 evidence-lane map and the existing HSAI attestation
+report-data binding.
+
+Validation gate: focused `gateway_attestation` unit tests,
+`hsai-agent-admission` library tests, repo hygiene, claim-boundary docs, and the
+full workspace test suite.
+
+Anti-goals: provider calls, live attestation capture, generated operator
+artifacts, model execution, signer/tool integration, accepted Evidence Ledger
+mutation, score-axis population, official benchmark evidence, Level2+
+evidence, production-readiness claims, semantic-correctness claims, SOTA
+claims, breakthrough claims, full-security claims, or claims above `Attested`.
+
+Exit criteria: gateway action proposals can deterministically produce and
+validate attestation challenge input metadata while preserving
+`authority_granted=false` and explicit nonclaims.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
