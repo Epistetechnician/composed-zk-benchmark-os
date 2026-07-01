@@ -344,6 +344,7 @@ Surface DSL
 | [docs/256-hsai-gateway-structured-claim-packet-manifest-notes.md](docs/256-hsai-gateway-structured-claim-packet-manifest-notes.md) | Phase 256 HSAI Gateway structured claim-packet manifest notes. |
 | [docs/257-hsai-gateway-claim-packet-manifest-drift-coverage-notes.md](docs/257-hsai-gateway-claim-packet-manifest-drift-coverage-notes.md) | Phase 257 HSAI Gateway claim-packet manifest drift coverage notes. |
 | [docs/258-hsai-gateway-structured-manifest-digest-binding-notes.md](docs/258-hsai-gateway-structured-manifest-digest-binding-notes.md) | Phase 258 HSAI Gateway structured manifest digest binding notes. |
+| [docs/259-hsai-gateway-digest-bound-manifest-reproduction-note.md](docs/259-hsai-gateway-digest-bound-manifest-reproduction-note.md) | Phase 259 HSAI Gateway digest-bound manifest reproduction note. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1375,6 +1376,12 @@ adds `manifest_digest_sha256` to the structured Phase 254 packet manifest and
 upgrades the checker to recompute the sorted-line SHA-256 digest. It rejects
 digest mismatch while preserving semantic drift checks, and still creates no
 fixtures, artifacts, provider calls, or accepted evidence.
+
+[docs/259-hsai-gateway-digest-bound-manifest-reproduction-note.md](docs/259-hsai-gateway-digest-bound-manifest-reproduction-note.md)
+packages the Phase 254 manifest digest into short external-share wording with
+the checker command, digest rule, reproduction checklist, and explicit
+nonclaims. It is a docs-only share note and does not create artifacts, provider
+calls, accepted evidence, or stronger claims.
 
 [docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md](docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md)
 records a bounded local coverage tranche for `zkbench-core` soak health

@@ -763,6 +763,15 @@ introduces no fixtures, generated artifacts, ignored demo execution, provider
 calls, credentials, accepted Evidence Ledger mutation, Level2+ evidence, or
 stronger public claim.
 
+Phase 259 packages that digest-bound manifest into
+`docs/259-hsai-gateway-digest-bound-manifest-reproduction-note.md`. The note
+names the packet path, `manifest_digest_sha256`, digest rule, focused checker
+command, short shareable wording, reproduction checklist, and explicit
+nonclaims. It is docs-only: no Rust/source changes, fixtures, generated
+artifacts, ignored demo execution, provider calls, credentials, accepted
+Evidence Ledger mutation, Level2+ evidence, live provider evidence, production
+readiness, SOTA status, breakthrough status, or stronger public claim.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2465,6 +2474,10 @@ hermetic, metadata-only, and non-promotional.
 Phase 258 completes that structured-manifest digest binding. The next bridge
 candidate is a small digest-bound manifest reproduction note for external
 sharing, still local, hermetic, metadata-only, and non-promotional.
+Phase 259 completes that reproduction note. The next bridge candidate is a
+local public-packet index that lists the latest shareable packet, digest,
+checker command, and nonclaims without creating generated artifacts or
+strengthening the public claim.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
