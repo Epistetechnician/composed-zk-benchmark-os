@@ -346,6 +346,7 @@ Surface DSL
 | [docs/258-hsai-gateway-structured-manifest-digest-binding-notes.md](docs/258-hsai-gateway-structured-manifest-digest-binding-notes.md) | Phase 258 HSAI Gateway structured manifest digest binding notes. |
 | [docs/259-hsai-gateway-digest-bound-manifest-reproduction-note.md](docs/259-hsai-gateway-digest-bound-manifest-reproduction-note.md) | Phase 259 HSAI Gateway digest-bound manifest reproduction note. |
 | [docs/260-hsai-gateway-public-packet-index.md](docs/260-hsai-gateway-public-packet-index.md) | Phase 260 HSAI Gateway public packet index. |
+| [docs/261-hsai-gateway-public-packet-index-checker-notes.md](docs/261-hsai-gateway-public-packet-index-checker-notes.md) | Phase 261 HSAI Gateway public packet index checker notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1389,6 +1390,13 @@ indexes the latest shareable gateway packet, reproduction note, structured
 manifest digest, checker command, bounded public wording, and explicit
 nonclaims. It is docs-only and does not create artifacts, provider calls,
 accepted evidence, or stronger claims.
+
+[docs/261-hsai-gateway-public-packet-index-checker-notes.md](docs/261-hsai-gateway-public-packet-index-checker-notes.md)
+records the local hermetic checker that validates the Phase 260 index against
+the Phase 254 packet, Phase 259 reproduction note, structured manifest digest,
+focused checker command, bounded wording, and explicit nonclaims. It reads
+committed Markdown only and does not create artifacts, provider calls, accepted
+evidence, or stronger claims.
 
 [docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md](docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md)
 records a bounded local coverage tranche for `zkbench-core` soak health

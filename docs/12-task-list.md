@@ -5505,6 +5505,37 @@ breakthrough claims, full-security claims, or claims above `Attested`.
 Exit criteria: the latest packet index is shareable without claim inflation and
 the repo validation gates remain green.
 
+## Phase 261 HSAI Gateway Public Packet Index Checker
+
+Status: complete. See
+`docs/261-hsai-gateway-public-packet-index-checker-notes.md`.
+
+Goal: make the Phase 260 public packet index locally checkable against the
+Phase 254 packet and Phase 259 reproduction note without creating artifacts or
+strengthening the public claim.
+
+Implemented: extended
+`crates/zkbench-core/tests/gateway_claim_packet_reproduction.rs` to validate the
+Phase 260 index path, indexed commit, packet path, reproduction-note path,
+structured manifest digest, digest rule, focused checker command, bounded
+wording, reproduction checklist hygiene, explicit nonclaims, and absence of
+forbidden public phrases in the public-facing index and reproduction note. The
+test also rejects in-memory drift examples for indexed commit, packet path,
+digest, checker command, and nonclaim drift.
+
+Validation gate: focused gateway packet checker, docs hygiene, claim-boundary
+docs, formatting, diff hygiene, and full workspace tests.
+
+Anti-goals: fixture files, generated artifacts, ignored demo execution,
+provider calls, credential handling, accepted Evidence Ledger mutation, final
+bridge acceptance, Level2+ evidence, live provider evidence, live attestation
+capture, benchmark evidence, score-axis population, production-readiness
+claims, semantic-correctness claims, SOTA claims, breakthrough claims,
+full-security claims, or claims above `Attested`.
+
+Exit criteria: the Phase 260 index is guarded by a local hermetic checker and
+the repo validation gates remain green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

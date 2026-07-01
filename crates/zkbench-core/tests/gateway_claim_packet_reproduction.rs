@@ -6,6 +6,10 @@ use sha2::{Digest, Sha256};
 
 const PACKET_PATH: &str = "docs/254-hsai-gateway-bridge-public-claim-packet.md";
 const PACKET_BASE_COMMIT: &str = "edbae44ea2f47f067683e28d2c6d5cb8af4362e8";
+const REPRODUCTION_NOTE_PATH: &str =
+    "docs/259-hsai-gateway-digest-bound-manifest-reproduction-note.md";
+const PUBLIC_PACKET_INDEX_PATH: &str = "docs/260-hsai-gateway-public-packet-index.md";
+const PUBLIC_PACKET_INDEX_COMMIT: &str = "85a49f546935e5c237ff01811ea94fba38d5d0b5";
 const IGNORED_DEMO_ROOT: &str = ".gateway-demo-runs/phase-253-gateway-acceptance-preview/";
 const MANIFEST_FENCE: &str = "```claim-packet-manifest-v1";
 const MANIFEST_DIGEST: &str = "9cec879e89def697a5fdbb07a5ea1885ea2e4ce330cc6e8c0ed91e69de793fa9";
@@ -274,6 +278,87 @@ fn phase_254_public_claim_packet_matches_committed_reproduction_contract() {
 }
 
 #[test]
+fn phase_260_public_packet_index_matches_packet_and_reproduction_note() {
+    let repo_root = repo_root();
+    let packet = read(&repo_root.join(PACKET_PATH));
+    let reproduction_note = read(&repo_root.join(REPRODUCTION_NOTE_PATH));
+    let index = read(&repo_root.join(PUBLIC_PACKET_INDEX_PATH));
+    let manifest = parse_manifest(&packet).expect("committed packet manifest should parse");
+    validate_manifest_contract(&manifest).expect("committed packet manifest should validate");
+
+    validate_public_packet_index_contract(&index, &packet, &reproduction_note, &manifest)
+        .expect("committed public packet index should validate");
+}
+
+#[test]
+fn public_packet_index_rejects_local_drift_examples() {
+    let repo_root = repo_root();
+    let packet = read(&repo_root.join(PACKET_PATH));
+    let reproduction_note = read(&repo_root.join(REPRODUCTION_NOTE_PATH));
+    let index = read(&repo_root.join(PUBLIC_PACKET_INDEX_PATH));
+    let manifest = parse_manifest(&packet).expect("committed packet manifest should parse");
+
+    assert_index_contract_error(
+        "indexed commit drift",
+        &index.replace(
+            PUBLIC_PACKET_INDEX_COMMIT,
+            "0000000000000000000000000000000000000000",
+        ),
+        &packet,
+        &reproduction_note,
+        &manifest,
+        "public packet index missing indexed commit",
+    );
+
+    assert_index_contract_error(
+        "packet path drift",
+        &index.replace(
+            PACKET_PATH,
+            "docs/999-hsai-gateway-bridge-public-claim-packet.md",
+        ),
+        &packet,
+        &reproduction_note,
+        &manifest,
+        "public packet index missing packet path",
+    );
+
+    assert_index_contract_error(
+        "digest drift",
+        &index.replace(
+            &format!("{MANIFEST_DIGEST_KEY}={MANIFEST_DIGEST}"),
+            &format!(
+                "{MANIFEST_DIGEST_KEY}=0000000000000000000000000000000000000000000000000000000000000000"
+            ),
+        ),
+        &packet,
+        &reproduction_note,
+        &manifest,
+        "public packet index missing manifest digest",
+    );
+
+    assert_index_contract_error(
+        "checker command drift",
+        &index.replace(
+            "cargo test -p zkbench-core --test gateway_claim_packet_reproduction --quiet",
+            "cargo test --workspace --quiet",
+        ),
+        &packet,
+        &reproduction_note,
+        &manifest,
+        "public packet index missing focused checker command",
+    );
+
+    assert_index_contract_error(
+        "nonclaim drift",
+        &index.replace("- live provider evidence;", "- live provider proof;"),
+        &packet,
+        &reproduction_note,
+        &manifest,
+        "public packet index missing nonclaim",
+    );
+}
+
+#[test]
 fn claim_packet_manifest_rejects_malformed_local_packet_examples() {
     let repo_root = repo_root();
     let packet = read(&repo_root.join(PACKET_PATH));
@@ -385,6 +470,19 @@ fn assert_contains_all(text: &str, needles: &[&str]) {
     assert!(missing.is_empty(), "missing expected text: {missing:?}");
 }
 
+fn expect_contains_all(text: &str, needles: &[&str], context: &str) -> Result<(), String> {
+    let missing: Vec<&str> = needles
+        .iter()
+        .copied()
+        .filter(|needle| !text.contains(needle))
+        .collect();
+    if missing.is_empty() {
+        Ok(())
+    } else {
+        Err(format!("{context} missing expected text: {missing:?}"))
+    }
+}
+
 fn parse_manifest(packet: &str) -> Result<BTreeMap<String, Vec<String>>, String> {
     let (_, rest) = packet
         .split_once(MANIFEST_FENCE)
@@ -414,6 +512,120 @@ fn parse_manifest(packet: &str) -> Result<BTreeMap<String, Vec<String>>, String>
             .push(value.to_string());
     }
     Ok(manifest)
+}
+
+fn validate_public_packet_index_contract(
+    index: &str,
+    packet: &str,
+    reproduction_note: &str,
+    manifest: &BTreeMap<String, Vec<String>>,
+) -> Result<(), String> {
+    let digest_line = format!("{MANIFEST_DIGEST_KEY}={MANIFEST_DIGEST}");
+    let checker_command =
+        "cargo test -p zkbench-core --test gateway_claim_packet_reproduction --quiet";
+    let digest_rule = "SHA-256 over sorted key=value manifest lines, excluding the";
+
+    expect_manifest_digest(manifest)?;
+    if single_manifest_value(manifest, MANIFEST_DIGEST_KEY)? != MANIFEST_DIGEST {
+        return Err("manifest digest constant drifted".to_string());
+    }
+
+    expect_contains_all(
+        packet,
+        &[PACKET_PATH, &digest_line, checker_command],
+        "packet",
+    )?;
+    expect_contains_all(
+        reproduction_note,
+        &[PACKET_PATH, &digest_line, digest_rule, checker_command],
+        "reproduction note",
+    )?;
+
+    if !index.contains(PUBLIC_PACKET_INDEX_COMMIT) {
+        return Err("public packet index missing indexed commit".to_string());
+    }
+    if !index.contains(PACKET_PATH) {
+        return Err("public packet index missing packet path".to_string());
+    }
+    if !index.contains(&digest_line) {
+        return Err("public packet index missing manifest digest".to_string());
+    }
+    if !index.contains(checker_command) {
+        return Err("public packet index missing focused checker command".to_string());
+    }
+
+    expect_contains_all(
+        index,
+        &[
+            "# Phase 260 HSAI Gateway Public Packet Index",
+            "Status: complete for a local latest-packet index.",
+            PUBLIC_PACKET_INDEX_COMMIT,
+            PACKET_PATH,
+            REPRODUCTION_NOTE_PATH,
+            &digest_line,
+            digest_rule,
+            checker_command,
+            "HSAI has a local digest-bound gateway public claim packet.",
+            "This is local metadata integrity evidence only.",
+            "It proves packet integrity and claim-boundary discipline only.",
+            "git status --short --ignored .gateway-demo-runs",
+            "creating generated artifacts or strengthening the public claim.",
+            "claim.",
+        ],
+        "public packet index",
+    )?;
+
+    for nonclaim in [
+        "- accepted evidence;",
+        "- final bridge acceptance;",
+        "- accepted Evidence Ledger mutation;",
+        "- Level2+ evidence;",
+        "- live provider evidence;",
+        "- live attestation capture;",
+        "- benchmark evidence;",
+        "- score-axis population;",
+        "- live gateway execution;",
+        "- live model behavior;",
+        "- verifier-agent runtime behavior;",
+        "- production readiness;",
+        "- semantic correctness;",
+        "- SOTA status;",
+        "- breakthrough status;",
+        "- full security;",
+        "- global software-agent uniqueness;",
+        "- any claim above `Attested`.",
+    ] {
+        if !index.contains(nonclaim) {
+            return Err(format!("public packet index missing nonclaim {nonclaim:?}"));
+        }
+        if !reproduction_note.contains(nonclaim) {
+            return Err(format!(
+                "reproduction note missing indexed nonclaim {nonclaim:?}"
+            ));
+        }
+    }
+
+    for forbidden_phrase in [
+        "HSAI has proven production-ready secure agent execution.",
+        "HSAI has accepted live attestation evidence.",
+        "HSAI is SOTA.",
+        "HSAI has proven a breakthrough.",
+        "HSAI has Level2+ evidence.",
+        "HSAI is fully secure.",
+    ] {
+        if index.contains(forbidden_phrase) {
+            return Err(format!(
+                "public packet index includes forbidden public phrase {forbidden_phrase:?}"
+            ));
+        }
+        if reproduction_note.contains(forbidden_phrase) {
+            return Err(format!(
+                "reproduction note includes forbidden public phrase {forbidden_phrase:?}"
+            ));
+        }
+    }
+
+    Ok(())
 }
 
 fn validate_manifest_contract(manifest: &BTreeMap<String, Vec<String>>) -> Result<(), String> {
@@ -656,6 +868,22 @@ fn assert_contract_error(case: &str, packet: &str, expected_message: &str) {
         panic!("{case} should parse before contract validation, got {error}");
     });
     let error = validate_manifest_contract(&manifest).expect_err(case);
+    assert!(
+        error.contains(expected_message),
+        "{case} should contain {expected_message:?}, got {error:?}"
+    );
+}
+
+fn assert_index_contract_error(
+    case: &str,
+    index: &str,
+    packet: &str,
+    reproduction_note: &str,
+    manifest: &BTreeMap<String, Vec<String>>,
+    expected_message: &str,
+) {
+    let error = validate_public_packet_index_contract(index, packet, reproduction_note, manifest)
+        .expect_err(case);
     assert!(
         error.contains(expected_message),
         "{case} should contain {expected_message:?}, got {error:?}"
