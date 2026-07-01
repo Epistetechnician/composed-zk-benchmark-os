@@ -649,6 +649,83 @@ impl GatewayOperatorBridgeAcceptancePreviewReport {
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayOperatorBridgeAcceptancePreviewMaterializationRequest {
+    pub bundle_id: String,
+    pub created_at_unix: u64,
+    pub overwrite: bool,
+    pub protected_roots: Vec<PathBuf>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayOperatorBridgeAcceptancePreviewOutputManifest {
+    pub schema_version: String,
+    pub bundle_id: String,
+    pub created_at_unix: u64,
+    pub preview_request_digest: Hash,
+    pub acceptance_preview_report_digest: Hash,
+    pub source_preflight_report_digest: Hash,
+    pub bridge_bundle_digest: Hash,
+    pub bridge_manifest_digest: Hash,
+    pub gateway_report_digest: Hash,
+    pub attestation_binding_digest: Hash,
+    pub operator_artifact_reference_digest: Hash,
+    pub declared_files: Vec<String>,
+    pub declared_file_digests: BTreeMap<String, Hash>,
+    pub claim_boundary: String,
+    pub candidate_only: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub grants_authority: bool,
+    pub retains_raw_provider_artifacts: bool,
+    pub retains_credentials_or_secrets: bool,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl GatewayOperatorBridgeAcceptancePreviewOutputManifest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-operator-bridge-acceptance-preview-output-manifest:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayOperatorBridgeAcceptancePreviewOutputValidationReport {
+    pub schema_version: String,
+    pub bundle_id: String,
+    pub valid: bool,
+    pub issue_count: u64,
+    pub checked_files: Vec<String>,
+    pub claim_boundary: String,
+    pub candidate_only: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayOperatorBridgeAcceptancePreviewMaterializationError {
+    InvalidPreview(Vec<GatewayOperatorBridgeAcceptancePreviewIssue>),
+    EmptyBundleId,
+    EmptyOutputRoot,
+    ProtectedOutputRoot,
+    OutputRootExistsWithoutOverwrite,
+    OutputRootIsFile,
+    OutputRootIsSymlink,
+    BundleFileIsSymlink(String),
+    SidecarIsSymlink(String),
+    DeclaredFileTypeMismatch(String),
+    UndeclaredFile(String),
+    DigestMismatch(String),
+    MalformedDeclaredFile(String),
+    ManifestSemanticMismatch,
+    NonclaimMismatch,
+    ValidationReportMismatch,
+    Io(String),
+    Serialization(String),
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GatewayOperatorBridgeValidationReport {
     pub schema_version: String,
     pub bundle_id: String,
@@ -3095,6 +3172,140 @@ pub fn validate_gateway_operator_bridge_acceptance_preview_request(
     }
 }
 
+pub fn materialize_gateway_operator_bridge_acceptance_preview_bundle(
+    output_root: &Path,
+    preview_request: &GatewayOperatorBridgeAcceptancePreviewRequest,
+    request: &GatewayOperatorBridgeAcceptancePreviewMaterializationRequest,
+) -> Result<
+    GatewayOperatorBridgeAcceptancePreviewOutputManifest,
+    GatewayOperatorBridgeAcceptancePreviewMaterializationError,
+> {
+    validate_gateway_operator_bridge_acceptance_preview_materialization_request(
+        output_root,
+        preview_request,
+        request,
+    )?;
+
+    let staging_root = gateway_staging_root_for(output_root, &request.bundle_id)
+        .map_err(gateway_acceptance_preview_from_report_error)?;
+    if staging_root.exists() {
+        remove_gateway_dir_all_checked(&staging_root)
+            .map_err(gateway_acceptance_preview_from_report_error)?;
+    }
+    fs::create_dir_all(staging_root.join("gateway-acceptance-preview"))
+        .map_err(gateway_acceptance_preview_io_error)?;
+
+    let files = build_gateway_acceptance_preview_files(preview_request, request)?;
+    for (logical_path, bytes) in &files {
+        let target = staging_root.join(logical_path);
+        if let Some(parent) = target.parent() {
+            fs::create_dir_all(parent).map_err(gateway_acceptance_preview_io_error)?;
+        }
+        fs::write(&target, bytes).map_err(gateway_acceptance_preview_io_error)?;
+        fs::write(
+            sidecar_path(&target),
+            hash_hex(hash_bytes(bytes)).into_bytes(),
+        )
+        .map_err(gateway_acceptance_preview_io_error)?;
+    }
+
+    if output_root.exists() {
+        if !request.overwrite {
+            remove_gateway_dir_all_checked(&staging_root)
+                .map_err(gateway_acceptance_preview_from_report_error)?;
+            return Err(GatewayOperatorBridgeAcceptancePreviewMaterializationError::OutputRootExistsWithoutOverwrite);
+        }
+        remove_gateway_dir_all_checked(output_root)
+            .map_err(gateway_acceptance_preview_from_report_error)?;
+    }
+    fs::rename(&staging_root, output_root).map_err(gateway_acceptance_preview_io_error)?;
+    read_gateway_operator_bridge_acceptance_preview_bundle(output_root)
+}
+
+pub fn read_gateway_operator_bridge_acceptance_preview_bundle(
+    output_root: &Path,
+) -> Result<
+    GatewayOperatorBridgeAcceptancePreviewOutputManifest,
+    GatewayOperatorBridgeAcceptancePreviewMaterializationError,
+> {
+    let output_metadata =
+        fs::symlink_metadata(output_root).map_err(gateway_acceptance_preview_io_error)?;
+    if output_metadata.file_type().is_symlink() {
+        return Err(
+            GatewayOperatorBridgeAcceptancePreviewMaterializationError::OutputRootIsSymlink,
+        );
+    }
+    if !output_metadata.is_dir() {
+        return Err(GatewayOperatorBridgeAcceptancePreviewMaterializationError::OutputRootIsFile);
+    }
+    let bundle_dir = output_root.join("gateway-acceptance-preview");
+    let bundle_metadata =
+        fs::symlink_metadata(&bundle_dir).map_err(gateway_acceptance_preview_io_error)?;
+    if bundle_metadata.file_type().is_symlink() {
+        return Err(
+            GatewayOperatorBridgeAcceptancePreviewMaterializationError::BundleFileIsSymlink(
+                "gateway-acceptance-preview".to_owned(),
+            ),
+        );
+    }
+    if !bundle_metadata.is_dir() {
+        return Err(
+            GatewayOperatorBridgeAcceptancePreviewMaterializationError::DeclaredFileTypeMismatch(
+                "gateway-acceptance-preview".to_owned(),
+            ),
+        );
+    }
+
+    reject_undeclared_gateway_acceptance_preview_files(output_root)?;
+    let mut file_bytes = BTreeMap::new();
+    for logical_path in GATEWAY_ACCEPTANCE_PREVIEW_DECLARED_FILES {
+        let path = output_root.join(logical_path);
+        let metadata = fs::symlink_metadata(&path).map_err(gateway_acceptance_preview_io_error)?;
+        if metadata.file_type().is_symlink() {
+            return Err(
+                GatewayOperatorBridgeAcceptancePreviewMaterializationError::BundleFileIsSymlink(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        if !metadata.is_file() {
+            return Err(
+                GatewayOperatorBridgeAcceptancePreviewMaterializationError::DeclaredFileTypeMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        let sidecar = sidecar_path(&path);
+        let sidecar_metadata =
+            fs::symlink_metadata(&sidecar).map_err(gateway_acceptance_preview_io_error)?;
+        if sidecar_metadata.file_type().is_symlink() {
+            return Err(
+                GatewayOperatorBridgeAcceptancePreviewMaterializationError::SidecarIsSymlink(
+                    format!("{logical_path}.sha256"),
+                ),
+            );
+        }
+        if !sidecar_metadata.is_file() {
+            return Err(
+                GatewayOperatorBridgeAcceptancePreviewMaterializationError::DeclaredFileTypeMismatch(
+                    format!("{logical_path}.sha256"),
+                ),
+            );
+        }
+        let bytes = fs::read(&path).map_err(gateway_acceptance_preview_io_error)?;
+        let expected = fs::read_to_string(sidecar).map_err(gateway_acceptance_preview_io_error)?;
+        if expected != hash_hex(hash_bytes(&bytes)) {
+            return Err(
+                GatewayOperatorBridgeAcceptancePreviewMaterializationError::DigestMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        file_bytes.insert((*logical_path).to_owned(), bytes);
+    }
+    validate_gateway_acceptance_preview_files(&file_bytes)
+}
+
 pub fn materialize_gateway_operator_bridge_bundle(
     output_root: &Path,
     bundle: &GatewayOperatorBridgeBundle,
@@ -4237,6 +4448,12 @@ const GATEWAY_OPERATOR_BRIDGE_ACCEPTANCE_PREVIEW_REQUEST_SCHEMA_VERSION: &str =
 const GATEWAY_OPERATOR_BRIDGE_ACCEPTANCE_PREVIEW_REPORT_SCHEMA_VERSION: &str =
     "hsai-gateway-operator-bridge-acceptance-preview-report-v1";
 
+const GATEWAY_OPERATOR_BRIDGE_ACCEPTANCE_PREVIEW_OUTPUT_SCHEMA_VERSION: &str =
+    "hsai-gateway-operator-bridge-acceptance-preview-output-v1";
+
+const GATEWAY_OPERATOR_BRIDGE_ACCEPTANCE_PREVIEW_OUTPUT_VALIDATION_SCHEMA_VERSION: &str =
+    "hsai-gateway-operator-bridge-acceptance-preview-output-validation-v1";
+
 const GATEWAY_REPORT_DECLARED_FILES: &[&str] = &[
     "gateway-report/manifest.json",
     "gateway-report/report.json",
@@ -4269,6 +4486,24 @@ const GATEWAY_OPERATOR_BRIDGE_DECLARED_SIDECARS: &[&str] = &[
     "gateway-bridge/operator-artifact-reference.json.sha256",
     "gateway-bridge/non-claims.md.sha256",
     "gateway-bridge/validation-report.json.sha256",
+];
+
+const GATEWAY_ACCEPTANCE_PREVIEW_DECLARED_FILES: &[&str] = &[
+    "gateway-acceptance-preview/manifest.json",
+    "gateway-acceptance-preview/acceptance-preview-request.json",
+    "gateway-acceptance-preview/acceptance-preview-report.json",
+    "gateway-acceptance-preview/source-preflight-report.json",
+    "gateway-acceptance-preview/non-claims.md",
+    "gateway-acceptance-preview/validation-report.json",
+];
+
+const GATEWAY_ACCEPTANCE_PREVIEW_DECLARED_SIDECARS: &[&str] = &[
+    "gateway-acceptance-preview/manifest.json.sha256",
+    "gateway-acceptance-preview/acceptance-preview-request.json.sha256",
+    "gateway-acceptance-preview/acceptance-preview-report.json.sha256",
+    "gateway-acceptance-preview/source-preflight-report.json.sha256",
+    "gateway-acceptance-preview/non-claims.md.sha256",
+    "gateway-acceptance-preview/validation-report.json.sha256",
 ];
 
 const ADMISSION_JOURNAL_DECLARED_FILES: &[&str] = &[
@@ -4603,6 +4838,357 @@ fn gateway_operator_bridge_promotion_forbidden_claim_fragments() -> &'static [&'
         "fully secure",
         "full security",
     ]
+}
+
+fn validate_gateway_operator_bridge_acceptance_preview_materialization_request(
+    output_root: &Path,
+    preview_request: &GatewayOperatorBridgeAcceptancePreviewRequest,
+    request: &GatewayOperatorBridgeAcceptancePreviewMaterializationRequest,
+) -> Result<(), GatewayOperatorBridgeAcceptancePreviewMaterializationError> {
+    if request.bundle_id.trim().is_empty()
+        || !is_safe_relative_path(&request.bundle_id)
+        || request.bundle_id.contains(['/', '\\'])
+    {
+        return Err(GatewayOperatorBridgeAcceptancePreviewMaterializationError::EmptyBundleId);
+    }
+    let validation = validate_gateway_operator_bridge_acceptance_preview_request(preview_request);
+    if !validation.valid {
+        return Err(
+            GatewayOperatorBridgeAcceptancePreviewMaterializationError::InvalidPreview(
+                validation.issues,
+            ),
+        );
+    }
+    validate_gateway_output_root(output_root, &request.protected_roots, request.overwrite)
+        .map_err(gateway_acceptance_preview_from_report_error)
+}
+
+fn build_gateway_acceptance_preview_files(
+    preview_request: &GatewayOperatorBridgeAcceptancePreviewRequest,
+    request: &GatewayOperatorBridgeAcceptancePreviewMaterializationRequest,
+) -> Result<BTreeMap<String, Vec<u8>>, GatewayOperatorBridgeAcceptancePreviewMaterializationError> {
+    let report = build_gateway_operator_bridge_acceptance_preview_report(preview_request);
+    let nonclaims = gateway_acceptance_preview_nonclaims_markdown(&report.nonclaims).into_bytes();
+    let validation = GatewayOperatorBridgeAcceptancePreviewOutputValidationReport {
+        schema_version: GATEWAY_OPERATOR_BRIDGE_ACCEPTANCE_PREVIEW_OUTPUT_VALIDATION_SCHEMA_VERSION
+            .to_owned(),
+        bundle_id: request.bundle_id.clone(),
+        valid: true,
+        issue_count: 0,
+        checked_files: gateway_acceptance_preview_declared_files(),
+        claim_boundary: report.claim_boundary.clone(),
+        candidate_only: true,
+        mutates_accepted_evidence_ledger: false,
+    };
+    let validation_bytes =
+        serde_json::to_vec_pretty(&validation).map_err(gateway_acceptance_preview_serde_error)?;
+    let mut files = BTreeMap::from([
+        (
+            "gateway-acceptance-preview/acceptance-preview-request.json".to_owned(),
+            serde_json::to_vec_pretty(preview_request)
+                .map_err(gateway_acceptance_preview_serde_error)?,
+        ),
+        (
+            "gateway-acceptance-preview/acceptance-preview-report.json".to_owned(),
+            serde_json::to_vec_pretty(&report).map_err(gateway_acceptance_preview_serde_error)?,
+        ),
+        (
+            "gateway-acceptance-preview/source-preflight-report.json".to_owned(),
+            serde_json::to_vec_pretty(&preview_request.source_preflight_report)
+                .map_err(gateway_acceptance_preview_serde_error)?,
+        ),
+        (
+            "gateway-acceptance-preview/non-claims.md".to_owned(),
+            nonclaims,
+        ),
+        (
+            "gateway-acceptance-preview/validation-report.json".to_owned(),
+            validation_bytes,
+        ),
+    ]);
+    let manifest = gateway_acceptance_preview_output_manifest_for_files(
+        preview_request,
+        &report,
+        request,
+        &files,
+    );
+    files.insert(
+        "gateway-acceptance-preview/manifest.json".to_owned(),
+        serde_json::to_vec_pretty(&manifest).map_err(gateway_acceptance_preview_serde_error)?,
+    );
+    Ok(files)
+}
+
+fn gateway_acceptance_preview_output_manifest_for_files(
+    preview_request: &GatewayOperatorBridgeAcceptancePreviewRequest,
+    report: &GatewayOperatorBridgeAcceptancePreviewReport,
+    request: &GatewayOperatorBridgeAcceptancePreviewMaterializationRequest,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> GatewayOperatorBridgeAcceptancePreviewOutputManifest {
+    let mut declared_file_digests = BTreeMap::new();
+    for (logical_path, bytes) in files {
+        declared_file_digests.insert(logical_path.clone(), hash_bytes(bytes));
+    }
+    GatewayOperatorBridgeAcceptancePreviewOutputManifest {
+        schema_version: GATEWAY_OPERATOR_BRIDGE_ACCEPTANCE_PREVIEW_OUTPUT_SCHEMA_VERSION.to_owned(),
+        bundle_id: request.bundle_id.clone(),
+        created_at_unix: request.created_at_unix,
+        preview_request_digest: hash_tagged(
+            "hsai-agent-admission:gateway-operator-bridge-acceptance-preview-request:v1",
+            preview_request,
+        ),
+        acceptance_preview_report_digest: report.digest(),
+        source_preflight_report_digest: report.source_preflight_report_digest,
+        bridge_bundle_digest: report.bridge_bundle_digest,
+        bridge_manifest_digest: report.bridge_manifest_digest,
+        gateway_report_digest: report.gateway_report_digest,
+        attestation_binding_digest: report.attestation_binding_digest,
+        operator_artifact_reference_digest: report.operator_artifact_reference_digest,
+        declared_files: gateway_acceptance_preview_declared_files(),
+        declared_file_digests,
+        claim_boundary: report.claim_boundary.clone(),
+        candidate_only: true,
+        mutates_accepted_evidence_ledger: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        grants_authority: false,
+        retains_raw_provider_artifacts: false,
+        retains_credentials_or_secrets: false,
+        nonclaims: report.nonclaims.clone(),
+    }
+}
+
+fn validate_gateway_acceptance_preview_files(
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<
+    GatewayOperatorBridgeAcceptancePreviewOutputManifest,
+    GatewayOperatorBridgeAcceptancePreviewMaterializationError,
+> {
+    let manifest: GatewayOperatorBridgeAcceptancePreviewOutputManifest =
+        parse_gateway_acceptance_preview_declared_json(
+            files,
+            "gateway-acceptance-preview/manifest.json",
+        )?;
+    let request: GatewayOperatorBridgeAcceptancePreviewRequest =
+        parse_gateway_acceptance_preview_declared_json(
+            files,
+            "gateway-acceptance-preview/acceptance-preview-request.json",
+        )?;
+    let report: GatewayOperatorBridgeAcceptancePreviewReport =
+        parse_gateway_acceptance_preview_declared_json(
+            files,
+            "gateway-acceptance-preview/acceptance-preview-report.json",
+        )?;
+    let source_preflight: GatewayOperatorBridgePromotionPreflightReport =
+        parse_gateway_acceptance_preview_declared_json(
+            files,
+            "gateway-acceptance-preview/source-preflight-report.json",
+        )?;
+
+    if source_preflight != request.source_preflight_report {
+        return Err(
+            GatewayOperatorBridgeAcceptancePreviewMaterializationError::ManifestSemanticMismatch,
+        );
+    }
+    let expected_report = build_gateway_operator_bridge_acceptance_preview_report(&request);
+    if report != expected_report {
+        return Err(
+            GatewayOperatorBridgeAcceptancePreviewMaterializationError::ManifestSemanticMismatch,
+        );
+    }
+    if !report.validation.valid {
+        return Err(
+            GatewayOperatorBridgeAcceptancePreviewMaterializationError::InvalidPreview(
+                report.validation.issues,
+            ),
+        );
+    }
+    validate_gateway_acceptance_preview_manifest_semantics(&manifest, &request, &report, files)?;
+
+    let nonclaims = declared_gateway_acceptance_preview_bytes(
+        files,
+        "gateway-acceptance-preview/non-claims.md",
+    )?;
+    if nonclaims != gateway_acceptance_preview_nonclaims_markdown(&report.nonclaims).as_bytes() {
+        return Err(GatewayOperatorBridgeAcceptancePreviewMaterializationError::NonclaimMismatch);
+    }
+
+    let validation: GatewayOperatorBridgeAcceptancePreviewOutputValidationReport =
+        parse_gateway_acceptance_preview_declared_json(
+            files,
+            "gateway-acceptance-preview/validation-report.json",
+        )?;
+    let expected_validation = GatewayOperatorBridgeAcceptancePreviewOutputValidationReport {
+        schema_version: GATEWAY_OPERATOR_BRIDGE_ACCEPTANCE_PREVIEW_OUTPUT_VALIDATION_SCHEMA_VERSION
+            .to_owned(),
+        bundle_id: manifest.bundle_id.clone(),
+        valid: true,
+        issue_count: 0,
+        checked_files: gateway_acceptance_preview_declared_files(),
+        claim_boundary: report.claim_boundary.clone(),
+        candidate_only: true,
+        mutates_accepted_evidence_ledger: false,
+    };
+    if validation != expected_validation {
+        return Err(
+            GatewayOperatorBridgeAcceptancePreviewMaterializationError::ValidationReportMismatch,
+        );
+    }
+
+    Ok(manifest)
+}
+
+fn validate_gateway_acceptance_preview_manifest_semantics(
+    manifest: &GatewayOperatorBridgeAcceptancePreviewOutputManifest,
+    preview_request: &GatewayOperatorBridgeAcceptancePreviewRequest,
+    report: &GatewayOperatorBridgeAcceptancePreviewReport,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<(), GatewayOperatorBridgeAcceptancePreviewMaterializationError> {
+    let expected_digest_paths: BTreeSet<String> = GATEWAY_ACCEPTANCE_PREVIEW_DECLARED_FILES
+        .iter()
+        .filter(|path| **path != "gateway-acceptance-preview/manifest.json")
+        .map(|path| (*path).to_owned())
+        .collect();
+    let actual_digest_paths: BTreeSet<String> =
+        manifest.declared_file_digests.keys().cloned().collect();
+    let expected_request_digest = hash_tagged(
+        "hsai-agent-admission:gateway-operator-bridge-acceptance-preview-request:v1",
+        preview_request,
+    );
+
+    if manifest.schema_version != GATEWAY_OPERATOR_BRIDGE_ACCEPTANCE_PREVIEW_OUTPUT_SCHEMA_VERSION
+        || manifest.preview_request_digest != expected_request_digest
+        || manifest.acceptance_preview_report_digest != report.digest()
+        || manifest.source_preflight_report_digest != report.source_preflight_report_digest
+        || manifest.bridge_bundle_digest != report.bridge_bundle_digest
+        || manifest.bridge_manifest_digest != report.bridge_manifest_digest
+        || manifest.gateway_report_digest != report.gateway_report_digest
+        || manifest.attestation_binding_digest != report.attestation_binding_digest
+        || manifest.operator_artifact_reference_digest != report.operator_artifact_reference_digest
+        || manifest.declared_files != gateway_acceptance_preview_declared_files()
+        || actual_digest_paths != expected_digest_paths
+        || manifest
+            .declared_file_digests
+            .values()
+            .any(|digest| *digest == Hash([0; 32]))
+        || manifest.claim_boundary != report.claim_boundary
+        || !manifest.candidate_only
+        || manifest.mutates_accepted_evidence_ledger
+        || manifest.creates_level2_evidence
+        || manifest.populates_score_axes
+        || manifest.grants_authority
+        || manifest.retains_raw_provider_artifacts
+        || manifest.retains_credentials_or_secrets
+        || manifest.nonclaims != report.nonclaims
+    {
+        return Err(
+            GatewayOperatorBridgeAcceptancePreviewMaterializationError::ManifestSemanticMismatch,
+        );
+    }
+    for (logical_path, expected_digest) in &manifest.declared_file_digests {
+        if hash_bytes(declared_gateway_acceptance_preview_bytes(
+            files,
+            logical_path,
+        )?) != *expected_digest
+        {
+            return Err(
+                GatewayOperatorBridgeAcceptancePreviewMaterializationError::ManifestSemanticMismatch,
+            );
+        }
+    }
+    Ok(())
+}
+
+fn gateway_acceptance_preview_declared_files() -> Vec<String> {
+    GATEWAY_ACCEPTANCE_PREVIEW_DECLARED_FILES
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
+fn declared_gateway_acceptance_preview_bytes<'a>(
+    files: &'a BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<&'a [u8], GatewayOperatorBridgeAcceptancePreviewMaterializationError> {
+    files.get(logical_path).map(Vec::as_slice).ok_or_else(|| {
+        GatewayOperatorBridgeAcceptancePreviewMaterializationError::Io(format!(
+            "declared file missing: {logical_path}"
+        ))
+    })
+}
+
+fn parse_gateway_acceptance_preview_declared_json<T: for<'de> Deserialize<'de> + Serialize>(
+    files: &BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<T, GatewayOperatorBridgeAcceptancePreviewMaterializationError> {
+    let bytes = declared_gateway_acceptance_preview_bytes(files, logical_path)?;
+    let original = parse_json_value_rejecting_duplicate_keys(bytes).map_err(|_| {
+        GatewayOperatorBridgeAcceptancePreviewMaterializationError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })?;
+    let parsed: T = serde_json::from_value(original.clone()).map_err(|_| {
+        GatewayOperatorBridgeAcceptancePreviewMaterializationError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })?;
+    let canonical =
+        serde_json::to_value(&parsed).map_err(gateway_acceptance_preview_serde_error)?;
+    if canonical != original {
+        return Err(
+            GatewayOperatorBridgeAcceptancePreviewMaterializationError::MalformedDeclaredFile(
+                logical_path.to_owned(),
+            ),
+        );
+    }
+    Ok(parsed)
+}
+
+fn gateway_acceptance_preview_nonclaims_markdown(nonclaims: &BTreeSet<NonClaimLabel>) -> String {
+    let mut out = String::from("# Gateway Bridge Acceptance Preview Non-Claims\n\n");
+    for nonclaim in nonclaims {
+        out.push_str("- ");
+        out.push_str(&nonclaim.0);
+        out.push('\n');
+    }
+    out
+}
+
+fn reject_undeclared_gateway_acceptance_preview_files(
+    output_root: &Path,
+) -> Result<(), GatewayOperatorBridgeAcceptancePreviewMaterializationError> {
+    let mut declared: BTreeSet<String> = GATEWAY_ACCEPTANCE_PREVIEW_DECLARED_FILES
+        .iter()
+        .chain(GATEWAY_ACCEPTANCE_PREVIEW_DECLARED_SIDECARS.iter())
+        .map(|value| (*value).to_owned())
+        .collect();
+    let bundle_dir = output_root.join("gateway-acceptance-preview");
+    for entry in fs::read_dir(&bundle_dir).map_err(gateway_acceptance_preview_io_error)? {
+        let entry = entry.map_err(gateway_acceptance_preview_io_error)?;
+        let logical_path = entry
+            .path()
+            .strip_prefix(output_root)
+            .map_err(|error| {
+                GatewayOperatorBridgeAcceptancePreviewMaterializationError::Io(error.to_string())
+            })?
+            .to_string_lossy()
+            .replace('\\', "/");
+        if !declared.remove(&logical_path) {
+            return Err(
+                GatewayOperatorBridgeAcceptancePreviewMaterializationError::UndeclaredFile(
+                    logical_path,
+                ),
+            );
+        }
+    }
+    if let Some(missing) = declared.into_iter().next() {
+        return Err(
+            GatewayOperatorBridgeAcceptancePreviewMaterializationError::Io(format!(
+                "declared file missing: {missing}"
+            )),
+        );
+    }
+    Ok(())
 }
 
 fn validate_gateway_operator_bridge_materialization_request(
@@ -5093,6 +5679,49 @@ fn gateway_bridge_serde_error(
     error: serde_json::Error,
 ) -> GatewayOperatorBridgeMaterializationError {
     GatewayOperatorBridgeMaterializationError::Serialization(error.to_string())
+}
+
+fn gateway_acceptance_preview_from_report_error(
+    error: GatewayReportMaterializationError,
+) -> GatewayOperatorBridgeAcceptancePreviewMaterializationError {
+    match error {
+        GatewayReportMaterializationError::EmptyOutputRoot => {
+            GatewayOperatorBridgeAcceptancePreviewMaterializationError::EmptyOutputRoot
+        }
+        GatewayReportMaterializationError::ProtectedOutputRoot => {
+            GatewayOperatorBridgeAcceptancePreviewMaterializationError::ProtectedOutputRoot
+        }
+        GatewayReportMaterializationError::OutputRootExistsWithoutOverwrite => {
+            GatewayOperatorBridgeAcceptancePreviewMaterializationError::OutputRootExistsWithoutOverwrite
+        }
+        GatewayReportMaterializationError::OutputRootIsFile => {
+            GatewayOperatorBridgeAcceptancePreviewMaterializationError::OutputRootIsFile
+        }
+        GatewayReportMaterializationError::OutputRootIsSymlink => {
+            GatewayOperatorBridgeAcceptancePreviewMaterializationError::OutputRootIsSymlink
+        }
+        GatewayReportMaterializationError::Io(error) => {
+            GatewayOperatorBridgeAcceptancePreviewMaterializationError::Io(error)
+        }
+        GatewayReportMaterializationError::Serialization(error) => {
+            GatewayOperatorBridgeAcceptancePreviewMaterializationError::Serialization(error)
+        }
+        other => GatewayOperatorBridgeAcceptancePreviewMaterializationError::Io(format!(
+            "{other:?}"
+        )),
+    }
+}
+
+fn gateway_acceptance_preview_io_error(
+    error: io::Error,
+) -> GatewayOperatorBridgeAcceptancePreviewMaterializationError {
+    GatewayOperatorBridgeAcceptancePreviewMaterializationError::Io(error.to_string())
+}
+
+fn gateway_acceptance_preview_serde_error(
+    error: serde_json::Error,
+) -> GatewayOperatorBridgeAcceptancePreviewMaterializationError {
+    GatewayOperatorBridgeAcceptancePreviewMaterializationError::Serialization(error.to_string())
 }
 
 fn sidecar_path(path: &Path) -> PathBuf {
@@ -5941,6 +6570,20 @@ mod tests {
         }
     }
 
+    fn gateway_acceptance_preview_materialization_request(
+        output_root: &Path,
+    ) -> GatewayOperatorBridgeAcceptancePreviewMaterializationRequest {
+        GatewayOperatorBridgeAcceptancePreviewMaterializationRequest {
+            bundle_id: "gateway-acceptance-preview".to_owned(),
+            created_at_unix: 1_800_000_253,
+            overwrite: false,
+            protected_roots: vec![output_root
+                .parent()
+                .expect("temp output root has a parent")
+                .join("protected-repo")],
+        }
+    }
+
     #[test]
     fn accepted_candidate_exports_envelope_and_appends_journal_entry() {
         let candidate = accepted_candidate();
@@ -6527,6 +7170,161 @@ mod tests {
             )
         ));
         let _ = fs::remove_dir_all(report_root);
+        let _ = fs::remove_dir_all(output_root);
+    }
+
+    #[test]
+    fn gateway_acceptance_preview_bundle_materializes_declared_files_and_readback() {
+        let proposal = gateway_proposal("gateway-acceptance-preview-bundle-action");
+        let report_root = temp_output_root("gateway-acceptance-preview-bundle-report");
+        let report_manifest = gateway_report_manifest_for_bridge(proposal.clone(), &report_root);
+        let bridge_root = temp_output_root("gateway-acceptance-preview-bundle-bridge");
+        let preview_request = gateway_operator_bridge_acceptance_preview_request(
+            &proposal,
+            &report_manifest,
+            &bridge_root,
+        );
+        let output_root = temp_output_root("gateway-acceptance-preview-bundle");
+        let materialization_request =
+            gateway_acceptance_preview_materialization_request(&output_root);
+
+        let manifest = materialize_gateway_operator_bridge_acceptance_preview_bundle(
+            &output_root,
+            &preview_request,
+            &materialization_request,
+        )
+        .expect("acceptance preview bundle materializes");
+
+        assert_eq!(manifest.bundle_id, "gateway-acceptance-preview");
+        assert_eq!(
+            manifest.declared_files,
+            gateway_acceptance_preview_declared_files()
+        );
+        assert_eq!(
+            manifest.acceptance_preview_report_digest,
+            build_gateway_operator_bridge_acceptance_preview_report(&preview_request).digest()
+        );
+        assert!(manifest.candidate_only);
+        assert!(!manifest.mutates_accepted_evidence_ledger);
+        assert!(!manifest.creates_level2_evidence);
+        assert!(!manifest.populates_score_axes);
+        assert!(!manifest.grants_authority);
+        assert_eq!(
+            read_gateway_operator_bridge_acceptance_preview_bundle(&output_root)
+                .expect("readback validates"),
+            manifest
+        );
+        let _ = fs::remove_dir_all(report_root);
+        let _ = fs::remove_dir_all(bridge_root);
+        let _ = fs::remove_dir_all(output_root);
+    }
+
+    #[test]
+    fn gateway_acceptance_preview_bundle_rejects_raw_provider_artifacts() {
+        let proposal = gateway_proposal("gateway-acceptance-preview-raw-action");
+        let report_root = temp_output_root("gateway-acceptance-preview-raw-report");
+        let report_manifest = gateway_report_manifest_for_bridge(proposal.clone(), &report_root);
+        let bridge_root = temp_output_root("gateway-acceptance-preview-raw-bridge");
+        let preview_request = gateway_operator_bridge_acceptance_preview_request(
+            &proposal,
+            &report_manifest,
+            &bridge_root,
+        );
+        let output_root = temp_output_root("gateway-acceptance-preview-raw");
+        let materialization_request =
+            gateway_acceptance_preview_materialization_request(&output_root);
+        materialize_gateway_operator_bridge_acceptance_preview_bundle(
+            &output_root,
+            &preview_request,
+            &materialization_request,
+        )
+        .expect("acceptance preview bundle materializes");
+        fs::write(
+            output_root.join("gateway-acceptance-preview/raw-response.json"),
+            b"{}",
+        )
+        .expect("raw extra writes");
+
+        assert_eq!(
+            read_gateway_operator_bridge_acceptance_preview_bundle(&output_root),
+            Err(
+                GatewayOperatorBridgeAcceptancePreviewMaterializationError::UndeclaredFile(
+                    "gateway-acceptance-preview/raw-response.json".to_owned()
+                )
+            )
+        );
+        let _ = fs::remove_dir_all(report_root);
+        let _ = fs::remove_dir_all(bridge_root);
+        let _ = fs::remove_dir_all(output_root);
+    }
+
+    #[test]
+    fn gateway_acceptance_preview_bundle_rejects_invalid_preview_request() {
+        let proposal = gateway_proposal("gateway-acceptance-preview-invalid-action");
+        let report_root = temp_output_root("gateway-acceptance-preview-invalid-report");
+        let report_manifest = gateway_report_manifest_for_bridge(proposal.clone(), &report_root);
+        let bridge_root = temp_output_root("gateway-acceptance-preview-invalid-bridge");
+        let mut preview_request = gateway_operator_bridge_acceptance_preview_request(
+            &proposal,
+            &report_manifest,
+            &bridge_root,
+        );
+        preview_request.accepted_evidence_mutation_requested = true;
+        let output_root = temp_output_root("gateway-acceptance-preview-invalid");
+        let materialization_request =
+            gateway_acceptance_preview_materialization_request(&output_root);
+
+        assert!(matches!(
+            materialize_gateway_operator_bridge_acceptance_preview_bundle(
+                &output_root,
+                &preview_request,
+                &materialization_request,
+            ),
+            Err(GatewayOperatorBridgeAcceptancePreviewMaterializationError::InvalidPreview(
+                issues
+            )) if issues.contains(
+                &GatewayOperatorBridgeAcceptancePreviewIssue::AcceptedEvidenceMutationRequested
+            )
+        ));
+        let _ = fs::remove_dir_all(report_root);
+        let _ = fs::remove_dir_all(bridge_root);
+    }
+
+    #[test]
+    fn gateway_acceptance_preview_bundle_readback_rejects_report_drift() {
+        let proposal = gateway_proposal("gateway-acceptance-preview-drift-action");
+        let report_root = temp_output_root("gateway-acceptance-preview-drift-report");
+        let report_manifest = gateway_report_manifest_for_bridge(proposal.clone(), &report_root);
+        let bridge_root = temp_output_root("gateway-acceptance-preview-drift-bridge");
+        let preview_request = gateway_operator_bridge_acceptance_preview_request(
+            &proposal,
+            &report_manifest,
+            &bridge_root,
+        );
+        let output_root = temp_output_root("gateway-acceptance-preview-drift");
+        let materialization_request =
+            gateway_acceptance_preview_materialization_request(&output_root);
+        materialize_gateway_operator_bridge_acceptance_preview_bundle(
+            &output_root,
+            &preview_request,
+            &materialization_request,
+        )
+        .expect("acceptance preview bundle materializes");
+        let mut tampered =
+            build_gateway_operator_bridge_acceptance_preview_report(&preview_request);
+        tampered.candidate_only = false;
+        rewrite_bundle_file(
+            &output_root,
+            "gateway-acceptance-preview/acceptance-preview-report.json",
+            &serde_json::to_vec_pretty(&tampered).expect("tampered report serializes"),
+        );
+
+        assert_eq!(
+            read_gateway_operator_bridge_acceptance_preview_bundle(&output_root),
+            Err(GatewayOperatorBridgeAcceptancePreviewMaterializationError::ManifestSemanticMismatch)
+        );
+        let _ = fs::remove_dir_all(report_root);
+        let _ = fs::remove_dir_all(bridge_root);
         let _ = fs::remove_dir_all(output_root);
     }
 

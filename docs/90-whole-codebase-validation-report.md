@@ -703,6 +703,18 @@ retention, live-provider evidence claims, production-readiness claims,
 semantic-correctness claims, SOTA claims, and breakthrough claims. It remains
 preview metadata only and commits no generated output.
 
+Phase 253 implements the ignored local output bundle for that Phase 252
+acceptance preview. It materializes declared `gateway-acceptance-preview/*`
+files with digest sidecars, including the preview request, preview report,
+source preflight report, nonclaims, validation report, and manifest. The Phase
+253 ignored demo run wrote
+`.gateway-demo-runs/phase-253-gateway-acceptance-preview/*`, validated
+readback, preserved `candidate_only=true`, preserved
+`mutates_accepted_evidence_ledger=false`, preserved `creates_level2_evidence=false`,
+preserved `populates_score_axes=false`, preserved `grants_authority=false`,
+preserved `retains_raw_provider_artifacts=false`, preserved
+`retains_credentials_or_secrets=false`, and committed no generated output.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2384,6 +2396,11 @@ Ledger.
 Phase 252 completes that candidate-only acceptance preview. The next bridge
 candidate is an ignored local preview bundle/run artifact for the Phase 252
 report that remains reproducible, ignored, and non-mutating.
+Phase 253 completes that ignored local preview bundle. The next bridge
+candidate is a bounded public claim packet for Phases 249 through 253 that
+summarizes the gateway-to-attestation-to-preview bridge without promoting
+accepted evidence, final acceptance, Level2+ evidence, live provider evidence,
+SOTA, breakthrough status, or production readiness.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
