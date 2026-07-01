@@ -735,6 +735,16 @@ phrases, and navigation references. It runs no providers, creates no artifacts,
 executes no ignored demo command, mutates no accepted Evidence Ledger, creates
 no Level2+ evidence, and does not strengthen the public claim.
 
+Phase 256 adds a structured `claim-packet-manifest-v1` block to
+`docs/254-hsai-gateway-bridge-public-claim-packet.md` and upgrades
+`gateway_claim_packet_reproduction` to parse it. The manifest carries packet
+identity, commit metadata, covered phases, claim level, maximum claim maturity,
+ignored demo root/status, declared files, non-mutating flags, commands,
+nonclaims, and forbidden public phrases as repeated `key=value` fields. The
+checker remains local and hermetic; it runs no providers, creates no artifacts,
+executes no ignored demo command, mutates no accepted Evidence Ledger, creates
+no Level2+ evidence, and does not strengthen the public claim.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2428,6 +2438,9 @@ strengthening the public claim.
 Phase 255 completes that local reproduction checker. The next bridge candidate
 is a structured claim-packet manifest block plus parser-backed checks, still
 local, hermetic, metadata-only, and non-promotional.
+Phase 256 completes that structured manifest and parser-backed check. The next
+bridge candidate is manifest drift coverage with malformed local packet
+examples, still without executing the ignored demo or creating artifacts.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

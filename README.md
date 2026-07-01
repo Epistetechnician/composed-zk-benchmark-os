@@ -341,6 +341,7 @@ Surface DSL
 | [docs/253-hsai-gateway-bridge-acceptance-preview-bundle-notes.md](docs/253-hsai-gateway-bridge-acceptance-preview-bundle-notes.md) | Phase 253 HSAI Gateway bridge acceptance-preview ignored bundle run notes. |
 | [docs/254-hsai-gateway-bridge-public-claim-packet.md](docs/254-hsai-gateway-bridge-public-claim-packet.md) | Phase 254 HSAI Gateway bridge bounded public claim packet. |
 | [docs/255-hsai-gateway-claim-packet-reproduction-checker-notes.md](docs/255-hsai-gateway-claim-packet-reproduction-checker-notes.md) | Phase 255 HSAI Gateway claim-packet reproduction checker notes. |
+| [docs/256-hsai-gateway-structured-claim-packet-manifest-notes.md](docs/256-hsai-gateway-structured-claim-packet-manifest-notes.md) | Phase 256 HSAI Gateway structured claim-packet manifest notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1354,6 +1355,12 @@ checks its commit string, covered surfaces, commands, ignored-artifact boundary,
 declared files, nonclaims, buyer-facing wording, and navigation references. It
 does not run providers, generate artifacts, mutate accepted evidence, or
 strengthen the public claim.
+
+[docs/256-hsai-gateway-structured-claim-packet-manifest-notes.md](docs/256-hsai-gateway-structured-claim-packet-manifest-notes.md)
+adds a fenced `claim-packet-manifest-v1` block to the Phase 254 packet and
+upgrades the reproduction checker to parse singleton and repeated manifest
+fields. The checker remains hermetic and does not execute providers, generate
+artifacts, mutate accepted evidence, or strengthen the public claim.
 
 [docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md](docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md)
 records a bounded local coverage tranche for `zkbench-core` soak health
