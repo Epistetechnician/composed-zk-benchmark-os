@@ -337,5 +337,5 @@ HSAI is fully secure.
 ## Next Evidence Step
 
 The next defensible step is not to strengthen the public claim. The next step
-is to add manifest drift tests that reject malformed local packet examples
-without executing the ignored demo or creating artifacts.
+is to add digest binding for the structured manifest itself, without executing
+the ignored demo or creating artifacts.

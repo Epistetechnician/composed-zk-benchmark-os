@@ -745,6 +745,15 @@ checker remains local and hermetic; it runs no providers, creates no artifacts,
 executes no ignored demo command, mutates no accepted Evidence Ledger, creates
 no Level2+ evidence, and does not strengthen the public claim.
 
+Phase 257 hardens that manifest checker with local malformed-packet drift
+coverage. The parser now returns structured errors and the test rejects missing
+manifest fences, unterminated fences, non-`key=value` lines, empty keys, empty
+values, maximum-maturity drift, missing focused checker commands, and explicit
+nonclaim drift. The malformed examples are in-memory strings only: no fixtures,
+generated artifacts, ignored demo execution, provider calls, credentials,
+accepted Evidence Ledger mutation, Level2+ evidence, or stronger public claim
+are introduced.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2441,6 +2450,9 @@ local, hermetic, metadata-only, and non-promotional.
 Phase 256 completes that structured manifest and parser-backed check. The next
 bridge candidate is manifest drift coverage with malformed local packet
 examples, still without executing the ignored demo or creating artifacts.
+Phase 257 completes that malformed manifest drift coverage. The next bridge
+candidate is digest binding for the structured manifest itself, still local,
+hermetic, metadata-only, and non-promotional.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

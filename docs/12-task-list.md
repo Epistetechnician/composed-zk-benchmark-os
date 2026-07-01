@@ -5399,6 +5399,33 @@ claims, or claims above `Attested`.
 Exit criteria: the Phase 254 packet carries a structured local manifest and the
 repo validation gates remain green.
 
+## Phase 257 HSAI Gateway Claim-Packet Manifest Drift Coverage
+
+Status: complete. See
+`docs/257-hsai-gateway-claim-packet-manifest-drift-coverage-notes.md`.
+
+Goal: harden the Phase 256 structured manifest checker with local malformed
+packet examples.
+
+Implemented: changed the manifest parser to return structured errors, added a
+reusable local manifest contract validator, and added negative coverage for
+missing fences, unterminated fences, non-`key=value` lines, empty keys, empty
+values, maximum-maturity drift, missing focused checker command, and explicit
+nonclaim drift.
+
+Validation gate: focused manifest drift checker test, repo hygiene,
+claim-boundary docs, formatting, diff hygiene, and full workspace tests.
+
+Anti-goals: fixture files, generated artifacts, ignored demo execution,
+provider calls, credential handling, accepted Evidence Ledger mutation, final
+bridge acceptance, Level2+ evidence, live provider evidence, live attestation
+capture, benchmark evidence, score-axis population, production-readiness
+claims, semantic-correctness claims, SOTA claims, breakthrough claims,
+full-security claims, or claims above `Attested`.
+
+Exit criteria: malformed local packet examples are rejected without creating
+artifacts and the repo validation gates remain green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
