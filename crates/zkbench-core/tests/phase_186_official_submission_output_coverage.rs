@@ -433,6 +433,90 @@ fn official_submission_readback_rejects_directory_and_missing_declared_files() {
     assert!(missing_error.to_string().contains("No such file"));
 }
 
+#[test]
+fn official_submission_output_allows_matching_explicit_overwrite() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let ledger_path = dir.path().join("accepted-ledger.json");
+    let output_root = dir.path().join("package-output");
+    let (_, package) = write_accepted_ledger(&ledger_path);
+    let base_request = request(
+        output_root.clone(),
+        ledger_path.clone(),
+        package.clone(),
+        false,
+    );
+    let first = write_official_submission_package_outputs(&base_request)
+        .expect("initial package output should write");
+
+    let overwrite_request = request(output_root, ledger_path, package, true);
+    let second = write_official_submission_package_outputs(&overwrite_request)
+        .expect("matching explicit overwrite should rewrite declared package");
+
+    assert_eq!(
+        second.package_metadata_digest,
+        first.package_metadata_digest
+    );
+    assert_eq!(
+        second.package_markdown_digest,
+        first.package_markdown_digest
+    );
+    assert_eq!(
+        second.validation_report_digest,
+        first.validation_report_digest
+    );
+    assert_eq!(
+        second
+            .validation_report
+            .matched_accepted_evidence_ledger_entry_ids,
+        first
+            .validation_report
+            .matched_accepted_evidence_ledger_entry_ids
+    );
+    assert!(!second.validation_report.creates_official_submission);
+    assert!(!second.validation_report.submits_to_official_endpoint);
+    assert!(!second.validation_report.populates_score_axes);
+}
+
+#[test]
+fn official_submission_output_rejects_readback_sidecar_json_and_unexpected_path_edges() {
+    let sidecar_dir = tempfile::tempdir().expect("tempdir should be available");
+    let (sidecar_root, _) = write_package_output(&sidecar_dir);
+    fs::write(
+        sidecar_root.join(OFFICIAL_SUBMISSION_PACKAGE_METADATA_DIGEST_PATH),
+        b"\xff",
+    )
+    .expect("digest sidecar should tamper");
+    let sidecar_error = read_official_submission_package_outputs(&sidecar_root, &[])
+        .expect_err("non-UTF8 digest sidecar should reject");
+    assert!(sidecar_error
+        .to_string()
+        .contains("digest sidecar is not UTF-8"));
+
+    let validation_dir = tempfile::tempdir().expect("tempdir should be available");
+    let (validation_root, _) = write_package_output(&validation_dir);
+    write_file_with_digest(
+        &validation_root,
+        OFFICIAL_SUBMISSION_PACKAGE_VALIDATION_PATH,
+        OFFICIAL_SUBMISSION_PACKAGE_VALIDATION_DIGEST_PATH,
+        b"{not-json",
+    );
+    let validation_error = read_official_submission_package_outputs(&validation_root, &[])
+        .expect_err("invalid validation report JSON should reject");
+    assert!(validation_error
+        .to_string()
+        .contains("deserialize_official_submission_package_output_validation_report_json"));
+
+    let unexpected_dir = tempfile::tempdir().expect("tempdir should be available");
+    let (unexpected_root, _) = write_package_output(&unexpected_dir);
+    fs::create_dir_all(unexpected_root.join("official-submission-package/extra-dir"))
+        .expect("unexpected directory should create");
+    let unexpected_error = read_official_submission_package_outputs(&unexpected_root, &[])
+        .expect_err("unexpected declared-root child should reject");
+    assert!(unexpected_error
+        .to_string()
+        .contains("unexpected file or directory"));
+}
+
 #[cfg(unix)]
 #[test]
 fn official_submission_readback_rejects_symlink_roots_and_declared_files() {

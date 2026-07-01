@@ -5536,6 +5536,45 @@ full-security claims, or claims above `Attested`.
 Exit criteria: the Phase 260 index is guarded by a local hermetic checker and
 the repo validation gates remain green.
 
+## Phase 262 Official Submission Output Coverage
+
+Status: complete. See
+`docs/262-phase-official-submission-output-coverage-notes.md`.
+
+Goal: return to the `zkbench-core` coverage lane and harden the next reachable
+non-serializer surface after the gateway public-packet work:
+`crates/zkbench-core/src/evidence/official_submission_output.rs`.
+
+Implemented: extended
+`crates/zkbench-core/tests/phase_186_official_submission_output_coverage.rs`
+with tests for matching explicit overwrite, digest-preserving rewrite,
+non-UTF-8 digest sidecar rejection, invalid validation-report JSON rejection
+with a matching digest sidecar, and unexpected declared-root child rejection.
+
+Coverage result: `evidence/official_submission_output.rs` moved from `82.12%`
+region / `70.45%` function / `87.45%` line coverage to `84.22%` region /
+`75.00%` function / `90.04%` line coverage. The local `zkbench-core` package
+summary moved from `92.74%` region / `89.36%` function / `94.51%` line
+coverage to `92.80%` region / `89.48%` function / `94.57%` line coverage.
+
+Residual cap: remaining misses are low-level filesystem error wrappers,
+private relative-path validation branches reached only by fixed internal
+constants, unreachable parent-component fallback arms after public
+prevalidation, and concrete serializer-error wrappers.
+
+Anti-goals: production source behavior changes, official submission behavior,
+endpoint submission behavior, credential handling, generated artifact
+materialization outside test tempdirs, accepted Evidence Ledger mutation,
+benchmark evidence, score-axis population, Level2+ evidence, semantic
+correctness claims, production-readiness claims, SOTA claims, breakthrough
+claims, unsafe coverage forcing, coverage suppression, test-only hooks, or
+whole-workspace 100% coverage claims.
+
+Exit criteria: focused official-submission output tests pass; repo hygiene and
+claim-boundary checks remain green; full workspace tests pass; package coverage
+summary records the local coverage movement and next low non-serializer
+surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
