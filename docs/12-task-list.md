@@ -5426,6 +5426,33 @@ full-security claims, or claims above `Attested`.
 Exit criteria: malformed local packet examples are rejected without creating
 artifacts and the repo validation gates remain green.
 
+## Phase 258 HSAI Gateway Structured Manifest Digest Binding
+
+Status: complete. See
+`docs/258-hsai-gateway-structured-manifest-digest-binding-notes.md`.
+
+Goal: bind the structured Phase 254 claim-packet manifest to a deterministic
+local digest without strengthening the public claim.
+
+Implemented: added `manifest_digest_sha256` to the structured manifest and
+upgraded `gateway_claim_packet_reproduction` to recompute the canonical digest
+over sorted `key=value` lines excluding the digest line. The checker validates
+64-character lowercase hex formatting, digest self-consistency, digest-field
+drift, digest-content drift, and recomputed-digest semantic drift examples.
+
+Validation gate: focused manifest digest checker test, repo hygiene,
+claim-boundary docs, formatting, diff hygiene, and full workspace tests.
+
+Anti-goals: fixture files, generated artifacts, ignored demo execution,
+provider calls, credential handling, accepted Evidence Ledger mutation, final
+bridge acceptance, Level2+ evidence, live provider evidence, live attestation
+capture, benchmark evidence, score-axis population, production-readiness
+claims, semantic-correctness claims, SOTA claims, breakthrough claims,
+full-security claims, or claims above `Attested`.
+
+Exit criteria: the Phase 254 structured manifest is digest-bound and the repo
+validation gates remain green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

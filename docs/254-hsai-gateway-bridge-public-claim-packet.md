@@ -69,6 +69,10 @@ This is a local metadata and artifact-shape claim only.
 This manifest is parsed by the local reproduction checker. It is not accepted
 evidence and does not strengthen the public claim.
 
+The `manifest_digest_sha256` value is computed over the sorted `key=value`
+manifest lines, excluding the `manifest_digest_sha256` line itself, with one
+newline after each included line.
+
 ```claim-packet-manifest-v1
 packet_id=phase-254-hsai-gateway-bridge-public-claim-packet
 packet_path=docs/254-hsai-gateway-bridge-public-claim-packet.md
@@ -83,6 +87,7 @@ claim_level=local_metadata_and_artifact_shape_only
 max_claim_maturity=Attested
 ignored_demo_root=.gateway-demo-runs/phase-253-gateway-acceptance-preview/
 ignored_status=!! .gateway-demo-runs/
+manifest_digest_sha256=9cec879e89def697a5fdbb07a5ea1885ea2e4ce330cc6e8c0ed91e69de793fa9
 declared_file=gateway-acceptance-preview/manifest.json
 declared_file=gateway-acceptance-preview/acceptance-preview-request.json
 declared_file=gateway-acceptance-preview/acceptance-preview-report.json
@@ -337,5 +342,5 @@ HSAI is fully secure.
 ## Next Evidence Step
 
 The next defensible step is not to strengthen the public claim. The next step
-is to add digest binding for the structured manifest itself, without executing
-the ignored demo or creating artifacts.
+is to add a small digest-bound manifest reproduction note that can be quoted
+without exposing generated artifacts or strengthening the claim.
