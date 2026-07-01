@@ -5371,6 +5371,34 @@ claims, or claims above `Attested`.
 Exit criteria: the Phase 254 public packet has a committed local reproduction
 checker and the repo validation gates remain green.
 
+## Phase 256 HSAI Gateway Structured Claim-Packet Manifest
+
+Status: complete. See
+`docs/256-hsai-gateway-structured-claim-packet-manifest-notes.md`.
+
+Goal: make the Phase 254 public claim packet more machine-checkable without
+strengthening the public claim.
+
+Implemented: added a fenced `claim-packet-manifest-v1` block to
+`docs/254-hsai-gateway-bridge-public-claim-packet.md` and upgraded
+`gateway_claim_packet_reproduction` to parse the block. The parser validates
+singleton fields and repeated values for packet identity, commit metadata,
+covered phases, claim level, ignored demo boundary, declared output files,
+summary flags, commands, nonclaims, and forbidden public phrases.
+
+Validation gate: focused parser-backed reproduction-checker test, repo hygiene,
+claim-boundary docs, formatting, diff hygiene, and full workspace tests.
+
+Anti-goals: provider calls, generated artifacts, ignored demo execution,
+credential handling, accepted Evidence Ledger mutation, final bridge
+acceptance, Level2+ evidence, live provider evidence, live attestation capture,
+benchmark evidence, score-axis population, production-readiness claims,
+semantic-correctness claims, SOTA claims, breakthrough claims, full-security
+claims, or claims above `Attested`.
+
+Exit criteria: the Phase 254 packet carries a structured local manifest and the
+repo validation gates remain green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

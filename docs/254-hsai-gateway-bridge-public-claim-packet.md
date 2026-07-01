@@ -64,6 +64,79 @@ HSAI has a local hermetic gateway bridge stack that can:
 
 This is a local metadata and artifact-shape claim only.
 
+## Structured Claim-Packet Manifest
+
+This manifest is parsed by the local reproduction checker. It is not accepted
+evidence and does not strengthen the public claim.
+
+```claim-packet-manifest-v1
+packet_id=phase-254-hsai-gateway-bridge-public-claim-packet
+packet_path=docs/254-hsai-gateway-bridge-public-claim-packet.md
+base_commit=edbae44ea2f47f067683e28d2c6d5cb8af4362e8
+top_commit=edbae44 Materialize gateway acceptance preview bundle
+validated_phase=249
+validated_phase=250
+validated_phase=251
+validated_phase=252
+validated_phase=253
+claim_level=local_metadata_and_artifact_shape_only
+max_claim_maturity=Attested
+ignored_demo_root=.gateway-demo-runs/phase-253-gateway-acceptance-preview/
+ignored_status=!! .gateway-demo-runs/
+declared_file=gateway-acceptance-preview/manifest.json
+declared_file=gateway-acceptance-preview/acceptance-preview-request.json
+declared_file=gateway-acceptance-preview/acceptance-preview-report.json
+declared_file=gateway-acceptance-preview/source-preflight-report.json
+declared_file=gateway-acceptance-preview/non-claims.md
+declared_file=gateway-acceptance-preview/validation-report.json
+summary_flag=candidate_only:true
+summary_flag=mutates_accepted_evidence_ledger:false
+summary_flag=creates_level2_evidence:false
+summary_flag=populates_score_axes:false
+summary_flag=grants_authority:false
+summary_flag=retains_raw_provider_artifacts:false
+summary_flag=retains_credentials_or_secrets:false
+phase253_command=cargo fmt --all --check
+phase253_command=git diff --check
+phase253_command=cargo test -p hsai-agent-admission --lib gateway_acceptance_preview_bundle
+phase253_command=cargo test -p hsai-agent-admission --test gateway_acceptance_preview_bundle_contract
+phase253_command=cargo check -p hsai-agent-admission --examples
+phase253_command=cargo run -p hsai-agent-admission --example gateway_acceptance_preview_bundle
+phase253_command=cargo test -p hsai-agent-admission --lib --quiet
+phase253_command=cargo test -p zkbench-core --test repo_hygiene --quiet
+phase253_command=cargo test -p zkbench-core --test repo_claim_boundary_docs --quiet
+phase253_command=cargo test --workspace --quiet
+phase253_command=cargo test --workspace --features external-runner --quiet
+packet_validation_command=cargo fmt --all --check
+packet_validation_command=git diff --check
+packet_validation_command=cargo test -p zkbench-core --test gateway_claim_packet_reproduction --quiet
+packet_validation_command=cargo test -p zkbench-core --test repo_hygiene --quiet
+packet_validation_command=cargo test -p zkbench-core --test repo_claim_boundary_docs --quiet
+packet_validation_command=cargo test --workspace --quiet
+packet_validation_command=cargo test --workspace --features external-runner --quiet
+nonclaim=accepted evidence
+nonclaim=final acceptance
+nonclaim=accepted Evidence Ledger mutation
+nonclaim=Level2+ evidence
+nonclaim=live provider evidence
+nonclaim=live attestation capture
+nonclaim=benchmark evidence
+nonclaim=score-axis population
+nonclaim=production readiness
+nonclaim=semantic correctness
+nonclaim=SOTA status
+nonclaim=breakthrough status
+nonclaim=full security
+nonclaim=global software-agent uniqueness
+nonclaim=any claim above Attested
+do_not_use=HSAI has proven production-ready secure agent execution.
+do_not_use=HSAI has accepted live attestation evidence.
+do_not_use=HSAI is SOTA.
+do_not_use=HSAI has proven a breakthrough.
+do_not_use=HSAI has Level2+ evidence.
+do_not_use=HSAI is fully secure.
+```
+
 ## Exact Passed Commands
 
 The Phase 253 final gate on `edbae44ea2f47f067683e28d2c6d5cb8af4362e8`
@@ -90,6 +163,7 @@ The Phase 254 docs-only packet validation passed:
 ```sh
 cargo fmt --all --check
 git diff --check
+cargo test -p zkbench-core --test gateway_claim_packet_reproduction --quiet
 cargo test -p zkbench-core --test repo_hygiene --quiet
 cargo test -p zkbench-core --test repo_claim_boundary_docs --quiet
 cargo test --workspace --quiet
@@ -263,6 +337,5 @@ HSAI is fully secure.
 ## Next Evidence Step
 
 The next defensible step is not to strengthen the public claim. The next step
-is to add a local claim-packet reproduction checker that reads this packet and
-verifies that the named commands, nonclaims, and ignored-artifact boundaries stay
-consistent with the repository state.
+is to add manifest drift tests that reject malformed local packet examples
+without executing the ignored demo or creating artifacts.
