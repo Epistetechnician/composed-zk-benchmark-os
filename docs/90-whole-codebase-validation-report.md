@@ -782,6 +782,19 @@ generated artifacts, ignored demo execution, provider calls, accepted Evidence
 Ledger mutation, Level2+ evidence, live provider evidence, production readiness,
 SOTA status, breakthrough status, or stronger public claim.
 
+Phase 261 extends
+`crates/zkbench-core/tests/gateway_claim_packet_reproduction.rs` with a local
+hermetic checker for the Phase 260 index. The checker validates the indexed
+commit, packet path, reproduction-note path, structured manifest digest, digest
+rule, focused checker command, bounded public wording, reproduction checklist
+hygiene, explicit nonclaims, and absence of forbidden public phrases in the
+public-facing index and reproduction note. It also rejects in-memory drift
+examples for indexed commit, packet path, digest, checker command, and nonclaim
+drift. It creates no fixtures, generated artifacts, ignored demo execution,
+provider calls, accepted Evidence Ledger mutation, Level2+ evidence, live
+provider evidence, production readiness, SOTA status, breakthrough status, or
+stronger public claim.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2492,6 +2505,9 @@ Phase 260 completes that public-packet index. The next bridge candidate is a
 local index checker that verifies the index against the packet, reproduction
 note, digest, checker command, and nonclaims without creating generated
 artifacts or strengthening the public claim.
+Phase 261 completes that local index checker. The next defensible move is to
+return to the coverage lane or open a new explicitly bounded gateway slice; no
+public claim strengthening follows from the checker.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

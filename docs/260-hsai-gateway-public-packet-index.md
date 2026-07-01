@@ -99,7 +99,7 @@ git status --short --ignored .gateway-demo-runs
 
 ## Next Step
 
-The next defensible bridge slice is a local index checker that verifies this
-index against the packet, reproduction note, digest, checker command, and
-nonclaims without creating generated artifacts or strengthening the public
-claim.
+The next bridge slice was a local index checker that verifies this index against
+the packet, reproduction note, digest, checker command, and nonclaims without
+creating generated artifacts or strengthening the public claim. That checker is
+recorded in `docs/261-hsai-gateway-public-packet-index-checker-notes.md`.
