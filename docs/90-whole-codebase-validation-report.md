@@ -795,6 +795,16 @@ provider calls, accepted Evidence Ledger mutation, Level2+ evidence, live
 provider evidence, production readiness, SOTA status, breakthrough status, or
 stronger public claim.
 
+Phase 262 returns to the `zkbench-core` coverage lane and adds focused local
+coverage for `evidence/official_submission_output.rs`. It covers matching
+explicit overwrite, digest-preserving rewrite, non-UTF-8 digest sidecar
+rejection, invalid validation-report JSON rejection with a matching digest
+sidecar, and unexpected declared-root child rejection. It changes no production
+source behavior, official submission behavior, endpoint submission behavior,
+credentials, generated artifacts outside test tempdirs, accepted Evidence Ledger
+state, benchmark evidence, score-axis state, Level2+ evidence, production
+readiness, SOTA status, breakthrough status, or stronger public claim.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2447,6 +2457,15 @@ The Phase 245 tranche moved `mutation/bad_counters.rs` from `87.14%` to
 coverage. The lowest remaining non-serializer line-coverage candidate in the
 current package summary is `evidence/official_submission_output.rs` at
 `87.45%`, subject to missing-line audit before mutation.
+The Phase 262 tranche moved `evidence/official_submission_output.rs` from
+`87.45%` to `90.04%` line coverage and moved the local `zkbench-core` package
+summary to `92.80%` region coverage, `89.48%` function execution, and `94.57%`
+line coverage. The fresh coverage table still shows
+`adapters/zk_harness/export.rs` at `86.96%`, but Phase 240 already audited that
+surface as serializer-wrapper residual. The lowest reachable non-serializer
+line-coverage candidate in the current package summary is
+`external_runner/validation.rs` at `88.16%`, subject to missing-line audit
+before mutation.
 Phase 246 adds no code and changes no coverage. It refreshes the public proof
 packet for the current green head and routes the SOTA-breakthrough bridge to a
 local gateway demo bundle, first real external evidence lane, accepted evidence
@@ -2508,6 +2527,10 @@ artifacts or strengthening the public claim.
 Phase 261 completes that local index checker. The next defensible move is to
 return to the coverage lane or open a new explicitly bounded gateway slice; no
 public claim strengthening follows from the checker.
+Phase 262 returns to the coverage lane and completes an
+official-submission-output tranche. The next coverage candidate is
+`external_runner/validation.rs`, but it requires a missing-line audit before
+mutation.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

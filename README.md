@@ -347,6 +347,7 @@ Surface DSL
 | [docs/259-hsai-gateway-digest-bound-manifest-reproduction-note.md](docs/259-hsai-gateway-digest-bound-manifest-reproduction-note.md) | Phase 259 HSAI Gateway digest-bound manifest reproduction note. |
 | [docs/260-hsai-gateway-public-packet-index.md](docs/260-hsai-gateway-public-packet-index.md) | Phase 260 HSAI Gateway public packet index. |
 | [docs/261-hsai-gateway-public-packet-index-checker-notes.md](docs/261-hsai-gateway-public-packet-index-checker-notes.md) | Phase 261 HSAI Gateway public packet index checker notes. |
+| [docs/262-phase-official-submission-output-coverage-notes.md](docs/262-phase-official-submission-output-coverage-notes.md) | Phase 262 official-submission output coverage notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1397,6 +1398,15 @@ the Phase 254 packet, Phase 259 reproduction note, structured manifest digest,
 focused checker command, bounded wording, and explicit nonclaims. It reads
 committed Markdown only and does not create artifacts, provider calls, accepted
 evidence, or stronger claims.
+
+[docs/262-phase-official-submission-output-coverage-notes.md](docs/262-phase-official-submission-output-coverage-notes.md)
+records a bounded local coverage tranche for
+`evidence/official_submission_output.rs`. It covers matching explicit
+overwrite, digest-preserving rewrite, non-UTF-8 digest sidecar rejection,
+invalid validation-report JSON rejection, and unexpected declared-root child
+rejection. The local package coverage run moved the file from `87.45%` to
+`90.04%` line coverage and `zkbench-core` from `94.51%` to `94.57%` line
+coverage. The next audit-first target is `external_runner/validation.rs`.
 
 [docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md](docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md)
 records a bounded local coverage tranche for `zkbench-core` soak health
