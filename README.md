@@ -338,6 +338,7 @@ Surface DSL
 | [docs/250-hsai-gateway-operator-bridge-bundle-notes.md](docs/250-hsai-gateway-operator-bridge-bundle-notes.md) | Phase 250 HSAI Gateway operator bridge bundle implementation and ignored run notes. |
 | [docs/251-hsai-gateway-bridge-promotion-preflight-notes.md](docs/251-hsai-gateway-bridge-promotion-preflight-notes.md) | Phase 251 HSAI Gateway bridge reviewed promotion preflight implementation notes. |
 | [docs/252-hsai-gateway-bridge-acceptance-preview-notes.md](docs/252-hsai-gateway-bridge-acceptance-preview-notes.md) | Phase 252 HSAI Gateway bridge candidate-only acceptance preview implementation notes. |
+| [docs/253-hsai-gateway-bridge-acceptance-preview-bundle-notes.md](docs/253-hsai-gateway-bridge-acceptance-preview-bundle-notes.md) | Phase 253 HSAI Gateway bridge acceptance-preview ignored bundle run notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1332,6 +1333,12 @@ report. The preview binds to the preflight digest and still blocks accepted
 Evidence Ledger mutation, final acceptance, Level2+ evidence, score-axis
 population, authority grants, raw artifact retention, credentials, and stronger
 claims.
+
+[docs/253-hsai-gateway-bridge-acceptance-preview-bundle-notes.md](docs/253-hsai-gateway-bridge-acceptance-preview-bundle-notes.md)
+records the ignored local `gateway-acceptance-preview/*` output bundle and run.
+The bundle materializes the Phase 252 preview request, report, source preflight
+report, nonclaims, validation report, manifest, and sidecars without committing
+generated output or mutating accepted evidence.
 
 [docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md](docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md)
 records a bounded local coverage tranche for `zkbench-core` soak health

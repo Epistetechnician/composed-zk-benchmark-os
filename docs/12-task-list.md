@@ -5283,6 +5283,38 @@ Exit criteria: valid preview report remains candidate-only metadata; digest
 drift, invalid source preflight, escalation flags, and forbidden claim text fail
 closed; no generated output is committed.
 
+## Phase 253 HSAI Gateway Bridge Acceptance Preview Bundle
+
+Status: complete. See
+`docs/253-hsai-gateway-bridge-acceptance-preview-bundle-notes.md`.
+
+Goal: materialize a reproducible ignored output bundle for the Phase 252
+candidate-only acceptance preview report.
+
+Implemented: `hsai-agent-admission` now provides the acceptance-preview
+materialization request, output manifest, output validation report,
+materialization error surface, declared `gateway-acceptance-preview/*` files,
+digest sidecars, materialization/readback helpers, focused drift/escalation
+tests, source-contract tests, and the `gateway_acceptance_preview_bundle`
+operator-facing example. The ignored demo writes gateway report, bridge, and
+acceptance-preview output sub-bundles under
+`.gateway-demo-runs/phase-253-gateway-acceptance-preview`.
+
+Validation gate: focused acceptance-preview bundle unit tests, source-contract
+tests, example compilation, ignored demo run, repo hygiene, claim-boundary docs,
+and full workspace tests.
+
+Anti-goals: final bridge acceptance, accepted Evidence Ledger mutation, ledger
+append, committed generated output, raw provider artifact retention, credential
+handling, provider calls, live attestation capture, score-axis population,
+official benchmark evidence, Level2+ evidence, production-readiness claims,
+semantic-correctness claims, SOTA claims, breakthrough claims, full-security
+claims, or claims above `Attested`.
+
+Exit criteria: ignored preview bundle exists locally; generated files are not
+committed; exact run command and digests are recorded; readback and
+claim-boundary checks remain green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
