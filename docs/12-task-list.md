@@ -5315,6 +5315,33 @@ Exit criteria: ignored preview bundle exists locally; generated files are not
 committed; exact run command and digests are recorded; readback and
 claim-boundary checks remain green.
 
+## Phase 254 HSAI Gateway Bridge Public Claim Packet
+
+Status: complete. See
+`docs/254-hsai-gateway-bridge-public-claim-packet.md`.
+
+Goal: package Phases 249-253 into one bounded public claim artifact that says
+exactly what is locally proven, how to reproduce it, and what is explicitly not
+claimed.
+
+Implemented: added a docs-only public claim packet for the local
+gateway-to-attestation-to-preview bridge. The packet names commit
+`edbae44ea2f47f067683e28d2c6d5cb8af4362e8`, covered phases, public claim,
+passed commands, ignored run evidence, reproduction checklist, explicit
+nonclaims, buyer-facing wording, and the next defensible evidence step.
+
+Validation gate: repo hygiene, claim-boundary docs, Markdown presence checks,
+and full workspace tests.
+
+Anti-goals: code changes, generated output, accepted Evidence Ledger mutation,
+final bridge acceptance, Level2+ evidence, live provider evidence, live
+attestation capture, benchmark evidence, score-axis population,
+production-readiness claims, semantic-correctness claims, SOTA claims,
+breakthrough claims, full-security claims, or claims above `Attested`.
+
+Exit criteria: the public packet is shareable without inflating the claim and
+the repo validation gates remain green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
