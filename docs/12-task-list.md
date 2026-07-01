@@ -5479,6 +5479,32 @@ breakthrough claims, full-security claims, or claims above `Attested`.
 Exit criteria: the digest-bound manifest has a short shareable reproduction note
 and the repo validation gates remain green.
 
+## Phase 260 HSAI Gateway Public Packet Index
+
+Status: complete. See `docs/260-hsai-gateway-public-packet-index.md`.
+
+Goal: provide one local index for the latest shareable gateway packet, digest,
+checker command, and nonclaims without strengthening the public claim.
+
+Implemented: added a docs-only public packet index pinned to commit
+`85a49f546935e5c237ff01811ea94fba38d5d0b5`. The index names the latest
+shareable packet, reproduction note, structured manifest digest, digest rule,
+checker command, bounded public wording, short wording, reproduction checklist,
+explicit nonclaims, and next local index-checker slice.
+
+Validation gate: docs hygiene, claim-boundary docs, formatting, diff hygiene,
+and full workspace tests.
+
+Anti-goals: Rust/source changes, fixture files, generated artifacts, ignored
+demo execution, provider calls, credential handling, accepted Evidence Ledger
+mutation, final bridge acceptance, Level2+ evidence, live provider evidence,
+live attestation capture, benchmark evidence, score-axis population,
+production-readiness claims, semantic-correctness claims, SOTA claims,
+breakthrough claims, full-security claims, or claims above `Attested`.
+
+Exit criteria: the latest packet index is shareable without claim inflation and
+the repo validation gates remain green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
