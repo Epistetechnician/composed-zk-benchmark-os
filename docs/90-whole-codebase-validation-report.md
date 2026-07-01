@@ -814,6 +814,19 @@ credentials, generated artifacts, accepted Evidence Ledger state, benchmark
 evidence, score-axis state, Level2+ evidence, production readiness, SOTA status,
 breakthrough status, or stronger public claim.
 
+Phase 264 opens a docs-first HSAI Gateway external-evidence acceptance boundary.
+It defines the future path from one gateway-bound external attestation artifact
+to a reviewed local accepted Evidence Ledger mutation using the existing
+gateway bridge surfaces and the existing `zkbench-core`
+`AcceptedLedgerAppendTransactionRequest` path. It names required inputs,
+redaction rules, digest rules, review decision, evidence-class and
+claim-boundary caps, verification order, output shape, tests, verifier commands,
+buyer-facing wording, explicit nonclaims, and the next implementation slice. It
+creates no Rust/source changes, generated artifacts, accepted Evidence Ledger
+mutation, final bridge acceptance, live provider call, live attestation capture,
+benchmark evidence, score-axis population, Level2+ evidence, production
+readiness, SOTA status, breakthrough status, or stronger public claim.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2552,6 +2565,11 @@ mutation.
 Phase 263 completes that external-runner validation tranche. The next coverage
 candidate is `evidence/external_submission_preflight_output.rs`, but it requires
 a missing-line audit before mutation.
+Phase 264 opens the gateway external-evidence acceptance boundary. The next
+bridge implementation candidate is a gateway-specific adapter that maps one
+validated gateway bridge acceptance preview into the existing accepted append
+transaction path without raw provider artifacts, credentials, Level2+ evidence,
+score axes, or stronger public claims.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

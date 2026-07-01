@@ -5612,6 +5612,36 @@ claim-boundary checks remain green; full workspace tests pass; package coverage
 summary records the local coverage movement and next low non-serializer
 surface.
 
+## Phase 264 HSAI Gateway External Evidence Acceptance Boundary
+
+Status: complete. See
+`docs/264-hsai-gateway-external-evidence-acceptance-boundary.md`.
+
+Goal: define the docs-first boundary for the first gateway-bound external
+evidence accepted-ledger mutation before implementation touches accepted
+evidence.
+
+Implemented: added a bounded acceptance-boundary spec that names the existing
+gateway bridge inputs, existing `zkbench-core` accepted append APIs, future
+request shape, redaction rules, evidence-class and claim-boundary caps,
+verification order, output-root shape, required review decision, required tests,
+verifier commands, buyer-facing wording, explicit nonclaims, and next
+implementation slice.
+
+Validation gate: docs hygiene, claim-boundary docs, repo hygiene, formatting,
+diff hygiene, and full workspace tests.
+
+Anti-goals: Rust/source changes, accepted Evidence Ledger mutation, final
+bridge acceptance, generated artifacts, raw provider payload retention,
+credential handling, live provider calls, live attestation capture, benchmark
+evidence, official benchmark submission, score-axis population, Level2+
+evidence, production-readiness claims, semantic-correctness claims, SOTA
+claims, breakthrough claims, full-security claims, global software-agent
+uniqueness claims, or claims above `Attested`.
+
+Exit criteria: the future accepted-evidence implementation path is explicit,
+bounded, and nonclaim-safe before code mutation.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

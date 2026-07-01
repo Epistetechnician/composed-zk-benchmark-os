@@ -349,6 +349,7 @@ Surface DSL
 | [docs/261-hsai-gateway-public-packet-index-checker-notes.md](docs/261-hsai-gateway-public-packet-index-checker-notes.md) | Phase 261 HSAI Gateway public packet index checker notes. |
 | [docs/262-phase-official-submission-output-coverage-notes.md](docs/262-phase-official-submission-output-coverage-notes.md) | Phase 262 official-submission output coverage notes. |
 | [docs/263-phase-external-runner-validation-coverage-notes.md](docs/263-phase-external-runner-validation-coverage-notes.md) | Phase 263 external-runner validation coverage notes. |
+| [docs/264-hsai-gateway-external-evidence-acceptance-boundary.md](docs/264-hsai-gateway-external-evidence-acceptance-boundary.md) | Phase 264 HSAI Gateway external-evidence acceptance boundary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1416,6 +1417,14 @@ detection. The local package coverage run moved the file from `88.16%` to
 `100.00%` line coverage and `zkbench-core` from `94.57%` to `94.60%` line
 coverage. The next audit-first target is
 `evidence/external_submission_preflight_output.rs`.
+
+[docs/264-hsai-gateway-external-evidence-acceptance-boundary.md](docs/264-hsai-gateway-external-evidence-acceptance-boundary.md)
+defines the docs-first boundary for turning one gateway-bound external
+attestation artifact into a reviewed local accepted Evidence Ledger mutation.
+It names required inputs, redaction rules, digest rules, review decision,
+accepted append transaction mapping, output shape, tests, verifier commands,
+buyer-facing wording, and explicit nonclaims. It does not implement accepted
+bridge evidence or mutate an accepted Evidence Ledger.
 
 [docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md](docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md)
 records a bounded local coverage tranche for `zkbench-core` soak health
