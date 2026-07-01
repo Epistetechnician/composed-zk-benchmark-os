@@ -342,6 +342,6 @@ HSAI is fully secure.
 ## Next Evidence Step
 
 The next defensible step is not to strengthen the public claim. The next step
-is to add a local public-packet index that lists the latest shareable packet,
-digest, checker command, and nonclaims without creating generated artifacts or
-strengthening the claim.
+is to add a local index checker that verifies the latest public-packet index
+against the packet, reproduction note, digest, checker command, and nonclaims
+without creating generated artifacts or strengthening the claim.

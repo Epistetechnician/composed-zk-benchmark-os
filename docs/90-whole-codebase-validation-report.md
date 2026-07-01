@@ -772,6 +772,16 @@ artifacts, ignored demo execution, provider calls, credentials, accepted
 Evidence Ledger mutation, Level2+ evidence, live provider evidence, production
 readiness, SOTA status, breakthrough status, or stronger public claim.
 
+Phase 260 adds `docs/260-hsai-gateway-public-packet-index.md` as a docs-only
+local index for the latest shareable gateway packet. It pins commit
+`85a49f546935e5c237ff01811ea94fba38d5d0b5`, names the Phase 254 packet, Phase
+259 reproduction note, structured manifest digest, digest rule, checker command,
+bounded public wording, reproduction checklist, explicit nonclaims, and next
+local index-checker slice. It creates no Rust/source changes, fixtures,
+generated artifacts, ignored demo execution, provider calls, accepted Evidence
+Ledger mutation, Level2+ evidence, live provider evidence, production readiness,
+SOTA status, breakthrough status, or stronger public claim.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2478,6 +2488,10 @@ Phase 259 completes that reproduction note. The next bridge candidate is a
 local public-packet index that lists the latest shareable packet, digest,
 checker command, and nonclaims without creating generated artifacts or
 strengthening the public claim.
+Phase 260 completes that public-packet index. The next bridge candidate is a
+local index checker that verifies the index against the packet, reproduction
+note, digest, checker command, and nonclaims without creating generated
+artifacts or strengthening the public claim.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark

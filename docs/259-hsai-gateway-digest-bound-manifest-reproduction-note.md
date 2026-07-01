@@ -103,5 +103,6 @@ This note does not claim:
 ## Next Step
 
 The next defensible bridge slice is to add a local public-packet index that
-lists the latest shareable packet, digest, checker command, and nonclaims,
-without creating generated artifacts or strengthening the public claim.
+lists the latest shareable packet, digest, checker command, and nonclaims. The
+next implementation slice after that is a local index checker, still without
+creating generated artifacts or strengthening the public claim.
