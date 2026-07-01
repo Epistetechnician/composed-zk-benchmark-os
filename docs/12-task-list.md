@@ -5342,6 +5342,35 @@ breakthrough claims, full-security claims, or claims above `Attested`.
 Exit criteria: the public packet is shareable without inflating the claim and
 the repo validation gates remain green.
 
+## Phase 255 HSAI Gateway Claim-Packet Reproduction Checker
+
+Status: complete. See
+`docs/255-hsai-gateway-claim-packet-reproduction-checker-notes.md`.
+
+Goal: add a local hermetic checker that keeps the Phase 254 public claim packet
+aligned with committed repository state.
+
+Implemented: added `gateway_claim_packet_reproduction`, a `zkbench-core`
+integration test that reads the Phase 254 packet, `.gitignore`, README, task
+list, validation report, and AGENTS boundary. It verifies the packet's pinned
+commit string, covered surfaces, exact commands, ignored demo-root boundary,
+declared output files, candidate-only and non-mutating flags, explicit
+nonclaims, buyer-facing wording, "do not use" phrases, and navigation
+references.
+
+Validation gate: focused reproduction-checker test, repo hygiene,
+claim-boundary docs, formatting, diff hygiene, and full workspace tests.
+
+Anti-goals: provider calls, generated artifacts, ignored demo execution,
+credential handling, accepted Evidence Ledger mutation, final bridge
+acceptance, Level2+ evidence, live provider evidence, live attestation capture,
+benchmark evidence, score-axis population, production-readiness claims,
+semantic-correctness claims, SOTA claims, breakthrough claims, full-security
+claims, or claims above `Attested`.
+
+Exit criteria: the Phase 254 public packet has a committed local reproduction
+checker and the repo validation gates remain green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

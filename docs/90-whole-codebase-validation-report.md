@@ -725,6 +725,16 @@ no final bridge acceptance, no Level2+ evidence, no live provider evidence, no
 production-readiness claim, no semantic-correctness claim, no SOTA claim, and no
 breakthrough claim.
 
+Phase 255 adds a local hermetic reproduction checker for the Phase 254 public
+claim packet. The `gateway_claim_packet_reproduction` integration test reads
+the committed packet, `.gitignore`, README, task list, validation report, and
+AGENTS boundary, then checks the pinned commit string, covered surfaces, exact
+commands, ignored artifact boundary, declared files, candidate-only and
+non-mutating flags, explicit nonclaims, buyer-facing wording, "do not use"
+phrases, and navigation references. It runs no providers, creates no artifacts,
+executes no ignored demo command, mutates no accepted Evidence Ledger, creates
+no Level2+ evidence, and does not strengthen the public claim.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2415,6 +2425,9 @@ Phase 254 completes that public claim packet. The next bridge candidate is a
 local claim-packet reproduction checker that reads the packet and verifies the
 commands, nonclaims, and ignored-artifact boundaries against repo state without
 strengthening the public claim.
+Phase 255 completes that local reproduction checker. The next bridge candidate
+is a structured claim-packet manifest block plus parser-backed checks, still
+local, hermetic, metadata-only, and non-promotional.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
