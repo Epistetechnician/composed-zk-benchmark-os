@@ -339,6 +339,7 @@ Surface DSL
 | [docs/251-hsai-gateway-bridge-promotion-preflight-notes.md](docs/251-hsai-gateway-bridge-promotion-preflight-notes.md) | Phase 251 HSAI Gateway bridge reviewed promotion preflight implementation notes. |
 | [docs/252-hsai-gateway-bridge-acceptance-preview-notes.md](docs/252-hsai-gateway-bridge-acceptance-preview-notes.md) | Phase 252 HSAI Gateway bridge candidate-only acceptance preview implementation notes. |
 | [docs/253-hsai-gateway-bridge-acceptance-preview-bundle-notes.md](docs/253-hsai-gateway-bridge-acceptance-preview-bundle-notes.md) | Phase 253 HSAI Gateway bridge acceptance-preview ignored bundle run notes. |
+| [docs/254-hsai-gateway-bridge-public-claim-packet.md](docs/254-hsai-gateway-bridge-public-claim-packet.md) | Phase 254 HSAI Gateway bridge bounded public claim packet. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1339,6 +1340,12 @@ records the ignored local `gateway-acceptance-preview/*` output bundle and run.
 The bundle materializes the Phase 252 preview request, report, source preflight
 report, nonclaims, validation report, manifest, and sidecars without committing
 generated output or mutating accepted evidence.
+
+[docs/254-hsai-gateway-bridge-public-claim-packet.md](docs/254-hsai-gateway-bridge-public-claim-packet.md)
+packages Phases 249-253 into a bounded public claim packet. It states exactly
+what is locally proven, how to reproduce it, and what is explicitly not claimed:
+no accepted evidence, final acceptance, Level2+ evidence, live provider
+evidence, SOTA, breakthrough status, or production readiness.
 
 [docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md](docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md)
 records a bounded local coverage tranche for `zkbench-core` soak health

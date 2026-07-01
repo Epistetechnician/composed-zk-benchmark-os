@@ -715,6 +715,16 @@ preserved `populates_score_axes=false`, preserved `grants_authority=false`,
 preserved `retains_raw_provider_artifacts=false`, preserved
 `retains_credentials_or_secrets=false`, and committed no generated output.
 
+Phase 254 packages Phases 249 through 253 into
+`docs/254-hsai-gateway-bridge-public-claim-packet.md`. It is a docs-only public
+claim packet that names commit `edbae44ea2f47f067683e28d2c6d5cb8af4362e8`, the
+covered local bridge surfaces, exact passed commands, Phase 253 ignored run
+evidence, reproduction checklist, buyer-facing wording, and explicit nonclaims.
+It creates no code, no generated output, no accepted Evidence Ledger mutation,
+no final bridge acceptance, no Level2+ evidence, no live provider evidence, no
+production-readiness claim, no semantic-correctness claim, no SOTA claim, and no
+breakthrough claim.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2401,6 +2411,10 @@ candidate is a bounded public claim packet for Phases 249 through 253 that
 summarizes the gateway-to-attestation-to-preview bridge without promoting
 accepted evidence, final acceptance, Level2+ evidence, live provider evidence,
 SOTA, breakthrough status, or production readiness.
+Phase 254 completes that public claim packet. The next bridge candidate is a
+local claim-packet reproduction checker that reads the packet and verifies the
+commands, nonclaims, and ignored-artifact boundaries against repo state without
+strengthening the public claim.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
