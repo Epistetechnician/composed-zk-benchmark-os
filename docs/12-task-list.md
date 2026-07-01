@@ -5575,6 +5575,43 @@ claim-boundary checks remain green; full workspace tests pass; package coverage
 summary records the local coverage movement and next low non-serializer
 surface.
 
+## Phase 263 External Runner Validation Coverage
+
+Status: complete. See
+`docs/263-phase-external-runner-validation-coverage-notes.md`.
+
+Goal: harden the next reachable non-serializer coverage target after Phase 262:
+`crates/zkbench-core/src/external_runner/validation.rs`.
+
+Implemented: added
+`crates/zkbench-core/tests/phase_263_external_runner_validation_coverage.rs`
+with tests for `ExternalValidationIssue::warning` preserving path, message, and
+warning severity, plus Windows absolute-path detection for slash and backslash
+forms and negative checks for non-drive prefixes, drive-relative paths, short
+drive strings, and portable relative paths.
+
+Coverage result: `external_runner/validation.rs` moved from `89.36%` region /
+`90.91%` function / `88.16%` line coverage to `100.00%` region / `100.00%`
+function / `100.00%` line coverage. The local `zkbench-core` package summary
+moved from `92.80%` region / `89.48%` function / `94.57%` line coverage to
+`92.83%` region / `89.53%` function / `94.60%` line coverage.
+
+Residual cap: no residual missed lines remain in
+`external_runner/validation.rs` under the local coverage run.
+
+Anti-goals: production source behavior changes, external-runner behavior
+changes, external execution, endpoint submission behavior, credential handling,
+generated artifact materialization, accepted Evidence Ledger mutation,
+benchmark evidence, score-axis population, Level2+ evidence, semantic
+correctness claims, production-readiness claims, SOTA claims, breakthrough
+claims, unsafe coverage forcing, coverage suppression, test-only hooks, or
+whole-workspace 100% coverage claims.
+
+Exit criteria: focused external-runner validation tests pass; repo hygiene and
+claim-boundary checks remain green; full workspace tests pass; package coverage
+summary records the local coverage movement and next low non-serializer
+surface.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

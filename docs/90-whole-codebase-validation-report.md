@@ -805,6 +805,15 @@ credentials, generated artifacts outside test tempdirs, accepted Evidence Ledger
 state, benchmark evidence, score-axis state, Level2+ evidence, production
 readiness, SOTA status, breakthrough status, or stronger public claim.
 
+Phase 263 adds focused local coverage for `external_runner/validation.rs`. It
+covers the shared warning issue constructor and Windows absolute-path edge
+detection, including slash, backslash, non-drive, drive-relative, short-drive,
+and portable-relative cases. It changes no production source behavior,
+external-runner behavior, external execution, endpoint submission behavior,
+credentials, generated artifacts, accepted Evidence Ledger state, benchmark
+evidence, score-axis state, Level2+ evidence, production readiness, SOTA status,
+breakthrough status, or stronger public claim.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2466,6 +2475,15 @@ surface as serializer-wrapper residual. The lowest reachable non-serializer
 line-coverage candidate in the current package summary is
 `external_runner/validation.rs` at `88.16%`, subject to missing-line audit
 before mutation.
+The Phase 263 tranche moved `external_runner/validation.rs` from `88.16%` to
+`100.00%` line coverage and moved the local `zkbench-core` package summary to
+`92.83%` region coverage, `89.53%` function execution, and `94.60%` line
+coverage. The fresh coverage table still shows
+`adapters/zk_harness/export.rs` at `86.96%`, but Phase 240 already audited that
+surface as serializer-wrapper residual. The lowest reachable non-serializer
+line-coverage candidate in the current package summary is
+`evidence/external_submission_preflight_output.rs` at `88.60%`, subject to
+missing-line audit before mutation.
 Phase 246 adds no code and changes no coverage. It refreshes the public proof
 packet for the current green head and routes the SOTA-breakthrough bridge to a
 local gateway demo bundle, first real external evidence lane, accepted evidence
@@ -2531,6 +2549,9 @@ Phase 262 returns to the coverage lane and completes an
 official-submission-output tranche. The next coverage candidate is
 `external_runner/validation.rs`, but it requires a missing-line audit before
 mutation.
+Phase 263 completes that external-runner validation tranche. The next coverage
+candidate is `evidence/external_submission_preflight_output.rs`, but it requires
+a missing-line audit before mutation.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
