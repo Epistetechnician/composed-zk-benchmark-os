@@ -2,10 +2,14 @@ use std::collections::BTreeMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 
+use sha2::{Digest, Sha256};
+
 const PACKET_PATH: &str = "docs/254-hsai-gateway-bridge-public-claim-packet.md";
 const PACKET_BASE_COMMIT: &str = "edbae44ea2f47f067683e28d2c6d5cb8af4362e8";
 const IGNORED_DEMO_ROOT: &str = ".gateway-demo-runs/phase-253-gateway-acceptance-preview/";
 const MANIFEST_FENCE: &str = "```claim-packet-manifest-v1";
+const MANIFEST_DIGEST: &str = "9cec879e89def697a5fdbb07a5ea1885ea2e4ce330cc6e8c0ed91e69de793fa9";
+const MANIFEST_DIGEST_KEY: &str = "manifest_digest_sha256";
 
 #[test]
 fn phase_254_public_claim_packet_matches_committed_reproduction_contract() {
@@ -47,6 +51,7 @@ fn phase_254_public_claim_packet_matches_committed_reproduction_contract() {
             ("max_claim_maturity", "Attested"),
             ("ignored_demo_root", IGNORED_DEMO_ROOT),
             ("ignored_status", "!! .gateway-demo-runs/"),
+            (MANIFEST_DIGEST_KEY, MANIFEST_DIGEST),
         ],
     );
 
@@ -315,23 +320,45 @@ fn claim_packet_manifest_rejects_malformed_local_packet_examples() {
 
     assert_contract_error(
         "maturity drift",
-        &packet.replace("max_claim_maturity=Attested", "max_claim_maturity=Proven"),
+        &with_recomputed_manifest_digest(
+            &packet.replace("max_claim_maturity=Attested", "max_claim_maturity=Proven"),
+        ),
         "manifest singleton mismatch for max_claim_maturity",
     );
 
     assert_contract_error(
         "missing focused checker command",
-        &packet.replace(
+        &with_recomputed_manifest_digest(&packet.replace(
             "packet_validation_command=cargo test -p zkbench-core --test gateway_claim_packet_reproduction --quiet\n",
             "",
-        ),
+        )),
         "manifest repeated-value mismatch for packet_validation_command",
     );
 
     assert_contract_error(
         "nonclaim drift",
-        &packet.replace("nonclaim=full security", "nonclaim=production security"),
+        &with_recomputed_manifest_digest(
+            &packet.replace("nonclaim=full security", "nonclaim=production security"),
+        ),
         "manifest repeated-value mismatch for nonclaim",
+    );
+
+    assert_contract_error(
+        "manifest digest drift",
+        &packet.replace(
+            "summary_flag=grants_authority:false",
+            "summary_flag=grants_authority:true",
+        ),
+        "manifest digest mismatch",
+    );
+
+    assert_contract_error(
+        "manifest digest field drift",
+        &packet.replace(
+            "manifest_digest_sha256=9cec879e89def697a5fdbb07a5ea1885ea2e4ce330cc6e8c0ed91e69de793fa9",
+            "manifest_digest_sha256=0000000000000000000000000000000000000000000000000000000000000000",
+        ),
+        "manifest digest mismatch",
     );
 }
 
@@ -390,6 +417,7 @@ fn parse_manifest(packet: &str) -> Result<BTreeMap<String, Vec<String>>, String>
 }
 
 fn validate_manifest_contract(manifest: &BTreeMap<String, Vec<String>>) -> Result<(), String> {
+    expect_manifest_digest(manifest)?;
     expect_manifest_singletons(
         manifest,
         &[
@@ -505,6 +533,70 @@ fn validate_manifest_contract(manifest: &BTreeMap<String, Vec<String>>) -> Resul
     Ok(())
 }
 
+fn expect_manifest_digest(manifest: &BTreeMap<String, Vec<String>>) -> Result<(), String> {
+    let declared = single_manifest_value(manifest, MANIFEST_DIGEST_KEY)?;
+    if !is_sha256_hex(declared) {
+        return Err(format!(
+            "manifest digest should be 64 lowercase hex characters, got {declared:?}"
+        ));
+    }
+    let computed = canonical_manifest_digest(manifest);
+    if declared != computed {
+        return Err(format!(
+            "manifest digest mismatch: expected declared digest {declared}, recomputed {computed}"
+        ));
+    }
+    Ok(())
+}
+
+fn canonical_manifest_digest(manifest: &BTreeMap<String, Vec<String>>) -> String {
+    let mut hasher = Sha256::new();
+    for (key, values) in manifest {
+        if key == MANIFEST_DIGEST_KEY {
+            continue;
+        }
+        for value in values {
+            hasher.update(key.as_bytes());
+            hasher.update(b"=");
+            hasher.update(value.as_bytes());
+            hasher.update(b"\n");
+        }
+    }
+    hex_encode(&hasher.finalize())
+}
+
+fn single_manifest_value<'a>(
+    manifest: &'a BTreeMap<String, Vec<String>>,
+    key: &str,
+) -> Result<&'a str, String> {
+    let values = manifest
+        .get(key)
+        .ok_or_else(|| format!("manifest missing key {key}"))?;
+    if values.len() != 1 {
+        return Err(format!(
+            "manifest singleton mismatch for {key}: expected one value, got {values:?}"
+        ));
+    }
+    Ok(values[0].as_str())
+}
+
+fn is_sha256_hex(value: &str) -> bool {
+    value.len() == 64
+        && value
+            .bytes()
+            .all(|byte| byte.is_ascii_digit() || (b'a'..=b'f').contains(&byte))
+}
+
+fn hex_encode(bytes: &[u8]) -> String {
+    const HEX: &[u8; 16] = b"0123456789abcdef";
+    let mut encoded = String::with_capacity(bytes.len() * 2);
+    for byte in bytes {
+        encoded.push(HEX[(byte >> 4) as usize] as char);
+        encoded.push(HEX[(byte & 0x0f) as usize] as char);
+    }
+    encoded
+}
+
 fn assert_manifest_singletons(manifest: &BTreeMap<String, Vec<String>>, expected: &[(&str, &str)]) {
     expect_manifest_singletons(manifest, expected)
         .expect("manifest singleton contract should hold");
@@ -568,4 +660,14 @@ fn assert_contract_error(case: &str, packet: &str, expected_message: &str) {
         error.contains(expected_message),
         "{case} should contain {expected_message:?}, got {error:?}"
     );
+}
+
+fn with_recomputed_manifest_digest(packet: &str) -> String {
+    let manifest = parse_manifest(packet).expect("modified packet should still parse");
+    let digest = canonical_manifest_digest(&manifest);
+    let digest_line = format!(
+        "{MANIFEST_DIGEST_KEY}={}",
+        single_manifest_value(&manifest, MANIFEST_DIGEST_KEY).expect("digest key should exist")
+    );
+    packet.replace(&digest_line, &format!("{MANIFEST_DIGEST_KEY}={digest}"))
 }

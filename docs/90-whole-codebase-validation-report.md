@@ -754,6 +754,15 @@ generated artifacts, ignored demo execution, provider calls, credentials,
 accepted Evidence Ledger mutation, Level2+ evidence, or stronger public claim
 are introduced.
 
+Phase 258 adds deterministic digest binding to the structured Phase 254
+manifest. The packet now carries `manifest_digest_sha256`, computed as SHA-256
+over sorted `key=value` manifest lines excluding the digest line itself. The
+checker validates lowercase hex formatting, recomputes the digest, rejects
+digest mismatch, and preserves recomputed-digest semantic drift checks. It
+introduces no fixtures, generated artifacts, ignored demo execution, provider
+calls, credentials, accepted Evidence Ledger mutation, Level2+ evidence, or
+stronger public claim.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
@@ -2453,6 +2462,9 @@ examples, still without executing the ignored demo or creating artifacts.
 Phase 257 completes that malformed manifest drift coverage. The next bridge
 candidate is digest binding for the structured manifest itself, still local,
 hermetic, metadata-only, and non-promotional.
+Phase 258 completes that structured-manifest digest binding. The next bridge
+candidate is a small digest-bound manifest reproduction note for external
+sharing, still local, hermetic, metadata-only, and non-promotional.
 
 These coverage percentages are local test instrumentation only; they are not
 100% coverage, production readiness, semantic correctness, official benchmark
