@@ -5453,6 +5453,32 @@ full-security claims, or claims above `Attested`.
 Exit criteria: the Phase 254 structured manifest is digest-bound and the repo
 validation gates remain green.
 
+## Phase 259 HSAI Gateway Digest-Bound Manifest Reproduction Note
+
+Status: complete. See
+`docs/259-hsai-gateway-digest-bound-manifest-reproduction-note.md`.
+
+Goal: provide bounded external-share wording for the Phase 254 digest-bound
+structured manifest without strengthening the public claim.
+
+Implemented: added a docs-only reproduction note that names the Phase 254 packet
+path, `manifest_digest_sha256`, digest rule, focused checker command,
+shareable wording, short wording, reproduction checklist, and explicit
+nonclaims.
+
+Validation gate: docs hygiene, claim-boundary docs, formatting, diff hygiene,
+and full workspace tests.
+
+Anti-goals: Rust/source changes, fixture files, generated artifacts, ignored
+demo execution, provider calls, credential handling, accepted Evidence Ledger
+mutation, final bridge acceptance, Level2+ evidence, live provider evidence,
+live attestation capture, benchmark evidence, score-axis population,
+production-readiness claims, semantic-correctness claims, SOTA claims,
+breakthrough claims, full-security claims, or claims above `Attested`.
+
+Exit criteria: the digest-bound manifest has a short shareable reproduction note
+and the repo validation gates remain green.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
