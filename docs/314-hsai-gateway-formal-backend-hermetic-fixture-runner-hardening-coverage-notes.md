@@ -83,10 +83,13 @@ cargo test --workspace
 
 ## Next Slice
 
-Phase 315 should remain a boundary slice before any real backend runner. The
-next responsible move is a docs-first contract for a tiny hermetic backend
-fixture adapter that maps one non-secret gateway invariant to an executable
-backend command descriptor, expected checker transcript fields, and quarantine
-nonpromotion rules. It should not authorize Lean/SMT/Z3/COBALT execution,
-accepted evidence, Level2+ evidence, score axes, semantic-correctness claims, or
+Phase 315 implemented Mesh repo-patch admission backend compatibility. See
+`docs/315-hsai-mesh-repo-patch-admission-backend-compatibility-notes.md`.
+
+The next formal-backend lane slice should remain a boundary slice before any
+real backend runner: define a tiny hermetic backend fixture adapter contract
+that maps one non-secret gateway invariant to an executable backend command
+descriptor, expected checker transcript fields, and quarantine nonpromotion
+rules. It should not authorize Lean/SMT/Z3/COBALT execution, accepted evidence,
+Level2+ evidence, score axes, semantic-correctness claims, or
 production-readiness claims.

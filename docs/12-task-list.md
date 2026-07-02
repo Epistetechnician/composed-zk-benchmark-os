@@ -7192,6 +7192,35 @@ accepted evidence, Level2+, score axes, benchmark evidence,
 semantic-correctness, production-readiness, SOTA, breakthrough, full-security,
 or authority claims.
 
+## Phase 315 HSAI Mesh Repo-Patch Admission Backend Compatibility
+
+Status: complete. See
+`docs/315-hsai-mesh-repo-patch-admission-backend-compatibility-notes.md`.
+
+Goal: align HSAI's local repo-patch admission backend with the Mesh
+`repo_patch_service` / `investigate_and_patch` bridge schemas and golden
+allow/deny fixture vocabulary.
+
+Implemented: added Mesh repo-patch bounded claim labels
+`patch_applies_cleanly`, `tests_passed`, and `no_protected_paths_modified`;
+allowed URI-shaped Mesh policy ids; aligned required nonclaims with the Mesh
+golden fixture vocabulary; made any rejection clear accepted claims; preserved
+`missing_explicit_nonclaims` as the exact empty-nonclaim denial; added
+repo-local non-secret Mesh golden fixtures; and added integration tests for
+canonical fixture digests, allow/deny parity, claim rejection, weakening,
+backend-run metadata requirements, and decision digest sensitivity.
+
+Validation gate: formatting, Phase 315 Mesh admission integration tests, HSAI
+claim-boundary source scan, repo docs/hygiene tests, diff hygiene,
+empty-file hygiene, package-root lint check, and full workspace tests.
+
+Anti-goals: Mesh orchestration implementation, Kubernetes rollback authority,
+feature-flag action authority, network calls, live Mesh runtime calls,
+accepted HSAI evidence, formal proof claims, Level2+ evidence, score axes,
+benchmark evidence, global correctness, production certification, full
+security, semantic-correctness, production-readiness, SOTA, breakthrough, or
+authority to execute a patch.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

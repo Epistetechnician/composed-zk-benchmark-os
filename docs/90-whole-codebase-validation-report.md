@@ -1520,6 +1520,20 @@ certificate, no accepted Evidence Ledger mutation, no Level2+ evidence, no
 score-axis population, and no semantic-correctness, production-readiness, SOTA,
 breakthrough, full-security, or action-authority claim.
 
+Phase 315 aligns the local HSAI Mesh repo-patch admission backend with the Mesh
+`repo_patch_service` / `investigate_and_patch` bridge schemas and golden fixture
+vocabulary. It adds bounded repo-patch claim labels for clean patch application,
+test passage, and protected-path exclusion; accepts URI-shaped Mesh policy ids;
+uses the Mesh nonclaim vocabulary; clears accepted claims on any rejection;
+preserves `missing_explicit_nonclaims` as the exact empty-nonclaim denial; and
+adds repo-local non-secret Mesh golden allow/deny fixtures with integration
+tests for canonical fixture digest parity and HSAI decision semantics. Phase 315
+does not implement Mesh orchestration, Kubernetes rollback, feature-flag action
+logic, network calls, accepted HSAI evidence, formal proof, Level2+ evidence,
+score-axis population, benchmark evidence, global correctness, production
+certification, semantic correctness, production readiness, SOTA, breakthrough,
+full security, or authority to execute a patch.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
