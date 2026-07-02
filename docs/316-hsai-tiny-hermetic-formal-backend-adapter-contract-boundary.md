@@ -206,9 +206,10 @@ cargo test --workspace
 
 ## Next Slice
 
-Phase 317 may implement the tiny hermetic adapter data model and quarantine
-bundle if it stays within the Phase 316 contract. It should still use a fixed
-local fixture and must not run Lean/SMT/Z3/COBALT as proof authority, create
+Phase 317 implemented the tiny hermetic adapter data model and not-run
+quarantine bundle within the Phase 316 contract. The next responsible slice is
+a Phase 318 backend-execution readiness boundary for the typed adapter bundle.
+That boundary must still not run Lean/SMT/Z3/COBALT as proof authority, create
 accepted evidence, create Level2+ evidence, populate score axes, or claim
 semantic correctness, production readiness, SOTA, breakthrough status, full
 security, or authority.

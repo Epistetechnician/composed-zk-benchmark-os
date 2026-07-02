@@ -7249,6 +7249,36 @@ checker transcript creation, solver certificates, accepted evidence, Level2+,
 score axes, benchmark evidence, semantic-correctness, production-readiness,
 SOTA, breakthrough, full-security, or authority claims.
 
+## Phase 317 HSAI Tiny Hermetic Formal-Backend Adapter Data Model
+
+Status: complete. See
+`docs/317-hsai-tiny-hermetic-formal-backend-adapter-data-model-notes.md`.
+
+Goal: implement the typed not-run adapter data model and declared quarantine
+bundle required before a future backend execution readiness boundary.
+
+Implemented: Phase 317 constants, adapter request, fixed non-secret fixture
+input, fixed command descriptor metadata, not-run transcript summary,
+nonpromotion report, output manifest, output validation report, declared
+logical files and SHA-256 sidecars, staged materialization, readback, duplicate
+JSON rejection, manifest semantic validation, nonclaim Markdown checks, stale
+digest rejection, undeclared proof-artifact rejection, and focused unit tests.
+
+Validation gate: formatting, Phase 317 focused unit tests, HSAI claim-boundary
+source scan, repo docs/hygiene tests, diff hygiene, empty-file hygiene,
+package-root lint check, and full workspace tests.
+
+Anti-goals: process spawning, backend execution, Lean/SMT/Z3/COBALT/Aeneas/Hax/
+rust-lean/Coq/TLA+/CBMC/model-checker execution, proof artifacts, checker
+transcripts, solver certificates, accepted evidence, Level2+ evidence, score
+axes, benchmark evidence, live provider evidence, semantic-correctness,
+production-readiness, SOTA, breakthrough, full-security, or authority claims.
+
+Exit criteria: `hsai-agent-admission` can materialize and read back a typed
+not-run tiny hermetic formal-backend adapter quarantine bundle for the selected
+gateway attestation challenge-binding invariant, while rejecting command-policy
+escalation, stale digests, manifest drift, and undeclared proof artifacts.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

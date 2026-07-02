@@ -1550,6 +1550,21 @@ score-axis population, benchmark evidence, semantic-correctness claim,
 production-readiness claim, SOTA claim, breakthrough claim, full-security
 claim, or authority grant.
 
+Phase 317 implements the HSAI tiny hermetic formal-backend adapter data model
+and not-run quarantine bundle in `hsai-agent-admission`. It adds typed adapter
+request, fixed non-secret fixture input, fixed command descriptor metadata,
+not-run transcript summary, nonpromotion report, validation report, output
+manifest, declared logical files, SHA-256 sidecars, staged materialization,
+readback, duplicate-JSON rejection, semantic manifest validation, nonclaim
+Markdown checks, and focused tests for valid materialization/readback,
+pre-write escalation rejection, stale digest rejection, manifest drift
+rejection, and undeclared proof-artifact rejection. Phase 317 still spawns no
+process, executes no backend, runs no Lean/SMT/Z3/COBALT/Aeneas/Hax/rust-lean/
+Coq/TLA+/CBMC/model checker, creates no proof artifact, checker transcript, or
+solver certificate, mutates no accepted Evidence Ledger, creates no Level2+
+evidence, populates no score axes, and makes no semantic-correctness,
+production-readiness, SOTA, breakthrough, full-security, or authority claim.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
