@@ -87,6 +87,9 @@ fn hsai_crates_do_not_use_process_or_network_apis() {
                     if is_phase113_tls_channel_exception(&file, pattern) {
                         continue;
                     }
+                    if is_phase313_fixture_runner_exception(&file, pattern, line) {
+                        continue;
+                    }
                     violations.push(format!("{}:{}:{pattern}", file.display(), line_index + 1));
                 }
             }
@@ -117,6 +120,20 @@ fn is_phase113_tls_channel_exception(file: &Path, pattern: &str) -> bool {
         matches!(pattern, "std::net" | "TcpStream" | "std::process")
     } else {
         tls_contract_test && matches!(pattern, "reqwest::" | "ureq::" | "Command::new")
+    }
+}
+
+fn is_phase313_fixture_runner_exception(file: &Path, pattern: &str, line: &str) -> bool {
+    if !file.ends_with(Path::new("hsai-agent-admission/src/lib.rs")) {
+        return false;
+    }
+    match pattern {
+        "std::process" => {
+            line == "use std::process::Stdio;"
+                || line.contains("std::process::Command::new(executable)")
+        }
+        "Command::new" => line.contains("std::process::Command::new(executable)"),
+        _ => false,
     }
 }
 
