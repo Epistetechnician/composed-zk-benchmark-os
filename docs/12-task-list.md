@@ -7380,6 +7380,40 @@ declared files, unsafe filesystem shapes, unauthorized overwrite, and
 digest-preserving semantic drift in summaries, redaction, and nonpromotion
 metadata.
 
+## Phase 321 HSAI Real Formal Command Lane Boundary
+
+Status: complete. See
+`docs/321-hsai-real-formal-command-lane-boundary.md`.
+
+Goal: define the docs-first boundary for the first real formal command lane
+after the Phase 319/320 local fixture execution readback lane.
+
+Defined: the first real command lane as `local_smt_tiny_gateway_invariant`, the
+first backend mode as `smt-lib2-offline-command`, the first property as
+`attestation_challenge_binding_deterministic_input_sensitive`, the local
+non-secret input contract, fixed direct-process command contract, declared
+`gateway-formal-real-command-lane/*` artifact grammar, checker transcript
+grammar, solver verdict labels, readback rejection rules, nonclaims,
+anti-goals, validation gate, and Phase 322 inert implementation ceiling.
+
+Validation gate: formatting, HSAI claim-boundary source scan, repo docs/hygiene
+tests, diff hygiene, empty-file hygiene, package-root lint check, and full
+workspace tests.
+
+Anti-goals: Rust implementation code, Cargo metadata changes, package runtime
+files, command execution, process spawning, backend runner implementation,
+solver scripts, checker scripts, proof assistant setup files, external repo
+clones, vendored source, Lean/SMT/Z3/COBALT/Aeneas/Hax/rust-lean/Coq/TLA+/
+CBMC/model-checker execution, generated proof artifacts, generated checker
+transcripts, generated solver certificates, accepted evidence, Level2+
+evidence, score axes, benchmark evidence, live provider evidence,
+semantic-correctness, production-readiness, SOTA, breakthrough, full-security,
+or authority claims.
+
+Exit criteria: the first real command lane has an explicit docs-first boundary
+that chooses one tiny SMT-style lane and blocks Lean/COBALT/proof-authority
+execution until separate source/toolchain and artifact boundaries exist.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

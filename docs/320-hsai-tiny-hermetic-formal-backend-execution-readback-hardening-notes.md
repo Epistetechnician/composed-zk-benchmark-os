@@ -120,8 +120,11 @@ cargo test --workspace
 
 ## Next Slice
 
-The next responsible slice is Phase 321: a docs-first boundary for a real
-Lean/SMT/COBALT command lane. It must decide one tiny property, one backend
-mode, one artifact grammar, one checker transcript grammar, and one quarantine
-readback contract before any real proof assistant, solver, or COBALT command is
-allowed to run.
+Phase 321 completed the docs-first boundary for the first real formal command
+lane. It selects one tiny SMT-style command lane and keeps Lean and COBALT
+deferred behind separate source/toolchain boundaries.
+
+The next responsible slice is Phase 322: an inert Rust data model and declared
+output contract for the Phase 321 SMT command lane. It must not execute a real
+solver command until the data model, output grammar, readback drift tests, and
+source-scan exception are complete and reviewed.

@@ -1609,6 +1609,22 @@ create Level2+ evidence, populate score axes, create benchmark evidence, claim
 semantic correctness, claim production readiness, claim SOTA, claim
 breakthrough status, claim full security, or grant authority.
 
+Phase 321 defines the docs-first boundary for the first real formal command
+lane after Phase 319/320. It selects `local_smt_tiny_gateway_invariant` as the
+first lane, `smt-lib2-offline-command` as the first backend mode, and
+`attestation_challenge_binding_deterministic_input_sensitive` as the first
+property. It defines the future non-secret input contract, fixed direct-process
+command contract, declared `gateway-formal-real-command-lane/*` artifact
+grammar, checker transcript grammar, solver verdict labels, readback rejection
+rules, evidence meaning, nonclaims, required future tests, and Phase 322 inert
+implementation ceiling. Phase 321 adds no Rust implementation code, package
+runtime file, command execution, process spawning, solver script, checker
+script, Lean/SMT/Z3/COBALT/Aeneas/Hax/rust-lean/Coq/TLA+/CBMC/model-checker
+execution, proof artifact, checker transcript, solver certificate, accepted
+Evidence Ledger mutation, Level2+ evidence, score-axis population, benchmark
+evidence, semantic-correctness claim, production-readiness claim, SOTA claim,
+breakthrough claim, full-security claim, or authority grant.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
