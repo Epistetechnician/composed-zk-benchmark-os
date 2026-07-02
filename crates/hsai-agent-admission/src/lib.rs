@@ -440,6 +440,9 @@ pub const MESH_CLAIM_ACCEPTED_EVIDENCE_GATE_PASSED: &str =
     "repo_patch.accepted_evidence_gate_passed";
 pub const MESH_CLAIM_FORMAL_EVIDENCE_METADATA_BOUND: &str =
     "repo_patch.formal_evidence_metadata_bound";
+pub const MESH_CLAIM_PATCH_APPLIES_CLEANLY: &str = "patch_applies_cleanly";
+pub const MESH_CLAIM_TESTS_PASSED: &str = "tests_passed";
+pub const MESH_CLAIM_NO_PROTECTED_PATHS_MODIFIED: &str = "no_protected_paths_modified";
 
 #[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct MeshAttestationRef {
@@ -4691,20 +4694,19 @@ fn is_portable_artifact_id(id: &str) -> bool {
 
 pub fn mesh_repo_patch_required_nonclaims() -> BTreeSet<NonClaimLabel> {
     BTreeSet::from([
-        NonClaimLabel("not Mesh orchestration".to_owned()),
-        NonClaimLabel("not Kubernetes rollback authority".to_owned()),
-        NonClaimLabel("not feature-flag action authority".to_owned()),
-        NonClaimLabel("not production readiness".to_owned()),
-        NonClaimLabel("not semantic correctness".to_owned()),
-        NonClaimLabel("not full security".to_owned()),
-        NonClaimLabel("not benchmark evidence".to_owned()),
-        NonClaimLabel("not accepted Evidence Ledger mutation".to_owned()),
-        NonClaimLabel("not authority to execute a patch".to_owned()),
+        NonClaimLabel("does_not_claim_accepted_hsai_evidence".to_owned()),
+        NonClaimLabel("does_not_claim_formal_proof".to_owned()),
+        NonClaimLabel("does_not_claim_global_correctness".to_owned()),
+        NonClaimLabel("does_not_claim_production_certification".to_owned()),
+        NonClaimLabel("does_not_claim_security_review_complete".to_owned()),
     ])
 }
 
 pub fn mesh_repo_patch_supported_claims() -> BTreeSet<String> {
     BTreeSet::from([
+        MESH_CLAIM_NO_PROTECTED_PATHS_MODIFIED.to_owned(),
+        MESH_CLAIM_PATCH_APPLIES_CLEANLY.to_owned(),
+        MESH_CLAIM_TESTS_PASSED.to_owned(),
         MESH_CLAIM_CANDIDATE_DIGEST_BOUND.to_owned(),
         MESH_CLAIM_EVIDENCE_PACKET_DIGEST_BOUND.to_owned(),
         MESH_CLAIM_ATTESTATION_REFS_BOUND.to_owned(),
@@ -4788,7 +4790,10 @@ pub fn evaluate_mesh_hsai_admission_request(
         }
     }
 
-    if accepted_claims.is_empty() {
+    if !reason_codes.is_empty() || !rejected_claims.is_empty() {
+        accepted_claims.clear();
+    }
+    if accepted_claims.is_empty() && reason_codes.is_empty() {
         push_reason_once(&mut reason_codes, "no_accepted_claims");
     }
 
@@ -4846,7 +4851,7 @@ fn validate_mesh_request_shape(
     if !is_portable_artifact_id(&request.mesh_action_id) {
         push_reason_once(reason_codes, "malformed_mesh_action_id");
     }
-    if !is_portable_artifact_id(&request.mesh_policy_id) {
+    if !is_mesh_policy_id(&request.mesh_policy_id) {
         push_reason_once(reason_codes, "malformed_mesh_policy_id");
     }
     if request.mesh_policy_id != policy.current_mesh_policy_id {
@@ -4885,7 +4890,8 @@ fn validate_mesh_nonclaims(
     reason_codes: &mut Vec<String>,
 ) {
     if request.explicit_nonclaims.is_empty() {
-        push_reason_once(reason_codes, "missing_nonclaims");
+        push_reason_once(reason_codes, "missing_explicit_nonclaims");
+        return;
     }
     for required in &policy.required_nonclaims {
         if !request.explicit_nonclaims.contains(required) {
@@ -5080,6 +5086,7 @@ fn mesh_claim_has_adequate_evidence(
         MESH_CLAIM_RUN_ACTION_POLICY_BOUND => {
             is_portable_artifact_id(&request.mesh_run_id)
                 && is_portable_artifact_id(&request.mesh_action_id)
+                && is_mesh_policy_id(&request.mesh_policy_id)
                 && request.mesh_policy_id == policy.current_mesh_policy_id
         }
         MESH_CLAIM_CANDIDATE_EVIDENCE_GATE_PASSED => {
@@ -5114,8 +5121,30 @@ fn mesh_claim_has_adequate_evidence(
             }
             adequate
         }
+        MESH_CLAIM_PATCH_APPLIES_CLEANLY
+        | MESH_CLAIM_TESTS_PASSED
+        | MESH_CLAIM_NO_PROTECTED_PATHS_MODIFIED => {
+            request.candidate_digest != Hash([0; 32])
+                && request.evidence_packet_digest != Hash([0; 32])
+                && request.candidate_evidence_gate.gate_id == "candidate_evidence_gate"
+                && request.candidate_evidence_gate.passed
+                && request.candidate_evidence_gate.evidence_digest != Hash([0; 32])
+                && request.accepted_evidence_gate.gate_id == "accepted_evidence_gate"
+                && request.accepted_evidence_gate.passed
+                && request.accepted_evidence_gate.evidence_digest != Hash([0; 32])
+        }
         _ => false,
     }
+}
+
+fn is_mesh_policy_id(id: &str) -> bool {
+    let trimmed = id.trim();
+    !trimmed.is_empty()
+        && trimmed == id
+        && !trimmed.contains("..")
+        && trimmed
+            .chars()
+            .all(|ch| ch.is_ascii_alphanumeric() || matches!(ch, ':' | '/' | '-' | '_' | '.'))
 }
 
 fn push_reason_once(reason_codes: &mut Vec<String>, reason_code: &str) {
@@ -13169,6 +13198,7 @@ fn build_gateway_formal_backend_hermetic_execution_result_quarantine_bundle_file
     Ok(files)
 }
 
+#[allow(clippy::too_many_arguments)]
 fn gateway_formal_backend_hermetic_execution_result_quarantine_output_manifest_for_files(
     descriptor: &GatewayFormalBackendHermeticExecutionDescriptor,
     descriptor_report_manifest: &GatewayFormalBackendHermeticDescriptorReportOutputManifest,
@@ -13436,6 +13466,7 @@ fn validate_gateway_formal_backend_hermetic_execution_result_quarantine_bundle_s
     Ok(manifest)
 }
 
+#[allow(clippy::too_many_arguments)]
 fn validate_gateway_formal_backend_hermetic_execution_result_quarantine_manifest_semantics(
     manifest: &GatewayFormalBackendHermeticExecutionResultQuarantineOutputManifest,
     input_binding: &GatewayFormalBackendHermeticExecutionResultInputBinding,
@@ -15112,6 +15143,7 @@ fn gateway_formal_backend_hermetic_fixture_runner_output_validation_report(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn gateway_formal_backend_hermetic_fixture_runner_output_manifest_for_files(
     descriptor: &GatewayFormalBackendHermeticExecutionDescriptor,
     descriptor_report_manifest: &GatewayFormalBackendHermeticDescriptorReportOutputManifest,

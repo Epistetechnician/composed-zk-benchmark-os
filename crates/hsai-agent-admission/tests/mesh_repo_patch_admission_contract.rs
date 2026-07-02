@@ -8,7 +8,18 @@ use hsai_agent_admission::{
     MESH_HSAI_ADMISSION_REQUEST_SCHEMA_VERSION, MESH_REPO_PATCH_ADMISSION_CLAIM_BOUNDARY,
 };
 use hsai_claim_envelope::Hash;
+use serde_json::Value;
+use sha2::{Digest, Sha256};
 use std::collections::BTreeSet;
+
+const MESH_GOLDEN_ALLOW_REQUEST: &str =
+    include_str!("fixtures/hsai_bridge/golden_allow_request.json");
+const MESH_GOLDEN_ALLOW_DECISION: &str =
+    include_str!("fixtures/hsai_bridge/golden_allow_decision.json");
+const MESH_GOLDEN_DENY_REQUEST: &str =
+    include_str!("fixtures/hsai_bridge/golden_deny_request.json");
+const MESH_GOLDEN_DENY_DECISION: &str =
+    include_str!("fixtures/hsai_bridge/golden_deny_decision.json");
 
 fn hash(byte: u8) -> Hash {
     Hash([byte; 32])
@@ -65,6 +76,181 @@ fn valid_request() -> MeshHsaiAdmissionRequest {
     }
 }
 
+fn json_fixture(text: &str) -> Value {
+    serde_json::from_str(text).expect("golden fixture parses")
+}
+
+fn fixture_string<'a>(value: &'a Value, key: &str) -> &'a str {
+    value
+        .get(key)
+        .and_then(Value::as_str)
+        .unwrap_or_else(|| panic!("fixture string key exists: {key}"))
+}
+
+fn fixture_string_set(value: &Value, key: &str) -> BTreeSet<String> {
+    value
+        .get(key)
+        .and_then(Value::as_array)
+        .unwrap_or_else(|| panic!("fixture string array key exists: {key}"))
+        .iter()
+        .map(|entry| {
+            entry
+                .as_str()
+                .unwrap_or_else(|| panic!("fixture string array element exists: {key}"))
+                .to_owned()
+        })
+        .collect()
+}
+
+fn fixture_nonclaims(value: &Value) -> BTreeSet<hsai_agent_admission::NonClaimLabel> {
+    fixture_string_set(value, "explicit_nonclaims")
+        .into_iter()
+        .map(hsai_agent_admission::NonClaimLabel)
+        .collect()
+}
+
+fn fixture_hash(value: &Value, key: &str) -> Hash {
+    hash_from_sha256_uri(fixture_string(value, key))
+}
+
+fn hash_from_sha256_uri(value: &str) -> Hash {
+    let hex = value
+        .strip_prefix("sha256:")
+        .expect("fixture digest has sha256 prefix");
+    assert_eq!(hex.len(), 64, "fixture digest is 32 bytes hex");
+    let mut out = [0u8; 32];
+    for (idx, chunk) in hex.as_bytes().chunks_exact(2).enumerate() {
+        out[idx] = (hex_nibble(chunk[0]) << 4) | hex_nibble(chunk[1]);
+    }
+    Hash(out)
+}
+
+fn hex_nibble(byte: u8) -> u8 {
+    match byte {
+        b'0'..=b'9' => byte - b'0',
+        b'a'..=b'f' => 10 + byte - b'a',
+        b'A'..=b'F' => 10 + byte - b'A',
+        _ => panic!("invalid fixture hex nibble"),
+    }
+}
+
+fn mesh_canonical_digest(value: &Value) -> String {
+    let mut hasher = Sha256::new();
+    hasher.update(mesh_canonical_json(value).as_bytes());
+    let digest = hasher.finalize();
+    let mut hex = String::with_capacity(64);
+    for byte in digest {
+        hex.push_str(&format!("{byte:02x}"));
+    }
+    format!("sha256:{hex}")
+}
+
+fn mesh_decision_digest(value: &Value) -> String {
+    let mut without_digest = value.clone();
+    without_digest
+        .as_object_mut()
+        .expect("decision fixture is object")
+        .remove("decision_digest");
+    mesh_canonical_digest(&without_digest)
+}
+
+fn mesh_canonical_json(value: &Value) -> String {
+    match value {
+        Value::Null => "null".to_owned(),
+        Value::Bool(value) => value.to_string(),
+        Value::Number(value) => value.to_string(),
+        Value::String(value) => serde_json::to_string(value).expect("string serializes"),
+        Value::Array(values) => {
+            let body = values
+                .iter()
+                .map(mesh_canonical_json)
+                .collect::<Vec<_>>()
+                .join(",");
+            format!("[{body}]")
+        }
+        Value::Object(map) => {
+            let mut entries = map.iter().collect::<Vec<_>>();
+            entries.sort_by(|(left, _), (right, _)| left.cmp(right));
+            let body = entries
+                .into_iter()
+                .map(|(key, value)| {
+                    format!(
+                        "{}:{}",
+                        serde_json::to_string(key).expect("key serializes"),
+                        mesh_canonical_json(value)
+                    )
+                })
+                .collect::<Vec<_>>()
+                .join(",");
+            format!("{{{body}}}")
+        }
+    }
+}
+
+fn hsai_request_from_mesh_fixture(request: &Value, decision: &Value) -> MeshHsaiAdmissionRequest {
+    let formal = decision
+        .get("formal_evidence_metadata")
+        .expect("decision formal metadata exists");
+    let metadata_digest = fixture_hash(formal, "metadata_digest");
+    MeshHsaiAdmissionRequest {
+        schema_version: fixture_string(request, "schema_version").to_owned(),
+        mesh_run_id: fixture_string(request, "mesh_run_id").to_owned(),
+        mesh_action_id: fixture_string(request, "mesh_action_id").to_owned(),
+        mesh_policy_id: fixture_string(request, "mesh_policy_id").to_owned(),
+        candidate_digest: fixture_hash(request, "candidate_payload_digest"),
+        evidence_packet_schema_version: MESH_COMBINED_PROOF_PACKET_SCHEMA_VERSION.to_owned(),
+        evidence_packet_digest: fixture_hash(request, "evidence_packet_digest"),
+        attestation_refs: request
+            .get("attestation_refs")
+            .and_then(Value::as_array)
+            .expect("attestation refs exist")
+            .iter()
+            .map(|entry| MeshAttestationRef {
+                ref_id: fixture_string(entry, "kind").to_owned(),
+                digest: fixture_hash(entry, "digest"),
+                claim_binding: fixture_string(entry, "kind").to_owned(),
+            })
+            .collect(),
+        requested_claims: fixture_string_set(request, "requested_claims"),
+        explicit_nonclaims: fixture_nonclaims(request),
+        claim_weakenings: Vec::new(),
+        candidate_evidence_gate: gate(
+            "candidate_evidence_gate",
+            true,
+            fixture_hash(request, "evidence_packet_digest"),
+        ),
+        accepted_evidence_gate: gate(
+            "accepted_evidence_gate",
+            true,
+            fixture_hash(request, "evidence_packet_digest"),
+        ),
+        formal_evidence_metadata: Some(MeshFormalEvidenceMetadata {
+            evidence_id: fixture_string(formal, "backend").to_owned(),
+            evidence_digest: metadata_digest,
+            backend_kind: GatewayFormalBackendKind::LocalRustMetadataOnly,
+            property_kind:
+                GatewayFormalEvidencePropertyKind::AttestationChallengeBindingDeterministicInputSensitive,
+            local_regression_only: true,
+            claim_boundary: fixture_string(formal, "nonclaim").to_owned(),
+        }),
+        backend_run_metadata: Some(MeshBackendRunMetadata {
+            run_id: fixture_string(formal, "backend_run_id").to_owned(),
+            backend_kind: GatewayFormalBackendKind::LocalRustMetadataOnly,
+            run_digest: metadata_digest,
+            transcript_digest: metadata_digest,
+            checker_status: GatewayFormalBackendRunCheckerStatus::NotRun,
+            creates_accepted_evidence: false,
+            creates_level2_evidence: false,
+            grants_authority: false,
+            claim_boundary: fixture_string(formal, "nonclaim").to_owned(),
+        }),
+    }
+}
+
+fn fixture_decision_claims(decision: &Value, key: &str) -> BTreeSet<String> {
+    fixture_string_set(decision, key)
+}
+
 #[test]
 fn valid_repo_patch_admission_allows_supported_bounded_claims() {
     let request = valid_request();
@@ -88,6 +274,86 @@ fn valid_repo_patch_admission_allows_supported_bounded_claims() {
     );
     assert!(!decision.grants_authority);
     assert!(!decision.production_readiness_claimed);
+}
+
+#[test]
+fn mesh_golden_allow_fixture_matches_hsai_decision_semantics() {
+    let request_fixture = json_fixture(MESH_GOLDEN_ALLOW_REQUEST);
+    let decision_fixture = json_fixture(MESH_GOLDEN_ALLOW_DECISION);
+    let request = hsai_request_from_mesh_fixture(&request_fixture, &decision_fixture);
+    let policy =
+        mesh_repo_patch_admission_policy(fixture_string(&request_fixture, "mesh_policy_id"));
+    let decision = evaluate_mesh_hsai_admission_request(&request, &policy);
+
+    assert_eq!(
+        mesh_canonical_digest(&request_fixture),
+        fixture_string(&decision_fixture, "request_digest")
+    );
+    assert_eq!(
+        mesh_decision_digest(&decision_fixture),
+        fixture_string(&decision_fixture, "decision_digest")
+    );
+    assert_eq!(decision.verdict, MeshHsaiAdmissionVerdict::Allow);
+    assert_eq!(decision.reason_codes, Vec::<String>::new());
+    assert_eq!(
+        decision.accepted_claims,
+        fixture_decision_claims(&decision_fixture, "accepted_claims")
+    );
+    assert_eq!(
+        decision.enforced_nonclaims,
+        fixture_decision_claims(&decision_fixture, "enforced_nonclaims")
+            .into_iter()
+            .map(hsai_agent_admission::NonClaimLabel)
+            .collect()
+    );
+    assert_eq!(
+        decision.candidate_digest,
+        fixture_hash(&decision_fixture, "candidate_digest")
+    );
+    assert_eq!(
+        decision.request_digest,
+        hsai_request_from_mesh_fixture(&request_fixture, &decision_fixture).digest()
+    );
+
+    let mut changed_request = request.clone();
+    changed_request.candidate_digest = hash(9);
+    let changed_decision = evaluate_mesh_hsai_admission_request(&changed_request, &policy);
+    assert_ne!(decision.digest(), changed_decision.digest());
+    assert_ne!(decision.request_digest, changed_decision.request_digest);
+    assert_eq!(changed_decision.candidate_digest, hash(9));
+}
+
+#[test]
+fn mesh_golden_deny_fixture_preserves_missing_explicit_nonclaims() {
+    let request_fixture = json_fixture(MESH_GOLDEN_DENY_REQUEST);
+    let decision_fixture = json_fixture(MESH_GOLDEN_DENY_DECISION);
+    let request = hsai_request_from_mesh_fixture(&request_fixture, &decision_fixture);
+    let policy =
+        mesh_repo_patch_admission_policy(fixture_string(&request_fixture, "mesh_policy_id"));
+    let decision = evaluate_mesh_hsai_admission_request(&request, &policy);
+
+    assert_eq!(
+        mesh_canonical_digest(&request_fixture),
+        fixture_string(&decision_fixture, "request_digest")
+    );
+    assert_eq!(
+        mesh_decision_digest(&decision_fixture),
+        fixture_string(&decision_fixture, "decision_digest")
+    );
+    assert_eq!(decision.verdict, MeshHsaiAdmissionVerdict::Deny);
+    assert_eq!(decision.reason_codes, vec!["missing_explicit_nonclaims"]);
+    assert_eq!(
+        decision.reason_codes,
+        fixture_string_set(&decision_fixture, "reason_codes")
+            .into_iter()
+            .collect::<Vec<_>>()
+    );
+    assert!(decision.accepted_claims.is_empty());
+    assert!(decision.enforced_nonclaims.is_empty());
+    assert_eq!(
+        decision.candidate_digest,
+        fixture_hash(&decision_fixture, "candidate_digest")
+    );
 }
 
 #[test]
@@ -135,10 +401,11 @@ fn missing_nonclaims_denies() {
     assert_eq!(decision.verdict, MeshHsaiAdmissionVerdict::Deny);
     assert!(decision
         .reason_codes
-        .contains(&"missing_nonclaims".to_owned()));
-    assert!(decision
+        .contains(&"missing_explicit_nonclaims".to_owned()));
+    assert!(!decision
         .reason_codes
         .contains(&"missing_required_nonclaim".to_owned()));
+    assert!(decision.accepted_claims.is_empty());
     assert!(decision.enforced_nonclaims.is_empty());
 }
 
