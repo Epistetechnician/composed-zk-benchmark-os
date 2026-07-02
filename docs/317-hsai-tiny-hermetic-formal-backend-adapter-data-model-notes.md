@@ -74,8 +74,9 @@ cargo test --workspace
 
 ## Next Slice
 
-The next responsible slice is Phase 318: a backend execution readiness boundary
-for the already typed Phase 317 adapter bundle. That phase should define the
-operator acknowledgement, exact command fixture, transcript schema, raw-output
-redaction, and checker transcript quarantine rules before any new execution
-code is added.
+Phase 318 defined the backend execution readiness boundary for the already
+typed Phase 317 adapter bundle. The next responsible slice is a Phase 319
+implementation only if it stays within that boundary: one tiny local fixture
+execution readback contract, with no proof authority, accepted evidence,
+Level2+ evidence, score axes, semantic-correctness claim, production-readiness
+claim, SOTA claim, breakthrough claim, full-security claim, or authority.
