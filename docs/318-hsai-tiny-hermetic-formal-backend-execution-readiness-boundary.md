@@ -190,8 +190,13 @@ cargo test --workspace
 
 ## Next Slice
 
-Phase 319 may implement a tiny local fixture execution readback contract only if
-it stays within this Phase 318 boundary. It must still treat the run as a local
-execution experiment, not proof authority, accepted evidence, Level2+ evidence,
-score-axis evidence, semantic correctness, production readiness, SOTA,
-breakthrough status, full security, or action authority.
+Phase 319 implemented the tiny local fixture execution readback contract inside
+this Phase 318 boundary. It treats the run as a local execution experiment, not
+proof authority, accepted evidence, Level2+ evidence, score-axis evidence,
+semantic correctness, production readiness, SOTA, breakthrough status, full
+security, or action authority.
+
+The next responsible slice is Phase 320: harden the Phase 319 local fixture
+execution readback lane with additional malformed-file, symlink, overwrite,
+summary drift, redaction drift, and nonpromotion drift tests before any
+Lean/SMT/COBALT command boundary is opened.
