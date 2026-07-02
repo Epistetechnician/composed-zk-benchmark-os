@@ -7495,6 +7495,49 @@ Exit criteria: the real command lane now has a materialized local output bundle
 and strict readback path, but still no solver preflight exception and no real
 solver run.
 
+## Phase 324 HSAI Real Formal Command Lane Execution Preflight Boundary
+
+Status: complete. See
+`docs/324-hsai-real-formal-command-lane-execution-preflight-boundary.md`.
+
+Goal: define the docs-first execution preflight boundary that must exist before
+the Phase 321-323 real formal command lane can cross into a fixed local
+SMT-LIB2 process invocation.
+
+Defined: the one eligible future lane
+`local_smt_tiny_gateway_invariant`, backend mode
+`smt-lib2-offline-command`, property
+`attestation_challenge_binding_deterministic_input_sensitive`, required future
+inputs, fail-closed rejection cases, the single-function future source-scan
+exception shape, inert preflight output fields, fixed nonclaims, evidence
+meaning, required tests, validation gate, and Phase 325 ceiling.
+
+Validation coverage defined: valid preflight from a read back Phase 323 bundle,
+missing operator acknowledgement, missing executable digest, caller executable
+path, caller argv, shell fragments, inherited environment, stdin, network
+access, protected output roots, Phase 323 manifest drift, command descriptor
+drift, obligation digest drift, expected-output grammar digest drift,
+accepted-evidence path rejection, Level2+ path rejection, score-axis path
+rejection, benchmark-output path rejection, proof-promotion path rejection, and
+single-function fixed-command source-scan exception enforcement.
+
+Validation gate: formatting, focused real formal command-lane tests, HSAI
+claim-boundary source scan, repo docs/hygiene tests, diff hygiene, empty-file
+hygiene, package-root lint check, and full workspace tests.
+
+Anti-goals: Rust implementation code, Cargo metadata changes, package runtime
+files, source-scan exception code, process APIs, process spawning, solver
+scripts, checker scripts, proof assistant setup files, command execution,
+generated proof artifacts, generated checker transcripts, generated solver
+certificates, accepted evidence, Level2+ evidence, score axes, benchmark
+evidence, live provider evidence, semantic-correctness, production-readiness,
+SOTA, breakthrough, full-security, or authority claims.
+
+Exit criteria: the real formal command lane now has a documented execution
+preflight boundary for one future fixed local SMT-LIB2 command invocation over
+one tiny gateway invariant, but still no source-scan implementation exception,
+no process spawn, no solver run, and no accepted formal evidence.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

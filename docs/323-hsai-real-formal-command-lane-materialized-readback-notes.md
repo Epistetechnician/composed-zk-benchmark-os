@@ -143,9 +143,10 @@ cargo test --workspace --quiet
 
 ## Next Slice
 
-Phase 324 may define the source-scan exception and execution preflight boundary
-for one fixed local SMT-LIB2 command invocation.
+Phase 324 defines the source-scan exception and execution preflight boundary for
+one fixed local SMT-LIB2 command invocation.
 
-Phase 324 still must not run the solver. The first real run requires a later
-phase after command execution policy, readback, and source-scan exception are
-complete and reviewed.
+Phase 325 may implement the inert execution-preflight metadata and the
+corresponding source-scan exception. Phase 325 still must not run the solver.
+The first real run requires a later phase after command execution policy,
+readback, and source-scan exception are complete and reviewed.

@@ -409,6 +409,7 @@ Surface DSL
 | [docs/321-hsai-real-formal-command-lane-boundary.md](docs/321-hsai-real-formal-command-lane-boundary.md) | Phase 321 HSAI real formal command lane boundary. |
 | [docs/322-hsai-real-formal-command-lane-inert-data-model-notes.md](docs/322-hsai-real-formal-command-lane-inert-data-model-notes.md) | Phase 322 HSAI real formal command lane inert data model notes. |
 | [docs/323-hsai-real-formal-command-lane-materialized-readback-notes.md](docs/323-hsai-real-formal-command-lane-materialized-readback-notes.md) | Phase 323 HSAI real formal command lane materialized readback notes. |
+| [docs/324-hsai-real-formal-command-lane-execution-preflight-boundary.md](docs/324-hsai-real-formal-command-lane-execution-preflight-boundary.md) | Phase 324 HSAI real formal command lane execution preflight boundary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
