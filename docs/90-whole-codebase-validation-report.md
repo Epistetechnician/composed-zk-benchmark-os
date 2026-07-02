@@ -1662,6 +1662,22 @@ Ledger state, create Level2+ evidence, populate score axes, claim semantic
 correctness, claim production readiness, claim SOTA, claim breakthrough status,
 claim full security, or grant authority.
 
+Phase 324 defines the docs-first execution preflight boundary for the Phase
+321-323 real formal command lane before any fixed local SMT-LIB2 process
+invocation can be considered. It fixes the only future eligible lane to
+`local_smt_tiny_gateway_invariant` in `smt-lib2-offline-command` mode over
+`attestation_challenge_binding_deterministic_input_sensitive`, records the
+future required inputs, rejection cases, one-function source-scan exception
+shape, inert preflight output metadata, fixed nonclaims, evidence meaning, and
+required tests. Phase 324 does not add Rust implementation code, Cargo metadata,
+package runtime files, source-scan exception code, process APIs, process
+spawning, solver scripts, checker scripts, proof assistant setup files, command
+execution, generated proof artifacts, generated checker transcripts, generated
+solver certificates, accepted Evidence Ledger mutation, Level2+ evidence,
+score-axis population, benchmark evidence, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims, full-security
+claims, or authority grants.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
