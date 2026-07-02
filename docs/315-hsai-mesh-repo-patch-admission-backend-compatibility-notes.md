@@ -125,9 +125,6 @@ cargo test --workspace
 
 ## Next Slice
 
-Phase 316 should return to the formal-backend lane and remain docs-first:
-define a tiny hermetic backend adapter contract that maps one non-secret gateway
-invariant to an executable command descriptor, expected checker transcript
-fields, local fixture inputs, and quarantine nonpromotion rules. It should not
-authorize Lean/SMT/Z3/COBALT execution, accepted evidence, Level2+ evidence,
-score axes, semantic-correctness claims, or production-readiness claims.
+Phase 316 returned to the formal-backend lane with a docs-first tiny hermetic
+adapter contract boundary. See
+`docs/316-hsai-tiny-hermetic-formal-backend-adapter-contract-boundary.md`.
