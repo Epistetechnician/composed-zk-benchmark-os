@@ -7279,6 +7279,37 @@ not-run tiny hermetic formal-backend adapter quarantine bundle for the selected
 gateway attestation challenge-binding invariant, while rejecting command-policy
 escalation, stale digests, manifest drift, and undeclared proof artifacts.
 
+## Phase 318 HSAI Tiny Hermetic Formal-Backend Execution Readiness Boundary
+
+Status: complete. See
+`docs/318-hsai-tiny-hermetic-formal-backend-execution-readiness-boundary.md`.
+
+Goal: define the readiness contract required before any later code may run the
+Phase 317 tiny hermetic formal-backend adapter command.
+
+Implemented: documented the required preconditions for future process spawn,
+the fixed command execution contract, transcript metadata contract, quarantine
+readback rejection requirements, nonpromotion requirements, exact claim
+boundary, anti-goals, validation gate, and Phase 319 implementation ceiling.
+
+Validation gate: formatting, HSAI claim-boundary source scan, repo docs/hygiene
+tests, diff hygiene, empty-file hygiene, package-root lint check, and full
+workspace tests.
+
+Anti-goals: Rust implementation code, process APIs, process spawning, backend
+execution, Lean/SMT/Z3/COBALT/Aeneas/Hax/rust-lean/Coq/TLA+/CBMC/model-checker
+execution, solver scripts, checker scripts, package runtime files, external
+repo clones, vendored source, network access, credentials, secrets, proof
+artifacts, checker transcripts, solver certificates, accepted evidence,
+Level2+ evidence, score axes, benchmark evidence, live provider evidence,
+semantic-correctness, production-readiness, SOTA, breakthrough, full-security,
+or authority claims.
+
+Exit criteria: future execution code has an explicit readiness boundary for
+operator acknowledgement, exact command fixture, transcript schema, raw-output
+redaction, quarantine readback, and nonpromotion before any new code phase can
+cross into a tiny local backend execution experiment.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

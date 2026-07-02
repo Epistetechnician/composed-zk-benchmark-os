@@ -1565,6 +1565,20 @@ solver certificate, mutates no accepted Evidence Ledger, creates no Level2+
 evidence, populates no score axes, and makes no semantic-correctness,
 production-readiness, SOTA, breakthrough, full-security, or authority claim.
 
+Phase 318 defines the HSAI tiny hermetic formal-backend execution readiness
+boundary as a docs-first contract. It records the required preconditions for
+any future process spawn, the fixed command execution contract, transcript
+metadata fields, raw-output redaction rules, quarantine readback rejection
+requirements, nonpromotion requirements, claim boundary, and Phase 319 ceiling.
+Phase 318 adds no Rust implementation code, process API, process spawning,
+backend execution, Lean/SMT/Z3/COBALT/Aeneas/Hax/rust-lean/Coq/TLA+/CBMC/model
+checker execution, solver script, checker script, package runtime file,
+external repo clone, vendored source, proof artifact, checker transcript,
+solver certificate, accepted Evidence Ledger mutation, Level2+ evidence,
+score-axis population, benchmark evidence, semantic-correctness claim,
+production-readiness claim, SOTA claim, breakthrough claim, full-security
+claim, or authority grant.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
