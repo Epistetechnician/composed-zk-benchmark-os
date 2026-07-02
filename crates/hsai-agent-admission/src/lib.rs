@@ -616,6 +616,11 @@ pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_SCHEMA_VERSION: &
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_STATE_SLICE: &str =
     "phase-325-hsai-real-formal-command-lane-inert-execution-preflight";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_CLAIM_BOUNDARY: &str = "local gateway real formal command-lane execution preflight metadata only; authorizes at most one future fixed local SMT-LIB2 command policy over a read back Phase 323 bundle but does not spawn a process, execute SMT, Z3, Lean, COBALT, Rust-to-Lean, Aeneas, Hax, Coq, TLA+, CBMC, or any model checker, create proof artifacts, create checker transcripts, create solver certificates, create accepted evidence, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-real-command-lane-fixed-smt-execution:v1";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_STATE_SLICE: &str =
+    "phase-326-hsai-real-formal-command-lane-quarantined-fixed-smt-execution";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_CLAIM_BOUNDARY: &str = "local gateway real formal command-lane quarantined fixed-SMT execution result only; spawns one operator-digested fixed local executable through the Phase 325 preflight and records bounded redacted stdout/stderr summaries, but does not create proof artifacts, create checker transcripts, create solver certificates, create accepted evidence, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GatewayAttestationChallengeBinding {
@@ -4685,6 +4690,82 @@ pub struct GatewayFormalRealCommandLaneFixedSmtProcessPlan {
     pub backend_executed: bool,
     pub blocked_reason: String,
     pub claim_boundary: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneFixedSmtStreamSummary {
+    pub stream_label: String,
+    pub max_bytes: u64,
+    pub retained_bytes: u64,
+    pub truncated: bool,
+    pub retained_text: String,
+    pub raw_retained: bool,
+    pub raw_solver_trace_retained: bool,
+    pub proof_artifact_retained: bool,
+    pub checker_transcript_retained: bool,
+    pub secret_scan_passed: bool,
+    pub claim_boundary: String,
+}
+
+impl GatewayFormalRealCommandLaneFixedSmtStreamSummary {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-fixed-smt-stream-summary:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneFixedSmtProcessOutput {
+    pub schema_version: String,
+    pub run_id: String,
+    pub state_slice: String,
+    pub preflight_digest: Hash,
+    pub command_descriptor_digest: Hash,
+    pub executable_digest: Hash,
+    pub fixed_argv_template_digest: Hash,
+    pub process_spawn_authorized: bool,
+    pub process_spawned: bool,
+    pub backend_executed: bool,
+    pub process_exit_code_label: String,
+    pub timeout: bool,
+    pub signal: bool,
+    pub stdout_summary: GatewayFormalRealCommandLaneFixedSmtStreamSummary,
+    pub stderr_summary: GatewayFormalRealCommandLaneFixedSmtStreamSummary,
+    pub solver_verdict_label: GatewayFormalRealCommandLaneSolverVerdictLabel,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+    pub raw_logs_retained: bool,
+    pub raw_provider_response_retained: bool,
+    pub claim_boundary: String,
+}
+
+impl GatewayFormalRealCommandLaneFixedSmtProcessOutput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-fixed-smt-process-output:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayFormalRealCommandLaneFixedSmtProcessError {
+    PreflightNotAuthorized,
+    ExecutableRead(String),
+    ExecutableDigestMismatch,
+    ProcessSpawn(String),
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -18422,6 +18503,78 @@ pub fn validate_gateway_formal_real_command_lane_execution_preflight(
 
 pub fn run_gateway_formal_real_command_lane_fixed_smt_process(
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
+    descriptor: &GatewayFormalRealCommandLaneCommandDescriptor,
+    fixed_executable: &Path,
+) -> Result<
+    GatewayFormalRealCommandLaneFixedSmtProcessOutput,
+    GatewayFormalRealCommandLaneFixedSmtProcessError,
+> {
+    if !preflight.process_spawn_authorized {
+        return Err(GatewayFormalRealCommandLaneFixedSmtProcessError::PreflightNotAuthorized);
+    }
+    let executable_bytes = fs::read(fixed_executable).map_err(|error| {
+        GatewayFormalRealCommandLaneFixedSmtProcessError::ExecutableRead(error.to_string())
+    })?;
+    let executable_digest = hash_bytes(&executable_bytes);
+    if executable_digest != preflight.executable_digest {
+        return Err(GatewayFormalRealCommandLaneFixedSmtProcessError::ExecutableDigestMismatch);
+    }
+
+    let mut command = std::process::Command::new(fixed_executable);
+    command
+        .args(&descriptor.argv_template)
+        .env_clear()
+        .stdin(Stdio::null())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped());
+    let mut child = command.spawn().map_err(|error| {
+        GatewayFormalRealCommandLaneFixedSmtProcessError::ProcessSpawn(error.to_string())
+    })?;
+    let deadline = Instant::now() + Duration::from_millis(descriptor.timeout_millis);
+    loop {
+        if child
+            .try_wait()
+            .map_err(|error| {
+                GatewayFormalRealCommandLaneFixedSmtProcessError::ProcessSpawn(error.to_string())
+            })?
+            .is_some()
+        {
+            let output = child.wait_with_output().map_err(|error| {
+                GatewayFormalRealCommandLaneFixedSmtProcessError::ProcessSpawn(error.to_string())
+            })?;
+            return Ok(gateway_formal_real_command_lane_fixed_smt_process_output(
+                preflight,
+                descriptor,
+                executable_digest,
+                output.status.code(),
+                false,
+                output.status.code().is_none(),
+                &output.stdout,
+                &output.stderr,
+            ));
+        }
+        if Instant::now() >= deadline {
+            let _ = child.kill();
+            let output = child.wait_with_output().map_err(|error| {
+                GatewayFormalRealCommandLaneFixedSmtProcessError::ProcessSpawn(error.to_string())
+            })?;
+            return Ok(gateway_formal_real_command_lane_fixed_smt_process_output(
+                preflight,
+                descriptor,
+                executable_digest,
+                None,
+                true,
+                false,
+                &output.stdout,
+                &output.stderr,
+            ));
+        }
+        std::thread::sleep(Duration::from_millis(5));
+    }
+}
+
+pub fn gateway_formal_real_command_lane_fixed_smt_process_plan(
+    preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
 ) -> GatewayFormalRealCommandLaneFixedSmtProcessPlan {
     GatewayFormalRealCommandLaneFixedSmtProcessPlan {
         schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_SCHEMA_VERSION
@@ -18432,6 +18585,116 @@ pub fn run_gateway_formal_real_command_lane_fixed_smt_process(
         backend_executed: false,
         blocked_reason: "phase325_preflight_only_no_process_spawn".to_owned(),
         claim_boundary: gateway_formal_real_command_lane_execution_preflight_claim_boundary(),
+    }
+}
+
+fn gateway_formal_real_command_lane_fixed_smt_process_output(
+    preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
+    descriptor: &GatewayFormalRealCommandLaneCommandDescriptor,
+    executable_digest: Hash,
+    exit_code: Option<i32>,
+    timeout: bool,
+    signal: bool,
+    stdout: &[u8],
+    stderr: &[u8],
+) -> GatewayFormalRealCommandLaneFixedSmtProcessOutput {
+    GatewayFormalRealCommandLaneFixedSmtProcessOutput {
+        schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_SCHEMA_VERSION
+            .to_owned(),
+        run_id: preflight.run_id.clone(),
+        state_slice: GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_STATE_SLICE.to_owned(),
+        preflight_digest: preflight.digest(),
+        command_descriptor_digest: descriptor.digest(),
+        executable_digest,
+        fixed_argv_template_digest: descriptor.argv_template_digest,
+        process_spawn_authorized: preflight.process_spawn_authorized,
+        process_spawned: true,
+        backend_executed: true,
+        process_exit_code_label: if timeout {
+            "timeout".to_owned()
+        } else {
+            exit_code
+                .map(|code| format!("exit_{code}"))
+                .unwrap_or_else(|| "signal".to_owned())
+        },
+        timeout,
+        signal,
+        stdout_summary: gateway_formal_real_command_lane_fixed_smt_stream_summary(
+            "stdout",
+            descriptor.max_stdout_bytes,
+            stdout,
+        ),
+        stderr_summary: gateway_formal_real_command_lane_fixed_smt_stream_summary(
+            "stderr",
+            descriptor.max_stderr_bytes,
+            stderr,
+        ),
+        solver_verdict_label: gateway_formal_real_command_lane_fixed_smt_solver_verdict(
+            timeout, stdout, stderr,
+        ),
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+        raw_logs_retained: false,
+        raw_provider_response_retained: false,
+        claim_boundary: GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_CLAIM_BOUNDARY
+            .to_owned(),
+    }
+}
+
+fn gateway_formal_real_command_lane_fixed_smt_stream_summary(
+    stream_label: &str,
+    max_bytes: u64,
+    bytes: &[u8],
+) -> GatewayFormalRealCommandLaneFixedSmtStreamSummary {
+    let retained_bytes = bytes.len().min(max_bytes as usize);
+    GatewayFormalRealCommandLaneFixedSmtStreamSummary {
+        stream_label: stream_label.to_owned(),
+        max_bytes,
+        retained_bytes: retained_bytes as u64,
+        truncated: bytes.len() > retained_bytes,
+        retained_text: format!(
+            "retained_sha256={} retained_bytes={retained_bytes}",
+            hash_hex(hash_bytes(&bytes[..retained_bytes]))
+        ),
+        raw_retained: false,
+        raw_solver_trace_retained: false,
+        proof_artifact_retained: false,
+        checker_transcript_retained: false,
+        secret_scan_passed: !looks_like_credential_value(&String::from_utf8_lossy(bytes)),
+        claim_boundary: GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_CLAIM_BOUNDARY
+            .to_owned(),
+    }
+}
+
+fn gateway_formal_real_command_lane_fixed_smt_solver_verdict(
+    timeout: bool,
+    stdout: &[u8],
+    stderr: &[u8],
+) -> GatewayFormalRealCommandLaneSolverVerdictLabel {
+    if timeout {
+        return GatewayFormalRealCommandLaneSolverVerdictLabel::ProcessTimedOut;
+    }
+    let stdout_text = String::from_utf8_lossy(stdout).to_ascii_lowercase();
+    if stdout_text.lines().any(|line| line.trim() == "unsat") {
+        GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
+    } else if stdout_text.lines().any(|line| line.trim() == "sat") {
+        GatewayFormalRealCommandLaneSolverVerdictLabel::SolverSatWitnessWithoutCertificate
+    } else if stdout_text.lines().any(|line| line.trim() == "unknown") {
+        GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnknown
+    } else if !stderr.is_empty() {
+        GatewayFormalRealCommandLaneSolverVerdictLabel::ProcessFailed
+    } else {
+        GatewayFormalRealCommandLaneSolverVerdictLabel::OutputUnparseable
     }
 }
 
@@ -29951,7 +30214,7 @@ mod tests {
             gateway_formal_real_command_lane_execution_preflight_claim_boundary()
         );
 
-        let process_plan = run_gateway_formal_real_command_lane_fixed_smt_process(&preflight);
+        let process_plan = gateway_formal_real_command_lane_fixed_smt_process_plan(&preflight);
         assert!(process_plan.process_spawn_authorized);
         assert!(!process_plan.process_spawned);
         assert!(!process_plan.backend_executed);
@@ -29964,6 +30227,120 @@ mod tests {
         fs::remove_dir_all(&execution_root)
             .expect("preflight valid execution source cleanup succeeds");
         fs::remove_dir_all(&source_root).expect("preflight valid adapter source cleanup succeeds");
+    }
+
+    #[ignore]
+    #[test]
+    fn phase326_fixed_smt_child_unsat() {
+        println!("unsat");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_fixed_smt_process_executes_and_quarantines_unsat() {
+        let (
+            execution_root,
+            source_root,
+            source_manifest,
+            execution_manifest,
+            request,
+            mut command,
+            obligation,
+            mut obligation_binding,
+            mut transcript,
+            stdout_summary,
+            stderr_summary,
+            solver_verdict,
+            nonpromotion,
+        ) = real_command_lane_valid_parts("real-command-phase326-exec");
+        command.argv_template = vec![
+            "--ignored".to_owned(),
+            "--exact".to_owned(),
+            "tests::phase326_fixed_smt_child_unsat".to_owned(),
+            "--nocapture".to_owned(),
+        ];
+        command.argv_template_digest = hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-argv-template:v1",
+            &command.argv_template,
+        );
+        obligation_binding.command_descriptor_digest = command.digest();
+        transcript.command_descriptor_digest = command.digest();
+        let output_root = temp_output_root("real-command-phase326-exec-output");
+        materialize_gateway_formal_real_command_lane_output_bundle(
+            &output_root,
+            &source_manifest,
+            &execution_manifest,
+            &request,
+            &command,
+            &obligation,
+            &obligation_binding,
+            &transcript,
+            &stdout_summary,
+            &stderr_summary,
+            &solver_verdict,
+            &nonpromotion,
+            &real_command_lane_output_request(&output_root),
+        )
+        .expect("phase326 source bundle materializes");
+        let manifest = read_gateway_formal_real_command_lane_output_bundle(&output_root)
+            .expect("phase326 source bundle reads back");
+        let fixed_executable = std::env::current_exe().expect("current test binary path exists");
+        let executable_digest =
+            hash_bytes(&fs::read(&fixed_executable).expect("current test binary reads"));
+        let mut input = real_command_lane_execution_preflight_input(&manifest, &request, &command);
+        input.executable_digest = executable_digest;
+        let preflight = build_gateway_formal_real_command_lane_execution_preflight(
+            &manifest, &request, &command, &input,
+        );
+
+        let output = run_gateway_formal_real_command_lane_fixed_smt_process(
+            &preflight,
+            &command,
+            &fixed_executable,
+        )
+        .expect("phase326 fixed process executes");
+
+        assert!(output.process_spawn_authorized);
+        assert!(output.process_spawned);
+        assert!(output.backend_executed);
+        assert_eq!(output.process_exit_code_label, "exit_0");
+        assert_eq!(
+            output.solver_verdict_label,
+            GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
+        );
+        assert!(!output.proof_artifact_created);
+        assert!(!output.checker_transcript_created);
+        assert!(!output.solver_certificate_created);
+        assert!(!output.creates_accepted_evidence);
+        assert!(!output.creates_level2_evidence);
+        assert!(!output.populates_score_axes);
+        assert!(!output.semantic_correctness_claimed);
+        assert!(!output.production_readiness_claimed);
+        assert!(!output.sota_claimed);
+        assert!(!output.breakthrough_claimed);
+        assert!(!output.full_security_claimed);
+        assert!(!output.grants_authority);
+        assert!(!output.raw_logs_retained);
+        assert!(!output.stdout_summary.raw_retained);
+        assert!(output
+            .stdout_summary
+            .retained_text
+            .contains("retained_sha256="));
+        assert!(!output.stdout_summary.retained_text.contains("unsat"));
+
+        let mut bad_preflight = preflight.clone();
+        bad_preflight.executable_digest = Hash([9; 32]);
+        assert_eq!(
+            run_gateway_formal_real_command_lane_fixed_smt_process(
+                &bad_preflight,
+                &command,
+                &fixed_executable,
+            ),
+            Err(GatewayFormalRealCommandLaneFixedSmtProcessError::ExecutableDigestMismatch)
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase326 output cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase326 execution source cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase326 adapter source cleanup succeeds");
     }
 
     #[test]

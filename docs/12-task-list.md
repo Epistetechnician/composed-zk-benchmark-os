@@ -7583,6 +7583,43 @@ execution-preflight lane and source-scan exception shape, but still no process
 spawn, no solver run, no proof/checker/solver artifacts, and no accepted formal
 evidence.
 
+## Phase 326 HSAI Real Formal Command Lane Quarantined Fixed SMT Execution
+
+Status: complete. See
+`docs/326-hsai-real-formal-command-lane-quarantined-fixed-smt-execution-notes.md`.
+
+Goal: cross from inert preflight into one bounded fixed local process execution
+for the real formal command lane while preserving quarantine and nonpromotion.
+
+Implemented: fixed executable digest verification, direct process spawn through
+`std::process::Command::new(fixed_executable)`, fixed argv from the validated
+command descriptor, cleared environment, null stdin, piped stdout/stderr,
+timeout handling, bounded redacted stream summaries, solver-like `unsat`,
+`sat`, and `unknown` label classification, pre-spawn executable digest mismatch
+rejection, and all proof/evidence/score/authority flags held false.
+
+Validation coverage: successful fixed process execution through the Phase 325
+preflight, `unsat` classification without proof authority, redacted summary
+retention without raw stdout, executable digest mismatch rejection before spawn,
+and source-scan confinement of the single allowed process API line.
+
+Validation gate: formatting, focused real formal command-lane tests, HSAI
+claim-boundary source scan, repo docs/hygiene tests, diff hygiene, empty-file
+hygiene, package-root lint check, and full workspace tests.
+
+Anti-goals: generic backend runners, caller-controlled executable paths,
+caller-controlled argv, shell execution, inherited environment, stdin, network
+access, solver scripts, checker scripts, proof assistant setup files, generated
+proof artifacts, generated checker transcripts, generated solver certificates,
+accepted evidence, Level2+ evidence, score axes, benchmark evidence, official
+benchmark submission, semantic-correctness, production-readiness, SOTA,
+breakthrough, full-security, or authority claims.
+
+Exit criteria: the real formal command lane now has a local quarantined fixed
+process execution surface and focused execution coverage, but still no
+materialized Phase 326 output bundle, no accepted formal evidence, no Level2+
+formal evidence, and no proof-authority claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
