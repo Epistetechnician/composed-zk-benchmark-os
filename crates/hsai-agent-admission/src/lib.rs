@@ -590,6 +590,13 @@ pub const GATEWAY_FORMAL_BACKEND_HERMETIC_FIXTURE_RUNNER_SCHEMA_VERSION: &str =
 pub const GATEWAY_FORMAL_BACKEND_HERMETIC_FIXTURE_RUNNER_STATE_SLICE: &str =
     "phase-313-hsai-gateway-formal-backend-hermetic-fixture-runner-crossing";
 pub const GATEWAY_FORMAL_BACKEND_HERMETIC_FIXTURE_RUNNER_CLAIM_BOUNDARY: &str = "local gateway formal backend hermetic fixture-runner output only; spawns one fixed local fixture process through a no-shell policy and materializes bounded redacted quarantine metadata, but does not execute Lean, SMT, COBALT, Rust-to-Lean, Aeneas, Hax, Z3, CBMC, Coq, TLA+, or any model checker as proof authority, create proof artifacts, promote proof artifacts, promote checker transcripts, promote solver certificates, create accepted evidence, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-backend-tiny-hermetic-adapter:v1";
+pub const GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_OUTPUT_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-backend-tiny-hermetic-adapter-output-bundle:v1";
+pub const GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_STATE_SLICE: &str =
+    "phase-317-hsai-tiny-hermetic-formal-backend-adapter-data-model";
+pub const GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_CLAIM_BOUNDARY: &str = "local gateway tiny hermetic formal-backend adapter metadata and quarantine output only; binds one source-correspondence certificate, one descriptor-report manifest, one process-spawn interface digest, one fixed input fixture, one fixed command descriptor, and one not-run transcript summary, but does not spawn a process, execute Lean, SMT, COBALT, Rust-to-Lean, Aeneas, Hax, Z3, CBMC, Coq, TLA+, or any model checker, create proof artifacts, promote proof artifacts, promote checker transcripts, promote solver certificates, create accepted evidence, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GatewayAttestationChallengeBinding {
@@ -3710,6 +3717,309 @@ pub enum GatewayFormalBackendHermeticProcessSpawnInterfaceIssue {
 pub struct GatewayFormalBackendHermeticProcessSpawnInterfaceValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalBackendHermeticProcessSpawnInterfaceIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalBackendTinyHermeticAdapterFixtureInput {
+    pub schema_version: String,
+    pub fixture_id: String,
+    pub property_id: String,
+    pub baseline_proposal_digest: Hash,
+    pub changed_proposal_digest: Hash,
+    pub baseline_nonce: u64,
+    pub changed_nonce: u64,
+    pub anchor_id: String,
+    pub public_agent_key_label: String,
+    pub public_agent_key_digest: Hash,
+    pub expected_identical_inputs_equal: bool,
+    pub expected_changed_proposal_differs: bool,
+    pub expected_changed_nonce_differs: bool,
+    pub imported_assumptions: BTreeSet<String>,
+    pub non_secret: bool,
+    pub contains_live_attestation_token: bool,
+    pub contains_credentials: bool,
+    pub contains_provider_response: bool,
+    pub contains_raw_quote: bool,
+    pub contains_raw_solver_log: bool,
+}
+
+impl GatewayFormalBackendTinyHermeticAdapterFixtureInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-backend-tiny-hermetic-adapter-fixture-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalBackendTinyHermeticAdapterCommandDescriptor {
+    pub schema_version: String,
+    pub adapter_id: String,
+    pub backend_id: String,
+    pub property_id: String,
+    pub executable_path_label: String,
+    pub argv_template: Vec<String>,
+    pub argv_template_digest: Hash,
+    pub timeout_millis: u64,
+    pub max_stdout_bytes: u64,
+    pub max_stderr_bytes: u64,
+    pub direct_process: bool,
+    pub no_shell: bool,
+    pub no_stdin: bool,
+    pub cleared_environment: bool,
+    pub no_network: bool,
+    pub caller_executable_path_allowed: bool,
+    pub output_root_authority_allowed: bool,
+    pub fixed_argv_template: bool,
+    pub ignored_output_root_only: bool,
+}
+
+impl GatewayFormalBackendTinyHermeticAdapterCommandDescriptor {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-backend-tiny-hermetic-adapter-command-descriptor:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalBackendTinyHermeticAdapterRequest {
+    pub schema_version: String,
+    pub request_id: String,
+    pub adapter_id: String,
+    pub backend_id: String,
+    pub property_id: String,
+    pub source_correspondence_certificate_digest: Hash,
+    pub descriptor_report_manifest_digest: Hash,
+    pub process_spawn_interface_digest: Hash,
+    pub fixture_input_digest: Hash,
+    pub command_descriptor_digest: Hash,
+    pub expected_transcript_schema_digest: Hash,
+    pub operator_acknowledged: bool,
+    pub required_nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl GatewayFormalBackendTinyHermeticAdapterRequest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-backend-tiny-hermetic-adapter-request:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalBackendTinyHermeticAdapterTranscriptSummary {
+    pub schema_version: String,
+    pub backend_id: String,
+    pub property_id: String,
+    pub command_descriptor_digest: Hash,
+    pub fixture_input_digest: Hash,
+    pub source_correspondence_certificate_digest: Hash,
+    pub process_exit_code_label: String,
+    pub timeout: bool,
+    pub solver_status: GatewayFormalBackendHermeticExecutionSolverStatus,
+    pub invariant_verdict: GatewayFormalBackendHermeticExecutionInvariantVerdict,
+    pub stdout_summary_digest: Hash,
+    pub stderr_summary_digest: Hash,
+    pub redaction_report_digest: Hash,
+    pub imported_assumptions: BTreeSet<String>,
+    pub nonpromotion_report_digest: Hash,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+    pub process_spawned: bool,
+    pub backend_executed: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub accepted_evidence_created: bool,
+    pub level2_evidence_created: bool,
+    pub score_axes_populated: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub authority_granted: bool,
+    pub raw_logs_retained: bool,
+    pub raw_provider_response_retained: bool,
+    pub claim_boundary: String,
+}
+
+impl GatewayFormalBackendTinyHermeticAdapterTranscriptSummary {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-backend-tiny-hermetic-adapter-transcript-summary:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalBackendTinyHermeticAdapterNonpromotionReport {
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub grants_authority: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub raw_logs_retained: bool,
+    pub raw_provider_response_retained: bool,
+    pub claim_boundary: String,
+}
+
+impl GatewayFormalBackendTinyHermeticAdapterNonpromotionReport {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-backend-tiny-hermetic-adapter-nonpromotion-report:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalBackendTinyHermeticAdapterValidationReport {
+    pub schema_version: String,
+    pub bundle_id: String,
+    pub valid: bool,
+    pub checked_files: Vec<String>,
+    pub request_digest: Hash,
+    pub fixture_input_digest: Hash,
+    pub command_descriptor_digest: Hash,
+    pub transcript_summary_digest: Hash,
+    pub nonpromotion_report_digest: Hash,
+    pub issue_count: u64,
+    pub claim_boundary: String,
+    pub process_spawned: bool,
+    pub backend_executed: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalBackendTinyHermeticAdapterValidationReport {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-backend-tiny-hermetic-adapter-validation-report:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalBackendTinyHermeticAdapterOutputManifest {
+    pub schema_version: String,
+    pub bundle_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub request_digest: Hash,
+    pub fixture_input_digest: Hash,
+    pub command_descriptor_digest: Hash,
+    pub transcript_summary_digest: Hash,
+    pub nonpromotion_report_digest: Hash,
+    pub validation_report_digest: Hash,
+    pub nonclaims_digest: Hash,
+    pub source_correspondence_certificate_digest: Hash,
+    pub descriptor_report_manifest_digest: Hash,
+    pub process_spawn_interface_digest: Hash,
+    pub expected_transcript_schema_digest: Hash,
+    pub adapter_id: String,
+    pub backend_id: String,
+    pub property_id: String,
+    pub declared_files: Vec<String>,
+    pub declared_file_digests: BTreeMap<String, Hash>,
+    pub claim_boundary: String,
+    pub process_spawned: bool,
+    pub backend_executed: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+    pub raw_logs_retained: bool,
+    pub raw_provider_response_retained: bool,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl GatewayFormalBackendTinyHermeticAdapterOutputManifest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-backend-tiny-hermetic-adapter-output-manifest:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct GatewayFormalBackendTinyHermeticAdapterOutputRequest {
+    pub bundle_id: String,
+    pub created_at_unix: u64,
+    pub overwrite: bool,
+    pub protected_roots: Vec<PathBuf>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalBackendTinyHermeticAdapterIssue {
+    InvalidSchemaVersion,
+    InvalidId(String),
+    AdapterIdMismatch,
+    BackendIdMismatch,
+    PropertyIdMismatch,
+    MissingDigest(String),
+    OperatorAcknowledgementMissing,
+    MissingRequiredNonclaim(String),
+    FixtureContainsSecretOrLiveArtifact,
+    FixtureExpectationMismatch,
+    FixtureImportedAssumptionMissing,
+    CommandPolicyMismatch,
+    CommandDigestMismatch,
+    TranscriptStatusMismatch,
+    TranscriptPromotionAttempt,
+    TranscriptDigestMismatch,
+    NonpromotionMismatch,
+    ClaimBoundaryMismatch,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalBackendTinyHermeticAdapterValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalBackendTinyHermeticAdapterIssue>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayFormalBackendTinyHermeticAdapterOutputError {
+    InvalidAdapter(Vec<GatewayFormalBackendTinyHermeticAdapterIssue>),
+    EmptyBundleId,
+    EmptyOutputRoot,
+    ProtectedOutputRoot,
+    OutputRootExistsWithoutOverwrite,
+    OutputRootIsFile,
+    OutputRootIsSymlink,
+    BundleFileIsSymlink(String),
+    DeclaredFileTypeMismatch(String),
+    UndeclaredFile(String),
+    DigestMismatch(String),
+    MalformedDeclaredFile(String),
+    ManifestSemanticMismatch,
+    ValidationReportMismatch,
+    NonclaimMismatch,
+    Io(String),
+    Serialization(String),
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -14544,6 +14854,1037 @@ fn validate_gateway_formal_backend_hermetic_process_spawn_nonpromotion_policy(
     }
 }
 
+pub fn gateway_formal_backend_tiny_hermetic_adapter_output_declared_files() -> Vec<String> {
+    GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_DECLARED_FILES
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
+pub fn gateway_formal_backend_tiny_hermetic_adapter_claim_boundary() -> String {
+    GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_backend_tiny_hermetic_adapter_required_nonclaims() -> BTreeSet<NonClaimLabel>
+{
+    BTreeSet::from([
+        NonClaimLabel("not backend execution".to_owned()),
+        NonClaimLabel("not Lean execution".to_owned()),
+        NonClaimLabel("not SMT execution".to_owned()),
+        NonClaimLabel("not COBALT execution".to_owned()),
+        NonClaimLabel("not proof evidence".to_owned()),
+        NonClaimLabel("not checker transcript evidence".to_owned()),
+        NonClaimLabel("not accepted evidence".to_owned()),
+        NonClaimLabel("not Level2 evidence".to_owned()),
+        NonClaimLabel("not score-axis evidence".to_owned()),
+        NonClaimLabel("not semantic correctness".to_owned()),
+        NonClaimLabel("not production readiness".to_owned()),
+        NonClaimLabel("not SOTA".to_owned()),
+        NonClaimLabel("not breakthrough".to_owned()),
+        NonClaimLabel("not full security".to_owned()),
+        NonClaimLabel("not authority to execute actions".to_owned()),
+    ])
+}
+
+pub fn validate_gateway_formal_backend_tiny_hermetic_adapter(
+    request: &GatewayFormalBackendTinyHermeticAdapterRequest,
+    fixture: &GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+    command: &GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+    transcript: &GatewayFormalBackendTinyHermeticAdapterTranscriptSummary,
+    nonpromotion: &GatewayFormalBackendTinyHermeticAdapterNonpromotionReport,
+) -> GatewayFormalBackendTinyHermeticAdapterValidation {
+    let mut issues = Vec::new();
+    validate_gateway_formal_backend_tiny_hermetic_adapter_request(request, &mut issues);
+    validate_gateway_formal_backend_tiny_hermetic_adapter_fixture(fixture, &mut issues);
+    validate_gateway_formal_backend_tiny_hermetic_adapter_command(command, &mut issues);
+    validate_gateway_formal_backend_tiny_hermetic_adapter_transcript(
+        request,
+        fixture,
+        command,
+        transcript,
+        nonpromotion,
+        &mut issues,
+    );
+    validate_gateway_formal_backend_tiny_hermetic_adapter_nonpromotion(nonpromotion, &mut issues);
+    if request.fixture_input_digest != fixture.digest()
+        || transcript.fixture_input_digest != fixture.digest()
+    {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::TranscriptDigestMismatch);
+    }
+    if request.command_descriptor_digest != command.digest()
+        || transcript.command_descriptor_digest != command.digest()
+    {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::CommandDigestMismatch);
+    }
+    if transcript.source_correspondence_certificate_digest
+        != request.source_correspondence_certificate_digest
+    {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::TranscriptDigestMismatch);
+    }
+    if transcript.nonpromotion_report_digest != nonpromotion.digest() {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::NonpromotionMismatch);
+    }
+
+    GatewayFormalBackendTinyHermeticAdapterValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+pub fn materialize_gateway_formal_backend_tiny_hermetic_adapter_output_bundle(
+    output_root: &Path,
+    request: &GatewayFormalBackendTinyHermeticAdapterRequest,
+    fixture: &GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+    command: &GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+    transcript: &GatewayFormalBackendTinyHermeticAdapterTranscriptSummary,
+    nonpromotion: &GatewayFormalBackendTinyHermeticAdapterNonpromotionReport,
+    output_request: &GatewayFormalBackendTinyHermeticAdapterOutputRequest,
+) -> Result<
+    GatewayFormalBackendTinyHermeticAdapterOutputManifest,
+    GatewayFormalBackendTinyHermeticAdapterOutputError,
+> {
+    validate_gateway_formal_backend_tiny_hermetic_adapter_output_request(
+        output_root,
+        request,
+        fixture,
+        command,
+        transcript,
+        nonpromotion,
+        output_request,
+    )?;
+    let staging_root = gateway_formal_backend_tiny_hermetic_adapter_staging_root_for(
+        output_root,
+        &output_request.bundle_id,
+    )?;
+    if staging_root.exists() {
+        remove_gateway_formal_backend_tiny_hermetic_adapter_dir_all_checked(&staging_root)?;
+    }
+    fs::create_dir_all(staging_root.join("gateway-formal-backend-tiny-hermetic-adapter"))
+        .map_err(gateway_formal_backend_tiny_hermetic_adapter_io_error)?;
+
+    let files = build_gateway_formal_backend_tiny_hermetic_adapter_bundle_files(
+        request,
+        fixture,
+        command,
+        transcript,
+        nonpromotion,
+        output_request,
+    )?;
+    for (logical_path, bytes) in &files {
+        let target = staging_root.join(logical_path);
+        if let Some(parent) = target.parent() {
+            fs::create_dir_all(parent)
+                .map_err(gateway_formal_backend_tiny_hermetic_adapter_io_error)?;
+        }
+        fs::write(&target, bytes).map_err(gateway_formal_backend_tiny_hermetic_adapter_io_error)?;
+        fs::write(
+            sidecar_path(&target),
+            hash_hex(hash_bytes(bytes)).into_bytes(),
+        )
+        .map_err(gateway_formal_backend_tiny_hermetic_adapter_io_error)?;
+    }
+
+    if output_root.exists() {
+        if !output_request.overwrite {
+            remove_gateway_formal_backend_tiny_hermetic_adapter_dir_all_checked(&staging_root)?;
+            return Err(
+                GatewayFormalBackendTinyHermeticAdapterOutputError::OutputRootExistsWithoutOverwrite,
+            );
+        }
+        remove_gateway_formal_backend_tiny_hermetic_adapter_dir_all_checked(output_root)?;
+    }
+    fs::rename(&staging_root, output_root)
+        .map_err(gateway_formal_backend_tiny_hermetic_adapter_io_error)?;
+    read_gateway_formal_backend_tiny_hermetic_adapter_output_bundle(output_root)
+}
+
+pub fn read_gateway_formal_backend_tiny_hermetic_adapter_output_bundle(
+    output_root: &Path,
+) -> Result<
+    GatewayFormalBackendTinyHermeticAdapterOutputManifest,
+    GatewayFormalBackendTinyHermeticAdapterOutputError,
+> {
+    let output_metadata = fs::symlink_metadata(output_root)
+        .map_err(gateway_formal_backend_tiny_hermetic_adapter_io_error)?;
+    if output_metadata.file_type().is_symlink() {
+        return Err(GatewayFormalBackendTinyHermeticAdapterOutputError::OutputRootIsSymlink);
+    }
+    if !output_metadata.is_dir() {
+        return Err(GatewayFormalBackendTinyHermeticAdapterOutputError::OutputRootIsFile);
+    }
+    let bundle_dir = output_root.join("gateway-formal-backend-tiny-hermetic-adapter");
+    let bundle_metadata = fs::symlink_metadata(&bundle_dir)
+        .map_err(gateway_formal_backend_tiny_hermetic_adapter_io_error)?;
+    if bundle_metadata.file_type().is_symlink() {
+        return Err(
+            GatewayFormalBackendTinyHermeticAdapterOutputError::BundleFileIsSymlink(
+                "gateway-formal-backend-tiny-hermetic-adapter".to_owned(),
+            ),
+        );
+    }
+    if !bundle_metadata.is_dir() {
+        return Err(
+            GatewayFormalBackendTinyHermeticAdapterOutputError::DeclaredFileTypeMismatch(
+                "gateway-formal-backend-tiny-hermetic-adapter".to_owned(),
+            ),
+        );
+    }
+
+    reject_undeclared_gateway_formal_backend_tiny_hermetic_adapter_files(output_root)?;
+    let mut file_bytes = BTreeMap::new();
+    for logical_path in GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_DECLARED_FILES {
+        let path = output_root.join(logical_path);
+        let metadata = fs::symlink_metadata(&path)
+            .map_err(gateway_formal_backend_tiny_hermetic_adapter_io_error)?;
+        if metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalBackendTinyHermeticAdapterOutputError::BundleFileIsSymlink(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        if !metadata.is_file() {
+            return Err(
+                GatewayFormalBackendTinyHermeticAdapterOutputError::DeclaredFileTypeMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        let sidecar = sidecar_path(&path);
+        let sidecar_metadata = fs::symlink_metadata(&sidecar)
+            .map_err(gateway_formal_backend_tiny_hermetic_adapter_io_error)?;
+        if sidecar_metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalBackendTinyHermeticAdapterOutputError::BundleFileIsSymlink(format!(
+                    "{logical_path}.sha256"
+                )),
+            );
+        }
+        if !sidecar_metadata.is_file() {
+            return Err(
+                GatewayFormalBackendTinyHermeticAdapterOutputError::DeclaredFileTypeMismatch(
+                    format!("{logical_path}.sha256"),
+                ),
+            );
+        }
+        let bytes =
+            fs::read(&path).map_err(gateway_formal_backend_tiny_hermetic_adapter_io_error)?;
+        let expected_hash = String::from_utf8(
+            fs::read(&sidecar).map_err(gateway_formal_backend_tiny_hermetic_adapter_io_error)?,
+        )
+        .map_err(|error| {
+            GatewayFormalBackendTinyHermeticAdapterOutputError::Io(error.to_string())
+        })?;
+        if expected_hash.trim() != hash_hex(hash_bytes(&bytes)) {
+            return Err(
+                GatewayFormalBackendTinyHermeticAdapterOutputError::DigestMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        file_bytes.insert((*logical_path).to_owned(), bytes);
+    }
+    validate_gateway_formal_backend_tiny_hermetic_adapter_bundle_semantics(&file_bytes)
+}
+
+fn validate_gateway_formal_backend_tiny_hermetic_adapter_request(
+    request: &GatewayFormalBackendTinyHermeticAdapterRequest,
+    issues: &mut Vec<GatewayFormalBackendTinyHermeticAdapterIssue>,
+) {
+    if request.schema_version != GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_SCHEMA_VERSION {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&request.request_id) {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::InvalidId(
+            "request_id".to_owned(),
+        ));
+    }
+    if request.adapter_id != "tiny_hermetic_formal_backend_adapter" {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::AdapterIdMismatch);
+    }
+    if request.backend_id != "local_smt_tiny_gateway_invariant" {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::BackendIdMismatch);
+    }
+    if request.property_id != "attestation_challenge_binding_deterministic_input_sensitive" {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::PropertyIdMismatch);
+    }
+    for (label, digest) in [
+        (
+            "source_correspondence_certificate_digest",
+            request.source_correspondence_certificate_digest,
+        ),
+        (
+            "descriptor_report_manifest_digest",
+            request.descriptor_report_manifest_digest,
+        ),
+        (
+            "process_spawn_interface_digest",
+            request.process_spawn_interface_digest,
+        ),
+        ("fixture_input_digest", request.fixture_input_digest),
+        (
+            "command_descriptor_digest",
+            request.command_descriptor_digest,
+        ),
+        (
+            "expected_transcript_schema_digest",
+            request.expected_transcript_schema_digest,
+        ),
+    ] {
+        if digest == Hash([0; 32]) {
+            issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::MissingDigest(
+                label.to_owned(),
+            ));
+        }
+    }
+    if !request.operator_acknowledged {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::OperatorAcknowledgementMissing);
+    }
+    for required in gateway_formal_backend_tiny_hermetic_adapter_required_nonclaims() {
+        if !request.required_nonclaims.contains(&required) {
+            issues.push(
+                GatewayFormalBackendTinyHermeticAdapterIssue::MissingRequiredNonclaim(required.0),
+            );
+        }
+    }
+}
+
+fn validate_gateway_formal_backend_tiny_hermetic_adapter_fixture(
+    fixture: &GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+    issues: &mut Vec<GatewayFormalBackendTinyHermeticAdapterIssue>,
+) {
+    if fixture.schema_version != GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_SCHEMA_VERSION {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&fixture.fixture_id) {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::InvalidId(
+            "fixture_id".to_owned(),
+        ));
+    }
+    if fixture.property_id != "attestation_challenge_binding_deterministic_input_sensitive" {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::PropertyIdMismatch);
+    }
+    if fixture.baseline_proposal_digest == Hash([0; 32])
+        || fixture.changed_proposal_digest == Hash([0; 32])
+        || fixture.public_agent_key_digest == Hash([0; 32])
+    {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::MissingDigest(
+            "fixture_digest".to_owned(),
+        ));
+    }
+    if fixture.baseline_proposal_digest == fixture.changed_proposal_digest
+        || fixture.baseline_nonce == fixture.changed_nonce
+        || !fixture.expected_identical_inputs_equal
+        || !fixture.expected_changed_proposal_differs
+        || !fixture.expected_changed_nonce_differs
+    {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::FixtureExpectationMismatch);
+    }
+    if !is_single_segment_id(&fixture.anchor_id)
+        || !is_safe_relative_path(&fixture.public_agent_key_label)
+        || has_shell_metacharacters(&fixture.public_agent_key_label)
+    {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::InvalidId(
+            "fixture_anchor_or_key".to_owned(),
+        ));
+    }
+    if !fixture
+        .imported_assumptions
+        .contains("report_data_binding imported from hsai_attestation and not proved here")
+    {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::FixtureImportedAssumptionMissing);
+    }
+    if !fixture.non_secret
+        || fixture.contains_live_attestation_token
+        || fixture.contains_credentials
+        || fixture.contains_provider_response
+        || fixture.contains_raw_quote
+        || fixture.contains_raw_solver_log
+    {
+        issues.push(
+            GatewayFormalBackendTinyHermeticAdapterIssue::FixtureContainsSecretOrLiveArtifact,
+        );
+    }
+}
+
+fn validate_gateway_formal_backend_tiny_hermetic_adapter_command(
+    command: &GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+    issues: &mut Vec<GatewayFormalBackendTinyHermeticAdapterIssue>,
+) {
+    if command.schema_version != GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_SCHEMA_VERSION {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::InvalidSchemaVersion);
+    }
+    if command.adapter_id != "tiny_hermetic_formal_backend_adapter" {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::AdapterIdMismatch);
+    }
+    if command.backend_id != "local_smt_tiny_gateway_invariant" {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::BackendIdMismatch);
+    }
+    if command.property_id != "attestation_challenge_binding_deterministic_input_sensitive" {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::PropertyIdMismatch);
+    }
+    if command.executable_path_label.trim().is_empty()
+        || !is_safe_relative_path(&command.executable_path_label)
+        || command.executable_path_label.starts_with('/')
+        || has_shell_metacharacters(&command.executable_path_label)
+        || command.argv_template.is_empty()
+        || command
+            .argv_template
+            .iter()
+            .any(|arg| arg.trim().is_empty() || has_shell_metacharacters(arg))
+    {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::CommandPolicyMismatch);
+    }
+    if command.argv_template_digest
+        != hash_tagged(
+            "hsai-agent-admission:gateway-formal-backend-tiny-hermetic-adapter-argv-template:v1",
+            &command.argv_template,
+        )
+    {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::CommandDigestMismatch);
+    }
+    if command.timeout_millis == 0
+        || command.timeout_millis > 60_000
+        || command.max_stdout_bytes == 0
+        || command.max_stdout_bytes > 65_536
+        || command.max_stderr_bytes == 0
+        || command.max_stderr_bytes > 65_536
+        || !command.direct_process
+        || !command.no_shell
+        || !command.no_stdin
+        || !command.cleared_environment
+        || !command.no_network
+        || command.caller_executable_path_allowed
+        || command.output_root_authority_allowed
+        || !command.fixed_argv_template
+        || !command.ignored_output_root_only
+    {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::CommandPolicyMismatch);
+    }
+}
+
+fn validate_gateway_formal_backend_tiny_hermetic_adapter_transcript(
+    request: &GatewayFormalBackendTinyHermeticAdapterRequest,
+    fixture: &GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+    command: &GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+    transcript: &GatewayFormalBackendTinyHermeticAdapterTranscriptSummary,
+    nonpromotion: &GatewayFormalBackendTinyHermeticAdapterNonpromotionReport,
+    issues: &mut Vec<GatewayFormalBackendTinyHermeticAdapterIssue>,
+) {
+    if transcript.schema_version != GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_SCHEMA_VERSION {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::InvalidSchemaVersion);
+    }
+    if transcript.backend_id != request.backend_id || transcript.backend_id != command.backend_id {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::BackendIdMismatch);
+    }
+    if transcript.property_id != request.property_id
+        || transcript.property_id != fixture.property_id
+    {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::PropertyIdMismatch);
+    }
+    if transcript.process_exit_code_label != "not_run"
+        || transcript.timeout
+        || transcript.solver_status != GatewayFormalBackendHermeticExecutionSolverStatus::NotRun
+        || transcript.invariant_verdict
+            != GatewayFormalBackendHermeticExecutionInvariantVerdict::NotEvaluated
+        || transcript.process_spawned
+        || transcript.backend_executed
+    {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::TranscriptStatusMismatch);
+    }
+    if transcript.stdout_summary_digest == Hash([0; 32])
+        || transcript.stderr_summary_digest == Hash([0; 32])
+        || transcript.redaction_report_digest == Hash([0; 32])
+    {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::MissingDigest(
+            "transcript_summary_digest".to_owned(),
+        ));
+    }
+    if transcript.imported_assumptions != fixture.imported_assumptions {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::FixtureImportedAssumptionMissing);
+    }
+    if transcript.nonclaims != request.required_nonclaims
+        || nonpromotion.claim_boundary
+            != GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_CLAIM_BOUNDARY
+        || transcript.claim_boundary != GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_CLAIM_BOUNDARY
+    {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::ClaimBoundaryMismatch);
+    }
+    if transcript.proof_artifact_created
+        || transcript.checker_transcript_created
+        || transcript.solver_certificate_created
+        || transcript.accepted_evidence_created
+        || transcript.level2_evidence_created
+        || transcript.score_axes_populated
+        || transcript.semantic_correctness_claimed
+        || transcript.production_readiness_claimed
+        || transcript.sota_claimed
+        || transcript.breakthrough_claimed
+        || transcript.full_security_claimed
+        || transcript.authority_granted
+        || transcript.raw_logs_retained
+        || transcript.raw_provider_response_retained
+    {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::TranscriptPromotionAttempt);
+    }
+}
+
+fn validate_gateway_formal_backend_tiny_hermetic_adapter_nonpromotion(
+    nonpromotion: &GatewayFormalBackendTinyHermeticAdapterNonpromotionReport,
+    issues: &mut Vec<GatewayFormalBackendTinyHermeticAdapterIssue>,
+) {
+    if nonpromotion.proof_artifact_created
+        || nonpromotion.checker_transcript_created
+        || nonpromotion.solver_certificate_created
+        || nonpromotion.creates_accepted_evidence
+        || nonpromotion.creates_level2_evidence
+        || nonpromotion.populates_score_axes
+        || nonpromotion.grants_authority
+        || nonpromotion.semantic_correctness_claimed
+        || nonpromotion.production_readiness_claimed
+        || nonpromotion.sota_claimed
+        || nonpromotion.breakthrough_claimed
+        || nonpromotion.full_security_claimed
+        || nonpromotion.raw_logs_retained
+        || nonpromotion.raw_provider_response_retained
+        || nonpromotion.claim_boundary
+            != GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_CLAIM_BOUNDARY
+    {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::NonpromotionMismatch);
+    }
+}
+
+fn validate_gateway_formal_backend_tiny_hermetic_adapter_output_request(
+    output_root: &Path,
+    request: &GatewayFormalBackendTinyHermeticAdapterRequest,
+    fixture: &GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+    command: &GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+    transcript: &GatewayFormalBackendTinyHermeticAdapterTranscriptSummary,
+    nonpromotion: &GatewayFormalBackendTinyHermeticAdapterNonpromotionReport,
+    output_request: &GatewayFormalBackendTinyHermeticAdapterOutputRequest,
+) -> Result<(), GatewayFormalBackendTinyHermeticAdapterOutputError> {
+    if output_request.bundle_id.trim().is_empty()
+        || !is_safe_relative_path(&output_request.bundle_id)
+        || output_request.bundle_id.contains(['/', '\\'])
+    {
+        return Err(GatewayFormalBackendTinyHermeticAdapterOutputError::EmptyBundleId);
+    }
+    let validation = validate_gateway_formal_backend_tiny_hermetic_adapter(
+        request,
+        fixture,
+        command,
+        transcript,
+        nonpromotion,
+    );
+    if !validation.valid {
+        return Err(
+            GatewayFormalBackendTinyHermeticAdapterOutputError::InvalidAdapter(validation.issues),
+        );
+    }
+    validate_gateway_formal_backend_tiny_hermetic_adapter_output_root(
+        output_root,
+        &output_request.protected_roots,
+        output_request.overwrite,
+    )
+}
+
+fn build_gateway_formal_backend_tiny_hermetic_adapter_bundle_files(
+    request: &GatewayFormalBackendTinyHermeticAdapterRequest,
+    fixture: &GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+    command: &GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+    transcript: &GatewayFormalBackendTinyHermeticAdapterTranscriptSummary,
+    nonpromotion: &GatewayFormalBackendTinyHermeticAdapterNonpromotionReport,
+    output_request: &GatewayFormalBackendTinyHermeticAdapterOutputRequest,
+) -> Result<BTreeMap<String, Vec<u8>>, GatewayFormalBackendTinyHermeticAdapterOutputError> {
+    let validation = GatewayFormalBackendTinyHermeticAdapterValidationReport {
+        schema_version: GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_OUTPUT_SCHEMA_VERSION
+            .to_owned(),
+        bundle_id: output_request.bundle_id.clone(),
+        valid: true,
+        checked_files: gateway_formal_backend_tiny_hermetic_adapter_output_declared_files(),
+        request_digest: request.digest(),
+        fixture_input_digest: fixture.digest(),
+        command_descriptor_digest: command.digest(),
+        transcript_summary_digest: transcript.digest(),
+        nonpromotion_report_digest: nonpromotion.digest(),
+        issue_count: 0,
+        claim_boundary: gateway_formal_backend_tiny_hermetic_adapter_claim_boundary(),
+        process_spawned: false,
+        backend_executed: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        grants_authority: false,
+    };
+    let nonclaims = gateway_formal_backend_tiny_hermetic_adapter_nonclaims_markdown(
+        &request.required_nonclaims,
+    )
+    .into_bytes();
+    let mut files = BTreeMap::from([
+        (
+            "gateway-formal-backend-tiny-hermetic-adapter/adapter-request.json".to_owned(),
+            serde_json::to_vec_pretty(request)
+                .map_err(gateway_formal_backend_tiny_hermetic_adapter_serde_error)?,
+        ),
+        (
+            "gateway-formal-backend-tiny-hermetic-adapter/fixture-input.json".to_owned(),
+            serde_json::to_vec_pretty(fixture)
+                .map_err(gateway_formal_backend_tiny_hermetic_adapter_serde_error)?,
+        ),
+        (
+            "gateway-formal-backend-tiny-hermetic-adapter/command-descriptor.json".to_owned(),
+            serde_json::to_vec_pretty(command)
+                .map_err(gateway_formal_backend_tiny_hermetic_adapter_serde_error)?,
+        ),
+        (
+            "gateway-formal-backend-tiny-hermetic-adapter/transcript-summary.json".to_owned(),
+            serde_json::to_vec_pretty(transcript)
+                .map_err(gateway_formal_backend_tiny_hermetic_adapter_serde_error)?,
+        ),
+        (
+            "gateway-formal-backend-tiny-hermetic-adapter/nonpromotion-report.json".to_owned(),
+            serde_json::to_vec_pretty(nonpromotion)
+                .map_err(gateway_formal_backend_tiny_hermetic_adapter_serde_error)?,
+        ),
+        (
+            "gateway-formal-backend-tiny-hermetic-adapter/nonclaims.md".to_owned(),
+            nonclaims,
+        ),
+        (
+            "gateway-formal-backend-tiny-hermetic-adapter/validation-report.json".to_owned(),
+            serde_json::to_vec_pretty(&validation)
+                .map_err(gateway_formal_backend_tiny_hermetic_adapter_serde_error)?,
+        ),
+    ]);
+    let manifest = gateway_formal_backend_tiny_hermetic_adapter_output_manifest_for_files(
+        request,
+        fixture,
+        command,
+        transcript,
+        nonpromotion,
+        &validation,
+        output_request,
+        &files,
+    );
+    files.insert(
+        "gateway-formal-backend-tiny-hermetic-adapter/manifest.json".to_owned(),
+        serde_json::to_vec_pretty(&manifest)
+            .map_err(gateway_formal_backend_tiny_hermetic_adapter_serde_error)?,
+    );
+    Ok(files)
+}
+
+#[allow(clippy::too_many_arguments)]
+fn gateway_formal_backend_tiny_hermetic_adapter_output_manifest_for_files(
+    request: &GatewayFormalBackendTinyHermeticAdapterRequest,
+    fixture: &GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+    command: &GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+    transcript: &GatewayFormalBackendTinyHermeticAdapterTranscriptSummary,
+    nonpromotion: &GatewayFormalBackendTinyHermeticAdapterNonpromotionReport,
+    validation: &GatewayFormalBackendTinyHermeticAdapterValidationReport,
+    output_request: &GatewayFormalBackendTinyHermeticAdapterOutputRequest,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> GatewayFormalBackendTinyHermeticAdapterOutputManifest {
+    let mut declared_file_digests = BTreeMap::new();
+    for (logical_path, bytes) in files {
+        declared_file_digests.insert(logical_path.clone(), hash_bytes(bytes));
+    }
+    GatewayFormalBackendTinyHermeticAdapterOutputManifest {
+        schema_version: GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_OUTPUT_SCHEMA_VERSION
+            .to_owned(),
+        bundle_id: output_request.bundle_id.clone(),
+        state_slice: GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_STATE_SLICE.to_owned(),
+        created_at_unix: output_request.created_at_unix,
+        request_digest: request.digest(),
+        fixture_input_digest: fixture.digest(),
+        command_descriptor_digest: command.digest(),
+        transcript_summary_digest: transcript.digest(),
+        nonpromotion_report_digest: nonpromotion.digest(),
+        validation_report_digest: validation.digest(),
+        nonclaims_digest: hash_bytes(
+            files
+                .get("gateway-formal-backend-tiny-hermetic-adapter/nonclaims.md")
+                .map(Vec::as_slice)
+                .unwrap_or_default(),
+        ),
+        source_correspondence_certificate_digest: request.source_correspondence_certificate_digest,
+        descriptor_report_manifest_digest: request.descriptor_report_manifest_digest,
+        process_spawn_interface_digest: request.process_spawn_interface_digest,
+        expected_transcript_schema_digest: request.expected_transcript_schema_digest,
+        adapter_id: request.adapter_id.clone(),
+        backend_id: request.backend_id.clone(),
+        property_id: request.property_id.clone(),
+        declared_files: gateway_formal_backend_tiny_hermetic_adapter_output_declared_files(),
+        declared_file_digests,
+        claim_boundary: gateway_formal_backend_tiny_hermetic_adapter_claim_boundary(),
+        process_spawned: false,
+        backend_executed: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+        raw_logs_retained: false,
+        raw_provider_response_retained: false,
+        nonclaims: request.required_nonclaims.clone(),
+    }
+}
+
+fn validate_gateway_formal_backend_tiny_hermetic_adapter_bundle_semantics(
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<
+    GatewayFormalBackendTinyHermeticAdapterOutputManifest,
+    GatewayFormalBackendTinyHermeticAdapterOutputError,
+> {
+    let manifest: GatewayFormalBackendTinyHermeticAdapterOutputManifest =
+        parse_gateway_formal_backend_tiny_hermetic_adapter_declared_json(
+            files,
+            "gateway-formal-backend-tiny-hermetic-adapter/manifest.json",
+        )?;
+    let request: GatewayFormalBackendTinyHermeticAdapterRequest =
+        parse_gateway_formal_backend_tiny_hermetic_adapter_declared_json(
+            files,
+            "gateway-formal-backend-tiny-hermetic-adapter/adapter-request.json",
+        )?;
+    let fixture: GatewayFormalBackendTinyHermeticAdapterFixtureInput =
+        parse_gateway_formal_backend_tiny_hermetic_adapter_declared_json(
+            files,
+            "gateway-formal-backend-tiny-hermetic-adapter/fixture-input.json",
+        )?;
+    let command: GatewayFormalBackendTinyHermeticAdapterCommandDescriptor =
+        parse_gateway_formal_backend_tiny_hermetic_adapter_declared_json(
+            files,
+            "gateway-formal-backend-tiny-hermetic-adapter/command-descriptor.json",
+        )?;
+    let transcript: GatewayFormalBackendTinyHermeticAdapterTranscriptSummary =
+        parse_gateway_formal_backend_tiny_hermetic_adapter_declared_json(
+            files,
+            "gateway-formal-backend-tiny-hermetic-adapter/transcript-summary.json",
+        )?;
+    let nonpromotion: GatewayFormalBackendTinyHermeticAdapterNonpromotionReport =
+        parse_gateway_formal_backend_tiny_hermetic_adapter_declared_json(
+            files,
+            "gateway-formal-backend-tiny-hermetic-adapter/nonpromotion-report.json",
+        )?;
+    let validation_report: GatewayFormalBackendTinyHermeticAdapterValidationReport =
+        parse_gateway_formal_backend_tiny_hermetic_adapter_declared_json(
+            files,
+            "gateway-formal-backend-tiny-hermetic-adapter/validation-report.json",
+        )?;
+    let validation = validate_gateway_formal_backend_tiny_hermetic_adapter(
+        &request,
+        &fixture,
+        &command,
+        &transcript,
+        &nonpromotion,
+    );
+    if !validation.valid {
+        return Err(
+            GatewayFormalBackendTinyHermeticAdapterOutputError::InvalidAdapter(validation.issues),
+        );
+    }
+    validate_gateway_formal_backend_tiny_hermetic_adapter_manifest_semantics(
+        &manifest,
+        &request,
+        &fixture,
+        &command,
+        &transcript,
+        &nonpromotion,
+        &validation_report,
+        files,
+    )?;
+    let nonclaims = declared_gateway_formal_backend_tiny_hermetic_adapter_bytes(
+        files,
+        "gateway-formal-backend-tiny-hermetic-adapter/nonclaims.md",
+    )?;
+    if nonclaims
+        != gateway_formal_backend_tiny_hermetic_adapter_nonclaims_markdown(
+            &request.required_nonclaims,
+        )
+        .as_bytes()
+    {
+        return Err(GatewayFormalBackendTinyHermeticAdapterOutputError::NonclaimMismatch);
+    }
+    let expected_validation_report = GatewayFormalBackendTinyHermeticAdapterValidationReport {
+        schema_version: GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_OUTPUT_SCHEMA_VERSION
+            .to_owned(),
+        bundle_id: manifest.bundle_id.clone(),
+        valid: true,
+        checked_files: gateway_formal_backend_tiny_hermetic_adapter_output_declared_files(),
+        request_digest: request.digest(),
+        fixture_input_digest: fixture.digest(),
+        command_descriptor_digest: command.digest(),
+        transcript_summary_digest: transcript.digest(),
+        nonpromotion_report_digest: nonpromotion.digest(),
+        issue_count: 0,
+        claim_boundary: gateway_formal_backend_tiny_hermetic_adapter_claim_boundary(),
+        process_spawned: false,
+        backend_executed: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        grants_authority: false,
+    };
+    if validation_report != expected_validation_report {
+        return Err(GatewayFormalBackendTinyHermeticAdapterOutputError::ValidationReportMismatch);
+    }
+    Ok(manifest)
+}
+
+#[allow(clippy::too_many_arguments)]
+fn validate_gateway_formal_backend_tiny_hermetic_adapter_manifest_semantics(
+    manifest: &GatewayFormalBackendTinyHermeticAdapterOutputManifest,
+    request: &GatewayFormalBackendTinyHermeticAdapterRequest,
+    fixture: &GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+    command: &GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+    transcript: &GatewayFormalBackendTinyHermeticAdapterTranscriptSummary,
+    nonpromotion: &GatewayFormalBackendTinyHermeticAdapterNonpromotionReport,
+    validation_report: &GatewayFormalBackendTinyHermeticAdapterValidationReport,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<(), GatewayFormalBackendTinyHermeticAdapterOutputError> {
+    let expected_digest_paths: BTreeSet<String> =
+        GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_DECLARED_FILES
+            .iter()
+            .filter(|path| **path != "gateway-formal-backend-tiny-hermetic-adapter/manifest.json")
+            .map(|path| (*path).to_owned())
+            .collect();
+    let actual_digest_paths: BTreeSet<String> =
+        manifest.declared_file_digests.keys().cloned().collect();
+
+    if manifest.schema_version != GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_OUTPUT_SCHEMA_VERSION
+        || manifest.state_slice != GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_STATE_SLICE
+        || manifest.request_digest != request.digest()
+        || manifest.fixture_input_digest != fixture.digest()
+        || manifest.command_descriptor_digest != command.digest()
+        || manifest.transcript_summary_digest != transcript.digest()
+        || manifest.nonpromotion_report_digest != nonpromotion.digest()
+        || manifest.validation_report_digest != validation_report.digest()
+        || manifest.nonclaims_digest
+            != hash_bytes(declared_gateway_formal_backend_tiny_hermetic_adapter_bytes(
+                files,
+                "gateway-formal-backend-tiny-hermetic-adapter/nonclaims.md",
+            )?)
+        || manifest.source_correspondence_certificate_digest
+            != request.source_correspondence_certificate_digest
+        || manifest.descriptor_report_manifest_digest != request.descriptor_report_manifest_digest
+        || manifest.process_spawn_interface_digest != request.process_spawn_interface_digest
+        || manifest.expected_transcript_schema_digest != request.expected_transcript_schema_digest
+        || manifest.adapter_id != request.adapter_id
+        || manifest.backend_id != request.backend_id
+        || manifest.property_id != request.property_id
+        || manifest.declared_files
+            != gateway_formal_backend_tiny_hermetic_adapter_output_declared_files()
+        || actual_digest_paths != expected_digest_paths
+        || manifest.claim_boundary != gateway_formal_backend_tiny_hermetic_adapter_claim_boundary()
+        || manifest.process_spawned
+        || manifest.backend_executed
+        || manifest.proof_artifact_created
+        || manifest.checker_transcript_created
+        || manifest.solver_certificate_created
+        || manifest.creates_accepted_evidence
+        || manifest.creates_level2_evidence
+        || manifest.populates_score_axes
+        || manifest.semantic_correctness_claimed
+        || manifest.production_readiness_claimed
+        || manifest.sota_claimed
+        || manifest.breakthrough_claimed
+        || manifest.full_security_claimed
+        || manifest.grants_authority
+        || manifest.raw_logs_retained
+        || manifest.raw_provider_response_retained
+        || manifest.nonclaims != request.required_nonclaims
+    {
+        return Err(GatewayFormalBackendTinyHermeticAdapterOutputError::ManifestSemanticMismatch);
+    }
+    for (logical_path, expected_digest) in &manifest.declared_file_digests {
+        if hash_bytes(declared_gateway_formal_backend_tiny_hermetic_adapter_bytes(
+            files,
+            logical_path,
+        )?) != *expected_digest
+        {
+            return Err(
+                GatewayFormalBackendTinyHermeticAdapterOutputError::ManifestSemanticMismatch,
+            );
+        }
+    }
+    Ok(())
+}
+
+fn declared_gateway_formal_backend_tiny_hermetic_adapter_bytes<'a>(
+    files: &'a BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<&'a [u8], GatewayFormalBackendTinyHermeticAdapterOutputError> {
+    files.get(logical_path).map(Vec::as_slice).ok_or_else(|| {
+        GatewayFormalBackendTinyHermeticAdapterOutputError::Io(format!(
+            "declared file missing: {logical_path}"
+        ))
+    })
+}
+
+fn parse_gateway_formal_backend_tiny_hermetic_adapter_declared_json<
+    T: for<'de> Deserialize<'de> + Serialize,
+>(
+    files: &BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<T, GatewayFormalBackendTinyHermeticAdapterOutputError> {
+    let bytes = declared_gateway_formal_backend_tiny_hermetic_adapter_bytes(files, logical_path)?;
+    let original = parse_json_value_rejecting_duplicate_keys(bytes).map_err(|_| {
+        GatewayFormalBackendTinyHermeticAdapterOutputError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })?;
+    let parsed: T = serde_json::from_value(original.clone()).map_err(|_| {
+        GatewayFormalBackendTinyHermeticAdapterOutputError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })?;
+    let canonical = serde_json::to_value(&parsed)
+        .map_err(gateway_formal_backend_tiny_hermetic_adapter_serde_error)?;
+    if canonical != original {
+        return Err(
+            GatewayFormalBackendTinyHermeticAdapterOutputError::MalformedDeclaredFile(
+                logical_path.to_owned(),
+            ),
+        );
+    }
+    Ok(parsed)
+}
+
+fn gateway_formal_backend_tiny_hermetic_adapter_nonclaims_markdown(
+    nonclaims: &BTreeSet<NonClaimLabel>,
+) -> String {
+    let mut out = String::from("# Gateway Tiny Hermetic Formal Backend Adapter Non-Claims\n\n");
+    for nonclaim in nonclaims {
+        out.push_str("- ");
+        out.push_str(&nonclaim.0);
+        out.push('\n');
+    }
+    out
+}
+
+fn reject_undeclared_gateway_formal_backend_tiny_hermetic_adapter_files(
+    output_root: &Path,
+) -> Result<(), GatewayFormalBackendTinyHermeticAdapterOutputError> {
+    let mut declared: BTreeSet<String> =
+        GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_DECLARED_FILES
+            .iter()
+            .chain(GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_DECLARED_SIDECARS.iter())
+            .map(|value| (*value).to_owned())
+            .collect();
+    let bundle_dir = output_root.join("gateway-formal-backend-tiny-hermetic-adapter");
+    for entry in
+        fs::read_dir(&bundle_dir).map_err(gateway_formal_backend_tiny_hermetic_adapter_io_error)?
+    {
+        let entry = entry.map_err(gateway_formal_backend_tiny_hermetic_adapter_io_error)?;
+        let logical_path = entry
+            .path()
+            .strip_prefix(output_root)
+            .map_err(|error| {
+                GatewayFormalBackendTinyHermeticAdapterOutputError::Io(error.to_string())
+            })?
+            .to_string_lossy()
+            .replace('\\', "/");
+        if !declared.remove(&logical_path) {
+            return Err(
+                GatewayFormalBackendTinyHermeticAdapterOutputError::UndeclaredFile(logical_path),
+            );
+        }
+    }
+    if let Some(missing) = declared.into_iter().next() {
+        return Err(GatewayFormalBackendTinyHermeticAdapterOutputError::Io(
+            format!("declared file missing: {missing}"),
+        ));
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_backend_tiny_hermetic_adapter_output_root(
+    output_root: &Path,
+    protected_roots: &[PathBuf],
+    overwrite: bool,
+) -> Result<(), GatewayFormalBackendTinyHermeticAdapterOutputError> {
+    match validate_output_root(output_root, protected_roots, overwrite) {
+        Ok(()) => Ok(()),
+        Err(AdmissionJournalMaterializationError::EmptyOutputRoot) => {
+            Err(GatewayFormalBackendTinyHermeticAdapterOutputError::EmptyOutputRoot)
+        }
+        Err(AdmissionJournalMaterializationError::ProtectedOutputRoot) => {
+            Err(GatewayFormalBackendTinyHermeticAdapterOutputError::ProtectedOutputRoot)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootExistsWithoutOverwrite) => Err(
+            GatewayFormalBackendTinyHermeticAdapterOutputError::OutputRootExistsWithoutOverwrite,
+        ),
+        Err(AdmissionJournalMaterializationError::OutputRootIsFile) => {
+            Err(GatewayFormalBackendTinyHermeticAdapterOutputError::OutputRootIsFile)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootIsSymlink) => {
+            Err(GatewayFormalBackendTinyHermeticAdapterOutputError::OutputRootIsSymlink)
+        }
+        Err(AdmissionJournalMaterializationError::Io(error)) => Err(
+            GatewayFormalBackendTinyHermeticAdapterOutputError::Io(error),
+        ),
+        Err(other) => Err(GatewayFormalBackendTinyHermeticAdapterOutputError::Io(
+            format!("{other:?}"),
+        )),
+    }
+}
+
+fn gateway_formal_backend_tiny_hermetic_adapter_staging_root_for(
+    output_root: &Path,
+    bundle_id: &str,
+) -> Result<PathBuf, GatewayFormalBackendTinyHermeticAdapterOutputError> {
+    let parent = output_root
+        .parent()
+        .ok_or(GatewayFormalBackendTinyHermeticAdapterOutputError::EmptyOutputRoot)?;
+    let name = output_root
+        .file_name()
+        .map(|value| value.to_string_lossy().into_owned())
+        .ok_or(GatewayFormalBackendTinyHermeticAdapterOutputError::EmptyOutputRoot)?;
+    Ok(parent.join(format!(".{name}.{bundle_id}.staging")))
+}
+
+fn remove_gateway_formal_backend_tiny_hermetic_adapter_dir_all_checked(
+    path: &Path,
+) -> Result<(), GatewayFormalBackendTinyHermeticAdapterOutputError> {
+    if !path.exists() {
+        return Ok(());
+    }
+    if fs::symlink_metadata(path)
+        .map_err(gateway_formal_backend_tiny_hermetic_adapter_io_error)?
+        .file_type()
+        .is_symlink()
+    {
+        return Err(GatewayFormalBackendTinyHermeticAdapterOutputError::OutputRootIsSymlink);
+    }
+    fs::remove_dir_all(path).map_err(gateway_formal_backend_tiny_hermetic_adapter_io_error)
+}
+
+fn gateway_formal_backend_tiny_hermetic_adapter_io_error(
+    error: io::Error,
+) -> GatewayFormalBackendTinyHermeticAdapterOutputError {
+    GatewayFormalBackendTinyHermeticAdapterOutputError::Io(error.to_string())
+}
+
+fn gateway_formal_backend_tiny_hermetic_adapter_serde_error(
+    error: serde_json::Error,
+) -> GatewayFormalBackendTinyHermeticAdapterOutputError {
+    GatewayFormalBackendTinyHermeticAdapterOutputError::Serialization(error.to_string())
+}
+
+fn is_single_segment_id(value: &str) -> bool {
+    !value.trim().is_empty()
+        && value.trim() == value
+        && is_safe_relative_path(value)
+        && !value.contains(['/', '\\'])
+}
+
 fn gateway_formal_backend_hermetic_process_spawn_result_quarantine_manifest_matches(
     descriptor: &GatewayFormalBackendHermeticExecutionDescriptor,
     descriptor_report_manifest: &GatewayFormalBackendHermeticDescriptorReportOutputManifest,
@@ -21391,6 +22732,28 @@ const GATEWAY_FORMAL_BACKEND_HERMETIC_EXECUTION_RESULT_QUARANTINE_DECLARED_SIDEC
     "gateway-formal-backend-hermetic-execution-result-quarantine/nonclaims.md.sha256",
 ];
 
+const GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_DECLARED_FILES: &[&str] = &[
+    "gateway-formal-backend-tiny-hermetic-adapter/manifest.json",
+    "gateway-formal-backend-tiny-hermetic-adapter/adapter-request.json",
+    "gateway-formal-backend-tiny-hermetic-adapter/fixture-input.json",
+    "gateway-formal-backend-tiny-hermetic-adapter/command-descriptor.json",
+    "gateway-formal-backend-tiny-hermetic-adapter/transcript-summary.json",
+    "gateway-formal-backend-tiny-hermetic-adapter/nonpromotion-report.json",
+    "gateway-formal-backend-tiny-hermetic-adapter/nonclaims.md",
+    "gateway-formal-backend-tiny-hermetic-adapter/validation-report.json",
+];
+
+const GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_DECLARED_SIDECARS: &[&str] = &[
+    "gateway-formal-backend-tiny-hermetic-adapter/manifest.json.sha256",
+    "gateway-formal-backend-tiny-hermetic-adapter/adapter-request.json.sha256",
+    "gateway-formal-backend-tiny-hermetic-adapter/fixture-input.json.sha256",
+    "gateway-formal-backend-tiny-hermetic-adapter/command-descriptor.json.sha256",
+    "gateway-formal-backend-tiny-hermetic-adapter/transcript-summary.json.sha256",
+    "gateway-formal-backend-tiny-hermetic-adapter/nonpromotion-report.json.sha256",
+    "gateway-formal-backend-tiny-hermetic-adapter/nonclaims.md.sha256",
+    "gateway-formal-backend-tiny-hermetic-adapter/validation-report.json.sha256",
+];
+
 const ADMISSION_JOURNAL_DECLARED_FILES: &[&str] = &[
     "admission-journal/manifest.json",
     "admission-journal/journal.json",
@@ -23152,6 +24515,349 @@ mod tests {
             "gateway-report/manifest.json",
             &serde_json::to_vec_pretty(&manifest).expect("gateway manifest serializes"),
         );
+    }
+
+    fn tiny_adapter_fixture_input() -> GatewayFormalBackendTinyHermeticAdapterFixtureInput {
+        GatewayFormalBackendTinyHermeticAdapterFixtureInput {
+            schema_version: GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_SCHEMA_VERSION.to_owned(),
+            fixture_id: "tiny-fixture-1".to_owned(),
+            property_id: "attestation_challenge_binding_deterministic_input_sensitive".to_owned(),
+            baseline_proposal_digest: Hash([31; 32]),
+            changed_proposal_digest: Hash([32; 32]),
+            baseline_nonce: 101,
+            changed_nonce: 102,
+            anchor_id: "agent-anchor-1".to_owned(),
+            public_agent_key_label: "fixtures/agent-key-spki.der".to_owned(),
+            public_agent_key_digest: Hash([33; 32]),
+            expected_identical_inputs_equal: true,
+            expected_changed_proposal_differs: true,
+            expected_changed_nonce_differs: true,
+            imported_assumptions: BTreeSet::from([
+                "report_data_binding imported from hsai_attestation and not proved here".to_owned(),
+            ]),
+            non_secret: true,
+            contains_live_attestation_token: false,
+            contains_credentials: false,
+            contains_provider_response: false,
+            contains_raw_quote: false,
+            contains_raw_solver_log: false,
+        }
+    }
+
+    fn tiny_adapter_command_descriptor() -> GatewayFormalBackendTinyHermeticAdapterCommandDescriptor
+    {
+        let argv_template = vec![
+            "tiny-smt-checker".to_owned(),
+            "--fixture".to_owned(),
+            "fixture-input.json".to_owned(),
+        ];
+        GatewayFormalBackendTinyHermeticAdapterCommandDescriptor {
+            schema_version: GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_SCHEMA_VERSION.to_owned(),
+            adapter_id: "tiny_hermetic_formal_backend_adapter".to_owned(),
+            backend_id: "local_smt_tiny_gateway_invariant".to_owned(),
+            property_id: "attestation_challenge_binding_deterministic_input_sensitive".to_owned(),
+            executable_path_label: "tools/tiny-smt-checker".to_owned(),
+            argv_template_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-backend-tiny-hermetic-adapter-argv-template:v1",
+                &argv_template,
+            ),
+            argv_template,
+            timeout_millis: 5_000,
+            max_stdout_bytes: 4_096,
+            max_stderr_bytes: 4_096,
+            direct_process: true,
+            no_shell: true,
+            no_stdin: true,
+            cleared_environment: true,
+            no_network: true,
+            caller_executable_path_allowed: false,
+            output_root_authority_allowed: false,
+            fixed_argv_template: true,
+            ignored_output_root_only: true,
+        }
+    }
+
+    fn tiny_adapter_nonpromotion_report(
+    ) -> GatewayFormalBackendTinyHermeticAdapterNonpromotionReport {
+        GatewayFormalBackendTinyHermeticAdapterNonpromotionReport {
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            creates_accepted_evidence: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            grants_authority: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            raw_logs_retained: false,
+            raw_provider_response_retained: false,
+            claim_boundary: gateway_formal_backend_tiny_hermetic_adapter_claim_boundary(),
+        }
+    }
+
+    fn tiny_adapter_request(
+        fixture: &GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+        command: &GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+    ) -> GatewayFormalBackendTinyHermeticAdapterRequest {
+        GatewayFormalBackendTinyHermeticAdapterRequest {
+            schema_version: GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_SCHEMA_VERSION.to_owned(),
+            request_id: "tiny-adapter-request-1".to_owned(),
+            adapter_id: "tiny_hermetic_formal_backend_adapter".to_owned(),
+            backend_id: "local_smt_tiny_gateway_invariant".to_owned(),
+            property_id: "attestation_challenge_binding_deterministic_input_sensitive".to_owned(),
+            source_correspondence_certificate_digest: Hash([34; 32]),
+            descriptor_report_manifest_digest: Hash([35; 32]),
+            process_spawn_interface_digest: Hash([36; 32]),
+            fixture_input_digest: fixture.digest(),
+            command_descriptor_digest: command.digest(),
+            expected_transcript_schema_digest: Hash([37; 32]),
+            operator_acknowledged: true,
+            required_nonclaims: gateway_formal_backend_tiny_hermetic_adapter_required_nonclaims(),
+        }
+    }
+
+    fn tiny_adapter_transcript_summary(
+        request: &GatewayFormalBackendTinyHermeticAdapterRequest,
+        fixture: &GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+        command: &GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+        nonpromotion: &GatewayFormalBackendTinyHermeticAdapterNonpromotionReport,
+    ) -> GatewayFormalBackendTinyHermeticAdapterTranscriptSummary {
+        GatewayFormalBackendTinyHermeticAdapterTranscriptSummary {
+            schema_version: GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_SCHEMA_VERSION.to_owned(),
+            backend_id: request.backend_id.clone(),
+            property_id: request.property_id.clone(),
+            command_descriptor_digest: command.digest(),
+            fixture_input_digest: fixture.digest(),
+            source_correspondence_certificate_digest: request
+                .source_correspondence_certificate_digest,
+            process_exit_code_label: "not_run".to_owned(),
+            timeout: false,
+            solver_status: GatewayFormalBackendHermeticExecutionSolverStatus::NotRun,
+            invariant_verdict: GatewayFormalBackendHermeticExecutionInvariantVerdict::NotEvaluated,
+            stdout_summary_digest: Hash([38; 32]),
+            stderr_summary_digest: Hash([39; 32]),
+            redaction_report_digest: Hash([40; 32]),
+            imported_assumptions: fixture.imported_assumptions.clone(),
+            nonpromotion_report_digest: nonpromotion.digest(),
+            nonclaims: request.required_nonclaims.clone(),
+            process_spawned: false,
+            backend_executed: false,
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            accepted_evidence_created: false,
+            level2_evidence_created: false,
+            score_axes_populated: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            authority_granted: false,
+            raw_logs_retained: false,
+            raw_provider_response_retained: false,
+            claim_boundary: gateway_formal_backend_tiny_hermetic_adapter_claim_boundary(),
+        }
+    }
+
+    fn tiny_adapter_output_request(
+        bundle_id: &str,
+        output_root: &Path,
+    ) -> GatewayFormalBackendTinyHermeticAdapterOutputRequest {
+        GatewayFormalBackendTinyHermeticAdapterOutputRequest {
+            bundle_id: bundle_id.to_owned(),
+            created_at_unix: 1_800_000_317,
+            overwrite: false,
+            protected_roots: vec![output_root
+                .parent()
+                .expect("temp output root has a parent")
+                .join("protected-repo")],
+        }
+    }
+
+    fn tiny_adapter_valid_parts() -> (
+        GatewayFormalBackendTinyHermeticAdapterRequest,
+        GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+        GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+        GatewayFormalBackendTinyHermeticAdapterTranscriptSummary,
+        GatewayFormalBackendTinyHermeticAdapterNonpromotionReport,
+    ) {
+        let fixture = tiny_adapter_fixture_input();
+        let command = tiny_adapter_command_descriptor();
+        let request = tiny_adapter_request(&fixture, &command);
+        let nonpromotion = tiny_adapter_nonpromotion_report();
+        let transcript =
+            tiny_adapter_transcript_summary(&request, &fixture, &command, &nonpromotion);
+        (request, fixture, command, transcript, nonpromotion)
+    }
+
+    #[test]
+    fn gateway_formal_backend_tiny_hermetic_adapter_bundle_materializes_and_reads_back() {
+        let output_root = temp_output_root("tiny-hermetic-adapter-bundle");
+        let (request, fixture, command, transcript, nonpromotion) = tiny_adapter_valid_parts();
+        let output_request = tiny_adapter_output_request("tiny-adapter-bundle-1", &output_root);
+
+        let manifest = materialize_gateway_formal_backend_tiny_hermetic_adapter_output_bundle(
+            &output_root,
+            &request,
+            &fixture,
+            &command,
+            &transcript,
+            &nonpromotion,
+            &output_request,
+        )
+        .expect("tiny hermetic adapter bundle materializes");
+        assert_eq!(
+            manifest.declared_files,
+            gateway_formal_backend_tiny_hermetic_adapter_output_declared_files()
+        );
+        assert!(!manifest.process_spawned);
+        assert!(!manifest.backend_executed);
+        assert!(!manifest.creates_accepted_evidence);
+        assert!(!manifest.creates_level2_evidence);
+        assert!(!manifest.populates_score_axes);
+        assert!(!manifest.semantic_correctness_claimed);
+        assert!(!manifest.production_readiness_claimed);
+        assert!(!manifest.sota_claimed);
+        assert!(!manifest.full_security_claimed);
+        assert_eq!(
+            read_gateway_formal_backend_tiny_hermetic_adapter_output_bundle(&output_root),
+            Ok(manifest)
+        );
+        fs::remove_dir_all(&output_root).expect("tiny adapter bundle cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_backend_tiny_hermetic_adapter_rejects_escalation_before_write() {
+        let output_root = temp_output_root("tiny-hermetic-adapter-escalation");
+        let (request, fixture, mut command, transcript, nonpromotion) = tiny_adapter_valid_parts();
+        command.no_shell = false;
+        let output_request = tiny_adapter_output_request("tiny-adapter-escalation", &output_root);
+
+        match materialize_gateway_formal_backend_tiny_hermetic_adapter_output_bundle(
+            &output_root,
+            &request,
+            &fixture,
+            &command,
+            &transcript,
+            &nonpromotion,
+            &output_request,
+        ) {
+            Err(GatewayFormalBackendTinyHermeticAdapterOutputError::InvalidAdapter(issues)) => {
+                assert!(issues.contains(
+                    &GatewayFormalBackendTinyHermeticAdapterIssue::CommandPolicyMismatch
+                ));
+                assert!(issues.contains(
+                    &GatewayFormalBackendTinyHermeticAdapterIssue::CommandDigestMismatch
+                ));
+            }
+            other => panic!("unexpected tiny adapter escalation result: {other:?}"),
+        }
+        assert!(!output_root.exists());
+    }
+
+    #[test]
+    fn gateway_formal_backend_tiny_hermetic_adapter_readback_rejects_stale_digest() {
+        let output_root = temp_output_root("tiny-hermetic-adapter-stale-digest");
+        let (request, fixture, command, transcript, nonpromotion) = tiny_adapter_valid_parts();
+        let output_request = tiny_adapter_output_request("tiny-adapter-stale-digest", &output_root);
+        materialize_gateway_formal_backend_tiny_hermetic_adapter_output_bundle(
+            &output_root,
+            &request,
+            &fixture,
+            &command,
+            &transcript,
+            &nonpromotion,
+            &output_request,
+        )
+        .expect("tiny hermetic adapter bundle materializes");
+
+        fs::write(
+            output_root
+                .join("gateway-formal-backend-tiny-hermetic-adapter/transcript-summary.json"),
+            b"{}",
+        )
+        .expect("transcript tamper writes");
+        assert_eq!(
+            read_gateway_formal_backend_tiny_hermetic_adapter_output_bundle(&output_root),
+            Err(
+                GatewayFormalBackendTinyHermeticAdapterOutputError::DigestMismatch(
+                    "gateway-formal-backend-tiny-hermetic-adapter/transcript-summary.json"
+                        .to_owned()
+                )
+            )
+        );
+        fs::remove_dir_all(&output_root).expect("tiny adapter bundle cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_backend_tiny_hermetic_adapter_readback_rejects_manifest_drift() {
+        let output_root = temp_output_root("tiny-hermetic-adapter-manifest-drift");
+        let (request, fixture, command, transcript, nonpromotion) = tiny_adapter_valid_parts();
+        let output_request =
+            tiny_adapter_output_request("tiny-adapter-manifest-drift", &output_root);
+        materialize_gateway_formal_backend_tiny_hermetic_adapter_output_bundle(
+            &output_root,
+            &request,
+            &fixture,
+            &command,
+            &transcript,
+            &nonpromotion,
+            &output_request,
+        )
+        .expect("tiny hermetic adapter bundle materializes");
+
+        let manifest_path =
+            output_root.join("gateway-formal-backend-tiny-hermetic-adapter/manifest.json");
+        let mut manifest: GatewayFormalBackendTinyHermeticAdapterOutputManifest =
+            serde_json::from_slice(&fs::read(&manifest_path).expect("manifest reads"))
+                .expect("manifest parses");
+        manifest.creates_level2_evidence = true;
+        rewrite_bundle_file(
+            &output_root,
+            "gateway-formal-backend-tiny-hermetic-adapter/manifest.json",
+            &serde_json::to_vec_pretty(&manifest).expect("manifest serializes"),
+        );
+        assert_eq!(
+            read_gateway_formal_backend_tiny_hermetic_adapter_output_bundle(&output_root),
+            Err(GatewayFormalBackendTinyHermeticAdapterOutputError::ManifestSemanticMismatch)
+        );
+        fs::remove_dir_all(&output_root).expect("tiny adapter bundle cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_backend_tiny_hermetic_adapter_rejects_undeclared_proof_artifact() {
+        let output_root = temp_output_root("tiny-hermetic-adapter-undeclared-proof");
+        let (request, fixture, command, transcript, nonpromotion) = tiny_adapter_valid_parts();
+        let output_request =
+            tiny_adapter_output_request("tiny-adapter-undeclared-proof", &output_root);
+        materialize_gateway_formal_backend_tiny_hermetic_adapter_output_bundle(
+            &output_root,
+            &request,
+            &fixture,
+            &command,
+            &transcript,
+            &nonpromotion,
+            &output_request,
+        )
+        .expect("tiny hermetic adapter bundle materializes");
+        fs::write(
+            output_root.join("gateway-formal-backend-tiny-hermetic-adapter/proof-artifact.json"),
+            b"{}",
+        )
+        .expect("undeclared proof artifact writes");
+        assert_eq!(
+            read_gateway_formal_backend_tiny_hermetic_adapter_output_bundle(&output_root),
+            Err(
+                GatewayFormalBackendTinyHermeticAdapterOutputError::UndeclaredFile(
+                    "gateway-formal-backend-tiny-hermetic-adapter/proof-artifact.json".to_owned()
+                )
+            )
+        );
+        fs::remove_dir_all(&output_root).expect("tiny adapter bundle cleanup succeeds");
     }
 
     fn rewrite_content_and_manifest_digest(output_root: &Path, logical_path: &str, bytes: &[u8]) {

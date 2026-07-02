@@ -402,6 +402,7 @@ Surface DSL
 | [docs/314-hsai-gateway-formal-backend-hermetic-fixture-runner-hardening-coverage-notes.md](docs/314-hsai-gateway-formal-backend-hermetic-fixture-runner-hardening-coverage-notes.md) | Phase 314 HSAI Gateway formal backend hermetic fixture-runner hardening coverage notes. |
 | [docs/315-hsai-mesh-repo-patch-admission-backend-compatibility-notes.md](docs/315-hsai-mesh-repo-patch-admission-backend-compatibility-notes.md) | Phase 315 HSAI Mesh repo-patch admission backend compatibility notes. |
 | [docs/316-hsai-tiny-hermetic-formal-backend-adapter-contract-boundary.md](docs/316-hsai-tiny-hermetic-formal-backend-adapter-contract-boundary.md) | Phase 316 HSAI tiny hermetic formal-backend adapter contract boundary. |
+| [docs/317-hsai-tiny-hermetic-formal-backend-adapter-data-model-notes.md](docs/317-hsai-tiny-hermetic-formal-backend-adapter-data-model-notes.md) | Phase 317 HSAI tiny hermetic formal-backend adapter data model notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
