@@ -1579,6 +1579,22 @@ score-axis population, benchmark evidence, semantic-correctness claim,
 production-readiness claim, SOTA claim, breakthrough claim, full-security
 claim, or authority grant.
 
+Phase 319 implements the tiny hermetic formal-backend local fixture execution
+readback contract in `hsai-agent-admission`. It revalidates the Phase 317
+source adapter manifest before spawn, runs one fixed local direct-process
+fixture command with no shell, cleared environment, and no stdin, materializes
+declared `gateway-formal-backend-tiny-hermetic-execution/*` files with
+SHA-256 sidecars, records bounded stdout/stderr summaries, redaction and
+nonpromotion reports, execution transcript metadata, validation report, and
+nonclaim Markdown, and rejects stale sidecars, manifest escalation drift, and
+undeclared proof artifacts on readback. Phase 319 is local fixture execution
+regression evidence only. It does not execute Lean/SMT/Z3/COBALT/Aeneas/Hax/
+rust-lean/Coq/TLA+/CBMC/model checker as proof authority, create proof
+artifacts, checker transcripts, or solver certificates, mutate the accepted
+Evidence Ledger, create Level2+ evidence, populate score axes, create
+benchmark evidence, claim semantic correctness, claim production readiness,
+claim SOTA, claim breakthrough status, claim full security, or grant authority.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission

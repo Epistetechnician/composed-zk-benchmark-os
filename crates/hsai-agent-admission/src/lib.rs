@@ -597,6 +597,13 @@ pub const GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_OUTPUT_SCHEMA_VERSION: &s
 pub const GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_STATE_SLICE: &str =
     "phase-317-hsai-tiny-hermetic-formal-backend-adapter-data-model";
 pub const GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_CLAIM_BOUNDARY: &str = "local gateway tiny hermetic formal-backend adapter metadata and quarantine output only; binds one source-correspondence certificate, one descriptor-report manifest, one process-spawn interface digest, one fixed input fixture, one fixed command descriptor, and one not-run transcript summary, but does not spawn a process, execute Lean, SMT, COBALT, Rust-to-Lean, Aeneas, Hax, Z3, CBMC, Coq, TLA+, or any model checker, create proof artifacts, promote proof artifacts, promote checker transcripts, promote solver certificates, create accepted evidence, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-backend-tiny-hermetic-execution:v1";
+pub const GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_OUTPUT_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-backend-tiny-hermetic-execution-output-bundle:v1";
+pub const GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_STATE_SLICE: &str =
+    "phase-319-hsai-tiny-hermetic-formal-backend-local-fixture-execution-readback";
+pub const GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_CLAIM_BOUNDARY: &str = "local gateway tiny hermetic formal-backend fixture execution output only; spawns one fixed local fixture process through the Phase 317 command descriptor and materializes bounded redacted quarantine metadata, but does not execute Lean, SMT, COBALT, Rust-to-Lean, Aeneas, Hax, Z3, CBMC, Coq, TLA+, or any model checker as proof authority, create proof artifacts, promote proof artifacts, promote checker transcripts, promote solver certificates, create accepted evidence, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GatewayAttestationChallengeBinding {
@@ -4018,6 +4025,213 @@ pub enum GatewayFormalBackendTinyHermeticAdapterOutputError {
     ManifestSemanticMismatch,
     ValidationReportMismatch,
     NonclaimMismatch,
+    Io(String),
+    Serialization(String),
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct GatewayFormalBackendTinyHermeticExecutionOutputRequest {
+    pub run_id: String,
+    pub created_at_unix: u64,
+    pub operator_acknowledged: bool,
+    pub overwrite: bool,
+    pub protected_roots: Vec<PathBuf>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalBackendTinyHermeticExecutionTranscript {
+    pub schema_version: String,
+    pub run_id: String,
+    pub adapter_id: String,
+    pub backend_id: String,
+    pub property_id: String,
+    pub source_adapter_manifest_digest: Hash,
+    pub adapter_request_digest: Hash,
+    pub source_correspondence_certificate_digest: Hash,
+    pub descriptor_report_manifest_digest: Hash,
+    pub process_spawn_interface_digest: Hash,
+    pub command_descriptor_digest: Hash,
+    pub fixture_input_digest: Hash,
+    pub expected_transcript_schema_digest: Hash,
+    pub process_exit_code_label: String,
+    pub timeout: bool,
+    pub solver_status: GatewayFormalBackendHermeticExecutionSolverStatus,
+    pub invariant_verdict: GatewayFormalBackendHermeticExecutionInvariantVerdict,
+    pub stdout_summary_digest: Hash,
+    pub stderr_summary_digest: Hash,
+    pub redaction_report_digest: Hash,
+    pub nonpromotion_report_digest: Hash,
+    pub imported_assumptions: BTreeSet<String>,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+    pub process_spawned: bool,
+    pub backend_executed: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+    pub raw_logs_retained: bool,
+    pub raw_provider_response_retained: bool,
+    pub claim_boundary: String,
+}
+
+impl GatewayFormalBackendTinyHermeticExecutionTranscript {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-backend-tiny-hermetic-execution-transcript:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalBackendTinyHermeticExecutionNonpromotionReport {
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub grants_authority: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub raw_logs_retained: bool,
+    pub raw_provider_response_retained: bool,
+    pub claim_boundary: String,
+}
+
+impl GatewayFormalBackendTinyHermeticExecutionNonpromotionReport {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-backend-tiny-hermetic-execution-nonpromotion-report:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalBackendTinyHermeticExecutionValidationReport {
+    pub schema_version: String,
+    pub run_id: String,
+    pub valid: bool,
+    pub checked_files: Vec<String>,
+    pub source_adapter_manifest_digest: Hash,
+    pub adapter_request_digest: Hash,
+    pub fixture_input_digest: Hash,
+    pub command_descriptor_digest: Hash,
+    pub transcript_digest: Hash,
+    pub stdout_summary_digest: Hash,
+    pub stderr_summary_digest: Hash,
+    pub redaction_report_digest: Hash,
+    pub nonpromotion_report_digest: Hash,
+    pub claim_boundary: String,
+    pub process_spawned: bool,
+    pub backend_executed: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalBackendTinyHermeticExecutionValidationReport {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-backend-tiny-hermetic-execution-validation-report:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalBackendTinyHermeticExecutionOutputManifest {
+    pub schema_version: String,
+    pub run_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub source_adapter_manifest_digest: Hash,
+    pub adapter_request_digest: Hash,
+    pub fixture_input_digest: Hash,
+    pub command_descriptor_digest: Hash,
+    pub transcript_digest: Hash,
+    pub stdout_summary_digest: Hash,
+    pub stderr_summary_digest: Hash,
+    pub redaction_report_digest: Hash,
+    pub nonpromotion_report_digest: Hash,
+    pub validation_report_digest: Hash,
+    pub nonclaims_digest: Hash,
+    pub adapter_id: String,
+    pub backend_id: String,
+    pub property_id: String,
+    pub process_exit_code_label: String,
+    pub timeout: bool,
+    pub solver_status: GatewayFormalBackendHermeticExecutionSolverStatus,
+    pub invariant_verdict: GatewayFormalBackendHermeticExecutionInvariantVerdict,
+    pub declared_files: Vec<String>,
+    pub declared_file_digests: BTreeMap<String, Hash>,
+    pub claim_boundary: String,
+    pub process_spawned: bool,
+    pub backend_executed: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+    pub raw_logs_retained: bool,
+    pub raw_provider_response_retained: bool,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl GatewayFormalBackendTinyHermeticExecutionOutputManifest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-backend-tiny-hermetic-execution-output-manifest:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayFormalBackendTinyHermeticExecutionOutputError {
+    InvalidAdapter(Vec<GatewayFormalBackendTinyHermeticAdapterIssue>),
+    SourceAdapterManifestMismatch,
+    OperatorAcknowledgementMissing,
+    EmptyRunId,
+    EmptyOutputRoot,
+    ProtectedOutputRoot,
+    OutputRootExistsWithoutOverwrite,
+    OutputRootIsFile,
+    OutputRootIsSymlink,
+    BundleFileIsSymlink(String),
+    DeclaredFileTypeMismatch(String),
+    UndeclaredFile(String),
+    DigestMismatch(String),
+    MalformedDeclaredFile(String),
+    ManifestSemanticMismatch,
+    TranscriptMismatch,
+    StdoutSummaryMismatch,
+    StderrSummaryMismatch,
+    RedactionReportMismatch,
+    NonpromotionReportMismatch,
+    ValidationReportMismatch,
+    NonclaimMismatch,
+    ProcessSpawn(String),
     Io(String),
     Serialization(String),
 }
@@ -16232,6 +16446,1166 @@ fn run_gateway_formal_backend_hermetic_fixture_process(
     }
 }
 
+pub fn gateway_formal_backend_tiny_hermetic_execution_output_declared_files() -> Vec<String> {
+    GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_DECLARED_FILES
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
+pub fn gateway_formal_backend_tiny_hermetic_execution_claim_boundary() -> String {
+    GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_backend_tiny_hermetic_execution_required_nonclaims() -> BTreeSet<NonClaimLabel>
+{
+    let mut nonclaims = gateway_formal_backend_tiny_hermetic_adapter_required_nonclaims();
+    for value in [
+        "local fixture execution only",
+        "not proof authority",
+        "not Lean execution",
+        "not COBALT execution",
+        "not checker transcript",
+        "quarantine output only",
+    ] {
+        nonclaims.insert(NonClaimLabel(value.to_owned()));
+    }
+    nonclaims
+}
+
+pub fn materialize_gateway_formal_backend_tiny_hermetic_execution_output_bundle(
+    output_root: &Path,
+    source_adapter_manifest: &GatewayFormalBackendTinyHermeticAdapterOutputManifest,
+    request: &GatewayFormalBackendTinyHermeticAdapterRequest,
+    fixture: &GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+    command: &GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+    output_request: &GatewayFormalBackendTinyHermeticExecutionOutputRequest,
+) -> Result<
+    GatewayFormalBackendTinyHermeticExecutionOutputManifest,
+    GatewayFormalBackendTinyHermeticExecutionOutputError,
+> {
+    validate_gateway_formal_backend_tiny_hermetic_execution_request(
+        output_root,
+        source_adapter_manifest,
+        request,
+        fixture,
+        command,
+        output_request,
+    )?;
+    let process_result = run_gateway_formal_backend_tiny_hermetic_execution_process(command)
+        .map_err(GatewayFormalBackendTinyHermeticExecutionOutputError::ProcessSpawn)?;
+    let files = build_gateway_formal_backend_tiny_hermetic_execution_bundle_files(
+        source_adapter_manifest,
+        request,
+        fixture,
+        command,
+        output_request,
+        &process_result,
+    )?;
+    let staging_root = gateway_formal_backend_tiny_hermetic_execution_staging_root_for(
+        output_root,
+        &output_request.run_id,
+    )?;
+    if staging_root.exists() {
+        remove_gateway_formal_backend_tiny_hermetic_execution_dir_all_checked(&staging_root)?;
+    }
+    fs::create_dir_all(staging_root.join("gateway-formal-backend-tiny-hermetic-execution"))
+        .map_err(gateway_formal_backend_tiny_hermetic_execution_io_error)?;
+    for (logical_path, bytes) in &files {
+        let target = staging_root.join(logical_path);
+        if let Some(parent) = target.parent() {
+            fs::create_dir_all(parent)
+                .map_err(gateway_formal_backend_tiny_hermetic_execution_io_error)?;
+        }
+        fs::write(&target, bytes)
+            .map_err(gateway_formal_backend_tiny_hermetic_execution_io_error)?;
+        fs::write(
+            sidecar_path(&target),
+            hash_hex(hash_bytes(bytes)).into_bytes(),
+        )
+        .map_err(gateway_formal_backend_tiny_hermetic_execution_io_error)?;
+    }
+    if output_root.exists() {
+        if !output_request.overwrite {
+            remove_gateway_formal_backend_tiny_hermetic_execution_dir_all_checked(&staging_root)?;
+            return Err(
+                GatewayFormalBackendTinyHermeticExecutionOutputError::OutputRootExistsWithoutOverwrite,
+            );
+        }
+        remove_gateway_formal_backend_tiny_hermetic_execution_dir_all_checked(output_root)?;
+    }
+    fs::rename(&staging_root, output_root)
+        .map_err(gateway_formal_backend_tiny_hermetic_execution_io_error)?;
+    read_gateway_formal_backend_tiny_hermetic_execution_output_bundle(output_root)
+}
+
+pub fn read_gateway_formal_backend_tiny_hermetic_execution_output_bundle(
+    output_root: &Path,
+) -> Result<
+    GatewayFormalBackendTinyHermeticExecutionOutputManifest,
+    GatewayFormalBackendTinyHermeticExecutionOutputError,
+> {
+    let output_metadata = fs::symlink_metadata(output_root)
+        .map_err(gateway_formal_backend_tiny_hermetic_execution_io_error)?;
+    if output_metadata.file_type().is_symlink() {
+        return Err(GatewayFormalBackendTinyHermeticExecutionOutputError::OutputRootIsSymlink);
+    }
+    if !output_metadata.is_dir() {
+        return Err(GatewayFormalBackendTinyHermeticExecutionOutputError::OutputRootIsFile);
+    }
+    let bundle_dir = output_root.join("gateway-formal-backend-tiny-hermetic-execution");
+    let bundle_metadata = fs::symlink_metadata(&bundle_dir)
+        .map_err(gateway_formal_backend_tiny_hermetic_execution_io_error)?;
+    if bundle_metadata.file_type().is_symlink() {
+        return Err(
+            GatewayFormalBackendTinyHermeticExecutionOutputError::BundleFileIsSymlink(
+                "gateway-formal-backend-tiny-hermetic-execution".to_owned(),
+            ),
+        );
+    }
+    if !bundle_metadata.is_dir() {
+        return Err(
+            GatewayFormalBackendTinyHermeticExecutionOutputError::DeclaredFileTypeMismatch(
+                "gateway-formal-backend-tiny-hermetic-execution".to_owned(),
+            ),
+        );
+    }
+    reject_undeclared_gateway_formal_backend_tiny_hermetic_execution_files(output_root)?;
+    let mut files = BTreeMap::new();
+    for logical_path in GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_DECLARED_FILES {
+        let path = output_root.join(logical_path);
+        let metadata = fs::symlink_metadata(&path)
+            .map_err(gateway_formal_backend_tiny_hermetic_execution_io_error)?;
+        if metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalBackendTinyHermeticExecutionOutputError::BundleFileIsSymlink(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        if !metadata.is_file() {
+            return Err(
+                GatewayFormalBackendTinyHermeticExecutionOutputError::DeclaredFileTypeMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        let sidecar = sidecar_path(&path);
+        let sidecar_metadata = fs::symlink_metadata(&sidecar)
+            .map_err(gateway_formal_backend_tiny_hermetic_execution_io_error)?;
+        if sidecar_metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalBackendTinyHermeticExecutionOutputError::BundleFileIsSymlink(format!(
+                    "{logical_path}.sha256"
+                )),
+            );
+        }
+        if !sidecar_metadata.is_file() {
+            return Err(
+                GatewayFormalBackendTinyHermeticExecutionOutputError::DeclaredFileTypeMismatch(
+                    format!("{logical_path}.sha256"),
+                ),
+            );
+        }
+        let bytes =
+            fs::read(&path).map_err(gateway_formal_backend_tiny_hermetic_execution_io_error)?;
+        let expected_hash = fs::read_to_string(&sidecar)
+            .map_err(gateway_formal_backend_tiny_hermetic_execution_io_error)?;
+        if expected_hash.trim() != hash_hex(hash_bytes(&bytes)) {
+            return Err(
+                GatewayFormalBackendTinyHermeticExecutionOutputError::DigestMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        files.insert((*logical_path).to_owned(), bytes);
+    }
+    validate_gateway_formal_backend_tiny_hermetic_execution_bundle_semantics(&files)
+}
+
+fn run_gateway_formal_backend_tiny_hermetic_execution_process(
+    command_descriptor: &GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+) -> Result<GatewayFormalBackendHermeticFixtureProcessResult, String> {
+    let executable = std::env::current_exe().map_err(|error| error.to_string())?;
+    let mut command = std::process::Command::new(executable);
+    command
+        .args(&command_descriptor.argv_template)
+        .env_clear()
+        .stdin(Stdio::null())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped());
+    let mut child = command.spawn().map_err(|error| error.to_string())?;
+    let deadline = Instant::now() + Duration::from_millis(command_descriptor.timeout_millis);
+    loop {
+        if child
+            .try_wait()
+            .map_err(|error| error.to_string())?
+            .is_some()
+        {
+            let output = child
+                .wait_with_output()
+                .map_err(|error| error.to_string())?;
+            let process_exit_code_label = output
+                .status
+                .code()
+                .map(|code| format!("exit_{code}"))
+                .unwrap_or_else(|| "signal".to_owned());
+            let signal = output.status.code().is_none();
+            let solver_status = if output.status.success() {
+                GatewayFormalBackendHermeticExecutionSolverStatus::FixtureProcessExited
+            } else {
+                GatewayFormalBackendHermeticExecutionSolverStatus::FixtureProcessFailed
+            };
+            return Ok(GatewayFormalBackendHermeticFixtureProcessResult {
+                process_exit_code_label,
+                timeout: false,
+                signal,
+                stdout: output.stdout,
+                stderr: output.stderr,
+                solver_status,
+            });
+        }
+        if Instant::now() >= deadline {
+            let _ = child.kill();
+            let output = child
+                .wait_with_output()
+                .map_err(|error| error.to_string())?;
+            return Ok(GatewayFormalBackendHermeticFixtureProcessResult {
+                process_exit_code_label: "timeout".to_owned(),
+                timeout: true,
+                signal: false,
+                stdout: output.stdout,
+                stderr: output.stderr,
+                solver_status:
+                    GatewayFormalBackendHermeticExecutionSolverStatus::FixtureProcessTimedOut,
+            });
+        }
+        std::thread::sleep(Duration::from_millis(5));
+    }
+}
+
+fn validate_gateway_formal_backend_tiny_hermetic_execution_request(
+    output_root: &Path,
+    source_adapter_manifest: &GatewayFormalBackendTinyHermeticAdapterOutputManifest,
+    request: &GatewayFormalBackendTinyHermeticAdapterRequest,
+    fixture: &GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+    command: &GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+    output_request: &GatewayFormalBackendTinyHermeticExecutionOutputRequest,
+) -> Result<(), GatewayFormalBackendTinyHermeticExecutionOutputError> {
+    if output_request.run_id.trim().is_empty()
+        || !is_safe_relative_path(&output_request.run_id)
+        || output_request.run_id.contains(['/', '\\'])
+    {
+        return Err(GatewayFormalBackendTinyHermeticExecutionOutputError::EmptyRunId);
+    }
+    if !output_request.operator_acknowledged {
+        return Err(
+            GatewayFormalBackendTinyHermeticExecutionOutputError::OperatorAcknowledgementMissing,
+        );
+    }
+    validate_gateway_formal_backend_tiny_hermetic_execution_source(
+        source_adapter_manifest,
+        request,
+        fixture,
+        command,
+    )?;
+    let mut protected_roots = output_request.protected_roots.clone();
+    if let Ok(current_dir) = std::env::current_dir() {
+        protected_roots.push(current_dir);
+    }
+    validate_gateway_formal_backend_tiny_hermetic_execution_output_root(
+        output_root,
+        &protected_roots,
+        output_request.overwrite,
+    )
+}
+
+fn validate_gateway_formal_backend_tiny_hermetic_execution_source(
+    source_adapter_manifest: &GatewayFormalBackendTinyHermeticAdapterOutputManifest,
+    request: &GatewayFormalBackendTinyHermeticAdapterRequest,
+    fixture: &GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+    command: &GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+) -> Result<(), GatewayFormalBackendTinyHermeticExecutionOutputError> {
+    let mut issues = Vec::new();
+    validate_gateway_formal_backend_tiny_hermetic_adapter_request(request, &mut issues);
+    validate_gateway_formal_backend_tiny_hermetic_adapter_fixture(fixture, &mut issues);
+    validate_gateway_formal_backend_tiny_hermetic_adapter_command(command, &mut issues);
+    if request.fixture_input_digest != fixture.digest()
+        || request.command_descriptor_digest != command.digest()
+    {
+        issues.push(GatewayFormalBackendTinyHermeticAdapterIssue::TranscriptDigestMismatch);
+    }
+    if !issues.is_empty() {
+        return Err(GatewayFormalBackendTinyHermeticExecutionOutputError::InvalidAdapter(issues));
+    }
+    if source_adapter_manifest.schema_version
+        != GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_OUTPUT_SCHEMA_VERSION
+        || source_adapter_manifest.state_slice
+            != GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_STATE_SLICE
+        || source_adapter_manifest.request_digest != request.digest()
+        || source_adapter_manifest.fixture_input_digest != fixture.digest()
+        || source_adapter_manifest.command_descriptor_digest != command.digest()
+        || source_adapter_manifest.source_correspondence_certificate_digest
+            != request.source_correspondence_certificate_digest
+        || source_adapter_manifest.descriptor_report_manifest_digest
+            != request.descriptor_report_manifest_digest
+        || source_adapter_manifest.process_spawn_interface_digest
+            != request.process_spawn_interface_digest
+        || source_adapter_manifest.expected_transcript_schema_digest
+            != request.expected_transcript_schema_digest
+        || source_adapter_manifest.process_spawned
+        || source_adapter_manifest.backend_executed
+        || source_adapter_manifest.creates_accepted_evidence
+        || source_adapter_manifest.creates_level2_evidence
+        || source_adapter_manifest.populates_score_axes
+        || source_adapter_manifest.grants_authority
+        || source_adapter_manifest.semantic_correctness_claimed
+        || source_adapter_manifest.production_readiness_claimed
+        || source_adapter_manifest.sota_claimed
+        || source_adapter_manifest.breakthrough_claimed
+        || source_adapter_manifest.full_security_claimed
+        || source_adapter_manifest.raw_logs_retained
+        || source_adapter_manifest.raw_provider_response_retained
+        || source_adapter_manifest.nonclaims != request.required_nonclaims
+    {
+        return Err(
+            GatewayFormalBackendTinyHermeticExecutionOutputError::SourceAdapterManifestMismatch,
+        );
+    }
+    Ok(())
+}
+
+fn build_gateway_formal_backend_tiny_hermetic_execution_bundle_files(
+    source_adapter_manifest: &GatewayFormalBackendTinyHermeticAdapterOutputManifest,
+    request: &GatewayFormalBackendTinyHermeticAdapterRequest,
+    fixture: &GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+    command: &GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+    output_request: &GatewayFormalBackendTinyHermeticExecutionOutputRequest,
+    process_result: &GatewayFormalBackendHermeticFixtureProcessResult,
+) -> Result<BTreeMap<String, Vec<u8>>, GatewayFormalBackendTinyHermeticExecutionOutputError> {
+    let stdout_summary = gateway_formal_backend_tiny_hermetic_execution_bounded_summary(
+        "stdout",
+        &process_result.stdout,
+        command.max_stdout_bytes,
+    );
+    let stderr_summary = gateway_formal_backend_tiny_hermetic_execution_bounded_summary(
+        "stderr",
+        &process_result.stderr,
+        command.max_stderr_bytes,
+    );
+    let redaction_report = gateway_formal_backend_tiny_hermetic_execution_redaction_report(
+        &stdout_summary,
+        &stderr_summary,
+    );
+    let nonpromotion_report = gateway_formal_backend_tiny_hermetic_execution_nonpromotion_report();
+    let nonclaims = gateway_formal_backend_tiny_hermetic_execution_required_nonclaims();
+    let transcript = GatewayFormalBackendTinyHermeticExecutionTranscript {
+        schema_version: GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_SCHEMA_VERSION.to_owned(),
+        run_id: output_request.run_id.clone(),
+        adapter_id: request.adapter_id.clone(),
+        backend_id: request.backend_id.clone(),
+        property_id: request.property_id.clone(),
+        source_adapter_manifest_digest: source_adapter_manifest.digest(),
+        adapter_request_digest: request.digest(),
+        source_correspondence_certificate_digest: request.source_correspondence_certificate_digest,
+        descriptor_report_manifest_digest: request.descriptor_report_manifest_digest,
+        process_spawn_interface_digest: request.process_spawn_interface_digest,
+        command_descriptor_digest: command.digest(),
+        fixture_input_digest: fixture.digest(),
+        expected_transcript_schema_digest: request.expected_transcript_schema_digest,
+        process_exit_code_label: process_result.process_exit_code_label.clone(),
+        timeout: process_result.timeout,
+        solver_status: process_result.solver_status.clone(),
+        invariant_verdict: GatewayFormalBackendHermeticExecutionInvariantVerdict::NotEvaluated,
+        stdout_summary_digest: stdout_summary.digest(),
+        stderr_summary_digest: stderr_summary.digest(),
+        redaction_report_digest: redaction_report.digest(),
+        nonpromotion_report_digest: nonpromotion_report.digest(),
+        imported_assumptions: fixture.imported_assumptions.clone(),
+        nonclaims: nonclaims.clone(),
+        process_spawned: true,
+        backend_executed: true,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+        raw_logs_retained: false,
+        raw_provider_response_retained: false,
+        claim_boundary: gateway_formal_backend_tiny_hermetic_execution_claim_boundary(),
+    };
+    let validation_report = GatewayFormalBackendTinyHermeticExecutionValidationReport {
+        schema_version: GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_OUTPUT_SCHEMA_VERSION
+            .to_owned(),
+        run_id: output_request.run_id.clone(),
+        valid: true,
+        checked_files: gateway_formal_backend_tiny_hermetic_execution_output_declared_files(),
+        source_adapter_manifest_digest: source_adapter_manifest.digest(),
+        adapter_request_digest: request.digest(),
+        fixture_input_digest: fixture.digest(),
+        command_descriptor_digest: command.digest(),
+        transcript_digest: transcript.digest(),
+        stdout_summary_digest: stdout_summary.digest(),
+        stderr_summary_digest: stderr_summary.digest(),
+        redaction_report_digest: redaction_report.digest(),
+        nonpromotion_report_digest: nonpromotion_report.digest(),
+        claim_boundary: gateway_formal_backend_tiny_hermetic_execution_claim_boundary(),
+        process_spawned: true,
+        backend_executed: true,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        grants_authority: false,
+    };
+    let nonclaims_md =
+        gateway_formal_backend_tiny_hermetic_execution_nonclaims_markdown(&nonclaims);
+    let mut files = BTreeMap::from([
+        (
+            "gateway-formal-backend-tiny-hermetic-execution/source-adapter-manifest.json"
+                .to_owned(),
+            serde_json::to_vec_pretty(source_adapter_manifest)
+                .map_err(gateway_formal_backend_tiny_hermetic_execution_serde_error)?,
+        ),
+        (
+            "gateway-formal-backend-tiny-hermetic-execution/adapter-request.json".to_owned(),
+            serde_json::to_vec_pretty(request)
+                .map_err(gateway_formal_backend_tiny_hermetic_execution_serde_error)?,
+        ),
+        (
+            "gateway-formal-backend-tiny-hermetic-execution/fixture-input.json".to_owned(),
+            serde_json::to_vec_pretty(fixture)
+                .map_err(gateway_formal_backend_tiny_hermetic_execution_serde_error)?,
+        ),
+        (
+            "gateway-formal-backend-tiny-hermetic-execution/command-descriptor.json".to_owned(),
+            serde_json::to_vec_pretty(command)
+                .map_err(gateway_formal_backend_tiny_hermetic_execution_serde_error)?,
+        ),
+        (
+            "gateway-formal-backend-tiny-hermetic-execution/execution-transcript.json".to_owned(),
+            serde_json::to_vec_pretty(&transcript)
+                .map_err(gateway_formal_backend_tiny_hermetic_execution_serde_error)?,
+        ),
+        (
+            "gateway-formal-backend-tiny-hermetic-execution/stdout-summary.json".to_owned(),
+            serde_json::to_vec_pretty(&stdout_summary)
+                .map_err(gateway_formal_backend_tiny_hermetic_execution_serde_error)?,
+        ),
+        (
+            "gateway-formal-backend-tiny-hermetic-execution/stderr-summary.json".to_owned(),
+            serde_json::to_vec_pretty(&stderr_summary)
+                .map_err(gateway_formal_backend_tiny_hermetic_execution_serde_error)?,
+        ),
+        (
+            "gateway-formal-backend-tiny-hermetic-execution/redaction-report.json".to_owned(),
+            serde_json::to_vec_pretty(&redaction_report)
+                .map_err(gateway_formal_backend_tiny_hermetic_execution_serde_error)?,
+        ),
+        (
+            "gateway-formal-backend-tiny-hermetic-execution/nonpromotion-report.json".to_owned(),
+            serde_json::to_vec_pretty(&nonpromotion_report)
+                .map_err(gateway_formal_backend_tiny_hermetic_execution_serde_error)?,
+        ),
+        (
+            "gateway-formal-backend-tiny-hermetic-execution/nonclaims.md".to_owned(),
+            nonclaims_md.into_bytes(),
+        ),
+        (
+            "gateway-formal-backend-tiny-hermetic-execution/validation-report.json".to_owned(),
+            serde_json::to_vec_pretty(&validation_report)
+                .map_err(gateway_formal_backend_tiny_hermetic_execution_serde_error)?,
+        ),
+    ]);
+    let manifest = gateway_formal_backend_tiny_hermetic_execution_output_manifest_for_files(
+        source_adapter_manifest,
+        request,
+        fixture,
+        command,
+        &transcript,
+        &stdout_summary,
+        &stderr_summary,
+        &redaction_report,
+        &nonpromotion_report,
+        &validation_report,
+        output_request,
+        &files,
+    );
+    files.insert(
+        "gateway-formal-backend-tiny-hermetic-execution/manifest.json".to_owned(),
+        serde_json::to_vec_pretty(&manifest)
+            .map_err(gateway_formal_backend_tiny_hermetic_execution_serde_error)?,
+    );
+    Ok(files)
+}
+
+#[allow(clippy::too_many_arguments)]
+fn gateway_formal_backend_tiny_hermetic_execution_output_manifest_for_files(
+    source_adapter_manifest: &GatewayFormalBackendTinyHermeticAdapterOutputManifest,
+    request: &GatewayFormalBackendTinyHermeticAdapterRequest,
+    fixture: &GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+    command: &GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+    transcript: &GatewayFormalBackendTinyHermeticExecutionTranscript,
+    stdout_summary: &GatewayFormalBackendHermeticExecutionResultBoundedSummary,
+    stderr_summary: &GatewayFormalBackendHermeticExecutionResultBoundedSummary,
+    redaction_report: &GatewayFormalBackendHermeticExecutionResultRedactionReport,
+    nonpromotion_report: &GatewayFormalBackendTinyHermeticExecutionNonpromotionReport,
+    validation_report: &GatewayFormalBackendTinyHermeticExecutionValidationReport,
+    output_request: &GatewayFormalBackendTinyHermeticExecutionOutputRequest,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> GatewayFormalBackendTinyHermeticExecutionOutputManifest {
+    let mut declared_file_digests = BTreeMap::new();
+    for (logical_path, bytes) in files {
+        declared_file_digests.insert(logical_path.clone(), hash_bytes(bytes));
+    }
+    GatewayFormalBackendTinyHermeticExecutionOutputManifest {
+        schema_version: GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_OUTPUT_SCHEMA_VERSION
+            .to_owned(),
+        run_id: output_request.run_id.clone(),
+        state_slice: GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_STATE_SLICE.to_owned(),
+        created_at_unix: output_request.created_at_unix,
+        source_adapter_manifest_digest: source_adapter_manifest.digest(),
+        adapter_request_digest: request.digest(),
+        fixture_input_digest: fixture.digest(),
+        command_descriptor_digest: command.digest(),
+        transcript_digest: transcript.digest(),
+        stdout_summary_digest: stdout_summary.digest(),
+        stderr_summary_digest: stderr_summary.digest(),
+        redaction_report_digest: redaction_report.digest(),
+        nonpromotion_report_digest: nonpromotion_report.digest(),
+        validation_report_digest: validation_report.digest(),
+        nonclaims_digest: hash_bytes(
+            files
+                .get("gateway-formal-backend-tiny-hermetic-execution/nonclaims.md")
+                .map(Vec::as_slice)
+                .unwrap_or_default(),
+        ),
+        adapter_id: request.adapter_id.clone(),
+        backend_id: request.backend_id.clone(),
+        property_id: request.property_id.clone(),
+        process_exit_code_label: transcript.process_exit_code_label.clone(),
+        timeout: transcript.timeout,
+        solver_status: transcript.solver_status.clone(),
+        invariant_verdict: GatewayFormalBackendHermeticExecutionInvariantVerdict::NotEvaluated,
+        declared_files: gateway_formal_backend_tiny_hermetic_execution_output_declared_files(),
+        declared_file_digests,
+        claim_boundary: gateway_formal_backend_tiny_hermetic_execution_claim_boundary(),
+        process_spawned: true,
+        backend_executed: true,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+        raw_logs_retained: false,
+        raw_provider_response_retained: false,
+        nonclaims: gateway_formal_backend_tiny_hermetic_execution_required_nonclaims(),
+    }
+}
+
+fn gateway_formal_backend_tiny_hermetic_execution_bounded_summary(
+    stream_label: &str,
+    bytes: &[u8],
+    max_bytes: u64,
+) -> GatewayFormalBackendHermeticExecutionResultBoundedSummary {
+    let retained_len = bytes.len().min(max_bytes as usize);
+    let retained = &bytes[..retained_len];
+    GatewayFormalBackendHermeticExecutionResultBoundedSummary {
+        stream_label: stream_label.to_owned(),
+        retained_text: format!(
+            "{stream_label} summary only: captured_bytes={}; retained_bytes={retained_len}; retained_sha256={}",
+            bytes.len(),
+            hash_hex(hash_bytes(retained))
+        ),
+        retained_bytes: retained_len as u64,
+        max_bytes,
+        truncated: bytes.len() > retained_len,
+        raw_retained: false,
+        secret_scan_passed: !looks_like_credential_value(&String::from_utf8_lossy(bytes)),
+        raw_solver_trace_retained: false,
+        proof_artifact_retained: false,
+        checker_transcript_retained: false,
+        claim_boundary: gateway_formal_backend_tiny_hermetic_execution_claim_boundary(),
+    }
+}
+
+fn gateway_formal_backend_tiny_hermetic_execution_redaction_report(
+    stdout_summary: &GatewayFormalBackendHermeticExecutionResultBoundedSummary,
+    stderr_summary: &GatewayFormalBackendHermeticExecutionResultBoundedSummary,
+) -> GatewayFormalBackendHermeticExecutionResultRedactionReport {
+    GatewayFormalBackendHermeticExecutionResultRedactionReport {
+        valid: stdout_summary.secret_scan_passed && stderr_summary.secret_scan_passed,
+        stdout_summary_bounded: true,
+        stderr_summary_bounded: true,
+        credential_looking_value_found: false,
+        secret_looking_value_found: false,
+        raw_solver_trace_found: false,
+        proof_artifact_found: false,
+        checker_transcript_found: false,
+        solver_certificate_found: false,
+        retained_summary_only: true,
+        claim_boundary: gateway_formal_backend_tiny_hermetic_execution_claim_boundary(),
+    }
+}
+
+fn gateway_formal_backend_tiny_hermetic_execution_nonpromotion_report(
+) -> GatewayFormalBackendTinyHermeticExecutionNonpromotionReport {
+    GatewayFormalBackendTinyHermeticExecutionNonpromotionReport {
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        grants_authority: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        raw_logs_retained: false,
+        raw_provider_response_retained: false,
+        claim_boundary: gateway_formal_backend_tiny_hermetic_execution_claim_boundary(),
+    }
+}
+
+fn validate_gateway_formal_backend_tiny_hermetic_execution_bundle_semantics(
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<
+    GatewayFormalBackendTinyHermeticExecutionOutputManifest,
+    GatewayFormalBackendTinyHermeticExecutionOutputError,
+> {
+    let manifest: GatewayFormalBackendTinyHermeticExecutionOutputManifest =
+        parse_gateway_formal_backend_tiny_hermetic_execution_declared_json(
+            files,
+            "gateway-formal-backend-tiny-hermetic-execution/manifest.json",
+        )?;
+    let source_adapter_manifest: GatewayFormalBackendTinyHermeticAdapterOutputManifest =
+        parse_gateway_formal_backend_tiny_hermetic_execution_declared_json(
+            files,
+            "gateway-formal-backend-tiny-hermetic-execution/source-adapter-manifest.json",
+        )?;
+    let request: GatewayFormalBackendTinyHermeticAdapterRequest =
+        parse_gateway_formal_backend_tiny_hermetic_execution_declared_json(
+            files,
+            "gateway-formal-backend-tiny-hermetic-execution/adapter-request.json",
+        )?;
+    let fixture: GatewayFormalBackendTinyHermeticAdapterFixtureInput =
+        parse_gateway_formal_backend_tiny_hermetic_execution_declared_json(
+            files,
+            "gateway-formal-backend-tiny-hermetic-execution/fixture-input.json",
+        )?;
+    let command: GatewayFormalBackendTinyHermeticAdapterCommandDescriptor =
+        parse_gateway_formal_backend_tiny_hermetic_execution_declared_json(
+            files,
+            "gateway-formal-backend-tiny-hermetic-execution/command-descriptor.json",
+        )?;
+    let transcript: GatewayFormalBackendTinyHermeticExecutionTranscript =
+        parse_gateway_formal_backend_tiny_hermetic_execution_declared_json(
+            files,
+            "gateway-formal-backend-tiny-hermetic-execution/execution-transcript.json",
+        )?;
+    let stdout_summary: GatewayFormalBackendHermeticExecutionResultBoundedSummary =
+        parse_gateway_formal_backend_tiny_hermetic_execution_declared_json(
+            files,
+            "gateway-formal-backend-tiny-hermetic-execution/stdout-summary.json",
+        )?;
+    let stderr_summary: GatewayFormalBackendHermeticExecutionResultBoundedSummary =
+        parse_gateway_formal_backend_tiny_hermetic_execution_declared_json(
+            files,
+            "gateway-formal-backend-tiny-hermetic-execution/stderr-summary.json",
+        )?;
+    let redaction_report: GatewayFormalBackendHermeticExecutionResultRedactionReport =
+        parse_gateway_formal_backend_tiny_hermetic_execution_declared_json(
+            files,
+            "gateway-formal-backend-tiny-hermetic-execution/redaction-report.json",
+        )?;
+    let nonpromotion_report: GatewayFormalBackendTinyHermeticExecutionNonpromotionReport =
+        parse_gateway_formal_backend_tiny_hermetic_execution_declared_json(
+            files,
+            "gateway-formal-backend-tiny-hermetic-execution/nonpromotion-report.json",
+        )?;
+    let validation_report: GatewayFormalBackendTinyHermeticExecutionValidationReport =
+        parse_gateway_formal_backend_tiny_hermetic_execution_declared_json(
+            files,
+            "gateway-formal-backend-tiny-hermetic-execution/validation-report.json",
+        )?;
+
+    validate_gateway_formal_backend_tiny_hermetic_execution_source(
+        &source_adapter_manifest,
+        &request,
+        &fixture,
+        &command,
+    )?;
+    validate_gateway_formal_backend_tiny_hermetic_execution_manifest_semantics(
+        &manifest,
+        &source_adapter_manifest,
+        &request,
+        &fixture,
+        &command,
+        &transcript,
+        &stdout_summary,
+        &stderr_summary,
+        &redaction_report,
+        &nonpromotion_report,
+        &validation_report,
+        files,
+    )?;
+    validate_gateway_formal_backend_tiny_hermetic_execution_transcript(
+        &transcript,
+        &manifest,
+        &source_adapter_manifest,
+        &request,
+        &fixture,
+        &command,
+        &stdout_summary,
+        &stderr_summary,
+        &redaction_report,
+        &nonpromotion_report,
+    )?;
+    validate_gateway_formal_backend_tiny_hermetic_execution_summary(&stdout_summary, "stdout")
+        .map_err(|_| GatewayFormalBackendTinyHermeticExecutionOutputError::StdoutSummaryMismatch)?;
+    validate_gateway_formal_backend_tiny_hermetic_execution_summary(&stderr_summary, "stderr")
+        .map_err(|_| GatewayFormalBackendTinyHermeticExecutionOutputError::StderrSummaryMismatch)?;
+    validate_gateway_formal_backend_tiny_hermetic_execution_redaction(
+        &redaction_report,
+        &stdout_summary,
+        &stderr_summary,
+    )?;
+    validate_gateway_formal_backend_tiny_hermetic_execution_nonpromotion(&nonpromotion_report)?;
+
+    let nonclaims = declared_gateway_formal_backend_tiny_hermetic_execution_bytes(
+        files,
+        "gateway-formal-backend-tiny-hermetic-execution/nonclaims.md",
+    )?;
+    if nonclaims
+        != gateway_formal_backend_tiny_hermetic_execution_nonclaims_markdown(&manifest.nonclaims)
+            .as_bytes()
+    {
+        return Err(GatewayFormalBackendTinyHermeticExecutionOutputError::NonclaimMismatch);
+    }
+    let expected_validation_report = GatewayFormalBackendTinyHermeticExecutionValidationReport {
+        schema_version: GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_OUTPUT_SCHEMA_VERSION
+            .to_owned(),
+        run_id: manifest.run_id.clone(),
+        valid: true,
+        checked_files: gateway_formal_backend_tiny_hermetic_execution_output_declared_files(),
+        source_adapter_manifest_digest: source_adapter_manifest.digest(),
+        adapter_request_digest: request.digest(),
+        fixture_input_digest: fixture.digest(),
+        command_descriptor_digest: command.digest(),
+        transcript_digest: transcript.digest(),
+        stdout_summary_digest: stdout_summary.digest(),
+        stderr_summary_digest: stderr_summary.digest(),
+        redaction_report_digest: redaction_report.digest(),
+        nonpromotion_report_digest: nonpromotion_report.digest(),
+        claim_boundary: gateway_formal_backend_tiny_hermetic_execution_claim_boundary(),
+        process_spawned: true,
+        backend_executed: true,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        grants_authority: false,
+    };
+    if validation_report != expected_validation_report {
+        return Err(GatewayFormalBackendTinyHermeticExecutionOutputError::ValidationReportMismatch);
+    }
+    Ok(manifest)
+}
+
+#[allow(clippy::too_many_arguments)]
+fn validate_gateway_formal_backend_tiny_hermetic_execution_manifest_semantics(
+    manifest: &GatewayFormalBackendTinyHermeticExecutionOutputManifest,
+    source_adapter_manifest: &GatewayFormalBackendTinyHermeticAdapterOutputManifest,
+    request: &GatewayFormalBackendTinyHermeticAdapterRequest,
+    fixture: &GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+    command: &GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+    transcript: &GatewayFormalBackendTinyHermeticExecutionTranscript,
+    stdout_summary: &GatewayFormalBackendHermeticExecutionResultBoundedSummary,
+    stderr_summary: &GatewayFormalBackendHermeticExecutionResultBoundedSummary,
+    redaction_report: &GatewayFormalBackendHermeticExecutionResultRedactionReport,
+    nonpromotion_report: &GatewayFormalBackendTinyHermeticExecutionNonpromotionReport,
+    validation_report: &GatewayFormalBackendTinyHermeticExecutionValidationReport,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<(), GatewayFormalBackendTinyHermeticExecutionOutputError> {
+    let expected_digest_paths: BTreeSet<String> =
+        GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_DECLARED_FILES
+            .iter()
+            .filter(|path| **path != "gateway-formal-backend-tiny-hermetic-execution/manifest.json")
+            .map(|path| (*path).to_owned())
+            .collect();
+    let actual_digest_paths: BTreeSet<String> =
+        manifest.declared_file_digests.keys().cloned().collect();
+    if manifest.schema_version
+        != GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_OUTPUT_SCHEMA_VERSION
+        || manifest.state_slice != GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_STATE_SLICE
+        || manifest.source_adapter_manifest_digest != source_adapter_manifest.digest()
+        || manifest.adapter_request_digest != request.digest()
+        || manifest.fixture_input_digest != fixture.digest()
+        || manifest.command_descriptor_digest != command.digest()
+        || manifest.transcript_digest != transcript.digest()
+        || manifest.stdout_summary_digest != stdout_summary.digest()
+        || manifest.stderr_summary_digest != stderr_summary.digest()
+        || manifest.redaction_report_digest != redaction_report.digest()
+        || manifest.nonpromotion_report_digest != nonpromotion_report.digest()
+        || manifest.validation_report_digest != validation_report.digest()
+        || manifest.nonclaims_digest
+            != hash_bytes(
+                declared_gateway_formal_backend_tiny_hermetic_execution_bytes(
+                    files,
+                    "gateway-formal-backend-tiny-hermetic-execution/nonclaims.md",
+                )?,
+            )
+        || manifest.adapter_id != request.adapter_id
+        || manifest.backend_id != request.backend_id
+        || manifest.property_id != request.property_id
+        || manifest.process_exit_code_label != transcript.process_exit_code_label
+        || manifest.timeout != transcript.timeout
+        || manifest.solver_status != transcript.solver_status
+        || manifest.invariant_verdict
+            != GatewayFormalBackendHermeticExecutionInvariantVerdict::NotEvaluated
+        || manifest.declared_files
+            != gateway_formal_backend_tiny_hermetic_execution_output_declared_files()
+        || actual_digest_paths != expected_digest_paths
+        || manifest.claim_boundary
+            != gateway_formal_backend_tiny_hermetic_execution_claim_boundary()
+        || !manifest.process_spawned
+        || !manifest.backend_executed
+        || manifest.proof_artifact_created
+        || manifest.checker_transcript_created
+        || manifest.solver_certificate_created
+        || manifest.creates_accepted_evidence
+        || manifest.creates_level2_evidence
+        || manifest.populates_score_axes
+        || manifest.semantic_correctness_claimed
+        || manifest.production_readiness_claimed
+        || manifest.sota_claimed
+        || manifest.breakthrough_claimed
+        || manifest.full_security_claimed
+        || manifest.grants_authority
+        || manifest.raw_logs_retained
+        || manifest.raw_provider_response_retained
+        || manifest.nonclaims != gateway_formal_backend_tiny_hermetic_execution_required_nonclaims()
+    {
+        return Err(GatewayFormalBackendTinyHermeticExecutionOutputError::ManifestSemanticMismatch);
+    }
+    for (logical_path, expected_digest) in &manifest.declared_file_digests {
+        if hash_bytes(
+            declared_gateway_formal_backend_tiny_hermetic_execution_bytes(files, logical_path)?,
+        ) != *expected_digest
+        {
+            return Err(
+                GatewayFormalBackendTinyHermeticExecutionOutputError::ManifestSemanticMismatch,
+            );
+        }
+    }
+    Ok(())
+}
+
+#[allow(clippy::too_many_arguments)]
+fn validate_gateway_formal_backend_tiny_hermetic_execution_transcript(
+    transcript: &GatewayFormalBackendTinyHermeticExecutionTranscript,
+    manifest: &GatewayFormalBackendTinyHermeticExecutionOutputManifest,
+    source_adapter_manifest: &GatewayFormalBackendTinyHermeticAdapterOutputManifest,
+    request: &GatewayFormalBackendTinyHermeticAdapterRequest,
+    fixture: &GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+    command: &GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+    stdout_summary: &GatewayFormalBackendHermeticExecutionResultBoundedSummary,
+    stderr_summary: &GatewayFormalBackendHermeticExecutionResultBoundedSummary,
+    redaction_report: &GatewayFormalBackendHermeticExecutionResultRedactionReport,
+    nonpromotion_report: &GatewayFormalBackendTinyHermeticExecutionNonpromotionReport,
+) -> Result<(), GatewayFormalBackendTinyHermeticExecutionOutputError> {
+    if transcript.schema_version != GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_SCHEMA_VERSION
+        || transcript.run_id != manifest.run_id
+        || transcript.adapter_id != request.adapter_id
+        || transcript.backend_id != request.backend_id
+        || transcript.property_id != request.property_id
+        || transcript.source_adapter_manifest_digest != source_adapter_manifest.digest()
+        || transcript.adapter_request_digest != request.digest()
+        || transcript.source_correspondence_certificate_digest
+            != request.source_correspondence_certificate_digest
+        || transcript.descriptor_report_manifest_digest != request.descriptor_report_manifest_digest
+        || transcript.process_spawn_interface_digest != request.process_spawn_interface_digest
+        || transcript.command_descriptor_digest != command.digest()
+        || transcript.fixture_input_digest != fixture.digest()
+        || transcript.expected_transcript_schema_digest != request.expected_transcript_schema_digest
+        || transcript.invariant_verdict
+            != GatewayFormalBackendHermeticExecutionInvariantVerdict::NotEvaluated
+        || transcript.stdout_summary_digest != stdout_summary.digest()
+        || transcript.stderr_summary_digest != stderr_summary.digest()
+        || transcript.redaction_report_digest != redaction_report.digest()
+        || transcript.nonpromotion_report_digest != nonpromotion_report.digest()
+        || transcript.imported_assumptions != fixture.imported_assumptions
+        || transcript.nonclaims
+            != gateway_formal_backend_tiny_hermetic_execution_required_nonclaims()
+        || !transcript.process_spawned
+        || !transcript.backend_executed
+        || transcript.proof_artifact_created
+        || transcript.checker_transcript_created
+        || transcript.solver_certificate_created
+        || transcript.creates_accepted_evidence
+        || transcript.creates_level2_evidence
+        || transcript.populates_score_axes
+        || transcript.semantic_correctness_claimed
+        || transcript.production_readiness_claimed
+        || transcript.sota_claimed
+        || transcript.breakthrough_claimed
+        || transcript.full_security_claimed
+        || transcript.grants_authority
+        || transcript.raw_logs_retained
+        || transcript.raw_provider_response_retained
+        || transcript.claim_boundary
+            != gateway_formal_backend_tiny_hermetic_execution_claim_boundary()
+    {
+        return Err(GatewayFormalBackendTinyHermeticExecutionOutputError::TranscriptMismatch);
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_backend_tiny_hermetic_execution_summary(
+    summary: &GatewayFormalBackendHermeticExecutionResultBoundedSummary,
+    stream_label: &str,
+) -> Result<(), ()> {
+    if summary.stream_label != stream_label
+        || summary.max_bytes == 0
+        || summary.retained_bytes > summary.max_bytes
+        || summary.raw_retained
+        || summary.raw_solver_trace_retained
+        || summary.proof_artifact_retained
+        || summary.checker_transcript_retained
+        || !summary.retained_text.contains("summary only")
+        || !summary.secret_scan_passed
+        || summary.claim_boundary != gateway_formal_backend_tiny_hermetic_execution_claim_boundary()
+    {
+        return Err(());
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_backend_tiny_hermetic_execution_redaction(
+    report: &GatewayFormalBackendHermeticExecutionResultRedactionReport,
+    stdout_summary: &GatewayFormalBackendHermeticExecutionResultBoundedSummary,
+    stderr_summary: &GatewayFormalBackendHermeticExecutionResultBoundedSummary,
+) -> Result<(), GatewayFormalBackendTinyHermeticExecutionOutputError> {
+    if !report.valid
+        || !stdout_summary.secret_scan_passed
+        || !stderr_summary.secret_scan_passed
+        || !report.stdout_summary_bounded
+        || !report.stderr_summary_bounded
+        || report.credential_looking_value_found
+        || report.secret_looking_value_found
+        || report.raw_solver_trace_found
+        || report.proof_artifact_found
+        || report.checker_transcript_found
+        || report.solver_certificate_found
+        || !report.retained_summary_only
+        || report.claim_boundary != gateway_formal_backend_tiny_hermetic_execution_claim_boundary()
+    {
+        return Err(GatewayFormalBackendTinyHermeticExecutionOutputError::RedactionReportMismatch);
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_backend_tiny_hermetic_execution_nonpromotion(
+    report: &GatewayFormalBackendTinyHermeticExecutionNonpromotionReport,
+) -> Result<(), GatewayFormalBackendTinyHermeticExecutionOutputError> {
+    if report.proof_artifact_created
+        || report.checker_transcript_created
+        || report.solver_certificate_created
+        || report.creates_accepted_evidence
+        || report.creates_level2_evidence
+        || report.populates_score_axes
+        || report.grants_authority
+        || report.semantic_correctness_claimed
+        || report.production_readiness_claimed
+        || report.sota_claimed
+        || report.breakthrough_claimed
+        || report.full_security_claimed
+        || report.raw_logs_retained
+        || report.raw_provider_response_retained
+        || report.claim_boundary != gateway_formal_backend_tiny_hermetic_execution_claim_boundary()
+    {
+        return Err(
+            GatewayFormalBackendTinyHermeticExecutionOutputError::NonpromotionReportMismatch,
+        );
+    }
+    Ok(())
+}
+
+fn declared_gateway_formal_backend_tiny_hermetic_execution_bytes<'a>(
+    files: &'a BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<&'a [u8], GatewayFormalBackendTinyHermeticExecutionOutputError> {
+    files.get(logical_path).map(Vec::as_slice).ok_or_else(|| {
+        GatewayFormalBackendTinyHermeticExecutionOutputError::Io(format!(
+            "declared file missing: {logical_path}"
+        ))
+    })
+}
+
+fn parse_gateway_formal_backend_tiny_hermetic_execution_declared_json<
+    T: for<'de> Deserialize<'de> + Serialize,
+>(
+    files: &BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<T, GatewayFormalBackendTinyHermeticExecutionOutputError> {
+    let bytes = declared_gateway_formal_backend_tiny_hermetic_execution_bytes(files, logical_path)?;
+    let original = parse_json_value_rejecting_duplicate_keys(bytes).map_err(|_| {
+        GatewayFormalBackendTinyHermeticExecutionOutputError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })?;
+    let parsed: T = serde_json::from_value(original.clone()).map_err(|_| {
+        GatewayFormalBackendTinyHermeticExecutionOutputError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })?;
+    let canonical = serde_json::to_value(&parsed)
+        .map_err(gateway_formal_backend_tiny_hermetic_execution_serde_error)?;
+    if canonical != original {
+        return Err(
+            GatewayFormalBackendTinyHermeticExecutionOutputError::MalformedDeclaredFile(
+                logical_path.to_owned(),
+            ),
+        );
+    }
+    Ok(parsed)
+}
+
+fn gateway_formal_backend_tiny_hermetic_execution_nonclaims_markdown(
+    nonclaims: &BTreeSet<NonClaimLabel>,
+) -> String {
+    let mut out = String::from("# Gateway Tiny Hermetic Formal Backend Execution Non-Claims\n\n");
+    for nonclaim in nonclaims {
+        out.push_str("- ");
+        out.push_str(&nonclaim.0);
+        out.push('\n');
+    }
+    out
+}
+
+fn reject_undeclared_gateway_formal_backend_tiny_hermetic_execution_files(
+    output_root: &Path,
+) -> Result<(), GatewayFormalBackendTinyHermeticExecutionOutputError> {
+    let mut declared: BTreeSet<String> =
+        GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_DECLARED_FILES
+            .iter()
+            .chain(GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_DECLARED_SIDECARS.iter())
+            .map(|value| (*value).to_owned())
+            .collect();
+    let bundle_dir = output_root.join("gateway-formal-backend-tiny-hermetic-execution");
+    for entry in fs::read_dir(&bundle_dir)
+        .map_err(gateway_formal_backend_tiny_hermetic_execution_io_error)?
+    {
+        let entry = entry.map_err(gateway_formal_backend_tiny_hermetic_execution_io_error)?;
+        let logical_path = entry
+            .path()
+            .strip_prefix(output_root)
+            .map_err(|error| {
+                GatewayFormalBackendTinyHermeticExecutionOutputError::Io(error.to_string())
+            })?
+            .to_string_lossy()
+            .replace('\\', "/");
+        if !declared.remove(&logical_path) {
+            return Err(
+                GatewayFormalBackendTinyHermeticExecutionOutputError::UndeclaredFile(logical_path),
+            );
+        }
+    }
+    if let Some(missing) = declared.into_iter().next() {
+        return Err(GatewayFormalBackendTinyHermeticExecutionOutputError::Io(
+            format!("declared file missing: {missing}"),
+        ));
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_backend_tiny_hermetic_execution_output_root(
+    output_root: &Path,
+    protected_roots: &[PathBuf],
+    overwrite: bool,
+) -> Result<(), GatewayFormalBackendTinyHermeticExecutionOutputError> {
+    match validate_output_root(output_root, protected_roots, overwrite) {
+        Ok(()) => Ok(()),
+        Err(AdmissionJournalMaterializationError::EmptyOutputRoot) => {
+            Err(GatewayFormalBackendTinyHermeticExecutionOutputError::EmptyOutputRoot)
+        }
+        Err(AdmissionJournalMaterializationError::ProtectedOutputRoot) => {
+            Err(GatewayFormalBackendTinyHermeticExecutionOutputError::ProtectedOutputRoot)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootExistsWithoutOverwrite) => Err(
+            GatewayFormalBackendTinyHermeticExecutionOutputError::OutputRootExistsWithoutOverwrite,
+        ),
+        Err(AdmissionJournalMaterializationError::OutputRootIsFile) => {
+            Err(GatewayFormalBackendTinyHermeticExecutionOutputError::OutputRootIsFile)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootIsSymlink) => {
+            Err(GatewayFormalBackendTinyHermeticExecutionOutputError::OutputRootIsSymlink)
+        }
+        Err(AdmissionJournalMaterializationError::Io(error)) => Err(
+            GatewayFormalBackendTinyHermeticExecutionOutputError::Io(error),
+        ),
+        Err(other) => Err(GatewayFormalBackendTinyHermeticExecutionOutputError::Io(
+            format!("{other:?}"),
+        )),
+    }
+}
+
+fn gateway_formal_backend_tiny_hermetic_execution_staging_root_for(
+    output_root: &Path,
+    run_id: &str,
+) -> Result<PathBuf, GatewayFormalBackendTinyHermeticExecutionOutputError> {
+    let parent = output_root
+        .parent()
+        .ok_or(GatewayFormalBackendTinyHermeticExecutionOutputError::EmptyOutputRoot)?;
+    let name = output_root
+        .file_name()
+        .map(|value| value.to_string_lossy().into_owned())
+        .ok_or(GatewayFormalBackendTinyHermeticExecutionOutputError::EmptyOutputRoot)?;
+    Ok(parent.join(format!(".{name}.{run_id}.staging")))
+}
+
+fn remove_gateway_formal_backend_tiny_hermetic_execution_dir_all_checked(
+    path: &Path,
+) -> Result<(), GatewayFormalBackendTinyHermeticExecutionOutputError> {
+    if !path.exists() {
+        return Ok(());
+    }
+    if fs::symlink_metadata(path)
+        .map_err(gateway_formal_backend_tiny_hermetic_execution_io_error)?
+        .file_type()
+        .is_symlink()
+    {
+        return Err(GatewayFormalBackendTinyHermeticExecutionOutputError::OutputRootIsSymlink);
+    }
+    fs::remove_dir_all(path).map_err(gateway_formal_backend_tiny_hermetic_execution_io_error)
+}
+
+fn gateway_formal_backend_tiny_hermetic_execution_io_error(
+    error: io::Error,
+) -> GatewayFormalBackendTinyHermeticExecutionOutputError {
+    GatewayFormalBackendTinyHermeticExecutionOutputError::Io(error.to_string())
+}
+
+fn gateway_formal_backend_tiny_hermetic_execution_serde_error(
+    error: serde_json::Error,
+) -> GatewayFormalBackendTinyHermeticExecutionOutputError {
+    GatewayFormalBackendTinyHermeticExecutionOutputError::Serialization(error.to_string())
+}
+
 fn build_gateway_formal_backend_hermetic_fixture_runner_bundle_files(
     interface: &GatewayFormalBackendHermeticProcessSpawnInterface,
     descriptor: &GatewayFormalBackendHermeticExecutionDescriptor,
@@ -22754,6 +24128,36 @@ const GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_DECLARED_SIDECARS: &[&str] = 
     "gateway-formal-backend-tiny-hermetic-adapter/validation-report.json.sha256",
 ];
 
+const GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_DECLARED_FILES: &[&str] = &[
+    "gateway-formal-backend-tiny-hermetic-execution/manifest.json",
+    "gateway-formal-backend-tiny-hermetic-execution/source-adapter-manifest.json",
+    "gateway-formal-backend-tiny-hermetic-execution/adapter-request.json",
+    "gateway-formal-backend-tiny-hermetic-execution/fixture-input.json",
+    "gateway-formal-backend-tiny-hermetic-execution/command-descriptor.json",
+    "gateway-formal-backend-tiny-hermetic-execution/execution-transcript.json",
+    "gateway-formal-backend-tiny-hermetic-execution/stdout-summary.json",
+    "gateway-formal-backend-tiny-hermetic-execution/stderr-summary.json",
+    "gateway-formal-backend-tiny-hermetic-execution/redaction-report.json",
+    "gateway-formal-backend-tiny-hermetic-execution/nonpromotion-report.json",
+    "gateway-formal-backend-tiny-hermetic-execution/nonclaims.md",
+    "gateway-formal-backend-tiny-hermetic-execution/validation-report.json",
+];
+
+const GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_DECLARED_SIDECARS: &[&str] = &[
+    "gateway-formal-backend-tiny-hermetic-execution/manifest.json.sha256",
+    "gateway-formal-backend-tiny-hermetic-execution/source-adapter-manifest.json.sha256",
+    "gateway-formal-backend-tiny-hermetic-execution/adapter-request.json.sha256",
+    "gateway-formal-backend-tiny-hermetic-execution/fixture-input.json.sha256",
+    "gateway-formal-backend-tiny-hermetic-execution/command-descriptor.json.sha256",
+    "gateway-formal-backend-tiny-hermetic-execution/execution-transcript.json.sha256",
+    "gateway-formal-backend-tiny-hermetic-execution/stdout-summary.json.sha256",
+    "gateway-formal-backend-tiny-hermetic-execution/stderr-summary.json.sha256",
+    "gateway-formal-backend-tiny-hermetic-execution/redaction-report.json.sha256",
+    "gateway-formal-backend-tiny-hermetic-execution/nonpromotion-report.json.sha256",
+    "gateway-formal-backend-tiny-hermetic-execution/nonclaims.md.sha256",
+    "gateway-formal-backend-tiny-hermetic-execution/validation-report.json.sha256",
+];
+
 const ADMISSION_JOURNAL_DECLARED_FILES: &[&str] = &[
     "admission-journal/manifest.json",
     "admission-journal/journal.json",
@@ -24544,13 +25948,9 @@ mod tests {
         }
     }
 
-    fn tiny_adapter_command_descriptor() -> GatewayFormalBackendTinyHermeticAdapterCommandDescriptor
-    {
-        let argv_template = vec![
-            "tiny-smt-checker".to_owned(),
-            "--fixture".to_owned(),
-            "fixture-input.json".to_owned(),
-        ];
+    fn tiny_adapter_command_descriptor_with_argv(
+        argv_template: Vec<String>,
+    ) -> GatewayFormalBackendTinyHermeticAdapterCommandDescriptor {
         GatewayFormalBackendTinyHermeticAdapterCommandDescriptor {
             schema_version: GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_SCHEMA_VERSION.to_owned(),
             adapter_id: "tiny_hermetic_formal_backend_adapter".to_owned(),
@@ -24575,6 +25975,15 @@ mod tests {
             fixed_argv_template: true,
             ignored_output_root_only: true,
         }
+    }
+
+    fn tiny_adapter_command_descriptor() -> GatewayFormalBackendTinyHermeticAdapterCommandDescriptor
+    {
+        tiny_adapter_command_descriptor_with_argv(vec![
+            "tiny-smt-checker".to_owned(),
+            "--fixture".to_owned(),
+            "fixture-input.json".to_owned(),
+        ])
     }
 
     fn tiny_adapter_nonpromotion_report(
@@ -24678,7 +26087,25 @@ mod tests {
         }
     }
 
-    fn tiny_adapter_valid_parts() -> (
+    fn tiny_execution_output_request(
+        run_id: &str,
+        output_root: &Path,
+    ) -> GatewayFormalBackendTinyHermeticExecutionOutputRequest {
+        GatewayFormalBackendTinyHermeticExecutionOutputRequest {
+            run_id: run_id.to_owned(),
+            created_at_unix: 1_800_000_319,
+            operator_acknowledged: true,
+            overwrite: false,
+            protected_roots: vec![output_root
+                .parent()
+                .expect("temp output root has a parent")
+                .join("protected-repo")],
+        }
+    }
+
+    fn tiny_adapter_valid_parts_with_command(
+        command: GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+    ) -> (
         GatewayFormalBackendTinyHermeticAdapterRequest,
         GatewayFormalBackendTinyHermeticAdapterFixtureInput,
         GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
@@ -24686,12 +26113,48 @@ mod tests {
         GatewayFormalBackendTinyHermeticAdapterNonpromotionReport,
     ) {
         let fixture = tiny_adapter_fixture_input();
-        let command = tiny_adapter_command_descriptor();
         let request = tiny_adapter_request(&fixture, &command);
         let nonpromotion = tiny_adapter_nonpromotion_report();
         let transcript =
             tiny_adapter_transcript_summary(&request, &fixture, &command, &nonpromotion);
         (request, fixture, command, transcript, nonpromotion)
+    }
+
+    fn tiny_adapter_valid_parts() -> (
+        GatewayFormalBackendTinyHermeticAdapterRequest,
+        GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+        GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+        GatewayFormalBackendTinyHermeticAdapterTranscriptSummary,
+        GatewayFormalBackendTinyHermeticAdapterNonpromotionReport,
+    ) {
+        tiny_adapter_valid_parts_with_command(tiny_adapter_command_descriptor())
+    }
+
+    fn tiny_adapter_source_manifest_with_command(
+        name: &str,
+        command: GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+    ) -> (
+        GatewayFormalBackendTinyHermeticAdapterRequest,
+        GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+        GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+        GatewayFormalBackendTinyHermeticAdapterOutputManifest,
+        PathBuf,
+    ) {
+        let (request, fixture, command, transcript, nonpromotion) =
+            tiny_adapter_valid_parts_with_command(command);
+        let output_root = temp_output_root(name);
+        let output_request = tiny_adapter_output_request(name, &output_root);
+        let manifest = materialize_gateway_formal_backend_tiny_hermetic_adapter_output_bundle(
+            &output_root,
+            &request,
+            &fixture,
+            &command,
+            &transcript,
+            &nonpromotion,
+            &output_request,
+        )
+        .expect("tiny adapter source manifest materializes");
+        (request, fixture, command, manifest, output_root)
     }
 
     #[test]
@@ -24858,6 +26321,227 @@ mod tests {
             )
         );
         fs::remove_dir_all(&output_root).expect("tiny adapter bundle cleanup succeeds");
+    }
+
+    #[ignore]
+    #[test]
+    fn phase319_fixture_child_success() {
+        println!("phase319 tiny backend fixture completed");
+    }
+
+    #[test]
+    fn gateway_formal_backend_tiny_hermetic_execution_materializes_fixture_and_reads_back() {
+        let command = tiny_adapter_command_descriptor_with_argv(vec![
+            "--ignored".to_owned(),
+            "--exact".to_owned(),
+            "tests::phase319_fixture_child_success".to_owned(),
+            "--nocapture".to_owned(),
+        ]);
+        let (request, fixture, command, source_manifest, source_root) =
+            tiny_adapter_source_manifest_with_command("tiny-execution-source-valid", command);
+        let output_root = temp_output_root("tiny-hermetic-execution-valid");
+        let output_request = tiny_execution_output_request("tiny-execution-valid", &output_root);
+
+        let manifest = materialize_gateway_formal_backend_tiny_hermetic_execution_output_bundle(
+            &output_root,
+            &source_manifest,
+            &request,
+            &fixture,
+            &command,
+            &output_request,
+        )
+        .expect("tiny hermetic execution output materializes");
+        assert_eq!(
+            manifest.declared_files,
+            gateway_formal_backend_tiny_hermetic_execution_output_declared_files()
+        );
+        assert_eq!(
+            manifest.source_adapter_manifest_digest,
+            source_manifest.digest()
+        );
+        assert_eq!(manifest.adapter_request_digest, request.digest());
+        assert_eq!(manifest.fixture_input_digest, fixture.digest());
+        assert_eq!(manifest.command_descriptor_digest, command.digest());
+        assert_eq!(manifest.process_exit_code_label, "exit_0");
+        assert_eq!(
+            manifest.solver_status,
+            GatewayFormalBackendHermeticExecutionSolverStatus::FixtureProcessExited
+        );
+        assert!(manifest.process_spawned);
+        assert!(manifest.backend_executed);
+        assert!(!manifest.proof_artifact_created);
+        assert!(!manifest.checker_transcript_created);
+        assert!(!manifest.solver_certificate_created);
+        assert!(!manifest.creates_accepted_evidence);
+        assert!(!manifest.creates_level2_evidence);
+        assert!(!manifest.populates_score_axes);
+        assert!(!manifest.semantic_correctness_claimed);
+        assert!(!manifest.production_readiness_claimed);
+        assert!(!manifest.sota_claimed);
+        assert!(!manifest.breakthrough_claimed);
+        assert!(!manifest.full_security_claimed);
+        assert!(!manifest.grants_authority);
+        assert!(!manifest.raw_logs_retained);
+        assert!(!manifest.raw_provider_response_retained);
+        assert_eq!(
+            manifest.claim_boundary,
+            gateway_formal_backend_tiny_hermetic_execution_claim_boundary()
+        );
+        assert_eq!(
+            read_gateway_formal_backend_tiny_hermetic_execution_output_bundle(&output_root),
+            Ok(manifest)
+        );
+        assert!(!output_root
+            .join("gateway-formal-backend-tiny-hermetic-execution/proof-artifact.json")
+            .exists());
+        assert!(!output_root
+            .join("gateway-formal-backend-tiny-hermetic-execution/checker-transcript.json")
+            .exists());
+
+        fs::remove_dir_all(&output_root).expect("tiny execution bundle cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("tiny execution source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_backend_tiny_hermetic_execution_rejects_ack_and_source_drift() {
+        let command = tiny_adapter_command_descriptor_with_argv(vec![
+            "--ignored".to_owned(),
+            "--exact".to_owned(),
+            "tests::phase319_fixture_child_success".to_owned(),
+        ]);
+        let (request, fixture, command, mut source_manifest, source_root) =
+            tiny_adapter_source_manifest_with_command("tiny-execution-source-drift", command);
+        let output_root = temp_output_root("tiny-hermetic-execution-ack-drift");
+        let mut output_request =
+            tiny_execution_output_request("tiny-execution-ack-drift", &output_root);
+        output_request.operator_acknowledged = false;
+        assert_eq!(
+            materialize_gateway_formal_backend_tiny_hermetic_execution_output_bundle(
+                &output_root,
+                &source_manifest,
+                &request,
+                &fixture,
+                &command,
+                &output_request,
+            ),
+            Err(GatewayFormalBackendTinyHermeticExecutionOutputError::OperatorAcknowledgementMissing)
+        );
+        assert!(!output_root.exists());
+
+        output_request.operator_acknowledged = true;
+        source_manifest.creates_level2_evidence = true;
+        assert_eq!(
+            materialize_gateway_formal_backend_tiny_hermetic_execution_output_bundle(
+                &output_root,
+                &source_manifest,
+                &request,
+                &fixture,
+                &command,
+                &output_request,
+            ),
+            Err(
+                GatewayFormalBackendTinyHermeticExecutionOutputError::SourceAdapterManifestMismatch
+            )
+        );
+        assert!(!output_root.exists());
+
+        fs::remove_dir_all(&source_root).expect("tiny execution source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_backend_tiny_hermetic_execution_readback_rejects_drift_and_undeclared() {
+        let command = tiny_adapter_command_descriptor_with_argv(vec![
+            "--ignored".to_owned(),
+            "--exact".to_owned(),
+            "tests::phase319_fixture_child_success".to_owned(),
+        ]);
+        let (request, fixture, command, source_manifest, source_root) =
+            tiny_adapter_source_manifest_with_command("tiny-execution-source-readback", command);
+
+        let manifest_root = temp_output_root("tiny-hermetic-execution-manifest-drift");
+        materialize_gateway_formal_backend_tiny_hermetic_execution_output_bundle(
+            &manifest_root,
+            &source_manifest,
+            &request,
+            &fixture,
+            &command,
+            &tiny_execution_output_request("tiny-execution-manifest-drift", &manifest_root),
+        )
+        .expect("tiny execution manifest-drift bundle materializes");
+        let manifest_path =
+            manifest_root.join("gateway-formal-backend-tiny-hermetic-execution/manifest.json");
+        let mut manifest: GatewayFormalBackendTinyHermeticExecutionOutputManifest =
+            serde_json::from_slice(&fs::read(&manifest_path).expect("execution manifest reads"))
+                .expect("execution manifest parses");
+        manifest.creates_accepted_evidence = true;
+        rewrite_bundle_file(
+            &manifest_root,
+            "gateway-formal-backend-tiny-hermetic-execution/manifest.json",
+            &serde_json::to_vec_pretty(&manifest).expect("execution manifest serializes"),
+        );
+        assert_eq!(
+            read_gateway_formal_backend_tiny_hermetic_execution_output_bundle(&manifest_root),
+            Err(GatewayFormalBackendTinyHermeticExecutionOutputError::ManifestSemanticMismatch)
+        );
+
+        let stale_root = temp_output_root("tiny-hermetic-execution-stale-sidecar");
+        materialize_gateway_formal_backend_tiny_hermetic_execution_output_bundle(
+            &stale_root,
+            &source_manifest,
+            &request,
+            &fixture,
+            &command,
+            &tiny_execution_output_request("tiny-execution-stale-sidecar", &stale_root),
+        )
+        .expect("tiny execution stale-sidecar bundle materializes");
+        fs::write(
+            sidecar_path(
+                &stale_root.join(
+                    "gateway-formal-backend-tiny-hermetic-execution/execution-transcript.json",
+                ),
+            ),
+            b"stale",
+        )
+        .expect("tiny execution stale sidecar writes");
+        assert_eq!(
+            read_gateway_formal_backend_tiny_hermetic_execution_output_bundle(&stale_root),
+            Err(
+                GatewayFormalBackendTinyHermeticExecutionOutputError::DigestMismatch(
+                    "gateway-formal-backend-tiny-hermetic-execution/execution-transcript.json"
+                        .to_owned()
+                )
+            )
+        );
+
+        let undeclared_root = temp_output_root("tiny-hermetic-execution-undeclared");
+        materialize_gateway_formal_backend_tiny_hermetic_execution_output_bundle(
+            &undeclared_root,
+            &source_manifest,
+            &request,
+            &fixture,
+            &command,
+            &tiny_execution_output_request("tiny-execution-undeclared", &undeclared_root),
+        )
+        .expect("tiny execution undeclared bundle materializes");
+        fs::write(
+            undeclared_root
+                .join("gateway-formal-backend-tiny-hermetic-execution/proof-artifact.json"),
+            b"{}",
+        )
+        .expect("tiny execution undeclared proof artifact writes");
+        assert_eq!(
+            read_gateway_formal_backend_tiny_hermetic_execution_output_bundle(&undeclared_root),
+            Err(
+                GatewayFormalBackendTinyHermeticExecutionOutputError::UndeclaredFile(
+                    "gateway-formal-backend-tiny-hermetic-execution/proof-artifact.json".to_owned()
+                )
+            )
+        );
+
+        fs::remove_dir_all(&manifest_root).expect("tiny execution manifest drift cleanup succeeds");
+        fs::remove_dir_all(&stale_root).expect("tiny execution stale cleanup succeeds");
+        fs::remove_dir_all(&undeclared_root).expect("tiny execution undeclared cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("tiny execution source cleanup succeeds");
     }
 
     fn rewrite_content_and_manifest_digest(output_root: &Path, logical_path: &str, bytes: &[u8]) {

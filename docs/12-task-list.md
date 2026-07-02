@@ -7310,6 +7310,43 @@ operator acknowledgement, exact command fixture, transcript schema, raw-output
 redaction, quarantine readback, and nonpromotion before any new code phase can
 cross into a tiny local backend execution experiment.
 
+## Phase 319 HSAI Tiny Hermetic Formal-Backend Local Fixture Execution Readback
+
+Status: complete. See
+`docs/319-hsai-tiny-hermetic-formal-backend-local-fixture-execution-readback-notes.md`.
+
+Goal: implement the smallest Phase 318 execution crossing by running one fixed
+local fixture process from the Phase 317 command descriptor and materializing a
+quarantine-only readback bundle.
+
+Implemented: Phase 319 constants, execution output request, execution
+transcript, nonpromotion report, validation report, output manifest, declared
+logical files and SHA-256 sidecars, source Phase 317 adapter-manifest
+revalidation before spawn, direct-process no-shell fixture execution, cleared
+environment, no stdin, bounded stdout/stderr summaries, redaction report,
+staged materialization, digest/semantic readback, nonclaim Markdown checks, and
+focused tests for successful readback, missing acknowledgement rejection,
+source-manifest drift rejection, manifest drift rejection, stale sidecar
+rejection, and undeclared proof-artifact rejection.
+
+Validation gate: formatting, Phase 319 focused unit tests, HSAI claim-boundary
+source scan, repo docs/hygiene tests, diff hygiene, empty-file hygiene,
+package-root lint check, and full workspace tests.
+
+Anti-goals: generic backend runners, caller-supplied executable paths,
+caller-supplied argv, shell execution, inherited environment, stdin, network
+access, package runtime files, external repo clones, vendored source,
+Lean/SMT/Z3/COBALT/Aeneas/Hax/rust-lean/Coq/TLA+/CBMC/model-checker execution
+as proof authority, solver scripts, checker scripts, proof artifacts, checker
+transcripts, solver certificates, accepted evidence, Level2+ evidence, score
+axes, benchmark evidence, live provider evidence, semantic-correctness,
+production-readiness, SOTA, breakthrough, full-security, or authority claims.
+
+Exit criteria: `hsai-agent-admission` can execute and read back one fixed local
+fixture process for the selected gateway invariant while proving through local
+tests that the bundle remains quarantine-only, promotion flags stay false, raw
+logs are not retained, and undeclared proof artifacts are rejected.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
