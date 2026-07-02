@@ -7414,6 +7414,50 @@ Exit criteria: the first real command lane has an explicit docs-first boundary
 that chooses one tiny SMT-style lane and blocks Lean/COBALT/proof-authority
 execution until separate source/toolchain and artifact boundaries exist.
 
+## Phase 322 HSAI Real Formal Command Lane Inert Data Model
+
+Status: complete. See
+`docs/322-hsai-real-formal-command-lane-inert-data-model-notes.md`.
+
+Goal: implement the inert Rust data model and declared output contract for the
+Phase 321 real formal command lane without running a solver or materializing a
+new command-lane bundle.
+
+Implemented: schema/state/claim-boundary constants, request metadata, fixed
+command descriptor metadata, static SMT-LIB2 obligation metadata, obligation
+binding metadata, bounded stdout/stderr summary metadata, solver verdict labels,
+checker/execution transcript metadata, nonpromotion report, validation report,
+output manifest, output contract, exact declared file and sidecar lists, an
+in-memory builder, and fail-closed validation.
+
+Validation coverage: valid contract construction from real Phase 317/319 source
+manifests, exact declared file and sidecar grammar, missing operator
+acknowledgement rejection, unsafe command-policy rejection, source execution
+manifest drift rejection, transcript promotion rejection, and nonpromotion of
+process execution, solver execution, proof artifacts, checker transcripts,
+solver certificates, accepted evidence, Level2+ evidence, score axes,
+semantic-correctness, production-readiness, SOTA, breakthrough, full-security,
+and authority claims.
+
+Validation gate: formatting, focused Phase 322 tests, HSAI claim-boundary source
+scan, repo docs/hygiene tests, diff hygiene, empty-file hygiene, package-root
+lint check, and full workspace tests.
+
+Anti-goals: package runtime files, command execution, process spawning,
+filesystem materialization for the new lane, backend runner implementation,
+solver scripts, checker scripts, proof assistant setup files, external repo
+clones, vendored source, Lean/SMT/Z3/COBALT/Aeneas/Hax/rust-lean/Coq/TLA+/
+CBMC/model-checker execution, generated proof artifacts, generated checker
+transcripts, generated solver certificates, accepted evidence, Level2+
+evidence, score axes, benchmark evidence, live provider evidence,
+semantic-correctness, production-readiness, SOTA, breakthrough, full-security,
+or authority claims.
+
+Exit criteria: the real command lane now has an in-memory Rust contract tied to
+Phase 317/319 source manifests and a declared output grammar, with policy and
+claim-escalation validation, but still no materialized command-lane readback and
+no real solver run.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
