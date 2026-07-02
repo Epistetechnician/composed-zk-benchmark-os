@@ -1678,6 +1678,26 @@ score-axis population, benchmark evidence, semantic-correctness claims,
 production-readiness claims, SOTA claims, breakthrough claims, full-security
 claims, or authority grants.
 
+Phase 325 implements the inert execution-preflight metadata for the Phase
+321-323 real formal command lane in `crates/hsai-agent-admission`. It adds
+typed preflight input/report metadata, validation issues, digest binding to the
+read back Phase 323 manifest, command request, command descriptor, obligation
+digest, expected-output grammar digest, executable policy id, executable
+digest, fixed executable label, fixed argv digest, timeout/stdout/stderr
+bounds, required nonclaims, and a blocked fixed-SMT process-plan function that
+returns no spawn and no backend execution. The HSAI source-scan test now
+contains a single-function future exception shape for
+`run_gateway_formal_real_command_lane_fixed_smt_process`, while the Phase 325
+implementation itself does not call `std::process::Command`. Focused tests
+cover valid preflight, no-spawn process-plan behavior, readback/digest/policy/
+path/promotion rejections, and source-scan exception confinement. Phase 325
+does not execute SMT/Z3/Lean/COBALT/Rust-to-Lean/Aeneas/Hax/Coq/TLA+/CBMC/
+model-checker tooling, create proof artifacts, create checker transcripts,
+create solver certificates, mutate accepted Evidence Ledger state, create
+Level2+ evidence, populate score axes, claim semantic correctness, claim
+production readiness, claim SOTA, claim breakthrough status, claim full
+security, or grant authority.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission

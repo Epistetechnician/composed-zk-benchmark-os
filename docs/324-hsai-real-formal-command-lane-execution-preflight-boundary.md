@@ -235,8 +235,9 @@ cargo test --workspace --quiet
 
 ## Next Slice
 
-Phase 325 may implement the inert execution-preflight metadata and the
-corresponding source-scan exception. It still must not run the solver.
+Phase 325 implements the inert execution-preflight metadata and the
+corresponding source-scan exception. It still does not run the solver.
 
-The first real SMT/Z3 command run must wait until after the preflight metadata,
-source-scan exception, and readback boundary are implemented and validated.
+The first real SMT/Z3 command run must wait until a later quarantined execution
+phase after preflight metadata, source-scan exception, and readback boundary are
+implemented and validated.

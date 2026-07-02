@@ -7538,6 +7538,51 @@ preflight boundary for one future fixed local SMT-LIB2 command invocation over
 one tiny gateway invariant, but still no source-scan implementation exception,
 no process spawn, no solver run, and no accepted formal evidence.
 
+## Phase 325 HSAI Real Formal Command Lane Inert Execution Preflight
+
+Status: complete. See
+`docs/325-hsai-real-formal-command-lane-inert-execution-preflight-notes.md`.
+
+Goal: implement the inert execution-preflight metadata and tightly scoped
+source-scan exception shape for one future fixed local SMT-LIB2 command
+invocation over the Phase 321-323 real formal command lane.
+
+Implemented: preflight input metadata, preflight report metadata, validation
+issues, validation result, required nonclaims, digest binding to the read back
+Phase 323 manifest, command request, command descriptor, obligation digest,
+expected-output grammar digest, executable policy id, executable digest, fixed
+executable label, fixed argv digest, timeout/stdout/stderr bounds, blocked
+fixed-SMT process-plan stub, and a source-scan exception constrained to one
+future direct-process line inside
+`run_gateway_formal_real_command_lane_fixed_smt_process`.
+
+Validation coverage: valid preflight from a read back Phase 323 bundle, blocked
+process-plan behavior with no spawn, missing readback, missing operator
+acknowledgement, missing executable digest, manifest/request/descriptor/
+obligation/grammar drift, caller executable path, caller argv, shell fragment,
+inherited environment, stdin, network, protected output-root, accepted-evidence
+path, Level2+ path, score-axis path, benchmark-output path, proof-promotion
+path, promotion flag, and single-function source-scan exception enforcement.
+
+Validation gate: formatting, focused real formal command-lane tests, HSAI
+claim-boundary source scan, repo docs/hygiene tests, diff hygiene, empty-file
+hygiene, package-root lint check, and full workspace tests.
+
+Anti-goals: real process spawning, SMT/Z3/Lean/COBALT/Rust-to-Lean/Aeneas/Hax/
+Coq/TLA+/CBMC/model-checker execution, arbitrary backend runners,
+caller-controlled executable paths, caller-controlled argv, shell execution,
+inherited environment, stdin, network access, solver scripts, checker scripts,
+proof assistant setup files, generated proof artifacts, generated checker
+transcripts, generated solver certificates, accepted evidence, Level2+
+evidence, score axes, benchmark evidence, live provider evidence,
+semantic-correctness, production-readiness, SOTA, breakthrough, full-security,
+or authority claims.
+
+Exit criteria: the real formal command lane now has an inert local
+execution-preflight lane and source-scan exception shape, but still no process
+spawn, no solver run, no proof/checker/solver artifacts, and no accepted formal
+evidence.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
