@@ -5642,6 +5642,1556 @@ uniqueness claims, or claims above `Attested`.
 Exit criteria: the future accepted-evidence implementation path is explicit,
 bounded, and nonclaim-safe before code mutation.
 
+## Phase 265 HSAI Formal Verification Evidence Architecture Boundary
+
+Status: complete. See
+`docs/265-hsai-formal-verification-evidence-architecture-boundary.md`.
+
+Goal: define the docs-first boundary for the next HSAI
+formal-verification evidence architecture before implementation touches formal
+tools, external repositories, proof artifacts, accepted evidence, or public
+SOTA wording.
+
+Implemented: added a bounded architecture spec that ranks COBALT, Aeneas,
+Verified-zkEVM rust-lean, VeriSoftBench, Federated Formal Verification,
+cycle-consistent certificate explanation, and related research repos by their
+future HSAI role. It defines the target pipeline, first tiny gateway-property
+targets, future formal evidence shape, verification order, source verification
+rule, explicit nonclaims, and next implementation slice.
+
+Validation gate: docs hygiene, source-index hygiene, claim-boundary docs, repo
+hygiene, formatting, diff hygiene, and full workspace tests.
+
+Anti-goals: Rust/source changes, Cargo metadata changes, package runtime files,
+external repo clones, vendored source, proof assistant setup files, Lean, Coq,
+TLA+, SMT, Z3, CBMC, or model-checker execution, generated proof artifacts,
+accepted Evidence Ledger mutation, Level2+ evidence, score-axis population,
+benchmark evidence, official benchmark submission, live provider calls,
+credential handling, production-readiness claims, semantic-correctness claims,
+SOTA claims, breakthrough claims, full-security claims, or global
+software-agent uniqueness claims.
+
+Exit criteria: the next formal-verification evidence track is explicit,
+bounded, source-indexed, and nonclaim-safe before code mutation.
+
+## Phase 266 HSAI Gateway Formal Evidence Metadata Adapter
+
+Status: complete. See
+`docs/266-hsai-gateway-formal-evidence-metadata-adapter-notes.md`.
+
+Goal: implement the first bounded local metadata adapter for one tiny HSAI
+gateway formal-evidence candidate without running formal tools or escalating
+claims.
+
+Implemented: added typed `hsai-agent-admission` request, report, validation,
+local-check, status, property-kind, and issue types for the gateway attestation
+challenge binding determinism/input-sensitivity candidate. The adapter rebuilds
+the existing challenge binding, checks identical-input determinism, nonce
+sensitivity, proposal sensitivity, expected binding digest agreement, portable
+source attribution, source digest/commit presence, explicit nonclaims, and
+claim-boundary flags.
+
+Validation gate: focused `hsai-agent-admission` formal-evidence tests, repo
+hygiene, formatting, diff hygiene, and full workspace tests.
+
+Anti-goals: formal backend execution, proof artifact submission, external repo
+clones, vendored source, proof assistant setup files, accepted Evidence Ledger
+mutation, Level2+ evidence, score-axis population, benchmark evidence,
+official benchmark submission, live provider calls, credential handling,
+production-readiness claims, semantic-correctness claims, SOTA claims,
+breakthrough claims, full-security claims, global software-agent uniqueness
+claims, or authority to execute an action.
+
+Exit criteria: one gateway formal-evidence candidate is represented as bounded
+local metadata with explicit nonclaims and fail-closed escalation rejection.
+
+## Phase 267 HSAI Gateway Formal Source Correspondence Boundary
+
+Status: complete. See
+`docs/267-hsai-gateway-formal-source-correspondence-boundary.md`.
+
+Goal: define the source-correspondence contract for any future formal
+obligation over the Phase 266 gateway binding property before proof tooling or
+certificate implementation is allowed.
+
+Implemented: added a docs-first boundary that names the source anchor set for
+`GatewayActionProposal`, `GatewayAttestationChallengeBinding`,
+`build_gateway_attestation_challenge_binding`,
+`validate_gateway_attestation_challenge_binding`,
+`gateway_attestation_challenge_id`, the Phase 266 formal-evidence local check,
+and the imported `hsai-attestation::report_data_binding` dependency. It splits
+the future property into deterministic-constructor, nonce-sensitivity,
+proposal-sensitivity, and validation-agreement obligations, then defines
+required correspondence-certificate fields and backend-specific rules for
+Rust-to-Lean, SMT/COBALT-style, and federated paths.
+
+Validation gate: docs hygiene, source-correspondence claim-boundary review, repo
+hygiene, formatting, diff hygiene, and full workspace tests.
+
+Anti-goals: Rust implementation changes, Cargo metadata changes, package
+runtime files, proof assistant setup files, external repo clones, vendored
+source, Lean, Coq, TLA+, SMT, Z3, CBMC, model-checker execution, generated proof
+artifacts, accepted Evidence Ledger mutation, Level2+ evidence, score-axis
+population, benchmark evidence, official benchmark submission, live provider
+calls, credential handling, production-readiness claims, semantic-correctness
+claims, SOTA claims, breakthrough claims, full-security claims, global
+software-agent uniqueness claims, or authority to execute an action.
+
+Exit criteria: the future proof target is source-anchored and nonclaim-safe
+before any prover or correspondence-certificate implementation begins.
+
+## Phase 268 HSAI Gateway Formal Correspondence Certificate Metadata
+
+Status: complete. See
+`docs/268-hsai-gateway-formal-correspondence-certificate-notes.md`.
+
+Goal: implement the local pure-data correspondence-certificate type for the
+Phase 267 source mapping without running a prover or creating proof evidence.
+
+Implemented: added typed `hsai-agent-admission` certificate, validation, issue,
+source-file digest, source-anchor, tool-status, proof-obligation, backend-kind,
+tool-execution-status, proof-status, and review-decision surfaces. Validation
+requires both source files, all Phase 267 anchors, all four P267 obligations,
+source commit metadata, nonzero source digests, tool metadata, trusted
+assumptions, modeled replacements, an input/output schema digest,
+metadata-only review, explicit nonclaims, and the correspondence-only claim
+boundary.
+
+Validation gate: focused `hsai-agent-admission` correspondence-certificate
+tests, repo hygiene, formatting, diff hygiene, and full workspace tests.
+
+Anti-goals: formal backend execution, proof artifact submission, proof-status
+escalation, external repo clones, vendored source, proof assistant setup files,
+accepted Evidence Ledger mutation, Level2+ evidence, score-axis population,
+benchmark evidence, official benchmark submission, live provider calls,
+credential handling, production-readiness claims, semantic-correctness claims,
+SOTA claims, breakthrough claims, full-security claims, global software-agent
+uniqueness claims, or authority to execute an action.
+
+Exit criteria: the Phase 267 source mapping is represented as local
+correspondence metadata with fail-closed source, tool, assumption, review, and
+claim-boundary validation.
+
+## Phase 269 HSAI Gateway Formal Correspondence Output Bundle Boundary
+
+Status: complete. See
+`docs/269-hsai-gateway-formal-correspondence-output-bundle-boundary.md`.
+
+Goal: define the docs-first output-bundle boundary for future materialization
+of the Phase 268 correspondence certificate before filesystem code is allowed.
+
+Implemented: added a bounded bundle spec that names the future
+`gateway-formal-correspondence/*` declared files, SHA-256 sidecars, manifest
+fields, validation-report fields, redaction-report fields, readback semantics,
+future tests, anti-goals, explicit nonclaims, and next implementation slice. The
+bundle contract requires local consistency checks over certificate, manifest,
+sidecars, validation report, redaction report, and nonclaims.
+
+Validation gate: docs hygiene, output-bundle claim-boundary review, repo
+hygiene, formatting, diff hygiene, and full workspace tests.
+
+Anti-goals: Rust implementation changes, Cargo metadata changes, package
+runtime files, filesystem output implementation, generated output bundles, proof
+assistant setup files, external repo clones, vendored source, Lean, Coq, TLA+,
+SMT, Z3, CBMC, model-checker execution, generated proof artifacts, proof
+artifact submission, raw prover or solver logs, accepted Evidence Ledger
+mutation, Level2+ evidence, score-axis population, benchmark evidence, official
+benchmark submission, live provider calls, credential handling,
+production-readiness claims, semantic-correctness claims, SOTA claims,
+breakthrough claims, full-security claims, global software-agent uniqueness
+claims, or authority to execute an action.
+
+Exit criteria: future correspondence-certificate output materialization is
+declared, digest-bound, readback-bound, and nonclaim-safe before code mutation.
+
+## Phase 270 HSAI Gateway Formal Correspondence Output Bundle Implementation
+
+Status: complete. See
+`docs/270-hsai-gateway-formal-correspondence-output-bundle-notes.md`.
+
+Goal: implement the Phase 269 local output-bundle materialization and readback
+contract for Phase 268 correspondence certificates.
+
+Implemented: added local `hsai-agent-admission` output request, manifest,
+validation report, redaction report, output error, materialization, and readback
+surfaces for `gateway-formal-correspondence/*` bundles. The implementation
+stages writes, emits SHA-256 sidecars, recomputes manifest and validation
+content on readback, rejects undeclared files and symlinks, and preserves the
+metadata-only claim boundary.
+
+Validation gate: focused bundle materialization/readback tests, docs hygiene,
+repo hygiene, formatting, diff hygiene, and full workspace tests.
+
+Anti-goals: formal backend execution, proof assistant setup files, external
+repo clones, vendored source, Lean, Coq, TLA+, SMT, Z3, CBMC, model-checker
+execution, generated proof artifacts, proof artifact submission, raw prover or
+solver logs, accepted Evidence Ledger mutation, Level2+ evidence, score-axis
+population, benchmark evidence, official benchmark submission, live provider
+calls, credential handling, production-readiness claims, semantic-correctness
+claims, SOTA claims, breakthrough claims, full-security claims, global
+software-agent uniqueness claims, or authority to execute an action.
+
+Exit criteria: Phase 268 correspondence certificates can be materialized into a
+local declared-file bundle and read back with fail-closed local consistency
+checks, without becoming proof evidence or accepted evidence.
+
+## Phase 271 HSAI Gateway Formal Correspondence Output Bundle Drift Coverage
+
+Status: complete. See
+`docs/271-hsai-gateway-formal-correspondence-output-bundle-drift-coverage-notes.md`.
+
+Goal: expand audit-first negative coverage for the Phase 270 local output
+bundle before any backend-specific proof adapter boundary.
+
+Implemented: added focused `hsai-agent-admission` tests for existing output
+roots without overwrite, file output roots, protected output roots, symlink
+output roots, symlink bundle directories, symlink declared files, symlink
+sidecars, missing sidecars, stale sidecars, malformed manifest JSON,
+validation-report semantic drift, and manifest claim-boundary escalation.
+
+Validation gate: focused bundle drift coverage tests, docs hygiene, repo
+hygiene, formatting, diff hygiene, and full workspace tests.
+
+Anti-goals: production source format changes, formal backend execution, proof
+assistant setup files, external repo clones, vendored source, Lean, Coq, TLA+,
+SMT, Z3, CBMC, model-checker execution, generated proof artifacts, proof
+artifact submission, raw prover or solver logs, accepted Evidence Ledger
+mutation, Level2+ evidence, score-axis population, benchmark evidence, official
+benchmark submission, live provider calls, credential handling,
+production-readiness claims, semantic-correctness claims, SOTA claims,
+breakthrough claims, full-security claims, global software-agent uniqueness
+claims, or authority to execute an action.
+
+Exit criteria: Phase 270 output-bundle readback has focused failure coverage for
+root safety, declared-file safety, sidecar integrity, semantic drift, and claim
+boundary escalation.
+
+## Phase 272 HSAI Gateway Formal Backend Adapter Boundary
+
+Status: complete. See
+`docs/272-hsai-gateway-formal-backend-adapter-boundary.md`.
+
+Goal: define the docs-first boundary for the first future backend-specific proof
+adapter before any proof tool setup or execution is allowed.
+
+Implemented: added a backend ranking that puts a Rust-to-Lean
+source-correspondence lane first for the gateway binding property, limits the
+SMT/COBALT-style lane to boolean claim-boundary and small arithmetic
+containment invariants, defers federated dispatch and benchmark evaluation until
+candidate backend runs exist, and treats certificate explanation as audit/debug
+support only. The boundary defines future adapter inputs, outputs, verification
+order, maturity labels, required tests, anti-goals, and next implementation
+slice.
+
+Validation gate: docs hygiene, backend-boundary claim review, repo hygiene,
+formatting, diff hygiene, and full workspace tests.
+
+Anti-goals: Rust implementation changes, Cargo metadata changes, package
+runtime files, proof assistant setup files, external repo clones, vendored
+source, Lean, Coq, TLA+, SMT, Z3, CBMC, model-checker, Aeneas, Hax, rust-lean,
+or COBALT execution, generated proof artifacts, generated checker transcripts,
+accepted Evidence Ledger mutation, Level2+ evidence, score-axis population,
+benchmark evidence, official benchmark submission, live provider calls,
+credential handling, production-readiness claims, semantic-correctness claims,
+SOTA claims, breakthrough claims, full-security claims, global software-agent
+uniqueness claims, or authority to execute an action.
+
+Exit criteria: the first backend-specific adapter is bounded as future
+candidate metadata only, with explicit correspondence, toolchain, proof
+artifact, checker transcript, and claim-boundary requirements.
+
+## Phase 273 HSAI Gateway Formal Backend Adapter Inert Metadata
+
+Status: complete. See
+`docs/273-hsai-gateway-formal-backend-adapter-inert-metadata-notes.md`.
+
+Goal: implement the inert request/report metadata surface for the first future
+backend-specific adapter without running any backend.
+
+Implemented: added local `hsai-agent-admission` request, report, validation,
+issue, status, maturity, claim-boundary, required-nonclaim, validation, and
+report-construction surfaces for the future `RustToLean` gateway formal lane.
+Validation binds the Phase 268 correspondence certificate digest, Phase 270
+output manifest digest, source commit, source files, source anchors, proof
+obligations, tool metadata, model assumptions, modeled replacements,
+unsupported Rust features, input/output schema digest, expected future proof
+artifact format, expected checker transcript format, `NotRun` maturity, and
+explicit nonclaims.
+
+Validation gate: focused backend-adapter metadata tests, docs hygiene, repo
+hygiene, formatting, diff hygiene, and full workspace tests.
+
+Anti-goals: backend execution, proof assistant setup files, external repo
+clones, vendored source, Lean, Coq, TLA+, SMT, Z3, CBMC, model-checker, Aeneas,
+Hax, rust-lean, or COBALT execution, generated proof artifacts, generated
+checker transcripts, accepted Evidence Ledger mutation, Level2+ evidence,
+score-axis population, benchmark evidence, official benchmark submission, live
+provider calls, credential handling, production-readiness claims,
+semantic-correctness claims, SOTA claims, breakthrough claims, full-security
+claims, global software-agent uniqueness claims, or authority to execute an
+action.
+
+Exit criteria: the future backend adapter now has local candidate metadata that
+fails closed on digest drift, source drift, tool drift, proof/checker artifact
+submission, maturity escalation, and public-claim escalation.
+
+## Phase 274 HSAI Gateway Formal Backend Adapter Drift Coverage
+
+Status: complete. See
+`docs/274-hsai-gateway-formal-backend-adapter-drift-coverage-notes.md`.
+
+Goal: add audit-first negative coverage for the Phase 273 inert backend-adapter
+metadata before any backend-run artifact boundary.
+
+Implemented: added focused `hsai-agent-admission` tests for output-manifest
+digest drift, output-manifest certificate-digest drift, output-manifest
+claim-boundary drift, invalid nested correspondence certificates,
+schema-version drift, unsafe adapter ids, state-slice drift, and requested
+claim-boundary drift.
+
+Validation gate: focused backend-adapter metadata tests, docs hygiene, repo
+hygiene, formatting, diff hygiene, and full workspace tests.
+
+Anti-goals: production source format changes, backend execution, proof
+assistant setup files, external repo clones, vendored source, Lean, Coq, TLA+,
+SMT, Z3, CBMC, model-checker, Aeneas, Hax, rust-lean, or COBALT execution,
+generated proof artifacts, generated checker transcripts, accepted Evidence
+Ledger mutation, Level2+ evidence, score-axis population, benchmark evidence,
+official benchmark submission, live provider calls, credential handling,
+production-readiness claims, semantic-correctness claims, SOTA claims,
+breakthrough claims, full-security claims, global software-agent uniqueness
+claims, or authority to execute an action.
+
+Exit criteria: Phase 273 adapter metadata has focused failure coverage for
+manifest identity, nested certificate validity, request identity, and claim
+boundary drift.
+
+## Phase 275 HSAI Gateway Formal Backend Run Artifact Boundary
+
+Status: complete. See
+`docs/275-hsai-gateway-formal-backend-run-artifact-boundary.md`.
+
+Goal: define the docs-first artifact boundary for a future hermetic backend run
+before any proof tool setup or execution is allowed.
+
+Implemented: added a backend-run artifact boundary that defines the future
+`gateway-formal-backend-run/*` declared file layout, SHA-256 sidecars, optional
+candidate proof/checker references, run-summary contract, execution-mode
+contract, review gate, benchmark hooks, required future tests, anti-goals, and
+next implementation slice. The boundary keeps any future run candidate-only and
+forbids accepted-evidence promotion inside this slice.
+
+Validation gate: docs hygiene, backend-run boundary claim review, repo hygiene,
+formatting, diff hygiene, and full workspace tests.
+
+Anti-goals: Rust implementation changes, Cargo metadata changes, package
+runtime files, proof assistant setup files, external repo clones, vendored
+source, Lean, Coq, TLA+, SMT, Z3, CBMC, model-checker, Aeneas, Hax, rust-lean,
+or COBALT execution, generated proof artifacts, generated checker transcripts,
+raw prover logs, raw checker logs, accepted Evidence Ledger mutation, Level2+
+evidence, score-axis population, benchmark evidence, official benchmark
+submission, live provider calls, credential handling, production-readiness
+claims, semantic-correctness claims, SOTA claims, breakthrough claims,
+full-security claims, global software-agent uniqueness claims, or authority to
+execute an action.
+
+Exit criteria: the future backend-run artifact surface is declared,
+candidate-only, digest-bound, redaction-bound, review-gated, benchmark-hooked
+only as metadata, and nonpromotion-safe before code mutation.
+
+## Phase 276 HSAI Gateway Formal Backend Run Inert Artifact Metadata
+
+Status: complete. See
+`docs/276-hsai-gateway-formal-backend-run-inert-artifact-metadata-notes.md`.
+
+Goal: implement local inert backend-run artifact metadata that binds the future
+run summary to the Phase 273 adapter chain without running a backend.
+
+Implemented: added schema/state/claim-boundary constants, backend-run execution,
+exit, checker, artifact-reference, metadata, issue, and validation types;
+required nonclaims; digest helpers for modeled assumptions and unsupported
+features; a `NotRun` metadata builder; and fail-closed validation for binding
+drift, execution labels, timestamps, proof/checker references, tool-log
+summaries, accepted evidence, Level2+ evidence, score axes, authority grants,
+forbidden public claim text, and missing nonclaims.
+
+Validation gate: focused `hsai-agent-admission` tests for valid inert metadata,
+execution/artifact-reference escalation rejection, and binding drift rejection;
+formatting; repo hygiene; full workspace tests.
+
+Anti-goals: materialized backend-run bundle writes, backend execution, proof
+assistant setup files, external repo clones, vendored source, Lean, Coq, TLA+,
+SMT, Z3, CBMC, model-checker, Aeneas, Hax, rust-lean, or COBALT execution,
+generated proof artifacts, generated checker transcripts, raw prover logs, raw
+checker logs, accepted Evidence Ledger mutation, Level2+ evidence, score-axis
+population, benchmark evidence, official benchmark submission, live provider
+calls, credential handling, semantic-correctness claims, production-readiness
+claims, SOTA claims, breakthrough claims, full-security claims, global
+software-agent uniqueness claims, or authority to execute an action.
+
+Exit criteria: the backend-run artifact has a local, digest-bound `NotRun`
+metadata representation with negative coverage for execution and claim
+escalation, while remaining below backend execution and accepted evidence.
+
+## Phase 277 HSAI Gateway Formal Backend Run Materialized Bundle Boundary
+
+Status: complete. See
+`docs/277-hsai-gateway-formal-backend-run-materialized-bundle-boundary.md`.
+
+Goal: define the docs-first filesystem contract for a future materialized
+`gateway-formal-backend-run/*` bundle before implementation code writes or reads
+those files.
+
+Implemented: added a materialized bundle boundary that defines output-root
+rules, protected-root and symlink rejection, exact declared files, required
+SHA-256 sidecars, manifest fields, bounded file semantics, redaction-report
+rules, optional proof/checker/tool-log attachment rejection, readback drift
+checks, required future tests, anti-goals, and next implementation slice.
+
+Validation gate: docs hygiene, boundary claim review, repo hygiene, formatting,
+diff hygiene, and workspace tests.
+
+Anti-goals: Rust implementation changes, Cargo metadata changes, package
+runtime files, filesystem bundle materialization code, proof assistant setup
+files, external repo clones, vendored source, Lean, Coq, TLA+, SMT, Z3, CBMC,
+model-checker, Aeneas, Hax, rust-lean, or COBALT execution, generated proof
+artifacts, generated checker transcripts, raw prover logs, raw checker logs,
+accepted Evidence Ledger mutation, Level2+ evidence, score-axis population,
+benchmark evidence, official benchmark submission, live provider calls,
+credential handling, semantic-correctness claims, production-readiness claims,
+SOTA claims, breakthrough claims, full-security claims, global software-agent
+uniqueness claims, or authority to execute an action.
+
+Exit criteria: the future backend-run bundle has an explicit materialized-file
+contract with fail-closed readback requirements and no authorization to execute
+a backend or promote evidence.
+
+## Phase 278 HSAI Gateway Formal Backend Run Inert Bundle Materialization
+
+Status: complete. See
+`docs/278-hsai-gateway-formal-backend-run-inert-bundle-materialization-notes.md`.
+
+Goal: implement local inert materialization and readback for the Phase 277
+`gateway-formal-backend-run/*` bundle without running a backend or promoting
+evidence.
+
+Implemented: added backend-run output request, toolchain-lock, redaction-report,
+manifest, and error types; declared file and sidecar constants; deterministic
+bundle construction; staged writes; output-root validation; sidecar generation;
+readback; undeclared-file rejection; sidecar digest checks; manifest semantic
+validation; redaction-report checking; nonclaim checking; optional attachment
+rejection; and focused tests for valid readback, escalated metadata rejection,
+optional proof attachment rejection, and digest-consistent semantic drift.
+
+Validation gate: focused backend-run tests, formatting, docs hygiene, repo
+hygiene, diff hygiene, and full workspace tests.
+
+Anti-goals: backend execution, proof assistant setup files, external repo
+clones, vendored source, Lean, Coq, TLA+, SMT, Z3, CBMC, model-checker, Aeneas,
+Hax, rust-lean, or COBALT execution, generated proof artifacts, generated
+checker transcripts, raw prover logs, raw checker logs, raw solver traces,
+accepted Evidence Ledger mutation, Level2+ evidence, score-axis population,
+benchmark evidence, official benchmark submission, live provider calls,
+credential handling, semantic-correctness claims, production-readiness claims,
+SOTA claims, breakthrough claims, full-security claims, global software-agent
+uniqueness claims, or authority to execute an action.
+
+Exit criteria: the backend-run bundle can be materialized and read back as a
+local `NotRun` metadata bundle with digest-bound semantics and no evidence
+promotion.
+
+## Phase 279 HSAI Gateway Formal Backend Run Bundle Drift Coverage
+
+Status: complete. See
+`docs/279-hsai-gateway-formal-backend-run-bundle-drift-coverage-notes.md`.
+
+Goal: add audit-first negative coverage for the Phase 278 backend-run bundle
+reader without changing the bundle format or running a backend.
+
+Implemented: added tests for protected output-root rejection, file output-root
+rejection, symlink output-root rejection, stale run-summary sidecar rejection,
+manifest nonpromotion-flag drift rejection, malformed run-summary JSON
+rejection, redaction-report drift rejection, nonclaim Markdown drift rejection,
+and symlink declared-file rejection.
+
+Validation gate: focused backend-run tests, formatting, docs hygiene, repo
+hygiene, diff hygiene, and full workspace tests.
+
+Anti-goals: production bundle semantic changes, backend execution, proof
+assistant setup files, external repo clones, vendored source, Lean, Coq, TLA+,
+SMT, Z3, CBMC, model-checker, Aeneas, Hax, rust-lean, or COBALT execution,
+generated proof artifacts, generated checker transcripts, raw prover logs, raw
+checker logs, raw solver traces, accepted Evidence Ledger mutation, Level2+
+evidence, score-axis population, benchmark evidence, official benchmark
+submission, live provider calls, credential handling, semantic-correctness
+claims, production-readiness claims, SOTA claims, breakthrough claims,
+full-security claims, global software-agent uniqueness claims, or authority to
+execute an action.
+
+Exit criteria: the Phase 278 reader now has focused failure coverage for
+root/file/symlink drift, sidecar drift, manifest drift, redaction drift,
+nonclaim drift, malformed run-summary JSON, and symlinked declared files.
+
+## Phase 280 HSAI Gateway Formal Backend Execution Preflight Boundary
+
+Status: complete. See
+`docs/280-hsai-gateway-formal-backend-execution-preflight-boundary.md`.
+
+Goal: define the docs-first preflight boundary that must exist before any
+future Lean, SMT, COBALT, Rust-to-Lean, Aeneas, Hax, Z3, CBMC, Coq, TLA+, or
+model-checker command can run.
+
+Implemented: added a backend execution preflight boundary defining required
+future inputs, inert argv-only command descriptors, allowed future backend
+modes, environment rules, artifact-root rules, operator acknowledgement,
+preflight output shape, required future tests, anti-goals, and next
+implementation slice.
+
+Validation gate: docs hygiene, boundary claim review, repo hygiene, formatting,
+diff hygiene, and full workspace tests.
+
+Anti-goals: Rust implementation changes, Cargo metadata changes, package
+runtime files, command execution, process spawning, proof assistant setup files,
+external repo clones, vendored source, Lean, Coq, TLA+, SMT, Z3, CBMC,
+model-checker, Aeneas, Hax, rust-lean, or COBALT execution, generated proof
+artifacts, generated checker transcripts, raw prover logs, raw checker logs,
+raw solver traces, accepted Evidence Ledger mutation, Level2+ evidence,
+score-axis population, benchmark evidence, official benchmark submission, live
+provider calls, credential handling, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims, full-security
+claims, global software-agent uniqueness claims, or authority to execute an
+action.
+
+Exit criteria: the future backend execution lane now has an explicit preflight
+contract for command, environment, artifact-root, operator acknowledgement,
+no-network, no-secret, and nonpromotion rules before code mutation.
+
+## Phase 281 HSAI Gateway Formal Backend Execution Preflight Inert Metadata
+
+Status: complete. See
+`docs/281-hsai-gateway-formal-backend-execution-preflight-inert-metadata-notes.md`.
+
+Goal: implement the Phase 280 backend execution preflight boundary as pure
+metadata and validation in `hsai-agent-admission`, without running any command.
+
+Implemented: added preflight request/report types, backend preflight modes,
+argv-only command descriptors, environment descriptors, artifact-root
+descriptors, operator acknowledgement metadata, redaction-policy metadata,
+digest helpers, fail-closed validation, and focused tests for candidate-only
+acceptance and drift rejection.
+
+Validation gate: focused `hsai-agent-admission` tests, formatting, diff hygiene,
+repo hygiene, and full workspace tests.
+
+Anti-goals: command execution, process spawning, backend runner implementation,
+filesystem materialization for preflight output bundles, Cargo metadata changes,
+package runtime files, proof assistant setup files, external repo clones,
+vendored source, Lean, Coq, TLA+, SMT, Z3, CBMC, model-checker, Aeneas, Hax,
+rust-lean, or COBALT execution, generated proof artifacts, generated checker
+transcripts, raw prover logs, raw checker logs, raw solver traces, accepted
+Evidence Ledger mutation, Level2+ evidence, score-axis population, benchmark
+evidence, official benchmark submission, live provider calls, credential
+handling, semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, global software-agent uniqueness
+claims, or authority to execute an action.
+
+Exit criteria: Phase 281 can now decide whether a future backend execution
+command descriptor is preflight-ready as local metadata only. It still cannot
+execute the command or create proof/checker artifacts.
+
+## Phase 282 HSAI Gateway Formal Backend Preflight Output-Bundle Boundary
+
+Status: complete. See
+`docs/282-hsai-gateway-formal-backend-preflight-output-bundle-boundary.md`.
+
+Goal: define the docs-first filesystem output-bundle contract for future
+materialization of Phase 281 preflight metadata.
+
+Implemented: added a boundary spec for
+`gateway-formal-backend-preflight/*` declared files, SHA-256 sidecars,
+output-root rules, manifest fields, readback drift checks, required future
+tests, anti-goals, and next implementation slice.
+
+Validation gate: docs hygiene, boundary claim review, formatting, diff hygiene,
+repo hygiene, and full workspace tests.
+
+Anti-goals: Rust implementation changes, Cargo metadata changes, package
+runtime files, filesystem bundle materialization code, command execution,
+process spawning, backend runner implementation, proof assistant setup files,
+external repo clones, vendored source, Lean, Coq, TLA+, SMT, Z3, CBMC,
+model-checker, Aeneas, Hax, rust-lean, or COBALT execution, generated proof
+artifacts, generated checker transcripts, raw prover logs, raw checker logs,
+raw solver traces, accepted Evidence Ledger mutation, Level2+ evidence,
+score-axis population, benchmark evidence, official benchmark submission, live
+provider calls, credential handling, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims, full-security
+claims, global software-agent uniqueness claims, or authority to execute an
+action.
+
+Exit criteria: the future preflight materialization lane now has an explicit
+declared-file, sidecar, manifest, output-root, and readback contract before any
+Rust implementation is authorized.
+
+## Phase 283 HSAI Gateway Formal Backend Preflight Output-Bundle Implementation
+
+Status: complete. See
+`docs/283-hsai-gateway-formal-backend-preflight-output-bundle-implementation-notes.md`.
+
+Goal: implement the Phase 282 preflight output-bundle contract as local
+filesystem materialization and readback in `hsai-agent-admission`.
+
+Implemented: added preflight output request, manifest, error type, declared
+files, SHA-256 sidecars, staged writes, readback validation, manifest
+recomputation, semantic drift rejection, and focused tests.
+
+Validation gate: focused `hsai-agent-admission` tests, formatting, diff
+hygiene, repo hygiene, and full workspace tests.
+
+Anti-goals: command execution, process spawning, backend runner implementation,
+proof assistant setup files, external repo clones, vendored source, Lean, Coq,
+TLA+, SMT, Z3, CBMC, model-checker, Aeneas, Hax, rust-lean, or COBALT
+execution, generated proof artifacts, generated checker transcripts, raw prover
+logs, raw checker logs, raw solver traces, accepted Evidence Ledger mutation,
+Level2+ evidence, score-axis population, benchmark evidence, official benchmark
+submission, live provider calls, credential handling, semantic-correctness
+claims, production-readiness claims, SOTA claims, breakthrough claims,
+full-security claims, global software-agent uniqueness claims, or authority to
+execute an action.
+
+Exit criteria: Phase 281 preflight metadata can now be materialized and read
+back as a bounded local metadata bundle. It still cannot execute any backend or
+create proof/checker artifacts.
+
+## Phase 284 HSAI Gateway Formal Backend Execution Transcript Boundary
+
+Status: complete. See
+`docs/284-hsai-gateway-formal-backend-execution-transcript-boundary.md`.
+
+Goal: define the docs-first boundary for future backend execution transcript
+references and checker-output admission rules.
+
+Implemented: added a boundary spec for future transcript metadata, proof and
+checker reference rules, checker-output admission requirements, required future
+tests, anti-goals, and next implementation slice.
+
+Validation gate: docs hygiene, boundary claim review, formatting, diff hygiene,
+repo hygiene, and full workspace tests.
+
+Anti-goals: Rust implementation changes, Cargo metadata changes, package
+runtime files, filesystem transcript bundle materialization code, command
+execution, process spawning, backend runner implementation, proof assistant
+setup files, external repo clones, vendored source, Lean, Coq, TLA+, SMT, Z3,
+CBMC, model-checker, Aeneas, Hax, rust-lean, or COBALT execution, generated
+proof artifacts, generated checker transcripts, raw prover logs, raw checker
+logs, raw solver traces, accepted Evidence Ledger mutation, Level2+ evidence,
+score-axis population, benchmark evidence, official benchmark submission, live
+provider calls, credential handling, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims, full-security
+claims, global software-agent uniqueness claims, or authority to execute an
+action.
+
+Exit criteria: the future transcript lane now has an explicit reference,
+redaction, checker-output, and nonpromotion boundary before any Rust
+implementation is authorized.
+
+## Phase 285 HSAI Gateway Formal Backend Execution Transcript Inert Metadata
+
+Status: complete. See
+`docs/285-hsai-gateway-formal-backend-execution-transcript-inert-metadata-notes.md`.
+
+Goal: implement local transcript metadata and validation for a future backend
+execution transcript candidate without running a backend or materializing
+transcript files.
+
+Implemented: added transcript schema/state/claim-boundary constants, execution
+and checker status labels, transcript reference metadata, redaction report
+metadata, `GatewayFormalBackendExecutionTranscriptMetadata`, validation issue
+labels, deterministic digesting, a Phase 283 preflight-bound metadata builder,
+and fail-closed validation for preflight binding, command/toolchain binding,
+transcript references, redaction retention, proof-obligation submission,
+trust-root submission, nonpromotion flags, forbidden public claim text, and
+required nonclaims.
+
+Validation gate: `cargo fmt --all -- --check`,
+`cargo test -p hsai-agent-admission gateway_formal_backend_transcript`, full
+workspace tests, diff hygiene, repo hygiene, and package-script detection.
+
+Anti-goals: Cargo metadata changes, package runtime files, filesystem
+transcript bundle materialization code, command execution, process spawning,
+backend runner implementation, proof assistant setup files, external repo
+clones, vendored source, Lean, Coq, TLA+, SMT, Z3, CBMC, model-checker, Aeneas,
+Hax, rust-lean, or COBALT execution, generated proof artifacts, generated
+checker transcripts, raw prover logs, raw checker logs, raw solver traces,
+accepted Evidence Ledger mutation, Level2+ evidence, score-axis population,
+benchmark evidence, official benchmark submission, live provider calls,
+credential handling, semantic-correctness claims, production-readiness claims,
+SOTA claims, breakthrough claims, full-security claims, global software-agent
+uniqueness claims, or authority to execute an action.
+
+Exit criteria: HSAI gateway formal backend transcript metadata can be built and
+validated as an inert candidate bound to a Phase 283 preflight bundle. It still
+cannot execute a backend, create proof/checker artifacts, create accepted
+evidence, populate score axes, or support SOTA/full-security/semantic
+correctness/production-readiness claims.
+
+## Phase 286 HSAI Gateway Formal Backend Transcript Output-Bundle Boundary
+
+Status: complete. See
+`docs/286-hsai-gateway-formal-backend-transcript-output-bundle-boundary.md`.
+
+Goal: define the docs-first filesystem contract for future transcript metadata
+materialization and readback.
+
+Implemented: added a boundary spec for declared
+`gateway-formal-backend-transcript/*` files, SHA-256 sidecars, output-root
+rules, manifest fields, file semantics, readback drift checks, required future
+tests, anti-goals, explicit nonclaims, and next implementation slice.
+
+Validation gate: docs hygiene, boundary claim review, formatting, diff hygiene,
+repo hygiene, and full workspace tests.
+
+Anti-goals: Rust implementation changes, Cargo metadata changes, package
+runtime files, filesystem bundle materialization code, command execution,
+process spawning, backend runner implementation, proof assistant setup files,
+external repo clones, vendored source, Lean, Coq, TLA+, SMT, Z3, CBMC,
+model-checker, Aeneas, Hax, rust-lean, or COBALT execution, generated proof
+artifacts, generated checker transcripts, raw prover logs, raw checker logs,
+raw solver traces, accepted Evidence Ledger mutation, Level2+ evidence,
+score-axis population, benchmark evidence, official benchmark submission, live
+provider calls, credential handling, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims, full-security
+claims, global software-agent uniqueness claims, or authority to execute an
+action.
+
+Exit criteria: the future transcript metadata output bundle now has an explicit
+declared-file, sidecar, manifest, readback, redaction, and nonpromotion boundary
+before any Rust implementation is authorized.
+
+## Phase 287 HSAI Gateway Formal Backend Transcript Output-Bundle Implementation
+
+Status: complete. See
+`docs/287-hsai-gateway-formal-backend-transcript-output-bundle-implementation-notes.md`.
+
+Goal: implement local materialization and readback for inert Phase 285
+transcript metadata.
+
+Implemented: added transcript output request, manifest, component records,
+error types, declared `gateway-formal-backend-transcript/*` files, SHA-256
+sidecars, staged writes, output-root validation, invalid transcript rejection
+before write, exact metadata-builder drift rejection before write, readback
+validation, manifest recomputation, preflight-binding checks, toolchain-binding
+checks, execution-status checks, checker-status checks, redaction-report checks,
+proof-obligation checks, nonclaim Markdown checks, and undeclared-file
+rejection.
+
+Validation gate: `cargo fmt --all -- --check`,
+`cargo test -p hsai-agent-admission gateway_formal_backend_transcript_output_bundle`,
+full workspace tests, diff hygiene, repo hygiene, and package-script detection.
+
+Anti-goals: Cargo metadata changes, package runtime files, command execution,
+process spawning, backend runner implementation, proof assistant setup files,
+external repo clones, vendored source, Lean, Coq, TLA+, SMT, Z3, CBMC,
+model-checker, Aeneas, Hax, rust-lean, or COBALT execution, generated proof
+artifacts, generated checker transcripts, raw prover logs, raw checker logs,
+raw solver traces, accepted Evidence Ledger mutation, Level2+ evidence,
+score-axis population, benchmark evidence, official benchmark submission, live
+provider calls, credential handling, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims, full-security
+claims, global software-agent uniqueness claims, or authority to execute an
+action.
+
+Exit criteria: HSAI gateway formal backend transcript metadata can now be
+materialized and read back as a bounded local metadata bundle. It still cannot
+execute a backend, create proof/checker artifacts, create accepted evidence,
+populate score axes, or support SOTA/full-security/semantic
+correctness/production-readiness claims.
+
+## Phase 288 HSAI Gateway Formal Backend Transcript Output-Bundle Drift Coverage
+
+Status: complete. See
+`docs/288-hsai-gateway-formal-backend-transcript-output-bundle-drift-coverage-notes.md`.
+
+Goal: broaden negative readback coverage for Phase 287 transcript output
+bundles without broadening the execution or claim boundary.
+
+Implemented: added tests for stale transcript metadata sidecars, missing
+manifest sidecars, malformed transcript metadata JSON, nonclaim Markdown drift,
+proof-obligation drift, preflight-binding drift, checker-status drift,
+protected output-root rejection, declared-file symlink rejection, and
+declared-sidecar symlink rejection.
+
+Validation gate: `cargo fmt --all -- --check`,
+`cargo test -p hsai-agent-admission gateway_formal_backend_transcript_output_bundle`,
+full workspace tests, diff hygiene, repo hygiene, and package-script detection.
+
+Anti-goals: Cargo metadata changes, package runtime files, command execution,
+process spawning, backend runner implementation, proof assistant setup files,
+external repo clones, vendored source, Lean, Coq, TLA+, SMT, Z3, CBMC,
+model-checker, Aeneas, Hax, rust-lean, or COBALT execution, generated proof
+artifacts, generated checker transcripts, raw prover logs, raw checker logs,
+raw solver traces, accepted Evidence Ledger mutation, Level2+ evidence,
+score-axis population, benchmark evidence, official benchmark submission, live
+provider calls, credential handling, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims, full-security
+claims, global software-agent uniqueness claims, or authority to execute an
+action.
+
+Exit criteria: Phase 287 transcript output bundles now reject broader
+filesystem, sidecar, malformed JSON, semantic drift, symlink, and protected-root
+failure modes while remaining local metadata only.
+
+## Phase 289 HSAI Gateway Formal Backend Execution Authorization Boundary
+
+Status: complete. See
+`docs/289-hsai-gateway-formal-backend-execution-authorization-boundary.md`.
+
+Goal: define the docs-first authorization boundary for a future
+operator-approved local formal backend execution experiment.
+
+Implemented: added a boundary spec for future authorization metadata,
+execution preconditions, output quarantine rules, transcript admission rules,
+required future tests, anti-goals, explicit nonclaims, and next implementation
+slice.
+
+Validation gate: docs hygiene, boundary claim review, formatting, diff hygiene,
+repo hygiene, and full workspace tests.
+
+Anti-goals: Rust implementation changes, Cargo metadata changes, package
+runtime files, command execution, process spawning, backend runner
+implementation, proof assistant setup files, external repo clones, vendored
+source, Lean, Coq, TLA+, SMT, Z3, CBMC, model-checker, Aeneas, Hax, rust-lean,
+or COBALT execution, generated proof artifacts, generated checker transcripts,
+raw prover logs, raw checker logs, raw solver traces, accepted Evidence Ledger
+mutation, Level2+ evidence, score-axis population, benchmark evidence,
+official benchmark submission, live provider calls, credential handling,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, global software-agent uniqueness
+claims, or authority to execute an action.
+
+Exit criteria: the future backend execution lane now has an explicit
+authorization, quarantine, transcript-admission, and nonpromotion boundary
+before any Rust implementation or command execution is authorized.
+
+## Phase 290 HSAI Gateway Formal Backend Execution Authorization Inert Metadata
+
+Status: complete. See
+`docs/290-hsai-gateway-formal-backend-execution-authorization-inert-metadata-notes.md`.
+
+Goal: implement local inert authorization metadata for a future
+operator-approved formal backend execution experiment.
+
+Implemented: added execution-authorization schema/state/claim-boundary
+constants, quarantine descriptor metadata, operator acknowledgement metadata,
+authorization request metadata, deterministic digest helpers, required
+nonclaims, builder helpers, validation issue labels, and fail-closed validation
+for Phase 283 preflight bundle binding, Phase 287 transcript output-bundle
+binding, command/argv/toolchain drift, timeout and output-retention drift,
+environment and network/secret policy drift, quarantine-root drift,
+operator-acknowledgement drift, proof-obligation submission, nonpromotion
+flags, forbidden public-claim text, and required nonclaims.
+
+Validation gate: `cargo fmt --all -- --check`, focused
+`hsai-agent-admission` authorization tests, full workspace tests, diff hygiene,
+empty-file hygiene, and package-root lint check.
+
+Anti-goals: Cargo metadata changes, package runtime files, filesystem
+authorization bundle materialization, command execution, process spawning,
+backend runner implementation, proof assistant setup files, external repo
+clones, vendored source, Lean, Coq, TLA+, SMT, Z3, CBMC, model-checker, Aeneas,
+Hax, rust-lean, or COBALT execution, generated proof artifacts, generated
+checker transcripts, raw prover logs, raw checker logs, raw solver traces,
+accepted Evidence Ledger mutation, Level2+ evidence, score-axis population,
+benchmark evidence, official benchmark submission, live provider calls,
+credential handling, semantic-correctness claims, production-readiness claims,
+SOTA claims, breakthrough claims, full-security claims, global software-agent
+uniqueness claims, or authority to execute an action.
+
+Exit criteria: HSAI now has a local metadata-only authorization record for the
+future backend execution lane, with digest binding and fail-closed policy
+validation, while still creating no execution, proof artifact, checker
+transcript, accepted evidence, Level2+ evidence, score axes, or stronger public
+claim.
+
+## Phase 291 HSAI Gateway Formal Backend Execution Authorization Output-Bundle Boundary
+
+Status: complete. See
+`docs/291-hsai-gateway-formal-backend-execution-authorization-output-bundle-boundary.md`.
+
+Goal: define the docs-first filesystem boundary for a future local output bundle
+over Phase 290 inert execution-authorization metadata.
+
+Implemented: added the boundary spec for future
+`gateway-formal-backend-authorization/*` declared files, SHA-256 sidecars,
+manifest fields, authorization/preflight/transcript/command/environment/
+quarantine/operator binding rules, readback rejection rules, required future
+tests, anti-goals, explicit nonclaims, and next implementation slice.
+
+Validation gate: docs hygiene, boundary claim review, formatting, diff hygiene,
+empty-file hygiene, package-root lint check, and full workspace tests.
+
+Anti-goals: Rust implementation changes, Cargo metadata changes, package
+runtime files, filesystem authorization bundle materialization, command
+execution, process spawning, backend runner implementation, proof assistant
+setup files, external repo clones, vendored source, Lean, Coq, TLA+, SMT, Z3,
+CBMC, model-checker, Aeneas, Hax, rust-lean, or COBALT execution, generated
+proof artifacts, generated checker transcripts, raw prover logs, raw checker
+logs, raw solver traces, accepted Evidence Ledger mutation, Level2+ evidence,
+score-axis population, benchmark evidence, official benchmark submission, live
+provider calls, credential handling, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims, full-security
+claims, global software-agent uniqueness claims, or authority to execute an
+action.
+
+Exit criteria: the future authorization output-bundle lane now has an explicit
+declared-file, sidecar, manifest, readback, quarantine, nonpromotion, and
+claim-boundary contract before any Rust materializer or backend execution is
+authorized.
+
+## Phase 292 HSAI Gateway Formal Backend Execution Authorization Output-Bundle Implementation
+
+Status: complete. See
+`docs/292-hsai-gateway-formal-backend-execution-authorization-output-bundle-implementation-notes.md`.
+
+Goal: implement local filesystem materialization and readback for Phase 290
+inert execution-authorization metadata.
+
+Implemented: added authorization output-bundle state/claim constants, output
+schema and declared file constants, output request and manifest types,
+component binding records, output error labels, staged writes, SHA-256
+sidecars, output-root validation, invalid authorization rejection before write,
+readback validation, manifest recomputation, component binding checks,
+nonclaim Markdown checks, undeclared-file rejection, and focused hermetic tests.
+
+Validation gate: `cargo fmt --all -- --check`, focused
+`hsai-agent-admission` authorization output-bundle tests, full workspace tests,
+diff hygiene, empty-file hygiene, and package-root lint check.
+
+Anti-goals: Cargo metadata changes, package runtime files, command execution,
+process spawning, backend runner implementation, proof assistant setup files,
+external repo clones, vendored source, Lean, Coq, TLA+, SMT, Z3, CBMC,
+model-checker, Aeneas, Hax, rust-lean, or COBALT execution, generated proof
+artifacts, generated checker transcripts, raw prover logs, raw checker logs,
+raw solver traces, accepted Evidence Ledger mutation, Level2+ evidence,
+score-axis population, benchmark evidence, official benchmark submission, live
+provider calls, credential handling, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims, full-security
+claims, global software-agent uniqueness claims, or authority to execute an
+action.
+
+Exit criteria: Phase 290 authorization metadata can now be materialized and
+read back as a local, declared-file, digest-bound output bundle while still
+creating no command execution, proof artifact, checker transcript, accepted
+evidence, Level2+ evidence, score axes, or stronger public claim.
+
+## Phase 293 HSAI Gateway Formal Backend Execution Quarantine Artifact Boundary
+
+Status: complete. See
+`docs/293-hsai-gateway-formal-backend-execution-quarantine-artifact-boundary.md`.
+
+Goal: define the docs-first quarantine artifact boundary that must exist before
+any future formal backend runner can record process results.
+
+Implemented: added a boundary spec for future quarantine artifact metadata,
+authorization/preflight/transcript binding requirements, bounded retained
+summary rules, disallowed raw logs and proof/checker artifacts, required
+rejection paths, required future tests, anti-goals, explicit nonclaims, and the
+next implementation slice.
+
+Validation gate: docs hygiene, boundary claim review, formatting, diff hygiene,
+empty-file hygiene, package-root lint check, and full workspace tests.
+
+Anti-goals: Rust implementation changes, Cargo metadata changes, package
+runtime files, command execution, process spawning, backend runner
+implementation, proof assistant setup files, external repo clones, vendored
+source, Lean, Coq, TLA+, SMT, Z3, CBMC, model-checker, Aeneas, Hax, rust-lean,
+or COBALT execution, generated proof artifacts, generated checker transcripts,
+raw prover logs, raw checker logs, raw solver traces, accepted Evidence Ledger
+mutation, Level2+ evidence, score-axis population, benchmark evidence,
+official benchmark submission, live provider calls, credential handling,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, global software-agent uniqueness
+claims, or authority to execute an action.
+
+Exit criteria: the future execution quarantine lane now has an explicit
+bounded-retention, write-path, proof/checker nonpromotion, and public-claim
+boundary before any Rust quarantine metadata or backend runner implementation is
+authorized.
+
+## Phase 294 HSAI Gateway Formal Backend Execution Quarantine Artifact Inert Metadata
+
+Status: complete. See
+`docs/294-hsai-gateway-formal-backend-execution-quarantine-artifact-inert-metadata-notes.md`.
+
+Goal: add inert local quarantine artifact metadata for bounded, redacted
+operator-supplied process-result summaries without executing a command.
+
+Implemented: added quarantine artifact schema/state/claim constants, output
+summary metadata, output file references, redaction reports, proof/checker
+nonpromotion reports, quarantine artifact metadata, issue labels, validation
+results, required nonclaims, a deterministic builder, and fail-closed validation
+against the Phase 292 authorization output manifest.
+
+Validation gate: focused Phase 294 tests, formatting, diff hygiene,
+empty-file hygiene, package-root lint check, and full workspace tests.
+
+Anti-goals: command execution, process spawning, backend runner implementation,
+filesystem quarantine bundle materialization, proof assistant setup files,
+external repo clones, vendored source, Lean, Coq, TLA+, SMT, Z3, CBMC,
+model-checker, Aeneas, Hax, rust-lean, or COBALT execution, generated proof
+artifact promotion, generated checker transcript promotion, raw prover log
+retention, raw checker log retention, raw solver trace retention, accepted
+Evidence Ledger mutation, Level2+ evidence, score-axis population, benchmark
+evidence, official benchmark submission, live provider calls, credential
+handling, semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, global software-agent uniqueness
+claims, or authority to execute an action.
+
+Exit criteria: HSAI can now validate a local, authorization-bound,
+process-result quarantine artifact as scoped metadata while preserving explicit
+nonclaims that process success, checker success, and proof/checker artifacts are
+not accepted evidence, semantic correctness, production readiness, SOTA, full
+security, or execution authority.
+
+## Phase 295 HSAI Gateway Formal Backend Quarantine Output-Bundle Boundary
+
+Status: complete. See
+`docs/295-hsai-gateway-formal-backend-quarantine-output-bundle-boundary.md`.
+
+Goal: define the docs-first filesystem output-bundle contract for future
+materialization of Phase 294 quarantine artifact metadata.
+
+Implemented: added a boundary spec for the future
+`gateway-formal-backend-quarantine/*` bundle namespace, declared files,
+SHA-256 sidecars, manifest fields, readback rules, required rejection paths,
+required future tests, anti-goals, explicit nonclaims, and next implementation
+slice.
+
+Validation gate: docs hygiene, boundary claim review, formatting, diff hygiene,
+empty-file hygiene, package-root lint check, and full workspace tests.
+
+Anti-goals: Rust implementation changes, Cargo metadata changes, package
+runtime files, filesystem quarantine bundle materialization, command execution,
+process spawning, backend runner implementation, proof assistant setup files,
+external repo clones, vendored source, Lean, Coq, TLA+, SMT, Z3, CBMC,
+model-checker, Aeneas, Hax, rust-lean, or COBALT execution, generated proof
+artifact promotion, generated checker transcript promotion, raw prover log
+retention, raw checker log retention, raw solver trace retention, accepted
+Evidence Ledger mutation, Level2+ evidence, score-axis population, benchmark
+evidence, official benchmark submission, live provider calls, credential
+handling, semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, global software-agent uniqueness
+claims, or authority to execute an action.
+
+Exit criteria: the future quarantine output-bundle lane now has an explicit
+declared-file, sidecar, manifest, readback, drift-rejection, nonpromotion, and
+public-claim boundary before any Rust filesystem materialization is authorized.
+
+## Phase 296 HSAI Gateway Formal Backend Quarantine Output-Bundle Implementation
+
+Status: complete. See
+`docs/296-hsai-gateway-formal-backend-quarantine-output-bundle-implementation-notes.md`.
+
+Goal: implement local filesystem materialization and readback for the declared
+Phase 295 quarantine output bundle.
+
+Implemented: added quarantine output-bundle state/claim constants, declared
+file and sidecar lists, output request and manifest types, authorization
+binding and process-status records, output error labels, staged writes,
+SHA-256 sidecars, output-root validation, invalid quarantine artifact rejection
+before write, readback validation, manifest recomputation, component binding
+checks, nonclaim Markdown checks, undeclared-file rejection, and focused
+hermetic tests.
+
+Validation gate: focused Phase 296 tests, formatting, diff hygiene,
+empty-file hygiene, package-root lint check, and full workspace tests.
+
+Anti-goals: command execution, process spawning, backend runner implementation,
+proof assistant setup files, external repo clones, vendored source, Lean, Coq,
+TLA+, SMT, Z3, CBMC, model-checker, Aeneas, Hax, rust-lean, or COBALT
+execution, generated proof artifact promotion, generated checker transcript
+promotion, raw prover log retention, raw checker log retention, raw solver
+trace retention, accepted Evidence Ledger mutation, Level2+ evidence,
+score-axis population, benchmark evidence, official benchmark submission, live
+provider calls, credential handling, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims, full-security
+claims, global software-agent uniqueness claims, or authority to execute an
+action.
+
+Exit criteria: Phase 294 quarantine metadata can now be materialized and read
+back as a local, declared-file, digest-bound output bundle while still creating
+no command execution, proof artifact promotion, checker transcript promotion,
+accepted evidence, Level2+ evidence, score axes, or stronger public claim.
+
+## Phase 297 HSAI Gateway Formal Backend Quarantine Output-Bundle Drift Coverage Boundary
+
+Status: complete. See
+`docs/297-hsai-gateway-formal-backend-quarantine-output-bundle-drift-coverage-boundary.md`.
+
+Goal: define the next focused negative-test slice for Phase 296 quarantine
+output-bundle readback drift.
+
+Implemented: added a docs-first boundary naming the future drift coverage for
+protected roots, missing sidecars, malformed JSON, authorization binding drift,
+process-status drift, stderr drift, redaction drift, inventory drift,
+proof/checker nonpromotion drift, symlink rejection, undeclared raw logs,
+undeclared proof/checker artifacts, undeclared accepted Evidence Ledger paths,
+undeclared benchmark outputs, and undeclared earlier formal-bundle paths.
+
+Validation gate: docs hygiene, boundary claim review, formatting, diff hygiene,
+empty-file hygiene, package-root lint check, and full workspace tests.
+
+Anti-goals: Rust implementation changes, Cargo metadata changes, package
+runtime files, new bundle materialization behavior, command execution, process
+spawning, backend runner implementation, proof assistant setup files, external
+repo clones, vendored source, Lean, Coq, TLA+, SMT, Z3, CBMC, model-checker,
+Aeneas, Hax, rust-lean, or COBALT execution, generated proof artifact
+promotion, generated checker transcript promotion, raw prover log retention,
+raw checker log retention, raw solver trace retention, accepted Evidence Ledger
+mutation, Level2+ evidence, score-axis population, benchmark evidence,
+official benchmark submission, live provider calls, credential handling,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, global software-agent uniqueness
+claims, or authority to execute an action.
+
+Exit criteria: the next quarantine output-bundle test slice is now explicitly
+bounded to negative readback coverage and cannot be interpreted as backend
+execution, proof/checker promotion, accepted evidence, Level2+ evidence, score
+axes, or stronger public claims.
+
+## Phase 298 HSAI Gateway Formal Backend Quarantine Output-Bundle Drift Coverage Implementation
+
+Status: complete. See
+`docs/298-hsai-gateway-formal-backend-quarantine-output-bundle-drift-coverage-implementation-notes.md`.
+
+Goal: implement the Phase 297 focused drift-coverage test slice for the Phase
+296 quarantine output-bundle readback path.
+
+Implemented: added local tests for protected output roots, overwrite rejection,
+missing sidecars, malformed declared JSON, authorization binding drift,
+process-status drift, stderr summary drift, redaction report drift, output
+inventory drift, proof/checker nonpromotion report drift, undeclared raw logs,
+undeclared proof/checker artifacts, undeclared accepted Evidence Ledger paths,
+undeclared benchmark outputs, undeclared earlier formal-bundle paths, and Unix
+symlink rejection for output roots, bundle directories, declared files, and
+declared sidecars.
+
+Validation gate: focused `hsai-agent-admission` quarantine output-bundle tests,
+formatting, diff hygiene, empty-file hygiene, package-root lint check, and full
+workspace tests.
+
+Anti-goals: public API changes, Cargo metadata changes, package runtime files,
+command execution, process spawning, backend runner implementation, proof
+assistant setup files, external repo clones, vendored source, Lean, Coq, TLA+,
+SMT, Z3, CBMC, model-checker, Aeneas, Hax, rust-lean, or COBALT execution,
+generated proof/checker promotion, accepted evidence, Level2+, score axes,
+benchmark evidence, semantic-correctness, production-readiness, SOTA,
+breakthrough, full-security, or authority claims.
+
+## Phase 299 HSAI Gateway Formal Backend Quarantine Validation-Summary Boundary
+
+Status: complete. See
+`docs/299-hsai-gateway-formal-backend-quarantine-validation-summary-boundary.md`.
+
+Goal: define the docs-first boundary for a future local validation-summary
+artifact over the Phase 296 quarantine output-bundle and Phase 298 drift tests.
+
+Implemented: specified the future summary fields, required coverage labels,
+required fail-closed validation paths, evidence meaning, nonclaims, anti-goals,
+and next implementation scope.
+
+Validation gate: docs hygiene, boundary claim review, formatting, diff hygiene,
+empty-file hygiene, package-root lint check, and full workspace tests.
+
+Anti-goals: Rust implementation changes, Cargo metadata changes, package
+runtime files, command execution, process spawning, backend runner
+implementation, proof assistant setup files, external repo clones, vendored
+source, Lean, Coq, TLA+, SMT, Z3, CBMC, model-checker, Aeneas, Hax, rust-lean,
+or COBALT execution, generated proof/checker promotion, accepted evidence,
+Level2+, score axes, benchmark evidence, semantic-correctness,
+production-readiness, SOTA, breakthrough, full-security, or authority claims.
+
+## Phase 300 HSAI Gateway Formal Backend Quarantine Validation-Summary Implementation
+
+Status: complete. See
+`docs/300-hsai-gateway-formal-backend-quarantine-validation-summary-implementation-notes.md`.
+
+Goal: implement the Phase 299 pure-data validation-summary surface for the
+Phase 296 quarantine output bundle and Phase 298 drift tests.
+
+Implemented: added validation-summary constants, data type, deterministic
+digest helper, validation issue labels, validation result type, required
+nonclaims, required coverage-label registries, required command-label registry,
+summary builder from a quarantine output manifest, fail-closed validation
+against that manifest, and focused tests for valid deterministic summaries,
+identity/digest/coverage drift, claim escalation, command-label drift, and
+missing nonclaims.
+
+Validation gate: focused validation-summary tests, focused quarantine
+output-bundle tests, formatting, diff hygiene, empty-file hygiene, package-root
+lint check, and full workspace tests.
+
+Anti-goals: filesystem materialization for the summary, public claim changes,
+Cargo metadata changes, package runtime files, command execution, process
+spawning, backend runner implementation, proof assistant setup files, external
+repo clones, vendored source, Lean, Coq, TLA+, SMT, Z3, CBMC, model-checker,
+Aeneas, Hax, rust-lean, or COBALT execution, generated proof/checker
+promotion, accepted evidence, Level2+, score axes, benchmark evidence,
+semantic-correctness, production-readiness, SOTA, breakthrough, full-security,
+or authority claims.
+
+## Phase 301 HSAI Gateway Formal Backend Quarantine Validation-Summary Output-Bundle Boundary
+
+Status: complete. See
+`docs/301-hsai-gateway-formal-backend-quarantine-validation-summary-output-bundle-boundary.md`.
+
+Goal: define the docs-first filesystem boundary for a future local declared-file
+bundle around the Phase 300 validation summary.
+
+Implemented: specified future declared files and sidecars, future manifest
+fields, readback rules, validation-report meaning, required future tests,
+anti-goals, and next implementation scope.
+
+Validation gate: docs hygiene, boundary claim review, formatting, diff hygiene,
+empty-file hygiene, package-root lint check, and full workspace tests.
+
+Anti-goals: Rust implementation changes, Cargo metadata changes, package
+runtime files, filesystem materialization behavior, command execution, process
+spawning, backend runner implementation, proof assistant setup files, external
+repo clones, vendored source, Lean, Coq, TLA+, SMT, Z3, CBMC, model-checker,
+Aeneas, Hax, rust-lean, or COBALT execution, generated proof/checker
+promotion, accepted evidence, Level2+, score axes, benchmark evidence,
+semantic-correctness, production-readiness, SOTA, breakthrough, full-security,
+or authority claims.
+
+## Phase 302 HSAI Gateway Formal Backend Quarantine Validation-Summary Output-Bundle Implementation
+
+Status: complete. See
+`docs/302-hsai-gateway-formal-backend-quarantine-validation-summary-output-bundle-implementation-notes.md`.
+
+Goal: implement the Phase 301 local declared-file output-bundle surface for the
+Phase 300 validation summary.
+
+Implemented: added output-bundle constants, declared file and sidecar
+registries, output request type, coverage-labels record, validation-report
+record, output manifest and digest helper, error labels, staged
+materialization, readback, undeclared-file rejection, stale-sidecar rejection,
+semantic readback for summary/source manifest/coverage labels/nonclaims/
+validation report/manifest, and focused tests.
+
+Validation gate: focused validation-summary output-bundle tests, focused
+validation-summary tests, focused quarantine output-bundle tests, formatting,
+diff hygiene, empty-file hygiene, package-root lint check, and full workspace
+tests.
+
+Anti-goals: backend command execution, proof artifact reads, checker transcript
+promotion, accepted evidence, Level2+, score axes, benchmark evidence,
+semantic-correctness, production-readiness, SOTA, breakthrough, full-security,
+or authority claims.
+
+## Phase 303 HSAI Gateway Formal Backend Hermetic Execution Boundary
+
+Status: complete. See
+`docs/303-hsai-gateway-formal-backend-hermetic-execution-boundary.md`.
+
+Goal: define the first future point where the HSAI gateway formal lane may
+cross from inert metadata into hermetic local backend execution.
+
+Implemented: added a docs-first boundary for the
+`local_smt_tiny_gateway_invariant` lane, including future input contracts,
+future command descriptor rules, future quarantine output contract, future
+readback rules, evidence meaning, required future tests, anti-goals, and the
+next no-spawn implementation slice.
+
+Validation gate: docs/reference scan, diff hygiene, empty-file hygiene,
+package-root lint check, and full workspace tests.
+
+Anti-goals: Rust implementation changes, command execution, process spawning,
+backend runner implementation, proof artifact promotion, checker transcript
+promotion, accepted evidence, Level2+, score axes, benchmark evidence,
+semantic-correctness, production-readiness, SOTA, breakthrough, full-security,
+or authority claims.
+
+## Phase 304 HSAI Gateway Formal Backend Hermetic Execution No-Spawn Descriptor Implementation
+
+Status: complete. See
+`docs/304-hsai-gateway-formal-backend-hermetic-execution-no-spawn-descriptor-notes.md`.
+
+Goal: implement the Phase 303 hermetic backend execution boundary as pure-data
+descriptor metadata and fail-closed validation, still without process spawning.
+
+Implemented: added descriptor/report schema constants, state and claim
+boundary constants, lane/command/property enums, descriptor/report/validation
+types, required nonclaims, a deterministic `local_smt_tiny_gateway_invariant`
+descriptor builder, a fail-closed validator, a report builder, and focused
+tests for valid no-spawn metadata, execution/claim escalation rejection,
+shell/environment/raw-retention rejection, and digest sensitivity.
+
+Validation gate: focused no-spawn descriptor tests, focused Phase 302
+validation-summary output-bundle tests, repo docs/hygiene tests, formatting,
+diff hygiene, empty-file hygiene, package-root lint check, and full workspace
+tests.
+
+Anti-goals: process spawning, backend execution, SMT/Z3/COBALT/Lean execution,
+proof artifact reads or promotion, checker transcript promotion, accepted
+evidence, Level2+, score axes, benchmark evidence, semantic-correctness,
+production-readiness, SOTA, breakthrough, full-security, or authority claims.
+
+## Phase 305 HSAI Gateway Formal Backend Hermetic Descriptor-Report Output-Bundle Boundary
+
+Status: complete. See
+`docs/305-hsai-gateway-formal-backend-hermetic-descriptor-report-output-bundle-boundary.md`.
+
+Goal: define the future declared-file output-bundle boundary for the Phase 304
+no-spawn descriptor report.
+
+Implemented: added a docs-first boundary for future descriptor/report
+materialization, declared files and SHA-256 sidecars, future manifest fields,
+future readback rules, future validation-report meaning, required future tests,
+anti-goals, and next implementation scope.
+
+Validation gate: docs/reference scan, diff hygiene, empty-file hygiene,
+package-root lint check, repo docs/hygiene tests, and full workspace tests.
+
+Anti-goals: Rust implementation changes, filesystem materialization, process
+spawning, backend execution, SMT/Z3/COBALT/Lean execution, proof artifact
+promotion, checker transcript promotion, accepted evidence, Level2+, score
+axes, benchmark evidence, semantic-correctness, production-readiness, SOTA,
+breakthrough, full-security, or authority claims.
+
+## Phase 306 HSAI Gateway Formal Backend Hermetic Descriptor-Report Output-Bundle Implementation
+
+Status: complete. See
+`docs/306-hsai-gateway-formal-backend-hermetic-descriptor-report-output-bundle-implementation-notes.md`.
+
+Goal: implement the Phase 305 local declared-file output-bundle surface for the
+Phase 304 no-spawn descriptor report.
+
+Implemented: added output-bundle constants, declared file and sidecar
+registries, output request type, command-contract record, validation-report
+record, output manifest and digest helper, error labels, staged
+materialization, readback, undeclared-file rejection, stale-sidecar rejection,
+semantic readback for descriptor/report/validation/command-contract/nonclaims/
+manifest, and focused tests.
+
+Validation gate: focused descriptor-report output-bundle tests, focused
+no-spawn descriptor tests, repo docs/hygiene tests, formatting, diff hygiene,
+empty-file hygiene, package-root lint check, and full workspace tests.
+
+Anti-goals: process spawning, backend execution, SMT/Z3/COBALT/Lean execution,
+proof artifact reads or promotion, checker transcript promotion, accepted
+evidence, Level2+, score axes, benchmark evidence, semantic-correctness,
+production-readiness, SOTA, breakthrough, full-security, or authority claims.
+
+## Phase 307 HSAI Gateway Formal Backend Hermetic Execution Result Quarantine Output-Bundle Boundary
+
+Status: complete. See
+`docs/307-hsai-gateway-formal-backend-hermetic-execution-result-quarantine-output-bundle-boundary.md`.
+
+Goal: define the future declared-file output-bundle boundary for the first
+local hermetic execution result quarantine shape.
+
+Implemented: added a docs-first boundary for
+`gateway-formal-backend-hermetic-execution-result-quarantine/*`, future
+declared files and SHA-256 sidecars, manifest fields, execution-status meaning,
+readback rejection rules, validation-report limits, required future tests, and
+anti-goals.
+
+Validation gate: docs/reference scan, diff hygiene, empty-file hygiene,
+package-root lint check, repo docs/hygiene tests, and full workspace tests.
+
+Anti-goals: Rust implementation, filesystem materialization, command execution,
+process spawning, backend runner implementation, SMT/Z3/COBALT/Lean execution,
+proof artifact promotion, checker transcript promotion, solver-certificate
+promotion, accepted evidence, Level2+, score axes, benchmark evidence,
+semantic-correctness, production-readiness, SOTA, breakthrough, full-security,
+or authority claims.
+
+## Phase 308 HSAI Gateway Formal Backend Hermetic Execution Result Quarantine Output-Bundle Implementation
+
+Status: complete. See
+`docs/308-hsai-gateway-formal-backend-hermetic-execution-result-quarantine-output-bundle-implementation-notes.md`.
+
+Goal: implement the Phase 307 local declared-file output-bundle surface for a
+not-run hermetic execution result quarantine shape.
+
+Implemented: added result-quarantine output-bundle constants, declared file and
+sidecar registries, output request type, not-run solver/verdict labels,
+input-binding, bounded stdout/stderr summaries, redaction report, output
+inventory, invariant-verdict report, nonpromotion report, execution-status
+record, validation report, output manifest and digest helpers, staged
+materialization, readback, undeclared-file rejection, stale-sidecar rejection,
+semantic component validation, and focused tests.
+
+Validation gate: focused result-quarantine output-bundle tests, focused
+descriptor-report output-bundle tests, focused no-spawn descriptor tests, repo
+docs/hygiene tests, formatting, diff hygiene, empty-file hygiene, package-root
+lint check, and full workspace tests.
+
+Anti-goals: process spawning, backend execution, SMT/Z3/COBALT/Lean execution,
+proof artifact promotion, checker transcript promotion, solver-certificate
+promotion, accepted evidence, Level2+, score axes, benchmark evidence,
+semantic-correctness, production-readiness, SOTA, breakthrough, full-security,
+or authority claims.
+
+## Phase 309 HSAI Gateway Formal Backend Hermetic Result Quarantine Output-Bundle Drift Coverage Boundary
+
+Status: complete. See
+`docs/309-hsai-gateway-formal-backend-hermetic-result-quarantine-output-bundle-drift-coverage-boundary.md`.
+
+Goal: define the focused negative-test coverage required for the Phase 308
+result-quarantine output-bundle surface before any process-spawning backend
+runner phase.
+
+Implemented: added a docs-first drift-coverage boundary for protected roots,
+overwrite rejection, missing sidecars, malformed JSON/Markdown, input-binding
+drift, command-contract drift, execution-status drift, bounded-summary drift,
+redaction drift, output-inventory drift, invariant-verdict drift,
+nonpromotion-report drift, validation-report drift, manifest escalation,
+undeclared raw/proof/checker/solver/evidence/benchmark/score artifacts, nested
+bundle rejection, and symlink rejection.
+
+Validation gate: docs/reference scan, diff hygiene, empty-file hygiene,
+package-root lint check, repo docs/hygiene tests, and full workspace tests.
+
+Anti-goals: Rust implementation, new bundle materialization behavior, command
+execution, process spawning, backend runner implementation, SMT/Z3/COBALT/Lean
+execution, proof artifact promotion, checker transcript promotion,
+solver-certificate promotion, accepted evidence, Level2+, score axes,
+benchmark evidence, semantic-correctness, production-readiness, SOTA,
+breakthrough, full-security, or authority claims.
+
+## Phase 310 HSAI Gateway Formal Backend Hermetic Result Quarantine Output-Bundle Drift Coverage Implementation
+
+Status: complete. See
+`docs/310-hsai-gateway-formal-backend-hermetic-result-quarantine-output-bundle-drift-coverage-implementation-notes.md`.
+
+Goal: implement focused local drift-coverage tests for the Phase 308
+result-quarantine output-bundle reader and materializer.
+
+Implemented: added tests for protected-root rejection, existing-root overwrite
+rejection, missing sidecar rejection, malformed JSON rejection, nested
+descriptor-report bundle rejection, input-binding claim-boundary drift,
+command-contract network drift, execution-status process-spawned drift,
+redaction credential drift, nonpromotion Level2 drift, and validation
+accepted-evidence drift.
+
+Validation gate: focused result-quarantine output-bundle tests, focused
+descriptor-report output-bundle tests, focused no-spawn descriptor tests, repo
+docs/hygiene tests, formatting, diff hygiene, empty-file hygiene, package-root
+lint check, and full workspace tests.
+
+Anti-goals: new materialization behavior, command execution, process spawning,
+backend runner implementation, SMT/Z3/COBALT/Lean execution, proof artifact
+promotion, checker transcript promotion, solver-certificate promotion,
+accepted evidence, Level2+, score axes, benchmark evidence,
+semantic-correctness, production-readiness, SOTA, breakthrough, full-security,
+or authority claims.
+
+## Phase 311 HSAI Gateway Formal Backend Hermetic Process-Spawn Crossing Boundary
+
+Status: complete. See
+`docs/311-hsai-gateway-formal-backend-hermetic-process-spawn-crossing-boundary.md`.
+
+Goal: define the future process-spawn crossing contract for the first tiny
+local `local_smt_tiny_gateway_invariant` backend lane.
+
+Implemented: added a docs-first boundary for future direct-process no-shell
+execution, fixed executable policy, fixed argv policy, empty or allowlisted
+environment, no stdin, no network, timeout handling, bounded stdout/stderr,
+redaction, quarantine output, nonpromotion, required tests, anti-goals, and
+next no-default-runner interface scope.
+
+Validation gate: docs/reference scan, diff hygiene, empty-file hygiene,
+package-root lint check, repo docs/hygiene tests, and full workspace tests.
+
+Anti-goals: Rust implementation, command execution, process spawning, backend
+runner implementation, SMT/Z3/COBALT/Lean execution, proof artifact promotion,
+checker transcript promotion, solver-certificate promotion, accepted evidence,
+Level2+, score axes, benchmark evidence, semantic-correctness,
+production-readiness, SOTA, breakthrough, full-security, or authority claims.
+
+## Phase 312 HSAI Gateway Formal Backend Hermetic Process-Spawn No-Default-Runner Interface
+
+Status: complete. See
+`docs/312-hsai-gateway-formal-backend-hermetic-process-spawn-no-default-runner-interface-notes.md`.
+
+Goal: implement the local Rust interface and validator for the Phase 311
+process-spawn boundary without adding a default runner or executing a backend.
+
+Implemented: added process-spawn interface constants, executable policy
+metadata, runtime policy metadata, nonpromotion policy metadata, deterministic
+builder, fail-closed validator, digest/source bindings to Phase 304/306/308
+artifacts, and focused tests for valid no-default-runner metadata, runner/policy
+escalation rejection, and source drift rejection.
+
+Validation gate: formatting, Phase 312 focused tests, Phase 308/306/304
+regression tests, repo docs/hygiene tests, diff hygiene, empty-file hygiene,
+package-root lint check, and full workspace tests.
+
+Anti-goals: default runner implementation, command execution, process
+spawning, backend execution, SMT/Z3/COBALT/Lean execution, proof artifact
+promotion, checker transcript promotion, solver-certificate promotion, accepted
+evidence, Level2+, score axes, benchmark evidence, semantic-correctness,
+production-readiness, SOTA, breakthrough, full-security, or authority claims.
+
+## Phase 313 HSAI Gateway Formal Backend Hermetic Fixture-Runner Crossing
+
+Status: complete. See
+`docs/313-hsai-gateway-formal-backend-hermetic-fixture-runner-crossing-notes.md`.
+
+Goal: cross the process-spawn boundary with one fixed local fixture process,
+while preserving no-shell execution, empty environment, bounded summaries, and
+quarantine-only output.
+
+Implemented: added Phase 313 constants, fixture-runner request/report/output
+types, fixture-runner errors, direct-process execution with `env_clear`, null
+stdin, piped stdout/stderr, timeout handling, bounded digest/count summaries,
+Phase 313 materialization/readback for the quarantine namespace, a narrow
+cross-crate source-scan exception for the Phase 313 `Stdio` import and
+`Command::new` call, and tests for successful fixture execution, pre-spawn
+acknowledgement rejection, invalid interface rejection, and claim-escalation
+readback rejection.
+
+Validation gate: formatting, Phase 313 focused tests, Phase 312/308/306/304
+regression tests, repo docs/hygiene tests, diff hygiene, empty-file hygiene,
+package-root lint check, and full workspace tests.
+
+Anti-goals: Lean/SMT/Z3/COBALT/Aeneas/Hax/rust-lean/Coq/TLA+/CBMC/model-checker
+execution as proof authority, proof artifact promotion, checker transcript
+promotion, solver-certificate promotion, accepted evidence, Level2+, score
+axes, benchmark evidence, semantic-correctness, production-readiness, SOTA,
+breakthrough, full-security, or authority claims.
+
+## Phase 314 HSAI Gateway Formal Backend Hermetic Fixture-Runner Hardening Coverage
+
+Status: complete. See
+`docs/314-hsai-gateway-formal-backend-hermetic-fixture-runner-hardening-coverage-notes.md`.
+
+Goal: harden the Phase 313 fixture-runner crossing with focused local negative
+coverage and one readback guard for the executed-fixture quarantine bundle
+directory.
+
+Implemented: added tests for nonzero fixture-process exit classification,
+timeout classification, bounded stdout truncation without raw retention, stale
+sidecar rejection, declared summary drift rejection through manifest digest
+bindings, redaction drift rejection through manifest digest bindings,
+undeclared proof-artifact rejection, and bundle-directory symlink rejection.
+Added a readback guard that rejects a symlinked or non-directory
+`gateway-formal-backend-hermetic-execution-result-quarantine` bundle directory.
+
+Validation gate: formatting, Phase 314/313 focused tests, Phase 312/308/306/304
+regression tests, repo docs/hygiene tests, diff hygiene, empty-file hygiene,
+package-root lint check, and full workspace tests.
+
+Anti-goals: new process APIs beyond the Phase 313 fixture-runner implementation,
+generic backend runners, caller-supplied executable paths, shell execution,
+inherited environment, stdin, network access, Lean/SMT/Z3/COBALT/Aeneas/Hax/
+rust-lean/Coq/TLA+/CBMC/model-checker execution as proof authority, proof
+artifact promotion, checker transcript promotion, solver-certificate promotion,
+accepted evidence, Level2+, score axes, benchmark evidence,
+semantic-correctness, production-readiness, SOTA, breakthrough, full-security,
+or authority claims.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

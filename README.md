@@ -350,6 +350,56 @@ Surface DSL
 | [docs/262-phase-official-submission-output-coverage-notes.md](docs/262-phase-official-submission-output-coverage-notes.md) | Phase 262 official-submission output coverage notes. |
 | [docs/263-phase-external-runner-validation-coverage-notes.md](docs/263-phase-external-runner-validation-coverage-notes.md) | Phase 263 external-runner validation coverage notes. |
 | [docs/264-hsai-gateway-external-evidence-acceptance-boundary.md](docs/264-hsai-gateway-external-evidence-acceptance-boundary.md) | Phase 264 HSAI Gateway external-evidence acceptance boundary. |
+| [docs/265-hsai-formal-verification-evidence-architecture-boundary.md](docs/265-hsai-formal-verification-evidence-architecture-boundary.md) | Phase 265 HSAI formal-verification evidence architecture boundary. |
+| [docs/266-hsai-gateway-formal-evidence-metadata-adapter-notes.md](docs/266-hsai-gateway-formal-evidence-metadata-adapter-notes.md) | Phase 266 HSAI Gateway formal-evidence metadata adapter notes. |
+| [docs/267-hsai-gateway-formal-source-correspondence-boundary.md](docs/267-hsai-gateway-formal-source-correspondence-boundary.md) | Phase 267 HSAI Gateway formal source-correspondence boundary. |
+| [docs/268-hsai-gateway-formal-correspondence-certificate-notes.md](docs/268-hsai-gateway-formal-correspondence-certificate-notes.md) | Phase 268 HSAI Gateway formal correspondence-certificate metadata notes. |
+| [docs/269-hsai-gateway-formal-correspondence-output-bundle-boundary.md](docs/269-hsai-gateway-formal-correspondence-output-bundle-boundary.md) | Phase 269 HSAI Gateway formal correspondence output-bundle boundary. |
+| [docs/270-hsai-gateway-formal-correspondence-output-bundle-notes.md](docs/270-hsai-gateway-formal-correspondence-output-bundle-notes.md) | Phase 270 HSAI Gateway formal correspondence output-bundle implementation notes. |
+| [docs/271-hsai-gateway-formal-correspondence-output-bundle-drift-coverage-notes.md](docs/271-hsai-gateway-formal-correspondence-output-bundle-drift-coverage-notes.md) | Phase 271 HSAI Gateway formal correspondence output-bundle drift coverage notes. |
+| [docs/272-hsai-gateway-formal-backend-adapter-boundary.md](docs/272-hsai-gateway-formal-backend-adapter-boundary.md) | Phase 272 HSAI Gateway formal backend adapter boundary. |
+| [docs/273-hsai-gateway-formal-backend-adapter-inert-metadata-notes.md](docs/273-hsai-gateway-formal-backend-adapter-inert-metadata-notes.md) | Phase 273 HSAI Gateway formal backend adapter inert metadata notes. |
+| [docs/274-hsai-gateway-formal-backend-adapter-drift-coverage-notes.md](docs/274-hsai-gateway-formal-backend-adapter-drift-coverage-notes.md) | Phase 274 HSAI Gateway formal backend adapter drift coverage notes. |
+| [docs/275-hsai-gateway-formal-backend-run-artifact-boundary.md](docs/275-hsai-gateway-formal-backend-run-artifact-boundary.md) | Phase 275 HSAI Gateway formal backend-run artifact boundary. |
+| [docs/276-hsai-gateway-formal-backend-run-inert-artifact-metadata-notes.md](docs/276-hsai-gateway-formal-backend-run-inert-artifact-metadata-notes.md) | Phase 276 HSAI Gateway formal backend-run inert artifact metadata notes. |
+| [docs/277-hsai-gateway-formal-backend-run-materialized-bundle-boundary.md](docs/277-hsai-gateway-formal-backend-run-materialized-bundle-boundary.md) | Phase 277 HSAI Gateway formal backend-run materialized bundle boundary. |
+| [docs/278-hsai-gateway-formal-backend-run-inert-bundle-materialization-notes.md](docs/278-hsai-gateway-formal-backend-run-inert-bundle-materialization-notes.md) | Phase 278 HSAI Gateway formal backend-run inert bundle materialization notes. |
+| [docs/279-hsai-gateway-formal-backend-run-bundle-drift-coverage-notes.md](docs/279-hsai-gateway-formal-backend-run-bundle-drift-coverage-notes.md) | Phase 279 HSAI Gateway formal backend-run bundle drift coverage notes. |
+| [docs/280-hsai-gateway-formal-backend-execution-preflight-boundary.md](docs/280-hsai-gateway-formal-backend-execution-preflight-boundary.md) | Phase 280 HSAI Gateway formal backend execution preflight boundary. |
+| [docs/281-hsai-gateway-formal-backend-execution-preflight-inert-metadata-notes.md](docs/281-hsai-gateway-formal-backend-execution-preflight-inert-metadata-notes.md) | Phase 281 HSAI Gateway formal backend execution preflight inert metadata notes. |
+| [docs/282-hsai-gateway-formal-backend-preflight-output-bundle-boundary.md](docs/282-hsai-gateway-formal-backend-preflight-output-bundle-boundary.md) | Phase 282 HSAI Gateway formal backend preflight output-bundle boundary. |
+| [docs/283-hsai-gateway-formal-backend-preflight-output-bundle-implementation-notes.md](docs/283-hsai-gateway-formal-backend-preflight-output-bundle-implementation-notes.md) | Phase 283 HSAI Gateway formal backend preflight output-bundle implementation notes. |
+| [docs/284-hsai-gateway-formal-backend-execution-transcript-boundary.md](docs/284-hsai-gateway-formal-backend-execution-transcript-boundary.md) | Phase 284 HSAI Gateway formal backend execution transcript boundary. |
+| [docs/285-hsai-gateway-formal-backend-execution-transcript-inert-metadata-notes.md](docs/285-hsai-gateway-formal-backend-execution-transcript-inert-metadata-notes.md) | Phase 285 HSAI Gateway formal backend execution transcript inert metadata notes. |
+| [docs/286-hsai-gateway-formal-backend-transcript-output-bundle-boundary.md](docs/286-hsai-gateway-formal-backend-transcript-output-bundle-boundary.md) | Phase 286 HSAI Gateway formal backend transcript output-bundle boundary. |
+| [docs/287-hsai-gateway-formal-backend-transcript-output-bundle-implementation-notes.md](docs/287-hsai-gateway-formal-backend-transcript-output-bundle-implementation-notes.md) | Phase 287 HSAI Gateway formal backend transcript output-bundle implementation notes. |
+| [docs/288-hsai-gateway-formal-backend-transcript-output-bundle-drift-coverage-notes.md](docs/288-hsai-gateway-formal-backend-transcript-output-bundle-drift-coverage-notes.md) | Phase 288 HSAI Gateway formal backend transcript output-bundle drift coverage notes. |
+| [docs/289-hsai-gateway-formal-backend-execution-authorization-boundary.md](docs/289-hsai-gateway-formal-backend-execution-authorization-boundary.md) | Phase 289 HSAI Gateway formal backend execution authorization boundary. |
+| [docs/290-hsai-gateway-formal-backend-execution-authorization-inert-metadata-notes.md](docs/290-hsai-gateway-formal-backend-execution-authorization-inert-metadata-notes.md) | Phase 290 HSAI Gateway formal backend execution authorization inert metadata notes. |
+| [docs/291-hsai-gateway-formal-backend-execution-authorization-output-bundle-boundary.md](docs/291-hsai-gateway-formal-backend-execution-authorization-output-bundle-boundary.md) | Phase 291 HSAI Gateway formal backend execution authorization output-bundle boundary. |
+| [docs/292-hsai-gateway-formal-backend-execution-authorization-output-bundle-implementation-notes.md](docs/292-hsai-gateway-formal-backend-execution-authorization-output-bundle-implementation-notes.md) | Phase 292 HSAI Gateway formal backend execution authorization output-bundle implementation notes. |
+| [docs/293-hsai-gateway-formal-backend-execution-quarantine-artifact-boundary.md](docs/293-hsai-gateway-formal-backend-execution-quarantine-artifact-boundary.md) | Phase 293 HSAI Gateway formal backend execution quarantine artifact boundary. |
+| [docs/294-hsai-gateway-formal-backend-execution-quarantine-artifact-inert-metadata-notes.md](docs/294-hsai-gateway-formal-backend-execution-quarantine-artifact-inert-metadata-notes.md) | Phase 294 HSAI Gateway formal backend execution quarantine artifact inert metadata notes. |
+| [docs/295-hsai-gateway-formal-backend-quarantine-output-bundle-boundary.md](docs/295-hsai-gateway-formal-backend-quarantine-output-bundle-boundary.md) | Phase 295 HSAI Gateway formal backend quarantine output-bundle boundary. |
+| [docs/296-hsai-gateway-formal-backend-quarantine-output-bundle-implementation-notes.md](docs/296-hsai-gateway-formal-backend-quarantine-output-bundle-implementation-notes.md) | Phase 296 HSAI Gateway formal backend quarantine output-bundle implementation notes. |
+| [docs/297-hsai-gateway-formal-backend-quarantine-output-bundle-drift-coverage-boundary.md](docs/297-hsai-gateway-formal-backend-quarantine-output-bundle-drift-coverage-boundary.md) | Phase 297 HSAI Gateway formal backend quarantine output-bundle drift coverage boundary. |
+| [docs/298-hsai-gateway-formal-backend-quarantine-output-bundle-drift-coverage-implementation-notes.md](docs/298-hsai-gateway-formal-backend-quarantine-output-bundle-drift-coverage-implementation-notes.md) | Phase 298 HSAI Gateway formal backend quarantine output-bundle drift coverage implementation notes. |
+| [docs/299-hsai-gateway-formal-backend-quarantine-validation-summary-boundary.md](docs/299-hsai-gateway-formal-backend-quarantine-validation-summary-boundary.md) | Phase 299 HSAI Gateway formal backend quarantine validation-summary boundary. |
+| [docs/300-hsai-gateway-formal-backend-quarantine-validation-summary-implementation-notes.md](docs/300-hsai-gateway-formal-backend-quarantine-validation-summary-implementation-notes.md) | Phase 300 HSAI Gateway formal backend quarantine validation-summary implementation notes. |
+| [docs/301-hsai-gateway-formal-backend-quarantine-validation-summary-output-bundle-boundary.md](docs/301-hsai-gateway-formal-backend-quarantine-validation-summary-output-bundle-boundary.md) | Phase 301 HSAI Gateway formal backend quarantine validation-summary output-bundle boundary. |
+| [docs/302-hsai-gateway-formal-backend-quarantine-validation-summary-output-bundle-implementation-notes.md](docs/302-hsai-gateway-formal-backend-quarantine-validation-summary-output-bundle-implementation-notes.md) | Phase 302 HSAI Gateway formal backend quarantine validation-summary output-bundle implementation notes. |
+| [docs/303-hsai-gateway-formal-backend-hermetic-execution-boundary.md](docs/303-hsai-gateway-formal-backend-hermetic-execution-boundary.md) | Phase 303 HSAI Gateway formal backend hermetic execution boundary. |
+| [docs/304-hsai-gateway-formal-backend-hermetic-execution-no-spawn-descriptor-notes.md](docs/304-hsai-gateway-formal-backend-hermetic-execution-no-spawn-descriptor-notes.md) | Phase 304 HSAI Gateway formal backend hermetic execution no-spawn descriptor notes. |
+| [docs/305-hsai-gateway-formal-backend-hermetic-descriptor-report-output-bundle-boundary.md](docs/305-hsai-gateway-formal-backend-hermetic-descriptor-report-output-bundle-boundary.md) | Phase 305 HSAI Gateway formal backend hermetic descriptor-report output-bundle boundary. |
+| [docs/306-hsai-gateway-formal-backend-hermetic-descriptor-report-output-bundle-implementation-notes.md](docs/306-hsai-gateway-formal-backend-hermetic-descriptor-report-output-bundle-implementation-notes.md) | Phase 306 HSAI Gateway formal backend hermetic descriptor-report output-bundle implementation notes. |
+| [docs/307-hsai-gateway-formal-backend-hermetic-execution-result-quarantine-output-bundle-boundary.md](docs/307-hsai-gateway-formal-backend-hermetic-execution-result-quarantine-output-bundle-boundary.md) | Phase 307 HSAI Gateway formal backend hermetic execution result quarantine output-bundle boundary. |
+| [docs/308-hsai-gateway-formal-backend-hermetic-execution-result-quarantine-output-bundle-implementation-notes.md](docs/308-hsai-gateway-formal-backend-hermetic-execution-result-quarantine-output-bundle-implementation-notes.md) | Phase 308 HSAI Gateway formal backend hermetic execution result quarantine output-bundle implementation notes. |
+| [docs/309-hsai-gateway-formal-backend-hermetic-result-quarantine-output-bundle-drift-coverage-boundary.md](docs/309-hsai-gateway-formal-backend-hermetic-result-quarantine-output-bundle-drift-coverage-boundary.md) | Phase 309 HSAI Gateway formal backend hermetic result quarantine output-bundle drift coverage boundary. |
+| [docs/310-hsai-gateway-formal-backend-hermetic-result-quarantine-output-bundle-drift-coverage-implementation-notes.md](docs/310-hsai-gateway-formal-backend-hermetic-result-quarantine-output-bundle-drift-coverage-implementation-notes.md) | Phase 310 HSAI Gateway formal backend hermetic result quarantine output-bundle drift coverage implementation notes. |
+| [docs/311-hsai-gateway-formal-backend-hermetic-process-spawn-crossing-boundary.md](docs/311-hsai-gateway-formal-backend-hermetic-process-spawn-crossing-boundary.md) | Phase 311 HSAI Gateway formal backend hermetic process-spawn crossing boundary. |
+| [docs/312-hsai-gateway-formal-backend-hermetic-process-spawn-no-default-runner-interface-notes.md](docs/312-hsai-gateway-formal-backend-hermetic-process-spawn-no-default-runner-interface-notes.md) | Phase 312 HSAI Gateway formal backend hermetic process-spawn no-default-runner interface notes. |
+| [docs/313-hsai-gateway-formal-backend-hermetic-fixture-runner-crossing-notes.md](docs/313-hsai-gateway-formal-backend-hermetic-fixture-runner-crossing-notes.md) | Phase 313 HSAI Gateway formal backend hermetic fixture-runner crossing notes. |
+| [docs/314-hsai-gateway-formal-backend-hermetic-fixture-runner-hardening-coverage-notes.md](docs/314-hsai-gateway-formal-backend-hermetic-fixture-runner-hardening-coverage-notes.md) | Phase 314 HSAI Gateway formal backend hermetic fixture-runner hardening coverage notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -1425,6 +1475,157 @@ It names required inputs, redaction rules, digest rules, review decision,
 accepted append transaction mapping, output shape, tests, verifier commands,
 buyer-facing wording, and explicit nonclaims. It does not implement accepted
 bridge evidence or mutate an accepted Evidence Ledger.
+
+[docs/265-hsai-formal-verification-evidence-architecture-boundary.md](docs/265-hsai-formal-verification-evidence-architecture-boundary.md)
+defines the docs-first architecture boundary for the next HSAI
+formal-verification evidence track. It ranks COBALT, Rust-to-Lean extraction,
+repository-scale Lean benchmarking, federated verification, certificate
+explanation, and source-index research as future source candidates. It does not
+run formal tools, clone external repos, implement adapters, create formal
+evidence, populate score axes, mutate the accepted Evidence Ledger, or claim
+SOTA, semantic correctness, production readiness, breakthrough status, or full
+security.
+
+[docs/266-hsai-gateway-formal-evidence-metadata-adapter-notes.md](docs/266-hsai-gateway-formal-evidence-metadata-adapter-notes.md)
+records the first local HSAI gateway formal-evidence metadata adapter in
+`hsai-agent-admission`. It adds a typed request/report/validation surface for
+one property candidate: gateway attestation challenge binding determinism and
+nonce/proposal sensitivity. The report is local metadata only. It rejects
+formal backend execution, proof artifact submission, accepted Evidence Ledger
+mutation, Level2+ evidence, score-axis population, production-readiness,
+semantic-correctness, SOTA, full-security, and authority-grant claims.
+
+[docs/267-hsai-gateway-formal-source-correspondence-boundary.md](docs/267-hsai-gateway-formal-source-correspondence-boundary.md)
+defines the docs-first source-correspondence boundary for any future formal
+obligation over the Phase 266 gateway binding property. It names the exact Rust
+source anchors, imported `report_data_binding` dependency, property
+decomposition, backend-specific correspondence rules, certificate requirements,
+and nonclaims. It does not run a prover, add proof setup files, clone external
+repos, create proof artifacts, or turn local metadata into formal evidence.
+
+[docs/268-hsai-gateway-formal-correspondence-certificate-notes.md](docs/268-hsai-gateway-formal-correspondence-certificate-notes.md)
+records the local pure-data correspondence-certificate metadata surface in
+`hsai-agent-admission`. It validates Phase 267 source anchors, source file
+digests, P267 obligations, tool status, assumptions, modeled replacements,
+review status, and explicit nonclaims. It rejects executed backends, proof
+artifact submission, proof-status escalation, accepted Evidence Ledger mutation,
+Level2+ evidence, score-axis population, production-readiness,
+semantic-correctness, SOTA, full-security, and authority-grant claims.
+
+[docs/269-hsai-gateway-formal-correspondence-output-bundle-boundary.md](docs/269-hsai-gateway-formal-correspondence-output-bundle-boundary.md)
+defines the docs-first output-bundle boundary for the Phase 268 correspondence
+certificate. It names future declared files, SHA-256 sidecars, manifest fields,
+validation-report fields, redaction-report fields, readback semantics, required
+tests, and nonclaims. It does not implement filesystem output, generate a
+bundle, run a prover, retain proof artifacts, or promote correspondence metadata
+into accepted evidence.
+
+[docs/270-hsai-gateway-formal-correspondence-output-bundle-notes.md](docs/270-hsai-gateway-formal-correspondence-output-bundle-notes.md)
+records the local filesystem output-bundle implementation for Phase 268
+correspondence certificates in `hsai-agent-admission`. It writes only declared
+`gateway-formal-correspondence/*` files with SHA-256 sidecars, stages output
+before publication, and validates readback for manifest, validation-report,
+redaction-report, nonclaim, sidecar, symlink, and undeclared-file drift. It does
+not run a prover, create proof evidence, mutate accepted evidence, populate
+score axes, create Level2+ evidence, or establish semantic correctness,
+production readiness, SOTA, breakthrough status, full security, or execution
+authority.
+
+[docs/271-hsai-gateway-formal-correspondence-output-bundle-drift-coverage-notes.md](docs/271-hsai-gateway-formal-correspondence-output-bundle-drift-coverage-notes.md)
+records audit-first negative coverage for the Phase 270 bundle path. It covers
+output-root drift, protected roots, file roots, symlink roots, symlink bundle
+directories, symlink declared files, symlink sidecars, missing sidecars, stale
+sidecars, malformed manifests, validation-report drift, and manifest
+claim-boundary escalation. It is test coverage only and does not add proof
+authority, accepted evidence, Level2+ evidence, score axes, or broader public
+claims.
+
+[docs/272-hsai-gateway-formal-backend-adapter-boundary.md](docs/272-hsai-gateway-formal-backend-adapter-boundary.md)
+defines the docs-first boundary for a future backend-specific proof adapter. It
+ranks a Rust-to-Lean source-correspondence lane first for the gateway binding
+property, with an SMT/COBALT-style containment lane limited to boolean and small
+arithmetic gate invariants. It defines future adapter inputs, outputs,
+verification order, maturity labels, tests, and nonclaims. It does not implement
+an adapter, run a prover, clone external repositories, generate proof artifacts,
+or create accepted evidence.
+
+[docs/273-hsai-gateway-formal-backend-adapter-inert-metadata-notes.md](docs/273-hsai-gateway-formal-backend-adapter-inert-metadata-notes.md)
+records the first inert backend-adapter metadata surface in
+`hsai-agent-admission`. It binds a future `RustToLean` candidate lane to the
+Phase 268 correspondence certificate and Phase 270 output manifest, validates
+source, anchor, proof-obligation, tool, assumption, replacement, unsupported
+feature, schema, maturity, digest, and nonclaim metadata, and rejects backend
+execution or proof/checker artifact submission. It does not run a backend,
+create proof evidence, mutate accepted evidence, create Level2+ evidence,
+populate score axes, or establish semantic correctness, production readiness,
+SOTA, breakthrough status, full security, or execution authority.
+
+[docs/274-hsai-gateway-formal-backend-adapter-drift-coverage-notes.md](docs/274-hsai-gateway-formal-backend-adapter-drift-coverage-notes.md)
+records audit-first negative coverage for the Phase 273 adapter metadata. It
+covers output-manifest digest drift, output-manifest certificate-digest drift,
+output-manifest claim-boundary drift, invalid nested correspondence
+certificates, schema-version drift, unsafe adapter ids, state-slice drift, and
+requested claim-boundary drift. It is test coverage only and does not run a
+backend, create proof evidence, create accepted evidence, or widen public
+claims.
+
+[docs/275-hsai-gateway-formal-backend-run-artifact-boundary.md](docs/275-hsai-gateway-formal-backend-run-artifact-boundary.md)
+defines the docs-first boundary for a future hermetic backend-run artifact
+bundle for the `RustToLean` gateway formal lane. It names declared candidate
+files, optional digest-bound attachments, run-summary fields, execution modes,
+review gates, benchmark hooks, required tests, and nonclaims. It does not
+implement a runner, run a backend, generate proof artifacts, retain raw checker
+transcripts, mutate accepted evidence, create Level2+ evidence, populate score
+axes, or widen public claims.
+
+[docs/276-hsai-gateway-formal-backend-run-inert-artifact-metadata-notes.md](docs/276-hsai-gateway-formal-backend-run-inert-artifact-metadata-notes.md)
+records the first inert backend-run artifact metadata surface in
+`hsai-agent-admission`. It binds a `NotRun` artifact summary to the Phase 273
+adapter request/report, correspondence certificate, output manifest, backend
+kind, tool metadata, toolchain lock, proof obligations, modeled assumptions,
+unsupported Rust features, and required nonclaims. It rejects execution labels,
+proof/checker references, tool-log summaries, accepted evidence, Level2+
+evidence, score-axis population, authority grants, and SOTA/full-security/
+semantic-correctness/production-readiness claims. It does not materialize a
+bundle, run a backend, create proof evidence, or widen public claims.
+
+[docs/277-hsai-gateway-formal-backend-run-materialized-bundle-boundary.md](docs/277-hsai-gateway-formal-backend-run-materialized-bundle-boundary.md)
+defines the docs-first materialized bundle boundary for a future
+`gateway-formal-backend-run/*` output root. It specifies protected-root and
+symlink rejection, the exact declared file layout, SHA-256 sidecars, manifest
+fields, readback drift checks, redaction-report semantics, optional attachment
+rejection, required future tests, and nonclaims. It does not implement bundle
+writes or readback, run a backend, generate proof artifacts, retain checker
+transcripts, create accepted evidence, create Level2+ evidence, populate score
+axes, or widen public claims.
+
+[docs/278-hsai-gateway-formal-backend-run-inert-bundle-materialization-notes.md](docs/278-hsai-gateway-formal-backend-run-inert-bundle-materialization-notes.md)
+records local inert materialization and readback for the
+`gateway-formal-backend-run/*` bundle in `hsai-agent-admission`. It writes only
+declared metadata files and SHA-256 sidecars, binds the manifest to the Phase
+273 adapter request/report and Phase 276 run summary, validates readback
+semantics, rejects optional proof/checker/tool-log attachments, and preserves
+all nonpromotion flags. It does not run a backend, generate proof artifacts,
+retain checker transcripts, create accepted evidence, create Level2+ evidence,
+populate score axes, or widen public claims.
+
+[docs/279-hsai-gateway-formal-backend-run-bundle-drift-coverage-notes.md](docs/279-hsai-gateway-formal-backend-run-bundle-drift-coverage-notes.md)
+records audit-first negative coverage for the Phase 278 backend-run bundle
+reader. It covers protected roots, file roots, symlink roots, stale sidecars,
+manifest nonpromotion-flag drift, malformed run-summary JSON, redaction-report
+drift, nonclaim drift, and symlinked declared files. It is test coverage only
+and does not run a backend, create proof evidence, create accepted evidence, or
+widen public claims.
+
+[docs/280-hsai-gateway-formal-backend-execution-preflight-boundary.md](docs/280-hsai-gateway-formal-backend-execution-preflight-boundary.md)
+defines the docs-first preflight boundary that must exist before any future
+Lean, SMT, COBALT, Rust-to-Lean, Aeneas, Hax, Z3, CBMC, Coq, TLA+, or
+model-checker command can run. It specifies future input metadata, argv-only
+command descriptors, toolchain locks, environment rules, artifact-root rules,
+operator acknowledgement, output flags, required tests, and nonclaims. It does
+not implement a preflight runner, spawn processes, run a backend, create proof
+artifacts, create checker transcripts, create accepted evidence, create Level2+
+evidence, populate score axes, or widen public claims.
 
 [docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md](docs/216-phase-soak-health-coverage-thirty-seventh-tranche-notes.md)
 records a bounded local coverage tranche for `zkbench-core` soak health

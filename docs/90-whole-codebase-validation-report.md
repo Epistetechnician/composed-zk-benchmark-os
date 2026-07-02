@@ -827,6 +827,699 @@ mutation, final bridge acceptance, live provider call, live attestation capture,
 benchmark evidence, score-axis population, Level2+ evidence, production
 readiness, SOTA status, breakthrough status, or stronger public claim.
 
+Phase 265 opens a docs-first HSAI formal-verification evidence architecture
+boundary. It ranks COBALT, Rust-to-Lean extraction, repository-scale Lean
+benchmarking, federated verification, certificate explanation, and
+formal-verification source indexes as future source candidates for a scoped
+gateway formal-evidence track. It names first tiny gateway-property targets,
+future formal evidence shape, source-verification rules, verification order,
+claim caps, explicit nonclaims, and the next implementation slice. It creates no
+Rust/source changes, proof assistant setup files, external repo clones, formal
+tool execution, proof artifacts, accepted Evidence Ledger mutation, benchmark
+evidence, score-axis population, Level2+ evidence, semantic-correctness claims,
+production readiness, SOTA status, breakthrough status, full-security claim, or
+stronger public claim.
+
+Phase 266 implements the first local HSAI gateway formal-evidence metadata
+adapter in `hsai-agent-admission`. It adds typed request, report, validation,
+local-check, property-kind, status, and issue surfaces for one candidate
+property: gateway attestation challenge binding determinism and nonce/proposal
+sensitivity. It rebuilds the existing gateway attestation challenge binding and
+checks identical-input determinism, nonce sensitivity, proposal sensitivity,
+expected binding digest agreement, source attribution, source digest/commit
+presence, and explicit nonclaims. It creates no formal proof, runs no formal
+backend, clones no external repo, vendors no source, creates no proof artifact,
+mutates no accepted Evidence Ledger, creates no Level2+ evidence, populates no
+score axes, grants no action authority, and does not establish semantic
+correctness, production readiness, SOTA status, breakthrough status, full
+security, or a stronger public claim.
+
+Phase 267 opens a docs-first HSAI gateway formal source-correspondence
+boundary. It names the exact Rust source anchors and imported
+`hsai-attestation::report_data_binding` dependency that a future Lean,
+Rust-to-Lean, SMT, or federated verification obligation must correspond to
+before any result can be treated as HSAI evidence. It decomposes the Phase 266
+property into deterministic-constructor, nonce-sensitivity, proposal-sensitivity,
+and validation-agreement obligations, then defines required correspondence
+certificate fields and backend-specific assumptions. It creates no Rust/source
+changes, Cargo metadata changes, proof setup files, external repo clones,
+vendored source, formal backend execution, generated proof artifacts, accepted
+Evidence Ledger mutation, benchmark evidence, score-axis population, Level2+
+evidence, semantic-correctness claims, production readiness, SOTA status,
+breakthrough status, full-security claim, or stronger public claim.
+
+Phase 268 implements the local HSAI gateway formal correspondence-certificate
+metadata surface in `hsai-agent-admission`. It adds typed certificate,
+validation, issue, source-file digest, source-anchor, tool-status,
+proof-obligation, backend-kind, tool-execution-status, proof-status, and
+review-decision surfaces. Validation requires the Phase 267 source files,
+anchors, P267 obligations, source commit, nonzero source digests, tool metadata,
+trusted assumptions, modeled replacements, input/output schema digest,
+metadata-only review, explicit nonclaims, and the correspondence-only claim
+boundary. It creates no formal proof, runs no formal backend, clones no external
+repo, vendors no source, creates no proof artifact, mutates no accepted Evidence
+Ledger, creates no Level2+ evidence, populates no score axes, grants no action
+authority, and does not establish semantic correctness, production readiness,
+SOTA status, breakthrough status, full security, or a stronger public claim.
+
+Phase 269 opens a docs-first HSAI gateway formal correspondence output-bundle
+boundary. It defines the future `gateway-formal-correspondence/*` declared file
+layout, SHA-256 sidecars, manifest contract, validation-report contract,
+redaction-report contract, readback semantics, required future tests, anti-goals,
+and next implementation slice for materializing Phase 268 certificates. It
+creates no Rust/source changes, Cargo metadata changes, package runtime files,
+filesystem output implementation, generated output bundle, proof setup files,
+external repo clones, vendored source, formal backend execution, generated proof
+artifacts, accepted Evidence Ledger mutation, benchmark evidence, score-axis
+population, Level2+ evidence, semantic-correctness claims, production
+readiness, SOTA status, breakthrough status, full-security claim, or stronger
+public claim.
+
+Phase 270 implements that local HSAI gateway formal correspondence output-bundle
+surface in `hsai-agent-admission`: output request, manifest, validation report,
+redaction report, output error, materialization, and readback. The bundle writes
+only declared `gateway-formal-correspondence/*` files with SHA-256 sidecars,
+stages output before publication, rejects invalid correspondence certificates,
+and fails closed on missing files, symlinks, undeclared files, stale sidecars,
+manifest drift, validation-report drift, redaction-report drift, and nonclaim
+drift. It still creates no proof artifact, runs no formal backend, mutates no
+accepted Evidence Ledger, creates no Level2+ evidence, populates no score axes,
+grants no action authority, and does not establish semantic correctness,
+production readiness, SOTA status, breakthrough status, full security, or a
+stronger public claim.
+
+Phase 271 expands audit-first negative coverage for that output-bundle path. The
+new focused tests cover existing output roots without overwrite, file roots,
+protected roots, symlink roots, symlink bundle directories, symlink declared
+files, symlink sidecars, missing sidecars, stale sidecars, malformed manifest
+JSON, validation-report drift, and manifest claim-boundary escalation. This is
+test coverage only. It changes no output format, runs no formal backend, creates
+no proof artifact, mutates no accepted Evidence Ledger, creates no Level2+
+evidence, populates no score axes, grants no action authority, and does not
+establish semantic correctness, production readiness, SOTA status, breakthrough
+status, full security, or a stronger public claim.
+
+Phase 272 opens the docs-first HSAI gateway formal backend-adapter boundary. It
+ranks a Rust-to-Lean source-correspondence lane first for the gateway binding
+property, limits the SMT/COBALT-style lane to boolean claim-boundary and small
+arithmetic containment invariants, defers federated dispatch and
+repository-scale benchmark evaluation until candidate backend runs exist, and
+treats certificate explanation as an audit/debug aid only. It defines future
+adapter inputs, outputs, verification order, proof maturity labels, required
+tests, anti-goals, and next implementation slice. It creates no Rust source
+changes, Cargo metadata changes, proof setup files, external repo clones,
+vendored source, backend execution, generated proof artifacts, checker
+transcripts, accepted Evidence Ledger mutation, Level2+ evidence, benchmark
+evidence, score-axis population, semantic-correctness claim, production
+readiness, SOTA status, breakthrough status, full-security claim, or stronger
+public claim.
+
+Phase 273 implements the first inert HSAI gateway formal backend-adapter
+metadata surface in `hsai-agent-admission`. It adds request, report,
+validation, issue, status, maturity, claim-boundary, required-nonclaim,
+validation, and report-construction APIs for a future `RustToLean` candidate
+lane. Validation binds the Phase 268 correspondence certificate digest, Phase
+270 output manifest digest, source commit, source files, source anchors, proof
+obligations, tool metadata, model assumptions, modeled replacements,
+unsupported Rust features, input/output schema digest, expected future proof
+artifact format, expected checker transcript format, `NotRun` maturity, and
+explicit nonclaims. It rejects backend execution, proof artifact submission,
+checker transcript submission, accepted Evidence Ledger mutation, Level2+
+evidence, score-axis population, authority grant, and forbidden public claims.
+It still creates no proof artifact, runs no formal backend, mutates no accepted
+Evidence Ledger, creates no Level2+ evidence, populates no score axes, grants no
+action authority, and does not establish semantic correctness, production
+readiness, SOTA status, breakthrough status, full security, or a stronger
+public claim.
+
+Phase 274 expands audit-first negative coverage for the Phase 273 inert backend
+adapter metadata. The new focused tests cover output-manifest digest drift,
+output-manifest certificate-digest drift, output-manifest claim-boundary drift,
+invalid nested correspondence certificates, schema-version drift, unsafe adapter
+ids, state-slice drift, and requested claim-boundary drift. This is test
+coverage only. It changes no adapter format, runs no formal backend, creates no
+proof artifact, generates no checker transcript, mutates no accepted Evidence
+Ledger, creates no Level2+ evidence, populates no score axes, grants no action
+authority, and does not establish semantic correctness, production readiness,
+SOTA status, breakthrough status, full security, or a stronger public claim.
+
+Phase 275 opens the docs-first HSAI gateway formal backend-run artifact
+boundary. It defines the future `gateway-formal-backend-run/*` declared file
+layout, SHA-256 sidecars, optional candidate proof/checker references,
+run-summary contract, execution-mode contract, review gate, benchmark hooks,
+required future tests, anti-goals, and next implementation slice for a future
+Rust-to-Lean lane. It creates no Rust source changes, Cargo metadata changes,
+proof setup files, external repo clones, vendored source, backend execution,
+generated proof artifacts, generated checker transcripts, accepted Evidence
+Ledger mutation, Level2+ evidence, benchmark evidence, score-axis population,
+semantic-correctness claim, production readiness, SOTA status, breakthrough
+status, full-security claim, or stronger public claim.
+
+Phase 276 implements inert HSAI gateway formal backend-run artifact metadata in
+`hsai-agent-admission`. It adds local `NotRun` run-summary metadata, digest
+bindings to the Phase 273 adapter request/report, correspondence certificate,
+output manifest, backend kind, tool metadata, toolchain lock, proof
+obligations, modeled assumptions, unsupported Rust features, and required
+nonclaims. It adds focused rejection coverage for execution labels, timestamps,
+proof/checker artifact references, tool-log summaries, binding drift, accepted
+evidence, Level2+ evidence, score-axis population, authority grants, and
+SOTA/full-security/semantic-correctness/production-readiness claims. It still
+does not materialize a backend-run bundle, run a formal backend, create proof
+artifacts, generate checker transcripts, mutate accepted Evidence Ledger state,
+create benchmark evidence, populate score axes, or widen public claims.
+
+Phase 277 opens the docs-first HSAI gateway formal backend-run materialized
+bundle boundary. It defines output-root rules, protected-root and symlink
+rejection, the exact `gateway-formal-backend-run/*` declared file layout,
+SHA-256 sidecars, bounded file semantics, redaction-report fields, manifest
+fields, readback drift checks, optional attachment rejection, required future
+tests, and anti-goals. It creates no Rust source changes, Cargo metadata
+changes, package runtime files, filesystem bundle materialization code, proof
+setup files, external repo clones, vendored source, backend execution,
+generated proof artifacts, generated checker transcripts, accepted Evidence
+Ledger mutation, Level2+ evidence, benchmark evidence, score-axis population,
+semantic-correctness claim, production readiness, SOTA status, breakthrough
+status, full-security claim, or stronger public claim.
+
+Phase 278 implements local inert materialization and readback for the HSAI
+gateway formal backend-run bundle in `hsai-agent-admission`. It writes only the
+declared `gateway-formal-backend-run/*` metadata files and SHA-256 sidecars,
+uses staged output, binds the manifest to the adapter request/report and
+`NotRun` run summary, validates readback semantics, rejects undeclared optional
+proof/checker/tool-log attachments, rejects digest-consistent source-digest
+drift, and preserves all nonpromotion flags. It still does not run a formal
+backend, create proof artifacts, generate checker transcripts, mutate accepted
+Evidence Ledger state, create Level2+ evidence, create benchmark evidence,
+populate score axes, or widen public claims.
+
+Phase 279 expands audit-first negative coverage for the Phase 278 backend-run
+bundle reader. It adds tests for protected roots, file roots, symlink roots,
+stale run-summary sidecars, manifest nonpromotion-flag drift, malformed
+run-summary JSON, redaction-report drift, nonclaim Markdown drift, and symlinked
+declared files. This is local failure coverage only. It changes no bundle
+format, runs no formal backend, creates no proof artifact, generates no checker
+transcript, mutates no accepted Evidence Ledger, creates no Level2+ evidence,
+populates no score axes, grants no action authority, and does not establish
+semantic correctness, production readiness, SOTA status, breakthrough status,
+full security, or a stronger public claim.
+
+Phase 280 opens the docs-first HSAI gateway formal backend execution preflight
+boundary. It defines the future required inputs, argv-only command descriptor,
+toolchain lock, allowed future backend modes, environment rules, artifact-root
+rules, operator acknowledgement, output shape, required tests, anti-goals, and
+nonclaims that must exist before any Lean, SMT, COBALT, Rust-to-Lean, Aeneas,
+Hax, Z3, CBMC, Coq, TLA+, or model-checker command can run. It creates no Rust
+source changes, Cargo metadata changes, package runtime files, command
+execution, process spawning, proof setup files, external repo clones, vendored
+source, backend execution, generated proof artifacts, generated checker
+transcripts, accepted Evidence Ledger mutation, Level2+ evidence, benchmark
+evidence, score-axis population, semantic-correctness claim, production
+readiness, SOTA status, breakthrough status, full-security claim, or stronger
+public claim.
+
+Phase 281 implements the HSAI gateway formal backend execution preflight as
+inert metadata in `hsai-agent-admission`. It adds preflight request/report
+types, backend preflight modes, argv-only command descriptors, environment
+descriptors, artifact-root descriptors, operator acknowledgement metadata,
+redaction-policy metadata, digest helpers, fail-closed validation, and focused
+tests for valid candidate-only metadata plus command, environment, artifact
+root, acknowledgement, redaction, and claim-escalation drift. It still creates
+no command execution, process spawning, backend runner, filesystem preflight
+bundle materialization, proof assistant setup files, external repo clones,
+vendored source, Lean, SMT, COBALT, Rust-to-Lean, Aeneas, Hax, Z3, CBMC, Coq,
+TLA+, or model-checker execution, generated proof artifacts, generated checker
+transcripts, accepted Evidence Ledger mutation, Level2+ evidence, benchmark
+evidence, score-axis population, semantic-correctness claim, production
+readiness, SOTA status, breakthrough status, full-security claim, or stronger
+public claim.
+
+Phase 282 opens the docs-first HSAI gateway formal backend preflight
+output-bundle boundary. It defines the future
+`gateway-formal-backend-preflight/*` declared files, digest sidecars,
+output-root rules, manifest contract, readback checks, required future tests,
+anti-goals, and next implementation slice for materializing Phase 281 preflight
+metadata. It creates no Rust implementation changes, Cargo metadata changes,
+package runtime files, filesystem bundle materialization code, command
+execution, process spawning, backend runner, proof assistant setup files,
+external repo clones, vendored source, Lean, SMT, COBALT, Rust-to-Lean, Aeneas,
+Hax, Z3, CBMC, Coq, TLA+, or model-checker execution, generated proof
+artifacts, generated checker transcripts, accepted Evidence Ledger mutation,
+Level2+ evidence, benchmark evidence, score-axis population,
+semantic-correctness claim, production readiness, SOTA status, breakthrough
+status, full-security claim, or stronger public claim.
+
+Phase 283 implements the HSAI gateway formal backend preflight output-bundle in
+`hsai-agent-admission`. It adds a preflight output request, manifest, error
+type, declared files, SHA-256 sidecars, staged writes, readback validation,
+manifest recomputation, semantic drift rejection, and focused tests for valid
+materialization, invalid preflight/report rejection before write, undeclared
+attachment rejection, manifest nonpromotion-flag drift, command descriptor
+drift, and redaction-policy drift. It still creates no command execution,
+process spawning, backend runner, proof assistant setup files, external repo
+clones, vendored source, Lean, SMT, COBALT, Rust-to-Lean, Aeneas, Hax, Z3,
+CBMC, Coq, TLA+, or model-checker execution, generated proof artifacts,
+generated checker transcripts, accepted Evidence Ledger mutation, Level2+
+evidence, benchmark evidence, score-axis population, semantic-correctness
+claim, production readiness, SOTA status, breakthrough status, full-security
+claim, or stronger public claim.
+
+Phase 284 opens the docs-first HSAI gateway formal backend execution transcript
+boundary. It defines the future transcript metadata shape, proof/checker
+reference rules, checker-output admission rules, required future tests,
+anti-goals, and next implementation slice. It creates no Rust implementation
+changes, Cargo metadata changes, package runtime files, filesystem transcript
+bundle materialization code, command execution, process spawning, backend
+runner, proof assistant setup files, external repo clones, vendored source,
+Lean, SMT, COBALT, Rust-to-Lean, Aeneas, Hax, Z3, CBMC, Coq, TLA+, or
+model-checker execution, generated proof artifacts, generated checker
+transcripts, accepted Evidence Ledger mutation, Level2+ evidence, benchmark
+evidence, score-axis population, semantic-correctness claim, production
+readiness, SOTA status, breakthrough status, full-security claim, or stronger
+public claim.
+
+Phase 285 implements inert HSAI gateway formal backend execution transcript
+metadata in `hsai-agent-admission`. It adds transcript status labels, transcript
+reference metadata, redaction report metadata, deterministic digesting, a
+preflight-bound builder, and fail-closed validation for binding drift,
+execution/checker escalation, proof/checker references, proof-obligation
+submission, trust-root submission, raw transcript retention, accepted Evidence
+Ledger mutation, Level2+ evidence, score-axis population, authority grants, and
+forbidden public claim text. It still creates no filesystem transcript bundle,
+command execution, process spawning, backend runner, proof assistant setup
+files, external repo clones, vendored source, Lean, SMT, COBALT, Rust-to-Lean,
+Aeneas, Hax, Z3, CBMC, Coq, TLA+, or model-checker execution, generated proof
+artifacts, generated checker transcripts, accepted Evidence Ledger mutation,
+Level2+ evidence, benchmark evidence, score-axis population,
+semantic-correctness claim, production readiness, SOTA status, breakthrough
+status, full-security claim, or stronger public claim.
+
+Phase 286 opens the docs-first HSAI gateway formal backend transcript
+output-bundle boundary. It defines the future declared
+`gateway-formal-backend-transcript/*` file layout, sidecar requirements,
+output-root rules, manifest contract, bounded file semantics, readback rejection
+rules, required future tests, anti-goals, and next implementation slice. It
+creates no Rust implementation changes, Cargo metadata changes, package runtime
+files, filesystem bundle materialization code, command execution, process
+spawning, backend runner, proof assistant setup files, external repo clones,
+vendored source, Lean, SMT, COBALT, Rust-to-Lean, Aeneas, Hax, Z3, CBMC, Coq,
+TLA+, or model-checker execution, generated proof artifacts, generated checker
+transcripts, accepted Evidence Ledger mutation, Level2+ evidence, benchmark
+evidence, score-axis population, semantic-correctness claim, production
+readiness, SOTA status, breakthrough status, full-security claim, or stronger
+public claim.
+
+Phase 287 implements the HSAI gateway formal backend transcript output-bundle
+surface in `hsai-agent-admission`: transcript output request and manifest
+metadata, preflight-binding records, toolchain-binding records, execution and
+checker status records, proof-obligation records, declared
+`gateway-formal-backend-transcript/*` files, SHA-256 sidecars, staged writes,
+readback validation, manifest recomputation, exact metadata-builder drift
+rejection, redaction drift rejection, and undeclared-file rejection. It still
+creates no command execution, process spawning, backend runner, proof assistant
+setup files, external repo clones, vendored source, Lean, SMT, COBALT,
+Rust-to-Lean, Aeneas, Hax, Z3, CBMC, Coq, TLA+, or model-checker execution,
+generated proof artifacts, generated checker transcripts, accepted Evidence
+Ledger mutation, Level2+ evidence, benchmark evidence, score-axis population,
+semantic-correctness claim, production readiness, SOTA status, breakthrough
+status, full-security claim, or stronger public claim.
+
+Phase 288 broadens HSAI gateway formal backend transcript output-bundle drift
+coverage in `hsai-agent-admission`. It adds negative tests for stale transcript
+metadata sidecars, missing manifest sidecars, malformed transcript metadata
+JSON, nonclaim Markdown drift, proof-obligation drift, preflight-binding drift,
+checker-status drift, protected output-root rejection, declared-file symlink
+rejection, and declared-sidecar symlink rejection. It still creates no command
+execution, process spawning, backend runner, proof assistant setup files,
+external repo clones, vendored source, Lean, SMT, COBALT, Rust-to-Lean, Aeneas,
+Hax, Z3, CBMC, Coq, TLA+, or model-checker execution, generated proof
+artifacts, generated checker transcripts, accepted Evidence Ledger mutation,
+Level2+ evidence, benchmark evidence, score-axis population,
+semantic-correctness claim, production readiness, SOTA status, breakthrough
+status, full-security claim, or stronger public claim.
+
+Phase 289 opens the docs-first HSAI gateway formal backend execution
+authorization boundary. It defines the future authorization metadata shape,
+execution preconditions, output quarantine rules, transcript admission rules,
+required future tests, anti-goals, and next implementation slice. It creates no
+Rust implementation changes, Cargo metadata changes, package runtime files,
+command execution, process spawning, backend runner, proof assistant setup
+files, external repo clones, vendored source, Lean, SMT, COBALT, Rust-to-Lean,
+Aeneas, Hax, Z3, CBMC, Coq, TLA+, or model-checker execution, generated proof
+artifacts, generated checker transcripts, accepted Evidence Ledger mutation,
+Level2+ evidence, benchmark evidence, score-axis population,
+semantic-correctness claim, production readiness, SOTA status, breakthrough
+status, full-security claim, or stronger public claim.
+
+Phase 290 implements the inert HSAI gateway formal backend execution
+authorization metadata in `hsai-agent-admission`. It adds local authorization
+request, quarantine descriptor, and operator acknowledgement records, digest
+helpers, builder helpers, required nonclaims, and fail-closed validation over
+Phase 283 preflight output manifests, Phase 287 transcript output manifests,
+command and argv binding, toolchain binding, environment and network/secret
+policy, quarantine roots, operator acknowledgement, nonpromotion flags, and
+forbidden public claim text. It creates no filesystem authorization bundle,
+command execution, process spawning, backend runner, proof artifact, checker
+transcript, accepted Evidence Ledger mutation, Level2+ evidence, benchmark
+evidence, score-axis population, semantic-correctness claim, production
+readiness, SOTA status, breakthrough status, full-security claim, or stronger
+public claim.
+
+Phase 291 opens the docs-first HSAI gateway formal backend execution
+authorization output-bundle boundary. It defines future declared
+`gateway-formal-backend-authorization/*` files, SHA-256 sidecars, manifest
+fields, preflight/transcript/command/environment/quarantine/operator binding
+rules, readback rejection rules, required future tests, anti-goals, and next
+implementation slice. It creates no Rust implementation changes, Cargo metadata
+changes, package runtime files, filesystem authorization bundle materialization,
+command execution, process spawning, backend runner, proof assistant setup
+files, external repo clones, vendored source, Lean, SMT, COBALT, Rust-to-Lean,
+Aeneas, Hax, Z3, CBMC, Coq, TLA+, or model-checker execution, generated proof
+artifacts, generated checker transcripts, accepted Evidence Ledger mutation,
+Level2+ evidence, benchmark evidence, score-axis population,
+semantic-correctness claim, production readiness, SOTA status, breakthrough
+status, full-security claim, or stronger public claim.
+
+Phase 292 implements the local HSAI gateway formal backend execution
+authorization output-bundle materializer and readback validator in
+`hsai-agent-admission`. It writes only declared
+`gateway-formal-backend-authorization/*` metadata files plus SHA-256 sidecars,
+validates authorization metadata before write, rejects undeclared files and
+stale sidecars on readback, recomputes manifest semantics, and checks
+preflight, transcript, command, environment, quarantine, operator
+acknowledgement, and nonclaim component bindings. It creates no command
+execution, process spawning, backend runner, proof artifact, checker
+transcript, accepted Evidence Ledger mutation, Level2+ evidence, benchmark
+evidence, score-axis population, semantic-correctness claim, production
+readiness, SOTA status, breakthrough status, full-security claim, or stronger
+public claim.
+
+Phase 293 opens the docs-first HSAI gateway formal backend execution quarantine
+artifact boundary. It defines the future metadata contract for bounded local
+process-result summaries after authorization, including authorization,
+preflight, transcript, command, environment, quarantine, and operator binding
+requirements; allowed retained summaries; required rejection paths for raw logs,
+proof/checker artifacts, external source retention, unsafe write paths, and
+claim escalation; and required future tests. It creates no Rust implementation
+changes, Cargo metadata changes, package runtime files, command execution,
+process spawning, backend runner, proof assistant setup files, external repo
+clones, vendored source, Lean, SMT, COBALT, Rust-to-Lean, Aeneas, Hax, Z3,
+CBMC, Coq, TLA+, or model-checker execution, generated proof artifacts,
+generated checker transcripts, accepted Evidence Ledger mutation, Level2+
+evidence, benchmark evidence, score-axis population, semantic-correctness
+claim, production readiness, SOTA status, breakthrough status, full-security
+claim, or stronger public claim.
+
+Phase 294 implements the inert HSAI gateway formal backend execution quarantine
+artifact metadata surface in `hsai-agent-admission`. It adds bounded stdout and
+stderr summary metadata, redacted output file references, redaction reports,
+proof/checker nonpromotion reports, quarantine artifact metadata, deterministic
+digests, required nonclaims, and validation against the Phase 292 authorization
+output manifest. The validation rejects digest drift, unsafe output references,
+raw log retention, proof/checker artifact promotion, checker-success semantic
+claims, process-success accepted-evidence claims, accepted Evidence Ledger
+mutation, Level2+ evidence, score-axis population, semantic-correctness claim,
+production readiness, SOTA status, breakthrough status, full-security claim, or
+authority to execute an action. It still creates no command execution, process
+spawning, backend runner, proof artifact promotion, checker transcript
+promotion, filesystem quarantine bundle, benchmark evidence, official
+submission, or stronger public claim.
+
+Phase 295 opens the docs-first HSAI gateway formal backend quarantine
+output-bundle boundary. It defines the future `gateway-formal-backend-quarantine/*`
+filesystem contract for materializing Phase 294 metadata, including declared
+files, SHA-256 sidecars, manifest fields, readback rules, drift rejection,
+undeclared-file rejection, raw-log rejection, proof/checker nonpromotion, and
+claim-boundary restrictions. It creates no Rust implementation changes, Cargo
+metadata changes, package runtime files, filesystem quarantine bundle,
+command execution, process spawning, backend runner, proof assistant setup
+files, external repo clones, vendored source, Lean, SMT, COBALT, Rust-to-Lean,
+Aeneas, Hax, Z3, CBMC, Coq, TLA+, or model-checker execution, generated proof
+artifact promotion, generated checker transcript promotion, accepted Evidence
+Ledger mutation, Level2+ evidence, benchmark evidence, score-axis population,
+semantic-correctness claim, production readiness, SOTA status, breakthrough
+status, full-security claim, or stronger public claim.
+
+Phase 296 implements the HSAI gateway formal backend quarantine output-bundle
+materialization surface in `hsai-agent-admission`. It adds declared files,
+SHA-256 sidecars, staged writes, output-root validation, readback validation,
+manifest recomputation, component drift checks, nonclaim Markdown checks, and
+undeclared-file rejection for `gateway-formal-backend-quarantine/*`. It creates
+no command execution, process spawning, backend runner, proof assistant setup
+files, external repo clones, vendored source, Lean, SMT, COBALT, Rust-to-Lean,
+Aeneas, Hax, Z3, CBMC, Coq, TLA+, or model-checker execution, generated proof
+artifact promotion, generated checker transcript promotion, accepted Evidence
+Ledger mutation, Level2+ evidence, benchmark evidence, score-axis population,
+semantic-correctness claim, production readiness, SOTA status, breakthrough
+status, full-security claim, or stronger public claim.
+
+Phase 297 opens the docs-first HSAI gateway formal backend quarantine
+output-bundle drift coverage boundary. It defines the future negative-test
+targets for Phase 296 readback hardening: protected roots, missing sidecars,
+malformed JSON, authorization binding drift, process-status drift, stderr
+drift, redaction drift, inventory drift, proof/checker nonpromotion drift,
+symlink rejection, undeclared raw logs, undeclared proof/checker artifacts,
+undeclared accepted Evidence Ledger paths, undeclared benchmark outputs, and
+undeclared earlier formal-bundle paths. It creates no Rust implementation
+changes, Cargo metadata changes, package runtime files, new bundle behavior,
+command execution, process spawning, backend runner, proof assistant setup
+files, external repo clones, vendored source, Lean, SMT, COBALT, Rust-to-Lean,
+Aeneas, Hax, Z3, CBMC, Coq, TLA+, or model-checker execution, generated proof
+artifact promotion, generated checker transcript promotion, accepted Evidence
+Ledger mutation, Level2+ evidence, benchmark evidence, score-axis population,
+semantic-correctness claim, production readiness, SOTA status, breakthrough
+status, full-security claim, or stronger public claim.
+
+Phase 298 implements the HSAI gateway formal backend quarantine output-bundle
+drift coverage tests over the Phase 296 readback surface. The new local tests
+cover protected output roots, overwrite rejection, missing sidecars, malformed
+declared JSON, authorization binding drift, process-status drift, stderr
+summary drift, redaction report drift, output inventory drift, proof/checker
+nonpromotion drift, undeclared raw logs, undeclared proof/checker artifacts,
+undeclared accepted Evidence Ledger paths, undeclared benchmark outputs,
+undeclared earlier formal-bundle paths, and Unix symlink rejection for output
+roots, bundle directories, declared files, and declared sidecars. This remains
+local regression coverage only and creates no command execution, process
+spawning, backend runner, proof assistant setup files, external repo clones,
+vendored source, Lean, SMT, COBALT, Rust-to-Lean, Aeneas, Hax, Z3, CBMC, Coq,
+TLA+, or model-checker execution, generated proof artifact promotion, generated
+checker transcript promotion, accepted Evidence Ledger mutation, Level2+
+evidence, benchmark evidence, score-axis population, semantic-correctness
+claim, production readiness, SOTA status, breakthrough status, full-security
+claim, or stronger public claim.
+
+Phase 299 opens the docs-first HSAI gateway formal backend quarantine
+validation-summary boundary. It defines a future local pure-data summary for
+the Phase 296 quarantine output-bundle and Phase 298 drift tests: referenced
+manifest and quarantine artifact digests, declared-file and sidecar checks,
+drift coverage labels, undeclared-file coverage labels, symlink coverage
+labels, nonpromotion coverage labels, claim-boundary coverage labels,
+validation command labels, required nonclaims, and explicit flags preserving
+local-regression-only meaning. It creates no Rust implementation changes, Cargo
+metadata changes, package runtime files, command execution, process spawning,
+backend runner, proof assistant setup files, external repo clones, vendored
+source, Lean, SMT, COBALT, Rust-to-Lean, Aeneas, Hax, Z3, CBMC, Coq, TLA+, or
+model-checker execution, generated proof artifact promotion, generated checker
+transcript promotion, accepted Evidence Ledger mutation, Level2+ evidence,
+benchmark evidence, score-axis population, semantic-correctness claim,
+production readiness, SOTA status, breakthrough status, full-security claim, or
+stronger public claim.
+
+Phase 300 implements the HSAI gateway formal backend quarantine
+validation-summary as pure local metadata in `hsai-agent-admission`: schema,
+state-slice, and claim-boundary constants, deterministic data type and digest,
+required nonclaims, coverage-label registries, validation-command labels,
+builder from a quarantine output manifest, fail-closed validation, and focused
+tests. It remains local regression metadata only and creates no filesystem
+summary bundle, command execution, process spawning, backend runner, proof
+assistant setup files, external repo clones, vendored source, Lean, SMT,
+COBALT, Rust-to-Lean, Aeneas, Hax, Z3, CBMC, Coq, TLA+, or model-checker
+execution, generated proof artifact promotion, generated checker transcript
+promotion, accepted Evidence Ledger mutation, Level2+ evidence, benchmark
+evidence, score-axis population, semantic-correctness claim, production
+readiness, SOTA status, breakthrough status, full-security claim, or stronger
+public claim.
+
+Phase 301 opens the docs-first HSAI gateway formal backend quarantine
+validation-summary output-bundle boundary. It defines a future local
+declared-file bundle for the Phase 300 validation summary, including declared
+files, SHA-256 sidecars, manifest fields, readback rules, validation-report
+meaning, required future tests, and anti-goals. It creates no Rust
+implementation changes, Cargo metadata changes, package runtime files,
+filesystem materialization behavior, command execution, process spawning,
+backend runner, proof assistant setup files, external repo clones, vendored
+source, Lean, SMT, COBALT, Rust-to-Lean, Aeneas, Hax, Z3, CBMC, Coq, TLA+, or
+model-checker execution, generated proof artifact promotion, generated checker
+transcript promotion, accepted Evidence Ledger mutation, Level2+ evidence,
+benchmark evidence, score-axis population, semantic-correctness claim,
+production readiness, SOTA status, breakthrough status, full-security claim, or
+stronger public claim.
+
+Phase 302 implements the HSAI gateway formal backend quarantine
+validation-summary output bundle in `hsai-agent-admission`: declared files and
+SHA-256 sidecars, output request/manifest/validation-report records, staged
+materialization, readback, undeclared-file rejection, stale-sidecar rejection,
+semantic validation for summary/source manifest/coverage labels/nonclaims/
+validation report/manifest, and focused tests. It remains local metadata
+materialization only and creates no backend command execution, proof artifact
+read, checker transcript promotion, accepted Evidence Ledger mutation, Level2+
+evidence, benchmark evidence, score-axis population, semantic-correctness
+claim, production readiness, SOTA status, breakthrough status, full-security
+claim, or stronger public claim.
+
+Phase 303 defines the HSAI gateway formal backend hermetic execution boundary
+as a docs-first contract for a future `local_smt_tiny_gateway_invariant` lane.
+It specifies future non-secret inputs, direct-process no-shell command
+constraints, ignored-output-root quarantine outputs, readback rejection rules,
+evidence meaning, required future tests, and nonclaims. It creates no Rust
+implementation, command execution, process spawning, backend runner, proof
+artifact promotion, checker transcript promotion, accepted Evidence Ledger
+mutation, Level2+ evidence, benchmark evidence, score-axis population,
+semantic-correctness claim, production readiness, SOTA status, breakthrough
+status, full-security claim, or stronger public claim.
+
+Phase 304 implements the HSAI gateway formal backend hermetic execution
+no-spawn descriptor in `hsai-agent-admission`: descriptor/report schema
+constants, state and claim-boundary constants, lane/command/property enums,
+descriptor/report/validation records, required nonclaims, a deterministic
+`local_smt_tiny_gateway_invariant` descriptor builder, a fail-closed validator,
+a report builder, and focused tests. It remains pure metadata and creates no
+process spawning, backend execution, SMT/Z3/COBALT/Lean execution, proof
+artifact read or promotion, checker transcript promotion, accepted Evidence
+Ledger mutation, Level2+ evidence, benchmark evidence, score-axis population,
+semantic-correctness claim, production readiness, SOTA status, breakthrough
+status, full-security claim, or stronger public claim.
+
+Phase 305 defines the HSAI gateway formal backend hermetic descriptor-report
+output-bundle boundary as a docs-first contract for future local
+materialization of the Phase 304 descriptor report. It specifies declared
+files, SHA-256 sidecars, future manifest fields, readback rejection rules,
+validation-report meaning, required future tests, and nonclaims. It creates no
+Rust implementation, filesystem materialization, process spawning, backend
+execution, SMT/Z3/COBALT/Lean execution, proof artifact promotion, checker
+transcript promotion, accepted Evidence Ledger mutation, Level2+ evidence,
+benchmark evidence, score-axis population, semantic-correctness claim,
+production readiness, SOTA status, breakthrough status, full-security claim,
+or stronger public claim.
+
+Phase 306 implements the HSAI gateway formal backend hermetic descriptor-report
+output bundle in `hsai-agent-admission`: declared files and SHA-256 sidecars,
+output request/command-contract/validation-report/manifest records, staged
+materialization, readback, undeclared-file rejection, stale-sidecar rejection,
+semantic validation for descriptor/report/validation/command-contract/nonclaims/
+manifest, and focused tests. It remains local metadata materialization only and
+creates no process spawning, backend execution, SMT/Z3/COBALT/Lean execution,
+proof artifact read or promotion, checker transcript promotion, accepted
+Evidence Ledger mutation, Level2+ evidence, benchmark evidence, score-axis
+population, semantic-correctness claim, production readiness, SOTA status,
+breakthrough status, full-security claim, or stronger public claim.
+
+Phase 307 defines the HSAI gateway formal backend hermetic execution result
+quarantine output-bundle boundary as a docs-first contract for future local
+materialization of bounded, redacted `local_smt_tiny_gateway_invariant` result
+metadata. It specifies declared files, SHA-256 sidecars, manifest fields,
+execution-status meaning, readback rejection rules, validation-report limits,
+required future tests, and nonclaims. It creates no Rust implementation,
+filesystem materialization, process spawning, backend execution,
+SMT/Z3/COBALT/Lean execution, proof artifact promotion, checker transcript
+promotion, solver-certificate promotion, accepted Evidence Ledger mutation,
+Level2+ evidence, benchmark evidence, score-axis population,
+semantic-correctness claim, production readiness, SOTA status, breakthrough
+status, full-security claim, or stronger public claim.
+
+Phase 308 implements the HSAI gateway formal backend hermetic execution result
+quarantine output bundle in `hsai-agent-admission`: declared files and SHA-256
+sidecars, output request, not-run solver/verdict labels, input-binding,
+bounded stdout/stderr summaries, redaction report, output inventory,
+invariant-verdict report, nonpromotion report, execution status, validation
+report, manifest, staged materialization, readback, undeclared-file rejection,
+stale-sidecar rejection, semantic component validation, and focused tests. It
+remains a no-run local quarantine surface and creates no process spawning,
+backend execution, SMT/Z3/COBALT/Lean execution, proof artifact promotion,
+checker transcript promotion, solver-certificate promotion, accepted Evidence
+Ledger mutation, Level2+ evidence, benchmark evidence, score-axis population,
+semantic-correctness claim, production readiness, SOTA status, breakthrough
+status, full-security claim, or stronger public claim.
+
+Phase 309 defines the HSAI gateway formal backend hermetic result quarantine
+output-bundle drift coverage boundary as a docs-first contract for future
+focused negative tests over the Phase 308 reader and materializer. It specifies
+protected-root, overwrite, missing-sidecar, malformed-file, component-drift,
+nonpromotion, undeclared-artifact, nested-bundle, and symlink coverage. It
+creates no Rust implementation, new materialization behavior, process spawning,
+backend execution, SMT/Z3/COBALT/Lean execution, proof artifact promotion,
+checker transcript promotion, solver-certificate promotion, accepted Evidence
+Ledger mutation, Level2+ evidence, benchmark evidence, score-axis population,
+semantic-correctness claim, production readiness, SOTA status, breakthrough
+status, full-security claim, or stronger public claim.
+
+Phase 310 implements focused local drift-coverage tests for the Phase 308 HSAI
+gateway formal backend hermetic result quarantine output-bundle reader and
+materializer. It covers protected roots, existing-root overwrite rejection,
+missing sidecars, malformed JSON, nested descriptor-report bundles,
+input-binding drift, command-contract drift, execution-status drift, redaction
+drift, nonpromotion drift, and validation-report drift. It creates no new
+materialization behavior, process spawning, backend execution,
+SMT/Z3/COBALT/Lean execution, proof artifact promotion, checker transcript
+promotion, solver-certificate promotion, accepted Evidence Ledger mutation,
+Level2+ evidence, benchmark evidence, score-axis population,
+semantic-correctness claim, production readiness, SOTA status, breakthrough
+status, full-security claim, or stronger public claim.
+
+Phase 311 defines the HSAI gateway formal backend hermetic process-spawn
+crossing boundary as a docs-first contract for a future tiny local
+`local_smt_tiny_gateway_invariant` runner. It specifies direct-process
+no-shell execution, fixed executable and argv policy, empty or allowlisted
+environment, no stdin, no network, timeout handling, bounded stdout/stderr,
+redaction, quarantine output, nonpromotion, required future tests, and
+anti-goals. It creates no Rust implementation, process spawning, backend
+execution, SMT/Z3/COBALT/Lean execution, proof artifact promotion, checker
+transcript promotion, solver-certificate promotion, accepted Evidence Ledger
+mutation, Level2+ evidence, benchmark evidence, score-axis population,
+semantic-correctness claim, production readiness, SOTA status, breakthrough
+status, full-security claim, or stronger public claim.
+
+Phase 312 implements the HSAI gateway formal backend hermetic process-spawn
+no-default-runner interface in `hsai-agent-admission`. It adds policy metadata
+for the fixed local SMT lane, runtime constraints for no stdin/no shell/no
+network/bounded output/redaction, nonpromotion constraints, source digest
+bindings to Phase 304/306/308 artifacts, and focused tests for valid
+no-default-runner metadata, runner/policy escalation rejection, and source
+manifest drift rejection. It still creates no default runner, spawns no process,
+executes no backend, runs no SMT/Z3/COBALT/Lean tool, promotes no proof
+artifact/checker transcript/solver certificate, mutates no accepted Evidence
+Ledger, creates no Level2+ evidence, populates no score axes, and makes no
+semantic-correctness, production-readiness, SOTA, breakthrough, full-security,
+or authority claim.
+
+Phase 313 implements the first HSAI gateway formal backend hermetic fixture-runner
+process crossing in `hsai-agent-admission`. It uses the Phase 312 interface as a
+pre-spawn gate, runs one fixed local fixture process with no shell, cleared
+environment, null stdin, piped stdout/stderr, timeout handling, bounded
+digest/count summaries, and Phase 313 quarantine readback. The Phase 308 not-run
+reader remains unchanged and rejects executed-fixture bundles. The HSAI
+cross-crate source scan now allows only the Phase 313 `Stdio` import and
+`Command::new` call in `hsai-agent-admission`; all other process/network
+matches remain forbidden unless covered by prior explicit operator exceptions.
+Phase 313 creates no proof artifact, checker transcript, solver certificate,
+accepted Evidence Ledger mutation, Level2+ evidence, benchmark evidence,
+score-axis population, semantic-correctness claim, production-readiness claim,
+SOTA status, breakthrough status, full-security claim, or action authority.
+
+Phase 314 hardens the HSAI gateway formal backend hermetic fixture-runner
+crossing in `hsai-agent-admission`. It adds focused local coverage for nonzero
+fixture-process exits, timeout classification, bounded stdout truncation without
+raw retention, stale sidecar rejection, declared summary drift rejection through
+manifest digest bindings, redaction drift rejection through manifest digest
+bindings, undeclared proof-artifact rejection, and bundle-directory symlink
+rejection. It also adds a readback guard for a symlinked or non-directory
+`gateway-formal-backend-hermetic-execution-result-quarantine` bundle directory.
+Phase 314 adds no new generic runner, no caller-supplied executable path, no
+shell, no inherited environment, no stdin, no network, no Lean/SMT/Z3/COBALT
+proof authority, no proof artifact, no checker transcript, no solver
+certificate, no accepted Evidence Ledger mutation, no Level2+ evidence, no
+score-axis population, and no semantic-correctness, production-readiness, SOTA,
+breakthrough, full-security, or action-authority claim.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
