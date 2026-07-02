@@ -7347,6 +7347,39 @@ fixture process for the selected gateway invariant while proving through local
 tests that the bundle remains quarantine-only, promotion flags stay false, raw
 logs are not retained, and undeclared proof artifacts are rejected.
 
+## Phase 320 HSAI Tiny Hermetic Formal-Backend Execution Readback Hardening
+
+Status: complete. See
+`docs/320-hsai-tiny-hermetic-formal-backend-execution-readback-hardening-notes.md`.
+
+Goal: harden the Phase 319 local fixture execution output readback lane before
+opening any real Lean/SMT/COBALT command boundary.
+
+Implemented: focused tests for malformed declared JSON, overwrite rejection,
+output-root symlink rejection, bundle-directory symlink rejection, declared-file
+symlink rejection, declared-sidecar symlink rejection, digest-preserving stdout
+summary semantic drift rejection, digest-preserving redaction-report semantic
+drift rejection, and digest-preserving nonpromotion-report semantic drift
+rejection.
+
+Validation gate: formatting, Phase 319/320 focused unit tests, HSAI
+claim-boundary source scan, repo docs/hygiene tests, diff hygiene,
+empty-file hygiene, package-root lint check, and full workspace tests.
+
+Anti-goals: generic backend runners, caller-supplied executable paths,
+caller-supplied argv, shell execution, inherited environment, stdin, network
+access, package runtime files, external repo clones, vendored source,
+Lean/SMT/Z3/COBALT/Aeneas/Hax/rust-lean/Coq/TLA+/CBMC/model-checker execution
+as proof authority, solver scripts, checker scripts, proof artifacts, checker
+transcripts, solver certificates, accepted evidence, Level2+ evidence, score
+axes, benchmark evidence, live provider evidence, semantic-correctness,
+production-readiness, SOTA, breakthrough, full-security, or authority claims.
+
+Exit criteria: the Phase 319 local fixture execution bundle rejects malformed
+declared files, unsafe filesystem shapes, unauthorized overwrite, and
+digest-preserving semantic drift in summaries, redaction, and nonpromotion
+metadata.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
