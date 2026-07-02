@@ -611,6 +611,11 @@ pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_OUTPUT_SCHEMA_VERSION: &str =
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_STATE_SLICE: &str =
     "phase-322-hsai-real-formal-command-lane-inert-data-model";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_CLAIM_BOUNDARY: &str = "local gateway real formal command-lane inert contract only; binds Phase 317/319 source manifests, one static SMT-LIB2 obligation digest, fixed no-shell command metadata, checker-transcript grammar metadata, and declared output paths, but does not spawn a process, execute SMT, Z3, Lean, COBALT, Rust-to-Lean, Aeneas, Hax, Coq, TLA+, CBMC, or any model checker, create proof artifacts, promote checker transcripts, promote solver certificates, create accepted evidence, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-real-command-lane-execution-preflight:v1";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_STATE_SLICE: &str =
+    "phase-325-hsai-real-formal-command-lane-inert-execution-preflight";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_CLAIM_BOUNDARY: &str = "local gateway real formal command-lane execution preflight metadata only; authorizes at most one future fixed local SMT-LIB2 command policy over a read back Phase 323 bundle but does not spawn a process, execute SMT, Z3, Lean, COBALT, Rust-to-Lean, Aeneas, Hax, Coq, TLA+, CBMC, or any model checker, create proof artifacts, create checker transcripts, create solver certificates, create accepted evidence, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GatewayAttestationChallengeBinding {
@@ -4548,10 +4553,138 @@ pub enum GatewayFormalRealCommandLaneIssue {
     PromotionAttempt,
 }
 
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalRealCommandLaneExecutionPreflightIssue {
+    MissingPhase323Readback,
+    InvalidSchemaVersion,
+    InvalidRunId,
+    MissingCreatedAt,
+    ManifestDrift,
+    CommandRequestDigestDrift,
+    CommandDescriptorDigestDrift,
+    ObligationDigestDrift,
+    ExpectedOutputGrammarDigestDrift,
+    MissingOperatorAcknowledgement,
+    MissingExecutableDigest,
+    ExecutablePolicyMismatch,
+    FixedExecutableLabelMismatch,
+    CallerExecutablePathAllowed,
+    CallerArgvAllowed,
+    ShellFragment,
+    InheritedEnvironment,
+    StdinAllowed,
+    NetworkAllowed,
+    ProtectedOutputRoot,
+    AcceptedEvidencePathRequested,
+    Level2EvidencePathRequested,
+    ScoreAxisPathRequested,
+    BenchmarkOutputPathRequested,
+    ProofPromotionPathRequested,
+    MissingRequiredNonclaim(String),
+    ClaimBoundaryMismatch,
+    PromotionAttempt,
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GatewayFormalRealCommandLaneValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalRealCommandLaneIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneExecutionPreflightValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalRealCommandLaneExecutionPreflightIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneExecutionPreflightInput {
+    pub schema_version: String,
+    pub run_id: String,
+    pub created_at_unix: u64,
+    pub phase323_manifest_digest: Hash,
+    pub command_request_digest: Hash,
+    pub command_descriptor_digest: Hash,
+    pub obligation_digest: Hash,
+    pub expected_output_grammar_digest: Hash,
+    pub operator_acknowledged: bool,
+    pub executable_policy_id: String,
+    pub executable_digest: Hash,
+    pub fixed_executable_label: String,
+    pub output_root_label: String,
+    pub accepted_evidence_path_requested: bool,
+    pub level2_evidence_path_requested: bool,
+    pub score_axis_path_requested: bool,
+    pub benchmark_output_path_requested: bool,
+    pub proof_promotion_path_requested: bool,
+}
+
+impl GatewayFormalRealCommandLaneExecutionPreflightInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-execution-preflight-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneExecutionPreflight {
+    pub schema_version: String,
+    pub run_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub preflight_input_digest: Hash,
+    pub phase323_manifest_digest: Hash,
+    pub command_request_digest: Hash,
+    pub command_descriptor_digest: Hash,
+    pub obligation_digest: Hash,
+    pub expected_output_grammar_digest: Hash,
+    pub executable_policy_id: String,
+    pub executable_digest: Hash,
+    pub fixed_executable_label: String,
+    pub fixed_argv_template_digest: Hash,
+    pub timeout_millis: u64,
+    pub max_stdout_bytes: u64,
+    pub max_stderr_bytes: u64,
+    pub operator_acknowledged: bool,
+    pub process_spawn_authorized: bool,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub claim_boundary: String,
+    pub process_spawned: bool,
+    pub backend_executed: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalRealCommandLaneExecutionPreflight {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-execution-preflight:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneFixedSmtProcessPlan {
+    pub schema_version: String,
+    pub run_id: String,
+    pub process_spawn_authorized: bool,
+    pub process_spawned: bool,
+    pub backend_executed: bool,
+    pub blocked_reason: String,
+    pub claim_boundary: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -18096,6 +18229,360 @@ pub fn gateway_formal_real_command_lane_required_nonclaims() -> BTreeSet<NonClai
     ])
 }
 
+pub fn gateway_formal_real_command_lane_execution_preflight_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims = gateway_formal_real_command_lane_required_nonclaims();
+    nonclaims.insert(NonClaimLabel("execution preflight only".to_owned()));
+    nonclaims.insert(NonClaimLabel("not solver output".to_owned()));
+    nonclaims.insert(NonClaimLabel("not backend execution".to_owned()));
+    nonclaims
+}
+
+pub fn gateway_formal_real_command_lane_execution_preflight_claim_boundary() -> String {
+    GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn build_gateway_formal_real_command_lane_execution_preflight(
+    phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
+    command_request: &GatewayFormalRealCommandLaneRequest,
+    command: &GatewayFormalRealCommandLaneCommandDescriptor,
+    input: &GatewayFormalRealCommandLaneExecutionPreflightInput,
+) -> GatewayFormalRealCommandLaneExecutionPreflight {
+    let validation = validate_gateway_formal_real_command_lane_execution_preflight_input(
+        Some(phase323_manifest),
+        command_request,
+        command,
+        input,
+    );
+    GatewayFormalRealCommandLaneExecutionPreflight {
+        schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_SCHEMA_VERSION
+            .to_owned(),
+        run_id: input.run_id.clone(),
+        state_slice: GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_STATE_SLICE.to_owned(),
+        created_at_unix: input.created_at_unix,
+        preflight_input_digest: input.digest(),
+        phase323_manifest_digest: phase323_manifest.digest(),
+        command_request_digest: command_request.digest(),
+        command_descriptor_digest: command.digest(),
+        obligation_digest: command_request.obligation_digest,
+        expected_output_grammar_digest: command_request.expected_output_grammar_digest,
+        executable_policy_id: input.executable_policy_id.clone(),
+        executable_digest: input.executable_digest,
+        fixed_executable_label: input.fixed_executable_label.clone(),
+        fixed_argv_template_digest: command.argv_template_digest,
+        timeout_millis: command.timeout_millis,
+        max_stdout_bytes: command.max_stdout_bytes,
+        max_stderr_bytes: command.max_stderr_bytes,
+        operator_acknowledged: input.operator_acknowledged && command_request.operator_acknowledged,
+        process_spawn_authorized: validation.valid,
+        explicit_nonclaims: gateway_formal_real_command_lane_execution_preflight_required_nonclaims(
+        ),
+        claim_boundary: gateway_formal_real_command_lane_execution_preflight_claim_boundary(),
+        process_spawned: false,
+        backend_executed: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    }
+}
+
+pub fn validate_gateway_formal_real_command_lane_execution_preflight_input(
+    phase323_manifest: Option<&GatewayFormalRealCommandLaneOutputManifest>,
+    command_request: &GatewayFormalRealCommandLaneRequest,
+    command: &GatewayFormalRealCommandLaneCommandDescriptor,
+    input: &GatewayFormalRealCommandLaneExecutionPreflightInput,
+) -> GatewayFormalRealCommandLaneExecutionPreflightValidation {
+    let mut issues = Vec::new();
+    if phase323_manifest.is_none() {
+        issues.push(GatewayFormalRealCommandLaneExecutionPreflightIssue::MissingPhase323Readback);
+    }
+    if input.schema_version != GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_SCHEMA_VERSION {
+        issues.push(GatewayFormalRealCommandLaneExecutionPreflightIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.run_id) {
+        issues.push(GatewayFormalRealCommandLaneExecutionPreflightIssue::InvalidRunId);
+    }
+    if input.created_at_unix == 0 {
+        issues.push(GatewayFormalRealCommandLaneExecutionPreflightIssue::MissingCreatedAt);
+    }
+    if let Some(manifest) = phase323_manifest {
+        validate_gateway_formal_real_command_lane_execution_preflight_manifest(
+            manifest,
+            command_request,
+            input,
+            &mut issues,
+        );
+    }
+    validate_gateway_formal_real_command_lane_execution_preflight_command_request(
+        command_request,
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_real_command_lane_execution_preflight_command(
+        command,
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_real_command_lane_execution_preflight_paths(input, &mut issues);
+    GatewayFormalRealCommandLaneExecutionPreflightValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+pub fn validate_gateway_formal_real_command_lane_execution_preflight(
+    preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
+    phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
+    command_request: &GatewayFormalRealCommandLaneRequest,
+    command: &GatewayFormalRealCommandLaneCommandDescriptor,
+    input: &GatewayFormalRealCommandLaneExecutionPreflightInput,
+) -> GatewayFormalRealCommandLaneExecutionPreflightValidation {
+    let mut validation = validate_gateway_formal_real_command_lane_execution_preflight_input(
+        Some(phase323_manifest),
+        command_request,
+        command,
+        input,
+    );
+    let expected_process_spawn_authorized = validation.valid;
+    if preflight.schema_version
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_SCHEMA_VERSION
+        || preflight.run_id != input.run_id
+        || preflight.state_slice != GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_STATE_SLICE
+        || preflight.created_at_unix != input.created_at_unix
+        || preflight.preflight_input_digest != input.digest()
+        || preflight.phase323_manifest_digest != phase323_manifest.digest()
+        || preflight.command_request_digest != command_request.digest()
+        || preflight.command_descriptor_digest != command.digest()
+        || preflight.obligation_digest != command_request.obligation_digest
+        || preflight.expected_output_grammar_digest
+            != command_request.expected_output_grammar_digest
+        || preflight.executable_policy_id != input.executable_policy_id
+        || preflight.executable_digest != input.executable_digest
+        || preflight.fixed_executable_label != input.fixed_executable_label
+        || preflight.fixed_argv_template_digest != command.argv_template_digest
+        || preflight.timeout_millis != command.timeout_millis
+        || preflight.max_stdout_bytes != command.max_stdout_bytes
+        || preflight.max_stderr_bytes != command.max_stderr_bytes
+        || !preflight.operator_acknowledged
+        || preflight.process_spawn_authorized != expected_process_spawn_authorized
+        || preflight.claim_boundary
+            != gateway_formal_real_command_lane_execution_preflight_claim_boundary()
+    {
+        validation
+            .issues
+            .push(GatewayFormalRealCommandLaneExecutionPreflightIssue::ManifestDrift);
+    }
+    for required in gateway_formal_real_command_lane_execution_preflight_required_nonclaims() {
+        if !preflight.explicit_nonclaims.contains(&required) {
+            validation.issues.push(
+                GatewayFormalRealCommandLaneExecutionPreflightIssue::MissingRequiredNonclaim(
+                    required.0,
+                ),
+            );
+        }
+    }
+    if preflight.claim_boundary
+        != gateway_formal_real_command_lane_execution_preflight_claim_boundary()
+    {
+        validation
+            .issues
+            .push(GatewayFormalRealCommandLaneExecutionPreflightIssue::ClaimBoundaryMismatch);
+    }
+    if preflight.process_spawned
+        || preflight.backend_executed
+        || preflight.proof_artifact_created
+        || preflight.checker_transcript_created
+        || preflight.solver_certificate_created
+        || preflight.creates_accepted_evidence
+        || preflight.creates_level2_evidence
+        || preflight.populates_score_axes
+        || preflight.semantic_correctness_claimed
+        || preflight.production_readiness_claimed
+        || preflight.sota_claimed
+        || preflight.breakthrough_claimed
+        || preflight.full_security_claimed
+        || preflight.grants_authority
+    {
+        validation
+            .issues
+            .push(GatewayFormalRealCommandLaneExecutionPreflightIssue::PromotionAttempt);
+    }
+    validation.valid = validation.issues.is_empty();
+    validation
+}
+
+pub fn run_gateway_formal_real_command_lane_fixed_smt_process(
+    preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
+) -> GatewayFormalRealCommandLaneFixedSmtProcessPlan {
+    GatewayFormalRealCommandLaneFixedSmtProcessPlan {
+        schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_SCHEMA_VERSION
+            .to_owned(),
+        run_id: preflight.run_id.clone(),
+        process_spawn_authorized: preflight.process_spawn_authorized,
+        process_spawned: false,
+        backend_executed: false,
+        blocked_reason: "phase325_preflight_only_no_process_spawn".to_owned(),
+        claim_boundary: gateway_formal_real_command_lane_execution_preflight_claim_boundary(),
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_execution_preflight_manifest(
+    manifest: &GatewayFormalRealCommandLaneOutputManifest,
+    command_request: &GatewayFormalRealCommandLaneRequest,
+    input: &GatewayFormalRealCommandLaneExecutionPreflightInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneExecutionPreflightIssue>,
+) {
+    if input.phase323_manifest_digest != manifest.digest()
+        || manifest.schema_version != GATEWAY_FORMAL_REAL_COMMAND_LANE_OUTPUT_SCHEMA_VERSION
+        || manifest.state_slice != GATEWAY_FORMAL_REAL_COMMAND_LANE_STATE_SLICE
+        || manifest.request_digest != command_request.digest()
+        || manifest.command_descriptor_digest != input.command_descriptor_digest
+        || manifest.obligation_digest != input.obligation_digest
+        || manifest.claim_boundary != gateway_formal_real_command_lane_claim_boundary()
+    {
+        issues.push(GatewayFormalRealCommandLaneExecutionPreflightIssue::ManifestDrift);
+    }
+    if manifest.process_spawned
+        || manifest.backend_executed
+        || manifest.proof_artifact_created
+        || manifest.checker_transcript_created
+        || manifest.solver_certificate_created
+        || manifest.creates_accepted_evidence
+        || manifest.creates_level2_evidence
+        || manifest.populates_score_axes
+        || manifest.semantic_correctness_claimed
+        || manifest.production_readiness_claimed
+        || manifest.sota_claimed
+        || manifest.breakthrough_claimed
+        || manifest.full_security_claimed
+        || manifest.grants_authority
+    {
+        issues.push(GatewayFormalRealCommandLaneExecutionPreflightIssue::PromotionAttempt);
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_execution_preflight_command_request(
+    command_request: &GatewayFormalRealCommandLaneRequest,
+    input: &GatewayFormalRealCommandLaneExecutionPreflightInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneExecutionPreflightIssue>,
+) {
+    if input.command_request_digest != command_request.digest() {
+        issues.push(GatewayFormalRealCommandLaneExecutionPreflightIssue::CommandRequestDigestDrift);
+    }
+    if input.obligation_digest != command_request.obligation_digest {
+        issues.push(GatewayFormalRealCommandLaneExecutionPreflightIssue::ObligationDigestDrift);
+    }
+    if input.expected_output_grammar_digest != command_request.expected_output_grammar_digest {
+        issues.push(
+            GatewayFormalRealCommandLaneExecutionPreflightIssue::ExpectedOutputGrammarDigestDrift,
+        );
+    }
+    if !input.operator_acknowledged || !command_request.operator_acknowledged {
+        issues.push(
+            GatewayFormalRealCommandLaneExecutionPreflightIssue::MissingOperatorAcknowledgement,
+        );
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_execution_preflight_command(
+    command: &GatewayFormalRealCommandLaneCommandDescriptor,
+    input: &GatewayFormalRealCommandLaneExecutionPreflightInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneExecutionPreflightIssue>,
+) {
+    if input.command_descriptor_digest != command.digest() {
+        issues.push(
+            GatewayFormalRealCommandLaneExecutionPreflightIssue::CommandDescriptorDigestDrift,
+        );
+    }
+    if input.executable_digest == Hash([0; 32]) {
+        issues.push(GatewayFormalRealCommandLaneExecutionPreflightIssue::MissingExecutableDigest);
+    }
+    if input.executable_policy_id != command.executable_policy_id
+        || !command.fixed_executable_policy
+        || command.executable_policy_id.trim().is_empty()
+    {
+        issues.push(GatewayFormalRealCommandLaneExecutionPreflightIssue::ExecutablePolicyMismatch);
+    }
+    if input.fixed_executable_label != command.executable_path_label
+        || command.executable_path_label.trim().is_empty()
+        || command.executable_path_label.starts_with('/')
+        || !is_safe_relative_path(&command.executable_path_label)
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneExecutionPreflightIssue::FixedExecutableLabelMismatch,
+        );
+    }
+    if command.caller_executable_path_allowed {
+        issues
+            .push(GatewayFormalRealCommandLaneExecutionPreflightIssue::CallerExecutablePathAllowed);
+    }
+    if command.caller_argv_allowed || !command.fixed_argv_template {
+        issues.push(GatewayFormalRealCommandLaneExecutionPreflightIssue::CallerArgvAllowed);
+    }
+    if command.command_kind != "direct_process_no_shell"
+        || !command.direct_process_no_shell
+        || !command.no_shell
+        || has_shell_metacharacters(&command.executable_path_label)
+        || command
+            .argv_template
+            .iter()
+            .any(|arg| has_shell_metacharacters(arg))
+    {
+        issues.push(GatewayFormalRealCommandLaneExecutionPreflightIssue::ShellFragment);
+    }
+    if command.inherit_environment || !command.environment_variables.is_empty() {
+        issues.push(GatewayFormalRealCommandLaneExecutionPreflightIssue::InheritedEnvironment);
+    }
+    if !command.no_stdin {
+        issues.push(GatewayFormalRealCommandLaneExecutionPreflightIssue::StdinAllowed);
+    }
+    if !command.no_network {
+        issues.push(GatewayFormalRealCommandLaneExecutionPreflightIssue::NetworkAllowed);
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_execution_preflight_paths(
+    input: &GatewayFormalRealCommandLaneExecutionPreflightInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneExecutionPreflightIssue>,
+) {
+    if input.output_root_label.trim().is_empty()
+        || !is_safe_relative_path(&input.output_root_label)
+        || path_label_is_protected(&input.output_root_label)
+    {
+        issues.push(GatewayFormalRealCommandLaneExecutionPreflightIssue::ProtectedOutputRoot);
+    }
+    if input.accepted_evidence_path_requested {
+        issues.push(
+            GatewayFormalRealCommandLaneExecutionPreflightIssue::AcceptedEvidencePathRequested,
+        );
+    }
+    if input.level2_evidence_path_requested {
+        issues
+            .push(GatewayFormalRealCommandLaneExecutionPreflightIssue::Level2EvidencePathRequested);
+    }
+    if input.score_axis_path_requested {
+        issues.push(GatewayFormalRealCommandLaneExecutionPreflightIssue::ScoreAxisPathRequested);
+    }
+    if input.benchmark_output_path_requested {
+        issues.push(
+            GatewayFormalRealCommandLaneExecutionPreflightIssue::BenchmarkOutputPathRequested,
+        );
+    }
+    if input.proof_promotion_path_requested {
+        issues
+            .push(GatewayFormalRealCommandLaneExecutionPreflightIssue::ProofPromotionPathRequested);
+    }
+}
+
 #[allow(clippy::too_many_arguments)]
 pub fn build_gateway_formal_real_command_lane_output_contract(
     created_at_unix: u64,
@@ -29123,6 +29610,34 @@ mod tests {
         }
     }
 
+    fn real_command_lane_execution_preflight_input(
+        manifest: &GatewayFormalRealCommandLaneOutputManifest,
+        request: &GatewayFormalRealCommandLaneRequest,
+        command: &GatewayFormalRealCommandLaneCommandDescriptor,
+    ) -> GatewayFormalRealCommandLaneExecutionPreflightInput {
+        GatewayFormalRealCommandLaneExecutionPreflightInput {
+            schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_SCHEMA_VERSION
+                .to_owned(),
+            run_id: "real-command-preflight-run-1".to_owned(),
+            created_at_unix: 1_800_000_325,
+            phase323_manifest_digest: manifest.digest(),
+            command_request_digest: request.digest(),
+            command_descriptor_digest: command.digest(),
+            obligation_digest: request.obligation_digest,
+            expected_output_grammar_digest: request.expected_output_grammar_digest,
+            operator_acknowledged: true,
+            executable_policy_id: command.executable_policy_id.clone(),
+            executable_digest: Hash([88; 32]),
+            fixed_executable_label: command.executable_path_label.clone(),
+            output_root_label: "gateway-formal-real-command-lane-preflight-output".to_owned(),
+            accepted_evidence_path_requested: false,
+            level2_evidence_path_requested: false,
+            score_axis_path_requested: false,
+            benchmark_output_path_requested: false,
+            proof_promotion_path_requested: false,
+        }
+    }
+
     #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
@@ -29369,6 +29884,392 @@ mod tests {
             .expect("real command materialized execution source cleanup succeeds");
         fs::remove_dir_all(&source_root)
             .expect("real command materialized adapter source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_execution_preflight_authorizes_without_spawning() {
+        let (
+            execution_root,
+            source_root,
+            source_manifest,
+            execution_manifest,
+            request,
+            command,
+            obligation,
+            obligation_binding,
+            transcript,
+            stdout_summary,
+            stderr_summary,
+            solver_verdict,
+            nonpromotion,
+        ) = real_command_lane_valid_parts("real-command-preflight-valid");
+        let output_root = temp_output_root("real-command-preflight-valid-output");
+        materialize_gateway_formal_real_command_lane_output_bundle(
+            &output_root,
+            &source_manifest,
+            &execution_manifest,
+            &request,
+            &command,
+            &obligation,
+            &obligation_binding,
+            &transcript,
+            &stdout_summary,
+            &stderr_summary,
+            &solver_verdict,
+            &nonpromotion,
+            &real_command_lane_output_request(&output_root),
+        )
+        .expect("preflight source bundle materializes");
+        let manifest = read_gateway_formal_real_command_lane_output_bundle(&output_root)
+            .expect("preflight source bundle reads back");
+        let input = real_command_lane_execution_preflight_input(&manifest, &request, &command);
+        let preflight = build_gateway_formal_real_command_lane_execution_preflight(
+            &manifest, &request, &command, &input,
+        );
+        let validation = validate_gateway_formal_real_command_lane_execution_preflight(
+            &preflight, &manifest, &request, &command, &input,
+        );
+
+        assert!(validation.valid);
+        assert!(preflight.process_spawn_authorized);
+        assert!(!preflight.process_spawned);
+        assert!(!preflight.backend_executed);
+        assert!(!preflight.proof_artifact_created);
+        assert!(!preflight.checker_transcript_created);
+        assert!(!preflight.solver_certificate_created);
+        assert!(!preflight.creates_accepted_evidence);
+        assert!(!preflight.creates_level2_evidence);
+        assert!(!preflight.populates_score_axes);
+        assert!(!preflight.semantic_correctness_claimed);
+        assert!(!preflight.production_readiness_claimed);
+        assert!(!preflight.sota_claimed);
+        assert!(!preflight.breakthrough_claimed);
+        assert!(!preflight.full_security_claimed);
+        assert!(!preflight.grants_authority);
+        assert_eq!(
+            preflight.claim_boundary,
+            gateway_formal_real_command_lane_execution_preflight_claim_boundary()
+        );
+
+        let process_plan = run_gateway_formal_real_command_lane_fixed_smt_process(&preflight);
+        assert!(process_plan.process_spawn_authorized);
+        assert!(!process_plan.process_spawned);
+        assert!(!process_plan.backend_executed);
+        assert_eq!(
+            process_plan.blocked_reason,
+            "phase325_preflight_only_no_process_spawn"
+        );
+
+        fs::remove_dir_all(&output_root).expect("preflight valid output cleanup succeeds");
+        fs::remove_dir_all(&execution_root)
+            .expect("preflight valid execution source cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("preflight valid adapter source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_execution_preflight_rejects_drift_and_promotion_paths() {
+        let (
+            execution_root,
+            source_root,
+            source_manifest,
+            execution_manifest,
+            request,
+            command,
+            obligation,
+            obligation_binding,
+            transcript,
+            stdout_summary,
+            stderr_summary,
+            solver_verdict,
+            nonpromotion,
+        ) = real_command_lane_valid_parts("real-command-preflight-reject");
+        let output_root = temp_output_root("real-command-preflight-reject-output");
+        materialize_gateway_formal_real_command_lane_output_bundle(
+            &output_root,
+            &source_manifest,
+            &execution_manifest,
+            &request,
+            &command,
+            &obligation,
+            &obligation_binding,
+            &transcript,
+            &stdout_summary,
+            &stderr_summary,
+            &solver_verdict,
+            &nonpromotion,
+            &real_command_lane_output_request(&output_root),
+        )
+        .expect("preflight rejection source bundle materializes");
+        let manifest = read_gateway_formal_real_command_lane_output_bundle(&output_root)
+            .expect("preflight rejection source bundle reads back");
+        let input = real_command_lane_execution_preflight_input(&manifest, &request, &command);
+
+        assert!(
+            validate_gateway_formal_real_command_lane_execution_preflight_input(
+                None, &request, &command, &input,
+            )
+            .issues
+            .contains(
+                &GatewayFormalRealCommandLaneExecutionPreflightIssue::MissingPhase323Readback
+            )
+        );
+
+        let mut missing_ack = input.clone();
+        missing_ack.operator_acknowledged = false;
+        assert!(validate_gateway_formal_real_command_lane_execution_preflight_input(
+            Some(&manifest),
+            &request,
+            &command,
+            &missing_ack,
+        )
+        .issues
+        .contains(
+            &GatewayFormalRealCommandLaneExecutionPreflightIssue::MissingOperatorAcknowledgement
+        ));
+
+        let mut missing_digest = input.clone();
+        missing_digest.executable_digest = Hash([0; 32]);
+        assert!(
+            validate_gateway_formal_real_command_lane_execution_preflight_input(
+                Some(&manifest),
+                &request,
+                &command,
+                &missing_digest,
+            )
+            .issues
+            .contains(
+                &GatewayFormalRealCommandLaneExecutionPreflightIssue::MissingExecutableDigest
+            )
+        );
+
+        let mut manifest_drift = input.clone();
+        manifest_drift.phase323_manifest_digest = Hash([1; 32]);
+        assert!(
+            validate_gateway_formal_real_command_lane_execution_preflight_input(
+                Some(&manifest),
+                &request,
+                &command,
+                &manifest_drift,
+            )
+            .issues
+            .contains(&GatewayFormalRealCommandLaneExecutionPreflightIssue::ManifestDrift)
+        );
+
+        let mut command_request_drift = input.clone();
+        command_request_drift.command_request_digest = Hash([2; 32]);
+        assert!(
+            validate_gateway_formal_real_command_lane_execution_preflight_input(
+                Some(&manifest),
+                &request,
+                &command,
+                &command_request_drift,
+            )
+            .issues
+            .contains(
+                &GatewayFormalRealCommandLaneExecutionPreflightIssue::CommandRequestDigestDrift
+            )
+        );
+
+        let mut command_descriptor_drift = input.clone();
+        command_descriptor_drift.command_descriptor_digest = Hash([3; 32]);
+        assert!(
+            validate_gateway_formal_real_command_lane_execution_preflight_input(
+                Some(&manifest),
+                &request,
+                &command,
+                &command_descriptor_drift,
+            )
+            .issues
+            .contains(
+                &GatewayFormalRealCommandLaneExecutionPreflightIssue::CommandDescriptorDigestDrift
+            )
+        );
+
+        let mut obligation_drift = input.clone();
+        obligation_drift.obligation_digest = Hash([4; 32]);
+        assert!(
+            validate_gateway_formal_real_command_lane_execution_preflight_input(
+                Some(&manifest),
+                &request,
+                &command,
+                &obligation_drift,
+            )
+            .issues
+            .contains(&GatewayFormalRealCommandLaneExecutionPreflightIssue::ObligationDigestDrift)
+        );
+
+        let mut grammar_drift = input.clone();
+        grammar_drift.expected_output_grammar_digest = Hash([5; 32]);
+        assert!(validate_gateway_formal_real_command_lane_execution_preflight_input(
+            Some(&manifest),
+            &request,
+            &command,
+            &grammar_drift,
+        )
+        .issues
+        .contains(
+            &GatewayFormalRealCommandLaneExecutionPreflightIssue::ExpectedOutputGrammarDigestDrift
+        ));
+
+        let mut caller_command = command.clone();
+        caller_command.caller_executable_path_allowed = true;
+        let mut caller_input = input.clone();
+        caller_input.command_descriptor_digest = caller_command.digest();
+        assert!(
+            validate_gateway_formal_real_command_lane_execution_preflight_input(
+                Some(&manifest),
+                &request,
+                &caller_command,
+                &caller_input,
+            )
+            .issues
+            .contains(
+                &GatewayFormalRealCommandLaneExecutionPreflightIssue::CallerExecutablePathAllowed
+            )
+        );
+
+        let mut argv_command = command.clone();
+        argv_command.caller_argv_allowed = true;
+        let mut argv_input = input.clone();
+        argv_input.command_descriptor_digest = argv_command.digest();
+        assert!(
+            validate_gateway_formal_real_command_lane_execution_preflight_input(
+                Some(&manifest),
+                &request,
+                &argv_command,
+                &argv_input,
+            )
+            .issues
+            .contains(&GatewayFormalRealCommandLaneExecutionPreflightIssue::CallerArgvAllowed)
+        );
+
+        let mut shell_command = command.clone();
+        shell_command.argv_template.push("bad;arg".to_owned());
+        shell_command.argv_template_digest = hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-argv-template:v1",
+            &shell_command.argv_template,
+        );
+        let mut shell_input = input.clone();
+        shell_input.command_descriptor_digest = shell_command.digest();
+        assert!(
+            validate_gateway_formal_real_command_lane_execution_preflight_input(
+                Some(&manifest),
+                &request,
+                &shell_command,
+                &shell_input,
+            )
+            .issues
+            .contains(&GatewayFormalRealCommandLaneExecutionPreflightIssue::ShellFragment)
+        );
+
+        let mut env_command = command.clone();
+        env_command.inherit_environment = true;
+        let mut env_input = input.clone();
+        env_input.command_descriptor_digest = env_command.digest();
+        assert!(
+            validate_gateway_formal_real_command_lane_execution_preflight_input(
+                Some(&manifest),
+                &request,
+                &env_command,
+                &env_input,
+            )
+            .issues
+            .contains(&GatewayFormalRealCommandLaneExecutionPreflightIssue::InheritedEnvironment)
+        );
+
+        let mut stdin_command = command.clone();
+        stdin_command.no_stdin = false;
+        let mut stdin_input = input.clone();
+        stdin_input.command_descriptor_digest = stdin_command.digest();
+        assert!(
+            validate_gateway_formal_real_command_lane_execution_preflight_input(
+                Some(&manifest),
+                &request,
+                &stdin_command,
+                &stdin_input,
+            )
+            .issues
+            .contains(&GatewayFormalRealCommandLaneExecutionPreflightIssue::StdinAllowed)
+        );
+
+        let mut network_command = command.clone();
+        network_command.no_network = false;
+        let mut network_input = input.clone();
+        network_input.command_descriptor_digest = network_command.digest();
+        assert!(
+            validate_gateway_formal_real_command_lane_execution_preflight_input(
+                Some(&manifest),
+                &request,
+                &network_command,
+                &network_input,
+            )
+            .issues
+            .contains(&GatewayFormalRealCommandLaneExecutionPreflightIssue::NetworkAllowed)
+        );
+
+        let mut protected_path = input.clone();
+        protected_path.output_root_label = "accepted-evidence/formal-run".to_owned();
+        assert!(
+            validate_gateway_formal_real_command_lane_execution_preflight_input(
+                Some(&manifest),
+                &request,
+                &command,
+                &protected_path,
+            )
+            .issues
+            .contains(&GatewayFormalRealCommandLaneExecutionPreflightIssue::ProtectedOutputRoot)
+        );
+
+        let mut promotion_paths = input.clone();
+        promotion_paths.accepted_evidence_path_requested = true;
+        promotion_paths.level2_evidence_path_requested = true;
+        promotion_paths.score_axis_path_requested = true;
+        promotion_paths.benchmark_output_path_requested = true;
+        promotion_paths.proof_promotion_path_requested = true;
+        let promotion_issues = validate_gateway_formal_real_command_lane_execution_preflight_input(
+            Some(&manifest),
+            &request,
+            &command,
+            &promotion_paths,
+        )
+        .issues;
+        assert!(promotion_issues.contains(
+            &GatewayFormalRealCommandLaneExecutionPreflightIssue::AcceptedEvidencePathRequested
+        ));
+        assert!(promotion_issues.contains(
+            &GatewayFormalRealCommandLaneExecutionPreflightIssue::Level2EvidencePathRequested
+        ));
+        assert!(promotion_issues.contains(
+            &GatewayFormalRealCommandLaneExecutionPreflightIssue::ScoreAxisPathRequested
+        ));
+        assert!(promotion_issues.contains(
+            &GatewayFormalRealCommandLaneExecutionPreflightIssue::BenchmarkOutputPathRequested
+        ));
+        assert!(promotion_issues.contains(
+            &GatewayFormalRealCommandLaneExecutionPreflightIssue::ProofPromotionPathRequested
+        ));
+
+        let mut promoted_preflight = build_gateway_formal_real_command_lane_execution_preflight(
+            &manifest, &request, &command, &input,
+        );
+        promoted_preflight.creates_accepted_evidence = true;
+        assert!(
+            validate_gateway_formal_real_command_lane_execution_preflight(
+                &promoted_preflight,
+                &manifest,
+                &request,
+                &command,
+                &input,
+            )
+            .issues
+            .contains(&GatewayFormalRealCommandLaneExecutionPreflightIssue::PromotionAttempt)
+        );
+
+        fs::remove_dir_all(&output_root).expect("preflight rejection output cleanup succeeds");
+        fs::remove_dir_all(&execution_root)
+            .expect("preflight rejection execution source cleanup succeeds");
+        fs::remove_dir_all(&source_root)
+            .expect("preflight rejection adapter source cleanup succeeds");
     }
 
     #[test]

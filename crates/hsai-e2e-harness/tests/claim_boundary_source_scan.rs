@@ -90,6 +90,11 @@ fn hsai_crates_do_not_use_process_or_network_apis() {
                     if is_phase313_fixture_runner_exception(&file, pattern, line) {
                         continue;
                     }
+                    if is_phase325_real_command_lane_fixed_smt_exception(
+                        &file, pattern, &text, line_index, line,
+                    ) {
+                        continue;
+                    }
                     violations.push(format!("{}:{}:{pattern}", file.display(), line_index + 1));
                 }
             }
@@ -135,6 +140,64 @@ fn is_phase313_fixture_runner_exception(file: &Path, pattern: &str, line: &str) 
         "Command::new" => line.contains("std::process::Command::new(executable)"),
         _ => false,
     }
+}
+
+fn is_phase325_real_command_lane_fixed_smt_exception(
+    file: &Path,
+    pattern: &str,
+    text: &str,
+    line_index: usize,
+    line: &str,
+) -> bool {
+    if !file.ends_with(Path::new("hsai-agent-admission/src/lib.rs")) {
+        return false;
+    }
+    if !matches!(pattern, "std::process" | "Command::new") {
+        return false;
+    }
+    if line.trim() != "let mut command = std::process::Command::new(fixed_executable);" {
+        return false;
+    }
+    enclosing_function_name(text, line_index)
+        == Some("run_gateway_formal_real_command_lane_fixed_smt_process")
+}
+
+fn enclosing_function_name(text: &str, line_index: usize) -> Option<&str> {
+    let lines = text.lines().take(line_index + 1).collect::<Vec<_>>();
+    lines
+        .iter()
+        .rev()
+        .find_map(|line| line.trim_start().strip_prefix("pub fn "))
+        .and_then(|rest| rest.split('(').next())
+}
+
+#[test]
+fn phase325_real_command_lane_process_exception_is_single_function_only() {
+    let file = Path::new("hsai-agent-admission/src/lib.rs");
+    let allowed = "pub fn run_gateway_formal_real_command_lane_fixed_smt_process(\n\
+        fixed_executable: &std::path::Path,\n\
+    ) {\n\
+        let mut command = std::process::Command::new(fixed_executable);\n\
+    }\n";
+    let denied = "pub fn arbitrary_backend_runner(\n\
+        fixed_executable: &std::path::Path,\n\
+    ) {\n\
+        let mut command = std::process::Command::new(fixed_executable);\n\
+    }\n";
+    assert!(is_phase325_real_command_lane_fixed_smt_exception(
+        file,
+        "Command::new",
+        allowed,
+        3,
+        "        let mut command = std::process::Command::new(fixed_executable);",
+    ));
+    assert!(!is_phase325_real_command_lane_fixed_smt_exception(
+        file,
+        "Command::new",
+        denied,
+        3,
+        "        let mut command = std::process::Command::new(fixed_executable);",
+    ));
 }
 
 fn rust_sources(root: &Path) -> Vec<PathBuf> {
