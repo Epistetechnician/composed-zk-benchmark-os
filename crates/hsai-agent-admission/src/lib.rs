@@ -604,6 +604,13 @@ pub const GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_OUTPUT_SCHEMA_VERSION: 
 pub const GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_STATE_SLICE: &str =
     "phase-319-hsai-tiny-hermetic-formal-backend-local-fixture-execution-readback";
 pub const GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_CLAIM_BOUNDARY: &str = "local gateway tiny hermetic formal-backend fixture execution output only; spawns one fixed local fixture process through the Phase 317 command descriptor and materializes bounded redacted quarantine metadata, but does not execute Lean, SMT, COBALT, Rust-to-Lean, Aeneas, Hax, Z3, CBMC, Coq, TLA+, or any model checker as proof authority, create proof artifacts, promote proof artifacts, promote checker transcripts, promote solver certificates, create accepted evidence, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-real-command-lane:v1";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_OUTPUT_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-real-command-lane-output-contract:v1";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_STATE_SLICE: &str =
+    "phase-322-hsai-real-formal-command-lane-inert-data-model";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_CLAIM_BOUNDARY: &str = "local gateway real formal command-lane inert contract only; binds Phase 317/319 source manifests, one static SMT-LIB2 obligation digest, fixed no-shell command metadata, checker-transcript grammar metadata, and declared output paths, but does not spawn a process, execute SMT, Z3, Lean, COBALT, Rust-to-Lean, Aeneas, Hax, Coq, TLA+, CBMC, or any model checker, create proof artifacts, promote checker transcripts, promote solver certificates, create accepted evidence, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GatewayAttestationChallengeBinding {
@@ -4234,6 +4241,387 @@ pub enum GatewayFormalBackendTinyHermeticExecutionOutputError {
     ProcessSpawn(String),
     Io(String),
     Serialization(String),
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum GatewayFormalRealCommandLaneSolverVerdictLabel {
+    NotRun,
+    ProcessExited,
+    ProcessFailed,
+    ProcessTimedOut,
+    SolverUnsatWithoutCertificate,
+    SolverSatWitnessWithoutCertificate,
+    SolverUnknown,
+    OutputUnparseable,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneRequest {
+    pub schema_version: String,
+    pub run_id: String,
+    pub backend_id: String,
+    pub backend_mode: String,
+    pub property_id: String,
+    pub source_adapter_manifest_digest: Hash,
+    pub source_execution_manifest_digest: Hash,
+    pub adapter_request_digest: Hash,
+    pub fixture_input_digest: Hash,
+    pub source_command_descriptor_digest: Hash,
+    pub obligation_digest: Hash,
+    pub expected_output_grammar_digest: Hash,
+    pub operator_acknowledged: bool,
+    pub required_nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl GatewayFormalRealCommandLaneRequest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-request:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneCommandDescriptor {
+    pub schema_version: String,
+    pub backend_id: String,
+    pub backend_mode: String,
+    pub command_kind: String,
+    pub input_kind: String,
+    pub output_kind: String,
+    pub executable_policy_id: String,
+    pub executable_path_label: String,
+    pub argv_template: Vec<String>,
+    pub argv_template_digest: Hash,
+    pub timeout_millis: u64,
+    pub max_stdout_bytes: u64,
+    pub max_stderr_bytes: u64,
+    pub direct_process_no_shell: bool,
+    pub no_shell: bool,
+    pub no_stdin: bool,
+    pub inherit_environment: bool,
+    pub allowed_environment_variables: BTreeSet<String>,
+    pub environment_variables: BTreeMap<String, String>,
+    pub no_network: bool,
+    pub caller_executable_path_allowed: bool,
+    pub caller_argv_allowed: bool,
+    pub fixed_executable_policy: bool,
+    pub fixed_argv_template: bool,
+    pub ignored_output_root_only: bool,
+    pub input_digest_binding: Hash,
+    pub obligation_digest_binding: Hash,
+    pub expected_output_grammar_digest_binding: Hash,
+}
+
+impl GatewayFormalRealCommandLaneCommandDescriptor {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-command-descriptor:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneObligation {
+    pub schema_version: String,
+    pub obligation_id: String,
+    pub backend_id: String,
+    pub backend_mode: String,
+    pub property_id: String,
+    pub obligation_format: String,
+    pub smtlib2_text: String,
+    pub imported_assumptions: BTreeSet<String>,
+    pub non_secret: bool,
+    pub contains_provider_response: bool,
+    pub contains_raw_quote: bool,
+    pub contains_credentials: bool,
+}
+
+impl GatewayFormalRealCommandLaneObligation {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-obligation:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneObligationBinding {
+    pub schema_version: String,
+    pub backend_id: String,
+    pub backend_mode: String,
+    pub property_id: String,
+    pub source_adapter_manifest_digest: Hash,
+    pub source_execution_manifest_digest: Hash,
+    pub command_descriptor_digest: Hash,
+    pub obligation_digest: Hash,
+    pub expected_output_grammar_digest: Hash,
+    pub imported_assumptions: BTreeSet<String>,
+    pub claim_boundary: String,
+}
+
+impl GatewayFormalRealCommandLaneObligationBinding {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-obligation-binding:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneBoundedSummary {
+    pub stream_label: String,
+    pub max_bytes: u64,
+    pub retained_bytes: u64,
+    pub truncated: bool,
+    pub retained_text: String,
+    pub raw_retained: bool,
+    pub raw_solver_trace_retained: bool,
+    pub proof_artifact_retained: bool,
+    pub checker_transcript_retained: bool,
+    pub secret_scan_passed: bool,
+    pub claim_boundary: String,
+}
+
+impl GatewayFormalRealCommandLaneBoundedSummary {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-bounded-summary:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneSolverVerdict {
+    pub schema_version: String,
+    pub backend_id: String,
+    pub backend_mode: String,
+    pub property_id: String,
+    pub solver_verdict_label: GatewayFormalRealCommandLaneSolverVerdictLabel,
+    pub certificate_retained: bool,
+    pub witness_retained: bool,
+    pub proof_authority_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub claim_boundary: String,
+}
+
+impl GatewayFormalRealCommandLaneSolverVerdict {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-solver-verdict:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneTranscript {
+    pub schema_version: String,
+    pub run_id: String,
+    pub backend_id: String,
+    pub backend_mode: String,
+    pub property_id: String,
+    pub source_adapter_manifest_digest: Hash,
+    pub source_execution_manifest_digest: Hash,
+    pub command_descriptor_digest: Hash,
+    pub obligation_digest: Hash,
+    pub expected_output_grammar_digest: Hash,
+    pub stdout_summary_digest: Hash,
+    pub stderr_summary_digest: Hash,
+    pub redaction_report_digest: Hash,
+    pub nonpromotion_report_digest: Hash,
+    pub process_exit_code_label: String,
+    pub timeout: bool,
+    pub solver_status_label: String,
+    pub solver_verdict_label: GatewayFormalRealCommandLaneSolverVerdictLabel,
+    pub imported_assumptions: BTreeSet<String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub process_spawned: bool,
+    pub backend_executed: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+    pub raw_logs_retained: bool,
+    pub raw_provider_response_retained: bool,
+    pub claim_boundary: String,
+}
+
+impl GatewayFormalRealCommandLaneTranscript {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-transcript:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneNonpromotionReport {
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub grants_authority: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub raw_logs_retained: bool,
+    pub raw_provider_response_retained: bool,
+    pub claim_boundary: String,
+}
+
+impl GatewayFormalRealCommandLaneNonpromotionReport {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-nonpromotion-report:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalRealCommandLaneIssue {
+    InvalidSchemaVersion,
+    InvalidRunId,
+    BackendIdMismatch,
+    BackendModeMismatch,
+    PropertyIdMismatch,
+    MissingDigest(String),
+    SourceAdapterManifestMismatch,
+    SourceExecutionManifestMismatch,
+    OperatorAcknowledgementMissing,
+    MissingRequiredNonclaim(String),
+    CommandPolicyMismatch,
+    CommandDigestMismatch,
+    ObligationMismatch,
+    ObligationContainsSecretOrLiveArtifact,
+    TranscriptMismatch,
+    SummaryMismatch,
+    SolverVerdictMismatch,
+    NonpromotionMismatch,
+    ClaimBoundaryMismatch,
+    DeclaredFileSetMismatch,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalRealCommandLaneIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneValidationReport {
+    pub schema_version: String,
+    pub run_id: String,
+    pub valid: bool,
+    pub issue_count: u64,
+    pub checked_files: Vec<String>,
+    pub request_digest: Hash,
+    pub source_adapter_manifest_digest: Hash,
+    pub source_execution_manifest_digest: Hash,
+    pub command_descriptor_digest: Hash,
+    pub obligation_digest: Hash,
+    pub obligation_binding_digest: Hash,
+    pub transcript_digest: Hash,
+    pub solver_verdict_digest: Hash,
+    pub stdout_summary_digest: Hash,
+    pub stderr_summary_digest: Hash,
+    pub nonpromotion_report_digest: Hash,
+    pub claim_boundary: String,
+    pub process_spawned: bool,
+    pub backend_executed: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalRealCommandLaneValidationReport {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-validation-report:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneOutputManifest {
+    pub schema_version: String,
+    pub run_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub request_digest: Hash,
+    pub source_adapter_manifest_digest: Hash,
+    pub source_execution_manifest_digest: Hash,
+    pub command_descriptor_digest: Hash,
+    pub obligation_digest: Hash,
+    pub obligation_binding_digest: Hash,
+    pub transcript_digest: Hash,
+    pub solver_verdict_digest: Hash,
+    pub stdout_summary_digest: Hash,
+    pub stderr_summary_digest: Hash,
+    pub nonpromotion_report_digest: Hash,
+    pub validation_report_digest: Hash,
+    pub backend_id: String,
+    pub backend_mode: String,
+    pub property_id: String,
+    pub declared_files: Vec<String>,
+    pub declared_sidecars: Vec<String>,
+    pub declared_file_digests: BTreeMap<String, Hash>,
+    pub claim_boundary: String,
+    pub process_spawned: bool,
+    pub backend_executed: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+    pub raw_logs_retained: bool,
+    pub raw_provider_response_retained: bool,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl GatewayFormalRealCommandLaneOutputManifest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-output-manifest:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneOutputContract {
+    pub manifest: GatewayFormalRealCommandLaneOutputManifest,
+    pub validation_report: GatewayFormalRealCommandLaneValidationReport,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -17606,6 +17994,642 @@ fn gateway_formal_backend_tiny_hermetic_execution_serde_error(
     GatewayFormalBackendTinyHermeticExecutionOutputError::Serialization(error.to_string())
 }
 
+pub fn gateway_formal_real_command_lane_declared_files() -> Vec<String> {
+    GATEWAY_FORMAL_REAL_COMMAND_LANE_DECLARED_FILES
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
+pub fn gateway_formal_real_command_lane_declared_sidecars() -> Vec<String> {
+    GATEWAY_FORMAL_REAL_COMMAND_LANE_DECLARED_SIDECARS
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
+pub fn gateway_formal_real_command_lane_claim_boundary() -> String {
+    GATEWAY_FORMAL_REAL_COMMAND_LANE_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_real_command_lane_required_nonclaims() -> BTreeSet<NonClaimLabel> {
+    BTreeSet::from([
+        NonClaimLabel("inert command-lane contract only".to_owned()),
+        NonClaimLabel("not command execution".to_owned()),
+        NonClaimLabel("not SMT execution".to_owned()),
+        NonClaimLabel("not Z3 execution".to_owned()),
+        NonClaimLabel("not Lean execution".to_owned()),
+        NonClaimLabel("not COBALT execution".to_owned()),
+        NonClaimLabel("not proof evidence".to_owned()),
+        NonClaimLabel("not checker transcript evidence".to_owned()),
+        NonClaimLabel("not solver certificate evidence".to_owned()),
+        NonClaimLabel("not accepted evidence".to_owned()),
+        NonClaimLabel("not Level2 evidence".to_owned()),
+        NonClaimLabel("not score-axis evidence".to_owned()),
+        NonClaimLabel("not semantic correctness".to_owned()),
+        NonClaimLabel("not production readiness".to_owned()),
+        NonClaimLabel("not SOTA".to_owned()),
+        NonClaimLabel("not breakthrough".to_owned()),
+        NonClaimLabel("not full security".to_owned()),
+        NonClaimLabel("not authority to execute actions".to_owned()),
+    ])
+}
+
+#[allow(clippy::too_many_arguments)]
+pub fn build_gateway_formal_real_command_lane_output_contract(
+    created_at_unix: u64,
+    source_adapter_manifest: &GatewayFormalBackendTinyHermeticAdapterOutputManifest,
+    source_execution_manifest: &GatewayFormalBackendTinyHermeticExecutionOutputManifest,
+    request: &GatewayFormalRealCommandLaneRequest,
+    command: &GatewayFormalRealCommandLaneCommandDescriptor,
+    obligation: &GatewayFormalRealCommandLaneObligation,
+    obligation_binding: &GatewayFormalRealCommandLaneObligationBinding,
+    transcript: &GatewayFormalRealCommandLaneTranscript,
+    stdout_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    stderr_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    solver_verdict: &GatewayFormalRealCommandLaneSolverVerdict,
+    nonpromotion: &GatewayFormalRealCommandLaneNonpromotionReport,
+) -> GatewayFormalRealCommandLaneOutputContract {
+    let validation = validate_gateway_formal_real_command_lane(
+        source_adapter_manifest,
+        source_execution_manifest,
+        request,
+        command,
+        obligation,
+        obligation_binding,
+        transcript,
+        stdout_summary,
+        stderr_summary,
+        solver_verdict,
+        nonpromotion,
+    );
+    let validation_report = GatewayFormalRealCommandLaneValidationReport {
+        schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_OUTPUT_SCHEMA_VERSION.to_owned(),
+        run_id: request.run_id.clone(),
+        valid: validation.valid,
+        issue_count: validation.issues.len() as u64,
+        checked_files: gateway_formal_real_command_lane_declared_files(),
+        request_digest: request.digest(),
+        source_adapter_manifest_digest: source_adapter_manifest.digest(),
+        source_execution_manifest_digest: source_execution_manifest.digest(),
+        command_descriptor_digest: command.digest(),
+        obligation_digest: obligation.digest(),
+        obligation_binding_digest: obligation_binding.digest(),
+        transcript_digest: transcript.digest(),
+        solver_verdict_digest: solver_verdict.digest(),
+        stdout_summary_digest: stdout_summary.digest(),
+        stderr_summary_digest: stderr_summary.digest(),
+        nonpromotion_report_digest: nonpromotion.digest(),
+        claim_boundary: gateway_formal_real_command_lane_claim_boundary(),
+        process_spawned: false,
+        backend_executed: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        grants_authority: false,
+    };
+    let manifest = GatewayFormalRealCommandLaneOutputManifest {
+        schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_OUTPUT_SCHEMA_VERSION.to_owned(),
+        run_id: request.run_id.clone(),
+        state_slice: GATEWAY_FORMAL_REAL_COMMAND_LANE_STATE_SLICE.to_owned(),
+        created_at_unix,
+        request_digest: request.digest(),
+        source_adapter_manifest_digest: source_adapter_manifest.digest(),
+        source_execution_manifest_digest: source_execution_manifest.digest(),
+        command_descriptor_digest: command.digest(),
+        obligation_digest: obligation.digest(),
+        obligation_binding_digest: obligation_binding.digest(),
+        transcript_digest: transcript.digest(),
+        solver_verdict_digest: solver_verdict.digest(),
+        stdout_summary_digest: stdout_summary.digest(),
+        stderr_summary_digest: stderr_summary.digest(),
+        nonpromotion_report_digest: nonpromotion.digest(),
+        validation_report_digest: validation_report.digest(),
+        backend_id: request.backend_id.clone(),
+        backend_mode: request.backend_mode.clone(),
+        property_id: request.property_id.clone(),
+        declared_files: gateway_formal_real_command_lane_declared_files(),
+        declared_sidecars: gateway_formal_real_command_lane_declared_sidecars(),
+        declared_file_digests: gateway_formal_real_command_lane_declared_file_digests(
+            source_execution_manifest,
+            request,
+            command,
+            obligation,
+            obligation_binding,
+            transcript,
+            stdout_summary,
+            stderr_summary,
+            solver_verdict,
+            nonpromotion,
+            &validation_report,
+        ),
+        claim_boundary: gateway_formal_real_command_lane_claim_boundary(),
+        process_spawned: false,
+        backend_executed: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+        raw_logs_retained: false,
+        raw_provider_response_retained: false,
+        nonclaims: request.required_nonclaims.clone(),
+    };
+    GatewayFormalRealCommandLaneOutputContract {
+        manifest,
+        validation_report,
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+pub fn validate_gateway_formal_real_command_lane(
+    source_adapter_manifest: &GatewayFormalBackendTinyHermeticAdapterOutputManifest,
+    source_execution_manifest: &GatewayFormalBackendTinyHermeticExecutionOutputManifest,
+    request: &GatewayFormalRealCommandLaneRequest,
+    command: &GatewayFormalRealCommandLaneCommandDescriptor,
+    obligation: &GatewayFormalRealCommandLaneObligation,
+    obligation_binding: &GatewayFormalRealCommandLaneObligationBinding,
+    transcript: &GatewayFormalRealCommandLaneTranscript,
+    stdout_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    stderr_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    solver_verdict: &GatewayFormalRealCommandLaneSolverVerdict,
+    nonpromotion: &GatewayFormalRealCommandLaneNonpromotionReport,
+) -> GatewayFormalRealCommandLaneValidation {
+    let mut issues = Vec::new();
+    validate_gateway_formal_real_command_lane_request(request, &mut issues);
+    validate_gateway_formal_real_command_lane_sources(
+        source_adapter_manifest,
+        source_execution_manifest,
+        request,
+        &mut issues,
+    );
+    validate_gateway_formal_real_command_lane_command(command, request, &mut issues);
+    validate_gateway_formal_real_command_lane_obligation(
+        obligation,
+        obligation_binding,
+        request,
+        command,
+        source_adapter_manifest,
+        source_execution_manifest,
+        &mut issues,
+    );
+    validate_gateway_formal_real_command_lane_transcript(
+        transcript,
+        request,
+        command,
+        obligation,
+        obligation_binding,
+        stdout_summary,
+        stderr_summary,
+        solver_verdict,
+        nonpromotion,
+        &mut issues,
+    );
+    validate_gateway_formal_real_command_lane_summary(stdout_summary, "stdout", &mut issues);
+    validate_gateway_formal_real_command_lane_summary(stderr_summary, "stderr", &mut issues);
+    validate_gateway_formal_real_command_lane_solver_verdict(solver_verdict, request, &mut issues);
+    validate_gateway_formal_real_command_lane_nonpromotion(nonpromotion, &mut issues);
+
+    GatewayFormalRealCommandLaneValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_request(
+    request: &GatewayFormalRealCommandLaneRequest,
+    issues: &mut Vec<GatewayFormalRealCommandLaneIssue>,
+) {
+    if request.schema_version != GATEWAY_FORMAL_REAL_COMMAND_LANE_SCHEMA_VERSION {
+        issues.push(GatewayFormalRealCommandLaneIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&request.run_id) {
+        issues.push(GatewayFormalRealCommandLaneIssue::InvalidRunId);
+    }
+    if request.backend_id != "local_smt_tiny_gateway_invariant" {
+        issues.push(GatewayFormalRealCommandLaneIssue::BackendIdMismatch);
+    }
+    if request.backend_mode != "smt-lib2-offline-command" {
+        issues.push(GatewayFormalRealCommandLaneIssue::BackendModeMismatch);
+    }
+    if request.property_id != "attestation_challenge_binding_deterministic_input_sensitive" {
+        issues.push(GatewayFormalRealCommandLaneIssue::PropertyIdMismatch);
+    }
+    for (label, digest) in [
+        (
+            "source_adapter_manifest_digest",
+            request.source_adapter_manifest_digest,
+        ),
+        (
+            "source_execution_manifest_digest",
+            request.source_execution_manifest_digest,
+        ),
+        ("adapter_request_digest", request.adapter_request_digest),
+        ("fixture_input_digest", request.fixture_input_digest),
+        (
+            "source_command_descriptor_digest",
+            request.source_command_descriptor_digest,
+        ),
+        ("obligation_digest", request.obligation_digest),
+        (
+            "expected_output_grammar_digest",
+            request.expected_output_grammar_digest,
+        ),
+    ] {
+        if digest == Hash([0; 32]) {
+            issues.push(GatewayFormalRealCommandLaneIssue::MissingDigest(
+                label.to_owned(),
+            ));
+        }
+    }
+    if !request.operator_acknowledged {
+        issues.push(GatewayFormalRealCommandLaneIssue::OperatorAcknowledgementMissing);
+    }
+    for required in gateway_formal_real_command_lane_required_nonclaims() {
+        if !request.required_nonclaims.contains(&required) {
+            issues.push(GatewayFormalRealCommandLaneIssue::MissingRequiredNonclaim(
+                required.0,
+            ));
+        }
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_sources(
+    source_adapter_manifest: &GatewayFormalBackendTinyHermeticAdapterOutputManifest,
+    source_execution_manifest: &GatewayFormalBackendTinyHermeticExecutionOutputManifest,
+    request: &GatewayFormalRealCommandLaneRequest,
+    issues: &mut Vec<GatewayFormalRealCommandLaneIssue>,
+) {
+    if request.source_adapter_manifest_digest != source_adapter_manifest.digest()
+        || source_adapter_manifest.schema_version
+            != GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_OUTPUT_SCHEMA_VERSION
+        || source_adapter_manifest.state_slice
+            != GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_ADAPTER_STATE_SLICE
+        || source_adapter_manifest.backend_id != request.backend_id
+        || source_adapter_manifest.property_id != request.property_id
+        || source_adapter_manifest.process_spawned
+        || source_adapter_manifest.backend_executed
+        || source_adapter_manifest.creates_accepted_evidence
+        || source_adapter_manifest.creates_level2_evidence
+        || source_adapter_manifest.populates_score_axes
+        || source_adapter_manifest.grants_authority
+    {
+        issues.push(GatewayFormalRealCommandLaneIssue::SourceAdapterManifestMismatch);
+    }
+    if request.source_execution_manifest_digest != source_execution_manifest.digest()
+        || source_execution_manifest.schema_version
+            != GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_OUTPUT_SCHEMA_VERSION
+        || source_execution_manifest.state_slice
+            != GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_STATE_SLICE
+        || source_execution_manifest.source_adapter_manifest_digest
+            != source_adapter_manifest.digest()
+        || source_execution_manifest.adapter_request_digest != request.adapter_request_digest
+        || source_execution_manifest.fixture_input_digest != request.fixture_input_digest
+        || source_execution_manifest.command_descriptor_digest
+            != request.source_command_descriptor_digest
+        || source_execution_manifest.backend_id != request.backend_id
+        || source_execution_manifest.property_id != request.property_id
+        || source_execution_manifest.proof_artifact_created
+        || source_execution_manifest.checker_transcript_created
+        || source_execution_manifest.solver_certificate_created
+        || source_execution_manifest.creates_accepted_evidence
+        || source_execution_manifest.creates_level2_evidence
+        || source_execution_manifest.populates_score_axes
+        || source_execution_manifest.grants_authority
+    {
+        issues.push(GatewayFormalRealCommandLaneIssue::SourceExecutionManifestMismatch);
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_command(
+    command: &GatewayFormalRealCommandLaneCommandDescriptor,
+    request: &GatewayFormalRealCommandLaneRequest,
+    issues: &mut Vec<GatewayFormalRealCommandLaneIssue>,
+) {
+    if command.schema_version != GATEWAY_FORMAL_REAL_COMMAND_LANE_SCHEMA_VERSION {
+        issues.push(GatewayFormalRealCommandLaneIssue::InvalidSchemaVersion);
+    }
+    if command.backend_id != request.backend_id {
+        issues.push(GatewayFormalRealCommandLaneIssue::BackendIdMismatch);
+    }
+    if command.backend_mode != request.backend_mode {
+        issues.push(GatewayFormalRealCommandLaneIssue::BackendModeMismatch);
+    }
+    if command.command_kind != "direct_process_no_shell"
+        || command.input_kind != "static_non_secret_smt2_obligation"
+        || command.output_kind != "bounded_solver_stdout_stderr"
+        || !is_single_segment_id(&command.executable_policy_id)
+        || command.executable_path_label.trim().is_empty()
+        || command.executable_path_label.starts_with('/')
+        || !is_safe_relative_path(&command.executable_path_label)
+        || has_shell_metacharacters(&command.executable_path_label)
+        || command.argv_template.is_empty()
+        || command
+            .argv_template
+            .iter()
+            .any(|arg| arg.trim().is_empty() || has_shell_metacharacters(arg))
+        || command.timeout_millis == 0
+        || command.timeout_millis > 60_000
+        || command.max_stdout_bytes == 0
+        || command.max_stdout_bytes > 65_536
+        || command.max_stderr_bytes == 0
+        || command.max_stderr_bytes > 65_536
+        || !command.direct_process_no_shell
+        || !command.no_shell
+        || !command.no_stdin
+        || command.inherit_environment
+        || !command.environment_variables.is_empty()
+        || !command.no_network
+        || command.caller_executable_path_allowed
+        || command.caller_argv_allowed
+        || !command.fixed_executable_policy
+        || !command.fixed_argv_template
+        || !command.ignored_output_root_only
+        || command.input_digest_binding != request.source_execution_manifest_digest
+        || command.obligation_digest_binding != request.obligation_digest
+        || command.expected_output_grammar_digest_binding != request.expected_output_grammar_digest
+    {
+        issues.push(GatewayFormalRealCommandLaneIssue::CommandPolicyMismatch);
+    }
+    if command.argv_template_digest
+        != hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-argv-template:v1",
+            &command.argv_template,
+        )
+    {
+        issues.push(GatewayFormalRealCommandLaneIssue::CommandDigestMismatch);
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn validate_gateway_formal_real_command_lane_obligation(
+    obligation: &GatewayFormalRealCommandLaneObligation,
+    obligation_binding: &GatewayFormalRealCommandLaneObligationBinding,
+    request: &GatewayFormalRealCommandLaneRequest,
+    command: &GatewayFormalRealCommandLaneCommandDescriptor,
+    source_adapter_manifest: &GatewayFormalBackendTinyHermeticAdapterOutputManifest,
+    source_execution_manifest: &GatewayFormalBackendTinyHermeticExecutionOutputManifest,
+    issues: &mut Vec<GatewayFormalRealCommandLaneIssue>,
+) {
+    if obligation.schema_version != GATEWAY_FORMAL_REAL_COMMAND_LANE_SCHEMA_VERSION
+        || obligation_binding.schema_version != GATEWAY_FORMAL_REAL_COMMAND_LANE_SCHEMA_VERSION
+    {
+        issues.push(GatewayFormalRealCommandLaneIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&obligation.obligation_id)
+        || obligation.backend_id != request.backend_id
+        || obligation.backend_mode != request.backend_mode
+        || obligation.property_id != request.property_id
+        || obligation.obligation_format != "smt-lib2-static-non-secret"
+        || !obligation.smtlib2_text.contains("(set-logic")
+        || !obligation
+            .smtlib2_text
+            .contains("attestation_challenge_binding")
+        || has_shell_metacharacters(&obligation.smtlib2_text)
+        || obligation.digest() != request.obligation_digest
+    {
+        issues.push(GatewayFormalRealCommandLaneIssue::ObligationMismatch);
+    }
+    if !obligation.non_secret
+        || obligation.contains_provider_response
+        || obligation.contains_raw_quote
+        || obligation.contains_credentials
+    {
+        issues.push(GatewayFormalRealCommandLaneIssue::ObligationContainsSecretOrLiveArtifact);
+    }
+    if obligation_binding.backend_id != request.backend_id
+        || obligation_binding.backend_mode != request.backend_mode
+        || obligation_binding.property_id != request.property_id
+        || obligation_binding.source_adapter_manifest_digest != source_adapter_manifest.digest()
+        || obligation_binding.source_execution_manifest_digest != source_execution_manifest.digest()
+        || obligation_binding.command_descriptor_digest != command.digest()
+        || obligation_binding.obligation_digest != obligation.digest()
+        || obligation_binding.expected_output_grammar_digest
+            != request.expected_output_grammar_digest
+        || obligation_binding.imported_assumptions != obligation.imported_assumptions
+        || obligation_binding.claim_boundary != gateway_formal_real_command_lane_claim_boundary()
+    {
+        issues.push(GatewayFormalRealCommandLaneIssue::ObligationMismatch);
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn validate_gateway_formal_real_command_lane_transcript(
+    transcript: &GatewayFormalRealCommandLaneTranscript,
+    request: &GatewayFormalRealCommandLaneRequest,
+    command: &GatewayFormalRealCommandLaneCommandDescriptor,
+    obligation: &GatewayFormalRealCommandLaneObligation,
+    obligation_binding: &GatewayFormalRealCommandLaneObligationBinding,
+    stdout_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    stderr_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    solver_verdict: &GatewayFormalRealCommandLaneSolverVerdict,
+    nonpromotion: &GatewayFormalRealCommandLaneNonpromotionReport,
+    issues: &mut Vec<GatewayFormalRealCommandLaneIssue>,
+) {
+    if transcript.schema_version != GATEWAY_FORMAL_REAL_COMMAND_LANE_SCHEMA_VERSION
+        || transcript.run_id != request.run_id
+        || transcript.backend_id != request.backend_id
+        || transcript.backend_mode != request.backend_mode
+        || transcript.property_id != request.property_id
+        || transcript.source_adapter_manifest_digest != request.source_adapter_manifest_digest
+        || transcript.source_execution_manifest_digest != request.source_execution_manifest_digest
+        || transcript.command_descriptor_digest != command.digest()
+        || transcript.obligation_digest != obligation.digest()
+        || transcript.expected_output_grammar_digest != request.expected_output_grammar_digest
+        || transcript.stdout_summary_digest != stdout_summary.digest()
+        || transcript.stderr_summary_digest != stderr_summary.digest()
+        || transcript.redaction_report_digest == Hash([0; 32])
+        || transcript.nonpromotion_report_digest != nonpromotion.digest()
+        || transcript.process_exit_code_label != "not_run"
+        || transcript.timeout
+        || transcript.solver_status_label != "not_run"
+        || transcript.solver_verdict_label != solver_verdict.solver_verdict_label
+        || transcript.solver_verdict_label != GatewayFormalRealCommandLaneSolverVerdictLabel::NotRun
+        || transcript.imported_assumptions != obligation.imported_assumptions
+        || transcript.explicit_nonclaims != request.required_nonclaims
+        || obligation_binding.digest() == Hash([0; 32])
+        || transcript.claim_boundary != gateway_formal_real_command_lane_claim_boundary()
+    {
+        issues.push(GatewayFormalRealCommandLaneIssue::TranscriptMismatch);
+    }
+    if transcript.process_spawned
+        || transcript.backend_executed
+        || transcript.proof_artifact_created
+        || transcript.checker_transcript_created
+        || transcript.solver_certificate_created
+        || transcript.creates_accepted_evidence
+        || transcript.creates_level2_evidence
+        || transcript.populates_score_axes
+        || transcript.semantic_correctness_claimed
+        || transcript.production_readiness_claimed
+        || transcript.sota_claimed
+        || transcript.breakthrough_claimed
+        || transcript.full_security_claimed
+        || transcript.grants_authority
+        || transcript.raw_logs_retained
+        || transcript.raw_provider_response_retained
+    {
+        issues.push(GatewayFormalRealCommandLaneIssue::PromotionAttempt);
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_summary(
+    summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    stream_label: &str,
+    issues: &mut Vec<GatewayFormalRealCommandLaneIssue>,
+) {
+    if summary.stream_label != stream_label
+        || summary.max_bytes == 0
+        || summary.retained_bytes > summary.max_bytes
+        || summary.truncated
+        || summary.retained_text != "not_run summary only"
+        || summary.raw_retained
+        || summary.raw_solver_trace_retained
+        || summary.proof_artifact_retained
+        || summary.checker_transcript_retained
+        || !summary.secret_scan_passed
+        || summary.claim_boundary != gateway_formal_real_command_lane_claim_boundary()
+    {
+        issues.push(GatewayFormalRealCommandLaneIssue::SummaryMismatch);
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_solver_verdict(
+    verdict: &GatewayFormalRealCommandLaneSolverVerdict,
+    request: &GatewayFormalRealCommandLaneRequest,
+    issues: &mut Vec<GatewayFormalRealCommandLaneIssue>,
+) {
+    if verdict.schema_version != GATEWAY_FORMAL_REAL_COMMAND_LANE_SCHEMA_VERSION
+        || verdict.backend_id != request.backend_id
+        || verdict.backend_mode != request.backend_mode
+        || verdict.property_id != request.property_id
+        || verdict.solver_verdict_label != GatewayFormalRealCommandLaneSolverVerdictLabel::NotRun
+        || verdict.certificate_retained
+        || verdict.witness_retained
+        || verdict.proof_authority_claimed
+        || verdict.semantic_correctness_claimed
+        || verdict.claim_boundary != gateway_formal_real_command_lane_claim_boundary()
+    {
+        issues.push(GatewayFormalRealCommandLaneIssue::SolverVerdictMismatch);
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_nonpromotion(
+    nonpromotion: &GatewayFormalRealCommandLaneNonpromotionReport,
+    issues: &mut Vec<GatewayFormalRealCommandLaneIssue>,
+) {
+    if nonpromotion.proof_artifact_created
+        || nonpromotion.checker_transcript_created
+        || nonpromotion.solver_certificate_created
+        || nonpromotion.creates_accepted_evidence
+        || nonpromotion.creates_level2_evidence
+        || nonpromotion.populates_score_axes
+        || nonpromotion.grants_authority
+        || nonpromotion.semantic_correctness_claimed
+        || nonpromotion.production_readiness_claimed
+        || nonpromotion.sota_claimed
+        || nonpromotion.breakthrough_claimed
+        || nonpromotion.full_security_claimed
+        || nonpromotion.raw_logs_retained
+        || nonpromotion.raw_provider_response_retained
+        || nonpromotion.claim_boundary != gateway_formal_real_command_lane_claim_boundary()
+    {
+        issues.push(GatewayFormalRealCommandLaneIssue::NonpromotionMismatch);
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn gateway_formal_real_command_lane_declared_file_digests(
+    source_execution_manifest: &GatewayFormalBackendTinyHermeticExecutionOutputManifest,
+    request: &GatewayFormalRealCommandLaneRequest,
+    command: &GatewayFormalRealCommandLaneCommandDescriptor,
+    obligation: &GatewayFormalRealCommandLaneObligation,
+    obligation_binding: &GatewayFormalRealCommandLaneObligationBinding,
+    transcript: &GatewayFormalRealCommandLaneTranscript,
+    stdout_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    stderr_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    solver_verdict: &GatewayFormalRealCommandLaneSolverVerdict,
+    nonpromotion: &GatewayFormalRealCommandLaneNonpromotionReport,
+    validation_report: &GatewayFormalRealCommandLaneValidationReport,
+) -> BTreeMap<String, Hash> {
+    let mut digests = BTreeMap::new();
+    let entries = [
+        (
+            "gateway-formal-real-command-lane/source-execution-manifest.json",
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-declared-source-execution-manifest:v1",
+                source_execution_manifest,
+            ),
+        ),
+        (
+            "gateway-formal-real-command-lane/command-request.json",
+            request.digest(),
+        ),
+        (
+            "gateway-formal-real-command-lane/command-descriptor.json",
+            command.digest(),
+        ),
+        (
+            "gateway-formal-real-command-lane/obligation.smt2",
+            hash_bytes(obligation.smtlib2_text.as_bytes()),
+        ),
+        (
+            "gateway-formal-real-command-lane/obligation-binding.json",
+            obligation_binding.digest(),
+        ),
+        (
+            "gateway-formal-real-command-lane/execution-transcript.json",
+            transcript.digest(),
+        ),
+        (
+            "gateway-formal-real-command-lane/stdout-summary.json",
+            stdout_summary.digest(),
+        ),
+        (
+            "gateway-formal-real-command-lane/stderr-summary.json",
+            stderr_summary.digest(),
+        ),
+        (
+            "gateway-formal-real-command-lane/solver-verdict.json",
+            solver_verdict.digest(),
+        ),
+        (
+            "gateway-formal-real-command-lane/checker-transcript.json",
+            transcript.digest(),
+        ),
+        (
+            "gateway-formal-real-command-lane/redaction-report.json",
+            transcript.redaction_report_digest,
+        ),
+        (
+            "gateway-formal-real-command-lane/nonpromotion-report.json",
+            nonpromotion.digest(),
+        ),
+        (
+            "gateway-formal-real-command-lane/nonclaims.md",
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-nonclaims:v1",
+                &request.required_nonclaims,
+            ),
+        ),
+        (
+            "gateway-formal-real-command-lane/validation-report.json",
+            validation_report.digest(),
+        ),
+    ];
+    for (path, digest) in entries {
+        digests.insert(path.to_owned(), digest);
+    }
+    digests
+}
+
 fn build_gateway_formal_backend_hermetic_fixture_runner_bundle_files(
     interface: &GatewayFormalBackendHermeticProcessSpawnInterface,
     descriptor: &GatewayFormalBackendHermeticExecutionDescriptor,
@@ -24158,6 +25182,42 @@ const GATEWAY_FORMAL_BACKEND_TINY_HERMETIC_EXECUTION_DECLARED_SIDECARS: &[&str] 
     "gateway-formal-backend-tiny-hermetic-execution/validation-report.json.sha256",
 ];
 
+const GATEWAY_FORMAL_REAL_COMMAND_LANE_DECLARED_FILES: &[&str] = &[
+    "gateway-formal-real-command-lane/manifest.json",
+    "gateway-formal-real-command-lane/source-execution-manifest.json",
+    "gateway-formal-real-command-lane/command-request.json",
+    "gateway-formal-real-command-lane/command-descriptor.json",
+    "gateway-formal-real-command-lane/obligation.smt2",
+    "gateway-formal-real-command-lane/obligation-binding.json",
+    "gateway-formal-real-command-lane/execution-transcript.json",
+    "gateway-formal-real-command-lane/stdout-summary.json",
+    "gateway-formal-real-command-lane/stderr-summary.json",
+    "gateway-formal-real-command-lane/solver-verdict.json",
+    "gateway-formal-real-command-lane/checker-transcript.json",
+    "gateway-formal-real-command-lane/redaction-report.json",
+    "gateway-formal-real-command-lane/nonpromotion-report.json",
+    "gateway-formal-real-command-lane/nonclaims.md",
+    "gateway-formal-real-command-lane/validation-report.json",
+];
+
+const GATEWAY_FORMAL_REAL_COMMAND_LANE_DECLARED_SIDECARS: &[&str] = &[
+    "gateway-formal-real-command-lane/manifest.json.sha256",
+    "gateway-formal-real-command-lane/source-execution-manifest.json.sha256",
+    "gateway-formal-real-command-lane/command-request.json.sha256",
+    "gateway-formal-real-command-lane/command-descriptor.json.sha256",
+    "gateway-formal-real-command-lane/obligation.smt2.sha256",
+    "gateway-formal-real-command-lane/obligation-binding.json.sha256",
+    "gateway-formal-real-command-lane/execution-transcript.json.sha256",
+    "gateway-formal-real-command-lane/stdout-summary.json.sha256",
+    "gateway-formal-real-command-lane/stderr-summary.json.sha256",
+    "gateway-formal-real-command-lane/solver-verdict.json.sha256",
+    "gateway-formal-real-command-lane/checker-transcript.json.sha256",
+    "gateway-formal-real-command-lane/redaction-report.json.sha256",
+    "gateway-formal-real-command-lane/nonpromotion-report.json.sha256",
+    "gateway-formal-real-command-lane/nonclaims.md.sha256",
+    "gateway-formal-real-command-lane/validation-report.json.sha256",
+];
+
 const ADMISSION_JOURNAL_DECLARED_FILES: &[&str] = &[
     "admission-journal/manifest.json",
     "admission-journal/journal.json",
@@ -26901,6 +27961,404 @@ mod tests {
             .expect("tiny execution nonpromotion cleanup succeeds");
         fs::remove_dir_all(&nonpromotion_source_root)
             .expect("tiny execution nonpromotion source cleanup succeeds");
+    }
+
+    #[allow(clippy::type_complexity)]
+    fn real_command_lane_valid_parts(
+        name: &str,
+    ) -> (
+        PathBuf,
+        PathBuf,
+        GatewayFormalBackendTinyHermeticAdapterOutputManifest,
+        GatewayFormalBackendTinyHermeticExecutionOutputManifest,
+        GatewayFormalRealCommandLaneRequest,
+        GatewayFormalRealCommandLaneCommandDescriptor,
+        GatewayFormalRealCommandLaneObligation,
+        GatewayFormalRealCommandLaneObligationBinding,
+        GatewayFormalRealCommandLaneTranscript,
+        GatewayFormalRealCommandLaneBoundedSummary,
+        GatewayFormalRealCommandLaneBoundedSummary,
+        GatewayFormalRealCommandLaneSolverVerdict,
+        GatewayFormalRealCommandLaneNonpromotionReport,
+    ) {
+        let (execution_root, source_root, request, _fixture, _command, execution_manifest) =
+            tiny_execution_materialized_bundle(&format!("{name}-source-execution"));
+        let source_manifest_path =
+            source_root.join("gateway-formal-backend-tiny-hermetic-adapter/manifest.json");
+        let source_manifest: GatewayFormalBackendTinyHermeticAdapterOutputManifest =
+            serde_json::from_slice(&fs::read(source_manifest_path).expect("source manifest reads"))
+                .expect("source manifest parses");
+        let expected_output_grammar_digest = Hash([71; 32]);
+        let obligation = GatewayFormalRealCommandLaneObligation {
+            schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_SCHEMA_VERSION.to_owned(),
+            obligation_id: "real-command-obligation-1".to_owned(),
+            backend_id: "local_smt_tiny_gateway_invariant".to_owned(),
+            backend_mode: "smt-lib2-offline-command".to_owned(),
+            property_id: "attestation_challenge_binding_deterministic_input_sensitive".to_owned(),
+            obligation_format: "smt-lib2-static-non-secret".to_owned(),
+            smtlib2_text: "(set-logic QF_UF) (declare-const attestation_challenge_binding Bool) (assert attestation_challenge_binding) (check-sat)".to_owned(),
+            imported_assumptions: BTreeSet::from([
+                "report_data_binding imported from hsai_attestation and not proved here".to_owned(),
+            ]),
+            non_secret: true,
+            contains_provider_response: false,
+            contains_raw_quote: false,
+            contains_credentials: false,
+        };
+        let command_request = GatewayFormalRealCommandLaneRequest {
+            schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_SCHEMA_VERSION.to_owned(),
+            run_id: "real-command-run-1".to_owned(),
+            backend_id: "local_smt_tiny_gateway_invariant".to_owned(),
+            backend_mode: "smt-lib2-offline-command".to_owned(),
+            property_id: "attestation_challenge_binding_deterministic_input_sensitive".to_owned(),
+            source_adapter_manifest_digest: source_manifest.digest(),
+            source_execution_manifest_digest: execution_manifest.digest(),
+            adapter_request_digest: request.digest(),
+            fixture_input_digest: request.fixture_input_digest,
+            source_command_descriptor_digest: request.command_descriptor_digest,
+            obligation_digest: obligation.digest(),
+            expected_output_grammar_digest,
+            operator_acknowledged: true,
+            required_nonclaims: gateway_formal_real_command_lane_required_nonclaims(),
+        };
+        let argv_template = vec![
+            "z3".to_owned(),
+            "-smt2".to_owned(),
+            "gateway-formal-real-command-lane/obligation.smt2".to_owned(),
+        ];
+        let command = GatewayFormalRealCommandLaneCommandDescriptor {
+            schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_SCHEMA_VERSION.to_owned(),
+            backend_id: command_request.backend_id.clone(),
+            backend_mode: command_request.backend_mode.clone(),
+            command_kind: "direct_process_no_shell".to_owned(),
+            input_kind: "static_non_secret_smt2_obligation".to_owned(),
+            output_kind: "bounded_solver_stdout_stderr".to_owned(),
+            executable_policy_id: "real-command-policy-1".to_owned(),
+            executable_path_label: "tools/z3-fixed".to_owned(),
+            argv_template_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-argv-template:v1",
+                &argv_template,
+            ),
+            argv_template,
+            timeout_millis: 5_000,
+            max_stdout_bytes: 4_096,
+            max_stderr_bytes: 4_096,
+            direct_process_no_shell: true,
+            no_shell: true,
+            no_stdin: true,
+            inherit_environment: false,
+            allowed_environment_variables: BTreeSet::new(),
+            environment_variables: BTreeMap::new(),
+            no_network: true,
+            caller_executable_path_allowed: false,
+            caller_argv_allowed: false,
+            fixed_executable_policy: true,
+            fixed_argv_template: true,
+            ignored_output_root_only: true,
+            input_digest_binding: command_request.source_execution_manifest_digest,
+            obligation_digest_binding: command_request.obligation_digest,
+            expected_output_grammar_digest_binding: command_request.expected_output_grammar_digest,
+        };
+        let obligation_binding = GatewayFormalRealCommandLaneObligationBinding {
+            schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_SCHEMA_VERSION.to_owned(),
+            backend_id: command_request.backend_id.clone(),
+            backend_mode: command_request.backend_mode.clone(),
+            property_id: command_request.property_id.clone(),
+            source_adapter_manifest_digest: source_manifest.digest(),
+            source_execution_manifest_digest: execution_manifest.digest(),
+            command_descriptor_digest: command.digest(),
+            obligation_digest: obligation.digest(),
+            expected_output_grammar_digest: command_request.expected_output_grammar_digest,
+            imported_assumptions: obligation.imported_assumptions.clone(),
+            claim_boundary: gateway_formal_real_command_lane_claim_boundary(),
+        };
+        let stdout_summary = GatewayFormalRealCommandLaneBoundedSummary {
+            stream_label: "stdout".to_owned(),
+            max_bytes: command.max_stdout_bytes,
+            retained_bytes: 0,
+            truncated: false,
+            retained_text: "not_run summary only".to_owned(),
+            raw_retained: false,
+            raw_solver_trace_retained: false,
+            proof_artifact_retained: false,
+            checker_transcript_retained: false,
+            secret_scan_passed: true,
+            claim_boundary: gateway_formal_real_command_lane_claim_boundary(),
+        };
+        let stderr_summary = GatewayFormalRealCommandLaneBoundedSummary {
+            stream_label: "stderr".to_owned(),
+            max_bytes: command.max_stderr_bytes,
+            retained_bytes: 0,
+            truncated: false,
+            retained_text: "not_run summary only".to_owned(),
+            raw_retained: false,
+            raw_solver_trace_retained: false,
+            proof_artifact_retained: false,
+            checker_transcript_retained: false,
+            secret_scan_passed: true,
+            claim_boundary: gateway_formal_real_command_lane_claim_boundary(),
+        };
+        let solver_verdict = GatewayFormalRealCommandLaneSolverVerdict {
+            schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_SCHEMA_VERSION.to_owned(),
+            backend_id: command_request.backend_id.clone(),
+            backend_mode: command_request.backend_mode.clone(),
+            property_id: command_request.property_id.clone(),
+            solver_verdict_label: GatewayFormalRealCommandLaneSolverVerdictLabel::NotRun,
+            certificate_retained: false,
+            witness_retained: false,
+            proof_authority_claimed: false,
+            semantic_correctness_claimed: false,
+            claim_boundary: gateway_formal_real_command_lane_claim_boundary(),
+        };
+        let nonpromotion = GatewayFormalRealCommandLaneNonpromotionReport {
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            creates_accepted_evidence: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            grants_authority: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            raw_logs_retained: false,
+            raw_provider_response_retained: false,
+            claim_boundary: gateway_formal_real_command_lane_claim_boundary(),
+        };
+        let transcript = GatewayFormalRealCommandLaneTranscript {
+            schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_SCHEMA_VERSION.to_owned(),
+            run_id: command_request.run_id.clone(),
+            backend_id: command_request.backend_id.clone(),
+            backend_mode: command_request.backend_mode.clone(),
+            property_id: command_request.property_id.clone(),
+            source_adapter_manifest_digest: source_manifest.digest(),
+            source_execution_manifest_digest: execution_manifest.digest(),
+            command_descriptor_digest: command.digest(),
+            obligation_digest: obligation.digest(),
+            expected_output_grammar_digest: command_request.expected_output_grammar_digest,
+            stdout_summary_digest: stdout_summary.digest(),
+            stderr_summary_digest: stderr_summary.digest(),
+            redaction_report_digest: Hash([72; 32]),
+            nonpromotion_report_digest: nonpromotion.digest(),
+            process_exit_code_label: "not_run".to_owned(),
+            timeout: false,
+            solver_status_label: "not_run".to_owned(),
+            solver_verdict_label: GatewayFormalRealCommandLaneSolverVerdictLabel::NotRun,
+            imported_assumptions: obligation.imported_assumptions.clone(),
+            explicit_nonclaims: command_request.required_nonclaims.clone(),
+            process_spawned: false,
+            backend_executed: false,
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            creates_accepted_evidence: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            grants_authority: false,
+            raw_logs_retained: false,
+            raw_provider_response_retained: false,
+            claim_boundary: gateway_formal_real_command_lane_claim_boundary(),
+        };
+        (
+            execution_root,
+            source_root,
+            source_manifest,
+            execution_manifest,
+            command_request,
+            command,
+            obligation,
+            obligation_binding,
+            transcript,
+            stdout_summary,
+            stderr_summary,
+            solver_verdict,
+            nonpromotion,
+        )
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
+        let (
+            execution_root,
+            source_root,
+            source_manifest,
+            execution_manifest,
+            request,
+            command,
+            obligation,
+            obligation_binding,
+            transcript,
+            stdout_summary,
+            stderr_summary,
+            solver_verdict,
+            nonpromotion,
+        ) = real_command_lane_valid_parts("real-command-valid");
+
+        let contract = build_gateway_formal_real_command_lane_output_contract(
+            1_800_000_322,
+            &source_manifest,
+            &execution_manifest,
+            &request,
+            &command,
+            &obligation,
+            &obligation_binding,
+            &transcript,
+            &stdout_summary,
+            &stderr_summary,
+            &solver_verdict,
+            &nonpromotion,
+        );
+
+        assert!(contract.validation_report.valid);
+        assert_eq!(
+            contract.manifest.state_slice,
+            GATEWAY_FORMAL_REAL_COMMAND_LANE_STATE_SLICE
+        );
+        assert_eq!(
+            contract.manifest.declared_files,
+            gateway_formal_real_command_lane_declared_files()
+        );
+        assert_eq!(
+            contract.manifest.declared_sidecars,
+            gateway_formal_real_command_lane_declared_sidecars()
+        );
+        assert_eq!(
+            contract
+                .manifest
+                .declared_file_digests
+                .contains_key("gateway-formal-real-command-lane/manifest.json"),
+            false
+        );
+        assert_eq!(contract.manifest.declared_file_digests.len(), 14);
+        assert!(!contract.manifest.process_spawned);
+        assert!(!contract.manifest.backend_executed);
+        assert!(!contract.manifest.proof_artifact_created);
+        assert!(!contract.manifest.checker_transcript_created);
+        assert!(!contract.manifest.solver_certificate_created);
+        assert!(!contract.manifest.creates_accepted_evidence);
+        assert!(!contract.manifest.creates_level2_evidence);
+        assert!(!contract.manifest.populates_score_axes);
+        assert!(!contract.manifest.semantic_correctness_claimed);
+        assert!(!contract.manifest.production_readiness_claimed);
+        assert!(!contract.manifest.sota_claimed);
+        assert!(!contract.manifest.breakthrough_claimed);
+        assert!(!contract.manifest.full_security_claimed);
+        assert!(!contract.manifest.grants_authority);
+        assert_eq!(
+            contract.manifest.claim_boundary,
+            gateway_formal_real_command_lane_claim_boundary()
+        );
+
+        fs::remove_dir_all(&execution_root)
+            .expect("real command execution source cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("real command adapter source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_rejects_policy_source_and_promotion_drift() {
+        let (
+            execution_root,
+            source_root,
+            source_manifest,
+            execution_manifest,
+            request,
+            command,
+            obligation,
+            obligation_binding,
+            transcript,
+            stdout_summary,
+            stderr_summary,
+            solver_verdict,
+            nonpromotion,
+        ) = real_command_lane_valid_parts("real-command-drift");
+
+        let mut missing_ack = request.clone();
+        missing_ack.operator_acknowledged = false;
+        assert!(validate_gateway_formal_real_command_lane(
+            &source_manifest,
+            &execution_manifest,
+            &missing_ack,
+            &command,
+            &obligation,
+            &obligation_binding,
+            &transcript,
+            &stdout_summary,
+            &stderr_summary,
+            &solver_verdict,
+            &nonpromotion,
+        )
+        .issues
+        .contains(&GatewayFormalRealCommandLaneIssue::OperatorAcknowledgementMissing));
+
+        let mut unsafe_command = command.clone();
+        unsafe_command.no_shell = false;
+        unsafe_command.inherit_environment = true;
+        unsafe_command.no_stdin = false;
+        unsafe_command.no_network = false;
+        unsafe_command.caller_executable_path_allowed = true;
+        unsafe_command.caller_argv_allowed = true;
+        unsafe_command.argv_template.push("bad;arg".to_owned());
+        assert!(validate_gateway_formal_real_command_lane(
+            &source_manifest,
+            &execution_manifest,
+            &request,
+            &unsafe_command,
+            &obligation,
+            &obligation_binding,
+            &transcript,
+            &stdout_summary,
+            &stderr_summary,
+            &solver_verdict,
+            &nonpromotion,
+        )
+        .issues
+        .contains(&GatewayFormalRealCommandLaneIssue::CommandPolicyMismatch));
+
+        let mut source_drift = execution_manifest.clone();
+        source_drift.creates_level2_evidence = true;
+        assert!(validate_gateway_formal_real_command_lane(
+            &source_manifest,
+            &source_drift,
+            &request,
+            &command,
+            &obligation,
+            &obligation_binding,
+            &transcript,
+            &stdout_summary,
+            &stderr_summary,
+            &solver_verdict,
+            &nonpromotion,
+        )
+        .issues
+        .contains(&GatewayFormalRealCommandLaneIssue::SourceExecutionManifestMismatch));
+
+        let mut transcript_drift = transcript.clone();
+        transcript_drift.creates_accepted_evidence = true;
+        assert!(validate_gateway_formal_real_command_lane(
+            &source_manifest,
+            &execution_manifest,
+            &request,
+            &command,
+            &obligation,
+            &obligation_binding,
+            &transcript_drift,
+            &stdout_summary,
+            &stderr_summary,
+            &solver_verdict,
+            &nonpromotion,
+        )
+        .issues
+        .contains(&GatewayFormalRealCommandLaneIssue::PromotionAttempt));
+
+        fs::remove_dir_all(&execution_root).expect("real command drift execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("real command drift source cleanup succeeds");
     }
 
     fn rewrite_content_and_manifest_digest(output_root: &Path, logical_path: &str, bytes: &[u8]) {

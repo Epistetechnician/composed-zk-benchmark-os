@@ -380,7 +380,10 @@ cargo test --workspace
 
 ## Next Slice
 
-Phase 322 may implement only an inert Rust data model and declared output
-contract for this real SMT command lane. It may not run a real solver command
-until the data model, output grammar, readback drift tests, and source-scan
-exception are complete and reviewed.
+Phase 322 implemented the inert Rust data model and declared output contract
+for this real SMT command lane.
+
+Phase 323 may implement local filesystem materialization and readback for the
+declared `gateway-formal-real-command-lane/*` output contract. It may not run a
+real solver command until the materialized output grammar, readback drift tests,
+and source-scan exception are complete and reviewed.

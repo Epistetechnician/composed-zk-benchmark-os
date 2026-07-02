@@ -1625,6 +1625,24 @@ Evidence Ledger mutation, Level2+ evidence, score-axis population, benchmark
 evidence, semantic-correctness claim, production-readiness claim, SOTA claim,
 breakthrough claim, full-security claim, or authority grant.
 
+Phase 322 implements the inert Rust data model and declared output contract for
+the Phase 321 real formal command lane in `crates/hsai-agent-admission`. It
+adds request metadata, fixed no-shell command descriptor metadata, static
+SMT-LIB2 obligation metadata, obligation binding metadata, bounded stream
+summary metadata, solver verdict labels, checker/execution transcript metadata,
+nonpromotion reporting, validation reporting, an output manifest, exact
+declared `gateway-formal-real-command-lane/*` file and sidecar lists, and an
+in-memory output-contract builder. The focused tests build the contract from
+real Phase 317/319 source manifests and reject missing operator acknowledgement,
+unsafe command policy, source execution manifest drift, and transcript promotion
+attempts. Phase 322 does not materialize the new command-lane bundle, spawn a
+process, execute SMT/Z3/Lean/COBALT/Aeneas/Hax/rust-lean/Coq/TLA+/CBMC/model
+checker tooling, create proof artifacts, promote checker transcripts, promote
+solver certificates, mutate accepted Evidence Ledger state, create Level2+
+evidence, populate score axes, claim semantic correctness, claim production
+readiness, claim SOTA, claim breakthrough status, claim full security, or grant
+authority.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
