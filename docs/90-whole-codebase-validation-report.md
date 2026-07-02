@@ -1534,6 +1534,22 @@ score-axis population, benchmark evidence, global correctness, production
 certification, semantic correctness, production readiness, SOTA, breakthrough,
 full security, or authority to execute a patch.
 
+Phase 316 defines the docs-first HSAI tiny hermetic formal-backend adapter
+contract boundary. It binds the next formal-backend implementation slice to the
+existing Phase 265-314 surfaces, names the first invariant as gateway
+attestation challenge-binding determinism and input sensitivity, lists the
+source anchors and imported `report_data_binding` assumption, defines the
+future adapter request, command descriptor, non-secret fixture input, transcript
+metadata, quarantine, nonpromotion, and implementation exit criteria, and keeps
+the accepted-ledger ceiling explicit through `Level1LocalReplay`. Phase 316
+adds no Rust implementation code, process API, default runner, caller-supplied
+executable path, shell, inherited environment, stdin, network, external repo
+clone, vendored source, Lean/SMT/Z3/COBALT execution, proof artifact, checker
+transcript, solver certificate, accepted evidence, Level2+ evidence,
+score-axis population, benchmark evidence, semantic-correctness claim,
+production-readiness claim, SOTA claim, breakthrough claim, full-security
+claim, or authority grant.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission

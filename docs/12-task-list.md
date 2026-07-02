@@ -7221,6 +7221,34 @@ benchmark evidence, global correctness, production certification, full
 security, semantic-correctness, production-readiness, SOTA, breakthrough, or
 authority to execute a patch.
 
+## Phase 316 HSAI Tiny Hermetic Formal-Backend Adapter Contract Boundary
+
+Status: complete. See
+`docs/316-hsai-tiny-hermetic-formal-backend-adapter-contract-boundary.md`.
+
+Goal: define the docs-first contract that must exist before HSAI can move from
+the Phase 313 fixture-process crossing toward a real tiny formal-backend
+adapter implementation.
+
+Implemented: documented the exact target invariant, source anchors, imported
+`report_data_binding` assumption handling, adapter request fields, direct-process
+command descriptor constraints, non-secret fixture input shape, checker
+transcript metadata contract, quarantine and nonpromotion rejection rules,
+accepted-ledger ceiling, and implementation exit criteria for a later Phase 317
+data-model/quarantine slice.
+
+Validation gate: formatting, HSAI claim-boundary source scan, repo docs/hygiene
+tests, diff hygiene, empty-file hygiene, package-root lint check, and full
+workspace tests.
+
+Anti-goals: Rust implementation code, new process APIs, default runners,
+caller-supplied executable paths, shell execution, inherited environment, stdin,
+network access, external repo clones, vendored source, Lean/SMT/Z3/COBALT/
+Aeneas/Hax/rust-lean/Coq/TLA+/CBMC/model-checker execution, proof artifacts,
+checker transcript creation, solver certificates, accepted evidence, Level2+,
+score axes, benchmark evidence, semantic-correctness, production-readiness,
+SOTA, breakthrough, full-security, or authority claims.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
