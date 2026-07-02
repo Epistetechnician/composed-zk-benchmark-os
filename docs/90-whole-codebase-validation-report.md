@@ -1643,6 +1643,25 @@ evidence, populate score axes, claim semantic correctness, claim production
 readiness, claim SOTA, claim breakthrough status, claim full security, or grant
 authority.
 
+Phase 323 implements local filesystem materialization and readback for the
+Phase 322 real formal command-lane output contract in
+`crates/hsai-agent-admission`. It adds staged writes, SHA-256 sidecars, strict
+declared-file grammar for `gateway-formal-real-command-lane/*`, output-root and
+protected-root checks, symlink rejection, undeclared-file rejection, malformed
+declared JSON rejection, sidecar digest mismatch rejection, manifest semantic
+drift rejection, transcript/checker-transcript consistency checks, bounded
+stdout/stderr summary checks, deterministic redaction report checks,
+solver-verdict checks, nonpromotion-report checks, validation-report checks, and
+nonclaims Markdown checks. Focused tests cover valid materialization/readback,
+stale sidecar rejection, malformed solver-verdict JSON rejection, undeclared
+proof-artifact rejection, and manifest Level2+ promotion drift rejection. Phase
+323 still does not spawn a process, execute SMT/Z3/Lean/COBALT/Aeneas/Hax/
+rust-lean/Coq/TLA+/CBMC/model-checker tooling, create proof artifacts, promote
+checker transcripts, promote solver certificates, mutate accepted Evidence
+Ledger state, create Level2+ evidence, populate score axes, claim semantic
+correctness, claim production readiness, claim SOTA, claim breakthrough status,
+claim full security, or grant authority.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission

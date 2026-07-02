@@ -4421,6 +4421,31 @@ impl GatewayFormalRealCommandLaneSolverVerdict {
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneRedactionReport {
+    pub schema_version: String,
+    pub valid: bool,
+    pub stdout_summary_bounded: bool,
+    pub stderr_summary_bounded: bool,
+    pub credential_looking_value_found: bool,
+    pub secret_looking_value_found: bool,
+    pub raw_solver_trace_found: bool,
+    pub proof_artifact_found: bool,
+    pub checker_transcript_found: bool,
+    pub solver_certificate_found: bool,
+    pub retained_summary_only: bool,
+    pub claim_boundary: String,
+}
+
+impl GatewayFormalRealCommandLaneRedactionReport {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-redaction-report:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GatewayFormalRealCommandLaneTranscript {
     pub schema_version: String,
     pub run_id: String,
@@ -4546,6 +4571,7 @@ pub struct GatewayFormalRealCommandLaneValidationReport {
     pub solver_verdict_digest: Hash,
     pub stdout_summary_digest: Hash,
     pub stderr_summary_digest: Hash,
+    pub redaction_report_digest: Hash,
     pub nonpromotion_report_digest: Hash,
     pub claim_boundary: String,
     pub process_spawned: bool,
@@ -4581,6 +4607,7 @@ pub struct GatewayFormalRealCommandLaneOutputManifest {
     pub solver_verdict_digest: Hash,
     pub stdout_summary_digest: Hash,
     pub stderr_summary_digest: Hash,
+    pub redaction_report_digest: Hash,
     pub nonpromotion_report_digest: Hash,
     pub validation_report_digest: Hash,
     pub backend_id: String,
@@ -4622,6 +4649,40 @@ impl GatewayFormalRealCommandLaneOutputManifest {
 pub struct GatewayFormalRealCommandLaneOutputContract {
     pub manifest: GatewayFormalRealCommandLaneOutputManifest,
     pub validation_report: GatewayFormalRealCommandLaneValidationReport,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct GatewayFormalRealCommandLaneOutputRequest {
+    pub created_at_unix: u64,
+    pub overwrite: bool,
+    pub protected_roots: Vec<PathBuf>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayFormalRealCommandLaneOutputError {
+    InvalidContract(Vec<GatewayFormalRealCommandLaneIssue>),
+    EmptyRunId,
+    EmptyOutputRoot,
+    ProtectedOutputRoot,
+    OutputRootExistsWithoutOverwrite,
+    OutputRootIsFile,
+    OutputRootIsSymlink,
+    BundleFileIsSymlink(String),
+    DeclaredFileTypeMismatch(String),
+    UndeclaredFile(String),
+    DigestMismatch(String),
+    MalformedDeclaredFile(String),
+    ManifestSemanticMismatch,
+    ValidationReportMismatch,
+    TranscriptMismatch,
+    StdoutSummaryMismatch,
+    StderrSummaryMismatch,
+    RedactionReportMismatch,
+    SolverVerdictMismatch,
+    NonpromotionReportMismatch,
+    NonclaimMismatch,
+    Io(String),
+    Serialization(String),
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -18063,6 +18124,8 @@ pub fn build_gateway_formal_real_command_lane_output_contract(
         solver_verdict,
         nonpromotion,
     );
+    let redaction_report =
+        gateway_formal_real_command_lane_redaction_report(stdout_summary, stderr_summary);
     let validation_report = GatewayFormalRealCommandLaneValidationReport {
         schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_OUTPUT_SCHEMA_VERSION.to_owned(),
         run_id: request.run_id.clone(),
@@ -18079,6 +18142,7 @@ pub fn build_gateway_formal_real_command_lane_output_contract(
         solver_verdict_digest: solver_verdict.digest(),
         stdout_summary_digest: stdout_summary.digest(),
         stderr_summary_digest: stderr_summary.digest(),
+        redaction_report_digest: redaction_report.digest(),
         nonpromotion_report_digest: nonpromotion.digest(),
         claim_boundary: gateway_formal_real_command_lane_claim_boundary(),
         process_spawned: false,
@@ -18103,6 +18167,7 @@ pub fn build_gateway_formal_real_command_lane_output_contract(
         solver_verdict_digest: solver_verdict.digest(),
         stdout_summary_digest: stdout_summary.digest(),
         stderr_summary_digest: stderr_summary.digest(),
+        redaction_report_digest: redaction_report.digest(),
         nonpromotion_report_digest: nonpromotion.digest(),
         validation_report_digest: validation_report.digest(),
         backend_id: request.backend_id.clone(),
@@ -18445,7 +18510,9 @@ fn validate_gateway_formal_real_command_lane_transcript(
         || transcript.expected_output_grammar_digest != request.expected_output_grammar_digest
         || transcript.stdout_summary_digest != stdout_summary.digest()
         || transcript.stderr_summary_digest != stderr_summary.digest()
-        || transcript.redaction_report_digest == Hash([0; 32])
+        || transcript.redaction_report_digest
+            != gateway_formal_real_command_lane_redaction_report(stdout_summary, stderr_summary)
+                .digest()
         || transcript.nonpromotion_report_digest != nonpromotion.digest()
         || transcript.process_exit_code_label != "not_run"
         || transcript.timeout
@@ -18499,6 +18566,47 @@ fn validate_gateway_formal_real_command_lane_summary(
     {
         issues.push(GatewayFormalRealCommandLaneIssue::SummaryMismatch);
     }
+}
+
+fn gateway_formal_real_command_lane_redaction_report(
+    stdout_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    stderr_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+) -> GatewayFormalRealCommandLaneRedactionReport {
+    GatewayFormalRealCommandLaneRedactionReport {
+        schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_OUTPUT_SCHEMA_VERSION.to_owned(),
+        valid: stdout_summary.secret_scan_passed && stderr_summary.secret_scan_passed,
+        stdout_summary_bounded: stdout_summary.retained_bytes <= stdout_summary.max_bytes
+            && !stdout_summary.raw_retained
+            && !stdout_summary.raw_solver_trace_retained
+            && !stdout_summary.proof_artifact_retained
+            && !stdout_summary.checker_transcript_retained,
+        stderr_summary_bounded: stderr_summary.retained_bytes <= stderr_summary.max_bytes
+            && !stderr_summary.raw_retained
+            && !stderr_summary.raw_solver_trace_retained
+            && !stderr_summary.proof_artifact_retained
+            && !stderr_summary.checker_transcript_retained,
+        credential_looking_value_found: false,
+        secret_looking_value_found: false,
+        raw_solver_trace_found: false,
+        proof_artifact_found: false,
+        checker_transcript_found: false,
+        solver_certificate_found: false,
+        retained_summary_only: true,
+        claim_boundary: gateway_formal_real_command_lane_claim_boundary(),
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_redaction_report(
+    report: &GatewayFormalRealCommandLaneRedactionReport,
+    stdout_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    stderr_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+) -> Result<(), GatewayFormalRealCommandLaneOutputError> {
+    let expected =
+        gateway_formal_real_command_lane_redaction_report(stdout_summary, stderr_summary);
+    if report != &expected {
+        return Err(GatewayFormalRealCommandLaneOutputError::RedactionReportMismatch);
+    }
+    Ok(())
 }
 
 fn validate_gateway_formal_real_command_lane_solver_verdict(
@@ -18628,6 +18736,823 @@ fn gateway_formal_real_command_lane_declared_file_digests(
         digests.insert(path.to_owned(), digest);
     }
     digests
+}
+
+#[allow(clippy::too_many_arguments)]
+pub fn materialize_gateway_formal_real_command_lane_output_bundle(
+    output_root: &Path,
+    source_adapter_manifest: &GatewayFormalBackendTinyHermeticAdapterOutputManifest,
+    source_execution_manifest: &GatewayFormalBackendTinyHermeticExecutionOutputManifest,
+    request: &GatewayFormalRealCommandLaneRequest,
+    command: &GatewayFormalRealCommandLaneCommandDescriptor,
+    obligation: &GatewayFormalRealCommandLaneObligation,
+    obligation_binding: &GatewayFormalRealCommandLaneObligationBinding,
+    transcript: &GatewayFormalRealCommandLaneTranscript,
+    stdout_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    stderr_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    solver_verdict: &GatewayFormalRealCommandLaneSolverVerdict,
+    nonpromotion: &GatewayFormalRealCommandLaneNonpromotionReport,
+    output_request: &GatewayFormalRealCommandLaneOutputRequest,
+) -> Result<GatewayFormalRealCommandLaneOutputManifest, GatewayFormalRealCommandLaneOutputError> {
+    validate_gateway_formal_real_command_lane_output_request(
+        output_root,
+        source_adapter_manifest,
+        source_execution_manifest,
+        request,
+        command,
+        obligation,
+        obligation_binding,
+        transcript,
+        stdout_summary,
+        stderr_summary,
+        solver_verdict,
+        nonpromotion,
+        output_request,
+    )?;
+    let staging_root =
+        gateway_formal_real_command_lane_staging_root_for(output_root, &request.run_id)?;
+    if staging_root.exists() {
+        remove_gateway_formal_real_command_lane_dir_all_checked(&staging_root)?;
+    }
+    fs::create_dir_all(staging_root.join("gateway-formal-real-command-lane"))
+        .map_err(gateway_formal_real_command_lane_io_error)?;
+
+    let files = build_gateway_formal_real_command_lane_bundle_files(
+        output_request.created_at_unix,
+        source_adapter_manifest,
+        source_execution_manifest,
+        request,
+        command,
+        obligation,
+        obligation_binding,
+        transcript,
+        stdout_summary,
+        stderr_summary,
+        solver_verdict,
+        nonpromotion,
+    )?;
+    for (logical_path, bytes) in &files {
+        let target = staging_root.join(logical_path);
+        if let Some(parent) = target.parent() {
+            fs::create_dir_all(parent).map_err(gateway_formal_real_command_lane_io_error)?;
+        }
+        fs::write(&target, bytes).map_err(gateway_formal_real_command_lane_io_error)?;
+        fs::write(
+            sidecar_path(&target),
+            hash_hex(hash_bytes(bytes)).into_bytes(),
+        )
+        .map_err(gateway_formal_real_command_lane_io_error)?;
+    }
+
+    if output_root.exists() {
+        if !output_request.overwrite {
+            remove_gateway_formal_real_command_lane_dir_all_checked(&staging_root)?;
+            return Err(GatewayFormalRealCommandLaneOutputError::OutputRootExistsWithoutOverwrite);
+        }
+        remove_gateway_formal_real_command_lane_dir_all_checked(output_root)?;
+    }
+    fs::rename(&staging_root, output_root).map_err(gateway_formal_real_command_lane_io_error)?;
+    read_gateway_formal_real_command_lane_output_bundle(output_root)
+}
+
+pub fn read_gateway_formal_real_command_lane_output_bundle(
+    output_root: &Path,
+) -> Result<GatewayFormalRealCommandLaneOutputManifest, GatewayFormalRealCommandLaneOutputError> {
+    let output_metadata =
+        fs::symlink_metadata(output_root).map_err(gateway_formal_real_command_lane_io_error)?;
+    if output_metadata.file_type().is_symlink() {
+        return Err(GatewayFormalRealCommandLaneOutputError::OutputRootIsSymlink);
+    }
+    if !output_metadata.is_dir() {
+        return Err(GatewayFormalRealCommandLaneOutputError::OutputRootIsFile);
+    }
+    let bundle_dir = output_root.join("gateway-formal-real-command-lane");
+    let bundle_metadata =
+        fs::symlink_metadata(&bundle_dir).map_err(gateway_formal_real_command_lane_io_error)?;
+    if bundle_metadata.file_type().is_symlink() {
+        return Err(
+            GatewayFormalRealCommandLaneOutputError::BundleFileIsSymlink(
+                "gateway-formal-real-command-lane".to_owned(),
+            ),
+        );
+    }
+    if !bundle_metadata.is_dir() {
+        return Err(
+            GatewayFormalRealCommandLaneOutputError::DeclaredFileTypeMismatch(
+                "gateway-formal-real-command-lane".to_owned(),
+            ),
+        );
+    }
+
+    reject_undeclared_gateway_formal_real_command_lane_files(output_root)?;
+    let mut files = BTreeMap::new();
+    for logical_path in GATEWAY_FORMAL_REAL_COMMAND_LANE_DECLARED_FILES {
+        let path = output_root.join(logical_path);
+        let metadata =
+            fs::symlink_metadata(&path).map_err(gateway_formal_real_command_lane_io_error)?;
+        if metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalRealCommandLaneOutputError::BundleFileIsSymlink(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        if !metadata.is_file() {
+            return Err(
+                GatewayFormalRealCommandLaneOutputError::DeclaredFileTypeMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        let sidecar = sidecar_path(&path);
+        let sidecar_metadata =
+            fs::symlink_metadata(&sidecar).map_err(gateway_formal_real_command_lane_io_error)?;
+        if sidecar_metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalRealCommandLaneOutputError::BundleFileIsSymlink(format!(
+                    "{logical_path}.sha256"
+                )),
+            );
+        }
+        if !sidecar_metadata.is_file() {
+            return Err(
+                GatewayFormalRealCommandLaneOutputError::DeclaredFileTypeMismatch(format!(
+                    "{logical_path}.sha256"
+                )),
+            );
+        }
+        let bytes = fs::read(&path).map_err(gateway_formal_real_command_lane_io_error)?;
+        let expected_hash =
+            fs::read_to_string(&sidecar).map_err(gateway_formal_real_command_lane_io_error)?;
+        if expected_hash.trim() != hash_hex(hash_bytes(&bytes)) {
+            return Err(GatewayFormalRealCommandLaneOutputError::DigestMismatch(
+                (*logical_path).to_owned(),
+            ));
+        }
+        files.insert((*logical_path).to_owned(), bytes);
+    }
+    validate_gateway_formal_real_command_lane_bundle_semantics(&files)
+}
+
+#[allow(clippy::too_many_arguments)]
+fn validate_gateway_formal_real_command_lane_output_request(
+    output_root: &Path,
+    source_adapter_manifest: &GatewayFormalBackendTinyHermeticAdapterOutputManifest,
+    source_execution_manifest: &GatewayFormalBackendTinyHermeticExecutionOutputManifest,
+    request: &GatewayFormalRealCommandLaneRequest,
+    command: &GatewayFormalRealCommandLaneCommandDescriptor,
+    obligation: &GatewayFormalRealCommandLaneObligation,
+    obligation_binding: &GatewayFormalRealCommandLaneObligationBinding,
+    transcript: &GatewayFormalRealCommandLaneTranscript,
+    stdout_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    stderr_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    solver_verdict: &GatewayFormalRealCommandLaneSolverVerdict,
+    nonpromotion: &GatewayFormalRealCommandLaneNonpromotionReport,
+    output_request: &GatewayFormalRealCommandLaneOutputRequest,
+) -> Result<(), GatewayFormalRealCommandLaneOutputError> {
+    if !is_single_segment_id(&request.run_id) {
+        return Err(GatewayFormalRealCommandLaneOutputError::EmptyRunId);
+    }
+    let validation = validate_gateway_formal_real_command_lane(
+        source_adapter_manifest,
+        source_execution_manifest,
+        request,
+        command,
+        obligation,
+        obligation_binding,
+        transcript,
+        stdout_summary,
+        stderr_summary,
+        solver_verdict,
+        nonpromotion,
+    );
+    if !validation.valid {
+        return Err(GatewayFormalRealCommandLaneOutputError::InvalidContract(
+            validation.issues,
+        ));
+    }
+    validate_gateway_formal_real_command_lane_output_root(
+        output_root,
+        &output_request.protected_roots,
+        output_request.overwrite,
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+fn build_gateway_formal_real_command_lane_bundle_files(
+    created_at_unix: u64,
+    source_adapter_manifest: &GatewayFormalBackendTinyHermeticAdapterOutputManifest,
+    source_execution_manifest: &GatewayFormalBackendTinyHermeticExecutionOutputManifest,
+    request: &GatewayFormalRealCommandLaneRequest,
+    command: &GatewayFormalRealCommandLaneCommandDescriptor,
+    obligation: &GatewayFormalRealCommandLaneObligation,
+    obligation_binding: &GatewayFormalRealCommandLaneObligationBinding,
+    transcript: &GatewayFormalRealCommandLaneTranscript,
+    stdout_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    stderr_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    solver_verdict: &GatewayFormalRealCommandLaneSolverVerdict,
+    nonpromotion: &GatewayFormalRealCommandLaneNonpromotionReport,
+) -> Result<BTreeMap<String, Vec<u8>>, GatewayFormalRealCommandLaneOutputError> {
+    let contract = build_gateway_formal_real_command_lane_output_contract(
+        created_at_unix,
+        source_adapter_manifest,
+        source_execution_manifest,
+        request,
+        command,
+        obligation,
+        obligation_binding,
+        transcript,
+        stdout_summary,
+        stderr_summary,
+        solver_verdict,
+        nonpromotion,
+    );
+    if !contract.validation_report.valid {
+        return Err(GatewayFormalRealCommandLaneOutputError::InvalidContract(
+            validate_gateway_formal_real_command_lane(
+                source_adapter_manifest,
+                source_execution_manifest,
+                request,
+                command,
+                obligation,
+                obligation_binding,
+                transcript,
+                stdout_summary,
+                stderr_summary,
+                solver_verdict,
+                nonpromotion,
+            )
+            .issues,
+        ));
+    }
+    let redaction_report =
+        gateway_formal_real_command_lane_redaction_report(stdout_summary, stderr_summary);
+    let nonclaims_md =
+        gateway_formal_real_command_lane_nonclaims_markdown(&request.required_nonclaims);
+    let mut files = BTreeMap::from([
+        (
+            "gateway-formal-real-command-lane/source-execution-manifest.json".to_owned(),
+            serde_json::to_vec_pretty(source_execution_manifest)
+                .map_err(gateway_formal_real_command_lane_serde_error)?,
+        ),
+        (
+            "gateway-formal-real-command-lane/command-request.json".to_owned(),
+            serde_json::to_vec_pretty(request)
+                .map_err(gateway_formal_real_command_lane_serde_error)?,
+        ),
+        (
+            "gateway-formal-real-command-lane/command-descriptor.json".to_owned(),
+            serde_json::to_vec_pretty(command)
+                .map_err(gateway_formal_real_command_lane_serde_error)?,
+        ),
+        (
+            "gateway-formal-real-command-lane/obligation.smt2".to_owned(),
+            obligation.smtlib2_text.as_bytes().to_vec(),
+        ),
+        (
+            "gateway-formal-real-command-lane/obligation-binding.json".to_owned(),
+            serde_json::to_vec_pretty(obligation_binding)
+                .map_err(gateway_formal_real_command_lane_serde_error)?,
+        ),
+        (
+            "gateway-formal-real-command-lane/execution-transcript.json".to_owned(),
+            serde_json::to_vec_pretty(transcript)
+                .map_err(gateway_formal_real_command_lane_serde_error)?,
+        ),
+        (
+            "gateway-formal-real-command-lane/stdout-summary.json".to_owned(),
+            serde_json::to_vec_pretty(stdout_summary)
+                .map_err(gateway_formal_real_command_lane_serde_error)?,
+        ),
+        (
+            "gateway-formal-real-command-lane/stderr-summary.json".to_owned(),
+            serde_json::to_vec_pretty(stderr_summary)
+                .map_err(gateway_formal_real_command_lane_serde_error)?,
+        ),
+        (
+            "gateway-formal-real-command-lane/solver-verdict.json".to_owned(),
+            serde_json::to_vec_pretty(solver_verdict)
+                .map_err(gateway_formal_real_command_lane_serde_error)?,
+        ),
+        (
+            "gateway-formal-real-command-lane/checker-transcript.json".to_owned(),
+            serde_json::to_vec_pretty(transcript)
+                .map_err(gateway_formal_real_command_lane_serde_error)?,
+        ),
+        (
+            "gateway-formal-real-command-lane/redaction-report.json".to_owned(),
+            serde_json::to_vec_pretty(&redaction_report)
+                .map_err(gateway_formal_real_command_lane_serde_error)?,
+        ),
+        (
+            "gateway-formal-real-command-lane/nonpromotion-report.json".to_owned(),
+            serde_json::to_vec_pretty(nonpromotion)
+                .map_err(gateway_formal_real_command_lane_serde_error)?,
+        ),
+        (
+            "gateway-formal-real-command-lane/nonclaims.md".to_owned(),
+            nonclaims_md.into_bytes(),
+        ),
+        (
+            "gateway-formal-real-command-lane/validation-report.json".to_owned(),
+            serde_json::to_vec_pretty(&contract.validation_report)
+                .map_err(gateway_formal_real_command_lane_serde_error)?,
+        ),
+    ]);
+    files.insert(
+        "gateway-formal-real-command-lane/manifest.json".to_owned(),
+        serde_json::to_vec_pretty(&contract.manifest)
+            .map_err(gateway_formal_real_command_lane_serde_error)?,
+    );
+    Ok(files)
+}
+
+fn validate_gateway_formal_real_command_lane_bundle_semantics(
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<GatewayFormalRealCommandLaneOutputManifest, GatewayFormalRealCommandLaneOutputError> {
+    let manifest: GatewayFormalRealCommandLaneOutputManifest =
+        parse_gateway_formal_real_command_lane_declared_json(
+            files,
+            "gateway-formal-real-command-lane/manifest.json",
+        )?;
+    let source_execution_manifest: GatewayFormalBackendTinyHermeticExecutionOutputManifest =
+        parse_gateway_formal_real_command_lane_declared_json(
+            files,
+            "gateway-formal-real-command-lane/source-execution-manifest.json",
+        )?;
+    let request: GatewayFormalRealCommandLaneRequest =
+        parse_gateway_formal_real_command_lane_declared_json(
+            files,
+            "gateway-formal-real-command-lane/command-request.json",
+        )?;
+    let command: GatewayFormalRealCommandLaneCommandDescriptor =
+        parse_gateway_formal_real_command_lane_declared_json(
+            files,
+            "gateway-formal-real-command-lane/command-descriptor.json",
+        )?;
+    let obligation_smt2 = String::from_utf8(
+        declared_gateway_formal_real_command_lane_bytes(
+            files,
+            "gateway-formal-real-command-lane/obligation.smt2",
+        )?
+        .to_vec(),
+    )
+    .map_err(|_| {
+        GatewayFormalRealCommandLaneOutputError::MalformedDeclaredFile(
+            "gateway-formal-real-command-lane/obligation.smt2".to_owned(),
+        )
+    })?;
+    let obligation_binding: GatewayFormalRealCommandLaneObligationBinding =
+        parse_gateway_formal_real_command_lane_declared_json(
+            files,
+            "gateway-formal-real-command-lane/obligation-binding.json",
+        )?;
+    let transcript: GatewayFormalRealCommandLaneTranscript =
+        parse_gateway_formal_real_command_lane_declared_json(
+            files,
+            "gateway-formal-real-command-lane/execution-transcript.json",
+        )?;
+    let checker_transcript: GatewayFormalRealCommandLaneTranscript =
+        parse_gateway_formal_real_command_lane_declared_json(
+            files,
+            "gateway-formal-real-command-lane/checker-transcript.json",
+        )?;
+    let stdout_summary: GatewayFormalRealCommandLaneBoundedSummary =
+        parse_gateway_formal_real_command_lane_declared_json(
+            files,
+            "gateway-formal-real-command-lane/stdout-summary.json",
+        )?;
+    let stderr_summary: GatewayFormalRealCommandLaneBoundedSummary =
+        parse_gateway_formal_real_command_lane_declared_json(
+            files,
+            "gateway-formal-real-command-lane/stderr-summary.json",
+        )?;
+    let solver_verdict: GatewayFormalRealCommandLaneSolverVerdict =
+        parse_gateway_formal_real_command_lane_declared_json(
+            files,
+            "gateway-formal-real-command-lane/solver-verdict.json",
+        )?;
+    let redaction_report: GatewayFormalRealCommandLaneRedactionReport =
+        parse_gateway_formal_real_command_lane_declared_json(
+            files,
+            "gateway-formal-real-command-lane/redaction-report.json",
+        )?;
+    let nonpromotion: GatewayFormalRealCommandLaneNonpromotionReport =
+        parse_gateway_formal_real_command_lane_declared_json(
+            files,
+            "gateway-formal-real-command-lane/nonpromotion-report.json",
+        )?;
+    let validation_report: GatewayFormalRealCommandLaneValidationReport =
+        parse_gateway_formal_real_command_lane_declared_json(
+            files,
+            "gateway-formal-real-command-lane/validation-report.json",
+        )?;
+
+    validate_gateway_formal_real_command_lane_readback_manifest(
+        &manifest,
+        &source_execution_manifest,
+        &request,
+        &command,
+        &obligation_smt2,
+        &obligation_binding,
+        &transcript,
+        &checker_transcript,
+        &stdout_summary,
+        &stderr_summary,
+        &solver_verdict,
+        &redaction_report,
+        &nonpromotion,
+        &validation_report,
+        files,
+    )?;
+    Ok(manifest)
+}
+
+#[allow(clippy::too_many_arguments)]
+fn validate_gateway_formal_real_command_lane_readback_manifest(
+    manifest: &GatewayFormalRealCommandLaneOutputManifest,
+    source_execution_manifest: &GatewayFormalBackendTinyHermeticExecutionOutputManifest,
+    request: &GatewayFormalRealCommandLaneRequest,
+    command: &GatewayFormalRealCommandLaneCommandDescriptor,
+    obligation_smt2: &str,
+    obligation_binding: &GatewayFormalRealCommandLaneObligationBinding,
+    transcript: &GatewayFormalRealCommandLaneTranscript,
+    checker_transcript: &GatewayFormalRealCommandLaneTranscript,
+    stdout_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    stderr_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    solver_verdict: &GatewayFormalRealCommandLaneSolverVerdict,
+    redaction_report: &GatewayFormalRealCommandLaneRedactionReport,
+    nonpromotion: &GatewayFormalRealCommandLaneNonpromotionReport,
+    validation_report: &GatewayFormalRealCommandLaneValidationReport,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<(), GatewayFormalRealCommandLaneOutputError> {
+    let expected_digest_paths: BTreeSet<String> = GATEWAY_FORMAL_REAL_COMMAND_LANE_DECLARED_FILES
+        .iter()
+        .filter(|path| **path != "gateway-formal-real-command-lane/manifest.json")
+        .map(|path| (*path).to_owned())
+        .collect();
+    let actual_digest_paths: BTreeSet<String> =
+        manifest.declared_file_digests.keys().cloned().collect();
+    if manifest.schema_version != GATEWAY_FORMAL_REAL_COMMAND_LANE_OUTPUT_SCHEMA_VERSION
+        || manifest.state_slice != GATEWAY_FORMAL_REAL_COMMAND_LANE_STATE_SLICE
+        || manifest.run_id != request.run_id
+        || manifest.request_digest != request.digest()
+        || manifest.source_execution_manifest_digest != source_execution_manifest.digest()
+        || manifest.command_descriptor_digest != command.digest()
+        || manifest.obligation_digest != request.obligation_digest
+        || manifest.obligation_binding_digest != obligation_binding.digest()
+        || manifest.transcript_digest != transcript.digest()
+        || manifest.solver_verdict_digest != solver_verdict.digest()
+        || manifest.stdout_summary_digest != stdout_summary.digest()
+        || manifest.stderr_summary_digest != stderr_summary.digest()
+        || manifest.redaction_report_digest != redaction_report.digest()
+        || manifest.nonpromotion_report_digest != nonpromotion.digest()
+        || manifest.validation_report_digest != validation_report.digest()
+        || manifest.backend_id != request.backend_id
+        || manifest.backend_mode != request.backend_mode
+        || manifest.property_id != request.property_id
+        || manifest.declared_files != gateway_formal_real_command_lane_declared_files()
+        || manifest.declared_sidecars != gateway_formal_real_command_lane_declared_sidecars()
+        || actual_digest_paths != expected_digest_paths
+        || manifest.claim_boundary != gateway_formal_real_command_lane_claim_boundary()
+        || manifest.process_spawned
+        || manifest.backend_executed
+        || manifest.proof_artifact_created
+        || manifest.checker_transcript_created
+        || manifest.solver_certificate_created
+        || manifest.creates_accepted_evidence
+        || manifest.creates_level2_evidence
+        || manifest.populates_score_axes
+        || manifest.semantic_correctness_claimed
+        || manifest.production_readiness_claimed
+        || manifest.sota_claimed
+        || manifest.breakthrough_claimed
+        || manifest.full_security_claimed
+        || manifest.grants_authority
+        || manifest.raw_logs_retained
+        || manifest.raw_provider_response_retained
+        || manifest.nonclaims != request.required_nonclaims
+    {
+        return Err(GatewayFormalRealCommandLaneOutputError::ManifestSemanticMismatch);
+    }
+    for (logical_path, expected_digest) in &manifest.declared_file_digests {
+        let actual = match logical_path.as_str() {
+            "gateway-formal-real-command-lane/source-execution-manifest.json" => hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-declared-source-execution-manifest:v1",
+                source_execution_manifest,
+            ),
+            "gateway-formal-real-command-lane/command-request.json" => request.digest(),
+            "gateway-formal-real-command-lane/command-descriptor.json" => command.digest(),
+            "gateway-formal-real-command-lane/obligation.smt2" => {
+                hash_bytes(obligation_smt2.as_bytes())
+            }
+            "gateway-formal-real-command-lane/obligation-binding.json" => {
+                obligation_binding.digest()
+            }
+            "gateway-formal-real-command-lane/execution-transcript.json" => transcript.digest(),
+            "gateway-formal-real-command-lane/stdout-summary.json" => stdout_summary.digest(),
+            "gateway-formal-real-command-lane/stderr-summary.json" => stderr_summary.digest(),
+            "gateway-formal-real-command-lane/solver-verdict.json" => solver_verdict.digest(),
+            "gateway-formal-real-command-lane/checker-transcript.json" => {
+                checker_transcript.digest()
+            }
+            "gateway-formal-real-command-lane/redaction-report.json" => redaction_report.digest(),
+            "gateway-formal-real-command-lane/nonpromotion-report.json" => nonpromotion.digest(),
+            "gateway-formal-real-command-lane/nonclaims.md" => hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-nonclaims:v1",
+                &request.required_nonclaims,
+            ),
+            "gateway-formal-real-command-lane/validation-report.json" => {
+                validation_report.digest()
+            }
+            _ => return Err(GatewayFormalRealCommandLaneOutputError::ManifestSemanticMismatch),
+        };
+        if actual != *expected_digest {
+            return Err(GatewayFormalRealCommandLaneOutputError::ManifestSemanticMismatch);
+        }
+    }
+    if checker_transcript != transcript {
+        return Err(GatewayFormalRealCommandLaneOutputError::TranscriptMismatch);
+    }
+    if transcript.redaction_report_digest != redaction_report.digest()
+        || transcript.stdout_summary_digest != stdout_summary.digest()
+        || transcript.stderr_summary_digest != stderr_summary.digest()
+        || transcript.nonpromotion_report_digest != nonpromotion.digest()
+        || transcript.solver_verdict_label != solver_verdict.solver_verdict_label
+    {
+        return Err(GatewayFormalRealCommandLaneOutputError::TranscriptMismatch);
+    }
+    validate_gateway_formal_real_command_lane_summary_readback(stdout_summary, "stdout")?;
+    validate_gateway_formal_real_command_lane_summary_readback(stderr_summary, "stderr")?;
+    validate_gateway_formal_real_command_lane_redaction_report(
+        redaction_report,
+        stdout_summary,
+        stderr_summary,
+    )?;
+    validate_gateway_formal_real_command_lane_solver_verdict_readback(solver_verdict, request)?;
+    validate_gateway_formal_real_command_lane_nonpromotion_readback(nonpromotion)?;
+    validate_gateway_formal_real_command_lane_validation_report_readback(
+        validation_report,
+        manifest,
+        request,
+        source_execution_manifest,
+        command,
+        obligation_binding,
+        transcript,
+        solver_verdict,
+        stdout_summary,
+        stderr_summary,
+        redaction_report,
+        nonpromotion,
+    )?;
+    let nonclaims = declared_gateway_formal_real_command_lane_bytes(
+        files,
+        "gateway-formal-real-command-lane/nonclaims.md",
+    )?;
+    if nonclaims
+        != gateway_formal_real_command_lane_nonclaims_markdown(&request.required_nonclaims)
+            .as_bytes()
+    {
+        return Err(GatewayFormalRealCommandLaneOutputError::NonclaimMismatch);
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_real_command_lane_summary_readback(
+    summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    stream_label: &str,
+) -> Result<(), GatewayFormalRealCommandLaneOutputError> {
+    let mut issues = Vec::new();
+    validate_gateway_formal_real_command_lane_summary(summary, stream_label, &mut issues);
+    if issues.is_empty() {
+        Ok(())
+    } else if stream_label == "stdout" {
+        Err(GatewayFormalRealCommandLaneOutputError::StdoutSummaryMismatch)
+    } else {
+        Err(GatewayFormalRealCommandLaneOutputError::StderrSummaryMismatch)
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_solver_verdict_readback(
+    verdict: &GatewayFormalRealCommandLaneSolverVerdict,
+    request: &GatewayFormalRealCommandLaneRequest,
+) -> Result<(), GatewayFormalRealCommandLaneOutputError> {
+    let mut issues = Vec::new();
+    validate_gateway_formal_real_command_lane_solver_verdict(verdict, request, &mut issues);
+    if issues.is_empty() {
+        Ok(())
+    } else {
+        Err(GatewayFormalRealCommandLaneOutputError::SolverVerdictMismatch)
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_nonpromotion_readback(
+    nonpromotion: &GatewayFormalRealCommandLaneNonpromotionReport,
+) -> Result<(), GatewayFormalRealCommandLaneOutputError> {
+    let mut issues = Vec::new();
+    validate_gateway_formal_real_command_lane_nonpromotion(nonpromotion, &mut issues);
+    if issues.is_empty() {
+        Ok(())
+    } else {
+        Err(GatewayFormalRealCommandLaneOutputError::NonpromotionReportMismatch)
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn validate_gateway_formal_real_command_lane_validation_report_readback(
+    report: &GatewayFormalRealCommandLaneValidationReport,
+    manifest: &GatewayFormalRealCommandLaneOutputManifest,
+    request: &GatewayFormalRealCommandLaneRequest,
+    source_execution_manifest: &GatewayFormalBackendTinyHermeticExecutionOutputManifest,
+    command: &GatewayFormalRealCommandLaneCommandDescriptor,
+    obligation_binding: &GatewayFormalRealCommandLaneObligationBinding,
+    transcript: &GatewayFormalRealCommandLaneTranscript,
+    solver_verdict: &GatewayFormalRealCommandLaneSolverVerdict,
+    stdout_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    stderr_summary: &GatewayFormalRealCommandLaneBoundedSummary,
+    redaction_report: &GatewayFormalRealCommandLaneRedactionReport,
+    nonpromotion: &GatewayFormalRealCommandLaneNonpromotionReport,
+) -> Result<(), GatewayFormalRealCommandLaneOutputError> {
+    let expected = GatewayFormalRealCommandLaneValidationReport {
+        schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_OUTPUT_SCHEMA_VERSION.to_owned(),
+        run_id: manifest.run_id.clone(),
+        valid: true,
+        issue_count: 0,
+        checked_files: gateway_formal_real_command_lane_declared_files(),
+        request_digest: request.digest(),
+        source_adapter_manifest_digest: request.source_adapter_manifest_digest,
+        source_execution_manifest_digest: source_execution_manifest.digest(),
+        command_descriptor_digest: command.digest(),
+        obligation_digest: request.obligation_digest,
+        obligation_binding_digest: obligation_binding.digest(),
+        transcript_digest: transcript.digest(),
+        solver_verdict_digest: solver_verdict.digest(),
+        stdout_summary_digest: stdout_summary.digest(),
+        stderr_summary_digest: stderr_summary.digest(),
+        redaction_report_digest: redaction_report.digest(),
+        nonpromotion_report_digest: nonpromotion.digest(),
+        claim_boundary: gateway_formal_real_command_lane_claim_boundary(),
+        process_spawned: false,
+        backend_executed: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        grants_authority: false,
+    };
+    if report != &expected {
+        return Err(GatewayFormalRealCommandLaneOutputError::ValidationReportMismatch);
+    }
+    Ok(())
+}
+
+fn declared_gateway_formal_real_command_lane_bytes<'a>(
+    files: &'a BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<&'a [u8], GatewayFormalRealCommandLaneOutputError> {
+    files.get(logical_path).map(Vec::as_slice).ok_or_else(|| {
+        GatewayFormalRealCommandLaneOutputError::Io(format!(
+            "declared file missing: {logical_path}"
+        ))
+    })
+}
+
+fn parse_gateway_formal_real_command_lane_declared_json<
+    T: for<'de> Deserialize<'de> + Serialize,
+>(
+    files: &BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<T, GatewayFormalRealCommandLaneOutputError> {
+    let bytes = declared_gateway_formal_real_command_lane_bytes(files, logical_path)?;
+    let original = parse_json_value_rejecting_duplicate_keys(bytes).map_err(|_| {
+        GatewayFormalRealCommandLaneOutputError::MalformedDeclaredFile(logical_path.to_owned())
+    })?;
+    let parsed: T = serde_json::from_value(original.clone()).map_err(|_| {
+        GatewayFormalRealCommandLaneOutputError::MalformedDeclaredFile(logical_path.to_owned())
+    })?;
+    let canonical =
+        serde_json::to_value(&parsed).map_err(gateway_formal_real_command_lane_serde_error)?;
+    if canonical != original {
+        return Err(
+            GatewayFormalRealCommandLaneOutputError::MalformedDeclaredFile(logical_path.to_owned()),
+        );
+    }
+    Ok(parsed)
+}
+
+fn gateway_formal_real_command_lane_nonclaims_markdown(
+    nonclaims: &BTreeSet<NonClaimLabel>,
+) -> String {
+    let mut out = String::from("# Gateway Real Formal Command Lane Non-Claims\n\n");
+    for nonclaim in nonclaims {
+        out.push_str("- ");
+        out.push_str(&nonclaim.0);
+        out.push('\n');
+    }
+    out
+}
+
+fn reject_undeclared_gateway_formal_real_command_lane_files(
+    output_root: &Path,
+) -> Result<(), GatewayFormalRealCommandLaneOutputError> {
+    let mut declared: BTreeSet<String> = GATEWAY_FORMAL_REAL_COMMAND_LANE_DECLARED_FILES
+        .iter()
+        .chain(GATEWAY_FORMAL_REAL_COMMAND_LANE_DECLARED_SIDECARS.iter())
+        .map(|value| (*value).to_owned())
+        .collect();
+    let bundle_dir = output_root.join("gateway-formal-real-command-lane");
+    for entry in fs::read_dir(&bundle_dir).map_err(gateway_formal_real_command_lane_io_error)? {
+        let entry = entry.map_err(gateway_formal_real_command_lane_io_error)?;
+        let logical_path = entry
+            .path()
+            .strip_prefix(output_root)
+            .map_err(|error| GatewayFormalRealCommandLaneOutputError::Io(error.to_string()))?
+            .to_string_lossy()
+            .replace('\\', "/");
+        if !declared.remove(&logical_path) {
+            return Err(GatewayFormalRealCommandLaneOutputError::UndeclaredFile(
+                logical_path,
+            ));
+        }
+    }
+    if let Some(missing) = declared.into_iter().next() {
+        return Err(GatewayFormalRealCommandLaneOutputError::Io(format!(
+            "declared file missing: {missing}"
+        )));
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_real_command_lane_output_root(
+    output_root: &Path,
+    protected_roots: &[PathBuf],
+    overwrite: bool,
+) -> Result<(), GatewayFormalRealCommandLaneOutputError> {
+    match validate_output_root(output_root, protected_roots, overwrite) {
+        Ok(()) => Ok(()),
+        Err(AdmissionJournalMaterializationError::EmptyOutputRoot) => {
+            Err(GatewayFormalRealCommandLaneOutputError::EmptyOutputRoot)
+        }
+        Err(AdmissionJournalMaterializationError::ProtectedOutputRoot) => {
+            Err(GatewayFormalRealCommandLaneOutputError::ProtectedOutputRoot)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootExistsWithoutOverwrite) => {
+            Err(GatewayFormalRealCommandLaneOutputError::OutputRootExistsWithoutOverwrite)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootIsFile) => {
+            Err(GatewayFormalRealCommandLaneOutputError::OutputRootIsFile)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootIsSymlink) => {
+            Err(GatewayFormalRealCommandLaneOutputError::OutputRootIsSymlink)
+        }
+        Err(AdmissionJournalMaterializationError::Io(error)) => {
+            Err(GatewayFormalRealCommandLaneOutputError::Io(error))
+        }
+        Err(other) => Err(GatewayFormalRealCommandLaneOutputError::Io(format!(
+            "{other:?}"
+        ))),
+    }
+}
+
+fn gateway_formal_real_command_lane_staging_root_for(
+    output_root: &Path,
+    run_id: &str,
+) -> Result<PathBuf, GatewayFormalRealCommandLaneOutputError> {
+    let parent = output_root
+        .parent()
+        .ok_or(GatewayFormalRealCommandLaneOutputError::EmptyOutputRoot)?;
+    let name = output_root
+        .file_name()
+        .map(|value| value.to_string_lossy().into_owned())
+        .ok_or(GatewayFormalRealCommandLaneOutputError::EmptyOutputRoot)?;
+    Ok(parent.join(format!(".{name}.{run_id}.staging")))
+}
+
+fn remove_gateway_formal_real_command_lane_dir_all_checked(
+    path: &Path,
+) -> Result<(), GatewayFormalRealCommandLaneOutputError> {
+    if !path.exists() {
+        return Ok(());
+    }
+    if fs::symlink_metadata(path)
+        .map_err(gateway_formal_real_command_lane_io_error)?
+        .file_type()
+        .is_symlink()
+    {
+        return Err(GatewayFormalRealCommandLaneOutputError::OutputRootIsSymlink);
+    }
+    fs::remove_dir_all(path).map_err(gateway_formal_real_command_lane_io_error)
+}
+
+fn gateway_formal_real_command_lane_io_error(
+    error: io::Error,
+) -> GatewayFormalRealCommandLaneOutputError {
+    GatewayFormalRealCommandLaneOutputError::Io(error.to_string())
+}
+
+fn gateway_formal_real_command_lane_serde_error(
+    error: serde_json::Error,
+) -> GatewayFormalRealCommandLaneOutputError {
+    GatewayFormalRealCommandLaneOutputError::Serialization(error.to_string())
 }
 
 fn build_gateway_formal_backend_hermetic_fixture_runner_bundle_files(
@@ -28110,6 +29035,8 @@ mod tests {
             semantic_correctness_claimed: false,
             claim_boundary: gateway_formal_real_command_lane_claim_boundary(),
         };
+        let redaction_report =
+            gateway_formal_real_command_lane_redaction_report(&stdout_summary, &stderr_summary);
         let nonpromotion = GatewayFormalRealCommandLaneNonpromotionReport {
             proof_artifact_created: false,
             checker_transcript_created: false,
@@ -28140,7 +29067,7 @@ mod tests {
             expected_output_grammar_digest: command_request.expected_output_grammar_digest,
             stdout_summary_digest: stdout_summary.digest(),
             stderr_summary_digest: stderr_summary.digest(),
-            redaction_report_digest: Hash([72; 32]),
+            redaction_report_digest: redaction_report.digest(),
             nonpromotion_report_digest: nonpromotion.digest(),
             process_exit_code_label: "not_run".to_owned(),
             timeout: false,
@@ -28181,6 +29108,19 @@ mod tests {
             solver_verdict,
             nonpromotion,
         )
+    }
+
+    fn real_command_lane_output_request(
+        output_root: &Path,
+    ) -> GatewayFormalRealCommandLaneOutputRequest {
+        GatewayFormalRealCommandLaneOutputRequest {
+            created_at_unix: 1_800_000_323,
+            overwrite: false,
+            protected_roots: vec![output_root
+                .parent()
+                .expect("temp output root has a parent")
+                .join("protected-repo")],
+        }
     }
 
     #[test]
@@ -28359,6 +29299,277 @@ mod tests {
 
         fs::remove_dir_all(&execution_root).expect("real command drift execution cleanup succeeds");
         fs::remove_dir_all(&source_root).expect("real command drift source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_output_materializes_and_reads_back() {
+        let (
+            execution_root,
+            source_root,
+            source_manifest,
+            execution_manifest,
+            request,
+            command,
+            obligation,
+            obligation_binding,
+            transcript,
+            stdout_summary,
+            stderr_summary,
+            solver_verdict,
+            nonpromotion,
+        ) = real_command_lane_valid_parts("real-command-materialized");
+        let output_root = temp_output_root("real-command-materialized-output");
+
+        let manifest = materialize_gateway_formal_real_command_lane_output_bundle(
+            &output_root,
+            &source_manifest,
+            &execution_manifest,
+            &request,
+            &command,
+            &obligation,
+            &obligation_binding,
+            &transcript,
+            &stdout_summary,
+            &stderr_summary,
+            &solver_verdict,
+            &nonpromotion,
+            &real_command_lane_output_request(&output_root),
+        )
+        .expect("real command lane output materializes");
+
+        assert_eq!(
+            read_gateway_formal_real_command_lane_output_bundle(&output_root),
+            Ok(manifest.clone())
+        );
+        assert_eq!(
+            manifest.declared_files,
+            gateway_formal_real_command_lane_declared_files()
+        );
+        assert_eq!(
+            manifest.declared_sidecars,
+            gateway_formal_real_command_lane_declared_sidecars()
+        );
+        assert!(!manifest.process_spawned);
+        assert!(!manifest.backend_executed);
+        assert!(!manifest.proof_artifact_created);
+        assert!(!manifest.checker_transcript_created);
+        assert!(!manifest.solver_certificate_created);
+        assert!(!manifest.creates_accepted_evidence);
+        assert!(!manifest.creates_level2_evidence);
+        assert!(!manifest.populates_score_axes);
+        assert!(!manifest.semantic_correctness_claimed);
+        assert!(!manifest.production_readiness_claimed);
+        assert!(!manifest.sota_claimed);
+        assert!(!manifest.breakthrough_claimed);
+        assert!(!manifest.full_security_claimed);
+        assert!(!manifest.grants_authority);
+
+        fs::remove_dir_all(&output_root).expect("real command output cleanup succeeds");
+        fs::remove_dir_all(&execution_root)
+            .expect("real command materialized execution source cleanup succeeds");
+        fs::remove_dir_all(&source_root)
+            .expect("real command materialized adapter source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_output_readback_rejects_drift_and_undeclared() {
+        let (
+            stale_execution_root,
+            stale_source_root,
+            stale_source_manifest,
+            stale_execution_manifest,
+            stale_request,
+            stale_command,
+            stale_obligation,
+            stale_obligation_binding,
+            stale_transcript,
+            stale_stdout_summary,
+            stale_stderr_summary,
+            stale_solver_verdict,
+            stale_nonpromotion,
+        ) = real_command_lane_valid_parts("real-command-stale-sidecar");
+        let stale_root = temp_output_root("real-command-stale-sidecar-output");
+        materialize_gateway_formal_real_command_lane_output_bundle(
+            &stale_root,
+            &stale_source_manifest,
+            &stale_execution_manifest,
+            &stale_request,
+            &stale_command,
+            &stale_obligation,
+            &stale_obligation_binding,
+            &stale_transcript,
+            &stale_stdout_summary,
+            &stale_stderr_summary,
+            &stale_solver_verdict,
+            &stale_nonpromotion,
+            &real_command_lane_output_request(&stale_root),
+        )
+        .expect("stale sidecar fixture materializes");
+        fs::write(
+            sidecar_path(&stale_root.join("gateway-formal-real-command-lane/command-request.json")),
+            b"stale",
+        )
+        .expect("stale sidecar writes");
+        assert_eq!(
+            read_gateway_formal_real_command_lane_output_bundle(&stale_root),
+            Err(GatewayFormalRealCommandLaneOutputError::DigestMismatch(
+                "gateway-formal-real-command-lane/command-request.json".to_owned()
+            ))
+        );
+
+        let (
+            malformed_execution_root,
+            malformed_source_root,
+            malformed_source_manifest,
+            malformed_execution_manifest,
+            malformed_request,
+            malformed_command,
+            malformed_obligation,
+            malformed_obligation_binding,
+            malformed_transcript,
+            malformed_stdout_summary,
+            malformed_stderr_summary,
+            malformed_solver_verdict,
+            malformed_nonpromotion,
+        ) = real_command_lane_valid_parts("real-command-malformed-json");
+        let malformed_root = temp_output_root("real-command-malformed-json-output");
+        materialize_gateway_formal_real_command_lane_output_bundle(
+            &malformed_root,
+            &malformed_source_manifest,
+            &malformed_execution_manifest,
+            &malformed_request,
+            &malformed_command,
+            &malformed_obligation,
+            &malformed_obligation_binding,
+            &malformed_transcript,
+            &malformed_stdout_summary,
+            &malformed_stderr_summary,
+            &malformed_solver_verdict,
+            &malformed_nonpromotion,
+            &real_command_lane_output_request(&malformed_root),
+        )
+        .expect("malformed fixture materializes");
+        rewrite_bundle_file(
+            &malformed_root,
+            "gateway-formal-real-command-lane/solver-verdict.json",
+            b"{not-json",
+        );
+        assert_eq!(
+            read_gateway_formal_real_command_lane_output_bundle(&malformed_root),
+            Err(
+                GatewayFormalRealCommandLaneOutputError::MalformedDeclaredFile(
+                    "gateway-formal-real-command-lane/solver-verdict.json".to_owned()
+                )
+            )
+        );
+
+        let (
+            undeclared_execution_root,
+            undeclared_source_root,
+            undeclared_source_manifest,
+            undeclared_execution_manifest,
+            undeclared_request,
+            undeclared_command,
+            undeclared_obligation,
+            undeclared_obligation_binding,
+            undeclared_transcript,
+            undeclared_stdout_summary,
+            undeclared_stderr_summary,
+            undeclared_solver_verdict,
+            undeclared_nonpromotion,
+        ) = real_command_lane_valid_parts("real-command-undeclared");
+        let undeclared_root = temp_output_root("real-command-undeclared-output");
+        materialize_gateway_formal_real_command_lane_output_bundle(
+            &undeclared_root,
+            &undeclared_source_manifest,
+            &undeclared_execution_manifest,
+            &undeclared_request,
+            &undeclared_command,
+            &undeclared_obligation,
+            &undeclared_obligation_binding,
+            &undeclared_transcript,
+            &undeclared_stdout_summary,
+            &undeclared_stderr_summary,
+            &undeclared_solver_verdict,
+            &undeclared_nonpromotion,
+            &real_command_lane_output_request(&undeclared_root),
+        )
+        .expect("undeclared fixture materializes");
+        fs::write(
+            undeclared_root.join("gateway-formal-real-command-lane/proof-artifact.json"),
+            b"{}",
+        )
+        .expect("undeclared proof artifact writes");
+        assert_eq!(
+            read_gateway_formal_real_command_lane_output_bundle(&undeclared_root),
+            Err(GatewayFormalRealCommandLaneOutputError::UndeclaredFile(
+                "gateway-formal-real-command-lane/proof-artifact.json".to_owned()
+            ))
+        );
+
+        let (
+            promotion_execution_root,
+            promotion_source_root,
+            promotion_source_manifest,
+            promotion_execution_manifest,
+            promotion_request,
+            promotion_command,
+            promotion_obligation,
+            promotion_obligation_binding,
+            promotion_transcript,
+            promotion_stdout_summary,
+            promotion_stderr_summary,
+            promotion_solver_verdict,
+            promotion_nonpromotion,
+        ) = real_command_lane_valid_parts("real-command-manifest-promotion");
+        let promotion_root = temp_output_root("real-command-manifest-promotion-output");
+        materialize_gateway_formal_real_command_lane_output_bundle(
+            &promotion_root,
+            &promotion_source_manifest,
+            &promotion_execution_manifest,
+            &promotion_request,
+            &promotion_command,
+            &promotion_obligation,
+            &promotion_obligation_binding,
+            &promotion_transcript,
+            &promotion_stdout_summary,
+            &promotion_stderr_summary,
+            &promotion_solver_verdict,
+            &promotion_nonpromotion,
+            &real_command_lane_output_request(&promotion_root),
+        )
+        .expect("promotion fixture materializes");
+        let manifest_path = promotion_root.join("gateway-formal-real-command-lane/manifest.json");
+        let mut manifest: GatewayFormalRealCommandLaneOutputManifest =
+            serde_json::from_slice(&fs::read(&manifest_path).expect("manifest reads"))
+                .expect("manifest parses");
+        manifest.creates_level2_evidence = true;
+        rewrite_bundle_file(
+            &promotion_root,
+            "gateway-formal-real-command-lane/manifest.json",
+            &serde_json::to_vec_pretty(&manifest).expect("manifest serializes"),
+        );
+        assert_eq!(
+            read_gateway_formal_real_command_lane_output_bundle(&promotion_root),
+            Err(GatewayFormalRealCommandLaneOutputError::ManifestSemanticMismatch)
+        );
+
+        for root in [
+            &stale_root,
+            &stale_execution_root,
+            &stale_source_root,
+            &malformed_root,
+            &malformed_execution_root,
+            &malformed_source_root,
+            &undeclared_root,
+            &undeclared_execution_root,
+            &undeclared_source_root,
+            &promotion_root,
+            &promotion_execution_root,
+            &promotion_source_root,
+        ] {
+            fs::remove_dir_all(root).expect("real command drift fixture cleanup succeeds");
+        }
     }
 
     fn rewrite_content_and_manifest_digest(output_root: &Path, logical_path: &str, bytes: &[u8]) {

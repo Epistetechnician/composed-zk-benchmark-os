@@ -177,10 +177,10 @@ cargo test --workspace --quiet
 
 ## Next Slice
 
-Phase 323 may implement local filesystem materialization and readback for the
-declared `gateway-formal-real-command-lane/*` output contract, including stale
-sidecar, malformed JSON, symlink, undeclared-file, digest-drift, nonpromotion,
-and claim-escalation rejection.
+Phase 323 implemented local filesystem materialization and readback for the
+declared `gateway-formal-real-command-lane/*` output contract.
 
-Phase 323 still must not run SMT, Z3, Lean, COBALT, Aeneas, Hax, rust-lean,
-Coq, TLA+, CBMC, or any model checker.
+Phase 324 may define the source-scan exception and execution preflight boundary
+for one fixed local SMT-LIB2 command invocation. Phase 324 still must not run
+SMT, Z3, Lean, COBALT, Aeneas, Hax, rust-lean, Coq, TLA+, CBMC, or any model
+checker.
