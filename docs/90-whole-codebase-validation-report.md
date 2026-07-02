@@ -1698,6 +1698,25 @@ Level2+ evidence, populate score axes, claim semantic correctness, claim
 production readiness, claim SOTA, claim breakthrough status, claim full
 security, or grant authority.
 
+Phase 326 implements the first quarantined fixed-process execution crossing for
+the Phase 321-325 real formal command lane in `crates/hsai-agent-admission`.
+The execution function requires Phase 325 preflight authorization, reads the
+fixed executable, verifies its digest, starts it through direct
+`std::process::Command::new(fixed_executable)`, uses the fixed argv template
+from the validated command descriptor, clears the environment, nulls stdin,
+pipes stdout/stderr, enforces the descriptor timeout, records bounded redacted
+stream summaries, and classifies solver-like `unsat`, `sat`, or `unknown`
+stdout labels without retaining raw logs. Focused tests use the current test
+binary as a hermetic fixed executable that prints `unsat`, verify digest
+mismatch rejection before spawn, and keep all proof/evidence/score/authority
+flags false. Phase 326 does not implement a generic backend runner, caller
+executable path control, caller argv control, shell execution, inherited
+environment, stdin, network access, proof artifacts, checker transcripts,
+solver certificates, accepted Evidence Ledger mutation, Level2+ evidence,
+score-axis population, semantic-correctness claims, production-readiness
+claims, SOTA claims, breakthrough claims, full-security claims, or authority
+grants.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission

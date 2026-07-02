@@ -29,12 +29,13 @@ Phase 325 adds these local Rust surfaces under
 - `build_gateway_formal_real_command_lane_execution_preflight`;
 - `validate_gateway_formal_real_command_lane_execution_preflight_input`;
 - `validate_gateway_formal_real_command_lane_execution_preflight`;
-- `run_gateway_formal_real_command_lane_fixed_smt_process`.
+- `gateway_formal_real_command_lane_fixed_smt_process_plan`.
 
-The `run_gateway_formal_real_command_lane_fixed_smt_process` function is a
+The `gateway_formal_real_command_lane_fixed_smt_process_plan` function is a
 blocked Phase 325 plan surface. It returns `process_spawned = false` and
-`backend_executed = false`; it does not call `std::process::Command`, does not
-construct a solver command, and does not read or write solver artifacts.
+`backend_executed = false`; Phase 325 does not call `std::process::Command`,
+does not construct a solver command, and does not read or write solver
+artifacts.
 
 ## Preflight Rejections
 
@@ -134,8 +135,8 @@ execute an action.
 
 ## Next Slice
 
-Phase 326 may implement the first quarantined fixed local SMT-LIB2 process
-execution over this exact preflight lane. That phase must remain nonpromoting:
-no accepted evidence, no Level2+ evidence, no score axes, no semantic
-correctness claim, no production-readiness claim, no SOTA claim, no full-security
-claim, and no action authority.
+Phase 326 implements the first quarantined fixed local SMT-LIB2 process
+execution over this exact preflight lane. It remains nonpromoting: no accepted
+evidence, no Level2+ evidence, no score axes, no semantic-correctness claim, no
+production-readiness claim, no SOTA claim, no full-security claim, and no action
+authority.
