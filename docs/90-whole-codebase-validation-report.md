@@ -1595,6 +1595,20 @@ Evidence Ledger, create Level2+ evidence, populate score axes, create
 benchmark evidence, claim semantic correctness, claim production readiness,
 claim SOTA, claim breakthrough status, claim full security, or grant authority.
 
+Phase 320 hardens the Phase 319 tiny hermetic formal-backend local fixture
+execution readback lane. It adds focused local tests for malformed declared JSON,
+existing output-root overwrite rejection, output-root symlink rejection,
+bundle-directory symlink rejection, declared-file symlink rejection,
+declared-sidecar symlink rejection, digest-preserving stdout summary semantic
+drift rejection, digest-preserving redaction-report semantic drift rejection,
+and digest-preserving nonpromotion-report semantic drift rejection. Phase 320
+does not add a new runner, execute Lean/SMT/Z3/COBALT/Aeneas/Hax/rust-lean/Coq/
+TLA+/CBMC/model checker as proof authority, create proof artifacts, checker
+transcripts, or solver certificates, mutate the accepted Evidence Ledger,
+create Level2+ evidence, populate score axes, create benchmark evidence, claim
+semantic correctness, claim production readiness, claim SOTA, claim
+breakthrough status, claim full security, or grant authority.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission

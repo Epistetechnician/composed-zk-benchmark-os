@@ -169,8 +169,13 @@ cargo test --workspace
 
 ## Next Slice
 
-The next responsible slice is Phase 320: harden the Phase 319 local fixture
+Phase 320 completed the hardening pass for the Phase 319 local fixture
 execution readback lane with negative tests for malformed declared JSON,
-sidecar symlinks, bundle-directory symlinks, output-root overwrite rejection,
-and summary/redaction/nonpromotion drift. Only after that hardening should a
-separate docs-first boundary consider a real Lean/SMT/COBALT command lane.
+symlink shapes, output-root overwrite rejection, and summary/redaction/
+nonpromotion drift.
+
+The next responsible slice is Phase 321: a docs-first boundary for a real
+Lean/SMT/COBALT command lane. It must define the exact property, backend mode,
+artifact grammar, checker transcript grammar, quarantine readback contract, and
+nonpromotion rules before any real proof assistant, solver, or COBALT command
+is allowed to run.

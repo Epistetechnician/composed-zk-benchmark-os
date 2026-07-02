@@ -405,6 +405,7 @@ Surface DSL
 | [docs/317-hsai-tiny-hermetic-formal-backend-adapter-data-model-notes.md](docs/317-hsai-tiny-hermetic-formal-backend-adapter-data-model-notes.md) | Phase 317 HSAI tiny hermetic formal-backend adapter data model notes. |
 | [docs/318-hsai-tiny-hermetic-formal-backend-execution-readiness-boundary.md](docs/318-hsai-tiny-hermetic-formal-backend-execution-readiness-boundary.md) | Phase 318 HSAI tiny hermetic formal-backend execution readiness boundary. |
 | [docs/319-hsai-tiny-hermetic-formal-backend-local-fixture-execution-readback-notes.md](docs/319-hsai-tiny-hermetic-formal-backend-local-fixture-execution-readback-notes.md) | Phase 319 HSAI tiny hermetic formal-backend local fixture execution readback notes. |
+| [docs/320-hsai-tiny-hermetic-formal-backend-execution-readback-hardening-notes.md](docs/320-hsai-tiny-hermetic-formal-backend-execution-readback-hardening-notes.md) | Phase 320 HSAI tiny hermetic formal-backend execution readback hardening notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |

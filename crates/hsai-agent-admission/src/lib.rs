@@ -26157,6 +26157,71 @@ mod tests {
         (request, fixture, command, manifest, output_root)
     }
 
+    fn tiny_execution_fixture_command() -> GatewayFormalBackendTinyHermeticAdapterCommandDescriptor
+    {
+        tiny_adapter_command_descriptor_with_argv(vec![
+            "--ignored".to_owned(),
+            "--exact".to_owned(),
+            "tests::phase319_fixture_child_success".to_owned(),
+        ])
+    }
+
+    fn tiny_execution_materialized_bundle(
+        name: &str,
+    ) -> (
+        PathBuf,
+        PathBuf,
+        GatewayFormalBackendTinyHermeticAdapterRequest,
+        GatewayFormalBackendTinyHermeticAdapterFixtureInput,
+        GatewayFormalBackendTinyHermeticAdapterCommandDescriptor,
+        GatewayFormalBackendTinyHermeticExecutionOutputManifest,
+    ) {
+        let command = tiny_execution_fixture_command();
+        let (request, fixture, command, source_manifest, source_root) =
+            tiny_adapter_source_manifest_with_command(&format!("{name}-source"), command);
+        let output_root = temp_output_root(name);
+        let manifest = materialize_gateway_formal_backend_tiny_hermetic_execution_output_bundle(
+            &output_root,
+            &source_manifest,
+            &request,
+            &fixture,
+            &command,
+            &tiny_execution_output_request(name, &output_root),
+        )
+        .expect("tiny execution bundle materializes");
+        (
+            output_root,
+            source_root,
+            request,
+            fixture,
+            command,
+            manifest,
+        )
+    }
+
+    fn update_tiny_execution_manifest_digest(
+        output_root: &Path,
+        logical_path: &str,
+        bytes: &[u8],
+        update: impl FnOnce(&mut GatewayFormalBackendTinyHermeticExecutionOutputManifest),
+    ) {
+        rewrite_bundle_file(output_root, logical_path, bytes);
+        let manifest_path =
+            output_root.join("gateway-formal-backend-tiny-hermetic-execution/manifest.json");
+        let mut manifest: GatewayFormalBackendTinyHermeticExecutionOutputManifest =
+            serde_json::from_slice(&fs::read(&manifest_path).expect("execution manifest reads"))
+                .expect("execution manifest parses");
+        manifest
+            .declared_file_digests
+            .insert(logical_path.to_owned(), hash_bytes(bytes));
+        update(&mut manifest);
+        rewrite_bundle_file(
+            output_root,
+            "gateway-formal-backend-tiny-hermetic-execution/manifest.json",
+            &serde_json::to_vec_pretty(&manifest).expect("execution manifest serializes"),
+        );
+    }
+
     #[test]
     fn gateway_formal_backend_tiny_hermetic_adapter_bundle_materializes_and_reads_back() {
         let output_root = temp_output_root("tiny-hermetic-adapter-bundle");
@@ -26542,6 +26607,300 @@ mod tests {
         fs::remove_dir_all(&stale_root).expect("tiny execution stale cleanup succeeds");
         fs::remove_dir_all(&undeclared_root).expect("tiny execution undeclared cleanup succeeds");
         fs::remove_dir_all(&source_root).expect("tiny execution source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_backend_tiny_hermetic_execution_hardening_rejects_malformed_and_overwrite() {
+        let (malformed_root, malformed_source_root, _, _, _, _) =
+            tiny_execution_materialized_bundle("tiny-execution-malformed-json");
+        rewrite_bundle_file(
+            &malformed_root,
+            "gateway-formal-backend-tiny-hermetic-execution/redaction-report.json",
+            b"{not-json",
+        );
+        assert_eq!(
+            read_gateway_formal_backend_tiny_hermetic_execution_output_bundle(&malformed_root),
+            Err(
+                GatewayFormalBackendTinyHermeticExecutionOutputError::MalformedDeclaredFile(
+                    "gateway-formal-backend-tiny-hermetic-execution/redaction-report.json"
+                        .to_owned()
+                )
+            )
+        );
+
+        let command = tiny_execution_fixture_command();
+        let (request, fixture, command, source_manifest, source_root) =
+            tiny_adapter_source_manifest_with_command("tiny-execution-overwrite-source", command);
+        let existing_root = temp_output_root("tiny-execution-overwrite-existing");
+        fs::create_dir_all(&existing_root).expect("existing tiny execution output root creates");
+        assert_eq!(
+            materialize_gateway_formal_backend_tiny_hermetic_execution_output_bundle(
+                &existing_root,
+                &source_manifest,
+                &request,
+                &fixture,
+                &command,
+                &tiny_execution_output_request("tiny-execution-overwrite-existing", &existing_root),
+            ),
+            Err(
+                GatewayFormalBackendTinyHermeticExecutionOutputError::OutputRootExistsWithoutOverwrite
+            )
+        );
+
+        fs::remove_dir_all(&malformed_root).expect("tiny execution malformed cleanup succeeds");
+        fs::remove_dir_all(&malformed_source_root)
+            .expect("tiny execution malformed source cleanup succeeds");
+        fs::remove_dir_all(&existing_root).expect("tiny execution existing root cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("tiny execution overwrite source cleanup succeeds");
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn gateway_formal_backend_tiny_hermetic_execution_hardening_rejects_symlinks() {
+        use std::os::unix::fs::symlink;
+
+        let symlink_target = temp_output_root("tiny-execution-symlink-target");
+        let symlink_output = temp_output_root("tiny-execution-symlink-output");
+        fs::create_dir_all(&symlink_target).expect("tiny execution symlink target creates");
+        symlink(&symlink_target, &symlink_output).expect("tiny execution output symlink creates");
+        assert_eq!(
+            read_gateway_formal_backend_tiny_hermetic_execution_output_bundle(&symlink_output),
+            Err(GatewayFormalBackendTinyHermeticExecutionOutputError::OutputRootIsSymlink)
+        );
+        fs::remove_file(&symlink_output).expect("tiny execution output symlink cleanup succeeds");
+        fs::remove_dir_all(&symlink_target)
+            .expect("tiny execution symlink target cleanup succeeds");
+
+        let (bundle_root, bundle_source_root, _, _, _, _) =
+            tiny_execution_materialized_bundle("tiny-execution-bundle-symlink");
+        let bundle_dir = bundle_root.join("gateway-formal-backend-tiny-hermetic-execution");
+        fs::remove_dir_all(&bundle_dir).expect("tiny execution bundle dir removal succeeds");
+        symlink(
+            bundle_root.join("gateway-formal-backend-tiny-hermetic-execution-target"),
+            &bundle_dir,
+        )
+        .expect("tiny execution bundle dir symlink creates");
+        assert_eq!(
+            read_gateway_formal_backend_tiny_hermetic_execution_output_bundle(&bundle_root),
+            Err(
+                GatewayFormalBackendTinyHermeticExecutionOutputError::BundleFileIsSymlink(
+                    "gateway-formal-backend-tiny-hermetic-execution".to_owned()
+                )
+            )
+        );
+
+        let (file_root, file_source_root, _, _, _, _) =
+            tiny_execution_materialized_bundle("tiny-execution-file-symlink");
+        let transcript_path = file_root
+            .join("gateway-formal-backend-tiny-hermetic-execution/execution-transcript.json");
+        fs::remove_file(&transcript_path).expect("tiny execution transcript removal succeeds");
+        symlink(
+            file_root.join("gateway-formal-backend-tiny-hermetic-execution/manifest.json"),
+            &transcript_path,
+        )
+        .expect("tiny execution declared file symlink creates");
+        assert_eq!(
+            read_gateway_formal_backend_tiny_hermetic_execution_output_bundle(&file_root),
+            Err(
+                GatewayFormalBackendTinyHermeticExecutionOutputError::BundleFileIsSymlink(
+                    "gateway-formal-backend-tiny-hermetic-execution/execution-transcript.json"
+                        .to_owned()
+                )
+            )
+        );
+
+        let (sidecar_root, sidecar_source_root, _, _, _, _) =
+            tiny_execution_materialized_bundle("tiny-execution-sidecar-symlink");
+        let sidecar = sidecar_path(
+            &sidecar_root
+                .join("gateway-formal-backend-tiny-hermetic-execution/validation-report.json"),
+        );
+        fs::remove_file(&sidecar).expect("tiny execution validation sidecar removal succeeds");
+        symlink(
+            sidecar_root
+                .join("gateway-formal-backend-tiny-hermetic-execution/manifest.json.sha256"),
+            &sidecar,
+        )
+        .expect("tiny execution declared sidecar symlink creates");
+        assert_eq!(
+            read_gateway_formal_backend_tiny_hermetic_execution_output_bundle(&sidecar_root),
+            Err(
+                GatewayFormalBackendTinyHermeticExecutionOutputError::BundleFileIsSymlink(
+                    "gateway-formal-backend-tiny-hermetic-execution/validation-report.json.sha256"
+                        .to_owned()
+                )
+            )
+        );
+
+        fs::remove_dir_all(&bundle_root).expect("tiny execution bundle symlink cleanup succeeds");
+        fs::remove_dir_all(&bundle_source_root)
+            .expect("tiny execution bundle symlink source cleanup succeeds");
+        fs::remove_dir_all(&file_root).expect("tiny execution file symlink cleanup succeeds");
+        fs::remove_dir_all(&file_source_root)
+            .expect("tiny execution file symlink source cleanup succeeds");
+        fs::remove_dir_all(&sidecar_root).expect("tiny execution sidecar symlink cleanup succeeds");
+        fs::remove_dir_all(&sidecar_source_root)
+            .expect("tiny execution sidecar symlink source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_backend_tiny_hermetic_execution_hardening_rejects_summary_redaction_and_nonpromotion_drift(
+    ) {
+        let (stdout_root, stdout_source_root, _, _, _, _) =
+            tiny_execution_materialized_bundle("tiny-execution-stdout-drift");
+        let stdout_path =
+            stdout_root.join("gateway-formal-backend-tiny-hermetic-execution/stdout-summary.json");
+        let mut stdout_summary: GatewayFormalBackendHermeticExecutionResultBoundedSummary =
+            serde_json::from_slice(&fs::read(&stdout_path).expect("stdout summary reads"))
+                .expect("stdout summary parses");
+        stdout_summary.retained_text = "raw solver trace".to_owned();
+        let stdout_bytes =
+            serde_json::to_vec_pretty(&stdout_summary).expect("stdout summary serializes");
+        let transcript_path = stdout_root
+            .join("gateway-formal-backend-tiny-hermetic-execution/execution-transcript.json");
+        let mut transcript: GatewayFormalBackendTinyHermeticExecutionTranscript =
+            serde_json::from_slice(&fs::read(&transcript_path).expect("transcript reads"))
+                .expect("transcript parses");
+        transcript.stdout_summary_digest = stdout_summary.digest();
+        let transcript_bytes =
+            serde_json::to_vec_pretty(&transcript).expect("transcript serializes");
+        rewrite_bundle_file(
+            &stdout_root,
+            "gateway-formal-backend-tiny-hermetic-execution/execution-transcript.json",
+            &transcript_bytes,
+        );
+        update_tiny_execution_manifest_digest(
+            &stdout_root,
+            "gateway-formal-backend-tiny-hermetic-execution/stdout-summary.json",
+            &stdout_bytes,
+            |manifest| {
+                manifest.stdout_summary_digest = stdout_summary.digest();
+                manifest.transcript_digest = transcript.digest();
+                manifest.declared_file_digests.insert(
+                    "gateway-formal-backend-tiny-hermetic-execution/execution-transcript.json"
+                        .to_owned(),
+                    hash_bytes(&transcript_bytes),
+                );
+            },
+        );
+        assert_eq!(
+            read_gateway_formal_backend_tiny_hermetic_execution_output_bundle(&stdout_root),
+            Err(GatewayFormalBackendTinyHermeticExecutionOutputError::StdoutSummaryMismatch)
+        );
+
+        let (redaction_root, redaction_source_root, _, _, _, _) =
+            tiny_execution_materialized_bundle("tiny-execution-redaction-drift");
+        let redaction_path = redaction_root
+            .join("gateway-formal-backend-tiny-hermetic-execution/redaction-report.json");
+        let mut redaction_report: GatewayFormalBackendHermeticExecutionResultRedactionReport =
+            serde_json::from_slice(&fs::read(&redaction_path).expect("redaction report reads"))
+                .expect("redaction report parses");
+        redaction_report.proof_artifact_found = true;
+        let redaction_bytes =
+            serde_json::to_vec_pretty(&redaction_report).expect("redaction report serializes");
+        let transcript_path = redaction_root
+            .join("gateway-formal-backend-tiny-hermetic-execution/execution-transcript.json");
+        let mut transcript: GatewayFormalBackendTinyHermeticExecutionTranscript =
+            serde_json::from_slice(&fs::read(&transcript_path).expect("transcript reads"))
+                .expect("transcript parses");
+        transcript.redaction_report_digest = redaction_report.digest();
+        let transcript_bytes =
+            serde_json::to_vec_pretty(&transcript).expect("transcript serializes");
+        rewrite_bundle_file(
+            &redaction_root,
+            "gateway-formal-backend-tiny-hermetic-execution/execution-transcript.json",
+            &transcript_bytes,
+        );
+        update_tiny_execution_manifest_digest(
+            &redaction_root,
+            "gateway-formal-backend-tiny-hermetic-execution/redaction-report.json",
+            &redaction_bytes,
+            |manifest| {
+                manifest.redaction_report_digest = redaction_report.digest();
+                manifest.transcript_digest = transcript.digest();
+                manifest.declared_file_digests.insert(
+                    "gateway-formal-backend-tiny-hermetic-execution/execution-transcript.json"
+                        .to_owned(),
+                    hash_bytes(&transcript_bytes),
+                );
+            },
+        );
+        assert_eq!(
+            read_gateway_formal_backend_tiny_hermetic_execution_output_bundle(&redaction_root),
+            Err(GatewayFormalBackendTinyHermeticExecutionOutputError::RedactionReportMismatch)
+        );
+
+        let (nonpromotion_root, nonpromotion_source_root, _, _, _, _) =
+            tiny_execution_materialized_bundle("tiny-execution-nonpromotion-drift");
+        let nonpromotion_path = nonpromotion_root
+            .join("gateway-formal-backend-tiny-hermetic-execution/nonpromotion-report.json");
+        let mut nonpromotion_report: GatewayFormalBackendTinyHermeticExecutionNonpromotionReport =
+            serde_json::from_slice(&fs::read(&nonpromotion_path).expect("nonpromotion reads"))
+                .expect("nonpromotion parses");
+        nonpromotion_report.solver_certificate_created = true;
+        let nonpromotion_bytes =
+            serde_json::to_vec_pretty(&nonpromotion_report).expect("nonpromotion serializes");
+        let transcript_path = nonpromotion_root
+            .join("gateway-formal-backend-tiny-hermetic-execution/execution-transcript.json");
+        let mut transcript: GatewayFormalBackendTinyHermeticExecutionTranscript =
+            serde_json::from_slice(&fs::read(&transcript_path).expect("transcript reads"))
+                .expect("transcript parses");
+        transcript.nonpromotion_report_digest = nonpromotion_report.digest();
+        let transcript_bytes =
+            serde_json::to_vec_pretty(&transcript).expect("transcript serializes");
+        rewrite_bundle_file(
+            &nonpromotion_root,
+            "gateway-formal-backend-tiny-hermetic-execution/execution-transcript.json",
+            &transcript_bytes,
+        );
+        let validation_path = nonpromotion_root
+            .join("gateway-formal-backend-tiny-hermetic-execution/validation-report.json");
+        let mut validation: GatewayFormalBackendTinyHermeticExecutionValidationReport =
+            serde_json::from_slice(&fs::read(&validation_path).expect("validation reads"))
+                .expect("validation parses");
+        validation.nonpromotion_report_digest = nonpromotion_report.digest();
+        let validation_bytes =
+            serde_json::to_vec_pretty(&validation).expect("validation serializes");
+        rewrite_bundle_file(
+            &nonpromotion_root,
+            "gateway-formal-backend-tiny-hermetic-execution/validation-report.json",
+            &validation_bytes,
+        );
+        update_tiny_execution_manifest_digest(
+            &nonpromotion_root,
+            "gateway-formal-backend-tiny-hermetic-execution/nonpromotion-report.json",
+            &nonpromotion_bytes,
+            |manifest| {
+                manifest.nonpromotion_report_digest = nonpromotion_report.digest();
+                manifest.transcript_digest = transcript.digest();
+                manifest.validation_report_digest = validation.digest();
+                manifest.declared_file_digests.insert(
+                    "gateway-formal-backend-tiny-hermetic-execution/execution-transcript.json"
+                        .to_owned(),
+                    hash_bytes(&transcript_bytes),
+                );
+                manifest.declared_file_digests.insert(
+                    "gateway-formal-backend-tiny-hermetic-execution/validation-report.json"
+                        .to_owned(),
+                    hash_bytes(&validation_bytes),
+                );
+            },
+        );
+        assert_eq!(
+            read_gateway_formal_backend_tiny_hermetic_execution_output_bundle(&nonpromotion_root),
+            Err(GatewayFormalBackendTinyHermeticExecutionOutputError::NonpromotionReportMismatch)
+        );
+
+        fs::remove_dir_all(&stdout_root).expect("tiny execution stdout cleanup succeeds");
+        fs::remove_dir_all(&stdout_source_root)
+            .expect("tiny execution stdout source cleanup succeeds");
+        fs::remove_dir_all(&redaction_root).expect("tiny execution redaction cleanup succeeds");
+        fs::remove_dir_all(&redaction_source_root)
+            .expect("tiny execution redaction source cleanup succeeds");
+        fs::remove_dir_all(&nonpromotion_root)
+            .expect("tiny execution nonpromotion cleanup succeeds");
+        fs::remove_dir_all(&nonpromotion_source_root)
+            .expect("tiny execution nonpromotion source cleanup succeeds");
     }
 
     fn rewrite_content_and_manifest_digest(output_root: &Path, logical_path: &str, bytes: &[u8]) {
