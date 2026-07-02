@@ -7458,6 +7458,43 @@ Phase 317/319 source manifests and a declared output grammar, with policy and
 claim-escalation validation, but still no materialized command-lane readback and
 no real solver run.
 
+## Phase 323 HSAI Real Formal Command Lane Materialized Readback
+
+Status: complete. See
+`docs/323-hsai-real-formal-command-lane-materialized-readback-notes.md`.
+
+Goal: materialize and read back the Phase 322 real formal command-lane output
+contract while preserving the no-execution and no-promotion boundary.
+
+Implemented: local staged writes, exact declared
+`gateway-formal-real-command-lane/*` files, SHA-256 sidecars, output-root
+validation, protected-root rejection, symlink rejection, undeclared-file
+rejection, malformed declared JSON rejection, sidecar digest mismatch rejection,
+manifest semantic drift rejection, transcript/checker-transcript consistency
+checks, bounded stdout/stderr summary checks, deterministic redaction report
+checks, solver verdict checks, nonpromotion report checks, validation report
+checks, and nonclaims Markdown checks.
+
+Validation coverage: valid materialization and readback, stale sidecar
+rejection, malformed solver-verdict JSON rejection, undeclared proof-artifact
+rejection, and manifest Level2+ promotion drift rejection.
+
+Validation gate: formatting, focused Phase 323 tests, HSAI claim-boundary source
+scan, repo docs/hygiene tests, diff hygiene, empty-file hygiene, package-root
+lint check, and full workspace tests.
+
+Anti-goals: command execution, process spawning, backend runner implementation,
+solver scripts, checker scripts, proof assistant setup files, package runtime
+files, external repo clones, vendored source, Lean/SMT/Z3/COBALT/Aeneas/Hax/
+rust-lean/Coq/TLA+/CBMC/model-checker execution, generated proof artifacts,
+accepted evidence, Level2+ evidence, score axes, benchmark evidence, live
+provider evidence, semantic-correctness, production-readiness, SOTA,
+breakthrough, full-security, or authority claims.
+
+Exit criteria: the real command lane now has a materialized local output bundle
+and strict readback path, but still no solver preflight exception and no real
+solver run.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
