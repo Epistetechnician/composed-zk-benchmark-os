@@ -7734,6 +7734,45 @@ and explicit promotion rejection, but still no reviewed formal evidence, no
 accepted formal evidence, no Level2+ evidence, no score axes, no proof-authority
 claim, and no production/SOTA/security/correctness claim.
 
+## Phase 330 HSAI Reviewed Formal Evidence Preview Boundary
+
+Status: complete. See
+`docs/330-hsai-reviewed-formal-evidence-preview-boundary.md`.
+
+Goal: define the docs-first boundary for a future reviewed-formal-evidence
+preview over Phase 329 candidates while preserving a separate reviewed evidence
+state and a separate accepted evidence state.
+
+Implemented: review-preview promotion ladder, review input digest
+requirements, reviewer decision labels, required rejection cases, evidence
+meaning limits, SOTA-quality review discipline, and future Phase 331 preview
+metadata exit criteria. The state ladder is now
+`quarantined_output -> formal_evidence_candidate ->
+reviewed_formal_evidence_preview -> reviewed_formal_evidence ->
+accepted_formal_evidence`.
+
+Validation coverage: documentation now separates candidate evidence from review
+preview, reviewed formal evidence, and accepted formal evidence. It defines why
+a review preview can classify a candidate without becoming reviewed evidence or
+accepted evidence.
+
+Validation gate: formatting, docs/hygiene checks, diff hygiene, empty-file
+hygiene, package-root lint check, and full workspace tests.
+
+Anti-goals: Rust implementation code, reviewed evidence emission, accepted
+Evidence Ledger mutation, Level2+ evidence, score-axis population, proof
+artifact generation, checker transcript generation, solver certificate
+generation, Lean execution, COBALT execution, Rust-to-Lean extraction,
+benchmark submission, production deployment, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims, full-security
+claims, or action authority.
+
+Exit criteria: the repo now has a documented reviewed-formal-evidence preview
+boundary that moves review toward typed, digest-bound evidence discipline, but
+still no review-preview implementation, no reviewed formal evidence, no
+accepted formal evidence, no Level2+ evidence, no score axes, no proof-authority
+claim, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

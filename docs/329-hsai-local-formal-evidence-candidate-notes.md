@@ -90,8 +90,8 @@ authority to execute an action.
 
 ## Next Slice
 
-Phase 330 may implement a local reviewed-formal-evidence preview boundary for a
-Phase 329 candidate. That slice must still avoid accepted Evidence Ledger
-mutation, Level2+ evidence, score-axis population, SOTA claims, full-security
-claims, production-readiness claims, semantic-correctness claims, and action
-authority.
+Phase 330 defines a local reviewed-formal-evidence preview boundary for a Phase
+329 candidate. Phase 331 may implement preview metadata if it still avoids
+reviewed formal evidence emission, accepted Evidence Ledger mutation, Level2+
+evidence, score-axis population, SOTA claims, full-security claims,
+production-readiness claims, semantic-correctness claims, and action authority.
