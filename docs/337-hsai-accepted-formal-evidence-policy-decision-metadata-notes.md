@@ -137,8 +137,8 @@ That still does not support:
 
 ## Next Slice
 
-Phase 338 may define a docs-first bounded formal-evidence class feasibility
-boundary. It must not implement the class, mutate accepted evidence, change
-accepted append policy, create Level2+ evidence, populate score axes, or claim
-semantic correctness, production readiness, SOTA, full security, or action
+Phase 338 defines the docs-first bounded formal-evidence class feasibility
+boundary. It does not implement or approve the class, mutate accepted evidence,
+change accepted append policy, create Level2+ evidence, populate score axes, or
+claim semantic correctness, production readiness, SOTA, full security, or action
 authority.
