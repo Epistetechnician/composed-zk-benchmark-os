@@ -144,8 +144,8 @@ That still is not:
 
 ## Phase 419 Implementation Exit Criteria
 
-Phase 419 may implement local tiny-Z3 non-accepted class policy metadata only if
-it:
+Phase 419 implements local tiny-Z3 non-accepted class policy metadata in
+`docs/419-hsai-tiny-z3-local-non-accepted-class-policy-notes.md`. It:
 
 - binds one Phase 417 feasibility digest;
 - binds one Phase 415 policy-decision digest;
@@ -163,4 +163,4 @@ it:
 - rejects benchmark/SOTA, semantic-correctness, production-readiness,
   full-security, breakthrough, and action-authority claims.
 
-Phase 419 still must not implement `TinyZ3LocalReviewedFormalEvidenceMetadata`.
+It still does not implement `TinyZ3LocalReviewedFormalEvidenceMetadata`.

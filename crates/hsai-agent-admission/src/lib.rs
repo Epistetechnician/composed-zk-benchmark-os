@@ -690,6 +690,16 @@ pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_BOUNDED_FORMAL_EVIDENCE_FEASIBIL
     &str = "feasibility_only_not_approved";
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_OWNER_DECISION:
     &str = "ownership_unresolved";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_NON_ACCEPTED_CLASS_POLICY_SCHEMA_VERSION:
+    &str = "hsai-gateway-formal-tiny-digest-backend-z3-local-non-accepted-class-policy:v1";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_NON_ACCEPTED_CLASS_POLICY_STATE_SLICE: &str =
+    "phase-419-hsai-tiny-z3-local-non-accepted-class-policy-metadata";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_NON_ACCEPTED_CLASS_POLICY_CLAIM_BOUNDARY:
+    &str = "local gateway tiny digest-binding Z3 non-accepted formal-evidence class policy metadata only; binds one Phase 417 feasibility record and records that TinyZ3LocalReviewedFormalEvidenceMetadata may be specified only as local non-accepted metadata, but does not implement the class, approve accepted formal evidence, create accepted evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_NON_ACCEPTED_CLASS_POLICY_OWNER_PATH: &str =
+    "local_non_accepted_metadata_class";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_NON_ACCEPTED_CLASS_POLICY_CLASS_STATUS: &str =
+    "not_accepted_formal_evidence";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -6186,6 +6196,128 @@ pub enum GatewayFormalTinyDigestBackendZ3BoundedFormalEvidenceFeasibilityIssue {
 pub struct GatewayFormalTinyDigestBackendZ3BoundedFormalEvidenceFeasibilityValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyDigestBackendZ3BoundedFormalEvidenceFeasibilityIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyInput {
+    pub schema_version: String,
+    pub policy_id: String,
+    pub created_at_unix: u64,
+    pub feasibility_digest: Hash,
+    pub feasibility_input_digest: Hash,
+    pub policy_decision_digest: Hash,
+    pub handoff_digest: Hash,
+    pub reviewed_record_digest: Hash,
+    pub current_accepted_append_blockers: BTreeSet<String>,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub class_name: String,
+    pub owner_path: String,
+    pub class_status: String,
+    pub reviewed_scope_requirement_digest: Hash,
+    pub source_correspondence_requirement_digest: Hash,
+    pub replay_requirement_digest: Hash,
+    pub reviewer_policy_requirement_digest: Hash,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub accepted_evidence_mutation_requested: bool,
+    pub accepted_append_policy_change_requested: bool,
+    pub bounded_formal_evidence_class_implemented: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub benchmark_or_sota_comparison_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-local-non-accepted-class-policy-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicy {
+    pub schema_version: String,
+    pub policy_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub policy_input_digest: Hash,
+    pub feasibility_digest: Hash,
+    pub feasibility_input_digest: Hash,
+    pub policy_decision_digest: Hash,
+    pub handoff_digest: Hash,
+    pub reviewed_record_digest: Hash,
+    pub current_accepted_append_blockers: BTreeSet<String>,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub class_name: String,
+    pub owner_path: String,
+    pub class_status: String,
+    pub reviewed_scope_requirement_digest: Hash,
+    pub source_correspondence_requirement_digest: Hash,
+    pub replay_requirement_digest: Hash,
+    pub reviewer_policy_requirement_digest: Hash,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub creates_accepted_evidence: bool,
+    pub changes_accepted_append_policy: bool,
+    pub implements_bounded_formal_evidence_class: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicy {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-local-non-accepted-class-policy:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue {
+    InvalidSchemaVersion,
+    InvalidPolicyId,
+    MissingCreatedAt,
+    MissingDigest(String),
+    FeasibilityDigestDrift,
+    FeasibilityStateMismatch,
+    AcceptedAppendBlockerMismatch,
+    ClassNameMismatch,
+    OwnerPathMismatch,
+    ClassStatusMismatch,
+    RequirementDigestMismatch,
+    NonclaimMismatch,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -25778,6 +25910,11 @@ pub fn gateway_formal_tiny_digest_backend_z3_bounded_formal_evidence_feasibility
         .to_owned()
 }
 
+pub fn gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_claim_boundary(
+) -> String {
+    GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_NON_ACCEPTED_CLASS_POLICY_CLAIM_BOUNDARY.to_owned()
+}
+
 pub fn gateway_formal_tiny_digest_backend_z3_execution_output_declared_files() -> Vec<String> {
     GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_DECLARED_FILES
         .iter()
@@ -25941,6 +26078,23 @@ pub fn gateway_formal_tiny_digest_backend_z3_bounded_formal_evidence_feasibility
         "not accepted tiny Z3 formal evidence".to_owned(),
     ));
     nonclaims.insert(NonClaimLabel("ownership decision unresolved".to_owned()));
+    nonclaims
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims =
+        gateway_formal_tiny_digest_backend_z3_bounded_formal_evidence_feasibility_required_nonclaims(
+        );
+    nonclaims.insert(NonClaimLabel(
+        "tiny Z3 local non-accepted class policy metadata only".to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel(
+        "not implemented tiny Z3 bounded formal evidence class".to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel(
+        "not accepted tiny Z3 formal evidence class".to_owned(),
+    ));
     nonclaims
 }
 
@@ -27457,6 +27611,40 @@ pub fn gateway_formal_real_command_lane_local_non_accepted_class_policy_requirem
             hash_tagged(
                 "hsai-agent-admission:gateway-formal-real-command-lane-local-non-accepted-class-policy-requirement:v1",
                 &"must bind reviewer policy requirement digest",
+            ),
+        ),
+    ])
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_requirement_digests(
+) -> BTreeMap<String, Hash> {
+    BTreeMap::from([
+        (
+            "reviewed_scope_requirement".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-local-non-accepted-class-policy-requirement:v1",
+                &"must bind tiny Z3 reviewed scope statement digest",
+            ),
+        ),
+        (
+            "source_correspondence_requirement".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-local-non-accepted-class-policy-requirement:v1",
+                &"must bind tiny Z3 source correspondence requirement digest",
+            ),
+        ),
+        (
+            "replay_requirement".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-local-non-accepted-class-policy-requirement:v1",
+                &"must bind tiny Z3 replay requirement digest",
+            ),
+        ),
+        (
+            "reviewer_policy_requirement".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-local-non-accepted-class-policy-requirement:v1",
+                &"must bind tiny Z3 reviewer policy requirement digest",
             ),
         ),
     ])
@@ -30140,6 +30328,292 @@ fn validate_gateway_formal_tiny_digest_backend_z3_bounded_formal_evidence_feasib
     {
         issues.push(
             GatewayFormalTinyDigestBackendZ3BoundedFormalEvidenceFeasibilityIssue::PromotionAttempt,
+        );
+    }
+}
+
+pub fn build_gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy(
+    feasibility: &GatewayFormalTinyDigestBackendZ3BoundedFormalEvidenceFeasibility,
+    input: &GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyInput,
+) -> Result<
+    GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicy,
+    GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyValidation,
+> {
+    let validation =
+        validate_gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_input(
+            feasibility,
+            input,
+        );
+    if !validation.valid {
+        return Err(validation);
+    }
+    Ok(
+        GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicy {
+            schema_version:
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_NON_ACCEPTED_CLASS_POLICY_SCHEMA_VERSION
+                    .to_owned(),
+            policy_id: input.policy_id.clone(),
+            state_slice:
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_NON_ACCEPTED_CLASS_POLICY_STATE_SLICE
+                    .to_owned(),
+            created_at_unix: input.created_at_unix,
+            policy_input_digest: input.digest(),
+            feasibility_digest: feasibility.digest(),
+            feasibility_input_digest: feasibility.feasibility_input_digest,
+            policy_decision_digest: feasibility.policy_decision_digest,
+            handoff_digest: feasibility.handoff_digest,
+            reviewed_record_digest: feasibility.reviewed_record_digest,
+            current_accepted_append_blockers: feasibility.current_accepted_append_blockers.clone(),
+            current_accepted_append_blockers_digest: feasibility
+                .current_accepted_append_blockers_digest,
+            class_name: input.class_name.clone(),
+            owner_path: input.owner_path.clone(),
+            class_status: input.class_status.clone(),
+            reviewed_scope_requirement_digest: input.reviewed_scope_requirement_digest,
+            source_correspondence_requirement_digest: input
+                .source_correspondence_requirement_digest,
+            replay_requirement_digest: input.replay_requirement_digest,
+            reviewer_policy_requirement_digest: input.reviewer_policy_requirement_digest,
+            previous_promotion_state: "bounded_formal_evidence_feasibility_metadata".to_owned(),
+            promotion_state: "local_non_accepted_class_policy_metadata".to_owned(),
+            next_required_state: "tiny_z3_local_reviewed_formal_evidence_metadata_class_boundary"
+                .to_owned(),
+            claim_boundary:
+                gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_claim_boundary(
+                ),
+            explicit_nonclaims: input.explicit_nonclaims.clone(),
+            creates_accepted_evidence: false,
+            changes_accepted_append_policy: false,
+            implements_bounded_formal_evidence_class: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            grants_authority: false,
+        },
+    )
+}
+
+pub fn validate_gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_input(
+    feasibility: &GatewayFormalTinyDigestBackendZ3BoundedFormalEvidenceFeasibility,
+    input: &GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyInput,
+) -> GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_NON_ACCEPTED_CLASS_POLICY_SCHEMA_VERSION
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue::InvalidSchemaVersion,
+        );
+    }
+    if !is_single_segment_id(&input.policy_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue::InvalidPolicyId,
+        );
+    }
+    if input.created_at_unix == 0 {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue::MissingCreatedAt,
+        );
+    }
+    validate_gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_digests(
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_feasibility(
+        feasibility,
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_policy(
+        input,
+        &mut issues,
+    );
+    GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_digests(
+    input: &GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyInput,
+    issues: &mut Vec<GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue>,
+) {
+    for (label, digest) in [
+        ("feasibility_digest", input.feasibility_digest),
+        ("feasibility_input_digest", input.feasibility_input_digest),
+        ("policy_decision_digest", input.policy_decision_digest),
+        ("handoff_digest", input.handoff_digest),
+        ("reviewed_record_digest", input.reviewed_record_digest),
+        (
+            "current_accepted_append_blockers_digest",
+            input.current_accepted_append_blockers_digest,
+        ),
+        (
+            "reviewed_scope_requirement_digest",
+            input.reviewed_scope_requirement_digest,
+        ),
+        (
+            "source_correspondence_requirement_digest",
+            input.source_correspondence_requirement_digest,
+        ),
+        ("replay_requirement_digest", input.replay_requirement_digest),
+        (
+            "reviewer_policy_requirement_digest",
+            input.reviewer_policy_requirement_digest,
+        ),
+        ("explicit_nonclaims_digest", input.explicit_nonclaims_digest),
+    ] {
+        if digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue::MissingDigest(
+                    label.to_owned(),
+                ),
+            );
+        }
+    }
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_feasibility(
+    feasibility: &GatewayFormalTinyDigestBackendZ3BoundedFormalEvidenceFeasibility,
+    input: &GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyInput,
+    issues: &mut Vec<GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue>,
+) {
+    if input.feasibility_digest != feasibility.digest()
+        || input.feasibility_input_digest != feasibility.feasibility_input_digest
+        || input.policy_decision_digest != feasibility.policy_decision_digest
+        || input.handoff_digest != feasibility.handoff_digest
+        || input.reviewed_record_digest != feasibility.reviewed_record_digest
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue::FeasibilityDigestDrift,
+        );
+    }
+    if feasibility.schema_version
+        != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_SCHEMA_VERSION
+        || feasibility.state_slice
+            != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_STATE_SLICE
+        || feasibility.promotion_state != "bounded_formal_evidence_feasibility_metadata"
+        || feasibility.next_required_state != "bounded_formal_evidence_class_policy_boundary"
+        || feasibility.claim_boundary
+            != gateway_formal_tiny_digest_backend_z3_bounded_formal_evidence_feasibility_claim_boundary()
+        || feasibility.policy_decision
+            != GatewayFormalTinyDigestBackendZ3FormalAcceptancePolicyDecision::AcceptedFormalEvidenceStillForbidden
+        || feasibility.candidate_class_name
+            != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_CANDIDATE_CLASS
+        || feasibility.candidate_class_status
+            != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_CLASS_STATUS
+        || feasibility.ownership_decision
+            != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_OWNER_DECISION
+        || feasibility.creates_accepted_evidence
+        || feasibility.changes_accepted_append_policy
+        || feasibility.bounded_formal_evidence_class_approved
+        || feasibility.creates_level2_evidence
+        || feasibility.populates_score_axes
+        || feasibility.proof_artifact_created
+        || feasibility.checker_transcript_created
+        || feasibility.solver_certificate_created
+        || feasibility.semantic_correctness_claimed
+        || feasibility.production_readiness_claimed
+        || feasibility.sota_claimed
+        || feasibility.breakthrough_claimed
+        || feasibility.full_security_claimed
+        || feasibility.grants_authority
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue::FeasibilityStateMismatch,
+        );
+    }
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_policy(
+    input: &GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyInput,
+    issues: &mut Vec<GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue>,
+) {
+    let blockers = gateway_formal_tiny_digest_backend_z3_accepted_handoff_current_blockers();
+    if input.current_accepted_append_blockers != blockers
+        || input.current_accepted_append_blockers_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-handoff-current-blockers:v1",
+                &blockers,
+            )
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue::AcceptedAppendBlockerMismatch,
+        );
+    }
+    if input.class_name
+        != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_CANDIDATE_CLASS
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue::ClassNameMismatch,
+        );
+    }
+    if input.owner_path
+        != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_NON_ACCEPTED_CLASS_POLICY_OWNER_PATH
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue::OwnerPathMismatch,
+        );
+    }
+    if input.class_status
+        != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_NON_ACCEPTED_CLASS_POLICY_CLASS_STATUS
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue::ClassStatusMismatch,
+        );
+    }
+    let requirement_digests =
+        gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_requirement_digests();
+    if input.reviewed_scope_requirement_digest != requirement_digests["reviewed_scope_requirement"]
+        || input.source_correspondence_requirement_digest
+            != requirement_digests["source_correspondence_requirement"]
+        || input.replay_requirement_digest != requirement_digests["replay_requirement"]
+        || input.reviewer_policy_requirement_digest
+            != requirement_digests["reviewer_policy_requirement"]
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue::RequirementDigestMismatch,
+        );
+    }
+    let nonclaims =
+        gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-local-non-accepted-class-policy-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue::NonclaimMismatch,
+        );
+    }
+    if input.accepted_evidence_mutation_requested
+        || input.accepted_append_policy_change_requested
+        || input.bounded_formal_evidence_class_implemented
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.benchmark_or_sota_comparison_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue::PromotionAttempt,
         );
     }
 }
@@ -54249,6 +54723,69 @@ mod tests {
         }
     }
 
+    fn phase419_local_non_accepted_class_policy_input(
+        policy_id: &str,
+        feasibility: &GatewayFormalTinyDigestBackendZ3BoundedFormalEvidenceFeasibility,
+    ) -> GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyInput {
+        let blockers = gateway_formal_tiny_digest_backend_z3_accepted_handoff_current_blockers();
+        let requirement_digests =
+            gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_requirement_digests();
+        let explicit_nonclaims =
+            gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_required_nonclaims();
+        GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyInput {
+            schema_version:
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_NON_ACCEPTED_CLASS_POLICY_SCHEMA_VERSION
+                    .to_owned(),
+            policy_id: policy_id.to_owned(),
+            created_at_unix: 1_800_000_419,
+            feasibility_digest: feasibility.digest(),
+            feasibility_input_digest: feasibility.feasibility_input_digest,
+            policy_decision_digest: feasibility.policy_decision_digest,
+            handoff_digest: feasibility.handoff_digest,
+            reviewed_record_digest: feasibility.reviewed_record_digest,
+            current_accepted_append_blockers_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-handoff-current-blockers:v1",
+                &blockers,
+            ),
+            current_accepted_append_blockers: blockers,
+            class_name:
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_CANDIDATE_CLASS
+                    .to_owned(),
+            owner_path:
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_NON_ACCEPTED_CLASS_POLICY_OWNER_PATH
+                    .to_owned(),
+            class_status:
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_NON_ACCEPTED_CLASS_POLICY_CLASS_STATUS
+                    .to_owned(),
+            reviewed_scope_requirement_digest: requirement_digests["reviewed_scope_requirement"],
+            source_correspondence_requirement_digest: requirement_digests
+                ["source_correspondence_requirement"],
+            replay_requirement_digest: requirement_digests["replay_requirement"],
+            reviewer_policy_requirement_digest: requirement_digests["reviewer_policy_requirement"],
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-local-non-accepted-class-policy-nonclaims:v1",
+                &explicit_nonclaims,
+            ),
+            explicit_nonclaims,
+            accepted_evidence_mutation_requested: false,
+            accepted_append_policy_change_requested: false,
+            bounded_formal_evidence_class_implemented: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            benchmark_or_sota_comparison_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
     fn phase407_candidate_if_z3_available(
         name: &str,
     ) -> Option<(
@@ -55858,6 +56395,296 @@ mod tests {
         fs::remove_dir_all(&output_root).expect("phase417 promotion output cleanup succeeds");
         fs::remove_dir_all(&obligation_root)
             .expect("phase417 promotion obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase419_tiny_z3_local_non_accepted_class_policy_builds_metadata() {
+        let Some((obligation_root, output_root, candidate)) =
+            phase407_candidate_if_z3_available("phase419-policy-valid")
+        else {
+            return;
+        };
+        let preview_input = phase409_review_preview_input(
+            "phase419-policy-preview",
+            &candidate,
+            GatewayFormalTinyDigestBackendZ3ReviewPreviewDecisionLabel::ReviewPreviewAcceptCandidateScope,
+        );
+        let preview =
+            build_gateway_formal_tiny_digest_backend_z3_review_preview(&candidate, &preview_input)
+                .expect("phase419 preview builds");
+        let record_input = phase411_reviewed_record_input("phase419-record", &preview);
+        let reviewed_record =
+            build_gateway_formal_tiny_digest_backend_z3_reviewed_record(&preview, &record_input)
+                .expect("phase419 reviewed record builds");
+        let handoff_input = phase413_accepted_handoff_input("phase419-handoff", &reviewed_record);
+        let handoff = build_gateway_formal_tiny_digest_backend_z3_accepted_handoff(
+            &reviewed_record,
+            &handoff_input,
+        )
+        .expect("phase419 handoff builds");
+        let decision_input = phase415_policy_decision_input("phase419-decision", &handoff);
+        let policy_decision =
+            build_gateway_formal_tiny_digest_backend_z3_policy_decision(&handoff, &decision_input)
+                .expect("phase419 policy decision builds");
+        let feasibility_input =
+            phase417_bounded_feasibility_input("phase419-feasibility", &policy_decision);
+        let feasibility =
+            build_gateway_formal_tiny_digest_backend_z3_bounded_formal_evidence_feasibility(
+                &policy_decision,
+                &feasibility_input,
+            )
+            .expect("phase419 feasibility builds");
+        let class_policy_input =
+            phase419_local_non_accepted_class_policy_input("phase419-policy", &feasibility);
+        let class_policy =
+            build_gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy(
+                &feasibility,
+                &class_policy_input,
+            )
+            .expect("phase419 class policy builds");
+
+        assert_eq!(
+            class_policy.state_slice,
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_NON_ACCEPTED_CLASS_POLICY_STATE_SLICE
+        );
+        assert_eq!(
+            class_policy.previous_promotion_state,
+            "bounded_formal_evidence_feasibility_metadata"
+        );
+        assert_eq!(
+            class_policy.promotion_state,
+            "local_non_accepted_class_policy_metadata"
+        );
+        assert_eq!(
+            class_policy.next_required_state,
+            "tiny_z3_local_reviewed_formal_evidence_metadata_class_boundary"
+        );
+        assert_eq!(class_policy.feasibility_digest, feasibility.digest());
+        assert_eq!(
+            class_policy.policy_decision_digest,
+            feasibility.policy_decision_digest
+        );
+        assert_eq!(
+            class_policy.class_name,
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_CANDIDATE_CLASS
+        );
+        assert_eq!(
+            class_policy.owner_path,
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_NON_ACCEPTED_CLASS_POLICY_OWNER_PATH
+        );
+        assert_eq!(
+            class_policy.class_status,
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_NON_ACCEPTED_CLASS_POLICY_CLASS_STATUS
+        );
+        assert_eq!(
+            class_policy.claim_boundary,
+            gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_claim_boundary()
+        );
+        assert!(!class_policy.creates_accepted_evidence);
+        assert!(!class_policy.changes_accepted_append_policy);
+        assert!(!class_policy.implements_bounded_formal_evidence_class);
+        assert!(!class_policy.creates_level2_evidence);
+        assert!(!class_policy.populates_score_axes);
+        assert!(!class_policy.proof_artifact_created);
+        assert!(!class_policy.checker_transcript_created);
+        assert!(!class_policy.solver_certificate_created);
+        assert!(!class_policy.semantic_correctness_claimed);
+        assert!(!class_policy.production_readiness_claimed);
+        assert!(!class_policy.sota_claimed);
+        assert!(!class_policy.breakthrough_claimed);
+        assert!(!class_policy.full_security_claimed);
+        assert!(!class_policy.grants_authority);
+
+        fs::remove_dir_all(&output_root).expect("phase419 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase419 obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase419_tiny_z3_local_non_accepted_class_policy_rejects_drift() {
+        let Some((obligation_root, output_root, candidate)) =
+            phase407_candidate_if_z3_available("phase419-policy-drift")
+        else {
+            return;
+        };
+        let preview_input = phase409_review_preview_input(
+            "phase419-drift-preview",
+            &candidate,
+            GatewayFormalTinyDigestBackendZ3ReviewPreviewDecisionLabel::ReviewPreviewAcceptCandidateScope,
+        );
+        let preview =
+            build_gateway_formal_tiny_digest_backend_z3_review_preview(&candidate, &preview_input)
+                .expect("phase419 drift preview builds");
+        let record_input = phase411_reviewed_record_input("phase419-drift-record", &preview);
+        let reviewed_record =
+            build_gateway_formal_tiny_digest_backend_z3_reviewed_record(&preview, &record_input)
+                .expect("phase419 drift reviewed record builds");
+        let handoff_input =
+            phase413_accepted_handoff_input("phase419-drift-handoff", &reviewed_record);
+        let handoff = build_gateway_formal_tiny_digest_backend_z3_accepted_handoff(
+            &reviewed_record,
+            &handoff_input,
+        )
+        .expect("phase419 drift handoff builds");
+        let decision_input = phase415_policy_decision_input("phase419-drift-decision", &handoff);
+        let policy_decision =
+            build_gateway_formal_tiny_digest_backend_z3_policy_decision(&handoff, &decision_input)
+                .expect("phase419 drift policy decision builds");
+        let feasibility_input =
+            phase417_bounded_feasibility_input("phase419-drift-feasibility", &policy_decision);
+        let feasibility =
+            build_gateway_formal_tiny_digest_backend_z3_bounded_formal_evidence_feasibility(
+                &policy_decision,
+                &feasibility_input,
+            )
+            .expect("phase419 drift feasibility builds");
+        let class_policy_input =
+            phase419_local_non_accepted_class_policy_input("phase419-drift-policy", &feasibility);
+
+        let mut digest_drift = class_policy_input.clone();
+        digest_drift.feasibility_digest = Hash([19; 32]);
+        let digest_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_input(
+                &feasibility,
+                &digest_drift,
+            );
+        assert!(digest_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue::FeasibilityDigestDrift
+        ));
+
+        let mut class_drift = class_policy_input.clone();
+        class_drift.class_name = "AcceptedTinyZ3FormalEvidence".to_owned();
+        let class_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_input(
+                &feasibility,
+                &class_drift,
+            );
+        assert!(class_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue::ClassNameMismatch
+        ));
+
+        let mut owner_drift = class_policy_input.clone();
+        owner_drift.owner_path = "accepted_append_path".to_owned();
+        let owner_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_input(
+                &feasibility,
+                &owner_drift,
+            );
+        assert!(owner_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue::OwnerPathMismatch
+        ));
+
+        let mut status_drift = class_policy_input.clone();
+        status_drift.class_status = "accepted_formal_evidence".to_owned();
+        let status_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_input(
+                &feasibility,
+                &status_drift,
+            );
+        assert!(status_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue::ClassStatusMismatch
+        ));
+
+        let mut requirement_drift = class_policy_input.clone();
+        requirement_drift.replay_requirement_digest = Hash([20; 32]);
+        let requirement_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_input(
+                &feasibility,
+                &requirement_drift,
+            );
+        assert!(requirement_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue::RequirementDigestMismatch
+        ));
+
+        let mut promoted_feasibility = feasibility.clone();
+        promoted_feasibility.creates_accepted_evidence = true;
+        let feasibility_state_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_input(
+                &promoted_feasibility,
+                &class_policy_input,
+            );
+        assert!(feasibility_state_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue::FeasibilityStateMismatch
+        ));
+
+        fs::remove_dir_all(&output_root).expect("phase419 drift output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase419 drift obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase419_tiny_z3_local_non_accepted_class_policy_rejects_promotion() {
+        let Some((obligation_root, output_root, candidate)) =
+            phase407_candidate_if_z3_available("phase419-policy-promotion")
+        else {
+            return;
+        };
+        let preview_input = phase409_review_preview_input(
+            "phase419-promotion-preview",
+            &candidate,
+            GatewayFormalTinyDigestBackendZ3ReviewPreviewDecisionLabel::ReviewPreviewAcceptCandidateScope,
+        );
+        let preview =
+            build_gateway_formal_tiny_digest_backend_z3_review_preview(&candidate, &preview_input)
+                .expect("phase419 promotion preview builds");
+        let record_input = phase411_reviewed_record_input("phase419-promotion-record", &preview);
+        let reviewed_record =
+            build_gateway_formal_tiny_digest_backend_z3_reviewed_record(&preview, &record_input)
+                .expect("phase419 promotion reviewed record builds");
+        let handoff_input =
+            phase413_accepted_handoff_input("phase419-promotion-handoff", &reviewed_record);
+        let handoff = build_gateway_formal_tiny_digest_backend_z3_accepted_handoff(
+            &reviewed_record,
+            &handoff_input,
+        )
+        .expect("phase419 promotion handoff builds");
+        let decision_input =
+            phase415_policy_decision_input("phase419-promotion-decision", &handoff);
+        let policy_decision =
+            build_gateway_formal_tiny_digest_backend_z3_policy_decision(&handoff, &decision_input)
+                .expect("phase419 promotion policy decision builds");
+        let feasibility_input =
+            phase417_bounded_feasibility_input("phase419-promotion-feasibility", &policy_decision);
+        let feasibility =
+            build_gateway_formal_tiny_digest_backend_z3_bounded_formal_evidence_feasibility(
+                &policy_decision,
+                &feasibility_input,
+            )
+            .expect("phase419 promotion feasibility builds");
+        let mut class_policy_input = phase419_local_non_accepted_class_policy_input(
+            "phase419-promotion-policy",
+            &feasibility,
+        );
+
+        class_policy_input.accepted_evidence_mutation_requested = true;
+        class_policy_input.accepted_append_policy_change_requested = true;
+        class_policy_input.bounded_formal_evidence_class_implemented = true;
+        class_policy_input.accepted_formal_evidence_created = true;
+        class_policy_input.creates_level2_evidence = true;
+        class_policy_input.populates_score_axes = true;
+        class_policy_input.proof_artifact_promoted = true;
+        class_policy_input.checker_transcript_promoted = true;
+        class_policy_input.solver_certificate_promoted = true;
+        class_policy_input.sota_claimed = true;
+        class_policy_input.full_security_claimed = true;
+        class_policy_input.action_authority_claimed = true;
+        let validation =
+            validate_gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy_input(
+                &feasibility,
+                &class_policy_input,
+            );
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3LocalNonAcceptedClassPolicyIssue::PromotionAttempt
+        ));
+        assert!(
+            build_gateway_formal_tiny_digest_backend_z3_local_non_accepted_class_policy(
+                &feasibility,
+                &class_policy_input,
+            )
+            .is_err()
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase419 promotion output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase419 promotion obligation cleanup succeeds");
     }
 
     #[test]
