@@ -147,10 +147,9 @@ That still does not support:
 
 ## Next Slice
 
-Phase 340 should define the docs-first bounded formal-evidence class policy
-boundary. It must decide whether the candidate class remains blocked, remains
-feasibility-only, or can be specified as a local non-accepted metadata class. It
-must not approve accepted formal evidence, mutate the accepted Evidence Ledger,
+Phase 340 defines the docs-first bounded formal-evidence class policy boundary.
+It permits the candidate only as a future local non-accepted metadata class. It
+does not approve accepted formal evidence, mutate the accepted Evidence Ledger,
 change accepted append policy, create Level2+ evidence, populate score axes, or
 claim semantic correctness, production readiness, SOTA, full security, or action
 authority.
