@@ -216,7 +216,7 @@ It cannot support:
 ## Phase 379 Implementation Exit Criteria
 
 Phase 379 implements local accepted-append decision quarantine-resolution
-review metadata only if it:
+review metadata. The implementation is valid because it:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;
