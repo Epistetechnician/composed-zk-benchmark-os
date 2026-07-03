@@ -225,8 +225,7 @@ It cannot support:
 
 ## Phase 385 Implementation Exit Criteria
 
-Phase 385 implements local accepted-append decision quarantine-resolution
-escalation terminal-blocker metadata only if it:
+The Phase 385 implementation is valid because it:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;
