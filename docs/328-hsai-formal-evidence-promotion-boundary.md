@@ -143,8 +143,7 @@ claim.
 
 ## Future Code Phase Exit Criteria
 
-A future Phase 329 implementation may create candidate evidence only if it
-adds:
+Phase 329 implements candidate evidence only if it adds:
 
 - a candidate evidence data model under `crates/hsai-agent-admission`;
 - deterministic candidate digesting;
@@ -164,3 +163,11 @@ attestation_challenge_binding_deterministic_input_sensitive
 ```
 
 No broader property is authorized by this boundary.
+
+## Next Slice
+
+Phase 330 may define or implement a local reviewed-formal-evidence preview
+boundary for a Phase 329 candidate. It must not mutate accepted evidence, create
+Level2+ evidence, populate score axes, claim semantic correctness, claim
+production readiness, claim SOTA, claim breakthrough status, claim full
+security, or grant authority to execute an action.

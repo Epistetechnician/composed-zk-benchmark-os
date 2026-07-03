@@ -623,6 +623,11 @@ pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_OUTPUT_SCHEMA_VER
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_STATE_SLICE: &str =
     "phase-326-hsai-real-formal-command-lane-quarantined-fixed-smt-execution";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_CLAIM_BOUNDARY: &str = "local gateway real formal command-lane quarantined fixed-SMT execution result only; spawns one operator-digested fixed local executable through the Phase 325 preflight and records bounded redacted stdout/stderr summaries, but does not create proof artifacts, create checker transcripts, create solver certificates, create accepted evidence, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
+    "phase-329-hsai-local-formal-evidence-candidate-data-model";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_CLAIM_BOUNDARY: &str = "local gateway formal-evidence candidate metadata only; binds one quarantined fixed-SMT execution output to one Phase 323 source bundle, one Phase 325 preflight, one Phase 327 output bundle, one declared gateway admission invariant, digest-bound replay metadata, and explicit nonclaims, but does not create reviewed formal evidence, create accepted evidence, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GatewayAttestationChallengeBinding {
@@ -4837,6 +4842,139 @@ pub enum GatewayFormalRealCommandLaneFixedSmtExecutionOutputError {
     NonclaimMismatch,
     Io(String),
     Serialization(String),
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneFormalEvidenceCandidateInput {
+    pub schema_version: String,
+    pub candidate_id: String,
+    pub created_at_unix: u64,
+    pub phase323_manifest_digest: Hash,
+    pub preflight_digest: Hash,
+    pub process_output_digest: Hash,
+    pub phase327_manifest_digest: Hash,
+    pub fixed_executable_digest: Hash,
+    pub fixed_argv_template_digest: Hash,
+    pub smtlib2_obligation_digest: Hash,
+    pub expected_output_grammar_digest: Hash,
+    pub solver_verdict_label: GatewayFormalRealCommandLaneSolverVerdictLabel,
+    pub stdout_summary_digest: Hash,
+    pub stderr_summary_digest: Hash,
+    pub nonclaim_set_digest: Hash,
+    pub source_correspondence_statement: String,
+    pub replay_command_descriptor_digest: Hash,
+    pub verifier_policy_id: String,
+    pub reviewer_policy_id: String,
+    pub required_nonclaims: BTreeSet<NonClaimLabel>,
+    pub accepted_evidence_output_path_requested: bool,
+    pub level2_evidence_requested: bool,
+    pub score_axis_population_requested: bool,
+    pub whole_system_proof_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+    pub raw_logs_relied_on: bool,
+    pub raw_provider_response_relied_on: bool,
+    pub secrets_relied_on: bool,
+    pub undeclared_files_relied_on: bool,
+    pub checker_transcript_promotion_requested: bool,
+    pub solver_certificate_promotion_requested: bool,
+}
+
+impl GatewayFormalRealCommandLaneFormalEvidenceCandidateInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-formal-evidence-candidate-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneFormalEvidenceCandidate {
+    pub schema_version: String,
+    pub candidate_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub candidate_input_digest: Hash,
+    pub phase323_manifest_digest: Hash,
+    pub preflight_digest: Hash,
+    pub process_output_digest: Hash,
+    pub phase327_manifest_digest: Hash,
+    pub fixed_executable_digest: Hash,
+    pub fixed_argv_template_digest: Hash,
+    pub smtlib2_obligation_digest: Hash,
+    pub expected_output_grammar_digest: Hash,
+    pub solver_verdict_label: GatewayFormalRealCommandLaneSolverVerdictLabel,
+    pub stdout_summary_digest: Hash,
+    pub stderr_summary_digest: Hash,
+    pub nonclaim_set_digest: Hash,
+    pub source_correspondence_statement: String,
+    pub replay_command_descriptor_digest: Hash,
+    pub verifier_policy_id: String,
+    pub reviewer_policy_id: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub reviewed_formal_evidence_created: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+    pub raw_logs_retained: bool,
+    pub raw_provider_response_retained: bool,
+}
+
+impl GatewayFormalRealCommandLaneFormalEvidenceCandidate {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-formal-evidence-candidate:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue {
+    InvalidSchemaVersion,
+    InvalidCandidateId,
+    MissingCreatedAt,
+    MissingDigest(String),
+    Phase323ManifestDrift,
+    PreflightDrift,
+    Phase327ManifestDrift,
+    SolverVerdictNotEligible,
+    SourceCorrespondenceMissing,
+    ReplayDescriptorMismatch,
+    VerifierPolicyMissing,
+    ReviewerPolicyMissing,
+    NonclaimMismatch,
+    PromotionAttempt,
+    AcceptedEvidencePathRequested,
+    Level2EvidenceRequested,
+    ScoreAxisPopulationRequested,
+    RawArtifactReliance,
+    CheckerOrSolverCertificatePromotionRequested,
+    ClaimBoundaryMismatch,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneFormalEvidenceCandidateValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -18440,6 +18578,21 @@ pub fn gateway_formal_real_command_lane_fixed_smt_execution_required_nonclaims(
     ])
 }
 
+pub fn gateway_formal_real_command_lane_formal_evidence_candidate_claim_boundary() -> String {
+    GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_real_command_lane_formal_evidence_candidate_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims = gateway_formal_real_command_lane_fixed_smt_execution_required_nonclaims();
+    nonclaims.insert(NonClaimLabel("formal evidence candidate only".to_owned()));
+    nonclaims.insert(NonClaimLabel("not reviewed formal evidence".to_owned()));
+    nonclaims.insert(NonClaimLabel("not accepted formal evidence".to_owned()));
+    nonclaims.insert(NonClaimLabel("not source correspondence proof".to_owned()));
+    nonclaims.insert(NonClaimLabel("not whole-system proof".to_owned()));
+    nonclaims
+}
+
 pub fn build_gateway_formal_real_command_lane_execution_preflight(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     command_request: &GatewayFormalRealCommandLaneRequest,
@@ -19413,6 +19566,313 @@ fn gateway_formal_real_command_lane_fixed_smt_execution_serde_error(
     error: serde_json::Error,
 ) -> GatewayFormalRealCommandLaneFixedSmtExecutionOutputError {
     GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::Serialization(error.to_string())
+}
+
+pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
+    phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
+    preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
+    phase327_manifest: &GatewayFormalRealCommandLaneFixedSmtExecutionOutputManifest,
+    input: &GatewayFormalRealCommandLaneFormalEvidenceCandidateInput,
+) -> Result<
+    GatewayFormalRealCommandLaneFormalEvidenceCandidate,
+    GatewayFormalRealCommandLaneFormalEvidenceCandidateValidation,
+> {
+    let validation = validate_gateway_formal_real_command_lane_formal_evidence_candidate_input(
+        phase323_manifest,
+        preflight,
+        phase327_manifest,
+        input,
+    );
+    if !validation.valid {
+        return Err(validation);
+    }
+    Ok(GatewayFormalRealCommandLaneFormalEvidenceCandidate {
+        schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION
+            .to_owned(),
+        candidate_id: input.candidate_id.clone(),
+        state_slice: GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE
+            .to_owned(),
+        created_at_unix: input.created_at_unix,
+        candidate_input_digest: input.digest(),
+        phase323_manifest_digest: phase323_manifest.digest(),
+        preflight_digest: preflight.digest(),
+        process_output_digest: phase327_manifest.process_output_digest,
+        phase327_manifest_digest: phase327_manifest.digest(),
+        fixed_executable_digest: phase327_manifest.executable_digest,
+        fixed_argv_template_digest: phase327_manifest.fixed_argv_template_digest,
+        smtlib2_obligation_digest: phase323_manifest.obligation_digest,
+        expected_output_grammar_digest: preflight.expected_output_grammar_digest,
+        solver_verdict_label: phase327_manifest.solver_verdict_label.clone(),
+        stdout_summary_digest: phase327_manifest.stdout_summary_digest,
+        stderr_summary_digest: phase327_manifest.stderr_summary_digest,
+        nonclaim_set_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-formal-evidence-candidate-nonclaims:v1",
+            &input.required_nonclaims,
+        ),
+        source_correspondence_statement: input.source_correspondence_statement.clone(),
+        replay_command_descriptor_digest: phase323_manifest.command_descriptor_digest,
+        verifier_policy_id: input.verifier_policy_id.clone(),
+        reviewer_policy_id: input.reviewer_policy_id.clone(),
+        previous_promotion_state: "quarantined_output".to_owned(),
+        promotion_state: "formal_evidence_candidate".to_owned(),
+        next_required_state: "reviewed_formal_evidence".to_owned(),
+        claim_boundary:
+            gateway_formal_real_command_lane_formal_evidence_candidate_claim_boundary(),
+        explicit_nonclaims: input.required_nonclaims.clone(),
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        reviewed_formal_evidence_created: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+        raw_logs_retained: false,
+        raw_provider_response_retained: false,
+    })
+}
+
+pub fn validate_gateway_formal_real_command_lane_formal_evidence_candidate_input(
+    phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
+    preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
+    phase327_manifest: &GatewayFormalRealCommandLaneFixedSmtExecutionOutputManifest,
+    input: &GatewayFormalRealCommandLaneFormalEvidenceCandidateInput,
+) -> GatewayFormalRealCommandLaneFormalEvidenceCandidateValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION
+    {
+        issues.push(GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.candidate_id) {
+        issues.push(GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::InvalidCandidateId);
+    }
+    if input.created_at_unix == 0 {
+        issues.push(GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::MissingCreatedAt);
+    }
+    validate_gateway_formal_real_command_lane_formal_evidence_candidate_digests(input, &mut issues);
+    validate_gateway_formal_real_command_lane_formal_evidence_candidate_sources(
+        phase323_manifest,
+        preflight,
+        phase327_manifest,
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_real_command_lane_formal_evidence_candidate_policy(
+        phase327_manifest,
+        input,
+        &mut issues,
+    );
+    GatewayFormalRealCommandLaneFormalEvidenceCandidateValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_formal_evidence_candidate_digests(
+    input: &GatewayFormalRealCommandLaneFormalEvidenceCandidateInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue>,
+) {
+    for (label, digest) in [
+        ("phase323_manifest_digest", input.phase323_manifest_digest),
+        ("preflight_digest", input.preflight_digest),
+        ("process_output_digest", input.process_output_digest),
+        ("phase327_manifest_digest", input.phase327_manifest_digest),
+        ("fixed_executable_digest", input.fixed_executable_digest),
+        (
+            "fixed_argv_template_digest",
+            input.fixed_argv_template_digest,
+        ),
+        ("smtlib2_obligation_digest", input.smtlib2_obligation_digest),
+        (
+            "expected_output_grammar_digest",
+            input.expected_output_grammar_digest,
+        ),
+        ("stdout_summary_digest", input.stdout_summary_digest),
+        ("stderr_summary_digest", input.stderr_summary_digest),
+        ("nonclaim_set_digest", input.nonclaim_set_digest),
+        (
+            "replay_command_descriptor_digest",
+            input.replay_command_descriptor_digest,
+        ),
+    ] {
+        if digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::MissingDigest(
+                    label.to_owned(),
+                ),
+            );
+        }
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_formal_evidence_candidate_sources(
+    phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
+    preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
+    phase327_manifest: &GatewayFormalRealCommandLaneFixedSmtExecutionOutputManifest,
+    input: &GatewayFormalRealCommandLaneFormalEvidenceCandidateInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue>,
+) {
+    if phase323_manifest.schema_version != GATEWAY_FORMAL_REAL_COMMAND_LANE_OUTPUT_SCHEMA_VERSION
+        || phase323_manifest.state_slice != GATEWAY_FORMAL_REAL_COMMAND_LANE_STATE_SLICE
+        || phase323_manifest.claim_boundary != gateway_formal_real_command_lane_claim_boundary()
+        || phase323_manifest.process_spawned
+        || phase323_manifest.backend_executed
+        || phase323_manifest.creates_accepted_evidence
+        || phase323_manifest.creates_level2_evidence
+        || phase323_manifest.populates_score_axes
+        || input.phase323_manifest_digest != phase323_manifest.digest()
+    {
+        issues
+            .push(GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::Phase323ManifestDrift);
+    }
+    if preflight.schema_version
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_SCHEMA_VERSION
+        || preflight.state_slice != GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_STATE_SLICE
+        || preflight.phase323_manifest_digest != phase323_manifest.digest()
+        || preflight.command_request_digest != phase323_manifest.request_digest
+        || preflight.command_descriptor_digest != phase323_manifest.command_descriptor_digest
+        || preflight.obligation_digest != phase323_manifest.obligation_digest
+        || input.preflight_digest != preflight.digest()
+        || input.expected_output_grammar_digest != preflight.expected_output_grammar_digest
+        || !preflight.process_spawn_authorized
+        || preflight.process_spawned
+        || preflight.backend_executed
+        || preflight.creates_accepted_evidence
+        || preflight.creates_level2_evidence
+        || preflight.populates_score_axes
+    {
+        issues.push(GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::PreflightDrift);
+    }
+    if phase327_manifest.schema_version
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_OUTPUT_SCHEMA_VERSION
+        || phase327_manifest.state_slice
+            != GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_STATE_SLICE
+        || phase327_manifest.preflight_digest != preflight.digest()
+        || phase327_manifest.command_descriptor_digest
+            != phase323_manifest.command_descriptor_digest
+        || phase327_manifest.process_output_digest != input.process_output_digest
+        || phase327_manifest.executable_digest != input.fixed_executable_digest
+        || phase327_manifest.fixed_argv_template_digest != input.fixed_argv_template_digest
+        || phase327_manifest.stdout_summary_digest != input.stdout_summary_digest
+        || phase327_manifest.stderr_summary_digest != input.stderr_summary_digest
+        || phase327_manifest.digest() != input.phase327_manifest_digest
+        || phase327_manifest.creates_accepted_evidence
+        || phase327_manifest.creates_level2_evidence
+        || phase327_manifest.populates_score_axes
+        || phase327_manifest.proof_artifact_created
+        || phase327_manifest.checker_transcript_created
+        || phase327_manifest.solver_certificate_created
+    {
+        issues
+            .push(GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::Phase327ManifestDrift);
+    }
+    if input.smtlib2_obligation_digest != phase323_manifest.obligation_digest
+        || input.fixed_executable_digest != preflight.executable_digest
+        || input.fixed_argv_template_digest != preflight.fixed_argv_template_digest
+    {
+        issues
+            .push(GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::Phase327ManifestDrift);
+    }
+    if input.replay_command_descriptor_digest != phase323_manifest.command_descriptor_digest {
+        issues.push(
+            GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::ReplayDescriptorMismatch,
+        );
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_formal_evidence_candidate_policy(
+    phase327_manifest: &GatewayFormalRealCommandLaneFixedSmtExecutionOutputManifest,
+    input: &GatewayFormalRealCommandLaneFormalEvidenceCandidateInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue>,
+) {
+    if input.solver_verdict_label
+        != GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
+        || phase327_manifest.solver_verdict_label
+            != GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::SolverVerdictNotEligible,
+        );
+    }
+    if input.source_correspondence_statement.trim().is_empty()
+        || input
+            .source_correspondence_statement
+            .to_ascii_lowercase()
+            .contains("whole-system proof")
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::SourceCorrespondenceMissing,
+        );
+    }
+    if !is_single_segment_id(&input.verifier_policy_id) {
+        issues
+            .push(GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::VerifierPolicyMissing);
+    }
+    if !is_single_segment_id(&input.reviewer_policy_id) {
+        issues
+            .push(GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::ReviewerPolicyMissing);
+    }
+    let required_nonclaims =
+        gateway_formal_real_command_lane_formal_evidence_candidate_required_nonclaims();
+    if input.required_nonclaims != required_nonclaims
+        || input.nonclaim_set_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-formal-evidence-candidate-nonclaims:v1",
+                &required_nonclaims,
+            )
+    {
+        issues.push(GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::NonclaimMismatch);
+    }
+    if phase327_manifest.claim_boundary
+        != gateway_formal_real_command_lane_fixed_smt_execution_claim_boundary()
+    {
+        issues
+            .push(GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::ClaimBoundaryMismatch);
+    }
+    if input.whole_system_proof_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::PromotionAttempt);
+    }
+    if input.accepted_evidence_output_path_requested {
+        issues.push(
+            GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::AcceptedEvidencePathRequested,
+        );
+    }
+    if input.level2_evidence_requested {
+        issues.push(
+            GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::Level2EvidenceRequested,
+        );
+    }
+    if input.score_axis_population_requested {
+        issues.push(
+            GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::ScoreAxisPopulationRequested,
+        );
+    }
+    if input.raw_logs_relied_on
+        || input.raw_provider_response_relied_on
+        || input.secrets_relied_on
+        || input.undeclared_files_relied_on
+    {
+        issues.push(GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::RawArtifactReliance);
+    }
+    if input.checker_transcript_promotion_requested || input.solver_certificate_promotion_requested
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::CheckerOrSolverCertificatePromotionRequested,
+        );
+    }
 }
 
 fn validate_gateway_formal_real_command_lane_execution_preflight_manifest(
@@ -31052,6 +31512,163 @@ mod tests {
         }
     }
 
+    fn formal_evidence_candidate_input(
+        candidate_id: &str,
+        phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
+        preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
+        phase327_manifest: &GatewayFormalRealCommandLaneFixedSmtExecutionOutputManifest,
+    ) -> GatewayFormalRealCommandLaneFormalEvidenceCandidateInput {
+        let required_nonclaims =
+            gateway_formal_real_command_lane_formal_evidence_candidate_required_nonclaims();
+        let nonclaim_set_digest = hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-formal-evidence-candidate-nonclaims:v1",
+            &required_nonclaims,
+        );
+        GatewayFormalRealCommandLaneFormalEvidenceCandidateInput {
+            schema_version:
+                GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION
+                    .to_owned(),
+            candidate_id: candidate_id.to_owned(),
+            created_at_unix: 1_800_000_329,
+            phase323_manifest_digest: phase323_manifest.digest(),
+            preflight_digest: preflight.digest(),
+            process_output_digest: phase327_manifest.process_output_digest,
+            phase327_manifest_digest: phase327_manifest.digest(),
+            fixed_executable_digest: phase327_manifest.executable_digest,
+            fixed_argv_template_digest: phase327_manifest.fixed_argv_template_digest,
+            smtlib2_obligation_digest: phase323_manifest.obligation_digest,
+            expected_output_grammar_digest: preflight.expected_output_grammar_digest,
+            solver_verdict_label: phase327_manifest.solver_verdict_label.clone(),
+            stdout_summary_digest: phase327_manifest.stdout_summary_digest,
+            stderr_summary_digest: phase327_manifest.stderr_summary_digest,
+            nonclaim_set_digest,
+            source_correspondence_statement: "Phase 329 local source correspondence statement binds the Phase 323 SMT-LIB2 obligation to the declared gateway admission invariant without claiming source correspondence proof."
+                .to_owned(),
+            replay_command_descriptor_digest: phase323_manifest.command_descriptor_digest,
+            verifier_policy_id: "phase329-local-fixed-smt-policy".to_owned(),
+            reviewer_policy_id: "phase329-local-review-policy".to_owned(),
+            required_nonclaims,
+            accepted_evidence_output_path_requested: false,
+            level2_evidence_requested: false,
+            score_axis_population_requested: false,
+            whole_system_proof_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+            raw_logs_relied_on: false,
+            raw_provider_response_relied_on: false,
+            secrets_relied_on: false,
+            undeclared_files_relied_on: false,
+            checker_transcript_promotion_requested: false,
+            solver_certificate_promotion_requested: false,
+        }
+    }
+
+    fn real_command_lane_formal_evidence_candidate_parts(
+        name: &str,
+    ) -> (
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        GatewayFormalRealCommandLaneOutputManifest,
+        GatewayFormalRealCommandLaneExecutionPreflight,
+        GatewayFormalRealCommandLaneFixedSmtExecutionOutputManifest,
+        GatewayFormalRealCommandLaneFormalEvidenceCandidateInput,
+    ) {
+        let (
+            execution_root,
+            source_root,
+            source_manifest,
+            execution_manifest,
+            request,
+            mut command,
+            obligation,
+            mut obligation_binding,
+            mut transcript,
+            stdout_summary,
+            stderr_summary,
+            solver_verdict,
+            nonpromotion,
+        ) = real_command_lane_valid_parts(name);
+        command.argv_template = vec![
+            "--ignored".to_owned(),
+            "--exact".to_owned(),
+            "tests::phase326_fixed_smt_child_unsat".to_owned(),
+            "--nocapture".to_owned(),
+        ];
+        command.argv_template_digest = hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-argv-template:v1",
+            &command.argv_template,
+        );
+        obligation_binding.command_descriptor_digest = command.digest();
+        transcript.command_descriptor_digest = command.digest();
+        let phase323_root = temp_output_root(&format!("{name}-phase323"));
+        materialize_gateway_formal_real_command_lane_output_bundle(
+            &phase323_root,
+            &source_manifest,
+            &execution_manifest,
+            &request,
+            &command,
+            &obligation,
+            &obligation_binding,
+            &transcript,
+            &stdout_summary,
+            &stderr_summary,
+            &solver_verdict,
+            &nonpromotion,
+            &real_command_lane_output_request(&phase323_root),
+        )
+        .expect("phase329 source bundle materializes");
+        let phase323_manifest = read_gateway_formal_real_command_lane_output_bundle(&phase323_root)
+            .expect("phase329 source bundle reads back");
+        let fixed_executable = std::env::current_exe().expect("current test binary path exists");
+        let executable_digest =
+            hash_bytes(&fs::read(&fixed_executable).expect("current test binary reads"));
+        let mut preflight_input =
+            real_command_lane_execution_preflight_input(&phase323_manifest, &request, &command);
+        preflight_input.executable_digest = executable_digest;
+        let preflight = build_gateway_formal_real_command_lane_execution_preflight(
+            &phase323_manifest,
+            &request,
+            &command,
+            &preflight_input,
+        );
+        let process_output = run_gateway_formal_real_command_lane_fixed_smt_process(
+            &preflight,
+            &command,
+            &fixed_executable,
+        )
+        .expect("phase329 fixed process executes");
+        let phase327_root = temp_output_root(&format!("{name}-phase327"));
+        let phase327_manifest =
+            materialize_gateway_formal_real_command_lane_fixed_smt_execution_output_bundle(
+                &phase327_root,
+                &process_output,
+                &fixed_smt_execution_output_request(&phase327_root),
+            )
+            .expect("phase329 fixed-SMT output materializes");
+        let input = formal_evidence_candidate_input(
+            "phase329-candidate",
+            &phase323_manifest,
+            &preflight,
+            &phase327_manifest,
+        );
+        (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            phase323_manifest,
+            preflight,
+            phase327_manifest,
+            input,
+        )
+    }
+
     #[test]
     fn gateway_formal_real_command_lane_fixed_smt_process_executes_and_quarantines_unsat() {
         let (
@@ -31299,6 +31916,174 @@ mod tests {
         fs::remove_dir_all(&source_bundle_root).expect("phase327 source bundle cleanup succeeds");
         fs::remove_dir_all(&execution_root).expect("phase327 execution source cleanup succeeds");
         fs::remove_dir_all(&source_root).expect("phase327 adapter source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_formal_evidence_candidate_builds_below_acceptance() {
+        let (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            phase323_manifest,
+            preflight,
+            phase327_manifest,
+            input,
+        ) = real_command_lane_formal_evidence_candidate_parts("real-command-phase329-valid");
+
+        let candidate = build_gateway_formal_real_command_lane_formal_evidence_candidate(
+            &phase323_manifest,
+            &preflight,
+            &phase327_manifest,
+            &input,
+        )
+        .expect("phase329 formal evidence candidate builds");
+
+        assert_eq!(
+            candidate.state_slice,
+            GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE
+        );
+        assert_eq!(candidate.previous_promotion_state, "quarantined_output");
+        assert_eq!(candidate.promotion_state, "formal_evidence_candidate");
+        assert_eq!(candidate.next_required_state, "reviewed_formal_evidence");
+        assert_eq!(
+            candidate.phase323_manifest_digest,
+            phase323_manifest.digest()
+        );
+        assert_eq!(candidate.preflight_digest, preflight.digest());
+        assert_eq!(
+            candidate.phase327_manifest_digest,
+            phase327_manifest.digest()
+        );
+        assert_eq!(
+            candidate.process_output_digest,
+            phase327_manifest.process_output_digest
+        );
+        assert_eq!(
+            candidate.solver_verdict_label,
+            GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
+        );
+        assert_eq!(
+            candidate.claim_boundary,
+            gateway_formal_real_command_lane_formal_evidence_candidate_claim_boundary()
+        );
+        assert!(!candidate.reviewed_formal_evidence_created);
+        assert!(!candidate.creates_accepted_evidence);
+        assert!(!candidate.creates_level2_evidence);
+        assert!(!candidate.populates_score_axes);
+        assert!(!candidate.semantic_correctness_claimed);
+        assert!(!candidate.production_readiness_claimed);
+        assert!(!candidate.sota_claimed);
+        assert!(!candidate.breakthrough_claimed);
+        assert!(!candidate.full_security_claimed);
+        assert!(!candidate.grants_authority);
+
+        fs::remove_dir_all(&phase323_root).expect("phase329 phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase329 phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase329 execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase329 source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_formal_evidence_candidate_rejects_drift_and_promotion() {
+        let (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            phase323_manifest,
+            preflight,
+            phase327_manifest,
+            input,
+        ) = real_command_lane_formal_evidence_candidate_parts("real-command-phase329-drift");
+
+        let mut stale_preflight = input.clone();
+        stale_preflight.preflight_digest = Hash([7; 32]);
+        let validation = validate_gateway_formal_real_command_lane_formal_evidence_candidate_input(
+            &phase323_manifest,
+            &preflight,
+            &phase327_manifest,
+            &stale_preflight,
+        );
+        assert!(validation
+            .issues
+            .contains(&GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::PreflightDrift));
+
+        let mut promotion = input.clone();
+        promotion.accepted_evidence_output_path_requested = true;
+        promotion.sota_claimed = true;
+        promotion.score_axis_population_requested = true;
+        let promotion_validation =
+            validate_gateway_formal_real_command_lane_formal_evidence_candidate_input(
+                &phase323_manifest,
+                &preflight,
+                &phase327_manifest,
+                &promotion,
+            );
+        assert!(promotion_validation.issues.contains(
+            &GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::AcceptedEvidencePathRequested
+        ));
+        assert!(promotion_validation
+            .issues
+            .contains(&GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::PromotionAttempt));
+        assert!(promotion_validation.issues.contains(
+            &GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::ScoreAxisPopulationRequested
+        ));
+
+        let mut nonclaim_drift = input.clone();
+        nonclaim_drift
+            .required_nonclaims
+            .remove(&NonClaimLabel("not accepted formal evidence".to_owned()));
+        let nonclaim_validation =
+            validate_gateway_formal_real_command_lane_formal_evidence_candidate_input(
+                &phase323_manifest,
+                &preflight,
+                &phase327_manifest,
+                &nonclaim_drift,
+            );
+        assert!(nonclaim_validation
+            .issues
+            .contains(&GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::NonclaimMismatch));
+
+        let mut unknown_phase327 = phase327_manifest.clone();
+        unknown_phase327.solver_verdict_label =
+            GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnknown;
+        let mut unknown_input = input.clone();
+        unknown_input.solver_verdict_label =
+            GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnknown;
+        unknown_input.phase327_manifest_digest = unknown_phase327.digest();
+        let unknown_validation =
+            validate_gateway_formal_real_command_lane_formal_evidence_candidate_input(
+                &phase323_manifest,
+                &preflight,
+                &unknown_phase327,
+                &unknown_input,
+            );
+        assert!(unknown_validation.issues.contains(
+            &GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::SolverVerdictNotEligible
+        ));
+
+        let mut raw_reliance = input.clone();
+        raw_reliance.raw_logs_relied_on = true;
+        raw_reliance.checker_transcript_promotion_requested = true;
+        let raw_validation =
+            validate_gateway_formal_real_command_lane_formal_evidence_candidate_input(
+                &phase323_manifest,
+                &preflight,
+                &phase327_manifest,
+                &raw_reliance,
+            );
+        assert!(raw_validation.issues.contains(
+            &GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::RawArtifactReliance
+        ));
+        assert!(raw_validation.issues.contains(
+            &GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::CheckerOrSolverCertificatePromotionRequested
+        ));
+
+        fs::remove_dir_all(&phase323_root).expect("phase329 drift phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase329 drift phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase329 drift execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase329 drift source cleanup succeeds");
     }
 
     #[test]
