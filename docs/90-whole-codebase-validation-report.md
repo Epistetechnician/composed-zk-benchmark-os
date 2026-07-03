@@ -2025,6 +2025,21 @@ execute COBALT, run Rust-to-Lean extraction, submit benchmarks, deploy to
 production, claim semantic correctness, claim production readiness, claim SOTA,
 claim breakthrough status, claim full security, or grant authority.
 
+Phase 344 defines the docs-first local reviewed metadata review boundary. It
+records the allowed future review labels `review_scope_acceptable`,
+`review_rejected`, `replay_blocked`, `source_correspondence_blocked`, and
+`accepted_evidence_blocked`, plus future review inputs, validation and rejection
+cases, evidence meaning limits, and Phase 345 implementation exit criteria.
+Phase 344 creates no Rust code, changes no Cargo metadata, implements no review
+metadata, changes no `zkbench-core` accepted append policy, mutates no accepted
+Evidence Ledger, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, generates or promotes no proof artifacts,
+generates or promotes no checker transcripts, generates or promotes no solver
+certificates, executes no Lean, executes no COBALT, runs no Rust-to-Lean
+extraction, submits no benchmarks, deploys nothing to production, claims no
+semantic correctness, claims no production readiness, claims no SOTA, claims no
+breakthrough status, claims no full security, and grants no authority.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
