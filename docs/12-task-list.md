@@ -11287,6 +11287,37 @@ score axes, Lean/COBALT/Rust-to-Lean execution, proof artifact, checker
 transcript, solver certificate, or SOTA/full-security/semantic-correctness/
 production-readiness claim.
 
+## Phase 419 HSAI Tiny Z3 Local Non-Accepted Class Policy Metadata
+
+Status: complete. See
+`docs/419-hsai-tiny-z3-local-non-accepted-class-policy-notes.md`.
+
+Goal: implement local tiny-Z3 non-accepted class policy metadata over one Phase
+417 feasibility record without implementing the class, mutating accepted
+evidence, changing accepted append policy, creating accepted formal evidence,
+creating Level2+ evidence, populating score axes, or making strong public
+claims.
+
+Implemented: Phase 419 adds tiny-Z3 local non-accepted class-policy schema/
+state/claim-boundary constants, owner-path and class-status constants, input
+metadata, policy metadata, issue taxonomy, validation report, canonical
+nonclaim and requirement-digest helpers, builder, validator, and focused tests
+for valid policy metadata, feasibility digest drift, class-name drift,
+owner-path drift, class-status drift, requirement digest drift, promoted
+feasibility state, and promotion attempts.
+
+Validation coverage: `hsai-agent-admission` Phase 419 tests cover construction
+and rejection behavior. Repository hygiene, claim-boundary source scans, and
+workspace tests remain the broader gates.
+
+Exit criteria: HSAI now has local tiny-Z3 non-accepted class policy metadata
+bound to a Phase 417 feasibility record and current accepted-evidence blocker.
+It still has no implemented tiny-Z3 reviewed metadata class, accepted formal
+evidence, accepted Evidence Ledger mutation, accepted append policy change,
+Level2+ evidence, score axes, Lean/COBALT/Rust-to-Lean execution, proof
+artifact, checker transcript, solver certificate, or SOTA/full-security/
+semantic-correctness/production-readiness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

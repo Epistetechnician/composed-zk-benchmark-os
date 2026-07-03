@@ -5786,5 +5786,18 @@ production-readiness claims, full-security claims, breakthrough claims, and
 action authority. It is boundary documentation only; no Rust class-policy
 metadata is implemented in this phase.
 
+[docs/419-hsai-tiny-z3-local-non-accepted-class-policy-notes.md](docs/419-hsai-tiny-z3-local-non-accepted-class-policy-notes.md)
+records the Phase 419 local tiny-Z3 non-accepted class policy metadata over
+one Phase 417 feasibility record. The Rust surface adds typed input/output
+metadata, issue taxonomy, validation report, canonical nonclaim and
+requirement-digest helpers, builder, validator, and focused tests. The policy
+record preserves class name `TinyZ3LocalReviewedFormalEvidenceMetadata`, owner
+path `local_non_accepted_metadata_class`, and status
+`not_accepted_formal_evidence`. This is not a class implementation, not
+accepted formal evidence, not accepted Evidence Ledger mutation, not accepted
+append policy change, not Level2+ evidence, not score-axis evidence, not proof
+artifacts, not checker transcripts, not solver certificates, and not a
+production/SOTA/security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
