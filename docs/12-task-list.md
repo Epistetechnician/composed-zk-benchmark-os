@@ -10972,6 +10972,33 @@ evidence, no Level2+ evidence, no score axes, no Lean/COBALT/Rust-to-Lean
 execution, and no SOTA/full-security/semantic-correctness/production-readiness
 claim.
 
+## Phase 407 HSAI Tiny Z3 Formal Evidence Candidate
+
+Status: complete. See
+`docs/407-hsai-tiny-z3-formal-evidence-candidate-notes.md`.
+
+Goal: implement local formal-evidence candidate metadata for the Phase 403/404/405
+tiny Z3 lane without creating reviewed evidence, accepted evidence, Level2+
+evidence, score axes, proof authority, or strong public claims.
+
+Implemented: Phase 407 adds candidate input, candidate record, issue taxonomy,
+validation report, claim-boundary helper, nonclaim helper, builder, and
+validator under `hsai-agent-admission`. The candidate binds Phase 403 probe
+digests, Phase 404 execution digests, Phase 405 output-manifest and declared
+file digests, command and obligation digests, solver verdict, replay metadata,
+source correspondence statement, verifier/reviewer policy ids, and exact
+nonclaims.
+
+Validation coverage: focused tests build a valid candidate from real local Z3
+execution when available, reject stale execution and output-manifest digests,
+reject accepted-evidence/Level2+/score/SOTA/checker-transcript promotion, and
+reject nonclaim drift.
+
+Exit criteria: HSAI now has a local tiny-Z3 formal-evidence candidate metadata
+lane. It still has no reviewed formal evidence, accepted evidence, Level2+
+evidence, score axes, Lean/COBALT/Rust-to-Lean execution, or
+SOTA/full-security/semantic-correctness/production-readiness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
