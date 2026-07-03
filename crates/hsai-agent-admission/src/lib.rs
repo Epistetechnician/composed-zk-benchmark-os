@@ -723,6 +723,11 @@ pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_PROPOSAL_CANDIDATE_REVIEW_SCHEMA_VERS
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_PROPOSAL_CANDIDATE_REVIEW_STATE_SLICE: &str =
     "phase-359-hsai-proposal-candidate-review-metadata";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_PROPOSAL_CANDIDATE_REVIEW_CLAIM_BOUNDARY: &str = "local proposal-candidate review metadata only; reviews one Phase 357 proposal candidate while accepted append and accepted-ledger mutation remain blocked, but does not create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_APPEND_DECISION_PREFLIGHT_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-real-command-lane-append-decision-preflight:v1";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_APPEND_DECISION_PREFLIGHT_STATE_SLICE: &str =
+    "phase-361-hsai-append-decision-preflight-metadata";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_APPEND_DECISION_PREFLIGHT_CLAIM_BOUNDARY: &str = "local append-decision preflight metadata only; preflights one Phase 359 proposal candidate review while accepted append and accepted-ledger mutation remain blocked, but does not create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GatewayAttestationChallengeBinding {
@@ -6965,6 +6970,151 @@ pub enum GatewayFormalRealCommandLaneProposalCandidateReviewIssue {
 pub struct GatewayFormalRealCommandLaneProposalCandidateReviewValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalRealCommandLaneProposalCandidateReviewIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalRealCommandLaneAppendDecisionPreflightLabel {
+    AppendPreflightScopeAcceptable,
+    AppendPreflightRejected,
+    AcceptedAppendPolicyStillBlocked,
+    AcceptedLedgerMutationStillBlocked,
+    Level2EvidenceStillBlocked,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneAppendDecisionPreflightInput {
+    pub schema_version: String,
+    pub append_preflight_id: String,
+    pub reviewer_policy_id: String,
+    pub reviewer_decision_id: String,
+    pub proposal_policy_id: String,
+    pub proposal_candidate_id: String,
+    pub proposal_review_id: String,
+    pub preflight_decision_at_unix: u64,
+    pub phase359_review_digest: Hash,
+    pub phase359_review_input_digest: Hash,
+    pub phase357_candidate_digest: Hash,
+    pub phase357_candidate_input_digest: Hash,
+    pub phase355_review_digest: Hash,
+    pub phase353_materialized_manifest_digest: Hash,
+    pub phase351_review_digest: Hash,
+    pub phase349_serialization_preview_digest: Hash,
+    pub phase347_audit_package_digest: Hash,
+    pub phase345_review_record_digest: Hash,
+    pub phase343_metadata_digest: Hash,
+    pub declared_file_digest_map_digest: Hash,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub proposal_candidate_review_label: GatewayFormalRealCommandLaneProposalCandidateReviewLabel,
+    pub preflight_label: GatewayFormalRealCommandLaneAppendDecisionPreflightLabel,
+    pub preflight_summary: String,
+    pub accepted_evidence_mutation_requested: bool,
+    pub accepted_append_policy_change_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub benchmark_or_sota_comparison_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalRealCommandLaneAppendDecisionPreflightInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-append-decision-preflight-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneAppendDecisionPreflight {
+    pub schema_version: String,
+    pub append_preflight_id: String,
+    pub state_slice: String,
+    pub preflight_input_digest: Hash,
+    pub reviewer_policy_id: String,
+    pub reviewer_decision_id: String,
+    pub proposal_policy_id: String,
+    pub proposal_candidate_id: String,
+    pub proposal_review_id: String,
+    pub preflight_decision_at_unix: u64,
+    pub phase359_review_digest: Hash,
+    pub phase359_review_input_digest: Hash,
+    pub phase357_candidate_digest: Hash,
+    pub phase357_candidate_input_digest: Hash,
+    pub phase355_review_digest: Hash,
+    pub phase353_materialized_manifest_digest: Hash,
+    pub phase351_review_digest: Hash,
+    pub phase349_serialization_preview_digest: Hash,
+    pub phase347_audit_package_digest: Hash,
+    pub phase345_review_record_digest: Hash,
+    pub phase343_metadata_digest: Hash,
+    pub declared_file_digest_map_digest: Hash,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub proposal_candidate_review_label: GatewayFormalRealCommandLaneProposalCandidateReviewLabel,
+    pub preflight_label: GatewayFormalRealCommandLaneAppendDecisionPreflightLabel,
+    pub preflight_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub creates_accepted_evidence: bool,
+    pub changes_accepted_append_policy: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalRealCommandLaneAppendDecisionPreflight {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-append-decision-preflight:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalRealCommandLaneAppendDecisionPreflightIssue {
+    InvalidSchemaVersion,
+    InvalidAppendPreflightId,
+    InvalidReviewerPolicyId,
+    InvalidReviewerDecisionId,
+    InvalidProposalPolicyId,
+    InvalidProposalCandidateId,
+    InvalidProposalReviewId,
+    MissingPreflightDecisionTimestamp,
+    MissingDigest(String),
+    Phase359ReviewDigestDrift,
+    Phase359ReviewStateMismatch,
+    AcceptedAppendBlockerMismatch,
+    NonclaimMismatch,
+    PreflightSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneAppendDecisionPreflightValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalRealCommandLaneAppendDecisionPreflightIssue>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -20648,6 +20798,10 @@ pub fn gateway_formal_real_command_lane_proposal_candidate_review_claim_boundary
     GATEWAY_FORMAL_REAL_COMMAND_LANE_PROPOSAL_CANDIDATE_REVIEW_CLAIM_BOUNDARY.to_owned()
 }
 
+pub fn gateway_formal_real_command_lane_append_decision_preflight_claim_boundary() -> String {
+    GATEWAY_FORMAL_REAL_COMMAND_LANE_APPEND_DECISION_PREFLIGHT_CLAIM_BOUNDARY.to_owned()
+}
+
 pub fn gateway_formal_real_command_lane_policy_decision_statement() -> String {
     "accepted formal evidence remains forbidden in the current accepted append path".to_owned()
 }
@@ -20843,6 +20997,22 @@ pub fn gateway_formal_real_command_lane_proposal_candidate_review_required_noncl
     nonclaims.insert(NonClaimLabel("review is not acceptance".to_owned()));
     nonclaims.insert(NonClaimLabel(
         "accepted ledger mutation still blocked".to_owned(),
+    ));
+    nonclaims
+}
+
+pub fn gateway_formal_real_command_lane_append_decision_preflight_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims =
+        gateway_formal_real_command_lane_proposal_candidate_review_required_nonclaims();
+    nonclaims.insert(NonClaimLabel(
+        "local append-decision preflight metadata only".to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel(
+        "preflight is not accepted append decision".to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel(
+        "accepted append policy still blocked".to_owned(),
     ));
     nonclaims
 }
@@ -26685,6 +26855,290 @@ fn validate_gateway_formal_real_command_lane_proposal_candidate_review_policy(
         || input.action_authority_claimed
     {
         issues.push(GatewayFormalRealCommandLaneProposalCandidateReviewIssue::PromotionAttempt);
+    }
+}
+
+pub fn build_gateway_formal_real_command_lane_append_decision_preflight(
+    review: &GatewayFormalRealCommandLaneProposalCandidateReview,
+    input: &GatewayFormalRealCommandLaneAppendDecisionPreflightInput,
+) -> Result<
+    GatewayFormalRealCommandLaneAppendDecisionPreflight,
+    GatewayFormalRealCommandLaneAppendDecisionPreflightValidation,
+> {
+    let validation =
+        validate_gateway_formal_real_command_lane_append_decision_preflight_input(review, input);
+    if !validation.valid {
+        return Err(validation);
+    }
+    Ok(GatewayFormalRealCommandLaneAppendDecisionPreflight {
+        schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_APPEND_DECISION_PREFLIGHT_SCHEMA_VERSION
+            .to_owned(),
+        append_preflight_id: input.append_preflight_id.clone(),
+        state_slice: GATEWAY_FORMAL_REAL_COMMAND_LANE_APPEND_DECISION_PREFLIGHT_STATE_SLICE
+            .to_owned(),
+        preflight_input_digest: input.digest(),
+        reviewer_policy_id: input.reviewer_policy_id.clone(),
+        reviewer_decision_id: input.reviewer_decision_id.clone(),
+        proposal_policy_id: input.proposal_policy_id.clone(),
+        proposal_candidate_id: input.proposal_candidate_id.clone(),
+        proposal_review_id: input.proposal_review_id.clone(),
+        preflight_decision_at_unix: input.preflight_decision_at_unix,
+        phase359_review_digest: review.digest(),
+        phase359_review_input_digest: review.review_input_digest,
+        phase357_candidate_digest: review.phase357_candidate_digest,
+        phase357_candidate_input_digest: review.phase357_candidate_input_digest,
+        phase355_review_digest: review.phase355_review_digest,
+        phase353_materialized_manifest_digest: review.phase353_materialized_manifest_digest,
+        phase351_review_digest: review.phase351_review_digest,
+        phase349_serialization_preview_digest: review.phase349_serialization_preview_digest,
+        phase347_audit_package_digest: review.phase347_audit_package_digest,
+        phase345_review_record_digest: review.phase345_review_record_digest,
+        phase343_metadata_digest: review.phase343_metadata_digest,
+        declared_file_digest_map_digest: review.declared_file_digest_map_digest,
+        current_accepted_append_blockers_digest: review.current_accepted_append_blockers_digest,
+        proposal_candidate_review_label: input.proposal_candidate_review_label.clone(),
+        preflight_label: input.preflight_label.clone(),
+        preflight_summary: input.preflight_summary.clone(),
+        previous_promotion_state: "local_proposal_candidate_review_metadata".to_owned(),
+        promotion_state: "local_append_decision_preflight_metadata".to_owned(),
+        next_required_state: "accepted_append_decision_still_blocked".to_owned(),
+        claim_boundary: gateway_formal_real_command_lane_append_decision_preflight_claim_boundary(),
+        explicit_nonclaims: input.explicit_nonclaims.clone(),
+        creates_accepted_evidence: false,
+        changes_accepted_append_policy: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_gateway_formal_real_command_lane_append_decision_preflight_input(
+    review: &GatewayFormalRealCommandLaneProposalCandidateReview,
+    input: &GatewayFormalRealCommandLaneAppendDecisionPreflightInput,
+) -> GatewayFormalRealCommandLaneAppendDecisionPreflightValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_APPEND_DECISION_PREFLIGHT_SCHEMA_VERSION
+    {
+        issues.push(GatewayFormalRealCommandLaneAppendDecisionPreflightIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.append_preflight_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAppendDecisionPreflightIssue::InvalidAppendPreflightId,
+        );
+    }
+    if !is_single_segment_id(&input.reviewer_policy_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAppendDecisionPreflightIssue::InvalidReviewerPolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.reviewer_decision_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAppendDecisionPreflightIssue::InvalidReviewerDecisionId,
+        );
+    }
+    if !is_single_segment_id(&input.proposal_policy_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAppendDecisionPreflightIssue::InvalidProposalPolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.proposal_candidate_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAppendDecisionPreflightIssue::InvalidProposalCandidateId,
+        );
+    }
+    if !is_single_segment_id(&input.proposal_review_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAppendDecisionPreflightIssue::InvalidProposalReviewId,
+        );
+    }
+    if input.preflight_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalRealCommandLaneAppendDecisionPreflightIssue::MissingPreflightDecisionTimestamp,
+        );
+    }
+    validate_gateway_formal_real_command_lane_append_decision_preflight_digests(input, &mut issues);
+    validate_gateway_formal_real_command_lane_append_decision_preflight_review(
+        review,
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_real_command_lane_append_decision_preflight_policy(input, &mut issues);
+    GatewayFormalRealCommandLaneAppendDecisionPreflightValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_append_decision_preflight_digests(
+    input: &GatewayFormalRealCommandLaneAppendDecisionPreflightInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneAppendDecisionPreflightIssue>,
+) {
+    for (label, digest) in [
+        ("phase359_review_digest", input.phase359_review_digest),
+        (
+            "phase359_review_input_digest",
+            input.phase359_review_input_digest,
+        ),
+        ("phase357_candidate_digest", input.phase357_candidate_digest),
+        (
+            "phase357_candidate_input_digest",
+            input.phase357_candidate_input_digest,
+        ),
+        ("phase355_review_digest", input.phase355_review_digest),
+        (
+            "phase353_materialized_manifest_digest",
+            input.phase353_materialized_manifest_digest,
+        ),
+        ("phase351_review_digest", input.phase351_review_digest),
+        (
+            "phase349_serialization_preview_digest",
+            input.phase349_serialization_preview_digest,
+        ),
+        (
+            "phase347_audit_package_digest",
+            input.phase347_audit_package_digest,
+        ),
+        (
+            "phase345_review_record_digest",
+            input.phase345_review_record_digest,
+        ),
+        ("phase343_metadata_digest", input.phase343_metadata_digest),
+        (
+            "declared_file_digest_map_digest",
+            input.declared_file_digest_map_digest,
+        ),
+        ("explicit_nonclaims_digest", input.explicit_nonclaims_digest),
+        (
+            "current_accepted_append_blockers_digest",
+            input.current_accepted_append_blockers_digest,
+        ),
+    ] {
+        if digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalRealCommandLaneAppendDecisionPreflightIssue::MissingDigest(
+                    label.to_owned(),
+                ),
+            );
+        }
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_append_decision_preflight_review(
+    review: &GatewayFormalRealCommandLaneProposalCandidateReview,
+    input: &GatewayFormalRealCommandLaneAppendDecisionPreflightInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneAppendDecisionPreflightIssue>,
+) {
+    if input.phase359_review_digest != review.digest()
+        || input.phase359_review_input_digest != review.review_input_digest
+        || input.phase357_candidate_digest != review.phase357_candidate_digest
+        || input.phase357_candidate_input_digest != review.phase357_candidate_input_digest
+        || input.phase355_review_digest != review.phase355_review_digest
+        || input.phase353_materialized_manifest_digest
+            != review.phase353_materialized_manifest_digest
+        || input.phase351_review_digest != review.phase351_review_digest
+        || input.phase349_serialization_preview_digest
+            != review.phase349_serialization_preview_digest
+        || input.phase347_audit_package_digest != review.phase347_audit_package_digest
+        || input.phase345_review_record_digest != review.phase345_review_record_digest
+        || input.phase343_metadata_digest != review.phase343_metadata_digest
+        || input.declared_file_digest_map_digest != review.declared_file_digest_map_digest
+        || input.current_accepted_append_blockers_digest
+            != review.current_accepted_append_blockers_digest
+        || input.proposal_candidate_id != review.proposal_candidate_id
+        || input.proposal_policy_id != review.proposal_policy_id
+        || input.proposal_review_id != review.proposal_review_id
+        || input.proposal_candidate_review_label != review.review_label
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneAppendDecisionPreflightIssue::Phase359ReviewDigestDrift,
+        );
+    }
+    if review.schema_version
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_PROPOSAL_CANDIDATE_REVIEW_SCHEMA_VERSION
+        || review.state_slice
+            != GATEWAY_FORMAL_REAL_COMMAND_LANE_PROPOSAL_CANDIDATE_REVIEW_STATE_SLICE
+        || review.promotion_state != "local_proposal_candidate_review_metadata"
+        || review.next_required_state != "accepted_append_decision_still_blocked"
+        || review.claim_boundary
+            != gateway_formal_real_command_lane_proposal_candidate_review_claim_boundary()
+        || review.creates_accepted_evidence
+        || review.changes_accepted_append_policy
+        || review.creates_level2_evidence
+        || review.populates_score_axes
+        || review.proof_artifact_created
+        || review.checker_transcript_created
+        || review.solver_certificate_created
+        || review.semantic_correctness_claimed
+        || review.production_readiness_claimed
+        || review.sota_claimed
+        || review.breakthrough_claimed
+        || review.full_security_claimed
+        || review.grants_authority
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneAppendDecisionPreflightIssue::Phase359ReviewStateMismatch,
+        );
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_append_decision_preflight_policy(
+    input: &GatewayFormalRealCommandLaneAppendDecisionPreflightInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneAppendDecisionPreflightIssue>,
+) {
+    let blockers = gateway_formal_real_command_lane_accepted_handoff_current_blockers();
+    if input.current_accepted_append_blockers_digest
+        != hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-accepted-handoff-current-blockers:v1",
+            &blockers,
+        )
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneAppendDecisionPreflightIssue::AcceptedAppendBlockerMismatch,
+        );
+    }
+    let nonclaims = gateway_formal_real_command_lane_append_decision_preflight_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-append-decision-preflight-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(GatewayFormalRealCommandLaneAppendDecisionPreflightIssue::NonclaimMismatch);
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.preflight_summary,
+    ) {
+        issues.push(
+            GatewayFormalRealCommandLaneAppendDecisionPreflightIssue::PreflightSummaryPromotionClaim,
+        );
+    }
+    if input.accepted_evidence_mutation_requested
+        || input.accepted_append_policy_change_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.benchmark_or_sota_comparison_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(GatewayFormalRealCommandLaneAppendDecisionPreflightIssue::PromotionAttempt);
     }
 }
 
@@ -39419,6 +39873,65 @@ mod tests {
         }
     }
 
+    fn formal_evidence_append_decision_preflight_input(
+        preflight_id: &str,
+        review: &GatewayFormalRealCommandLaneProposalCandidateReview,
+        preflight_label: GatewayFormalRealCommandLaneAppendDecisionPreflightLabel,
+    ) -> GatewayFormalRealCommandLaneAppendDecisionPreflightInput {
+        let nonclaims =
+            gateway_formal_real_command_lane_append_decision_preflight_required_nonclaims();
+        GatewayFormalRealCommandLaneAppendDecisionPreflightInput {
+            schema_version:
+                GATEWAY_FORMAL_REAL_COMMAND_LANE_APPEND_DECISION_PREFLIGHT_SCHEMA_VERSION
+                    .to_owned(),
+            append_preflight_id: preflight_id.to_owned(),
+            reviewer_policy_id: "phase361-preflight-policy".to_owned(),
+            reviewer_decision_id: "phase361-preflight-decision".to_owned(),
+            proposal_policy_id: review.proposal_policy_id.clone(),
+            proposal_candidate_id: review.proposal_candidate_id.clone(),
+            proposal_review_id: review.proposal_review_id.clone(),
+            preflight_decision_at_unix: 1_800_000_361,
+            phase359_review_digest: review.digest(),
+            phase359_review_input_digest: review.review_input_digest,
+            phase357_candidate_digest: review.phase357_candidate_digest,
+            phase357_candidate_input_digest: review.phase357_candidate_input_digest,
+            phase355_review_digest: review.phase355_review_digest,
+            phase353_materialized_manifest_digest: review.phase353_materialized_manifest_digest,
+            phase351_review_digest: review.phase351_review_digest,
+            phase349_serialization_preview_digest: review.phase349_serialization_preview_digest,
+            phase347_audit_package_digest: review.phase347_audit_package_digest,
+            phase345_review_record_digest: review.phase345_review_record_digest,
+            phase343_metadata_digest: review.phase343_metadata_digest,
+            declared_file_digest_map_digest: review.declared_file_digest_map_digest,
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-append-decision-preflight-nonclaims:v1",
+                &nonclaims,
+            ),
+            current_accepted_append_blockers_digest: review
+                .current_accepted_append_blockers_digest,
+            proposal_candidate_review_label: review.review_label.clone(),
+            preflight_label,
+            preflight_summary: "local append decision preflight keeps accepted append blocked"
+                .to_owned(),
+            accepted_evidence_mutation_requested: false,
+            accepted_append_policy_change_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            benchmark_or_sota_comparison_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
     fn formal_evidence_local_audit_package_artifact_parts(
         name: &str,
     ) -> (
@@ -43916,6 +44429,194 @@ mod tests {
         fs::remove_dir_all(&execution_root)
             .expect("phase359 disposition execution cleanup succeeds");
         fs::remove_dir_all(&source_root).expect("phase359 disposition source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_append_decision_preflight_builds_blocking_record() {
+        let (phase323_root, phase327_root, execution_root, source_root, output_root, review) =
+            formal_evidence_accepted_evidence_proposal_candidate_source(
+                "real-command-phase361-preflight",
+            );
+        let candidate_input = formal_evidence_accepted_evidence_proposal_candidate_input(
+            "phase361-source-candidate",
+            &review,
+            GatewayFormalRealCommandLaneAcceptedEvidenceProposalCandidateDisposition::AcceptedLedgerMutationStillBlocked,
+        );
+        let candidate =
+            build_gateway_formal_real_command_lane_accepted_evidence_proposal_candidate(
+                &review,
+                &candidate_input,
+            )
+            .expect("phase361 source candidate builds");
+        let review_input = formal_evidence_proposal_candidate_review_input(
+            "phase361-source-review",
+            &candidate,
+            GatewayFormalRealCommandLaneProposalCandidateReviewLabel::AcceptedAppendDecisionStillBlocked,
+        );
+        let candidate_review = build_gateway_formal_real_command_lane_proposal_candidate_review(
+            &candidate,
+            &review_input,
+        )
+        .expect("phase361 source review builds");
+        let preflight_input = formal_evidence_append_decision_preflight_input(
+            "phase361-preflight",
+            &candidate_review,
+            GatewayFormalRealCommandLaneAppendDecisionPreflightLabel::AcceptedAppendPolicyStillBlocked,
+        );
+        let preflight = build_gateway_formal_real_command_lane_append_decision_preflight(
+            &candidate_review,
+            &preflight_input,
+        )
+        .expect("phase361 preflight builds");
+
+        assert_eq!(
+            preflight.state_slice,
+            GATEWAY_FORMAL_REAL_COMMAND_LANE_APPEND_DECISION_PREFLIGHT_STATE_SLICE
+        );
+        assert_eq!(preflight.phase359_review_digest, candidate_review.digest());
+        assert_eq!(
+            preflight.phase359_review_input_digest,
+            candidate_review.review_input_digest
+        );
+        assert_eq!(
+            preflight.phase357_candidate_digest,
+            candidate_review.phase357_candidate_digest
+        );
+        assert_eq!(
+            preflight.phase355_review_digest,
+            candidate_review.phase355_review_digest
+        );
+        assert_eq!(
+            preflight.proposal_candidate_review_label,
+            GatewayFormalRealCommandLaneProposalCandidateReviewLabel::AcceptedAppendDecisionStillBlocked
+        );
+        assert_eq!(
+            preflight.preflight_label,
+            GatewayFormalRealCommandLaneAppendDecisionPreflightLabel::AcceptedAppendPolicyStillBlocked
+        );
+        assert_eq!(
+            preflight.previous_promotion_state,
+            "local_proposal_candidate_review_metadata"
+        );
+        assert_eq!(
+            preflight.promotion_state,
+            "local_append_decision_preflight_metadata"
+        );
+        assert_eq!(
+            preflight.next_required_state,
+            "accepted_append_decision_still_blocked"
+        );
+        assert_eq!(
+            preflight.claim_boundary,
+            gateway_formal_real_command_lane_append_decision_preflight_claim_boundary()
+        );
+        assert!(!preflight.creates_accepted_evidence);
+        assert!(!preflight.changes_accepted_append_policy);
+        assert!(!preflight.creates_level2_evidence);
+        assert!(!preflight.populates_score_axes);
+        assert!(!preflight.proof_artifact_created);
+        assert!(!preflight.checker_transcript_created);
+        assert!(!preflight.solver_certificate_created);
+        assert!(!preflight.semantic_correctness_claimed);
+        assert!(!preflight.production_readiness_claimed);
+        assert!(!preflight.sota_claimed);
+        assert!(!preflight.breakthrough_claimed);
+        assert!(!preflight.full_security_claimed);
+        assert!(!preflight.grants_authority);
+
+        let mut digest_drift = preflight_input.clone();
+        digest_drift.phase359_review_digest = Hash([33; 32]);
+        let drift_validation =
+            validate_gateway_formal_real_command_lane_append_decision_preflight_input(
+                &candidate_review,
+                &digest_drift,
+            );
+        assert!(drift_validation.issues.contains(
+            &GatewayFormalRealCommandLaneAppendDecisionPreflightIssue::Phase359ReviewDigestDrift
+        ));
+
+        let mut text_promotion = preflight_input.clone();
+        text_promotion.preflight_summary = "claims accepted evidence and SOTA".to_owned();
+        let text_validation =
+            validate_gateway_formal_real_command_lane_append_decision_preflight_input(
+                &candidate_review,
+                &text_promotion,
+            );
+        assert!(text_validation.issues.contains(
+            &GatewayFormalRealCommandLaneAppendDecisionPreflightIssue::PreflightSummaryPromotionClaim
+        ));
+
+        fs::remove_dir_all(&output_root).expect("phase361 preflight output cleanup succeeds");
+        fs::remove_dir_all(&phase323_root).expect("phase361 preflight phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase361 preflight phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase361 preflight execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase361 preflight source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_append_decision_preflight_rejects_promotion() {
+        let (phase323_root, phase327_root, execution_root, source_root, output_root, review) =
+            formal_evidence_accepted_evidence_proposal_candidate_source(
+                "real-command-phase361-promotion",
+            );
+        let candidate_input = formal_evidence_accepted_evidence_proposal_candidate_input(
+            "phase361-promotion-candidate",
+            &review,
+            GatewayFormalRealCommandLaneAcceptedEvidenceProposalCandidateDisposition::CandidateRejected,
+        );
+        let candidate =
+            build_gateway_formal_real_command_lane_accepted_evidence_proposal_candidate(
+                &review,
+                &candidate_input,
+            )
+            .expect("phase361 promotion source candidate builds");
+        let review_input = formal_evidence_proposal_candidate_review_input(
+            "phase361-promotion-review",
+            &candidate,
+            GatewayFormalRealCommandLaneProposalCandidateReviewLabel::ProposalCandidateRejected,
+        );
+        let candidate_review = build_gateway_formal_real_command_lane_proposal_candidate_review(
+            &candidate,
+            &review_input,
+        )
+        .expect("phase361 promotion source review builds");
+        let mut preflight_input = formal_evidence_append_decision_preflight_input(
+            "phase361-promotion-preflight",
+            &candidate_review,
+            GatewayFormalRealCommandLaneAppendDecisionPreflightLabel::AppendPreflightRejected,
+        );
+
+        preflight_input.accepted_evidence_mutation_requested = true;
+        preflight_input.accepted_append_policy_change_requested = true;
+        preflight_input.accepted_formal_evidence_created = true;
+        preflight_input.creates_level2_evidence = true;
+        preflight_input.populates_score_axes = true;
+        preflight_input.proof_artifact_promoted = true;
+        preflight_input.checker_transcript_promoted = true;
+        preflight_input.solver_certificate_promoted = true;
+        preflight_input.sota_claimed = true;
+        preflight_input.full_security_claimed = true;
+        preflight_input.action_authority_claimed = true;
+        let validation = validate_gateway_formal_real_command_lane_append_decision_preflight_input(
+            &candidate_review,
+            &preflight_input,
+        );
+        assert!(validation
+            .issues
+            .contains(&GatewayFormalRealCommandLaneAppendDecisionPreflightIssue::PromotionAttempt));
+        assert!(
+            build_gateway_formal_real_command_lane_append_decision_preflight(
+                &candidate_review,
+                &preflight_input,
+            )
+            .is_err()
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase361 promotion output cleanup succeeds");
+        fs::remove_dir_all(&phase323_root).expect("phase361 promotion phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase361 promotion phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase361 promotion execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase361 promotion source cleanup succeeds");
     }
 
     #[test]
