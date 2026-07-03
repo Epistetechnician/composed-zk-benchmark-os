@@ -5749,5 +5749,16 @@ evidence, accepted Evidence Ledger mutation, accepted append policy change,
 Level2+ evidence, score axes, or production/SOTA/security/semantic-correctness
 claim.
 
+[docs/416-hsai-tiny-z3-bounded-formal-evidence-feasibility-boundary.md](docs/416-hsai-tiny-z3-bounded-formal-evidence-feasibility-boundary.md)
+records the Phase 416 docs-first feasibility boundary for a possible future
+bounded tiny-Z3 formal-evidence class. It defines the feasibility question,
+candidate class shape, required ownership decision, required feasibility
+criteria, rejection cases, evidence meaning, and Phase 417 implementation exit
+criteria. This is boundary documentation only: no Rust implementation, bounded
+class approval, accepted formal evidence, accepted Evidence Ledger mutation,
+accepted append policy change, Level2+ evidence, score axes, proof artifacts,
+checker transcripts, solver certificates, or production/SOTA/security/
+semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

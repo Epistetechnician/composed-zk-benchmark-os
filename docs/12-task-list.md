@@ -11203,6 +11203,30 @@ mutation, accepted append policy change, Level2+ evidence, score axes,
 Lean/COBALT/Rust-to-Lean execution, or
 SOTA/full-security/semantic-correctness/production-readiness claim.
 
+## Phase 416 HSAI Tiny Z3 Bounded Formal Evidence Feasibility Boundary
+
+Status: complete. See
+`docs/416-hsai-tiny-z3-bounded-formal-evidence-feasibility-boundary.md`.
+
+Goal: define the docs-first feasibility boundary for a possible future bounded
+tiny-Z3 formal-evidence class without approving the class, mutating accepted
+evidence, changing accepted append policy, creating accepted formal evidence,
+creating Level2+ evidence, populating score axes, or making strong public
+claims.
+
+Implemented: Phase 416 records the feasibility question, candidate class shape,
+required ownership decision, required feasibility criteria, rejection cases,
+evidence meaning, and Phase 417 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a documented tiny-Z3 bounded-class feasibility
+boundary. It still has no bounded formal-evidence class approval, accepted
+formal evidence, accepted Evidence Ledger mutation, accepted append policy
+change, Level2+ evidence, score axes, Lean/COBALT/Rust-to-Lean execution, or
+SOTA/full-security/semantic-correctness/production-readiness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
