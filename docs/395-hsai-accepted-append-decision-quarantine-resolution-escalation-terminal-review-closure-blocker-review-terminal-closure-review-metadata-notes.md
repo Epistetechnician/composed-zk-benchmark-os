@@ -105,6 +105,6 @@ not SOTA, not breakthrough status, and not full security.
 
 ## Next Boundary
 
-Phase 396 may define a docs-first terminal-closure review settlement-blocker
+Phase 396 defines a docs-first terminal-closure review settlement-blocker
 boundary. That boundary remains planning only unless a later implementation
 phase explicitly authorizes additive Rust source and tests.
