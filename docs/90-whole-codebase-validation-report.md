@@ -1876,6 +1876,41 @@ production, claims no semantic correctness, claims no production readiness,
 claims no SOTA, claims no breakthrough status, claims no full security, and
 grants no authority.
 
+Phase 365 implements deterministic pure-data accepted-append decision candidate
+metadata over one Phase 363 append-decision preflight review. It adds
+`GatewayFormalRealCommandLaneAcceptedAppendDecisionCandidateInput`,
+`GatewayFormalRealCommandLaneAcceptedAppendDecisionCandidate`,
+`GatewayFormalRealCommandLaneAcceptedAppendDecisionCandidateDisposition`,
+`GatewayFormalRealCommandLaneAcceptedAppendDecisionCandidateIssue`,
+`GatewayFormalRealCommandLaneAcceptedAppendDecisionCandidateValidation`,
+required nonclaim and claim-boundary helpers, a builder, and fail-closed
+validation in `crates/hsai-agent-admission/src/lib.rs`. The candidate binds one
+Phase 363 review digest and input digest, one Phase 361 preflight digest and
+input digest, one Phase 359 review digest and input digest, one Phase 357
+proposal candidate digest and input digest, one Phase 355 review digest, one
+Phase 353 manifest digest, one Phase 351 review digest, one Phase 349 preview
+digest, one Phase 347 package digest, one Phase 345 review record digest, one
+Phase 343 local metadata digest, declared file digest map digest, explicit
+nonclaim digest, reviewer ids, proposal policy id, proposal candidate id,
+proposal review id, append preflight id, append preflight review id, accepted
+append decision candidate id, candidate timestamp, current accepted append
+blocker digest, Phase 363 review label, and candidate disposition. Validation
+rejects digest drift, nonclaim drift, blocker drift, promoted or drifted Phase
+363 review state, promotion text, accepted Evidence Ledger mutation attempts,
+accepted append policy-change attempts, accepted formal-evidence creation
+attempts, Level2+ attempts, score-axis attempts, proof/checker/solver
+promotion, benchmark/SOTA claims, semantic correctness claims,
+production-readiness claims, full-security claims, and authority attempts.
+Phase 365 writes no durable artifacts, changes no Cargo metadata, changes no
+`zkbench-core` accepted append policy, mutates no accepted Evidence Ledger,
+creates no accepted formal evidence, creates no Level2+ evidence, populates no
+score axes, generates or promotes no proof artifacts, generates or promotes no
+checker transcripts, generates or promotes no solver certificates, executes no
+Lean, executes no SMT, executes no COBALT, runs no Rust-to-Lean extraction,
+submits no benchmarks, deploys nothing to production, claims no semantic
+correctness, claims no production readiness, claims no SOTA, claims no
+breakthrough status, claims no full security, and grants no authority.
+
 Phase 335 implements local accepted formal-evidence handoff metadata in
 `crates/hsai-agent-admission`. It adds handoff schema/state/claim-boundary
 constants, handoff input and record data models, an unresolved formal-evidence

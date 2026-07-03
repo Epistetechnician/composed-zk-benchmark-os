@@ -450,6 +450,7 @@ Surface DSL
 | [docs/362-hsai-append-decision-preflight-review-boundary.md](docs/362-hsai-append-decision-preflight-review-boundary.md) | Phase 362 HSAI append-decision preflight review boundary. |
 | [docs/363-hsai-append-decision-preflight-review-metadata-notes.md](docs/363-hsai-append-decision-preflight-review-metadata-notes.md) | Phase 363 HSAI append-decision preflight review metadata notes. |
 | [docs/364-hsai-accepted-append-decision-candidate-boundary.md](docs/364-hsai-accepted-append-decision-candidate-boundary.md) | Phase 364 HSAI accepted-append decision candidate boundary. |
+| [docs/365-hsai-accepted-append-decision-candidate-metadata-notes.md](docs/365-hsai-accepted-append-decision-candidate-metadata-notes.md) | Phase 365 HSAI accepted-append decision candidate metadata notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |

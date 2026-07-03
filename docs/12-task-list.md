@@ -9224,6 +9224,53 @@ evidence, no accepted Evidence Ledger mutation, no accepted append policy
 change, no Level2+ evidence, no score axes, no proof-authority claim, and no
 production/SOTA/security/correctness claim.
 
+## Phase 365 HSAI Accepted-Append Decision Candidate Metadata
+
+Status: complete. See
+`docs/365-hsai-accepted-append-decision-candidate-metadata-notes.md`.
+
+Goal: implement deterministic local accepted-append decision candidate metadata
+over one Phase 363 append-decision preflight review while preserving the
+current accepted append and accepted-ledger blockers.
+
+Implemented: Phase 365 schema/state/claim-boundary constants, accepted-append
+decision candidate input metadata, accepted-append decision candidate record
+metadata, five bounded disposition labels, validation issues, validation result,
+required nonclaim helper, candidate builder, digest binding to one Phase 363
+review digest/input digest, Phase 361 preflight digest/input digest, Phase 359
+review digest/input digest, Phase 357 candidate digest/input digest, Phase 355
+review digest, Phase 353 manifest digest, Phase 351 review digest, Phase 349
+preview digest, Phase 347 package digest, Phase 345 review record digest, Phase
+343 metadata digest, declared file digest map digest, explicit nonclaim digest,
+reviewer ids, proposal policy id, proposal candidate id, proposal review id,
+append preflight id, append preflight review id, accepted append decision
+candidate id, current accepted append blocker digest, promotion-text rejection,
+and focused tests for valid candidate construction plus Phase 363 review digest
+drift, promotional candidate text, accepted-evidence mutation attempts,
+accepted append policy-change attempts, accepted formal-evidence creation
+attempts, Level2+ attempts, score-axis attempts, proof/checker/solver
+promotion, SOTA/full-security claims, and authority attempts.
+
+Validation gate: formatting, focused Phase 365 tests, docs/hygiene checks, diff
+hygiene, empty-file hygiene, package-root lint check, claim-boundary source
+scans, repo docs tests, and full workspace tests.
+
+Anti-goals: filesystem artifact writes, accepted Evidence Ledger mutation,
+accepted append policy changes, accepted formal evidence, Level2+ evidence,
+score-axis population, proof artifact generation or promotion, checker
+transcript generation or promotion, solver certificate generation or promotion,
+additional process-spawn APIs, generic backend runners, solver scripts, checker
+scripts, proof assistant setup files, Lean execution, SMT execution, COBALT
+execution, Rust-to-Lean extraction, benchmark submission, production
+deployment, semantic-correctness claims, production-readiness claims, SOTA
+claims, breakthrough claims, full-security claims, or action authority.
+
+Exit criteria: HSAI now has deterministic digest-only accepted-append decision
+candidate metadata over one Phase 363 append-decision preflight review. It
+still has no accepted formal evidence, no accepted Evidence Ledger mutation, no
+accepted append policy change, no Level2+ evidence, no score axes, no
+proof-authority claim, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
