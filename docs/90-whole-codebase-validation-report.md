@@ -5642,5 +5642,17 @@ Rust implementation, proof artifacts, checker transcripts, solver
 certificates, accepted formal evidence, Level2+ evidence, score axes, or
 production/SOTA/security/semantic-correctness claim.
 
+[docs/407-hsai-tiny-z3-formal-evidence-candidate-notes.md](docs/407-hsai-tiny-z3-formal-evidence-candidate-notes.md)
+records the Phase 407 local formal-evidence candidate metadata lane for
+`gateway-local-digest-binding-determinism-v1`. The implementation binds Phase
+403 probe digests, Phase 404 execution digests, Phase 405 output-manifest and
+declared-file digests, command and obligation digests, solver verdict, replay
+metadata, source correspondence statement, verifier/reviewer policy ids, and
+explicit nonclaims. Focused tests cover valid construction, stale execution and
+output-manifest rejection, promotion rejection, and nonclaim drift rejection.
+This remains candidate metadata only: no reviewed formal evidence, accepted
+formal evidence, Level2+ evidence, score axes, or production/SOTA/security/
+semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

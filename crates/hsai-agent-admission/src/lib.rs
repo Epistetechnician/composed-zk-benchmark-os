@@ -641,8 +641,13 @@ pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_STATE_SLICE: &str =
     "phase-404-hsai-fixed-local-z3-digest-binding-execution";
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_STATE_SLICE: &str =
     "phase-405-hsai-fixed-local-z3-execution-output-readback";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-digest-backend-z3-formal-evidence-candidate:v1";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
+    "phase-407-hsai-tiny-z3-formal-evidence-candidate";
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_CLAIM_BOUNDARY: &str = "local gateway tiny digest-binding fixed-Z3 execution output only; reuses the Phase 326 fixed-process no-shell runner to execute one local Z3 SMT-LIB2 obligation for the Phase 401 property and records bounded quarantined output, but does not create proof artifacts, checker transcripts, solver certificates, accepted evidence, Level2+ evidence, score axes, semantic correctness, production readiness, SOTA, breakthrough status, full security, or authority to execute an action.";
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_CLAIM_BOUNDARY: &str = "local gateway tiny digest-binding fixed-Z3 execution output-bundle readback only; materializes and reads back one Phase 404 fixed-Z3 execution record with digest sidecars and nonpromotion checks, but does not create proof artifacts, checker transcripts, solver certificates, accepted evidence, Level2+ evidence, score axes, semantic correctness, production readiness, SOTA, breakthrough status, full security, or authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_FORMAL_EVIDENCE_CANDIDATE_CLAIM_BOUNDARY: &str = "local gateway tiny digest-binding Z3 formal-evidence candidate metadata only; binds one Phase 405 quarantined fixed-Z3 execution output bundle to Phase 403 probe metadata, Phase 404 execution metadata, replay descriptors, verifier/reviewer policy ids, and explicit nonclaims, but does not create reviewed formal evidence, accepted evidence, Level2+ evidence, score axes, semantic correctness, production readiness, SOTA, breakthrough status, full security, or authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -5363,6 +5368,140 @@ pub enum GatewayFormalTinyDigestBackendZ3ExecutionOutputError {
     NonclaimMismatch,
     Io(String),
     Serialization(String),
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateInput {
+    pub schema_version: String,
+    pub candidate_id: String,
+    pub created_at_unix: u64,
+    pub probe_digest: Hash,
+    pub probe_input_digest: Hash,
+    pub execution_digest: Hash,
+    pub execution_input_digest: Hash,
+    pub output_manifest_digest: Hash,
+    pub declared_file_digests: BTreeMap<String, Hash>,
+    pub command_descriptor_digest: Hash,
+    pub obligation_digest: Hash,
+    pub process_output_digest: Hash,
+    pub stdout_summary_digest: Hash,
+    pub stderr_summary_digest: Hash,
+    pub solver_verdict_label: GatewayFormalRealCommandLaneSolverVerdictLabel,
+    pub source_correspondence_statement: String,
+    pub replay_command_descriptor_digest: Hash,
+    pub verifier_policy_id: String,
+    pub reviewer_policy_id: String,
+    pub required_nonclaims: BTreeSet<NonClaimLabel>,
+    pub nonclaim_set_digest: Hash,
+    pub accepted_evidence_output_path_requested: bool,
+    pub level2_evidence_requested: bool,
+    pub score_axis_population_requested: bool,
+    pub whole_system_proof_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+    pub raw_logs_relied_on: bool,
+    pub raw_provider_response_relied_on: bool,
+    pub secrets_relied_on: bool,
+    pub undeclared_files_relied_on: bool,
+    pub checker_transcript_promotion_requested: bool,
+    pub solver_certificate_promotion_requested: bool,
+}
+
+impl GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-formal-evidence-candidate-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidate {
+    pub schema_version: String,
+    pub candidate_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub candidate_input_digest: Hash,
+    pub probe_digest: Hash,
+    pub probe_input_digest: Hash,
+    pub execution_digest: Hash,
+    pub execution_input_digest: Hash,
+    pub output_manifest_digest: Hash,
+    pub declared_file_digests: BTreeMap<String, Hash>,
+    pub command_descriptor_digest: Hash,
+    pub obligation_digest: Hash,
+    pub process_output_digest: Hash,
+    pub stdout_summary_digest: Hash,
+    pub stderr_summary_digest: Hash,
+    pub solver_verdict_label: GatewayFormalRealCommandLaneSolverVerdictLabel,
+    pub source_correspondence_statement: String,
+    pub replay_command_descriptor_digest: Hash,
+    pub verifier_policy_id: String,
+    pub reviewer_policy_id: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub reviewed_formal_evidence_created: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+    pub raw_logs_retained: bool,
+    pub raw_provider_response_retained: bool,
+}
+
+impl GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidate {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-formal-evidence-candidate:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue {
+    InvalidSchemaVersion,
+    InvalidCandidateId,
+    MissingCreatedAt,
+    MissingDigest(String),
+    ProbeDrift,
+    ExecutionDrift,
+    OutputManifestDrift,
+    SolverVerdictNotEligible,
+    SourceCorrespondenceMissing,
+    ReplayDescriptorMismatch,
+    VerifierPolicyMissing,
+    ReviewerPolicyMissing,
+    NonclaimMismatch,
+    ClaimBoundaryMismatch,
+    PromotionAttempt,
+    AcceptedEvidencePathRequested,
+    Level2EvidenceRequested,
+    ScoreAxisPopulationRequested,
+    RawArtifactReliance,
+    CheckerOrSolverCertificatePromotionRequested,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -24929,6 +25068,10 @@ pub fn gateway_formal_tiny_digest_backend_z3_execution_output_claim_boundary() -
     GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_CLAIM_BOUNDARY.to_owned()
 }
 
+pub fn gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_FORMAL_EVIDENCE_CANDIDATE_CLAIM_BOUNDARY.to_owned()
+}
+
 pub fn gateway_formal_tiny_digest_backend_z3_execution_output_declared_files() -> Vec<String> {
     GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_DECLARED_FILES
         .iter()
@@ -24951,6 +25094,19 @@ pub fn gateway_formal_tiny_digest_backend_z3_execution_required_nonclaims(
     ));
     nonclaims.insert(NonClaimLabel("not a solver certificate".to_owned()));
     nonclaims.insert(NonClaimLabel("not a machine-checked proof".to_owned()));
+    nonclaims
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims = gateway_formal_tiny_digest_backend_z3_execution_required_nonclaims();
+    nonclaims.insert(NonClaimLabel(
+        "local formal-evidence candidate metadata only".to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel("not reviewed formal evidence".to_owned()));
+    nonclaims.insert(NonClaimLabel("not accepted formal evidence".to_owned()));
+    nonclaims.insert(NonClaimLabel("not Level2+ evidence".to_owned()));
+    nonclaims.insert(NonClaimLabel("not score-axis evidence".to_owned()));
     nonclaims
 }
 
@@ -27491,6 +27647,335 @@ fn gateway_formal_real_command_lane_fixed_smt_execution_serde_error(
     error: serde_json::Error,
 ) -> GatewayFormalRealCommandLaneFixedSmtExecutionOutputError {
     GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::Serialization(error.to_string())
+}
+
+pub fn build_gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate(
+    probe: &GatewayFormalTinyDigestBackendProbe,
+    execution: &GatewayFormalTinyDigestBackendZ3Execution,
+    output_manifest: &GatewayFormalTinyDigestBackendZ3ExecutionOutputManifest,
+    input: &GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateInput,
+) -> Result<
+    GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidate,
+    GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateValidation,
+> {
+    let validation = validate_gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_input(
+        probe,
+        execution,
+        output_manifest,
+        input,
+    );
+    if !validation.valid {
+        return Err(validation);
+    }
+    Ok(GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidate {
+        schema_version:
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION
+                .to_owned(),
+        candidate_id: input.candidate_id.clone(),
+        state_slice: GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE
+            .to_owned(),
+        created_at_unix: input.created_at_unix,
+        candidate_input_digest: input.digest(),
+        probe_digest: probe.digest(),
+        probe_input_digest: probe.probe_input_digest,
+        execution_digest: execution.digest(),
+        execution_input_digest: execution.execution_input_digest,
+        output_manifest_digest: output_manifest.digest(),
+        declared_file_digests: output_manifest.declared_file_digests.clone(),
+        command_descriptor_digest: execution.command_descriptor_digest,
+        obligation_digest: execution.obligation_digest,
+        process_output_digest: execution.process_output_digest,
+        stdout_summary_digest: execution.stdout_summary_digest,
+        stderr_summary_digest: execution.stderr_summary_digest,
+        solver_verdict_label: execution.solver_verdict_label.clone(),
+        source_correspondence_statement: input.source_correspondence_statement.clone(),
+        replay_command_descriptor_digest: execution.command_descriptor_digest,
+        verifier_policy_id: input.verifier_policy_id.clone(),
+        reviewer_policy_id: input.reviewer_policy_id.clone(),
+        previous_promotion_state: "quarantined_z3_output_bundle".to_owned(),
+        promotion_state: "formal_evidence_candidate".to_owned(),
+        next_required_state: "reviewed_formal_evidence".to_owned(),
+        claim_boundary:
+            gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_claim_boundary(),
+        explicit_nonclaims: input.required_nonclaims.clone(),
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        reviewed_formal_evidence_created: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+        raw_logs_retained: false,
+        raw_provider_response_retained: false,
+    })
+}
+
+pub fn validate_gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_input(
+    probe: &GatewayFormalTinyDigestBackendProbe,
+    execution: &GatewayFormalTinyDigestBackendZ3Execution,
+    output_manifest: &GatewayFormalTinyDigestBackendZ3ExecutionOutputManifest,
+    input: &GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateInput,
+) -> GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::InvalidSchemaVersion,
+        );
+    }
+    if !is_single_segment_id(&input.candidate_id) {
+        issues
+            .push(GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::InvalidCandidateId);
+    }
+    if input.created_at_unix == 0 {
+        issues.push(GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::MissingCreatedAt);
+    }
+    validate_gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_digests(
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_sources(
+        probe,
+        execution,
+        output_manifest,
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_policy(
+        output_manifest,
+        input,
+        &mut issues,
+    );
+    GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_digests(
+    input: &GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateInput,
+    issues: &mut Vec<GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue>,
+) {
+    for (label, digest) in [
+        ("probe_digest", input.probe_digest),
+        ("probe_input_digest", input.probe_input_digest),
+        ("execution_digest", input.execution_digest),
+        ("execution_input_digest", input.execution_input_digest),
+        ("output_manifest_digest", input.output_manifest_digest),
+        ("command_descriptor_digest", input.command_descriptor_digest),
+        ("obligation_digest", input.obligation_digest),
+        ("process_output_digest", input.process_output_digest),
+        ("stdout_summary_digest", input.stdout_summary_digest),
+        ("stderr_summary_digest", input.stderr_summary_digest),
+        (
+            "replay_command_descriptor_digest",
+            input.replay_command_descriptor_digest,
+        ),
+        ("nonclaim_set_digest", input.nonclaim_set_digest),
+    ] {
+        if digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::MissingDigest(
+                    label.to_owned(),
+                ),
+            );
+        }
+    }
+    if input.declared_file_digests.is_empty()
+        || input
+            .declared_file_digests
+            .values()
+            .any(|digest| *digest == Hash([0; 32]))
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::MissingDigest(
+                "declared_file_digests".to_owned(),
+            ),
+        );
+    }
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_sources(
+    probe: &GatewayFormalTinyDigestBackendProbe,
+    execution: &GatewayFormalTinyDigestBackendZ3Execution,
+    output_manifest: &GatewayFormalTinyDigestBackendZ3ExecutionOutputManifest,
+    input: &GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateInput,
+    issues: &mut Vec<GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue>,
+) {
+    if probe.schema_version != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SCHEMA_VERSION
+        || probe.state_slice != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_STATE_SLICE
+        || probe.property_id != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_PROPERTY_ID
+        || probe.selected_lane_id != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SMT_Z3_LANE_ID
+        || !probe.selected_lane_available
+        || probe.process_spawned
+        || probe.backend_executed
+        || probe.creates_accepted_evidence
+        || probe.creates_level2_evidence
+        || probe.populates_score_axes
+        || probe.claim_boundary != gateway_formal_tiny_digest_backend_probe_claim_boundary()
+        || input.probe_digest != probe.digest()
+        || input.probe_input_digest != probe.probe_input_digest
+    {
+        issues.push(GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::ProbeDrift);
+    }
+    if execution.schema_version != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_SCHEMA_VERSION
+        || execution.state_slice != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_STATE_SLICE
+        || execution.probe_digest != probe.digest()
+        || execution.probe_input_digest != probe.probe_input_digest
+        || !execution.process_spawned
+        || !execution.backend_executed
+        || execution.proof_artifact_created
+        || execution.checker_transcript_created
+        || execution.solver_certificate_created
+        || execution.creates_accepted_evidence
+        || execution.creates_level2_evidence
+        || execution.populates_score_axes
+        || execution.claim_boundary
+            != gateway_formal_tiny_digest_backend_z3_execution_claim_boundary()
+        || input.execution_digest != execution.digest()
+        || input.execution_input_digest != execution.execution_input_digest
+        || input.command_descriptor_digest != execution.command_descriptor_digest
+        || input.obligation_digest != execution.obligation_digest
+        || input.process_output_digest != execution.process_output_digest
+        || input.stdout_summary_digest != execution.stdout_summary_digest
+        || input.stderr_summary_digest != execution.stderr_summary_digest
+    {
+        issues.push(GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::ExecutionDrift);
+    }
+    if output_manifest.schema_version
+        != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_SCHEMA_VERSION
+        || output_manifest.state_slice
+            != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_STATE_SLICE
+        || output_manifest.execution_digest != execution.digest()
+        || output_manifest.execution_input_digest != execution.execution_input_digest
+        || output_manifest.probe_digest != probe.digest()
+        || output_manifest.command_descriptor_digest != execution.command_descriptor_digest
+        || output_manifest.obligation_digest != execution.obligation_digest
+        || output_manifest.declared_files
+            != gateway_formal_tiny_digest_backend_z3_execution_output_declared_files()
+        || output_manifest.declared_sidecars
+            != gateway_formal_tiny_digest_backend_z3_execution_output_declared_sidecars()
+        || output_manifest.claim_boundary
+            != gateway_formal_tiny_digest_backend_z3_execution_output_claim_boundary()
+        || output_manifest.creates_accepted_evidence
+        || output_manifest.creates_level2_evidence
+        || output_manifest.populates_score_axes
+        || output_manifest.proof_artifact_created
+        || output_manifest.checker_transcript_created
+        || output_manifest.solver_certificate_created
+        || input.output_manifest_digest != output_manifest.digest()
+        || input.declared_file_digests != output_manifest.declared_file_digests
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::OutputManifestDrift,
+        );
+    }
+    if input.replay_command_descriptor_digest != execution.command_descriptor_digest {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::ReplayDescriptorMismatch,
+        );
+    }
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_policy(
+    output_manifest: &GatewayFormalTinyDigestBackendZ3ExecutionOutputManifest,
+    input: &GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateInput,
+    issues: &mut Vec<GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue>,
+) {
+    if input.solver_verdict_label
+        != GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
+        || output_manifest.solver_verdict_label
+            != GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::SolverVerdictNotEligible,
+        );
+    }
+    if input.source_correspondence_statement.trim().is_empty()
+        || input
+            .source_correspondence_statement
+            .to_ascii_lowercase()
+            .contains("whole-system proof")
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::SourceCorrespondenceMissing,
+        );
+    }
+    if !is_single_segment_id(&input.verifier_policy_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::VerifierPolicyMissing,
+        );
+    }
+    if !is_single_segment_id(&input.reviewer_policy_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::ReviewerPolicyMissing,
+        );
+    }
+    let required_nonclaims =
+        gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_required_nonclaims();
+    if input.required_nonclaims != required_nonclaims
+        || input.nonclaim_set_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-formal-evidence-candidate-nonclaims:v1",
+                &required_nonclaims,
+            )
+    {
+        issues.push(GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::NonclaimMismatch);
+    }
+    if output_manifest.claim_boundary
+        != gateway_formal_tiny_digest_backend_z3_execution_output_claim_boundary()
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::ClaimBoundaryMismatch,
+        );
+    }
+    if input.whole_system_proof_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::PromotionAttempt);
+    }
+    if input.accepted_evidence_output_path_requested {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::AcceptedEvidencePathRequested,
+        );
+    }
+    if input.level2_evidence_requested {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::Level2EvidenceRequested,
+        );
+    }
+    if input.score_axis_population_requested {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::ScoreAxisPopulationRequested,
+        );
+    }
+    if input.raw_logs_relied_on
+        || input.raw_provider_response_relied_on
+        || input.secrets_relied_on
+        || input.undeclared_files_relied_on
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::RawArtifactReliance,
+        );
+    }
+    if input.checker_transcript_promotion_requested || input.solver_certificate_promotion_requested
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::CheckerOrSolverCertificatePromotionRequested,
+        );
+    }
 }
 
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
@@ -51230,6 +51715,62 @@ mod tests {
         }
     }
 
+    fn phase407_candidate_input(
+        candidate_id: &str,
+        probe: &GatewayFormalTinyDigestBackendProbe,
+        execution: &GatewayFormalTinyDigestBackendZ3Execution,
+        output_manifest: &GatewayFormalTinyDigestBackendZ3ExecutionOutputManifest,
+    ) -> GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateInput {
+        let required_nonclaims =
+            gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_required_nonclaims();
+        let nonclaim_set_digest = hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-formal-evidence-candidate-nonclaims:v1",
+            &required_nonclaims,
+        );
+        GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateInput {
+            schema_version:
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION
+                    .to_owned(),
+            candidate_id: candidate_id.to_owned(),
+            created_at_unix: 1_800_000_407,
+            probe_digest: probe.digest(),
+            probe_input_digest: probe.probe_input_digest,
+            execution_digest: execution.digest(),
+            execution_input_digest: execution.execution_input_digest,
+            output_manifest_digest: output_manifest.digest(),
+            declared_file_digests: output_manifest.declared_file_digests.clone(),
+            command_descriptor_digest: execution.command_descriptor_digest,
+            obligation_digest: execution.obligation_digest,
+            process_output_digest: execution.process_output_digest,
+            stdout_summary_digest: execution.stdout_summary_digest,
+            stderr_summary_digest: execution.stderr_summary_digest,
+            solver_verdict_label: execution.solver_verdict_label.clone(),
+            source_correspondence_statement: "Phase 407 local source correspondence statement binds the tiny digest-binding SMT obligation to the gateway-local-digest-binding-determinism-v1 property without claiming source correspondence proof."
+                .to_owned(),
+            replay_command_descriptor_digest: execution.command_descriptor_digest,
+            verifier_policy_id: "phase407-local-z3-policy".to_owned(),
+            reviewer_policy_id: "phase407-local-review-policy".to_owned(),
+            required_nonclaims,
+            nonclaim_set_digest,
+            accepted_evidence_output_path_requested: false,
+            level2_evidence_requested: false,
+            score_axis_population_requested: false,
+            whole_system_proof_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+            raw_logs_relied_on: false,
+            raw_provider_response_relied_on: false,
+            secrets_relied_on: false,
+            undeclared_files_relied_on: false,
+            checker_transcript_promotion_requested: false,
+            solver_certificate_promotion_requested: false,
+        }
+    }
+
     #[test]
     fn phase403_tiny_digest_backend_probe_builds_without_promotion() {
         let input = phase403_probe_input(
@@ -51533,6 +52074,150 @@ mod tests {
         ] {
             fs::remove_dir_all(root).expect("phase405 drift fixture cleanup succeeds");
         }
+    }
+
+    #[test]
+    fn phase407_tiny_z3_formal_evidence_candidate_builds_without_promotion() {
+        let Some((obligation_root, execution, probe, _input, _command)) =
+            phase404_execution_if_z3_available("phase407-candidate-valid-obligation")
+        else {
+            return;
+        };
+        let output_root = temp_output_root("phase407-candidate-output");
+        let output_manifest =
+            materialize_gateway_formal_tiny_digest_backend_z3_execution_output_bundle(
+                &output_root,
+                &execution,
+                &phase405_output_request(&output_root),
+            )
+            .expect("phase407 output materializes");
+        let input =
+            phase407_candidate_input("phase407-candidate", &probe, &execution, &output_manifest);
+        let candidate = build_gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate(
+            &probe,
+            &execution,
+            &output_manifest,
+            &input,
+        )
+        .expect("phase407 candidate builds");
+
+        assert_eq!(
+            candidate.state_slice,
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE
+        );
+        assert_eq!(candidate.probe_digest, probe.digest());
+        assert_eq!(candidate.execution_digest, execution.digest());
+        assert_eq!(candidate.output_manifest_digest, output_manifest.digest());
+        assert_eq!(
+            candidate.previous_promotion_state,
+            "quarantined_z3_output_bundle"
+        );
+        assert_eq!(candidate.promotion_state, "formal_evidence_candidate");
+        assert_eq!(candidate.next_required_state, "reviewed_formal_evidence");
+        assert!(!candidate.reviewed_formal_evidence_created);
+        assert!(!candidate.creates_accepted_evidence);
+        assert!(!candidate.creates_level2_evidence);
+        assert!(!candidate.populates_score_axes);
+        assert!(!candidate.semantic_correctness_claimed);
+        assert!(!candidate.production_readiness_claimed);
+        assert!(!candidate.sota_claimed);
+        assert!(!candidate.full_security_claimed);
+        assert!(!candidate.grants_authority);
+
+        fs::remove_dir_all(&output_root).expect("phase407 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase407 obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase407_tiny_z3_formal_evidence_candidate_rejects_drift_and_promotion() {
+        let Some((obligation_root, execution, probe, _input, _command)) =
+            phase404_execution_if_z3_available("phase407-candidate-drift-obligation")
+        else {
+            return;
+        };
+        let output_root = temp_output_root("phase407-candidate-drift-output");
+        let output_manifest =
+            materialize_gateway_formal_tiny_digest_backend_z3_execution_output_bundle(
+                &output_root,
+                &execution,
+                &phase405_output_request(&output_root),
+            )
+            .expect("phase407 drift output materializes");
+        let input =
+            phase407_candidate_input("phase407-candidate", &probe, &execution, &output_manifest);
+
+        let mut stale_execution = input.clone();
+        stale_execution.execution_digest = Hash([7; 32]);
+        let stale_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_input(
+                &probe,
+                &execution,
+                &output_manifest,
+                &stale_execution,
+            );
+        assert!(stale_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::ExecutionDrift
+        ));
+
+        let mut stale_manifest = input.clone();
+        stale_manifest.output_manifest_digest = Hash([8; 32]);
+        let manifest_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_input(
+                &probe,
+                &execution,
+                &output_manifest,
+                &stale_manifest,
+            );
+        assert!(manifest_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::OutputManifestDrift
+        ));
+
+        let mut promotion = input.clone();
+        promotion.accepted_evidence_output_path_requested = true;
+        promotion.level2_evidence_requested = true;
+        promotion.score_axis_population_requested = true;
+        promotion.sota_claimed = true;
+        promotion.checker_transcript_promotion_requested = true;
+        let promotion_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_input(
+                &probe,
+                &execution,
+                &output_manifest,
+                &promotion,
+            );
+        assert!(promotion_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::AcceptedEvidencePathRequested
+        ));
+        assert!(promotion_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::Level2EvidenceRequested
+        ));
+        assert!(promotion_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::ScoreAxisPopulationRequested
+        ));
+        assert!(promotion_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::PromotionAttempt
+        ));
+        assert!(promotion_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::CheckerOrSolverCertificatePromotionRequested
+        ));
+
+        let mut nonclaim_drift = input.clone();
+        nonclaim_drift
+            .required_nonclaims
+            .remove(&NonClaimLabel("not accepted formal evidence".to_owned()));
+        let nonclaim_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_input(
+                &probe,
+                &execution,
+                &output_manifest,
+                &nonclaim_drift,
+            );
+        assert!(nonclaim_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::NonclaimMismatch
+        ));
+
+        fs::remove_dir_all(&output_root).expect("phase407 drift output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase407 drift obligation cleanup succeeds");
     }
 
     #[test]
