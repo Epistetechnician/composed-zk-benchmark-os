@@ -698,6 +698,11 @@ pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_SERIALIZATION_PRE
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_SERIALIZATION_PREVIEW_STATE_SLICE:
     &str = "phase-349-hsai-audit-package-serialization-preview-metadata";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_SERIALIZATION_PREVIEW_CLAIM_BOUNDARY: &str = "local audit package serialization-preview metadata only; binds one Phase 347 local non-accepted audit package to deterministic serialization digests, but does not write filesystem artifacts, store raw package bytes, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_SERIALIZATION_PREVIEW_REVIEW_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-real-command-lane-local-serialization-preview-review:v1";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_SERIALIZATION_PREVIEW_REVIEW_STATE_SLICE: &str =
+    "phase-351-hsai-serialization-preview-review-metadata";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_SERIALIZATION_PREVIEW_REVIEW_CLAIM_BOUNDARY: &str = "local serialization-preview review metadata only; classifies one Phase 349 deterministic serialization preview under bounded review labels while materialization remains blocked, but does not write filesystem artifacts, store raw package bytes, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GatewayAttestationChallengeBinding {
@@ -6306,6 +6311,150 @@ pub enum GatewayFormalRealCommandLaneLocalAuditPackageSerializationPreviewIssue 
 pub struct GatewayFormalRealCommandLaneLocalAuditPackageSerializationPreviewValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalRealCommandLaneLocalAuditPackageSerializationPreviewIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalRealCommandLaneLocalSerializationPreviewReviewLabel {
+    SerializationPreviewScopeAcceptable,
+    SerializationPreviewRejected,
+    SerializationProfileBlocked,
+    CanonicalShapeBlocked,
+    MaterializationStillBlocked,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneLocalSerializationPreviewReviewInput {
+    pub schema_version: String,
+    pub review_id: String,
+    pub reviewed_at_unix: u64,
+    pub serialization_preview_digest: Hash,
+    pub serialization_preview_input_digest: Hash,
+    pub package_digest: Hash,
+    pub review_record_digest: Hash,
+    pub metadata_digest: Hash,
+    pub current_accepted_append_blockers: BTreeSet<String>,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub serialization_profile_id: String,
+    pub canonical_field_order_digest: Hash,
+    pub canonical_json_shape_digest: Hash,
+    pub expected_package_bytes_digest: Hash,
+    pub reviewer_policy_id: String,
+    pub reviewer_decision_id: String,
+    pub reviewer_decision_at_unix: u64,
+    pub review_label: GatewayFormalRealCommandLaneLocalSerializationPreviewReviewLabel,
+    pub review_summary: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub attempts_filesystem_write: bool,
+    pub includes_filesystem_paths: bool,
+    pub includes_raw_package_bytes: bool,
+    pub includes_raw_proof_artifacts: bool,
+    pub includes_raw_checker_transcripts: bool,
+    pub includes_raw_solver_certificates: bool,
+    pub includes_live_backend_outputs: bool,
+    pub includes_benchmark_outputs: bool,
+    pub includes_secrets_or_credentials: bool,
+    pub includes_mutable_accepted_ledger_state: bool,
+    pub accepted_evidence_mutation_requested: bool,
+    pub accepted_append_policy_change_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub benchmark_or_sota_comparison_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalRealCommandLaneLocalSerializationPreviewReviewInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-local-serialization-preview-review-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneLocalSerializationPreviewReview {
+    pub schema_version: String,
+    pub review_id: String,
+    pub state_slice: String,
+    pub reviewed_at_unix: u64,
+    pub review_input_digest: Hash,
+    pub serialization_preview_digest: Hash,
+    pub serialization_preview_input_digest: Hash,
+    pub package_digest: Hash,
+    pub review_record_digest: Hash,
+    pub metadata_digest: Hash,
+    pub current_accepted_append_blockers: BTreeSet<String>,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub serialization_profile_id: String,
+    pub canonical_field_order_digest: Hash,
+    pub canonical_json_shape_digest: Hash,
+    pub expected_package_bytes_digest: Hash,
+    pub reviewer_policy_id: String,
+    pub reviewer_decision_id: String,
+    pub reviewer_decision_at_unix: u64,
+    pub review_label: GatewayFormalRealCommandLaneLocalSerializationPreviewReviewLabel,
+    pub review_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub creates_accepted_evidence: bool,
+    pub changes_accepted_append_policy: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalRealCommandLaneLocalSerializationPreviewReview {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-local-serialization-preview-review:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue {
+    InvalidSchemaVersion,
+    InvalidReviewId,
+    InvalidReviewerPolicyId,
+    InvalidReviewerDecisionId,
+    MissingReviewedAt,
+    MissingReviewerDecisionTimestamp,
+    MissingDigest(String),
+    SerializationPreviewDigestDrift,
+    SerializationPreviewStateMismatch,
+    AcceptedAppendBlockerMismatch,
+    NonclaimMismatch,
+    PathOrRawPayloadIncluded,
+    ReviewSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneLocalSerializationPreviewReviewValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -19967,6 +20116,11 @@ pub fn gateway_formal_real_command_lane_local_audit_package_serialization_previe
         .to_owned()
 }
 
+pub fn gateway_formal_real_command_lane_local_serialization_preview_review_claim_boundary() -> String
+{
+    GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_SERIALIZATION_PREVIEW_REVIEW_CLAIM_BOUNDARY.to_owned()
+}
+
 pub fn gateway_formal_real_command_lane_policy_decision_statement() -> String {
     "accepted formal evidence remains forbidden in the current accepted append path".to_owned()
 }
@@ -20102,6 +20256,18 @@ pub fn gateway_formal_real_command_lane_local_audit_package_serialization_previe
     ));
     nonclaims.insert(NonClaimLabel("not materialized artifact".to_owned()));
     nonclaims.insert(NonClaimLabel("not raw package bytes".to_owned()));
+    nonclaims
+}
+
+pub fn gateway_formal_real_command_lane_local_serialization_preview_review_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims =
+        gateway_formal_real_command_lane_local_audit_package_serialization_preview_required_nonclaims(
+        );
+    nonclaims.insert(NonClaimLabel(
+        "local serialization preview review metadata only".to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel("materialization still blocked".to_owned()));
     nonclaims
 }
 
@@ -24029,6 +24195,289 @@ fn validate_gateway_formal_real_command_lane_local_audit_package_serialization_p
     {
         issues.push(
             GatewayFormalRealCommandLaneLocalAuditPackageSerializationPreviewIssue::PromotionAttempt,
+        );
+    }
+}
+
+pub fn build_gateway_formal_real_command_lane_local_serialization_preview_review(
+    preview: &GatewayFormalRealCommandLaneLocalAuditPackageSerializationPreview,
+    input: &GatewayFormalRealCommandLaneLocalSerializationPreviewReviewInput,
+) -> Result<
+    GatewayFormalRealCommandLaneLocalSerializationPreviewReview,
+    GatewayFormalRealCommandLaneLocalSerializationPreviewReviewValidation,
+> {
+    let validation =
+        validate_gateway_formal_real_command_lane_local_serialization_preview_review_input(
+            preview, input,
+        );
+    if !validation.valid {
+        return Err(validation);
+    }
+    Ok(
+        GatewayFormalRealCommandLaneLocalSerializationPreviewReview {
+            schema_version:
+                GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_SERIALIZATION_PREVIEW_REVIEW_SCHEMA_VERSION
+                    .to_owned(),
+            review_id: input.review_id.clone(),
+            state_slice:
+                GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_SERIALIZATION_PREVIEW_REVIEW_STATE_SLICE
+                    .to_owned(),
+            reviewed_at_unix: input.reviewed_at_unix,
+            review_input_digest: input.digest(),
+            serialization_preview_digest: preview.digest(),
+            serialization_preview_input_digest: preview.preview_input_digest,
+            package_digest: preview.package_digest,
+            review_record_digest: preview.review_digest,
+            metadata_digest: preview.metadata_digest,
+            current_accepted_append_blockers: preview.current_accepted_append_blockers.clone(),
+            current_accepted_append_blockers_digest: preview
+                .current_accepted_append_blockers_digest,
+            serialization_profile_id: preview.serialization_profile_id.clone(),
+            canonical_field_order_digest: preview.canonical_field_order_digest,
+            canonical_json_shape_digest: preview.canonical_json_shape_digest,
+            expected_package_bytes_digest: preview.expected_package_bytes_digest,
+            reviewer_policy_id: input.reviewer_policy_id.clone(),
+            reviewer_decision_id: input.reviewer_decision_id.clone(),
+            reviewer_decision_at_unix: input.reviewer_decision_at_unix,
+            review_label: input.review_label.clone(),
+            review_summary: input.review_summary.clone(),
+            previous_promotion_state: "local_audit_package_serialization_preview_metadata"
+                .to_owned(),
+            promotion_state: "local_serialization_preview_review_metadata".to_owned(),
+            next_required_state: "materialized_audit_package_still_blocked".to_owned(),
+            claim_boundary:
+                gateway_formal_real_command_lane_local_serialization_preview_review_claim_boundary(),
+            explicit_nonclaims: input.explicit_nonclaims.clone(),
+            creates_accepted_evidence: false,
+            changes_accepted_append_policy: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            grants_authority: false,
+        },
+    )
+}
+
+pub fn validate_gateway_formal_real_command_lane_local_serialization_preview_review_input(
+    preview: &GatewayFormalRealCommandLaneLocalAuditPackageSerializationPreview,
+    input: &GatewayFormalRealCommandLaneLocalSerializationPreviewReviewInput,
+) -> GatewayFormalRealCommandLaneLocalSerializationPreviewReviewValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_SERIALIZATION_PREVIEW_REVIEW_SCHEMA_VERSION
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue::InvalidSchemaVersion,
+        );
+    }
+    if !is_single_segment_id(&input.review_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue::InvalidReviewId,
+        );
+    }
+    if !is_single_segment_id(&input.reviewer_policy_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue::InvalidReviewerPolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.reviewer_decision_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue::InvalidReviewerDecisionId,
+        );
+    }
+    if input.reviewed_at_unix == 0 {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue::MissingReviewedAt,
+        );
+    }
+    if input.reviewer_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue::MissingReviewerDecisionTimestamp,
+        );
+    }
+    validate_gateway_formal_real_command_lane_local_serialization_preview_review_digests(
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_real_command_lane_local_serialization_preview_review_preview(
+        preview,
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_real_command_lane_local_serialization_preview_review_policy(
+        input,
+        &mut issues,
+    );
+    GatewayFormalRealCommandLaneLocalSerializationPreviewReviewValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_local_serialization_preview_review_digests(
+    input: &GatewayFormalRealCommandLaneLocalSerializationPreviewReviewInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue>,
+) {
+    for (label, digest) in [
+        (
+            "serialization_preview_digest",
+            input.serialization_preview_digest,
+        ),
+        (
+            "serialization_preview_input_digest",
+            input.serialization_preview_input_digest,
+        ),
+        ("package_digest", input.package_digest),
+        ("review_record_digest", input.review_record_digest),
+        ("metadata_digest", input.metadata_digest),
+        (
+            "current_accepted_append_blockers_digest",
+            input.current_accepted_append_blockers_digest,
+        ),
+        (
+            "canonical_field_order_digest",
+            input.canonical_field_order_digest,
+        ),
+        (
+            "canonical_json_shape_digest",
+            input.canonical_json_shape_digest,
+        ),
+        (
+            "expected_package_bytes_digest",
+            input.expected_package_bytes_digest,
+        ),
+        ("explicit_nonclaims_digest", input.explicit_nonclaims_digest),
+    ] {
+        if digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue::MissingDigest(
+                    label.to_owned(),
+                ),
+            );
+        }
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_local_serialization_preview_review_preview(
+    preview: &GatewayFormalRealCommandLaneLocalAuditPackageSerializationPreview,
+    input: &GatewayFormalRealCommandLaneLocalSerializationPreviewReviewInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue>,
+) {
+    if input.serialization_preview_digest != preview.digest()
+        || input.serialization_preview_input_digest != preview.preview_input_digest
+        || input.package_digest != preview.package_digest
+        || input.review_record_digest != preview.review_digest
+        || input.metadata_digest != preview.metadata_digest
+        || input.serialization_profile_id != preview.serialization_profile_id
+        || input.canonical_field_order_digest != preview.canonical_field_order_digest
+        || input.canonical_json_shape_digest != preview.canonical_json_shape_digest
+        || input.expected_package_bytes_digest != preview.expected_package_bytes_digest
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue::SerializationPreviewDigestDrift,
+        );
+    }
+    if preview.schema_version
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_SERIALIZATION_PREVIEW_SCHEMA_VERSION
+        || preview.state_slice
+            != GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_SERIALIZATION_PREVIEW_STATE_SLICE
+        || preview.promotion_state != "local_audit_package_serialization_preview_metadata"
+        || preview.claim_boundary
+            != gateway_formal_real_command_lane_local_audit_package_serialization_preview_claim_boundary()
+        || preview.creates_accepted_evidence
+        || preview.changes_accepted_append_policy
+        || preview.creates_level2_evidence
+        || preview.populates_score_axes
+        || preview.proof_artifact_created
+        || preview.checker_transcript_created
+        || preview.solver_certificate_created
+        || preview.semantic_correctness_claimed
+        || preview.production_readiness_claimed
+        || preview.sota_claimed
+        || preview.breakthrough_claimed
+        || preview.full_security_claimed
+        || preview.grants_authority
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue::SerializationPreviewStateMismatch,
+        );
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_local_serialization_preview_review_policy(
+    input: &GatewayFormalRealCommandLaneLocalSerializationPreviewReviewInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue>,
+) {
+    let blockers = gateway_formal_real_command_lane_accepted_handoff_current_blockers();
+    if input.current_accepted_append_blockers != blockers
+        || input.current_accepted_append_blockers_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-accepted-handoff-current-blockers:v1",
+                &blockers,
+            )
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue::AcceptedAppendBlockerMismatch,
+        );
+    }
+    let nonclaims =
+        gateway_formal_real_command_lane_local_serialization_preview_review_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-local-serialization-preview-review-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue::NonclaimMismatch);
+    }
+    if input.attempts_filesystem_write
+        || input.includes_filesystem_paths
+        || input.includes_raw_package_bytes
+        || input.includes_raw_proof_artifacts
+        || input.includes_raw_checker_transcripts
+        || input.includes_raw_solver_certificates
+        || input.includes_live_backend_outputs
+        || input.includes_benchmark_outputs
+        || input.includes_secrets_or_credentials
+        || input.includes_mutable_accepted_ledger_state
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue::PathOrRawPayloadIncluded,
+        );
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.review_summary,
+    ) {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue::ReviewSummaryPromotionClaim,
+        );
+    }
+    if input.accepted_evidence_mutation_requested
+        || input.accepted_append_policy_change_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.benchmark_or_sota_comparison_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue::PromotionAttempt,
         );
     }
 }
@@ -36447,6 +36896,73 @@ mod tests {
         }
     }
 
+    fn formal_evidence_local_serialization_preview_review_input(
+        review_id: &str,
+        preview: &GatewayFormalRealCommandLaneLocalAuditPackageSerializationPreview,
+        review_label: GatewayFormalRealCommandLaneLocalSerializationPreviewReviewLabel,
+    ) -> GatewayFormalRealCommandLaneLocalSerializationPreviewReviewInput {
+        let blockers = gateway_formal_real_command_lane_accepted_handoff_current_blockers();
+        let explicit_nonclaims =
+            gateway_formal_real_command_lane_local_serialization_preview_review_required_nonclaims(
+            );
+        GatewayFormalRealCommandLaneLocalSerializationPreviewReviewInput {
+            schema_version:
+                GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_SERIALIZATION_PREVIEW_REVIEW_SCHEMA_VERSION
+                    .to_owned(),
+            review_id: review_id.to_owned(),
+            reviewed_at_unix: 1_800_000_351,
+            serialization_preview_digest: preview.digest(),
+            serialization_preview_input_digest: preview.preview_input_digest,
+            package_digest: preview.package_digest,
+            review_record_digest: preview.review_digest,
+            metadata_digest: preview.metadata_digest,
+            current_accepted_append_blockers_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-accepted-handoff-current-blockers:v1",
+                &blockers,
+            ),
+            current_accepted_append_blockers: blockers,
+            serialization_profile_id: preview.serialization_profile_id.clone(),
+            canonical_field_order_digest: preview.canonical_field_order_digest,
+            canonical_json_shape_digest: preview.canonical_json_shape_digest,
+            expected_package_bytes_digest: preview.expected_package_bytes_digest,
+            reviewer_policy_id: "phase351-review-policy".to_owned(),
+            reviewer_decision_id: "phase351-review-decision".to_owned(),
+            reviewer_decision_at_unix: 1_800_000_351,
+            review_label,
+            review_summary: "local review confirms materialization remains blocked".to_owned(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-local-serialization-preview-review-nonclaims:v1",
+                &explicit_nonclaims,
+            ),
+            explicit_nonclaims,
+            attempts_filesystem_write: false,
+            includes_filesystem_paths: false,
+            includes_raw_package_bytes: false,
+            includes_raw_proof_artifacts: false,
+            includes_raw_checker_transcripts: false,
+            includes_raw_solver_certificates: false,
+            includes_live_backend_outputs: false,
+            includes_benchmark_outputs: false,
+            includes_secrets_or_credentials: false,
+            includes_mutable_accepted_ledger_state: false,
+            accepted_evidence_mutation_requested: false,
+            accepted_append_policy_change_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            benchmark_or_sota_comparison_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
     #[test]
     fn gateway_formal_real_command_lane_fixed_smt_process_executes_and_quarantines_unsat() {
         let (
@@ -39728,6 +40244,344 @@ mod tests {
         fs::remove_dir_all(&phase327_root).expect("phase349 promotion phase327 cleanup succeeds");
         fs::remove_dir_all(&execution_root).expect("phase349 promotion execution cleanup succeeds");
         fs::remove_dir_all(&source_root).expect("phase349 promotion source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_local_serialization_preview_review_builds_blocking_record()
+    {
+        let (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            phase323_manifest,
+            preflight,
+            phase327_manifest,
+            input,
+        ) = real_command_lane_formal_evidence_candidate_parts("real-command-phase351-review");
+        let candidate = build_gateway_formal_real_command_lane_formal_evidence_candidate(
+            &phase323_manifest,
+            &preflight,
+            &phase327_manifest,
+            &input,
+        )
+        .expect("phase351 review candidate builds");
+        let preview_input = formal_evidence_review_preview_input(
+            "phase351-review-preview",
+            &candidate,
+            GatewayFormalRealCommandLaneReviewPreviewDecisionLabel::ReviewPreviewAcceptCandidateScope,
+        );
+        let preview =
+            build_gateway_formal_real_command_lane_review_preview(&candidate, &preview_input)
+                .expect("phase351 review preview builds");
+        let record_input =
+            formal_evidence_reviewed_record_input("phase351-review-record", &preview);
+        let reviewed_record =
+            build_gateway_formal_real_command_lane_reviewed_record(&preview, &record_input)
+                .expect("phase351 review reviewed record builds");
+        let handoff_input =
+            formal_evidence_accepted_handoff_input("phase351-review-handoff", &reviewed_record);
+        let handoff = build_gateway_formal_real_command_lane_accepted_handoff(
+            &reviewed_record,
+            &handoff_input,
+        )
+        .expect("phase351 review handoff builds");
+        let decision_input =
+            formal_evidence_policy_decision_input("phase351-review-decision", &handoff);
+        let policy_decision =
+            build_gateway_formal_real_command_lane_policy_decision(&handoff, &decision_input)
+                .expect("phase351 review policy decision builds");
+        let feasibility_input = formal_evidence_bounded_feasibility_input(
+            "phase351-review-feasibility",
+            &policy_decision,
+        );
+        let feasibility =
+            build_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility(
+                &policy_decision,
+                &feasibility_input,
+            )
+            .expect("phase351 review feasibility builds");
+        let class_policy_input = formal_evidence_local_non_accepted_class_policy_input(
+            "phase351-review-policy",
+            &feasibility,
+        );
+        let class_policy = build_gateway_formal_real_command_lane_local_non_accepted_class_policy(
+            &feasibility,
+            &class_policy_input,
+        )
+        .expect("phase351 review class policy builds");
+        let metadata_input = formal_evidence_local_reviewed_metadata_input(
+            "phase351-review-metadata",
+            &class_policy,
+        );
+        let metadata =
+            build_gateway_formal_real_command_lane_local_reviewed_formal_evidence_metadata(
+                &class_policy,
+                &metadata_input,
+            )
+            .expect("phase351 review metadata builds");
+        let metadata_review_input = formal_evidence_local_metadata_review_input(
+            "phase351-review-metadata-review",
+            &metadata,
+            GatewayFormalRealCommandLaneLocalMetadataReviewLabel::ReviewScopeAcceptable,
+        );
+        let metadata_review = build_gateway_formal_real_command_lane_local_metadata_review(
+            &metadata,
+            &metadata_review_input,
+        )
+        .expect("phase351 metadata review builds");
+        let package_input = formal_evidence_local_review_audit_package_input(
+            "phase351-review-package",
+            &metadata_review,
+        );
+        let package = build_gateway_formal_real_command_lane_local_review_audit_package(
+            &metadata_review,
+            &package_input,
+        )
+        .expect("phase351 package builds");
+        let serialization_input = formal_evidence_local_audit_package_serialization_preview_input(
+            "phase351-review-serialization",
+            &package,
+        );
+        let serialization_preview =
+            build_gateway_formal_real_command_lane_local_audit_package_serialization_preview(
+                &package,
+                &serialization_input,
+            )
+            .expect("phase351 serialization preview builds");
+        let review_input = formal_evidence_local_serialization_preview_review_input(
+            "phase351-review",
+            &serialization_preview,
+            GatewayFormalRealCommandLaneLocalSerializationPreviewReviewLabel::MaterializationStillBlocked,
+        );
+        let review = build_gateway_formal_real_command_lane_local_serialization_preview_review(
+            &serialization_preview,
+            &review_input,
+        )
+        .expect("phase351 serialization preview review builds");
+
+        assert_eq!(
+            review.state_slice,
+            GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_SERIALIZATION_PREVIEW_REVIEW_STATE_SLICE
+        );
+        assert_eq!(
+            review.previous_promotion_state,
+            "local_audit_package_serialization_preview_metadata"
+        );
+        assert_eq!(
+            review.promotion_state,
+            "local_serialization_preview_review_metadata"
+        );
+        assert_eq!(
+            review.next_required_state,
+            "materialized_audit_package_still_blocked"
+        );
+        assert_eq!(
+            review.serialization_preview_digest,
+            serialization_preview.digest()
+        );
+        assert_eq!(review.package_digest, serialization_preview.package_digest);
+        assert_eq!(
+            review.review_label,
+            GatewayFormalRealCommandLaneLocalSerializationPreviewReviewLabel::MaterializationStillBlocked
+        );
+        assert_eq!(
+            review.claim_boundary,
+            gateway_formal_real_command_lane_local_serialization_preview_review_claim_boundary()
+        );
+        assert!(!review.creates_accepted_evidence);
+        assert!(!review.changes_accepted_append_policy);
+        assert!(!review.creates_level2_evidence);
+        assert!(!review.populates_score_axes);
+        assert!(!review.proof_artifact_created);
+        assert!(!review.checker_transcript_created);
+        assert!(!review.solver_certificate_created);
+        assert!(!review.semantic_correctness_claimed);
+        assert!(!review.production_readiness_claimed);
+        assert!(!review.sota_claimed);
+        assert!(!review.breakthrough_claimed);
+        assert!(!review.full_security_claimed);
+        assert!(!review.grants_authority);
+
+        let mut digest_drift = review_input.clone();
+        digest_drift.serialization_preview_digest = Hash([17; 32]);
+        let digest_validation =
+            validate_gateway_formal_real_command_lane_local_serialization_preview_review_input(
+                &serialization_preview,
+                &digest_drift,
+            );
+        assert!(digest_validation.issues.contains(
+            &GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue::SerializationPreviewDigestDrift
+        ));
+
+        let mut raw_review = review_input.clone();
+        raw_review.attempts_filesystem_write = true;
+        raw_review.includes_raw_package_bytes = true;
+        let raw_validation =
+            validate_gateway_formal_real_command_lane_local_serialization_preview_review_input(
+                &serialization_preview,
+                &raw_review,
+            );
+        assert!(raw_validation.issues.contains(
+            &GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue::PathOrRawPayloadIncluded
+        ));
+
+        let mut text_promotion = review_input.clone();
+        text_promotion.review_summary = "claims accepted evidence and SOTA".to_owned();
+        let text_validation =
+            validate_gateway_formal_real_command_lane_local_serialization_preview_review_input(
+                &serialization_preview,
+                &text_promotion,
+            );
+        assert!(text_validation.issues.contains(
+            &GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue::ReviewSummaryPromotionClaim
+        ));
+
+        fs::remove_dir_all(&phase323_root).expect("phase351 review phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase351 review phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase351 review execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase351 review source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_local_serialization_preview_review_rejects_promotion() {
+        let (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            phase323_manifest,
+            preflight,
+            phase327_manifest,
+            input,
+        ) = real_command_lane_formal_evidence_candidate_parts("real-command-phase351-promotion");
+        let candidate = build_gateway_formal_real_command_lane_formal_evidence_candidate(
+            &phase323_manifest,
+            &preflight,
+            &phase327_manifest,
+            &input,
+        )
+        .expect("phase351 promotion candidate builds");
+        let preview_input = formal_evidence_review_preview_input(
+            "phase351-promotion-preview",
+            &candidate,
+            GatewayFormalRealCommandLaneReviewPreviewDecisionLabel::ReviewPreviewAcceptCandidateScope,
+        );
+        let preview =
+            build_gateway_formal_real_command_lane_review_preview(&candidate, &preview_input)
+                .expect("phase351 promotion preview builds");
+        let record_input =
+            formal_evidence_reviewed_record_input("phase351-promotion-record", &preview);
+        let reviewed_record =
+            build_gateway_formal_real_command_lane_reviewed_record(&preview, &record_input)
+                .expect("phase351 promotion reviewed record builds");
+        let handoff_input =
+            formal_evidence_accepted_handoff_input("phase351-promotion-handoff", &reviewed_record);
+        let handoff = build_gateway_formal_real_command_lane_accepted_handoff(
+            &reviewed_record,
+            &handoff_input,
+        )
+        .expect("phase351 promotion handoff builds");
+        let decision_input =
+            formal_evidence_policy_decision_input("phase351-promotion-decision", &handoff);
+        let policy_decision =
+            build_gateway_formal_real_command_lane_policy_decision(&handoff, &decision_input)
+                .expect("phase351 promotion policy decision builds");
+        let feasibility_input = formal_evidence_bounded_feasibility_input(
+            "phase351-promotion-feasibility",
+            &policy_decision,
+        );
+        let feasibility =
+            build_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility(
+                &policy_decision,
+                &feasibility_input,
+            )
+            .expect("phase351 promotion feasibility builds");
+        let class_policy_input = formal_evidence_local_non_accepted_class_policy_input(
+            "phase351-promotion-policy",
+            &feasibility,
+        );
+        let class_policy = build_gateway_formal_real_command_lane_local_non_accepted_class_policy(
+            &feasibility,
+            &class_policy_input,
+        )
+        .expect("phase351 promotion class policy builds");
+        let metadata_input = formal_evidence_local_reviewed_metadata_input(
+            "phase351-promotion-metadata",
+            &class_policy,
+        );
+        let metadata =
+            build_gateway_formal_real_command_lane_local_reviewed_formal_evidence_metadata(
+                &class_policy,
+                &metadata_input,
+            )
+            .expect("phase351 promotion metadata builds");
+        let metadata_review_input = formal_evidence_local_metadata_review_input(
+            "phase351-promotion-metadata-review",
+            &metadata,
+            GatewayFormalRealCommandLaneLocalMetadataReviewLabel::ReviewRejected,
+        );
+        let metadata_review = build_gateway_formal_real_command_lane_local_metadata_review(
+            &metadata,
+            &metadata_review_input,
+        )
+        .expect("phase351 promotion metadata review builds");
+        let package_input = formal_evidence_local_review_audit_package_input(
+            "phase351-promotion-package",
+            &metadata_review,
+        );
+        let package = build_gateway_formal_real_command_lane_local_review_audit_package(
+            &metadata_review,
+            &package_input,
+        )
+        .expect("phase351 promotion package builds");
+        let serialization_input = formal_evidence_local_audit_package_serialization_preview_input(
+            "phase351-promotion-serialization",
+            &package,
+        );
+        let serialization_preview =
+            build_gateway_formal_real_command_lane_local_audit_package_serialization_preview(
+                &package,
+                &serialization_input,
+            )
+            .expect("phase351 promotion serialization preview builds");
+        let mut review_input = formal_evidence_local_serialization_preview_review_input(
+            "phase351-promotion-review",
+            &serialization_preview,
+            GatewayFormalRealCommandLaneLocalSerializationPreviewReviewLabel::SerializationPreviewRejected,
+        );
+
+        review_input.accepted_evidence_mutation_requested = true;
+        review_input.accepted_append_policy_change_requested = true;
+        review_input.accepted_formal_evidence_created = true;
+        review_input.creates_level2_evidence = true;
+        review_input.populates_score_axes = true;
+        review_input.proof_artifact_promoted = true;
+        review_input.checker_transcript_promoted = true;
+        review_input.solver_certificate_promoted = true;
+        review_input.sota_claimed = true;
+        review_input.full_security_claimed = true;
+        review_input.action_authority_claimed = true;
+        let validation =
+            validate_gateway_formal_real_command_lane_local_serialization_preview_review_input(
+                &serialization_preview,
+                &review_input,
+            );
+        assert!(validation.issues.contains(
+            &GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue::PromotionAttempt
+        ));
+        assert!(
+            build_gateway_formal_real_command_lane_local_serialization_preview_review(
+                &serialization_preview,
+                &review_input,
+            )
+            .is_err()
+        );
+
+        fs::remove_dir_all(&phase323_root).expect("phase351 promotion phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase351 promotion phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase351 promotion execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase351 promotion source cleanup succeeds");
     }
 
     #[test]
