@@ -171,8 +171,8 @@ Phase 373 adds tests that:
 
 ## Next Slice
 
-Phase 374 should define a docs-first boundary for accepted-append decision
-quarantine review metadata before any accepted append decision is allowed. That
+Phase 374 defines a docs-first boundary for accepted-append decision quarantine
+review metadata before any accepted append decision is allowed. That
 boundary must keep quarantine-review metadata separate from accepted formal
 evidence, accepted Evidence Ledger mutation, accepted append policy changes,
 Level2+ evidence, score axes, Lean execution, SMT execution, COBALT execution,
