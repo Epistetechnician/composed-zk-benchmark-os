@@ -202,7 +202,7 @@ It cannot support:
 ## Phase 377 Implementation Exit Criteria
 
 Phase 377 implements local accepted-append decision quarantine-resolution
-planning metadata only if it:
+planning metadata. The implementation is valid because it:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;
