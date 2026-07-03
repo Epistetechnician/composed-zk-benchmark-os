@@ -151,7 +151,7 @@ It cannot support:
 
 ## Phase 367 Implementation Exit Criteria
 
-Phase 367 may implement local accepted-append decision candidate review metadata
+Phase 367 implements local accepted-append decision candidate review metadata
 only if it:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
