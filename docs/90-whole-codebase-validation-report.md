@@ -1747,6 +1747,24 @@ extraction, benchmark submission, production deployment, semantic-correctness
 claims, production-readiness claims, SOTA claims, breakthrough claims,
 full-security claims, or authority grants.
 
+Phase 329 implements the first local formal-evidence candidate lane for the
+real formal command lane in `crates/hsai-agent-admission`. It adds candidate
+input metadata, candidate record metadata, validation issues, validation
+reports, nonclaim helpers, and a builder that binds Phase 323 source-manifest
+digest, Phase 325 preflight digest, Phase 326 process-output digest through the
+Phase 327 readback manifest, fixed executable digest, fixed argv template
+digest, SMT-LIB2 obligation digest, expected-output grammar digest, solver
+verdict, stream-summary digests, replay descriptor digest, verifier policy,
+reviewer policy, source correspondence statement, and explicit nonclaims.
+Focused tests build a valid candidate from a hermetic fixed-SMT output and
+reject stale preflight drift, accepted-evidence/SOTA/score-axis promotion,
+nonclaim drift, non-eligible solver verdicts, raw-log reliance, and checker
+transcript promotion. Phase 329 does not create reviewed formal evidence,
+accepted Evidence Ledger entries, Level2+ evidence, score-axis entries, proof
+artifacts, checker transcripts, solver certificates, benchmark evidence,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, or authority grants.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission

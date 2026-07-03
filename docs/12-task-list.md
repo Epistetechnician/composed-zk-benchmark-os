@@ -7695,6 +7695,45 @@ formal-evidence candidate implementation, no reviewed formal evidence, no
 accepted formal evidence, no Level2+ evidence, no score axes, no proof-authority
 claim, and no production/SOTA/security/correctness claim.
 
+## Phase 329 HSAI Local Formal Evidence Candidate
+
+Status: complete. See
+`docs/329-hsai-local-formal-evidence-candidate-notes.md`.
+
+Goal: implement the first local formal-evidence candidate data model for the
+real formal command lane while keeping the candidate below reviewed evidence and
+accepted evidence.
+
+Implemented: Phase 329 schema/state/claim-boundary constants, candidate input
+metadata, candidate record metadata, validation issue taxonomy, validation
+report, candidate nonclaim helpers, candidate builder, and fail-closed
+candidate-input validation from Phase 323 source manifest, Phase 325 preflight,
+and Phase 327 fixed-SMT execution output manifest.
+
+Validation coverage: valid candidate construction from a hermetic Phase
+326/327 fixed-SMT output, preservation of the promotion ladder, proof/evidence
+/score/claim/authority flags held false, stale preflight digest rejection,
+accepted-evidence/SOTA/score-axis promotion rejection, nonclaim drift rejection,
+non-eligible solver verdict rejection, raw-log reliance rejection, and
+checker-transcript promotion rejection.
+
+Validation gate: formatting, focused Phase 329 candidate tests, HSAI
+claim-boundary source scan, repo docs/hygiene tests, diff hygiene, empty-file
+hygiene, package-root lint check, and full workspace tests.
+
+Anti-goals: reviewed formal evidence, accepted Evidence Ledger mutation,
+Level2+ evidence, score-axis population, proof artifact generation, checker
+transcript generation, solver certificate generation, Lean execution, COBALT
+execution, Rust-to-Lean extraction, benchmark submission, production deployment,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, or action authority.
+
+Exit criteria: HSAI now has a local formal-evidence candidate lane for one
+gateway admission invariant with digest-bound replay, nonclaim preservation,
+and explicit promotion rejection, but still no reviewed formal evidence, no
+accepted formal evidence, no Level2+ evidence, no score axes, no proof-authority
+claim, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
