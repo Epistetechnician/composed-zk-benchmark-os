@@ -135,8 +135,7 @@ authority.
 
 ## Phase 389 Implementation Exit Criteria
 
-Phase 389 may implement local accepted-append decision quarantine-resolution
-escalation terminal-review closure-blocker metadata only if it:
+The Phase 389 implementation is valid because it:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;

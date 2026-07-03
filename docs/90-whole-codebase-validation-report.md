@@ -2688,6 +2688,27 @@ submits no benchmarks, deploys nothing to production, claims no semantic
 correctness, claims no production readiness, claims no SOTA, claims no
 breakthrough status, claims no full security, and grants no authority.
 
+Phase 389 implements local deterministic accepted-append decision
+quarantine-resolution escalation terminal-review closure-blocker metadata over
+one Phase 387 terminal-blocker review. The implementation adds Phase 389
+schema/state/claim-boundary constants, closure-blocker input metadata,
+closure-blocker record metadata, six bounded closure-blocker labels, validation
+issues, validation result, required nonclaim helper, deterministic
+digest-binding, id-binding, and label-binding helpers, a closure-blocker
+builder, and validation for binding drift, invalid ids, promoted Phase 387
+state, current accepted append blocker drift, nonclaim drift, promotional
+closure text, accepted append decision attempts, accepted-evidence mutation
+attempts, accepted append policy-change attempts, accepted formal-evidence
+creation attempts, Level2+ attempts, score-axis attempts, proof/checker/solver
+promotion, SOTA/full-security claims, and authority attempts. Phase 389
+changes no Cargo metadata, writes no artifacts, changes no accepted append
+policy, mutates no accepted Evidence Ledger, creates no accepted formal
+evidence, creates no Level2+ evidence, populates no score axes, executes no
+Lean, executes no SMT, executes no COBALT, runs no Rust-to-Lean extraction,
+submits no benchmarks, deploys nothing to production, claims no semantic
+correctness, claims no production readiness, claims no SOTA, claims no
+breakthrough status, claims no full security, and grants no authority.
+
 Phase 360 defines the docs-first append-decision preflight boundary. It
 specifies the future preflight purpose, five allowed future preflight labels,
 required future inputs, required future validation, meaning limits, and Phase
