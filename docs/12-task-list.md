@@ -10153,6 +10153,61 @@ formal evidence, no accepted Evidence Ledger mutation, no accepted append
 policy change, no Level2+ evidence, no score axes, no proof-authority claim,
 and no production/SOTA/security/correctness claim.
 
+## Phase 384 HSAI Accepted-Append Decision Quarantine-Resolution Escalation Terminal-Blocker Boundary
+
+Status: complete. See
+`docs/384-hsai-accepted-append-decision-quarantine-resolution-escalation-terminal-blocker-boundary.md`.
+
+Goal: define the docs-first boundary for future local escalation
+terminal-blocker metadata over one Phase 383 accepted-append decision
+quarantine-resolution escalation-blocker review while preserving the hard block
+on accepted append decisions and accepted formal evidence.
+
+Boundary coverage: Phase 384 defines the future terminal-blocker purpose, six
+allowed future terminal-blocker labels, required future inputs, required future
+validation, meaning limits, and Phase 385 implementation exit criteria. The
+boundary requires any future terminal blocker to bind one Phase 383
+escalation-blocker review digest/input digest, one Phase 381 escalation-blocker
+digest/input digest, one Phase 379 resolution review digest/input digest, one
+Phase 377 resolution plan digest/input digest, one Phase 375 quarantine review
+digest/input digest, one Phase 373 quarantine digest/input digest, one Phase
+371 blocker review digest/input digest, one Phase 369 blocker digest/input
+digest, one Phase 367 review digest/input digest, one Phase 365 candidate
+digest/input digest, one Phase 363 review digest/input digest, one Phase 361
+preflight digest/input digest, one Phase 359 review digest/input digest, one
+Phase 357 candidate digest/input digest, Phase 355/353/351/349/347/345/343
+chain digests, declared file digest map digest, explicit nonclaim digest,
+terminal ids, escalation ids, review ids, quarantine ids, resolution ids,
+reviewer ids, proposal ids, append preflight ids, accepted append decision
+candidate/review/blocker/blocker-review/quarantine/quarantine-review/
+resolution-plan/resolution-review/escalation-blocker/
+escalation-blocker-review/terminal-blocker ids, terminal timestamp, current
+accepted append blocker digest, Phase 365 candidate disposition, Phase 367
+review label, Phase 369 blocker label, Phase 371 blocker review label, Phase
+373 quarantine label, Phase 375 quarantine review label, Phase 377 resolution
+planning label, Phase 379 resolution review label, Phase 381
+escalation-blocker label, Phase 383 escalation-blocker review label, and a
+bounded terminal-blocker label.
+
+Anti-goals: Rust implementation code, Cargo metadata changes, filesystem
+artifact writes, accepted append decisions, accepted Evidence Ledger mutation,
+accepted append policy changes, accepted formal evidence, Level2+ evidence,
+score-axis population, proof artifact generation or promotion, checker
+transcript generation or promotion, solver certificate generation or promotion,
+additional process-spawn APIs, generic backend runners, solver scripts,
+checker scripts, proof assistant setup files, Lean execution, SMT execution,
+COBALT execution, Rust-to-Lean extraction, benchmark submission, production
+deployment, semantic-correctness claims, production-readiness claims, SOTA
+claims, breakthrough claims, full-security claims, or action authority.
+
+Exit criteria: HSAI now has a docs-first boundary for future local recording of
+why one accepted-append decision quarantine-resolution escalation-blocker review
+closes the current escalation chain while the accepted append path remains
+blocked. It still has no accepted append decision, no accepted formal evidence,
+no accepted Evidence Ledger mutation, no accepted append policy change, no
+Level2+ evidence, no score axes, no proof-authority claim, and no
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
