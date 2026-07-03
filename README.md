@@ -419,6 +419,7 @@ Surface DSL
 | [docs/331-hsai-reviewed-formal-evidence-preview-metadata-notes.md](docs/331-hsai-reviewed-formal-evidence-preview-metadata-notes.md) | Phase 331 HSAI reviewed formal evidence preview metadata notes. |
 | [docs/332-hsai-reviewed-formal-evidence-record-boundary.md](docs/332-hsai-reviewed-formal-evidence-record-boundary.md) | Phase 332 HSAI reviewed formal evidence record boundary. |
 | [docs/333-hsai-reviewed-formal-evidence-record-metadata-notes.md](docs/333-hsai-reviewed-formal-evidence-record-metadata-notes.md) | Phase 333 HSAI reviewed formal evidence record metadata notes. |
+| [docs/334-hsai-accepted-formal-evidence-handoff-boundary.md](docs/334-hsai-accepted-formal-evidence-handoff-boundary.md) | Phase 334 HSAI accepted formal evidence handoff boundary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |

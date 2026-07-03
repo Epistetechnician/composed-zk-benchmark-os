@@ -7889,6 +7889,42 @@ candidate, Phase 327 output, Phase 325 preflight, and Phase 323 source digests.
 It still has no accepted formal evidence, no Level2+ evidence, no score axes,
 no proof-authority claim, and no production/SOTA/security/correctness claim.
 
+## Phase 334 HSAI Accepted Formal Evidence Handoff Boundary
+
+Status: complete. See
+`docs/334-hsai-accepted-formal-evidence-handoff-boundary.md`.
+
+Goal: define the docs-first handoff boundary from Phase 333 reviewed-record
+metadata toward a future accepted formal-evidence path without bypassing the
+existing accepted Evidence Ledger append policy.
+
+Implemented: future handoff input requirements, current evidence ladder,
+explicit policy decision required before accepted formal evidence can exist,
+forbidden shortcuts, evidence meaning limits, and future Phase 335 handoff
+metadata exit criteria.
+
+Validation coverage: documentation now records that the current
+`zkbench-core` accepted append transaction rejects formal evidence classes and
+claim boundaries above `Level1LocalReplay`. Phase 334 therefore creates no
+parallel accepted-evidence path and does not mutate accepted evidence.
+
+Validation gate: formatting, docs/hygiene checks, diff hygiene, empty-file
+hygiene, package-root lint check, claim-boundary source scans, repo docs tests,
+and full workspace tests.
+
+Anti-goals: Rust implementation code, accepted Evidence Ledger mutation,
+accepted formal evidence, Level2+ evidence, score-axis population, proof
+artifact generation, checker transcript generation, solver certificate
+generation, Lean execution, COBALT execution, Rust-to-Lean extraction,
+benchmark submission, production deployment, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims, full-security
+claims, or action authority.
+
+Exit criteria: HSAI now has a documented handoff boundary from local reviewed
+formal-evidence metadata to a future accepted formal-evidence path. It still
+has no accepted formal evidence, no Level2+ evidence, no score axes, no
+proof-authority claim, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
