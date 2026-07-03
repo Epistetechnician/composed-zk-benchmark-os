@@ -10824,6 +10824,34 @@ execution lane. It still has no backend run, no Lean/SMT/COBALT run, no
 accepted evidence, no Level2+ evidence, no score axes, and no
 SOTA/full-security/semantic-correctness/production-readiness claim.
 
+## Phase 402 HSAI Backend-Execution Readiness Reconciliation
+
+Status: complete. See
+`docs/402-hsai-backend-execution-readiness-reconciliation.md`.
+
+Goal: reconcile the post-400 Phase 401 tiny backend-execution boundary with
+the already-implemented Phase 321-327 fixed-SMT command lane and the current
+local tool availability.
+
+Boundary coverage: Phase 402 records that local `z3` is available at
+`/opt/homebrew/bin/z3`, while `lean`, `lake`, and `cobalt` are unavailable in
+the current environment. It also records that Phase 326 already crossed one
+bounded fixed-process SMT lane and Phase 327 already materialized/read back
+its quarantined output bundle, but those artifacts remain nonpromoted local
+metadata.
+
+Anti-goals: Rust implementation code, Cargo metadata changes, artifact writes,
+new backend execution, Lean execution, SMT execution, COBALT execution,
+Rust-to-Lean extraction, accepted append decisions, accepted Evidence Ledger
+mutation, accepted formal evidence, Level2+ evidence, score axes,
+proof/checker/solver promotion, benchmark submission, production deployment,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, or action authority.
+
+Exit criteria: HSAI now has a reconciled route to Phase 403. The next
+responsible implementation is a tiny digest-binding backend probe, not accepted
+formal evidence and not a broad public-claim escalation.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

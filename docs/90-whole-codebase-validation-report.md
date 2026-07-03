@@ -5589,5 +5589,15 @@ claim-boundary escalation.
 - No broader Phase S ergonomics surface was authorized or tested beyond the
   implemented single-index local output boundary.
 
+[docs/402-hsai-backend-execution-readiness-reconciliation.md](docs/402-hsai-backend-execution-readiness-reconciliation.md)
+records the Phase 402 reconciliation between the post-400 tiny
+backend-execution boundary and the existing Phase 321-327 fixed-SMT command
+lane. Local inspection found `z3` available at `/opt/homebrew/bin/z3` and
+`lean`, `lake`, and `cobalt` unavailable. The existing fixed-SMT command lane
+remains quarantined local execution metadata only. Phase 402 adds no Rust
+source, no new backend run, no accepted formal evidence, no Level2+ evidence,
+no score axes, no proof-authority claim, and no production/SOTA/security/
+semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
