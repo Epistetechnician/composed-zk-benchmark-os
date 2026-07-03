@@ -703,6 +703,11 @@ pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_SERIALIZATION_PREVIEW_REVIEW_SC
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_SERIALIZATION_PREVIEW_REVIEW_STATE_SLICE: &str =
     "phase-351-hsai-serialization-preview-review-metadata";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_SERIALIZATION_PREVIEW_REVIEW_CLAIM_BOUNDARY: &str = "local serialization-preview review metadata only; classifies one Phase 349 deterministic serialization preview under bounded review labels while materialization remains blocked, but does not write filesystem artifacts, store raw package bytes, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-real-command-lane-local-audit-package-artifact:v1";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_STATE_SLICE: &str =
+    "phase-353-hsai-materialized-audit-package-artifact-plumbing";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_CLAIM_BOUNDARY: &str = "local materialized audit package artifact only; writes a declared digest-bound metadata package for one Phase 351 serialization-preview review under a caller-selected output root, but does not create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GatewayAttestationChallengeBinding {
@@ -6455,6 +6460,86 @@ pub enum GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue {
 pub struct GatewayFormalRealCommandLaneLocalSerializationPreviewReviewValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputRequest {
+    pub package_id: String,
+    pub artifact_profile_id: String,
+    pub created_at_unix: u64,
+    pub overwrite: bool,
+    pub protected_roots: Vec<PathBuf>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneLocalAuditPackageArtifactManifest {
+    pub schema_version: String,
+    pub package_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub request_digest: Hash,
+    pub review_digest: Hash,
+    pub review_input_digest: Hash,
+    pub serialization_preview_digest: Hash,
+    pub serialization_preview_input_digest: Hash,
+    pub audit_package_digest: Hash,
+    pub review_record_digest: Hash,
+    pub metadata_digest: Hash,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub serialization_profile_id: String,
+    pub canonical_field_order_digest: Hash,
+    pub canonical_json_shape_digest: Hash,
+    pub expected_package_bytes_digest: Hash,
+    pub artifact_profile_id: String,
+    pub declared_files: Vec<String>,
+    pub declared_sidecars: Vec<String>,
+    pub declared_file_digests: BTreeMap<String, Hash>,
+    pub claim_boundary: String,
+    pub creates_accepted_evidence: bool,
+    pub changes_accepted_append_policy: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl GatewayFormalRealCommandLaneLocalAuditPackageArtifactManifest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-local-audit-package-artifact-manifest:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError {
+    InvalidPackageId,
+    EmptyOutputRoot,
+    ProtectedOutputRoot,
+    OutputRootExistsWithoutOverwrite,
+    OutputRootIsFile,
+    OutputRootIsSymlink,
+    BundleFileIsSymlink(String),
+    DeclaredFileTypeMismatch(String),
+    UndeclaredFile(String),
+    DigestMismatch(String),
+    MalformedDeclaredFile(String),
+    ManifestSemanticMismatch,
+    ReviewMismatch,
+    SerializationPreviewMismatch,
+    NonclaimMismatch,
+    PromotionAttempt,
+    Io(String),
+    Serialization(String),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -20121,6 +20206,10 @@ pub fn gateway_formal_real_command_lane_local_serialization_preview_review_claim
     GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_SERIALIZATION_PREVIEW_REVIEW_CLAIM_BOUNDARY.to_owned()
 }
 
+pub fn gateway_formal_real_command_lane_local_audit_package_artifact_claim_boundary() -> String {
+    GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_CLAIM_BOUNDARY.to_owned()
+}
+
 pub fn gateway_formal_real_command_lane_policy_decision_statement() -> String {
     "accepted formal evidence remains forbidden in the current accepted append path".to_owned()
 }
@@ -20268,6 +20357,17 @@ pub fn gateway_formal_real_command_lane_local_serialization_preview_review_requi
         "local serialization preview review metadata only".to_owned(),
     ));
     nonclaims.insert(NonClaimLabel("materialization still blocked".to_owned()));
+    nonclaims
+}
+
+pub fn gateway_formal_real_command_lane_local_audit_package_artifact_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims =
+        gateway_formal_real_command_lane_local_serialization_preview_review_required_nonclaims();
+    nonclaims.insert(NonClaimLabel(
+        "local materialized audit package artifact only".to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel("accepted evidence still blocked".to_owned()));
     nonclaims
 }
 
@@ -24480,6 +24580,735 @@ fn validate_gateway_formal_real_command_lane_local_serialization_preview_review_
             GatewayFormalRealCommandLaneLocalSerializationPreviewReviewIssue::PromotionAttempt,
         );
     }
+}
+
+const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_PROFILE_ID: &str =
+    "local-audit-package-artifact-v1";
+const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_DECLARED_FILES: &[&str] = &[
+    "audit-package/manifest.json",
+    "audit-package/review.json",
+    "audit-package/serialization-preview.json",
+    "audit-package/nonclaims.json",
+    "audit-package/claim-boundary.txt",
+    "audit-package/digests.json",
+];
+
+pub fn gateway_formal_real_command_lane_local_audit_package_artifact_declared_files() -> Vec<String>
+{
+    GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_DECLARED_FILES
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
+pub fn gateway_formal_real_command_lane_local_audit_package_artifact_declared_sidecars(
+) -> Vec<String> {
+    GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_DECLARED_FILES
+        .iter()
+        .map(|value| format!("{value}.sha256"))
+        .collect()
+}
+
+impl GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputRequest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-local-audit-package-artifact-output-request:v1",
+            self,
+        )
+    }
+}
+
+pub fn materialize_gateway_formal_real_command_lane_local_audit_package_artifact(
+    output_root: &Path,
+    review: &GatewayFormalRealCommandLaneLocalSerializationPreviewReview,
+    preview: &GatewayFormalRealCommandLaneLocalAuditPackageSerializationPreview,
+    output_request: &GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputRequest,
+) -> Result<
+    GatewayFormalRealCommandLaneLocalAuditPackageArtifactManifest,
+    GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError,
+> {
+    validate_gateway_formal_real_command_lane_local_audit_package_artifact_output_request(
+        output_root,
+        review,
+        preview,
+        output_request,
+    )?;
+    let staging_root =
+        gateway_formal_real_command_lane_local_audit_package_artifact_staging_root_for(
+            output_root,
+            &output_request.package_id,
+        )?;
+    if staging_root.exists() {
+        remove_gateway_formal_real_command_lane_local_audit_package_artifact_dir_all_checked(
+            &staging_root,
+        )?;
+    }
+    fs::create_dir_all(staging_root.join("audit-package"))
+        .map_err(gateway_formal_real_command_lane_local_audit_package_artifact_io_error)?;
+
+    let files = build_gateway_formal_real_command_lane_local_audit_package_artifact_files(
+        review,
+        preview,
+        output_request,
+    )?;
+    for (logical_path, bytes) in &files {
+        let target = staging_root.join(logical_path);
+        if let Some(parent) = target.parent() {
+            fs::create_dir_all(parent)
+                .map_err(gateway_formal_real_command_lane_local_audit_package_artifact_io_error)?;
+        }
+        fs::write(&target, bytes)
+            .map_err(gateway_formal_real_command_lane_local_audit_package_artifact_io_error)?;
+        fs::write(
+            sidecar_path(&target),
+            hash_hex(hash_bytes(bytes)).into_bytes(),
+        )
+        .map_err(gateway_formal_real_command_lane_local_audit_package_artifact_io_error)?;
+    }
+
+    if output_root.exists() {
+        if !output_request.overwrite {
+            remove_gateway_formal_real_command_lane_local_audit_package_artifact_dir_all_checked(
+                &staging_root,
+            )?;
+            return Err(
+                GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::OutputRootExistsWithoutOverwrite,
+            );
+        }
+        remove_gateway_formal_real_command_lane_local_audit_package_artifact_dir_all_checked(
+            output_root,
+        )?;
+    }
+    fs::rename(&staging_root, output_root)
+        .map_err(gateway_formal_real_command_lane_local_audit_package_artifact_io_error)?;
+    read_gateway_formal_real_command_lane_local_audit_package_artifact(output_root)
+}
+
+pub fn read_gateway_formal_real_command_lane_local_audit_package_artifact(
+    output_root: &Path,
+) -> Result<
+    GatewayFormalRealCommandLaneLocalAuditPackageArtifactManifest,
+    GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError,
+> {
+    let output_metadata = fs::symlink_metadata(output_root)
+        .map_err(gateway_formal_real_command_lane_local_audit_package_artifact_io_error)?;
+    if output_metadata.file_type().is_symlink() {
+        return Err(
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::OutputRootIsSymlink,
+        );
+    }
+    if !output_metadata.is_dir() {
+        return Err(
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::OutputRootIsFile,
+        );
+    }
+    let bundle_dir = output_root.join("audit-package");
+    let bundle_metadata = fs::symlink_metadata(&bundle_dir)
+        .map_err(gateway_formal_real_command_lane_local_audit_package_artifact_io_error)?;
+    if bundle_metadata.file_type().is_symlink() {
+        return Err(
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::BundleFileIsSymlink(
+                "audit-package".to_owned(),
+            ),
+        );
+    }
+    if !bundle_metadata.is_dir() {
+        return Err(
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::DeclaredFileTypeMismatch(
+                "audit-package".to_owned(),
+            ),
+        );
+    }
+
+    reject_undeclared_gateway_formal_real_command_lane_local_audit_package_artifact_files(
+        output_root,
+    )?;
+    let mut files = BTreeMap::new();
+    for logical_path in GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_DECLARED_FILES
+    {
+        let path = output_root.join(logical_path);
+        let metadata = fs::symlink_metadata(&path)
+            .map_err(gateway_formal_real_command_lane_local_audit_package_artifact_io_error)?;
+        if metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::BundleFileIsSymlink(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        if !metadata.is_file() {
+            return Err(
+                GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::DeclaredFileTypeMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        let sidecar = sidecar_path(&path);
+        let sidecar_metadata = fs::symlink_metadata(&sidecar)
+            .map_err(gateway_formal_real_command_lane_local_audit_package_artifact_io_error)?;
+        if sidecar_metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::BundleFileIsSymlink(
+                    format!("{logical_path}.sha256"),
+                ),
+            );
+        }
+        if !sidecar_metadata.is_file() {
+            return Err(
+                GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::DeclaredFileTypeMismatch(
+                    format!("{logical_path}.sha256"),
+                ),
+            );
+        }
+        let bytes = fs::read(&path)
+            .map_err(gateway_formal_real_command_lane_local_audit_package_artifact_io_error)?;
+        let expected_hash = fs::read_to_string(&sidecar)
+            .map_err(gateway_formal_real_command_lane_local_audit_package_artifact_io_error)?;
+        if expected_hash.trim() != hash_hex(hash_bytes(&bytes)) {
+            return Err(
+                GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::DigestMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        files.insert((*logical_path).to_owned(), bytes);
+    }
+    validate_gateway_formal_real_command_lane_local_audit_package_artifact_semantics(&files)
+}
+
+fn validate_gateway_formal_real_command_lane_local_audit_package_artifact_output_request(
+    output_root: &Path,
+    review: &GatewayFormalRealCommandLaneLocalSerializationPreviewReview,
+    preview: &GatewayFormalRealCommandLaneLocalAuditPackageSerializationPreview,
+    output_request: &GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputRequest,
+) -> Result<(), GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError> {
+    if !is_single_segment_id(&output_request.package_id)
+        || !is_single_segment_id(&output_request.artifact_profile_id)
+        || output_request.artifact_profile_id
+            != GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_PROFILE_ID
+    {
+        return Err(
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::InvalidPackageId,
+        );
+    }
+    validate_gateway_formal_real_command_lane_local_audit_package_artifact_review(review, preview)?;
+    validate_gateway_formal_real_command_lane_local_audit_package_artifact_output_root(
+        output_root,
+        &output_request.protected_roots,
+        output_request.overwrite,
+    )
+}
+
+fn validate_gateway_formal_real_command_lane_local_audit_package_artifact_review(
+    review: &GatewayFormalRealCommandLaneLocalSerializationPreviewReview,
+    preview: &GatewayFormalRealCommandLaneLocalAuditPackageSerializationPreview,
+) -> Result<(), GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError> {
+    if review.schema_version
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_SERIALIZATION_PREVIEW_REVIEW_SCHEMA_VERSION
+        || review.state_slice
+            != GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_SERIALIZATION_PREVIEW_REVIEW_STATE_SLICE
+        || review.promotion_state != "local_serialization_preview_review_metadata"
+        || review.next_required_state != "materialized_audit_package_still_blocked"
+        || review.claim_boundary
+            != gateway_formal_real_command_lane_local_serialization_preview_review_claim_boundary()
+    {
+        return Err(
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::ReviewMismatch,
+        );
+    }
+    if review.serialization_preview_digest != preview.digest()
+        || review.serialization_preview_input_digest != preview.preview_input_digest
+        || review.package_digest != preview.package_digest
+        || review.review_record_digest != preview.review_digest
+        || review.metadata_digest != preview.metadata_digest
+        || review.current_accepted_append_blockers != preview.current_accepted_append_blockers
+        || review.current_accepted_append_blockers_digest
+            != preview.current_accepted_append_blockers_digest
+        || review.serialization_profile_id != preview.serialization_profile_id
+        || review.canonical_field_order_digest != preview.canonical_field_order_digest
+        || review.canonical_json_shape_digest != preview.canonical_json_shape_digest
+        || review.expected_package_bytes_digest != preview.expected_package_bytes_digest
+    {
+        return Err(
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::SerializationPreviewMismatch,
+        );
+    }
+    let nonclaims =
+        gateway_formal_real_command_lane_local_audit_package_artifact_required_nonclaims();
+    if !nonclaims.is_superset(&review.explicit_nonclaims) {
+        return Err(
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::NonclaimMismatch,
+        );
+    }
+    if review.creates_accepted_evidence
+        || review.changes_accepted_append_policy
+        || review.creates_level2_evidence
+        || review.populates_score_axes
+        || review.proof_artifact_created
+        || review.checker_transcript_created
+        || review.solver_certificate_created
+        || review.semantic_correctness_claimed
+        || review.production_readiness_claimed
+        || review.sota_claimed
+        || review.breakthrough_claimed
+        || review.full_security_claimed
+        || review.grants_authority
+    {
+        return Err(
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::PromotionAttempt,
+        );
+    }
+    Ok(())
+}
+
+fn build_gateway_formal_real_command_lane_local_audit_package_artifact_files(
+    review: &GatewayFormalRealCommandLaneLocalSerializationPreviewReview,
+    preview: &GatewayFormalRealCommandLaneLocalAuditPackageSerializationPreview,
+    output_request: &GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputRequest,
+) -> Result<
+    BTreeMap<String, Vec<u8>>,
+    GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError,
+> {
+    let nonclaims =
+        gateway_formal_real_command_lane_local_audit_package_artifact_required_nonclaims();
+    let digest_index = gateway_formal_real_command_lane_local_audit_package_artifact_digest_index(
+        review, preview, &nonclaims,
+    );
+    let mut files = BTreeMap::from([
+        (
+            "audit-package/review.json".to_owned(),
+            serde_json::to_vec_pretty(review).map_err(
+                gateway_formal_real_command_lane_local_audit_package_artifact_serde_error,
+            )?,
+        ),
+        (
+            "audit-package/serialization-preview.json".to_owned(),
+            serde_json::to_vec_pretty(preview).map_err(
+                gateway_formal_real_command_lane_local_audit_package_artifact_serde_error,
+            )?,
+        ),
+        (
+            "audit-package/nonclaims.json".to_owned(),
+            serde_json::to_vec_pretty(&nonclaims).map_err(
+                gateway_formal_real_command_lane_local_audit_package_artifact_serde_error,
+            )?,
+        ),
+        (
+            "audit-package/claim-boundary.txt".to_owned(),
+            gateway_formal_real_command_lane_local_audit_package_artifact_claim_boundary()
+                .into_bytes(),
+        ),
+        (
+            "audit-package/digests.json".to_owned(),
+            serde_json::to_vec_pretty(&digest_index).map_err(
+                gateway_formal_real_command_lane_local_audit_package_artifact_serde_error,
+            )?,
+        ),
+    ]);
+    let declared_file_digests = files
+        .iter()
+        .map(|(logical_path, bytes)| (logical_path.clone(), hash_bytes(bytes)))
+        .collect();
+    let manifest = GatewayFormalRealCommandLaneLocalAuditPackageArtifactManifest {
+        schema_version:
+            GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_SCHEMA_VERSION.to_owned(),
+        package_id: output_request.package_id.clone(),
+        state_slice: GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_STATE_SLICE
+            .to_owned(),
+        created_at_unix: output_request.created_at_unix,
+        request_digest: output_request.digest(),
+        review_digest: review.digest(),
+        review_input_digest: review.review_input_digest,
+        serialization_preview_digest: preview.digest(),
+        serialization_preview_input_digest: preview.preview_input_digest,
+        audit_package_digest: preview.package_digest,
+        review_record_digest: preview.review_digest,
+        metadata_digest: preview.metadata_digest,
+        current_accepted_append_blockers_digest: preview.current_accepted_append_blockers_digest,
+        serialization_profile_id: preview.serialization_profile_id.clone(),
+        canonical_field_order_digest: preview.canonical_field_order_digest,
+        canonical_json_shape_digest: preview.canonical_json_shape_digest,
+        expected_package_bytes_digest: preview.expected_package_bytes_digest,
+        artifact_profile_id: output_request.artifact_profile_id.clone(),
+        declared_files:
+            gateway_formal_real_command_lane_local_audit_package_artifact_declared_files(),
+        declared_sidecars:
+            gateway_formal_real_command_lane_local_audit_package_artifact_declared_sidecars(),
+        declared_file_digests,
+        claim_boundary:
+            gateway_formal_real_command_lane_local_audit_package_artifact_claim_boundary(),
+        creates_accepted_evidence: false,
+        changes_accepted_append_policy: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+        nonclaims,
+    };
+    files.insert(
+        "audit-package/manifest.json".to_owned(),
+        serde_json::to_vec_pretty(&manifest)
+            .map_err(gateway_formal_real_command_lane_local_audit_package_artifact_serde_error)?,
+    );
+    Ok(files)
+}
+
+fn gateway_formal_real_command_lane_local_audit_package_artifact_digest_index(
+    review: &GatewayFormalRealCommandLaneLocalSerializationPreviewReview,
+    preview: &GatewayFormalRealCommandLaneLocalAuditPackageSerializationPreview,
+    nonclaims: &BTreeSet<NonClaimLabel>,
+) -> BTreeMap<String, Hash> {
+    BTreeMap::from([
+        ("review_digest".to_owned(), review.digest()),
+        ("review_input_digest".to_owned(), review.review_input_digest),
+        ("serialization_preview_digest".to_owned(), preview.digest()),
+        (
+            "serialization_preview_input_digest".to_owned(),
+            preview.preview_input_digest,
+        ),
+        ("audit_package_digest".to_owned(), preview.package_digest),
+        ("review_record_digest".to_owned(), preview.review_digest),
+        ("metadata_digest".to_owned(), preview.metadata_digest),
+        (
+            "current_accepted_append_blockers_digest".to_owned(),
+            preview.current_accepted_append_blockers_digest,
+        ),
+        (
+            "canonical_field_order_digest".to_owned(),
+            preview.canonical_field_order_digest,
+        ),
+        (
+            "canonical_json_shape_digest".to_owned(),
+            preview.canonical_json_shape_digest,
+        ),
+        (
+            "expected_package_bytes_digest".to_owned(),
+            preview.expected_package_bytes_digest,
+        ),
+        (
+            "artifact_nonclaims_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-local-audit-package-artifact-nonclaims:v1",
+                nonclaims,
+            ),
+        ),
+    ])
+}
+
+fn validate_gateway_formal_real_command_lane_local_audit_package_artifact_semantics(
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<
+    GatewayFormalRealCommandLaneLocalAuditPackageArtifactManifest,
+    GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError,
+> {
+    let manifest: GatewayFormalRealCommandLaneLocalAuditPackageArtifactManifest =
+        parse_gateway_formal_real_command_lane_local_audit_package_artifact_declared_json(
+            files,
+            "audit-package/manifest.json",
+        )?;
+    let review: GatewayFormalRealCommandLaneLocalSerializationPreviewReview =
+        parse_gateway_formal_real_command_lane_local_audit_package_artifact_declared_json(
+            files,
+            "audit-package/review.json",
+        )?;
+    let preview: GatewayFormalRealCommandLaneLocalAuditPackageSerializationPreview =
+        parse_gateway_formal_real_command_lane_local_audit_package_artifact_declared_json(
+            files,
+            "audit-package/serialization-preview.json",
+        )?;
+    let nonclaims: BTreeSet<NonClaimLabel> =
+        parse_gateway_formal_real_command_lane_local_audit_package_artifact_declared_json(
+            files,
+            "audit-package/nonclaims.json",
+        )?;
+    let digest_index: BTreeMap<String, Hash> =
+        parse_gateway_formal_real_command_lane_local_audit_package_artifact_declared_json(
+            files,
+            "audit-package/digests.json",
+        )?;
+    let claim_boundary = String::from_utf8(
+        declared_gateway_formal_real_command_lane_local_audit_package_artifact_bytes(
+            files,
+            "audit-package/claim-boundary.txt",
+        )?
+        .to_vec(),
+    )
+    .map_err(|_| {
+        GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::MalformedDeclaredFile(
+            "audit-package/claim-boundary.txt".to_owned(),
+        )
+    })?;
+
+    if manifest.schema_version
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_SCHEMA_VERSION
+        || manifest.state_slice
+            != GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_STATE_SLICE
+        || manifest.artifact_profile_id
+            != GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_PROFILE_ID
+        || manifest.claim_boundary
+            != gateway_formal_real_command_lane_local_audit_package_artifact_claim_boundary()
+        || claim_boundary != manifest.claim_boundary
+        || manifest.declared_files
+            != gateway_formal_real_command_lane_local_audit_package_artifact_declared_files()
+        || manifest.declared_sidecars
+            != gateway_formal_real_command_lane_local_audit_package_artifact_declared_sidecars()
+    {
+        return Err(
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::ManifestSemanticMismatch,
+        );
+    }
+    if manifest.creates_accepted_evidence
+        || manifest.changes_accepted_append_policy
+        || manifest.creates_level2_evidence
+        || manifest.populates_score_axes
+        || manifest.proof_artifact_created
+        || manifest.checker_transcript_created
+        || manifest.solver_certificate_created
+        || manifest.semantic_correctness_claimed
+        || manifest.production_readiness_claimed
+        || manifest.sota_claimed
+        || manifest.breakthrough_claimed
+        || manifest.full_security_claimed
+        || manifest.grants_authority
+    {
+        return Err(
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::PromotionAttempt,
+        );
+    }
+    validate_gateway_formal_real_command_lane_local_audit_package_artifact_review(
+        &review, &preview,
+    )?;
+    if manifest.review_digest != review.digest()
+        || manifest.review_input_digest != review.review_input_digest
+        || manifest.serialization_preview_digest != preview.digest()
+        || manifest.serialization_preview_input_digest != preview.preview_input_digest
+        || manifest.audit_package_digest != preview.package_digest
+        || manifest.review_record_digest != preview.review_digest
+        || manifest.metadata_digest != preview.metadata_digest
+        || manifest.current_accepted_append_blockers_digest
+            != preview.current_accepted_append_blockers_digest
+        || manifest.serialization_profile_id != preview.serialization_profile_id
+        || manifest.canonical_field_order_digest != preview.canonical_field_order_digest
+        || manifest.canonical_json_shape_digest != preview.canonical_json_shape_digest
+        || manifest.expected_package_bytes_digest != preview.expected_package_bytes_digest
+    {
+        return Err(
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::ManifestSemanticMismatch,
+        );
+    }
+    let required_nonclaims =
+        gateway_formal_real_command_lane_local_audit_package_artifact_required_nonclaims();
+    if manifest.nonclaims != required_nonclaims || nonclaims != required_nonclaims {
+        return Err(
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::NonclaimMismatch,
+        );
+    }
+    let expected_digest_index =
+        gateway_formal_real_command_lane_local_audit_package_artifact_digest_index(
+            &review,
+            &preview,
+            &required_nonclaims,
+        );
+    if digest_index != expected_digest_index {
+        return Err(
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::DigestMismatch(
+                "audit-package/digests.json".to_owned(),
+            ),
+        );
+    }
+    let expected_file_digests: BTreeMap<String, Hash> = files
+        .iter()
+        .filter(|(logical_path, _)| logical_path.as_str() != "audit-package/manifest.json")
+        .map(|(logical_path, bytes)| (logical_path.clone(), hash_bytes(bytes)))
+        .collect();
+    if manifest.declared_file_digests != expected_file_digests {
+        return Err(
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::DigestMismatch(
+                "audit-package/manifest.json".to_owned(),
+            ),
+        );
+    }
+    Ok(manifest)
+}
+
+fn declared_gateway_formal_real_command_lane_local_audit_package_artifact_bytes<'a>(
+    files: &'a BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<&'a [u8], GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError> {
+    files
+        .get(logical_path)
+        .map(|bytes| bytes.as_slice())
+        .ok_or_else(|| {
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::Io(format!(
+                "declared file missing: {logical_path}"
+            ))
+        })
+}
+
+fn parse_gateway_formal_real_command_lane_local_audit_package_artifact_declared_json<
+    T: for<'de> Deserialize<'de>,
+>(
+    files: &BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<T, GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError> {
+    let bytes = declared_gateway_formal_real_command_lane_local_audit_package_artifact_bytes(
+        files,
+        logical_path,
+    )?;
+    let text = std::str::from_utf8(bytes).map_err(|_| {
+        GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })?;
+    serde_json::from_str(text).map_err(|_| {
+        GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })
+}
+
+fn reject_undeclared_gateway_formal_real_command_lane_local_audit_package_artifact_files(
+    output_root: &Path,
+) -> Result<(), GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError> {
+    for entry in fs::read_dir(output_root)
+        .map_err(gateway_formal_real_command_lane_local_audit_package_artifact_io_error)?
+    {
+        let entry = entry
+            .map_err(gateway_formal_real_command_lane_local_audit_package_artifact_io_error)?;
+        let name = entry.file_name().to_string_lossy().into_owned();
+        if name != "audit-package" {
+            return Err(
+                GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::UndeclaredFile(
+                    name,
+                ),
+            );
+        }
+    }
+    let mut declared: BTreeSet<String> =
+        GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_DECLARED_FILES
+            .iter()
+            .map(|value| (*value).to_owned())
+            .chain(
+                gateway_formal_real_command_lane_local_audit_package_artifact_declared_sidecars(),
+            )
+            .collect();
+    let bundle_dir = output_root.join("audit-package");
+    for entry in fs::read_dir(&bundle_dir)
+        .map_err(gateway_formal_real_command_lane_local_audit_package_artifact_io_error)?
+    {
+        let entry = entry
+            .map_err(gateway_formal_real_command_lane_local_audit_package_artifact_io_error)?;
+        let logical_path = entry
+            .path()
+            .strip_prefix(output_root)
+            .map_err(|error| {
+                GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::Io(
+                    error.to_string(),
+                )
+            })?
+            .to_string_lossy()
+            .replace('\\', "/");
+        if !declared.remove(&logical_path) {
+            return Err(
+                GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::UndeclaredFile(
+                    logical_path,
+                ),
+            );
+        }
+    }
+    if let Some(missing) = declared.into_iter().next() {
+        return Err(
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::Io(format!(
+                "declared file missing: {missing}"
+            )),
+        );
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_real_command_lane_local_audit_package_artifact_output_root(
+    output_root: &Path,
+    protected_roots: &[PathBuf],
+    overwrite: bool,
+) -> Result<(), GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError> {
+    match validate_output_root(output_root, protected_roots, overwrite) {
+        Ok(()) => Ok(()),
+        Err(AdmissionJournalMaterializationError::EmptyOutputRoot) => {
+            Err(GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::EmptyOutputRoot)
+        }
+        Err(AdmissionJournalMaterializationError::ProtectedOutputRoot) => Err(
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::ProtectedOutputRoot,
+        ),
+        Err(AdmissionJournalMaterializationError::OutputRootExistsWithoutOverwrite) => Err(
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::OutputRootExistsWithoutOverwrite,
+        ),
+        Err(AdmissionJournalMaterializationError::OutputRootIsFile) => {
+            Err(GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::OutputRootIsFile)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootIsSymlink) => Err(
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::OutputRootIsSymlink,
+        ),
+        Err(AdmissionJournalMaterializationError::Io(error)) => {
+            Err(GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::Io(error))
+        }
+        Err(other) => Err(GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::Io(
+            format!("{other:?}"),
+        )),
+    }
+}
+
+fn gateway_formal_real_command_lane_local_audit_package_artifact_staging_root_for(
+    output_root: &Path,
+    package_id: &str,
+) -> Result<PathBuf, GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError> {
+    let parent = output_root
+        .parent()
+        .ok_or(GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::EmptyOutputRoot)?;
+    let name = output_root
+        .file_name()
+        .map(|value| value.to_string_lossy().into_owned())
+        .ok_or(GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::EmptyOutputRoot)?;
+    Ok(parent.join(format!(".{name}.{package_id}.staging")))
+}
+
+fn remove_gateway_formal_real_command_lane_local_audit_package_artifact_dir_all_checked(
+    path: &Path,
+) -> Result<(), GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError> {
+    if !path.exists() {
+        return Ok(());
+    }
+    if fs::symlink_metadata(path)
+        .map_err(gateway_formal_real_command_lane_local_audit_package_artifact_io_error)?
+        .file_type()
+        .is_symlink()
+    {
+        return Err(
+            GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::OutputRootIsSymlink,
+        );
+    }
+    fs::remove_dir_all(path)
+        .map_err(gateway_formal_real_command_lane_local_audit_package_artifact_io_error)
+}
+
+fn gateway_formal_real_command_lane_local_audit_package_artifact_io_error(
+    error: io::Error,
+) -> GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError {
+    GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::Io(error.to_string())
+}
+
+fn gateway_formal_real_command_lane_local_audit_package_artifact_serde_error(
+    error: serde_json::Error,
+) -> GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError {
+    GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::Serialization(
+        error.to_string(),
+    )
 }
 
 fn validate_gateway_formal_real_command_lane_execution_preflight_manifest(
@@ -36963,6 +37792,153 @@ mod tests {
         }
     }
 
+    fn formal_evidence_local_audit_package_artifact_output_request(
+        package_id: &str,
+        output_root: &Path,
+    ) -> GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputRequest {
+        GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputRequest {
+            package_id: package_id.to_owned(),
+            artifact_profile_id:
+                GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_PROFILE_ID.to_owned(),
+            created_at_unix: 1_800_000_353,
+            overwrite: false,
+            protected_roots: vec![output_root
+                .parent()
+                .expect("temp output root has parent")
+                .join("protected-repo")],
+        }
+    }
+
+    fn formal_evidence_local_audit_package_artifact_parts(
+        name: &str,
+    ) -> (
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        GatewayFormalRealCommandLaneLocalAuditPackageSerializationPreview,
+        GatewayFormalRealCommandLaneLocalSerializationPreviewReview,
+    ) {
+        let (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            phase323_manifest,
+            preflight,
+            phase327_manifest,
+            input,
+        ) = real_command_lane_formal_evidence_candidate_parts(name);
+        let candidate = build_gateway_formal_real_command_lane_formal_evidence_candidate(
+            &phase323_manifest,
+            &preflight,
+            &phase327_manifest,
+            &input,
+        )
+        .expect("phase353 candidate builds");
+        let preview_input = formal_evidence_review_preview_input(
+            &format!("{name}-review-preview"),
+            &candidate,
+            GatewayFormalRealCommandLaneReviewPreviewDecisionLabel::ReviewPreviewAcceptCandidateScope,
+        );
+        let preview =
+            build_gateway_formal_real_command_lane_review_preview(&candidate, &preview_input)
+                .expect("phase353 review preview builds");
+        let record_input =
+            formal_evidence_reviewed_record_input(&format!("{name}-review-record"), &preview);
+        let reviewed_record =
+            build_gateway_formal_real_command_lane_reviewed_record(&preview, &record_input)
+                .expect("phase353 reviewed record builds");
+        let handoff_input =
+            formal_evidence_accepted_handoff_input(&format!("{name}-handoff"), &reviewed_record);
+        let handoff = build_gateway_formal_real_command_lane_accepted_handoff(
+            &reviewed_record,
+            &handoff_input,
+        )
+        .expect("phase353 handoff builds");
+        let decision_input =
+            formal_evidence_policy_decision_input(&format!("{name}-decision"), &handoff);
+        let policy_decision =
+            build_gateway_formal_real_command_lane_policy_decision(&handoff, &decision_input)
+                .expect("phase353 policy decision builds");
+        let feasibility_input = formal_evidence_bounded_feasibility_input(
+            &format!("{name}-feasibility"),
+            &policy_decision,
+        );
+        let feasibility =
+            build_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility(
+                &policy_decision,
+                &feasibility_input,
+            )
+            .expect("phase353 feasibility builds");
+        let class_policy_input = formal_evidence_local_non_accepted_class_policy_input(
+            &format!("{name}-policy"),
+            &feasibility,
+        );
+        let class_policy = build_gateway_formal_real_command_lane_local_non_accepted_class_policy(
+            &feasibility,
+            &class_policy_input,
+        )
+        .expect("phase353 class policy builds");
+        let metadata_input = formal_evidence_local_reviewed_metadata_input(
+            &format!("{name}-metadata"),
+            &class_policy,
+        );
+        let metadata =
+            build_gateway_formal_real_command_lane_local_reviewed_formal_evidence_metadata(
+                &class_policy,
+                &metadata_input,
+            )
+            .expect("phase353 metadata builds");
+        let metadata_review_input = formal_evidence_local_metadata_review_input(
+            &format!("{name}-metadata-review"),
+            &metadata,
+            GatewayFormalRealCommandLaneLocalMetadataReviewLabel::ReviewScopeAcceptable,
+        );
+        let metadata_review = build_gateway_formal_real_command_lane_local_metadata_review(
+            &metadata,
+            &metadata_review_input,
+        )
+        .expect("phase353 metadata review builds");
+        let package_input = formal_evidence_local_review_audit_package_input(
+            &format!("{name}-package"),
+            &metadata_review,
+        );
+        let package = build_gateway_formal_real_command_lane_local_review_audit_package(
+            &metadata_review,
+            &package_input,
+        )
+        .expect("phase353 package builds");
+        let serialization_input = formal_evidence_local_audit_package_serialization_preview_input(
+            &format!("{name}-serialization"),
+            &package,
+        );
+        let serialization_preview =
+            build_gateway_formal_real_command_lane_local_audit_package_serialization_preview(
+                &package,
+                &serialization_input,
+            )
+            .expect("phase353 serialization preview builds");
+        let review_input = formal_evidence_local_serialization_preview_review_input(
+            &format!("{name}-serialization-review"),
+            &serialization_preview,
+            GatewayFormalRealCommandLaneLocalSerializationPreviewReviewLabel::MaterializationStillBlocked,
+        );
+        let review = build_gateway_formal_real_command_lane_local_serialization_preview_review(
+            &serialization_preview,
+            &review_input,
+        )
+        .expect("phase353 serialization review builds");
+        (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            serialization_preview,
+            review,
+        )
+    }
+
     #[test]
     fn gateway_formal_real_command_lane_fixed_smt_process_executes_and_quarantines_unsat() {
         let (
@@ -40582,6 +41558,213 @@ mod tests {
         fs::remove_dir_all(&phase327_root).expect("phase351 promotion phase327 cleanup succeeds");
         fs::remove_dir_all(&execution_root).expect("phase351 promotion execution cleanup succeeds");
         fs::remove_dir_all(&source_root).expect("phase351 promotion source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_local_audit_package_artifact_materializes_and_reads_back() {
+        let (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            serialization_preview,
+            review,
+        ) = formal_evidence_local_audit_package_artifact_parts("real-command-phase353-valid");
+        let output_root = temp_output_root("real-command-phase353-valid-output");
+        let output_request = formal_evidence_local_audit_package_artifact_output_request(
+            "phase353-valid-package",
+            &output_root,
+        );
+        let manifest = materialize_gateway_formal_real_command_lane_local_audit_package_artifact(
+            &output_root,
+            &review,
+            &serialization_preview,
+            &output_request,
+        )
+        .expect("phase353 audit package artifact materializes");
+        let readback =
+            read_gateway_formal_real_command_lane_local_audit_package_artifact(&output_root)
+                .expect("phase353 audit package artifact reads back");
+
+        assert_eq!(manifest, readback);
+        assert_eq!(
+            manifest.schema_version,
+            GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_SCHEMA_VERSION
+        );
+        assert_eq!(
+            manifest.state_slice,
+            GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_STATE_SLICE
+        );
+        assert_eq!(manifest.review_digest, review.digest());
+        assert_eq!(
+            manifest.serialization_preview_digest,
+            serialization_preview.digest()
+        );
+        assert_eq!(
+            manifest.audit_package_digest,
+            serialization_preview.package_digest
+        );
+        assert_eq!(
+            manifest.declared_files,
+            gateway_formal_real_command_lane_local_audit_package_artifact_declared_files()
+        );
+        assert_eq!(
+            manifest.declared_sidecars,
+            gateway_formal_real_command_lane_local_audit_package_artifact_declared_sidecars()
+        );
+        assert_eq!(
+            manifest.claim_boundary,
+            gateway_formal_real_command_lane_local_audit_package_artifact_claim_boundary()
+        );
+        assert!(!manifest.creates_accepted_evidence);
+        assert!(!manifest.changes_accepted_append_policy);
+        assert!(!manifest.creates_level2_evidence);
+        assert!(!manifest.populates_score_axes);
+        assert!(!manifest.proof_artifact_created);
+        assert!(!manifest.checker_transcript_created);
+        assert!(!manifest.solver_certificate_created);
+        assert!(!manifest.semantic_correctness_claimed);
+        assert!(!manifest.production_readiness_claimed);
+        assert!(!manifest.sota_claimed);
+        assert!(!manifest.breakthrough_claimed);
+        assert!(!manifest.full_security_claimed);
+        assert!(!manifest.grants_authority);
+        for logical_path in
+            gateway_formal_real_command_lane_local_audit_package_artifact_declared_files()
+        {
+            let path = output_root.join(&logical_path);
+            assert!(path.is_file(), "declared file exists: {logical_path}");
+            assert!(
+                sidecar_path(&path).is_file(),
+                "sidecar exists: {logical_path}"
+            );
+        }
+
+        fs::remove_dir_all(&output_root).expect("phase353 valid output cleanup succeeds");
+        fs::remove_dir_all(&phase323_root).expect("phase353 valid phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase353 valid phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase353 valid execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase353 valid source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_local_audit_package_artifact_readback_rejects_stale_digest()
+    {
+        let (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            serialization_preview,
+            review,
+        ) = formal_evidence_local_audit_package_artifact_parts("real-command-phase353-stale");
+        let output_root = temp_output_root("real-command-phase353-stale-output");
+        let output_request = formal_evidence_local_audit_package_artifact_output_request(
+            "phase353-stale-package",
+            &output_root,
+        );
+        materialize_gateway_formal_real_command_lane_local_audit_package_artifact(
+            &output_root,
+            &review,
+            &serialization_preview,
+            &output_request,
+        )
+        .expect("phase353 stale package materializes");
+
+        fs::write(output_root.join("audit-package/nonclaims.json"), b"[]")
+            .expect("phase353 stale payload writes");
+        assert_eq!(
+            read_gateway_formal_real_command_lane_local_audit_package_artifact(&output_root),
+            Err(
+                GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::DigestMismatch(
+                    "audit-package/nonclaims.json".to_owned()
+                )
+            )
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase353 stale output cleanup succeeds");
+        fs::remove_dir_all(&phase323_root).expect("phase353 stale phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase353 stale phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase353 stale execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase353 stale source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_local_audit_package_artifact_readback_rejects_undeclared_file(
+    ) {
+        let (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            serialization_preview,
+            review,
+        ) = formal_evidence_local_audit_package_artifact_parts("real-command-phase353-undeclared");
+        let output_root = temp_output_root("real-command-phase353-undeclared-output");
+        let output_request = formal_evidence_local_audit_package_artifact_output_request(
+            "phase353-undeclared-package",
+            &output_root,
+        );
+        materialize_gateway_formal_real_command_lane_local_audit_package_artifact(
+            &output_root,
+            &review,
+            &serialization_preview,
+            &output_request,
+        )
+        .expect("phase353 undeclared package materializes");
+
+        fs::write(output_root.join("audit-package/extra.json"), b"{}")
+            .expect("phase353 undeclared file writes");
+        assert_eq!(
+            read_gateway_formal_real_command_lane_local_audit_package_artifact(&output_root),
+            Err(
+                GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::UndeclaredFile(
+                    "audit-package/extra.json".to_owned()
+                )
+            )
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase353 undeclared output cleanup succeeds");
+        fs::remove_dir_all(&phase323_root).expect("phase353 undeclared phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase353 undeclared phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root)
+            .expect("phase353 undeclared execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase353 undeclared source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_local_audit_package_artifact_rejects_promotion_before_write(
+    ) {
+        let (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            serialization_preview,
+            mut review,
+        ) = formal_evidence_local_audit_package_artifact_parts("real-command-phase353-promotion");
+        let output_root = temp_output_root("real-command-phase353-promotion-output");
+        let output_request = formal_evidence_local_audit_package_artifact_output_request(
+            "phase353-promotion-package",
+            &output_root,
+        );
+        review.creates_level2_evidence = true;
+
+        assert_eq!(
+            materialize_gateway_formal_real_command_lane_local_audit_package_artifact(
+                &output_root,
+                &review,
+                &serialization_preview,
+                &output_request,
+            ),
+            Err(GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::PromotionAttempt)
+        );
+        assert!(!output_root.exists());
+
+        fs::remove_dir_all(&phase323_root).expect("phase353 promotion phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase353 promotion phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase353 promotion execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase353 promotion source cleanup succeeds");
     }
 
     #[test]

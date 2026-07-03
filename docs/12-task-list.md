@@ -8684,6 +8684,49 @@ Ledger mutation, no accepted append policy change, no Level2+ evidence, no score
 axes, no proof-authority claim, and no production/SOTA/security/correctness
 claim.
 
+## Phase 353 HSAI Materialized Audit Package Artifact Plumbing
+
+Status: complete. See
+`docs/353-hsai-materialized-audit-package-artifact-plumbing-notes.md`.
+
+Goal: implement local materialized audit package artifact plumbing for one Phase
+351 serialization-preview review while preserving accepted-evidence blockers.
+
+Implemented: Phase 353 schema/state/claim-boundary constants, output request,
+output manifest, output error taxonomy, required nonclaim helper, declared file
+helper, declared sidecar helper, staged materialization, read-back validation,
+digest sidecars, digest index, protected-root handling, symlink rejection,
+undeclared-file rejection, stale-digest rejection, manifest semantic validation,
+Phase 351 review binding, Phase 349 preview binding, and focused tests.
+
+Validation coverage: the implemented read-back requires exactly the declared
+`audit-package/*` files and sidecars, validates sidecar digests, rejects
+undeclared files, binds one Phase 351 review digest, one Phase 349 preview
+digest, one Phase 347 package digest, one Phase 345 review record digest, one
+Phase 343 metadata digest, current accepted append blocker digest, canonical
+serialization digests, artifact profile id, declared file digests, and explicit
+nonclaims while rejecting source review promotion attempts before write.
+
+Validation gate: formatting, focused Phase 353 tests, docs/hygiene checks, diff
+hygiene, empty-file hygiene, package-root lint check, claim-boundary source
+scans, repo docs tests, and full workspace tests.
+
+Anti-goals: accepted Evidence Ledger mutation, accepted append policy changes,
+accepted formal evidence, Level2+ evidence, score-axis population, raw proof
+artifact generation or promotion, checker transcript generation or promotion,
+solver certificate generation or promotion, additional process-spawn APIs,
+generic backend runners, solver scripts, checker scripts, proof assistant setup
+files, Lean execution, SMT execution, COBALT execution, Rust-to-Lean extraction,
+benchmark submission, production deployment, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims, full-security
+claims, or action authority.
+
+Exit criteria: HSAI now has local materialized audit package artifact plumbing
+for one Phase 351 serialization-preview review. It still has no accepted formal
+evidence, no accepted Evidence Ledger mutation, no accepted append policy
+change, no Level2+ evidence, no score axes, no proof-authority claim, and no
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

@@ -2217,6 +2217,32 @@ benchmarks, deploys nothing to production, claims no semantic correctness,
 claims no production readiness, claims no SOTA, claims no breakthrough status,
 claims no full security, and grants no authority.
 
+Phase 353 implements local materialized audit package artifact plumbing in
+`crates/hsai-agent-admission/src/lib.rs`. It adds the Phase 353 schema,
+state-slice, and claim-boundary constants; output request; output manifest;
+output error taxonomy; required nonclaim helper; declared file helper; declared
+sidecar helper; staged materialization; read-back validation; digest sidecars;
+digest index; protected-root handling; symlink rejection; undeclared-file
+rejection; stale-digest rejection; manifest semantic validation; Phase 351
+review binding; Phase 349 preview binding; and focused tests. The manifest
+binds one Phase 351 review digest and input digest, one Phase 349 preview digest
+and input digest, one Phase 347 package digest, one Phase 345 review record
+digest, one Phase 343 local metadata digest, current accepted append blocker
+digest, serialization profile id, canonical field-order digest, canonical
+JSON-shape digest, expected package bytes digest, artifact profile id, declared
+files, declared sidecars, declared file digests, claim boundary, and explicit
+nonclaims. Phase 353 writes only declared local `audit-package/*` metadata files
+under a caller-selected output root and creates `.sha256` sidecars. It changes
+no Cargo metadata, changes no `zkbench-core` accepted append policy, mutates no
+accepted Evidence Ledger, creates no accepted formal evidence, creates no
+Level2+ evidence, populates no score axes, generates or promotes no proof
+artifacts, generates or promotes no checker transcripts, generates or promotes
+no solver certificates, executes no Lean, executes no SMT, executes no COBALT,
+runs no Rust-to-Lean extraction, submits no benchmarks, deploys nothing to
+production, claims no semantic correctness, claims no production readiness,
+claims no SOTA, claims no breakthrough status, claims no full security, and
+grants no authority.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
