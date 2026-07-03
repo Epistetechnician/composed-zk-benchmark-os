@@ -140,3 +140,10 @@ only if it:
 - claims no breakthrough status;
 - claims no full security;
 - grants no action authority.
+
+## Implementation Note
+
+Phase 393 implements this boundary as local pure-data terminal-closure metadata
+in `crates/hsai-agent-admission/src/lib.rs` and documents the implementation
+in
+`docs/393-hsai-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-metadata-notes.md`.
