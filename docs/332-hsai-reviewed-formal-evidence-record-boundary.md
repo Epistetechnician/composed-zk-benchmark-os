@@ -145,10 +145,10 @@ explicit nonclaims, and accepted-evidence-disabled acknowledgement.
 
 That is reviewed local evidence. It is not accepted evidence and not SOTA.
 
-## Future Code Phase Exit Criteria
+## Phase 333 Implementation Status
 
-A future Phase 333 implementation may create reviewed-record metadata only if
-it adds:
+Phase 333 implements the reviewed-record metadata surface authorized by this
+boundary. It adds:
 
 - a reviewed formal-evidence record input data model;
 - a reviewed formal-evidence record data model;
