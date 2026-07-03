@@ -10455,6 +10455,42 @@ decision, no accepted formal evidence, no accepted Evidence Ledger mutation,
 no accepted append policy change, no Level2+ evidence, no score axes, no
 proof-authority claim, and no production/SOTA/security/correctness claim.
 
+## Phase 390 HSAI Accepted-Append Decision Quarantine-Resolution Escalation Terminal-Review Closure-Blocker Review Boundary
+
+Status: complete. See
+`docs/390-hsai-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-boundary.md`.
+
+Goal: define the docs-first boundary for future local closure-blocker review
+metadata over one Phase 389 accepted-append decision quarantine-resolution
+escalation terminal-review closure blocker while preserving the hard block on
+accepted append decisions and accepted formal evidence.
+
+Boundary coverage: Phase 390 defines future closure-blocker review purpose,
+six allowed future review labels, required future inputs, required future
+validation, meaning limits, and Phase 391 implementation exit criteria. The
+boundary requires any future review to bind the Phase 389 closure-blocker
+digest/input digest, Phase 389 digest/id/label binding map digests, explicit
+nonclaim digest, closure-review ids, closure ids, current accepted append
+blocker digest, the closure-blocker label, and a bounded review label.
+
+Anti-goals: Rust implementation code, Cargo metadata changes, filesystem
+artifact writes, accepted append decisions, accepted Evidence Ledger mutation,
+accepted append policy changes, accepted formal evidence, Level2+ evidence,
+score-axis population, proof artifact generation or promotion, checker
+transcript generation or promotion, solver certificate generation or promotion,
+additional process-spawn APIs, generic backend runners, solver scripts,
+checker scripts, proof assistant setup files, Lean execution, SMT execution,
+COBALT execution, Rust-to-Lean extraction, benchmark submission, production
+deployment, semantic-correctness claims, production-readiness claims, SOTA
+claims, breakthrough claims, full-security claims, or action authority.
+
+Exit criteria: HSAI now has a docs-first boundary for future local review of
+why one closure blocker keeps the current local escalation chain closed while
+the accepted append path remains blocked. It still has no accepted append
+decision, no accepted formal evidence, no accepted Evidence Ledger mutation,
+no accepted append policy change, no Level2+ evidence, no score axes, no
+proof-authority claim, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
