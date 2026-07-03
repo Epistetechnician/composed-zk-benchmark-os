@@ -142,10 +142,9 @@ That still is not:
 - full security;
 - authority to execute an action.
 
-## Future Code Phase Exit Criteria
+## Phase 339 Implementation Exit Criteria
 
-A future Phase 339 implementation may add bounded-class feasibility metadata
-only if it:
+Phase 339 may add bounded-class feasibility metadata only if it:
 
 - does not mutate the accepted Evidence Ledger;
 - does not change accepted append policy;
@@ -156,3 +155,7 @@ only if it:
 - preserves the current accepted append blocker digest;
 - rejects Level2+, score-axis, benchmark/SOTA, semantic-correctness,
   production-readiness, full-security, and authority claims.
+
+Phase 339 implements that metadata in
+`docs/339-hsai-bounded-formal-evidence-feasibility-metadata-notes.md`. It still
+does not approve the class or create accepted formal evidence.

@@ -658,6 +658,17 @@ pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_POLICY_DECISION_STATE_SLICE: &str =
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_POLICY_DECISION_VERSION: &str =
     "hsai-formal-evidence-current-path-still-forbidden:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_POLICY_DECISION_CLAIM_BOUNDARY: &str = "local gateway accepted formal-evidence policy-decision metadata only; binds one Phase 335 handoff to the current-path decision that formal evidence remains forbidden in the existing accepted append path, but does not create accepted evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_SCHEMA_VERSION:
+    &str = "hsai-gateway-formal-real-command-lane-bounded-formal-evidence-feasibility:v1";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_STATE_SLICE: &str =
+    "phase-339-hsai-bounded-formal-evidence-feasibility-metadata";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_CLAIM_BOUNDARY: &str = "local gateway bounded formal-evidence class feasibility metadata only; binds one Phase 337 forbidden policy decision and records that LocalReviewedFormalEvidenceMetadata remains feasibility-only with unresolved ownership, but does not approve a bounded formal-evidence class, create accepted evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_CANDIDATE_CLASS:
+    &str = "LocalReviewedFormalEvidenceMetadata";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_CLASS_STATUS: &str =
+    "feasibility_only_not_approved";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_OWNER_DECISION:
+    &str = "ownership_unresolved";
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GatewayAttestationChallengeBinding {
@@ -5518,6 +5529,127 @@ pub enum GatewayFormalRealCommandLanePolicyDecisionIssue {
 pub struct GatewayFormalRealCommandLanePolicyDecisionValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalRealCommandLanePolicyDecisionIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityInput {
+    pub schema_version: String,
+    pub feasibility_id: String,
+    pub created_at_unix: u64,
+    pub policy_decision_digest: Hash,
+    pub policy_decision_input_digest: Hash,
+    pub handoff_digest: Hash,
+    pub reviewed_record_digest: Hash,
+    pub policy_decision_version: String,
+    pub policy_decision: GatewayFormalRealCommandLaneFormalAcceptancePolicyDecision,
+    pub current_accepted_append_blockers: BTreeSet<String>,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub candidate_class_name: String,
+    pub candidate_class_status: String,
+    pub ownership_decision: String,
+    pub feasibility_question: String,
+    pub feasibility_question_digest: Hash,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub accepted_evidence_mutation_requested: bool,
+    pub accepted_append_policy_change_requested: bool,
+    pub bounded_formal_evidence_class_approved: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub benchmark_or_sota_comparison_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-bounded-formal-evidence-feasibility-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibility {
+    pub schema_version: String,
+    pub feasibility_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub feasibility_input_digest: Hash,
+    pub policy_decision_digest: Hash,
+    pub policy_decision_input_digest: Hash,
+    pub handoff_digest: Hash,
+    pub reviewed_record_digest: Hash,
+    pub policy_decision_version: String,
+    pub policy_decision: GatewayFormalRealCommandLaneFormalAcceptancePolicyDecision,
+    pub current_accepted_append_blockers: BTreeSet<String>,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub candidate_class_name: String,
+    pub candidate_class_status: String,
+    pub ownership_decision: String,
+    pub feasibility_question_digest: Hash,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub creates_accepted_evidence: bool,
+    pub changes_accepted_append_policy: bool,
+    pub bounded_formal_evidence_class_approved: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibility {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-bounded-formal-evidence-feasibility:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue {
+    InvalidSchemaVersion,
+    InvalidFeasibilityId,
+    MissingCreatedAt,
+    MissingDigest(String),
+    PolicyDecisionDigestDrift,
+    PolicyDecisionStateMismatch,
+    PolicyDecisionVersionMismatch,
+    PolicyDecisionNotForbidden,
+    AcceptedAppendBlockerMismatch,
+    CandidateClassMismatch,
+    CandidateClassStatusMismatch,
+    OwnershipDecisionMismatch,
+    FeasibilityQuestionMismatch,
+    NonclaimMismatch,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -19152,8 +19284,18 @@ pub fn gateway_formal_real_command_lane_policy_decision_claim_boundary() -> Stri
     GATEWAY_FORMAL_REAL_COMMAND_LANE_POLICY_DECISION_CLAIM_BOUNDARY.to_owned()
 }
 
+pub fn gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_claim_boundary(
+) -> String {
+    GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_CLAIM_BOUNDARY.to_owned()
+}
+
 pub fn gateway_formal_real_command_lane_policy_decision_statement() -> String {
     "accepted formal evidence remains forbidden in the current accepted append path".to_owned()
+}
+
+pub fn gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_question() -> String {
+    "can HSAI define a local reviewed formal-evidence metadata class while preserving the current accepted append blocker and forbidding accepted evidence promotion"
+        .to_owned()
 }
 
 pub fn gateway_formal_real_command_lane_reviewed_record_required_nonclaims(
@@ -19197,6 +19339,19 @@ pub fn gateway_formal_real_command_lane_policy_decision_required_nonclaims(
     nonclaims.insert(NonClaimLabel(
         "not bounded formal evidence approval".to_owned(),
     ));
+    nonclaims
+}
+
+pub fn gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims = gateway_formal_real_command_lane_policy_decision_required_nonclaims();
+    nonclaims.insert(NonClaimLabel(
+        "bounded formal evidence feasibility metadata only".to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel(
+        "not a bounded formal evidence class".to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel("ownership decision unresolved".to_owned()));
     nonclaims
 }
 
@@ -21493,6 +21648,283 @@ fn validate_gateway_formal_real_command_lane_policy_decision_policy(
         || input.action_authority_claimed
     {
         issues.push(GatewayFormalRealCommandLanePolicyDecisionIssue::PromotionAttempt);
+    }
+}
+
+pub fn build_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility(
+    policy_decision: &GatewayFormalRealCommandLanePolicyDecision,
+    input: &GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityInput,
+) -> Result<
+    GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibility,
+    GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityValidation,
+> {
+    let validation =
+        validate_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_input(
+            policy_decision,
+            input,
+        );
+    if !validation.valid {
+        return Err(validation);
+    }
+    Ok(
+        GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibility {
+            schema_version:
+                GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_SCHEMA_VERSION
+                    .to_owned(),
+            feasibility_id: input.feasibility_id.clone(),
+            state_slice:
+                GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_STATE_SLICE
+                    .to_owned(),
+            created_at_unix: input.created_at_unix,
+            feasibility_input_digest: input.digest(),
+            policy_decision_digest: policy_decision.digest(),
+            policy_decision_input_digest: policy_decision.decision_input_digest,
+            handoff_digest: policy_decision.handoff_digest,
+            reviewed_record_digest: policy_decision.reviewed_record_digest,
+            policy_decision_version: policy_decision.policy_decision_version.clone(),
+            policy_decision: policy_decision.policy_decision.clone(),
+            current_accepted_append_blockers: policy_decision
+                .current_accepted_append_blockers
+                .clone(),
+            current_accepted_append_blockers_digest: policy_decision
+                .current_accepted_append_blockers_digest,
+            candidate_class_name: input.candidate_class_name.clone(),
+            candidate_class_status: input.candidate_class_status.clone(),
+            ownership_decision: input.ownership_decision.clone(),
+            feasibility_question_digest: input.feasibility_question_digest,
+            previous_promotion_state: "accepted_formal_evidence_policy_decision".to_owned(),
+            promotion_state: "bounded_formal_evidence_feasibility_metadata".to_owned(),
+            next_required_state: "bounded_formal_evidence_class_policy_boundary".to_owned(),
+            claim_boundary:
+                gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_claim_boundary(
+                ),
+            explicit_nonclaims: input.explicit_nonclaims.clone(),
+            creates_accepted_evidence: false,
+            changes_accepted_append_policy: false,
+            bounded_formal_evidence_class_approved: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            grants_authority: false,
+        },
+    )
+}
+
+pub fn validate_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_input(
+    policy_decision: &GatewayFormalRealCommandLanePolicyDecision,
+    input: &GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityInput,
+) -> GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_SCHEMA_VERSION
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::InvalidSchemaVersion,
+        );
+    }
+    if !is_single_segment_id(&input.feasibility_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::InvalidFeasibilityId,
+        );
+    }
+    if input.created_at_unix == 0 {
+        issues.push(
+            GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::MissingCreatedAt,
+        );
+    }
+    validate_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_digests(
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_policy_decision(
+        policy_decision,
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_policy(
+        input,
+        &mut issues,
+    );
+    GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_digests(
+    input: &GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue>,
+) {
+    for (label, digest) in [
+        ("policy_decision_digest", input.policy_decision_digest),
+        (
+            "policy_decision_input_digest",
+            input.policy_decision_input_digest,
+        ),
+        ("handoff_digest", input.handoff_digest),
+        ("reviewed_record_digest", input.reviewed_record_digest),
+        (
+            "current_accepted_append_blockers_digest",
+            input.current_accepted_append_blockers_digest,
+        ),
+        (
+            "feasibility_question_digest",
+            input.feasibility_question_digest,
+        ),
+        ("explicit_nonclaims_digest", input.explicit_nonclaims_digest),
+    ] {
+        if digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::MissingDigest(
+                    label.to_owned(),
+                ),
+            );
+        }
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_policy_decision(
+    policy_decision: &GatewayFormalRealCommandLanePolicyDecision,
+    input: &GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue>,
+) {
+    if input.policy_decision_digest != policy_decision.digest()
+        || input.policy_decision_input_digest != policy_decision.decision_input_digest
+        || input.handoff_digest != policy_decision.handoff_digest
+        || input.reviewed_record_digest != policy_decision.reviewed_record_digest
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::PolicyDecisionDigestDrift,
+        );
+    }
+    if policy_decision.schema_version != GATEWAY_FORMAL_REAL_COMMAND_LANE_POLICY_DECISION_SCHEMA_VERSION
+        || policy_decision.state_slice != GATEWAY_FORMAL_REAL_COMMAND_LANE_POLICY_DECISION_STATE_SLICE
+        || policy_decision.promotion_state != "accepted_formal_evidence_policy_decision"
+        || policy_decision.next_required_state != "bounded_formal_evidence_policy_spec"
+        || policy_decision.claim_boundary != gateway_formal_real_command_lane_policy_decision_claim_boundary()
+        || policy_decision.policy_decision
+            != GatewayFormalRealCommandLaneFormalAcceptancePolicyDecision::AcceptedFormalEvidenceStillForbidden
+        || policy_decision.creates_accepted_evidence
+        || policy_decision.changes_accepted_append_policy
+        || policy_decision.creates_level2_evidence
+        || policy_decision.populates_score_axes
+        || policy_decision.proof_artifact_created
+        || policy_decision.checker_transcript_created
+        || policy_decision.solver_certificate_created
+        || policy_decision.semantic_correctness_claimed
+        || policy_decision.production_readiness_claimed
+        || policy_decision.sota_claimed
+        || policy_decision.breakthrough_claimed
+        || policy_decision.full_security_claimed
+        || policy_decision.grants_authority
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::PolicyDecisionStateMismatch,
+        );
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_policy(
+    input: &GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue>,
+) {
+    if input.policy_decision_version != GATEWAY_FORMAL_REAL_COMMAND_LANE_POLICY_DECISION_VERSION {
+        issues.push(
+            GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::PolicyDecisionVersionMismatch,
+        );
+    }
+    if input.policy_decision
+        != GatewayFormalRealCommandLaneFormalAcceptancePolicyDecision::AcceptedFormalEvidenceStillForbidden
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::PolicyDecisionNotForbidden,
+        );
+    }
+    let blockers = gateway_formal_real_command_lane_accepted_handoff_current_blockers();
+    if input.current_accepted_append_blockers != blockers
+        || input.current_accepted_append_blockers_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-accepted-handoff-current-blockers:v1",
+                &blockers,
+            )
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::AcceptedAppendBlockerMismatch,
+        );
+    }
+    if input.candidate_class_name
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_CANDIDATE_CLASS
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::CandidateClassMismatch,
+        );
+    }
+    if input.candidate_class_status
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_CLASS_STATUS
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::CandidateClassStatusMismatch,
+        );
+    }
+    if input.ownership_decision
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_OWNER_DECISION
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::OwnershipDecisionMismatch,
+        );
+    }
+    let question = gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_question();
+    if input.feasibility_question != question
+        || input.feasibility_question_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-bounded-formal-evidence-feasibility-question:v1",
+                &question,
+            )
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::FeasibilityQuestionMismatch,
+        );
+    }
+    let nonclaims =
+        gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-bounded-formal-evidence-feasibility-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::NonclaimMismatch,
+        );
+    }
+    if input.accepted_evidence_mutation_requested
+        || input.accepted_append_policy_change_requested
+        || input.bounded_formal_evidence_class_approved
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.benchmark_or_sota_comparison_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::PromotionAttempt,
+        );
     }
 }
 
@@ -33529,6 +33961,71 @@ mod tests {
         }
     }
 
+    fn formal_evidence_bounded_feasibility_input(
+        feasibility_id: &str,
+        policy_decision: &GatewayFormalRealCommandLanePolicyDecision,
+    ) -> GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityInput {
+        let blockers = gateway_formal_real_command_lane_accepted_handoff_current_blockers();
+        let explicit_nonclaims =
+            gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_required_nonclaims(
+            );
+        let feasibility_question =
+            gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_question();
+        GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityInput {
+            schema_version:
+                GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_SCHEMA_VERSION
+                    .to_owned(),
+            feasibility_id: feasibility_id.to_owned(),
+            created_at_unix: 1_800_000_339,
+            policy_decision_digest: policy_decision.digest(),
+            policy_decision_input_digest: policy_decision.decision_input_digest,
+            handoff_digest: policy_decision.handoff_digest,
+            reviewed_record_digest: policy_decision.reviewed_record_digest,
+            policy_decision_version: policy_decision.policy_decision_version.clone(),
+            policy_decision: policy_decision.policy_decision.clone(),
+            current_accepted_append_blockers_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-accepted-handoff-current-blockers:v1",
+                &blockers,
+            ),
+            current_accepted_append_blockers: blockers,
+            candidate_class_name:
+                GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_CANDIDATE_CLASS
+                    .to_owned(),
+            candidate_class_status:
+                GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_CLASS_STATUS
+                    .to_owned(),
+            ownership_decision:
+                GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_OWNER_DECISION
+                    .to_owned(),
+            feasibility_question_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-bounded-formal-evidence-feasibility-question:v1",
+                &feasibility_question,
+            ),
+            feasibility_question,
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-bounded-formal-evidence-feasibility-nonclaims:v1",
+                &explicit_nonclaims,
+            ),
+            explicit_nonclaims,
+            accepted_evidence_mutation_requested: false,
+            accepted_append_policy_change_requested: false,
+            bounded_formal_evidence_class_approved: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            benchmark_or_sota_comparison_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
     #[test]
     fn gateway_formal_real_command_lane_fixed_smt_process_executes_and_quarantines_unsat() {
         let (
@@ -34953,6 +35450,309 @@ mod tests {
         fs::remove_dir_all(&phase327_root).expect("phase337 promotion phase327 cleanup succeeds");
         fs::remove_dir_all(&execution_root).expect("phase337 promotion execution cleanup succeeds");
         fs::remove_dir_all(&source_root).expect("phase337 promotion source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_bounded_feasibility_builds_non_authoritative_metadata() {
+        let (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            phase323_manifest,
+            preflight,
+            phase327_manifest,
+            input,
+        ) = real_command_lane_formal_evidence_candidate_parts("real-command-phase339-feasibility");
+        let candidate = build_gateway_formal_real_command_lane_formal_evidence_candidate(
+            &phase323_manifest,
+            &preflight,
+            &phase327_manifest,
+            &input,
+        )
+        .expect("phase339 candidate builds");
+        let preview_input = formal_evidence_review_preview_input(
+            "phase339-feasibility-preview",
+            &candidate,
+            GatewayFormalRealCommandLaneReviewPreviewDecisionLabel::ReviewPreviewAcceptCandidateScope,
+        );
+        let preview =
+            build_gateway_formal_real_command_lane_review_preview(&candidate, &preview_input)
+                .expect("phase339 preview builds");
+        let record_input = formal_evidence_reviewed_record_input("phase339-record", &preview);
+        let reviewed_record =
+            build_gateway_formal_real_command_lane_reviewed_record(&preview, &record_input)
+                .expect("phase339 reviewed record builds");
+        let handoff_input =
+            formal_evidence_accepted_handoff_input("phase339-handoff", &reviewed_record);
+        let handoff = build_gateway_formal_real_command_lane_accepted_handoff(
+            &reviewed_record,
+            &handoff_input,
+        )
+        .expect("phase339 handoff builds");
+        let decision_input =
+            formal_evidence_policy_decision_input("phase339-policy-decision", &handoff);
+        let policy_decision =
+            build_gateway_formal_real_command_lane_policy_decision(&handoff, &decision_input)
+                .expect("phase339 policy decision builds");
+        let feasibility_input =
+            formal_evidence_bounded_feasibility_input("phase339-feasibility", &policy_decision);
+        let feasibility =
+            build_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility(
+                &policy_decision,
+                &feasibility_input,
+            )
+            .expect("phase339 feasibility metadata builds");
+
+        assert_eq!(
+            feasibility.state_slice,
+            GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_STATE_SLICE
+        );
+        assert_eq!(
+            feasibility.previous_promotion_state,
+            "accepted_formal_evidence_policy_decision"
+        );
+        assert_eq!(
+            feasibility.promotion_state,
+            "bounded_formal_evidence_feasibility_metadata"
+        );
+        assert_eq!(
+            feasibility.next_required_state,
+            "bounded_formal_evidence_class_policy_boundary"
+        );
+        assert_eq!(feasibility.policy_decision_digest, policy_decision.digest());
+        assert_eq!(
+            feasibility.policy_decision,
+            GatewayFormalRealCommandLaneFormalAcceptancePolicyDecision::AcceptedFormalEvidenceStillForbidden
+        );
+        assert_eq!(
+            feasibility.candidate_class_name,
+            GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_CANDIDATE_CLASS
+        );
+        assert_eq!(
+            feasibility.candidate_class_status,
+            GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_CLASS_STATUS
+        );
+        assert_eq!(
+            feasibility.ownership_decision,
+            GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_OWNER_DECISION
+        );
+        assert_eq!(
+            feasibility.claim_boundary,
+            gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_claim_boundary()
+        );
+        assert!(!feasibility.creates_accepted_evidence);
+        assert!(!feasibility.changes_accepted_append_policy);
+        assert!(!feasibility.bounded_formal_evidence_class_approved);
+        assert!(!feasibility.creates_level2_evidence);
+        assert!(!feasibility.populates_score_axes);
+        assert!(!feasibility.proof_artifact_created);
+        assert!(!feasibility.checker_transcript_created);
+        assert!(!feasibility.solver_certificate_created);
+        assert!(!feasibility.semantic_correctness_claimed);
+        assert!(!feasibility.production_readiness_claimed);
+        assert!(!feasibility.sota_claimed);
+        assert!(!feasibility.breakthrough_claimed);
+        assert!(!feasibility.full_security_claimed);
+        assert!(!feasibility.grants_authority);
+
+        fs::remove_dir_all(&phase323_root).expect("phase339 feasibility phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase339 feasibility phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root)
+            .expect("phase339 feasibility execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase339 feasibility source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_bounded_feasibility_rejects_drift_and_approval() {
+        let (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            phase323_manifest,
+            preflight,
+            phase327_manifest,
+            input,
+        ) = real_command_lane_formal_evidence_candidate_parts("real-command-phase339-drift");
+        let candidate = build_gateway_formal_real_command_lane_formal_evidence_candidate(
+            &phase323_manifest,
+            &preflight,
+            &phase327_manifest,
+            &input,
+        )
+        .expect("phase339 drift candidate builds");
+        let preview_input = formal_evidence_review_preview_input(
+            "phase339-drift-preview",
+            &candidate,
+            GatewayFormalRealCommandLaneReviewPreviewDecisionLabel::ReviewPreviewAcceptCandidateScope,
+        );
+        let preview =
+            build_gateway_formal_real_command_lane_review_preview(&candidate, &preview_input)
+                .expect("phase339 drift preview builds");
+        let record_input = formal_evidence_reviewed_record_input("phase339-drift-record", &preview);
+        let reviewed_record =
+            build_gateway_formal_real_command_lane_reviewed_record(&preview, &record_input)
+                .expect("phase339 drift reviewed record builds");
+        let handoff_input =
+            formal_evidence_accepted_handoff_input("phase339-drift-handoff", &reviewed_record);
+        let handoff = build_gateway_formal_real_command_lane_accepted_handoff(
+            &reviewed_record,
+            &handoff_input,
+        )
+        .expect("phase339 drift handoff builds");
+        let decision_input =
+            formal_evidence_policy_decision_input("phase339-drift-decision", &handoff);
+        let policy_decision =
+            build_gateway_formal_real_command_lane_policy_decision(&handoff, &decision_input)
+                .expect("phase339 drift policy decision builds");
+        let feasibility_input = formal_evidence_bounded_feasibility_input(
+            "phase339-drift-feasibility",
+            &policy_decision,
+        );
+
+        let mut digest_drift = feasibility_input.clone();
+        digest_drift.policy_decision_digest = Hash([9; 32]);
+        let digest_validation =
+            validate_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_input(
+                &policy_decision,
+                &digest_drift,
+            );
+        assert!(digest_validation.issues.contains(
+            &GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::PolicyDecisionDigestDrift
+        ));
+
+        let mut class_drift = feasibility_input.clone();
+        class_drift.candidate_class_name = "AcceptedFormalEvidence".to_owned();
+        let class_validation =
+            validate_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_input(
+                &policy_decision,
+                &class_drift,
+            );
+        assert!(class_validation.issues.contains(
+            &GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::CandidateClassMismatch
+        ));
+
+        let mut status_drift = feasibility_input.clone();
+        status_drift.candidate_class_status = "approved".to_owned();
+        let status_validation =
+            validate_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_input(
+                &policy_decision,
+                &status_drift,
+            );
+        assert!(status_validation.issues.contains(
+            &GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::CandidateClassStatusMismatch
+        ));
+
+        let mut owner_drift = feasibility_input.clone();
+        owner_drift.ownership_decision = "accepted_append_path".to_owned();
+        let owner_validation =
+            validate_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_input(
+                &policy_decision,
+                &owner_drift,
+            );
+        assert!(owner_validation.issues.contains(
+            &GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::OwnershipDecisionMismatch
+        ));
+
+        let mut promoted_decision = policy_decision.clone();
+        promoted_decision.creates_accepted_evidence = true;
+        let policy_state_validation =
+            validate_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_input(
+                &promoted_decision,
+                &feasibility_input,
+            );
+        assert!(policy_state_validation.issues.contains(
+            &GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::PolicyDecisionStateMismatch
+        ));
+
+        fs::remove_dir_all(&phase323_root).expect("phase339 drift phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase339 drift phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase339 drift execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase339 drift source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_bounded_feasibility_rejects_promotion_attempts() {
+        let (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            phase323_manifest,
+            preflight,
+            phase327_manifest,
+            input,
+        ) = real_command_lane_formal_evidence_candidate_parts("real-command-phase339-promotion");
+        let candidate = build_gateway_formal_real_command_lane_formal_evidence_candidate(
+            &phase323_manifest,
+            &preflight,
+            &phase327_manifest,
+            &input,
+        )
+        .expect("phase339 promotion candidate builds");
+        let preview_input = formal_evidence_review_preview_input(
+            "phase339-promotion-preview",
+            &candidate,
+            GatewayFormalRealCommandLaneReviewPreviewDecisionLabel::ReviewPreviewAcceptCandidateScope,
+        );
+        let preview =
+            build_gateway_formal_real_command_lane_review_preview(&candidate, &preview_input)
+                .expect("phase339 promotion preview builds");
+        let record_input =
+            formal_evidence_reviewed_record_input("phase339-promotion-record", &preview);
+        let reviewed_record =
+            build_gateway_formal_real_command_lane_reviewed_record(&preview, &record_input)
+                .expect("phase339 promotion reviewed record builds");
+        let handoff_input =
+            formal_evidence_accepted_handoff_input("phase339-promotion-handoff", &reviewed_record);
+        let handoff = build_gateway_formal_real_command_lane_accepted_handoff(
+            &reviewed_record,
+            &handoff_input,
+        )
+        .expect("phase339 promotion handoff builds");
+        let decision_input =
+            formal_evidence_policy_decision_input("phase339-promotion-decision", &handoff);
+        let policy_decision =
+            build_gateway_formal_real_command_lane_policy_decision(&handoff, &decision_input)
+                .expect("phase339 promotion policy decision builds");
+        let mut feasibility_input = formal_evidence_bounded_feasibility_input(
+            "phase339-promotion-feasibility",
+            &policy_decision,
+        );
+
+        feasibility_input.accepted_evidence_mutation_requested = true;
+        feasibility_input.accepted_append_policy_change_requested = true;
+        feasibility_input.bounded_formal_evidence_class_approved = true;
+        feasibility_input.accepted_formal_evidence_created = true;
+        feasibility_input.creates_level2_evidence = true;
+        feasibility_input.populates_score_axes = true;
+        feasibility_input.proof_artifact_promoted = true;
+        feasibility_input.checker_transcript_promoted = true;
+        feasibility_input.solver_certificate_promoted = true;
+        feasibility_input.sota_claimed = true;
+        feasibility_input.full_security_claimed = true;
+        feasibility_input.action_authority_claimed = true;
+        let validation =
+            validate_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility_input(
+                &policy_decision,
+                &feasibility_input,
+            );
+        assert!(validation.issues.contains(
+            &GatewayFormalRealCommandLaneBoundedFormalEvidenceFeasibilityIssue::PromotionAttempt
+        ));
+        assert!(
+            build_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility(
+                &policy_decision,
+                &feasibility_input,
+            )
+            .is_err()
+        );
+
+        fs::remove_dir_all(&phase323_root).expect("phase339 promotion phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase339 promotion phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase339 promotion execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase339 promotion source cleanup succeeds");
     }
 
     #[test]
