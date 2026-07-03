@@ -118,11 +118,10 @@ Phase 349 adds tests that:
 
 ## Next Slice
 
-Phase 350 should define a docs-first boundary for reviewing serialization
-preview metadata before any materialized artifact path is authorized. That
-boundary must not write filesystem artifacts, store raw package bytes, mutate
-the accepted Evidence Ledger, change accepted append policy, create accepted
-formal evidence, create Level2+ evidence, populate score axes, run Lean, run
-SMT, run COBALT, run Rust-to-Lean extraction, or claim semantic correctness,
-production readiness, SOTA, breakthrough status, full security, or action
-authority.
+Phase 350 defines a docs-first boundary for reviewing serialization preview
+metadata before any materialized artifact path is authorized. That boundary does
+not write filesystem artifacts, store raw package bytes, mutate the accepted
+Evidence Ledger, change accepted append policy, create accepted formal evidence,
+create Level2+ evidence, populate score axes, run Lean, run SMT, run COBALT, run
+Rust-to-Lean extraction, or claim semantic correctness, production readiness,
+SOTA, breakthrough status, full security, or action authority.
