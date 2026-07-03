@@ -161,7 +161,7 @@ It cannot support:
 
 ## Phase 369 Implementation Exit Criteria
 
-Phase 369 may implement local accepted-append decision blocker metadata only if
+Phase 369 implements local accepted-append decision blocker metadata only if
 it:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
