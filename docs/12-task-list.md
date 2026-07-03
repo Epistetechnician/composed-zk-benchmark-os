@@ -8212,6 +8212,44 @@ accepted formal evidence, no accepted Evidence Ledger mutation, no accepted
 append policy change, no Level2+ evidence, no score axes, no proof-authority
 claim, and no production/SOTA/security/correctness claim.
 
+## Phase 342 HSAI Local Reviewed Formal Evidence Metadata Class Boundary
+
+Status: complete. See
+`docs/342-hsai-local-reviewed-formal-evidence-metadata-class-boundary.md`.
+
+Goal: define the docs-first boundary for a future
+`LocalReviewedFormalEvidenceMetadata` class without implementing that class or
+creating accepted formal evidence.
+
+Implemented: future class name, required future fields, required future
+validation, required rejection cases, evidence meaning limits, and Phase 343
+implementation exit criteria. The boundary requires Phase 341 class-policy,
+Phase 339 feasibility, Phase 337 policy-decision, Phase 335 handoff, Phase 333
+reviewed-record, and current accepted append blocker digest bindings.
+
+Validation coverage: documentation now specifies the future class shape while
+preserving `local_non_accepted_metadata_class` owner path,
+`not_accepted_formal_evidence` status, and the existing accepted append guard.
+
+Validation gate: formatting, docs/hygiene checks, diff hygiene, empty-file
+hygiene, package-root lint check, claim-boundary source scans, repo docs tests,
+and full workspace tests.
+
+Anti-goals: Rust implementation code, Cargo metadata changes, bounded
+formal-evidence class implementation, accepted Evidence Ledger mutation,
+accepted append policy changes, accepted formal evidence, Level2+ evidence,
+score-axis population, proof artifact generation or promotion, checker
+transcript generation or promotion, solver certificate generation or promotion,
+Lean execution, COBALT execution, Rust-to-Lean extraction, benchmark submission,
+production deployment, semantic-correctness claims, production-readiness claims,
+SOTA claims, breakthrough claims, full-security claims, or action authority.
+
+Exit criteria: HSAI now has a boundary for a future local reviewed
+formal-evidence metadata class. It still has no implemented class, no accepted
+formal evidence, no accepted Evidence Ledger mutation, no accepted append policy
+change, no Level2+ evidence, no score axes, no proof-authority claim, and no
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
