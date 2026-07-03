@@ -125,7 +125,7 @@ It cannot support:
 
 ## Phase 359 Implementation Exit Criteria
 
-Phase 359 may implement local proposal-candidate review metadata only if it:
+Phase 359 implements local proposal-candidate review metadata only if it:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;
