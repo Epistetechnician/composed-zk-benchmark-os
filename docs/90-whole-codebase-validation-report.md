@@ -2848,6 +2848,31 @@ no benchmarks, deploys nothing to production, claims no semantic correctness,
 claims no production readiness, claims no SOTA, claims no breakthrough status,
 claims no full security, and grants no authority.
 
+Phase 396 defines the docs-first accepted-append decision
+quarantine-resolution escalation terminal-review closure-blocker review
+terminal-closure review settlement-blocker boundary. The boundary authorizes a
+future local settlement-blocker metadata implementation over one Phase 395
+terminal-closure review before any accepted append decision is allowed. It
+defines six allowed future settlement-blocker labels and requires any future
+blocker input to bind the Phase 395 terminal-closure review digest/input
+digest, Phase 395 digest/id/label binding map digests, explicit nonclaim
+digest, settlement-blocker ids, inherited terminal-closure review ids,
+inherited terminal-closure ids, current accepted append blocker digest, the
+terminal-closure review label, and a bounded settlement-blocker label. The
+boundary requires future validation to reject drifted digests, invalid ids,
+missing timestamps, promoted or drifted Phase 395 terminal-closure review
+state, promotion text, accepted append decision attempts, accepted Evidence
+Ledger mutation attempts, accepted append policy-change attempts, accepted
+formal-evidence creation attempts, Level2+ attempts, and score-axis attempts.
+Phase 396 creates no Rust implementation, changes no Cargo metadata, writes no
+artifacts, changes no accepted append policy, mutates no accepted Evidence
+Ledger, creates no accepted formal evidence, creates no Level2+ evidence,
+populates no score axes, executes no Lean, executes no SMT, executes no
+COBALT, runs no Rust-to-Lean extraction, submits no benchmarks, deploys
+nothing to production, claims no semantic correctness, claims no production
+readiness, claims no SOTA, claims no breakthrough status, claims no full
+security, and grants no authority.
+
 Phase 360 defines the docs-first append-decision preflight boundary. It
 specifies the future preflight purpose, five allowed future preflight labels,
 required future inputs, required future validation, meaning limits, and Phase
