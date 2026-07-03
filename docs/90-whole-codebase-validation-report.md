@@ -2662,6 +2662,32 @@ nothing to production, claims no semantic correctness, claims no production
 readiness, claims no SOTA, claims no breakthrough status, claims no full
 security, and grants no authority.
 
+Phase 388 defines the docs-first accepted-append decision
+quarantine-resolution escalation terminal-review closure-blocker boundary. The
+boundary authorizes a future local closure-blocker metadata implementation over
+one Phase 387 terminal-blocker review before any accepted append decision is
+allowed. It defines six allowed future closure-blocker labels and requires any
+future closure-blocker input to bind the full Phase
+387/385/383/381/379/377/375/373/371/369/367/365/363/361/359/357/355/353/351/
+349/347/345/343 digest chain, declared file digest map digest, explicit
+nonclaim digest, closure ids, terminal-review ids, terminal ids, escalation
+ids, review ids, quarantine ids, resolution ids, reviewer ids, proposal ids,
+append preflight ids, accepted append decision chain ids, closure timestamp,
+current accepted append blocker digest, inherited labels, and a bounded
+closure-blocker label. The boundary requires future validation to reject
+drifted digests, invalid ids, missing timestamps, promoted or drifted Phase 387
+terminal-blocker review state, promotion text, accepted append decision
+attempts, accepted Evidence Ledger mutation attempts, accepted append
+policy-change attempts, accepted formal-evidence creation attempts, Level2+
+attempts, and score-axis attempts. Phase 388 creates no Rust implementation,
+changes no Cargo metadata, writes no artifacts, changes no accepted append
+policy, mutates no accepted Evidence Ledger, creates no accepted formal
+evidence, creates no Level2+ evidence, populates no score axes, executes no
+Lean, executes no SMT, executes no COBALT, runs no Rust-to-Lean extraction,
+submits no benchmarks, deploys nothing to production, claims no semantic
+correctness, claims no production readiness, claims no SOTA, claims no
+breakthrough status, claims no full security, and grants no authority.
+
 Phase 360 defines the docs-first append-decision preflight boundary. It
 specifies the future preflight purpose, five allowed future preflight labels,
 required future inputs, required future validation, meaning limits, and Phase
