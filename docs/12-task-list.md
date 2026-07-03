@@ -8409,6 +8409,52 @@ package, no accepted formal evidence, no accepted Evidence Ledger mutation, no
 accepted append policy change, no Level2+ evidence, no score axes, no
 proof-authority claim, and no production/SOTA/security/correctness claim.
 
+## Phase 347 HSAI Local Metadata Review Audit Package
+
+Status: complete. See
+`docs/347-hsai-local-metadata-review-audit-package-notes.md`.
+
+Goal: implement the local non-accepted audit package authorized by Phase 346
+without writing artifacts, mutating accepted evidence, or introducing backend
+execution.
+
+Implemented: Phase 347 schema/state/claim-boundary constants,
+`GatewayFormalRealCommandLaneLocalReviewAuditPackageInput`,
+`GatewayFormalRealCommandLaneLocalReviewAuditPackage`,
+`GatewayFormalRealCommandLaneLocalReviewAuditPackageIssue`,
+`GatewayFormalRealCommandLaneLocalReviewAuditPackageValidation`, required
+nonclaim helper, package builder, validator, Phase 345 review-record digest
+binding, current accepted append blocker preservation, package manifest digest
+binding, raw-artifact rejection, package-summary promotion text rejection, and
+focused tests.
+
+Validation coverage: tests build a local non-accepted audit package, verify the
+Phase 345 review digest and Phase 343 metadata digest bindings, reject review
+digest drift, reject raw proof artifacts and secret-bearing inputs, reject
+promotional package-summary text, and reject accepted-evidence, Level2,
+score-axis, proof, checker, solver, SOTA, full-security, and action-authority
+promotion attempts.
+
+Validation gate: formatting, docs/hygiene checks, diff hygiene, empty-file
+hygiene, package-root lint check, focused `hsai-agent-admission` tests,
+claim-boundary source scans, repo docs tests, and full workspace tests.
+
+Anti-goals: filesystem artifact writes, accepted Evidence Ledger mutation,
+accepted append policy changes, accepted formal evidence, Level2+ evidence,
+score-axis population, proof artifact generation or promotion, checker
+transcript generation or promotion, solver certificate generation or promotion,
+additional process-spawn APIs, generic backend runners, solver scripts, checker
+scripts, proof assistant setup files, Lean execution, SMT execution, COBALT
+execution, Rust-to-Lean extraction, benchmark submission, production deployment,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, or action authority.
+
+Exit criteria: HSAI now has a deterministic local non-accepted audit package
+metadata type over one Phase 345 review record. It still has no accepted formal
+evidence, no accepted Evidence Ledger mutation, no accepted append policy
+change, no Level2+ evidence, no score axes, no proof-authority claim, and no
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
