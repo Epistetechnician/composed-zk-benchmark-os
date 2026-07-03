@@ -10999,6 +10999,33 @@ lane. It still has no reviewed formal evidence, accepted evidence, Level2+
 evidence, score axes, Lean/COBALT/Rust-to-Lean execution, or
 SOTA/full-security/semantic-correctness/production-readiness claim.
 
+## Phase 408 HSAI Tiny Z3 Reviewed Formal Evidence Preview Boundary
+
+Status: complete. See
+`docs/408-hsai-tiny-z3-reviewed-formal-evidence-preview-boundary.md`.
+
+Goal: define the docs-first boundary from the Phase 407 tiny-Z3 local
+formal-evidence candidate to a future reviewed-formal-evidence preview while
+keeping reviewed evidence, accepted evidence, Level2+ evidence, score axes, and
+strong public claims blocked.
+
+Implemented: Phase 408 records review inputs, decision labels, required
+rejection cases, evidence meaning, and Phase 409 code-phase exit criteria for a
+future tiny-Z3 review-preview metadata lane.
+
+Anti-goals: Rust implementation code, Cargo metadata changes, reviewed formal
+evidence, accepted append decisions, accepted Evidence Ledger mutation,
+accepted formal evidence, Level2+ evidence, score axes, proof artifacts,
+checker transcripts, solver certificates, Lean execution, COBALT execution,
+Rust-to-Lean extraction, benchmark submission, production deployment,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, or action authority.
+
+Exit criteria: HSAI now has a documented review-preview boundary for the
+Phase 407 tiny-Z3 candidate. It still has no reviewed formal evidence, accepted
+evidence, Level2+ evidence, score axes, Lean/COBALT/Rust-to-Lean execution, or
+SOTA/full-security/semantic-correctness/production-readiness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

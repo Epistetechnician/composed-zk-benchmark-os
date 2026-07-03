@@ -5654,5 +5654,15 @@ This remains candidate metadata only: no reviewed formal evidence, accepted
 formal evidence, Level2+ evidence, score axes, or production/SOTA/security/
 semantic-correctness claim.
 
+[docs/408-hsai-tiny-z3-reviewed-formal-evidence-preview-boundary.md](docs/408-hsai-tiny-z3-reviewed-formal-evidence-preview-boundary.md)
+records the Phase 408 docs-first boundary from the Phase 407 tiny-Z3 local
+formal-evidence candidate to a future reviewed-formal-evidence preview. It
+defines review inputs, decision labels, required rejection cases, evidence
+meaning, and Phase 409 implementation exit criteria. This is boundary
+documentation only: no Rust implementation, reviewed formal evidence, accepted
+formal evidence, Level2+ evidence, score axes, proof artifacts, checker
+transcripts, solver certificates, or production/SOTA/security/
+semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
