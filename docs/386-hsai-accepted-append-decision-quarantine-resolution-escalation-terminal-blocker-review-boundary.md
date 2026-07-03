@@ -237,8 +237,7 @@ It cannot support:
 
 ## Phase 387 Implementation Exit Criteria
 
-Phase 387 may implement local accepted-append decision quarantine-resolution
-escalation terminal-blocker review metadata only if it:
+The Phase 387 implementation is valid because it:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;
