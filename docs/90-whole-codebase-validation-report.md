@@ -1962,6 +1962,30 @@ benchmarks, deploys nothing to production, claims no semantic correctness,
 claims no production readiness, claims no SOTA, claims no breakthrough status,
 claims no full security, and grants no authority.
 
+Phase 341 implements local non-accepted formal-evidence class policy metadata in
+`crates/hsai-agent-admission`. It adds Phase 341 schema/state/claim-boundary
+constants, owner-path and class-status constants, policy input and record data
+models, validation issues, required nonclaims, requirement digest helpers, a
+builder, and fail-closed validation. The builder records
+`LocalReviewedFormalEvidenceMetadata` under `local_non_accepted_metadata_class`
+with `not_accepted_formal_evidence` status, binds one Phase 339 feasibility
+digest and input digest, binds the Phase 337 policy-decision digest, binds the
+Phase 335 handoff digest, binds the Phase 333 reviewed-record digest, and
+preserves the current accepted append blocker digest. Focused tests reject Phase
+339 feasibility drift, promoted feasibility state, class-name drift, owner-path
+drift, class-status drift, requirement digest drift, accepted Evidence Ledger
+mutation, accepted append policy change, bounded formal-evidence class
+implementation, accepted formal evidence creation, Level2+ evidence, score-axis
+population, proof/checker/solver promotion, SOTA/full-security claims, and
+authority attempts. Phase 341 does not implement the bounded formal-evidence
+class, change `zkbench-core` accepted append policy, mutate the accepted
+Evidence Ledger, create accepted formal evidence, create Level2+ evidence,
+populate score axes, generate proof artifacts, generate checker transcripts,
+generate solver certificates, execute Lean, execute COBALT, run Rust-to-Lean
+extraction, submit benchmarks, deploy to production, claim semantic
+correctness, claim production readiness, claim SOTA, claim breakthrough status,
+claim full security, or grant authority.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission

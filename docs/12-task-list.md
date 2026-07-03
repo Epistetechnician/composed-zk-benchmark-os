@@ -8169,6 +8169,49 @@ accepted Evidence Ledger mutation, no accepted append policy change, no Level2+
 evidence, no score axes, no proof-authority claim, and no
 production/SOTA/security/correctness claim.
 
+## Phase 341 HSAI Local Non-Accepted Formal Evidence Class Policy Metadata
+
+Status: complete. See
+`docs/341-hsai-local-non-accepted-formal-evidence-class-policy-metadata-notes.md`.
+
+Goal: implement local policy metadata that binds one Phase 339 feasibility
+record and records that `LocalReviewedFormalEvidenceMetadata` may only be a
+future local non-accepted metadata class.
+
+Implemented: Phase 341 schema/state/claim-boundary constants, local
+non-accepted owner-path and class-status constants, policy input and record data
+models, validation issues, required nonclaim helper, requirement digest helper,
+builder, validator, and focused tests in `crates/hsai-agent-admission`.
+
+Validation coverage: the metadata binds Phase 339 feasibility, Phase 337
+policy-decision, Phase 335 handoff, Phase 333 reviewed-record, and current
+accepted append blocker digests. Validators reject feasibility drift, promoted
+feasibility state, class-name drift, owner-path drift, class-status drift,
+requirement digest drift, explicit nonclaim drift, accepted evidence mutation,
+accepted append policy change, bounded-class implementation, accepted
+formal-evidence creation, Level2+, score-axis, proof/checker/solver promotion,
+SOTA, full-security, and authority attempts.
+
+Validation gate: formatting, focused `hsai-agent-admission` tests,
+docs/hygiene checks, diff hygiene, empty-file hygiene, package-root lint check,
+claim-boundary source scans, repo docs tests, and full workspace tests.
+
+Anti-goals: bounded formal-evidence class implementation, accepted Evidence
+Ledger mutation, accepted append policy changes, accepted formal evidence,
+Level2+ evidence, score-axis population, proof artifact generation or
+promotion, checker transcript generation or promotion, solver certificate
+generation or promotion, Lean execution, COBALT execution, Rust-to-Lean
+extraction, benchmark submission, production deployment, semantic-correctness
+claims, production-readiness claims, SOTA claims, breakthrough claims,
+full-security claims, or action authority.
+
+Exit criteria: HSAI now has local policy metadata saying a future
+`LocalReviewedFormalEvidenceMetadata` class may only be local non-accepted
+metadata. It still has no implemented bounded formal-evidence class, no
+accepted formal evidence, no accepted Evidence Ledger mutation, no accepted
+append policy change, no Level2+ evidence, no score axes, no proof-authority
+claim, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
