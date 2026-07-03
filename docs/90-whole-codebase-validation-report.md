@@ -2388,6 +2388,47 @@ deploys nothing to production, claims no semantic correctness, claims no
 production readiness, claims no SOTA, claims no breakthrough status, claims no
 full security, and grants no authority.
 
+Phase 381 implements local deterministic accepted-append decision
+quarantine-resolution escalation-blocker metadata over one Phase 379
+resolution review. The implementation adds Phase 381 schema/state/claim-boundary
+constants, accepted-append decision quarantine-resolution escalation-blocker
+input metadata, escalation-blocker record metadata, six bounded blocker
+labels, validation issues, validation result, required nonclaim helper, blocker
+builder, and blocker validator. The blocker binds the Phase 379 resolution
+review digest/input digest, Phase 377 resolution plan digest/input digest,
+Phase 375 quarantine review digest/input digest, Phase 373 quarantine
+digest/input digest, Phase 371 blocker review digest/input digest, Phase 369
+blocker digest/input digest, Phase 367 review digest/input digest, Phase 365
+candidate digest/input digest, Phase 363 review digest/input digest, Phase 361
+preflight digest/input digest, Phase 359 review digest/input digest, Phase 357
+candidate digest/input digest, Phase 355 review digest, Phase 353 manifest
+digest, Phase 351 review digest, Phase 349 preview digest, Phase 347 package
+digest, Phase 345 review record digest, Phase 343 metadata digest, declared
+file digest map digest, explicit nonclaim digest, escalation ids, quarantine
+ids, resolution ids, reviewer ids, proposal ids, append preflight ids, accepted
+append decision candidate/review/blocker/blocker-review/quarantine/
+quarantine-review/resolution-plan/resolution-review/escalation-blocker ids,
+current accepted append blocker digest, Phase 365 candidate disposition, Phase
+367 review label, Phase 369 blocker label, Phase 371 blocker review label,
+Phase 373 quarantine label, Phase 375 quarantine review label, Phase 377
+resolution planning label, Phase 379 resolution review label, and bounded
+escalation-blocker label. Validation rejects drifted Phase 379 review digests,
+drifted chain digests, promoted or drifted Phase 379 resolution review state,
+invalid ids, missing timestamps, accepted append blocker drift, nonclaim drift,
+promotion text, accepted append decision attempts, accepted Evidence Ledger
+mutation attempts, accepted append policy-change attempts, accepted
+formal-evidence creation attempts, Level2+ attempts, score-axis attempts,
+proof/checker/solver promotion, SOTA/full-security claims, and authority
+attempts. Phase 381 changes no Cargo metadata, writes no artifacts, changes no
+`zkbench-core` accepted append policy, mutates no accepted Evidence Ledger,
+creates no accepted formal evidence, creates no Level2+ evidence, populates no
+score axes, generates or promotes no proof artifacts, generates or promotes no
+checker transcripts, generates or promotes no solver certificates, executes no
+Lean, executes no SMT, executes no COBALT, runs no Rust-to-Lean extraction,
+submits no benchmarks, deploys nothing to production, claims no semantic
+correctness, claims no production readiness, claims no SOTA, claims no
+breakthrough status, claims no full security, and grants no authority.
+
 Phase 360 defines the docs-first append-decision preflight boundary. It
 specifies the future preflight purpose, five allowed future preflight labels,
 required future inputs, required future validation, meaning limits, and Phase
