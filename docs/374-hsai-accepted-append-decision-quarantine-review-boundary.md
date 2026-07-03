@@ -193,8 +193,8 @@ It cannot support:
 
 ## Phase 375 Implementation Exit Criteria
 
-Phase 375 implements local accepted-append decision quarantine review metadata
-only if it:
+Phase 375 implements local accepted-append decision quarantine review metadata.
+The implementation is valid because it:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;
