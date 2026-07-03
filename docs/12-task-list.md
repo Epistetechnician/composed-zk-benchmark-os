@@ -7925,6 +7925,48 @@ formal-evidence metadata to a future accepted formal-evidence path. It still
 has no accepted formal evidence, no Level2+ evidence, no score axes, no
 proof-authority claim, and no production/SOTA/security/correctness claim.
 
+## Phase 335 HSAI Accepted Formal Evidence Handoff Metadata Implementation
+
+Status: complete. See
+`docs/335-hsai-accepted-formal-evidence-handoff-metadata-notes.md`.
+
+Goal: implement local handoff metadata from Phase 333 reviewed-record metadata
+toward a future accepted formal-evidence policy decision without mutating the
+accepted Evidence Ledger or changing accepted append policy.
+
+Implemented: handoff schema/state/claim-boundary constants, handoff input and
+record data models, unresolved formal-evidence acceptance policy decision enum,
+accepted-append policy version marker, requested class and claim-boundary
+markers, current accepted append blocker helper, required nonclaim helper,
+handoff builder, validation issue taxonomy, and fail-closed validation.
+
+Validation coverage: focused tests build handoff metadata from a Phase 333
+reviewed record and reject reviewed-record digest drift, policy drift,
+requested accepted-evidence class drift, requested claim-boundary drift,
+attempted formal-evidence policy approval, current accepted append blocker
+drift, promoted reviewed-record state drift, accepted-evidence mutation,
+accepted append policy change, Level2+, score-axis, proof/checker/solver
+promotion, SOTA, full-security, and authority attempts.
+
+Validation gate: formatting, focused `hsai-agent-admission` tests,
+docs/hygiene checks, diff hygiene, empty-file hygiene, package-root lint check,
+claim-boundary source scans, repo docs tests, and full workspace tests.
+
+Anti-goals: accepted Evidence Ledger mutation, accepted append policy changes,
+accepted formal evidence, Level2+ evidence, score-axis population, proof
+artifact generation or promotion, checker transcript generation or promotion,
+solver certificate generation or promotion, Lean execution, COBALT execution,
+Rust-to-Lean extraction, benchmark submission, production deployment,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, or action authority.
+
+Exit criteria: HSAI now has local accepted formal-evidence handoff metadata
+that binds one Phase 333 reviewed formal-evidence record to the current
+accepted append blocker and an unresolved future policy decision. It still has
+no accepted formal evidence, no accepted Evidence Ledger mutation, no Level2+
+evidence, no score axes, no proof-authority claim, and no
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
