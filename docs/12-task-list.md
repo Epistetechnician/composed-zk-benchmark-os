@@ -11318,6 +11318,33 @@ Level2+ evidence, score axes, Lean/COBALT/Rust-to-Lean execution, proof
 artifact, checker transcript, solver certificate, or SOTA/full-security/
 semantic-correctness/production-readiness claim.
 
+## Phase 420 HSAI Tiny Z3 Local Reviewed Metadata Class Boundary
+
+Status: complete. See
+`docs/420-hsai-tiny-z3-local-reviewed-metadata-class-boundary.md`.
+
+Goal: define the docs-first boundary for a future
+`TinyZ3LocalReviewedFormalEvidenceMetadata` class without implementing that
+class, mutating accepted evidence, changing accepted append policy, creating
+accepted formal evidence, creating Level2+ evidence, populating score axes, or
+making strong public claims.
+
+Implemented: Phase 420 records the only valid future class name, required
+future fields, required owner path `local_non_accepted_metadata_class`,
+required class status `not_accepted_formal_evidence`, required future
+validation, required rejection cases, evidence meaning, and Phase 421
+implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a boundary for a future local reviewed tiny-Z3
+metadata class. It still has no implemented tiny-Z3 reviewed metadata class,
+accepted formal evidence, accepted Evidence Ledger mutation, accepted append
+policy change, Level2+ evidence, score axes, Lean/COBALT/Rust-to-Lean
+execution, proof artifact, checker transcript, solver certificate, or SOTA/
+full-security/semantic-correctness/production-readiness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

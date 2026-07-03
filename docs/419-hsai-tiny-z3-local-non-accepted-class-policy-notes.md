@@ -94,8 +94,8 @@ That is still not:
 
 ## Next Slice
 
-The next responsible slice is a docs-first boundary for implementing
+Phase 420 defines the docs-first boundary for implementing
 `TinyZ3LocalReviewedFormalEvidenceMetadata` as local non-accepted metadata. That
-future boundary must still keep accepted evidence, accepted append policy
-changes, Level2+ evidence, score axes, proof/checker/solver authority,
-Lean/COBALT/Rust-to-Lean execution, and strong public claims out of scope.
+boundary still keeps accepted evidence, accepted append policy changes, Level2+
+evidence, score axes, proof/checker/solver authority, Lean/COBALT/Rust-to-Lean
+execution, and strong public claims out of scope.
