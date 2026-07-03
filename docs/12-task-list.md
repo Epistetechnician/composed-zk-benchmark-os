@@ -10569,6 +10569,47 @@ no accepted Evidence Ledger mutation, no accepted append policy change, no
 Level2+ evidence, no score axes, no proof-authority claim, and no
 production/SOTA/security/correctness claim.
 
+## Phase 393 HSAI Accepted-Append Decision Quarantine-Resolution Escalation Terminal-Review Closure-Blocker Review Terminal-Closure Metadata
+
+Status: complete. See
+`docs/393-hsai-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-metadata-notes.md`.
+
+Goal: implement local terminal-closure metadata over one Phase 391
+accepted-append decision quarantine-resolution escalation terminal-review
+closure-blocker review while preserving the hard block on accepted append
+decisions and accepted formal evidence.
+
+Implemented: Phase 393 adds schema/state/claim-boundary constants,
+terminal-closure input metadata, terminal-closure record metadata, six bounded
+terminal-closure labels, validation issues, validation result, required
+nonclaim helper, deterministic digest-binding, id-binding, and label-binding
+helpers, a terminal-closure builder, and a validator that rejects binding
+drift, invalid ids, promoted Phase 391 state, current accepted append blocker
+drift, nonclaim drift, promotional terminal-closure text, accepted append
+decision attempts, accepted-evidence mutation attempts, accepted append
+policy-change attempts, accepted formal-evidence creation attempts, Level2+
+attempts, score-axis attempts, proof/checker/solver promotion,
+SOTA/full-security claims, and authority attempts.
+
+Anti-goals: Cargo metadata changes, filesystem artifact writes, accepted
+append decisions, accepted Evidence Ledger mutation, accepted append policy
+changes, accepted formal evidence, Level2+ evidence, score-axis population,
+proof artifact generation or promotion, checker transcript generation or
+promotion, solver certificate generation or promotion, additional process-spawn
+APIs, generic backend runners, solver scripts, checker scripts, proof
+assistant setup files, Lean execution, SMT execution, COBALT execution,
+Rust-to-Lean extraction, benchmark submission, production deployment,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, or action authority.
+
+Exit criteria: HSAI now has local accepted-append decision
+quarantine-resolution escalation terminal-review closure-blocker review
+terminal-closure metadata over one Phase 391 closure-blocker review. It still
+has no accepted append decision, no accepted formal evidence, no accepted
+Evidence Ledger mutation, no accepted append policy change, no Level2+
+evidence, no score axes, no proof-authority claim, and no
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
