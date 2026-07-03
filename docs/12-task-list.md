@@ -11259,6 +11259,34 @@ score axes, Lean/COBALT/Rust-to-Lean execution, proof artifact, checker
 transcript, solver certificate, or SOTA/full-security/semantic-correctness/
 production-readiness claim.
 
+## Phase 418 HSAI Tiny Z3 Local Non-Accepted Class Policy Boundary
+
+Status: complete. See
+`docs/418-hsai-tiny-z3-local-non-accepted-class-policy-boundary.md`.
+
+Goal: define the docs-first policy boundary for allowing the Phase 417
+`TinyZ3LocalReviewedFormalEvidenceMetadata` candidate only as a future local
+non-accepted metadata class policy, while rejecting accepted append routing,
+accepted formal-evidence class status, Level2+ evidence, score axes, and strong
+public claims.
+
+Implemented: Phase 418 records the allowed future owner path
+`local_non_accepted_metadata_class`, the required future class status
+`not_accepted_formal_evidence`, required future policy metadata constraints,
+required rejection cases, evidence meaning, and Phase 419 implementation exit
+criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a policy boundary for a future local non-accepted
+tiny-Z3 class policy. It still has no implemented tiny-Z3 class policy,
+implemented bounded formal-evidence class, accepted formal evidence, accepted
+Evidence Ledger mutation, accepted append policy change, Level2+ evidence,
+score axes, Lean/COBALT/Rust-to-Lean execution, proof artifact, checker
+transcript, solver certificate, or SOTA/full-security/semantic-correctness/
+production-readiness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

@@ -93,8 +93,8 @@ That is still not:
 
 ## Next Slice
 
-The next responsible slice is a docs-first policy boundary for whether this
-tiny-Z3 feasibility metadata may become a local non-accepted class. That slice
-must still keep accepted evidence, accepted append policy changes, Level2+
-evidence, score axes, Lean/COBALT/Rust-to-Lean execution, and strong public
-claims out of scope.
+Phase 418 defines the docs-first policy boundary for whether this tiny-Z3
+feasibility metadata may become a local non-accepted class policy. That
+boundary still keeps accepted evidence, accepted append policy changes,
+Level2+ evidence, score axes, Lean/COBALT/Rust-to-Lean execution, and strong
+public claims out of scope.

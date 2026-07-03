@@ -5774,5 +5774,17 @@ evidence, not score-axis evidence, not proof artifacts, not checker
 transcripts, not solver certificates, and not a production/SOTA/security/
 semantic-correctness claim.
 
+[docs/418-hsai-tiny-z3-local-non-accepted-class-policy-boundary.md](docs/418-hsai-tiny-z3-local-non-accepted-class-policy-boundary.md)
+records the Phase 418 docs-first policy boundary for allowing the Phase 417
+`TinyZ3LocalReviewedFormalEvidenceMetadata` candidate only as a future local
+non-accepted metadata class policy. It rejects accepted append routing,
+accepted formal-evidence class status, accepted Evidence Ledger mutation,
+accepted append policy changes, Level2+ evidence, score-axis evidence, proof
+artifacts, checker transcripts, solver certificates, Lean/COBALT/Rust-to-Lean
+execution, benchmark/SOTA comparison, semantic-correctness claims,
+production-readiness claims, full-security claims, breakthrough claims, and
+action authority. It is boundary documentation only; no Rust class-policy
+metadata is implemented in this phase.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
