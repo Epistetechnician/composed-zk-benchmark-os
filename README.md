@@ -461,6 +461,7 @@ Surface DSL
 | [docs/373-hsai-accepted-append-decision-quarantine-metadata-notes.md](docs/373-hsai-accepted-append-decision-quarantine-metadata-notes.md) | Phase 373 HSAI accepted-append decision quarantine metadata notes. |
 | [docs/374-hsai-accepted-append-decision-quarantine-review-boundary.md](docs/374-hsai-accepted-append-decision-quarantine-review-boundary.md) | Phase 374 HSAI accepted-append decision quarantine review boundary. |
 | [docs/375-hsai-accepted-append-decision-quarantine-review-metadata-notes.md](docs/375-hsai-accepted-append-decision-quarantine-review-metadata-notes.md) | Phase 375 HSAI accepted-append decision quarantine review metadata notes. |
+| [docs/376-hsai-accepted-append-decision-quarantine-resolution-planning-boundary.md](docs/376-hsai-accepted-append-decision-quarantine-resolution-planning-boundary.md) | Phase 376 HSAI accepted-append decision quarantine-resolution planning boundary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
