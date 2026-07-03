@@ -10880,6 +10880,38 @@ Lean/SMT/COBALT run for Phase 401, no accepted evidence, no Level2+ evidence,
 no score axes, and no SOTA/full-security/semantic-correctness/
 production-readiness claim.
 
+## Phase 404 HSAI Fixed Local Z3 Digest-Binding Execution
+
+Status: complete. See
+`docs/404-hsai-fixed-local-z3-digest-binding-execution-notes.md`.
+
+Goal: execute one fixed local Z3 SMT-LIB2 obligation for the Phase 401
+`gateway-local-digest-binding-determinism-v1` property while preserving
+quarantine and nonpromotion limits.
+
+Implemented: Phase 404 adds typed execution input, execution record, validation
+issues, validation result, claim-boundary and nonclaim helpers, a fixed-Z3
+runner wrapper, and validators under `hsai-agent-admission`. The runner reuses
+the existing Phase 326 fixed-process/no-shell path and adds no new
+`std::process::Command` site.
+
+Validation coverage: focused tests execute `/opt/homebrew/bin/z3` when present
+and expect `solver_unsat_without_certificate`; they also reject promotion
+attempts. The current local environment has Z3 4.15.0 installed.
+
+Anti-goals: generic backend runners, proof artifacts, checker transcripts,
+solver certificates, accepted append decisions, accepted Evidence Ledger
+mutation, accepted formal evidence, Level2+ evidence, score axes, Lean
+execution, COBALT execution, Rust-to-Lean extraction, benchmark submission,
+production deployment, semantic-correctness claims, production-readiness
+claims, SOTA claims, breakthrough claims, full-security claims, or action
+authority.
+
+Exit criteria: HSAI now has a quarantined fixed local Z3 execution path for one
+tiny digest-binding SMT obligation. It still has no accepted evidence, no
+Level2+ evidence, no score axes, no Lean/COBALT/Rust-to-Lean execution, and no
+SOTA/full-security/semantic-correctness/production-readiness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
