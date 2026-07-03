@@ -11176,6 +11176,33 @@ accepted append policy change, Level2+ evidence, score axes, Lean/COBALT/
 Rust-to-Lean execution, or
 SOTA/full-security/semantic-correctness/production-readiness claim.
 
+## Phase 415 HSAI Tiny Z3 Accepted Formal Evidence Policy Decision
+
+Status: complete. See
+`docs/415-hsai-tiny-z3-accepted-formal-evidence-policy-decision-notes.md`.
+
+Goal: implement local tiny-Z3 accepted formal-evidence policy-decision metadata
+without mutating accepted evidence, changing accepted append policy, creating
+accepted formal evidence, creating Level2+ evidence, populating score axes, or
+making strong public claims.
+
+Implemented: Phase 415 adds policy-decision schema/state/version/claim-boundary
+constants, input metadata, decision metadata, issue taxonomy, validation
+report, claim-boundary helper, canonical current-path statement helper,
+required-nonclaim helper, builder, and validator under `hsai-agent-admission`.
+
+Validation coverage: focused tests build the current-path forbidden policy
+decision from a Phase 413 handoff, reject handoff digest drift, append-policy
+drift, bounded-class approval, blocker drift, policy-statement drift, promoted
+handoff state drift, and promotion attempts.
+
+Exit criteria: HSAI now has local tiny-Z3 policy-decision metadata recording
+that accepted formal evidence remains forbidden in the current accepted append
+path. It still has no accepted formal evidence, accepted Evidence Ledger
+mutation, accepted append policy change, Level2+ evidence, score axes,
+Lean/COBALT/Rust-to-Lean execution, or
+SOTA/full-security/semantic-correctness/production-readiness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

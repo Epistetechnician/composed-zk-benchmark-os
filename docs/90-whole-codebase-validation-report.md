@@ -5736,5 +5736,18 @@ accepted append policy change, Level2+ evidence, score axes, proof artifacts,
 checker transcripts, solver certificates, or production/SOTA/security/
 semantic-correctness claim.
 
+[docs/415-hsai-tiny-z3-accepted-formal-evidence-policy-decision-notes.md](docs/415-hsai-tiny-z3-accepted-formal-evidence-policy-decision-notes.md)
+records the Phase 415 local tiny-Z3 policy-decision metadata lane over a Phase
+413 accepted-handoff record. The implementation adds policy-decision input,
+decision metadata, issue taxonomy, validation report, canonical current-path
+statement helper, required-nonclaim helper, a builder, and validators under
+`hsai-agent-admission`. Focused tests cover decision construction, handoff
+digest drift, append-policy drift, bounded-class approval rejection, blocker
+drift, policy-statement drift, promoted handoff state drift, and promotion
+attempts. This remains current-path policy metadata only: no accepted formal
+evidence, accepted Evidence Ledger mutation, accepted append policy change,
+Level2+ evidence, score axes, or production/SOTA/security/semantic-correctness
+claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
