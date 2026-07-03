@@ -125,10 +125,9 @@ That still is not:
 - full security;
 - authority to execute an action.
 
-## Future Code Phase Exit Criteria
+## Phase 337 Implementation Status
 
-A future Phase 337 implementation may add local policy-decision metadata only
-if it:
+Phase 337 implements local policy-decision metadata under this boundary. It:
 
 - does not mutate the accepted Evidence Ledger;
 - does not change accepted append policy;

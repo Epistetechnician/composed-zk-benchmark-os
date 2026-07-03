@@ -1885,6 +1885,28 @@ claims no semantic correctness, claims no production readiness, claims no SOTA,
 claims no breakthrough status, claims no full security, and grants no
 authority.
 
+Phase 337 implements local accepted formal-evidence policy-decision metadata in
+`crates/hsai-agent-admission`. It adds policy-decision
+schema/state/version/claim-boundary constants, policy-decision input and record
+data models, validation issues, a canonical current-path decision statement,
+required nonclaims, a builder, and fail-closed validation. The builder records
+`AcceptedFormalEvidenceStillForbidden` for the current accepted append path,
+binds one Phase 335 handoff digest and handoff-input digest, and preserves the
+current accepted append blocker digest. Focused tests reject handoff digest
+drift, handoff state drift, accepted append policy-version drift, bounded
+formal-evidence class approval, current accepted append blocker drift,
+policy-decision statement drift, accepted Evidence Ledger mutation, accepted
+append policy change, accepted formal-evidence creation, Level2+ evidence,
+score-axis population, proof/checker/solver promotion, SOTA/full-security
+claims, and authority attempts. Phase 337 does not change `zkbench-core`
+accepted append policy, mutate the accepted Evidence Ledger, create accepted
+formal evidence, approve a bounded formal-evidence class, create Level2+
+evidence, populate score axes, generate proof artifacts, generate checker
+transcripts, generate solver certificates, execute Lean, execute COBALT, run
+Rust-to-Lean extraction, submit benchmarks, deploy to production, claim
+semantic correctness, claim production readiness, claim SOTA, claim
+breakthrough status, claim full security, or grant authority.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
