@@ -1945,6 +1945,34 @@ submits no benchmarks, deploys nothing to production, claims no semantic
 correctness, claims no production readiness, claims no SOTA, claims no
 breakthrough status, claims no full security, and grants no authority.
 
+Phase 362 defines the docs-first append-decision preflight review boundary. It
+specifies the future review purpose, five allowed future review labels, required
+future inputs, required future validation, meaning limits, and Phase 363
+implementation exit criteria. The boundary requires any future review to bind
+one Phase 361 preflight digest and input digest, one Phase 359 review digest and
+input digest, one Phase 357 proposal candidate digest and input digest, one
+Phase 355 review digest, one Phase 353 manifest digest, one Phase 351 review
+digest, one Phase 349 preview digest, one Phase 347 package digest, one Phase
+345 review record digest, one Phase 343 local metadata digest, declared file
+digest map digest, explicit nonclaim digest, reviewer ids, proposal policy id,
+proposal candidate id, proposal review id, append preflight id, append
+preflight review id, review decision timestamp, current accepted append blocker
+digest, append-decision preflight label, and append-decision preflight review
+label. It requires future rejection of digest drift, nonclaim drift, blocker
+drift, promoted or drifted Phase 361 preflight state, promotion text, accepted
+Evidence Ledger mutation attempts, accepted append policy-change attempts,
+accepted formal-evidence creation attempts, Level2+ attempts, and score-axis
+attempts. Phase 362 creates no Rust code, changes no Cargo metadata, writes no
+artifacts, changes no `zkbench-core` accepted append policy, mutates no
+accepted Evidence Ledger, creates no accepted formal evidence, creates no
+Level2+ evidence, populates no score axes, generates or promotes no proof
+artifacts, generates or promotes no checker transcripts, generates or promotes
+no solver certificates, executes no Lean, executes no SMT, executes no COBALT,
+runs no Rust-to-Lean extraction, submits no benchmarks, deploys nothing to
+production, claims no semantic correctness, claims no production readiness,
+claims no SOTA, claims no breakthrough status, claims no full security, and
+grants no authority.
+
 Phase 337 implements local accepted formal-evidence policy-decision metadata in
 `crates/hsai-agent-admission`. It adds policy-decision
 schema/state/version/claim-boundary constants, policy-decision input and record

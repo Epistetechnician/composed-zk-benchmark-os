@@ -135,9 +135,9 @@ Phase 361 adds tests that:
 
 ## Next Slice
 
-Phase 362 should define a docs-first boundary for reviewing local
-append-decision preflight metadata before any accepted append decision. That
-boundary must keep preflight review separate from accepted formal evidence,
+Phase 362 defines a docs-first boundary for reviewing local append-decision
+preflight metadata before any accepted append decision. That boundary keeps
+preflight review separate from accepted formal evidence,
 accepted Evidence Ledger mutation, accepted append policy changes, Level2+
 evidence, score axes, Lean execution, SMT execution, COBALT execution,
 Rust-to-Lean extraction, semantic correctness, production readiness, SOTA,
