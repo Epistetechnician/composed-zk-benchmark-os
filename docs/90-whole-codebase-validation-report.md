@@ -5760,5 +5760,19 @@ accepted append policy change, Level2+ evidence, score axes, proof artifacts,
 checker transcripts, solver certificates, or production/SOTA/security/
 semantic-correctness claim.
 
+[docs/417-hsai-tiny-z3-bounded-formal-evidence-feasibility-notes.md](docs/417-hsai-tiny-z3-bounded-formal-evidence-feasibility-notes.md)
+records the Phase 417 local tiny-Z3 bounded formal-evidence feasibility
+metadata over a Phase 415 forbidden policy decision. The Rust surface adds
+typed input/output metadata, issue taxonomy, validation report, canonical
+feasibility-question and nonclaim helpers, builder, validator, and focused
+tests. The candidate class remains
+`TinyZ3LocalReviewedFormalEvidenceMetadata`; its status remains
+`feasibility_only_not_approved`; ownership remains `ownership_unresolved`.
+This is not accepted formal evidence, not accepted Evidence Ledger mutation,
+not accepted append policy change, not bounded-class approval, not Level2+
+evidence, not score-axis evidence, not proof artifacts, not checker
+transcripts, not solver certificates, and not a production/SOTA/security/
+semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
