@@ -147,8 +147,9 @@ That still does not support:
 
 ## Next Slice
 
-Phase 336 may define a docs-first accepted formal-evidence policy-decision
-boundary. It must decide whether formal evidence remains forbidden or whether a
-new bounded class can be admitted without creating Level2+ evidence, score
-axes, benchmark/SOTA claims, semantic-correctness claims, production-readiness
-claims, full-security claims, or action authority.
+Phase 336 defines the docs-first accepted formal-evidence policy-decision
+boundary. It records that formal evidence remains forbidden in the current
+accepted append path and preserves a future separately specified bounded-class
+path without creating Level2+ evidence, score axes, benchmark/SOTA claims,
+semantic-correctness claims, production-readiness claims, full-security claims,
+or action authority.
