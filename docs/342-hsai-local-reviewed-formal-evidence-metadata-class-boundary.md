@@ -145,9 +145,10 @@ That still is not:
 - full security;
 - authority to execute an action.
 
-## Phase 343 Implementation Exit Criteria
+## Phase 343 Implementation Outcome
 
-Phase 343 may implement `LocalReviewedFormalEvidenceMetadata` only if it:
+Phase 343 implements `LocalReviewedFormalEvidenceMetadata` in
+`docs/343-hsai-local-reviewed-formal-evidence-metadata-class-notes.md`. It:
 
 - binds one Phase 341 class-policy digest;
 - binds one Phase 339 feasibility digest;
@@ -165,3 +166,5 @@ Phase 343 may implement `LocalReviewedFormalEvidenceMetadata` only if it:
 - rejects proof/checker/solver promotion;
 - rejects benchmark/SOTA, semantic-correctness, production-readiness,
   full-security, and action-authority claims.
+
+It still does not create accepted formal evidence.
