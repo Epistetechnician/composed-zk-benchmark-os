@@ -101,3 +101,10 @@ Ledger mutation, not Level2+ evidence, not score-axis population, not proof
 authority, not backend execution, not Lean/SMT/COBALT execution, not
 Rust-to-Lean extraction, not semantic correctness, not production readiness,
 not SOTA, not breakthrough status, and not full security.
+
+## Next Boundary
+
+Phase 388 may define a docs-first closure-blocker boundary over this
+terminal-blocker review metadata. That boundary remains planning only unless a
+later implementation phase explicitly authorizes additive Rust source and
+tests.
