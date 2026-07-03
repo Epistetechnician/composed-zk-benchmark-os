@@ -133,9 +133,11 @@ That still is not:
 - full security;
 - authority to execute an action.
 
-## Phase 341 Implementation Exit Criteria
+## Phase 341 Implementation Outcome
 
-Phase 341 may implement local non-accepted class policy metadata only if it:
+Phase 341 implements local non-accepted class policy metadata in
+`docs/341-hsai-local-non-accepted-formal-evidence-class-policy-metadata-notes.md`.
+It:
 
 - binds one Phase 339 feasibility digest;
 - binds one Phase 337 policy-decision digest;
@@ -150,3 +152,5 @@ Phase 341 may implement local non-accepted class policy metadata only if it:
 - rejects proof/checker/solver promotion;
 - rejects benchmark/SOTA, semantic-correctness, production-readiness,
   full-security, and action-authority claims.
+
+It still does not implement `LocalReviewedFormalEvidenceMetadata`.
