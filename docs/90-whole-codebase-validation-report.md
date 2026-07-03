@@ -5810,5 +5810,19 @@ mutation, accepted append policy change, Level2+ evidence, score-axis evidence,
 proof artifact, checker transcript, solver certificate, Lean/COBALT/
 Rust-to-Lean execution, or production/SOTA/security/semantic-correctness claim.
 
+[docs/421-hsai-tiny-z3-local-reviewed-metadata-class-notes.md](docs/421-hsai-tiny-z3-local-reviewed-metadata-class-notes.md)
+records the Phase 421 local reviewed tiny-Z3 formal-evidence metadata class.
+The Rust surface adds typed input/output metadata, issue taxonomy, validation
+report, claim-boundary and nonclaim helpers, builder, validator, and focused
+tests. The metadata binds one Phase 419 class-policy record, the Phase 417
+feasibility digest, the Phase 415 policy-decision digest, the Phase 413
+handoff digest, the Phase 411 reviewed-record digest, current accepted append
+blockers, owner path `local_non_accepted_metadata_class`, class status
+`not_accepted_formal_evidence`, and required review/replay/correspondence
+digests. This is not accepted formal evidence, not accepted Evidence Ledger
+mutation, not accepted append policy change, not Level2+ evidence, not
+score-axis evidence, not proof artifacts, not checker transcripts, not solver
+certificates, and not a production/SOTA/security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
