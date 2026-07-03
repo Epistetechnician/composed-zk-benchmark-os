@@ -2118,6 +2118,29 @@ submits no benchmarks, deploys nothing to production, claims no semantic
 correctness, claims no production readiness, claims no SOTA, claims no
 breakthrough status, claims no full security, and grants no authority.
 
+Phase 349 implements deterministic audit package serialization-preview metadata
+in `crates/hsai-agent-admission/src/lib.rs`. It adds the Phase 349 schema,
+state slice, claim boundary, preview input/output records, validation issues,
+validation result, required nonclaim helper, canonical field-order helper,
+canonical JSON-shape helper, builder, and validator. The preview binds one Phase
+347 package digest/input digest, one Phase 345 review record digest, one Phase
+343 local metadata digest, current accepted append blockers, serialization
+profile id, canonical field-order digest, canonical JSON-shape digest, expected
+package bytes digest, and explicit nonclaims. It rejects path or materialized
+file references, raw package bytes, raw proof artifacts, raw checker
+transcripts, raw solver certificates, live backend outputs, benchmark outputs,
+secrets, credentials, mutable accepted-ledger state, promotional preview-summary
+text, and promotion flags. Phase 349 writes no artifacts, stores no raw package
+bytes, changes no `zkbench-core` accepted append policy, mutates no accepted
+Evidence Ledger, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, generates or promotes no proof artifacts,
+generates or promotes no checker transcripts, generates or promotes no solver
+certificates, executes no Lean, executes no SMT, executes no COBALT, runs no
+Rust-to-Lean extraction, submits no benchmarks, deploys nothing to production,
+claims no semantic correctness, claims no production readiness, claims no SOTA,
+claims no breakthrough status, claims no full security, and grants no
+authority.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission

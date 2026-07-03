@@ -92,9 +92,9 @@ It cannot support:
 - full security;
 - action authority.
 
-## Phase 349 Implementation Exit Criteria
+## Phase 349 Implementation Result
 
-Phase 349 may implement local serialization-preview metadata only if it:
+Phase 349 implements local serialization-preview metadata and:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;

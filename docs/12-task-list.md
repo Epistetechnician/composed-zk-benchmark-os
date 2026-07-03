@@ -8497,6 +8497,53 @@ formal evidence, no accepted Evidence Ledger mutation, no accepted append policy
 change, no Level2+ evidence, no score axes, no proof-authority claim, and no
 production/SOTA/security/correctness claim.
 
+## Phase 349 HSAI Audit Package Serialization Preview Metadata
+
+Status: complete. See
+`docs/349-hsai-audit-package-serialization-preview-metadata-notes.md`.
+
+Goal: implement deterministic digest-only serialization-preview metadata over
+Phase 347 local non-accepted audit packages without writing artifacts or storing
+raw package bytes.
+
+Implemented: Phase 349 schema/state/claim-boundary constants,
+`GatewayFormalRealCommandLaneLocalAuditPackageSerializationPreviewInput`,
+`GatewayFormalRealCommandLaneLocalAuditPackageSerializationPreview`,
+`GatewayFormalRealCommandLaneLocalAuditPackageSerializationPreviewIssue`,
+`GatewayFormalRealCommandLaneLocalAuditPackageSerializationPreviewValidation`,
+required nonclaim helper, canonical field-order helper, canonical JSON-shape
+helper, preview builder, validator, Phase 347 package digest binding, Phase 345
+review digest binding, current accepted append blocker preservation, path/raw
+payload rejection, preview-summary promotion text rejection, and focused tests.
+
+Validation coverage: tests build deterministic serialization-preview metadata,
+verify Phase 347 package digest and Phase 345 review digest bindings, reject
+package digest drift, reject filesystem paths and raw package bytes, reject
+promotional preview-summary text, and reject accepted-evidence, Level2,
+score-axis, proof, checker, solver, SOTA, full-security, and action-authority
+promotion attempts.
+
+Validation gate: formatting, docs/hygiene checks, diff hygiene, empty-file
+hygiene, package-root lint check, focused `hsai-agent-admission` tests,
+claim-boundary source scans, repo docs tests, and full workspace tests.
+
+Anti-goals: filesystem artifact writes, raw package bytes, accepted Evidence
+Ledger mutation, accepted append policy changes, accepted formal evidence,
+Level2+ evidence, score-axis population, proof artifact generation or
+promotion, checker transcript generation or promotion, solver certificate
+generation or promotion, additional process-spawn APIs, generic backend
+runners, solver scripts, checker scripts, proof assistant setup files, Lean
+execution, SMT execution, COBALT execution, Rust-to-Lean extraction, benchmark
+submission, production deployment, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims, full-security
+claims, or action authority.
+
+Exit criteria: HSAI now has deterministic digest-only serialization-preview
+metadata over one Phase 347 package. It still has no materialized audit package,
+no accepted formal evidence, no accepted Evidence Ledger mutation, no accepted
+append policy change, no Level2+ evidence, no score axes, no proof-authority
+claim, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
