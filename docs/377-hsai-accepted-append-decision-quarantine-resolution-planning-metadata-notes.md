@@ -176,9 +176,9 @@ Phase 377 adds tests that:
 
 ## Next Slice
 
-Phase 378 should define a docs-first boundary for accepted-append decision
+Phase 378 defines a docs-first boundary for accepted-append decision
 quarantine-resolution review metadata before any accepted append decision is
-allowed. That boundary must keep resolution review metadata separate from
+allowed. That boundary keeps resolution review metadata separate from
 accepted formal evidence, accepted Evidence Ledger mutation, accepted append
 policy changes, Level2+ evidence, score axes, Lean execution, SMT execution,
 COBALT execution, Rust-to-Lean extraction, semantic correctness, production
