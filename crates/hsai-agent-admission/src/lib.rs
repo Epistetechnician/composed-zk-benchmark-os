@@ -678,6 +678,11 @@ pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_NON_ACCEPTED_CLASS_POLICY_OWNER
     "local_non_accepted_metadata_class";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_NON_ACCEPTED_CLASS_POLICY_CLASS_STATUS: &str =
     "not_accepted_formal_evidence";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_REVIEWED_METADATA_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-real-command-lane-local-reviewed-formal-evidence-metadata:v1";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_REVIEWED_METADATA_STATE_SLICE: &str =
+    "phase-343-hsai-local-reviewed-formal-evidence-metadata-class";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_REVIEWED_METADATA_CLAIM_BOUNDARY: &str = "local reviewed formal-evidence metadata class only; binds one Phase 341 local non-accepted class policy record and prior reviewed formal-evidence artifacts, but does not create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GatewayAttestationChallengeBinding {
@@ -5781,6 +5786,128 @@ pub enum GatewayFormalRealCommandLaneLocalNonAcceptedClassPolicyIssue {
 pub struct GatewayFormalRealCommandLaneLocalNonAcceptedClassPolicyValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalRealCommandLaneLocalNonAcceptedClassPolicyIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataInput {
+    pub schema_version: String,
+    pub metadata_id: String,
+    pub created_at_unix: u64,
+    pub class_policy_digest: Hash,
+    pub class_policy_input_digest: Hash,
+    pub feasibility_digest: Hash,
+    pub policy_decision_digest: Hash,
+    pub handoff_digest: Hash,
+    pub reviewed_record_digest: Hash,
+    pub current_accepted_append_blockers: BTreeSet<String>,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub class_name: String,
+    pub owner_path: String,
+    pub class_status: String,
+    pub reviewed_scope_digest: Hash,
+    pub source_correspondence_requirement_digest: Hash,
+    pub replay_requirement_digest: Hash,
+    pub reviewer_policy_digest: Hash,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub accepted_evidence_mutation_requested: bool,
+    pub accepted_append_policy_change_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub benchmark_or_sota_comparison_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-local-reviewed-formal-evidence-metadata-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadata {
+    pub schema_version: String,
+    pub metadata_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub metadata_input_digest: Hash,
+    pub class_policy_digest: Hash,
+    pub class_policy_input_digest: Hash,
+    pub feasibility_digest: Hash,
+    pub policy_decision_digest: Hash,
+    pub handoff_digest: Hash,
+    pub reviewed_record_digest: Hash,
+    pub current_accepted_append_blockers: BTreeSet<String>,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub class_name: String,
+    pub owner_path: String,
+    pub class_status: String,
+    pub reviewed_scope_digest: Hash,
+    pub source_correspondence_requirement_digest: Hash,
+    pub replay_requirement_digest: Hash,
+    pub reviewer_policy_digest: Hash,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub creates_accepted_evidence: bool,
+    pub changes_accepted_append_policy: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadata {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-local-reviewed-formal-evidence-metadata:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue {
+    InvalidSchemaVersion,
+    InvalidMetadataId,
+    MissingCreatedAt,
+    MissingDigest(String),
+    ClassPolicyDigestDrift,
+    ClassPolicyStateMismatch,
+    AcceptedAppendBlockerMismatch,
+    ClassNameMismatch,
+    OwnerPathMismatch,
+    ClassStatusMismatch,
+    RequirementDigestMismatch,
+    NonclaimMismatch,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -19424,6 +19551,10 @@ pub fn gateway_formal_real_command_lane_local_non_accepted_class_policy_claim_bo
     GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_NON_ACCEPTED_CLASS_POLICY_CLAIM_BOUNDARY.to_owned()
 }
 
+pub fn gateway_formal_real_command_lane_local_reviewed_metadata_claim_boundary() -> String {
+    GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_REVIEWED_METADATA_CLAIM_BOUNDARY.to_owned()
+}
+
 pub fn gateway_formal_real_command_lane_policy_decision_statement() -> String {
     "accepted formal evidence remains forbidden in the current accepted append path".to_owned()
 }
@@ -19503,6 +19634,17 @@ pub fn gateway_formal_real_command_lane_local_non_accepted_class_policy_required
     nonclaims.insert(NonClaimLabel(
         "not accepted formal evidence class".to_owned(),
     ));
+    nonclaims
+}
+
+pub fn gateway_formal_real_command_lane_local_reviewed_metadata_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims =
+        gateway_formal_real_command_lane_local_non_accepted_class_policy_required_nonclaims();
+    nonclaims.insert(NonClaimLabel(
+        "local reviewed formal evidence metadata only".to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel("not machine checked scoped proof".to_owned()));
     nonclaims
 }
 
@@ -22380,6 +22522,274 @@ fn validate_gateway_formal_real_command_lane_local_non_accepted_class_policy_pol
         || input.action_authority_claimed
     {
         issues.push(GatewayFormalRealCommandLaneLocalNonAcceptedClassPolicyIssue::PromotionAttempt);
+    }
+}
+
+pub fn build_gateway_formal_real_command_lane_local_reviewed_formal_evidence_metadata(
+    class_policy: &GatewayFormalRealCommandLaneLocalNonAcceptedClassPolicy,
+    input: &GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataInput,
+) -> Result<
+    GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadata,
+    GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataValidation,
+> {
+    let validation =
+        validate_gateway_formal_real_command_lane_local_reviewed_formal_evidence_metadata_input(
+            class_policy,
+            input,
+        );
+    if !validation.valid {
+        return Err(validation);
+    }
+    Ok(
+        GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadata {
+            schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_REVIEWED_METADATA_SCHEMA_VERSION
+                .to_owned(),
+            metadata_id: input.metadata_id.clone(),
+            state_slice: GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_REVIEWED_METADATA_STATE_SLICE
+                .to_owned(),
+            created_at_unix: input.created_at_unix,
+            metadata_input_digest: input.digest(),
+            class_policy_digest: class_policy.digest(),
+            class_policy_input_digest: class_policy.policy_input_digest,
+            feasibility_digest: class_policy.feasibility_digest,
+            policy_decision_digest: class_policy.policy_decision_digest,
+            handoff_digest: class_policy.handoff_digest,
+            reviewed_record_digest: class_policy.reviewed_record_digest,
+            current_accepted_append_blockers: class_policy.current_accepted_append_blockers.clone(),
+            current_accepted_append_blockers_digest: class_policy
+                .current_accepted_append_blockers_digest,
+            class_name: input.class_name.clone(),
+            owner_path: input.owner_path.clone(),
+            class_status: input.class_status.clone(),
+            reviewed_scope_digest: input.reviewed_scope_digest,
+            source_correspondence_requirement_digest: input
+                .source_correspondence_requirement_digest,
+            replay_requirement_digest: input.replay_requirement_digest,
+            reviewer_policy_digest: input.reviewer_policy_digest,
+            previous_promotion_state: "local_non_accepted_class_policy_metadata".to_owned(),
+            promotion_state: "local_reviewed_formal_evidence_metadata".to_owned(),
+            next_required_state: "local_reviewed_formal_evidence_metadata_review_boundary"
+                .to_owned(),
+            claim_boundary: gateway_formal_real_command_lane_local_reviewed_metadata_claim_boundary(
+            ),
+            explicit_nonclaims: input.explicit_nonclaims.clone(),
+            creates_accepted_evidence: false,
+            changes_accepted_append_policy: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            grants_authority: false,
+        },
+    )
+}
+
+pub fn validate_gateway_formal_real_command_lane_local_reviewed_formal_evidence_metadata_input(
+    class_policy: &GatewayFormalRealCommandLaneLocalNonAcceptedClassPolicy,
+    input: &GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataInput,
+) -> GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_REVIEWED_METADATA_SCHEMA_VERSION
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue::InvalidSchemaVersion,
+        );
+    }
+    if !is_single_segment_id(&input.metadata_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue::InvalidMetadataId,
+        );
+    }
+    if input.created_at_unix == 0 {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue::MissingCreatedAt,
+        );
+    }
+    validate_gateway_formal_real_command_lane_local_reviewed_metadata_digests(input, &mut issues);
+    validate_gateway_formal_real_command_lane_local_reviewed_metadata_class_policy(
+        class_policy,
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_real_command_lane_local_reviewed_metadata_policy(input, &mut issues);
+    GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_local_reviewed_metadata_digests(
+    input: &GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue>,
+) {
+    for (label, digest) in [
+        ("class_policy_digest", input.class_policy_digest),
+        ("class_policy_input_digest", input.class_policy_input_digest),
+        ("feasibility_digest", input.feasibility_digest),
+        ("policy_decision_digest", input.policy_decision_digest),
+        ("handoff_digest", input.handoff_digest),
+        ("reviewed_record_digest", input.reviewed_record_digest),
+        (
+            "current_accepted_append_blockers_digest",
+            input.current_accepted_append_blockers_digest,
+        ),
+        ("reviewed_scope_digest", input.reviewed_scope_digest),
+        (
+            "source_correspondence_requirement_digest",
+            input.source_correspondence_requirement_digest,
+        ),
+        ("replay_requirement_digest", input.replay_requirement_digest),
+        ("reviewer_policy_digest", input.reviewer_policy_digest),
+        ("explicit_nonclaims_digest", input.explicit_nonclaims_digest),
+    ] {
+        if digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue::MissingDigest(
+                    label.to_owned(),
+                ),
+            );
+        }
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_local_reviewed_metadata_class_policy(
+    class_policy: &GatewayFormalRealCommandLaneLocalNonAcceptedClassPolicy,
+    input: &GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue>,
+) {
+    if input.class_policy_digest != class_policy.digest()
+        || input.class_policy_input_digest != class_policy.policy_input_digest
+        || input.feasibility_digest != class_policy.feasibility_digest
+        || input.policy_decision_digest != class_policy.policy_decision_digest
+        || input.handoff_digest != class_policy.handoff_digest
+        || input.reviewed_record_digest != class_policy.reviewed_record_digest
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue::ClassPolicyDigestDrift,
+        );
+    }
+    if class_policy.schema_version
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_NON_ACCEPTED_CLASS_POLICY_SCHEMA_VERSION
+        || class_policy.state_slice
+            != GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_NON_ACCEPTED_CLASS_POLICY_STATE_SLICE
+        || class_policy.promotion_state != "local_non_accepted_class_policy_metadata"
+        || class_policy.next_required_state
+            != "local_reviewed_formal_evidence_metadata_class_boundary"
+        || class_policy.claim_boundary
+            != gateway_formal_real_command_lane_local_non_accepted_class_policy_claim_boundary()
+        || class_policy.class_name
+            != GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_CANDIDATE_CLASS
+        || class_policy.owner_path
+            != GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_NON_ACCEPTED_CLASS_POLICY_OWNER_PATH
+        || class_policy.class_status
+            != GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_NON_ACCEPTED_CLASS_POLICY_CLASS_STATUS
+        || class_policy.creates_accepted_evidence
+        || class_policy.changes_accepted_append_policy
+        || class_policy.implements_bounded_formal_evidence_class
+        || class_policy.creates_level2_evidence
+        || class_policy.populates_score_axes
+        || class_policy.proof_artifact_created
+        || class_policy.checker_transcript_created
+        || class_policy.solver_certificate_created
+        || class_policy.semantic_correctness_claimed
+        || class_policy.production_readiness_claimed
+        || class_policy.sota_claimed
+        || class_policy.breakthrough_claimed
+        || class_policy.full_security_claimed
+        || class_policy.grants_authority
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue::ClassPolicyStateMismatch,
+        );
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_local_reviewed_metadata_policy(
+    input: &GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue>,
+) {
+    let blockers = gateway_formal_real_command_lane_accepted_handoff_current_blockers();
+    if input.current_accepted_append_blockers != blockers
+        || input.current_accepted_append_blockers_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-accepted-handoff-current-blockers:v1",
+                &blockers,
+            )
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue::AcceptedAppendBlockerMismatch,
+        );
+    }
+    if input.class_name
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_CANDIDATE_CLASS
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue::ClassNameMismatch,
+        );
+    }
+    if input.owner_path
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_NON_ACCEPTED_CLASS_POLICY_OWNER_PATH
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue::OwnerPathMismatch,
+        );
+    }
+    if input.class_status
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_NON_ACCEPTED_CLASS_POLICY_CLASS_STATUS
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue::ClassStatusMismatch,
+        );
+    }
+    let requirement_digests =
+        gateway_formal_real_command_lane_local_non_accepted_class_policy_requirement_digests();
+    if input.source_correspondence_requirement_digest
+        != requirement_digests["source_correspondence_requirement"]
+        || input.replay_requirement_digest != requirement_digests["replay_requirement"]
+        || input.reviewer_policy_digest != requirement_digests["reviewer_policy_requirement"]
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue::RequirementDigestMismatch,
+        );
+    }
+    let nonclaims = gateway_formal_real_command_lane_local_reviewed_metadata_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-local-reviewed-formal-evidence-metadata-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue::NonclaimMismatch,
+        );
+    }
+    if input.accepted_evidence_mutation_requested
+        || input.accepted_append_policy_change_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.benchmark_or_sota_comparison_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue::PromotionAttempt,
+        );
     }
 }
 
@@ -34543,6 +34953,67 @@ mod tests {
         }
     }
 
+    fn formal_evidence_local_reviewed_metadata_input(
+        metadata_id: &str,
+        class_policy: &GatewayFormalRealCommandLaneLocalNonAcceptedClassPolicy,
+    ) -> GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataInput {
+        let blockers = gateway_formal_real_command_lane_accepted_handoff_current_blockers();
+        let requirement_digests =
+            gateway_formal_real_command_lane_local_non_accepted_class_policy_requirement_digests();
+        let explicit_nonclaims =
+            gateway_formal_real_command_lane_local_reviewed_metadata_required_nonclaims();
+        GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataInput {
+            schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_REVIEWED_METADATA_SCHEMA_VERSION
+                .to_owned(),
+            metadata_id: metadata_id.to_owned(),
+            created_at_unix: 1_800_000_343,
+            class_policy_digest: class_policy.digest(),
+            class_policy_input_digest: class_policy.policy_input_digest,
+            feasibility_digest: class_policy.feasibility_digest,
+            policy_decision_digest: class_policy.policy_decision_digest,
+            handoff_digest: class_policy.handoff_digest,
+            reviewed_record_digest: class_policy.reviewed_record_digest,
+            current_accepted_append_blockers_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-accepted-handoff-current-blockers:v1",
+                &blockers,
+            ),
+            current_accepted_append_blockers: blockers,
+            class_name:
+                GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_CANDIDATE_CLASS
+                    .to_owned(),
+            owner_path: GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_NON_ACCEPTED_CLASS_POLICY_OWNER_PATH
+                .to_owned(),
+            class_status:
+                GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_NON_ACCEPTED_CLASS_POLICY_CLASS_STATUS
+                    .to_owned(),
+            reviewed_scope_digest: class_policy.reviewed_scope_requirement_digest,
+            source_correspondence_requirement_digest: requirement_digests
+                ["source_correspondence_requirement"],
+            replay_requirement_digest: requirement_digests["replay_requirement"],
+            reviewer_policy_digest: requirement_digests["reviewer_policy_requirement"],
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-local-reviewed-formal-evidence-metadata-nonclaims:v1",
+                &explicit_nonclaims,
+            ),
+            explicit_nonclaims,
+            accepted_evidence_mutation_requested: false,
+            accepted_append_policy_change_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            benchmark_or_sota_comparison_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
     #[test]
     fn gateway_formal_real_command_lane_fixed_smt_process_executes_and_quarantines_unsat() {
         let (
@@ -36606,6 +37077,365 @@ mod tests {
         fs::remove_dir_all(&phase327_root).expect("phase341 promotion phase327 cleanup succeeds");
         fs::remove_dir_all(&execution_root).expect("phase341 promotion execution cleanup succeeds");
         fs::remove_dir_all(&source_root).expect("phase341 promotion source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_local_reviewed_metadata_builds_class() {
+        let (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            phase323_manifest,
+            preflight,
+            phase327_manifest,
+            input,
+        ) = real_command_lane_formal_evidence_candidate_parts("real-command-phase343-class");
+        let candidate = build_gateway_formal_real_command_lane_formal_evidence_candidate(
+            &phase323_manifest,
+            &preflight,
+            &phase327_manifest,
+            &input,
+        )
+        .expect("phase343 candidate builds");
+        let preview_input = formal_evidence_review_preview_input(
+            "phase343-class-preview",
+            &candidate,
+            GatewayFormalRealCommandLaneReviewPreviewDecisionLabel::ReviewPreviewAcceptCandidateScope,
+        );
+        let preview =
+            build_gateway_formal_real_command_lane_review_preview(&candidate, &preview_input)
+                .expect("phase343 preview builds");
+        let record_input = formal_evidence_reviewed_record_input("phase343-record", &preview);
+        let reviewed_record =
+            build_gateway_formal_real_command_lane_reviewed_record(&preview, &record_input)
+                .expect("phase343 reviewed record builds");
+        let handoff_input =
+            formal_evidence_accepted_handoff_input("phase343-handoff", &reviewed_record);
+        let handoff = build_gateway_formal_real_command_lane_accepted_handoff(
+            &reviewed_record,
+            &handoff_input,
+        )
+        .expect("phase343 handoff builds");
+        let decision_input =
+            formal_evidence_policy_decision_input("phase343-policy-decision", &handoff);
+        let policy_decision =
+            build_gateway_formal_real_command_lane_policy_decision(&handoff, &decision_input)
+                .expect("phase343 policy decision builds");
+        let feasibility_input =
+            formal_evidence_bounded_feasibility_input("phase343-feasibility", &policy_decision);
+        let feasibility =
+            build_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility(
+                &policy_decision,
+                &feasibility_input,
+            )
+            .expect("phase343 feasibility builds");
+        let class_policy_input =
+            formal_evidence_local_non_accepted_class_policy_input("phase343-policy", &feasibility);
+        let class_policy = build_gateway_formal_real_command_lane_local_non_accepted_class_policy(
+            &feasibility,
+            &class_policy_input,
+        )
+        .expect("phase343 class policy builds");
+        let metadata_input =
+            formal_evidence_local_reviewed_metadata_input("phase343-metadata", &class_policy);
+        let metadata =
+            build_gateway_formal_real_command_lane_local_reviewed_formal_evidence_metadata(
+                &class_policy,
+                &metadata_input,
+            )
+            .expect("phase343 metadata builds");
+
+        assert_eq!(
+            metadata.state_slice,
+            GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_REVIEWED_METADATA_STATE_SLICE
+        );
+        assert_eq!(
+            metadata.previous_promotion_state,
+            "local_non_accepted_class_policy_metadata"
+        );
+        assert_eq!(
+            metadata.promotion_state,
+            "local_reviewed_formal_evidence_metadata"
+        );
+        assert_eq!(
+            metadata.next_required_state,
+            "local_reviewed_formal_evidence_metadata_review_boundary"
+        );
+        assert_eq!(metadata.class_policy_digest, class_policy.digest());
+        assert_eq!(metadata.feasibility_digest, class_policy.feasibility_digest);
+        assert_eq!(
+            metadata.class_name,
+            GATEWAY_FORMAL_REAL_COMMAND_LANE_BOUNDED_FORMAL_EVIDENCE_FEASIBILITY_CANDIDATE_CLASS
+        );
+        assert_eq!(
+            metadata.owner_path,
+            GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_NON_ACCEPTED_CLASS_POLICY_OWNER_PATH
+        );
+        assert_eq!(
+            metadata.class_status,
+            GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_NON_ACCEPTED_CLASS_POLICY_CLASS_STATUS
+        );
+        assert_eq!(
+            metadata.claim_boundary,
+            gateway_formal_real_command_lane_local_reviewed_metadata_claim_boundary()
+        );
+        assert!(!metadata.creates_accepted_evidence);
+        assert!(!metadata.changes_accepted_append_policy);
+        assert!(!metadata.creates_level2_evidence);
+        assert!(!metadata.populates_score_axes);
+        assert!(!metadata.proof_artifact_created);
+        assert!(!metadata.checker_transcript_created);
+        assert!(!metadata.solver_certificate_created);
+        assert!(!metadata.semantic_correctness_claimed);
+        assert!(!metadata.production_readiness_claimed);
+        assert!(!metadata.sota_claimed);
+        assert!(!metadata.breakthrough_claimed);
+        assert!(!metadata.full_security_claimed);
+        assert!(!metadata.grants_authority);
+
+        fs::remove_dir_all(&phase323_root).expect("phase343 class phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase343 class phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase343 class execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase343 class source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_local_reviewed_metadata_rejects_drift() {
+        let (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            phase323_manifest,
+            preflight,
+            phase327_manifest,
+            input,
+        ) = real_command_lane_formal_evidence_candidate_parts("real-command-phase343-drift");
+        let candidate = build_gateway_formal_real_command_lane_formal_evidence_candidate(
+            &phase323_manifest,
+            &preflight,
+            &phase327_manifest,
+            &input,
+        )
+        .expect("phase343 drift candidate builds");
+        let preview_input = formal_evidence_review_preview_input(
+            "phase343-drift-preview",
+            &candidate,
+            GatewayFormalRealCommandLaneReviewPreviewDecisionLabel::ReviewPreviewAcceptCandidateScope,
+        );
+        let preview =
+            build_gateway_formal_real_command_lane_review_preview(&candidate, &preview_input)
+                .expect("phase343 drift preview builds");
+        let record_input = formal_evidence_reviewed_record_input("phase343-drift-record", &preview);
+        let reviewed_record =
+            build_gateway_formal_real_command_lane_reviewed_record(&preview, &record_input)
+                .expect("phase343 drift reviewed record builds");
+        let handoff_input =
+            formal_evidence_accepted_handoff_input("phase343-drift-handoff", &reviewed_record);
+        let handoff = build_gateway_formal_real_command_lane_accepted_handoff(
+            &reviewed_record,
+            &handoff_input,
+        )
+        .expect("phase343 drift handoff builds");
+        let decision_input =
+            formal_evidence_policy_decision_input("phase343-drift-decision", &handoff);
+        let policy_decision =
+            build_gateway_formal_real_command_lane_policy_decision(&handoff, &decision_input)
+                .expect("phase343 drift policy decision builds");
+        let feasibility_input = formal_evidence_bounded_feasibility_input(
+            "phase343-drift-feasibility",
+            &policy_decision,
+        );
+        let feasibility =
+            build_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility(
+                &policy_decision,
+                &feasibility_input,
+            )
+            .expect("phase343 drift feasibility builds");
+        let class_policy_input = formal_evidence_local_non_accepted_class_policy_input(
+            "phase343-drift-policy",
+            &feasibility,
+        );
+        let class_policy = build_gateway_formal_real_command_lane_local_non_accepted_class_policy(
+            &feasibility,
+            &class_policy_input,
+        )
+        .expect("phase343 drift class policy builds");
+        let metadata_input =
+            formal_evidence_local_reviewed_metadata_input("phase343-drift-metadata", &class_policy);
+
+        let mut policy_drift = metadata_input.clone();
+        policy_drift.class_policy_digest = Hash([12; 32]);
+        let policy_validation =
+            validate_gateway_formal_real_command_lane_local_reviewed_formal_evidence_metadata_input(
+                &class_policy,
+                &policy_drift,
+            );
+        assert!(policy_validation.issues.contains(
+            &GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue::ClassPolicyDigestDrift
+        ));
+
+        let mut class_drift = metadata_input.clone();
+        class_drift.class_name = "ProofCertificate".to_owned();
+        let class_validation =
+            validate_gateway_formal_real_command_lane_local_reviewed_formal_evidence_metadata_input(
+                &class_policy,
+                &class_drift,
+            );
+        assert!(class_validation.issues.contains(
+            &GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue::ClassNameMismatch
+        ));
+
+        let mut owner_drift = metadata_input.clone();
+        owner_drift.owner_path = "accepted_append_path".to_owned();
+        let owner_validation =
+            validate_gateway_formal_real_command_lane_local_reviewed_formal_evidence_metadata_input(
+                &class_policy,
+                &owner_drift,
+            );
+        assert!(owner_validation.issues.contains(
+            &GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue::OwnerPathMismatch
+        ));
+
+        let mut status_drift = metadata_input.clone();
+        status_drift.class_status = "accepted_formal_evidence".to_owned();
+        let status_validation =
+            validate_gateway_formal_real_command_lane_local_reviewed_formal_evidence_metadata_input(
+                &class_policy,
+                &status_drift,
+            );
+        assert!(status_validation.issues.contains(
+            &GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue::ClassStatusMismatch
+        ));
+
+        let mut requirement_drift = metadata_input.clone();
+        requirement_drift.replay_requirement_digest = Hash([13; 32]);
+        let requirement_validation =
+            validate_gateway_formal_real_command_lane_local_reviewed_formal_evidence_metadata_input(
+                &class_policy,
+                &requirement_drift,
+            );
+        assert!(requirement_validation.issues.contains(
+            &GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue::RequirementDigestMismatch
+        ));
+
+        let mut promoted_policy = class_policy.clone();
+        promoted_policy.creates_accepted_evidence = true;
+        let policy_state_validation =
+            validate_gateway_formal_real_command_lane_local_reviewed_formal_evidence_metadata_input(
+                &promoted_policy,
+                &metadata_input,
+            );
+        assert!(policy_state_validation.issues.contains(
+            &GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue::ClassPolicyStateMismatch
+        ));
+
+        fs::remove_dir_all(&phase323_root).expect("phase343 drift phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase343 drift phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase343 drift execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase343 drift source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_local_reviewed_metadata_rejects_promotion() {
+        let (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            phase323_manifest,
+            preflight,
+            phase327_manifest,
+            input,
+        ) = real_command_lane_formal_evidence_candidate_parts("real-command-phase343-promotion");
+        let candidate = build_gateway_formal_real_command_lane_formal_evidence_candidate(
+            &phase323_manifest,
+            &preflight,
+            &phase327_manifest,
+            &input,
+        )
+        .expect("phase343 promotion candidate builds");
+        let preview_input = formal_evidence_review_preview_input(
+            "phase343-promotion-preview",
+            &candidate,
+            GatewayFormalRealCommandLaneReviewPreviewDecisionLabel::ReviewPreviewAcceptCandidateScope,
+        );
+        let preview =
+            build_gateway_formal_real_command_lane_review_preview(&candidate, &preview_input)
+                .expect("phase343 promotion preview builds");
+        let record_input =
+            formal_evidence_reviewed_record_input("phase343-promotion-record", &preview);
+        let reviewed_record =
+            build_gateway_formal_real_command_lane_reviewed_record(&preview, &record_input)
+                .expect("phase343 promotion reviewed record builds");
+        let handoff_input =
+            formal_evidence_accepted_handoff_input("phase343-promotion-handoff", &reviewed_record);
+        let handoff = build_gateway_formal_real_command_lane_accepted_handoff(
+            &reviewed_record,
+            &handoff_input,
+        )
+        .expect("phase343 promotion handoff builds");
+        let decision_input =
+            formal_evidence_policy_decision_input("phase343-promotion-decision", &handoff);
+        let policy_decision =
+            build_gateway_formal_real_command_lane_policy_decision(&handoff, &decision_input)
+                .expect("phase343 promotion policy decision builds");
+        let feasibility_input = formal_evidence_bounded_feasibility_input(
+            "phase343-promotion-feasibility",
+            &policy_decision,
+        );
+        let feasibility =
+            build_gateway_formal_real_command_lane_bounded_formal_evidence_feasibility(
+                &policy_decision,
+                &feasibility_input,
+            )
+            .expect("phase343 promotion feasibility builds");
+        let class_policy_input = formal_evidence_local_non_accepted_class_policy_input(
+            "phase343-promotion-policy",
+            &feasibility,
+        );
+        let class_policy = build_gateway_formal_real_command_lane_local_non_accepted_class_policy(
+            &feasibility,
+            &class_policy_input,
+        )
+        .expect("phase343 promotion class policy builds");
+        let mut metadata_input = formal_evidence_local_reviewed_metadata_input(
+            "phase343-promotion-metadata",
+            &class_policy,
+        );
+
+        metadata_input.accepted_evidence_mutation_requested = true;
+        metadata_input.accepted_append_policy_change_requested = true;
+        metadata_input.accepted_formal_evidence_created = true;
+        metadata_input.creates_level2_evidence = true;
+        metadata_input.populates_score_axes = true;
+        metadata_input.proof_artifact_promoted = true;
+        metadata_input.checker_transcript_promoted = true;
+        metadata_input.solver_certificate_promoted = true;
+        metadata_input.sota_claimed = true;
+        metadata_input.full_security_claimed = true;
+        metadata_input.action_authority_claimed = true;
+        let validation =
+            validate_gateway_formal_real_command_lane_local_reviewed_formal_evidence_metadata_input(
+                &class_policy,
+                &metadata_input,
+            );
+        assert!(validation.issues.contains(
+            &GatewayFormalRealCommandLaneLocalReviewedFormalEvidenceMetadataIssue::PromotionAttempt
+        ));
+        assert!(
+            build_gateway_formal_real_command_lane_local_reviewed_formal_evidence_metadata(
+                &class_policy,
+                &metadata_input,
+            )
+            .is_err()
+        );
+
+        fs::remove_dir_all(&phase323_root).expect("phase343 promotion phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase343 promotion phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase343 promotion execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase343 promotion source cleanup succeeds");
     }
 
     #[test]
