@@ -5799,5 +5799,16 @@ append policy change, not Level2+ evidence, not score-axis evidence, not proof
 artifacts, not checker transcripts, not solver certificates, and not a
 production/SOTA/security/semantic-correctness claim.
 
+[docs/420-hsai-tiny-z3-local-reviewed-metadata-class-boundary.md](docs/420-hsai-tiny-z3-local-reviewed-metadata-class-boundary.md)
+records the Phase 420 docs-first boundary for a future
+`TinyZ3LocalReviewedFormalEvidenceMetadata` class. It defines the only valid
+class name, required future digest bindings, owner path, class status,
+validation requirements, rejection cases, evidence meaning, and Phase 421
+implementation exit criteria. This is boundary documentation only: no Rust
+class implementation, accepted formal evidence, accepted Evidence Ledger
+mutation, accepted append policy change, Level2+ evidence, score-axis evidence,
+proof artifact, checker transcript, solver certificate, Lean/COBALT/
+Rust-to-Lean execution, or production/SOTA/security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
