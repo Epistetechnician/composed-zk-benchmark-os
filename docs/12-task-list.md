@@ -7967,6 +7967,44 @@ no accepted formal evidence, no accepted Evidence Ledger mutation, no Level2+
 evidence, no score axes, no proof-authority claim, and no
 production/SOTA/security/correctness claim.
 
+## Phase 336 HSAI Accepted Formal Evidence Policy Decision Boundary
+
+Status: complete. See
+`docs/336-hsai-accepted-formal-evidence-policy-decision-boundary.md`.
+
+Goal: define the docs-first policy decision for accepted formal evidence in the
+current accepted append path.
+
+Implemented: current-path policy decision that formal evidence remains
+forbidden in the existing `zkbench-core` accepted append path, current code
+constraint summary, allowed future policy shapes, bounded-class prerequisites,
+forbidden shortcuts, evidence meaning limits, and future Phase 337
+policy-decision metadata exit criteria.
+
+Validation coverage: documentation now records that Phase 335 handoff metadata
+does not become accepted formal evidence and that the current accepted append
+path must keep rejecting formal evidence classes until a separate future phase
+defines, implements, and tests a bounded formal-evidence policy.
+
+Validation gate: formatting, docs/hygiene checks, diff hygiene, empty-file
+hygiene, package-root lint check, claim-boundary source scans, repo docs tests,
+and full workspace tests.
+
+Anti-goals: Rust implementation code, Cargo metadata changes, accepted Evidence
+Ledger mutation, accepted append policy changes, accepted formal evidence,
+Level2+ evidence, score-axis population, proof artifact generation or
+promotion, checker transcript generation or promotion, solver certificate
+generation or promotion, Lean execution, COBALT execution, Rust-to-Lean
+extraction, benchmark submission, production deployment, semantic-correctness
+claims, production-readiness claims, SOTA claims, breakthrough claims,
+full-security claims, or action authority.
+
+Exit criteria: HSAI now has an explicit policy boundary stating that accepted
+formal evidence remains forbidden in the current accepted append path. It still
+has no accepted formal evidence, no accepted Evidence Ledger mutation, no
+Level2+ evidence, no score axes, no proof-authority claim, and no
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
