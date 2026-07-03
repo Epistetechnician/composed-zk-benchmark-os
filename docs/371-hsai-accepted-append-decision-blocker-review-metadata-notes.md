@@ -167,10 +167,10 @@ Phase 371 adds tests that:
 
 ## Next Slice
 
-Phase 372 should define a docs-first boundary for accepted-append decision
-quarantine metadata before any accepted append decision is allowed. That
-boundary must keep quarantine metadata separate from accepted formal evidence,
-accepted Evidence Ledger mutation, accepted append policy changes, Level2+
-evidence, score axes, Lean execution, SMT execution, COBALT execution,
-Rust-to-Lean extraction, semantic correctness, production readiness, SOTA,
-breakthrough status, full security, and action authority.
+Phase 372 defines a docs-first boundary for accepted-append decision quarantine
+metadata before any accepted append decision is allowed. That boundary keeps
+quarantine metadata separate from accepted formal evidence, accepted Evidence
+Ledger mutation, accepted append policy changes, Level2+ evidence, score axes,
+Lean execution, SMT execution, COBALT execution, Rust-to-Lean extraction,
+semantic correctness, production readiness, SOTA, breakthrough status, full
+security, and action authority.
