@@ -763,6 +763,11 @@ pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_ACCEPTED_APPEND_DECISION_QUARANTINE_R
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_ACCEPTED_APPEND_DECISION_QUARANTINE_REVIEW_STATE_SLICE:
     &str = "phase-375-hsai-accepted-append-decision-quarantine-review-metadata";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_ACCEPTED_APPEND_DECISION_QUARANTINE_REVIEW_CLAIM_BOUNDARY: &str = "local accepted-append decision quarantine review metadata only; reviews why one Phase 373 accepted-append decision quarantine remains isolated from the accepted append path, but does not make an accepted append decision, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_PLAN_SCHEMA_VERSION:
+    &str = "hsai-gateway-formal-real-command-lane-accepted-append-decision-quarantine-resolution-plan:v1";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_PLAN_STATE_SLICE:
+    &str = "phase-377-hsai-accepted-append-decision-quarantine-resolution-planning-metadata";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_PLAN_CLAIM_BOUNDARY: &str = "local accepted-append decision quarantine-resolution planning metadata only; plans why one Phase 375 accepted-append decision quarantine review still keeps the accepted append path blocked, but does not make an accepted append decision, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GatewayAttestationChallengeBinding {
@@ -8413,6 +8418,234 @@ pub enum GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineReviewIssue
 pub struct GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineReviewValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineReviewIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanLabel {
+    ResolutionPlanScopeAcceptable,
+    ResolutionPlanRejected,
+    AcceptedAppendDecisionStillBlocked,
+    AcceptedLedgerMutationStillBlocked,
+    Level2EvidenceStillBlocked,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanInput {
+    pub schema_version: String,
+    pub accepted_append_decision_quarantine_resolution_plan_id: String,
+    pub quarantine_policy_id: String,
+    pub quarantine_decision_id: String,
+    pub resolution_policy_id: String,
+    pub resolution_decision_id: String,
+    pub proposal_policy_id: String,
+    pub proposal_candidate_id: String,
+    pub proposal_review_id: String,
+    pub append_preflight_id: String,
+    pub append_preflight_review_id: String,
+    pub accepted_append_decision_candidate_id: String,
+    pub accepted_append_decision_candidate_review_id: String,
+    pub accepted_append_decision_blocker_id: String,
+    pub accepted_append_decision_blocker_review_id: String,
+    pub accepted_append_decision_quarantine_id: String,
+    pub accepted_append_decision_quarantine_review_id: String,
+    pub planning_decision_at_unix: u64,
+    pub phase375_quarantine_review_digest: Hash,
+    pub phase375_quarantine_review_input_digest: Hash,
+    pub phase373_quarantine_digest: Hash,
+    pub phase373_quarantine_input_digest: Hash,
+    pub phase371_blocker_review_digest: Hash,
+    pub phase371_blocker_review_input_digest: Hash,
+    pub phase369_blocker_digest: Hash,
+    pub phase369_blocker_input_digest: Hash,
+    pub phase367_review_digest: Hash,
+    pub phase367_review_input_digest: Hash,
+    pub phase365_candidate_digest: Hash,
+    pub phase365_candidate_input_digest: Hash,
+    pub phase363_review_digest: Hash,
+    pub phase363_review_input_digest: Hash,
+    pub phase361_preflight_digest: Hash,
+    pub phase361_preflight_input_digest: Hash,
+    pub phase359_review_digest: Hash,
+    pub phase359_review_input_digest: Hash,
+    pub phase357_candidate_digest: Hash,
+    pub phase357_candidate_input_digest: Hash,
+    pub phase355_review_digest: Hash,
+    pub phase353_materialized_manifest_digest: Hash,
+    pub phase351_review_digest: Hash,
+    pub phase349_serialization_preview_digest: Hash,
+    pub phase347_audit_package_digest: Hash,
+    pub phase345_review_record_digest: Hash,
+    pub phase343_metadata_digest: Hash,
+    pub declared_file_digest_map_digest: Hash,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub candidate_disposition:
+        GatewayFormalRealCommandLaneAcceptedAppendDecisionCandidateDisposition,
+    pub candidate_review_label:
+        GatewayFormalRealCommandLaneAcceptedAppendDecisionCandidateReviewLabel,
+    pub blocker_label: GatewayFormalRealCommandLaneAcceptedAppendDecisionBlockerLabel,
+    pub blocker_review_label: GatewayFormalRealCommandLaneAcceptedAppendDecisionBlockerReviewLabel,
+    pub quarantine_label: GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineLabel,
+    pub quarantine_review_label:
+        GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineReviewLabel,
+    pub resolution_plan_label:
+        GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanLabel,
+    pub planning_summary: String,
+    pub accepted_append_decision_requested: bool,
+    pub accepted_evidence_mutation_requested: bool,
+    pub accepted_append_policy_change_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub benchmark_or_sota_comparison_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-accepted-append-decision-quarantine-resolution-plan-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlan {
+    pub schema_version: String,
+    pub accepted_append_decision_quarantine_resolution_plan_id: String,
+    pub state_slice: String,
+    pub planning_input_digest: Hash,
+    pub quarantine_policy_id: String,
+    pub quarantine_decision_id: String,
+    pub resolution_policy_id: String,
+    pub resolution_decision_id: String,
+    pub proposal_policy_id: String,
+    pub proposal_candidate_id: String,
+    pub proposal_review_id: String,
+    pub append_preflight_id: String,
+    pub append_preflight_review_id: String,
+    pub accepted_append_decision_candidate_id: String,
+    pub accepted_append_decision_candidate_review_id: String,
+    pub accepted_append_decision_blocker_id: String,
+    pub accepted_append_decision_blocker_review_id: String,
+    pub accepted_append_decision_quarantine_id: String,
+    pub accepted_append_decision_quarantine_review_id: String,
+    pub planning_decision_at_unix: u64,
+    pub phase375_quarantine_review_digest: Hash,
+    pub phase375_quarantine_review_input_digest: Hash,
+    pub phase373_quarantine_digest: Hash,
+    pub phase373_quarantine_input_digest: Hash,
+    pub phase371_blocker_review_digest: Hash,
+    pub phase371_blocker_review_input_digest: Hash,
+    pub phase369_blocker_digest: Hash,
+    pub phase369_blocker_input_digest: Hash,
+    pub phase367_review_digest: Hash,
+    pub phase367_review_input_digest: Hash,
+    pub phase365_candidate_digest: Hash,
+    pub phase365_candidate_input_digest: Hash,
+    pub phase363_review_digest: Hash,
+    pub phase363_review_input_digest: Hash,
+    pub phase361_preflight_digest: Hash,
+    pub phase361_preflight_input_digest: Hash,
+    pub phase359_review_digest: Hash,
+    pub phase359_review_input_digest: Hash,
+    pub phase357_candidate_digest: Hash,
+    pub phase357_candidate_input_digest: Hash,
+    pub phase355_review_digest: Hash,
+    pub phase353_materialized_manifest_digest: Hash,
+    pub phase351_review_digest: Hash,
+    pub phase349_serialization_preview_digest: Hash,
+    pub phase347_audit_package_digest: Hash,
+    pub phase345_review_record_digest: Hash,
+    pub phase343_metadata_digest: Hash,
+    pub declared_file_digest_map_digest: Hash,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub candidate_disposition:
+        GatewayFormalRealCommandLaneAcceptedAppendDecisionCandidateDisposition,
+    pub candidate_review_label:
+        GatewayFormalRealCommandLaneAcceptedAppendDecisionCandidateReviewLabel,
+    pub blocker_label: GatewayFormalRealCommandLaneAcceptedAppendDecisionBlockerLabel,
+    pub blocker_review_label: GatewayFormalRealCommandLaneAcceptedAppendDecisionBlockerReviewLabel,
+    pub quarantine_label: GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineLabel,
+    pub quarantine_review_label:
+        GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineReviewLabel,
+    pub resolution_plan_label:
+        GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanLabel,
+    pub planning_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub makes_accepted_append_decision: bool,
+    pub creates_accepted_evidence: bool,
+    pub changes_accepted_append_policy: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlan {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-accepted-append-decision-quarantine-resolution-plan:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue {
+    InvalidSchemaVersion,
+    InvalidAcceptedAppendDecisionQuarantineResolutionPlanId,
+    InvalidQuarantinePolicyId,
+    InvalidQuarantineDecisionId,
+    InvalidResolutionPolicyId,
+    InvalidResolutionDecisionId,
+    InvalidProposalPolicyId,
+    InvalidProposalCandidateId,
+    InvalidProposalReviewId,
+    InvalidAppendPreflightId,
+    InvalidAppendPreflightReviewId,
+    InvalidAcceptedAppendDecisionCandidateId,
+    InvalidAcceptedAppendDecisionCandidateReviewId,
+    InvalidAcceptedAppendDecisionBlockerId,
+    InvalidAcceptedAppendDecisionBlockerReviewId,
+    InvalidAcceptedAppendDecisionQuarantineId,
+    InvalidAcceptedAppendDecisionQuarantineReviewId,
+    MissingPlanningDecisionTimestamp,
+    MissingDigest(String),
+    Phase375QuarantineReviewDigestDrift,
+    Phase375QuarantineReviewStateMismatch,
+    AcceptedAppendBlockerMismatch,
+    NonclaimMismatch,
+    PlanningSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanValidation {
+    pub valid: bool,
+    pub issues:
+        Vec<GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -22138,6 +22371,12 @@ pub fn gateway_formal_real_command_lane_accepted_append_decision_quarantine_revi
         .to_owned()
 }
 
+pub fn gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan_claim_boundary(
+) -> String {
+    GATEWAY_FORMAL_REAL_COMMAND_LANE_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_PLAN_CLAIM_BOUNDARY
+        .to_owned()
+}
+
 pub fn gateway_formal_real_command_lane_policy_decision_statement() -> String {
     "accepted formal evidence remains forbidden in the current accepted append path".to_owned()
 }
@@ -22442,6 +22681,19 @@ pub fn gateway_formal_real_command_lane_accepted_append_decision_quarantine_revi
     ));
     nonclaims.insert(NonClaimLabel(
         "quarantine review is not accepted append decision".to_owned(),
+    ));
+    nonclaims
+}
+
+pub fn gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims =
+        gateway_formal_real_command_lane_accepted_append_decision_quarantine_review_required_nonclaims();
+    nonclaims.insert(NonClaimLabel(
+        "local accepted-append decision quarantine-resolution planning metadata only".to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel(
+        "quarantine-resolution plan is not accepted append decision".to_owned(),
     ));
     nonclaims
 }
@@ -31246,6 +31498,500 @@ fn validate_gateway_formal_real_command_lane_accepted_append_decision_quarantine
     {
         issues.push(
             GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineReviewIssue::PromotionAttempt,
+        );
+    }
+}
+
+pub fn build_gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan(
+    review: &GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineReview,
+    input: &GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanInput,
+) -> Result<
+    GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlan,
+    GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanValidation,
+> {
+    let validation =
+        validate_gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan_input(
+            review, input,
+        );
+    if !validation.valid {
+        return Err(validation);
+    }
+    Ok(
+        GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlan {
+            schema_version:
+                GATEWAY_FORMAL_REAL_COMMAND_LANE_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_PLAN_SCHEMA_VERSION
+                    .to_owned(),
+            accepted_append_decision_quarantine_resolution_plan_id: input
+                .accepted_append_decision_quarantine_resolution_plan_id
+                .clone(),
+            state_slice:
+                GATEWAY_FORMAL_REAL_COMMAND_LANE_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_PLAN_STATE_SLICE
+                    .to_owned(),
+            planning_input_digest: input.digest(),
+            quarantine_policy_id: input.quarantine_policy_id.clone(),
+            quarantine_decision_id: input.quarantine_decision_id.clone(),
+            resolution_policy_id: input.resolution_policy_id.clone(),
+            resolution_decision_id: input.resolution_decision_id.clone(),
+            proposal_policy_id: input.proposal_policy_id.clone(),
+            proposal_candidate_id: input.proposal_candidate_id.clone(),
+            proposal_review_id: input.proposal_review_id.clone(),
+            append_preflight_id: input.append_preflight_id.clone(),
+            append_preflight_review_id: input.append_preflight_review_id.clone(),
+            accepted_append_decision_candidate_id: input
+                .accepted_append_decision_candidate_id
+                .clone(),
+            accepted_append_decision_candidate_review_id: input
+                .accepted_append_decision_candidate_review_id
+                .clone(),
+            accepted_append_decision_blocker_id: input.accepted_append_decision_blocker_id.clone(),
+            accepted_append_decision_blocker_review_id: input
+                .accepted_append_decision_blocker_review_id
+                .clone(),
+            accepted_append_decision_quarantine_id: input
+                .accepted_append_decision_quarantine_id
+                .clone(),
+            accepted_append_decision_quarantine_review_id: input
+                .accepted_append_decision_quarantine_review_id
+                .clone(),
+            planning_decision_at_unix: input.planning_decision_at_unix,
+            phase375_quarantine_review_digest: review.digest(),
+            phase375_quarantine_review_input_digest: review.review_input_digest,
+            phase373_quarantine_digest: review.phase373_quarantine_digest,
+            phase373_quarantine_input_digest: review.phase373_quarantine_input_digest,
+            phase371_blocker_review_digest: review.phase371_blocker_review_digest,
+            phase371_blocker_review_input_digest: review.phase371_blocker_review_input_digest,
+            phase369_blocker_digest: review.phase369_blocker_digest,
+            phase369_blocker_input_digest: review.phase369_blocker_input_digest,
+            phase367_review_digest: review.phase367_review_digest,
+            phase367_review_input_digest: review.phase367_review_input_digest,
+            phase365_candidate_digest: review.phase365_candidate_digest,
+            phase365_candidate_input_digest: review.phase365_candidate_input_digest,
+            phase363_review_digest: review.phase363_review_digest,
+            phase363_review_input_digest: review.phase363_review_input_digest,
+            phase361_preflight_digest: review.phase361_preflight_digest,
+            phase361_preflight_input_digest: review.phase361_preflight_input_digest,
+            phase359_review_digest: review.phase359_review_digest,
+            phase359_review_input_digest: review.phase359_review_input_digest,
+            phase357_candidate_digest: review.phase357_candidate_digest,
+            phase357_candidate_input_digest: review.phase357_candidate_input_digest,
+            phase355_review_digest: review.phase355_review_digest,
+            phase353_materialized_manifest_digest: review.phase353_materialized_manifest_digest,
+            phase351_review_digest: review.phase351_review_digest,
+            phase349_serialization_preview_digest: review.phase349_serialization_preview_digest,
+            phase347_audit_package_digest: review.phase347_audit_package_digest,
+            phase345_review_record_digest: review.phase345_review_record_digest,
+            phase343_metadata_digest: review.phase343_metadata_digest,
+            declared_file_digest_map_digest: review.declared_file_digest_map_digest,
+            current_accepted_append_blockers_digest: review.current_accepted_append_blockers_digest,
+            candidate_disposition: input.candidate_disposition.clone(),
+            candidate_review_label: input.candidate_review_label.clone(),
+            blocker_label: input.blocker_label.clone(),
+            blocker_review_label: input.blocker_review_label.clone(),
+            quarantine_label: input.quarantine_label.clone(),
+            quarantine_review_label: input.quarantine_review_label.clone(),
+            resolution_plan_label: input.resolution_plan_label.clone(),
+            planning_summary: input.planning_summary.clone(),
+            previous_promotion_state:
+                "local_accepted_append_decision_quarantine_review_metadata".to_owned(),
+            promotion_state:
+                "local_accepted_append_decision_quarantine_resolution_planning_metadata"
+                    .to_owned(),
+            next_required_state: "accepted_append_decision_still_blocked".to_owned(),
+            claim_boundary:
+                gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan_claim_boundary(),
+            explicit_nonclaims: input.explicit_nonclaims.clone(),
+            makes_accepted_append_decision: false,
+            creates_accepted_evidence: false,
+            changes_accepted_append_policy: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            grants_authority: false,
+        },
+    )
+}
+
+pub fn validate_gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan_input(
+    review: &GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineReview,
+    input: &GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanInput,
+) -> GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_PLAN_SCHEMA_VERSION
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::InvalidSchemaVersion,
+        );
+    }
+    if !is_single_segment_id(&input.accepted_append_decision_quarantine_resolution_plan_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::InvalidAcceptedAppendDecisionQuarantineResolutionPlanId,
+        );
+    }
+    if !is_single_segment_id(&input.quarantine_policy_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::InvalidQuarantinePolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.quarantine_decision_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::InvalidQuarantineDecisionId,
+        );
+    }
+    if !is_single_segment_id(&input.resolution_policy_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::InvalidResolutionPolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.resolution_decision_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::InvalidResolutionDecisionId,
+        );
+    }
+    if !is_single_segment_id(&input.proposal_policy_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::InvalidProposalPolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.proposal_candidate_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::InvalidProposalCandidateId,
+        );
+    }
+    if !is_single_segment_id(&input.proposal_review_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::InvalidProposalReviewId,
+        );
+    }
+    if !is_single_segment_id(&input.append_preflight_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::InvalidAppendPreflightId,
+        );
+    }
+    if !is_single_segment_id(&input.append_preflight_review_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::InvalidAppendPreflightReviewId,
+        );
+    }
+    if !is_single_segment_id(&input.accepted_append_decision_candidate_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::InvalidAcceptedAppendDecisionCandidateId,
+        );
+    }
+    if !is_single_segment_id(&input.accepted_append_decision_candidate_review_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::InvalidAcceptedAppendDecisionCandidateReviewId,
+        );
+    }
+    if !is_single_segment_id(&input.accepted_append_decision_blocker_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::InvalidAcceptedAppendDecisionBlockerId,
+        );
+    }
+    if !is_single_segment_id(&input.accepted_append_decision_blocker_review_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::InvalidAcceptedAppendDecisionBlockerReviewId,
+        );
+    }
+    if !is_single_segment_id(&input.accepted_append_decision_quarantine_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::InvalidAcceptedAppendDecisionQuarantineId,
+        );
+    }
+    if !is_single_segment_id(&input.accepted_append_decision_quarantine_review_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::InvalidAcceptedAppendDecisionQuarantineReviewId,
+        );
+    }
+    if input.planning_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::MissingPlanningDecisionTimestamp,
+        );
+    }
+    validate_gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan_digests(
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan_review(
+        review,
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan_policy(
+        input,
+        &mut issues,
+    );
+    GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan_digests(
+    input: &GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanInput,
+    issues: &mut Vec<
+        GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue,
+    >,
+) {
+    for (label, digest) in [
+        (
+            "phase375_quarantine_review_digest",
+            input.phase375_quarantine_review_digest,
+        ),
+        (
+            "phase375_quarantine_review_input_digest",
+            input.phase375_quarantine_review_input_digest,
+        ),
+        (
+            "phase373_quarantine_digest",
+            input.phase373_quarantine_digest,
+        ),
+        (
+            "phase373_quarantine_input_digest",
+            input.phase373_quarantine_input_digest,
+        ),
+        (
+            "phase371_blocker_review_digest",
+            input.phase371_blocker_review_digest,
+        ),
+        (
+            "phase371_blocker_review_input_digest",
+            input.phase371_blocker_review_input_digest,
+        ),
+        ("phase369_blocker_digest", input.phase369_blocker_digest),
+        (
+            "phase369_blocker_input_digest",
+            input.phase369_blocker_input_digest,
+        ),
+        ("phase367_review_digest", input.phase367_review_digest),
+        (
+            "phase367_review_input_digest",
+            input.phase367_review_input_digest,
+        ),
+        ("phase365_candidate_digest", input.phase365_candidate_digest),
+        (
+            "phase365_candidate_input_digest",
+            input.phase365_candidate_input_digest,
+        ),
+        ("phase363_review_digest", input.phase363_review_digest),
+        (
+            "phase363_review_input_digest",
+            input.phase363_review_input_digest,
+        ),
+        ("phase361_preflight_digest", input.phase361_preflight_digest),
+        (
+            "phase361_preflight_input_digest",
+            input.phase361_preflight_input_digest,
+        ),
+        ("phase359_review_digest", input.phase359_review_digest),
+        (
+            "phase359_review_input_digest",
+            input.phase359_review_input_digest,
+        ),
+        ("phase357_candidate_digest", input.phase357_candidate_digest),
+        (
+            "phase357_candidate_input_digest",
+            input.phase357_candidate_input_digest,
+        ),
+        ("phase355_review_digest", input.phase355_review_digest),
+        (
+            "phase353_materialized_manifest_digest",
+            input.phase353_materialized_manifest_digest,
+        ),
+        ("phase351_review_digest", input.phase351_review_digest),
+        (
+            "phase349_serialization_preview_digest",
+            input.phase349_serialization_preview_digest,
+        ),
+        (
+            "phase347_audit_package_digest",
+            input.phase347_audit_package_digest,
+        ),
+        (
+            "phase345_review_record_digest",
+            input.phase345_review_record_digest,
+        ),
+        ("phase343_metadata_digest", input.phase343_metadata_digest),
+        (
+            "declared_file_digest_map_digest",
+            input.declared_file_digest_map_digest,
+        ),
+        ("explicit_nonclaims_digest", input.explicit_nonclaims_digest),
+        (
+            "current_accepted_append_blockers_digest",
+            input.current_accepted_append_blockers_digest,
+        ),
+    ] {
+        if digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::MissingDigest(
+                    label.to_owned(),
+                ),
+            );
+        }
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan_review(
+    review: &GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineReview,
+    input: &GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanInput,
+    issues: &mut Vec<
+        GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue,
+    >,
+) {
+    if input.phase375_quarantine_review_digest != review.digest()
+        || input.phase375_quarantine_review_input_digest != review.review_input_digest
+        || input.phase373_quarantine_digest != review.phase373_quarantine_digest
+        || input.phase373_quarantine_input_digest != review.phase373_quarantine_input_digest
+        || input.phase371_blocker_review_digest != review.phase371_blocker_review_digest
+        || input.phase371_blocker_review_input_digest != review.phase371_blocker_review_input_digest
+        || input.phase369_blocker_digest != review.phase369_blocker_digest
+        || input.phase369_blocker_input_digest != review.phase369_blocker_input_digest
+        || input.phase367_review_digest != review.phase367_review_digest
+        || input.phase367_review_input_digest != review.phase367_review_input_digest
+        || input.phase365_candidate_digest != review.phase365_candidate_digest
+        || input.phase365_candidate_input_digest != review.phase365_candidate_input_digest
+        || input.phase363_review_digest != review.phase363_review_digest
+        || input.phase363_review_input_digest != review.phase363_review_input_digest
+        || input.phase361_preflight_digest != review.phase361_preflight_digest
+        || input.phase361_preflight_input_digest != review.phase361_preflight_input_digest
+        || input.phase359_review_digest != review.phase359_review_digest
+        || input.phase359_review_input_digest != review.phase359_review_input_digest
+        || input.phase357_candidate_digest != review.phase357_candidate_digest
+        || input.phase357_candidate_input_digest != review.phase357_candidate_input_digest
+        || input.phase355_review_digest != review.phase355_review_digest
+        || input.phase353_materialized_manifest_digest
+            != review.phase353_materialized_manifest_digest
+        || input.phase351_review_digest != review.phase351_review_digest
+        || input.phase349_serialization_preview_digest
+            != review.phase349_serialization_preview_digest
+        || input.phase347_audit_package_digest != review.phase347_audit_package_digest
+        || input.phase345_review_record_digest != review.phase345_review_record_digest
+        || input.phase343_metadata_digest != review.phase343_metadata_digest
+        || input.declared_file_digest_map_digest != review.declared_file_digest_map_digest
+        || input.current_accepted_append_blockers_digest
+            != review.current_accepted_append_blockers_digest
+        || input.proposal_candidate_id != review.proposal_candidate_id
+        || input.proposal_policy_id != review.proposal_policy_id
+        || input.proposal_review_id != review.proposal_review_id
+        || input.append_preflight_id != review.append_preflight_id
+        || input.append_preflight_review_id != review.append_preflight_review_id
+        || input.accepted_append_decision_candidate_id
+            != review.accepted_append_decision_candidate_id
+        || input.accepted_append_decision_candidate_review_id
+            != review.accepted_append_decision_candidate_review_id
+        || input.accepted_append_decision_blocker_id != review.accepted_append_decision_blocker_id
+        || input.accepted_append_decision_blocker_review_id
+            != review.accepted_append_decision_blocker_review_id
+        || input.accepted_append_decision_quarantine_id
+            != review.accepted_append_decision_quarantine_id
+        || input.accepted_append_decision_quarantine_review_id
+            != review.accepted_append_decision_quarantine_review_id
+        || input.quarantine_policy_id != review.quarantine_policy_id
+        || input.quarantine_decision_id != review.quarantine_decision_id
+        || input.candidate_disposition != review.candidate_disposition
+        || input.candidate_review_label != review.candidate_review_label
+        || input.blocker_label != review.blocker_label
+        || input.blocker_review_label != review.blocker_review_label
+        || input.quarantine_label != review.quarantine_label
+        || input.quarantine_review_label != review.review_label
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::Phase375QuarantineReviewDigestDrift,
+        );
+    }
+    if review.schema_version
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_ACCEPTED_APPEND_DECISION_QUARANTINE_REVIEW_SCHEMA_VERSION
+        || review.state_slice
+            != GATEWAY_FORMAL_REAL_COMMAND_LANE_ACCEPTED_APPEND_DECISION_QUARANTINE_REVIEW_STATE_SLICE
+        || review.promotion_state != "local_accepted_append_decision_quarantine_review_metadata"
+        || review.next_required_state != "accepted_append_decision_still_blocked"
+        || review.claim_boundary
+            != gateway_formal_real_command_lane_accepted_append_decision_quarantine_review_claim_boundary()
+        || review.makes_accepted_append_decision
+        || review.creates_accepted_evidence
+        || review.changes_accepted_append_policy
+        || review.creates_level2_evidence
+        || review.populates_score_axes
+        || review.proof_artifact_created
+        || review.checker_transcript_created
+        || review.solver_certificate_created
+        || review.semantic_correctness_claimed
+        || review.production_readiness_claimed
+        || review.sota_claimed
+        || review.breakthrough_claimed
+        || review.full_security_claimed
+        || review.grants_authority
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::Phase375QuarantineReviewStateMismatch,
+        );
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan_policy(
+    input: &GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanInput,
+    issues: &mut Vec<
+        GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue,
+    >,
+) {
+    let blockers = gateway_formal_real_command_lane_accepted_handoff_current_blockers();
+    if input.current_accepted_append_blockers_digest
+        != hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-accepted-handoff-current-blockers:v1",
+            &blockers,
+        )
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::AcceptedAppendBlockerMismatch,
+        );
+    }
+    let nonclaims =
+        gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-accepted-append-decision-quarantine-resolution-plan-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::NonclaimMismatch,
+        );
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.planning_summary,
+    ) {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::PlanningSummaryPromotionClaim,
+        );
+    }
+    if input.accepted_append_decision_requested
+        || input.accepted_evidence_mutation_requested
+        || input.accepted_append_policy_change_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.benchmark_or_sota_comparison_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::PromotionAttempt,
         );
     }
 }
@@ -44011,6 +44757,111 @@ mod tests {
         }
     }
 
+    fn formal_evidence_accepted_append_decision_quarantine_resolution_plan_input(
+        plan_id: &str,
+        review: &GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineReview,
+        resolution_plan_label:
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanLabel,
+    ) -> GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanInput {
+        let nonclaims =
+            gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan_required_nonclaims();
+        GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanInput {
+            schema_version:
+                GATEWAY_FORMAL_REAL_COMMAND_LANE_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_PLAN_SCHEMA_VERSION
+                    .to_owned(),
+            accepted_append_decision_quarantine_resolution_plan_id: plan_id.to_owned(),
+            quarantine_policy_id: review.quarantine_policy_id.clone(),
+            quarantine_decision_id: review.quarantine_decision_id.clone(),
+            resolution_policy_id: "phase377-resolution-policy".to_owned(),
+            resolution_decision_id: "phase377-resolution-decision".to_owned(),
+            proposal_policy_id: review.proposal_policy_id.clone(),
+            proposal_candidate_id: review.proposal_candidate_id.clone(),
+            proposal_review_id: review.proposal_review_id.clone(),
+            append_preflight_id: review.append_preflight_id.clone(),
+            append_preflight_review_id: review.append_preflight_review_id.clone(),
+            accepted_append_decision_candidate_id: review
+                .accepted_append_decision_candidate_id
+                .clone(),
+            accepted_append_decision_candidate_review_id: review
+                .accepted_append_decision_candidate_review_id
+                .clone(),
+            accepted_append_decision_blocker_id: review
+                .accepted_append_decision_blocker_id
+                .clone(),
+            accepted_append_decision_blocker_review_id: review
+                .accepted_append_decision_blocker_review_id
+                .clone(),
+            accepted_append_decision_quarantine_id: review
+                .accepted_append_decision_quarantine_id
+                .clone(),
+            accepted_append_decision_quarantine_review_id: review
+                .accepted_append_decision_quarantine_review_id
+                .clone(),
+            planning_decision_at_unix: 1_800_000_377,
+            phase375_quarantine_review_digest: review.digest(),
+            phase375_quarantine_review_input_digest: review.review_input_digest,
+            phase373_quarantine_digest: review.phase373_quarantine_digest,
+            phase373_quarantine_input_digest: review.phase373_quarantine_input_digest,
+            phase371_blocker_review_digest: review.phase371_blocker_review_digest,
+            phase371_blocker_review_input_digest: review.phase371_blocker_review_input_digest,
+            phase369_blocker_digest: review.phase369_blocker_digest,
+            phase369_blocker_input_digest: review.phase369_blocker_input_digest,
+            phase367_review_digest: review.phase367_review_digest,
+            phase367_review_input_digest: review.phase367_review_input_digest,
+            phase365_candidate_digest: review.phase365_candidate_digest,
+            phase365_candidate_input_digest: review.phase365_candidate_input_digest,
+            phase363_review_digest: review.phase363_review_digest,
+            phase363_review_input_digest: review.phase363_review_input_digest,
+            phase361_preflight_digest: review.phase361_preflight_digest,
+            phase361_preflight_input_digest: review.phase361_preflight_input_digest,
+            phase359_review_digest: review.phase359_review_digest,
+            phase359_review_input_digest: review.phase359_review_input_digest,
+            phase357_candidate_digest: review.phase357_candidate_digest,
+            phase357_candidate_input_digest: review.phase357_candidate_input_digest,
+            phase355_review_digest: review.phase355_review_digest,
+            phase353_materialized_manifest_digest: review.phase353_materialized_manifest_digest,
+            phase351_review_digest: review.phase351_review_digest,
+            phase349_serialization_preview_digest: review.phase349_serialization_preview_digest,
+            phase347_audit_package_digest: review.phase347_audit_package_digest,
+            phase345_review_record_digest: review.phase345_review_record_digest,
+            phase343_metadata_digest: review.phase343_metadata_digest,
+            declared_file_digest_map_digest: review.declared_file_digest_map_digest,
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-accepted-append-decision-quarantine-resolution-plan-nonclaims:v1",
+                &nonclaims,
+            ),
+            current_accepted_append_blockers_digest: review
+                .current_accepted_append_blockers_digest,
+            candidate_disposition: review.candidate_disposition.clone(),
+            candidate_review_label: review.candidate_review_label.clone(),
+            blocker_label: review.blocker_label.clone(),
+            blocker_review_label: review.blocker_review_label.clone(),
+            quarantine_label: review.quarantine_label.clone(),
+            quarantine_review_label: review.review_label.clone(),
+            resolution_plan_label,
+            planning_summary:
+                "local accepted append decision quarantine resolution plan keeps accepted append blocked"
+                    .to_owned(),
+            accepted_append_decision_requested: false,
+            accepted_evidence_mutation_requested: false,
+            accepted_append_policy_change_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            benchmark_or_sota_comparison_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
     fn formal_evidence_local_audit_package_serialization_preview_input(
         preview_id: &str,
         package: &GatewayFormalRealCommandLaneLocalReviewAuditPackage,
@@ -51247,6 +52098,377 @@ mod tests {
         fs::remove_dir_all(&phase327_root).expect("phase375 promotion phase327 cleanup succeeds");
         fs::remove_dir_all(&execution_root).expect("phase375 promotion execution cleanup succeeds");
         fs::remove_dir_all(&source_root).expect("phase375 promotion source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan_builds_blocking_record(
+    ) {
+        let (phase323_root, phase327_root, execution_root, source_root, output_root, review) =
+            formal_evidence_accepted_evidence_proposal_candidate_source(
+                "real-command-phase377-resolution-plan",
+            );
+        let candidate_input = formal_evidence_accepted_evidence_proposal_candidate_input(
+            "phase377-source-candidate",
+            &review,
+            GatewayFormalRealCommandLaneAcceptedEvidenceProposalCandidateDisposition::AcceptedLedgerMutationStillBlocked,
+        );
+        let proposal_candidate =
+            build_gateway_formal_real_command_lane_accepted_evidence_proposal_candidate(
+                &review,
+                &candidate_input,
+            )
+            .expect("phase377 source proposal candidate builds");
+        let proposal_review_input = formal_evidence_proposal_candidate_review_input(
+            "phase377-source-review",
+            &proposal_candidate,
+            GatewayFormalRealCommandLaneProposalCandidateReviewLabel::AcceptedAppendDecisionStillBlocked,
+        );
+        let proposal_review = build_gateway_formal_real_command_lane_proposal_candidate_review(
+            &proposal_candidate,
+            &proposal_review_input,
+        )
+        .expect("phase377 source proposal review builds");
+        let preflight_input = formal_evidence_append_decision_preflight_input(
+            "phase377-source-preflight",
+            &proposal_review,
+            GatewayFormalRealCommandLaneAppendDecisionPreflightLabel::AcceptedAppendPolicyStillBlocked,
+        );
+        let preflight = build_gateway_formal_real_command_lane_append_decision_preflight(
+            &proposal_review,
+            &preflight_input,
+        )
+        .expect("phase377 source preflight builds");
+        let preflight_review_input = formal_evidence_append_decision_preflight_review_input(
+            "phase377-source-preflight-review",
+            &preflight,
+            GatewayFormalRealCommandLaneAppendDecisionPreflightReviewLabel::AcceptedAppendDecisionStillBlocked,
+        );
+        let preflight_review =
+            build_gateway_formal_real_command_lane_append_decision_preflight_review(
+                &preflight,
+                &preflight_review_input,
+            )
+            .expect("phase377 source preflight review builds");
+        let decision_candidate_input = formal_evidence_accepted_append_decision_candidate_input(
+            "phase377-decision-candidate",
+            &preflight_review,
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionCandidateDisposition::AcceptedLedgerMutationStillBlocked,
+        );
+        let decision_candidate =
+            build_gateway_formal_real_command_lane_accepted_append_decision_candidate(
+                &preflight_review,
+                &decision_candidate_input,
+            )
+            .expect("phase377 decision candidate builds");
+        let candidate_review_input =
+            formal_evidence_accepted_append_decision_candidate_review_input(
+                "phase377-decision-candidate-review",
+                &decision_candidate,
+                GatewayFormalRealCommandLaneAcceptedAppendDecisionCandidateReviewLabel::AcceptedAppendDecisionStillBlocked,
+            );
+        let candidate_review =
+            build_gateway_formal_real_command_lane_accepted_append_decision_candidate_review(
+                &decision_candidate,
+                &candidate_review_input,
+            )
+            .expect("phase377 decision candidate review builds");
+        let blocker_input = formal_evidence_accepted_append_decision_blocker_input(
+            "phase377-decision-blocker",
+            &candidate_review,
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionBlockerLabel::AcceptedAppendDecisionBlocked,
+        );
+        let blocker = build_gateway_formal_real_command_lane_accepted_append_decision_blocker(
+            &candidate_review,
+            &blocker_input,
+        )
+        .expect("phase377 blocker builds");
+        let blocker_review_input = formal_evidence_accepted_append_decision_blocker_review_input(
+            "phase377-decision-blocker-review",
+            &blocker,
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionBlockerReviewLabel::AcceptedAppendDecisionStillBlocked,
+        );
+        let blocker_review =
+            build_gateway_formal_real_command_lane_accepted_append_decision_blocker_review(
+                &blocker,
+                &blocker_review_input,
+            )
+            .expect("phase377 blocker review builds");
+        let quarantine_input = formal_evidence_accepted_append_decision_quarantine_input(
+            "phase377-decision-quarantine",
+            &blocker_review,
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineLabel::AcceptedAppendDecisionQuarantined,
+        );
+        let quarantine =
+            build_gateway_formal_real_command_lane_accepted_append_decision_quarantine(
+                &blocker_review,
+                &quarantine_input,
+            )
+            .expect("phase377 quarantine builds");
+        let quarantine_review_input =
+            formal_evidence_accepted_append_decision_quarantine_review_input(
+                "phase377-decision-quarantine-review",
+                &quarantine,
+                GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineReviewLabel::AcceptedAppendDecisionStillBlocked,
+            );
+        let quarantine_review =
+            build_gateway_formal_real_command_lane_accepted_append_decision_quarantine_review(
+                &quarantine,
+                &quarantine_review_input,
+            )
+            .expect("phase377 quarantine review builds");
+        let resolution_plan_input =
+            formal_evidence_accepted_append_decision_quarantine_resolution_plan_input(
+                "phase377-decision-resolution-plan",
+                &quarantine_review,
+                GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanLabel::AcceptedAppendDecisionStillBlocked,
+            );
+        let resolution_plan =
+            build_gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan(
+                &quarantine_review,
+                &resolution_plan_input,
+            )
+            .expect("phase377 resolution plan builds");
+
+        assert_eq!(
+            resolution_plan.state_slice,
+            GATEWAY_FORMAL_REAL_COMMAND_LANE_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_PLAN_STATE_SLICE
+        );
+        assert_eq!(
+            resolution_plan.phase375_quarantine_review_digest,
+            quarantine_review.digest()
+        );
+        assert_eq!(
+            resolution_plan.phase375_quarantine_review_input_digest,
+            quarantine_review.review_input_digest
+        );
+        assert_eq!(
+            resolution_plan.phase373_quarantine_digest,
+            quarantine_review.phase373_quarantine_digest
+        );
+        assert_eq!(
+            resolution_plan.quarantine_review_label,
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineReviewLabel::AcceptedAppendDecisionStillBlocked
+        );
+        assert_eq!(
+            resolution_plan.resolution_plan_label,
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanLabel::AcceptedAppendDecisionStillBlocked
+        );
+        assert_eq!(
+            resolution_plan.previous_promotion_state,
+            "local_accepted_append_decision_quarantine_review_metadata"
+        );
+        assert_eq!(
+            resolution_plan.promotion_state,
+            "local_accepted_append_decision_quarantine_resolution_planning_metadata"
+        );
+        assert_eq!(
+            resolution_plan.next_required_state,
+            "accepted_append_decision_still_blocked"
+        );
+        assert_eq!(
+            resolution_plan.claim_boundary,
+            gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan_claim_boundary()
+        );
+        assert!(!resolution_plan.makes_accepted_append_decision);
+        assert!(!resolution_plan.creates_accepted_evidence);
+        assert!(!resolution_plan.changes_accepted_append_policy);
+        assert!(!resolution_plan.creates_level2_evidence);
+        assert!(!resolution_plan.populates_score_axes);
+        assert!(!resolution_plan.proof_artifact_created);
+        assert!(!resolution_plan.checker_transcript_created);
+        assert!(!resolution_plan.solver_certificate_created);
+        assert!(!resolution_plan.semantic_correctness_claimed);
+        assert!(!resolution_plan.production_readiness_claimed);
+        assert!(!resolution_plan.sota_claimed);
+        assert!(!resolution_plan.breakthrough_claimed);
+        assert!(!resolution_plan.full_security_claimed);
+        assert!(!resolution_plan.grants_authority);
+
+        let mut digest_drift = resolution_plan_input.clone();
+        digest_drift.phase375_quarantine_review_digest = Hash([41; 32]);
+        let drift_validation = validate_gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan_input(
+            &quarantine_review,
+            &digest_drift,
+        );
+        assert!(drift_validation.issues.contains(
+            &GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::Phase375QuarantineReviewDigestDrift
+        ));
+
+        let mut text_promotion = resolution_plan_input.clone();
+        text_promotion.planning_summary = "claims accepted evidence and SOTA".to_owned();
+        let text_validation = validate_gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan_input(
+            &quarantine_review,
+            &text_promotion,
+        );
+        assert!(text_validation.issues.contains(
+            &GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::PlanningSummaryPromotionClaim
+        ));
+
+        fs::remove_dir_all(&output_root).expect("phase377 resolution plan output cleanup succeeds");
+        fs::remove_dir_all(&phase323_root)
+            .expect("phase377 resolution plan phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root)
+            .expect("phase377 resolution plan phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root)
+            .expect("phase377 resolution plan execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase377 resolution plan source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan_rejects_promotion(
+    ) {
+        let (phase323_root, phase327_root, execution_root, source_root, output_root, review) =
+            formal_evidence_accepted_evidence_proposal_candidate_source(
+                "real-command-phase377-promotion",
+            );
+        let candidate_input = formal_evidence_accepted_evidence_proposal_candidate_input(
+            "phase377-promotion-source-candidate",
+            &review,
+            GatewayFormalRealCommandLaneAcceptedEvidenceProposalCandidateDisposition::CandidateRejected,
+        );
+        let proposal_candidate =
+            build_gateway_formal_real_command_lane_accepted_evidence_proposal_candidate(
+                &review,
+                &candidate_input,
+            )
+            .expect("phase377 promotion source proposal candidate builds");
+        let proposal_review_input = formal_evidence_proposal_candidate_review_input(
+            "phase377-promotion-source-review",
+            &proposal_candidate,
+            GatewayFormalRealCommandLaneProposalCandidateReviewLabel::ProposalCandidateRejected,
+        );
+        let proposal_review = build_gateway_formal_real_command_lane_proposal_candidate_review(
+            &proposal_candidate,
+            &proposal_review_input,
+        )
+        .expect("phase377 promotion source proposal review builds");
+        let preflight_input = formal_evidence_append_decision_preflight_input(
+            "phase377-promotion-source-preflight",
+            &proposal_review,
+            GatewayFormalRealCommandLaneAppendDecisionPreflightLabel::AppendPreflightRejected,
+        );
+        let preflight = build_gateway_formal_real_command_lane_append_decision_preflight(
+            &proposal_review,
+            &preflight_input,
+        )
+        .expect("phase377 promotion source preflight builds");
+        let preflight_review_input = formal_evidence_append_decision_preflight_review_input(
+            "phase377-promotion-source-preflight-review",
+            &preflight,
+            GatewayFormalRealCommandLaneAppendDecisionPreflightReviewLabel::AppendPreflightReviewRejected,
+        );
+        let preflight_review =
+            build_gateway_formal_real_command_lane_append_decision_preflight_review(
+                &preflight,
+                &preflight_review_input,
+            )
+            .expect("phase377 promotion source preflight review builds");
+        let decision_candidate_input = formal_evidence_accepted_append_decision_candidate_input(
+            "phase377-promotion-decision-candidate",
+            &preflight_review,
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionCandidateDisposition::DecisionCandidateRejected,
+        );
+        let decision_candidate =
+            build_gateway_formal_real_command_lane_accepted_append_decision_candidate(
+                &preflight_review,
+                &decision_candidate_input,
+            )
+            .expect("phase377 promotion decision candidate builds");
+        let candidate_review_input =
+            formal_evidence_accepted_append_decision_candidate_review_input(
+                "phase377-promotion-decision-candidate-review",
+                &decision_candidate,
+                GatewayFormalRealCommandLaneAcceptedAppendDecisionCandidateReviewLabel::DecisionCandidateReviewRejected,
+            );
+        let candidate_review =
+            build_gateway_formal_real_command_lane_accepted_append_decision_candidate_review(
+                &decision_candidate,
+                &candidate_review_input,
+            )
+            .expect("phase377 promotion decision candidate review builds");
+        let blocker_input = formal_evidence_accepted_append_decision_blocker_input(
+            "phase377-promotion-decision-blocker",
+            &candidate_review,
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionBlockerLabel::AcceptedAppendDecisionBlocked,
+        );
+        let blocker = build_gateway_formal_real_command_lane_accepted_append_decision_blocker(
+            &candidate_review,
+            &blocker_input,
+        )
+        .expect("phase377 promotion blocker builds");
+        let blocker_review_input = formal_evidence_accepted_append_decision_blocker_review_input(
+            "phase377-promotion-decision-blocker-review",
+            &blocker,
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionBlockerReviewLabel::BlockerReviewRejected,
+        );
+        let blocker_review =
+            build_gateway_formal_real_command_lane_accepted_append_decision_blocker_review(
+                &blocker,
+                &blocker_review_input,
+            )
+            .expect("phase377 promotion blocker review builds");
+        let quarantine_input = formal_evidence_accepted_append_decision_quarantine_input(
+            "phase377-promotion-decision-quarantine",
+            &blocker_review,
+            GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineLabel::AcceptedAppendDecisionQuarantined,
+        );
+        let quarantine =
+            build_gateway_formal_real_command_lane_accepted_append_decision_quarantine(
+                &blocker_review,
+                &quarantine_input,
+            )
+            .expect("phase377 promotion quarantine builds");
+        let quarantine_review_input =
+            formal_evidence_accepted_append_decision_quarantine_review_input(
+                "phase377-promotion-decision-quarantine-review",
+                &quarantine,
+                GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineReviewLabel::QuarantineReviewRejected,
+            );
+        let quarantine_review =
+            build_gateway_formal_real_command_lane_accepted_append_decision_quarantine_review(
+                &quarantine,
+                &quarantine_review_input,
+            )
+            .expect("phase377 promotion quarantine review builds");
+        let mut resolution_plan_input =
+            formal_evidence_accepted_append_decision_quarantine_resolution_plan_input(
+                "phase377-promotion-decision-resolution-plan",
+                &quarantine_review,
+                GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanLabel::ResolutionPlanRejected,
+            );
+
+        resolution_plan_input.accepted_append_decision_requested = true;
+        resolution_plan_input.accepted_evidence_mutation_requested = true;
+        resolution_plan_input.accepted_append_policy_change_requested = true;
+        resolution_plan_input.accepted_formal_evidence_created = true;
+        resolution_plan_input.creates_level2_evidence = true;
+        resolution_plan_input.populates_score_axes = true;
+        resolution_plan_input.proof_artifact_promoted = true;
+        resolution_plan_input.checker_transcript_promoted = true;
+        resolution_plan_input.solver_certificate_promoted = true;
+        resolution_plan_input.sota_claimed = true;
+        resolution_plan_input.full_security_claimed = true;
+        resolution_plan_input.action_authority_claimed = true;
+        let validation = validate_gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan_input(
+            &quarantine_review,
+            &resolution_plan_input,
+        );
+        assert!(validation.issues.contains(
+            &GatewayFormalRealCommandLaneAcceptedAppendDecisionQuarantineResolutionPlanIssue::PromotionAttempt
+        ));
+        assert!(
+            build_gateway_formal_real_command_lane_accepted_append_decision_quarantine_resolution_plan(
+                &quarantine_review,
+                &resolution_plan_input,
+            )
+            .is_err()
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase377 promotion output cleanup succeeds");
+        fs::remove_dir_all(&phase323_root).expect("phase377 promotion phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase377 promotion phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase377 promotion execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase377 promotion source cleanup succeeds");
     }
 
     #[test]
