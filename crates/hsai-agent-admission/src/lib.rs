@@ -633,6 +633,11 @@ pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SMT_Z3_LANE_ID: &str = "smt-z
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_LEAN_LANE_ID: &str = "lean-local-skeleton";
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_COBALT_LANE_ID: &str = "cobalt-local-skeleton";
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_CLAIM_BOUNDARY: &str = "local gateway tiny digest-binding backend probe metadata only; binds the Phase 401 digest-binding property to local backend availability, digest descriptors, and existing quarantine discipline, but does not spawn a process, execute Z3, execute SMT, execute Lean, execute COBALT, create proof artifacts, checker transcripts, solver certificates, accepted evidence, Level2+ evidence, score axes, semantic correctness, production readiness, SOTA, breakthrough status, full security, or authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-digest-backend-z3-execution:v1";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_STATE_SLICE: &str =
+    "phase-404-hsai-fixed-local-z3-digest-binding-execution";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_CLAIM_BOUNDARY: &str = "local gateway tiny digest-binding fixed-Z3 execution output only; reuses the Phase 326 fixed-process no-shell runner to execute one local Z3 SMT-LIB2 obligation for the Phase 401 property and records bounded quarantined output, but does not create proof artifacts, checker transcripts, solver certificates, accepted evidence, Level2+ evidence, score axes, semantic correctness, production readiness, SOTA, breakthrough status, full security, or authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -5173,6 +5178,115 @@ pub enum GatewayFormalTinyDigestBackendProbeIssue {
 pub struct GatewayFormalTinyDigestBackendProbeValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyDigestBackendProbeIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3ExecutionInput {
+    pub schema_version: String,
+    pub run_id: String,
+    pub created_at_unix: u64,
+    pub probe_digest: Hash,
+    pub probe_input_digest: Hash,
+    pub command_descriptor_digest: Hash,
+    pub obligation_digest: Hash,
+    pub expected_solver_verdict_label: GatewayFormalRealCommandLaneSolverVerdictLabel,
+    pub operator_acknowledged: bool,
+    pub proof_artifact_requested: bool,
+    pub checker_transcript_requested: bool,
+    pub solver_certificate_requested: bool,
+    pub accepted_evidence_requested: bool,
+    pub level2_evidence_requested: bool,
+    pub score_axis_population_requested: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyDigestBackendZ3ExecutionInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-execution-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3Execution {
+    pub schema_version: String,
+    pub run_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub execution_input_digest: Hash,
+    pub probe_digest: Hash,
+    pub probe_input_digest: Hash,
+    pub command_descriptor_digest: Hash,
+    pub obligation_digest: Hash,
+    pub process_output_digest: Hash,
+    pub stdout_summary_digest: Hash,
+    pub stderr_summary_digest: Hash,
+    pub solver_verdict_label: GatewayFormalRealCommandLaneSolverVerdictLabel,
+    pub process_spawned: bool,
+    pub backend_executed: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+    pub raw_logs_retained: bool,
+    pub raw_provider_response_retained: bool,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub claim_boundary: String,
+}
+
+impl GatewayFormalTinyDigestBackendZ3Execution {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-execution:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyDigestBackendZ3ExecutionIssue {
+    InvalidSchemaVersion,
+    InvalidRunId,
+    MissingCreatedAt,
+    ProbeDigestMismatch,
+    ProbeInputDigestMismatch,
+    ProbePropertyMismatch,
+    ProbeLaneMismatch,
+    ProbeLaneUnavailable,
+    CommandDescriptorDigestMismatch,
+    MissingObligationDigest,
+    ExpectedVerdictMismatch,
+    MissingOperatorAcknowledgement,
+    InvalidCommandPolicy,
+    ProcessDidNotSpawn,
+    BackendDidNotExecute,
+    SolverVerdictMismatch,
+    MissingRequiredNonclaim(String),
+    ClaimBoundaryMismatch,
+    ExecutionBindingMismatch,
+    PromotionAttempt,
+    ProcessError(String),
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3ExecutionValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyDigestBackendZ3ExecutionIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -24728,6 +24842,329 @@ fn validate_gateway_formal_tiny_digest_backend_tool_availability(
                 );
             }
         }
+    }
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_execution_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_execution_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims = gateway_formal_tiny_digest_backend_probe_required_nonclaims();
+    nonclaims.insert(NonClaimLabel(
+        "fixed local Z3 execution output only".to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel("not a solver certificate".to_owned()));
+    nonclaims.insert(NonClaimLabel("not a machine-checked proof".to_owned()));
+    nonclaims
+}
+
+pub fn run_gateway_formal_tiny_digest_backend_z3_execution(
+    probe: &GatewayFormalTinyDigestBackendProbe,
+    input: &GatewayFormalTinyDigestBackendZ3ExecutionInput,
+    command: &GatewayFormalRealCommandLaneCommandDescriptor,
+    fixed_executable: &Path,
+) -> Result<
+    GatewayFormalTinyDigestBackendZ3Execution,
+    GatewayFormalTinyDigestBackendZ3ExecutionValidation,
+> {
+    let mut validation =
+        validate_gateway_formal_tiny_digest_backend_z3_execution_input(probe, input, command);
+    if !validation.valid {
+        return Err(validation);
+    }
+    let executable_digest = match fs::read(fixed_executable) {
+        Ok(bytes) => hash_bytes(&bytes),
+        Err(error) => {
+            validation.issues.push(
+                GatewayFormalTinyDigestBackendZ3ExecutionIssue::ProcessError(error.to_string()),
+            );
+            validation.valid = false;
+            return Err(validation);
+        }
+    };
+    let compatibility_preflight = gateway_formal_tiny_digest_backend_z3_compatibility_preflight(
+        probe,
+        input,
+        command,
+        executable_digest,
+    );
+    let process_output = match run_gateway_formal_real_command_lane_fixed_smt_process(
+        &compatibility_preflight,
+        command,
+        fixed_executable,
+    ) {
+        Ok(output) => output,
+        Err(error) => {
+            validation.issues.push(
+                GatewayFormalTinyDigestBackendZ3ExecutionIssue::ProcessError(format!("{error:?}")),
+            );
+            validation.valid = false;
+            return Err(validation);
+        }
+    };
+    if !process_output.process_spawned {
+        validation
+            .issues
+            .push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::ProcessDidNotSpawn);
+    }
+    if !process_output.backend_executed {
+        validation
+            .issues
+            .push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::BackendDidNotExecute);
+    }
+    if process_output.solver_verdict_label != input.expected_solver_verdict_label {
+        validation
+            .issues
+            .push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::SolverVerdictMismatch);
+    }
+    if process_output.proof_artifact_created
+        || process_output.checker_transcript_created
+        || process_output.solver_certificate_created
+        || process_output.creates_accepted_evidence
+        || process_output.creates_level2_evidence
+        || process_output.populates_score_axes
+        || process_output.semantic_correctness_claimed
+        || process_output.production_readiness_claimed
+        || process_output.sota_claimed
+        || process_output.breakthrough_claimed
+        || process_output.full_security_claimed
+        || process_output.grants_authority
+    {
+        validation
+            .issues
+            .push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::PromotionAttempt);
+    }
+    validation.valid = validation.issues.is_empty();
+    if !validation.valid {
+        return Err(validation);
+    }
+    Ok(GatewayFormalTinyDigestBackendZ3Execution {
+        schema_version: GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_SCHEMA_VERSION.to_owned(),
+        run_id: input.run_id.clone(),
+        state_slice: GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_STATE_SLICE.to_owned(),
+        created_at_unix: input.created_at_unix,
+        execution_input_digest: input.digest(),
+        probe_digest: probe.digest(),
+        probe_input_digest: probe.probe_input_digest,
+        command_descriptor_digest: command.digest(),
+        obligation_digest: input.obligation_digest,
+        process_output_digest: process_output.digest(),
+        stdout_summary_digest: process_output.stdout_summary.digest(),
+        stderr_summary_digest: process_output.stderr_summary.digest(),
+        solver_verdict_label: process_output.solver_verdict_label,
+        process_spawned: process_output.process_spawned,
+        backend_executed: process_output.backend_executed,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+        raw_logs_retained: false,
+        raw_provider_response_retained: false,
+        explicit_nonclaims: gateway_formal_tiny_digest_backend_z3_execution_required_nonclaims(),
+        claim_boundary: gateway_formal_tiny_digest_backend_z3_execution_claim_boundary(),
+    })
+}
+
+pub fn validate_gateway_formal_tiny_digest_backend_z3_execution_input(
+    probe: &GatewayFormalTinyDigestBackendProbe,
+    input: &GatewayFormalTinyDigestBackendZ3ExecutionInput,
+    command: &GatewayFormalRealCommandLaneCommandDescriptor,
+) -> GatewayFormalTinyDigestBackendZ3ExecutionValidation {
+    let mut issues = Vec::new();
+    if input.schema_version != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_SCHEMA_VERSION {
+        issues.push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.run_id) {
+        issues.push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::InvalidRunId);
+    }
+    if input.created_at_unix == 0 {
+        issues.push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::MissingCreatedAt);
+    }
+    if input.probe_digest != probe.digest() {
+        issues.push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::ProbeDigestMismatch);
+    }
+    if input.probe_input_digest != probe.probe_input_digest {
+        issues.push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::ProbeInputDigestMismatch);
+    }
+    if probe.property_id != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_PROPERTY_ID {
+        issues.push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::ProbePropertyMismatch);
+    }
+    if probe.selected_lane_id != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SMT_Z3_LANE_ID {
+        issues.push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::ProbeLaneMismatch);
+    }
+    if !probe.selected_lane_available {
+        issues.push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::ProbeLaneUnavailable);
+    }
+    if input.command_descriptor_digest != command.digest()
+        || probe.command_descriptor_digest != command.digest()
+    {
+        issues
+            .push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::CommandDescriptorDigestMismatch);
+    }
+    if input.obligation_digest == Hash([0; 32]) {
+        issues.push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::MissingObligationDigest);
+    }
+    if input.expected_solver_verdict_label
+        != GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
+    {
+        issues.push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::ExpectedVerdictMismatch);
+    }
+    if !input.operator_acknowledged {
+        issues.push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::MissingOperatorAcknowledgement);
+    }
+    if command.command_kind != "direct_process_no_shell"
+        || command.input_kind != "static_non_secret_smt2_obligation"
+        || command.output_kind != "bounded_solver_stdout_stderr"
+        || !command.direct_process_no_shell
+        || !command.no_shell
+        || !command.no_stdin
+        || command.inherit_environment
+        || !command.environment_variables.is_empty()
+        || !command.allowed_environment_variables.is_empty()
+        || !command.no_network
+        || command.caller_executable_path_allowed
+        || command.caller_argv_allowed
+        || !command.fixed_executable_policy
+        || !command.fixed_argv_template
+        || !command.ignored_output_root_only
+    {
+        issues.push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::InvalidCommandPolicy);
+    }
+    if input.proof_artifact_requested
+        || input.checker_transcript_requested
+        || input.solver_certificate_requested
+        || input.accepted_evidence_requested
+        || input.level2_evidence_requested
+        || input.score_axis_population_requested
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::PromotionAttempt);
+    }
+    GatewayFormalTinyDigestBackendZ3ExecutionValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+pub fn validate_gateway_formal_tiny_digest_backend_z3_execution(
+    execution: &GatewayFormalTinyDigestBackendZ3Execution,
+    probe: &GatewayFormalTinyDigestBackendProbe,
+    input: &GatewayFormalTinyDigestBackendZ3ExecutionInput,
+    command: &GatewayFormalRealCommandLaneCommandDescriptor,
+) -> GatewayFormalTinyDigestBackendZ3ExecutionValidation {
+    let mut validation =
+        validate_gateway_formal_tiny_digest_backend_z3_execution_input(probe, input, command);
+    if execution.schema_version != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_SCHEMA_VERSION
+        || execution.run_id != input.run_id
+        || execution.state_slice != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_STATE_SLICE
+        || execution.created_at_unix != input.created_at_unix
+        || execution.execution_input_digest != input.digest()
+        || execution.probe_digest != probe.digest()
+        || execution.probe_input_digest != probe.probe_input_digest
+        || execution.command_descriptor_digest != command.digest()
+        || execution.obligation_digest != input.obligation_digest
+        || execution.solver_verdict_label != input.expected_solver_verdict_label
+        || !execution.process_spawned
+        || !execution.backend_executed
+    {
+        validation
+            .issues
+            .push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::ExecutionBindingMismatch);
+    }
+    for required in gateway_formal_tiny_digest_backend_z3_execution_required_nonclaims() {
+        if !execution.explicit_nonclaims.contains(&required) {
+            validation.issues.push(
+                GatewayFormalTinyDigestBackendZ3ExecutionIssue::MissingRequiredNonclaim(required.0),
+            );
+        }
+    }
+    if execution.claim_boundary != gateway_formal_tiny_digest_backend_z3_execution_claim_boundary()
+    {
+        validation
+            .issues
+            .push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::ClaimBoundaryMismatch);
+    }
+    if execution.proof_artifact_created
+        || execution.checker_transcript_created
+        || execution.solver_certificate_created
+        || execution.creates_accepted_evidence
+        || execution.creates_level2_evidence
+        || execution.populates_score_axes
+        || execution.semantic_correctness_claimed
+        || execution.production_readiness_claimed
+        || execution.sota_claimed
+        || execution.breakthrough_claimed
+        || execution.full_security_claimed
+        || execution.grants_authority
+        || execution.raw_logs_retained
+        || execution.raw_provider_response_retained
+    {
+        validation
+            .issues
+            .push(GatewayFormalTinyDigestBackendZ3ExecutionIssue::PromotionAttempt);
+    }
+    validation.valid = validation.issues.is_empty();
+    validation
+}
+
+fn gateway_formal_tiny_digest_backend_z3_compatibility_preflight(
+    probe: &GatewayFormalTinyDigestBackendProbe,
+    input: &GatewayFormalTinyDigestBackendZ3ExecutionInput,
+    command: &GatewayFormalRealCommandLaneCommandDescriptor,
+    executable_digest: Hash,
+) -> GatewayFormalRealCommandLaneExecutionPreflight {
+    GatewayFormalRealCommandLaneExecutionPreflight {
+        schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_SCHEMA_VERSION
+            .to_owned(),
+        run_id: input.run_id.clone(),
+        state_slice: GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_STATE_SLICE.to_owned(),
+        created_at_unix: input.created_at_unix,
+        preflight_input_digest: input.digest(),
+        phase323_manifest_digest: probe.digest(),
+        command_request_digest: probe.probe_input_digest,
+        command_descriptor_digest: command.digest(),
+        obligation_digest: input.obligation_digest,
+        expected_output_grammar_digest: probe.expected_verdict_descriptor_digest,
+        executable_policy_id: command.executable_policy_id.clone(),
+        executable_digest,
+        fixed_executable_label: command.executable_path_label.clone(),
+        fixed_argv_template_digest: command.argv_template_digest,
+        timeout_millis: command.timeout_millis,
+        max_stdout_bytes: command.max_stdout_bytes,
+        max_stderr_bytes: command.max_stderr_bytes,
+        operator_acknowledged: input.operator_acknowledged,
+        process_spawn_authorized: true,
+        explicit_nonclaims: gateway_formal_tiny_digest_backend_z3_execution_required_nonclaims(),
+        claim_boundary: gateway_formal_tiny_digest_backend_z3_execution_claim_boundary(),
+        process_spawned: false,
+        backend_executed: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
     }
 }
 
@@ -50019,6 +50456,109 @@ mod tests {
         }
     }
 
+    fn phase404_z3_obligation_bytes() -> Vec<u8> {
+        br#"(set-logic QF_UF)
+(declare-sort Digest 0)
+(declare-fun bind (Digest Digest Digest Digest) Digest)
+(declare-const metadata_input Digest)
+(declare-const explicit_nonclaim Digest)
+(declare-const accepted_append_blocker Digest)
+(declare-const command_descriptor Digest)
+(assert (not (= (bind metadata_input explicit_nonclaim accepted_append_blocker command_descriptor)
+                (bind metadata_input explicit_nonclaim accepted_append_blocker command_descriptor))))
+(check-sat)
+"#
+        .to_vec()
+    }
+
+    fn phase404_z3_command(
+        obligation_path: &Path,
+        obligation_digest: Hash,
+    ) -> GatewayFormalRealCommandLaneCommandDescriptor {
+        let argv_template = vec![
+            "-smt2".to_owned(),
+            obligation_path.to_string_lossy().into_owned(),
+        ];
+        GatewayFormalRealCommandLaneCommandDescriptor {
+            schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_SCHEMA_VERSION.to_owned(),
+            backend_id: GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SMT_Z3_LANE_ID.to_owned(),
+            backend_mode: "smt-lib2-offline-command".to_owned(),
+            command_kind: "direct_process_no_shell".to_owned(),
+            input_kind: "static_non_secret_smt2_obligation".to_owned(),
+            output_kind: "bounded_solver_stdout_stderr".to_owned(),
+            executable_policy_id: "phase404-fixed-local-z3".to_owned(),
+            executable_path_label: "/opt/homebrew/bin/z3".to_owned(),
+            argv_template_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-argv-template:v1",
+                &argv_template,
+            ),
+            argv_template,
+            timeout_millis: 5_000,
+            max_stdout_bytes: 4_096,
+            max_stderr_bytes: 4_096,
+            direct_process_no_shell: true,
+            no_shell: true,
+            no_stdin: true,
+            inherit_environment: false,
+            allowed_environment_variables: BTreeSet::new(),
+            environment_variables: BTreeMap::new(),
+            no_network: true,
+            caller_executable_path_allowed: false,
+            caller_argv_allowed: false,
+            fixed_executable_policy: true,
+            fixed_argv_template: true,
+            ignored_output_root_only: true,
+            input_digest_binding: Hash([2; 32]),
+            obligation_digest_binding: obligation_digest,
+            expected_output_grammar_digest_binding: Hash([6; 32]),
+        }
+    }
+
+    fn phase404_probe_for_command(
+        command: &GatewayFormalRealCommandLaneCommandDescriptor,
+    ) -> GatewayFormalTinyDigestBackendProbe {
+        let mut input = phase403_probe_input(
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SMT_Z3_LANE_ID,
+            true,
+        );
+        input.command_descriptor_digest = command.digest();
+        input.expected_verdict_descriptor_digest = command.expected_output_grammar_digest_binding;
+        build_gateway_formal_tiny_digest_backend_probe(&input)
+            .expect("phase404 probe for command builds")
+    }
+
+    fn phase404_z3_execution_input(
+        probe: &GatewayFormalTinyDigestBackendProbe,
+        command: &GatewayFormalRealCommandLaneCommandDescriptor,
+        obligation_digest: Hash,
+    ) -> GatewayFormalTinyDigestBackendZ3ExecutionInput {
+        GatewayFormalTinyDigestBackendZ3ExecutionInput {
+            schema_version: GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_SCHEMA_VERSION
+                .to_owned(),
+            run_id: "phase404-z3-execution-1".to_owned(),
+            created_at_unix: 1_800_000_404,
+            probe_digest: probe.digest(),
+            probe_input_digest: probe.probe_input_digest,
+            command_descriptor_digest: command.digest(),
+            obligation_digest,
+            expected_solver_verdict_label:
+                GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate,
+            operator_acknowledged: true,
+            proof_artifact_requested: false,
+            checker_transcript_requested: false,
+            solver_certificate_requested: false,
+            accepted_evidence_requested: false,
+            level2_evidence_requested: false,
+            score_axis_population_requested: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
     #[test]
     fn phase403_tiny_digest_backend_probe_builds_without_promotion() {
         let input = phase403_probe_input(
@@ -50107,6 +50647,95 @@ mod tests {
             .issues
             .contains(&GatewayFormalTinyDigestBackendProbeIssue::PromotionAttempt));
         assert!(build_gateway_formal_tiny_digest_backend_probe(&input).is_err());
+    }
+
+    #[test]
+    fn phase404_fixed_local_z3_digest_binding_executes_when_available() {
+        let z3_path = PathBuf::from("/opt/homebrew/bin/z3");
+        if !z3_path.is_file() {
+            let input = phase403_probe_input(
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SMT_Z3_LANE_ID,
+                false,
+            );
+            assert!(
+                validate_gateway_formal_tiny_digest_backend_probe_input(&input)
+                    .issues
+                    .contains(&GatewayFormalTinyDigestBackendProbeIssue::SelectedLaneUnavailable)
+            );
+            return;
+        }
+
+        let obligation_root = temp_output_root("phase404-fixed-local-z3");
+        fs::create_dir_all(&obligation_root).expect("phase404 obligation root creates");
+        let obligation_path = obligation_root.join("digest-binding.smt2");
+        let obligation_bytes = phase404_z3_obligation_bytes();
+        fs::write(&obligation_path, &obligation_bytes).expect("phase404 obligation writes");
+        let obligation_digest = hash_bytes(&obligation_bytes);
+        let command = phase404_z3_command(&obligation_path, obligation_digest);
+        let probe = phase404_probe_for_command(&command);
+        let input = phase404_z3_execution_input(&probe, &command, obligation_digest);
+
+        let execution =
+            run_gateway_formal_tiny_digest_backend_z3_execution(&probe, &input, &command, &z3_path)
+                .expect("phase404 fixed local z3 execution succeeds");
+
+        assert_eq!(
+            execution.state_slice,
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_STATE_SLICE
+        );
+        assert!(execution.process_spawned);
+        assert!(execution.backend_executed);
+        assert_eq!(
+            execution.solver_verdict_label,
+            GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
+        );
+        assert!(!execution.proof_artifact_created);
+        assert!(!execution.checker_transcript_created);
+        assert!(!execution.solver_certificate_created);
+        assert!(!execution.creates_accepted_evidence);
+        assert!(!execution.creates_level2_evidence);
+        assert!(!execution.populates_score_axes);
+        assert!(!execution.semantic_correctness_claimed);
+        assert!(!execution.production_readiness_claimed);
+        assert!(!execution.sota_claimed);
+        assert!(!execution.full_security_claimed);
+        assert!(!execution.grants_authority);
+        assert!(
+            validate_gateway_formal_tiny_digest_backend_z3_execution(
+                &execution, &probe, &input, &command,
+            )
+            .valid
+        );
+
+        fs::remove_dir_all(&obligation_root).expect("phase404 obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase404_fixed_local_z3_digest_binding_rejects_promotion() {
+        let obligation_digest = hash_bytes(&phase404_z3_obligation_bytes());
+        let command =
+            phase404_z3_command(Path::new("/ignored/digest-binding.smt2"), obligation_digest);
+        let probe = phase404_probe_for_command(&command);
+        let mut input = phase404_z3_execution_input(&probe, &command, obligation_digest);
+        input.accepted_evidence_requested = true;
+        input.level2_evidence_requested = true;
+        input.score_axis_population_requested = true;
+        input.proof_artifact_requested = true;
+        input.checker_transcript_requested = true;
+        input.solver_certificate_requested = true;
+        input.semantic_correctness_claimed = true;
+        input.production_readiness_claimed = true;
+        input.sota_claimed = true;
+        input.full_security_claimed = true;
+        input.action_authority_claimed = true;
+
+        let validation = validate_gateway_formal_tiny_digest_backend_z3_execution_input(
+            &probe, &input, &command,
+        );
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&GatewayFormalTinyDigestBackendZ3ExecutionIssue::PromotionAttempt));
     }
 
     #[test]

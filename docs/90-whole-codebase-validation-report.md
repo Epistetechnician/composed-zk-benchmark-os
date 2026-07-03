@@ -5609,5 +5609,17 @@ It adds no backend execution, no proof artifacts, no checker transcripts, no
 accepted formal evidence, no Level2+ evidence, no score axes, and no
 production/SOTA/security/semantic-correctness claim.
 
+[docs/404-hsai-fixed-local-z3-digest-binding-execution-notes.md](docs/404-hsai-fixed-local-z3-digest-binding-execution-notes.md)
+records the Phase 404 fixed local Z3 execution path for
+`gateway-local-digest-binding-determinism-v1`. The implementation reuses the
+Phase 326 fixed-process/no-shell runner and adds a Phase 404 execution input,
+execution record, validators, nonclaims, and focused tests. In the current
+local environment, `/opt/homebrew/bin/z3` exists and reports Z3 4.15.0; the
+focused test executes a non-secret SMT-LIB2 obligation and records
+`solver_unsat_without_certificate`. This remains quarantined local execution
+only: no proof artifacts, checker transcripts, solver certificates, accepted
+formal evidence, Level2+ evidence, score axes, or production/SOTA/security/
+semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
