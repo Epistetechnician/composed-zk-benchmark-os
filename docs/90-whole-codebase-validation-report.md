@@ -2149,6 +2149,32 @@ submits no benchmarks, deploys nothing to production, claims no semantic
 correctness, claims no production readiness, claims no SOTA, claims no
 breakthrough status, claims no full security, and grants no authority.
 
+Phase 373 implements deterministic pure-data accepted-append decision
+quarantine metadata over one Phase 371 accepted-append decision blocker review.
+The implementation adds the Phase 373 quarantine input, quarantine output,
+bounded quarantine labels, issues, validation report, claim-boundary helper,
+required-nonclaim helper, builder, validator, and focused tests in
+`crates/hsai-agent-admission/src/lib.rs`. The validator checks schema version,
+single-segment quarantine and chain ids, nonzero timestamp, nonzero required
+digests, Phase 371 blocker review digest/input digest consistency,
+Phase 369/367/365/363/361/359/357/355/353/351/349/347/345/343 chain digest
+consistency, declared file digest map digest, explicit nonclaim digest, current
+accepted append blocker digest, candidate disposition, Phase 367 review label,
+Phase 369 blocker label, Phase 371 blocker review label, bounded quarantine
+label, Phase 371 nonpromotion state, promotion text, accepted append decision
+attempts, accepted Evidence Ledger mutation attempts, accepted append
+policy-change attempts, accepted formal-evidence creation attempts, Level2+
+attempts, and score-axis attempts. Phase 373 changes no Cargo metadata, writes
+no artifacts, changes no `zkbench-core` accepted append policy, mutates no
+accepted Evidence Ledger, creates no accepted formal evidence, creates no
+Level2+ evidence, populates no score axes, generates or promotes no proof
+artifacts, generates or promotes no checker transcripts, generates or promotes
+no solver certificates, executes no Lean, executes no SMT, executes no COBALT,
+runs no Rust-to-Lean extraction, submits no benchmarks, deploys nothing to
+production, claims no semantic correctness, claims no production readiness,
+claims no SOTA, claims no breakthrough status, claims no full security, and
+grants no authority.
+
 Phase 360 defines the docs-first append-decision preflight boundary. It
 specifies the future preflight purpose, five allowed future preflight labels,
 required future inputs, required future validation, meaning limits, and Phase

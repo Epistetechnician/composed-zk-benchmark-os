@@ -178,7 +178,7 @@ It cannot support:
 
 ## Phase 373 Implementation Exit Criteria
 
-Phase 373 may implement local accepted-append decision quarantine metadata only
+Phase 373 implements local accepted-append decision quarantine metadata only
 if it:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
