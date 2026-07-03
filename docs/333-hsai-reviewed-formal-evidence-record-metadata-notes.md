@@ -130,8 +130,9 @@ That still does not support:
 
 ## Next Slice
 
-Phase 334 may define a docs-first accepted formal-evidence handoff boundary
-only if it keeps the accepted Evidence Ledger path separate and does not create
-Level2+ evidence, score axes, benchmark comparison claims, SOTA claims,
-semantic-correctness claims, production-readiness claims, full-security claims,
-or action authority.
+Phase 334 defines the docs-first accepted formal-evidence handoff boundary. It
+keeps the accepted Evidence Ledger path separate, records that the current
+accepted append policy still blocks formal evidence classes, and does not
+create accepted formal evidence, Level2+ evidence, score axes, benchmark
+comparison claims, SOTA claims, semantic-correctness claims,
+production-readiness claims, full-security claims, or action authority.

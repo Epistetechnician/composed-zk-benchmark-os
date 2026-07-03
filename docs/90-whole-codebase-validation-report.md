@@ -1831,6 +1831,22 @@ extraction, submit benchmarks, deploy to production, claim semantic
 correctness, claim production readiness, claim SOTA, claim breakthrough status,
 claim full security, or grant authority.
 
+Phase 334 defines the docs-first accepted formal-evidence handoff boundary. It
+records that the current `zkbench-core` accepted append transaction remains the
+authoritative local accepted-evidence mutation path and currently rejects formal
+evidence classes and claim boundaries above `Level1LocalReplay`. The phase
+defines future handoff inputs from Phase 333 reviewed-record metadata, the
+required unresolved policy decision for any future bounded formal-evidence
+class, forbidden shortcuts, evidence meaning limits, and Phase 335 exit
+criteria for non-mutating handoff metadata. Phase 334 creates no Rust code,
+mutates no accepted Evidence Ledger, creates no accepted formal evidence,
+creates no Level2+ evidence, populates no score axes, generates no proof
+artifacts, generates no checker transcripts, generates no solver certificates,
+executes no Lean, executes no COBALT, runs no Rust-to-Lean extraction, submits
+no benchmarks, deploys nothing to production, claims no semantic correctness,
+claims no production readiness, claims no SOTA, claims no breakthrough status,
+claims no full security, and grants no authority.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
