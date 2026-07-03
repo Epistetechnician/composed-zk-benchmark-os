@@ -111,10 +111,10 @@ Phase 353 adds tests that:
 
 ## Next Slice
 
-Phase 354 should define a docs-first boundary for reviewing a materialized local
-audit package artifact before any accepted-evidence proposal path is considered.
-That boundary must keep local materialization separate from accepted formal
-evidence, accepted Evidence Ledger mutation, accepted append policy changes,
-Level2+ evidence, score axes, Lean execution, SMT execution, COBALT execution,
+Phase 354 defines a docs-first boundary for reviewing a materialized local audit
+package artifact before any accepted-evidence proposal path is considered. That
+boundary keeps local materialization separate from accepted formal evidence,
+accepted Evidence Ledger mutation, accepted append policy changes, Level2+
+evidence, score axes, Lean execution, SMT execution, COBALT execution,
 Rust-to-Lean extraction, semantic correctness, production readiness, SOTA,
 breakthrough status, full security, and action authority.

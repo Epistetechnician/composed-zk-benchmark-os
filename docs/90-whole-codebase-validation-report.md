@@ -2243,6 +2243,31 @@ production, claims no semantic correctness, claims no production readiness,
 claims no SOTA, claims no breakthrough status, claims no full security, and
 grants no authority.
 
+Phase 354 defines the docs-first materialized audit package review boundary. It
+specifies the future review purpose, five allowed future review labels, required
+future inputs, required future validation, meaning limits, and Phase 355
+implementation exit criteria. The boundary requires any future review to bind
+one Phase 353 materialized audit package manifest digest, one Phase 353 output
+request digest, one Phase 351 review digest, one Phase 349 preview digest, one
+Phase 347 package digest, one Phase 345 review record digest, one Phase 343
+local metadata digest, declared file list digest, declared sidecar list digest,
+declared file digest map digest, digest index digest, claim-boundary file
+digest, explicit nonclaim digest, reviewer ids, reviewer decision timestamp, and
+current accepted append blocker digest. It requires future rejection of digest
+drift, missing declared files, undeclared files, stale sidecars, claim-boundary
+drift, nonclaim drift, promotion text, accepted Evidence Ledger mutation
+attempts, accepted append policy-change attempts, accepted formal-evidence
+creation attempts, Level2+ attempts, and score-axis attempts. Phase 354 creates
+no Rust code, changes no Cargo metadata, writes no artifacts, changes no
+`zkbench-core` accepted append policy, mutates no accepted Evidence Ledger,
+creates no accepted formal evidence, creates no Level2+ evidence, populates no
+score axes, generates or promotes no proof artifacts, generates or promotes no
+checker transcripts, generates or promotes no solver certificates, executes no
+Lean, executes no SMT, executes no COBALT, runs no Rust-to-Lean extraction,
+submits no benchmarks, deploys nothing to production, claims no semantic
+correctness, claims no production readiness, claims no SOTA, claims no
+breakthrough status, claims no full security, and grants no authority.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
