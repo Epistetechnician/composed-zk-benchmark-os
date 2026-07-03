@@ -11074,6 +11074,32 @@ evidence record, accepted formal evidence, accepted Evidence Ledger mutation,
 Level2+ evidence, score axes, Lean/COBALT/Rust-to-Lean execution, or
 SOTA/full-security/semantic-correctness/production-readiness claim.
 
+## Phase 411 HSAI Tiny Z3 Reviewed Formal Evidence Record
+
+Status: complete. See
+`docs/411-hsai-tiny-z3-reviewed-formal-evidence-record-notes.md`.
+
+Goal: implement local reviewed-record metadata for the Phase 409 tiny-Z3
+review-preview lane without creating accepted evidence, Level2+ evidence, score
+axes, proof authority, or strong public claims.
+
+Implemented: Phase 411 adds reviewed-record schema/state/claim-boundary
+constants, input metadata, record metadata, issue taxonomy, validation report,
+claim-boundary helper, required-nonclaim helper,
+accepted-evidence-disabled-acknowledgement helper, builder, and validator under
+`hsai-agent-admission`.
+
+Validation coverage: focused tests build a reviewed record from the accepted
+preview decision, reject the three nonaccepted preview decisions, and reject
+preview digest drift, candidate digest drift, policy drift, nonclaim drift,
+accepted-evidence-disabled acknowledgement drift, scope escalation, promotion
+attempts, and promoted-preview state drift.
+
+Exit criteria: HSAI now has local tiny-Z3 reviewed-record metadata. It still
+has no accepted formal evidence, accepted Evidence Ledger mutation, Level2+
+evidence, score axes, Lean/COBALT/Rust-to-Lean execution, or
+SOTA/full-security/semantic-correctness/production-readiness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

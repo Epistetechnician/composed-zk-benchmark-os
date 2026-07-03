@@ -5687,5 +5687,18 @@ evidence record, accepted formal evidence, accepted Evidence Ledger mutation,
 Level2+ evidence, score axes, proof artifacts, checker transcripts, solver
 certificates, or production/SOTA/security/semantic-correctness claim.
 
+[docs/411-hsai-tiny-z3-reviewed-formal-evidence-record-notes.md](docs/411-hsai-tiny-z3-reviewed-formal-evidence-record-notes.md)
+records the Phase 411 local tiny-Z3 reviewed-record metadata lane over a Phase
+409 review preview. The implementation adds reviewed-record input, record,
+issue taxonomy, validation report, required-nonclaim helper,
+accepted-evidence-disabled acknowledgement helper, a builder, and validators
+under `hsai-agent-admission`. Focused tests cover accepted-preview record
+construction, nonaccepted preview decision rejection, preview and candidate
+digest drift, policy drift, nonclaim drift, disabled-acknowledgement drift,
+scope escalation, promotion attempts, and promoted-preview state drift. This
+remains reviewed-record metadata only: no accepted formal evidence, accepted
+Evidence Ledger mutation, Level2+ evidence, score axes, or production/SOTA/
+security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
