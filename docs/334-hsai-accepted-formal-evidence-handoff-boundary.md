@@ -119,9 +119,9 @@ That still is not:
 - full security;
 - authority to execute an action.
 
-## Future Code Phase Exit Criteria
+## Phase 335 Implementation Status
 
-A future Phase 335 implementation may add local handoff metadata only if it:
+Phase 335 implements local handoff metadata under this boundary. It:
 
 - does not mutate the accepted Evidence Ledger;
 - does not change accepted append policy;
