@@ -490,6 +490,7 @@ Surface DSL
 | [docs/402-hsai-backend-execution-readiness-reconciliation.md](docs/402-hsai-backend-execution-readiness-reconciliation.md) | Phase 402 HSAI backend-execution readiness reconciliation. |
 | [docs/403-hsai-tiny-digest-binding-backend-probe-notes.md](docs/403-hsai-tiny-digest-binding-backend-probe-notes.md) | Phase 403 HSAI tiny digest-binding backend probe notes. |
 | [docs/404-hsai-fixed-local-z3-digest-binding-execution-notes.md](docs/404-hsai-fixed-local-z3-digest-binding-execution-notes.md) | Phase 404 HSAI fixed local Z3 digest-binding execution notes. |
+| [docs/405-hsai-fixed-local-z3-execution-output-readback-notes.md](docs/405-hsai-fixed-local-z3-execution-output-readback-notes.md) | Phase 405 HSAI fixed local Z3 execution output readback notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |

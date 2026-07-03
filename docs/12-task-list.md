@@ -10912,6 +10912,37 @@ tiny digest-binding SMT obligation. It still has no accepted evidence, no
 Level2+ evidence, no score axes, no Lean/COBALT/Rust-to-Lean execution, and no
 SOTA/full-security/semantic-correctness/production-readiness claim.
 
+## Phase 405 HSAI Fixed Local Z3 Execution Output Readback
+
+Status: complete. See
+`docs/405-hsai-fixed-local-z3-execution-output-readback-notes.md`.
+
+Goal: materialize and read back the Phase 404 fixed local Z3 execution record as
+a quarantined local bundle with digest sidecars and nonpromotion validation.
+
+Implemented: Phase 405 adds an execution output manifest, output request,
+output error taxonomy, declared file and sidecar helpers, materialization, and
+readback under `hsai-agent-admission`. The bundle namespace is
+`gateway-formal-tiny-digest-z3-execution/` and declares `manifest.json`,
+`execution.json`, `nonclaims.md`, and their `.sha256` sidecars.
+
+Validation coverage: focused tests materialize and read back a valid bundle,
+reject stale execution sidecar drift, reject manifest promotion drift after
+sidecar recomputation, and reject an undeclared `proof-artifact.json`.
+
+Anti-goals: generic backend runners, proof artifacts, checker transcripts,
+solver certificates, accepted append decisions, accepted Evidence Ledger
+mutation, accepted formal evidence, Level2+ evidence, score axes, Lean
+execution, COBALT execution, Rust-to-Lean extraction, benchmark submission,
+production deployment, semantic-correctness claims, production-readiness
+claims, SOTA claims, breakthrough claims, full-security claims, or action
+authority.
+
+Exit criteria: HSAI now has a durable local readback envelope for the Phase 404
+fixed local Z3 execution output. It still has no accepted evidence, no Level2+
+evidence, no score axes, no Lean/COBALT/Rust-to-Lean execution, and no
+SOTA/full-security/semantic-correctness/production-readiness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
