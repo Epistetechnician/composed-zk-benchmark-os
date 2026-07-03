@@ -635,9 +635,14 @@ pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_COBALT_LANE_ID: &str = "cobal
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_CLAIM_BOUNDARY: &str = "local gateway tiny digest-binding backend probe metadata only; binds the Phase 401 digest-binding property to local backend availability, digest descriptors, and existing quarantine discipline, but does not spawn a process, execute Z3, execute SMT, execute Lean, execute COBALT, create proof artifacts, checker transcripts, solver certificates, accepted evidence, Level2+ evidence, score axes, semantic correctness, production readiness, SOTA, breakthrough status, full security, or authority to execute an action.";
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-tiny-digest-backend-z3-execution:v1";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-digest-backend-z3-execution-output-bundle:v1";
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_STATE_SLICE: &str =
     "phase-404-hsai-fixed-local-z3-digest-binding-execution";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_STATE_SLICE: &str =
+    "phase-405-hsai-fixed-local-z3-execution-output-readback";
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_CLAIM_BOUNDARY: &str = "local gateway tiny digest-binding fixed-Z3 execution output only; reuses the Phase 326 fixed-process no-shell runner to execute one local Z3 SMT-LIB2 obligation for the Phase 401 property and records bounded quarantined output, but does not create proof artifacts, checker transcripts, solver certificates, accepted evidence, Level2+ evidence, score axes, semantic correctness, production readiness, SOTA, breakthrough status, full security, or authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_CLAIM_BOUNDARY: &str = "local gateway tiny digest-binding fixed-Z3 execution output-bundle readback only; materializes and reads back one Phase 404 fixed-Z3 execution record with digest sidecars and nonpromotion checks, but does not create proof artifacts, checker transcripts, solver certificates, accepted evidence, Level2+ evidence, score axes, semantic correctness, production readiness, SOTA, breakthrough status, full security, or authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -5287,6 +5292,77 @@ pub enum GatewayFormalTinyDigestBackendZ3ExecutionIssue {
 pub struct GatewayFormalTinyDigestBackendZ3ExecutionValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyDigestBackendZ3ExecutionIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3ExecutionOutputManifest {
+    pub schema_version: String,
+    pub run_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub execution_digest: Hash,
+    pub execution_input_digest: Hash,
+    pub probe_digest: Hash,
+    pub command_descriptor_digest: Hash,
+    pub obligation_digest: Hash,
+    pub solver_verdict_label: GatewayFormalRealCommandLaneSolverVerdictLabel,
+    pub declared_files: Vec<String>,
+    pub declared_sidecars: Vec<String>,
+    pub declared_file_digests: BTreeMap<String, Hash>,
+    pub claim_boundary: String,
+    pub process_spawned: bool,
+    pub backend_executed: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+    pub raw_logs_retained: bool,
+    pub raw_provider_response_retained: bool,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl GatewayFormalTinyDigestBackendZ3ExecutionOutputManifest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-execution-output-manifest:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct GatewayFormalTinyDigestBackendZ3ExecutionOutputRequest {
+    pub created_at_unix: u64,
+    pub overwrite: bool,
+    pub protected_roots: Vec<PathBuf>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayFormalTinyDigestBackendZ3ExecutionOutputError {
+    InvalidExecution,
+    EmptyRunId,
+    EmptyOutputRoot,
+    ProtectedOutputRoot,
+    OutputRootExistsWithoutOverwrite,
+    OutputRootIsFile,
+    OutputRootIsSymlink,
+    BundleFileIsSymlink(String),
+    DeclaredFileTypeMismatch(String),
+    UndeclaredFile(String),
+    DigestMismatch(String),
+    MalformedDeclaredFile(String),
+    ManifestSemanticMismatch,
+    NonclaimMismatch,
+    Io(String),
+    Serialization(String),
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -24849,6 +24925,24 @@ pub fn gateway_formal_tiny_digest_backend_z3_execution_claim_boundary() -> Strin
     GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_CLAIM_BOUNDARY.to_owned()
 }
 
+pub fn gateway_formal_tiny_digest_backend_z3_execution_output_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_execution_output_declared_files() -> Vec<String> {
+    GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_DECLARED_FILES
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_execution_output_declared_sidecars() -> Vec<String> {
+    GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_DECLARED_SIDECARS
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
 pub fn gateway_formal_tiny_digest_backend_z3_execution_required_nonclaims(
 ) -> BTreeSet<NonClaimLabel> {
     let mut nonclaims = gateway_formal_tiny_digest_backend_probe_required_nonclaims();
@@ -25120,6 +25214,520 @@ pub fn validate_gateway_formal_tiny_digest_backend_z3_execution(
     }
     validation.valid = validation.issues.is_empty();
     validation
+}
+
+pub fn materialize_gateway_formal_tiny_digest_backend_z3_execution_output_bundle(
+    output_root: &Path,
+    execution: &GatewayFormalTinyDigestBackendZ3Execution,
+    output_request: &GatewayFormalTinyDigestBackendZ3ExecutionOutputRequest,
+) -> Result<
+    GatewayFormalTinyDigestBackendZ3ExecutionOutputManifest,
+    GatewayFormalTinyDigestBackendZ3ExecutionOutputError,
+> {
+    validate_gateway_formal_tiny_digest_backend_z3_execution_output_request(
+        output_root,
+        execution,
+        output_request,
+    )?;
+    let staging_root = gateway_formal_tiny_digest_backend_z3_execution_staging_root_for(
+        output_root,
+        &execution.run_id,
+    )?;
+    if staging_root.exists() {
+        remove_gateway_formal_tiny_digest_backend_z3_execution_dir_all_checked(&staging_root)?;
+    }
+    fs::create_dir_all(staging_root.join("gateway-formal-tiny-digest-z3-execution"))
+        .map_err(gateway_formal_tiny_digest_backend_z3_execution_io_error)?;
+
+    let files = build_gateway_formal_tiny_digest_backend_z3_execution_bundle_files(
+        output_request.created_at_unix,
+        execution,
+    )?;
+    for (logical_path, bytes) in &files {
+        let target = staging_root.join(logical_path);
+        if let Some(parent) = target.parent() {
+            fs::create_dir_all(parent)
+                .map_err(gateway_formal_tiny_digest_backend_z3_execution_io_error)?;
+        }
+        fs::write(&target, bytes)
+            .map_err(gateway_formal_tiny_digest_backend_z3_execution_io_error)?;
+        fs::write(
+            sidecar_path(&target),
+            hash_hex(hash_bytes(bytes)).into_bytes(),
+        )
+        .map_err(gateway_formal_tiny_digest_backend_z3_execution_io_error)?;
+    }
+
+    if output_root.exists() {
+        if !output_request.overwrite {
+            remove_gateway_formal_tiny_digest_backend_z3_execution_dir_all_checked(&staging_root)?;
+            return Err(
+                GatewayFormalTinyDigestBackendZ3ExecutionOutputError::OutputRootExistsWithoutOverwrite,
+            );
+        }
+        remove_gateway_formal_tiny_digest_backend_z3_execution_dir_all_checked(output_root)?;
+    }
+    fs::rename(&staging_root, output_root)
+        .map_err(gateway_formal_tiny_digest_backend_z3_execution_io_error)?;
+    read_gateway_formal_tiny_digest_backend_z3_execution_output_bundle(output_root)
+}
+
+pub fn read_gateway_formal_tiny_digest_backend_z3_execution_output_bundle(
+    output_root: &Path,
+) -> Result<
+    GatewayFormalTinyDigestBackendZ3ExecutionOutputManifest,
+    GatewayFormalTinyDigestBackendZ3ExecutionOutputError,
+> {
+    let output_metadata = fs::symlink_metadata(output_root)
+        .map_err(gateway_formal_tiny_digest_backend_z3_execution_io_error)?;
+    if output_metadata.file_type().is_symlink() {
+        return Err(GatewayFormalTinyDigestBackendZ3ExecutionOutputError::OutputRootIsSymlink);
+    }
+    if !output_metadata.is_dir() {
+        return Err(GatewayFormalTinyDigestBackendZ3ExecutionOutputError::OutputRootIsFile);
+    }
+    let bundle_dir = output_root.join("gateway-formal-tiny-digest-z3-execution");
+    let bundle_metadata = fs::symlink_metadata(&bundle_dir)
+        .map_err(gateway_formal_tiny_digest_backend_z3_execution_io_error)?;
+    if bundle_metadata.file_type().is_symlink() {
+        return Err(
+            GatewayFormalTinyDigestBackendZ3ExecutionOutputError::BundleFileIsSymlink(
+                "gateway-formal-tiny-digest-z3-execution".to_owned(),
+            ),
+        );
+    }
+    if !bundle_metadata.is_dir() {
+        return Err(
+            GatewayFormalTinyDigestBackendZ3ExecutionOutputError::DeclaredFileTypeMismatch(
+                "gateway-formal-tiny-digest-z3-execution".to_owned(),
+            ),
+        );
+    }
+
+    reject_undeclared_gateway_formal_tiny_digest_backend_z3_execution_files(output_root)?;
+    let mut files = BTreeMap::new();
+    for logical_path in GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_DECLARED_FILES {
+        let path = output_root.join(logical_path);
+        let metadata = fs::symlink_metadata(&path)
+            .map_err(gateway_formal_tiny_digest_backend_z3_execution_io_error)?;
+        if metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalTinyDigestBackendZ3ExecutionOutputError::BundleFileIsSymlink(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        if !metadata.is_file() {
+            return Err(
+                GatewayFormalTinyDigestBackendZ3ExecutionOutputError::DeclaredFileTypeMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        let sidecar = sidecar_path(&path);
+        let sidecar_metadata = fs::symlink_metadata(&sidecar)
+            .map_err(gateway_formal_tiny_digest_backend_z3_execution_io_error)?;
+        if sidecar_metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalTinyDigestBackendZ3ExecutionOutputError::BundleFileIsSymlink(format!(
+                    "{logical_path}.sha256"
+                )),
+            );
+        }
+        if !sidecar_metadata.is_file() {
+            return Err(
+                GatewayFormalTinyDigestBackendZ3ExecutionOutputError::DeclaredFileTypeMismatch(
+                    format!("{logical_path}.sha256"),
+                ),
+            );
+        }
+        let bytes =
+            fs::read(&path).map_err(gateway_formal_tiny_digest_backend_z3_execution_io_error)?;
+        let expected_hash = fs::read_to_string(&sidecar)
+            .map_err(gateway_formal_tiny_digest_backend_z3_execution_io_error)?;
+        if expected_hash.trim() != hash_hex(hash_bytes(&bytes)) {
+            return Err(
+                GatewayFormalTinyDigestBackendZ3ExecutionOutputError::DigestMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        files.insert((*logical_path).to_owned(), bytes);
+    }
+    validate_gateway_formal_tiny_digest_backend_z3_execution_bundle_semantics(&files)
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_execution_output_request(
+    output_root: &Path,
+    execution: &GatewayFormalTinyDigestBackendZ3Execution,
+    output_request: &GatewayFormalTinyDigestBackendZ3ExecutionOutputRequest,
+) -> Result<(), GatewayFormalTinyDigestBackendZ3ExecutionOutputError> {
+    if !is_single_segment_id(&execution.run_id) {
+        return Err(GatewayFormalTinyDigestBackendZ3ExecutionOutputError::EmptyRunId);
+    }
+    validate_gateway_formal_tiny_digest_backend_z3_execution_record(execution)?;
+    validate_gateway_formal_tiny_digest_backend_z3_execution_output_root(
+        output_root,
+        &output_request.protected_roots,
+        output_request.overwrite,
+    )
+}
+
+fn build_gateway_formal_tiny_digest_backend_z3_execution_bundle_files(
+    created_at_unix: u64,
+    execution: &GatewayFormalTinyDigestBackendZ3Execution,
+) -> Result<BTreeMap<String, Vec<u8>>, GatewayFormalTinyDigestBackendZ3ExecutionOutputError> {
+    let nonclaims = gateway_formal_tiny_digest_backend_z3_execution_required_nonclaims();
+    let nonclaims_md =
+        gateway_formal_tiny_digest_backend_z3_execution_nonclaims_markdown(&nonclaims);
+    let mut files = BTreeMap::from([
+        (
+            "gateway-formal-tiny-digest-z3-execution/execution.json".to_owned(),
+            serde_json::to_vec_pretty(execution)
+                .map_err(gateway_formal_tiny_digest_backend_z3_execution_serde_error)?,
+        ),
+        (
+            "gateway-formal-tiny-digest-z3-execution/nonclaims.md".to_owned(),
+            nonclaims_md.into_bytes(),
+        ),
+    ]);
+    let declared_file_digests = files
+        .iter()
+        .map(|(path, bytes)| (path.clone(), hash_bytes(bytes)))
+        .collect();
+    let manifest = GatewayFormalTinyDigestBackendZ3ExecutionOutputManifest {
+        schema_version: GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_SCHEMA_VERSION
+            .to_owned(),
+        run_id: execution.run_id.clone(),
+        state_slice: GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_STATE_SLICE.to_owned(),
+        created_at_unix,
+        execution_digest: execution.digest(),
+        execution_input_digest: execution.execution_input_digest,
+        probe_digest: execution.probe_digest,
+        command_descriptor_digest: execution.command_descriptor_digest,
+        obligation_digest: execution.obligation_digest,
+        solver_verdict_label: execution.solver_verdict_label.clone(),
+        declared_files: gateway_formal_tiny_digest_backend_z3_execution_output_declared_files(),
+        declared_sidecars: gateway_formal_tiny_digest_backend_z3_execution_output_declared_sidecars(
+        ),
+        declared_file_digests,
+        claim_boundary: gateway_formal_tiny_digest_backend_z3_execution_output_claim_boundary(),
+        process_spawned: execution.process_spawned,
+        backend_executed: execution.backend_executed,
+        proof_artifact_created: execution.proof_artifact_created,
+        checker_transcript_created: execution.checker_transcript_created,
+        solver_certificate_created: execution.solver_certificate_created,
+        creates_accepted_evidence: execution.creates_accepted_evidence,
+        creates_level2_evidence: execution.creates_level2_evidence,
+        populates_score_axes: execution.populates_score_axes,
+        semantic_correctness_claimed: execution.semantic_correctness_claimed,
+        production_readiness_claimed: execution.production_readiness_claimed,
+        sota_claimed: execution.sota_claimed,
+        breakthrough_claimed: execution.breakthrough_claimed,
+        full_security_claimed: execution.full_security_claimed,
+        grants_authority: execution.grants_authority,
+        raw_logs_retained: execution.raw_logs_retained,
+        raw_provider_response_retained: execution.raw_provider_response_retained,
+        nonclaims,
+    };
+    files.insert(
+        "gateway-formal-tiny-digest-z3-execution/manifest.json".to_owned(),
+        serde_json::to_vec_pretty(&manifest)
+            .map_err(gateway_formal_tiny_digest_backend_z3_execution_serde_error)?,
+    );
+    Ok(files)
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_execution_bundle_semantics(
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<
+    GatewayFormalTinyDigestBackendZ3ExecutionOutputManifest,
+    GatewayFormalTinyDigestBackendZ3ExecutionOutputError,
+> {
+    let manifest: GatewayFormalTinyDigestBackendZ3ExecutionOutputManifest =
+        parse_gateway_formal_tiny_digest_backend_z3_execution_declared_json(
+            files,
+            "gateway-formal-tiny-digest-z3-execution/manifest.json",
+        )?;
+    let execution: GatewayFormalTinyDigestBackendZ3Execution =
+        parse_gateway_formal_tiny_digest_backend_z3_execution_declared_json(
+            files,
+            "gateway-formal-tiny-digest-z3-execution/execution.json",
+        )?;
+    validate_gateway_formal_tiny_digest_backend_z3_execution_readback_manifest(
+        &manifest, &execution, files,
+    )?;
+    Ok(manifest)
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_execution_readback_manifest(
+    manifest: &GatewayFormalTinyDigestBackendZ3ExecutionOutputManifest,
+    execution: &GatewayFormalTinyDigestBackendZ3Execution,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<(), GatewayFormalTinyDigestBackendZ3ExecutionOutputError> {
+    validate_gateway_formal_tiny_digest_backend_z3_execution_record(execution)?;
+    let expected_digest_paths: BTreeSet<String> =
+        GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_DECLARED_FILES
+            .iter()
+            .filter(|path| **path != "gateway-formal-tiny-digest-z3-execution/manifest.json")
+            .map(|path| (*path).to_owned())
+            .collect();
+    let actual_digest_paths: BTreeSet<String> =
+        manifest.declared_file_digests.keys().cloned().collect();
+    if manifest.schema_version
+        != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_SCHEMA_VERSION
+        || manifest.state_slice
+            != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_STATE_SLICE
+        || manifest.run_id != execution.run_id
+        || manifest.execution_digest != execution.digest()
+        || manifest.execution_input_digest != execution.execution_input_digest
+        || manifest.probe_digest != execution.probe_digest
+        || manifest.command_descriptor_digest != execution.command_descriptor_digest
+        || manifest.obligation_digest != execution.obligation_digest
+        || manifest.solver_verdict_label != execution.solver_verdict_label
+        || manifest.declared_files
+            != gateway_formal_tiny_digest_backend_z3_execution_output_declared_files()
+        || manifest.declared_sidecars
+            != gateway_formal_tiny_digest_backend_z3_execution_output_declared_sidecars()
+        || actual_digest_paths != expected_digest_paths
+        || manifest.claim_boundary
+            != gateway_formal_tiny_digest_backend_z3_execution_output_claim_boundary()
+        || manifest.process_spawned != execution.process_spawned
+        || manifest.backend_executed != execution.backend_executed
+        || manifest.proof_artifact_created != execution.proof_artifact_created
+        || manifest.checker_transcript_created != execution.checker_transcript_created
+        || manifest.solver_certificate_created != execution.solver_certificate_created
+        || manifest.creates_accepted_evidence != execution.creates_accepted_evidence
+        || manifest.creates_level2_evidence != execution.creates_level2_evidence
+        || manifest.populates_score_axes != execution.populates_score_axes
+        || manifest.semantic_correctness_claimed != execution.semantic_correctness_claimed
+        || manifest.production_readiness_claimed != execution.production_readiness_claimed
+        || manifest.sota_claimed != execution.sota_claimed
+        || manifest.breakthrough_claimed != execution.breakthrough_claimed
+        || manifest.full_security_claimed != execution.full_security_claimed
+        || manifest.grants_authority != execution.grants_authority
+        || manifest.raw_logs_retained != execution.raw_logs_retained
+        || manifest.raw_provider_response_retained != execution.raw_provider_response_retained
+        || manifest.nonclaims
+            != gateway_formal_tiny_digest_backend_z3_execution_required_nonclaims()
+    {
+        return Err(GatewayFormalTinyDigestBackendZ3ExecutionOutputError::ManifestSemanticMismatch);
+    }
+    for (logical_path, expected_digest) in &manifest.declared_file_digests {
+        let bytes =
+            declared_gateway_formal_tiny_digest_backend_z3_execution_bytes(files, logical_path)?;
+        if hash_bytes(bytes) != *expected_digest {
+            return Err(
+                GatewayFormalTinyDigestBackendZ3ExecutionOutputError::ManifestSemanticMismatch,
+            );
+        }
+    }
+    let nonclaims = declared_gateway_formal_tiny_digest_backend_z3_execution_bytes(
+        files,
+        "gateway-formal-tiny-digest-z3-execution/nonclaims.md",
+    )?;
+    if nonclaims
+        != gateway_formal_tiny_digest_backend_z3_execution_nonclaims_markdown(
+            &gateway_formal_tiny_digest_backend_z3_execution_required_nonclaims(),
+        )
+        .as_bytes()
+    {
+        return Err(GatewayFormalTinyDigestBackendZ3ExecutionOutputError::NonclaimMismatch);
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_execution_record(
+    execution: &GatewayFormalTinyDigestBackendZ3Execution,
+) -> Result<(), GatewayFormalTinyDigestBackendZ3ExecutionOutputError> {
+    if execution.schema_version != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_SCHEMA_VERSION
+        || execution.state_slice != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_STATE_SLICE
+        || execution.claim_boundary
+            != gateway_formal_tiny_digest_backend_z3_execution_claim_boundary()
+        || !execution.process_spawned
+        || !execution.backend_executed
+        || execution.proof_artifact_created
+        || execution.checker_transcript_created
+        || execution.solver_certificate_created
+        || execution.creates_accepted_evidence
+        || execution.creates_level2_evidence
+        || execution.populates_score_axes
+        || execution.semantic_correctness_claimed
+        || execution.production_readiness_claimed
+        || execution.sota_claimed
+        || execution.breakthrough_claimed
+        || execution.full_security_claimed
+        || execution.grants_authority
+        || execution.raw_logs_retained
+        || execution.raw_provider_response_retained
+        || execution.explicit_nonclaims
+            != gateway_formal_tiny_digest_backend_z3_execution_required_nonclaims()
+    {
+        return Err(GatewayFormalTinyDigestBackendZ3ExecutionOutputError::InvalidExecution);
+    }
+    Ok(())
+}
+
+fn declared_gateway_formal_tiny_digest_backend_z3_execution_bytes<'a>(
+    files: &'a BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<&'a [u8], GatewayFormalTinyDigestBackendZ3ExecutionOutputError> {
+    files.get(logical_path).map(Vec::as_slice).ok_or_else(|| {
+        GatewayFormalTinyDigestBackendZ3ExecutionOutputError::Io(format!(
+            "declared file missing: {logical_path}"
+        ))
+    })
+}
+
+fn parse_gateway_formal_tiny_digest_backend_z3_execution_declared_json<
+    T: for<'de> Deserialize<'de> + Serialize,
+>(
+    files: &BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<T, GatewayFormalTinyDigestBackendZ3ExecutionOutputError> {
+    let bytes =
+        declared_gateway_formal_tiny_digest_backend_z3_execution_bytes(files, logical_path)?;
+    let original = parse_json_value_rejecting_duplicate_keys(bytes).map_err(|_| {
+        GatewayFormalTinyDigestBackendZ3ExecutionOutputError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })?;
+    let parsed: T = serde_json::from_value(original.clone()).map_err(|_| {
+        GatewayFormalTinyDigestBackendZ3ExecutionOutputError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })?;
+    let canonical = serde_json::to_value(&parsed)
+        .map_err(gateway_formal_tiny_digest_backend_z3_execution_serde_error)?;
+    if canonical != original {
+        return Err(
+            GatewayFormalTinyDigestBackendZ3ExecutionOutputError::MalformedDeclaredFile(
+                logical_path.to_owned(),
+            ),
+        );
+    }
+    Ok(parsed)
+}
+
+fn gateway_formal_tiny_digest_backend_z3_execution_nonclaims_markdown(
+    nonclaims: &BTreeSet<NonClaimLabel>,
+) -> String {
+    let mut out = String::from("# Gateway Tiny Digest Z3 Execution Non-Claims\n\n");
+    for nonclaim in nonclaims {
+        out.push_str("- ");
+        out.push_str(&nonclaim.0);
+        out.push('\n');
+    }
+    out
+}
+
+fn reject_undeclared_gateway_formal_tiny_digest_backend_z3_execution_files(
+    output_root: &Path,
+) -> Result<(), GatewayFormalTinyDigestBackendZ3ExecutionOutputError> {
+    let mut declared: BTreeSet<String> =
+        GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_DECLARED_FILES
+            .iter()
+            .chain(GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_DECLARED_SIDECARS.iter())
+            .map(|value| (*value).to_owned())
+            .collect();
+    let bundle_dir = output_root.join("gateway-formal-tiny-digest-z3-execution");
+    for entry in fs::read_dir(&bundle_dir)
+        .map_err(gateway_formal_tiny_digest_backend_z3_execution_io_error)?
+    {
+        let entry = entry.map_err(gateway_formal_tiny_digest_backend_z3_execution_io_error)?;
+        let logical_path = entry
+            .path()
+            .strip_prefix(output_root)
+            .map_err(|error| {
+                GatewayFormalTinyDigestBackendZ3ExecutionOutputError::Io(error.to_string())
+            })?
+            .to_string_lossy()
+            .replace('\\', "/");
+        if !declared.remove(&logical_path) {
+            return Err(
+                GatewayFormalTinyDigestBackendZ3ExecutionOutputError::UndeclaredFile(logical_path),
+            );
+        }
+    }
+    if let Some(missing) = declared.into_iter().next() {
+        return Err(GatewayFormalTinyDigestBackendZ3ExecutionOutputError::Io(
+            format!("declared file missing: {missing}"),
+        ));
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_execution_output_root(
+    output_root: &Path,
+    protected_roots: &[PathBuf],
+    overwrite: bool,
+) -> Result<(), GatewayFormalTinyDigestBackendZ3ExecutionOutputError> {
+    match validate_output_root(output_root, protected_roots, overwrite) {
+        Ok(()) => Ok(()),
+        Err(AdmissionJournalMaterializationError::EmptyOutputRoot) => {
+            Err(GatewayFormalTinyDigestBackendZ3ExecutionOutputError::EmptyOutputRoot)
+        }
+        Err(AdmissionJournalMaterializationError::ProtectedOutputRoot) => {
+            Err(GatewayFormalTinyDigestBackendZ3ExecutionOutputError::ProtectedOutputRoot)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootExistsWithoutOverwrite) => Err(
+            GatewayFormalTinyDigestBackendZ3ExecutionOutputError::OutputRootExistsWithoutOverwrite,
+        ),
+        Err(AdmissionJournalMaterializationError::OutputRootIsFile) => {
+            Err(GatewayFormalTinyDigestBackendZ3ExecutionOutputError::OutputRootIsFile)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootIsSymlink) => {
+            Err(GatewayFormalTinyDigestBackendZ3ExecutionOutputError::OutputRootIsSymlink)
+        }
+        Err(AdmissionJournalMaterializationError::Io(error)) => Err(
+            GatewayFormalTinyDigestBackendZ3ExecutionOutputError::Io(error),
+        ),
+        Err(other) => Err(GatewayFormalTinyDigestBackendZ3ExecutionOutputError::Io(
+            format!("{other:?}"),
+        )),
+    }
+}
+
+fn gateway_formal_tiny_digest_backend_z3_execution_staging_root_for(
+    output_root: &Path,
+    run_id: &str,
+) -> Result<PathBuf, GatewayFormalTinyDigestBackendZ3ExecutionOutputError> {
+    let parent = output_root
+        .parent()
+        .ok_or(GatewayFormalTinyDigestBackendZ3ExecutionOutputError::EmptyOutputRoot)?;
+    let name = output_root
+        .file_name()
+        .map(|value| value.to_string_lossy().into_owned())
+        .ok_or(GatewayFormalTinyDigestBackendZ3ExecutionOutputError::EmptyOutputRoot)?;
+    Ok(parent.join(format!(".{name}.{run_id}.staging")))
+}
+
+fn remove_gateway_formal_tiny_digest_backend_z3_execution_dir_all_checked(
+    path: &Path,
+) -> Result<(), GatewayFormalTinyDigestBackendZ3ExecutionOutputError> {
+    if !path.exists() {
+        return Ok(());
+    }
+    if fs::symlink_metadata(path)
+        .map_err(gateway_formal_tiny_digest_backend_z3_execution_io_error)?
+        .file_type()
+        .is_symlink()
+    {
+        return Err(GatewayFormalTinyDigestBackendZ3ExecutionOutputError::OutputRootIsSymlink);
+    }
+    fs::remove_dir_all(path).map_err(gateway_formal_tiny_digest_backend_z3_execution_io_error)
+}
+
+fn gateway_formal_tiny_digest_backend_z3_execution_io_error(
+    error: io::Error,
+) -> GatewayFormalTinyDigestBackendZ3ExecutionOutputError {
+    GatewayFormalTinyDigestBackendZ3ExecutionOutputError::Io(error.to_string())
+}
+
+fn gateway_formal_tiny_digest_backend_z3_execution_serde_error(
+    error: serde_json::Error,
+) -> GatewayFormalTinyDigestBackendZ3ExecutionOutputError {
+    GatewayFormalTinyDigestBackendZ3ExecutionOutputError::Serialization(error.to_string())
 }
 
 fn gateway_formal_tiny_digest_backend_z3_compatibility_preflight(
@@ -47380,6 +47988,18 @@ const GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_DECLARED_SIDECARS: &[
     "gateway-formal-real-command-lane-fixed-smt-execution/nonclaims.md.sha256",
 ];
 
+const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_DECLARED_FILES: &[&str] = &[
+    "gateway-formal-tiny-digest-z3-execution/manifest.json",
+    "gateway-formal-tiny-digest-z3-execution/execution.json",
+    "gateway-formal-tiny-digest-z3-execution/nonclaims.md",
+];
+
+const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_DECLARED_SIDECARS: &[&str] = &[
+    "gateway-formal-tiny-digest-z3-execution/manifest.json.sha256",
+    "gateway-formal-tiny-digest-z3-execution/execution.json.sha256",
+    "gateway-formal-tiny-digest-z3-execution/nonclaims.md.sha256",
+];
+
 const ADMISSION_JOURNAL_DECLARED_FILES: &[&str] = &[
     "admission-journal/manifest.json",
     "admission-journal/journal.json",
@@ -50559,6 +51179,57 @@ mod tests {
         }
     }
 
+    fn phase404_execution_if_z3_available(
+        name: &str,
+    ) -> Option<(
+        PathBuf,
+        GatewayFormalTinyDigestBackendZ3Execution,
+        GatewayFormalTinyDigestBackendProbe,
+        GatewayFormalTinyDigestBackendZ3ExecutionInput,
+        GatewayFormalRealCommandLaneCommandDescriptor,
+    )> {
+        let z3_path = PathBuf::from("/opt/homebrew/bin/z3");
+        if !z3_path.is_file() {
+            let input = phase403_probe_input(
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SMT_Z3_LANE_ID,
+                false,
+            );
+            assert!(
+                validate_gateway_formal_tiny_digest_backend_probe_input(&input)
+                    .issues
+                    .contains(&GatewayFormalTinyDigestBackendProbeIssue::SelectedLaneUnavailable)
+            );
+            return None;
+        }
+
+        let obligation_root = temp_output_root(name);
+        fs::create_dir_all(&obligation_root).expect("phase404 obligation root creates");
+        let obligation_path = obligation_root.join("digest-binding.smt2");
+        let obligation_bytes = phase404_z3_obligation_bytes();
+        fs::write(&obligation_path, &obligation_bytes).expect("phase404 obligation writes");
+        let obligation_digest = hash_bytes(&obligation_bytes);
+        let command = phase404_z3_command(&obligation_path, obligation_digest);
+        let probe = phase404_probe_for_command(&command);
+        let input = phase404_z3_execution_input(&probe, &command, obligation_digest);
+        let execution =
+            run_gateway_formal_tiny_digest_backend_z3_execution(&probe, &input, &command, &z3_path)
+                .expect("phase404 fixed local z3 execution succeeds");
+        Some((obligation_root, execution, probe, input, command))
+    }
+
+    fn phase405_output_request(
+        output_root: &Path,
+    ) -> GatewayFormalTinyDigestBackendZ3ExecutionOutputRequest {
+        GatewayFormalTinyDigestBackendZ3ExecutionOutputRequest {
+            created_at_unix: 1_800_000_405,
+            overwrite: false,
+            protected_roots: vec![output_root
+                .parent()
+                .expect("phase405 output root has parent")
+                .join("protected-repo")],
+        }
+    }
+
     #[test]
     fn phase403_tiny_digest_backend_probe_builds_without_promotion() {
         let input = phase403_probe_input(
@@ -50651,33 +51322,11 @@ mod tests {
 
     #[test]
     fn phase404_fixed_local_z3_digest_binding_executes_when_available() {
-        let z3_path = PathBuf::from("/opt/homebrew/bin/z3");
-        if !z3_path.is_file() {
-            let input = phase403_probe_input(
-                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SMT_Z3_LANE_ID,
-                false,
-            );
-            assert!(
-                validate_gateway_formal_tiny_digest_backend_probe_input(&input)
-                    .issues
-                    .contains(&GatewayFormalTinyDigestBackendProbeIssue::SelectedLaneUnavailable)
-            );
+        let Some((obligation_root, execution, probe, input, command)) =
+            phase404_execution_if_z3_available("phase404-fixed-local-z3")
+        else {
             return;
-        }
-
-        let obligation_root = temp_output_root("phase404-fixed-local-z3");
-        fs::create_dir_all(&obligation_root).expect("phase404 obligation root creates");
-        let obligation_path = obligation_root.join("digest-binding.smt2");
-        let obligation_bytes = phase404_z3_obligation_bytes();
-        fs::write(&obligation_path, &obligation_bytes).expect("phase404 obligation writes");
-        let obligation_digest = hash_bytes(&obligation_bytes);
-        let command = phase404_z3_command(&obligation_path, obligation_digest);
-        let probe = phase404_probe_for_command(&command);
-        let input = phase404_z3_execution_input(&probe, &command, obligation_digest);
-
-        let execution =
-            run_gateway_formal_tiny_digest_backend_z3_execution(&probe, &input, &command, &z3_path)
-                .expect("phase404 fixed local z3 execution succeeds");
+        };
 
         assert_eq!(
             execution.state_slice,
@@ -50736,6 +51385,154 @@ mod tests {
         assert!(validation
             .issues
             .contains(&GatewayFormalTinyDigestBackendZ3ExecutionIssue::PromotionAttempt));
+    }
+
+    #[test]
+    fn phase405_fixed_local_z3_execution_output_materializes_and_reads_back() {
+        let Some((obligation_root, execution, _probe, _input, _command)) =
+            phase404_execution_if_z3_available("phase405-output-valid-obligation")
+        else {
+            return;
+        };
+        let output_root = temp_output_root("phase405-output-valid");
+        let manifest = materialize_gateway_formal_tiny_digest_backend_z3_execution_output_bundle(
+            &output_root,
+            &execution,
+            &phase405_output_request(&output_root),
+        )
+        .expect("phase405 output materializes");
+
+        assert_eq!(
+            manifest.state_slice,
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_STATE_SLICE
+        );
+        assert_eq!(manifest.execution_digest, execution.digest());
+        assert!(manifest.process_spawned);
+        assert!(manifest.backend_executed);
+        assert!(!manifest.creates_accepted_evidence);
+        assert!(!manifest.creates_level2_evidence);
+        assert!(!manifest.populates_score_axes);
+        assert_eq!(
+            read_gateway_formal_tiny_digest_backend_z3_execution_output_bundle(&output_root),
+            Ok(manifest)
+        );
+        assert!(output_root
+            .join("gateway-formal-tiny-digest-z3-execution/manifest.json.sha256")
+            .is_file());
+        assert!(!output_root
+            .join("gateway-formal-tiny-digest-z3-execution/proof-artifact.json")
+            .exists());
+
+        fs::remove_dir_all(&output_root).expect("phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase405 obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase405_fixed_local_z3_execution_output_rejects_drift_and_undeclared() {
+        let Some((sidecar_obligation_root, sidecar_execution, _probe, _input, _command)) =
+            phase404_execution_if_z3_available("phase405-sidecar-obligation")
+        else {
+            return;
+        };
+        let sidecar_root = temp_output_root("phase405-sidecar-drift");
+        materialize_gateway_formal_tiny_digest_backend_z3_execution_output_bundle(
+            &sidecar_root,
+            &sidecar_execution,
+            &phase405_output_request(&sidecar_root),
+        )
+        .expect("phase405 sidecar fixture materializes");
+        fs::write(
+            sidecar_path(
+                &sidecar_root.join("gateway-formal-tiny-digest-z3-execution/execution.json"),
+            ),
+            b"stale",
+        )
+        .expect("phase405 stale sidecar writes");
+        assert_eq!(
+            read_gateway_formal_tiny_digest_backend_z3_execution_output_bundle(&sidecar_root),
+            Err(
+                GatewayFormalTinyDigestBackendZ3ExecutionOutputError::DigestMismatch(
+                    "gateway-formal-tiny-digest-z3-execution/execution.json".to_owned()
+                )
+            )
+        );
+
+        let Some((promotion_obligation_root, promotion_execution, _probe, _input, _command)) =
+            phase404_execution_if_z3_available("phase405-promotion-obligation")
+        else {
+            fs::remove_dir_all(&sidecar_root).expect("phase405 sidecar cleanup succeeds");
+            fs::remove_dir_all(&sidecar_obligation_root)
+                .expect("phase405 sidecar obligation cleanup succeeds");
+            return;
+        };
+        let promotion_root = temp_output_root("phase405-manifest-promotion");
+        materialize_gateway_formal_tiny_digest_backend_z3_execution_output_bundle(
+            &promotion_root,
+            &promotion_execution,
+            &phase405_output_request(&promotion_root),
+        )
+        .expect("phase405 promotion fixture materializes");
+        let manifest_path =
+            promotion_root.join("gateway-formal-tiny-digest-z3-execution/manifest.json");
+        let mut manifest: GatewayFormalTinyDigestBackendZ3ExecutionOutputManifest =
+            serde_json::from_slice(&fs::read(&manifest_path).expect("phase405 manifest reads"))
+                .expect("phase405 manifest parses");
+        manifest.creates_level2_evidence = true;
+        let manifest_bytes =
+            serde_json::to_vec_pretty(&manifest).expect("phase405 manifest serializes");
+        fs::write(&manifest_path, &manifest_bytes).expect("phase405 manifest drift writes");
+        fs::write(
+            sidecar_path(&manifest_path),
+            hash_hex(hash_bytes(&manifest_bytes)).into_bytes(),
+        )
+        .expect("phase405 manifest sidecar updates");
+        assert_eq!(
+            read_gateway_formal_tiny_digest_backend_z3_execution_output_bundle(&promotion_root),
+            Err(GatewayFormalTinyDigestBackendZ3ExecutionOutputError::ManifestSemanticMismatch)
+        );
+
+        let Some((undeclared_obligation_root, undeclared_execution, _probe, _input, _command)) =
+            phase404_execution_if_z3_available("phase405-undeclared-obligation")
+        else {
+            fs::remove_dir_all(&sidecar_root).expect("phase405 sidecar cleanup succeeds");
+            fs::remove_dir_all(&sidecar_obligation_root)
+                .expect("phase405 sidecar obligation cleanup succeeds");
+            fs::remove_dir_all(&promotion_root).expect("phase405 promotion cleanup succeeds");
+            fs::remove_dir_all(&promotion_obligation_root)
+                .expect("phase405 promotion obligation cleanup succeeds");
+            return;
+        };
+        let undeclared_root = temp_output_root("phase405-undeclared");
+        materialize_gateway_formal_tiny_digest_backend_z3_execution_output_bundle(
+            &undeclared_root,
+            &undeclared_execution,
+            &phase405_output_request(&undeclared_root),
+        )
+        .expect("phase405 undeclared fixture materializes");
+        fs::write(
+            undeclared_root.join("gateway-formal-tiny-digest-z3-execution/proof-artifact.json"),
+            b"{}",
+        )
+        .expect("phase405 undeclared proof writes");
+        assert_eq!(
+            read_gateway_formal_tiny_digest_backend_z3_execution_output_bundle(&undeclared_root),
+            Err(
+                GatewayFormalTinyDigestBackendZ3ExecutionOutputError::UndeclaredFile(
+                    "gateway-formal-tiny-digest-z3-execution/proof-artifact.json".to_owned()
+                )
+            )
+        );
+
+        for root in [
+            &sidecar_root,
+            &sidecar_obligation_root,
+            &promotion_root,
+            &promotion_obligation_root,
+            &undeclared_root,
+            &undeclared_obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase405 drift fixture cleanup succeeds");
+        }
     }
 
     #[test]

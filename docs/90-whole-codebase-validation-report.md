@@ -5621,5 +5621,16 @@ only: no proof artifacts, checker transcripts, solver certificates, accepted
 formal evidence, Level2+ evidence, score axes, or production/SOTA/security/
 semantic-correctness claim.
 
+[docs/405-hsai-fixed-local-z3-execution-output-readback-notes.md](docs/405-hsai-fixed-local-z3-execution-output-readback-notes.md)
+records the Phase 405 materialized/readback bundle for the Phase 404 fixed
+local Z3 execution output. The implementation adds a typed output manifest,
+request, error taxonomy, declared file and sidecar helpers, staged
+materialization, and readback validation under `hsai-agent-admission`. Focused
+tests cover valid bundle readback, stale sidecar rejection, manifest promotion
+drift rejection, and undeclared proof-artifact rejection. This remains
+quarantined local output-bundle readback only: no proof artifacts, checker
+transcripts, solver certificates, accepted formal evidence, Level2+ evidence,
+score axes, or production/SOTA/security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
