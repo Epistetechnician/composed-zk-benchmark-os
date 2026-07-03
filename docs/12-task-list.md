@@ -8770,6 +8770,54 @@ evidence proposal path, no accepted formal evidence, no accepted Evidence Ledger
 mutation, no accepted append policy change, no Level2+ evidence, no score axes,
 no proof-authority claim, and no production/SOTA/security/correctness claim.
 
+## Phase 355 HSAI Materialized Audit Package Review Metadata
+
+Status: complete. See
+`docs/355-hsai-materialized-audit-package-review-metadata-notes.md`.
+
+Goal: implement local digest-only review metadata over one Phase 353
+materialized audit package while preserving the block on any accepted-evidence
+proposal path.
+
+Implemented: Phase 355 schema/state/claim-boundary constants, review input
+metadata, review record metadata, five bounded review labels, validation
+issues, validation result, required nonclaim helper, review builder, digest
+binding to one Phase 353 manifest digest/output request digest, Phase 351 review
+digest, Phase 349 preview digest, Phase 347 package digest, Phase 345 review
+record digest, Phase 343 metadata digest, declared file list digest, declared
+sidecar list digest, declared file digest map digest, digest-index digest,
+claim-boundary file digest, explicit nonclaim digest, reviewer decision
+metadata, current accepted append blocker digest, promotion-text rejection, and
+focused tests.
+
+Validation coverage: the implemented validation requires one Phase 355 review
+to bind the Phase 353 manifest, Phase 351 review, Phase 349 preview, Phase 347
+package, Phase 345 review record, Phase 343 metadata record, current accepted
+append blockers, declared file/sidecar/file-digest surfaces, digest-index
+digest, claim-boundary file digest, reviewer decision metadata, and explicit
+nonclaims while rejecting manifest drift, declared artifact drift, promotion
+text, and accepted-ledger mutation attempts.
+
+Validation gate: formatting, focused Phase 355 tests, docs/hygiene checks, diff
+hygiene, empty-file hygiene, package-root lint check, claim-boundary source
+scans, repo docs tests, and full workspace tests.
+
+Anti-goals: filesystem artifact writes, accepted Evidence Ledger mutation,
+accepted append policy changes, accepted formal evidence, Level2+ evidence,
+score-axis population, proof artifact generation or promotion, checker
+transcript generation or promotion, solver certificate generation or promotion,
+additional process-spawn APIs, generic backend runners, solver scripts, checker
+scripts, proof assistant setup files, Lean execution, SMT execution, COBALT
+execution, Rust-to-Lean extraction, benchmark submission, production deployment,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, or action authority.
+
+Exit criteria: HSAI now has deterministic digest-only review metadata over one
+Phase 353 materialized audit package. It still has no accepted formal evidence
+proposal path, no accepted formal evidence, no accepted Evidence Ledger
+mutation, no accepted append policy change, no Level2+ evidence, no score axes,
+no proof-authority claim, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
