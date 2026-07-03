@@ -2077,6 +2077,28 @@ extraction, submits no benchmarks, deploys nothing to production, claims no
 semantic correctness, claims no production readiness, claims no SOTA, claims no
 breakthrough status, claims no full security, and grants no authority.
 
+Phase 347 implements the local metadata review audit package in
+`crates/hsai-agent-admission/src/lib.rs`. It adds the Phase 347 schema, state
+slice, claim boundary, package input/output records, validation issues,
+validation result, required nonclaim helper, builder, and validator. The package
+binds one Phase 345 review record digest, one Phase 345 review input digest, one
+Phase 343 local metadata digest, one Phase 341 class-policy digest, one Phase
+337 policy-decision digest, one Phase 335 handoff digest, one Phase 333
+reviewed-record digest, current accepted append blockers, review label,
+reviewer ids, reviewer decision timestamp, package manifest digest, and
+explicit nonclaims. It rejects raw proof artifacts, raw checker transcripts, raw
+solver certificates, live backend outputs, benchmark outputs, secrets,
+credentials, mutable accepted-ledger state, promotional package-summary text,
+and promotion flags. Phase 347 writes no artifacts, changes no `zkbench-core`
+accepted append policy, mutates no accepted Evidence Ledger, creates no accepted
+formal evidence, creates no Level2+ evidence, populates no score axes, generates
+or promotes no proof artifacts, generates or promotes no checker transcripts,
+generates or promotes no solver certificates, executes no Lean, executes no SMT,
+executes no COBALT, runs no Rust-to-Lean extraction, submits no benchmarks,
+deploys nothing to production, claims no semantic correctness, claims no
+production readiness, claims no SOTA, claims no breakthrough status, claims no
+full security, and grants no authority.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
