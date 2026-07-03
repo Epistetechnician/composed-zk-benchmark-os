@@ -628,6 +628,11 @@ pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERS
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
     "phase-329-hsai-local-formal-evidence-candidate-data-model";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_CLAIM_BOUNDARY: &str = "local gateway formal-evidence candidate metadata only; binds one quarantined fixed-SMT execution output to one Phase 323 source bundle, one Phase 325 preflight, one Phase 327 output bundle, one declared gateway admission invariant, digest-bound replay metadata, and explicit nonclaims, but does not create reviewed formal evidence, create accepted evidence, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_REVIEW_PREVIEW_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-real-command-lane-review-preview:v1";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_REVIEW_PREVIEW_STATE_SLICE: &str =
+    "phase-331-hsai-reviewed-formal-evidence-preview-metadata";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_REVIEW_PREVIEW_CLAIM_BOUNDARY: &str = "local gateway reviewed-formal-evidence preview metadata only; classifies one Phase 329 formal-evidence candidate as scoped-acceptable, rejected, replay-blocked, or checker-lane-blocked under an explicit review policy and explicit nonclaims, but does not create reviewed formal evidence, create accepted evidence, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GatewayAttestationChallengeBinding {
@@ -4975,6 +4980,132 @@ pub enum GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue {
 pub struct GatewayFormalRealCommandLaneFormalEvidenceCandidateValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalRealCommandLaneReviewPreviewDecisionLabel {
+    ReviewPreviewAcceptCandidateScope,
+    ReviewPreviewRejectCandidateScope,
+    ReviewPreviewNeedsReplay,
+    ReviewPreviewNeedsCheckerLane,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneReviewPreviewInput {
+    pub schema_version: String,
+    pub preview_id: String,
+    pub created_at_unix: u64,
+    pub candidate_digest: Hash,
+    pub candidate_input_digest: Hash,
+    pub phase327_manifest_digest: Hash,
+    pub preflight_digest: Hash,
+    pub phase323_manifest_digest: Hash,
+    pub reviewer_policy_id: String,
+    pub verifier_policy_id: String,
+    pub reviewer_decision_id: String,
+    pub reviewer_decision_at_unix: u64,
+    pub reviewer_decision_label: GatewayFormalRealCommandLaneReviewPreviewDecisionLabel,
+    pub reviewer_nonclaim_acknowledgement_digest: Hash,
+    pub source_correspondence_statement_digest: Hash,
+    pub replay_readiness_checklist_digest: Hash,
+    pub promotion_rejection_checklist_digest: Hash,
+    pub acknowledged_nonclaims: BTreeSet<NonClaimLabel>,
+    pub replay_readiness_checklist: BTreeSet<String>,
+    pub promotion_rejection_checklist: BTreeSet<String>,
+    pub creates_reviewed_formal_evidence: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub benchmark_or_sota_comparison_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalRealCommandLaneReviewPreviewInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-review-preview-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneReviewPreview {
+    pub schema_version: String,
+    pub preview_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub preview_input_digest: Hash,
+    pub candidate_digest: Hash,
+    pub candidate_input_digest: Hash,
+    pub phase327_manifest_digest: Hash,
+    pub preflight_digest: Hash,
+    pub phase323_manifest_digest: Hash,
+    pub reviewer_policy_id: String,
+    pub verifier_policy_id: String,
+    pub reviewer_decision_id: String,
+    pub reviewer_decision_at_unix: u64,
+    pub reviewer_decision_label: GatewayFormalRealCommandLaneReviewPreviewDecisionLabel,
+    pub reviewer_nonclaim_acknowledgement_digest: Hash,
+    pub source_correspondence_statement_digest: Hash,
+    pub replay_readiness_checklist_digest: Hash,
+    pub promotion_rejection_checklist_digest: Hash,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub reviewed_formal_evidence_created: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalRealCommandLaneReviewPreview {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-review-preview:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalRealCommandLaneReviewPreviewIssue {
+    InvalidSchemaVersion,
+    InvalidPreviewId,
+    InvalidReviewerDecisionId,
+    MissingCreatedAt,
+    MissingReviewerDecisionTimestamp,
+    MissingDigest(String),
+    CandidateDigestDrift,
+    CandidatePromotionStateMismatch,
+    PolicyMismatch,
+    NonclaimAcknowledgementMismatch,
+    SourceCorrespondenceMismatch,
+    ReplayReadinessChecklistMismatch,
+    PromotionRejectionChecklistMismatch,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneReviewPreviewValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalRealCommandLaneReviewPreviewIssue>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -18593,6 +18724,36 @@ pub fn gateway_formal_real_command_lane_formal_evidence_candidate_required_noncl
     nonclaims
 }
 
+pub fn gateway_formal_real_command_lane_review_preview_claim_boundary() -> String {
+    GATEWAY_FORMAL_REAL_COMMAND_LANE_REVIEW_PREVIEW_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_real_command_lane_review_preview_replay_readiness_checklist(
+) -> BTreeSet<String> {
+    BTreeSet::from([
+        "phase323_manifest_digest_bound".to_owned(),
+        "phase325_preflight_digest_bound".to_owned(),
+        "phase327_manifest_digest_bound".to_owned(),
+        "phase329_candidate_digest_bound".to_owned(),
+        "replay_command_descriptor_digest_bound".to_owned(),
+    ])
+}
+
+pub fn gateway_formal_real_command_lane_review_preview_promotion_rejection_checklist(
+) -> BTreeSet<String> {
+    BTreeSet::from([
+        "rejects_reviewed_formal_evidence_emission".to_owned(),
+        "rejects_accepted_evidence".to_owned(),
+        "rejects_level2_evidence".to_owned(),
+        "rejects_score_axes".to_owned(),
+        "rejects_sota".to_owned(),
+        "rejects_full_security".to_owned(),
+        "rejects_semantic_correctness".to_owned(),
+        "rejects_production_readiness".to_owned(),
+        "rejects_action_authority".to_owned(),
+    ])
+}
+
 pub fn build_gateway_formal_real_command_lane_execution_preflight(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     command_request: &GatewayFormalRealCommandLaneRequest,
@@ -19872,6 +20033,244 @@ fn validate_gateway_formal_real_command_lane_formal_evidence_candidate_policy(
         issues.push(
             GatewayFormalRealCommandLaneFormalEvidenceCandidateIssue::CheckerOrSolverCertificatePromotionRequested,
         );
+    }
+}
+
+pub fn build_gateway_formal_real_command_lane_review_preview(
+    candidate: &GatewayFormalRealCommandLaneFormalEvidenceCandidate,
+    input: &GatewayFormalRealCommandLaneReviewPreviewInput,
+) -> Result<
+    GatewayFormalRealCommandLaneReviewPreview,
+    GatewayFormalRealCommandLaneReviewPreviewValidation,
+> {
+    let validation =
+        validate_gateway_formal_real_command_lane_review_preview_input(candidate, input);
+    if !validation.valid {
+        return Err(validation);
+    }
+    Ok(GatewayFormalRealCommandLaneReviewPreview {
+        schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_REVIEW_PREVIEW_SCHEMA_VERSION.to_owned(),
+        preview_id: input.preview_id.clone(),
+        state_slice: GATEWAY_FORMAL_REAL_COMMAND_LANE_REVIEW_PREVIEW_STATE_SLICE.to_owned(),
+        created_at_unix: input.created_at_unix,
+        preview_input_digest: input.digest(),
+        candidate_digest: candidate.digest(),
+        candidate_input_digest: candidate.candidate_input_digest,
+        phase327_manifest_digest: candidate.phase327_manifest_digest,
+        preflight_digest: candidate.preflight_digest,
+        phase323_manifest_digest: candidate.phase323_manifest_digest,
+        reviewer_policy_id: candidate.reviewer_policy_id.clone(),
+        verifier_policy_id: candidate.verifier_policy_id.clone(),
+        reviewer_decision_id: input.reviewer_decision_id.clone(),
+        reviewer_decision_at_unix: input.reviewer_decision_at_unix,
+        reviewer_decision_label: input.reviewer_decision_label.clone(),
+        reviewer_nonclaim_acknowledgement_digest: input.reviewer_nonclaim_acknowledgement_digest,
+        source_correspondence_statement_digest: input.source_correspondence_statement_digest,
+        replay_readiness_checklist_digest: input.replay_readiness_checklist_digest,
+        promotion_rejection_checklist_digest: input.promotion_rejection_checklist_digest,
+        previous_promotion_state: "formal_evidence_candidate".to_owned(),
+        promotion_state: "reviewed_formal_evidence_preview".to_owned(),
+        next_required_state: "reviewed_formal_evidence".to_owned(),
+        claim_boundary: gateway_formal_real_command_lane_review_preview_claim_boundary(),
+        explicit_nonclaims: candidate.explicit_nonclaims.clone(),
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        reviewed_formal_evidence_created: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_gateway_formal_real_command_lane_review_preview_input(
+    candidate: &GatewayFormalRealCommandLaneFormalEvidenceCandidate,
+    input: &GatewayFormalRealCommandLaneReviewPreviewInput,
+) -> GatewayFormalRealCommandLaneReviewPreviewValidation {
+    let mut issues = Vec::new();
+    if input.schema_version != GATEWAY_FORMAL_REAL_COMMAND_LANE_REVIEW_PREVIEW_SCHEMA_VERSION {
+        issues.push(GatewayFormalRealCommandLaneReviewPreviewIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.preview_id) {
+        issues.push(GatewayFormalRealCommandLaneReviewPreviewIssue::InvalidPreviewId);
+    }
+    if !is_single_segment_id(&input.reviewer_decision_id) {
+        issues.push(GatewayFormalRealCommandLaneReviewPreviewIssue::InvalidReviewerDecisionId);
+    }
+    if input.created_at_unix == 0 {
+        issues.push(GatewayFormalRealCommandLaneReviewPreviewIssue::MissingCreatedAt);
+    }
+    if input.reviewer_decision_at_unix == 0 {
+        issues
+            .push(GatewayFormalRealCommandLaneReviewPreviewIssue::MissingReviewerDecisionTimestamp);
+    }
+    validate_gateway_formal_real_command_lane_review_preview_digests(input, &mut issues);
+    validate_gateway_formal_real_command_lane_review_preview_candidate(
+        candidate,
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_real_command_lane_review_preview_policy(candidate, input, &mut issues);
+    GatewayFormalRealCommandLaneReviewPreviewValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_review_preview_digests(
+    input: &GatewayFormalRealCommandLaneReviewPreviewInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneReviewPreviewIssue>,
+) {
+    for (label, digest) in [
+        ("candidate_digest", input.candidate_digest),
+        ("candidate_input_digest", input.candidate_input_digest),
+        ("phase327_manifest_digest", input.phase327_manifest_digest),
+        ("preflight_digest", input.preflight_digest),
+        ("phase323_manifest_digest", input.phase323_manifest_digest),
+        (
+            "reviewer_nonclaim_acknowledgement_digest",
+            input.reviewer_nonclaim_acknowledgement_digest,
+        ),
+        (
+            "source_correspondence_statement_digest",
+            input.source_correspondence_statement_digest,
+        ),
+        (
+            "replay_readiness_checklist_digest",
+            input.replay_readiness_checklist_digest,
+        ),
+        (
+            "promotion_rejection_checklist_digest",
+            input.promotion_rejection_checklist_digest,
+        ),
+    ] {
+        if digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalRealCommandLaneReviewPreviewIssue::MissingDigest(label.to_owned()),
+            );
+        }
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_review_preview_candidate(
+    candidate: &GatewayFormalRealCommandLaneFormalEvidenceCandidate,
+    input: &GatewayFormalRealCommandLaneReviewPreviewInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneReviewPreviewIssue>,
+) {
+    if input.candidate_digest != candidate.digest()
+        || input.candidate_input_digest != candidate.candidate_input_digest
+        || input.phase327_manifest_digest != candidate.phase327_manifest_digest
+        || input.preflight_digest != candidate.preflight_digest
+        || input.phase323_manifest_digest != candidate.phase323_manifest_digest
+    {
+        issues.push(GatewayFormalRealCommandLaneReviewPreviewIssue::CandidateDigestDrift);
+    }
+    if candidate.schema_version
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION
+        || candidate.state_slice
+            != GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE
+        || candidate.promotion_state != "formal_evidence_candidate"
+        || candidate.next_required_state != "reviewed_formal_evidence"
+        || candidate.claim_boundary
+            != gateway_formal_real_command_lane_formal_evidence_candidate_claim_boundary()
+        || candidate.proof_artifact_created
+        || candidate.checker_transcript_created
+        || candidate.solver_certificate_created
+        || candidate.reviewed_formal_evidence_created
+        || candidate.creates_accepted_evidence
+        || candidate.creates_level2_evidence
+        || candidate.populates_score_axes
+        || candidate.semantic_correctness_claimed
+        || candidate.production_readiness_claimed
+        || candidate.sota_claimed
+        || candidate.breakthrough_claimed
+        || candidate.full_security_claimed
+        || candidate.grants_authority
+    {
+        issues
+            .push(GatewayFormalRealCommandLaneReviewPreviewIssue::CandidatePromotionStateMismatch);
+    }
+    if candidate.source_correspondence_statement.trim().is_empty() {
+        issues.push(GatewayFormalRealCommandLaneReviewPreviewIssue::SourceCorrespondenceMismatch);
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_review_preview_policy(
+    candidate: &GatewayFormalRealCommandLaneFormalEvidenceCandidate,
+    input: &GatewayFormalRealCommandLaneReviewPreviewInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneReviewPreviewIssue>,
+) {
+    if input.reviewer_policy_id != candidate.reviewer_policy_id
+        || input.verifier_policy_id != candidate.verifier_policy_id
+        || !is_single_segment_id(&input.reviewer_policy_id)
+        || !is_single_segment_id(&input.verifier_policy_id)
+    {
+        issues.push(GatewayFormalRealCommandLaneReviewPreviewIssue::PolicyMismatch);
+    }
+    if input.acknowledged_nonclaims != candidate.explicit_nonclaims
+        || input.reviewer_nonclaim_acknowledgement_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-review-preview-nonclaim-ack:v1",
+                &candidate.explicit_nonclaims,
+            )
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneReviewPreviewIssue::NonclaimAcknowledgementMismatch,
+        );
+    }
+    if input.source_correspondence_statement_digest
+        != hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-review-preview-source-correspondence:v1",
+            &candidate.source_correspondence_statement,
+        )
+    {
+        issues.push(GatewayFormalRealCommandLaneReviewPreviewIssue::SourceCorrespondenceMismatch);
+    }
+    let replay_checklist =
+        gateway_formal_real_command_lane_review_preview_replay_readiness_checklist();
+    if input.replay_readiness_checklist != replay_checklist
+        || input.replay_readiness_checklist_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-review-preview-replay-readiness:v1",
+                &replay_checklist,
+            )
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneReviewPreviewIssue::ReplayReadinessChecklistMismatch,
+        );
+    }
+    let promotion_checklist =
+        gateway_formal_real_command_lane_review_preview_promotion_rejection_checklist();
+    if input.promotion_rejection_checklist != promotion_checklist
+        || input.promotion_rejection_checklist_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-review-preview-promotion-rejection:v1",
+                &promotion_checklist,
+            )
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneReviewPreviewIssue::PromotionRejectionChecklistMismatch,
+        );
+    }
+    if input.creates_reviewed_formal_evidence
+        || input.creates_accepted_evidence
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.benchmark_or_sota_comparison_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(GatewayFormalRealCommandLaneReviewPreviewIssue::PromotionAttempt);
     }
 }
 
@@ -31669,6 +32068,63 @@ mod tests {
         )
     }
 
+    fn formal_evidence_review_preview_input(
+        preview_id: &str,
+        candidate: &GatewayFormalRealCommandLaneFormalEvidenceCandidate,
+        decision: GatewayFormalRealCommandLaneReviewPreviewDecisionLabel,
+    ) -> GatewayFormalRealCommandLaneReviewPreviewInput {
+        let replay_readiness_checklist =
+            gateway_formal_real_command_lane_review_preview_replay_readiness_checklist();
+        let promotion_rejection_checklist =
+            gateway_formal_real_command_lane_review_preview_promotion_rejection_checklist();
+        GatewayFormalRealCommandLaneReviewPreviewInput {
+            schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_REVIEW_PREVIEW_SCHEMA_VERSION
+                .to_owned(),
+            preview_id: preview_id.to_owned(),
+            created_at_unix: 1_800_000_331,
+            candidate_digest: candidate.digest(),
+            candidate_input_digest: candidate.candidate_input_digest,
+            phase327_manifest_digest: candidate.phase327_manifest_digest,
+            preflight_digest: candidate.preflight_digest,
+            phase323_manifest_digest: candidate.phase323_manifest_digest,
+            reviewer_policy_id: candidate.reviewer_policy_id.clone(),
+            verifier_policy_id: candidate.verifier_policy_id.clone(),
+            reviewer_decision_id: format!("{preview_id}-decision"),
+            reviewer_decision_at_unix: 1_800_000_331,
+            reviewer_decision_label: decision,
+            reviewer_nonclaim_acknowledgement_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-review-preview-nonclaim-ack:v1",
+                &candidate.explicit_nonclaims,
+            ),
+            source_correspondence_statement_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-review-preview-source-correspondence:v1",
+                &candidate.source_correspondence_statement,
+            ),
+            replay_readiness_checklist_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-review-preview-replay-readiness:v1",
+                &replay_readiness_checklist,
+            ),
+            promotion_rejection_checklist_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-review-preview-promotion-rejection:v1",
+                &promotion_rejection_checklist,
+            ),
+            acknowledged_nonclaims: candidate.explicit_nonclaims.clone(),
+            replay_readiness_checklist,
+            promotion_rejection_checklist,
+            creates_reviewed_formal_evidence: false,
+            creates_accepted_evidence: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            benchmark_or_sota_comparison_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
     #[test]
     fn gateway_formal_real_command_lane_fixed_smt_process_executes_and_quarantines_unsat() {
         let (
@@ -32084,6 +32540,180 @@ mod tests {
         fs::remove_dir_all(&phase327_root).expect("phase329 drift phase327 cleanup succeeds");
         fs::remove_dir_all(&execution_root).expect("phase329 drift execution cleanup succeeds");
         fs::remove_dir_all(&source_root).expect("phase329 drift source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_review_preview_builds_for_all_decisions_below_review() {
+        let (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            phase323_manifest,
+            preflight,
+            phase327_manifest,
+            input,
+        ) = real_command_lane_formal_evidence_candidate_parts("real-command-phase331-preview");
+        let candidate = build_gateway_formal_real_command_lane_formal_evidence_candidate(
+            &phase323_manifest,
+            &preflight,
+            &phase327_manifest,
+            &input,
+        )
+        .expect("phase331 candidate builds");
+
+        for (idx, decision) in [
+            GatewayFormalRealCommandLaneReviewPreviewDecisionLabel::ReviewPreviewAcceptCandidateScope,
+            GatewayFormalRealCommandLaneReviewPreviewDecisionLabel::ReviewPreviewRejectCandidateScope,
+            GatewayFormalRealCommandLaneReviewPreviewDecisionLabel::ReviewPreviewNeedsReplay,
+            GatewayFormalRealCommandLaneReviewPreviewDecisionLabel::ReviewPreviewNeedsCheckerLane,
+        ]
+        .into_iter()
+        .enumerate()
+        {
+            let preview_input = formal_evidence_review_preview_input(
+                &format!("phase331-preview-{idx}"),
+                &candidate,
+                decision.clone(),
+            );
+            let preview = build_gateway_formal_real_command_lane_review_preview(
+                &candidate,
+                &preview_input,
+            )
+            .expect("phase331 review preview builds");
+            assert_eq!(
+                preview.state_slice,
+                GATEWAY_FORMAL_REAL_COMMAND_LANE_REVIEW_PREVIEW_STATE_SLICE
+            );
+            assert_eq!(
+                preview.previous_promotion_state,
+                "formal_evidence_candidate"
+            );
+            assert_eq!(
+                preview.promotion_state,
+                "reviewed_formal_evidence_preview"
+            );
+            assert_eq!(preview.next_required_state, "reviewed_formal_evidence");
+            assert_eq!(preview.candidate_digest, candidate.digest());
+            assert_eq!(preview.reviewer_decision_label, decision);
+            assert_eq!(
+                preview.claim_boundary,
+                gateway_formal_real_command_lane_review_preview_claim_boundary()
+            );
+            assert!(!preview.reviewed_formal_evidence_created);
+            assert!(!preview.creates_accepted_evidence);
+            assert!(!preview.creates_level2_evidence);
+            assert!(!preview.populates_score_axes);
+            assert!(!preview.semantic_correctness_claimed);
+            assert!(!preview.production_readiness_claimed);
+            assert!(!preview.sota_claimed);
+            assert!(!preview.breakthrough_claimed);
+            assert!(!preview.full_security_claimed);
+            assert!(!preview.grants_authority);
+        }
+
+        fs::remove_dir_all(&phase323_root).expect("phase331 phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase331 phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase331 execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase331 source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_review_preview_rejects_drift_and_promotion() {
+        let (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            phase323_manifest,
+            preflight,
+            phase327_manifest,
+            input,
+        ) = real_command_lane_formal_evidence_candidate_parts("real-command-phase331-drift");
+        let candidate = build_gateway_formal_real_command_lane_formal_evidence_candidate(
+            &phase323_manifest,
+            &preflight,
+            &phase327_manifest,
+            &input,
+        )
+        .expect("phase331 drift candidate builds");
+        let preview_input = formal_evidence_review_preview_input(
+            "phase331-drift-preview",
+            &candidate,
+            GatewayFormalRealCommandLaneReviewPreviewDecisionLabel::ReviewPreviewAcceptCandidateScope,
+        );
+
+        let mut candidate_drift = preview_input.clone();
+        candidate_drift.candidate_digest = Hash([3; 32]);
+        let candidate_drift_validation =
+            validate_gateway_formal_real_command_lane_review_preview_input(
+                &candidate,
+                &candidate_drift,
+            );
+        assert!(candidate_drift_validation
+            .issues
+            .contains(&GatewayFormalRealCommandLaneReviewPreviewIssue::CandidateDigestDrift));
+
+        let mut policy_drift = preview_input.clone();
+        policy_drift.reviewer_policy_id = "different-review-policy".to_owned();
+        let policy_validation = validate_gateway_formal_real_command_lane_review_preview_input(
+            &candidate,
+            &policy_drift,
+        );
+        assert!(policy_validation
+            .issues
+            .contains(&GatewayFormalRealCommandLaneReviewPreviewIssue::PolicyMismatch));
+
+        let mut nonclaim_drift = preview_input.clone();
+        nonclaim_drift
+            .acknowledged_nonclaims
+            .remove(&NonClaimLabel("not accepted formal evidence".to_owned()));
+        let nonclaim_validation = validate_gateway_formal_real_command_lane_review_preview_input(
+            &candidate,
+            &nonclaim_drift,
+        );
+        assert!(nonclaim_validation.issues.contains(
+            &GatewayFormalRealCommandLaneReviewPreviewIssue::NonclaimAcknowledgementMismatch
+        ));
+
+        let mut checklist_drift = preview_input.clone();
+        checklist_drift
+            .promotion_rejection_checklist
+            .remove("rejects_sota");
+        let checklist_validation = validate_gateway_formal_real_command_lane_review_preview_input(
+            &candidate,
+            &checklist_drift,
+        );
+        assert!(checklist_validation.issues.contains(
+            &GatewayFormalRealCommandLaneReviewPreviewIssue::PromotionRejectionChecklistMismatch
+        ));
+
+        let mut promotion = preview_input.clone();
+        promotion.creates_reviewed_formal_evidence = true;
+        promotion.creates_accepted_evidence = true;
+        promotion.sota_claimed = true;
+        promotion.populates_score_axes = true;
+        let promotion_validation =
+            validate_gateway_formal_real_command_lane_review_preview_input(&candidate, &promotion);
+        assert!(promotion_validation
+            .issues
+            .contains(&GatewayFormalRealCommandLaneReviewPreviewIssue::PromotionAttempt));
+
+        let mut promoted_candidate = candidate.clone();
+        promoted_candidate.reviewed_formal_evidence_created = true;
+        let candidate_state_validation =
+            validate_gateway_formal_real_command_lane_review_preview_input(
+                &promoted_candidate,
+                &preview_input,
+            );
+        assert!(candidate_state_validation.issues.contains(
+            &GatewayFormalRealCommandLaneReviewPreviewIssue::CandidatePromotionStateMismatch
+        ));
+
+        fs::remove_dir_all(&phase323_root).expect("phase331 drift phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase331 drift phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase331 drift execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase331 drift source cleanup succeeds");
     }
 
     #[test]

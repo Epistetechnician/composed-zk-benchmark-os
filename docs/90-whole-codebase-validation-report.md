@@ -1781,6 +1781,21 @@ Rust-to-Lean extraction, benchmark submission, production deployment,
 semantic-correctness claims, production-readiness claims, SOTA claims,
 breakthrough claims, full-security claims, or authority grants.
 
+Phase 331 implements local reviewed-formal-evidence preview metadata for Phase
+329 candidates in `crates/hsai-agent-admission`. It adds review-preview
+decision labels, input metadata, record metadata, validation issues, validation
+reports, canonical replay-readiness and promotion-rejection checklist helpers,
+and a builder that classifies a candidate as scoped-acceptable, rejected,
+replay-blocked, or checker-lane-blocked under explicit policy and nonclaims.
+Focused tests build all four preview decisions and reject candidate digest
+drift, policy drift, nonclaim acknowledgement drift, promotion-rejection
+checklist drift, review/accepted/SOTA/score-axis promotion, and promoted
+candidate state drift. Phase 331 does not create reviewed formal evidence,
+accepted Evidence Ledger entries, Level2+ evidence, score-axis entries, proof
+artifacts, checker transcripts, solver certificates, benchmark evidence,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, or authority grants.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission

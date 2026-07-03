@@ -7773,6 +7773,45 @@ still no review-preview implementation, no reviewed formal evidence, no
 accepted formal evidence, no Level2+ evidence, no score axes, no proof-authority
 claim, and no production/SOTA/security/correctness claim.
 
+## Phase 331 HSAI Reviewed Formal Evidence Preview Metadata
+
+Status: complete. See
+`docs/331-hsai-reviewed-formal-evidence-preview-metadata-notes.md`.
+
+Goal: implement local review-preview metadata for Phase 329 candidates while
+keeping preview metadata below reviewed formal evidence and accepted evidence.
+
+Implemented: Phase 331 schema/state/claim-boundary constants, review-preview
+decision labels, review-preview input metadata, review-preview record metadata,
+validation issue taxonomy, validation report, canonical replay-readiness and
+promotion-rejection checklist helpers, review-preview builder, and fail-closed
+review-preview validation from Phase 329 candidates.
+
+Validation coverage: successful preview construction for accept, reject,
+needs-replay, and needs-checker-lane decisions; preservation of the promotion
+ladder; proof/evidence/score/claim/authority flags held false; candidate digest
+drift rejection; policy drift rejection; nonclaim acknowledgement drift
+rejection; promotion-rejection checklist drift rejection; review/accepted/SOTA
+/score-axis promotion rejection; and promoted-candidate state rejection.
+
+Validation gate: formatting, focused Phase 331 review-preview tests, HSAI
+claim-boundary source scan, repo docs/hygiene tests, diff hygiene, empty-file
+hygiene, package-root lint check, and full workspace tests.
+
+Anti-goals: reviewed formal evidence, accepted Evidence Ledger mutation,
+Level2+ evidence, score-axis population, proof artifact generation, checker
+transcript generation, solver certificate generation, Lean execution, COBALT
+execution, Rust-to-Lean extraction, benchmark submission, production deployment,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, or action authority.
+
+Exit criteria: HSAI now has a local reviewed-formal-evidence preview lane that
+can classify one formal-evidence candidate as scoped-acceptable, rejected,
+replay-blocked, or checker-lane-blocked without creating reviewed or accepted
+evidence. It still has no reviewed formal evidence, no accepted formal
+evidence, no Level2+ evidence, no score axes, no proof-authority claim, and no
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
