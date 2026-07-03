@@ -488,6 +488,7 @@ Surface DSL
 | [docs/400-hsai-phase-400-continuation-gate.md](docs/400-hsai-phase-400-continuation-gate.md) | Phase 400 HSAI Phase-400 continuation gate. |
 | [docs/401-hsai-tiny-backend-execution-boundary.md](docs/401-hsai-tiny-backend-execution-boundary.md) | Phase 401 HSAI tiny backend-execution boundary. |
 | [docs/402-hsai-backend-execution-readiness-reconciliation.md](docs/402-hsai-backend-execution-readiness-reconciliation.md) | Phase 402 HSAI backend-execution readiness reconciliation. |
+| [docs/403-hsai-tiny-digest-binding-backend-probe-notes.md](docs/403-hsai-tiny-digest-binding-backend-probe-notes.md) | Phase 403 HSAI tiny digest-binding backend probe notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |

@@ -5599,5 +5599,15 @@ source, no new backend run, no accepted formal evidence, no Level2+ evidence,
 no score axes, no proof-authority claim, and no production/SOTA/security/
 semantic-correctness claim.
 
+[docs/403-hsai-tiny-digest-binding-backend-probe-notes.md](docs/403-hsai-tiny-digest-binding-backend-probe-notes.md)
+records the Phase 403 no-spawn Rust backend-probe metadata for
+`gateway-local-digest-binding-determinism-v1`. The implementation adds typed
+tool availability, digest-binding, nonclaim, builder, and validator surfaces
+under `hsai-agent-admission`, plus focused tests for valid construction,
+selected-unavailable-lane rejection, digest drift, and promotion attempts.
+It adds no backend execution, no proof artifacts, no checker transcripts, no
+accepted formal evidence, no Level2+ evidence, no score axes, and no
+production/SOTA/security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
