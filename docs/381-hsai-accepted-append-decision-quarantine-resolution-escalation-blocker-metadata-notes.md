@@ -195,9 +195,9 @@ Phase 381 adds tests that:
 
 ## Next Slice
 
-Phase 382 should define a docs-first boundary for accepted-append decision
+Phase 382 defines a docs-first boundary for accepted-append decision
 quarantine-resolution escalation-blocker review metadata before any accepted
-append decision is allowed. That boundary must keep blocker-review metadata
+append decision is allowed. That boundary keeps blocker-review metadata
 separate from accepted formal evidence, accepted Evidence Ledger mutation,
 accepted append policy changes, Level2+ evidence, score axes, Lean execution,
 SMT execution, COBALT execution, Rust-to-Lean extraction, semantic correctness,
