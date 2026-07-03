@@ -89,7 +89,6 @@ That is still not:
 
 ## Next Slice
 
-The next responsible slice is another boundary step before any promotion:
-define the review boundary for this local metadata class and the exact
-conditions under which it may be compared with backend execution artifacts
-without mutating accepted evidence or creating Level2+ evidence.
+Phase 422 defines the review boundary for this local metadata class and the
+exact conditions under which it may later be compared with backend execution
+artifacts without mutating accepted evidence or creating Level2+ evidence.
