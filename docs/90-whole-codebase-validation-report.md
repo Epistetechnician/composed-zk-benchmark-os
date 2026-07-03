@@ -2292,6 +2292,39 @@ production, claims no semantic correctness, claims no production readiness,
 claims no SOTA, claims no breakthrough status, claims no full security, and
 grants no authority.
 
+Phase 378 defines the docs-first accepted-append decision
+quarantine-resolution review boundary. The boundary authorizes a future local
+review metadata implementation over one Phase 377 resolution plan before any
+accepted append decision is allowed. It defines five allowed future review
+labels and requires any future review input to bind the Phase 377 resolution
+plan digest/input digest, Phase 375 quarantine review digest/input digest,
+Phase 373 quarantine digest/input digest, Phase 371 blocker review digest/input
+digest, Phase 369 blocker digest/input digest, Phase 367 review digest/input
+digest, Phase 365 candidate digest/input digest, Phase 363 review
+digest/input digest, Phase 361 preflight digest/input digest, Phase 359 review
+digest/input digest, Phase 357 candidate digest/input digest, Phase
+355/353/351/349/347/345/343 chain digests, declared file digest map digest,
+explicit nonclaim digest, quarantine ids, resolution ids, reviewer ids,
+proposal ids, append preflight ids, accepted append decision candidate/review/
+blocker/blocker-review/quarantine/quarantine-review/resolution-plan/
+resolution-review ids, review timestamp, current accepted append blocker
+digest, Phase 365 candidate disposition, Phase 367 review label, Phase 369
+blocker label, Phase 371 blocker review label, Phase 373 quarantine label,
+Phase 375 quarantine review label, Phase 377 resolution planning label, and
+bounded resolution-review label. The boundary requires future validation to
+reject drifted digests, invalid ids, missing timestamps, promoted or drifted
+Phase 377 resolution plan state, promotion text, accepted append decision
+attempts, accepted Evidence Ledger mutation attempts, accepted append
+policy-change attempts, accepted formal-evidence creation attempts, Level2+
+attempts, and score-axis attempts. Phase 378 creates no Rust implementation,
+changes no Cargo metadata, writes no artifacts, changes no accepted append
+policy, mutates no accepted Evidence Ledger, creates no accepted formal
+evidence, creates no Level2+ evidence, populates no score axes, executes no
+Lean, executes no SMT, executes no COBALT, runs no Rust-to-Lean extraction,
+submits no benchmarks, deploys nothing to production, claims no semantic
+correctness, claims no production readiness, claims no SOTA, claims no
+breakthrough status, claims no full security, and grants no authority.
+
 Phase 360 defines the docs-first append-decision preflight boundary. It
 specifies the future preflight purpose, five allowed future preflight labels,
 required future inputs, required future validation, meaning limits, and Phase
