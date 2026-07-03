@@ -145,9 +145,9 @@ Phase 365 adds tests that:
 
 ## Next Slice
 
-Phase 366 should define a docs-first boundary for reviewing local
-accepted-append decision candidate metadata before any accepted append decision.
-That boundary must keep decision-candidate review separate from accepted formal
+Phase 366 defines a docs-first boundary for reviewing local accepted-append
+decision candidate metadata before any accepted append decision. That boundary
+keeps decision-candidate review separate from accepted formal
 evidence, accepted Evidence Ledger mutation, accepted append policy changes,
 Level2+ evidence, score axes, Lean execution, SMT execution, COBALT execution,
 Rust-to-Lean extraction, semantic correctness, production readiness, SOTA,
