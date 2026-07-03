@@ -8906,6 +8906,50 @@ accepted formal evidence, no accepted Evidence Ledger mutation, no accepted
 append policy change, no Level2+ evidence, no score axes, no proof-authority
 claim, and no production/SOTA/security/correctness claim.
 
+## Phase 358 HSAI Proposal Candidate Review Boundary
+
+Status: complete. See
+`docs/358-hsai-proposal-candidate-review-boundary.md`.
+
+Goal: define the docs-first boundary for future local review metadata over one
+Phase 357 proposal candidate before any accepted append policy decision is
+considered.
+
+Implemented: future review purpose, five allowed future review labels, required
+future inputs, required future validation, meaning limits, and Phase 359
+implementation exit criteria.
+
+Validation coverage: documentation now requires future reviews to bind one
+Phase 357 candidate digest/input digest, one Phase 355 review digest, one Phase
+353 manifest digest, one Phase 351 review digest, one Phase 349 preview digest,
+one Phase 347 package digest, one Phase 345 review record digest, one Phase 343
+metadata digest, declared file digest map digest, explicit nonclaim digest,
+reviewer ids, proposal policy id, proposal candidate id, proposal review id,
+reviewer decision timestamp, current accepted append blocker digest, candidate
+disposition label, and review label while rejecting promotion text and
+accepted-ledger mutation attempts.
+
+Validation gate: formatting, docs/hygiene checks, diff hygiene, empty-file
+hygiene, package-root lint check, claim-boundary source scans, repo docs tests,
+and full workspace tests.
+
+Anti-goals: Rust implementation code, Cargo metadata changes, filesystem
+artifact writes, accepted Evidence Ledger mutation, accepted append policy
+changes, accepted formal evidence, Level2+ evidence, score-axis population,
+proof artifact generation or promotion, checker transcript generation or
+promotion, solver certificate generation or promotion, additional process-spawn
+APIs, generic backend runners, solver scripts, checker scripts, proof assistant
+setup files, Lean execution, SMT execution, COBALT execution, Rust-to-Lean
+extraction, benchmark submission, production deployment, semantic-correctness
+claims, production-readiness claims, SOTA claims, breakthrough claims,
+full-security claims, or action authority.
+
+Exit criteria: HSAI now has a docs-first boundary for future local proposal
+candidate review metadata. It still has no accepted formal evidence, no
+accepted Evidence Ledger mutation, no accepted append policy change, no Level2+
+evidence, no score axes, no proof-authority claim, and no production/SOTA/
+security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
