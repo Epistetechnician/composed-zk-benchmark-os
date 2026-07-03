@@ -98,3 +98,9 @@ mutation, not Level2+ evidence, not score-axis population, not proof authority,
 not backend execution, not Lean/SMT/COBALT execution, not Rust-to-Lean
 extraction, not semantic correctness, not production readiness, not SOTA, not
 breakthrough status, and not full security.
+
+## Next Boundary
+
+Phase 390 may define a docs-first review boundary over this closure-blocker
+metadata. That boundary remains planning only unless a later implementation
+phase explicitly authorizes additive Rust source and tests.
