@@ -137,10 +137,9 @@ checker-lane-blocked without creating accepted evidence.
 
 That is review discipline, not accepted evidence and not SOTA.
 
-## Future Code Phase Exit Criteria
+## Code Phase Exit Criteria
 
-A future Phase 331 implementation may create review preview metadata only if it
-adds:
+Phase 331 implements review preview metadata only if it adds:
 
 - a reviewed-formal-evidence preview input data model;
 - a reviewed-formal-evidence preview record data model;
@@ -159,3 +158,11 @@ adds:
 No broader property than
 `attestation_challenge_binding_deterministic_input_sensitive` is authorized by
 this boundary.
+
+## Next Slice
+
+Phase 332 may define a docs-first reviewed-formal-evidence record boundary for
+Phase 331 preview metadata. It must not mutate accepted evidence, create
+Level2+ evidence, populate score axes, claim semantic correctness, claim
+production readiness, claim SOTA, claim breakthrough status, claim full
+security, or grant authority to execute an action.
