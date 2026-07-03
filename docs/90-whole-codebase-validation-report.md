@@ -5664,5 +5664,17 @@ formal evidence, Level2+ evidence, score axes, proof artifacts, checker
 transcripts, solver certificates, or production/SOTA/security/
 semantic-correctness claim.
 
+[docs/409-hsai-tiny-z3-reviewed-formal-evidence-preview-notes.md](docs/409-hsai-tiny-z3-reviewed-formal-evidence-preview-notes.md)
+records the Phase 409 local tiny-Z3 review-preview metadata lane over a Phase
+407 formal-evidence candidate. The implementation adds decision labels, preview
+input, preview record, issue taxonomy, validation report, canonical
+replay-readiness and promotion-rejection checklist helpers, a builder, and
+validators under `hsai-agent-admission`. Focused tests cover all four decision
+labels, candidate digest drift, policy drift, nonclaim acknowledgement drift,
+promotion-checklist drift, promotion attempts, and promoted-candidate state
+drift. This remains review-preview metadata only: no reviewed formal evidence,
+accepted formal evidence, Level2+ evidence, score axes, or production/SOTA/
+security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

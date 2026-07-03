@@ -643,11 +643,16 @@ pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_STATE_SLICE: &s
     "phase-405-hsai-fixed-local-z3-execution-output-readback";
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-tiny-digest-backend-z3-formal-evidence-candidate:v1";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_REVIEW_PREVIEW_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-digest-backend-z3-review-preview:v1";
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
     "phase-407-hsai-tiny-z3-formal-evidence-candidate";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_REVIEW_PREVIEW_STATE_SLICE: &str =
+    "phase-409-hsai-tiny-z3-reviewed-formal-evidence-preview";
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_CLAIM_BOUNDARY: &str = "local gateway tiny digest-binding fixed-Z3 execution output only; reuses the Phase 326 fixed-process no-shell runner to execute one local Z3 SMT-LIB2 obligation for the Phase 401 property and records bounded quarantined output, but does not create proof artifacts, checker transcripts, solver certificates, accepted evidence, Level2+ evidence, score axes, semantic correctness, production readiness, SOTA, breakthrough status, full security, or authority to execute an action.";
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_CLAIM_BOUNDARY: &str = "local gateway tiny digest-binding fixed-Z3 execution output-bundle readback only; materializes and reads back one Phase 404 fixed-Z3 execution record with digest sidecars and nonpromotion checks, but does not create proof artifacts, checker transcripts, solver certificates, accepted evidence, Level2+ evidence, score axes, semantic correctness, production readiness, SOTA, breakthrough status, full security, or authority to execute an action.";
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_FORMAL_EVIDENCE_CANDIDATE_CLAIM_BOUNDARY: &str = "local gateway tiny digest-binding Z3 formal-evidence candidate metadata only; binds one Phase 405 quarantined fixed-Z3 execution output bundle to Phase 403 probe metadata, Phase 404 execution metadata, replay descriptors, verifier/reviewer policy ids, and explicit nonclaims, but does not create reviewed formal evidence, accepted evidence, Level2+ evidence, score axes, semantic correctness, production readiness, SOTA, breakthrough status, full security, or authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_REVIEW_PREVIEW_CLAIM_BOUNDARY: &str = "local gateway tiny digest-binding Z3 reviewed-formal-evidence preview metadata only; classifies one Phase 407 tiny-Z3 formal-evidence candidate as scoped-acceptable, rejected, replay-blocked, or checker-lane-blocked under an explicit review policy and explicit nonclaims, but does not create reviewed formal evidence, accepted evidence, Level2+ evidence, score axes, semantic correctness, production readiness, SOTA, breakthrough status, full security, or authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -5502,6 +5507,132 @@ pub enum GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue {
 pub struct GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyDigestBackendZ3ReviewPreviewDecisionLabel {
+    ReviewPreviewAcceptCandidateScope,
+    ReviewPreviewRejectCandidateScope,
+    ReviewPreviewNeedsReplay,
+    ReviewPreviewNeedsCheckerLane,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3ReviewPreviewInput {
+    pub schema_version: String,
+    pub preview_id: String,
+    pub created_at_unix: u64,
+    pub candidate_digest: Hash,
+    pub candidate_input_digest: Hash,
+    pub output_manifest_digest: Hash,
+    pub execution_digest: Hash,
+    pub probe_digest: Hash,
+    pub reviewer_policy_id: String,
+    pub verifier_policy_id: String,
+    pub reviewer_decision_id: String,
+    pub reviewer_decision_at_unix: u64,
+    pub reviewer_decision_label: GatewayFormalTinyDigestBackendZ3ReviewPreviewDecisionLabel,
+    pub reviewer_nonclaim_acknowledgement_digest: Hash,
+    pub source_correspondence_statement_digest: Hash,
+    pub replay_readiness_checklist_digest: Hash,
+    pub promotion_rejection_checklist_digest: Hash,
+    pub acknowledged_nonclaims: BTreeSet<NonClaimLabel>,
+    pub replay_readiness_checklist: BTreeSet<String>,
+    pub promotion_rejection_checklist: BTreeSet<String>,
+    pub creates_reviewed_formal_evidence: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub benchmark_or_sota_comparison_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyDigestBackendZ3ReviewPreviewInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-review-preview-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3ReviewPreview {
+    pub schema_version: String,
+    pub preview_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub preview_input_digest: Hash,
+    pub candidate_digest: Hash,
+    pub candidate_input_digest: Hash,
+    pub output_manifest_digest: Hash,
+    pub execution_digest: Hash,
+    pub probe_digest: Hash,
+    pub reviewer_policy_id: String,
+    pub verifier_policy_id: String,
+    pub reviewer_decision_id: String,
+    pub reviewer_decision_at_unix: u64,
+    pub reviewer_decision_label: GatewayFormalTinyDigestBackendZ3ReviewPreviewDecisionLabel,
+    pub reviewer_nonclaim_acknowledgement_digest: Hash,
+    pub source_correspondence_statement_digest: Hash,
+    pub replay_readiness_checklist_digest: Hash,
+    pub promotion_rejection_checklist_digest: Hash,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub acknowledged_nonclaims: BTreeSet<NonClaimLabel>,
+    pub replay_readiness_checklist: BTreeSet<String>,
+    pub promotion_rejection_checklist: BTreeSet<String>,
+    pub creates_reviewed_formal_evidence: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub benchmark_or_sota_comparison_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyDigestBackendZ3ReviewPreview {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-review-preview:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue {
+    InvalidSchemaVersion,
+    InvalidPreviewId,
+    InvalidReviewerDecisionId,
+    MissingCreatedAt,
+    MissingReviewerDecisionTimestamp,
+    MissingDigest(String),
+    CandidateDigestDrift,
+    CandidatePromotionStateMismatch,
+    SourceCorrespondenceMismatch,
+    PolicyMismatch,
+    NonclaimAcknowledgementMismatch,
+    ReplayReadinessChecklistMismatch,
+    PromotionRejectionChecklistMismatch,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3ReviewPreviewValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -25072,6 +25203,10 @@ pub fn gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_claim_bou
     GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_FORMAL_EVIDENCE_CANDIDATE_CLAIM_BOUNDARY.to_owned()
 }
 
+pub fn gateway_formal_tiny_digest_backend_z3_review_preview_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_REVIEW_PREVIEW_CLAIM_BOUNDARY.to_owned()
+}
+
 pub fn gateway_formal_tiny_digest_backend_z3_execution_output_declared_files() -> Vec<String> {
     GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_DECLARED_FILES
         .iter()
@@ -25108,6 +25243,32 @@ pub fn gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_required_
     nonclaims.insert(NonClaimLabel("not Level2+ evidence".to_owned()));
     nonclaims.insert(NonClaimLabel("not score-axis evidence".to_owned()));
     nonclaims
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_review_preview_replay_readiness_checklist(
+) -> BTreeSet<String> {
+    BTreeSet::from([
+        "phase403_probe_digest_bound".to_owned(),
+        "phase404_execution_digest_bound".to_owned(),
+        "phase405_output_manifest_digest_bound".to_owned(),
+        "phase407_candidate_digest_bound".to_owned(),
+        "replay_command_descriptor_digest_bound".to_owned(),
+    ])
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_review_preview_promotion_rejection_checklist(
+) -> BTreeSet<String> {
+    BTreeSet::from([
+        "reviewed_formal_evidence_not_created".to_owned(),
+        "accepted_formal_evidence_not_created".to_owned(),
+        "level2_evidence_rejected".to_owned(),
+        "score_axis_population_rejected".to_owned(),
+        "benchmark_or_sota_comparison_rejected".to_owned(),
+        "semantic_correctness_claim_rejected".to_owned(),
+        "production_readiness_claim_rejected".to_owned(),
+        "full_security_claim_rejected".to_owned(),
+        "action_authority_rejected".to_owned(),
+    ])
 }
 
 pub fn run_gateway_formal_tiny_digest_backend_z3_execution(
@@ -27975,6 +28136,255 @@ fn validate_gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_poli
         issues.push(
             GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidateIssue::CheckerOrSolverCertificatePromotionRequested,
         );
+    }
+}
+
+pub fn build_gateway_formal_tiny_digest_backend_z3_review_preview(
+    candidate: &GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidate,
+    input: &GatewayFormalTinyDigestBackendZ3ReviewPreviewInput,
+) -> Result<
+    GatewayFormalTinyDigestBackendZ3ReviewPreview,
+    GatewayFormalTinyDigestBackendZ3ReviewPreviewValidation,
+> {
+    let validation =
+        validate_gateway_formal_tiny_digest_backend_z3_review_preview_input(candidate, input);
+    if !validation.valid {
+        return Err(validation);
+    }
+    Ok(GatewayFormalTinyDigestBackendZ3ReviewPreview {
+        schema_version: GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_REVIEW_PREVIEW_SCHEMA_VERSION
+            .to_owned(),
+        preview_id: input.preview_id.clone(),
+        state_slice: GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_REVIEW_PREVIEW_STATE_SLICE.to_owned(),
+        created_at_unix: input.created_at_unix,
+        preview_input_digest: input.digest(),
+        candidate_digest: candidate.digest(),
+        candidate_input_digest: candidate.candidate_input_digest,
+        output_manifest_digest: candidate.output_manifest_digest,
+        execution_digest: candidate.execution_digest,
+        probe_digest: candidate.probe_digest,
+        reviewer_policy_id: candidate.reviewer_policy_id.clone(),
+        verifier_policy_id: candidate.verifier_policy_id.clone(),
+        reviewer_decision_id: input.reviewer_decision_id.clone(),
+        reviewer_decision_at_unix: input.reviewer_decision_at_unix,
+        reviewer_decision_label: input.reviewer_decision_label.clone(),
+        reviewer_nonclaim_acknowledgement_digest: input.reviewer_nonclaim_acknowledgement_digest,
+        source_correspondence_statement_digest: input.source_correspondence_statement_digest,
+        replay_readiness_checklist_digest: input.replay_readiness_checklist_digest,
+        promotion_rejection_checklist_digest: input.promotion_rejection_checklist_digest,
+        previous_promotion_state: "formal_evidence_candidate".to_owned(),
+        promotion_state: "reviewed_formal_evidence_preview".to_owned(),
+        next_required_state: "reviewed_formal_evidence".to_owned(),
+        claim_boundary: gateway_formal_tiny_digest_backend_z3_review_preview_claim_boundary(),
+        acknowledged_nonclaims: input.acknowledged_nonclaims.clone(),
+        replay_readiness_checklist: input.replay_readiness_checklist.clone(),
+        promotion_rejection_checklist: input.promotion_rejection_checklist.clone(),
+        creates_reviewed_formal_evidence: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        benchmark_or_sota_comparison_claimed: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_gateway_formal_tiny_digest_backend_z3_review_preview_input(
+    candidate: &GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidate,
+    input: &GatewayFormalTinyDigestBackendZ3ReviewPreviewInput,
+) -> GatewayFormalTinyDigestBackendZ3ReviewPreviewValidation {
+    let mut issues = Vec::new();
+    if input.schema_version != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_REVIEW_PREVIEW_SCHEMA_VERSION {
+        issues.push(GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.preview_id) {
+        issues.push(GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::InvalidPreviewId);
+    }
+    if !is_single_segment_id(&input.reviewer_decision_id) {
+        issues.push(GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::InvalidReviewerDecisionId);
+    }
+    if input.created_at_unix == 0 {
+        issues.push(GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::MissingCreatedAt);
+    }
+    if input.reviewer_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::MissingReviewerDecisionTimestamp,
+        );
+    }
+    validate_gateway_formal_tiny_digest_backend_z3_review_preview_digests(input, &mut issues);
+    validate_gateway_formal_tiny_digest_backend_z3_review_preview_candidate(
+        candidate,
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_tiny_digest_backend_z3_review_preview_policy(
+        candidate,
+        input,
+        &mut issues,
+    );
+    GatewayFormalTinyDigestBackendZ3ReviewPreviewValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_review_preview_digests(
+    input: &GatewayFormalTinyDigestBackendZ3ReviewPreviewInput,
+    issues: &mut Vec<GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue>,
+) {
+    for (label, digest) in [
+        ("candidate_digest", input.candidate_digest),
+        ("candidate_input_digest", input.candidate_input_digest),
+        ("output_manifest_digest", input.output_manifest_digest),
+        ("execution_digest", input.execution_digest),
+        ("probe_digest", input.probe_digest),
+        (
+            "reviewer_nonclaim_acknowledgement_digest",
+            input.reviewer_nonclaim_acknowledgement_digest,
+        ),
+        (
+            "source_correspondence_statement_digest",
+            input.source_correspondence_statement_digest,
+        ),
+        (
+            "replay_readiness_checklist_digest",
+            input.replay_readiness_checklist_digest,
+        ),
+        (
+            "promotion_rejection_checklist_digest",
+            input.promotion_rejection_checklist_digest,
+        ),
+    ] {
+        if digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::MissingDigest(label.to_owned()),
+            );
+        }
+    }
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_review_preview_candidate(
+    candidate: &GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidate,
+    input: &GatewayFormalTinyDigestBackendZ3ReviewPreviewInput,
+    issues: &mut Vec<GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue>,
+) {
+    if candidate.schema_version
+        != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION
+        || candidate.state_slice
+            != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE
+        || input.candidate_digest != candidate.digest()
+        || input.candidate_input_digest != candidate.candidate_input_digest
+        || input.output_manifest_digest != candidate.output_manifest_digest
+        || input.execution_digest != candidate.execution_digest
+        || input.probe_digest != candidate.probe_digest
+        || candidate.claim_boundary
+            != gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate_claim_boundary()
+    {
+        issues.push(GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::CandidateDigestDrift);
+    }
+    if candidate.previous_promotion_state != "quarantined_z3_output_bundle"
+        || candidate.promotion_state != "formal_evidence_candidate"
+        || candidate.next_required_state != "reviewed_formal_evidence"
+        || candidate.proof_artifact_created
+        || candidate.checker_transcript_created
+        || candidate.solver_certificate_created
+        || candidate.reviewed_formal_evidence_created
+        || candidate.creates_accepted_evidence
+        || candidate.creates_level2_evidence
+        || candidate.populates_score_axes
+        || candidate.semantic_correctness_claimed
+        || candidate.production_readiness_claimed
+        || candidate.sota_claimed
+        || candidate.breakthrough_claimed
+        || candidate.full_security_claimed
+        || candidate.grants_authority
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::CandidatePromotionStateMismatch,
+        );
+    }
+    if candidate.source_correspondence_statement.trim().is_empty() {
+        issues
+            .push(GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::SourceCorrespondenceMismatch);
+    }
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_review_preview_policy(
+    candidate: &GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidate,
+    input: &GatewayFormalTinyDigestBackendZ3ReviewPreviewInput,
+    issues: &mut Vec<GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue>,
+) {
+    if input.reviewer_policy_id != candidate.reviewer_policy_id
+        || input.verifier_policy_id != candidate.verifier_policy_id
+        || !is_single_segment_id(&input.reviewer_policy_id)
+        || !is_single_segment_id(&input.verifier_policy_id)
+    {
+        issues.push(GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::PolicyMismatch);
+    }
+    if input.acknowledged_nonclaims != candidate.explicit_nonclaims
+        || input.reviewer_nonclaim_acknowledgement_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-review-preview-nonclaim-ack:v1",
+                &candidate.explicit_nonclaims,
+            )
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::NonclaimAcknowledgementMismatch,
+        );
+    }
+    if input.source_correspondence_statement_digest
+        != hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-review-preview-source-correspondence:v1",
+            &candidate.source_correspondence_statement,
+        )
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::SourceCorrespondenceMismatch,
+        );
+    }
+    let replay_readiness_checklist =
+        gateway_formal_tiny_digest_backend_z3_review_preview_replay_readiness_checklist();
+    if input.replay_readiness_checklist != replay_readiness_checklist
+        || input.replay_readiness_checklist_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-review-preview-replay-readiness:v1",
+                &replay_readiness_checklist,
+            )
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::ReplayReadinessChecklistMismatch,
+        );
+    }
+    let promotion_rejection_checklist =
+        gateway_formal_tiny_digest_backend_z3_review_preview_promotion_rejection_checklist();
+    if input.promotion_rejection_checklist != promotion_rejection_checklist
+        || input.promotion_rejection_checklist_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-review-preview-promotion-rejection:v1",
+                &promotion_rejection_checklist,
+            )
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::PromotionRejectionChecklistMismatch,
+        );
+    }
+    if input.creates_reviewed_formal_evidence
+        || input.creates_accepted_evidence
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.benchmark_or_sota_comparison_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::PromotionAttempt);
     }
 }
 
@@ -51771,6 +52181,95 @@ mod tests {
         }
     }
 
+    fn phase409_review_preview_input(
+        preview_id: &str,
+        candidate: &GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidate,
+        decision: GatewayFormalTinyDigestBackendZ3ReviewPreviewDecisionLabel,
+    ) -> GatewayFormalTinyDigestBackendZ3ReviewPreviewInput {
+        let replay_readiness_checklist =
+            gateway_formal_tiny_digest_backend_z3_review_preview_replay_readiness_checklist();
+        let promotion_rejection_checklist =
+            gateway_formal_tiny_digest_backend_z3_review_preview_promotion_rejection_checklist();
+        GatewayFormalTinyDigestBackendZ3ReviewPreviewInput {
+            schema_version: GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_REVIEW_PREVIEW_SCHEMA_VERSION
+                .to_owned(),
+            preview_id: preview_id.to_owned(),
+            created_at_unix: 1_800_000_409,
+            candidate_digest: candidate.digest(),
+            candidate_input_digest: candidate.candidate_input_digest,
+            output_manifest_digest: candidate.output_manifest_digest,
+            execution_digest: candidate.execution_digest,
+            probe_digest: candidate.probe_digest,
+            reviewer_policy_id: candidate.reviewer_policy_id.clone(),
+            verifier_policy_id: candidate.verifier_policy_id.clone(),
+            reviewer_decision_id: format!("{preview_id}-decision"),
+            reviewer_decision_at_unix: 1_800_000_409,
+            reviewer_decision_label: decision,
+            reviewer_nonclaim_acknowledgement_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-review-preview-nonclaim-ack:v1",
+                &candidate.explicit_nonclaims,
+            ),
+            source_correspondence_statement_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-review-preview-source-correspondence:v1",
+                &candidate.source_correspondence_statement,
+            ),
+            replay_readiness_checklist_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-review-preview-replay-readiness:v1",
+                &replay_readiness_checklist,
+            ),
+            promotion_rejection_checklist_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-review-preview-promotion-rejection:v1",
+                &promotion_rejection_checklist,
+            ),
+            acknowledged_nonclaims: candidate.explicit_nonclaims.clone(),
+            replay_readiness_checklist,
+            promotion_rejection_checklist,
+            creates_reviewed_formal_evidence: false,
+            creates_accepted_evidence: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            benchmark_or_sota_comparison_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase407_candidate_if_z3_available(
+        name: &str,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        GatewayFormalTinyDigestBackendZ3FormalEvidenceCandidate,
+    )> {
+        let Some((obligation_root, execution, probe, _input, _command)) =
+            phase404_execution_if_z3_available(&format!("{name}-obligation"))
+        else {
+            return None;
+        };
+        let output_root = temp_output_root(&format!("{name}-output"));
+        let output_manifest =
+            materialize_gateway_formal_tiny_digest_backend_z3_execution_output_bundle(
+                &output_root,
+                &execution,
+                &phase405_output_request(&output_root),
+            )
+            .expect("phase407 candidate output materializes");
+        let input =
+            phase407_candidate_input("phase407-candidate", &probe, &execution, &output_manifest);
+        let candidate = build_gateway_formal_tiny_digest_backend_z3_formal_evidence_candidate(
+            &probe,
+            &execution,
+            &output_manifest,
+            &input,
+        )
+        .expect("phase407 candidate builds");
+        Some((obligation_root, output_root, candidate))
+    }
+
     #[test]
     fn phase403_tiny_digest_backend_probe_builds_without_promotion() {
         let input = phase403_probe_input(
@@ -52218,6 +52717,147 @@ mod tests {
 
         fs::remove_dir_all(&output_root).expect("phase407 drift output cleanup succeeds");
         fs::remove_dir_all(&obligation_root).expect("phase407 drift obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase409_tiny_z3_review_preview_builds_for_all_decisions_below_review() {
+        let Some((obligation_root, output_root, candidate)) =
+            phase407_candidate_if_z3_available("phase409-preview-valid")
+        else {
+            return;
+        };
+
+        for decision in [
+            GatewayFormalTinyDigestBackendZ3ReviewPreviewDecisionLabel::ReviewPreviewAcceptCandidateScope,
+            GatewayFormalTinyDigestBackendZ3ReviewPreviewDecisionLabel::ReviewPreviewRejectCandidateScope,
+            GatewayFormalTinyDigestBackendZ3ReviewPreviewDecisionLabel::ReviewPreviewNeedsReplay,
+            GatewayFormalTinyDigestBackendZ3ReviewPreviewDecisionLabel::ReviewPreviewNeedsCheckerLane,
+        ] {
+            let input = phase409_review_preview_input(
+                &format!("phase409-preview-{decision:?}"),
+                &candidate,
+                decision.clone(),
+            );
+            let preview = build_gateway_formal_tiny_digest_backend_z3_review_preview(
+                &candidate,
+                &input,
+            )
+            .expect("phase409 review preview builds");
+
+            assert_eq!(
+                preview.state_slice,
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_REVIEW_PREVIEW_STATE_SLICE
+            );
+            assert_eq!(preview.candidate_digest, candidate.digest());
+            assert_eq!(
+                preview.previous_promotion_state,
+                "formal_evidence_candidate"
+            );
+            assert_eq!(preview.promotion_state, "reviewed_formal_evidence_preview");
+            assert_eq!(preview.next_required_state, "reviewed_formal_evidence");
+            assert_eq!(preview.reviewer_decision_label, decision);
+            assert!(!preview.creates_reviewed_formal_evidence);
+            assert!(!preview.creates_accepted_evidence);
+            assert!(!preview.creates_level2_evidence);
+            assert!(!preview.populates_score_axes);
+            assert!(!preview.benchmark_or_sota_comparison_claimed);
+            assert!(!preview.semantic_correctness_claimed);
+            assert!(!preview.production_readiness_claimed);
+            assert!(!preview.sota_claimed);
+            assert!(!preview.full_security_claimed);
+            assert!(!preview.grants_authority);
+        }
+
+        fs::remove_dir_all(&output_root).expect("phase409 preview output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase409 preview obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase409_tiny_z3_review_preview_rejects_drift_and_promotion() {
+        let Some((obligation_root, output_root, candidate)) =
+            phase407_candidate_if_z3_available("phase409-preview-drift")
+        else {
+            return;
+        };
+        let input = phase409_review_preview_input(
+            "phase409-preview",
+            &candidate,
+            GatewayFormalTinyDigestBackendZ3ReviewPreviewDecisionLabel::ReviewPreviewAcceptCandidateScope,
+        );
+
+        let mut stale_candidate = input.clone();
+        stale_candidate.candidate_digest = Hash([9; 32]);
+        let stale_validation = validate_gateway_formal_tiny_digest_backend_z3_review_preview_input(
+            &candidate,
+            &stale_candidate,
+        );
+        assert!(stale_validation
+            .issues
+            .contains(&GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::CandidateDigestDrift));
+
+        let mut policy_drift = input.clone();
+        policy_drift.reviewer_policy_id = "different-policy".to_owned();
+        let policy_validation = validate_gateway_formal_tiny_digest_backend_z3_review_preview_input(
+            &candidate,
+            &policy_drift,
+        );
+        assert!(policy_validation
+            .issues
+            .contains(&GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::PolicyMismatch));
+
+        let mut nonclaim_drift = input.clone();
+        nonclaim_drift
+            .acknowledged_nonclaims
+            .remove(&NonClaimLabel("not accepted formal evidence".to_owned()));
+        let nonclaim_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_review_preview_input(
+                &candidate,
+                &nonclaim_drift,
+            );
+        assert!(nonclaim_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::NonclaimAcknowledgementMismatch
+        ));
+
+        let mut checklist_drift = input.clone();
+        checklist_drift
+            .promotion_rejection_checklist
+            .remove("score_axis_population_rejected");
+        let checklist_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_review_preview_input(
+                &candidate,
+                &checklist_drift,
+            );
+        assert!(checklist_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::PromotionRejectionChecklistMismatch
+        ));
+
+        let mut promotion = input.clone();
+        promotion.creates_reviewed_formal_evidence = true;
+        promotion.creates_accepted_evidence = true;
+        promotion.creates_level2_evidence = true;
+        promotion.populates_score_axes = true;
+        promotion.benchmark_or_sota_comparison_claimed = true;
+        let promotion_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_review_preview_input(
+                &candidate, &promotion,
+            );
+        assert!(promotion_validation
+            .issues
+            .contains(&GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::PromotionAttempt));
+
+        let mut promoted_candidate = candidate.clone();
+        promoted_candidate.reviewed_formal_evidence_created = true;
+        let promoted_candidate_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_review_preview_input(
+                &promoted_candidate,
+                &input,
+            );
+        assert!(promoted_candidate_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3ReviewPreviewIssue::CandidatePromotionStateMismatch
+        ));
+
+        fs::remove_dir_all(&output_root).expect("phase409 drift output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase409 drift obligation cleanup succeeds");
     }
 
     #[test]
