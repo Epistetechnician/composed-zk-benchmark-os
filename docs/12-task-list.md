@@ -11100,6 +11100,29 @@ has no accepted formal evidence, accepted Evidence Ledger mutation, Level2+
 evidence, score axes, Lean/COBALT/Rust-to-Lean execution, or
 SOTA/full-security/semantic-correctness/production-readiness claim.
 
+## Phase 412 HSAI Tiny Z3 Accepted Formal Evidence Handoff Boundary
+
+Status: complete. See
+`docs/412-hsai-tiny-z3-accepted-formal-evidence-handoff-boundary.md`.
+
+Goal: define the docs-first boundary from the Phase 411 tiny-Z3 local
+reviewed-record metadata lane to a future accepted formal-evidence handoff
+without mutating accepted evidence, changing accepted append policy, creating
+Level2+ evidence, populating score axes, or making strong public claims.
+
+Implemented: Phase 412 records the tiny-Z3 evidence ladder, required future
+handoff inputs, required future policy decision, forbidden shortcuts, evidence
+meaning, and Phase 413 implementation conditions.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a documented accepted-formal-evidence handoff
+boundary for the Phase 411 tiny-Z3 reviewed record. It still has no accepted
+formal evidence, accepted Evidence Ledger mutation, Level2+ evidence, score
+axes, Lean/COBALT/Rust-to-Lean execution, or
+SOTA/full-security/semantic-correctness/production-readiness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

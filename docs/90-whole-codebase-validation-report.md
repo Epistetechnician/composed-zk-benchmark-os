@@ -5700,5 +5700,16 @@ remains reviewed-record metadata only: no accepted formal evidence, accepted
 Evidence Ledger mutation, Level2+ evidence, score axes, or production/SOTA/
 security/semantic-correctness claim.
 
+[docs/412-hsai-tiny-z3-accepted-formal-evidence-handoff-boundary.md](docs/412-hsai-tiny-z3-accepted-formal-evidence-handoff-boundary.md)
+records the Phase 412 docs-first boundary from the Phase 411 local tiny-Z3
+reviewed formal-evidence record toward a future accepted formal-evidence
+handoff. It defines the tiny-Z3 evidence ladder, required future handoff
+inputs, required future policy decision, forbidden shortcuts, evidence meaning,
+and Phase 413 implementation conditions. This is boundary documentation only:
+no Rust implementation, accepted formal evidence, accepted Evidence Ledger
+mutation, accepted append policy change, Level2+ evidence, score axes, proof
+artifacts, checker transcripts, solver certificates, or production/SOTA/
+security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
