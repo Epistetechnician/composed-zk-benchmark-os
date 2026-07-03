@@ -1923,6 +1923,29 @@ benchmarks, deploys nothing to production, claims no semantic correctness,
 claims no production readiness, claims no SOTA, claims no breakthrough status,
 claims no full security, and grants no authority.
 
+Phase 339 implements local bounded formal-evidence feasibility metadata in
+`crates/hsai-agent-admission`. It adds Phase 339 schema/state/claim-boundary
+constants, feasibility candidate class/status/ownership constants, feasibility
+input and record data models, validation issues, a feasibility question helper,
+required nonclaims, a builder, and fail-closed validation. The builder records
+`LocalReviewedFormalEvidenceMetadata` as feasibility-only, records ownership as
+unresolved, binds one Phase 337 `AcceptedFormalEvidenceStillForbidden` policy
+decision digest and input digest, binds the Phase 335 handoff digest, binds the
+Phase 333 reviewed-record digest, and preserves the current accepted append
+blocker digest. Focused tests reject Phase 337 policy-decision drift, promoted
+policy-decision state, candidate class drift, class-status drift, ownership
+drift, feasibility question drift, accepted Evidence Ledger mutation, accepted
+append policy change, bounded formal-evidence class approval, accepted formal
+evidence creation, Level2+ evidence, score-axis population, proof/checker/solver
+promotion, SOTA/full-security claims, and authority attempts. Phase 339 does
+not approve a bounded formal-evidence class, change `zkbench-core` accepted
+append policy, mutate the accepted Evidence Ledger, create accepted formal
+evidence, create Level2+ evidence, populate score axes, generate proof
+artifacts, generate checker transcripts, generate solver certificates, execute
+Lean, execute COBALT, run Rust-to-Lean extraction, submit benchmarks, deploy to
+production, claim semantic correctness, claim production readiness, claim SOTA,
+claim breakthrough status, claim full security, or grant authority.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
