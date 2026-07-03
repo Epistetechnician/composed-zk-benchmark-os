@@ -8328,6 +8328,46 @@ accepted formal evidence, no accepted Evidence Ledger mutation, no accepted
 append policy change, no Level2+ evidence, no score axes, no proof-authority
 claim, and no production/SOTA/security/correctness claim.
 
+## Phase 345 HSAI Local Metadata Review Record
+
+Status: complete. See
+`docs/345-hsai-local-metadata-review-record-notes.md`.
+
+Goal: implement the local metadata review record authorized by Phase 344 without
+creating accepted formal evidence or weakening the accepted append blocker.
+
+Implemented: Phase 345 schema/state/claim-boundary constants,
+`GatewayFormalRealCommandLaneLocalMetadataReviewLabel`, review input and output
+records, validation issues, validation result, claim-boundary helper, required
+nonclaim helper, review builder, digest binding to one Phase 343 local metadata
+record, current accepted append blocker checks, reviewer id/timestamp checks,
+and focused tests.
+
+Validation coverage: tests build an `AcceptedEvidenceBlocked` review record as
+non-promotional metadata, reject metadata digest drift, reject invalid reviewer
+policy ids, reject missing reviewer decision timestamps, reject accepted append
+blocker drift, and reject accepted-evidence, Level2, score-axis, proof,
+checker, solver, SOTA, full-security, and action-authority promotion attempts.
+
+Validation gate: formatting, docs/hygiene checks, diff hygiene, empty-file
+hygiene, package-root lint check, claim-boundary source scans, repo docs tests,
+focused `hsai-agent-admission` tests, and full workspace tests.
+
+Anti-goals: accepted Evidence Ledger mutation, accepted append policy changes,
+accepted formal evidence, Level2+ evidence, score-axis population, proof
+artifact generation or promotion, checker transcript generation or promotion,
+solver certificate generation or promotion, additional process-spawn APIs,
+generic backend runners, solver scripts, checker scripts, proof assistant setup
+files, Lean execution, COBALT execution, Rust-to-Lean extraction, benchmark
+submission, production deployment, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims, full-security
+claims, or action authority.
+
+Exit criteria: HSAI now has a local review record for Phase 343 metadata. It
+still has no accepted formal evidence, no accepted Evidence Ledger mutation, no
+accepted append policy change, no Level2+ evidence, no score axes, no
+proof-authority claim, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
