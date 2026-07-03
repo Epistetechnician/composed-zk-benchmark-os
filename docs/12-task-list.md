@@ -8861,6 +8861,51 @@ evidence, no accepted Evidence Ledger mutation, no accepted append policy
 change, no Level2+ evidence, no score axes, no proof-authority claim, and no
 production/SOTA/security/correctness claim.
 
+## Phase 357 HSAI Accepted Evidence Proposal Candidate Metadata
+
+Status: complete. See
+`docs/357-hsai-accepted-evidence-proposal-candidate-metadata-notes.md`.
+
+Goal: implement local digest-only accepted-evidence proposal candidate metadata
+over one Phase 355 review while preserving accepted-evidence blockers.
+
+Implemented: Phase 357 schema/state/claim-boundary constants, proposal
+candidate input metadata, proposal candidate record metadata, five bounded
+disposition labels, validation issues, validation result, required nonclaim
+helper, candidate builder, digest binding to one Phase 355 review digest/input
+digest, Phase 353 manifest digest, Phase 351 review digest, Phase 349 preview
+digest, Phase 347 package digest, Phase 345 review record digest, Phase 343
+metadata digest, declared file digest map digest, explicit nonclaim digest,
+reviewer ids, proposal policy id, proposal candidate id, current accepted
+append blocker digest, promotion-text rejection, and focused tests.
+
+Validation coverage: the implemented validation requires one Phase 357 proposal
+candidate to bind the Phase 355 review, Phase 353 manifest, Phase 351 review,
+Phase 349 preview, Phase 347 package, Phase 345 review record, Phase 343
+metadata record, declared file digest map, current accepted append blockers,
+reviewer/proposal policy metadata, and explicit nonclaims while rejecting
+review drift, promotion text, and accepted-ledger mutation attempts.
+
+Validation gate: formatting, focused Phase 357 tests, docs/hygiene checks, diff
+hygiene, empty-file hygiene, package-root lint check, claim-boundary source
+scans, repo docs tests, and full workspace tests.
+
+Anti-goals: filesystem artifact writes, accepted Evidence Ledger mutation,
+accepted append policy changes, accepted formal evidence, Level2+ evidence,
+score-axis population, proof artifact generation or promotion, checker
+transcript generation or promotion, solver certificate generation or promotion,
+additional process-spawn APIs, generic backend runners, solver scripts, checker
+scripts, proof assistant setup files, Lean execution, SMT execution, COBALT
+execution, Rust-to-Lean extraction, benchmark submission, production deployment,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, or action authority.
+
+Exit criteria: HSAI now has deterministic digest-only proposal candidate
+metadata over one Phase 355 materialized audit package review. It still has no
+accepted formal evidence, no accepted Evidence Ledger mutation, no accepted
+append policy change, no Level2+ evidence, no score axes, no proof-authority
+claim, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
