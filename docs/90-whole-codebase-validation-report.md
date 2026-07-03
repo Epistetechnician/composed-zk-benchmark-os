@@ -2802,6 +2802,29 @@ no benchmarks, deploys nothing to production, claims no semantic correctness,
 claims no production readiness, claims no SOTA, claims no breakthrough status,
 claims no full security, and grants no authority.
 
+Phase 394 defines the docs-first accepted-append decision
+quarantine-resolution escalation terminal-review closure-blocker review
+terminal-closure review boundary. The boundary authorizes a future local review
+metadata implementation over one Phase 393 terminal closure before any accepted
+append decision is allowed. It defines six allowed future review labels and
+requires any future review input to bind the Phase 393 terminal-closure
+digest/input digest, Phase 393 digest/id/label binding map digests, explicit
+nonclaim digest, terminal-closure review ids, inherited terminal-closure ids,
+inherited closure-blocker review ids, current accepted append blocker digest,
+the terminal-closure label, and a bounded review label. The boundary requires
+future validation to reject drifted digests, invalid ids, missing timestamps,
+promoted or drifted Phase 393 terminal-closure state, promotion text, accepted
+append decision attempts, accepted Evidence Ledger mutation attempts, accepted
+append policy-change attempts, accepted formal-evidence creation attempts,
+Level2+ attempts, and score-axis attempts. Phase 394 creates no Rust
+implementation, changes no Cargo metadata, writes no artifacts, changes no
+accepted append policy, mutates no accepted Evidence Ledger, creates no
+accepted formal evidence, creates no Level2+ evidence, populates no score axes,
+executes no Lean, executes no SMT, executes no COBALT, runs no Rust-to-Lean
+extraction, submits no benchmarks, deploys nothing to production, claims no
+semantic correctness, claims no production readiness, claims no SOTA, claims no
+breakthrough status, claims no full security, and grants no authority.
+
 Phase 360 defines the docs-first append-decision preflight boundary. It
 specifies the future preflight purpose, five allowed future preflight labels,
 required future inputs, required future validation, meaning limits, and Phase

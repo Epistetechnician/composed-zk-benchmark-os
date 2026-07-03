@@ -105,6 +105,6 @@ breakthrough status, and not full security.
 
 ## Next Boundary
 
-Phase 394 may define a docs-first terminal-closure review boundary. That
-boundary remains planning only unless a later implementation phase explicitly
-authorizes additive Rust source and tests.
+Phase 394 defines a docs-first terminal-closure review boundary. That boundary
+remains planning only unless a later implementation phase explicitly authorizes
+additive Rust source and tests.
