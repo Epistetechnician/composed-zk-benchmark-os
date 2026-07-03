@@ -1765,6 +1765,22 @@ artifacts, checker transcripts, solver certificates, benchmark evidence,
 semantic-correctness claims, production-readiness claims, SOTA claims,
 breakthrough claims, full-security claims, or authority grants.
 
+Phase 330 defines the docs-first reviewed-formal-evidence preview boundary for
+Phase 329 candidates. It inserts the explicit preview state
+`reviewed_formal_evidence_preview` between `formal_evidence_candidate` and
+`reviewed_formal_evidence`, defines required review input digests, allowed
+review decision labels, required rejection cases, and the maximum meaning of a
+future review preview. The boundary permits a future preview to classify a
+candidate as scoped-acceptable, rejected, replay-blocked, or
+checker-lane-blocked under an explicit review policy and explicit nonclaims,
+but not to create reviewed evidence or accepted evidence. Phase 330 does not
+implement reviewed evidence code, accepted Evidence Ledger mutation, Level2+
+evidence, score-axis population, proof artifact generation, checker transcript
+generation, solver certificate generation, Lean execution, COBALT execution,
+Rust-to-Lean extraction, benchmark submission, production deployment,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, or authority grants.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
