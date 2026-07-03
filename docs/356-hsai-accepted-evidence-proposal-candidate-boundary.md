@@ -116,10 +116,13 @@ It cannot support:
 - full security;
 - action authority.
 
-## Phase 357 Implementation Exit Criteria
+## Phase 357 Implementation Result
 
-Phase 357 may implement local accepted-evidence proposal candidate metadata only
-if it:
+Phase 357 implements local accepted-evidence proposal candidate metadata in
+`crates/hsai-agent-admission/src/lib.rs` and records its implementation notes in
+`docs/357-hsai-accepted-evidence-proposal-candidate-metadata-notes.md`.
+
+The implementation:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;
