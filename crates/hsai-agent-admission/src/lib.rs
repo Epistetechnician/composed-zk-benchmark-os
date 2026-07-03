@@ -623,6 +623,16 @@ pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_OUTPUT_SCHEMA_VER
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_STATE_SLICE: &str =
     "phase-326-hsai-real-formal-command-lane-quarantined-fixed-smt-execution";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_CLAIM_BOUNDARY: &str = "local gateway real formal command-lane quarantined fixed-SMT execution result only; spawns one operator-digested fixed local executable through the Phase 325 preflight and records bounded redacted stdout/stderr summaries, but does not create proof artifacts, create checker transcripts, create solver certificates, create accepted evidence, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-digest-backend-probe:v1";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_STATE_SLICE: &str =
+    "phase-403-hsai-tiny-digest-binding-backend-probe";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_PROPERTY_ID: &str =
+    "gateway-local-digest-binding-determinism-v1";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SMT_Z3_LANE_ID: &str = "smt-z3-local";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_LEAN_LANE_ID: &str = "lean-local-skeleton";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_COBALT_LANE_ID: &str = "cobalt-local-skeleton";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_CLAIM_BOUNDARY: &str = "local gateway tiny digest-binding backend probe metadata only; binds the Phase 401 digest-binding property to local backend availability, digest descriptors, and existing quarantine discipline, but does not spawn a process, execute Z3, execute SMT, execute Lean, execute COBALT, create proof artifacts, checker transcripts, solver certificates, accepted evidence, Level2+ evidence, score axes, semantic correctness, production readiness, SOTA, breakthrough status, full security, or authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -5027,6 +5037,142 @@ pub enum GatewayFormalRealCommandLaneFixedSmtExecutionOutputError {
     NonclaimMismatch,
     Io(String),
     Serialization(String),
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum GatewayFormalTinyDigestBackendToolStatus {
+    Available,
+    Unavailable,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendToolAvailability {
+    pub lane_id: String,
+    pub tool_name: String,
+    pub status: GatewayFormalTinyDigestBackendToolStatus,
+    pub executable_identity: Option<String>,
+    pub unavailable_reason: Option<String>,
+}
+
+impl GatewayFormalTinyDigestBackendToolAvailability {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-tool-availability:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendProbeInput {
+    pub schema_version: String,
+    pub probe_id: String,
+    pub created_at_unix: u64,
+    pub property_id: String,
+    pub selected_lane_id: String,
+    pub selected_metadata_record_digest: Hash,
+    pub selected_metadata_input_digest: Hash,
+    pub explicit_nonclaim_digest: Hash,
+    pub accepted_append_blocker_digest: Hash,
+    pub command_descriptor_digest: Hash,
+    pub expected_verdict_descriptor_digest: Hash,
+    pub output_quarantine_descriptor_digest: Hash,
+    pub smt_z3_availability: GatewayFormalTinyDigestBackendToolAvailability,
+    pub lean_availability: GatewayFormalTinyDigestBackendToolAvailability,
+    pub cobalt_availability: GatewayFormalTinyDigestBackendToolAvailability,
+    pub accepted_evidence_requested: bool,
+    pub level2_evidence_requested: bool,
+    pub score_axis_population_requested: bool,
+    pub proof_artifact_requested: bool,
+    pub checker_transcript_requested: bool,
+    pub solver_certificate_requested: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyDigestBackendProbeInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-probe-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendProbe {
+    pub schema_version: String,
+    pub probe_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub probe_input_digest: Hash,
+    pub property_id: String,
+    pub selected_lane_id: String,
+    pub selected_metadata_record_digest: Hash,
+    pub selected_metadata_input_digest: Hash,
+    pub explicit_nonclaim_digest: Hash,
+    pub accepted_append_blocker_digest: Hash,
+    pub command_descriptor_digest: Hash,
+    pub expected_verdict_descriptor_digest: Hash,
+    pub output_quarantine_descriptor_digest: Hash,
+    pub tool_availability_digest: Hash,
+    pub selected_lane_available: bool,
+    pub process_spawned: bool,
+    pub backend_executed: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub claim_boundary: String,
+}
+
+impl GatewayFormalTinyDigestBackendProbe {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-probe:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyDigestBackendProbeIssue {
+    InvalidSchemaVersion,
+    InvalidProbeId,
+    MissingCreatedAt,
+    PropertyIdMismatch,
+    UnknownSelectedLane,
+    MissingDigest(String),
+    ToolLaneMismatch(String),
+    ToolNameMissing(String),
+    AvailableToolMissingExecutableIdentity(String),
+    UnavailableToolMissingReason(String),
+    UnavailableToolHasExecutableIdentity(String),
+    SelectedLaneUnavailable,
+    MissingRequiredNonclaim(String),
+    ClaimBoundaryMismatch,
+    DigestBindingMismatch,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendProbeValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyDigestBackendProbeIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -24259,6 +24405,330 @@ pub fn gateway_formal_real_command_lane_fixed_smt_execution_required_nonclaims(
         NonClaimLabel("not full security".to_owned()),
         NonClaimLabel("not authority to execute actions".to_owned()),
     ])
+}
+
+pub fn gateway_formal_tiny_digest_backend_probe_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_digest_backend_probe_required_nonclaims() -> BTreeSet<NonClaimLabel> {
+    BTreeSet::from([
+        NonClaimLabel("tiny digest-binding backend probe only".to_owned()),
+        NonClaimLabel("not accepted evidence".to_owned()),
+        NonClaimLabel("not Level2 evidence".to_owned()),
+        NonClaimLabel("not score-axis evidence".to_owned()),
+        NonClaimLabel("not proof evidence".to_owned()),
+        NonClaimLabel("not checker transcript evidence".to_owned()),
+        NonClaimLabel("not solver certificate evidence".to_owned()),
+        NonClaimLabel("not Lean execution".to_owned()),
+        NonClaimLabel("not COBALT execution".to_owned()),
+        NonClaimLabel("not Rust-to-Lean extraction".to_owned()),
+        NonClaimLabel("not semantic correctness".to_owned()),
+        NonClaimLabel("not production readiness".to_owned()),
+        NonClaimLabel("not SOTA".to_owned()),
+        NonClaimLabel("not breakthrough".to_owned()),
+        NonClaimLabel("not full security".to_owned()),
+        NonClaimLabel("not authority to execute actions".to_owned()),
+    ])
+}
+
+pub fn build_gateway_formal_tiny_digest_backend_probe(
+    input: &GatewayFormalTinyDigestBackendProbeInput,
+) -> Result<GatewayFormalTinyDigestBackendProbe, GatewayFormalTinyDigestBackendProbeValidation> {
+    let validation = validate_gateway_formal_tiny_digest_backend_probe_input(input);
+    if !validation.valid {
+        return Err(validation);
+    }
+    let selected_lane_available =
+        gateway_formal_tiny_digest_backend_probe_selected_availability(input)
+            .map(|availability| {
+                availability.status == GatewayFormalTinyDigestBackendToolStatus::Available
+            })
+            .unwrap_or(false);
+    Ok(GatewayFormalTinyDigestBackendProbe {
+        schema_version: GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SCHEMA_VERSION.to_owned(),
+        probe_id: input.probe_id.clone(),
+        state_slice: GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_STATE_SLICE.to_owned(),
+        created_at_unix: input.created_at_unix,
+        probe_input_digest: input.digest(),
+        property_id: input.property_id.clone(),
+        selected_lane_id: input.selected_lane_id.clone(),
+        selected_metadata_record_digest: input.selected_metadata_record_digest,
+        selected_metadata_input_digest: input.selected_metadata_input_digest,
+        explicit_nonclaim_digest: input.explicit_nonclaim_digest,
+        accepted_append_blocker_digest: input.accepted_append_blocker_digest,
+        command_descriptor_digest: input.command_descriptor_digest,
+        expected_verdict_descriptor_digest: input.expected_verdict_descriptor_digest,
+        output_quarantine_descriptor_digest: input.output_quarantine_descriptor_digest,
+        tool_availability_digest: gateway_formal_tiny_digest_backend_tool_availability_digest(
+            input,
+        ),
+        selected_lane_available,
+        process_spawned: false,
+        backend_executed: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+        explicit_nonclaims: gateway_formal_tiny_digest_backend_probe_required_nonclaims(),
+        claim_boundary: gateway_formal_tiny_digest_backend_probe_claim_boundary(),
+    })
+}
+
+pub fn validate_gateway_formal_tiny_digest_backend_probe_input(
+    input: &GatewayFormalTinyDigestBackendProbeInput,
+) -> GatewayFormalTinyDigestBackendProbeValidation {
+    let mut issues = Vec::new();
+    if input.schema_version != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SCHEMA_VERSION {
+        issues.push(GatewayFormalTinyDigestBackendProbeIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.probe_id) {
+        issues.push(GatewayFormalTinyDigestBackendProbeIssue::InvalidProbeId);
+    }
+    if input.created_at_unix == 0 {
+        issues.push(GatewayFormalTinyDigestBackendProbeIssue::MissingCreatedAt);
+    }
+    if input.property_id != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_PROPERTY_ID {
+        issues.push(GatewayFormalTinyDigestBackendProbeIssue::PropertyIdMismatch);
+    }
+    if !gateway_formal_tiny_digest_backend_probe_lane_ids().contains(&input.selected_lane_id) {
+        issues.push(GatewayFormalTinyDigestBackendProbeIssue::UnknownSelectedLane);
+    }
+    for (label, digest) in [
+        (
+            "selected_metadata_record_digest",
+            input.selected_metadata_record_digest,
+        ),
+        (
+            "selected_metadata_input_digest",
+            input.selected_metadata_input_digest,
+        ),
+        ("explicit_nonclaim_digest", input.explicit_nonclaim_digest),
+        (
+            "accepted_append_blocker_digest",
+            input.accepted_append_blocker_digest,
+        ),
+        ("command_descriptor_digest", input.command_descriptor_digest),
+        (
+            "expected_verdict_descriptor_digest",
+            input.expected_verdict_descriptor_digest,
+        ),
+        (
+            "output_quarantine_descriptor_digest",
+            input.output_quarantine_descriptor_digest,
+        ),
+    ] {
+        if digest == Hash([0; 32]) {
+            issues.push(GatewayFormalTinyDigestBackendProbeIssue::MissingDigest(
+                label.to_owned(),
+            ));
+        }
+    }
+    validate_gateway_formal_tiny_digest_backend_tool_availability(
+        &input.smt_z3_availability,
+        GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SMT_Z3_LANE_ID,
+        &mut issues,
+    );
+    validate_gateway_formal_tiny_digest_backend_tool_availability(
+        &input.lean_availability,
+        GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_LEAN_LANE_ID,
+        &mut issues,
+    );
+    validate_gateway_formal_tiny_digest_backend_tool_availability(
+        &input.cobalt_availability,
+        GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_COBALT_LANE_ID,
+        &mut issues,
+    );
+    if gateway_formal_tiny_digest_backend_probe_selected_availability(input)
+        .map(|availability| {
+            availability.status == GatewayFormalTinyDigestBackendToolStatus::Unavailable
+        })
+        .unwrap_or(false)
+    {
+        issues.push(GatewayFormalTinyDigestBackendProbeIssue::SelectedLaneUnavailable);
+    }
+    if input.accepted_evidence_requested
+        || input.level2_evidence_requested
+        || input.score_axis_population_requested
+        || input.proof_artifact_requested
+        || input.checker_transcript_requested
+        || input.solver_certificate_requested
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(GatewayFormalTinyDigestBackendProbeIssue::PromotionAttempt);
+    }
+    GatewayFormalTinyDigestBackendProbeValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+pub fn validate_gateway_formal_tiny_digest_backend_probe(
+    probe: &GatewayFormalTinyDigestBackendProbe,
+    input: &GatewayFormalTinyDigestBackendProbeInput,
+) -> GatewayFormalTinyDigestBackendProbeValidation {
+    let mut validation = validate_gateway_formal_tiny_digest_backend_probe_input(input);
+    let selected_lane_available =
+        gateway_formal_tiny_digest_backend_probe_selected_availability(input)
+            .map(|availability| {
+                availability.status == GatewayFormalTinyDigestBackendToolStatus::Available
+            })
+            .unwrap_or(false);
+    if probe.schema_version != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SCHEMA_VERSION
+        || probe.probe_id != input.probe_id
+        || probe.state_slice != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_STATE_SLICE
+        || probe.created_at_unix != input.created_at_unix
+        || probe.probe_input_digest != input.digest()
+        || probe.property_id != input.property_id
+        || probe.selected_lane_id != input.selected_lane_id
+        || probe.selected_metadata_record_digest != input.selected_metadata_record_digest
+        || probe.selected_metadata_input_digest != input.selected_metadata_input_digest
+        || probe.explicit_nonclaim_digest != input.explicit_nonclaim_digest
+        || probe.accepted_append_blocker_digest != input.accepted_append_blocker_digest
+        || probe.command_descriptor_digest != input.command_descriptor_digest
+        || probe.expected_verdict_descriptor_digest != input.expected_verdict_descriptor_digest
+        || probe.output_quarantine_descriptor_digest != input.output_quarantine_descriptor_digest
+        || probe.tool_availability_digest
+            != gateway_formal_tiny_digest_backend_tool_availability_digest(input)
+        || probe.selected_lane_available != selected_lane_available
+    {
+        validation
+            .issues
+            .push(GatewayFormalTinyDigestBackendProbeIssue::DigestBindingMismatch);
+    }
+    for required in gateway_formal_tiny_digest_backend_probe_required_nonclaims() {
+        if !probe.explicit_nonclaims.contains(&required) {
+            validation.issues.push(
+                GatewayFormalTinyDigestBackendProbeIssue::MissingRequiredNonclaim(required.0),
+            );
+        }
+    }
+    if probe.claim_boundary != gateway_formal_tiny_digest_backend_probe_claim_boundary() {
+        validation
+            .issues
+            .push(GatewayFormalTinyDigestBackendProbeIssue::ClaimBoundaryMismatch);
+    }
+    if probe.process_spawned
+        || probe.backend_executed
+        || probe.proof_artifact_created
+        || probe.checker_transcript_created
+        || probe.solver_certificate_created
+        || probe.creates_accepted_evidence
+        || probe.creates_level2_evidence
+        || probe.populates_score_axes
+        || probe.semantic_correctness_claimed
+        || probe.production_readiness_claimed
+        || probe.sota_claimed
+        || probe.breakthrough_claimed
+        || probe.full_security_claimed
+        || probe.grants_authority
+    {
+        validation
+            .issues
+            .push(GatewayFormalTinyDigestBackendProbeIssue::PromotionAttempt);
+    }
+    validation.valid = validation.issues.is_empty();
+    validation
+}
+
+fn gateway_formal_tiny_digest_backend_probe_lane_ids() -> BTreeSet<String> {
+    BTreeSet::from([
+        GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SMT_Z3_LANE_ID.to_owned(),
+        GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_LEAN_LANE_ID.to_owned(),
+        GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_COBALT_LANE_ID.to_owned(),
+    ])
+}
+
+fn gateway_formal_tiny_digest_backend_tool_availability_digest(
+    input: &GatewayFormalTinyDigestBackendProbeInput,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-digest-backend-tool-availability-set:v1",
+        &[
+            input.smt_z3_availability.digest(),
+            input.lean_availability.digest(),
+            input.cobalt_availability.digest(),
+        ],
+    )
+}
+
+fn gateway_formal_tiny_digest_backend_probe_selected_availability(
+    input: &GatewayFormalTinyDigestBackendProbeInput,
+) -> Option<&GatewayFormalTinyDigestBackendToolAvailability> {
+    [
+        &input.smt_z3_availability,
+        &input.lean_availability,
+        &input.cobalt_availability,
+    ]
+    .into_iter()
+    .find(|availability| availability.lane_id == input.selected_lane_id)
+}
+
+fn validate_gateway_formal_tiny_digest_backend_tool_availability(
+    availability: &GatewayFormalTinyDigestBackendToolAvailability,
+    expected_lane_id: &str,
+    issues: &mut Vec<GatewayFormalTinyDigestBackendProbeIssue>,
+) {
+    if availability.lane_id != expected_lane_id {
+        issues.push(GatewayFormalTinyDigestBackendProbeIssue::ToolLaneMismatch(
+            expected_lane_id.to_owned(),
+        ));
+    }
+    if availability.tool_name.trim().is_empty() {
+        issues.push(GatewayFormalTinyDigestBackendProbeIssue::ToolNameMissing(
+            expected_lane_id.to_owned(),
+        ));
+    }
+    match availability.status {
+        GatewayFormalTinyDigestBackendToolStatus::Available => {
+            if availability
+                .executable_identity
+                .as_ref()
+                .map(|identity| identity.trim().is_empty())
+                .unwrap_or(true)
+            {
+                issues.push(
+                    GatewayFormalTinyDigestBackendProbeIssue::AvailableToolMissingExecutableIdentity(
+                        expected_lane_id.to_owned(),
+                    ),
+                );
+            }
+        }
+        GatewayFormalTinyDigestBackendToolStatus::Unavailable => {
+            if availability
+                .unavailable_reason
+                .as_ref()
+                .map(|reason| reason.trim().is_empty())
+                .unwrap_or(true)
+            {
+                issues.push(
+                    GatewayFormalTinyDigestBackendProbeIssue::UnavailableToolMissingReason(
+                        expected_lane_id.to_owned(),
+                    ),
+                );
+            }
+            if availability.executable_identity.is_some() {
+                issues.push(
+                    GatewayFormalTinyDigestBackendProbeIssue::UnavailableToolHasExecutableIdentity(
+                        expected_lane_id.to_owned(),
+                    ),
+                );
+            }
+        }
+    }
 }
 
 pub fn gateway_formal_real_command_lane_formal_evidence_candidate_claim_boundary() -> String {
@@ -49479,6 +49949,164 @@ mod tests {
             benchmark_output_path_requested: false,
             proof_promotion_path_requested: false,
         }
+    }
+
+    fn phase403_tool_availability(
+        lane_id: &str,
+        tool_name: &str,
+        available: bool,
+    ) -> GatewayFormalTinyDigestBackendToolAvailability {
+        GatewayFormalTinyDigestBackendToolAvailability {
+            lane_id: lane_id.to_owned(),
+            tool_name: tool_name.to_owned(),
+            status: if available {
+                GatewayFormalTinyDigestBackendToolStatus::Available
+            } else {
+                GatewayFormalTinyDigestBackendToolStatus::Unavailable
+            },
+            executable_identity: available.then(|| format!("{tool_name}:local-path-detected")),
+            unavailable_reason: (!available).then(|| format!("{tool_name}:not-detected")),
+        }
+    }
+
+    fn phase403_probe_input(
+        selected_lane_id: &str,
+        selected_available: bool,
+    ) -> GatewayFormalTinyDigestBackendProbeInput {
+        GatewayFormalTinyDigestBackendProbeInput {
+            schema_version: GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SCHEMA_VERSION.to_owned(),
+            probe_id: "phase403-probe-1".to_owned(),
+            created_at_unix: 1_800_000_403,
+            property_id: GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_PROPERTY_ID.to_owned(),
+            selected_lane_id: selected_lane_id.to_owned(),
+            selected_metadata_record_digest: Hash([1; 32]),
+            selected_metadata_input_digest: Hash([2; 32]),
+            explicit_nonclaim_digest: Hash([3; 32]),
+            accepted_append_blocker_digest: Hash([4; 32]),
+            command_descriptor_digest: Hash([5; 32]),
+            expected_verdict_descriptor_digest: Hash([6; 32]),
+            output_quarantine_descriptor_digest: Hash([7; 32]),
+            smt_z3_availability: phase403_tool_availability(
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SMT_Z3_LANE_ID,
+                "z3",
+                selected_lane_id != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SMT_Z3_LANE_ID
+                    || selected_available,
+            ),
+            lean_availability: phase403_tool_availability(
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_LEAN_LANE_ID,
+                "lean",
+                selected_lane_id == GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_LEAN_LANE_ID
+                    && selected_available,
+            ),
+            cobalt_availability: phase403_tool_availability(
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_COBALT_LANE_ID,
+                "cobalt",
+                selected_lane_id == GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_COBALT_LANE_ID
+                    && selected_available,
+            ),
+            accepted_evidence_requested: false,
+            level2_evidence_requested: false,
+            score_axis_population_requested: false,
+            proof_artifact_requested: false,
+            checker_transcript_requested: false,
+            solver_certificate_requested: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    #[test]
+    fn phase403_tiny_digest_backend_probe_builds_without_promotion() {
+        let input = phase403_probe_input(
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SMT_Z3_LANE_ID,
+            true,
+        );
+        let probe =
+            build_gateway_formal_tiny_digest_backend_probe(&input).expect("phase403 probe builds");
+
+        assert_eq!(
+            probe.state_slice,
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_STATE_SLICE
+        );
+        assert_eq!(
+            probe.property_id,
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_PROPERTY_ID
+        );
+        assert!(probe.selected_lane_available);
+        assert!(!probe.process_spawned);
+        assert!(!probe.backend_executed);
+        assert!(!probe.creates_accepted_evidence);
+        assert!(!probe.creates_level2_evidence);
+        assert!(!probe.populates_score_axes);
+        assert!(!probe.semantic_correctness_claimed);
+        assert!(!probe.production_readiness_claimed);
+        assert!(!probe.sota_claimed);
+        assert!(!probe.full_security_claimed);
+        assert!(!probe.grants_authority);
+        assert!(probe.explicit_nonclaims.contains(&NonClaimLabel(
+            "tiny digest-binding backend probe only".to_owned()
+        )));
+        assert!(validate_gateway_formal_tiny_digest_backend_probe(&probe, &input).valid);
+    }
+
+    #[test]
+    fn phase403_tiny_digest_backend_probe_rejects_unavailable_selected_lane() {
+        let input =
+            phase403_probe_input(GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_LEAN_LANE_ID, false);
+        let validation = validate_gateway_formal_tiny_digest_backend_probe_input(&input);
+
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&GatewayFormalTinyDigestBackendProbeIssue::SelectedLaneUnavailable));
+        assert!(build_gateway_formal_tiny_digest_backend_probe(&input).is_err());
+    }
+
+    #[test]
+    fn phase403_tiny_digest_backend_probe_rejects_drift() {
+        let input = phase403_probe_input(
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SMT_Z3_LANE_ID,
+            true,
+        );
+        let mut probe = build_gateway_formal_tiny_digest_backend_probe(&input)
+            .expect("phase403 probe builds before drift");
+        probe.selected_metadata_input_digest = Hash([42; 32]);
+
+        let validation = validate_gateway_formal_tiny_digest_backend_probe(&probe, &input);
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&GatewayFormalTinyDigestBackendProbeIssue::DigestBindingMismatch));
+    }
+
+    #[test]
+    fn phase403_tiny_digest_backend_probe_rejects_promotion() {
+        let mut input = phase403_probe_input(
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_SMT_Z3_LANE_ID,
+            true,
+        );
+        input.accepted_evidence_requested = true;
+        input.level2_evidence_requested = true;
+        input.score_axis_population_requested = true;
+        input.proof_artifact_requested = true;
+        input.checker_transcript_requested = true;
+        input.solver_certificate_requested = true;
+        input.semantic_correctness_claimed = true;
+        input.production_readiness_claimed = true;
+        input.sota_claimed = true;
+        input.full_security_claimed = true;
+        input.action_authority_claimed = true;
+
+        let validation = validate_gateway_formal_tiny_digest_backend_probe_input(&input);
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&GatewayFormalTinyDigestBackendProbeIssue::PromotionAttempt));
+        assert!(build_gateway_formal_tiny_digest_backend_probe(&input).is_err());
     }
 
     #[test]

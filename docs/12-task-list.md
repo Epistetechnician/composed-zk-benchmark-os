@@ -10852,6 +10852,34 @@ Exit criteria: HSAI now has a reconciled route to Phase 403. The next
 responsible implementation is a tiny digest-binding backend probe, not accepted
 formal evidence and not a broad public-claim escalation.
 
+## Phase 403 HSAI Tiny Digest-Binding Backend Probe Implementation
+
+Status: complete. See
+`docs/403-hsai-tiny-digest-binding-backend-probe-notes.md`.
+
+Goal: implement no-spawn Rust metadata for the Phase 401
+`gateway-local-digest-binding-determinism-v1` backend probe.
+
+Implemented: Phase 403 adds typed local probe input, local tool availability,
+probe record, validation issues, validation result, claim-boundary and
+nonclaim helpers, a probe builder, and validators under `hsai-agent-admission`.
+It binds selected metadata, input, explicit nonclaim, accepted append blocker,
+command descriptor, expected verdict, output quarantine, and local backend
+availability digests.
+
+Anti-goals: process spawning, backend execution, Lean execution, SMT execution,
+COBALT execution, Rust-to-Lean extraction, accepted append decisions, accepted
+Evidence Ledger mutation, accepted formal evidence, Level2+ evidence, score
+axes, proof/checker/solver promotion, benchmark submission, production
+deployment, semantic-correctness claims, production-readiness claims, SOTA
+claims, breakthrough claims, full-security claims, or action authority.
+
+Exit criteria: HSAI now has a no-spawn backend-probe metadata implementation
+for the Phase 401 digest-binding property. It still has no new backend run, no
+Lean/SMT/COBALT run for Phase 401, no accepted evidence, no Level2+ evidence,
+no score axes, and no SOTA/full-security/semantic-correctness/
+production-readiness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
