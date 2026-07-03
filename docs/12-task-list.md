@@ -11404,6 +11404,37 @@ Level2+ evidence, score axes, Lean/COBALT/Rust-to-Lean execution, proof
 artifact, checker transcript, solver certificate, or SOTA/full-security/
 semantic-correctness/production-readiness claim.
 
+## Phase 423 HSAI Tiny Z3 Local Reviewed Metadata Review Record Implementation
+
+Status: complete. See
+`docs/423-hsai-tiny-z3-local-reviewed-metadata-review-record-notes.md`.
+
+Goal: implement local tiny-Z3 metadata review records over Phase 421 metadata
+with explicit Phase 404 execution and Phase 405 output-manifest bindings,
+without mutating accepted evidence, changing accepted append policy, creating
+accepted formal evidence, creating Level2+ evidence, populating score axes, or
+making strong public claims.
+
+Implemented: Phase 423 adds tiny-Z3 local reviewed metadata review schema/
+state/claim-boundary constants, review labels, input metadata, review record
+metadata, issue taxonomy, validation report, canonical claim-boundary and
+nonclaim helpers, builder, validator, and focused tests for valid blocking
+review construction, metadata digest drift, backend digest drift, promoted
+backend state, reviewer policy errors, accepted append blocker drift, and
+promotion attempts.
+
+Validation coverage: `hsai-agent-admission` Phase 423 tests cover construction
+and rejection behavior. Repository hygiene, claim-boundary source scans, and
+workspace tests remain the broader gates.
+
+Exit criteria: HSAI now has a local tiny-Z3 metadata review record that binds
+Phase 421 metadata to one local Phase 404/405 Z3 backend replay comparison
+while accepted formal evidence remains blocked. It still has no accepted
+formal evidence, accepted Evidence Ledger mutation, accepted append policy
+change, Level2+ evidence, score axes, Lean/COBALT/Rust-to-Lean execution, proof
+artifact, checker transcript, solver certificate, or SOTA/full-security/
+semantic-correctness/production-readiness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

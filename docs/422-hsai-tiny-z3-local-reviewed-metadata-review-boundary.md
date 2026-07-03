@@ -149,7 +149,9 @@ That still is not:
 
 ## Phase 423 Implementation Exit Criteria
 
-Phase 423 may implement tiny-Z3 local metadata review records only if it:
+Phase 423 implements tiny-Z3 local metadata review records in
+`docs/423-hsai-tiny-z3-local-reviewed-metadata-review-record-notes.md`. The
+implementation:
 
 - binds one Phase 421 local metadata digest;
 - binds one Phase 419 class-policy digest;
