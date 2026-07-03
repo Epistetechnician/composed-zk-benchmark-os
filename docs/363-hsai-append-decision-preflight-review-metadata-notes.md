@@ -139,8 +139,8 @@ Phase 363 adds tests that:
 
 ## Next Slice
 
-Phase 364 should define a docs-first boundary for local accepted-append decision
-candidate metadata. That boundary must keep decision-candidate metadata separate
+Phase 364 defines a docs-first boundary for local accepted-append decision
+candidate metadata. That boundary keeps decision-candidate metadata separate
 from accepted formal evidence, accepted Evidence Ledger mutation, accepted
 append policy changes, Level2+ evidence, score axes, Lean execution, SMT
 execution, COBALT execution, Rust-to-Lean extraction, semantic correctness,
