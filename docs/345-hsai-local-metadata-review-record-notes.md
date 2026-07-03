@@ -114,10 +114,9 @@ Phase 345 adds tests that:
 
 ## Next Slice
 
-Phase 346 should define a docs-first boundary for exporting local metadata
-review records into a non-accepted audit package. That boundary must not mutate
-the accepted Evidence Ledger, change accepted append policy, create accepted
-formal evidence, create Level2+ evidence, populate score axes, run Lean, run
-SMT, run COBALT, run Rust-to-Lean extraction, or claim semantic correctness,
-production readiness, SOTA, breakthrough status, full security, or action
-authority.
+Phase 346 defines a docs-first boundary for exporting local metadata review
+records into a non-accepted audit package. That boundary does not mutate the
+accepted Evidence Ledger, change accepted append policy, create accepted formal
+evidence, create Level2+ evidence, populate score axes, run Lean, run SMT, run
+COBALT, run Rust-to-Lean extraction, or claim semantic correctness, production
+readiness, SOTA, breakthrough status, full security, or action authority.
