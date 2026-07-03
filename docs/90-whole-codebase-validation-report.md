@@ -1732,6 +1732,21 @@ evidence, score-axis entries, benchmark evidence, semantic-correctness claims,
 production-readiness claims, SOTA claims, breakthrough claims, full-security
 claims, or authority grants.
 
+Phase 328 defines the docs-first formal-evidence promotion boundary for the
+Phase 327 quarantined fixed-SMT output. It introduces the explicit state ladder
+`quarantined_output -> formal_evidence_candidate -> reviewed_formal_evidence
+-> accepted_formal_evidence`, candidate input digest requirements, required
+promotion rejection cases, and the maximum evidence meaning of a future
+candidate. The boundary states that SOTA-quality progress requires stricter
+digest-bound, replayable, nonclaim-preserving evidence discipline, not stronger
+labels on the current artifact. Phase 328 does not implement candidate
+emission, accepted Evidence Ledger mutation, Level2+ evidence, score-axis
+population, proof artifact generation, checker transcript generation, solver
+certificate generation, Lean execution, COBALT execution, Rust-to-Lean
+extraction, benchmark submission, production deployment, semantic-correctness
+claims, production-readiness claims, SOTA claims, breakthrough claims,
+full-security claims, or authority grants.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission

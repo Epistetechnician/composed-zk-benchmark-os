@@ -87,9 +87,9 @@ execute an action.
 
 ## Next Slice
 
-Phase 328 may define a docs-first formal-evidence promotion boundary for the
-quarantined fixed-SMT output. That boundary must keep promotion explicit and
-must still reject accepted evidence, Level2+ evidence, score axes, semantic
+Phase 328 defines a docs-first formal-evidence promotion boundary for the
+quarantined fixed-SMT output. Phase 329 may implement a local
+formal-evidence-candidate data model if it preserves the Phase 328 state ladder
+and still rejects accepted evidence, Level2+ evidence, score axes, semantic
 correctness claims, production-readiness claims, SOTA claims, full-security
-claims, and action authority until a separate evidence-admission phase is
-implemented and validated.
+claims, and action authority.

@@ -7659,6 +7659,42 @@ bundle for quarantined fixed-SMT execution output, but still no accepted formal
 evidence, no Level2+ formal evidence, no score-axis evidence, no proof-authority
 claim, and no production/SOTA/security/correctness claim.
 
+## Phase 328 HSAI Formal Evidence Promotion Boundary
+
+Status: complete. See
+`docs/328-hsai-formal-evidence-promotion-boundary.md`.
+
+Goal: define the docs-first promotion boundary between a Phase 327
+quarantined fixed-SMT output bundle and any future formal-evidence candidate.
+
+Implemented: formal-lane state ladder, candidate input digest requirements,
+required rejection cases, evidence meaning limits, SOTA-quality direction, and
+future Phase 329 exit criteria. The state ladder is
+`quarantined_output -> formal_evidence_candidate -> reviewed_formal_evidence
+-> accepted_formal_evidence`, and no state transition may skip a state.
+
+Validation coverage: documentation now separates quarantined backend output
+from candidate evidence, reviewed evidence, and accepted evidence. It defines
+why a Phase 327 bundle can inform a future evidence candidate without becoming
+accepted evidence, Level2+ evidence, score-axis evidence, or proof authority.
+
+Validation gate: formatting, docs/hygiene checks, diff hygiene, empty-file
+hygiene, package-root lint check, and full workspace tests.
+
+Anti-goals: Rust implementation code, candidate emission, accepted Evidence
+Ledger mutation, Level2+ evidence, score-axis population, proof artifact
+generation, checker transcript generation, solver certificate generation,
+Lean execution, COBALT execution, Rust-to-Lean extraction, benchmark
+submission, production deployment, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims, full-security
+claims, or action authority.
+
+Exit criteria: the repo now has a documented formal-evidence promotion
+boundary that moves toward SOTA-quality evidence discipline, but still no
+formal-evidence candidate implementation, no reviewed formal evidence, no
+accepted formal evidence, no Level2+ evidence, no score axes, no proof-authority
+claim, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
