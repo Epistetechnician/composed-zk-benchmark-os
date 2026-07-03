@@ -11026,6 +11026,30 @@ Phase 407 tiny-Z3 candidate. It still has no reviewed formal evidence, accepted
 evidence, Level2+ evidence, score axes, Lean/COBALT/Rust-to-Lean execution, or
 SOTA/full-security/semantic-correctness/production-readiness claim.
 
+## Phase 409 HSAI Tiny Z3 Reviewed Formal Evidence Preview
+
+Status: complete. See
+`docs/409-hsai-tiny-z3-reviewed-formal-evidence-preview-notes.md`.
+
+Goal: implement local review-preview metadata for Phase 407 tiny-Z3 candidates
+without creating reviewed evidence, accepted evidence, Level2+ evidence, score
+axes, proof authority, or strong public claims.
+
+Implemented: Phase 409 adds review-preview decision labels, input metadata,
+preview record metadata, issue taxonomy, validation report, claim-boundary
+helper, canonical replay-readiness and promotion-rejection checklist helpers,
+builder, and validator under `hsai-agent-admission`.
+
+Validation coverage: focused tests build previews for all four decision labels,
+reject candidate digest drift, policy drift, nonclaim acknowledgement drift,
+promotion-checklist drift, reviewed/accepted/Level2+/score/SOTA promotion, and
+promoted-candidate state drift.
+
+Exit criteria: HSAI now has a local tiny-Z3 review-preview metadata lane. It
+still has no reviewed formal evidence, accepted evidence, Level2+ evidence,
+score axes, Lean/COBALT/Rust-to-Lean execution, or
+SOTA/full-security/semantic-correctness/production-readiness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
