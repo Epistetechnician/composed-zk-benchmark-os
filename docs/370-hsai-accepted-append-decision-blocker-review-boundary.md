@@ -173,7 +173,7 @@ It cannot support:
 
 ## Phase 371 Implementation Exit Criteria
 
-Phase 371 may implement local accepted-append decision blocker review metadata
+Phase 371 implements local accepted-append decision blocker review metadata
 only if it:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
