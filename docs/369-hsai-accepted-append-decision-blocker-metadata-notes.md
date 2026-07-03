@@ -161,10 +161,10 @@ Phase 369 adds tests that:
 
 ## Next Slice
 
-Phase 370 should define a docs-first boundary for accepted-append decision
-blocker review metadata before any accepted append decision is allowed. That
-boundary must keep blocker-review metadata separate from accepted formal
-evidence, accepted Evidence Ledger mutation, accepted append policy changes,
-Level2+ evidence, score axes, Lean execution, SMT execution, COBALT execution,
-Rust-to-Lean extraction, semantic correctness, production readiness, SOTA,
-breakthrough status, full security, and action authority.
+Phase 370 defines a docs-first boundary for accepted-append decision blocker
+review metadata before any accepted append decision is allowed. That boundary
+keeps blocker-review metadata separate from accepted formal evidence, accepted
+Evidence Ledger mutation, accepted append policy changes, Level2+ evidence,
+score axes, Lean execution, SMT execution, COBALT execution, Rust-to-Lean
+extraction, semantic correctness, production readiness, SOTA, breakthrough
+status, full security, and action authority.

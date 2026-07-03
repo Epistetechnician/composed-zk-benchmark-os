@@ -9466,6 +9466,57 @@ accepted Evidence Ledger mutation, no accepted append policy change, no Level2+
 evidence, no score axes, no proof-authority claim, and no
 production/SOTA/security/correctness claim.
 
+## Phase 370 HSAI Accepted-Append Decision Blocker Review Boundary
+
+Status: complete. See
+`docs/370-hsai-accepted-append-decision-blocker-review-boundary.md`.
+
+Goal: define the docs-first boundary for future local accepted-append decision
+blocker review metadata over one Phase 369 accepted-append decision blocker
+before any accepted append decision is allowed.
+
+Implemented: future review purpose, five allowed future review labels, required
+future inputs, required future validation, meaning limits, and Phase 371
+implementation exit criteria.
+
+Validation coverage: documentation now requires future blocker reviews to bind
+one Phase 369 blocker digest/input digest, one Phase 367 review digest/input
+digest, one Phase 365 candidate digest/input digest, one Phase 363 review
+digest/input digest, one Phase 361 preflight digest/input digest, one Phase 359
+review digest/input digest, one Phase 357 candidate digest/input digest, one
+Phase 355 review digest, one Phase 353 manifest digest, one Phase 351 review
+digest, one Phase 349 preview digest, one Phase 347 package digest, one Phase
+345 review record digest, one Phase 343 metadata digest, declared file digest
+map digest, explicit nonclaim digest, reviewer ids, proposal policy id,
+proposal candidate id, proposal review id, append preflight id, append
+preflight review id, accepted append decision candidate id, accepted append
+decision candidate review id, accepted append decision blocker id, accepted
+append decision blocker review id, review decision timestamp, current accepted
+append blocker digest, Phase 365 candidate disposition, Phase 367 review label,
+Phase 369 blocker label, and blocker review label while rejecting promotion text
+and accepted-ledger mutation attempts.
+
+Validation gate: formatting, docs/hygiene checks, diff hygiene, empty-file
+hygiene, package-root lint check, claim-boundary source scans, repo docs tests,
+and full workspace tests.
+
+Anti-goals: Rust implementation code, Cargo metadata changes, filesystem
+artifact writes, accepted append decisions, accepted Evidence Ledger mutation,
+accepted append policy changes, accepted formal evidence, Level2+ evidence,
+score-axis population, proof artifact generation or promotion, checker
+transcript generation or promotion, solver certificate generation or promotion,
+additional process-spawn APIs, generic backend runners, solver scripts, checker
+scripts, proof assistant setup files, Lean execution, SMT execution, COBALT
+execution, Rust-to-Lean extraction, benchmark submission, production
+deployment, semantic-correctness claims, production-readiness claims, SOTA
+claims, breakthrough claims, full-security claims, or action authority.
+
+Exit criteria: HSAI now has a docs-first boundary for future local
+accepted-append decision blocker review metadata. It still has no accepted
+append decision, no accepted formal evidence, no accepted Evidence Ledger
+mutation, no accepted append policy change, no Level2+ evidence, no score axes,
+no proof-authority claim, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
