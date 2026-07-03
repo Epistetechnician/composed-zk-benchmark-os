@@ -8292,6 +8292,42 @@ evidence, no accepted Evidence Ledger mutation, no accepted append policy
 change, no Level2+ evidence, no score axes, no proof-authority claim, and no
 production/SOTA/security/correctness claim.
 
+## Phase 344 HSAI Local Reviewed Metadata Review Boundary
+
+Status: complete. See
+`docs/344-hsai-local-reviewed-metadata-review-boundary.md`.
+
+Goal: define the docs-first review boundary for the Phase 343 local metadata
+class without implementing review metadata or creating accepted formal evidence.
+
+Implemented: allowed future review labels, required future review inputs,
+required future validation and rejection cases, evidence meaning limits, and
+Phase 345 implementation exit criteria.
+
+Validation coverage: documentation now constrains future review labels to
+`review_scope_acceptable`, `review_rejected`, `replay_blocked`,
+`source_correspondence_blocked`, and `accepted_evidence_blocked`, with
+`accepted_evidence_blocked` explicitly non-promotional.
+
+Validation gate: formatting, docs/hygiene checks, diff hygiene, empty-file
+hygiene, package-root lint check, claim-boundary source scans, repo docs tests,
+and full workspace tests.
+
+Anti-goals: Rust implementation code, Cargo metadata changes, review metadata
+implementation, accepted Evidence Ledger mutation, accepted append policy
+changes, accepted formal evidence, Level2+ evidence, score-axis population,
+proof artifact generation or promotion, checker transcript generation or
+promotion, solver certificate generation or promotion, Lean execution, COBALT
+execution, Rust-to-Lean extraction, benchmark submission, production deployment,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, or action authority.
+
+Exit criteria: HSAI now has a boundary for reviewing local non-accepted
+formal-evidence metadata. It still has no implemented review metadata, no
+accepted formal evidence, no accepted Evidence Ledger mutation, no accepted
+append policy change, no Level2+ evidence, no score axes, no proof-authority
+claim, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

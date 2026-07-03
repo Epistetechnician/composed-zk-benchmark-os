@@ -142,9 +142,9 @@ That still does not support:
 
 ## Next Slice
 
-Phase 344 should define a docs-first local reviewed metadata review boundary.
-It may specify how a future reviewer can classify the Phase 343 metadata class,
-but it must not approve accepted formal evidence, mutate the accepted Evidence
-Ledger, change accepted append policy, create Level2+ evidence, populate score
-axes, or claim semantic correctness, production readiness, SOTA, full security,
-or action authority.
+Phase 344 defines a docs-first local reviewed metadata review boundary. It
+specifies how a future reviewer may classify the Phase 343 metadata class, but
+does not implement review metadata, approve accepted formal evidence, mutate the
+accepted Evidence Ledger, change accepted append policy, create Level2+
+evidence, populate score axes, or claim semantic correctness, production
+readiness, SOTA, full security, or action authority.
