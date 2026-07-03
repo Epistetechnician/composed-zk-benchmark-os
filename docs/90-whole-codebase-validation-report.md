@@ -5676,5 +5676,16 @@ drift. This remains review-preview metadata only: no reviewed formal evidence,
 accepted formal evidence, Level2+ evidence, score axes, or production/SOTA/
 security/semantic-correctness claim.
 
+[docs/410-hsai-tiny-z3-reviewed-formal-evidence-record-boundary.md](docs/410-hsai-tiny-z3-reviewed-formal-evidence-record-boundary.md)
+records the Phase 410 docs-first boundary from the Phase 409 local tiny-Z3
+review-preview metadata lane to a future reviewed formal-evidence record for
+`gateway-local-digest-binding-determinism-v1`. It defines reviewed-record
+inputs, the only eligible preview decision, required rejection cases, evidence
+meaning, SOTA-quality direction, and Phase 411 implementation exit criteria.
+This is boundary documentation only: no Rust implementation, reviewed formal
+evidence record, accepted formal evidence, accepted Evidence Ledger mutation,
+Level2+ evidence, score axes, proof artifacts, checker transcripts, solver
+certificates, or production/SOTA/security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
