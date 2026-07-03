@@ -136,10 +136,13 @@ It cannot support:
 - full security;
 - action authority.
 
-## Phase 353 Implementation Exit Criteria
+## Phase 353 Implementation Result
 
-Phase 353 may implement local materialized audit package artifact plumbing only
-if it:
+Phase 353 implements local materialized audit package artifact plumbing in
+`crates/hsai-agent-admission/src/lib.rs` and records its implementation notes in
+`docs/353-hsai-materialized-audit-package-artifact-plumbing-notes.md`.
+
+The implementation:
 
 - remains additive and local;
 - writes only declared logical files under a caller-selected output root;
