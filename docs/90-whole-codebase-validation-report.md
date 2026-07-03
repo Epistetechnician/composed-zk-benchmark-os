@@ -5724,5 +5724,17 @@ handoff metadata only: no accepted formal evidence, accepted Evidence Ledger
 mutation, accepted append policy change, Level2+ evidence, score axes, or
 production/SOTA/security/semantic-correctness claim.
 
+[docs/414-hsai-tiny-z3-accepted-formal-evidence-policy-decision-boundary.md](docs/414-hsai-tiny-z3-accepted-formal-evidence-policy-decision-boundary.md)
+records the Phase 414 docs-first current-path policy decision boundary for
+tiny-Z3 accepted formal evidence. It states that tiny-Z3 accepted formal
+evidence remains forbidden in the current accepted append path, documents
+current code constraints, allowed future policy shapes, requirements before any
+bounded class, forbidden shortcuts, evidence meaning, and Phase 415
+implementation conditions. This is boundary documentation only: no Rust
+implementation, accepted formal evidence, accepted Evidence Ledger mutation,
+accepted append policy change, Level2+ evidence, score axes, proof artifacts,
+checker transcripts, solver certificates, or production/SOTA/security/
+semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
