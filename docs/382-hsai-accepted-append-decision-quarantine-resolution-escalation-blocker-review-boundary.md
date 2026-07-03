@@ -214,8 +214,7 @@ It cannot support:
 
 ## Phase 383 Implementation Exit Criteria
 
-Phase 383 implements local accepted-append decision quarantine-resolution
-escalation-blocker review metadata only if it:
+The Phase 383 implementation is valid because it:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;
