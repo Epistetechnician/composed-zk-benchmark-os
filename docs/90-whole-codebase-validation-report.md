@@ -1717,6 +1717,21 @@ score-axis population, semantic-correctness claims, production-readiness
 claims, SOTA claims, breakthrough claims, full-security claims, or authority
 grants.
 
+Phase 327 materializes and reads back the quarantined Phase 326 fixed-SMT
+process output in `crates/hsai-agent-admission`. It adds a fixed
+`gateway-formal-real-command-lane-fixed-smt-execution/*` bundle with
+`manifest.json`, `process-output.json`, bounded stdout/stderr summaries,
+nonclaims Markdown, and SHA-256 sidecars. Readback rejects protected or
+symlinked roots, undeclared files, sidecar digest drift, duplicate-key or
+noncanonical JSON, manifest/process-output drift, stream-summary drift,
+promotion drift, and undeclared proof artifacts. Focused tests materialize a
+Phase 326 execution result, read it back, and reject sidecar, promotion, and
+undeclared-file tampering. Phase 327 does not create proof artifacts, checker
+transcripts, solver certificates, accepted Evidence Ledger entries, Level2+
+evidence, score-axis entries, benchmark evidence, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims, full-security
+claims, or authority grants.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission

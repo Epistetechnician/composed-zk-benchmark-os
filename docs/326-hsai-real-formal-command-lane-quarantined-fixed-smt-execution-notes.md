@@ -105,8 +105,9 @@ execute an action.
 
 ## Next Slice
 
-Phase 327 may materialize and read back the Phase 326 quarantined fixed-SMT
-execution output bundle with digest sidecars and promotion rejection. It still
-must not create accepted evidence, Level2+ evidence, score axes, semantic
-correctness claims, production-readiness claims, SOTA claims, full-security
-claims, or action authority.
+Phase 327 materializes and reads back the Phase 326 quarantined fixed-SMT
+execution output bundle with digest sidecars and promotion rejection. Phase 328
+may define a docs-first formal-evidence promotion boundary for that quarantined
+output, but must not create accepted evidence, Level2+ evidence, score axes,
+semantic correctness claims, production-readiness claims, SOTA claims,
+full-security claims, or action authority.

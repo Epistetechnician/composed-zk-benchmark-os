@@ -618,6 +618,8 @@ pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_STATE_SLICE: &str
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_CLAIM_BOUNDARY: &str = "local gateway real formal command-lane execution preflight metadata only; authorizes at most one future fixed local SMT-LIB2 command policy over a read back Phase 323 bundle but does not spawn a process, execute SMT, Z3, Lean, COBALT, Rust-to-Lean, Aeneas, Hax, Coq, TLA+, CBMC, or any model checker, create proof artifacts, create checker transcripts, create solver certificates, create accepted evidence, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-fixed-smt-execution:v1";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_OUTPUT_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-real-command-lane-fixed-smt-execution-output-bundle:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_STATE_SLICE: &str =
     "phase-326-hsai-real-formal-command-lane-quarantined-fixed-smt-execution";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_CLAIM_BOUNDARY: &str = "local gateway real formal command-lane quarantined fixed-SMT execution result only; spawns one operator-digested fixed local executable through the Phase 325 preflight and records bounded redacted stdout/stderr summaries, but does not create proof artifacts, create checker transcripts, create solver certificates, create accepted evidence, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
@@ -4758,6 +4760,83 @@ impl GatewayFormalRealCommandLaneFixedSmtProcessOutput {
             self,
         )
     }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneFixedSmtExecutionOutputManifest {
+    pub schema_version: String,
+    pub run_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub preflight_digest: Hash,
+    pub command_descriptor_digest: Hash,
+    pub process_output_digest: Hash,
+    pub stdout_summary_digest: Hash,
+    pub stderr_summary_digest: Hash,
+    pub executable_digest: Hash,
+    pub fixed_argv_template_digest: Hash,
+    pub solver_verdict_label: GatewayFormalRealCommandLaneSolverVerdictLabel,
+    pub declared_files: Vec<String>,
+    pub declared_sidecars: Vec<String>,
+    pub declared_file_digests: BTreeMap<String, Hash>,
+    pub claim_boundary: String,
+    pub process_spawn_authorized: bool,
+    pub process_spawned: bool,
+    pub backend_executed: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+    pub raw_logs_retained: bool,
+    pub raw_provider_response_retained: bool,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl GatewayFormalRealCommandLaneFixedSmtExecutionOutputManifest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-fixed-smt-execution-output-manifest:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct GatewayFormalRealCommandLaneFixedSmtExecutionOutputRequest {
+    pub created_at_unix: u64,
+    pub overwrite: bool,
+    pub protected_roots: Vec<PathBuf>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayFormalRealCommandLaneFixedSmtExecutionOutputError {
+    InvalidProcessOutput,
+    EmptyRunId,
+    EmptyOutputRoot,
+    ProtectedOutputRoot,
+    OutputRootExistsWithoutOverwrite,
+    OutputRootIsFile,
+    OutputRootIsSymlink,
+    BundleFileIsSymlink(String),
+    DeclaredFileTypeMismatch(String),
+    UndeclaredFile(String),
+    DigestMismatch(String),
+    MalformedDeclaredFile(String),
+    ManifestSemanticMismatch,
+    ProcessOutputMismatch,
+    StdoutSummaryMismatch,
+    StderrSummaryMismatch,
+    NonclaimMismatch,
+    Io(String),
+    Serialization(String),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -18323,6 +18402,44 @@ pub fn gateway_formal_real_command_lane_execution_preflight_claim_boundary() -> 
     GATEWAY_FORMAL_REAL_COMMAND_LANE_EXECUTION_PREFLIGHT_CLAIM_BOUNDARY.to_owned()
 }
 
+pub fn gateway_formal_real_command_lane_fixed_smt_execution_declared_files() -> Vec<String> {
+    GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_DECLARED_FILES
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
+pub fn gateway_formal_real_command_lane_fixed_smt_execution_declared_sidecars() -> Vec<String> {
+    GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_DECLARED_SIDECARS
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
+pub fn gateway_formal_real_command_lane_fixed_smt_execution_claim_boundary() -> String {
+    GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_real_command_lane_fixed_smt_execution_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    BTreeSet::from([
+        NonClaimLabel("quarantined fixed-SMT execution output only".to_owned()),
+        NonClaimLabel("not proof evidence".to_owned()),
+        NonClaimLabel("not checker transcript evidence".to_owned()),
+        NonClaimLabel("not solver certificate evidence".to_owned()),
+        NonClaimLabel("not accepted evidence".to_owned()),
+        NonClaimLabel("not Level2 evidence".to_owned()),
+        NonClaimLabel("not score-axis evidence".to_owned()),
+        NonClaimLabel("not benchmark evidence".to_owned()),
+        NonClaimLabel("not semantic correctness".to_owned()),
+        NonClaimLabel("not production readiness".to_owned()),
+        NonClaimLabel("not SOTA".to_owned()),
+        NonClaimLabel("not breakthrough".to_owned()),
+        NonClaimLabel("not full security".to_owned()),
+        NonClaimLabel("not authority to execute actions".to_owned()),
+    ])
+}
+
 pub fn build_gateway_formal_real_command_lane_execution_preflight(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     command_request: &GatewayFormalRealCommandLaneRequest,
@@ -18696,6 +18813,606 @@ fn gateway_formal_real_command_lane_fixed_smt_solver_verdict(
     } else {
         GatewayFormalRealCommandLaneSolverVerdictLabel::OutputUnparseable
     }
+}
+
+pub fn materialize_gateway_formal_real_command_lane_fixed_smt_execution_output_bundle(
+    output_root: &Path,
+    process_output: &GatewayFormalRealCommandLaneFixedSmtProcessOutput,
+    output_request: &GatewayFormalRealCommandLaneFixedSmtExecutionOutputRequest,
+) -> Result<
+    GatewayFormalRealCommandLaneFixedSmtExecutionOutputManifest,
+    GatewayFormalRealCommandLaneFixedSmtExecutionOutputError,
+> {
+    validate_gateway_formal_real_command_lane_fixed_smt_execution_output_request(
+        output_root,
+        process_output,
+        output_request,
+    )?;
+    let staging_root = gateway_formal_real_command_lane_fixed_smt_execution_staging_root_for(
+        output_root,
+        &process_output.run_id,
+    )?;
+    if staging_root.exists() {
+        remove_gateway_formal_real_command_lane_fixed_smt_execution_dir_all_checked(&staging_root)?;
+    }
+    fs::create_dir_all(staging_root.join("gateway-formal-real-command-lane-fixed-smt-execution"))
+        .map_err(gateway_formal_real_command_lane_fixed_smt_execution_io_error)?;
+
+    let files = build_gateway_formal_real_command_lane_fixed_smt_execution_bundle_files(
+        output_request.created_at_unix,
+        process_output,
+    )?;
+    for (logical_path, bytes) in &files {
+        let target = staging_root.join(logical_path);
+        if let Some(parent) = target.parent() {
+            fs::create_dir_all(parent)
+                .map_err(gateway_formal_real_command_lane_fixed_smt_execution_io_error)?;
+        }
+        fs::write(&target, bytes)
+            .map_err(gateway_formal_real_command_lane_fixed_smt_execution_io_error)?;
+        fs::write(
+            sidecar_path(&target),
+            hash_hex(hash_bytes(bytes)).into_bytes(),
+        )
+        .map_err(gateway_formal_real_command_lane_fixed_smt_execution_io_error)?;
+    }
+
+    if output_root.exists() {
+        if !output_request.overwrite {
+            remove_gateway_formal_real_command_lane_fixed_smt_execution_dir_all_checked(
+                &staging_root,
+            )?;
+            return Err(
+                GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::OutputRootExistsWithoutOverwrite,
+            );
+        }
+        remove_gateway_formal_real_command_lane_fixed_smt_execution_dir_all_checked(output_root)?;
+    }
+    fs::rename(&staging_root, output_root)
+        .map_err(gateway_formal_real_command_lane_fixed_smt_execution_io_error)?;
+    read_gateway_formal_real_command_lane_fixed_smt_execution_output_bundle(output_root)
+}
+
+pub fn read_gateway_formal_real_command_lane_fixed_smt_execution_output_bundle(
+    output_root: &Path,
+) -> Result<
+    GatewayFormalRealCommandLaneFixedSmtExecutionOutputManifest,
+    GatewayFormalRealCommandLaneFixedSmtExecutionOutputError,
+> {
+    let output_metadata = fs::symlink_metadata(output_root)
+        .map_err(gateway_formal_real_command_lane_fixed_smt_execution_io_error)?;
+    if output_metadata.file_type().is_symlink() {
+        return Err(GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::OutputRootIsSymlink);
+    }
+    if !output_metadata.is_dir() {
+        return Err(GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::OutputRootIsFile);
+    }
+    let bundle_dir = output_root.join("gateway-formal-real-command-lane-fixed-smt-execution");
+    let bundle_metadata = fs::symlink_metadata(&bundle_dir)
+        .map_err(gateway_formal_real_command_lane_fixed_smt_execution_io_error)?;
+    if bundle_metadata.file_type().is_symlink() {
+        return Err(
+            GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::BundleFileIsSymlink(
+                "gateway-formal-real-command-lane-fixed-smt-execution".to_owned(),
+            ),
+        );
+    }
+    if !bundle_metadata.is_dir() {
+        return Err(
+            GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::DeclaredFileTypeMismatch(
+                "gateway-formal-real-command-lane-fixed-smt-execution".to_owned(),
+            ),
+        );
+    }
+
+    reject_undeclared_gateway_formal_real_command_lane_fixed_smt_execution_files(output_root)?;
+    let mut files = BTreeMap::new();
+    for logical_path in GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_DECLARED_FILES {
+        let path = output_root.join(logical_path);
+        let metadata = fs::symlink_metadata(&path)
+            .map_err(gateway_formal_real_command_lane_fixed_smt_execution_io_error)?;
+        if metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::BundleFileIsSymlink(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        if !metadata.is_file() {
+            return Err(
+                GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::DeclaredFileTypeMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        let sidecar = sidecar_path(&path);
+        let sidecar_metadata = fs::symlink_metadata(&sidecar)
+            .map_err(gateway_formal_real_command_lane_fixed_smt_execution_io_error)?;
+        if sidecar_metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::BundleFileIsSymlink(
+                    format!("{logical_path}.sha256"),
+                ),
+            );
+        }
+        if !sidecar_metadata.is_file() {
+            return Err(
+                GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::DeclaredFileTypeMismatch(
+                    format!("{logical_path}.sha256"),
+                ),
+            );
+        }
+        let bytes = fs::read(&path)
+            .map_err(gateway_formal_real_command_lane_fixed_smt_execution_io_error)?;
+        let expected_hash = fs::read_to_string(&sidecar)
+            .map_err(gateway_formal_real_command_lane_fixed_smt_execution_io_error)?;
+        if expected_hash.trim() != hash_hex(hash_bytes(&bytes)) {
+            return Err(
+                GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::DigestMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        files.insert((*logical_path).to_owned(), bytes);
+    }
+    validate_gateway_formal_real_command_lane_fixed_smt_execution_bundle_semantics(&files)
+}
+
+fn validate_gateway_formal_real_command_lane_fixed_smt_execution_output_request(
+    output_root: &Path,
+    process_output: &GatewayFormalRealCommandLaneFixedSmtProcessOutput,
+    output_request: &GatewayFormalRealCommandLaneFixedSmtExecutionOutputRequest,
+) -> Result<(), GatewayFormalRealCommandLaneFixedSmtExecutionOutputError> {
+    if !is_single_segment_id(&process_output.run_id) {
+        return Err(GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::EmptyRunId);
+    }
+    validate_gateway_formal_real_command_lane_fixed_smt_execution_process_output(process_output)?;
+    validate_gateway_formal_real_command_lane_fixed_smt_execution_output_root(
+        output_root,
+        &output_request.protected_roots,
+        output_request.overwrite,
+    )
+}
+
+fn build_gateway_formal_real_command_lane_fixed_smt_execution_bundle_files(
+    created_at_unix: u64,
+    process_output: &GatewayFormalRealCommandLaneFixedSmtProcessOutput,
+) -> Result<BTreeMap<String, Vec<u8>>, GatewayFormalRealCommandLaneFixedSmtExecutionOutputError> {
+    let nonclaims = gateway_formal_real_command_lane_fixed_smt_execution_required_nonclaims();
+    let nonclaims_md =
+        gateway_formal_real_command_lane_fixed_smt_execution_nonclaims_markdown(&nonclaims);
+    let mut files = BTreeMap::from([
+        (
+            "gateway-formal-real-command-lane-fixed-smt-execution/process-output.json".to_owned(),
+            serde_json::to_vec_pretty(process_output)
+                .map_err(gateway_formal_real_command_lane_fixed_smt_execution_serde_error)?,
+        ),
+        (
+            "gateway-formal-real-command-lane-fixed-smt-execution/stdout-summary.json".to_owned(),
+            serde_json::to_vec_pretty(&process_output.stdout_summary)
+                .map_err(gateway_formal_real_command_lane_fixed_smt_execution_serde_error)?,
+        ),
+        (
+            "gateway-formal-real-command-lane-fixed-smt-execution/stderr-summary.json".to_owned(),
+            serde_json::to_vec_pretty(&process_output.stderr_summary)
+                .map_err(gateway_formal_real_command_lane_fixed_smt_execution_serde_error)?,
+        ),
+        (
+            "gateway-formal-real-command-lane-fixed-smt-execution/nonclaims.md".to_owned(),
+            nonclaims_md.into_bytes(),
+        ),
+    ]);
+    let declared_file_digests = files
+        .iter()
+        .map(|(path, bytes)| (path.clone(), hash_bytes(bytes)))
+        .collect();
+    let manifest = GatewayFormalRealCommandLaneFixedSmtExecutionOutputManifest {
+        schema_version: GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_OUTPUT_SCHEMA_VERSION
+            .to_owned(),
+        run_id: process_output.run_id.clone(),
+        state_slice: GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_STATE_SLICE.to_owned(),
+        created_at_unix,
+        preflight_digest: process_output.preflight_digest,
+        command_descriptor_digest: process_output.command_descriptor_digest,
+        process_output_digest: process_output.digest(),
+        stdout_summary_digest: process_output.stdout_summary.digest(),
+        stderr_summary_digest: process_output.stderr_summary.digest(),
+        executable_digest: process_output.executable_digest,
+        fixed_argv_template_digest: process_output.fixed_argv_template_digest,
+        solver_verdict_label: process_output.solver_verdict_label.clone(),
+        declared_files: gateway_formal_real_command_lane_fixed_smt_execution_declared_files(),
+        declared_sidecars: gateway_formal_real_command_lane_fixed_smt_execution_declared_sidecars(),
+        declared_file_digests,
+        claim_boundary: gateway_formal_real_command_lane_fixed_smt_execution_claim_boundary(),
+        process_spawn_authorized: process_output.process_spawn_authorized,
+        process_spawned: process_output.process_spawned,
+        backend_executed: process_output.backend_executed,
+        proof_artifact_created: process_output.proof_artifact_created,
+        checker_transcript_created: process_output.checker_transcript_created,
+        solver_certificate_created: process_output.solver_certificate_created,
+        creates_accepted_evidence: process_output.creates_accepted_evidence,
+        creates_level2_evidence: process_output.creates_level2_evidence,
+        populates_score_axes: process_output.populates_score_axes,
+        semantic_correctness_claimed: process_output.semantic_correctness_claimed,
+        production_readiness_claimed: process_output.production_readiness_claimed,
+        sota_claimed: process_output.sota_claimed,
+        breakthrough_claimed: process_output.breakthrough_claimed,
+        full_security_claimed: process_output.full_security_claimed,
+        grants_authority: process_output.grants_authority,
+        raw_logs_retained: process_output.raw_logs_retained,
+        raw_provider_response_retained: process_output.raw_provider_response_retained,
+        nonclaims,
+    };
+    files.insert(
+        "gateway-formal-real-command-lane-fixed-smt-execution/manifest.json".to_owned(),
+        serde_json::to_vec_pretty(&manifest)
+            .map_err(gateway_formal_real_command_lane_fixed_smt_execution_serde_error)?,
+    );
+    Ok(files)
+}
+
+fn validate_gateway_formal_real_command_lane_fixed_smt_execution_bundle_semantics(
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<
+    GatewayFormalRealCommandLaneFixedSmtExecutionOutputManifest,
+    GatewayFormalRealCommandLaneFixedSmtExecutionOutputError,
+> {
+    let manifest: GatewayFormalRealCommandLaneFixedSmtExecutionOutputManifest =
+        parse_gateway_formal_real_command_lane_fixed_smt_execution_declared_json(
+            files,
+            "gateway-formal-real-command-lane-fixed-smt-execution/manifest.json",
+        )?;
+    let process_output: GatewayFormalRealCommandLaneFixedSmtProcessOutput =
+        parse_gateway_formal_real_command_lane_fixed_smt_execution_declared_json(
+            files,
+            "gateway-formal-real-command-lane-fixed-smt-execution/process-output.json",
+        )?;
+    let stdout_summary: GatewayFormalRealCommandLaneFixedSmtStreamSummary =
+        parse_gateway_formal_real_command_lane_fixed_smt_execution_declared_json(
+            files,
+            "gateway-formal-real-command-lane-fixed-smt-execution/stdout-summary.json",
+        )?;
+    let stderr_summary: GatewayFormalRealCommandLaneFixedSmtStreamSummary =
+        parse_gateway_formal_real_command_lane_fixed_smt_execution_declared_json(
+            files,
+            "gateway-formal-real-command-lane-fixed-smt-execution/stderr-summary.json",
+        )?;
+    validate_gateway_formal_real_command_lane_fixed_smt_execution_readback_manifest(
+        &manifest,
+        &process_output,
+        &stdout_summary,
+        &stderr_summary,
+        files,
+    )?;
+    Ok(manifest)
+}
+
+fn validate_gateway_formal_real_command_lane_fixed_smt_execution_readback_manifest(
+    manifest: &GatewayFormalRealCommandLaneFixedSmtExecutionOutputManifest,
+    process_output: &GatewayFormalRealCommandLaneFixedSmtProcessOutput,
+    stdout_summary: &GatewayFormalRealCommandLaneFixedSmtStreamSummary,
+    stderr_summary: &GatewayFormalRealCommandLaneFixedSmtStreamSummary,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<(), GatewayFormalRealCommandLaneFixedSmtExecutionOutputError> {
+    validate_gateway_formal_real_command_lane_fixed_smt_execution_process_output(process_output)?;
+    let expected_digest_paths: BTreeSet<String> =
+        GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_DECLARED_FILES
+            .iter()
+            .filter(|path| {
+                **path != "gateway-formal-real-command-lane-fixed-smt-execution/manifest.json"
+            })
+            .map(|path| (*path).to_owned())
+            .collect();
+    let actual_digest_paths: BTreeSet<String> =
+        manifest.declared_file_digests.keys().cloned().collect();
+    if manifest.schema_version
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_OUTPUT_SCHEMA_VERSION
+        || manifest.state_slice != GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_STATE_SLICE
+        || manifest.run_id != process_output.run_id
+        || manifest.preflight_digest != process_output.preflight_digest
+        || manifest.command_descriptor_digest != process_output.command_descriptor_digest
+        || manifest.process_output_digest != process_output.digest()
+        || manifest.stdout_summary_digest != process_output.stdout_summary.digest()
+        || manifest.stderr_summary_digest != process_output.stderr_summary.digest()
+        || manifest.executable_digest != process_output.executable_digest
+        || manifest.fixed_argv_template_digest != process_output.fixed_argv_template_digest
+        || manifest.solver_verdict_label != process_output.solver_verdict_label
+        || manifest.declared_files
+            != gateway_formal_real_command_lane_fixed_smt_execution_declared_files()
+        || manifest.declared_sidecars
+            != gateway_formal_real_command_lane_fixed_smt_execution_declared_sidecars()
+        || actual_digest_paths != expected_digest_paths
+        || manifest.claim_boundary
+            != gateway_formal_real_command_lane_fixed_smt_execution_claim_boundary()
+        || manifest.process_spawn_authorized != process_output.process_spawn_authorized
+        || manifest.process_spawned != process_output.process_spawned
+        || manifest.backend_executed != process_output.backend_executed
+        || manifest.proof_artifact_created != process_output.proof_artifact_created
+        || manifest.checker_transcript_created != process_output.checker_transcript_created
+        || manifest.solver_certificate_created != process_output.solver_certificate_created
+        || manifest.creates_accepted_evidence != process_output.creates_accepted_evidence
+        || manifest.creates_level2_evidence != process_output.creates_level2_evidence
+        || manifest.populates_score_axes != process_output.populates_score_axes
+        || manifest.semantic_correctness_claimed != process_output.semantic_correctness_claimed
+        || manifest.production_readiness_claimed != process_output.production_readiness_claimed
+        || manifest.sota_claimed != process_output.sota_claimed
+        || manifest.breakthrough_claimed != process_output.breakthrough_claimed
+        || manifest.full_security_claimed != process_output.full_security_claimed
+        || manifest.grants_authority != process_output.grants_authority
+        || manifest.raw_logs_retained != process_output.raw_logs_retained
+        || manifest.raw_provider_response_retained != process_output.raw_provider_response_retained
+        || manifest.nonclaims
+            != gateway_formal_real_command_lane_fixed_smt_execution_required_nonclaims()
+    {
+        return Err(
+            GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::ManifestSemanticMismatch,
+        );
+    }
+    if stdout_summary != &process_output.stdout_summary {
+        return Err(
+            GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::StdoutSummaryMismatch,
+        );
+    }
+    if stderr_summary != &process_output.stderr_summary {
+        return Err(
+            GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::StderrSummaryMismatch,
+        );
+    }
+    for (logical_path, expected_digest) in &manifest.declared_file_digests {
+        let bytes = declared_gateway_formal_real_command_lane_fixed_smt_execution_bytes(
+            files,
+            logical_path,
+        )?;
+        if hash_bytes(bytes) != *expected_digest {
+            return Err(
+                GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::ManifestSemanticMismatch,
+            );
+        }
+    }
+    let nonclaims = declared_gateway_formal_real_command_lane_fixed_smt_execution_bytes(
+        files,
+        "gateway-formal-real-command-lane-fixed-smt-execution/nonclaims.md",
+    )?;
+    if nonclaims
+        != gateway_formal_real_command_lane_fixed_smt_execution_nonclaims_markdown(
+            &gateway_formal_real_command_lane_fixed_smt_execution_required_nonclaims(),
+        )
+        .as_bytes()
+    {
+        return Err(GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::NonclaimMismatch);
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_real_command_lane_fixed_smt_execution_process_output(
+    process_output: &GatewayFormalRealCommandLaneFixedSmtProcessOutput,
+) -> Result<(), GatewayFormalRealCommandLaneFixedSmtExecutionOutputError> {
+    if process_output.schema_version
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_SCHEMA_VERSION
+        || process_output.state_slice
+            != GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_STATE_SLICE
+        || process_output.claim_boundary
+            != gateway_formal_real_command_lane_fixed_smt_execution_claim_boundary()
+        || !process_output.process_spawn_authorized
+        || !process_output.process_spawned
+        || !process_output.backend_executed
+        || process_output.proof_artifact_created
+        || process_output.checker_transcript_created
+        || process_output.solver_certificate_created
+        || process_output.creates_accepted_evidence
+        || process_output.creates_level2_evidence
+        || process_output.populates_score_axes
+        || process_output.semantic_correctness_claimed
+        || process_output.production_readiness_claimed
+        || process_output.sota_claimed
+        || process_output.breakthrough_claimed
+        || process_output.full_security_claimed
+        || process_output.grants_authority
+        || process_output.raw_logs_retained
+        || process_output.raw_provider_response_retained
+    {
+        return Err(GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::InvalidProcessOutput);
+    }
+    validate_gateway_formal_real_command_lane_fixed_smt_execution_summary(
+        &process_output.stdout_summary,
+        "stdout",
+    )?;
+    validate_gateway_formal_real_command_lane_fixed_smt_execution_summary(
+        &process_output.stderr_summary,
+        "stderr",
+    )?;
+    Ok(())
+}
+
+fn validate_gateway_formal_real_command_lane_fixed_smt_execution_summary(
+    summary: &GatewayFormalRealCommandLaneFixedSmtStreamSummary,
+    stream_label: &str,
+) -> Result<(), GatewayFormalRealCommandLaneFixedSmtExecutionOutputError> {
+    if summary.stream_label != stream_label
+        || summary.claim_boundary
+            != gateway_formal_real_command_lane_fixed_smt_execution_claim_boundary()
+        || summary.max_bytes == 0
+        || summary.retained_bytes > summary.max_bytes
+        || summary.raw_retained
+        || summary.raw_solver_trace_retained
+        || summary.proof_artifact_retained
+        || summary.checker_transcript_retained
+        || !summary.secret_scan_passed
+        || !summary.retained_text.starts_with("retained_sha256=")
+    {
+        return if stream_label == "stdout" {
+            Err(GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::StdoutSummaryMismatch)
+        } else {
+            Err(GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::StderrSummaryMismatch)
+        };
+    }
+    Ok(())
+}
+
+fn declared_gateway_formal_real_command_lane_fixed_smt_execution_bytes<'a>(
+    files: &'a BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<&'a [u8], GatewayFormalRealCommandLaneFixedSmtExecutionOutputError> {
+    files.get(logical_path).map(Vec::as_slice).ok_or_else(|| {
+        GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::Io(format!(
+            "declared file missing: {logical_path}"
+        ))
+    })
+}
+
+fn parse_gateway_formal_real_command_lane_fixed_smt_execution_declared_json<
+    T: for<'de> Deserialize<'de> + Serialize,
+>(
+    files: &BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<T, GatewayFormalRealCommandLaneFixedSmtExecutionOutputError> {
+    let bytes =
+        declared_gateway_formal_real_command_lane_fixed_smt_execution_bytes(files, logical_path)?;
+    let original = parse_json_value_rejecting_duplicate_keys(bytes).map_err(|_| {
+        GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })?;
+    let parsed: T = serde_json::from_value(original.clone()).map_err(|_| {
+        GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })?;
+    let canonical = serde_json::to_value(&parsed)
+        .map_err(gateway_formal_real_command_lane_fixed_smt_execution_serde_error)?;
+    if canonical != original {
+        return Err(
+            GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::MalformedDeclaredFile(
+                logical_path.to_owned(),
+            ),
+        );
+    }
+    Ok(parsed)
+}
+
+fn gateway_formal_real_command_lane_fixed_smt_execution_nonclaims_markdown(
+    nonclaims: &BTreeSet<NonClaimLabel>,
+) -> String {
+    let mut out = String::from("# Gateway Fixed-SMT Execution Non-Claims\n\n");
+    for nonclaim in nonclaims {
+        out.push_str("- ");
+        out.push_str(&nonclaim.0);
+        out.push('\n');
+    }
+    out
+}
+
+fn reject_undeclared_gateway_formal_real_command_lane_fixed_smt_execution_files(
+    output_root: &Path,
+) -> Result<(), GatewayFormalRealCommandLaneFixedSmtExecutionOutputError> {
+    let mut declared: BTreeSet<String> =
+        GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_DECLARED_FILES
+            .iter()
+            .chain(GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_DECLARED_SIDECARS.iter())
+            .map(|value| (*value).to_owned())
+            .collect();
+    let bundle_dir = output_root.join("gateway-formal-real-command-lane-fixed-smt-execution");
+    for entry in fs::read_dir(&bundle_dir)
+        .map_err(gateway_formal_real_command_lane_fixed_smt_execution_io_error)?
+    {
+        let entry = entry.map_err(gateway_formal_real_command_lane_fixed_smt_execution_io_error)?;
+        let logical_path = entry
+            .path()
+            .strip_prefix(output_root)
+            .map_err(|error| {
+                GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::Io(error.to_string())
+            })?
+            .to_string_lossy()
+            .replace('\\', "/");
+        if !declared.remove(&logical_path) {
+            return Err(
+                GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::UndeclaredFile(
+                    logical_path,
+                ),
+            );
+        }
+    }
+    if let Some(missing) = declared.into_iter().next() {
+        return Err(
+            GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::Io(format!(
+                "declared file missing: {missing}"
+            )),
+        );
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_real_command_lane_fixed_smt_execution_output_root(
+    output_root: &Path,
+    protected_roots: &[PathBuf],
+    overwrite: bool,
+) -> Result<(), GatewayFormalRealCommandLaneFixedSmtExecutionOutputError> {
+    match validate_output_root(output_root, protected_roots, overwrite) {
+        Ok(()) => Ok(()),
+        Err(AdmissionJournalMaterializationError::EmptyOutputRoot) => {
+            Err(GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::EmptyOutputRoot)
+        }
+        Err(AdmissionJournalMaterializationError::ProtectedOutputRoot) => {
+            Err(GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::ProtectedOutputRoot)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootExistsWithoutOverwrite) => {
+            Err(GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::OutputRootExistsWithoutOverwrite)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootIsFile) => {
+            Err(GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::OutputRootIsFile)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootIsSymlink) => {
+            Err(GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::OutputRootIsSymlink)
+        }
+        Err(AdmissionJournalMaterializationError::Io(error)) => {
+            Err(GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::Io(error))
+        }
+        Err(other) => Err(GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::Io(
+            format!("{other:?}"),
+        )),
+    }
+}
+
+fn gateway_formal_real_command_lane_fixed_smt_execution_staging_root_for(
+    output_root: &Path,
+    run_id: &str,
+) -> Result<PathBuf, GatewayFormalRealCommandLaneFixedSmtExecutionOutputError> {
+    let parent = output_root
+        .parent()
+        .ok_or(GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::EmptyOutputRoot)?;
+    let name = output_root
+        .file_name()
+        .map(|value| value.to_string_lossy().into_owned())
+        .ok_or(GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::EmptyOutputRoot)?;
+    Ok(parent.join(format!(".{name}.{run_id}.staging")))
+}
+
+fn remove_gateway_formal_real_command_lane_fixed_smt_execution_dir_all_checked(
+    path: &Path,
+) -> Result<(), GatewayFormalRealCommandLaneFixedSmtExecutionOutputError> {
+    if !path.exists() {
+        return Ok(());
+    }
+    if fs::symlink_metadata(path)
+        .map_err(gateway_formal_real_command_lane_fixed_smt_execution_io_error)?
+        .file_type()
+        .is_symlink()
+    {
+        return Err(GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::OutputRootIsSymlink);
+    }
+    fs::remove_dir_all(path).map_err(gateway_formal_real_command_lane_fixed_smt_execution_io_error)
+}
+
+fn gateway_formal_real_command_lane_fixed_smt_execution_io_error(
+    error: io::Error,
+) -> GatewayFormalRealCommandLaneFixedSmtExecutionOutputError {
+    GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::Io(error.to_string())
+}
+
+fn gateway_formal_real_command_lane_fixed_smt_execution_serde_error(
+    error: serde_json::Error,
+) -> GatewayFormalRealCommandLaneFixedSmtExecutionOutputError {
+    GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::Serialization(error.to_string())
 }
 
 fn validate_gateway_formal_real_command_lane_execution_preflight_manifest(
@@ -26893,6 +27610,22 @@ const GATEWAY_FORMAL_REAL_COMMAND_LANE_DECLARED_SIDECARS: &[&str] = &[
     "gateway-formal-real-command-lane/validation-report.json.sha256",
 ];
 
+const GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_DECLARED_FILES: &[&str] = &[
+    "gateway-formal-real-command-lane-fixed-smt-execution/manifest.json",
+    "gateway-formal-real-command-lane-fixed-smt-execution/process-output.json",
+    "gateway-formal-real-command-lane-fixed-smt-execution/stdout-summary.json",
+    "gateway-formal-real-command-lane-fixed-smt-execution/stderr-summary.json",
+    "gateway-formal-real-command-lane-fixed-smt-execution/nonclaims.md",
+];
+
+const GATEWAY_FORMAL_REAL_COMMAND_LANE_FIXED_SMT_EXECUTION_DECLARED_SIDECARS: &[&str] = &[
+    "gateway-formal-real-command-lane-fixed-smt-execution/manifest.json.sha256",
+    "gateway-formal-real-command-lane-fixed-smt-execution/process-output.json.sha256",
+    "gateway-formal-real-command-lane-fixed-smt-execution/stdout-summary.json.sha256",
+    "gateway-formal-real-command-lane-fixed-smt-execution/stderr-summary.json.sha256",
+    "gateway-formal-real-command-lane-fixed-smt-execution/nonclaims.md.sha256",
+];
+
 const ADMISSION_JOURNAL_DECLARED_FILES: &[&str] = &[
     "admission-journal/manifest.json",
     "admission-journal/journal.json",
@@ -30235,6 +30968,90 @@ mod tests {
         println!("unsat");
     }
 
+    fn real_command_lane_fixed_smt_process_output(
+        name: &str,
+    ) -> (
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        GatewayFormalRealCommandLaneFixedSmtProcessOutput,
+    ) {
+        let (
+            execution_root,
+            source_root,
+            source_manifest,
+            execution_manifest,
+            request,
+            mut command,
+            obligation,
+            mut obligation_binding,
+            mut transcript,
+            stdout_summary,
+            stderr_summary,
+            solver_verdict,
+            nonpromotion,
+        ) = real_command_lane_valid_parts(name);
+        command.argv_template = vec![
+            "--ignored".to_owned(),
+            "--exact".to_owned(),
+            "tests::phase326_fixed_smt_child_unsat".to_owned(),
+            "--nocapture".to_owned(),
+        ];
+        command.argv_template_digest = hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-argv-template:v1",
+            &command.argv_template,
+        );
+        obligation_binding.command_descriptor_digest = command.digest();
+        transcript.command_descriptor_digest = command.digest();
+        let source_bundle_root = temp_output_root(&format!("{name}-source-bundle"));
+        materialize_gateway_formal_real_command_lane_output_bundle(
+            &source_bundle_root,
+            &source_manifest,
+            &execution_manifest,
+            &request,
+            &command,
+            &obligation,
+            &obligation_binding,
+            &transcript,
+            &stdout_summary,
+            &stderr_summary,
+            &solver_verdict,
+            &nonpromotion,
+            &real_command_lane_output_request(&source_bundle_root),
+        )
+        .expect("fixed-SMT source bundle materializes");
+        let manifest = read_gateway_formal_real_command_lane_output_bundle(&source_bundle_root)
+            .expect("fixed-SMT source bundle reads back");
+        let fixed_executable = std::env::current_exe().expect("current test binary path exists");
+        let executable_digest =
+            hash_bytes(&fs::read(&fixed_executable).expect("current test binary reads"));
+        let mut input = real_command_lane_execution_preflight_input(&manifest, &request, &command);
+        input.executable_digest = executable_digest;
+        let preflight = build_gateway_formal_real_command_lane_execution_preflight(
+            &manifest, &request, &command, &input,
+        );
+        let output = run_gateway_formal_real_command_lane_fixed_smt_process(
+            &preflight,
+            &command,
+            &fixed_executable,
+        )
+        .expect("fixed-SMT process executes");
+        (source_bundle_root, execution_root, source_root, output)
+    }
+
+    fn fixed_smt_execution_output_request(
+        output_root: &Path,
+    ) -> GatewayFormalRealCommandLaneFixedSmtExecutionOutputRequest {
+        GatewayFormalRealCommandLaneFixedSmtExecutionOutputRequest {
+            created_at_unix: 327_000_000,
+            overwrite: true,
+            protected_roots: vec![output_root
+                .parent()
+                .expect("temp output root has parent")
+                .join("protected-repo")],
+        }
+    }
+
     #[test]
     fn gateway_formal_real_command_lane_fixed_smt_process_executes_and_quarantines_unsat() {
         let (
@@ -30341,6 +31158,147 @@ mod tests {
         fs::remove_dir_all(&output_root).expect("phase326 output cleanup succeeds");
         fs::remove_dir_all(&execution_root).expect("phase326 execution source cleanup succeeds");
         fs::remove_dir_all(&source_root).expect("phase326 adapter source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_fixed_smt_execution_output_materializes_and_reads_back() {
+        let (source_bundle_root, execution_root, source_root, process_output) =
+            real_command_lane_fixed_smt_process_output("real-command-phase327-output");
+        let output_root = temp_output_root("real-command-phase327-output-bundle");
+
+        let manifest =
+            materialize_gateway_formal_real_command_lane_fixed_smt_execution_output_bundle(
+                &output_root,
+                &process_output,
+                &fixed_smt_execution_output_request(&output_root),
+            )
+            .expect("phase327 output bundle materializes");
+        let readback =
+            read_gateway_formal_real_command_lane_fixed_smt_execution_output_bundle(&output_root)
+                .expect("phase327 output bundle reads back");
+
+        assert_eq!(readback, manifest);
+        assert_eq!(
+            manifest.declared_files,
+            gateway_formal_real_command_lane_fixed_smt_execution_declared_files()
+        );
+        assert_eq!(
+            manifest.declared_sidecars,
+            gateway_formal_real_command_lane_fixed_smt_execution_declared_sidecars()
+        );
+        assert!(manifest.process_spawn_authorized);
+        assert!(manifest.process_spawned);
+        assert!(manifest.backend_executed);
+        assert_eq!(manifest.process_output_digest, process_output.digest());
+        assert_eq!(
+            manifest.solver_verdict_label,
+            GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
+        );
+        assert!(!manifest.proof_artifact_created);
+        assert!(!manifest.checker_transcript_created);
+        assert!(!manifest.solver_certificate_created);
+        assert!(!manifest.creates_accepted_evidence);
+        assert!(!manifest.creates_level2_evidence);
+        assert!(!manifest.populates_score_axes);
+        assert!(!manifest.semantic_correctness_claimed);
+        assert!(!manifest.production_readiness_claimed);
+        assert!(!manifest.sota_claimed);
+        assert!(!manifest.breakthrough_claimed);
+        assert!(!manifest.full_security_claimed);
+        assert!(!manifest.grants_authority);
+        assert!(!manifest.raw_logs_retained);
+        assert!(!manifest.raw_provider_response_retained);
+
+        fs::remove_dir_all(&output_root).expect("phase327 output cleanup succeeds");
+        fs::remove_dir_all(&source_bundle_root).expect("phase327 source bundle cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase327 execution source cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase327 adapter source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_fixed_smt_execution_output_rejects_drift_and_promotion() {
+        let (source_bundle_root, execution_root, source_root, process_output) =
+            real_command_lane_fixed_smt_process_output("real-command-phase327-drift");
+        let sidecar_root = temp_output_root("real-command-phase327-sidecar-drift");
+        materialize_gateway_formal_real_command_lane_fixed_smt_execution_output_bundle(
+            &sidecar_root,
+            &process_output,
+            &fixed_smt_execution_output_request(&sidecar_root),
+        )
+        .expect("phase327 sidecar test bundle materializes");
+        fs::write(
+            sidecar_root.join(
+                "gateway-formal-real-command-lane-fixed-smt-execution/process-output.json.sha256",
+            ),
+            b"bad-digest",
+        )
+        .expect("sidecar drift writes");
+        assert_eq!(
+            read_gateway_formal_real_command_lane_fixed_smt_execution_output_bundle(&sidecar_root),
+            Err(
+                GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::DigestMismatch(
+                    "gateway-formal-real-command-lane-fixed-smt-execution/process-output.json"
+                        .to_owned()
+                )
+            )
+        );
+
+        let promotion_root = temp_output_root("real-command-phase327-promotion-drift");
+        materialize_gateway_formal_real_command_lane_fixed_smt_execution_output_bundle(
+            &promotion_root,
+            &process_output,
+            &fixed_smt_execution_output_request(&promotion_root),
+        )
+        .expect("phase327 promotion test bundle materializes");
+        let manifest_path = promotion_root
+            .join("gateway-formal-real-command-lane-fixed-smt-execution/manifest.json");
+        let mut manifest: GatewayFormalRealCommandLaneFixedSmtExecutionOutputManifest =
+            serde_json::from_slice(&fs::read(&manifest_path).expect("manifest reads"))
+                .expect("manifest parses");
+        manifest.creates_level2_evidence = true;
+        rewrite_bundle_file(
+            &promotion_root,
+            "gateway-formal-real-command-lane-fixed-smt-execution/manifest.json",
+            &serde_json::to_vec_pretty(&manifest).expect("manifest serializes"),
+        );
+        assert_eq!(
+            read_gateway_formal_real_command_lane_fixed_smt_execution_output_bundle(
+                &promotion_root
+            ),
+            Err(GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::ManifestSemanticMismatch)
+        );
+
+        let undeclared_root = temp_output_root("real-command-phase327-undeclared");
+        materialize_gateway_formal_real_command_lane_fixed_smt_execution_output_bundle(
+            &undeclared_root,
+            &process_output,
+            &fixed_smt_execution_output_request(&undeclared_root),
+        )
+        .expect("phase327 undeclared test bundle materializes");
+        fs::write(
+            undeclared_root
+                .join("gateway-formal-real-command-lane-fixed-smt-execution/proof-artifact.json"),
+            b"{}",
+        )
+        .expect("undeclared proof artifact writes");
+        assert_eq!(
+            read_gateway_formal_real_command_lane_fixed_smt_execution_output_bundle(
+                &undeclared_root
+            ),
+            Err(
+                GatewayFormalRealCommandLaneFixedSmtExecutionOutputError::UndeclaredFile(
+                    "gateway-formal-real-command-lane-fixed-smt-execution/proof-artifact.json"
+                        .to_owned()
+                )
+            )
+        );
+
+        fs::remove_dir_all(&sidecar_root).expect("phase327 sidecar cleanup succeeds");
+        fs::remove_dir_all(&promotion_root).expect("phase327 promotion cleanup succeeds");
+        fs::remove_dir_all(&undeclared_root).expect("phase327 undeclared cleanup succeeds");
+        fs::remove_dir_all(&source_bundle_root).expect("phase327 source bundle cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase327 execution source cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase327 adapter source cleanup succeeds");
     }
 
     #[test]

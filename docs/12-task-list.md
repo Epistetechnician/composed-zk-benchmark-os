@@ -7620,6 +7620,45 @@ process execution surface and focused execution coverage, but still no
 materialized Phase 326 output bundle, no accepted formal evidence, no Level2+
 formal evidence, and no proof-authority claim.
 
+## Phase 327 HSAI Real Formal Command Lane Fixed SMT Execution Output Readback
+
+Status: complete. See
+`docs/327-hsai-real-formal-command-lane-fixed-smt-execution-output-readback-notes.md`.
+
+Goal: materialize and read back the Phase 326 quarantined fixed-SMT execution
+output as a local bundle while preserving digest binding and nonpromotion.
+
+Implemented: Phase 327 output-bundle schema metadata, fixed declared
+`gateway-formal-real-command-lane-fixed-smt-execution/*` files, SHA-256
+sidecars, staged materialization, protected-root rejection, symlink rejection,
+exact declared-file rejection, duplicate-key/canonical JSON readback checks,
+process-output/summary consistency checks, nonclaim Markdown checks, sidecar
+digest drift rejection, manifest promotion drift rejection, and undeclared proof
+artifact rejection.
+
+Validation coverage: successful materialization/readback of a Phase 326
+quarantined fixed-SMT process output, confirmation that process execution is
+recorded only as local quarantined output, and rejection of sidecar drift,
+promotion drift, and undeclared artifact files.
+
+Validation gate: formatting, focused fixed-SMT execution output tests, HSAI
+claim-boundary source scan, repo docs/hygiene tests, diff hygiene, empty-file
+hygiene, package-root lint check, and full workspace tests.
+
+Anti-goals: generic backend runners, additional process-spawn APIs,
+caller-controlled executable paths, caller-controlled argv, shell execution,
+inherited environment, stdin, network access, solver scripts, checker scripts,
+proof assistant setup files, generated proof artifacts as evidence, generated
+checker transcripts, generated solver certificates, accepted evidence, Level2+
+evidence, score axes, benchmark evidence, official benchmark submission,
+semantic-correctness, production-readiness, SOTA, breakthrough, full-security,
+or authority claims.
+
+Exit criteria: the real formal command lane now has a materialized/readback
+bundle for quarantined fixed-SMT execution output, but still no accepted formal
+evidence, no Level2+ formal evidence, no score-axis evidence, no proof-authority
+claim, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
