@@ -7848,6 +7848,47 @@ discipline, but still no reviewed-record implementation, no accepted formal
 evidence, no Level2+ evidence, no score axes, no proof-authority claim, and no
 production/SOTA/security/correctness claim.
 
+## Phase 333 HSAI Reviewed Formal Evidence Record Metadata Implementation
+
+Status: complete. See
+`docs/333-hsai-reviewed-formal-evidence-record-metadata-notes.md`.
+
+Goal: implement local reviewed formal-evidence record metadata over Phase 331
+review previews while keeping accepted formal evidence, Level2+ evidence, and
+score axes out of scope.
+
+Implemented: reviewed-record schema/state/claim-boundary constants,
+reviewed-record input and record data models, deterministic digesting,
+validation issue taxonomy, validation report, accepted-evidence-disabled
+acknowledgement helper, reviewed-record builder, and fail-closed validation from
+Phase 331 preview metadata.
+
+Validation coverage: focused tests build a reviewed record only from
+`ReviewPreviewAcceptCandidateScope` and reject reject, needs-replay, and
+needs-checker-lane preview decisions. Additional tests reject preview digest
+drift, candidate digest drift, policy drift, nonclaim acknowledgement drift,
+accepted-evidence-disabled acknowledgement drift, reviewed-scope claim
+escalation, accepted-evidence mutation attempts, Level2+ attempts, score-axis
+attempts, SOTA/full-security attempts, and preview state drift.
+
+Validation gate: formatting, focused `hsai-agent-admission` tests,
+docs/hygiene checks, diff hygiene, empty-file hygiene, package-root lint check,
+claim-boundary source scans, repo docs tests, and full workspace tests.
+
+Anti-goals: accepted Evidence Ledger mutation, Level2+ evidence, score-axis
+population, proof artifact generation, checker transcript generation, solver
+certificate generation, additional process-spawn APIs, generic backend runners,
+solver scripts, checker scripts, proof assistant setup files, Lean execution,
+COBALT execution, Rust-to-Lean extraction, benchmark submission, production
+deployment, semantic-correctness claims, production-readiness claims, SOTA
+claims, breakthrough claims, full-security claims, or action authority.
+
+Exit criteria: HSAI now has local reviewed formal-evidence record metadata for
+one scoped gateway admission invariant, bound to Phase 331 preview, Phase 329
+candidate, Phase 327 output, Phase 325 preflight, and Phase 323 source digests.
+It still has no accepted formal evidence, no Level2+ evidence, no score axes,
+no proof-authority claim, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

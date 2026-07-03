@@ -1812,6 +1812,25 @@ execution, Rust-to-Lean extraction, benchmark submission, production
 deployment, semantic-correctness claims, production-readiness claims, SOTA
 claims, breakthrough claims, full-security claims, or authority grants.
 
+Phase 333 implements local reviewed formal-evidence record metadata in
+`crates/hsai-agent-admission`. It adds schema/state/claim-boundary constants,
+reviewed-record input and record data models, deterministic digesting,
+validation issues, an accepted-evidence-disabled acknowledgement helper, a
+builder, and fail-closed validation from Phase 331 preview metadata. The builder
+emits reviewed-record metadata only from
+`ReviewPreviewAcceptCandidateScope`; rejected, replay-blocked, and
+checker-lane-blocked preview decisions are rejected. Focused tests also reject
+preview digest drift, candidate digest drift, policy drift, nonclaim
+acknowledgement drift, accepted-evidence-disabled acknowledgement drift,
+reviewed-scope escalation, accepted-evidence mutation, Level2+ evidence,
+score-axis population, SOTA/full-security claims, and preview state drift. Phase
+333 does not mutate the accepted Evidence Ledger, create Level2+ evidence,
+populate score axes, generate proof artifacts, generate checker transcripts,
+generate solver certificates, execute Lean, execute COBALT, run Rust-to-Lean
+extraction, submit benchmarks, deploy to production, claim semantic
+correctness, claim production readiness, claim SOTA, claim breakthrough status,
+claim full security, or grant authority.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
