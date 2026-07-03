@@ -2099,6 +2099,25 @@ deploys nothing to production, claims no semantic correctness, claims no
 production readiness, claims no SOTA, claims no breakthrough status, claims no
 full security, and grants no authority.
 
+Phase 348 defines the docs-first audit package serialization preview boundary.
+It specifies a future deterministic pure-metadata preview over one Phase 347
+package, allowed digest references, forbidden materialized/raw artifact classes,
+required future validation, meaning limits, and Phase 349 implementation exit
+criteria. The boundary requires any future preview to bind one Phase 347 package
+digest, one Phase 345 review record digest, one Phase 343 local metadata digest,
+the current accepted append blocker digest, serialization profile id, canonical
+field-order digest, canonical JSON shape digest, expected package bytes digest,
+and explicit nonclaim digest. Phase 348 creates no Rust code, changes no Cargo
+metadata, writes no artifacts, stores no raw package bytes, changes no
+`zkbench-core` accepted append policy, mutates no accepted Evidence Ledger,
+creates no accepted formal evidence, creates no Level2+ evidence, populates no
+score axes, generates or promotes no proof artifacts, generates or promotes no
+checker transcripts, generates or promotes no solver certificates, executes no
+Lean, executes no SMT, executes no COBALT, runs no Rust-to-Lean extraction,
+submits no benchmarks, deploys nothing to production, claims no semantic
+correctness, claims no production readiness, claims no SOTA, claims no
+breakthrough status, claims no full security, and grants no authority.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
