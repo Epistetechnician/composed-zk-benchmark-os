@@ -133,8 +133,8 @@ Phase 359 adds tests that:
 
 ## Next Slice
 
-Phase 360 should define a docs-first boundary for packaging a reviewed proposal
-candidate as local append-decision preflight metadata. That boundary must keep
+Phase 360 defines a docs-first boundary for packaging a reviewed proposal
+candidate as local append-decision preflight metadata. That boundary keeps
 preflight metadata separate from accepted formal evidence, accepted Evidence
 Ledger mutation, accepted append policy changes, Level2+ evidence, score axes,
 Lean execution, SMT execution, COBALT execution, Rust-to-Lean extraction,
