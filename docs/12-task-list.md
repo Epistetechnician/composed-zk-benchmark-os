@@ -11227,6 +11227,38 @@ formal evidence, accepted Evidence Ledger mutation, accepted append policy
 change, Level2+ evidence, score axes, Lean/COBALT/Rust-to-Lean execution, or
 SOTA/full-security/semantic-correctness/production-readiness claim.
 
+## Phase 417 HSAI Tiny Z3 Bounded Formal Evidence Feasibility Metadata
+
+Status: complete. See
+`docs/417-hsai-tiny-z3-bounded-formal-evidence-feasibility-notes.md`.
+
+Goal: implement local tiny-Z3 bounded formal-evidence feasibility metadata over
+one Phase 415 forbidden policy decision without approving a class, mutating
+accepted evidence, changing accepted append policy, creating accepted formal
+evidence, creating Level2+ evidence, populating score axes, or making strong
+public claims.
+
+Implemented: Phase 417 adds tiny-Z3 bounded-feasibility schema/state/
+claim-boundary constants, input metadata, feasibility metadata, issue taxonomy,
+validation report, canonical feasibility-question and nonclaim helpers, builder,
+validator, and focused tests for valid metadata, policy-decision digest drift,
+candidate class drift, class-status drift, ownership drift, promoted policy
+state, and promotion attempts. The only candidate class label is
+`TinyZ3LocalReviewedFormalEvidenceMetadata`; its status is
+`feasibility_only_not_approved`; its owner decision is `ownership_unresolved`.
+
+Validation coverage: `hsai-agent-admission` Phase 417 tests cover construction
+and rejection behavior. Repository hygiene, claim-boundary source scans, and
+workspace tests remain the broader gates.
+
+Exit criteria: HSAI now has local tiny-Z3 bounded formal-evidence feasibility
+metadata bound to a forbidden accepted-evidence policy decision. It still has no
+bounded formal-evidence class approval, accepted formal evidence, accepted
+Evidence Ledger mutation, accepted append policy change, Level2+ evidence,
+score axes, Lean/COBALT/Rust-to-Lean execution, proof artifact, checker
+transcript, solver certificate, or SOTA/full-security/semantic-correctness/
+production-readiness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
