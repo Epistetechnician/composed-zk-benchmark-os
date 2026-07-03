@@ -708,6 +708,11 @@ pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_SCHEMA_V
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_STATE_SLICE: &str =
     "phase-353-hsai-materialized-audit-package-artifact-plumbing";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_CLAIM_BOUNDARY: &str = "local materialized audit package artifact only; writes a declared digest-bound metadata package for one Phase 351 serialization-preview review under a caller-selected output root, but does not create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_REVIEW_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-real-command-lane-local-audit-package-review:v1";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_REVIEW_STATE_SLICE: &str =
+    "phase-355-hsai-materialized-audit-package-review-metadata";
+pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_REVIEW_CLAIM_BOUNDARY: &str = "local materialized audit package review metadata only; classifies one Phase 353 local materialized audit package while the accepted-evidence proposal path remains blocked, but does not create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct GatewayAttestationChallengeBinding {
@@ -6540,6 +6545,144 @@ pub enum GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError {
     PromotionAttempt,
     Io(String),
     Serialization(String),
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalRealCommandLaneLocalAuditPackageReviewLabel {
+    MaterializedPackageScopeAcceptable,
+    MaterializedPackageRejected,
+    DeclaredFileSetBlocked,
+    DigestConsistencyBlocked,
+    AcceptedEvidenceProposalStillBlocked,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneLocalAuditPackageReviewInput {
+    pub schema_version: String,
+    pub review_id: String,
+    pub reviewed_at_unix: u64,
+    pub materialized_package_manifest_digest: Hash,
+    pub phase353_output_request_digest: Hash,
+    pub phase351_review_digest: Hash,
+    pub phase349_serialization_preview_digest: Hash,
+    pub phase347_audit_package_digest: Hash,
+    pub phase345_review_record_digest: Hash,
+    pub phase343_metadata_digest: Hash,
+    pub declared_file_list_digest: Hash,
+    pub declared_sidecar_list_digest: Hash,
+    pub declared_file_digest_map_digest: Hash,
+    pub digest_index_digest: Hash,
+    pub claim_boundary_file_digest: Hash,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub reviewer_policy_id: String,
+    pub reviewer_decision_id: String,
+    pub reviewer_decision_at_unix: u64,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub review_label: GatewayFormalRealCommandLaneLocalAuditPackageReviewLabel,
+    pub review_summary: String,
+    pub accepted_evidence_mutation_requested: bool,
+    pub accepted_append_policy_change_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub benchmark_or_sota_comparison_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalRealCommandLaneLocalAuditPackageReviewInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-local-audit-package-review-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneLocalAuditPackageReview {
+    pub schema_version: String,
+    pub review_id: String,
+    pub state_slice: String,
+    pub reviewed_at_unix: u64,
+    pub review_input_digest: Hash,
+    pub materialized_package_manifest_digest: Hash,
+    pub phase353_output_request_digest: Hash,
+    pub phase351_review_digest: Hash,
+    pub phase349_serialization_preview_digest: Hash,
+    pub phase347_audit_package_digest: Hash,
+    pub phase345_review_record_digest: Hash,
+    pub phase343_metadata_digest: Hash,
+    pub declared_file_list_digest: Hash,
+    pub declared_sidecar_list_digest: Hash,
+    pub declared_file_digest_map_digest: Hash,
+    pub digest_index_digest: Hash,
+    pub claim_boundary_file_digest: Hash,
+    pub reviewer_policy_id: String,
+    pub reviewer_decision_id: String,
+    pub reviewer_decision_at_unix: u64,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub review_label: GatewayFormalRealCommandLaneLocalAuditPackageReviewLabel,
+    pub review_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub creates_accepted_evidence: bool,
+    pub changes_accepted_append_policy: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalRealCommandLaneLocalAuditPackageReview {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-local-audit-package-review:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue {
+    InvalidSchemaVersion,
+    InvalidReviewId,
+    InvalidReviewerPolicyId,
+    InvalidReviewerDecisionId,
+    MissingReviewedAt,
+    MissingReviewerDecisionTimestamp,
+    MissingDigest(String),
+    MaterializedPackageManifestDrift,
+    MaterializedPackageStateMismatch,
+    DeclaredArtifactDigestDrift,
+    AcceptedAppendBlockerMismatch,
+    NonclaimMismatch,
+    ReviewSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalRealCommandLaneLocalAuditPackageReviewValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -20210,6 +20353,10 @@ pub fn gateway_formal_real_command_lane_local_audit_package_artifact_claim_bound
     GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_CLAIM_BOUNDARY.to_owned()
 }
 
+pub fn gateway_formal_real_command_lane_local_audit_package_review_claim_boundary() -> String {
+    GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_REVIEW_CLAIM_BOUNDARY.to_owned()
+}
+
 pub fn gateway_formal_real_command_lane_policy_decision_statement() -> String {
     "accepted formal evidence remains forbidden in the current accepted append path".to_owned()
 }
@@ -20368,6 +20515,19 @@ pub fn gateway_formal_real_command_lane_local_audit_package_artifact_required_no
         "local materialized audit package artifact only".to_owned(),
     ));
     nonclaims.insert(NonClaimLabel("accepted evidence still blocked".to_owned()));
+    nonclaims
+}
+
+pub fn gateway_formal_real_command_lane_local_audit_package_review_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims =
+        gateway_formal_real_command_lane_local_audit_package_artifact_required_nonclaims();
+    nonclaims.insert(NonClaimLabel(
+        "local materialized audit package review metadata only".to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel(
+        "accepted evidence proposal still blocked".to_owned(),
+    ));
     nonclaims
 }
 
@@ -25309,6 +25469,355 @@ fn gateway_formal_real_command_lane_local_audit_package_artifact_serde_error(
     GatewayFormalRealCommandLaneLocalAuditPackageArtifactOutputError::Serialization(
         error.to_string(),
     )
+}
+
+pub fn build_gateway_formal_real_command_lane_local_audit_package_review(
+    manifest: &GatewayFormalRealCommandLaneLocalAuditPackageArtifactManifest,
+    input: &GatewayFormalRealCommandLaneLocalAuditPackageReviewInput,
+) -> Result<
+    GatewayFormalRealCommandLaneLocalAuditPackageReview,
+    GatewayFormalRealCommandLaneLocalAuditPackageReviewValidation,
+> {
+    let validation =
+        validate_gateway_formal_real_command_lane_local_audit_package_review_input(manifest, input);
+    if !validation.valid {
+        return Err(validation);
+    }
+    Ok(GatewayFormalRealCommandLaneLocalAuditPackageReview {
+        schema_version:
+            GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_REVIEW_SCHEMA_VERSION
+                .to_owned(),
+        review_id: input.review_id.clone(),
+        state_slice: GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_REVIEW_STATE_SLICE
+            .to_owned(),
+        reviewed_at_unix: input.reviewed_at_unix,
+        review_input_digest: input.digest(),
+        materialized_package_manifest_digest: manifest.digest(),
+        phase353_output_request_digest: manifest.request_digest,
+        phase351_review_digest: manifest.review_digest,
+        phase349_serialization_preview_digest: manifest.serialization_preview_digest,
+        phase347_audit_package_digest: manifest.audit_package_digest,
+        phase345_review_record_digest: manifest.review_record_digest,
+        phase343_metadata_digest: manifest.metadata_digest,
+        declared_file_list_digest:
+            gateway_formal_real_command_lane_local_audit_package_review_declared_file_list_digest(
+                manifest,
+            ),
+        declared_sidecar_list_digest:
+            gateway_formal_real_command_lane_local_audit_package_review_declared_sidecar_list_digest(
+                manifest,
+            ),
+        declared_file_digest_map_digest:
+            gateway_formal_real_command_lane_local_audit_package_review_declared_file_digest_map_digest(
+                manifest,
+            ),
+        digest_index_digest:
+            gateway_formal_real_command_lane_local_audit_package_review_declared_digest(
+                manifest,
+                "audit-package/digests.json",
+            ),
+        claim_boundary_file_digest:
+            gateway_formal_real_command_lane_local_audit_package_review_declared_digest(
+                manifest,
+                "audit-package/claim-boundary.txt",
+            ),
+        reviewer_policy_id: input.reviewer_policy_id.clone(),
+        reviewer_decision_id: input.reviewer_decision_id.clone(),
+        reviewer_decision_at_unix: input.reviewer_decision_at_unix,
+        current_accepted_append_blockers_digest: manifest.current_accepted_append_blockers_digest,
+        review_label: input.review_label.clone(),
+        review_summary: input.review_summary.clone(),
+        previous_promotion_state: "local_materialized_audit_package_artifact".to_owned(),
+        promotion_state: "local_materialized_audit_package_review_metadata".to_owned(),
+        next_required_state: "accepted_evidence_proposal_still_blocked".to_owned(),
+        claim_boundary: gateway_formal_real_command_lane_local_audit_package_review_claim_boundary(
+        ),
+        explicit_nonclaims: input.explicit_nonclaims.clone(),
+        creates_accepted_evidence: false,
+        changes_accepted_append_policy: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_gateway_formal_real_command_lane_local_audit_package_review_input(
+    manifest: &GatewayFormalRealCommandLaneLocalAuditPackageArtifactManifest,
+    input: &GatewayFormalRealCommandLaneLocalAuditPackageReviewInput,
+) -> GatewayFormalRealCommandLaneLocalAuditPackageReviewValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_REVIEW_SCHEMA_VERSION
+    {
+        issues.push(GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.review_id) {
+        issues.push(GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue::InvalidReviewId);
+    }
+    if !is_single_segment_id(&input.reviewer_policy_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue::InvalidReviewerPolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.reviewer_decision_id) {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue::InvalidReviewerDecisionId,
+        );
+    }
+    if input.reviewed_at_unix == 0 {
+        issues.push(GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue::MissingReviewedAt);
+    }
+    if input.reviewer_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue::MissingReviewerDecisionTimestamp,
+        );
+    }
+    validate_gateway_formal_real_command_lane_local_audit_package_review_digests(
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_real_command_lane_local_audit_package_review_manifest(
+        manifest,
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_real_command_lane_local_audit_package_review_policy(input, &mut issues);
+    GatewayFormalRealCommandLaneLocalAuditPackageReviewValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_local_audit_package_review_digests(
+    input: &GatewayFormalRealCommandLaneLocalAuditPackageReviewInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue>,
+) {
+    for (label, digest) in [
+        (
+            "materialized_package_manifest_digest",
+            input.materialized_package_manifest_digest,
+        ),
+        (
+            "phase353_output_request_digest",
+            input.phase353_output_request_digest,
+        ),
+        ("phase351_review_digest", input.phase351_review_digest),
+        (
+            "phase349_serialization_preview_digest",
+            input.phase349_serialization_preview_digest,
+        ),
+        (
+            "phase347_audit_package_digest",
+            input.phase347_audit_package_digest,
+        ),
+        (
+            "phase345_review_record_digest",
+            input.phase345_review_record_digest,
+        ),
+        ("phase343_metadata_digest", input.phase343_metadata_digest),
+        ("declared_file_list_digest", input.declared_file_list_digest),
+        (
+            "declared_sidecar_list_digest",
+            input.declared_sidecar_list_digest,
+        ),
+        (
+            "declared_file_digest_map_digest",
+            input.declared_file_digest_map_digest,
+        ),
+        ("digest_index_digest", input.digest_index_digest),
+        (
+            "claim_boundary_file_digest",
+            input.claim_boundary_file_digest,
+        ),
+        ("explicit_nonclaims_digest", input.explicit_nonclaims_digest),
+        (
+            "current_accepted_append_blockers_digest",
+            input.current_accepted_append_blockers_digest,
+        ),
+    ] {
+        if digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue::MissingDigest(
+                    label.to_owned(),
+                ),
+            );
+        }
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_local_audit_package_review_manifest(
+    manifest: &GatewayFormalRealCommandLaneLocalAuditPackageArtifactManifest,
+    input: &GatewayFormalRealCommandLaneLocalAuditPackageReviewInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue>,
+) {
+    if input.materialized_package_manifest_digest != manifest.digest()
+        || input.phase353_output_request_digest != manifest.request_digest
+        || input.phase351_review_digest != manifest.review_digest
+        || input.phase349_serialization_preview_digest != manifest.serialization_preview_digest
+        || input.phase347_audit_package_digest != manifest.audit_package_digest
+        || input.phase345_review_record_digest != manifest.review_record_digest
+        || input.phase343_metadata_digest != manifest.metadata_digest
+        || input.current_accepted_append_blockers_digest
+            != manifest.current_accepted_append_blockers_digest
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue::MaterializedPackageManifestDrift,
+        );
+    }
+    if manifest.schema_version
+        != GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_SCHEMA_VERSION
+        || manifest.state_slice
+            != GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_ARTIFACT_STATE_SLICE
+        || manifest.claim_boundary
+            != gateway_formal_real_command_lane_local_audit_package_artifact_claim_boundary()
+        || manifest.creates_accepted_evidence
+        || manifest.changes_accepted_append_policy
+        || manifest.creates_level2_evidence
+        || manifest.populates_score_axes
+        || manifest.proof_artifact_created
+        || manifest.checker_transcript_created
+        || manifest.solver_certificate_created
+        || manifest.semantic_correctness_claimed
+        || manifest.production_readiness_claimed
+        || manifest.sota_claimed
+        || manifest.breakthrough_claimed
+        || manifest.full_security_claimed
+        || manifest.grants_authority
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue::MaterializedPackageStateMismatch,
+        );
+    }
+    if manifest.declared_files
+        != gateway_formal_real_command_lane_local_audit_package_artifact_declared_files()
+        || manifest.declared_sidecars
+            != gateway_formal_real_command_lane_local_audit_package_artifact_declared_sidecars()
+        || input.declared_file_list_digest
+            != gateway_formal_real_command_lane_local_audit_package_review_declared_file_list_digest(
+                manifest,
+            )
+        || input.declared_sidecar_list_digest
+            != gateway_formal_real_command_lane_local_audit_package_review_declared_sidecar_list_digest(
+                manifest,
+            )
+        || input.declared_file_digest_map_digest
+            != gateway_formal_real_command_lane_local_audit_package_review_declared_file_digest_map_digest(
+                manifest,
+            )
+        || input.digest_index_digest
+            != gateway_formal_real_command_lane_local_audit_package_review_declared_digest(
+                manifest,
+                "audit-package/digests.json",
+            )
+        || input.claim_boundary_file_digest
+            != gateway_formal_real_command_lane_local_audit_package_review_declared_digest(
+                manifest,
+                "audit-package/claim-boundary.txt",
+            )
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue::DeclaredArtifactDigestDrift,
+        );
+    }
+}
+
+fn validate_gateway_formal_real_command_lane_local_audit_package_review_policy(
+    input: &GatewayFormalRealCommandLaneLocalAuditPackageReviewInput,
+    issues: &mut Vec<GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue>,
+) {
+    let blockers = gateway_formal_real_command_lane_accepted_handoff_current_blockers();
+    if input.current_accepted_append_blockers_digest
+        != hash_tagged(
+            "hsai-agent-admission:gateway-formal-real-command-lane-accepted-handoff-current-blockers:v1",
+            &blockers,
+        )
+    {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue::AcceptedAppendBlockerMismatch,
+        );
+    }
+    let nonclaims =
+        gateway_formal_real_command_lane_local_audit_package_review_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-local-audit-package-review-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue::NonclaimMismatch);
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.review_summary,
+    ) {
+        issues.push(
+            GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue::ReviewSummaryPromotionClaim,
+        );
+    }
+    if input.accepted_evidence_mutation_requested
+        || input.accepted_append_policy_change_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.benchmark_or_sota_comparison_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue::PromotionAttempt);
+    }
+}
+
+fn gateway_formal_real_command_lane_local_audit_package_review_declared_file_list_digest(
+    manifest: &GatewayFormalRealCommandLaneLocalAuditPackageArtifactManifest,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-real-command-lane-local-audit-package-review-declared-files:v1",
+        &manifest.declared_files,
+    )
+}
+
+fn gateway_formal_real_command_lane_local_audit_package_review_declared_sidecar_list_digest(
+    manifest: &GatewayFormalRealCommandLaneLocalAuditPackageArtifactManifest,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-real-command-lane-local-audit-package-review-declared-sidecars:v1",
+        &manifest.declared_sidecars,
+    )
+}
+
+fn gateway_formal_real_command_lane_local_audit_package_review_declared_file_digest_map_digest(
+    manifest: &GatewayFormalRealCommandLaneLocalAuditPackageArtifactManifest,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-real-command-lane-local-audit-package-review-declared-file-digests:v1",
+        &manifest.declared_file_digests,
+    )
+}
+
+fn gateway_formal_real_command_lane_local_audit_package_review_declared_digest(
+    manifest: &GatewayFormalRealCommandLaneLocalAuditPackageArtifactManifest,
+    logical_path: &str,
+) -> Hash {
+    manifest
+        .declared_file_digests
+        .get(logical_path)
+        .copied()
+        .unwrap_or(Hash([0; 32]))
 }
 
 fn validate_gateway_formal_real_command_lane_execution_preflight_manifest(
@@ -37809,6 +38318,78 @@ mod tests {
         }
     }
 
+    fn formal_evidence_local_audit_package_review_input(
+        review_id: &str,
+        manifest: &GatewayFormalRealCommandLaneLocalAuditPackageArtifactManifest,
+        review_label: GatewayFormalRealCommandLaneLocalAuditPackageReviewLabel,
+    ) -> GatewayFormalRealCommandLaneLocalAuditPackageReviewInput {
+        let nonclaims =
+            gateway_formal_real_command_lane_local_audit_package_review_required_nonclaims();
+        GatewayFormalRealCommandLaneLocalAuditPackageReviewInput {
+            schema_version:
+                GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_REVIEW_SCHEMA_VERSION
+                    .to_owned(),
+            review_id: review_id.to_owned(),
+            reviewed_at_unix: 1_800_000_355,
+            materialized_package_manifest_digest: manifest.digest(),
+            phase353_output_request_digest: manifest.request_digest,
+            phase351_review_digest: manifest.review_digest,
+            phase349_serialization_preview_digest: manifest.serialization_preview_digest,
+            phase347_audit_package_digest: manifest.audit_package_digest,
+            phase345_review_record_digest: manifest.review_record_digest,
+            phase343_metadata_digest: manifest.metadata_digest,
+            declared_file_list_digest:
+                gateway_formal_real_command_lane_local_audit_package_review_declared_file_list_digest(
+                    manifest,
+                ),
+            declared_sidecar_list_digest:
+                gateway_formal_real_command_lane_local_audit_package_review_declared_sidecar_list_digest(
+                    manifest,
+                ),
+            declared_file_digest_map_digest:
+                gateway_formal_real_command_lane_local_audit_package_review_declared_file_digest_map_digest(
+                    manifest,
+                ),
+            digest_index_digest:
+                gateway_formal_real_command_lane_local_audit_package_review_declared_digest(
+                    manifest,
+                    "audit-package/digests.json",
+                ),
+            claim_boundary_file_digest:
+                gateway_formal_real_command_lane_local_audit_package_review_declared_digest(
+                    manifest,
+                    "audit-package/claim-boundary.txt",
+                ),
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-real-command-lane-local-audit-package-review-nonclaims:v1",
+                &nonclaims,
+            ),
+            reviewer_policy_id: "phase355-review-policy".to_owned(),
+            reviewer_decision_id: "phase355-review-decision".to_owned(),
+            reviewer_decision_at_unix: 1_800_000_355,
+            current_accepted_append_blockers_digest: manifest
+                .current_accepted_append_blockers_digest,
+            review_label,
+            review_summary: "local package review keeps proposal path blocked".to_owned(),
+            accepted_evidence_mutation_requested: false,
+            accepted_append_policy_change_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            benchmark_or_sota_comparison_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
     fn formal_evidence_local_audit_package_artifact_parts(
         name: &str,
     ) -> (
@@ -41765,6 +42346,188 @@ mod tests {
         fs::remove_dir_all(&phase327_root).expect("phase353 promotion phase327 cleanup succeeds");
         fs::remove_dir_all(&execution_root).expect("phase353 promotion execution cleanup succeeds");
         fs::remove_dir_all(&source_root).expect("phase353 promotion source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_local_audit_package_review_builds_blocking_record() {
+        let (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            serialization_preview,
+            review,
+        ) = formal_evidence_local_audit_package_artifact_parts("real-command-phase355-review");
+        let output_root = temp_output_root("real-command-phase355-review-output");
+        let output_request = formal_evidence_local_audit_package_artifact_output_request(
+            "phase355-review-package",
+            &output_root,
+        );
+        let manifest = materialize_gateway_formal_real_command_lane_local_audit_package_artifact(
+            &output_root,
+            &review,
+            &serialization_preview,
+            &output_request,
+        )
+        .expect("phase355 source artifact materializes");
+        let review_input = formal_evidence_local_audit_package_review_input(
+            "phase355-review",
+            &manifest,
+            GatewayFormalRealCommandLaneLocalAuditPackageReviewLabel::AcceptedEvidenceProposalStillBlocked,
+        );
+        let audit_review = build_gateway_formal_real_command_lane_local_audit_package_review(
+            &manifest,
+            &review_input,
+        )
+        .expect("phase355 audit package review builds");
+
+        assert_eq!(
+            audit_review.state_slice,
+            GATEWAY_FORMAL_REAL_COMMAND_LANE_LOCAL_AUDIT_PACKAGE_REVIEW_STATE_SLICE
+        );
+        assert_eq!(
+            audit_review.materialized_package_manifest_digest,
+            manifest.digest()
+        );
+        assert_eq!(audit_review.phase351_review_digest, manifest.review_digest);
+        assert_eq!(
+            audit_review.phase349_serialization_preview_digest,
+            manifest.serialization_preview_digest
+        );
+        assert_eq!(
+            audit_review.review_label,
+            GatewayFormalRealCommandLaneLocalAuditPackageReviewLabel::AcceptedEvidenceProposalStillBlocked
+        );
+        assert_eq!(
+            audit_review.previous_promotion_state,
+            "local_materialized_audit_package_artifact"
+        );
+        assert_eq!(
+            audit_review.promotion_state,
+            "local_materialized_audit_package_review_metadata"
+        );
+        assert_eq!(
+            audit_review.next_required_state,
+            "accepted_evidence_proposal_still_blocked"
+        );
+        assert_eq!(
+            audit_review.claim_boundary,
+            gateway_formal_real_command_lane_local_audit_package_review_claim_boundary()
+        );
+        assert!(!audit_review.creates_accepted_evidence);
+        assert!(!audit_review.changes_accepted_append_policy);
+        assert!(!audit_review.creates_level2_evidence);
+        assert!(!audit_review.populates_score_axes);
+        assert!(!audit_review.proof_artifact_created);
+        assert!(!audit_review.checker_transcript_created);
+        assert!(!audit_review.solver_certificate_created);
+        assert!(!audit_review.semantic_correctness_claimed);
+        assert!(!audit_review.production_readiness_claimed);
+        assert!(!audit_review.sota_claimed);
+        assert!(!audit_review.breakthrough_claimed);
+        assert!(!audit_review.full_security_claimed);
+        assert!(!audit_review.grants_authority);
+
+        let mut digest_drift = review_input.clone();
+        digest_drift.materialized_package_manifest_digest = Hash([23; 32]);
+        let drift_validation =
+            validate_gateway_formal_real_command_lane_local_audit_package_review_input(
+                &manifest,
+                &digest_drift,
+            );
+        assert!(drift_validation.issues.contains(
+            &GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue::MaterializedPackageManifestDrift
+        ));
+
+        let mut declared_drift = review_input.clone();
+        declared_drift.digest_index_digest = Hash([24; 32]);
+        let declared_validation =
+            validate_gateway_formal_real_command_lane_local_audit_package_review_input(
+                &manifest,
+                &declared_drift,
+            );
+        assert!(declared_validation.issues.contains(
+            &GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue::DeclaredArtifactDigestDrift
+        ));
+
+        let mut text_promotion = review_input.clone();
+        text_promotion.review_summary =
+            "claims accepted evidence and production readiness".to_owned();
+        let text_validation =
+            validate_gateway_formal_real_command_lane_local_audit_package_review_input(
+                &manifest,
+                &text_promotion,
+            );
+        assert!(text_validation.issues.contains(
+            &GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue::ReviewSummaryPromotionClaim
+        ));
+
+        fs::remove_dir_all(&output_root).expect("phase355 review output cleanup succeeds");
+        fs::remove_dir_all(&phase323_root).expect("phase355 review phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase355 review phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase355 review execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase355 review source cleanup succeeds");
+    }
+
+    #[test]
+    fn gateway_formal_real_command_lane_local_audit_package_review_rejects_promotion() {
+        let (
+            phase323_root,
+            phase327_root,
+            execution_root,
+            source_root,
+            serialization_preview,
+            review,
+        ) = formal_evidence_local_audit_package_artifact_parts("real-command-phase355-promotion");
+        let output_root = temp_output_root("real-command-phase355-promotion-output");
+        let output_request = formal_evidence_local_audit_package_artifact_output_request(
+            "phase355-promotion-package",
+            &output_root,
+        );
+        let manifest = materialize_gateway_formal_real_command_lane_local_audit_package_artifact(
+            &output_root,
+            &review,
+            &serialization_preview,
+            &output_request,
+        )
+        .expect("phase355 promotion source artifact materializes");
+        let mut review_input = formal_evidence_local_audit_package_review_input(
+            "phase355-promotion-review",
+            &manifest,
+            GatewayFormalRealCommandLaneLocalAuditPackageReviewLabel::MaterializedPackageRejected,
+        );
+
+        review_input.accepted_evidence_mutation_requested = true;
+        review_input.accepted_append_policy_change_requested = true;
+        review_input.accepted_formal_evidence_created = true;
+        review_input.creates_level2_evidence = true;
+        review_input.populates_score_axes = true;
+        review_input.proof_artifact_promoted = true;
+        review_input.checker_transcript_promoted = true;
+        review_input.solver_certificate_promoted = true;
+        review_input.sota_claimed = true;
+        review_input.full_security_claimed = true;
+        review_input.action_authority_claimed = true;
+        let validation = validate_gateway_formal_real_command_lane_local_audit_package_review_input(
+            &manifest,
+            &review_input,
+        );
+        assert!(validation
+            .issues
+            .contains(&GatewayFormalRealCommandLaneLocalAuditPackageReviewIssue::PromotionAttempt));
+        assert!(
+            build_gateway_formal_real_command_lane_local_audit_package_review(
+                &manifest,
+                &review_input,
+            )
+            .is_err()
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase355 promotion output cleanup succeeds");
+        fs::remove_dir_all(&phase323_root).expect("phase355 promotion phase323 cleanup succeeds");
+        fs::remove_dir_all(&phase327_root).expect("phase355 promotion phase327 cleanup succeeds");
+        fs::remove_dir_all(&execution_root).expect("phase355 promotion execution cleanup succeeds");
+        fs::remove_dir_all(&source_root).expect("phase355 promotion source cleanup succeeds");
     }
 
     #[test]

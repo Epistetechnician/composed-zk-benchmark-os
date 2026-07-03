@@ -117,10 +117,13 @@ It cannot support:
 - full security;
 - action authority.
 
-## Phase 355 Implementation Exit Criteria
+## Phase 355 Implementation Result
 
-Phase 355 may implement local materialized audit package review metadata only if
-it:
+Phase 355 implements local materialized audit package review metadata in
+`crates/hsai-agent-admission/src/lib.rs` and records its implementation notes in
+`docs/355-hsai-materialized-audit-package-review-metadata-notes.md`.
+
+The implementation:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;
