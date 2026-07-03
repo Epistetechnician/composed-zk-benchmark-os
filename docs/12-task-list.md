@@ -11050,6 +11050,30 @@ still has no reviewed formal evidence, accepted evidence, Level2+ evidence,
 score axes, Lean/COBALT/Rust-to-Lean execution, or
 SOTA/full-security/semantic-correctness/production-readiness claim.
 
+## Phase 410 HSAI Tiny Z3 Reviewed Formal Evidence Record Boundary
+
+Status: complete. See
+`docs/410-hsai-tiny-z3-reviewed-formal-evidence-record-boundary.md`.
+
+Goal: define the docs-first boundary from the Phase 409 tiny-Z3 local
+review-preview metadata lane to a future reviewed formal-evidence record for
+`gateway-local-digest-binding-determinism-v1` without creating accepted
+evidence, Level2+ evidence, score axes, proof authority, or strong public
+claims.
+
+Implemented: Phase 410 records reviewed-record inputs, the only eligible Phase
+409 decision label, required rejection cases, evidence meaning, SOTA-quality
+direction, and Phase 411 code-phase exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a documented reviewed-record boundary for the
+Phase 409 tiny-Z3 review preview. It still has no implemented reviewed formal
+evidence record, accepted formal evidence, accepted Evidence Ledger mutation,
+Level2+ evidence, score axes, Lean/COBALT/Rust-to-Lean execution, or
+SOTA/full-security/semantic-correctness/production-readiness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
