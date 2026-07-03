@@ -10208,6 +10208,60 @@ no accepted Evidence Ledger mutation, no accepted append policy change, no
 Level2+ evidence, no score axes, no proof-authority claim, and no
 production/SOTA/security/correctness claim.
 
+## Phase 385 HSAI Accepted-Append Decision Quarantine-Resolution Escalation Terminal-Blocker Metadata
+
+Status: complete. See
+`docs/385-hsai-accepted-append-decision-quarantine-resolution-escalation-terminal-blocker-metadata-notes.md`.
+
+Goal: implement local deterministic escalation terminal-blocker metadata over
+one Phase 383 accepted-append decision quarantine-resolution
+escalation-blocker review while preserving the hard block on accepted append
+decisions and accepted formal evidence.
+
+Implemented: Phase 385 adds schema/state/claim-boundary constants,
+terminal-blocker input metadata, terminal-blocker record metadata, six bounded
+terminal-blocker labels, validation issues, validation result, required
+nonclaim helper, terminal-blocker builder, digest binding to one Phase 383
+escalation-blocker review digest/input digest, Phase 381 escalation-blocker
+digest/input digest, Phase 379 resolution review digest/input digest, Phase
+377 resolution plan digest/input digest, Phase 375 quarantine review
+digest/input digest, Phase 373 quarantine digest/input digest, Phase 371
+blocker review digest/input digest, Phase 369 blocker digest/input digest,
+Phase 367 review digest/input digest, Phase 365 candidate digest/input digest,
+Phase 363 review digest/input digest, Phase 361 preflight digest/input digest,
+Phase 359 review digest/input digest, Phase 357 candidate digest/input digest,
+Phase 355/353/351/349/347/345/343 chain digests, declared file digest map
+digest, explicit nonclaim digest, terminal ids, escalation ids, review ids,
+quarantine ids, resolution ids, reviewer ids, proposal ids, append preflight
+ids, accepted append decision candidate/review/blocker/blocker-review/
+quarantine/quarantine-review/resolution-plan/resolution-review/
+escalation-blocker/escalation-blocker-review/terminal-blocker ids, current
+accepted append blocker digest, promotion-text rejection, and focused tests for
+valid terminal-blocker construction plus Phase 383 escalation-blocker review
+digest drift, promotional terminal text, accepted append decision attempts,
+accepted-evidence mutation attempts, accepted append policy-change attempts,
+accepted formal-evidence creation attempts, Level2+ attempts, score-axis
+attempts, proof/checker/solver promotion, SOTA/full-security claims, and
+authority attempts.
+
+Anti-goals: Cargo metadata changes, filesystem artifact writes, accepted append
+decisions, accepted Evidence Ledger mutation, accepted append policy changes,
+accepted formal evidence, Level2+ evidence, score-axis population, proof
+artifact generation or promotion, checker transcript generation or promotion,
+solver certificate generation or promotion, additional process-spawn APIs,
+generic backend runners, solver scripts, checker scripts, proof assistant
+setup files, Lean execution, SMT execution, COBALT execution, Rust-to-Lean
+extraction, benchmark submission, production deployment, semantic-correctness
+claims, production-readiness claims, SOTA claims, breakthrough claims,
+full-security claims, or action authority.
+
+Exit criteria: HSAI now has local accepted-append decision
+quarantine-resolution escalation terminal-blocker metadata over one Phase 383
+escalation-blocker review. It still has no accepted append decision, no
+accepted formal evidence, no accepted Evidence Ledger mutation, no accepted
+append policy change, no Level2+ evidence, no score axes, no proof-authority
+claim, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
