@@ -135,10 +135,9 @@ Phase 351 adds tests that:
 
 ## Next Slice
 
-Phase 352 should define a docs-first boundary for any future materialized audit
-package artifact path. That boundary must keep the materialized path separate
-from accepted formal evidence, accepted Evidence Ledger mutation, accepted
-append policy changes, Level2+ evidence, score axes, Lean execution, SMT
-execution, COBALT execution, Rust-to-Lean extraction, semantic correctness,
-production readiness, SOTA, breakthrough status, full security, and action
-authority.
+Phase 352 defines a docs-first boundary for any future materialized audit
+package artifact path. That boundary keeps the materialized path separate from
+accepted formal evidence, accepted Evidence Ledger mutation, accepted append
+policy changes, Level2+ evidence, score axes, Lean execution, SMT execution,
+COBALT execution, Rust-to-Lean extraction, semantic correctness, production
+readiness, SOTA, breakthrough status, full security, and action authority.
