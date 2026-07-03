@@ -5632,5 +5632,15 @@ quarantined local output-bundle readback only: no proof artifacts, checker
 transcripts, solver certificates, accepted formal evidence, Level2+ evidence,
 score axes, or production/SOTA/security/semantic-correctness claim.
 
+[docs/406-hsai-tiny-z3-formal-evidence-candidate-boundary.md](docs/406-hsai-tiny-z3-formal-evidence-candidate-boundary.md)
+records the Phase 406 docs-first boundary from the Phase 405 quarantined fixed
+local Z3 output bundle to a future local formal-evidence candidate for
+`gateway-local-digest-binding-determinism-v1`. It defines the tiny-lane state
+ladder, required future candidate inputs, required rejection cases, evidence
+meaning, and Phase 407 exit criteria. This is boundary documentation only: no
+Rust implementation, proof artifacts, checker transcripts, solver
+certificates, accepted formal evidence, Level2+ evidence, score axes, or
+production/SOTA/security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

@@ -10943,6 +10943,35 @@ fixed local Z3 execution output. It still has no accepted evidence, no Level2+
 evidence, no score axes, no Lean/COBALT/Rust-to-Lean execution, and no
 SOTA/full-security/semantic-correctness/production-readiness claim.
 
+## Phase 406 HSAI Tiny Z3 Formal Evidence Candidate Boundary
+
+Status: complete. See
+`docs/406-hsai-tiny-z3-formal-evidence-candidate-boundary.md`.
+
+Goal: define the docs-first boundary from the Phase 405 quarantined fixed local
+Z3 output bundle to a future local formal-evidence candidate for
+`gateway-local-digest-binding-determinism-v1`.
+
+Implemented: Phase 406 records the tiny-lane state ladder, required future
+candidate inputs, required rejection cases, evidence meaning, and Phase 407
+code-phase exit criteria. It explicitly separates the Phase 403/404/405 tiny
+lane from the older Phase 329 candidate model, which binds Phase 323/325/327
+command-lane artifacts.
+
+Anti-goals: Rust implementation code, Cargo metadata changes, accepted append
+decisions, accepted Evidence Ledger mutation, accepted formal evidence, Level2+
+evidence, score axes, proof artifacts, checker transcripts, solver
+certificates, Lean execution, COBALT execution, Rust-to-Lean extraction,
+benchmark submission, production deployment, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims, full-security
+claims, or action authority.
+
+Exit criteria: HSAI now has a documented promotion boundary for turning the
+Phase 405 bundle into a future local candidate. It still has no accepted
+evidence, no Level2+ evidence, no score axes, no Lean/COBALT/Rust-to-Lean
+execution, and no SOTA/full-security/semantic-correctness/production-readiness
+claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
