@@ -145,8 +145,8 @@ It cannot support:
 
 ## Phase 365 Implementation Exit Criteria
 
-Phase 365 may implement local accepted-append decision candidate metadata only
-if it:
+Phase 365 implements local accepted-append decision candidate metadata only if
+it:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;
