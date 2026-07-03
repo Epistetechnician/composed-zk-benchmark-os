@@ -2161,6 +2161,34 @@ production, claims no semantic correctness, claims no production readiness,
 claims no SOTA, claims no breakthrough status, claims no full security, and
 grants no authority.
 
+Phase 351 implements deterministic local serialization-preview review metadata
+in `crates/hsai-agent-admission/src/lib.rs`. It adds the Phase 351 schema,
+state-slice, and claim-boundary constants; review input and review record
+metadata; five bounded review labels; validation issues; validation result;
+required nonclaim helper; builder; and validation over one Phase 349
+serialization preview. The review binds the Phase 349 preview digest and input
+digest, Phase 347 package digest, Phase 345 review record digest, Phase 343
+metadata digest, current accepted append blockers, serialization profile id,
+canonical field-order digest, canonical JSON-shape digest, expected package
+bytes digest, reviewer ids, reviewer decision timestamp, and explicit nonclaim
+digest. Validation rejects preview digest drift, promoted or drifted preview
+state, accepted append blocker drift, nonclaim drift, filesystem artifact
+writes, filesystem paths, raw package bytes, raw proof/checker/solver payloads,
+live backend outputs, benchmark outputs, secrets, mutable accepted-ledger state,
+promotion text, and accepted-evidence, accepted-append-policy, Level2,
+score-axis, proof/checker/solver, benchmark, semantic-correctness,
+production-readiness, SOTA, breakthrough, full-security, and action-authority
+promotion attempts. Phase 351 changes no Cargo metadata, writes no artifacts,
+stores no raw package bytes, changes no `zkbench-core` accepted append policy,
+mutates no accepted Evidence Ledger, creates no accepted formal evidence,
+creates no Level2+ evidence, populates no score axes, generates or promotes no
+proof artifacts, generates or promotes no checker transcripts, generates or
+promotes no solver certificates, executes no Lean, executes no SMT, executes no
+COBALT, runs no Rust-to-Lean extraction, submits no benchmarks, deploys nothing
+to production, claims no semantic correctness, claims no production readiness,
+claims no SOTA, claims no breakthrough status, claims no full security, and
+grants no authority.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission

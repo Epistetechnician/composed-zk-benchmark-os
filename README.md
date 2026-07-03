@@ -436,6 +436,7 @@ Surface DSL
 | [docs/348-hsai-audit-package-serialization-preview-boundary.md](docs/348-hsai-audit-package-serialization-preview-boundary.md) | Phase 348 HSAI audit package serialization preview boundary. |
 | [docs/349-hsai-audit-package-serialization-preview-metadata-notes.md](docs/349-hsai-audit-package-serialization-preview-metadata-notes.md) | Phase 349 HSAI audit package serialization preview metadata notes. |
 | [docs/350-hsai-serialization-preview-review-boundary.md](docs/350-hsai-serialization-preview-review-boundary.md) | Phase 350 HSAI serialization preview review boundary. |
+| [docs/351-hsai-serialization-preview-review-metadata-notes.md](docs/351-hsai-serialization-preview-review-metadata-notes.md) | Phase 351 HSAI serialization preview review metadata notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
