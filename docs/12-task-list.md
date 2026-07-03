@@ -11123,6 +11123,34 @@ formal evidence, accepted Evidence Ledger mutation, Level2+ evidence, score
 axes, Lean/COBALT/Rust-to-Lean execution, or
 SOTA/full-security/semantic-correctness/production-readiness claim.
 
+## Phase 413 HSAI Tiny Z3 Accepted Formal Evidence Handoff
+
+Status: complete. See
+`docs/413-hsai-tiny-z3-accepted-formal-evidence-handoff-notes.md`.
+
+Goal: implement local accepted formal-evidence handoff metadata for the Phase
+411 tiny-Z3 reviewed-record lane without mutating accepted evidence, changing
+accepted append policy, creating accepted formal evidence, creating Level2+
+evidence, populating score axes, or making strong public claims.
+
+Implemented: Phase 413 adds accepted-handoff schema/state/claim-boundary
+constants, policy-version markers, requested-class markers, input metadata,
+handoff metadata, issue taxonomy, validation report, claim-boundary helper,
+required-nonclaim helper, current-blocker helper, builder, and validator under
+`hsai-agent-admission`.
+
+Validation coverage: focused tests build a handoff from a Phase 411 reviewed
+record, reject reviewed-record digest drift, policy drift, requested-class
+drift, requested-claim-boundary drift, attempted formal-evidence policy
+approval, accepted-append blocker drift, promoted reviewed-record state drift,
+and promotion attempts.
+
+Exit criteria: HSAI now has local tiny-Z3 accepted-handoff metadata. It still
+has no accepted formal evidence, accepted Evidence Ledger mutation, accepted
+append policy change, Level2+ evidence, score axes, Lean/COBALT/Rust-to-Lean
+execution, or SOTA/full-security/semantic-correctness/production-readiness
+claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
