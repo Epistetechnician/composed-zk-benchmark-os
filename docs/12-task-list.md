@@ -10797,6 +10797,33 @@ Exit criteria: HSAI has reached Phase 400 with a clean local documentation and
 metadata ladder, explicit nonclaims, and no accepted-evidence or backend-run
 promotion.
 
+## Phase 401 HSAI Tiny Backend-Execution Boundary
+
+Status: complete. See
+`docs/401-hsai-tiny-backend-execution-boundary.md`.
+
+Goal: open the first post-400 docs-first backend-execution boundary for one
+tiny digest-binding determinism property without creating accepted evidence or
+strong public claims.
+
+Boundary coverage: Phase 401 selects
+`gateway-local-digest-binding-determinism-v1`, defines allowed future local
+backend lanes for SMT/Z3, Lean skeleton, and COBALT-inspired containment only
+when local tooling exists, defines future inputs, future quarantined outputs,
+validation requirements, and Phase 402 exit criteria.
+
+Anti-goals: Rust implementation code, Cargo metadata changes, artifact writes,
+network fetches, external repo clones, accepted append decisions, accepted
+Evidence Ledger mutation, accepted formal evidence, Level2+ evidence, score
+axes, proof/checker/solver promotion, benchmark submission, production
+deployment, semantic-correctness claims, production-readiness claims, SOTA
+claims, breakthrough claims, full-security claims, or action authority.
+
+Exit criteria: HSAI now has an explicit boundary for one future tiny backend
+execution lane. It still has no backend run, no Lean/SMT/COBALT run, no
+accepted evidence, no Level2+ evidence, no score axes, and no
+SOTA/full-security/semantic-correctness/production-readiness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
