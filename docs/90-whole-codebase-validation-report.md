@@ -5824,5 +5824,16 @@ mutation, not accepted append policy change, not Level2+ evidence, not
 score-axis evidence, not proof artifacts, not checker transcripts, not solver
 certificates, and not a production/SOTA/security/semantic-correctness claim.
 
+[docs/422-hsai-tiny-z3-local-reviewed-metadata-review-boundary.md](docs/422-hsai-tiny-z3-local-reviewed-metadata-review-boundary.md)
+records the Phase 422 docs-first review boundary for Phase 421
+`TinyZ3LocalReviewedFormalEvidenceMetadata`. It defines six future review
+labels, required future review inputs, backend replay comparison fields,
+validation requirements, rejection cases, evidence meaning, and Phase 423
+implementation exit criteria. Backend comparison fields remain correspondence
+metadata only: no accepted formal evidence, accepted Evidence Ledger mutation,
+accepted append policy change, Level2+ evidence, score-axis evidence, proof
+artifact, checker transcript, solver certificate, Lean/COBALT/Rust-to-Lean
+execution, or production/SOTA/security/semantic-correctness claim is created.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

@@ -11376,6 +11376,34 @@ score axes, Lean/COBALT/Rust-to-Lean execution, proof artifact, checker
 transcript, solver certificate, or SOTA/full-security/semantic-correctness/
 production-readiness claim.
 
+## Phase 422 HSAI Tiny Z3 Local Reviewed Metadata Review Boundary
+
+Status: complete. See
+`docs/422-hsai-tiny-z3-local-reviewed-metadata-review-boundary.md`.
+
+Goal: define the docs-first review boundary for Phase 421
+`TinyZ3LocalReviewedFormalEvidenceMetadata`, including future local backend
+replay comparison fields, without implementing review metadata, mutating
+accepted evidence, changing accepted append policy, creating accepted formal
+evidence, creating Level2+ evidence, populating score axes, or making strong
+public claims.
+
+Implemented: Phase 422 records the six allowed future review labels, required
+future review inputs, backend replay comparison limits, required future
+validation, required rejection cases, evidence meaning, and Phase 423
+implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a boundary for reviewing local tiny-Z3 metadata and
+future local backend replay comparisons while accepted formal evidence remains
+forbidden. It still has no implemented review metadata, accepted formal
+evidence, accepted Evidence Ledger mutation, accepted append policy change,
+Level2+ evidence, score axes, Lean/COBALT/Rust-to-Lean execution, proof
+artifact, checker transcript, solver certificate, or SOTA/full-security/
+semantic-correctness/production-readiness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
