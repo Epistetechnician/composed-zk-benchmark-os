@@ -2059,6 +2059,24 @@ to production, claims no semantic correctness, claims no production readiness,
 claims no SOTA, claims no breakthrough status, claims no full security, and
 grants no authority.
 
+Phase 346 defines the docs-first local metadata review audit package boundary.
+It specifies a future non-accepted package purpose, allowed digest references,
+forbidden raw artifact classes, required future validation, package meaning
+limits, and Phase 347 implementation exit criteria. The boundary requires any
+future package to bind one Phase 345 review record digest, one Phase 343 local
+metadata digest, one Phase 341 class-policy digest, one Phase 337
+policy-decision digest, the current accepted append blocker digest, review
+label, reviewer ids, reviewer decision timestamp, and explicit nonclaim digest.
+Phase 346 creates no Rust code, changes no Cargo metadata, writes no artifacts,
+changes no `zkbench-core` accepted append policy, mutates no accepted Evidence
+Ledger, creates no accepted formal evidence, creates no Level2+ evidence,
+populates no score axes, generates or promotes no proof artifacts, generates or
+promotes no checker transcripts, generates or promotes no solver certificates,
+executes no Lean, executes no SMT, executes no COBALT, runs no Rust-to-Lean
+extraction, submits no benchmarks, deploys nothing to production, claims no
+semantic correctness, claims no production readiness, claims no SOTA, claims no
+breakthrough status, claims no full security, and grants no authority.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission
