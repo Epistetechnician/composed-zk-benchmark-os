@@ -207,9 +207,9 @@ Phase 383 adds tests that:
 
 ## Next Slice
 
-Phase 384 should define a docs-first boundary for accepted-append decision
+Phase 384 defines a docs-first boundary for accepted-append decision
 quarantine-resolution escalation terminal-blocker metadata before any accepted
-append decision is allowed. That boundary must keep terminal-blocker metadata
+append decision is allowed. That boundary keeps terminal-blocker metadata
 separate from accepted formal evidence, accepted Evidence Ledger mutation,
 accepted append policy changes, Level2+ evidence, score axes, Lean execution,
 SMT execution, COBALT execution, Rust-to-Lean extraction, semantic correctness,
