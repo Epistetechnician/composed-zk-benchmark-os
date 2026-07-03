@@ -1986,6 +1986,23 @@ extraction, submit benchmarks, deploy to production, claim semantic
 correctness, claim production readiness, claim SOTA, claim breakthrough status,
 claim full security, or grant authority.
 
+Phase 342 defines the docs-first local reviewed formal-evidence metadata class
+boundary. It specifies the future `LocalReviewedFormalEvidenceMetadata` class
+name, required future fields, required future validation, rejection cases,
+evidence meaning limits, and Phase 343 implementation exit criteria. The
+boundary requires future binding to Phase 341 class-policy, Phase 339
+feasibility, Phase 337 policy-decision, Phase 335 handoff, Phase 333
+reviewed-record, and current accepted append blocker digests. Phase 342 creates
+no Rust code, changes no Cargo metadata, implements no bounded formal-evidence
+class, changes no `zkbench-core` accepted append policy, mutates no accepted
+Evidence Ledger, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, generates or promotes no proof artifacts,
+generates or promotes no checker transcripts, generates or promotes no solver
+certificates, executes no Lean, executes no COBALT, runs no Rust-to-Lean
+extraction, submits no benchmarks, deploys nothing to production, claims no
+semantic correctness, claims no production readiness, claims no SOTA, claims no
+breakthrough status, claims no full security, and grants no authority.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission

@@ -145,10 +145,9 @@ That still does not support:
 
 ## Next Slice
 
-Phase 342 should define the docs-first local reviewed formal-evidence metadata
-class boundary. It may specify the future class shape, but must not implement
-the class unless a later explicit implementation phase authorizes it. It must
-not approve accepted formal evidence, mutate the accepted Evidence Ledger,
-change accepted append policy, create Level2+ evidence, populate score axes, or
-claim semantic correctness, production readiness, SOTA, full security, or action
-authority.
+Phase 342 defines the docs-first local reviewed formal-evidence metadata class
+boundary. It specifies the future class shape but does not implement the class.
+It does not approve accepted formal evidence, mutate the accepted Evidence
+Ledger, change accepted append policy, create Level2+ evidence, populate score
+axes, or claim semantic correctness, production readiness, SOTA, full security,
+or action authority.
