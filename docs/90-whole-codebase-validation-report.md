@@ -5711,5 +5711,18 @@ mutation, accepted append policy change, Level2+ evidence, score axes, proof
 artifacts, checker transcripts, solver certificates, or production/SOTA/
 security/semantic-correctness claim.
 
+[docs/413-hsai-tiny-z3-accepted-formal-evidence-handoff-notes.md](docs/413-hsai-tiny-z3-accepted-formal-evidence-handoff-notes.md)
+records the Phase 413 local tiny-Z3 accepted-handoff metadata lane over a
+Phase 411 reviewed formal-evidence record. The implementation adds
+accepted-handoff input, handoff metadata, issue taxonomy, validation report,
+required-nonclaim helper, current-blocker helper, a builder, and validators
+under `hsai-agent-admission`. Focused tests cover handoff construction,
+reviewed-record digest drift, policy drift, requested-class drift,
+requested-claim-boundary drift, attempted policy approval, blocker drift,
+promoted reviewed-record state drift, and promotion attempts. This remains
+handoff metadata only: no accepted formal evidence, accepted Evidence Ledger
+mutation, accepted append policy change, Level2+ evidence, score axes, or
+production/SOTA/security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
