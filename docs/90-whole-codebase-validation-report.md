@@ -2873,6 +2873,48 @@ nothing to production, claims no semantic correctness, claims no production
 readiness, claims no SOTA, claims no breakthrough status, claims no full
 security, and grants no authority.
 
+Phase 397 defines the docs-first accepted-append settlement-blocker
+implementation checklist boundary. It creates no Rust implementation, changes
+no Cargo metadata, writes no artifacts, changes no accepted append policy,
+mutates no accepted Evidence Ledger, creates no accepted formal evidence,
+creates no Level2+ evidence, populates no score axes, executes no Lean,
+executes no SMT, executes no COBALT, runs no Rust-to-Lean extraction, submits
+no benchmarks, deploys nothing to production, claims no semantic correctness,
+claims no production readiness, claims no SOTA, claims no breakthrough status,
+claims no full security, and grants no authority.
+
+Phase 398 defines the docs-first Phase-400 readiness audit boundary. It records
+the audit questions and required negative findings needed before any Phase
+400+ continuation is treated as responsible. It creates no Rust implementation,
+changes no Cargo metadata, writes no artifacts, mutates no accepted Evidence
+Ledger, creates no accepted formal evidence, creates no Level2+ evidence,
+populates no score axes, executes no Lean, executes no SMT, executes no
+COBALT, runs no Rust-to-Lean extraction, submits no benchmarks, deploys
+nothing to production, claims no semantic correctness, claims no production
+readiness, claims no SOTA, claims no breakthrough status, claims no full
+security, and grants no authority.
+
+Phase 399 freezes the Phase-400 claim boundary. It allows only the bounded
+local documentation and metadata ladder claim and freezes nonclaims for
+accepted evidence, accepted append decisions, accepted Evidence Ledger
+mutation, accepted append policy changes, accepted formal evidence, Level2+
+evidence, score axes, proof authority, backend execution, Lean/SMT/COBALT
+execution, Rust-to-Lean extraction, benchmark evidence, semantic correctness,
+production readiness, SOTA, breakthrough status, full security, and action
+authority.
+
+Phase 400 records the responsible Phase-400 continuation gate. It requires
+future work to choose an explicitly named lane and requires a new boundary
+before accepted evidence, backend execution, proof artifacts, score axes, or
+public-claim changes. Phase 400 creates no Rust implementation, changes no
+Cargo metadata, writes no artifacts, mutates no accepted Evidence Ledger,
+creates no accepted formal evidence, creates no Level2+ evidence, populates no
+score axes, executes no Lean, executes no SMT, executes no COBALT, runs no
+Rust-to-Lean extraction, submits no benchmarks, deploys nothing to production,
+claims no semantic correctness, claims no production readiness, claims no
+SOTA, claims no breakthrough status, claims no full security, and grants no
+authority.
+
 Phase 360 defines the docs-first append-decision preflight boundary. It
 specifies the future preflight purpose, five allowed future preflight labels,
 required future inputs, required future validation, meaning limits, and Phase

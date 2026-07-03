@@ -10729,6 +10729,74 @@ accepted formal evidence, no accepted Evidence Ledger mutation, no accepted
 append policy change, no Level2+ evidence, no score axes, no proof-authority
 claim, and no production/SOTA/security/correctness claim.
 
+## Phase 397 HSAI Accepted-Append Settlement-Blocker Implementation Checklist Boundary
+
+Status: complete. See
+`docs/397-hsai-accepted-append-settlement-blocker-implementation-checklist-boundary.md`.
+
+Goal: define a docs-first checklist for any future settlement-blocker
+implementation without authorizing that implementation in this phase.
+
+Boundary coverage: Phase 397 lists required mutation naming, inherited binding
+requirements, nonclaim preservation, promotion-flag rejection, and public-claim
+non-escalation checks for any future settlement-blocker implementation.
+
+Anti-goals: Rust implementation code, Cargo metadata changes, artifacts,
+accepted append decisions, accepted formal evidence, Level2+ evidence, score
+axes, backend execution, Lean/SMT/COBALT execution, proof/checker/solver
+artifacts, production-readiness claims, SOTA claims, semantic-correctness
+claims, full-security claims, or action authority.
+
+## Phase 398 HSAI Phase-400 Readiness Audit Boundary
+
+Status: complete. See
+`docs/398-hsai-phase-400-readiness-audit-boundary.md`.
+
+Goal: define the docs-first audit questions and required negative findings for
+reaching Phase 400+ without crossing evidence or execution boundaries.
+
+Boundary coverage: Phase 398 requires future Phase 400+ work to identify the
+state slice, authorizing boundary, allowed mutation surface, validation
+coverage, nonclaims, and remaining blocked gates.
+
+Anti-goals: accepted append decisions, accepted Evidence Ledger mutation,
+accepted formal evidence, Level2+ evidence, score axes, backend execution,
+Lean/SMT/COBALT execution, proof/checker/solver promotion, production-readiness
+claims, SOTA claims, semantic-correctness claims, breakthrough claims,
+full-security claims, or action authority.
+
+## Phase 399 HSAI Phase-400 Claim-Boundary Freeze
+
+Status: complete. See
+`docs/399-hsai-phase-400-claim-boundary-freeze.md`.
+
+Goal: freeze the allowed Phase 400+ claim and required nonclaims before the
+continuation gate.
+
+Boundary coverage: Phase 399 allows only a bounded local documentation and
+metadata ladder claim and freezes nonclaims for accepted evidence, backend
+execution, proof authority, score axes, benchmark evidence, semantic
+correctness, production readiness, SOTA, breakthrough status, full security,
+and action authority.
+
+Anti-goals: any public claim stronger than the frozen bounded local claim.
+
+## Phase 400 HSAI Phase-400 Continuation Gate
+
+Status: complete. See
+`docs/400-hsai-phase-400-continuation-gate.md`.
+
+Goal: record the responsible Phase 400+ continuation gate and the next
+permitted lane categories.
+
+Boundary coverage: Phase 400 requires future work to choose an explicitly
+named lane and requires a new boundary before accepted evidence, backend
+execution, proof artifacts, score axes, or public-claim changes.
+
+Exit criteria: HSAI has reached Phase 400 with a clean local documentation and
+metadata ladder, explicit nonclaims, and no accepted-evidence or backend-run
+promotion.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
