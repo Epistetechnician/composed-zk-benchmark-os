@@ -1796,6 +1796,22 @@ artifacts, checker transcripts, solver certificates, benchmark evidence,
 semantic-correctness claims, production-readiness claims, SOTA claims,
 breakthrough claims, full-security claims, or authority grants.
 
+Phase 332 defines the docs-first reviewed-formal-evidence record boundary for
+Phase 331 review previews. It requires any future reviewed record to bind the
+Phase 331 preview digest, Phase 329 candidate digest, Phase 327 manifest
+digest, Phase 325 preflight digest, Phase 323 source-manifest digest, reviewer
+and verifier policy ids, reviewer decision metadata, reviewed-scope statement,
+nonclaim acknowledgement, promotion-rejection checklist, and
+accepted-evidence-disabled acknowledgement. It permits reviewed-record emission
+only from `ReviewPreviewAcceptCandidateScope` and requires rejection of
+rejected, replay-blocked, and checker-lane-blocked preview decisions. Phase 332
+does not implement reviewed evidence code, accepted Evidence Ledger mutation,
+Level2+ evidence, score-axis population, proof artifact generation, checker
+transcript generation, solver certificate generation, Lean execution, COBALT
+execution, Rust-to-Lean extraction, benchmark submission, production
+deployment, semantic-correctness claims, production-readiness claims, SOTA
+claims, breakthrough claims, full-security claims, or authority grants.
+
 Phase 115 implements that inert preflight surface in `zkbench-core`: promotion
 preflight request/report metadata, deterministic JSON/Markdown/digest helpers,
 required non-claim labels, fail-closed validation, and official-submission

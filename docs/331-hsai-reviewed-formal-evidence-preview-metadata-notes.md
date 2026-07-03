@@ -104,7 +104,8 @@ accepted Evidence Ledger mutation, or authority to execute an action.
 
 ## Next Slice
 
-Phase 332 may define a docs-first reviewed-formal-evidence record boundary for
-Phase 331 previews. It must still avoid accepted Evidence Ledger mutation,
-Level2+ evidence, score-axis population, SOTA claims, full-security claims,
-production-readiness claims, semantic-correctness claims, and action authority.
+Phase 332 defines a docs-first reviewed-formal-evidence record boundary for
+Phase 331 previews. Phase 333 may implement local reviewed-record metadata if it
+still avoids accepted Evidence Ledger mutation, Level2+ evidence, score-axis
+population, SOTA claims, full-security claims, production-readiness claims,
+semantic-correctness claims, and action authority.
