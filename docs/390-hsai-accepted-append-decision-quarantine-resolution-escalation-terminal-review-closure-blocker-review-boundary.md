@@ -135,3 +135,9 @@ escalation terminal-review closure-blocker review metadata only if it:
 - claims no breakthrough status;
 - claims no full security;
 - grants no action authority.
+
+## Implementation Note
+
+Phase 391 implements this boundary as local pure-data review metadata in
+`crates/hsai-agent-admission/src/lib.rs` and documents the implementation in
+`docs/391-hsai-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-metadata-notes.md`.
