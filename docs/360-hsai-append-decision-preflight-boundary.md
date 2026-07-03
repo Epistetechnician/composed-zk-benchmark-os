@@ -131,7 +131,7 @@ It cannot support:
 
 ## Phase 361 Implementation Exit Criteria
 
-Phase 361 may implement local append-decision preflight metadata only if it:
+Phase 361 implements local append-decision preflight metadata only if it:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;
