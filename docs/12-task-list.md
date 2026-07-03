@@ -8455,6 +8455,48 @@ evidence, no accepted Evidence Ledger mutation, no accepted append policy
 change, no Level2+ evidence, no score axes, no proof-authority claim, and no
 production/SOTA/security/correctness claim.
 
+## Phase 348 HSAI Audit Package Serialization Preview Boundary
+
+Status: complete. See
+`docs/348-hsai-audit-package-serialization-preview-boundary.md`.
+
+Goal: define the docs-first boundary for deterministic serialization-preview
+metadata over Phase 347 local non-accepted audit packages without implementing
+serialization or writing artifacts.
+
+Implemented: future preview purpose, allowed digest references, forbidden
+materialized/raw artifact classes, required future validation, meaning limits,
+and Phase 349 implementation exit criteria.
+
+Validation coverage: documentation now requires future previews to bind one
+Phase 347 package digest, one Phase 345 review record digest, one Phase 343
+metadata digest, the current accepted append blocker digest, serialization
+profile id, canonical field-order digest, canonical JSON shape digest, expected
+package bytes digest, and explicit nonclaim digest while rejecting paths, raw
+bytes, promotion text, and accepted-ledger mutation attempts.
+
+Validation gate: formatting, docs/hygiene checks, diff hygiene, empty-file
+hygiene, package-root lint check, claim-boundary source scans, repo docs tests,
+and full workspace tests.
+
+Anti-goals: Rust implementation code, Cargo metadata changes, filesystem
+artifact writes, raw package bytes, accepted Evidence Ledger mutation, accepted
+append policy changes, accepted formal evidence, Level2+ evidence, score-axis
+population, proof artifact generation or promotion, checker transcript
+generation or promotion, solver certificate generation or promotion, additional
+process-spawn APIs, generic backend runners, solver scripts, checker scripts,
+proof assistant setup files, Lean execution, SMT execution, COBALT execution,
+Rust-to-Lean extraction, benchmark submission, production deployment,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, or action authority.
+
+Exit criteria: HSAI now has a boundary for future deterministic
+serialization-preview metadata over Phase 347 packages. It still has no
+implemented serialization preview, no materialized audit package, no accepted
+formal evidence, no accepted Evidence Ledger mutation, no accepted append policy
+change, no Level2+ evidence, no score axes, no proof-authority claim, and no
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
