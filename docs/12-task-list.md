@@ -11345,6 +11345,37 @@ policy change, Level2+ evidence, score axes, Lean/COBALT/Rust-to-Lean
 execution, proof artifact, checker transcript, solver certificate, or SOTA/
 full-security/semantic-correctness/production-readiness claim.
 
+## Phase 421 HSAI Tiny Z3 Local Reviewed Metadata Class Implementation
+
+Status: complete. See
+`docs/421-hsai-tiny-z3-local-reviewed-metadata-class-notes.md`.
+
+Goal: implement `TinyZ3LocalReviewedFormalEvidenceMetadata` as local
+non-accepted metadata bound to Phase 419 class-policy metadata and the prior
+tiny-Z3 admission chain, without mutating accepted evidence, changing accepted
+append policy, creating accepted formal evidence, creating Level2+ evidence,
+populating score axes, or making strong public claims.
+
+Implemented: Phase 421 adds tiny-Z3 local reviewed metadata schema/state/
+claim-boundary constants, input metadata, reviewed metadata, issue taxonomy,
+validation report, canonical claim-boundary and nonclaim helpers, builder,
+validator, and focused tests for valid metadata construction, class-policy
+digest drift, class-name drift, owner-path drift, class-status drift,
+reviewed-scope and requirement digest drift, promoted class-policy state, and
+promotion attempts.
+
+Validation coverage: `hsai-agent-admission` Phase 421 tests cover construction
+and rejection behavior. Repository hygiene, claim-boundary source scans, and
+workspace tests remain the broader gates.
+
+Exit criteria: HSAI now has a local reviewed tiny-Z3 formal-evidence metadata
+class bound to the current non-accepted class-policy path and prior reviewed
+admission artifacts. It still has no accepted formal evidence, accepted
+Evidence Ledger mutation, accepted append policy change, Level2+ evidence,
+score axes, Lean/COBALT/Rust-to-Lean execution, proof artifact, checker
+transcript, solver certificate, or SOTA/full-security/semantic-correctness/
+production-readiness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

@@ -154,7 +154,9 @@ That still is not:
 
 ## Phase 421 Implementation Exit Criteria
 
-Phase 421 may implement `TinyZ3LocalReviewedFormalEvidenceMetadata` only if it:
+Phase 421 implements `TinyZ3LocalReviewedFormalEvidenceMetadata` in
+`docs/421-hsai-tiny-z3-local-reviewed-metadata-class-notes.md`. The
+implementation:
 
 - binds one Phase 419 class-policy digest;
 - binds one Phase 417 feasibility digest;
@@ -173,4 +175,4 @@ Phase 421 may implement `TinyZ3LocalReviewedFormalEvidenceMetadata` only if it:
 - rejects benchmark/SOTA, semantic-correctness, production-readiness,
   full-security, breakthrough, and action-authority claims.
 
-Phase 421 still must not create accepted formal evidence.
+It still does not create accepted formal evidence.
