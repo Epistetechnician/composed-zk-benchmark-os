@@ -272,3 +272,15 @@ quarantine-resolution escalation-blocker review metadata only if it:
 - does not submit benchmarks;
 - does not claim semantic correctness, production readiness, SOTA, breakthrough
   status, full security, or action authority.
+
+## Phase 461 Implementation Status
+
+Phase 461 implemented this boundary in
+`crates/hsai-agent-admission/src/lib.rs` and
+`docs/461-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-blocker-review-notes.md`.
+The implementation remains pure metadata, binds one Phase 459 escalation
+blocker plus its Phase 457/455/453/451/449/447/445/443/404/405 ancestry,
+rejects promotion attempts, and still does not create accepted evidence,
+Level2+ evidence, score axes, backend execution evidence, semantic-correctness
+claims, production-readiness claims, SOTA claims, full-security claims, or
+action authority.
