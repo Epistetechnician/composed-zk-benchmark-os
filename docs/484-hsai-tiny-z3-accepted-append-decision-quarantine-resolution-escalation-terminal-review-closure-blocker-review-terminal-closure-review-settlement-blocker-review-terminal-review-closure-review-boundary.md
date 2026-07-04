@@ -175,3 +175,12 @@ review metadata only if it:
 - claims no breakthrough status;
 - claims no full security;
 - grants no action authority.
+
+## Phase 485 Implementation Note
+
+Phase 485 implements this boundary as local metadata in
+`docs/485-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-closure-review-notes.md`
+and `crates/hsai-agent-admission/src/lib.rs`. It does not run backend
+execution, create accepted evidence, create Level2+ evidence, populate score
+axes, or support SOTA/full-security/semantic-correctness/production-readiness
+claims.

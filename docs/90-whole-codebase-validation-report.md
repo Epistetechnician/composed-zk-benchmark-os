@@ -6908,5 +6908,22 @@ accepted formal evidence, creates no Level2+ evidence, populates no score
 axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/485-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-closure-review-notes.md](docs/485-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-closure-review-notes.md)
+records the Phase 485 local tiny-Z3 settlement-blocker review terminal review
+closure review metadata implementation in
+`crates/hsai-agent-admission/src/lib.rs`. The implementation adds schema,
+state-slice, and claim-boundary constants, six non-promotional closure-review
+labels, input/output records, issue and validation types, required nonclaim
+helpers, digest/id/label binding helpers, a builder, a validator, and focused
+tests. It binds one Phase 483 settlement-blocker review terminal review
+closure digest/input digest, Phase 483 digest/id/label map digests, explicit
+nonclaim digest, current accepted append blocker digest, inherited ids,
+inherited closure label, and one closure-review label. It creates no accepted
+append decision, mutates no accepted Evidence Ledger, changes no accepted
+append policy, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean
+extraction, and claims no production/SOTA/security/semantic-correctness
+result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
