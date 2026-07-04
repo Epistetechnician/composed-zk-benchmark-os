@@ -167,7 +167,18 @@ Phase 451 adds tests that:
 - reject promotional quarantine-summary text;
 - reject accepted-append-decision, accepted-evidence, Level2, score-axis,
   proof, checker, solver, SOTA, full-security, and action-authority promotion
-  attempts.
+attempts.
+
+## Phase 452 Boundary Status
+
+Phase 452 defines the docs-first boundary for future local review metadata over
+this Phase 451 quarantine in
+`docs/452-hsai-tiny-z3-accepted-append-decision-quarantine-review-boundary.md`.
+That boundary still does not authorize an accepted append decision, accepted
+formal evidence, accepted Evidence Ledger mutation, accepted append policy
+change, Level2+ evidence, score axes, Lean execution, new SMT execution,
+COBALT execution, Rust-to-Lean extraction, semantic correctness, production
+readiness, SOTA, breakthrough status, full security, or action authority.
 
 ## Next Slice
 
