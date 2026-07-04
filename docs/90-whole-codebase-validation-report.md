@@ -7086,5 +7086,24 @@ Level2+ evidence, populates no score axes, runs no
 Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence,
 and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/495-hsai-tiny-z3-accepted-evidence-class-claim-boundary-metadata-notes.md](docs/495-hsai-tiny-z3-accepted-evidence-class-claim-boundary-metadata-notes.md)
+documents the Phase 495 local metadata implementation for the Phase 489
+`accepted_evidence_class_and_claim_boundary` prerequisite gate. The
+implementation in `crates/hsai-agent-admission/src/lib.rs` binds one Phase 493
+policy-version record to `zkbench-core` owner and route identifiers,
+`EvidenceClass`, `ClaimBoundary`, `EvidenceRecord`, `EvidenceRecordCandidate`,
+accepted evidence class `LocalReplay`, accepted claim boundary
+`Level1LocalReplay`, lower local metadata class/boundary `DesignNote` and
+`Level0DesignNote`, maximum accepted append boundary `Level1LocalReplay`,
+rejected Level2+/formal/proof/cross-backend/independent classes, explicit
+nonclaims, and rejection policy. Focused tests cover valid construction plus
+Phase 493 digest drift, accepted evidence class drift, accepted claim boundary
+drift, rejected-class set drift, and promotion-attempt rejection. It makes no
+accepted append decision, mutates no accepted Evidence Ledger, changes no
+accepted append policy, creates no accepted formal evidence, creates no
+Level2+ evidence, populates no score axes, runs no
+Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence,
+and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

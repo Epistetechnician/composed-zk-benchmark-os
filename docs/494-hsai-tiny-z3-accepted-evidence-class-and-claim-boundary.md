@@ -213,8 +213,10 @@ That still is not:
 
 ## Phase 495 Implementation Exit Criteria
 
-Phase 495 may implement local accepted evidence class and claim-boundary
-metadata only if it:
+Phase 495 implements local accepted evidence class and claim-boundary metadata
+in
+`docs/495-hsai-tiny-z3-accepted-evidence-class-claim-boundary-metadata-notes.md`.
+That implementation:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;
