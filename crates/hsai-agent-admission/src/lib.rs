@@ -787,6 +787,11 @@ pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANT
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_STATE_SLICE:
     &str = "phase-451-hsai-tiny-z3-accepted-append-decision-quarantine-metadata";
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_CLAIM_BOUNDARY: &str = "local tiny-Z3 accepted-append decision quarantine metadata only; quarantines one Phase 449 accepted-append decision blocker review away from the accepted append path, but does not make an accepted append decision, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_REVIEW_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-digest-backend-z3-accepted-append-decision-quarantine-review:v1";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_REVIEW_STATE_SLICE: &str =
+    "phase-453-hsai-tiny-z3-accepted-append-decision-quarantine-review-metadata";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_REVIEW_CLAIM_BOUNDARY: &str = "local tiny-Z3 accepted-append decision quarantine review metadata only; reviews why one Phase 451 accepted-append decision quarantine remains isolated from the accepted append path, but does not make an accepted append decision, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -8832,6 +8837,226 @@ pub enum GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineIssue {
 pub struct GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewLabel {
+    TinyZ3QuarantineReviewScopeAcceptable,
+    TinyZ3QuarantineReviewRejected,
+    TinyZ3AcceptedAppendDecisionStillBlocked,
+    TinyZ3AcceptedLedgerMutationStillBlocked,
+    TinyZ3Level2EvidenceStillBlocked,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewInput {
+    pub schema_version: String,
+    pub accepted_append_decision_quarantine_review_id: String,
+    pub quarantine_policy_id: String,
+    pub quarantine_decision_id: String,
+    pub reviewer_policy_id: String,
+    pub reviewer_decision_id: String,
+    pub proposal_policy_id: String,
+    pub proposal_candidate_id: String,
+    pub proposal_review_id: String,
+    pub append_preflight_id: String,
+    pub append_preflight_review_id: String,
+    pub accepted_append_decision_candidate_id: String,
+    pub accepted_append_decision_candidate_review_id: String,
+    pub accepted_append_decision_blocker_id: String,
+    pub accepted_append_decision_blocker_review_id: String,
+    pub accepted_append_decision_quarantine_id: String,
+    pub review_decision_at_unix: u64,
+    pub phase451_quarantine_digest: Hash,
+    pub phase451_quarantine_input_digest: Hash,
+    pub phase449_blocker_review_digest: Hash,
+    pub phase449_blocker_review_input_digest: Hash,
+    pub phase447_blocker_digest: Hash,
+    pub phase447_blocker_input_digest: Hash,
+    pub phase445_review_digest: Hash,
+    pub phase445_review_input_digest: Hash,
+    pub phase443_candidate_digest: Hash,
+    pub phase443_candidate_input_digest: Hash,
+    pub phase441_review_digest: Hash,
+    pub phase441_review_input_digest: Hash,
+    pub phase439_preflight_digest: Hash,
+    pub phase439_preflight_input_digest: Hash,
+    pub phase437_review_digest: Hash,
+    pub phase437_review_input_digest: Hash,
+    pub phase435_candidate_digest: Hash,
+    pub phase435_candidate_input_digest: Hash,
+    pub phase433_review_digest: Hash,
+    pub phase431_materialized_manifest_digest: Hash,
+    pub phase429_review_digest: Hash,
+    pub phase427_serialization_preview_digest: Hash,
+    pub phase425_audit_package_digest: Hash,
+    pub phase423_review_record_digest: Hash,
+    pub phase421_metadata_digest: Hash,
+    pub phase405_output_manifest_digest: Hash,
+    pub phase404_execution_digest: Hash,
+    pub declared_file_digest_map_digest: Hash,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub candidate_disposition:
+        GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionCandidateDisposition,
+    pub candidate_review_label:
+        GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionCandidateReviewLabel,
+    pub blocker_label: GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionBlockerLabel,
+    pub blocker_review_label:
+        GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionBlockerReviewLabel,
+    pub quarantine_label: GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineLabel,
+    pub review_label: GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewLabel,
+    pub review_summary: String,
+    pub accepted_append_decision_requested: bool,
+    pub accepted_evidence_mutation_requested: bool,
+    pub accepted_append_policy_change_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub benchmark_or_sota_comparison_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-append-decision-quarantine-review-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReview {
+    pub schema_version: String,
+    pub accepted_append_decision_quarantine_review_id: String,
+    pub state_slice: String,
+    pub review_input_digest: Hash,
+    pub quarantine_policy_id: String,
+    pub quarantine_decision_id: String,
+    pub reviewer_policy_id: String,
+    pub reviewer_decision_id: String,
+    pub proposal_policy_id: String,
+    pub proposal_candidate_id: String,
+    pub proposal_review_id: String,
+    pub append_preflight_id: String,
+    pub append_preflight_review_id: String,
+    pub accepted_append_decision_candidate_id: String,
+    pub accepted_append_decision_candidate_review_id: String,
+    pub accepted_append_decision_blocker_id: String,
+    pub accepted_append_decision_blocker_review_id: String,
+    pub accepted_append_decision_quarantine_id: String,
+    pub review_decision_at_unix: u64,
+    pub phase451_quarantine_digest: Hash,
+    pub phase451_quarantine_input_digest: Hash,
+    pub phase449_blocker_review_digest: Hash,
+    pub phase449_blocker_review_input_digest: Hash,
+    pub phase447_blocker_digest: Hash,
+    pub phase447_blocker_input_digest: Hash,
+    pub phase445_review_digest: Hash,
+    pub phase445_review_input_digest: Hash,
+    pub phase443_candidate_digest: Hash,
+    pub phase443_candidate_input_digest: Hash,
+    pub phase441_review_digest: Hash,
+    pub phase441_review_input_digest: Hash,
+    pub phase439_preflight_digest: Hash,
+    pub phase439_preflight_input_digest: Hash,
+    pub phase437_review_digest: Hash,
+    pub phase437_review_input_digest: Hash,
+    pub phase435_candidate_digest: Hash,
+    pub phase435_candidate_input_digest: Hash,
+    pub phase433_review_digest: Hash,
+    pub phase431_materialized_manifest_digest: Hash,
+    pub phase429_review_digest: Hash,
+    pub phase427_serialization_preview_digest: Hash,
+    pub phase425_audit_package_digest: Hash,
+    pub phase423_review_record_digest: Hash,
+    pub phase421_metadata_digest: Hash,
+    pub phase405_output_manifest_digest: Hash,
+    pub phase404_execution_digest: Hash,
+    pub declared_file_digest_map_digest: Hash,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub candidate_disposition:
+        GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionCandidateDisposition,
+    pub candidate_review_label:
+        GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionCandidateReviewLabel,
+    pub blocker_label: GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionBlockerLabel,
+    pub blocker_review_label:
+        GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionBlockerReviewLabel,
+    pub quarantine_label: GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineLabel,
+    pub review_label: GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewLabel,
+    pub review_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub makes_accepted_append_decision: bool,
+    pub creates_accepted_evidence: bool,
+    pub changes_accepted_append_policy: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReview {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-append-decision-quarantine-review:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue {
+    InvalidSchemaVersion,
+    InvalidAcceptedAppendDecisionQuarantineReviewId,
+    InvalidQuarantinePolicyId,
+    InvalidQuarantineDecisionId,
+    InvalidReviewerPolicyId,
+    InvalidReviewerDecisionId,
+    InvalidProposalPolicyId,
+    InvalidProposalCandidateId,
+    InvalidProposalReviewId,
+    InvalidAppendPreflightId,
+    InvalidAppendPreflightReviewId,
+    InvalidAcceptedAppendDecisionCandidateId,
+    InvalidAcceptedAppendDecisionCandidateReviewId,
+    InvalidAcceptedAppendDecisionBlockerId,
+    InvalidAcceptedAppendDecisionBlockerReviewId,
+    InvalidAcceptedAppendDecisionQuarantineId,
+    MissingReviewDecisionTimestamp,
+    MissingDigest(String),
+    Phase451QuarantineDigestDrift,
+    Phase451QuarantineStateMismatch,
+    AcceptedAppendBlockerMismatch,
+    NonclaimMismatch,
+    ReviewSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -28509,6 +28734,12 @@ pub fn gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine
         .to_owned()
 }
 
+pub fn gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_review_claim_boundary(
+) -> String {
+    GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_REVIEW_CLAIM_BOUNDARY
+        .to_owned()
+}
+
 pub fn gateway_formal_tiny_digest_backend_z3_execution_output_declared_files() -> Vec<String> {
     GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_DECLARED_FILES
         .iter()
@@ -28938,6 +29169,19 @@ pub fn gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine
     ));
     nonclaims.insert(NonClaimLabel(
         "tiny Z3 quarantine is not accepted append decision".to_owned(),
+    ));
+    nonclaims
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_review_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims =
+        gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_required_nonclaims();
+    nonclaims.insert(NonClaimLabel(
+        "local tiny Z3 accepted-append decision quarantine review metadata only".to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel(
+        "tiny Z3 quarantine review is not accepted append decision".to_owned(),
     ));
     nonclaims
 }
@@ -39398,6 +39642,483 @@ fn validate_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quara
     {
         issues.push(
             GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineIssue::PromotionAttempt,
+        );
+    }
+}
+
+pub fn build_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_review(
+    quarantine: &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantine,
+    input: &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewInput,
+) -> Result<
+    GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReview,
+    GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewValidation,
+> {
+    let validation =
+        validate_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_review_input(
+            quarantine, input,
+        );
+    if !validation.valid {
+        return Err(validation);
+    }
+    Ok(
+        GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReview {
+            schema_version:
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_REVIEW_SCHEMA_VERSION
+                    .to_owned(),
+            accepted_append_decision_quarantine_review_id: input
+                .accepted_append_decision_quarantine_review_id
+                .clone(),
+            state_slice:
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_REVIEW_STATE_SLICE
+                    .to_owned(),
+            review_input_digest: input.digest(),
+            quarantine_policy_id: input.quarantine_policy_id.clone(),
+            quarantine_decision_id: input.quarantine_decision_id.clone(),
+            reviewer_policy_id: input.reviewer_policy_id.clone(),
+            reviewer_decision_id: input.reviewer_decision_id.clone(),
+            proposal_policy_id: input.proposal_policy_id.clone(),
+            proposal_candidate_id: input.proposal_candidate_id.clone(),
+            proposal_review_id: input.proposal_review_id.clone(),
+            append_preflight_id: input.append_preflight_id.clone(),
+            append_preflight_review_id: input.append_preflight_review_id.clone(),
+            accepted_append_decision_candidate_id: input
+                .accepted_append_decision_candidate_id
+                .clone(),
+            accepted_append_decision_candidate_review_id: input
+                .accepted_append_decision_candidate_review_id
+                .clone(),
+            accepted_append_decision_blocker_id: input
+                .accepted_append_decision_blocker_id
+                .clone(),
+            accepted_append_decision_blocker_review_id: input
+                .accepted_append_decision_blocker_review_id
+                .clone(),
+            accepted_append_decision_quarantine_id: input
+                .accepted_append_decision_quarantine_id
+                .clone(),
+            review_decision_at_unix: input.review_decision_at_unix,
+            phase451_quarantine_digest: quarantine.digest(),
+            phase451_quarantine_input_digest: quarantine.quarantine_input_digest,
+            phase449_blocker_review_digest: quarantine.phase449_blocker_review_digest,
+            phase449_blocker_review_input_digest: quarantine.phase449_blocker_review_input_digest,
+            phase447_blocker_digest: quarantine.phase447_blocker_digest,
+            phase447_blocker_input_digest: quarantine.phase447_blocker_input_digest,
+            phase445_review_digest: quarantine.phase445_review_digest,
+            phase445_review_input_digest: quarantine.phase445_review_input_digest,
+            phase443_candidate_digest: quarantine.phase443_candidate_digest,
+            phase443_candidate_input_digest: quarantine.phase443_candidate_input_digest,
+            phase441_review_digest: quarantine.phase441_review_digest,
+            phase441_review_input_digest: quarantine.phase441_review_input_digest,
+            phase439_preflight_digest: quarantine.phase439_preflight_digest,
+            phase439_preflight_input_digest: quarantine.phase439_preflight_input_digest,
+            phase437_review_digest: quarantine.phase437_review_digest,
+            phase437_review_input_digest: quarantine.phase437_review_input_digest,
+            phase435_candidate_digest: quarantine.phase435_candidate_digest,
+            phase435_candidate_input_digest: quarantine.phase435_candidate_input_digest,
+            phase433_review_digest: quarantine.phase433_review_digest,
+            phase431_materialized_manifest_digest: quarantine.phase431_materialized_manifest_digest,
+            phase429_review_digest: quarantine.phase429_review_digest,
+            phase427_serialization_preview_digest: quarantine.phase427_serialization_preview_digest,
+            phase425_audit_package_digest: quarantine.phase425_audit_package_digest,
+            phase423_review_record_digest: quarantine.phase423_review_record_digest,
+            phase421_metadata_digest: quarantine.phase421_metadata_digest,
+            phase405_output_manifest_digest: quarantine.phase405_output_manifest_digest,
+            phase404_execution_digest: quarantine.phase404_execution_digest,
+            declared_file_digest_map_digest: quarantine.declared_file_digest_map_digest,
+            current_accepted_append_blockers_digest: quarantine
+                .current_accepted_append_blockers_digest,
+            candidate_disposition: input.candidate_disposition.clone(),
+            candidate_review_label: input.candidate_review_label.clone(),
+            blocker_label: input.blocker_label.clone(),
+            blocker_review_label: input.blocker_review_label.clone(),
+            quarantine_label: input.quarantine_label.clone(),
+            review_label: input.review_label.clone(),
+            review_summary: input.review_summary.clone(),
+            previous_promotion_state:
+                "tiny_z3_accepted_append_decision_quarantine_metadata".to_owned(),
+            promotion_state: "tiny_z3_accepted_append_decision_quarantine_review_metadata"
+                .to_owned(),
+            next_required_state: "tiny_z3_accepted_append_decision_still_blocked".to_owned(),
+            claim_boundary:
+                gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_review_claim_boundary(),
+            explicit_nonclaims: input.explicit_nonclaims.clone(),
+            makes_accepted_append_decision: false,
+            creates_accepted_evidence: false,
+            changes_accepted_append_policy: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            grants_authority: false,
+        },
+    )
+}
+
+pub fn validate_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_review_input(
+    quarantine: &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantine,
+    input: &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewInput,
+) -> GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_REVIEW_SCHEMA_VERSION
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::InvalidSchemaVersion,
+        );
+    }
+    if !is_single_segment_id(&input.accepted_append_decision_quarantine_review_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::InvalidAcceptedAppendDecisionQuarantineReviewId,
+        );
+    }
+    if !is_single_segment_id(&input.quarantine_policy_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::InvalidQuarantinePolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.quarantine_decision_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::InvalidQuarantineDecisionId,
+        );
+    }
+    if !is_single_segment_id(&input.reviewer_policy_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::InvalidReviewerPolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.reviewer_decision_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::InvalidReviewerDecisionId,
+        );
+    }
+    if !is_single_segment_id(&input.proposal_policy_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::InvalidProposalPolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.proposal_candidate_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::InvalidProposalCandidateId,
+        );
+    }
+    if !is_single_segment_id(&input.proposal_review_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::InvalidProposalReviewId,
+        );
+    }
+    if !is_single_segment_id(&input.append_preflight_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::InvalidAppendPreflightId,
+        );
+    }
+    if !is_single_segment_id(&input.append_preflight_review_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::InvalidAppendPreflightReviewId,
+        );
+    }
+    if !is_single_segment_id(&input.accepted_append_decision_candidate_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::InvalidAcceptedAppendDecisionCandidateId,
+        );
+    }
+    if !is_single_segment_id(&input.accepted_append_decision_candidate_review_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::InvalidAcceptedAppendDecisionCandidateReviewId,
+        );
+    }
+    if !is_single_segment_id(&input.accepted_append_decision_blocker_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::InvalidAcceptedAppendDecisionBlockerId,
+        );
+    }
+    if !is_single_segment_id(&input.accepted_append_decision_blocker_review_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::InvalidAcceptedAppendDecisionBlockerReviewId,
+        );
+    }
+    if !is_single_segment_id(&input.accepted_append_decision_quarantine_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::InvalidAcceptedAppendDecisionQuarantineId,
+        );
+    }
+    if input.review_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::MissingReviewDecisionTimestamp,
+        );
+    }
+    validate_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_review_digests(
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_review_quarantine(
+        quarantine,
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_review_policy(
+        input,
+        &mut issues,
+    );
+    GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_review_digests(
+    input: &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewInput,
+    issues: &mut Vec<GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue>,
+) {
+    for (label, digest) in [
+        (
+            "phase451_quarantine_digest",
+            input.phase451_quarantine_digest,
+        ),
+        (
+            "phase451_quarantine_input_digest",
+            input.phase451_quarantine_input_digest,
+        ),
+        (
+            "phase449_blocker_review_digest",
+            input.phase449_blocker_review_digest,
+        ),
+        (
+            "phase449_blocker_review_input_digest",
+            input.phase449_blocker_review_input_digest,
+        ),
+        ("phase447_blocker_digest", input.phase447_blocker_digest),
+        (
+            "phase447_blocker_input_digest",
+            input.phase447_blocker_input_digest,
+        ),
+        ("phase445_review_digest", input.phase445_review_digest),
+        (
+            "phase445_review_input_digest",
+            input.phase445_review_input_digest,
+        ),
+        ("phase443_candidate_digest", input.phase443_candidate_digest),
+        (
+            "phase443_candidate_input_digest",
+            input.phase443_candidate_input_digest,
+        ),
+        ("phase441_review_digest", input.phase441_review_digest),
+        (
+            "phase441_review_input_digest",
+            input.phase441_review_input_digest,
+        ),
+        ("phase439_preflight_digest", input.phase439_preflight_digest),
+        (
+            "phase439_preflight_input_digest",
+            input.phase439_preflight_input_digest,
+        ),
+        ("phase437_review_digest", input.phase437_review_digest),
+        (
+            "phase437_review_input_digest",
+            input.phase437_review_input_digest,
+        ),
+        ("phase435_candidate_digest", input.phase435_candidate_digest),
+        (
+            "phase435_candidate_input_digest",
+            input.phase435_candidate_input_digest,
+        ),
+        ("phase433_review_digest", input.phase433_review_digest),
+        (
+            "phase431_materialized_manifest_digest",
+            input.phase431_materialized_manifest_digest,
+        ),
+        ("phase429_review_digest", input.phase429_review_digest),
+        (
+            "phase427_serialization_preview_digest",
+            input.phase427_serialization_preview_digest,
+        ),
+        (
+            "phase425_audit_package_digest",
+            input.phase425_audit_package_digest,
+        ),
+        (
+            "phase423_review_record_digest",
+            input.phase423_review_record_digest,
+        ),
+        ("phase421_metadata_digest", input.phase421_metadata_digest),
+        (
+            "phase405_output_manifest_digest",
+            input.phase405_output_manifest_digest,
+        ),
+        ("phase404_execution_digest", input.phase404_execution_digest),
+        (
+            "declared_file_digest_map_digest",
+            input.declared_file_digest_map_digest,
+        ),
+        ("explicit_nonclaims_digest", input.explicit_nonclaims_digest),
+        (
+            "current_accepted_append_blockers_digest",
+            input.current_accepted_append_blockers_digest,
+        ),
+    ] {
+        if digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::MissingDigest(
+                    label.to_owned(),
+                ),
+            );
+        }
+    }
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_review_quarantine(
+    quarantine: &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantine,
+    input: &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewInput,
+    issues: &mut Vec<GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue>,
+) {
+    if input.phase451_quarantine_digest != quarantine.digest()
+        || input.phase451_quarantine_input_digest != quarantine.quarantine_input_digest
+        || input.phase449_blocker_review_digest != quarantine.phase449_blocker_review_digest
+        || input.phase449_blocker_review_input_digest
+            != quarantine.phase449_blocker_review_input_digest
+        || input.phase447_blocker_digest != quarantine.phase447_blocker_digest
+        || input.phase447_blocker_input_digest != quarantine.phase447_blocker_input_digest
+        || input.phase445_review_digest != quarantine.phase445_review_digest
+        || input.phase445_review_input_digest != quarantine.phase445_review_input_digest
+        || input.phase443_candidate_digest != quarantine.phase443_candidate_digest
+        || input.phase443_candidate_input_digest != quarantine.phase443_candidate_input_digest
+        || input.phase441_review_digest != quarantine.phase441_review_digest
+        || input.phase441_review_input_digest != quarantine.phase441_review_input_digest
+        || input.phase439_preflight_digest != quarantine.phase439_preflight_digest
+        || input.phase439_preflight_input_digest != quarantine.phase439_preflight_input_digest
+        || input.phase437_review_digest != quarantine.phase437_review_digest
+        || input.phase437_review_input_digest != quarantine.phase437_review_input_digest
+        || input.phase435_candidate_digest != quarantine.phase435_candidate_digest
+        || input.phase435_candidate_input_digest != quarantine.phase435_candidate_input_digest
+        || input.phase433_review_digest != quarantine.phase433_review_digest
+        || input.phase431_materialized_manifest_digest
+            != quarantine.phase431_materialized_manifest_digest
+        || input.phase429_review_digest != quarantine.phase429_review_digest
+        || input.phase427_serialization_preview_digest
+            != quarantine.phase427_serialization_preview_digest
+        || input.phase425_audit_package_digest != quarantine.phase425_audit_package_digest
+        || input.phase423_review_record_digest != quarantine.phase423_review_record_digest
+        || input.phase421_metadata_digest != quarantine.phase421_metadata_digest
+        || input.phase405_output_manifest_digest != quarantine.phase405_output_manifest_digest
+        || input.phase404_execution_digest != quarantine.phase404_execution_digest
+        || input.declared_file_digest_map_digest != quarantine.declared_file_digest_map_digest
+        || input.current_accepted_append_blockers_digest
+            != quarantine.current_accepted_append_blockers_digest
+        || input.proposal_candidate_id != quarantine.proposal_candidate_id
+        || input.proposal_policy_id != quarantine.proposal_policy_id
+        || input.proposal_review_id != quarantine.proposal_review_id
+        || input.append_preflight_id != quarantine.append_preflight_id
+        || input.append_preflight_review_id != quarantine.append_preflight_review_id
+        || input.accepted_append_decision_candidate_id
+            != quarantine.accepted_append_decision_candidate_id
+        || input.accepted_append_decision_candidate_review_id
+            != quarantine.accepted_append_decision_candidate_review_id
+        || input.accepted_append_decision_blocker_id
+            != quarantine.accepted_append_decision_blocker_id
+        || input.accepted_append_decision_blocker_review_id
+            != quarantine.accepted_append_decision_blocker_review_id
+        || input.accepted_append_decision_quarantine_id
+            != quarantine.accepted_append_decision_quarantine_id
+        || input.quarantine_policy_id != quarantine.quarantine_policy_id
+        || input.quarantine_decision_id != quarantine.quarantine_decision_id
+        || input.candidate_disposition != quarantine.candidate_disposition
+        || input.candidate_review_label != quarantine.candidate_review_label
+        || input.blocker_label != quarantine.blocker_label
+        || input.blocker_review_label != quarantine.blocker_review_label
+        || input.quarantine_label != quarantine.quarantine_label
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::Phase451QuarantineDigestDrift,
+        );
+    }
+    if quarantine.schema_version
+        != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_SCHEMA_VERSION
+        || quarantine.state_slice
+            != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_STATE_SLICE
+        || quarantine.promotion_state != "tiny_z3_accepted_append_decision_quarantine_metadata"
+        || quarantine.next_required_state != "tiny_z3_accepted_append_decision_still_blocked"
+        || quarantine.claim_boundary
+            != gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_claim_boundary()
+        || quarantine.makes_accepted_append_decision
+        || quarantine.creates_accepted_evidence
+        || quarantine.changes_accepted_append_policy
+        || quarantine.creates_level2_evidence
+        || quarantine.populates_score_axes
+        || quarantine.proof_artifact_created
+        || quarantine.checker_transcript_created
+        || quarantine.solver_certificate_created
+        || quarantine.semantic_correctness_claimed
+        || quarantine.production_readiness_claimed
+        || quarantine.sota_claimed
+        || quarantine.breakthrough_claimed
+        || quarantine.full_security_claimed
+        || quarantine.grants_authority
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::Phase451QuarantineStateMismatch,
+        );
+    }
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_review_policy(
+    input: &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewInput,
+    issues: &mut Vec<GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue>,
+) {
+    let blockers = gateway_formal_tiny_digest_backend_z3_accepted_handoff_current_blockers();
+    if input.current_accepted_append_blockers_digest
+        != hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-handoff-current-blockers:v1",
+            &blockers,
+        )
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::AcceptedAppendBlockerMismatch,
+        );
+    }
+    let nonclaims =
+        gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_review_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-append-decision-quarantine-review-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::NonclaimMismatch,
+        );
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.review_summary,
+    ) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::ReviewSummaryPromotionClaim,
+        );
+    }
+    if input.accepted_append_decision_requested
+        || input.accepted_evidence_mutation_requested
+        || input.accepted_append_policy_change_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.benchmark_or_sota_comparison_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::PromotionAttempt,
         );
     }
 }
@@ -69422,6 +70143,178 @@ mod tests {
     }
 
     #[test]
+    fn phase453_tiny_z3_accepted_append_decision_quarantine_review_builds_blocking_record() {
+        let Some((obligation_root, phase405_output_root, output_root, quarantine)) =
+            phase453_tiny_z3_accepted_append_decision_quarantine_review_source(
+                "phase453-quarantine-review",
+            )
+        else {
+            return;
+        };
+        let review_input = phase453_tiny_z3_accepted_append_decision_quarantine_review_input(
+            "phase453-decision-quarantine-review",
+            &quarantine,
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewLabel::TinyZ3AcceptedAppendDecisionStillBlocked,
+        );
+        let review =
+            build_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_review(
+                &quarantine,
+                &review_input,
+            )
+            .expect("phase453 quarantine review builds");
+
+        assert_eq!(
+            review.state_slice,
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_REVIEW_STATE_SLICE
+        );
+        assert_eq!(review.phase451_quarantine_digest, quarantine.digest());
+        assert_eq!(
+            review.phase451_quarantine_input_digest,
+            quarantine.quarantine_input_digest
+        );
+        assert_eq!(
+            review.phase449_blocker_review_digest,
+            quarantine.phase449_blocker_review_digest
+        );
+        assert_eq!(
+            review.phase447_blocker_digest,
+            quarantine.phase447_blocker_digest
+        );
+        assert_eq!(
+            review.phase445_review_digest,
+            quarantine.phase445_review_digest
+        );
+        assert_eq!(
+            review.phase443_candidate_digest,
+            quarantine.phase443_candidate_digest
+        );
+        assert_eq!(
+            review.phase405_output_manifest_digest,
+            quarantine.phase405_output_manifest_digest
+        );
+        assert_eq!(
+            review.phase404_execution_digest,
+            quarantine.phase404_execution_digest
+        );
+        assert_eq!(
+            review.quarantine_label,
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineLabel::TinyZ3AcceptedAppendDecisionQuarantined
+        );
+        assert_eq!(
+            review.review_label,
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewLabel::TinyZ3AcceptedAppendDecisionStillBlocked
+        );
+        assert_eq!(
+            review.previous_promotion_state,
+            "tiny_z3_accepted_append_decision_quarantine_metadata"
+        );
+        assert_eq!(
+            review.promotion_state,
+            "tiny_z3_accepted_append_decision_quarantine_review_metadata"
+        );
+        assert_eq!(
+            review.next_required_state,
+            "tiny_z3_accepted_append_decision_still_blocked"
+        );
+        assert_eq!(
+            review.claim_boundary,
+            gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_review_claim_boundary()
+        );
+        assert!(!review.makes_accepted_append_decision);
+        assert!(!review.creates_accepted_evidence);
+        assert!(!review.changes_accepted_append_policy);
+        assert!(!review.creates_level2_evidence);
+        assert!(!review.populates_score_axes);
+        assert!(!review.proof_artifact_created);
+        assert!(!review.checker_transcript_created);
+        assert!(!review.solver_certificate_created);
+        assert!(!review.semantic_correctness_claimed);
+        assert!(!review.production_readiness_claimed);
+        assert!(!review.sota_claimed);
+        assert!(!review.breakthrough_claimed);
+        assert!(!review.full_security_claimed);
+        assert!(!review.grants_authority);
+
+        let mut digest_drift = review_input.clone();
+        digest_drift.phase451_quarantine_digest = Hash([53; 32]);
+        let drift_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_review_input(
+                &quarantine,
+                &digest_drift,
+            );
+        assert!(drift_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::Phase451QuarantineDigestDrift
+        ));
+
+        let mut text_promotion = review_input.clone();
+        text_promotion.review_summary = "claims accepted evidence and SOTA".to_owned();
+        let text_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_review_input(
+                &quarantine,
+                &text_promotion,
+            );
+        assert!(text_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::ReviewSummaryPromotionClaim
+        ));
+
+        fs::remove_dir_all(&output_root)
+            .expect("phase453 quarantine review output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase453 quarantine review phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase453 quarantine review obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase453_tiny_z3_accepted_append_decision_quarantine_review_rejects_promotion() {
+        let Some((obligation_root, phase405_output_root, output_root, quarantine)) =
+            phase453_tiny_z3_accepted_append_decision_quarantine_review_source(
+                "phase453-promotion",
+            )
+        else {
+            return;
+        };
+        let mut review_input = phase453_tiny_z3_accepted_append_decision_quarantine_review_input(
+            "phase453-promotion-decision-quarantine-review",
+            &quarantine,
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewLabel::TinyZ3QuarantineReviewRejected,
+        );
+        review_input.accepted_append_decision_requested = true;
+        review_input.accepted_evidence_mutation_requested = true;
+        review_input.accepted_append_policy_change_requested = true;
+        review_input.accepted_formal_evidence_created = true;
+        review_input.creates_level2_evidence = true;
+        review_input.populates_score_axes = true;
+        review_input.proof_artifact_promoted = true;
+        review_input.checker_transcript_promoted = true;
+        review_input.solver_certificate_promoted = true;
+        review_input.sota_claimed = true;
+        review_input.full_security_claimed = true;
+        review_input.action_authority_claimed = true;
+        let validation =
+            validate_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_review_input(
+                &quarantine,
+                &review_input,
+            );
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewIssue::PromotionAttempt
+        ));
+        assert!(
+            build_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_review(
+                &quarantine,
+                &review_input,
+            )
+            .is_err()
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase453 promotion output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase453 promotion phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase453 promotion obligation cleanup succeeds");
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -73589,6 +74482,139 @@ mod tests {
             quarantine_label,
             quarantine_summary:
                 "local tiny-Z3 accepted-append decision quarantine keeps accepted append isolated"
+                    .to_owned(),
+            accepted_append_decision_requested: false,
+            accepted_evidence_mutation_requested: false,
+            accepted_append_policy_change_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            benchmark_or_sota_comparison_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase453_tiny_z3_accepted_append_decision_quarantine_review_source(
+        prefix: &str,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantine,
+    )> {
+        let Some((obligation_root, phase405_output_root, output_root, review)) =
+            phase451_tiny_z3_accepted_append_decision_quarantine_source(prefix)
+        else {
+            return None;
+        };
+        let quarantine_input = phase451_tiny_z3_accepted_append_decision_quarantine_input(
+            &format!("{prefix}-decision-quarantine"),
+            &review,
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineLabel::TinyZ3AcceptedAppendDecisionQuarantined,
+        );
+        let quarantine =
+            build_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine(
+                &review,
+                &quarantine_input,
+            )
+            .expect("phase453 source quarantine builds");
+
+        Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            quarantine,
+        ))
+    }
+
+    fn phase453_tiny_z3_accepted_append_decision_quarantine_review_input(
+        review_id: &str,
+        quarantine: &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantine,
+        review_label: GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewLabel,
+    ) -> GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewInput {
+        let nonclaims =
+            gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_review_required_nonclaims();
+        GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineReviewInput {
+            schema_version:
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_REVIEW_SCHEMA_VERSION
+                    .to_owned(),
+            accepted_append_decision_quarantine_review_id: review_id.to_owned(),
+            quarantine_policy_id: quarantine.quarantine_policy_id.clone(),
+            quarantine_decision_id: quarantine.quarantine_decision_id.clone(),
+            reviewer_policy_id: "phase453-reviewer-policy".to_owned(),
+            reviewer_decision_id: "phase453-reviewer-decision".to_owned(),
+            proposal_policy_id: quarantine.proposal_policy_id.clone(),
+            proposal_candidate_id: quarantine.proposal_candidate_id.clone(),
+            proposal_review_id: quarantine.proposal_review_id.clone(),
+            append_preflight_id: quarantine.append_preflight_id.clone(),
+            append_preflight_review_id: quarantine.append_preflight_review_id.clone(),
+            accepted_append_decision_candidate_id: quarantine
+                .accepted_append_decision_candidate_id
+                .clone(),
+            accepted_append_decision_candidate_review_id: quarantine
+                .accepted_append_decision_candidate_review_id
+                .clone(),
+            accepted_append_decision_blocker_id: quarantine
+                .accepted_append_decision_blocker_id
+                .clone(),
+            accepted_append_decision_blocker_review_id: quarantine
+                .accepted_append_decision_blocker_review_id
+                .clone(),
+            accepted_append_decision_quarantine_id: quarantine
+                .accepted_append_decision_quarantine_id
+                .clone(),
+            review_decision_at_unix: 1_800_000_453,
+            phase451_quarantine_digest: quarantine.digest(),
+            phase451_quarantine_input_digest: quarantine.quarantine_input_digest,
+            phase449_blocker_review_digest: quarantine.phase449_blocker_review_digest,
+            phase449_blocker_review_input_digest: quarantine.phase449_blocker_review_input_digest,
+            phase447_blocker_digest: quarantine.phase447_blocker_digest,
+            phase447_blocker_input_digest: quarantine.phase447_blocker_input_digest,
+            phase445_review_digest: quarantine.phase445_review_digest,
+            phase445_review_input_digest: quarantine.phase445_review_input_digest,
+            phase443_candidate_digest: quarantine.phase443_candidate_digest,
+            phase443_candidate_input_digest: quarantine.phase443_candidate_input_digest,
+            phase441_review_digest: quarantine.phase441_review_digest,
+            phase441_review_input_digest: quarantine.phase441_review_input_digest,
+            phase439_preflight_digest: quarantine.phase439_preflight_digest,
+            phase439_preflight_input_digest: quarantine.phase439_preflight_input_digest,
+            phase437_review_digest: quarantine.phase437_review_digest,
+            phase437_review_input_digest: quarantine.phase437_review_input_digest,
+            phase435_candidate_digest: quarantine.phase435_candidate_digest,
+            phase435_candidate_input_digest: quarantine.phase435_candidate_input_digest,
+            phase433_review_digest: quarantine.phase433_review_digest,
+            phase431_materialized_manifest_digest: quarantine.phase431_materialized_manifest_digest,
+            phase429_review_digest: quarantine.phase429_review_digest,
+            phase427_serialization_preview_digest: quarantine.phase427_serialization_preview_digest,
+            phase425_audit_package_digest: quarantine.phase425_audit_package_digest,
+            phase423_review_record_digest: quarantine.phase423_review_record_digest,
+            phase421_metadata_digest: quarantine.phase421_metadata_digest,
+            phase405_output_manifest_digest: quarantine.phase405_output_manifest_digest,
+            phase404_execution_digest: quarantine.phase404_execution_digest,
+            declared_file_digest_map_digest: quarantine.declared_file_digest_map_digest,
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-append-decision-quarantine-review-nonclaims:v1",
+                &nonclaims,
+            ),
+            current_accepted_append_blockers_digest: quarantine
+                .current_accepted_append_blockers_digest,
+            candidate_disposition: quarantine.candidate_disposition.clone(),
+            candidate_review_label: quarantine.candidate_review_label.clone(),
+            blocker_label: quarantine.blocker_label.clone(),
+            blocker_review_label: quarantine.blocker_review_label.clone(),
+            quarantine_label: quarantine.quarantine_label.clone(),
+            review_label,
+            review_summary:
+                "local tiny-Z3 accepted-append decision quarantine review keeps accepted append isolated"
                     .to_owned(),
             accepted_append_decision_requested: false,
             accepted_evidence_mutation_requested: false,
