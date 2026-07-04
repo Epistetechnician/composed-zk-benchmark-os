@@ -12782,6 +12782,38 @@ accepted Evidence Ledger mutation, accepted append policy change, Level2+
 evidence, score axes, proof-authority claim, Lean/COBALT/Rust-to-Lean
 execution, or production/SOTA/security/correctness claim.
 
+## Phase 465 HSAI Tiny Z3 Accepted Append Decision Quarantine-Resolution Escalation Terminal-Blocker Review Metadata
+
+Status: complete. See
+`docs/465-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-blocker-review-notes.md`.
+
+Goal: implement local terminal-blocker review metadata over one Phase 463
+tiny-Z3 accepted-append decision quarantine-resolution escalation terminal
+blocker without making an accepted append decision, mutating accepted evidence,
+changing accepted append policy, creating Level2+ evidence, populating score
+axes, running backend proof systems, or making strong public claims.
+
+Implemented: Phase 465 adds deterministic terminal-blocker review metadata in
+`crates/hsai-agent-admission/src/lib.rs`, including schema/state/claim-boundary
+constants, terminal-blocker review labels, input and output metadata, issue
+taxonomy, builder, validator, required-nonclaim helper, Phase 463 terminal
+blocker digest binding, Phase 461/459/457/455/453/451/449/447/445/443/441/439/
+437/435/433/431/429/427/425/423/421 and Phase 404/405 ancestry bindings,
+current accepted append blocker binding, bounded id and label checks, Phase
+463 non-promotion checks, terminal-review-summary promotion-text rejection,
+and explicit promotion-attempt rejection.
+
+Validation coverage: `hsai-agent-admission` Phase 465 tests cover valid
+terminal-blocker review construction, Phase 463 terminal-blocker digest drift,
+promotional terminal-review-summary text, and explicit promotion attempts.
+
+Exit criteria: HSAI now has local terminal-blocker review metadata over one
+tiny-Z3 accepted-append decision quarantine-resolution escalation terminal
+blocker. It still has no accepted append decision, accepted formal evidence,
+accepted Evidence Ledger mutation, accepted append policy change, Level2+
+evidence, score axes, proof-authority claim, Lean/COBALT/Rust-to-Lean
+execution, or production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
