@@ -7006,5 +7006,22 @@ evidence, populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean
 extraction, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/491-hsai-tiny-z3-accepted-append-owner-mutation-route-metadata-notes.md](docs/491-hsai-tiny-z3-accepted-append-owner-mutation-route-metadata-notes.md)
+records the Phase 491 local owner/mutation-route gate metadata implementation
+under `crates/hsai-agent-admission/src/lib.rs`. The implementation binds one
+Phase 489 prerequisite digest and input digest, the Phase 489 gate-status
+digest, Phase 489 digest/id/label map digests, explicit nonclaim digest,
+current accepted append blocker digest, accepted append owner `zkbench-core`,
+local transaction route `AcceptedLedgerAppendTransactionRequest`, materialized
+route `MaterializedAcceptedLedgerAppendRequest`, explicit unresolved bridge
+input markers, required future transaction-input-shape labels, and required
+future rejection-policy labels. Its focused tests cover valid metadata
+construction and rejection of promotion attempts. It creates no accepted
+append decision, mutates no accepted Evidence Ledger, changes no accepted
+append policy, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean
+extraction, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
