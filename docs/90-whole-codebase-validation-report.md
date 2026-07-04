@@ -6925,5 +6925,23 @@ evidence, populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean
 extraction, and claims no production/SOTA/security/semantic-correctness
 result.
 
+[docs/486-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-closure-review-terminal-boundary.md](docs/486-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-closure-review-terminal-boundary.md)
+defines the Phase 486 docs-first boundary for future local tiny-Z3
+accepted-append decision quarantine-resolution escalation terminal-review
+closure-blocker review terminal-closure review settlement-blocker review
+terminal review closure review terminal metadata over one Phase 485
+closure-review record. The boundary names six non-promotional future terminal
+labels, required future bindings to the Phase 485 settlement-blocker review
+terminal review closure review digest/input digest, Phase 485 digest/id/label
+binding map digests, explicit nonclaim digest, current accepted append blocker
+digest, inherited ids, inherited settlement-blocker review terminal review
+closure review label, required future validation, meaning limits, and Phase
+487 implementation exit criteria. It creates no Rust code, makes no accepted
+append decision, mutates no accepted Evidence Ledger, changes no accepted
+append policy, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean
+extraction, and claims no production/SOTA/security/semantic-correctness
+result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
