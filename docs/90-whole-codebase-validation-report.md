@@ -5933,5 +5933,17 @@ proof/checker/solver promotion, semantic-correctness claims,
 production-readiness claims, SOTA claims, breakthrough claims,
 full-security claims, and action authority.
 
+[docs/430-hsai-tiny-z3-materialized-audit-package-artifact-boundary.md](docs/430-hsai-tiny-z3-materialized-audit-package-artifact-boundary.md)
+records the Phase 430 docs-first materialized artifact boundary for Phase 429
+tiny-Z3 serialization-preview review metadata. The boundary permits only future
+local digest-bound package artifact plumbing and defines declared future file
+roles, required inputs, path policy, validation requirements, evidence meaning
+limits, and Phase 431 implementation exit criteria. It creates no Rust code,
+writes no artifacts, creates no package files, mutates no accepted Evidence
+Ledger, changes no accepted append policy, creates no accepted formal evidence,
+creates no Level2+ evidence, populates no score axes, runs no
+Lean/SMT/COBALT/Rust-to-Lean extraction, and claims no production/SOTA/security/
+semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

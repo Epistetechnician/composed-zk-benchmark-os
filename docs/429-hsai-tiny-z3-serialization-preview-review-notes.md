@@ -152,10 +152,11 @@ Phase 429 adds tests that:
 
 ## Next Slice
 
-Phase 430 should define a docs-first materialized artifact boundary for reviewed
-tiny-Z3 serialization-preview metadata. That boundary must keep materialized
-artifact output separate from accepted formal evidence, accepted Evidence Ledger
-mutation, accepted append policy changes, Level2+ evidence, score axes, Lean
-execution, SMT execution, COBALT execution, Rust-to-Lean extraction, semantic
-correctness, production readiness, SOTA, breakthrough status, full security, and
-action authority.
+Phase 430 defines the docs-first materialized artifact boundary for reviewed
+tiny-Z3 serialization-preview metadata in
+`docs/430-hsai-tiny-z3-materialized-audit-package-artifact-boundary.md`. That
+boundary keeps materialized artifact output separate from accepted formal
+evidence, accepted Evidence Ledger mutation, accepted append policy changes,
+Level2+ evidence, score axes, Lean execution, SMT execution, COBALT execution,
+Rust-to-Lean extraction, semantic correctness, production readiness, SOTA,
+breakthrough status, full security, and action authority.
