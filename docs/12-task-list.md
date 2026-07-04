@@ -11571,6 +11571,36 @@ Evidence Ledger mutation, accepted append policy change, Level2+ evidence,
 score axes, proof-authority claim, or production/SOTA/security/correctness
 claim.
 
+## Phase 429 HSAI Tiny Z3 Serialization Preview Review
+
+Status: complete. See
+`docs/429-hsai-tiny-z3-serialization-preview-review-notes.md`.
+
+Goal: implement deterministic local review metadata over one Phase 427 tiny-Z3
+serialization preview without writing artifacts, creating package files,
+mutating accepted evidence, changing accepted append policy, creating accepted
+formal evidence, creating Level2+ evidence, populating score axes, or making
+strong public claims.
+
+Implemented: Phase 429 adds tiny-Z3 serialization-preview review schema/state/
+claim-boundary constants, review labels, review input metadata, review record
+metadata, issue taxonomy, validation report, canonical claim-boundary and
+nonclaim helpers, builder, validator, Phase 427 preview digest binding, Phase
+425 package digest binding, Phase 423 review digest binding, Phase 421 metadata
+digest binding, Phase 404/405 backend replay digest binding, current accepted
+append blocker preservation, review summary digest validation, raw/materialized
+payload rejection, review-summary promotion text rejection, and focused tests.
+
+Validation coverage: `hsai-agent-admission` Phase 429 tests cover construction
+and rejection behavior. Repository hygiene, claim-boundary source scans, and
+workspace tests remain the broader gates.
+
+Exit criteria: HSAI now has deterministic local review metadata for one tiny-Z3
+serialization preview. It still has no filesystem artifact output, accepted
+formal evidence, accepted Evidence Ledger mutation, accepted append policy
+change, Level2+ evidence, score axes, proof-authority claim, or production/
+SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
