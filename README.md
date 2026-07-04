@@ -519,6 +519,7 @@ Surface DSL
 | [docs/431-hsai-tiny-z3-materialized-audit-package-artifact-notes.md](docs/431-hsai-tiny-z3-materialized-audit-package-artifact-notes.md) | Phase 431 HSAI tiny Z3 materialized audit package artifact notes. |
 | [docs/432-hsai-tiny-z3-materialized-audit-package-review-boundary.md](docs/432-hsai-tiny-z3-materialized-audit-package-review-boundary.md) | Phase 432 HSAI tiny Z3 materialized audit package review boundary. |
 | [docs/433-hsai-tiny-z3-materialized-audit-package-review-notes.md](docs/433-hsai-tiny-z3-materialized-audit-package-review-notes.md) | Phase 433 HSAI tiny Z3 materialized audit package review notes. |
+| [docs/434-hsai-tiny-z3-accepted-evidence-proposal-candidate-boundary.md](docs/434-hsai-tiny-z3-accepted-evidence-proposal-candidate-boundary.md) | Phase 434 HSAI tiny Z3 accepted-evidence proposal candidate boundary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
