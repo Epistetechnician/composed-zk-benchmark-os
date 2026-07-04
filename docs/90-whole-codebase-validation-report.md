@@ -6051,5 +6051,18 @@ accepted formal evidence, create Level2+ evidence, populate score axes, run
 Lean/new-SMT/COBALT/Rust-to-Lean extraction, submit benchmarks, or claim
 production/SOTA/security/semantic-correctness.
 
+[docs/438-hsai-tiny-z3-accepted-append-preflight-boundary.md](docs/438-hsai-tiny-z3-accepted-append-preflight-boundary.md)
+records the Phase 438 docs-first accepted-append preflight boundary after one
+Phase 437 tiny-Z3 proposal-candidate review. The boundary permits only future
+local preflight metadata, defines five allowed future preflight labels, requires
+binding to Phase 437/435/433/431/429/427/425/423/421 and Phase 404/405 digests,
+requires declared-file digest map, nonclaim, reviewer, proposal, current
+accepted append blocker, review-label, and preflight-label bindings, and
+defines Phase 439 implementation exit criteria. It creates no Rust code,
+mutates no accepted Evidence Ledger, changes no accepted append policy, creates
+no accepted formal evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
