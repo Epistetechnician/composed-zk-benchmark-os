@@ -162,3 +162,12 @@ solver certificate authority, Lean execution evidence, new SMT execution
 evidence, COBALT execution evidence, Rust-to-Lean extraction evidence,
 benchmark evidence, semantic correctness, production readiness, SOTA,
 breakthrough status, full security, or action authority.
+
+## Next Boundary
+
+Phase 456 defines a docs-first boundary for future local tiny-Z3
+accepted-append decision quarantine-resolution review over this Phase 455
+resolution plan before any accepted append decision can be considered. That
+boundary keeps resolution review separate from accepted formal evidence,
+Level2+ evidence, score axes, Lean/new-SMT/COBALT execution, semantic
+correctness, production readiness, SOTA, full security, and action authority.
