@@ -128,10 +128,11 @@ Phase 425 adds tests that:
 
 ## Next Slice
 
-Phase 426 should define a docs-first serialization-preview boundary for this
-tiny-Z3 local audit package. That boundary must not write filesystem artifacts,
-mutate the accepted Evidence Ledger, change accepted append policy, create
-accepted formal evidence, create Level2+ evidence, populate score axes, run
-Lean, run COBALT, run Rust-to-Lean extraction, or claim semantic correctness,
-production readiness, SOTA, breakthrough status, full security, or action
-authority.
+Phase 426 defines the docs-first serialization-preview boundary for this
+tiny-Z3 local audit package in
+`docs/426-hsai-tiny-z3-audit-package-serialization-preview-boundary.md`. That
+boundary does not write filesystem artifacts, mutate the accepted Evidence
+Ledger, change accepted append policy, create accepted formal evidence, create
+Level2+ evidence, populate score axes, run Lean, run SMT, run COBALT, run
+Rust-to-Lean extraction, or claim semantic correctness, production readiness,
+SOTA, breakthrough status, full security, or action authority.

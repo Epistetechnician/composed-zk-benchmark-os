@@ -11487,6 +11487,32 @@ formal evidence, accepted Evidence Ledger mutation, accepted append policy
 change, Level2+ evidence, score axes, proof-authority claim, or production/
 SOTA/security/correctness claim.
 
+## Phase 426 HSAI Tiny Z3 Audit Package Serialization Preview Boundary
+
+Status: complete. See
+`docs/426-hsai-tiny-z3-audit-package-serialization-preview-boundary.md`.
+
+Goal: define the docs-first boundary for a future deterministic in-memory
+serialization preview of one Phase 425 local tiny-Z3 audit package without
+implementing serialization, writing artifacts, mutating accepted evidence,
+changing accepted append policy, creating accepted formal evidence, creating
+Level2+ evidence, populating score axes, or making strong public claims.
+
+Implemented: Phase 426 defines the future preview purpose, allowed in-memory
+fields, required validation, deterministic serialization rules, evidence
+meaning limits, and Phase 427 implementation exit criteria. The boundary keeps
+preview data local, pure, non-accepted, non-authoritative, and non-mutating.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a boundary for a deterministic local serialization
+preview of one non-accepted tiny-Z3 audit package. It still has no implemented
+serialization, filesystem artifact output, accepted formal evidence, accepted
+Evidence Ledger mutation, accepted append policy change, Level2+ evidence,
+score axes, proof-authority claim, or production/SOTA/security/correctness
+claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

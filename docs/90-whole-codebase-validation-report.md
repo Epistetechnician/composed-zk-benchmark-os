@@ -5875,5 +5875,16 @@ evidence, Level2+ evidence, score axes, proof/checker/solver promotion,
 semantic-correctness claims, production-readiness claims, SOTA claims,
 breakthrough claims, full-security claims, and action authority.
 
+[docs/426-hsai-tiny-z3-audit-package-serialization-preview-boundary.md](docs/426-hsai-tiny-z3-audit-package-serialization-preview-boundary.md)
+records the Phase 426 docs-first serialization-preview boundary for the local
+tiny-Z3 audit package. The boundary permits only a future deterministic
+in-memory preview over one valid Phase 425 audit package. It defines allowed
+preview fields, validation requirements, canonical serialization rules, evidence
+meaning limits, and Phase 427 implementation exit criteria. It creates no Rust
+code, writes no artifacts, mutates no accepted Evidence Ledger, changes no
+accepted append policy, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, runs no Lean/SMT/COBALT/Rust-to-Lean
+extraction, and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
