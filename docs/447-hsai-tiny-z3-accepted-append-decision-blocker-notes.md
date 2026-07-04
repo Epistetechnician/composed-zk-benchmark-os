@@ -167,3 +167,14 @@ policy changes, Level2+ evidence, score axes, Lean execution, new SMT
 execution, COBALT execution, Rust-to-Lean extraction, semantic correctness,
 production readiness, SOTA, breakthrough status, full security, and action
 authority.
+
+## Phase 448 Boundary Status
+
+Phase 448 defines the docs-first boundary for future local review metadata over
+this Phase 447 blocker in
+`docs/448-hsai-tiny-z3-accepted-append-decision-blocker-review-boundary.md`.
+That boundary still does not authorize an accepted append decision, accepted
+formal evidence, accepted Evidence Ledger mutation, accepted append policy
+change, Level2+ evidence, score axes, Lean execution, new SMT execution,
+COBALT execution, Rust-to-Lean extraction, semantic correctness, production
+readiness, SOTA, breakthrough status, full security, or action authority.
