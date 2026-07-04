@@ -11459,6 +11459,34 @@ audit package, accepted formal evidence, accepted Evidence Ledger mutation,
 accepted append policy change, Level2+ evidence, score axes, proof-authority
 claim, or production/SOTA/security/correctness claim.
 
+## Phase 425 HSAI Tiny Z3 Local Review Audit Package
+
+Status: complete. See
+`docs/425-hsai-tiny-z3-local-review-audit-package-notes.md`.
+
+Goal: implement the local non-accepted tiny-Z3 audit package authorized by
+Phase 424 without writing artifacts, mutating accepted evidence, changing
+accepted append policy, creating accepted formal evidence, creating Level2+
+evidence, populating score axes, or making strong public claims.
+
+Implemented: Phase 425 adds tiny-Z3 local review audit package schema/state/
+claim-boundary constants, package input metadata, package metadata, issue
+taxonomy, validation report, canonical claim-boundary and nonclaim helpers,
+builder, validator, Phase 423 review-record digest binding, Phase 421 metadata
+binding, Phase 404/405 backend replay digest binding, current accepted append
+blocker preservation, package manifest digest binding, raw-artifact rejection,
+package-summary promotion text rejection, and focused tests.
+
+Validation coverage: `hsai-agent-admission` Phase 425 tests cover construction
+and rejection behavior. Repository hygiene, claim-boundary source scans, and
+workspace tests remain the broader gates.
+
+Exit criteria: HSAI now has deterministic local non-accepted tiny-Z3 audit
+package metadata over one Phase 423 review record. It still has no accepted
+formal evidence, accepted Evidence Ledger mutation, accepted append policy
+change, Level2+ evidence, score axes, proof-authority claim, or production/
+SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
