@@ -170,8 +170,8 @@ breakthrough status, full security, or action authority.
 
 ## Next Boundary
 
-The next responsible slice is a docs-first escalation-blocker boundary over the
-Phase 457 resolution review. It must keep backend execution, Lean/new-SMT/
-COBALT runs, accepted evidence, Level2+ evidence, score axes, semantic
-correctness, production readiness, SOTA, full security, and action authority
-out of scope until a later explicit phase opens a bounded execution lane.
+Phase 458 defines the docs-first escalation-blocker boundary over this Phase
+457 resolution review. It keeps backend execution, Lean/new-SMT/COBALT runs,
+accepted evidence, Level2+ evidence, score axes, semantic correctness,
+production readiness, SOTA, full security, and action authority out of scope
+until a later explicit phase opens a bounded execution lane.
