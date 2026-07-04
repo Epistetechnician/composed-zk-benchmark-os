@@ -136,7 +136,9 @@ That still is not:
 
 ## Phase 491 Implementation Exit Criteria
 
-Phase 491 may implement local owner/mutation-route gate metadata only if it:
+Phase 491 implements local owner/mutation-route gate metadata in
+`docs/491-hsai-tiny-z3-accepted-append-owner-mutation-route-metadata-notes.md`.
+That implementation remains valid only while it:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;

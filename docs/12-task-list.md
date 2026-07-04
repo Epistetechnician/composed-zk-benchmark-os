@@ -13746,6 +13746,39 @@ accepted append policy change, Level2+ evidence, score axes, proof-authority
 claim, Lean/new-SMT/COBALT/Rust-to-Lean execution, benchmark evidence, or
 production/SOTA/security/correctness claim.
 
+## Phase 491 HSAI Tiny Z3 Accepted Append Owner Mutation Route Metadata
+
+Status: complete. See
+`docs/491-hsai-tiny-z3-accepted-append-owner-mutation-route-metadata-notes.md`.
+
+Goal: implement the local owner/mutation-route gate metadata authorized by
+Phase 490 for the Phase 489 prerequisite gate
+`accepted_append_owner_and_mutation_route`.
+
+Implemented: Phase 491 adds schema/state/claim-boundary constants, input and
+output records, issue and validation types, digest/id/label binding helpers,
+required nonclaim, transaction-input-shape, and rejection-policy helpers,
+builder and validator functions, and focused tests under
+`crates/hsai-agent-admission/src/lib.rs`. The record binds the Phase 489
+prerequisite digest, input digest, gate-status digest, digest/id/label map
+digests, explicit nonclaim digest, current accepted append blocker digest,
+owner `zkbench-core`, local route `AcceptedLedgerAppendTransactionRequest`,
+materialized route `MaterializedAcceptedLedgerAppendRequest`, and explicit
+unresolved markers for future bridge inputs.
+
+Validation coverage: focused tests prove valid metadata construction and
+rejection of promotion attempts. The validator also rejects digest drift, owner
+drift, route drift, invented bridge inputs, transaction-shape drift,
+rejection-policy drift, nonclaim drift, Phase 489 state drift, and strong
+claim attempts.
+
+Exit criteria: HSAI now has local metadata for the accepted append owner and
+mutation-route prerequisite gate. It still has no accepted append decision,
+accepted formal evidence, accepted Evidence Ledger mutation from HSAI
+admission metadata, accepted append policy change, Level2+ evidence, score
+axes, proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean execution,
+benchmark evidence, or production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
