@@ -225,3 +225,15 @@ only if it:
 - does not submit benchmarks;
 - does not claim semantic correctness, production readiness, SOTA, breakthrough
   status, full security, or action authority.
+
+## Phase 451 Implementation Status
+
+Phase 451 implements the local deterministic quarantine metadata allowed by
+this boundary. See
+`docs/451-hsai-tiny-z3-accepted-append-decision-quarantine-notes.md`. Phase
+451 remains metadata-only and still does not authorize an accepted append
+decision, accepted formal evidence, accepted Evidence Ledger mutation, accepted
+append policy change, Level2+ evidence, score axes, Lean execution, new SMT
+execution, COBALT execution, Rust-to-Lean extraction, semantic correctness,
+production readiness, SOTA, breakthrough status, full security, or action
+authority.
