@@ -13024,6 +13024,41 @@ accepted append policy change, Level2+ evidence, score axes, proof-authority
 claim, Lean/new-SMT/COBALT/Rust-to-Lean execution, or production/SOTA/
 security/correctness claim.
 
+## Phase 472 HSAI Tiny Z3 Accepted Append Decision Quarantine-Resolution Escalation Terminal-Review Closure-Blocker Review Terminal-Closure Review Boundary
+
+Status: complete. See
+`docs/472-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-boundary.md`.
+
+Goal: define the docs-first boundary for future local terminal-closure review
+metadata over one Phase 471 tiny-Z3 accepted-append decision
+quarantine-resolution escalation terminal-review closure-blocker review
+terminal closure without implementing review metadata, making accepted append
+decisions, mutating accepted evidence, changing accepted append policy,
+creating Level2+ evidence, populating score axes, running backend proof
+systems, or making strong public claims.
+
+Implemented: Phase 472 documents six non-promotional future terminal-closure
+review labels, required future bindings to the Phase 471 terminal-closure
+digest/input digest, Phase 471 digest/id/label binding map digests, explicit
+nonclaim digest, current accepted append blocker digest, inherited
+terminal-closure ids, inherited closure-blocker review ids, inherited
+closure-blocker ids, inherited closure ids, inherited terminal-review ids, the
+inherited terminal-closure label, terminal-closure review label, required
+future validation, meaning limits, and Phase 473 implementation exit
+criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a boundary for local terminal-closure review
+metadata over one tiny-Z3 accepted-append decision quarantine-resolution
+escalation terminal-review closure-blocker review terminal closure. Phase 473
+may implement that local terminal-closure review metadata. It still has no
+accepted append decision, accepted formal evidence, accepted Evidence Ledger
+mutation, accepted append policy change, Level2+ evidence, score axes,
+proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean execution, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
