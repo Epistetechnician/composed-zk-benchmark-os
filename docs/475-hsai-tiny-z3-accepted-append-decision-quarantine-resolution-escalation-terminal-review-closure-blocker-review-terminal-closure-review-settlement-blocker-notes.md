@@ -81,3 +81,12 @@ boundary. It should define how to review one Phase 475 settlement blocker
 without settling it into accepted append, accepted formal evidence, Level2+
 evidence, score axes, backend execution, or SOTA/full-security/semantic-
 correctness/production-readiness claims.
+
+## Phase 476 Boundary Note
+
+Phase 476 defines that docs-first boundary in
+`docs/476-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-boundary.md`.
+It does not implement settlement-blocker review metadata, run backend
+execution, create accepted evidence, create Level2+ evidence, populate score
+axes, or support SOTA/full-security/semantic-correctness/production-readiness
+claims.
