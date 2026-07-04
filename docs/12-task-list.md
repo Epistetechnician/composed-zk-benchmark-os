@@ -11748,6 +11748,37 @@ Ledger mutation, accepted append policy change, Level2+ evidence, score axes,
 proof-authority claim, Lean/COBALT/Rust-to-Lean execution, or production/SOTA/
 security/correctness claim.
 
+## Phase 435 HSAI Tiny Z3 Accepted Evidence Proposal Candidate Metadata
+
+Status: complete. See
+`docs/435-hsai-tiny-z3-accepted-evidence-proposal-candidate-notes.md`.
+
+Goal: implement deterministic local proposal candidate metadata over one Phase
+433 tiny-Z3 materialized audit package review while keeping accepted evidence,
+accepted append policy changes, Level2+ evidence, score axes, proof authority,
+and strong public claims blocked.
+
+Implemented: Phase 435 adds the local proposal candidate input, candidate
+record, disposition labels, issue taxonomy, validation report, claim-boundary
+helper, required nonclaim helper, builder, and validator. The candidate binds
+one Phase 433 review, one Phase 433 review input, one Phase 431 manifest, one
+Phase 429 review, one Phase 427 preview, one Phase 425 package, one Phase 423
+review record, one Phase 421 metadata record, Phase 404/405 local Z3 replay
+digests, declared file digest map, nonclaim digest, reviewer metadata, proposal
+metadata, and current accepted append blockers.
+
+Validation coverage: `hsai-agent-admission` Phase 435 tests cover deterministic
+candidate construction, Phase 433/431/404/405 binding, Phase 433 digest drift
+rejection, promotional candidate-summary rejection, and accepted-evidence/
+Level2/score/proof/checker/solver/SOTA/full-security/action-authority promotion
+rejection.
+
+Exit criteria: HSAI now has deterministic local proposal candidate metadata for
+one reviewed tiny-Z3 materialized audit package. It still has no accepted formal
+evidence, accepted Evidence Ledger mutation, accepted append policy change,
+Level2+ evidence, score axes, proof-authority claim, Lean/COBALT/Rust-to-Lean
+execution, or production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
