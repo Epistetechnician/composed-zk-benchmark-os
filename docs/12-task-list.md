@@ -11808,6 +11808,37 @@ Evidence Ledger mutation, accepted append policy change, Level2+ evidence,
 score axes, proof-authority claim, Lean/COBALT/Rust-to-Lean execution, or
 production/SOTA/security/correctness claim.
 
+## Phase 437 HSAI Tiny Z3 Proposal Candidate Review Metadata
+
+Status: complete. See
+`docs/437-hsai-tiny-z3-proposal-candidate-review-notes.md`.
+
+Goal: implement deterministic local review metadata over one Phase 435 tiny-Z3
+proposal candidate while keeping accepted append policy changes, accepted
+Evidence Ledger mutation, accepted formal evidence, Level2+ evidence, score
+axes, proof authority, backend execution, and strong public claims blocked.
+
+Implemented: Phase 437 adds the local proposal-candidate review input, review
+record, review labels, issue taxonomy, validation report, claim-boundary
+helper, required nonclaim helper, builder, and validator. The review binds one
+Phase 435 candidate, one Phase 435 candidate input, Phase 433/431/429/427/425/
+423/421 records, Phase 404/405 local Z3 replay digests, declared file digest
+map, explicit nonclaim digest, reviewer/proposal metadata, candidate
+disposition, review label, and current accepted append blockers.
+
+Validation coverage: `hsai-agent-admission` Phase 437 tests cover deterministic
+review construction, Phase 435 candidate/input binding, Phase 433/431/404/405
+binding, Phase 435 digest drift rejection, promotional review-summary
+rejection, promotional candidate-disposition rejection, and accepted-evidence/
+Level2/score/proof/checker/solver/SOTA/full-security/action-authority promotion
+rejection.
+
+Exit criteria: HSAI now has deterministic local review metadata for one tiny-Z3
+proposal candidate. It still has no accepted formal evidence, accepted Evidence
+Ledger mutation, accepted append policy change, Level2+ evidence, score axes,
+proof-authority claim, Lean/COBALT/Rust-to-Lean execution, or production/SOTA/
+security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
