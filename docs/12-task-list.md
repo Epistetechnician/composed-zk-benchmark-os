@@ -11601,6 +11601,32 @@ formal evidence, accepted Evidence Ledger mutation, accepted append policy
 change, Level2+ evidence, score axes, proof-authority claim, or production/
 SOTA/security/correctness claim.
 
+## Phase 430 HSAI Tiny Z3 Materialized Audit Package Artifact Boundary
+
+Status: complete. See
+`docs/430-hsai-tiny-z3-materialized-audit-package-artifact-boundary.md`.
+
+Goal: define the docs-first boundary for future local materialized tiny-Z3
+audit package artifact plumbing after Phase 429 without implementing filesystem
+writes, creating package files, mutating accepted evidence, changing accepted
+append policy, creating accepted formal evidence, creating Level2+ evidence,
+populating score axes, or making strong public claims.
+
+Implemented: Phase 430 defines the future artifact purpose, declared future
+file roles, required future inputs, required future path policy, required future
+validation, evidence meaning limits, and Phase 431 implementation exit
+criteria. The boundary keeps materialized output local, digest-bound,
+non-accepted, and non-authoritative.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a boundary for a future local materialized tiny-Z3
+audit package over one Phase 429 review. It still has no implemented
+materialized artifact output, accepted formal evidence, accepted Evidence
+Ledger mutation, accepted append policy change, Level2+ evidence, score axes,
+proof-authority claim, or production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
