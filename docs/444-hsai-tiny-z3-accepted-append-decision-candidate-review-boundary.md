@@ -151,6 +151,14 @@ It cannot support:
 - full security;
 - action authority.
 
+## Phase 445 Implementation Status
+
+Phase 445 implements the local deterministic review metadata allowed by this
+boundary in `crates/hsai-agent-admission/src/lib.rs`. The implementation keeps
+the accepted Evidence Ledger, accepted append policy, accepted formal evidence,
+Level2+ evidence, score axes, backend execution, and strong public claims
+blocked.
+
 ## Phase 445 Implementation Exit Criteria
 
 Phase 445 implements local tiny-Z3 accepted-append decision candidate review
