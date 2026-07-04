@@ -217,3 +217,15 @@ metadata only if it:
 - does not submit benchmarks;
 - does not claim semantic correctness, production readiness, SOTA, breakthrough
   status, full security, or action authority.
+
+## Phase 449 Implementation Status
+
+Phase 449 implements the local deterministic blocker-review metadata allowed by
+this boundary. See
+`docs/449-hsai-tiny-z3-accepted-append-decision-blocker-review-notes.md`.
+Phase 449 remains metadata-only and still does not authorize an accepted append
+decision, accepted formal evidence, accepted Evidence Ledger mutation, accepted
+append policy change, Level2+ evidence, score axes, Lean execution, new SMT
+execution, COBALT execution, Rust-to-Lean extraction, semantic correctness,
+production readiness, SOTA, breakthrough status, full security, or action
+authority.

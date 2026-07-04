@@ -12189,6 +12189,44 @@ evidence, accepted Evidence Ledger mutation, accepted append policy change,
 Level2+ evidence, score axes, proof-authority claim, Lean/COBALT/Rust-to-Lean
 execution, or production/SOTA/security/correctness claim.
 
+## Phase 449 HSAI Tiny Z3 Accepted Append Decision Blocker Review Metadata
+
+Status: complete. See
+`docs/449-hsai-tiny-z3-accepted-append-decision-blocker-review-notes.md`.
+
+Goal: implement deterministic local accepted-append decision blocker review
+metadata over one Phase 447 tiny-Z3 accepted-append decision blocker while
+keeping accepted append decisions, accepted append policy changes, accepted
+Evidence Ledger mutation, accepted formal evidence, Level2+ evidence, score
+axes, proof authority, backend execution, and strong public claims blocked.
+
+Implemented: Phase 449 adds the local accepted-append decision blocker review
+input, review record, review labels, issue taxonomy, validation report,
+claim-boundary helper, required nonclaim helper, builder, and validator. The
+review binds one Phase 447 blocker, one Phase 447 blocker input, one Phase 445
+review, one Phase 445 review input, one Phase 443 candidate, one Phase 443
+candidate input, one Phase 441 review, one Phase 441 review input, one Phase
+439 preflight, one Phase 439 preflight input, one Phase 437 review, one Phase
+437 review input, one Phase 435 candidate, one Phase 435 candidate input,
+Phase 433/431/429/427/425/423/421 records, Phase 404/405 local Z3 replay
+digests, declared file digest map, explicit nonclaim digest, reviewer/proposal
+metadata, candidate disposition, review label, blocker label, blocker-review
+label, and current accepted append blockers.
+
+Validation coverage: `hsai-agent-admission` Phase 449 tests cover deterministic
+blocker-review construction, Phase 447 blocker/input binding, Phase
+445/443/441/404/405 binding, Phase 447 digest drift rejection, promotional
+review-summary rejection, and accepted-append-decision/accepted-evidence/
+Level2/score/proof/checker/solver/SOTA/full-security/action-authority
+promotion rejection.
+
+Exit criteria: HSAI now has deterministic local blocker-review metadata for
+one tiny-Z3 accepted-append decision blocker. It still has no accepted append
+decision, accepted formal evidence, accepted Evidence Ledger mutation,
+accepted append policy change, Level2+ evidence, score axes, proof-authority
+claim, Lean/COBALT/Rust-to-Lean execution, or production/SOTA/security/
+correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
