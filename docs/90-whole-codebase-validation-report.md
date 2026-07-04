@@ -6286,5 +6286,21 @@ create accepted formal evidence, create Level2+ evidence, populate score axes,
 run Lean/new-SMT/COBALT/Rust-to-Lean extraction, submit benchmarks, or claim
 production/SOTA/security/semantic-correctness.
 
+[docs/452-hsai-tiny-z3-accepted-append-decision-quarantine-review-boundary.md](docs/452-hsai-tiny-z3-accepted-append-decision-quarantine-review-boundary.md)
+records the Phase 452 docs-first accepted-append decision quarantine review
+boundary after one Phase 451 tiny-Z3 accepted-append decision quarantine. The
+boundary permits only future local quarantine-review metadata, defines five
+allowed future quarantine-review labels, requires binding to Phase
+451/449/447/445/443/441/439/437/435/433/431/429/427/425/423/421 and Phase
+404/405 digests, requires declared-file digest map, nonclaim, quarantine,
+reviewer, proposal, current accepted append blocker, candidate-disposition,
+review-label, blocker-label, blocker-review-label, quarantine-label, and
+quarantine-review-label bindings, and defines Phase 453 implementation exit
+criteria. It creates no Rust code, makes no accepted append decision, mutates
+no accepted Evidence Ledger, changes no accepted append policy, creates no
+accepted formal evidence, creates no Level2+ evidence, populates no score axes,
+runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
