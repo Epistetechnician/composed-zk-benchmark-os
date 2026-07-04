@@ -172,3 +172,12 @@ metadata only if it:
 - claims no breakthrough status;
 - claims no full security;
 - grants no action authority.
+
+## Phase 483 Implementation Note
+
+Phase 483 implements this boundary as local metadata in
+`docs/483-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-closure-notes.md`
+and `crates/hsai-agent-admission/src/lib.rs`. It does not run backend
+execution, create accepted evidence, create Level2+ evidence, populate score
+axes, or support SOTA/full-security/semantic-correctness/production-readiness
+claims.

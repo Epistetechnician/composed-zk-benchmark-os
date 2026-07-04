@@ -13456,6 +13456,44 @@ evidence, score axes, proof-authority claim,
 Lean/new-SMT/COBALT/Rust-to-Lean execution, or
 production/SOTA/security/correctness claim.
 
+## Phase 483 HSAI Tiny Z3 Accepted-Append Decision Quarantine-Resolution Escalation Terminal-Review Closure-Blocker Review Terminal-Closure Review Settlement-Blocker Review Terminal Review Closure Metadata
+
+Status: complete. See
+`docs/483-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-closure-notes.md`.
+
+Goal: implement local settlement-blocker review terminal review closure
+metadata over one Phase 481 tiny-Z3 accepted-append decision
+quarantine-resolution escalation terminal-review closure-blocker review
+terminal-closure review settlement-blocker review terminal review without
+creating accepted append decisions, accepted formal evidence, accepted
+Evidence Ledger mutations, policy changes, Level2+ evidence, score-axis
+population, backend execution, or strong public claims.
+
+Implemented: Phase 483 adds deterministic closure metadata in
+`crates/hsai-agent-admission/src/lib.rs`: schema, state-slice, and
+claim-boundary constants; six non-promotional settlement-blocker review
+terminal review closure labels; input and output records; issue and
+validation types; required-nonclaim helpers; deterministic digest, id, and
+label binding helpers; a builder; and a validator. The validator binds the
+Phase 481 settlement-blocker review terminal review digest/input digest,
+Phase 481 digest/id/label map digests, explicit nonclaim digest, current
+accepted append blocker digest, inherited ids, inherited review label, and one
+closure label.
+
+Validation coverage: focused Phase 483 tests cover valid construction, Phase
+481 digest drift, label drift, Phase 481 state drift, promotional closure
+summary text, and every promotion flag for accepted append, formal evidence,
+Level2+, score axes, proof/checker/solver authority, backend execution, and
+strong public claims.
+
+Exit criteria: HSAI now has one local settlement-blocker review terminal
+review closure metadata record path. The closure keeps accepted append and
+formal evidence blocked. It still has no accepted append decision, accepted
+formal evidence, accepted Evidence Ledger mutation, accepted append policy
+change, Level2+ evidence, score axes, proof-authority claim,
+Lean/new-SMT/COBALT/Rust-to-Lean execution, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
