@@ -6974,5 +6974,22 @@ evidence, populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean
 extraction, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/489-hsai-tiny-z3-accepted-path-prerequisite-metadata-notes.md](docs/489-hsai-tiny-z3-accepted-path-prerequisite-metadata-notes.md)
+records the Phase 489 local tiny-Z3 accepted-path prerequisite metadata
+implementation in `crates/hsai-agent-admission/src/lib.rs`. The implementation
+adds schema, state-slice, and claim-boundary constants, six non-promotional
+prerequisite labels, three gate statuses, input/output records, issue and
+validation types, required gate helpers, required nonclaim helpers,
+digest/id/label binding helpers, a builder, a validator, and focused tests. It
+binds one Phase 487 terminal digest/input digest, Phase 487 digest/id/label map
+digests, gate-status map digest, explicit nonclaim digest, current accepted
+append blocker digest, inherited Phase 487 id and label bindings, inherited
+terminal label, and one prerequisite label. It creates no accepted append
+decision, mutates no accepted Evidence Ledger, changes no accepted append
+policy, creates no accepted formal evidence, creates no Level2+ evidence,
+populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction,
+creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
