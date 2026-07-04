@@ -179,3 +179,15 @@ review terminal metadata only if it:
 - claims no breakthrough status;
 - claims no full security;
 - grants no action authority.
+
+## Implementation Status
+
+Phase 487 implements this local terminal metadata boundary in
+`crates/hsai-agent-admission/src/lib.rs` and records the implementation notes
+in
+`docs/487-hsai-tiny-z3-settlement-blocker-review-terminal-review-closure-review-terminal-notes.md`.
+The implementation remains local metadata only and does not create accepted
+append, accepted formal evidence, Level2+ evidence, score axes, backend
+execution, Lean/new-SMT/COBALT/Rust-to-Lean evidence, semantic correctness,
+production readiness, SOTA, breakthrough status, full security, or action
+authority.
