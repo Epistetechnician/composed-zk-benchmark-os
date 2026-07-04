@@ -6793,5 +6793,23 @@ accepted formal evidence, creates no Level2+ evidence, populates no score
 axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/479-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-notes.md](docs/479-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-notes.md)
+records the Phase 479 local tiny-Z3 accepted-append decision
+quarantine-resolution escalation terminal-review closure-blocker review
+terminal-closure review settlement-blocker review terminal implementation.
+The Rust surface in `crates/hsai-agent-admission/src/lib.rs` adds
+deterministic settlement-blocker review terminal labels, inputs, records,
+validation issues, validation reports, binding helpers, a builder, and tests
+over one Phase 477 settlement-blocker review. The validator binds the Phase
+477 settlement-blocker review digest/input digest, Phase 477 digest/id/label
+binding map digests, explicit nonclaims, current accepted append blocker
+digest, inherited ids, inherited settlement-blocker review label, and
+settlement-blocker review terminal label, while rejecting drift, promotional
+terminal text, and explicit promotion attempts. It does not make an accepted
+append decision, mutate the accepted Evidence Ledger, change accepted append
+policy, create accepted formal evidence, create Level2+ evidence, populate
+score axes, run Lean/new-SMT/COBALT/Rust-to-Lean extraction, or claim
+production/SOTA/security/semantic-correctness.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
