@@ -13719,6 +13719,33 @@ accepted append policy change, Level2+ evidence, score axes, proof-authority
 claim, Lean/new-SMT/COBALT/Rust-to-Lean execution, benchmark evidence, or
 production/SOTA/security/correctness claim.
 
+## Phase 490 HSAI Tiny Z3 Accepted Append Owner Mutation Route Boundary
+
+Status: complete. See
+`docs/490-hsai-tiny-z3-accepted-append-owner-mutation-route-boundary.md`.
+
+Goal: define the docs-first boundary for the first Phase 489 prerequisite gate:
+`accepted_append_owner_and_mutation_route`. The boundary prevents
+`hsai-agent-admission` metadata from becoming a parallel accepted Evidence
+Ledger mutation path and keeps `zkbench-core` as the accepted append owner.
+
+Implemented: Phase 490 documents `zkbench-core` as the current accepted append
+owner, names `AcceptedLedgerAppendTransactionRequest` as the only local
+transaction route, names `MaterializedAcceptedLedgerAppendRequest` as the only
+materialized local path route, defines the HSAI admission role, required future
+bridge inputs, required validation, meaning limits, and Phase 491
+implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has an owner/mutation-route boundary for later
+accepted-path work. It still has no accepted append decision, accepted formal
+evidence, accepted Evidence Ledger mutation from HSAI admission metadata,
+accepted append policy change, Level2+ evidence, score axes, proof-authority
+claim, Lean/new-SMT/COBALT/Rust-to-Lean execution, benchmark evidence, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

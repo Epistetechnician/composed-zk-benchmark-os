@@ -76,9 +76,9 @@ The unsupported claims remain:
 
 ## Next Responsible Slice
 
-The next responsible slice is a docs-first boundary for one accepted-path
-prerequisite gate category, starting with accepted append owner and mutation
-route. It must not implement accepted append, mutate the accepted Evidence
-Ledger, run Lean/new-SMT/COBALT/Rust-to-Lean extraction, create Level2+
-evidence, populate score axes, or claim SOTA, full security, semantic
-correctness, or production readiness.
+Phase 490 defines the docs-first accepted append owner and mutation route
+boundary in
+`docs/490-hsai-tiny-z3-accepted-append-owner-mutation-route-boundary.md`. That
+boundary keeps `zkbench-core` as the only accepted append owner and prevents
+HSAI admission metadata from becoming a parallel accepted Evidence Ledger
+mutation route.
