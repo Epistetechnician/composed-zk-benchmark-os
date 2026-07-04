@@ -12914,6 +12914,41 @@ evidence, accepted Evidence Ledger mutation, accepted append policy change,
 Level2+ evidence, score axes, proof-authority claim, Lean/new-SMT/COBALT/
 Rust-to-Lean execution, or production/SOTA/security/correctness claim.
 
+## Phase 469 HSAI Tiny Z3 Accepted Append Decision Quarantine-Resolution Escalation Terminal-Review Closure-Blocker Review Metadata
+
+Status: complete. See
+`docs/469-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-notes.md`.
+
+Goal: implement local closure-blocker review metadata over one Phase 467
+tiny-Z3 accepted-append decision quarantine-resolution escalation
+terminal-review closure blocker without making an accepted append decision,
+mutating accepted evidence, changing accepted append policy, creating Level2+
+evidence, populating score axes, running backend proof systems, or making
+strong public claims.
+
+Implemented: Phase 469 adds deterministic closure-blocker review metadata in
+`crates/hsai-agent-admission/src/lib.rs`, including schema/state/claim-boundary
+constants, closure-blocker review labels, input and output metadata, issue
+taxonomy, digest/id/label binding helpers, builder, validator, required
+nonclaim helper, Phase 467 closure-blocker digest/input-digest binding, Phase
+467 digest/id/label binding map digests, current accepted append blocker
+binding, inherited closure and terminal-review id checks, bounded label checks,
+Phase 467 non-promotion checks, closure-blocker-review-summary promotion-text
+rejection, and explicit promotion-attempt rejection.
+
+Validation coverage: `hsai-agent-admission` Phase 469 tests cover valid
+closure-blocker review construction, Phase 467 digest drift, label drift,
+Phase 467 state drift, promotional review-summary text, and explicit promotion
+attempts.
+
+Exit criteria: HSAI now has local closure-blocker review metadata over one
+tiny-Z3 accepted-append decision quarantine-resolution escalation
+terminal-review closure blocker. It still has no accepted append decision,
+accepted formal evidence, accepted Evidence Ledger mutation, accepted append
+policy change, Level2+ evidence, score axes, proof-authority claim,
+Lean/new-SMT/COBALT/Rust-to-Lean execution, or production/SOTA/security/
+correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
