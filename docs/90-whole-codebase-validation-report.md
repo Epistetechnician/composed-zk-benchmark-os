@@ -5886,5 +5886,22 @@ accepted append policy, creates no accepted formal evidence, creates no Level2+
 evidence, populates no score axes, runs no Lean/SMT/COBALT/Rust-to-Lean
 extraction, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/427-hsai-tiny-z3-audit-package-serialization-preview-notes.md](docs/427-hsai-tiny-z3-audit-package-serialization-preview-notes.md)
+records the Phase 427 local tiny-Z3 audit package serialization-preview
+metadata implementation. The Rust surface adds typed input/output metadata,
+issue taxonomy, validation report, claim-boundary and nonclaim helpers,
+canonical field-order and JSON-shape helpers, redaction-policy helper, builder,
+validator, and focused tests. The preview binds one Phase 425 audit package,
+one Phase 423 review record, one Phase 421 metadata record, Phase 404/405 local
+Z3 backend replay digests through the package, current accepted append blockers,
+package manifest digest, canonical JSON-payload digest, redaction-policy digest,
+logical preview path, preview summary, and explicit nonclaims. It rejects
+non-portable logical paths, filesystem writes, materialized package files, raw
+backend/proof/checker/solver artifacts, secrets, mutable accepted-ledger state,
+promotional preview text, accepted evidence mutation, accepted append policy
+changes, accepted formal evidence, Level2+ evidence, score axes, proof/checker/
+solver promotion, semantic-correctness claims, production-readiness claims,
+SOTA claims, breakthrough claims, full-security claims, and action authority.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

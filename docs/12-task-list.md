@@ -11513,6 +11513,38 @@ Evidence Ledger mutation, accepted append policy change, Level2+ evidence,
 score axes, proof-authority claim, or production/SOTA/security/correctness
 claim.
 
+## Phase 427 HSAI Tiny Z3 Audit Package Serialization Preview
+
+Status: complete. See
+`docs/427-hsai-tiny-z3-audit-package-serialization-preview-notes.md`.
+
+Goal: implement deterministic in-memory serialization-preview metadata over one
+Phase 425 local tiny-Z3 audit package without writing artifacts, creating
+package files, mutating accepted evidence, changing accepted append policy,
+creating accepted formal evidence, creating Level2+ evidence, populating score
+axes, or making strong public claims.
+
+Implemented: Phase 427 adds tiny-Z3 serialization-preview schema/state/
+claim-boundary constants, preview input metadata, preview record metadata, issue
+taxonomy, validation report, canonical claim-boundary and nonclaim helpers,
+canonical field-order and JSON-shape helpers, redaction-policy helper, builder,
+validator, Phase 425 package digest binding, Phase 423 review digest binding,
+Phase 421 metadata digest binding, Phase 404/405 backend replay digest binding,
+accepted append blocker preservation, canonical JSON-payload digest validation,
+redaction-policy digest validation, logical preview path validation, raw/
+materialized-payload rejection, preview-summary promotion text rejection, and
+focused tests.
+
+Validation coverage: `hsai-agent-admission` Phase 427 tests cover construction
+and rejection behavior. Repository hygiene, claim-boundary source scans, and
+workspace tests remain the broader gates.
+
+Exit criteria: HSAI now has deterministic in-memory serialization-preview
+metadata for one local non-accepted tiny-Z3 audit package. It still has no
+filesystem artifact output, accepted formal evidence, accepted Evidence Ledger
+mutation, accepted append policy change, Level2+ evidence, score axes,
+proof-authority claim, or production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
