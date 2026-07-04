@@ -12642,6 +12642,50 @@ Evidence Ledger mutation, accepted append policy change, Level2+ evidence,
 score axes, proof-authority claim, Lean/COBALT/Rust-to-Lean execution, or
 production/SOTA/security/correctness claim.
 
+## Phase 461 HSAI Tiny Z3 Accepted Append Decision Quarantine-Resolution Escalation-Blocker Review Metadata
+
+Status: complete. See
+`docs/461-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-blocker-review-notes.md`.
+
+Goal: implement deterministic local escalation-blocker review metadata over
+one Phase 459 tiny-Z3 accepted-append decision quarantine-resolution
+escalation blocker without making an accepted append decision, mutating
+accepted evidence, changing accepted append policy, creating Level2+ evidence,
+populating score axes, running backend proof systems, or making strong public
+claims.
+
+Implemented: Phase 461 adds the local accepted-append decision
+quarantine-resolution escalation-blocker review schema constants, review
+labels, input record, output record, issue taxonomy, validation report,
+required-nonclaim helper, claim-boundary helper, builder, and validator. The
+review binds one Phase 459 escalation blocker, one Phase 459 escalation-blocker
+input, one Phase 457 resolution review, one Phase 455 resolution plan, one
+Phase 453 quarantine review, one Phase 451 quarantine, one Phase 449 blocker
+review, one Phase 447 blocker, one Phase 445 review, one Phase 443 candidate,
+Phase 441/439/437/435 records, Phase 433/431/429/427/425/423/421 records,
+Phase 404/405 local Z3 replay digests, declared file digest map, current
+accepted append blockers, escalation metadata, review metadata, resolution
+metadata, quarantine metadata, reviewer metadata, proposal metadata, candidate
+disposition, candidate-review label, blocker label, blocker-review label,
+quarantine label, quarantine-review label, resolution-plan label,
+resolution-review label, escalation-blocker label, escalation-blocker review
+label, review summary, and explicit nonclaim digest.
+
+Validation coverage: `hsai-agent-admission` Phase 461 tests cover
+deterministic escalation-blocker review construction, Phase 459
+escalation-blocker/input binding, Phase 457/455/453/451/449/447/445/443/404/
+405 binding, Phase 459 digest drift rejection, promotional review-summary
+rejection, and accepted-append-decision, accepted-evidence, Level2, score-axis,
+proof, checker, solver, SOTA, full-security, and action-authority promotion
+rejection.
+
+Exit criteria: HSAI now has deterministic local escalation-blocker review
+metadata for one tiny-Z3 accepted-append decision quarantine-resolution
+escalation blocker. It still has no accepted append decision, accepted formal
+evidence, accepted Evidence Ledger mutation, accepted append policy change,
+Level2+ evidence, score axes, proof-authority claim, Lean/COBALT/Rust-to-Lean
+execution, or production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
