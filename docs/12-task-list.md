@@ -11868,6 +11868,39 @@ Evidence Ledger mutation, accepted append policy change, Level2+ evidence,
 score axes, proof-authority claim, Lean/COBALT/Rust-to-Lean execution, or
 production/SOTA/security/correctness claim.
 
+## Phase 439 HSAI Tiny Z3 Accepted Append Preflight Metadata
+
+Status: complete. See
+`docs/439-hsai-tiny-z3-accepted-append-preflight-notes.md`.
+
+Goal: implement deterministic local accepted-append preflight metadata over one
+Phase 437 tiny-Z3 proposal-candidate review while keeping accepted append
+policy changes, accepted Evidence Ledger mutation, accepted formal evidence,
+Level2+ evidence, score axes, proof authority, backend execution, and strong
+public claims blocked.
+
+Implemented: Phase 439 adds the local accepted-append preflight input,
+preflight record, preflight labels, issue taxonomy, validation report,
+claim-boundary helper, required nonclaim helper, builder, and validator. The
+preflight binds one Phase 437 review, one Phase 437 review input, one Phase 435
+candidate, one Phase 435 candidate input, Phase 433/431/429/427/425/423/421
+records, Phase 404/405 local Z3 replay digests, declared file digest map,
+explicit nonclaim digest, reviewer/proposal metadata, proposal-candidate review
+label, preflight label, and current accepted append blockers.
+
+Validation coverage: `hsai-agent-admission` Phase 439 tests cover deterministic
+preflight construction, Phase 437 review/input binding, Phase 435/433/404/405
+binding, Phase 437 digest drift rejection, promotional preflight-summary
+rejection, and accepted-evidence/Level2/score/proof/checker/solver/SOTA/
+full-security/action-authority promotion rejection.
+
+Exit criteria: HSAI now has deterministic local accepted-append preflight
+metadata for one reviewed tiny-Z3 proposal candidate. It still has no accepted
+formal evidence, accepted Evidence Ledger mutation, accepted append policy
+change, Level2+ evidence, score axes, proof-authority claim,
+Lean/COBALT/Rust-to-Lean execution, or production/SOTA/security/correctness
+claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

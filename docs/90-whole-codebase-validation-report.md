@@ -6064,5 +6064,23 @@ no accepted formal evidence, creates no Level2+ evidence, populates no score
 axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/439-hsai-tiny-z3-accepted-append-preflight-notes.md](docs/439-hsai-tiny-z3-accepted-append-preflight-notes.md)
+records the Phase 439 local tiny-Z3 accepted-append preflight metadata
+implementation. The implementation in `crates/hsai-agent-admission/src/lib.rs`
+adds deterministic pure-data preflight records over one Phase 437 review,
+binding the Phase 437 review input, Phase 435 candidate and input, Phase 433
+review, Phase 431 manifest, Phase 429 review, Phase 427 preview, Phase 425
+package, Phase 423 review-record, Phase 421 metadata, Phase 404/405 local Z3
+replay digests, declared-file digest map, nonclaim digest, reviewer metadata,
+proposal metadata, proposal-candidate review label, preflight label, and current
+accepted append blocker digest. It rejects Phase 437 review digest drift,
+promoted review state, accepted append blocker drift, nonclaim drift,
+promotional preflight text, and all accepted-evidence/Level2/score/proof/
+checker/solver/SOTA/full-security/action promotion attempts. It does not mutate
+the accepted Evidence Ledger, change accepted append policy, create accepted
+formal evidence, create Level2+ evidence, populate score axes, run Lean/new-SMT/
+COBALT/Rust-to-Lean extraction, submit benchmarks, or claim production/SOTA/
+security/semantic-correctness.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
