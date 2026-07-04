@@ -135,6 +135,17 @@ Validation rejects:
 - full-security claims;
 - action-authority claims.
 
+## Phase 450 Boundary Status
+
+Phase 450 defines the docs-first boundary for future local quarantine metadata
+over this Phase 449 blocker review in
+`docs/450-hsai-tiny-z3-accepted-append-decision-quarantine-boundary.md`. That
+boundary still does not authorize an accepted append decision, accepted formal
+evidence, accepted Evidence Ledger mutation, accepted append policy change,
+Level2+ evidence, score axes, Lean execution, new SMT execution, COBALT
+execution, Rust-to-Lean extraction, semantic correctness, production
+readiness, SOTA, breakthrough status, full security, or action authority.
+
 ## Claim Boundary
 
 The maximum claim after Phase 449 is:
