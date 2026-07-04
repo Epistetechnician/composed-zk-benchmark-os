@@ -12610,6 +12610,38 @@ Ledger mutation, accepted append policy change, Level2+ evidence, score axes,
 proof-authority claim, Lean/COBALT/Rust-to-Lean execution, or
 production/SOTA/security/correctness claim.
 
+## Phase 460 HSAI Tiny Z3 Accepted Append Decision Quarantine-Resolution Escalation-Blocker Review Boundary
+
+Status: complete. See
+`docs/460-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-blocker-review-boundary.md`.
+
+Goal: define the docs-first boundary for future local review metadata over one
+Phase 459 tiny-Z3 accepted-append decision quarantine-resolution
+escalation-blocker without implementing review metadata, making accepted append
+decisions, mutating accepted evidence, changing accepted append policy,
+creating Level2+ evidence, populating score axes, running backend proof
+systems, or making strong public claims.
+
+Implemented: Phase 460 documents six non-promotional future
+escalation-blocker review labels, required future bindings to Phase 459/457/
+455/453/451/449/447/445/443/441/439/437/435/433/431/429/427/425/423/421 and
+Phase 404/405 digests, declared-file digest map, explicit nonclaim digest,
+current accepted append blocker digest, escalation/review/quarantine/
+resolution/reviewer/proposal/preflight/candidate ids, bounded label bindings,
+required future validation, meaning limits, and Phase 461 implementation exit
+criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a boundary for local escalation-blocker review
+metadata over one tiny-Z3 accepted-append decision quarantine-resolution
+escalation blocker. Phase 461 may implement that local review metadata. It
+still has no accepted append decision, accepted formal evidence, accepted
+Evidence Ledger mutation, accepted append policy change, Level2+ evidence,
+score axes, proof-authority claim, Lean/COBALT/Rust-to-Lean execution, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
