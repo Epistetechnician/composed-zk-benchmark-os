@@ -11435,6 +11435,30 @@ change, Level2+ evidence, score axes, Lean/COBALT/Rust-to-Lean execution, proof
 artifact, checker transcript, solver certificate, or SOTA/full-security/
 semantic-correctness/production-readiness claim.
 
+## Phase 424 HSAI Tiny Z3 Local Review Audit Package Boundary
+
+Status: complete. See
+`docs/424-hsai-tiny-z3-local-review-audit-package-boundary.md`.
+
+Goal: define the docs-first boundary for a future non-accepted tiny-Z3 audit
+package over Phase 423 metadata review records without implementing that
+package, writing artifacts, mutating accepted evidence, changing accepted
+append policy, creating accepted formal evidence, creating Level2+ evidence,
+populating score axes, or making strong public claims.
+
+Implemented: Phase 424 records future package purpose, allowed digest
+references, forbidden raw artifact classes, required future validation, package
+meaning limits, and Phase 425 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a boundary for future local non-accepted tiny-Z3
+audit packages over Phase 423 review records. It still has no implemented
+audit package, accepted formal evidence, accepted Evidence Ledger mutation,
+accepted append policy change, Level2+ evidence, score axes, proof-authority
+claim, or production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

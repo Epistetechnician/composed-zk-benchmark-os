@@ -5847,5 +5847,19 @@ Ledger mutation, not accepted append policy change, not Level2+ evidence, not
 score-axis evidence, not proof artifacts, not checker transcripts, not solver
 certificates, and not a production/SOTA/security/semantic-correctness claim.
 
+[docs/424-hsai-tiny-z3-local-review-audit-package-boundary.md](docs/424-hsai-tiny-z3-local-review-audit-package-boundary.md)
+records the Phase 424 docs-first non-accepted tiny-Z3 audit package boundary.
+It specifies future package purpose, allowed digest references, forbidden raw
+artifact classes, required future validation, package meaning limits, and Phase
+425 implementation exit criteria. The future package may reference Phase 423
+review records, Phase 421 metadata, Phase 405 output manifests, Phase 404
+executions, backend comparison statement metadata, accepted append blockers,
+review labels, reviewer ids, reviewer decision timestamps, explicit nonclaims,
+and a package manifest digest. Phase 424 creates no Rust code, writes no
+artifacts, mutates no accepted Evidence Ledger, changes no accepted append
+policy, creates no accepted formal evidence, creates no Level2+ evidence,
+populates no score axes, runs no Lean/SMT/COBALT/Rust-to-Lean extraction, and
+claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
