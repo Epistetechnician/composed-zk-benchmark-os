@@ -13059,6 +13059,48 @@ mutation, accepted append policy change, Level2+ evidence, score axes,
 proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean execution, or
 production/SOTA/security/correctness claim.
 
+## Phase 473 HSAI Tiny Z3 Accepted Append Decision Quarantine-Resolution Escalation Terminal-Review Closure-Blocker Review Terminal-Closure Review Metadata
+
+Status: complete. See
+`docs/473-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-notes.md`.
+
+Goal: implement local terminal-closure review metadata over one Phase 471
+tiny-Z3 accepted-append decision quarantine-resolution escalation
+terminal-review closure-blocker review terminal closure without making
+accepted append decisions, mutating accepted evidence, changing accepted
+append policy, creating Level2+ evidence, populating score axes, running
+backend proof systems, or making strong public claims.
+
+Implemented: Phase 473 adds deterministic terminal-closure review metadata in
+`crates/hsai-agent-admission/src/lib.rs`: schema/state/claim-boundary
+constants, six terminal-closure review labels, terminal-closure review input
+and record types, validation issues, validation report, required nonclaims,
+digest/id/label binding helpers, builder, validator, and focused tests. The
+record binds the Phase 471 terminal-closure digest/input digest, Phase 471
+digest/id/label binding map digests, explicit nonclaim digest, current
+accepted append blocker digest, inherited terminal-closure ids, inherited
+closure-blocker review ids, inherited closure-blocker ids, inherited closure
+ids, inherited terminal-review ids, inherited terminal-closure label, and
+terminal-closure review label.
+
+Validation coverage: `hsai-agent-admission` Phase 473 tests cover valid
+terminal-closure review construction, Phase 471 digest drift, inherited label
+drift, Phase 471 state drift, promotional terminal-closure review text,
+accepted append decision attempts, accepted evidence mutation attempts,
+accepted append policy change attempts, accepted formal evidence creation
+attempts, Level2+ attempts, score-axis attempts, proof/checker/solver
+promotion, benchmark/SOTA comparison claims, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims, full-security
+claims, and action-authority claims.
+
+Exit criteria: HSAI can locally review why one tiny-Z3 terminal closure leaves
+the current tiny-Z3 accepted append decision chain terminally closed while
+accepted append remains blocked. It still has no accepted append decision,
+accepted formal evidence, accepted Evidence Ledger mutation, accepted append
+policy change, Level2+ evidence, score axes, proof-authority claim,
+Lean/new-SMT/COBALT/Rust-to-Lean execution, or production/SOTA/security/
+correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
