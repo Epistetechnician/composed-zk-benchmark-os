@@ -156,3 +156,13 @@ terminal-closure review settlement-blocker review metadata only if it:
 - claims no breakthrough status;
 - claims no full security;
 - grants no action authority.
+
+## Implementation Note
+
+Phase 477 implements this boundary as local metadata in
+`docs/477-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-notes.md`
+and `crates/hsai-agent-admission/src/lib.rs`. The implementation keeps the
+accepted append path blocked and does not create accepted evidence, Level2+
+evidence, score-axis evidence, backend execution evidence, semantic-correctness
+evidence, production-readiness evidence, SOTA evidence, full-security evidence,
+or action authority.

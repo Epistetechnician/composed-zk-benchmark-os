@@ -13212,6 +13212,45 @@ Level2+ evidence, score axes, proof-authority claim,
 Lean/new-SMT/COBALT/Rust-to-Lean execution, or production/SOTA/security/
 correctness claim.
 
+## Phase 477 HSAI Tiny Z3 Accepted Append Decision Quarantine-Resolution Escalation Terminal-Review Closure-Blocker Review Terminal-Closure Review Settlement-Blocker Review Metadata
+
+Status: complete. See
+`docs/477-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-notes.md`.
+
+Goal: implement local settlement-blocker review metadata over one Phase 475
+tiny-Z3 accepted-append decision quarantine-resolution escalation
+terminal-review closure-blocker review terminal-closure review settlement
+blocker without making accepted append decisions, mutating accepted evidence,
+changing accepted append policy, creating Level2+ evidence, populating score
+axes, running backend proof systems, or making strong public claims.
+
+Implemented: Phase 477 adds deterministic settlement-blocker review metadata
+in `crates/hsai-agent-admission/src/lib.rs`: schema/state/claim-boundary
+constants, six non-promotional settlement-blocker review labels, input and
+output records, issue and validation report types, required nonclaim helper,
+deterministic digest/id/label binding helpers, builder, and validator. The
+validator binds the Phase 475 settlement-blocker digest/input digest, Phase
+475 digest/id/label binding map digests, explicit nonclaim digest, current
+accepted append blocker digest, inherited ids, inherited settlement-blocker
+label, and settlement-blocker review label.
+
+Validation coverage: `hsai-agent-admission` Phase 477 tests cover valid
+settlement-blocker review construction plus Phase 475 digest drift, label
+drift, Phase 475 state drift, promotional settlement-blocker review summary
+text, accepted append decision attempts, accepted evidence mutation attempts,
+accepted append policy-change attempts, accepted formal-evidence creation
+attempts, Level2+ attempts, score-axis attempts, proof/checker/solver
+promotion, benchmark/SOTA comparison claims, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims, full-security
+claims, and action-authority attempts.
+
+Exit criteria: HSAI can locally review why one tiny-Z3 settlement blocker
+still prevents settlement into accepted append or accepted formal evidence. It
+still has no accepted append decision, accepted formal evidence, accepted
+Evidence Ledger mutation, accepted append policy change, Level2+ evidence,
+score axes, proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean
+execution, or production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
