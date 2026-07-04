@@ -267,3 +267,17 @@ quarantine-resolution review metadata only if it:
 - does not submit benchmarks;
 - does not claim semantic correctness, production readiness, SOTA, breakthrough
   status, full security, or action authority.
+
+## Phase 457 Implementation Status
+
+Phase 457 implemented this boundary in
+`crates/hsai-agent-admission/src/lib.rs` and documented the implementation in
+`docs/457-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-review-notes.md`.
+The implementation remains local pure-data metadata only. It binds one Phase
+455 resolution plan, preserves the accepted append blocker, rejects promotion
+text and promotion flags, and still creates no accepted append decision,
+accepted Evidence Ledger mutation, accepted formal evidence, Level2+ evidence,
+score-axis evidence, proof artifact, checker transcript, solver certificate,
+Lean execution evidence, new SMT execution evidence, COBALT execution evidence,
+semantic-correctness claim, production-readiness claim, SOTA claim,
+breakthrough claim, full-security claim, or action authority.

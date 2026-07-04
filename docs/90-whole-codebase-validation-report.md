@@ -6384,5 +6384,25 @@ accepted append policy, creates no accepted formal evidence, creates no Level2+
 evidence, populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean
 extraction, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/457-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-review-notes.md](docs/457-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-review-notes.md)
+records the Phase 457 local tiny-Z3 accepted-append decision
+quarantine-resolution review metadata implementation. The Rust surface adds
+deterministic pure-data resolution-review records over one Phase 455
+resolution plan, binding the Phase 455 resolution-plan input, Phase 453
+quarantine review and input, Phase 451 quarantine and input, Phase 449 blocker
+review and input, Phase 447 blocker and input, Phase 445 review and input,
+Phase 443 candidate and input, Phase 441/439/437/435 records, Phase
+433/431/429/427/425/423/421 records, Phase 404/405 local Z3 replay digests,
+declared-file digest map, explicit nonclaims, and current accepted append
+blocker digest. It rejects Phase 455 resolution-plan digest drift, promoted
+resolution-plan state, accepted append blocker drift, nonclaim drift,
+promotional review text, and all accepted-append-decision/accepted-evidence/
+Level2/score/proof/checker/solver/SOTA/full-security/action promotion
+attempts. It does not make an accepted append decision, mutate the accepted
+Evidence Ledger, change accepted append policy, create accepted formal
+evidence, create Level2+ evidence, populate score axes, run Lean/new-SMT/
+COBALT/Rust-to-Lean extraction, submit benchmarks, or claim production/SOTA/
+security/semantic-correctness.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
