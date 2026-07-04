@@ -13414,6 +13414,48 @@ accepted append policy change, Level2+ evidence, score axes,
 proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean execution, or
 production/SOTA/security/correctness claim.
 
+## Phase 482 HSAI Tiny Z3 Accepted Append Decision Quarantine-Resolution Escalation Terminal-Review Closure-Blocker Review Terminal-Closure Review Settlement-Blocker Review Terminal Review Closure Boundary
+
+Status: complete. See
+`docs/482-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-closure-boundary.md`.
+
+Goal: define the docs-first boundary for future local settlement-blocker
+review terminal review closure metadata over one Phase 481 tiny-Z3
+accepted-append decision quarantine-resolution escalation terminal-review
+closure-blocker review terminal-closure review settlement-blocker review
+terminal review without implementing closure metadata, making accepted append
+decisions, mutating accepted evidence, changing accepted append policy,
+creating Level2+ evidence, populating score axes, running backend proof
+systems, or making strong public claims.
+
+Implemented: Phase 482 documents six non-promotional future
+settlement-blocker review terminal review closure labels, required future
+bindings to the Phase 481 settlement-blocker review terminal review
+digest/input digest, Phase 481 digest/id/label binding map digests, explicit
+nonclaim digest, current accepted append blocker digest, inherited
+settlement-blocker review terminal review ids, inherited settlement-blocker
+review terminal ids, inherited settlement-blocker review ids, inherited
+settlement-blocker ids, inherited terminal-closure review ids, inherited
+terminal-closure ids, inherited closure-blocker review ids, inherited
+closure-blocker ids, inherited closure ids, inherited terminal-review ids,
+inherited settlement-blocker review terminal review label, settlement-blocker
+review terminal review closure label, required future validation, meaning
+limits, and Phase 483 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a boundary for local settlement-blocker review
+terminal review closure metadata over one tiny-Z3 accepted-append decision
+quarantine-resolution escalation terminal-review closure-blocker review
+terminal-closure review settlement-blocker review terminal review. Phase 483
+may implement that local settlement-blocker review terminal review closure
+metadata. It still has no accepted append decision, accepted formal evidence,
+accepted Evidence Ledger mutation, accepted append policy change, Level2+
+evidence, score axes, proof-authority claim,
+Lean/new-SMT/COBALT/Rust-to-Lean execution, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
