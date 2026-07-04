@@ -94,9 +94,8 @@ Result: passed.
 
 ## Next Boundary
 
-The next responsible slice is a docs-first Phase 470 terminal-closure boundary
-over the Phase 469 closure-blocker review metadata. It must keep backend
-execution, Lean, new SMT, COBALT, Rust-to-Lean extraction, accepted evidence,
-Level2+ evidence, score axes, accepted Evidence Ledger mutation, and strong
-public claims out of scope unless a separate explicit phase opens those
-surfaces.
+Phase 470 now defines the docs-first terminal-closure boundary over the Phase
+469 closure-blocker review metadata. It keeps backend execution, Lean, new
+SMT, COBALT, Rust-to-Lean extraction, accepted evidence, Level2+ evidence,
+score axes, accepted Evidence Ledger mutation, and strong public claims out of
+scope unless a separate explicit phase opens those surfaces.

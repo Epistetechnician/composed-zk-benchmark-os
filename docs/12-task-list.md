@@ -12949,6 +12949,40 @@ policy change, Level2+ evidence, score axes, proof-authority claim,
 Lean/new-SMT/COBALT/Rust-to-Lean execution, or production/SOTA/security/
 correctness claim.
 
+## Phase 470 HSAI Tiny Z3 Accepted Append Decision Quarantine-Resolution Escalation Terminal-Review Closure-Blocker Review Terminal-Closure Boundary
+
+Status: complete. See
+`docs/470-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-boundary.md`.
+
+Goal: define the docs-first boundary for future local terminal-closure
+metadata over one Phase 469 tiny-Z3 accepted-append decision
+quarantine-resolution escalation terminal-review closure-blocker review
+without implementing terminal-closure metadata, making accepted append
+decisions, mutating accepted evidence, changing accepted append policy,
+creating Level2+ evidence, populating score axes, running backend proof
+systems, or making strong public claims.
+
+Implemented: Phase 470 documents six non-promotional future terminal-closure
+labels, required future bindings to the Phase 469 closure-blocker review
+digest/input digest, Phase 469 digest/id/label binding map digests, explicit
+nonclaim digest, current accepted append blocker digest, inherited
+closure-blocker review ids, inherited closure-blocker ids, inherited closure
+ids, inherited terminal-review ids, inherited closure-blocker review label,
+terminal-closure label, required future validation, meaning limits, and Phase
+471 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a boundary for local terminal-closure metadata
+over one tiny-Z3 accepted-append decision quarantine-resolution escalation
+terminal-review closure-blocker review. Phase 471 may implement that local
+terminal-closure metadata. It still has no accepted append decision, accepted
+formal evidence, accepted Evidence Ledger mutation, accepted append policy
+change, Level2+ evidence, score axes, proof-authority claim,
+Lean/new-SMT/COBALT/Rust-to-Lean execution, or production/SOTA/security/
+correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
