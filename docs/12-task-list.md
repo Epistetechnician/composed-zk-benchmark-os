@@ -13621,6 +13621,42 @@ Evidence Ledger mutation, accepted append policy change, Level2+ evidence,
 score axes, proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean
 execution, or production/SOTA/security/correctness claim.
 
+## Phase 487 HSAI Tiny Z3 Settlement-Blocker Review Terminal Review Closure Review Terminal Metadata
+
+Status: complete. See
+`docs/487-hsai-tiny-z3-settlement-blocker-review-terminal-review-closure-review-terminal-notes.md`.
+
+Goal: implement local settlement-blocker review terminal review closure review
+terminal metadata over one Phase 485 tiny-Z3 closure-review record without
+making accepted append decisions, mutating accepted evidence, changing
+accepted append policy, creating Level2+ evidence, populating score axes,
+running backend proof systems, or making strong public claims.
+
+Implemented: Phase 487 adds deterministic terminal metadata in
+`crates/hsai-agent-admission/src/lib.rs`: schema, state-slice, and
+claim-boundary constants; six non-promotional settlement terminal labels;
+input and output records; issue and validation types; required-nonclaim
+helpers; deterministic digest, id, and label binding helpers; a builder; and a
+validator. The validator binds the Phase 485 settlement-blocker review
+terminal review closure review digest/input digest, Phase 485 digest/id/label
+map digests, explicit nonclaim digest, current accepted append blocker digest,
+inherited Phase 485 id and label bindings, inherited closure-review label, and
+one terminal label.
+
+Validation coverage: focused Phase 487 tests cover valid construction, Phase
+485 digest drift, label drift, Phase 485 state drift, promotional terminal
+summary text, and every promotion flag for accepted append, formal evidence,
+Level2+, score axes, proof/checker/solver authority, backend execution, and
+strong public claims.
+
+Exit criteria: HSAI now has one local terminal metadata record path over a
+Phase 485 closure-review. The terminal metadata keeps accepted append and
+formal evidence blocked. It still has no accepted append decision, accepted
+formal evidence, accepted Evidence Ledger mutation, accepted append policy
+change, Level2+ evidence, score axes, proof-authority claim,
+Lean/new-SMT/COBALT/Rust-to-Lean execution, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
