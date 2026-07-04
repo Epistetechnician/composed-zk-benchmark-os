@@ -6033,5 +6033,23 @@ accepted formal evidence, creates no Level2+ evidence, populates no score axes,
 runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, and claims no production/
 SOTA/security/semantic-correctness result.
 
+[docs/437-hsai-tiny-z3-proposal-candidate-review-notes.md](docs/437-hsai-tiny-z3-proposal-candidate-review-notes.md)
+records the Phase 437 local tiny-Z3 proposal-candidate review metadata
+implementation. The implementation in `crates/hsai-agent-admission/src/lib.rs`
+adds deterministic pure-data review records over one Phase 435 candidate,
+binding the Phase 435 candidate input, Phase 433 review, Phase 431 manifest,
+Phase 429 review, Phase 427 preview, Phase 425 package, Phase 423
+review-record, Phase 421 metadata, Phase 404/405 local Z3 replay digests,
+declared-file digest map, nonclaim digest, reviewer metadata, proposal
+metadata, candidate disposition, review label, and current accepted append
+blocker digest. It rejects Phase 435 candidate digest drift, promoted candidate
+state, accepted append blocker drift, nonclaim drift, promotional candidate
+disposition, promotional review text, and all accepted-evidence/Level2/score/
+proof/checker/solver/SOTA/full-security/action promotion attempts. It does not
+mutate the accepted Evidence Ledger, change accepted append policy, create
+accepted formal evidence, create Level2+ evidence, populate score axes, run
+Lean/new-SMT/COBALT/Rust-to-Lean extraction, submit benchmarks, or claim
+production/SOTA/security/semantic-correctness.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
