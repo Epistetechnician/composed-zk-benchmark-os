@@ -11718,6 +11718,36 @@ accepted Evidence Ledger mutation, accepted append policy change, Level2+
 evidence, score axes, proof-authority claim, Lean/COBALT/Rust-to-Lean
 execution, or production/SOTA/security/correctness claim.
 
+## Phase 434 HSAI Tiny Z3 Accepted Evidence Proposal Candidate Boundary
+
+Status: complete. See
+`docs/434-hsai-tiny-z3-accepted-evidence-proposal-candidate-boundary.md`.
+
+Goal: define the docs-first boundary for a future local tiny-Z3
+accepted-evidence proposal candidate after Phase 433 without implementing
+proposal metadata, mutating accepted evidence, changing accepted append policy,
+creating Level2+ evidence, populating score axes, or making strong public
+claims.
+
+Implemented: Phase 434 defines the future candidate purpose, required future
+inputs, five allowed future disposition labels, required future validation,
+evidence meaning limits, and Phase 435 implementation exit criteria. The
+boundary requires future binding to one Phase 433 review, one Phase 431
+manifest, one Phase 429 review, one Phase 427 preview, one Phase 425 package,
+one Phase 423 review record, one Phase 421 metadata record, Phase 404/405 local
+Z3 replay digests, declared file digest map, nonclaim digest, proposal metadata,
+and current accepted append blockers.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a boundary for a future local proposal candidate
+over one reviewed tiny-Z3 materialized package. It still has no implemented
+Phase 435 candidate metadata, accepted formal evidence, accepted Evidence
+Ledger mutation, accepted append policy change, Level2+ evidence, score axes,
+proof-authority claim, Lean/COBALT/Rust-to-Lean execution, or production/SOTA/
+security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

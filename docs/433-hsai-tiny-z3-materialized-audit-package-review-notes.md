@@ -133,10 +133,10 @@ Phase 433 adds tests that:
 
 ## Next Slice
 
-The next responsible slice is a docs-first boundary for a future tiny-Z3
-accepted-evidence proposal candidate, not acceptance. That boundary must keep
-the candidate separate from accepted formal evidence, accepted Evidence Ledger
-mutation, accepted append policy changes, Level2+ evidence, score axes, Lean
-execution, new SMT execution, COBALT execution, Rust-to-Lean extraction,
-semantic correctness, production readiness, SOTA, breakthrough status, full
-security, and action authority.
+Phase 434 defines a docs-first boundary for a future tiny-Z3 accepted-evidence
+proposal candidate, not acceptance. That boundary keeps the candidate separate
+from accepted formal evidence, accepted Evidence Ledger mutation, accepted
+append policy changes, Level2+ evidence, score axes, Lean execution, new SMT
+execution, COBALT execution, Rust-to-Lean extraction, semantic correctness,
+production readiness, SOTA, breakthrough status, full security, and action
+authority.
