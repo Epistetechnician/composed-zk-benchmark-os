@@ -6179,5 +6179,19 @@ formal evidence, create Level2+ evidence, populate score axes, run
 Lean/new-SMT/COBALT/Rust-to-Lean extraction, submit benchmarks, or claim
 production/SOTA/security/semantic-correctness.
 
+[docs/446-hsai-tiny-z3-accepted-append-decision-blocker-boundary.md](docs/446-hsai-tiny-z3-accepted-append-decision-blocker-boundary.md)
+records the Phase 446 docs-first accepted-append decision blocker boundary
+after one Phase 445 tiny-Z3 accepted-append decision candidate review. The
+boundary permits only future local blocker metadata, defines five allowed
+future blocker labels, requires binding to Phase 445/443/441/439/437/435/433/
+431/429/427/425/423/421 and Phase 404/405 digests, requires declared-file
+digest map, nonclaim, reviewer, proposal, current accepted append blocker,
+candidate-disposition, review-label, and blocker-label bindings, and defines
+Phase 447 implementation exit criteria. It creates no Rust code, makes no
+accepted append decision, mutates no accepted Evidence Ledger, changes no
+accepted append policy, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean
+extraction, and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

@@ -153,8 +153,8 @@ Phase 445 adds tests that:
 
 The next responsible slice is Phase 446: a docs-first boundary for an explicit
 accepted-append decision blocker over the Phase 445 review. That boundary must
-keep blocker metadata separate from accepted formal evidence, accepted Evidence
-Ledger mutation, accepted append policy changes, Level2+ evidence, score axes,
-Lean execution, new SMT execution, COBALT execution, Rust-to-Lean extraction,
-semantic correctness, production readiness, SOTA, breakthrough status, full
-security, and action authority.
+keep blocker metadata separate from an accepted append decision, accepted
+formal evidence, accepted Evidence Ledger mutation, accepted append policy
+changes, Level2+ evidence, score axes, Lean execution, new SMT execution,
+COBALT execution, Rust-to-Lean extraction, semantic correctness, production
+readiness, SOTA, breakthrough status, full security, and action authority.
