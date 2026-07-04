@@ -99,9 +99,8 @@ Result: passed.
 
 ## Next Boundary
 
-The next responsible slice is a docs-first Phase 468 closure-blocker review
-boundary over the Phase 467 closure-blocker metadata. It must keep backend
-execution, Lean, new SMT, COBALT, Rust-to-Lean extraction, accepted evidence,
-Level2+ evidence, score axes, accepted Evidence Ledger mutation, and strong
-public claims out of scope unless a separate explicit phase opens those
-surfaces.
+Phase 468 now defines the docs-first closure-blocker review boundary over the
+Phase 467 closure-blocker metadata. It keeps backend execution, Lean, new SMT,
+COBALT, Rust-to-Lean extraction, accepted evidence, Level2+ evidence, score
+axes, accepted Evidence Ledger mutation, and strong public claims out of scope
+unless a separate explicit phase opens those surfaces.
