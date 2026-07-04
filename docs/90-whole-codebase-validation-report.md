@@ -6720,5 +6720,22 @@ evidence, creates no Level2+ evidence, populates no score axes, runs no
 Lean/new-SMT/COBALT/Rust-to-Lean extraction, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/475-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-notes.md](docs/475-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-notes.md)
+records the Phase 475 local tiny-Z3 accepted-append decision
+quarantine-resolution escalation terminal-review closure-blocker review
+terminal-closure review settlement-blocker implementation. The Rust surface in
+`crates/hsai-agent-admission/src/lib.rs` adds deterministic
+settlement-blocker labels, inputs, records, validation issues, validation
+reports, binding helpers, a builder, and tests over one Phase 473
+terminal-closure review. The validator binds the Phase 473 terminal-closure
+review digest/input digest, Phase 473 digest/id/label binding map digests,
+explicit nonclaims, current accepted append blocker digest, inherited ids,
+inherited terminal-closure review label, and settlement-blocker label, while
+rejecting drift, promotional summary text, and explicit promotion attempts. It
+does not make an accepted append decision, mutate the accepted Evidence
+Ledger, change accepted append policy, create accepted formal evidence, create
+Level2+ evidence, populate score axes, run Lean/new-SMT/COBALT/Rust-to-Lean
+extraction, or claim production/SOTA/security/semantic-correctness.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
