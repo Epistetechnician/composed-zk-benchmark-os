@@ -5861,5 +5861,19 @@ policy, creates no accepted formal evidence, creates no Level2+ evidence,
 populates no score axes, runs no Lean/SMT/COBALT/Rust-to-Lean extraction, and
 claims no production/SOTA/security/semantic-correctness result.
 
+[docs/425-hsai-tiny-z3-local-review-audit-package-notes.md](docs/425-hsai-tiny-z3-local-review-audit-package-notes.md)
+records the Phase 425 local non-accepted tiny-Z3 audit package. The Rust
+surface adds typed input/output metadata, issue taxonomy, validation report,
+claim-boundary and nonclaim helpers, builder, validator, and focused tests. The
+package binds one Phase 423 review record, one Phase 421 metadata record, Phase
+404/405 local Z3 backend replay digests through the review record, current
+accepted append blockers, reviewer metadata, package manifest digest, package
+summary, and explicit nonclaims. It rejects raw backend/proof/checker/solver
+artifacts, secrets, mutable accepted-ledger state, promotional package text,
+accepted evidence mutation, accepted append policy changes, accepted formal
+evidence, Level2+ evidence, score axes, proof/checker/solver promotion,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, and action authority.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

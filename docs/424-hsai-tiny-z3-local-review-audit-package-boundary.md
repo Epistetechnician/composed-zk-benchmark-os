@@ -110,7 +110,9 @@ It cannot support:
 
 ## Phase 425 Implementation Exit Criteria
 
-Phase 425 may implement the local non-accepted tiny-Z3 audit package only if it:
+Phase 425 implements the local non-accepted tiny-Z3 audit package in
+`docs/425-hsai-tiny-z3-local-review-audit-package-notes.md`. The
+implementation:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;
