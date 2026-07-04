@@ -148,10 +148,10 @@ Phase 443 adds tests that:
 
 ## Next Slice
 
-The next responsible slice is Phase 444: a docs-first boundary for decision
-candidate review metadata over the Phase 443 candidate. That boundary must keep
-review metadata separate from accepted formal evidence, accepted Evidence
-Ledger mutation, accepted append policy changes, Level2+ evidence, score axes,
-Lean execution, new SMT execution, COBALT execution, Rust-to-Lean extraction,
-semantic correctness, production readiness, SOTA, breakthrough status, full
-security, and action authority.
+The next responsible slice is Phase 444: a docs-first boundary for
+accepted-append decision candidate review metadata over the Phase 443
+candidate. That boundary must keep review metadata separate from accepted
+formal evidence, accepted Evidence Ledger mutation, accepted append policy
+changes, Level2+ evidence, score axes, Lean execution, new SMT execution,
+COBALT execution, Rust-to-Lean extraction, semantic correctness, production
+readiness, SOTA, breakthrough status, full security, and action authority.
