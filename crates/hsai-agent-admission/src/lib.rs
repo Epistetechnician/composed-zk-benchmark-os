@@ -893,6 +893,31 @@ pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_LOCAL_TRANSACTION: 
 pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_MATERIALIZED_ROUTE: &str =
     "MaterializedAcceptedLedgerAppendRequest";
 pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_UNRESOLVED: &str = "unresolved";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-z3-accepted-append-policy-version:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_STATE_SLICE: &str =
+    "phase-493-hsai-tiny-z3-accepted-append-policy-version-metadata";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CLAIM_BOUNDARY: &str = "local tiny-Z3 accepted append policy-version metadata only; records accepted append policy and transaction version identifiers that a future accepted append bridge must bind before asking zkbench-core to evaluate an accepted-ledger append transaction, but does not make an accepted append decision, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, create proof artifacts, create checker transcripts, create solver certificates, run Lean, run new SMT, run COBALT, run Rust-to-Lean extraction, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_POLICY_OWNER_ID: &str =
+    "zkbench-core";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_POLICY_TYPE: &str =
+    "EvidenceAcceptancePolicy";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_VERSION_TYPE: &str =
+    "EvidenceAcceptancePolicyVersion";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_HSAI_MARKER: &str =
+    "zkbench-core-accepted-append-local-level1-replay-formal-evidence-blocked:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CANDIDATE_POLICY_ID: &str =
+    "phase_j_level1_local_only_policy";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CANDIDATE_POLICY_VERSION: &str =
+    "phase-j-evidence-acceptance-policy-v0";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CANDIDATE_POLICY_MODE: &str =
+    "Level1LocalOnly";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_TRANSACTION_VERSION_TYPE: &str =
+    "AcceptedLedgerAppendTransactionVersion";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_TRANSACTION_VERSION: &str =
+    "phase-w-accepted-ledger-append-transaction-v0";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CLAIM_BOUNDARY_CAP: &str =
+    "Level1LocalReplay";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -12692,6 +12717,181 @@ pub enum GatewayFormalTinyZ3AcceptedAppendOwnerRouteIssue {
 pub struct GatewayFormalTinyZ3AcceptedAppendOwnerRouteValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyZ3AcceptedAppendOwnerRouteIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3AcceptedAppendPolicyVersionLabel {
+    AcceptedAppendPolicyVersionRecorded,
+    AcceptedAppendPolicyVersionRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3AcceptedAppendPolicyVersionInput {
+    pub schema_version: String,
+    pub policy_version_gate_id: String,
+    pub policy_version_policy_id: String,
+    pub policy_version_decision_id: String,
+    pub policy_version_decision_at_unix: u64,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub accepted_append_owner_id: String,
+    pub local_transaction_route_id: String,
+    pub materialized_route_id: String,
+    pub evidence_acceptance_policy_owner_id: String,
+    pub acceptance_policy_type: String,
+    pub acceptance_policy_version_type: String,
+    pub hsai_accepted_append_policy_version_marker: String,
+    pub candidate_policy_id: String,
+    pub candidate_policy_version: String,
+    pub candidate_policy_mode: String,
+    pub append_transaction_version_type: String,
+    pub append_transaction_version: String,
+    pub claim_boundary_cap: String,
+    pub disallowed_evidence_classes: BTreeSet<String>,
+    pub review_decision_requirements: BTreeSet<String>,
+    pub rejection_policy: BTreeSet<String>,
+    pub policy_version_label: GatewayFormalTinyZ3AcceptedAppendPolicyVersionLabel,
+    pub policy_version_summary: String,
+    pub accepted_append_policy_change_requested: bool,
+    pub accepted_append_decision_requested: bool,
+    pub accepted_evidence_ledger_mutation_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyZ3AcceptedAppendPolicyVersionInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-accepted-append-policy-version-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3AcceptedAppendPolicyVersion {
+    pub schema_version: String,
+    pub policy_version_gate_id: String,
+    pub state_slice: String,
+    pub policy_version_input_digest: Hash,
+    pub policy_version_policy_id: String,
+    pub policy_version_decision_id: String,
+    pub policy_version_decision_at_unix: u64,
+    pub phase491_owner_route_digest: Hash,
+    pub phase491_owner_route_input_digest: Hash,
+    pub phase491_digest_binding_map_digest: Hash,
+    pub phase491_id_binding_map_digest: Hash,
+    pub phase491_label_binding_map_digest: Hash,
+    pub phase491_explicit_nonclaims_digest: Hash,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub accepted_append_owner_id: String,
+    pub local_transaction_route_id: String,
+    pub materialized_route_id: String,
+    pub evidence_acceptance_policy_owner_id: String,
+    pub acceptance_policy_type: String,
+    pub acceptance_policy_version_type: String,
+    pub hsai_accepted_append_policy_version_marker: String,
+    pub candidate_policy_id: String,
+    pub candidate_policy_version: String,
+    pub candidate_policy_mode: String,
+    pub append_transaction_version_type: String,
+    pub append_transaction_version: String,
+    pub claim_boundary_cap: String,
+    pub disallowed_evidence_classes: BTreeSet<String>,
+    pub review_decision_requirements: BTreeSet<String>,
+    pub rejection_policy: BTreeSet<String>,
+    pub policy_version_label: GatewayFormalTinyZ3AcceptedAppendPolicyVersionLabel,
+    pub policy_version_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub changes_accepted_append_policy: bool,
+    pub makes_accepted_append_decision: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub creates_accepted_formal_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3AcceptedAppendPolicyVersion {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-accepted-append-policy-version:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue {
+    InvalidSchemaVersion,
+    InvalidPolicyVersionGateId,
+    InvalidPolicyVersionPolicyId,
+    InvalidPolicyVersionDecisionId,
+    MissingPolicyVersionDecisionTimestamp,
+    MissingDigest(String),
+    DigestBindingMismatch,
+    IdBindingMismatch,
+    InvalidIdBinding(String),
+    LabelBindingMismatch,
+    Phase491OwnerRouteStateMismatch,
+    NonclaimMismatch,
+    InvalidAcceptedAppendOwner,
+    InvalidLocalTransactionRoute,
+    InvalidMaterializedRoute,
+    InvalidPolicyOwner,
+    InvalidAcceptancePolicyType,
+    InvalidAcceptancePolicyVersionType,
+    InvalidHsaiAcceptedAppendPolicyVersion,
+    InvalidCandidatePolicyId,
+    InvalidCandidatePolicyVersion,
+    InvalidCandidatePolicyMode,
+    InvalidAppendTransactionVersionType,
+    InvalidAppendTransactionVersion,
+    InvalidClaimBoundaryCap,
+    DisallowedEvidenceClassesMismatch,
+    ReviewDecisionRequirementsMismatch,
+    RejectionPolicyMismatch,
+    PolicyVersionSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3AcceptedAppendPolicyVersionValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -52409,6 +52609,495 @@ pub fn validate_gateway_formal_tiny_z3_accepted_append_owner_route_input(
     }
 }
 
+pub fn gateway_formal_tiny_z3_accepted_append_policy_version_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_z3_accepted_append_policy_version_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    [
+        "not accepted append decision",
+        "not accepted formal evidence",
+        "not accepted evidence ledger mutation",
+        "not accepted append policy change",
+        "not Level2+ evidence",
+        "not score-axis evidence",
+        "not proof authority",
+        "not checker transcript authority",
+        "not solver certificate authority",
+        "not backend execution evidence",
+        "not Lean execution evidence",
+        "not new SMT execution evidence",
+        "not COBALT execution evidence",
+        "not Rust-to-Lean extraction evidence",
+        "not benchmark evidence",
+        "not SOTA",
+        "not semantic correctness",
+        "not production readiness",
+        "not full security",
+        "not action authority",
+    ]
+    .into_iter()
+    .map(|label| NonClaimLabel(label.to_owned()))
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_accepted_append_policy_version_disallowed_evidence_classes(
+) -> BTreeSet<String> {
+    [
+        "ReproducibleBenchmarkArtifact",
+        "CrossBackendReplay",
+        "FormalPropertyStatement",
+        "MachineCheckedScopedProof",
+        "IndependentlyReproducedEvidence",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_accepted_append_policy_version_review_decision_requirements(
+) -> BTreeSet<String> {
+    [
+        "human_review_role_required",
+        "ApproveForCandidateOnly",
+        "ApproveForFutureAppendPreview",
+        "review_decision_must_validate",
+        "automated_policy_check_alone_insufficient",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_accepted_append_policy_version_rejection_policy() -> BTreeSet<String>
+{
+    [
+        "level2_plus_actual_evidence_blocked",
+        "formal_evidence_blocked",
+        "official_benchmark_claim_blocked",
+        "score_axis_population_blocked",
+        "stale_ledger_tip_blocked",
+        "missing_artifact_digest_blocked",
+        "strong_public_claim_blocked",
+        "accepted_append_policy_change_blocked",
+        "accepted_evidence_ledger_mutation_blocked",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_accepted_append_policy_version_digest_bindings(
+    owner_route: &GatewayFormalTinyZ3AcceptedAppendOwnerRoute,
+) -> BTreeMap<String, Hash> {
+    BTreeMap::from([
+        (
+            "phase491_owner_route_digest".to_owned(),
+            owner_route.digest(),
+        ),
+        (
+            "phase491_owner_route_input_digest".to_owned(),
+            owner_route.owner_route_input_digest,
+        ),
+        (
+            "phase491_digest_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase491-owner-route-digest-bindings:v1",
+                &owner_route.digest_bindings,
+            ),
+        ),
+        (
+            "phase491_id_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase491-owner-route-id-bindings:v1",
+                &owner_route.id_bindings,
+            ),
+        ),
+        (
+            "phase491_label_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase491-owner-route-label-bindings:v1",
+                &owner_route.label_bindings,
+            ),
+        ),
+        (
+            "phase491_explicit_nonclaims_digest".to_owned(),
+            owner_route.explicit_nonclaims_digest,
+        ),
+        (
+            "current_accepted_append_blockers_digest".to_owned(),
+            owner_route.current_accepted_append_blockers_digest,
+        ),
+    ])
+}
+
+pub fn gateway_formal_tiny_z3_accepted_append_policy_version_id_bindings(
+    owner_route: &GatewayFormalTinyZ3AcceptedAppendOwnerRoute,
+    policy_version_gate_id: &str,
+    policy_version_policy_id: &str,
+    policy_version_decision_id: &str,
+) -> BTreeMap<String, String> {
+    let mut ids = owner_route.id_bindings.clone();
+    ids.insert(
+        "accepted_append_policy_version_gate_id".to_owned(),
+        policy_version_gate_id.to_owned(),
+    );
+    ids.insert(
+        "accepted_append_policy_version_policy_id".to_owned(),
+        policy_version_policy_id.to_owned(),
+    );
+    ids.insert(
+        "accepted_append_policy_version_decision_id".to_owned(),
+        policy_version_decision_id.to_owned(),
+    );
+    ids.insert(
+        "phase491_owner_route_gate_id".to_owned(),
+        owner_route.owner_route_gate_id.clone(),
+    );
+    ids
+}
+
+pub fn gateway_formal_tiny_z3_accepted_append_policy_version_label_bindings(
+    owner_route: &GatewayFormalTinyZ3AcceptedAppendOwnerRoute,
+    policy_version_label: &GatewayFormalTinyZ3AcceptedAppendPolicyVersionLabel,
+) -> BTreeMap<String, String> {
+    let mut labels = owner_route.label_bindings.clone();
+    labels.insert(
+        "phase491_owner_route_label".to_owned(),
+        format!("{:?}", owner_route.owner_route_label),
+    );
+    labels.insert(
+        "accepted_append_policy_version_label".to_owned(),
+        format!("{policy_version_label:?}"),
+    );
+    labels
+}
+
+pub fn build_gateway_formal_tiny_z3_accepted_append_policy_version(
+    owner_route: &GatewayFormalTinyZ3AcceptedAppendOwnerRoute,
+    input: &GatewayFormalTinyZ3AcceptedAppendPolicyVersionInput,
+) -> Result<
+    GatewayFormalTinyZ3AcceptedAppendPolicyVersion,
+    GatewayFormalTinyZ3AcceptedAppendPolicyVersionValidation,
+> {
+    let validation =
+        validate_gateway_formal_tiny_z3_accepted_append_policy_version_input(owner_route, input);
+    if !validation.valid {
+        return Err(validation);
+    }
+    let digest_bindings =
+        gateway_formal_tiny_z3_accepted_append_policy_version_digest_bindings(owner_route);
+    Ok(GatewayFormalTinyZ3AcceptedAppendPolicyVersion {
+        schema_version: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_SCHEMA_VERSION
+            .to_owned(),
+        policy_version_gate_id: input.policy_version_gate_id.clone(),
+        state_slice: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_STATE_SLICE.to_owned(),
+        policy_version_input_digest: input.digest(),
+        policy_version_policy_id: input.policy_version_policy_id.clone(),
+        policy_version_decision_id: input.policy_version_decision_id.clone(),
+        policy_version_decision_at_unix: input.policy_version_decision_at_unix,
+        phase491_owner_route_digest: digest_bindings["phase491_owner_route_digest"],
+        phase491_owner_route_input_digest: digest_bindings["phase491_owner_route_input_digest"],
+        phase491_digest_binding_map_digest: digest_bindings["phase491_digest_binding_map_digest"],
+        phase491_id_binding_map_digest: digest_bindings["phase491_id_binding_map_digest"],
+        phase491_label_binding_map_digest: digest_bindings["phase491_label_binding_map_digest"],
+        phase491_explicit_nonclaims_digest: digest_bindings["phase491_explicit_nonclaims_digest"],
+        current_accepted_append_blockers_digest: digest_bindings
+            ["current_accepted_append_blockers_digest"],
+        digest_bindings: input.digest_bindings.clone(),
+        id_bindings: input.id_bindings.clone(),
+        label_bindings: input.label_bindings.clone(),
+        explicit_nonclaims: input.explicit_nonclaims.clone(),
+        explicit_nonclaims_digest: input.explicit_nonclaims_digest,
+        accepted_append_owner_id: input.accepted_append_owner_id.clone(),
+        local_transaction_route_id: input.local_transaction_route_id.clone(),
+        materialized_route_id: input.materialized_route_id.clone(),
+        evidence_acceptance_policy_owner_id: input.evidence_acceptance_policy_owner_id.clone(),
+        acceptance_policy_type: input.acceptance_policy_type.clone(),
+        acceptance_policy_version_type: input.acceptance_policy_version_type.clone(),
+        hsai_accepted_append_policy_version_marker: input
+            .hsai_accepted_append_policy_version_marker
+            .clone(),
+        candidate_policy_id: input.candidate_policy_id.clone(),
+        candidate_policy_version: input.candidate_policy_version.clone(),
+        candidate_policy_mode: input.candidate_policy_mode.clone(),
+        append_transaction_version_type: input.append_transaction_version_type.clone(),
+        append_transaction_version: input.append_transaction_version.clone(),
+        claim_boundary_cap: input.claim_boundary_cap.clone(),
+        disallowed_evidence_classes: input.disallowed_evidence_classes.clone(),
+        review_decision_requirements: input.review_decision_requirements.clone(),
+        rejection_policy: input.rejection_policy.clone(),
+        policy_version_label: input.policy_version_label.clone(),
+        policy_version_summary: input.policy_version_summary.clone(),
+        previous_promotion_state: "tiny_z3_accepted_append_owner_mutation_route_gate_metadata"
+            .to_owned(),
+        promotion_state: "tiny_z3_accepted_append_policy_version_metadata".to_owned(),
+        next_required_state: "tiny_z3_accepted_path_prerequisites_remain_unresolved".to_owned(),
+        claim_boundary: gateway_formal_tiny_z3_accepted_append_policy_version_claim_boundary(),
+        changes_accepted_append_policy: false,
+        makes_accepted_append_decision: false,
+        mutates_accepted_evidence_ledger: false,
+        creates_accepted_formal_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        backend_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_gateway_formal_tiny_z3_accepted_append_policy_version_input(
+    owner_route: &GatewayFormalTinyZ3AcceptedAppendOwnerRoute,
+    input: &GatewayFormalTinyZ3AcceptedAppendPolicyVersionInput,
+) -> GatewayFormalTinyZ3AcceptedAppendPolicyVersionValidation {
+    let mut issues = Vec::new();
+    if input.schema_version != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_SCHEMA_VERSION
+    {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.policy_version_gate_id) {
+        issues
+            .push(GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::InvalidPolicyVersionGateId);
+    }
+    if !is_single_segment_id(&input.policy_version_policy_id) {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::InvalidPolicyVersionPolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.policy_version_decision_id) {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::InvalidPolicyVersionDecisionId,
+        );
+    }
+    if input.policy_version_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::MissingPolicyVersionDecisionTimestamp,
+        );
+    }
+    let expected_digests =
+        gateway_formal_tiny_z3_accepted_append_policy_version_digest_bindings(owner_route);
+    for (label, digest) in &input.digest_bindings {
+        if *digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::MissingDigest(label.clone()),
+            );
+        }
+    }
+    if input.digest_bindings != expected_digests {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::DigestBindingMismatch);
+    }
+    let expected_ids = gateway_formal_tiny_z3_accepted_append_policy_version_id_bindings(
+        owner_route,
+        &input.policy_version_gate_id,
+        &input.policy_version_policy_id,
+        &input.policy_version_decision_id,
+    );
+    for (label, value) in &input.id_bindings {
+        if !is_single_segment_id(value) {
+            issues.push(
+                GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::InvalidIdBinding(
+                    label.clone(),
+                ),
+            );
+        }
+    }
+    if input.id_bindings != expected_ids {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::IdBindingMismatch);
+    }
+    let expected_labels = gateway_formal_tiny_z3_accepted_append_policy_version_label_bindings(
+        owner_route,
+        &input.policy_version_label,
+    );
+    if input.label_bindings != expected_labels {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::LabelBindingMismatch);
+    }
+    if owner_route.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_SCHEMA_VERSION
+        || owner_route.state_slice != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_STATE_SLICE
+        || owner_route.promotion_state
+            != "tiny_z3_accepted_append_owner_mutation_route_gate_metadata"
+        || owner_route.next_required_state
+            != "tiny_z3_accepted_path_prerequisites_remain_unresolved"
+        || owner_route.claim_boundary
+            != gateway_formal_tiny_z3_accepted_append_owner_route_claim_boundary()
+        || owner_route.accepted_append_owner_id
+            != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_OWNER_ID
+        || owner_route.local_transaction_route_id
+            != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_LOCAL_TRANSACTION
+        || owner_route.materialized_route_id
+            != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_MATERIALIZED_ROUTE
+        || owner_route.makes_accepted_append_decision
+        || owner_route.mutates_accepted_evidence_ledger
+        || owner_route.changes_accepted_append_policy
+        || owner_route.creates_accepted_formal_evidence
+        || owner_route.creates_level2_evidence
+        || owner_route.populates_score_axes
+        || owner_route.proof_artifact_created
+        || owner_route.checker_transcript_created
+        || owner_route.solver_certificate_created
+        || owner_route.backend_execution_evidence_created
+        || owner_route.benchmark_evidence_created
+        || owner_route.semantic_correctness_claimed
+        || owner_route.production_readiness_claimed
+        || owner_route.sota_claimed
+        || owner_route.breakthrough_claimed
+        || owner_route.full_security_claimed
+        || owner_route.grants_authority
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::Phase491OwnerRouteStateMismatch,
+        );
+    }
+    let nonclaims = gateway_formal_tiny_z3_accepted_append_policy_version_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-accepted-append-policy-version-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::NonclaimMismatch);
+    }
+    if input.accepted_append_owner_id != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_OWNER_ID
+    {
+        issues
+            .push(GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::InvalidAcceptedAppendOwner);
+    }
+    if input.local_transaction_route_id
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_LOCAL_TRANSACTION
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::InvalidLocalTransactionRoute,
+        );
+    }
+    if input.materialized_route_id
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_MATERIALIZED_ROUTE
+    {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::InvalidMaterializedRoute);
+    }
+    if input.evidence_acceptance_policy_owner_id
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_POLICY_OWNER_ID
+    {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::InvalidPolicyOwner);
+    }
+    if input.acceptance_policy_type
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_POLICY_TYPE
+    {
+        issues
+            .push(GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::InvalidAcceptancePolicyType);
+    }
+    if input.acceptance_policy_version_type
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_VERSION_TYPE
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::InvalidAcceptancePolicyVersionType,
+        );
+    }
+    if input.hsai_accepted_append_policy_version_marker
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_HSAI_MARKER
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::InvalidHsaiAcceptedAppendPolicyVersion,
+        );
+    }
+    if input.candidate_policy_id
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CANDIDATE_POLICY_ID
+    {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::InvalidCandidatePolicyId);
+    }
+    if input.candidate_policy_version
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CANDIDATE_POLICY_VERSION
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::InvalidCandidatePolicyVersion,
+        );
+    }
+    if input.candidate_policy_mode
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CANDIDATE_POLICY_MODE
+    {
+        issues
+            .push(GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::InvalidCandidatePolicyMode);
+    }
+    if input.append_transaction_version_type
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_TRANSACTION_VERSION_TYPE
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::InvalidAppendTransactionVersionType,
+        );
+    }
+    if input.append_transaction_version
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_TRANSACTION_VERSION
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::InvalidAppendTransactionVersion,
+        );
+    }
+    if input.claim_boundary_cap
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CLAIM_BOUNDARY_CAP
+    {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::InvalidClaimBoundaryCap);
+    }
+    if input.disallowed_evidence_classes
+        != gateway_formal_tiny_z3_accepted_append_policy_version_disallowed_evidence_classes()
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::DisallowedEvidenceClassesMismatch,
+        );
+    }
+    if input.review_decision_requirements
+        != gateway_formal_tiny_z3_accepted_append_policy_version_review_decision_requirements()
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::ReviewDecisionRequirementsMismatch,
+        );
+    }
+    if input.rejection_policy
+        != gateway_formal_tiny_z3_accepted_append_policy_version_rejection_policy()
+    {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::RejectionPolicyMismatch);
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.policy_version_summary,
+    ) {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::PolicyVersionSummaryPromotionClaim,
+        );
+    }
+    if input.accepted_append_policy_change_requested
+        || input.accepted_append_decision_requested
+        || input.accepted_evidence_ledger_mutation_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.backend_execution_evidence_created
+        || input.benchmark_evidence_created
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::PromotionAttempt);
+    }
+    GatewayFormalTinyZ3AcceptedAppendPolicyVersionValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -86954,6 +87643,268 @@ mod tests {
     }
 
     #[test]
+    fn phase493_tiny_z3_accepted_append_policy_version_builds_blocking_record() {
+        let Some((obligation_root, phase405_output_root, output_root, owner_route)) =
+            phase493_tiny_z3_accepted_append_owner_route_source("phase493-policy-version")
+        else {
+            return;
+        };
+        let policy_version_input = phase493_tiny_z3_accepted_append_policy_version_input(
+            "phase493-accepted-append-policy-version",
+            &owner_route,
+            GatewayFormalTinyZ3AcceptedAppendPolicyVersionLabel::AcceptedAppendPolicyVersionRecorded,
+        );
+        let policy_version = build_gateway_formal_tiny_z3_accepted_append_policy_version(
+            &owner_route,
+            &policy_version_input,
+        )
+        .expect("phase493 policy version builds");
+
+        assert_eq!(
+            policy_version.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_STATE_SLICE
+        );
+        assert_eq!(
+            policy_version.phase491_owner_route_digest,
+            owner_route.digest()
+        );
+        assert_eq!(
+            policy_version.phase491_owner_route_input_digest,
+            owner_route.owner_route_input_digest
+        );
+        assert_eq!(
+            policy_version.phase491_digest_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase491-owner-route-digest-bindings:v1",
+                &owner_route.digest_bindings,
+            )
+        );
+        assert_eq!(
+            policy_version.phase491_id_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase491-owner-route-id-bindings:v1",
+                &owner_route.id_bindings,
+            )
+        );
+        assert_eq!(
+            policy_version.phase491_label_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase491-owner-route-label-bindings:v1",
+                &owner_route.label_bindings,
+            )
+        );
+        assert_eq!(
+            policy_version.phase491_explicit_nonclaims_digest,
+            owner_route.explicit_nonclaims_digest
+        );
+        assert_eq!(
+            policy_version.accepted_append_owner_id,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_OWNER_ID
+        );
+        assert_eq!(
+            policy_version.local_transaction_route_id,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_LOCAL_TRANSACTION
+        );
+        assert_eq!(
+            policy_version.materialized_route_id,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_MATERIALIZED_ROUTE
+        );
+        assert_eq!(
+            policy_version.evidence_acceptance_policy_owner_id,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_POLICY_OWNER_ID
+        );
+        assert_eq!(
+            policy_version.acceptance_policy_type,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_POLICY_TYPE
+        );
+        assert_eq!(
+            policy_version.acceptance_policy_version_type,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_VERSION_TYPE
+        );
+        assert_eq!(
+            policy_version.hsai_accepted_append_policy_version_marker,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_HSAI_MARKER
+        );
+        assert_eq!(
+            policy_version.candidate_policy_id,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CANDIDATE_POLICY_ID
+        );
+        assert_eq!(
+            policy_version.candidate_policy_version,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CANDIDATE_POLICY_VERSION
+        );
+        assert_eq!(
+            policy_version.candidate_policy_mode,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CANDIDATE_POLICY_MODE
+        );
+        assert_eq!(
+            policy_version.append_transaction_version_type,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_TRANSACTION_VERSION_TYPE
+        );
+        assert_eq!(
+            policy_version.append_transaction_version,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_TRANSACTION_VERSION
+        );
+        assert_eq!(
+            policy_version.claim_boundary_cap,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CLAIM_BOUNDARY_CAP
+        );
+        assert_eq!(
+            policy_version.disallowed_evidence_classes,
+            gateway_formal_tiny_z3_accepted_append_policy_version_disallowed_evidence_classes()
+        );
+        assert_eq!(
+            policy_version.review_decision_requirements,
+            gateway_formal_tiny_z3_accepted_append_policy_version_review_decision_requirements()
+        );
+        assert_eq!(
+            policy_version.rejection_policy,
+            gateway_formal_tiny_z3_accepted_append_policy_version_rejection_policy()
+        );
+        assert_eq!(
+            policy_version.previous_promotion_state,
+            "tiny_z3_accepted_append_owner_mutation_route_gate_metadata"
+        );
+        assert_eq!(
+            policy_version.promotion_state,
+            "tiny_z3_accepted_append_policy_version_metadata"
+        );
+        assert_eq!(
+            policy_version.next_required_state,
+            "tiny_z3_accepted_path_prerequisites_remain_unresolved"
+        );
+        assert_eq!(
+            policy_version.claim_boundary,
+            gateway_formal_tiny_z3_accepted_append_policy_version_claim_boundary()
+        );
+        assert!(!policy_version.changes_accepted_append_policy);
+        assert!(!policy_version.makes_accepted_append_decision);
+        assert!(!policy_version.mutates_accepted_evidence_ledger);
+        assert!(!policy_version.creates_accepted_formal_evidence);
+        assert!(!policy_version.creates_level2_evidence);
+        assert!(!policy_version.populates_score_axes);
+        assert!(!policy_version.proof_artifact_created);
+        assert!(!policy_version.checker_transcript_created);
+        assert!(!policy_version.solver_certificate_created);
+        assert!(!policy_version.backend_execution_evidence_created);
+        assert!(!policy_version.benchmark_evidence_created);
+        assert!(!policy_version.semantic_correctness_claimed);
+        assert!(!policy_version.production_readiness_claimed);
+        assert!(!policy_version.sota_claimed);
+        assert!(!policy_version.breakthrough_claimed);
+        assert!(!policy_version.full_security_claimed);
+        assert!(!policy_version.grants_authority);
+
+        let mut digest_drift = policy_version_input.clone();
+        digest_drift
+            .digest_bindings
+            .insert("phase491_owner_route_digest".to_owned(), Hash([55; 32]));
+        let digest_validation =
+            validate_gateway_formal_tiny_z3_accepted_append_policy_version_input(
+                &owner_route,
+                &digest_drift,
+            );
+        assert!(digest_validation
+            .issues
+            .contains(&GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::DigestBindingMismatch));
+
+        let mut policy_marker_drift = policy_version_input.clone();
+        policy_marker_drift.hsai_accepted_append_policy_version_marker =
+            "future-unreviewed-policy".to_owned();
+        let policy_marker_validation =
+            validate_gateway_formal_tiny_z3_accepted_append_policy_version_input(
+                &owner_route,
+                &policy_marker_drift,
+            );
+        assert!(policy_marker_validation.issues.contains(
+            &GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::InvalidHsaiAcceptedAppendPolicyVersion
+        ));
+
+        let mut transaction_version_drift = policy_version_input.clone();
+        transaction_version_drift.append_transaction_version =
+            "phase-w-accepted-ledger-append-transaction-v9".to_owned();
+        let transaction_validation =
+            validate_gateway_formal_tiny_z3_accepted_append_policy_version_input(
+                &owner_route,
+                &transaction_version_drift,
+            );
+        assert!(transaction_validation.issues.contains(
+            &GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::InvalidAppendTransactionVersion
+        ));
+
+        let mut evidence_class_drift = policy_version_input.clone();
+        evidence_class_drift
+            .disallowed_evidence_classes
+            .remove("MachineCheckedScopedProof");
+        let evidence_class_validation =
+            validate_gateway_formal_tiny_z3_accepted_append_policy_version_input(
+                &owner_route,
+                &evidence_class_drift,
+            );
+        assert!(evidence_class_validation.issues.contains(
+            &GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::DisallowedEvidenceClassesMismatch
+        ));
+
+        fs::remove_dir_all(&output_root).expect("phase493 policy-version output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase493 policy-version phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase493 policy-version obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase493_tiny_z3_accepted_append_policy_version_rejects_promotion() {
+        let Some((obligation_root, phase405_output_root, output_root, owner_route)) =
+            phase493_tiny_z3_accepted_append_owner_route_source(
+                "phase493-policy-version-promotion",
+            )
+        else {
+            return;
+        };
+        let mut policy_version_input = phase493_tiny_z3_accepted_append_policy_version_input(
+            "phase493-promotion-policy-version",
+            &owner_route,
+            GatewayFormalTinyZ3AcceptedAppendPolicyVersionLabel::AcceptedAppendPolicyVersionRejected,
+        );
+
+        policy_version_input.accepted_append_policy_change_requested = true;
+        policy_version_input.accepted_append_decision_requested = true;
+        policy_version_input.accepted_evidence_ledger_mutation_requested = true;
+        policy_version_input.accepted_formal_evidence_created = true;
+        policy_version_input.creates_level2_evidence = true;
+        policy_version_input.populates_score_axes = true;
+        policy_version_input.proof_artifact_promoted = true;
+        policy_version_input.checker_transcript_promoted = true;
+        policy_version_input.solver_certificate_promoted = true;
+        policy_version_input.backend_execution_evidence_created = true;
+        policy_version_input.benchmark_evidence_created = true;
+        policy_version_input.semantic_correctness_claimed = true;
+        policy_version_input.production_readiness_claimed = true;
+        policy_version_input.sota_claimed = true;
+        policy_version_input.breakthrough_claimed = true;
+        policy_version_input.full_security_claimed = true;
+        policy_version_input.action_authority_claimed = true;
+        let validation = validate_gateway_formal_tiny_z3_accepted_append_policy_version_input(
+            &owner_route,
+            &policy_version_input,
+        );
+        assert!(validation
+            .issues
+            .contains(&GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue::PromotionAttempt));
+        assert!(build_gateway_formal_tiny_z3_accepted_append_policy_version(
+            &owner_route,
+            &policy_version_input,
+        )
+        .is_err());
+
+        fs::remove_dir_all(&output_root).expect("phase493 promotion output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase493 promotion phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase493 promotion obligation cleanup succeeds");
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -93401,6 +94352,130 @@ mod tests {
             full_security_claimed: false,
             action_authority_claimed: false,
         }
+    }
+
+    fn phase493_tiny_z3_accepted_append_policy_version_input(
+        policy_version_gate_id: &str,
+        owner_route: &GatewayFormalTinyZ3AcceptedAppendOwnerRoute,
+        policy_version_label: GatewayFormalTinyZ3AcceptedAppendPolicyVersionLabel,
+    ) -> GatewayFormalTinyZ3AcceptedAppendPolicyVersionInput {
+        let policy_version_policy_id = "phase493-accepted-append-policy-version-policy";
+        let policy_version_decision_id = "phase493-accepted-append-policy-version-decision";
+        let nonclaims = gateway_formal_tiny_z3_accepted_append_policy_version_required_nonclaims();
+        GatewayFormalTinyZ3AcceptedAppendPolicyVersionInput {
+            schema_version: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_SCHEMA_VERSION
+                .to_owned(),
+            policy_version_gate_id: policy_version_gate_id.to_owned(),
+            policy_version_policy_id: policy_version_policy_id.to_owned(),
+            policy_version_decision_id: policy_version_decision_id.to_owned(),
+            policy_version_decision_at_unix: 1_800_000_493,
+            digest_bindings: gateway_formal_tiny_z3_accepted_append_policy_version_digest_bindings(
+                owner_route,
+            ),
+            id_bindings: gateway_formal_tiny_z3_accepted_append_policy_version_id_bindings(
+                owner_route,
+                policy_version_gate_id,
+                policy_version_policy_id,
+                policy_version_decision_id,
+            ),
+            label_bindings: gateway_formal_tiny_z3_accepted_append_policy_version_label_bindings(
+                owner_route,
+                &policy_version_label,
+            ),
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-accepted-append-policy-version-nonclaims:v1",
+                &nonclaims,
+            ),
+            accepted_append_owner_id: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_OWNER_ID
+                .to_owned(),
+            local_transaction_route_id:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_LOCAL_TRANSACTION.to_owned(),
+            materialized_route_id:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_MATERIALIZED_ROUTE.to_owned(),
+            evidence_acceptance_policy_owner_id:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_POLICY_OWNER_ID.to_owned(),
+            acceptance_policy_type: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_POLICY_TYPE
+                .to_owned(),
+            acceptance_policy_version_type:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_VERSION_TYPE.to_owned(),
+            hsai_accepted_append_policy_version_marker:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_HSAI_MARKER.to_owned(),
+            candidate_policy_id:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CANDIDATE_POLICY_ID
+                    .to_owned(),
+            candidate_policy_version:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CANDIDATE_POLICY_VERSION
+                    .to_owned(),
+            candidate_policy_mode:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CANDIDATE_POLICY_MODE
+                    .to_owned(),
+            append_transaction_version_type:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_TRANSACTION_VERSION_TYPE
+                    .to_owned(),
+            append_transaction_version:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_TRANSACTION_VERSION
+                    .to_owned(),
+            claim_boundary_cap:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CLAIM_BOUNDARY_CAP
+                    .to_owned(),
+            disallowed_evidence_classes:
+                gateway_formal_tiny_z3_accepted_append_policy_version_disallowed_evidence_classes(),
+            review_decision_requirements:
+                gateway_formal_tiny_z3_accepted_append_policy_version_review_decision_requirements(
+                ),
+            rejection_policy: gateway_formal_tiny_z3_accepted_append_policy_version_rejection_policy(
+            ),
+            policy_version_label,
+            policy_version_summary:
+                "local tiny-Z3 accepted append policy-version metadata records the current zkbench-core local Level1 policy boundary"
+                    .to_owned(),
+            accepted_append_policy_change_requested: false,
+            accepted_append_decision_requested: false,
+            accepted_evidence_ledger_mutation_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            backend_execution_evidence_created: false,
+            benchmark_evidence_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase493_tiny_z3_accepted_append_owner_route_source(
+        source_prefix: &str,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        GatewayFormalTinyZ3AcceptedAppendOwnerRoute,
+    )> {
+        let (obligation_root, phase405_output_root, output_root, prerequisite) =
+            phase491_tiny_z3_accepted_path_prerequisite_source(source_prefix)?;
+        let owner_route_input = phase491_tiny_z3_accepted_append_owner_route_input(
+            &format!("{source_prefix}-owner-route"),
+            &prerequisite,
+            GatewayFormalTinyZ3AcceptedAppendOwnerRouteLabel::AcceptedAppendOwnerRouteRecorded,
+        );
+        let owner_route = build_gateway_formal_tiny_z3_accepted_append_owner_route(
+            &prerequisite,
+            &owner_route_input,
+        )
+        .expect("phase493 source owner route builds");
+        Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            owner_route,
+        ))
     }
 
     fn phase491_tiny_z3_accepted_path_prerequisite_source(

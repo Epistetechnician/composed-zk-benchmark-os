@@ -13811,6 +13811,44 @@ append policy change, Level2+ evidence, score axes, proof-authority claim,
 Lean/new-SMT/COBALT/Rust-to-Lean execution, benchmark evidence, or
 production/SOTA/security/correctness claim.
 
+## Phase 493 HSAI Tiny Z3 Accepted Append Policy Version Metadata
+
+Status: complete. See
+`docs/493-hsai-tiny-z3-accepted-append-policy-version-metadata-notes.md`.
+
+Goal: implement the local policy-version gate metadata authorized by Phase 492
+for the Phase 489 prerequisite gate `accepted_append_policy_version`.
+
+Implemented: Phase 493 adds schema/state/claim-boundary constants, input and
+output records, issue and validation types, digest/id/label binding helpers,
+required nonclaim, disallowed evidence-class, review-decision requirement, and
+rejection-policy helpers, builder and validator functions, and focused tests
+under `crates/hsai-agent-admission/src/lib.rs`. The record binds the Phase 491
+owner-route digest, input digest, digest/id/label map digests, explicit
+nonclaim digest, current accepted append blocker digest, owner `zkbench-core`,
+local route `AcceptedLedgerAppendTransactionRequest`, materialized route
+`MaterializedAcceptedLedgerAppendRequest`, policy type
+`EvidenceAcceptancePolicy`, policy version type
+`EvidenceAcceptancePolicyVersion`, transaction version type
+`AcceptedLedgerAppendTransactionVersion`, and source-grounded values
+`zkbench-core-accepted-append-local-level1-replay-formal-evidence-blocked:v1`,
+`phase_j_level1_local_only_policy`, `phase-j-evidence-acceptance-policy-v0`,
+`Level1LocalOnly`, `phase-w-accepted-ledger-append-transaction-v0`, and
+`Level1LocalReplay`.
+
+Validation coverage: focused tests prove valid metadata construction and
+rejection of promotion attempts. The validator also rejects digest drift,
+policy-version marker drift, append-transaction version drift, evidence-class
+drift, policy owner/type/version drift, route drift, nonclaim drift, Phase 491
+state drift, and strong claim attempts.
+
+Exit criteria: HSAI now has local metadata for the accepted append policy
+version prerequisite gate. It still has no accepted append decision, accepted
+formal evidence, accepted Evidence Ledger mutation from HSAI admission
+metadata, accepted append policy change, Level2+ evidence, score axes,
+proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean execution, benchmark
+evidence, or production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

@@ -7043,5 +7043,27 @@ evidence, populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean
 extraction, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/493-hsai-tiny-z3-accepted-append-policy-version-metadata-notes.md](docs/493-hsai-tiny-z3-accepted-append-policy-version-metadata-notes.md)
+records the Phase 493 local accepted append policy-version metadata
+implementation under `crates/hsai-agent-admission/src/lib.rs`. The
+implementation binds one Phase 491 owner-route digest and input digest, the
+Phase 491 digest/id/label map digests, explicit nonclaim digest, current
+accepted append blocker digest, accepted append owner `zkbench-core`, local
+transaction route `AcceptedLedgerAppendTransactionRequest`, materialized route
+`MaterializedAcceptedLedgerAppendRequest`, policy type
+`EvidenceAcceptancePolicy`, policy version type
+`EvidenceAcceptancePolicyVersion`, transaction version type
+`AcceptedLedgerAppendTransactionVersion`, and the source-grounded policy and
+version strings `zkbench-core-accepted-append-local-level1-replay-formal-evidence-blocked:v1`,
+`phase_j_level1_local_only_policy`, `phase-j-evidence-acceptance-policy-v0`,
+`Level1LocalOnly`, `phase-w-accepted-ledger-append-transaction-v0`, and
+`Level1LocalReplay`. Its focused tests cover valid metadata construction and
+rejection of promotion attempts. It creates no accepted append decision,
+mutates no accepted Evidence Ledger, changes no accepted append policy,
+creates no accepted formal evidence, creates no Level2+ evidence, populates no
+score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no
+benchmark evidence, and claims no production/SOTA/security/semantic-correctness
+result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

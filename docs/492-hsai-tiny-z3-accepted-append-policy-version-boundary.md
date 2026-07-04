@@ -176,8 +176,9 @@ That still is not:
 
 ## Phase 493 Implementation Exit Criteria
 
-Phase 493 may implement local accepted append policy-version metadata only if
-it:
+Phase 493 implements local accepted append policy-version metadata in
+`docs/493-hsai-tiny-z3-accepted-append-policy-version-metadata-notes.md`.
+That implementation remains valid only while it:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;
