@@ -284,3 +284,16 @@ quarantine-resolution escalation terminal-blocker metadata only if it:
 - does not submit benchmarks;
 - does not claim semantic correctness, production readiness, SOTA, breakthrough
   status, full security, or action authority.
+
+## Phase 463 Implementation Status
+
+Phase 463 implemented this boundary in
+`crates/hsai-agent-admission/src/lib.rs` and recorded the implementation in
+`docs/463-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-blocker-notes.md`.
+
+The implementation remains local metadata only. It does not make an accepted
+append decision, mutate the accepted Evidence Ledger, change accepted append
+policy, create accepted formal evidence, create Level2+ evidence, populate
+score axes, run Lean, run new SMT, run COBALT, run Rust-to-Lean extraction,
+submit benchmarks, or claim semantic correctness, production readiness, SOTA,
+breakthrough status, full security, or action authority.
