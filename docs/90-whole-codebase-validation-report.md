@@ -6608,5 +6608,24 @@ creates no Level2+ evidence, populates no score axes, runs no
 Lean/new-SMT/COBALT/Rust-to-Lean extraction, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/469-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-notes.md](docs/469-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-notes.md)
+records the Phase 469 local tiny-Z3 accepted-append decision
+quarantine-resolution escalation terminal-review closure-blocker review
+metadata implementation. The implementation adds schema/state/claim-boundary
+constants, closure-blocker review labels, input and output metadata, issue
+taxonomy, required nonclaim helper, digest/id/label binding helpers, builder,
+validator, Phase 467 closure-blocker digest/input-digest binding, Phase 467
+digest/id/label binding map digests, current accepted append blocker binding,
+inherited closure and terminal-review id checks, label checks, Phase 467
+non-promotion checks, closure-blocker-review-summary promotion-text rejection,
+and explicit promotion-attempt rejection. Focused tests cover valid
+closure-blocker review construction, Phase 467 digest drift, label drift,
+Phase 467 state drift, promotional review-summary text, and explicit promotion
+attempts. It does not make an accepted append decision, mutate the accepted
+Evidence Ledger, change accepted append policy, create accepted formal
+evidence, create Level2+ evidence, populate score axes, run
+Lean/new-SMT/COBALT/Rust-to-Lean extraction, or claim
+production/SOTA/security/semantic-correctness.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
