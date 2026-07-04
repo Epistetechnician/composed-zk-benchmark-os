@@ -757,6 +757,11 @@ pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_PREFLIGHT_SCHEMA
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_PREFLIGHT_STATE_SLICE: &str =
     "phase-439-hsai-tiny-z3-accepted-append-preflight-metadata";
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_PREFLIGHT_CLAIM_BOUNDARY: &str = "local tiny-Z3 accepted-append preflight metadata only; preflights one Phase 437 proposal-candidate review while accepted append and accepted-ledger mutation remain blocked, but does not create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_PREFLIGHT_REVIEW_SCHEMA_VERSION:
+    &str = "hsai-gateway-formal-tiny-digest-backend-z3-accepted-append-preflight-review:v1";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_PREFLIGHT_REVIEW_STATE_SLICE: &str =
+    "phase-441-hsai-tiny-z3-accepted-append-preflight-review-metadata";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_PREFLIGHT_REVIEW_CLAIM_BOUNDARY: &str = "local tiny-Z3 accepted-append preflight review metadata only; reviews one Phase 439 accepted-append preflight while accepted append and accepted-ledger mutation remain blocked, but does not create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -7725,6 +7730,164 @@ pub enum GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightIssue {
 pub struct GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewLabel {
+    TinyZ3AppendPreflightReviewScopeAcceptable,
+    TinyZ3AppendPreflightReviewRejected,
+    TinyZ3AcceptedAppendDecisionStillBlocked,
+    TinyZ3AcceptedLedgerMutationStillBlocked,
+    TinyZ3Level2EvidenceStillBlocked,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewInput {
+    pub schema_version: String,
+    pub append_preflight_review_id: String,
+    pub reviewer_policy_id: String,
+    pub reviewer_decision_id: String,
+    pub proposal_policy_id: String,
+    pub proposal_candidate_id: String,
+    pub proposal_review_id: String,
+    pub append_preflight_id: String,
+    pub review_decision_at_unix: u64,
+    pub phase439_preflight_digest: Hash,
+    pub phase439_preflight_input_digest: Hash,
+    pub phase437_review_digest: Hash,
+    pub phase437_review_input_digest: Hash,
+    pub phase435_candidate_digest: Hash,
+    pub phase435_candidate_input_digest: Hash,
+    pub phase433_review_digest: Hash,
+    pub phase431_materialized_manifest_digest: Hash,
+    pub phase429_review_digest: Hash,
+    pub phase427_serialization_preview_digest: Hash,
+    pub phase425_audit_package_digest: Hash,
+    pub phase423_review_record_digest: Hash,
+    pub phase421_metadata_digest: Hash,
+    pub phase405_output_manifest_digest: Hash,
+    pub phase404_execution_digest: Hash,
+    pub declared_file_digest_map_digest: Hash,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub accepted_append_preflight_label:
+        GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightLabel,
+    pub review_label: GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewLabel,
+    pub review_summary: String,
+    pub accepted_evidence_mutation_requested: bool,
+    pub accepted_append_policy_change_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub benchmark_or_sota_comparison_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-append-preflight-review-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReview {
+    pub schema_version: String,
+    pub append_preflight_review_id: String,
+    pub state_slice: String,
+    pub review_input_digest: Hash,
+    pub reviewer_policy_id: String,
+    pub reviewer_decision_id: String,
+    pub proposal_policy_id: String,
+    pub proposal_candidate_id: String,
+    pub proposal_review_id: String,
+    pub append_preflight_id: String,
+    pub review_decision_at_unix: u64,
+    pub phase439_preflight_digest: Hash,
+    pub phase439_preflight_input_digest: Hash,
+    pub phase437_review_digest: Hash,
+    pub phase437_review_input_digest: Hash,
+    pub phase435_candidate_digest: Hash,
+    pub phase435_candidate_input_digest: Hash,
+    pub phase433_review_digest: Hash,
+    pub phase431_materialized_manifest_digest: Hash,
+    pub phase429_review_digest: Hash,
+    pub phase427_serialization_preview_digest: Hash,
+    pub phase425_audit_package_digest: Hash,
+    pub phase423_review_record_digest: Hash,
+    pub phase421_metadata_digest: Hash,
+    pub phase405_output_manifest_digest: Hash,
+    pub phase404_execution_digest: Hash,
+    pub declared_file_digest_map_digest: Hash,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub accepted_append_preflight_label:
+        GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightLabel,
+    pub review_label: GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewLabel,
+    pub review_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub creates_accepted_evidence: bool,
+    pub changes_accepted_append_policy: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReview {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-append-preflight-review:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue {
+    InvalidSchemaVersion,
+    InvalidAppendPreflightReviewId,
+    InvalidReviewerPolicyId,
+    InvalidReviewerDecisionId,
+    InvalidProposalPolicyId,
+    InvalidProposalCandidateId,
+    InvalidProposalReviewId,
+    InvalidAppendPreflightId,
+    MissingReviewDecisionTimestamp,
+    MissingDigest(String),
+    Phase439PreflightDigestDrift,
+    Phase439PreflightStateMismatch,
+    AcceptedAppendBlockerMismatch,
+    NonclaimMismatch,
+    ReviewSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -27368,6 +27531,11 @@ pub fn gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_claim_bou
     GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_PREFLIGHT_CLAIM_BOUNDARY.to_owned()
 }
 
+pub fn gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_review_claim_boundary(
+) -> String {
+    GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_PREFLIGHT_REVIEW_CLAIM_BOUNDARY.to_owned()
+}
+
 pub fn gateway_formal_tiny_digest_backend_z3_execution_output_declared_files() -> Vec<String> {
     GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_DECLARED_FILES
         .iter()
@@ -27704,6 +27872,22 @@ pub fn gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_required_
     ));
     nonclaims.insert(NonClaimLabel(
         "tiny Z3 accepted append policy still blocked".to_owned(),
+    ));
+    nonclaims
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_review_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims =
+        gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_required_nonclaims();
+    nonclaims.insert(NonClaimLabel(
+        "local tiny Z3 accepted-append preflight review metadata only".to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel(
+        "tiny Z3 preflight review is not accepted append decision".to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel(
+        "tiny Z3 accepted append decision still blocked".to_owned(),
     ));
     nonclaims
 }
@@ -35870,6 +36054,337 @@ fn validate_gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_poli
         || input.action_authority_claimed
     {
         issues.push(GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightIssue::PromotionAttempt);
+    }
+}
+
+pub fn build_gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_review(
+    preflight: &GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflight,
+    input: &GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewInput,
+) -> Result<
+    GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReview,
+    GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewValidation,
+> {
+    let validation =
+        validate_gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_review_input(
+            preflight, input,
+        );
+    if !validation.valid {
+        return Err(validation);
+    }
+    Ok(
+        GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReview {
+            schema_version:
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_PREFLIGHT_REVIEW_SCHEMA_VERSION
+                    .to_owned(),
+            append_preflight_review_id: input.append_preflight_review_id.clone(),
+            state_slice:
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_PREFLIGHT_REVIEW_STATE_SLICE
+                    .to_owned(),
+            review_input_digest: input.digest(),
+            reviewer_policy_id: input.reviewer_policy_id.clone(),
+            reviewer_decision_id: input.reviewer_decision_id.clone(),
+            proposal_policy_id: input.proposal_policy_id.clone(),
+            proposal_candidate_id: input.proposal_candidate_id.clone(),
+            proposal_review_id: input.proposal_review_id.clone(),
+            append_preflight_id: input.append_preflight_id.clone(),
+            review_decision_at_unix: input.review_decision_at_unix,
+            phase439_preflight_digest: preflight.digest(),
+            phase439_preflight_input_digest: preflight.preflight_input_digest,
+            phase437_review_digest: preflight.phase437_review_digest,
+            phase437_review_input_digest: preflight.phase437_review_input_digest,
+            phase435_candidate_digest: preflight.phase435_candidate_digest,
+            phase435_candidate_input_digest: preflight.phase435_candidate_input_digest,
+            phase433_review_digest: preflight.phase433_review_digest,
+            phase431_materialized_manifest_digest: preflight.phase431_materialized_manifest_digest,
+            phase429_review_digest: preflight.phase429_review_digest,
+            phase427_serialization_preview_digest: preflight.phase427_serialization_preview_digest,
+            phase425_audit_package_digest: preflight.phase425_audit_package_digest,
+            phase423_review_record_digest: preflight.phase423_review_record_digest,
+            phase421_metadata_digest: preflight.phase421_metadata_digest,
+            phase405_output_manifest_digest: preflight.phase405_output_manifest_digest,
+            phase404_execution_digest: preflight.phase404_execution_digest,
+            declared_file_digest_map_digest: preflight.declared_file_digest_map_digest,
+            current_accepted_append_blockers_digest: preflight
+                .current_accepted_append_blockers_digest,
+            accepted_append_preflight_label: input.accepted_append_preflight_label.clone(),
+            review_label: input.review_label.clone(),
+            review_summary: input.review_summary.clone(),
+            previous_promotion_state: "tiny_z3_accepted_append_preflight_metadata".to_owned(),
+            promotion_state: "tiny_z3_accepted_append_preflight_review_metadata".to_owned(),
+            next_required_state: "tiny_z3_accepted_append_decision_still_blocked".to_owned(),
+            claim_boundary:
+                gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_review_claim_boundary(
+                ),
+            explicit_nonclaims: input.explicit_nonclaims.clone(),
+            creates_accepted_evidence: false,
+            changes_accepted_append_policy: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            grants_authority: false,
+        },
+    )
+}
+
+pub fn validate_gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_review_input(
+    preflight: &GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflight,
+    input: &GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewInput,
+) -> GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_PREFLIGHT_REVIEW_SCHEMA_VERSION
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue::InvalidSchemaVersion,
+        );
+    }
+    if !is_single_segment_id(&input.append_preflight_review_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue::InvalidAppendPreflightReviewId,
+        );
+    }
+    if !is_single_segment_id(&input.reviewer_policy_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue::InvalidReviewerPolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.reviewer_decision_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue::InvalidReviewerDecisionId,
+        );
+    }
+    if !is_single_segment_id(&input.proposal_policy_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue::InvalidProposalPolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.proposal_candidate_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue::InvalidProposalCandidateId,
+        );
+    }
+    if !is_single_segment_id(&input.proposal_review_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue::InvalidProposalReviewId,
+        );
+    }
+    if !is_single_segment_id(&input.append_preflight_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue::InvalidAppendPreflightId,
+        );
+    }
+    if input.review_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue::MissingReviewDecisionTimestamp,
+        );
+    }
+    validate_gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_review_digests(
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_review_preflight(
+        preflight,
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_review_policy(
+        input,
+        &mut issues,
+    );
+    GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_review_digests(
+    input: &GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewInput,
+    issues: &mut Vec<GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue>,
+) {
+    for (label, digest) in [
+        ("phase439_preflight_digest", input.phase439_preflight_digest),
+        (
+            "phase439_preflight_input_digest",
+            input.phase439_preflight_input_digest,
+        ),
+        ("phase437_review_digest", input.phase437_review_digest),
+        (
+            "phase437_review_input_digest",
+            input.phase437_review_input_digest,
+        ),
+        ("phase435_candidate_digest", input.phase435_candidate_digest),
+        (
+            "phase435_candidate_input_digest",
+            input.phase435_candidate_input_digest,
+        ),
+        ("phase433_review_digest", input.phase433_review_digest),
+        (
+            "phase431_materialized_manifest_digest",
+            input.phase431_materialized_manifest_digest,
+        ),
+        ("phase429_review_digest", input.phase429_review_digest),
+        (
+            "phase427_serialization_preview_digest",
+            input.phase427_serialization_preview_digest,
+        ),
+        (
+            "phase425_audit_package_digest",
+            input.phase425_audit_package_digest,
+        ),
+        (
+            "phase423_review_record_digest",
+            input.phase423_review_record_digest,
+        ),
+        ("phase421_metadata_digest", input.phase421_metadata_digest),
+        (
+            "phase405_output_manifest_digest",
+            input.phase405_output_manifest_digest,
+        ),
+        ("phase404_execution_digest", input.phase404_execution_digest),
+        (
+            "declared_file_digest_map_digest",
+            input.declared_file_digest_map_digest,
+        ),
+        ("explicit_nonclaims_digest", input.explicit_nonclaims_digest),
+        (
+            "current_accepted_append_blockers_digest",
+            input.current_accepted_append_blockers_digest,
+        ),
+    ] {
+        if digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue::MissingDigest(
+                    label.to_owned(),
+                ),
+            );
+        }
+    }
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_review_preflight(
+    preflight: &GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflight,
+    input: &GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewInput,
+    issues: &mut Vec<GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue>,
+) {
+    if input.phase439_preflight_digest != preflight.digest()
+        || input.phase439_preflight_input_digest != preflight.preflight_input_digest
+        || input.phase437_review_digest != preflight.phase437_review_digest
+        || input.phase437_review_input_digest != preflight.phase437_review_input_digest
+        || input.phase435_candidate_digest != preflight.phase435_candidate_digest
+        || input.phase435_candidate_input_digest != preflight.phase435_candidate_input_digest
+        || input.phase433_review_digest != preflight.phase433_review_digest
+        || input.phase431_materialized_manifest_digest
+            != preflight.phase431_materialized_manifest_digest
+        || input.phase429_review_digest != preflight.phase429_review_digest
+        || input.phase427_serialization_preview_digest
+            != preflight.phase427_serialization_preview_digest
+        || input.phase425_audit_package_digest != preflight.phase425_audit_package_digest
+        || input.phase423_review_record_digest != preflight.phase423_review_record_digest
+        || input.phase421_metadata_digest != preflight.phase421_metadata_digest
+        || input.phase405_output_manifest_digest != preflight.phase405_output_manifest_digest
+        || input.phase404_execution_digest != preflight.phase404_execution_digest
+        || input.declared_file_digest_map_digest != preflight.declared_file_digest_map_digest
+        || input.current_accepted_append_blockers_digest
+            != preflight.current_accepted_append_blockers_digest
+        || input.proposal_candidate_id != preflight.proposal_candidate_id
+        || input.proposal_policy_id != preflight.proposal_policy_id
+        || input.proposal_review_id != preflight.proposal_review_id
+        || input.append_preflight_id != preflight.append_preflight_id
+        || input.accepted_append_preflight_label != preflight.preflight_label
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue::Phase439PreflightDigestDrift,
+        );
+    }
+    if preflight.schema_version
+        != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_PREFLIGHT_SCHEMA_VERSION
+        || preflight.state_slice
+            != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_PREFLIGHT_STATE_SLICE
+        || preflight.promotion_state != "tiny_z3_accepted_append_preflight_metadata"
+        || preflight.next_required_state != "tiny_z3_accepted_append_decision_still_blocked"
+        || preflight.claim_boundary
+            != gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_claim_boundary()
+        || preflight.creates_accepted_evidence
+        || preflight.changes_accepted_append_policy
+        || preflight.creates_level2_evidence
+        || preflight.populates_score_axes
+        || preflight.proof_artifact_created
+        || preflight.checker_transcript_created
+        || preflight.solver_certificate_created
+        || preflight.semantic_correctness_claimed
+        || preflight.production_readiness_claimed
+        || preflight.sota_claimed
+        || preflight.breakthrough_claimed
+        || preflight.full_security_claimed
+        || preflight.grants_authority
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue::Phase439PreflightStateMismatch,
+        );
+    }
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_review_policy(
+    input: &GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewInput,
+    issues: &mut Vec<GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue>,
+) {
+    let blockers = gateway_formal_tiny_digest_backend_z3_accepted_handoff_current_blockers();
+    if input.current_accepted_append_blockers_digest
+        != hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-handoff-current-blockers:v1",
+            &blockers,
+        )
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue::AcceptedAppendBlockerMismatch,
+        );
+    }
+    let nonclaims =
+        gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_review_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-append-preflight-review-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue::NonclaimMismatch,
+        );
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.review_summary,
+    ) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue::ReviewSummaryPromotionClaim,
+        );
+    }
+    if input.accepted_evidence_mutation_requested
+        || input.accepted_append_policy_change_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.benchmark_or_sota_comparison_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue::PromotionAttempt,
+        );
     }
 }
 
@@ -64507,6 +65022,231 @@ mod tests {
     }
 
     #[test]
+    fn phase441_tiny_z3_accepted_append_preflight_review_builds_blocking_record() {
+        let Some((obligation_root, phase405_output_root, output_root, review)) =
+            phase435_tiny_z3_accepted_evidence_proposal_candidate_source("phase441-review")
+        else {
+            return;
+        };
+        let candidate_input = phase435_tiny_z3_accepted_evidence_proposal_candidate_input(
+            "phase441-source-candidate",
+            &review,
+            GatewayFormalTinyDigestBackendZ3AcceptedEvidenceProposalCandidateDisposition::TinyZ3AcceptedLedgerMutationStillBlocked,
+        );
+        let candidate =
+            build_gateway_formal_tiny_digest_backend_z3_accepted_evidence_proposal_candidate(
+                &review,
+                &candidate_input,
+            )
+            .expect("phase441 source candidate builds");
+        let proposal_review_input = phase437_tiny_z3_proposal_candidate_review_input(
+            "phase441-source-review",
+            &candidate,
+            GatewayFormalTinyDigestBackendZ3ProposalCandidateReviewLabel::TinyZ3AcceptedAppendDecisionStillBlocked,
+        );
+        let proposal_review =
+            build_gateway_formal_tiny_digest_backend_z3_proposal_candidate_review(
+                &candidate,
+                &proposal_review_input,
+            )
+            .expect("phase441 source proposal review builds");
+        let preflight_input = phase439_tiny_z3_accepted_append_preflight_input(
+            "phase441-source-preflight",
+            &proposal_review,
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightLabel::TinyZ3AcceptedAppendPolicyStillBlocked,
+        );
+        let preflight = build_gateway_formal_tiny_digest_backend_z3_accepted_append_preflight(
+            &proposal_review,
+            &preflight_input,
+        )
+        .expect("phase441 source preflight builds");
+        let preflight_review_input = phase441_tiny_z3_accepted_append_preflight_review_input(
+            "phase441-review",
+            &preflight,
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewLabel::TinyZ3AcceptedAppendDecisionStillBlocked,
+        );
+        let preflight_review =
+            build_gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_review(
+                &preflight,
+                &preflight_review_input,
+            )
+            .expect("phase441 preflight review builds");
+
+        assert_eq!(
+            preflight_review.state_slice,
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_PREFLIGHT_REVIEW_STATE_SLICE
+        );
+        assert_eq!(
+            preflight_review.phase439_preflight_digest,
+            preflight.digest()
+        );
+        assert_eq!(
+            preflight_review.phase439_preflight_input_digest,
+            preflight.preflight_input_digest
+        );
+        assert_eq!(
+            preflight_review.phase437_review_digest,
+            preflight.phase437_review_digest
+        );
+        assert_eq!(
+            preflight_review.phase435_candidate_digest,
+            preflight.phase435_candidate_digest
+        );
+        assert_eq!(
+            preflight_review.phase405_output_manifest_digest,
+            preflight.phase405_output_manifest_digest
+        );
+        assert_eq!(
+            preflight_review.phase404_execution_digest,
+            preflight.phase404_execution_digest
+        );
+        assert_eq!(
+            preflight_review.accepted_append_preflight_label,
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightLabel::TinyZ3AcceptedAppendPolicyStillBlocked
+        );
+        assert_eq!(
+            preflight_review.review_label,
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewLabel::TinyZ3AcceptedAppendDecisionStillBlocked
+        );
+        assert_eq!(
+            preflight_review.previous_promotion_state,
+            "tiny_z3_accepted_append_preflight_metadata"
+        );
+        assert_eq!(
+            preflight_review.promotion_state,
+            "tiny_z3_accepted_append_preflight_review_metadata"
+        );
+        assert_eq!(
+            preflight_review.next_required_state,
+            "tiny_z3_accepted_append_decision_still_blocked"
+        );
+        assert_eq!(
+            preflight_review.claim_boundary,
+            gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_review_claim_boundary()
+        );
+        assert!(!preflight_review.creates_accepted_evidence);
+        assert!(!preflight_review.changes_accepted_append_policy);
+        assert!(!preflight_review.creates_level2_evidence);
+        assert!(!preflight_review.populates_score_axes);
+        assert!(!preflight_review.proof_artifact_created);
+        assert!(!preflight_review.checker_transcript_created);
+        assert!(!preflight_review.solver_certificate_created);
+        assert!(!preflight_review.semantic_correctness_claimed);
+        assert!(!preflight_review.production_readiness_claimed);
+        assert!(!preflight_review.sota_claimed);
+        assert!(!preflight_review.breakthrough_claimed);
+        assert!(!preflight_review.full_security_claimed);
+        assert!(!preflight_review.grants_authority);
+
+        let mut digest_drift = preflight_review_input.clone();
+        digest_drift.phase439_preflight_digest = Hash([37; 32]);
+        let drift_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_review_input(
+                &preflight,
+                &digest_drift,
+            );
+        assert!(drift_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue::Phase439PreflightDigestDrift
+        ));
+
+        let mut text_promotion = preflight_review_input.clone();
+        text_promotion.review_summary =
+            "claims accepted evidence, Level2, SOTA, and production ready".to_owned();
+        let text_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_review_input(
+                &preflight,
+                &text_promotion,
+            );
+        assert!(text_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue::ReviewSummaryPromotionClaim
+        ));
+
+        fs::remove_dir_all(&output_root).expect("phase441 review output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase441 review phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase441 review obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase441_tiny_z3_accepted_append_preflight_review_rejects_promotion() {
+        let Some((obligation_root, phase405_output_root, output_root, review)) =
+            phase435_tiny_z3_accepted_evidence_proposal_candidate_source("phase441-promotion")
+        else {
+            return;
+        };
+        let candidate_input = phase435_tiny_z3_accepted_evidence_proposal_candidate_input(
+            "phase441-promotion-candidate",
+            &review,
+            GatewayFormalTinyDigestBackendZ3AcceptedEvidenceProposalCandidateDisposition::TinyZ3CandidateRejected,
+        );
+        let candidate =
+            build_gateway_formal_tiny_digest_backend_z3_accepted_evidence_proposal_candidate(
+                &review,
+                &candidate_input,
+            )
+            .expect("phase441 promotion source candidate builds");
+        let proposal_review_input = phase437_tiny_z3_proposal_candidate_review_input(
+            "phase441-promotion-review",
+            &candidate,
+            GatewayFormalTinyDigestBackendZ3ProposalCandidateReviewLabel::TinyZ3ProposalCandidateRejected,
+        );
+        let proposal_review =
+            build_gateway_formal_tiny_digest_backend_z3_proposal_candidate_review(
+                &candidate,
+                &proposal_review_input,
+            )
+            .expect("phase441 promotion source proposal review builds");
+        let preflight_input = phase439_tiny_z3_accepted_append_preflight_input(
+            "phase441-promotion-preflight",
+            &proposal_review,
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightLabel::TinyZ3AppendPreflightRejected,
+        );
+        let preflight = build_gateway_formal_tiny_digest_backend_z3_accepted_append_preflight(
+            &proposal_review,
+            &preflight_input,
+        )
+        .expect("phase441 promotion source preflight builds");
+        let mut preflight_review_input = phase441_tiny_z3_accepted_append_preflight_review_input(
+            "phase441-promotion-preflight-review",
+            &preflight,
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewLabel::TinyZ3AppendPreflightReviewRejected,
+        );
+
+        preflight_review_input.accepted_evidence_mutation_requested = true;
+        preflight_review_input.accepted_append_policy_change_requested = true;
+        preflight_review_input.accepted_formal_evidence_created = true;
+        preflight_review_input.creates_level2_evidence = true;
+        preflight_review_input.populates_score_axes = true;
+        preflight_review_input.proof_artifact_promoted = true;
+        preflight_review_input.checker_transcript_promoted = true;
+        preflight_review_input.solver_certificate_promoted = true;
+        preflight_review_input.sota_claimed = true;
+        preflight_review_input.full_security_claimed = true;
+        preflight_review_input.action_authority_claimed = true;
+        let validation =
+            validate_gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_review_input(
+                &preflight,
+                &preflight_review_input,
+            );
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewIssue::PromotionAttempt
+        ));
+        assert!(
+            build_gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_review(
+                &preflight,
+                &preflight_review_input,
+            )
+            .is_err()
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase441 promotion output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase441 promotion phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase441 promotion obligation cleanup succeeds");
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -68092,6 +68832,70 @@ mod tests {
             proposal_candidate_review_label: review.review_label.clone(),
             preflight_label,
             preflight_summary: "local tiny-Z3 accepted-append preflight keeps accepted append blocked"
+                .to_owned(),
+            accepted_evidence_mutation_requested: false,
+            accepted_append_policy_change_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            benchmark_or_sota_comparison_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase441_tiny_z3_accepted_append_preflight_review_input(
+        review_id: &str,
+        preflight: &GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflight,
+        review_label: GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewLabel,
+    ) -> GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewInput {
+        let nonclaims =
+            gateway_formal_tiny_digest_backend_z3_accepted_append_preflight_review_required_nonclaims();
+        GatewayFormalTinyDigestBackendZ3AcceptedAppendPreflightReviewInput {
+            schema_version:
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_PREFLIGHT_REVIEW_SCHEMA_VERSION
+                    .to_owned(),
+            append_preflight_review_id: review_id.to_owned(),
+            reviewer_policy_id: "phase441-review-policy".to_owned(),
+            reviewer_decision_id: "phase441-review-decision".to_owned(),
+            proposal_policy_id: preflight.proposal_policy_id.clone(),
+            proposal_candidate_id: preflight.proposal_candidate_id.clone(),
+            proposal_review_id: preflight.proposal_review_id.clone(),
+            append_preflight_id: preflight.append_preflight_id.clone(),
+            review_decision_at_unix: 1_800_000_441,
+            phase439_preflight_digest: preflight.digest(),
+            phase439_preflight_input_digest: preflight.preflight_input_digest,
+            phase437_review_digest: preflight.phase437_review_digest,
+            phase437_review_input_digest: preflight.phase437_review_input_digest,
+            phase435_candidate_digest: preflight.phase435_candidate_digest,
+            phase435_candidate_input_digest: preflight.phase435_candidate_input_digest,
+            phase433_review_digest: preflight.phase433_review_digest,
+            phase431_materialized_manifest_digest: preflight.phase431_materialized_manifest_digest,
+            phase429_review_digest: preflight.phase429_review_digest,
+            phase427_serialization_preview_digest: preflight.phase427_serialization_preview_digest,
+            phase425_audit_package_digest: preflight.phase425_audit_package_digest,
+            phase423_review_record_digest: preflight.phase423_review_record_digest,
+            phase421_metadata_digest: preflight.phase421_metadata_digest,
+            phase405_output_manifest_digest: preflight.phase405_output_manifest_digest,
+            phase404_execution_digest: preflight.phase404_execution_digest,
+            declared_file_digest_map_digest: preflight.declared_file_digest_map_digest,
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-append-preflight-review-nonclaims:v1",
+                &nonclaims,
+            ),
+            current_accepted_append_blockers_digest: preflight
+                .current_accepted_append_blockers_digest,
+            accepted_append_preflight_label: preflight.preflight_label.clone(),
+            review_label,
+            review_summary: "local tiny-Z3 accepted-append preflight review keeps accepted append blocked"
                 .to_owned(),
             accepted_evidence_mutation_requested: false,
             accepted_append_policy_change_requested: false,
