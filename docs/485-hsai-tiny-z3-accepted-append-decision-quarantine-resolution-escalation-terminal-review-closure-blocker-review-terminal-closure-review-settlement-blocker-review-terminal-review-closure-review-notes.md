@@ -87,9 +87,10 @@ The unsupported claims remain:
 
 ## Next Responsible Slice
 
-The next responsible slice is a docs-first Phase 486 settlement-blocker review
-terminal review closure review terminal boundary. It should define how to
-record one Phase 485 closure-review record as terminal for the current local
-chain without settling it into accepted append, accepted formal evidence,
-Level2+ evidence, score axes, backend execution, or
-SOTA/full-security/semantic-correctness/production-readiness claims.
+Phase 486 defines the next docs-first settlement-blocker review terminal
+review closure review terminal boundary in
+`docs/486-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-closure-review-terminal-boundary.md`.
+That boundary keeps terminal status for one Phase 485 closure-review record
+separate from accepted append, accepted formal evidence, Level2+ evidence,
+score axes, backend execution, and SOTA/full-security/semantic-correctness
+or production-readiness claims.
