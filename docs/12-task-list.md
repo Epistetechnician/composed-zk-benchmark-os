@@ -11901,6 +11901,35 @@ change, Level2+ evidence, score axes, proof-authority claim,
 Lean/COBALT/Rust-to-Lean execution, or production/SOTA/security/correctness
 claim.
 
+## Phase 440 HSAI Tiny Z3 Accepted Append Preflight Review Boundary
+
+Status: complete. See
+`docs/440-hsai-tiny-z3-accepted-append-preflight-review-boundary.md`.
+
+Goal: define the docs-first boundary for future local review metadata over one
+Phase 439 tiny-Z3 accepted-append preflight without implementing review
+metadata, mutating accepted evidence, changing accepted append policy, creating
+Level2+ evidence, populating score axes, or making strong public claims.
+
+Implemented: Phase 440 defines the future review purpose, required future
+inputs, five allowed future review labels, required future validation, evidence
+meaning limits, and Phase 441 implementation exit criteria. The boundary
+requires future binding to one Phase 439 preflight, one Phase 437 review, one
+Phase 435 candidate, Phase 433/431/429/427/425/423/421 records, Phase 404/405
+local Z3 replay digests, declared file digest map, nonclaim digest,
+proposal/reviewer metadata, current accepted append blockers, preflight label,
+and review label.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a boundary for a future local review over one
+tiny-Z3 accepted-append preflight. It still has no implemented Phase 441 review
+metadata, accepted formal evidence, accepted Evidence Ledger mutation, accepted
+append policy change, Level2+ evidence, score axes, proof-authority claim,
+Lean/COBALT/Rust-to-Lean execution, or production/SOTA/security/correctness
+claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

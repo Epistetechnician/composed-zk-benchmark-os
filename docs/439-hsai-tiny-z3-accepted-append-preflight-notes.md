@@ -139,10 +139,10 @@ Phase 439 adds tests that:
 
 ## Next Slice
 
-The next responsible slice is a docs-first boundary for reviewing the Phase 439
-accepted-append preflight. That boundary must keep preflight review separate
-from accepted formal evidence, accepted Evidence Ledger mutation, accepted
-append policy changes, Level2+ evidence, score axes, Lean execution, new SMT
-execution, COBALT execution, Rust-to-Lean extraction, semantic correctness,
-production readiness, SOTA, breakthrough status, full security, and action
-authority.
+The next responsible slice is Phase 440, a docs-first boundary for reviewing
+the Phase 439 accepted-append preflight. That boundary must keep preflight
+review separate from accepted formal evidence, accepted Evidence Ledger
+mutation, accepted append policy changes, Level2+ evidence, score axes, Lean
+execution, new SMT execution, COBALT execution, Rust-to-Lean extraction,
+semantic correctness, production readiness, SOTA, breakthrough status, full
+security, and action authority.
