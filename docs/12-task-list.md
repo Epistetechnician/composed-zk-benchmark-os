@@ -12530,6 +12530,44 @@ Evidence Ledger mutation, accepted append policy change, Level2+ evidence,
 score axes, proof-authority claim, Lean/COBALT/Rust-to-Lean execution, or
 production/SOTA/security/correctness claim.
 
+## Phase 458 HSAI Tiny Z3 Accepted Append Decision Quarantine-Resolution Escalation-Blocker Boundary
+
+Status: complete. See
+`docs/458-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-blocker-boundary.md`.
+
+Goal: define the docs-first boundary for future local escalation-blocker
+metadata over one Phase 457 tiny-Z3 accepted-append decision
+quarantine-resolution review without implementing escalation-blocker metadata,
+making an accepted append decision, mutating accepted evidence, changing
+accepted append policy, creating Level2+ evidence, populating score axes, or
+making strong public claims.
+
+Implemented: Phase 458 defines the future escalation-blocker purpose, required
+future inputs, six allowed future escalation-blocker labels, required future
+validation, evidence meaning limits, and Phase 459 implementation exit
+criteria. The boundary requires future binding to one Phase 457 resolution
+review, one Phase 455 resolution plan, one Phase 453 quarantine review, one
+Phase 451 quarantine, one Phase 449 blocker review, one Phase 447 blocker, one
+Phase 445 review, one Phase 443 candidate, one Phase 441 review, one Phase 439
+preflight, one Phase 437 review, one Phase 435 candidate, Phase
+433/431/429/427/425/423/421 records, Phase 404/405 local Z3 replay digests,
+declared file digest map, nonclaim digest, escalation/quarantine/resolution/
+reviewer/proposal metadata, current accepted append blockers, candidate
+disposition, review label, blocker label, blocker-review label, quarantine
+label, quarantine-review label, resolution-planning label,
+resolution-review label, and escalation-blocker label.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a boundary for future local escalation-blocker
+metadata over one tiny-Z3 accepted-append decision quarantine-resolution review.
+It still has no implemented Phase 459 escalation-blocker metadata, accepted
+append decision, accepted formal evidence, accepted Evidence Ledger mutation,
+accepted append policy change, Level2+ evidence, score axes, proof-authority
+claim, Lean/COBALT/Rust-to-Lean execution, or production/SOTA/security/
+correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
