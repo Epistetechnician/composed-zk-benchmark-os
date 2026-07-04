@@ -877,6 +877,11 @@ pub const GATEWAY_FORMAL_TINY_Z3_SETTLEMENT_BLOCKER_REVIEW_TERMINAL_REVIEW_CLOSU
 pub const GATEWAY_FORMAL_TINY_Z3_SETTLEMENT_BLOCKER_REVIEW_TERMINAL_REVIEW_CLOSURE_REVIEW_TERMINAL_STATE_SLICE: &str =
     "phase-487-hsai-tiny-z3-settlement-blocker-review-terminal-review-closure-review-terminal-metadata";
 pub const GATEWAY_FORMAL_TINY_Z3_SETTLEMENT_BLOCKER_REVIEW_TERMINAL_REVIEW_CLOSURE_REVIEW_TERMINAL_CLAIM_BOUNDARY: &str = "local tiny-Z3 settlement-blocker review terminal review closure review terminal metadata only; records that one Phase 485 closure-review record is terminal for the current local chain while settlement into accepted append or accepted formal evidence remains blocked, but does not make an accepted append decision, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, create proof artifacts, create checker transcripts, create solver certificates, run Lean, run new SMT, run COBALT, run Rust-to-Lean extraction, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_PATH_PREREQUISITE_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-z3-accepted-path-prerequisite:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_PATH_PREREQUISITE_STATE_SLICE: &str =
+    "phase-489-hsai-tiny-z3-accepted-path-prerequisite-metadata";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_PATH_PREREQUISITE_CLAIM_BOUNDARY: &str = "local tiny-Z3 accepted-path prerequisite metadata only; records unresolved, satisfied-by-reference, or rejected prerequisite gates over one Phase 487 terminal record before any future accepted append, accepted formal evidence, Level2+, score-axis, backend-evidence, benchmark, SOTA, semantic-correctness, production-readiness, full-security, breakthrough, or action-authority path can be considered, but does not make an accepted append decision, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, create proof artifacts, create checker transcripts, create solver certificates, run Lean, run new SMT, run COBALT, run Rust-to-Lean extraction, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -12375,6 +12380,152 @@ pub struct GatewayFormalTinyZ3SettlementBlockerReviewTerminalReviewClosureReview
     pub valid: bool,
     pub issues:
         Vec<GatewayFormalTinyZ3SettlementBlockerReviewTerminalReviewClosureReviewTerminalIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3AcceptedPathPrerequisiteLabel {
+    AcceptedPathPrerequisiteScopeAcceptable,
+    AcceptedPathPrerequisiteRejected,
+    AcceptedAppendPrerequisitesUnresolved,
+    FormalEvidencePrerequisitesUnresolved,
+    Level2AndScoreAxisPrerequisitesUnresolved,
+    PublicClaimPrerequisitesUnresolved,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3AcceptedPathPrerequisiteGateStatus {
+    Unresolved,
+    SatisfiedByReference,
+    Rejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3AcceptedPathPrerequisiteInput {
+    pub schema_version: String,
+    pub prerequisite_id: String,
+    pub prerequisite_policy_id: String,
+    pub prerequisite_decision_id: String,
+    pub prerequisite_decision_at_unix: u64,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub gate_statuses: BTreeMap<String, GatewayFormalTinyZ3AcceptedPathPrerequisiteGateStatus>,
+    pub gate_statuses_digest: Hash,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub inherited_terminal_label:
+        GatewayFormalTinyZ3SettlementBlockerReviewTerminalReviewClosureReviewTerminalLabel,
+    pub prerequisite_label: GatewayFormalTinyZ3AcceptedPathPrerequisiteLabel,
+    pub prerequisite_summary: String,
+    pub accepted_append_decision_requested: bool,
+    pub accepted_evidence_mutation_requested: bool,
+    pub accepted_append_policy_change_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_or_sota_comparison_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyZ3AcceptedPathPrerequisiteInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-accepted-path-prerequisite-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3AcceptedPathPrerequisite {
+    pub schema_version: String,
+    pub prerequisite_id: String,
+    pub state_slice: String,
+    pub prerequisite_input_digest: Hash,
+    pub prerequisite_policy_id: String,
+    pub prerequisite_decision_id: String,
+    pub prerequisite_decision_at_unix: u64,
+    pub phase487_terminal_digest: Hash,
+    pub phase487_terminal_input_digest: Hash,
+    pub phase487_digest_binding_map_digest: Hash,
+    pub phase487_id_binding_map_digest: Hash,
+    pub phase487_label_binding_map_digest: Hash,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub gate_statuses: BTreeMap<String, GatewayFormalTinyZ3AcceptedPathPrerequisiteGateStatus>,
+    pub gate_statuses_digest: Hash,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub inherited_terminal_label:
+        GatewayFormalTinyZ3SettlementBlockerReviewTerminalReviewClosureReviewTerminalLabel,
+    pub prerequisite_label: GatewayFormalTinyZ3AcceptedPathPrerequisiteLabel,
+    pub prerequisite_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub makes_accepted_append_decision: bool,
+    pub creates_accepted_evidence: bool,
+    pub changes_accepted_append_policy: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3AcceptedPathPrerequisite {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-accepted-path-prerequisite:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue {
+    InvalidSchemaVersion,
+    InvalidPrerequisiteId,
+    InvalidPrerequisitePolicyId,
+    InvalidPrerequisiteDecisionId,
+    MissingPrerequisiteDecisionTimestamp,
+    MissingDigest(String),
+    DigestBindingMismatch,
+    IdBindingMismatch,
+    InvalidIdBinding(String),
+    LabelBindingMismatch,
+    GateStatusMismatch,
+    Phase487TerminalStateMismatch,
+    AcceptedAppendBlockerMismatch,
+    NonclaimMismatch,
+    PrerequisiteSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3AcceptedPathPrerequisiteValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -51329,6 +51480,363 @@ pub fn validate_gateway_formal_tiny_z3_settlement_blocker_review_terminal_review
     }
 }
 
+pub fn gateway_formal_tiny_z3_accepted_path_prerequisite_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_Z3_ACCEPTED_PATH_PREREQUISITE_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_z3_accepted_path_prerequisite_required_gate_ids() -> BTreeSet<String> {
+    [
+        "accepted_append_owner_and_mutation_route",
+        "accepted_append_policy_version",
+        "accepted_evidence_class_and_claim_boundary",
+        "replayable_input_bundle_identity",
+        "source_correspondence_statement_and_digest",
+        "reviewer_policy_and_decision_requirements",
+        "accepted_evidence_ledger_append_rules",
+        "formal_evidence_authority_policy",
+        "source_to_obligation_correspondence_policy",
+        "backend_replay_policy",
+        "solver_certificate_checker_and_cobalt_scope_policy",
+        "level2_evidence_class_taxonomy",
+        "score_axis_names_and_semantics",
+        "benchmark_comparison_corpus_and_reproducibility",
+        "public_claim_evidence_for_sota_security_correctness_readiness",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_accepted_path_prerequisite_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    [
+        "not accepted append decision",
+        "not accepted formal evidence",
+        "not accepted evidence ledger mutation",
+        "not accepted append policy change",
+        "not Level2+ evidence",
+        "not score-axis evidence",
+        "not proof authority",
+        "not checker transcript authority",
+        "not solver certificate authority",
+        "not backend execution evidence",
+        "not Lean execution evidence",
+        "not new SMT execution evidence",
+        "not COBALT execution evidence",
+        "not Rust-to-Lean extraction evidence",
+        "not benchmark evidence",
+        "not SOTA",
+        "not semantic correctness",
+        "not production readiness",
+        "not full security",
+        "not action authority",
+    ]
+    .into_iter()
+    .map(|label| NonClaimLabel(label.to_owned()))
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_accepted_path_prerequisite_default_gate_statuses(
+) -> BTreeMap<String, GatewayFormalTinyZ3AcceptedPathPrerequisiteGateStatus> {
+    gateway_formal_tiny_z3_accepted_path_prerequisite_required_gate_ids()
+        .into_iter()
+        .map(|gate| {
+            (
+                gate,
+                GatewayFormalTinyZ3AcceptedPathPrerequisiteGateStatus::Unresolved,
+            )
+        })
+        .collect()
+}
+
+pub fn gateway_formal_tiny_z3_accepted_path_prerequisite_digest_bindings(
+    terminal: &GatewayFormalTinyZ3SettlementBlockerReviewTerminalReviewClosureReviewTerminal,
+) -> BTreeMap<String, Hash> {
+    BTreeMap::from([
+        ("phase487_terminal_digest".to_owned(), terminal.digest()),
+        (
+            "phase487_terminal_input_digest".to_owned(),
+            terminal.terminal_input_digest,
+        ),
+        (
+            "phase487_digest_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase487-terminal-digest-bindings:v1",
+                &terminal.digest_bindings,
+            ),
+        ),
+        (
+            "phase487_id_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase487-terminal-id-bindings:v1",
+                &terminal.id_bindings,
+            ),
+        ),
+        (
+            "phase487_label_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase487-terminal-label-bindings:v1",
+                &terminal.label_bindings,
+            ),
+        ),
+    ])
+}
+
+pub fn gateway_formal_tiny_z3_accepted_path_prerequisite_id_bindings(
+    terminal: &GatewayFormalTinyZ3SettlementBlockerReviewTerminalReviewClosureReviewTerminal,
+    prerequisite_id: &str,
+    prerequisite_policy_id: &str,
+    prerequisite_decision_id: &str,
+) -> BTreeMap<String, String> {
+    let mut ids = terminal.id_bindings.clone();
+    ids.insert(
+        "accepted_path_prerequisite_id".to_owned(),
+        prerequisite_id.to_owned(),
+    );
+    ids.insert(
+        "accepted_path_prerequisite_policy_id".to_owned(),
+        prerequisite_policy_id.to_owned(),
+    );
+    ids.insert(
+        "accepted_path_prerequisite_decision_id".to_owned(),
+        prerequisite_decision_id.to_owned(),
+    );
+    ids.insert(
+        "phase487_terminal_id".to_owned(),
+        terminal.terminal_id.clone(),
+    );
+    ids
+}
+
+pub fn gateway_formal_tiny_z3_accepted_path_prerequisite_label_bindings(
+    terminal: &GatewayFormalTinyZ3SettlementBlockerReviewTerminalReviewClosureReviewTerminal,
+    prerequisite_label: &GatewayFormalTinyZ3AcceptedPathPrerequisiteLabel,
+) -> BTreeMap<String, String> {
+    let mut labels = terminal.label_bindings.clone();
+    labels.insert(
+        "phase487_terminal_label".to_owned(),
+        format!("{:?}", terminal.terminal_label),
+    );
+    labels.insert(
+        "accepted_path_prerequisite_label".to_owned(),
+        format!("{prerequisite_label:?}"),
+    );
+    labels
+}
+
+pub fn build_gateway_formal_tiny_z3_accepted_path_prerequisite(
+    terminal: &GatewayFormalTinyZ3SettlementBlockerReviewTerminalReviewClosureReviewTerminal,
+    input: &GatewayFormalTinyZ3AcceptedPathPrerequisiteInput,
+) -> Result<
+    GatewayFormalTinyZ3AcceptedPathPrerequisite,
+    GatewayFormalTinyZ3AcceptedPathPrerequisiteValidation,
+> {
+    let validation =
+        validate_gateway_formal_tiny_z3_accepted_path_prerequisite_input(terminal, input);
+    if !validation.valid {
+        return Err(validation);
+    }
+    let digest_bindings =
+        gateway_formal_tiny_z3_accepted_path_prerequisite_digest_bindings(terminal);
+    Ok(GatewayFormalTinyZ3AcceptedPathPrerequisite {
+        schema_version: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_PATH_PREREQUISITE_SCHEMA_VERSION.to_owned(),
+        prerequisite_id: input.prerequisite_id.clone(),
+        state_slice: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_PATH_PREREQUISITE_STATE_SLICE.to_owned(),
+        prerequisite_input_digest: input.digest(),
+        prerequisite_policy_id: input.prerequisite_policy_id.clone(),
+        prerequisite_decision_id: input.prerequisite_decision_id.clone(),
+        prerequisite_decision_at_unix: input.prerequisite_decision_at_unix,
+        phase487_terminal_digest: digest_bindings["phase487_terminal_digest"],
+        phase487_terminal_input_digest: digest_bindings["phase487_terminal_input_digest"],
+        phase487_digest_binding_map_digest: digest_bindings["phase487_digest_binding_map_digest"],
+        phase487_id_binding_map_digest: digest_bindings["phase487_id_binding_map_digest"],
+        phase487_label_binding_map_digest: digest_bindings["phase487_label_binding_map_digest"],
+        digest_bindings: input.digest_bindings.clone(),
+        id_bindings: input.id_bindings.clone(),
+        label_bindings: input.label_bindings.clone(),
+        gate_statuses: input.gate_statuses.clone(),
+        gate_statuses_digest: input.gate_statuses_digest,
+        explicit_nonclaims: input.explicit_nonclaims.clone(),
+        current_accepted_append_blockers_digest: input.current_accepted_append_blockers_digest,
+        inherited_terminal_label: input.inherited_terminal_label.clone(),
+        prerequisite_label: input.prerequisite_label.clone(),
+        prerequisite_summary: input.prerequisite_summary.clone(),
+        previous_promotion_state:
+            "tiny_z3_settlement_blocker_review_terminal_review_closure_review_terminal_metadata"
+                .to_owned(),
+        promotion_state: "tiny_z3_accepted_path_prerequisite_metadata".to_owned(),
+        next_required_state: "tiny_z3_accepted_path_prerequisites_unresolved".to_owned(),
+        claim_boundary: gateway_formal_tiny_z3_accepted_path_prerequisite_claim_boundary(),
+        makes_accepted_append_decision: false,
+        creates_accepted_evidence: false,
+        changes_accepted_append_policy: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        backend_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_gateway_formal_tiny_z3_accepted_path_prerequisite_input(
+    terminal: &GatewayFormalTinyZ3SettlementBlockerReviewTerminalReviewClosureReviewTerminal,
+    input: &GatewayFormalTinyZ3AcceptedPathPrerequisiteInput,
+) -> GatewayFormalTinyZ3AcceptedPathPrerequisiteValidation {
+    let mut issues = Vec::new();
+    if input.schema_version != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_PATH_PREREQUISITE_SCHEMA_VERSION {
+        issues.push(GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.prerequisite_id) {
+        issues.push(GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::InvalidPrerequisiteId);
+    }
+    if !is_single_segment_id(&input.prerequisite_policy_id) {
+        issues.push(GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::InvalidPrerequisitePolicyId);
+    }
+    if !is_single_segment_id(&input.prerequisite_decision_id) {
+        issues
+            .push(GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::InvalidPrerequisiteDecisionId);
+    }
+    if input.prerequisite_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::MissingPrerequisiteDecisionTimestamp,
+        );
+    }
+    let expected_digests =
+        gateway_formal_tiny_z3_accepted_path_prerequisite_digest_bindings(terminal);
+    for (label, digest) in &input.digest_bindings {
+        if *digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::MissingDigest(label.clone()),
+            );
+        }
+    }
+    if input.digest_bindings != expected_digests {
+        issues.push(GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::DigestBindingMismatch);
+    }
+    let expected_ids = gateway_formal_tiny_z3_accepted_path_prerequisite_id_bindings(
+        terminal,
+        &input.prerequisite_id,
+        &input.prerequisite_policy_id,
+        &input.prerequisite_decision_id,
+    );
+    for (label, value) in &input.id_bindings {
+        if !is_single_segment_id(value) {
+            issues.push(
+                GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::InvalidIdBinding(label.clone()),
+            );
+        }
+    }
+    if input.id_bindings != expected_ids {
+        issues.push(GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::IdBindingMismatch);
+    }
+    let expected_labels = gateway_formal_tiny_z3_accepted_path_prerequisite_label_bindings(
+        terminal,
+        &input.prerequisite_label,
+    );
+    if input.label_bindings != expected_labels
+        || input.inherited_terminal_label != terminal.terminal_label
+    {
+        issues.push(GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::LabelBindingMismatch);
+    }
+    let required_gates = gateway_formal_tiny_z3_accepted_path_prerequisite_required_gate_ids();
+    let actual_gates: BTreeSet<String> = input.gate_statuses.keys().cloned().collect();
+    if actual_gates != required_gates
+        || input.gate_statuses_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-accepted-path-prerequisite-gate-statuses:v1",
+                &input.gate_statuses,
+            )
+    {
+        issues.push(GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::GateStatusMismatch);
+    }
+    if terminal.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_SETTLEMENT_BLOCKER_REVIEW_TERMINAL_REVIEW_CLOSURE_REVIEW_TERMINAL_SCHEMA_VERSION
+        || terminal.state_slice
+            != GATEWAY_FORMAL_TINY_Z3_SETTLEMENT_BLOCKER_REVIEW_TERMINAL_REVIEW_CLOSURE_REVIEW_TERMINAL_STATE_SLICE
+        || terminal.promotion_state
+            != "tiny_z3_settlement_blocker_review_terminal_review_closure_review_terminal_metadata"
+        || terminal.next_required_state != "tiny_z3_accepted_append_and_formal_evidence_settlement_blocked"
+        || terminal.claim_boundary
+            != gateway_formal_tiny_z3_settlement_blocker_review_terminal_review_closure_review_terminal_claim_boundary()
+        || terminal.makes_accepted_append_decision
+        || terminal.creates_accepted_evidence
+        || terminal.changes_accepted_append_policy
+        || terminal.creates_level2_evidence
+        || terminal.populates_score_axes
+        || terminal.proof_artifact_created
+        || terminal.checker_transcript_created
+        || terminal.solver_certificate_created
+        || terminal.semantic_correctness_claimed
+        || terminal.production_readiness_claimed
+        || terminal.sota_claimed
+        || terminal.breakthrough_claimed
+        || terminal.full_security_claimed
+        || terminal.grants_authority
+    {
+        issues.push(GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::Phase487TerminalStateMismatch);
+    }
+    let blockers = gateway_formal_tiny_digest_backend_z3_accepted_handoff_current_blockers();
+    if input.current_accepted_append_blockers_digest
+        != hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-handoff-current-blockers:v1",
+            &blockers,
+        )
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::AcceptedAppendBlockerMismatch,
+        );
+    }
+    let nonclaims = gateway_formal_tiny_z3_accepted_path_prerequisite_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-accepted-path-prerequisite-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::NonclaimMismatch);
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.prerequisite_summary,
+    ) {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::PrerequisiteSummaryPromotionClaim,
+        );
+    }
+    if input.accepted_append_decision_requested
+        || input.accepted_evidence_mutation_requested
+        || input.accepted_append_policy_change_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.backend_execution_evidence_created
+        || input.benchmark_or_sota_comparison_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::PromotionAttempt);
+    }
+    GatewayFormalTinyZ3AcceptedPathPrerequisiteValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -85365,6 +85873,299 @@ mod tests {
     }
 
     #[test]
+    fn phase489_tiny_z3_accepted_path_prerequisite_builds_blocking_record() {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            settlement_blocker_review_terminal_review_closure,
+        )) =
+            phase485_tiny_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_source(
+                "phase489-prerequisite-source",
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalBlockerReviewLabel::TinyZ3TerminalEscalationStillBlocked,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerLabel::AcceptedAppendDecisionSettlementBlocked,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewLabel::AcceptedAppendDecisionSettlementReviewStillBlocked,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalLabel::AcceptedAppendDecisionSettlementReviewTerminallyBlocked,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewLabel::AcceptedAppendDecisionSettlementTerminalReviewStillBlocked,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureLabel::AcceptedAppendDecisionSettlementTerminalReviewClosureBlocked,
+            )
+        else {
+            return;
+        };
+        let closure_review_input =
+            phase485_tiny_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_review_input(
+                "phase489-prerequisite-source-closure-review",
+                &settlement_blocker_review_terminal_review_closure,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureReviewLabel::AcceptedAppendDecisionSettlementTerminalReviewClosureReviewStillBlocked,
+            );
+        let closure_review =
+            build_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_review(
+                &settlement_blocker_review_terminal_review_closure,
+                &closure_review_input,
+            )
+            .expect("phase489 source closure review builds");
+        let terminal_input =
+            phase487_tiny_z3_settlement_blocker_review_terminal_review_closure_review_terminal_input(
+                "phase489-source-terminal",
+                &closure_review,
+                GatewayFormalTinyZ3SettlementBlockerReviewTerminalReviewClosureReviewTerminalLabel::AcceptedAppendDecisionSettlementClosureReviewTerminallyBlocked,
+            );
+        let terminal =
+            build_gateway_formal_tiny_z3_settlement_blocker_review_terminal_review_closure_review_terminal(
+                &closure_review,
+                &terminal_input,
+            )
+            .expect("phase489 source terminal builds");
+        let prerequisite_input = phase489_tiny_z3_accepted_path_prerequisite_input(
+            "phase489-accepted-path-prerequisite",
+            &terminal,
+            GatewayFormalTinyZ3AcceptedPathPrerequisiteLabel::AcceptedAppendPrerequisitesUnresolved,
+        );
+        let prerequisite =
+            build_gateway_formal_tiny_z3_accepted_path_prerequisite(&terminal, &prerequisite_input)
+                .expect("phase489 prerequisite builds");
+
+        assert_eq!(
+            prerequisite.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_PATH_PREREQUISITE_STATE_SLICE
+        );
+        assert_eq!(prerequisite.phase487_terminal_digest, terminal.digest());
+        assert_eq!(
+            prerequisite.phase487_terminal_input_digest,
+            terminal.terminal_input_digest
+        );
+        assert_eq!(
+            prerequisite.phase487_digest_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase487-terminal-digest-bindings:v1",
+                &terminal.digest_bindings,
+            )
+        );
+        assert_eq!(
+            prerequisite.phase487_id_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase487-terminal-id-bindings:v1",
+                &terminal.id_bindings,
+            )
+        );
+        assert_eq!(
+            prerequisite.phase487_label_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase487-terminal-label-bindings:v1",
+                &terminal.label_bindings,
+            )
+        );
+        assert_eq!(
+            prerequisite.id_bindings["phase487_terminal_id"],
+            terminal.terminal_id
+        );
+        assert_eq!(
+            prerequisite.label_bindings["accepted_path_prerequisite_label"],
+            "AcceptedAppendPrerequisitesUnresolved"
+        );
+        assert_eq!(
+            prerequisite
+                .gate_statuses
+                .keys()
+                .cloned()
+                .collect::<BTreeSet<_>>(),
+            gateway_formal_tiny_z3_accepted_path_prerequisite_required_gate_ids()
+        );
+        assert_eq!(
+            prerequisite.gate_statuses_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-accepted-path-prerequisite-gate-statuses:v1",
+                &prerequisite.gate_statuses,
+            )
+        );
+        assert_eq!(
+            prerequisite.previous_promotion_state,
+            "tiny_z3_settlement_blocker_review_terminal_review_closure_review_terminal_metadata"
+        );
+        assert_eq!(
+            prerequisite.promotion_state,
+            "tiny_z3_accepted_path_prerequisite_metadata"
+        );
+        assert_eq!(
+            prerequisite.next_required_state,
+            "tiny_z3_accepted_path_prerequisites_unresolved"
+        );
+        assert_eq!(
+            prerequisite.claim_boundary,
+            gateway_formal_tiny_z3_accepted_path_prerequisite_claim_boundary()
+        );
+        assert!(!prerequisite.makes_accepted_append_decision);
+        assert!(!prerequisite.creates_accepted_evidence);
+        assert!(!prerequisite.changes_accepted_append_policy);
+        assert!(!prerequisite.creates_level2_evidence);
+        assert!(!prerequisite.populates_score_axes);
+        assert!(!prerequisite.proof_artifact_created);
+        assert!(!prerequisite.checker_transcript_created);
+        assert!(!prerequisite.solver_certificate_created);
+        assert!(!prerequisite.backend_execution_evidence_created);
+        assert!(!prerequisite.benchmark_evidence_created);
+        assert!(!prerequisite.semantic_correctness_claimed);
+        assert!(!prerequisite.production_readiness_claimed);
+        assert!(!prerequisite.sota_claimed);
+        assert!(!prerequisite.breakthrough_claimed);
+        assert!(!prerequisite.full_security_claimed);
+        assert!(!prerequisite.grants_authority);
+
+        let mut digest_drift = prerequisite_input.clone();
+        digest_drift
+            .digest_bindings
+            .insert("phase487_terminal_digest".to_owned(), Hash([53; 32]));
+        let digest_validation = validate_gateway_formal_tiny_z3_accepted_path_prerequisite_input(
+            &terminal,
+            &digest_drift,
+        );
+        assert!(digest_validation
+            .issues
+            .contains(&GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::DigestBindingMismatch));
+
+        let mut label_drift = prerequisite_input.clone();
+        label_drift.inherited_terminal_label =
+            GatewayFormalTinyZ3SettlementBlockerReviewTerminalReviewClosureReviewTerminalLabel::ActionAuthoritySettlementClosureReviewTerminallyBlocked;
+        let label_validation = validate_gateway_formal_tiny_z3_accepted_path_prerequisite_input(
+            &terminal,
+            &label_drift,
+        );
+        assert!(label_validation
+            .issues
+            .contains(&GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::LabelBindingMismatch));
+
+        let mut gate_drift = prerequisite_input.clone();
+        gate_drift
+            .gate_statuses
+            .remove("accepted_append_owner_and_mutation_route");
+        gate_drift.gate_statuses_digest = hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-accepted-path-prerequisite-gate-statuses:v1",
+            &gate_drift.gate_statuses,
+        );
+        let gate_validation = validate_gateway_formal_tiny_z3_accepted_path_prerequisite_input(
+            &terminal,
+            &gate_drift,
+        );
+        assert!(gate_validation
+            .issues
+            .contains(&GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::GateStatusMismatch));
+
+        let mut prior_state_drift = terminal.clone();
+        prior_state_drift.promotion_state = "accepted_evidence".to_owned();
+        let prior_state_validation =
+            validate_gateway_formal_tiny_z3_accepted_path_prerequisite_input(
+                &prior_state_drift,
+                &prerequisite_input,
+            );
+        assert!(prior_state_validation.issues.contains(
+            &GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::Phase487TerminalStateMismatch
+        ));
+
+        let mut text_promotion = prerequisite_input.clone();
+        text_promotion.prerequisite_summary = "claims accepted evidence and SOTA status".to_owned();
+        let text_validation = validate_gateway_formal_tiny_z3_accepted_path_prerequisite_input(
+            &terminal,
+            &text_promotion,
+        );
+        assert!(text_validation.issues.contains(
+            &GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::PrerequisiteSummaryPromotionClaim
+        ));
+
+        fs::remove_dir_all(&output_root).expect("phase489 prerequisite output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase489 prerequisite phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase489 prerequisite obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase489_tiny_z3_accepted_path_prerequisite_rejects_promotion() {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            settlement_blocker_review_terminal_review_closure,
+        )) =
+            phase485_tiny_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_source(
+                "phase489-promotion-source",
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalBlockerReviewLabel::TinyZ3TerminalBlockerReviewRejected,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerLabel::ActionAuthoritySettlementBlocked,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewLabel::ActionAuthoritySettlementReviewStillBlocked,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalLabel::ActionAuthoritySettlementReviewTerminallyBlocked,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewLabel::ActionAuthoritySettlementTerminalReviewStillBlocked,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureLabel::ActionAuthoritySettlementTerminalReviewClosureBlocked,
+            )
+        else {
+            return;
+        };
+        let closure_review_input =
+            phase485_tiny_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_review_input(
+                "phase489-promotion-source-closure-review",
+                &settlement_blocker_review_terminal_review_closure,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureReviewLabel::ActionAuthoritySettlementTerminalReviewClosureReviewStillBlocked,
+            );
+        let closure_review =
+            build_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_review(
+                &settlement_blocker_review_terminal_review_closure,
+                &closure_review_input,
+            )
+            .expect("phase489 promotion source closure review builds");
+        let terminal_input =
+            phase487_tiny_z3_settlement_blocker_review_terminal_review_closure_review_terminal_input(
+                "phase489-promotion-terminal",
+                &closure_review,
+                GatewayFormalTinyZ3SettlementBlockerReviewTerminalReviewClosureReviewTerminalLabel::ActionAuthoritySettlementClosureReviewTerminallyBlocked,
+            );
+        let terminal =
+            build_gateway_formal_tiny_z3_settlement_blocker_review_terminal_review_closure_review_terminal(
+                &closure_review,
+                &terminal_input,
+            )
+            .expect("phase489 promotion source terminal builds");
+        let mut prerequisite_input = phase489_tiny_z3_accepted_path_prerequisite_input(
+            "phase489-promotion-prerequisite",
+            &terminal,
+            GatewayFormalTinyZ3AcceptedPathPrerequisiteLabel::PublicClaimPrerequisitesUnresolved,
+        );
+
+        prerequisite_input.accepted_append_decision_requested = true;
+        prerequisite_input.accepted_evidence_mutation_requested = true;
+        prerequisite_input.accepted_append_policy_change_requested = true;
+        prerequisite_input.accepted_formal_evidence_created = true;
+        prerequisite_input.creates_level2_evidence = true;
+        prerequisite_input.populates_score_axes = true;
+        prerequisite_input.proof_artifact_promoted = true;
+        prerequisite_input.checker_transcript_promoted = true;
+        prerequisite_input.solver_certificate_promoted = true;
+        prerequisite_input.backend_execution_evidence_created = true;
+        prerequisite_input.benchmark_or_sota_comparison_claimed = true;
+        prerequisite_input.semantic_correctness_claimed = true;
+        prerequisite_input.production_readiness_claimed = true;
+        prerequisite_input.sota_claimed = true;
+        prerequisite_input.breakthrough_claimed = true;
+        prerequisite_input.full_security_claimed = true;
+        prerequisite_input.action_authority_claimed = true;
+        let validation = validate_gateway_formal_tiny_z3_accepted_path_prerequisite_input(
+            &terminal,
+            &prerequisite_input,
+        );
+        assert!(validation
+            .issues
+            .contains(&GatewayFormalTinyZ3AcceptedPathPrerequisiteIssue::PromotionAttempt));
+        assert!(build_gateway_formal_tiny_z3_accepted_path_prerequisite(
+            &terminal,
+            &prerequisite_input
+        )
+        .is_err());
+
+        fs::remove_dir_all(&output_root).expect("phase489 promotion output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase489 promotion phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase489 promotion obligation cleanup succeeds");
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -91658,6 +92459,73 @@ mod tests {
             proof_artifact_promoted: false,
             checker_transcript_promoted: false,
             solver_certificate_promoted: false,
+            benchmark_or_sota_comparison_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase489_tiny_z3_accepted_path_prerequisite_input(
+        prerequisite_id: &str,
+        terminal: &GatewayFormalTinyZ3SettlementBlockerReviewTerminalReviewClosureReviewTerminal,
+        prerequisite_label: GatewayFormalTinyZ3AcceptedPathPrerequisiteLabel,
+    ) -> GatewayFormalTinyZ3AcceptedPathPrerequisiteInput {
+        let prerequisite_policy_id = "phase489-accepted-path-prerequisite-policy";
+        let prerequisite_decision_id = "phase489-accepted-path-prerequisite-decision";
+        let nonclaims = gateway_formal_tiny_z3_accepted_path_prerequisite_required_nonclaims();
+        let gate_statuses =
+            gateway_formal_tiny_z3_accepted_path_prerequisite_default_gate_statuses();
+        GatewayFormalTinyZ3AcceptedPathPrerequisiteInput {
+            schema_version: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_PATH_PREREQUISITE_SCHEMA_VERSION
+                .to_owned(),
+            prerequisite_id: prerequisite_id.to_owned(),
+            prerequisite_policy_id: prerequisite_policy_id.to_owned(),
+            prerequisite_decision_id: prerequisite_decision_id.to_owned(),
+            prerequisite_decision_at_unix: 1_800_000_489,
+            digest_bindings: gateway_formal_tiny_z3_accepted_path_prerequisite_digest_bindings(
+                terminal,
+            ),
+            id_bindings: gateway_formal_tiny_z3_accepted_path_prerequisite_id_bindings(
+                terminal,
+                prerequisite_id,
+                prerequisite_policy_id,
+                prerequisite_decision_id,
+            ),
+            label_bindings: gateway_formal_tiny_z3_accepted_path_prerequisite_label_bindings(
+                terminal,
+                &prerequisite_label,
+            ),
+            gate_statuses_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-accepted-path-prerequisite-gate-statuses:v1",
+                &gate_statuses,
+            ),
+            gate_statuses,
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-accepted-path-prerequisite-nonclaims:v1",
+                &nonclaims,
+            ),
+            current_accepted_append_blockers_digest:
+                terminal.current_accepted_append_blockers_digest,
+            inherited_terminal_label: terminal.terminal_label.clone(),
+            prerequisite_label,
+            prerequisite_summary:
+                "local tiny-Z3 accepted-path prerequisite metadata keeps future gated paths blocked"
+                    .to_owned(),
+            accepted_append_decision_requested: false,
+            accepted_evidence_mutation_requested: false,
+            accepted_append_policy_change_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            backend_execution_evidence_created: false,
             benchmark_or_sota_comparison_claimed: false,
             semantic_correctness_claimed: false,
             production_readiness_claimed: false,

@@ -13683,6 +13683,42 @@ accepted Evidence Ledger mutation, accepted append policy change, Level2+
 evidence, score axes, proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean
 execution, benchmark evidence, or production/SOTA/security/correctness claim.
 
+## Phase 489 HSAI Tiny Z3 Accepted-Path Prerequisite Metadata
+
+Status: complete. See
+`docs/489-hsai-tiny-z3-accepted-path-prerequisite-metadata-notes.md`.
+
+Goal: implement local accepted-path prerequisite metadata over one Phase 487
+tiny-Z3 terminal record without making accepted append decisions, mutating
+accepted evidence, changing accepted append policy, creating accepted formal
+evidence, creating Level2+ evidence, populating score axes, running backend
+proof systems, creating benchmark evidence, or making strong public claims.
+
+Implemented: Phase 489 adds deterministic accepted-path prerequisite metadata
+in `crates/hsai-agent-admission/src/lib.rs`: schema, state-slice, and
+claim-boundary constants; six non-promotional prerequisite labels; three gate
+statuses; input and output records; issue and validation types; required gate
+helpers; required-nonclaim helpers; deterministic digest, id, and label
+binding helpers; a builder; and a validator. The validator binds the Phase
+487 terminal digest/input digest, Phase 487 digest/id/label map digests, gate
+status map digest, explicit nonclaim digest, current accepted append blocker
+digest, inherited Phase 487 id and label bindings, inherited terminal label,
+and one prerequisite label.
+
+Validation coverage: focused Phase 489 tests cover valid construction, Phase
+487 digest drift, label drift, gate-status drift, Phase 487 terminal state
+drift, promotional prerequisite summary text, and every promotion flag for
+accepted append, formal evidence, Level2+, score axes, proof/checker/solver
+authority, backend evidence, benchmark/SOTA comparison, and strong public
+claims.
+
+Exit criteria: HSAI now has one local accepted-path prerequisite metadata
+record path over a Phase 487 terminal record. It still has no accepted append
+decision, accepted formal evidence, accepted Evidence Ledger mutation,
+accepted append policy change, Level2+ evidence, score axes, proof-authority
+claim, Lean/new-SMT/COBALT/Rust-to-Lean execution, benchmark evidence, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

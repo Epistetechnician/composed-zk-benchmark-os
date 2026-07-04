@@ -183,3 +183,14 @@ the accepted Evidence Ledger, create accepted formal evidence, create Level2+
 evidence, populate score axes, run Lean/new-SMT/COBALT/Rust-to-Lean
 extraction, claim semantic correctness, claim production readiness, claim SOTA,
 claim breakthrough status, claim full security, or grant action authority.
+
+## Implementation Status
+
+Phase 489 implements this local prerequisite metadata boundary in
+`crates/hsai-agent-admission/src/lib.rs` and records the implementation notes
+in `docs/489-hsai-tiny-z3-accepted-path-prerequisite-metadata-notes.md`. The
+implementation remains local metadata only and does not create accepted append,
+accepted formal evidence, Level2+ evidence, score axes, backend evidence,
+benchmark evidence, Lean/new-SMT/COBALT/Rust-to-Lean evidence, semantic
+correctness, production readiness, SOTA, breakthrough status, full security,
+or action authority.
