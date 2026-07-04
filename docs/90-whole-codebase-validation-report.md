@@ -6302,5 +6302,28 @@ accepted formal evidence, creates no Level2+ evidence, populates no score axes,
 runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/453-hsai-tiny-z3-accepted-append-decision-quarantine-review-notes.md](docs/453-hsai-tiny-z3-accepted-append-decision-quarantine-review-notes.md)
+records the Phase 453 local tiny-Z3 accepted-append decision quarantine review
+metadata implementation. The implementation in `crates/hsai-agent-admission/src/lib.rs`
+adds deterministic pure-data quarantine-review records over one Phase 451
+quarantine, binding the Phase 451 quarantine input, Phase 449 blocker-review
+and input, Phase 447 blocker and input, Phase 445 review and input, Phase 443
+candidate and input, Phase 441 review and input, Phase 439 preflight and
+input, Phase 437 review and input, Phase 435 candidate and input, Phase 433
+review, Phase 431 manifest, Phase 429 review, Phase 427 preview, Phase 425
+package, Phase 423 review-record, Phase 421 metadata, Phase 404/405 local Z3
+replay digests, declared-file digest map, nonclaim digest, quarantine
+metadata, reviewer metadata, proposal metadata, candidate disposition, review
+label, blocker label, blocker-review label, quarantine label, quarantine-review
+label, and current accepted append blocker digest. It rejects Phase 451
+quarantine digest drift, promoted quarantine state, accepted append blocker
+drift, nonclaim drift, promotional review text, and all accepted-append-
+decision/accepted-evidence/Level2/score/proof/checker/solver/SOTA/
+full-security/action promotion attempts. It does not make an accepted append
+decision, mutate the accepted Evidence Ledger, change accepted append policy,
+create accepted formal evidence, create Level2+ evidence, populate score axes,
+run Lean/new-SMT/COBALT/Rust-to-Lean extraction, submit benchmarks, or claim
+production/SOTA/security/semantic-correctness.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
