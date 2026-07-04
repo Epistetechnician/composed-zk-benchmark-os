@@ -730,6 +730,12 @@ pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_SERIALIZATION_PREVIEW_REVIEW_STA
     "phase-429-hsai-tiny-z3-serialization-preview-review-metadata";
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_SERIALIZATION_PREVIEW_REVIEW_CLAIM_BOUNDARY: &str =
     "local tiny-Z3 serialization-preview review metadata only; classifies one Phase 427 deterministic in-memory serialization preview under bounded review labels while materialization remains blocked, but does not write filesystem artifacts, create package files, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_ARTIFACT_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-digest-backend-z3-audit-package-artifact:v1";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_ARTIFACT_STATE_SLICE: &str =
+    "phase-431-hsai-tiny-z3-materialized-audit-package-artifact-plumbing";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_ARTIFACT_CLAIM_BOUNDARY: &str =
+    "local materialized tiny-Z3 audit package artifact only; writes a declared digest-bound metadata package for one Phase 429 serialization-preview review under a caller-selected output root, but does not create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -7040,6 +7046,91 @@ pub enum GatewayFormalTinyDigestBackendZ3SerializationPreviewReviewIssue {
 pub struct GatewayFormalTinyDigestBackendZ3SerializationPreviewReviewValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyDigestBackendZ3SerializationPreviewReviewIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputRequest {
+    pub package_id: String,
+    pub artifact_profile_id: String,
+    pub created_at_unix: u64,
+    pub overwrite: bool,
+    pub protected_roots: Vec<PathBuf>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3AuditPackageArtifactManifest {
+    pub schema_version: String,
+    pub package_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub request_digest: Hash,
+    pub review_digest: Hash,
+    pub review_input_digest: Hash,
+    pub serialization_preview_digest: Hash,
+    pub serialization_preview_input_digest: Hash,
+    pub audit_package_digest: Hash,
+    pub review_record_digest: Hash,
+    pub metadata_digest: Hash,
+    pub phase405_output_manifest_digest: Hash,
+    pub phase404_execution_digest: Hash,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub package_manifest_digest: Hash,
+    pub serialization_profile_id: String,
+    pub canonical_field_order_digest: Hash,
+    pub canonical_json_shape_digest: Hash,
+    pub canonical_json_payload_digest: Hash,
+    pub redaction_policy_digest: Hash,
+    pub logical_preview_path_digest: Hash,
+    pub artifact_profile_id: String,
+    pub declared_files: Vec<String>,
+    pub declared_sidecars: Vec<String>,
+    pub declared_file_digests: BTreeMap<String, Hash>,
+    pub claim_boundary: String,
+    pub creates_accepted_evidence: bool,
+    pub changes_accepted_append_policy: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl GatewayFormalTinyDigestBackendZ3AuditPackageArtifactManifest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-audit-package-artifact-manifest:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError {
+    InvalidPackageId,
+    EmptyOutputRoot,
+    ProtectedOutputRoot,
+    OutputRootExistsWithoutOverwrite,
+    OutputRootIsFile,
+    OutputRootIsSymlink,
+    BundleFileIsSymlink(String),
+    DeclaredFileTypeMismatch(String),
+    UndeclaredFile(String),
+    DigestMismatch(String),
+    MalformedDeclaredFile(String),
+    ManifestSemanticMismatch,
+    ReviewMismatch,
+    SerializationPreviewMismatch,
+    NonclaimMismatch,
+    PromotionAttempt,
+    Io(String),
+    Serialization(String),
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -26661,6 +26752,10 @@ pub fn gateway_formal_tiny_digest_backend_z3_serialization_preview_review_claim_
     GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_SERIALIZATION_PREVIEW_REVIEW_CLAIM_BOUNDARY.to_owned()
 }
 
+pub fn gateway_formal_tiny_digest_backend_z3_audit_package_artifact_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_ARTIFACT_CLAIM_BOUNDARY.to_owned()
+}
+
 pub fn gateway_formal_tiny_digest_backend_z3_execution_output_declared_files() -> Vec<String> {
     GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_DECLARED_FILES
         .iter()
@@ -26929,6 +27024,19 @@ pub fn gateway_formal_tiny_digest_backend_z3_serialization_preview_review_requir
         "not materialization authorization".to_owned(),
     ));
     nonclaims.insert(NonClaimLabel("not accepted evidence review".to_owned()));
+    nonclaims
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_audit_package_artifact_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims =
+        gateway_formal_tiny_digest_backend_z3_serialization_preview_review_required_nonclaims();
+    nonclaims.insert(NonClaimLabel(
+        "local materialized tiny Z3 audit package artifact only".to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel("accepted evidence still blocked".to_owned()));
+    nonclaims.insert(NonClaimLabel("not Level2 payload".to_owned()));
+    nonclaims.insert(NonClaimLabel("not score-axis payload".to_owned()));
     nonclaims
 }
 
@@ -33091,6 +33199,767 @@ fn validate_gateway_formal_tiny_digest_backend_z3_serialization_preview_review_p
             GatewayFormalTinyDigestBackendZ3SerializationPreviewReviewIssue::PromotionAttempt,
         );
     }
+}
+
+const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_ARTIFACT_PROFILE_ID: &str =
+    "tiny-z3-audit-package-artifact-v1";
+const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_ARTIFACT_DECLARED_FILES: &[&str] = &[
+    "tiny-z3-audit-package/manifest.json",
+    "tiny-z3-audit-package/review.json",
+    "tiny-z3-audit-package/serialization-preview.json",
+    "tiny-z3-audit-package/nonclaims.json",
+    "tiny-z3-audit-package/claim-boundary.txt",
+    "tiny-z3-audit-package/digests.json",
+];
+
+pub fn gateway_formal_tiny_digest_backend_z3_audit_package_artifact_declared_files() -> Vec<String>
+{
+    GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_ARTIFACT_DECLARED_FILES
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_audit_package_artifact_declared_sidecars(
+) -> Vec<String> {
+    GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_ARTIFACT_DECLARED_FILES
+        .iter()
+        .map(|value| format!("{value}.sha256"))
+        .collect()
+}
+
+impl GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputRequest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-audit-package-artifact-output-request:v1",
+            self,
+        )
+    }
+}
+
+pub fn materialize_gateway_formal_tiny_digest_backend_z3_audit_package_artifact(
+    output_root: &Path,
+    review: &GatewayFormalTinyDigestBackendZ3SerializationPreviewReview,
+    preview: &GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreview,
+    output_request: &GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputRequest,
+) -> Result<
+    GatewayFormalTinyDigestBackendZ3AuditPackageArtifactManifest,
+    GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError,
+> {
+    validate_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_output_request(
+        output_root,
+        review,
+        preview,
+        output_request,
+    )?;
+    let staging_root =
+        gateway_formal_tiny_digest_backend_z3_audit_package_artifact_staging_root_for(
+            output_root,
+            &output_request.package_id,
+        )?;
+    if staging_root.exists() {
+        remove_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_dir_all_checked(
+            &staging_root,
+        )?;
+    }
+    fs::create_dir_all(staging_root.join("tiny-z3-audit-package"))
+        .map_err(gateway_formal_tiny_digest_backend_z3_audit_package_artifact_io_error)?;
+
+    let files = build_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_files(
+        review,
+        preview,
+        output_request,
+    )?;
+    for (logical_path, bytes) in &files {
+        let target = staging_root.join(logical_path);
+        if let Some(parent) = target.parent() {
+            fs::create_dir_all(parent)
+                .map_err(gateway_formal_tiny_digest_backend_z3_audit_package_artifact_io_error)?;
+        }
+        fs::write(&target, bytes)
+            .map_err(gateway_formal_tiny_digest_backend_z3_audit_package_artifact_io_error)?;
+        fs::write(
+            sidecar_path(&target),
+            hash_hex(hash_bytes(bytes)).into_bytes(),
+        )
+        .map_err(gateway_formal_tiny_digest_backend_z3_audit_package_artifact_io_error)?;
+    }
+
+    if output_root.exists() {
+        if !output_request.overwrite {
+            remove_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_dir_all_checked(
+                &staging_root,
+            )?;
+            return Err(
+                GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::OutputRootExistsWithoutOverwrite,
+            );
+        }
+        remove_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_dir_all_checked(
+            output_root,
+        )?;
+    }
+    fs::rename(&staging_root, output_root)
+        .map_err(gateway_formal_tiny_digest_backend_z3_audit_package_artifact_io_error)?;
+    read_gateway_formal_tiny_digest_backend_z3_audit_package_artifact(output_root)
+}
+
+pub fn read_gateway_formal_tiny_digest_backend_z3_audit_package_artifact(
+    output_root: &Path,
+) -> Result<
+    GatewayFormalTinyDigestBackendZ3AuditPackageArtifactManifest,
+    GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError,
+> {
+    let output_metadata = fs::symlink_metadata(output_root)
+        .map_err(gateway_formal_tiny_digest_backend_z3_audit_package_artifact_io_error)?;
+    if output_metadata.file_type().is_symlink() {
+        return Err(
+            GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::OutputRootIsSymlink,
+        );
+    }
+    if !output_metadata.is_dir() {
+        return Err(
+            GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::OutputRootIsFile,
+        );
+    }
+    let bundle_dir = output_root.join("tiny-z3-audit-package");
+    let bundle_metadata = fs::symlink_metadata(&bundle_dir)
+        .map_err(gateway_formal_tiny_digest_backend_z3_audit_package_artifact_io_error)?;
+    if bundle_metadata.file_type().is_symlink() {
+        return Err(
+            GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::BundleFileIsSymlink(
+                "tiny-z3-audit-package".to_owned(),
+            ),
+        );
+    }
+    if !bundle_metadata.is_dir() {
+        return Err(
+            GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::DeclaredFileTypeMismatch(
+                "tiny-z3-audit-package".to_owned(),
+            ),
+        );
+    }
+
+    reject_undeclared_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_files(
+        output_root,
+    )?;
+    let mut files = BTreeMap::new();
+    for logical_path in GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_ARTIFACT_DECLARED_FILES
+    {
+        let path = output_root.join(logical_path);
+        let metadata = fs::symlink_metadata(&path)
+            .map_err(gateway_formal_tiny_digest_backend_z3_audit_package_artifact_io_error)?;
+        if metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::BundleFileIsSymlink(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        if !metadata.is_file() {
+            return Err(
+                GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::DeclaredFileTypeMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        let sidecar = sidecar_path(&path);
+        let sidecar_metadata = fs::symlink_metadata(&sidecar)
+            .map_err(gateway_formal_tiny_digest_backend_z3_audit_package_artifact_io_error)?;
+        if sidecar_metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::BundleFileIsSymlink(
+                    format!("{logical_path}.sha256"),
+                ),
+            );
+        }
+        if !sidecar_metadata.is_file() {
+            return Err(
+                GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::DeclaredFileTypeMismatch(
+                    format!("{logical_path}.sha256"),
+                ),
+            );
+        }
+        let bytes = fs::read(&path)
+            .map_err(gateway_formal_tiny_digest_backend_z3_audit_package_artifact_io_error)?;
+        let expected_hash = fs::read_to_string(&sidecar)
+            .map_err(gateway_formal_tiny_digest_backend_z3_audit_package_artifact_io_error)?;
+        if expected_hash.trim() != hash_hex(hash_bytes(&bytes)) {
+            return Err(
+                GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::DigestMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        files.insert((*logical_path).to_owned(), bytes);
+    }
+    validate_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_semantics(&files)
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_output_request(
+    output_root: &Path,
+    review: &GatewayFormalTinyDigestBackendZ3SerializationPreviewReview,
+    preview: &GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreview,
+    output_request: &GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputRequest,
+) -> Result<(), GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError> {
+    if !is_single_segment_id(&output_request.package_id)
+        || !is_single_segment_id(&output_request.artifact_profile_id)
+        || output_request.artifact_profile_id
+            != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_ARTIFACT_PROFILE_ID
+    {
+        return Err(
+            GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::InvalidPackageId,
+        );
+    }
+    validate_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_review(review, preview)?;
+    validate_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_output_root(
+        output_root,
+        &output_request.protected_roots,
+        output_request.overwrite,
+    )
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_review(
+    review: &GatewayFormalTinyDigestBackendZ3SerializationPreviewReview,
+    preview: &GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreview,
+) -> Result<(), GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError> {
+    if review.schema_version
+        != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_SERIALIZATION_PREVIEW_REVIEW_SCHEMA_VERSION
+        || review.state_slice
+            != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_SERIALIZATION_PREVIEW_REVIEW_STATE_SLICE
+        || review.promotion_state != "tiny_z3_serialization_preview_review_metadata"
+        || review.next_required_state != "tiny_z3_materialized_audit_package_still_blocked"
+        || review.claim_boundary
+            != gateway_formal_tiny_digest_backend_z3_serialization_preview_review_claim_boundary()
+    {
+        return Err(
+            GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::ReviewMismatch,
+        );
+    }
+    if review.serialization_preview_digest != preview.digest()
+        || review.serialization_preview_input_digest != preview.preview_input_digest
+        || review.package_digest != preview.package_digest
+        || review.review_record_digest != preview.review_digest
+        || review.metadata_digest != preview.metadata_digest
+        || review.phase405_output_manifest_digest != preview.phase405_output_manifest_digest
+        || review.phase404_execution_digest != preview.phase404_execution_digest
+        || review.current_accepted_append_blockers != preview.current_accepted_append_blockers
+        || review.current_accepted_append_blockers_digest
+            != preview.current_accepted_append_blockers_digest
+        || review.package_manifest_digest != preview.package_manifest_digest
+        || review.serialization_profile_id != preview.serialization_profile_id
+        || review.canonical_field_order_digest != preview.canonical_field_order_digest
+        || review.canonical_json_shape_digest != preview.canonical_json_shape_digest
+        || review.canonical_json_payload_digest != preview.canonical_json_payload_digest
+        || review.redaction_policy_digest != preview.redaction_policy_digest
+    {
+        return Err(
+            GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::SerializationPreviewMismatch,
+        );
+    }
+    let nonclaims =
+        gateway_formal_tiny_digest_backend_z3_audit_package_artifact_required_nonclaims();
+    if !nonclaims.is_superset(&review.explicit_nonclaims) {
+        return Err(
+            GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::NonclaimMismatch,
+        );
+    }
+    if review.creates_accepted_evidence
+        || review.changes_accepted_append_policy
+        || review.creates_level2_evidence
+        || review.populates_score_axes
+        || review.proof_artifact_created
+        || review.checker_transcript_created
+        || review.solver_certificate_created
+        || review.semantic_correctness_claimed
+        || review.production_readiness_claimed
+        || review.sota_claimed
+        || review.breakthrough_claimed
+        || review.full_security_claimed
+        || review.grants_authority
+    {
+        return Err(
+            GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::PromotionAttempt,
+        );
+    }
+    Ok(())
+}
+
+fn build_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_files(
+    review: &GatewayFormalTinyDigestBackendZ3SerializationPreviewReview,
+    preview: &GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreview,
+    output_request: &GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputRequest,
+) -> Result<
+    BTreeMap<String, Vec<u8>>,
+    GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError,
+> {
+    let nonclaims =
+        gateway_formal_tiny_digest_backend_z3_audit_package_artifact_required_nonclaims();
+    let digest_index = gateway_formal_tiny_digest_backend_z3_audit_package_artifact_digest_index(
+        review, preview, &nonclaims,
+    );
+    let mut files = BTreeMap::from([
+        (
+            "tiny-z3-audit-package/review.json".to_owned(),
+            serde_json::to_vec_pretty(review).map_err(
+                gateway_formal_tiny_digest_backend_z3_audit_package_artifact_serde_error,
+            )?,
+        ),
+        (
+            "tiny-z3-audit-package/serialization-preview.json".to_owned(),
+            serde_json::to_vec_pretty(preview).map_err(
+                gateway_formal_tiny_digest_backend_z3_audit_package_artifact_serde_error,
+            )?,
+        ),
+        (
+            "tiny-z3-audit-package/nonclaims.json".to_owned(),
+            serde_json::to_vec_pretty(&nonclaims).map_err(
+                gateway_formal_tiny_digest_backend_z3_audit_package_artifact_serde_error,
+            )?,
+        ),
+        (
+            "tiny-z3-audit-package/claim-boundary.txt".to_owned(),
+            gateway_formal_tiny_digest_backend_z3_audit_package_artifact_claim_boundary()
+                .into_bytes(),
+        ),
+        (
+            "tiny-z3-audit-package/digests.json".to_owned(),
+            serde_json::to_vec_pretty(&digest_index).map_err(
+                gateway_formal_tiny_digest_backend_z3_audit_package_artifact_serde_error,
+            )?,
+        ),
+    ]);
+    let declared_file_digests = files
+        .iter()
+        .map(|(logical_path, bytes)| (logical_path.clone(), hash_bytes(bytes)))
+        .collect();
+    let manifest = GatewayFormalTinyDigestBackendZ3AuditPackageArtifactManifest {
+        schema_version: GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_ARTIFACT_SCHEMA_VERSION
+            .to_owned(),
+        package_id: output_request.package_id.clone(),
+        state_slice: GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_ARTIFACT_STATE_SLICE
+            .to_owned(),
+        created_at_unix: output_request.created_at_unix,
+        request_digest: output_request.digest(),
+        review_digest: review.digest(),
+        review_input_digest: review.review_input_digest,
+        serialization_preview_digest: preview.digest(),
+        serialization_preview_input_digest: preview.preview_input_digest,
+        audit_package_digest: preview.package_digest,
+        review_record_digest: preview.review_digest,
+        metadata_digest: preview.metadata_digest,
+        phase405_output_manifest_digest: preview.phase405_output_manifest_digest,
+        phase404_execution_digest: preview.phase404_execution_digest,
+        current_accepted_append_blockers_digest: preview.current_accepted_append_blockers_digest,
+        package_manifest_digest: preview.package_manifest_digest,
+        serialization_profile_id: preview.serialization_profile_id.clone(),
+        canonical_field_order_digest: preview.canonical_field_order_digest,
+        canonical_json_shape_digest: preview.canonical_json_shape_digest,
+        canonical_json_payload_digest: preview.canonical_json_payload_digest,
+        redaction_policy_digest: preview.redaction_policy_digest,
+        logical_preview_path_digest: review.logical_preview_path_digest,
+        artifact_profile_id: output_request.artifact_profile_id.clone(),
+        declared_files: gateway_formal_tiny_digest_backend_z3_audit_package_artifact_declared_files(
+        ),
+        declared_sidecars:
+            gateway_formal_tiny_digest_backend_z3_audit_package_artifact_declared_sidecars(),
+        declared_file_digests,
+        claim_boundary: gateway_formal_tiny_digest_backend_z3_audit_package_artifact_claim_boundary(
+        ),
+        creates_accepted_evidence: false,
+        changes_accepted_append_policy: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+        nonclaims,
+    };
+    files.insert(
+        "tiny-z3-audit-package/manifest.json".to_owned(),
+        serde_json::to_vec_pretty(&manifest)
+            .map_err(gateway_formal_tiny_digest_backend_z3_audit_package_artifact_serde_error)?,
+    );
+    Ok(files)
+}
+
+fn gateway_formal_tiny_digest_backend_z3_audit_package_artifact_digest_index(
+    review: &GatewayFormalTinyDigestBackendZ3SerializationPreviewReview,
+    preview: &GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreview,
+    nonclaims: &BTreeSet<NonClaimLabel>,
+) -> BTreeMap<String, Hash> {
+    BTreeMap::from([
+        ("review_digest".to_owned(), review.digest()),
+        ("review_input_digest".to_owned(), review.review_input_digest),
+        ("serialization_preview_digest".to_owned(), preview.digest()),
+        (
+            "serialization_preview_input_digest".to_owned(),
+            preview.preview_input_digest,
+        ),
+        ("audit_package_digest".to_owned(), preview.package_digest),
+        ("review_record_digest".to_owned(), preview.review_digest),
+        ("metadata_digest".to_owned(), preview.metadata_digest),
+        (
+            "phase405_output_manifest_digest".to_owned(),
+            preview.phase405_output_manifest_digest,
+        ),
+        (
+            "phase404_execution_digest".to_owned(),
+            preview.phase404_execution_digest,
+        ),
+        (
+            "current_accepted_append_blockers_digest".to_owned(),
+            preview.current_accepted_append_blockers_digest,
+        ),
+        (
+            "package_manifest_digest".to_owned(),
+            preview.package_manifest_digest,
+        ),
+        (
+            "canonical_field_order_digest".to_owned(),
+            preview.canonical_field_order_digest,
+        ),
+        (
+            "canonical_json_shape_digest".to_owned(),
+            preview.canonical_json_shape_digest,
+        ),
+        (
+            "canonical_json_payload_digest".to_owned(),
+            preview.canonical_json_payload_digest,
+        ),
+        (
+            "redaction_policy_digest".to_owned(),
+            preview.redaction_policy_digest,
+        ),
+        (
+            "logical_preview_path_digest".to_owned(),
+            review.logical_preview_path_digest,
+        ),
+        (
+            "artifact_nonclaims_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-audit-package-artifact-nonclaims:v1",
+                nonclaims,
+            ),
+        ),
+    ])
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_semantics(
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<
+    GatewayFormalTinyDigestBackendZ3AuditPackageArtifactManifest,
+    GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError,
+> {
+    let manifest: GatewayFormalTinyDigestBackendZ3AuditPackageArtifactManifest =
+        parse_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_declared_json(
+            files,
+            "tiny-z3-audit-package/manifest.json",
+        )?;
+    let review: GatewayFormalTinyDigestBackendZ3SerializationPreviewReview =
+        parse_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_declared_json(
+            files,
+            "tiny-z3-audit-package/review.json",
+        )?;
+    let preview: GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreview =
+        parse_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_declared_json(
+            files,
+            "tiny-z3-audit-package/serialization-preview.json",
+        )?;
+    let nonclaims: BTreeSet<NonClaimLabel> =
+        parse_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_declared_json(
+            files,
+            "tiny-z3-audit-package/nonclaims.json",
+        )?;
+    let digest_index: BTreeMap<String, Hash> =
+        parse_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_declared_json(
+            files,
+            "tiny-z3-audit-package/digests.json",
+        )?;
+    let claim_boundary = String::from_utf8(
+        declared_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_bytes(
+            files,
+            "tiny-z3-audit-package/claim-boundary.txt",
+        )?
+        .to_vec(),
+    )
+    .map_err(|_| {
+        GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::MalformedDeclaredFile(
+            "tiny-z3-audit-package/claim-boundary.txt".to_owned(),
+        )
+    })?;
+
+    if manifest.schema_version
+        != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_ARTIFACT_SCHEMA_VERSION
+        || manifest.state_slice
+            != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_ARTIFACT_STATE_SLICE
+        || manifest.artifact_profile_id
+            != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_ARTIFACT_PROFILE_ID
+        || manifest.claim_boundary
+            != gateway_formal_tiny_digest_backend_z3_audit_package_artifact_claim_boundary()
+        || claim_boundary != manifest.claim_boundary
+        || manifest.declared_files
+            != gateway_formal_tiny_digest_backend_z3_audit_package_artifact_declared_files()
+        || manifest.declared_sidecars
+            != gateway_formal_tiny_digest_backend_z3_audit_package_artifact_declared_sidecars()
+    {
+        return Err(
+            GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::ManifestSemanticMismatch,
+        );
+    }
+    if manifest.creates_accepted_evidence
+        || manifest.changes_accepted_append_policy
+        || manifest.creates_level2_evidence
+        || manifest.populates_score_axes
+        || manifest.proof_artifact_created
+        || manifest.checker_transcript_created
+        || manifest.solver_certificate_created
+        || manifest.semantic_correctness_claimed
+        || manifest.production_readiness_claimed
+        || manifest.sota_claimed
+        || manifest.breakthrough_claimed
+        || manifest.full_security_claimed
+        || manifest.grants_authority
+    {
+        return Err(
+            GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::PromotionAttempt,
+        );
+    }
+    validate_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_review(
+        &review, &preview,
+    )?;
+    if manifest.review_digest != review.digest()
+        || manifest.review_input_digest != review.review_input_digest
+        || manifest.serialization_preview_digest != preview.digest()
+        || manifest.serialization_preview_input_digest != preview.preview_input_digest
+        || manifest.audit_package_digest != preview.package_digest
+        || manifest.review_record_digest != preview.review_digest
+        || manifest.metadata_digest != preview.metadata_digest
+        || manifest.phase405_output_manifest_digest != preview.phase405_output_manifest_digest
+        || manifest.phase404_execution_digest != preview.phase404_execution_digest
+        || manifest.current_accepted_append_blockers_digest
+            != preview.current_accepted_append_blockers_digest
+        || manifest.package_manifest_digest != preview.package_manifest_digest
+        || manifest.serialization_profile_id != preview.serialization_profile_id
+        || manifest.canonical_field_order_digest != preview.canonical_field_order_digest
+        || manifest.canonical_json_shape_digest != preview.canonical_json_shape_digest
+        || manifest.canonical_json_payload_digest != preview.canonical_json_payload_digest
+        || manifest.redaction_policy_digest != preview.redaction_policy_digest
+        || manifest.logical_preview_path_digest != review.logical_preview_path_digest
+    {
+        return Err(
+            GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::ManifestSemanticMismatch,
+        );
+    }
+    let required_nonclaims =
+        gateway_formal_tiny_digest_backend_z3_audit_package_artifact_required_nonclaims();
+    if manifest.nonclaims != required_nonclaims || nonclaims != required_nonclaims {
+        return Err(
+            GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::NonclaimMismatch,
+        );
+    }
+    let expected_digest_index =
+        gateway_formal_tiny_digest_backend_z3_audit_package_artifact_digest_index(
+            &review,
+            &preview,
+            &required_nonclaims,
+        );
+    if digest_index != expected_digest_index {
+        return Err(
+            GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::DigestMismatch(
+                "tiny-z3-audit-package/digests.json".to_owned(),
+            ),
+        );
+    }
+    let expected_file_digests: BTreeMap<String, Hash> = files
+        .iter()
+        .filter(|(logical_path, _)| logical_path.as_str() != "tiny-z3-audit-package/manifest.json")
+        .map(|(logical_path, bytes)| (logical_path.clone(), hash_bytes(bytes)))
+        .collect();
+    if manifest.declared_file_digests != expected_file_digests {
+        return Err(
+            GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::DigestMismatch(
+                "tiny-z3-audit-package/manifest.json".to_owned(),
+            ),
+        );
+    }
+    Ok(manifest)
+}
+
+fn declared_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_bytes<'a>(
+    files: &'a BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<&'a [u8], GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError> {
+    files
+        .get(logical_path)
+        .map(|bytes| bytes.as_slice())
+        .ok_or_else(|| {
+            GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::Io(format!(
+                "declared file missing: {logical_path}"
+            ))
+        })
+}
+
+fn parse_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_declared_json<
+    T: for<'de> Deserialize<'de>,
+>(
+    files: &BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<T, GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError> {
+    let bytes = declared_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_bytes(
+        files,
+        logical_path,
+    )?;
+    let text = std::str::from_utf8(bytes).map_err(|_| {
+        GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })?;
+    serde_json::from_str(text).map_err(|_| {
+        GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })
+}
+
+fn reject_undeclared_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_files(
+    output_root: &Path,
+) -> Result<(), GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError> {
+    for entry in fs::read_dir(output_root)
+        .map_err(gateway_formal_tiny_digest_backend_z3_audit_package_artifact_io_error)?
+    {
+        let entry =
+            entry.map_err(gateway_formal_tiny_digest_backend_z3_audit_package_artifact_io_error)?;
+        let name = entry.file_name().to_string_lossy().into_owned();
+        if name != "tiny-z3-audit-package" {
+            return Err(
+                GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::UndeclaredFile(
+                    name,
+                ),
+            );
+        }
+    }
+    let mut declared: BTreeSet<String> =
+        GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_ARTIFACT_DECLARED_FILES
+            .iter()
+            .map(|value| (*value).to_owned())
+            .chain(gateway_formal_tiny_digest_backend_z3_audit_package_artifact_declared_sidecars())
+            .collect();
+    let bundle_dir = output_root.join("tiny-z3-audit-package");
+    for entry in fs::read_dir(&bundle_dir)
+        .map_err(gateway_formal_tiny_digest_backend_z3_audit_package_artifact_io_error)?
+    {
+        let entry =
+            entry.map_err(gateway_formal_tiny_digest_backend_z3_audit_package_artifact_io_error)?;
+        let logical_path = entry
+            .path()
+            .strip_prefix(output_root)
+            .map_err(|error| {
+                GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::Io(
+                    error.to_string(),
+                )
+            })?
+            .to_string_lossy()
+            .replace('\\', "/");
+        if !declared.remove(&logical_path) {
+            return Err(
+                GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::UndeclaredFile(
+                    logical_path,
+                ),
+            );
+        }
+    }
+    if let Some(missing) = declared.into_iter().next() {
+        return Err(
+            GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::Io(format!(
+                "declared file missing: {missing}"
+            )),
+        );
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_output_root(
+    output_root: &Path,
+    protected_roots: &[PathBuf],
+    overwrite: bool,
+) -> Result<(), GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError> {
+    match validate_output_root(output_root, protected_roots, overwrite) {
+        Ok(()) => Ok(()),
+        Err(AdmissionJournalMaterializationError::EmptyOutputRoot) => {
+            Err(GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::EmptyOutputRoot)
+        }
+        Err(AdmissionJournalMaterializationError::ProtectedOutputRoot) => Err(
+            GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::ProtectedOutputRoot,
+        ),
+        Err(AdmissionJournalMaterializationError::OutputRootExistsWithoutOverwrite) => Err(
+            GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::OutputRootExistsWithoutOverwrite,
+        ),
+        Err(AdmissionJournalMaterializationError::OutputRootIsFile) => {
+            Err(GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::OutputRootIsFile)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootIsSymlink) => {
+            Err(GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::OutputRootIsSymlink)
+        }
+        Err(AdmissionJournalMaterializationError::Io(error)) => {
+            Err(GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::Io(error))
+        }
+        Err(other) => Err(GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::Io(
+            format!("{other:?}"),
+        )),
+    }
+}
+
+fn gateway_formal_tiny_digest_backend_z3_audit_package_artifact_staging_root_for(
+    output_root: &Path,
+    package_id: &str,
+) -> Result<PathBuf, GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError> {
+    let parent = output_root
+        .parent()
+        .ok_or(GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::EmptyOutputRoot)?;
+    let name = output_root
+        .file_name()
+        .map(|value| value.to_string_lossy().into_owned())
+        .ok_or(GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::EmptyOutputRoot)?;
+    Ok(parent.join(format!(".{name}.{package_id}.staging")))
+}
+
+fn remove_gateway_formal_tiny_digest_backend_z3_audit_package_artifact_dir_all_checked(
+    path: &Path,
+) -> Result<(), GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError> {
+    if !path.exists() {
+        return Ok(());
+    }
+    if fs::symlink_metadata(path)
+        .map_err(gateway_formal_tiny_digest_backend_z3_audit_package_artifact_io_error)?
+        .file_type()
+        .is_symlink()
+    {
+        return Err(
+            GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::OutputRootIsSymlink,
+        );
+    }
+    fs::remove_dir_all(path)
+        .map_err(gateway_formal_tiny_digest_backend_z3_audit_package_artifact_io_error)
+}
+
+fn gateway_formal_tiny_digest_backend_z3_audit_package_artifact_io_error(
+    error: io::Error,
+) -> GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError {
+    GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::Io(error.to_string())
+}
+
+fn gateway_formal_tiny_digest_backend_z3_audit_package_artifact_serde_error(
+    error: serde_json::Error,
+) -> GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError {
+    GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::Serialization(
+        error.to_string(),
+    )
 }
 
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
@@ -60800,6 +61669,207 @@ mod tests {
     }
 
     #[test]
+    fn phase431_tiny_z3_audit_package_artifact_materializes_and_reads_back() {
+        let Some((obligation_root, phase405_output_root, preview, review)) =
+            phase431_tiny_z3_audit_package_artifact_parts("phase431-valid")
+        else {
+            return;
+        };
+        let output_root = temp_output_root("phase431-valid-output");
+        let output_request = phase431_tiny_z3_audit_package_artifact_output_request(
+            "phase431-valid-package",
+            &output_root,
+        );
+        let manifest = materialize_gateway_formal_tiny_digest_backend_z3_audit_package_artifact(
+            &output_root,
+            &review,
+            &preview,
+            &output_request,
+        )
+        .expect("phase431 audit package artifact materializes");
+        let readback =
+            read_gateway_formal_tiny_digest_backend_z3_audit_package_artifact(&output_root)
+                .expect("phase431 audit package artifact reads back");
+
+        assert_eq!(manifest, readback);
+        assert_eq!(
+            manifest.schema_version,
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_ARTIFACT_SCHEMA_VERSION
+        );
+        assert_eq!(
+            manifest.state_slice,
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_ARTIFACT_STATE_SLICE
+        );
+        assert_eq!(manifest.review_digest, review.digest());
+        assert_eq!(manifest.review_input_digest, review.review_input_digest);
+        assert_eq!(manifest.serialization_preview_digest, preview.digest());
+        assert_eq!(
+            manifest.serialization_preview_input_digest,
+            preview.preview_input_digest
+        );
+        assert_eq!(manifest.audit_package_digest, preview.package_digest);
+        assert_eq!(manifest.review_record_digest, preview.review_digest);
+        assert_eq!(manifest.metadata_digest, preview.metadata_digest);
+        assert_eq!(
+            manifest.phase405_output_manifest_digest,
+            preview.phase405_output_manifest_digest
+        );
+        assert_eq!(
+            manifest.phase404_execution_digest,
+            preview.phase404_execution_digest
+        );
+        assert_eq!(
+            manifest.declared_files,
+            gateway_formal_tiny_digest_backend_z3_audit_package_artifact_declared_files()
+        );
+        assert_eq!(
+            manifest.declared_sidecars,
+            gateway_formal_tiny_digest_backend_z3_audit_package_artifact_declared_sidecars()
+        );
+        assert_eq!(
+            manifest.claim_boundary,
+            gateway_formal_tiny_digest_backend_z3_audit_package_artifact_claim_boundary()
+        );
+        assert!(!manifest.creates_accepted_evidence);
+        assert!(!manifest.changes_accepted_append_policy);
+        assert!(!manifest.creates_level2_evidence);
+        assert!(!manifest.populates_score_axes);
+        assert!(!manifest.proof_artifact_created);
+        assert!(!manifest.checker_transcript_created);
+        assert!(!manifest.solver_certificate_created);
+        assert!(!manifest.semantic_correctness_claimed);
+        assert!(!manifest.production_readiness_claimed);
+        assert!(!manifest.sota_claimed);
+        assert!(!manifest.breakthrough_claimed);
+        assert!(!manifest.full_security_claimed);
+        assert!(!manifest.grants_authority);
+        for logical_path in
+            gateway_formal_tiny_digest_backend_z3_audit_package_artifact_declared_files()
+        {
+            let path = output_root.join(&logical_path);
+            assert!(path.is_file(), "declared file exists: {logical_path}");
+            assert!(
+                sidecar_path(&path).is_file(),
+                "sidecar exists: {logical_path}"
+            );
+        }
+
+        fs::remove_dir_all(&output_root).expect("phase431 valid output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase431 valid phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase431 valid obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase431_tiny_z3_audit_package_artifact_readback_rejects_stale_digest() {
+        let Some((obligation_root, phase405_output_root, preview, review)) =
+            phase431_tiny_z3_audit_package_artifact_parts("phase431-stale")
+        else {
+            return;
+        };
+        let output_root = temp_output_root("phase431-stale-output");
+        let output_request = phase431_tiny_z3_audit_package_artifact_output_request(
+            "phase431-stale-package",
+            &output_root,
+        );
+        materialize_gateway_formal_tiny_digest_backend_z3_audit_package_artifact(
+            &output_root,
+            &review,
+            &preview,
+            &output_request,
+        )
+        .expect("phase431 stale package materializes");
+
+        fs::write(
+            output_root.join("tiny-z3-audit-package/nonclaims.json"),
+            b"[]",
+        )
+        .expect("phase431 stale payload writes");
+        assert_eq!(
+            read_gateway_formal_tiny_digest_backend_z3_audit_package_artifact(&output_root),
+            Err(
+                GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::DigestMismatch(
+                    "tiny-z3-audit-package/nonclaims.json".to_owned()
+                )
+            )
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase431 stale output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase431 stale phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase431 stale obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase431_tiny_z3_audit_package_artifact_readback_rejects_undeclared_file() {
+        let Some((obligation_root, phase405_output_root, preview, review)) =
+            phase431_tiny_z3_audit_package_artifact_parts("phase431-undeclared")
+        else {
+            return;
+        };
+        let output_root = temp_output_root("phase431-undeclared-output");
+        let output_request = phase431_tiny_z3_audit_package_artifact_output_request(
+            "phase431-undeclared-package",
+            &output_root,
+        );
+        materialize_gateway_formal_tiny_digest_backend_z3_audit_package_artifact(
+            &output_root,
+            &review,
+            &preview,
+            &output_request,
+        )
+        .expect("phase431 undeclared package materializes");
+
+        fs::write(output_root.join("tiny-z3-audit-package/extra.json"), b"{}")
+            .expect("phase431 undeclared file writes");
+        assert_eq!(
+            read_gateway_formal_tiny_digest_backend_z3_audit_package_artifact(&output_root),
+            Err(
+                GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::UndeclaredFile(
+                    "tiny-z3-audit-package/extra.json".to_owned()
+                )
+            )
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase431 undeclared output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase431 undeclared phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase431 undeclared obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase431_tiny_z3_audit_package_artifact_rejects_promotion_before_write() {
+        let Some((obligation_root, phase405_output_root, preview, mut review)) =
+            phase431_tiny_z3_audit_package_artifact_parts("phase431-promotion")
+        else {
+            return;
+        };
+        let output_root = temp_output_root("phase431-promotion-output");
+        let output_request = phase431_tiny_z3_audit_package_artifact_output_request(
+            "phase431-promotion-package",
+            &output_root,
+        );
+        review.creates_level2_evidence = true;
+
+        assert_eq!(
+            materialize_gateway_formal_tiny_digest_backend_z3_audit_package_artifact(
+                &output_root,
+                &review,
+                &preview,
+                &output_request,
+            ),
+            Err(GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputError::PromotionAttempt)
+        );
+        assert!(!output_root.exists());
+
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase431 promotion phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase431 promotion obligation cleanup succeeds");
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -64035,6 +65105,81 @@ mod tests {
             full_security_claimed: false,
             action_authority_claimed: false,
         }
+    }
+
+    fn phase431_tiny_z3_audit_package_artifact_output_request(
+        package_id: &str,
+        output_root: &Path,
+    ) -> GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputRequest {
+        GatewayFormalTinyDigestBackendZ3AuditPackageArtifactOutputRequest {
+            package_id: package_id.to_owned(),
+            artifact_profile_id:
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_ARTIFACT_PROFILE_ID.to_owned(),
+            created_at_unix: 1_800_000_431,
+            overwrite: false,
+            protected_roots: vec![output_root
+                .parent()
+                .expect("temp output root has parent")
+                .join("protected-repo")],
+        }
+    }
+
+    fn phase431_tiny_z3_audit_package_artifact_parts(
+        name: &str,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreview,
+        GatewayFormalTinyDigestBackendZ3SerializationPreviewReview,
+    )> {
+        let Some((obligation_root, output_root, execution, output_manifest, metadata)) =
+            phase421_metadata_with_backend_if_z3_available(name)
+        else {
+            return None;
+        };
+        let review_input = phase423_local_reviewed_metadata_review_input(
+            &format!("{name}-review-record"),
+            &metadata,
+            &execution,
+            &output_manifest,
+            GatewayFormalTinyDigestBackendZ3LocalReviewedMetadataReviewLabel::TinyAcceptedEvidenceBlocked,
+        );
+        let review = build_gateway_formal_tiny_digest_backend_z3_local_reviewed_metadata_review(
+            &metadata,
+            &execution,
+            &output_manifest,
+            &review_input,
+        )
+        .expect("phase431 source review builds");
+        let package_input =
+            phase425_local_review_audit_package_input(&format!("{name}-package"), &review);
+        let package = build_gateway_formal_tiny_digest_backend_z3_local_review_audit_package(
+            &review,
+            &package_input,
+        )
+        .expect("phase431 source package builds");
+        let preview_input = phase427_audit_package_serialization_preview_input(
+            &format!("{name}-preview"),
+            &package,
+        );
+        let preview =
+            build_gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview(
+                &package,
+                &preview_input,
+            )
+            .expect("phase431 source preview builds");
+        let review_input = phase429_serialization_preview_review_input(
+            &format!("{name}-serialization-review"),
+            &preview,
+            GatewayFormalTinyDigestBackendZ3SerializationPreviewReviewLabel::TinyZ3MaterializationStillBlocked,
+        );
+        let review_record =
+            build_gateway_formal_tiny_digest_backend_z3_serialization_preview_review(
+                &preview,
+                &review_input,
+            )
+            .expect("phase431 serialization preview review builds");
+        Some((obligation_root, output_root, preview, review_record))
     }
 
     fn formal_evidence_local_audit_package_artifact_output_request(

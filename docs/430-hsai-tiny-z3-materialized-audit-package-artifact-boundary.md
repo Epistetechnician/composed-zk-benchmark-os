@@ -190,3 +190,16 @@ plumbing only if it:
 - does not submit benchmarks;
 - does not claim semantic correctness, production readiness, SOTA, breakthrough
   status, full security, or action authority.
+
+## Phase 431 Implementation Result
+
+Phase 431 is implemented in
+`docs/431-hsai-tiny-z3-materialized-audit-package-artifact-notes.md`.
+
+The implementation stays within the Phase 430 boundary by adding only local
+digest-bound `tiny-z3-audit-package/*` artifact plumbing, declared `.sha256`
+sidecars, read-back validation, nonclaim validation, and promotion rejection for
+one Phase 429 serialization-preview review. It creates no accepted formal
+evidence, mutates no accepted Evidence Ledger, changes no accepted append
+policy, creates no Level2+ evidence, populates no score axes, and makes no
+production/SOTA/security/semantic-correctness claim.

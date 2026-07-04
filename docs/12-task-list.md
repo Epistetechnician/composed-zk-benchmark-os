@@ -11627,6 +11627,36 @@ materialized artifact output, accepted formal evidence, accepted Evidence
 Ledger mutation, accepted append policy change, Level2+ evidence, score axes,
 proof-authority claim, or production/SOTA/security/correctness claim.
 
+## Phase 431 HSAI Tiny Z3 Materialized Audit Package Artifact Plumbing
+
+Status: complete. See
+`docs/431-hsai-tiny-z3-materialized-audit-package-artifact-notes.md`.
+
+Goal: implement local materialized tiny-Z3 audit package artifact plumbing for
+one Phase 429 serialization-preview review without creating accepted evidence,
+changing accepted append policy, creating Level2+ evidence, populating score
+axes, or making proof-authority claims.
+
+Implemented: Phase 431 adds the local output request, manifest, error taxonomy,
+declared file helpers, staged write path, read-back validator, digest index,
+nonclaim validation, path/root guards, sidecar digest validation, and promotion
+rejection for the `tiny-z3-audit-package/*` namespace. The manifest binds one
+Phase 429 review, one Phase 427 preview, one Phase 425 package, one Phase 423
+review record, one Phase 421 metadata record, Phase 404/405 local Z3 replay
+digests, current accepted append blockers, serialization digests, redaction
+policy, declared file digests, claim boundary, and required nonclaims.
+
+Validation coverage: `hsai-agent-admission` Phase 431 tests cover successful
+materialization/read-back, stale digest rejection, undeclared file rejection,
+and promotion rejection before write. Repository hygiene, claim-boundary source
+scans, and workspace tests remain the broader gates.
+
+Exit criteria: HSAI now has local materialized tiny-Z3 audit package artifact
+plumbing for one reviewed local Z3 replay package. It still has no accepted
+formal evidence, accepted Evidence Ledger mutation, accepted append policy
+change, Level2+ evidence, score axes, proof-authority claim, Lean/COBALT/
+Rust-to-Lean execution, or production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
