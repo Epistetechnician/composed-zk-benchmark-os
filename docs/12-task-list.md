@@ -13849,6 +13849,39 @@ metadata, accepted append policy change, Level2+ evidence, score axes,
 proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean execution, benchmark
 evidence, or production/SOTA/security/correctness claim.
 
+## Phase 494 HSAI Tiny Z3 Accepted Evidence Class And Claim Boundary
+
+Status: complete. See
+`docs/494-hsai-tiny-z3-accepted-evidence-class-and-claim-boundary.md`.
+
+Goal: define the docs-first boundary for the third Phase 489 prerequisite
+gate: `accepted_evidence_class_and_claim_boundary`.
+
+Implemented: Phase 494 documents the current `zkbench-core` class and
+claim-boundary surface for later HSAI accepted-path work: `EvidenceClass`,
+`ClaimBoundary`, `EvidenceRecord`, `EvidenceRecordCandidate`,
+`AcceptedLedgerAppendTransactionRequest`,
+`validate_accepted_ledger_append_transaction_request`,
+`build_evidence_record_from_transaction`, `EvidenceLedger`, and
+`EvidenceAppendPolicy::RejectAboveLevel1Actual`. It records accepted evidence
+class `LocalReplay`, accepted claim boundary `Level1LocalReplay`, lower local
+metadata class/boundary `DesignNote` and `Level0DesignNote`, maximum accepted
+append boundary `Level1LocalReplay`, rejected classes
+`ReproducibleBenchmarkArtifact`, `CrossBackendReplay`, `FormalPropertyStatement`,
+`MachineCheckedScopedProof`, and `IndependentlyReproducedEvidence`, required
+future bindings, required future validation, meaning limits, and Phase 495
+implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has an evidence class and claim-boundary boundary for
+later accepted-path work. It still has no accepted append decision, accepted
+formal evidence, accepted Evidence Ledger mutation from HSAI admission
+metadata, accepted append policy change, Level2+ evidence, score axes,
+proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean execution, benchmark
+evidence, or production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

@@ -7065,5 +7065,26 @@ score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no
 benchmark evidence, and claims no production/SOTA/security/semantic-correctness
 result.
 
+[docs/494-hsai-tiny-z3-accepted-evidence-class-and-claim-boundary.md](docs/494-hsai-tiny-z3-accepted-evidence-class-and-claim-boundary.md)
+defines the Phase 494 docs-first accepted evidence class and claim-boundary
+boundary for the Phase 489 `accepted_evidence_class_and_claim_boundary`
+prerequisite gate. The boundary records `zkbench-core` as the class and
+claim-boundary owner, names `EvidenceClass`, `ClaimBoundary`, `EvidenceRecord`,
+`EvidenceRecordCandidate`, `AcceptedLedgerAppendTransactionRequest`,
+`validate_accepted_ledger_append_transaction_request`,
+`build_evidence_record_from_transaction`, `EvidenceLedger`, and
+`EvidenceAppendPolicy::RejectAboveLevel1Actual`, and records accepted evidence
+class `LocalReplay`, accepted claim boundary `Level1LocalReplay`, lower local
+metadata class/boundary `DesignNote` and `Level0DesignNote`, maximum accepted
+append boundary `Level1LocalReplay`, rejected
+Level2+/formal/proof/cross-backend/independent classes, required future
+bindings, required future validation, meaning limits, and Phase 495
+implementation exit criteria. It creates no Rust code, makes no
+accepted append decision, mutates no accepted Evidence Ledger, changes no
+accepted append policy, creates no accepted formal evidence, creates no
+Level2+ evidence, populates no score axes, runs no
+Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence,
+and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
