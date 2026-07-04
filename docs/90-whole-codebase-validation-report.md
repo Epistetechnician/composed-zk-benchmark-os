@@ -6773,5 +6773,25 @@ accepted append policy, create accepted formal evidence, create Level2+
 evidence, populate score axes, run Lean/new-SMT/COBALT/Rust-to-Lean
 extraction, or claim production/SOTA/security/semantic-correctness.
 
+[docs/478-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-boundary.md](docs/478-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-boundary.md)
+defines the Phase 478 docs-first boundary for future local tiny-Z3
+accepted-append decision quarantine-resolution escalation terminal-review
+closure-blocker review terminal-closure review settlement-blocker review
+terminal metadata over one Phase 477 settlement-blocker review. The boundary
+names six non-promotional future settlement-blocker review terminal labels,
+required future bindings to the Phase 477 settlement-blocker review
+digest/input digest, Phase 477 digest/id/label binding map digests, explicit
+nonclaim digest, current accepted append blocker digest, inherited
+settlement-blocker review ids, inherited settlement-blocker ids, inherited
+terminal-closure review ids, inherited terminal-closure ids, inherited
+closure-blocker review ids, inherited closure-blocker ids, inherited closure
+ids, inherited terminal-review ids, inherited settlement-blocker review label,
+required future validation, meaning limits, and Phase 479 implementation exit
+criteria. It creates no Rust code, makes no accepted append decision, mutates
+no accepted Evidence Ledger, changes no accepted append policy, creates no
+accepted formal evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

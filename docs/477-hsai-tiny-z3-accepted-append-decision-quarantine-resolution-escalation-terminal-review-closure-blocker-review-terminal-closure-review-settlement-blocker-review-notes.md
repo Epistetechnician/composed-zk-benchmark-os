@@ -82,3 +82,12 @@ terminal boundary. It should define how to close one Phase 477
 settlement-blocker review without settling it into accepted append, accepted
 formal evidence, Level2+ evidence, score axes, backend execution, or
 SOTA/full-security/semantic-correctness/production-readiness claims.
+
+## Phase 478 Boundary Note
+
+Phase 478 defines that docs-first boundary in
+`docs/478-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-boundary.md`.
+It does not implement settlement-blocker review terminal metadata, run backend
+execution, create accepted evidence, create Level2+ evidence, populate score
+axes, or support SOTA/full-security/semantic-correctness/production-readiness
+claims.
