@@ -170,3 +170,11 @@ A future Phase 467 implementation is valid only if it:
 - claims no breakthrough status;
 - claims no full security;
 - grants no action authority.
+
+## Phase 467 Implementation Status
+
+Phase 467 implemented this boundary in
+`crates/hsai-agent-admission/src/lib.rs` and
+`docs/467-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-notes.md`.
+The implementation remains local metadata only and preserves every nonclaim
+and anti-promotion requirement above.
