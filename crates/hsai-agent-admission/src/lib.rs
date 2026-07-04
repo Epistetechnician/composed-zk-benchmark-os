@@ -862,6 +862,11 @@ pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANT
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_ESCALATION_TERMINAL_REVIEW_CLOSURE_BLOCKER_REVIEW_TERMINAL_CLOSURE_REVIEW_SETTLEMENT_BLOCKER_REVIEW_TERMINAL_REVIEW_STATE_SLICE: &str =
     "phase-481-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-metadata";
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_ESCALATION_TERMINAL_REVIEW_CLOSURE_BLOCKER_REVIEW_TERMINAL_CLOSURE_REVIEW_SETTLEMENT_BLOCKER_REVIEW_TERMINAL_REVIEW_CLAIM_BOUNDARY: &str = "local tiny-Z3 accepted-append decision quarantine-resolution escalation terminal-review closure-blocker review terminal-closure review settlement-blocker review terminal review metadata only; reviews one Phase 479 tiny-Z3 settlement-blocker review terminal record while settlement into accepted append or accepted formal evidence remains blocked, but does not make an accepted append decision, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, create proof artifacts, create checker transcripts, create solver certificates, run Lean, run new SMT, run COBALT, run Rust-to-Lean extraction, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_ESCALATION_TERMINAL_REVIEW_CLOSURE_BLOCKER_REVIEW_TERMINAL_CLOSURE_REVIEW_SETTLEMENT_BLOCKER_REVIEW_TERMINAL_REVIEW_CLOSURE_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-digest-backend-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-closure:v1";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_ESCALATION_TERMINAL_REVIEW_CLOSURE_BLOCKER_REVIEW_TERMINAL_CLOSURE_REVIEW_SETTLEMENT_BLOCKER_REVIEW_TERMINAL_REVIEW_CLOSURE_STATE_SLICE: &str =
+    "phase-483-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-closure-metadata";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_ESCALATION_TERMINAL_REVIEW_CLOSURE_BLOCKER_REVIEW_TERMINAL_CLOSURE_REVIEW_SETTLEMENT_BLOCKER_REVIEW_TERMINAL_REVIEW_CLOSURE_CLAIM_BOUNDARY: &str = "local tiny-Z3 accepted-append decision quarantine-resolution escalation terminal-review closure-blocker review terminal-closure review settlement-blocker review terminal review closure metadata only; closes one Phase 481 tiny-Z3 settlement-blocker review terminal review record while settlement into accepted append or accepted formal evidence remains blocked, but does not make an accepted append decision, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, create proof artifacts, create checker transcripts, create solver certificates, run Lean, run new SMT, run COBALT, run Rust-to-Lean extraction, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -11945,6 +11950,146 @@ pub struct GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResol
     pub valid: bool,
     pub issues: Vec<
         GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewIssue,
+    >,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureLabel
+{
+    SettlementBlockerReviewTerminalReviewClosureScopeAcceptable,
+    SettlementBlockerReviewTerminalReviewClosureRejected,
+    AcceptedAppendDecisionSettlementTerminalReviewClosureBlocked,
+    AcceptedFormalEvidenceSettlementTerminalReviewClosureBlocked,
+    ScoreAxisPopulationSettlementTerminalReviewClosureBlocked,
+    ActionAuthoritySettlementTerminalReviewClosureBlocked,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureInput
+{
+    pub schema_version: String,
+    pub settlement_blocker_review_terminal_review_closure_id: String,
+    pub settlement_blocker_review_terminal_review_closure_policy_id: String,
+    pub settlement_blocker_review_terminal_review_closure_decision_id: String,
+    pub settlement_blocker_review_terminal_review_closure_decision_at_unix: u64,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub inherited_settlement_blocker_review_terminal_review_label:
+        GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewLabel,
+    pub settlement_blocker_review_terminal_review_closure_label:
+        GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureLabel,
+    pub settlement_blocker_review_terminal_review_closure_summary: String,
+    pub accepted_append_decision_requested: bool,
+    pub accepted_evidence_mutation_requested: bool,
+    pub accepted_append_policy_change_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub benchmark_or_sota_comparison_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-closure-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosure
+{
+    pub schema_version: String,
+    pub settlement_blocker_review_terminal_review_closure_id: String,
+    pub state_slice: String,
+    pub settlement_blocker_review_terminal_review_closure_input_digest: Hash,
+    pub settlement_blocker_review_terminal_review_closure_policy_id: String,
+    pub settlement_blocker_review_terminal_review_closure_decision_id: String,
+    pub settlement_blocker_review_terminal_review_closure_decision_at_unix: u64,
+    pub phase481_settlement_blocker_review_terminal_review_digest: Hash,
+    pub phase481_settlement_blocker_review_terminal_review_input_digest: Hash,
+    pub phase481_digest_binding_map_digest: Hash,
+    pub phase481_id_binding_map_digest: Hash,
+    pub phase481_label_binding_map_digest: Hash,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub inherited_settlement_blocker_review_terminal_review_label:
+        GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewLabel,
+    pub settlement_blocker_review_terminal_review_closure_label:
+        GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureLabel,
+    pub settlement_blocker_review_terminal_review_closure_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub makes_accepted_append_decision: bool,
+    pub creates_accepted_evidence: bool,
+    pub changes_accepted_append_policy: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosure {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-closure:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue
+{
+    InvalidSchemaVersion,
+    InvalidSettlementBlockerReviewTerminalReviewClosureId,
+    InvalidSettlementBlockerReviewTerminalReviewClosurePolicyId,
+    InvalidSettlementBlockerReviewTerminalReviewClosureDecisionId,
+    MissingSettlementBlockerReviewTerminalReviewClosureDecisionTimestamp,
+    MissingDigest(String),
+    DigestBindingMismatch,
+    IdBindingMismatch,
+    InvalidIdBinding(String),
+    LabelBindingMismatch,
+    Phase481SettlementBlockerReviewTerminalReviewStateMismatch,
+    AcceptedAppendBlockerMismatch,
+    NonclaimMismatch,
+    SettlementBlockerReviewTerminalReviewClosureSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureValidation
+{
+    pub valid: bool,
+    pub issues: Vec<
+        GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue,
     >,
 }
 
@@ -31713,6 +31858,12 @@ pub fn gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine
         .to_owned()
 }
 
+pub fn gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_claim_boundary(
+) -> String {
+    GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_ESCALATION_TERMINAL_REVIEW_CLOSURE_BLOCKER_REVIEW_TERMINAL_CLOSURE_REVIEW_SETTLEMENT_BLOCKER_REVIEW_TERMINAL_REVIEW_CLOSURE_CLAIM_BOUNDARY
+        .to_owned()
+}
+
 pub fn gateway_formal_tiny_digest_backend_z3_execution_output_declared_files() -> Vec<String> {
     GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_DECLARED_FILES
         .iter()
@@ -32412,6 +32563,31 @@ pub fn gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine
     ));
     nonclaims.insert(NonClaimLabel(
         "tiny Z3 settlement blocker review terminal review is not accepted formal evidence"
+            .to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel(
+        "tiny Z3 Level2 and score-axis evidence still blocked".to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel(
+        "not Lean new SMT COBALT or Rust-to-Lean execution evidence".to_owned(),
+    ));
+    nonclaims
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims =
+        gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_required_nonclaims();
+    nonclaims.insert(NonClaimLabel(
+        "local tiny Z3 accepted-append decision quarantine-resolution escalation terminal-review closure-blocker review terminal-closure review settlement-blocker review terminal review closure metadata only"
+            .to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel(
+        "tiny Z3 settlement blocker review terminal review closure is not accepted append decision"
+            .to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel(
+        "tiny Z3 settlement blocker review terminal review closure is not accepted formal evidence"
             .to_owned(),
     ));
     nonclaims.insert(NonClaimLabel(
@@ -49715,6 +49891,381 @@ pub fn validate_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_q
         );
     }
     GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_digest_bindings(
+    settlement_blocker_review_terminal_review: &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReview,
+) -> BTreeMap<String, Hash> {
+    BTreeMap::from([
+        (
+            "phase481_settlement_blocker_review_terminal_review_digest".to_owned(),
+            settlement_blocker_review_terminal_review.digest(),
+        ),
+        (
+            "phase481_settlement_blocker_review_terminal_review_input_digest".to_owned(),
+            settlement_blocker_review_terminal_review
+                .settlement_blocker_review_terminal_review_input_digest,
+        ),
+        (
+            "phase481_digest_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-digest-bindings:v1",
+                &settlement_blocker_review_terminal_review.digest_bindings,
+            ),
+        ),
+        (
+            "phase481_id_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-id-bindings:v1",
+                &settlement_blocker_review_terminal_review.id_bindings,
+            ),
+        ),
+        (
+            "phase481_label_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-label-bindings:v1",
+                &settlement_blocker_review_terminal_review.label_bindings,
+            ),
+        ),
+        (
+            "explicit_nonclaims_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-closure-nonclaims:v1",
+                &gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_required_nonclaims(),
+            ),
+        ),
+        (
+            "current_accepted_append_blockers_digest".to_owned(),
+            settlement_blocker_review_terminal_review.current_accepted_append_blockers_digest,
+        ),
+    ])
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_id_bindings(
+    settlement_blocker_review_terminal_review: &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReview,
+    settlement_blocker_review_terminal_review_closure_id: &str,
+    settlement_blocker_review_terminal_review_closure_policy_id: &str,
+    settlement_blocker_review_terminal_review_closure_decision_id: &str,
+) -> BTreeMap<String, String> {
+    let mut ids = BTreeMap::from([
+        (
+            "settlement_blocker_review_terminal_review_closure_id".to_owned(),
+            settlement_blocker_review_terminal_review_closure_id.to_owned(),
+        ),
+        (
+            "settlement_blocker_review_terminal_review_closure_policy_id".to_owned(),
+            settlement_blocker_review_terminal_review_closure_policy_id.to_owned(),
+        ),
+        (
+            "settlement_blocker_review_terminal_review_closure_decision_id".to_owned(),
+            settlement_blocker_review_terminal_review_closure_decision_id.to_owned(),
+        ),
+        (
+            "settlement_blocker_review_terminal_review_id".to_owned(),
+            settlement_blocker_review_terminal_review
+                .settlement_blocker_review_terminal_review_id
+                .clone(),
+        ),
+        (
+            "settlement_blocker_review_terminal_review_policy_id".to_owned(),
+            settlement_blocker_review_terminal_review
+                .settlement_blocker_review_terminal_review_policy_id
+                .clone(),
+        ),
+        (
+            "settlement_blocker_review_terminal_review_decision_id".to_owned(),
+            settlement_blocker_review_terminal_review
+                .settlement_blocker_review_terminal_review_decision_id
+                .clone(),
+        ),
+    ]);
+    ids.extend(
+        settlement_blocker_review_terminal_review
+            .id_bindings
+            .clone(),
+    );
+    ids
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_label_bindings(
+    settlement_blocker_review_terminal_review: &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReview,
+    settlement_blocker_review_terminal_review_closure_label: &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureLabel,
+) -> BTreeMap<String, String> {
+    BTreeMap::from([
+        (
+            "settlement_blocker_review_terminal_review_label".to_owned(),
+            format!(
+                "{:?}",
+                settlement_blocker_review_terminal_review
+                    .settlement_blocker_review_terminal_review_label
+            ),
+        ),
+        (
+            "settlement_blocker_review_terminal_review_closure_label".to_owned(),
+            format!(
+                "{:?}",
+                settlement_blocker_review_terminal_review_closure_label
+            ),
+        ),
+    ])
+}
+
+pub fn build_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure(
+    settlement_blocker_review_terminal_review: &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReview,
+    input: &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureInput,
+) -> Result<
+    GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosure,
+    GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureValidation,
+>{
+    let validation =
+        validate_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_input(
+            settlement_blocker_review_terminal_review,
+            input,
+        );
+    if !validation.valid {
+        return Err(validation);
+    }
+    let digest_bindings =
+        gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_digest_bindings(
+            settlement_blocker_review_terminal_review,
+        );
+    Ok(GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosure {
+        schema_version:
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_ESCALATION_TERMINAL_REVIEW_CLOSURE_BLOCKER_REVIEW_TERMINAL_CLOSURE_REVIEW_SETTLEMENT_BLOCKER_REVIEW_TERMINAL_REVIEW_CLOSURE_SCHEMA_VERSION
+                .to_owned(),
+        settlement_blocker_review_terminal_review_closure_id: input
+            .settlement_blocker_review_terminal_review_closure_id
+            .clone(),
+        state_slice:
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_ESCALATION_TERMINAL_REVIEW_CLOSURE_BLOCKER_REVIEW_TERMINAL_CLOSURE_REVIEW_SETTLEMENT_BLOCKER_REVIEW_TERMINAL_REVIEW_CLOSURE_STATE_SLICE
+                .to_owned(),
+        settlement_blocker_review_terminal_review_closure_input_digest: input.digest(),
+        settlement_blocker_review_terminal_review_closure_policy_id: input
+            .settlement_blocker_review_terminal_review_closure_policy_id
+            .clone(),
+        settlement_blocker_review_terminal_review_closure_decision_id: input
+            .settlement_blocker_review_terminal_review_closure_decision_id
+            .clone(),
+        settlement_blocker_review_terminal_review_closure_decision_at_unix: input
+            .settlement_blocker_review_terminal_review_closure_decision_at_unix,
+        phase481_settlement_blocker_review_terminal_review_digest: digest_bindings
+            ["phase481_settlement_blocker_review_terminal_review_digest"],
+        phase481_settlement_blocker_review_terminal_review_input_digest: digest_bindings
+            ["phase481_settlement_blocker_review_terminal_review_input_digest"],
+        phase481_digest_binding_map_digest: digest_bindings["phase481_digest_binding_map_digest"],
+        phase481_id_binding_map_digest: digest_bindings["phase481_id_binding_map_digest"],
+        phase481_label_binding_map_digest: digest_bindings["phase481_label_binding_map_digest"],
+        digest_bindings: input.digest_bindings.clone(),
+        id_bindings: input.id_bindings.clone(),
+        label_bindings: input.label_bindings.clone(),
+        explicit_nonclaims: input.explicit_nonclaims.clone(),
+        current_accepted_append_blockers_digest: input.current_accepted_append_blockers_digest,
+        inherited_settlement_blocker_review_terminal_review_label: input
+            .inherited_settlement_blocker_review_terminal_review_label
+            .clone(),
+        settlement_blocker_review_terminal_review_closure_label: input
+            .settlement_blocker_review_terminal_review_closure_label
+            .clone(),
+        settlement_blocker_review_terminal_review_closure_summary: input
+            .settlement_blocker_review_terminal_review_closure_summary
+            .clone(),
+        previous_promotion_state:
+            "tiny_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_metadata"
+                .to_owned(),
+        promotion_state:
+            "tiny_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_metadata"
+                .to_owned(),
+        next_required_state: "tiny_z3_accepted_append_settlement_terminal_review_closure_blocked"
+            .to_owned(),
+        claim_boundary:
+            gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_claim_boundary(),
+        makes_accepted_append_decision: false,
+        creates_accepted_evidence: false,
+        changes_accepted_append_policy: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_input(
+    settlement_blocker_review_terminal_review: &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReview,
+    input: &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureInput,
+) -> GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureValidation{
+    let mut issues = Vec::new();
+    if input.schema_version
+        != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_ESCALATION_TERMINAL_REVIEW_CLOSURE_BLOCKER_REVIEW_TERMINAL_CLOSURE_REVIEW_SETTLEMENT_BLOCKER_REVIEW_TERMINAL_REVIEW_CLOSURE_SCHEMA_VERSION
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue::InvalidSchemaVersion,
+        );
+    }
+    if !is_single_segment_id(&input.settlement_blocker_review_terminal_review_closure_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue::InvalidSettlementBlockerReviewTerminalReviewClosureId,
+        );
+    }
+    if !is_single_segment_id(&input.settlement_blocker_review_terminal_review_closure_policy_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue::InvalidSettlementBlockerReviewTerminalReviewClosurePolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.settlement_blocker_review_terminal_review_closure_decision_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue::InvalidSettlementBlockerReviewTerminalReviewClosureDecisionId,
+        );
+    }
+    if input.settlement_blocker_review_terminal_review_closure_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue::MissingSettlementBlockerReviewTerminalReviewClosureDecisionTimestamp,
+        );
+    }
+    let expected_digests =
+        gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_digest_bindings(
+            settlement_blocker_review_terminal_review,
+        );
+    for (label, digest) in &input.digest_bindings {
+        if *digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue::MissingDigest(
+                    label.clone(),
+                ),
+            );
+        }
+    }
+    if input.digest_bindings != expected_digests {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue::DigestBindingMismatch,
+        );
+    }
+    let expected_ids =
+        gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_id_bindings(
+            settlement_blocker_review_terminal_review,
+            &input.settlement_blocker_review_terminal_review_closure_id,
+            &input.settlement_blocker_review_terminal_review_closure_policy_id,
+            &input.settlement_blocker_review_terminal_review_closure_decision_id,
+        );
+    for (label, value) in &input.id_bindings {
+        if !is_single_segment_id(value) {
+            issues.push(
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue::InvalidIdBinding(
+                    label.clone(),
+                ),
+            );
+        }
+    }
+    if input.id_bindings != expected_ids {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue::IdBindingMismatch,
+        );
+    }
+    let expected_labels =
+        gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_label_bindings(
+            settlement_blocker_review_terminal_review,
+            &input.settlement_blocker_review_terminal_review_closure_label,
+        );
+    if input.label_bindings != expected_labels
+        || input.inherited_settlement_blocker_review_terminal_review_label
+            != settlement_blocker_review_terminal_review
+                .settlement_blocker_review_terminal_review_label
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue::LabelBindingMismatch,
+        );
+    }
+    if settlement_blocker_review_terminal_review.schema_version
+        != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_ESCALATION_TERMINAL_REVIEW_CLOSURE_BLOCKER_REVIEW_TERMINAL_CLOSURE_REVIEW_SETTLEMENT_BLOCKER_REVIEW_TERMINAL_REVIEW_SCHEMA_VERSION
+        || settlement_blocker_review_terminal_review.state_slice
+            != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_ESCALATION_TERMINAL_REVIEW_CLOSURE_BLOCKER_REVIEW_TERMINAL_CLOSURE_REVIEW_SETTLEMENT_BLOCKER_REVIEW_TERMINAL_REVIEW_STATE_SLICE
+        || settlement_blocker_review_terminal_review.promotion_state
+            != "tiny_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_metadata"
+        || settlement_blocker_review_terminal_review.next_required_state
+            != "tiny_z3_accepted_append_settlement_terminal_review_still_blocked"
+        || settlement_blocker_review_terminal_review.claim_boundary
+            != gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_claim_boundary()
+        || settlement_blocker_review_terminal_review.makes_accepted_append_decision
+        || settlement_blocker_review_terminal_review.creates_accepted_evidence
+        || settlement_blocker_review_terminal_review.changes_accepted_append_policy
+        || settlement_blocker_review_terminal_review.creates_level2_evidence
+        || settlement_blocker_review_terminal_review.populates_score_axes
+        || settlement_blocker_review_terminal_review.proof_artifact_created
+        || settlement_blocker_review_terminal_review.checker_transcript_created
+        || settlement_blocker_review_terminal_review.solver_certificate_created
+        || settlement_blocker_review_terminal_review.semantic_correctness_claimed
+        || settlement_blocker_review_terminal_review.production_readiness_claimed
+        || settlement_blocker_review_terminal_review.sota_claimed
+        || settlement_blocker_review_terminal_review.breakthrough_claimed
+        || settlement_blocker_review_terminal_review.full_security_claimed
+        || settlement_blocker_review_terminal_review.grants_authority
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue::Phase481SettlementBlockerReviewTerminalReviewStateMismatch,
+        );
+    }
+    let blockers = gateway_formal_tiny_digest_backend_z3_accepted_handoff_current_blockers();
+    if input.current_accepted_append_blockers_digest
+        != hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-handoff-current-blockers:v1",
+            &blockers,
+        )
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue::AcceptedAppendBlockerMismatch,
+        );
+    }
+    let nonclaims =
+        gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-closure-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue::NonclaimMismatch,
+        );
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.settlement_blocker_review_terminal_review_closure_summary,
+    ) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue::SettlementBlockerReviewTerminalReviewClosureSummaryPromotionClaim,
+        );
+    }
+    if input.accepted_append_decision_requested
+        || input.accepted_evidence_mutation_requested
+        || input.accepted_append_policy_change_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.benchmark_or_sota_comparison_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue::PromotionAttempt,
+        );
+    }
+    GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureValidation {
         valid: issues.is_empty(),
         issues,
     }
@@ -83009,6 +83560,242 @@ mod tests {
     }
 
     #[test]
+    fn phase483_tiny_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_builds_blocking_record(
+    ) {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            settlement_blocker_review_terminal_review,
+        )) =
+            phase483_tiny_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_source(
+                "phase483-settlement-blocker-review-terminal-review-closure",
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalBlockerReviewLabel::TinyZ3TerminalEscalationStillBlocked,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerLabel::AcceptedAppendDecisionSettlementBlocked,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewLabel::AcceptedAppendDecisionSettlementReviewStillBlocked,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalLabel::AcceptedAppendDecisionSettlementReviewTerminallyBlocked,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewLabel::AcceptedAppendDecisionSettlementTerminalReviewStillBlocked,
+            )
+        else {
+            return;
+        };
+        let closure_input =
+            phase483_tiny_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_input(
+                "phase483-settlement-blocker-review-terminal-review-closure",
+                &settlement_blocker_review_terminal_review,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureLabel::AcceptedAppendDecisionSettlementTerminalReviewClosureBlocked,
+            );
+        let settlement_blocker_review_terminal_review_closure =
+            build_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure(
+                &settlement_blocker_review_terminal_review,
+                &closure_input,
+            )
+            .expect("phase483 settlement-blocker review terminal review closure builds");
+
+        assert_eq!(
+            settlement_blocker_review_terminal_review_closure.state_slice,
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_ESCALATION_TERMINAL_REVIEW_CLOSURE_BLOCKER_REVIEW_TERMINAL_CLOSURE_REVIEW_SETTLEMENT_BLOCKER_REVIEW_TERMINAL_REVIEW_CLOSURE_STATE_SLICE
+        );
+        assert_eq!(
+            settlement_blocker_review_terminal_review_closure
+                .phase481_settlement_blocker_review_terminal_review_digest,
+            settlement_blocker_review_terminal_review.digest()
+        );
+        assert_eq!(
+            settlement_blocker_review_terminal_review_closure
+                .phase481_settlement_blocker_review_terminal_review_input_digest,
+            settlement_blocker_review_terminal_review
+                .settlement_blocker_review_terminal_review_input_digest
+        );
+        assert_eq!(
+            settlement_blocker_review_terminal_review_closure.phase481_digest_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-digest-bindings:v1",
+                &settlement_blocker_review_terminal_review.digest_bindings,
+            )
+        );
+        assert_eq!(
+            settlement_blocker_review_terminal_review_closure.phase481_id_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-id-bindings:v1",
+                &settlement_blocker_review_terminal_review.id_bindings,
+            )
+        );
+        assert_eq!(
+            settlement_blocker_review_terminal_review_closure.phase481_label_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-label-bindings:v1",
+                &settlement_blocker_review_terminal_review.label_bindings,
+            )
+        );
+        assert_eq!(
+            settlement_blocker_review_terminal_review_closure.id_bindings
+                ["settlement_blocker_review_terminal_review_id"],
+            settlement_blocker_review_terminal_review.settlement_blocker_review_terminal_review_id
+        );
+        assert_eq!(
+            settlement_blocker_review_terminal_review_closure.label_bindings
+                ["settlement_blocker_review_terminal_review_closure_label"],
+            "AcceptedAppendDecisionSettlementTerminalReviewClosureBlocked"
+        );
+        assert_eq!(
+            settlement_blocker_review_terminal_review_closure.previous_promotion_state,
+            "tiny_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_metadata"
+        );
+        assert_eq!(
+            settlement_blocker_review_terminal_review_closure.promotion_state,
+            "tiny_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_metadata"
+        );
+        assert_eq!(
+            settlement_blocker_review_terminal_review_closure.next_required_state,
+            "tiny_z3_accepted_append_settlement_terminal_review_closure_blocked"
+        );
+        assert_eq!(
+            settlement_blocker_review_terminal_review_closure.claim_boundary,
+            gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_claim_boundary()
+        );
+        assert!(!settlement_blocker_review_terminal_review_closure.makes_accepted_append_decision);
+        assert!(!settlement_blocker_review_terminal_review_closure.creates_accepted_evidence);
+        assert!(!settlement_blocker_review_terminal_review_closure.changes_accepted_append_policy);
+        assert!(!settlement_blocker_review_terminal_review_closure.creates_level2_evidence);
+        assert!(!settlement_blocker_review_terminal_review_closure.populates_score_axes);
+        assert!(!settlement_blocker_review_terminal_review_closure.proof_artifact_created);
+        assert!(!settlement_blocker_review_terminal_review_closure.checker_transcript_created);
+        assert!(!settlement_blocker_review_terminal_review_closure.solver_certificate_created);
+        assert!(!settlement_blocker_review_terminal_review_closure.semantic_correctness_claimed);
+        assert!(!settlement_blocker_review_terminal_review_closure.production_readiness_claimed);
+        assert!(!settlement_blocker_review_terminal_review_closure.sota_claimed);
+        assert!(!settlement_blocker_review_terminal_review_closure.breakthrough_claimed);
+        assert!(!settlement_blocker_review_terminal_review_closure.full_security_claimed);
+        assert!(!settlement_blocker_review_terminal_review_closure.grants_authority);
+
+        let mut digest_drift = closure_input.clone();
+        digest_drift.digest_bindings.insert(
+            "phase481_settlement_blocker_review_terminal_review_digest".to_owned(),
+            Hash([50; 32]),
+        );
+        let digest_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_input(
+                &settlement_blocker_review_terminal_review,
+                &digest_drift,
+            );
+        assert!(digest_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue::DigestBindingMismatch
+        ));
+
+        let mut label_drift = closure_input.clone();
+        label_drift.inherited_settlement_blocker_review_terminal_review_label =
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewLabel::ActionAuthoritySettlementTerminalReviewStillBlocked;
+        let label_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_input(
+                &settlement_blocker_review_terminal_review,
+                &label_drift,
+            );
+        assert!(label_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue::LabelBindingMismatch
+        ));
+
+        let mut prior_state_drift = settlement_blocker_review_terminal_review.clone();
+        prior_state_drift.promotion_state = "accepted_evidence".to_owned();
+        let prior_state_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_input(
+                &prior_state_drift,
+                &closure_input,
+            );
+        assert!(prior_state_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue::Phase481SettlementBlockerReviewTerminalReviewStateMismatch
+        ));
+
+        let mut text_promotion = closure_input.clone();
+        text_promotion.settlement_blocker_review_terminal_review_closure_summary =
+            "claims accepted evidence and semantic correctness".to_owned();
+        let text_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_input(
+                &settlement_blocker_review_terminal_review,
+                &text_promotion,
+            );
+        assert!(text_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue::SettlementBlockerReviewTerminalReviewClosureSummaryPromotionClaim
+        ));
+
+        fs::remove_dir_all(&output_root).expect(
+            "phase483 settlement-blocker review terminal review closure output cleanup succeeds",
+        );
+        fs::remove_dir_all(&phase405_output_root).expect(
+            "phase483 settlement-blocker review terminal review closure phase405 output cleanup succeeds",
+        );
+        fs::remove_dir_all(&obligation_root).expect(
+            "phase483 settlement-blocker review terminal review closure obligation cleanup succeeds",
+        );
+    }
+
+    #[test]
+    fn phase483_tiny_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_rejects_promotion(
+    ) {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            settlement_blocker_review_terminal_review,
+        )) =
+            phase483_tiny_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_source(
+                "phase483-promotion",
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalBlockerReviewLabel::TinyZ3TerminalBlockerReviewRejected,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerLabel::ActionAuthoritySettlementBlocked,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewLabel::ActionAuthoritySettlementReviewStillBlocked,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalLabel::ActionAuthoritySettlementReviewTerminallyBlocked,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewLabel::ActionAuthoritySettlementTerminalReviewStillBlocked,
+            )
+        else {
+            return;
+        };
+        let mut closure_input =
+            phase483_tiny_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_input(
+                "phase483-promotion-settlement-blocker-review-terminal-review-closure",
+                &settlement_blocker_review_terminal_review,
+                GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureLabel::ActionAuthoritySettlementTerminalReviewClosureBlocked,
+            );
+
+        closure_input.accepted_append_decision_requested = true;
+        closure_input.accepted_evidence_mutation_requested = true;
+        closure_input.accepted_append_policy_change_requested = true;
+        closure_input.accepted_formal_evidence_created = true;
+        closure_input.creates_level2_evidence = true;
+        closure_input.populates_score_axes = true;
+        closure_input.proof_artifact_promoted = true;
+        closure_input.checker_transcript_promoted = true;
+        closure_input.solver_certificate_promoted = true;
+        closure_input.benchmark_or_sota_comparison_claimed = true;
+        closure_input.semantic_correctness_claimed = true;
+        closure_input.production_readiness_claimed = true;
+        closure_input.sota_claimed = true;
+        closure_input.breakthrough_claimed = true;
+        closure_input.full_security_claimed = true;
+        closure_input.action_authority_claimed = true;
+        let validation =
+            validate_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_input(
+                &settlement_blocker_review_terminal_review,
+                &closure_input,
+            );
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureIssue::PromotionAttempt
+        ));
+        assert!(
+            build_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure(
+                &settlement_blocker_review_terminal_review,
+                &closure_input,
+            )
+            .is_err()
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase483 promotion output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase483 promotion phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase483 promotion obligation cleanup succeeds");
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -88971,6 +89758,130 @@ mod tests {
             settlement_blocker_review_terminal_review_label,
             settlement_blocker_review_terminal_review_summary:
                 "local tiny-Z3 accepted-append decision quarantine-resolution escalation terminal-review closure-blocker review terminal-closure review settlement-blocker review terminal review keeps accepted append blocked"
+                    .to_owned(),
+            accepted_append_decision_requested: false,
+            accepted_evidence_mutation_requested: false,
+            accepted_append_policy_change_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            benchmark_or_sota_comparison_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase483_tiny_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_source(
+        name: &str,
+        terminal_blocker_review_label:
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalBlockerReviewLabel,
+        settlement_blocker_label:
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerLabel,
+        settlement_blocker_review_label:
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewLabel,
+        settlement_blocker_review_terminal_label:
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalLabel,
+        settlement_blocker_review_terminal_review_label:
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewLabel,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReview,
+    )>{
+        let (
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            settlement_blocker_review_terminal,
+        ) =
+            phase481_tiny_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_source(
+                name,
+                terminal_blocker_review_label,
+                settlement_blocker_label,
+                settlement_blocker_review_label,
+                settlement_blocker_review_terminal_label,
+            )?;
+        let settlement_blocker_review_terminal_review_input =
+            phase481_tiny_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_input(
+                &format!("{name}-settlement-blocker-review-terminal-review"),
+                &settlement_blocker_review_terminal,
+                settlement_blocker_review_terminal_review_label,
+            );
+        let settlement_blocker_review_terminal_review =
+            build_gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review(
+                &settlement_blocker_review_terminal,
+                &settlement_blocker_review_terminal_review_input,
+            )
+            .expect("phase483 source settlement-blocker review terminal review builds");
+        Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            settlement_blocker_review_terminal_review,
+        ))
+    }
+
+    fn phase483_tiny_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_input(
+        settlement_blocker_review_terminal_review_closure_id: &str,
+        settlement_blocker_review_terminal_review: &GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReview,
+        settlement_blocker_review_terminal_review_closure_label:
+            GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureLabel,
+    ) -> GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureInput{
+        let settlement_blocker_review_terminal_review_closure_policy_id =
+            "phase483-settlement-blocker-review-terminal-review-closure-policy";
+        let settlement_blocker_review_terminal_review_closure_decision_id =
+            "phase483-settlement-blocker-review-terminal-review-closure-decision";
+        let nonclaims =
+            gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_required_nonclaims();
+        GatewayFormalTinyDigestBackendZ3AcceptedAppendDecisionQuarantineResolutionEscalationTerminalReviewClosureBlockerReviewTerminalClosureReviewSettlementBlockerReviewTerminalReviewClosureInput {
+            schema_version:
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_ACCEPTED_APPEND_DECISION_QUARANTINE_RESOLUTION_ESCALATION_TERMINAL_REVIEW_CLOSURE_BLOCKER_REVIEW_TERMINAL_CLOSURE_REVIEW_SETTLEMENT_BLOCKER_REVIEW_TERMINAL_REVIEW_CLOSURE_SCHEMA_VERSION
+                    .to_owned(),
+            settlement_blocker_review_terminal_review_closure_id:
+                settlement_blocker_review_terminal_review_closure_id.to_owned(),
+            settlement_blocker_review_terminal_review_closure_policy_id:
+                settlement_blocker_review_terminal_review_closure_policy_id.to_owned(),
+            settlement_blocker_review_terminal_review_closure_decision_id:
+                settlement_blocker_review_terminal_review_closure_decision_id.to_owned(),
+            settlement_blocker_review_terminal_review_closure_decision_at_unix: 1_800_000_483,
+            digest_bindings:
+                gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_digest_bindings(
+                    settlement_blocker_review_terminal_review,
+                ),
+            id_bindings:
+                gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_id_bindings(
+                    settlement_blocker_review_terminal_review,
+                    settlement_blocker_review_terminal_review_closure_id,
+                    settlement_blocker_review_terminal_review_closure_policy_id,
+                    settlement_blocker_review_terminal_review_closure_decision_id,
+                ),
+            label_bindings:
+                gateway_formal_tiny_digest_backend_z3_accepted_append_decision_quarantine_resolution_escalation_terminal_review_closure_blocker_review_terminal_closure_review_settlement_blocker_review_terminal_review_closure_label_bindings(
+                    settlement_blocker_review_terminal_review,
+                    &settlement_blocker_review_terminal_review_closure_label,
+                ),
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-closure-nonclaims:v1",
+                &nonclaims,
+            ),
+            current_accepted_append_blockers_digest: settlement_blocker_review_terminal_review
+                .current_accepted_append_blockers_digest,
+            inherited_settlement_blocker_review_terminal_review_label:
+                settlement_blocker_review_terminal_review
+                    .settlement_blocker_review_terminal_review_label
+                    .clone(),
+            settlement_blocker_review_terminal_review_closure_label,
+            settlement_blocker_review_terminal_review_closure_summary:
+                "local tiny-Z3 accepted-append decision quarantine-resolution escalation terminal-review closure-blocker review terminal-closure review settlement-blocker review terminal review closure keeps accepted append blocked"
                     .to_owned(),
             accepted_append_decision_requested: false,
             accepted_evidence_mutation_requested: false,
