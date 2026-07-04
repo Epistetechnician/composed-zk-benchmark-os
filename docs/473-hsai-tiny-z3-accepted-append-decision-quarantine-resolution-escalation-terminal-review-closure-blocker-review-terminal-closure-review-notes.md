@@ -127,8 +127,8 @@ The next admissible slice is docs-first only:
 
 `Phase 474 HSAI tiny Z3 accepted-append decision quarantine-resolution escalation terminal-review closure-blocker review terminal-closure review settlement-blocker boundary`
 
-That future boundary may define a local settlement-blocker over this Phase 473
-terminal-closure review metadata. It must not implement new Rust code, run a
-backend, create accepted evidence, mutate accepted ledgers, populate score
-axes, or claim SOTA, semantic correctness, full security, production
-readiness, or breakthrough status.
+Phase 474 now defines the docs-first settlement-blocker boundary over this
+Phase 473 terminal-closure review metadata. It keeps backend execution, Lean,
+new SMT, COBALT, Rust-to-Lean extraction, accepted evidence, Level2+
+evidence, score axes, accepted Evidence Ledger mutation, and strong public
+claims out of scope unless a separate explicit phase opens those surfaces.
