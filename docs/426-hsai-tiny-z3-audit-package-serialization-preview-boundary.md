@@ -143,9 +143,11 @@ That still is not:
 - full security;
 - authority to execute an action.
 
-## Phase 427 Implementation Exit Criteria
+## Phase 427 Implementation Result
 
-Phase 427 may implement the local in-memory serialization preview only if it:
+Phase 427 implements the local in-memory serialization preview in
+`docs/427-hsai-tiny-z3-audit-package-serialization-preview-notes.md`. The
+implementation:
 
 - stays inside `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;

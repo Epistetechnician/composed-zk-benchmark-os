@@ -718,6 +718,12 @@ pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_REVIEW_AUDIT_PACKAGE_STATE
     "phase-425-hsai-tiny-z3-local-review-audit-package";
 pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_REVIEW_AUDIT_PACKAGE_CLAIM_BOUNDARY: &str =
     "local non-accepted tiny-Z3 review audit package only; binds one Phase 423 tiny-Z3 metadata review record, one Phase 421 local reviewed metadata record, one Phase 404 local Z3 execution record, one Phase 405 local Z3 output manifest, and current accepted append blockers for human inspection, but does not create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_SERIALIZATION_PREVIEW_SCHEMA_VERSION:
+    &str = "hsai-gateway-formal-tiny-digest-backend-z3-audit-package-serialization-preview:v1";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_SERIALIZATION_PREVIEW_STATE_SLICE:
+    &str = "phase-427-hsai-tiny-z3-audit-package-serialization-preview-metadata";
+pub const GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_SERIALIZATION_PREVIEW_CLAIM_BOUNDARY:
+    &str = "local tiny-Z3 audit package serialization-preview metadata only; binds one Phase 425 local non-accepted audit package to deterministic in-memory serialization digests, but does not write filesystem artifacts, create package files, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -6734,6 +6740,142 @@ pub enum GatewayFormalTinyDigestBackendZ3LocalReviewAuditPackageIssue {
 pub struct GatewayFormalTinyDigestBackendZ3LocalReviewAuditPackageValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyDigestBackendZ3LocalReviewAuditPackageIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewInput {
+    pub schema_version: String,
+    pub preview_id: String,
+    pub created_at_unix: u64,
+    pub package_digest: Hash,
+    pub package_input_digest: Hash,
+    pub review_digest: Hash,
+    pub metadata_digest: Hash,
+    pub phase405_output_manifest_digest: Hash,
+    pub phase404_execution_digest: Hash,
+    pub current_accepted_append_blockers: BTreeSet<String>,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub package_manifest_digest: Hash,
+    pub serialization_profile_id: String,
+    pub canonical_field_order_digest: Hash,
+    pub canonical_json_shape_digest: Hash,
+    pub canonical_json_payload_digest: Hash,
+    pub redaction_policy_digest: Hash,
+    pub logical_preview_path: String,
+    pub preview_summary: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub includes_filesystem_writes: bool,
+    pub includes_package_files: bool,
+    pub includes_raw_backend_stdout_stderr: bool,
+    pub includes_raw_proof_artifacts: bool,
+    pub includes_raw_checker_transcripts: bool,
+    pub includes_raw_solver_certificates: bool,
+    pub includes_live_backend_outputs: bool,
+    pub includes_benchmark_outputs: bool,
+    pub includes_secrets_or_credentials: bool,
+    pub includes_mutable_accepted_ledger_state: bool,
+    pub accepted_evidence_mutation_requested: bool,
+    pub accepted_append_policy_change_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub benchmark_or_sota_comparison_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-audit-package-serialization-preview-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreview {
+    pub schema_version: String,
+    pub preview_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub preview_input_digest: Hash,
+    pub package_digest: Hash,
+    pub package_input_digest: Hash,
+    pub review_digest: Hash,
+    pub metadata_digest: Hash,
+    pub phase405_output_manifest_digest: Hash,
+    pub phase404_execution_digest: Hash,
+    pub current_accepted_append_blockers: BTreeSet<String>,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub package_manifest_digest: Hash,
+    pub serialization_profile_id: String,
+    pub canonical_field_order_digest: Hash,
+    pub canonical_json_shape_digest: Hash,
+    pub canonical_json_payload_digest: Hash,
+    pub redaction_policy_digest: Hash,
+    pub logical_preview_path: String,
+    pub preview_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub creates_accepted_evidence: bool,
+    pub changes_accepted_append_policy: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreview {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-audit-package-serialization-preview:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue {
+    InvalidSchemaVersion,
+    InvalidPreviewId,
+    InvalidSerializationProfileId,
+    MissingCreatedAt,
+    MissingDigest(String),
+    PackageDigestDrift,
+    PackageStateMismatch,
+    AcceptedAppendBlockerMismatch,
+    CanonicalDigestMismatch,
+    RedactionPolicyMismatch,
+    NonclaimMismatch,
+    NonPortableLogicalPath,
+    RawOrMaterializedPayloadIncluded,
+    PreviewSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -26344,6 +26486,12 @@ pub fn gateway_formal_tiny_digest_backend_z3_local_review_audit_package_claim_bo
     GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_REVIEW_AUDIT_PACKAGE_CLAIM_BOUNDARY.to_owned()
 }
 
+pub fn gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_claim_boundary(
+) -> String {
+    GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_SERIALIZATION_PREVIEW_CLAIM_BOUNDARY
+        .to_owned()
+}
+
 pub fn gateway_formal_tiny_digest_backend_z3_execution_output_declared_files() -> Vec<String> {
     GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_EXECUTION_OUTPUT_DECLARED_FILES
         .iter()
@@ -26579,6 +26727,78 @@ pub fn gateway_formal_tiny_digest_backend_z3_local_review_audit_package_required
         "not Rust-to-Lean extraction evidence".to_owned(),
     ));
     nonclaims
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims =
+        gateway_formal_tiny_digest_backend_z3_local_review_audit_package_required_nonclaims();
+    nonclaims.insert(NonClaimLabel(
+        "tiny Z3 audit package serialization preview metadata only".to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel(
+        "not materialized package artifact".to_owned(),
+    ));
+    nonclaims.insert(NonClaimLabel("not filesystem output".to_owned()));
+    nonclaims.insert(NonClaimLabel("not accepted evidence package".to_owned()));
+    nonclaims.insert(NonClaimLabel("not score-axis payload".to_owned()));
+    nonclaims
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_field_order(
+) -> Vec<String> {
+    [
+        "schema_version",
+        "preview_id",
+        "state_slice",
+        "created_at_unix",
+        "preview_input_digest",
+        "package_digest",
+        "package_input_digest",
+        "review_digest",
+        "metadata_digest",
+        "phase405_output_manifest_digest",
+        "phase404_execution_digest",
+        "current_accepted_append_blockers_digest",
+        "package_manifest_digest",
+        "serialization_profile_id",
+        "canonical_json_shape_digest",
+        "canonical_json_payload_digest",
+        "redaction_policy_digest",
+        "logical_preview_path",
+        "preview_summary",
+        "claim_boundary",
+        "explicit_nonclaims",
+    ]
+    .iter()
+    .map(|value| (*value).to_owned())
+    .collect()
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_json_shape(
+) -> BTreeSet<String> {
+    BTreeSet::from([
+        "all_digest_fields_hex_encoded".to_owned(),
+        "all_object_keys_canonical_order".to_owned(),
+        "no_raw_backend_stdout_or_stderr".to_owned(),
+        "no_raw_proof_checker_solver_payloads".to_owned(),
+        "no_benchmark_outputs".to_owned(),
+        "no_secret_or_credential_fields".to_owned(),
+        "no_mutable_accepted_ledger_state".to_owned(),
+    ])
+}
+
+pub fn gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_redaction_policy(
+) -> BTreeSet<String> {
+    BTreeSet::from([
+        "raw_backend_stdout_stderr_excluded".to_owned(),
+        "raw_proof_artifacts_excluded".to_owned(),
+        "raw_checker_transcripts_excluded".to_owned(),
+        "raw_solver_certificates_excluded".to_owned(),
+        "benchmark_outputs_excluded".to_owned(),
+        "secrets_credentials_private_keys_excluded".to_owned(),
+        "mutable_accepted_ledger_state_excluded".to_owned(),
+    ])
 }
 
 pub fn run_gateway_formal_tiny_digest_backend_z3_execution(
@@ -32018,6 +32238,350 @@ fn gateway_formal_tiny_digest_backend_z3_local_review_audit_package_text_promote
     ]
     .iter()
     .any(|forbidden| lowered.contains(forbidden))
+}
+
+pub fn build_gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview(
+    package: &GatewayFormalTinyDigestBackendZ3LocalReviewAuditPackage,
+    input: &GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewInput,
+) -> Result<
+    GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreview,
+    GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewValidation,
+> {
+    let validation =
+        validate_gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_input(
+            package, input,
+        );
+    if !validation.valid {
+        return Err(validation);
+    }
+    Ok(
+        GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreview {
+            schema_version:
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_SERIALIZATION_PREVIEW_SCHEMA_VERSION
+                    .to_owned(),
+            preview_id: input.preview_id.clone(),
+            state_slice:
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_SERIALIZATION_PREVIEW_STATE_SLICE
+                    .to_owned(),
+            created_at_unix: input.created_at_unix,
+            preview_input_digest: input.digest(),
+            package_digest: package.digest(),
+            package_input_digest: package.package_input_digest,
+            review_digest: package.review_digest,
+            metadata_digest: package.metadata_digest,
+            phase405_output_manifest_digest: package.phase405_output_manifest_digest,
+            phase404_execution_digest: package.phase404_execution_digest,
+            current_accepted_append_blockers: package.current_accepted_append_blockers.clone(),
+            current_accepted_append_blockers_digest: package
+                .current_accepted_append_blockers_digest,
+            package_manifest_digest: package.package_manifest_digest,
+            serialization_profile_id: input.serialization_profile_id.clone(),
+            canonical_field_order_digest: input.canonical_field_order_digest,
+            canonical_json_shape_digest: input.canonical_json_shape_digest,
+            canonical_json_payload_digest: input.canonical_json_payload_digest,
+            redaction_policy_digest: input.redaction_policy_digest,
+            logical_preview_path: input.logical_preview_path.clone(),
+            preview_summary: input.preview_summary.clone(),
+            previous_promotion_state: "tiny_z3_local_non_accepted_review_audit_package"
+                .to_owned(),
+            promotion_state: "tiny_z3_audit_package_serialization_preview_metadata".to_owned(),
+            next_required_state: "tiny_z3_serialization_preview_review_boundary".to_owned(),
+            claim_boundary:
+                gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_claim_boundary(
+                ),
+            explicit_nonclaims: input.explicit_nonclaims.clone(),
+            creates_accepted_evidence: false,
+            changes_accepted_append_policy: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            grants_authority: false,
+        },
+    )
+}
+
+pub fn validate_gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_input(
+    package: &GatewayFormalTinyDigestBackendZ3LocalReviewAuditPackage,
+    input: &GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewInput,
+) -> GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_SERIALIZATION_PREVIEW_SCHEMA_VERSION
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::InvalidSchemaVersion,
+        );
+    }
+    if !is_single_segment_id(&input.preview_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::InvalidPreviewId,
+        );
+    }
+    if !is_single_segment_id(&input.serialization_profile_id) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::InvalidSerializationProfileId,
+        );
+    }
+    if input.created_at_unix == 0 {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::MissingCreatedAt,
+        );
+    }
+    validate_gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_digests(
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_package(
+        package,
+        input,
+        &mut issues,
+    );
+    validate_gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_policy(
+        package,
+        input,
+        &mut issues,
+    );
+    GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_digests(
+    input: &GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewInput,
+    issues: &mut Vec<GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue>,
+) {
+    for (label, digest) in [
+        ("package_digest", input.package_digest),
+        ("package_input_digest", input.package_input_digest),
+        ("review_digest", input.review_digest),
+        ("metadata_digest", input.metadata_digest),
+        (
+            "phase405_output_manifest_digest",
+            input.phase405_output_manifest_digest,
+        ),
+        ("phase404_execution_digest", input.phase404_execution_digest),
+        (
+            "current_accepted_append_blockers_digest",
+            input.current_accepted_append_blockers_digest,
+        ),
+        ("package_manifest_digest", input.package_manifest_digest),
+        (
+            "canonical_field_order_digest",
+            input.canonical_field_order_digest,
+        ),
+        (
+            "canonical_json_shape_digest",
+            input.canonical_json_shape_digest,
+        ),
+        (
+            "canonical_json_payload_digest",
+            input.canonical_json_payload_digest,
+        ),
+        ("redaction_policy_digest", input.redaction_policy_digest),
+        ("explicit_nonclaims_digest", input.explicit_nonclaims_digest),
+    ] {
+        if digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::MissingDigest(
+                    label.to_owned(),
+                ),
+            );
+        }
+    }
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_package(
+    package: &GatewayFormalTinyDigestBackendZ3LocalReviewAuditPackage,
+    input: &GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewInput,
+    issues: &mut Vec<GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue>,
+) {
+    if input.package_digest != package.digest()
+        || input.package_input_digest != package.package_input_digest
+        || input.review_digest != package.review_digest
+        || input.metadata_digest != package.metadata_digest
+        || input.phase405_output_manifest_digest != package.phase405_output_manifest_digest
+        || input.phase404_execution_digest != package.phase404_execution_digest
+        || input.package_manifest_digest != package.package_manifest_digest
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::PackageDigestDrift,
+        );
+    }
+    if package.schema_version
+        != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_REVIEW_AUDIT_PACKAGE_SCHEMA_VERSION
+        || package.state_slice
+            != GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_LOCAL_REVIEW_AUDIT_PACKAGE_STATE_SLICE
+        || package.promotion_state != "tiny_z3_local_non_accepted_review_audit_package"
+        || package.next_required_state != "tiny_z3_accepted_formal_evidence_still_blocked"
+        || package.claim_boundary
+            != gateway_formal_tiny_digest_backend_z3_local_review_audit_package_claim_boundary()
+        || package.creates_accepted_evidence
+        || package.changes_accepted_append_policy
+        || package.creates_level2_evidence
+        || package.populates_score_axes
+        || package.proof_artifact_created
+        || package.checker_transcript_created
+        || package.solver_certificate_created
+        || package.semantic_correctness_claimed
+        || package.production_readiness_claimed
+        || package.sota_claimed
+        || package.breakthrough_claimed
+        || package.full_security_claimed
+        || package.grants_authority
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::PackageStateMismatch,
+        );
+    }
+}
+
+fn validate_gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_policy(
+    package: &GatewayFormalTinyDigestBackendZ3LocalReviewAuditPackage,
+    input: &GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewInput,
+    issues: &mut Vec<GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue>,
+) {
+    let blockers = gateway_formal_tiny_digest_backend_z3_accepted_handoff_current_blockers();
+    if input.current_accepted_append_blockers != blockers
+        || package.current_accepted_append_blockers != blockers
+        || input.current_accepted_append_blockers_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-handoff-current-blockers:v1",
+                &blockers,
+            )
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::AcceptedAppendBlockerMismatch,
+        );
+    }
+    let field_order =
+        gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_field_order();
+    let json_shape =
+        gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_json_shape();
+    if input.canonical_field_order_digest
+        != hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-audit-package-serialization-preview-field-order:v1",
+            &field_order,
+        )
+        || input.canonical_json_shape_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-audit-package-serialization-preview-json-shape:v1",
+                &json_shape,
+            )
+        || input.canonical_json_payload_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-audit-package-serialization-preview-json-payload:v1",
+                &(
+                    package.digest(),
+                    input.logical_preview_path.clone(),
+                    field_order,
+                    json_shape,
+                    input.redaction_policy_digest,
+                ),
+            )
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::CanonicalDigestMismatch,
+        );
+    }
+    let redaction_policy =
+        gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_redaction_policy(
+        );
+    if input.redaction_policy_digest
+        != hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-audit-package-serialization-preview-redaction-policy:v1",
+            &redaction_policy,
+        )
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::RedactionPolicyMismatch,
+        );
+    }
+    if !gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_path_is_portable(
+        &input.logical_preview_path,
+    ) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::NonPortableLogicalPath,
+        );
+    }
+    let nonclaims =
+        gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_required_nonclaims(
+        );
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-audit-package-serialization-preview-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::NonclaimMismatch,
+        );
+    }
+    if input.includes_filesystem_writes
+        || input.includes_package_files
+        || input.includes_raw_backend_stdout_stderr
+        || input.includes_raw_proof_artifacts
+        || input.includes_raw_checker_transcripts
+        || input.includes_raw_solver_certificates
+        || input.includes_live_backend_outputs
+        || input.includes_benchmark_outputs
+        || input.includes_secrets_or_credentials
+        || input.includes_mutable_accepted_ledger_state
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::RawOrMaterializedPayloadIncluded,
+        );
+    }
+    if gateway_formal_tiny_digest_backend_z3_local_review_audit_package_text_promotes(
+        &input.preview_summary,
+    ) {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::PreviewSummaryPromotionClaim,
+        );
+    }
+    if input.accepted_evidence_mutation_requested
+        || input.accepted_append_policy_change_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.benchmark_or_sota_comparison_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(
+            GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::PromotionAttempt,
+        );
+    }
+}
+
+fn gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_path_is_portable(
+    path: &str,
+) -> bool {
+    !path.trim().is_empty()
+        && path.starts_with("local-preview/tiny-z3/")
+        && !path.ends_with('/')
+        && !path.starts_with('/')
+        && !path.contains('\\')
+        && !path.contains(':')
+        && !path.contains("//")
+        && !path
+            .split('/')
+            .any(|part| part.is_empty() || part == "." || part == "..")
 }
 
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
@@ -56390,6 +56954,102 @@ mod tests {
         }
     }
 
+    fn phase427_audit_package_serialization_preview_input(
+        preview_id: &str,
+        package: &GatewayFormalTinyDigestBackendZ3LocalReviewAuditPackage,
+    ) -> GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewInput {
+        let blockers = gateway_formal_tiny_digest_backend_z3_accepted_handoff_current_blockers();
+        let explicit_nonclaims =
+            gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_required_nonclaims(
+            );
+        let field_order =
+            gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_field_order();
+        let json_shape =
+            gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_json_shape();
+        let redaction_policy =
+            gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_redaction_policy(
+            );
+        let redaction_policy_digest = hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-audit-package-serialization-preview-redaction-policy:v1",
+            &redaction_policy,
+        );
+        let logical_preview_path =
+            format!("local-preview/tiny-z3/{preview_id}/audit-package-preview.json");
+        GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewInput {
+            schema_version:
+                GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_SERIALIZATION_PREVIEW_SCHEMA_VERSION
+                    .to_owned(),
+            preview_id: preview_id.to_owned(),
+            created_at_unix: 1_800_000_427,
+            package_digest: package.digest(),
+            package_input_digest: package.package_input_digest,
+            review_digest: package.review_digest,
+            metadata_digest: package.metadata_digest,
+            phase405_output_manifest_digest: package.phase405_output_manifest_digest,
+            phase404_execution_digest: package.phase404_execution_digest,
+            current_accepted_append_blockers_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-accepted-handoff-current-blockers:v1",
+                &blockers,
+            ),
+            current_accepted_append_blockers: blockers,
+            package_manifest_digest: package.package_manifest_digest,
+            serialization_profile_id: "phase427-tiny-z3-canonical-json-preview".to_owned(),
+            canonical_field_order_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-audit-package-serialization-preview-field-order:v1",
+                &field_order,
+            ),
+            canonical_json_shape_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-audit-package-serialization-preview-json-shape:v1",
+                &json_shape,
+            ),
+            canonical_json_payload_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-audit-package-serialization-preview-json-payload:v1",
+                &(
+                    package.digest(),
+                    logical_preview_path.clone(),
+                    field_order,
+                    json_shape,
+                    redaction_policy_digest,
+                ),
+            ),
+            redaction_policy_digest,
+            logical_preview_path,
+            preview_summary:
+                "deterministic in-memory tiny-Z3 audit package serialization preview metadata"
+                    .to_owned(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-digest-backend-z3-audit-package-serialization-preview-nonclaims:v1",
+                &explicit_nonclaims,
+            ),
+            explicit_nonclaims,
+            includes_filesystem_writes: false,
+            includes_package_files: false,
+            includes_raw_backend_stdout_stderr: false,
+            includes_raw_proof_artifacts: false,
+            includes_raw_checker_transcripts: false,
+            includes_raw_solver_certificates: false,
+            includes_live_backend_outputs: false,
+            includes_benchmark_outputs: false,
+            includes_secrets_or_credentials: false,
+            includes_mutable_accepted_ledger_state: false,
+            accepted_evidence_mutation_requested: false,
+            accepted_append_policy_change_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            benchmark_or_sota_comparison_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
     fn phase407_candidate_if_z3_available(
         name: &str,
     ) -> Option<(
@@ -59078,6 +59738,232 @@ mod tests {
         fs::remove_dir_all(&output_root).expect("phase425 promotion output cleanup succeeds");
         fs::remove_dir_all(&obligation_root)
             .expect("phase425 promotion obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase427_tiny_z3_audit_package_serialization_preview_builds_non_materialized_preview() {
+        let Some((obligation_root, output_root, execution, output_manifest, metadata)) =
+            phase421_metadata_with_backend_if_z3_available("phase427-preview-valid")
+        else {
+            return;
+        };
+        let review_input = phase423_local_reviewed_metadata_review_input(
+            "phase427-preview-review",
+            &metadata,
+            &execution,
+            &output_manifest,
+            GatewayFormalTinyDigestBackendZ3LocalReviewedMetadataReviewLabel::TinyAcceptedEvidenceBlocked,
+        );
+        let review = build_gateway_formal_tiny_digest_backend_z3_local_reviewed_metadata_review(
+            &metadata,
+            &execution,
+            &output_manifest,
+            &review_input,
+        )
+        .expect("phase427 review builds");
+        let package_input =
+            phase425_local_review_audit_package_input("phase427-preview-package", &review);
+        let package = build_gateway_formal_tiny_digest_backend_z3_local_review_audit_package(
+            &review,
+            &package_input,
+        )
+        .expect("phase427 package builds");
+        let preview_input =
+            phase427_audit_package_serialization_preview_input("phase427-preview", &package);
+        let preview =
+            build_gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview(
+                &package,
+                &preview_input,
+            )
+            .expect("phase427 serialization preview builds");
+
+        assert_eq!(
+            preview.state_slice,
+            GATEWAY_FORMAL_TINY_DIGEST_BACKEND_Z3_AUDIT_PACKAGE_SERIALIZATION_PREVIEW_STATE_SLICE
+        );
+        assert_eq!(
+            preview.previous_promotion_state,
+            "tiny_z3_local_non_accepted_review_audit_package"
+        );
+        assert_eq!(
+            preview.promotion_state,
+            "tiny_z3_audit_package_serialization_preview_metadata"
+        );
+        assert_eq!(
+            preview.next_required_state,
+            "tiny_z3_serialization_preview_review_boundary"
+        );
+        assert_eq!(preview.package_digest, package.digest());
+        assert_eq!(preview.review_digest, package.review_digest);
+        assert_eq!(preview.metadata_digest, package.metadata_digest);
+        assert_eq!(
+            preview.phase405_output_manifest_digest,
+            package.phase405_output_manifest_digest
+        );
+        assert_eq!(
+            preview.phase404_execution_digest,
+            package.phase404_execution_digest
+        );
+        assert_eq!(
+            preview.claim_boundary,
+            gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_claim_boundary()
+        );
+        assert!(preview
+            .logical_preview_path
+            .starts_with("local-preview/tiny-z3/"));
+        assert!(!preview.creates_accepted_evidence);
+        assert!(!preview.changes_accepted_append_policy);
+        assert!(!preview.creates_level2_evidence);
+        assert!(!preview.populates_score_axes);
+        assert!(!preview.proof_artifact_created);
+        assert!(!preview.checker_transcript_created);
+        assert!(!preview.solver_certificate_created);
+        assert!(!preview.semantic_correctness_claimed);
+        assert!(!preview.production_readiness_claimed);
+        assert!(!preview.sota_claimed);
+        assert!(!preview.breakthrough_claimed);
+        assert!(!preview.full_security_claimed);
+        assert!(!preview.grants_authority);
+
+        let mut digest_drift = preview_input.clone();
+        digest_drift.package_digest = Hash([27; 32]);
+        let digest_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_input(
+                &package,
+                &digest_drift,
+            );
+        assert!(digest_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::PackageDigestDrift
+        ));
+
+        let mut canonical_drift = preview_input.clone();
+        canonical_drift.canonical_json_payload_digest = Hash([28; 32]);
+        let canonical_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_input(
+                &package,
+                &canonical_drift,
+            );
+        assert!(canonical_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::CanonicalDigestMismatch
+        ));
+
+        let mut redaction_drift = preview_input.clone();
+        redaction_drift.redaction_policy_digest = Hash([29; 32]);
+        let redaction_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_input(
+                &package,
+                &redaction_drift,
+            );
+        assert!(redaction_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::RedactionPolicyMismatch
+        ));
+
+        let mut bad_path = preview_input.clone();
+        bad_path.logical_preview_path = "../audit-package-preview.json".to_owned();
+        let path_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_input(
+                &package,
+                &bad_path,
+            );
+        assert!(path_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::NonPortableLogicalPath
+        ));
+
+        let mut raw_preview = preview_input.clone();
+        raw_preview.includes_filesystem_writes = true;
+        raw_preview.includes_package_files = true;
+        raw_preview.includes_raw_backend_stdout_stderr = true;
+        raw_preview.includes_raw_solver_certificates = true;
+        let raw_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_input(
+                &package,
+                &raw_preview,
+            );
+        assert!(raw_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::RawOrMaterializedPayloadIncluded
+        ));
+
+        let mut text_promotion = preview_input.clone();
+        text_promotion.preview_summary =
+            "claims accepted evidence, SOTA, full security, and production readiness".to_owned();
+        let text_validation =
+            validate_gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_input(
+                &package,
+                &text_promotion,
+            );
+        assert!(text_validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::PreviewSummaryPromotionClaim
+        ));
+
+        fs::remove_dir_all(&output_root).expect("phase427 preview output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase427 preview obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase427_tiny_z3_audit_package_serialization_preview_rejects_promotion() {
+        let Some((obligation_root, output_root, execution, output_manifest, metadata)) =
+            phase421_metadata_with_backend_if_z3_available("phase427-preview-promotion")
+        else {
+            return;
+        };
+        let review_input = phase423_local_reviewed_metadata_review_input(
+            "phase427-promotion-review",
+            &metadata,
+            &execution,
+            &output_manifest,
+            GatewayFormalTinyDigestBackendZ3LocalReviewedMetadataReviewLabel::TinyReviewRejected,
+        );
+        let review = build_gateway_formal_tiny_digest_backend_z3_local_reviewed_metadata_review(
+            &metadata,
+            &execution,
+            &output_manifest,
+            &review_input,
+        )
+        .expect("phase427 promotion review builds");
+        let package_input =
+            phase425_local_review_audit_package_input("phase427-promotion-package", &review);
+        let package = build_gateway_formal_tiny_digest_backend_z3_local_review_audit_package(
+            &review,
+            &package_input,
+        )
+        .expect("phase427 promotion package builds");
+        let mut preview_input =
+            phase427_audit_package_serialization_preview_input("phase427-promotion", &package);
+
+        preview_input.accepted_evidence_mutation_requested = true;
+        preview_input.accepted_append_policy_change_requested = true;
+        preview_input.accepted_formal_evidence_created = true;
+        preview_input.creates_level2_evidence = true;
+        preview_input.populates_score_axes = true;
+        preview_input.proof_artifact_promoted = true;
+        preview_input.checker_transcript_promoted = true;
+        preview_input.solver_certificate_promoted = true;
+        preview_input.benchmark_or_sota_comparison_claimed = true;
+        preview_input.semantic_correctness_claimed = true;
+        preview_input.production_readiness_claimed = true;
+        preview_input.sota_claimed = true;
+        preview_input.breakthrough_claimed = true;
+        preview_input.full_security_claimed = true;
+        preview_input.action_authority_claimed = true;
+        let validation =
+            validate_gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview_input(
+                &package,
+                &preview_input,
+            );
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyDigestBackendZ3AuditPackageSerializationPreviewIssue::PromotionAttempt
+        ));
+        assert!(
+            build_gateway_formal_tiny_digest_backend_z3_audit_package_serialization_preview(
+                &package,
+                &preview_input,
+            )
+            .is_err()
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase427 promotion output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase427 promotion obligation cleanup succeeds");
     }
 
     #[test]
