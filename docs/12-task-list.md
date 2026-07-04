@@ -13372,6 +13372,48 @@ Evidence Ledger mutation, accepted append policy change, Level2+ evidence,
 score axes, proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean
 execution, or production/SOTA/security/correctness claim.
 
+## Phase 481 HSAI Tiny Z3 Accepted Append Decision Quarantine-Resolution Escalation Terminal-Review Closure-Blocker Review Terminal-Closure Review Settlement-Blocker Review Terminal Review Metadata
+
+Status: complete. See
+`docs/481-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-review-notes.md`.
+
+Goal: implement local settlement-blocker review terminal review metadata over
+one Phase 479 tiny-Z3 accepted-append decision quarantine-resolution
+escalation terminal-review closure-blocker review terminal-closure review
+settlement-blocker review terminal without making accepted append decisions,
+mutating accepted evidence, changing accepted append policy, creating Level2+
+evidence, populating score axes, running backend proof systems, or making
+strong public claims.
+
+Implemented: Phase 481 adds deterministic settlement-blocker review terminal
+review metadata in `crates/hsai-agent-admission/src/lib.rs`:
+schema/state/claim-boundary constants, six non-promotional settlement-blocker
+review terminal review labels, input and output records, issue and validation
+report types, required nonclaim helper, deterministic digest/id/label binding
+helpers, builder, and validator. The validator binds the Phase 479
+settlement-blocker review terminal digest/input digest, Phase 479
+digest/id/label binding map digests, explicit nonclaim digest, current
+accepted append blocker digest, inherited ids, inherited settlement-blocker
+review terminal label, and settlement-blocker review terminal review label.
+
+Validation coverage: `hsai-agent-admission` Phase 481 tests cover valid
+settlement-blocker review terminal review construction plus Phase 479 digest
+drift, label drift, Phase 479 state drift, promotional settlement-blocker
+review terminal review summary text, accepted append decision attempts,
+accepted evidence mutation attempts, accepted append policy-change attempts,
+accepted formal-evidence creation attempts, Level2+ attempts, score-axis
+attempts, proof/checker/solver promotion, benchmark/SOTA comparison claims,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+breakthrough claims, full-security claims, and action-authority attempts.
+
+Exit criteria: HSAI can locally review that one tiny-Z3 settlement-blocker
+review terminal record is non-promotional while settlement into accepted
+append or accepted formal evidence remains blocked. It still has no accepted
+append decision, accepted formal evidence, accepted Evidence Ledger mutation,
+accepted append policy change, Level2+ evidence, score axes,
+proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean execution, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
