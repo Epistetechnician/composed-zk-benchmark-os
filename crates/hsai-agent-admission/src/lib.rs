@@ -918,6 +918,21 @@ pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_TRANSACTION_VERS
     "phase-w-accepted-ledger-append-transaction-v0";
 pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CLAIM_BOUNDARY_CAP: &str =
     "Level1LocalReplay";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_CLAIM_BOUNDARY_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-z3-accepted-evidence-class-claim-boundary:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_CLAIM_BOUNDARY_STATE_SLICE: &str =
+    "phase-495-hsai-tiny-z3-accepted-evidence-class-claim-boundary-metadata";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_CLAIM_BOUNDARY_CLAIM_BOUNDARY: &str = "local tiny-Z3 accepted evidence class and claim-boundary metadata only; records the exact LocalReplay and Level1LocalReplay pair that a future accepted append bridge must bind before asking zkbench-core to evaluate an accepted-ledger append transaction, but does not make an accepted append decision, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, create proof artifacts, create checker transcripts, create solver certificates, run Lean, run new SMT, run COBALT, run Rust-to-Lean extraction, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_OWNER_ID: &str = "zkbench-core";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY_OWNER_ID: &str = "zkbench-core";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_TYPE: &str = "EvidenceClass";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY_TYPE: &str = "ClaimBoundary";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_RECORD_TYPE: &str = "EvidenceRecord";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CANDIDATE_TYPE: &str = "EvidenceRecordCandidate";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS: &str = "LocalReplay";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY: &str = "Level1LocalReplay";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_LOWER_LOCAL_METADATA_CLASS: &str = "DesignNote";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_LOWER_LOCAL_METADATA_BOUNDARY: &str = "Level0DesignNote";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -12892,6 +12907,181 @@ pub enum GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue {
 pub struct GatewayFormalTinyZ3AcceptedAppendPolicyVersionValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyZ3AcceptedAppendPolicyVersionIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryLabel {
+    AcceptedEvidenceClassClaimBoundaryRecorded,
+    AcceptedEvidenceClassClaimBoundaryRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryInput {
+    pub schema_version: String,
+    pub class_boundary_gate_id: String,
+    pub class_boundary_policy_id: String,
+    pub class_boundary_decision_id: String,
+    pub class_boundary_decision_at_unix: u64,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub accepted_append_owner_id: String,
+    pub local_transaction_route_id: String,
+    pub materialized_route_id: String,
+    pub evidence_class_owner_id: String,
+    pub claim_boundary_owner_id: String,
+    pub evidence_class_type: String,
+    pub claim_boundary_type: String,
+    pub accepted_evidence_record_type: String,
+    pub candidate_type: String,
+    pub accepted_evidence_class: String,
+    pub accepted_claim_boundary: String,
+    pub lower_local_metadata_class: String,
+    pub lower_local_metadata_boundary: String,
+    pub claim_boundary_cap: String,
+    pub disallowed_evidence_classes: BTreeSet<String>,
+    pub rejection_policy: BTreeSet<String>,
+    pub class_boundary_label: GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryLabel,
+    pub class_boundary_summary: String,
+    pub accepted_append_policy_change_requested: bool,
+    pub accepted_append_decision_requested: bool,
+    pub accepted_evidence_ledger_mutation_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-accepted-evidence-class-claim-boundary-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundary {
+    pub schema_version: String,
+    pub class_boundary_gate_id: String,
+    pub state_slice: String,
+    pub class_boundary_input_digest: Hash,
+    pub class_boundary_policy_id: String,
+    pub class_boundary_decision_id: String,
+    pub class_boundary_decision_at_unix: u64,
+    pub phase493_policy_version_digest: Hash,
+    pub phase493_policy_version_input_digest: Hash,
+    pub phase493_digest_binding_map_digest: Hash,
+    pub phase493_id_binding_map_digest: Hash,
+    pub phase493_label_binding_map_digest: Hash,
+    pub phase493_explicit_nonclaims_digest: Hash,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub accepted_append_owner_id: String,
+    pub local_transaction_route_id: String,
+    pub materialized_route_id: String,
+    pub evidence_class_owner_id: String,
+    pub claim_boundary_owner_id: String,
+    pub evidence_class_type: String,
+    pub claim_boundary_type: String,
+    pub accepted_evidence_record_type: String,
+    pub candidate_type: String,
+    pub accepted_evidence_class: String,
+    pub accepted_claim_boundary: String,
+    pub lower_local_metadata_class: String,
+    pub lower_local_metadata_boundary: String,
+    pub claim_boundary_cap: String,
+    pub disallowed_evidence_classes: BTreeSet<String>,
+    pub rejection_policy: BTreeSet<String>,
+    pub class_boundary_label: GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryLabel,
+    pub class_boundary_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub changes_accepted_append_policy: bool,
+    pub makes_accepted_append_decision: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub creates_accepted_formal_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundary {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-accepted-evidence-class-claim-boundary:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue {
+    InvalidSchemaVersion,
+    InvalidClassBoundaryGateId,
+    InvalidClassBoundaryPolicyId,
+    InvalidClassBoundaryDecisionId,
+    MissingClassBoundaryDecisionTimestamp,
+    MissingDigest(String),
+    DigestBindingMismatch,
+    IdBindingMismatch,
+    InvalidIdBinding(String),
+    LabelBindingMismatch,
+    Phase493PolicyVersionStateMismatch,
+    NonclaimMismatch,
+    InvalidAcceptedAppendOwner,
+    InvalidLocalTransactionRoute,
+    InvalidMaterializedRoute,
+    InvalidEvidenceClassOwner,
+    InvalidClaimBoundaryOwner,
+    InvalidEvidenceClassType,
+    InvalidClaimBoundaryType,
+    InvalidAcceptedEvidenceRecordType,
+    InvalidCandidateType,
+    InvalidAcceptedEvidenceClass,
+    InvalidAcceptedClaimBoundary,
+    InvalidLowerLocalMetadataClass,
+    InvalidLowerLocalMetadataBoundary,
+    InvalidClaimBoundaryCap,
+    DisallowedEvidenceClassesMismatch,
+    RejectionPolicyMismatch,
+    ClassBoundarySummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -53098,6 +53288,498 @@ pub fn validate_gateway_formal_tiny_z3_accepted_append_policy_version_input(
     }
 }
 
+pub fn gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_CLAIM_BOUNDARY_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    [
+        "not accepted append decision",
+        "not accepted formal evidence",
+        "not accepted evidence ledger mutation",
+        "not accepted append policy change",
+        "not Level2+ evidence",
+        "not score-axis evidence",
+        "not proof authority",
+        "not checker transcript authority",
+        "not solver certificate authority",
+        "not backend execution evidence",
+        "not Lean execution evidence",
+        "not new SMT execution evidence",
+        "not COBALT execution evidence",
+        "not Rust-to-Lean extraction evidence",
+        "not benchmark evidence",
+        "not SOTA",
+        "not semantic correctness",
+        "not production readiness",
+        "not full security",
+        "not action authority",
+    ]
+    .into_iter()
+    .map(|label| NonClaimLabel(label.to_owned()))
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_disallowed_evidence_classes(
+) -> BTreeSet<String> {
+    gateway_formal_tiny_z3_accepted_append_policy_version_disallowed_evidence_classes()
+}
+
+pub fn gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_rejection_policy(
+) -> BTreeSet<String> {
+    [
+        "accepted_append_decision_blocked",
+        "accepted_append_policy_change_blocked",
+        "accepted_evidence_ledger_mutation_blocked",
+        "benchmark_evidence_blocked",
+        "cross_backend_replay_blocked",
+        "formal_evidence_blocked",
+        "independent_reproduction_blocked",
+        "level2_plus_actual_evidence_blocked",
+        "machine_checked_proof_blocked",
+        "official_benchmark_claim_blocked",
+        "score_axis_population_blocked",
+        "strong_public_claim_blocked",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_digest_bindings(
+    policy_version: &GatewayFormalTinyZ3AcceptedAppendPolicyVersion,
+) -> BTreeMap<String, Hash> {
+    BTreeMap::from([
+        (
+            "phase493_policy_version_digest".to_owned(),
+            policy_version.digest(),
+        ),
+        (
+            "phase493_policy_version_input_digest".to_owned(),
+            policy_version.policy_version_input_digest,
+        ),
+        (
+            "phase493_digest_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase493-policy-version-digest-bindings:v1",
+                &policy_version.digest_bindings,
+            ),
+        ),
+        (
+            "phase493_id_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase493-policy-version-id-bindings:v1",
+                &policy_version.id_bindings,
+            ),
+        ),
+        (
+            "phase493_label_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase493-policy-version-label-bindings:v1",
+                &policy_version.label_bindings,
+            ),
+        ),
+        (
+            "phase493_explicit_nonclaims_digest".to_owned(),
+            policy_version.explicit_nonclaims_digest,
+        ),
+        (
+            "current_accepted_append_blockers_digest".to_owned(),
+            policy_version.current_accepted_append_blockers_digest,
+        ),
+    ])
+}
+
+pub fn gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_id_bindings(
+    policy_version: &GatewayFormalTinyZ3AcceptedAppendPolicyVersion,
+    class_boundary_gate_id: &str,
+    class_boundary_policy_id: &str,
+    class_boundary_decision_id: &str,
+) -> BTreeMap<String, String> {
+    let mut ids = policy_version.id_bindings.clone();
+    ids.insert(
+        "accepted_evidence_class_claim_boundary_gate_id".to_owned(),
+        class_boundary_gate_id.to_owned(),
+    );
+    ids.insert(
+        "accepted_evidence_class_claim_boundary_policy_id".to_owned(),
+        class_boundary_policy_id.to_owned(),
+    );
+    ids.insert(
+        "accepted_evidence_class_claim_boundary_decision_id".to_owned(),
+        class_boundary_decision_id.to_owned(),
+    );
+    ids.insert(
+        "phase493_policy_version_gate_id".to_owned(),
+        policy_version.policy_version_gate_id.clone(),
+    );
+    ids
+}
+
+pub fn gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_label_bindings(
+    policy_version: &GatewayFormalTinyZ3AcceptedAppendPolicyVersion,
+    class_boundary_label: &GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryLabel,
+) -> BTreeMap<String, String> {
+    let mut labels = policy_version.label_bindings.clone();
+    labels.insert(
+        "phase493_policy_version_label".to_owned(),
+        format!("{:?}", policy_version.policy_version_label),
+    );
+    labels.insert(
+        "accepted_evidence_class_claim_boundary_label".to_owned(),
+        format!("{class_boundary_label:?}"),
+    );
+    labels
+}
+
+pub fn build_gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary(
+    policy_version: &GatewayFormalTinyZ3AcceptedAppendPolicyVersion,
+    input: &GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryInput,
+) -> Result<
+    GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundary,
+    GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryValidation,
+> {
+    let validation = validate_gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_input(
+        policy_version,
+        input,
+    );
+    if !validation.valid {
+        return Err(validation);
+    }
+    let digest_bindings =
+        gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_digest_bindings(
+            policy_version,
+        );
+    Ok(GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundary {
+        schema_version:
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_CLAIM_BOUNDARY_SCHEMA_VERSION.to_owned(),
+        class_boundary_gate_id: input.class_boundary_gate_id.clone(),
+        state_slice: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_CLAIM_BOUNDARY_STATE_SLICE
+            .to_owned(),
+        class_boundary_input_digest: input.digest(),
+        class_boundary_policy_id: input.class_boundary_policy_id.clone(),
+        class_boundary_decision_id: input.class_boundary_decision_id.clone(),
+        class_boundary_decision_at_unix: input.class_boundary_decision_at_unix,
+        phase493_policy_version_digest: digest_bindings["phase493_policy_version_digest"],
+        phase493_policy_version_input_digest: digest_bindings
+            ["phase493_policy_version_input_digest"],
+        phase493_digest_binding_map_digest: digest_bindings["phase493_digest_binding_map_digest"],
+        phase493_id_binding_map_digest: digest_bindings["phase493_id_binding_map_digest"],
+        phase493_label_binding_map_digest: digest_bindings["phase493_label_binding_map_digest"],
+        phase493_explicit_nonclaims_digest: digest_bindings["phase493_explicit_nonclaims_digest"],
+        current_accepted_append_blockers_digest: digest_bindings
+            ["current_accepted_append_blockers_digest"],
+        digest_bindings: input.digest_bindings.clone(),
+        id_bindings: input.id_bindings.clone(),
+        label_bindings: input.label_bindings.clone(),
+        explicit_nonclaims: input.explicit_nonclaims.clone(),
+        explicit_nonclaims_digest: input.explicit_nonclaims_digest,
+        accepted_append_owner_id: input.accepted_append_owner_id.clone(),
+        local_transaction_route_id: input.local_transaction_route_id.clone(),
+        materialized_route_id: input.materialized_route_id.clone(),
+        evidence_class_owner_id: input.evidence_class_owner_id.clone(),
+        claim_boundary_owner_id: input.claim_boundary_owner_id.clone(),
+        evidence_class_type: input.evidence_class_type.clone(),
+        claim_boundary_type: input.claim_boundary_type.clone(),
+        accepted_evidence_record_type: input.accepted_evidence_record_type.clone(),
+        candidate_type: input.candidate_type.clone(),
+        accepted_evidence_class: input.accepted_evidence_class.clone(),
+        accepted_claim_boundary: input.accepted_claim_boundary.clone(),
+        lower_local_metadata_class: input.lower_local_metadata_class.clone(),
+        lower_local_metadata_boundary: input.lower_local_metadata_boundary.clone(),
+        claim_boundary_cap: input.claim_boundary_cap.clone(),
+        disallowed_evidence_classes: input.disallowed_evidence_classes.clone(),
+        rejection_policy: input.rejection_policy.clone(),
+        class_boundary_label: input.class_boundary_label.clone(),
+        class_boundary_summary: input.class_boundary_summary.clone(),
+        previous_promotion_state: "tiny_z3_accepted_append_policy_version_metadata".to_owned(),
+        promotion_state: "tiny_z3_accepted_evidence_class_claim_boundary_metadata".to_owned(),
+        next_required_state: "tiny_z3_accepted_path_prerequisites_remain_unresolved".to_owned(),
+        claim_boundary:
+            gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_claim_boundary(),
+        changes_accepted_append_policy: false,
+        makes_accepted_append_decision: false,
+        mutates_accepted_evidence_ledger: false,
+        creates_accepted_formal_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        backend_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_input(
+    policy_version: &GatewayFormalTinyZ3AcceptedAppendPolicyVersion,
+    input: &GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryInput,
+) -> GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_CLAIM_BOUNDARY_SCHEMA_VERSION
+    {
+        issues
+            .push(GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.class_boundary_gate_id) {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidClassBoundaryGateId,
+        );
+    }
+    if !is_single_segment_id(&input.class_boundary_policy_id) {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidClassBoundaryPolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.class_boundary_decision_id) {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidClassBoundaryDecisionId,
+        );
+    }
+    if input.class_boundary_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::MissingClassBoundaryDecisionTimestamp,
+        );
+    }
+    let expected_digests =
+        gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_digest_bindings(
+            policy_version,
+        );
+    for (label, digest) in &input.digest_bindings {
+        if *digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::MissingDigest(
+                    label.clone(),
+                ),
+            );
+        }
+    }
+    if input.digest_bindings != expected_digests {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::DigestBindingMismatch,
+        );
+    }
+    let expected_ids = gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_id_bindings(
+        policy_version,
+        &input.class_boundary_gate_id,
+        &input.class_boundary_policy_id,
+        &input.class_boundary_decision_id,
+    );
+    for (label, value) in &input.id_bindings {
+        if !is_single_segment_id(value) {
+            issues.push(
+                GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidIdBinding(
+                    label.clone(),
+                ),
+            );
+        }
+    }
+    if input.id_bindings != expected_ids {
+        issues.push(GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::IdBindingMismatch);
+    }
+    let expected_labels =
+        gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_label_bindings(
+            policy_version,
+            &input.class_boundary_label,
+        );
+    if input.label_bindings != expected_labels {
+        issues
+            .push(GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::LabelBindingMismatch);
+    }
+    if policy_version.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_SCHEMA_VERSION
+        || policy_version.state_slice
+            != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_STATE_SLICE
+        || policy_version.promotion_state != "tiny_z3_accepted_append_policy_version_metadata"
+        || policy_version.next_required_state
+            != "tiny_z3_accepted_path_prerequisites_remain_unresolved"
+        || policy_version.claim_boundary
+            != gateway_formal_tiny_z3_accepted_append_policy_version_claim_boundary()
+        || policy_version.accepted_append_owner_id
+            != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_OWNER_ID
+        || policy_version.local_transaction_route_id
+            != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_LOCAL_TRANSACTION
+        || policy_version.materialized_route_id
+            != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_MATERIALIZED_ROUTE
+        || policy_version.evidence_acceptance_policy_owner_id
+            != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_POLICY_OWNER_ID
+        || policy_version.acceptance_policy_type
+            != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_POLICY_TYPE
+        || policy_version.acceptance_policy_version_type
+            != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_VERSION_TYPE
+        || policy_version.claim_boundary_cap
+            != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CLAIM_BOUNDARY_CAP
+        || policy_version.disallowed_evidence_classes
+            != gateway_formal_tiny_z3_accepted_append_policy_version_disallowed_evidence_classes()
+        || policy_version.changes_accepted_append_policy
+        || policy_version.makes_accepted_append_decision
+        || policy_version.mutates_accepted_evidence_ledger
+        || policy_version.creates_accepted_formal_evidence
+        || policy_version.creates_level2_evidence
+        || policy_version.populates_score_axes
+        || policy_version.proof_artifact_created
+        || policy_version.checker_transcript_created
+        || policy_version.solver_certificate_created
+        || policy_version.backend_execution_evidence_created
+        || policy_version.benchmark_evidence_created
+        || policy_version.semantic_correctness_claimed
+        || policy_version.production_readiness_claimed
+        || policy_version.sota_claimed
+        || policy_version.breakthrough_claimed
+        || policy_version.full_security_claimed
+        || policy_version.grants_authority
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::Phase493PolicyVersionStateMismatch,
+        );
+    }
+    let nonclaims =
+        gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-accepted-evidence-class-claim-boundary-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::NonclaimMismatch);
+    }
+    if input.accepted_append_owner_id != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_OWNER_ID
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidAcceptedAppendOwner,
+        );
+    }
+    if input.local_transaction_route_id
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_LOCAL_TRANSACTION
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidLocalTransactionRoute,
+        );
+    }
+    if input.materialized_route_id
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_MATERIALIZED_ROUTE
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidMaterializedRoute,
+        );
+    }
+    if input.evidence_class_owner_id != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_OWNER_ID {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidEvidenceClassOwner,
+        );
+    }
+    if input.claim_boundary_owner_id != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY_OWNER_ID {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidClaimBoundaryOwner,
+        );
+    }
+    if input.evidence_class_type != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_TYPE {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidEvidenceClassType,
+        );
+    }
+    if input.claim_boundary_type != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY_TYPE {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidClaimBoundaryType,
+        );
+    }
+    if input.accepted_evidence_record_type != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_RECORD_TYPE {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidAcceptedEvidenceRecordType,
+        );
+    }
+    if input.candidate_type != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CANDIDATE_TYPE {
+        issues
+            .push(GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidCandidateType);
+    }
+    if input.accepted_evidence_class != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidAcceptedEvidenceClass,
+        );
+    }
+    if input.accepted_claim_boundary != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidAcceptedClaimBoundary,
+        );
+    }
+    if input.lower_local_metadata_class
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_LOWER_LOCAL_METADATA_CLASS
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidLowerLocalMetadataClass,
+        );
+    }
+    if input.lower_local_metadata_boundary
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_LOWER_LOCAL_METADATA_BOUNDARY
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidLowerLocalMetadataBoundary,
+        );
+    }
+    if input.claim_boundary_cap
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CLAIM_BOUNDARY_CAP
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidClaimBoundaryCap,
+        );
+    }
+    if input.disallowed_evidence_classes
+        != gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_disallowed_evidence_classes(
+        )
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::DisallowedEvidenceClassesMismatch,
+        );
+    }
+    if input.rejection_policy
+        != gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_rejection_policy()
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::RejectionPolicyMismatch,
+        );
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.class_boundary_summary,
+    ) {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::ClassBoundarySummaryPromotionClaim,
+        );
+    }
+    if input.accepted_append_policy_change_requested
+        || input.accepted_append_decision_requested
+        || input.accepted_evidence_ledger_mutation_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.backend_execution_evidence_created
+        || input.benchmark_evidence_created
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::PromotionAttempt);
+    }
+    GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -87905,6 +88587,269 @@ mod tests {
     }
 
     #[test]
+    fn phase495_tiny_z3_accepted_evidence_class_claim_boundary_builds_blocking_record() {
+        let Some((obligation_root, phase405_output_root, output_root, policy_version)) =
+            phase495_tiny_z3_accepted_append_policy_version_source("phase495-class-boundary")
+        else {
+            return;
+        };
+        let class_boundary_input =
+            phase495_tiny_z3_accepted_evidence_class_claim_boundary_input(
+                "phase495-accepted-evidence-class-claim-boundary",
+                &policy_version,
+                GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryLabel::AcceptedEvidenceClassClaimBoundaryRecorded,
+            );
+        let class_boundary = build_gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary(
+            &policy_version,
+            &class_boundary_input,
+        )
+        .expect("phase495 class boundary builds");
+
+        assert_eq!(
+            class_boundary.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_CLAIM_BOUNDARY_STATE_SLICE
+        );
+        assert_eq!(
+            class_boundary.phase493_policy_version_digest,
+            policy_version.digest()
+        );
+        assert_eq!(
+            class_boundary.phase493_policy_version_input_digest,
+            policy_version.policy_version_input_digest
+        );
+        assert_eq!(
+            class_boundary.phase493_digest_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase493-policy-version-digest-bindings:v1",
+                &policy_version.digest_bindings,
+            )
+        );
+        assert_eq!(
+            class_boundary.phase493_id_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase493-policy-version-id-bindings:v1",
+                &policy_version.id_bindings,
+            )
+        );
+        assert_eq!(
+            class_boundary.phase493_label_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase493-policy-version-label-bindings:v1",
+                &policy_version.label_bindings,
+            )
+        );
+        assert_eq!(
+            class_boundary.phase493_explicit_nonclaims_digest,
+            policy_version.explicit_nonclaims_digest
+        );
+        assert_eq!(
+            class_boundary.accepted_append_owner_id,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_OWNER_ID
+        );
+        assert_eq!(
+            class_boundary.local_transaction_route_id,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_LOCAL_TRANSACTION
+        );
+        assert_eq!(
+            class_boundary.materialized_route_id,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_MATERIALIZED_ROUTE
+        );
+        assert_eq!(
+            class_boundary.evidence_class_owner_id,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_OWNER_ID
+        );
+        assert_eq!(
+            class_boundary.claim_boundary_owner_id,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY_OWNER_ID
+        );
+        assert_eq!(
+            class_boundary.evidence_class_type,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_TYPE
+        );
+        assert_eq!(
+            class_boundary.claim_boundary_type,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY_TYPE
+        );
+        assert_eq!(
+            class_boundary.accepted_evidence_record_type,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_RECORD_TYPE
+        );
+        assert_eq!(
+            class_boundary.candidate_type,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CANDIDATE_TYPE
+        );
+        assert_eq!(
+            class_boundary.accepted_evidence_class,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS
+        );
+        assert_eq!(
+            class_boundary.accepted_claim_boundary,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY
+        );
+        assert_eq!(
+            class_boundary.lower_local_metadata_class,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_LOWER_LOCAL_METADATA_CLASS
+        );
+        assert_eq!(
+            class_boundary.lower_local_metadata_boundary,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_LOWER_LOCAL_METADATA_BOUNDARY
+        );
+        assert_eq!(
+            class_boundary.claim_boundary_cap,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CLAIM_BOUNDARY_CAP
+        );
+        assert_eq!(
+            class_boundary.disallowed_evidence_classes,
+            gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_disallowed_evidence_classes()
+        );
+        assert_eq!(
+            class_boundary.rejection_policy,
+            gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_rejection_policy()
+        );
+        assert_eq!(
+            class_boundary.previous_promotion_state,
+            "tiny_z3_accepted_append_policy_version_metadata"
+        );
+        assert_eq!(
+            class_boundary.promotion_state,
+            "tiny_z3_accepted_evidence_class_claim_boundary_metadata"
+        );
+        assert_eq!(
+            class_boundary.next_required_state,
+            "tiny_z3_accepted_path_prerequisites_remain_unresolved"
+        );
+        assert_eq!(
+            class_boundary.claim_boundary,
+            gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_claim_boundary()
+        );
+        assert!(!class_boundary.changes_accepted_append_policy);
+        assert!(!class_boundary.makes_accepted_append_decision);
+        assert!(!class_boundary.mutates_accepted_evidence_ledger);
+        assert!(!class_boundary.creates_accepted_formal_evidence);
+        assert!(!class_boundary.creates_level2_evidence);
+        assert!(!class_boundary.populates_score_axes);
+        assert!(!class_boundary.proof_artifact_created);
+        assert!(!class_boundary.checker_transcript_created);
+        assert!(!class_boundary.solver_certificate_created);
+        assert!(!class_boundary.backend_execution_evidence_created);
+        assert!(!class_boundary.benchmark_evidence_created);
+        assert!(!class_boundary.semantic_correctness_claimed);
+        assert!(!class_boundary.production_readiness_claimed);
+        assert!(!class_boundary.sota_claimed);
+        assert!(!class_boundary.breakthrough_claimed);
+        assert!(!class_boundary.full_security_claimed);
+        assert!(!class_boundary.grants_authority);
+
+        let mut digest_drift = class_boundary_input.clone();
+        digest_drift
+            .digest_bindings
+            .insert("phase493_policy_version_digest".to_owned(), Hash([56; 32]));
+        let digest_validation =
+            validate_gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_input(
+                &policy_version,
+                &digest_drift,
+            );
+        assert!(digest_validation.issues.contains(
+            &GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::DigestBindingMismatch
+        ));
+
+        let mut class_drift = class_boundary_input.clone();
+        class_drift.accepted_evidence_class = "FormalPropertyStatement".to_owned();
+        let class_validation =
+            validate_gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_input(
+                &policy_version,
+                &class_drift,
+            );
+        assert!(class_validation.issues.contains(
+            &GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidAcceptedEvidenceClass
+        ));
+
+        let mut boundary_drift = class_boundary_input.clone();
+        boundary_drift.accepted_claim_boundary = "Level5MachineCheckedScopedProof".to_owned();
+        let boundary_validation =
+            validate_gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_input(
+                &policy_version,
+                &boundary_drift,
+            );
+        assert!(boundary_validation.issues.contains(
+            &GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::InvalidAcceptedClaimBoundary
+        ));
+
+        let mut disallowed_drift = class_boundary_input.clone();
+        disallowed_drift
+            .disallowed_evidence_classes
+            .remove("FormalPropertyStatement");
+        let disallowed_validation =
+            validate_gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_input(
+                &policy_version,
+                &disallowed_drift,
+            );
+        assert!(disallowed_validation.issues.contains(
+            &GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::DisallowedEvidenceClassesMismatch
+        ));
+
+        fs::remove_dir_all(&output_root).expect("phase495 class-boundary output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase495 class-boundary phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase495 class-boundary obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase495_tiny_z3_accepted_evidence_class_claim_boundary_rejects_promotion() {
+        let Some((obligation_root, phase405_output_root, output_root, policy_version)) =
+            phase495_tiny_z3_accepted_append_policy_version_source("phase495-class-promotion")
+        else {
+            return;
+        };
+        let mut class_boundary_input =
+            phase495_tiny_z3_accepted_evidence_class_claim_boundary_input(
+                "phase495-promotion-class-boundary",
+                &policy_version,
+                GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryLabel::AcceptedEvidenceClassClaimBoundaryRejected,
+            );
+
+        class_boundary_input.accepted_append_policy_change_requested = true;
+        class_boundary_input.accepted_append_decision_requested = true;
+        class_boundary_input.accepted_evidence_ledger_mutation_requested = true;
+        class_boundary_input.accepted_formal_evidence_created = true;
+        class_boundary_input.creates_level2_evidence = true;
+        class_boundary_input.populates_score_axes = true;
+        class_boundary_input.proof_artifact_promoted = true;
+        class_boundary_input.checker_transcript_promoted = true;
+        class_boundary_input.solver_certificate_promoted = true;
+        class_boundary_input.backend_execution_evidence_created = true;
+        class_boundary_input.benchmark_evidence_created = true;
+        class_boundary_input.semantic_correctness_claimed = true;
+        class_boundary_input.production_readiness_claimed = true;
+        class_boundary_input.sota_claimed = true;
+        class_boundary_input.breakthrough_claimed = true;
+        class_boundary_input.full_security_claimed = true;
+        class_boundary_input.action_authority_claimed = true;
+        let validation =
+            validate_gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_input(
+                &policy_version,
+                &class_boundary_input,
+            );
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue::PromotionAttempt
+        ));
+        assert!(
+            build_gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary(
+                &policy_version,
+                &class_boundary_input,
+            )
+            .is_err()
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase495 promotion output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase495 promotion phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase495 promotion obligation cleanup succeeds");
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -94448,6 +95393,124 @@ mod tests {
             full_security_claimed: false,
             action_authority_claimed: false,
         }
+    }
+
+    fn phase495_tiny_z3_accepted_evidence_class_claim_boundary_input(
+        class_boundary_gate_id: &str,
+        policy_version: &GatewayFormalTinyZ3AcceptedAppendPolicyVersion,
+        class_boundary_label: GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryLabel,
+    ) -> GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryInput {
+        let class_boundary_policy_id = "phase495-accepted-evidence-class-claim-boundary-policy";
+        let class_boundary_decision_id = "phase495-accepted-evidence-class-claim-boundary-decision";
+        let nonclaims =
+            gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_required_nonclaims();
+        GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryInput {
+            schema_version:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_CLAIM_BOUNDARY_SCHEMA_VERSION
+                    .to_owned(),
+            class_boundary_gate_id: class_boundary_gate_id.to_owned(),
+            class_boundary_policy_id: class_boundary_policy_id.to_owned(),
+            class_boundary_decision_id: class_boundary_decision_id.to_owned(),
+            class_boundary_decision_at_unix: 1_800_000_495,
+            digest_bindings:
+                gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_digest_bindings(
+                    policy_version,
+                ),
+            id_bindings:
+                gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_id_bindings(
+                    policy_version,
+                    class_boundary_gate_id,
+                    class_boundary_policy_id,
+                    class_boundary_decision_id,
+                ),
+            label_bindings:
+                gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_label_bindings(
+                    policy_version,
+                    &class_boundary_label,
+                ),
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-accepted-evidence-class-claim-boundary-nonclaims:v1",
+                &nonclaims,
+            ),
+            accepted_append_owner_id: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_OWNER_ID
+                .to_owned(),
+            local_transaction_route_id:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_LOCAL_TRANSACTION.to_owned(),
+            materialized_route_id:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_MATERIALIZED_ROUTE.to_owned(),
+            evidence_class_owner_id: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_OWNER_ID
+                .to_owned(),
+            claim_boundary_owner_id: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY_OWNER_ID
+                .to_owned(),
+            evidence_class_type: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_TYPE.to_owned(),
+            claim_boundary_type: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY_TYPE.to_owned(),
+            accepted_evidence_record_type: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_RECORD_TYPE
+                .to_owned(),
+            candidate_type: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CANDIDATE_TYPE.to_owned(),
+            accepted_evidence_class: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS.to_owned(),
+            accepted_claim_boundary: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY.to_owned(),
+            lower_local_metadata_class:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_LOWER_LOCAL_METADATA_CLASS.to_owned(),
+            lower_local_metadata_boundary:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_LOWER_LOCAL_METADATA_BOUNDARY.to_owned(),
+            claim_boundary_cap:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_POLICY_VERSION_CLAIM_BOUNDARY_CAP
+                    .to_owned(),
+            disallowed_evidence_classes:
+                gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_disallowed_evidence_classes(),
+            rejection_policy:
+                gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_rejection_policy(),
+            class_boundary_label,
+            class_boundary_summary:
+                "local tiny-Z3 class-boundary gate metadata binds LocalReplay at Level1LocalReplay only"
+                    .to_owned(),
+            accepted_append_policy_change_requested: false,
+            accepted_append_decision_requested: false,
+            accepted_evidence_ledger_mutation_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            backend_execution_evidence_created: false,
+            benchmark_evidence_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase495_tiny_z3_accepted_append_policy_version_source(
+        source_prefix: &str,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        GatewayFormalTinyZ3AcceptedAppendPolicyVersion,
+    )> {
+        let (obligation_root, phase405_output_root, output_root, owner_route) =
+            phase493_tiny_z3_accepted_append_owner_route_source(source_prefix)?;
+        let policy_version_input = phase493_tiny_z3_accepted_append_policy_version_input(
+            &format!("{source_prefix}-policy-version"),
+            &owner_route,
+            GatewayFormalTinyZ3AcceptedAppendPolicyVersionLabel::AcceptedAppendPolicyVersionRecorded,
+        );
+        let policy_version = build_gateway_formal_tiny_z3_accepted_append_policy_version(
+            &owner_route,
+            &policy_version_input,
+        )
+        .expect("phase495 source policy version builds");
+        Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            policy_version,
+        ))
     }
 
     fn phase493_tiny_z3_accepted_append_owner_route_source(

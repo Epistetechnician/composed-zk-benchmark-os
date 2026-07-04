@@ -13882,6 +13882,35 @@ metadata, accepted append policy change, Level2+ evidence, score axes,
 proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean execution, benchmark
 evidence, or production/SOTA/security/correctness claim.
 
+## Phase 495 HSAI Tiny Z3 Accepted Evidence Class Claim Boundary Metadata
+
+Status: complete. See
+`docs/495-hsai-tiny-z3-accepted-evidence-class-claim-boundary-metadata-notes.md`.
+
+Goal: implement local in-memory metadata for the Phase 489
+`accepted_evidence_class_and_claim_boundary` gate.
+
+Implemented: Phase 495 adds deterministic local metadata in
+`crates/hsai-agent-admission/src/lib.rs` over one Phase 493 accepted append
+policy-version record. The record binds `zkbench-core` owner and route
+identifiers, `EvidenceClass`, `ClaimBoundary`, `EvidenceRecord`,
+`EvidenceRecordCandidate`, accepted evidence class `LocalReplay`, accepted
+claim boundary `Level1LocalReplay`, lower local metadata class/boundary
+`DesignNote` and `Level0DesignNote`, maximum accepted append boundary
+`Level1LocalReplay`, rejected Level2+/formal/proof/cross-backend/independent
+classes, explicit nonclaims, and rejection policy.
+
+Validation coverage: focused Phase 495 tests cover valid metadata construction
+plus Phase 493 digest drift, accepted evidence class drift, accepted claim
+boundary drift, rejected-class set drift, and promotion-attempt rejection.
+
+Exit criteria: HSAI now has local metadata for the accepted evidence class and
+claim-boundary prerequisite gate. It still has no accepted append decision,
+accepted formal evidence, accepted Evidence Ledger mutation from HSAI
+admission metadata, accepted append policy change, Level2+ evidence, score
+axes, proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean execution,
+benchmark evidence, or production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
