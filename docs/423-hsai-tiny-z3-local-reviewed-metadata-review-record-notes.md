@@ -136,8 +136,8 @@ Phase 423 adds tests that:
 
 ## Next Slice
 
-Phase 424 should define a docs-first boundary for exporting Phase 423 tiny-Z3
-metadata review records into a non-accepted audit package. That boundary must
+Phase 424 defines a docs-first boundary for exporting Phase 423 tiny-Z3
+metadata review records into a non-accepted audit package. That boundary does
 not mutate the accepted Evidence Ledger, change accepted append policy, create
 accepted formal evidence, create Level2+ evidence, populate score axes, run
 Lean, run COBALT, run Rust-to-Lean extraction, or claim semantic correctness,
