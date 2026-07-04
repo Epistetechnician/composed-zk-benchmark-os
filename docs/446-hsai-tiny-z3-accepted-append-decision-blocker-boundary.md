@@ -161,6 +161,14 @@ It cannot support:
 - full security;
 - action authority.
 
+## Phase 447 Implementation Status
+
+Phase 447 implements the local deterministic blocker metadata allowed by this
+boundary in `crates/hsai-agent-admission/src/lib.rs`. The implementation keeps
+accepted append decisions, the accepted Evidence Ledger, accepted append
+policy, accepted formal evidence, Level2+ evidence, score axes, backend
+execution, and strong public claims blocked.
+
 ## Phase 447 Implementation Exit Criteria
 
 Phase 447 implements local tiny-Z3 accepted-append decision blocker metadata

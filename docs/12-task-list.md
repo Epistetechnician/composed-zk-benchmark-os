@@ -12122,6 +12122,42 @@ accepted Evidence Ledger mutation, accepted append policy change, Level2+
 evidence, score axes, proof-authority claim, Lean/COBALT/Rust-to-Lean
 execution, or production/SOTA/security/correctness claim.
 
+## Phase 447 HSAI Tiny Z3 Accepted Append Decision Blocker Metadata
+
+Status: complete. See
+`docs/447-hsai-tiny-z3-accepted-append-decision-blocker-notes.md`.
+
+Goal: implement deterministic local accepted-append decision blocker metadata
+over one Phase 445 tiny-Z3 accepted-append decision candidate review while
+keeping accepted append decisions, accepted append policy changes, accepted
+Evidence Ledger mutation, accepted formal evidence, Level2+ evidence, score
+axes, proof authority, backend execution, and strong public claims blocked.
+
+Implemented: Phase 447 adds the local accepted-append decision blocker input,
+blocker record, blocker labels, issue taxonomy, validation report,
+claim-boundary helper, required nonclaim helper, builder, and validator. The
+blocker binds one Phase 445 review, one Phase 445 review input, one Phase 443
+candidate, one Phase 443 candidate input, one Phase 441 review, one Phase 441
+review input, one Phase 439 preflight, one Phase 439 preflight input, one Phase
+437 review, one Phase 437 review input, one Phase 435 candidate, one Phase 435
+candidate input, Phase 433/431/429/427/425/423/421 records, Phase 404/405
+local Z3 replay digests, declared file digest map, explicit nonclaim digest,
+reviewer/proposal metadata, candidate disposition, review label, blocker
+label, and current accepted append blockers.
+
+Validation coverage: `hsai-agent-admission` Phase 447 tests cover deterministic
+blocker construction, Phase 445 review/input binding, Phase 443/441/404/405
+binding, Phase 445 digest drift rejection, promotional blocker-summary
+rejection, and accepted-append-decision/accepted-evidence/Level2/score/proof/
+checker/solver/SOTA/full-security/action-authority promotion rejection.
+
+Exit criteria: HSAI now has deterministic local blocker metadata for one
+tiny-Z3 accepted-append decision candidate review. It still has no accepted
+append decision, accepted formal evidence, accepted Evidence Ledger mutation,
+accepted append policy change, Level2+ evidence, score axes, proof-authority
+claim, Lean/COBALT/Rust-to-Lean execution, or production/SOTA/security/
+correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
