@@ -11687,6 +11687,37 @@ accepted append policy change, Level2+ evidence, score axes, proof-authority
 claim, Lean/COBALT/Rust-to-Lean execution, or production/SOTA/security/
 correctness claim.
 
+## Phase 433 HSAI Tiny Z3 Materialized Audit Package Review Metadata
+
+Status: complete. See
+`docs/433-hsai-tiny-z3-materialized-audit-package-review-notes.md`.
+
+Goal: implement deterministic local review metadata over one Phase 431
+materialized tiny-Z3 audit package while keeping accepted evidence, accepted
+append policy changes, Level2+ evidence, score axes, proof authority, and strong
+public claims blocked.
+
+Implemented: Phase 433 adds the local review input, review record, review
+labels, issue taxonomy, validation report, claim-boundary helper, required
+nonclaim helper, builder, and validator. The review binds one Phase 431
+manifest, one Phase 431 output request, one Phase 429 review, one Phase 427
+preview, one Phase 425 package, one Phase 423 review record, one Phase 421
+metadata record, Phase 404/405 local Z3 replay digests, declared file digests,
+claim-boundary digest, nonclaim digest, reviewer metadata, and current accepted
+append blockers.
+
+Validation coverage: `hsai-agent-admission` Phase 433 tests cover deterministic
+review construction, Phase 431/429/427/404/405 binding, declared digest drift
+rejection, promotional review-summary rejection, and accepted-evidence/Level2/
+score/proof/checker/solver/SOTA/full-security/action-authority promotion
+rejection.
+
+Exit criteria: HSAI now has deterministic local review metadata for one
+materialized tiny-Z3 audit package. It still has no accepted formal evidence,
+accepted Evidence Ledger mutation, accepted append policy change, Level2+
+evidence, score axes, proof-authority claim, Lean/COBALT/Rust-to-Lean
+execution, or production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
