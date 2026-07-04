@@ -12718,6 +12718,38 @@ accepted Evidence Ledger mutation, accepted append policy change, Level2+
 evidence, score axes, proof-authority claim, Lean/COBALT/Rust-to-Lean
 execution, or production/SOTA/security/correctness claim.
 
+## Phase 463 HSAI Tiny Z3 Accepted Append Decision Quarantine-Resolution Escalation Terminal-Blocker Metadata
+
+Status: complete. See
+`docs/463-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-blocker-notes.md`.
+
+Goal: implement local terminal-blocker metadata over one Phase 461 tiny-Z3
+accepted-append decision quarantine-resolution escalation-blocker review
+without making an accepted append decision, mutating accepted evidence,
+changing accepted append policy, creating Level2+ evidence, populating score
+axes, running backend proof systems, or making strong public claims.
+
+Implemented: Phase 463 adds deterministic terminal-blocker metadata in
+`crates/hsai-agent-admission/src/lib.rs`, including schema/state/claim-boundary
+constants, terminal-blocker labels, input and output metadata, issue taxonomy,
+builder, validator, required-nonclaim helper, Phase 461 review digest binding,
+Phase 459/457/455/453/451/449/447/445/443/441/439/437/435/433/431/429/427/425/
+423/421 and Phase 404/405 ancestry bindings, current accepted append blocker
+binding, bounded id and label checks, Phase 461 non-promotion checks,
+terminal-summary promotion-text rejection, and explicit promotion-attempt
+rejection.
+
+Validation coverage: `hsai-agent-admission` Phase 463 tests cover valid
+terminal-blocker construction, Phase 461 review digest drift, promotional
+terminal-summary text, and explicit promotion attempts.
+
+Exit criteria: HSAI now has local terminal-blocker metadata over one tiny-Z3
+accepted-append decision quarantine-resolution escalation-blocker review. It
+still has no accepted append decision, accepted formal evidence, accepted
+Evidence Ledger mutation, accepted append policy change, Level2+ evidence,
+score axes, proof-authority claim, Lean/COBALT/Rust-to-Lean execution, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
