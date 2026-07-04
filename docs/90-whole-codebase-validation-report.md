@@ -6019,5 +6019,19 @@ create accepted formal evidence, create Level2+ evidence, populate score axes,
 run Lean/new-SMT/COBALT/Rust-to-Lean extraction, submit benchmarks, or claim
 production/SOTA/security/semantic-correctness.
 
+[docs/436-hsai-tiny-z3-proposal-candidate-review-boundary.md](docs/436-hsai-tiny-z3-proposal-candidate-review-boundary.md)
+records the Phase 436 docs-first review boundary for one Phase 435 local
+tiny-Z3 accepted-evidence proposal candidate. The boundary permits only future
+local review metadata, defines five allowed future review labels, requires
+binding to the Phase 435 candidate and input, Phase 433/431/429/427/425/423/421
+records, Phase 404/405 local Z3 replay digests, declared-file digest map,
+explicit nonclaim digest, reviewer/proposal identifiers, current accepted
+append blocker digest, candidate disposition, and review label, and defines
+Phase 437 implementation exit criteria. It creates no Rust code, mutates no
+accepted Evidence Ledger, changes no accepted append policy, creates no
+accepted formal evidence, creates no Level2+ evidence, populates no score axes,
+runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, and claims no production/
+SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

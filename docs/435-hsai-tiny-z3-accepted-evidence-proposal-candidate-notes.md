@@ -127,9 +127,9 @@ Phase 435 adds tests that:
 
 ## Next Slice
 
-The next responsible slice is a docs-first boundary for reviewing the local
-tiny-Z3 proposal candidate before any accepted append policy decision is
-considered. That boundary must keep candidate review separate from accepted
+The next responsible slice is Phase 436, a docs-first boundary for reviewing
+the local tiny-Z3 proposal candidate before any accepted append policy decision
+is considered. That boundary must keep candidate review separate from accepted
 formal evidence, accepted Evidence Ledger mutation, accepted append policy
 changes, Level2+ evidence, score axes, Lean execution, new SMT execution,
 COBALT execution, Rust-to-Lean extraction, semantic correctness, production
