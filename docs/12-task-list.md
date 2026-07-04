@@ -13657,6 +13657,32 @@ change, Level2+ evidence, score axes, proof-authority claim,
 Lean/new-SMT/COBALT/Rust-to-Lean execution, or
 production/SOTA/security/correctness claim.
 
+## Phase 488 HSAI Tiny Z3 Accepted-Path Prerequisite Boundary
+
+Status: complete. See
+`docs/488-hsai-tiny-z3-accepted-path-prerequisite-boundary.md`.
+
+Goal: define the docs-first prerequisite boundary for leaving the Phase 487
+local terminal metadata chain and later pursuing accepted append decisions,
+accepted formal evidence, score-axis population, Level2+ evidence, or public
+claims of SOTA, full security, semantic correctness, or production readiness
+without conflating local terminal metadata with accepted evidence.
+
+Implemented: Phase 488 documents the current Phase 487 terminal state, required
+future accepted append gates, required future formal-evidence gates, required
+future Level2+ and score-axis gates, required future public-claim gates,
+future implementation exit criteria, evidence meaning, and the Phase 489 local
+prerequisite metadata exit boundary.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a prerequisite boundary for later accepted-path
+work. It still has no accepted append decision, accepted formal evidence,
+accepted Evidence Ledger mutation, accepted append policy change, Level2+
+evidence, score axes, proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean
+execution, benchmark evidence, or production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

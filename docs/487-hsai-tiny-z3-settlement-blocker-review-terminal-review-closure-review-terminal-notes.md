@@ -73,9 +73,9 @@ The unsupported claims remain:
 
 ## Next Responsible Slice
 
-The next responsible slice is a docs-first boundary for leaving the terminal
-metadata chain and defining what would be required before any accepted-append
-decision, accepted formal evidence, score-axis population, or Level2+ evidence
-could be considered. It must not implement accepted append, mutate the
-accepted Evidence Ledger, run Lean/new-SMT/COBALT/Rust-to-Lean extraction, or
-claim SOTA, full security, semantic correctness, or production readiness.
+Phase 488 defines the docs-first accepted-path prerequisite boundary in
+`docs/488-hsai-tiny-z3-accepted-path-prerequisite-boundary.md`. That boundary
+keeps any future accepted append, accepted formal evidence, score-axis
+population, Level2+ evidence, Lean/new-SMT/COBALT/Rust-to-Lean evidence, SOTA,
+full-security, semantic-correctness, and production-readiness work separate
+from the Phase 487 local terminal metadata record.
