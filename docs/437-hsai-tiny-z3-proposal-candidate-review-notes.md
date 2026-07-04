@@ -138,10 +138,10 @@ Phase 437 adds tests that:
 
 ## Next Slice
 
-The next responsible slice is a docs-first boundary for accepted-append
-decision preflight over the Phase 437 review. That boundary must keep preflight
-separate from accepted formal evidence, accepted Evidence Ledger mutation,
-accepted append policy changes, Level2+ evidence, score axes, Lean execution,
-new SMT execution, COBALT execution, Rust-to-Lean extraction, semantic
-correctness, production readiness, SOTA, breakthrough status, full security,
-and action authority.
+The next responsible slice is Phase 438, a docs-first boundary for
+accepted-append decision preflight over the Phase 437 review. That boundary
+must keep preflight separate from accepted formal evidence, accepted Evidence
+Ledger mutation, accepted append policy changes, Level2+ evidence, score axes,
+Lean execution, new SMT execution, COBALT execution, Rust-to-Lean extraction,
+semantic correctness, production readiness, SOTA, breakthrough status, full
+security, and action authority.
