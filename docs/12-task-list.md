@@ -12483,13 +12483,52 @@ resolution-planning label, and resolution-review label.
 Validation coverage: docs-only phase. It is validated by repository hygiene,
 markdown/source-contract checks, and claim-boundary source scans.
 
-Exit criteria: HSAI now has a boundary for future local quarantine-resolution
-review over one tiny-Z3 accepted-append decision quarantine-resolution plan. It
-still has no implemented Phase 457 resolution-review metadata, accepted append
-decision, accepted formal evidence, accepted Evidence Ledger mutation,
+Exit criteria: HSAI now has a boundary for local quarantine-resolution review
+over one tiny-Z3 accepted-append decision quarantine-resolution plan. Phase 457
+implements that local resolution-review metadata. It still has no accepted
+append decision, accepted formal evidence, accepted Evidence Ledger mutation,
 accepted append policy change, Level2+ evidence, score axes, proof-authority
 claim, Lean/COBALT/Rust-to-Lean execution, or production/SOTA/security/
 correctness claim.
+
+## Phase 457 HSAI Tiny Z3 Accepted Append Decision Quarantine-Resolution Review Metadata
+
+Status: complete. See
+`docs/457-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-review-notes.md`.
+
+Goal: implement deterministic local quarantine-resolution review metadata over
+one Phase 455 tiny-Z3 accepted-append decision quarantine-resolution plan
+without making an accepted append decision, mutating accepted evidence,
+changing accepted append policy, creating Level2+ evidence, populating score
+axes, or making strong public claims.
+
+Implemented: Phase 457 adds the local accepted-append decision
+quarantine-resolution review schema constants, review labels, input record,
+output record, issue taxonomy, validation report, required-nonclaim helper,
+claim-boundary helper, builder, and validator. The review binds one Phase 455
+resolution plan, one Phase 455 resolution-plan input, one Phase 453 quarantine
+review, one Phase 451 quarantine, one Phase 449 blocker review, one Phase 447
+blocker, one Phase 445 review, one Phase 443 candidate, Phase 441/439/437/435
+records, Phase 433/431/429/427/425/423/421 records, Phase 404/405 local Z3
+replay digests, declared file digest map, current accepted append blockers,
+resolution metadata, quarantine metadata, reviewer metadata, proposal metadata,
+candidate disposition, candidate-review label, blocker label, blocker-review
+label, quarantine label, quarantine-review label, resolution-plan label,
+resolution-review label, review summary, and explicit nonclaim digest.
+
+Validation coverage: `hsai-agent-admission` Phase 457 tests cover
+deterministic resolution-review construction, Phase 455 resolution-plan/input
+binding, Phase 453/451/449/447/445/443/404/405 binding, Phase 455 digest drift
+rejection, promotional review-summary rejection, and accepted-append-decision,
+accepted-evidence, Level2, score-axis, proof, checker, solver, SOTA,
+full-security, and action-authority promotion rejection.
+
+Exit criteria: HSAI now has deterministic local quarantine-resolution review
+metadata for one tiny-Z3 accepted-append decision quarantine-resolution plan.
+It still has no accepted append decision, accepted formal evidence, accepted
+Evidence Ledger mutation, accepted append policy change, Level2+ evidence,
+score axes, proof-authority claim, Lean/COBALT/Rust-to-Lean execution, or
+production/SOTA/security/correctness claim.
 
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
