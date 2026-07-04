@@ -11545,6 +11545,32 @@ filesystem artifact output, accepted formal evidence, accepted Evidence Ledger
 mutation, accepted append policy change, Level2+ evidence, score axes,
 proof-authority claim, or production/SOTA/security/correctness claim.
 
+## Phase 428 HSAI Tiny Z3 Serialization Preview Review Boundary
+
+Status: complete. See
+`docs/428-hsai-tiny-z3-serialization-preview-review-boundary.md`.
+
+Goal: define the docs-first boundary for future local review metadata over one
+Phase 427 tiny-Z3 serialization preview without implementing review metadata,
+writing artifacts, creating package files, mutating accepted evidence, changing
+accepted append policy, creating accepted formal evidence, creating Level2+
+evidence, populating score axes, or making strong public claims.
+
+Implemented: Phase 428 defines the future review purpose, five allowed future
+review labels, required future inputs, required future validation, evidence
+meaning limits, and Phase 429 implementation exit criteria. The boundary keeps
+review metadata local, non-accepted, non-authoritative, and non-mutating.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a boundary for reviewing deterministic local
+tiny-Z3 serialization-preview metadata. It still has no implemented preview
+review metadata, filesystem artifact output, accepted formal evidence, accepted
+Evidence Ledger mutation, accepted append policy change, Level2+ evidence,
+score axes, proof-authority claim, or production/SOTA/security/correctness
+claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

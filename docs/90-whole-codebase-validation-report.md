@@ -5903,5 +5903,17 @@ changes, accepted formal evidence, Level2+ evidence, score axes, proof/checker/
 solver promotion, semantic-correctness claims, production-readiness claims,
 SOTA claims, breakthrough claims, full-security claims, and action authority.
 
+[docs/428-hsai-tiny-z3-serialization-preview-review-boundary.md](docs/428-hsai-tiny-z3-serialization-preview-review-boundary.md)
+records the Phase 428 docs-first review boundary for Phase 427 tiny-Z3
+serialization-preview metadata. The boundary permits only future local review
+metadata over one deterministic in-memory preview and defines five future review
+labels, required inputs, validation requirements, evidence meaning limits, and
+Phase 429 implementation exit criteria. It creates no Rust code, writes no
+artifacts, creates no package files, mutates no accepted Evidence Ledger,
+changes no accepted append policy, creates no accepted formal evidence, creates
+no Level2+ evidence, populates no score axes, runs no
+Lean/SMT/COBALT/Rust-to-Lean extraction, and claims no production/SOTA/security/
+semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
