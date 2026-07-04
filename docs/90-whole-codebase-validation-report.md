@@ -6960,5 +6960,19 @@ creates no Level2+ evidence, populates no score axes, runs no
 Lean/new-SMT/COBALT/Rust-to-Lean extraction, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/488-hsai-tiny-z3-accepted-path-prerequisite-boundary.md](docs/488-hsai-tiny-z3-accepted-path-prerequisite-boundary.md)
+defines the Phase 488 docs-first prerequisite boundary for leaving the local
+tiny-Z3 terminal metadata chain and later pursuing accepted append, accepted
+formal evidence, Level2+, score axes, and strong public claims without
+conflating local metadata with accepted evidence or proof authority. The
+boundary records required future accepted append gates, formal-evidence gates,
+Level2+ and score-axis gates, public-claim gates, future implementation exit
+criteria, and evidence meaning. It creates no Rust code, makes no accepted
+append decision, mutates no accepted Evidence Ledger, changes no accepted
+append policy, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean
+extraction, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
