@@ -102,9 +102,9 @@ It is still not:
 
 ## Next Responsible Slice
 
-The next responsible slice is a docs-first boundary for the next Phase 489
-prerequisite gate: accepted append policy version. It must not implement an
-accepted append decision, mutate the accepted Evidence Ledger, create accepted
-formal evidence, create Level2+ evidence, populate score axes, run
-Lean/new-SMT/COBALT/Rust-to-Lean extraction, create benchmark evidence, or
-claim SOTA, full security, semantic correctness, or production readiness.
+Phase 492 defines the docs-first accepted append policy-version boundary in
+`docs/492-hsai-tiny-z3-accepted-append-policy-version-boundary.md`. That
+boundary keeps `zkbench-core` as the accepted append policy owner and records
+the policy/version identifiers that any future accepted append bridge must
+bind before asking `zkbench-core` to evaluate an accepted-ledger append
+transaction.

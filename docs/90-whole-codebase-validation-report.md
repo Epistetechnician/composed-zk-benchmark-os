@@ -7023,5 +7023,25 @@ evidence, populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean
 extraction, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/492-hsai-tiny-z3-accepted-append-policy-version-boundary.md](docs/492-hsai-tiny-z3-accepted-append-policy-version-boundary.md)
+defines the Phase 492 docs-first accepted append policy-version boundary for
+the Phase 489 `accepted_append_policy_version` prerequisite gate. The boundary
+records `zkbench-core` as the accepted append policy/version owner, names the
+current policy/version surfaces `EvidenceAcceptancePolicy`,
+`EvidenceAcceptancePolicyVersion`, `AcceptedLedgerAppendTransactionVersion`,
+`AcceptedLedgerAppendTransactionRequest`, and
+`MaterializedAcceptedLedgerAppendRequest`, and records the current source
+version strings
+`zkbench-core-accepted-append-local-level1-replay-formal-evidence-blocked:v1`,
+`phase-j-evidence-acceptance-policy-v0`, and
+`phase-w-accepted-ledger-append-transaction-v0`. It also defines required
+future bindings, required future validation, meaning limits, and Phase 493
+implementation exit criteria. It creates no Rust code, makes no accepted
+append decision, mutates no accepted Evidence Ledger, changes no accepted
+append policy, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean
+extraction, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

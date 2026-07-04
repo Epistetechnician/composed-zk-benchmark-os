@@ -13779,6 +13779,38 @@ admission metadata, accepted append policy change, Level2+ evidence, score
 axes, proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean execution,
 benchmark evidence, or production/SOTA/security/correctness claim.
 
+## Phase 492 HSAI Tiny Z3 Accepted Append Policy Version Boundary
+
+Status: complete. See
+`docs/492-hsai-tiny-z3-accepted-append-policy-version-boundary.md`.
+
+Goal: define the docs-first boundary for the second Phase 489 prerequisite
+gate: `accepted_append_policy_version`.
+
+Implemented: Phase 492 documents the current `zkbench-core` policy/version
+surface for later HSAI accepted-path work: `EvidenceAcceptancePolicy`,
+`EvidenceAcceptancePolicyVersion`, `EvidenceAcceptancePolicy::phase_j_conservative`,
+`EvidenceAcceptancePolicy::phase_j_level1_local_only`,
+`AcceptedLedgerAppendTransactionVersion`,
+`AcceptedLedgerAppendTransactionRequest`, and
+`MaterializedAcceptedLedgerAppendRequest`. It records the current source
+version strings
+`zkbench-core-accepted-append-local-level1-replay-formal-evidence-blocked:v1`,
+`phase-j-evidence-acceptance-policy-v0`, and
+`phase-w-accepted-ledger-append-transaction-v0`, required future bindings,
+required future validation, meaning limits, and Phase 493 implementation exit
+criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a policy-version boundary for later accepted-path
+work. It still has no accepted append decision, accepted formal evidence,
+accepted Evidence Ledger mutation from HSAI admission metadata, accepted
+append policy change, Level2+ evidence, score axes, proof-authority claim,
+Lean/new-SMT/COBALT/Rust-to-Lean execution, benchmark evidence, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
