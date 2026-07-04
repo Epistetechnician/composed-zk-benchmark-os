@@ -5960,5 +5960,18 @@ append policy, create accepted formal evidence, create Level2+ evidence,
 populate score axes, run Lean/COBALT/Rust-to-Lean extraction, submit
 benchmarks, or claim production/SOTA/security/semantic-correctness.
 
+[docs/432-hsai-tiny-z3-materialized-audit-package-review-boundary.md](docs/432-hsai-tiny-z3-materialized-audit-package-review-boundary.md)
+records the Phase 432 docs-first review boundary for one Phase 431 materialized
+tiny-Z3 audit package. The boundary permits only a future local review metadata
+record over one validated materialized package, defines five allowed future
+review labels, requires binding to Phase 431/429/427/425/423/421 and Phase
+404/405 digests, requires declared-file, sidecar, digest-index, claim-boundary,
+nonclaim, reviewer, and current accepted append blocker bindings, and defines
+Phase 433 implementation exit criteria. It creates no Rust code, mutates no
+accepted Evidence Ledger, changes no accepted append policy, creates no
+accepted formal evidence, creates no Level2+ evidence, populates no score axes,
+runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, and claims no production/
+SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

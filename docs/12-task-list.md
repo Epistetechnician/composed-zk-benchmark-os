@@ -11657,6 +11657,36 @@ formal evidence, accepted Evidence Ledger mutation, accepted append policy
 change, Level2+ evidence, score axes, proof-authority claim, Lean/COBALT/
 Rust-to-Lean execution, or production/SOTA/security/correctness claim.
 
+## Phase 432 HSAI Tiny Z3 Materialized Audit Package Review Boundary
+
+Status: complete. See
+`docs/432-hsai-tiny-z3-materialized-audit-package-review-boundary.md`.
+
+Goal: define the docs-first boundary for reviewing one Phase 431 materialized
+tiny-Z3 audit package before any accepted-evidence proposal path is considered,
+without implementing review metadata, mutating accepted evidence, changing
+accepted append policy, creating Level2+ evidence, populating score axes, or
+making strong public claims.
+
+Implemented: Phase 432 defines the future review purpose, five allowed future
+review labels, required future inputs, required future validation, evidence
+meaning limits, and Phase 433 implementation exit criteria. It binds the future
+review to one Phase 431 manifest, one Phase 431 output request, one Phase 429
+review, one Phase 427 preview, one Phase 425 package, one Phase 423 review
+record, one Phase 421 metadata record, Phase 404/405 local Z3 replay digests,
+declared-file digests, claim-boundary digest, nonclaim digest, reviewer
+metadata, and the current accepted append blocker digest.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a boundary for a future local review of one
+materialized tiny-Z3 audit package. It still has no implemented Phase 433
+review metadata, accepted formal evidence, accepted Evidence Ledger mutation,
+accepted append policy change, Level2+ evidence, score axes, proof-authority
+claim, Lean/COBALT/Rust-to-Lean execution, or production/SOTA/security/
+correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

@@ -58,3 +58,13 @@ Lean, run SMT beyond the already-scoped local tiny-Z3 replay path, run COBALT,
 run Rust-to-Lean extraction, submit benchmarks, prove semantic correctness,
 establish production readiness, establish SOTA, establish breakthrough status,
 establish full security, or grant authority to execute an action.
+
+## Next Slice
+
+Phase 432 defines a docs-first boundary for reviewing one materialized tiny-Z3
+audit package before any accepted-evidence proposal path is considered. That
+boundary keeps review metadata separate from accepted formal evidence, accepted
+Evidence Ledger mutation, accepted append policy changes, Level2+ evidence,
+score axes, Lean execution, new SMT execution, COBALT execution, Rust-to-Lean
+extraction, semantic correctness, production readiness, SOTA, breakthrough
+status, full security, and action authority.
