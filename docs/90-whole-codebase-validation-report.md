@@ -7105,5 +7105,27 @@ Level2+ evidence, populates no score axes, runs no
 Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence,
 and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/496-hsai-tiny-z3-replayable-input-bundle-identity-boundary.md](docs/496-hsai-tiny-z3-replayable-input-bundle-identity-boundary.md)
+defines the Phase 496 docs-first replayable input bundle identity boundary for
+the next Phase 488 accepted-path prerequisite gate. The boundary records
+`zkbench-core` as the accepted append replay identity owner and names
+`AcceptedLedgerAppendTransactionRequest`,
+`AcceptedLedgerAppendTransactionVersion`, `ReviewedPromotionPreflightRequest`,
+`ReviewedPromotionPreflightReport`, `EvidenceRecordCandidate`,
+`EvidenceRecordCandidateSource`, `EvidenceAppendPreview`,
+`validate_accepted_ledger_append_transaction_request`,
+`build_reviewed_promotion_preflight_report`,
+`validate_reviewed_promotion_preflight_request`, and
+`build_evidence_record_from_transaction`. It records future bindings and
+validation for transaction id/version, target ledger id, expected ledger tip,
+preflight request/report, candidate, append preview, review decision, source
+artifact digests, candidate/preview alignment, preflight report recomputation,
+and source digest presence. It creates no Rust code, makes no accepted append
+decision, mutates no accepted Evidence Ledger, changes no accepted append
+policy, creates no accepted formal evidence, creates no Level2+ evidence,
+populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction,
+creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

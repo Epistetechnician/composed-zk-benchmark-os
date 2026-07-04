@@ -101,9 +101,9 @@ readiness, not full security, and not action authority.
 
 ## Next Responsible Slice
 
-The next responsible slice is a docs-first boundary for the next Phase 488
-accepted-path prerequisite gate: replayable input bundle identity. It must not
-implement accepted append, mutate the accepted Evidence Ledger, create
-accepted formal evidence, create Level2+ evidence, populate score axes, run
-Lean/new-SMT/COBALT/Rust-to-Lean extraction, create benchmark evidence, or
-claim SOTA, full security, semantic correctness, or production readiness.
+Phase 496 defines the docs-first replayable input bundle identity boundary in
+`docs/496-hsai-tiny-z3-replayable-input-bundle-identity-boundary.md`. That
+boundary keeps `zkbench-core` as the accepted append replay identity owner and
+records the existing request/preflight/report/candidate/append-preview/source
+digest and ledger-tip fields that any future bridge must bind before asking
+`zkbench-core` to evaluate an accepted-ledger append transaction.
