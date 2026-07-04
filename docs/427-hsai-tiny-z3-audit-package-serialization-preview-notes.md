@@ -127,10 +127,12 @@ Phase 427 adds tests that:
 
 ## Next Slice
 
-Phase 428 should define a docs-first review boundary for Phase 427
-serialization-preview metadata. That boundary must not write filesystem
-artifacts, create materialized package files, mutate the accepted Evidence
-Ledger, change accepted append policy, create accepted formal evidence, create
-Level2+ evidence, populate score axes, run Lean, run SMT, run COBALT, run
-Rust-to-Lean extraction, or claim semantic correctness, production readiness,
-SOTA, breakthrough status, full security, or action authority.
+Phase 428 defines the docs-first review boundary for Phase 427
+serialization-preview metadata in
+`docs/428-hsai-tiny-z3-serialization-preview-review-boundary.md`. That boundary
+does not write filesystem artifacts, create materialized package files, mutate
+the accepted Evidence Ledger, change accepted append policy, create accepted
+formal evidence, create Level2+ evidence, populate score axes, run Lean, run
+SMT, run COBALT, run Rust-to-Lean extraction, or claim semantic correctness,
+production readiness, SOTA, breakthrough status, full security, or action
+authority.
