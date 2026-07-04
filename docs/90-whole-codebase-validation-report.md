@@ -5945,5 +5945,20 @@ creates no Level2+ evidence, populates no score axes, runs no
 Lean/SMT/COBALT/Rust-to-Lean extraction, and claims no production/SOTA/security/
 semantic-correctness result.
 
+[docs/431-hsai-tiny-z3-materialized-audit-package-artifact-notes.md](docs/431-hsai-tiny-z3-materialized-audit-package-artifact-notes.md)
+records the Phase 431 local materialized tiny-Z3 audit package artifact
+plumbing. The implementation in `crates/hsai-agent-admission/src/lib.rs` writes
+only declared `tiny-z3-audit-package/*` metadata files and `.sha256` sidecars
+under a caller-selected output root, then read-back validates declared files,
+sidecars, digest index, manifest semantics, Phase 429 review binding, Phase 427
+preview binding, Phase 425 package binding, Phase 423 review-record binding,
+Phase 421 metadata binding, Phase 404/405 replay digest binding, current
+accepted append blocker binding, claim boundary, and nonclaims. It rejects stale
+digests, undeclared files, symlinks, malformed declared files, and promotion
+attempts. It does not mutate the accepted Evidence Ledger, change accepted
+append policy, create accepted formal evidence, create Level2+ evidence,
+populate score axes, run Lean/COBALT/Rust-to-Lean extraction, submit
+benchmarks, or claim production/SOTA/security/semantic-correctness.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
