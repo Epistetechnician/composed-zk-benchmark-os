@@ -6991,5 +6991,20 @@ populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction,
 creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/490-hsai-tiny-z3-accepted-append-owner-mutation-route-boundary.md](docs/490-hsai-tiny-z3-accepted-append-owner-mutation-route-boundary.md)
+defines the Phase 490 docs-first owner and mutation-route boundary for the
+Phase 489 `accepted_append_owner_and_mutation_route` prerequisite gate. The
+boundary records `zkbench-core` as the only accepted append owner,
+`AcceptedLedgerAppendTransactionRequest` as the only local transaction route,
+and `MaterializedAcceptedLedgerAppendRequest` as the only materialized local
+path route. It also defines the HSAI admission metadata role, required future
+bridge inputs, required validation, meaning limits, and Phase 491
+implementation exit criteria. It creates no Rust code, makes no accepted
+append decision, mutates no accepted Evidence Ledger, changes no accepted
+append policy, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean
+extraction, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
