@@ -133,10 +133,11 @@ It cannot support:
 - full security;
 - action authority.
 
-## Phase 429 Implementation Exit Criteria
+## Phase 429 Implementation Result
 
-Phase 429 may implement local tiny-Z3 serialization-preview review metadata only
-if it:
+Phase 429 implements local tiny-Z3 serialization-preview review metadata in
+`docs/429-hsai-tiny-z3-serialization-preview-review-notes.md`. The
+implementation:
 
 - stays inside `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;

@@ -5915,5 +5915,23 @@ no Level2+ evidence, populates no score axes, runs no
 Lean/SMT/COBALT/Rust-to-Lean extraction, and claims no production/SOTA/security/
 semantic-correctness result.
 
+[docs/429-hsai-tiny-z3-serialization-preview-review-notes.md](docs/429-hsai-tiny-z3-serialization-preview-review-notes.md)
+records the Phase 429 local tiny-Z3 serialization-preview review metadata
+implementation. The Rust surface adds typed input/output metadata, five bounded
+review labels, issue taxonomy, validation report, claim-boundary and nonclaim
+helpers, builder, validator, and focused tests. The review binds one Phase 427
+serialization preview, one Phase 425 audit package, one Phase 423 review record,
+one Phase 421 metadata record, Phase 404/405 local Z3 backend replay digests
+through the preview, current accepted append blockers, package manifest digest,
+canonical serialization digests, redaction-policy digest, logical preview path
+digest, reviewer metadata, review summary digest, and explicit nonclaims. It
+rejects promoted preview state, filesystem writes, materialized package files,
+raw backend/proof/checker/solver artifacts, secrets, mutable accepted-ledger
+state, promotional review text, accepted evidence mutation, accepted append
+policy changes, accepted formal evidence, Level2+ evidence, score axes,
+proof/checker/solver promotion, semantic-correctness claims,
+production-readiness claims, SOTA claims, breakthrough claims,
+full-security claims, and action authority.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
