@@ -11993,6 +11993,40 @@ Evidence Ledger mutation, accepted append policy change, Level2+ evidence,
 score axes, proof-authority claim, Lean/COBALT/Rust-to-Lean execution, or
 production/SOTA/security/correctness claim.
 
+## Phase 443 HSAI Tiny Z3 Accepted Append Decision Candidate Metadata
+
+Status: complete. See
+`docs/443-hsai-tiny-z3-accepted-append-decision-candidate-notes.md`.
+
+Goal: implement deterministic local accepted-append decision candidate metadata
+over one Phase 441 tiny-Z3 accepted-append preflight review while keeping
+accepted append policy changes, accepted Evidence Ledger mutation, accepted
+formal evidence, Level2+ evidence, score axes, proof authority, backend
+execution, and strong public claims blocked.
+
+Implemented: Phase 443 adds the local accepted-append decision candidate input,
+candidate record, candidate dispositions, issue taxonomy, validation report,
+claim-boundary helper, required nonclaim helper, builder, and validator. The
+candidate binds one Phase 441 review, one Phase 441 review input, one Phase 439
+preflight, one Phase 439 preflight input, one Phase 437 review, one Phase 437
+review input, one Phase 435 candidate, one Phase 435 candidate input, Phase
+433/431/429/427/425/423/421 records, Phase 404/405 local Z3 replay digests,
+declared file digest map, explicit nonclaim digest, reviewer/proposal metadata,
+accepted-append preflight review label, candidate disposition, and current
+accepted append blockers.
+
+Validation coverage: `hsai-agent-admission` Phase 443 tests cover deterministic
+candidate construction, Phase 441 review/input binding, Phase 439/437/435/404/
+405 binding, Phase 441 digest drift rejection, promotional candidate-summary
+rejection, and accepted-evidence/Level2/score/proof/checker/solver/SOTA/
+full-security/action-authority promotion rejection.
+
+Exit criteria: HSAI now has deterministic local decision candidate metadata for
+one tiny-Z3 accepted-append preflight review. It still has no accepted formal
+evidence, accepted Evidence Ledger mutation, accepted append policy change,
+Level2+ evidence, score axes, proof-authority claim, Lean/COBALT/Rust-to-Lean
+execution, or production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
