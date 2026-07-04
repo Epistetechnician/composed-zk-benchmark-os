@@ -581,6 +581,7 @@ Surface DSL
 | [docs/493-hsai-tiny-z3-accepted-append-policy-version-metadata-notes.md](docs/493-hsai-tiny-z3-accepted-append-policy-version-metadata-notes.md) | Phase 493 HSAI tiny Z3 accepted append policy version metadata notes. |
 | [docs/494-hsai-tiny-z3-accepted-evidence-class-and-claim-boundary.md](docs/494-hsai-tiny-z3-accepted-evidence-class-and-claim-boundary.md) | Phase 494 HSAI tiny Z3 accepted evidence class and claim-boundary boundary. |
 | [docs/495-hsai-tiny-z3-accepted-evidence-class-claim-boundary-metadata-notes.md](docs/495-hsai-tiny-z3-accepted-evidence-class-claim-boundary-metadata-notes.md) | Phase 495 HSAI tiny Z3 accepted evidence class claim-boundary metadata notes. |
+| [docs/496-hsai-tiny-z3-replayable-input-bundle-identity-boundary.md](docs/496-hsai-tiny-z3-replayable-input-bundle-identity-boundary.md) | Phase 496 HSAI tiny Z3 replayable input bundle identity boundary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |

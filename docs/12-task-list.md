@@ -13911,6 +13911,38 @@ admission metadata, accepted append policy change, Level2+ evidence, score
 axes, proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean execution,
 benchmark evidence, or production/SOTA/security/correctness claim.
 
+## Phase 496 HSAI Tiny Z3 Replayable Input Bundle Identity Boundary
+
+Status: complete. See
+`docs/496-hsai-tiny-z3-replayable-input-bundle-identity-boundary.md`.
+
+Goal: define the docs-first boundary for the next Phase 488 accepted-path
+prerequisite gate: replayable input bundle identity.
+
+Implemented: Phase 496 documents the current `zkbench-core` accepted append
+replay identity surface: `AcceptedLedgerAppendTransactionRequest`,
+`AcceptedLedgerAppendTransactionVersion`, `ReviewedPromotionPreflightRequest`,
+`ReviewedPromotionPreflightReport`, `EvidenceRecordCandidate`,
+`EvidenceRecordCandidateSource`, `EvidenceAppendPreview`,
+`validate_accepted_ledger_append_transaction_request`,
+`build_reviewed_promotion_preflight_report`,
+`validate_reviewed_promotion_preflight_request`, and
+`build_evidence_record_from_transaction`. It records the future bindings and
+validation rules for transaction id/version, target ledger id, expected ledger
+tip, preflight request/report, candidate, append preview, review decision,
+source artifact digests, candidate/preview alignment, preflight report
+recomputation, and source digest presence.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a replayable input identity boundary for later
+accepted-path work. It still has no accepted append decision, accepted formal
+evidence, accepted Evidence Ledger mutation from HSAI admission metadata,
+accepted append policy change, Level2+ evidence, score axes, proof-authority
+claim, Lean/new-SMT/COBALT/Rust-to-Lean execution, benchmark evidence, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
