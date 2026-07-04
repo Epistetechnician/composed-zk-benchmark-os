@@ -101,3 +101,14 @@ execution, Lean, new SMT, COBALT, Rust-to-Lean extraction, accepted evidence,
 Level2+ evidence, score axes, accepted Evidence Ledger mutation, and strong
 public claims out of scope unless a separate explicit phase opens those
 surfaces.
+
+## Phase 464 Boundary Status
+
+Phase 464 defines that docs-first boundary in
+`docs/464-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-blocker-review-boundary.md`.
+
+The Phase 464 boundary creates no Rust code, makes no accepted append decision,
+mutates no accepted Evidence Ledger, changes no accepted append policy, creates
+no accepted formal evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, submits no
+benchmarks, and claims no production/SOTA/security/semantic-correctness result.
