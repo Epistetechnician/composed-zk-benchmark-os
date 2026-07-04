@@ -13251,6 +13251,45 @@ Evidence Ledger mutation, accepted append policy change, Level2+ evidence,
 score axes, proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean
 execution, or production/SOTA/security/correctness claim.
 
+## Phase 478 HSAI Tiny Z3 Accepted Append Decision Quarantine-Resolution Escalation Terminal-Review Closure-Blocker Review Terminal-Closure Review Settlement-Blocker Review Terminal Boundary
+
+Status: complete. See
+`docs/478-hsai-tiny-z3-accepted-append-decision-quarantine-resolution-escalation-terminal-review-closure-blocker-review-terminal-closure-review-settlement-blocker-review-terminal-boundary.md`.
+
+Goal: define the docs-first boundary for future local settlement-blocker
+review terminal metadata over one Phase 477 tiny-Z3 accepted-append decision
+quarantine-resolution escalation terminal-review closure-blocker review
+terminal-closure review settlement-blocker review without implementing
+terminal metadata, making accepted append decisions, mutating accepted
+evidence, changing accepted append policy, creating Level2+ evidence,
+populating score axes, running backend proof systems, or making strong public
+claims.
+
+Implemented: Phase 478 documents six non-promotional future
+settlement-blocker review terminal labels, required future bindings to the
+Phase 477 settlement-blocker review digest/input digest, Phase 477
+digest/id/label binding map digests, explicit nonclaim digest, current
+accepted append blocker digest, inherited settlement-blocker review ids,
+inherited settlement-blocker ids, inherited terminal-closure review ids,
+inherited terminal-closure ids, inherited closure-blocker review ids,
+inherited closure-blocker ids, inherited closure ids, inherited
+terminal-review ids, inherited settlement-blocker review label,
+settlement-blocker review terminal label, required future validation, meaning
+limits, and Phase 479 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a boundary for local settlement-blocker review
+terminal metadata over one tiny-Z3 accepted-append decision
+quarantine-resolution escalation terminal-review closure-blocker review
+terminal-closure review settlement-blocker review. Phase 479 may implement
+that local settlement-blocker review terminal metadata. It still has no
+accepted append decision, accepted formal evidence, accepted Evidence Ledger
+mutation, accepted append policy change, Level2+ evidence, score axes,
+proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean execution, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
