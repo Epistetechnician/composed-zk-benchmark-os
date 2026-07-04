@@ -145,10 +145,10 @@ Phase 441 adds tests that:
 
 ## Next Slice
 
-The next responsible slice is a docs-first boundary for an accepted-append
-decision candidate over the Phase 441 review. That boundary must keep decision
-candidate metadata separate from accepted formal evidence, accepted Evidence
-Ledger mutation, accepted append policy changes, Level2+ evidence, score axes,
-Lean execution, new SMT execution, COBALT execution, Rust-to-Lean extraction,
-semantic correctness, production readiness, SOTA, breakthrough status, full
-security, and action authority.
+The next responsible slice is Phase 442: a docs-first boundary for an
+accepted-append decision candidate over the Phase 441 review. That boundary
+must keep decision candidate metadata separate from accepted formal evidence,
+accepted Evidence Ledger mutation, accepted append policy changes, Level2+
+evidence, score axes, Lean execution, new SMT execution, COBALT execution,
+Rust-to-Lean extraction, semantic correctness, production readiness, SOTA,
+breakthrough status, full security, and action authority.
