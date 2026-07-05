@@ -7557,5 +7557,21 @@ formal evidence, creates no Level2+ evidence, runs no new
 Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence, and
 claims no production/SOTA/security/semantic-correctness result.
 
+[docs/522-hsai-tiny-z3-external-result-import-candidate-boundary.md](docs/522-hsai-tiny-z3-external-result-import-candidate-boundary.md)
+defines the Phase 522 docs-first boundary for future external-result import
+candidate metadata over the Phase 521 external-reproduction provenance record.
+The boundary records the existing `zkbench-core` import owner surface for
+`ExternalResultCandidate`, `ExternalRunProvenanceDraft`,
+`validate_external_result_candidate`, `external_result_quarantine_record`, and
+quarantine status. It defines required future Phase 521/519/517/515/513 digest
+bindings, candidate, validation, issue, and quarantine-record bindings,
+fail-closed future validation rules, backend relationship limits, meaning
+limits, and Phase 523 implementation exit criteria. It creates no Rust code,
+changes no Cargo metadata, writes no external-result artifact files, populates
+no score axes, creates no accepted formal evidence, creates no Level2+
+evidence, runs no new Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no
+benchmark evidence, and claims no production/SOTA/security/semantic-correctness
+result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

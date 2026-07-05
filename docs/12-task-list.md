@@ -14682,6 +14682,33 @@ score axes, no accepted formal evidence, no new Lean/new-SMT/COBALT or
 Rust-to-Lean execution, no benchmark evidence, no external audit evidence, and
 no production/SOTA/security/correctness claim.
 
+## Phase 522 HSAI Tiny Z3 External Result Import Candidate Boundary
+
+Status: complete. See
+`docs/522-hsai-tiny-z3-external-result-import-candidate-boundary.md`.
+
+Goal: define the docs-first boundary for future external-result import
+candidate metadata over the Phase 521 external-reproduction provenance record.
+
+Implemented: Phase 522 documents the current `zkbench-core` import owner
+surface for `ExternalResultCandidate`, `ExternalRunProvenanceDraft`,
+`validate_external_result_candidate`, `external_result_quarantine_record`, and
+quarantine status. It defines future HSAI import-candidate classifications,
+required future Phase 521/519/517/515/513 digest bindings, candidate,
+validation, issue, and quarantine-record bindings, fail-closed future
+validation rules, backend relationship limits, meaning limits, and Phase 523
+implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has an external-result import candidate boundary for a
+future local metadata implementation. It still has no independent external
+reproduction, no Level2+ evidence, no populated score axes, no accepted formal
+evidence, no new Lean/new-SMT/COBALT or Rust-to-Lean execution, no benchmark
+evidence, no external audit evidence, and no production/SOTA/security/
+correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
