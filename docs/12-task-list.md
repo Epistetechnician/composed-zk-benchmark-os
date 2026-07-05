@@ -16651,6 +16651,38 @@ Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution, no
 benchmark evidence, no external audit evidence, and no production/SOTA
 /security/semantic-correctness claim.
 
+## Phase 591 HSAI Tiny Z3 Backend Execution Packet Role Artifact Independent Operator Materialization Metadata
+
+Status: complete. See
+`docs/591-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-materialization-metadata-notes.md`.
+
+Goal: implement local materialization metadata for Phase 589 packet-role
+artifact independent-operator evidence packet roles without writing packet
+files or advancing evidence acceptance.
+
+Implemented: Phase 591 adds schema/state/claim-boundary constants,
+materialization input/output records, bounded classifications and labels,
+issue/validation types, digest/id/label binding helpers, declared role-file
+and sidecar sets, manifest-shape/output-root/readback policy digests,
+policy/blocker/nonpromotion/rule/forbidden-API/inherited-digest helpers, a
+fail-closed builder/validator over one exact Phase 589 packet metadata record,
+and focused tests for successful missing-materialization metadata, Phase 589
+drift rejection, declared-role digest drift, output-root policy drift,
+file-materialization rejection, promotion flag rejection, and strong-claim
+rejection.
+
+Validation coverage: focused `hsai-agent-admission` Phase 591 tests plus repo
+hygiene and claim-boundary checks.
+
+Exit criteria: HSAI now has local packet-role artifact independent-operator
+materialization metadata. It still has no written packet-role files, no output
+root, no readback, no external result import, no accepted external result
+evidence, no accepted independent external reproduction, no accepted formal
+evidence, no Level2+ evidence, no populated score axes, no Lean/COBALT
+/Rust-to-Lean execution, no additional SMT/Z3 execution, no benchmark
+evidence, no external audit evidence, and no production/SOTA/security
+/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
