@@ -11,6 +11,9 @@ Phase 521 external-reproduction provenance metadata
   -> future local external-result import candidate metadata
 ```
 
+Phase 523 implements this boundary as local metadata in
+`docs/523-hsai-tiny-z3-external-result-import-candidate-metadata-notes.md`.
+
 This phase does not implement Rust code, change Cargo metadata, write
 filesystem artifacts, run an external replay, run a backend, run Lean, run
 SMT/Z3, run COBALT, run Rust-to-Lean extraction, create proof artifacts,

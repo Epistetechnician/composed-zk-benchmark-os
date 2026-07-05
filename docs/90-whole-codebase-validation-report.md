@@ -7573,5 +7573,22 @@ evidence, runs no new Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no
 benchmark evidence, and claims no production/SOTA/security/semantic-correctness
 result.
 
+[docs/523-hsai-tiny-z3-external-result-import-candidate-metadata-notes.md](docs/523-hsai-tiny-z3-external-result-import-candidate-metadata-notes.md)
+documents the Phase 523 local external-result import candidate metadata
+implementation. The implementation adds HSAI admission metadata types, digest
+bindings, nonclaim/blocker/rule helpers, a zkbench-core candidate constructor,
+and a fail-closed validator over one exact Phase 521 external-reproduction
+provenance record. It constructs one in-memory
+`zkbench_core::ExternalResultCandidate`, calls
+`validate_external_result_candidate`, calls `external_result_quarantine_record`,
+and records candidate, validation, validation-issue, and quarantine-record
+digests while preserving `ExternalResultStatus::Quarantined` and
+`ClaimBoundary::Level0DesignNote`. Focused tests cover successful quarantined
+metadata, invalid Phase 521 state rejection, and digest-drift plus promotion
+rejection. It writes no external-result artifact files, populates no score axes,
+creates no accepted formal evidence, creates no Level2+ evidence, runs no new
+Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence, and
+claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
