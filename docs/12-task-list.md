@@ -14206,6 +14206,36 @@ proof-authority claim, Lean/new-SMT/COBALT or Rust-to-Lean execution,
 benchmark evidence, external audit evidence, or
 production/SOTA/security/correctness claim.
 
+## Phase 506 HSAI Tiny Z3 Accepted Append Evaluation Handoff Boundary
+
+Status: complete. See
+`docs/506-hsai-tiny-z3-accepted-append-evaluation-handoff-boundary.md`.
+
+Goal: define the docs-first validation-only handoff boundary from reviewed HSAI
+tiny-Z3 prerequisite metadata to the `zkbench-core` accepted-ledger append
+transaction validator.
+
+Implemented: Phase 506 documents the accepted append owner surface,
+validation-only owner API, forbidden mutation and materialization APIs,
+required future Phase 505 digest bindings, accepted append request/preflight/
+report/candidate/append-preview/review-decision/source-artifact/ledger-tip
+identity bindings, fail-closed future validation rules, backend relationship
+limits, meaning limits, and Phase 507 implementation exit criteria. The
+boundary keeps `zkbench-core` as the only accepted append owner and reserves
+future work for metadata-only handoff before any validator call or ledger
+mutation is allowed.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has an accepted append evaluation handoff boundary for
+later validation-only metadata work. It still has no accepted append validator
+call, accepted append mutation, accepted Evidence Ledger read or write,
+materialized accepted ledger output, accepted formal evidence, Level2+
+evidence, score axes, proof-authority claim, Lean/new-SMT/COBALT or
+Rust-to-Lean execution, benchmark evidence, external audit evidence, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
