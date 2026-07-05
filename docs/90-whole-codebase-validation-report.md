@@ -8733,5 +8733,23 @@ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
 additional SMT/Z3 execution, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/597-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-import-candidate-metadata-notes.md](docs/597-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-import-candidate-metadata-notes.md)
+documents the Phase 597 packet-role artifact independent-operator import
+candidate metadata implementation. The Rust surface in
+`hsai-agent-admission` accepts one exact Phase 595
+`PacketRoleArtifactIndependentOperatorOutputQuarantinedLocalBundle` readback,
+maps it to a quarantined zkbench-core `ExternalResultCandidate`, records
+validator and quarantine-record digests, records policy/nonpromotion digests,
+and validates Phase 595 schema, state, classification, declared files,
+sidecars, readback digest, Phase 593/591/589/587/585 digest bindings, and
+nonpromotion booleans. Older Phase 583/581/579/577/575/573/571/569/567/565
+/563/561/559/557/555 requirements remain transitive through the Phase 593
+output digest. It imports no external result, mutates no accepted Evidence
+Ledger, creates no accepted external result evidence, accepts no independent
+external reproduction, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
+additional SMT/Z3 execution, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
