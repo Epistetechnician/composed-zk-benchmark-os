@@ -8332,5 +8332,23 @@ score axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution,
 creates no benchmark evidence, and claims no production/SOTA/security/
 semantic-correctness result.
 
+[docs/573-hsai-tiny-z3-backend-execution-packet-role-materialization-metadata-notes.md](docs/573-hsai-tiny-z3-backend-execution-packet-role-materialization-metadata-notes.md)
+documents the Phase 573 packet role materialization metadata implementation.
+`crates/hsai-agent-admission` now has local typed metadata that validates one
+exact Phase 571 packet metadata record, records
+`PacketRoleMaterializationMissing`, binds Phase 571/569/567/565/563/561/559/557
+and Phase 555 digests, records deterministic declared role files, sidecars,
+manifest shape, output-root policy, and readback policy, and rejects Phase 571
+drift, declared-role drift, output-root policy drift, file materialization,
+accepted-ledger mutation, Level2, score-axis population, proof/checker/solver
+promotion, backend execution evidence, benchmark evidence, external audit
+evidence, strong public claims, and authority. It writes no files, materializes
+no packet role, imports no external result, mutates no accepted Evidence
+Ledger, creates no accepted external result evidence, accepts no independent
+external reproduction, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
+additional SMT/Z3 execution, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

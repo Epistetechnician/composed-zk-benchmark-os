@@ -16120,6 +16120,39 @@ evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean execution, no
 additional SMT/Z3 execution, no benchmark evidence, no external audit
 evidence, and no production/SOTA/security/semantic-correctness claim.
 
+## Phase 573 HSAI Tiny Z3 Backend Execution Packet Role Materialization Metadata
+
+Status: complete. See
+`docs/573-hsai-tiny-z3-backend-execution-packet-role-materialization-metadata-notes.md`.
+
+Goal: implement local metadata for the Phase 572 packet role materialization
+boundary without writing packet role files.
+
+Implemented: `crates/hsai-agent-admission` now has local typed metadata that
+validates one exact Phase 571 packet metadata record, records
+`PacketRoleMaterializationMissing`, binds Phase 571 policy and nonpromotion
+digests, preserves Phase 569/567/565/563/561/559/557/555 digest bindings,
+records deterministic declared role files, sidecars, manifest shape,
+output-root policy, and readback policy, and rejects Phase 571 drift, declared
+role drift, output-root policy drift, file materialization, accepted-ledger
+mutation, Level2, score axes, proof/checker/solver promotion, backend
+execution evidence, benchmark evidence, external audit evidence, strong public
+claims, and authority.
+
+Validation coverage: focused `hsai-agent-admission` tests cover successful
+missing-materialization metadata, invalid Phase 571 state rejection, and
+declared-role drift plus file-write/promotion rejection. The metadata records
+the only valid current classification: `PacketRoleMaterializationMissing`.
+
+Exit criteria: HSAI can now locally carry the Phase 571 packet-role
+materialization blocker into metadata. It still has no packet role
+materialization, no filesystem artifact writes, no external result import, no
+accepted external result evidence, no accepted independent external
+reproduction, no accepted formal evidence, no Level2+ evidence, no populated
+score axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3
+execution, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
