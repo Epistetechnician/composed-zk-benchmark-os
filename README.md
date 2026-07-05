@@ -589,6 +589,7 @@ Surface DSL
 | [docs/501-hsai-tiny-z3-reviewer-policy-decision-metadata-notes.md](docs/501-hsai-tiny-z3-reviewer-policy-decision-metadata-notes.md) | Phase 501 HSAI tiny Z3 reviewer policy decision metadata notes. |
 | [docs/502-hsai-tiny-z3-policy-drift-rejection-boundary.md](docs/502-hsai-tiny-z3-policy-drift-rejection-boundary.md) | Phase 502 HSAI tiny Z3 policy drift rejection boundary. |
 | [docs/503-hsai-tiny-z3-policy-drift-rejection-metadata-notes.md](docs/503-hsai-tiny-z3-policy-drift-rejection-metadata-notes.md) | Phase 503 HSAI tiny Z3 policy drift rejection metadata notes. |
+| [docs/504-hsai-tiny-z3-stale-accepted-append-blocker-rejection-boundary.md](docs/504-hsai-tiny-z3-stale-accepted-append-blocker-rejection-boundary.md) | Phase 504 HSAI tiny Z3 stale accepted append blocker rejection boundary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |

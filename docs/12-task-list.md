@@ -14140,6 +14140,36 @@ evidence, score axes, proof-authority claim, Lean/new-SMT/COBALT or
 Rust-to-Lean execution, benchmark evidence, external audit evidence, or
 production/SOTA/security/correctness claim.
 
+## Phase 504 HSAI Tiny Z3 Stale Accepted Append Blocker Rejection Boundary
+
+Status: complete. See
+`docs/504-hsai-tiny-z3-stale-accepted-append-blocker-rejection-boundary.md`.
+
+Goal: define the docs-first rejection behavior for stale current accepted
+append blockers boundary for the next Phase 488 accepted-path prerequisite
+gate.
+
+Implemented: Phase 504 documents stale blocker meaning, required future Phase
+503 digest bindings, reviewed and expected current accepted append blocker
+digest bindings, closed freshness comparison rules, closed stale blocker
+rejection actions, fail-closed validation behavior, backend relationship
+limits, and Phase 505 implementation exit criteria. It requires missing, zero,
+or unequal blocker digests to block accepted append evaluation, accepted
+evidence mutation, formal evidence, Level2+, score axes, backend authority,
+benchmark claims, and strong public claims until a new current blocker review
+is performed.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a stale accepted append blocker rejection boundary
+for later accepted-path work. It still has no accepted append decision,
+accepted formal evidence, accepted Evidence Ledger mutation from HSAI admission
+metadata, accepted append policy change, blocker refresh, blocker repair,
+Level2+ evidence, score axes, proof-authority claim, Lean/new-SMT/COBALT or
+Rust-to-Lean execution, benchmark evidence, external audit, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
