@@ -8670,5 +8670,18 @@ creates no Level2+ evidence, populates no score axes, runs no
 Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark
 evidence, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/593-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-output-metadata-notes.md](docs/593-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-output-metadata-notes.md)
+documents the Phase 593 packet-role artifact independent-operator output
+metadata implementation. It adds local Rust metadata and focused tests over
+one exact Phase 591 materialization metadata record, binds Phase 591, Phase
+589, and inherited backend-execution digests, records
+`PacketRoleArtifactIndependentOperatorOutputMissing`, and rejects output-root
+access, artifact materialization, external-result import, accepted-ledger
+mutation, accepted external result evidence, accepted independent external
+reproduction, accepted formal evidence, Level2+ evidence, score-axis
+population, Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, benchmark
+evidence, external-audit evidence, and production/SOTA/security
+/semantic-correctness claims.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
