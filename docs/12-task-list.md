@@ -16245,6 +16245,36 @@ score axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3
 execution, no benchmark evidence, no external audit evidence, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 577 HSAI Tiny Z3 Backend Execution Packet Role Artifact Output Plumbing
+
+Status: complete. See
+`docs/577-hsai-tiny-z3-backend-execution-packet-role-artifact-output-plumbing-notes.md`.
+
+Goal: implement local output-root plumbing for the Phase 575 packet role
+artifact output metadata.
+
+Implemented: Phase 577 adds `hsai-agent-admission` local output plumbing for
+one exact Phase 575 output metadata record. It validates the Phase 575 source,
+requires a caller-owned output root, rejects protected roots and symlinks,
+stages writes, materializes only declared `independent-operator-packet/*.json`
+files plus `.sha256` sidecars, validates readback, records a manifest with
+Phase 575/573/571/569/567/565/563/561/559/557/555 digest bindings, and
+classifies successful local output as
+`PacketRoleArtifactOutputQuarantinedLocalBundle`.
+
+Validation coverage: focused `hsai-agent-admission` tests cover valid local
+bundle materialization/readback, Phase 575 promotion drift rejection,
+protected-root rejection, stale sidecar rejection, undeclared-file rejection,
+secret-bearing declared-file rejection, and Unix sidecar-symlink rejection.
+
+Exit criteria: HSAI can now locally materialize and read back a quarantined
+packet role artifact bundle. It still has no external result import, no
+accepted external result evidence, no accepted independent external
+reproduction, no accepted formal evidence, no Level2+ evidence, no populated
+score axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3
+execution, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
