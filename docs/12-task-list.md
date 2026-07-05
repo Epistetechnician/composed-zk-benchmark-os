@@ -14791,6 +14791,32 @@ evidence, no populated score axes, no accepted formal evidence, no new
 Lean/new-SMT/COBALT or Rust-to-Lean execution, no benchmark evidence, no
 external audit evidence, and no production/SOTA/security/correctness claim.
 
+## Phase 526 HSAI Tiny Z3 Backend Execution Boundary
+
+Status: complete. See
+`docs/526-hsai-tiny-z3-backend-execution-boundary.md`.
+
+Goal: define the docs-first boundary for the first future backend execution
+crossing after Phase 525 import-review metadata.
+
+Implemented: Phase 526 splits the future execution surface into Lane A scoped
+SMT/Z3 replay, Lane B Lean/Rust-to-Lean, and Lane C COBALT-style containment.
+Only Lane A is opened as the immediate future candidate. The boundary defines
+required Phase 525/523/521/519/517/515/513 bindings, obligation/toolchain/
+command/expected-output/timeout/scratch-output policy digests, fail-closed
+future validation rules, future touch surface, backend relationship limits,
+meaning limits, and Phase 527 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named boundary for a future scoped tiny-Z3
+backend-execution candidate lane. It still has no backend run, no accepted
+external-result evidence, no independent external reproduction, no Level2+
+evidence, no populated score axes, no accepted formal evidence, no
+Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no external audit
+evidence, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
