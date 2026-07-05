@@ -7197,5 +7197,21 @@ no accepted formal evidence, creates no Level2+ evidence, populates no score
 axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark
 evidence, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/501-hsai-tiny-z3-reviewer-policy-decision-metadata-notes.md](docs/501-hsai-tiny-z3-reviewer-policy-decision-metadata-notes.md)
+documents the Phase 501 local metadata implementation for the Phase 488
+reviewer policy and reviewer decision requirements prerequisite gate. The
+implementation in `crates/hsai-agent-admission/src/lib.rs` binds one Phase 499
+source correspondence record to a local reviewer policy digest, reviewer
+decision digest, closed decision labels, reviewer role requirements, reviewer
+independence declarations, drift rejection policy, promotion rejection policy,
+and explicit nonclaims. Focused tests cover valid construction plus Phase 499
+digest drift, reviewer decision-label set drift, reviewer decision digest drift,
+and promotion-attempt rejection including review artifact creation and external
+audit claims. It creates no review artifact, makes no accepted append decision,
+mutates no accepted Evidence Ledger, changes no accepted append policy, creates
+no accepted formal evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark
+evidence, and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

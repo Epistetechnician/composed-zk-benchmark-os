@@ -14057,6 +14057,34 @@ proof-authority claim, Lean/new-SMT/COBALT or Rust-to-Lean execution,
 benchmark evidence, external audit, or production/SOTA/security/correctness
 claim.
 
+## Phase 501 HSAI Tiny Z3 Reviewer Policy Decision Metadata
+
+Status: complete. See
+`docs/501-hsai-tiny-z3-reviewer-policy-decision-metadata-notes.md`.
+
+Goal: implement local in-memory metadata for the Phase 488 reviewer policy and
+reviewer decision requirements prerequisite gate.
+
+Implemented: Phase 501 adds deterministic local metadata in
+`crates/hsai-agent-admission/src/lib.rs` over one Phase 499 source
+correspondence record. The record binds Phase 499 digests to a local reviewer
+policy digest, reviewer decision digest, closed decision labels, reviewer role
+requirements, reviewer independence declarations, drift rejection policy,
+promotion rejection policy, and explicit nonclaims.
+
+Validation coverage: focused Phase 501 tests cover valid metadata construction
+plus Phase 499 digest drift, reviewer decision-label set drift, reviewer
+decision digest drift, and promotion-attempt rejection including review
+artifact creation and external audit claims.
+
+Exit criteria: HSAI now has local metadata for the reviewer policy/decision
+prerequisite gate. It still has no accepted append decision, accepted formal
+evidence, accepted Evidence Ledger mutation from HSAI admission metadata,
+accepted append policy change, review artifact, Level2+ evidence, score axes,
+proof-authority claim, Lean/new-SMT/COBALT or Rust-to-Lean execution,
+benchmark evidence, external audit evidence, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
