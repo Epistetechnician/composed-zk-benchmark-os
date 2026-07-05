@@ -8504,5 +8504,21 @@ axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates
 no benchmark evidence, and claims no production/SOTA/security
 /semantic-correctness result.
 
+[docs/583-hsai-tiny-z3-backend-execution-packet-role-artifact-accepted-result-evidence-eligibility-metadata-notes.md](docs/583-hsai-tiny-z3-backend-execution-packet-role-artifact-accepted-result-evidence-eligibility-metadata-notes.md)
+documents the Phase 583 packet role artifact accepted-result evidence
+eligibility metadata implementation. It adds local metadata over one exact
+Phase 581 blocked import-review record, binds Phase 581 review/input/binding
+/policy/blocker/nonpromotion digests, binds Phase 579 candidate/validation
+/quarantine digests, binds Phase 577 readback digests and Phase
+575/573/571/569/567/565/563/561/559/557/555 digests, and rejects Phase 581
+state drift, inherited Phase 579 digest drift, accepted-ledger mutation
+attempts, non-blocked classification, promotion booleans, and strong public
+claims. It imports no external result, mutates no accepted Evidence Ledger,
+creates no accepted external result evidence, accepts no independent external
+reproduction, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
+additional SMT/Z3 execution, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
