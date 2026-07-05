@@ -15716,6 +15716,39 @@ evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean execution, no
 additional SMT/Z3 execution, no benchmark evidence, no external audit evidence,
 and no production/SOTA/security/semantic-correctness claim.
 
+## Phase 559 HSAI Tiny Z3 Backend Execution Independent External Operator Result Capture Metadata
+
+Status: complete. See
+`docs/559-hsai-tiny-z3-backend-execution-independent-external-operator-result-capture-metadata-notes.md`.
+
+Goal: implement local capture metadata over one exact Phase 557 handoff packet
+manifest, operator-declared provenance, an operator-declared execution
+observation, a redacted artifact index, and a redaction report.
+
+Implemented: Phase 559 adds capture schema/state/claim-boundary constants,
+declared file and sidecar lists, operator provenance records, execution
+observation records, captured-artifact index records, redaction reports,
+nonpromotion reports, output manifests, output/readback errors, a staged local
+materializer, a fail-closed readback validator, Phase 557 manifest exactness
+checks, provenance/observation/artifact/redaction validation, per-file content
+digest checks, readback validation digest binding, and focused tests.
+
+Validation coverage: focused tests cover successful capture packet
+materialization/readback, stale sidecar rejection, forbidden proof-artifact
+metadata rejection, and invalid Phase 557 manifest rejection. The packet keeps
+local process execution, local backend execution, external result import,
+accepted independent external reproduction, accepted formal evidence, Level2+,
+score-axis population, Lean, COBALT, Rust-to-Lean, additional SMT/Z3,
+benchmark evidence, external audit, strong claims, and action authority false.
+
+Exit criteria: HSAI now can locally validate and package an
+operator-declared external execution observation as quarantined capture
+metadata for future review. It still has no external result import, no
+accepted independent external reproduction, no accepted formal evidence, no
+Level2+ evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean
+execution, no additional SMT/Z3 execution, no benchmark evidence, no external
+audit evidence, and no production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

@@ -1164,6 +1164,33 @@ pub const GATEWAY_FORMAL_TINY_Z3_HANDOFF_PACKET_DECLARED_SIDECARS: [&str; 6] = [
     "gateway-formal-tiny-z3-external-reproduction-handoff/nonpromotion-report.json.sha256",
     "gateway-formal-tiny-z3-external-reproduction-handoff/digests.json.sha256",
 ];
+pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-z3-independent-external-operator-result-capture:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_STATE_SLICE: &str =
+    "phase-559-hsai-tiny-z3-backend-execution-independent-external-operator-result-capture-metadata";
+pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_CLAIM_BOUNDARY: &str = "local tiny-Z3 independent external operator result capture metadata only; materializes one quarantined digest-checked operator-declared execution observation packet over one Phase 557 handoff packet manifest, but does not run an external replay, run a backend locally, import external results, accept independent external reproduction, create accepted formal evidence, create Level2+ evidence, populate score axes, generate proof artifacts, generate checker transcripts, generate solver certificates, run Lean, run another SMT/Z3 execution, run COBALT, run Rust-to-Lean extraction, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_NAMESPACE: &str =
+    "gateway-formal-tiny-z3-independent-external-operator-result";
+pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_DECLARED_FILES: [&str; 8] = [
+    "gateway-formal-tiny-z3-independent-external-operator-result/manifest.json",
+    "gateway-formal-tiny-z3-independent-external-operator-result/phase557-handoff-packet-manifest.json",
+    "gateway-formal-tiny-z3-independent-external-operator-result/operator-provenance.json",
+    "gateway-formal-tiny-z3-independent-external-operator-result/execution-observation.json",
+    "gateway-formal-tiny-z3-independent-external-operator-result/captured-artifact-index.json",
+    "gateway-formal-tiny-z3-independent-external-operator-result/redaction-report.json",
+    "gateway-formal-tiny-z3-independent-external-operator-result/nonpromotion-report.json",
+    "gateway-formal-tiny-z3-independent-external-operator-result/digests.json",
+];
+pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_DECLARED_SIDECARS: [&str; 8] = [
+    "gateway-formal-tiny-z3-independent-external-operator-result/manifest.json.sha256",
+    "gateway-formal-tiny-z3-independent-external-operator-result/phase557-handoff-packet-manifest.json.sha256",
+    "gateway-formal-tiny-z3-independent-external-operator-result/operator-provenance.json.sha256",
+    "gateway-formal-tiny-z3-independent-external-operator-result/execution-observation.json.sha256",
+    "gateway-formal-tiny-z3-independent-external-operator-result/captured-artifact-index.json.sha256",
+    "gateway-formal-tiny-z3-independent-external-operator-result/redaction-report.json.sha256",
+    "gateway-formal-tiny-z3-independent-external-operator-result/nonpromotion-report.json.sha256",
+    "gateway-formal-tiny-z3-independent-external-operator-result/digests.json.sha256",
+];
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -19090,6 +19117,270 @@ pub enum GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError {
     ManifestSemanticMismatch,
     NonpromotionMismatch,
     NonclaimMismatch,
+    EmptyOutputRoot,
+    ProtectedOutputRoot,
+    OutputRootExistsWithoutOverwrite,
+    OutputRootIsSymlink,
+    OutputRootIsFile,
+    BundleFileIsSymlink(String),
+    DeclaredFileTypeMismatch(String),
+    DigestMismatch(String),
+    UndeclaredFile(String),
+    MalformedDeclaredFile(String),
+    Io(String),
+    Serialization(String),
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3ExternalOperatorObservationStatus {
+    OperatorDeclaredSucceeded,
+    OperatorDeclaredFailed,
+    OperatorDeclaredTimedOut,
+    OperatorDeclaredInconclusive,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3ExternalOperatorCaptureOutputRequest {
+    pub capture_id: String,
+    pub created_at_unix: u64,
+    pub overwrite: bool,
+    pub protected_roots: Vec<PathBuf>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3ExternalOperatorProvenance {
+    pub provenance_id: String,
+    pub operator_id: String,
+    pub environment_id: String,
+    pub run_started_at_unix: u64,
+    pub workspace_digest: Hash,
+    pub source_revision: String,
+    pub toolchain_declaration_digest: Hash,
+    pub command_descriptor_digest: Hash,
+    pub redaction_policy_digest: Hash,
+}
+
+impl GatewayFormalTinyZ3ExternalOperatorProvenance {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-external-operator-provenance:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3ExternalOperatorExecutionObservation {
+    pub observation_id: String,
+    pub status: GatewayFormalTinyZ3ExternalOperatorObservationStatus,
+    pub operator_declared_process_executed: bool,
+    pub operator_declared_backend_executed: bool,
+    pub local_process_executed: bool,
+    pub local_backend_executed: bool,
+    pub stdout_summary_digest: Hash,
+    pub stderr_summary_digest: Hash,
+    pub elapsed_ms: u64,
+    pub raw_stdout_retained: bool,
+    pub raw_stderr_retained: bool,
+    pub raw_provider_response_retained: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub production_deployment_evidence_created: bool,
+}
+
+impl GatewayFormalTinyZ3ExternalOperatorExecutionObservation {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-external-operator-execution-observation:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3ExternalOperatorCapturedArtifactReference {
+    pub role: String,
+    pub relative_path: String,
+    pub digest: Hash,
+    pub byte_len: u64,
+    pub redacted: bool,
+    pub retains_raw_content: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3ExternalOperatorCapturedArtifactIndex {
+    pub index_id: String,
+    pub artifacts: Vec<GatewayFormalTinyZ3ExternalOperatorCapturedArtifactReference>,
+}
+
+impl GatewayFormalTinyZ3ExternalOperatorCapturedArtifactIndex {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-external-operator-captured-artifact-index:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3ExternalOperatorCaptureRedactionReport {
+    pub report_id: String,
+    pub no_secrets_detected: bool,
+    pub no_credentials_detected: bool,
+    pub no_raw_provider_responses_retained: bool,
+    pub no_raw_stdout_retained: bool,
+    pub no_raw_stderr_retained: bool,
+    pub no_undeclared_files_retained: bool,
+    pub no_accepted_evidence_artifacts_retained: bool,
+    pub no_level2_artifacts_retained: bool,
+    pub no_score_axis_artifacts_retained: bool,
+    pub no_proof_artifacts_retained: bool,
+    pub no_checker_transcripts_retained: bool,
+    pub no_solver_certificates_retained: bool,
+    pub no_benchmark_artifacts_retained: bool,
+    pub no_production_deployment_artifacts_retained: bool,
+}
+
+impl GatewayFormalTinyZ3ExternalOperatorCaptureRedactionReport {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-external-operator-capture-redaction-report:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3ExternalOperatorCaptureNonpromotionReport {
+    pub schema_version: String,
+    pub state_slice: String,
+    pub phase557_handoff_packet_manifest_digest: Hash,
+    pub provenance_digest: Hash,
+    pub execution_observation_digest: Hash,
+    pub artifact_index_digest: Hash,
+    pub redaction_report_digest: Hash,
+    pub output_claim_boundary: String,
+    pub local_process_execution_performed: bool,
+    pub local_backend_execution_performed: bool,
+    pub external_result_import_created: bool,
+    pub independent_external_reproduction_accepted: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3ExternalOperatorCaptureNonpromotionReport {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-external-operator-capture-nonpromotion-report:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3ExternalOperatorCaptureOutputManifest {
+    pub schema_version: String,
+    pub capture_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub phase557_handoff_packet_manifest_digest: Hash,
+    pub phase557_readback_validation_digest: Hash,
+    pub phase557_nonpromotion_report_digest: Hash,
+    pub phase557_phase555_handoff_digest: Hash,
+    pub phase555_manual_handoff_bundle_digest: Hash,
+    pub phase555_manual_handoff_validation_digest: Hash,
+    pub phase555_manual_handoff_validation_valid: bool,
+    pub phase555_manual_handoff_validation_issue_count: usize,
+    pub phase553_import_review_digest: Hash,
+    pub phase551_import_candidate_digest: Hash,
+    pub phase549_external_reproduction_digest: Hash,
+    pub phase547_level2_eligibility_digest: Hash,
+    pub phase545_score_axis_eligibility_digest: Hash,
+    pub phase543_package_digest: Hash,
+    pub phase541_materialized_ledger_artifact_digest: Hash,
+    pub phase535_owner_decision_digest: Hash,
+    pub phase533_review_digest: Hash,
+    pub phase531_package_digest: Hash,
+    pub phase529_result_digest: Hash,
+    pub phase527_candidate_digest: Hash,
+    pub operator_provenance_digest: Hash,
+    pub execution_observation_digest: Hash,
+    pub captured_artifact_index_digest: Hash,
+    pub redaction_report_digest: Hash,
+    pub declared_namespace: String,
+    pub declared_files: Vec<String>,
+    pub declared_sidecars: Vec<String>,
+    pub declared_file_digests: BTreeMap<String, Hash>,
+    pub readback_validation_digest: Hash,
+    pub nonpromotion_report_digest: Hash,
+    pub claim_boundary: String,
+    pub operator_execution_observation_captured: bool,
+    pub local_process_execution_performed: bool,
+    pub local_backend_execution_performed: bool,
+    pub external_result_import_created: bool,
+    pub independent_external_reproduction_accepted: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3ExternalOperatorCaptureOutputManifest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-external-operator-capture-output-manifest:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayFormalTinyZ3ExternalOperatorCaptureOutputError {
+    EmptyCaptureId,
+    InvalidCaptureId,
+    InvalidPhase557Manifest,
+    InvalidOperatorProvenance,
+    InvalidExecutionObservation,
+    InvalidCapturedArtifactIndex,
+    InvalidRedactionReport,
+    ManifestSemanticMismatch,
+    NonpromotionMismatch,
     EmptyOutputRoot,
     ProtectedOutputRoot,
     OutputRootExistsWithoutOverwrite,
@@ -78716,6 +79007,986 @@ fn gateway_formal_tiny_z3_backend_execution_handoff_packet_serde_error(
     GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::Serialization(error.to_string())
 }
 
+pub fn gateway_formal_tiny_z3_external_operator_capture_declared_files() -> Vec<String> {
+    GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_DECLARED_FILES
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
+pub fn gateway_formal_tiny_z3_external_operator_capture_declared_sidecars() -> Vec<String> {
+    GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_DECLARED_SIDECARS
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
+pub fn gateway_formal_tiny_z3_external_operator_capture_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_z3_external_operator_capture_nonpromotion_report(
+    phase557_manifest: &GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputManifest,
+    provenance: &GatewayFormalTinyZ3ExternalOperatorProvenance,
+    observation: &GatewayFormalTinyZ3ExternalOperatorExecutionObservation,
+    artifact_index: &GatewayFormalTinyZ3ExternalOperatorCapturedArtifactIndex,
+    redaction_report: &GatewayFormalTinyZ3ExternalOperatorCaptureRedactionReport,
+) -> GatewayFormalTinyZ3ExternalOperatorCaptureNonpromotionReport {
+    GatewayFormalTinyZ3ExternalOperatorCaptureNonpromotionReport {
+        schema_version: GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_SCHEMA_VERSION.to_owned(),
+        state_slice: GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_STATE_SLICE.to_owned(),
+        phase557_handoff_packet_manifest_digest: phase557_manifest.digest(),
+        provenance_digest: provenance.digest(),
+        execution_observation_digest: observation.digest(),
+        artifact_index_digest: artifact_index.digest(),
+        redaction_report_digest: redaction_report.digest(),
+        output_claim_boundary: gateway_formal_tiny_z3_external_operator_capture_claim_boundary(),
+        local_process_execution_performed: false,
+        local_backend_execution_performed: false,
+        external_result_import_created: false,
+        independent_external_reproduction_accepted: false,
+        accepted_formal_evidence_created: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        lean_execution_evidence_created: false,
+        additional_smt_z3_execution_created: false,
+        cobalt_execution_evidence_created: false,
+        rust_to_lean_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        external_audit_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    }
+}
+
+pub fn materialize_gateway_formal_tiny_z3_external_operator_capture_output_bundle(
+    output_root: &Path,
+    phase557_manifest: &GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputManifest,
+    provenance: &GatewayFormalTinyZ3ExternalOperatorProvenance,
+    observation: &GatewayFormalTinyZ3ExternalOperatorExecutionObservation,
+    artifact_index: &GatewayFormalTinyZ3ExternalOperatorCapturedArtifactIndex,
+    redaction_report: &GatewayFormalTinyZ3ExternalOperatorCaptureRedactionReport,
+    request: &GatewayFormalTinyZ3ExternalOperatorCaptureOutputRequest,
+) -> Result<
+    GatewayFormalTinyZ3ExternalOperatorCaptureOutputManifest,
+    GatewayFormalTinyZ3ExternalOperatorCaptureOutputError,
+> {
+    validate_gateway_formal_tiny_z3_external_operator_capture_output_request(
+        output_root,
+        phase557_manifest,
+        provenance,
+        observation,
+        artifact_index,
+        redaction_report,
+        request,
+    )?;
+    let staging_root = gateway_formal_tiny_z3_external_operator_capture_staging_root_for(
+        output_root,
+        &request.capture_id,
+    )?;
+    if staging_root.exists() {
+        remove_gateway_formal_tiny_z3_external_operator_capture_dir_all_checked(&staging_root)?;
+    }
+    fs::create_dir_all(
+        staging_root.join(GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_NAMESPACE),
+    )
+    .map_err(gateway_formal_tiny_z3_external_operator_capture_io_error)?;
+
+    let files = build_gateway_formal_tiny_z3_external_operator_capture_bundle_files(
+        phase557_manifest,
+        provenance,
+        observation,
+        artifact_index,
+        redaction_report,
+        request,
+    )?;
+    for (logical_path, bytes) in &files {
+        let target = staging_root.join(logical_path);
+        if let Some(parent) = target.parent() {
+            fs::create_dir_all(parent)
+                .map_err(gateway_formal_tiny_z3_external_operator_capture_io_error)?;
+        }
+        fs::write(&target, bytes)
+            .map_err(gateway_formal_tiny_z3_external_operator_capture_io_error)?;
+        fs::write(
+            sidecar_path(&target),
+            hash_hex(hash_bytes(bytes)).into_bytes(),
+        )
+        .map_err(gateway_formal_tiny_z3_external_operator_capture_io_error)?;
+    }
+
+    if output_root.exists() {
+        if !request.overwrite {
+            remove_gateway_formal_tiny_z3_external_operator_capture_dir_all_checked(&staging_root)?;
+            return Err(
+                GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::OutputRootExistsWithoutOverwrite,
+            );
+        }
+        remove_gateway_formal_tiny_z3_external_operator_capture_dir_all_checked(output_root)?;
+    }
+    fs::rename(&staging_root, output_root)
+        .map_err(gateway_formal_tiny_z3_external_operator_capture_io_error)?;
+    read_gateway_formal_tiny_z3_external_operator_capture_output_bundle(output_root)
+}
+
+pub fn read_gateway_formal_tiny_z3_external_operator_capture_output_bundle(
+    output_root: &Path,
+) -> Result<
+    GatewayFormalTinyZ3ExternalOperatorCaptureOutputManifest,
+    GatewayFormalTinyZ3ExternalOperatorCaptureOutputError,
+> {
+    let output_metadata = fs::symlink_metadata(output_root)
+        .map_err(gateway_formal_tiny_z3_external_operator_capture_io_error)?;
+    if output_metadata.file_type().is_symlink() {
+        return Err(GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::OutputRootIsSymlink);
+    }
+    if !output_metadata.is_dir() {
+        return Err(GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::OutputRootIsFile);
+    }
+    let bundle_dir = output_root.join(GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_NAMESPACE);
+    let bundle_metadata = fs::symlink_metadata(&bundle_dir)
+        .map_err(gateway_formal_tiny_z3_external_operator_capture_io_error)?;
+    if bundle_metadata.file_type().is_symlink() {
+        return Err(
+            GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::BundleFileIsSymlink(
+                GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_NAMESPACE.to_owned(),
+            ),
+        );
+    }
+    if !bundle_metadata.is_dir() {
+        return Err(
+            GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::DeclaredFileTypeMismatch(
+                GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_NAMESPACE.to_owned(),
+            ),
+        );
+    }
+
+    reject_undeclared_gateway_formal_tiny_z3_external_operator_capture_files(output_root)?;
+    let mut files = BTreeMap::new();
+    for logical_path in GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_DECLARED_FILES {
+        let path = output_root.join(logical_path);
+        let metadata = fs::symlink_metadata(&path)
+            .map_err(gateway_formal_tiny_z3_external_operator_capture_io_error)?;
+        if metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::BundleFileIsSymlink(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        if !metadata.is_file() {
+            return Err(
+                GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::DeclaredFileTypeMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        let sidecar = sidecar_path(&path);
+        let sidecar_metadata = fs::symlink_metadata(&sidecar)
+            .map_err(gateway_formal_tiny_z3_external_operator_capture_io_error)?;
+        if sidecar_metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::BundleFileIsSymlink(
+                    format!("{logical_path}.sha256"),
+                ),
+            );
+        }
+        if !sidecar_metadata.is_file() {
+            return Err(
+                GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::DeclaredFileTypeMismatch(
+                    format!("{logical_path}.sha256"),
+                ),
+            );
+        }
+        let bytes =
+            fs::read(&path).map_err(gateway_formal_tiny_z3_external_operator_capture_io_error)?;
+        let expected_hash = fs::read_to_string(&sidecar)
+            .map_err(gateway_formal_tiny_z3_external_operator_capture_io_error)?;
+        if expected_hash.trim() != hash_hex(hash_bytes(&bytes)) {
+            return Err(
+                GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::DigestMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        files.insert((*logical_path).to_owned(), bytes);
+    }
+    validate_gateway_formal_tiny_z3_external_operator_capture_bundle_semantics(&files)
+}
+
+fn validate_gateway_formal_tiny_z3_external_operator_capture_output_request(
+    output_root: &Path,
+    phase557_manifest: &GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputManifest,
+    provenance: &GatewayFormalTinyZ3ExternalOperatorProvenance,
+    observation: &GatewayFormalTinyZ3ExternalOperatorExecutionObservation,
+    artifact_index: &GatewayFormalTinyZ3ExternalOperatorCapturedArtifactIndex,
+    redaction_report: &GatewayFormalTinyZ3ExternalOperatorCaptureRedactionReport,
+    request: &GatewayFormalTinyZ3ExternalOperatorCaptureOutputRequest,
+) -> Result<(), GatewayFormalTinyZ3ExternalOperatorCaptureOutputError> {
+    if request.capture_id.trim().is_empty() {
+        return Err(GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::EmptyCaptureId);
+    }
+    if !is_single_segment_id(&request.capture_id) {
+        return Err(GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::InvalidCaptureId);
+    }
+    validate_gateway_formal_tiny_z3_external_operator_capture_phase557_manifest(phase557_manifest)?;
+    validate_gateway_formal_tiny_z3_external_operator_provenance(provenance)?;
+    validate_gateway_formal_tiny_z3_external_operator_observation(observation)?;
+    validate_gateway_formal_tiny_z3_external_operator_artifact_index(
+        artifact_index,
+        &request.capture_id,
+    )?;
+    validate_gateway_formal_tiny_z3_external_operator_redaction_report(redaction_report)?;
+    validate_gateway_formal_tiny_z3_external_operator_capture_output_root(
+        output_root,
+        &request.protected_roots,
+        request.overwrite,
+    )
+}
+
+fn build_gateway_formal_tiny_z3_external_operator_capture_bundle_files(
+    phase557_manifest: &GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputManifest,
+    provenance: &GatewayFormalTinyZ3ExternalOperatorProvenance,
+    observation: &GatewayFormalTinyZ3ExternalOperatorExecutionObservation,
+    artifact_index: &GatewayFormalTinyZ3ExternalOperatorCapturedArtifactIndex,
+    redaction_report: &GatewayFormalTinyZ3ExternalOperatorCaptureRedactionReport,
+    request: &GatewayFormalTinyZ3ExternalOperatorCaptureOutputRequest,
+) -> Result<BTreeMap<String, Vec<u8>>, GatewayFormalTinyZ3ExternalOperatorCaptureOutputError> {
+    let nonpromotion = gateway_formal_tiny_z3_external_operator_capture_nonpromotion_report(
+        phase557_manifest,
+        provenance,
+        observation,
+        artifact_index,
+        redaction_report,
+    );
+    let mut files = BTreeMap::from([
+        (
+            "gateway-formal-tiny-z3-independent-external-operator-result/phase557-handoff-packet-manifest.json".to_owned(),
+            serde_json::to_vec_pretty(phase557_manifest)
+                .map_err(gateway_formal_tiny_z3_external_operator_capture_serde_error)?,
+        ),
+        (
+            "gateway-formal-tiny-z3-independent-external-operator-result/operator-provenance.json".to_owned(),
+            serde_json::to_vec_pretty(provenance)
+                .map_err(gateway_formal_tiny_z3_external_operator_capture_serde_error)?,
+        ),
+        (
+            "gateway-formal-tiny-z3-independent-external-operator-result/execution-observation.json".to_owned(),
+            serde_json::to_vec_pretty(observation)
+                .map_err(gateway_formal_tiny_z3_external_operator_capture_serde_error)?,
+        ),
+        (
+            "gateway-formal-tiny-z3-independent-external-operator-result/captured-artifact-index.json".to_owned(),
+            serde_json::to_vec_pretty(artifact_index)
+                .map_err(gateway_formal_tiny_z3_external_operator_capture_serde_error)?,
+        ),
+        (
+            "gateway-formal-tiny-z3-independent-external-operator-result/redaction-report.json".to_owned(),
+            serde_json::to_vec_pretty(redaction_report)
+                .map_err(gateway_formal_tiny_z3_external_operator_capture_serde_error)?,
+        ),
+        (
+            "gateway-formal-tiny-z3-independent-external-operator-result/nonpromotion-report.json".to_owned(),
+            serde_json::to_vec_pretty(&nonpromotion)
+                .map_err(gateway_formal_tiny_z3_external_operator_capture_serde_error)?,
+        ),
+    ]);
+    let core_file_digests: BTreeMap<String, Hash> = files
+        .iter()
+        .map(|(path, bytes)| (path.clone(), hash_bytes(bytes)))
+        .collect();
+    files.insert(
+        "gateway-formal-tiny-z3-independent-external-operator-result/digests.json".to_owned(),
+        serde_json::to_vec_pretty(&core_file_digests)
+            .map_err(gateway_formal_tiny_z3_external_operator_capture_serde_error)?,
+    );
+    let declared_file_digests = files
+        .iter()
+        .map(|(path, bytes)| (path.clone(), hash_bytes(bytes)))
+        .collect();
+    let readback_validation_digest =
+        gateway_formal_tiny_z3_external_operator_capture_readback_validation_digest(
+            phase557_manifest,
+            provenance,
+            observation,
+            artifact_index,
+            redaction_report,
+            &nonpromotion,
+            &core_file_digests,
+        );
+    let manifest = GatewayFormalTinyZ3ExternalOperatorCaptureOutputManifest {
+        schema_version: GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_SCHEMA_VERSION.to_owned(),
+        capture_id: request.capture_id.clone(),
+        state_slice: GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_STATE_SLICE.to_owned(),
+        created_at_unix: request.created_at_unix,
+        phase557_handoff_packet_manifest_digest: phase557_manifest.digest(),
+        phase557_readback_validation_digest: phase557_manifest.readback_validation_digest,
+        phase557_nonpromotion_report_digest: phase557_manifest.nonpromotion_report_digest,
+        phase557_phase555_handoff_digest: phase557_manifest.phase555_handoff_digest,
+        phase555_manual_handoff_bundle_digest: phase557_manifest
+            .phase555_manual_handoff_bundle_digest,
+        phase555_manual_handoff_validation_digest: phase557_manifest
+            .phase555_manual_handoff_validation_digest,
+        phase555_manual_handoff_validation_valid: phase557_manifest
+            .phase555_manual_handoff_validation_valid,
+        phase555_manual_handoff_validation_issue_count: phase557_manifest
+            .phase555_manual_handoff_validation_issue_count,
+        phase553_import_review_digest: phase557_manifest.phase553_import_review_digest,
+        phase551_import_candidate_digest: phase557_manifest.phase551_import_candidate_digest,
+        phase549_external_reproduction_digest: phase557_manifest
+            .phase549_external_reproduction_digest,
+        phase547_level2_eligibility_digest: phase557_manifest.phase547_level2_eligibility_digest,
+        phase545_score_axis_eligibility_digest: phase557_manifest
+            .phase545_score_axis_eligibility_digest,
+        phase543_package_digest: phase557_manifest.phase543_package_digest,
+        phase541_materialized_ledger_artifact_digest: phase557_manifest
+            .phase541_materialized_ledger_artifact_digest,
+        phase535_owner_decision_digest: phase557_manifest.phase535_owner_decision_digest,
+        phase533_review_digest: phase557_manifest.phase533_review_digest,
+        phase531_package_digest: phase557_manifest.phase531_package_digest,
+        phase529_result_digest: phase557_manifest.phase529_result_digest,
+        phase527_candidate_digest: phase557_manifest.phase527_candidate_digest,
+        operator_provenance_digest: provenance.digest(),
+        execution_observation_digest: observation.digest(),
+        captured_artifact_index_digest: artifact_index.digest(),
+        redaction_report_digest: redaction_report.digest(),
+        declared_namespace: GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_NAMESPACE.to_owned(),
+        declared_files: gateway_formal_tiny_z3_external_operator_capture_declared_files(),
+        declared_sidecars: gateway_formal_tiny_z3_external_operator_capture_declared_sidecars(),
+        declared_file_digests,
+        readback_validation_digest,
+        nonpromotion_report_digest: nonpromotion.digest(),
+        claim_boundary: gateway_formal_tiny_z3_external_operator_capture_claim_boundary(),
+        operator_execution_observation_captured: true,
+        local_process_execution_performed: false,
+        local_backend_execution_performed: false,
+        external_result_import_created: false,
+        independent_external_reproduction_accepted: false,
+        accepted_formal_evidence_created: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        lean_execution_evidence_created: false,
+        additional_smt_z3_execution_created: false,
+        cobalt_execution_evidence_created: false,
+        rust_to_lean_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        external_audit_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    };
+    files.insert(
+        "gateway-formal-tiny-z3-independent-external-operator-result/manifest.json".to_owned(),
+        serde_json::to_vec_pretty(&manifest)
+            .map_err(gateway_formal_tiny_z3_external_operator_capture_serde_error)?,
+    );
+    Ok(files)
+}
+
+fn validate_gateway_formal_tiny_z3_external_operator_capture_bundle_semantics(
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<
+    GatewayFormalTinyZ3ExternalOperatorCaptureOutputManifest,
+    GatewayFormalTinyZ3ExternalOperatorCaptureOutputError,
+> {
+    let manifest: GatewayFormalTinyZ3ExternalOperatorCaptureOutputManifest =
+        parse_gateway_formal_tiny_z3_external_operator_capture_declared_json(
+            files,
+            "gateway-formal-tiny-z3-independent-external-operator-result/manifest.json",
+        )?;
+    let phase557_manifest: GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputManifest =
+        parse_gateway_formal_tiny_z3_external_operator_capture_declared_json(
+            files,
+            "gateway-formal-tiny-z3-independent-external-operator-result/phase557-handoff-packet-manifest.json",
+        )?;
+    let provenance: GatewayFormalTinyZ3ExternalOperatorProvenance =
+        parse_gateway_formal_tiny_z3_external_operator_capture_declared_json(
+            files,
+            "gateway-formal-tiny-z3-independent-external-operator-result/operator-provenance.json",
+        )?;
+    let observation: GatewayFormalTinyZ3ExternalOperatorExecutionObservation =
+        parse_gateway_formal_tiny_z3_external_operator_capture_declared_json(
+            files,
+            "gateway-formal-tiny-z3-independent-external-operator-result/execution-observation.json",
+        )?;
+    let artifact_index: GatewayFormalTinyZ3ExternalOperatorCapturedArtifactIndex =
+        parse_gateway_formal_tiny_z3_external_operator_capture_declared_json(
+            files,
+            "gateway-formal-tiny-z3-independent-external-operator-result/captured-artifact-index.json",
+        )?;
+    let redaction_report: GatewayFormalTinyZ3ExternalOperatorCaptureRedactionReport =
+        parse_gateway_formal_tiny_z3_external_operator_capture_declared_json(
+            files,
+            "gateway-formal-tiny-z3-independent-external-operator-result/redaction-report.json",
+        )?;
+    let nonpromotion: GatewayFormalTinyZ3ExternalOperatorCaptureNonpromotionReport =
+        parse_gateway_formal_tiny_z3_external_operator_capture_declared_json(
+            files,
+            "gateway-formal-tiny-z3-independent-external-operator-result/nonpromotion-report.json",
+        )?;
+    let core_file_digests: BTreeMap<String, Hash> =
+        parse_gateway_formal_tiny_z3_external_operator_capture_declared_json(
+            files,
+            "gateway-formal-tiny-z3-independent-external-operator-result/digests.json",
+        )?;
+    validate_gateway_formal_tiny_z3_external_operator_capture_readback_manifest(
+        &manifest,
+        &phase557_manifest,
+        &provenance,
+        &observation,
+        &artifact_index,
+        &redaction_report,
+        &nonpromotion,
+        &core_file_digests,
+        files,
+    )?;
+    Ok(manifest)
+}
+
+fn validate_gateway_formal_tiny_z3_external_operator_capture_readback_manifest(
+    manifest: &GatewayFormalTinyZ3ExternalOperatorCaptureOutputManifest,
+    phase557_manifest: &GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputManifest,
+    provenance: &GatewayFormalTinyZ3ExternalOperatorProvenance,
+    observation: &GatewayFormalTinyZ3ExternalOperatorExecutionObservation,
+    artifact_index: &GatewayFormalTinyZ3ExternalOperatorCapturedArtifactIndex,
+    redaction_report: &GatewayFormalTinyZ3ExternalOperatorCaptureRedactionReport,
+    nonpromotion: &GatewayFormalTinyZ3ExternalOperatorCaptureNonpromotionReport,
+    core_file_digests: &BTreeMap<String, Hash>,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<(), GatewayFormalTinyZ3ExternalOperatorCaptureOutputError> {
+    validate_gateway_formal_tiny_z3_external_operator_capture_phase557_manifest(phase557_manifest)?;
+    validate_gateway_formal_tiny_z3_external_operator_provenance(provenance)?;
+    validate_gateway_formal_tiny_z3_external_operator_observation(observation)?;
+    validate_gateway_formal_tiny_z3_external_operator_artifact_index(
+        artifact_index,
+        &manifest.capture_id,
+    )?;
+    validate_gateway_formal_tiny_z3_external_operator_redaction_report(redaction_report)?;
+    let expected_nonpromotion =
+        gateway_formal_tiny_z3_external_operator_capture_nonpromotion_report(
+            phase557_manifest,
+            provenance,
+            observation,
+            artifact_index,
+            redaction_report,
+        );
+    if nonpromotion != &expected_nonpromotion {
+        return Err(GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::NonpromotionMismatch);
+    }
+    let expected_core_paths: BTreeSet<String> = [
+        "gateway-formal-tiny-z3-independent-external-operator-result/phase557-handoff-packet-manifest.json",
+        "gateway-formal-tiny-z3-independent-external-operator-result/operator-provenance.json",
+        "gateway-formal-tiny-z3-independent-external-operator-result/execution-observation.json",
+        "gateway-formal-tiny-z3-independent-external-operator-result/captured-artifact-index.json",
+        "gateway-formal-tiny-z3-independent-external-operator-result/redaction-report.json",
+        "gateway-formal-tiny-z3-independent-external-operator-result/nonpromotion-report.json",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect();
+    if core_file_digests.keys().cloned().collect::<BTreeSet<_>>() != expected_core_paths {
+        return Err(
+            GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::ManifestSemanticMismatch,
+        );
+    }
+    for (logical_path, expected_digest) in core_file_digests {
+        if hash_bytes(
+            declared_gateway_formal_tiny_z3_external_operator_capture_bytes(files, logical_path)?,
+        ) != *expected_digest
+        {
+            return Err(
+                GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::ManifestSemanticMismatch,
+            );
+        }
+    }
+    let expected_digest_paths: BTreeSet<String> =
+        GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_DECLARED_FILES
+            .iter()
+            .filter(|path| {
+                **path
+                    != "gateway-formal-tiny-z3-independent-external-operator-result/manifest.json"
+            })
+            .map(|path| (*path).to_owned())
+            .collect();
+    if manifest
+        .declared_file_digests
+        .keys()
+        .cloned()
+        .collect::<BTreeSet<_>>()
+        != expected_digest_paths
+    {
+        return Err(
+            GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::ManifestSemanticMismatch,
+        );
+    }
+    for (logical_path, expected_digest) in &manifest.declared_file_digests {
+        if hash_bytes(
+            declared_gateway_formal_tiny_z3_external_operator_capture_bytes(files, logical_path)?,
+        ) != *expected_digest
+        {
+            return Err(
+                GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::ManifestSemanticMismatch,
+            );
+        }
+    }
+    if manifest.schema_version != GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_SCHEMA_VERSION
+        || manifest.state_slice != GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_STATE_SLICE
+        || !is_single_segment_id(&manifest.capture_id)
+        || manifest.phase557_handoff_packet_manifest_digest != phase557_manifest.digest()
+        || manifest.phase557_readback_validation_digest
+            != phase557_manifest.readback_validation_digest
+        || manifest.phase557_nonpromotion_report_digest
+            != phase557_manifest.nonpromotion_report_digest
+        || manifest.phase557_phase555_handoff_digest != phase557_manifest.phase555_handoff_digest
+        || manifest.phase555_manual_handoff_bundle_digest
+            != phase557_manifest.phase555_manual_handoff_bundle_digest
+        || manifest.phase555_manual_handoff_validation_digest
+            != phase557_manifest.phase555_manual_handoff_validation_digest
+        || manifest.phase555_manual_handoff_validation_valid
+            != phase557_manifest.phase555_manual_handoff_validation_valid
+        || manifest.phase555_manual_handoff_validation_issue_count
+            != phase557_manifest.phase555_manual_handoff_validation_issue_count
+        || manifest.phase553_import_review_digest != phase557_manifest.phase553_import_review_digest
+        || manifest.phase551_import_candidate_digest
+            != phase557_manifest.phase551_import_candidate_digest
+        || manifest.phase549_external_reproduction_digest
+            != phase557_manifest.phase549_external_reproduction_digest
+        || manifest.phase547_level2_eligibility_digest
+            != phase557_manifest.phase547_level2_eligibility_digest
+        || manifest.phase545_score_axis_eligibility_digest
+            != phase557_manifest.phase545_score_axis_eligibility_digest
+        || manifest.phase543_package_digest != phase557_manifest.phase543_package_digest
+        || manifest.phase541_materialized_ledger_artifact_digest
+            != phase557_manifest.phase541_materialized_ledger_artifact_digest
+        || manifest.phase535_owner_decision_digest
+            != phase557_manifest.phase535_owner_decision_digest
+        || manifest.phase533_review_digest != phase557_manifest.phase533_review_digest
+        || manifest.phase531_package_digest != phase557_manifest.phase531_package_digest
+        || manifest.phase529_result_digest != phase557_manifest.phase529_result_digest
+        || manifest.phase527_candidate_digest != phase557_manifest.phase527_candidate_digest
+        || manifest.operator_provenance_digest != provenance.digest()
+        || manifest.execution_observation_digest != observation.digest()
+        || manifest.captured_artifact_index_digest != artifact_index.digest()
+        || manifest.redaction_report_digest != redaction_report.digest()
+        || manifest.declared_namespace != GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_NAMESPACE
+        || manifest.declared_files
+            != gateway_formal_tiny_z3_external_operator_capture_declared_files()
+        || manifest.declared_sidecars
+            != gateway_formal_tiny_z3_external_operator_capture_declared_sidecars()
+        || manifest.readback_validation_digest
+            != gateway_formal_tiny_z3_external_operator_capture_readback_validation_digest(
+                phase557_manifest,
+                provenance,
+                observation,
+                artifact_index,
+                redaction_report,
+                nonpromotion,
+                core_file_digests,
+            )
+        || manifest.nonpromotion_report_digest != nonpromotion.digest()
+        || manifest.claim_boundary
+            != gateway_formal_tiny_z3_external_operator_capture_claim_boundary()
+        || !manifest.operator_execution_observation_captured
+        || manifest.local_process_execution_performed
+        || manifest.local_backend_execution_performed
+        || manifest.external_result_import_created
+        || manifest.independent_external_reproduction_accepted
+        || manifest.accepted_formal_evidence_created
+        || manifest.creates_level2_evidence
+        || manifest.populates_score_axes
+        || manifest.proof_artifact_created
+        || manifest.checker_transcript_created
+        || manifest.solver_certificate_created
+        || manifest.lean_execution_evidence_created
+        || manifest.additional_smt_z3_execution_created
+        || manifest.cobalt_execution_evidence_created
+        || manifest.rust_to_lean_execution_evidence_created
+        || manifest.benchmark_evidence_created
+        || manifest.external_audit_evidence_created
+        || manifest.semantic_correctness_claimed
+        || manifest.production_readiness_claimed
+        || manifest.sota_claimed
+        || manifest.breakthrough_claimed
+        || manifest.full_security_claimed
+        || manifest.grants_authority
+    {
+        return Err(
+            GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::ManifestSemanticMismatch,
+        );
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_z3_external_operator_capture_phase557_manifest(
+    manifest: &GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputManifest,
+) -> Result<(), GatewayFormalTinyZ3ExternalOperatorCaptureOutputError> {
+    if manifest.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_HANDOFF_PACKET_OUTPUT_SCHEMA_VERSION
+        || manifest.state_slice
+            != GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_HANDOFF_PACKET_OUTPUT_STATE_SLICE
+        || manifest.claim_boundary
+            != gateway_formal_tiny_z3_backend_execution_handoff_packet_claim_boundary()
+        || manifest.phase555_classification
+            != GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffClassification::IndependentExternalReproductionHandoffDeclaredNoRun
+        || !manifest.phase555_manual_handoff_validation_valid
+        || manifest.phase555_manual_handoff_validation_issue_count != 0
+        || manifest.declared_namespace != GATEWAY_FORMAL_TINY_Z3_HANDOFF_PACKET_NAMESPACE
+        || manifest.declared_files
+            != gateway_formal_tiny_z3_backend_execution_handoff_packet_declared_files()
+        || manifest.declared_sidecars
+            != gateway_formal_tiny_z3_backend_execution_handoff_packet_declared_sidecars()
+        || manifest.process_execution_performed
+        || manifest.backend_execution_performed
+        || manifest.external_replay_performed
+        || manifest.external_result_import_created
+        || manifest.independent_external_reproduction_created
+        || manifest.accepted_formal_evidence_created
+        || manifest.creates_level2_evidence
+        || manifest.populates_score_axes
+        || manifest.proof_artifact_created
+        || manifest.checker_transcript_created
+        || manifest.solver_certificate_created
+        || manifest.lean_execution_evidence_created
+        || manifest.additional_smt_z3_execution_created
+        || manifest.cobalt_execution_evidence_created
+        || manifest.rust_to_lean_execution_evidence_created
+        || manifest.benchmark_evidence_created
+        || manifest.external_audit_evidence_created
+        || manifest.semantic_correctness_claimed
+        || manifest.production_readiness_claimed
+        || manifest.sota_claimed
+        || manifest.breakthrough_claimed
+        || manifest.full_security_claimed
+        || manifest.grants_authority
+    {
+        return Err(GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::InvalidPhase557Manifest);
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_z3_external_operator_provenance(
+    provenance: &GatewayFormalTinyZ3ExternalOperatorProvenance,
+) -> Result<(), GatewayFormalTinyZ3ExternalOperatorCaptureOutputError> {
+    if !is_single_segment_id(&provenance.provenance_id)
+        || !is_single_segment_id(&provenance.operator_id)
+        || !is_single_segment_id(&provenance.environment_id)
+        || provenance.run_started_at_unix == 0
+        || provenance.workspace_digest == Hash([0; 32])
+        || provenance.source_revision.trim().is_empty()
+        || provenance.toolchain_declaration_digest == Hash([0; 32])
+        || provenance.command_descriptor_digest == Hash([0; 32])
+        || provenance.redaction_policy_digest == Hash([0; 32])
+    {
+        return Err(
+            GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::InvalidOperatorProvenance,
+        );
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_z3_external_operator_observation(
+    observation: &GatewayFormalTinyZ3ExternalOperatorExecutionObservation,
+) -> Result<(), GatewayFormalTinyZ3ExternalOperatorCaptureOutputError> {
+    if !is_single_segment_id(&observation.observation_id)
+        || !observation.operator_declared_process_executed
+        || !observation.operator_declared_backend_executed
+        || observation.local_process_executed
+        || observation.local_backend_executed
+        || observation.stdout_summary_digest == Hash([0; 32])
+        || observation.stderr_summary_digest == Hash([0; 32])
+        || observation.elapsed_ms == 0
+        || observation.raw_stdout_retained
+        || observation.raw_stderr_retained
+        || observation.raw_provider_response_retained
+        || observation.proof_artifact_created
+        || observation.checker_transcript_created
+        || observation.solver_certificate_created
+        || observation.lean_execution_evidence_created
+        || observation.additional_smt_z3_execution_created
+        || observation.cobalt_execution_evidence_created
+        || observation.rust_to_lean_execution_evidence_created
+        || observation.benchmark_evidence_created
+        || observation.production_deployment_evidence_created
+    {
+        return Err(
+            GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::InvalidExecutionObservation,
+        );
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_z3_external_operator_artifact_index(
+    artifact_index: &GatewayFormalTinyZ3ExternalOperatorCapturedArtifactIndex,
+    capture_id: &str,
+) -> Result<(), GatewayFormalTinyZ3ExternalOperatorCaptureOutputError> {
+    if artifact_index.index_id != capture_id || artifact_index.artifacts.is_empty() {
+        return Err(
+            GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::InvalidCapturedArtifactIndex,
+        );
+    }
+    let mut roles = BTreeSet::new();
+    let mut paths = BTreeSet::new();
+    for artifact in &artifact_index.artifacts {
+        let lower_role = artifact.role.to_ascii_lowercase();
+        let lower_path = artifact.relative_path.to_ascii_lowercase();
+        if !is_single_segment_id(&artifact.role)
+            || !is_safe_relative_path(&artifact.relative_path)
+            || !roles.insert(artifact.role.clone())
+            || !paths.insert(artifact.relative_path.clone())
+            || artifact.digest == Hash([0; 32])
+            || artifact.byte_len == 0
+            || !artifact.redacted
+            || artifact.retains_raw_content
+            || gateway_formal_tiny_z3_external_operator_capture_forbidden_artifact_label(
+                &lower_role,
+            )
+            || gateway_formal_tiny_z3_external_operator_capture_forbidden_artifact_label(
+                &lower_path,
+            )
+        {
+            return Err(
+                GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::InvalidCapturedArtifactIndex,
+            );
+        }
+    }
+    Ok(())
+}
+
+fn gateway_formal_tiny_z3_external_operator_capture_forbidden_artifact_label(value: &str) -> bool {
+    [
+        "accepted",
+        "evidence",
+        "level2",
+        "score",
+        "proof",
+        "checker",
+        "solver",
+        "certificate",
+        "lean",
+        "cobalt",
+        "rust-to-lean",
+        "benchmark",
+        "production",
+        "secret",
+        "credential",
+        "stdout",
+        "stderr",
+        "provider",
+    ]
+    .iter()
+    .any(|token| value.contains(token))
+}
+
+fn validate_gateway_formal_tiny_z3_external_operator_redaction_report(
+    report: &GatewayFormalTinyZ3ExternalOperatorCaptureRedactionReport,
+) -> Result<(), GatewayFormalTinyZ3ExternalOperatorCaptureOutputError> {
+    if !is_single_segment_id(&report.report_id)
+        || !report.no_secrets_detected
+        || !report.no_credentials_detected
+        || !report.no_raw_provider_responses_retained
+        || !report.no_raw_stdout_retained
+        || !report.no_raw_stderr_retained
+        || !report.no_undeclared_files_retained
+        || !report.no_accepted_evidence_artifacts_retained
+        || !report.no_level2_artifacts_retained
+        || !report.no_score_axis_artifacts_retained
+        || !report.no_proof_artifacts_retained
+        || !report.no_checker_transcripts_retained
+        || !report.no_solver_certificates_retained
+        || !report.no_benchmark_artifacts_retained
+        || !report.no_production_deployment_artifacts_retained
+    {
+        return Err(GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::InvalidRedactionReport);
+    }
+    Ok(())
+}
+
+fn gateway_formal_tiny_z3_external_operator_capture_readback_validation_digest(
+    phase557_manifest: &GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputManifest,
+    provenance: &GatewayFormalTinyZ3ExternalOperatorProvenance,
+    observation: &GatewayFormalTinyZ3ExternalOperatorExecutionObservation,
+    artifact_index: &GatewayFormalTinyZ3ExternalOperatorCapturedArtifactIndex,
+    redaction_report: &GatewayFormalTinyZ3ExternalOperatorCaptureRedactionReport,
+    nonpromotion: &GatewayFormalTinyZ3ExternalOperatorCaptureNonpromotionReport,
+    core_file_digests: &BTreeMap<String, Hash>,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-external-operator-capture-readback-validation:v1",
+        &(
+            phase557_manifest.digest(),
+            provenance.digest(),
+            observation.digest(),
+            artifact_index.digest(),
+            redaction_report.digest(),
+            nonpromotion.digest(),
+            core_file_digests,
+        ),
+    )
+}
+
+fn declared_gateway_formal_tiny_z3_external_operator_capture_bytes<'a>(
+    files: &'a BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<&'a [u8], GatewayFormalTinyZ3ExternalOperatorCaptureOutputError> {
+    files.get(logical_path).map(Vec::as_slice).ok_or_else(|| {
+        GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::Io(format!(
+            "declared file missing: {logical_path}"
+        ))
+    })
+}
+
+fn parse_gateway_formal_tiny_z3_external_operator_capture_declared_json<
+    T: for<'de> Deserialize<'de> + Serialize,
+>(
+    files: &BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<T, GatewayFormalTinyZ3ExternalOperatorCaptureOutputError> {
+    let bytes =
+        declared_gateway_formal_tiny_z3_external_operator_capture_bytes(files, logical_path)?;
+    let original = parse_json_value_rejecting_duplicate_keys(bytes).map_err(|_| {
+        GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })?;
+    let parsed: T = serde_json::from_value(original.clone()).map_err(|_| {
+        GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })?;
+    let canonical = serde_json::to_value(&parsed)
+        .map_err(gateway_formal_tiny_z3_external_operator_capture_serde_error)?;
+    if canonical != original {
+        return Err(
+            GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::MalformedDeclaredFile(
+                logical_path.to_owned(),
+            ),
+        );
+    }
+    Ok(parsed)
+}
+
+fn reject_undeclared_gateway_formal_tiny_z3_external_operator_capture_files(
+    output_root: &Path,
+) -> Result<(), GatewayFormalTinyZ3ExternalOperatorCaptureOutputError> {
+    let mut declared: BTreeSet<String> =
+        GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_DECLARED_FILES
+            .iter()
+            .chain(GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_DECLARED_SIDECARS.iter())
+            .map(|value| (*value).to_owned())
+            .collect();
+    let bundle_dir = output_root.join(GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_NAMESPACE);
+    for entry in fs::read_dir(&bundle_dir)
+        .map_err(gateway_formal_tiny_z3_external_operator_capture_io_error)?
+    {
+        let entry = entry.map_err(gateway_formal_tiny_z3_external_operator_capture_io_error)?;
+        let logical_path = entry
+            .path()
+            .strip_prefix(output_root)
+            .map_err(|error| {
+                GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::Io(error.to_string())
+            })?
+            .to_string_lossy()
+            .replace('\\', "/");
+        if !declared.remove(&logical_path) {
+            return Err(
+                GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::UndeclaredFile(logical_path),
+            );
+        }
+    }
+    if let Some(missing) = declared.into_iter().next() {
+        return Err(GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::Io(
+            format!("declared file missing: {missing}"),
+        ));
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_z3_external_operator_capture_output_root(
+    output_root: &Path,
+    protected_roots: &[PathBuf],
+    overwrite: bool,
+) -> Result<(), GatewayFormalTinyZ3ExternalOperatorCaptureOutputError> {
+    match validate_output_root(output_root, protected_roots, overwrite) {
+        Ok(()) => Ok(()),
+        Err(AdmissionJournalMaterializationError::EmptyOutputRoot) => {
+            Err(GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::EmptyOutputRoot)
+        }
+        Err(AdmissionJournalMaterializationError::ProtectedOutputRoot) => {
+            Err(GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::ProtectedOutputRoot)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootExistsWithoutOverwrite) => Err(
+            GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::OutputRootExistsWithoutOverwrite,
+        ),
+        Err(AdmissionJournalMaterializationError::OutputRootIsSymlink) => {
+            Err(GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::OutputRootIsSymlink)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootIsFile) => {
+            Err(GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::OutputRootIsFile)
+        }
+        Err(AdmissionJournalMaterializationError::Io(error)) => Err(
+            GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::Io(error),
+        ),
+        Err(other) => Err(GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::Io(
+            format!("{other:?}"),
+        )),
+    }
+}
+
+fn gateway_formal_tiny_z3_external_operator_capture_staging_root_for(
+    output_root: &Path,
+    capture_id: &str,
+) -> Result<PathBuf, GatewayFormalTinyZ3ExternalOperatorCaptureOutputError> {
+    let parent = output_root
+        .parent()
+        .ok_or(GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::EmptyOutputRoot)?;
+    let name = output_root
+        .file_name()
+        .map(|value| value.to_string_lossy().into_owned())
+        .ok_or(GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::EmptyOutputRoot)?;
+    Ok(parent.join(format!(".{name}.{capture_id}.staging")))
+}
+
+fn remove_gateway_formal_tiny_z3_external_operator_capture_dir_all_checked(
+    path: &Path,
+) -> Result<(), GatewayFormalTinyZ3ExternalOperatorCaptureOutputError> {
+    if !path.exists() {
+        return Ok(());
+    }
+    if fs::symlink_metadata(path)
+        .map_err(gateway_formal_tiny_z3_external_operator_capture_io_error)?
+        .file_type()
+        .is_symlink()
+    {
+        return Err(GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::OutputRootIsSymlink);
+    }
+    fs::remove_dir_all(path).map_err(gateway_formal_tiny_z3_external_operator_capture_io_error)
+}
+
+fn gateway_formal_tiny_z3_external_operator_capture_io_error(
+    error: io::Error,
+) -> GatewayFormalTinyZ3ExternalOperatorCaptureOutputError {
+    GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::Io(error.to_string())
+}
+
+fn gateway_formal_tiny_z3_external_operator_capture_serde_error(
+    error: serde_json::Error,
+) -> GatewayFormalTinyZ3ExternalOperatorCaptureOutputError {
+    GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::Serialization(error.to_string())
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -120142,6 +121413,244 @@ mod tests {
     }
 
     #[test]
+    fn phase559_tiny_z3_external_operator_capture_output_materializes_and_reads_back() {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            phase557_manifest,
+        )) = phase559_tiny_z3_external_operator_capture_source("phase559-capture")
+        else {
+            return;
+        };
+        let capture_root = temp_output_root("phase559-capture-output");
+        let request = GatewayFormalTinyZ3ExternalOperatorCaptureOutputRequest {
+            capture_id: "phase559-capture-output".to_owned(),
+            created_at_unix: 1_800_000_559,
+            overwrite: false,
+            protected_roots: vec![temp_output_root("phase559-capture-protected")],
+        };
+        let provenance = phase559_operator_provenance("phase559-capture-output");
+        let observation = phase559_operator_observation("phase559-capture-output");
+        let artifact_index = phase559_artifact_index("phase559-capture-output");
+        let redaction_report = phase559_redaction_report("phase559-capture-output");
+        let manifest = materialize_gateway_formal_tiny_z3_external_operator_capture_output_bundle(
+            &capture_root,
+            &phase557_manifest,
+            &provenance,
+            &observation,
+            &artifact_index,
+            &redaction_report,
+            &request,
+        )
+        .expect("phase559 capture output materializes");
+
+        assert_eq!(
+            manifest.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_STATE_SLICE
+        );
+        assert_eq!(
+            manifest.phase557_handoff_packet_manifest_digest,
+            phase557_manifest.digest()
+        );
+        assert_eq!(
+            manifest.phase557_phase555_handoff_digest,
+            phase557_manifest.phase555_handoff_digest
+        );
+        assert_eq!(manifest.operator_provenance_digest, provenance.digest());
+        assert_eq!(manifest.execution_observation_digest, observation.digest());
+        assert_eq!(
+            manifest.captured_artifact_index_digest,
+            artifact_index.digest()
+        );
+        assert_eq!(manifest.redaction_report_digest, redaction_report.digest());
+        assert_eq!(
+            manifest.declared_files,
+            gateway_formal_tiny_z3_external_operator_capture_declared_files()
+        );
+        assert_eq!(
+            manifest.declared_sidecars,
+            gateway_formal_tiny_z3_external_operator_capture_declared_sidecars()
+        );
+        assert!(manifest.operator_execution_observation_captured);
+        assert!(!manifest.local_process_execution_performed);
+        assert!(!manifest.local_backend_execution_performed);
+        assert!(!manifest.external_result_import_created);
+        assert!(!manifest.independent_external_reproduction_accepted);
+        assert!(!manifest.accepted_formal_evidence_created);
+        assert!(!manifest.creates_level2_evidence);
+        assert!(!manifest.populates_score_axes);
+        assert!(!manifest.proof_artifact_created);
+        assert!(!manifest.checker_transcript_created);
+        assert!(!manifest.solver_certificate_created);
+        assert!(!manifest.lean_execution_evidence_created);
+        assert!(!manifest.additional_smt_z3_execution_created);
+        assert!(!manifest.cobalt_execution_evidence_created);
+        assert!(!manifest.rust_to_lean_execution_evidence_created);
+        assert!(!manifest.benchmark_evidence_created);
+        assert!(!manifest.external_audit_evidence_created);
+        assert!(!manifest.semantic_correctness_claimed);
+        assert!(!manifest.production_readiness_claimed);
+        assert!(!manifest.sota_claimed);
+        assert!(!manifest.breakthrough_claimed);
+        assert!(!manifest.full_security_claimed);
+        assert!(!manifest.grants_authority);
+        assert_eq!(
+            read_gateway_formal_tiny_z3_external_operator_capture_output_bundle(&capture_root),
+            Ok(manifest)
+        );
+        assert!(capture_root
+            .join(
+                "gateway-formal-tiny-z3-independent-external-operator-result/manifest.json.sha256"
+            )
+            .is_file());
+        assert!(!capture_root
+            .join("gateway-formal-tiny-z3-independent-external-operator-result/proof-artifact.json")
+            .exists());
+
+        for root in [
+            &capture_root,
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase559 capture cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase559_tiny_z3_external_operator_capture_output_rejects_drift_and_forbidden_artifact() {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            phase557_manifest,
+        )) = phase559_tiny_z3_external_operator_capture_source("phase559-capture-drift")
+        else {
+            return;
+        };
+        let capture_root = temp_output_root("phase559-capture-drift-output");
+        let request = GatewayFormalTinyZ3ExternalOperatorCaptureOutputRequest {
+            capture_id: "phase559-capture-drift-output".to_owned(),
+            created_at_unix: 1_800_000_559,
+            overwrite: false,
+            protected_roots: Vec::new(),
+        };
+        let provenance = phase559_operator_provenance("phase559-capture-drift-output");
+        let observation = phase559_operator_observation("phase559-capture-drift-output");
+        let artifact_index = phase559_artifact_index("phase559-capture-drift-output");
+        let redaction_report = phase559_redaction_report("phase559-capture-drift-output");
+        materialize_gateway_formal_tiny_z3_external_operator_capture_output_bundle(
+            &capture_root,
+            &phase557_manifest,
+            &provenance,
+            &observation,
+            &artifact_index,
+            &redaction_report,
+            &request,
+        )
+        .expect("phase559 drift fixture materializes");
+        fs::write(
+            sidecar_path(&capture_root.join(
+                "gateway-formal-tiny-z3-independent-external-operator-result/redaction-report.json",
+            )),
+            b"stale",
+        )
+        .expect("phase559 stale sidecar writes");
+        assert_eq!(
+            read_gateway_formal_tiny_z3_external_operator_capture_output_bundle(&capture_root),
+            Err(
+                GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::DigestMismatch(
+                    "gateway-formal-tiny-z3-independent-external-operator-result/redaction-report.json"
+                        .to_owned()
+                )
+            )
+        );
+
+        let mut forbidden_artifact_index =
+            phase559_artifact_index("phase559-forbidden-capture-output");
+        forbidden_artifact_index.index_id = "phase559-forbidden-capture-output".to_owned();
+        forbidden_artifact_index.artifacts[0].role = "proof_artifact".to_owned();
+        let forbidden_root = temp_output_root("phase559-forbidden-capture-output");
+        let forbidden_request = GatewayFormalTinyZ3ExternalOperatorCaptureOutputRequest {
+            capture_id: "phase559-forbidden-capture-output".to_owned(),
+            created_at_unix: 1_800_000_559,
+            overwrite: false,
+            protected_roots: Vec::new(),
+        };
+        assert_eq!(
+            materialize_gateway_formal_tiny_z3_external_operator_capture_output_bundle(
+                &forbidden_root,
+                &phase557_manifest,
+                &provenance,
+                &observation,
+                &forbidden_artifact_index,
+                &redaction_report,
+                &forbidden_request,
+            ),
+            Err(
+                GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::InvalidCapturedArtifactIndex
+            )
+        );
+
+        for root in [
+            &capture_root,
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase559 drift cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase559_tiny_z3_external_operator_capture_output_rejects_invalid_phase557_manifest() {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            mut phase557_manifest,
+        )) = phase559_tiny_z3_external_operator_capture_source("phase559-invalid-phase557")
+        else {
+            return;
+        };
+        phase557_manifest.backend_execution_performed = true;
+        let capture_root = temp_output_root("phase559-invalid-phase557-output");
+        let request = GatewayFormalTinyZ3ExternalOperatorCaptureOutputRequest {
+            capture_id: "phase559-invalid-phase557-output".to_owned(),
+            created_at_unix: 1_800_000_559,
+            overwrite: false,
+            protected_roots: Vec::new(),
+        };
+        assert_eq!(
+            materialize_gateway_formal_tiny_z3_external_operator_capture_output_bundle(
+                &capture_root,
+                &phase557_manifest,
+                &phase559_operator_provenance("phase559-invalid-phase557-output"),
+                &phase559_operator_observation("phase559-invalid-phase557-output"),
+                &phase559_artifact_index("phase559-invalid-phase557-output"),
+                &phase559_redaction_report("phase559-invalid-phase557-output"),
+                &request,
+            ),
+            Err(GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::InvalidPhase557Manifest)
+        );
+
+        for root in [
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase559 invalid cleanup succeeds");
+        }
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -130248,6 +131757,140 @@ mod tests {
         )
         .expect("phase555 source import review metadata builds");
         Some((obligation_root, phase405_output_root, output_root, review))
+    }
+
+    fn phase559_tiny_z3_external_operator_capture_source(
+        source_prefix: &str,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputManifest,
+    )> {
+        let (obligation_root, phase405_output_root, output_root, review) =
+            phase555_tiny_z3_backend_execution_external_reproduction_handoff_source(source_prefix)?;
+        let handoff_id = format!("{source_prefix}-handoff-record");
+        let handoff_input =
+            phase555_tiny_z3_backend_execution_external_reproduction_handoff_input(
+                &handoff_id,
+                &review,
+                GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffLabel::IndependentExternalReproductionHandoffRecorded,
+            );
+        let handoff = build_gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff(
+            &review,
+            &handoff_input,
+        )
+        .expect("phase559 source handoff metadata builds");
+        let manual_bundle =
+            gateway_formal_tiny_z3_backend_execution_external_reproduction_manual_handoff_bundle(
+                &review,
+                &handoff_id,
+            );
+        let packet_root = temp_output_root(&format!("{source_prefix}-packet-output"));
+        let packet_request = GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputRequest {
+            bundle_id: format!("{source_prefix}-packet-output"),
+            created_at_unix: 1_800_000_557,
+            overwrite: false,
+            protected_roots: Vec::new(),
+        };
+        let packet_manifest =
+            materialize_gateway_formal_tiny_z3_backend_execution_handoff_packet_output_bundle(
+                &packet_root,
+                &handoff,
+                &manual_bundle,
+                &packet_request,
+            )
+            .expect("phase559 source Phase 557 packet materializes");
+        Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            packet_manifest,
+        ))
+    }
+
+    fn phase559_operator_provenance(id: &str) -> GatewayFormalTinyZ3ExternalOperatorProvenance {
+        GatewayFormalTinyZ3ExternalOperatorProvenance {
+            provenance_id: format!("{id}-provenance"),
+            operator_id: "phase559-operator".to_owned(),
+            environment_id: "phase559-independent-env".to_owned(),
+            run_started_at_unix: 1_800_000_559,
+            workspace_digest: hash_tagged("phase559-test-workspace", &id),
+            source_revision: "phase559-source-revision".to_owned(),
+            toolchain_declaration_digest: hash_tagged("phase559-test-toolchain", &id),
+            command_descriptor_digest: hash_tagged("phase559-test-command", &id),
+            redaction_policy_digest: hash_tagged("phase559-test-redaction-policy", &id),
+        }
+    }
+
+    fn phase559_operator_observation(
+        id: &str,
+    ) -> GatewayFormalTinyZ3ExternalOperatorExecutionObservation {
+        GatewayFormalTinyZ3ExternalOperatorExecutionObservation {
+            observation_id: format!("{id}-observation"),
+            status: GatewayFormalTinyZ3ExternalOperatorObservationStatus::OperatorDeclaredSucceeded,
+            operator_declared_process_executed: true,
+            operator_declared_backend_executed: true,
+            local_process_executed: false,
+            local_backend_executed: false,
+            stdout_summary_digest: hash_tagged("phase559-test-stdout-summary", &id),
+            stderr_summary_digest: hash_tagged("phase559-test-stderr-summary", &id),
+            elapsed_ms: 1_337,
+            raw_stdout_retained: false,
+            raw_stderr_retained: false,
+            raw_provider_response_retained: false,
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            lean_execution_evidence_created: false,
+            additional_smt_z3_execution_created: false,
+            cobalt_execution_evidence_created: false,
+            rust_to_lean_execution_evidence_created: false,
+            benchmark_evidence_created: false,
+            production_deployment_evidence_created: false,
+        }
+    }
+
+    fn phase559_artifact_index(
+        id: &str,
+    ) -> GatewayFormalTinyZ3ExternalOperatorCapturedArtifactIndex {
+        GatewayFormalTinyZ3ExternalOperatorCapturedArtifactIndex {
+            index_id: id.to_owned(),
+            artifacts: vec![
+                GatewayFormalTinyZ3ExternalOperatorCapturedArtifactReference {
+                    role: "normalized-result-summary".to_owned(),
+                    relative_path: "capture/normalized-result-summary.json".to_owned(),
+                    digest: hash_tagged("phase559-test-artifact", &id),
+                    byte_len: 128,
+                    redacted: true,
+                    retains_raw_content: false,
+                },
+            ],
+        }
+    }
+
+    fn phase559_redaction_report(
+        id: &str,
+    ) -> GatewayFormalTinyZ3ExternalOperatorCaptureRedactionReport {
+        GatewayFormalTinyZ3ExternalOperatorCaptureRedactionReport {
+            report_id: format!("{id}-redaction"),
+            no_secrets_detected: true,
+            no_credentials_detected: true,
+            no_raw_provider_responses_retained: true,
+            no_raw_stdout_retained: true,
+            no_raw_stderr_retained: true,
+            no_undeclared_files_retained: true,
+            no_accepted_evidence_artifacts_retained: true,
+            no_level2_artifacts_retained: true,
+            no_score_axis_artifacts_retained: true,
+            no_proof_artifacts_retained: true,
+            no_checker_transcripts_retained: true,
+            no_solver_certificates_retained: true,
+            no_benchmark_artifacts_retained: true,
+            no_production_deployment_artifacts_retained: true,
+        }
     }
 
     fn phase555_tiny_z3_backend_execution_external_reproduction_handoff_input(
