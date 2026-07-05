@@ -16060,6 +16060,40 @@ score axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3
 execution, no benchmark evidence, no external audit evidence, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 571 HSAI Tiny Z3 Backend Execution Independent Operator Evidence Packet Metadata
+
+Status: complete. See
+`docs/571-hsai-tiny-z3-backend-execution-independent-operator-evidence-packet-metadata-notes.md`.
+
+Goal: implement local metadata for the Phase 570 independent-operator evidence
+packet boundary without materializing a packet or accepting evidence.
+
+Implemented: `crates/hsai-agent-admission` now has local typed metadata that
+validates one exact Phase 569 requirement metadata record, records
+`IndependentOperatorEvidencePacketMissing`, binds Phase 569 policy and
+nonpromotion digests, preserves Phase 567/565/563/561/559/557/555 digest
+bindings, records deterministic packet-role digests for operator identity,
+operator statement, environment declaration, captured-output summary,
+redaction report, replay/correspondence statement, and import ownership, and
+rejects Phase 569 drift, packet-role presence, packet materialization,
+accepted-ledger mutation, Level2, score axes, proof/checker/solver promotion,
+backend execution evidence, benchmark evidence, external audit evidence,
+strong public claims, and authority.
+
+Validation coverage: focused `hsai-agent-admission` tests cover successful
+missing-packet metadata, invalid Phase 569 state rejection, and packet-role
+digest drift plus promotion rejection. The metadata records the only valid
+current classification: `IndependentOperatorEvidencePacketMissing`.
+
+Exit criteria: HSAI can now locally carry the Phase 569
+independent-operator packet blocker into a packet metadata record. It still
+has no packet materialization, no external result import, no accepted external
+result evidence, no accepted independent external reproduction, no accepted
+formal evidence, no Level2+ evidence, no populated score axes, no
+Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution, no
+benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
