@@ -15243,6 +15243,34 @@ Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no external audit
 evidence, no independent external reproduction, and no production/SOTA/
 security/correctness claim.
 
+## Phase 543 HSAI Tiny Z3 Backend Execution Accepted Evidence Package Metadata
+
+Status: complete. See
+`docs/543-hsai-tiny-z3-backend-execution-accepted-evidence-package-metadata-notes.md`.
+
+Goal: implement local package metadata over one exact Phase 541 materialized
+accepted append metadata record.
+
+Implemented: Phase 543 adds backend-execution package input/output metadata,
+bounded package labels, issue/validation types, digest/id/label binding
+helpers, package nonclaim/cap/rule/forbidden-API/inherited-digest helpers,
+`build_...` and `validate_...` entrypoints, and tests over a Phase 541
+materialization.
+
+Validation coverage: focused tests cover successful local package metadata,
+invalid Phase 541 state rejection, and promotion rejection across package
+artifact writes, accepted formal evidence, Level2+, score axes, Lean, COBALT,
+Rust-to-Lean, additional SMT/Z3 execution, proof/checker/solver, benchmark,
+external audit, independent external reproduction, strong claims, and action
+authority.
+
+Exit criteria: HSAI now has local Level1LocalReplay package metadata for one
+reviewed local SMT/Z3 backend execution route. It still has no accepted formal
+evidence, no Level2+ evidence, no populated score axes, no Lean/COBALT/
+Rust-to-Lean execution, no benchmark evidence, no external audit evidence, no
+independent external reproduction, and no production/SOTA/security/correctness
+claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
