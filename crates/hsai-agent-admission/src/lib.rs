@@ -1082,6 +1082,11 @@ pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_PACKAGE_REVIEW_SCHEMA_VERSION
 pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_PACKAGE_REVIEW_STATE_SLICE: &str =
     "phase-533-hsai-tiny-z3-backend-execution-package-review-metadata";
 pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_PACKAGE_REVIEW_CLAIM_BOUNDARY: &str = "local tiny-Z3 backend execution package review metadata only; reviews one Phase 531 non-accepted local backend-execution package as scoped local metadata while accepted evidence, accepted formal evidence, Level2+ evidence, score-axis evidence, proof artifacts, checker transcripts, solver certificates, Lean proof, COBALT containment evidence, Rust-to-Lean extraction, benchmark evidence, semantic-correctness claims, production-readiness claims, SOTA claims, breakthrough claims, full-security claims, external-audit claims, and action authority remain blocked.";
+pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_OWNER_DECISION_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-z3-backend-execution-accepted-evidence-owner-decision:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_OWNER_DECISION_STATE_SLICE: &str =
+    "phase-535-hsai-tiny-z3-backend-execution-accepted-evidence-owner-decision-metadata";
+pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_OWNER_DECISION_CLAIM_BOUNDARY: &str = "local tiny-Z3 backend execution accepted-evidence owner-decision metadata only; records whether one Phase 533 reviewed local SMT/Z3 backend execution package remains blocked, is rejected, or may proceed to a later zkbench-core accepted-append evaluation boundary, but does not create accepted evidence, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, create proof artifacts, create checker transcripts, create solver certificates, run Lean, run another SMT/Z3 execution, run COBALT, run Rust-to-Lean extraction, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, establish independent external reproduction, or grant authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -16627,6 +16632,187 @@ pub enum GatewayFormalTinyZ3BackendExecutionPackageReviewIssue {
 pub struct GatewayFormalTinyZ3BackendExecutionPackageReviewValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyZ3BackendExecutionPackageReviewIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3BackendExecutionOwnerDecisionLabel {
+    BackendExecutionAcceptedEvidenceRouteStillBlocked,
+    BackendExecutionAcceptedEvidenceRouteRejected,
+    BackendExecutionAcceptedEvidenceRouteNeedsZkbenchCoreEvaluation,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3BackendExecutionOwnerDecisionInput {
+    pub schema_version: String,
+    pub owner_decision_id: String,
+    pub owner_policy_id: String,
+    pub owner_decision_record_id: String,
+    pub owner_decision_at_unix: u64,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub owner_decision_policy_digest: Hash,
+    pub owner_decision_rules: BTreeSet<String>,
+    pub forbidden_api_set: BTreeSet<String>,
+    pub inherited_digest_requirements: BTreeSet<String>,
+    pub accepted_evidence_owner_id: String,
+    pub local_transaction_route: String,
+    pub materialized_route: String,
+    pub accepted_evidence_class_owner_id: String,
+    pub accepted_claim_boundary_owner_id: String,
+    pub maximum_claim_boundary: String,
+    pub rejected_level2_floor: String,
+    pub decision_label: GatewayFormalTinyZ3BackendExecutionOwnerDecisionLabel,
+    pub decision_summary: String,
+    pub accepted_evidence_created: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub accepted_evidence_ledger_mutated: bool,
+    pub accepted_append_policy_changed: bool,
+    pub accepted_append_validator_called: bool,
+    pub accepted_append_mutation_called: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_evidence_created: bool,
+    pub independent_external_reproduction_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyZ3BackendExecutionOwnerDecisionInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-owner-decision-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3BackendExecutionOwnerDecision {
+    pub schema_version: String,
+    pub owner_decision_id: String,
+    pub state_slice: String,
+    pub owner_decision_input_digest: Hash,
+    pub owner_policy_id: String,
+    pub owner_decision_record_id: String,
+    pub owner_decision_at_unix: u64,
+    pub phase533_review_digest: Hash,
+    pub phase533_review_input_digest: Hash,
+    pub phase533_classification: GatewayFormalTinyZ3BackendExecutionPackageReviewClassification,
+    pub phase533_promotion_state: String,
+    pub phase531_package_digest: Hash,
+    pub phase531_package_input_digest: Hash,
+    pub phase529_result_digest: Hash,
+    pub phase529_request_digest: Hash,
+    pub phase527_candidate_digest: Hash,
+    pub phase527_candidate_input_digest: Hash,
+    pub accepted_evidence_owner_id: String,
+    pub local_transaction_route: String,
+    pub materialized_route: String,
+    pub accepted_evidence_class_owner_id: String,
+    pub accepted_claim_boundary_owner_id: String,
+    pub maximum_claim_boundary: String,
+    pub rejected_level2_floor: String,
+    pub decision_label: GatewayFormalTinyZ3BackendExecutionOwnerDecisionLabel,
+    pub owner_decision_policy_digest: Hash,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub owner_decision_rules: BTreeSet<String>,
+    pub owner_decision_rules_digest: Hash,
+    pub forbidden_api_set: BTreeSet<String>,
+    pub forbidden_api_set_digest: Hash,
+    pub inherited_digest_requirements: BTreeSet<String>,
+    pub inherited_digest_requirements_digest: Hash,
+    pub decision_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub creates_accepted_evidence: bool,
+    pub creates_accepted_formal_evidence: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub changes_accepted_append_policy: bool,
+    pub calls_accepted_append_validator: bool,
+    pub calls_accepted_append_mutation: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_evidence_created: bool,
+    pub independent_external_reproduction_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3BackendExecutionOwnerDecision {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-owner-decision:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue {
+    InvalidSchemaVersion,
+    InvalidOwnerDecisionId,
+    InvalidOwnerPolicyId,
+    InvalidOwnerDecisionRecordId,
+    MissingOwnerDecisionTimestamp,
+    MissingDigest(String),
+    DigestBindingMismatch,
+    IdBindingMismatch,
+    InvalidIdBinding(String),
+    LabelBindingMismatch,
+    Phase533ReviewStateMismatch,
+    NonclaimMismatch,
+    OwnerDecisionPolicyDigestMismatch,
+    OwnerDecisionRulesMismatch,
+    ForbiddenApiSetMismatch,
+    InheritedDigestRequirementsMismatch,
+    InvalidAcceptedEvidenceOwner,
+    InvalidLocalTransactionRoute,
+    InvalidMaterializedRoute,
+    InvalidEvidenceClassOwner,
+    InvalidClaimBoundaryOwner,
+    InvalidMaximumClaimBoundary,
+    InvalidRejectedLevel2Floor,
+    DecisionSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3BackendExecutionOwnerDecisionValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -67592,6 +67778,510 @@ pub fn validate_gateway_formal_tiny_z3_backend_execution_package_review_input(
     }
 }
 
+pub fn gateway_formal_tiny_z3_backend_execution_owner_decision_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_OWNER_DECISION_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_owner_decision_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims =
+        gateway_formal_tiny_z3_backend_execution_package_review_required_nonclaims();
+    for label in [
+        "not accepted evidence owner decision evidence",
+        "not accepted append decision",
+        "not accepted Evidence Ledger mutation",
+        "not accepted append validator call",
+        "not accepted append mutation call",
+        "not independent external reproduction",
+    ] {
+        nonclaims.insert(NonClaimLabel(label.to_owned()));
+    }
+    nonclaims
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_owner_decision_rules() -> BTreeSet<String> {
+    [
+        "phase533_review_state_required",
+        "phase533_digest_bindings_required",
+        "phase533_review_scope_acceptable_local_only_required",
+        "zkbench_core_owner_required",
+        "accepted_append_transaction_route_required",
+        "materialized_append_route_declared_only",
+        "level1_claim_boundary_cap_required",
+        "level2_floor_rejected_required",
+        "accepted_evidence_creation_rejected",
+        "accepted_append_validator_call_rejected",
+        "accepted_append_mutation_call_rejected",
+        "proof_checker_solver_authority_rejected",
+        "lean_cobalt_rust_to_lean_rejected",
+        "additional_smt_z3_execution_rejected",
+        "benchmark_evidence_rejected",
+        "external_audit_evidence_rejected",
+        "strong_public_claim_rejected",
+        "action_authority_rejected",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_owner_decision_forbidden_apis() -> BTreeSet<String>
+{
+    let mut forbidden = gateway_formal_tiny_z3_backend_execution_package_review_forbidden_apis();
+    for api in [
+        "validate_accepted_ledger_append_transaction_request",
+        "apply_accepted_ledger_append_transaction",
+        "apply_materialized_accepted_ledger_append_transaction",
+        "EvidenceLedger_save_json",
+        "accepted_evidence_ledger_reader",
+        "accepted_evidence_ledger_writer",
+    ] {
+        forbidden.insert(api.to_owned());
+    }
+    forbidden
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_owner_decision_inherited_digest_requirements(
+) -> BTreeSet<String> {
+    let mut requirements =
+        gateway_formal_tiny_z3_backend_execution_package_review_inherited_digest_requirements();
+    for label in [
+        "phase533_review_digest_required",
+        "phase533_review_input_digest_required",
+        "phase533_review_policy_digest_required",
+        "phase533_review_nonclaim_digest_required",
+        "phase533_review_blocker_digest_required",
+        "phase533_allowed_next_state_digest_required",
+        "phase533_review_rules_digest_required",
+        "phase533_review_forbidden_api_set_digest_required",
+        "phase533_review_inherited_digest_requirements_digest_required",
+    ] {
+        requirements.insert(label.to_owned());
+    }
+    requirements
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_owner_decision_digest_bindings(
+    review: &GatewayFormalTinyZ3BackendExecutionPackageReview,
+) -> BTreeMap<String, Hash> {
+    let mut digests = review.digest_bindings.clone();
+    digests.insert("phase533_review_digest".to_owned(), review.digest());
+    digests.insert(
+        "phase533_review_input_digest".to_owned(),
+        review.review_input_digest,
+    );
+    digests.insert(
+        "phase533_review_policy_digest".to_owned(),
+        review.review_policy_digest,
+    );
+    digests.insert(
+        "phase533_review_nonclaim_digest".to_owned(),
+        review.explicit_nonclaims_digest,
+    );
+    digests.insert(
+        "phase533_review_blocker_digest".to_owned(),
+        review.review_blocker_digest,
+    );
+    digests.insert(
+        "phase533_allowed_next_state_digest".to_owned(),
+        review.allowed_next_state_digest,
+    );
+    digests.insert(
+        "phase533_review_rules_digest".to_owned(),
+        review.review_rules_digest,
+    );
+    digests.insert(
+        "phase533_review_forbidden_api_set_digest".to_owned(),
+        review.forbidden_api_set_digest,
+    );
+    digests.insert(
+        "phase533_review_inherited_digest_requirements_digest".to_owned(),
+        review.inherited_digest_requirements_digest,
+    );
+    digests
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_owner_decision_id_bindings(
+    review: &GatewayFormalTinyZ3BackendExecutionPackageReview,
+    owner_decision_id: &str,
+    owner_policy_id: &str,
+    owner_decision_record_id: &str,
+) -> BTreeMap<String, String> {
+    let mut ids = review.id_bindings.clone();
+    ids.insert("owner_decision_id".to_owned(), owner_decision_id.to_owned());
+    ids.insert("owner_policy_id".to_owned(), owner_policy_id.to_owned());
+    ids.insert(
+        "owner_decision_record_id".to_owned(),
+        owner_decision_record_id.to_owned(),
+    );
+    ids.insert("phase533_review_id".to_owned(), review.review_id.clone());
+    ids
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_owner_decision_label_bindings(
+    review: &GatewayFormalTinyZ3BackendExecutionPackageReview,
+    decision_label: &GatewayFormalTinyZ3BackendExecutionOwnerDecisionLabel,
+) -> BTreeMap<String, String> {
+    let mut labels = review.label_bindings.clone();
+    labels.insert(
+        "phase533_review_classification".to_owned(),
+        format!("{:?}", review.classification),
+    );
+    labels.insert(
+        "phase533_review_label".to_owned(),
+        format!("{:?}", review.review_label),
+    );
+    labels.insert(
+        "owner_decision_label".to_owned(),
+        format!("{decision_label:?}"),
+    );
+    labels
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_owner_decision_policy_digest(
+    owner_policy_id: &str,
+    decision_label: &GatewayFormalTinyZ3BackendExecutionOwnerDecisionLabel,
+    review_digest: Hash,
+    review_policy_digest: Hash,
+    accepted_evidence_owner_id: &str,
+    maximum_claim_boundary: &str,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-owner-decision-policy:v1",
+        &(
+            owner_policy_id,
+            decision_label,
+            review_digest,
+            review_policy_digest,
+            accepted_evidence_owner_id,
+            maximum_claim_boundary,
+        ),
+    )
+}
+
+fn gateway_formal_tiny_z3_backend_execution_owner_decision_phase533_exact(
+    review: &GatewayFormalTinyZ3BackendExecutionPackageReview,
+) -> bool {
+    review.schema_version == GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_PACKAGE_REVIEW_SCHEMA_VERSION
+        && review.state_slice == GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_PACKAGE_REVIEW_STATE_SLICE
+        && review.promotion_state == "backend_execution_package_reviewed_local_only"
+        && review.next_required_state == "backend_execution_package_owner_decision_boundary"
+        && review.classification
+            == GatewayFormalTinyZ3BackendExecutionPackageReviewClassification::BackendExecutionPackageReviewScopeAcceptableLocalOnly
+        && review.phase531_classification
+            == GatewayFormalTinyZ3BackendExecutionArtifactPackageClassification::BackendExecutionPackagedLocalOnly
+        && review.phase529_requested_lane
+            == GatewayFormalTinyZ3BackendExecutionLane::LaneAScopedSmtZ3Replay
+        && review.phase529_result_classification
+            == GatewayFormalTinyZ3HermeticBackendExecutionResultClassification::LaneASmtZ3RunObservedLocalOnly
+        && review.phase527_candidate_classification
+            == GatewayFormalTinyZ3BackendExecutionCandidateClassification::LaneAExecutionCandidateDeclaredNoRun
+        && !review.creates_accepted_evidence
+        && !review.creates_accepted_formal_evidence
+        && !review.creates_level2_evidence
+        && !review.populates_score_axes
+        && !review.proof_artifact_created
+        && !review.checker_transcript_created
+        && !review.solver_certificate_created
+        && !review.lean_execution_evidence_created
+        && !review.cobalt_execution_evidence_created
+        && !review.rust_to_lean_execution_evidence_created
+        && !review.benchmark_evidence_created
+        && !review.external_audit_evidence_created
+        && !review.independent_external_reproduction_claimed
+        && !review.semantic_correctness_claimed
+        && !review.production_readiness_claimed
+        && !review.sota_claimed
+        && !review.breakthrough_claimed
+        && !review.full_security_claimed
+        && !review.grants_authority
+}
+
+pub fn build_gateway_formal_tiny_z3_backend_execution_owner_decision(
+    review: &GatewayFormalTinyZ3BackendExecutionPackageReview,
+    input: &GatewayFormalTinyZ3BackendExecutionOwnerDecisionInput,
+) -> Result<
+    GatewayFormalTinyZ3BackendExecutionOwnerDecision,
+    GatewayFormalTinyZ3BackendExecutionOwnerDecisionValidation,
+> {
+    let validation =
+        validate_gateway_formal_tiny_z3_backend_execution_owner_decision_input(review, input);
+    if !validation.valid {
+        return Err(validation);
+    }
+    Ok(GatewayFormalTinyZ3BackendExecutionOwnerDecision {
+        schema_version: GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_OWNER_DECISION_SCHEMA_VERSION
+            .to_owned(),
+        owner_decision_id: input.owner_decision_id.clone(),
+        state_slice: GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_OWNER_DECISION_STATE_SLICE
+            .to_owned(),
+        owner_decision_input_digest: input.digest(),
+        owner_policy_id: input.owner_policy_id.clone(),
+        owner_decision_record_id: input.owner_decision_record_id.clone(),
+        owner_decision_at_unix: input.owner_decision_at_unix,
+        phase533_review_digest: review.digest(),
+        phase533_review_input_digest: review.review_input_digest,
+        phase533_classification: review.classification.clone(),
+        phase533_promotion_state: review.promotion_state.clone(),
+        phase531_package_digest: review.phase531_package_digest,
+        phase531_package_input_digest: review.phase531_package_input_digest,
+        phase529_result_digest: review.phase529_result_digest,
+        phase529_request_digest: review.phase529_request_digest,
+        phase527_candidate_digest: review.phase529_candidate_digest,
+        phase527_candidate_input_digest: review.phase529_candidate_input_digest,
+        accepted_evidence_owner_id: input.accepted_evidence_owner_id.clone(),
+        local_transaction_route: input.local_transaction_route.clone(),
+        materialized_route: input.materialized_route.clone(),
+        accepted_evidence_class_owner_id: input.accepted_evidence_class_owner_id.clone(),
+        accepted_claim_boundary_owner_id: input.accepted_claim_boundary_owner_id.clone(),
+        maximum_claim_boundary: input.maximum_claim_boundary.clone(),
+        rejected_level2_floor: input.rejected_level2_floor.clone(),
+        decision_label: input.decision_label.clone(),
+        owner_decision_policy_digest: input.owner_decision_policy_digest,
+        digest_bindings: input.digest_bindings.clone(),
+        id_bindings: input.id_bindings.clone(),
+        label_bindings: input.label_bindings.clone(),
+        explicit_nonclaims: input.explicit_nonclaims.clone(),
+        explicit_nonclaims_digest: input.explicit_nonclaims_digest,
+        owner_decision_rules: input.owner_decision_rules.clone(),
+        owner_decision_rules_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-owner-decision-rules:v1",
+            &input.owner_decision_rules,
+        ),
+        forbidden_api_set: input.forbidden_api_set.clone(),
+        forbidden_api_set_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-owner-decision-forbidden-apis:v1",
+            &input.forbidden_api_set,
+        ),
+        inherited_digest_requirements: input.inherited_digest_requirements.clone(),
+        inherited_digest_requirements_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-owner-decision-inherited-digest-requirements:v1",
+            &input.inherited_digest_requirements,
+        ),
+        decision_summary: input.decision_summary.clone(),
+        previous_promotion_state: "backend_execution_package_reviewed_local_only".to_owned(),
+        promotion_state: "backend_execution_owner_decision_recorded_local_only".to_owned(),
+        next_required_state: "backend_execution_accepted_append_evaluation_boundary".to_owned(),
+        claim_boundary: gateway_formal_tiny_z3_backend_execution_owner_decision_claim_boundary(),
+        creates_accepted_evidence: false,
+        creates_accepted_formal_evidence: false,
+        mutates_accepted_evidence_ledger: false,
+        changes_accepted_append_policy: false,
+        calls_accepted_append_validator: false,
+        calls_accepted_append_mutation: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        lean_execution_evidence_created: false,
+        additional_smt_z3_execution_created: false,
+        cobalt_execution_evidence_created: false,
+        rust_to_lean_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        external_audit_evidence_created: false,
+        independent_external_reproduction_claimed: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_gateway_formal_tiny_z3_backend_execution_owner_decision_input(
+    review: &GatewayFormalTinyZ3BackendExecutionPackageReview,
+    input: &GatewayFormalTinyZ3BackendExecutionOwnerDecisionInput,
+) -> GatewayFormalTinyZ3BackendExecutionOwnerDecisionValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_OWNER_DECISION_SCHEMA_VERSION
+    {
+        issues.push(GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.owner_decision_id) {
+        issues.push(GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::InvalidOwnerDecisionId);
+    }
+    if !is_single_segment_id(&input.owner_policy_id) {
+        issues.push(GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::InvalidOwnerPolicyId);
+    }
+    if !is_single_segment_id(&input.owner_decision_record_id) {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::InvalidOwnerDecisionRecordId,
+        );
+    }
+    if input.owner_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::MissingOwnerDecisionTimestamp,
+        );
+    }
+    let expected_digests =
+        gateway_formal_tiny_z3_backend_execution_owner_decision_digest_bindings(review);
+    for (label, digest) in &input.digest_bindings {
+        if *digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::MissingDigest(label.clone()),
+            );
+        }
+    }
+    if input.digest_bindings != expected_digests {
+        issues.push(GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::DigestBindingMismatch);
+    }
+    let expected_ids = gateway_formal_tiny_z3_backend_execution_owner_decision_id_bindings(
+        review,
+        &input.owner_decision_id,
+        &input.owner_policy_id,
+        &input.owner_decision_record_id,
+    );
+    for (label, value) in &input.id_bindings {
+        if !is_single_segment_id(value) {
+            issues.push(
+                GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::InvalidIdBinding(
+                    label.clone(),
+                ),
+            );
+        }
+    }
+    if input.id_bindings != expected_ids {
+        issues.push(GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::IdBindingMismatch);
+    }
+    let expected_labels = gateway_formal_tiny_z3_backend_execution_owner_decision_label_bindings(
+        review,
+        &input.decision_label,
+    );
+    if input.label_bindings != expected_labels {
+        issues.push(GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::LabelBindingMismatch);
+    }
+    if !gateway_formal_tiny_z3_backend_execution_owner_decision_phase533_exact(review) {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::Phase533ReviewStateMismatch,
+        );
+    }
+    let nonclaims = gateway_formal_tiny_z3_backend_execution_owner_decision_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-owner-decision-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::NonclaimMismatch);
+    }
+    let expected_policy_digest =
+        gateway_formal_tiny_z3_backend_execution_owner_decision_policy_digest(
+            &input.owner_policy_id,
+            &input.decision_label,
+            review.digest(),
+            review.review_policy_digest,
+            &input.accepted_evidence_owner_id,
+            &input.maximum_claim_boundary,
+        );
+    if input.owner_decision_policy_digest != expected_policy_digest {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::OwnerDecisionPolicyDigestMismatch,
+        );
+    }
+    if input.owner_decision_rules != gateway_formal_tiny_z3_backend_execution_owner_decision_rules()
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::OwnerDecisionRulesMismatch,
+        );
+    }
+    if input.forbidden_api_set
+        != gateway_formal_tiny_z3_backend_execution_owner_decision_forbidden_apis()
+    {
+        issues.push(GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::ForbiddenApiSetMismatch);
+    }
+    if input.inherited_digest_requirements
+        != gateway_formal_tiny_z3_backend_execution_owner_decision_inherited_digest_requirements()
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::InheritedDigestRequirementsMismatch,
+        );
+    }
+    if input.accepted_evidence_owner_id
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_OWNER_ID
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::InvalidAcceptedEvidenceOwner,
+        );
+    }
+    if input.local_transaction_route
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_LOCAL_TRANSACTION
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::InvalidLocalTransactionRoute,
+        );
+    }
+    if input.materialized_route
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_MATERIALIZED_ROUTE
+    {
+        issues
+            .push(GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::InvalidMaterializedRoute);
+    }
+    if input.accepted_evidence_class_owner_id
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_OWNER_ID
+    {
+        issues
+            .push(GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::InvalidEvidenceClassOwner);
+    }
+    if input.accepted_claim_boundary_owner_id
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY_OWNER_ID
+    {
+        issues
+            .push(GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::InvalidClaimBoundaryOwner);
+    }
+    if input.maximum_claim_boundary != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::InvalidMaximumClaimBoundary,
+        );
+    }
+    if input.rejected_level2_floor != "Level2ReproducibleBenchmarkArtifact" {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::InvalidRejectedLevel2Floor,
+        );
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.decision_summary,
+    ) {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::DecisionSummaryPromotionClaim,
+        );
+    }
+    if input.accepted_evidence_created
+        || input.accepted_formal_evidence_created
+        || input.accepted_evidence_ledger_mutated
+        || input.accepted_append_policy_changed
+        || input.accepted_append_validator_called
+        || input.accepted_append_mutation_called
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.lean_execution_evidence_created
+        || input.additional_smt_z3_execution_created
+        || input.cobalt_execution_evidence_created
+        || input.rust_to_lean_execution_evidence_created
+        || input.benchmark_evidence_created
+        || input.external_audit_evidence_created
+        || input.independent_external_reproduction_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::PromotionAttempt);
+    }
+    GatewayFormalTinyZ3BackendExecutionOwnerDecisionValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -106458,6 +107148,178 @@ mod tests {
     }
 
     #[test]
+    fn phase535_tiny_z3_backend_execution_owner_decision_records_local_route() {
+        let Some((obligation_root, phase405_output_root, output_root, review)) =
+            phase535_tiny_z3_backend_execution_owner_decision_source("phase535-owner")
+        else {
+            return;
+        };
+        let owner_input = phase535_tiny_z3_backend_execution_owner_decision_input(
+            "phase535-owner-decision",
+            &review,
+            GatewayFormalTinyZ3BackendExecutionOwnerDecisionLabel::BackendExecutionAcceptedEvidenceRouteNeedsZkbenchCoreEvaluation,
+        );
+        let owner_decision =
+            build_gateway_formal_tiny_z3_backend_execution_owner_decision(&review, &owner_input)
+                .expect("phase535 backend execution owner decision metadata builds");
+
+        assert_eq!(
+            owner_decision.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_OWNER_DECISION_STATE_SLICE
+        );
+        assert_eq!(owner_decision.phase533_review_digest, review.digest());
+        assert_eq!(
+            owner_decision.accepted_evidence_owner_id,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_OWNER_ID
+        );
+        assert_eq!(
+            owner_decision.local_transaction_route,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_LOCAL_TRANSACTION
+        );
+        assert_eq!(
+            owner_decision.maximum_claim_boundary,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY
+        );
+        assert_eq!(
+            owner_decision.decision_label,
+            GatewayFormalTinyZ3BackendExecutionOwnerDecisionLabel::BackendExecutionAcceptedEvidenceRouteNeedsZkbenchCoreEvaluation
+        );
+        assert!(!owner_decision.creates_accepted_evidence);
+        assert!(!owner_decision.creates_accepted_formal_evidence);
+        assert!(!owner_decision.mutates_accepted_evidence_ledger);
+        assert!(!owner_decision.changes_accepted_append_policy);
+        assert!(!owner_decision.calls_accepted_append_validator);
+        assert!(!owner_decision.calls_accepted_append_mutation);
+        assert!(!owner_decision.creates_level2_evidence);
+        assert!(!owner_decision.populates_score_axes);
+        assert!(!owner_decision.proof_artifact_created);
+        assert!(!owner_decision.checker_transcript_created);
+        assert!(!owner_decision.solver_certificate_created);
+        assert!(!owner_decision.lean_execution_evidence_created);
+        assert!(!owner_decision.additional_smt_z3_execution_created);
+        assert!(!owner_decision.cobalt_execution_evidence_created);
+        assert!(!owner_decision.rust_to_lean_execution_evidence_created);
+        assert!(!owner_decision.benchmark_evidence_created);
+        assert!(!owner_decision.external_audit_evidence_created);
+        assert!(!owner_decision.independent_external_reproduction_claimed);
+        assert!(!owner_decision.semantic_correctness_claimed);
+        assert!(!owner_decision.production_readiness_claimed);
+        assert!(!owner_decision.sota_claimed);
+        assert!(!owner_decision.breakthrough_claimed);
+        assert!(!owner_decision.full_security_claimed);
+        assert!(!owner_decision.grants_authority);
+
+        fs::remove_dir_all(&output_root).expect("phase535 owner output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase535 owner phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase535 owner obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase535_tiny_z3_backend_execution_owner_decision_rejects_invalid_phase533_state() {
+        let Some((obligation_root, phase405_output_root, output_root, mut review)) =
+            phase535_tiny_z3_backend_execution_owner_decision_source("phase535-invalid-phase533")
+        else {
+            return;
+        };
+        review.creates_accepted_evidence = true;
+        let owner_input = phase535_tiny_z3_backend_execution_owner_decision_input(
+            "phase535-invalid-owner",
+            &review,
+            GatewayFormalTinyZ3BackendExecutionOwnerDecisionLabel::BackendExecutionAcceptedEvidenceRouteRejected,
+        );
+        let validation = validate_gateway_formal_tiny_z3_backend_execution_owner_decision_input(
+            &review,
+            &owner_input,
+        );
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::Phase533ReviewStateMismatch
+        ));
+        assert!(
+            build_gateway_formal_tiny_z3_backend_execution_owner_decision(&review, &owner_input)
+                .is_err()
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase535 invalid output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase535 invalid phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase535 invalid obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase535_tiny_z3_backend_execution_owner_decision_rejects_drift_and_promotion() {
+        let Some((obligation_root, phase405_output_root, output_root, review)) =
+            phase535_tiny_z3_backend_execution_owner_decision_source("phase535-promotion")
+        else {
+            return;
+        };
+        let mut owner_input = phase535_tiny_z3_backend_execution_owner_decision_input(
+            "phase535-promotion-owner",
+            &review,
+            GatewayFormalTinyZ3BackendExecutionOwnerDecisionLabel::BackendExecutionAcceptedEvidenceRouteRejected,
+        );
+        owner_input.owner_decision_policy_digest = Hash([0; 32]);
+        owner_input
+            .digest_bindings
+            .insert("phase533_review_digest".to_owned(), Hash([0; 32]));
+        owner_input.accepted_evidence_owner_id = "hsai-agent-admission".to_owned();
+        owner_input.maximum_claim_boundary = "Level2ReproducibleBenchmarkArtifact".to_owned();
+        owner_input.accepted_evidence_created = true;
+        owner_input.accepted_formal_evidence_created = true;
+        owner_input.accepted_evidence_ledger_mutated = true;
+        owner_input.accepted_append_policy_changed = true;
+        owner_input.accepted_append_validator_called = true;
+        owner_input.accepted_append_mutation_called = true;
+        owner_input.creates_level2_evidence = true;
+        owner_input.populates_score_axes = true;
+        owner_input.proof_artifact_promoted = true;
+        owner_input.checker_transcript_promoted = true;
+        owner_input.solver_certificate_promoted = true;
+        owner_input.lean_execution_evidence_created = true;
+        owner_input.additional_smt_z3_execution_created = true;
+        owner_input.cobalt_execution_evidence_created = true;
+        owner_input.rust_to_lean_execution_evidence_created = true;
+        owner_input.benchmark_evidence_created = true;
+        owner_input.external_audit_evidence_created = true;
+        owner_input.independent_external_reproduction_claimed = true;
+        owner_input.semantic_correctness_claimed = true;
+        owner_input.production_readiness_claimed = true;
+        owner_input.sota_claimed = true;
+        owner_input.breakthrough_claimed = true;
+        owner_input.full_security_claimed = true;
+        owner_input.action_authority_claimed = true;
+        let validation = validate_gateway_formal_tiny_z3_backend_execution_owner_decision_input(
+            &review,
+            &owner_input,
+        );
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::DigestBindingMismatch
+        ));
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::OwnerDecisionPolicyDigestMismatch
+        ));
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::InvalidAcceptedEvidenceOwner
+        ));
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::InvalidMaximumClaimBoundary
+        ));
+        assert!(validation
+            .issues
+            .contains(&GatewayFormalTinyZ3BackendExecutionOwnerDecisionIssue::PromotionAttempt));
+        assert!(
+            build_gateway_formal_tiny_z3_backend_execution_owner_decision(&review, &owner_input)
+                .is_err()
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase535 promotion output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase535 promotion phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase535 promotion obligation cleanup succeeds");
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -115236,6 +116098,120 @@ mod tests {
             checker_transcript_promoted: false,
             solver_certificate_promoted: false,
             lean_execution_evidence_created: false,
+            cobalt_execution_evidence_created: false,
+            rust_to_lean_execution_evidence_created: false,
+            benchmark_evidence_created: false,
+            external_audit_evidence_created: false,
+            independent_external_reproduction_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase535_tiny_z3_backend_execution_owner_decision_source(
+        source_prefix: &str,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        GatewayFormalTinyZ3BackendExecutionPackageReview,
+    )> {
+        let (obligation_root, phase405_output_root, output_root, package) =
+            phase533_tiny_z3_backend_execution_package_review_source(source_prefix)?;
+        let review_input = phase533_tiny_z3_backend_execution_package_review_input(
+            &format!("{source_prefix}-review"),
+            &package,
+            GatewayFormalTinyZ3BackendExecutionPackageReviewLabel::BackendExecutionPackageReviewRecorded,
+        );
+        let review =
+            build_gateway_formal_tiny_z3_backend_execution_package_review(&package, &review_input)
+                .expect("phase535 source review builds");
+        Some((obligation_root, phase405_output_root, output_root, review))
+    }
+
+    fn phase535_tiny_z3_backend_execution_owner_decision_input(
+        owner_decision_id: &str,
+        review: &GatewayFormalTinyZ3BackendExecutionPackageReview,
+        decision_label: GatewayFormalTinyZ3BackendExecutionOwnerDecisionLabel,
+    ) -> GatewayFormalTinyZ3BackendExecutionOwnerDecisionInput {
+        let owner_policy_id = "phase535-backend-execution-owner-decision-policy";
+        let owner_decision_record_id = "phase535-backend-execution-owner-decision-record";
+        let nonclaims =
+            gateway_formal_tiny_z3_backend_execution_owner_decision_required_nonclaims();
+        let maximum_claim_boundary = GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY.to_owned();
+        let accepted_evidence_owner_id =
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_OWNER_ID.to_owned();
+        GatewayFormalTinyZ3BackendExecutionOwnerDecisionInput {
+            schema_version: GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_OWNER_DECISION_SCHEMA_VERSION
+                .to_owned(),
+            owner_decision_id: owner_decision_id.to_owned(),
+            owner_policy_id: owner_policy_id.to_owned(),
+            owner_decision_record_id: owner_decision_record_id.to_owned(),
+            owner_decision_at_unix: 1_800_000_535,
+            digest_bindings: gateway_formal_tiny_z3_backend_execution_owner_decision_digest_bindings(
+                review,
+            ),
+            id_bindings: gateway_formal_tiny_z3_backend_execution_owner_decision_id_bindings(
+                review,
+                owner_decision_id,
+                owner_policy_id,
+                owner_decision_record_id,
+            ),
+            label_bindings: gateway_formal_tiny_z3_backend_execution_owner_decision_label_bindings(
+                review,
+                &decision_label,
+            ),
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-owner-decision-nonclaims:v1",
+                &nonclaims,
+            ),
+            owner_decision_policy_digest:
+                gateway_formal_tiny_z3_backend_execution_owner_decision_policy_digest(
+                    owner_policy_id,
+                    &decision_label,
+                    review.digest(),
+                    review.review_policy_digest,
+                    &accepted_evidence_owner_id,
+                    &maximum_claim_boundary,
+                ),
+            owner_decision_rules: gateway_formal_tiny_z3_backend_execution_owner_decision_rules(),
+            forbidden_api_set:
+                gateway_formal_tiny_z3_backend_execution_owner_decision_forbidden_apis(),
+            inherited_digest_requirements:
+                gateway_formal_tiny_z3_backend_execution_owner_decision_inherited_digest_requirements(),
+            accepted_evidence_owner_id,
+            local_transaction_route:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_LOCAL_TRANSACTION.to_owned(),
+            materialized_route:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_MATERIALIZED_ROUTE.to_owned(),
+            accepted_evidence_class_owner_id:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_OWNER_ID.to_owned(),
+            accepted_claim_boundary_owner_id:
+                GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY_OWNER_ID.to_owned(),
+            maximum_claim_boundary,
+            rejected_level2_floor: "Level2ReproducibleBenchmarkArtifact".to_owned(),
+            decision_label,
+            decision_summary:
+                "local owner-decision metadata records zkbench-core evaluation as the only future route"
+                    .to_owned(),
+            accepted_evidence_created: false,
+            accepted_formal_evidence_created: false,
+            accepted_evidence_ledger_mutated: false,
+            accepted_append_policy_changed: false,
+            accepted_append_validator_called: false,
+            accepted_append_mutation_called: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            lean_execution_evidence_created: false,
+            additional_smt_z3_execution_created: false,
             cobalt_execution_evidence_created: false,
             rust_to_lean_execution_evidence_created: false,
             benchmark_evidence_created: false,

@@ -15021,6 +15021,34 @@ accepted formal evidence, no Lean/COBALT/Rust-to-Lean execution, no benchmark
 evidence, no external audit evidence, and no production/SOTA/security/
 correctness claim.
 
+## Phase 535 HSAI Tiny Z3 Backend Execution Accepted-Evidence Owner Decision Metadata
+
+Status: complete. See
+`docs/535-hsai-tiny-z3-backend-execution-accepted-evidence-owner-decision-metadata-notes.md`.
+
+Goal: implement local non-mutating owner-decision metadata over one Phase 533
+backend-execution package review.
+
+Implemented: Phase 535 adds owner-decision input/output metadata, bounded
+decision labels, issue/validation types, owner-decision nonclaim/rule/
+forbidden-API/inherited-digest helpers, deterministic digest/id/label binding
+helpers, policy digest helper, `build_...` and `validate_...` entrypoints, and
+tests over a Phase 533 review.
+
+Validation coverage: focused tests cover successful local owner-decision
+metadata, invalid Phase 533 state rejection, and digest/promotion rejection
+across owner drift, claim-boundary drift, accepted evidence, accepted append
+validator/mutation calls, Level2+, score axes, Lean, COBALT, Rust-to-Lean,
+additional SMT/Z3 execution, proof/checker/solver, benchmark, external audit,
+independent external reproduction, strong claims, and action authority.
+
+Exit criteria: HSAI now has local owner-decision metadata that records
+`zkbench-core` as the only future accepted-evidence evaluation owner for one
+reviewed local SMT/Z3 backend execution package. It still has no accepted
+evidence, no Level2+ evidence, no populated score axes, no accepted formal
+evidence, no Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no
+external audit evidence, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
