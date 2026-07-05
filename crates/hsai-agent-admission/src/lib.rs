@@ -1276,6 +1276,11 @@ pub const GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_IMPOR
 pub const GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_IMPORT_REVIEW_STATE_SLICE:
     &str = "phase-599-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-import-review-metadata";
 pub const GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_IMPORT_REVIEW_CLAIM_BOUNDARY: &str = "local tiny-Z3 packet role artifact independent-operator import-review metadata only; reviews one quarantined Phase 597 packet role artifact independent-operator import candidate and records that accepted external result evidence remains blocked, but does not import external results, mutate the accepted Evidence Ledger, accept independent external reproduction, create accepted formal evidence, create Level2+ evidence, populate score axes, generate proof artifacts, generate checker transcripts, generate solver certificates, run Lean, run another SMT/Z3 execution, run COBALT, run Rust-to-Lean extraction, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_ELIGIBILITY_SCHEMA_VERSION:
+    &str = "hsai-gateway-formal-tiny-z3-packet-role-artifact-independent-operator-accepted-result-eligibility:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_ELIGIBILITY_STATE_SLICE:
+    &str = "phase-601-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-accepted-result-eligibility-metadata";
+pub const GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_ELIGIBILITY_CLAIM_BOUNDARY: &str = "local tiny-Z3 packet role artifact independent-operator accepted-result evidence eligibility metadata only; classifies one Phase 599 blocked packet role artifact independent-operator import review and records that accepted external result evidence remains blocked by policy, but does not import external results, mutate the accepted Evidence Ledger, accept independent external reproduction, create accepted formal evidence, create Level2+ evidence, populate score axes, generate proof artifacts, generate checker transcripts, generate solver certificates, run Lean, run another SMT/Z3 execution, run COBALT, run Rust-to-Lean extraction, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, or grant authority to execute an action.";
 pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_NAMESPACE: &str =
     "gateway-formal-tiny-z3-independent-external-operator-result";
 pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_DECLARED_FILES: [&str; 8] = [
@@ -23750,6 +23755,226 @@ pub enum GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorImportReviewIss
 pub struct GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorImportReviewValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorImportReviewIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityClassification
+{
+    PacketRoleArtifactIndependentOperatorAcceptedResultBlockedPolicyNotSatisfied,
+    PacketRoleArtifactIndependentOperatorAcceptedResultRejected,
+    PacketRoleArtifactIndependentOperatorAcceptedResultLocalMetadataOnly,
+    PacketRoleArtifactIndependentOperatorAcceptedResultWaitingForLevel2Review,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityLabel {
+    PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityRecorded,
+    PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityInput {
+    pub schema_version: String,
+    pub eligibility_id: String,
+    pub eligibility_policy_id: String,
+    pub eligibility_decision_id: String,
+    pub eligibility_decision_at_unix: u64,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub classification:
+        GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityClassification,
+    pub eligibility_policy_digest: Hash,
+    pub eligibility_blockers: BTreeSet<String>,
+    pub eligibility_blocker_digest: Hash,
+    pub eligibility_nonpromotion_digest: Hash,
+    pub eligibility_rules: BTreeSet<String>,
+    pub forbidden_api_set: BTreeSet<String>,
+    pub inherited_digest_requirements: BTreeSet<String>,
+    pub eligibility_label:
+        GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityLabel,
+    pub eligibility_summary: String,
+    pub external_result_import_created: bool,
+    pub accepted_external_result_evidence_created: bool,
+    pub accepted_evidence_artifact_write_requested: bool,
+    pub accepted_evidence_ledger_mutation_requested: bool,
+    pub independent_external_reproduction_accepted: bool,
+    pub level2_artifact_write_requested: bool,
+    pub score_axis_artifact_write_requested: bool,
+    pub score_axis_population_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-packet-role-artifact-independent-operator-accepted-result-eligibility-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibility {
+    pub schema_version: String,
+    pub eligibility_id: String,
+    pub state_slice: String,
+    pub eligibility_input_digest: Hash,
+    pub eligibility_policy_id: String,
+    pub eligibility_decision_id: String,
+    pub eligibility_decision_at_unix: u64,
+    pub phase599_import_review_digest: Hash,
+    pub phase599_import_review_input_digest: Hash,
+    pub phase599_digest_binding_map_digest: Hash,
+    pub phase599_id_binding_map_digest: Hash,
+    pub phase599_label_binding_map_digest: Hash,
+    pub phase599_classification:
+        GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorImportReviewClassification,
+    pub phase599_review_blocker_digest: Hash,
+    pub phase599_review_policy_digest: Hash,
+    pub phase599_review_nonpromotion_digest: Hash,
+    pub phase597_import_candidate_digest: Hash,
+    pub phase597_import_candidate_input_digest: Hash,
+    pub phase597_candidate_digest: Hash,
+    pub phase597_validation_digest: Hash,
+    pub phase597_validation_issue_digest: Hash,
+    pub phase597_quarantine_record_digest: Hash,
+    pub phase597_validation_valid: bool,
+    pub phase597_validation_issue_count: usize,
+    pub phase597_candidate_status: String,
+    pub phase597_requested_claim_boundary: String,
+    pub phase597_external_owner_id: String,
+    pub phase597_quarantine_status: String,
+    pub phase595_manifest_digest: Hash,
+    pub phase595_readback_digest: Hash,
+    pub phase595_readback_file_map_digest: Hash,
+    pub phase595_request_digest: Hash,
+    pub phase593_output_digest: Hash,
+    pub phase593_output_input_digest: Hash,
+    pub phase593_output_policy_digest: Hash,
+    pub phase593_output_nonpromotion_digest: Hash,
+    pub phase593_output_request_digest: Hash,
+    pub phase591_materialization_digest: Hash,
+    pub phase591_declared_role_files_digest: Hash,
+    pub phase591_declared_sidecars_digest: Hash,
+    pub phase589_packet_digest: Hash,
+    pub phase589_packet_input_digest: Hash,
+    pub phase589_packet_role_manifest_digest: Hash,
+    pub phase587_requirement_digest: Hash,
+    pub phase587_requirement_input_digest: Hash,
+    pub phase585_resolution_digest: Hash,
+    pub phase585_resolution_input_digest: Hash,
+    pub classification:
+        GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityClassification,
+    pub eligibility_policy_digest: Hash,
+    pub eligibility_blockers: BTreeSet<String>,
+    pub eligibility_blocker_digest: Hash,
+    pub eligibility_nonpromotion_digest: Hash,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub eligibility_rules: BTreeSet<String>,
+    pub eligibility_rules_digest: Hash,
+    pub forbidden_api_set: BTreeSet<String>,
+    pub forbidden_api_set_digest: Hash,
+    pub inherited_digest_requirements: BTreeSet<String>,
+    pub inherited_digest_requirements_digest: Hash,
+    pub eligibility_label:
+        GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityLabel,
+    pub eligibility_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub imports_external_result: bool,
+    pub creates_accepted_external_result_evidence: bool,
+    pub writes_accepted_evidence_artifacts: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub accepts_independent_external_reproduction: bool,
+    pub writes_level2_artifact_files: bool,
+    pub writes_score_axis_artifact_files: bool,
+    pub populates_score_axes: bool,
+    pub creates_accepted_formal_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibility {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-packet-role-artifact-independent-operator-accepted-result-eligibility:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue {
+    InvalidSchemaVersion,
+    InvalidEligibilityId,
+    InvalidEligibilityPolicyId,
+    InvalidEligibilityDecisionId,
+    MissingEligibilityDecisionTimestamp,
+    MissingDigest(String),
+    DigestBindingMismatch,
+    IdBindingMismatch,
+    InvalidIdBinding(String),
+    LabelBindingMismatch,
+    Phase599ImportReviewStateMismatch,
+    NonclaimMismatch,
+    InvalidClassification,
+    EligibilityPolicyDigestMismatch,
+    EligibilityBlockerMismatch,
+    EligibilityNonpromotionDigestMismatch,
+    EligibilityRulesMismatch,
+    ForbiddenApiSetMismatch,
+    InheritedDigestRequirementsMismatch,
+    EligibilitySummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityValidation
+{
+    pub valid: bool,
+    pub issues:
+        Vec<GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -100560,6 +100785,761 @@ pub fn validate_gateway_formal_tiny_z3_packet_role_artifact_independent_operator
     }
 }
 
+pub fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_claim_boundary(
+) -> String {
+    GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_ELIGIBILITY_CLAIM_BOUNDARY
+        .to_owned()
+}
+
+pub fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    gateway_formal_tiny_z3_packet_role_artifact_independent_operator_import_review_required_nonclaims()
+}
+
+pub fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_blockers(
+) -> BTreeSet<String> {
+    [
+        "phase599_independent_operator_import_review_blocked_no_accepted_external_result",
+        "phase597_packet_role_artifact_independent_operator_import_candidate_quarantined_local_bundle",
+        "accepted_external_result_evidence_policy_not_satisfied",
+        "accepted_evidence_append_still_unauthorized",
+        "accepted_independent_reproduction_absent",
+        "accepted_formal_evidence_absent",
+        "level2_and_score_axes_still_blocked",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_rules(
+) -> BTreeSet<String> {
+    [
+        "phase599_state_required",
+        "phase599_digest_bindings_required",
+        "phase599_blocked_classification_required",
+        "phase599_no_accepted_evidence_required",
+        "phase599_no_accepted_ledger_mutation_required",
+        "phase597_quarantined_candidate_required",
+        "phase597_validation_valid_required",
+        "phase597_quarantine_status_required",
+        "phase595_readback_binding_required",
+        "phase593_output_digest_required",
+        "phase591_materialization_digest_required",
+        "phase589_packet_digest_required",
+        "phase587_requirement_digest_required",
+        "phase585_resolution_digest_required",
+        "transitive_phase583_through_phase555_requirements_remain_inherited_only",
+        "accepted_result_evidence_policy_blocked_required",
+        "accepted_ledger_owner_preserved",
+        "direct_evidence_ledger_load_save_rejected",
+        "external_result_import_rejected",
+        "accepted_external_result_evidence_rejected",
+        "accepted_formal_evidence_rejected",
+        "independent_external_reproduction_rejected",
+        "level2_actual_evidence_rejected",
+        "score_axis_population_rejected",
+        "lean_cobalt_rust_to_lean_rejected",
+        "additional_smt_z3_execution_rejected",
+        "backend_execution_evidence_rejected",
+        "benchmark_evidence_rejected",
+        "external_audit_evidence_rejected",
+        "strong_public_claim_rejected",
+        "action_authority_rejected",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_forbidden_apis(
+) -> BTreeSet<String> {
+    gateway_formal_tiny_z3_packet_role_artifact_accepted_result_eligibility_forbidden_apis()
+}
+
+pub fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_inherited_digest_requirements(
+) -> BTreeSet<String> {
+    let mut requirements =
+        gateway_formal_tiny_z3_packet_role_artifact_independent_operator_import_review_inherited_digest_requirements();
+    for requirement in [
+        "phase599_import_review_digest_required",
+        "phase599_import_review_input_digest_required",
+        "phase599_digest_binding_map_digest_required",
+        "phase599_id_binding_map_digest_required",
+        "phase599_label_binding_map_digest_required",
+        "phase599_classification_required",
+        "phase599_review_blocker_digest_required",
+        "phase599_review_policy_digest_required",
+        "phase599_review_nonpromotion_digest_required",
+        "phase601_accepted_result_policy_digest_required",
+        "phase601_accepted_result_blocker_digest_required",
+        "phase601_accepted_result_nonpromotion_digest_required",
+    ] {
+        requirements.insert(requirement.to_owned());
+    }
+    requirements
+}
+
+pub fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_digest_bindings(
+    review: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorImportReview,
+) -> BTreeMap<String, Hash> {
+    [
+        ("phase599_import_review_digest", review.digest()),
+        (
+            "phase599_import_review_input_digest",
+            review.review_input_digest,
+        ),
+        (
+            "phase599_digest_binding_map_digest",
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase599-independent-operator-import-review-digest-bindings:v1",
+                &review.digest_bindings,
+            ),
+        ),
+        (
+            "phase599_id_binding_map_digest",
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase599-independent-operator-import-review-id-bindings:v1",
+                &review.id_bindings,
+            ),
+        ),
+        (
+            "phase599_label_binding_map_digest",
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase599-independent-operator-import-review-label-bindings:v1",
+                &review.label_bindings,
+            ),
+        ),
+        (
+            "phase599_review_blocker_digest",
+            review.review_blocker_digest,
+        ),
+        ("phase599_review_policy_digest", review.review_policy_digest),
+        (
+            "phase599_review_nonpromotion_digest",
+            review.review_nonpromotion_digest,
+        ),
+        (
+            "phase597_import_candidate_digest",
+            review.phase597_import_candidate_digest,
+        ),
+        (
+            "phase597_import_candidate_input_digest",
+            review.phase597_import_candidate_input_digest,
+        ),
+        (
+            "phase597_digest_binding_map_digest",
+            review.phase597_digest_binding_map_digest,
+        ),
+        (
+            "phase597_id_binding_map_digest",
+            review.phase597_id_binding_map_digest,
+        ),
+        (
+            "phase597_label_binding_map_digest",
+            review.phase597_label_binding_map_digest,
+        ),
+        (
+            "phase597_import_blocker_digest",
+            review.phase597_import_blocker_digest,
+        ),
+        (
+            "phase597_import_policy_digest",
+            review.phase597_import_policy_digest,
+        ),
+        (
+            "phase597_import_nonpromotion_digest",
+            review.phase597_import_nonpromotion_digest,
+        ),
+        ("phase597_candidate_digest", review.phase597_candidate_digest),
+        ("phase597_validation_digest", review.phase597_validation_digest),
+        (
+            "phase597_validation_issue_digest",
+            review.phase597_validation_issue_digest,
+        ),
+        (
+            "phase597_quarantine_record_digest",
+            review.phase597_quarantine_record_digest,
+        ),
+        ("phase595_manifest_digest", review.phase595_manifest_digest),
+        ("phase595_readback_digest", review.phase595_readback_digest),
+        (
+            "phase595_readback_file_map_digest",
+            review.phase595_readback_file_map_digest,
+        ),
+        ("phase595_request_digest", review.phase595_request_digest),
+        ("phase593_output_digest", review.phase593_output_digest),
+        (
+            "phase593_output_input_digest",
+            review.phase593_output_input_digest,
+        ),
+        (
+            "phase593_output_policy_digest",
+            review.phase593_output_policy_digest,
+        ),
+        (
+            "phase593_output_nonpromotion_digest",
+            review.phase593_output_nonpromotion_digest,
+        ),
+        (
+            "phase593_output_request_digest",
+            review.phase593_output_request_digest,
+        ),
+        (
+            "phase591_materialization_digest",
+            review.phase591_materialization_digest,
+        ),
+        (
+            "phase591_declared_role_files_digest",
+            review.phase591_declared_role_files_digest,
+        ),
+        (
+            "phase591_declared_sidecars_digest",
+            review.phase591_declared_sidecars_digest,
+        ),
+        ("phase589_packet_digest", review.phase589_packet_digest),
+        (
+            "phase589_packet_input_digest",
+            review.phase589_packet_input_digest,
+        ),
+        (
+            "phase589_packet_role_manifest_digest",
+            review.phase589_packet_role_manifest_digest,
+        ),
+        (
+            "phase587_requirement_digest",
+            review.phase587_requirement_digest,
+        ),
+        (
+            "phase587_requirement_input_digest",
+            review.phase587_requirement_input_digest,
+        ),
+        ("phase585_resolution_digest", review.phase585_resolution_digest),
+        (
+            "phase585_resolution_input_digest",
+            review.phase585_resolution_input_digest,
+        ),
+    ]
+    .into_iter()
+    .map(|(label, digest)| (label.to_owned(), digest))
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_id_bindings(
+    review: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorImportReview,
+    eligibility_id: &str,
+    eligibility_policy_id: &str,
+    eligibility_decision_id: &str,
+) -> BTreeMap<String, String> {
+    [
+        ("eligibility_id", eligibility_id.to_owned()),
+        ("eligibility_policy_id", eligibility_policy_id.to_owned()),
+        (
+            "eligibility_decision_id",
+            eligibility_decision_id.to_owned(),
+        ),
+        ("phase599_review_id", review.review_id.clone()),
+        ("phase599_review_policy_id", review.review_policy_id.clone()),
+        (
+            "phase599_review_decision_id",
+            review.review_decision_id.clone(),
+        ),
+    ]
+    .into_iter()
+    .map(|(label, value)| (label.to_owned(), value))
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_label_bindings(
+    review: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorImportReview,
+    eligibility_label: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityLabel,
+) -> BTreeMap<String, String> {
+    [
+        (
+            "phase599_classification",
+            format!("{:?}", review.classification),
+        ),
+        (
+            "phase599_review_label",
+            format!("{:?}", review.review_label),
+        ),
+        ("eligibility_label", format!("{eligibility_label:?}")),
+    ]
+    .into_iter()
+    .map(|(label, value)| (label.to_owned(), value))
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_nonpromotion_digest(
+    classification: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityClassification,
+    review_digest: Hash,
+    review_policy_digest: Hash,
+    review_nonpromotion_digest: Hash,
+    blockers: &BTreeSet<String>,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-packet-role-artifact-independent-operator-accepted-result-eligibility-nonpromotion:v1",
+        &(
+            classification,
+            review_digest,
+            review_policy_digest,
+            review_nonpromotion_digest,
+            blockers,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ),
+    )
+}
+
+pub fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_policy_digest(
+    eligibility_policy_id: &str,
+    classification: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityClassification,
+    review_digest: Hash,
+    review_policy_digest: Hash,
+    review_nonpromotion_digest: Hash,
+    blockers: &BTreeSet<String>,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-packet-role-artifact-independent-operator-accepted-result-eligibility-policy:v1",
+        &(
+            eligibility_policy_id,
+            classification,
+            review_digest,
+            review_policy_digest,
+            review_nonpromotion_digest,
+            blockers,
+        ),
+    )
+}
+
+pub fn build_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility(
+    review: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorImportReview,
+    input: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityInput,
+) -> Result<
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibility,
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityValidation,
+> {
+    let validation =
+        validate_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_input(
+            review, input,
+        );
+    if !validation.valid {
+        return Err(validation);
+    }
+    Ok(GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibility {
+        schema_version:
+            GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_ELIGIBILITY_SCHEMA_VERSION
+                .to_owned(),
+        eligibility_id: input.eligibility_id.clone(),
+        state_slice:
+            GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_ELIGIBILITY_STATE_SLICE
+                .to_owned(),
+        eligibility_input_digest: input.digest(),
+        eligibility_policy_id: input.eligibility_policy_id.clone(),
+        eligibility_decision_id: input.eligibility_decision_id.clone(),
+        eligibility_decision_at_unix: input.eligibility_decision_at_unix,
+        phase599_import_review_digest: review.digest(),
+        phase599_import_review_input_digest: review.review_input_digest,
+        phase599_digest_binding_map_digest: input.digest_bindings
+            ["phase599_digest_binding_map_digest"],
+        phase599_id_binding_map_digest: input.digest_bindings["phase599_id_binding_map_digest"],
+        phase599_label_binding_map_digest: input.digest_bindings
+            ["phase599_label_binding_map_digest"],
+        phase599_classification: review.classification.clone(),
+        phase599_review_blocker_digest: review.review_blocker_digest,
+        phase599_review_policy_digest: review.review_policy_digest,
+        phase599_review_nonpromotion_digest: review.review_nonpromotion_digest,
+        phase597_import_candidate_digest: review.phase597_import_candidate_digest,
+        phase597_import_candidate_input_digest: review.phase597_import_candidate_input_digest,
+        phase597_candidate_digest: review.phase597_candidate_digest,
+        phase597_validation_digest: review.phase597_validation_digest,
+        phase597_validation_issue_digest: review.phase597_validation_issue_digest,
+        phase597_quarantine_record_digest: review.phase597_quarantine_record_digest,
+        phase597_validation_valid: review.phase597_validation_valid,
+        phase597_validation_issue_count: review.phase597_validation_issue_count,
+        phase597_candidate_status: review.phase597_candidate_status.clone(),
+        phase597_requested_claim_boundary: review.phase597_requested_claim_boundary.clone(),
+        phase597_external_owner_id: review.phase597_external_owner_id.clone(),
+        phase597_quarantine_status: review.phase597_quarantine_status.clone(),
+        phase595_manifest_digest: review.phase595_manifest_digest,
+        phase595_readback_digest: review.phase595_readback_digest,
+        phase595_readback_file_map_digest: review.phase595_readback_file_map_digest,
+        phase595_request_digest: review.phase595_request_digest,
+        phase593_output_digest: review.phase593_output_digest,
+        phase593_output_input_digest: review.phase593_output_input_digest,
+        phase593_output_policy_digest: review.phase593_output_policy_digest,
+        phase593_output_nonpromotion_digest: review.phase593_output_nonpromotion_digest,
+        phase593_output_request_digest: review.phase593_output_request_digest,
+        phase591_materialization_digest: review.phase591_materialization_digest,
+        phase591_declared_role_files_digest: review.phase591_declared_role_files_digest,
+        phase591_declared_sidecars_digest: review.phase591_declared_sidecars_digest,
+        phase589_packet_digest: review.phase589_packet_digest,
+        phase589_packet_input_digest: review.phase589_packet_input_digest,
+        phase589_packet_role_manifest_digest: review.phase589_packet_role_manifest_digest,
+        phase587_requirement_digest: review.phase587_requirement_digest,
+        phase587_requirement_input_digest: review.phase587_requirement_input_digest,
+        phase585_resolution_digest: review.phase585_resolution_digest,
+        phase585_resolution_input_digest: review.phase585_resolution_input_digest,
+        classification: input.classification.clone(),
+        eligibility_policy_digest: input.eligibility_policy_digest,
+        eligibility_blockers: input.eligibility_blockers.clone(),
+        eligibility_blocker_digest: input.eligibility_blocker_digest,
+        eligibility_nonpromotion_digest: input.eligibility_nonpromotion_digest,
+        digest_bindings: input.digest_bindings.clone(),
+        id_bindings: input.id_bindings.clone(),
+        label_bindings: input.label_bindings.clone(),
+        explicit_nonclaims: input.explicit_nonclaims.clone(),
+        explicit_nonclaims_digest: input.explicit_nonclaims_digest,
+        eligibility_rules: input.eligibility_rules.clone(),
+        eligibility_rules_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-packet-role-artifact-independent-operator-accepted-result-eligibility-rules:v1",
+            &input.eligibility_rules,
+        ),
+        forbidden_api_set: input.forbidden_api_set.clone(),
+        forbidden_api_set_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-packet-role-artifact-independent-operator-accepted-result-eligibility-forbidden-apis:v1",
+            &input.forbidden_api_set,
+        ),
+        inherited_digest_requirements: input.inherited_digest_requirements.clone(),
+        inherited_digest_requirements_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-packet-role-artifact-independent-operator-accepted-result-eligibility-inherited-digest-requirements:v1",
+            &input.inherited_digest_requirements,
+        ),
+        eligibility_label: input.eligibility_label.clone(),
+        eligibility_summary: input.eligibility_summary.clone(),
+        previous_promotion_state:
+            "packet_role_artifact_independent_operator_import_review_metadata".to_owned(),
+        promotion_state:
+            "packet_role_artifact_independent_operator_accepted_result_eligibility_metadata"
+                .to_owned(),
+        next_required_state: "accepted_external_result_evidence_policy_still_unsatisfied"
+            .to_owned(),
+        claim_boundary:
+            gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_claim_boundary(),
+        imports_external_result: false,
+        creates_accepted_external_result_evidence: false,
+        writes_accepted_evidence_artifacts: false,
+        mutates_accepted_evidence_ledger: false,
+        accepts_independent_external_reproduction: false,
+        writes_level2_artifact_files: false,
+        writes_score_axis_artifact_files: false,
+        populates_score_axes: false,
+        creates_accepted_formal_evidence: false,
+        creates_level2_evidence: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        lean_execution_evidence_created: false,
+        additional_smt_z3_execution_created: false,
+        cobalt_execution_evidence_created: false,
+        rust_to_lean_execution_evidence_created: false,
+        backend_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        external_audit_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_input(
+    review: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorImportReview,
+    input: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityInput,
+) -> GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_ELIGIBILITY_SCHEMA_VERSION
+    {
+        issues.push(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::InvalidSchemaVersion,
+        );
+    }
+    if !is_single_segment_id(&input.eligibility_id) {
+        issues.push(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::InvalidEligibilityId,
+        );
+    }
+    if !is_single_segment_id(&input.eligibility_policy_id) {
+        issues.push(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::InvalidEligibilityPolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.eligibility_decision_id) {
+        issues.push(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::InvalidEligibilityDecisionId,
+        );
+    }
+    if input.eligibility_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::MissingEligibilityDecisionTimestamp,
+        );
+    }
+    let expected_digests =
+        gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_digest_bindings(
+            review,
+        );
+    for (label, digest) in &input.digest_bindings {
+        if *digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::MissingDigest(
+                    label.clone(),
+                ),
+            );
+        }
+    }
+    if input.digest_bindings != expected_digests {
+        issues.push(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::DigestBindingMismatch,
+        );
+    }
+    let expected_ids =
+        gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_id_bindings(
+            review,
+            &input.eligibility_id,
+            &input.eligibility_policy_id,
+            &input.eligibility_decision_id,
+        );
+    for (label, value) in &input.id_bindings {
+        if !is_single_segment_id(value) {
+            issues.push(
+                GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::InvalidIdBinding(
+                    label.clone(),
+                ),
+            );
+        }
+    }
+    if input.id_bindings != expected_ids {
+        issues.push(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::IdBindingMismatch,
+        );
+    }
+    let expected_labels =
+        gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_label_bindings(
+            review,
+            &input.eligibility_label,
+        );
+    if input.label_bindings != expected_labels {
+        issues.push(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::LabelBindingMismatch,
+        );
+    }
+    if gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_phase599_state_invalid(review)
+    {
+        issues.push(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::Phase599ImportReviewStateMismatch,
+        );
+    }
+    let nonclaims =
+        gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-packet-role-artifact-independent-operator-accepted-result-eligibility-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::NonclaimMismatch,
+        );
+    }
+    if input.classification
+        != GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityClassification::PacketRoleArtifactIndependentOperatorAcceptedResultBlockedPolicyNotSatisfied
+    {
+        issues.push(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::InvalidClassification,
+        );
+    }
+    let blockers =
+        gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_blockers();
+    if input.eligibility_blockers != blockers
+        || input.eligibility_blocker_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-packet-role-artifact-independent-operator-accepted-result-eligibility-blockers:v1",
+                &blockers,
+            )
+    {
+        issues.push(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::EligibilityBlockerMismatch,
+        );
+    }
+    let expected_nonpromotion_digest =
+        gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_nonpromotion_digest(
+            &input.classification,
+            review.digest(),
+            review.review_policy_digest,
+            review.review_nonpromotion_digest,
+            &blockers,
+        );
+    if input.eligibility_nonpromotion_digest != expected_nonpromotion_digest {
+        issues.push(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::EligibilityNonpromotionDigestMismatch,
+        );
+    }
+    let expected_policy_digest =
+        gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_policy_digest(
+            &input.eligibility_policy_id,
+            &input.classification,
+            review.digest(),
+            review.review_policy_digest,
+            review.review_nonpromotion_digest,
+            &blockers,
+        );
+    if input.eligibility_policy_digest != expected_policy_digest {
+        issues.push(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::EligibilityPolicyDigestMismatch,
+        );
+    }
+    if input.eligibility_rules
+        != gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_rules()
+    {
+        issues.push(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::EligibilityRulesMismatch,
+        );
+    }
+    if input.forbidden_api_set
+        != gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_forbidden_apis()
+    {
+        issues.push(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::ForbiddenApiSetMismatch,
+        );
+    }
+    if input.inherited_digest_requirements
+        != gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_inherited_digest_requirements()
+    {
+        issues.push(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::InheritedDigestRequirementsMismatch,
+        );
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.eligibility_summary,
+    ) {
+        issues.push(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::EligibilitySummaryPromotionClaim,
+        );
+    }
+    if input.external_result_import_created
+        || input.accepted_external_result_evidence_created
+        || input.accepted_evidence_artifact_write_requested
+        || input.accepted_evidence_ledger_mutation_requested
+        || input.independent_external_reproduction_accepted
+        || input.level2_artifact_write_requested
+        || input.score_axis_artifact_write_requested
+        || input.score_axis_population_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.lean_execution_evidence_created
+        || input.additional_smt_z3_execution_created
+        || input.cobalt_execution_evidence_created
+        || input.rust_to_lean_execution_evidence_created
+        || input.backend_execution_evidence_created
+        || input.benchmark_evidence_created
+        || input.external_audit_evidence_created
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::PromotionAttempt,
+        );
+    }
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_phase599_state_invalid(
+    review: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorImportReview,
+) -> bool {
+    review.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_IMPORT_REVIEW_SCHEMA_VERSION
+        || review.state_slice
+            != GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_IMPORT_REVIEW_STATE_SLICE
+        || review.promotion_state
+            != "packet_role_artifact_independent_operator_import_review_metadata"
+        || review.next_required_state != "accepted_external_result_evidence_still_uncreated"
+        || review.classification
+            != GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorImportReviewClassification::PacketRoleArtifactIndependentOperatorImportReviewBlockedNoAcceptedExternalResult
+        || review.phase597_classification
+            != GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorImportCandidateClassification::PacketRoleArtifactIndependentOperatorImportCandidateQuarantinedLocalBundle
+        || review.phase597_external_owner_id != GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OWNER_ID
+        || review.phase597_candidate_status != GATEWAY_FORMAL_TINY_Z3_EXTERNAL_IMPORT_CANDIDATE_STATUS
+        || review.phase597_requested_claim_boundary
+            != GATEWAY_FORMAL_TINY_Z3_EXTERNAL_IMPORT_REQUESTED_CLAIM_BOUNDARY
+        || !review.phase597_validation_valid
+        || review.phase597_validation_issue_count != 0
+        || review.phase597_quarantine_status != "Quarantined"
+        || review.review_input_digest == Hash([0; 32])
+        || review.review_blocker_digest == Hash([0; 32])
+        || review.review_policy_digest == Hash([0; 32])
+        || review.review_nonpromotion_digest == Hash([0; 32])
+        || review.phase597_import_candidate_digest == Hash([0; 32])
+        || review.phase597_import_candidate_input_digest == Hash([0; 32])
+        || review.phase597_candidate_digest == Hash([0; 32])
+        || review.phase597_validation_digest == Hash([0; 32])
+        || review.phase597_validation_issue_digest == Hash([0; 32])
+        || review.phase597_quarantine_record_digest == Hash([0; 32])
+        || review.phase595_manifest_digest == Hash([0; 32])
+        || review.phase595_readback_digest == Hash([0; 32])
+        || review.phase595_readback_file_map_digest == Hash([0; 32])
+        || review.phase595_request_digest == Hash([0; 32])
+        || review.phase593_output_digest == Hash([0; 32])
+        || review.phase593_output_input_digest == Hash([0; 32])
+        || review.phase593_output_policy_digest == Hash([0; 32])
+        || review.phase593_output_nonpromotion_digest == Hash([0; 32])
+        || review.phase593_output_request_digest == Hash([0; 32])
+        || review.phase591_materialization_digest == Hash([0; 32])
+        || review.phase591_declared_role_files_digest == Hash([0; 32])
+        || review.phase591_declared_sidecars_digest == Hash([0; 32])
+        || review.phase589_packet_digest == Hash([0; 32])
+        || review.phase589_packet_input_digest == Hash([0; 32])
+        || review.phase589_packet_role_manifest_digest == Hash([0; 32])
+        || review.phase587_requirement_digest == Hash([0; 32])
+        || review.phase587_requirement_input_digest == Hash([0; 32])
+        || review.phase585_resolution_digest == Hash([0; 32])
+        || review.phase585_resolution_input_digest == Hash([0; 32])
+        || review.imports_external_result
+        || review.creates_accepted_external_result_evidence
+        || review.writes_accepted_evidence_artifacts
+        || review.accepts_independent_external_reproduction
+        || review.writes_level2_artifact_files
+        || review.writes_score_axis_artifact_files
+        || review.populates_score_axes
+        || review.creates_accepted_formal_evidence
+        || review.creates_level2_evidence
+        || review.proof_artifact_created
+        || review.checker_transcript_created
+        || review.solver_certificate_created
+        || review.lean_execution_evidence_created
+        || review.additional_smt_z3_execution_created
+        || review.cobalt_execution_evidence_created
+        || review.rust_to_lean_execution_evidence_created
+        || review.backend_execution_evidence_created
+        || review.benchmark_evidence_created
+        || review.external_audit_evidence_created
+        || review.semantic_correctness_claimed
+        || review.production_readiness_claimed
+        || review.sota_claimed
+        || review.breakthrough_claimed
+        || review.full_security_claimed
+        || review.grants_authority
+}
+
 fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_import_candidate_phase595_state_invalid(
     readback: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorOutputPlumbingReadback,
 ) -> bool {
@@ -147758,6 +148738,323 @@ mod tests {
     }
 
     #[test]
+    fn phase601_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_records_blocked_metadata(
+    ) {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            review,
+        )) = phase601_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_source(
+            "phase601-eligibility",
+        )
+        else {
+            return;
+        };
+        let eligibility_input =
+            phase601_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_input(
+                "phase601-accepted-result-eligibility",
+                &review,
+                GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityLabel::PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityRecorded,
+            );
+        let eligibility =
+            build_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility(
+                &review,
+                &eligibility_input,
+            )
+            .expect("phase601 independent-operator accepted-result eligibility metadata builds");
+
+        assert_eq!(
+            eligibility.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_ELIGIBILITY_STATE_SLICE
+        );
+        assert_eq!(
+            eligibility.claim_boundary,
+            gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_claim_boundary()
+        );
+        assert_eq!(eligibility.phase599_import_review_digest, review.digest());
+        assert_eq!(
+            eligibility.phase599_classification,
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorImportReviewClassification::PacketRoleArtifactIndependentOperatorImportReviewBlockedNoAcceptedExternalResult
+        );
+        assert_eq!(
+            eligibility.classification,
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityClassification::PacketRoleArtifactIndependentOperatorAcceptedResultBlockedPolicyNotSatisfied
+        );
+        assert_eq!(
+            eligibility.phase597_import_candidate_digest,
+            review.phase597_import_candidate_digest
+        );
+        assert!(eligibility.phase597_validation_valid);
+        assert_eq!(eligibility.phase597_validation_issue_count, 0);
+        assert_eq!(eligibility.phase597_quarantine_status, "Quarantined");
+        assert_eq!(
+            eligibility.phase595_readback_digest,
+            review.phase595_readback_digest
+        );
+        assert_eq!(
+            eligibility.phase593_output_digest,
+            review.phase593_output_digest
+        );
+        assert_eq!(
+            eligibility.previous_promotion_state,
+            "packet_role_artifact_independent_operator_import_review_metadata"
+        );
+        assert_eq!(
+            eligibility.promotion_state,
+            "packet_role_artifact_independent_operator_accepted_result_eligibility_metadata"
+        );
+        assert!(!eligibility.imports_external_result);
+        assert!(!eligibility.creates_accepted_external_result_evidence);
+        assert!(!eligibility.writes_accepted_evidence_artifacts);
+        assert!(!eligibility.mutates_accepted_evidence_ledger);
+        assert!(!eligibility.accepts_independent_external_reproduction);
+        assert!(!eligibility.writes_level2_artifact_files);
+        assert!(!eligibility.writes_score_axis_artifact_files);
+        assert!(!eligibility.populates_score_axes);
+        assert!(!eligibility.creates_accepted_formal_evidence);
+        assert!(!eligibility.creates_level2_evidence);
+        assert!(!eligibility.proof_artifact_created);
+        assert!(!eligibility.checker_transcript_created);
+        assert!(!eligibility.solver_certificate_created);
+        assert!(!eligibility.lean_execution_evidence_created);
+        assert!(!eligibility.additional_smt_z3_execution_created);
+        assert!(!eligibility.cobalt_execution_evidence_created);
+        assert!(!eligibility.rust_to_lean_execution_evidence_created);
+        assert!(!eligibility.backend_execution_evidence_created);
+        assert!(!eligibility.benchmark_evidence_created);
+        assert!(!eligibility.external_audit_evidence_created);
+        assert!(!eligibility.semantic_correctness_claimed);
+        assert!(!eligibility.production_readiness_claimed);
+        assert!(!eligibility.sota_claimed);
+        assert!(!eligibility.breakthrough_claimed);
+        assert!(!eligibility.full_security_claimed);
+        assert!(!eligibility.grants_authority);
+
+        for root in [
+            &phase595_bundle_root,
+            &bundle_root,
+            &capture_root,
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase601 eligibility cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase601_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_rejects_phase599_drift(
+    ) {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            mut review,
+        )) = phase601_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_source(
+            "phase601-phase599-drift",
+        )
+        else {
+            return;
+        };
+        review.creates_accepted_external_result_evidence = true;
+        let eligibility_input =
+            phase601_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_input(
+                "phase601-phase599-drift-eligibility",
+                &review,
+                GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityLabel::PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityRejected,
+            );
+        let validation =
+            validate_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_input(
+                &review,
+                &eligibility_input,
+            );
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::Phase599ImportReviewStateMismatch
+        ));
+        assert!(
+            build_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility(
+                &review,
+                &eligibility_input,
+            )
+            .is_err()
+        );
+
+        for root in [
+            &phase595_bundle_root,
+            &bundle_root,
+            &capture_root,
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase601 phase599 drift cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase601_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_rejects_inherited_digest_drift(
+    ) {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            mut review,
+        )) = phase601_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_source(
+            "phase601-inherited-drift",
+        )
+        else {
+            return;
+        };
+        let eligibility_input =
+            phase601_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_input(
+                "phase601-inherited-drift-eligibility",
+                &review,
+                GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityLabel::PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityRejected,
+            );
+        review.phase597_import_candidate_digest = Hash([8; 32]);
+        let validation =
+            validate_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_input(
+                &review,
+                &eligibility_input,
+            );
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::DigestBindingMismatch
+        ));
+        assert!(
+            build_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility(
+                &review,
+                &eligibility_input,
+            )
+            .is_err()
+        );
+
+        for root in [
+            &phase595_bundle_root,
+            &bundle_root,
+            &capture_root,
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase601 inherited drift cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase601_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_rejects_policy_drift_and_promotion(
+    ) {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            review,
+        )) = phase601_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_source(
+            "phase601-promotion",
+        )
+        else {
+            return;
+        };
+        let mut eligibility_input =
+            phase601_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_input(
+                "phase601-promotion-eligibility",
+                &review,
+                GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityLabel::PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityRejected,
+            );
+        eligibility_input.classification =
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityClassification::PacketRoleArtifactIndependentOperatorAcceptedResultWaitingForLevel2Review;
+        eligibility_input.eligibility_policy_digest = Hash([0; 32]);
+        eligibility_input.eligibility_nonpromotion_digest = Hash([0; 32]);
+        eligibility_input.eligibility_summary =
+            "this independent-operator accepted result creates accepted evidence and SOTA"
+                .to_owned();
+        eligibility_input.external_result_import_created = true;
+        eligibility_input.accepted_external_result_evidence_created = true;
+        eligibility_input.accepted_evidence_artifact_write_requested = true;
+        eligibility_input.accepted_evidence_ledger_mutation_requested = true;
+        eligibility_input.independent_external_reproduction_accepted = true;
+        eligibility_input.level2_artifact_write_requested = true;
+        eligibility_input.score_axis_artifact_write_requested = true;
+        eligibility_input.score_axis_population_requested = true;
+        eligibility_input.accepted_formal_evidence_created = true;
+        eligibility_input.creates_level2_evidence = true;
+        eligibility_input.proof_artifact_promoted = true;
+        eligibility_input.checker_transcript_promoted = true;
+        eligibility_input.solver_certificate_promoted = true;
+        eligibility_input.lean_execution_evidence_created = true;
+        eligibility_input.additional_smt_z3_execution_created = true;
+        eligibility_input.cobalt_execution_evidence_created = true;
+        eligibility_input.rust_to_lean_execution_evidence_created = true;
+        eligibility_input.backend_execution_evidence_created = true;
+        eligibility_input.benchmark_evidence_created = true;
+        eligibility_input.external_audit_evidence_created = true;
+        eligibility_input.semantic_correctness_claimed = true;
+        eligibility_input.production_readiness_claimed = true;
+        eligibility_input.sota_claimed = true;
+        eligibility_input.breakthrough_claimed = true;
+        eligibility_input.full_security_claimed = true;
+        eligibility_input.action_authority_claimed = true;
+        let validation =
+            validate_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_input(
+                &review,
+                &eligibility_input,
+            );
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::InvalidClassification
+        ));
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::EligibilityPolicyDigestMismatch
+        ));
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::EligibilityNonpromotionDigestMismatch
+        ));
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::EligibilitySummaryPromotionClaim
+        ));
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityIssue::PromotionAttempt
+        ));
+        assert!(
+            build_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility(
+                &review,
+                &eligibility_input,
+            )
+            .is_err()
+        );
+
+        for root in [
+            &phase595_bundle_root,
+            &bundle_root,
+            &capture_root,
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase601 promotion cleanup succeeds");
+        }
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -160964,6 +162261,161 @@ mod tests {
             external_result_import_created: false,
             accepted_external_result_evidence_created: false,
             accepted_evidence_artifact_write_requested: false,
+            independent_external_reproduction_accepted: false,
+            level2_artifact_write_requested: false,
+            score_axis_artifact_write_requested: false,
+            score_axis_population_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            lean_execution_evidence_created: false,
+            additional_smt_z3_execution_created: false,
+            cobalt_execution_evidence_created: false,
+            rust_to_lean_execution_evidence_created: false,
+            backend_execution_evidence_created: false,
+            benchmark_evidence_created: false,
+            external_audit_evidence_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase601_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_source(
+        source_prefix: &str,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorImportReview,
+    )> {
+        let (
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            import_candidate,
+        ) = phase599_tiny_z3_packet_role_artifact_independent_operator_import_review_source(
+            source_prefix,
+        )?;
+        let review_input =
+            phase599_tiny_z3_packet_role_artifact_independent_operator_import_review_input(
+                &format!("{source_prefix}-phase599-review"),
+                &import_candidate,
+                GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorImportReviewLabel::PacketRoleArtifactIndependentOperatorImportReviewRecorded,
+            );
+        let review =
+            build_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_import_review(
+                &import_candidate,
+                &review_input,
+            )
+            .expect("phase601 source Phase 599 independent-operator import review builds");
+        Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            review,
+        ))
+    }
+
+    fn phase601_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_input(
+        eligibility_id: &str,
+        review: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorImportReview,
+        eligibility_label: GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityLabel,
+    ) -> GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityInput
+    {
+        let eligibility_policy_id =
+            "phase601-packet-role-artifact-independent-operator-accepted-result-eligibility-policy";
+        let eligibility_decision_id =
+            "phase601-packet-role-artifact-independent-operator-accepted-result-eligibility-decision";
+        let classification =
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityClassification::PacketRoleArtifactIndependentOperatorAcceptedResultBlockedPolicyNotSatisfied;
+        let nonclaims =
+            gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_required_nonclaims();
+        let blockers =
+            gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_blockers();
+        GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityInput {
+            schema_version:
+                GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_ELIGIBILITY_SCHEMA_VERSION
+                    .to_owned(),
+            eligibility_id: eligibility_id.to_owned(),
+            eligibility_policy_id: eligibility_policy_id.to_owned(),
+            eligibility_decision_id: eligibility_decision_id.to_owned(),
+            eligibility_decision_at_unix: 1_800_000_601,
+            digest_bindings:
+                gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_digest_bindings(
+                    review,
+                ),
+            id_bindings:
+                gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_id_bindings(
+                    review,
+                    eligibility_id,
+                    eligibility_policy_id,
+                    eligibility_decision_id,
+                ),
+            label_bindings:
+                gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_label_bindings(
+                    review,
+                    &eligibility_label,
+                ),
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-packet-role-artifact-independent-operator-accepted-result-eligibility-nonclaims:v1",
+                &nonclaims,
+            ),
+            classification: classification.clone(),
+            eligibility_policy_digest:
+                gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_policy_digest(
+                    eligibility_policy_id,
+                    &classification,
+                    review.digest(),
+                    review.review_policy_digest,
+                    review.review_nonpromotion_digest,
+                    &blockers,
+                ),
+            eligibility_blockers: blockers.clone(),
+            eligibility_blocker_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-packet-role-artifact-independent-operator-accepted-result-eligibility-blockers:v1",
+                &blockers,
+            ),
+            eligibility_nonpromotion_digest:
+                gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_nonpromotion_digest(
+                    &classification,
+                    review.digest(),
+                    review.review_policy_digest,
+                    review.review_nonpromotion_digest,
+                    &blockers,
+                ),
+            eligibility_rules:
+                gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_rules(),
+            forbidden_api_set:
+                gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_forbidden_apis(),
+            inherited_digest_requirements:
+                gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_eligibility_inherited_digest_requirements(),
+            eligibility_label,
+            eligibility_summary:
+                "local packet role artifact independent-operator accepted-result eligibility remains blocked by policy"
+                    .to_owned(),
+            external_result_import_created: false,
+            accepted_external_result_evidence_created: false,
+            accepted_evidence_artifact_write_requested: false,
+            accepted_evidence_ledger_mutation_requested: false,
             independent_external_reproduction_accepted: false,
             level2_artifact_write_requested: false,
             score_axis_artifact_write_requested: false,

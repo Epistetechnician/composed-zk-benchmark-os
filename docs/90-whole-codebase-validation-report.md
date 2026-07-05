@@ -8802,5 +8802,25 @@ formal evidence, creates no Level2+ evidence, populates no score axes, runs no
 Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark
 evidence, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/601-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-accepted-result-evidence-eligibility-metadata-notes.md](docs/601-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-accepted-result-evidence-eligibility-metadata-notes.md)
+documents the Phase 601 packet-role artifact independent-operator
+accepted-result evidence eligibility metadata implementation. The Rust surface
+in `hsai-agent-admission` accepts one exact Phase 599
+`PacketRoleArtifactIndependentOperatorImportReviewBlockedNoAcceptedExternalResult`
+record, binds Phase 599 review/input/binding/policy/blocker/nonpromotion
+digests, binds Phase 597 candidate/validation/quarantine digests, binds exact
+Phase 595 readback digests and directly exposed Phase 593/591/589/587/585
+digests, records inherited transitive Phase
+583/581/579/577/575/573/571/569/567/565/563/561/559/557/555 and
+backend-execution requirements, and rejects Phase 599 state drift, inherited
+Phase 597 digest drift, accepted-ledger mutation attempts, non-blocked
+classification, promotion booleans, and strong public claims. It imports no
+external result, mutates no accepted Evidence Ledger, creates no accepted
+external result evidence, accepts no independent external reproduction, creates
+no accepted formal evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates
+no benchmark evidence, and claims no production/SOTA/security
+/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
