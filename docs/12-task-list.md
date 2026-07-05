@@ -14709,6 +14709,36 @@ evidence, no new Lean/new-SMT/COBALT or Rust-to-Lean execution, no benchmark
 evidence, no external audit evidence, and no production/SOTA/security/
 correctness claim.
 
+## Phase 523 HSAI Tiny Z3 External Result Import Candidate Metadata
+
+Status: complete. See
+`docs/523-hsai-tiny-z3-external-result-import-candidate-metadata-notes.md`.
+
+Goal: implement local external-result import candidate metadata over one exact
+Phase 521 external-reproduction provenance record.
+
+Implemented: Phase 523 adds import-candidate input/output metadata,
+classification and label enums, issue and validation types, blocker/rule/
+forbidden-API/inherited-digest helpers, nonclaim and nonpromotion digest
+helpers, deterministic digest/id/label bindings, a builder that constructs one
+in-memory `zkbench_core::ExternalResultCandidate`, and a fail-closed validator
+that calls `validate_external_result_candidate` and
+`external_result_quarantine_record`. The record binds Phase 521/519/517/515/513
+digests, candidate digest, validation digest, validation-issue digest,
+quarantine-record digest, status `ExternalResultStatus::Quarantined`, and
+requested boundary `ClaimBoundary::Level0DesignNote`.
+
+Validation coverage: focused Rust tests cover a successful quarantined import
+candidate metadata record, rejection of invalid Phase 521 state, and rejection
+of digest drift plus promotion flags.
+
+Exit criteria: HSAI now has local metadata showing that one tiny-Z3
+external-result import candidate can be constructed, validated by zkbench-core,
+and kept quarantined. It still has no independent external reproduction, no
+Level2+ evidence, no populated score axes, no accepted formal evidence, no new
+Lean/new-SMT/COBALT or Rust-to-Lean execution, no benchmark evidence, no
+external audit evidence, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
