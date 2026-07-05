@@ -8520,5 +8520,22 @@ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
 additional SMT/Z3 execution, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/584-hsai-tiny-z3-backend-execution-packet-role-artifact-accepted-result-policy-resolution-boundary.md](docs/584-hsai-tiny-z3-backend-execution-packet-role-artifact-accepted-result-policy-resolution-boundary.md)
+documents the Phase 584 docs-first packet role artifact accepted-result
+policy-resolution boundary. It requires one exact Phase 583
+`PacketRoleArtifactAcceptedResultBlockedPolicyNotSatisfied` record, Phase 583
+eligibility/input/binding/policy/blocker/nonpromotion digests, Phase 581
+review/input/binding/policy/blocker/nonpromotion digests, Phase 579
+candidate/validation/quarantine digests, exact Phase 577 readback bindings,
+exact Phase 575/573/571/569/567/565/563/561/559/557/555 and inherited
+backend-execution digest bindings, blocked resolution metadata, and future
+Phase 585 implementation exit criteria. It creates no Rust code, imports no
+external result, mutates no accepted Evidence Ledger, creates no accepted
+external result evidence, accepts no independent external reproduction, creates
+no accepted formal evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates
+no benchmark evidence, and claims no production/SOTA/security
+/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
