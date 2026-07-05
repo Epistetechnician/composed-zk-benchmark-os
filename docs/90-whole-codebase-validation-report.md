@@ -7436,5 +7436,20 @@ accepted formal evidence, creates no Level2+ evidence, populates no score axes,
 runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark
 evidence, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/515-hsai-tiny-z3-accepted-evidence-package-metadata-notes.md](docs/515-hsai-tiny-z3-accepted-evidence-package-metadata-notes.md)
+documents the Phase 515 local accepted-evidence package metadata
+implementation. The Rust surface in `crates/hsai-agent-admission/src/lib.rs`
+adds package input/output metadata, issue and validation types, nonclaim/cap/
+rule/forbidden-API/inherited-digest helpers, package-policy digest helpers,
+digest/id/label binding helpers, a fail-closed validator, and a builder that
+validates one exact Phase 513 materialized append metadata record before
+recording local package metadata only. The metadata binds Phase 513
+materialization identity, Phase 513 materialized ledger artifact identity,
+Phase 511 class/boundary identity, package policy digest, package nonclaim
+digest, and package cap digest. It writes no package artifact files, creates no
+accepted formal evidence, creates no Level2+ evidence, populates no score axes,
+runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark
+evidence, and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

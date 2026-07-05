@@ -14474,6 +14474,34 @@ Level2+ evidence, no score axes, no Lean/new-SMT/COBALT or Rust-to-Lean
 execution, no benchmark evidence, no external audit evidence, and no
 production/SOTA/security/correctness claim.
 
+## Phase 515 HSAI Tiny Z3 Accepted Evidence Package Metadata
+
+Status: complete. See
+`docs/515-hsai-tiny-z3-accepted-evidence-package-metadata-notes.md`.
+
+Goal: implement local accepted-evidence package metadata over one exact Phase
+513 materialized accepted append metadata record.
+
+Implemented: Phase 515 adds accepted-evidence package input/output metadata,
+issue and validation types, nonclaim/cap/rule/forbidden-API/inherited digest
+helpers, package-policy digest helpers, digest/id/label binding helpers, a
+fail-closed validator, and a builder that records local package metadata only.
+The result binds Phase 513 materialization identity, Phase 513 materialized
+ledger artifact identity, Phase 511 class/boundary identity, package policy
+digest, package nonclaim digest, and package cap digest.
+
+Validation coverage: focused Rust tests cover successful local package
+metadata over a real Phase 513 materialized append metadata record, rejection
+of invalid Phase 513 state, and rejection of package artifact writes,
+formal-evidence, Level2+, score-axis, proof/checker/solver, backend, benchmark,
+external-audit, strong-claim, and action-authority promotion attempts.
+
+Exit criteria: HSAI now has local metadata packaging one materialized
+`LocalReplay` / `Level1LocalReplay` accepted-ledger artifact. It still has no
+accepted formal evidence, no Level2+ evidence, no score axes, no
+Lean/new-SMT/COBALT or Rust-to-Lean execution, no benchmark evidence, no
+external audit evidence, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
