@@ -141,8 +141,9 @@ readiness, full security, or authority to execute an action.
 
 ## Phase 515 Implementation Exit Criteria
 
-A future Phase 515 may implement local accepted-evidence package metadata only
-if it:
+Phase 515 implemented local accepted-evidence package metadata in
+`docs/515-hsai-tiny-z3-accepted-evidence-package-metadata-notes.md`. The
+implementation met this boundary by:
 
 - touches only the allowed files listed above;
 - performs no process or network calls;
