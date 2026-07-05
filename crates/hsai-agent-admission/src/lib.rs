@@ -1102,6 +1102,11 @@ pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_MATERIALIZED_ACCEPTED_APPEND_
 pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_MATERIALIZED_ACCEPTED_APPEND_STATE_SLICE: &str =
     "phase-541-hsai-tiny-z3-backend-execution-materialized-accepted-append-metadata";
 pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_MATERIALIZED_ACCEPTED_APPEND_CLAIM_BOUNDARY: &str = "local tiny-Z3 backend execution materialized accepted append metadata only; records one local JSON accepted-ledger artifact materialized through zkbench-core apply_materialized_accepted_ledger_append_transaction over one exact Phase 539 in-memory backend-execution accepted append mutation, but does not create accepted formal evidence, create Level2+ evidence, populate score axes, create proof artifacts, create checker transcripts, create solver certificates, run Lean, run another SMT/Z3 execution, run COBALT, run Rust-to-Lean extraction, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, establish independent external reproduction, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_EVIDENCE_PACKAGE_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-z3-backend-execution-accepted-evidence-package:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_EVIDENCE_PACKAGE_STATE_SLICE: &str =
+    "phase-543-hsai-tiny-z3-backend-execution-accepted-evidence-package-metadata";
+pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_EVIDENCE_PACKAGE_CLAIM_BOUNDARY: &str = "local tiny-Z3 backend execution accepted evidence package metadata only; packages one Phase 541 local materialized accepted-ledger artifact as LocalReplay Level1LocalReplay evidence for a reviewed local SMT/Z3 backend execution route, but does not create accepted formal evidence, create Level2+ evidence, populate score axes, create proof artifacts, create checker transcripts, create solver certificates, run Lean, run another SMT/Z3 execution, run COBALT, run Rust-to-Lean extraction, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, establish independent external reproduction, or grant authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -17410,6 +17415,181 @@ pub enum GatewayFormalTinyZ3BackendExecutionMaterializedAcceptedAppendIssue {
 pub struct GatewayFormalTinyZ3BackendExecutionMaterializedAcceptedAppendValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyZ3BackendExecutionMaterializedAcceptedAppendIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageLabel {
+    BackendExecutionPackageRecorded,
+    BackendExecutionPackageRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageInput {
+    pub schema_version: String,
+    pub package_id: String,
+    pub package_policy_id: String,
+    pub package_decision_id: String,
+    pub package_decision_at_unix: u64,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub package_policy_digest: Hash,
+    pub package_caps: BTreeSet<String>,
+    pub package_cap_digest: Hash,
+    pub evidence_class: String,
+    pub claim_boundary: String,
+    pub package_rules: BTreeSet<String>,
+    pub forbidden_api_set: BTreeSet<String>,
+    pub inherited_digest_requirements: BTreeSet<String>,
+    pub package_label: GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageLabel,
+    pub package_summary: String,
+    pub package_artifact_write_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_evidence_created: bool,
+    pub independent_external_reproduction_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-accepted-evidence-package-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackage {
+    pub schema_version: String,
+    pub package_id: String,
+    pub state_slice: String,
+    pub package_input_digest: Hash,
+    pub package_policy_id: String,
+    pub package_decision_id: String,
+    pub package_decision_at_unix: u64,
+    pub phase541_materialization_digest: Hash,
+    pub phase541_materialization_input_digest: Hash,
+    pub phase541_digest_binding_map_digest: Hash,
+    pub phase541_id_binding_map_digest: Hash,
+    pub phase541_label_binding_map_digest: Hash,
+    pub phase541_explicit_nonclaims_digest: Hash,
+    pub phase541_materialization_rule_digest: Hash,
+    pub phase541_forbidden_api_set_digest: Hash,
+    pub phase541_inherited_digest_requirements_digest: Hash,
+    pub phase541_phase539_mutation_digest: Hash,
+    pub phase541_ledger_path_identity_digest: Hash,
+    pub phase541_ledger_path_policy_digest: Hash,
+    pub phase541_materialized_append_report_digest: Hash,
+    pub phase541_materialized_ledger_artifact_digest: Hash,
+    pub phase541_materialized_ledger_artifact_byte_len: usize,
+    pub phase539_appended_evidence_class: String,
+    pub phase539_appended_claim_boundary: String,
+    pub phase535_owner_decision_digest: Hash,
+    pub phase533_review_digest: Hash,
+    pub phase531_package_digest: Hash,
+    pub phase529_result_digest: Hash,
+    pub phase527_candidate_digest: Hash,
+    pub evidence_class: String,
+    pub claim_boundary: String,
+    pub package_policy_digest: Hash,
+    pub package_caps: BTreeSet<String>,
+    pub package_cap_digest: Hash,
+    pub package_nonclaim_digest: Hash,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub package_rules: BTreeSet<String>,
+    pub package_rules_digest: Hash,
+    pub forbidden_api_set: BTreeSet<String>,
+    pub forbidden_api_set_digest: Hash,
+    pub inherited_digest_requirements: BTreeSet<String>,
+    pub inherited_digest_requirements_digest: Hash,
+    pub package_label: GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageLabel,
+    pub package_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary_statement: String,
+    pub local_accepted_evidence_package_created: bool,
+    pub writes_package_artifact_files: bool,
+    pub creates_accepted_formal_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_evidence_created: bool,
+    pub independent_external_reproduction_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackage {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-accepted-evidence-package:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue {
+    InvalidSchemaVersion,
+    InvalidPackageId,
+    InvalidPackagePolicyId,
+    InvalidPackageDecisionId,
+    MissingPackageDecisionTimestamp,
+    MissingDigest(String),
+    DigestBindingMismatch,
+    IdBindingMismatch,
+    InvalidIdBinding(String),
+    LabelBindingMismatch,
+    Phase541MaterializationStateMismatch,
+    NonclaimMismatch,
+    PackagePolicyDigestMismatch,
+    PackageCapMismatch,
+    InvalidEvidenceClass,
+    InvalidClaimBoundary,
+    PackageRulesMismatch,
+    ForbiddenApiSetMismatch,
+    InheritedDigestRequirementsMismatch,
+    PackageSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -70840,6 +71020,651 @@ pub fn validate_gateway_formal_tiny_z3_backend_execution_materialized_accepted_a
     }
 }
 
+pub fn gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_claim_boundary() -> String
+{
+    GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_EVIDENCE_PACKAGE_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    [
+        "not backend execution accepted formal evidence",
+        "not backend execution Level2+ evidence",
+        "not backend execution score-axis evidence",
+        "not proof authority",
+        "not checker transcript authority",
+        "not solver certificate authority",
+        "not Lean execution evidence",
+        "not new SMT execution evidence",
+        "not COBALT execution evidence",
+        "not Rust-to-Lean extraction evidence",
+        "not benchmark evidence",
+        "not external audit",
+        "not independent external reproduction",
+        "not SOTA",
+        "not semantic correctness",
+        "not production readiness",
+        "not full security",
+        "not action authority",
+    ]
+    .into_iter()
+    .map(|label| NonClaimLabel(label.to_owned()))
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_caps() -> BTreeSet<String>
+{
+    [
+        "evidence_class_cap:LocalReplay",
+        "claim_boundary_cap:Level1LocalReplay",
+        "scope:single_phase541_materialized_local_accepted_ledger_artifact",
+        "scope:reviewed_local_smt_z3_backend_execution_route",
+        "no_formal_proof_authority",
+        "no_level2_authority",
+        "no_score_axis_authority",
+        "no_benchmark_authority",
+        "no_external_audit_authority",
+        "no_independent_external_reproduction_authority",
+        "no_action_authority",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_rules() -> BTreeSet<String>
+{
+    [
+        "phase541_state_required",
+        "phase541_digest_bindings_required",
+        "phase541_materialized_output_required",
+        "phase541_zkbench_core_materialized_owner_required",
+        "phase541_materialized_ledger_digest_required",
+        "phase541_materialized_ledger_byte_len_required",
+        "phase539_local_replay_required",
+        "phase539_level1_local_replay_required",
+        "phase535_533_531_529_527_bindings_required",
+        "local_replay_evidence_class_required",
+        "level1_local_replay_claim_boundary_required",
+        "package_policy_digest_required",
+        "package_nonclaim_digest_required",
+        "package_cap_digest_required",
+        "package_artifact_write_rejected",
+        "level2_formal_evidence_request_rejected",
+        "score_axis_population_rejected",
+        "proof_checker_solver_authority_rejected",
+        "lean_cobalt_rust_to_lean_rejected",
+        "additional_smt_z3_execution_rejected",
+        "benchmark_evidence_rejected",
+        "external_audit_evidence_rejected",
+        "independent_reproduction_rejected",
+        "strong_public_claim_rejected",
+        "action_authority_rejected",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_forbidden_apis(
+) -> BTreeSet<String> {
+    [
+        "package_artifact_file_write",
+        "accepted_formal_evidence_writer",
+        "score_axis_writer",
+        "official_submission_api",
+        "external_runner",
+        "process_spawn",
+        "network_api",
+        "solver_api",
+        "proof_assistant_api",
+        "benchmark_runner",
+        "lean_api",
+        "cobalt_api",
+        "rust_to_lean_api",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_inherited_digest_requirements(
+) -> BTreeSet<String> {
+    [
+        "phase541_materialization_digest_required",
+        "phase541_materialization_input_digest_required",
+        "phase541_digest_binding_map_digest_required",
+        "phase541_id_binding_map_digest_required",
+        "phase541_label_binding_map_digest_required",
+        "phase541_explicit_nonclaims_digest_required",
+        "phase541_materialization_rule_digest_required",
+        "phase541_forbidden_api_set_digest_required",
+        "phase541_inherited_digest_requirements_digest_required",
+        "phase541_phase539_mutation_digest_required",
+        "phase541_ledger_path_identity_digest_required",
+        "phase541_ledger_path_policy_digest_required",
+        "phase541_materialized_append_report_digest_required",
+        "phase541_materialized_ledger_artifact_digest_required",
+        "phase541_materialized_ledger_artifact_byte_len_required",
+        "phase539_appended_evidence_class_required",
+        "phase539_appended_claim_boundary_required",
+        "phase535_owner_decision_digest_required",
+        "phase533_review_digest_required",
+        "phase531_package_digest_required",
+        "phase529_result_digest_required",
+        "phase527_candidate_digest_required",
+        "package_policy_digest_required",
+        "package_nonclaim_digest_required",
+        "package_cap_digest_required",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_policy_digest(
+    package_policy_id: &str,
+    evidence_class: &str,
+    claim_boundary: &str,
+    package_caps: &BTreeSet<String>,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-accepted-evidence-package-policy:v1",
+        &(
+            package_policy_id,
+            evidence_class,
+            claim_boundary,
+            package_caps,
+        ),
+    )
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_digest_bindings(
+    materialization: &GatewayFormalTinyZ3BackendExecutionMaterializedAcceptedAppend,
+) -> BTreeMap<String, Hash> {
+    BTreeMap::from([
+        (
+            "phase541_materialization_digest".to_owned(),
+            materialization.digest(),
+        ),
+        (
+            "phase541_materialization_input_digest".to_owned(),
+            materialization.materialization_input_digest,
+        ),
+        (
+            "phase541_digest_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase541-materialized-accepted-append-digest-bindings:v1",
+                &materialization.digest_bindings,
+            ),
+        ),
+        (
+            "phase541_id_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase541-materialized-accepted-append-id-bindings:v1",
+                &materialization.id_bindings,
+            ),
+        ),
+        (
+            "phase541_label_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase541-materialized-accepted-append-label-bindings:v1",
+                &materialization.label_bindings,
+            ),
+        ),
+        (
+            "phase541_explicit_nonclaims_digest".to_owned(),
+            materialization.explicit_nonclaims_digest,
+        ),
+        (
+            "phase541_materialization_rule_digest".to_owned(),
+            materialization.materialization_rules_digest,
+        ),
+        (
+            "phase541_forbidden_api_set_digest".to_owned(),
+            materialization.forbidden_api_set_digest,
+        ),
+        (
+            "phase541_inherited_digest_requirements_digest".to_owned(),
+            materialization.inherited_digest_requirements_digest,
+        ),
+        (
+            "phase541_phase539_mutation_digest".to_owned(),
+            materialization.phase539_mutation_digest,
+        ),
+        (
+            "phase541_ledger_path_identity_digest".to_owned(),
+            materialization.ledger_path_identity_digest,
+        ),
+        (
+            "phase541_ledger_path_policy_digest".to_owned(),
+            materialization.ledger_path_policy_digest,
+        ),
+        (
+            "phase541_materialized_append_report_digest".to_owned(),
+            materialization.materialized_append_report_digest,
+        ),
+        (
+            "phase541_materialized_ledger_artifact_digest".to_owned(),
+            materialization.materialized_ledger_artifact_digest,
+        ),
+        (
+            "phase535_owner_decision_digest".to_owned(),
+            materialization.phase535_owner_decision_digest,
+        ),
+        (
+            "phase533_review_digest".to_owned(),
+            materialization.phase533_review_digest,
+        ),
+        (
+            "phase531_package_digest".to_owned(),
+            materialization.phase531_package_digest,
+        ),
+        (
+            "phase529_result_digest".to_owned(),
+            materialization.phase529_result_digest,
+        ),
+        (
+            "phase527_candidate_digest".to_owned(),
+            materialization.phase527_candidate_digest,
+        ),
+    ])
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_id_bindings(
+    materialization: &GatewayFormalTinyZ3BackendExecutionMaterializedAcceptedAppend,
+    package_id: &str,
+    package_policy_id: &str,
+    package_decision_id: &str,
+) -> BTreeMap<String, String> {
+    let mut ids = materialization.id_bindings.clone();
+    ids.insert("package_id".to_owned(), package_id.to_owned());
+    ids.insert("package_policy_id".to_owned(), package_policy_id.to_owned());
+    ids.insert(
+        "package_decision_id".to_owned(),
+        package_decision_id.to_owned(),
+    );
+    ids.insert(
+        "phase541_materialization_id".to_owned(),
+        materialization.materialization_id.clone(),
+    );
+    ids
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_label_bindings(
+    materialization: &GatewayFormalTinyZ3BackendExecutionMaterializedAcceptedAppend,
+    package_label: &GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageLabel,
+) -> BTreeMap<String, String> {
+    let mut labels = materialization.label_bindings.clone();
+    labels.insert(
+        "phase541_materialization_label".to_owned(),
+        format!("{:?}", materialization.materialization_label),
+    );
+    labels.insert("package_label".to_owned(), format!("{package_label:?}"));
+    labels
+}
+
+pub fn build_gateway_formal_tiny_z3_backend_execution_accepted_evidence_package(
+    materialization: &GatewayFormalTinyZ3BackendExecutionMaterializedAcceptedAppend,
+    input: &GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageInput,
+) -> Result<
+    GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackage,
+    GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageValidation,
+> {
+    let input_validation =
+        validate_gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_input(
+            materialization,
+            input,
+        );
+    if !input_validation.valid {
+        return Err(input_validation);
+    }
+    let digest_bindings =
+        gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_digest_bindings(
+            materialization,
+        );
+    Ok(
+        GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackage {
+            schema_version:
+                GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_EVIDENCE_PACKAGE_SCHEMA_VERSION
+                    .to_owned(),
+            package_id: input.package_id.clone(),
+            state_slice:
+                GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_EVIDENCE_PACKAGE_STATE_SLICE
+                    .to_owned(),
+            package_input_digest: input.digest(),
+            package_policy_id: input.package_policy_id.clone(),
+            package_decision_id: input.package_decision_id.clone(),
+            package_decision_at_unix: input.package_decision_at_unix,
+            phase541_materialization_digest: digest_bindings["phase541_materialization_digest"],
+            phase541_materialization_input_digest: digest_bindings
+                ["phase541_materialization_input_digest"],
+            phase541_digest_binding_map_digest: digest_bindings
+                ["phase541_digest_binding_map_digest"],
+            phase541_id_binding_map_digest: digest_bindings["phase541_id_binding_map_digest"],
+            phase541_label_binding_map_digest: digest_bindings
+                ["phase541_label_binding_map_digest"],
+            phase541_explicit_nonclaims_digest: digest_bindings
+                ["phase541_explicit_nonclaims_digest"],
+            phase541_materialization_rule_digest: digest_bindings
+                ["phase541_materialization_rule_digest"],
+            phase541_forbidden_api_set_digest: digest_bindings
+                ["phase541_forbidden_api_set_digest"],
+            phase541_inherited_digest_requirements_digest: digest_bindings
+                ["phase541_inherited_digest_requirements_digest"],
+            phase541_phase539_mutation_digest: digest_bindings["phase541_phase539_mutation_digest"],
+            phase541_ledger_path_identity_digest: digest_bindings
+                ["phase541_ledger_path_identity_digest"],
+            phase541_ledger_path_policy_digest: digest_bindings["phase541_ledger_path_policy_digest"],
+            phase541_materialized_append_report_digest: digest_bindings
+                ["phase541_materialized_append_report_digest"],
+            phase541_materialized_ledger_artifact_digest: digest_bindings
+                ["phase541_materialized_ledger_artifact_digest"],
+            phase541_materialized_ledger_artifact_byte_len: materialization
+                .materialized_ledger_artifact_byte_len,
+            phase539_appended_evidence_class: materialization
+                .phase539_appended_evidence_class
+                .clone(),
+            phase539_appended_claim_boundary: materialization
+                .phase539_appended_claim_boundary
+                .clone(),
+            phase535_owner_decision_digest: materialization.phase535_owner_decision_digest,
+            phase533_review_digest: materialization.phase533_review_digest,
+            phase531_package_digest: materialization.phase531_package_digest,
+            phase529_result_digest: materialization.phase529_result_digest,
+            phase527_candidate_digest: materialization.phase527_candidate_digest,
+            evidence_class: input.evidence_class.clone(),
+            claim_boundary: input.claim_boundary.clone(),
+            package_policy_digest: input.package_policy_digest,
+            package_caps: input.package_caps.clone(),
+            package_cap_digest: input.package_cap_digest,
+            package_nonclaim_digest: input.explicit_nonclaims_digest,
+            digest_bindings: input.digest_bindings.clone(),
+            id_bindings: input.id_bindings.clone(),
+            label_bindings: input.label_bindings.clone(),
+            explicit_nonclaims: input.explicit_nonclaims.clone(),
+            package_rules: input.package_rules.clone(),
+            package_rules_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-accepted-evidence-package-rules:v1",
+                &input.package_rules,
+            ),
+            forbidden_api_set: input.forbidden_api_set.clone(),
+            forbidden_api_set_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-accepted-evidence-package-forbidden-apis:v1",
+                &input.forbidden_api_set,
+            ),
+            inherited_digest_requirements: input.inherited_digest_requirements.clone(),
+            inherited_digest_requirements_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-accepted-evidence-package-inherited-digest-requirements:v1",
+                &input.inherited_digest_requirements,
+            ),
+            package_label: input.package_label.clone(),
+            package_summary: input.package_summary.clone(),
+            previous_promotion_state:
+                "backend_execution_materialized_accepted_append_metadata".to_owned(),
+            promotion_state: "backend_execution_local_accepted_evidence_package_metadata"
+                .to_owned(),
+            next_required_state:
+                "backend_execution_level2_score_axes_and_formal_evidence_still_unperformed"
+                    .to_owned(),
+            claim_boundary_statement:
+                gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_claim_boundary(
+                ),
+            local_accepted_evidence_package_created: true,
+            writes_package_artifact_files: false,
+            creates_accepted_formal_evidence: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            lean_execution_evidence_created: false,
+            additional_smt_z3_execution_created: false,
+            cobalt_execution_evidence_created: false,
+            rust_to_lean_execution_evidence_created: false,
+            benchmark_evidence_created: false,
+            external_audit_evidence_created: false,
+            independent_external_reproduction_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            grants_authority: false,
+        },
+    )
+}
+
+pub fn validate_gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_input(
+    materialization: &GatewayFormalTinyZ3BackendExecutionMaterializedAcceptedAppend,
+    input: &GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageInput,
+) -> GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_EVIDENCE_PACKAGE_SCHEMA_VERSION
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::InvalidSchemaVersion,
+        );
+    }
+    if !is_single_segment_id(&input.package_id) {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::InvalidPackageId,
+        );
+    }
+    if !is_single_segment_id(&input.package_policy_id) {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::InvalidPackagePolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.package_decision_id) {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::InvalidPackageDecisionId,
+        );
+    }
+    if input.package_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::MissingPackageDecisionTimestamp,
+        );
+    }
+    let expected_digests =
+        gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_digest_bindings(
+            materialization,
+        );
+    for (label, digest) in &input.digest_bindings {
+        if *digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::MissingDigest(
+                    label.clone(),
+                ),
+            );
+        }
+    }
+    if input.digest_bindings != expected_digests {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::DigestBindingMismatch,
+        );
+    }
+    let expected_ids =
+        gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_id_bindings(
+            materialization,
+            &input.package_id,
+            &input.package_policy_id,
+            &input.package_decision_id,
+        );
+    for (label, value) in &input.id_bindings {
+        if !is_single_segment_id(value) {
+            issues.push(
+                GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::InvalidIdBinding(
+                    label.clone(),
+                ),
+            );
+        }
+    }
+    if input.id_bindings != expected_ids {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::IdBindingMismatch,
+        );
+    }
+    let expected_labels =
+        gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_label_bindings(
+            materialization,
+            &input.package_label,
+        );
+    if input.label_bindings != expected_labels {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::LabelBindingMismatch,
+        );
+    }
+    if materialization.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_MATERIALIZED_ACCEPTED_APPEND_SCHEMA_VERSION
+        || materialization.state_slice
+            != GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_MATERIALIZED_ACCEPTED_APPEND_STATE_SLICE
+        || materialization.promotion_state
+            != "backend_execution_materialized_accepted_append_metadata"
+        || materialization.next_required_state
+            != "backend_execution_level2_score_axes_and_formal_evidence_still_unperformed"
+        || materialization.claim_boundary
+            != gateway_formal_tiny_z3_backend_execution_materialized_accepted_append_claim_boundary(
+            )
+        || !materialization.routes_through_zkbench_core_materialized_owner
+        || !materialization.creates_materialized_accepted_ledger_output
+        || materialization.materialized_ledger_artifact_digest == Hash([0; 32])
+        || materialization.materialized_ledger_artifact_byte_len == 0
+        || materialization.creates_official_submission
+        || materialization.creates_accepted_formal_evidence
+        || materialization.creates_level2_evidence
+        || materialization.populates_score_axes
+        || materialization.proof_artifact_created
+        || materialization.checker_transcript_created
+        || materialization.solver_certificate_created
+        || materialization.lean_execution_evidence_created
+        || materialization.additional_smt_z3_execution_created
+        || materialization.cobalt_execution_evidence_created
+        || materialization.rust_to_lean_execution_evidence_created
+        || materialization.benchmark_evidence_created
+        || materialization.external_audit_claimed
+        || materialization.independent_external_reproduction_claimed
+        || materialization.semantic_correctness_claimed
+        || materialization.production_readiness_claimed
+        || materialization.sota_claimed
+        || materialization.breakthrough_claimed
+        || materialization.full_security_claimed
+        || materialization.grants_authority
+        || materialization.phase539_appended_evidence_class != "LocalReplay"
+        || materialization.phase539_appended_claim_boundary != "Level1LocalReplay"
+        || materialization.phase535_owner_decision_digest == Hash([0; 32])
+        || materialization.phase533_review_digest == Hash([0; 32])
+        || materialization.phase531_package_digest == Hash([0; 32])
+        || materialization.phase529_result_digest == Hash([0; 32])
+        || materialization.phase527_candidate_digest == Hash([0; 32])
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::Phase541MaterializationStateMismatch,
+        );
+    }
+    let nonclaims =
+        gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-accepted-evidence-package-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::NonclaimMismatch);
+    }
+    let caps = gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_caps();
+    if input.package_caps != caps
+        || input.package_cap_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-accepted-evidence-package-caps:v1",
+                &caps,
+            )
+    {
+        issues.push(GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::PackageCapMismatch);
+    }
+    let expected_policy_digest =
+        gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_policy_digest(
+            &input.package_policy_id,
+            &input.evidence_class,
+            &input.claim_boundary,
+            &input.package_caps,
+        );
+    if input.package_policy_digest != expected_policy_digest {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::PackagePolicyDigestMismatch,
+        );
+    }
+    if input.evidence_class != "LocalReplay" {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::InvalidEvidenceClass,
+        );
+    }
+    if input.claim_boundary != "Level1LocalReplay" {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::InvalidClaimBoundary,
+        );
+    }
+    if input.package_rules
+        != gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_rules()
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::PackageRulesMismatch,
+        );
+    }
+    if input.forbidden_api_set
+        != gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_forbidden_apis()
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::ForbiddenApiSetMismatch,
+        );
+    }
+    if input.inherited_digest_requirements
+        != gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_inherited_digest_requirements()
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::InheritedDigestRequirementsMismatch,
+        );
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.package_summary,
+    ) {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::PackageSummaryPromotionClaim,
+        );
+    }
+    if input.package_artifact_write_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.lean_execution_evidence_created
+        || input.additional_smt_z3_execution_created
+        || input.cobalt_execution_evidence_created
+        || input.rust_to_lean_execution_evidence_created
+        || input.benchmark_evidence_created
+        || input.external_audit_evidence_created
+        || input.independent_external_reproduction_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::PromotionAttempt,
+        );
+    }
+    GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -110552,6 +111377,192 @@ mod tests {
     }
 
     #[test]
+    fn phase543_tiny_z3_backend_execution_accepted_evidence_package_records_local_metadata() {
+        let Some((obligation_root, phase405_output_root, output_root, materialization)) =
+            phase543_tiny_z3_backend_execution_accepted_evidence_package_source("phase543-package")
+        else {
+            return;
+        };
+        let package_input =
+            phase543_tiny_z3_backend_execution_accepted_evidence_package_input(
+                "phase543-package",
+                &materialization,
+                GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageLabel::BackendExecutionPackageRecorded,
+            );
+        let package = build_gateway_formal_tiny_z3_backend_execution_accepted_evidence_package(
+            &materialization,
+            &package_input,
+        )
+        .expect("phase543 backend execution accepted evidence package metadata builds");
+
+        assert_eq!(
+            package.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_EVIDENCE_PACKAGE_STATE_SLICE
+        );
+        assert_eq!(
+            package.phase541_materialization_digest,
+            materialization.digest()
+        );
+        assert_eq!(
+            package.phase541_materialization_input_digest,
+            materialization.materialization_input_digest
+        );
+        assert_eq!(
+            package.phase541_materialized_ledger_artifact_digest,
+            materialization.materialized_ledger_artifact_digest
+        );
+        assert_eq!(
+            package.phase541_materialized_ledger_artifact_byte_len,
+            materialization.materialized_ledger_artifact_byte_len
+        );
+        assert_eq!(
+            package.phase541_phase539_mutation_digest,
+            materialization.phase539_mutation_digest
+        );
+        assert_eq!(
+            package.phase535_owner_decision_digest,
+            materialization.phase535_owner_decision_digest
+        );
+        assert_eq!(package.evidence_class, "LocalReplay");
+        assert_eq!(package.claim_boundary, "Level1LocalReplay");
+        assert_eq!(package.phase539_appended_evidence_class, "LocalReplay");
+        assert_eq!(
+            package.phase539_appended_claim_boundary,
+            "Level1LocalReplay"
+        );
+        assert_eq!(
+            package.package_caps,
+            gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_caps()
+        );
+        assert_ne!(package.package_policy_digest, Hash([0; 32]));
+        assert_ne!(package.package_nonclaim_digest, Hash([0; 32]));
+        assert_ne!(package.package_cap_digest, Hash([0; 32]));
+        assert!(package.local_accepted_evidence_package_created);
+        assert!(!package.writes_package_artifact_files);
+        assert!(!package.creates_accepted_formal_evidence);
+        assert!(!package.creates_level2_evidence);
+        assert!(!package.populates_score_axes);
+        assert!(!package.proof_artifact_created);
+        assert!(!package.checker_transcript_created);
+        assert!(!package.solver_certificate_created);
+        assert!(!package.lean_execution_evidence_created);
+        assert!(!package.additional_smt_z3_execution_created);
+        assert!(!package.cobalt_execution_evidence_created);
+        assert!(!package.rust_to_lean_execution_evidence_created);
+        assert!(!package.benchmark_evidence_created);
+        assert!(!package.external_audit_evidence_created);
+        assert!(!package.independent_external_reproduction_claimed);
+        assert!(!package.semantic_correctness_claimed);
+        assert!(!package.production_readiness_claimed);
+        assert!(!package.sota_claimed);
+        assert!(!package.breakthrough_claimed);
+        assert!(!package.full_security_claimed);
+        assert!(!package.grants_authority);
+
+        fs::remove_dir_all(&output_root).expect("phase543 package output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase543 package phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase543 package obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase543_tiny_z3_backend_execution_accepted_evidence_package_rejects_invalid_phase541_state()
+    {
+        let Some((obligation_root, phase405_output_root, output_root, mut materialization)) =
+            phase543_tiny_z3_backend_execution_accepted_evidence_package_source(
+                "phase543-invalid-phase541",
+            )
+        else {
+            return;
+        };
+        materialization.routes_through_zkbench_core_materialized_owner = false;
+        let package_input =
+            phase543_tiny_z3_backend_execution_accepted_evidence_package_input(
+                "phase543-invalid-package",
+                &materialization,
+                GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageLabel::BackendExecutionPackageRejected,
+            );
+        let validation =
+            validate_gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_input(
+                &materialization,
+                &package_input,
+            );
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::Phase541MaterializationStateMismatch
+        ));
+        assert!(
+            build_gateway_formal_tiny_z3_backend_execution_accepted_evidence_package(
+                &materialization,
+                &package_input,
+            )
+            .is_err()
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase543 invalid output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase543 invalid phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase543 invalid obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase543_tiny_z3_backend_execution_accepted_evidence_package_rejects_promotion() {
+        let Some((obligation_root, phase405_output_root, output_root, materialization)) =
+            phase543_tiny_z3_backend_execution_accepted_evidence_package_source(
+                "phase543-promotion",
+            )
+        else {
+            return;
+        };
+        let mut package_input =
+            phase543_tiny_z3_backend_execution_accepted_evidence_package_input(
+                "phase543-promotion-package",
+                &materialization,
+                GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageLabel::BackendExecutionPackageRejected,
+            );
+        package_input.package_artifact_write_requested = true;
+        package_input.accepted_formal_evidence_created = true;
+        package_input.creates_level2_evidence = true;
+        package_input.populates_score_axes = true;
+        package_input.proof_artifact_promoted = true;
+        package_input.checker_transcript_promoted = true;
+        package_input.solver_certificate_promoted = true;
+        package_input.lean_execution_evidence_created = true;
+        package_input.additional_smt_z3_execution_created = true;
+        package_input.cobalt_execution_evidence_created = true;
+        package_input.rust_to_lean_execution_evidence_created = true;
+        package_input.benchmark_evidence_created = true;
+        package_input.external_audit_evidence_created = true;
+        package_input.independent_external_reproduction_claimed = true;
+        package_input.semantic_correctness_claimed = true;
+        package_input.production_readiness_claimed = true;
+        package_input.sota_claimed = true;
+        package_input.breakthrough_claimed = true;
+        package_input.full_security_claimed = true;
+        package_input.action_authority_claimed = true;
+        let validation =
+            validate_gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_input(
+                &materialization,
+                &package_input,
+            );
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageIssue::PromotionAttempt
+        ));
+        assert!(
+            build_gateway_formal_tiny_z3_backend_execution_accepted_evidence_package(
+                &materialization,
+                &package_input,
+            )
+            .is_err()
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase543 promotion output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase543 promotion phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase543 promotion obligation cleanup succeeds");
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -119814,6 +120825,133 @@ mod tests {
             rust_to_lean_execution_evidence_created: false,
             benchmark_evidence_created: false,
             external_audit_claimed: false,
+            independent_external_reproduction_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase543_tiny_z3_backend_execution_accepted_evidence_package_source(
+        source_prefix: &str,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        GatewayFormalTinyZ3BackendExecutionMaterializedAcceptedAppend,
+    )> {
+        let (obligation_root, phase405_output_root, output_root, request, mutation) =
+            phase541_tiny_z3_backend_execution_materialized_accepted_append_source(source_prefix)?;
+        let ledger_path = output_root.join(format!("{source_prefix}-phase541-ledger.json"));
+        let materialized_request = zkbench_core::MaterializedAcceptedLedgerAppendRequest {
+            ledger_path,
+            create_if_missing: true,
+            transaction: request,
+        };
+        let materialization_input =
+            phase541_tiny_z3_backend_execution_materialized_accepted_append_input(
+                &format!("{source_prefix}-materialization"),
+                &mutation,
+                &materialized_request,
+                GatewayFormalTinyZ3BackendExecutionMaterializedAcceptedAppendLabel::BackendExecutionMaterializationRecorded,
+            );
+        let materialization =
+            build_gateway_formal_tiny_z3_backend_execution_materialized_accepted_append(
+                &mutation,
+                &materialized_request,
+                &materialization_input,
+            )
+            .expect("phase543 source materialization builds");
+        Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            materialization,
+        ))
+    }
+
+    fn phase543_tiny_z3_backend_execution_accepted_evidence_package_input(
+        package_id: &str,
+        materialization: &GatewayFormalTinyZ3BackendExecutionMaterializedAcceptedAppend,
+        package_label: GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageLabel,
+    ) -> GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageInput {
+        let package_policy_id = "phase543-backend-execution-accepted-evidence-package-policy";
+        let package_decision_id = "phase543-backend-execution-accepted-evidence-package-decision";
+        let nonclaims =
+            gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_required_nonclaims();
+        let caps = gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_caps();
+        let evidence_class = "LocalReplay".to_owned();
+        let claim_boundary = "Level1LocalReplay".to_owned();
+        GatewayFormalTinyZ3BackendExecutionAcceptedEvidencePackageInput {
+            schema_version:
+                GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_EVIDENCE_PACKAGE_SCHEMA_VERSION
+                    .to_owned(),
+            package_id: package_id.to_owned(),
+            package_policy_id: package_policy_id.to_owned(),
+            package_decision_id: package_decision_id.to_owned(),
+            package_decision_at_unix: 1_800_000_543,
+            digest_bindings:
+                gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_digest_bindings(
+                    materialization,
+                ),
+            id_bindings:
+                gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_id_bindings(
+                    materialization,
+                    package_id,
+                    package_policy_id,
+                    package_decision_id,
+                ),
+            label_bindings:
+                gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_label_bindings(
+                    materialization,
+                    &package_label,
+                ),
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-accepted-evidence-package-nonclaims:v1",
+                &nonclaims,
+            ),
+            package_policy_digest:
+                gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_policy_digest(
+                    package_policy_id,
+                    &evidence_class,
+                    &claim_boundary,
+                    &caps,
+                ),
+            package_caps: caps.clone(),
+            package_cap_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-accepted-evidence-package-caps:v1",
+                &caps,
+            ),
+            evidence_class,
+            claim_boundary,
+            package_rules:
+                gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_rules(),
+            forbidden_api_set:
+                gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_forbidden_apis(
+                ),
+            inherited_digest_requirements:
+                gateway_formal_tiny_z3_backend_execution_accepted_evidence_package_inherited_digest_requirements(),
+            package_label,
+            package_summary:
+                "local backend route package metadata remains Level1LocalReplay only"
+                    .to_owned(),
+            package_artifact_write_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            lean_execution_evidence_created: false,
+            additional_smt_z3_execution_created: false,
+            cobalt_execution_evidence_created: false,
+            rust_to_lean_execution_evidence_created: false,
+            benchmark_evidence_created: false,
+            external_audit_evidence_created: false,
             independent_external_reproduction_claimed: false,
             semantic_correctness_claimed: false,
             production_readiness_claimed: false,
