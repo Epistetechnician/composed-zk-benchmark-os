@@ -7676,5 +7676,17 @@ populates no score axes, runs no Lean/COBALT/Rust-to-Lean extraction, creates
 no benchmark evidence, and claims no production/SOTA/security/semantic-
 correctness result.
 
+[docs/530-hsai-tiny-z3-backend-execution-artifact-package-boundary.md](docs/530-hsai-tiny-z3-backend-execution-artifact-package-boundary.md)
+defines the Phase 530 docs-first boundary for a future local backend-execution
+artifact package over one Phase 529 hermetic SMT/Z3 result. The boundary
+defines required Phase 529 and Phase 527 digest bindings, actual SMT-LIB2/
+executable/argv/working-directory/environment/timeout/stdout/stderr/output
+classification bindings, allowed touch surface, fail-closed validation rules,
+accepted-evidence relationship limits, and Phase 531 implementation exit
+criteria. It creates no Rust code, changes no Cargo metadata, writes no package
+files, creates no accepted evidence, creates no Level2+ evidence, populates no
+score axes, runs no Lean/COBALT/Rust-to-Lean extraction, creates no benchmark
+evidence, and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
