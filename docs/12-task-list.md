@@ -16891,6 +16891,34 @@ formal evidence, no Level2+ evidence, no populated score axes, no Lean/COBALT
 no external audit evidence, and no production/SOTA/security/semantic-correctness
 claim.
 
+## Phase 599 HSAI Tiny Z3 Backend Execution Packet Role Artifact Independent Operator Import Review Metadata
+
+Status: complete. See
+`docs/599-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-import-review-metadata-notes.md`.
+
+Goal: implement local blocked import-review metadata over one exact Phase 597
+quarantined packet-role artifact independent-operator import candidate.
+
+Implemented: Phase 599 adds independent-operator import-review constants,
+types, builder, validator, digest/id/label bindings, review blockers,
+policy/nonpromotion digests, inherited-digest requirements, and focused tests.
+The validator requires exact Phase 597 source state, direct Phase 595 and Phase
+593/591/589/587/585 digest bindings, transitive inherited earlier-phase
+requirements, valid quarantined candidate metadata, and all promotion flags
+false.
+
+Validation coverage: focused Rust tests cover successful blocked review
+metadata, Phase 597 promotion drift rejection, Phase 595 inherited-digest drift
+rejection, and acceptance-boundary or strong-claim rejection.
+
+Exit criteria: HSAI can review one quarantined Phase 597 independent-operator
+import candidate as blocked local metadata. It still has no external result
+import, no accepted external result evidence, no accepted independent external
+reproduction, no accepted formal evidence, no Level2+ evidence, no populated
+score axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3
+execution, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
