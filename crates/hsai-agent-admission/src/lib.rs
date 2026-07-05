@@ -1132,6 +1132,15 @@ pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_IMPORT_REVIEW_SCHEMA
 pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_IMPORT_REVIEW_STATE_SLICE: &str =
     "phase-553-hsai-tiny-z3-backend-execution-external-import-review-metadata";
 pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_IMPORT_REVIEW_CLAIM_BOUNDARY: &str = "local tiny-Z3 backend execution external import review metadata only; reviews one Phase 551 quarantined backend-execution external-result import candidate and records backend_execution_import_review_blocked_no_independent_run, but does not create independent external reproduction, create accepted formal evidence, create Level2+ evidence, populate score axes, generate proof artifacts, generate checker transcripts, generate solver certificates, run Lean, run another SMT/Z3 execution, run COBALT, run Rust-to-Lean extraction, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_HANDOFF_SCHEMA_VERSION:
+    &str =
+    "hsai-gateway-formal-tiny-z3-backend-execution-independent-external-reproduction-handoff:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_HANDOFF_STATE_SLICE: &str =
+    "phase-555-hsai-tiny-z3-backend-execution-independent-external-reproduction-handoff-metadata";
+pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_HANDOFF_CLAIM_BOUNDARY: &str = "local tiny-Z3 backend execution independent external reproduction handoff metadata only; builds one validated zkbench-core ManualHandoffBundle over one Phase 553 blocked import-review record and records handoff and validation digests, but does not run an external replay, run a backend, import external results, create independent external reproduction, create accepted formal evidence, create Level2+ evidence, populate score axes, generate proof artifacts, generate checker transcripts, generate solver certificates, run Lean, run another SMT/Z3 execution, run COBALT, run Rust-to-Lean extraction, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_Z3_MANUAL_HANDOFF_BUNDLE_TYPE: &str = "ManualHandoffBundle";
+pub const GATEWAY_FORMAL_TINY_Z3_MANUAL_HANDOFF_VALIDATOR_ID: &str =
+    "validate_manual_handoff_bundle";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -18674,6 +18683,257 @@ pub enum GatewayFormalTinyZ3BackendExecutionExternalImportReviewIssue {
 pub struct GatewayFormalTinyZ3BackendExecutionExternalImportReviewValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyZ3BackendExecutionExternalImportReviewIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffClassification {
+    IndependentExternalReproductionHandoffDeclaredNoRun,
+    IndependentExternalReproductionHandoffInvalid,
+    IndependentExternalReproductionHandoffWaitingForOperator,
+    IndependentExternalReproductionHandoffReadyForFutureReviewOnly,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffLabel {
+    IndependentExternalReproductionHandoffRecorded,
+    IndependentExternalReproductionHandoffRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffInput {
+    pub schema_version: String,
+    pub handoff_id: String,
+    pub handoff_policy_id: String,
+    pub handoff_decision_id: String,
+    pub handoff_decision_at_unix: u64,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub manual_handoff_owner_id: String,
+    pub manual_handoff_bundle_type: String,
+    pub manual_handoff_validator_id: String,
+    pub manual_handoff_bundle_digest: Hash,
+    pub manual_handoff_validation_digest: Hash,
+    pub manual_handoff_validation_issue_digest: Hash,
+    pub manual_handoff_claim_boundary: String,
+    pub manual_handoff_policy_digest: Hash,
+    pub required_operator_output_roles_digest: Hash,
+    pub required_provenance_field_digest: Hash,
+    pub result_import_quarantine_requirement_digest: Hash,
+    pub classification:
+        GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffClassification,
+    pub handoff_policy_digest: Hash,
+    pub handoff_blockers: BTreeSet<String>,
+    pub handoff_blocker_digest: Hash,
+    pub handoff_nonpromotion_digest: Hash,
+    pub handoff_rules: BTreeSet<String>,
+    pub forbidden_api_set: BTreeSet<String>,
+    pub inherited_digest_requirements: BTreeSet<String>,
+    pub handoff_label: GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffLabel,
+    pub handoff_summary: String,
+    pub process_execution_requested: bool,
+    pub network_access_requested: bool,
+    pub credentials_requested: bool,
+    pub external_replay_requested: bool,
+    pub external_result_import_created: bool,
+    pub external_result_artifact_write_requested: bool,
+    pub accepted_external_result_evidence_created: bool,
+    pub accepted_evidence_artifact_write_requested: bool,
+    pub independent_external_reproduction_claimed: bool,
+    pub level2_artifact_write_requested: bool,
+    pub score_axis_artifact_write_requested: bool,
+    pub score_axis_population_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoff {
+    pub schema_version: String,
+    pub handoff_id: String,
+    pub state_slice: String,
+    pub handoff_input_digest: Hash,
+    pub handoff_policy_id: String,
+    pub handoff_decision_id: String,
+    pub handoff_decision_at_unix: u64,
+    pub phase553_import_review_digest: Hash,
+    pub phase553_import_review_input_digest: Hash,
+    pub phase553_classification:
+        GatewayFormalTinyZ3BackendExecutionExternalImportReviewClassification,
+    pub phase553_review_blocker_digest: Hash,
+    pub phase553_review_policy_digest: Hash,
+    pub phase553_review_nonpromotion_digest: Hash,
+    pub phase551_import_candidate_digest: Hash,
+    pub phase551_import_candidate_input_digest: Hash,
+    pub phase551_classification:
+        GatewayFormalTinyZ3BackendExecutionExternalImportCandidateClassification,
+    pub phase551_candidate_digest: Hash,
+    pub phase551_validation_digest: Hash,
+    pub phase551_validation_issue_digest: Hash,
+    pub phase551_quarantine_record_digest: Hash,
+    pub phase551_candidate_status: String,
+    pub phase551_requested_claim_boundary: String,
+    pub phase549_external_reproduction_digest: Hash,
+    pub phase549_classification:
+        GatewayFormalTinyZ3BackendExecutionExternalReproductionClassification,
+    pub phase547_level2_eligibility_digest: Hash,
+    pub phase547_classification: GatewayFormalTinyZ3BackendExecutionLevel2EligibilityClassification,
+    pub phase545_score_axis_eligibility_digest: Hash,
+    pub phase545_score_axis_nonpopulation_digest: Hash,
+    pub phase543_package_digest: Hash,
+    pub phase543_evidence_class: String,
+    pub phase543_claim_boundary: String,
+    pub phase541_materialized_ledger_artifact_digest: Hash,
+    pub phase535_owner_decision_digest: Hash,
+    pub phase533_review_digest: Hash,
+    pub phase531_package_digest: Hash,
+    pub phase529_result_digest: Hash,
+    pub phase527_candidate_digest: Hash,
+    pub manual_handoff_owner_id: String,
+    pub manual_handoff_bundle_type: String,
+    pub manual_handoff_validator_id: String,
+    pub manual_handoff_bundle_digest: Hash,
+    pub manual_handoff_validation_digest: Hash,
+    pub manual_handoff_validation_valid: bool,
+    pub manual_handoff_validation_issue_count: usize,
+    pub manual_handoff_validation_issue_digest: Hash,
+    pub manual_handoff_claim_boundary: String,
+    pub manual_handoff_policy_digest: Hash,
+    pub required_operator_output_roles_digest: Hash,
+    pub required_provenance_field_digest: Hash,
+    pub result_import_quarantine_requirement_digest: Hash,
+    pub classification:
+        GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffClassification,
+    pub handoff_policy_digest: Hash,
+    pub handoff_blockers: BTreeSet<String>,
+    pub handoff_blocker_digest: Hash,
+    pub handoff_nonpromotion_digest: Hash,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub handoff_rules: BTreeSet<String>,
+    pub handoff_rules_digest: Hash,
+    pub forbidden_api_set: BTreeSet<String>,
+    pub forbidden_api_set_digest: Hash,
+    pub inherited_digest_requirements: BTreeSet<String>,
+    pub inherited_digest_requirements_digest: Hash,
+    pub handoff_label: GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffLabel,
+    pub handoff_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub process_execution_requested: bool,
+    pub network_access_requested: bool,
+    pub credentials_requested: bool,
+    pub external_replay_requested: bool,
+    pub external_result_import_created: bool,
+    pub writes_external_result_artifact_files: bool,
+    pub creates_accepted_external_result_evidence: bool,
+    pub writes_accepted_evidence_artifacts: bool,
+    pub claims_independent_external_reproduction: bool,
+    pub writes_level2_artifact_files: bool,
+    pub writes_score_axis_artifact_files: bool,
+    pub populates_score_axes: bool,
+    pub creates_accepted_formal_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoff {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue {
+    InvalidSchemaVersion,
+    InvalidHandoffId,
+    InvalidHandoffPolicyId,
+    InvalidHandoffDecisionId,
+    MissingHandoffDecisionTimestamp,
+    MissingDigest(String),
+    DigestBindingMismatch,
+    IdBindingMismatch,
+    InvalidIdBinding(String),
+    LabelBindingMismatch,
+    Phase553ImportReviewStateMismatch,
+    NonclaimMismatch,
+    InvalidManualHandoffOwner,
+    InvalidManualHandoffBundleType,
+    InvalidManualHandoffValidatorId,
+    ManualHandoffBundleDigestMismatch,
+    ManualHandoffValidationDigestMismatch,
+    ManualHandoffValidationIssueDigestMismatch,
+    ManualHandoffValidationFailed,
+    InvalidManualHandoffClaimBoundary,
+    ManualHandoffPolicyDigestMismatch,
+    RequiredOperatorOutputRolesDigestMismatch,
+    RequiredProvenanceFieldDigestMismatch,
+    ResultImportQuarantineRequirementDigestMismatch,
+    InvalidClassification,
+    HandoffPolicyDigestMismatch,
+    HandoffBlockerMismatch,
+    HandoffNonpromotionDigestMismatch,
+    HandoffRulesMismatch,
+    ForbiddenApiSetMismatch,
+    InheritedDigestRequirementsMismatch,
+    HandoffSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -76422,6 +76682,1008 @@ pub fn validate_gateway_formal_tiny_z3_backend_execution_external_import_review_
     }
 }
 
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_claim_boundary(
+) -> String {
+    GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_HANDOFF_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    gateway_formal_tiny_z3_backend_execution_external_import_review_required_nonclaims()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_blockers(
+) -> BTreeSet<String> {
+    [
+        "phase553_import_review_blocked_no_independent_run",
+        "phase551_import_candidate_quarantined_local_metadata",
+        "phase549_external_reproduction_blocked_no_independent_run",
+        "manual_handoff_only_no_run",
+        "missing_independent_external_operator_bundle",
+        "missing_external_result_import",
+        "missing_level2_benchmark_evidence",
+        "score_axes_unpopulated",
+        "accepted_formal_evidence_absent",
+        "accepted_external_result_evidence_absent",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_rules(
+) -> BTreeSet<String> {
+    [
+        "phase553_state_required",
+        "phase553_digest_bindings_required",
+        "phase553_review_blocked_required",
+        "phase551_candidate_quarantined_required",
+        "phase551_validation_valid_required",
+        "phase549_external_reproduction_blocked_required",
+        "manual_handoff_bundle_valid_required",
+        "manual_handoff_claim_boundary_level0_required",
+        "manual_handoff_live_execution_rejected",
+        "manual_handoff_steps_manual_only_required",
+        "operator_output_roles_declared_required",
+        "required_provenance_fields_declared_required",
+        "result_import_quarantine_required",
+        "process_execution_rejected",
+        "network_access_rejected",
+        "credentials_rejected",
+        "external_replay_rejected",
+        "external_result_import_rejected",
+        "accepted_external_result_evidence_rejected",
+        "accepted_formal_evidence_rejected",
+        "independent_external_reproduction_rejected",
+        "level2_actual_evidence_rejected",
+        "score_axis_population_rejected",
+        "lean_cobalt_rust_to_lean_rejected",
+        "additional_smt_z3_execution_rejected",
+        "backend_execution_evidence_rejected",
+        "benchmark_evidence_rejected",
+        "external_audit_evidence_rejected",
+        "strong_public_claim_rejected",
+        "action_authority_rejected",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_forbidden_apis(
+) -> BTreeSet<String> {
+    [
+        "manual_handoff_artifact_writer",
+        "external_result_artifact_writer",
+        "external_reproduction_artifact_writer",
+        "accepted_external_result_evidence_writer",
+        "accepted_evidence_append_writer",
+        "level2_artifact_writer",
+        "score_axis_writer",
+        "ScoreReport_axis_population",
+        "official_submission_api",
+        "external_runner",
+        "external_replay_runner",
+        "process_spawn",
+        "network_api",
+        "credential_reader",
+        "solver_api",
+        "proof_assistant_api",
+        "benchmark_runner",
+        "lean_api",
+        "cobalt_api",
+        "rust_to_lean_api",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_inherited_digest_requirements(
+) -> BTreeSet<String> {
+    let mut requirements =
+        gateway_formal_tiny_z3_backend_execution_external_import_review_inherited_digest_requirements(
+        );
+    requirements.insert("phase553_import_review_digest_required".to_owned());
+    requirements.insert("phase553_import_review_input_digest_required".to_owned());
+    requirements.insert("phase553_classification_required".to_owned());
+    requirements.insert("phase553_review_blocker_digest_required".to_owned());
+    requirements.insert("phase553_review_policy_digest_required".to_owned());
+    requirements.insert("phase553_review_nonpromotion_digest_required".to_owned());
+    requirements.insert("manual_handoff_bundle_digest_required".to_owned());
+    requirements.insert("manual_handoff_validation_digest_required".to_owned());
+    requirements.insert("manual_handoff_validation_issue_digest_required".to_owned());
+    requirements
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_required_operator_output_roles(
+) -> BTreeSet<String> {
+    [
+        "input_manifest",
+        "candidate_workload_manifest",
+        "external_tool_version",
+        "normalized_result_candidate",
+        "provenance_record",
+        "validation_report",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_result_import_quarantine_requirements(
+) -> BTreeSet<String> {
+    [
+        "external_result_candidate_required",
+        "provenance_draft_required",
+        "artifact_digest_set_required",
+        "claim_boundary_level0_design_note_required",
+        "quarantined_or_pending_review_required",
+        "official_benchmark_claim_rejected",
+        "formal_evidence_claim_rejected",
+        "proof_system_soundness_claim_rejected",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_manual_handoff_bundle(
+    review: &GatewayFormalTinyZ3BackendExecutionExternalImportReview,
+    handoff_id: &str,
+) -> zkbench_core::ManualHandoffBundle {
+    let review_bytes = serde_json::to_vec(review).expect("phase553 review metadata serializes");
+    let review_digest = zkbench_core::ArtifactDigest {
+        algorithm: zkbench_core::ArtifactDigestAlgorithm::Sha256,
+        hex_digest: hash_to_lower_hex(&review.digest()),
+        byte_len: review_bytes.len(),
+        kind: None,
+        role: None,
+    };
+    let package_digest = zkbench_core::ArtifactDigest {
+        algorithm: zkbench_core::ArtifactDigestAlgorithm::Sha256,
+        hex_digest: hash_to_lower_hex(&review.phase543_package_digest),
+        byte_len: 32,
+        kind: None,
+        role: None,
+    };
+    let step_validation = zkbench_core::ManualHandoffValidation {
+        valid: true,
+        issues: Vec::new(),
+    };
+    zkbench_core::ManualHandoffBundle {
+        id: handoff_id.to_owned(),
+        bundle_version: zkbench_core::ManualHandoffBundleVersion::default(),
+        subject: zkbench_core::ManualHandoffSubject {
+            dry_run_plan_id: "phase555-backend-execution-independent-external-reproduction-handoff"
+                .to_owned(),
+            source_benchmark_pack_id: "hsai-tiny-z3-backend-execution-local-package".to_owned(),
+            source_pack_digest: package_digest,
+            source_artifact_digests: vec![review_digest],
+            local_pack_claim_boundary: zkbench_core::ClaimBoundary::Level1LocalReplay,
+            notes: vec![
+                "manual handoff references Phase 553 blocked review metadata".to_owned(),
+                "independent external reproduction has not occurred".to_owned(),
+            ],
+        },
+        external_runner_policy: zkbench_core::ExternalRunnerPolicy::phase_h_manual_handoff_only(),
+        artifact_capture_contract: zkbench_core::build_default_artifact_capture_contract(),
+        provenance_contract: zkbench_core::build_default_provenance_contract(),
+        result_import_schema: zkbench_core::build_default_external_result_import_schema(),
+        steps: vec![
+            zkbench_core::ManualHandoffStep {
+                id: "review-phase553-metadata".to_owned(),
+                kind: zkbench_core::ManualHandoffStepKind::ReviewDryRunPlan,
+                instruction: zkbench_core::ManualHandoffInstruction {
+                    title: "Review Phase 553 metadata".to_owned(),
+                    detail: "Confirm digest bindings and nonclaims before any operator action"
+                        .to_owned(),
+                    inert_planned_program_name: None,
+                    inert_arguments: Vec::new(),
+                    artifact_refs: vec!["handoff/phase553-review.json".to_owned()],
+                    manual_only: true,
+                    notes: vec!["no command execution is authorized".to_owned()],
+                },
+                validation: step_validation.clone(),
+                notes: vec!["manual review step only".to_owned()],
+            },
+            zkbench_core::ManualHandoffStep {
+                id: "prepare-independent-workspace".to_owned(),
+                kind: zkbench_core::ManualHandoffStepKind::PrepareExternalWorkspace,
+                instruction: zkbench_core::ManualHandoffInstruction {
+                    title: "Prepare independent workspace".to_owned(),
+                    detail: "Use a separate reviewed environment and record provenance fields"
+                        .to_owned(),
+                    inert_planned_program_name: Some("manual-operator-environment".to_owned()),
+                    inert_arguments: vec!["no-network-by-default".to_owned()],
+                    artifact_refs: vec!["provenance/provenance_record.json".to_owned()],
+                    manual_only: true,
+                    notes: vec!["credentials are not part of this bundle".to_owned()],
+                },
+                validation: step_validation.clone(),
+                notes: vec!["operator preparation metadata only".to_owned()],
+            },
+            zkbench_core::ManualHandoffStep {
+                id: "capture-quarantined-result".to_owned(),
+                kind: zkbench_core::ManualHandoffStepKind::CaptureArtifacts,
+                instruction: zkbench_core::ManualHandoffInstruction {
+                    title: "Capture quarantined result artifacts".to_owned(),
+                    detail: "Capture declared artifacts for future import review without evidence promotion"
+                        .to_owned(),
+                    inert_planned_program_name: None,
+                    inert_arguments: Vec::new(),
+                    artifact_refs: vec![
+                        "handoff/normalized_result_candidate.json".to_owned(),
+                        "handoff/validation_report.json".to_owned(),
+                    ],
+                    manual_only: true,
+                    notes: vec!["captured output remains future quarantine input".to_owned()],
+                },
+                validation: step_validation.clone(),
+                notes: vec!["no result import occurs in Phase 555".to_owned()],
+            },
+            zkbench_core::ManualHandoffStep {
+                id: "claim-boundary-review".to_owned(),
+                kind: zkbench_core::ManualHandoffStepKind::ClaimBoundaryReview,
+                instruction: zkbench_core::ManualHandoffInstruction {
+                    title: "Review claim boundary".to_owned(),
+                    detail: "Keep the handoff at Level0DesignNote until a separate import phase"
+                        .to_owned(),
+                    inert_planned_program_name: None,
+                    inert_arguments: Vec::new(),
+                    artifact_refs: vec!["handoff/claim_boundary_review.json".to_owned()],
+                    manual_only: true,
+                    notes: vec!["Level2 evidence is not created by this bundle".to_owned()],
+                },
+                validation: step_validation,
+                notes: vec!["final manual claim boundary review".to_owned()],
+            },
+        ],
+        export: zkbench_core::ManualHandoffExport {
+            id: "phase555-independent-external-reproduction-handoff-export".to_owned(),
+            format: "json".to_owned(),
+            relative_uri: "handoff/phase555-manual-handoff-bundle.json".to_owned(),
+            claim_boundary: zkbench_core::ClaimBoundary::Level0DesignNote,
+            notes: vec!["export metadata only".to_owned()],
+        },
+        claim_boundary: zkbench_core::ClaimBoundary::Level0DesignNote,
+        notes: vec![
+            "manual handoff bundle only".to_owned(),
+            "no backend execution is performed by this metadata".to_owned(),
+        ],
+    }
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_digest_bindings(
+    review: &GatewayFormalTinyZ3BackendExecutionExternalImportReview,
+    handoff_id: &str,
+) -> BTreeMap<String, Hash> {
+    let bundle =
+        gateway_formal_tiny_z3_backend_execution_external_reproduction_manual_handoff_bundle(
+            review, handoff_id,
+        );
+    let validation = zkbench_core::validate_manual_handoff_bundle(&bundle);
+    [
+        ("phase553_import_review_digest", review.digest()),
+        (
+            "phase553_import_review_input_digest",
+            review.review_input_digest,
+        ),
+        (
+            "phase553_review_blocker_digest",
+            review.review_blocker_digest,
+        ),
+        (
+            "phase553_review_policy_digest",
+            review.review_policy_digest,
+        ),
+        (
+            "phase553_review_nonpromotion_digest",
+            review.review_nonpromotion_digest,
+        ),
+        (
+            "phase551_import_candidate_digest",
+            review.phase551_import_candidate_digest,
+        ),
+        (
+            "phase551_import_candidate_input_digest",
+            review.phase551_import_candidate_input_digest,
+        ),
+        ("phase551_candidate_digest", review.phase551_candidate_digest),
+        (
+            "phase551_validation_digest",
+            review.phase551_validation_digest,
+        ),
+        (
+            "phase551_validation_issue_digest",
+            review.phase551_validation_issue_digest,
+        ),
+        (
+            "phase551_quarantine_record_digest",
+            review.phase551_quarantine_record_digest,
+        ),
+        (
+            "phase549_external_reproduction_digest",
+            review.phase549_external_reproduction_digest,
+        ),
+        (
+            "phase547_level2_eligibility_digest",
+            review.phase547_level2_eligibility_digest,
+        ),
+        (
+            "phase545_score_axis_eligibility_digest",
+            review.phase545_score_axis_eligibility_digest,
+        ),
+        (
+            "phase545_score_axis_nonpopulation_digest",
+            review.phase545_score_axis_nonpopulation_digest,
+        ),
+        ("phase543_package_digest", review.phase543_package_digest),
+        (
+            "phase541_materialized_ledger_artifact_digest",
+            review.phase541_materialized_ledger_artifact_digest,
+        ),
+        (
+            "phase535_owner_decision_digest",
+            review.phase535_owner_decision_digest,
+        ),
+        ("phase533_review_digest", review.phase533_review_digest),
+        ("phase531_package_digest", review.phase531_package_digest),
+        ("phase529_result_digest", review.phase529_result_digest),
+        ("phase527_candidate_digest", review.phase527_candidate_digest),
+        (
+            "manual_handoff_bundle_digest",
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-bundle:v1",
+                &bundle,
+            ),
+        ),
+        (
+            "manual_handoff_validation_digest",
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-validation:v1",
+                &validation,
+            ),
+        ),
+        (
+            "manual_handoff_validation_issue_digest",
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-validation-issues:v1",
+                &validation.issues,
+            ),
+        ),
+    ]
+    .into_iter()
+    .map(|(label, digest)| (label.to_owned(), digest))
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_id_bindings(
+    review: &GatewayFormalTinyZ3BackendExecutionExternalImportReview,
+    handoff_id: &str,
+    handoff_policy_id: &str,
+    handoff_decision_id: &str,
+) -> BTreeMap<String, String> {
+    [
+        ("handoff_id", handoff_id.to_owned()),
+        ("handoff_policy_id", handoff_policy_id.to_owned()),
+        ("handoff_decision_id", handoff_decision_id.to_owned()),
+        ("phase553_review_id", review.review_id.clone()),
+        ("phase553_review_policy_id", review.review_policy_id.clone()),
+        (
+            "phase553_review_decision_id",
+            review.review_decision_id.clone(),
+        ),
+    ]
+    .into_iter()
+    .map(|(label, value)| (label.to_owned(), value))
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_label_bindings(
+    review: &GatewayFormalTinyZ3BackendExecutionExternalImportReview,
+    handoff_label: &GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffLabel,
+) -> BTreeMap<String, String> {
+    [
+        (
+            "phase553_classification",
+            format!("{:?}", review.classification),
+        ),
+        (
+            "phase553_review_label",
+            format!("{:?}", review.review_label),
+        ),
+        (
+            "phase551_classification",
+            format!("{:?}", review.phase551_classification),
+        ),
+        ("handoff_label", format!("{handoff_label:?}")),
+    ]
+    .into_iter()
+    .map(|(label, value)| (label.to_owned(), value))
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_nonpromotion_digest(
+    classification: &GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffClassification,
+    review_digest: Hash,
+    manual_handoff_bundle_digest: Hash,
+    manual_handoff_validation_digest: Hash,
+    blockers: &BTreeSet<String>,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-nonpromotion:v1",
+        &(
+            classification,
+            review_digest,
+            manual_handoff_bundle_digest,
+            manual_handoff_validation_digest,
+            blockers,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ),
+    )
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_policy_digest(
+    handoff_policy_id: &str,
+    classification: &GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffClassification,
+    review_digest: Hash,
+    manual_handoff_bundle_digest: Hash,
+    manual_handoff_validation_digest: Hash,
+    blockers: &BTreeSet<String>,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-policy:v1",
+        &(
+            handoff_policy_id,
+            classification,
+            review_digest,
+            manual_handoff_bundle_digest,
+            manual_handoff_validation_digest,
+            blockers,
+        ),
+    )
+}
+
+pub fn build_gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff(
+    review: &GatewayFormalTinyZ3BackendExecutionExternalImportReview,
+    input: &GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffInput,
+) -> Result<
+    GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoff,
+    GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffValidation,
+> {
+    let input_validation =
+        validate_gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_input(
+            review, input,
+        );
+    if !input_validation.valid {
+        return Err(input_validation);
+    }
+    let bundle =
+        gateway_formal_tiny_z3_backend_execution_external_reproduction_manual_handoff_bundle(
+            review,
+            &input.handoff_id,
+        );
+    let validation = zkbench_core::validate_manual_handoff_bundle(&bundle);
+    Ok(
+        GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoff {
+            schema_version:
+                GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_HANDOFF_SCHEMA_VERSION
+                    .to_owned(),
+            handoff_id: input.handoff_id.clone(),
+            state_slice:
+                GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_HANDOFF_STATE_SLICE
+                    .to_owned(),
+            handoff_input_digest: input.digest(),
+            handoff_policy_id: input.handoff_policy_id.clone(),
+            handoff_decision_id: input.handoff_decision_id.clone(),
+            handoff_decision_at_unix: input.handoff_decision_at_unix,
+            phase553_import_review_digest: review.digest(),
+            phase553_import_review_input_digest: review.review_input_digest,
+            phase553_classification: review.classification.clone(),
+            phase553_review_blocker_digest: review.review_blocker_digest,
+            phase553_review_policy_digest: review.review_policy_digest,
+            phase553_review_nonpromotion_digest: review.review_nonpromotion_digest,
+            phase551_import_candidate_digest: review.phase551_import_candidate_digest,
+            phase551_import_candidate_input_digest: review.phase551_import_candidate_input_digest,
+            phase551_classification: review.phase551_classification.clone(),
+            phase551_candidate_digest: review.phase551_candidate_digest,
+            phase551_validation_digest: review.phase551_validation_digest,
+            phase551_validation_issue_digest: review.phase551_validation_issue_digest,
+            phase551_quarantine_record_digest: review.phase551_quarantine_record_digest,
+            phase551_candidate_status: review.phase551_candidate_status.clone(),
+            phase551_requested_claim_boundary: review.phase551_requested_claim_boundary.clone(),
+            phase549_external_reproduction_digest: review.phase549_external_reproduction_digest,
+            phase549_classification: review.phase549_classification.clone(),
+            phase547_level2_eligibility_digest: review.phase547_level2_eligibility_digest,
+            phase547_classification: review.phase547_classification.clone(),
+            phase545_score_axis_eligibility_digest: review.phase545_score_axis_eligibility_digest,
+            phase545_score_axis_nonpopulation_digest: review
+                .phase545_score_axis_nonpopulation_digest,
+            phase543_package_digest: review.phase543_package_digest,
+            phase543_evidence_class: review.phase543_evidence_class.clone(),
+            phase543_claim_boundary: review.phase543_claim_boundary.clone(),
+            phase541_materialized_ledger_artifact_digest: review
+                .phase541_materialized_ledger_artifact_digest,
+            phase535_owner_decision_digest: review.phase535_owner_decision_digest,
+            phase533_review_digest: review.phase533_review_digest,
+            phase531_package_digest: review.phase531_package_digest,
+            phase529_result_digest: review.phase529_result_digest,
+            phase527_candidate_digest: review.phase527_candidate_digest,
+            manual_handoff_owner_id: input.manual_handoff_owner_id.clone(),
+            manual_handoff_bundle_type: input.manual_handoff_bundle_type.clone(),
+            manual_handoff_validator_id: input.manual_handoff_validator_id.clone(),
+            manual_handoff_bundle_digest: input.manual_handoff_bundle_digest,
+            manual_handoff_validation_digest: input.manual_handoff_validation_digest,
+            manual_handoff_validation_valid: validation.valid,
+            manual_handoff_validation_issue_count: validation.issues.len(),
+            manual_handoff_validation_issue_digest: input.manual_handoff_validation_issue_digest,
+            manual_handoff_claim_boundary: input.manual_handoff_claim_boundary.clone(),
+            manual_handoff_policy_digest: input.manual_handoff_policy_digest,
+            required_operator_output_roles_digest: input.required_operator_output_roles_digest,
+            required_provenance_field_digest: input.required_provenance_field_digest,
+            result_import_quarantine_requirement_digest: input
+                .result_import_quarantine_requirement_digest,
+            classification: input.classification.clone(),
+            handoff_policy_digest: input.handoff_policy_digest,
+            handoff_blockers: input.handoff_blockers.clone(),
+            handoff_blocker_digest: input.handoff_blocker_digest,
+            handoff_nonpromotion_digest: input.handoff_nonpromotion_digest,
+            digest_bindings: input.digest_bindings.clone(),
+            id_bindings: input.id_bindings.clone(),
+            label_bindings: input.label_bindings.clone(),
+            explicit_nonclaims: input.explicit_nonclaims.clone(),
+            explicit_nonclaims_digest: input.explicit_nonclaims_digest,
+            handoff_rules: input.handoff_rules.clone(),
+            handoff_rules_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-rules:v1",
+                &input.handoff_rules,
+            ),
+            forbidden_api_set: input.forbidden_api_set.clone(),
+            forbidden_api_set_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-forbidden-apis:v1",
+                &input.forbidden_api_set,
+            ),
+            inherited_digest_requirements: input.inherited_digest_requirements.clone(),
+            inherited_digest_requirements_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-inherited-digest-requirements:v1",
+                &input.inherited_digest_requirements,
+            ),
+            handoff_label: input.handoff_label.clone(),
+            handoff_summary: input.handoff_summary.clone(),
+            previous_promotion_state: "backend_execution_external_import_review_metadata"
+                .to_owned(),
+            promotion_state: "backend_execution_independent_external_reproduction_handoff_metadata"
+                .to_owned(),
+            next_required_state: "independent_external_operator_run_still_unperformed".to_owned(),
+            claim_boundary:
+                gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_claim_boundary(),
+            process_execution_requested: false,
+            network_access_requested: false,
+            credentials_requested: false,
+            external_replay_requested: false,
+            external_result_import_created: false,
+            writes_external_result_artifact_files: false,
+            creates_accepted_external_result_evidence: false,
+            writes_accepted_evidence_artifacts: false,
+            claims_independent_external_reproduction: false,
+            writes_level2_artifact_files: false,
+            writes_score_axis_artifact_files: false,
+            populates_score_axes: false,
+            creates_accepted_formal_evidence: false,
+            creates_level2_evidence: false,
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            lean_execution_evidence_created: false,
+            additional_smt_z3_execution_created: false,
+            cobalt_execution_evidence_created: false,
+            rust_to_lean_execution_evidence_created: false,
+            backend_execution_evidence_created: false,
+            benchmark_evidence_created: false,
+            external_audit_evidence_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            grants_authority: false,
+        },
+    )
+}
+
+pub fn validate_gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_input(
+    review: &GatewayFormalTinyZ3BackendExecutionExternalImportReview,
+    input: &GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffInput,
+) -> GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_HANDOFF_SCHEMA_VERSION
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::InvalidSchemaVersion,
+        );
+    }
+    if !is_single_segment_id(&input.handoff_id) {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::InvalidHandoffId,
+        );
+    }
+    if !is_single_segment_id(&input.handoff_policy_id) {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::InvalidHandoffPolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.handoff_decision_id) {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::InvalidHandoffDecisionId,
+        );
+    }
+    if input.handoff_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::MissingHandoffDecisionTimestamp,
+        );
+    }
+    let expected_digests =
+        gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_digest_bindings(
+            review,
+            &input.handoff_id,
+        );
+    for (label, digest) in &input.digest_bindings {
+        if *digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::MissingDigest(
+                    label.clone(),
+                ),
+            );
+        }
+    }
+    if input.digest_bindings != expected_digests {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::DigestBindingMismatch,
+        );
+    }
+    let expected_ids =
+        gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_id_bindings(
+            review,
+            &input.handoff_id,
+            &input.handoff_policy_id,
+            &input.handoff_decision_id,
+        );
+    for (label, value) in &input.id_bindings {
+        if !is_single_segment_id(value) {
+            issues.push(
+                GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::InvalidIdBinding(
+                    label.clone(),
+                ),
+            );
+        }
+    }
+    if input.id_bindings != expected_ids {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::IdBindingMismatch,
+        );
+    }
+    let expected_labels =
+        gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_label_bindings(
+            review,
+            &input.handoff_label,
+        );
+    if input.label_bindings != expected_labels {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::LabelBindingMismatch,
+        );
+    }
+    if review.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_IMPORT_REVIEW_SCHEMA_VERSION
+        || review.state_slice
+            != GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_IMPORT_REVIEW_STATE_SLICE
+        || review.promotion_state != "backend_execution_external_import_review_metadata"
+        || review.next_required_state
+            != "backend_execution_independent_external_reproduction_still_unperformed"
+        || review.classification
+            != GatewayFormalTinyZ3BackendExecutionExternalImportReviewClassification::BackendExecutionImportReviewBlockedNoIndependentRun
+        || review.phase551_classification
+            != GatewayFormalTinyZ3BackendExecutionExternalImportCandidateClassification::ImportCandidateQuarantinedLocalMetadata
+        || review.phase551_candidate_status != GATEWAY_FORMAL_TINY_Z3_EXTERNAL_IMPORT_CANDIDATE_STATUS
+        || review.phase551_requested_claim_boundary
+            != GATEWAY_FORMAL_TINY_Z3_EXTERNAL_IMPORT_REQUESTED_CLAIM_BOUNDARY
+        || !review.phase551_validation_valid
+        || review.phase551_validation_issue_count != 0
+        || review.phase551_quarantine_status != "Quarantined"
+        || review.phase549_classification
+            != GatewayFormalTinyZ3BackendExecutionExternalReproductionClassification::ExternalReproductionBlockedNoIndependentRun
+        || review.phase547_classification
+            != GatewayFormalTinyZ3BackendExecutionLevel2EligibilityClassification::Level2BlockedLocalOnly
+        || review.phase543_evidence_class != "LocalReplay"
+        || review.phase543_claim_boundary != "Level1LocalReplay"
+        || review.phase541_materialized_ledger_artifact_digest == Hash([0; 32])
+        || review.phase535_owner_decision_digest == Hash([0; 32])
+        || review.phase533_review_digest == Hash([0; 32])
+        || review.phase531_package_digest == Hash([0; 32])
+        || review.phase529_result_digest == Hash([0; 32])
+        || review.phase527_candidate_digest == Hash([0; 32])
+        || review.creates_accepted_external_result_evidence
+        || review.writes_accepted_evidence_artifacts
+        || review.claims_independent_external_reproduction
+        || review.writes_level2_artifact_files
+        || review.writes_score_axis_artifact_files
+        || review.populates_score_axes
+        || review.creates_accepted_formal_evidence
+        || review.creates_level2_evidence
+        || review.proof_artifact_created
+        || review.checker_transcript_created
+        || review.solver_certificate_created
+        || review.lean_execution_evidence_created
+        || review.additional_smt_z3_execution_created
+        || review.cobalt_execution_evidence_created
+        || review.rust_to_lean_execution_evidence_created
+        || review.backend_execution_evidence_created
+        || review.benchmark_evidence_created
+        || review.external_audit_evidence_created
+        || review.semantic_correctness_claimed
+        || review.production_readiness_claimed
+        || review.sota_claimed
+        || review.breakthrough_claimed
+        || review.full_security_claimed
+        || review.grants_authority
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::Phase553ImportReviewStateMismatch,
+        );
+    }
+    let nonclaims =
+        gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::NonclaimMismatch,
+        );
+    }
+    let bundle =
+        gateway_formal_tiny_z3_backend_execution_external_reproduction_manual_handoff_bundle(
+            review,
+            &input.handoff_id,
+        );
+    let validation = zkbench_core::validate_manual_handoff_bundle(&bundle);
+    let expected_bundle_digest = hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-bundle:v1",
+        &bundle,
+    );
+    let expected_validation_digest = hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-validation:v1",
+        &validation,
+    );
+    let expected_validation_issue_digest = hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-validation-issues:v1",
+        &validation.issues,
+    );
+    if input.manual_handoff_owner_id != GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OWNER_ID {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::InvalidManualHandoffOwner,
+        );
+    }
+    if input.manual_handoff_bundle_type != GATEWAY_FORMAL_TINY_Z3_MANUAL_HANDOFF_BUNDLE_TYPE {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::InvalidManualHandoffBundleType,
+        );
+    }
+    if input.manual_handoff_validator_id != GATEWAY_FORMAL_TINY_Z3_MANUAL_HANDOFF_VALIDATOR_ID {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::InvalidManualHandoffValidatorId,
+        );
+    }
+    if input.manual_handoff_bundle_digest != expected_bundle_digest {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::ManualHandoffBundleDigestMismatch,
+        );
+    }
+    if input.manual_handoff_validation_digest != expected_validation_digest {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::ManualHandoffValidationDigestMismatch,
+        );
+    }
+    if input.manual_handoff_validation_issue_digest != expected_validation_issue_digest {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::ManualHandoffValidationIssueDigestMismatch,
+        );
+    }
+    if !validation.valid
+        || !validation.issues.is_empty()
+        || !bundle.contains_manual_instructions_only()
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::ManualHandoffValidationFailed,
+        );
+    }
+    if bundle.claim_boundary != zkbench_core::ClaimBoundary::Level0DesignNote
+        || bundle.allows_live_execution()
+        || input.manual_handoff_claim_boundary
+            != GATEWAY_FORMAL_TINY_Z3_EXTERNAL_IMPORT_REQUESTED_CLAIM_BOUNDARY
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::InvalidManualHandoffClaimBoundary,
+        );
+    }
+    let expected_manual_policy_digest = hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-manual-policy:v1",
+        &(
+            &bundle.external_runner_policy,
+            &bundle.artifact_capture_contract,
+            &bundle.provenance_contract,
+            &bundle.result_import_schema,
+        ),
+    );
+    if input.manual_handoff_policy_digest != expected_manual_policy_digest {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::ManualHandoffPolicyDigestMismatch,
+        );
+    }
+    let output_roles =
+        gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_required_operator_output_roles();
+    if input.required_operator_output_roles_digest
+        != hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-required-output-roles:v1",
+            &output_roles,
+        )
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::RequiredOperatorOutputRolesDigestMismatch,
+        );
+    }
+    let provenance_fields = zkbench_core::required_provenance_fields();
+    if input.required_provenance_field_digest
+        != hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-required-provenance-fields:v1",
+            &provenance_fields,
+        )
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::RequiredProvenanceFieldDigestMismatch,
+        );
+    }
+    let quarantine_requirements =
+        gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_result_import_quarantine_requirements();
+    if input.result_import_quarantine_requirement_digest
+        != hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-quarantine-requirements:v1",
+            &quarantine_requirements,
+        )
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::ResultImportQuarantineRequirementDigestMismatch,
+        );
+    }
+    if input.classification
+        != GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffClassification::IndependentExternalReproductionHandoffDeclaredNoRun
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::InvalidClassification,
+        );
+    }
+    let blockers =
+        gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_blockers();
+    if input.handoff_blockers != blockers
+        || input.handoff_blocker_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-blockers:v1",
+                &blockers,
+            )
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::HandoffBlockerMismatch,
+        );
+    }
+    let expected_nonpromotion_digest =
+        gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_nonpromotion_digest(
+            &input.classification,
+            review.digest(),
+            expected_bundle_digest,
+            expected_validation_digest,
+            &blockers,
+        );
+    if input.handoff_nonpromotion_digest != expected_nonpromotion_digest {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::HandoffNonpromotionDigestMismatch,
+        );
+    }
+    let expected_policy_digest =
+        gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_policy_digest(
+            &input.handoff_policy_id,
+            &input.classification,
+            review.digest(),
+            expected_bundle_digest,
+            expected_validation_digest,
+            &blockers,
+        );
+    if input.handoff_policy_digest != expected_policy_digest {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::HandoffPolicyDigestMismatch,
+        );
+    }
+    if input.handoff_rules
+        != gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_rules()
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::HandoffRulesMismatch,
+        );
+    }
+    if input.forbidden_api_set
+        != gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_forbidden_apis()
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::ForbiddenApiSetMismatch,
+        );
+    }
+    if input.inherited_digest_requirements
+        != gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_inherited_digest_requirements()
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::InheritedDigestRequirementsMismatch,
+        );
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.handoff_summary,
+    ) {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::HandoffSummaryPromotionClaim,
+        );
+    }
+    if input.process_execution_requested
+        || input.network_access_requested
+        || input.credentials_requested
+        || input.external_replay_requested
+        || input.external_result_import_created
+        || input.external_result_artifact_write_requested
+        || input.accepted_external_result_evidence_created
+        || input.accepted_evidence_artifact_write_requested
+        || input.independent_external_reproduction_claimed
+        || input.level2_artifact_write_requested
+        || input.score_axis_artifact_write_requested
+        || input.score_axis_population_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.lean_execution_evidence_created
+        || input.additional_smt_z3_execution_created
+        || input.cobalt_execution_evidence_created
+        || input.rust_to_lean_execution_evidence_created
+        || input.backend_execution_evidence_created
+        || input.benchmark_evidence_created
+        || input.external_audit_evidence_created
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::PromotionAttempt,
+        );
+    }
+    GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -117365,6 +118627,233 @@ mod tests {
     }
 
     #[test]
+    fn phase555_tiny_z3_backend_execution_external_reproduction_handoff_records_manual_metadata() {
+        let Some((obligation_root, phase405_output_root, output_root, review)) =
+            phase555_tiny_z3_backend_execution_external_reproduction_handoff_source(
+                "phase555-handoff",
+            )
+        else {
+            return;
+        };
+        let handoff_input =
+            phase555_tiny_z3_backend_execution_external_reproduction_handoff_input(
+                "phase555-handoff-record",
+                &review,
+                GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffLabel::IndependentExternalReproductionHandoffRecorded,
+            );
+        let handoff = build_gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff(
+            &review,
+            &handoff_input,
+        )
+        .expect("phase555 independent external reproduction handoff metadata builds");
+        let bundle =
+            gateway_formal_tiny_z3_backend_execution_external_reproduction_manual_handoff_bundle(
+                &review,
+                "phase555-handoff-record",
+            );
+        let validation = zkbench_core::validate_manual_handoff_bundle(&bundle);
+
+        assert_eq!(
+            handoff.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_HANDOFF_STATE_SLICE
+        );
+        assert_eq!(
+            handoff.claim_boundary,
+            gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_claim_boundary()
+        );
+        assert_eq!(handoff.phase553_import_review_digest, review.digest());
+        assert_eq!(
+            handoff.phase553_classification,
+            GatewayFormalTinyZ3BackendExecutionExternalImportReviewClassification::BackendExecutionImportReviewBlockedNoIndependentRun
+        );
+        assert_eq!(
+            handoff.phase551_classification,
+            GatewayFormalTinyZ3BackendExecutionExternalImportCandidateClassification::ImportCandidateQuarantinedLocalMetadata
+        );
+        assert_eq!(
+            handoff.phase551_candidate_status,
+            GATEWAY_FORMAL_TINY_Z3_EXTERNAL_IMPORT_CANDIDATE_STATUS
+        );
+        assert_eq!(
+            handoff.phase551_requested_claim_boundary,
+            GATEWAY_FORMAL_TINY_Z3_EXTERNAL_IMPORT_REQUESTED_CLAIM_BOUNDARY
+        );
+        assert_eq!(
+            handoff.phase549_classification,
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionClassification::ExternalReproductionBlockedNoIndependentRun
+        );
+        assert_eq!(
+            handoff.classification,
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffClassification::IndependentExternalReproductionHandoffDeclaredNoRun
+        );
+        assert_eq!(
+            bundle.claim_boundary,
+            zkbench_core::ClaimBoundary::Level0DesignNote
+        );
+        assert_eq!(
+            bundle.subject.local_pack_claim_boundary,
+            zkbench_core::ClaimBoundary::Level1LocalReplay
+        );
+        assert!(!bundle.allows_live_execution());
+        assert!(bundle.contains_manual_instructions_only());
+        assert!(
+            validation.valid,
+            "validation issues: {:?}",
+            validation.issues
+        );
+        assert!(validation.issues.is_empty());
+        assert!(handoff.manual_handoff_validation_valid);
+        assert_eq!(handoff.manual_handoff_validation_issue_count, 0);
+        assert!(!handoff.process_execution_requested);
+        assert!(!handoff.network_access_requested);
+        assert!(!handoff.credentials_requested);
+        assert!(!handoff.external_replay_requested);
+        assert!(!handoff.external_result_import_created);
+        assert!(!handoff.writes_external_result_artifact_files);
+        assert!(!handoff.creates_accepted_external_result_evidence);
+        assert!(!handoff.writes_accepted_evidence_artifacts);
+        assert!(!handoff.claims_independent_external_reproduction);
+        assert!(!handoff.writes_level2_artifact_files);
+        assert!(!handoff.writes_score_axis_artifact_files);
+        assert!(!handoff.populates_score_axes);
+        assert!(!handoff.creates_accepted_formal_evidence);
+        assert!(!handoff.creates_level2_evidence);
+        assert!(!handoff.proof_artifact_created);
+        assert!(!handoff.checker_transcript_created);
+        assert!(!handoff.solver_certificate_created);
+        assert!(!handoff.lean_execution_evidence_created);
+        assert!(!handoff.additional_smt_z3_execution_created);
+        assert!(!handoff.cobalt_execution_evidence_created);
+        assert!(!handoff.rust_to_lean_execution_evidence_created);
+        assert!(!handoff.backend_execution_evidence_created);
+        assert!(!handoff.benchmark_evidence_created);
+        assert!(!handoff.external_audit_evidence_created);
+        assert!(!handoff.semantic_correctness_claimed);
+        assert!(!handoff.production_readiness_claimed);
+        assert!(!handoff.sota_claimed);
+        assert!(!handoff.breakthrough_claimed);
+        assert!(!handoff.full_security_claimed);
+        assert!(!handoff.grants_authority);
+
+        fs::remove_dir_all(&output_root).expect("phase555 output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase555 phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase555 obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase555_tiny_z3_backend_execution_external_reproduction_handoff_rejects_invalid_phase553_state(
+    ) {
+        let Some((obligation_root, phase405_output_root, output_root, mut review)) =
+            phase555_tiny_z3_backend_execution_external_reproduction_handoff_source(
+                "phase555-invalid-phase553",
+            )
+        else {
+            return;
+        };
+        review.claims_independent_external_reproduction = true;
+        let handoff_input =
+            phase555_tiny_z3_backend_execution_external_reproduction_handoff_input(
+                "phase555-invalid-handoff",
+                &review,
+                GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffLabel::IndependentExternalReproductionHandoffRejected,
+            );
+        let validation =
+            validate_gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_input(
+                &review,
+                &handoff_input,
+            );
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::Phase553ImportReviewStateMismatch
+        ));
+        assert!(
+            build_gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff(
+                &review,
+                &handoff_input,
+            )
+            .is_err()
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase555 invalid output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase555 invalid phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase555 invalid obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase555_tiny_z3_backend_execution_external_reproduction_handoff_rejects_digest_drift_and_promotion(
+    ) {
+        let Some((obligation_root, phase405_output_root, output_root, review)) =
+            phase555_tiny_z3_backend_execution_external_reproduction_handoff_source(
+                "phase555-promotion",
+            )
+        else {
+            return;
+        };
+        let mut handoff_input =
+            phase555_tiny_z3_backend_execution_external_reproduction_handoff_input(
+                "phase555-promotion-handoff",
+                &review,
+                GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffLabel::IndependentExternalReproductionHandoffRejected,
+            );
+        handoff_input.manual_handoff_bundle_digest = Hash([0; 32]);
+        handoff_input.process_execution_requested = true;
+        handoff_input.network_access_requested = true;
+        handoff_input.credentials_requested = true;
+        handoff_input.external_replay_requested = true;
+        handoff_input.external_result_import_created = true;
+        handoff_input.external_result_artifact_write_requested = true;
+        handoff_input.accepted_external_result_evidence_created = true;
+        handoff_input.accepted_evidence_artifact_write_requested = true;
+        handoff_input.independent_external_reproduction_claimed = true;
+        handoff_input.level2_artifact_write_requested = true;
+        handoff_input.score_axis_artifact_write_requested = true;
+        handoff_input.score_axis_population_requested = true;
+        handoff_input.accepted_formal_evidence_created = true;
+        handoff_input.creates_level2_evidence = true;
+        handoff_input.proof_artifact_promoted = true;
+        handoff_input.checker_transcript_promoted = true;
+        handoff_input.solver_certificate_promoted = true;
+        handoff_input.lean_execution_evidence_created = true;
+        handoff_input.additional_smt_z3_execution_created = true;
+        handoff_input.cobalt_execution_evidence_created = true;
+        handoff_input.rust_to_lean_execution_evidence_created = true;
+        handoff_input.backend_execution_evidence_created = true;
+        handoff_input.benchmark_evidence_created = true;
+        handoff_input.external_audit_evidence_created = true;
+        handoff_input.semantic_correctness_claimed = true;
+        handoff_input.production_readiness_claimed = true;
+        handoff_input.sota_claimed = true;
+        handoff_input.breakthrough_claimed = true;
+        handoff_input.full_security_claimed = true;
+        handoff_input.action_authority_claimed = true;
+        let validation =
+            validate_gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_input(
+                &review,
+                &handoff_input,
+            );
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::ManualHandoffBundleDigestMismatch
+        ));
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue::PromotionAttempt
+        ));
+        assert!(
+            build_gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff(
+                &review,
+                &handoff_input,
+            )
+            .is_err()
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase555 promotion output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase555 promotion phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase555 promotion obligation cleanup succeeds");
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -127423,6 +128912,192 @@ mod tests {
                 gateway_formal_tiny_z3_backend_execution_external_import_review_inherited_digest_requirements(),
             review_label,
             review_summary: "local backend route import review keeps independent external reproduction blocked".to_owned(),
+            accepted_external_result_evidence_created: false,
+            accepted_evidence_artifact_write_requested: false,
+            independent_external_reproduction_claimed: false,
+            level2_artifact_write_requested: false,
+            score_axis_artifact_write_requested: false,
+            score_axis_population_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            lean_execution_evidence_created: false,
+            additional_smt_z3_execution_created: false,
+            cobalt_execution_evidence_created: false,
+            rust_to_lean_execution_evidence_created: false,
+            backend_execution_evidence_created: false,
+            benchmark_evidence_created: false,
+            external_audit_evidence_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase555_tiny_z3_backend_execution_external_reproduction_handoff_source(
+        source_prefix: &str,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        GatewayFormalTinyZ3BackendExecutionExternalImportReview,
+    )> {
+        let (obligation_root, phase405_output_root, output_root, import_candidate) =
+            phase553_tiny_z3_backend_execution_external_import_review_source(source_prefix)?;
+        let review_input = phase553_tiny_z3_backend_execution_external_import_review_input(
+            &format!("{source_prefix}-review"),
+            &import_candidate,
+            GatewayFormalTinyZ3BackendExecutionExternalImportReviewLabel::BackendExecutionImportReviewRecorded,
+        );
+        let review = build_gateway_formal_tiny_z3_backend_execution_external_import_review(
+            &import_candidate,
+            &review_input,
+        )
+        .expect("phase555 source import review metadata builds");
+        Some((obligation_root, phase405_output_root, output_root, review))
+    }
+
+    fn phase555_tiny_z3_backend_execution_external_reproduction_handoff_input(
+        handoff_id: &str,
+        review: &GatewayFormalTinyZ3BackendExecutionExternalImportReview,
+        handoff_label: GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffLabel,
+    ) -> GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffInput {
+        let handoff_policy_id =
+            "phase555-backend-execution-independent-external-reproduction-handoff-policy";
+        let handoff_decision_id =
+            "phase555-backend-execution-independent-external-reproduction-handoff-decision";
+        let classification =
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffClassification::IndependentExternalReproductionHandoffDeclaredNoRun;
+        let nonclaims =
+            gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_required_nonclaims();
+        let blockers =
+            gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_blockers();
+        let bundle =
+            gateway_formal_tiny_z3_backend_execution_external_reproduction_manual_handoff_bundle(
+                review, handoff_id,
+            );
+        let validation = zkbench_core::validate_manual_handoff_bundle(&bundle);
+        let manual_handoff_bundle_digest = hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-bundle:v1",
+            &bundle,
+        );
+        let manual_handoff_validation_digest = hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-validation:v1",
+            &validation,
+        );
+        let manual_handoff_validation_issue_digest = hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-validation-issues:v1",
+            &validation.issues,
+        );
+        let output_roles =
+            gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_required_operator_output_roles();
+        let provenance_fields = zkbench_core::required_provenance_fields();
+        let quarantine_requirements =
+            gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_result_import_quarantine_requirements();
+        GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffInput {
+            schema_version:
+                GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_HANDOFF_SCHEMA_VERSION
+                    .to_owned(),
+            handoff_id: handoff_id.to_owned(),
+            handoff_policy_id: handoff_policy_id.to_owned(),
+            handoff_decision_id: handoff_decision_id.to_owned(),
+            handoff_decision_at_unix: 1_800_000_555,
+            digest_bindings:
+                gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_digest_bindings(
+                    review,
+                    handoff_id,
+                ),
+            id_bindings:
+                gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_id_bindings(
+                    review,
+                    handoff_id,
+                    handoff_policy_id,
+                    handoff_decision_id,
+                ),
+            label_bindings:
+                gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_label_bindings(
+                    review,
+                    &handoff_label,
+                ),
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-nonclaims:v1",
+                &nonclaims,
+            ),
+            manual_handoff_owner_id: GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OWNER_ID.to_owned(),
+            manual_handoff_bundle_type: GATEWAY_FORMAL_TINY_Z3_MANUAL_HANDOFF_BUNDLE_TYPE
+                .to_owned(),
+            manual_handoff_validator_id: GATEWAY_FORMAL_TINY_Z3_MANUAL_HANDOFF_VALIDATOR_ID
+                .to_owned(),
+            manual_handoff_bundle_digest,
+            manual_handoff_validation_digest,
+            manual_handoff_validation_issue_digest,
+            manual_handoff_claim_boundary:
+                GATEWAY_FORMAL_TINY_Z3_EXTERNAL_IMPORT_REQUESTED_CLAIM_BOUNDARY.to_owned(),
+            manual_handoff_policy_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-manual-policy:v1",
+                &(
+                    &bundle.external_runner_policy,
+                    &bundle.artifact_capture_contract,
+                    &bundle.provenance_contract,
+                    &bundle.result_import_schema,
+                ),
+            ),
+            required_operator_output_roles_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-required-output-roles:v1",
+                &output_roles,
+            ),
+            required_provenance_field_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-required-provenance-fields:v1",
+                &provenance_fields,
+            ),
+            result_import_quarantine_requirement_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-quarantine-requirements:v1",
+                &quarantine_requirements,
+            ),
+            classification: classification.clone(),
+            handoff_policy_digest:
+                gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_policy_digest(
+                    handoff_policy_id,
+                    &classification,
+                    review.digest(),
+                    manual_handoff_bundle_digest,
+                    manual_handoff_validation_digest,
+                    &blockers,
+                ),
+            handoff_blockers: blockers.clone(),
+            handoff_blocker_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-blockers:v1",
+                &blockers,
+            ),
+            handoff_nonpromotion_digest:
+                gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_nonpromotion_digest(
+                    &classification,
+                    review.digest(),
+                    manual_handoff_bundle_digest,
+                    manual_handoff_validation_digest,
+                    &blockers,
+                ),
+            handoff_rules:
+                gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_rules(),
+            forbidden_api_set:
+                gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_forbidden_apis(),
+            inherited_digest_requirements:
+                gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_inherited_digest_requirements(),
+            handoff_label,
+            handoff_summary: "manual handoff metadata declares no independent external run yet"
+                .to_owned(),
+            process_execution_requested: false,
+            network_access_requested: false,
+            credentials_requested: false,
+            external_replay_requested: false,
+            external_result_import_created: false,
+            external_result_artifact_write_requested: false,
             accepted_external_result_evidence_created: false,
             accepted_evidence_artifact_write_requested: false,
             independent_external_reproduction_claimed: false,

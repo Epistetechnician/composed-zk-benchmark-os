@@ -15598,6 +15598,39 @@ evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean execution, no
 benchmark evidence, no external audit evidence, and no production/SOTA/
 security/correctness claim.
 
+## Phase 555 HSAI Tiny Z3 Backend Execution Independent External Reproduction Handoff Metadata
+
+Status: complete. See
+`docs/555-hsai-tiny-z3-backend-execution-independent-external-reproduction-handoff-metadata-notes.md`.
+
+Goal: implement local independent external-reproduction handoff metadata over
+one exact Phase 553 blocked import-review metadata record.
+
+Implemented: Phase 555 adds backend-execution independent external
+reproduction handoff input/output metadata, bounded classifications and
+labels, issue/validation types, blocker/nonclaim/rule/forbidden-API/
+inherited-digest helpers, operator-output-role and quarantine-requirement
+helpers, nonpromotion/policy/digest/id/label binding helpers, one in-memory
+`zkbench_core::ManualHandoffBundle` builder, `build_...` and `validate_...`
+entrypoints, and tests over a Phase 553 blocked import-review record.
+
+Validation coverage: focused tests cover successful manual handoff metadata,
+invalid Phase 553 state rejection, and promotion rejection across handoff
+bundle digest drift, process execution, network access, credentials, external
+replay, external result import, external-result artifact writes, accepted
+external-result evidence, accepted-evidence artifact writes, independent
+external reproduction, Level2 artifacts, score-axis artifacts, axis
+population, accepted formal evidence, Level2+, Lean, COBALT, Rust-to-Lean,
+additional SMT/Z3 execution, backend execution evidence, proof/checker/solver,
+benchmark, external audit, strong claims, and action authority.
+
+Exit criteria: HSAI now can prepare a digest-bound manual handoff request for
+independent external reproduction of the backend-execution route. It still has
+no independent external reproduction, no external result import, no accepted
+formal evidence, no Level2+ evidence, no populated score axes, no Lean/
+COBALT/Rust-to-Lean execution, no benchmark evidence, no external audit
+evidence, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
