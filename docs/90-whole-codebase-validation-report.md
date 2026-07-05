@@ -7407,5 +7407,22 @@ score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no
 benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/513-hsai-tiny-z3-materialized-accepted-append-metadata-notes.md](docs/513-hsai-tiny-z3-materialized-accepted-append-metadata-notes.md)
+documents the Phase 513 local materialized accepted append metadata
+implementation. The Rust surface in `crates/hsai-agent-admission/src/lib.rs`
+adds materialized accepted append input/output metadata, issue and validation
+types, nonclaim/rule/forbidden-API/inherited-digest helpers, path digest
+helpers, digest/id/label binding helpers, a fail-closed validator, and a
+builder that validates one exact Phase 511 mutation record before routing
+through `zkbench-core::apply_materialized_accepted_ledger_append_transaction`.
+The metadata binds ledger path identity digest, ledger path policy digest,
+`create_if_missing` policy value, materialized append report digest,
+materialized ledger artifact digest, and materialized ledger artifact byte
+length. It does not add a parallel ledger writer, does not call direct
+`EvidenceLedger::load_json` or `EvidenceLedger::save_json` APIs, creates no
+accepted formal evidence, creates no Level2+ evidence, populates no score axes,
+runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark
+evidence, and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

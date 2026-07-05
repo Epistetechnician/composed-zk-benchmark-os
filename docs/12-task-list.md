@@ -14420,6 +14420,37 @@ ledger output, no accepted formal evidence, no Level2+ evidence, no score axes,
 no Lean/new-SMT/COBALT or Rust-to-Lean execution, no benchmark evidence, no
 external audit evidence, and no production/SOTA/security/correctness claim.
 
+## Phase 513 HSAI Tiny Z3 Materialized Accepted Append Metadata
+
+Status: complete. See
+`docs/513-hsai-tiny-z3-materialized-accepted-append-metadata-notes.md`.
+
+Goal: implement local metadata for materializing one accepted ledger JSON
+artifact through the existing `zkbench-core`
+`apply_materialized_accepted_ledger_append_transaction` owner.
+
+Implemented: Phase 513 adds materialized accepted append input/output metadata,
+issue and validation types, nonclaim/rule/forbidden-API/inherited digest
+helpers, path digest helpers, digest/id/label binding helpers, a fail-closed
+validator, and a builder that validates one exact Phase 511 mutation record
+before routing through `zkbench-core` materialized append. The result records
+the ledger path identity digest, ledger path policy digest, `create_if_missing`
+policy value, materialized append report digest, materialized ledger artifact
+digest, and materialized ledger artifact byte length.
+
+Validation coverage: focused Rust tests cover successful local materialized
+append metadata over a real Phase 511 mutation record and real `zkbench-core`
+materialized append request, rejection of invalid Phase 511 state, and
+rejection of direct-ledger-load/save, parallel-writer, official-submission,
+formal-evidence, Level2+, score-axis, backend, benchmark, strong-claim, and
+action-authority promotion attempts.
+
+Exit criteria: HSAI now has local metadata for one materialized accepted ledger
+JSON artifact routed through `zkbench-core`. It still has no accepted formal
+evidence, no Level2+ evidence, no score axes, no Lean/new-SMT/COBALT or
+Rust-to-Lean execution, no benchmark evidence, no external audit evidence, and
+no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

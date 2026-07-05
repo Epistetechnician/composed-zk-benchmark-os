@@ -146,8 +146,9 @@ readiness, full security, or authority to execute an action.
 
 ## Phase 513 Implementation Exit Criteria
 
-A future Phase 513 may implement local materialized accepted append metadata
-only if it:
+Phase 513 implemented local materialized accepted append metadata in
+`docs/513-hsai-tiny-z3-materialized-accepted-append-metadata-notes.md`. The
+implementation met this boundary by:
 
 - touches only the allowed files listed above;
 - performs no process or network calls;
