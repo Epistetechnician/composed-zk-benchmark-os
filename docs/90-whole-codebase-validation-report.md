@@ -7649,5 +7649,18 @@ creates no Level2+ evidence, populates no score axes, runs no
 Lean/COBALT/Rust-to-Lean extraction, creates no benchmark evidence, and claims
 no production/SOTA/security/semantic-correctness result.
 
+[docs/528-hsai-tiny-z3-hermetic-backend-execution-result-boundary.md](docs/528-hsai-tiny-z3-hermetic-backend-execution-result-boundary.md)
+defines the Phase 528 docs-first boundary for one future hermetic local
+SMT/Z3 execution result over the Phase 527 backend-execution candidate. The
+boundary defines required Phase 527 bindings, actual executable/argv/
+working-directory/environment/timeout/exit-status/stdout-summary/stderr-summary
+digests, allowed touch surface, process-spawn limits, fail-closed validation
+rules, result meaning limits, and Phase 529 implementation exit criteria. It
+creates no Rust code, changes no Cargo metadata, runs no backend, writes no
+backend artifacts, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean extraction,
+creates no benchmark evidence, and claims no production/SOTA/security/
+semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
