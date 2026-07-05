@@ -16302,6 +16302,35 @@ Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution, no
 benchmark evidence, no external audit evidence, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 579 HSAI Tiny Z3 Backend Execution Packet Role Artifact Import Candidate Metadata
+
+Status: complete. See
+`docs/579-hsai-tiny-z3-backend-execution-packet-role-artifact-import-candidate-metadata-notes.md`.
+
+Goal: implement local quarantined import-candidate metadata over one exact
+Phase 577 packet role artifact output plumbing readback.
+
+Implemented: Phase 579 adds packet role artifact import-candidate constants,
+input/output/issue/validation/classification/label types, deterministic
+Phase 577 readback digest bindings, zkbench-core `ExternalResultCandidate`
+construction, `validate_external_result_candidate` and
+`external_result_quarantine_record` digests, policy/blocker/nonpromotion
+digests, inherited-digest requirements, and fail-closed Phase 577 exactness
+checks.
+
+Validation coverage: focused `hsai-agent-admission` tests cover successful
+quarantined import-candidate metadata, Phase 577 manifest drift rejection,
+readback-digest drift rejection, and classification/promotion/strong-claim
+rejection.
+
+Exit criteria: HSAI can now map one validated Phase 577 local packet role
+artifact bundle into quarantined import-candidate metadata. It still has no
+external result import, no accepted external result evidence, no accepted
+independent external reproduction, no accepted formal evidence, no Level2+
+evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean execution, no
+additional SMT/Z3 execution, no benchmark evidence, no external audit evidence,
+and no production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
