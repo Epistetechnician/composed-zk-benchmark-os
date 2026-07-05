@@ -985,6 +985,11 @@ pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_HANDOFF_CLAIM_BOUNDARY: &str = 
 pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_HANDOFF_OWNER_ID: &str = "zkbench-core";
 pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_HANDOFF_VALIDATOR_ID: &str =
     "validate_accepted_ledger_append_transaction_request";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_VALIDATOR_CALL_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-z3-accepted-append-validator-call:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_VALIDATOR_CALL_STATE_SLICE: &str =
+    "phase-509-hsai-tiny-z3-accepted-append-validator-call-metadata";
+pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_VALIDATOR_CALL_CLAIM_BOUNDARY: &str = "local tiny-Z3 accepted append validator-call metadata only; records the result of an in-memory validation-only call to zkbench-core validate_accepted_ledger_append_transaction_request over caller-supplied values, but does not read or mutate accepted Evidence Ledger files, materialize accepted ledger output, make an accepted append decision, create accepted formal evidence, create Level2+ evidence, populate score axes, create proof artifacts, create checker transcripts, create solver certificates, run Lean, run new SMT, run COBALT, run Rust-to-Lean extraction, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, or grant authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -14157,6 +14162,192 @@ pub enum GatewayFormalTinyZ3AcceptedAppendHandoffIssue {
 pub struct GatewayFormalTinyZ3AcceptedAppendHandoffValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyZ3AcceptedAppendHandoffIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3AcceptedAppendValidatorCallLabel {
+    ValidatorCallRecorded,
+    ValidatorCallRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3AcceptedAppendValidatorCallInput {
+    pub schema_version: String,
+    pub validator_call_id: String,
+    pub validator_policy_id: String,
+    pub validator_decision_id: String,
+    pub validator_decision_at_unix: u64,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub accepted_append_owner_id: String,
+    pub validation_function_id: String,
+    pub request_type_name: String,
+    pub validation_output_type_name: String,
+    pub target_ledger_type_name: String,
+    pub validation_call_rules: BTreeSet<String>,
+    pub forbidden_api_set: BTreeSet<String>,
+    pub inherited_digest_requirements: BTreeSet<String>,
+    pub validator_call_label: GatewayFormalTinyZ3AcceptedAppendValidatorCallLabel,
+    pub validator_call_summary: String,
+    pub accepted_evidence_ledger_file_read_requested: bool,
+    pub accepted_evidence_ledger_file_write_requested: bool,
+    pub accepted_append_mutation_requested: bool,
+    pub materialized_accepted_ledger_output_requested: bool,
+    pub proceed_after_invalid_validation_requested: bool,
+    pub valid_validation_treated_as_accepted_evidence: bool,
+    pub accepted_append_decision_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub external_audit_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyZ3AcceptedAppendValidatorCallInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-accepted-append-validator-call-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3AcceptedAppendValidatorCall {
+    pub schema_version: String,
+    pub validator_call_id: String,
+    pub state_slice: String,
+    pub validator_call_input_digest: Hash,
+    pub validator_policy_id: String,
+    pub validator_decision_id: String,
+    pub validator_decision_at_unix: u64,
+    pub phase507_handoff_digest: Hash,
+    pub phase507_handoff_input_digest: Hash,
+    pub phase507_digest_binding_map_digest: Hash,
+    pub phase507_id_binding_map_digest: Hash,
+    pub phase507_label_binding_map_digest: Hash,
+    pub phase507_explicit_nonclaims_digest: Hash,
+    pub phase507_validation_handoff_rule_digest: Hash,
+    pub phase507_forbidden_api_set_digest: Hash,
+    pub phase507_inherited_digest_requirements_digest: Hash,
+    pub reviewed_current_accepted_append_blockers_digest: Hash,
+    pub expected_current_accepted_append_blockers_digest: Hash,
+    pub accepted_append_owner_id: String,
+    pub validation_function_id: String,
+    pub request_type_name: String,
+    pub validation_output_type_name: String,
+    pub target_ledger_type_name: String,
+    pub target_evidence_ledger_id: String,
+    pub transaction_id: String,
+    pub expected_current_ledger_tip_digest: Hash,
+    pub append_preview_current_ledger_tip_digest: Hash,
+    pub transaction_request_digest: Hash,
+    pub candidate_digest: Hash,
+    pub append_preview_digest: Hash,
+    pub review_decision_digest: Hash,
+    pub source_artifact_set_digest: Hash,
+    pub ledger_digest: Hash,
+    pub validation_result_digest: Hash,
+    pub validation_issue_kind_set: BTreeSet<String>,
+    pub validation_issue_kind_set_digest: Hash,
+    pub validation_valid: bool,
+    pub validation_issue_count: usize,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub validation_call_rules: BTreeSet<String>,
+    pub validation_call_rules_digest: Hash,
+    pub forbidden_api_set: BTreeSet<String>,
+    pub forbidden_api_set_digest: Hash,
+    pub inherited_digest_requirements: BTreeSet<String>,
+    pub inherited_digest_requirements_digest: Hash,
+    pub validator_call_label: GatewayFormalTinyZ3AcceptedAppendValidatorCallLabel,
+    pub validator_call_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub reads_accepted_evidence_ledger_files: bool,
+    pub writes_accepted_evidence_ledger_files: bool,
+    pub requests_accepted_append_mutation: bool,
+    pub creates_materialized_accepted_ledger_output: bool,
+    pub proceeds_after_invalid_validation: bool,
+    pub treats_valid_validation_as_accepted_evidence: bool,
+    pub makes_accepted_append_decision: bool,
+    pub creates_accepted_formal_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub external_audit_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3AcceptedAppendValidatorCall {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-accepted-append-validator-call:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue {
+    InvalidSchemaVersion,
+    InvalidValidatorCallId,
+    InvalidValidatorPolicyId,
+    InvalidValidatorDecisionId,
+    MissingValidatorDecisionTimestamp,
+    MissingDigest(String),
+    DigestBindingMismatch,
+    IdBindingMismatch,
+    InvalidIdBinding(String),
+    LabelBindingMismatch,
+    Phase507HandoffStateMismatch,
+    NonclaimMismatch,
+    StaleBlockerDigestMismatch,
+    InvalidAcceptedAppendOwner,
+    InvalidValidationFunction,
+    InvalidRequestTypeName,
+    InvalidValidationOutputTypeName,
+    InvalidTargetLedgerTypeName,
+    RequestIdentityMismatch,
+    LedgerIdentityMismatch,
+    ValidationCallRulesMismatch,
+    ForbiddenApiSetMismatch,
+    InheritedDigestRequirementsMismatch,
+    ValidatorCallSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3AcceptedAppendValidatorCallValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -57864,6 +58055,609 @@ pub fn validate_gateway_formal_tiny_z3_accepted_append_handoff_input(
     }
 }
 
+pub fn gateway_formal_tiny_z3_accepted_append_validator_call_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_VALIDATOR_CALL_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_z3_accepted_append_validator_call_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    [
+        "not accepted append mutation",
+        "not accepted append decision",
+        "not accepted evidence",
+        "not accepted formal evidence",
+        "not accepted evidence ledger file read",
+        "not accepted evidence ledger file write",
+        "not materialized accepted ledger output",
+        "not accepted append policy change",
+        "not Level2+ evidence",
+        "not score-axis evidence",
+        "not proof authority",
+        "not checker transcript authority",
+        "not solver certificate authority",
+        "not backend execution evidence",
+        "not Lean execution evidence",
+        "not new SMT execution evidence",
+        "not COBALT execution evidence",
+        "not Rust-to-Lean extraction evidence",
+        "not benchmark evidence",
+        "not external audit",
+        "not SOTA",
+        "not semantic correctness",
+        "not production readiness",
+        "not full security",
+        "not action authority",
+    ]
+    .into_iter()
+    .map(|label| NonClaimLabel(label.to_owned()))
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_accepted_append_validator_call_rules() -> BTreeSet<String> {
+    [
+        "phase507_state_required",
+        "phase507_digest_bindings_required",
+        "blocker_digest_equality_required",
+        "zkbench_core_owner_required",
+        "validation_function_identifier_required",
+        "caller_supplied_in_memory_request_required",
+        "caller_supplied_in_memory_ledger_required",
+        "accepted_append_request_identity_required",
+        "ledger_identity_digest_recorded",
+        "validation_result_digest_recorded",
+        "validation_issue_kind_set_digest_recorded",
+        "invalid_validation_blocks_progress",
+        "valid_validation_not_accepted_evidence",
+        "ledger_file_read_rejected",
+        "ledger_file_write_rejected",
+        "mutation_api_rejected",
+        "materialized_output_rejected",
+        "level2_formal_evidence_request_rejected",
+        "score_axis_population_rejected",
+        "backend_execution_rejected",
+        "benchmark_evidence_rejected",
+        "strong_public_claim_rejected",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_accepted_append_validator_call_forbidden_apis() -> BTreeSet<String> {
+    [
+        "apply_accepted_ledger_append_transaction",
+        "MaterializedAcceptedLedgerAppendRequest",
+        "apply_materialized_accepted_ledger_append_transaction",
+        "EvidenceLedger::load_json",
+        "EvidenceLedger::save_json",
+        "accepted_evidence_ledger_file_read",
+        "accepted_evidence_ledger_file_write",
+        "external_runner",
+        "process_spawn",
+        "network_api",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_accepted_append_validator_call_inherited_digest_requirements(
+) -> BTreeSet<String> {
+    [
+        "phase507_handoff_digest_required",
+        "phase507_handoff_input_digest_required",
+        "phase507_digest_binding_map_digest_required",
+        "phase507_id_binding_map_digest_required",
+        "phase507_label_binding_map_digest_required",
+        "phase507_explicit_nonclaims_digest_required",
+        "phase507_validation_handoff_rule_digest_required",
+        "phase507_forbidden_api_set_digest_required",
+        "phase507_inherited_digest_requirements_digest_required",
+        "reviewed_current_accepted_append_blockers_digest_required",
+        "expected_current_accepted_append_blockers_digest_required",
+        "transaction_request_digest_required",
+        "candidate_digest_required",
+        "append_preview_digest_required",
+        "review_decision_digest_required",
+        "source_artifact_set_digest_required",
+        "ledger_tip_digest_required",
+        "validation_result_digest_required",
+        "validation_issue_kind_set_digest_required",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_accepted_append_validator_call_digest_bindings(
+    handoff: &GatewayFormalTinyZ3AcceptedAppendHandoff,
+) -> BTreeMap<String, Hash> {
+    BTreeMap::from([
+        ("phase507_handoff_digest".to_owned(), handoff.digest()),
+        (
+            "phase507_handoff_input_digest".to_owned(),
+            handoff.handoff_input_digest,
+        ),
+        (
+            "phase507_digest_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase507-accepted-append-handoff-digest-bindings:v1",
+                &handoff.digest_bindings,
+            ),
+        ),
+        (
+            "phase507_id_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase507-accepted-append-handoff-id-bindings:v1",
+                &handoff.id_bindings,
+            ),
+        ),
+        (
+            "phase507_label_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase507-accepted-append-handoff-label-bindings:v1",
+                &handoff.label_bindings,
+            ),
+        ),
+        (
+            "phase507_explicit_nonclaims_digest".to_owned(),
+            handoff.explicit_nonclaims_digest,
+        ),
+        (
+            "phase507_validation_handoff_rule_digest".to_owned(),
+            handoff.validation_handoff_rules_digest,
+        ),
+        (
+            "phase507_forbidden_api_set_digest".to_owned(),
+            handoff.forbidden_api_set_digest,
+        ),
+        (
+            "phase507_inherited_digest_requirements_digest".to_owned(),
+            handoff.inherited_digest_requirements_digest,
+        ),
+        (
+            "reviewed_current_accepted_append_blockers_digest".to_owned(),
+            handoff.reviewed_current_accepted_append_blockers_digest,
+        ),
+        (
+            "expected_current_accepted_append_blockers_digest".to_owned(),
+            handoff.expected_current_accepted_append_blockers_digest,
+        ),
+    ])
+}
+
+pub fn gateway_formal_tiny_z3_accepted_append_validator_call_id_bindings(
+    handoff: &GatewayFormalTinyZ3AcceptedAppendHandoff,
+    validator_call_id: &str,
+    validator_policy_id: &str,
+    validator_decision_id: &str,
+) -> BTreeMap<String, String> {
+    let mut ids = handoff.id_bindings.clone();
+    ids.insert("validator_call_id".to_owned(), validator_call_id.to_owned());
+    ids.insert(
+        "validator_policy_id".to_owned(),
+        validator_policy_id.to_owned(),
+    );
+    ids.insert(
+        "validator_decision_id".to_owned(),
+        validator_decision_id.to_owned(),
+    );
+    ids.insert(
+        "phase507_accepted_append_handoff_id".to_owned(),
+        handoff.accepted_append_handoff_id.clone(),
+    );
+    ids
+}
+
+pub fn gateway_formal_tiny_z3_accepted_append_validator_call_label_bindings(
+    handoff: &GatewayFormalTinyZ3AcceptedAppendHandoff,
+    validator_call_label: &GatewayFormalTinyZ3AcceptedAppendValidatorCallLabel,
+) -> BTreeMap<String, String> {
+    let mut labels = handoff.label_bindings.clone();
+    labels.insert(
+        "phase507_handoff_label".to_owned(),
+        format!("{:?}", handoff.handoff_label),
+    );
+    labels.insert(
+        "validator_call_label".to_owned(),
+        format!("{validator_call_label:?}"),
+    );
+    labels
+}
+
+pub fn gateway_formal_tiny_z3_accepted_append_request_identity_digests(
+    request: &zkbench_core::AcceptedLedgerAppendTransactionRequest,
+) -> BTreeMap<String, Hash> {
+    BTreeMap::from([
+        (
+            "transaction_request_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:phase509-accepted-append-transaction-request:v1",
+                request,
+            ),
+        ),
+        (
+            "candidate_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:phase509-accepted-append-candidate:v1",
+                &request.preflight_request.candidate,
+            ),
+        ),
+        (
+            "append_preview_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:phase509-accepted-append-preview:v1",
+                &request.preflight_request.append_preview,
+            ),
+        ),
+        (
+            "review_decision_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:phase509-accepted-append-review-decision:v1",
+                &request.preflight_request.review_decision,
+            ),
+        ),
+        (
+            "source_artifact_set_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:phase509-accepted-append-source-artifact-set:v1",
+                &request.preflight_request.source_artifact_digests,
+            ),
+        ),
+        (
+            "expected_current_ledger_tip_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:phase509-expected-current-ledger-tip:v1",
+                &request.expected_current_ledger_tip,
+            ),
+        ),
+        (
+            "append_preview_current_ledger_tip_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:phase509-append-preview-current-ledger-tip:v1",
+                &request
+                    .preflight_request
+                    .append_preview
+                    .transaction_preview
+                    .current_ledger_digest,
+            ),
+        ),
+    ])
+}
+
+pub fn build_gateway_formal_tiny_z3_accepted_append_validator_call(
+    handoff: &GatewayFormalTinyZ3AcceptedAppendHandoff,
+    request: &zkbench_core::AcceptedLedgerAppendTransactionRequest,
+    ledger: &zkbench_core::EvidenceLedger,
+    input: &GatewayFormalTinyZ3AcceptedAppendValidatorCallInput,
+) -> Result<
+    GatewayFormalTinyZ3AcceptedAppendValidatorCall,
+    GatewayFormalTinyZ3AcceptedAppendValidatorCallValidation,
+> {
+    let input_validation = validate_gateway_formal_tiny_z3_accepted_append_validator_call_input(
+        handoff, request, input,
+    );
+    if !input_validation.valid {
+        return Err(input_validation);
+    }
+    let accepted_append_validation =
+        zkbench_core::validate_accepted_ledger_append_transaction_request(request, ledger);
+    let issue_kind_set: BTreeSet<String> = accepted_append_validation
+        .issues
+        .iter()
+        .map(|issue| format!("{:?}", issue.kind))
+        .collect();
+    let digest_bindings =
+        gateway_formal_tiny_z3_accepted_append_validator_call_digest_bindings(handoff);
+    let request_digests = gateway_formal_tiny_z3_accepted_append_request_identity_digests(request);
+    let validation_valid = accepted_append_validation.valid;
+    Ok(GatewayFormalTinyZ3AcceptedAppendValidatorCall {
+        schema_version: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_VALIDATOR_CALL_SCHEMA_VERSION
+            .to_owned(),
+        validator_call_id: input.validator_call_id.clone(),
+        state_slice: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_VALIDATOR_CALL_STATE_SLICE.to_owned(),
+        validator_call_input_digest: input.digest(),
+        validator_policy_id: input.validator_policy_id.clone(),
+        validator_decision_id: input.validator_decision_id.clone(),
+        validator_decision_at_unix: input.validator_decision_at_unix,
+        phase507_handoff_digest: digest_bindings["phase507_handoff_digest"],
+        phase507_handoff_input_digest: digest_bindings["phase507_handoff_input_digest"],
+        phase507_digest_binding_map_digest: digest_bindings["phase507_digest_binding_map_digest"],
+        phase507_id_binding_map_digest: digest_bindings["phase507_id_binding_map_digest"],
+        phase507_label_binding_map_digest: digest_bindings["phase507_label_binding_map_digest"],
+        phase507_explicit_nonclaims_digest: digest_bindings["phase507_explicit_nonclaims_digest"],
+        phase507_validation_handoff_rule_digest: digest_bindings
+            ["phase507_validation_handoff_rule_digest"],
+        phase507_forbidden_api_set_digest: digest_bindings["phase507_forbidden_api_set_digest"],
+        phase507_inherited_digest_requirements_digest: digest_bindings
+            ["phase507_inherited_digest_requirements_digest"],
+        reviewed_current_accepted_append_blockers_digest: digest_bindings
+            ["reviewed_current_accepted_append_blockers_digest"],
+        expected_current_accepted_append_blockers_digest: digest_bindings
+            ["expected_current_accepted_append_blockers_digest"],
+        accepted_append_owner_id: input.accepted_append_owner_id.clone(),
+        validation_function_id: input.validation_function_id.clone(),
+        request_type_name: input.request_type_name.clone(),
+        validation_output_type_name: input.validation_output_type_name.clone(),
+        target_ledger_type_name: input.target_ledger_type_name.clone(),
+        target_evidence_ledger_id: request.target_evidence_ledger_id.clone(),
+        transaction_id: request.transaction_id.clone(),
+        expected_current_ledger_tip_digest: request_digests["expected_current_ledger_tip_digest"],
+        append_preview_current_ledger_tip_digest: request_digests
+            ["append_preview_current_ledger_tip_digest"],
+        transaction_request_digest: request_digests["transaction_request_digest"],
+        candidate_digest: request_digests["candidate_digest"],
+        append_preview_digest: request_digests["append_preview_digest"],
+        review_decision_digest: request_digests["review_decision_digest"],
+        source_artifact_set_digest: request_digests["source_artifact_set_digest"],
+        ledger_digest: hash_tagged("hsai-agent-admission:phase509-evidence-ledger:v1", ledger),
+        validation_result_digest: hash_tagged(
+            "hsai-agent-admission:phase509-accepted-append-validation-result:v1",
+            &accepted_append_validation,
+        ),
+        validation_issue_kind_set: issue_kind_set.clone(),
+        validation_issue_kind_set_digest: hash_tagged(
+            "hsai-agent-admission:phase509-accepted-append-validation-issue-kind-set:v1",
+            &issue_kind_set,
+        ),
+        validation_valid,
+        validation_issue_count: accepted_append_validation.issues.len(),
+        digest_bindings: input.digest_bindings.clone(),
+        id_bindings: input.id_bindings.clone(),
+        label_bindings: input.label_bindings.clone(),
+        explicit_nonclaims: input.explicit_nonclaims.clone(),
+        explicit_nonclaims_digest: input.explicit_nonclaims_digest,
+        validation_call_rules: input.validation_call_rules.clone(),
+        validation_call_rules_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-accepted-append-validator-call-rules:v1",
+            &input.validation_call_rules,
+        ),
+        forbidden_api_set: input.forbidden_api_set.clone(),
+        forbidden_api_set_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-accepted-append-validator-call-forbidden-apis:v1",
+            &input.forbidden_api_set,
+        ),
+        inherited_digest_requirements: input.inherited_digest_requirements.clone(),
+        inherited_digest_requirements_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-accepted-append-validator-call-inherited-digest-requirements:v1",
+            &input.inherited_digest_requirements,
+        ),
+        validator_call_label: input.validator_call_label.clone(),
+        validator_call_summary: input.validator_call_summary.clone(),
+        previous_promotion_state: "tiny_z3_accepted_append_evaluation_handoff_metadata".to_owned(),
+        promotion_state: "tiny_z3_accepted_append_validator_call_metadata".to_owned(),
+        next_required_state: if validation_valid {
+            "tiny_z3_accepted_append_validation_satisfied_but_mutation_unperformed".to_owned()
+        } else {
+            "tiny_z3_accepted_append_validation_failed_mutation_blocked".to_owned()
+        },
+        claim_boundary: gateway_formal_tiny_z3_accepted_append_validator_call_claim_boundary(),
+        reads_accepted_evidence_ledger_files: false,
+        writes_accepted_evidence_ledger_files: false,
+        requests_accepted_append_mutation: false,
+        creates_materialized_accepted_ledger_output: false,
+        proceeds_after_invalid_validation: false,
+        treats_valid_validation_as_accepted_evidence: false,
+        makes_accepted_append_decision: false,
+        creates_accepted_formal_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        backend_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        external_audit_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_gateway_formal_tiny_z3_accepted_append_validator_call_input(
+    handoff: &GatewayFormalTinyZ3AcceptedAppendHandoff,
+    request: &zkbench_core::AcceptedLedgerAppendTransactionRequest,
+    input: &GatewayFormalTinyZ3AcceptedAppendValidatorCallInput,
+) -> GatewayFormalTinyZ3AcceptedAppendValidatorCallValidation {
+    let mut issues = Vec::new();
+    if input.schema_version != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_VALIDATOR_CALL_SCHEMA_VERSION
+    {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.validator_call_id) {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::InvalidValidatorCallId);
+    }
+    if !is_single_segment_id(&input.validator_policy_id) {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::InvalidValidatorPolicyId);
+    }
+    if !is_single_segment_id(&input.validator_decision_id) {
+        issues
+            .push(GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::InvalidValidatorDecisionId);
+    }
+    if input.validator_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::MissingValidatorDecisionTimestamp,
+        );
+    }
+    let expected_digests =
+        gateway_formal_tiny_z3_accepted_append_validator_call_digest_bindings(handoff);
+    for (label, digest) in &input.digest_bindings {
+        if *digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::MissingDigest(label.clone()),
+            );
+        }
+    }
+    if input.digest_bindings != expected_digests {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::DigestBindingMismatch);
+    }
+    let expected_ids = gateway_formal_tiny_z3_accepted_append_validator_call_id_bindings(
+        handoff,
+        &input.validator_call_id,
+        &input.validator_policy_id,
+        &input.validator_decision_id,
+    );
+    for (label, value) in &input.id_bindings {
+        if !is_single_segment_id(value) {
+            issues.push(
+                GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::InvalidIdBinding(
+                    label.clone(),
+                ),
+            );
+        }
+    }
+    if input.id_bindings != expected_ids {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::IdBindingMismatch);
+    }
+    let expected_labels = gateway_formal_tiny_z3_accepted_append_validator_call_label_bindings(
+        handoff,
+        &input.validator_call_label,
+    );
+    if input.label_bindings != expected_labels {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::LabelBindingMismatch);
+    }
+    if handoff.schema_version != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_HANDOFF_SCHEMA_VERSION
+        || handoff.state_slice != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_HANDOFF_STATE_SLICE
+        || handoff.promotion_state != "tiny_z3_accepted_append_evaluation_handoff_metadata"
+        || handoff.next_required_state
+            != "tiny_z3_accepted_append_validation_call_still_unperformed"
+        || handoff.claim_boundary != gateway_formal_tiny_z3_accepted_append_handoff_claim_boundary()
+        || handoff.reads_accepted_evidence_ledger
+        || handoff.writes_accepted_evidence_ledger
+        || handoff.calls_accepted_append_validator
+        || handoff.requests_accepted_append_mutation
+        || handoff.creates_materialized_accepted_ledger_output
+        || handoff.makes_accepted_append_decision
+        || handoff.creates_accepted_formal_evidence
+        || handoff.creates_level2_evidence
+        || handoff.populates_score_axes
+        || handoff.proof_artifact_created
+        || handoff.checker_transcript_created
+        || handoff.solver_certificate_created
+        || handoff.backend_execution_evidence_created
+        || handoff.benchmark_evidence_created
+        || handoff.semantic_correctness_claimed
+        || handoff.production_readiness_claimed
+        || handoff.sota_claimed
+        || handoff.breakthrough_claimed
+        || handoff.full_security_claimed
+        || handoff.external_audit_claimed
+        || handoff.grants_authority
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::Phase507HandoffStateMismatch,
+        );
+    }
+    let nonclaims = gateway_formal_tiny_z3_accepted_append_validator_call_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-accepted-append-validator-call-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::NonclaimMismatch);
+    }
+    if handoff.reviewed_current_accepted_append_blockers_digest == Hash([0; 32])
+        || handoff.expected_current_accepted_append_blockers_digest == Hash([0; 32])
+        || handoff.reviewed_current_accepted_append_blockers_digest
+            != handoff.expected_current_accepted_append_blockers_digest
+    {
+        issues
+            .push(GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::StaleBlockerDigestMismatch);
+    }
+    if input.accepted_append_owner_id != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_HANDOFF_OWNER_ID {
+        issues
+            .push(GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::InvalidAcceptedAppendOwner);
+    }
+    if input.validation_function_id != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_HANDOFF_VALIDATOR_ID {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::InvalidValidationFunction);
+    }
+    if input.request_type_name != GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_TRANSACTION_REQUEST_TYPE {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::InvalidRequestTypeName);
+    }
+    if input.validation_output_type_name != "AcceptedLedgerAppendTransactionValidation" {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::InvalidValidationOutputTypeName,
+        );
+    }
+    if input.target_ledger_type_name != "EvidenceLedger" {
+        issues
+            .push(GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::InvalidTargetLedgerTypeName);
+    }
+    let request_digests = gateway_formal_tiny_z3_accepted_append_request_identity_digests(request);
+    if handoff.target_evidence_ledger_id != request.target_evidence_ledger_id
+        || handoff.transaction_id != request.transaction_id
+        || handoff.transaction_request_digest != request_digests["transaction_request_digest"]
+        || handoff.candidate_digest != request_digests["candidate_digest"]
+        || handoff.append_preview_digest != request_digests["append_preview_digest"]
+        || handoff.review_decision_digest != request_digests["review_decision_digest"]
+        || handoff.source_artifact_set_digest != request_digests["source_artifact_set_digest"]
+        || handoff.expected_current_ledger_tip_digest
+            != request_digests["expected_current_ledger_tip_digest"]
+        || handoff.append_preview_current_ledger_tip_digest
+            != request_digests["append_preview_current_ledger_tip_digest"]
+    {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::RequestIdentityMismatch);
+    }
+    if input.validation_call_rules != gateway_formal_tiny_z3_accepted_append_validator_call_rules()
+    {
+        issues
+            .push(GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::ValidationCallRulesMismatch);
+    }
+    if input.forbidden_api_set
+        != gateway_formal_tiny_z3_accepted_append_validator_call_forbidden_apis()
+    {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::ForbiddenApiSetMismatch);
+    }
+    if input.inherited_digest_requirements
+        != gateway_formal_tiny_z3_accepted_append_validator_call_inherited_digest_requirements()
+    {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::InheritedDigestRequirementsMismatch,
+        );
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.validator_call_summary,
+    ) {
+        issues.push(
+            GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::ValidatorCallSummaryPromotionClaim,
+        );
+    }
+    if input.accepted_evidence_ledger_file_read_requested
+        || input.accepted_evidence_ledger_file_write_requested
+        || input.accepted_append_mutation_requested
+        || input.materialized_accepted_ledger_output_requested
+        || input.proceed_after_invalid_validation_requested
+        || input.valid_validation_treated_as_accepted_evidence
+        || input.accepted_append_decision_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.backend_execution_evidence_created
+        || input.benchmark_evidence_created
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.external_audit_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::PromotionAttempt);
+    }
+    GatewayFormalTinyZ3AcceptedAppendValidatorCallValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -94343,6 +95137,219 @@ mod tests {
     }
 
     #[test]
+    fn phase509_tiny_z3_accepted_append_validator_call_records_real_validation() {
+        let Some((obligation_root, phase405_output_root, output_root, reviewer_decision)) =
+            phase503_tiny_z3_reviewer_decision_source("phase509-validator-call")
+        else {
+            return;
+        };
+        let drift_input = phase503_tiny_z3_policy_drift_rejection_input(
+            "phase509-source-policy-drift-rejection",
+            &reviewer_decision,
+            GatewayFormalTinyZ3PolicyDriftRejectionLabel::PolicyDriftRejectionRecorded,
+        );
+        let policy_drift =
+            build_gateway_formal_tiny_z3_policy_drift_rejection(&reviewer_decision, &drift_input)
+                .expect("phase509 source policy drift rejection builds");
+        let stale_input = phase505_tiny_z3_stale_blocker_rejection_input(
+            "phase509-source-stale-blocker-rejection",
+            &policy_drift,
+            policy_drift.current_accepted_append_blockers_digest,
+            GatewayFormalTinyZ3StaleBlockerRejectionLabel::CurrentBlockerFreshnessRecorded,
+        );
+        let stale_blocker =
+            build_gateway_formal_tiny_z3_stale_blocker_rejection(&policy_drift, &stale_input)
+                .expect("phase509 source stale blocker rejection builds");
+        let (ledger, request) = phase509_valid_append_transaction();
+        let handoff = phase509_accepted_append_handoff_for_request(
+            "phase509-accepted-append-handoff",
+            &stale_blocker,
+            &request,
+        );
+        let validator_input = phase509_tiny_z3_accepted_append_validator_call_input(
+            "phase509-validator-call",
+            &handoff,
+            GatewayFormalTinyZ3AcceptedAppendValidatorCallLabel::ValidatorCallRecorded,
+        );
+        let validator_call = build_gateway_formal_tiny_z3_accepted_append_validator_call(
+            &handoff,
+            &request,
+            &ledger,
+            &validator_input,
+        )
+        .expect("phase509 validator call metadata builds");
+
+        assert_eq!(
+            validator_call.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_VALIDATOR_CALL_STATE_SLICE
+        );
+        assert_eq!(validator_call.phase507_handoff_digest, handoff.digest());
+        assert_eq!(
+            validator_call.phase507_handoff_input_digest,
+            handoff.handoff_input_digest
+        );
+        assert_eq!(
+            validator_call.accepted_append_owner_id,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_HANDOFF_OWNER_ID
+        );
+        assert_eq!(
+            validator_call.validation_function_id,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_HANDOFF_VALIDATOR_ID
+        );
+        assert_eq!(
+            validator_call.target_evidence_ledger_id,
+            request.target_evidence_ledger_id
+        );
+        assert_eq!(validator_call.transaction_id, request.transaction_id);
+        assert!(validator_call.validation_valid);
+        assert_eq!(validator_call.validation_issue_count, 0);
+        assert!(validator_call.validation_issue_kind_set.is_empty());
+        assert_eq!(
+            validator_call.next_required_state,
+            "tiny_z3_accepted_append_validation_satisfied_but_mutation_unperformed"
+        );
+        assert_eq!(
+            validator_call.claim_boundary,
+            gateway_formal_tiny_z3_accepted_append_validator_call_claim_boundary()
+        );
+        assert_ne!(validator_call.ledger_digest, Hash([0; 32]));
+        assert_ne!(validator_call.validation_result_digest, Hash([0; 32]));
+        assert!(!validator_call.reads_accepted_evidence_ledger_files);
+        assert!(!validator_call.writes_accepted_evidence_ledger_files);
+        assert!(!validator_call.requests_accepted_append_mutation);
+        assert!(!validator_call.creates_materialized_accepted_ledger_output);
+        assert!(!validator_call.proceeds_after_invalid_validation);
+        assert!(!validator_call.treats_valid_validation_as_accepted_evidence);
+        assert!(!validator_call.makes_accepted_append_decision);
+        assert!(!validator_call.creates_accepted_formal_evidence);
+        assert!(!validator_call.creates_level2_evidence);
+        assert!(!validator_call.populates_score_axes);
+        assert!(!validator_call.proof_artifact_created);
+        assert!(!validator_call.checker_transcript_created);
+        assert!(!validator_call.solver_certificate_created);
+        assert!(!validator_call.backend_execution_evidence_created);
+        assert!(!validator_call.benchmark_evidence_created);
+        assert!(!validator_call.semantic_correctness_claimed);
+        assert!(!validator_call.production_readiness_claimed);
+        assert!(!validator_call.sota_claimed);
+        assert!(!validator_call.breakthrough_claimed);
+        assert!(!validator_call.full_security_claimed);
+        assert!(!validator_call.external_audit_claimed);
+        assert!(!validator_call.grants_authority);
+
+        let mut identity_mismatch = request.clone();
+        identity_mismatch.transaction_id = "phase509-other-transaction".to_owned();
+        let identity_validation =
+            validate_gateway_formal_tiny_z3_accepted_append_validator_call_input(
+                &handoff,
+                &identity_mismatch,
+                &validator_input,
+            );
+        assert!(identity_validation.issues.contains(
+            &GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::RequestIdentityMismatch
+        ));
+
+        let mut invalid_owner = validator_input.clone();
+        invalid_owner.accepted_append_owner_id = "hsai-agent-admission".to_owned();
+        let owner_validation = validate_gateway_formal_tiny_z3_accepted_append_validator_call_input(
+            &handoff,
+            &request,
+            &invalid_owner,
+        );
+        assert!(owner_validation.issues.contains(
+            &GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::InvalidAcceptedAppendOwner
+        ));
+
+        fs::remove_dir_all(&output_root).expect("phase509 validator output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase509 validator phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase509 validator obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase509_tiny_z3_accepted_append_validator_call_rejects_promotion() {
+        let Some((obligation_root, phase405_output_root, output_root, reviewer_decision)) =
+            phase503_tiny_z3_reviewer_decision_source("phase509-validator-call-promotion")
+        else {
+            return;
+        };
+        let drift_input = phase503_tiny_z3_policy_drift_rejection_input(
+            "phase509-promotion-policy-drift-rejection",
+            &reviewer_decision,
+            GatewayFormalTinyZ3PolicyDriftRejectionLabel::PolicyDriftRejectionRecorded,
+        );
+        let policy_drift =
+            build_gateway_formal_tiny_z3_policy_drift_rejection(&reviewer_decision, &drift_input)
+                .expect("phase509 promotion source policy drift rejection builds");
+        let stale_input = phase505_tiny_z3_stale_blocker_rejection_input(
+            "phase509-promotion-stale-blocker-rejection",
+            &policy_drift,
+            policy_drift.current_accepted_append_blockers_digest,
+            GatewayFormalTinyZ3StaleBlockerRejectionLabel::CurrentBlockerFreshnessRecorded,
+        );
+        let stale_blocker =
+            build_gateway_formal_tiny_z3_stale_blocker_rejection(&policy_drift, &stale_input)
+                .expect("phase509 promotion source stale blocker rejection builds");
+        let (_ledger, request) = phase509_valid_append_transaction();
+        let handoff = phase509_accepted_append_handoff_for_request(
+            "phase509-promotion-accepted-append-handoff",
+            &stale_blocker,
+            &request,
+        );
+        let mut validator_input = phase509_tiny_z3_accepted_append_validator_call_input(
+            "phase509-promotion-validator-call",
+            &handoff,
+            GatewayFormalTinyZ3AcceptedAppendValidatorCallLabel::ValidatorCallRejected,
+        );
+
+        validator_input.accepted_evidence_ledger_file_read_requested = true;
+        validator_input.accepted_evidence_ledger_file_write_requested = true;
+        validator_input.accepted_append_mutation_requested = true;
+        validator_input.materialized_accepted_ledger_output_requested = true;
+        validator_input.proceed_after_invalid_validation_requested = true;
+        validator_input.valid_validation_treated_as_accepted_evidence = true;
+        validator_input.accepted_append_decision_requested = true;
+        validator_input.accepted_formal_evidence_created = true;
+        validator_input.creates_level2_evidence = true;
+        validator_input.populates_score_axes = true;
+        validator_input.proof_artifact_promoted = true;
+        validator_input.checker_transcript_promoted = true;
+        validator_input.solver_certificate_promoted = true;
+        validator_input.backend_execution_evidence_created = true;
+        validator_input.benchmark_evidence_created = true;
+        validator_input.semantic_correctness_claimed = true;
+        validator_input.production_readiness_claimed = true;
+        validator_input.sota_claimed = true;
+        validator_input.breakthrough_claimed = true;
+        validator_input.full_security_claimed = true;
+        validator_input.external_audit_claimed = true;
+        validator_input.action_authority_claimed = true;
+        let validation = validate_gateway_formal_tiny_z3_accepted_append_validator_call_input(
+            &handoff,
+            &request,
+            &validator_input,
+        );
+        assert!(validation
+            .issues
+            .contains(&GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue::PromotionAttempt));
+        assert!(build_gateway_formal_tiny_z3_accepted_append_validator_call(
+            &handoff,
+            &request,
+            &_ledger,
+            &validator_input
+        )
+        .is_err());
+
+        fs::remove_dir_all(&output_root)
+            .expect("phase509 validator promotion output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase509 validator promotion phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase509 validator promotion obligation cleanup succeeds");
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -101546,6 +102553,208 @@ mod tests {
             accepted_append_validator_called: false,
             accepted_append_mutation_requested: false,
             materialized_accepted_ledger_output_requested: false,
+            accepted_append_decision_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            backend_execution_evidence_created: false,
+            benchmark_evidence_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            external_audit_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase509_candidate_and_decision() -> (
+        zkbench_core::EvidenceRecordCandidate,
+        zkbench_core::EvidenceReviewDecision,
+    ) {
+        let proposal = zkbench_core::deserialize_evidence_append_proposal_json(include_str!(
+            "../../zkbench-core/tests/fixtures/evidence_append_proposal.json"
+        ))
+        .expect("phase509 proposal fixture parses");
+        let decision = zkbench_core::review_evidence_append_proposal(
+            &proposal,
+            zkbench_core::EvidenceReviewerRole::Maintainer,
+            zkbench_core::EvidenceReviewDecisionKind::ApproveForCandidateOnly,
+            zkbench_core::EvidenceReviewChecklist::satisfied_phase_j_default(),
+        )
+        .expect("phase509 review decision builds");
+        let policy = zkbench_core::EvidenceAcceptancePolicy::phase_j_level1_local_only();
+        let candidate =
+            zkbench_core::create_evidence_record_candidate(&policy, &proposal, &decision)
+                .expect("phase509 evidence candidate builds");
+        (candidate, decision)
+    }
+
+    fn phase509_source_digests(
+        candidate: &zkbench_core::EvidenceRecordCandidate,
+    ) -> Vec<zkbench_core::ArtifactDigest> {
+        candidate
+            .proposed_artifact_refs
+            .iter()
+            .map(|artifact| artifact.digest.clone())
+            .collect()
+    }
+
+    fn phase509_valid_preflight_request(
+        ledger: &zkbench_core::EvidenceLedger,
+    ) -> zkbench_core::ReviewedPromotionPreflightRequest {
+        let (candidate, decision) = phase509_candidate_and_decision();
+        let append_preview = zkbench_core::create_evidence_append_preview(&candidate, Some(ledger))
+            .expect("phase509 append preview builds");
+        let expected_current_ledger_tip = ledger
+            .entries
+            .last()
+            .map(|entry| entry.entry_digest.clone());
+        zkbench_core::ReviewedPromotionPreflightRequest {
+            id: "phase509-local-preflight".to_owned(),
+            version: zkbench_core::ReviewedPromotionPreflightVersion::default(),
+            source_artifact_digests: phase509_source_digests(&candidate),
+            candidate,
+            append_preview,
+            review_decision: decision,
+            expected_current_ledger_tip,
+            external_replay_provenance: Vec::new(),
+            unresolved_quarantine_markers: Vec::new(),
+            blocking_markers: Vec::new(),
+            requested_evidence_class: zkbench_core::EvidenceClass::LocalReplay,
+            requested_claim_boundary: zkbench_core::ClaimBoundary::Level1LocalReplay,
+            populates_score_axes: false,
+            official_submission_package_requested: false,
+            accepted_evidence_ledger_entry_ids: Vec::new(),
+            claim_text: vec!["phase509 local validator call metadata".to_owned()],
+            non_claims: zkbench_core::required_reviewed_promotion_preflight_non_claims()
+                .into_iter()
+                .map(str::to_owned)
+                .collect(),
+        }
+    }
+
+    fn phase509_valid_append_transaction() -> (
+        zkbench_core::EvidenceLedger,
+        zkbench_core::AcceptedLedgerAppendTransactionRequest,
+    ) {
+        let ledger = zkbench_core::EvidenceLedger::new();
+        let preflight_request = phase509_valid_preflight_request(&ledger);
+        let preflight_report =
+            zkbench_core::build_reviewed_promotion_preflight_report(&preflight_request);
+        assert!(
+            preflight_report.validation.valid,
+            "{:?}",
+            preflight_report.validation.issues
+        );
+        let request = zkbench_core::AcceptedLedgerAppendTransactionRequest {
+            transaction_id: "phase509-accepted-append-tx".to_owned(),
+            version: zkbench_core::AcceptedLedgerAppendTransactionVersion::default(),
+            target_evidence_ledger_id: "phase509-accepted-ledger".to_owned(),
+            expected_current_ledger_tip: preflight_request.expected_current_ledger_tip.clone(),
+            preflight_request,
+            preflight_report,
+            notes: vec!["phase509 validator call stays local validation only".to_owned()],
+        };
+        let validation =
+            zkbench_core::validate_accepted_ledger_append_transaction_request(&request, &ledger);
+        assert!(validation.valid, "{:?}", validation.issues);
+        (ledger, request)
+    }
+
+    fn phase509_accepted_append_handoff_for_request(
+        accepted_append_handoff_id: &str,
+        stale_blocker_rejection: &GatewayFormalTinyZ3StaleBlockerRejection,
+        request: &zkbench_core::AcceptedLedgerAppendTransactionRequest,
+    ) -> GatewayFormalTinyZ3AcceptedAppendHandoff {
+        let request_digests =
+            gateway_formal_tiny_z3_accepted_append_request_identity_digests(request);
+        let mut handoff_input = phase507_tiny_z3_accepted_append_handoff_input(
+            accepted_append_handoff_id,
+            stale_blocker_rejection,
+            GatewayFormalTinyZ3AcceptedAppendHandoffLabel::ValidationHandoffRecorded,
+        );
+        handoff_input.request_schema_version = request.version.value.clone();
+        handoff_input.target_evidence_ledger_id = request.target_evidence_ledger_id.clone();
+        handoff_input.transaction_id = request.transaction_id.clone();
+        handoff_input.expected_current_ledger_tip_digest =
+            request_digests["expected_current_ledger_tip_digest"];
+        handoff_input.append_preview_current_ledger_tip_digest =
+            request_digests["append_preview_current_ledger_tip_digest"];
+        handoff_input.transaction_request_digest = request_digests["transaction_request_digest"];
+        handoff_input.candidate_digest = request_digests["candidate_digest"];
+        handoff_input.append_preview_digest = request_digests["append_preview_digest"];
+        handoff_input.review_decision_digest = request_digests["review_decision_digest"];
+        handoff_input.source_artifact_set_digest = request_digests["source_artifact_set_digest"];
+        build_gateway_formal_tiny_z3_accepted_append_handoff(
+            stale_blocker_rejection,
+            &handoff_input,
+        )
+        .expect("phase509 source accepted append handoff builds")
+    }
+
+    fn phase509_tiny_z3_accepted_append_validator_call_input(
+        validator_call_id: &str,
+        handoff: &GatewayFormalTinyZ3AcceptedAppendHandoff,
+        validator_call_label: GatewayFormalTinyZ3AcceptedAppendValidatorCallLabel,
+    ) -> GatewayFormalTinyZ3AcceptedAppendValidatorCallInput {
+        let validator_policy_id = "phase509-validator-call-policy";
+        let validator_decision_id = "phase509-validator-call-decision";
+        let nonclaims = gateway_formal_tiny_z3_accepted_append_validator_call_required_nonclaims();
+        GatewayFormalTinyZ3AcceptedAppendValidatorCallInput {
+            schema_version: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_VALIDATOR_CALL_SCHEMA_VERSION
+                .to_owned(),
+            validator_call_id: validator_call_id.to_owned(),
+            validator_policy_id: validator_policy_id.to_owned(),
+            validator_decision_id: validator_decision_id.to_owned(),
+            validator_decision_at_unix: 1_800_000_509,
+            digest_bindings: gateway_formal_tiny_z3_accepted_append_validator_call_digest_bindings(
+                handoff,
+            ),
+            id_bindings: gateway_formal_tiny_z3_accepted_append_validator_call_id_bindings(
+                handoff,
+                validator_call_id,
+                validator_policy_id,
+                validator_decision_id,
+            ),
+            label_bindings: gateway_formal_tiny_z3_accepted_append_validator_call_label_bindings(
+                handoff,
+                &validator_call_label,
+            ),
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-accepted-append-validator-call-nonclaims:v1",
+                &nonclaims,
+            ),
+            accepted_append_owner_id: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_HANDOFF_OWNER_ID
+                .to_owned(),
+            validation_function_id: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_HANDOFF_VALIDATOR_ID
+                .to_owned(),
+            request_type_name: GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_TRANSACTION_REQUEST_TYPE
+                .to_owned(),
+            validation_output_type_name: "AcceptedLedgerAppendTransactionValidation".to_owned(),
+            target_ledger_type_name: "EvidenceLedger".to_owned(),
+            validation_call_rules:
+                gateway_formal_tiny_z3_accepted_append_validator_call_rules(),
+            forbidden_api_set:
+                gateway_formal_tiny_z3_accepted_append_validator_call_forbidden_apis(),
+            inherited_digest_requirements:
+                gateway_formal_tiny_z3_accepted_append_validator_call_inherited_digest_requirements(
+                ),
+            validator_call_label,
+            validator_call_summary:
+                "local tiny-Z3 accepted append validator call metadata records validation only"
+                    .to_owned(),
+            accepted_evidence_ledger_file_read_requested: false,
+            accepted_evidence_ledger_file_write_requested: false,
+            accepted_append_mutation_requested: false,
+            materialized_accepted_ledger_output_requested: false,
+            proceed_after_invalid_validation_requested: false,
+            valid_validation_treated_as_accepted_evidence: false,
             accepted_append_decision_requested: false,
             accepted_formal_evidence_created: false,
             creates_level2_evidence: false,

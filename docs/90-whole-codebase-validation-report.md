@@ -7334,5 +7334,27 @@ evidence, creates no Level2+ evidence, populates no score axes, runs no
 Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence, and
 claims no production/SOTA/security/semantic-correctness result.
 
+[docs/509-hsai-tiny-z3-accepted-append-validator-call-metadata-notes.md](docs/509-hsai-tiny-z3-accepted-append-validator-call-metadata-notes.md)
+documents the Phase 509 local in-memory accepted append validator-call
+metadata implemented in `crates/hsai-agent-admission/src/lib.rs`. The phase
+adds the local `zkbench-core` dependency to
+`crates/hsai-agent-admission/Cargo.toml`, records the corresponding
+`Cargo.lock` dependency edge, and calls only
+`zkbench_core::validate_accepted_ledger_append_transaction_request` over
+caller-supplied in-memory request and ledger values. The metadata binds one
+Phase 507 accepted append handoff record to the accepted append request,
+candidate, append-preview, review-decision, source-artifact-set, ledger-tip,
+in-memory ledger, and returned validation result digests, plus the validation
+valid flag and issue-kind set. Its validation rejects Phase 507 binding drift,
+handoff state drift, stale blocker drift, request identity drift, file
+read/write requests, accepted append mutation, materialized output, accepted
+append decisions, formal evidence, Level2+ evidence, score axes, backend
+evidence, benchmark evidence, external audit, and strong claims. It reads or
+writes no accepted Evidence Ledger files, calls no accepted append mutation
+function, creates no materialized accepted ledger output, creates no accepted
+formal evidence, creates no Level2+ evidence, populates no score axes, runs no
+Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence, and
+claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
