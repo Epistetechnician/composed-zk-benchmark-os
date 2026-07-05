@@ -36,6 +36,8 @@ A future implementation phase may only touch these files unless a later
 boundary explicitly broadens scope:
 
 - `crates/hsai-agent-admission/Cargo.toml`;
+- `Cargo.lock`, only for the lockfile entry produced by the local
+  `zkbench-core` dependency edge;
 - `crates/hsai-agent-admission/src/lib.rs`;
 - focused tests in `crates/hsai-agent-admission/src/lib.rs`;
 - the future phase notes under `docs/`;
@@ -214,3 +216,22 @@ only if it:
   evidence, Level2+, score axes, proof/checker/solver authority, backend
   execution evidence, benchmark evidence, external audit, strong claims, and
   action authority in the metadata itself.
+
+## Phase 509 Implementation Status
+
+Phase 509 implements this boundary as local in-memory validator-call metadata
+in `crates/hsai-agent-admission/src/lib.rs`, adds the local
+`zkbench-core = { path = "../zkbench-core" }` dependency to
+`crates/hsai-agent-admission/Cargo.toml`, records the corresponding
+`Cargo.lock` dependency edge, and documents the result in
+`docs/509-hsai-tiny-z3-accepted-append-validator-call-metadata-notes.md`.
+
+The implementation remains inside this boundary: it calls only
+`zkbench_core::validate_accepted_ledger_append_transaction_request` over
+caller-supplied in-memory values, reads no accepted Evidence Ledger files,
+writes no accepted Evidence Ledger files, does not call accepted append
+mutation APIs, creates no materialized accepted ledger output, creates no
+accepted formal evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean, creates no benchmark evidence,
+and claims no SOTA, semantic correctness, production readiness, full security,
+external audit, breakthrough status, or action authority.

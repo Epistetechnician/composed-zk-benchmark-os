@@ -14301,6 +14301,40 @@ evidence, score axes, proof-authority claim, Lean/new-SMT/COBALT or
 Rust-to-Lean execution, benchmark evidence, external audit evidence, or
 production/SOTA/security/correctness claim.
 
+## Phase 509 HSAI Tiny Z3 Accepted Append Validator Call Metadata
+
+Status: complete. See
+`docs/509-hsai-tiny-z3-accepted-append-validator-call-metadata-notes.md`.
+
+Goal: implement local in-memory validation-only accepted append validator-call
+metadata over one Phase 507 accepted append handoff record.
+
+Implemented: Phase 509 adds the local `zkbench-core` dependency to
+`crates/hsai-agent-admission/Cargo.toml`, records the corresponding
+`Cargo.lock` dependency edge, and adds
+`GatewayFormalTinyZ3AcceptedAppendValidatorCallInput`,
+`GatewayFormalTinyZ3AcceptedAppendValidatorCall`,
+`GatewayFormalTinyZ3AcceptedAppendValidatorCallIssue`, validation helpers,
+digest/id/label bindings, request identity digest helpers, closed validator
+call rules, closed forbidden API sets, inherited digest requirements, and
+focused tests in `crates/hsai-agent-admission/src/lib.rs`. The builder calls
+only `zkbench_core::validate_accepted_ledger_append_transaction_request` over
+caller-supplied in-memory request and ledger values.
+
+Validation coverage: `cargo test -p hsai-agent-admission --quiet` covers valid
+metadata construction over a real in-memory `zkbench-core` accepted append
+transaction request and `EvidenceLedger`, validation result digest and valid
+flag recording, request identity drift rejection, invalid owner rejection, and
+promotion-attempt rejection.
+
+Exit criteria: HSAI now has local metadata for one in-memory
+`zkbench-core` accepted append validator call. It still has no accepted append
+mutation, accepted Evidence Ledger file read or write, materialized accepted
+ledger output, accepted formal evidence, Level2+ evidence, score axes,
+proof-authority claim, Lean/new-SMT/COBALT or Rust-to-Lean execution,
+benchmark evidence, external audit evidence, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
