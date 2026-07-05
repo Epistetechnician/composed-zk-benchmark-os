@@ -14002,6 +14002,35 @@ Level2+ evidence, score axes, proof-authority claim, Lean/new-SMT/COBALT or
 Rust-to-Lean execution, benchmark evidence, or production/SOTA/security/
 correctness claim.
 
+## Phase 499 HSAI Tiny Z3 Source Correspondence Statement Metadata
+
+Status: complete. See
+`docs/499-hsai-tiny-z3-source-correspondence-statement-metadata-notes.md`.
+
+Goal: implement local in-memory metadata for the Phase 488 source
+correspondence statement and digest prerequisite gate.
+
+Implemented: Phase 499 adds deterministic local metadata in
+`crates/hsai-agent-admission/src/lib.rs` over one Phase 497 replayable input
+identity record. The record binds Phase 497 digests to HSAI admission source
+anchors, `zkbench-core` accepted append source anchors, source path and source
+digest requirements, statement digest input requirements, reviewer decision
+requirements, unsupported correspondence claims, drift rejection policy, and
+explicit nonclaims.
+
+Validation coverage: focused Phase 499 tests cover valid metadata construction
+plus Phase 497 digest drift, HSAI source anchor drift, statement digest input
+drift, and promotion-attempt rejection including correspondence artifact and
+digest sidecar creation.
+
+Exit criteria: HSAI now has local metadata for the source correspondence
+statement/digest prerequisite gate. It still has no accepted append decision,
+accepted formal evidence, accepted Evidence Ledger mutation from HSAI admission
+metadata, accepted append policy change, correspondence artifact, digest
+sidecar, Level2+ evidence, score axes, proof-authority claim,
+Lean/new-SMT/COBALT or Rust-to-Lean execution, benchmark evidence, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

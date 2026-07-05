@@ -951,6 +951,15 @@ pub const GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_CANDIDATE_SOURCE_TYPE: &str =
     "EvidenceRecordCandidateSource";
 pub const GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_APPEND_PREVIEW_TYPE: &str =
     "EvidenceAppendPreview";
+pub const GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-z3-source-correspondence-statement:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_STATE_SLICE: &str =
+    "phase-499-hsai-tiny-z3-source-correspondence-statement-metadata";
+pub const GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_CLAIM_BOUNDARY: &str = "local tiny-Z3 source correspondence statement metadata only; records source anchor and digest requirements that a future bridge must bind between Phase 497 HSAI replay identity metadata and zkbench-core accepted-append replay validators, but does not create a correspondence artifact, create a digest sidecar, make an accepted append decision, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, create proof artifacts, create checker transcripts, create solver certificates, run Lean, run new SMT, run COBALT, run Rust-to-Lean extraction, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_HSAI_SOURCE_PATH: &str =
+    "crates/hsai-agent-admission/src/lib.rs";
+pub const GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_SOURCE_COMMIT_REQUIRED: &str =
+    "source_commit_required";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -13277,6 +13286,177 @@ pub enum GatewayFormalTinyZ3ReplayableInputIdentityIssue {
 pub struct GatewayFormalTinyZ3ReplayableInputIdentityValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyZ3ReplayableInputIdentityIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3SourceCorrespondenceLabel {
+    SourceCorrespondenceStatementRecorded,
+    SourceCorrespondenceStatementRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3SourceCorrespondenceInput {
+    pub schema_version: String,
+    pub source_correspondence_gate_id: String,
+    pub source_correspondence_policy_id: String,
+    pub source_correspondence_decision_id: String,
+    pub source_correspondence_decision_at_unix: u64,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub source_commit_requirement: String,
+    pub hsai_admission_source_path: String,
+    pub accepted_append_source_paths: BTreeSet<String>,
+    pub hsai_admission_source_anchors: BTreeSet<String>,
+    pub accepted_append_source_anchors: BTreeSet<String>,
+    pub statement_digest_inputs: BTreeSet<String>,
+    pub source_path_digest_requirements: BTreeSet<String>,
+    pub correspondence_statement_claim: String,
+    pub unsupported_correspondence_claims: BTreeSet<String>,
+    pub reviewer_policy_id: String,
+    pub reviewer_decision_required: bool,
+    pub drift_rejection_policy: BTreeSet<String>,
+    pub source_correspondence_label: GatewayFormalTinyZ3SourceCorrespondenceLabel,
+    pub source_correspondence_summary: String,
+    pub correspondence_artifact_creation_requested: bool,
+    pub digest_sidecar_creation_requested: bool,
+    pub accepted_append_policy_change_requested: bool,
+    pub accepted_append_decision_requested: bool,
+    pub accepted_evidence_ledger_mutation_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyZ3SourceCorrespondenceInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-source-correspondence-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3SourceCorrespondence {
+    pub schema_version: String,
+    pub source_correspondence_gate_id: String,
+    pub state_slice: String,
+    pub source_correspondence_input_digest: Hash,
+    pub source_correspondence_policy_id: String,
+    pub source_correspondence_decision_id: String,
+    pub source_correspondence_decision_at_unix: u64,
+    pub phase497_replay_identity_digest: Hash,
+    pub phase497_replay_identity_input_digest: Hash,
+    pub phase497_digest_binding_map_digest: Hash,
+    pub phase497_id_binding_map_digest: Hash,
+    pub phase497_label_binding_map_digest: Hash,
+    pub phase497_explicit_nonclaims_digest: Hash,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub source_commit_requirement: String,
+    pub hsai_admission_source_path: String,
+    pub accepted_append_source_paths: BTreeSet<String>,
+    pub hsai_admission_source_anchors: BTreeSet<String>,
+    pub accepted_append_source_anchors: BTreeSet<String>,
+    pub source_anchor_set_digest: Hash,
+    pub statement_digest_inputs: BTreeSet<String>,
+    pub statement_digest_inputs_digest: Hash,
+    pub source_path_digest_requirements: BTreeSet<String>,
+    pub source_path_digest_requirements_digest: Hash,
+    pub correspondence_statement_claim: String,
+    pub unsupported_correspondence_claims: BTreeSet<String>,
+    pub reviewer_policy_id: String,
+    pub reviewer_decision_required: bool,
+    pub drift_rejection_policy: BTreeSet<String>,
+    pub drift_rejection_policy_digest: Hash,
+    pub source_correspondence_label: GatewayFormalTinyZ3SourceCorrespondenceLabel,
+    pub source_correspondence_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub creates_correspondence_artifact: bool,
+    pub creates_digest_sidecar: bool,
+    pub changes_accepted_append_policy: bool,
+    pub makes_accepted_append_decision: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub creates_accepted_formal_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3SourceCorrespondence {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-source-correspondence:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3SourceCorrespondenceIssue {
+    InvalidSchemaVersion,
+    InvalidSourceCorrespondenceGateId,
+    InvalidSourceCorrespondencePolicyId,
+    InvalidSourceCorrespondenceDecisionId,
+    MissingSourceCorrespondenceDecisionTimestamp,
+    MissingDigest(String),
+    DigestBindingMismatch,
+    IdBindingMismatch,
+    InvalidIdBinding(String),
+    LabelBindingMismatch,
+    Phase497ReplayIdentityStateMismatch,
+    NonclaimMismatch,
+    InvalidSourceCommitRequirement,
+    InvalidHsaiAdmissionSourcePath,
+    AcceptedAppendSourcePathsMismatch,
+    HsaiAdmissionSourceAnchorsMismatch,
+    AcceptedAppendSourceAnchorsMismatch,
+    StatementDigestInputsMismatch,
+    SourcePathDigestRequirementsMismatch,
+    CorrespondenceStatementClaimMismatch,
+    UnsupportedCorrespondenceClaimsMismatch,
+    InvalidReviewerPolicyId,
+    MissingReviewerDecisionRequirement,
+    DriftRejectionPolicyMismatch,
+    SourceCorrespondenceSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3SourceCorrespondenceValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyZ3SourceCorrespondenceIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -54460,6 +54640,580 @@ pub fn validate_gateway_formal_tiny_z3_replayable_input_identity_input(
     }
 }
 
+pub fn gateway_formal_tiny_z3_source_correspondence_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_z3_source_correspondence_required_nonclaims() -> BTreeSet<NonClaimLabel>
+{
+    [
+        "not correspondence artifact",
+        "not digest sidecar",
+        "not accepted append decision",
+        "not accepted formal evidence",
+        "not accepted evidence ledger mutation",
+        "not accepted append policy change",
+        "not Level2+ evidence",
+        "not score-axis evidence",
+        "not proof authority",
+        "not checker transcript authority",
+        "not solver certificate authority",
+        "not backend execution evidence",
+        "not Lean execution evidence",
+        "not new SMT execution evidence",
+        "not COBALT execution evidence",
+        "not Rust-to-Lean extraction evidence",
+        "not benchmark evidence",
+        "not SOTA",
+        "not semantic correctness",
+        "not production readiness",
+        "not full security",
+        "not action authority",
+    ]
+    .into_iter()
+    .map(|label| NonClaimLabel(label.to_owned()))
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_source_correspondence_accepted_append_source_paths(
+) -> BTreeSet<String> {
+    [
+        "crates/zkbench-core/src/evidence/accepted_append.rs",
+        "crates/zkbench-core/src/evidence/promotion_preflight.rs",
+        "crates/zkbench-core/src/evidence/candidate.rs",
+        "crates/zkbench-core/src/evidence/append_preview.rs",
+        "crates/zkbench-core/src/evidence/mod.rs",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_source_correspondence_hsai_admission_source_anchors(
+) -> BTreeSet<String> {
+    [
+        "GatewayFormalTinyZ3ReplayableInputIdentityInput",
+        "GatewayFormalTinyZ3ReplayableInputIdentity",
+        "GatewayFormalTinyZ3ReplayableInputIdentityIssue",
+        "GatewayFormalTinyZ3ReplayableInputIdentityValidation",
+        "GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_IDENTITY_SCHEMA_VERSION",
+        "GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_IDENTITY_STATE_SLICE",
+        "GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_IDENTITY_CLAIM_BOUNDARY",
+        "gateway_formal_tiny_z3_replayable_input_identity_transaction_fields",
+        "gateway_formal_tiny_z3_replayable_input_identity_preflight_fields",
+        "gateway_formal_tiny_z3_replayable_input_identity_candidate_fields",
+        "gateway_formal_tiny_z3_replayable_input_identity_append_preview_fields",
+        "gateway_formal_tiny_z3_replayable_input_identity_validation_rules",
+        "build_gateway_formal_tiny_z3_replayable_input_identity",
+        "validate_gateway_formal_tiny_z3_replayable_input_identity_input",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_source_correspondence_accepted_append_source_anchors(
+) -> BTreeSet<String> {
+    [
+        "AcceptedLedgerAppendTransactionRequest",
+        "validate_accepted_ledger_append_transaction_request",
+        "build_evidence_record_from_transaction",
+        "ReviewedPromotionPreflightRequest",
+        "ReviewedPromotionPreflightReport",
+        "build_reviewed_promotion_preflight_report",
+        "validate_reviewed_promotion_preflight_request",
+        "EvidenceRecordCandidate",
+        "EvidenceRecordCandidateSource",
+        "EvidenceAppendPreview",
+        "EvidenceClass",
+        "ClaimBoundary",
+        "EvidenceRecord",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_source_correspondence_statement_digest_inputs() -> BTreeSet<String> {
+    [
+        "statement_schema_version",
+        "statement_id",
+        "source_commit",
+        "source_file_paths",
+        "source_file_digests",
+        "source_anchor_names",
+        "phase497_replay_identity_digest",
+        "phase497_replay_identity_input_digest",
+        "phase497_digest_binding_map_digest",
+        "phase497_id_binding_map_digest",
+        "phase497_label_binding_map_digest",
+        "phase497_explicit_nonclaims_digest",
+        "current_accepted_append_blockers_digest",
+        "correspondence_statement_claim",
+        "unsupported_correspondence_claims",
+        "explicit_nonclaim_digest",
+        "reviewer_policy_id",
+        "reviewer_decision_requirement",
+        "drift_rejection_policy",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_source_correspondence_source_path_digest_requirements(
+) -> BTreeSet<String> {
+    [
+        "source_paths_must_be_repository_relative",
+        "source_file_digests_must_be_declared",
+        "source_file_digests_must_be_nonzero_sha256",
+        "source_commit_must_be_declared",
+        "statement_digest_must_include_source_file_digests",
+        "statement_digest_must_include_phase497_binding_digests",
+        "statement_digest_must_include_explicit_nonclaim_digest",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_source_correspondence_statement_claim() -> String {
+    "The Phase 497 HSAI tiny-Z3 replayable input identity metadata names the current zkbench-core accepted-append request, preflight, report, candidate, append-preview, source-digest, ledger-tip, evidence-class, and claim-boundary source anchors that a future accepted-path bridge must bind before transaction evaluation.".to_owned()
+}
+
+pub fn gateway_formal_tiny_z3_source_correspondence_unsupported_claims() -> BTreeSet<String> {
+    [
+        "executable bridge correctness",
+        "accepted append authority",
+        "accepted formal evidence",
+        "proof authority",
+        "checker transcript authority",
+        "solver certificate authority",
+        "Lean execution evidence",
+        "new SMT execution evidence",
+        "COBALT execution evidence",
+        "Rust-to-Lean extraction evidence",
+        "Level2+ evidence",
+        "score-axis evidence",
+        "benchmark evidence",
+        "SOTA",
+        "semantic correctness",
+        "production readiness",
+        "full security",
+        "action authority",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_source_correspondence_drift_rejection_policy() -> BTreeSet<String> {
+    [
+        "missing_hsai_source_anchor_rejected",
+        "missing_zkbench_source_anchor_rejected",
+        "source_path_drift_rejected",
+        "source_digest_drift_rejected",
+        "source_commit_absence_rejected",
+        "phase497_digest_binding_drift_rejected",
+        "phase497_id_binding_drift_rejected",
+        "phase497_label_binding_drift_rejected",
+        "phase497_nonclaim_digest_drift_rejected",
+        "statement_digest_omission_rejected",
+        "promotion_claim_rejected",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_source_correspondence_digest_bindings(
+    replay_identity: &GatewayFormalTinyZ3ReplayableInputIdentity,
+) -> BTreeMap<String, Hash> {
+    BTreeMap::from([
+        (
+            "phase497_replay_identity_digest".to_owned(),
+            replay_identity.digest(),
+        ),
+        (
+            "phase497_replay_identity_input_digest".to_owned(),
+            replay_identity.replay_identity_input_digest,
+        ),
+        (
+            "phase497_digest_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase497-replay-identity-digest-bindings:v1",
+                &replay_identity.digest_bindings,
+            ),
+        ),
+        (
+            "phase497_id_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase497-replay-identity-id-bindings:v1",
+                &replay_identity.id_bindings,
+            ),
+        ),
+        (
+            "phase497_label_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase497-replay-identity-label-bindings:v1",
+                &replay_identity.label_bindings,
+            ),
+        ),
+        (
+            "phase497_explicit_nonclaims_digest".to_owned(),
+            replay_identity.explicit_nonclaims_digest,
+        ),
+        (
+            "current_accepted_append_blockers_digest".to_owned(),
+            replay_identity.current_accepted_append_blockers_digest,
+        ),
+    ])
+}
+
+pub fn gateway_formal_tiny_z3_source_correspondence_id_bindings(
+    replay_identity: &GatewayFormalTinyZ3ReplayableInputIdentity,
+    source_correspondence_gate_id: &str,
+    source_correspondence_policy_id: &str,
+    source_correspondence_decision_id: &str,
+) -> BTreeMap<String, String> {
+    let mut ids = replay_identity.id_bindings.clone();
+    ids.insert(
+        "source_correspondence_gate_id".to_owned(),
+        source_correspondence_gate_id.to_owned(),
+    );
+    ids.insert(
+        "source_correspondence_policy_id".to_owned(),
+        source_correspondence_policy_id.to_owned(),
+    );
+    ids.insert(
+        "source_correspondence_decision_id".to_owned(),
+        source_correspondence_decision_id.to_owned(),
+    );
+    ids.insert(
+        "phase497_replay_identity_gate_id".to_owned(),
+        replay_identity.replay_identity_gate_id.clone(),
+    );
+    ids
+}
+
+pub fn gateway_formal_tiny_z3_source_correspondence_label_bindings(
+    replay_identity: &GatewayFormalTinyZ3ReplayableInputIdentity,
+    source_correspondence_label: &GatewayFormalTinyZ3SourceCorrespondenceLabel,
+) -> BTreeMap<String, String> {
+    let mut labels = replay_identity.label_bindings.clone();
+    labels.insert(
+        "phase497_replay_identity_label".to_owned(),
+        format!("{:?}", replay_identity.replay_identity_label),
+    );
+    labels.insert(
+        "source_correspondence_label".to_owned(),
+        format!("{source_correspondence_label:?}"),
+    );
+    labels
+}
+
+pub fn build_gateway_formal_tiny_z3_source_correspondence(
+    replay_identity: &GatewayFormalTinyZ3ReplayableInputIdentity,
+    input: &GatewayFormalTinyZ3SourceCorrespondenceInput,
+) -> Result<
+    GatewayFormalTinyZ3SourceCorrespondence,
+    GatewayFormalTinyZ3SourceCorrespondenceValidation,
+> {
+    let validation =
+        validate_gateway_formal_tiny_z3_source_correspondence_input(replay_identity, input);
+    if !validation.valid {
+        return Err(validation);
+    }
+    let digest_bindings =
+        gateway_formal_tiny_z3_source_correspondence_digest_bindings(replay_identity);
+    let source_anchor_set = (
+        input.hsai_admission_source_anchors.clone(),
+        input.accepted_append_source_anchors.clone(),
+    );
+    Ok(GatewayFormalTinyZ3SourceCorrespondence {
+        schema_version: GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_SCHEMA_VERSION.to_owned(),
+        source_correspondence_gate_id: input.source_correspondence_gate_id.clone(),
+        state_slice: GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_STATE_SLICE.to_owned(),
+        source_correspondence_input_digest: input.digest(),
+        source_correspondence_policy_id: input.source_correspondence_policy_id.clone(),
+        source_correspondence_decision_id: input.source_correspondence_decision_id.clone(),
+        source_correspondence_decision_at_unix: input.source_correspondence_decision_at_unix,
+        phase497_replay_identity_digest: digest_bindings["phase497_replay_identity_digest"],
+        phase497_replay_identity_input_digest: digest_bindings
+            ["phase497_replay_identity_input_digest"],
+        phase497_digest_binding_map_digest: digest_bindings["phase497_digest_binding_map_digest"],
+        phase497_id_binding_map_digest: digest_bindings["phase497_id_binding_map_digest"],
+        phase497_label_binding_map_digest: digest_bindings["phase497_label_binding_map_digest"],
+        phase497_explicit_nonclaims_digest: digest_bindings["phase497_explicit_nonclaims_digest"],
+        current_accepted_append_blockers_digest: digest_bindings
+            ["current_accepted_append_blockers_digest"],
+        digest_bindings: input.digest_bindings.clone(),
+        id_bindings: input.id_bindings.clone(),
+        label_bindings: input.label_bindings.clone(),
+        explicit_nonclaims: input.explicit_nonclaims.clone(),
+        explicit_nonclaims_digest: input.explicit_nonclaims_digest,
+        source_commit_requirement: input.source_commit_requirement.clone(),
+        hsai_admission_source_path: input.hsai_admission_source_path.clone(),
+        accepted_append_source_paths: input.accepted_append_source_paths.clone(),
+        hsai_admission_source_anchors: input.hsai_admission_source_anchors.clone(),
+        accepted_append_source_anchors: input.accepted_append_source_anchors.clone(),
+        source_anchor_set_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-source-correspondence-source-anchor-set:v1",
+            &source_anchor_set,
+        ),
+        statement_digest_inputs: input.statement_digest_inputs.clone(),
+        statement_digest_inputs_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-source-correspondence-statement-digest-inputs:v1",
+            &input.statement_digest_inputs,
+        ),
+        source_path_digest_requirements: input.source_path_digest_requirements.clone(),
+        source_path_digest_requirements_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-source-correspondence-source-path-digest-requirements:v1",
+            &input.source_path_digest_requirements,
+        ),
+        correspondence_statement_claim: input.correspondence_statement_claim.clone(),
+        unsupported_correspondence_claims: input.unsupported_correspondence_claims.clone(),
+        reviewer_policy_id: input.reviewer_policy_id.clone(),
+        reviewer_decision_required: input.reviewer_decision_required,
+        drift_rejection_policy: input.drift_rejection_policy.clone(),
+        drift_rejection_policy_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-source-correspondence-drift-rejection-policy:v1",
+            &input.drift_rejection_policy,
+        ),
+        source_correspondence_label: input.source_correspondence_label.clone(),
+        source_correspondence_summary: input.source_correspondence_summary.clone(),
+        previous_promotion_state: "tiny_z3_replayable_input_identity_metadata".to_owned(),
+        promotion_state: "tiny_z3_source_correspondence_statement_metadata".to_owned(),
+        next_required_state: "tiny_z3_accepted_path_prerequisites_remain_unresolved".to_owned(),
+        claim_boundary: gateway_formal_tiny_z3_source_correspondence_claim_boundary(),
+        creates_correspondence_artifact: false,
+        creates_digest_sidecar: false,
+        changes_accepted_append_policy: false,
+        makes_accepted_append_decision: false,
+        mutates_accepted_evidence_ledger: false,
+        creates_accepted_formal_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        backend_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_gateway_formal_tiny_z3_source_correspondence_input(
+    replay_identity: &GatewayFormalTinyZ3ReplayableInputIdentity,
+    input: &GatewayFormalTinyZ3SourceCorrespondenceInput,
+) -> GatewayFormalTinyZ3SourceCorrespondenceValidation {
+    let mut issues = Vec::new();
+    if input.schema_version != GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_SCHEMA_VERSION {
+        issues.push(GatewayFormalTinyZ3SourceCorrespondenceIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.source_correspondence_gate_id) {
+        issues
+            .push(GatewayFormalTinyZ3SourceCorrespondenceIssue::InvalidSourceCorrespondenceGateId);
+    }
+    if !is_single_segment_id(&input.source_correspondence_policy_id) {
+        issues.push(
+            GatewayFormalTinyZ3SourceCorrespondenceIssue::InvalidSourceCorrespondencePolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.source_correspondence_decision_id) {
+        issues.push(
+            GatewayFormalTinyZ3SourceCorrespondenceIssue::InvalidSourceCorrespondenceDecisionId,
+        );
+    }
+    if input.source_correspondence_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalTinyZ3SourceCorrespondenceIssue::MissingSourceCorrespondenceDecisionTimestamp,
+        );
+    }
+    let expected_digests =
+        gateway_formal_tiny_z3_source_correspondence_digest_bindings(replay_identity);
+    for (label, digest) in &input.digest_bindings {
+        if *digest == Hash([0; 32]) {
+            issues.push(GatewayFormalTinyZ3SourceCorrespondenceIssue::MissingDigest(
+                label.clone(),
+            ));
+        }
+    }
+    if input.digest_bindings != expected_digests {
+        issues.push(GatewayFormalTinyZ3SourceCorrespondenceIssue::DigestBindingMismatch);
+    }
+    let expected_ids = gateway_formal_tiny_z3_source_correspondence_id_bindings(
+        replay_identity,
+        &input.source_correspondence_gate_id,
+        &input.source_correspondence_policy_id,
+        &input.source_correspondence_decision_id,
+    );
+    for (label, value) in &input.id_bindings {
+        if !is_single_segment_id(value) {
+            issues.push(
+                GatewayFormalTinyZ3SourceCorrespondenceIssue::InvalidIdBinding(label.clone()),
+            );
+        }
+    }
+    if input.id_bindings != expected_ids {
+        issues.push(GatewayFormalTinyZ3SourceCorrespondenceIssue::IdBindingMismatch);
+    }
+    let expected_labels = gateway_formal_tiny_z3_source_correspondence_label_bindings(
+        replay_identity,
+        &input.source_correspondence_label,
+    );
+    if input.label_bindings != expected_labels {
+        issues.push(GatewayFormalTinyZ3SourceCorrespondenceIssue::LabelBindingMismatch);
+    }
+    if replay_identity.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_IDENTITY_SCHEMA_VERSION
+        || replay_identity.state_slice
+            != GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_IDENTITY_STATE_SLICE
+        || replay_identity.promotion_state != "tiny_z3_replayable_input_identity_metadata"
+        || replay_identity.next_required_state
+            != "tiny_z3_accepted_path_prerequisites_remain_unresolved"
+        || replay_identity.claim_boundary
+            != gateway_formal_tiny_z3_replayable_input_identity_claim_boundary()
+        || replay_identity.creates_filesystem_bundle
+        || replay_identity.changes_accepted_append_policy
+        || replay_identity.makes_accepted_append_decision
+        || replay_identity.mutates_accepted_evidence_ledger
+        || replay_identity.creates_accepted_formal_evidence
+        || replay_identity.creates_level2_evidence
+        || replay_identity.populates_score_axes
+        || replay_identity.proof_artifact_created
+        || replay_identity.checker_transcript_created
+        || replay_identity.solver_certificate_created
+        || replay_identity.backend_execution_evidence_created
+        || replay_identity.benchmark_evidence_created
+        || replay_identity.semantic_correctness_claimed
+        || replay_identity.production_readiness_claimed
+        || replay_identity.sota_claimed
+        || replay_identity.breakthrough_claimed
+        || replay_identity.full_security_claimed
+        || replay_identity.grants_authority
+    {
+        issues.push(
+            GatewayFormalTinyZ3SourceCorrespondenceIssue::Phase497ReplayIdentityStateMismatch,
+        );
+    }
+    let nonclaims = gateway_formal_tiny_z3_source_correspondence_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-source-correspondence-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(GatewayFormalTinyZ3SourceCorrespondenceIssue::NonclaimMismatch);
+    }
+    if input.source_commit_requirement
+        != GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_SOURCE_COMMIT_REQUIRED
+    {
+        issues.push(GatewayFormalTinyZ3SourceCorrespondenceIssue::InvalidSourceCommitRequirement);
+    }
+    if input.hsai_admission_source_path
+        != GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_HSAI_SOURCE_PATH
+    {
+        issues.push(GatewayFormalTinyZ3SourceCorrespondenceIssue::InvalidHsaiAdmissionSourcePath);
+    }
+    if input.accepted_append_source_paths
+        != gateway_formal_tiny_z3_source_correspondence_accepted_append_source_paths()
+    {
+        issues
+            .push(GatewayFormalTinyZ3SourceCorrespondenceIssue::AcceptedAppendSourcePathsMismatch);
+    }
+    if input.hsai_admission_source_anchors
+        != gateway_formal_tiny_z3_source_correspondence_hsai_admission_source_anchors()
+    {
+        issues
+            .push(GatewayFormalTinyZ3SourceCorrespondenceIssue::HsaiAdmissionSourceAnchorsMismatch);
+    }
+    if input.accepted_append_source_anchors
+        != gateway_formal_tiny_z3_source_correspondence_accepted_append_source_anchors()
+    {
+        issues.push(
+            GatewayFormalTinyZ3SourceCorrespondenceIssue::AcceptedAppendSourceAnchorsMismatch,
+        );
+    }
+    if input.statement_digest_inputs
+        != gateway_formal_tiny_z3_source_correspondence_statement_digest_inputs()
+    {
+        issues.push(GatewayFormalTinyZ3SourceCorrespondenceIssue::StatementDigestInputsMismatch);
+    }
+    if input.source_path_digest_requirements
+        != gateway_formal_tiny_z3_source_correspondence_source_path_digest_requirements()
+    {
+        issues.push(
+            GatewayFormalTinyZ3SourceCorrespondenceIssue::SourcePathDigestRequirementsMismatch,
+        );
+    }
+    if input.correspondence_statement_claim
+        != gateway_formal_tiny_z3_source_correspondence_statement_claim()
+    {
+        issues.push(
+            GatewayFormalTinyZ3SourceCorrespondenceIssue::CorrespondenceStatementClaimMismatch,
+        );
+    }
+    if input.unsupported_correspondence_claims
+        != gateway_formal_tiny_z3_source_correspondence_unsupported_claims()
+    {
+        issues.push(
+            GatewayFormalTinyZ3SourceCorrespondenceIssue::UnsupportedCorrespondenceClaimsMismatch,
+        );
+    }
+    if !is_single_segment_id(&input.reviewer_policy_id) {
+        issues.push(GatewayFormalTinyZ3SourceCorrespondenceIssue::InvalidReviewerPolicyId);
+    }
+    if !input.reviewer_decision_required {
+        issues
+            .push(GatewayFormalTinyZ3SourceCorrespondenceIssue::MissingReviewerDecisionRequirement);
+    }
+    if input.drift_rejection_policy
+        != gateway_formal_tiny_z3_source_correspondence_drift_rejection_policy()
+    {
+        issues.push(GatewayFormalTinyZ3SourceCorrespondenceIssue::DriftRejectionPolicyMismatch);
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.source_correspondence_summary,
+    ) {
+        issues.push(
+            GatewayFormalTinyZ3SourceCorrespondenceIssue::SourceCorrespondenceSummaryPromotionClaim,
+        );
+    }
+    if input.correspondence_artifact_creation_requested
+        || input.digest_sidecar_creation_requested
+        || input.accepted_append_policy_change_requested
+        || input.accepted_append_decision_requested
+        || input.accepted_evidence_ledger_mutation_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.backend_execution_evidence_created
+        || input.benchmark_evidence_created
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(GatewayFormalTinyZ3SourceCorrespondenceIssue::PromotionAttempt);
+    }
+    GatewayFormalTinyZ3SourceCorrespondenceValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -89775,6 +90529,232 @@ mod tests {
     }
 
     #[test]
+    fn phase499_tiny_z3_source_correspondence_builds_blocking_record() {
+        let Some((obligation_root, phase405_output_root, output_root, replay_identity)) =
+            phase499_tiny_z3_replay_identity_source("phase499-source-correspondence")
+        else {
+            return;
+        };
+        let source_input = phase499_tiny_z3_source_correspondence_input(
+            "phase499-source-correspondence",
+            &replay_identity,
+            GatewayFormalTinyZ3SourceCorrespondenceLabel::SourceCorrespondenceStatementRecorded,
+        );
+        let source_correspondence =
+            build_gateway_formal_tiny_z3_source_correspondence(&replay_identity, &source_input)
+                .expect("phase499 source correspondence builds");
+
+        assert_eq!(
+            source_correspondence.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_STATE_SLICE
+        );
+        assert_eq!(
+            source_correspondence.phase497_replay_identity_digest,
+            replay_identity.digest()
+        );
+        assert_eq!(
+            source_correspondence.phase497_replay_identity_input_digest,
+            replay_identity.replay_identity_input_digest
+        );
+        assert_eq!(
+            source_correspondence.phase497_digest_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase497-replay-identity-digest-bindings:v1",
+                &replay_identity.digest_bindings,
+            )
+        );
+        assert_eq!(
+            source_correspondence.phase497_id_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase497-replay-identity-id-bindings:v1",
+                &replay_identity.id_bindings,
+            )
+        );
+        assert_eq!(
+            source_correspondence.phase497_label_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase497-replay-identity-label-bindings:v1",
+                &replay_identity.label_bindings,
+            )
+        );
+        assert_eq!(
+            source_correspondence.phase497_explicit_nonclaims_digest,
+            replay_identity.explicit_nonclaims_digest
+        );
+        assert_eq!(
+            source_correspondence.source_commit_requirement,
+            GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_SOURCE_COMMIT_REQUIRED
+        );
+        assert_eq!(
+            source_correspondence.hsai_admission_source_path,
+            GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_HSAI_SOURCE_PATH
+        );
+        assert_eq!(
+            source_correspondence.accepted_append_source_paths,
+            gateway_formal_tiny_z3_source_correspondence_accepted_append_source_paths()
+        );
+        assert_eq!(
+            source_correspondence.hsai_admission_source_anchors,
+            gateway_formal_tiny_z3_source_correspondence_hsai_admission_source_anchors()
+        );
+        assert_eq!(
+            source_correspondence.accepted_append_source_anchors,
+            gateway_formal_tiny_z3_source_correspondence_accepted_append_source_anchors()
+        );
+        assert_eq!(
+            source_correspondence.statement_digest_inputs,
+            gateway_formal_tiny_z3_source_correspondence_statement_digest_inputs()
+        );
+        assert_eq!(
+            source_correspondence.source_path_digest_requirements,
+            gateway_formal_tiny_z3_source_correspondence_source_path_digest_requirements()
+        );
+        assert_eq!(
+            source_correspondence.correspondence_statement_claim,
+            gateway_formal_tiny_z3_source_correspondence_statement_claim()
+        );
+        assert_eq!(
+            source_correspondence.unsupported_correspondence_claims,
+            gateway_formal_tiny_z3_source_correspondence_unsupported_claims()
+        );
+        assert!(source_correspondence.reviewer_decision_required);
+        assert_eq!(
+            source_correspondence.drift_rejection_policy,
+            gateway_formal_tiny_z3_source_correspondence_drift_rejection_policy()
+        );
+        assert_eq!(
+            source_correspondence.previous_promotion_state,
+            "tiny_z3_replayable_input_identity_metadata"
+        );
+        assert_eq!(
+            source_correspondence.promotion_state,
+            "tiny_z3_source_correspondence_statement_metadata"
+        );
+        assert_eq!(
+            source_correspondence.next_required_state,
+            "tiny_z3_accepted_path_prerequisites_remain_unresolved"
+        );
+        assert_eq!(
+            source_correspondence.claim_boundary,
+            gateway_formal_tiny_z3_source_correspondence_claim_boundary()
+        );
+        assert!(!source_correspondence.creates_correspondence_artifact);
+        assert!(!source_correspondence.creates_digest_sidecar);
+        assert!(!source_correspondence.changes_accepted_append_policy);
+        assert!(!source_correspondence.makes_accepted_append_decision);
+        assert!(!source_correspondence.mutates_accepted_evidence_ledger);
+        assert!(!source_correspondence.creates_accepted_formal_evidence);
+        assert!(!source_correspondence.creates_level2_evidence);
+        assert!(!source_correspondence.populates_score_axes);
+        assert!(!source_correspondence.proof_artifact_created);
+        assert!(!source_correspondence.checker_transcript_created);
+        assert!(!source_correspondence.solver_certificate_created);
+        assert!(!source_correspondence.backend_execution_evidence_created);
+        assert!(!source_correspondence.benchmark_evidence_created);
+        assert!(!source_correspondence.semantic_correctness_claimed);
+        assert!(!source_correspondence.production_readiness_claimed);
+        assert!(!source_correspondence.sota_claimed);
+        assert!(!source_correspondence.breakthrough_claimed);
+        assert!(!source_correspondence.full_security_claimed);
+        assert!(!source_correspondence.grants_authority);
+
+        let mut digest_drift = source_input.clone();
+        digest_drift
+            .digest_bindings
+            .insert("phase497_replay_identity_digest".to_owned(), Hash([58; 32]));
+        let digest_validation = validate_gateway_formal_tiny_z3_source_correspondence_input(
+            &replay_identity,
+            &digest_drift,
+        );
+        assert!(digest_validation
+            .issues
+            .contains(&GatewayFormalTinyZ3SourceCorrespondenceIssue::DigestBindingMismatch));
+
+        let mut anchor_drift = source_input.clone();
+        anchor_drift
+            .hsai_admission_source_anchors
+            .remove("build_gateway_formal_tiny_z3_replayable_input_identity");
+        let anchor_validation = validate_gateway_formal_tiny_z3_source_correspondence_input(
+            &replay_identity,
+            &anchor_drift,
+        );
+        assert!(anchor_validation.issues.contains(
+            &GatewayFormalTinyZ3SourceCorrespondenceIssue::HsaiAdmissionSourceAnchorsMismatch
+        ));
+
+        let mut digest_input_drift = source_input.clone();
+        digest_input_drift
+            .statement_digest_inputs
+            .remove("source_file_digests");
+        let digest_input_validation = validate_gateway_formal_tiny_z3_source_correspondence_input(
+            &replay_identity,
+            &digest_input_drift,
+        );
+        assert!(digest_input_validation.issues.contains(
+            &GatewayFormalTinyZ3SourceCorrespondenceIssue::StatementDigestInputsMismatch
+        ));
+
+        fs::remove_dir_all(&output_root)
+            .expect("phase499 source correspondence output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase499 source correspondence phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase499 source correspondence obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase499_tiny_z3_source_correspondence_rejects_promotion() {
+        let Some((obligation_root, phase405_output_root, output_root, replay_identity)) =
+            phase499_tiny_z3_replay_identity_source("phase499-source-promotion")
+        else {
+            return;
+        };
+        let mut source_input = phase499_tiny_z3_source_correspondence_input(
+            "phase499-promotion-source-correspondence",
+            &replay_identity,
+            GatewayFormalTinyZ3SourceCorrespondenceLabel::SourceCorrespondenceStatementRejected,
+        );
+
+        source_input.correspondence_artifact_creation_requested = true;
+        source_input.digest_sidecar_creation_requested = true;
+        source_input.accepted_append_policy_change_requested = true;
+        source_input.accepted_append_decision_requested = true;
+        source_input.accepted_evidence_ledger_mutation_requested = true;
+        source_input.accepted_formal_evidence_created = true;
+        source_input.creates_level2_evidence = true;
+        source_input.populates_score_axes = true;
+        source_input.proof_artifact_promoted = true;
+        source_input.checker_transcript_promoted = true;
+        source_input.solver_certificate_promoted = true;
+        source_input.backend_execution_evidence_created = true;
+        source_input.benchmark_evidence_created = true;
+        source_input.semantic_correctness_claimed = true;
+        source_input.production_readiness_claimed = true;
+        source_input.sota_claimed = true;
+        source_input.breakthrough_claimed = true;
+        source_input.full_security_claimed = true;
+        source_input.action_authority_claimed = true;
+        let validation = validate_gateway_formal_tiny_z3_source_correspondence_input(
+            &replay_identity,
+            &source_input,
+        );
+        assert!(validation
+            .issues
+            .contains(&GatewayFormalTinyZ3SourceCorrespondenceIssue::PromotionAttempt));
+        assert!(build_gateway_formal_tiny_z3_source_correspondence(
+            &replay_identity,
+            &source_input
+        )
+        .is_err());
+
+        fs::remove_dir_all(&output_root).expect("phase499 promotion output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase499 promotion phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase499 promotion obligation cleanup succeeds");
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -96550,6 +97530,115 @@ mod tests {
             phase405_output_root,
             output_root,
             class_boundary,
+        ))
+    }
+
+    fn phase499_tiny_z3_source_correspondence_input(
+        source_correspondence_gate_id: &str,
+        replay_identity: &GatewayFormalTinyZ3ReplayableInputIdentity,
+        source_correspondence_label: GatewayFormalTinyZ3SourceCorrespondenceLabel,
+    ) -> GatewayFormalTinyZ3SourceCorrespondenceInput {
+        let source_correspondence_policy_id = "phase499-source-correspondence-policy";
+        let source_correspondence_decision_id = "phase499-source-correspondence-decision";
+        let reviewer_policy_id = "phase499-source-correspondence-reviewer-policy";
+        let nonclaims = gateway_formal_tiny_z3_source_correspondence_required_nonclaims();
+        GatewayFormalTinyZ3SourceCorrespondenceInput {
+            schema_version: GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_SCHEMA_VERSION.to_owned(),
+            source_correspondence_gate_id: source_correspondence_gate_id.to_owned(),
+            source_correspondence_policy_id: source_correspondence_policy_id.to_owned(),
+            source_correspondence_decision_id: source_correspondence_decision_id.to_owned(),
+            source_correspondence_decision_at_unix: 1_800_000_499,
+            digest_bindings: gateway_formal_tiny_z3_source_correspondence_digest_bindings(
+                replay_identity,
+            ),
+            id_bindings: gateway_formal_tiny_z3_source_correspondence_id_bindings(
+                replay_identity,
+                source_correspondence_gate_id,
+                source_correspondence_policy_id,
+                source_correspondence_decision_id,
+            ),
+            label_bindings: gateway_formal_tiny_z3_source_correspondence_label_bindings(
+                replay_identity,
+                &source_correspondence_label,
+            ),
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-source-correspondence-nonclaims:v1",
+                &nonclaims,
+            ),
+            source_commit_requirement:
+                GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_SOURCE_COMMIT_REQUIRED.to_owned(),
+            hsai_admission_source_path:
+                GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_HSAI_SOURCE_PATH.to_owned(),
+            accepted_append_source_paths:
+                gateway_formal_tiny_z3_source_correspondence_accepted_append_source_paths(),
+            hsai_admission_source_anchors:
+                gateway_formal_tiny_z3_source_correspondence_hsai_admission_source_anchors(),
+            accepted_append_source_anchors:
+                gateway_formal_tiny_z3_source_correspondence_accepted_append_source_anchors(),
+            statement_digest_inputs:
+                gateway_formal_tiny_z3_source_correspondence_statement_digest_inputs(),
+            source_path_digest_requirements:
+                gateway_formal_tiny_z3_source_correspondence_source_path_digest_requirements(),
+            correspondence_statement_claim:
+                gateway_formal_tiny_z3_source_correspondence_statement_claim(),
+            unsupported_correspondence_claims:
+                gateway_formal_tiny_z3_source_correspondence_unsupported_claims(),
+            reviewer_policy_id: reviewer_policy_id.to_owned(),
+            reviewer_decision_required: true,
+            drift_rejection_policy:
+                gateway_formal_tiny_z3_source_correspondence_drift_rejection_policy(),
+            source_correspondence_label,
+            source_correspondence_summary:
+                "local tiny-Z3 source correspondence metadata records source anchor and digest requirements for future bridge review"
+                    .to_owned(),
+            correspondence_artifact_creation_requested: false,
+            digest_sidecar_creation_requested: false,
+            accepted_append_policy_change_requested: false,
+            accepted_append_decision_requested: false,
+            accepted_evidence_ledger_mutation_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            backend_execution_evidence_created: false,
+            benchmark_evidence_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase499_tiny_z3_replay_identity_source(
+        source_prefix: &str,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        GatewayFormalTinyZ3ReplayableInputIdentity,
+    )> {
+        let (obligation_root, phase405_output_root, output_root, class_boundary) =
+            phase497_tiny_z3_class_boundary_source(source_prefix)?;
+        let replay_identity_input = phase497_tiny_z3_replayable_input_identity_input(
+            &format!("{source_prefix}-replay-identity"),
+            &class_boundary,
+            GatewayFormalTinyZ3ReplayableInputIdentityLabel::ReplayableInputIdentityRecorded,
+        );
+        let replay_identity = build_gateway_formal_tiny_z3_replayable_input_identity(
+            &class_boundary,
+            &replay_identity_input,
+        )
+        .expect("phase499 source replay identity builds");
+        Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            replay_identity,
         ))
     }
 
