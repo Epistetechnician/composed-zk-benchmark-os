@@ -7148,5 +7148,23 @@ populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction,
 creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/498-hsai-tiny-z3-source-correspondence-statement-digest-boundary.md](docs/498-hsai-tiny-z3-source-correspondence-statement-digest-boundary.md)
+defines the Phase 498 docs-first source correspondence statement and digest
+boundary for the next Phase 488 accepted-path prerequisite gate. The boundary
+requires future statement metadata to bind Phase 497 replayable input identity
+digests and source anchors in `crates/hsai-agent-admission/src/lib.rs` to the
+current `zkbench-core` accepted append anchors in
+`accepted_append.rs`, `promotion_preflight.rs`, `candidate.rs`,
+`append_preview.rs`, and `evidence/mod.rs`. It records required statement
+fields, statement digest construction inputs, source path and source digest
+requirements, drift rejection behavior, backend relationship limits, and Phase
+499 implementation exit criteria. It creates no Rust code, writes no
+correspondence artifact, makes no accepted append decision, mutates no
+accepted Evidence Ledger, changes no accepted append policy, creates no
+accepted formal evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no
+benchmark evidence, and claims no production/SOTA/security/semantic-correctness
+result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

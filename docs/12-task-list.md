@@ -13974,6 +13974,34 @@ accepted append policy change, replayable bundle materialization, Level2+
 evidence, score axes, proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean
 execution, benchmark evidence, or production/SOTA/security/correctness claim.
 
+## Phase 498 HSAI Tiny Z3 Source Correspondence Statement Digest Boundary
+
+Status: complete. See
+`docs/498-hsai-tiny-z3-source-correspondence-statement-digest-boundary.md`.
+
+Goal: define the docs-first source correspondence statement and digest
+boundary for the next Phase 488 accepted-path prerequisite gate.
+
+Implemented: Phase 498 documents the required HSAI admission anchors from the
+Phase 497 replayable input identity metadata and the required `zkbench-core`
+accepted append anchors: accepted append transaction request validation,
+preflight request/report validation, candidate and append-preview types,
+evidence class, claim boundary, and evidence record construction. It defines
+required future statement fields, statement digest inputs, drift rejection
+rules, backend relationship limits, and Phase 499 implementation exit
+criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a source correspondence statement/digest boundary
+for later accepted-path work. It still has no accepted append decision,
+accepted formal evidence, accepted Evidence Ledger mutation from HSAI admission
+metadata, accepted append policy change, replayable bundle materialization,
+Level2+ evidence, score axes, proof-authority claim, Lean/new-SMT/COBALT or
+Rust-to-Lean execution, benchmark evidence, or production/SOTA/security/
+correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
