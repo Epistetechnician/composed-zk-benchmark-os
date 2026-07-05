@@ -7389,5 +7389,23 @@ evidence, populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean
 extraction, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/512-hsai-tiny-z3-materialized-accepted-append-boundary.md](docs/512-hsai-tiny-z3-materialized-accepted-append-boundary.md)
+defines the Phase 512 docs-first boundary for a future local materialized
+accepted-ledger append output through the existing `zkbench-core`
+`MaterializedAcceptedLedgerAppendRequest` and
+`apply_materialized_accepted_ledger_append_transaction` owner. The boundary
+records the future allowed touch surface, only future allowed materialization
+call, required Phase 511 digest bindings, local ledger path identity and
+path-policy bindings, post-materialization report and artifact digest bindings,
+forbidden direct ledger load/save and parallel-writer APIs, fail-closed future
+validation rules, backend relationship limits, meaning limits, and Phase 513
+implementation exit criteria. It creates no Rust code, changes no Cargo
+metadata, reads or writes no accepted Evidence Ledger files, calls no
+materialized append function, creates no materialized accepted ledger output,
+creates no accepted formal evidence, creates no Level2+ evidence, populates no
+score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no
+benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
