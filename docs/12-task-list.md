@@ -16033,6 +16033,33 @@ score axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3
 execution, no benchmark evidence, no external audit evidence, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 570 HSAI Tiny Z3 Backend Execution Independent Operator Evidence Packet Boundary
+
+Status: complete. See
+`docs/570-hsai-tiny-z3-backend-execution-independent-operator-evidence-packet-boundary.md`.
+
+Goal: define the docs-first independent-operator evidence packet boundary
+after Phase 569 requirement metadata.
+
+Implemented: Phase 570 defines the future packet roles required before the
+independent external operator path can advance: operator identity, operator
+statement, environment declaration, captured-output summary, redaction report,
+replay/correspondence statement, and import ownership. It requires exact Phase
+569/567/565/563/561/559/557/555 and inherited digest bindings, deterministic
+packet and role digests, fail-closed classifications, nonclaims, and Phase 571
+implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named independent-operator evidence packet
+boundary. It still has no packet materialization, no external result import,
+no accepted external result evidence, no accepted independent external
+reproduction, no accepted formal evidence, no Level2+ evidence, no populated
+score axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3
+execution, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
