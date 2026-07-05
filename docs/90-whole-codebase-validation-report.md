@@ -7969,5 +7969,24 @@ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
 additional SMT/Z3 execution, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/551-hsai-tiny-z3-backend-execution-external-result-import-candidate-metadata-notes.md](docs/551-hsai-tiny-z3-backend-execution-external-result-import-candidate-metadata-notes.md)
+documents the Phase 551 local backend-execution external-result import
+candidate metadata implementation. The implementation validates one exact
+Phase 549 external-reproduction metadata record, constructs one in-memory
+`zkbench_core::ExternalResultCandidate`, calls
+`validate_external_result_candidate`, calls
+`external_result_quarantine_record`, records classification
+`ImportCandidateQuarantinedLocalMetadata`, binds Phase 549 reproduction/input/
+classification/blocker/nonpromotion/input-status metadata, Phase 547 Level2
+eligibility metadata, Phase 545 score-axis metadata, Phase 543 package/class/
+boundary metadata, Phase 541 materialized artifact digest, inherited Phase
+535/533/531/529/527 digests, and candidate/validation/quarantine digests. It
+writes no external-result, external-reproduction, Level2, or score-axis
+artifact files, creates no independent external reproduction, creates no
+accepted formal evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates
+no benchmark evidence, and claims no production/SOTA/security/
+semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
