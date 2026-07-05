@@ -7745,5 +7745,18 @@ populates no score axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3
 execution, creates no benchmark evidence, and claims no production/SOTA/
 security/semantic-correctness result.
 
+[docs/536-hsai-tiny-z3-backend-execution-zkbench-core-accepted-append-evaluation-boundary.md](docs/536-hsai-tiny-z3-backend-execution-zkbench-core-accepted-append-evaluation-boundary.md)
+defines the Phase 536 docs-first boundary for a future validation-only
+`zkbench-core` accepted append evaluation over one Phase 535 owner-decision
+record. The boundary defines required Phase 535, Phase 533, Phase 531, Phase
+529, and Phase 527 digest bindings, the existing owner-validator surface,
+future accepted append evaluation inputs, unresolved-input rules, fail-closed
+validation rules, meaning limits, and Phase 537 implementation exit criteria.
+It creates no Rust code, calls no accepted append validator, mutates no
+accepted Evidence Ledger, creates no accepted evidence, creates no Level2+
+evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
+additional SMT/Z3 execution, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

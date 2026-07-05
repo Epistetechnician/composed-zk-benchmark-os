@@ -15049,6 +15049,31 @@ evidence, no Level2+ evidence, no populated score axes, no accepted formal
 evidence, no Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no
 external audit evidence, and no production/SOTA/security/correctness claim.
 
+## Phase 536 HSAI Tiny Z3 Backend Execution Zkbench-Core Accepted Append Evaluation Boundary
+
+Status: complete. See
+`docs/536-hsai-tiny-z3-backend-execution-zkbench-core-accepted-append-evaluation-boundary.md`.
+
+Goal: define the docs-first boundary for a future validation-only
+`zkbench-core` accepted append evaluation over one Phase 535 owner-decision
+record.
+
+Implemented: Phase 536 defines the future validator-crossing contract:
+required Phase 535, Phase 533, Phase 531, Phase 529, and Phase 527 digest
+bindings, required `zkbench-core` accepted append validator surface, required
+future accepted append evaluation inputs, unresolved-input rules, fail-closed
+validation rules, meaning limits, and Phase 537 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named boundary for a future validation-only call
+into the existing `zkbench-core` accepted append validator. It still has no
+accepted evidence, no accepted append mutation, no Level2+ evidence, no
+populated score axes, no accepted formal evidence, no Lean/COBALT/Rust-to-Lean
+execution, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
