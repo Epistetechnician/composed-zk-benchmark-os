@@ -8786,5 +8786,21 @@ evidence, creates no Level2+ evidence, populates no score axes, runs no
 Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark
 evidence, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/600-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-accepted-result-evidence-eligibility-boundary.md](docs/600-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-accepted-result-evidence-eligibility-boundary.md)
+documents the Phase 600 docs-first packet-role artifact independent-operator
+accepted-result evidence eligibility boundary. It requires one exact Phase 599
+`PacketRoleArtifactIndependentOperatorImportReviewBlockedNoAcceptedExternalResult`
+record, Phase 599 review/input/binding/policy/blocker/nonpromotion digests,
+Phase 597 candidate/validation/quarantine digests, exact Phase 595 readback
+bindings, directly exposed Phase 593/591/589/587/585 digests, inherited Phase
+583/581/579/577/575/573/571/569/567/565/563/561/559/557/555 and
+backend-execution requirements, blocked eligibility metadata, and future Phase
+601 implementation exit criteria. It creates no Rust code, imports no external
+result, mutates no accepted Evidence Ledger, creates no accepted external result
+evidence, accepts no independent external reproduction, creates no accepted
+formal evidence, creates no Level2+ evidence, populates no score axes, runs no
+Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark
+evidence, and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
