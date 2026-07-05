@@ -7451,5 +7451,20 @@ accepted formal evidence, creates no Level2+ evidence, populates no score axes,
 runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark
 evidence, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/516-hsai-tiny-z3-score-axis-eligibility-boundary.md](docs/516-hsai-tiny-z3-score-axis-eligibility-boundary.md)
+defines the Phase 516 docs-first boundary for future score-axis eligibility
+over the Phase 515 local accepted-evidence package metadata. The boundary
+records the existing `zkbench-core` score owner surface, `ScoreReport`,
+`validate_score_report`, current local-claim score-axis restrictions, future
+eligibility classifications, required Phase 515 digest bindings, score owner/
+type/validator bindings, eligibility policy/blocker/nonpopulation digest
+bindings, fail-closed future validation rules, backend relationship limits,
+meaning limits, and Phase 517 implementation exit criteria. It creates no Rust
+code, changes no Cargo metadata, writes no score-axis artifact files, populates
+no score axes, creates no accepted formal evidence, creates no Level2+
+evidence, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no
+benchmark evidence, and claims no production/SOTA/security/semantic-correctness
+result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
