@@ -194,8 +194,9 @@ That still is not:
 
 ## Phase 497 Implementation Exit Criteria
 
-Phase 497 may implement local replayable input bundle identity metadata only if
-it:
+Phase 497 implements local replayable input identity metadata in
+`docs/497-hsai-tiny-z3-replayable-input-identity-metadata-notes.md`. That
+implementation:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;

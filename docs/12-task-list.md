@@ -13943,6 +13943,37 @@ accepted append policy change, Level2+ evidence, score axes, proof-authority
 claim, Lean/new-SMT/COBALT/Rust-to-Lean execution, benchmark evidence, or
 production/SOTA/security/correctness claim.
 
+## Phase 497 HSAI Tiny Z3 Replayable Input Identity Metadata
+
+Status: complete. See
+`docs/497-hsai-tiny-z3-replayable-input-identity-metadata-notes.md`.
+
+Goal: implement local in-memory metadata for the Phase 488 replayable input
+bundle identity prerequisite gate.
+
+Implemented: Phase 497 adds deterministic local metadata in
+`crates/hsai-agent-admission/src/lib.rs` over one Phase 495 accepted evidence
+class claim-boundary record. The record binds `zkbench-core` owner and current
+accepted-append replay identity types: `AcceptedLedgerAppendTransactionRequest`,
+`AcceptedLedgerAppendTransactionVersion`, `ReviewedPromotionPreflightRequest`,
+`ReviewedPromotionPreflightReport`, `EvidenceRecordCandidate`,
+`EvidenceRecordCandidateSource`, and `EvidenceAppendPreview`. It records
+transaction, preflight, candidate, append-preview, source-digest, ledger-tip,
+candidate/preview alignment, preflight-report recomputation, source artifact
+presence, and Level1 local replay cap rules.
+
+Validation coverage: focused Phase 497 tests cover valid metadata construction
+plus Phase 495 digest drift, transaction field-set drift, replay validation
+rule drift, and promotion-attempt rejection including filesystem bundle
+creation.
+
+Exit criteria: HSAI now has local metadata for the replayable input identity
+prerequisite gate. It still has no accepted append decision, accepted formal
+evidence, accepted Evidence Ledger mutation from HSAI admission metadata,
+accepted append policy change, replayable bundle materialization, Level2+
+evidence, score axes, proof-authority claim, Lean/new-SMT/COBALT/Rust-to-Lean
+execution, benchmark evidence, or production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
