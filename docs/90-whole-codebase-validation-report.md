@@ -7721,5 +7721,17 @@ Level2+ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean
 extraction, creates no benchmark evidence, and claims no production/SOTA/
 security/semantic-correctness result.
 
+[docs/534-hsai-tiny-z3-backend-execution-accepted-evidence-owner-decision-boundary.md](docs/534-hsai-tiny-z3-backend-execution-accepted-evidence-owner-decision-boundary.md)
+defines the Phase 534 docs-first boundary for a future local owner-decision
+record over one Phase 533 backend-execution package review. The boundary keeps
+`zkbench-core` as the only accepted-evidence owner, binds the existing accepted
+append routes and Level1 claim-boundary cap, defines the allowed future
+owner-decision labels, and requires fail-closed validation over the Phase 533,
+Phase 531, Phase 529, and Phase 527 digest chain. It creates no Rust code,
+mutates no accepted Evidence Ledger, creates no accepted evidence, creates no
+Level2+ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
+additional SMT/Z3 execution, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
