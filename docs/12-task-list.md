@@ -14527,6 +14527,38 @@ accepted formal evidence, no Level2+ evidence, no Lean/new-SMT/COBALT or
 Rust-to-Lean execution, no benchmark evidence, no external audit evidence, and
 no production/SOTA/security/correctness claim.
 
+## Phase 517 HSAI Tiny Z3 Score Axis Eligibility Metadata
+
+Status: complete. See
+`docs/517-hsai-tiny-z3-score-axis-eligibility-metadata-notes.md`.
+
+Goal: implement local score-axis eligibility metadata over one exact Phase 515
+local accepted-evidence package metadata record.
+
+Implemented: Phase 517 adds score-axis eligibility input/output metadata,
+classification and label enums, issue and validation types, score-axis name,
+nonpopulation, blocker, nonclaim, rule, forbidden-API, inherited-digest,
+policy-digest, digest-binding, id-binding, and label-binding helpers, a
+fail-closed validator, and a builder that records local eligibility metadata
+only. The result binds the Phase 515 package digest, Phase 515 input digest,
+Phase 515 package policy/nonclaim/cap digests, Phase 515 evidence class,
+Phase 515 claim boundary, Phase 513 materialized artifact and append-report
+digests, score owner `zkbench-core`, score report type `ScoreReport`, score
+validator `validate_score_report`, eligibility policy digest, blocker digest,
+and nonpopulation digest.
+
+Validation coverage: focused Rust tests cover successful local eligibility
+metadata over a real Phase 515 package metadata record, rejection of invalid
+Phase 515 package state, and rejection of axis population, score-axis artifact
+writes, formal-evidence, Level2+, proof/checker/solver, backend, benchmark,
+external-audit, strong-claim, and action-authority promotion attempts.
+
+Exit criteria: HSAI now has local metadata classifying one Phase 515 package as
+`score_axes_blocked_local_only` with every score axis unpopulated. It still has
+no populated score axes, no accepted formal evidence, no Level2+ evidence, no
+Lean/new-SMT/COBALT or Rust-to-Lean execution, no benchmark evidence, no
+external audit evidence, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

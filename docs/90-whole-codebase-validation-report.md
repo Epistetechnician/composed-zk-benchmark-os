@@ -7466,5 +7466,24 @@ evidence, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no
 benchmark evidence, and claims no production/SOTA/security/semantic-correctness
 result.
 
+[docs/517-hsai-tiny-z3-score-axis-eligibility-metadata-notes.md](docs/517-hsai-tiny-z3-score-axis-eligibility-metadata-notes.md)
+documents the Phase 517 local score-axis eligibility metadata implementation.
+The Rust surface in `crates/hsai-agent-admission/src/lib.rs` adds score-axis
+eligibility input/output metadata, classification and label enums, issue and
+validation types, score-axis name, nonpopulation, blocker, nonclaim, rule,
+forbidden-API, inherited-digest, policy-digest, digest-binding, id-binding,
+and label-binding helpers, a fail-closed validator, and a builder that
+validates one exact Phase 515 package metadata record before recording local
+eligibility metadata only. The metadata binds Phase 515 package identity,
+Phase 515 policy/nonclaim/cap digests, Phase 515 evidence class and claim
+boundary, Phase 513 materialized artifact and append-report digests,
+`zkbench-core`, `ScoreReport`, `validate_score_report`, the eligibility policy
+digest, the blocker digest, and the nonpopulation digest. It classifies the
+package as `score_axes_blocked_local_only`, records every score axis as
+unpopulated, writes no score-axis artifact files, creates no accepted formal
+evidence, creates no Level2+ evidence, runs no
+Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence,
+and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
