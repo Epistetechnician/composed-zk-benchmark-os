@@ -207,10 +207,11 @@ That still is not:
 - full security;
 - authority to execute an action.
 
-## Phase 499 Implementation Exit Criteria
+## Phase 499 Implementation Status
 
-A future Phase 499 may implement local source correspondence statement metadata
-only if it:
+Phase 499 implements local source correspondence statement metadata in
+`docs/499-hsai-tiny-z3-source-correspondence-statement-metadata-notes.md`.
+That implementation:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;

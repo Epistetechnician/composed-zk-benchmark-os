@@ -7166,5 +7166,23 @@ axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no
 benchmark evidence, and claims no production/SOTA/security/semantic-correctness
 result.
 
+[docs/499-hsai-tiny-z3-source-correspondence-statement-metadata-notes.md](docs/499-hsai-tiny-z3-source-correspondence-statement-metadata-notes.md)
+documents the Phase 499 local metadata implementation for the Phase 488 source
+correspondence statement and digest prerequisite gate. The implementation in
+`crates/hsai-agent-admission/src/lib.rs` binds one Phase 497 replayable input
+identity record to HSAI admission source anchors, `zkbench-core` accepted
+append source anchors, source path and source digest requirements, statement
+digest input requirements, reviewer decision requirements, unsupported
+correspondence claims, drift rejection policy, and explicit nonclaims. Focused
+tests cover valid construction plus Phase 497 digest drift, HSAI source anchor
+drift, statement digest input drift, and promotion-attempt rejection including
+correspondence artifact and digest sidecar creation. It creates no
+correspondence artifact, writes no digest sidecar, makes no accepted append
+decision, mutates no accepted Evidence Ledger, changes no accepted append
+policy, creates no accepted formal evidence, creates no Level2+ evidence,
+populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction,
+creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
