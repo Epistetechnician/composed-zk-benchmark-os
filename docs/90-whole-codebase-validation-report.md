@@ -8102,5 +8102,22 @@ formal evidence, creates no Level2+ evidence, populates no score axes, runs no
 Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark
 evidence, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/559-hsai-tiny-z3-backend-execution-independent-external-operator-result-capture-metadata-notes.md](docs/559-hsai-tiny-z3-backend-execution-independent-external-operator-result-capture-metadata-notes.md)
+documents the Phase 559 local independent external operator result capture
+metadata implementation. It materializes only the declared
+`gateway-formal-tiny-z3-independent-external-operator-result/` packet files
+over one exact Phase 557 handoff packet manifest, operator-declared
+provenance, operator-declared execution observation, redacted artifact index,
+and redaction report. It writes `.sha256` sidecars, validates readback
+semantics, binds a nonpromotion report, and rejects digest drift, undeclared
+files, malformed JSON, invalid Phase 557 manifests, invalid provenance,
+invalid observations, forbidden artifact labels, raw-content retention,
+invalid redaction reports, and nonpromotion drift. It performs no local run,
+imports no external result, accepts no independent external reproduction,
+creates no accepted formal evidence, creates no Level2+ evidence, populates no
+score axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution,
+creates no benchmark evidence, and claims no production/SOTA/security/
+semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
