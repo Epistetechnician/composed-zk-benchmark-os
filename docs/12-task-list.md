@@ -15972,6 +15972,34 @@ populated score axes, no Lean/COBALT/Rust-to-Lean execution, no additional
 SMT/Z3 execution, no benchmark evidence, no external audit evidence, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 568 HSAI Tiny Z3 Backend Execution External Operator Independent Reproduction Evidence Boundary
+
+Status: complete. See
+`docs/568-hsai-tiny-z3-backend-execution-external-operator-independent-reproduction-evidence-boundary.md`.
+
+Goal: define the docs-first independent-reproduction evidence requirement
+boundary after Phase 567 policy-resolution metadata.
+
+Implemented: Phase 568 defines the future independent-reproduction evidence
+requirements over one exact Phase 567 policy-resolution metadata record:
+required Phase 567/565/563/561/559/557/555 and inherited digest bindings,
+operator identity requirements, operator statement requirements, environment
+declaration requirements, captured-output requirements, redaction
+requirements, replay/correspondence requirements, `zkbench_core` import
+ownership constraints, future classifications, fail-closed rules, nonclaims,
+and Phase 569 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named independent-reproduction evidence
+requirement boundary. It still has no external result import, no accepted
+external result evidence, no accepted independent external reproduction, no
+accepted formal evidence, no Level2+ evidence, no populated score axes, no
+Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution, no
+benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
