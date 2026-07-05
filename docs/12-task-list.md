@@ -15074,6 +15074,36 @@ populated score axes, no accepted formal evidence, no Lean/COBALT/Rust-to-Lean
 execution, no benchmark evidence, no external audit evidence, and no
 production/SOTA/security/correctness claim.
 
+## Phase 537 HSAI Tiny Z3 Backend Execution Accepted Append Evaluation Metadata
+
+Status: complete. See
+`docs/537-hsai-tiny-z3-backend-execution-accepted-append-evaluation-metadata-notes.md`.
+
+Goal: implement local validation-only accepted append evaluation metadata over
+one Phase 535 owner-decision record.
+
+Implemented: Phase 537 adds accepted append evaluation input/output metadata,
+bounded evaluation labels, issue/validation types, evaluation nonclaim/rule/
+forbidden-API/inherited-digest helpers, deterministic digest/id/label binding
+helpers, policy digest helper, `build_...` and `validate_...` entrypoints, and
+tests over a Phase 535 owner decision and caller-supplied in-memory
+`zkbench-core` accepted append transaction.
+
+Validation coverage: focused tests cover successful validation-only metadata,
+invalid Phase 535 state rejection, and digest/promotion rejection across owner
+drift, ledger read/write, mutation, materialization, accepted append decision,
+accepted evidence, Level2+, score axes, Lean, COBALT, Rust-to-Lean, additional
+SMT/Z3 execution, proof/checker/solver, benchmark, external audit, independent
+external reproduction, strong claims, and action authority.
+
+Exit criteria: HSAI now has local validation-only metadata from calling the
+existing `zkbench-core` accepted append validator over one reviewed local
+SMT/Z3 backend execution package route. It still has no accepted evidence, no
+accepted append mutation, no Level2+ evidence, no populated score axes, no
+accepted formal evidence, no Lean/COBALT/Rust-to-Lean execution, no benchmark
+evidence, no external audit evidence, and no production/SOTA/security/
+correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
