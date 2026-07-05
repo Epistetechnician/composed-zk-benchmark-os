@@ -15104,6 +15104,32 @@ accepted formal evidence, no Lean/COBALT/Rust-to-Lean execution, no benchmark
 evidence, no external audit evidence, and no production/SOTA/security/
 correctness claim.
 
+## Phase 538 HSAI Tiny Z3 Backend Execution Accepted Append Mutation Decision Boundary
+
+Status: complete. See
+`docs/538-hsai-tiny-z3-backend-execution-accepted-append-mutation-decision-boundary.md`.
+
+Goal: define the docs-first boundary for a future in-memory accepted append
+mutation decision over one Phase 537 validation-satisfied evaluation record.
+
+Implemented: Phase 538 defines the future mutation-decision contract: required
+Phase 537, Phase 535, Phase 533, Phase 531, Phase 529, and Phase 527 digest
+bindings, validation-valid requirements, request and ledger identity
+requirements, the only allowed `zkbench-core` in-memory mutation function,
+forbidden materialized/file routes, fail-closed validation rules, meaning
+limits, and Phase 539 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named boundary for deciding whether one Phase
+537 validation-satisfied backend-execution route may proceed to an in-memory
+`zkbench-core` accepted append mutation. It still has no accepted append
+mutation, no materialized accepted ledger output, no Level2+ evidence, no
+populated score axes, no accepted formal evidence, no Lean/COBALT/Rust-to-Lean
+execution, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
