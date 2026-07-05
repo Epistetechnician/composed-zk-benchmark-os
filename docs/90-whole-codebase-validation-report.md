@@ -8440,5 +8440,21 @@ populates no score axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3
 execution, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/579-hsai-tiny-z3-backend-execution-packet-role-artifact-import-candidate-metadata-notes.md](docs/579-hsai-tiny-z3-backend-execution-packet-role-artifact-import-candidate-metadata-notes.md)
+documents the Phase 579 packet role artifact import-candidate metadata
+implementation. The `hsai-agent-admission` crate now records one exact Phase
+577 `PacketRoleArtifactOutputQuarantinedLocalBundle` readback as a quarantined
+zkbench-core `ExternalResultCandidate`, validates it through
+`validate_external_result_candidate`, records
+`external_result_quarantine_record` output, binds Phase 577/575/573/571/569
+/567/565/563/561/559/557/555 digests, and rejects Phase 577 drift, readback
+digest drift, promotion booleans, ready-for-review classification, and strong
+public claims. It imports no external result, mutates no accepted Evidence
+Ledger, creates no accepted external result evidence, accepts no independent
+external reproduction, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
+additional SMT/Z3 execution, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
