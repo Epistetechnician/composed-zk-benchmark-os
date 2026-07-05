@@ -16624,6 +16624,33 @@ score axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3
 execution, no benchmark evidence, no external audit evidence, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 590 HSAI Tiny Z3 Backend Execution Packet Role Artifact Independent Operator Materialization Boundary
+
+Status: complete. See
+`docs/590-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-materialization-boundary.md`.
+
+Goal: define the docs-first materialization boundary for Phase 589 packet-role
+artifact independent-operator evidence packet roles.
+
+Implemented: Phase 590 defines the future declared logical files, SHA-256
+sidecars, role content constraints, output-root policy, filesystem readback
+rules, materialization classifications, fail-closed rules, and future Phase
+591 implementation exit criteria. It requires one exact Phase 589
+`PacketRoleArtifactIndependentOperatorEvidencePacketMissing` record and binds
+Phase 589/587/585/583/581/579/577/575/573/571/569/567/565/563/561/559
+/557/555 plus inherited backend-execution digests.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named packet-role artifact independent-operator
+materialization boundary. It still has no external result import, no accepted
+external result evidence, no accepted independent external reproduction, no
+accepted formal evidence, no Level2+ evidence, no populated score axes, no
+Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution, no
+benchmark evidence, no external audit evidence, and no production/SOTA
+/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
