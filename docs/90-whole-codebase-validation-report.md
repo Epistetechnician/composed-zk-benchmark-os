@@ -7619,5 +7619,20 @@ accepted formal evidence, creates no Level2+ evidence, runs no new
 Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence, and
 claims no production/SOTA/security/semantic-correctness result.
 
+[docs/526-hsai-tiny-z3-backend-execution-boundary.md](docs/526-hsai-tiny-z3-backend-execution-boundary.md)
+defines the Phase 526 docs-first boundary for a future scoped backend-execution
+candidate lane after Phase 525 import-review metadata. The boundary splits the
+future execution surface into Lane A scoped SMT/Z3 replay, Lane B
+Lean/Rust-to-Lean, and Lane C COBALT-style containment, while opening only Lane
+A as the immediate future candidate. It defines required Phase
+525/523/521/519/517/515/513 bindings, obligation/toolchain/command/
+expected-output/timeout/scratch-output policy digests, fail-closed future
+validation rules, future touch surface, backend relationship limits, meaning
+limits, and Phase 527 implementation exit criteria. It creates no Rust code,
+changes no Cargo metadata, runs no backend, writes no backend artifacts, creates
+no accepted formal evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/COBALT/Rust-to-Lean extraction, creates no benchmark
+evidence, and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
