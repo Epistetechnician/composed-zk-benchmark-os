@@ -15475,6 +15475,39 @@ evidence, no Level2+ evidence, no populated score axes, no Lean/COBALT/
 Rust-to-Lean execution, no benchmark evidence, no external audit evidence,
 and no production/SOTA/security/correctness claim.
 
+## Phase 551 HSAI Tiny Z3 Backend Execution External Result Import Candidate Metadata
+
+Status: complete. See
+`docs/551-hsai-tiny-z3-backend-execution-external-result-import-candidate-metadata-notes.md`.
+
+Goal: implement local external-result import candidate metadata over one exact
+Phase 549 external-reproduction metadata record.
+
+Implemented: Phase 551 adds backend-execution external-result import candidate
+input/output metadata, bounded classifications and labels, issue/validation
+types, blocker/nonclaim/rule/forbidden-API/inherited-digest helpers,
+candidate/nonpromotion/policy/digest/id/label binding helpers, `build_...` and
+`validate_...` entrypoints, in-memory `zkbench-core` candidate validation and
+quarantine calls, and tests over a Phase 549 external-reproduction metadata
+record.
+
+Validation coverage: focused tests cover successful quarantined local import
+candidate metadata, invalid Phase 549 state rejection, and promotion rejection
+across candidate digest drift, external-result artifact writes, independent
+external reproduction, Level2 artifact writes, score-axis artifact writes,
+axis population, accepted formal evidence, Level2+, Lean, COBALT,
+Rust-to-Lean, additional SMT/Z3 execution, backend execution evidence,
+proof/checker/solver, benchmark, external audit, strong claims, and action
+authority.
+
+Exit criteria: HSAI now can construct and validate a quarantined local
+external-result import candidate for the backend-execution route while
+preserving that no independent external reproduction has occurred. It still
+has no independent external reproduction, no accepted formal evidence, no
+Level2+ evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean
+execution, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
