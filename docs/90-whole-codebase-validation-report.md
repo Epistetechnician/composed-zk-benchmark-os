@@ -7798,5 +7798,22 @@ populates no score axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3
 execution, creates no benchmark evidence, and claims no production/SOTA/
 security/semantic-correctness result.
 
+[docs/540-hsai-tiny-z3-backend-execution-materialized-accepted-append-boundary.md](docs/540-hsai-tiny-z3-backend-execution-materialized-accepted-append-boundary.md)
+defines the Phase 540 docs-first boundary for a future materialized accepted
+ledger append output over one exact Phase 539 in-memory mutation metadata
+record. The boundary defines required Phase 539 mutation/input/nonclaim/rule/
+forbidden-API/inherited-digest bindings, inherited Phase 535/533/531/529/527
+bindings, the only allowed `zkbench-core` materialized append owner,
+`MaterializedAcceptedLedgerAppendRequest`,
+`apply_materialized_accepted_ledger_append_transaction`, caller-selected local
+ledger path identity and policy digests, `create_if_missing` policy binding,
+future report/artifact/byte-length bindings, fail-closed validation rules,
+meaning limits, and Phase 541 implementation exit criteria. It creates no Rust
+code, calls no materialized accepted append API, writes no accepted Evidence
+Ledger file, creates no materialized accepted ledger output, creates no
+Level2+ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
+additional SMT/Z3 execution, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
