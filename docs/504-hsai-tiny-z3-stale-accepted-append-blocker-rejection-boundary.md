@@ -208,3 +208,17 @@ it:
 - rejects SOTA, semantic-correctness, production-readiness, full-security,
   breakthrough, external-audit, and action-authority claims in the gate
   metadata itself.
+
+## Phase 505 Implementation Status
+
+Phase 505 implements this boundary as local in-memory metadata in
+`crates/hsai-agent-admission/src/lib.rs` and documents it in
+`docs/505-hsai-tiny-z3-stale-blocker-rejection-metadata-notes.md`.
+
+The implementation remains inside this boundary: it writes no filesystem
+artifacts, reads or mutates no accepted Evidence Ledger files, refreshes no
+blockers, repairs no blockers, makes no accepted append decision, creates no
+accepted formal evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean, creates no benchmark evidence,
+and claims no SOTA, semantic correctness, production readiness, full security,
+external audit, breakthrough status, or action authority.

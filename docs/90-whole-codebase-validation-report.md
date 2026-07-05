@@ -7258,5 +7258,22 @@ Level2+ evidence, populates no score axes, runs no Lean/new-SMT/COBALT/
 Rust-to-Lean extraction, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/505-hsai-tiny-z3-stale-blocker-rejection-metadata-notes.md](docs/505-hsai-tiny-z3-stale-blocker-rejection-metadata-notes.md)
+documents the Phase 505 local in-memory stale current accepted append blocker
+rejection metadata implemented in `crates/hsai-agent-admission/src/lib.rs`.
+The metadata binds one Phase 503 policy drift rejection record to reviewed and
+expected current accepted append blocker digests, closed freshness comparison
+rules, closed stale blocker rejection actions, inherited digest requirements,
+and explicit nonclaims. Its validation rejects Phase 503 binding drift, missing
+or stale blocker digests, freshness rule/action drift, blocker refresh, blocker
+repair, proceeding after stale detection, accepted append decisions, accepted
+Evidence Ledger mutation, accepted formal evidence, Level2+ evidence, score
+axes, backend evidence, benchmark evidence, external audit, and strong claims.
+It writes no filesystem artifacts, reads or mutates no accepted Evidence Ledger
+files, creates no stale blocker report artifact, makes no accepted append
+decision, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no
+benchmark evidence, and claims no production/SOTA/security/semantic-correctness
+result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
