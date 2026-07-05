@@ -176,10 +176,11 @@ That still is not:
 - full security;
 - authority to execute an action.
 
-## Phase 503 Implementation Exit Criteria
+## Phase 503 Implementation Status
 
-A future Phase 503 may implement local policy drift rejection metadata only if
-it:
+Phase 503 implements local policy drift rejection metadata in
+`docs/503-hsai-tiny-z3-policy-drift-rejection-metadata-notes.md`. That
+implementation:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;

@@ -7226,5 +7226,22 @@ Level2+ evidence, populates no score axes, runs no Lean/new-SMT/COBALT/
 Rust-to-Lean extraction, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/503-hsai-tiny-z3-policy-drift-rejection-metadata-notes.md](docs/503-hsai-tiny-z3-policy-drift-rejection-metadata-notes.md)
+documents the Phase 503 local metadata implementation for the Phase 488 policy
+drift rejection prerequisite gate. The implementation in
+`crates/hsai-agent-admission/src/lib.rs` binds one Phase 501 reviewer policy
+decision record to a closed policy drift source set, closed rejection action
+set, inherited digest requirements, explicit nonclaims, and fail-closed
+promotion rejection flags. Focused tests cover valid construction plus Phase
+501 digest drift, policy drift source set drift, rejection action set drift,
+and promotion-attempt rejection including drift artifact creation, drift
+repair, proceeding after drift, backend evidence, benchmark evidence, and
+external audit claims. It creates no drift report artifact, repairs no drift,
+does not proceed after drift, makes no accepted append decision, mutates no
+accepted Evidence Ledger, changes no accepted append policy, creates no
+accepted formal evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark
+evidence, and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

@@ -14112,6 +14112,34 @@ proof-authority claim, Lean/new-SMT/COBALT or Rust-to-Lean execution,
 benchmark evidence, external audit, or production/SOTA/security/correctness
 claim.
 
+## Phase 503 HSAI Tiny Z3 Policy Drift Rejection Metadata
+
+Status: complete. See
+`docs/503-hsai-tiny-z3-policy-drift-rejection-metadata-notes.md`.
+
+Goal: implement local in-memory metadata for the Phase 488 rejection behavior
+for policy drift prerequisite gate.
+
+Implemented: Phase 503 adds deterministic local metadata in
+`crates/hsai-agent-admission/src/lib.rs` over one Phase 501 reviewer policy
+decision record. The record binds Phase 501 digests to a closed policy drift
+source set, closed rejection action set, inherited digest requirements,
+explicit nonclaims, and fail-closed promotion rejection flags.
+
+Validation coverage: focused Phase 503 tests cover valid metadata construction
+plus Phase 501 digest drift, policy drift source set drift, rejection action
+set drift, and promotion-attempt rejection including drift artifact creation,
+drift repair, proceeding after drift, backend evidence, benchmark evidence,
+and external audit claims.
+
+Exit criteria: HSAI now has local metadata for the policy drift rejection
+prerequisite gate. It still has no accepted append decision, accepted formal
+evidence, accepted Evidence Ledger mutation from HSAI admission metadata,
+accepted append policy change, drift repair, drift report artifact, Level2+
+evidence, score axes, proof-authority claim, Lean/new-SMT/COBALT or
+Rust-to-Lean execution, benchmark evidence, external audit evidence, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

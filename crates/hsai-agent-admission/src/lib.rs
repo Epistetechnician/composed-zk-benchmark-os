@@ -967,6 +967,11 @@ pub const GATEWAY_FORMAL_TINY_Z3_REVIEWER_POLICY_DECISION_STATE_SLICE: &str =
 pub const GATEWAY_FORMAL_TINY_Z3_REVIEWER_POLICY_DECISION_CLAIM_BOUNDARY: &str = "local tiny-Z3 reviewer policy and decision metadata only; records reviewer policy and reviewer decision requirements over Phase 499 source correspondence metadata, but does not create a review artifact, make an accepted append decision, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, create proof artifacts, create checker transcripts, create solver certificates, run Lean, run new SMT, run COBALT, run Rust-to-Lean extraction, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, or grant authority to execute an action.";
 pub const GATEWAY_FORMAL_TINY_Z3_REVIEWER_POLICY_DECISION_INPUT_TYPE: &str =
     "GatewayFormalTinyZ3SourceCorrespondence";
+pub const GATEWAY_FORMAL_TINY_Z3_POLICY_DRIFT_REJECTION_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-z3-policy-drift-rejection:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_POLICY_DRIFT_REJECTION_STATE_SLICE: &str =
+    "phase-503-hsai-tiny-z3-policy-drift-rejection-metadata";
+pub const GATEWAY_FORMAL_TINY_Z3_POLICY_DRIFT_REJECTION_CLAIM_BOUNDARY: &str = "local tiny-Z3 policy drift rejection metadata only; records fail-closed policy drift sources and rejection actions over Phase 501 reviewer policy decision metadata, but does not repair drift, proceed after drift, create a drift report artifact, make an accepted append decision, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, create proof artifacts, create checker transcripts, create solver certificates, run Lean, run new SMT, run COBALT, run Rust-to-Lean extraction, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, or grant authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -13627,6 +13632,157 @@ pub enum GatewayFormalTinyZ3ReviewerPolicyDecisionIssue {
 pub struct GatewayFormalTinyZ3ReviewerPolicyDecisionValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyZ3ReviewerPolicyDecisionIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3PolicyDriftRejectionLabel {
+    PolicyDriftRejectionRecorded,
+    PolicyDriftRejectionRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3PolicyDriftRejectionInput {
+    pub schema_version: String,
+    pub policy_drift_gate_id: String,
+    pub policy_drift_policy_id: String,
+    pub policy_drift_decision_id: String,
+    pub policy_drift_decision_at_unix: u64,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub policy_drift_sources: BTreeSet<String>,
+    pub rejection_actions: BTreeSet<String>,
+    pub inherited_digest_requirements: BTreeSet<String>,
+    pub policy_drift_label: GatewayFormalTinyZ3PolicyDriftRejectionLabel,
+    pub policy_drift_summary: String,
+    pub drift_report_artifact_creation_requested: bool,
+    pub drift_repair_requested: bool,
+    pub proceed_after_drift_requested: bool,
+    pub accepted_append_policy_change_requested: bool,
+    pub accepted_append_decision_requested: bool,
+    pub accepted_evidence_ledger_mutation_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub external_audit_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyZ3PolicyDriftRejectionInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-policy-drift-rejection-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3PolicyDriftRejection {
+    pub schema_version: String,
+    pub policy_drift_gate_id: String,
+    pub state_slice: String,
+    pub policy_drift_input_digest: Hash,
+    pub policy_drift_policy_id: String,
+    pub policy_drift_decision_id: String,
+    pub policy_drift_decision_at_unix: u64,
+    pub phase501_reviewer_policy_decision_digest: Hash,
+    pub phase501_reviewer_policy_decision_input_digest: Hash,
+    pub phase501_digest_binding_map_digest: Hash,
+    pub phase501_id_binding_map_digest: Hash,
+    pub phase501_label_binding_map_digest: Hash,
+    pub phase501_explicit_nonclaims_digest: Hash,
+    pub phase501_reviewer_policy_digest: Hash,
+    pub phase501_reviewer_decision_digest: Hash,
+    pub phase501_drift_rejection_policy_digest: Hash,
+    pub phase501_promotion_rejection_policy_digest: Hash,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub policy_drift_sources: BTreeSet<String>,
+    pub policy_drift_sources_digest: Hash,
+    pub rejection_actions: BTreeSet<String>,
+    pub rejection_actions_digest: Hash,
+    pub inherited_digest_requirements: BTreeSet<String>,
+    pub inherited_digest_requirements_digest: Hash,
+    pub policy_drift_label: GatewayFormalTinyZ3PolicyDriftRejectionLabel,
+    pub policy_drift_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub creates_drift_report_artifact: bool,
+    pub repairs_drift: bool,
+    pub proceeds_after_drift: bool,
+    pub changes_accepted_append_policy: bool,
+    pub makes_accepted_append_decision: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub creates_accepted_formal_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub external_audit_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3PolicyDriftRejection {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-policy-drift-rejection:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3PolicyDriftRejectionIssue {
+    InvalidSchemaVersion,
+    InvalidPolicyDriftGateId,
+    InvalidPolicyDriftPolicyId,
+    InvalidPolicyDriftDecisionId,
+    MissingPolicyDriftDecisionTimestamp,
+    MissingDigest(String),
+    DigestBindingMismatch,
+    IdBindingMismatch,
+    InvalidIdBinding(String),
+    LabelBindingMismatch,
+    Phase501ReviewerPolicyDecisionStateMismatch,
+    NonclaimMismatch,
+    PolicyDriftSourcesMismatch,
+    RejectionActionsMismatch,
+    InheritedDigestRequirementsMismatch,
+    PolicyDriftSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3PolicyDriftRejectionValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyZ3PolicyDriftRejectionIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -55903,6 +56059,459 @@ pub fn validate_gateway_formal_tiny_z3_reviewer_policy_decision_input(
     }
 }
 
+pub fn gateway_formal_tiny_z3_policy_drift_rejection_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_Z3_POLICY_DRIFT_REJECTION_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_z3_policy_drift_rejection_required_nonclaims() -> BTreeSet<NonClaimLabel>
+{
+    [
+        "not drift report artifact",
+        "not drift repair",
+        "not proceed after drift",
+        "not accepted append decision",
+        "not accepted formal evidence",
+        "not accepted evidence ledger mutation",
+        "not accepted append policy change",
+        "not Level2+ evidence",
+        "not score-axis evidence",
+        "not proof authority",
+        "not checker transcript authority",
+        "not solver certificate authority",
+        "not backend execution evidence",
+        "not Lean execution evidence",
+        "not new SMT execution evidence",
+        "not COBALT execution evidence",
+        "not Rust-to-Lean extraction evidence",
+        "not benchmark evidence",
+        "not external audit",
+        "not SOTA",
+        "not semantic correctness",
+        "not production readiness",
+        "not full security",
+        "not action authority",
+    ]
+    .into_iter()
+    .map(|label| NonClaimLabel(label.to_owned()))
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_policy_drift_sources() -> BTreeSet<String> {
+    [
+        "accepted_append_owner_drift",
+        "accepted_append_mutation_route_drift",
+        "accepted_append_materialized_route_drift",
+        "accepted_append_policy_owner_drift",
+        "accepted_append_policy_id_drift",
+        "accepted_append_policy_version_drift",
+        "accepted_append_transaction_version_drift",
+        "accepted_evidence_class_owner_drift",
+        "accepted_evidence_class_drift",
+        "accepted_claim_boundary_owner_drift",
+        "accepted_claim_boundary_drift",
+        "rejected_evidence_class_set_drift",
+        "replay_identity_owner_drift",
+        "replay_identity_field_set_drift",
+        "replay_validation_rule_drift",
+        "source_correspondence_source_path_drift",
+        "source_correspondence_source_anchor_drift",
+        "source_correspondence_statement_digest_input_drift",
+        "reviewer_policy_id_drift",
+        "reviewer_policy_digest_drift",
+        "reviewer_decision_label_drift",
+        "reviewer_decision_digest_drift",
+        "explicit_nonclaim_set_drift",
+        "explicit_nonclaim_digest_drift",
+        "current_accepted_append_blocker_digest_drift",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_policy_drift_rejection_actions() -> BTreeSet<String> {
+    [
+        "reject_accepted_append_evaluation",
+        "reject_accepted_evidence_ledger_mutation",
+        "reject_accepted_formal_evidence_creation",
+        "reject_level2_plus_creation",
+        "reject_score_axis_population",
+        "reject_backend_execution_authority",
+        "reject_benchmark_claim",
+        "reject_public_strong_claim",
+        "require_new_review_cycle",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_policy_drift_inherited_digest_requirements() -> BTreeSet<String> {
+    [
+        "phase501_reviewer_policy_decision_digest_required",
+        "phase501_reviewer_policy_decision_input_digest_required",
+        "phase501_digest_binding_map_digest_required",
+        "phase501_id_binding_map_digest_required",
+        "phase501_label_binding_map_digest_required",
+        "phase501_explicit_nonclaims_digest_required",
+        "phase501_reviewer_policy_digest_required",
+        "phase501_reviewer_decision_digest_required",
+        "phase501_current_accepted_append_blockers_digest_required",
+        "phase499_source_correspondence_digest_required",
+        "phase497_replay_identity_digest_required",
+        "phase495_accepted_evidence_class_claim_boundary_digest_required",
+        "phase493_accepted_append_policy_version_digest_required",
+        "phase491_accepted_append_owner_mutation_route_digest_required",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_policy_drift_rejection_digest_bindings(
+    reviewer_decision: &GatewayFormalTinyZ3ReviewerPolicyDecision,
+) -> BTreeMap<String, Hash> {
+    BTreeMap::from([
+        (
+            "phase501_reviewer_policy_decision_digest".to_owned(),
+            reviewer_decision.digest(),
+        ),
+        (
+            "phase501_reviewer_policy_decision_input_digest".to_owned(),
+            reviewer_decision.reviewer_policy_decision_input_digest,
+        ),
+        (
+            "phase501_digest_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase501-reviewer-policy-decision-digest-bindings:v1",
+                &reviewer_decision.digest_bindings,
+            ),
+        ),
+        (
+            "phase501_id_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase501-reviewer-policy-decision-id-bindings:v1",
+                &reviewer_decision.id_bindings,
+            ),
+        ),
+        (
+            "phase501_label_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase501-reviewer-policy-decision-label-bindings:v1",
+                &reviewer_decision.label_bindings,
+            ),
+        ),
+        (
+            "phase501_explicit_nonclaims_digest".to_owned(),
+            reviewer_decision.explicit_nonclaims_digest,
+        ),
+        (
+            "phase501_reviewer_policy_digest".to_owned(),
+            reviewer_decision.reviewer_policy_digest,
+        ),
+        (
+            "phase501_reviewer_decision_digest".to_owned(),
+            reviewer_decision.reviewer_decision_digest,
+        ),
+        (
+            "phase501_drift_rejection_policy_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase501-drift-rejection-policy:v1",
+                &reviewer_decision.drift_rejection_policy,
+            ),
+        ),
+        (
+            "phase501_promotion_rejection_policy_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase501-promotion-rejection-policy:v1",
+                &reviewer_decision.promotion_rejection_policy,
+            ),
+        ),
+        (
+            "current_accepted_append_blockers_digest".to_owned(),
+            reviewer_decision.current_accepted_append_blockers_digest,
+        ),
+    ])
+}
+
+pub fn gateway_formal_tiny_z3_policy_drift_rejection_id_bindings(
+    reviewer_decision: &GatewayFormalTinyZ3ReviewerPolicyDecision,
+    policy_drift_gate_id: &str,
+    policy_drift_policy_id: &str,
+    policy_drift_decision_id: &str,
+) -> BTreeMap<String, String> {
+    let mut ids = reviewer_decision.id_bindings.clone();
+    ids.insert(
+        "policy_drift_gate_id".to_owned(),
+        policy_drift_gate_id.to_owned(),
+    );
+    ids.insert(
+        "policy_drift_policy_id".to_owned(),
+        policy_drift_policy_id.to_owned(),
+    );
+    ids.insert(
+        "policy_drift_decision_id".to_owned(),
+        policy_drift_decision_id.to_owned(),
+    );
+    ids.insert(
+        "phase501_reviewer_gate_id".to_owned(),
+        reviewer_decision.reviewer_gate_id.clone(),
+    );
+    ids
+}
+
+pub fn gateway_formal_tiny_z3_policy_drift_rejection_label_bindings(
+    reviewer_decision: &GatewayFormalTinyZ3ReviewerPolicyDecision,
+    policy_drift_label: &GatewayFormalTinyZ3PolicyDriftRejectionLabel,
+) -> BTreeMap<String, String> {
+    let mut labels = reviewer_decision.label_bindings.clone();
+    labels.insert(
+        "phase501_reviewer_decision_label".to_owned(),
+        format!("{:?}", reviewer_decision.reviewer_decision_label),
+    );
+    labels.insert(
+        "policy_drift_label".to_owned(),
+        format!("{policy_drift_label:?}"),
+    );
+    labels
+}
+
+pub fn build_gateway_formal_tiny_z3_policy_drift_rejection(
+    reviewer_decision: &GatewayFormalTinyZ3ReviewerPolicyDecision,
+    input: &GatewayFormalTinyZ3PolicyDriftRejectionInput,
+) -> Result<
+    GatewayFormalTinyZ3PolicyDriftRejection,
+    GatewayFormalTinyZ3PolicyDriftRejectionValidation,
+> {
+    let validation =
+        validate_gateway_formal_tiny_z3_policy_drift_rejection_input(reviewer_decision, input);
+    if !validation.valid {
+        return Err(validation);
+    }
+    let digest_bindings =
+        gateway_formal_tiny_z3_policy_drift_rejection_digest_bindings(reviewer_decision);
+    Ok(GatewayFormalTinyZ3PolicyDriftRejection {
+        schema_version: GATEWAY_FORMAL_TINY_Z3_POLICY_DRIFT_REJECTION_SCHEMA_VERSION.to_owned(),
+        policy_drift_gate_id: input.policy_drift_gate_id.clone(),
+        state_slice: GATEWAY_FORMAL_TINY_Z3_POLICY_DRIFT_REJECTION_STATE_SLICE.to_owned(),
+        policy_drift_input_digest: input.digest(),
+        policy_drift_policy_id: input.policy_drift_policy_id.clone(),
+        policy_drift_decision_id: input.policy_drift_decision_id.clone(),
+        policy_drift_decision_at_unix: input.policy_drift_decision_at_unix,
+        phase501_reviewer_policy_decision_digest: digest_bindings
+            ["phase501_reviewer_policy_decision_digest"],
+        phase501_reviewer_policy_decision_input_digest: digest_bindings
+            ["phase501_reviewer_policy_decision_input_digest"],
+        phase501_digest_binding_map_digest: digest_bindings["phase501_digest_binding_map_digest"],
+        phase501_id_binding_map_digest: digest_bindings["phase501_id_binding_map_digest"],
+        phase501_label_binding_map_digest: digest_bindings["phase501_label_binding_map_digest"],
+        phase501_explicit_nonclaims_digest: digest_bindings["phase501_explicit_nonclaims_digest"],
+        phase501_reviewer_policy_digest: digest_bindings["phase501_reviewer_policy_digest"],
+        phase501_reviewer_decision_digest: digest_bindings["phase501_reviewer_decision_digest"],
+        phase501_drift_rejection_policy_digest: digest_bindings
+            ["phase501_drift_rejection_policy_digest"],
+        phase501_promotion_rejection_policy_digest: digest_bindings
+            ["phase501_promotion_rejection_policy_digest"],
+        current_accepted_append_blockers_digest: digest_bindings
+            ["current_accepted_append_blockers_digest"],
+        digest_bindings: input.digest_bindings.clone(),
+        id_bindings: input.id_bindings.clone(),
+        label_bindings: input.label_bindings.clone(),
+        explicit_nonclaims: input.explicit_nonclaims.clone(),
+        explicit_nonclaims_digest: input.explicit_nonclaims_digest,
+        policy_drift_sources: input.policy_drift_sources.clone(),
+        policy_drift_sources_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-policy-drift-sources:v1",
+            &input.policy_drift_sources,
+        ),
+        rejection_actions: input.rejection_actions.clone(),
+        rejection_actions_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-policy-drift-rejection-actions:v1",
+            &input.rejection_actions,
+        ),
+        inherited_digest_requirements: input.inherited_digest_requirements.clone(),
+        inherited_digest_requirements_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-policy-drift-inherited-digest-requirements:v1",
+            &input.inherited_digest_requirements,
+        ),
+        policy_drift_label: input.policy_drift_label.clone(),
+        policy_drift_summary: input.policy_drift_summary.clone(),
+        previous_promotion_state: "tiny_z3_reviewer_policy_decision_metadata".to_owned(),
+        promotion_state: "tiny_z3_policy_drift_rejection_metadata".to_owned(),
+        next_required_state: "tiny_z3_accepted_path_prerequisites_remain_unresolved".to_owned(),
+        claim_boundary: gateway_formal_tiny_z3_policy_drift_rejection_claim_boundary(),
+        creates_drift_report_artifact: false,
+        repairs_drift: false,
+        proceeds_after_drift: false,
+        changes_accepted_append_policy: false,
+        makes_accepted_append_decision: false,
+        mutates_accepted_evidence_ledger: false,
+        creates_accepted_formal_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        backend_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        external_audit_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_gateway_formal_tiny_z3_policy_drift_rejection_input(
+    reviewer_decision: &GatewayFormalTinyZ3ReviewerPolicyDecision,
+    input: &GatewayFormalTinyZ3PolicyDriftRejectionInput,
+) -> GatewayFormalTinyZ3PolicyDriftRejectionValidation {
+    let mut issues = Vec::new();
+    if input.schema_version != GATEWAY_FORMAL_TINY_Z3_POLICY_DRIFT_REJECTION_SCHEMA_VERSION {
+        issues.push(GatewayFormalTinyZ3PolicyDriftRejectionIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.policy_drift_gate_id) {
+        issues.push(GatewayFormalTinyZ3PolicyDriftRejectionIssue::InvalidPolicyDriftGateId);
+    }
+    if !is_single_segment_id(&input.policy_drift_policy_id) {
+        issues.push(GatewayFormalTinyZ3PolicyDriftRejectionIssue::InvalidPolicyDriftPolicyId);
+    }
+    if !is_single_segment_id(&input.policy_drift_decision_id) {
+        issues.push(GatewayFormalTinyZ3PolicyDriftRejectionIssue::InvalidPolicyDriftDecisionId);
+    }
+    if input.policy_drift_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalTinyZ3PolicyDriftRejectionIssue::MissingPolicyDriftDecisionTimestamp,
+        );
+    }
+    let expected_digests =
+        gateway_formal_tiny_z3_policy_drift_rejection_digest_bindings(reviewer_decision);
+    for (label, digest) in &input.digest_bindings {
+        if *digest == Hash([0; 32]) {
+            issues.push(GatewayFormalTinyZ3PolicyDriftRejectionIssue::MissingDigest(
+                label.clone(),
+            ));
+        }
+    }
+    if input.digest_bindings != expected_digests {
+        issues.push(GatewayFormalTinyZ3PolicyDriftRejectionIssue::DigestBindingMismatch);
+    }
+    let expected_ids = gateway_formal_tiny_z3_policy_drift_rejection_id_bindings(
+        reviewer_decision,
+        &input.policy_drift_gate_id,
+        &input.policy_drift_policy_id,
+        &input.policy_drift_decision_id,
+    );
+    for (label, value) in &input.id_bindings {
+        if !is_single_segment_id(value) {
+            issues.push(
+                GatewayFormalTinyZ3PolicyDriftRejectionIssue::InvalidIdBinding(label.clone()),
+            );
+        }
+    }
+    if input.id_bindings != expected_ids {
+        issues.push(GatewayFormalTinyZ3PolicyDriftRejectionIssue::IdBindingMismatch);
+    }
+    let expected_labels = gateway_formal_tiny_z3_policy_drift_rejection_label_bindings(
+        reviewer_decision,
+        &input.policy_drift_label,
+    );
+    if input.label_bindings != expected_labels {
+        issues.push(GatewayFormalTinyZ3PolicyDriftRejectionIssue::LabelBindingMismatch);
+    }
+    if reviewer_decision.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_REVIEWER_POLICY_DECISION_SCHEMA_VERSION
+        || reviewer_decision.state_slice
+            != GATEWAY_FORMAL_TINY_Z3_REVIEWER_POLICY_DECISION_STATE_SLICE
+        || reviewer_decision.promotion_state != "tiny_z3_reviewer_policy_decision_metadata"
+        || reviewer_decision.next_required_state
+            != "tiny_z3_accepted_path_prerequisites_remain_unresolved"
+        || reviewer_decision.claim_boundary
+            != gateway_formal_tiny_z3_reviewer_policy_decision_claim_boundary()
+        || reviewer_decision.creates_review_artifact
+        || reviewer_decision.changes_accepted_append_policy
+        || reviewer_decision.makes_accepted_append_decision
+        || reviewer_decision.mutates_accepted_evidence_ledger
+        || reviewer_decision.creates_accepted_formal_evidence
+        || reviewer_decision.creates_level2_evidence
+        || reviewer_decision.populates_score_axes
+        || reviewer_decision.proof_artifact_created
+        || reviewer_decision.checker_transcript_created
+        || reviewer_decision.solver_certificate_created
+        || reviewer_decision.backend_execution_evidence_created
+        || reviewer_decision.benchmark_evidence_created
+        || reviewer_decision.semantic_correctness_claimed
+        || reviewer_decision.production_readiness_claimed
+        || reviewer_decision.sota_claimed
+        || reviewer_decision.breakthrough_claimed
+        || reviewer_decision.full_security_claimed
+        || reviewer_decision.external_audit_claimed
+        || reviewer_decision.grants_authority
+    {
+        issues.push(
+            GatewayFormalTinyZ3PolicyDriftRejectionIssue::Phase501ReviewerPolicyDecisionStateMismatch,
+        );
+    }
+    let nonclaims = gateway_formal_tiny_z3_policy_drift_rejection_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-policy-drift-rejection-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(GatewayFormalTinyZ3PolicyDriftRejectionIssue::NonclaimMismatch);
+    }
+    if input.policy_drift_sources != gateway_formal_tiny_z3_policy_drift_sources() {
+        issues.push(GatewayFormalTinyZ3PolicyDriftRejectionIssue::PolicyDriftSourcesMismatch);
+    }
+    if input.rejection_actions != gateway_formal_tiny_z3_policy_drift_rejection_actions() {
+        issues.push(GatewayFormalTinyZ3PolicyDriftRejectionIssue::RejectionActionsMismatch);
+    }
+    if input.inherited_digest_requirements
+        != gateway_formal_tiny_z3_policy_drift_inherited_digest_requirements()
+    {
+        issues.push(
+            GatewayFormalTinyZ3PolicyDriftRejectionIssue::InheritedDigestRequirementsMismatch,
+        );
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.policy_drift_summary,
+    ) {
+        issues.push(GatewayFormalTinyZ3PolicyDriftRejectionIssue::PolicyDriftSummaryPromotionClaim);
+    }
+    if input.drift_report_artifact_creation_requested
+        || input.drift_repair_requested
+        || input.proceed_after_drift_requested
+        || input.accepted_append_policy_change_requested
+        || input.accepted_append_decision_requested
+        || input.accepted_evidence_ledger_mutation_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.backend_execution_evidence_created
+        || input.benchmark_evidence_created
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.external_audit_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(GatewayFormalTinyZ3PolicyDriftRejectionIssue::PromotionAttempt);
+    }
+    GatewayFormalTinyZ3PolicyDriftRejectionValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -91672,6 +92281,206 @@ mod tests {
     }
 
     #[test]
+    fn phase503_tiny_z3_policy_drift_rejection_builds_blocking_record() {
+        let Some((obligation_root, phase405_output_root, output_root, reviewer_decision)) =
+            phase503_tiny_z3_reviewer_decision_source("phase503-policy-drift")
+        else {
+            return;
+        };
+        let drift_input = phase503_tiny_z3_policy_drift_rejection_input(
+            "phase503-policy-drift-rejection",
+            &reviewer_decision,
+            GatewayFormalTinyZ3PolicyDriftRejectionLabel::PolicyDriftRejectionRecorded,
+        );
+        let drift_rejection =
+            build_gateway_formal_tiny_z3_policy_drift_rejection(&reviewer_decision, &drift_input)
+                .expect("phase503 policy drift rejection builds");
+
+        assert_eq!(
+            drift_rejection.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_POLICY_DRIFT_REJECTION_STATE_SLICE
+        );
+        assert_eq!(
+            drift_rejection.phase501_reviewer_policy_decision_digest,
+            reviewer_decision.digest()
+        );
+        assert_eq!(
+            drift_rejection.phase501_reviewer_policy_decision_input_digest,
+            reviewer_decision.reviewer_policy_decision_input_digest
+        );
+        assert_eq!(
+            drift_rejection.phase501_digest_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase501-reviewer-policy-decision-digest-bindings:v1",
+                &reviewer_decision.digest_bindings,
+            )
+        );
+        assert_eq!(
+            drift_rejection.phase501_id_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase501-reviewer-policy-decision-id-bindings:v1",
+                &reviewer_decision.id_bindings,
+            )
+        );
+        assert_eq!(
+            drift_rejection.phase501_label_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase501-reviewer-policy-decision-label-bindings:v1",
+                &reviewer_decision.label_bindings,
+            )
+        );
+        assert_eq!(
+            drift_rejection.phase501_reviewer_policy_digest,
+            reviewer_decision.reviewer_policy_digest
+        );
+        assert_eq!(
+            drift_rejection.phase501_reviewer_decision_digest,
+            reviewer_decision.reviewer_decision_digest
+        );
+        assert_eq!(
+            drift_rejection.policy_drift_sources,
+            gateway_formal_tiny_z3_policy_drift_sources()
+        );
+        assert_eq!(
+            drift_rejection.rejection_actions,
+            gateway_formal_tiny_z3_policy_drift_rejection_actions()
+        );
+        assert_eq!(
+            drift_rejection.inherited_digest_requirements,
+            gateway_formal_tiny_z3_policy_drift_inherited_digest_requirements()
+        );
+        assert_eq!(
+            drift_rejection.previous_promotion_state,
+            "tiny_z3_reviewer_policy_decision_metadata"
+        );
+        assert_eq!(
+            drift_rejection.promotion_state,
+            "tiny_z3_policy_drift_rejection_metadata"
+        );
+        assert_eq!(
+            drift_rejection.claim_boundary,
+            gateway_formal_tiny_z3_policy_drift_rejection_claim_boundary()
+        );
+        assert!(!drift_rejection.creates_drift_report_artifact);
+        assert!(!drift_rejection.repairs_drift);
+        assert!(!drift_rejection.proceeds_after_drift);
+        assert!(!drift_rejection.changes_accepted_append_policy);
+        assert!(!drift_rejection.makes_accepted_append_decision);
+        assert!(!drift_rejection.mutates_accepted_evidence_ledger);
+        assert!(!drift_rejection.creates_accepted_formal_evidence);
+        assert!(!drift_rejection.creates_level2_evidence);
+        assert!(!drift_rejection.populates_score_axes);
+        assert!(!drift_rejection.proof_artifact_created);
+        assert!(!drift_rejection.checker_transcript_created);
+        assert!(!drift_rejection.solver_certificate_created);
+        assert!(!drift_rejection.backend_execution_evidence_created);
+        assert!(!drift_rejection.benchmark_evidence_created);
+        assert!(!drift_rejection.semantic_correctness_claimed);
+        assert!(!drift_rejection.production_readiness_claimed);
+        assert!(!drift_rejection.sota_claimed);
+        assert!(!drift_rejection.breakthrough_claimed);
+        assert!(!drift_rejection.full_security_claimed);
+        assert!(!drift_rejection.external_audit_claimed);
+        assert!(!drift_rejection.grants_authority);
+
+        let mut digest_drift = drift_input.clone();
+        digest_drift.digest_bindings.insert(
+            "phase501_reviewer_policy_decision_digest".to_owned(),
+            Hash([61; 32]),
+        );
+        let digest_validation = validate_gateway_formal_tiny_z3_policy_drift_rejection_input(
+            &reviewer_decision,
+            &digest_drift,
+        );
+        assert!(digest_validation
+            .issues
+            .contains(&GatewayFormalTinyZ3PolicyDriftRejectionIssue::DigestBindingMismatch));
+
+        let mut source_drift = drift_input.clone();
+        source_drift
+            .policy_drift_sources
+            .remove("reviewer_policy_digest_drift");
+        let source_validation = validate_gateway_formal_tiny_z3_policy_drift_rejection_input(
+            &reviewer_decision,
+            &source_drift,
+        );
+        assert!(source_validation
+            .issues
+            .contains(&GatewayFormalTinyZ3PolicyDriftRejectionIssue::PolicyDriftSourcesMismatch));
+
+        let mut action_drift = drift_input.clone();
+        action_drift
+            .rejection_actions
+            .remove("reject_backend_execution_authority");
+        let action_validation = validate_gateway_formal_tiny_z3_policy_drift_rejection_input(
+            &reviewer_decision,
+            &action_drift,
+        );
+        assert!(action_validation
+            .issues
+            .contains(&GatewayFormalTinyZ3PolicyDriftRejectionIssue::RejectionActionsMismatch));
+
+        fs::remove_dir_all(&output_root).expect("phase503 drift output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase503 drift phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase503 drift obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase503_tiny_z3_policy_drift_rejection_rejects_promotion() {
+        let Some((obligation_root, phase405_output_root, output_root, reviewer_decision)) =
+            phase503_tiny_z3_reviewer_decision_source("phase503-policy-drift-promotion")
+        else {
+            return;
+        };
+        let mut drift_input = phase503_tiny_z3_policy_drift_rejection_input(
+            "phase503-promotion-policy-drift",
+            &reviewer_decision,
+            GatewayFormalTinyZ3PolicyDriftRejectionLabel::PolicyDriftRejectionRejected,
+        );
+
+        drift_input.drift_report_artifact_creation_requested = true;
+        drift_input.drift_repair_requested = true;
+        drift_input.proceed_after_drift_requested = true;
+        drift_input.accepted_append_policy_change_requested = true;
+        drift_input.accepted_append_decision_requested = true;
+        drift_input.accepted_evidence_ledger_mutation_requested = true;
+        drift_input.accepted_formal_evidence_created = true;
+        drift_input.creates_level2_evidence = true;
+        drift_input.populates_score_axes = true;
+        drift_input.proof_artifact_promoted = true;
+        drift_input.checker_transcript_promoted = true;
+        drift_input.solver_certificate_promoted = true;
+        drift_input.backend_execution_evidence_created = true;
+        drift_input.benchmark_evidence_created = true;
+        drift_input.semantic_correctness_claimed = true;
+        drift_input.production_readiness_claimed = true;
+        drift_input.sota_claimed = true;
+        drift_input.breakthrough_claimed = true;
+        drift_input.full_security_claimed = true;
+        drift_input.external_audit_claimed = true;
+        drift_input.action_authority_claimed = true;
+        let validation = validate_gateway_formal_tiny_z3_policy_drift_rejection_input(
+            &reviewer_decision,
+            &drift_input,
+        );
+        assert!(validation
+            .issues
+            .contains(&GatewayFormalTinyZ3PolicyDriftRejectionIssue::PromotionAttempt));
+        assert!(build_gateway_formal_tiny_z3_policy_drift_rejection(
+            &reviewer_decision,
+            &drift_input
+        )
+        .is_err());
+
+        fs::remove_dir_all(&output_root).expect("phase503 promotion output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase503 promotion phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase503 promotion obligation cleanup succeeds");
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -98669,6 +99478,98 @@ mod tests {
             phase405_output_root,
             output_root,
             source_correspondence,
+        ))
+    }
+
+    fn phase503_tiny_z3_policy_drift_rejection_input(
+        policy_drift_gate_id: &str,
+        reviewer_decision: &GatewayFormalTinyZ3ReviewerPolicyDecision,
+        policy_drift_label: GatewayFormalTinyZ3PolicyDriftRejectionLabel,
+    ) -> GatewayFormalTinyZ3PolicyDriftRejectionInput {
+        let policy_drift_policy_id = "phase503-policy-drift-policy";
+        let policy_drift_decision_id = "phase503-policy-drift-decision";
+        let nonclaims = gateway_formal_tiny_z3_policy_drift_rejection_required_nonclaims();
+        GatewayFormalTinyZ3PolicyDriftRejectionInput {
+            schema_version: GATEWAY_FORMAL_TINY_Z3_POLICY_DRIFT_REJECTION_SCHEMA_VERSION.to_owned(),
+            policy_drift_gate_id: policy_drift_gate_id.to_owned(),
+            policy_drift_policy_id: policy_drift_policy_id.to_owned(),
+            policy_drift_decision_id: policy_drift_decision_id.to_owned(),
+            policy_drift_decision_at_unix: 1_800_000_503,
+            digest_bindings: gateway_formal_tiny_z3_policy_drift_rejection_digest_bindings(
+                reviewer_decision,
+            ),
+            id_bindings: gateway_formal_tiny_z3_policy_drift_rejection_id_bindings(
+                reviewer_decision,
+                policy_drift_gate_id,
+                policy_drift_policy_id,
+                policy_drift_decision_id,
+            ),
+            label_bindings: gateway_formal_tiny_z3_policy_drift_rejection_label_bindings(
+                reviewer_decision,
+                &policy_drift_label,
+            ),
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-policy-drift-rejection-nonclaims:v1",
+                &nonclaims,
+            ),
+            policy_drift_sources: gateway_formal_tiny_z3_policy_drift_sources(),
+            rejection_actions: gateway_formal_tiny_z3_policy_drift_rejection_actions(),
+            inherited_digest_requirements:
+                gateway_formal_tiny_z3_policy_drift_inherited_digest_requirements(),
+            policy_drift_label,
+            policy_drift_summary:
+                "local tiny-Z3 policy drift rejection metadata keeps accepted path fail closed"
+                    .to_owned(),
+            drift_report_artifact_creation_requested: false,
+            drift_repair_requested: false,
+            proceed_after_drift_requested: false,
+            accepted_append_policy_change_requested: false,
+            accepted_append_decision_requested: false,
+            accepted_evidence_ledger_mutation_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            backend_execution_evidence_created: false,
+            benchmark_evidence_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            external_audit_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase503_tiny_z3_reviewer_decision_source(
+        source_prefix: &str,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        GatewayFormalTinyZ3ReviewerPolicyDecision,
+    )> {
+        let (obligation_root, phase405_output_root, output_root, source_correspondence) =
+            phase501_tiny_z3_source_correspondence_source(source_prefix)?;
+        let reviewer_input = phase501_tiny_z3_reviewer_policy_decision_input(
+            &format!("{source_prefix}-reviewer-decision"),
+            &source_correspondence,
+            GatewayFormalTinyZ3ReviewerDecisionLabel::SourceCorrespondenceReviewAcceptedForLocalMetadata,
+        );
+        let reviewer_decision = build_gateway_formal_tiny_z3_reviewer_policy_decision(
+            &source_correspondence,
+            &reviewer_input,
+        )
+        .expect("phase503 reviewer decision builds");
+        Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            reviewer_decision,
         ))
     }
 
