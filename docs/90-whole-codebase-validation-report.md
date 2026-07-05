@@ -7771,5 +7771,19 @@ no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no
 benchmark evidence, and claims no production/SOTA/security/semantic-
 correctness result.
 
+[docs/538-hsai-tiny-z3-backend-execution-accepted-append-mutation-decision-boundary.md](docs/538-hsai-tiny-z3-backend-execution-accepted-append-mutation-decision-boundary.md)
+defines the Phase 538 docs-first boundary for a future in-memory accepted
+append mutation decision over one Phase 537 validation-satisfied evaluation
+record. The boundary defines required Phase 537, Phase 535, Phase 533, Phase
+531, Phase 529, and Phase 527 digest bindings, validation-valid requirements,
+request and ledger identity requirements, the only allowed `zkbench-core`
+in-memory mutation function, forbidden materialized/file routes, fail-closed
+validation rules, meaning limits, and Phase 539 implementation exit criteria.
+It creates no Rust code, calls no accepted append mutation API, writes no
+accepted Evidence Ledger file, creates no materialized accepted ledger output,
+creates no Level2+ evidence, populates no score axes, runs no Lean/COBALT/
+Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark evidence,
+and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
