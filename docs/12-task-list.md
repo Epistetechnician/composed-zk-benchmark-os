@@ -16683,6 +16683,34 @@ evidence, no Level2+ evidence, no populated score axes, no Lean/COBALT
 evidence, no external audit evidence, and no production/SOTA/security
 /semantic-correctness claim.
 
+## Phase 592 HSAI Tiny Z3 Backend Execution Packet Role Artifact Independent Operator Output Boundary
+
+Status: complete. See
+`docs/592-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-output-boundary.md`.
+
+Goal: define the docs-first packet-role artifact independent-operator output
+boundary after Phase 591 materialization metadata.
+
+Implemented: Phase 592 defines the future caller-owned output-root contract,
+output request bindings, protected-root rules, write policy, readback policy,
+declared role-file and sidecar constraints, fail-closed classifications,
+nonclaims, and Phase 593 implementation exit criteria. It requires exact
+Phase 591/589/587/585/583/581/579/577/575/573/571/569/567/565/563/561/559
+/557/555 and inherited backend-execution digest bindings before any future
+output metadata may advance.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named packet-role artifact independent-operator
+output boundary. It still has no packet-role artifact output plumbing, no
+output-root reads or writes, no filesystem artifact writes, no external result
+import, no accepted external result evidence, no accepted independent external
+reproduction, no accepted formal evidence, no Level2+ evidence, no populated
+score axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3
+execution, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
