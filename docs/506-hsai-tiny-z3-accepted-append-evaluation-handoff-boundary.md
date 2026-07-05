@@ -193,3 +193,19 @@ metadata only if it:
 - rejects mutation, materialization, score-axis, Level2+, formal-evidence,
   backend-execution, benchmark, external-audit, strong-claim, and
   action-authority requests in the metadata itself.
+
+## Phase 507 Implementation Status
+
+Phase 507 implements this boundary as local in-memory metadata in
+`crates/hsai-agent-admission/src/lib.rs` and documents it in
+`docs/507-hsai-tiny-z3-accepted-append-handoff-metadata-notes.md`.
+
+The implementation remains inside this boundary: it adds no `zkbench-core`
+dependency, writes no filesystem artifacts, reads or mutates no accepted
+Evidence Ledger files, does not call the accepted append validator, does not
+call accepted append mutation APIs, creates no materialized accepted ledger
+output, creates no accepted formal evidence, creates no Level2+ evidence,
+populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean, creates no
+benchmark evidence, and claims no SOTA, semantic correctness, production
+readiness, full security, external audit, breakthrough status, or action
+authority.
