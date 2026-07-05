@@ -15130,6 +15130,36 @@ populated score axes, no accepted formal evidence, no Lean/COBALT/Rust-to-Lean
 execution, no benchmark evidence, no external audit evidence, and no
 production/SOTA/security/correctness claim.
 
+## Phase 539 HSAI Tiny Z3 Backend Execution Accepted Append Mutation Metadata
+
+Status: complete. See
+`docs/539-hsai-tiny-z3-backend-execution-accepted-append-mutation-metadata-notes.md`.
+
+Goal: implement local in-memory accepted append mutation metadata over one
+Phase 537 validation-satisfied evaluation record.
+
+Implemented: Phase 539 adds accepted append mutation input/output metadata,
+bounded mutation labels, issue/validation types, mutation nonclaim/rule/
+forbidden-API/inherited-digest helpers, deterministic digest/id/label binding
+helpers, `build_...` and `validate_...` entrypoints, and tests over a Phase
+537 evaluation and caller-supplied in-memory `zkbench-core` accepted append
+transaction and ledger.
+
+Validation coverage: focused tests cover successful local in-memory mutation
+metadata, invalid Phase 537 state rejection, and digest/promotion rejection
+across owner drift, ledger file reads/writes, materialization, accepted append
+decision claims, accepted formal evidence, Level2+, score axes, Lean, COBALT,
+Rust-to-Lean, additional SMT/Z3 execution, proof/checker/solver, benchmark,
+external audit, independent external reproduction, strong claims, and action
+authority.
+
+Exit criteria: HSAI now has local in-memory accepted append mutation metadata
+for one reviewed local SMT/Z3 backend execution route. It still has no
+materialized accepted ledger output, no Level2+ evidence, no populated score
+axes, no accepted formal evidence, no Lean/COBALT/Rust-to-Lean execution, no
+benchmark evidence, no external audit evidence, and no production/SOTA/
+security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
