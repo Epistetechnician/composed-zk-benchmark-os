@@ -7127,5 +7127,26 @@ populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction,
 creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/497-hsai-tiny-z3-replayable-input-identity-metadata-notes.md](docs/497-hsai-tiny-z3-replayable-input-identity-metadata-notes.md)
+documents the Phase 497 local metadata implementation for the Phase 488
+replayable input bundle identity prerequisite gate. The implementation in
+`crates/hsai-agent-admission/src/lib.rs` binds one Phase 495 class-boundary
+record to `zkbench-core` owner and current accepted-append replay identity
+types: `AcceptedLedgerAppendTransactionRequest`,
+`AcceptedLedgerAppendTransactionVersion`, `ReviewedPromotionPreflightRequest`,
+`ReviewedPromotionPreflightReport`, `EvidenceRecordCandidate`,
+`EvidenceRecordCandidateSource`, and `EvidenceAppendPreview`. It records
+transaction, preflight, candidate, append-preview, source-digest, ledger-tip,
+candidate/preview alignment, preflight-report recomputation, source artifact
+presence, and Level1 local replay cap rules. Focused tests cover valid
+construction plus Phase 495 digest drift, transaction field-set drift, replay
+validation rule drift, and promotion-attempt rejection including filesystem
+bundle creation. It materializes no replayable bundle, makes no accepted append
+decision, mutates no accepted Evidence Ledger, changes no accepted append
+policy, creates no accepted formal evidence, creates no Level2+ evidence,
+populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction,
+creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

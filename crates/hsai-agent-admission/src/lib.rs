@@ -933,6 +933,24 @@ pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS: &str = "LocalReplay";
 pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY: &str = "Level1LocalReplay";
 pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_LOWER_LOCAL_METADATA_CLASS: &str = "DesignNote";
 pub const GATEWAY_FORMAL_TINY_Z3_ACCEPTED_LOWER_LOCAL_METADATA_BOUNDARY: &str = "Level0DesignNote";
+pub const GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_IDENTITY_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-z3-replayable-input-identity:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_IDENTITY_STATE_SLICE: &str =
+    "phase-497-hsai-tiny-z3-replayable-input-identity-metadata";
+pub const GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_IDENTITY_CLAIM_BOUNDARY: &str = "local tiny-Z3 replayable input identity metadata only; records the existing zkbench-core accepted-append request, preflight, report, candidate, append-preview, source-digest, and ledger-tip identity fields that a future bridge must bind before asking zkbench-core to evaluate an accepted-ledger append transaction, but does not create a bundle, make an accepted append decision, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, create proof artifacts, create checker transcripts, create solver certificates, run Lean, run new SMT, run COBALT, run Rust-to-Lean extraction, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_IDENTITY_OWNER_ID: &str = "zkbench-core";
+pub const GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_TRANSACTION_REQUEST_TYPE: &str =
+    "AcceptedLedgerAppendTransactionRequest";
+pub const GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_TRANSACTION_VERSION_TYPE: &str =
+    "AcceptedLedgerAppendTransactionVersion";
+pub const GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_PREFLIGHT_REQUEST_TYPE: &str =
+    "ReviewedPromotionPreflightRequest";
+pub const GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_PREFLIGHT_REPORT_TYPE: &str =
+    "ReviewedPromotionPreflightReport";
+pub const GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_CANDIDATE_SOURCE_TYPE: &str =
+    "EvidenceRecordCandidateSource";
+pub const GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_APPEND_PREVIEW_TYPE: &str =
+    "EvidenceAppendPreview";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -13082,6 +13100,183 @@ pub enum GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue {
 pub struct GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3ReplayableInputIdentityLabel {
+    ReplayableInputIdentityRecorded,
+    ReplayableInputIdentityRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3ReplayableInputIdentityInput {
+    pub schema_version: String,
+    pub replay_identity_gate_id: String,
+    pub replay_identity_policy_id: String,
+    pub replay_identity_decision_id: String,
+    pub replay_identity_decision_at_unix: u64,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub accepted_append_owner_id: String,
+    pub replay_identity_owner_id: String,
+    pub transaction_request_type: String,
+    pub transaction_version_type: String,
+    pub preflight_request_type: String,
+    pub preflight_report_type: String,
+    pub candidate_type: String,
+    pub candidate_source_type: String,
+    pub append_preview_type: String,
+    pub transaction_identity_fields: BTreeSet<String>,
+    pub preflight_identity_fields: BTreeSet<String>,
+    pub candidate_identity_fields: BTreeSet<String>,
+    pub append_preview_identity_fields: BTreeSet<String>,
+    pub replay_validation_rules: BTreeSet<String>,
+    pub accepted_evidence_class: String,
+    pub accepted_claim_boundary: String,
+    pub replay_identity_label: GatewayFormalTinyZ3ReplayableInputIdentityLabel,
+    pub replay_identity_summary: String,
+    pub filesystem_bundle_creation_requested: bool,
+    pub accepted_append_policy_change_requested: bool,
+    pub accepted_append_decision_requested: bool,
+    pub accepted_evidence_ledger_mutation_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyZ3ReplayableInputIdentityInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-replayable-input-identity-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3ReplayableInputIdentity {
+    pub schema_version: String,
+    pub replay_identity_gate_id: String,
+    pub state_slice: String,
+    pub replay_identity_input_digest: Hash,
+    pub replay_identity_policy_id: String,
+    pub replay_identity_decision_id: String,
+    pub replay_identity_decision_at_unix: u64,
+    pub phase495_class_boundary_digest: Hash,
+    pub phase495_class_boundary_input_digest: Hash,
+    pub phase495_digest_binding_map_digest: Hash,
+    pub phase495_id_binding_map_digest: Hash,
+    pub phase495_label_binding_map_digest: Hash,
+    pub phase495_explicit_nonclaims_digest: Hash,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub accepted_append_owner_id: String,
+    pub replay_identity_owner_id: String,
+    pub transaction_request_type: String,
+    pub transaction_version_type: String,
+    pub preflight_request_type: String,
+    pub preflight_report_type: String,
+    pub candidate_type: String,
+    pub candidate_source_type: String,
+    pub append_preview_type: String,
+    pub transaction_identity_fields: BTreeSet<String>,
+    pub preflight_identity_fields: BTreeSet<String>,
+    pub candidate_identity_fields: BTreeSet<String>,
+    pub append_preview_identity_fields: BTreeSet<String>,
+    pub replay_validation_rules: BTreeSet<String>,
+    pub accepted_evidence_class: String,
+    pub accepted_claim_boundary: String,
+    pub replay_identity_label: GatewayFormalTinyZ3ReplayableInputIdentityLabel,
+    pub replay_identity_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub creates_filesystem_bundle: bool,
+    pub changes_accepted_append_policy: bool,
+    pub makes_accepted_append_decision: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub creates_accepted_formal_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3ReplayableInputIdentity {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-replayable-input-identity:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3ReplayableInputIdentityIssue {
+    InvalidSchemaVersion,
+    InvalidReplayIdentityGateId,
+    InvalidReplayIdentityPolicyId,
+    InvalidReplayIdentityDecisionId,
+    MissingReplayIdentityDecisionTimestamp,
+    MissingDigest(String),
+    DigestBindingMismatch,
+    IdBindingMismatch,
+    InvalidIdBinding(String),
+    LabelBindingMismatch,
+    Phase495ClassBoundaryStateMismatch,
+    NonclaimMismatch,
+    InvalidAcceptedAppendOwner,
+    InvalidReplayIdentityOwner,
+    InvalidTransactionRequestType,
+    InvalidTransactionVersionType,
+    InvalidPreflightRequestType,
+    InvalidPreflightReportType,
+    InvalidCandidateType,
+    InvalidCandidateSourceType,
+    InvalidAppendPreviewType,
+    TransactionIdentityFieldsMismatch,
+    PreflightIdentityFieldsMismatch,
+    CandidateIdentityFieldsMismatch,
+    AppendPreviewIdentityFieldsMismatch,
+    ReplayValidationRulesMismatch,
+    InvalidAcceptedEvidenceClass,
+    InvalidAcceptedClaimBoundary,
+    ReplayIdentitySummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3ReplayableInputIdentityValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyZ3ReplayableInputIdentityIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -53780,6 +53975,491 @@ pub fn validate_gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_in
     }
 }
 
+pub fn gateway_formal_tiny_z3_replayable_input_identity_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_IDENTITY_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_z3_replayable_input_identity_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    [
+        "not accepted append decision",
+        "not accepted formal evidence",
+        "not accepted evidence ledger mutation",
+        "not accepted append policy change",
+        "not filesystem bundle",
+        "not Level2+ evidence",
+        "not score-axis evidence",
+        "not proof authority",
+        "not checker transcript authority",
+        "not solver certificate authority",
+        "not backend execution evidence",
+        "not Lean execution evidence",
+        "not new SMT execution evidence",
+        "not COBALT execution evidence",
+        "not Rust-to-Lean extraction evidence",
+        "not benchmark evidence",
+        "not SOTA",
+        "not semantic correctness",
+        "not production readiness",
+        "not full security",
+        "not action authority",
+    ]
+    .into_iter()
+    .map(|label| NonClaimLabel(label.to_owned()))
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_replayable_input_identity_transaction_fields() -> BTreeSet<String> {
+    [
+        "AcceptedLedgerAppendTransactionRequest.transaction_id",
+        "AcceptedLedgerAppendTransactionRequest.version",
+        "AcceptedLedgerAppendTransactionRequest.target_evidence_ledger_id",
+        "AcceptedLedgerAppendTransactionRequest.expected_current_ledger_tip",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_replayable_input_identity_preflight_fields() -> BTreeSet<String> {
+    [
+        "ReviewedPromotionPreflightRequest.id",
+        "ReviewedPromotionPreflightRequest.version",
+        "ReviewedPromotionPreflightRequest.candidate",
+        "ReviewedPromotionPreflightRequest.append_preview",
+        "ReviewedPromotionPreflightRequest.review_decision",
+        "ReviewedPromotionPreflightRequest.expected_current_ledger_tip",
+        "ReviewedPromotionPreflightRequest.source_artifact_digests",
+        "ReviewedPromotionPreflightReport",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_replayable_input_identity_candidate_fields() -> BTreeSet<String> {
+    [
+        "EvidenceRecordCandidate.id",
+        "EvidenceRecordCandidate.source",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_replayable_input_identity_append_preview_fields() -> BTreeSet<String>
+{
+    [
+        "EvidenceAppendPreview.id",
+        "EvidenceAppendPreview.source_candidate_id",
+        "EvidenceAppendPreview.proposed_append_entries",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_replayable_input_identity_validation_rules() -> BTreeSet<String> {
+    [
+        "preflight_request_validation_required",
+        "preflight_report_recomputed_from_request",
+        "current_ledger_tip_equality_required",
+        "candidate_append_preview_source_id_alignment_required",
+        "append_preview_entry_candidate_id_alignment_required",
+        "append_preview_entry_evidence_class_alignment_required",
+        "append_preview_entry_claim_boundary_alignment_required",
+        "append_preview_entry_candidate_digest_alignment_required",
+        "source_artifact_digest_presence_required",
+        "local_replay_level1_cap_required",
+        "level2_plus_and_formal_classes_rejected",
+        "official_submission_and_score_axes_rejected",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_replayable_input_identity_digest_bindings(
+    class_boundary: &GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundary,
+) -> BTreeMap<String, Hash> {
+    BTreeMap::from([
+        (
+            "phase495_class_boundary_digest".to_owned(),
+            class_boundary.digest(),
+        ),
+        (
+            "phase495_class_boundary_input_digest".to_owned(),
+            class_boundary.class_boundary_input_digest,
+        ),
+        (
+            "phase495_digest_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase495-class-boundary-digest-bindings:v1",
+                &class_boundary.digest_bindings,
+            ),
+        ),
+        (
+            "phase495_id_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase495-class-boundary-id-bindings:v1",
+                &class_boundary.id_bindings,
+            ),
+        ),
+        (
+            "phase495_label_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase495-class-boundary-label-bindings:v1",
+                &class_boundary.label_bindings,
+            ),
+        ),
+        (
+            "phase495_explicit_nonclaims_digest".to_owned(),
+            class_boundary.explicit_nonclaims_digest,
+        ),
+        (
+            "current_accepted_append_blockers_digest".to_owned(),
+            class_boundary.current_accepted_append_blockers_digest,
+        ),
+    ])
+}
+
+pub fn gateway_formal_tiny_z3_replayable_input_identity_id_bindings(
+    class_boundary: &GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundary,
+    replay_identity_gate_id: &str,
+    replay_identity_policy_id: &str,
+    replay_identity_decision_id: &str,
+) -> BTreeMap<String, String> {
+    let mut ids = class_boundary.id_bindings.clone();
+    ids.insert(
+        "replayable_input_identity_gate_id".to_owned(),
+        replay_identity_gate_id.to_owned(),
+    );
+    ids.insert(
+        "replayable_input_identity_policy_id".to_owned(),
+        replay_identity_policy_id.to_owned(),
+    );
+    ids.insert(
+        "replayable_input_identity_decision_id".to_owned(),
+        replay_identity_decision_id.to_owned(),
+    );
+    ids.insert(
+        "phase495_class_boundary_gate_id".to_owned(),
+        class_boundary.class_boundary_gate_id.clone(),
+    );
+    ids
+}
+
+pub fn gateway_formal_tiny_z3_replayable_input_identity_label_bindings(
+    class_boundary: &GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundary,
+    replay_identity_label: &GatewayFormalTinyZ3ReplayableInputIdentityLabel,
+) -> BTreeMap<String, String> {
+    let mut labels = class_boundary.label_bindings.clone();
+    labels.insert(
+        "phase495_class_boundary_label".to_owned(),
+        format!("{:?}", class_boundary.class_boundary_label),
+    );
+    labels.insert(
+        "replayable_input_identity_label".to_owned(),
+        format!("{replay_identity_label:?}"),
+    );
+    labels
+}
+
+pub fn build_gateway_formal_tiny_z3_replayable_input_identity(
+    class_boundary: &GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundary,
+    input: &GatewayFormalTinyZ3ReplayableInputIdentityInput,
+) -> Result<
+    GatewayFormalTinyZ3ReplayableInputIdentity,
+    GatewayFormalTinyZ3ReplayableInputIdentityValidation,
+> {
+    let validation =
+        validate_gateway_formal_tiny_z3_replayable_input_identity_input(class_boundary, input);
+    if !validation.valid {
+        return Err(validation);
+    }
+    let digest_bindings =
+        gateway_formal_tiny_z3_replayable_input_identity_digest_bindings(class_boundary);
+    Ok(GatewayFormalTinyZ3ReplayableInputIdentity {
+        schema_version: GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_IDENTITY_SCHEMA_VERSION.to_owned(),
+        replay_identity_gate_id: input.replay_identity_gate_id.clone(),
+        state_slice: GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_IDENTITY_STATE_SLICE.to_owned(),
+        replay_identity_input_digest: input.digest(),
+        replay_identity_policy_id: input.replay_identity_policy_id.clone(),
+        replay_identity_decision_id: input.replay_identity_decision_id.clone(),
+        replay_identity_decision_at_unix: input.replay_identity_decision_at_unix,
+        phase495_class_boundary_digest: digest_bindings["phase495_class_boundary_digest"],
+        phase495_class_boundary_input_digest: digest_bindings
+            ["phase495_class_boundary_input_digest"],
+        phase495_digest_binding_map_digest: digest_bindings["phase495_digest_binding_map_digest"],
+        phase495_id_binding_map_digest: digest_bindings["phase495_id_binding_map_digest"],
+        phase495_label_binding_map_digest: digest_bindings["phase495_label_binding_map_digest"],
+        phase495_explicit_nonclaims_digest: digest_bindings["phase495_explicit_nonclaims_digest"],
+        current_accepted_append_blockers_digest: digest_bindings
+            ["current_accepted_append_blockers_digest"],
+        digest_bindings: input.digest_bindings.clone(),
+        id_bindings: input.id_bindings.clone(),
+        label_bindings: input.label_bindings.clone(),
+        explicit_nonclaims: input.explicit_nonclaims.clone(),
+        explicit_nonclaims_digest: input.explicit_nonclaims_digest,
+        accepted_append_owner_id: input.accepted_append_owner_id.clone(),
+        replay_identity_owner_id: input.replay_identity_owner_id.clone(),
+        transaction_request_type: input.transaction_request_type.clone(),
+        transaction_version_type: input.transaction_version_type.clone(),
+        preflight_request_type: input.preflight_request_type.clone(),
+        preflight_report_type: input.preflight_report_type.clone(),
+        candidate_type: input.candidate_type.clone(),
+        candidate_source_type: input.candidate_source_type.clone(),
+        append_preview_type: input.append_preview_type.clone(),
+        transaction_identity_fields: input.transaction_identity_fields.clone(),
+        preflight_identity_fields: input.preflight_identity_fields.clone(),
+        candidate_identity_fields: input.candidate_identity_fields.clone(),
+        append_preview_identity_fields: input.append_preview_identity_fields.clone(),
+        replay_validation_rules: input.replay_validation_rules.clone(),
+        accepted_evidence_class: input.accepted_evidence_class.clone(),
+        accepted_claim_boundary: input.accepted_claim_boundary.clone(),
+        replay_identity_label: input.replay_identity_label.clone(),
+        replay_identity_summary: input.replay_identity_summary.clone(),
+        previous_promotion_state: "tiny_z3_accepted_evidence_class_claim_boundary_metadata"
+            .to_owned(),
+        promotion_state: "tiny_z3_replayable_input_identity_metadata".to_owned(),
+        next_required_state: "tiny_z3_accepted_path_prerequisites_remain_unresolved".to_owned(),
+        claim_boundary: gateway_formal_tiny_z3_replayable_input_identity_claim_boundary(),
+        creates_filesystem_bundle: false,
+        changes_accepted_append_policy: false,
+        makes_accepted_append_decision: false,
+        mutates_accepted_evidence_ledger: false,
+        creates_accepted_formal_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        backend_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_gateway_formal_tiny_z3_replayable_input_identity_input(
+    class_boundary: &GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundary,
+    input: &GatewayFormalTinyZ3ReplayableInputIdentityInput,
+) -> GatewayFormalTinyZ3ReplayableInputIdentityValidation {
+    let mut issues = Vec::new();
+    if input.schema_version != GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_IDENTITY_SCHEMA_VERSION {
+        issues.push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.replay_identity_gate_id) {
+        issues.push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::InvalidReplayIdentityGateId);
+    }
+    if !is_single_segment_id(&input.replay_identity_policy_id) {
+        issues.push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::InvalidReplayIdentityPolicyId);
+    }
+    if !is_single_segment_id(&input.replay_identity_decision_id) {
+        issues
+            .push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::InvalidReplayIdentityDecisionId);
+    }
+    if input.replay_identity_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalTinyZ3ReplayableInputIdentityIssue::MissingReplayIdentityDecisionTimestamp,
+        );
+    }
+    let expected_digests =
+        gateway_formal_tiny_z3_replayable_input_identity_digest_bindings(class_boundary);
+    for (label, digest) in &input.digest_bindings {
+        if *digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalTinyZ3ReplayableInputIdentityIssue::MissingDigest(label.clone()),
+            );
+        }
+    }
+    if input.digest_bindings != expected_digests {
+        issues.push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::DigestBindingMismatch);
+    }
+    let expected_ids = gateway_formal_tiny_z3_replayable_input_identity_id_bindings(
+        class_boundary,
+        &input.replay_identity_gate_id,
+        &input.replay_identity_policy_id,
+        &input.replay_identity_decision_id,
+    );
+    for (label, value) in &input.id_bindings {
+        if !is_single_segment_id(value) {
+            issues.push(
+                GatewayFormalTinyZ3ReplayableInputIdentityIssue::InvalidIdBinding(label.clone()),
+            );
+        }
+    }
+    if input.id_bindings != expected_ids {
+        issues.push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::IdBindingMismatch);
+    }
+    let expected_labels = gateway_formal_tiny_z3_replayable_input_identity_label_bindings(
+        class_boundary,
+        &input.replay_identity_label,
+    );
+    if input.label_bindings != expected_labels {
+        issues.push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::LabelBindingMismatch);
+    }
+    if class_boundary.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_CLAIM_BOUNDARY_SCHEMA_VERSION
+        || class_boundary.state_slice
+            != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_CLAIM_BOUNDARY_STATE_SLICE
+        || class_boundary.promotion_state
+            != "tiny_z3_accepted_evidence_class_claim_boundary_metadata"
+        || class_boundary.next_required_state
+            != "tiny_z3_accepted_path_prerequisites_remain_unresolved"
+        || class_boundary.claim_boundary
+            != gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary_claim_boundary()
+        || class_boundary.accepted_append_owner_id
+            != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_OWNER_ID
+        || class_boundary.evidence_class_owner_id
+            != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS_OWNER_ID
+        || class_boundary.claim_boundary_owner_id
+            != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY_OWNER_ID
+        || class_boundary.accepted_evidence_class != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS
+        || class_boundary.accepted_claim_boundary != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY
+        || class_boundary.changes_accepted_append_policy
+        || class_boundary.makes_accepted_append_decision
+        || class_boundary.mutates_accepted_evidence_ledger
+        || class_boundary.creates_accepted_formal_evidence
+        || class_boundary.creates_level2_evidence
+        || class_boundary.populates_score_axes
+        || class_boundary.proof_artifact_created
+        || class_boundary.checker_transcript_created
+        || class_boundary.solver_certificate_created
+        || class_boundary.backend_execution_evidence_created
+        || class_boundary.benchmark_evidence_created
+        || class_boundary.semantic_correctness_claimed
+        || class_boundary.production_readiness_claimed
+        || class_boundary.sota_claimed
+        || class_boundary.breakthrough_claimed
+        || class_boundary.full_security_claimed
+        || class_boundary.grants_authority
+    {
+        issues.push(
+            GatewayFormalTinyZ3ReplayableInputIdentityIssue::Phase495ClassBoundaryStateMismatch,
+        );
+    }
+    let nonclaims = gateway_formal_tiny_z3_replayable_input_identity_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-replayable-input-identity-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::NonclaimMismatch);
+    }
+    if input.accepted_append_owner_id != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_OWNER_ID
+    {
+        issues.push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::InvalidAcceptedAppendOwner);
+    }
+    if input.replay_identity_owner_id != GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_IDENTITY_OWNER_ID {
+        issues.push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::InvalidReplayIdentityOwner);
+    }
+    if input.transaction_request_type
+        != GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_TRANSACTION_REQUEST_TYPE
+    {
+        issues.push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::InvalidTransactionRequestType);
+    }
+    if input.transaction_version_type
+        != GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_TRANSACTION_VERSION_TYPE
+    {
+        issues.push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::InvalidTransactionVersionType);
+    }
+    if input.preflight_request_type
+        != GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_PREFLIGHT_REQUEST_TYPE
+    {
+        issues.push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::InvalidPreflightRequestType);
+    }
+    if input.preflight_report_type != GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_PREFLIGHT_REPORT_TYPE
+    {
+        issues.push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::InvalidPreflightReportType);
+    }
+    if input.candidate_type != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CANDIDATE_TYPE {
+        issues.push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::InvalidCandidateType);
+    }
+    if input.candidate_source_type != GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_CANDIDATE_SOURCE_TYPE
+    {
+        issues.push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::InvalidCandidateSourceType);
+    }
+    if input.append_preview_type != GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_APPEND_PREVIEW_TYPE {
+        issues.push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::InvalidAppendPreviewType);
+    }
+    if input.transaction_identity_fields
+        != gateway_formal_tiny_z3_replayable_input_identity_transaction_fields()
+    {
+        issues.push(
+            GatewayFormalTinyZ3ReplayableInputIdentityIssue::TransactionIdentityFieldsMismatch,
+        );
+    }
+    if input.preflight_identity_fields
+        != gateway_formal_tiny_z3_replayable_input_identity_preflight_fields()
+    {
+        issues
+            .push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::PreflightIdentityFieldsMismatch);
+    }
+    if input.candidate_identity_fields
+        != gateway_formal_tiny_z3_replayable_input_identity_candidate_fields()
+    {
+        issues
+            .push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::CandidateIdentityFieldsMismatch);
+    }
+    if input.append_preview_identity_fields
+        != gateway_formal_tiny_z3_replayable_input_identity_append_preview_fields()
+    {
+        issues.push(
+            GatewayFormalTinyZ3ReplayableInputIdentityIssue::AppendPreviewIdentityFieldsMismatch,
+        );
+    }
+    if input.replay_validation_rules
+        != gateway_formal_tiny_z3_replayable_input_identity_validation_rules()
+    {
+        issues.push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::ReplayValidationRulesMismatch);
+    }
+    if input.accepted_evidence_class != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS {
+        issues.push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::InvalidAcceptedEvidenceClass);
+    }
+    if input.accepted_claim_boundary != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY {
+        issues.push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::InvalidAcceptedClaimBoundary);
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.replay_identity_summary,
+    ) {
+        issues.push(
+            GatewayFormalTinyZ3ReplayableInputIdentityIssue::ReplayIdentitySummaryPromotionClaim,
+        );
+    }
+    if input.filesystem_bundle_creation_requested
+        || input.accepted_append_policy_change_requested
+        || input.accepted_append_decision_requested
+        || input.accepted_evidence_ledger_mutation_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.backend_execution_evidence_created
+        || input.benchmark_evidence_created
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(GatewayFormalTinyZ3ReplayableInputIdentityIssue::PromotionAttempt);
+    }
+    GatewayFormalTinyZ3ReplayableInputIdentityValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -88850,6 +89530,251 @@ mod tests {
     }
 
     #[test]
+    fn phase497_tiny_z3_replayable_input_identity_builds_blocking_record() {
+        let Some((obligation_root, phase405_output_root, output_root, class_boundary)) =
+            phase497_tiny_z3_class_boundary_source("phase497-replay-identity")
+        else {
+            return;
+        };
+        let replay_input = phase497_tiny_z3_replayable_input_identity_input(
+            "phase497-replayable-input-identity",
+            &class_boundary,
+            GatewayFormalTinyZ3ReplayableInputIdentityLabel::ReplayableInputIdentityRecorded,
+        );
+        let replay_identity =
+            build_gateway_formal_tiny_z3_replayable_input_identity(&class_boundary, &replay_input)
+                .expect("phase497 replay identity builds");
+
+        assert_eq!(
+            replay_identity.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_IDENTITY_STATE_SLICE
+        );
+        assert_eq!(
+            replay_identity.phase495_class_boundary_digest,
+            class_boundary.digest()
+        );
+        assert_eq!(
+            replay_identity.phase495_class_boundary_input_digest,
+            class_boundary.class_boundary_input_digest
+        );
+        assert_eq!(
+            replay_identity.phase495_digest_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase495-class-boundary-digest-bindings:v1",
+                &class_boundary.digest_bindings,
+            )
+        );
+        assert_eq!(
+            replay_identity.phase495_id_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase495-class-boundary-id-bindings:v1",
+                &class_boundary.id_bindings,
+            )
+        );
+        assert_eq!(
+            replay_identity.phase495_label_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase495-class-boundary-label-bindings:v1",
+                &class_boundary.label_bindings,
+            )
+        );
+        assert_eq!(
+            replay_identity.phase495_explicit_nonclaims_digest,
+            class_boundary.explicit_nonclaims_digest
+        );
+        assert_eq!(
+            replay_identity.accepted_append_owner_id,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_OWNER_ID
+        );
+        assert_eq!(
+            replay_identity.replay_identity_owner_id,
+            GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_IDENTITY_OWNER_ID
+        );
+        assert_eq!(
+            replay_identity.transaction_request_type,
+            GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_TRANSACTION_REQUEST_TYPE
+        );
+        assert_eq!(
+            replay_identity.transaction_version_type,
+            GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_TRANSACTION_VERSION_TYPE
+        );
+        assert_eq!(
+            replay_identity.preflight_request_type,
+            GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_PREFLIGHT_REQUEST_TYPE
+        );
+        assert_eq!(
+            replay_identity.preflight_report_type,
+            GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_PREFLIGHT_REPORT_TYPE
+        );
+        assert_eq!(
+            replay_identity.candidate_type,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CANDIDATE_TYPE
+        );
+        assert_eq!(
+            replay_identity.candidate_source_type,
+            GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_CANDIDATE_SOURCE_TYPE
+        );
+        assert_eq!(
+            replay_identity.append_preview_type,
+            GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_APPEND_PREVIEW_TYPE
+        );
+        assert_eq!(
+            replay_identity.transaction_identity_fields,
+            gateway_formal_tiny_z3_replayable_input_identity_transaction_fields()
+        );
+        assert_eq!(
+            replay_identity.preflight_identity_fields,
+            gateway_formal_tiny_z3_replayable_input_identity_preflight_fields()
+        );
+        assert_eq!(
+            replay_identity.candidate_identity_fields,
+            gateway_formal_tiny_z3_replayable_input_identity_candidate_fields()
+        );
+        assert_eq!(
+            replay_identity.append_preview_identity_fields,
+            gateway_formal_tiny_z3_replayable_input_identity_append_preview_fields()
+        );
+        assert_eq!(
+            replay_identity.replay_validation_rules,
+            gateway_formal_tiny_z3_replayable_input_identity_validation_rules()
+        );
+        assert_eq!(
+            replay_identity.accepted_evidence_class,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS
+        );
+        assert_eq!(
+            replay_identity.accepted_claim_boundary,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY
+        );
+        assert_eq!(
+            replay_identity.previous_promotion_state,
+            "tiny_z3_accepted_evidence_class_claim_boundary_metadata"
+        );
+        assert_eq!(
+            replay_identity.promotion_state,
+            "tiny_z3_replayable_input_identity_metadata"
+        );
+        assert_eq!(
+            replay_identity.next_required_state,
+            "tiny_z3_accepted_path_prerequisites_remain_unresolved"
+        );
+        assert_eq!(
+            replay_identity.claim_boundary,
+            gateway_formal_tiny_z3_replayable_input_identity_claim_boundary()
+        );
+        assert!(!replay_identity.creates_filesystem_bundle);
+        assert!(!replay_identity.changes_accepted_append_policy);
+        assert!(!replay_identity.makes_accepted_append_decision);
+        assert!(!replay_identity.mutates_accepted_evidence_ledger);
+        assert!(!replay_identity.creates_accepted_formal_evidence);
+        assert!(!replay_identity.creates_level2_evidence);
+        assert!(!replay_identity.populates_score_axes);
+        assert!(!replay_identity.proof_artifact_created);
+        assert!(!replay_identity.checker_transcript_created);
+        assert!(!replay_identity.solver_certificate_created);
+        assert!(!replay_identity.backend_execution_evidence_created);
+        assert!(!replay_identity.benchmark_evidence_created);
+        assert!(!replay_identity.semantic_correctness_claimed);
+        assert!(!replay_identity.production_readiness_claimed);
+        assert!(!replay_identity.sota_claimed);
+        assert!(!replay_identity.breakthrough_claimed);
+        assert!(!replay_identity.full_security_claimed);
+        assert!(!replay_identity.grants_authority);
+
+        let mut digest_drift = replay_input.clone();
+        digest_drift
+            .digest_bindings
+            .insert("phase495_class_boundary_digest".to_owned(), Hash([57; 32]));
+        let digest_validation = validate_gateway_formal_tiny_z3_replayable_input_identity_input(
+            &class_boundary,
+            &digest_drift,
+        );
+        assert!(digest_validation
+            .issues
+            .contains(&GatewayFormalTinyZ3ReplayableInputIdentityIssue::DigestBindingMismatch));
+
+        let mut field_drift = replay_input.clone();
+        field_drift
+            .transaction_identity_fields
+            .remove("AcceptedLedgerAppendTransactionRequest.transaction_id");
+        let field_validation = validate_gateway_formal_tiny_z3_replayable_input_identity_input(
+            &class_boundary,
+            &field_drift,
+        );
+        assert!(field_validation.issues.contains(
+            &GatewayFormalTinyZ3ReplayableInputIdentityIssue::TransactionIdentityFieldsMismatch
+        ));
+
+        let mut rule_drift = replay_input.clone();
+        rule_drift
+            .replay_validation_rules
+            .remove("preflight_report_recomputed_from_request");
+        let rule_validation = validate_gateway_formal_tiny_z3_replayable_input_identity_input(
+            &class_boundary,
+            &rule_drift,
+        );
+        assert!(rule_validation.issues.contains(
+            &GatewayFormalTinyZ3ReplayableInputIdentityIssue::ReplayValidationRulesMismatch
+        ));
+
+        fs::remove_dir_all(&output_root).expect("phase497 replay output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase497 replay phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase497 replay obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase497_tiny_z3_replayable_input_identity_rejects_promotion() {
+        let Some((obligation_root, phase405_output_root, output_root, class_boundary)) =
+            phase497_tiny_z3_class_boundary_source("phase497-replay-promotion")
+        else {
+            return;
+        };
+        let mut replay_input = phase497_tiny_z3_replayable_input_identity_input(
+            "phase497-promotion-replay-identity",
+            &class_boundary,
+            GatewayFormalTinyZ3ReplayableInputIdentityLabel::ReplayableInputIdentityRejected,
+        );
+
+        replay_input.filesystem_bundle_creation_requested = true;
+        replay_input.accepted_append_policy_change_requested = true;
+        replay_input.accepted_append_decision_requested = true;
+        replay_input.accepted_evidence_ledger_mutation_requested = true;
+        replay_input.accepted_formal_evidence_created = true;
+        replay_input.creates_level2_evidence = true;
+        replay_input.populates_score_axes = true;
+        replay_input.proof_artifact_promoted = true;
+        replay_input.checker_transcript_promoted = true;
+        replay_input.solver_certificate_promoted = true;
+        replay_input.backend_execution_evidence_created = true;
+        replay_input.benchmark_evidence_created = true;
+        replay_input.semantic_correctness_claimed = true;
+        replay_input.production_readiness_claimed = true;
+        replay_input.sota_claimed = true;
+        replay_input.breakthrough_claimed = true;
+        replay_input.full_security_claimed = true;
+        replay_input.action_authority_claimed = true;
+        let validation = validate_gateway_formal_tiny_z3_replayable_input_identity_input(
+            &class_boundary,
+            &replay_input,
+        );
+        assert!(validation
+            .issues
+            .contains(&GatewayFormalTinyZ3ReplayableInputIdentityIssue::PromotionAttempt));
+        assert!(build_gateway_formal_tiny_z3_replayable_input_identity(
+            &class_boundary,
+            &replay_input,
+        )
+        .is_err());
+
+        fs::remove_dir_all(&output_root).expect("phase497 promotion output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase497 promotion phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase497 promotion obligation cleanup succeeds");
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -95510,6 +96435,121 @@ mod tests {
             phase405_output_root,
             output_root,
             policy_version,
+        ))
+    }
+
+    fn phase497_tiny_z3_replayable_input_identity_input(
+        replay_identity_gate_id: &str,
+        class_boundary: &GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundary,
+        replay_identity_label: GatewayFormalTinyZ3ReplayableInputIdentityLabel,
+    ) -> GatewayFormalTinyZ3ReplayableInputIdentityInput {
+        let replay_identity_policy_id = "phase497-replayable-input-identity-policy";
+        let replay_identity_decision_id = "phase497-replayable-input-identity-decision";
+        let nonclaims = gateway_formal_tiny_z3_replayable_input_identity_required_nonclaims();
+        GatewayFormalTinyZ3ReplayableInputIdentityInput {
+            schema_version: GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_IDENTITY_SCHEMA_VERSION
+                .to_owned(),
+            replay_identity_gate_id: replay_identity_gate_id.to_owned(),
+            replay_identity_policy_id: replay_identity_policy_id.to_owned(),
+            replay_identity_decision_id: replay_identity_decision_id.to_owned(),
+            replay_identity_decision_at_unix: 1_800_000_497,
+            digest_bindings: gateway_formal_tiny_z3_replayable_input_identity_digest_bindings(
+                class_boundary,
+            ),
+            id_bindings: gateway_formal_tiny_z3_replayable_input_identity_id_bindings(
+                class_boundary,
+                replay_identity_gate_id,
+                replay_identity_policy_id,
+                replay_identity_decision_id,
+            ),
+            label_bindings: gateway_formal_tiny_z3_replayable_input_identity_label_bindings(
+                class_boundary,
+                &replay_identity_label,
+            ),
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-replayable-input-identity-nonclaims:v1",
+                &nonclaims,
+            ),
+            accepted_append_owner_id: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_OWNER_ROUTE_OWNER_ID
+                .to_owned(),
+            replay_identity_owner_id: GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_IDENTITY_OWNER_ID
+                .to_owned(),
+            transaction_request_type:
+                GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_TRANSACTION_REQUEST_TYPE.to_owned(),
+            transaction_version_type:
+                GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_TRANSACTION_VERSION_TYPE.to_owned(),
+            preflight_request_type:
+                GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_PREFLIGHT_REQUEST_TYPE.to_owned(),
+            preflight_report_type:
+                GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_PREFLIGHT_REPORT_TYPE.to_owned(),
+            candidate_type: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CANDIDATE_TYPE.to_owned(),
+            candidate_source_type:
+                GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_CANDIDATE_SOURCE_TYPE.to_owned(),
+            append_preview_type: GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_APPEND_PREVIEW_TYPE
+                .to_owned(),
+            transaction_identity_fields:
+                gateway_formal_tiny_z3_replayable_input_identity_transaction_fields(),
+            preflight_identity_fields:
+                gateway_formal_tiny_z3_replayable_input_identity_preflight_fields(),
+            candidate_identity_fields:
+                gateway_formal_tiny_z3_replayable_input_identity_candidate_fields(),
+            append_preview_identity_fields:
+                gateway_formal_tiny_z3_replayable_input_identity_append_preview_fields(),
+            replay_validation_rules:
+                gateway_formal_tiny_z3_replayable_input_identity_validation_rules(),
+            accepted_evidence_class: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_EVIDENCE_CLASS.to_owned(),
+            accepted_claim_boundary: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_CLAIM_BOUNDARY.to_owned(),
+            replay_identity_label,
+            replay_identity_summary:
+                "local tiny-Z3 replay identity gate metadata records request preflight report candidate preview source-digest and ledger-tip fields"
+                    .to_owned(),
+            filesystem_bundle_creation_requested: false,
+            accepted_append_policy_change_requested: false,
+            accepted_append_decision_requested: false,
+            accepted_evidence_ledger_mutation_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            backend_execution_evidence_created: false,
+            benchmark_evidence_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase497_tiny_z3_class_boundary_source(
+        source_prefix: &str,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundary,
+    )> {
+        let (obligation_root, phase405_output_root, output_root, policy_version) =
+            phase495_tiny_z3_accepted_append_policy_version_source(source_prefix)?;
+        let class_boundary_input = phase495_tiny_z3_accepted_evidence_class_claim_boundary_input(
+            &format!("{source_prefix}-class-boundary"),
+            &policy_version,
+            GatewayFormalTinyZ3AcceptedEvidenceClassClaimBoundaryLabel::AcceptedEvidenceClassClaimBoundaryRecorded,
+        );
+        let class_boundary = build_gateway_formal_tiny_z3_accepted_evidence_class_claim_boundary(
+            &policy_version,
+            &class_boundary_input,
+        )
+        .expect("phase497 source class boundary builds");
+        Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            class_boundary,
         ))
     }
 
