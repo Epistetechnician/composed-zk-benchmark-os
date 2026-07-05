@@ -7485,5 +7485,22 @@ evidence, creates no Level2+ evidence, runs no
 Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence,
 and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/518-hsai-tiny-z3-level2-evidence-eligibility-boundary.md](docs/518-hsai-tiny-z3-level2-evidence-eligibility-boundary.md)
+defines the Phase 518 docs-first boundary for future Level2 eligibility
+metadata over the Phase 517 score-axis eligibility record. The boundary
+records the existing `zkbench-core` Level2 owner surface,
+`Level2EligibilityChecker`, `check_level2_eligibility`,
+`Level2EligibilityReport`, `Level2EligibilityStatus`,
+`Level2EligibilityBlockingReason`, and `ClaimBoundary::Level0DesignNote`.
+It records that Level2 eligibility reports are review artifacts only, that
+they do not create Level2 evidence, that the current HSAI classification
+remains `level2_blocked_local_only`, and that a future implementation must bind
+Phase 517, Phase 515, Phase 513, and Level2 owner/report invariants before
+recording local metadata. It creates no Rust code, changes no Cargo metadata,
+writes no Level2 artifact files, populates no score axes, creates no accepted
+formal evidence, creates no Level2+ evidence, runs no new
+Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence, and
+claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
