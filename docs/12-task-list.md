@@ -16359,6 +16359,32 @@ Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution, no
 benchmark evidence, no external audit evidence, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 581 HSAI Tiny Z3 Backend Execution Packet Role Artifact Import Review Metadata
+
+Status: complete. See
+`docs/581-hsai-tiny-z3-backend-execution-packet-role-artifact-import-review-metadata-notes.md`.
+
+Goal: implement local blocked import-review metadata over one exact Phase 579
+packet role artifact import candidate.
+
+Implemented: Phase 581 adds packet role artifact import-review constants,
+input/output/issue/validation/classification/label types, deterministic
+Phase 579 candidate digest bindings, policy/blocker/nonpromotion digests,
+inherited-digest requirements, and fail-closed Phase 579 exactness checks.
+
+Validation coverage: focused `hsai-agent-admission` tests cover successful
+blocked import-review metadata, Phase 579 candidate drift rejection, inherited
+Phase 577 readback digest drift rejection, and classification/promotion/strong
+claim rejection.
+
+Exit criteria: HSAI can now review one Phase 579 quarantined packet role
+artifact import candidate as blocked local metadata. It still has no external
+result import, no accepted external result evidence, no accepted independent
+external reproduction, no accepted formal evidence, no Level2+ evidence, no
+populated score axes, no Lean/COBALT/Rust-to-Lean execution, no additional
+SMT/Z3 execution, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
