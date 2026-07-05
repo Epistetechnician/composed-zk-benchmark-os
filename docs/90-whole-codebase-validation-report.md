@@ -8119,5 +8119,21 @@ score axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution,
 creates no benchmark evidence, and claims no production/SOTA/security/
 semantic-correctness result.
 
+[docs/560-hsai-tiny-z3-backend-execution-external-operator-capture-import-candidate-boundary.md](docs/560-hsai-tiny-z3-backend-execution-external-operator-capture-import-candidate-boundary.md)
+documents the Phase 560 docs-first external operator capture import-candidate
+boundary. It defines a future local import-candidate metadata record over one
+exact Phase 559 capture manifest, including Phase 559 capture bindings, Phase
+557 handoff packet bindings, Phase 555 handoff/manual-bundle/manual-validation
+bindings, inherited backend-execution digest bindings, operator
+provenance/observation/artifact/redaction bindings, future
+candidate/validation/quarantine digest requirements, requested
+`ClaimBoundary::Level0DesignNote`, fail-closed validation rules, meaning
+limits, and Phase 561 implementation exit criteria. It creates no Rust code,
+writes no artifact files, performs no run, imports no external result, accepts
+no independent external reproduction, creates no accepted formal evidence,
+creates no Level2+ evidence, populates no score axes, runs no
+Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark
+evidence, and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
