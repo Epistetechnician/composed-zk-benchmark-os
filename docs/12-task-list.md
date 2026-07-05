@@ -14995,6 +14995,32 @@ populated score axes, no accepted formal evidence, no Lean/COBALT/Rust-to-Lean
 execution, no benchmark evidence, no external audit evidence, and no
 production/SOTA/security/correctness claim.
 
+## Phase 534 HSAI Tiny Z3 Backend Execution Accepted-Evidence Owner Decision Boundary
+
+Status: complete. See
+`docs/534-hsai-tiny-z3-backend-execution-accepted-evidence-owner-decision-boundary.md`.
+
+Goal: define the docs-first boundary for a future local owner-decision record
+over one Phase 533 backend-execution package review before any accepted-evidence
+route can be evaluated.
+
+Implemented: Phase 534 defines the future owner-decision contract: required
+Phase 533, Phase 531, Phase 529, and Phase 527 digest bindings, `zkbench-core`
+as the only accepted-evidence owner, existing accepted append routes, Level1
+claim-boundary cap, allowed owner-decision labels, fail-closed validation rules,
+meaning limits, and Phase 535 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named boundary for deciding whether one reviewed
+local SMT/Z3 backend execution package remains blocked, is rejected, or may
+proceed to a later `zkbench-core` accepted-append evaluation boundary. It still
+has no accepted evidence, no Level2+ evidence, no populated score axes, no
+accepted formal evidence, no Lean/COBALT/Rust-to-Lean execution, no benchmark
+evidence, no external audit evidence, and no production/SOTA/security/
+correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
