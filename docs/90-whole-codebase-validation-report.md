@@ -7184,5 +7184,18 @@ populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction,
 creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/500-hsai-tiny-z3-reviewer-policy-decision-boundary.md](docs/500-hsai-tiny-z3-reviewer-policy-decision-boundary.md)
+defines the Phase 500 docs-first reviewer policy and reviewer decision
+requirements boundary for the next Phase 488 accepted-path prerequisite gate.
+The boundary records required future reviewer policy fields, closed reviewer
+decision labels, Phase 499 binding requirements, decision digest requirements,
+reviewer summary promotion rejection, reviewer independence limits, backend
+relationship limits, and Phase 501 implementation exit criteria. It creates no
+Rust code, writes no review artifact, makes no accepted append decision,
+mutates no accepted Evidence Ledger, changes no accepted append policy, creates
+no accepted formal evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark
+evidence, and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
