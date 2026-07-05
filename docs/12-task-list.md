@@ -16595,6 +16595,35 @@ formal evidence, no Level2+ evidence, no populated score axes, no Lean/COBALT
 no external audit evidence, and no production/SOTA/security
 /semantic-correctness claim.
 
+## Phase 589 HSAI Tiny Z3 Backend Execution Packet Role Artifact Independent Operator Evidence Packet Metadata
+
+Status: complete. See
+`docs/589-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-evidence-packet-metadata-notes.md`.
+
+Goal: implement local missing-packet metadata over one exact Phase 587 packet
+role artifact independent-reproduction requirement metadata record.
+
+Implemented: Phase 589 adds packet input/output records, missing-packet
+classification and labels, issue/validation types, digest/id/label binding
+helpers, deterministic missing-role digests, policy/blocker/nonpromotion/rule
+/forbidden-API/inherited-digest helpers, and fail-closed Phase 587 exactness
+checks. The metadata binds the Phase 587 requirement and the inherited Phase
+585/583/581/579/577/575/573/571/569/567/565/563/561/559/557/555
+backend-execution chain through the Phase 587 source digest map.
+
+Validation coverage: focused tests cover successful missing-packet metadata,
+Phase 587 drift rejection, packet-role digest drift rejection, packet-role
+presence rejection, promotion flag rejection, and strong-claim rejection.
+
+Exit criteria: HSAI can now carry one blocked Phase 587 packet role artifact
+independent-reproduction requirement into missing packet-role independent
+operator evidence packet metadata. It still has no external result import, no
+accepted external result evidence, no accepted independent external
+reproduction, no accepted formal evidence, no Level2+ evidence, no populated
+score axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3
+execution, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
