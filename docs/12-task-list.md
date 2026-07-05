@@ -14920,6 +14920,32 @@ evidence, no Level2+ evidence, no populated score axes, no accepted formal
 evidence, no Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no
 external audit evidence, and no production/SOTA/security/correctness claim.
 
+## Phase 531 HSAI Tiny Z3 Backend Execution Artifact Package Metadata
+
+Status: complete. See
+`docs/531-hsai-tiny-z3-backend-execution-artifact-package-metadata-notes.md`.
+
+Goal: implement local non-accepted package metadata over one Phase 529
+hermetic SMT/Z3 backend execution result.
+
+Implemented: Phase 531 adds backend-execution artifact package input/output
+metadata, classification/label/issue/validation types, package nonclaim/cap/
+rule/forbidden-API/inherited-digest helpers, deterministic digest/id/label
+binding helpers, package policy digest helper, `build_...` and `validate_...`
+entrypoints, and tests over a Phase 529-shaped local backend execution result.
+
+Validation coverage: focused tests cover successful local package metadata,
+invalid Phase 529 state rejection, and digest/promotion rejection across
+package writes, accepted-evidence mutation, Level2+, score axes, Lean, COBALT,
+Rust-to-Lean, proof/checker/solver, benchmark, external audit, independent
+external reproduction, strong claims, and action authority.
+
+Exit criteria: HSAI now has local package metadata over one local SMT/Z3
+backend execution observation. It still has no package file materialization, no
+accepted evidence, no Level2+ evidence, no populated score axes, no accepted
+formal evidence, no Lean/COBALT/Rust-to-Lean execution, no benchmark evidence,
+no external audit evidence, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
