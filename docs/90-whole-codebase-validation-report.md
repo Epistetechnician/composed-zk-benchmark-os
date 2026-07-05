@@ -7733,5 +7733,17 @@ Level2+ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
 additional SMT/Z3 execution, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/535-hsai-tiny-z3-backend-execution-accepted-evidence-owner-decision-metadata-notes.md](docs/535-hsai-tiny-z3-backend-execution-accepted-evidence-owner-decision-metadata-notes.md)
+documents the Phase 535 local backend-execution accepted-evidence owner
+decision metadata implementation. The implementation adds local owner-decision
+input/output metadata, bounded decision labels, owner-decision nonclaim/rule/
+forbidden-API/inherited-digest helpers, deterministic digest/id/label binding
+helpers, builder and validator entrypoints, and focused tests over a Phase 533
+review. It records `zkbench-core` as the only future accepted-evidence
+evaluation owner, creates no accepted evidence, creates no Level2+ evidence,
+populates no score axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3
+execution, creates no benchmark evidence, and claims no production/SOTA/
+security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
