@@ -15355,6 +15355,38 @@ evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean execution, no
 benchmark evidence, no external audit evidence, no independent external
 reproduction, and no production/SOTA/security/correctness claim.
 
+## Phase 547 HSAI Tiny Z3 Backend Execution Level2 Eligibility Metadata
+
+Status: complete. See
+`docs/547-hsai-tiny-z3-backend-execution-level2-eligibility-metadata-notes.md`.
+
+Goal: implement local Level2 eligibility metadata over one exact Phase 545
+score-axis eligibility record.
+
+Implemented: Phase 547 adds backend-execution Level2 eligibility input/output
+metadata, bounded Level2 classifications and labels, issue/validation types,
+blocker/nonclaim/rule/forbidden-API/inherited-digest helpers,
+nonpromotion/policy/digest/id/label binding helpers, `build_...` and
+`validate_...` entrypoints, and tests over a Phase 545 score-axis eligibility
+record.
+
+Validation coverage: focused tests cover successful local eligibility
+metadata, invalid Phase 545 state rejection, and promotion rejection across
+Level2 artifact writes, score-axis artifact writes, axis population, accepted
+formal evidence, Level2+, Lean, COBALT, Rust-to-Lean, additional SMT/Z3
+execution, proof/checker/solver, benchmark, external audit, independent
+external reproduction, strong claims, and action authority.
+
+Exit criteria: HSAI now records that the Phase 545 backend-execution
+score-axis eligibility record remains Level2-blocked under current local-only
+evidence and binds `zkbench-core` / `Level2EligibilityChecker` /
+`check_level2_eligibility` / `Level2EligibilityReport` /
+`ClaimBoundary::Level0DesignNote` with `creates_level2_evidence=false`. It
+still has no accepted formal evidence, no Level2+ evidence, no populated score
+axes, no Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no
+external audit evidence, no independent external reproduction, and no
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
