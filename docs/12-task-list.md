@@ -14392,6 +14392,34 @@ Level2+ evidence, no score axes, no Lean/new-SMT/COBALT or Rust-to-Lean
 execution, no benchmark evidence, no external audit evidence, and no
 production/SOTA/security/correctness claim.
 
+## Phase 512 HSAI Tiny Z3 Materialized Accepted Append Boundary
+
+Status: complete. See
+`docs/512-hsai-tiny-z3-materialized-accepted-append-boundary.md`.
+
+Goal: define the docs-first boundary for a future local materialized accepted
+ledger append output through the existing `zkbench-core`
+`MaterializedAcceptedLedgerAppendRequest` and
+`apply_materialized_accepted_ledger_append_transaction` owner.
+
+Implemented: Phase 512 documents the future allowed touch surface, the only
+future allowed materialization call, the requirement to route through the
+existing `zkbench-core` materialized append owner, forbidden direct
+`EvidenceLedger::load_json`/`save_json` and parallel-writer APIs, required
+future Phase 511 digest bindings, local ledger path identity and path-policy
+bindings, post-materialization report and artifact digest bindings, fail-closed
+future validation rules, backend relationship limits, meaning limits, and
+Phase 513 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a materialized accepted append boundary for a
+future local artifact implementation. It still has no materialized accepted
+ledger output, no accepted formal evidence, no Level2+ evidence, no score axes,
+no Lean/new-SMT/COBALT or Rust-to-Lean execution, no benchmark evidence, no
+external audit evidence, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

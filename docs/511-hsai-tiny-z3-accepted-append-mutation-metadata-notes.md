@@ -108,12 +108,11 @@ appended locally, the post-mutation ledger digest changes, the appended
 evidence class remains `LocalReplay`, and the appended claim boundary remains
 `Level1LocalReplay`.
 
-## Next Responsible Slice
+## Phase 512 Boundary Status
 
-The next responsible boundary is not SOTA, full security, semantic correctness,
-production readiness, Level2+, or backend proof authority.
-
-The next slice should be a docs-first materialization boundary that defines
-whether and how this in-memory mutation metadata may be exported into an
-explicit local artifact without promoting it to formal evidence, score axes,
-benchmark evidence, or external audit evidence.
+Phase 512 defines the docs-first materialized accepted append boundary in
+`docs/512-hsai-tiny-z3-materialized-accepted-append-boundary.md`. It does not
+write accepted Evidence Ledger files, call materialized append APIs, create
+accepted formal evidence, create Level2+ evidence, populate score axes, run
+Lean/new-SMT/COBALT/Rust-to-Lean extraction, create benchmark evidence, or
+claim production/SOTA/security/semantic-correctness results.
