@@ -14648,6 +14648,40 @@ evidence, no new Lean/new-SMT/COBALT or Rust-to-Lean execution, no benchmark
 evidence, no external audit evidence, and no production/SOTA/security/
 correctness claim.
 
+## Phase 521 HSAI Tiny Z3 External Reproduction Provenance Metadata
+
+Status: complete. See
+`docs/521-hsai-tiny-z3-external-reproduction-provenance-metadata-notes.md`.
+
+Goal: implement local external-reproduction provenance metadata over one exact
+Phase 519 Level2 eligibility metadata record.
+
+Implemented: Phase 521 adds external-reproduction provenance input/output
+metadata, classification and label enums, issue and validation types, missing
+input, blocker, nonclaim, rule, forbidden-API, inherited-digest,
+contract-digest, nonpromotion, policy-digest, digest-binding, id-binding, and
+label-binding helpers, a fail-closed validator, and a builder that records
+local external-reproduction provenance metadata only. The result binds Phase
+519, Phase 517, Phase 515, and Phase 513 identities, `zkbench-core`, default
+artifact-capture contract digest, default provenance contract digest, default
+external-result import schema digest, required provenance-field digest,
+blocker digest, and nonpromotion digest.
+
+Validation coverage: focused Rust tests cover successful local
+external-reproduction provenance metadata over a real Phase 519 record,
+rejection of invalid Phase 519 state, and rejection of fabricated independent
+external reproduction, artifact writes, formal-evidence, Level2+, score-axis,
+proof/checker/solver, backend, benchmark, external-audit, strong-claim, and
+action-authority promotion attempts.
+
+Exit criteria: HSAI now has local metadata classifying one Phase 519 record as
+`external_reproduction_blocked_no_independent_run` while binding the
+`zkbench-core` contracts required for future external reproduction. It still
+has no independent external reproduction, no Level2+ evidence, no populated
+score axes, no accepted formal evidence, no new Lean/new-SMT/COBALT or
+Rust-to-Lean execution, no benchmark evidence, no external audit evidence, and
+no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

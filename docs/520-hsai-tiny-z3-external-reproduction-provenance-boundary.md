@@ -166,22 +166,22 @@ execute an action.
 
 ## Phase 521 Implementation Exit Criteria
 
-A future Phase 521 may implement local external-reproduction provenance
-metadata only if it:
+Phase 521 implemented local external-reproduction provenance metadata in
+`docs/521-hsai-tiny-z3-external-reproduction-provenance-metadata-notes.md`.
+The implementation met this boundary by:
 
-- touches only the allowed files listed above;
-- performs no process or network calls;
-- writes no external-reproduction artifact files;
-- writes no Level2 artifact files;
-- writes no score-axis artifact files;
-- validates one exact Phase 519 Level2 eligibility metadata record;
-- binds the `zkbench-core` artifact-capture, provenance, and external-result
+- touching only the allowed files listed above;
+- performing no process or network calls;
+- writing no external-reproduction artifact files;
+- writing no Level2 artifact files;
+- writing no score-axis artifact files;
+- validating one exact Phase 519 Level2 eligibility metadata record;
+- binding the `zkbench-core` artifact-capture, provenance, and external-result
   import owner surface;
-- records the current HSAI classification as
+- recording the current HSAI classification as
   `external_reproduction_blocked_no_independent_run`;
-- records every required external-reproduction input as missing unless it has
-  explicit digest-bound evidence;
-- rejects accepted formal evidence, Level2+ evidence, populated score axes,
+- recording every required external-reproduction input as missing;
+- rejecting accepted formal evidence, Level2+ evidence, populated score axes,
   proof/checker/solver authority, backend execution evidence, benchmark
   evidence, external audit, strong claims, and action authority in the metadata
   itself.
