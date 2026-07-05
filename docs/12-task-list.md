@@ -16809,6 +16809,33 @@ formal evidence, no Level2+ evidence, no populated score axes, no Lean/COBALT
 no external audit evidence, and no production/SOTA/security/semantic-correctness
 claim.
 
+## Phase 596 HSAI Tiny Z3 Backend Execution Packet Role Artifact Independent Operator Import Candidate Boundary
+
+Status: complete. See
+`docs/596-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-import-candidate-boundary.md`.
+
+Goal: define the docs-first import-candidate metadata boundary after Phase 595
+local output plumbing.
+
+Implemented: Phase 596 defines the future local import-candidate metadata
+boundary over one exact Phase 595
+`PacketRoleArtifactIndependentOperatorOutputQuarantinedLocalBundle` readback.
+It specifies required Phase 595/593/591/589/587/585/583/581/579/577/575/573
+/571/569/567/565/563/561/559/557/555 and inherited backend-execution digest
+bindings, future candidate scope, validation requirements, classification caps,
+forbidden behavior, and Phase 597 exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has local packet-role artifact independent-operator
+output plumbing and a documented future import-candidate boundary. It still has
+no external result import, no accepted external result evidence, no accepted
+independent external reproduction, no accepted formal evidence, no Level2+
+evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean execution, no
+additional SMT/Z3 execution, no benchmark evidence, no external audit evidence,
+and no production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
