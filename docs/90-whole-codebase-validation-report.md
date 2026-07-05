@@ -7521,5 +7521,21 @@ creates no accepted formal evidence, creates no Level2+ evidence, runs no new
 Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence, and
 claims no production/SOTA/security/semantic-correctness result.
 
+[docs/520-hsai-tiny-z3-external-reproduction-provenance-boundary.md](docs/520-hsai-tiny-z3-external-reproduction-provenance-boundary.md)
+defines the Phase 520 docs-first boundary for future external-reproduction and
+provenance metadata over the Phase 519 Level2 eligibility record. The boundary
+records the existing `zkbench-core` owner surface for artifact capture,
+provenance contracts, external provenance drafts, external-result import
+schemas, candidate validation, and quarantine records. It records the current
+classification as `external_reproduction_blocked_no_independent_run`, defines
+required future Phase 519/517/515/513 digest bindings, external owner and
+contract bindings, required provenance-field bindings, fail-closed future
+validation rules, backend relationship limits, meaning limits, and Phase 521
+implementation exit criteria. It creates no Rust code, changes no Cargo
+metadata, writes no external-reproduction artifact files, populates no score
+axes, creates no accepted formal evidence, creates no Level2+ evidence, runs
+no new Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark
+evidence, and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
