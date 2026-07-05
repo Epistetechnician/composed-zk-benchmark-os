@@ -16779,6 +16779,36 @@ evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean execution, no
 additional SMT/Z3 execution, no benchmark evidence, no external audit evidence,
 and no production/SOTA/security/semantic-correctness claim.
 
+## Phase 595 HSAI Tiny Z3 Backend Execution Packet Role Artifact Independent Operator Output Plumbing
+
+Status: complete. See
+`docs/595-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-output-plumbing-notes.md`.
+
+Goal: implement the local caller-owned output-root plumbing authorized by Phase
+594.
+
+Implemented: Phase 595 adds typed local plumbing in `hsai-agent-admission` for
+one exact Phase 593 packet-role artifact independent-operator output metadata
+record. It writes and reads back the declared
+`packet-role-artifact-independent-operator-packet/` JSON files and `.sha256`
+sidecars, validates protected roots, staged writes, sidecars, undeclared-file
+absence, redaction constraints, manifest semantics, and nonpromotion booleans,
+and classifies successful readback at most as
+`PacketRoleArtifactIndependentOperatorOutputQuarantinedLocalBundle`.
+
+Validation coverage: focused Rust tests cover successful local
+materialization/readback, protected-root rejection, Phase 593 drift rejection,
+stale sidecar rejection, undeclared-file rejection, retained-secret rejection,
+and Unix symlink rejection.
+
+Exit criteria: HSAI now has local packet-role artifact independent-operator
+output plumbing. It still has no external result import, no accepted external
+result evidence, no accepted independent external reproduction, no accepted
+formal evidence, no Level2+ evidence, no populated score axes, no Lean/COBALT
+/Rust-to-Lean execution, no additional SMT/Z3 execution, no benchmark evidence,
+no external audit evidence, and no production/SOTA/security/semantic-correctness
+claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

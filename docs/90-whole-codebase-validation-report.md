@@ -8700,5 +8700,23 @@ score axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution,
 creates no benchmark evidence, and claims no production/SOTA/security
 /semantic-correctness result.
 
+[docs/595-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-output-plumbing-notes.md](docs/595-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-output-plumbing-notes.md)
+documents the Phase 595 packet-role artifact independent-operator output
+plumbing implementation. The Rust surface in `hsai-agent-admission` accepts one
+exact Phase 593 `PacketRoleArtifactIndependentOperatorOutputMissing` metadata
+record, writes and reads back the declared
+`packet-role-artifact-independent-operator-packet/` JSON files and `.sha256`
+sidecars under a caller-owned output root, validates protected roots, staged
+writes, stale sidecars, undeclared files, malformed or secret-bearing files,
+manifest semantics, and nonpromotion booleans, and classifies successful
+readback at most as
+`PacketRoleArtifactIndependentOperatorOutputQuarantinedLocalBundle`. It imports
+no external result, mutates no accepted Evidence Ledger, creates no accepted
+external result evidence, accepts no independent external reproduction, creates
+no accepted formal evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates
+no benchmark evidence, and claims no production/SOTA/security
+/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
