@@ -8258,5 +8258,24 @@ axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates
 no benchmark evidence, and claims no production/SOTA/security/semantic-
 correctness result.
 
+[docs/569-hsai-tiny-z3-backend-execution-external-operator-independent-reproduction-requirement-metadata-notes.md](docs/569-hsai-tiny-z3-backend-execution-external-operator-independent-reproduction-requirement-metadata-notes.md)
+documents the Phase 569 independent-reproduction requirement metadata
+implementation. `crates/hsai-agent-admission` now has local typed metadata
+that validates one exact Phase 567 policy-resolution metadata record, records
+`IndependentReproductionEvidenceBlocked`, binds Phase 567/565/563/561/559/557
+and Phase 555 digests, records deterministic required-future-evidence digests
+for independent operator identity, operator statement, environment
+declaration, captured-output summary, redaction report,
+replay/correspondence statement, and import ownership, and rejects Phase 567
+drift, premature evidence satisfaction, accepted-ledger mutation, Level2,
+score-axis population, proof/checker/solver promotion, backend execution
+evidence, benchmark evidence, external audit evidence, strong public claims,
+and authority. It imports no external result, writes no artifact files,
+mutates no accepted Evidence Ledger, creates no accepted external result
+evidence, accepts no independent external reproduction, creates no accepted
+formal evidence, creates no Level2+ evidence, populates no score axes, runs no
+Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark
+evidence, and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
