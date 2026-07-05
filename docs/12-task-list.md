@@ -14946,6 +14946,29 @@ accepted evidence, no Level2+ evidence, no populated score axes, no accepted
 formal evidence, no Lean/COBALT/Rust-to-Lean execution, no benchmark evidence,
 no external audit evidence, and no production/SOTA/security/correctness claim.
 
+## Phase 532 HSAI Tiny Z3 Backend Execution Package Review Boundary
+
+Status: complete. See
+`docs/532-hsai-tiny-z3-backend-execution-package-review-boundary.md`.
+
+Goal: define the docs-first boundary for a future local review record over one
+Phase 531 backend-execution artifact package metadata record.
+
+Implemented: Phase 532 defines the future review contract: required Phase 531,
+Phase 529, and Phase 527 digest bindings, allowed review classifications,
+allowed touch surface, fail-closed validation rules, accepted-evidence
+relationship limits, and Phase 533 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named boundary for reviewing one local SMT/Z3
+backend execution package as scoped local metadata. It still has no review
+implementation, no accepted evidence, no Level2+ evidence, no populated score
+axes, no accepted formal evidence, no Lean/COBALT/Rust-to-Lean execution, no
+benchmark evidence, no external audit evidence, and no production/SOTA/security/
+correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
