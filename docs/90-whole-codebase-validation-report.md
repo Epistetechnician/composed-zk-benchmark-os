@@ -8209,5 +8209,21 @@ creates no Level2+ evidence, populates no score axes, runs no
 Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark
 evidence, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/566-hsai-tiny-z3-backend-execution-external-operator-accepted-result-policy-resolution-boundary.md](docs/566-hsai-tiny-z3-backend-execution-external-operator-accepted-result-policy-resolution-boundary.md)
+documents the Phase 566 docs-first policy-resolution boundary for the Phase
+565 accepted-result eligibility blocker. It requires exact Phase 565
+eligibility metadata, Phase 563 review bindings, Phase 561
+candidate/validation/quarantine bindings, Phase 559 capture bindings, Phase
+557/555 handoff bindings, inherited backend-execution digests, explicit future
+evidence prerequisites, accepted-ledger owner preservation, Level2 and
+score-axis preconditions, fail-closed resolution states, and Phase 567
+implementation exit criteria. It creates no Rust code, writes no artifact
+files, performs no run, imports no external result, mutates no accepted
+Evidence Ledger, creates no accepted external result evidence, creates no
+accepted formal evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates
+no benchmark evidence, and claims no production/SOTA/security/semantic-
+correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

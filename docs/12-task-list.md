@@ -15918,6 +15918,32 @@ evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean execution, no
 additional SMT/Z3 execution, no benchmark evidence, no external audit
 evidence, and no production/SOTA/security/semantic-correctness claim.
 
+## Phase 566 HSAI Tiny Z3 Backend Execution External Operator Accepted Result Policy Resolution Boundary
+
+Status: complete. See
+`docs/566-hsai-tiny-z3-backend-execution-external-operator-accepted-result-policy-resolution-boundary.md`.
+
+Goal: define the docs-first policy-resolution boundary for the Phase 565
+accepted-result eligibility blocker.
+
+Implemented: Phase 566 defines the future policy-resolution boundary over one
+exact Phase 565 eligibility metadata record: required Phase 565/563/561/559/
+557/555 and inherited digest bindings, resolution states, the only currently
+valid `AcceptedResultPolicyResolutionBlocked` meaning, required future
+evidence before any advancement, forbidden operations, nonclaims, and Phase
+567 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named policy-resolution boundary after local
+accepted-result eligibility metadata. It still has no external result import,
+no accepted external result evidence, no accepted independent external
+reproduction, no accepted formal evidence, no Level2+ evidence, no populated
+score axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3
+execution, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
