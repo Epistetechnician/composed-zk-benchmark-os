@@ -14031,6 +14031,32 @@ sidecar, Level2+ evidence, score axes, proof-authority claim,
 Lean/new-SMT/COBALT or Rust-to-Lean execution, benchmark evidence, or
 production/SOTA/security/correctness claim.
 
+## Phase 500 HSAI Tiny Z3 Reviewer Policy Decision Boundary
+
+Status: complete. See
+`docs/500-hsai-tiny-z3-reviewer-policy-decision-boundary.md`.
+
+Goal: define the docs-first reviewer policy and reviewer decision requirements
+boundary for the next Phase 488 accepted-path prerequisite gate.
+
+Implemented: Phase 500 documents required future reviewer policy fields,
+closed reviewer decision labels, Phase 499 binding requirements, decision
+digest requirements, reviewer summary promotion rejection, reviewer
+independence limits, backend relationship limits, and Phase 501 implementation
+exit criteria. It scopes any future accepted reviewer label to local Phase 499
+source correspondence metadata only.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a reviewer policy/decision boundary for later
+accepted-path work. It still has no accepted append decision, accepted formal
+evidence, accepted Evidence Ledger mutation from HSAI admission metadata,
+accepted append policy change, review artifact, Level2+ evidence, score axes,
+proof-authority claim, Lean/new-SMT/COBALT or Rust-to-Lean execution,
+benchmark evidence, external audit, or production/SOTA/security/correctness
+claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
