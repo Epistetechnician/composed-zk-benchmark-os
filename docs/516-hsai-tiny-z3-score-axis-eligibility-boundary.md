@@ -140,17 +140,19 @@ readiness, full security, or authority to execute an action.
 
 ## Phase 517 Implementation Exit Criteria
 
-A future Phase 517 may implement local score-axis eligibility metadata only if
-it:
+Phase 517 implemented local score-axis eligibility metadata in
+`docs/517-hsai-tiny-z3-score-axis-eligibility-metadata-notes.md`. The
+implementation met this boundary by:
 
-- touches only the allowed files listed above;
-- performs no process or network calls;
-- writes no score-axis artifact files;
-- validates one exact Phase 515 package metadata record;
-- binds the `zkbench-core` score owner, `ScoreReport`, and
+- touching only the allowed files listed above;
+- performing no process or network calls;
+- writing no score-axis artifact files;
+- validating one exact Phase 515 package metadata record;
+- binding the `zkbench-core` score owner, `ScoreReport`, and
   `validate_score_report`;
-- records the current classification as `score_axes_blocked_local_only`;
-- records every score axis as unpopulated;
-- rejects formal evidence, Level2+, populated score axes, proof/checker/solver
-  authority, backend execution evidence, benchmark evidence, external audit,
-  strong claims, and action authority in the metadata itself.
+- recording the current classification as `score_axes_blocked_local_only`;
+- recording every score axis as unpopulated;
+- rejecting formal evidence, Level2+, populated score axes,
+  proof/checker/solver authority, backend execution evidence, benchmark
+  evidence, external audit, strong claims, and action authority in the
+  metadata itself.
