@@ -15835,6 +15835,33 @@ Rust-to-Lean execution, no additional SMT/Z3 execution, no benchmark evidence,
 no external audit evidence, and no production/SOTA/security/
 semantic-correctness claim.
 
+## Phase 563 HSAI Tiny Z3 Backend Execution External Operator Capture Import Review Metadata
+
+Status: complete. See
+`docs/563-hsai-tiny-z3-backend-execution-external-operator-capture-import-review-metadata-notes.md`.
+
+Goal: implement local review metadata over one exact Phase 561 quarantined
+operator-capture import candidate.
+
+Implemented: Phase 563 adds schema/state/claim-boundary constants, input and
+output metadata records, bounded classifications and labels, issue and
+validation types, blocker/nonclaim/rule/forbidden-API/inherited-digest
+helpers, Phase 561 import-candidate digest/id/label bindings, review policy
+and nonpromotion digest helpers, Phase 561 exactness checks, and promotion
+rejection.
+
+Validation coverage: focused tests cover successful blocked review metadata,
+invalid Phase 561 state rejection, and review-policy digest drift plus
+promotion rejection.
+
+Exit criteria: HSAI can locally review a structurally valid operator-capture
+external-result import candidate and keep it blocked from accepted evidence.
+It still has no external result import, no accepted independent external
+reproduction, no accepted formal evidence, no Level2+ evidence, no populated
+score axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3
+execution, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
