@@ -7829,5 +7829,19 @@ evidence, creates no Level2+ evidence, populates no score axes, runs no
 Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark
 evidence, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/542-hsai-tiny-z3-backend-execution-accepted-evidence-package-boundary.md](docs/542-hsai-tiny-z3-backend-execution-accepted-evidence-package-boundary.md)
+defines the Phase 542 docs-first boundary for a future local accepted-evidence
+package over one exact Phase 541 materialized accepted append metadata record.
+The boundary defines required Phase 541 materialization/input/nonclaim/rule/
+forbidden-API/inherited-digest bindings, Phase 541 materialized append report,
+artifact, and byte-length bindings, Phase 539 mutation and appended
+LocalReplay/Level1LocalReplay bindings, inherited Phase 535/533/531/529/527
+bindings, package policy/nonclaim/cap digest bindings, fail-closed validation
+rules, meaning limits, and Phase 543 implementation exit criteria. It creates
+no Rust code, creates no package metadata, creates no accepted formal evidence,
+creates no Level2+ evidence, populates no score axes, runs no Lean/COBALT/
+Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark evidence,
+and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

@@ -15217,6 +15217,32 @@ no accepted formal evidence, no Level2+ evidence, no populated score axes, no
 Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no external audit
 evidence, and no production/SOTA/security/correctness claim.
 
+## Phase 542 HSAI Tiny Z3 Backend Execution Accepted Evidence Package Boundary
+
+Status: complete. See
+`docs/542-hsai-tiny-z3-backend-execution-accepted-evidence-package-boundary.md`.
+
+Goal: define the docs-first boundary for a future local accepted-evidence
+package over one exact Phase 541 materialized accepted append metadata record.
+
+Implemented: Phase 542 defines the future package contract: required Phase 541
+materialization/input/nonclaim/rule/forbidden-API/inherited-digest bindings,
+Phase 541 materialized append report/artifact/byte-length bindings, Phase 539
+mutation and appended LocalReplay/Level1LocalReplay bindings, inherited Phase
+535/533/531/529/527 bindings, package policy/nonclaim/cap digest bindings,
+fail-closed validation rules, meaning limits, and Phase 543 implementation
+exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named boundary for packaging one Phase 541 local
+materialized artifact as scoped local accepted evidence. It still has no
+accepted formal evidence, no Level2+ evidence, no populated score axes, no
+Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no external audit
+evidence, no independent external reproduction, and no production/SOTA/
+security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
