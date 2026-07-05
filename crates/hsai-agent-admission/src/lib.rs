@@ -1141,6 +1141,29 @@ pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_HANDOFF
 pub const GATEWAY_FORMAL_TINY_Z3_MANUAL_HANDOFF_BUNDLE_TYPE: &str = "ManualHandoffBundle";
 pub const GATEWAY_FORMAL_TINY_Z3_MANUAL_HANDOFF_VALIDATOR_ID: &str =
     "validate_manual_handoff_bundle";
+pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_HANDOFF_PACKET_OUTPUT_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-z3-backend-execution-handoff-packet-output:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_HANDOFF_PACKET_OUTPUT_STATE_SLICE: &str =
+    "phase-557-hsai-tiny-z3-backend-execution-handoff-packet-output-metadata";
+pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_HANDOFF_PACKET_OUTPUT_CLAIM_BOUNDARY: &str = "local tiny-Z3 backend execution handoff packet output metadata only; materializes one digest-checked Level0DesignNote manual handoff packet over one Phase 555 handoff record, but does not run an external replay, run a backend, import external results, create independent external reproduction, create accepted formal evidence, create Level2+ evidence, populate score axes, generate proof artifacts, generate checker transcripts, generate solver certificates, run Lean, run another SMT/Z3 execution, run COBALT, run Rust-to-Lean extraction, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_Z3_HANDOFF_PACKET_NAMESPACE: &str =
+    "gateway-formal-tiny-z3-external-reproduction-handoff";
+pub const GATEWAY_FORMAL_TINY_Z3_HANDOFF_PACKET_DECLARED_FILES: [&str; 6] = [
+    "gateway-formal-tiny-z3-external-reproduction-handoff/manifest.json",
+    "gateway-formal-tiny-z3-external-reproduction-handoff/phase555-handoff.json",
+    "gateway-formal-tiny-z3-external-reproduction-handoff/manual-handoff-bundle.json",
+    "gateway-formal-tiny-z3-external-reproduction-handoff/manual-handoff-validation.json",
+    "gateway-formal-tiny-z3-external-reproduction-handoff/nonpromotion-report.json",
+    "gateway-formal-tiny-z3-external-reproduction-handoff/digests.json",
+];
+pub const GATEWAY_FORMAL_TINY_Z3_HANDOFF_PACKET_DECLARED_SIDECARS: [&str; 6] = [
+    "gateway-formal-tiny-z3-external-reproduction-handoff/manifest.json.sha256",
+    "gateway-formal-tiny-z3-external-reproduction-handoff/phase555-handoff.json.sha256",
+    "gateway-formal-tiny-z3-external-reproduction-handoff/manual-handoff-bundle.json.sha256",
+    "gateway-formal-tiny-z3-external-reproduction-handoff/manual-handoff-validation.json.sha256",
+    "gateway-formal-tiny-z3-external-reproduction-handoff/nonpromotion-report.json.sha256",
+    "gateway-formal-tiny-z3-external-reproduction-handoff/digests.json.sha256",
+];
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -18934,6 +18957,151 @@ pub enum GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue {
 pub struct GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputRequest {
+    pub bundle_id: String,
+    pub created_at_unix: u64,
+    pub overwrite: bool,
+    pub protected_roots: Vec<PathBuf>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3BackendExecutionHandoffPacketNonpromotionReport {
+    pub schema_version: String,
+    pub state_slice: String,
+    pub phase555_handoff_digest: Hash,
+    pub manual_handoff_bundle_digest: Hash,
+    pub manual_handoff_validation_digest: Hash,
+    pub manual_handoff_validation_valid: bool,
+    pub manual_handoff_validation_issue_count: usize,
+    pub output_claim_boundary: String,
+    pub process_execution_performed: bool,
+    pub backend_execution_performed: bool,
+    pub external_replay_performed: bool,
+    pub external_result_import_created: bool,
+    pub independent_external_reproduction_created: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3BackendExecutionHandoffPacketNonpromotionReport {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-handoff-packet-nonpromotion-report:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputManifest {
+    pub schema_version: String,
+    pub bundle_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub phase555_handoff_digest: Hash,
+    pub phase555_handoff_input_digest: Hash,
+    pub phase555_classification:
+        GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffClassification,
+    pub phase555_manual_handoff_bundle_digest: Hash,
+    pub phase555_manual_handoff_validation_digest: Hash,
+    pub phase555_manual_handoff_validation_valid: bool,
+    pub phase555_manual_handoff_validation_issue_count: usize,
+    pub phase555_manual_handoff_claim_boundary: String,
+    pub phase553_import_review_digest: Hash,
+    pub phase551_import_candidate_digest: Hash,
+    pub phase549_external_reproduction_digest: Hash,
+    pub phase547_level2_eligibility_digest: Hash,
+    pub phase545_score_axis_eligibility_digest: Hash,
+    pub phase543_package_digest: Hash,
+    pub phase541_materialized_ledger_artifact_digest: Hash,
+    pub phase535_owner_decision_digest: Hash,
+    pub phase533_review_digest: Hash,
+    pub phase531_package_digest: Hash,
+    pub phase529_result_digest: Hash,
+    pub phase527_candidate_digest: Hash,
+    pub declared_namespace: String,
+    pub declared_files: Vec<String>,
+    pub declared_sidecars: Vec<String>,
+    pub declared_file_digests: BTreeMap<String, Hash>,
+    pub readback_validation_digest: Hash,
+    pub nonpromotion_report_digest: Hash,
+    pub claim_boundary: String,
+    pub process_execution_performed: bool,
+    pub backend_execution_performed: bool,
+    pub external_replay_performed: bool,
+    pub external_result_import_created: bool,
+    pub independent_external_reproduction_created: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputManifest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-handoff-packet-output-manifest:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError {
+    EmptyBundleId,
+    InvalidBundleId,
+    InvalidHandoffState,
+    ManualHandoffBundleDigestMismatch,
+    ManualHandoffValidationMismatch,
+    ManifestSemanticMismatch,
+    NonpromotionMismatch,
+    NonclaimMismatch,
+    EmptyOutputRoot,
+    ProtectedOutputRoot,
+    OutputRootExistsWithoutOverwrite,
+    OutputRootIsSymlink,
+    OutputRootIsFile,
+    BundleFileIsSymlink(String),
+    DeclaredFileTypeMismatch(String),
+    DigestMismatch(String),
+    UndeclaredFile(String),
+    MalformedDeclaredFile(String),
+    Io(String),
+    Serialization(String),
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -77684,6 +77852,870 @@ pub fn validate_gateway_formal_tiny_z3_backend_execution_external_reproduction_h
     }
 }
 
+pub fn gateway_formal_tiny_z3_backend_execution_handoff_packet_declared_files() -> Vec<String> {
+    GATEWAY_FORMAL_TINY_Z3_HANDOFF_PACKET_DECLARED_FILES
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_handoff_packet_declared_sidecars() -> Vec<String> {
+    GATEWAY_FORMAL_TINY_Z3_HANDOFF_PACKET_DECLARED_SIDECARS
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_handoff_packet_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_HANDOFF_PACKET_OUTPUT_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_handoff_packet_nonpromotion_report(
+    handoff: &GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoff,
+) -> GatewayFormalTinyZ3BackendExecutionHandoffPacketNonpromotionReport {
+    GatewayFormalTinyZ3BackendExecutionHandoffPacketNonpromotionReport {
+        schema_version:
+            GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_HANDOFF_PACKET_OUTPUT_SCHEMA_VERSION.to_owned(),
+        state_slice: GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_HANDOFF_PACKET_OUTPUT_STATE_SLICE
+            .to_owned(),
+        phase555_handoff_digest: handoff.digest(),
+        manual_handoff_bundle_digest: handoff.manual_handoff_bundle_digest,
+        manual_handoff_validation_digest: handoff.manual_handoff_validation_digest,
+        manual_handoff_validation_valid: handoff.manual_handoff_validation_valid,
+        manual_handoff_validation_issue_count: handoff.manual_handoff_validation_issue_count,
+        output_claim_boundary:
+            gateway_formal_tiny_z3_backend_execution_handoff_packet_claim_boundary(),
+        process_execution_performed: false,
+        backend_execution_performed: false,
+        external_replay_performed: false,
+        external_result_import_created: false,
+        independent_external_reproduction_created: false,
+        accepted_formal_evidence_created: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        lean_execution_evidence_created: false,
+        additional_smt_z3_execution_created: false,
+        cobalt_execution_evidence_created: false,
+        rust_to_lean_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        external_audit_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    }
+}
+
+pub fn materialize_gateway_formal_tiny_z3_backend_execution_handoff_packet_output_bundle(
+    output_root: &Path,
+    handoff: &GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoff,
+    manual_bundle: &zkbench_core::ManualHandoffBundle,
+    request: &GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputRequest,
+) -> Result<
+    GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputManifest,
+    GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError,
+> {
+    validate_gateway_formal_tiny_z3_backend_execution_handoff_packet_output_request(
+        output_root,
+        handoff,
+        manual_bundle,
+        request,
+    )?;
+    let staging_root = gateway_formal_tiny_z3_backend_execution_handoff_packet_staging_root_for(
+        output_root,
+        &request.bundle_id,
+    )?;
+    if staging_root.exists() {
+        remove_gateway_formal_tiny_z3_backend_execution_handoff_packet_dir_all_checked(
+            &staging_root,
+        )?;
+    }
+    fs::create_dir_all(staging_root.join(GATEWAY_FORMAL_TINY_Z3_HANDOFF_PACKET_NAMESPACE))
+        .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_io_error)?;
+
+    let files = build_gateway_formal_tiny_z3_backend_execution_handoff_packet_bundle_files(
+        handoff,
+        manual_bundle,
+        request,
+    )?;
+    for (logical_path, bytes) in &files {
+        let target = staging_root.join(logical_path);
+        if let Some(parent) = target.parent() {
+            fs::create_dir_all(parent)
+                .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_io_error)?;
+        }
+        fs::write(&target, bytes)
+            .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_io_error)?;
+        fs::write(
+            sidecar_path(&target),
+            hash_hex(hash_bytes(bytes)).into_bytes(),
+        )
+        .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_io_error)?;
+    }
+
+    if output_root.exists() {
+        if !request.overwrite {
+            remove_gateway_formal_tiny_z3_backend_execution_handoff_packet_dir_all_checked(
+                &staging_root,
+            )?;
+            return Err(
+                GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::OutputRootExistsWithoutOverwrite,
+            );
+        }
+        remove_gateway_formal_tiny_z3_backend_execution_handoff_packet_dir_all_checked(
+            output_root,
+        )?;
+    }
+    fs::rename(&staging_root, output_root)
+        .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_io_error)?;
+    read_gateway_formal_tiny_z3_backend_execution_handoff_packet_output_bundle(output_root)
+}
+
+pub fn read_gateway_formal_tiny_z3_backend_execution_handoff_packet_output_bundle(
+    output_root: &Path,
+) -> Result<
+    GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputManifest,
+    GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError,
+> {
+    let output_metadata = fs::symlink_metadata(output_root)
+        .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_io_error)?;
+    if output_metadata.file_type().is_symlink() {
+        return Err(
+            GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::OutputRootIsSymlink,
+        );
+    }
+    if !output_metadata.is_dir() {
+        return Err(GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::OutputRootIsFile);
+    }
+    let bundle_dir = output_root.join(GATEWAY_FORMAL_TINY_Z3_HANDOFF_PACKET_NAMESPACE);
+    let bundle_metadata = fs::symlink_metadata(&bundle_dir)
+        .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_io_error)?;
+    if bundle_metadata.file_type().is_symlink() {
+        return Err(
+            GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::BundleFileIsSymlink(
+                GATEWAY_FORMAL_TINY_Z3_HANDOFF_PACKET_NAMESPACE.to_owned(),
+            ),
+        );
+    }
+    if !bundle_metadata.is_dir() {
+        return Err(
+            GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::DeclaredFileTypeMismatch(
+                GATEWAY_FORMAL_TINY_Z3_HANDOFF_PACKET_NAMESPACE.to_owned(),
+            ),
+        );
+    }
+
+    reject_undeclared_gateway_formal_tiny_z3_backend_execution_handoff_packet_files(output_root)?;
+    let mut files = BTreeMap::new();
+    for logical_path in GATEWAY_FORMAL_TINY_Z3_HANDOFF_PACKET_DECLARED_FILES {
+        let path = output_root.join(logical_path);
+        let metadata = fs::symlink_metadata(&path)
+            .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_io_error)?;
+        if metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::BundleFileIsSymlink(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        if !metadata.is_file() {
+            return Err(
+                GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::DeclaredFileTypeMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        let sidecar = sidecar_path(&path);
+        let sidecar_metadata = fs::symlink_metadata(&sidecar)
+            .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_io_error)?;
+        if sidecar_metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::BundleFileIsSymlink(
+                    format!("{logical_path}.sha256"),
+                ),
+            );
+        }
+        if !sidecar_metadata.is_file() {
+            return Err(
+                GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::DeclaredFileTypeMismatch(
+                    format!("{logical_path}.sha256"),
+                ),
+            );
+        }
+        let bytes = fs::read(&path)
+            .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_io_error)?;
+        let expected_hash = fs::read_to_string(&sidecar)
+            .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_io_error)?;
+        if expected_hash.trim() != hash_hex(hash_bytes(&bytes)) {
+            return Err(
+                GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::DigestMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        files.insert((*logical_path).to_owned(), bytes);
+    }
+    validate_gateway_formal_tiny_z3_backend_execution_handoff_packet_bundle_semantics(&files)
+}
+
+fn validate_gateway_formal_tiny_z3_backend_execution_handoff_packet_output_request(
+    output_root: &Path,
+    handoff: &GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoff,
+    manual_bundle: &zkbench_core::ManualHandoffBundle,
+    request: &GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputRequest,
+) -> Result<(), GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError> {
+    if request.bundle_id.trim().is_empty() {
+        return Err(GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::EmptyBundleId);
+    }
+    if !is_single_segment_id(&request.bundle_id) {
+        return Err(GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::InvalidBundleId);
+    }
+    validate_gateway_formal_tiny_z3_backend_execution_handoff_packet_handoff_record(handoff)?;
+    validate_gateway_formal_tiny_z3_backend_execution_handoff_packet_manual_bundle(
+        handoff,
+        manual_bundle,
+    )?;
+    validate_gateway_formal_tiny_z3_backend_execution_handoff_packet_output_root(
+        output_root,
+        &request.protected_roots,
+        request.overwrite,
+    )
+}
+
+fn build_gateway_formal_tiny_z3_backend_execution_handoff_packet_bundle_files(
+    handoff: &GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoff,
+    manual_bundle: &zkbench_core::ManualHandoffBundle,
+    request: &GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputRequest,
+) -> Result<BTreeMap<String, Vec<u8>>, GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError>
+{
+    let validation = zkbench_core::validate_manual_handoff_bundle(manual_bundle);
+    let nonpromotion =
+        gateway_formal_tiny_z3_backend_execution_handoff_packet_nonpromotion_report(handoff);
+    let mut files = BTreeMap::from([
+        (
+            "gateway-formal-tiny-z3-external-reproduction-handoff/phase555-handoff.json".to_owned(),
+            serde_json::to_vec_pretty(handoff)
+                .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_serde_error)?,
+        ),
+        (
+            "gateway-formal-tiny-z3-external-reproduction-handoff/manual-handoff-bundle.json"
+                .to_owned(),
+            serde_json::to_vec_pretty(manual_bundle)
+                .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_serde_error)?,
+        ),
+        (
+            "gateway-formal-tiny-z3-external-reproduction-handoff/manual-handoff-validation.json"
+                .to_owned(),
+            serde_json::to_vec_pretty(&validation)
+                .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_serde_error)?,
+        ),
+        (
+            "gateway-formal-tiny-z3-external-reproduction-handoff/nonpromotion-report.json"
+                .to_owned(),
+            serde_json::to_vec_pretty(&nonpromotion)
+                .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_serde_error)?,
+        ),
+    ]);
+    let core_file_digests: BTreeMap<String, Hash> = files
+        .iter()
+        .map(|(path, bytes)| (path.clone(), hash_bytes(bytes)))
+        .collect();
+    files.insert(
+        "gateway-formal-tiny-z3-external-reproduction-handoff/digests.json".to_owned(),
+        serde_json::to_vec_pretty(&core_file_digests)
+            .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_serde_error)?,
+    );
+    let declared_file_digests = files
+        .iter()
+        .map(|(path, bytes)| (path.clone(), hash_bytes(bytes)))
+        .collect();
+    let readback_validation_digest =
+        gateway_formal_tiny_z3_backend_execution_handoff_packet_readback_validation_digest(
+            handoff,
+            manual_bundle,
+            &validation,
+            &nonpromotion,
+            &core_file_digests,
+        );
+    let manifest = GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputManifest {
+        schema_version:
+            GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_HANDOFF_PACKET_OUTPUT_SCHEMA_VERSION
+                .to_owned(),
+        bundle_id: request.bundle_id.clone(),
+        state_slice: GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_HANDOFF_PACKET_OUTPUT_STATE_SLICE
+            .to_owned(),
+        created_at_unix: request.created_at_unix,
+        phase555_handoff_digest: handoff.digest(),
+        phase555_handoff_input_digest: handoff.handoff_input_digest,
+        phase555_classification: handoff.classification.clone(),
+        phase555_manual_handoff_bundle_digest: handoff.manual_handoff_bundle_digest,
+        phase555_manual_handoff_validation_digest: handoff.manual_handoff_validation_digest,
+        phase555_manual_handoff_validation_valid: handoff.manual_handoff_validation_valid,
+        phase555_manual_handoff_validation_issue_count: handoff.manual_handoff_validation_issue_count,
+        phase555_manual_handoff_claim_boundary: handoff.manual_handoff_claim_boundary.clone(),
+        phase553_import_review_digest: handoff.phase553_import_review_digest,
+        phase551_import_candidate_digest: handoff.phase551_import_candidate_digest,
+        phase549_external_reproduction_digest: handoff.phase549_external_reproduction_digest,
+        phase547_level2_eligibility_digest: handoff.phase547_level2_eligibility_digest,
+        phase545_score_axis_eligibility_digest: handoff.phase545_score_axis_eligibility_digest,
+        phase543_package_digest: handoff.phase543_package_digest,
+        phase541_materialized_ledger_artifact_digest:
+            handoff.phase541_materialized_ledger_artifact_digest,
+        phase535_owner_decision_digest: handoff.phase535_owner_decision_digest,
+        phase533_review_digest: handoff.phase533_review_digest,
+        phase531_package_digest: handoff.phase531_package_digest,
+        phase529_result_digest: handoff.phase529_result_digest,
+        phase527_candidate_digest: handoff.phase527_candidate_digest,
+        declared_namespace: GATEWAY_FORMAL_TINY_Z3_HANDOFF_PACKET_NAMESPACE.to_owned(),
+        declared_files: gateway_formal_tiny_z3_backend_execution_handoff_packet_declared_files(),
+        declared_sidecars:
+            gateway_formal_tiny_z3_backend_execution_handoff_packet_declared_sidecars(),
+        declared_file_digests,
+        readback_validation_digest,
+        nonpromotion_report_digest: nonpromotion.digest(),
+        claim_boundary: gateway_formal_tiny_z3_backend_execution_handoff_packet_claim_boundary(),
+        process_execution_performed: false,
+        backend_execution_performed: false,
+        external_replay_performed: false,
+        external_result_import_created: false,
+        independent_external_reproduction_created: false,
+        accepted_formal_evidence_created: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        lean_execution_evidence_created: false,
+        additional_smt_z3_execution_created: false,
+        cobalt_execution_evidence_created: false,
+        rust_to_lean_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        external_audit_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+        explicit_nonclaims:
+            gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_required_nonclaims(),
+    };
+    files.insert(
+        "gateway-formal-tiny-z3-external-reproduction-handoff/manifest.json".to_owned(),
+        serde_json::to_vec_pretty(&manifest)
+            .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_serde_error)?,
+    );
+    Ok(files)
+}
+
+fn validate_gateway_formal_tiny_z3_backend_execution_handoff_packet_bundle_semantics(
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<
+    GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputManifest,
+    GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError,
+> {
+    let manifest: GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputManifest =
+        parse_gateway_formal_tiny_z3_backend_execution_handoff_packet_declared_json(
+            files,
+            "gateway-formal-tiny-z3-external-reproduction-handoff/manifest.json",
+        )?;
+    let handoff: GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoff =
+        parse_gateway_formal_tiny_z3_backend_execution_handoff_packet_declared_json(
+            files,
+            "gateway-formal-tiny-z3-external-reproduction-handoff/phase555-handoff.json",
+        )?;
+    let manual_bundle: zkbench_core::ManualHandoffBundle =
+        parse_gateway_formal_tiny_z3_backend_execution_handoff_packet_declared_json(
+            files,
+            "gateway-formal-tiny-z3-external-reproduction-handoff/manual-handoff-bundle.json",
+        )?;
+    let validation: zkbench_core::ManualHandoffValidation =
+        parse_gateway_formal_tiny_z3_backend_execution_handoff_packet_declared_json(
+            files,
+            "gateway-formal-tiny-z3-external-reproduction-handoff/manual-handoff-validation.json",
+        )?;
+    let nonpromotion: GatewayFormalTinyZ3BackendExecutionHandoffPacketNonpromotionReport =
+        parse_gateway_formal_tiny_z3_backend_execution_handoff_packet_declared_json(
+            files,
+            "gateway-formal-tiny-z3-external-reproduction-handoff/nonpromotion-report.json",
+        )?;
+    let core_file_digests: BTreeMap<String, Hash> =
+        parse_gateway_formal_tiny_z3_backend_execution_handoff_packet_declared_json(
+            files,
+            "gateway-formal-tiny-z3-external-reproduction-handoff/digests.json",
+        )?;
+    validate_gateway_formal_tiny_z3_backend_execution_handoff_packet_readback_manifest(
+        &manifest,
+        &handoff,
+        &manual_bundle,
+        &validation,
+        &nonpromotion,
+        &core_file_digests,
+        files,
+    )?;
+    Ok(manifest)
+}
+
+fn validate_gateway_formal_tiny_z3_backend_execution_handoff_packet_readback_manifest(
+    manifest: &GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputManifest,
+    handoff: &GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoff,
+    manual_bundle: &zkbench_core::ManualHandoffBundle,
+    validation: &zkbench_core::ManualHandoffValidation,
+    nonpromotion: &GatewayFormalTinyZ3BackendExecutionHandoffPacketNonpromotionReport,
+    core_file_digests: &BTreeMap<String, Hash>,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<(), GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError> {
+    validate_gateway_formal_tiny_z3_backend_execution_handoff_packet_handoff_record(handoff)?;
+    validate_gateway_formal_tiny_z3_backend_execution_handoff_packet_manual_bundle(
+        handoff,
+        manual_bundle,
+    )?;
+    let expected_validation = zkbench_core::validate_manual_handoff_bundle(manual_bundle);
+    if validation != &expected_validation || !validation.valid || !validation.issues.is_empty() {
+        return Err(
+            GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::ManualHandoffValidationMismatch,
+        );
+    }
+    let expected_nonpromotion =
+        gateway_formal_tiny_z3_backend_execution_handoff_packet_nonpromotion_report(handoff);
+    if nonpromotion != &expected_nonpromotion {
+        return Err(
+            GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::NonpromotionMismatch,
+        );
+    }
+    let expected_core_paths: BTreeSet<String> = [
+        "gateway-formal-tiny-z3-external-reproduction-handoff/phase555-handoff.json",
+        "gateway-formal-tiny-z3-external-reproduction-handoff/manual-handoff-bundle.json",
+        "gateway-formal-tiny-z3-external-reproduction-handoff/manual-handoff-validation.json",
+        "gateway-formal-tiny-z3-external-reproduction-handoff/nonpromotion-report.json",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect();
+    if core_file_digests.keys().cloned().collect::<BTreeSet<_>>() != expected_core_paths {
+        return Err(
+            GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::ManifestSemanticMismatch,
+        );
+    }
+    for (logical_path, expected_digest) in core_file_digests {
+        if hash_bytes(
+            declared_gateway_formal_tiny_z3_backend_execution_handoff_packet_bytes(
+                files,
+                logical_path,
+            )?,
+        ) != *expected_digest
+        {
+            return Err(
+                GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::ManifestSemanticMismatch,
+            );
+        }
+    }
+    let expected_digest_paths: BTreeSet<String> =
+        GATEWAY_FORMAL_TINY_Z3_HANDOFF_PACKET_DECLARED_FILES
+            .iter()
+            .filter(|path| {
+                **path != "gateway-formal-tiny-z3-external-reproduction-handoff/manifest.json"
+            })
+            .map(|path| (*path).to_owned())
+            .collect();
+    if manifest
+        .declared_file_digests
+        .keys()
+        .cloned()
+        .collect::<BTreeSet<_>>()
+        != expected_digest_paths
+    {
+        return Err(
+            GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::ManifestSemanticMismatch,
+        );
+    }
+    for (logical_path, expected_digest) in &manifest.declared_file_digests {
+        if hash_bytes(
+            declared_gateway_formal_tiny_z3_backend_execution_handoff_packet_bytes(
+                files,
+                logical_path,
+            )?,
+        ) != *expected_digest
+        {
+            return Err(
+                GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::ManifestSemanticMismatch,
+            );
+        }
+    }
+    if manifest.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_HANDOFF_PACKET_OUTPUT_SCHEMA_VERSION
+        || manifest.state_slice
+            != GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_HANDOFF_PACKET_OUTPUT_STATE_SLICE
+        || !is_single_segment_id(&manifest.bundle_id)
+        || manifest.phase555_handoff_digest != handoff.digest()
+        || manifest.phase555_handoff_input_digest != handoff.handoff_input_digest
+        || manifest.phase555_classification != handoff.classification
+        || manifest.phase555_manual_handoff_bundle_digest != handoff.manual_handoff_bundle_digest
+        || manifest.phase555_manual_handoff_validation_digest
+            != handoff.manual_handoff_validation_digest
+        || manifest.phase555_manual_handoff_validation_valid
+            != handoff.manual_handoff_validation_valid
+        || manifest.phase555_manual_handoff_validation_issue_count
+            != handoff.manual_handoff_validation_issue_count
+        || manifest.phase555_manual_handoff_claim_boundary != handoff.manual_handoff_claim_boundary
+        || manifest.phase553_import_review_digest != handoff.phase553_import_review_digest
+        || manifest.phase551_import_candidate_digest != handoff.phase551_import_candidate_digest
+        || manifest.phase549_external_reproduction_digest
+            != handoff.phase549_external_reproduction_digest
+        || manifest.phase547_level2_eligibility_digest != handoff.phase547_level2_eligibility_digest
+        || manifest.phase545_score_axis_eligibility_digest
+            != handoff.phase545_score_axis_eligibility_digest
+        || manifest.phase543_package_digest != handoff.phase543_package_digest
+        || manifest.phase541_materialized_ledger_artifact_digest
+            != handoff.phase541_materialized_ledger_artifact_digest
+        || manifest.phase535_owner_decision_digest != handoff.phase535_owner_decision_digest
+        || manifest.phase533_review_digest != handoff.phase533_review_digest
+        || manifest.phase531_package_digest != handoff.phase531_package_digest
+        || manifest.phase529_result_digest != handoff.phase529_result_digest
+        || manifest.phase527_candidate_digest != handoff.phase527_candidate_digest
+        || manifest.declared_namespace != GATEWAY_FORMAL_TINY_Z3_HANDOFF_PACKET_NAMESPACE
+        || manifest.declared_files
+            != gateway_formal_tiny_z3_backend_execution_handoff_packet_declared_files()
+        || manifest.declared_sidecars
+            != gateway_formal_tiny_z3_backend_execution_handoff_packet_declared_sidecars()
+        || manifest.readback_validation_digest
+            != gateway_formal_tiny_z3_backend_execution_handoff_packet_readback_validation_digest(
+                handoff,
+                manual_bundle,
+                validation,
+                nonpromotion,
+                core_file_digests,
+            )
+        || manifest.nonpromotion_report_digest != nonpromotion.digest()
+        || manifest.claim_boundary
+            != gateway_formal_tiny_z3_backend_execution_handoff_packet_claim_boundary()
+        || manifest.process_execution_performed
+        || manifest.backend_execution_performed
+        || manifest.external_replay_performed
+        || manifest.external_result_import_created
+        || manifest.independent_external_reproduction_created
+        || manifest.accepted_formal_evidence_created
+        || manifest.creates_level2_evidence
+        || manifest.populates_score_axes
+        || manifest.proof_artifact_created
+        || manifest.checker_transcript_created
+        || manifest.solver_certificate_created
+        || manifest.lean_execution_evidence_created
+        || manifest.additional_smt_z3_execution_created
+        || manifest.cobalt_execution_evidence_created
+        || manifest.rust_to_lean_execution_evidence_created
+        || manifest.benchmark_evidence_created
+        || manifest.external_audit_evidence_created
+        || manifest.semantic_correctness_claimed
+        || manifest.production_readiness_claimed
+        || manifest.sota_claimed
+        || manifest.breakthrough_claimed
+        || manifest.full_security_claimed
+        || manifest.grants_authority
+    {
+        return Err(
+            GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::ManifestSemanticMismatch,
+        );
+    }
+    if manifest.explicit_nonclaims
+        != gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_required_nonclaims(
+        )
+    {
+        return Err(GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::NonclaimMismatch);
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_z3_backend_execution_handoff_packet_handoff_record(
+    handoff: &GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoff,
+) -> Result<(), GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError> {
+    if handoff.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_HANDOFF_SCHEMA_VERSION
+        || handoff.state_slice
+            != GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_HANDOFF_STATE_SLICE
+        || handoff.claim_boundary
+            != gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff_claim_boundary()
+        || handoff.classification
+            != GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffClassification::IndependentExternalReproductionHandoffDeclaredNoRun
+        || !handoff.manual_handoff_validation_valid
+        || handoff.manual_handoff_validation_issue_count != 0
+        || handoff.manual_handoff_claim_boundary
+            != GATEWAY_FORMAL_TINY_Z3_EXTERNAL_IMPORT_REQUESTED_CLAIM_BOUNDARY
+        || handoff.previous_promotion_state != "backend_execution_external_import_review_metadata"
+        || handoff.promotion_state
+            != "backend_execution_independent_external_reproduction_handoff_metadata"
+        || handoff.next_required_state != "independent_external_operator_run_still_unperformed"
+        || handoff.phase553_classification
+            != GatewayFormalTinyZ3BackendExecutionExternalImportReviewClassification::BackendExecutionImportReviewBlockedNoIndependentRun
+        || handoff.phase551_classification
+            != GatewayFormalTinyZ3BackendExecutionExternalImportCandidateClassification::ImportCandidateQuarantinedLocalMetadata
+        || handoff.phase549_classification
+            != GatewayFormalTinyZ3BackendExecutionExternalReproductionClassification::ExternalReproductionBlockedNoIndependentRun
+        || handoff.phase547_classification
+            != GatewayFormalTinyZ3BackendExecutionLevel2EligibilityClassification::Level2BlockedLocalOnly
+        || handoff.process_execution_requested
+        || handoff.network_access_requested
+        || handoff.credentials_requested
+        || handoff.external_replay_requested
+        || handoff.external_result_import_created
+        || handoff.writes_external_result_artifact_files
+        || handoff.creates_accepted_external_result_evidence
+        || handoff.writes_accepted_evidence_artifacts
+        || handoff.claims_independent_external_reproduction
+        || handoff.writes_level2_artifact_files
+        || handoff.writes_score_axis_artifact_files
+        || handoff.populates_score_axes
+        || handoff.creates_accepted_formal_evidence
+        || handoff.creates_level2_evidence
+        || handoff.proof_artifact_created
+        || handoff.checker_transcript_created
+        || handoff.solver_certificate_created
+        || handoff.lean_execution_evidence_created
+        || handoff.additional_smt_z3_execution_created
+        || handoff.cobalt_execution_evidence_created
+        || handoff.rust_to_lean_execution_evidence_created
+        || handoff.backend_execution_evidence_created
+        || handoff.benchmark_evidence_created
+        || handoff.external_audit_evidence_created
+        || handoff.semantic_correctness_claimed
+        || handoff.production_readiness_claimed
+        || handoff.sota_claimed
+        || handoff.breakthrough_claimed
+        || handoff.full_security_claimed
+        || handoff.grants_authority
+    {
+        return Err(
+            GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::InvalidHandoffState,
+        );
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_z3_backend_execution_handoff_packet_manual_bundle(
+    handoff: &GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoff,
+    manual_bundle: &zkbench_core::ManualHandoffBundle,
+) -> Result<(), GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError> {
+    let validation = zkbench_core::validate_manual_handoff_bundle(manual_bundle);
+    let bundle_digest = hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-bundle:v1",
+        manual_bundle,
+    );
+    let validation_digest = hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-validation:v1",
+        &validation,
+    );
+    if manual_bundle.id != handoff.handoff_id
+        || manual_bundle.claim_boundary != zkbench_core::ClaimBoundary::Level0DesignNote
+        || manual_bundle.subject.local_pack_claim_boundary
+            != zkbench_core::ClaimBoundary::Level1LocalReplay
+        || manual_bundle.allows_live_execution()
+        || !manual_bundle.contains_manual_instructions_only()
+        || bundle_digest != handoff.manual_handoff_bundle_digest
+    {
+        return Err(
+            GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::ManualHandoffBundleDigestMismatch,
+        );
+    }
+    if !validation.valid
+        || !validation.issues.is_empty()
+        || validation_digest != handoff.manual_handoff_validation_digest
+    {
+        return Err(
+            GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::ManualHandoffValidationMismatch,
+        );
+    }
+    Ok(())
+}
+
+fn gateway_formal_tiny_z3_backend_execution_handoff_packet_readback_validation_digest(
+    handoff: &GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoff,
+    manual_bundle: &zkbench_core::ManualHandoffBundle,
+    validation: &zkbench_core::ManualHandoffValidation,
+    nonpromotion: &GatewayFormalTinyZ3BackendExecutionHandoffPacketNonpromotionReport,
+    core_file_digests: &BTreeMap<String, Hash>,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-handoff-packet-readback-validation:v1",
+        &(
+            handoff.digest(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-bundle:v1",
+                manual_bundle,
+            ),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-handoff-validation:v1",
+                validation,
+            ),
+            nonpromotion.digest(),
+            core_file_digests,
+        ),
+    )
+}
+
+fn declared_gateway_formal_tiny_z3_backend_execution_handoff_packet_bytes<'a>(
+    files: &'a BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<&'a [u8], GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError> {
+    files.get(logical_path).map(Vec::as_slice).ok_or_else(|| {
+        GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::Io(format!(
+            "declared file missing: {logical_path}"
+        ))
+    })
+}
+
+fn parse_gateway_formal_tiny_z3_backend_execution_handoff_packet_declared_json<
+    T: for<'de> Deserialize<'de> + Serialize,
+>(
+    files: &BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<T, GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError> {
+    let bytes = declared_gateway_formal_tiny_z3_backend_execution_handoff_packet_bytes(
+        files,
+        logical_path,
+    )?;
+    let original = parse_json_value_rejecting_duplicate_keys(bytes).map_err(|_| {
+        GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })?;
+    let parsed: T = serde_json::from_value(original.clone()).map_err(|_| {
+        GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })?;
+    let canonical = serde_json::to_value(&parsed)
+        .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_serde_error)?;
+    if canonical != original {
+        return Err(
+            GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::MalformedDeclaredFile(
+                logical_path.to_owned(),
+            ),
+        );
+    }
+    Ok(parsed)
+}
+
+fn reject_undeclared_gateway_formal_tiny_z3_backend_execution_handoff_packet_files(
+    output_root: &Path,
+) -> Result<(), GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError> {
+    let mut declared: BTreeSet<String> = GATEWAY_FORMAL_TINY_Z3_HANDOFF_PACKET_DECLARED_FILES
+        .iter()
+        .chain(GATEWAY_FORMAL_TINY_Z3_HANDOFF_PACKET_DECLARED_SIDECARS.iter())
+        .map(|value| (*value).to_owned())
+        .collect();
+    let bundle_dir = output_root.join(GATEWAY_FORMAL_TINY_Z3_HANDOFF_PACKET_NAMESPACE);
+    for entry in fs::read_dir(&bundle_dir)
+        .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_io_error)?
+    {
+        let entry =
+            entry.map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_io_error)?;
+        let logical_path = entry
+            .path()
+            .strip_prefix(output_root)
+            .map_err(|error| {
+                GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::Io(error.to_string())
+            })?
+            .to_string_lossy()
+            .replace('\\', "/");
+        if !declared.remove(&logical_path) {
+            return Err(
+                GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::UndeclaredFile(
+                    logical_path,
+                ),
+            );
+        }
+    }
+    if let Some(missing) = declared.into_iter().next() {
+        return Err(
+            GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::Io(format!(
+                "declared file missing: {missing}"
+            )),
+        );
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_z3_backend_execution_handoff_packet_output_root(
+    output_root: &Path,
+    protected_roots: &[PathBuf],
+    overwrite: bool,
+) -> Result<(), GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError> {
+    match validate_output_root(output_root, protected_roots, overwrite) {
+        Ok(()) => Ok(()),
+        Err(AdmissionJournalMaterializationError::EmptyOutputRoot) => {
+            Err(GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::EmptyOutputRoot)
+        }
+        Err(AdmissionJournalMaterializationError::ProtectedOutputRoot) => Err(
+            GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::ProtectedOutputRoot,
+        ),
+        Err(AdmissionJournalMaterializationError::OutputRootExistsWithoutOverwrite) => Err(
+            GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::OutputRootExistsWithoutOverwrite,
+        ),
+        Err(AdmissionJournalMaterializationError::OutputRootIsSymlink) => Err(
+            GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::OutputRootIsSymlink,
+        ),
+        Err(AdmissionJournalMaterializationError::OutputRootIsFile) => {
+            Err(GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::OutputRootIsFile)
+        }
+        Err(AdmissionJournalMaterializationError::Io(error)) => {
+            Err(GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::Io(error))
+        }
+        Err(other) => Err(GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::Io(
+            format!("{other:?}"),
+        )),
+    }
+}
+
+fn gateway_formal_tiny_z3_backend_execution_handoff_packet_staging_root_for(
+    output_root: &Path,
+    bundle_id: &str,
+) -> Result<PathBuf, GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError> {
+    let parent = output_root
+        .parent()
+        .ok_or(GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::EmptyOutputRoot)?;
+    let name = output_root
+        .file_name()
+        .map(|value| value.to_string_lossy().into_owned())
+        .ok_or(GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::EmptyOutputRoot)?;
+    Ok(parent.join(format!(".{name}.{bundle_id}.staging")))
+}
+
+fn remove_gateway_formal_tiny_z3_backend_execution_handoff_packet_dir_all_checked(
+    path: &Path,
+) -> Result<(), GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError> {
+    if !path.exists() {
+        return Ok(());
+    }
+    if fs::symlink_metadata(path)
+        .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_io_error)?
+        .file_type()
+        .is_symlink()
+    {
+        return Err(
+            GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::OutputRootIsSymlink,
+        );
+    }
+    fs::remove_dir_all(path)
+        .map_err(gateway_formal_tiny_z3_backend_execution_handoff_packet_io_error)
+}
+
+fn gateway_formal_tiny_z3_backend_execution_handoff_packet_io_error(
+    error: io::Error,
+) -> GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError {
+    GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::Io(error.to_string())
+}
+
+fn gateway_formal_tiny_z3_backend_execution_handoff_packet_serde_error(
+    error: serde_json::Error,
+) -> GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError {
+    GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::Serialization(error.to_string())
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -118851,6 +119883,262 @@ mod tests {
             .expect("phase555 promotion phase405 output cleanup succeeds");
         fs::remove_dir_all(&obligation_root)
             .expect("phase555 promotion obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase557_tiny_z3_backend_execution_handoff_packet_output_materializes_and_reads_back() {
+        let Some((obligation_root, phase405_output_root, output_root, review)) =
+            phase555_tiny_z3_backend_execution_external_reproduction_handoff_source(
+                "phase557-handoff-packet",
+            )
+        else {
+            return;
+        };
+        let handoff_input =
+            phase555_tiny_z3_backend_execution_external_reproduction_handoff_input(
+                "phase557-handoff-packet-record",
+                &review,
+                GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffLabel::IndependentExternalReproductionHandoffRecorded,
+            );
+        let handoff = build_gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff(
+            &review,
+            &handoff_input,
+        )
+        .expect("phase557 source handoff metadata builds");
+        let manual_bundle =
+            gateway_formal_tiny_z3_backend_execution_external_reproduction_manual_handoff_bundle(
+                &review,
+                "phase557-handoff-packet-record",
+            );
+        let packet_root = temp_output_root("phase557-handoff-packet-output");
+        let request = GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputRequest {
+            bundle_id: "phase557-handoff-packet-output".to_owned(),
+            created_at_unix: 1_800_000_557,
+            overwrite: false,
+            protected_roots: vec![temp_output_root("phase557-handoff-packet-protected")],
+        };
+        let manifest =
+            materialize_gateway_formal_tiny_z3_backend_execution_handoff_packet_output_bundle(
+                &packet_root,
+                &handoff,
+                &manual_bundle,
+                &request,
+            )
+            .expect("phase557 handoff packet output materializes");
+
+        assert_eq!(
+            manifest.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_HANDOFF_PACKET_OUTPUT_STATE_SLICE
+        );
+        assert_eq!(manifest.phase555_handoff_digest, handoff.digest());
+        assert_eq!(
+            manifest.phase555_manual_handoff_bundle_digest,
+            handoff.manual_handoff_bundle_digest
+        );
+        assert_eq!(
+            manifest.phase555_classification,
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffClassification::IndependentExternalReproductionHandoffDeclaredNoRun
+        );
+        assert_eq!(
+            manifest.declared_files,
+            gateway_formal_tiny_z3_backend_execution_handoff_packet_declared_files()
+        );
+        assert_eq!(
+            manifest.declared_sidecars,
+            gateway_formal_tiny_z3_backend_execution_handoff_packet_declared_sidecars()
+        );
+        assert!(!manifest.process_execution_performed);
+        assert!(!manifest.backend_execution_performed);
+        assert!(!manifest.external_replay_performed);
+        assert!(!manifest.external_result_import_created);
+        assert!(!manifest.independent_external_reproduction_created);
+        assert!(!manifest.accepted_formal_evidence_created);
+        assert!(!manifest.creates_level2_evidence);
+        assert!(!manifest.populates_score_axes);
+        assert!(!manifest.proof_artifact_created);
+        assert!(!manifest.checker_transcript_created);
+        assert!(!manifest.solver_certificate_created);
+        assert!(!manifest.lean_execution_evidence_created);
+        assert!(!manifest.additional_smt_z3_execution_created);
+        assert!(!manifest.cobalt_execution_evidence_created);
+        assert!(!manifest.rust_to_lean_execution_evidence_created);
+        assert!(!manifest.benchmark_evidence_created);
+        assert!(!manifest.external_audit_evidence_created);
+        assert!(!manifest.semantic_correctness_claimed);
+        assert!(!manifest.production_readiness_claimed);
+        assert!(!manifest.sota_claimed);
+        assert!(!manifest.breakthrough_claimed);
+        assert!(!manifest.full_security_claimed);
+        assert!(!manifest.grants_authority);
+        assert_eq!(
+            read_gateway_formal_tiny_z3_backend_execution_handoff_packet_output_bundle(
+                &packet_root
+            ),
+            Ok(manifest)
+        );
+        assert!(packet_root
+            .join("gateway-formal-tiny-z3-external-reproduction-handoff/manifest.json.sha256")
+            .is_file());
+        assert!(!packet_root
+            .join("gateway-formal-tiny-z3-external-reproduction-handoff/proof-artifact.json")
+            .exists());
+
+        fs::remove_dir_all(&packet_root).expect("phase557 packet output cleanup succeeds");
+        fs::remove_dir_all(&output_root).expect("phase557 source output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase557 source phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase557 source obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase557_tiny_z3_backend_execution_handoff_packet_output_rejects_drift_and_undeclared() {
+        let Some((obligation_root, phase405_output_root, output_root, review)) =
+            phase555_tiny_z3_backend_execution_external_reproduction_handoff_source(
+                "phase557-handoff-packet-drift",
+            )
+        else {
+            return;
+        };
+        let handoff_input =
+            phase555_tiny_z3_backend_execution_external_reproduction_handoff_input(
+                "phase557-handoff-packet-drift-record",
+                &review,
+                GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffLabel::IndependentExternalReproductionHandoffRecorded,
+            );
+        let handoff = build_gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff(
+            &review,
+            &handoff_input,
+        )
+        .expect("phase557 drift source handoff metadata builds");
+        let manual_bundle =
+            gateway_formal_tiny_z3_backend_execution_external_reproduction_manual_handoff_bundle(
+                &review,
+                "phase557-handoff-packet-drift-record",
+            );
+        let sidecar_root = temp_output_root("phase557-handoff-packet-sidecar");
+        let sidecar_request = GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputRequest {
+            bundle_id: "phase557-handoff-packet-sidecar".to_owned(),
+            created_at_unix: 1_800_000_557,
+            overwrite: false,
+            protected_roots: Vec::new(),
+        };
+        materialize_gateway_formal_tiny_z3_backend_execution_handoff_packet_output_bundle(
+            &sidecar_root,
+            &handoff,
+            &manual_bundle,
+            &sidecar_request,
+        )
+        .expect("phase557 sidecar fixture materializes");
+        fs::write(
+            sidecar_path(&sidecar_root.join(
+                "gateway-formal-tiny-z3-external-reproduction-handoff/manual-handoff-validation.json",
+            )),
+            b"stale",
+        )
+        .expect("phase557 stale sidecar writes");
+        assert_eq!(
+            read_gateway_formal_tiny_z3_backend_execution_handoff_packet_output_bundle(
+                &sidecar_root
+            ),
+            Err(
+                GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::DigestMismatch(
+                    "gateway-formal-tiny-z3-external-reproduction-handoff/manual-handoff-validation.json"
+                        .to_owned()
+                )
+            )
+        );
+
+        let undeclared_root = temp_output_root("phase557-handoff-packet-undeclared");
+        let undeclared_request = GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputRequest {
+            bundle_id: "phase557-handoff-packet-undeclared".to_owned(),
+            created_at_unix: 1_800_000_557,
+            overwrite: false,
+            protected_roots: Vec::new(),
+        };
+        materialize_gateway_formal_tiny_z3_backend_execution_handoff_packet_output_bundle(
+            &undeclared_root,
+            &handoff,
+            &manual_bundle,
+            &undeclared_request,
+        )
+        .expect("phase557 undeclared fixture materializes");
+        fs::write(
+            undeclared_root
+                .join("gateway-formal-tiny-z3-external-reproduction-handoff/proof-artifact.json"),
+            b"{}",
+        )
+        .expect("phase557 undeclared proof writes");
+        assert_eq!(
+            read_gateway_formal_tiny_z3_backend_execution_handoff_packet_output_bundle(
+                &undeclared_root
+            ),
+            Err(
+                GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::UndeclaredFile(
+                    "gateway-formal-tiny-z3-external-reproduction-handoff/proof-artifact.json"
+                        .to_owned()
+                )
+            )
+        );
+
+        for root in [
+            &sidecar_root,
+            &undeclared_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase557 drift cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase557_tiny_z3_backend_execution_handoff_packet_output_rejects_invalid_handoff_state() {
+        let Some((obligation_root, phase405_output_root, output_root, review)) =
+            phase555_tiny_z3_backend_execution_external_reproduction_handoff_source(
+                "phase557-handoff-packet-invalid",
+            )
+        else {
+            return;
+        };
+        let handoff_input =
+            phase555_tiny_z3_backend_execution_external_reproduction_handoff_input(
+                "phase557-handoff-packet-invalid-record",
+                &review,
+                GatewayFormalTinyZ3BackendExecutionExternalReproductionHandoffLabel::IndependentExternalReproductionHandoffRecorded,
+            );
+        let mut handoff =
+            build_gateway_formal_tiny_z3_backend_execution_external_reproduction_handoff(
+                &review,
+                &handoff_input,
+            )
+            .expect("phase557 invalid source handoff metadata builds");
+        handoff.backend_execution_evidence_created = true;
+        let manual_bundle =
+            gateway_formal_tiny_z3_backend_execution_external_reproduction_manual_handoff_bundle(
+                &review,
+                "phase557-handoff-packet-invalid-record",
+            );
+        let packet_root = temp_output_root("phase557-handoff-packet-invalid-output");
+        let request = GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputRequest {
+            bundle_id: "phase557-handoff-packet-invalid-output".to_owned(),
+            created_at_unix: 1_800_000_557,
+            overwrite: false,
+            protected_roots: Vec::new(),
+        };
+        assert_eq!(
+            materialize_gateway_formal_tiny_z3_backend_execution_handoff_packet_output_bundle(
+                &packet_root,
+                &handoff,
+                &manual_bundle,
+                &request,
+            ),
+            Err(GatewayFormalTinyZ3BackendExecutionHandoffPacketOutputError::InvalidHandoffState)
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase557 invalid output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase557 invalid phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase557 invalid obligation cleanup succeeds");
     }
 
     #[test]

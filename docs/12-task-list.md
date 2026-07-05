@@ -15657,6 +15657,38 @@ Level2+ evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean
 execution, no benchmark evidence, no external audit evidence, and no
 production/SOTA/security/correctness claim.
 
+## Phase 557 HSAI Tiny Z3 Backend Execution Handoff Packet Output Metadata
+
+Status: complete. See
+`docs/557-hsai-tiny-z3-backend-execution-handoff-packet-output-metadata-notes.md`.
+
+Goal: implement local handoff packet output metadata over one exact Phase 555
+validated manual handoff metadata record and one digest-matched
+`zkbench_core::ManualHandoffBundle`.
+
+Implemented: Phase 557 adds packet schema/state/claim-boundary constants,
+declared file and sidecar lists, output request/manifest/nonpromotion report
+types, output/readback errors, a staged local materializer, a fail-closed
+readback validator, Phase 555 handoff exactness checks, manual handoff bundle
+digest and validation checks, per-file content digest checks, readback
+validation digest binding, and focused tests.
+
+Validation coverage: focused tests cover successful packet
+materialization/readback, stale sidecar rejection, undeclared proof artifact
+rejection, and invalid handoff state rejection. The packet keeps process
+execution, backend execution, external replay, external result import,
+independent external reproduction, accepted formal evidence, Level2+,
+score-axis population, Lean, COBALT, Rust-to-Lean, additional SMT/Z3,
+benchmark evidence, external audit, strong claims, and action authority false.
+
+Exit criteria: HSAI now can materialize a local digest-checked manual handoff
+packet for a future independent external-reproduction operator. It still has
+no independent external reproduction, no external result import, no accepted
+formal evidence, no Level2+ evidence, no populated score axes, no Lean/
+COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution, no benchmark
+evidence, no external audit evidence, and no production/SOTA/security/
+semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
