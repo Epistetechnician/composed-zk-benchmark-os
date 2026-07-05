@@ -7603,5 +7603,21 @@ score axes, creates no accepted formal evidence, creates no Level2+ evidence,
 runs no new Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark
 evidence, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/525-hsai-tiny-z3-external-import-review-metadata-notes.md](docs/525-hsai-tiny-z3-external-import-review-metadata-notes.md)
+documents the Phase 525 local external import-review metadata implementation.
+The implementation adds HSAI admission metadata types, digest bindings,
+nonclaim/blocker/rule helpers, and a fail-closed validator over one exact Phase
+523 quarantined external-result import candidate. It records
+`ImportReviewBlockedNoIndependentRun`, binds Phase 523/521/519/517/515/513
+digests, and rejects accepted external-result evidence, independent external
+reproduction, accepted formal evidence, Level2+ evidence, score-axis
+population, backend evidence, benchmark evidence, external audit, strong
+claims, and action authority. Focused tests cover successful blocked review
+metadata, invalid Phase 523 state rejection, and review-policy digest drift
+plus promotion rejection. It writes no accepted-evidence files, creates no
+accepted formal evidence, creates no Level2+ evidence, runs no new
+Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence, and
+claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
