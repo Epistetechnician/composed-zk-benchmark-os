@@ -8295,5 +8295,25 @@ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
 additional SMT/Z3 execution, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/571-hsai-tiny-z3-backend-execution-independent-operator-evidence-packet-metadata-notes.md](docs/571-hsai-tiny-z3-backend-execution-independent-operator-evidence-packet-metadata-notes.md)
+documents the Phase 571 independent-operator evidence packet metadata
+implementation. `crates/hsai-agent-admission` now has local typed metadata
+that validates one exact Phase 569 requirement metadata record, records
+`IndependentOperatorEvidencePacketMissing`, binds Phase 569/567/565/563/561/559/557
+and Phase 555 digests, records deterministic packet-role digests for
+operator identity, operator statement, environment declaration,
+captured-output summary, redaction report, replay/correspondence statement,
+and import ownership, and rejects Phase 569 drift, packet-role presence,
+packet materialization, accepted-ledger mutation, Level2, score-axis
+population, proof/checker/solver promotion, backend execution evidence,
+benchmark evidence, external audit evidence, strong public claims, and
+authority. It materializes no packet, imports no external result, writes no
+artifact files, mutates no accepted Evidence Ledger, creates no accepted
+external result evidence, accepts no independent external reproduction,
+creates no accepted formal evidence, creates no Level2+ evidence, populates no
+score axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution,
+creates no benchmark evidence, and claims no production/SOTA/security/
+semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
