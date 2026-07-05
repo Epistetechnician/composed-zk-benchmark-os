@@ -16094,6 +16094,32 @@ Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution, no
 benchmark evidence, no external audit evidence, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 572 HSAI Tiny Z3 Backend Execution Packet Role Materialization Boundary
+
+Status: complete. See
+`docs/572-hsai-tiny-z3-backend-execution-packet-role-materialization-boundary.md`.
+
+Goal: define the docs-first packet role materialization boundary after Phase
+571 packet metadata.
+
+Implemented: Phase 572 defines the future non-secret role file set,
+sidecars, manifest shape, role content constraints, filesystem output-root
+rules, fail-closed classifications, nonclaims, and Phase 573 implementation
+exit criteria. It requires exact Phase 571/569/567/565/563/561/559/557/555
+and inherited digest bindings before any future materialization metadata may
+advance.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named packet role materialization boundary. It
+still has no packet role materialization, no filesystem artifact writes, no
+external result import, no accepted external result evidence, no accepted
+independent external reproduction, no accepted formal evidence, no Level2+
+evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean execution, no
+additional SMT/Z3 execution, no benchmark evidence, no external audit
+evidence, and no production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
