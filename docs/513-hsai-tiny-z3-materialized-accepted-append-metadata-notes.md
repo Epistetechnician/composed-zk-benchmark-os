@@ -116,12 +116,11 @@ call, the materialized artifact digest and byte length are recorded, and the
 metadata still rejects formal evidence, Level2+, score axes, backend execution,
 benchmark evidence, external audit, and strong claims.
 
-## Next Responsible Slice
+## Phase 514 Boundary Status
 
-The next responsible boundary is still not SOTA, full security, semantic
-correctness, production readiness, Level2+, or backend proof authority.
-
-The next slice should define an accepted-evidence packaging boundary for the
-materialized local ledger artifact. That boundary must distinguish local
-artifact evidence from formal proof artifacts, checker transcripts, solver
-certificates, benchmark evidence, and score-axis evidence.
+Phase 514 defines the docs-first accepted-evidence package boundary in
+`docs/514-hsai-tiny-z3-accepted-evidence-package-boundary.md`. It does not
+write package artifacts, create accepted formal evidence, create Level2+
+evidence, populate score axes, run Lean/new-SMT/COBALT/Rust-to-Lean extraction,
+create benchmark evidence, or claim production/SOTA/security/semantic-
+correctness results.

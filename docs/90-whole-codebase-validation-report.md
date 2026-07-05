@@ -7424,5 +7424,17 @@ accepted formal evidence, creates no Level2+ evidence, populates no score axes,
 runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark
 evidence, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/514-hsai-tiny-z3-accepted-evidence-package-boundary.md](docs/514-hsai-tiny-z3-accepted-evidence-package-boundary.md)
+defines the Phase 514 docs-first boundary for a future local accepted-evidence
+package over the Phase 513 materialized accepted ledger artifact. The boundary
+records the future allowed touch surface, local-only package meaning, required
+Phase 513 digest bindings, package policy/nonclaim/cap digest bindings,
+fail-closed future validation rules, backend relationship limits, meaning
+limits, and Phase 515 implementation exit criteria. It creates no Rust code,
+changes no Cargo metadata, writes no package artifact files, creates no
+accepted formal evidence, creates no Level2+ evidence, populates no score axes,
+runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark
+evidence, and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
