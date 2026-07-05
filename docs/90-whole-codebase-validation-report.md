@@ -7901,5 +7901,21 @@ populates no score axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3
 execution, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/547-hsai-tiny-z3-backend-execution-level2-eligibility-metadata-notes.md](docs/547-hsai-tiny-z3-backend-execution-level2-eligibility-metadata-notes.md)
+documents the Phase 547 local backend-execution Level2 eligibility metadata
+implementation. The implementation validates one exact Phase 545 score-axis
+eligibility metadata record, records classification `Level2BlockedLocalOnly`,
+binds Phase 545 eligibility/input/classification/blocker/nonpopulation
+digests, Phase 543 package/policy/nonclaim/cap digests, Phase 541
+materialized artifact/report/byte-length digests, Phase 539 appended
+class/boundary values, inherited Phase 535/533/531/529/527 digests, and
+`zkbench-core` / `Level2EligibilityChecker` / `check_level2_eligibility` /
+`Level2EligibilityReport` / `ClaimBoundary::Level0DesignNote` with
+`creates_level2_evidence=false`. It writes no Level2 artifact files, writes no
+score-axis artifact files, creates no accepted formal evidence, creates no
+Level2+ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
+additional SMT/Z3 execution, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
