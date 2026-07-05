@@ -16331,6 +16331,34 @@ evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean execution, no
 additional SMT/Z3 execution, no benchmark evidence, no external audit evidence,
 and no production/SOTA/security/semantic-correctness claim.
 
+## Phase 580 HSAI Tiny Z3 Backend Execution Packet Role Artifact Import Review Boundary
+
+Status: complete. See
+`docs/580-hsai-tiny-z3-backend-execution-packet-role-artifact-import-review-boundary.md`.
+
+Goal: define the docs-first import-review boundary after Phase 579 local
+packet role artifact import-candidate metadata.
+
+Implemented: Phase 580 defines the future import-review metadata contract over
+one exact Phase 579
+`PacketRoleArtifactImportCandidateQuarantinedLocalBundle` record. It requires
+the Phase 579 schema/state/classification, quarantined candidate status,
+validator and quarantine digests, nonzero Phase 577/575/573/571/569/567/565
+/563/561/559/557/555 and inherited backend-execution digest bindings, local
+blocked-review metadata, deterministic review/policy/blocker/nonpromotion
+digests, and future Phase 581 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named packet role artifact import-review
+boundary. It still has no external result import, no accepted external result
+evidence, no accepted independent external reproduction, no accepted formal
+evidence, no Level2+ evidence, no populated score axes, no
+Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution, no
+benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

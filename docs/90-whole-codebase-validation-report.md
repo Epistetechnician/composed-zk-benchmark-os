@@ -8456,5 +8456,22 @@ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
 additional SMT/Z3 execution, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/580-hsai-tiny-z3-backend-execution-packet-role-artifact-import-review-boundary.md](docs/580-hsai-tiny-z3-backend-execution-packet-role-artifact-import-review-boundary.md)
+documents the Phase 580 docs-first packet role artifact import-review
+boundary. It requires one exact Phase 579
+`PacketRoleArtifactImportCandidateQuarantinedLocalBundle` record, quarantined
+candidate status, valid zkbench-core candidate validation, zero validation
+issues, quarantine status `Quarantined`, nonzero candidate/validation/quarantine
+/policy/blocker/nonpromotion digests, exact Phase 577 readback bindings, exact
+Phase 575/573/571/569/567/565/563/561/559/557/555 and inherited
+backend-execution digest bindings, blocked-review metadata, and future Phase
+581 implementation exit criteria. It creates no Rust code, imports no external
+result, mutates no accepted Evidence Ledger, creates no accepted external
+result evidence, accepts no independent external reproduction, creates no
+accepted formal evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates
+no benchmark evidence, and claims no production/SOTA/security
+/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
