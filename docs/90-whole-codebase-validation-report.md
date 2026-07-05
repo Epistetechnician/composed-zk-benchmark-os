@@ -7213,5 +7213,18 @@ no accepted formal evidence, creates no Level2+ evidence, populates no score
 axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark
 evidence, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/502-hsai-tiny-z3-policy-drift-rejection-boundary.md](docs/502-hsai-tiny-z3-policy-drift-rejection-boundary.md)
+defines the Phase 502 docs-first rejection behavior for policy drift boundary
+for the next Phase 488 accepted-path prerequisite gate. The boundary records
+policy drift sources, required future Phase 501 and inherited Phase
+499/497/495/493/491 digest bindings, closed rejection actions, fail-closed
+validation behavior, backend relationship limits, and Phase 503 implementation
+exit criteria. It creates no Rust code, writes no drift report artifact, makes
+no accepted append decision, mutates no accepted Evidence Ledger, changes no
+accepted append policy, creates no accepted formal evidence, creates no
+Level2+ evidence, populates no score axes, runs no Lean/new-SMT/COBALT/
+Rust-to-Lean extraction, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
