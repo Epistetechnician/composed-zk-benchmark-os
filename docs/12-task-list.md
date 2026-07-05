@@ -14559,6 +14559,33 @@ no populated score axes, no accepted formal evidence, no Level2+ evidence, no
 Lean/new-SMT/COBALT or Rust-to-Lean execution, no benchmark evidence, no
 external audit evidence, and no production/SOTA/security/correctness claim.
 
+## Phase 518 HSAI Tiny Z3 Level2 Evidence Eligibility Boundary
+
+Status: complete. See
+`docs/518-hsai-tiny-z3-level2-evidence-eligibility-boundary.md`.
+
+Goal: define the docs-first boundary for future Level2 eligibility metadata
+over the Phase 517 score-axis eligibility record.
+
+Implemented: Phase 518 documents the current `zkbench-core` Level2 eligibility
+owner surface, including `Level2EligibilityChecker`,
+`check_level2_eligibility`, `Level2EligibilityReport`,
+`Level2EligibilityStatus`, `Level2EligibilityBlockingReason`, and
+`ClaimBoundary::Level0DesignNote`. It records that Level2 eligibility reports
+are review artifacts only, that they do not create Level2 evidence, that the
+current HSAI classification remains `level2_blocked_local_only`, and that a
+future Phase 519 implementation must bind Phase 517, Phase 515, Phase 513, and
+Level2 owner/report invariants before recording local metadata.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a Level2 eligibility boundary for a future local
+metadata implementation. It still has no Level2+ evidence, no populated score
+axes, no accepted formal evidence, no new Lean/new-SMT/COBALT or Rust-to-Lean
+execution, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
