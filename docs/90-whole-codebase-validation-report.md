@@ -8225,5 +8225,21 @@ axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates
 no benchmark evidence, and claims no production/SOTA/security/semantic-
 correctness result.
 
+[docs/567-hsai-tiny-z3-backend-execution-external-operator-accepted-result-policy-resolution-metadata-notes.md](docs/567-hsai-tiny-z3-backend-execution-external-operator-accepted-result-policy-resolution-metadata-notes.md)
+documents the Phase 567 accepted-result policy-resolution metadata
+implementation. `crates/hsai-agent-admission` now has local typed metadata
+that validates one exact Phase 565 eligibility metadata record, records
+`AcceptedResultPolicyResolutionBlocked`, binds Phase 565 eligibility policy
+and nonpromotion digests, preserves Phase 563/561/559/557/555 digest
+bindings, and rejects Phase 565 drift, accepted-ledger mutation, Level2, score
+axes, proof artifact promotion, backend execution evidence, benchmark
+evidence, external audit evidence, strong public claims, and authority. It
+imports no external result, writes no artifact files, mutates no accepted
+Evidence Ledger, creates no accepted external result evidence, creates no
+accepted formal evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates
+no benchmark evidence, and claims no production/SOTA/security/semantic-
+correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

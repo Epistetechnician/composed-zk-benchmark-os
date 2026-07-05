@@ -15944,6 +15944,34 @@ score axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3
 execution, no benchmark evidence, no external audit evidence, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 567 HSAI Tiny Z3 Backend Execution External Operator Accepted Result Policy Resolution Metadata
+
+Status: complete. See
+`docs/567-hsai-tiny-z3-backend-execution-external-operator-accepted-result-policy-resolution-metadata-notes.md`.
+
+Goal: implement local accepted-result policy-resolution metadata over one
+exact Phase 565 eligibility metadata record while keeping accepted evidence
+blocked.
+
+Implemented: Phase 567 adds schema/state/claim-boundary constants, input and
+output metadata records, bounded classifications and labels, validation issue
+types, digest/id/label binding helpers, blocker/rule/forbidden-API/inherited
+digest helpers, policy and nonpromotion digest helpers, a fail-closed builder
+and validator over exact Phase 565 metadata, and focused tests.
+
+Validation coverage: focused `hsai-agent-admission` tests cover successful
+blocked policy-resolution metadata, invalid Phase 565 state rejection, and
+policy digest drift plus promotion rejection. The metadata records the only
+valid current classification: `AcceptedResultPolicyResolutionBlocked`.
+
+Exit criteria: HSAI can now locally carry the Phase 565 accepted-result
+eligibility blocker into a policy-resolution record. It still has no external
+result import, no accepted external result evidence, no accepted independent
+external reproduction, no accepted formal evidence, no Level2+ evidence, no
+populated score axes, no Lean/COBALT/Rust-to-Lean execution, no additional
+SMT/Z3 execution, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
