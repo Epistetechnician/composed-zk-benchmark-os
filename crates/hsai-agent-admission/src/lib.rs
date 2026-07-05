@@ -972,6 +972,11 @@ pub const GATEWAY_FORMAL_TINY_Z3_POLICY_DRIFT_REJECTION_SCHEMA_VERSION: &str =
 pub const GATEWAY_FORMAL_TINY_Z3_POLICY_DRIFT_REJECTION_STATE_SLICE: &str =
     "phase-503-hsai-tiny-z3-policy-drift-rejection-metadata";
 pub const GATEWAY_FORMAL_TINY_Z3_POLICY_DRIFT_REJECTION_CLAIM_BOUNDARY: &str = "local tiny-Z3 policy drift rejection metadata only; records fail-closed policy drift sources and rejection actions over Phase 501 reviewer policy decision metadata, but does not repair drift, proceed after drift, create a drift report artifact, make an accepted append decision, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, create proof artifacts, create checker transcripts, create solver certificates, run Lean, run new SMT, run COBALT, run Rust-to-Lean extraction, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_Z3_STALE_BLOCKER_REJECTION_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-z3-stale-blocker-rejection:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_STALE_BLOCKER_REJECTION_STATE_SLICE: &str =
+    "phase-505-hsai-tiny-z3-stale-blocker-rejection-metadata";
+pub const GATEWAY_FORMAL_TINY_Z3_STALE_BLOCKER_REJECTION_CLAIM_BOUNDARY: &str = "local tiny-Z3 stale accepted append blocker rejection metadata only; records fail-closed freshness rules and rejection actions over Phase 503 policy drift rejection metadata, but does not refresh blockers, repair blockers, proceed after stale blocker detection, make an accepted append decision, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, create proof artifacts, create checker transcripts, create solver certificates, run Lean, run new SMT, run COBALT, run Rust-to-Lean extraction, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, or grant authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -13783,6 +13788,165 @@ pub enum GatewayFormalTinyZ3PolicyDriftRejectionIssue {
 pub struct GatewayFormalTinyZ3PolicyDriftRejectionValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyZ3PolicyDriftRejectionIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3StaleBlockerRejectionLabel {
+    CurrentBlockerFreshnessRecorded,
+    StaleBlockerRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3StaleBlockerRejectionInput {
+    pub schema_version: String,
+    pub stale_blocker_gate_id: String,
+    pub stale_blocker_policy_id: String,
+    pub stale_blocker_decision_id: String,
+    pub stale_blocker_decision_at_unix: u64,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub reviewed_current_accepted_append_blockers_digest: Hash,
+    pub expected_current_accepted_append_blockers_digest: Hash,
+    pub freshness_comparison_rules: BTreeSet<String>,
+    pub stale_blocker_rejection_actions: BTreeSet<String>,
+    pub inherited_digest_requirements: BTreeSet<String>,
+    pub stale_blocker_label: GatewayFormalTinyZ3StaleBlockerRejectionLabel,
+    pub stale_blocker_summary: String,
+    pub stale_blocker_report_artifact_creation_requested: bool,
+    pub blocker_refresh_requested: bool,
+    pub blocker_repair_requested: bool,
+    pub proceed_after_stale_blocker_requested: bool,
+    pub accepted_append_policy_change_requested: bool,
+    pub accepted_append_decision_requested: bool,
+    pub accepted_evidence_ledger_mutation_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub external_audit_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyZ3StaleBlockerRejectionInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-stale-blocker-rejection-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3StaleBlockerRejection {
+    pub schema_version: String,
+    pub stale_blocker_gate_id: String,
+    pub state_slice: String,
+    pub stale_blocker_input_digest: Hash,
+    pub stale_blocker_policy_id: String,
+    pub stale_blocker_decision_id: String,
+    pub stale_blocker_decision_at_unix: u64,
+    pub phase503_policy_drift_rejection_digest: Hash,
+    pub phase503_policy_drift_rejection_input_digest: Hash,
+    pub phase503_digest_binding_map_digest: Hash,
+    pub phase503_id_binding_map_digest: Hash,
+    pub phase503_label_binding_map_digest: Hash,
+    pub phase503_explicit_nonclaims_digest: Hash,
+    pub phase503_policy_drift_sources_digest: Hash,
+    pub phase503_rejection_actions_digest: Hash,
+    pub phase503_inherited_digest_requirements_digest: Hash,
+    pub reviewed_current_accepted_append_blockers_digest: Hash,
+    pub expected_current_accepted_append_blockers_digest: Hash,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub freshness_comparison_rules: BTreeSet<String>,
+    pub freshness_comparison_rules_digest: Hash,
+    pub stale_blocker_rejection_actions: BTreeSet<String>,
+    pub stale_blocker_rejection_actions_digest: Hash,
+    pub inherited_digest_requirements: BTreeSet<String>,
+    pub inherited_digest_requirements_digest: Hash,
+    pub stale_blocker_label: GatewayFormalTinyZ3StaleBlockerRejectionLabel,
+    pub stale_blocker_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub creates_stale_blocker_report_artifact: bool,
+    pub refreshes_blockers: bool,
+    pub repairs_blockers: bool,
+    pub proceeds_after_stale_blocker: bool,
+    pub changes_accepted_append_policy: bool,
+    pub makes_accepted_append_decision: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub creates_accepted_formal_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub external_audit_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3StaleBlockerRejection {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-stale-blocker-rejection:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3StaleBlockerRejectionIssue {
+    InvalidSchemaVersion,
+    InvalidStaleBlockerGateId,
+    InvalidStaleBlockerPolicyId,
+    InvalidStaleBlockerDecisionId,
+    MissingStaleBlockerDecisionTimestamp,
+    MissingDigest(String),
+    DigestBindingMismatch,
+    IdBindingMismatch,
+    InvalidIdBinding(String),
+    LabelBindingMismatch,
+    Phase503PolicyDriftRejectionStateMismatch,
+    NonclaimMismatch,
+    MissingReviewedBlockerDigest,
+    MissingExpectedBlockerDigest,
+    ReviewedBlockerDigestMismatch,
+    StaleBlockerDigestMismatch,
+    FreshnessComparisonRulesMismatch,
+    StaleBlockerRejectionActionsMismatch,
+    InheritedDigestRequirementsMismatch,
+    StaleBlockerSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3StaleBlockerRejectionValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyZ3StaleBlockerRejectionIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -56512,6 +56676,458 @@ pub fn validate_gateway_formal_tiny_z3_policy_drift_rejection_input(
     }
 }
 
+pub fn gateway_formal_tiny_z3_stale_blocker_rejection_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_Z3_STALE_BLOCKER_REJECTION_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_z3_stale_blocker_rejection_required_nonclaims() -> BTreeSet<NonClaimLabel>
+{
+    [
+        "not stale blocker report artifact",
+        "not blocker refresh",
+        "not blocker repair",
+        "not proceed after stale blocker",
+        "not accepted append decision",
+        "not accepted formal evidence",
+        "not accepted evidence ledger mutation",
+        "not accepted append policy change",
+        "not Level2+ evidence",
+        "not score-axis evidence",
+        "not proof authority",
+        "not checker transcript authority",
+        "not solver certificate authority",
+        "not backend execution evidence",
+        "not Lean execution evidence",
+        "not new SMT execution evidence",
+        "not COBALT execution evidence",
+        "not Rust-to-Lean extraction evidence",
+        "not benchmark evidence",
+        "not external audit",
+        "not SOTA",
+        "not semantic correctness",
+        "not production readiness",
+        "not full security",
+        "not action authority",
+    ]
+    .into_iter()
+    .map(|label| NonClaimLabel(label.to_owned()))
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_stale_blocker_freshness_comparison_rules() -> BTreeSet<String> {
+    [
+        "blocker_digest_equality_required",
+        "missing_expected_blocker_digest_rejected",
+        "missing_reviewed_blocker_digest_rejected",
+        "zero_blocker_digest_rejected",
+        "stale_blocker_digest_rejected",
+        "new_review_cycle_required_on_mismatch",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_stale_blocker_rejection_actions() -> BTreeSet<String> {
+    [
+        "reject_accepted_append_evaluation",
+        "reject_accepted_evidence_ledger_mutation",
+        "reject_accepted_formal_evidence_creation",
+        "reject_level2_plus_creation",
+        "reject_score_axis_population",
+        "reject_backend_execution_authority",
+        "reject_benchmark_claim",
+        "reject_public_strong_claim",
+        "require_new_current_blocker_review",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_stale_blocker_inherited_digest_requirements() -> BTreeSet<String> {
+    [
+        "phase503_policy_drift_rejection_digest_required",
+        "phase503_policy_drift_rejection_input_digest_required",
+        "phase503_digest_binding_map_digest_required",
+        "phase503_id_binding_map_digest_required",
+        "phase503_label_binding_map_digest_required",
+        "phase503_explicit_nonclaims_digest_required",
+        "phase503_policy_drift_sources_digest_required",
+        "phase503_rejection_actions_digest_required",
+        "phase503_inherited_digest_requirements_digest_required",
+        "reviewed_current_accepted_append_blockers_digest_required",
+        "expected_current_accepted_append_blockers_digest_required",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_stale_blocker_rejection_digest_bindings(
+    policy_drift_rejection: &GatewayFormalTinyZ3PolicyDriftRejection,
+) -> BTreeMap<String, Hash> {
+    BTreeMap::from([
+        (
+            "phase503_policy_drift_rejection_digest".to_owned(),
+            policy_drift_rejection.digest(),
+        ),
+        (
+            "phase503_policy_drift_rejection_input_digest".to_owned(),
+            policy_drift_rejection.policy_drift_input_digest,
+        ),
+        (
+            "phase503_digest_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase503-policy-drift-rejection-digest-bindings:v1",
+                &policy_drift_rejection.digest_bindings,
+            ),
+        ),
+        (
+            "phase503_id_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase503-policy-drift-rejection-id-bindings:v1",
+                &policy_drift_rejection.id_bindings,
+            ),
+        ),
+        (
+            "phase503_label_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase503-policy-drift-rejection-label-bindings:v1",
+                &policy_drift_rejection.label_bindings,
+            ),
+        ),
+        (
+            "phase503_explicit_nonclaims_digest".to_owned(),
+            policy_drift_rejection.explicit_nonclaims_digest,
+        ),
+        (
+            "phase503_policy_drift_sources_digest".to_owned(),
+            policy_drift_rejection.policy_drift_sources_digest,
+        ),
+        (
+            "phase503_rejection_actions_digest".to_owned(),
+            policy_drift_rejection.rejection_actions_digest,
+        ),
+        (
+            "phase503_inherited_digest_requirements_digest".to_owned(),
+            policy_drift_rejection.inherited_digest_requirements_digest,
+        ),
+        (
+            "reviewed_current_accepted_append_blockers_digest".to_owned(),
+            policy_drift_rejection.current_accepted_append_blockers_digest,
+        ),
+    ])
+}
+
+pub fn gateway_formal_tiny_z3_stale_blocker_rejection_id_bindings(
+    policy_drift_rejection: &GatewayFormalTinyZ3PolicyDriftRejection,
+    stale_blocker_gate_id: &str,
+    stale_blocker_policy_id: &str,
+    stale_blocker_decision_id: &str,
+) -> BTreeMap<String, String> {
+    let mut ids = policy_drift_rejection.id_bindings.clone();
+    ids.insert(
+        "stale_blocker_gate_id".to_owned(),
+        stale_blocker_gate_id.to_owned(),
+    );
+    ids.insert(
+        "stale_blocker_policy_id".to_owned(),
+        stale_blocker_policy_id.to_owned(),
+    );
+    ids.insert(
+        "stale_blocker_decision_id".to_owned(),
+        stale_blocker_decision_id.to_owned(),
+    );
+    ids.insert(
+        "phase503_policy_drift_gate_id".to_owned(),
+        policy_drift_rejection.policy_drift_gate_id.clone(),
+    );
+    ids
+}
+
+pub fn gateway_formal_tiny_z3_stale_blocker_rejection_label_bindings(
+    policy_drift_rejection: &GatewayFormalTinyZ3PolicyDriftRejection,
+    stale_blocker_label: &GatewayFormalTinyZ3StaleBlockerRejectionLabel,
+) -> BTreeMap<String, String> {
+    let mut labels = policy_drift_rejection.label_bindings.clone();
+    labels.insert(
+        "phase503_policy_drift_label".to_owned(),
+        format!("{:?}", policy_drift_rejection.policy_drift_label),
+    );
+    labels.insert(
+        "stale_blocker_label".to_owned(),
+        format!("{stale_blocker_label:?}"),
+    );
+    labels
+}
+
+pub fn build_gateway_formal_tiny_z3_stale_blocker_rejection(
+    policy_drift_rejection: &GatewayFormalTinyZ3PolicyDriftRejection,
+    input: &GatewayFormalTinyZ3StaleBlockerRejectionInput,
+) -> Result<
+    GatewayFormalTinyZ3StaleBlockerRejection,
+    GatewayFormalTinyZ3StaleBlockerRejectionValidation,
+> {
+    let validation = validate_gateway_formal_tiny_z3_stale_blocker_rejection_input(
+        policy_drift_rejection,
+        input,
+    );
+    if !validation.valid {
+        return Err(validation);
+    }
+    let digest_bindings =
+        gateway_formal_tiny_z3_stale_blocker_rejection_digest_bindings(policy_drift_rejection);
+    Ok(GatewayFormalTinyZ3StaleBlockerRejection {
+        schema_version: GATEWAY_FORMAL_TINY_Z3_STALE_BLOCKER_REJECTION_SCHEMA_VERSION.to_owned(),
+        stale_blocker_gate_id: input.stale_blocker_gate_id.clone(),
+        state_slice: GATEWAY_FORMAL_TINY_Z3_STALE_BLOCKER_REJECTION_STATE_SLICE.to_owned(),
+        stale_blocker_input_digest: input.digest(),
+        stale_blocker_policy_id: input.stale_blocker_policy_id.clone(),
+        stale_blocker_decision_id: input.stale_blocker_decision_id.clone(),
+        stale_blocker_decision_at_unix: input.stale_blocker_decision_at_unix,
+        phase503_policy_drift_rejection_digest: digest_bindings
+            ["phase503_policy_drift_rejection_digest"],
+        phase503_policy_drift_rejection_input_digest: digest_bindings
+            ["phase503_policy_drift_rejection_input_digest"],
+        phase503_digest_binding_map_digest: digest_bindings["phase503_digest_binding_map_digest"],
+        phase503_id_binding_map_digest: digest_bindings["phase503_id_binding_map_digest"],
+        phase503_label_binding_map_digest: digest_bindings["phase503_label_binding_map_digest"],
+        phase503_explicit_nonclaims_digest: digest_bindings["phase503_explicit_nonclaims_digest"],
+        phase503_policy_drift_sources_digest: digest_bindings
+            ["phase503_policy_drift_sources_digest"],
+        phase503_rejection_actions_digest: digest_bindings["phase503_rejection_actions_digest"],
+        phase503_inherited_digest_requirements_digest: digest_bindings
+            ["phase503_inherited_digest_requirements_digest"],
+        reviewed_current_accepted_append_blockers_digest: input
+            .reviewed_current_accepted_append_blockers_digest,
+        expected_current_accepted_append_blockers_digest: input
+            .expected_current_accepted_append_blockers_digest,
+        digest_bindings: input.digest_bindings.clone(),
+        id_bindings: input.id_bindings.clone(),
+        label_bindings: input.label_bindings.clone(),
+        explicit_nonclaims: input.explicit_nonclaims.clone(),
+        explicit_nonclaims_digest: input.explicit_nonclaims_digest,
+        freshness_comparison_rules: input.freshness_comparison_rules.clone(),
+        freshness_comparison_rules_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-stale-blocker-freshness-rules:v1",
+            &input.freshness_comparison_rules,
+        ),
+        stale_blocker_rejection_actions: input.stale_blocker_rejection_actions.clone(),
+        stale_blocker_rejection_actions_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-stale-blocker-rejection-actions:v1",
+            &input.stale_blocker_rejection_actions,
+        ),
+        inherited_digest_requirements: input.inherited_digest_requirements.clone(),
+        inherited_digest_requirements_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-stale-blocker-inherited-digest-requirements:v1",
+            &input.inherited_digest_requirements,
+        ),
+        stale_blocker_label: input.stale_blocker_label.clone(),
+        stale_blocker_summary: input.stale_blocker_summary.clone(),
+        previous_promotion_state: "tiny_z3_policy_drift_rejection_metadata".to_owned(),
+        promotion_state: "tiny_z3_stale_blocker_rejection_metadata".to_owned(),
+        next_required_state: "tiny_z3_accepted_path_prerequisites_remain_unresolved".to_owned(),
+        claim_boundary: gateway_formal_tiny_z3_stale_blocker_rejection_claim_boundary(),
+        creates_stale_blocker_report_artifact: false,
+        refreshes_blockers: false,
+        repairs_blockers: false,
+        proceeds_after_stale_blocker: false,
+        changes_accepted_append_policy: false,
+        makes_accepted_append_decision: false,
+        mutates_accepted_evidence_ledger: false,
+        creates_accepted_formal_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        backend_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        external_audit_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_gateway_formal_tiny_z3_stale_blocker_rejection_input(
+    policy_drift_rejection: &GatewayFormalTinyZ3PolicyDriftRejection,
+    input: &GatewayFormalTinyZ3StaleBlockerRejectionInput,
+) -> GatewayFormalTinyZ3StaleBlockerRejectionValidation {
+    let mut issues = Vec::new();
+    if input.schema_version != GATEWAY_FORMAL_TINY_Z3_STALE_BLOCKER_REJECTION_SCHEMA_VERSION {
+        issues.push(GatewayFormalTinyZ3StaleBlockerRejectionIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.stale_blocker_gate_id) {
+        issues.push(GatewayFormalTinyZ3StaleBlockerRejectionIssue::InvalidStaleBlockerGateId);
+    }
+    if !is_single_segment_id(&input.stale_blocker_policy_id) {
+        issues.push(GatewayFormalTinyZ3StaleBlockerRejectionIssue::InvalidStaleBlockerPolicyId);
+    }
+    if !is_single_segment_id(&input.stale_blocker_decision_id) {
+        issues.push(GatewayFormalTinyZ3StaleBlockerRejectionIssue::InvalidStaleBlockerDecisionId);
+    }
+    if input.stale_blocker_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalTinyZ3StaleBlockerRejectionIssue::MissingStaleBlockerDecisionTimestamp,
+        );
+    }
+    let expected_digests =
+        gateway_formal_tiny_z3_stale_blocker_rejection_digest_bindings(policy_drift_rejection);
+    for (label, digest) in &input.digest_bindings {
+        if *digest == Hash([0; 32]) {
+            issues
+                .push(GatewayFormalTinyZ3StaleBlockerRejectionIssue::MissingDigest(label.clone()));
+        }
+    }
+    if input.digest_bindings != expected_digests {
+        issues.push(GatewayFormalTinyZ3StaleBlockerRejectionIssue::DigestBindingMismatch);
+    }
+    let expected_ids = gateway_formal_tiny_z3_stale_blocker_rejection_id_bindings(
+        policy_drift_rejection,
+        &input.stale_blocker_gate_id,
+        &input.stale_blocker_policy_id,
+        &input.stale_blocker_decision_id,
+    );
+    for (label, value) in &input.id_bindings {
+        if !is_single_segment_id(value) {
+            issues.push(
+                GatewayFormalTinyZ3StaleBlockerRejectionIssue::InvalidIdBinding(label.clone()),
+            );
+        }
+    }
+    if input.id_bindings != expected_ids {
+        issues.push(GatewayFormalTinyZ3StaleBlockerRejectionIssue::IdBindingMismatch);
+    }
+    let expected_labels = gateway_formal_tiny_z3_stale_blocker_rejection_label_bindings(
+        policy_drift_rejection,
+        &input.stale_blocker_label,
+    );
+    if input.label_bindings != expected_labels {
+        issues.push(GatewayFormalTinyZ3StaleBlockerRejectionIssue::LabelBindingMismatch);
+    }
+    if policy_drift_rejection.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_POLICY_DRIFT_REJECTION_SCHEMA_VERSION
+        || policy_drift_rejection.state_slice
+            != GATEWAY_FORMAL_TINY_Z3_POLICY_DRIFT_REJECTION_STATE_SLICE
+        || policy_drift_rejection.promotion_state != "tiny_z3_policy_drift_rejection_metadata"
+        || policy_drift_rejection.next_required_state
+            != "tiny_z3_accepted_path_prerequisites_remain_unresolved"
+        || policy_drift_rejection.claim_boundary
+            != gateway_formal_tiny_z3_policy_drift_rejection_claim_boundary()
+        || policy_drift_rejection.creates_drift_report_artifact
+        || policy_drift_rejection.repairs_drift
+        || policy_drift_rejection.proceeds_after_drift
+        || policy_drift_rejection.changes_accepted_append_policy
+        || policy_drift_rejection.makes_accepted_append_decision
+        || policy_drift_rejection.mutates_accepted_evidence_ledger
+        || policy_drift_rejection.creates_accepted_formal_evidence
+        || policy_drift_rejection.creates_level2_evidence
+        || policy_drift_rejection.populates_score_axes
+        || policy_drift_rejection.proof_artifact_created
+        || policy_drift_rejection.checker_transcript_created
+        || policy_drift_rejection.solver_certificate_created
+        || policy_drift_rejection.backend_execution_evidence_created
+        || policy_drift_rejection.benchmark_evidence_created
+        || policy_drift_rejection.semantic_correctness_claimed
+        || policy_drift_rejection.production_readiness_claimed
+        || policy_drift_rejection.sota_claimed
+        || policy_drift_rejection.breakthrough_claimed
+        || policy_drift_rejection.full_security_claimed
+        || policy_drift_rejection.external_audit_claimed
+        || policy_drift_rejection.grants_authority
+    {
+        issues.push(
+            GatewayFormalTinyZ3StaleBlockerRejectionIssue::Phase503PolicyDriftRejectionStateMismatch,
+        );
+    }
+    let nonclaims = gateway_formal_tiny_z3_stale_blocker_rejection_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-stale-blocker-rejection-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(GatewayFormalTinyZ3StaleBlockerRejectionIssue::NonclaimMismatch);
+    }
+    if input.reviewed_current_accepted_append_blockers_digest == Hash([0; 32]) {
+        issues.push(GatewayFormalTinyZ3StaleBlockerRejectionIssue::MissingReviewedBlockerDigest);
+    }
+    if input.expected_current_accepted_append_blockers_digest == Hash([0; 32]) {
+        issues.push(GatewayFormalTinyZ3StaleBlockerRejectionIssue::MissingExpectedBlockerDigest);
+    }
+    if input.reviewed_current_accepted_append_blockers_digest
+        != policy_drift_rejection.current_accepted_append_blockers_digest
+    {
+        issues.push(GatewayFormalTinyZ3StaleBlockerRejectionIssue::ReviewedBlockerDigestMismatch);
+    }
+    if input.reviewed_current_accepted_append_blockers_digest
+        != input.expected_current_accepted_append_blockers_digest
+    {
+        issues.push(GatewayFormalTinyZ3StaleBlockerRejectionIssue::StaleBlockerDigestMismatch);
+    }
+    if input.freshness_comparison_rules
+        != gateway_formal_tiny_z3_stale_blocker_freshness_comparison_rules()
+    {
+        issues
+            .push(GatewayFormalTinyZ3StaleBlockerRejectionIssue::FreshnessComparisonRulesMismatch);
+    }
+    if input.stale_blocker_rejection_actions
+        != gateway_formal_tiny_z3_stale_blocker_rejection_actions()
+    {
+        issues.push(
+            GatewayFormalTinyZ3StaleBlockerRejectionIssue::StaleBlockerRejectionActionsMismatch,
+        );
+    }
+    if input.inherited_digest_requirements
+        != gateway_formal_tiny_z3_stale_blocker_inherited_digest_requirements()
+    {
+        issues.push(
+            GatewayFormalTinyZ3StaleBlockerRejectionIssue::InheritedDigestRequirementsMismatch,
+        );
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.stale_blocker_summary,
+    ) {
+        issues
+            .push(GatewayFormalTinyZ3StaleBlockerRejectionIssue::StaleBlockerSummaryPromotionClaim);
+    }
+    if input.stale_blocker_report_artifact_creation_requested
+        || input.blocker_refresh_requested
+        || input.blocker_repair_requested
+        || input.proceed_after_stale_blocker_requested
+        || input.accepted_append_policy_change_requested
+        || input.accepted_append_decision_requested
+        || input.accepted_evidence_ledger_mutation_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.backend_execution_evidence_created
+        || input.benchmark_evidence_created
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.external_audit_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(GatewayFormalTinyZ3StaleBlockerRejectionIssue::PromotionAttempt);
+    }
+    GatewayFormalTinyZ3StaleBlockerRejectionValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -92481,6 +93097,245 @@ mod tests {
     }
 
     #[test]
+    fn phase505_tiny_z3_stale_blocker_rejection_builds_blocking_record() {
+        let Some((obligation_root, phase405_output_root, output_root, reviewer_decision)) =
+            phase503_tiny_z3_reviewer_decision_source("phase505-stale-blocker")
+        else {
+            return;
+        };
+        let drift_input = phase503_tiny_z3_policy_drift_rejection_input(
+            "phase505-source-policy-drift-rejection",
+            &reviewer_decision,
+            GatewayFormalTinyZ3PolicyDriftRejectionLabel::PolicyDriftRejectionRecorded,
+        );
+        let policy_drift =
+            build_gateway_formal_tiny_z3_policy_drift_rejection(&reviewer_decision, &drift_input)
+                .expect("phase505 source policy drift rejection builds");
+        let stale_input = phase505_tiny_z3_stale_blocker_rejection_input(
+            "phase505-stale-blocker-rejection",
+            &policy_drift,
+            policy_drift.current_accepted_append_blockers_digest,
+            GatewayFormalTinyZ3StaleBlockerRejectionLabel::CurrentBlockerFreshnessRecorded,
+        );
+        let stale_rejection =
+            build_gateway_formal_tiny_z3_stale_blocker_rejection(&policy_drift, &stale_input)
+                .expect("phase505 stale blocker rejection builds");
+
+        assert_eq!(
+            stale_rejection.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_STALE_BLOCKER_REJECTION_STATE_SLICE
+        );
+        assert_eq!(
+            stale_rejection.phase503_policy_drift_rejection_digest,
+            policy_drift.digest()
+        );
+        assert_eq!(
+            stale_rejection.phase503_policy_drift_rejection_input_digest,
+            policy_drift.policy_drift_input_digest
+        );
+        assert_eq!(
+            stale_rejection.phase503_digest_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase503-policy-drift-rejection-digest-bindings:v1",
+                &policy_drift.digest_bindings,
+            )
+        );
+        assert_eq!(
+            stale_rejection.phase503_id_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase503-policy-drift-rejection-id-bindings:v1",
+                &policy_drift.id_bindings,
+            )
+        );
+        assert_eq!(
+            stale_rejection.phase503_label_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase503-policy-drift-rejection-label-bindings:v1",
+                &policy_drift.label_bindings,
+            )
+        );
+        assert_eq!(
+            stale_rejection.phase503_policy_drift_sources_digest,
+            policy_drift.policy_drift_sources_digest
+        );
+        assert_eq!(
+            stale_rejection.phase503_rejection_actions_digest,
+            policy_drift.rejection_actions_digest
+        );
+        assert_eq!(
+            stale_rejection.reviewed_current_accepted_append_blockers_digest,
+            policy_drift.current_accepted_append_blockers_digest
+        );
+        assert_eq!(
+            stale_rejection.expected_current_accepted_append_blockers_digest,
+            policy_drift.current_accepted_append_blockers_digest
+        );
+        assert_eq!(
+            stale_rejection.freshness_comparison_rules,
+            gateway_formal_tiny_z3_stale_blocker_freshness_comparison_rules()
+        );
+        assert_eq!(
+            stale_rejection.stale_blocker_rejection_actions,
+            gateway_formal_tiny_z3_stale_blocker_rejection_actions()
+        );
+        assert_eq!(
+            stale_rejection.inherited_digest_requirements,
+            gateway_formal_tiny_z3_stale_blocker_inherited_digest_requirements()
+        );
+        assert_eq!(
+            stale_rejection.previous_promotion_state,
+            "tiny_z3_policy_drift_rejection_metadata"
+        );
+        assert_eq!(
+            stale_rejection.promotion_state,
+            "tiny_z3_stale_blocker_rejection_metadata"
+        );
+        assert_eq!(
+            stale_rejection.claim_boundary,
+            gateway_formal_tiny_z3_stale_blocker_rejection_claim_boundary()
+        );
+        assert!(!stale_rejection.creates_stale_blocker_report_artifact);
+        assert!(!stale_rejection.refreshes_blockers);
+        assert!(!stale_rejection.repairs_blockers);
+        assert!(!stale_rejection.proceeds_after_stale_blocker);
+        assert!(!stale_rejection.changes_accepted_append_policy);
+        assert!(!stale_rejection.makes_accepted_append_decision);
+        assert!(!stale_rejection.mutates_accepted_evidence_ledger);
+        assert!(!stale_rejection.creates_accepted_formal_evidence);
+        assert!(!stale_rejection.creates_level2_evidence);
+        assert!(!stale_rejection.populates_score_axes);
+        assert!(!stale_rejection.proof_artifact_created);
+        assert!(!stale_rejection.checker_transcript_created);
+        assert!(!stale_rejection.solver_certificate_created);
+        assert!(!stale_rejection.backend_execution_evidence_created);
+        assert!(!stale_rejection.benchmark_evidence_created);
+        assert!(!stale_rejection.semantic_correctness_claimed);
+        assert!(!stale_rejection.production_readiness_claimed);
+        assert!(!stale_rejection.sota_claimed);
+        assert!(!stale_rejection.breakthrough_claimed);
+        assert!(!stale_rejection.full_security_claimed);
+        assert!(!stale_rejection.external_audit_claimed);
+        assert!(!stale_rejection.grants_authority);
+
+        let mut stale_digest = stale_input.clone();
+        stale_digest.expected_current_accepted_append_blockers_digest = Hash([88; 32]);
+        let stale_validation = validate_gateway_formal_tiny_z3_stale_blocker_rejection_input(
+            &policy_drift,
+            &stale_digest,
+        );
+        assert!(stale_validation
+            .issues
+            .contains(&GatewayFormalTinyZ3StaleBlockerRejectionIssue::StaleBlockerDigestMismatch));
+
+        let mut missing_reviewed = stale_input.clone();
+        missing_reviewed.reviewed_current_accepted_append_blockers_digest = Hash([0; 32]);
+        let missing_validation = validate_gateway_formal_tiny_z3_stale_blocker_rejection_input(
+            &policy_drift,
+            &missing_reviewed,
+        );
+        assert!(missing_validation.issues.contains(
+            &GatewayFormalTinyZ3StaleBlockerRejectionIssue::MissingReviewedBlockerDigest
+        ));
+        assert!(missing_validation.issues.contains(
+            &GatewayFormalTinyZ3StaleBlockerRejectionIssue::ReviewedBlockerDigestMismatch
+        ));
+
+        let mut rule_drift = stale_input.clone();
+        rule_drift
+            .freshness_comparison_rules
+            .remove("stale_blocker_digest_rejected");
+        let rule_validation = validate_gateway_formal_tiny_z3_stale_blocker_rejection_input(
+            &policy_drift,
+            &rule_drift,
+        );
+        assert!(rule_validation.issues.contains(
+            &GatewayFormalTinyZ3StaleBlockerRejectionIssue::FreshnessComparisonRulesMismatch
+        ));
+
+        let mut action_drift = stale_input.clone();
+        action_drift
+            .stale_blocker_rejection_actions
+            .remove("reject_backend_execution_authority");
+        let action_validation = validate_gateway_formal_tiny_z3_stale_blocker_rejection_input(
+            &policy_drift,
+            &action_drift,
+        );
+        assert!(action_validation.issues.contains(
+            &GatewayFormalTinyZ3StaleBlockerRejectionIssue::StaleBlockerRejectionActionsMismatch
+        ));
+
+        fs::remove_dir_all(&output_root).expect("phase505 stale blocker output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase505 stale blocker phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase505 stale blocker obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase505_tiny_z3_stale_blocker_rejection_rejects_promotion() {
+        let Some((obligation_root, phase405_output_root, output_root, reviewer_decision)) =
+            phase503_tiny_z3_reviewer_decision_source("phase505-stale-blocker-promotion")
+        else {
+            return;
+        };
+        let drift_input = phase503_tiny_z3_policy_drift_rejection_input(
+            "phase505-promotion-policy-drift-rejection",
+            &reviewer_decision,
+            GatewayFormalTinyZ3PolicyDriftRejectionLabel::PolicyDriftRejectionRecorded,
+        );
+        let policy_drift =
+            build_gateway_formal_tiny_z3_policy_drift_rejection(&reviewer_decision, &drift_input)
+                .expect("phase505 promotion source policy drift rejection builds");
+        let mut stale_input = phase505_tiny_z3_stale_blocker_rejection_input(
+            "phase505-promotion-stale-blocker",
+            &policy_drift,
+            policy_drift.current_accepted_append_blockers_digest,
+            GatewayFormalTinyZ3StaleBlockerRejectionLabel::StaleBlockerRejected,
+        );
+
+        stale_input.stale_blocker_report_artifact_creation_requested = true;
+        stale_input.blocker_refresh_requested = true;
+        stale_input.blocker_repair_requested = true;
+        stale_input.proceed_after_stale_blocker_requested = true;
+        stale_input.accepted_append_policy_change_requested = true;
+        stale_input.accepted_append_decision_requested = true;
+        stale_input.accepted_evidence_ledger_mutation_requested = true;
+        stale_input.accepted_formal_evidence_created = true;
+        stale_input.creates_level2_evidence = true;
+        stale_input.populates_score_axes = true;
+        stale_input.proof_artifact_promoted = true;
+        stale_input.checker_transcript_promoted = true;
+        stale_input.solver_certificate_promoted = true;
+        stale_input.backend_execution_evidence_created = true;
+        stale_input.benchmark_evidence_created = true;
+        stale_input.semantic_correctness_claimed = true;
+        stale_input.production_readiness_claimed = true;
+        stale_input.sota_claimed = true;
+        stale_input.breakthrough_claimed = true;
+        stale_input.full_security_claimed = true;
+        stale_input.external_audit_claimed = true;
+        stale_input.action_authority_claimed = true;
+        let validation = validate_gateway_formal_tiny_z3_stale_blocker_rejection_input(
+            &policy_drift,
+            &stale_input,
+        );
+        assert!(validation
+            .issues
+            .contains(&GatewayFormalTinyZ3StaleBlockerRejectionIssue::PromotionAttempt));
+        assert!(
+            build_gateway_formal_tiny_z3_stale_blocker_rejection(&policy_drift, &stale_input)
+                .is_err()
+        );
+
+        fs::remove_dir_all(&output_root)
+            .expect("phase505 stale blocker promotion output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase505 stale blocker promotion phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase505 stale blocker promotion obligation cleanup succeeds");
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -99524,6 +100379,78 @@ mod tests {
             drift_report_artifact_creation_requested: false,
             drift_repair_requested: false,
             proceed_after_drift_requested: false,
+            accepted_append_policy_change_requested: false,
+            accepted_append_decision_requested: false,
+            accepted_evidence_ledger_mutation_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            backend_execution_evidence_created: false,
+            benchmark_evidence_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            external_audit_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase505_tiny_z3_stale_blocker_rejection_input(
+        stale_blocker_gate_id: &str,
+        policy_drift_rejection: &GatewayFormalTinyZ3PolicyDriftRejection,
+        expected_current_accepted_append_blockers_digest: Hash,
+        stale_blocker_label: GatewayFormalTinyZ3StaleBlockerRejectionLabel,
+    ) -> GatewayFormalTinyZ3StaleBlockerRejectionInput {
+        let stale_blocker_policy_id = "phase505-stale-blocker-policy";
+        let stale_blocker_decision_id = "phase505-stale-blocker-decision";
+        let nonclaims = gateway_formal_tiny_z3_stale_blocker_rejection_required_nonclaims();
+        GatewayFormalTinyZ3StaleBlockerRejectionInput {
+            schema_version: GATEWAY_FORMAL_TINY_Z3_STALE_BLOCKER_REJECTION_SCHEMA_VERSION
+                .to_owned(),
+            stale_blocker_gate_id: stale_blocker_gate_id.to_owned(),
+            stale_blocker_policy_id: stale_blocker_policy_id.to_owned(),
+            stale_blocker_decision_id: stale_blocker_decision_id.to_owned(),
+            stale_blocker_decision_at_unix: 1_800_000_505,
+            digest_bindings: gateway_formal_tiny_z3_stale_blocker_rejection_digest_bindings(
+                policy_drift_rejection,
+            ),
+            id_bindings: gateway_formal_tiny_z3_stale_blocker_rejection_id_bindings(
+                policy_drift_rejection,
+                stale_blocker_gate_id,
+                stale_blocker_policy_id,
+                stale_blocker_decision_id,
+            ),
+            label_bindings: gateway_formal_tiny_z3_stale_blocker_rejection_label_bindings(
+                policy_drift_rejection,
+                &stale_blocker_label,
+            ),
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-stale-blocker-rejection-nonclaims:v1",
+                &nonclaims,
+            ),
+            reviewed_current_accepted_append_blockers_digest: policy_drift_rejection
+                .current_accepted_append_blockers_digest,
+            expected_current_accepted_append_blockers_digest,
+            freshness_comparison_rules:
+                gateway_formal_tiny_z3_stale_blocker_freshness_comparison_rules(),
+            stale_blocker_rejection_actions: gateway_formal_tiny_z3_stale_blocker_rejection_actions(
+            ),
+            inherited_digest_requirements:
+                gateway_formal_tiny_z3_stale_blocker_inherited_digest_requirements(),
+            stale_blocker_label,
+            stale_blocker_summary:
+                "local tiny-Z3 stale blocker rejection metadata keeps accepted path fail closed"
+                    .to_owned(),
+            stale_blocker_report_artifact_creation_requested: false,
+            blocker_refresh_requested: false,
+            blocker_repair_requested: false,
+            proceed_after_stale_blocker_requested: false,
             accepted_append_policy_change_requested: false,
             accepted_append_decision_requested: false,
             accepted_evidence_ledger_mutation_requested: false,

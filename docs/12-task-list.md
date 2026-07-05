@@ -14170,6 +14170,42 @@ Level2+ evidence, score axes, proof-authority claim, Lean/new-SMT/COBALT or
 Rust-to-Lean execution, benchmark evidence, external audit, or
 production/SOTA/security/correctness claim.
 
+## Phase 505 HSAI Tiny Z3 Stale Blocker Rejection Metadata
+
+Status: complete. See
+`docs/505-hsai-tiny-z3-stale-blocker-rejection-metadata-notes.md`.
+
+Goal: implement local in-memory metadata for stale current accepted append
+blocker rejection over one Phase 503 policy drift rejection record.
+
+Implemented: Phase 505 adds
+`GatewayFormalTinyZ3StaleBlockerRejectionInput`,
+`GatewayFormalTinyZ3StaleBlockerRejection`,
+`GatewayFormalTinyZ3StaleBlockerRejectionIssue`, validation helpers, digest,
+id, and label bindings, closed freshness comparison rules, closed stale
+blocker rejection actions, inherited digest requirements, and focused tests in
+`crates/hsai-agent-admission/src/lib.rs`. The validator rejects Phase 503
+binding drift, missing reviewed or expected blocker digests, reviewed blocker
+digest drift from Phase 503, stale blocker digest mismatch, rule/action drift,
+blocker refresh, blocker repair, proceeding after stale detection, accepted
+append decisions, accepted Evidence Ledger mutation, formal evidence, Level2+,
+score axes, backend evidence, benchmark evidence, external audit, and strong
+claims.
+
+Validation coverage: `cargo test -p hsai-agent-admission --quiet` covers valid
+metadata construction, inherited digest preservation, stale and missing blocker
+digest rejection, freshness rule drift rejection, stale blocker action drift
+rejection, and promotion-attempt rejection.
+
+Exit criteria: HSAI now has local metadata for the stale current accepted
+append blocker rejection prerequisite gate. It still has no accepted append
+decision, accepted formal evidence, accepted Evidence Ledger mutation from HSAI
+admission metadata, accepted append policy change, blocker refresh, blocker
+repair, stale blocker report artifact, Level2+ evidence, score axes,
+proof-authority claim, Lean/new-SMT/COBALT or Rust-to-Lean execution,
+benchmark evidence, external audit evidence, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
