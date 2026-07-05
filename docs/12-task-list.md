@@ -14272,6 +14272,35 @@ evidence, score axes, proof-authority claim, Lean/new-SMT/COBALT or
 Rust-to-Lean execution, benchmark evidence, external audit evidence, or
 production/SOTA/security/correctness claim.
 
+## Phase 508 HSAI Tiny Z3 Accepted Append Validator Call Boundary
+
+Status: complete. See
+`docs/508-hsai-tiny-z3-accepted-append-validator-call-boundary.md`.
+
+Goal: define the docs-first boundary for a future in-memory validation-only
+call from HSAI accepted append handoff metadata to
+`zkbench-core::validate_accepted_ledger_append_transaction_request`.
+
+Implemented: Phase 508 documents the future allowed touch surface, the only
+future local dependency addition, the only future allowed validator call,
+forbidden mutation/materialization/file/process/network APIs, required future
+Phase 507 digest bindings, accepted append request and ledger identity
+bindings, validation result bindings, fail-closed future validation rules,
+backend relationship limits, meaning limits, and Phase 509 implementation exit
+criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has an accepted append validator call boundary for a
+future local in-memory validation-only implementation. It still has no
+`zkbench-core` dependency in `hsai-agent-admission`, accepted append validator
+call, accepted append mutation, accepted Evidence Ledger read or write,
+materialized accepted ledger output, accepted formal evidence, Level2+
+evidence, score axes, proof-authority claim, Lean/new-SMT/COBALT or
+Rust-to-Lean execution, benchmark evidence, external audit evidence, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

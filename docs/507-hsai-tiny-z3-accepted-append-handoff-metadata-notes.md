@@ -138,14 +138,14 @@ not solver certificate authority, not benchmark evidence, not external audit,
 not SOTA, not semantic correctness, not production readiness, not full
 security, and not authority to execute an action.
 
-## Next Responsible Slice
+## Phase 508 Boundary Status
 
-The accepted append path still has not called the `zkbench-core` accepted
-append validator and still has not read or written an accepted Evidence Ledger.
-A later slice must define a new boundary before any code can add a
-`zkbench-core` dependency, call
-`validate_accepted_ledger_append_transaction_request`, read accepted ledger
-state, evaluate an accepted append transaction, create accepted formal
-evidence, create Level2+ evidence, populate score axes, run
+Phase 508 defines the docs-first accepted append validator call boundary in
+`docs/508-hsai-tiny-z3-accepted-append-validator-call-boundary.md`.
+
+That boundary still does not implement a `zkbench-core` dependency, call the
+accepted append validator, read or write accepted Evidence Ledger files, mutate
+an accepted Evidence Ledger, create materialized accepted ledger output, create
+accepted formal evidence, create Level2+ evidence, populate score axes, run
 Lean/new-SMT/COBALT/Rust-to-Lean, or make
 production/SOTA/security/correctness claims.

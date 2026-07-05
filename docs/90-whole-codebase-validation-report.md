@@ -7316,5 +7316,23 @@ evidence, creates no Level2+ evidence, populates no score axes, runs no
 Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence, and
 claims no production/SOTA/security/semantic-correctness result.
 
+[docs/508-hsai-tiny-z3-accepted-append-validator-call-boundary.md](docs/508-hsai-tiny-z3-accepted-append-validator-call-boundary.md)
+defines the Phase 508 docs-first boundary for a future in-memory
+validation-only call from HSAI accepted append handoff metadata to
+`zkbench-core::validate_accepted_ledger_append_transaction_request`. The
+boundary records the future allowed touch surface, the only future local
+dependency addition, the only future allowed validator call, forbidden
+mutation/materialization/file/process/network APIs, required future Phase 507
+digest bindings, accepted append request and ledger identity bindings,
+validation result bindings, fail-closed future validation rules, backend
+relationship limits, meaning limits, and Phase 509 implementation exit
+criteria. It creates no Rust code, adds no `zkbench-core` dependency to
+`hsai-agent-admission`, reads or writes no accepted Evidence Ledger files,
+calls no accepted append validator, calls no accepted append mutation function,
+creates no materialized accepted ledger output, creates no accepted formal
+evidence, creates no Level2+ evidence, populates no score axes, runs no
+Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence, and
+claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
