@@ -15689,6 +15689,33 @@ COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution, no benchmark
 evidence, no external audit evidence, and no production/SOTA/security/
 semantic-correctness claim.
 
+## Phase 558 HSAI Tiny Z3 Backend Execution Independent External Operator Result Capture Boundary
+
+Status: complete. See
+`docs/558-hsai-tiny-z3-backend-execution-independent-external-operator-result-capture-boundary.md`.
+
+Goal: define the docs-first boundary for future local capture metadata that an
+independent external operator could return after receiving the Phase 557
+handoff packet.
+
+Implemented: Phase 558 defines a future capture packet namespace, declared
+files, Phase 557 packet manifest bindings, Phase 555 handoff bindings,
+operator provenance requirements, execution observation requirements,
+captured-artifact index requirements, redaction-report requirements,
+nonpromotion requirements, fail-closed validation rules, meaning limits, and
+Phase 559 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named boundary for future local validation of an
+operator-declared external execution observation as quarantined capture
+metadata. It still has no independent external reproduction accepted by the
+repo, no external result import, no accepted formal evidence, no Level2+
+evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean execution, no
+additional SMT/Z3 execution, no benchmark evidence, no external audit evidence,
+and no production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
