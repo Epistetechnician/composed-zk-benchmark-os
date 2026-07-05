@@ -108,10 +108,11 @@ action.
 
 ## Phase 561 Implementation Exit Criteria
 
-A future Phase 561 may implement local import-candidate metadata only if it:
+Phase 561 implemented local import-candidate metadata under this boundary. The
+implementation:
 
-- touches only `crates/hsai-agent-admission/src/lib.rs`, focused tests in that
-  file, future phase notes under `docs/`, and navigation/status updates under
+- touched only `crates/hsai-agent-admission/src/lib.rs`, focused tests in that
+  file, phase notes under `docs/`, and navigation/status updates under
   `README.md`, `docs/12-task-list.md`,
   `docs/90-whole-codebase-validation-report.md`, this boundary, and
   `AGENTS.md`;
