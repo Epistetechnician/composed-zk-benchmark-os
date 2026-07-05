@@ -14361,6 +14361,37 @@ proof-authority claim, Lean/new-SMT/COBALT or Rust-to-Lean execution,
 benchmark evidence, external audit evidence, or
 production/SOTA/security/correctness claim.
 
+## Phase 511 HSAI Tiny Z3 Accepted Append Mutation Metadata
+
+Status: complete. See
+`docs/511-hsai-tiny-z3-accepted-append-mutation-metadata-notes.md`.
+
+Goal: implement the first local in-memory accepted append mutation metadata
+path through `zkbench-core::apply_accepted_ledger_append_transaction`, over
+caller-supplied values only.
+
+Implemented: Phase 511 adds the accepted append mutation input/output
+metadata, issue and validation types, nonclaim/rule/forbidden-API/inherited
+digest helpers, digest/id/label binding helpers, a fail-closed validator, and a
+builder that validates one exact Phase 509 validator-call record before
+calling the existing in-memory `zkbench-core` append mutation. The result
+records pre- and post-mutation ledger digests, the accepted append report
+digest, appended entry identity, appended sequence number, appended evidence
+class, and appended claim boundary.
+
+Validation coverage: focused Rust tests cover successful in-memory mutation
+metadata over a real Phase 509 validator-call record and real `zkbench-core`
+append request, rejection of invalid Phase 509 validation state, and rejection
+of file/materialization/formal-evidence/Level2+/score-axis/backend/benchmark/
+strong-claim/action-authority promotion attempts.
+
+Exit criteria: HSAI now has local metadata for one in-memory accepted ledger
+append mutation. It still has no accepted Evidence Ledger file read or write,
+no materialized accepted ledger output, no accepted formal evidence, no
+Level2+ evidence, no score axes, no Lean/new-SMT/COBALT or Rust-to-Lean
+execution, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

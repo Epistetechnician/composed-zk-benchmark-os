@@ -181,8 +181,9 @@ That still is not:
 
 ## Phase 511 Implementation Exit Criteria
 
-A future Phase 511 may implement local accepted append mutation metadata only
-if it:
+Phase 511 implemented local accepted append mutation metadata in
+`docs/511-hsai-tiny-z3-accepted-append-mutation-metadata-notes.md`. The
+implementation met this boundary by:
 
 - touches only the allowed files listed above;
 - performs no process or network calls;
