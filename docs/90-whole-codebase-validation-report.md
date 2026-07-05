@@ -8150,5 +8150,20 @@ evidence, creates no Level2+ evidence, populates no score axes, runs no
 Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark
 evidence, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/562-hsai-tiny-z3-backend-execution-external-operator-capture-import-review-boundary.md](docs/562-hsai-tiny-z3-backend-execution-external-operator-capture-import-review-boundary.md)
+documents the Phase 562 docs-first operator-capture import-review boundary.
+It defines future local review metadata over one exact Phase 561 quarantined
+import candidate, including Phase 561 candidate/validation/quarantine
+bindings, Phase 559 capture bindings, Phase 557 handoff packet bindings,
+Phase 555 manual handoff validation bindings, inherited backend-execution
+digest bindings, review policy and nonpromotion digest requirements,
+fail-closed validation rules, meaning limits, and Phase 563 implementation
+exit criteria. It creates no Rust code, writes no artifact files, performs no
+run, imports no external result, accepts no independent external reproduction,
+creates no accepted formal evidence, creates no Level2+ evidence, populates no
+score axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution,
+creates no benchmark evidence, and claims no production/SOTA/security/
+semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
