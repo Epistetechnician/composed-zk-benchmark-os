@@ -15387,6 +15387,35 @@ axes, no Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no
 external audit evidence, no independent external reproduction, and no
 production/SOTA/security/correctness claim.
 
+## Phase 548 HSAI Tiny Z3 Backend Execution External Reproduction Boundary
+
+Status: complete. See
+`docs/548-hsai-tiny-z3-backend-execution-external-reproduction-boundary.md`.
+
+Goal: define the docs-first boundary for future external-reproduction
+metadata over one exact Phase 547 Level2 eligibility record.
+
+Implemented: Phase 548 defines the future external reproduction contract:
+required Phase 547 eligibility/input/classification/blocker/nonpromotion
+bindings, Phase 545 score-axis eligibility/nonpopulation bindings, Phase 543
+package/class/boundary bindings, Phase 541 materialized artifact bindings,
+Phase 539 appended class/boundary bindings, inherited Phase
+535/533/531/529/527 bindings, `zkbench-core` external owner surface,
+artifact-capture/provenance/import-schema/required-provenance-field digests,
+external-reproduction input-status, policy, blocker, and nonpromotion digests,
+fail-closed validation rules, meaning limits, and Phase 549 implementation
+exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named boundary for classifying the Phase 547
+backend-execution Level2 eligibility record as external-reproduction-blocked
+under current evidence. It still has no independent external reproduction, no
+accepted formal evidence, no Level2+ evidence, no populated score axes, no
+Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no external audit
+evidence, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
