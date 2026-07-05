@@ -609,6 +609,7 @@ Surface DSL
 | [docs/521-hsai-tiny-z3-external-reproduction-provenance-metadata-notes.md](docs/521-hsai-tiny-z3-external-reproduction-provenance-metadata-notes.md) | Phase 521 HSAI tiny Z3 external reproduction provenance metadata notes. |
 | [docs/522-hsai-tiny-z3-external-result-import-candidate-boundary.md](docs/522-hsai-tiny-z3-external-result-import-candidate-boundary.md) | Phase 522 HSAI tiny Z3 external result import candidate boundary. |
 | [docs/523-hsai-tiny-z3-external-result-import-candidate-metadata-notes.md](docs/523-hsai-tiny-z3-external-result-import-candidate-metadata-notes.md) | Phase 523 HSAI tiny Z3 external result import candidate metadata notes. |
+| [docs/524-hsai-tiny-z3-external-import-review-boundary.md](docs/524-hsai-tiny-z3-external-import-review-boundary.md) | Phase 524 HSAI tiny Z3 external import review boundary. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
