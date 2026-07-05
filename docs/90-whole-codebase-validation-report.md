@@ -7884,5 +7884,22 @@ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
 additional SMT/Z3 execution, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/546-hsai-tiny-z3-backend-execution-level2-eligibility-boundary.md](docs/546-hsai-tiny-z3-backend-execution-level2-eligibility-boundary.md)
+defines the Phase 546 docs-first boundary for future Level2 eligibility
+metadata over one exact Phase 545 score-axis eligibility record. The boundary
+defines required Phase 545 eligibility/input/classification/blocker/
+nonpopulation bindings, Phase 543 package/class/boundary bindings, Phase 541
+materialized artifact/report bindings, Phase 539 appended class/boundary
+bindings, inherited Phase 535/533/531/529/527 bindings, `zkbench-core` Level2
+owner, `Level2EligibilityChecker`, `check_level2_eligibility`,
+`Level2EligibilityReport`, `ClaimBoundary::Level0DesignNote`, the
+`creates_level2_evidence=false` invariant, Level2 policy/blocker/nonpromotion
+digests, fail-closed validation rules, meaning limits, and Phase 547
+implementation exit criteria. It creates no Rust code, creates no Level2
+metadata, creates no accepted formal evidence, creates no Level2+ evidence,
+populates no score axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3
+execution, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

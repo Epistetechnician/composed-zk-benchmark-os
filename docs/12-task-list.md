@@ -15326,6 +15326,35 @@ populated score axes, no Lean/COBALT/Rust-to-Lean execution, no benchmark
 evidence, no external audit evidence, no independent external reproduction,
 and no production/SOTA/security/correctness claim.
 
+## Phase 546 HSAI Tiny Z3 Backend Execution Level2 Eligibility Boundary
+
+Status: complete. See
+`docs/546-hsai-tiny-z3-backend-execution-level2-eligibility-boundary.md`.
+
+Goal: define the docs-first boundary for future Level2 eligibility metadata
+over one exact Phase 545 score-axis eligibility record.
+
+Implemented: Phase 546 defines the future Level2 eligibility contract:
+required Phase 545 eligibility/input/classification/blocker/nonpopulation
+bindings, Phase 543 package/class/boundary bindings, Phase 541 materialized
+artifact/report bindings, Phase 539 appended class/boundary bindings,
+inherited Phase 535/533/531/529/527 bindings, `zkbench-core` Level2 owner,
+`Level2EligibilityChecker`, `check_level2_eligibility`,
+`Level2EligibilityReport`, `ClaimBoundary::Level0DesignNote`, the
+`creates_level2_evidence=false` invariant, Level2 policy/blocker/nonpromotion
+digests, fail-closed validation rules, meaning limits, and Phase 547
+implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named boundary for classifying the Phase 545
+backend-execution score-axis eligibility record as Level2-blocked under
+current evidence. It still has no accepted formal evidence, no Level2+
+evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean execution, no
+benchmark evidence, no external audit evidence, no independent external
+reproduction, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
