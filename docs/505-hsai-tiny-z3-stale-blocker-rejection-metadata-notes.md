@@ -147,11 +147,13 @@ benchmark evidence, not external audit, not SOTA, not semantic correctness,
 not production readiness, not full security, and not authority to execute an
 action.
 
-## Next Responsible Slice
+## Phase 506 Boundary Status
 
-The accepted-path prerequisite chain still has not crossed into accepted
-append evaluation or backend execution. A later slice must define the next
-boundary before any code can read accepted Evidence Ledger state, evaluate an
-accepted append transaction, create accepted formal evidence, create Level2+
-evidence, populate score axes, run Lean/new-SMT/COBALT/Rust-to-Lean, or make
+Phase 506 defines the docs-first accepted append evaluation handoff boundary in
+`docs/506-hsai-tiny-z3-accepted-append-evaluation-handoff-boundary.md`.
+
+That boundary still does not authorize accepted Evidence Ledger reads or
+writes, accepted append mutation, materialized accepted ledger output, accepted
+formal evidence, Level2+ evidence, score axes, Lean/new-SMT/COBALT/
+Rust-to-Lean execution, benchmark evidence, or
 production/SOTA/security/correctness claims.
