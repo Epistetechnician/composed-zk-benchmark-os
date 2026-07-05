@@ -15536,6 +15536,38 @@ reproduction, no accepted formal evidence, no Level2+ evidence, no populated
 score axes, no Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no
 external audit evidence, and no production/SOTA/security/correctness claim.
 
+## Phase 553 HSAI Tiny Z3 Backend Execution External Import Review Metadata
+
+Status: complete. See
+`docs/553-hsai-tiny-z3-backend-execution-external-import-review-metadata-notes.md`.
+
+Goal: implement local import-review metadata over one exact Phase 551
+quarantined backend-execution external-result import candidate.
+
+Implemented: Phase 553 adds backend-execution external import-review
+input/output metadata, bounded classifications and labels, issue/validation
+types, blocker/nonclaim/rule/forbidden-API/inherited-digest helpers,
+nonpromotion/policy/digest/id/label binding helpers, `build_...` and
+`validate_...` entrypoints, and tests over a Phase 551 quarantined import
+candidate.
+
+Validation coverage: focused tests cover successful blocked local import
+review metadata, invalid Phase 551 state rejection, and promotion rejection
+across review-policy digest drift, accepted external-result evidence,
+accepted-evidence artifact writes, independent external reproduction, Level2
+artifacts, score-axis artifacts, axis population, accepted formal evidence,
+Level2+, Lean, COBALT, Rust-to-Lean, additional SMT/Z3 execution, backend
+execution evidence, proof/checker/solver, benchmark, external audit, strong
+claims, and action authority.
+
+Exit criteria: HSAI now can locally review a structurally valid
+backend-execution external-result import candidate and keep it blocked because
+independent external reproduction is absent. It still has no independent
+external reproduction, no accepted formal evidence, no Level2+ evidence, no
+populated score axes, no Lean/COBALT/Rust-to-Lean execution, no benchmark
+evidence, no external audit evidence, and no production/SOTA/security/
+correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
