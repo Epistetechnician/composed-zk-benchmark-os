@@ -7537,5 +7537,25 @@ axes, creates no accepted formal evidence, creates no Level2+ evidence, runs
 no new Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark
 evidence, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/521-hsai-tiny-z3-external-reproduction-provenance-metadata-notes.md](docs/521-hsai-tiny-z3-external-reproduction-provenance-metadata-notes.md)
+documents the Phase 521 local external-reproduction provenance metadata
+implementation. The Rust surface in `crates/hsai-agent-admission/src/lib.rs`
+adds external-reproduction provenance input/output metadata, classification and
+label enums, issue and validation types, missing-input, blocker, nonclaim,
+rule, forbidden-API, inherited-digest, contract-digest, nonpromotion,
+policy-digest, digest-binding, id-binding, and label-binding helpers, a
+fail-closed validator, and a builder that validates one exact Phase 519 Level2
+eligibility metadata record before recording local external-reproduction
+provenance metadata only. The metadata binds Phase 519, Phase 517, Phase 515,
+and Phase 513 identities, `zkbench-core`, default artifact-capture contract,
+default provenance contract, default external-result import schema, required
+provenance fields, the blocker digest, and the nonpromotion digest. It
+classifies the record as `external_reproduction_blocked_no_independent_run`,
+records every external-reproduction input as missing, writes no external
+reproduction artifact files, populates no score axes, creates no accepted
+formal evidence, creates no Level2+ evidence, runs no new
+Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence, and
+claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
