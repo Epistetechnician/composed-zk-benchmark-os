@@ -7634,5 +7634,20 @@ no accepted formal evidence, creates no Level2+ evidence, populates no score
 axes, runs no Lean/COBALT/Rust-to-Lean extraction, creates no benchmark
 evidence, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/527-hsai-tiny-z3-backend-execution-candidate-metadata-notes.md](docs/527-hsai-tiny-z3-backend-execution-candidate-metadata-notes.md)
+documents the Phase 527 local backend-execution candidate metadata
+implementation. The implementation adds HSAI admission metadata types, lane
+state, digest bindings, nonclaim/blocker/rule helpers, and a fail-closed
+validator over one exact Phase 525 import-review record. It opens Lane A scoped
+SMT/Z3 replay as the only future execution candidate, closes Lane B
+Lean/Rust-to-Lean and Lane C COBALT-style containment, and binds obligation,
+toolchain, command, expected-output, timeout, and scratch-output-root policy
+digests. Focused tests cover successful Lane A candidate metadata, invalid
+Phase 525 state rejection, and lane drift plus promotion rejection. It runs no
+backend, writes no backend artifacts, creates no accepted formal evidence,
+creates no Level2+ evidence, populates no score axes, runs no
+Lean/COBALT/Rust-to-Lean extraction, creates no benchmark evidence, and claims
+no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

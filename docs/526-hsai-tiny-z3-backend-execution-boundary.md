@@ -11,6 +11,9 @@ Phase 525 blocked import-review metadata
   -> future scoped backend execution candidate metadata
 ```
 
+Phase 527 implements the Lane A candidate metadata in
+`docs/527-hsai-tiny-z3-backend-execution-candidate-metadata-notes.md`.
+
 This phase does not implement Rust code, change Cargo metadata, run a process,
 run Z3, run Lean, run COBALT, run Rust-to-Lean extraction, call the network,
 write backend artifacts, mutate accepted ledgers, accept formal evidence, create
