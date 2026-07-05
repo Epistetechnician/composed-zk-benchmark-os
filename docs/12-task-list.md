@@ -14763,6 +14763,34 @@ evidence, no new Lean/new-SMT/COBALT or Rust-to-Lean execution, no benchmark
 evidence, no external audit evidence, and no production/SOTA/security/
 correctness claim.
 
+## Phase 525 HSAI Tiny Z3 External Import Review Metadata
+
+Status: complete. See
+`docs/525-hsai-tiny-z3-external-import-review-metadata-notes.md`.
+
+Goal: implement local import-review metadata over one exact Phase 523
+quarantined external-result import candidate.
+
+Implemented: Phase 525 adds import-review input/output metadata,
+classification and label enums, issue and validation types, blocker/rule/
+forbidden-API/inherited-digest helpers, nonclaim and nonpromotion digest
+helpers, deterministic digest/id/label bindings, and a fail-closed validator
+over one exact Phase 523 import-candidate metadata record. The review binds
+Phase 523/521/519/517/515/513 digests and records
+`ImportReviewBlockedNoIndependentRun`.
+
+Validation coverage: focused Rust tests cover a successful blocked review
+metadata record, rejection of invalid Phase 523 state, and rejection of review
+policy digest drift plus promotion flags.
+
+Exit criteria: HSAI now has local metadata showing that one structurally valid
+tiny-Z3 external-result import candidate can be reviewed and kept blocked
+because independent external reproduction is absent. It still has no accepted
+external-result evidence, no independent external reproduction, no Level2+
+evidence, no populated score axes, no accepted formal evidence, no new
+Lean/new-SMT/COBALT or Rust-to-Lean execution, no benchmark evidence, no
+external audit evidence, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

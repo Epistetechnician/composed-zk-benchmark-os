@@ -11,6 +11,9 @@ Phase 523 quarantined import candidate metadata
   -> future local import-review metadata
 ```
 
+Phase 525 implements this boundary as local metadata in
+`docs/525-hsai-tiny-z3-external-import-review-metadata-notes.md`.
+
 This phase does not implement Rust code, change Cargo metadata, write
 filesystem artifacts, mutate accepted ledgers, accept external-result evidence,
 run an external replay, run a backend, run Lean, run SMT/Z3, run COBALT, run
