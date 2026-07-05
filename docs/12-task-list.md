@@ -15271,6 +15271,33 @@ Rust-to-Lean execution, no benchmark evidence, no external audit evidence, no
 independent external reproduction, and no production/SOTA/security/correctness
 claim.
 
+## Phase 544 HSAI Tiny Z3 Backend Execution Score Axis Eligibility Boundary
+
+Status: complete. See
+`docs/544-hsai-tiny-z3-backend-execution-score-axis-eligibility-boundary.md`.
+
+Goal: define the docs-first boundary for future score-axis eligibility over
+one exact Phase 543 package metadata record.
+
+Implemented: Phase 544 defines the future eligibility contract: required Phase
+543 package/input/policy/nonclaim/cap bindings, LocalReplay/Level1LocalReplay
+bindings, Phase 541 materialized artifact/report/byte-length bindings, Phase
+539 appended class/boundary bindings, inherited Phase 535/533/531/529/527
+bindings, `zkbench-core` score owner, `ScoreReport`, `validate_score_report`,
+eligibility policy digest, score-axis blocker digest, score-axis
+nonpopulation digest, fail-closed validation rules, meaning limits, and Phase
+545 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named boundary for classifying the Phase 543
+package as score-axis ineligible under current evidence. It still has no
+accepted formal evidence, no Level2+ evidence, no populated score axes, no
+Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no external audit
+evidence, no independent external reproduction, and no production/SOTA/
+security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

@@ -7855,5 +7855,20 @@ Level2+ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
 additional SMT/Z3 execution, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/544-hsai-tiny-z3-backend-execution-score-axis-eligibility-boundary.md](docs/544-hsai-tiny-z3-backend-execution-score-axis-eligibility-boundary.md)
+defines the Phase 544 docs-first boundary for future score-axis eligibility
+over one exact Phase 543 package metadata record. The boundary defines required
+Phase 543 package/input/policy/nonclaim/cap bindings, LocalReplay/
+Level1LocalReplay bindings, Phase 541 materialized artifact/report/byte-length
+bindings, Phase 539 appended class/boundary bindings, inherited Phase
+535/533/531/529/527 bindings, `zkbench-core` score owner, `ScoreReport`,
+`validate_score_report`, eligibility policy digest, score-axis blocker digest,
+score-axis nonpopulation digest, fail-closed validation rules, meaning limits,
+and Phase 545 implementation exit criteria. It creates no Rust code, creates
+no score-axis metadata, populates no score axes, creates no accepted formal
+evidence, creates no Level2+ evidence, runs no Lean/COBALT/Rust-to-Lean or
+additional SMT/Z3 execution, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
