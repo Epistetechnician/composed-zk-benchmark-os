@@ -15889,6 +15889,35 @@ Level2+ evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean
 execution, no additional SMT/Z3 execution, no benchmark evidence, no external
 audit evidence, and no production/SOTA/security/semantic-correctness claim.
 
+## Phase 565 HSAI Tiny Z3 Backend Execution External Operator Accepted Result Evidence Eligibility Metadata
+
+Status: complete. See
+`docs/565-hsai-tiny-z3-backend-execution-external-operator-accepted-result-evidence-eligibility-metadata-notes.md`.
+
+Goal: implement local accepted-result evidence eligibility metadata over one
+exact Phase 563 operator-capture import-review record while keeping accepted
+evidence blocked.
+
+Implemented: Phase 565 adds schema/state/claim-boundary constants, input and
+output metadata records, bounded classifications and labels, validation issue
+types, digest/id/label binding helpers, blocker/rule/forbidden-API/inherited
+digest helpers, policy and nonpromotion digest helpers, a fail-closed builder
+and validator over exact Phase 563 metadata, and focused tests.
+
+Validation coverage: focused `hsai-agent-admission` tests cover successful
+blocked eligibility metadata, invalid Phase 563 state rejection, and policy
+digest drift plus promotion rejection. The metadata records the only valid
+current classification:
+`OperatorCaptureAcceptedResultBlockedPolicyNotSatisfied`.
+
+Exit criteria: HSAI can now locally classify the current operator-capture
+tiny-Z3 path as blocked from accepted-result evidence by policy. It still has
+no external result import, no accepted external result evidence, no accepted
+independent external reproduction, no accepted formal evidence, no Level2+
+evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean execution, no
+additional SMT/Z3 execution, no benchmark evidence, no external audit
+evidence, and no production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
