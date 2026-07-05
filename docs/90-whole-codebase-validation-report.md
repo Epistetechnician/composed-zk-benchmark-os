@@ -7372,5 +7372,22 @@ creates no Level2+ evidence, populates no score axes, runs no
 Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence, and
 claims no production/SOTA/security/semantic-correctness result.
 
+[docs/511-hsai-tiny-z3-accepted-append-mutation-metadata-notes.md](docs/511-hsai-tiny-z3-accepted-append-mutation-metadata-notes.md)
+documents the Phase 511 local in-memory accepted append mutation metadata
+implementation. The Rust surface in `crates/hsai-agent-admission/src/lib.rs`
+adds mutation input/output metadata, issue and validation types, nonclaim/rule/
+forbidden-API/inherited-digest helpers, digest/id/label binding helpers, a
+fail-closed validator, and a builder that validates one exact Phase 509
+validator-call record before calling the existing in-memory
+`zkbench-core::apply_accepted_ledger_append_transaction` function on
+caller-supplied values. The metadata binds pre- and post-mutation ledger
+digests, accepted append report digest, appended entry identity, appended
+sequence number, appended evidence class, and appended claim boundary. It reads
+or writes no accepted Evidence Ledger files, creates no materialized accepted
+ledger output, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean
+extraction, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
