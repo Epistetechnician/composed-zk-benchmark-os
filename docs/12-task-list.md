@@ -14845,6 +14845,30 @@ reproduction, no Level2+ evidence, no populated score axes, no accepted formal
 evidence, no Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no
 external audit evidence, and no production/SOTA/security/correctness claim.
 
+## Phase 528 HSAI Tiny Z3 Hermetic Backend Execution Result Boundary
+
+Status: complete. See
+`docs/528-hsai-tiny-z3-hermetic-backend-execution-result-boundary.md`.
+
+Goal: define the docs-first boundary for the first future actual Lane A SMT/Z3
+backend run over the Phase 527 backend-execution candidate.
+
+Implemented: Phase 528 defines the future hermetic execution-result contract:
+required Phase 527 bindings, actual executable/argv/working-directory/
+environment/timeout/exit-status/stdout-summary/stderr-summary digests, allowed
+touch surface, process-spawn limits, fail-closed validation rules, result
+meaning limits, and Phase 529 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named boundary for one future hermetic local
+SMT/Z3 backend execution result. It still has no backend run, no backend
+artifacts, no accepted external-result evidence, no independent external
+reproduction, no Level2+ evidence, no populated score axes, no accepted formal
+evidence, no Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no
+external audit evidence, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
