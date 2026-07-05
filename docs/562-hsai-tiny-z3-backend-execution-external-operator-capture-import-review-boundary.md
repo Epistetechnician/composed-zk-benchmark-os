@@ -142,11 +142,11 @@ action.
 
 ## Phase 563 Implementation Exit Criteria
 
-A future Phase 563 may implement local operator-capture import-review metadata
-only if it:
+Phase 563 implemented local operator-capture import-review metadata under this
+boundary. The implementation:
 
-- touches only `crates/hsai-agent-admission/src/lib.rs`, focused tests in that
-  file, future phase notes under `docs/`, and navigation/status updates under
+- touched only `crates/hsai-agent-admission/src/lib.rs`, focused tests in that
+  file, phase notes under `docs/`, and navigation/status updates under
   `README.md`, `docs/12-task-list.md`,
   `docs/90-whole-codebase-validation-report.md`, this boundary, and
   `AGENTS.md`;

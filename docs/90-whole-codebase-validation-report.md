@@ -8165,5 +8165,18 @@ score axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution,
 creates no benchmark evidence, and claims no production/SOTA/security/
 semantic-correctness result.
 
+[docs/563-hsai-tiny-z3-backend-execution-external-operator-capture-import-review-metadata-notes.md](docs/563-hsai-tiny-z3-backend-execution-external-operator-capture-import-review-metadata-notes.md)
+documents the Phase 563 local operator-capture import-review metadata
+implementation. It reviews only one exact Phase 561 quarantined import
+candidate, records Phase 561 candidate/validation/quarantine bindings,
+preserves Phase 559/557/555/553/551/549/547/545/543/541/535/533/531/529/527
+digest bindings, and records that the candidate remains blocked from evidence
+promotion. It writes no artifact files, performs no run, imports no external
+result, accepts no independent external reproduction, creates no accepted
+external result evidence, creates no accepted formal evidence, creates no
+Level2+ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
+additional SMT/Z3 execution, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
