@@ -1092,6 +1092,11 @@ pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_APPEND_EVALUATION_SC
 pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_APPEND_EVALUATION_STATE_SLICE: &str =
     "phase-537-hsai-tiny-z3-backend-execution-accepted-append-evaluation-metadata";
 pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_APPEND_EVALUATION_CLAIM_BOUNDARY: &str = "local tiny-Z3 backend execution accepted append evaluation metadata only; records one validation-only call to zkbench-core validate_accepted_ledger_append_transaction_request over caller-supplied in-memory values after a Phase 535 owner decision, but does not create accepted evidence, make an accepted append decision, mutate the accepted Evidence Ledger, change accepted append policy, create accepted formal evidence, create Level2+ evidence, populate score axes, create proof artifacts, create checker transcripts, create solver certificates, run Lean, run another SMT/Z3 execution, run COBALT, run Rust-to-Lean extraction, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, establish independent external reproduction, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_APPEND_MUTATION_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-z3-backend-execution-accepted-append-mutation:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_APPEND_MUTATION_STATE_SLICE: &str =
+    "phase-539-hsai-tiny-z3-backend-execution-accepted-append-mutation-metadata";
+pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_APPEND_MUTATION_CLAIM_BOUNDARY: &str = "local tiny-Z3 backend execution accepted append mutation metadata only; records one in-memory accepted-ledger append mutation through zkbench-core apply_accepted_ledger_append_transaction over caller-supplied values after Phase 537 validation, but does not read accepted Evidence Ledger files, write accepted Evidence Ledger files, materialize accepted ledger output, create accepted formal evidence, create Level2+ evidence, populate score axes, create proof artifacts, create checker transcripts, create solver certificates, run Lean, run another SMT/Z3 execution, run COBALT, run Rust-to-Lean extraction, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, establish independent external reproduction, or grant authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -17014,6 +17019,201 @@ pub enum GatewayFormalTinyZ3BackendExecutionAcceptedAppendEvaluationIssue {
 pub struct GatewayFormalTinyZ3BackendExecutionAcceptedAppendEvaluationValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyZ3BackendExecutionAcceptedAppendEvaluationIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationLabel {
+    BackendExecutionAcceptedAppendMutationRecorded,
+    BackendExecutionAcceptedAppendMutationRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationInput {
+    pub schema_version: String,
+    pub mutation_id: String,
+    pub mutation_policy_id: String,
+    pub mutation_decision_id: String,
+    pub mutation_decision_at_unix: u64,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub accepted_append_owner_id: String,
+    pub mutation_function_id: String,
+    pub request_type_name: String,
+    pub report_type_name: String,
+    pub target_ledger_type_name: String,
+    pub mutation_rules: BTreeSet<String>,
+    pub forbidden_api_set: BTreeSet<String>,
+    pub inherited_digest_requirements: BTreeSet<String>,
+    pub mutation_label: GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationLabel,
+    pub mutation_summary: String,
+    pub accepted_evidence_ledger_file_read_requested: bool,
+    pub accepted_evidence_ledger_file_write_requested: bool,
+    pub materialized_accepted_ledger_output_requested: bool,
+    pub failed_mutation_treated_as_accepted_evidence: bool,
+    pub accepted_append_decision_claimed: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_claimed: bool,
+    pub independent_external_reproduction_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-accepted-append-mutation-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutation {
+    pub schema_version: String,
+    pub mutation_id: String,
+    pub state_slice: String,
+    pub mutation_input_digest: Hash,
+    pub mutation_policy_id: String,
+    pub mutation_decision_id: String,
+    pub mutation_decision_at_unix: u64,
+    pub phase537_evaluation_digest: Hash,
+    pub phase537_evaluation_input_digest: Hash,
+    pub phase537_digest_binding_map_digest: Hash,
+    pub phase537_id_binding_map_digest: Hash,
+    pub phase537_label_binding_map_digest: Hash,
+    pub phase537_explicit_nonclaims_digest: Hash,
+    pub phase537_evaluation_policy_digest: Hash,
+    pub phase537_evaluation_rule_digest: Hash,
+    pub phase537_forbidden_api_set_digest: Hash,
+    pub phase537_inherited_digest_requirements_digest: Hash,
+    pub phase537_validation_result_digest: Hash,
+    pub phase537_validation_issue_kind_set_digest: Hash,
+    pub phase537_validation_valid: bool,
+    pub phase535_owner_decision_digest: Hash,
+    pub phase533_review_digest: Hash,
+    pub phase531_package_digest: Hash,
+    pub phase529_result_digest: Hash,
+    pub phase527_candidate_digest: Hash,
+    pub accepted_append_owner_id: String,
+    pub mutation_function_id: String,
+    pub request_type_name: String,
+    pub report_type_name: String,
+    pub target_ledger_type_name: String,
+    pub target_evidence_ledger_id: String,
+    pub transaction_id: String,
+    pub transaction_request_digest: Hash,
+    pub pre_mutation_ledger_digest: Hash,
+    pub post_mutation_ledger_digest: Hash,
+    pub accepted_append_report_digest: Hash,
+    pub appended_entry_digest: Option<Hash>,
+    pub appended_entry_artifact_id: Option<String>,
+    pub appended_entry_artifact_sha256: Option<String>,
+    pub appended_sequence_number: Option<u64>,
+    pub appended_evidence_class: String,
+    pub appended_claim_boundary: String,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub mutation_rules: BTreeSet<String>,
+    pub mutation_rules_digest: Hash,
+    pub forbidden_api_set: BTreeSet<String>,
+    pub forbidden_api_set_digest: Hash,
+    pub inherited_digest_requirements: BTreeSet<String>,
+    pub inherited_digest_requirements_digest: Hash,
+    pub mutation_label: GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationLabel,
+    pub mutation_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub reads_accepted_evidence_ledger_files: bool,
+    pub writes_accepted_evidence_ledger_files: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub creates_materialized_accepted_ledger_output: bool,
+    pub creates_official_submission: bool,
+    pub makes_accepted_append_decision_claim: bool,
+    pub creates_accepted_formal_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_claimed: bool,
+    pub independent_external_reproduction_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutation {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-accepted-append-mutation:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue {
+    InvalidSchemaVersion,
+    InvalidMutationId,
+    InvalidMutationPolicyId,
+    InvalidMutationDecisionId,
+    MissingMutationDecisionTimestamp,
+    MissingDigest(String),
+    DigestBindingMismatch,
+    IdBindingMismatch,
+    InvalidIdBinding(String),
+    LabelBindingMismatch,
+    Phase537EvaluationStateMismatch,
+    NonclaimMismatch,
+    InvalidAcceptedAppendOwner,
+    InvalidMutationFunction,
+    InvalidRequestTypeName,
+    InvalidReportTypeName,
+    InvalidTargetLedgerTypeName,
+    RequestIdentityMismatch,
+    PreMutationLedgerMismatch,
+    MutationRulesMismatch,
+    ForbiddenApiSetMismatch,
+    InheritedDigestRequirementsMismatch,
+    MutationSummaryPromotionClaim,
+    PromotionAttempt,
+    AcceptedAppendMutationFailed,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -69113,6 +69313,646 @@ pub fn validate_gateway_formal_tiny_z3_backend_execution_accepted_append_evaluat
     }
 }
 
+pub fn gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_claim_boundary() -> String
+{
+    GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_APPEND_MUTATION_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims =
+        gateway_formal_tiny_z3_backend_execution_accepted_append_evaluation_required_nonclaims();
+    for label in [
+        "not materialized backend execution accepted ledger output",
+        "not backend execution accepted formal evidence",
+        "not backend execution Level2+ evidence",
+        "not backend execution score-axis evidence",
+    ] {
+        nonclaims.insert(NonClaimLabel(label.to_owned()));
+    }
+    nonclaims
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_rules() -> BTreeSet<String>
+{
+    [
+        "phase537_state_required",
+        "phase537_digest_bindings_required",
+        "phase537_validation_valid_required",
+        "phase537_validation_issue_count_zero_required",
+        "zkbench_core_owner_required",
+        "mutation_function_identifier_required",
+        "caller_supplied_in_memory_request_required",
+        "caller_supplied_mutable_in_memory_ledger_required",
+        "accepted_append_request_identity_required",
+        "pre_mutation_ledger_matches_phase537_validation_ledger",
+        "post_mutation_ledger_digest_recorded",
+        "accepted_append_report_digest_recorded",
+        "appended_entry_identity_recorded",
+        "appended_sequence_recorded",
+        "appended_level1_or_lower_required",
+        "appended_formal_or_level2_class_rejected",
+        "ledger_file_read_rejected",
+        "ledger_file_write_rejected",
+        "materialized_output_rejected",
+        "official_submission_rejected",
+        "level2_formal_evidence_request_rejected",
+        "score_axis_population_rejected",
+        "lean_cobalt_rust_to_lean_rejected",
+        "additional_smt_z3_execution_rejected",
+        "benchmark_evidence_rejected",
+        "independent_reproduction_rejected",
+        "strong_public_claim_rejected",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_forbidden_apis(
+) -> BTreeSet<String> {
+    let mut forbidden = gateway_formal_tiny_z3_accepted_append_mutation_forbidden_apis();
+    for api in [
+        "apply_materialized_accepted_ledger_append_transaction",
+        "EvidenceLedger::load_json",
+        "EvidenceLedger::save_json",
+        "lean_api",
+        "cobalt_api",
+        "rust_to_lean_api",
+        "solver_process_spawn",
+    ] {
+        forbidden.insert(api.to_owned());
+    }
+    forbidden
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_inherited_digest_requirements(
+) -> BTreeSet<String> {
+    let mut requirements =
+        gateway_formal_tiny_z3_backend_execution_accepted_append_evaluation_inherited_digest_requirements();
+    for label in [
+        "phase537_evaluation_digest_required",
+        "phase537_evaluation_input_digest_required",
+        "phase537_digest_binding_map_digest_required",
+        "phase537_id_binding_map_digest_required",
+        "phase537_label_binding_map_digest_required",
+        "phase537_explicit_nonclaims_digest_required",
+        "phase537_evaluation_policy_digest_required",
+        "phase537_evaluation_rule_digest_required",
+        "phase537_forbidden_api_set_digest_required",
+        "phase537_inherited_digest_requirements_digest_required",
+        "phase537_validation_result_digest_required",
+        "phase537_validation_issue_kind_set_digest_required",
+        "transaction_request_digest_required",
+        "pre_mutation_ledger_digest_required",
+        "post_mutation_ledger_digest_required",
+        "accepted_append_report_digest_required",
+        "appended_entry_digest_required",
+        "appended_sequence_number_required",
+        "appended_evidence_class_required",
+        "appended_claim_boundary_required",
+    ] {
+        requirements.insert(label.to_owned());
+    }
+    requirements
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_digest_bindings(
+    evaluation: &GatewayFormalTinyZ3BackendExecutionAcceptedAppendEvaluation,
+) -> BTreeMap<String, Hash> {
+    let mut digests = evaluation.digest_bindings.clone();
+    digests.insert("phase537_evaluation_digest".to_owned(), evaluation.digest());
+    digests.insert(
+        "phase537_evaluation_input_digest".to_owned(),
+        evaluation.evaluation_input_digest,
+    );
+    digests.insert(
+        "phase537_digest_binding_map_digest".to_owned(),
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-phase537-accepted-append-evaluation-digest-bindings:v1",
+            &evaluation.digest_bindings,
+        ),
+    );
+    digests.insert(
+        "phase537_id_binding_map_digest".to_owned(),
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-phase537-accepted-append-evaluation-id-bindings:v1",
+            &evaluation.id_bindings,
+        ),
+    );
+    digests.insert(
+        "phase537_label_binding_map_digest".to_owned(),
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-phase537-accepted-append-evaluation-label-bindings:v1",
+            &evaluation.label_bindings,
+        ),
+    );
+    digests.insert(
+        "phase537_explicit_nonclaims_digest".to_owned(),
+        evaluation.explicit_nonclaims_digest,
+    );
+    digests.insert(
+        "phase537_evaluation_policy_digest".to_owned(),
+        evaluation.evaluation_policy_digest,
+    );
+    digests.insert(
+        "phase537_evaluation_rule_digest".to_owned(),
+        evaluation.evaluation_rules_digest,
+    );
+    digests.insert(
+        "phase537_forbidden_api_set_digest".to_owned(),
+        evaluation.forbidden_api_set_digest,
+    );
+    digests.insert(
+        "phase537_inherited_digest_requirements_digest".to_owned(),
+        evaluation.inherited_digest_requirements_digest,
+    );
+    digests.insert(
+        "phase537_validation_result_digest".to_owned(),
+        evaluation.validation_result_digest,
+    );
+    digests.insert(
+        "phase537_validation_issue_kind_set_digest".to_owned(),
+        evaluation.validation_issue_kind_set_digest,
+    );
+    digests.insert(
+        "transaction_request_digest".to_owned(),
+        evaluation.transaction_request_digest,
+    );
+    digests.insert("ledger_digest".to_owned(), evaluation.ledger_digest);
+    digests
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_id_bindings(
+    evaluation: &GatewayFormalTinyZ3BackendExecutionAcceptedAppendEvaluation,
+    mutation_id: &str,
+    mutation_policy_id: &str,
+    mutation_decision_id: &str,
+) -> BTreeMap<String, String> {
+    let mut ids = evaluation.id_bindings.clone();
+    ids.insert("mutation_id".to_owned(), mutation_id.to_owned());
+    ids.insert(
+        "mutation_policy_id".to_owned(),
+        mutation_policy_id.to_owned(),
+    );
+    ids.insert(
+        "mutation_decision_id".to_owned(),
+        mutation_decision_id.to_owned(),
+    );
+    ids.insert(
+        "phase537_evaluation_id".to_owned(),
+        evaluation.evaluation_id.clone(),
+    );
+    ids
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_label_bindings(
+    evaluation: &GatewayFormalTinyZ3BackendExecutionAcceptedAppendEvaluation,
+    mutation_label: &GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationLabel,
+) -> BTreeMap<String, String> {
+    let mut labels = evaluation.label_bindings.clone();
+    labels.insert(
+        "phase537_evaluation_label".to_owned(),
+        format!("{:?}", evaluation.evaluation_label),
+    );
+    labels.insert("mutation_label".to_owned(), format!("{mutation_label:?}"));
+    labels
+}
+
+fn gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_phase537_exact(
+    evaluation: &GatewayFormalTinyZ3BackendExecutionAcceptedAppendEvaluation,
+) -> bool {
+    evaluation.schema_version
+        == GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_APPEND_EVALUATION_SCHEMA_VERSION
+        && evaluation.state_slice
+            == GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_APPEND_EVALUATION_STATE_SLICE
+        && evaluation.promotion_state
+            == "backend_execution_accepted_append_evaluation_recorded_local_only"
+        && evaluation.next_required_state
+            == "backend_execution_accepted_append_validation_satisfied_but_mutation_unperformed"
+        && evaluation.phase535_decision_label
+            == GatewayFormalTinyZ3BackendExecutionOwnerDecisionLabel::BackendExecutionAcceptedEvidenceRouteNeedsZkbenchCoreEvaluation
+        && evaluation.evaluation_label
+            == GatewayFormalTinyZ3BackendExecutionAcceptedAppendEvaluationLabel::BackendExecutionAcceptedAppendValidatorAccepted
+        && evaluation.validation_valid
+        && evaluation.validation_issue_count == 0
+        && evaluation.validation_issue_kind_set.is_empty()
+        && !evaluation.reads_accepted_evidence_ledger_files
+        && !evaluation.writes_accepted_evidence_ledger_files
+        && !evaluation.requests_accepted_append_mutation
+        && !evaluation.creates_materialized_accepted_ledger_output
+        && !evaluation.makes_accepted_append_decision
+        && !evaluation.treats_valid_validation_as_accepted_evidence
+        && !evaluation.creates_accepted_evidence
+        && !evaluation.creates_accepted_formal_evidence
+        && !evaluation.creates_level2_evidence
+        && !evaluation.populates_score_axes
+        && !evaluation.proof_artifact_created
+        && !evaluation.checker_transcript_created
+        && !evaluation.solver_certificate_created
+        && !evaluation.lean_execution_evidence_created
+        && !evaluation.additional_smt_z3_execution_created
+        && !evaluation.cobalt_execution_evidence_created
+        && !evaluation.rust_to_lean_execution_evidence_created
+        && !evaluation.benchmark_evidence_created
+        && !evaluation.external_audit_evidence_created
+        && !evaluation.independent_external_reproduction_claimed
+        && !evaluation.semantic_correctness_claimed
+        && !evaluation.production_readiness_claimed
+        && !evaluation.sota_claimed
+        && !evaluation.breakthrough_claimed
+        && !evaluation.full_security_claimed
+        && !evaluation.grants_authority
+}
+
+pub fn build_gateway_formal_tiny_z3_backend_execution_accepted_append_mutation(
+    evaluation: &GatewayFormalTinyZ3BackendExecutionAcceptedAppendEvaluation,
+    request: &zkbench_core::AcceptedLedgerAppendTransactionRequest,
+    ledger: &mut zkbench_core::EvidenceLedger,
+    input: &GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationInput,
+) -> Result<
+    GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutation,
+    GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationValidation,
+> {
+    let input_validation =
+        validate_gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_input(
+            evaluation, request, ledger, input,
+        );
+    if !input_validation.valid {
+        return Err(input_validation);
+    }
+    let pre_mutation_ledger_digest = hash_tagged(
+        "hsai-agent-admission:phase539-backend-execution-pre-mutation-evidence-ledger:v1",
+        ledger,
+    );
+    let report = match zkbench_core::apply_accepted_ledger_append_transaction(request, ledger) {
+        Ok(report) => report,
+        Err(_) => {
+            return Err(
+                GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationValidation {
+                    valid: false,
+                    issues: vec![
+                        GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::AcceptedAppendMutationFailed,
+                    ],
+                },
+            );
+        }
+    };
+    let post_mutation_ledger_digest = hash_tagged(
+        "hsai-agent-admission:phase539-backend-execution-post-mutation-evidence-ledger:v1",
+        ledger,
+    );
+    let report_digest = hash_tagged(
+        "hsai-agent-admission:phase539-backend-execution-accepted-append-transaction-report:v1",
+        &report,
+    );
+    let appended_entry_digest = report.appended_entry_digest.as_ref().map(|digest| {
+        hash_tagged(
+            "hsai-agent-admission:phase539-backend-execution-appended-entry-artifact-digest:v1",
+            digest,
+        )
+    });
+    let appended_entry_artifact_sha256 = report
+        .appended_entry_digest
+        .as_ref()
+        .map(|digest| digest.hex_digest.clone());
+    let appended_entry_artifact_id = report
+        .appended_entry_digest
+        .as_ref()
+        .map(|digest| format!("{:?}:{}", digest.algorithm, digest.hex_digest));
+    let digest_bindings =
+        gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_digest_bindings(
+            evaluation,
+        );
+    Ok(
+        GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutation {
+            schema_version:
+                GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_APPEND_MUTATION_SCHEMA_VERSION
+                    .to_owned(),
+            mutation_id: input.mutation_id.clone(),
+            state_slice:
+                GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_APPEND_MUTATION_STATE_SLICE
+                    .to_owned(),
+            mutation_input_digest: input.digest(),
+            mutation_policy_id: input.mutation_policy_id.clone(),
+            mutation_decision_id: input.mutation_decision_id.clone(),
+            mutation_decision_at_unix: input.mutation_decision_at_unix,
+            phase537_evaluation_digest: digest_bindings["phase537_evaluation_digest"],
+            phase537_evaluation_input_digest: digest_bindings["phase537_evaluation_input_digest"],
+            phase537_digest_binding_map_digest: digest_bindings
+                ["phase537_digest_binding_map_digest"],
+            phase537_id_binding_map_digest: digest_bindings["phase537_id_binding_map_digest"],
+            phase537_label_binding_map_digest: digest_bindings["phase537_label_binding_map_digest"],
+            phase537_explicit_nonclaims_digest: digest_bindings
+                ["phase537_explicit_nonclaims_digest"],
+            phase537_evaluation_policy_digest: digest_bindings
+                ["phase537_evaluation_policy_digest"],
+            phase537_evaluation_rule_digest: digest_bindings["phase537_evaluation_rule_digest"],
+            phase537_forbidden_api_set_digest: digest_bindings["phase537_forbidden_api_set_digest"],
+            phase537_inherited_digest_requirements_digest: digest_bindings
+                ["phase537_inherited_digest_requirements_digest"],
+            phase537_validation_result_digest: digest_bindings["phase537_validation_result_digest"],
+            phase537_validation_issue_kind_set_digest: digest_bindings
+                ["phase537_validation_issue_kind_set_digest"],
+            phase537_validation_valid: evaluation.validation_valid,
+            phase535_owner_decision_digest: evaluation.phase535_owner_decision_digest,
+            phase533_review_digest: evaluation.phase533_review_digest,
+            phase531_package_digest: evaluation.phase531_package_digest,
+            phase529_result_digest: evaluation.phase529_result_digest,
+            phase527_candidate_digest: evaluation.phase527_candidate_digest,
+            accepted_append_owner_id: input.accepted_append_owner_id.clone(),
+            mutation_function_id: input.mutation_function_id.clone(),
+            request_type_name: input.request_type_name.clone(),
+            report_type_name: input.report_type_name.clone(),
+            target_ledger_type_name: input.target_ledger_type_name.clone(),
+            target_evidence_ledger_id: request.target_evidence_ledger_id.clone(),
+            transaction_id: request.transaction_id.clone(),
+            transaction_request_digest: digest_bindings["transaction_request_digest"],
+            pre_mutation_ledger_digest,
+            post_mutation_ledger_digest,
+            accepted_append_report_digest: report_digest,
+            appended_entry_digest,
+            appended_entry_artifact_id,
+            appended_entry_artifact_sha256,
+            appended_sequence_number: report.appended_sequence_number,
+            appended_evidence_class: format!("{:?}", report.appended_evidence_class),
+            appended_claim_boundary: format!("{:?}", report.appended_claim_boundary),
+            digest_bindings: input.digest_bindings.clone(),
+            id_bindings: input.id_bindings.clone(),
+            label_bindings: input.label_bindings.clone(),
+            explicit_nonclaims: input.explicit_nonclaims.clone(),
+            explicit_nonclaims_digest: input.explicit_nonclaims_digest,
+            mutation_rules: input.mutation_rules.clone(),
+            mutation_rules_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-accepted-append-mutation-rules:v1",
+                &input.mutation_rules,
+            ),
+            forbidden_api_set: input.forbidden_api_set.clone(),
+            forbidden_api_set_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-accepted-append-mutation-forbidden-apis:v1",
+                &input.forbidden_api_set,
+            ),
+            inherited_digest_requirements: input.inherited_digest_requirements.clone(),
+            inherited_digest_requirements_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-accepted-append-mutation-inherited-digest-requirements:v1",
+                &input.inherited_digest_requirements,
+            ),
+            mutation_label: input.mutation_label.clone(),
+            mutation_summary: input.mutation_summary.clone(),
+            previous_promotion_state:
+                "backend_execution_accepted_append_validation_satisfied_but_mutation_unperformed"
+                    .to_owned(),
+            promotion_state:
+                "backend_execution_accepted_append_in_memory_mutation_metadata".to_owned(),
+            next_required_state:
+                "backend_execution_materialization_level2_score_axes_and_formal_evidence_still_unperformed"
+                    .to_owned(),
+            claim_boundary:
+                gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_claim_boundary(),
+            reads_accepted_evidence_ledger_files: false,
+            writes_accepted_evidence_ledger_files: false,
+            mutates_accepted_evidence_ledger: report.mutates_accepted_evidence_ledger,
+            creates_materialized_accepted_ledger_output: false,
+            creates_official_submission: report.creates_official_submission,
+            makes_accepted_append_decision_claim: false,
+            creates_accepted_formal_evidence: false,
+            creates_level2_evidence: false,
+            populates_score_axes: report.populates_score_axes,
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            lean_execution_evidence_created: false,
+            additional_smt_z3_execution_created: false,
+            cobalt_execution_evidence_created: false,
+            rust_to_lean_execution_evidence_created: false,
+            benchmark_evidence_created: false,
+            external_audit_claimed: false,
+            independent_external_reproduction_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            grants_authority: false,
+        },
+    )
+}
+
+pub fn validate_gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_input(
+    evaluation: &GatewayFormalTinyZ3BackendExecutionAcceptedAppendEvaluation,
+    request: &zkbench_core::AcceptedLedgerAppendTransactionRequest,
+    ledger: &zkbench_core::EvidenceLedger,
+    input: &GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationInput,
+) -> GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_APPEND_MUTATION_SCHEMA_VERSION
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::InvalidSchemaVersion,
+        );
+    }
+    if !is_single_segment_id(&input.mutation_id) {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::InvalidMutationId,
+        );
+    }
+    if !is_single_segment_id(&input.mutation_policy_id) {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::InvalidMutationPolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.mutation_decision_id) {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::InvalidMutationDecisionId,
+        );
+    }
+    if input.mutation_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::MissingMutationDecisionTimestamp,
+        );
+    }
+    let expected_digests =
+        gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_digest_bindings(
+            evaluation,
+        );
+    for (label, digest) in &input.digest_bindings {
+        if *digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::MissingDigest(
+                    label.clone(),
+                ),
+            );
+        }
+    }
+    if input.digest_bindings != expected_digests {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::DigestBindingMismatch,
+        );
+    }
+    let expected_ids =
+        gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_id_bindings(
+            evaluation,
+            &input.mutation_id,
+            &input.mutation_policy_id,
+            &input.mutation_decision_id,
+        );
+    for (label, value) in &input.id_bindings {
+        if !is_single_segment_id(value) {
+            issues.push(
+                GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::InvalidIdBinding(
+                    label.clone(),
+                ),
+            );
+        }
+    }
+    if input.id_bindings != expected_ids {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::IdBindingMismatch,
+        );
+    }
+    let expected_labels =
+        gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_label_bindings(
+            evaluation,
+            &input.mutation_label,
+        );
+    if input.label_bindings != expected_labels {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::LabelBindingMismatch,
+        );
+    }
+    if !gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_phase537_exact(evaluation)
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::Phase537EvaluationStateMismatch,
+        );
+    }
+    let nonclaims =
+        gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-accepted-append-mutation-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::NonclaimMismatch,
+        );
+    }
+    if input.accepted_append_owner_id != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_HANDOFF_OWNER_ID {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::InvalidAcceptedAppendOwner,
+        );
+    }
+    if input.mutation_function_id != GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_MUTATION_FUNCTION_ID {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::InvalidMutationFunction,
+        );
+    }
+    if input.request_type_name != GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_TRANSACTION_REQUEST_TYPE {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::InvalidRequestTypeName,
+        );
+    }
+    if input.report_type_name != "AcceptedLedgerAppendTransactionReport" {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::InvalidReportTypeName,
+        );
+    }
+    if input.target_ledger_type_name != "EvidenceLedger" {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::InvalidTargetLedgerTypeName,
+        );
+    }
+    let request_digests = gateway_formal_tiny_z3_accepted_append_request_identity_digests(request);
+    if evaluation.target_evidence_ledger_id != request.target_evidence_ledger_id
+        || evaluation.transaction_id != request.transaction_id
+        || evaluation.transaction_request_digest != request_digests["transaction_request_digest"]
+        || evaluation.candidate_digest != request_digests["candidate_digest"]
+        || evaluation.append_preview_digest != request_digests["append_preview_digest"]
+        || evaluation.review_decision_digest != request_digests["review_decision_digest"]
+        || evaluation.source_artifact_set_digest != request_digests["source_artifact_set_digest"]
+        || evaluation.expected_current_ledger_tip_digest
+            != request_digests["expected_current_ledger_tip_digest"]
+        || evaluation.append_preview_current_ledger_tip_digest
+            != request_digests["append_preview_current_ledger_tip_digest"]
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::RequestIdentityMismatch,
+        );
+    }
+    let pre_mutation_ledger_digest = hash_tagged(
+        "hsai-agent-admission:phase537-backend-execution-accepted-append-evaluation-ledger:v1",
+        ledger,
+    );
+    if evaluation.ledger_digest != pre_mutation_ledger_digest {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::PreMutationLedgerMismatch,
+        );
+    }
+    if input.mutation_rules
+        != gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_rules()
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::MutationRulesMismatch,
+        );
+    }
+    if input.forbidden_api_set
+        != gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_forbidden_apis()
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::ForbiddenApiSetMismatch,
+        );
+    }
+    if input.inherited_digest_requirements
+        != gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_inherited_digest_requirements()
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::InheritedDigestRequirementsMismatch,
+        );
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.mutation_summary,
+    ) {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::MutationSummaryPromotionClaim,
+        );
+    }
+    if input.accepted_evidence_ledger_file_read_requested
+        || input.accepted_evidence_ledger_file_write_requested
+        || input.materialized_accepted_ledger_output_requested
+        || input.failed_mutation_treated_as_accepted_evidence
+        || input.accepted_append_decision_claimed
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.lean_execution_evidence_created
+        || input.additional_smt_z3_execution_created
+        || input.cobalt_execution_evidence_created
+        || input.rust_to_lean_execution_evidence_created
+        || input.benchmark_evidence_created
+        || input.external_audit_claimed
+        || input.independent_external_reproduction_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues
+            .push(GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::PromotionAttempt);
+    }
+    GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -108364,6 +109204,225 @@ mod tests {
     }
 
     #[test]
+    fn phase539_tiny_z3_backend_execution_accepted_append_mutation_records_in_memory_append() {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            evaluation,
+            mut ledger,
+            request,
+        )) =
+            phase539_tiny_z3_backend_execution_accepted_append_mutation_source("phase539-mutation")
+        else {
+            return;
+        };
+        let mutation_input = phase539_tiny_z3_backend_execution_accepted_append_mutation_input(
+            "phase539-mutation",
+            &evaluation,
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationLabel::BackendExecutionAcceptedAppendMutationRecorded,
+        );
+        let mutation = build_gateway_formal_tiny_z3_backend_execution_accepted_append_mutation(
+            &evaluation,
+            &request,
+            &mut ledger,
+            &mutation_input,
+        )
+        .expect("phase539 backend execution accepted append mutation metadata builds");
+
+        assert_eq!(
+            mutation.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_APPEND_MUTATION_STATE_SLICE
+        );
+        assert_eq!(mutation.phase537_evaluation_digest, evaluation.digest());
+        assert!(mutation.phase537_validation_valid);
+        assert_eq!(
+            mutation.accepted_append_owner_id,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_HANDOFF_OWNER_ID
+        );
+        assert_eq!(
+            mutation.mutation_function_id,
+            GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_MUTATION_FUNCTION_ID
+        );
+        assert_eq!(
+            mutation.target_evidence_ledger_id,
+            request.target_evidence_ledger_id
+        );
+        assert_eq!(mutation.transaction_id, request.transaction_id);
+        assert_ne!(mutation.pre_mutation_ledger_digest, Hash([0; 32]));
+        assert_ne!(mutation.post_mutation_ledger_digest, Hash([0; 32]));
+        assert_ne!(
+            mutation.pre_mutation_ledger_digest,
+            mutation.post_mutation_ledger_digest
+        );
+        assert_ne!(mutation.accepted_append_report_digest, Hash([0; 32]));
+        assert!(mutation.appended_entry_digest.is_some());
+        assert_eq!(mutation.appended_sequence_number, Some(0));
+        assert_eq!(mutation.appended_evidence_class, "LocalReplay");
+        assert_eq!(mutation.appended_claim_boundary, "Level1LocalReplay");
+        assert!(mutation.mutates_accepted_evidence_ledger);
+        assert!(!mutation.reads_accepted_evidence_ledger_files);
+        assert!(!mutation.writes_accepted_evidence_ledger_files);
+        assert!(!mutation.creates_materialized_accepted_ledger_output);
+        assert!(!mutation.creates_official_submission);
+        assert!(!mutation.makes_accepted_append_decision_claim);
+        assert!(!mutation.creates_accepted_formal_evidence);
+        assert!(!mutation.creates_level2_evidence);
+        assert!(!mutation.populates_score_axes);
+        assert!(!mutation.proof_artifact_created);
+        assert!(!mutation.checker_transcript_created);
+        assert!(!mutation.solver_certificate_created);
+        assert!(!mutation.lean_execution_evidence_created);
+        assert!(!mutation.additional_smt_z3_execution_created);
+        assert!(!mutation.cobalt_execution_evidence_created);
+        assert!(!mutation.rust_to_lean_execution_evidence_created);
+        assert!(!mutation.benchmark_evidence_created);
+        assert!(!mutation.external_audit_claimed);
+        assert!(!mutation.independent_external_reproduction_claimed);
+        assert!(!mutation.semantic_correctness_claimed);
+        assert!(!mutation.production_readiness_claimed);
+        assert!(!mutation.sota_claimed);
+        assert!(!mutation.breakthrough_claimed);
+        assert!(!mutation.full_security_claimed);
+        assert!(!mutation.grants_authority);
+
+        fs::remove_dir_all(&output_root).expect("phase539 output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase539 phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase539 obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase539_tiny_z3_backend_execution_accepted_append_mutation_rejects_invalid_phase537_state()
+    {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            mut evaluation,
+            mut ledger,
+            request,
+        )) = phase539_tiny_z3_backend_execution_accepted_append_mutation_source(
+            "phase539-invalid-phase537",
+        )
+        else {
+            return;
+        };
+        evaluation.validation_valid = false;
+        let mutation_input = phase539_tiny_z3_backend_execution_accepted_append_mutation_input(
+            "phase539-invalid-mutation",
+            &evaluation,
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationLabel::BackendExecutionAcceptedAppendMutationRejected,
+        );
+        let validation =
+            validate_gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_input(
+                &evaluation,
+                &request,
+                &ledger,
+                &mutation_input,
+            );
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::Phase537EvaluationStateMismatch
+        ));
+        assert!(
+            build_gateway_formal_tiny_z3_backend_execution_accepted_append_mutation(
+                &evaluation,
+                &request,
+                &mut ledger,
+                &mutation_input,
+            )
+            .is_err()
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase539 invalid output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase539 invalid phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase539 invalid obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase539_tiny_z3_backend_execution_accepted_append_mutation_rejects_drift_and_promotion() {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            evaluation,
+            mut ledger,
+            request,
+        )) = phase539_tiny_z3_backend_execution_accepted_append_mutation_source(
+            "phase539-promotion",
+        )
+        else {
+            return;
+        };
+        let mut mutation_input =
+            phase539_tiny_z3_backend_execution_accepted_append_mutation_input(
+                "phase539-promotion-mutation",
+                &evaluation,
+                GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationLabel::BackendExecutionAcceptedAppendMutationRejected,
+            );
+        mutation_input
+            .digest_bindings
+            .insert("phase537_evaluation_digest".to_owned(), Hash([0; 32]));
+        mutation_input.accepted_append_owner_id = "hsai-agent-admission".to_owned();
+        mutation_input.accepted_evidence_ledger_file_read_requested = true;
+        mutation_input.accepted_evidence_ledger_file_write_requested = true;
+        mutation_input.materialized_accepted_ledger_output_requested = true;
+        mutation_input.failed_mutation_treated_as_accepted_evidence = true;
+        mutation_input.accepted_append_decision_claimed = true;
+        mutation_input.accepted_formal_evidence_created = true;
+        mutation_input.creates_level2_evidence = true;
+        mutation_input.populates_score_axes = true;
+        mutation_input.proof_artifact_promoted = true;
+        mutation_input.checker_transcript_promoted = true;
+        mutation_input.solver_certificate_promoted = true;
+        mutation_input.lean_execution_evidence_created = true;
+        mutation_input.additional_smt_z3_execution_created = true;
+        mutation_input.cobalt_execution_evidence_created = true;
+        mutation_input.rust_to_lean_execution_evidence_created = true;
+        mutation_input.benchmark_evidence_created = true;
+        mutation_input.external_audit_claimed = true;
+        mutation_input.independent_external_reproduction_claimed = true;
+        mutation_input.semantic_correctness_claimed = true;
+        mutation_input.production_readiness_claimed = true;
+        mutation_input.sota_claimed = true;
+        mutation_input.breakthrough_claimed = true;
+        mutation_input.full_security_claimed = true;
+        mutation_input.action_authority_claimed = true;
+        let validation =
+            validate_gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_input(
+                &evaluation,
+                &request,
+                &ledger,
+                &mutation_input,
+            );
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::DigestBindingMismatch
+        ));
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::InvalidAcceptedAppendOwner
+        ));
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationIssue::PromotionAttempt
+        ));
+        assert!(
+            build_gateway_formal_tiny_z3_backend_execution_accepted_append_mutation(
+                &evaluation,
+                &request,
+                &mut ledger,
+                &mutation_input,
+            )
+            .is_err()
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase539 promotion output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase539 promotion phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase539 promotion obligation cleanup succeeds");
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -117384,6 +118443,125 @@ mod tests {
             rust_to_lean_execution_evidence_created: false,
             benchmark_evidence_created: false,
             external_audit_evidence_created: false,
+            independent_external_reproduction_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase539_tiny_z3_backend_execution_accepted_append_mutation_source(
+        source_prefix: &str,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        GatewayFormalTinyZ3BackendExecutionAcceptedAppendEvaluation,
+        zkbench_core::EvidenceLedger,
+        zkbench_core::AcceptedLedgerAppendTransactionRequest,
+    )> {
+        let (obligation_root, phase405_output_root, output_root, owner_decision) =
+            phase537_tiny_z3_backend_execution_accepted_append_evaluation_source(source_prefix)?;
+        let (ledger, request) = phase509_valid_append_transaction();
+        let evaluation_input =
+            phase537_tiny_z3_backend_execution_accepted_append_evaluation_input(
+                &format!("{source_prefix}-evaluation"),
+                &owner_decision,
+                GatewayFormalTinyZ3BackendExecutionAcceptedAppendEvaluationLabel::BackendExecutionAcceptedAppendValidatorAccepted,
+            );
+        let evaluation = build_gateway_formal_tiny_z3_backend_execution_accepted_append_evaluation(
+            &owner_decision,
+            &request,
+            &ledger,
+            &evaluation_input,
+        )
+        .expect("phase539 source evaluation builds");
+        Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            evaluation,
+            ledger,
+            request,
+        ))
+    }
+
+    fn phase539_tiny_z3_backend_execution_accepted_append_mutation_input(
+        mutation_id: &str,
+        evaluation: &GatewayFormalTinyZ3BackendExecutionAcceptedAppendEvaluation,
+        mutation_label: GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationLabel,
+    ) -> GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationInput {
+        let mutation_policy_id = "phase539-backend-execution-accepted-append-mutation-policy";
+        let mutation_decision_id = "phase539-backend-execution-accepted-append-mutation-decision";
+        let nonclaims =
+            gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_required_nonclaims();
+        GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationInput {
+            schema_version:
+                GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_ACCEPTED_APPEND_MUTATION_SCHEMA_VERSION
+                    .to_owned(),
+            mutation_id: mutation_id.to_owned(),
+            mutation_policy_id: mutation_policy_id.to_owned(),
+            mutation_decision_id: mutation_decision_id.to_owned(),
+            mutation_decision_at_unix: 1_800_000_539,
+            digest_bindings:
+                gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_digest_bindings(
+                    evaluation,
+                ),
+            id_bindings:
+                gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_id_bindings(
+                    evaluation,
+                    mutation_id,
+                    mutation_policy_id,
+                    mutation_decision_id,
+                ),
+            label_bindings:
+                gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_label_bindings(
+                    evaluation,
+                    &mutation_label,
+                ),
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-accepted-append-mutation-nonclaims:v1",
+                &nonclaims,
+            ),
+            accepted_append_owner_id: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_HANDOFF_OWNER_ID
+                .to_owned(),
+            mutation_function_id: GATEWAY_FORMAL_TINY_Z3_ACCEPTED_APPEND_MUTATION_FUNCTION_ID
+                .to_owned(),
+            request_type_name: GATEWAY_FORMAL_TINY_Z3_REPLAYABLE_INPUT_TRANSACTION_REQUEST_TYPE
+                .to_owned(),
+            report_type_name: "AcceptedLedgerAppendTransactionReport".to_owned(),
+            target_ledger_type_name: "EvidenceLedger".to_owned(),
+            mutation_rules: gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_rules(
+            ),
+            forbidden_api_set:
+                gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_forbidden_apis(),
+            inherited_digest_requirements:
+                gateway_formal_tiny_z3_backend_execution_accepted_append_mutation_inherited_digest_requirements(),
+            mutation_label,
+            mutation_summary:
+                "local backend execution accepted append mutation metadata records in-memory append only"
+                    .to_owned(),
+            accepted_evidence_ledger_file_read_requested: false,
+            accepted_evidence_ledger_file_write_requested: false,
+            materialized_accepted_ledger_output_requested: false,
+            failed_mutation_treated_as_accepted_evidence: false,
+            accepted_append_decision_claimed: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            lean_execution_evidence_created: false,
+            additional_smt_z3_execution_created: false,
+            cobalt_execution_evidence_created: false,
+            rust_to_lean_execution_evidence_created: false,
+            benchmark_evidence_created: false,
+            external_audit_claimed: false,
             independent_external_reproduction_claimed: false,
             semantic_correctness_claimed: false,
             production_readiness_claimed: false,

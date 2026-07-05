@@ -7785,5 +7785,18 @@ creates no Level2+ evidence, populates no score axes, runs no Lean/COBALT/
 Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark evidence,
 and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/539-hsai-tiny-z3-backend-execution-accepted-append-mutation-metadata-notes.md](docs/539-hsai-tiny-z3-backend-execution-accepted-append-mutation-metadata-notes.md)
+documents the Phase 539 local backend-execution accepted append mutation
+metadata implementation. The implementation calls
+`zkbench_core::apply_accepted_ledger_append_transaction` over caller-supplied
+in-memory values after exact Phase 537 validation metadata, records the
+pre-mutation ledger digest, post-mutation ledger digest, accepted append report
+digest, appended entry digest, appended sequence number, appended evidence
+class, and appended claim boundary. It writes no accepted Evidence Ledger file,
+creates no materialized accepted ledger output, creates no Level2+ evidence,
+populates no score axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3
+execution, creates no benchmark evidence, and claims no production/SOTA/
+security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
