@@ -8683,5 +8683,22 @@ population, Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, benchmark
 evidence, external-audit evidence, and production/SOTA/security
 /semantic-correctness claims.
 
+[docs/594-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-output-plumbing-boundary.md](docs/594-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-output-plumbing-boundary.md)
+documents the Phase 594 docs-first packet-role artifact independent-operator
+output plumbing boundary. It requires one exact Phase 593
+`PacketRoleArtifactIndependentOperatorOutputMissing` record, binds Phase
+593/591/589/587/585/583/581/579/577/575/573/571/569/567/565/563/561/559
+/557/555 and inherited backend-execution digests, defines future caller-owned
+output-root request handling, protected-root rejection, staged-write and
+readback policies, declared JSON role files and `.sha256` sidecars, local
+bundle classifications, and Phase 595 implementation exit criteria. It
+creates no Rust code, writes no files, reads no output roots, imports no
+external result, mutates no accepted Evidence Ledger, creates no accepted
+external result evidence, accepts no independent external reproduction,
+creates no accepted formal evidence, creates no Level2+ evidence, populates no
+score axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution,
+creates no benchmark evidence, and claims no production/SOTA/security
+/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
