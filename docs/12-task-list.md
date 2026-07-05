@@ -14451,6 +14451,29 @@ evidence, no Level2+ evidence, no score axes, no Lean/new-SMT/COBALT or
 Rust-to-Lean execution, no benchmark evidence, no external audit evidence, and
 no production/SOTA/security/correctness claim.
 
+## Phase 514 HSAI Tiny Z3 Accepted Evidence Package Boundary
+
+Status: complete. See
+`docs/514-hsai-tiny-z3-accepted-evidence-package-boundary.md`.
+
+Goal: define the docs-first boundary for a future local accepted-evidence
+package over the Phase 513 materialized accepted ledger artifact.
+
+Implemented: Phase 514 documents the future allowed touch surface, local-only
+package meaning, required future Phase 513 digest bindings, package policy/
+nonclaim/cap digest bindings, fail-closed future validation rules, backend
+relationship limits, meaning limits, and Phase 515 implementation exit
+criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has an accepted-evidence package boundary for a future
+local metadata implementation. It still has no accepted formal evidence, no
+Level2+ evidence, no score axes, no Lean/new-SMT/COBALT or Rust-to-Lean
+execution, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
