@@ -15778,6 +15778,34 @@ populated score axes, no Lean/COBALT/Rust-to-Lean execution, no additional
 SMT/Z3 execution, no benchmark evidence, no external audit evidence, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 561 HSAI Tiny Z3 Backend Execution External Operator Capture Import Candidate Metadata
+
+Status: complete. See
+`docs/561-hsai-tiny-z3-backend-execution-external-operator-capture-import-candidate-metadata-notes.md`.
+
+Goal: implement local import-candidate metadata derived from one exact Phase
+559 quarantined external operator capture manifest.
+
+Implemented: Phase 561 adds schema/state/claim-boundary constants, input and
+output metadata records, bounded classifications and labels, issue and
+validation types, blocker/nonclaim/rule/forbidden-API/inherited-digest
+helpers, Phase 559 manifest to `zkbench_core::ExternalResultCandidate`
+construction, `validate_external_result_candidate` digest binding,
+`external_result_quarantine_record` digest binding, Phase 559 manifest
+exactness checks, and promotion rejection.
+
+Validation coverage: focused tests cover successful quarantined import
+candidate metadata, invalid Phase 559 capture state rejection, and candidate
+digest drift plus promotion rejection.
+
+Exit criteria: HSAI can derive a quarantined local external-result import
+candidate from a locally validated operator capture packet. It still has no
+external result import, no accepted independent external reproduction, no
+accepted formal evidence, no Level2+ evidence, no populated score axes, no
+Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution, no
+benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

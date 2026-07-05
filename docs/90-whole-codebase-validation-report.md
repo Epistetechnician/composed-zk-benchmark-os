@@ -8135,5 +8135,20 @@ creates no Level2+ evidence, populates no score axes, runs no
 Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark
 evidence, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/561-hsai-tiny-z3-backend-execution-external-operator-capture-import-candidate-metadata-notes.md](docs/561-hsai-tiny-z3-backend-execution-external-operator-capture-import-candidate-metadata-notes.md)
+documents the Phase 561 local external operator capture import-candidate
+metadata implementation. It derives only one quarantined in-memory
+`zkbench_core::ExternalResultCandidate` from one exact Phase 559 capture
+manifest, records candidate, validation, validation-issue, and quarantine
+digests, and checks the Phase 559 capture manifest keeps external result
+import, accepted external evidence, accepted formal evidence, Level2+,
+score-axis population, Lean, COBALT, Rust-to-Lean, additional SMT/Z3,
+benchmark evidence, external audit, strong claims, and action authority false.
+It writes no artifact files, performs no run, imports no external result,
+accepts no independent external reproduction, creates no accepted formal
+evidence, creates no Level2+ evidence, populates no score axes, runs no
+Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark
+evidence, and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
