@@ -14335,6 +14335,32 @@ proof-authority claim, Lean/new-SMT/COBALT or Rust-to-Lean execution,
 benchmark evidence, external audit evidence, or
 production/SOTA/security/correctness claim.
 
+## Phase 510 HSAI Tiny Z3 Accepted Append Mutation Boundary
+
+Status: complete. See
+`docs/510-hsai-tiny-z3-accepted-append-mutation-boundary.md`.
+
+Goal: define the docs-first boundary for a future in-memory accepted-ledger
+append mutation through `zkbench-core::apply_accepted_ledger_append_transaction`.
+
+Implemented: Phase 510 documents the future allowed touch surface, the only
+future allowed in-memory mutation call, forbidden materialization/file/process/
+network APIs, required future Phase 509 digest bindings, pre- and post-mutation
+ledger/report/appended-entry identity bindings, fail-closed future validation
+rules, backend relationship limits, meaning limits, and Phase 511
+implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has an accepted append mutation boundary for a future
+local in-memory implementation. It still has no accepted append mutation,
+accepted Evidence Ledger file read or write, materialized accepted ledger
+output, accepted formal evidence, Level2+ evidence, score axes,
+proof-authority claim, Lean/new-SMT/COBALT or Rust-to-Lean execution,
+benchmark evidence, external audit evidence, or
+production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
