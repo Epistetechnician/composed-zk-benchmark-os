@@ -8178,5 +8178,19 @@ Level2+ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
 additional SMT/Z3 execution, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/564-hsai-tiny-z3-backend-execution-external-operator-accepted-result-evidence-boundary.md](docs/564-hsai-tiny-z3-backend-execution-external-operator-accepted-result-evidence-boundary.md)
+documents the Phase 564 docs-first accepted-result evidence boundary. It
+defines a future policy gate over one exact Phase 563 review metadata record,
+including Phase 563 review bindings, Phase 561 candidate/validation/quarantine
+bindings, Phase 559 capture bindings, inherited backend-execution digest
+bindings, accepted-evidence owner/function constraints, fail-closed validation
+rules, meaning limits, and Phase 565 implementation exit criteria. It creates
+no Rust code, writes no artifact files, performs no run, imports no external
+result, mutates no accepted Evidence Ledger, creates no accepted external
+result evidence, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
+additional SMT/Z3 execution, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
