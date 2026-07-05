@@ -164,18 +164,20 @@ production readiness, full security, or authority to execute an action.
 
 ## Phase 519 Implementation Exit Criteria
 
-A future Phase 519 may implement local Level2 eligibility metadata only if it:
+Phase 519 implemented local Level2 eligibility metadata in
+`docs/519-hsai-tiny-z3-level2-eligibility-metadata-notes.md`. The
+implementation met this boundary by:
 
-- touches only the allowed files listed above;
-- performs no process or network calls;
-- writes no Level2 artifact files;
-- writes no score-axis artifact files;
-- validates one exact Phase 517 score-axis eligibility metadata record;
-- binds the `zkbench-core` Level2 eligibility owner surface;
-- records the current HSAI classification as `level2_blocked_local_only`;
-- records `ClaimBoundary::Level0DesignNote`;
-- records `creates_level2_evidence = false`;
-- rejects accepted formal evidence, Level2+ evidence, populated score axes,
+- touching only the allowed files listed above;
+- performing no process or network calls;
+- writing no Level2 artifact files;
+- writing no score-axis artifact files;
+- validating one exact Phase 517 score-axis eligibility metadata record;
+- binding the `zkbench-core` Level2 eligibility owner surface;
+- recording the current HSAI classification as `level2_blocked_local_only`;
+- recording `ClaimBoundary::Level0DesignNote`;
+- recording `creates_level2_evidence = false`;
+- rejecting accepted formal evidence, Level2+ evidence, populated score axes,
   proof/checker/solver authority, backend execution evidence, benchmark
   evidence, external audit, strong claims, and action authority in the metadata
   itself.

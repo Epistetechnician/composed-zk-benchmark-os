@@ -14586,6 +14586,41 @@ axes, no accepted formal evidence, no new Lean/new-SMT/COBALT or Rust-to-Lean
 execution, no benchmark evidence, no external audit evidence, and no
 production/SOTA/security/correctness claim.
 
+## Phase 519 HSAI Tiny Z3 Level2 Eligibility Metadata
+
+Status: complete. See
+`docs/519-hsai-tiny-z3-level2-eligibility-metadata-notes.md`.
+
+Goal: implement local Level2 eligibility metadata over one exact Phase 517
+score-axis eligibility metadata record.
+
+Implemented: Phase 519 adds Level2 eligibility input/output metadata,
+classification and label enums, issue and validation types, blocker, nonclaim,
+rule, forbidden-API, inherited-digest, nonpromotion, policy-digest,
+digest-binding, id-binding, and label-binding helpers, a fail-closed validator,
+and a builder that records local Level2 eligibility metadata only. The result
+binds Phase 517 score-axis eligibility identity, Phase 517 input and binding
+digests, Phase 517 classification and nonpopulation digests, Phase 515 package
+identity, Phase 515 `LocalReplay` / `Level1LocalReplay`, Phase 513 artifact
+digests, `zkbench-core`, `Level2EligibilityChecker`,
+`check_level2_eligibility`, `Level2EligibilityReport`,
+`ClaimBoundary::Level0DesignNote`, `creates_level2_evidence = false`, Level2
+policy digest, blocker digest, and nonpromotion digest.
+
+Validation coverage: focused Rust tests cover successful local Level2
+eligibility metadata over a real Phase 517 record, rejection of invalid Phase
+517 state, and rejection of report-created Level2 evidence, Level2 artifact
+writes, score-axis artifact writes, score-axis population, formal-evidence,
+Level2+, proof/checker/solver, backend, benchmark, external-audit,
+strong-claim, and action-authority promotion attempts.
+
+Exit criteria: HSAI now has local metadata classifying one Phase 517 record as
+`level2_blocked_local_only` with `ClaimBoundary::Level0DesignNote` and
+`creates_level2_evidence = false`. It still has no Level2+ evidence, no
+populated score axes, no accepted formal evidence, no new
+Lean/new-SMT/COBALT or Rust-to-Lean execution, no benchmark evidence, no
+external audit evidence, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

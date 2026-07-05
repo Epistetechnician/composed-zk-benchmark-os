@@ -7502,5 +7502,24 @@ formal evidence, creates no Level2+ evidence, runs no new
 Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence, and
 claims no production/SOTA/security/semantic-correctness result.
 
+[docs/519-hsai-tiny-z3-level2-eligibility-metadata-notes.md](docs/519-hsai-tiny-z3-level2-eligibility-metadata-notes.md)
+documents the Phase 519 local Level2 eligibility metadata implementation. The
+Rust surface in `crates/hsai-agent-admission/src/lib.rs` adds Level2
+eligibility input/output metadata, classification and label enums, issue and
+validation types, blocker, nonclaim, rule, forbidden-API, inherited-digest,
+nonpromotion, policy-digest, digest-binding, id-binding, and label-binding
+helpers, a fail-closed validator, and a builder that validates one exact Phase
+517 score-axis eligibility metadata record before recording local Level2
+eligibility metadata only. The metadata binds Phase 517, Phase 515, and Phase
+513 identity, `zkbench-core`, `Level2EligibilityChecker`,
+`check_level2_eligibility`, `Level2EligibilityReport`,
+`ClaimBoundary::Level0DesignNote`, `creates_level2_evidence = false`, the
+Level2 policy digest, the blocker digest, and the nonpromotion digest. It
+classifies the record as `level2_blocked_local_only`, writes no Level2
+artifact files, writes no score-axis artifact files, populates no score axes,
+creates no accepted formal evidence, creates no Level2+ evidence, runs no new
+Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence, and
+claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
