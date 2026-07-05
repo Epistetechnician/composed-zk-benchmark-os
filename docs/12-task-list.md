@@ -16180,6 +16180,44 @@ Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution, no
 benchmark evidence, no external audit evidence, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 575 HSAI Tiny Z3 Backend Execution Packet Role Artifact Output Metadata
+
+Status: complete. See
+`docs/575-hsai-tiny-z3-backend-execution-packet-role-artifact-output-metadata-notes.md`.
+
+Goal: implement local packet role artifact output metadata after the Phase 574
+boundary.
+
+Implemented: Phase 575 adds `hsai-agent-admission` metadata for one exact Phase
+573 packet role materialization metadata record. It records
+`PacketRoleArtifactOutputMissing`, binds the Phase 573 materialization digest,
+input digest, digest/id/label binding-map digests, blocker/policy/nonpromotion
+digests, declared role-file and sidecar digests, Phase 571/569/567/565/563/561
+/559/557/555 digests, output request digest, output-root policy digest,
+protected-root policy digest, declared file and sidecar contract digests,
+write-policy digest, readback-policy digest, redaction-policy digest, and
+nonclaim-acknowledgement digest. It rejects Phase 573 drift, output-root
+policy drift, declared-file drift, readback-policy drift, output-root access,
+artifact materialization, accepted-ledger mutation, Level2, score-axis
+population, proof/checker/solver promotion, backend execution evidence,
+benchmark evidence, external audit evidence, strong public claims, and
+authority.
+
+Validation coverage: focused `hsai-agent-admission` tests cover successful
+missing-output metadata, invalid Phase 573 state rejection, and output-root
+policy drift plus declared-file/readback drift, output-root access, and
+promotion rejection. The metadata records the only valid current
+classification: `PacketRoleArtifactOutputMissing`.
+
+Exit criteria: HSAI can now locally carry the Phase 573 materialization blocker
+into packet role artifact output metadata. It still has no packet role artifact
+output plumbing, no output-root reads or writes, no filesystem artifact writes,
+no external result import, no accepted external result evidence, no accepted
+independent external reproduction, no accepted formal evidence, no Level2+
+evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean execution, no
+additional SMT/Z3 execution, no benchmark evidence, no external audit evidence,
+and no production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

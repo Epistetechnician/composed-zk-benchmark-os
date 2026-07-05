@@ -8367,5 +8367,26 @@ evidence, creates no Level2+ evidence, populates no score axes, runs no
 Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark
 evidence, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/575-hsai-tiny-z3-backend-execution-packet-role-artifact-output-metadata-notes.md](docs/575-hsai-tiny-z3-backend-execution-packet-role-artifact-output-metadata-notes.md)
+documents the Phase 575 local packet role artifact output metadata. It accepts
+one exact Phase 573 materialization metadata record, records
+`PacketRoleArtifactOutputMissing`, binds Phase 573 materialization/input and
+binding-map digests, Phase 573 blocker/policy/nonpromotion digests, declared
+role-file and sidecar digests, Phase 571/569/567/565/563/561/559/557/555
+digests, output request digest, output-root policy digest, protected-root
+policy digest, declared file and sidecar contract digests, write-policy
+digest, readback-policy digest, redaction-policy digest, and
+nonclaim-acknowledgement digest, and rejects Phase 573 drift, policy drift,
+output-root access, artifact materialization, accepted-ledger mutation,
+Level2, score-axis population, proof/checker/solver promotion, backend
+execution evidence, benchmark evidence, external audit evidence, strong public
+claims, and authority. It reads no output root, writes no output root, writes
+no artifact files, imports no external result, mutates no accepted Evidence
+Ledger, creates no accepted external result evidence, accepts no independent
+external reproduction, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
+additional SMT/Z3 execution, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
