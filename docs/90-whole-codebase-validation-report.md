@@ -8022,5 +8022,22 @@ formal evidence, creates no Level2+ evidence, populates no score axes, runs no
 Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark
 evidence, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/554-hsai-tiny-z3-backend-execution-independent-external-reproduction-handoff-boundary.md](docs/554-hsai-tiny-z3-backend-execution-independent-external-reproduction-handoff-boundary.md)
+documents the Phase 554 docs-first independent external-reproduction handoff
+boundary. It defines a future digest-bound manual operator handoff request over
+one exact Phase 553 blocked import-review record, including required Phase 553
+review bindings, Phase 551 import-candidate bindings, Phase 549
+external-reproduction bindings, Phase 547 Level2 eligibility bindings, Phase
+545 score-axis bindings, Phase 543 package bindings, Phase 541 materialized
+artifact binding, inherited Phase 535/533/531/529/527 digests, manual handoff
+owner surface, operator output roles, provenance requirements, result import
+quarantine requirements, fail-closed validation rules, meaning limits, and
+Phase 555 implementation exit criteria. It creates no Rust code, creates no
+handoff metadata, performs no run, imports no external result, creates no
+independent external reproduction, creates no accepted formal evidence,
+creates no Level2+ evidence, populates no score axes, runs no Lean/COBALT/
+Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark evidence,
+and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

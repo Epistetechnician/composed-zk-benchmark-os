@@ -15568,6 +15568,36 @@ populated score axes, no Lean/COBALT/Rust-to-Lean execution, no benchmark
 evidence, no external audit evidence, and no production/SOTA/security/
 correctness claim.
 
+## Phase 554 HSAI Tiny Z3 Backend Execution Independent External Reproduction Handoff Boundary
+
+Status: complete. See
+`docs/554-hsai-tiny-z3-backend-execution-independent-external-reproduction-handoff-boundary.md`.
+
+Goal: define the docs-first boundary for a future digest-bound manual handoff
+request that can ask an independent operator to reproduce the
+backend-execution route outside the current local metadata chain.
+
+Implemented: Phase 554 defines the future independent external-reproduction
+handoff contract: required Phase 553 import-review bindings, Phase 551
+import-candidate bindings, Phase 549 external-reproduction bindings, Phase
+547 Level2 eligibility bindings, Phase 545 score-axis eligibility/
+nonpopulation bindings, Phase 543 package/class/boundary bindings, Phase 541
+materialized artifact binding, inherited Phase 535/533/531/529/527 bindings,
+manual handoff owner surface, required external operator output roles,
+required provenance field digest, result import quarantine requirement digest,
+fail-closed validation rules, meaning limits, and Phase 555 implementation
+exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named boundary for preparing a digest-bound
+manual handoff request for independent external reproduction. It still has no
+independent external reproduction, no accepted formal evidence, no Level2+
+evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean execution, no
+benchmark evidence, no external audit evidence, and no production/SOTA/
+security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
