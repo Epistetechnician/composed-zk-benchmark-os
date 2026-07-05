@@ -8591,5 +8591,21 @@ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
 additional SMT/Z3 execution, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/588-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-evidence-packet-boundary.md](docs/588-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-evidence-packet-boundary.md)
+documents the Phase 588 docs-first packet role artifact independent-operator
+evidence packet boundary. It requires one exact Phase 587
+`PacketRoleArtifactIndependentReproductionEvidenceBlocked` record, binds
+Phase 587/585/583/581/579/577/575/573/571/569/567/565/563/561/559/557/555
+and inherited backend-execution digests, names future packet roles for
+operator identity, operator statement, environment declaration,
+captured-output summary, redaction report, replay/correspondence, and import
+ownership, and defines future Phase 589 implementation exit criteria. It
+creates no Rust code, imports no external result, mutates no accepted Evidence
+Ledger, creates no accepted external result evidence, accepts no independent
+external reproduction, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
+additional SMT/Z3 execution, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
