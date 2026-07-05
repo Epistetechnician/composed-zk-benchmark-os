@@ -16385,6 +16385,34 @@ populated score axes, no Lean/COBALT/Rust-to-Lean execution, no additional
 SMT/Z3 execution, no benchmark evidence, no external audit evidence, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 582 HSAI Tiny Z3 Backend Execution Packet Role Artifact Accepted Result Evidence Eligibility Boundary
+
+Status: complete. See
+`docs/582-hsai-tiny-z3-backend-execution-packet-role-artifact-accepted-result-evidence-eligibility-boundary.md`.
+
+Goal: define the docs-first accepted-result evidence eligibility boundary
+after Phase 581 blocked packet role artifact import-review metadata.
+
+Implemented: Phase 582 defines the future eligibility metadata contract over
+one exact Phase 581
+`PacketRoleArtifactImportReviewBlockedNoAcceptedExternalResult` record. It
+requires Phase 581 review/input/binding/policy/blocker/nonpromotion digests,
+Phase 579 candidate/validation/quarantine digests, Phase 577 readback digests,
+Phase 575/573/571/569/567/565/563/561/559/557/555 and inherited
+backend-execution digest bindings, a blocked eligibility classification, and
+future Phase 583 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named packet role artifact accepted-result
+evidence eligibility boundary. It still has no external result import, no
+accepted external result evidence, no accepted independent external
+reproduction, no accepted formal evidence, no Level2+ evidence, no populated
+score axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3
+execution, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
