@@ -16531,6 +16531,40 @@ score axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3
 execution, no benchmark evidence, no external audit evidence, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 587 HSAI Tiny Z3 Backend Execution Packet Role Artifact Independent Reproduction Requirement Metadata
+
+Status: complete. See
+`docs/587-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-reproduction-requirement-metadata-notes.md`.
+
+Goal: implement local blocked independent-reproduction requirement metadata
+over one exact Phase 585 packet role artifact accepted-result
+policy-resolution record.
+
+Implemented: Phase 587 adds requirement input/output records, blocked
+classification and labels, issue/validation types, digest/id/label binding
+helpers, required future evidence placeholder digests, policy/blocker
+/nonpromotion/rule/forbidden-API/inherited-digest helpers, and fail-closed
+Phase 585 exactness checks. The metadata binds Phase 585
+policy-resolution/input/binding/policy/blocker/nonpromotion digests, Phase 583
+eligibility/input/binding/policy/blocker/nonpromotion digests, Phase 581
+review/input digests, Phase 579 candidate/validation/quarantine digests, Phase
+577 readback digests, and the inherited Phase 575/573/571/569/567/565/563
+/561/559/557/555 backend-execution chain.
+
+Validation coverage: focused tests cover successful blocked requirement
+metadata, Phase 585 drift rejection, inherited Phase 583 digest drift
+rejection, required evidence digest drift rejection, premature evidence
+satisfaction rejection, promotion flag rejection, and strong-claim rejection.
+
+Exit criteria: HSAI can now carry one blocked Phase 585 packet role artifact
+accepted-result policy-resolution record into blocked independent-reproduction
+requirement metadata. It still has no external result import, no accepted
+external result evidence, no accepted independent external reproduction, no
+accepted formal evidence, no Level2+ evidence, no populated score axes, no
+Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution, no
+benchmark evidence, no external audit evidence, and no production/SOTA
+/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

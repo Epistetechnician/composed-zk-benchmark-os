@@ -8574,5 +8574,22 @@ axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates
 no benchmark evidence, and claims no production/SOTA/security
 /semantic-correctness result.
 
+[docs/587-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-reproduction-requirement-metadata-notes.md](docs/587-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-reproduction-requirement-metadata-notes.md)
+documents the Phase 587 packet role artifact independent-reproduction
+requirement metadata implementation. It adds local blocked requirement
+metadata over one exact Phase 585
+`PacketRoleArtifactAcceptedResultPolicyResolutionBlocked` record, binds the
+Phase 585/583/581/579/577/575/573/571/569/567/565/563/561/559/557/555 and
+inherited backend-execution digest chain, records future evidence placeholder
+digests for operator identity, operator statement, environment declaration,
+captured-output summary, redaction report, replay/correspondence, and
+`zkbench_core` import ownership, and rejects premature satisfaction or
+promotion. It imports no external result, mutates no accepted Evidence Ledger,
+creates no accepted external result evidence, accepts no independent external
+reproduction, creates no accepted formal evidence, creates no Level2+
+evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
+additional SMT/Z3 execution, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
