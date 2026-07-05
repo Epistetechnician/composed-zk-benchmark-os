@@ -14502,6 +14502,31 @@ accepted formal evidence, no Level2+ evidence, no score axes, no
 Lean/new-SMT/COBALT or Rust-to-Lean execution, no benchmark evidence, no
 external audit evidence, and no production/SOTA/security/correctness claim.
 
+## Phase 516 HSAI Tiny Z3 Score Axis Eligibility Boundary
+
+Status: complete. See
+`docs/516-hsai-tiny-z3-score-axis-eligibility-boundary.md`.
+
+Goal: define the docs-first boundary for future score-axis eligibility over the
+Phase 515 local accepted-evidence package metadata.
+
+Implemented: Phase 516 documents the current `zkbench-core` score owner
+surface, the existing `ScoreReport` and `validate_score_report` local-claim
+restriction, the future allowed touch surface, future eligibility
+classifications, required future Phase 515 digest bindings, score owner/type/
+validator bindings, eligibility policy/blocker/nonpopulation digest bindings,
+fail-closed future validation rules, backend relationship limits, meaning
+limits, and Phase 517 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a score-axis eligibility boundary for a future
+local metadata implementation. It still has no populated score axes, no
+accepted formal evidence, no Level2+ evidence, no Lean/new-SMT/COBALT or
+Rust-to-Lean execution, no benchmark evidence, no external audit evidence, and
+no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

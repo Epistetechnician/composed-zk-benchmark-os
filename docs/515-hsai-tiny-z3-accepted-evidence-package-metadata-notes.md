@@ -99,13 +99,10 @@ package artifact file, and creates no formal evidence, Level2+ evidence, score
 axes, backend execution evidence, benchmark evidence, external audit evidence,
 or action authority.
 
-## Next Responsible Slice
+## Phase 516 Boundary Status
 
-The next responsible boundary is still not SOTA, full security, semantic
-correctness, production readiness, Level2+, score axes, or backend proof
-authority.
-
-The next slice should define a score-axis boundary that explains exactly what
-would be required before this local package could contribute to score axes.
-That boundary must keep `LocalReplay` package evidence separate from Level2+
-benchmark evidence and formal backend proof evidence.
+Phase 516 defines the docs-first score-axis eligibility boundary in
+`docs/516-hsai-tiny-z3-score-axis-eligibility-boundary.md`. It does not
+populate score axes, create accepted formal evidence, create Level2+ evidence,
+run Lean/new-SMT/COBALT/Rust-to-Lean extraction, create benchmark evidence, or
+claim production/SOTA/security/semantic-correctness results.
