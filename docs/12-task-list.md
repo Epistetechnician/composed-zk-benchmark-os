@@ -16836,6 +16836,34 @@ evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean execution, no
 additional SMT/Z3 execution, no benchmark evidence, no external audit evidence,
 and no production/SOTA/security/semantic-correctness claim.
 
+## Phase 597 HSAI Tiny Z3 Backend Execution Packet Role Artifact Independent Operator Import Candidate Metadata
+
+Status: complete. See
+`docs/597-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-import-candidate-metadata-notes.md`.
+
+Goal: implement local import-candidate metadata over one exact Phase 595
+packet-role artifact independent-operator output plumbing readback.
+
+Implemented: Phase 597 adds independent-operator import-candidate constants,
+types, builder, validator, digest/id/label bindings, zkbench-core
+`ExternalResultCandidate` construction, validation and quarantine-record
+digests, policy/nonpromotion digests, inherited-digest requirements, and
+focused tests. The accepted input is one exact Phase 595
+`PacketRoleArtifactIndependentOperatorOutputQuarantinedLocalBundle` readback.
+
+Validation coverage: focused Rust tests cover successful quarantined metadata,
+Phase 595 drift rejection, readback-digest drift rejection, and promotion or
+strong-claim rejection.
+
+Exit criteria: HSAI can map one validated local Phase 595 packet-role artifact
+independent-operator bundle into a quarantined local import-candidate metadata
+record. It still has no external result import, no accepted external result
+evidence, no accepted independent external reproduction, no accepted formal
+evidence, no Level2+ evidence, no populated score axes, no Lean/COBALT
+/Rust-to-Lean execution, no additional SMT/Z3 execution, no benchmark evidence,
+no external audit evidence, and no production/SOTA/security/semantic-correctness
+claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
