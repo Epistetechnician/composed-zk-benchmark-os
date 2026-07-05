@@ -184,10 +184,11 @@ That still is not:
 - full security;
 - authority to execute an action.
 
-## Phase 501 Implementation Exit Criteria
+## Phase 501 Implementation Status
 
-A future Phase 501 may implement local reviewer policy/decision metadata only
-if it:
+Phase 501 implements local reviewer policy/decision metadata in
+`docs/501-hsai-tiny-z3-reviewer-policy-decision-metadata-notes.md`. That
+implementation:
 
 - remains in `crates/hsai-agent-admission/src/lib.rs`;
 - adds no Cargo metadata;

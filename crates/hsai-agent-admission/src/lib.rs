@@ -960,6 +960,13 @@ pub const GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_HSAI_SOURCE_PATH: &str =
     "crates/hsai-agent-admission/src/lib.rs";
 pub const GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_SOURCE_COMMIT_REQUIRED: &str =
     "source_commit_required";
+pub const GATEWAY_FORMAL_TINY_Z3_REVIEWER_POLICY_DECISION_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-z3-reviewer-policy-decision:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_REVIEWER_POLICY_DECISION_STATE_SLICE: &str =
+    "phase-501-hsai-tiny-z3-reviewer-policy-decision-metadata";
+pub const GATEWAY_FORMAL_TINY_Z3_REVIEWER_POLICY_DECISION_CLAIM_BOUNDARY: &str = "local tiny-Z3 reviewer policy and decision metadata only; records reviewer policy and reviewer decision requirements over Phase 499 source correspondence metadata, but does not create a review artifact, make an accepted append decision, create accepted formal evidence, mutate the accepted Evidence Ledger, change accepted append policy, create Level2+ evidence, populate score axes, create proof artifacts, create checker transcripts, create solver certificates, run Lean, run new SMT, run COBALT, run Rust-to-Lean extraction, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_Z3_REVIEWER_POLICY_DECISION_INPUT_TYPE: &str =
+    "GatewayFormalTinyZ3SourceCorrespondence";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -13457,6 +13464,169 @@ pub enum GatewayFormalTinyZ3SourceCorrespondenceIssue {
 pub struct GatewayFormalTinyZ3SourceCorrespondenceValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyZ3SourceCorrespondenceIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3ReviewerDecisionLabel {
+    SourceCorrespondenceReviewAcceptedForLocalMetadata,
+    SourceCorrespondenceReviewRejected,
+    SourceCorrespondenceReviewBlockedByPolicyDrift,
+    SourceCorrespondenceReviewBlockedBySourceDrift,
+    SourceCorrespondenceReviewBlockedByCurrentBlockerDrift,
+    SourceCorrespondenceReviewBlockedByPromotionClaim,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3ReviewerPolicyDecisionInput {
+    pub schema_version: String,
+    pub reviewer_gate_id: String,
+    pub reviewer_policy_id: String,
+    pub reviewer_policy_digest: Hash,
+    pub reviewer_decision_id: String,
+    pub reviewer_decision_digest: Hash,
+    pub reviewer_decision_at_unix: u64,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub required_input_record_type: String,
+    pub reviewer_role_requirements: BTreeSet<String>,
+    pub reviewer_independence_requirements: BTreeSet<String>,
+    pub reviewer_decision_labels: BTreeSet<String>,
+    pub reviewer_decision_label: GatewayFormalTinyZ3ReviewerDecisionLabel,
+    pub reviewer_decision_summary: String,
+    pub drift_rejection_policy: BTreeSet<String>,
+    pub promotion_rejection_policy: BTreeSet<String>,
+    pub review_artifact_creation_requested: bool,
+    pub accepted_append_policy_change_requested: bool,
+    pub accepted_append_decision_requested: bool,
+    pub accepted_evidence_ledger_mutation_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub external_audit_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyZ3ReviewerPolicyDecisionInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-reviewer-policy-decision-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3ReviewerPolicyDecision {
+    pub schema_version: String,
+    pub reviewer_gate_id: String,
+    pub state_slice: String,
+    pub reviewer_policy_decision_input_digest: Hash,
+    pub reviewer_policy_id: String,
+    pub reviewer_policy_digest: Hash,
+    pub reviewer_decision_id: String,
+    pub reviewer_decision_digest: Hash,
+    pub reviewer_decision_at_unix: u64,
+    pub phase499_source_correspondence_digest: Hash,
+    pub phase499_source_correspondence_input_digest: Hash,
+    pub phase499_digest_binding_map_digest: Hash,
+    pub phase499_id_binding_map_digest: Hash,
+    pub phase499_label_binding_map_digest: Hash,
+    pub phase499_explicit_nonclaims_digest: Hash,
+    pub phase499_source_anchor_set_digest: Hash,
+    pub phase499_statement_digest_inputs_digest: Hash,
+    pub phase499_source_path_digest_requirements_digest: Hash,
+    pub phase499_drift_rejection_policy_digest: Hash,
+    pub current_accepted_append_blockers_digest: Hash,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub required_input_record_type: String,
+    pub reviewer_role_requirements: BTreeSet<String>,
+    pub reviewer_independence_requirements: BTreeSet<String>,
+    pub reviewer_decision_labels: BTreeSet<String>,
+    pub reviewer_decision_label: GatewayFormalTinyZ3ReviewerDecisionLabel,
+    pub reviewer_decision_summary: String,
+    pub drift_rejection_policy: BTreeSet<String>,
+    pub promotion_rejection_policy: BTreeSet<String>,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub creates_review_artifact: bool,
+    pub changes_accepted_append_policy: bool,
+    pub makes_accepted_append_decision: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub creates_accepted_formal_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub external_audit_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3ReviewerPolicyDecision {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-reviewer-policy-decision:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3ReviewerPolicyDecisionIssue {
+    InvalidSchemaVersion,
+    InvalidReviewerGateId,
+    InvalidReviewerPolicyId,
+    InvalidReviewerDecisionId,
+    MissingReviewerDecisionTimestamp,
+    MissingDigest(String),
+    DigestBindingMismatch,
+    IdBindingMismatch,
+    InvalidIdBinding(String),
+    LabelBindingMismatch,
+    Phase499SourceCorrespondenceStateMismatch,
+    NonclaimMismatch,
+    ReviewerPolicyDigestMismatch,
+    ReviewerDecisionDigestMismatch,
+    InvalidRequiredInputRecordType,
+    ReviewerRoleRequirementsMismatch,
+    ReviewerIndependenceRequirementsMismatch,
+    ReviewerDecisionLabelsMismatch,
+    DriftRejectionPolicyMismatch,
+    PromotionRejectionPolicyMismatch,
+    ReviewerDecisionSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3ReviewerPolicyDecisionValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyZ3ReviewerPolicyDecisionIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -55214,6 +55384,525 @@ pub fn validate_gateway_formal_tiny_z3_source_correspondence_input(
     }
 }
 
+pub fn gateway_formal_tiny_z3_reviewer_policy_decision_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_Z3_REVIEWER_POLICY_DECISION_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_z3_reviewer_policy_decision_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    [
+        "not review artifact",
+        "not external audit",
+        "not accepted append decision",
+        "not accepted formal evidence",
+        "not accepted evidence ledger mutation",
+        "not accepted append policy change",
+        "not Level2+ evidence",
+        "not score-axis evidence",
+        "not proof authority",
+        "not checker transcript authority",
+        "not solver certificate authority",
+        "not backend execution evidence",
+        "not Lean execution evidence",
+        "not new SMT execution evidence",
+        "not COBALT execution evidence",
+        "not Rust-to-Lean extraction evidence",
+        "not benchmark evidence",
+        "not SOTA",
+        "not semantic correctness",
+        "not production readiness",
+        "not full security",
+        "not action authority",
+    ]
+    .into_iter()
+    .map(|label| NonClaimLabel(label.to_owned()))
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_reviewer_policy_decision_labels() -> BTreeSet<String> {
+    [
+        "source_correspondence_review_accepted_for_local_metadata",
+        "source_correspondence_review_rejected",
+        "source_correspondence_review_blocked_by_policy_drift",
+        "source_correspondence_review_blocked_by_source_drift",
+        "source_correspondence_review_blocked_by_current_blocker_drift",
+        "source_correspondence_review_blocked_by_promotion_claim",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_reviewer_policy_decision_role_requirements() -> BTreeSet<String> {
+    [
+        "reviewer_policy_id_declared",
+        "reviewer_decision_id_declared",
+        "phase499_source_correspondence_digest_checked",
+        "phase499_binding_digests_checked",
+        "explicit_nonclaims_checked",
+        "promotion_language_rejected",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_reviewer_policy_decision_independence_requirements(
+) -> BTreeSet<String> {
+    [
+        "reviewer_independence_declared_locally",
+        "reviewer_conflict_status_declared_locally",
+        "local_declaration_only_not_external_audit",
+        "reviewer_identity_not_verified_by_this_gate",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_reviewer_policy_decision_drift_rejection_policy() -> BTreeSet<String>
+{
+    [
+        "phase499_record_digest_drift_rejected",
+        "phase499_input_digest_drift_rejected",
+        "phase499_binding_map_drift_rejected",
+        "phase499_source_anchor_set_drift_rejected",
+        "phase499_statement_digest_input_drift_rejected",
+        "phase499_source_path_digest_requirement_drift_rejected",
+        "phase499_drift_policy_drift_rejected",
+        "current_accepted_append_blocker_drift_rejected",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_reviewer_policy_decision_promotion_rejection_policy(
+) -> BTreeSet<String> {
+    [
+        "accepted_append_rejected",
+        "accepted_evidence_ledger_mutation_rejected",
+        "accepted_formal_evidence_rejected",
+        "level2_plus_rejected",
+        "score_axis_population_rejected",
+        "proof_checker_solver_authority_rejected",
+        "backend_execution_evidence_rejected",
+        "benchmark_evidence_rejected",
+        "sota_security_correctness_readiness_claims_rejected",
+        "external_audit_claim_rejected",
+        "action_authority_rejected",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_reviewer_policy_digest(reviewer_policy_id: &str) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-reviewer-policy-digest:v1",
+        &(
+            reviewer_policy_id,
+            gateway_formal_tiny_z3_reviewer_policy_decision_role_requirements(),
+            gateway_formal_tiny_z3_reviewer_policy_decision_independence_requirements(),
+            gateway_formal_tiny_z3_reviewer_policy_decision_labels(),
+            gateway_formal_tiny_z3_reviewer_policy_decision_drift_rejection_policy(),
+            gateway_formal_tiny_z3_reviewer_policy_decision_promotion_rejection_policy(),
+        ),
+    )
+}
+
+pub fn gateway_formal_tiny_z3_reviewer_decision_digest(
+    source_correspondence: &GatewayFormalTinyZ3SourceCorrespondence,
+    reviewer_policy_id: &str,
+    reviewer_policy_digest: Hash,
+    reviewer_decision_id: &str,
+    reviewer_decision_label: &GatewayFormalTinyZ3ReviewerDecisionLabel,
+    reviewer_decision_at_unix: u64,
+    reviewer_decision_summary: &str,
+    explicit_nonclaims_digest: Hash,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-reviewer-decision-digest:v1",
+        &(
+            source_correspondence.digest(),
+            source_correspondence.source_correspondence_input_digest,
+            reviewer_policy_id,
+            reviewer_policy_digest,
+            reviewer_decision_id,
+            reviewer_decision_label,
+            reviewer_decision_at_unix,
+            reviewer_decision_summary,
+            explicit_nonclaims_digest,
+        ),
+    )
+}
+
+pub fn gateway_formal_tiny_z3_reviewer_policy_decision_digest_bindings(
+    source_correspondence: &GatewayFormalTinyZ3SourceCorrespondence,
+) -> BTreeMap<String, Hash> {
+    BTreeMap::from([
+        (
+            "phase499_source_correspondence_digest".to_owned(),
+            source_correspondence.digest(),
+        ),
+        (
+            "phase499_source_correspondence_input_digest".to_owned(),
+            source_correspondence.source_correspondence_input_digest,
+        ),
+        (
+            "phase499_digest_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase499-source-correspondence-digest-bindings:v1",
+                &source_correspondence.digest_bindings,
+            ),
+        ),
+        (
+            "phase499_id_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase499-source-correspondence-id-bindings:v1",
+                &source_correspondence.id_bindings,
+            ),
+        ),
+        (
+            "phase499_label_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase499-source-correspondence-label-bindings:v1",
+                &source_correspondence.label_bindings,
+            ),
+        ),
+        (
+            "phase499_explicit_nonclaims_digest".to_owned(),
+            source_correspondence.explicit_nonclaims_digest,
+        ),
+        (
+            "phase499_source_anchor_set_digest".to_owned(),
+            source_correspondence.source_anchor_set_digest,
+        ),
+        (
+            "phase499_statement_digest_inputs_digest".to_owned(),
+            source_correspondence.statement_digest_inputs_digest,
+        ),
+        (
+            "phase499_source_path_digest_requirements_digest".to_owned(),
+            source_correspondence.source_path_digest_requirements_digest,
+        ),
+        (
+            "phase499_drift_rejection_policy_digest".to_owned(),
+            source_correspondence.drift_rejection_policy_digest,
+        ),
+        (
+            "current_accepted_append_blockers_digest".to_owned(),
+            source_correspondence.current_accepted_append_blockers_digest,
+        ),
+    ])
+}
+
+pub fn gateway_formal_tiny_z3_reviewer_policy_decision_id_bindings(
+    source_correspondence: &GatewayFormalTinyZ3SourceCorrespondence,
+    reviewer_gate_id: &str,
+    reviewer_policy_id: &str,
+    reviewer_decision_id: &str,
+) -> BTreeMap<String, String> {
+    let mut ids = source_correspondence.id_bindings.clone();
+    ids.insert("reviewer_gate_id".to_owned(), reviewer_gate_id.to_owned());
+    ids.insert(
+        "reviewer_policy_id".to_owned(),
+        reviewer_policy_id.to_owned(),
+    );
+    ids.insert(
+        "reviewer_decision_id".to_owned(),
+        reviewer_decision_id.to_owned(),
+    );
+    ids.insert(
+        "phase499_source_correspondence_gate_id".to_owned(),
+        source_correspondence.source_correspondence_gate_id.clone(),
+    );
+    ids
+}
+
+pub fn gateway_formal_tiny_z3_reviewer_policy_decision_label_bindings(
+    source_correspondence: &GatewayFormalTinyZ3SourceCorrespondence,
+    reviewer_decision_label: &GatewayFormalTinyZ3ReviewerDecisionLabel,
+) -> BTreeMap<String, String> {
+    let mut labels = source_correspondence.label_bindings.clone();
+    labels.insert(
+        "phase499_source_correspondence_label".to_owned(),
+        format!("{:?}", source_correspondence.source_correspondence_label),
+    );
+    labels.insert(
+        "reviewer_decision_label".to_owned(),
+        format!("{reviewer_decision_label:?}"),
+    );
+    labels
+}
+
+pub fn build_gateway_formal_tiny_z3_reviewer_policy_decision(
+    source_correspondence: &GatewayFormalTinyZ3SourceCorrespondence,
+    input: &GatewayFormalTinyZ3ReviewerPolicyDecisionInput,
+) -> Result<
+    GatewayFormalTinyZ3ReviewerPolicyDecision,
+    GatewayFormalTinyZ3ReviewerPolicyDecisionValidation,
+> {
+    let validation = validate_gateway_formal_tiny_z3_reviewer_policy_decision_input(
+        source_correspondence,
+        input,
+    );
+    if !validation.valid {
+        return Err(validation);
+    }
+    let digest_bindings =
+        gateway_formal_tiny_z3_reviewer_policy_decision_digest_bindings(source_correspondence);
+    Ok(GatewayFormalTinyZ3ReviewerPolicyDecision {
+        schema_version: GATEWAY_FORMAL_TINY_Z3_REVIEWER_POLICY_DECISION_SCHEMA_VERSION.to_owned(),
+        reviewer_gate_id: input.reviewer_gate_id.clone(),
+        state_slice: GATEWAY_FORMAL_TINY_Z3_REVIEWER_POLICY_DECISION_STATE_SLICE.to_owned(),
+        reviewer_policy_decision_input_digest: input.digest(),
+        reviewer_policy_id: input.reviewer_policy_id.clone(),
+        reviewer_policy_digest: input.reviewer_policy_digest,
+        reviewer_decision_id: input.reviewer_decision_id.clone(),
+        reviewer_decision_digest: input.reviewer_decision_digest,
+        reviewer_decision_at_unix: input.reviewer_decision_at_unix,
+        phase499_source_correspondence_digest: digest_bindings
+            ["phase499_source_correspondence_digest"],
+        phase499_source_correspondence_input_digest: digest_bindings
+            ["phase499_source_correspondence_input_digest"],
+        phase499_digest_binding_map_digest: digest_bindings["phase499_digest_binding_map_digest"],
+        phase499_id_binding_map_digest: digest_bindings["phase499_id_binding_map_digest"],
+        phase499_label_binding_map_digest: digest_bindings["phase499_label_binding_map_digest"],
+        phase499_explicit_nonclaims_digest: digest_bindings["phase499_explicit_nonclaims_digest"],
+        phase499_source_anchor_set_digest: digest_bindings["phase499_source_anchor_set_digest"],
+        phase499_statement_digest_inputs_digest: digest_bindings
+            ["phase499_statement_digest_inputs_digest"],
+        phase499_source_path_digest_requirements_digest: digest_bindings
+            ["phase499_source_path_digest_requirements_digest"],
+        phase499_drift_rejection_policy_digest: digest_bindings
+            ["phase499_drift_rejection_policy_digest"],
+        current_accepted_append_blockers_digest: digest_bindings
+            ["current_accepted_append_blockers_digest"],
+        digest_bindings: input.digest_bindings.clone(),
+        id_bindings: input.id_bindings.clone(),
+        label_bindings: input.label_bindings.clone(),
+        explicit_nonclaims: input.explicit_nonclaims.clone(),
+        explicit_nonclaims_digest: input.explicit_nonclaims_digest,
+        required_input_record_type: input.required_input_record_type.clone(),
+        reviewer_role_requirements: input.reviewer_role_requirements.clone(),
+        reviewer_independence_requirements: input.reviewer_independence_requirements.clone(),
+        reviewer_decision_labels: input.reviewer_decision_labels.clone(),
+        reviewer_decision_label: input.reviewer_decision_label.clone(),
+        reviewer_decision_summary: input.reviewer_decision_summary.clone(),
+        drift_rejection_policy: input.drift_rejection_policy.clone(),
+        promotion_rejection_policy: input.promotion_rejection_policy.clone(),
+        previous_promotion_state: "tiny_z3_source_correspondence_statement_metadata".to_owned(),
+        promotion_state: "tiny_z3_reviewer_policy_decision_metadata".to_owned(),
+        next_required_state: "tiny_z3_accepted_path_prerequisites_remain_unresolved".to_owned(),
+        claim_boundary: gateway_formal_tiny_z3_reviewer_policy_decision_claim_boundary(),
+        creates_review_artifact: false,
+        changes_accepted_append_policy: false,
+        makes_accepted_append_decision: false,
+        mutates_accepted_evidence_ledger: false,
+        creates_accepted_formal_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        backend_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        external_audit_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_gateway_formal_tiny_z3_reviewer_policy_decision_input(
+    source_correspondence: &GatewayFormalTinyZ3SourceCorrespondence,
+    input: &GatewayFormalTinyZ3ReviewerPolicyDecisionInput,
+) -> GatewayFormalTinyZ3ReviewerPolicyDecisionValidation {
+    let mut issues = Vec::new();
+    if input.schema_version != GATEWAY_FORMAL_TINY_Z3_REVIEWER_POLICY_DECISION_SCHEMA_VERSION {
+        issues.push(GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.reviewer_gate_id) {
+        issues.push(GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::InvalidReviewerGateId);
+    }
+    if !is_single_segment_id(&input.reviewer_policy_id) {
+        issues.push(GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::InvalidReviewerPolicyId);
+    }
+    if !is_single_segment_id(&input.reviewer_decision_id) {
+        issues.push(GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::InvalidReviewerDecisionId);
+    }
+    if input.reviewer_decision_at_unix == 0 {
+        issues
+            .push(GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::MissingReviewerDecisionTimestamp);
+    }
+    let expected_digests =
+        gateway_formal_tiny_z3_reviewer_policy_decision_digest_bindings(source_correspondence);
+    for (label, digest) in &input.digest_bindings {
+        if *digest == Hash([0; 32]) {
+            issues
+                .push(GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::MissingDigest(label.clone()));
+        }
+    }
+    if input.digest_bindings != expected_digests {
+        issues.push(GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::DigestBindingMismatch);
+    }
+    let expected_ids = gateway_formal_tiny_z3_reviewer_policy_decision_id_bindings(
+        source_correspondence,
+        &input.reviewer_gate_id,
+        &input.reviewer_policy_id,
+        &input.reviewer_decision_id,
+    );
+    for (label, value) in &input.id_bindings {
+        if !is_single_segment_id(value) {
+            issues.push(
+                GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::InvalidIdBinding(label.clone()),
+            );
+        }
+    }
+    if input.id_bindings != expected_ids {
+        issues.push(GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::IdBindingMismatch);
+    }
+    let expected_labels = gateway_formal_tiny_z3_reviewer_policy_decision_label_bindings(
+        source_correspondence,
+        &input.reviewer_decision_label,
+    );
+    if input.label_bindings != expected_labels {
+        issues.push(GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::LabelBindingMismatch);
+    }
+    if source_correspondence.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_SCHEMA_VERSION
+        || source_correspondence.state_slice
+            != GATEWAY_FORMAL_TINY_Z3_SOURCE_CORRESPONDENCE_STATE_SLICE
+        || source_correspondence.promotion_state
+            != "tiny_z3_source_correspondence_statement_metadata"
+        || source_correspondence.next_required_state
+            != "tiny_z3_accepted_path_prerequisites_remain_unresolved"
+        || source_correspondence.claim_boundary
+            != gateway_formal_tiny_z3_source_correspondence_claim_boundary()
+        || source_correspondence.creates_correspondence_artifact
+        || source_correspondence.creates_digest_sidecar
+        || source_correspondence.changes_accepted_append_policy
+        || source_correspondence.makes_accepted_append_decision
+        || source_correspondence.mutates_accepted_evidence_ledger
+        || source_correspondence.creates_accepted_formal_evidence
+        || source_correspondence.creates_level2_evidence
+        || source_correspondence.populates_score_axes
+        || source_correspondence.proof_artifact_created
+        || source_correspondence.checker_transcript_created
+        || source_correspondence.solver_certificate_created
+        || source_correspondence.backend_execution_evidence_created
+        || source_correspondence.benchmark_evidence_created
+        || source_correspondence.semantic_correctness_claimed
+        || source_correspondence.production_readiness_claimed
+        || source_correspondence.sota_claimed
+        || source_correspondence.breakthrough_claimed
+        || source_correspondence.full_security_claimed
+        || source_correspondence.grants_authority
+    {
+        issues.push(
+            GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::Phase499SourceCorrespondenceStateMismatch,
+        );
+    }
+    let nonclaims = gateway_formal_tiny_z3_reviewer_policy_decision_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-reviewer-policy-decision-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::NonclaimMismatch);
+    }
+    if input.reviewer_policy_digest
+        != gateway_formal_tiny_z3_reviewer_policy_digest(&input.reviewer_policy_id)
+    {
+        issues.push(GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::ReviewerPolicyDigestMismatch);
+    }
+    if input.reviewer_decision_digest
+        != gateway_formal_tiny_z3_reviewer_decision_digest(
+            source_correspondence,
+            &input.reviewer_policy_id,
+            input.reviewer_policy_digest,
+            &input.reviewer_decision_id,
+            &input.reviewer_decision_label,
+            input.reviewer_decision_at_unix,
+            &input.reviewer_decision_summary,
+            input.explicit_nonclaims_digest,
+        )
+    {
+        issues.push(GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::ReviewerDecisionDigestMismatch);
+    }
+    if input.required_input_record_type
+        != GATEWAY_FORMAL_TINY_Z3_REVIEWER_POLICY_DECISION_INPUT_TYPE
+    {
+        issues.push(GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::InvalidRequiredInputRecordType);
+    }
+    if input.reviewer_role_requirements
+        != gateway_formal_tiny_z3_reviewer_policy_decision_role_requirements()
+    {
+        issues
+            .push(GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::ReviewerRoleRequirementsMismatch);
+    }
+    if input.reviewer_independence_requirements
+        != gateway_formal_tiny_z3_reviewer_policy_decision_independence_requirements()
+    {
+        issues.push(
+            GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::ReviewerIndependenceRequirementsMismatch,
+        );
+    }
+    if input.reviewer_decision_labels != gateway_formal_tiny_z3_reviewer_policy_decision_labels() {
+        issues.push(GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::ReviewerDecisionLabelsMismatch);
+    }
+    if input.drift_rejection_policy
+        != gateway_formal_tiny_z3_reviewer_policy_decision_drift_rejection_policy()
+    {
+        issues.push(GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::DriftRejectionPolicyMismatch);
+    }
+    if input.promotion_rejection_policy
+        != gateway_formal_tiny_z3_reviewer_policy_decision_promotion_rejection_policy()
+    {
+        issues
+            .push(GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::PromotionRejectionPolicyMismatch);
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.reviewer_decision_summary,
+    ) {
+        issues.push(
+            GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::ReviewerDecisionSummaryPromotionClaim,
+        );
+    }
+    if input.review_artifact_creation_requested
+        || input.accepted_append_policy_change_requested
+        || input.accepted_append_decision_requested
+        || input.accepted_evidence_ledger_mutation_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.backend_execution_evidence_created
+        || input.benchmark_evidence_created
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.external_audit_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::PromotionAttempt);
+    }
+    GatewayFormalTinyZ3ReviewerPolicyDecisionValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -90755,6 +91444,234 @@ mod tests {
     }
 
     #[test]
+    fn phase501_tiny_z3_reviewer_policy_decision_builds_blocking_record() {
+        let Some((obligation_root, phase405_output_root, output_root, source_correspondence)) =
+            phase501_tiny_z3_source_correspondence_source("phase501-reviewer-decision")
+        else {
+            return;
+        };
+        let reviewer_input = phase501_tiny_z3_reviewer_policy_decision_input(
+            "phase501-reviewer-policy-decision",
+            &source_correspondence,
+            GatewayFormalTinyZ3ReviewerDecisionLabel::SourceCorrespondenceReviewAcceptedForLocalMetadata,
+        );
+        let reviewer_decision = build_gateway_formal_tiny_z3_reviewer_policy_decision(
+            &source_correspondence,
+            &reviewer_input,
+        )
+        .expect("phase501 reviewer policy decision builds");
+
+        assert_eq!(
+            reviewer_decision.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_REVIEWER_POLICY_DECISION_STATE_SLICE
+        );
+        assert_eq!(
+            reviewer_decision.phase499_source_correspondence_digest,
+            source_correspondence.digest()
+        );
+        assert_eq!(
+            reviewer_decision.phase499_source_correspondence_input_digest,
+            source_correspondence.source_correspondence_input_digest
+        );
+        assert_eq!(
+            reviewer_decision.phase499_digest_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase499-source-correspondence-digest-bindings:v1",
+                &source_correspondence.digest_bindings,
+            )
+        );
+        assert_eq!(
+            reviewer_decision.phase499_id_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase499-source-correspondence-id-bindings:v1",
+                &source_correspondence.id_bindings,
+            )
+        );
+        assert_eq!(
+            reviewer_decision.phase499_label_binding_map_digest,
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase499-source-correspondence-label-bindings:v1",
+                &source_correspondence.label_bindings,
+            )
+        );
+        assert_eq!(
+            reviewer_decision.phase499_source_anchor_set_digest,
+            source_correspondence.source_anchor_set_digest
+        );
+        assert_eq!(
+            reviewer_decision.phase499_statement_digest_inputs_digest,
+            source_correspondence.statement_digest_inputs_digest
+        );
+        assert_eq!(
+            reviewer_decision.phase499_source_path_digest_requirements_digest,
+            source_correspondence.source_path_digest_requirements_digest
+        );
+        assert_eq!(
+            reviewer_decision.phase499_drift_rejection_policy_digest,
+            source_correspondence.drift_rejection_policy_digest
+        );
+        assert_eq!(
+            reviewer_decision.reviewer_policy_digest,
+            gateway_formal_tiny_z3_reviewer_policy_digest(&reviewer_input.reviewer_policy_id)
+        );
+        assert_eq!(
+            reviewer_decision.reviewer_decision_digest,
+            gateway_formal_tiny_z3_reviewer_decision_digest(
+                &source_correspondence,
+                &reviewer_input.reviewer_policy_id,
+                reviewer_input.reviewer_policy_digest,
+                &reviewer_input.reviewer_decision_id,
+                &reviewer_input.reviewer_decision_label,
+                reviewer_input.reviewer_decision_at_unix,
+                &reviewer_input.reviewer_decision_summary,
+                reviewer_input.explicit_nonclaims_digest,
+            )
+        );
+        assert_eq!(
+            reviewer_decision.required_input_record_type,
+            GATEWAY_FORMAL_TINY_Z3_REVIEWER_POLICY_DECISION_INPUT_TYPE
+        );
+        assert_eq!(
+            reviewer_decision.reviewer_decision_labels,
+            gateway_formal_tiny_z3_reviewer_policy_decision_labels()
+        );
+        assert_eq!(
+            reviewer_decision.reviewer_role_requirements,
+            gateway_formal_tiny_z3_reviewer_policy_decision_role_requirements()
+        );
+        assert_eq!(
+            reviewer_decision.reviewer_independence_requirements,
+            gateway_formal_tiny_z3_reviewer_policy_decision_independence_requirements()
+        );
+        assert_eq!(
+            reviewer_decision.previous_promotion_state,
+            "tiny_z3_source_correspondence_statement_metadata"
+        );
+        assert_eq!(
+            reviewer_decision.promotion_state,
+            "tiny_z3_reviewer_policy_decision_metadata"
+        );
+        assert_eq!(
+            reviewer_decision.claim_boundary,
+            gateway_formal_tiny_z3_reviewer_policy_decision_claim_boundary()
+        );
+        assert!(!reviewer_decision.creates_review_artifact);
+        assert!(!reviewer_decision.changes_accepted_append_policy);
+        assert!(!reviewer_decision.makes_accepted_append_decision);
+        assert!(!reviewer_decision.mutates_accepted_evidence_ledger);
+        assert!(!reviewer_decision.creates_accepted_formal_evidence);
+        assert!(!reviewer_decision.creates_level2_evidence);
+        assert!(!reviewer_decision.populates_score_axes);
+        assert!(!reviewer_decision.proof_artifact_created);
+        assert!(!reviewer_decision.checker_transcript_created);
+        assert!(!reviewer_decision.solver_certificate_created);
+        assert!(!reviewer_decision.backend_execution_evidence_created);
+        assert!(!reviewer_decision.benchmark_evidence_created);
+        assert!(!reviewer_decision.semantic_correctness_claimed);
+        assert!(!reviewer_decision.production_readiness_claimed);
+        assert!(!reviewer_decision.sota_claimed);
+        assert!(!reviewer_decision.breakthrough_claimed);
+        assert!(!reviewer_decision.full_security_claimed);
+        assert!(!reviewer_decision.external_audit_claimed);
+        assert!(!reviewer_decision.grants_authority);
+
+        let mut digest_drift = reviewer_input.clone();
+        digest_drift.digest_bindings.insert(
+            "phase499_source_correspondence_digest".to_owned(),
+            Hash([59; 32]),
+        );
+        let digest_validation = validate_gateway_formal_tiny_z3_reviewer_policy_decision_input(
+            &source_correspondence,
+            &digest_drift,
+        );
+        assert!(digest_validation
+            .issues
+            .contains(&GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::DigestBindingMismatch));
+
+        let mut label_drift = reviewer_input.clone();
+        label_drift
+            .reviewer_decision_labels
+            .remove("source_correspondence_review_rejected");
+        let label_validation = validate_gateway_formal_tiny_z3_reviewer_policy_decision_input(
+            &source_correspondence,
+            &label_drift,
+        );
+        assert!(label_validation.issues.contains(
+            &GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::ReviewerDecisionLabelsMismatch
+        ));
+
+        let mut decision_digest_drift = reviewer_input.clone();
+        decision_digest_drift.reviewer_decision_digest = Hash([60; 32]);
+        let decision_digest_validation =
+            validate_gateway_formal_tiny_z3_reviewer_policy_decision_input(
+                &source_correspondence,
+                &decision_digest_drift,
+            );
+        assert!(decision_digest_validation.issues.contains(
+            &GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::ReviewerDecisionDigestMismatch
+        ));
+
+        fs::remove_dir_all(&output_root).expect("phase501 reviewer output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase501 reviewer phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase501 reviewer obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase501_tiny_z3_reviewer_policy_decision_rejects_promotion() {
+        let Some((obligation_root, phase405_output_root, output_root, source_correspondence)) =
+            phase501_tiny_z3_source_correspondence_source("phase501-reviewer-promotion")
+        else {
+            return;
+        };
+        let mut reviewer_input = phase501_tiny_z3_reviewer_policy_decision_input(
+            "phase501-promotion-reviewer-decision",
+            &source_correspondence,
+            GatewayFormalTinyZ3ReviewerDecisionLabel::SourceCorrespondenceReviewBlockedByPromotionClaim,
+        );
+
+        reviewer_input.review_artifact_creation_requested = true;
+        reviewer_input.accepted_append_policy_change_requested = true;
+        reviewer_input.accepted_append_decision_requested = true;
+        reviewer_input.accepted_evidence_ledger_mutation_requested = true;
+        reviewer_input.accepted_formal_evidence_created = true;
+        reviewer_input.creates_level2_evidence = true;
+        reviewer_input.populates_score_axes = true;
+        reviewer_input.proof_artifact_promoted = true;
+        reviewer_input.checker_transcript_promoted = true;
+        reviewer_input.solver_certificate_promoted = true;
+        reviewer_input.backend_execution_evidence_created = true;
+        reviewer_input.benchmark_evidence_created = true;
+        reviewer_input.semantic_correctness_claimed = true;
+        reviewer_input.production_readiness_claimed = true;
+        reviewer_input.sota_claimed = true;
+        reviewer_input.breakthrough_claimed = true;
+        reviewer_input.full_security_claimed = true;
+        reviewer_input.external_audit_claimed = true;
+        reviewer_input.action_authority_claimed = true;
+        let validation = validate_gateway_formal_tiny_z3_reviewer_policy_decision_input(
+            &source_correspondence,
+            &reviewer_input,
+        );
+        assert!(validation
+            .issues
+            .contains(&GatewayFormalTinyZ3ReviewerPolicyDecisionIssue::PromotionAttempt));
+        assert!(build_gateway_formal_tiny_z3_reviewer_policy_decision(
+            &source_correspondence,
+            &reviewer_input,
+        )
+        .is_err());
+
+        fs::remove_dir_all(&output_root)
+            .expect("phase501 reviewer promotion output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase501 reviewer promotion phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase501 reviewer promotion obligation cleanup succeeds");
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -97639,6 +98556,119 @@ mod tests {
             phase405_output_root,
             output_root,
             replay_identity,
+        ))
+    }
+
+    fn phase501_tiny_z3_reviewer_policy_decision_input(
+        reviewer_gate_id: &str,
+        source_correspondence: &GatewayFormalTinyZ3SourceCorrespondence,
+        reviewer_decision_label: GatewayFormalTinyZ3ReviewerDecisionLabel,
+    ) -> GatewayFormalTinyZ3ReviewerPolicyDecisionInput {
+        let reviewer_policy_id = "phase501-reviewer-policy";
+        let reviewer_decision_id = "phase501-reviewer-decision";
+        let reviewer_decision_at_unix = 1_800_000_501;
+        let nonclaims = gateway_formal_tiny_z3_reviewer_policy_decision_required_nonclaims();
+        let explicit_nonclaims_digest = hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-reviewer-policy-decision-nonclaims:v1",
+            &nonclaims,
+        );
+        let reviewer_policy_digest =
+            gateway_formal_tiny_z3_reviewer_policy_digest(reviewer_policy_id);
+        let reviewer_decision_summary =
+            "local tiny-Z3 reviewer policy decision metadata accepts source correspondence only for local metadata"
+                .to_owned();
+        let reviewer_decision_digest = gateway_formal_tiny_z3_reviewer_decision_digest(
+            source_correspondence,
+            reviewer_policy_id,
+            reviewer_policy_digest,
+            reviewer_decision_id,
+            &reviewer_decision_label,
+            reviewer_decision_at_unix,
+            &reviewer_decision_summary,
+            explicit_nonclaims_digest,
+        );
+        GatewayFormalTinyZ3ReviewerPolicyDecisionInput {
+            schema_version: GATEWAY_FORMAL_TINY_Z3_REVIEWER_POLICY_DECISION_SCHEMA_VERSION
+                .to_owned(),
+            reviewer_gate_id: reviewer_gate_id.to_owned(),
+            reviewer_policy_id: reviewer_policy_id.to_owned(),
+            reviewer_policy_digest,
+            reviewer_decision_id: reviewer_decision_id.to_owned(),
+            reviewer_decision_digest,
+            reviewer_decision_at_unix,
+            digest_bindings: gateway_formal_tiny_z3_reviewer_policy_decision_digest_bindings(
+                source_correspondence,
+            ),
+            id_bindings: gateway_formal_tiny_z3_reviewer_policy_decision_id_bindings(
+                source_correspondence,
+                reviewer_gate_id,
+                reviewer_policy_id,
+                reviewer_decision_id,
+            ),
+            label_bindings: gateway_formal_tiny_z3_reviewer_policy_decision_label_bindings(
+                source_correspondence,
+                &reviewer_decision_label,
+            ),
+            explicit_nonclaims: nonclaims,
+            explicit_nonclaims_digest,
+            required_input_record_type: GATEWAY_FORMAL_TINY_Z3_REVIEWER_POLICY_DECISION_INPUT_TYPE
+                .to_owned(),
+            reviewer_role_requirements:
+                gateway_formal_tiny_z3_reviewer_policy_decision_role_requirements(),
+            reviewer_independence_requirements:
+                gateway_formal_tiny_z3_reviewer_policy_decision_independence_requirements(),
+            reviewer_decision_labels: gateway_formal_tiny_z3_reviewer_policy_decision_labels(),
+            reviewer_decision_label,
+            reviewer_decision_summary,
+            drift_rejection_policy:
+                gateway_formal_tiny_z3_reviewer_policy_decision_drift_rejection_policy(),
+            promotion_rejection_policy:
+                gateway_formal_tiny_z3_reviewer_policy_decision_promotion_rejection_policy(),
+            review_artifact_creation_requested: false,
+            accepted_append_policy_change_requested: false,
+            accepted_append_decision_requested: false,
+            accepted_evidence_ledger_mutation_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            backend_execution_evidence_created: false,
+            benchmark_evidence_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            external_audit_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase501_tiny_z3_source_correspondence_source(
+        source_prefix: &str,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        GatewayFormalTinyZ3SourceCorrespondence,
+    )> {
+        let (obligation_root, phase405_output_root, output_root, replay_identity) =
+            phase499_tiny_z3_replay_identity_source(source_prefix)?;
+        let source_input = phase499_tiny_z3_source_correspondence_input(
+            &format!("{source_prefix}-source-correspondence"),
+            &replay_identity,
+            GatewayFormalTinyZ3SourceCorrespondenceLabel::SourceCorrespondenceStatementRecorded,
+        );
+        let source_correspondence =
+            build_gateway_formal_tiny_z3_source_correspondence(&replay_identity, &source_input)
+                .expect("phase501 source correspondence builds");
+        Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            source_correspondence,
         ))
     }
 
