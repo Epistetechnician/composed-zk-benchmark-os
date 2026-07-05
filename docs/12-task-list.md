@@ -16947,6 +16947,36 @@ Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution, no
 benchmark evidence, no external audit evidence, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 601 HSAI Tiny Z3 Backend Execution Packet Role Artifact Independent Operator Accepted Result Evidence Eligibility Metadata
+
+Status: complete. See
+`docs/601-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-accepted-result-evidence-eligibility-metadata-notes.md`.
+
+Goal: implement local accepted-result evidence eligibility metadata over one
+exact Phase 599 blocked packet-role artifact independent-operator import-review
+metadata record.
+
+Implemented: Phase 601 adds independent-operator accepted-result eligibility
+constants, input/output/issue/validation/classification/label types,
+deterministic Phase 599 review digest bindings, policy/blocker/nonpromotion
+digests, inherited-digest requirements, and fail-closed Phase 599 exactness
+checks. The only valid classification is
+`PacketRoleArtifactIndependentOperatorAcceptedResultBlockedPolicyNotSatisfied`.
+
+Validation coverage: focused `hsai-agent-admission` tests cover successful
+blocked eligibility metadata, Phase 599 promoted-state drift rejection,
+inherited Phase 597 digest drift rejection, accepted-ledger mutation rejection
+through promotion flags, and strong-claim rejection.
+
+Exit criteria: HSAI can now classify one blocked Phase 599 packet-role artifact
+independent-operator import review as still blocked for accepted-result evidence
+eligibility. It still has no external result import, no accepted external result
+evidence, no accepted independent external reproduction, no accepted formal
+evidence, no Level2+ evidence, no populated score axes, no
+Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution, no
+benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
