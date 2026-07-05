@@ -614,6 +614,7 @@ Surface DSL
 | [docs/526-hsai-tiny-z3-backend-execution-boundary.md](docs/526-hsai-tiny-z3-backend-execution-boundary.md) | Phase 526 HSAI tiny Z3 backend execution boundary. |
 | [docs/527-hsai-tiny-z3-backend-execution-candidate-metadata-notes.md](docs/527-hsai-tiny-z3-backend-execution-candidate-metadata-notes.md) | Phase 527 HSAI tiny Z3 backend execution candidate metadata notes. |
 | [docs/528-hsai-tiny-z3-hermetic-backend-execution-result-boundary.md](docs/528-hsai-tiny-z3-hermetic-backend-execution-result-boundary.md) | Phase 528 HSAI tiny Z3 hermetic backend execution result boundary. |
+| [docs/529-hsai-tiny-z3-hermetic-backend-execution-result-notes.md](docs/529-hsai-tiny-z3-hermetic-backend-execution-result-notes.md) | Phase 529 HSAI tiny Z3 hermetic backend execution result notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |

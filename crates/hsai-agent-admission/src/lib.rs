@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
-use std::io;
+use std::io::{self, Write};
 use std::path::{Path, PathBuf};
 use std::process::Stdio;
 use std::str::FromStr;
@@ -1067,6 +1067,11 @@ pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_CANDIDATE_CLAIM_BOUNDARY: &st
 pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_LANE_A_ID: &str = "lane-a-scoped-smt-z3-replay";
 pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_LANE_B_ID: &str = "lane-b-lean-rust-to-lean";
 pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_LANE_C_ID: &str = "lane-c-cobalt-containment";
+pub const GATEWAY_FORMAL_TINY_Z3_HERMETIC_BACKEND_EXECUTION_RESULT_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-z3-hermetic-backend-execution-result:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_HERMETIC_BACKEND_EXECUTION_RESULT_STATE_SLICE: &str =
+    "phase-529-hsai-tiny-z3-hermetic-backend-execution-result-metadata";
+pub const GATEWAY_FORMAL_TINY_Z3_HERMETIC_BACKEND_EXECUTION_RESULT_CLAIM_BOUNDARY: &str = "local tiny-Z3 hermetic backend execution result metadata only; records one scoped Lane A SMT/Z3 process observation over one exact Phase 527 backend-execution candidate, with redacted stdout/stderr summary digests, no raw log retention, no repository-root writes, no accepted evidence, no Level2+ evidence, no score-axis population, no Lean proof, no COBALT containment evidence, no Rust-to-Lean extraction, no benchmark evidence, no semantic-correctness claim, no production-readiness claim, no SOTA claim, no breakthrough claim, no full-security claim, no external-audit claim, and no authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -16121,6 +16126,128 @@ pub enum GatewayFormalTinyZ3BackendExecutionCandidateIssue {
 pub struct GatewayFormalTinyZ3BackendExecutionCandidateValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyZ3BackendExecutionCandidateIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3HermeticBackendExecutionResultClassification {
+    LaneASmtZ3RunObservedLocalOnly,
+    LaneASmtZ3RunInvalid,
+    LaneASmtZ3RunTimedOut,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3HermeticBackendExecutionResultLabel {
+    HermeticBackendExecutionResultRecorded,
+    HermeticBackendExecutionResultRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3HermeticBackendExecutionRequest {
+    pub schema_version: String,
+    pub execution_result_id: String,
+    pub execution_policy_id: String,
+    pub execution_decision_id: String,
+    pub executed_at_unix: u64,
+    pub smtlib2_obligation_digest: Hash,
+    pub expected_executable_digest: Hash,
+    pub expected_argv_digest: Hash,
+    pub expected_working_directory_policy_digest: Hash,
+    pub expected_environment_digest: Hash,
+    pub timeout_millis: u64,
+    pub max_stdout_bytes: u64,
+    pub max_stderr_bytes: u64,
+    pub execution_label: GatewayFormalTinyZ3HermeticBackendExecutionResultLabel,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+}
+
+impl GatewayFormalTinyZ3HermeticBackendExecutionRequest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-hermetic-backend-execution-request:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3HermeticBackendExecutionResult {
+    pub schema_version: String,
+    pub execution_result_id: String,
+    pub state_slice: String,
+    pub request_digest: Hash,
+    pub phase527_candidate_digest: Hash,
+    pub phase527_candidate_input_digest: Hash,
+    pub phase527_requested_lane: GatewayFormalTinyZ3BackendExecutionLane,
+    pub phase527_classification: GatewayFormalTinyZ3BackendExecutionCandidateClassification,
+    pub phase527_obligation_artifact_digest: Hash,
+    pub phase527_toolchain_descriptor_digest: Hash,
+    pub phase527_command_descriptor_digest: Hash,
+    pub phase527_expected_output_grammar_digest: Hash,
+    pub phase527_timeout_policy_digest: Hash,
+    pub phase527_scratch_output_root_policy_digest: Hash,
+    pub actual_smtlib2_text_digest: Hash,
+    pub executed_at_unix: u64,
+    pub classification: GatewayFormalTinyZ3HermeticBackendExecutionResultClassification,
+    pub execution_label: GatewayFormalTinyZ3HermeticBackendExecutionResultLabel,
+    pub executable_digest: Hash,
+    pub argv_digest: Hash,
+    pub working_directory_policy_digest: Hash,
+    pub environment_digest: Hash,
+    pub timeout_policy_digest: Hash,
+    pub timeout_observed: bool,
+    pub exit_code_label: String,
+    pub stdout_summary_digest: Hash,
+    pub stderr_summary_digest: Hash,
+    pub output_classification_digest: Hash,
+    pub solver_verdict_label: GatewayFormalRealCommandLaneSolverVerdictLabel,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub claim_boundary: String,
+    pub process_spawned: bool,
+    pub backend_executed: bool,
+    pub backend_artifact_written: bool,
+    pub network_access_observed: bool,
+    pub repository_root_write_observed: bool,
+    pub raw_stdout_stderr_retained: bool,
+    pub creates_accepted_external_result_evidence: bool,
+    pub writes_accepted_evidence_artifacts: bool,
+    pub creates_accepted_formal_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub lean_execution_evidence_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3HermeticBackendExecutionResult {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-hermetic-backend-execution-result:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayFormalTinyZ3HermeticBackendExecutionError {
+    InvalidRequest,
+    CandidateStateMismatch,
+    ExecutableRead(String),
+    ExecutableDigestMismatch,
+    StdinWrite(String),
+    ProcessSpawn(String),
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -65658,6 +65785,338 @@ pub fn validate_gateway_formal_tiny_z3_backend_execution_candidate_input(
     }
 }
 
+pub fn gateway_formal_tiny_z3_hermetic_backend_execution_result_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_Z3_HERMETIC_BACKEND_EXECUTION_RESULT_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_z3_hermetic_backend_execution_result_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims = gateway_formal_tiny_z3_backend_execution_candidate_required_nonclaims();
+    for label in [
+        "not accepted backend evidence",
+        "not accepted external result evidence",
+        "not checker transcript",
+        "not solver certificate",
+        "not proof artifact",
+        "not Level2 evidence",
+        "not score axis population",
+    ] {
+        nonclaims.insert(NonClaimLabel(label.to_owned()));
+    }
+    nonclaims
+}
+
+pub fn gateway_formal_tiny_z3_hermetic_backend_execution_result_argv_digest() -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-hermetic-backend-execution-argv:v1",
+        &["-in", "-smt2"],
+    )
+}
+
+pub fn gateway_formal_tiny_z3_hermetic_backend_execution_result_working_directory_policy_digest(
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-hermetic-backend-execution-working-directory-policy:v1",
+        &"no_chdir_no_repository_root_write",
+    )
+}
+
+pub fn gateway_formal_tiny_z3_hermetic_backend_execution_result_environment_digest() -> Hash {
+    let environment: BTreeMap<String, String> = BTreeMap::new();
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-hermetic-backend-execution-environment:v1",
+        &environment,
+    )
+}
+
+pub fn gateway_formal_tiny_z3_hermetic_backend_execution_result_timeout_policy_digest(
+    timeout_millis: u64,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-hermetic-backend-execution-timeout-policy:v1",
+        &timeout_millis,
+    )
+}
+
+fn gateway_formal_tiny_z3_hermetic_backend_execution_candidate_exact(
+    candidate: &GatewayFormalTinyZ3BackendExecutionCandidate,
+) -> bool {
+    candidate.schema_version == GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_CANDIDATE_SCHEMA_VERSION
+        && candidate.state_slice == GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_CANDIDATE_STATE_SLICE
+        && candidate.promotion_state == "tiny_z3_backend_execution_candidate_metadata"
+        && candidate.next_required_state == "tiny_z3_hermetic_backend_execution_result_still_unperformed"
+        && candidate.requested_lane
+            == GatewayFormalTinyZ3BackendExecutionLane::LaneAScopedSmtZ3Replay
+        && candidate.classification
+            == GatewayFormalTinyZ3BackendExecutionCandidateClassification::LaneAExecutionCandidateDeclaredNoRun
+        && candidate.lane_a_open
+        && !candidate.lane_b_open
+        && !candidate.lane_c_open
+        && candidate.process_spawn_request_described
+        && !candidate.backend_execution_performed
+        && !candidate.backend_artifact_written
+        && !candidate.network_access_requested
+        && !candidate.repository_root_write_requested
+        && !candidate.raw_stdout_stderr_retained
+        && !candidate.creates_accepted_external_result_evidence
+        && !candidate.writes_accepted_evidence_artifacts
+        && !candidate.claims_independent_external_reproduction
+        && !candidate.writes_level2_artifact_files
+        && !candidate.writes_score_axis_artifact_files
+        && !candidate.populates_score_axes
+        && !candidate.creates_accepted_formal_evidence
+        && !candidate.creates_level2_evidence
+        && !candidate.proof_artifact_created
+        && !candidate.checker_transcript_created
+        && !candidate.solver_certificate_created
+        && !candidate.lean_execution_evidence_created
+        && !candidate.cobalt_execution_evidence_created
+        && !candidate.rust_to_lean_execution_evidence_created
+        && !candidate.benchmark_evidence_created
+        && !candidate.external_audit_evidence_created
+        && !candidate.semantic_correctness_claimed
+        && !candidate.production_readiness_claimed
+        && !candidate.sota_claimed
+        && !candidate.breakthrough_claimed
+        && !candidate.full_security_claimed
+        && !candidate.grants_authority
+        && candidate.obligation_artifact_digest != Hash([0; 32])
+        && candidate.toolchain_descriptor_digest != Hash([0; 32])
+        && candidate.command_descriptor_digest != Hash([0; 32])
+        && candidate.expected_output_grammar_digest != Hash([0; 32])
+        && candidate.timeout_policy_digest != Hash([0; 32])
+        && candidate.scratch_output_root_policy_digest != Hash([0; 32])
+}
+
+fn gateway_formal_tiny_z3_hermetic_backend_execution_request_valid(
+    candidate: &GatewayFormalTinyZ3BackendExecutionCandidate,
+    request: &GatewayFormalTinyZ3HermeticBackendExecutionRequest,
+) -> bool {
+    let nonclaims = gateway_formal_tiny_z3_hermetic_backend_execution_result_required_nonclaims();
+    request.schema_version == GATEWAY_FORMAL_TINY_Z3_HERMETIC_BACKEND_EXECUTION_RESULT_SCHEMA_VERSION
+        && is_single_segment_id(&request.execution_result_id)
+        && is_single_segment_id(&request.execution_policy_id)
+        && is_single_segment_id(&request.execution_decision_id)
+        && request.executed_at_unix != 0
+        && request.smtlib2_obligation_digest == candidate.obligation_artifact_digest
+        && request.expected_executable_digest != Hash([0; 32])
+        && request.expected_argv_digest
+            == gateway_formal_tiny_z3_hermetic_backend_execution_result_argv_digest()
+        && request.expected_working_directory_policy_digest
+            == gateway_formal_tiny_z3_hermetic_backend_execution_result_working_directory_policy_digest()
+        && request.expected_environment_digest
+            == gateway_formal_tiny_z3_hermetic_backend_execution_result_environment_digest()
+        && request.timeout_millis > 0
+        && request.timeout_millis <= 5_000
+        && request.max_stdout_bytes > 0
+        && request.max_stdout_bytes <= 4_096
+        && request.max_stderr_bytes > 0
+        && request.max_stderr_bytes <= 4_096
+        && request.execution_label
+            == GatewayFormalTinyZ3HermeticBackendExecutionResultLabel::HermeticBackendExecutionResultRecorded
+        && request.explicit_nonclaims == nonclaims
+        && request.explicit_nonclaims_digest
+            == hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-hermetic-backend-execution-result-nonclaims:v1",
+                &nonclaims,
+            )
+}
+
+pub fn run_gateway_formal_tiny_z3_hermetic_backend_execution_result(
+    candidate: &GatewayFormalTinyZ3BackendExecutionCandidate,
+    request: &GatewayFormalTinyZ3HermeticBackendExecutionRequest,
+    z3_executable: &Path,
+    smtlib2_text: &str,
+) -> Result<
+    GatewayFormalTinyZ3HermeticBackendExecutionResult,
+    GatewayFormalTinyZ3HermeticBackendExecutionError,
+> {
+    if !gateway_formal_tiny_z3_hermetic_backend_execution_candidate_exact(candidate) {
+        return Err(GatewayFormalTinyZ3HermeticBackendExecutionError::CandidateStateMismatch);
+    }
+    if !gateway_formal_tiny_z3_hermetic_backend_execution_request_valid(candidate, request)
+        || smtlib2_text.trim().is_empty()
+    {
+        return Err(GatewayFormalTinyZ3HermeticBackendExecutionError::InvalidRequest);
+    }
+    let executable_bytes = fs::read(z3_executable).map_err(|error| {
+        GatewayFormalTinyZ3HermeticBackendExecutionError::ExecutableRead(error.to_string())
+    })?;
+    let executable_digest = hash_bytes(&executable_bytes);
+    if executable_digest != request.expected_executable_digest {
+        return Err(GatewayFormalTinyZ3HermeticBackendExecutionError::ExecutableDigestMismatch);
+    }
+
+    let mut command = std::process::Command::new(z3_executable);
+    command
+        .args(["-in", "-smt2"])
+        .env_clear()
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped());
+    let mut child = command.spawn().map_err(|error| {
+        GatewayFormalTinyZ3HermeticBackendExecutionError::ProcessSpawn(error.to_string())
+    })?;
+    {
+        let mut stdin = child.stdin.take().ok_or_else(|| {
+            GatewayFormalTinyZ3HermeticBackendExecutionError::StdinWrite(
+                "z3 stdin unavailable".to_owned(),
+            )
+        })?;
+        stdin.write_all(smtlib2_text.as_bytes()).map_err(|error| {
+            GatewayFormalTinyZ3HermeticBackendExecutionError::StdinWrite(error.to_string())
+        })?;
+    }
+    let deadline = Instant::now() + Duration::from_millis(request.timeout_millis);
+    loop {
+        if child
+            .try_wait()
+            .map_err(|error| {
+                GatewayFormalTinyZ3HermeticBackendExecutionError::ProcessSpawn(error.to_string())
+            })?
+            .is_some()
+        {
+            let output = child.wait_with_output().map_err(|error| {
+                GatewayFormalTinyZ3HermeticBackendExecutionError::ProcessSpawn(error.to_string())
+            })?;
+            return Ok(
+                gateway_formal_tiny_z3_hermetic_backend_execution_result_from_output(
+                    candidate,
+                    request,
+                    executable_digest,
+                    hash_bytes(smtlib2_text.as_bytes()),
+                    output.status.code(),
+                    false,
+                    &output.stdout,
+                    &output.stderr,
+                ),
+            );
+        }
+        if Instant::now() >= deadline {
+            let _ = child.kill();
+            let output = child.wait_with_output().map_err(|error| {
+                GatewayFormalTinyZ3HermeticBackendExecutionError::ProcessSpawn(error.to_string())
+            })?;
+            return Ok(
+                gateway_formal_tiny_z3_hermetic_backend_execution_result_from_output(
+                    candidate,
+                    request,
+                    executable_digest,
+                    hash_bytes(smtlib2_text.as_bytes()),
+                    None,
+                    true,
+                    &output.stdout,
+                    &output.stderr,
+                ),
+            );
+        }
+        std::thread::sleep(Duration::from_millis(5));
+    }
+}
+
+fn gateway_formal_tiny_z3_hermetic_backend_execution_result_from_output(
+    candidate: &GatewayFormalTinyZ3BackendExecutionCandidate,
+    request: &GatewayFormalTinyZ3HermeticBackendExecutionRequest,
+    executable_digest: Hash,
+    actual_smtlib2_text_digest: Hash,
+    exit_code: Option<i32>,
+    timeout: bool,
+    stdout: &[u8],
+    stderr: &[u8],
+) -> GatewayFormalTinyZ3HermeticBackendExecutionResult {
+    let stdout_summary = gateway_formal_real_command_lane_fixed_smt_stream_summary(
+        "stdout",
+        request.max_stdout_bytes,
+        stdout,
+    );
+    let stderr_summary = gateway_formal_real_command_lane_fixed_smt_stream_summary(
+        "stderr",
+        request.max_stderr_bytes,
+        stderr,
+    );
+    let solver_verdict =
+        gateway_formal_real_command_lane_fixed_smt_solver_verdict(timeout, stdout, stderr);
+    GatewayFormalTinyZ3HermeticBackendExecutionResult {
+        schema_version: GATEWAY_FORMAL_TINY_Z3_HERMETIC_BACKEND_EXECUTION_RESULT_SCHEMA_VERSION
+            .to_owned(),
+        execution_result_id: request.execution_result_id.clone(),
+        state_slice: GATEWAY_FORMAL_TINY_Z3_HERMETIC_BACKEND_EXECUTION_RESULT_STATE_SLICE
+            .to_owned(),
+        request_digest: request.digest(),
+        phase527_candidate_digest: candidate.digest(),
+        phase527_candidate_input_digest: candidate.execution_candidate_input_digest,
+        phase527_requested_lane: candidate.requested_lane.clone(),
+        phase527_classification: candidate.classification.clone(),
+        phase527_obligation_artifact_digest: candidate.obligation_artifact_digest,
+        phase527_toolchain_descriptor_digest: candidate.toolchain_descriptor_digest,
+        phase527_command_descriptor_digest: candidate.command_descriptor_digest,
+        phase527_expected_output_grammar_digest: candidate.expected_output_grammar_digest,
+        phase527_timeout_policy_digest: candidate.timeout_policy_digest,
+        phase527_scratch_output_root_policy_digest: candidate.scratch_output_root_policy_digest,
+        actual_smtlib2_text_digest,
+        executed_at_unix: request.executed_at_unix,
+        classification: if timeout {
+            GatewayFormalTinyZ3HermeticBackendExecutionResultClassification::LaneASmtZ3RunTimedOut
+        } else if exit_code == Some(0) {
+            GatewayFormalTinyZ3HermeticBackendExecutionResultClassification::LaneASmtZ3RunObservedLocalOnly
+        } else {
+            GatewayFormalTinyZ3HermeticBackendExecutionResultClassification::LaneASmtZ3RunInvalid
+        },
+        execution_label: request.execution_label.clone(),
+        executable_digest,
+        argv_digest: request.expected_argv_digest,
+        working_directory_policy_digest: request.expected_working_directory_policy_digest,
+        environment_digest: request.expected_environment_digest,
+        timeout_policy_digest:
+            gateway_formal_tiny_z3_hermetic_backend_execution_result_timeout_policy_digest(
+                request.timeout_millis,
+            ),
+        timeout_observed: timeout,
+        exit_code_label: if timeout {
+            "timeout".to_owned()
+        } else {
+            exit_code
+                .map(|code| format!("exit_{code}"))
+                .unwrap_or_else(|| "signal".to_owned())
+        },
+        stdout_summary_digest: stdout_summary.digest(),
+        stderr_summary_digest: stderr_summary.digest(),
+        output_classification_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-hermetic-backend-execution-output-classification:v1",
+            &(timeout, exit_code, &solver_verdict),
+        ),
+        solver_verdict_label: solver_verdict,
+        explicit_nonclaims: request.explicit_nonclaims.clone(),
+        explicit_nonclaims_digest: request.explicit_nonclaims_digest,
+        claim_boundary: gateway_formal_tiny_z3_hermetic_backend_execution_result_claim_boundary(),
+        process_spawned: true,
+        backend_executed: true,
+        backend_artifact_written: false,
+        network_access_observed: false,
+        repository_root_write_observed: false,
+        raw_stdout_stderr_retained: false,
+        creates_accepted_external_result_evidence: false,
+        writes_accepted_evidence_artifacts: false,
+        creates_accepted_formal_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        lean_execution_evidence_created: false,
+        cobalt_execution_evidence_created: false,
+        rust_to_lean_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        external_audit_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    }
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -104028,6 +104487,181 @@ mod tests {
     }
 
     #[test]
+    fn phase529_tiny_z3_hermetic_backend_execution_result_runs_local_z3_without_promotion() {
+        let Some(z3_executable) = phase529_z3_executable() else {
+            return;
+        };
+        let Some((obligation_root, phase405_output_root, output_root, review)) =
+            phase527_tiny_z3_backend_execution_candidate_source("phase529-run")
+        else {
+            return;
+        };
+        let execution_input = phase527_tiny_z3_backend_execution_candidate_input(
+            "phase529-source-candidate",
+            &review,
+            GatewayFormalTinyZ3BackendExecutionCandidateLabel::BackendExecutionCandidateRecorded,
+        );
+        let candidate =
+            build_gateway_formal_tiny_z3_backend_execution_candidate(&review, &execution_input)
+                .expect("phase529 source candidate builds");
+        let executable_digest =
+            hash_bytes(&fs::read(&z3_executable).expect("phase529 z3 executable reads"));
+        let request = phase529_tiny_z3_hermetic_backend_execution_request(
+            "phase529-hermetic-result",
+            &candidate,
+            executable_digest,
+        );
+        let smtlib2_text = "(set-logic QF_UF)\n(declare-const gateway_binding Bool)\n(assert gateway_binding)\n(check-sat)\n";
+
+        let result = run_gateway_formal_tiny_z3_hermetic_backend_execution_result(
+            &candidate,
+            &request,
+            &z3_executable,
+            smtlib2_text,
+        )
+        .expect("phase529 local z3 execution succeeds");
+
+        assert_eq!(
+            result.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_HERMETIC_BACKEND_EXECUTION_RESULT_STATE_SLICE
+        );
+        assert_eq!(result.phase527_candidate_digest, candidate.digest());
+        assert_eq!(
+            result.phase527_classification,
+            GatewayFormalTinyZ3BackendExecutionCandidateClassification::LaneAExecutionCandidateDeclaredNoRun
+        );
+        assert_eq!(
+            result.classification,
+            GatewayFormalTinyZ3HermeticBackendExecutionResultClassification::LaneASmtZ3RunObservedLocalOnly
+        );
+        assert_eq!(
+            result.actual_smtlib2_text_digest,
+            hash_bytes(smtlib2_text.as_bytes())
+        );
+        assert_eq!(result.executable_digest, executable_digest);
+        assert_eq!(
+            result.argv_digest,
+            gateway_formal_tiny_z3_hermetic_backend_execution_result_argv_digest()
+        );
+        assert!(result.process_spawned);
+        assert!(result.backend_executed);
+        assert_eq!(result.exit_code_label, "exit_0");
+        assert_eq!(
+            result.solver_verdict_label,
+            GatewayFormalRealCommandLaneSolverVerdictLabel::SolverSatWitnessWithoutCertificate
+        );
+        assert!(!result.timeout_observed);
+        assert!(!result.backend_artifact_written);
+        assert!(!result.network_access_observed);
+        assert!(!result.repository_root_write_observed);
+        assert!(!result.raw_stdout_stderr_retained);
+        assert!(!result.creates_accepted_external_result_evidence);
+        assert!(!result.writes_accepted_evidence_artifacts);
+        assert!(!result.creates_accepted_formal_evidence);
+        assert!(!result.creates_level2_evidence);
+        assert!(!result.populates_score_axes);
+        assert!(!result.proof_artifact_created);
+        assert!(!result.checker_transcript_created);
+        assert!(!result.solver_certificate_created);
+        assert!(!result.lean_execution_evidence_created);
+        assert!(!result.cobalt_execution_evidence_created);
+        assert!(!result.rust_to_lean_execution_evidence_created);
+        assert!(!result.benchmark_evidence_created);
+        assert!(!result.external_audit_evidence_created);
+        assert!(!result.semantic_correctness_claimed);
+        assert!(!result.production_readiness_claimed);
+        assert!(!result.sota_claimed);
+        assert!(!result.breakthrough_claimed);
+        assert!(!result.full_security_claimed);
+        assert!(!result.grants_authority);
+
+        fs::remove_dir_all(&output_root).expect("phase529 run output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase529 run phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase529 run obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase529_tiny_z3_hermetic_backend_execution_result_rejects_candidate_drift() {
+        let Some((obligation_root, phase405_output_root, output_root, review)) =
+            phase527_tiny_z3_backend_execution_candidate_source("phase529-drift")
+        else {
+            return;
+        };
+        let execution_input = phase527_tiny_z3_backend_execution_candidate_input(
+            "phase529-drift-candidate",
+            &review,
+            GatewayFormalTinyZ3BackendExecutionCandidateLabel::BackendExecutionCandidateRecorded,
+        );
+        let mut candidate =
+            build_gateway_formal_tiny_z3_backend_execution_candidate(&review, &execution_input)
+                .expect("phase529 drift source candidate builds");
+        candidate.creates_level2_evidence = true;
+        let request = phase529_tiny_z3_hermetic_backend_execution_request(
+            "phase529-drift-result",
+            &candidate,
+            Hash([7; 32]),
+        );
+
+        assert_eq!(
+            run_gateway_formal_tiny_z3_hermetic_backend_execution_result(
+                &candidate,
+                &request,
+                Path::new("/definitely-not-used-z3"),
+                "(check-sat)\n",
+            ),
+            Err(GatewayFormalTinyZ3HermeticBackendExecutionError::CandidateStateMismatch)
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase529 drift output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase529 drift phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase529 drift obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase529_tiny_z3_hermetic_backend_execution_result_rejects_executable_digest_drift() {
+        let Some(z3_executable) = phase529_z3_executable() else {
+            return;
+        };
+        let Some((obligation_root, phase405_output_root, output_root, review)) =
+            phase527_tiny_z3_backend_execution_candidate_source("phase529-executable-drift")
+        else {
+            return;
+        };
+        let execution_input = phase527_tiny_z3_backend_execution_candidate_input(
+            "phase529-executable-drift-candidate",
+            &review,
+            GatewayFormalTinyZ3BackendExecutionCandidateLabel::BackendExecutionCandidateRecorded,
+        );
+        let candidate =
+            build_gateway_formal_tiny_z3_backend_execution_candidate(&review, &execution_input)
+                .expect("phase529 executable drift source candidate builds");
+        let request = phase529_tiny_z3_hermetic_backend_execution_request(
+            "phase529-executable-drift-result",
+            &candidate,
+            Hash([7; 32]),
+        );
+
+        assert_eq!(
+            run_gateway_formal_tiny_z3_hermetic_backend_execution_result(
+                &candidate,
+                &request,
+                &z3_executable,
+                "(check-sat)\n",
+            ),
+            Err(GatewayFormalTinyZ3HermeticBackendExecutionError::ExecutableDigestMismatch)
+        );
+
+        fs::remove_dir_all(&output_root)
+            .expect("phase529 executable drift output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase529 executable drift phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase529 executable drift obligation cleanup succeeds");
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -112531,6 +113165,59 @@ mod tests {
         input.digest_bindings =
             gateway_formal_tiny_z3_backend_execution_candidate_digest_bindings(review, &input);
         input
+    }
+
+    fn phase529_z3_executable() -> Option<PathBuf> {
+        if let Some(path) = std::env::var_os("HSAI_TEST_Z3").map(PathBuf::from) {
+            if path.is_file() {
+                return Some(path);
+            }
+        }
+        [
+            "/opt/homebrew/bin/z3",
+            "/usr/local/bin/z3",
+            "/usr/bin/z3",
+            "/opt/local/bin/z3",
+        ]
+        .into_iter()
+        .map(PathBuf::from)
+        .find(|path| path.is_file())
+    }
+
+    fn phase529_tiny_z3_hermetic_backend_execution_request(
+        execution_result_id: &str,
+        candidate: &GatewayFormalTinyZ3BackendExecutionCandidate,
+        executable_digest: Hash,
+    ) -> GatewayFormalTinyZ3HermeticBackendExecutionRequest {
+        let nonclaims =
+            gateway_formal_tiny_z3_hermetic_backend_execution_result_required_nonclaims();
+        GatewayFormalTinyZ3HermeticBackendExecutionRequest {
+            schema_version:
+                GATEWAY_FORMAL_TINY_Z3_HERMETIC_BACKEND_EXECUTION_RESULT_SCHEMA_VERSION
+                    .to_owned(),
+            execution_result_id: execution_result_id.to_owned(),
+            execution_policy_id: "phase529-hermetic-backend-execution-policy".to_owned(),
+            execution_decision_id: "phase529-hermetic-backend-execution-decision".to_owned(),
+            executed_at_unix: 1_800_000_529,
+            smtlib2_obligation_digest: candidate.obligation_artifact_digest,
+            expected_executable_digest: executable_digest,
+            expected_argv_digest:
+                gateway_formal_tiny_z3_hermetic_backend_execution_result_argv_digest(),
+            expected_working_directory_policy_digest:
+                gateway_formal_tiny_z3_hermetic_backend_execution_result_working_directory_policy_digest(),
+            expected_environment_digest:
+                gateway_formal_tiny_z3_hermetic_backend_execution_result_environment_digest(),
+            timeout_millis: 1_000,
+            max_stdout_bytes: 256,
+            max_stderr_bytes: 256,
+            execution_label:
+                GatewayFormalTinyZ3HermeticBackendExecutionResultLabel::HermeticBackendExecutionResultRecorded,
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-hermetic-backend-execution-result-nonclaims:v1",
+                &nonclaims,
+            ),
+        }
     }
 
     fn phase503_tiny_z3_reviewer_decision_source(

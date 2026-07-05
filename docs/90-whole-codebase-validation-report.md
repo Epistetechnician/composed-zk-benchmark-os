@@ -7662,5 +7662,19 @@ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean extraction,
 creates no benchmark evidence, and claims no production/SOTA/security/
 semantic-correctness result.
 
+[docs/529-hsai-tiny-z3-hermetic-backend-execution-result-notes.md](docs/529-hsai-tiny-z3-hermetic-backend-execution-result-notes.md)
+documents the Phase 529 local hermetic backend execution result path. The
+implementation adds request/result metadata, Phase 527 exactness checks,
+executable digest verification, fixed `-in -smt2` argv binding, empty
+environment binding, timeout-policy binding, bounded stdout/stderr summary
+digests, actual SMT-LIB2 text digest recording, and a single-purpose Z3 stdin
+runner. The HSAI claim-boundary source scan has a matching single-function
+exception and regression test for the named Phase 529 runner. Phase 529 records
+one local backend execution observation only; it writes no backend artifact
+package, creates no accepted formal evidence, creates no Level2+ evidence,
+populates no score axes, runs no Lean/COBALT/Rust-to-Lean extraction, creates
+no benchmark evidence, and claims no production/SOTA/security/semantic-
+correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

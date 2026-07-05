@@ -95,6 +95,11 @@ fn hsai_crates_do_not_use_process_or_network_apis() {
                     ) {
                         continue;
                     }
+                    if is_phase529_tiny_z3_hermetic_backend_execution_exception(
+                        &file, pattern, &text, line_index, line,
+                    ) {
+                        continue;
+                    }
                     violations.push(format!("{}:{}:{pattern}", file.display(), line_index + 1));
                 }
             }
@@ -162,6 +167,30 @@ fn is_phase325_real_command_lane_fixed_smt_exception(
         == Some("run_gateway_formal_real_command_lane_fixed_smt_process")
 }
 
+fn is_phase529_tiny_z3_hermetic_backend_execution_exception(
+    file: &Path,
+    pattern: &str,
+    text: &str,
+    line_index: usize,
+    line: &str,
+) -> bool {
+    if !file.ends_with(Path::new("hsai-agent-admission/src/lib.rs")) {
+        return false;
+    }
+    if !matches!(pattern, "std::process" | "Command::new") {
+        return false;
+    }
+    if line.trim() != "let mut command = std::process::Command::new(z3_executable);" {
+        return false;
+    }
+    text.contains(GATEWAY_FORMAL_TINY_Z3_PHASE529_CLAIM_BOUNDARY_NEEDLE)
+        && enclosing_function_name(text, line_index)
+            == Some("run_gateway_formal_tiny_z3_hermetic_backend_execution_result")
+}
+
+const GATEWAY_FORMAL_TINY_Z3_PHASE529_CLAIM_BOUNDARY_NEEDLE: &str =
+    "local tiny-Z3 hermetic backend execution result metadata only";
+
 fn enclosing_function_name(text: &str, line_index: usize) -> Option<&str> {
     let lines = text.lines().take(line_index + 1).collect::<Vec<_>>();
     lines
@@ -197,6 +226,53 @@ fn phase325_real_command_lane_process_exception_is_single_function_only() {
         denied,
         3,
         "        let mut command = std::process::Command::new(fixed_executable);",
+    ));
+}
+
+#[test]
+fn phase529_tiny_z3_process_exception_is_single_function_only() {
+    let file = Path::new("hsai-agent-admission/src/lib.rs");
+    let allowed = format!(
+        "const CLAIM: &str = \"{GATEWAY_FORMAL_TINY_Z3_PHASE529_CLAIM_BOUNDARY_NEEDLE}\";\n\
+        pub fn run_gateway_formal_tiny_z3_hermetic_backend_execution_result(\n\
+            z3_executable: &std::path::Path,\n\
+        ) {{\n\
+            let mut command = std::process::Command::new(z3_executable);\n\
+        }}\n"
+    );
+    let denied_function = format!(
+        "const CLAIM: &str = \"{GATEWAY_FORMAL_TINY_Z3_PHASE529_CLAIM_BOUNDARY_NEEDLE}\";\n\
+        pub fn arbitrary_backend_runner(\n\
+            z3_executable: &std::path::Path,\n\
+        ) {{\n\
+            let mut command = std::process::Command::new(z3_executable);\n\
+        }}\n"
+    );
+    let denied_boundary = "pub fn run_gateway_formal_tiny_z3_hermetic_backend_execution_result(\n\
+        z3_executable: &std::path::Path,\n\
+    ) {\n\
+        let mut command = std::process::Command::new(z3_executable);\n\
+    }\n";
+    assert!(is_phase529_tiny_z3_hermetic_backend_execution_exception(
+        file,
+        "Command::new",
+        &allowed,
+        4,
+        "            let mut command = std::process::Command::new(z3_executable);",
+    ));
+    assert!(!is_phase529_tiny_z3_hermetic_backend_execution_exception(
+        file,
+        "Command::new",
+        &denied_function,
+        4,
+        "            let mut command = std::process::Command::new(z3_executable);",
+    ));
+    assert!(!is_phase529_tiny_z3_hermetic_backend_execution_exception(
+        file,
+        "Command::new",
+        denied_boundary,
+        3,
+        "        let mut command = std::process::Command::new(z3_executable);",
     ));
 }
 
