@@ -15189,6 +15189,34 @@ accepted formal evidence, no Lean/COBALT/Rust-to-Lean execution, no benchmark
 evidence, no external audit evidence, and no production/SOTA/security/
 correctness claim.
 
+## Phase 541 HSAI Tiny Z3 Backend Execution Materialized Accepted Append Metadata
+
+Status: complete. See
+`docs/541-hsai-tiny-z3-backend-execution-materialized-accepted-append-metadata-notes.md`.
+
+Goal: implement local materialized accepted append metadata over one exact
+Phase 539 in-memory mutation record.
+
+Implemented: Phase 541 adds backend-execution materialized append input/output
+metadata, bounded materialization labels, issue/validation types,
+path/digest/id/label binding helpers, nonclaim/rule/forbidden-API/inherited
+digest helpers, `build_...` and `validate_...` entrypoints, and tests over a
+Phase 539 mutation and caller-supplied `zkbench-core`
+`MaterializedAcceptedLedgerAppendRequest`.
+
+Validation coverage: focused tests cover successful local materialization,
+invalid Phase 539 state rejection, and promotion rejection across direct ledger
+load/save claims, parallel writer claims, official submission, accepted formal
+evidence, Level2+, score axes, Lean, COBALT, Rust-to-Lean, additional SMT/Z3
+execution, proof/checker/solver, benchmark, external audit, independent
+external reproduction, strong claims, and action authority.
+
+Exit criteria: HSAI now has local materialized accepted ledger artifact
+metadata for one reviewed local SMT/Z3 backend execution route. It still has
+no accepted formal evidence, no Level2+ evidence, no populated score axes, no
+Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no external audit
+evidence, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

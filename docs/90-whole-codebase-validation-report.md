@@ -7815,5 +7815,19 @@ Level2+ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
 additional SMT/Z3 execution, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/541-hsai-tiny-z3-backend-execution-materialized-accepted-append-metadata-notes.md](docs/541-hsai-tiny-z3-backend-execution-materialized-accepted-append-metadata-notes.md)
+documents the Phase 541 local backend-execution materialized accepted append
+metadata implementation. The implementation calls
+`zkbench_core::apply_materialized_accepted_ledger_append_transaction` over one
+caller-supplied local materialized request after exact Phase 539 mutation
+metadata, records the materialized append report digest, materialized ledger
+artifact digest, materialized artifact byte length, ledger path identity
+digest, ledger path policy digest, inherited Phase 535/533/531/529/527
+bindings, and Phase 539 appended evidence class and claim boundary. It creates
+one local materialized accepted ledger artifact, but creates no accepted formal
+evidence, creates no Level2+ evidence, populates no score axes, runs no
+Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark
+evidence, and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
