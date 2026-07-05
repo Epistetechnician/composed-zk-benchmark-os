@@ -598,6 +598,7 @@ Surface DSL
 | [docs/510-hsai-tiny-z3-accepted-append-mutation-boundary.md](docs/510-hsai-tiny-z3-accepted-append-mutation-boundary.md) | Phase 510 HSAI tiny Z3 accepted append mutation boundary. |
 | [docs/511-hsai-tiny-z3-accepted-append-mutation-metadata-notes.md](docs/511-hsai-tiny-z3-accepted-append-mutation-metadata-notes.md) | Phase 511 HSAI tiny Z3 accepted append mutation metadata notes. |
 | [docs/512-hsai-tiny-z3-materialized-accepted-append-boundary.md](docs/512-hsai-tiny-z3-materialized-accepted-append-boundary.md) | Phase 512 HSAI tiny Z3 materialized accepted append boundary. |
+| [docs/513-hsai-tiny-z3-materialized-accepted-append-metadata-notes.md](docs/513-hsai-tiny-z3-materialized-accepted-append-metadata-notes.md) | Phase 513 HSAI tiny Z3 materialized accepted append metadata notes. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
