@@ -14869,6 +14869,33 @@ reproduction, no Level2+ evidence, no populated score axes, no accepted formal
 evidence, no Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no
 external audit evidence, and no production/SOTA/security/correctness claim.
 
+## Phase 529 HSAI Tiny Z3 Hermetic Backend Execution Result
+
+Status: complete. See
+`docs/529-hsai-tiny-z3-hermetic-backend-execution-result-notes.md`.
+
+Goal: implement the first scoped local Lane A SMT/Z3 backend process
+observation over one exact Phase 527 backend-execution candidate.
+
+Implemented: Phase 529 adds hermetic execution-result request/result metadata,
+candidate exactness checks, executable digest verification, fixed `-in -smt2`
+argv binding, empty-environment binding, timeout-policy binding, bounded
+stdout/stderr summary digests, actual SMT-LIB2 text digest recording, and a
+single-purpose Z3 stdin runner. It also updates the HSAI claim-boundary source
+scan with a single-function Phase 529 exception for that named runner.
+
+Validation coverage: focused tests cover a local Z3 execution when Z3 is
+available, candidate promotion-drift rejection, and executable-digest drift
+rejection. The claim-boundary source scan now has a regression test proving the
+Phase 529 process exception remains single-function only.
+
+Exit criteria: HSAI now has one local scoped SMT/Z3 backend execution
+observation path. It still has no backend artifact package, no accepted
+external-result evidence, no independent external reproduction, no Level2+
+evidence, no populated score axes, no accepted formal evidence, no
+Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no external audit
+evidence, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
