@@ -7988,5 +7988,22 @@ axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates
 no benchmark evidence, and claims no production/SOTA/security/
 semantic-correctness result.
 
+[docs/552-hsai-tiny-z3-backend-execution-external-import-review-boundary.md](docs/552-hsai-tiny-z3-backend-execution-external-import-review-boundary.md)
+documents the Phase 552 docs-first backend-execution external import-review
+boundary. It defines a future local review layer over one exact Phase 551
+quarantined import candidate, including required Phase 551 import-candidate
+digest/input/classification/blocker/policy/nonpromotion/candidate/validation/
+quarantine bindings, Phase 549 external-reproduction bindings, Phase 547
+Level2 eligibility bindings, Phase 545 score-axis bindings, Phase 543 package
+bindings, Phase 541 materialized artifact binding, inherited Phase
+535/533/531/529/527 digests, review policy and decision ids, blocker and
+nonpromotion digests, fail-closed validation rules, meaning limits, and Phase
+553 implementation exit criteria. It creates no Rust code, creates no
+import-review metadata, creates no independent external reproduction, creates
+no accepted formal evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates
+no benchmark evidence, and claims no production/SOTA/security/
+semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
