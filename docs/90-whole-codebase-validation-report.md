@@ -7590,5 +7590,18 @@ creates no accepted formal evidence, creates no Level2+ evidence, runs no new
 Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark evidence, and
 claims no production/SOTA/security/semantic-correctness result.
 
+[docs/524-hsai-tiny-z3-external-import-review-boundary.md](docs/524-hsai-tiny-z3-external-import-review-boundary.md)
+defines the Phase 524 docs-first boundary for future local import-review
+metadata over one exact Phase 523 quarantined external-result import candidate.
+The boundary defines future review classifications, required Phase
+523/521/519/517/515/513 digest bindings, review policy and decision bindings,
+review blocker and nonpromotion bindings, fail-closed future validation rules,
+backend relationship limits, meaning limits, and Phase 525 implementation exit
+criteria. It creates no Rust code, changes no Cargo metadata, writes no
+external-result artifact files, writes no accepted-evidence files, populates no
+score axes, creates no accepted formal evidence, creates no Level2+ evidence,
+runs no new Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark
+evidence, and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

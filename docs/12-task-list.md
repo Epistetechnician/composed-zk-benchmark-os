@@ -14739,6 +14739,30 @@ Level2+ evidence, no populated score axes, no accepted formal evidence, no new
 Lean/new-SMT/COBALT or Rust-to-Lean execution, no benchmark evidence, no
 external audit evidence, and no production/SOTA/security/correctness claim.
 
+## Phase 524 HSAI Tiny Z3 External Import Review Boundary
+
+Status: complete. See
+`docs/524-hsai-tiny-z3-external-import-review-boundary.md`.
+
+Goal: define the docs-first boundary for future local review metadata over one
+exact Phase 523 quarantined external-result import candidate.
+
+Implemented: Phase 524 documents future import-review classifications,
+required Phase 523/521/519/517/515/513 digest bindings, review policy and
+decision bindings, blocker and nonpromotion bindings, fail-closed future
+validation rules, backend relationship limits, meaning limits, and Phase 525
+implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has an external import-review boundary for a future
+local metadata implementation. It still has no independent external
+reproduction, no Level2+ evidence, no populated score axes, no accepted formal
+evidence, no new Lean/new-SMT/COBALT or Rust-to-Lean execution, no benchmark
+evidence, no external audit evidence, and no production/SOTA/security/
+correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
