@@ -7699,5 +7699,16 @@ no accepted evidence, creates no Level2+ evidence, populates no score axes,
 runs no Lean/COBALT/Rust-to-Lean extraction, creates no benchmark evidence,
 and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/532-hsai-tiny-z3-backend-execution-package-review-boundary.md](docs/532-hsai-tiny-z3-backend-execution-package-review-boundary.md)
+defines the Phase 532 docs-first boundary for a future local review record over
+one Phase 531 backend-execution package metadata record. The boundary defines
+required Phase 531, Phase 529, and Phase 527 digest bindings, allowed review
+classifications, allowed touch surface, fail-closed validation rules,
+accepted-evidence relationship limits, and Phase 533 implementation exit
+criteria. It creates no Rust code, writes no package files, creates no accepted
+evidence, creates no Level2+ evidence, populates no score axes, runs no Lean/
+COBALT/Rust-to-Lean extraction, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
