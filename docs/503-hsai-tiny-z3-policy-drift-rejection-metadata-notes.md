@@ -124,12 +124,15 @@ not benchmark evidence, not external audit evidence, not SOTA, not semantic
 correctness, not production readiness, not full security, and not action
 authority.
 
-## Next Responsible Slice
+## Phase 504 Boundary Status
 
-The next responsible slice is a docs-first boundary for the next Phase 488
-accepted-path prerequisite gate: rejection behavior for stale current accepted
-append blockers. It must not implement accepted append, mutate the accepted
-Evidence Ledger, create accepted formal evidence, create Level2+ evidence,
-populate score axes, run Lean/new-SMT/COBALT/Rust-to-Lean extraction, create
-benchmark evidence, or claim SOTA, full security, semantic correctness, or
-production readiness.
+Phase 504 defines the docs-first boundary for the next Phase 488 accepted-path
+prerequisite gate in
+`docs/504-hsai-tiny-z3-stale-accepted-append-blocker-rejection-boundary.md`:
+rejection behavior for stale current accepted append blockers.
+
+That boundary does not implement accepted append, mutate the accepted Evidence
+Ledger, create accepted formal evidence, create Level2+ evidence, populate
+score axes, run Lean/new-SMT/COBALT/Rust-to-Lean extraction, create benchmark
+evidence, or claim SOTA, full security, semantic correctness, or production
+readiness.

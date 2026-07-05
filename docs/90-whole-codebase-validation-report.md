@@ -7243,5 +7243,20 @@ accepted formal evidence, creates no Level2+ evidence, populates no score
 axes, runs no Lean/new-SMT/COBALT/Rust-to-Lean extraction, creates no benchmark
 evidence, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/504-hsai-tiny-z3-stale-accepted-append-blocker-rejection-boundary.md](docs/504-hsai-tiny-z3-stale-accepted-append-blocker-rejection-boundary.md)
+defines the Phase 504 docs-first rejection behavior for stale current accepted
+append blockers boundary for the next Phase 488 accepted-path prerequisite
+gate. The boundary records stale blocker meaning, required future Phase 503
+digest bindings, reviewed and expected current accepted append blocker digest
+bindings, closed freshness comparison rules, closed stale blocker rejection
+actions, fail-closed validation behavior, backend relationship limits, and
+Phase 505 implementation exit criteria. It creates no Rust code, reads no
+accepted Evidence Ledger files, writes no stale blocker report artifact, makes
+no accepted append decision, mutates no accepted Evidence Ledger, changes no
+accepted append policy, creates no accepted formal evidence, creates no
+Level2+ evidence, populates no score axes, runs no Lean/new-SMT/COBALT/
+Rust-to-Lean extraction, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
