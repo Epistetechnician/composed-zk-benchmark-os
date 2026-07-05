@@ -15862,6 +15862,33 @@ score axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3
 execution, no benchmark evidence, no external audit evidence, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 564 HSAI Tiny Z3 Backend Execution External Operator Accepted Result Evidence Boundary
+
+Status: complete. See
+`docs/564-hsai-tiny-z3-backend-execution-external-operator-accepted-result-evidence-boundary.md`.
+
+Goal: define the docs-first boundary for a future accepted-result evidence
+promotion path over one exact Phase 563 operator-capture import-review
+metadata record.
+
+Implemented: Phase 564 defines the future accepted-result evidence boundary:
+Phase 563 review bindings, Phase 561 candidate/validation/quarantine
+bindings, Phase 559 capture bindings, Phase 557/555/553/551/549/547/545/543/
+541/535/533/531/529/527 inherited digests, accepted-result evidence
+classification, accepted-evidence owner/function constraints, fail-closed
+validation rules, meaning limits, and Phase 565 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named policy boundary for deciding whether a
+reviewed operator-capture result may ever be promoted into accepted evidence.
+It still has no external result import, no accepted external result evidence,
+no accepted independent external reproduction, no accepted formal evidence, no
+Level2+ evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean
+execution, no additional SMT/Z3 execution, no benchmark evidence, no external
+audit evidence, and no production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
