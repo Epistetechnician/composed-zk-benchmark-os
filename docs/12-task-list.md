@@ -15298,6 +15298,34 @@ Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no external audit
 evidence, no independent external reproduction, and no production/SOTA/
 security/correctness claim.
 
+## Phase 545 HSAI Tiny Z3 Backend Execution Score Axis Eligibility Metadata
+
+Status: complete. See
+`docs/545-hsai-tiny-z3-backend-execution-score-axis-eligibility-metadata-notes.md`.
+
+Goal: implement local score-axis eligibility metadata over one exact Phase 543
+package metadata record.
+
+Implemented: Phase 545 adds backend-execution score-axis eligibility
+input/output metadata, bounded eligibility classifications and labels,
+issue/validation types, blocker/nonclaim/rule/forbidden-API/inherited-digest
+helpers, policy/digest/id/label binding helpers, `build_...` and
+`validate_...` entrypoints, and tests over a Phase 543 package.
+
+Validation coverage: focused tests cover successful local eligibility
+metadata, invalid Phase 543 state rejection, and promotion rejection across
+axis population, score-axis artifact writes, accepted formal evidence,
+Level2+, Lean, COBALT, Rust-to-Lean, additional SMT/Z3 execution,
+proof/checker/solver, benchmark, external audit, independent external
+reproduction, strong claims, and action authority.
+
+Exit criteria: HSAI now records that the Phase 543 backend-execution package
+is score-axis ineligible under current evidence and that every score axis is
+unpopulated. It still has no accepted formal evidence, no Level2+ evidence, no
+populated score axes, no Lean/COBALT/Rust-to-Lean execution, no benchmark
+evidence, no external audit evidence, no independent external reproduction,
+and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
