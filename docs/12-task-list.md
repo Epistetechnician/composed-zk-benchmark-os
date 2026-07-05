@@ -14621,6 +14621,33 @@ populated score axes, no accepted formal evidence, no new
 Lean/new-SMT/COBALT or Rust-to-Lean execution, no benchmark evidence, no
 external audit evidence, and no production/SOTA/security/correctness claim.
 
+## Phase 520 HSAI Tiny Z3 External Reproduction Provenance Boundary
+
+Status: complete. See
+`docs/520-hsai-tiny-z3-external-reproduction-provenance-boundary.md`.
+
+Goal: define the docs-first boundary for future external-reproduction and
+provenance metadata over the Phase 519 Level2 eligibility record.
+
+Implemented: Phase 520 documents the current `zkbench-core` external owner
+surface for artifact capture, provenance contracts, external provenance drafts,
+external-result import schemas, candidate validation, and quarantine records.
+It defines future HSAI external-reproduction classifications, required future
+Phase 519/517/515/513 digest bindings, external owner and contract bindings,
+required provenance-field bindings, fail-closed future validation rules,
+backend relationship limits, meaning limits, and Phase 521 implementation exit
+criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has an external-reproduction provenance boundary for a
+future local metadata implementation. It still has no independent external
+reproduction, no Level2+ evidence, no populated score axes, no accepted formal
+evidence, no new Lean/new-SMT/COBALT or Rust-to-Lean execution, no benchmark
+evidence, no external audit evidence, and no production/SOTA/security/
+correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
