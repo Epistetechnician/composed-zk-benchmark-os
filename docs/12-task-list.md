@@ -15416,6 +15416,36 @@ accepted formal evidence, no Level2+ evidence, no populated score axes, no
 Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no external audit
 evidence, and no production/SOTA/security/correctness claim.
 
+## Phase 549 HSAI Tiny Z3 Backend Execution External Reproduction Metadata
+
+Status: complete. See
+`docs/549-hsai-tiny-z3-backend-execution-external-reproduction-metadata-notes.md`.
+
+Goal: implement local external-reproduction metadata over one exact Phase 547
+Level2 eligibility record.
+
+Implemented: Phase 549 adds backend-execution external-reproduction
+input/output metadata, bounded classifications and labels, issue/validation
+types, missing-input/blocker/nonclaim/rule/forbidden-API/inherited-digest
+helpers, nonpromotion/policy/digest/id/label binding helpers, `build_...` and
+`validate_...` entrypoints, and tests over a Phase 547 Level2 eligibility
+record.
+
+Validation coverage: focused tests cover successful local metadata, invalid
+Phase 547 state rejection, and promotion rejection across fabricated
+independent external reproduction, external-reproduction artifact writes,
+Level2 artifact writes, score-axis artifact writes, axis population, accepted
+formal evidence, Level2+, Lean, COBALT, Rust-to-Lean, additional SMT/Z3
+execution, proof/checker/solver, benchmark, external audit, strong claims, and
+action authority.
+
+Exit criteria: HSAI now records that the Phase 547 backend-execution route
+still lacks independent external reproduction and remains blocked under
+current evidence. It still has no independent external reproduction, no
+accepted formal evidence, no Level2+ evidence, no populated score axes, no
+Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no external audit
+evidence, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

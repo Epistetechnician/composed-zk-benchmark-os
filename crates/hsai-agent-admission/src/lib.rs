@@ -1117,6 +1117,11 @@ pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_LEVEL2_ELIGIBILITY_SCHEMA_VER
 pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_LEVEL2_ELIGIBILITY_STATE_SLICE: &str =
     "phase-547-hsai-tiny-z3-backend-execution-level2-eligibility-metadata";
 pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_LEVEL2_ELIGIBILITY_CLAIM_BOUNDARY: &str = "local tiny-Z3 backend execution Level2 eligibility metadata only; classifies one Phase 545 score-axis eligibility record as level2_blocked_local_only and binds zkbench-core Level2EligibilityChecker metadata with creates_level2_evidence=false, but does not write Level2 artifacts, populate score axes, create accepted formal evidence, create Level2+ evidence, generate proof artifacts, generate checker transcripts, generate solver certificates, run Lean, run another SMT/Z3 execution, run COBALT, run Rust-to-Lean extraction, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, establish independent external reproduction, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-z3-backend-execution-external-reproduction:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_STATE_SLICE: &str =
+    "phase-549-hsai-tiny-z3-backend-execution-external-reproduction-metadata";
+pub const GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_CLAIM_BOUNDARY: &str = "local tiny-Z3 backend execution external-reproduction metadata only; classifies one Phase 547 Level2 eligibility record as external_reproduction_blocked_no_independent_run and binds zkbench-core artifact-capture, provenance, and external-result import contract digests, but does not create independent external reproduction, create accepted formal evidence, create Level2+ evidence, populate score axes, generate proof artifacts, generate checker transcripts, generate solver certificates, run Lean, run another SMT/Z3 execution, run COBALT, run Rust-to-Lean extraction, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, or grant authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -18000,6 +18005,229 @@ pub enum GatewayFormalTinyZ3BackendExecutionLevel2EligibilityIssue {
 pub struct GatewayFormalTinyZ3BackendExecutionLevel2EligibilityValidation {
     pub valid: bool,
     pub issues: Vec<GatewayFormalTinyZ3BackendExecutionLevel2EligibilityIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3BackendExecutionExternalReproductionClassification {
+    ExternalReproductionBlockedNoIndependentRun,
+    ExternalReproductionWaitingForArtifactCapture,
+    ExternalReproductionWaitingForProvenanceReview,
+    ExternalReproductionWaitingForExternalResultImportValidation,
+    ExternalReproductionReadyForFutureHumanReviewOnly,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3BackendExecutionExternalReproductionLabel {
+    BackendExecutionExternalReproductionRecorded,
+    BackendExecutionExternalReproductionRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3BackendExecutionExternalReproductionInput {
+    pub schema_version: String,
+    pub reproduction_id: String,
+    pub reproduction_policy_id: String,
+    pub reproduction_decision_id: String,
+    pub reproduction_decision_at_unix: u64,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub external_owner_id: String,
+    pub artifact_capture_contract_type: String,
+    pub provenance_contract_type: String,
+    pub external_result_import_schema_type: String,
+    pub external_result_candidate_type: String,
+    pub external_result_quarantine_type: String,
+    pub classification: GatewayFormalTinyZ3BackendExecutionExternalReproductionClassification,
+    pub artifact_capture_contract_digest: Hash,
+    pub provenance_contract_digest: Hash,
+    pub external_result_import_schema_digest: Hash,
+    pub required_provenance_field_digest: Hash,
+    pub reproduction_policy_digest: Hash,
+    pub reproduction_blockers: BTreeSet<String>,
+    pub reproduction_blocker_digest: Hash,
+    pub reproduction_nonpromotion_digest: Hash,
+    pub reproduction_inputs: BTreeMap<String, bool>,
+    pub reproduction_inputs_digest: Hash,
+    pub reproduction_rules: BTreeSet<String>,
+    pub forbidden_api_set: BTreeSet<String>,
+    pub inherited_digest_requirements: BTreeSet<String>,
+    pub reproduction_label: GatewayFormalTinyZ3BackendExecutionExternalReproductionLabel,
+    pub reproduction_summary: String,
+    pub external_reproduction_artifact_write_requested: bool,
+    pub independent_external_reproduction_claimed: bool,
+    pub level2_artifact_write_requested: bool,
+    pub score_axis_artifact_write_requested: bool,
+    pub score_axis_population_requested: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub proof_artifact_promoted: bool,
+    pub checker_transcript_promoted: bool,
+    pub solver_certificate_promoted: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl GatewayFormalTinyZ3BackendExecutionExternalReproductionInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3BackendExecutionExternalReproduction {
+    pub schema_version: String,
+    pub reproduction_id: String,
+    pub state_slice: String,
+    pub reproduction_input_digest: Hash,
+    pub reproduction_policy_id: String,
+    pub reproduction_decision_id: String,
+    pub reproduction_decision_at_unix: u64,
+    pub phase547_level2_eligibility_digest: Hash,
+    pub phase547_level2_eligibility_input_digest: Hash,
+    pub phase547_digest_binding_map_digest: Hash,
+    pub phase547_id_binding_map_digest: Hash,
+    pub phase547_label_binding_map_digest: Hash,
+    pub phase547_classification: GatewayFormalTinyZ3BackendExecutionLevel2EligibilityClassification,
+    pub phase547_level2_blocker_digest: Hash,
+    pub phase547_level2_nonpromotion_digest: Hash,
+    pub phase547_report_claim_boundary: String,
+    pub phase547_report_creates_level2_evidence: bool,
+    pub phase545_score_axis_eligibility_digest: Hash,
+    pub phase545_score_axis_nonpopulation_digest: Hash,
+    pub phase543_package_digest: Hash,
+    pub phase543_evidence_class: String,
+    pub phase543_claim_boundary: String,
+    pub phase541_materialized_ledger_artifact_digest: Hash,
+    pub phase539_appended_evidence_class: String,
+    pub phase539_appended_claim_boundary: String,
+    pub phase535_owner_decision_digest: Hash,
+    pub phase533_review_digest: Hash,
+    pub phase531_package_digest: Hash,
+    pub phase529_result_digest: Hash,
+    pub phase527_candidate_digest: Hash,
+    pub external_owner_id: String,
+    pub artifact_capture_contract_type: String,
+    pub provenance_contract_type: String,
+    pub external_result_import_schema_type: String,
+    pub external_result_candidate_type: String,
+    pub external_result_quarantine_type: String,
+    pub classification: GatewayFormalTinyZ3BackendExecutionExternalReproductionClassification,
+    pub artifact_capture_contract_digest: Hash,
+    pub provenance_contract_digest: Hash,
+    pub external_result_import_schema_digest: Hash,
+    pub required_provenance_field_digest: Hash,
+    pub reproduction_policy_digest: Hash,
+    pub reproduction_blockers: BTreeSet<String>,
+    pub reproduction_blocker_digest: Hash,
+    pub reproduction_nonpromotion_digest: Hash,
+    pub reproduction_inputs: BTreeMap<String, bool>,
+    pub reproduction_inputs_digest: Hash,
+    pub digest_bindings: BTreeMap<String, Hash>,
+    pub id_bindings: BTreeMap<String, String>,
+    pub label_bindings: BTreeMap<String, String>,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub reproduction_rules: BTreeSet<String>,
+    pub reproduction_rules_digest: Hash,
+    pub forbidden_api_set: BTreeSet<String>,
+    pub forbidden_api_set_digest: Hash,
+    pub inherited_digest_requirements: BTreeSet<String>,
+    pub inherited_digest_requirements_digest: Hash,
+    pub reproduction_label: GatewayFormalTinyZ3BackendExecutionExternalReproductionLabel,
+    pub reproduction_summary: String,
+    pub previous_promotion_state: String,
+    pub promotion_state: String,
+    pub next_required_state: String,
+    pub claim_boundary: String,
+    pub writes_external_reproduction_artifact_files: bool,
+    pub claims_independent_external_reproduction: bool,
+    pub writes_level2_artifact_files: bool,
+    pub writes_score_axis_artifact_files: bool,
+    pub populates_score_axes: bool,
+    pub creates_accepted_formal_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3BackendExecutionExternalReproduction {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue {
+    InvalidSchemaVersion,
+    InvalidReproductionId,
+    InvalidReproductionPolicyId,
+    InvalidReproductionDecisionId,
+    MissingReproductionDecisionTimestamp,
+    MissingDigest(String),
+    DigestBindingMismatch,
+    IdBindingMismatch,
+    InvalidIdBinding(String),
+    LabelBindingMismatch,
+    Phase547Level2StateMismatch,
+    NonclaimMismatch,
+    InvalidExternalOwner,
+    InvalidArtifactCaptureContractType,
+    InvalidProvenanceContractType,
+    InvalidExternalResultImportSchemaType,
+    InvalidExternalResultCandidateType,
+    InvalidExternalResultQuarantineType,
+    InvalidClassification,
+    ArtifactCaptureContractDigestMismatch,
+    ProvenanceContractDigestMismatch,
+    ExternalResultImportSchemaDigestMismatch,
+    RequiredProvenanceFieldDigestMismatch,
+    ReproductionPolicyDigestMismatch,
+    ReproductionBlockerMismatch,
+    ReproductionNonpromotionDigestMismatch,
+    ReproductionInputMismatch,
+    ReproductionRulesMismatch,
+    ForbiddenApiSetMismatch,
+    InheritedDigestRequirementsMismatch,
+    ReproductionSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3BackendExecutionExternalReproductionValidation {
+    pub valid: bool,
+    pub issues: Vec<GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue>,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -73391,6 +73619,765 @@ pub fn validate_gateway_formal_tiny_z3_backend_execution_level2_eligibility_inpu
     }
 }
 
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    [
+        "not independent external reproduction",
+        "not accepted formal evidence",
+        "not Level2+ evidence",
+        "not score-axis evidence",
+        "not populated score axes",
+        "not proof authority",
+        "not checker transcript authority",
+        "not solver certificate authority",
+        "not Lean execution evidence",
+        "not new SMT execution evidence",
+        "not COBALT execution evidence",
+        "not Rust-to-Lean extraction evidence",
+        "not benchmark evidence",
+        "not external audit",
+        "not SOTA",
+        "not semantic correctness",
+        "not production readiness",
+        "not full security",
+        "not action authority",
+    ]
+    .into_iter()
+    .map(|label| NonClaimLabel(label.to_owned()))
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_inputs_missing(
+) -> BTreeMap<String, bool> {
+    [
+        "independent_external_run",
+        "artifact_capture_reviewed",
+        "provenance_reviewed",
+        "external_result_import_validated",
+        "replay_manifest_reviewed",
+        "external_reproduction_human_reviewed",
+    ]
+    .into_iter()
+    .map(|input| (input.to_owned(), false))
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_blockers() -> BTreeSet<String>
+{
+    [
+        "phase547_level2_blocked_local_only",
+        "missing_independent_external_run",
+        "missing_artifact_capture_review",
+        "missing_provenance_review",
+        "missing_external_result_import_validation",
+        "missing_replay_manifest_review",
+        "missing_external_reproduction_human_review",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_rules() -> BTreeSet<String> {
+    [
+        "phase547_state_required",
+        "phase547_digest_bindings_required",
+        "level2_blocked_local_only_required",
+        "level2_report_level0_design_note_required",
+        "level2_creates_level2_evidence_false_required",
+        "phase545_score_axes_blocked_local_only_required",
+        "phase545_score_axes_unpopulated_required",
+        "phase543_local_replay_required",
+        "phase543_level1_local_replay_required",
+        "phase541_materialized_artifact_binding_required",
+        "phase539_appended_class_binding_required",
+        "phase535_533_531_529_527_bindings_required",
+        "zkbench_core_external_owner_required",
+        "artifact_capture_contract_digest_required",
+        "provenance_contract_digest_required",
+        "external_result_import_schema_digest_required",
+        "required_provenance_field_digest_required",
+        "external_reproduction_blocked_classification_required",
+        "all_external_reproduction_inputs_missing_required",
+        "accepted_formal_evidence_rejected",
+        "level2_actual_evidence_rejected",
+        "score_axis_population_rejected",
+        "proof_checker_solver_authority_rejected",
+        "lean_cobalt_rust_to_lean_rejected",
+        "additional_smt_z3_execution_rejected",
+        "benchmark_evidence_rejected",
+        "external_audit_evidence_rejected",
+        "strong_public_claim_rejected",
+        "action_authority_rejected",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_forbidden_apis(
+) -> BTreeSet<String> {
+    [
+        "external_reproduction_artifact_writer",
+        "external_replay_runner",
+        "level2_artifact_writer",
+        "score_axis_writer",
+        "ScoreReport_axis_population",
+        "accepted_formal_evidence_writer",
+        "official_submission_api",
+        "external_runner",
+        "process_spawn",
+        "network_api",
+        "solver_api",
+        "proof_assistant_api",
+        "benchmark_runner",
+        "lean_api",
+        "cobalt_api",
+        "rust_to_lean_api",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_inherited_digest_requirements(
+) -> BTreeSet<String> {
+    [
+        "phase547_level2_eligibility_digest_required",
+        "phase547_level2_eligibility_input_digest_required",
+        "phase547_digest_binding_map_digest_required",
+        "phase547_id_binding_map_digest_required",
+        "phase547_label_binding_map_digest_required",
+        "phase547_classification_required",
+        "phase547_level2_blocker_digest_required",
+        "phase547_level2_nonpromotion_digest_required",
+        "phase547_report_claim_boundary_required",
+        "phase547_report_creates_level2_evidence_required",
+        "phase545_score_axis_eligibility_digest_required",
+        "phase545_score_axis_nonpopulation_digest_required",
+        "phase543_package_digest_required",
+        "phase543_evidence_class_required",
+        "phase543_claim_boundary_required",
+        "phase541_materialized_ledger_artifact_digest_required",
+        "phase539_appended_evidence_class_required",
+        "phase539_appended_claim_boundary_required",
+        "phase535_owner_decision_digest_required",
+        "phase533_review_digest_required",
+        "phase531_package_digest_required",
+        "phase529_result_digest_required",
+        "phase527_candidate_digest_required",
+        "external_owner_digest_required",
+        "artifact_capture_contract_digest_required",
+        "provenance_contract_digest_required",
+        "external_result_import_schema_digest_required",
+        "required_provenance_field_digest_required",
+        "external_reproduction_policy_digest_required",
+        "external_reproduction_blocker_digest_required",
+        "external_reproduction_nonpromotion_digest_required",
+        "external_reproduction_inputs_digest_required",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_nonpromotion_digest(
+    classification: &GatewayFormalTinyZ3BackendExecutionExternalReproductionClassification,
+    inputs: &BTreeMap<String, bool>,
+    blockers: &BTreeSet<String>,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-nonpromotion:v1",
+        &(classification, inputs, blockers),
+    )
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_policy_digest(
+    reproduction_policy_id: &str,
+    classification: &GatewayFormalTinyZ3BackendExecutionExternalReproductionClassification,
+    inputs: &BTreeMap<String, bool>,
+    blockers: &BTreeSet<String>,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-policy:v1",
+        &(reproduction_policy_id, classification, inputs, blockers),
+    )
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_digest_bindings(
+    level2: &GatewayFormalTinyZ3BackendExecutionLevel2Eligibility,
+) -> BTreeMap<String, Hash> {
+    BTreeMap::from([
+        (
+            "phase547_level2_eligibility_digest".to_owned(),
+            level2.digest(),
+        ),
+        (
+            "phase547_level2_eligibility_input_digest".to_owned(),
+            level2.level2_eligibility_input_digest,
+        ),
+        (
+            "phase547_digest_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase547-level2-digest-bindings:v1",
+                &level2.digest_bindings,
+            ),
+        ),
+        (
+            "phase547_id_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase547-level2-id-bindings:v1",
+                &level2.id_bindings,
+            ),
+        ),
+        (
+            "phase547_label_binding_map_digest".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-phase547-level2-label-bindings:v1",
+                &level2.label_bindings,
+            ),
+        ),
+        (
+            "phase547_level2_blocker_digest".to_owned(),
+            level2.level2_blocker_digest,
+        ),
+        (
+            "phase547_level2_nonpromotion_digest".to_owned(),
+            level2.level2_nonpromotion_digest,
+        ),
+        (
+            "phase545_score_axis_eligibility_digest".to_owned(),
+            level2.phase545_score_axis_eligibility_digest,
+        ),
+        (
+            "phase545_score_axis_nonpopulation_digest".to_owned(),
+            level2.phase545_score_axis_nonpopulation_digest,
+        ),
+        (
+            "phase543_package_digest".to_owned(),
+            level2.phase543_package_digest,
+        ),
+        (
+            "phase541_materialized_ledger_artifact_digest".to_owned(),
+            level2.phase541_materialized_ledger_artifact_digest,
+        ),
+        (
+            "phase535_owner_decision_digest".to_owned(),
+            level2.phase535_owner_decision_digest,
+        ),
+        (
+            "phase533_review_digest".to_owned(),
+            level2.phase533_review_digest,
+        ),
+        (
+            "phase531_package_digest".to_owned(),
+            level2.phase531_package_digest,
+        ),
+        (
+            "phase529_result_digest".to_owned(),
+            level2.phase529_result_digest,
+        ),
+        (
+            "phase527_candidate_digest".to_owned(),
+            level2.phase527_candidate_digest,
+        ),
+    ])
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_id_bindings(
+    level2: &GatewayFormalTinyZ3BackendExecutionLevel2Eligibility,
+    reproduction_id: &str,
+    reproduction_policy_id: &str,
+    reproduction_decision_id: &str,
+) -> BTreeMap<String, String> {
+    let mut ids = level2.id_bindings.clone();
+    ids.insert("reproduction_id".to_owned(), reproduction_id.to_owned());
+    ids.insert(
+        "reproduction_policy_id".to_owned(),
+        reproduction_policy_id.to_owned(),
+    );
+    ids.insert(
+        "reproduction_decision_id".to_owned(),
+        reproduction_decision_id.to_owned(),
+    );
+    ids.insert(
+        "phase547_level2_eligibility_id".to_owned(),
+        level2.level2_eligibility_id.clone(),
+    );
+    ids
+}
+
+pub fn gateway_formal_tiny_z3_backend_execution_external_reproduction_label_bindings(
+    level2: &GatewayFormalTinyZ3BackendExecutionLevel2Eligibility,
+    reproduction_label: &GatewayFormalTinyZ3BackendExecutionExternalReproductionLabel,
+) -> BTreeMap<String, String> {
+    let mut labels = level2.label_bindings.clone();
+    labels.insert(
+        "phase547_level2_label".to_owned(),
+        format!("{:?}", level2.level2_label),
+    );
+    labels.insert(
+        "reproduction_label".to_owned(),
+        format!("{reproduction_label:?}"),
+    );
+    labels
+}
+
+pub fn build_gateway_formal_tiny_z3_backend_execution_external_reproduction(
+    level2: &GatewayFormalTinyZ3BackendExecutionLevel2Eligibility,
+    input: &GatewayFormalTinyZ3BackendExecutionExternalReproductionInput,
+) -> Result<
+    GatewayFormalTinyZ3BackendExecutionExternalReproduction,
+    GatewayFormalTinyZ3BackendExecutionExternalReproductionValidation,
+> {
+    let input_validation =
+        validate_gateway_formal_tiny_z3_backend_execution_external_reproduction_input(
+            level2, input,
+        );
+    if !input_validation.valid {
+        return Err(input_validation);
+    }
+    let digest_bindings =
+        gateway_formal_tiny_z3_backend_execution_external_reproduction_digest_bindings(level2);
+    Ok(
+        GatewayFormalTinyZ3BackendExecutionExternalReproduction {
+            schema_version:
+                GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_SCHEMA_VERSION
+                    .to_owned(),
+            reproduction_id: input.reproduction_id.clone(),
+            state_slice:
+                GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_STATE_SLICE
+                    .to_owned(),
+            reproduction_input_digest: input.digest(),
+            reproduction_policy_id: input.reproduction_policy_id.clone(),
+            reproduction_decision_id: input.reproduction_decision_id.clone(),
+            reproduction_decision_at_unix: input.reproduction_decision_at_unix,
+            phase547_level2_eligibility_digest: digest_bindings
+                ["phase547_level2_eligibility_digest"],
+            phase547_level2_eligibility_input_digest: digest_bindings
+                ["phase547_level2_eligibility_input_digest"],
+            phase547_digest_binding_map_digest: digest_bindings
+                ["phase547_digest_binding_map_digest"],
+            phase547_id_binding_map_digest: digest_bindings["phase547_id_binding_map_digest"],
+            phase547_label_binding_map_digest: digest_bindings
+                ["phase547_label_binding_map_digest"],
+            phase547_classification: level2.classification.clone(),
+            phase547_level2_blocker_digest: digest_bindings["phase547_level2_blocker_digest"],
+            phase547_level2_nonpromotion_digest: digest_bindings
+                ["phase547_level2_nonpromotion_digest"],
+            phase547_report_claim_boundary: level2.report_claim_boundary.clone(),
+            phase547_report_creates_level2_evidence: level2.report_creates_level2_evidence,
+            phase545_score_axis_eligibility_digest: digest_bindings
+                ["phase545_score_axis_eligibility_digest"],
+            phase545_score_axis_nonpopulation_digest: digest_bindings
+                ["phase545_score_axis_nonpopulation_digest"],
+            phase543_package_digest: digest_bindings["phase543_package_digest"],
+            phase543_evidence_class: level2.phase543_evidence_class.clone(),
+            phase543_claim_boundary: level2.phase543_claim_boundary.clone(),
+            phase541_materialized_ledger_artifact_digest: digest_bindings
+                ["phase541_materialized_ledger_artifact_digest"],
+            phase539_appended_evidence_class: level2.phase539_appended_evidence_class.clone(),
+            phase539_appended_claim_boundary: level2.phase539_appended_claim_boundary.clone(),
+            phase535_owner_decision_digest: digest_bindings["phase535_owner_decision_digest"],
+            phase533_review_digest: digest_bindings["phase533_review_digest"],
+            phase531_package_digest: digest_bindings["phase531_package_digest"],
+            phase529_result_digest: digest_bindings["phase529_result_digest"],
+            phase527_candidate_digest: digest_bindings["phase527_candidate_digest"],
+            external_owner_id: input.external_owner_id.clone(),
+            artifact_capture_contract_type: input.artifact_capture_contract_type.clone(),
+            provenance_contract_type: input.provenance_contract_type.clone(),
+            external_result_import_schema_type: input.external_result_import_schema_type.clone(),
+            external_result_candidate_type: input.external_result_candidate_type.clone(),
+            external_result_quarantine_type: input.external_result_quarantine_type.clone(),
+            classification: input.classification.clone(),
+            artifact_capture_contract_digest: input.artifact_capture_contract_digest,
+            provenance_contract_digest: input.provenance_contract_digest,
+            external_result_import_schema_digest: input.external_result_import_schema_digest,
+            required_provenance_field_digest: input.required_provenance_field_digest,
+            reproduction_policy_digest: input.reproduction_policy_digest,
+            reproduction_blockers: input.reproduction_blockers.clone(),
+            reproduction_blocker_digest: input.reproduction_blocker_digest,
+            reproduction_nonpromotion_digest: input.reproduction_nonpromotion_digest,
+            reproduction_inputs: input.reproduction_inputs.clone(),
+            reproduction_inputs_digest: input.reproduction_inputs_digest,
+            digest_bindings: input.digest_bindings.clone(),
+            id_bindings: input.id_bindings.clone(),
+            label_bindings: input.label_bindings.clone(),
+            explicit_nonclaims: input.explicit_nonclaims.clone(),
+            explicit_nonclaims_digest: input.explicit_nonclaims_digest,
+            reproduction_rules: input.reproduction_rules.clone(),
+            reproduction_rules_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-rules:v1",
+                &input.reproduction_rules,
+            ),
+            forbidden_api_set: input.forbidden_api_set.clone(),
+            forbidden_api_set_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-forbidden-apis:v1",
+                &input.forbidden_api_set,
+            ),
+            inherited_digest_requirements: input.inherited_digest_requirements.clone(),
+            inherited_digest_requirements_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-inherited-digest-requirements:v1",
+                &input.inherited_digest_requirements,
+            ),
+            reproduction_label: input.reproduction_label.clone(),
+            reproduction_summary: input.reproduction_summary.clone(),
+            previous_promotion_state: "backend_execution_level2_eligibility_metadata".to_owned(),
+            promotion_state: "backend_execution_external_reproduction_metadata".to_owned(),
+            next_required_state:
+                "backend_execution_independent_external_reproduction_still_unperformed"
+                    .to_owned(),
+            claim_boundary:
+                gateway_formal_tiny_z3_backend_execution_external_reproduction_claim_boundary(),
+            writes_external_reproduction_artifact_files: false,
+            claims_independent_external_reproduction: false,
+            writes_level2_artifact_files: false,
+            writes_score_axis_artifact_files: false,
+            populates_score_axes: false,
+            creates_accepted_formal_evidence: false,
+            creates_level2_evidence: false,
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            lean_execution_evidence_created: false,
+            additional_smt_z3_execution_created: false,
+            cobalt_execution_evidence_created: false,
+            rust_to_lean_execution_evidence_created: false,
+            benchmark_evidence_created: false,
+            external_audit_evidence_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            grants_authority: false,
+        },
+    )
+}
+
+pub fn validate_gateway_formal_tiny_z3_backend_execution_external_reproduction_input(
+    level2: &GatewayFormalTinyZ3BackendExecutionLevel2Eligibility,
+    input: &GatewayFormalTinyZ3BackendExecutionExternalReproductionInput,
+) -> GatewayFormalTinyZ3BackendExecutionExternalReproductionValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_SCHEMA_VERSION
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::InvalidSchemaVersion,
+        );
+    }
+    if !is_single_segment_id(&input.reproduction_id) {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::InvalidReproductionId,
+        );
+    }
+    if !is_single_segment_id(&input.reproduction_policy_id) {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::InvalidReproductionPolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.reproduction_decision_id) {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::InvalidReproductionDecisionId,
+        );
+    }
+    if input.reproduction_decision_at_unix == 0 {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::MissingReproductionDecisionTimestamp,
+        );
+    }
+    let expected_digests =
+        gateway_formal_tiny_z3_backend_execution_external_reproduction_digest_bindings(level2);
+    for (label, digest) in &input.digest_bindings {
+        if *digest == Hash([0; 32]) {
+            issues.push(
+                GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::MissingDigest(
+                    label.clone(),
+                ),
+            );
+        }
+    }
+    if input.digest_bindings != expected_digests {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::DigestBindingMismatch,
+        );
+    }
+    let expected_ids = gateway_formal_tiny_z3_backend_execution_external_reproduction_id_bindings(
+        level2,
+        &input.reproduction_id,
+        &input.reproduction_policy_id,
+        &input.reproduction_decision_id,
+    );
+    for (label, value) in &input.id_bindings {
+        if !is_single_segment_id(value) {
+            issues.push(
+                GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::InvalidIdBinding(
+                    label.clone(),
+                ),
+            );
+        }
+    }
+    if input.id_bindings != expected_ids {
+        issues
+            .push(GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::IdBindingMismatch);
+    }
+    let expected_labels =
+        gateway_formal_tiny_z3_backend_execution_external_reproduction_label_bindings(
+            level2,
+            &input.reproduction_label,
+        );
+    if input.label_bindings != expected_labels {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::LabelBindingMismatch,
+        );
+    }
+    if level2.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_LEVEL2_ELIGIBILITY_SCHEMA_VERSION
+        || level2.state_slice
+            != GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_LEVEL2_ELIGIBILITY_STATE_SLICE
+        || level2.promotion_state != "backend_execution_level2_eligibility_metadata"
+        || level2.next_required_state
+            != "backend_execution_formal_evidence_and_external_reproduction_still_unperformed"
+        || level2.classification
+            != GatewayFormalTinyZ3BackendExecutionLevel2EligibilityClassification::Level2BlockedLocalOnly
+        || level2.report_claim_boundary != GATEWAY_FORMAL_TINY_Z3_LEVEL2_REPORT_CLAIM_BOUNDARY
+        || level2.report_creates_level2_evidence
+        || level2.phase545_classification
+            != GatewayFormalTinyZ3BackendExecutionScoreAxisEligibilityClassification::ScoreAxesBlockedLocalOnly
+        || level2.phase543_evidence_class != "LocalReplay"
+        || level2.phase543_claim_boundary != "Level1LocalReplay"
+        || level2.phase541_materialized_ledger_artifact_digest == Hash([0; 32])
+        || level2.phase535_owner_decision_digest == Hash([0; 32])
+        || level2.phase533_review_digest == Hash([0; 32])
+        || level2.phase531_package_digest == Hash([0; 32])
+        || level2.phase529_result_digest == Hash([0; 32])
+        || level2.phase527_candidate_digest == Hash([0; 32])
+        || level2.writes_level2_artifact_files
+        || level2.writes_score_axis_artifact_files
+        || level2.populates_score_axes
+        || level2.creates_accepted_formal_evidence
+        || level2.creates_level2_evidence
+        || level2.proof_artifact_created
+        || level2.checker_transcript_created
+        || level2.solver_certificate_created
+        || level2.lean_execution_evidence_created
+        || level2.additional_smt_z3_execution_created
+        || level2.cobalt_execution_evidence_created
+        || level2.rust_to_lean_execution_evidence_created
+        || level2.benchmark_evidence_created
+        || level2.external_audit_evidence_created
+        || level2.independent_external_reproduction_claimed
+        || level2.semantic_correctness_claimed
+        || level2.production_readiness_claimed
+        || level2.sota_claimed
+        || level2.breakthrough_claimed
+        || level2.full_security_claimed
+        || level2.grants_authority
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::Phase547Level2StateMismatch,
+        );
+    }
+    let nonclaims =
+        gateway_formal_tiny_z3_backend_execution_external_reproduction_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-nonclaims:v1",
+                &nonclaims,
+            )
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::NonclaimMismatch,
+        );
+    }
+    if input.external_owner_id != GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OWNER_ID {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::InvalidExternalOwner,
+        );
+    }
+    if input.artifact_capture_contract_type != GATEWAY_FORMAL_TINY_Z3_ARTIFACT_CAPTURE_CONTRACT_TYPE
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::InvalidArtifactCaptureContractType,
+        );
+    }
+    if input.provenance_contract_type != GATEWAY_FORMAL_TINY_Z3_PROVENANCE_CONTRACT_TYPE {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::InvalidProvenanceContractType,
+        );
+    }
+    if input.external_result_import_schema_type
+        != GATEWAY_FORMAL_TINY_Z3_EXTERNAL_RESULT_IMPORT_SCHEMA_TYPE
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::InvalidExternalResultImportSchemaType,
+        );
+    }
+    if input.external_result_candidate_type != GATEWAY_FORMAL_TINY_Z3_EXTERNAL_RESULT_CANDIDATE_TYPE
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::InvalidExternalResultCandidateType,
+        );
+    }
+    if input.external_result_quarantine_type
+        != GATEWAY_FORMAL_TINY_Z3_EXTERNAL_RESULT_QUARANTINE_TYPE
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::InvalidExternalResultQuarantineType,
+        );
+    }
+    if input.classification
+        != GatewayFormalTinyZ3BackendExecutionExternalReproductionClassification::ExternalReproductionBlockedNoIndependentRun
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::InvalidClassification,
+        );
+    }
+    if input.artifact_capture_contract_digest
+        != gateway_formal_tiny_z3_artifact_capture_contract_digest()
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::ArtifactCaptureContractDigestMismatch,
+        );
+    }
+    if input.provenance_contract_digest != gateway_formal_tiny_z3_provenance_contract_digest() {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::ProvenanceContractDigestMismatch,
+        );
+    }
+    if input.external_result_import_schema_digest
+        != gateway_formal_tiny_z3_external_result_import_schema_digest()
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::ExternalResultImportSchemaDigestMismatch,
+        );
+    }
+    if input.required_provenance_field_digest
+        != gateway_formal_tiny_z3_required_provenance_field_digest()
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::RequiredProvenanceFieldDigestMismatch,
+        );
+    }
+    let blockers = gateway_formal_tiny_z3_backend_execution_external_reproduction_blockers();
+    if input.reproduction_blockers != blockers
+        || input.reproduction_blocker_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-blockers:v1",
+                &blockers,
+            )
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::ReproductionBlockerMismatch,
+        );
+    }
+    let expected_inputs =
+        gateway_formal_tiny_z3_backend_execution_external_reproduction_inputs_missing();
+    if input.reproduction_inputs != expected_inputs
+        || input.reproduction_inputs.values().any(|present| *present)
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::ReproductionInputMismatch,
+        );
+    }
+    if input.reproduction_inputs_digest
+        != hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-inputs:v1",
+            &expected_inputs,
+        )
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::ReproductionInputMismatch,
+        );
+    }
+    if input.reproduction_nonpromotion_digest
+        != gateway_formal_tiny_z3_backend_execution_external_reproduction_nonpromotion_digest(
+            &input.classification,
+            &input.reproduction_inputs,
+            &input.reproduction_blockers,
+        )
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::ReproductionNonpromotionDigestMismatch,
+        );
+    }
+    let expected_policy_digest =
+        gateway_formal_tiny_z3_backend_execution_external_reproduction_policy_digest(
+            &input.reproduction_policy_id,
+            &input.classification,
+            &input.reproduction_inputs,
+            &input.reproduction_blockers,
+        );
+    if input.reproduction_policy_digest != expected_policy_digest {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::ReproductionPolicyDigestMismatch,
+        );
+    }
+    if input.reproduction_rules
+        != gateway_formal_tiny_z3_backend_execution_external_reproduction_rules()
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::ReproductionRulesMismatch,
+        );
+    }
+    if input.forbidden_api_set
+        != gateway_formal_tiny_z3_backend_execution_external_reproduction_forbidden_apis()
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::ForbiddenApiSetMismatch,
+        );
+    }
+    if input.inherited_digest_requirements
+        != gateway_formal_tiny_z3_backend_execution_external_reproduction_inherited_digest_requirements()
+    {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::InheritedDigestRequirementsMismatch,
+        );
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.reproduction_summary,
+    ) {
+        issues.push(
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::ReproductionSummaryPromotionClaim,
+        );
+    }
+    if input.external_reproduction_artifact_write_requested
+        || input.independent_external_reproduction_claimed
+        || input.level2_artifact_write_requested
+        || input.score_axis_artifact_write_requested
+        || input.score_axis_population_requested
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.proof_artifact_promoted
+        || input.checker_transcript_promoted
+        || input.solver_certificate_promoted
+        || input.lean_execution_evidence_created
+        || input.additional_smt_z3_execution_created
+        || input.cobalt_execution_evidence_created
+        || input.rust_to_lean_execution_evidence_created
+        || input.benchmark_evidence_created
+        || input.external_audit_evidence_created
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::PromotionAttempt);
+    }
+    GatewayFormalTinyZ3BackendExecutionExternalReproductionValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -113709,6 +114696,226 @@ mod tests {
     }
 
     #[test]
+    fn phase549_tiny_z3_backend_execution_external_reproduction_records_missing_inputs() {
+        let Some((obligation_root, phase405_output_root, output_root, level2)) =
+            phase549_tiny_z3_backend_execution_external_reproduction_source(
+                "phase549-reproduction",
+            )
+        else {
+            return;
+        };
+        let reproduction_input =
+            phase549_tiny_z3_backend_execution_external_reproduction_input(
+                "phase549-reproduction",
+                &level2,
+                GatewayFormalTinyZ3BackendExecutionExternalReproductionLabel::BackendExecutionExternalReproductionRecorded,
+            );
+        let reproduction = build_gateway_formal_tiny_z3_backend_execution_external_reproduction(
+            &level2,
+            &reproduction_input,
+        )
+        .expect("phase549 backend execution external reproduction metadata builds");
+
+        assert_eq!(
+            reproduction.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_STATE_SLICE
+        );
+        assert_eq!(
+            reproduction.claim_boundary,
+            gateway_formal_tiny_z3_backend_execution_external_reproduction_claim_boundary()
+        );
+        assert_eq!(
+            reproduction.phase547_level2_eligibility_digest,
+            level2.digest()
+        );
+        assert_eq!(
+            reproduction.phase547_classification,
+            GatewayFormalTinyZ3BackendExecutionLevel2EligibilityClassification::Level2BlockedLocalOnly
+        );
+        assert_eq!(
+            reproduction.phase547_report_claim_boundary,
+            GATEWAY_FORMAL_TINY_Z3_LEVEL2_REPORT_CLAIM_BOUNDARY
+        );
+        assert!(!reproduction.phase547_report_creates_level2_evidence);
+        assert_eq!(
+            reproduction.phase545_score_axis_eligibility_digest,
+            level2.phase545_score_axis_eligibility_digest
+        );
+        assert_eq!(
+            reproduction.phase545_score_axis_nonpopulation_digest,
+            level2.phase545_score_axis_nonpopulation_digest
+        );
+        assert_eq!(reproduction.phase543_evidence_class, "LocalReplay");
+        assert_eq!(reproduction.phase543_claim_boundary, "Level1LocalReplay");
+        assert_eq!(
+            reproduction.external_owner_id,
+            GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OWNER_ID
+        );
+        assert_eq!(
+            reproduction.classification,
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionClassification::ExternalReproductionBlockedNoIndependentRun
+        );
+        assert_eq!(
+            reproduction.artifact_capture_contract_digest,
+            gateway_formal_tiny_z3_artifact_capture_contract_digest()
+        );
+        assert_eq!(
+            reproduction.provenance_contract_digest,
+            gateway_formal_tiny_z3_provenance_contract_digest()
+        );
+        assert_eq!(
+            reproduction.external_result_import_schema_digest,
+            gateway_formal_tiny_z3_external_result_import_schema_digest()
+        );
+        assert_eq!(
+            reproduction.required_provenance_field_digest,
+            gateway_formal_tiny_z3_required_provenance_field_digest()
+        );
+        assert_eq!(
+            reproduction.reproduction_inputs,
+            gateway_formal_tiny_z3_backend_execution_external_reproduction_inputs_missing()
+        );
+        assert!(reproduction
+            .reproduction_inputs
+            .values()
+            .all(|present| !*present));
+        assert_eq!(
+            reproduction.reproduction_blockers,
+            gateway_formal_tiny_z3_backend_execution_external_reproduction_blockers()
+        );
+        assert!(!reproduction.writes_external_reproduction_artifact_files);
+        assert!(!reproduction.claims_independent_external_reproduction);
+        assert!(!reproduction.writes_level2_artifact_files);
+        assert!(!reproduction.writes_score_axis_artifact_files);
+        assert!(!reproduction.populates_score_axes);
+        assert!(!reproduction.creates_accepted_formal_evidence);
+        assert!(!reproduction.creates_level2_evidence);
+        assert!(!reproduction.proof_artifact_created);
+        assert!(!reproduction.checker_transcript_created);
+        assert!(!reproduction.solver_certificate_created);
+        assert!(!reproduction.lean_execution_evidence_created);
+        assert!(!reproduction.additional_smt_z3_execution_created);
+        assert!(!reproduction.cobalt_execution_evidence_created);
+        assert!(!reproduction.rust_to_lean_execution_evidence_created);
+        assert!(!reproduction.benchmark_evidence_created);
+        assert!(!reproduction.external_audit_evidence_created);
+        assert!(!reproduction.semantic_correctness_claimed);
+        assert!(!reproduction.production_readiness_claimed);
+        assert!(!reproduction.sota_claimed);
+        assert!(!reproduction.breakthrough_claimed);
+        assert!(!reproduction.full_security_claimed);
+        assert!(!reproduction.grants_authority);
+
+        fs::remove_dir_all(&output_root).expect("phase549 output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase549 phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase549 obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase549_tiny_z3_backend_execution_external_reproduction_rejects_invalid_phase547_state() {
+        let Some((obligation_root, phase405_output_root, output_root, mut level2)) =
+            phase549_tiny_z3_backend_execution_external_reproduction_source(
+                "phase549-invalid-phase547",
+            )
+        else {
+            return;
+        };
+        level2.creates_level2_evidence = true;
+        let reproduction_input =
+            phase549_tiny_z3_backend_execution_external_reproduction_input(
+                "phase549-invalid-reproduction",
+                &level2,
+                GatewayFormalTinyZ3BackendExecutionExternalReproductionLabel::BackendExecutionExternalReproductionRejected,
+            );
+        let validation =
+            validate_gateway_formal_tiny_z3_backend_execution_external_reproduction_input(
+                &level2,
+                &reproduction_input,
+            );
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::Phase547Level2StateMismatch
+        ));
+        assert!(
+            build_gateway_formal_tiny_z3_backend_execution_external_reproduction(
+                &level2,
+                &reproduction_input,
+            )
+            .is_err()
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase549 invalid output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase549 invalid phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase549 invalid obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase549_tiny_z3_backend_execution_external_reproduction_rejects_fabricated_reproduction_and_promotion(
+    ) {
+        let Some((obligation_root, phase405_output_root, output_root, level2)) =
+            phase549_tiny_z3_backend_execution_external_reproduction_source("phase549-promotion")
+        else {
+            return;
+        };
+        let mut reproduction_input =
+            phase549_tiny_z3_backend_execution_external_reproduction_input(
+                "phase549-promotion-reproduction",
+                &level2,
+                GatewayFormalTinyZ3BackendExecutionExternalReproductionLabel::BackendExecutionExternalReproductionRejected,
+            );
+        reproduction_input
+            .reproduction_inputs
+            .insert("independent_external_run".to_owned(), true);
+        reproduction_input.external_reproduction_artifact_write_requested = true;
+        reproduction_input.independent_external_reproduction_claimed = true;
+        reproduction_input.level2_artifact_write_requested = true;
+        reproduction_input.score_axis_artifact_write_requested = true;
+        reproduction_input.score_axis_population_requested = true;
+        reproduction_input.accepted_formal_evidence_created = true;
+        reproduction_input.creates_level2_evidence = true;
+        reproduction_input.proof_artifact_promoted = true;
+        reproduction_input.checker_transcript_promoted = true;
+        reproduction_input.solver_certificate_promoted = true;
+        reproduction_input.lean_execution_evidence_created = true;
+        reproduction_input.additional_smt_z3_execution_created = true;
+        reproduction_input.cobalt_execution_evidence_created = true;
+        reproduction_input.rust_to_lean_execution_evidence_created = true;
+        reproduction_input.benchmark_evidence_created = true;
+        reproduction_input.external_audit_evidence_created = true;
+        reproduction_input.semantic_correctness_claimed = true;
+        reproduction_input.production_readiness_claimed = true;
+        reproduction_input.sota_claimed = true;
+        reproduction_input.breakthrough_claimed = true;
+        reproduction_input.full_security_claimed = true;
+        reproduction_input.action_authority_claimed = true;
+        let validation =
+            validate_gateway_formal_tiny_z3_backend_execution_external_reproduction_input(
+                &level2,
+                &reproduction_input,
+            );
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::ReproductionInputMismatch
+        ));
+        assert!(validation.issues.contains(
+            &GatewayFormalTinyZ3BackendExecutionExternalReproductionIssue::PromotionAttempt
+        ));
+        assert!(
+            build_gateway_formal_tiny_z3_backend_execution_external_reproduction(
+                &level2,
+                &reproduction_input,
+            )
+            .is_err()
+        );
+
+        fs::remove_dir_all(&output_root).expect("phase549 promotion output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase549 promotion phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root)
+            .expect("phase549 promotion obligation cleanup succeeds");
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -123349,6 +124556,147 @@ mod tests {
             benchmark_evidence_created: false,
             external_audit_evidence_created: false,
             independent_external_reproduction_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase549_tiny_z3_backend_execution_external_reproduction_source(
+        source_prefix: &str,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        GatewayFormalTinyZ3BackendExecutionLevel2Eligibility,
+    )> {
+        let (obligation_root, phase405_output_root, output_root, score_axis_eligibility) =
+            phase547_tiny_z3_backend_execution_level2_eligibility_source(source_prefix)?;
+        let level2_input = phase547_tiny_z3_backend_execution_level2_eligibility_input(
+            &format!("{source_prefix}-level2-eligibility"),
+            &score_axis_eligibility,
+            GatewayFormalTinyZ3BackendExecutionLevel2EligibilityLabel::BackendExecutionLevel2EligibilityRecorded,
+        );
+        let level2 = build_gateway_formal_tiny_z3_backend_execution_level2_eligibility(
+            &score_axis_eligibility,
+            &level2_input,
+        )
+        .expect("phase549 source Level2 eligibility metadata builds");
+        Some((obligation_root, phase405_output_root, output_root, level2))
+    }
+
+    fn phase549_tiny_z3_backend_execution_external_reproduction_input(
+        reproduction_id: &str,
+        level2: &GatewayFormalTinyZ3BackendExecutionLevel2Eligibility,
+        reproduction_label: GatewayFormalTinyZ3BackendExecutionExternalReproductionLabel,
+    ) -> GatewayFormalTinyZ3BackendExecutionExternalReproductionInput {
+        let reproduction_policy_id = "phase549-backend-execution-external-reproduction-policy";
+        let reproduction_decision_id = "phase549-backend-execution-external-reproduction-decision";
+        let classification =
+            GatewayFormalTinyZ3BackendExecutionExternalReproductionClassification::ExternalReproductionBlockedNoIndependentRun;
+        let nonclaims =
+            gateway_formal_tiny_z3_backend_execution_external_reproduction_required_nonclaims();
+        let blockers = gateway_formal_tiny_z3_backend_execution_external_reproduction_blockers();
+        let reproduction_inputs =
+            gateway_formal_tiny_z3_backend_execution_external_reproduction_inputs_missing();
+        GatewayFormalTinyZ3BackendExecutionExternalReproductionInput {
+            schema_version:
+                GATEWAY_FORMAL_TINY_Z3_BACKEND_EXECUTION_EXTERNAL_REPRODUCTION_SCHEMA_VERSION
+                    .to_owned(),
+            reproduction_id: reproduction_id.to_owned(),
+            reproduction_policy_id: reproduction_policy_id.to_owned(),
+            reproduction_decision_id: reproduction_decision_id.to_owned(),
+            reproduction_decision_at_unix: 1_800_000_549,
+            digest_bindings:
+                gateway_formal_tiny_z3_backend_execution_external_reproduction_digest_bindings(
+                    level2,
+                ),
+            id_bindings:
+                gateway_formal_tiny_z3_backend_execution_external_reproduction_id_bindings(
+                    level2,
+                    reproduction_id,
+                    reproduction_policy_id,
+                    reproduction_decision_id,
+                ),
+            label_bindings:
+                gateway_formal_tiny_z3_backend_execution_external_reproduction_label_bindings(
+                    level2,
+                    &reproduction_label,
+                ),
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-nonclaims:v1",
+                &nonclaims,
+            ),
+            external_owner_id: GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OWNER_ID.to_owned(),
+            artifact_capture_contract_type: GATEWAY_FORMAL_TINY_Z3_ARTIFACT_CAPTURE_CONTRACT_TYPE
+                .to_owned(),
+            provenance_contract_type: GATEWAY_FORMAL_TINY_Z3_PROVENANCE_CONTRACT_TYPE.to_owned(),
+            external_result_import_schema_type:
+                GATEWAY_FORMAL_TINY_Z3_EXTERNAL_RESULT_IMPORT_SCHEMA_TYPE.to_owned(),
+            external_result_candidate_type: GATEWAY_FORMAL_TINY_Z3_EXTERNAL_RESULT_CANDIDATE_TYPE
+                .to_owned(),
+            external_result_quarantine_type: GATEWAY_FORMAL_TINY_Z3_EXTERNAL_RESULT_QUARANTINE_TYPE
+                .to_owned(),
+            classification: classification.clone(),
+            artifact_capture_contract_digest:
+                gateway_formal_tiny_z3_artifact_capture_contract_digest(),
+            provenance_contract_digest: gateway_formal_tiny_z3_provenance_contract_digest(),
+            external_result_import_schema_digest:
+                gateway_formal_tiny_z3_external_result_import_schema_digest(),
+            required_provenance_field_digest:
+                gateway_formal_tiny_z3_required_provenance_field_digest(),
+            reproduction_policy_digest:
+                gateway_formal_tiny_z3_backend_execution_external_reproduction_policy_digest(
+                    reproduction_policy_id,
+                    &classification,
+                    &reproduction_inputs,
+                    &blockers,
+                ),
+            reproduction_blockers: blockers.clone(),
+            reproduction_blocker_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-blockers:v1",
+                &blockers,
+            ),
+            reproduction_nonpromotion_digest:
+                gateway_formal_tiny_z3_backend_execution_external_reproduction_nonpromotion_digest(
+                    &classification,
+                    &reproduction_inputs,
+                    &blockers,
+                ),
+            reproduction_inputs: reproduction_inputs.clone(),
+            reproduction_inputs_digest: hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-backend-execution-external-reproduction-inputs:v1",
+                &reproduction_inputs,
+            ),
+            reproduction_rules:
+                gateway_formal_tiny_z3_backend_execution_external_reproduction_rules(),
+            forbidden_api_set:
+                gateway_formal_tiny_z3_backend_execution_external_reproduction_forbidden_apis(),
+            inherited_digest_requirements:
+                gateway_formal_tiny_z3_backend_execution_external_reproduction_inherited_digest_requirements(),
+            reproduction_label,
+            reproduction_summary: "local backend route metadata records missing independent review"
+                .to_owned(),
+            external_reproduction_artifact_write_requested: false,
+            independent_external_reproduction_claimed: false,
+            level2_artifact_write_requested: false,
+            score_axis_artifact_write_requested: false,
+            score_axis_population_requested: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            proof_artifact_promoted: false,
+            checker_transcript_promoted: false,
+            solver_certificate_promoted: false,
+            lean_execution_evidence_created: false,
+            additional_smt_z3_execution_created: false,
+            cobalt_execution_evidence_created: false,
+            rust_to_lean_execution_evidence_created: false,
+            benchmark_evidence_created: false,
+            external_audit_evidence_created: false,
             semantic_correctness_claimed: false,
             production_readiness_claimed: false,
             sota_claimed: false,
