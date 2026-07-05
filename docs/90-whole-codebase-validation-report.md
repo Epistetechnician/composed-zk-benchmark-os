@@ -7758,5 +7758,18 @@ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
 additional SMT/Z3 execution, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/537-hsai-tiny-z3-backend-execution-accepted-append-evaluation-metadata-notes.md](docs/537-hsai-tiny-z3-backend-execution-accepted-append-evaluation-metadata-notes.md)
+documents the Phase 537 local backend-execution accepted append evaluation
+metadata implementation. The implementation calls
+`zkbench_core::validate_accepted_ledger_append_transaction_request` over
+caller-supplied in-memory values and records local validation metadata:
+request/ledger/validation-result digests, validation issue-kind set, Phase 535
+owner-decision bindings, inherited Phase 533/531/529/527 digests, and
+nonpromotion flags. It mutates no accepted Evidence Ledger, creates no
+accepted evidence, creates no Level2+ evidence, populates no score axes, runs
+no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no
+benchmark evidence, and claims no production/SOTA/security/semantic-
+correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
