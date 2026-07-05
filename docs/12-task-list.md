@@ -15160,6 +15160,35 @@ axes, no accepted formal evidence, no Lean/COBALT/Rust-to-Lean execution, no
 benchmark evidence, no external audit evidence, and no production/SOTA/
 security/correctness claim.
 
+## Phase 540 HSAI Tiny Z3 Backend Execution Materialized Accepted Append Boundary
+
+Status: complete. See
+`docs/540-hsai-tiny-z3-backend-execution-materialized-accepted-append-boundary.md`.
+
+Goal: define the docs-first boundary for a future local materialized accepted
+ledger append output over one exact Phase 539 in-memory mutation metadata
+record.
+
+Implemented: Phase 540 defines the future materialization contract: required
+Phase 539 mutation/input/nonclaim/rule/forbidden-API/inherited-digest
+bindings, inherited Phase 535/533/531/529/527 bindings, the only allowed
+`zkbench-core` materialized append owner, `MaterializedAcceptedLedgerAppendRequest`,
+`apply_materialized_accepted_ledger_append_transaction`, caller-selected local
+ledger path identity and policy digests, `create_if_missing` policy binding,
+future report/artifact/byte-length bindings, fail-closed validation rules,
+meaning limits, and Phase 541 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named boundary for whether one Phase 539
+in-memory accepted append mutation may be materialized through the existing
+`zkbench-core` materialized accepted append owner. It still has no materialized
+accepted ledger output, no Level2+ evidence, no populated score axes, no
+accepted formal evidence, no Lean/COBALT/Rust-to-Lean execution, no benchmark
+evidence, no external audit evidence, and no production/SOTA/security/
+correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
