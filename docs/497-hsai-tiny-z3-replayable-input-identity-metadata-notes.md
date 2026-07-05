@@ -121,11 +121,15 @@ not proof authority, not benchmark evidence, not SOTA, not semantic
 correctness, not production readiness, not full security, and not action
 authority.
 
-## Next Responsible Slice
+## Phase 498 Boundary Status
 
-The next responsible slice is a docs-first boundary for the next Phase 488
-accepted-path prerequisite gate: source correspondence statement and digest.
-It must not implement accepted append, mutate the accepted Evidence Ledger,
-create accepted formal evidence, create Level2+ evidence, populate score axes,
-run Lean/new-SMT/COBALT/Rust-to-Lean extraction, create benchmark evidence, or
-claim SOTA, full security, semantic correctness, or production readiness.
+Phase 498 defines the docs-first boundary for the next Phase 488 accepted-path
+prerequisite gate in
+`docs/498-hsai-tiny-z3-source-correspondence-statement-digest-boundary.md`:
+source correspondence statement and digest.
+
+That boundary does not implement accepted append, mutate the accepted Evidence
+Ledger, create accepted formal evidence, create Level2+ evidence, populate
+score axes, run Lean/new-SMT/COBALT/Rust-to-Lean extraction, create benchmark
+evidence, or claim SOTA, full security, semantic correctness, or production
+readiness.
