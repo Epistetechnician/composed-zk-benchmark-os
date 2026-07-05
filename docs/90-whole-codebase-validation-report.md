@@ -8554,5 +8554,25 @@ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
 additional SMT/Z3 execution, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/586-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-reproduction-evidence-boundary.md](docs/586-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-reproduction-evidence-boundary.md)
+documents the Phase 586 docs-first packet role artifact independent
+reproduction evidence requirement boundary. It requires one exact Phase 585
+`PacketRoleArtifactAcceptedResultPolicyResolutionBlocked` record, Phase 585
+policy-resolution/input/binding/policy/blocker/nonpromotion digests, Phase
+583 eligibility/input/binding/policy/blocker/nonpromotion digests, Phase 581
+review/input/binding/policy/blocker/nonpromotion digests, Phase 579
+candidate/validation/quarantine digests, exact Phase 577 readback bindings,
+exact Phase 575/573/571/569/567/565/563/561/559/557/555 and inherited
+backend-execution digest bindings, future operator identity, operator
+statement, environment declaration, captured-output summary, redaction report,
+replay/correspondence statement, import ownership requirements, and future
+Phase 587 implementation exit criteria. It creates no Rust code, imports no
+external result, mutates no accepted Evidence Ledger, creates no accepted
+external result evidence, accepts no independent external reproduction, creates
+no accepted formal evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates
+no benchmark evidence, and claims no production/SOTA/security
+/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
