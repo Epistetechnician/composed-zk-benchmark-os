@@ -15749,6 +15749,35 @@ Level2+ evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean
 execution, no additional SMT/Z3 execution, no benchmark evidence, no external
 audit evidence, and no production/SOTA/security/semantic-correctness claim.
 
+## Phase 560 HSAI Tiny Z3 Backend Execution External Operator Capture Import Candidate Boundary
+
+Status: complete. See
+`docs/560-hsai-tiny-z3-backend-execution-external-operator-capture-import-candidate-boundary.md`.
+
+Goal: define the docs-first boundary for future local external-result import
+candidate metadata derived from one exact Phase 559 quarantined operator
+capture packet.
+
+Implemented: Phase 560 defines the future import-candidate metadata boundary:
+Phase 559 capture manifest bindings, Phase 557 handoff packet bindings, Phase
+555 handoff/manual-bundle/manual-validation bindings, Phase 553 import-review
+binding, inherited Phase 551/549/547/545/543/541/535/533/531/529/527 digest
+binding, operator provenance/observation/artifact/redaction bindings, future
+candidate/validation/quarantine digest requirements, requested
+`ClaimBoundary::Level0DesignNote`, fail-closed validation rules, meaning
+limits, and Phase 561 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named boundary for deriving a quarantined local
+external-result import candidate from a locally validated operator capture
+packet. It still has no external result import, no accepted independent
+external reproduction, no accepted formal evidence, no Level2+ evidence, no
+populated score axes, no Lean/COBALT/Rust-to-Lean execution, no additional
+SMT/Z3 execution, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
