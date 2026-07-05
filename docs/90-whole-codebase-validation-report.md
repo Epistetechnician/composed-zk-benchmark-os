@@ -8315,5 +8315,22 @@ score axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution,
 creates no benchmark evidence, and claims no production/SOTA/security/
 semantic-correctness result.
 
+[docs/572-hsai-tiny-z3-backend-execution-packet-role-materialization-boundary.md](docs/572-hsai-tiny-z3-backend-execution-packet-role-materialization-boundary.md)
+documents the Phase 572 docs-first packet role materialization boundary. It
+requires exact Phase 571 packet metadata, Phase 569 requirement metadata,
+Phase 567 policy-resolution metadata, Phase 565 eligibility metadata, Phase
+563 review bindings, Phase 561 candidate/validation/quarantine bindings,
+Phase 559 capture bindings, Phase 557/555 handoff bindings, inherited
+backend-execution digests, declared non-secret role files, SHA-256 sidecars,
+manifest shape, role content constraints, filesystem output-root rules,
+fail-closed classifications, and Phase 573 implementation exit criteria. It
+creates no Rust code, writes no artifact files, performs no run, imports no
+external result, mutates no accepted Evidence Ledger, creates no accepted
+external result evidence, accepts no independent external reproduction,
+creates no accepted formal evidence, creates no Level2+ evidence, populates no
+score axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution,
+creates no benchmark evidence, and claims no production/SOTA/security/
+semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
