@@ -8088,5 +8088,19 @@ creates no Level2+ evidence, populates no score axes, runs no Lean/COBALT/
 Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark evidence,
 and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/558-hsai-tiny-z3-backend-execution-independent-external-operator-result-capture-boundary.md](docs/558-hsai-tiny-z3-backend-execution-independent-external-operator-result-capture-boundary.md)
+documents the Phase 558 docs-first independent external operator result capture
+boundary. It defines a future local capture namespace over one exact Phase 557
+handoff packet manifest, including Phase 557 packet bindings, Phase 555 handoff
+bindings, operator provenance requirements, execution observation requirements,
+captured-artifact index requirements, redaction-report requirements,
+nonpromotion requirements, fail-closed validation rules, meaning limits, and
+Phase 559 implementation exit criteria. It creates no Rust code, writes no
+capture files, performs no run, imports no external result, creates no
+independent external reproduction accepted by the repo, creates no accepted
+formal evidence, creates no Level2+ evidence, populates no score axes, runs no
+Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark
+evidence, and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
