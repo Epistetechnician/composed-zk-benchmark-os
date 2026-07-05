@@ -151,12 +151,13 @@ not solver certificate authority, not benchmark evidence, not external audit,
 not SOTA, not semantic correctness, not production readiness, not full
 security, and not authority to execute an action.
 
-## Next Responsible Slice
+## Phase 510 Boundary Status
 
-The accepted append path now has an in-memory validation-only call, but it has
-not mutated an accepted Evidence Ledger and has not created accepted evidence.
-A later slice must define a new boundary before any code can call
-`apply_accepted_ledger_append_transaction`, write accepted ledger state,
-materialize accepted ledger output, create accepted formal evidence, create
-Level2+ evidence, populate score axes, run Lean/new-SMT/COBALT/Rust-to-Lean,
-or make production/SOTA/security/correctness claims.
+Phase 510 defines the docs-first accepted append mutation boundary in
+`docs/510-hsai-tiny-z3-accepted-append-mutation-boundary.md`.
+
+That boundary still does not call `apply_accepted_ledger_append_transaction`,
+read or write accepted Evidence Ledger files, create materialized accepted
+ledger output, create accepted formal evidence, create Level2+ evidence,
+populate score axes, run Lean/new-SMT/COBALT/Rust-to-Lean, or make
+production/SOTA/security/correctness claims.
