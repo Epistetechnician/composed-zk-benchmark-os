@@ -14817,6 +14817,34 @@ evidence, no populated score axes, no accepted formal evidence, no
 Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no external audit
 evidence, and no production/SOTA/security/correctness claim.
 
+## Phase 527 HSAI Tiny Z3 Backend Execution Candidate Metadata
+
+Status: complete. See
+`docs/527-hsai-tiny-z3-backend-execution-candidate-metadata-notes.md`.
+
+Goal: implement local Lane A backend-execution candidate metadata over one exact
+Phase 525 import-review metadata record.
+
+Implemented: Phase 527 adds backend-execution candidate input/output metadata,
+lane, classification, and label enums, issue and validation types, blocker/
+rule/forbidden-API/inherited-digest helpers, nonclaim and nonpromotion digest
+helpers, policy digest helpers, deterministic digest/id/label bindings, and a
+fail-closed validator. It opens Lane A scoped SMT/Z3 replay as a future
+candidate, closes Lane B Lean/Rust-to-Lean and Lane C COBALT-style containment,
+and binds obligation, toolchain, command, expected-output, timeout, and
+scratch-output-root policy digests.
+
+Validation coverage: focused Rust tests cover a successful Lane A candidate
+with no backend run, rejection of invalid Phase 525 state, and rejection of lane
+drift plus promotion flags.
+
+Exit criteria: HSAI now has local metadata for a future scoped tiny-Z3
+SMT/Z3 backend-execution candidate. It still has no backend run, no backend
+artifacts, no accepted external-result evidence, no independent external
+reproduction, no Level2+ evidence, no populated score axes, no accepted formal
+evidence, no Lean/COBALT/Rust-to-Lean execution, no benchmark evidence, no
+external audit evidence, and no production/SOTA/security/correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
