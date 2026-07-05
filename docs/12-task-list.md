@@ -14085,6 +14085,33 @@ proof-authority claim, Lean/new-SMT/COBALT or Rust-to-Lean execution,
 benchmark evidence, external audit evidence, or
 production/SOTA/security/correctness claim.
 
+## Phase 502 HSAI Tiny Z3 Policy Drift Rejection Boundary
+
+Status: complete. See
+`docs/502-hsai-tiny-z3-policy-drift-rejection-boundary.md`.
+
+Goal: define the docs-first rejection behavior for policy drift boundary for
+the next Phase 488 accepted-path prerequisite gate.
+
+Implemented: Phase 502 documents policy drift sources, required future Phase
+501 and inherited Phase 499/497/495/493/491 digest bindings, closed rejection
+actions, fail-closed validation behavior, backend relationship limits, and
+Phase 503 implementation exit criteria. It requires policy drift to block
+accepted append evaluation, accepted evidence mutation, formal evidence,
+Level2+, score axes, backend authority, benchmark claims, and strong public
+claims until a new review cycle is performed.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a policy drift rejection boundary for later
+accepted-path work. It still has no accepted append decision, accepted formal
+evidence, accepted Evidence Ledger mutation from HSAI admission metadata,
+accepted append policy change, drift repair, Level2+ evidence, score axes,
+proof-authority claim, Lean/new-SMT/COBALT or Rust-to-Lean execution,
+benchmark evidence, external audit, or production/SOTA/security/correctness
+claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
