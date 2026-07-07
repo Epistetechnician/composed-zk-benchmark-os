@@ -4,8 +4,9 @@ use hsai_agent_admission::{
     GatewayFormalBackendRunCheckerStatus, GatewayFormalEvidencePropertyKind, MeshAttestationRef,
     MeshBackendRunMetadata, MeshEvidenceGate, MeshFormalEvidenceMetadata, MeshHsaiAdmissionRequest,
     MeshHsaiAdmissionVerdict, MeshRequestedClaimWeakening, MESH_CLAIM_CANDIDATE_DIGEST_BOUND,
-    MESH_CLAIM_FORMAL_EVIDENCE_METADATA_BOUND, MESH_COMBINED_PROOF_PACKET_SCHEMA_VERSION,
-    MESH_HSAI_ADMISSION_REQUEST_SCHEMA_VERSION, MESH_REPO_PATCH_ADMISSION_CLAIM_BOUNDARY,
+    MESH_CLAIM_FORMAL_EVIDENCE_METADATA_BOUND, MESH_CLAIM_PATCH_APPLIES_CLEANLY,
+    MESH_COMBINED_PROOF_PACKET_SCHEMA_VERSION, MESH_HSAI_ADMISSION_REQUEST_SCHEMA_VERSION,
+    MESH_REPO_PATCH_ADMISSION_CLAIM_BOUNDARY,
 };
 use hsai_claim_envelope::Hash;
 use serde_json::Value;
@@ -74,6 +75,21 @@ fn valid_request() -> MeshHsaiAdmissionRequest {
             claim_boundary: "backend run metadata only".to_owned(),
         }),
     }
+}
+
+fn assert_denies_with_reason(request: &MeshHsaiAdmissionRequest, expected_reason: &str) {
+    let decision = evaluate_mesh_hsai_admission_request(
+        request,
+        &mesh_repo_patch_admission_policy("mesh-policy-current"),
+    );
+
+    assert_eq!(decision.verdict, MeshHsaiAdmissionVerdict::Deny);
+    assert!(decision.accepted_claims.is_empty());
+    assert!(
+        decision.reason_codes.contains(&expected_reason.to_owned()),
+        "missing expected reason code {expected_reason}; got {:?}",
+        decision.reason_codes
+    );
 }
 
 fn json_fixture(text: &str) -> Value {
@@ -487,6 +503,178 @@ fn weakened_claim_requires_explicit_reason_code() {
     assert!(decision
         .reason_codes
         .contains(&"weakened_claim_reason_code_required".to_owned()));
+}
+
+#[test]
+fn stale_policy_and_malformed_mesh_ids_deny() {
+    let mut stale = valid_request();
+    stale.mesh_policy_id = "mesh-policy-stale".to_owned();
+    assert_denies_with_reason(&stale, "stale_policy_id");
+
+    let mut malformed = valid_request();
+    malformed.mesh_run_id = "mesh/run".to_owned();
+    malformed.mesh_action_id = "mesh..action".to_owned();
+    malformed.mesh_policy_id = " mesh-policy-current".to_owned();
+    let decision = evaluate_mesh_hsai_admission_request(
+        &malformed,
+        &mesh_repo_patch_admission_policy("mesh-policy-current"),
+    );
+
+    assert_eq!(decision.verdict, MeshHsaiAdmissionVerdict::Deny);
+    assert!(decision.accepted_claims.is_empty());
+    for reason in [
+        "malformed_mesh_run_id",
+        "malformed_mesh_action_id",
+        "malformed_mesh_policy_id",
+        "stale_policy_id",
+    ] {
+        assert!(decision.reason_codes.contains(&reason.to_owned()));
+    }
+}
+
+#[test]
+fn attestation_and_gate_shape_fail_closed() {
+    let mut missing_attestation = valid_request();
+    missing_attestation.attestation_refs.clear();
+    assert_denies_with_reason(&missing_attestation, "missing_attestation_refs");
+
+    let mut malformed_attestation = valid_request();
+    malformed_attestation.attestation_refs = BTreeSet::from([MeshAttestationRef {
+        ref_id: "attestation/ref".to_owned(),
+        digest: Hash([0; 32]),
+        claim_binding: " repo_patch.attestation.bound".to_owned(),
+    }]);
+    let malformed_decision = evaluate_mesh_hsai_admission_request(
+        &malformed_attestation,
+        &mesh_repo_patch_admission_policy("mesh-policy-current"),
+    );
+    assert_eq!(malformed_decision.verdict, MeshHsaiAdmissionVerdict::Deny);
+    for reason in [
+        "malformed_attestation_ref",
+        "missing_attestation_ref_digest",
+        "malformed_attestation_claim_binding",
+    ] {
+        assert!(malformed_decision.reason_codes.contains(&reason.to_owned()));
+    }
+
+    let mut malformed_gate = valid_request();
+    malformed_gate.accepted_evidence_gate = MeshEvidenceGate {
+        gate_id: "wrong_gate".to_owned(),
+        passed: false,
+        evidence_digest: Hash([0; 32]),
+        reason_codes: Vec::new(),
+    };
+    let gate_decision = evaluate_mesh_hsai_admission_request(
+        &malformed_gate,
+        &mesh_repo_patch_admission_policy("mesh-policy-current"),
+    );
+    assert_eq!(gate_decision.verdict, MeshHsaiAdmissionVerdict::Deny);
+    for reason in [
+        "malformed_evidence_gate",
+        "missing_accepted_evidence_digest",
+        "accepted_evidence_gate_failed",
+        "evidence_gate_failure_reason_missing",
+    ] {
+        assert!(gate_decision.reason_codes.contains(&reason.to_owned()));
+    }
+}
+
+#[test]
+fn weakened_claim_shape_and_evidence_fail_closed() {
+    let mut unrequested = valid_request();
+    unrequested.claim_weakenings = vec![MeshRequestedClaimWeakening {
+        requested_claim: "production_readiness".to_owned(),
+        weakened_claim: "repo_patch.unsupported_weakened".to_owned(),
+        reason_code: Some("bounded-substitute".to_owned()),
+    }];
+    let unrequested_decision = evaluate_mesh_hsai_admission_request(
+        &unrequested,
+        &mesh_repo_patch_admission_policy("mesh-policy-current"),
+    );
+    assert_eq!(unrequested_decision.verdict, MeshHsaiAdmissionVerdict::Deny);
+    assert!(unrequested_decision
+        .reason_codes
+        .contains(&"weakened_claim_not_requested".to_owned()));
+    assert!(unrequested_decision
+        .reason_codes
+        .contains(&"unsupported_weakened_claim".to_owned()));
+
+    let mut not_weakened = valid_request();
+    not_weakened.claim_weakenings = vec![MeshRequestedClaimWeakening {
+        requested_claim: MESH_CLAIM_PATCH_APPLIES_CLEANLY.to_owned(),
+        weakened_claim: MESH_CLAIM_PATCH_APPLIES_CLEANLY.to_owned(),
+        reason_code: Some("same-claim".to_owned()),
+    }];
+    assert_denies_with_reason(&not_weakened, "weakened_claim_not_weakened");
+
+    let mut inadequate = valid_request();
+    inadequate.requested_claims = BTreeSet::from(["production_readiness".to_owned()]);
+    inadequate.formal_evidence_metadata = None;
+    inadequate.backend_run_metadata = None;
+    inadequate.claim_weakenings = vec![MeshRequestedClaimWeakening {
+        requested_claim: "production_readiness".to_owned(),
+        weakened_claim: MESH_CLAIM_FORMAL_EVIDENCE_METADATA_BOUND.to_owned(),
+        reason_code: Some("formal-metadata-substitute".to_owned()),
+    }];
+    assert_denies_with_reason(&inadequate, "inadequate_evidence_for_weakened_claim");
+}
+
+#[test]
+fn backend_metadata_shape_and_forbidden_flags_deny() {
+    let mut forbidden = valid_request();
+    let backend = forbidden
+        .backend_run_metadata
+        .as_mut()
+        .expect("valid request has backend metadata");
+    backend.creates_accepted_evidence = true;
+    backend.creates_level2_evidence = true;
+    backend.grants_authority = true;
+    let forbidden_decision = evaluate_mesh_hsai_admission_request(
+        &forbidden,
+        &mesh_repo_patch_admission_policy("mesh-policy-current"),
+    );
+    assert_eq!(forbidden_decision.verdict, MeshHsaiAdmissionVerdict::Deny);
+    for reason in [
+        "backend_run_creates_accepted_evidence",
+        "backend_run_creates_level2_evidence",
+        "backend_run_grants_authority",
+        "formal_evidence_metadata_inadequate",
+    ] {
+        assert!(forbidden_decision.reason_codes.contains(&reason.to_owned()));
+    }
+
+    let mut malformed = valid_request();
+    let backend = malformed
+        .backend_run_metadata
+        .as_mut()
+        .expect("valid request has backend metadata");
+    backend.run_id = "backend/run".to_owned();
+    backend.backend_kind = GatewayFormalBackendKind::RustToLean;
+    backend.run_digest = Hash([0; 32]);
+    backend.transcript_digest = Hash([0; 32]);
+    backend.claim_boundary.clear();
+    let malformed_decision = evaluate_mesh_hsai_admission_request(
+        &malformed,
+        &mesh_repo_patch_admission_policy("mesh-policy-current"),
+    );
+    assert_eq!(malformed_decision.verdict, MeshHsaiAdmissionVerdict::Deny);
+    for reason in [
+        "malformed_backend_run_id",
+        "backend_kind_mismatch",
+        "missing_backend_run_digest",
+        "missing_backend_transcript_digest",
+        "missing_backend_run_claim_boundary",
+        "formal_evidence_metadata_inadequate",
+    ] {
+        assert!(malformed_decision.reason_codes.contains(&reason.to_owned()));
+    }
+
+    let mut orphan_backend = valid_request();
+    orphan_backend.formal_evidence_metadata = None;
+    assert_denies_with_reason(
+        &orphan_backend,
+        "backend_run_metadata_without_formal_evidence",
+    );
 }
 
 #[test]

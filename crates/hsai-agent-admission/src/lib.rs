@@ -1,3 +1,10 @@
+#![allow(
+    clippy::bool_assert_comparison,
+    clippy::question_mark,
+    clippy::too_many_arguments,
+    clippy::type_complexity
+)]
+
 use hsai_agent_case::AgentCase;
 use hsai_attestation::report_data_binding;
 use hsai_claim_envelope::{ClaimEnvelope, Hash, SubjectId};
@@ -31039,6 +31046,8 @@ pub enum PcsmHandoffIntakeError {
     DuplicateVerifierStatus(String),
     UnexpectedVerifierStatus(String),
     MissingSourceArtifactDigest,
+    MissingSourceHandoffArtifactDigest,
+    SourceHandoffDigestMismatch,
     InvalidSourceArtifactId(String),
     ZeroSourceArtifactDigest(String),
     ConflictingSourceArtifactDigestId(String),
@@ -31190,6 +31199,19 @@ pub fn validate_pcsm_bounded_proof_handoff_intake(
     if intake.source_artifact_digests.is_empty() {
         errors.push(PcsmHandoffIntakeError::MissingSourceArtifactDigest);
     }
+    let handoff_artifact_digests: Vec<&ArtifactDigest> = intake
+        .source_artifact_digests
+        .iter()
+        .filter(|digest| digest.id == PCSM_SOURCE_HANDOFF_ARTIFACT_DIGEST_ID)
+        .collect();
+    if handoff_artifact_digests.is_empty() {
+        errors.push(PcsmHandoffIntakeError::MissingSourceHandoffArtifactDigest);
+    } else if !handoff_artifact_digests
+        .iter()
+        .any(|digest| digest.sha256 == intake.source_handoff_sha256)
+    {
+        errors.push(PcsmHandoffIntakeError::SourceHandoffDigestMismatch);
+    }
     for artifact_error in validate_artifact_digests(&intake.source_artifact_digests) {
         match artifact_error {
             ArtifactDigestValidationError::InvalidId(id) => {
@@ -31280,6 +31302,7 @@ const REQUIRED_PCSM_VERIFIERS: &[&str] = &[
 ];
 
 const PCSM_BOUNDED_PROOF_INTAKE_DIGEST_ID: &str = "pcsm-bounded-proof-intake";
+const PCSM_SOURCE_HANDOFF_ARTIFACT_DIGEST_ID: &str = "source-handoff";
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 enum ArtifactDigestValidationError {
@@ -175954,7 +175977,7 @@ mod tests {
                 pcsm_verifier("source_lint_gate"),
             ]),
             source_artifact_digests: BTreeSet::from([
-                artifact("source-handoff", 9),
+                artifact(PCSM_SOURCE_HANDOFF_ARTIFACT_DIGEST_ID, 9),
                 artifact("pcsm-journal", 10),
             ]),
             nonclaims: pcsm_bounded_proof_required_nonclaims(),
@@ -188051,6 +188074,7 @@ mod tests {
             ))
         );
         assert!(errors.contains(&PcsmHandoffIntakeError::MissingSourceArtifactDigest));
+        assert!(errors.contains(&PcsmHandoffIntakeError::MissingSourceHandoffArtifactDigest));
     }
 
     #[test]
@@ -188164,6 +188188,38 @@ mod tests {
         });
         assert!(validate_pcsm_bounded_proof_handoff_intake(&collision)
             .contains(&PcsmHandoffIntakeError::ReservedIntakeDigestCollision));
+    }
+
+    #[test]
+    fn pcsm_bounded_handoff_requires_handoff_artifact_digest_binding() {
+        let mut missing = valid_pcsm_intake();
+        missing
+            .source_artifact_digests
+            .retain(|digest| digest.id != PCSM_SOURCE_HANDOFF_ARTIFACT_DIGEST_ID);
+        assert!(validate_pcsm_bounded_proof_handoff_intake(&missing)
+            .contains(&PcsmHandoffIntakeError::MissingSourceHandoffArtifactDigest));
+        assert_eq!(
+            pcsm_bounded_proof_handoff_candidate("pcsm-missing-handoff", subject("pcsm"), &missing),
+            Err(validate_pcsm_bounded_proof_handoff_intake(&missing))
+        );
+
+        let mut mismatch = valid_pcsm_intake();
+        mismatch
+            .source_artifact_digests
+            .retain(|digest| digest.id != PCSM_SOURCE_HANDOFF_ARTIFACT_DIGEST_ID);
+        mismatch
+            .source_artifact_digests
+            .insert(artifact(PCSM_SOURCE_HANDOFF_ARTIFACT_DIGEST_ID, 77));
+        assert!(validate_pcsm_bounded_proof_handoff_intake(&mismatch)
+            .contains(&PcsmHandoffIntakeError::SourceHandoffDigestMismatch));
+        assert_eq!(
+            pcsm_bounded_proof_handoff_candidate(
+                "pcsm-mismatch-handoff",
+                subject("pcsm"),
+                &mismatch
+            ),
+            Err(validate_pcsm_bounded_proof_handoff_intake(&mismatch))
+        );
     }
 
     #[test]
