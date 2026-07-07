@@ -17325,6 +17325,30 @@ no Level2+ evidence, no populated score axes, no benchmark evidence, no
 external audit evidence, and no production/SOTA/security/semantic-correctness
 claim.
 
+## Phase 615 HSAI Tiny Z3 Post-Campaign Residual Ceiling Report
+
+Status: complete. See
+`docs/615-phase-hsai-tiny-z3-post-campaign-residual-ceiling-report.md`.
+
+Goal: add one current residual-ceiling report after Phase 614 that states
+exactly what changed, exactly what remains blocked, and the decision on the
+local multi-obligation Z3 campaign.
+
+Implemented: Phase 615 records the exact Phase 603-614 changes, confirms that
+the Phase 614 two-obligation mixed local campaign is the current campaign,
+decides not to run a broader campaign yet, and preserves the
+`Level1LocalReplay` ceiling.
+
+Validation coverage: documentation review plus focused Phase 614 campaign gate.
+
+Exit criteria: the repo has one current post-campaign residual-ceiling report.
+It still has no deployable backend, no persistence tier, no deployment
+artifact, no UI/dashboard, no normal-gate credential path, no accepted external
+evidence, no accepted formal evidence, no accepted independent external
+reproduction, no Level2+ evidence, no populated score axes, no benchmark
+evidence, no external audit evidence, no proof authority, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

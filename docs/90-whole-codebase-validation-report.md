@@ -8967,5 +8967,14 @@ Ledger, creates no Level2+ evidence, populates no score axes, records no human
 reviewer decision, and claims no production/SOTA/security/semantic-correctness
 result.
 
+[docs/615-phase-hsai-tiny-z3-post-campaign-residual-ceiling-report.md](docs/615-phase-hsai-tiny-z3-post-campaign-residual-ceiling-report.md)
+documents the Phase 615 post-campaign residual ceiling. It is the current
+single report of the exact Phase 603-614 changes, the still-blocked backend,
+persistence, deployment, UI, credential, evidence-promotion, proof-authority,
+and claim-escalation surfaces, and the campaign decision: keep the Phase 614
+two-obligation mixed local campaign as the current `Level1LocalReplay` campaign
+and do not run a broader campaign until a future docs-first boundary justifies
+it.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
