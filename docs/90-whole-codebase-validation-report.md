@@ -8951,5 +8951,21 @@ no-persistence, no-deployment, no-dashboard, no-credentials, no-Level2+,
 no-score-axis, no-accepted-formal-evidence, no-production-readiness,
 no-semantic-correctness, no-SOTA, and no-full-security ceilings.
 
+[docs/613-phase-hsai-tiny-z3-real-multi-obligation-campaign-boundary.md](docs/613-phase-hsai-tiny-z3-real-multi-obligation-campaign-boundary.md)
+documents the Phase 613 local multi-obligation campaign boundary. It authorizes
+only a future in-memory summary over multiple existing Phase 529 hermetic local
+Z3 result objects, with unique-obligation and mixed-verdict visibility, no
+solver invocation inside the summary builder, no output files, and no evidence
+promotion.
+
+[docs/614-phase-hsai-tiny-z3-real-multi-obligation-campaign-notes.md](docs/614-phase-hsai-tiny-z3-real-multi-obligation-campaign-notes.md)
+documents the Phase 614 campaign implementation. It adds a local in-memory
+campaign request, observation, summary, error type, claim-boundary helper, and
+summary builder over existing Phase 529 local Z3 result objects. It writes no
+campaign files, imports no external result, mutates no accepted Evidence
+Ledger, creates no Level2+ evidence, populates no score axes, records no human
+reviewer decision, and claims no production/SOTA/security/semantic-correctness
+result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

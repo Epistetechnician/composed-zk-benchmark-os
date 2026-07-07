@@ -1352,6 +1352,11 @@ pub const GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_STAGING_RUN_AUDIT_SCHEMA_VERS
 pub const GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_STAGING_RUN_AUDIT_STATE_SLICE: &str =
     "phase-611-hsai-tiny-z3-real-materialized-staging-run-audit";
 pub const GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_STAGING_RUN_AUDIT_CLAIM_BOUNDARY: &str = "local Phase 611 tiny-Z3 real materialized staging-run audit summary only; summarizes one readback-valid Phase 607/609 quarantined capture manifest for operator review routing and data-collection visibility, but does not read raw transcripts, write audit files, import external results, mutate the accepted Evidence Ledger, accept independent external reproduction, create accepted formal evidence, create Level2+ evidence, populate score axes, generate proof artifacts, generate checker transcripts, generate solver certificates, run Lean, run SMT/Z3, run COBALT, run Rust-to-Lean extraction, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, record human-review acceptance, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_Z3_REAL_MULTI_OBLIGATION_CAMPAIGN_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-z3-real-multi-obligation-campaign:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_REAL_MULTI_OBLIGATION_CAMPAIGN_STATE_SLICE: &str =
+    "phase-614-hsai-tiny-z3-real-multi-obligation-campaign";
+pub const GATEWAY_FORMAL_TINY_Z3_REAL_MULTI_OBLIGATION_CAMPAIGN_CLAIM_BOUNDARY: &str = "local Phase 614 tiny-Z3 real multi-obligation campaign summary only; summarizes multiple existing Phase 529 hermetic local Z3 result objects for local data-collection visibility, but does not invoke a solver, write campaign files, import external results, mutate the accepted Evidence Ledger, accept independent external reproduction, create accepted formal evidence, create Level2+ evidence, populate score axes, generate proof artifacts, generate checker transcripts, generate solver certificates, run Lean, run SMT/Z3 inside the summary builder, run COBALT, run Rust-to-Lean extraction, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, record human-review acceptance, or grant authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -19961,6 +19966,89 @@ impl GatewayFormalTinyZ3RealMaterializedStagingRunAuditSummary {
 pub enum GatewayFormalTinyZ3RealMaterializedStagingRunAuditError {
     InvalidRequest,
     InvalidSourceManifest,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3RealMultiObligationCampaignRequest {
+    pub campaign_id: String,
+    pub created_at_unix: u64,
+    pub expected_obligation_count: u64,
+    pub require_mixed_verdicts: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3RealMultiObligationObservation {
+    pub observation_id: String,
+    pub result_digest: Hash,
+    pub request_digest: Hash,
+    pub phase527_candidate_digest: Hash,
+    pub phase527_obligation_artifact_digest: Hash,
+    pub actual_smtlib2_text_digest: Hash,
+    pub executable_digest: Hash,
+    pub solver_verdict_label: GatewayFormalRealCommandLaneSolverVerdictLabel,
+    pub exit_code_label: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3RealMultiObligationCampaignSummary {
+    pub schema_version: String,
+    pub state_slice: String,
+    pub campaign_id: String,
+    pub created_at_unix: u64,
+    pub result_count: u64,
+    pub unsat_count: u64,
+    pub sat_count: u64,
+    pub invalid_count: u64,
+    pub timeout_count: u64,
+    pub observations: Vec<GatewayFormalTinyZ3RealMultiObligationObservation>,
+    pub campaign_claim_boundary: String,
+    pub all_results_hermetic_local: bool,
+    pub all_obligation_digests_unique: bool,
+    pub mixed_verdicts_observed: bool,
+    pub solver_invoked_by_summary_builder: bool,
+    pub campaign_file_written: bool,
+    pub external_result_import_created: bool,
+    pub accepted_evidence_ledger_mutated: bool,
+    pub independent_external_reproduction_accepted: bool,
+    pub human_review_acceptance_recorded: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_local_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub global_uniqueness_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3RealMultiObligationCampaignSummary {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-real-multi-obligation-campaign-summary:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayFormalTinyZ3RealMultiObligationCampaignError {
+    InvalidRequest,
+    EmptyResults,
+    ResultCountMismatch,
+    DuplicateObligationDigest,
+    MixedVerdictsRequired,
+    InvalidResult,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
@@ -85640,6 +85728,196 @@ pub fn build_gateway_formal_tiny_z3_real_materialized_staging_run_audit_summary(
     })
 }
 
+pub fn gateway_formal_tiny_z3_real_multi_obligation_campaign_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_Z3_REAL_MULTI_OBLIGATION_CAMPAIGN_CLAIM_BOUNDARY.to_owned()
+}
+
+fn gateway_formal_tiny_z3_real_multi_obligation_campaign_result_valid(
+    result: &GatewayFormalTinyZ3HermeticBackendExecutionResult,
+) -> bool {
+    result.schema_version == GATEWAY_FORMAL_TINY_Z3_HERMETIC_BACKEND_EXECUTION_RESULT_SCHEMA_VERSION
+        && is_single_segment_id(&result.execution_result_id)
+        && result.state_slice == GATEWAY_FORMAL_TINY_Z3_HERMETIC_BACKEND_EXECUTION_RESULT_STATE_SLICE
+        && result.request_digest != Hash([0; 32])
+        && result.phase527_candidate_digest != Hash([0; 32])
+        && result.phase527_candidate_input_digest != Hash([0; 32])
+        && result.phase527_requested_lane
+            == GatewayFormalTinyZ3BackendExecutionLane::LaneAScopedSmtZ3Replay
+        && result.phase527_classification
+            == GatewayFormalTinyZ3BackendExecutionCandidateClassification::LaneAExecutionCandidateDeclaredNoRun
+        && result.phase527_obligation_artifact_digest != Hash([0; 32])
+        && result.phase527_toolchain_descriptor_digest != Hash([0; 32])
+        && result.phase527_command_descriptor_digest != Hash([0; 32])
+        && result.phase527_expected_output_grammar_digest != Hash([0; 32])
+        && result.phase527_timeout_policy_digest != Hash([0; 32])
+        && result.phase527_scratch_output_root_policy_digest != Hash([0; 32])
+        && result.actual_smtlib2_text_digest != Hash([0; 32])
+        && result.actual_smtlib2_text_digest == result.phase527_obligation_artifact_digest
+        && result.executed_at_unix != 0
+        && result.classification
+            == GatewayFormalTinyZ3HermeticBackendExecutionResultClassification::LaneASmtZ3RunObservedLocalOnly
+        && result.execution_label
+            == GatewayFormalTinyZ3HermeticBackendExecutionResultLabel::HermeticBackendExecutionResultRecorded
+        && result.executable_digest != Hash([0; 32])
+        && result.argv_digest
+            == gateway_formal_tiny_z3_hermetic_backend_execution_result_argv_digest()
+        && result.working_directory_policy_digest
+            == gateway_formal_tiny_z3_hermetic_backend_execution_result_working_directory_policy_digest()
+        && result.environment_digest
+            == gateway_formal_tiny_z3_hermetic_backend_execution_result_environment_digest()
+        && result.timeout_policy_digest != Hash([0; 32])
+        && !result.timeout_observed
+        && result.exit_code_label == "exit_0"
+        && result.stdout_summary_digest != Hash([0; 32])
+        && result.stderr_summary_digest != Hash([0; 32])
+        && result.output_classification_digest != Hash([0; 32])
+        && matches!(
+            result.solver_verdict_label,
+            GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
+                | GatewayFormalRealCommandLaneSolverVerdictLabel::SolverSatWitnessWithoutCertificate
+        )
+        && result.explicit_nonclaims
+            == gateway_formal_tiny_z3_hermetic_backend_execution_result_required_nonclaims()
+        && result.explicit_nonclaims_digest
+            == hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-hermetic-backend-execution-result-nonclaims:v1",
+                &result.explicit_nonclaims,
+            )
+        && result.claim_boundary
+            == gateway_formal_tiny_z3_hermetic_backend_execution_result_claim_boundary()
+        && result.process_spawned
+        && result.backend_executed
+        && !result.backend_artifact_written
+        && !result.network_access_observed
+        && !result.repository_root_write_observed
+        && !result.raw_stdout_stderr_retained
+        && !result.creates_accepted_external_result_evidence
+        && !result.writes_accepted_evidence_artifacts
+        && !result.creates_accepted_formal_evidence
+        && !result.creates_level2_evidence
+        && !result.populates_score_axes
+        && !result.proof_artifact_created
+        && !result.checker_transcript_created
+        && !result.solver_certificate_created
+        && !result.lean_execution_evidence_created
+        && !result.cobalt_execution_evidence_created
+        && !result.rust_to_lean_execution_evidence_created
+        && !result.benchmark_evidence_created
+        && !result.external_audit_evidence_created
+        && !result.semantic_correctness_claimed
+        && !result.production_readiness_claimed
+        && !result.sota_claimed
+        && !result.breakthrough_claimed
+        && !result.full_security_claimed
+        && !result.grants_authority
+}
+
+pub fn build_gateway_formal_tiny_z3_real_multi_obligation_campaign_summary(
+    request: &GatewayFormalTinyZ3RealMultiObligationCampaignRequest,
+    results: &[GatewayFormalTinyZ3HermeticBackendExecutionResult],
+) -> Result<
+    GatewayFormalTinyZ3RealMultiObligationCampaignSummary,
+    GatewayFormalTinyZ3RealMultiObligationCampaignError,
+> {
+    if !is_single_segment_id(&request.campaign_id)
+        || request.created_at_unix == 0
+        || request.expected_obligation_count == 0
+    {
+        return Err(GatewayFormalTinyZ3RealMultiObligationCampaignError::InvalidRequest);
+    }
+    if results.is_empty() {
+        return Err(GatewayFormalTinyZ3RealMultiObligationCampaignError::EmptyResults);
+    }
+    if request.expected_obligation_count != results.len() as u64 {
+        return Err(GatewayFormalTinyZ3RealMultiObligationCampaignError::ResultCountMismatch);
+    }
+
+    let mut obligation_digests = BTreeSet::new();
+    let mut observations = Vec::with_capacity(results.len());
+    let mut unsat_count = 0_u64;
+    let mut sat_count = 0_u64;
+
+    for result in results {
+        if !gateway_formal_tiny_z3_real_multi_obligation_campaign_result_valid(result) {
+            return Err(GatewayFormalTinyZ3RealMultiObligationCampaignError::InvalidResult);
+        }
+        if !obligation_digests.insert(result.phase527_obligation_artifact_digest) {
+            return Err(
+                GatewayFormalTinyZ3RealMultiObligationCampaignError::DuplicateObligationDigest,
+            );
+        }
+        match result.solver_verdict_label {
+            GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate => {
+                unsat_count += 1;
+            }
+            GatewayFormalRealCommandLaneSolverVerdictLabel::SolverSatWitnessWithoutCertificate => {
+                sat_count += 1;
+            }
+            _ => return Err(GatewayFormalTinyZ3RealMultiObligationCampaignError::InvalidResult),
+        }
+        observations.push(GatewayFormalTinyZ3RealMultiObligationObservation {
+            observation_id: result.execution_result_id.clone(),
+            result_digest: result.digest(),
+            request_digest: result.request_digest,
+            phase527_candidate_digest: result.phase527_candidate_digest,
+            phase527_obligation_artifact_digest: result.phase527_obligation_artifact_digest,
+            actual_smtlib2_text_digest: result.actual_smtlib2_text_digest,
+            executable_digest: result.executable_digest,
+            solver_verdict_label: result.solver_verdict_label.clone(),
+            exit_code_label: result.exit_code_label.clone(),
+        });
+    }
+
+    let mixed_verdicts_observed = unsat_count > 0 && sat_count > 0;
+    if request.require_mixed_verdicts && !mixed_verdicts_observed {
+        return Err(GatewayFormalTinyZ3RealMultiObligationCampaignError::MixedVerdictsRequired);
+    }
+
+    Ok(GatewayFormalTinyZ3RealMultiObligationCampaignSummary {
+        schema_version: GATEWAY_FORMAL_TINY_Z3_REAL_MULTI_OBLIGATION_CAMPAIGN_SCHEMA_VERSION
+            .to_owned(),
+        state_slice: GATEWAY_FORMAL_TINY_Z3_REAL_MULTI_OBLIGATION_CAMPAIGN_STATE_SLICE.to_owned(),
+        campaign_id: request.campaign_id.clone(),
+        created_at_unix: request.created_at_unix,
+        result_count: results.len() as u64,
+        unsat_count,
+        sat_count,
+        invalid_count: 0,
+        timeout_count: 0,
+        observations,
+        campaign_claim_boundary:
+            gateway_formal_tiny_z3_real_multi_obligation_campaign_claim_boundary(),
+        all_results_hermetic_local: true,
+        all_obligation_digests_unique: true,
+        mixed_verdicts_observed,
+        solver_invoked_by_summary_builder: false,
+        campaign_file_written: false,
+        external_result_import_created: false,
+        accepted_evidence_ledger_mutated: false,
+        independent_external_reproduction_accepted: false,
+        human_review_acceptance_recorded: false,
+        accepted_formal_evidence_created: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        lean_execution_evidence_created: false,
+        additional_local_smt_z3_execution_created: false,
+        cobalt_execution_evidence_created: false,
+        rust_to_lean_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        external_audit_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        global_uniqueness_claimed: false,
+        grants_authority: false,
+    })
+}
+
 fn build_gateway_formal_tiny_z3_real_materialized_operator_capture_bundle_files(
     phase605_packet: &GatewayFormalTinyZ3RealMaterializedPhase605HandoffPacket,
     provenance: &GatewayFormalTinyZ3RealMaterializedOperatorProvenance,
@@ -145992,6 +146270,208 @@ mod tests {
     }
 
     #[test]
+    fn phase614_real_multi_obligation_campaign_summarizes_mixed_phase529_results_without_promotion()
+    {
+        let Some((obligation_root, phase405_output_root, output_root, results)) =
+            phase614_synthetic_campaign_results("phase614-campaign-summary")
+        else {
+            return;
+        };
+        let summary = build_gateway_formal_tiny_z3_real_multi_obligation_campaign_summary(
+            &phase614_campaign_request("phase614-campaign"),
+            &results,
+        )
+        .expect("phase614 campaign summary builds");
+
+        assert_eq!(
+            summary.schema_version,
+            GATEWAY_FORMAL_TINY_Z3_REAL_MULTI_OBLIGATION_CAMPAIGN_SCHEMA_VERSION
+        );
+        assert_eq!(
+            summary.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_REAL_MULTI_OBLIGATION_CAMPAIGN_STATE_SLICE
+        );
+        assert_eq!(summary.result_count, 2);
+        assert_eq!(summary.unsat_count, 1);
+        assert_eq!(summary.sat_count, 1);
+        assert_eq!(summary.invalid_count, 0);
+        assert_eq!(summary.timeout_count, 0);
+        assert_eq!(summary.observations.len(), 2);
+        assert!(summary.all_results_hermetic_local);
+        assert!(summary.all_obligation_digests_unique);
+        assert!(summary.mixed_verdicts_observed);
+        assert!(!summary.solver_invoked_by_summary_builder);
+        assert!(!summary.campaign_file_written);
+        assert!(!summary.external_result_import_created);
+        assert!(!summary.accepted_evidence_ledger_mutated);
+        assert!(!summary.independent_external_reproduction_accepted);
+        assert!(!summary.human_review_acceptance_recorded);
+        assert!(!summary.accepted_formal_evidence_created);
+        assert!(!summary.creates_level2_evidence);
+        assert!(!summary.populates_score_axes);
+        assert!(!summary.proof_artifact_created);
+        assert!(!summary.checker_transcript_created);
+        assert!(!summary.solver_certificate_created);
+        assert!(!summary.lean_execution_evidence_created);
+        assert!(!summary.additional_local_smt_z3_execution_created);
+        assert!(!summary.cobalt_execution_evidence_created);
+        assert!(!summary.rust_to_lean_execution_evidence_created);
+        assert!(!summary.benchmark_evidence_created);
+        assert!(!summary.external_audit_evidence_created);
+        assert!(!summary.semantic_correctness_claimed);
+        assert!(!summary.production_readiness_claimed);
+        assert!(!summary.sota_claimed);
+        assert!(!summary.breakthrough_claimed);
+        assert!(!summary.full_security_claimed);
+        assert!(!summary.global_uniqueness_claimed);
+        assert!(!summary.grants_authority);
+        assert_ne!(summary.digest(), Hash([0; 32]));
+
+        fs::remove_dir_all(&obligation_root).expect("phase614 obligation cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root).expect("phase614 phase405 cleanup succeeds");
+        fs::remove_dir_all(&output_root).expect("phase614 output cleanup succeeds");
+    }
+
+    #[test]
+    fn phase614_real_multi_obligation_campaign_runs_local_z3_when_available() {
+        let Some(z3_executable) = phase529_z3_executable() else {
+            return;
+        };
+        let Some((obligation_root, phase405_output_root, output_root, review)) =
+            phase527_tiny_z3_backend_execution_candidate_source("phase614-real-z3-campaign")
+        else {
+            return;
+        };
+        let executable_digest =
+            hash_bytes(&fs::read(&z3_executable).expect("phase614 z3 executable readable"));
+        let unsat_bytes = phase404_z3_obligation_bytes();
+        let unsat_text = std::str::from_utf8(&unsat_bytes).expect("phase404 utf-8");
+        let sat_text =
+            "(set-logic QF_UF)\n(declare-const gateway_binding Bool)\n(assert gateway_binding)\n(check-sat)\n";
+        let unsat_candidate = phase614_candidate_for_obligation(
+            &review,
+            "phase614-real-z3-unsat-candidate",
+            hash_bytes(unsat_text.as_bytes()),
+        );
+        let sat_candidate = phase614_candidate_for_obligation(
+            &review,
+            "phase614-real-z3-sat-candidate",
+            hash_bytes(sat_text.as_bytes()),
+        );
+        let unsat_request = phase529_tiny_z3_hermetic_backend_execution_request(
+            "phase614-real-z3-unsat-result",
+            &unsat_candidate,
+            executable_digest,
+        );
+        let sat_request = phase529_tiny_z3_hermetic_backend_execution_request(
+            "phase614-real-z3-sat-result",
+            &sat_candidate,
+            executable_digest,
+        );
+        let unsat_result = run_gateway_formal_tiny_z3_hermetic_backend_execution_result(
+            &unsat_candidate,
+            &unsat_request,
+            &z3_executable,
+            unsat_text,
+        )
+        .expect("phase614 real unsat z3 run succeeds");
+        let sat_result = run_gateway_formal_tiny_z3_hermetic_backend_execution_result(
+            &sat_candidate,
+            &sat_request,
+            &z3_executable,
+            sat_text,
+        )
+        .expect("phase614 real sat z3 run succeeds");
+
+        let summary = build_gateway_formal_tiny_z3_real_multi_obligation_campaign_summary(
+            &phase614_campaign_request("phase614-real-z3-campaign"),
+            &[unsat_result, sat_result],
+        )
+        .expect("phase614 real z3 campaign summary builds");
+
+        assert_eq!(summary.result_count, 2);
+        assert_eq!(summary.unsat_count, 1);
+        assert_eq!(summary.sat_count, 1);
+        assert!(summary.mixed_verdicts_observed);
+        assert!(!summary.solver_invoked_by_summary_builder);
+        assert!(!summary.creates_level2_evidence);
+        assert!(!summary.populates_score_axes);
+        assert!(!summary.semantic_correctness_claimed);
+        assert!(!summary.production_readiness_claimed);
+
+        fs::remove_dir_all(&obligation_root).expect("phase614 real obligation cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root).expect("phase614 real phase405 cleanup succeeds");
+        fs::remove_dir_all(&output_root).expect("phase614 real output cleanup succeeds");
+    }
+
+    #[test]
+    fn phase614_real_multi_obligation_campaign_rejects_drift_and_invalid_requests() {
+        let Some((obligation_root, phase405_output_root, output_root, results)) =
+            phase614_synthetic_campaign_results("phase614-campaign-rejections")
+        else {
+            return;
+        };
+        let mut invalid_request = phase614_campaign_request("phase614-invalid-request");
+        invalid_request.campaign_id = "../bad".to_owned();
+        assert_eq!(
+            build_gateway_formal_tiny_z3_real_multi_obligation_campaign_summary(
+                &invalid_request,
+                &results,
+            ),
+            Err(GatewayFormalTinyZ3RealMultiObligationCampaignError::InvalidRequest)
+        );
+
+        let mut mismatch_request = phase614_campaign_request("phase614-mismatch");
+        mismatch_request.expected_obligation_count = 3;
+        assert_eq!(
+            build_gateway_formal_tiny_z3_real_multi_obligation_campaign_summary(
+                &mismatch_request,
+                &results,
+            ),
+            Err(GatewayFormalTinyZ3RealMultiObligationCampaignError::ResultCountMismatch)
+        );
+
+        let mut duplicate_results = results.clone();
+        duplicate_results[1].phase527_obligation_artifact_digest =
+            duplicate_results[0].phase527_obligation_artifact_digest;
+        duplicate_results[1].actual_smtlib2_text_digest =
+            duplicate_results[0].actual_smtlib2_text_digest;
+        assert_eq!(
+            build_gateway_formal_tiny_z3_real_multi_obligation_campaign_summary(
+                &phase614_campaign_request("phase614-duplicate"),
+                &duplicate_results,
+            ),
+            Err(GatewayFormalTinyZ3RealMultiObligationCampaignError::DuplicateObligationDigest)
+        );
+
+        let mut promoted_results = results.clone();
+        promoted_results[0].creates_level2_evidence = true;
+        assert_eq!(
+            build_gateway_formal_tiny_z3_real_multi_obligation_campaign_summary(
+                &phase614_campaign_request("phase614-promotion"),
+                &promoted_results,
+            ),
+            Err(GatewayFormalTinyZ3RealMultiObligationCampaignError::InvalidResult)
+        );
+
+        let mut single_verdict_results = results.clone();
+        single_verdict_results[1].solver_verdict_label =
+            GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate;
+        assert_eq!(
+            build_gateway_formal_tiny_z3_real_multi_obligation_campaign_summary(
+                &phase614_campaign_request("phase614-mixed-required"),
+                &single_verdict_results,
+            ),
+            Err(GatewayFormalTinyZ3RealMultiObligationCampaignError::MixedVerdictsRequired)
+        );
+
+        fs::remove_dir_all(&obligation_root).expect("phase614 reject obligation cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase614 reject phase405 cleanup succeeds");
+        fs::remove_dir_all(&output_root).expect("phase614 reject output cleanup succeeds");
+    }
+
+    #[test]
     fn phase561_tiny_z3_external_operator_capture_import_candidate_records_quarantined_metadata() {
         let Some((
             obligation_root,
@@ -162176,6 +162656,118 @@ mod tests {
             source_capture_label: "phase609-staging-run".to_owned(),
             created_at_unix: 1_800_000_611,
         }
+    }
+
+    fn phase614_campaign_request(
+        id: &str,
+    ) -> GatewayFormalTinyZ3RealMultiObligationCampaignRequest {
+        GatewayFormalTinyZ3RealMultiObligationCampaignRequest {
+            campaign_id: id.to_owned(),
+            created_at_unix: 1_800_000_614,
+            expected_obligation_count: 2,
+            require_mixed_verdicts: true,
+        }
+    }
+
+    fn phase614_candidate_for_obligation(
+        review: &GatewayFormalTinyZ3ExternalImportReview,
+        execution_candidate_id: &str,
+        obligation_artifact_digest: Hash,
+    ) -> GatewayFormalTinyZ3BackendExecutionCandidate {
+        let mut input = phase527_tiny_z3_backend_execution_candidate_input(
+            execution_candidate_id,
+            review,
+            GatewayFormalTinyZ3BackendExecutionCandidateLabel::BackendExecutionCandidateRecorded,
+        );
+        input.obligation_artifact_digest = obligation_artifact_digest;
+        input.execution_policy_digest =
+            gateway_formal_tiny_z3_backend_execution_candidate_policy_digest(
+                &input.execution_policy_id,
+                &input.classification,
+                &input.requested_lane,
+                input.obligation_artifact_digest,
+                input.toolchain_descriptor_digest,
+                input.command_descriptor_digest,
+                input.expected_output_grammar_digest,
+                input.timeout_policy_digest,
+                input.scratch_output_root_policy_digest,
+                &input.execution_blockers,
+            );
+        input.execution_nonpromotion_digest =
+            gateway_formal_tiny_z3_backend_execution_candidate_nonpromotion_digest(
+                &input.classification,
+                &input.requested_lane,
+                input.obligation_artifact_digest,
+                input.command_descriptor_digest,
+                &input.execution_blockers,
+            );
+        input.digest_bindings =
+            gateway_formal_tiny_z3_backend_execution_candidate_digest_bindings(review, &input);
+        build_gateway_formal_tiny_z3_backend_execution_candidate(review, &input)
+            .expect("phase614 obligation candidate builds")
+    }
+
+    fn phase614_synthetic_campaign_results(
+        source_prefix: &str,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        Vec<GatewayFormalTinyZ3HermeticBackendExecutionResult>,
+    )> {
+        let (obligation_root, phase405_output_root, output_root, review) =
+            phase527_tiny_z3_backend_execution_candidate_source(source_prefix)?;
+        let unsat_bytes = phase404_z3_obligation_bytes();
+        let unsat_text = std::str::from_utf8(&unsat_bytes).expect("phase404 utf-8");
+        let sat_text =
+            "(set-logic QF_UF)\n(declare-const gateway_binding Bool)\n(assert gateway_binding)\n(check-sat)\n";
+        let executable_digest = Hash([7; 32]);
+        let unsat_candidate = phase614_candidate_for_obligation(
+            &review,
+            &format!("{source_prefix}-unsat-candidate"),
+            hash_bytes(unsat_text.as_bytes()),
+        );
+        let sat_candidate = phase614_candidate_for_obligation(
+            &review,
+            &format!("{source_prefix}-sat-candidate"),
+            hash_bytes(sat_text.as_bytes()),
+        );
+        let unsat_request = phase529_tiny_z3_hermetic_backend_execution_request(
+            &format!("{source_prefix}-unsat-result"),
+            &unsat_candidate,
+            executable_digest,
+        );
+        let sat_request = phase529_tiny_z3_hermetic_backend_execution_request(
+            &format!("{source_prefix}-sat-result"),
+            &sat_candidate,
+            executable_digest,
+        );
+        let unsat_result = gateway_formal_tiny_z3_hermetic_backend_execution_result_from_output(
+            &unsat_candidate,
+            &unsat_request,
+            executable_digest,
+            hash_bytes(unsat_text.as_bytes()),
+            Some(0),
+            false,
+            b"unsat\n",
+            b"",
+        );
+        let sat_result = gateway_formal_tiny_z3_hermetic_backend_execution_result_from_output(
+            &sat_candidate,
+            &sat_request,
+            executable_digest,
+            hash_bytes(sat_text.as_bytes()),
+            Some(0),
+            false,
+            b"sat\n",
+            b"",
+        );
+        Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            vec![unsat_result, sat_result],
+        ))
     }
 
     fn phase561_tiny_z3_external_operator_capture_import_candidate_source(
