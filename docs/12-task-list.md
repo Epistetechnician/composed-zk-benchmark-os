@@ -17275,6 +17275,56 @@ external evidence, no accepted formal evidence, no Level2+ evidence, no score
 axes, no benchmark evidence, no external audit evidence, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 613 HSAI Tiny Z3 Real Multi-Obligation Campaign Boundary
+
+Status: complete. See
+`docs/613-phase-hsai-tiny-z3-real-multi-obligation-campaign-boundary.md`.
+
+Goal: define the docs-first boundary for a future in-memory campaign summary
+over multiple existing Phase 529 hermetic local Z3 result objects.
+
+Implemented: Phase 613 records the allowed request, observation, summary, and
+fail-closed validation shape for local multi-obligation campaign metadata.
+
+Validation coverage: documentation review only.
+
+Exit criteria: the next implementation slice is authorized to summarize
+multiple existing Phase 529 local Z3 result objects in memory only. It still
+has no campaign output file, no external result import, no accepted Evidence
+Ledger mutation, no accepted independent external reproduction, no accepted
+formal evidence, no Level2+ evidence, no populated score axes, no benchmark
+evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
+## Phase 614 HSAI Tiny Z3 Real Multi-Obligation Campaign
+
+Status: complete. See
+`docs/614-phase-hsai-tiny-z3-real-multi-obligation-campaign-notes.md`.
+
+Goal: implement an in-memory local campaign summary over multiple existing
+Phase 529 hermetic local Z3 result objects.
+
+Implemented: Phase 614 adds typed campaign request, observation, summary,
+error type, claim-boundary helper, fail-closed source-result validation, and a
+summary builder under `crates/hsai-agent-admission/src/lib.rs`. The summary
+records result counts, `unsat` and `sat` counts, unique-obligation status,
+mixed-verdict status, per-obligation digest visibility, and all nonpromotion
+flags.
+
+Validation coverage: focused Rust tests cover mixed `unsat`/`sat` campaign
+summary generation, optional real local Z3 campaign execution when `z3` is
+available, invalid request rejection, expected-count mismatch rejection,
+duplicate-obligation rejection, promotion-drift rejection, and mixed-verdict
+requirement rejection.
+
+Exit criteria: HSAI now has in-memory local campaign metadata over multiple
+Phase 529 result objects. It still has no campaign output file, no external
+result import, no accepted Evidence Ledger mutation, no accepted independent
+external reproduction, no human reviewer decision, no accepted formal evidence,
+no Level2+ evidence, no populated score axes, no benchmark evidence, no
+external audit evidence, and no production/SOTA/security/semantic-correctness
+claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
