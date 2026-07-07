@@ -8840,5 +8840,116 @@ axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates
 no benchmark evidence, and claims no production/SOTA/security
 /semantic-correctness result.
 
+[docs/603-phase-hsai-tiny-z3-real-backend-execution-crossing-notes.md](docs/603-phase-hsai-tiny-z3-real-backend-execution-crossing-notes.md)
+documents the Phase 603 real backend-execution crossing. It corrects the Phase
+531 exactness predicate to accept the canonical
+`SolverUnsatWithoutCertificate` result for
+`gateway-local-digest-binding-determinism-v1`, runs real Z3 against the Phase
+404 obligation, updates the Phase 531 fixture away from the satisfiable
+placeholder formula, and validates propagation through Phase 531 package,
+Phase 533 review, Phase 535 owner route, Phase 537 accepted append evaluation,
+and Phase 539 in-memory accepted append mutation. It writes no accepted
+Evidence Ledger files, creates no materialized accepted ledger output, creates
+no accepted formal evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/COBALT/Rust-to-Lean execution, creates no benchmark
+evidence, accepts no independent external reproduction, records no human
+reviewer decision, and claims no production/SOTA/security/semantic-correctness
+result.
+
+[docs/604-phase-hsai-tiny-z3-real-backend-execution-materialized-accepted-append-notes.md](docs/604-phase-hsai-tiny-z3-real-backend-execution-materialized-accepted-append-notes.md)
+documents the Phase 604 local materialized accepted append crossing. It runs
+real Z3 against the Phase 404 obligation, propagates the
+`SolverUnsatWithoutCertificate` result through Phase 531 package, Phase 533
+review, Phase 535 owner route, Phase 537 accepted append evaluation, and Phase
+539 in-memory accepted append mutation, then materializes one local
+accepted-ledger JSON artifact through Phase 541 using
+`MaterializedAcceptedLedgerAppendRequest` and the existing `zkbench-core`
+materialized append owner. It creates no accepted formal evidence, creates no
+Level2+ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean
+execution, creates no benchmark evidence, accepts no independent external
+reproduction, records no human reviewer decision, and claims no
+production/SOTA/security/semantic-correctness result.
+
+[docs/605-phase-hsai-tiny-z3-real-materialized-external-review-handoff-packet.md](docs/605-phase-hsai-tiny-z3-real-materialized-external-review-handoff-packet.md)
+documents the Phase 605 external-review handoff packet for the Phase 604
+materialized local replay path. It records the exact focused Phase 604 command,
+source binding, required external operator capture fields, Z3 path/version
+requirements, transcript and stderr digest requirements, human reviewer
+checklist, rejection rules, explicit nonclaims, and next external
+capture/import boundary. It adds no Rust code, writes no operator artifacts,
+retains no generated ledger, imports no external result, mutates no accepted
+Evidence Ledger, creates no Level2+ evidence, populates no score axes, runs no
+Lean/COBALT/Rust-to-Lean execution, creates no benchmark evidence, accepts no
+independent external reproduction, records no human reviewer decision, and
+claims no production/SOTA/security/semantic-correctness result.
+
+[docs/606-phase-hsai-tiny-z3-real-materialized-external-operator-capture-boundary.md](docs/606-phase-hsai-tiny-z3-real-materialized-external-operator-capture-boundary.md)
+documents the Phase 606 returned external-operator capture boundary for the
+Phase 605 handoff packet. It defines the future quarantined capture namespace,
+required operator provenance, Phase 604 command binding, source commit and
+dirty-status requirements, Z3 path/version requirements, transcript digest
+requirements, artifact-retention declaration, reviewer routing, redaction
+report, nonpromotion report, fail-closed validation rules, and Phase 607
+implementation exit criteria. It adds no Rust code, writes no operator
+artifacts, retains no generated ledger, imports no external result, mutates no
+accepted Evidence Ledger, creates no Level2+ evidence, populates no score axes,
+runs no Lean/COBALT/Rust-to-Lean execution, creates no benchmark evidence,
+accepts no independent external reproduction, records no human reviewer
+decision, and claims no production/SOTA/security/semantic-correctness result.
+
+[docs/607-phase-hsai-tiny-z3-real-materialized-operator-capture-implementation-notes.md](docs/607-phase-hsai-tiny-z3-real-materialized-operator-capture-implementation-notes.md)
+documents the Phase 607 staging operator-capture implementation. It adds local
+Rust data types, declared JSON files and sidecars, staged materialization,
+readback validation, exact Phase 605/604 binding checks, operator provenance
+checks, execution-observation checks, transcript digest checks, artifact
+retention checks, reviewer-routing checks, redaction checks, and nonpromotion
+checks. It writes only quarantined local capture packet files under a
+caller-selected output root, imports no external result, mutates no accepted
+Evidence Ledger, creates no Level2+ evidence, populates no score axes, runs no
+Lean/COBALT/Rust-to-Lean execution, creates no benchmark evidence, accepts no
+independent external reproduction, records no human reviewer decision, and
+claims no production/SOTA/security/semantic-correctness result.
+
+[docs/608-phase-hsai-tiny-z3-real-materialized-staging-runner-boundary.md](docs/608-phase-hsai-tiny-z3-real-materialized-staging-runner-boundary.md)
+documents the Phase 608 staging-runner boundary. It authorizes only a future
+operator-facing local exact-command runner over the Phase 607 capture
+materializer, with ignored output-root constraints, acknowledgement,
+in-memory transcript digest handling, readback validation, and no raw-log
+retention or evidence promotion.
+
+[docs/609-phase-hsai-tiny-z3-real-materialized-staging-runner-implementation-notes.md](docs/609-phase-hsai-tiny-z3-real-materialized-staging-runner-implementation-notes.md)
+documents the Phase 609 staging-runner implementation. It adds typed Rust
+normalization for exact Phase 604 focused command observations, a materialize
+wrapper over the Phase 607 capture materializer, and an operator-facing example
+that writes only a quarantined local capture packet under `.gateway-demo-runs/`.
+It imports no external result, creates no accepted formal evidence, creates no
+Level2+ evidence, populates no score axes, records no human reviewer decision,
+and claims no production/SOTA/security/semantic-correctness result.
+
+[docs/610-phase-hsai-tiny-z3-real-materialized-staging-run-audit-boundary.md](docs/610-phase-hsai-tiny-z3-real-materialized-staging-run-audit-boundary.md)
+documents the Phase 610 staging-run audit boundary. It authorizes only a future
+in-memory audit summary over one readback-valid Phase 607/609 capture manifest,
+with source digest visibility, declared file and sidecar counts, operator-review
+routing meaning, fail-closed source-manifest validation, no raw transcript
+reads, no file output, and no evidence promotion.
+
+[docs/611-phase-hsai-tiny-z3-real-materialized-staging-run-audit-notes.md](docs/611-phase-hsai-tiny-z3-real-materialized-staging-run-audit-notes.md)
+documents the Phase 611 staging-run audit implementation. It adds a local
+in-memory audit request, summary, error type, claim-boundary helper, and summary
+builder over the Phase 607/609 capture manifest. It reads no raw transcripts,
+writes no audit files, imports no external result, mutates no accepted Evidence
+Ledger, creates no Level2+ evidence, populates no score axes, records no human
+reviewer decision, and claims no production/SOTA/security/semantic-correctness
+result.
+
+[docs/612-phase-hsai-tiny-z3-real-materialized-residual-ceiling-report.md](docs/612-phase-hsai-tiny-z3-real-materialized-residual-ceiling-report.md)
+documents the Phase 612 residual-ceiling consolidation. It records that Phases
+603-611 added one local real-Z3 unsat path, local materialized
+`LocalReplay` / `Level1LocalReplay` handling, quarantined staging capture
+metadata, and in-memory audit-summary metadata, while preserving the no-backend,
+no-persistence, no-deployment, no-dashboard, no-credentials, no-Level2+,
+no-score-axis, no-accepted-formal-evidence, no-production-readiness,
+no-semantic-correctness, no-SOTA, and no-full-security ceilings.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

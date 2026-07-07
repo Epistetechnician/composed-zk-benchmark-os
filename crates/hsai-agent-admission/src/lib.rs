@@ -1303,6 +1303,55 @@ pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_DECLARED_SIDECARS: [&
     "gateway-formal-tiny-z3-independent-external-operator-result/nonpromotion-report.json.sha256",
     "gateway-formal-tiny-z3-independent-external-operator-result/digests.json.sha256",
 ];
+pub const GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-z3-real-materialized-operator-capture:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_STATE_SLICE: &str =
+    "phase-607-hsai-tiny-z3-real-materialized-operator-capture";
+pub const GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_CLAIM_BOUNDARY: &str = "local Phase 607 tiny-Z3 real materialized operator-capture metadata only; writes and reads back a quarantined staging packet over one exact Phase 605 handoff packet and operator-declared Phase 604 focused run telemetry, but does not import external results, mutate the accepted Evidence Ledger, accept independent external reproduction, create accepted formal evidence, create Level2+ evidence, populate score axes, generate proof artifacts, generate checker transcripts, generate solver certificates, run Lean, run another SMT/Z3 execution locally, run COBALT, run Rust-to-Lean extraction, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, record human-review acceptance, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_NAMESPACE: &str =
+    "phase605-real-z3-materialized-operator-capture";
+pub const GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE605_HANDOFF_PACKET_PATH: &str =
+    "docs/605-phase-hsai-tiny-z3-real-materialized-external-review-handoff-packet.md";
+pub const GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_NOTES_PATH: &str =
+    "docs/604-phase-hsai-tiny-z3-real-backend-execution-materialized-accepted-append-notes.md";
+pub const GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE603_NOTES_PATH: &str =
+    "docs/603-phase-hsai-tiny-z3-real-backend-execution-crossing-notes.md";
+pub const GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_FOCUSED_COMMAND: &str = "cargo test -p hsai-agent-admission phase604_real_z3_unsat_result_materializes_accepted_ledger_artifact_without_claim_escalation -- --nocapture";
+pub const GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_EXPECTED_RESULT_LINE: &str = "test tests::phase604_real_z3_unsat_result_materializes_accepted_ledger_artifact_without_claim_escalation ... ok";
+pub const GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_DECLARED_FILES: [&str; 10] = [
+    "phase605-real-z3-materialized-operator-capture/manifest.json",
+    "phase605-real-z3-materialized-operator-capture/phase605-handoff-packet.json",
+    "phase605-real-z3-materialized-operator-capture/operator-provenance.json",
+    "phase605-real-z3-materialized-operator-capture/execution-observation.json",
+    "phase605-real-z3-materialized-operator-capture/transcript-digests.json",
+    "phase605-real-z3-materialized-operator-capture/artifact-retention-declaration.json",
+    "phase605-real-z3-materialized-operator-capture/reviewer-routing.json",
+    "phase605-real-z3-materialized-operator-capture/redaction-report.json",
+    "phase605-real-z3-materialized-operator-capture/nonpromotion-report.json",
+    "phase605-real-z3-materialized-operator-capture/digests.json",
+];
+pub const GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_DECLARED_SIDECARS: [&str; 10] = [
+    "phase605-real-z3-materialized-operator-capture/manifest.json.sha256",
+    "phase605-real-z3-materialized-operator-capture/phase605-handoff-packet.json.sha256",
+    "phase605-real-z3-materialized-operator-capture/operator-provenance.json.sha256",
+    "phase605-real-z3-materialized-operator-capture/execution-observation.json.sha256",
+    "phase605-real-z3-materialized-operator-capture/transcript-digests.json.sha256",
+    "phase605-real-z3-materialized-operator-capture/artifact-retention-declaration.json.sha256",
+    "phase605-real-z3-materialized-operator-capture/reviewer-routing.json.sha256",
+    "phase605-real-z3-materialized-operator-capture/redaction-report.json.sha256",
+    "phase605-real-z3-materialized-operator-capture/nonpromotion-report.json.sha256",
+    "phase605-real-z3-materialized-operator-capture/digests.json.sha256",
+];
+pub const GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_STAGING_RUNNER_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-z3-real-materialized-staging-runner:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_STAGING_RUNNER_STATE_SLICE: &str =
+    "phase-609-hsai-tiny-z3-real-materialized-staging-runner";
+pub const GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_STAGING_RUNNER_CLAIM_BOUNDARY: &str = "local Phase 609 tiny-Z3 real materialized staging-runner metadata only; executes the exact Phase 604 focused local command when invoked by an operator-facing example, hashes bounded in-memory stdout/stderr transcripts, and packages the observation through the Phase 607 quarantined capture materializer, but does not import external results, mutate the accepted Evidence Ledger beyond the Phase 604 local test's own temporary fixture path, accept independent external reproduction, create accepted formal evidence, create Level2+ evidence, populate score axes, generate proof artifacts, generate checker transcripts, generate solver certificates, run Lean, run another SMT/Z3 execution beyond the exact Phase 604 focused local test, run COBALT, run Rust-to-Lean extraction, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, record human-review acceptance, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_STAGING_RUN_AUDIT_SCHEMA_VERSION: &str =
+    "hsai-gateway-formal-tiny-z3-real-materialized-staging-run-audit:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_STAGING_RUN_AUDIT_STATE_SLICE: &str =
+    "phase-611-hsai-tiny-z3-real-materialized-staging-run-audit";
+pub const GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_STAGING_RUN_AUDIT_CLAIM_BOUNDARY: &str = "local Phase 611 tiny-Z3 real materialized staging-run audit summary only; summarizes one readback-valid Phase 607/609 quarantined capture manifest for operator review routing and data-collection visibility, but does not read raw transcripts, write audit files, import external results, mutate the accepted Evidence Ledger, accept independent external reproduction, create accepted formal evidence, create Level2+ evidence, populate score axes, generate proof artifacts, generate checker transcripts, generate solver certificates, run Lean, run SMT/Z3, run COBALT, run Rust-to-Lean extraction, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, record human-review acceptance, or grant authority to execute an action.";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_SCHEMA_VERSION: &str =
     "hsai-gateway-formal-real-command-lane-formal-evidence-candidate:v1";
 pub const GATEWAY_FORMAL_REAL_COMMAND_LANE_FORMAL_EVIDENCE_CANDIDATE_STATE_SLICE: &str =
@@ -19480,6 +19529,438 @@ impl GatewayFormalTinyZ3ExternalOperatorCaptureOutputManifest {
             self,
         )
     }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputRequest {
+    pub capture_id: String,
+    pub created_at_unix: u64,
+    pub overwrite: bool,
+    pub protected_roots: Vec<PathBuf>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3RealMaterializedPhase605HandoffPacket {
+    pub packet_id: String,
+    pub phase605_document_path: String,
+    pub phase605_document_digest: Hash,
+    pub phase604_document_path: String,
+    pub phase604_document_digest: Hash,
+    pub phase603_document_path: String,
+    pub phase603_document_digest: Hash,
+    pub phase604_focused_command: String,
+    pub expected_test_result_line: String,
+    pub local_replay_acknowledged: bool,
+    pub level1_local_replay_acknowledged: bool,
+}
+
+impl GatewayFormalTinyZ3RealMaterializedPhase605HandoffPacket {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-real-materialized-phase605-handoff-packet:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3RealMaterializedOperatorProvenance {
+    pub provenance_id: String,
+    pub operator_id: String,
+    pub source_remote_or_bundle: String,
+    pub repository_commit: String,
+    pub branch_name: String,
+    pub dirty_status: String,
+    pub operating_system: String,
+    pub architecture: String,
+    pub rust_toolchain_version: String,
+    pub z3_executable_path: String,
+    pub z3_version_output: String,
+    pub command_line: String,
+    pub run_started_at_unix: u64,
+    pub run_finished_at_unix: u64,
+}
+
+impl GatewayFormalTinyZ3RealMaterializedOperatorProvenance {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-real-materialized-operator-provenance:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3RealMaterializedExecutionObservation {
+    pub observation_id: String,
+    pub status: GatewayFormalTinyZ3ExternalOperatorObservationStatus,
+    pub process_exit_status: i32,
+    pub focused_test_passed: bool,
+    pub z3_available: bool,
+    pub run_skipped: bool,
+    pub focused_test_result_line: String,
+    pub stdout_transcript_digest: Hash,
+    pub stderr_transcript_digest: Hash,
+    pub elapsed_ms: u64,
+    pub local_process_execution_performed: bool,
+    pub local_backend_execution_performed: bool,
+    pub raw_stdout_retained: bool,
+    pub raw_stderr_retained: bool,
+    pub raw_provider_response_retained: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub production_deployment_evidence_created: bool,
+}
+
+impl GatewayFormalTinyZ3RealMaterializedExecutionObservation {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-real-materialized-execution-observation:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3RealMaterializedTranscriptDigests {
+    pub transcript_id: String,
+    pub digest_algorithm: String,
+    pub stdout_transcript_digest: Hash,
+    pub stderr_transcript_digest: Hash,
+    pub empty_stderr_recorded: bool,
+}
+
+impl GatewayFormalTinyZ3RealMaterializedTranscriptDigests {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-real-materialized-transcript-digests:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3RealMaterializedRetainedArtifactReference {
+    pub role: String,
+    pub relative_path: String,
+    pub digest: Hash,
+    pub byte_len: u64,
+    pub quarantined: bool,
+    pub redacted: bool,
+    pub retains_raw_content: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3RealMaterializedArtifactRetentionDeclaration {
+    pub declaration_id: String,
+    pub retains_generated_ledger: bool,
+    pub retains_raw_logs: bool,
+    pub retained_artifacts_quarantined: bool,
+    pub artifacts: Vec<GatewayFormalTinyZ3RealMaterializedRetainedArtifactReference>,
+}
+
+impl GatewayFormalTinyZ3RealMaterializedArtifactRetentionDeclaration {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-real-materialized-artifact-retention-declaration:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3RealMaterializedReviewerRouting {
+    pub routing_id: String,
+    pub reviewer_queue: String,
+    pub reviewer_required: bool,
+    pub human_review_acceptance_recorded: bool,
+}
+
+impl GatewayFormalTinyZ3RealMaterializedReviewerRouting {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-real-materialized-reviewer-routing:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3RealMaterializedCaptureRedactionReport {
+    pub report_id: String,
+    pub no_secrets_detected: bool,
+    pub no_credentials_detected: bool,
+    pub no_private_machine_identifiers_retained: bool,
+    pub no_raw_provider_responses_retained: bool,
+    pub no_raw_stdout_retained: bool,
+    pub no_raw_stderr_retained: bool,
+    pub no_undeclared_files_retained: bool,
+    pub no_accepted_evidence_artifacts_retained: bool,
+    pub no_level2_artifacts_retained: bool,
+    pub no_score_axis_artifacts_retained: bool,
+    pub no_proof_artifacts_retained: bool,
+    pub no_checker_transcripts_retained: bool,
+    pub no_solver_certificates_retained: bool,
+    pub no_benchmark_artifacts_retained: bool,
+    pub no_production_deployment_artifacts_retained: bool,
+}
+
+impl GatewayFormalTinyZ3RealMaterializedCaptureRedactionReport {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-real-materialized-capture-redaction-report:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3RealMaterializedCaptureNonpromotionReport {
+    pub schema_version: String,
+    pub state_slice: String,
+    pub phase605_handoff_packet_digest: Hash,
+    pub operator_provenance_digest: Hash,
+    pub execution_observation_digest: Hash,
+    pub transcript_digests_digest: Hash,
+    pub artifact_retention_digest: Hash,
+    pub reviewer_routing_digest: Hash,
+    pub redaction_report_digest: Hash,
+    pub output_claim_boundary: String,
+    pub external_result_import_created: bool,
+    pub accepted_evidence_ledger_mutated: bool,
+    pub independent_external_reproduction_accepted: bool,
+    pub human_review_acceptance_recorded: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_local_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub global_uniqueness_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3RealMaterializedCaptureNonpromotionReport {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-real-materialized-capture-nonpromotion-report:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputManifest {
+    pub schema_version: String,
+    pub capture_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub phase605_handoff_packet_digest: Hash,
+    pub operator_provenance_digest: Hash,
+    pub execution_observation_digest: Hash,
+    pub transcript_digests_digest: Hash,
+    pub artifact_retention_digest: Hash,
+    pub reviewer_routing_digest: Hash,
+    pub redaction_report_digest: Hash,
+    pub declared_namespace: String,
+    pub declared_files: Vec<String>,
+    pub declared_sidecars: Vec<String>,
+    pub declared_file_digests: BTreeMap<String, Hash>,
+    pub readback_validation_digest: Hash,
+    pub nonpromotion_report_digest: Hash,
+    pub claim_boundary: String,
+    pub operator_capture_packet_quarantined: bool,
+    pub external_result_import_created: bool,
+    pub accepted_evidence_ledger_mutated: bool,
+    pub independent_external_reproduction_accepted: bool,
+    pub human_review_acceptance_recorded: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_local_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub global_uniqueness_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputManifest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-real-materialized-operator-capture-output-manifest:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError {
+    EmptyCaptureId,
+    InvalidCaptureId,
+    EmptyOutputRoot,
+    ProtectedOutputRoot,
+    OutputRootExistsWithoutOverwrite,
+    OutputRootIsSymlink,
+    OutputRootIsFile,
+    BundleFileIsSymlink(String),
+    DeclaredFileTypeMismatch(String),
+    DigestMismatch(String),
+    UndeclaredFile(String),
+    MalformedDeclaredFile(String),
+    InvalidPhase605HandoffPacket,
+    InvalidOperatorProvenance,
+    InvalidExecutionObservation,
+    InvalidTranscriptDigests,
+    InvalidArtifactRetentionDeclaration,
+    InvalidReviewerRouting,
+    InvalidRedactionReport,
+    NonpromotionMismatch,
+    ManifestSemanticMismatch,
+    Io(String),
+    Serialization(String),
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3RealMaterializedStagingRunnerRequest {
+    pub run_id: String,
+    pub operator_id: String,
+    pub source_remote_or_bundle: String,
+    pub repository_commit: String,
+    pub branch_name: String,
+    pub dirty_status: String,
+    pub operating_system: String,
+    pub architecture: String,
+    pub rust_toolchain_version: String,
+    pub z3_executable_path: String,
+    pub z3_version_output: String,
+    pub run_started_at_unix: u64,
+    pub run_finished_at_unix: u64,
+    pub elapsed_ms: u64,
+    pub created_at_unix: u64,
+    pub overwrite: bool,
+    pub protected_roots: Vec<PathBuf>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3RealMaterializedStagingRunnerObservedProcess {
+    pub command_line: String,
+    pub process_exit_status: i32,
+    pub stdout_transcript: Vec<u8>,
+    pub stderr_transcript: Vec<u8>,
+    pub z3_available: bool,
+    pub run_skipped: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3RealMaterializedStagingRunnerCaptureInputs {
+    pub phase605_packet: GatewayFormalTinyZ3RealMaterializedPhase605HandoffPacket,
+    pub provenance: GatewayFormalTinyZ3RealMaterializedOperatorProvenance,
+    pub observation: GatewayFormalTinyZ3RealMaterializedExecutionObservation,
+    pub transcript_digests: GatewayFormalTinyZ3RealMaterializedTranscriptDigests,
+    pub artifact_retention: GatewayFormalTinyZ3RealMaterializedArtifactRetentionDeclaration,
+    pub reviewer_routing: GatewayFormalTinyZ3RealMaterializedReviewerRouting,
+    pub redaction_report: GatewayFormalTinyZ3RealMaterializedCaptureRedactionReport,
+    pub capture_request: GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputRequest,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayFormalTinyZ3RealMaterializedStagingRunnerError {
+    InvalidRequest,
+    InvalidObservedProcess,
+    CaptureOutput(GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError),
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3RealMaterializedStagingRunAuditRequest {
+    pub audit_id: String,
+    pub source_capture_label: String,
+    pub created_at_unix: u64,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3RealMaterializedStagingRunAuditSummary {
+    pub schema_version: String,
+    pub state_slice: String,
+    pub audit_id: String,
+    pub source_capture_label: String,
+    pub created_at_unix: u64,
+    pub source_capture_id: String,
+    pub source_manifest_digest: Hash,
+    pub source_readback_validation_digest: Hash,
+    pub source_nonpromotion_report_digest: Hash,
+    pub source_declared_file_count: u64,
+    pub source_declared_sidecar_count: u64,
+    pub source_claim_boundary: String,
+    pub audit_claim_boundary: String,
+    pub source_packet_readback_validated: bool,
+    pub source_packet_quarantined: bool,
+    pub ready_for_operator_review_queue: bool,
+    pub external_result_import_created: bool,
+    pub accepted_evidence_ledger_mutated: bool,
+    pub independent_external_reproduction_accepted: bool,
+    pub human_review_acceptance_recorded: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_local_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub global_uniqueness_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3RealMaterializedStagingRunAuditSummary {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-real-materialized-staging-run-audit-summary:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayFormalTinyZ3RealMaterializedStagingRunAuditError {
+    InvalidRequest,
+    InvalidSourceManifest,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
@@ -74148,7 +74629,7 @@ fn gateway_formal_tiny_z3_backend_execution_artifact_package_phase529_exact(
         && !result.timeout_observed
         && result.exit_code_label == "exit_0"
         && result.solver_verdict_label
-            == GatewayFormalRealCommandLaneSolverVerdictLabel::SolverSatWitnessWithoutCertificate
+            == GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
         && !result.backend_artifact_written
         && !result.network_access_observed
         && !result.repository_root_write_observed
@@ -84592,6 +85073,1363 @@ fn gateway_formal_tiny_z3_external_operator_capture_serde_error(
     error: serde_json::Error,
 ) -> GatewayFormalTinyZ3ExternalOperatorCaptureOutputError {
     GatewayFormalTinyZ3ExternalOperatorCaptureOutputError::Serialization(error.to_string())
+}
+
+pub fn gateway_formal_tiny_z3_real_materialized_operator_capture_declared_files() -> Vec<String> {
+    GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_DECLARED_FILES
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
+pub fn gateway_formal_tiny_z3_real_materialized_operator_capture_declared_sidecars() -> Vec<String>
+{
+    GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_DECLARED_SIDECARS
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
+pub fn gateway_formal_tiny_z3_real_materialized_operator_capture_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn gateway_formal_tiny_z3_real_materialized_operator_capture_nonpromotion_report(
+    phase605_packet: &GatewayFormalTinyZ3RealMaterializedPhase605HandoffPacket,
+    provenance: &GatewayFormalTinyZ3RealMaterializedOperatorProvenance,
+    observation: &GatewayFormalTinyZ3RealMaterializedExecutionObservation,
+    transcript_digests: &GatewayFormalTinyZ3RealMaterializedTranscriptDigests,
+    artifact_retention: &GatewayFormalTinyZ3RealMaterializedArtifactRetentionDeclaration,
+    reviewer_routing: &GatewayFormalTinyZ3RealMaterializedReviewerRouting,
+    redaction_report: &GatewayFormalTinyZ3RealMaterializedCaptureRedactionReport,
+) -> GatewayFormalTinyZ3RealMaterializedCaptureNonpromotionReport {
+    GatewayFormalTinyZ3RealMaterializedCaptureNonpromotionReport {
+        schema_version: GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_SCHEMA_VERSION
+            .to_owned(),
+        state_slice: GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_STATE_SLICE
+            .to_owned(),
+        phase605_handoff_packet_digest: phase605_packet.digest(),
+        operator_provenance_digest: provenance.digest(),
+        execution_observation_digest: observation.digest(),
+        transcript_digests_digest: transcript_digests.digest(),
+        artifact_retention_digest: artifact_retention.digest(),
+        reviewer_routing_digest: reviewer_routing.digest(),
+        redaction_report_digest: redaction_report.digest(),
+        output_claim_boundary:
+            gateway_formal_tiny_z3_real_materialized_operator_capture_claim_boundary(),
+        external_result_import_created: false,
+        accepted_evidence_ledger_mutated: false,
+        independent_external_reproduction_accepted: false,
+        human_review_acceptance_recorded: false,
+        accepted_formal_evidence_created: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        lean_execution_evidence_created: false,
+        additional_local_smt_z3_execution_created: false,
+        cobalt_execution_evidence_created: false,
+        rust_to_lean_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        external_audit_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        global_uniqueness_claimed: false,
+        grants_authority: false,
+    }
+}
+
+pub fn materialize_gateway_formal_tiny_z3_real_materialized_operator_capture_output_bundle(
+    output_root: &Path,
+    phase605_packet: &GatewayFormalTinyZ3RealMaterializedPhase605HandoffPacket,
+    provenance: &GatewayFormalTinyZ3RealMaterializedOperatorProvenance,
+    observation: &GatewayFormalTinyZ3RealMaterializedExecutionObservation,
+    transcript_digests: &GatewayFormalTinyZ3RealMaterializedTranscriptDigests,
+    artifact_retention: &GatewayFormalTinyZ3RealMaterializedArtifactRetentionDeclaration,
+    reviewer_routing: &GatewayFormalTinyZ3RealMaterializedReviewerRouting,
+    redaction_report: &GatewayFormalTinyZ3RealMaterializedCaptureRedactionReport,
+    request: &GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputRequest,
+) -> Result<
+    GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputManifest,
+    GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError,
+> {
+    validate_gateway_formal_tiny_z3_real_materialized_operator_capture_output_request(
+        output_root,
+        phase605_packet,
+        provenance,
+        observation,
+        transcript_digests,
+        artifact_retention,
+        reviewer_routing,
+        redaction_report,
+        request,
+    )?;
+    let staging_root = gateway_formal_tiny_z3_real_materialized_operator_capture_staging_root_for(
+        output_root,
+        &request.capture_id,
+    )?;
+    if staging_root.exists() {
+        remove_gateway_formal_tiny_z3_real_materialized_operator_capture_dir_all_checked(
+            &staging_root,
+        )?;
+    }
+    fs::create_dir_all(
+        staging_root.join(GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_NAMESPACE),
+    )
+    .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_io_error)?;
+
+    let files = build_gateway_formal_tiny_z3_real_materialized_operator_capture_bundle_files(
+        phase605_packet,
+        provenance,
+        observation,
+        transcript_digests,
+        artifact_retention,
+        reviewer_routing,
+        redaction_report,
+        request,
+    )?;
+    for (logical_path, bytes) in &files {
+        let target = staging_root.join(logical_path);
+        if let Some(parent) = target.parent() {
+            fs::create_dir_all(parent)
+                .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_io_error)?;
+        }
+        fs::write(&target, bytes)
+            .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_io_error)?;
+        fs::write(
+            sidecar_path(&target),
+            hash_hex(hash_bytes(bytes)).into_bytes(),
+        )
+        .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_io_error)?;
+    }
+
+    if output_root.exists() {
+        if !request.overwrite {
+            remove_gateway_formal_tiny_z3_real_materialized_operator_capture_dir_all_checked(
+                &staging_root,
+            )?;
+            return Err(GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::OutputRootExistsWithoutOverwrite);
+        }
+        remove_gateway_formal_tiny_z3_real_materialized_operator_capture_dir_all_checked(
+            output_root,
+        )?;
+    }
+    fs::rename(&staging_root, output_root)
+        .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_io_error)?;
+    read_gateway_formal_tiny_z3_real_materialized_operator_capture_output_bundle(output_root)
+}
+
+pub fn read_gateway_formal_tiny_z3_real_materialized_operator_capture_output_bundle(
+    output_root: &Path,
+) -> Result<
+    GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputManifest,
+    GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError,
+> {
+    let output_metadata = fs::symlink_metadata(output_root)
+        .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_io_error)?;
+    if output_metadata.file_type().is_symlink() {
+        return Err(
+            GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::OutputRootIsSymlink,
+        );
+    }
+    if !output_metadata.is_dir() {
+        return Err(
+            GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::OutputRootIsFile,
+        );
+    }
+    let bundle_dir =
+        output_root.join(GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_NAMESPACE);
+    let bundle_metadata = fs::symlink_metadata(&bundle_dir)
+        .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_io_error)?;
+    if bundle_metadata.file_type().is_symlink() {
+        return Err(
+            GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::BundleFileIsSymlink(
+                GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_NAMESPACE.to_owned(),
+            ),
+        );
+    }
+    if !bundle_metadata.is_dir() {
+        return Err(
+            GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::DeclaredFileTypeMismatch(
+                GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_NAMESPACE.to_owned(),
+            ),
+        );
+    }
+
+    reject_undeclared_gateway_formal_tiny_z3_real_materialized_operator_capture_files(output_root)?;
+    let mut files = BTreeMap::new();
+    for logical_path in GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_DECLARED_FILES {
+        let path = output_root.join(logical_path);
+        let metadata = fs::symlink_metadata(&path)
+            .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_io_error)?;
+        if metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::BundleFileIsSymlink(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        if !metadata.is_file() {
+            return Err(
+                GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::DeclaredFileTypeMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        let sidecar = sidecar_path(&path);
+        let sidecar_metadata = fs::symlink_metadata(&sidecar)
+            .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_io_error)?;
+        if sidecar_metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::BundleFileIsSymlink(
+                    format!("{logical_path}.sha256"),
+                ),
+            );
+        }
+        if !sidecar_metadata.is_file() {
+            return Err(
+                GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::DeclaredFileTypeMismatch(
+                    format!("{logical_path}.sha256"),
+                ),
+            );
+        }
+        let bytes = fs::read(&path)
+            .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_io_error)?;
+        let expected_hash = fs::read_to_string(&sidecar)
+            .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_io_error)?;
+        if expected_hash.trim() != hash_hex(hash_bytes(&bytes)) {
+            return Err(
+                GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::DigestMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        files.insert((*logical_path).to_owned(), bytes);
+    }
+    validate_gateway_formal_tiny_z3_real_materialized_operator_capture_bundle_semantics(&files)
+}
+
+pub fn gateway_formal_tiny_z3_real_materialized_staging_runner_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_STAGING_RUNNER_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn build_gateway_formal_tiny_z3_real_materialized_staging_runner_capture_inputs(
+    request: &GatewayFormalTinyZ3RealMaterializedStagingRunnerRequest,
+    observed: &GatewayFormalTinyZ3RealMaterializedStagingRunnerObservedProcess,
+) -> Result<
+    GatewayFormalTinyZ3RealMaterializedStagingRunnerCaptureInputs,
+    GatewayFormalTinyZ3RealMaterializedStagingRunnerError,
+> {
+    if !is_single_segment_id(&request.run_id)
+        || !is_single_segment_id(&request.operator_id)
+        || request.source_remote_or_bundle.trim().is_empty()
+        || !is_full_hex_sha(&request.repository_commit)
+        || request.branch_name.trim().is_empty()
+        || request.dirty_status.trim().is_empty()
+        || request.operating_system.trim().is_empty()
+        || request.architecture.trim().is_empty()
+        || request.rust_toolchain_version.trim().is_empty()
+        || request.z3_executable_path.trim().is_empty()
+        || !request
+            .z3_version_output
+            .to_ascii_lowercase()
+            .contains("z3")
+        || request.run_started_at_unix == 0
+        || request.run_finished_at_unix < request.run_started_at_unix
+        || request.elapsed_ms == 0
+        || request.created_at_unix == 0
+    {
+        return Err(GatewayFormalTinyZ3RealMaterializedStagingRunnerError::InvalidRequest);
+    }
+    if observed.command_line != GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_FOCUSED_COMMAND
+        || observed.process_exit_status != 0
+        || !observed.z3_available
+        || observed.run_skipped
+        || observed.stdout_transcript.is_empty()
+        || observed.stdout_transcript.len() > 1_048_576
+        || observed.stderr_transcript.len() > 1_048_576
+        || !String::from_utf8_lossy(&observed.stdout_transcript)
+            .contains(GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_EXPECTED_RESULT_LINE)
+    {
+        return Err(GatewayFormalTinyZ3RealMaterializedStagingRunnerError::InvalidObservedProcess);
+    }
+
+    let stdout_digest = hash_bytes(&observed.stdout_transcript);
+    let stderr_digest = hash_bytes(&observed.stderr_transcript);
+    let summary_digest = hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-real-materialized-staging-runner-summary:v1",
+        &(
+            &request.run_id,
+            &request.repository_commit,
+            &observed.command_line,
+            observed.process_exit_status,
+            stdout_digest,
+            stderr_digest,
+        ),
+    );
+    let phase605_packet = GatewayFormalTinyZ3RealMaterializedPhase605HandoffPacket {
+        packet_id: format!("{}-phase605", request.run_id),
+        phase605_document_path:
+            GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE605_HANDOFF_PACKET_PATH.to_owned(),
+        phase605_document_digest: hash_tagged(
+            "hsai-agent-admission:phase609-phase605-doc-binding:v1",
+            &GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE605_HANDOFF_PACKET_PATH,
+        ),
+        phase604_document_path: GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_NOTES_PATH
+            .to_owned(),
+        phase604_document_digest: hash_tagged(
+            "hsai-agent-admission:phase609-phase604-doc-binding:v1",
+            &GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_NOTES_PATH,
+        ),
+        phase603_document_path: GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE603_NOTES_PATH
+            .to_owned(),
+        phase603_document_digest: hash_tagged(
+            "hsai-agent-admission:phase609-phase603-doc-binding:v1",
+            &GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE603_NOTES_PATH,
+        ),
+        phase604_focused_command: GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_FOCUSED_COMMAND
+            .to_owned(),
+        expected_test_result_line:
+            GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_EXPECTED_RESULT_LINE.to_owned(),
+        local_replay_acknowledged: true,
+        level1_local_replay_acknowledged: true,
+    };
+    let provenance = GatewayFormalTinyZ3RealMaterializedOperatorProvenance {
+        provenance_id: format!("{}-provenance", request.run_id),
+        operator_id: request.operator_id.clone(),
+        source_remote_or_bundle: request.source_remote_or_bundle.clone(),
+        repository_commit: request.repository_commit.clone(),
+        branch_name: request.branch_name.clone(),
+        dirty_status: request.dirty_status.clone(),
+        operating_system: request.operating_system.clone(),
+        architecture: request.architecture.clone(),
+        rust_toolchain_version: request.rust_toolchain_version.clone(),
+        z3_executable_path: request.z3_executable_path.clone(),
+        z3_version_output: request.z3_version_output.clone(),
+        command_line: observed.command_line.clone(),
+        run_started_at_unix: request.run_started_at_unix,
+        run_finished_at_unix: request.run_finished_at_unix,
+    };
+    let observation = GatewayFormalTinyZ3RealMaterializedExecutionObservation {
+        observation_id: format!("{}-observation", request.run_id),
+        status: GatewayFormalTinyZ3ExternalOperatorObservationStatus::OperatorDeclaredSucceeded,
+        process_exit_status: observed.process_exit_status,
+        focused_test_passed: true,
+        z3_available: observed.z3_available,
+        run_skipped: observed.run_skipped,
+        focused_test_result_line:
+            GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_EXPECTED_RESULT_LINE.to_owned(),
+        stdout_transcript_digest: stdout_digest,
+        stderr_transcript_digest: stderr_digest,
+        elapsed_ms: request.elapsed_ms,
+        local_process_execution_performed: true,
+        local_backend_execution_performed: true,
+        raw_stdout_retained: false,
+        raw_stderr_retained: false,
+        raw_provider_response_retained: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        lean_execution_evidence_created: false,
+        additional_smt_z3_execution_created: false,
+        cobalt_execution_evidence_created: false,
+        rust_to_lean_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        production_deployment_evidence_created: false,
+    };
+    let transcript_digests = GatewayFormalTinyZ3RealMaterializedTranscriptDigests {
+        transcript_id: format!("{}-transcripts", request.run_id),
+        digest_algorithm: "sha256".to_owned(),
+        stdout_transcript_digest: stdout_digest,
+        stderr_transcript_digest: stderr_digest,
+        empty_stderr_recorded: observed.stderr_transcript.is_empty(),
+    };
+    let artifact_retention = GatewayFormalTinyZ3RealMaterializedArtifactRetentionDeclaration {
+        declaration_id: format!("{}-retention", request.run_id),
+        retains_generated_ledger: false,
+        retains_raw_logs: false,
+        retained_artifacts_quarantined: true,
+        artifacts: vec![
+            GatewayFormalTinyZ3RealMaterializedRetainedArtifactReference {
+                role: "capture_summary".to_owned(),
+                relative_path: "capture/summary.json".to_owned(),
+                digest: summary_digest,
+                byte_len: 256,
+                quarantined: true,
+                redacted: true,
+                retains_raw_content: false,
+            },
+        ],
+    };
+    let reviewer_routing = GatewayFormalTinyZ3RealMaterializedReviewerRouting {
+        routing_id: format!("{}-routing", request.run_id),
+        reviewer_queue: "phase609-human-review".to_owned(),
+        reviewer_required: true,
+        human_review_acceptance_recorded: false,
+    };
+    let redaction_report = GatewayFormalTinyZ3RealMaterializedCaptureRedactionReport {
+        report_id: format!("{}-redaction", request.run_id),
+        no_secrets_detected: true,
+        no_credentials_detected: true,
+        no_private_machine_identifiers_retained: true,
+        no_raw_provider_responses_retained: true,
+        no_raw_stdout_retained: true,
+        no_raw_stderr_retained: true,
+        no_undeclared_files_retained: true,
+        no_accepted_evidence_artifacts_retained: true,
+        no_level2_artifacts_retained: true,
+        no_score_axis_artifacts_retained: true,
+        no_proof_artifacts_retained: true,
+        no_checker_transcripts_retained: true,
+        no_solver_certificates_retained: true,
+        no_benchmark_artifacts_retained: true,
+        no_production_deployment_artifacts_retained: true,
+    };
+    let capture_request = GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputRequest {
+        capture_id: request.run_id.clone(),
+        created_at_unix: request.created_at_unix,
+        overwrite: request.overwrite,
+        protected_roots: request.protected_roots.clone(),
+    };
+    Ok(
+        GatewayFormalTinyZ3RealMaterializedStagingRunnerCaptureInputs {
+            phase605_packet,
+            provenance,
+            observation,
+            transcript_digests,
+            artifact_retention,
+            reviewer_routing,
+            redaction_report,
+            capture_request,
+        },
+    )
+}
+
+pub fn materialize_gateway_formal_tiny_z3_real_materialized_staging_runner_capture(
+    output_root: &Path,
+    request: &GatewayFormalTinyZ3RealMaterializedStagingRunnerRequest,
+    observed: &GatewayFormalTinyZ3RealMaterializedStagingRunnerObservedProcess,
+) -> Result<
+    GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputManifest,
+    GatewayFormalTinyZ3RealMaterializedStagingRunnerError,
+> {
+    let inputs = build_gateway_formal_tiny_z3_real_materialized_staging_runner_capture_inputs(
+        request, observed,
+    )?;
+    materialize_gateway_formal_tiny_z3_real_materialized_operator_capture_output_bundle(
+        output_root,
+        &inputs.phase605_packet,
+        &inputs.provenance,
+        &inputs.observation,
+        &inputs.transcript_digests,
+        &inputs.artifact_retention,
+        &inputs.reviewer_routing,
+        &inputs.redaction_report,
+        &inputs.capture_request,
+    )
+    .map_err(GatewayFormalTinyZ3RealMaterializedStagingRunnerError::CaptureOutput)
+}
+
+pub fn gateway_formal_tiny_z3_real_materialized_staging_run_audit_claim_boundary() -> String {
+    GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_STAGING_RUN_AUDIT_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn build_gateway_formal_tiny_z3_real_materialized_staging_run_audit_summary(
+    source_manifest: &GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputManifest,
+    request: &GatewayFormalTinyZ3RealMaterializedStagingRunAuditRequest,
+) -> Result<
+    GatewayFormalTinyZ3RealMaterializedStagingRunAuditSummary,
+    GatewayFormalTinyZ3RealMaterializedStagingRunAuditError,
+> {
+    if !is_single_segment_id(&request.audit_id)
+        || request.source_capture_label.trim().is_empty()
+        || request.created_at_unix == 0
+    {
+        return Err(GatewayFormalTinyZ3RealMaterializedStagingRunAuditError::InvalidRequest);
+    }
+    if source_manifest.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_SCHEMA_VERSION
+        || !is_single_segment_id(&source_manifest.capture_id)
+        || source_manifest.state_slice
+            != GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_STATE_SLICE
+        || source_manifest.declared_namespace
+            != GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_NAMESPACE
+        || source_manifest.declared_files
+            != gateway_formal_tiny_z3_real_materialized_operator_capture_declared_files()
+        || source_manifest.declared_sidecars
+            != gateway_formal_tiny_z3_real_materialized_operator_capture_declared_sidecars()
+        || source_manifest.declared_file_digests.is_empty()
+        || source_manifest.readback_validation_digest == Hash([0; 32])
+        || source_manifest.nonpromotion_report_digest == Hash([0; 32])
+        || source_manifest.claim_boundary
+            != gateway_formal_tiny_z3_real_materialized_operator_capture_claim_boundary()
+        || !source_manifest.operator_capture_packet_quarantined
+        || source_manifest.external_result_import_created
+        || source_manifest.accepted_evidence_ledger_mutated
+        || source_manifest.independent_external_reproduction_accepted
+        || source_manifest.human_review_acceptance_recorded
+        || source_manifest.accepted_formal_evidence_created
+        || source_manifest.creates_level2_evidence
+        || source_manifest.populates_score_axes
+        || source_manifest.proof_artifact_created
+        || source_manifest.checker_transcript_created
+        || source_manifest.solver_certificate_created
+        || source_manifest.lean_execution_evidence_created
+        || source_manifest.additional_local_smt_z3_execution_created
+        || source_manifest.cobalt_execution_evidence_created
+        || source_manifest.rust_to_lean_execution_evidence_created
+        || source_manifest.benchmark_evidence_created
+        || source_manifest.external_audit_evidence_created
+        || source_manifest.semantic_correctness_claimed
+        || source_manifest.production_readiness_claimed
+        || source_manifest.sota_claimed
+        || source_manifest.breakthrough_claimed
+        || source_manifest.full_security_claimed
+        || source_manifest.global_uniqueness_claimed
+        || source_manifest.grants_authority
+    {
+        return Err(GatewayFormalTinyZ3RealMaterializedStagingRunAuditError::InvalidSourceManifest);
+    }
+    Ok(GatewayFormalTinyZ3RealMaterializedStagingRunAuditSummary {
+        schema_version: GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_STAGING_RUN_AUDIT_SCHEMA_VERSION
+            .to_owned(),
+        state_slice: GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_STAGING_RUN_AUDIT_STATE_SLICE
+            .to_owned(),
+        audit_id: request.audit_id.clone(),
+        source_capture_label: request.source_capture_label.clone(),
+        created_at_unix: request.created_at_unix,
+        source_capture_id: source_manifest.capture_id.clone(),
+        source_manifest_digest: source_manifest.digest(),
+        source_readback_validation_digest: source_manifest.readback_validation_digest,
+        source_nonpromotion_report_digest: source_manifest.nonpromotion_report_digest,
+        source_declared_file_count: source_manifest.declared_files.len() as u64,
+        source_declared_sidecar_count: source_manifest.declared_sidecars.len() as u64,
+        source_claim_boundary: source_manifest.claim_boundary.clone(),
+        audit_claim_boundary:
+            gateway_formal_tiny_z3_real_materialized_staging_run_audit_claim_boundary(),
+        source_packet_readback_validated: true,
+        source_packet_quarantined: true,
+        ready_for_operator_review_queue: true,
+        external_result_import_created: false,
+        accepted_evidence_ledger_mutated: false,
+        independent_external_reproduction_accepted: false,
+        human_review_acceptance_recorded: false,
+        accepted_formal_evidence_created: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        lean_execution_evidence_created: false,
+        additional_local_smt_z3_execution_created: false,
+        cobalt_execution_evidence_created: false,
+        rust_to_lean_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        external_audit_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        global_uniqueness_claimed: false,
+        grants_authority: false,
+    })
+}
+
+fn build_gateway_formal_tiny_z3_real_materialized_operator_capture_bundle_files(
+    phase605_packet: &GatewayFormalTinyZ3RealMaterializedPhase605HandoffPacket,
+    provenance: &GatewayFormalTinyZ3RealMaterializedOperatorProvenance,
+    observation: &GatewayFormalTinyZ3RealMaterializedExecutionObservation,
+    transcript_digests: &GatewayFormalTinyZ3RealMaterializedTranscriptDigests,
+    artifact_retention: &GatewayFormalTinyZ3RealMaterializedArtifactRetentionDeclaration,
+    reviewer_routing: &GatewayFormalTinyZ3RealMaterializedReviewerRouting,
+    redaction_report: &GatewayFormalTinyZ3RealMaterializedCaptureRedactionReport,
+    request: &GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputRequest,
+) -> Result<BTreeMap<String, Vec<u8>>, GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError>
+{
+    let nonpromotion =
+        gateway_formal_tiny_z3_real_materialized_operator_capture_nonpromotion_report(
+            phase605_packet,
+            provenance,
+            observation,
+            transcript_digests,
+            artifact_retention,
+            reviewer_routing,
+            redaction_report,
+        );
+    let mut files = BTreeMap::from([
+        (
+            "phase605-real-z3-materialized-operator-capture/phase605-handoff-packet.json"
+                .to_owned(),
+            serde_json::to_vec_pretty(phase605_packet)
+                .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_serde_error)?,
+        ),
+        (
+            "phase605-real-z3-materialized-operator-capture/operator-provenance.json".to_owned(),
+            serde_json::to_vec_pretty(provenance)
+                .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_serde_error)?,
+        ),
+        (
+            "phase605-real-z3-materialized-operator-capture/execution-observation.json".to_owned(),
+            serde_json::to_vec_pretty(observation)
+                .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_serde_error)?,
+        ),
+        (
+            "phase605-real-z3-materialized-operator-capture/transcript-digests.json".to_owned(),
+            serde_json::to_vec_pretty(transcript_digests)
+                .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_serde_error)?,
+        ),
+        (
+            "phase605-real-z3-materialized-operator-capture/artifact-retention-declaration.json"
+                .to_owned(),
+            serde_json::to_vec_pretty(artifact_retention)
+                .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_serde_error)?,
+        ),
+        (
+            "phase605-real-z3-materialized-operator-capture/reviewer-routing.json".to_owned(),
+            serde_json::to_vec_pretty(reviewer_routing)
+                .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_serde_error)?,
+        ),
+        (
+            "phase605-real-z3-materialized-operator-capture/redaction-report.json".to_owned(),
+            serde_json::to_vec_pretty(redaction_report)
+                .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_serde_error)?,
+        ),
+        (
+            "phase605-real-z3-materialized-operator-capture/nonpromotion-report.json".to_owned(),
+            serde_json::to_vec_pretty(&nonpromotion)
+                .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_serde_error)?,
+        ),
+    ]);
+    let core_file_digests: BTreeMap<String, Hash> = files
+        .iter()
+        .map(|(path, bytes)| (path.clone(), hash_bytes(bytes)))
+        .collect();
+    files.insert(
+        "phase605-real-z3-materialized-operator-capture/digests.json".to_owned(),
+        serde_json::to_vec_pretty(&core_file_digests)
+            .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_serde_error)?,
+    );
+    let declared_file_digests = files
+        .iter()
+        .map(|(path, bytes)| (path.clone(), hash_bytes(bytes)))
+        .collect();
+    let readback_validation_digest =
+        gateway_formal_tiny_z3_real_materialized_operator_capture_readback_validation_digest(
+            phase605_packet,
+            provenance,
+            observation,
+            transcript_digests,
+            artifact_retention,
+            reviewer_routing,
+            redaction_report,
+            &nonpromotion,
+            &core_file_digests,
+        );
+    let manifest = GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputManifest {
+        schema_version: GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_SCHEMA_VERSION
+            .to_owned(),
+        capture_id: request.capture_id.clone(),
+        state_slice: GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_STATE_SLICE
+            .to_owned(),
+        created_at_unix: request.created_at_unix,
+        phase605_handoff_packet_digest: phase605_packet.digest(),
+        operator_provenance_digest: provenance.digest(),
+        execution_observation_digest: observation.digest(),
+        transcript_digests_digest: transcript_digests.digest(),
+        artifact_retention_digest: artifact_retention.digest(),
+        reviewer_routing_digest: reviewer_routing.digest(),
+        redaction_report_digest: redaction_report.digest(),
+        declared_namespace: GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_NAMESPACE
+            .to_owned(),
+        declared_files: gateway_formal_tiny_z3_real_materialized_operator_capture_declared_files(),
+        declared_sidecars:
+            gateway_formal_tiny_z3_real_materialized_operator_capture_declared_sidecars(),
+        declared_file_digests,
+        readback_validation_digest,
+        nonpromotion_report_digest: nonpromotion.digest(),
+        claim_boundary: gateway_formal_tiny_z3_real_materialized_operator_capture_claim_boundary(),
+        operator_capture_packet_quarantined: true,
+        external_result_import_created: false,
+        accepted_evidence_ledger_mutated: false,
+        independent_external_reproduction_accepted: false,
+        human_review_acceptance_recorded: false,
+        accepted_formal_evidence_created: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        lean_execution_evidence_created: false,
+        additional_local_smt_z3_execution_created: false,
+        cobalt_execution_evidence_created: false,
+        rust_to_lean_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        external_audit_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        global_uniqueness_claimed: false,
+        grants_authority: false,
+    };
+    files.insert(
+        "phase605-real-z3-materialized-operator-capture/manifest.json".to_owned(),
+        serde_json::to_vec_pretty(&manifest)
+            .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_serde_error)?,
+    );
+    Ok(files)
+}
+
+fn validate_gateway_formal_tiny_z3_real_materialized_operator_capture_output_request(
+    output_root: &Path,
+    phase605_packet: &GatewayFormalTinyZ3RealMaterializedPhase605HandoffPacket,
+    provenance: &GatewayFormalTinyZ3RealMaterializedOperatorProvenance,
+    observation: &GatewayFormalTinyZ3RealMaterializedExecutionObservation,
+    transcript_digests: &GatewayFormalTinyZ3RealMaterializedTranscriptDigests,
+    artifact_retention: &GatewayFormalTinyZ3RealMaterializedArtifactRetentionDeclaration,
+    reviewer_routing: &GatewayFormalTinyZ3RealMaterializedReviewerRouting,
+    redaction_report: &GatewayFormalTinyZ3RealMaterializedCaptureRedactionReport,
+    request: &GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputRequest,
+) -> Result<(), GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError> {
+    if request.capture_id.trim().is_empty() {
+        return Err(GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::EmptyCaptureId);
+    }
+    if !is_single_segment_id(&request.capture_id) {
+        return Err(
+            GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::InvalidCaptureId,
+        );
+    }
+    validate_gateway_formal_tiny_z3_real_materialized_phase605_packet(phase605_packet)?;
+    validate_gateway_formal_tiny_z3_real_materialized_operator_provenance(provenance)?;
+    validate_gateway_formal_tiny_z3_real_materialized_observation(observation)?;
+    validate_gateway_formal_tiny_z3_real_materialized_transcript_digests(
+        transcript_digests,
+        observation,
+    )?;
+    validate_gateway_formal_tiny_z3_real_materialized_artifact_retention(artifact_retention)?;
+    validate_gateway_formal_tiny_z3_real_materialized_reviewer_routing(reviewer_routing)?;
+    validate_gateway_formal_tiny_z3_real_materialized_redaction_report(redaction_report)?;
+    validate_gateway_formal_tiny_z3_real_materialized_operator_capture_output_root(
+        output_root,
+        &request.protected_roots,
+        request.overwrite,
+    )
+}
+
+fn validate_gateway_formal_tiny_z3_real_materialized_operator_capture_bundle_semantics(
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<
+    GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputManifest,
+    GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError,
+> {
+    let manifest: GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputManifest =
+        parse_gateway_formal_tiny_z3_real_materialized_operator_capture_declared_json(
+            files,
+            "phase605-real-z3-materialized-operator-capture/manifest.json",
+        )?;
+    let phase605_packet: GatewayFormalTinyZ3RealMaterializedPhase605HandoffPacket =
+        parse_gateway_formal_tiny_z3_real_materialized_operator_capture_declared_json(
+            files,
+            "phase605-real-z3-materialized-operator-capture/phase605-handoff-packet.json",
+        )?;
+    let provenance: GatewayFormalTinyZ3RealMaterializedOperatorProvenance =
+        parse_gateway_formal_tiny_z3_real_materialized_operator_capture_declared_json(
+            files,
+            "phase605-real-z3-materialized-operator-capture/operator-provenance.json",
+        )?;
+    let observation: GatewayFormalTinyZ3RealMaterializedExecutionObservation =
+        parse_gateway_formal_tiny_z3_real_materialized_operator_capture_declared_json(
+            files,
+            "phase605-real-z3-materialized-operator-capture/execution-observation.json",
+        )?;
+    let transcript_digests: GatewayFormalTinyZ3RealMaterializedTranscriptDigests =
+        parse_gateway_formal_tiny_z3_real_materialized_operator_capture_declared_json(
+            files,
+            "phase605-real-z3-materialized-operator-capture/transcript-digests.json",
+        )?;
+    let artifact_retention: GatewayFormalTinyZ3RealMaterializedArtifactRetentionDeclaration =
+        parse_gateway_formal_tiny_z3_real_materialized_operator_capture_declared_json(
+            files,
+            "phase605-real-z3-materialized-operator-capture/artifact-retention-declaration.json",
+        )?;
+    let reviewer_routing: GatewayFormalTinyZ3RealMaterializedReviewerRouting =
+        parse_gateway_formal_tiny_z3_real_materialized_operator_capture_declared_json(
+            files,
+            "phase605-real-z3-materialized-operator-capture/reviewer-routing.json",
+        )?;
+    let redaction_report: GatewayFormalTinyZ3RealMaterializedCaptureRedactionReport =
+        parse_gateway_formal_tiny_z3_real_materialized_operator_capture_declared_json(
+            files,
+            "phase605-real-z3-materialized-operator-capture/redaction-report.json",
+        )?;
+    let nonpromotion: GatewayFormalTinyZ3RealMaterializedCaptureNonpromotionReport =
+        parse_gateway_formal_tiny_z3_real_materialized_operator_capture_declared_json(
+            files,
+            "phase605-real-z3-materialized-operator-capture/nonpromotion-report.json",
+        )?;
+    let core_file_digests: BTreeMap<String, Hash> =
+        parse_gateway_formal_tiny_z3_real_materialized_operator_capture_declared_json(
+            files,
+            "phase605-real-z3-materialized-operator-capture/digests.json",
+        )?;
+    validate_gateway_formal_tiny_z3_real_materialized_phase605_packet(&phase605_packet)?;
+    validate_gateway_formal_tiny_z3_real_materialized_operator_provenance(&provenance)?;
+    validate_gateway_formal_tiny_z3_real_materialized_observation(&observation)?;
+    validate_gateway_formal_tiny_z3_real_materialized_transcript_digests(
+        &transcript_digests,
+        &observation,
+    )?;
+    validate_gateway_formal_tiny_z3_real_materialized_artifact_retention(&artifact_retention)?;
+    validate_gateway_formal_tiny_z3_real_materialized_reviewer_routing(&reviewer_routing)?;
+    validate_gateway_formal_tiny_z3_real_materialized_redaction_report(&redaction_report)?;
+    validate_gateway_formal_tiny_z3_real_materialized_nonpromotion(
+        &nonpromotion,
+        &phase605_packet,
+        &provenance,
+        &observation,
+        &transcript_digests,
+        &artifact_retention,
+        &reviewer_routing,
+        &redaction_report,
+    )?;
+    let expected_core_digests: BTreeMap<String, Hash> = [
+        "phase605-real-z3-materialized-operator-capture/phase605-handoff-packet.json",
+        "phase605-real-z3-materialized-operator-capture/operator-provenance.json",
+        "phase605-real-z3-materialized-operator-capture/execution-observation.json",
+        "phase605-real-z3-materialized-operator-capture/transcript-digests.json",
+        "phase605-real-z3-materialized-operator-capture/artifact-retention-declaration.json",
+        "phase605-real-z3-materialized-operator-capture/reviewer-routing.json",
+        "phase605-real-z3-materialized-operator-capture/redaction-report.json",
+        "phase605-real-z3-materialized-operator-capture/nonpromotion-report.json",
+    ]
+    .into_iter()
+    .map(|path| {
+        (
+            path.to_owned(),
+            hash_bytes(
+                declared_gateway_formal_tiny_z3_real_materialized_operator_capture_bytes(
+                    files, path,
+                )
+                .expect("declared bytes exist after parse"),
+            ),
+        )
+    })
+    .collect();
+    if core_file_digests != expected_core_digests {
+        return Err(
+            GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::ManifestSemanticMismatch,
+        );
+    }
+    let declared_file_digests = files
+        .iter()
+        .filter(|(path, _)| *path != "phase605-real-z3-materialized-operator-capture/manifest.json")
+        .map(|(path, bytes)| (path.clone(), hash_bytes(bytes)))
+        .collect::<BTreeMap<_, _>>();
+    if manifest.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_SCHEMA_VERSION
+        || !is_single_segment_id(&manifest.capture_id)
+        || manifest.state_slice
+            != GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_STATE_SLICE
+        || manifest.phase605_handoff_packet_digest != phase605_packet.digest()
+        || manifest.operator_provenance_digest != provenance.digest()
+        || manifest.execution_observation_digest != observation.digest()
+        || manifest.transcript_digests_digest != transcript_digests.digest()
+        || manifest.artifact_retention_digest != artifact_retention.digest()
+        || manifest.reviewer_routing_digest != reviewer_routing.digest()
+        || manifest.redaction_report_digest != redaction_report.digest()
+        || manifest.declared_namespace
+            != GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_NAMESPACE
+        || manifest.declared_files
+            != gateway_formal_tiny_z3_real_materialized_operator_capture_declared_files()
+        || manifest.declared_sidecars
+            != gateway_formal_tiny_z3_real_materialized_operator_capture_declared_sidecars()
+        || manifest.declared_file_digests != declared_file_digests
+        || manifest.readback_validation_digest
+            != gateway_formal_tiny_z3_real_materialized_operator_capture_readback_validation_digest(
+                &phase605_packet,
+                &provenance,
+                &observation,
+                &transcript_digests,
+                &artifact_retention,
+                &reviewer_routing,
+                &redaction_report,
+                &nonpromotion,
+                &core_file_digests,
+            )
+        || manifest.nonpromotion_report_digest != nonpromotion.digest()
+        || manifest.claim_boundary
+            != gateway_formal_tiny_z3_real_materialized_operator_capture_claim_boundary()
+        || !manifest.operator_capture_packet_quarantined
+        || manifest.external_result_import_created
+        || manifest.accepted_evidence_ledger_mutated
+        || manifest.independent_external_reproduction_accepted
+        || manifest.human_review_acceptance_recorded
+        || manifest.accepted_formal_evidence_created
+        || manifest.creates_level2_evidence
+        || manifest.populates_score_axes
+        || manifest.proof_artifact_created
+        || manifest.checker_transcript_created
+        || manifest.solver_certificate_created
+        || manifest.lean_execution_evidence_created
+        || manifest.additional_local_smt_z3_execution_created
+        || manifest.cobalt_execution_evidence_created
+        || manifest.rust_to_lean_execution_evidence_created
+        || manifest.benchmark_evidence_created
+        || manifest.external_audit_evidence_created
+        || manifest.semantic_correctness_claimed
+        || manifest.production_readiness_claimed
+        || manifest.sota_claimed
+        || manifest.breakthrough_claimed
+        || manifest.full_security_claimed
+        || manifest.global_uniqueness_claimed
+        || manifest.grants_authority
+    {
+        return Err(
+            GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::ManifestSemanticMismatch,
+        );
+    }
+    Ok(manifest)
+}
+
+fn validate_gateway_formal_tiny_z3_real_materialized_phase605_packet(
+    packet: &GatewayFormalTinyZ3RealMaterializedPhase605HandoffPacket,
+) -> Result<(), GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError> {
+    if !is_single_segment_id(&packet.packet_id)
+        || packet.phase605_document_path
+            != GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE605_HANDOFF_PACKET_PATH
+        || packet.phase605_document_digest == Hash([0; 32])
+        || packet.phase604_document_path
+            != GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_NOTES_PATH
+        || packet.phase604_document_digest == Hash([0; 32])
+        || packet.phase603_document_path
+            != GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE603_NOTES_PATH
+        || packet.phase603_document_digest == Hash([0; 32])
+        || packet.phase604_focused_command
+            != GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_FOCUSED_COMMAND
+        || packet.expected_test_result_line
+            != GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_EXPECTED_RESULT_LINE
+        || !packet.local_replay_acknowledged
+        || !packet.level1_local_replay_acknowledged
+    {
+        return Err(
+            GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::InvalidPhase605HandoffPacket,
+        );
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_z3_real_materialized_operator_provenance(
+    provenance: &GatewayFormalTinyZ3RealMaterializedOperatorProvenance,
+) -> Result<(), GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError> {
+    if !is_single_segment_id(&provenance.provenance_id)
+        || !is_single_segment_id(&provenance.operator_id)
+        || provenance.source_remote_or_bundle.trim().is_empty()
+        || !is_full_hex_sha(&provenance.repository_commit)
+        || provenance.branch_name.trim().is_empty()
+        || provenance.dirty_status.trim().is_empty()
+        || provenance.operating_system.trim().is_empty()
+        || provenance.architecture.trim().is_empty()
+        || provenance.rust_toolchain_version.trim().is_empty()
+        || provenance.z3_executable_path.trim().is_empty()
+        || !provenance
+            .z3_version_output
+            .to_ascii_lowercase()
+            .contains("z3")
+        || provenance.command_line
+            != GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_FOCUSED_COMMAND
+        || provenance.run_started_at_unix == 0
+        || provenance.run_finished_at_unix < provenance.run_started_at_unix
+    {
+        return Err(
+            GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::InvalidOperatorProvenance,
+        );
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_z3_real_materialized_observation(
+    observation: &GatewayFormalTinyZ3RealMaterializedExecutionObservation,
+) -> Result<(), GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError> {
+    if !is_single_segment_id(&observation.observation_id)
+        || observation.status
+            != GatewayFormalTinyZ3ExternalOperatorObservationStatus::OperatorDeclaredSucceeded
+        || observation.process_exit_status != 0
+        || !observation.focused_test_passed
+        || !observation.z3_available
+        || observation.run_skipped
+        || observation.focused_test_result_line
+            != GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_EXPECTED_RESULT_LINE
+        || observation.stdout_transcript_digest == Hash([0; 32])
+        || observation.stderr_transcript_digest == Hash([0; 32])
+        || observation.elapsed_ms == 0
+        || !observation.local_process_execution_performed
+        || !observation.local_backend_execution_performed
+        || observation.raw_stdout_retained
+        || observation.raw_stderr_retained
+        || observation.raw_provider_response_retained
+        || observation.proof_artifact_created
+        || observation.checker_transcript_created
+        || observation.solver_certificate_created
+        || observation.lean_execution_evidence_created
+        || observation.additional_smt_z3_execution_created
+        || observation.cobalt_execution_evidence_created
+        || observation.rust_to_lean_execution_evidence_created
+        || observation.benchmark_evidence_created
+        || observation.production_deployment_evidence_created
+    {
+        return Err(
+            GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::InvalidExecutionObservation,
+        );
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_z3_real_materialized_transcript_digests(
+    transcript_digests: &GatewayFormalTinyZ3RealMaterializedTranscriptDigests,
+    observation: &GatewayFormalTinyZ3RealMaterializedExecutionObservation,
+) -> Result<(), GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError> {
+    if !is_single_segment_id(&transcript_digests.transcript_id)
+        || transcript_digests.digest_algorithm != "sha256"
+        || transcript_digests.stdout_transcript_digest != observation.stdout_transcript_digest
+        || transcript_digests.stderr_transcript_digest != observation.stderr_transcript_digest
+        || transcript_digests.stdout_transcript_digest == Hash([0; 32])
+        || transcript_digests.stderr_transcript_digest == Hash([0; 32])
+    {
+        return Err(
+            GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::InvalidTranscriptDigests,
+        );
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_z3_real_materialized_artifact_retention(
+    artifact_retention: &GatewayFormalTinyZ3RealMaterializedArtifactRetentionDeclaration,
+) -> Result<(), GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError> {
+    if !is_single_segment_id(&artifact_retention.declaration_id)
+        || artifact_retention.retains_raw_logs
+        || !artifact_retention.retained_artifacts_quarantined
+    {
+        return Err(
+            GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::InvalidArtifactRetentionDeclaration,
+        );
+    }
+    let mut roles = BTreeSet::new();
+    let mut paths = BTreeSet::new();
+    for artifact in &artifact_retention.artifacts {
+        let lower_role = artifact.role.to_ascii_lowercase();
+        let lower_path = artifact.relative_path.to_ascii_lowercase();
+        if !is_single_segment_id(&artifact.role)
+            || !is_safe_relative_path(&artifact.relative_path)
+            || !roles.insert(artifact.role.clone())
+            || !paths.insert(artifact.relative_path.clone())
+            || artifact.digest == Hash([0; 32])
+            || artifact.byte_len == 0
+            || !artifact.quarantined
+            || !artifact.redacted
+            || artifact.retains_raw_content
+            || gateway_formal_tiny_z3_real_materialized_capture_forbidden_artifact_label(
+                &lower_role,
+            )
+            || gateway_formal_tiny_z3_real_materialized_capture_forbidden_artifact_label(
+                &lower_path,
+            )
+        {
+            return Err(
+                GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::InvalidArtifactRetentionDeclaration,
+            );
+        }
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_z3_real_materialized_reviewer_routing(
+    reviewer_routing: &GatewayFormalTinyZ3RealMaterializedReviewerRouting,
+) -> Result<(), GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError> {
+    if !is_single_segment_id(&reviewer_routing.routing_id)
+        || reviewer_routing.reviewer_queue.trim().is_empty()
+        || !reviewer_routing.reviewer_required
+        || reviewer_routing.human_review_acceptance_recorded
+    {
+        return Err(
+            GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::InvalidReviewerRouting,
+        );
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_z3_real_materialized_redaction_report(
+    report: &GatewayFormalTinyZ3RealMaterializedCaptureRedactionReport,
+) -> Result<(), GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError> {
+    if !is_single_segment_id(&report.report_id)
+        || !report.no_secrets_detected
+        || !report.no_credentials_detected
+        || !report.no_private_machine_identifiers_retained
+        || !report.no_raw_provider_responses_retained
+        || !report.no_raw_stdout_retained
+        || !report.no_raw_stderr_retained
+        || !report.no_undeclared_files_retained
+        || !report.no_accepted_evidence_artifacts_retained
+        || !report.no_level2_artifacts_retained
+        || !report.no_score_axis_artifacts_retained
+        || !report.no_proof_artifacts_retained
+        || !report.no_checker_transcripts_retained
+        || !report.no_solver_certificates_retained
+        || !report.no_benchmark_artifacts_retained
+        || !report.no_production_deployment_artifacts_retained
+    {
+        return Err(
+            GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::InvalidRedactionReport,
+        );
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_z3_real_materialized_nonpromotion(
+    nonpromotion: &GatewayFormalTinyZ3RealMaterializedCaptureNonpromotionReport,
+    phase605_packet: &GatewayFormalTinyZ3RealMaterializedPhase605HandoffPacket,
+    provenance: &GatewayFormalTinyZ3RealMaterializedOperatorProvenance,
+    observation: &GatewayFormalTinyZ3RealMaterializedExecutionObservation,
+    transcript_digests: &GatewayFormalTinyZ3RealMaterializedTranscriptDigests,
+    artifact_retention: &GatewayFormalTinyZ3RealMaterializedArtifactRetentionDeclaration,
+    reviewer_routing: &GatewayFormalTinyZ3RealMaterializedReviewerRouting,
+    redaction_report: &GatewayFormalTinyZ3RealMaterializedCaptureRedactionReport,
+) -> Result<(), GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError> {
+    let expected = gateway_formal_tiny_z3_real_materialized_operator_capture_nonpromotion_report(
+        phase605_packet,
+        provenance,
+        observation,
+        transcript_digests,
+        artifact_retention,
+        reviewer_routing,
+        redaction_report,
+    );
+    if nonpromotion != &expected {
+        return Err(
+            GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::NonpromotionMismatch,
+        );
+    }
+    Ok(())
+}
+
+fn gateway_formal_tiny_z3_real_materialized_capture_forbidden_artifact_label(value: &str) -> bool {
+    [
+        "accepted",
+        "evidence",
+        "level2",
+        "score",
+        "proof",
+        "checker",
+        "solver",
+        "certificate",
+        "lean",
+        "cobalt",
+        "rust-to-lean",
+        "benchmark",
+        "production",
+        "secret",
+        "credential",
+        "stdout",
+        "stderr",
+        "provider",
+    ]
+    .iter()
+    .any(|token| value.contains(token))
+}
+
+fn gateway_formal_tiny_z3_real_materialized_operator_capture_readback_validation_digest(
+    phase605_packet: &GatewayFormalTinyZ3RealMaterializedPhase605HandoffPacket,
+    provenance: &GatewayFormalTinyZ3RealMaterializedOperatorProvenance,
+    observation: &GatewayFormalTinyZ3RealMaterializedExecutionObservation,
+    transcript_digests: &GatewayFormalTinyZ3RealMaterializedTranscriptDigests,
+    artifact_retention: &GatewayFormalTinyZ3RealMaterializedArtifactRetentionDeclaration,
+    reviewer_routing: &GatewayFormalTinyZ3RealMaterializedReviewerRouting,
+    redaction_report: &GatewayFormalTinyZ3RealMaterializedCaptureRedactionReport,
+    nonpromotion: &GatewayFormalTinyZ3RealMaterializedCaptureNonpromotionReport,
+    core_file_digests: &BTreeMap<String, Hash>,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:gateway-formal-tiny-z3-real-materialized-operator-capture-readback-validation:v1",
+        &(
+            phase605_packet.digest(),
+            provenance.digest(),
+            observation.digest(),
+            transcript_digests.digest(),
+            artifact_retention.digest(),
+            reviewer_routing.digest(),
+            redaction_report.digest(),
+            nonpromotion.digest(),
+            core_file_digests,
+        ),
+    )
+}
+
+fn declared_gateway_formal_tiny_z3_real_materialized_operator_capture_bytes<'a>(
+    files: &'a BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<&'a [u8], GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError> {
+    files.get(logical_path).map(Vec::as_slice).ok_or_else(|| {
+        GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::Io(format!(
+            "declared file missing: {logical_path}"
+        ))
+    })
+}
+
+fn parse_gateway_formal_tiny_z3_real_materialized_operator_capture_declared_json<
+    T: for<'de> Deserialize<'de> + Serialize,
+>(
+    files: &BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<T, GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError> {
+    let bytes = declared_gateway_formal_tiny_z3_real_materialized_operator_capture_bytes(
+        files,
+        logical_path,
+    )?;
+    let original = parse_json_value_rejecting_duplicate_keys(bytes).map_err(|_| {
+        GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })?;
+    let parsed: T = serde_json::from_value(original.clone()).map_err(|_| {
+        GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })?;
+    let canonical = serde_json::to_value(&parsed)
+        .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_serde_error)?;
+    if canonical != original {
+        return Err(
+            GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::MalformedDeclaredFile(
+                logical_path.to_owned(),
+            ),
+        );
+    }
+    Ok(parsed)
+}
+
+fn reject_undeclared_gateway_formal_tiny_z3_real_materialized_operator_capture_files(
+    output_root: &Path,
+) -> Result<(), GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError> {
+    let mut declared: BTreeSet<String> =
+        GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_DECLARED_FILES
+            .iter()
+            .chain(
+                GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_DECLARED_SIDECARS.iter(),
+            )
+            .map(|value| (*value).to_owned())
+            .collect();
+    let bundle_dir =
+        output_root.join(GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_NAMESPACE);
+    for entry in fs::read_dir(&bundle_dir)
+        .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_io_error)?
+    {
+        let entry =
+            entry.map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_io_error)?;
+        let logical_path = entry
+            .path()
+            .strip_prefix(output_root)
+            .map_err(|error| {
+                GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::Io(error.to_string())
+            })?
+            .to_string_lossy()
+            .replace('\\', "/");
+        if !declared.remove(&logical_path) {
+            return Err(
+                GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::UndeclaredFile(
+                    logical_path,
+                ),
+            );
+        }
+    }
+    if let Some(missing) = declared.into_iter().next() {
+        return Err(
+            GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::Io(format!(
+                "declared file missing: {missing}"
+            )),
+        );
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_z3_real_materialized_operator_capture_output_root(
+    output_root: &Path,
+    protected_roots: &[PathBuf],
+    overwrite: bool,
+) -> Result<(), GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError> {
+    match validate_output_root(output_root, protected_roots, overwrite) {
+        Ok(()) => Ok(()),
+        Err(AdmissionJournalMaterializationError::EmptyOutputRoot) => {
+            Err(GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::EmptyOutputRoot)
+        }
+        Err(AdmissionJournalMaterializationError::ProtectedOutputRoot) => {
+            Err(GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::ProtectedOutputRoot)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootExistsWithoutOverwrite) => Err(
+            GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::OutputRootExistsWithoutOverwrite,
+        ),
+        Err(AdmissionJournalMaterializationError::OutputRootIsSymlink) => {
+            Err(GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::OutputRootIsSymlink)
+        }
+        Err(AdmissionJournalMaterializationError::OutputRootIsFile) => {
+            Err(GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::OutputRootIsFile)
+        }
+        Err(AdmissionJournalMaterializationError::Io(error)) => {
+            Err(GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::Io(error))
+        }
+        Err(other) => Err(GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::Io(
+            format!("{other:?}"),
+        )),
+    }
+}
+
+fn gateway_formal_tiny_z3_real_materialized_operator_capture_staging_root_for(
+    output_root: &Path,
+    capture_id: &str,
+) -> Result<PathBuf, GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError> {
+    let parent = output_root
+        .parent()
+        .ok_or(GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::EmptyOutputRoot)?;
+    let name = output_root
+        .file_name()
+        .map(|value| value.to_string_lossy().into_owned())
+        .ok_or(GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::EmptyOutputRoot)?;
+    Ok(parent.join(format!(".{name}.{capture_id}.staging")))
+}
+
+fn remove_gateway_formal_tiny_z3_real_materialized_operator_capture_dir_all_checked(
+    path: &Path,
+) -> Result<(), GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError> {
+    if !path.exists() {
+        return Ok(());
+    }
+    if fs::symlink_metadata(path)
+        .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_io_error)?
+        .file_type()
+        .is_symlink()
+    {
+        return Err(
+            GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::OutputRootIsSymlink,
+        );
+    }
+    fs::remove_dir_all(path)
+        .map_err(gateway_formal_tiny_z3_real_materialized_operator_capture_io_error)
+}
+
+fn gateway_formal_tiny_z3_real_materialized_operator_capture_io_error(
+    error: io::Error,
+) -> GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError {
+    GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::Io(error.to_string())
+}
+
+fn gateway_formal_tiny_z3_real_materialized_operator_capture_serde_error(
+    error: serde_json::Error,
+) -> GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError {
+    GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::Serialization(error.to_string())
 }
 
 pub fn gateway_formal_tiny_z3_external_operator_capture_import_candidate_claim_boundary() -> String
@@ -140119,6 +141957,391 @@ mod tests {
         fs::remove_dir_all(&obligation_root).expect("phase529 run obligation cleanup succeeds");
     }
 
+    // Real Z3 execution against the gateway-local-digest-binding-determinism-v1 obligation
+    // yields the semantically-correct `unsat` verdict for the equal-input determinism check.
+    #[test]
+    fn phase529_tiny_z3_hermetic_backend_execution_result_runs_real_z3_against_gateway_digest_binding_obligation_without_promotion(
+    ) {
+        let Some(z3_executable) = phase529_z3_executable() else {
+            return;
+        };
+        let Some((obligation_root, phase405_output_root, output_root, review)) =
+            phase527_tiny_z3_backend_execution_candidate_source("phase529-real-z3-run")
+        else {
+            return;
+        };
+        let execution_input = phase527_tiny_z3_backend_execution_candidate_input(
+            "phase529-real-z3-source-candidate",
+            &review,
+            GatewayFormalTinyZ3BackendExecutionCandidateLabel::BackendExecutionCandidateRecorded,
+        );
+        let candidate =
+            build_gateway_formal_tiny_z3_backend_execution_candidate(&review, &execution_input)
+                .expect("phase529 real-z3 source candidate builds");
+        let executable_digest =
+            hash_bytes(&fs::read(&z3_executable).expect("phase529 real-z3 executable reads"));
+        let request = phase529_tiny_z3_hermetic_backend_execution_request(
+            "phase529-real-z3-hermetic-result",
+            &candidate,
+            executable_digest,
+        );
+        let smtlib2_bytes = phase404_z3_obligation_bytes();
+        let smtlib2_text =
+            std::str::from_utf8(&smtlib2_bytes).expect("phase404 obligation is valid utf-8");
+
+        let result = run_gateway_formal_tiny_z3_hermetic_backend_execution_result(
+            &candidate,
+            &request,
+            &z3_executable,
+            smtlib2_text,
+        )
+        .expect("phase529 real-z3 execution against phase404 obligation succeeds");
+
+        assert_eq!(
+            result.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_HERMETIC_BACKEND_EXECUTION_RESULT_STATE_SLICE
+        );
+        assert_eq!(result.phase527_candidate_digest, candidate.digest());
+        assert_eq!(
+            result.phase527_classification,
+            GatewayFormalTinyZ3BackendExecutionCandidateClassification::LaneAExecutionCandidateDeclaredNoRun
+        );
+        assert_eq!(
+            result.classification,
+            GatewayFormalTinyZ3HermeticBackendExecutionResultClassification::LaneASmtZ3RunObservedLocalOnly
+        );
+        assert_eq!(
+            result.actual_smtlib2_text_digest,
+            hash_bytes(smtlib2_text.as_bytes())
+        );
+        assert_eq!(result.executable_digest, executable_digest);
+        assert_eq!(
+            result.argv_digest,
+            gateway_formal_tiny_z3_hermetic_backend_execution_result_argv_digest()
+        );
+        assert!(result.process_spawned);
+        assert!(result.backend_executed);
+        assert_eq!(result.exit_code_label, "exit_0");
+        assert_eq!(
+            result.solver_verdict_label,
+            GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
+        );
+        assert!(!result.timeout_observed);
+        assert!(!result.backend_artifact_written);
+        assert!(!result.network_access_observed);
+        assert!(!result.repository_root_write_observed);
+        assert!(!result.raw_stdout_stderr_retained);
+        assert!(!result.creates_accepted_external_result_evidence);
+        assert!(!result.writes_accepted_evidence_artifacts);
+        assert!(!result.creates_accepted_formal_evidence);
+        assert!(!result.creates_level2_evidence);
+        assert!(!result.populates_score_axes);
+        assert!(!result.proof_artifact_created);
+        assert!(!result.checker_transcript_created);
+        assert!(!result.solver_certificate_created);
+        assert!(!result.lean_execution_evidence_created);
+        assert!(!result.cobalt_execution_evidence_created);
+        assert!(!result.rust_to_lean_execution_evidence_created);
+        assert!(!result.benchmark_evidence_created);
+        assert!(!result.external_audit_evidence_created);
+        assert!(!result.semantic_correctness_claimed);
+        assert!(!result.production_readiness_claimed);
+        assert!(!result.sota_claimed);
+        assert!(!result.breakthrough_claimed);
+        assert!(!result.full_security_claimed);
+        assert!(!result.grants_authority);
+
+        fs::remove_dir_all(&output_root).expect("phase529 real-z3 output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase529 real-z3 phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase529 real-z3 obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase603_real_z3_unsat_result_propagates_to_in_memory_accepted_append_boundary() {
+        let Some(z3_executable) = phase529_z3_executable() else {
+            return;
+        };
+        let Some((obligation_root, phase405_output_root, output_root, review)) =
+            phase527_tiny_z3_backend_execution_candidate_source("phase603-real-z3-propagation")
+        else {
+            return;
+        };
+        let execution_input = phase527_tiny_z3_backend_execution_candidate_input(
+            "phase603-real-z3-source-candidate",
+            &review,
+            GatewayFormalTinyZ3BackendExecutionCandidateLabel::BackendExecutionCandidateRecorded,
+        );
+        let candidate =
+            build_gateway_formal_tiny_z3_backend_execution_candidate(&review, &execution_input)
+                .expect("phase603 source candidate builds");
+        let executable_digest =
+            hash_bytes(&fs::read(&z3_executable).expect("phase603 z3 executable reads"));
+        let request = phase529_tiny_z3_hermetic_backend_execution_request(
+            "phase603-real-z3-hermetic-result",
+            &candidate,
+            executable_digest,
+        );
+        let smtlib2_bytes = phase404_z3_obligation_bytes();
+        let smtlib2_text =
+            std::str::from_utf8(&smtlib2_bytes).expect("phase404 obligation is valid utf-8");
+        let result = run_gateway_formal_tiny_z3_hermetic_backend_execution_result(
+            &candidate,
+            &request,
+            &z3_executable,
+            smtlib2_text,
+        )
+        .expect("phase603 real-z3 execution succeeds");
+        assert_eq!(
+            result.solver_verdict_label,
+            GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
+        );
+
+        let package_input = phase531_tiny_z3_backend_execution_artifact_package_input(
+            "phase603-real-z3-package",
+            &result,
+            GatewayFormalTinyZ3BackendExecutionArtifactPackageLabel::BackendExecutionPackageRecorded,
+        );
+        let package = build_gateway_formal_tiny_z3_backend_execution_artifact_package(
+            &result,
+            &package_input,
+        )
+        .expect("phase603 real-z3 package metadata builds");
+        assert_eq!(
+            package.solver_verdict_label,
+            GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
+        );
+
+        let review_input = phase533_tiny_z3_backend_execution_package_review_input(
+            "phase603-real-z3-review",
+            &package,
+            GatewayFormalTinyZ3BackendExecutionPackageReviewLabel::BackendExecutionPackageReviewRecorded,
+        );
+        let package_review =
+            build_gateway_formal_tiny_z3_backend_execution_package_review(&package, &review_input)
+                .expect("phase603 package review metadata builds");
+        let owner_input = phase535_tiny_z3_backend_execution_owner_decision_input(
+            "phase603-real-z3-owner-decision",
+            &package_review,
+            GatewayFormalTinyZ3BackendExecutionOwnerDecisionLabel::BackendExecutionAcceptedEvidenceRouteNeedsZkbenchCoreEvaluation,
+        );
+        let owner_decision = build_gateway_formal_tiny_z3_backend_execution_owner_decision(
+            &package_review,
+            &owner_input,
+        )
+        .expect("phase603 owner-decision metadata builds");
+        let (mut ledger, append_request) = phase509_valid_append_transaction();
+        let evaluation_input =
+            phase537_tiny_z3_backend_execution_accepted_append_evaluation_input(
+                "phase603-real-z3-evaluation",
+                &owner_decision,
+                GatewayFormalTinyZ3BackendExecutionAcceptedAppendEvaluationLabel::BackendExecutionAcceptedAppendValidatorAccepted,
+            );
+        let evaluation = build_gateway_formal_tiny_z3_backend_execution_accepted_append_evaluation(
+            &owner_decision,
+            &append_request,
+            &ledger,
+            &evaluation_input,
+        )
+        .expect("phase603 accepted append evaluation metadata builds");
+        assert!(evaluation.validation_valid);
+
+        let mutation_input = phase539_tiny_z3_backend_execution_accepted_append_mutation_input(
+            "phase603-real-z3-mutation",
+            &evaluation,
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationLabel::BackendExecutionAcceptedAppendMutationRecorded,
+        );
+        let mutation = build_gateway_formal_tiny_z3_backend_execution_accepted_append_mutation(
+            &evaluation,
+            &append_request,
+            &mut ledger,
+            &mutation_input,
+        )
+        .expect("phase603 in-memory accepted append mutation metadata builds");
+        assert!(mutation.mutates_accepted_evidence_ledger);
+        assert_eq!(mutation.appended_sequence_number, Some(0));
+        assert_eq!(mutation.appended_evidence_class, "LocalReplay");
+        assert_eq!(mutation.appended_claim_boundary, "Level1LocalReplay");
+        assert!(!mutation.writes_accepted_evidence_ledger_files);
+        assert!(!mutation.creates_materialized_accepted_ledger_output);
+        assert!(!mutation.creates_accepted_formal_evidence);
+        assert!(!mutation.creates_level2_evidence);
+        assert!(!mutation.populates_score_axes);
+        assert!(!mutation.semantic_correctness_claimed);
+        assert!(!mutation.production_readiness_claimed);
+        assert!(!mutation.sota_claimed);
+        assert!(!mutation.full_security_claimed);
+
+        fs::remove_dir_all(&output_root).expect("phase603 output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase603 phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase603 obligation cleanup succeeds");
+    }
+
+    #[test]
+    fn phase604_real_z3_unsat_result_materializes_accepted_ledger_artifact_without_claim_escalation(
+    ) {
+        let Some(z3_executable) = phase529_z3_executable() else {
+            return;
+        };
+        let Some((obligation_root, phase405_output_root, output_root, review)) =
+            phase527_tiny_z3_backend_execution_candidate_source("phase604-real-z3-materialized")
+        else {
+            return;
+        };
+        let execution_input = phase527_tiny_z3_backend_execution_candidate_input(
+            "phase604-real-z3-source-candidate",
+            &review,
+            GatewayFormalTinyZ3BackendExecutionCandidateLabel::BackendExecutionCandidateRecorded,
+        );
+        let candidate =
+            build_gateway_formal_tiny_z3_backend_execution_candidate(&review, &execution_input)
+                .expect("phase604 source candidate builds");
+        let executable_digest =
+            hash_bytes(&fs::read(&z3_executable).expect("phase604 z3 executable reads"));
+        let execution_request = phase529_tiny_z3_hermetic_backend_execution_request(
+            "phase604-real-z3-hermetic-result",
+            &candidate,
+            executable_digest,
+        );
+        let smtlib2_bytes = phase404_z3_obligation_bytes();
+        let smtlib2_text =
+            std::str::from_utf8(&smtlib2_bytes).expect("phase404 obligation is valid utf-8");
+        let result = run_gateway_formal_tiny_z3_hermetic_backend_execution_result(
+            &candidate,
+            &execution_request,
+            &z3_executable,
+            smtlib2_text,
+        )
+        .expect("phase604 real-z3 execution succeeds");
+        assert_eq!(
+            result.solver_verdict_label,
+            GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
+        );
+
+        let package_input = phase531_tiny_z3_backend_execution_artifact_package_input(
+            "phase604-real-z3-package",
+            &result,
+            GatewayFormalTinyZ3BackendExecutionArtifactPackageLabel::BackendExecutionPackageRecorded,
+        );
+        let package = build_gateway_formal_tiny_z3_backend_execution_artifact_package(
+            &result,
+            &package_input,
+        )
+        .expect("phase604 real-z3 package metadata builds");
+        let review_input = phase533_tiny_z3_backend_execution_package_review_input(
+            "phase604-real-z3-review",
+            &package,
+            GatewayFormalTinyZ3BackendExecutionPackageReviewLabel::BackendExecutionPackageReviewRecorded,
+        );
+        let package_review =
+            build_gateway_formal_tiny_z3_backend_execution_package_review(&package, &review_input)
+                .expect("phase604 package review metadata builds");
+        let owner_input = phase535_tiny_z3_backend_execution_owner_decision_input(
+            "phase604-real-z3-owner-decision",
+            &package_review,
+            GatewayFormalTinyZ3BackendExecutionOwnerDecisionLabel::BackendExecutionAcceptedEvidenceRouteNeedsZkbenchCoreEvaluation,
+        );
+        let owner_decision = build_gateway_formal_tiny_z3_backend_execution_owner_decision(
+            &package_review,
+            &owner_input,
+        )
+        .expect("phase604 owner-decision metadata builds");
+        let (mut ledger, append_request) = phase509_valid_append_transaction();
+        let evaluation_input =
+            phase537_tiny_z3_backend_execution_accepted_append_evaluation_input(
+                "phase604-real-z3-evaluation",
+                &owner_decision,
+                GatewayFormalTinyZ3BackendExecutionAcceptedAppendEvaluationLabel::BackendExecutionAcceptedAppendValidatorAccepted,
+            );
+        let evaluation = build_gateway_formal_tiny_z3_backend_execution_accepted_append_evaluation(
+            &owner_decision,
+            &append_request,
+            &ledger,
+            &evaluation_input,
+        )
+        .expect("phase604 accepted append evaluation metadata builds");
+        let mutation_input = phase539_tiny_z3_backend_execution_accepted_append_mutation_input(
+            "phase604-real-z3-mutation",
+            &evaluation,
+            GatewayFormalTinyZ3BackendExecutionAcceptedAppendMutationLabel::BackendExecutionAcceptedAppendMutationRecorded,
+        );
+        let mutation = build_gateway_formal_tiny_z3_backend_execution_accepted_append_mutation(
+            &evaluation,
+            &append_request,
+            &mut ledger,
+            &mutation_input,
+        )
+        .expect("phase604 in-memory accepted append mutation metadata builds");
+        assert_eq!(mutation.appended_evidence_class, "LocalReplay");
+        assert_eq!(mutation.appended_claim_boundary, "Level1LocalReplay");
+
+        let ledger_path = output_root.join("phase604-real-z3-accepted-ledger.json");
+        let materialized_request = zkbench_core::MaterializedAcceptedLedgerAppendRequest {
+            ledger_path: ledger_path.clone(),
+            create_if_missing: true,
+            transaction: append_request,
+        };
+        let materialization_input =
+            phase541_tiny_z3_backend_execution_materialized_accepted_append_input(
+                "phase604-real-z3-materialization",
+                &mutation,
+                &materialized_request,
+                GatewayFormalTinyZ3BackendExecutionMaterializedAcceptedAppendLabel::BackendExecutionMaterializationRecorded,
+            );
+        let materialization =
+            build_gateway_formal_tiny_z3_backend_execution_materialized_accepted_append(
+                &mutation,
+                &materialized_request,
+                &materialization_input,
+            )
+            .expect("phase604 materialized accepted append metadata builds");
+
+        assert!(ledger_path.exists());
+        assert!(materialization.routes_through_zkbench_core_materialized_owner);
+        assert!(materialization.creates_materialized_accepted_ledger_output);
+        assert_ne!(
+            materialization.materialized_append_report_digest,
+            Hash([0; 32])
+        );
+        assert_ne!(
+            materialization.materialized_ledger_artifact_digest,
+            Hash([0; 32])
+        );
+        assert!(materialization.materialized_ledger_artifact_byte_len > 0);
+        assert_eq!(
+            materialization.phase539_appended_evidence_class,
+            "LocalReplay"
+        );
+        assert_eq!(
+            materialization.phase539_appended_claim_boundary,
+            "Level1LocalReplay"
+        );
+        assert!(!materialization.creates_official_submission);
+        assert!(!materialization.creates_accepted_formal_evidence);
+        assert!(!materialization.creates_level2_evidence);
+        assert!(!materialization.populates_score_axes);
+        assert!(!materialization.proof_artifact_created);
+        assert!(!materialization.checker_transcript_created);
+        assert!(!materialization.solver_certificate_created);
+        assert!(!materialization.lean_execution_evidence_created);
+        assert!(!materialization.additional_smt_z3_execution_created);
+        assert!(!materialization.cobalt_execution_evidence_created);
+        assert!(!materialization.rust_to_lean_execution_evidence_created);
+        assert!(!materialization.benchmark_evidence_created);
+        assert!(!materialization.external_audit_claimed);
+        assert!(!materialization.independent_external_reproduction_claimed);
+        assert!(!materialization.semantic_correctness_claimed);
+        assert!(!materialization.production_readiness_claimed);
+        assert!(!materialization.sota_claimed);
+        assert!(!materialization.full_security_claimed);
+
+        fs::remove_dir_all(&output_root).expect("phase604 output cleanup succeeds");
+        fs::remove_dir_all(&phase405_output_root)
+            .expect("phase604 phase405 output cleanup succeeds");
+        fs::remove_dir_all(&obligation_root).expect("phase604 obligation cleanup succeeds");
+    }
+
     #[test]
     fn phase529_tiny_z3_hermetic_backend_execution_result_rejects_candidate_drift() {
         let Some((obligation_root, phase405_output_root, output_root, review)) =
@@ -140241,7 +142464,7 @@ mod tests {
         );
         assert_eq!(
             package.solver_verdict_label,
-            GatewayFormalRealCommandLaneSolverVerdictLabel::SolverSatWitnessWithoutCertificate
+            GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
         );
         assert_eq!(package.exit_code_label, "exit_0");
         assert!(package.local_backend_execution_package_created);
@@ -143316,6 +145539,456 @@ mod tests {
         ] {
             fs::remove_dir_all(root).expect("phase559 invalid cleanup succeeds");
         }
+    }
+
+    #[test]
+    fn phase607_real_materialized_operator_capture_materializes_and_reads_back() {
+        let capture_root = temp_output_root("phase607-capture-output");
+        let request = phase607_capture_request("phase607-capture-output");
+        let packet = phase607_handoff_packet("phase607-capture-output");
+        let provenance = phase607_operator_provenance("phase607-capture-output");
+        let observation = phase607_execution_observation("phase607-capture-output");
+        let transcript_digests =
+            phase607_transcript_digests("phase607-capture-output", &observation);
+        let artifact_retention = phase607_artifact_retention("phase607-capture-output");
+        let reviewer_routing = phase607_reviewer_routing("phase607-capture-output");
+        let redaction_report = phase607_redaction_report("phase607-capture-output");
+
+        let manifest =
+            materialize_gateway_formal_tiny_z3_real_materialized_operator_capture_output_bundle(
+                &capture_root,
+                &packet,
+                &provenance,
+                &observation,
+                &transcript_digests,
+                &artifact_retention,
+                &reviewer_routing,
+                &redaction_report,
+                &request,
+            )
+            .expect("phase607 capture materializes");
+
+        assert_eq!(
+            manifest.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_STATE_SLICE
+        );
+        assert_eq!(manifest.phase605_handoff_packet_digest, packet.digest());
+        assert_eq!(manifest.operator_provenance_digest, provenance.digest());
+        assert_eq!(manifest.execution_observation_digest, observation.digest());
+        assert_eq!(
+            manifest.transcript_digests_digest,
+            transcript_digests.digest()
+        );
+        assert_eq!(
+            manifest.artifact_retention_digest,
+            artifact_retention.digest()
+        );
+        assert_eq!(manifest.reviewer_routing_digest, reviewer_routing.digest());
+        assert_eq!(manifest.redaction_report_digest, redaction_report.digest());
+        assert_eq!(
+            manifest.declared_files,
+            gateway_formal_tiny_z3_real_materialized_operator_capture_declared_files()
+        );
+        assert!(manifest.operator_capture_packet_quarantined);
+        assert!(!manifest.external_result_import_created);
+        assert!(!manifest.accepted_evidence_ledger_mutated);
+        assert!(!manifest.independent_external_reproduction_accepted);
+        assert!(!manifest.human_review_acceptance_recorded);
+        assert!(!manifest.accepted_formal_evidence_created);
+        assert!(!manifest.creates_level2_evidence);
+        assert!(!manifest.populates_score_axes);
+        assert!(!manifest.proof_artifact_created);
+        assert!(!manifest.checker_transcript_created);
+        assert!(!manifest.solver_certificate_created);
+        assert!(!manifest.lean_execution_evidence_created);
+        assert!(!manifest.additional_local_smt_z3_execution_created);
+        assert!(!manifest.cobalt_execution_evidence_created);
+        assert!(!manifest.rust_to_lean_execution_evidence_created);
+        assert!(!manifest.benchmark_evidence_created);
+        assert!(!manifest.external_audit_evidence_created);
+        assert!(!manifest.semantic_correctness_claimed);
+        assert!(!manifest.production_readiness_claimed);
+        assert!(!manifest.sota_claimed);
+        assert!(!manifest.breakthrough_claimed);
+        assert!(!manifest.full_security_claimed);
+        assert!(!manifest.global_uniqueness_claimed);
+        assert!(!manifest.grants_authority);
+        assert_eq!(
+            read_gateway_formal_tiny_z3_real_materialized_operator_capture_output_bundle(
+                &capture_root
+            ),
+            Ok(manifest)
+        );
+        assert!(capture_root
+            .join("phase605-real-z3-materialized-operator-capture/manifest.json.sha256")
+            .is_file());
+        assert!(!capture_root
+            .join("phase605-real-z3-materialized-operator-capture/accepted-evidence.json")
+            .exists());
+
+        fs::remove_dir_all(&capture_root).expect("phase607 cleanup succeeds");
+    }
+
+    #[test]
+    fn phase607_real_materialized_operator_capture_rejects_drift_and_forbidden_artifact() {
+        let capture_root = temp_output_root("phase607-capture-drift-output");
+        let request = phase607_capture_request("phase607-capture-drift-output");
+        let packet = phase607_handoff_packet("phase607-capture-drift-output");
+        let provenance = phase607_operator_provenance("phase607-capture-drift-output");
+        let observation = phase607_execution_observation("phase607-capture-drift-output");
+        let transcript_digests =
+            phase607_transcript_digests("phase607-capture-drift-output", &observation);
+        let artifact_retention = phase607_artifact_retention("phase607-capture-drift-output");
+        let reviewer_routing = phase607_reviewer_routing("phase607-capture-drift-output");
+        let redaction_report = phase607_redaction_report("phase607-capture-drift-output");
+        materialize_gateway_formal_tiny_z3_real_materialized_operator_capture_output_bundle(
+            &capture_root,
+            &packet,
+            &provenance,
+            &observation,
+            &transcript_digests,
+            &artifact_retention,
+            &reviewer_routing,
+            &redaction_report,
+            &request,
+        )
+        .expect("phase607 drift fixture materializes");
+        fs::write(
+            sidecar_path(
+                &capture_root
+                    .join("phase605-real-z3-materialized-operator-capture/redaction-report.json"),
+            ),
+            b"stale",
+        )
+        .expect("phase607 stale sidecar writes");
+        assert_eq!(
+            read_gateway_formal_tiny_z3_real_materialized_operator_capture_output_bundle(
+                &capture_root
+            ),
+            Err(
+                GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::DigestMismatch(
+                    "phase605-real-z3-materialized-operator-capture/redaction-report.json"
+                        .to_owned()
+                )
+            )
+        );
+
+        let mut forbidden_retention = phase607_artifact_retention("phase607-forbidden-output");
+        forbidden_retention.declaration_id = "phase607-forbidden-output-retention".to_owned();
+        forbidden_retention.retains_generated_ledger = true;
+        forbidden_retention.artifacts.push(
+            GatewayFormalTinyZ3RealMaterializedRetainedArtifactReference {
+                role: "proof_artifact".to_owned(),
+                relative_path: "capture/proof-artifact.json".to_owned(),
+                digest: hash_tagged("phase607-forbidden-artifact", &"phase607-forbidden-output"),
+                byte_len: 100,
+                quarantined: true,
+                redacted: true,
+                retains_raw_content: false,
+            },
+        );
+        let forbidden_root = temp_output_root("phase607-forbidden-output");
+        let forbidden_request = phase607_capture_request("phase607-forbidden-output");
+        assert_eq!(
+            materialize_gateway_formal_tiny_z3_real_materialized_operator_capture_output_bundle(
+                &forbidden_root,
+                &phase607_handoff_packet("phase607-forbidden-output"),
+                &phase607_operator_provenance("phase607-forbidden-output"),
+                &phase607_execution_observation("phase607-forbidden-output"),
+                &phase607_transcript_digests(
+                    "phase607-forbidden-output",
+                    &phase607_execution_observation("phase607-forbidden-output")
+                ),
+                &forbidden_retention,
+                &phase607_reviewer_routing("phase607-forbidden-output"),
+                &phase607_redaction_report("phase607-forbidden-output"),
+                &forbidden_request,
+            ),
+            Err(
+                GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::InvalidArtifactRetentionDeclaration
+            )
+        );
+
+        fs::remove_dir_all(&capture_root).expect("phase607 drift cleanup succeeds");
+    }
+
+    #[test]
+    fn phase607_real_materialized_operator_capture_rejects_skips_and_review_promotion() {
+        let skipped_root = temp_output_root("phase607-skipped-output");
+        let mut skipped_observation = phase607_execution_observation("phase607-skipped-output");
+        skipped_observation.z3_available = false;
+        skipped_observation.run_skipped = true;
+        skipped_observation.focused_test_passed = false;
+        assert_eq!(
+            materialize_gateway_formal_tiny_z3_real_materialized_operator_capture_output_bundle(
+                &skipped_root,
+                &phase607_handoff_packet("phase607-skipped-output"),
+                &phase607_operator_provenance("phase607-skipped-output"),
+                &skipped_observation,
+                &phase607_transcript_digests("phase607-skipped-output", &skipped_observation),
+                &phase607_artifact_retention("phase607-skipped-output"),
+                &phase607_reviewer_routing("phase607-skipped-output"),
+                &phase607_redaction_report("phase607-skipped-output"),
+                &phase607_capture_request("phase607-skipped-output"),
+            ),
+            Err(
+                GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::InvalidExecutionObservation
+            )
+        );
+
+        let review_root = temp_output_root("phase607-review-promotion-output");
+        let mut review_routing = phase607_reviewer_routing("phase607-review-promotion-output");
+        review_routing.human_review_acceptance_recorded = true;
+        assert_eq!(
+            materialize_gateway_formal_tiny_z3_real_materialized_operator_capture_output_bundle(
+                &review_root,
+                &phase607_handoff_packet("phase607-review-promotion-output"),
+                &phase607_operator_provenance("phase607-review-promotion-output"),
+                &phase607_execution_observation("phase607-review-promotion-output"),
+                &phase607_transcript_digests(
+                    "phase607-review-promotion-output",
+                    &phase607_execution_observation("phase607-review-promotion-output")
+                ),
+                &phase607_artifact_retention("phase607-review-promotion-output"),
+                &review_routing,
+                &phase607_redaction_report("phase607-review-promotion-output"),
+                &phase607_capture_request("phase607-review-promotion-output"),
+            ),
+            Err(
+                GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputError::InvalidReviewerRouting
+            )
+        );
+    }
+
+    #[test]
+    fn phase609_real_materialized_staging_runner_materializes_phase607_capture() {
+        let capture_root = temp_output_root("phase609-staging-output");
+        let request = phase609_staging_request("phase609-staging-output");
+        let observed = phase609_observed_process();
+
+        let manifest = materialize_gateway_formal_tiny_z3_real_materialized_staging_runner_capture(
+            &capture_root,
+            &request,
+            &observed,
+        )
+        .expect("phase609 staging runner materializes through phase607 capture");
+
+        assert_eq!(
+            manifest.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_STATE_SLICE
+        );
+        assert_eq!(manifest.capture_id, "phase609-staging-output");
+        assert!(
+            gateway_formal_tiny_z3_real_materialized_staging_runner_claim_boundary()
+                .contains("Phase 609")
+        );
+        assert!(manifest.operator_capture_packet_quarantined);
+        assert!(!manifest.external_result_import_created);
+        assert!(!manifest.accepted_evidence_ledger_mutated);
+        assert!(!manifest.independent_external_reproduction_accepted);
+        assert!(!manifest.human_review_acceptance_recorded);
+        assert!(!manifest.accepted_formal_evidence_created);
+        assert!(!manifest.creates_level2_evidence);
+        assert!(!manifest.populates_score_axes);
+        assert!(!manifest.proof_artifact_created);
+        assert!(!manifest.checker_transcript_created);
+        assert!(!manifest.solver_certificate_created);
+        assert!(!manifest.lean_execution_evidence_created);
+        assert!(!manifest.additional_local_smt_z3_execution_created);
+        assert!(!manifest.cobalt_execution_evidence_created);
+        assert!(!manifest.rust_to_lean_execution_evidence_created);
+        assert!(!manifest.benchmark_evidence_created);
+        assert!(!manifest.external_audit_evidence_created);
+        assert!(!manifest.semantic_correctness_claimed);
+        assert!(!manifest.production_readiness_claimed);
+        assert!(!manifest.sota_claimed);
+        assert!(!manifest.full_security_claimed);
+        assert_eq!(
+            read_gateway_formal_tiny_z3_real_materialized_operator_capture_output_bundle(
+                &capture_root
+            ),
+            Ok(manifest)
+        );
+
+        fs::remove_dir_all(&capture_root).expect("phase609 cleanup succeeds");
+    }
+
+    #[test]
+    fn phase609_real_materialized_staging_runner_rejects_command_and_result_drift() {
+        let mut command_drift = phase609_observed_process();
+        command_drift.command_line = "cargo test --workspace".to_owned();
+        assert_eq!(
+            build_gateway_formal_tiny_z3_real_materialized_staging_runner_capture_inputs(
+                &phase609_staging_request("phase609-command-drift"),
+                &command_drift,
+            ),
+            Err(GatewayFormalTinyZ3RealMaterializedStagingRunnerError::InvalidObservedProcess)
+        );
+
+        let mut result_drift = phase609_observed_process();
+        result_drift.stdout_transcript = b"test result: ok. 0 passed; 0 failed\n".to_vec();
+        assert_eq!(
+            build_gateway_formal_tiny_z3_real_materialized_staging_runner_capture_inputs(
+                &phase609_staging_request("phase609-result-drift"),
+                &result_drift,
+            ),
+            Err(GatewayFormalTinyZ3RealMaterializedStagingRunnerError::InvalidObservedProcess)
+        );
+    }
+
+    #[test]
+    fn phase609_real_materialized_staging_runner_rejects_skips_and_invalid_provenance() {
+        let mut skipped = phase609_observed_process();
+        skipped.z3_available = false;
+        skipped.run_skipped = true;
+        skipped.process_exit_status = 101;
+        assert_eq!(
+            build_gateway_formal_tiny_z3_real_materialized_staging_runner_capture_inputs(
+                &phase609_staging_request("phase609-skipped"),
+                &skipped,
+            ),
+            Err(GatewayFormalTinyZ3RealMaterializedStagingRunnerError::InvalidObservedProcess)
+        );
+
+        let mut invalid_request = phase609_staging_request("phase609-invalid-provenance");
+        invalid_request.repository_commit = "not-a-sha".to_owned();
+        assert_eq!(
+            build_gateway_formal_tiny_z3_real_materialized_staging_runner_capture_inputs(
+                &invalid_request,
+                &phase609_observed_process(),
+            ),
+            Err(GatewayFormalTinyZ3RealMaterializedStagingRunnerError::InvalidRequest)
+        );
+    }
+
+    #[test]
+    fn phase611_real_materialized_staging_run_audit_summarizes_phase609_capture() {
+        let capture_root = temp_output_root("phase611-source-capture");
+        let source_manifest =
+            materialize_gateway_formal_tiny_z3_real_materialized_staging_runner_capture(
+                &capture_root,
+                &phase609_staging_request("phase611-source-capture"),
+                &phase609_observed_process(),
+            )
+            .expect("phase611 source capture materializes");
+        let request = phase611_audit_request("phase611-audit");
+
+        let summary = build_gateway_formal_tiny_z3_real_materialized_staging_run_audit_summary(
+            &source_manifest,
+            &request,
+        )
+        .expect("phase611 audit summary builds");
+
+        assert_eq!(
+            summary.schema_version,
+            GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_STAGING_RUN_AUDIT_SCHEMA_VERSION
+        );
+        assert_eq!(
+            summary.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_STAGING_RUN_AUDIT_STATE_SLICE
+        );
+        assert_eq!(summary.source_manifest_digest, source_manifest.digest());
+        assert_eq!(
+            summary.source_readback_validation_digest,
+            source_manifest.readback_validation_digest
+        );
+        assert_eq!(
+            summary.source_nonpromotion_report_digest,
+            source_manifest.nonpromotion_report_digest
+        );
+        assert_eq!(
+            summary.source_declared_file_count,
+            GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_DECLARED_FILES.len() as u64
+        );
+        assert_eq!(
+            summary.source_declared_sidecar_count,
+            GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_OPERATOR_CAPTURE_DECLARED_SIDECARS.len()
+                as u64
+        );
+        assert!(summary.source_packet_readback_validated);
+        assert!(summary.source_packet_quarantined);
+        assert!(summary.ready_for_operator_review_queue);
+        assert!(!summary.external_result_import_created);
+        assert!(!summary.accepted_evidence_ledger_mutated);
+        assert!(!summary.independent_external_reproduction_accepted);
+        assert!(!summary.human_review_acceptance_recorded);
+        assert!(!summary.accepted_formal_evidence_created);
+        assert!(!summary.creates_level2_evidence);
+        assert!(!summary.populates_score_axes);
+        assert!(!summary.proof_artifact_created);
+        assert!(!summary.checker_transcript_created);
+        assert!(!summary.solver_certificate_created);
+        assert!(!summary.lean_execution_evidence_created);
+        assert!(!summary.additional_local_smt_z3_execution_created);
+        assert!(!summary.cobalt_execution_evidence_created);
+        assert!(!summary.rust_to_lean_execution_evidence_created);
+        assert!(!summary.benchmark_evidence_created);
+        assert!(!summary.external_audit_evidence_created);
+        assert!(!summary.semantic_correctness_claimed);
+        assert!(!summary.production_readiness_claimed);
+        assert!(!summary.sota_claimed);
+        assert!(!summary.breakthrough_claimed);
+        assert!(!summary.full_security_claimed);
+        assert!(!summary.global_uniqueness_claimed);
+        assert!(!summary.grants_authority);
+        assert_ne!(summary.digest(), Hash([0; 32]));
+
+        fs::remove_dir_all(&capture_root).expect("phase611 cleanup succeeds");
+    }
+
+    #[test]
+    fn phase611_real_materialized_staging_run_audit_rejects_promotion_drift() {
+        let capture_root = temp_output_root("phase611-promotion-source");
+        let mut source_manifest =
+            materialize_gateway_formal_tiny_z3_real_materialized_staging_runner_capture(
+                &capture_root,
+                &phase609_staging_request("phase611-promotion-source"),
+                &phase609_observed_process(),
+            )
+            .expect("phase611 promotion source materializes");
+        source_manifest.creates_level2_evidence = true;
+
+        assert_eq!(
+            build_gateway_formal_tiny_z3_real_materialized_staging_run_audit_summary(
+                &source_manifest,
+                &phase611_audit_request("phase611-promotion-audit"),
+            ),
+            Err(GatewayFormalTinyZ3RealMaterializedStagingRunAuditError::InvalidSourceManifest)
+        );
+
+        fs::remove_dir_all(&capture_root).expect("phase611 promotion cleanup succeeds");
+    }
+
+    #[test]
+    fn phase611_real_materialized_staging_run_audit_rejects_invalid_request_and_source() {
+        let capture_root = temp_output_root("phase611-invalid-source");
+        let mut source_manifest =
+            materialize_gateway_formal_tiny_z3_real_materialized_staging_runner_capture(
+                &capture_root,
+                &phase609_staging_request("phase611-invalid-source"),
+                &phase609_observed_process(),
+            )
+            .expect("phase611 invalid source materializes");
+        let mut invalid_request = phase611_audit_request("phase611-invalid-request");
+        invalid_request.audit_id = "../bad".to_owned();
+        assert_eq!(
+            build_gateway_formal_tiny_z3_real_materialized_staging_run_audit_summary(
+                &source_manifest,
+                &invalid_request,
+            ),
+            Err(GatewayFormalTinyZ3RealMaterializedStagingRunAuditError::InvalidRequest)
+        );
+
+        source_manifest.readback_validation_digest = Hash([0; 32]);
+        assert_eq!(
+            build_gateway_formal_tiny_z3_real_materialized_staging_run_audit_summary(
+                &source_manifest,
+                &phase611_audit_request("phase611-invalid-source-audit"),
+            ),
+            Err(GatewayFormalTinyZ3RealMaterializedStagingRunAuditError::InvalidSourceManifest)
+        );
+
+        fs::remove_dir_all(&capture_root).expect("phase611 invalid cleanup succeeds");
     }
 
     #[test]
@@ -157637,7 +160310,9 @@ mod tests {
             &candidate,
             executable_digest,
         );
-        let smtlib2_text = "(set-logic QF_UF)\n(declare-const gateway_binding Bool)\n(assert gateway_binding)\n(check-sat)\n";
+        let smtlib2_bytes = phase404_z3_obligation_bytes();
+        let smtlib2_text =
+            std::str::from_utf8(&smtlib2_bytes).expect("phase404 obligation is valid utf-8");
         let result = gateway_formal_tiny_z3_hermetic_backend_execution_result_from_output(
             &candidate,
             &request,
@@ -157645,7 +160320,7 @@ mod tests {
             hash_bytes(smtlib2_text.as_bytes()),
             Some(0),
             false,
-            b"sat\n",
+            b"unsat\n",
             b"",
         );
         Some((obligation_root, phase405_output_root, output_root, result))
@@ -159294,6 +161969,212 @@ mod tests {
             no_solver_certificates_retained: true,
             no_benchmark_artifacts_retained: true,
             no_production_deployment_artifacts_retained: true,
+        }
+    }
+
+    fn phase607_capture_request(
+        id: &str,
+    ) -> GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputRequest {
+        GatewayFormalTinyZ3RealMaterializedOperatorCaptureOutputRequest {
+            capture_id: id.to_owned(),
+            created_at_unix: 1_800_000_607,
+            overwrite: false,
+            protected_roots: Vec::new(),
+        }
+    }
+
+    fn phase607_handoff_packet(
+        id: &str,
+    ) -> GatewayFormalTinyZ3RealMaterializedPhase605HandoffPacket {
+        GatewayFormalTinyZ3RealMaterializedPhase605HandoffPacket {
+            packet_id: format!("{id}-packet"),
+            phase605_document_path:
+                GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE605_HANDOFF_PACKET_PATH.to_owned(),
+            phase605_document_digest: hash_tagged("phase607-phase605-doc", &id),
+            phase604_document_path: GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_NOTES_PATH
+                .to_owned(),
+            phase604_document_digest: hash_tagged("phase607-phase604-doc", &id),
+            phase603_document_path: GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE603_NOTES_PATH
+                .to_owned(),
+            phase603_document_digest: hash_tagged("phase607-phase603-doc", &id),
+            phase604_focused_command:
+                GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_FOCUSED_COMMAND.to_owned(),
+            expected_test_result_line:
+                GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_EXPECTED_RESULT_LINE.to_owned(),
+            local_replay_acknowledged: true,
+            level1_local_replay_acknowledged: true,
+        }
+    }
+
+    fn phase607_operator_provenance(
+        id: &str,
+    ) -> GatewayFormalTinyZ3RealMaterializedOperatorProvenance {
+        GatewayFormalTinyZ3RealMaterializedOperatorProvenance {
+            provenance_id: format!("{id}-provenance"),
+            operator_id: format!("{id}-operator"),
+            source_remote_or_bundle: "git@example.invalid/composed-zk-benchmark-os.git".to_owned(),
+            repository_commit: "0123456789abcdef0123456789abcdef01234567".to_owned(),
+            branch_name: "phase607-staging".to_owned(),
+            dirty_status: "clean".to_owned(),
+            operating_system: "darwin".to_owned(),
+            architecture: "arm64".to_owned(),
+            rust_toolchain_version: "rustc 1.88.0".to_owned(),
+            z3_executable_path: "/usr/local/bin/z3".to_owned(),
+            z3_version_output: "Z3 version 4.13.0".to_owned(),
+            command_line: GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_FOCUSED_COMMAND
+                .to_owned(),
+            run_started_at_unix: 1_800_000_600,
+            run_finished_at_unix: 1_800_000_607,
+        }
+    }
+
+    fn phase607_execution_observation(
+        id: &str,
+    ) -> GatewayFormalTinyZ3RealMaterializedExecutionObservation {
+        GatewayFormalTinyZ3RealMaterializedExecutionObservation {
+            observation_id: format!("{id}-observation"),
+            status: GatewayFormalTinyZ3ExternalOperatorObservationStatus::OperatorDeclaredSucceeded,
+            process_exit_status: 0,
+            focused_test_passed: true,
+            z3_available: true,
+            run_skipped: false,
+            focused_test_result_line:
+                GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_EXPECTED_RESULT_LINE.to_owned(),
+            stdout_transcript_digest: hash_tagged("phase607-stdout-transcript", &id),
+            stderr_transcript_digest: hash_tagged("phase607-stderr-transcript", &id),
+            elapsed_ms: 4_607,
+            local_process_execution_performed: true,
+            local_backend_execution_performed: true,
+            raw_stdout_retained: false,
+            raw_stderr_retained: false,
+            raw_provider_response_retained: false,
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            lean_execution_evidence_created: false,
+            additional_smt_z3_execution_created: false,
+            cobalt_execution_evidence_created: false,
+            rust_to_lean_execution_evidence_created: false,
+            benchmark_evidence_created: false,
+            production_deployment_evidence_created: false,
+        }
+    }
+
+    fn phase607_transcript_digests(
+        id: &str,
+        observation: &GatewayFormalTinyZ3RealMaterializedExecutionObservation,
+    ) -> GatewayFormalTinyZ3RealMaterializedTranscriptDigests {
+        GatewayFormalTinyZ3RealMaterializedTranscriptDigests {
+            transcript_id: format!("{id}-transcripts"),
+            digest_algorithm: "sha256".to_owned(),
+            stdout_transcript_digest: observation.stdout_transcript_digest,
+            stderr_transcript_digest: observation.stderr_transcript_digest,
+            empty_stderr_recorded: true,
+        }
+    }
+
+    fn phase607_artifact_retention(
+        id: &str,
+    ) -> GatewayFormalTinyZ3RealMaterializedArtifactRetentionDeclaration {
+        GatewayFormalTinyZ3RealMaterializedArtifactRetentionDeclaration {
+            declaration_id: format!("{id}-retention"),
+            retains_generated_ledger: false,
+            retains_raw_logs: false,
+            retained_artifacts_quarantined: true,
+            artifacts: vec![
+                GatewayFormalTinyZ3RealMaterializedRetainedArtifactReference {
+                    role: "capture_summary".to_owned(),
+                    relative_path: "capture/summary.json".to_owned(),
+                    digest: hash_tagged("phase607-capture-summary", &id),
+                    byte_len: 256,
+                    quarantined: true,
+                    redacted: true,
+                    retains_raw_content: false,
+                },
+            ],
+        }
+    }
+
+    fn phase607_reviewer_routing(id: &str) -> GatewayFormalTinyZ3RealMaterializedReviewerRouting {
+        GatewayFormalTinyZ3RealMaterializedReviewerRouting {
+            routing_id: format!("{id}-routing"),
+            reviewer_queue: "phase607-human-review".to_owned(),
+            reviewer_required: true,
+            human_review_acceptance_recorded: false,
+        }
+    }
+
+    fn phase607_redaction_report(
+        id: &str,
+    ) -> GatewayFormalTinyZ3RealMaterializedCaptureRedactionReport {
+        GatewayFormalTinyZ3RealMaterializedCaptureRedactionReport {
+            report_id: format!("{id}-redaction"),
+            no_secrets_detected: true,
+            no_credentials_detected: true,
+            no_private_machine_identifiers_retained: true,
+            no_raw_provider_responses_retained: true,
+            no_raw_stdout_retained: true,
+            no_raw_stderr_retained: true,
+            no_undeclared_files_retained: true,
+            no_accepted_evidence_artifacts_retained: true,
+            no_level2_artifacts_retained: true,
+            no_score_axis_artifacts_retained: true,
+            no_proof_artifacts_retained: true,
+            no_checker_transcripts_retained: true,
+            no_solver_certificates_retained: true,
+            no_benchmark_artifacts_retained: true,
+            no_production_deployment_artifacts_retained: true,
+        }
+    }
+
+    fn phase609_staging_request(
+        id: &str,
+    ) -> GatewayFormalTinyZ3RealMaterializedStagingRunnerRequest {
+        GatewayFormalTinyZ3RealMaterializedStagingRunnerRequest {
+            run_id: id.to_owned(),
+            operator_id: format!("{id}-operator"),
+            source_remote_or_bundle: "git@example.invalid/composed-zk-benchmark-os.git".to_owned(),
+            repository_commit: "0123456789abcdef0123456789abcdef01234567".to_owned(),
+            branch_name: "phase609-staging".to_owned(),
+            dirty_status: "clean".to_owned(),
+            operating_system: "darwin".to_owned(),
+            architecture: "arm64".to_owned(),
+            rust_toolchain_version: "rustc 1.88.0".to_owned(),
+            z3_executable_path: "/usr/local/bin/z3".to_owned(),
+            z3_version_output: "Z3 version 4.13.0".to_owned(),
+            run_started_at_unix: 1_800_000_609,
+            run_finished_at_unix: 1_800_000_610,
+            elapsed_ms: 1_609,
+            created_at_unix: 1_800_000_611,
+            overwrite: false,
+            protected_roots: Vec::new(),
+        }
+    }
+
+    fn phase609_observed_process() -> GatewayFormalTinyZ3RealMaterializedStagingRunnerObservedProcess
+    {
+        GatewayFormalTinyZ3RealMaterializedStagingRunnerObservedProcess {
+            command_line: GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_FOCUSED_COMMAND
+                .to_owned(),
+            process_exit_status: 0,
+            stdout_transcript: format!(
+                "running 1 test\n{}\n\ntest result: ok. 1 passed; 0 failed; 0 ignored\n",
+                GATEWAY_FORMAL_TINY_Z3_REAL_MATERIALIZED_PHASE604_EXPECTED_RESULT_LINE
+            )
+            .into_bytes(),
+            stderr_transcript: Vec::new(),
+            z3_available: true,
+            run_skipped: false,
+        }
+    }
+
+    fn phase611_audit_request(
+        id: &str,
+    ) -> GatewayFormalTinyZ3RealMaterializedStagingRunAuditRequest {
+        GatewayFormalTinyZ3RealMaterializedStagingRunAuditRequest {
+            audit_id: id.to_owned(),
+            source_capture_label: "phase609-staging-run".to_owned(),
+            created_at_unix: 1_800_000_611,
         }
     }
 
