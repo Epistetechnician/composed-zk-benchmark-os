@@ -17005,6 +17005,276 @@ Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution, no
 benchmark evidence, no external audit evidence, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 603 HSAI Tiny Z3 Real Backend Execution Crossing
+
+Status: complete. See
+`docs/603-phase-hsai-tiny-z3-real-backend-execution-crossing-notes.md`.
+
+Goal: execute real Z3 against the canonical
+`gateway-local-digest-binding-determinism-v1` Phase 404 obligation and
+propagate the resulting `SolverUnsatWithoutCertificate` result through the
+existing local-only package/review/owner/evaluation/mutation path.
+
+Implemented: Phase 603 corrects the Phase 531 exactness predicate from the
+toy satisfiable placeholder verdict to the canonical `unsat` verdict, updates
+the Phase 531 fixture to use `phase404_z3_obligation_bytes()`, adds focused
+real-Z3 execution coverage, and adds a focused propagation test that reaches
+the Phase 539 in-memory `apply_accepted_ledger_append_transaction` boundary.
+
+Validation coverage: focused Rust tests cover the real Z3 run, Phase 531
+package acceptance of `SolverUnsatWithoutCertificate`, and real-run propagation
+through Phase 539 while preserving nonpromotion flags.
+
+Exit criteria: HSAI now has a real local Z3 backend execution observation for
+the tiny digest-binding determinism obligation and a local in-memory
+`LocalReplay` / `Level1LocalReplay` append mutation path over that observation.
+It still has no materialized accepted Evidence Ledger output, no accepted
+formal evidence, no Level2+ evidence, no populated score axes, no
+Lean/COBALT/Rust-to-Lean execution, no independent external reproduction, no
+human reviewer decision, no benchmark evidence, no external audit evidence, and
+no production/SOTA/security/semantic-correctness claim.
+
+## Phase 604 HSAI Tiny Z3 Real Backend Execution Materialized Accepted Append
+
+Status: complete. See
+`docs/604-phase-hsai-tiny-z3-real-backend-execution-materialized-accepted-append-notes.md`.
+
+Goal: materialize the real-Z3 Phase 603 path into one local accepted-ledger
+JSON artifact through the existing Phase 541 `zkbench-core` materialized append
+owner.
+
+Implemented: Phase 604 adds focused coverage that executes real Z3 against the
+Phase 404 obligation, propagates the `SolverUnsatWithoutCertificate` result
+through Phase 531/533/535/537/539, then calls the Phase 541 materialization
+path with `MaterializedAcceptedLedgerAppendRequest`.
+
+Validation coverage: focused Rust tests assert that the ledger path exists, the
+materialized append report and ledger artifact digests are nonzero, the
+materialized byte length is recorded, and all Level2, score-axis, proof,
+backend-expansion, independent-reproduction, and strong-claim flags remain
+false.
+
+Exit criteria: HSAI now has a verified local materialization path for one real
+Z3 digest-binding determinism observation into a local accepted-ledger JSON
+artifact. It still has no accepted formal evidence, no Level2+ evidence, no
+populated score axes, no Lean/COBALT/Rust-to-Lean execution, no independent
+external reproduction, no human reviewer decision, no benchmark evidence, no
+external audit evidence, and no production/SOTA/security/semantic-correctness
+claim.
+
+## Phase 605 HSAI Tiny Z3 Real Materialized External Review Handoff Packet
+
+Status: complete. See
+`docs/605-phase-hsai-tiny-z3-real-materialized-external-review-handoff-packet.md`.
+
+Goal: define the bounded handoff packet for an external operator and human
+reviewer over the Phase 604 real-Z3 materialized local replay path without
+promoting the evidence class.
+
+Implemented: Phase 605 records the exact Phase 604 focused command, source
+binding, required operator capture fields, reviewer checklist, rejection rules,
+nonclaims, and next external capture/import boundary. The packet requires the
+repository commit, dirty status, Z3 path/version, exact command line, focused
+test result, transcript digest, stderr digest, nonsecret operator identity, and
+explicit LocalReplay / Level1LocalReplay acknowledgement.
+
+Validation coverage: documentation review confirms the packet contains no Rust
+implementation authorization, no operator artifact writes, no import path, no
+accepted Evidence Ledger mutation, no Level2 or score-axis authorization, and
+no Lean/COBALT/Rust-to-Lean/proof/checker/solver/benchmark claim.
+
+Exit criteria: HSAI now has a concrete external operator and human-review
+handoff contract for the Phase 604 materialized local replay path. It still has
+no accepted formal evidence, no accepted independent external reproduction, no
+Level2+ evidence, no populated score axes, no retained external artifact, no
+external import candidate, no human reviewer decision, no benchmark evidence,
+no external audit evidence, and no production/SOTA/security/semantic-correctness
+claim.
+
+## Phase 606 HSAI Tiny Z3 Real Materialized External Operator Capture Boundary
+
+Status: complete. See
+`docs/606-phase-hsai-tiny-z3-real-materialized-external-operator-capture-boundary.md`.
+
+Goal: define the docs-first boundary for a future quarantined returned
+operator-capture packet over the Phase 605 handoff packet.
+
+Implemented: Phase 606 defines the future capture namespace, required
+operator/provenance/transcript/artifact-retention/redaction/nonpromotion
+bindings, fail-closed validation rules, evidence meaning, and Phase 607
+implementation exit criteria. It binds the future packet to the exact Phase
+605 handoff, Phase 604 focused command, repository commit and dirty status, Z3
+path/version, focused test result, stdout/stderr transcript digests, and
+LocalReplay / Level1LocalReplay nonpromotion acknowledgement.
+
+Validation coverage: documentation review confirms the boundary authorizes no
+Rust implementation in this phase, no operator artifact writes, no external
+result import, no accepted Evidence Ledger mutation, no Level2 or score-axis
+artifact, no Lean/COBALT/Rust-to-Lean/proof/checker/solver/benchmark evidence,
+and no strong public claim.
+
+Exit criteria: HSAI now has the future returned-packet boundary needed before a
+local capture implementation. It still has no actual external operator packet,
+no retained external artifact, no import candidate, no accepted independent
+external reproduction, no accepted formal evidence, no Level2+ evidence, no
+populated score axes, no human reviewer decision, no benchmark evidence, no
+external audit evidence, and no production/SOTA/security/semantic-correctness
+claim.
+
+## Phase 607 HSAI Tiny Z3 Real Materialized Operator Capture
+
+Status: complete. See
+`docs/607-phase-hsai-tiny-z3-real-materialized-operator-capture-implementation-notes.md`.
+
+Goal: implement the local quarantined staging capture packet materializer and
+readback validator for operator-declared Phase 604 focused real-Z3 run
+telemetry over the Phase 605 handoff contract.
+
+Implemented: Phase 607 adds Rust data types, nonpromotion reports, declared
+file/sidecar contracts, staged output materialization, fail-closed readback,
+and semantic validation for Phase 605 packet binding, operator provenance,
+execution observation, transcript digests, artifact retention, reviewer
+routing, redaction, and nonpromotion. The output namespace is
+`phase605-real-z3-materialized-operator-capture/`.
+
+Validation coverage: focused Rust tests cover successful materialization and
+readback, stale sidecar rejection, forbidden retained proof artifact rejection,
+skipped/missing-Z3 run rejection, and human-review acceptance promotion
+rejection.
+
+Exit criteria: HSAI now has a staging-deployable local capture primitive for
+collecting quarantined operator-declared Phase 604 run telemetry. It still has
+no external result import, no accepted Evidence Ledger mutation, no accepted
+independent external reproduction, no human reviewer decision, no accepted
+formal evidence, no Level2+ evidence, no populated score axes, no benchmark
+evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
+## Phase 608 HSAI Tiny Z3 Real Materialized Staging Runner Boundary
+
+Status: complete. See
+`docs/608-phase-hsai-tiny-z3-real-materialized-staging-runner-boundary.md`.
+
+Goal: define the docs-first boundary for a future operator-facing local runner
+that executes only the exact Phase 604 focused command and feeds bounded
+telemetry into the Phase 607 quarantined capture materializer.
+
+Implemented: Phase 608 records the command contract, ignored output-root
+contract, acknowledgement requirement, transcript digest handling,
+fail-closed validation rules, and Phase 609 implementation exit criteria.
+
+Validation coverage: documentation review only.
+
+Exit criteria: the next implementation slice is authorized to add only a local
+staging runner normalizer/example over the existing Phase 607 materializer. It
+still has no external result import, no accepted independent external
+reproduction, no accepted formal evidence, no Level2+ evidence, no populated
+score axes, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
+## Phase 609 HSAI Tiny Z3 Real Materialized Staging Runner
+
+Status: complete. See
+`docs/609-phase-hsai-tiny-z3-real-materialized-staging-runner-implementation-notes.md`.
+
+Goal: implement an operator-facing local staging runner path that can collect
+data by executing the exact Phase 604 focused command and materializing a
+Phase 607 quarantined capture packet.
+
+Implemented: Phase 609 adds typed staging-runner request and observed-process
+normalization, a materialize wrapper over the Phase 607 capture output
+materializer, an operator-facing example under
+`crates/hsai-agent-admission/examples/phase609_real_materialized_staging_runner.rs`,
+and source-contract tests for the environment, ignored output root, exact
+focused command, raw-log nonretention, and nonclaims.
+
+Validation coverage: focused Rust tests cover successful Phase 609 packaging
+through Phase 607, command drift rejection, missing result-line rejection,
+skipped/missing-Z3 rejection, invalid provenance rejection, and source-contract
+checks for the example.
+
+Exit criteria: HSAI now has a staging-runnable local command path for
+collecting quarantined Phase 604 run telemetry. It still has no external
+result import, no accepted Evidence Ledger mutation beyond the focused local
+test fixture path, no accepted independent external reproduction, no human
+reviewer decision, no accepted formal evidence, no Level2+ evidence, no
+populated score axes, no benchmark evidence, no external audit evidence, and
+no production/SOTA/security/semantic-correctness claim.
+
+## Phase 610 HSAI Tiny Z3 Real Materialized Staging Run Audit Boundary
+
+Status: complete. See
+`docs/610-phase-hsai-tiny-z3-real-materialized-staging-run-audit-boundary.md`.
+
+Goal: define the docs-first boundary for a future in-memory audit summary over
+one readback-valid Phase 607/609 capture manifest.
+
+Implemented: Phase 610 records the source-manifest requirements, digest fields,
+declared file and sidecar count visibility, operator-review routing meaning,
+fail-closed validation rules, and Phase 611 implementation exit criteria.
+
+Validation coverage: documentation review only.
+
+Exit criteria: the next implementation slice is authorized to summarize one
+readback-valid capture manifest for local operator review visibility only. It
+still has no raw transcript reads, no audit-file output, no external result
+import, no accepted Evidence Ledger mutation, no accepted independent external
+reproduction, no accepted formal evidence, no Level2+ evidence, no populated
+score axes, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
+## Phase 611 HSAI Tiny Z3 Real Materialized Staging Run Audit
+
+Status: complete. See
+`docs/611-phase-hsai-tiny-z3-real-materialized-staging-run-audit-notes.md`.
+
+Goal: implement an in-memory local audit summary over one Phase 607/609 capture
+manifest for operator-review visibility.
+
+Implemented: Phase 611 adds typed audit request, audit summary, error type,
+claim-boundary helper, and summary builder under
+`crates/hsai-agent-admission/src/lib.rs`. The summary records source manifest
+digest, readback-validation digest, nonpromotion digest, declared file and
+sidecar counts, source and audit claim boundaries, quarantine/readback status,
+operator-review readiness, and all nonpromotion flags.
+
+Validation coverage: focused Rust tests cover valid audit summary generation
+from a Phase 609-produced capture manifest, source promotion drift rejection,
+invalid audit request rejection, and empty readback-validation digest rejection.
+
+Exit criteria: HSAI now has an in-memory audit summary over staging-run capture
+manifests. It still has no raw transcript reads, no audit-file output, no
+external result import, no accepted Evidence Ledger mutation, no accepted
+independent external reproduction, no human reviewer decision, no accepted
+formal evidence, no Level2+ evidence, no populated score axes, no benchmark
+evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
+## Phase 612 HSAI Tiny Z3 Real Materialized Residual Ceiling Report
+
+Status: complete. See
+`docs/612-phase-hsai-tiny-z3-real-materialized-residual-ceiling-report.md`.
+
+Goal: consolidate the honest post-Phase-611 state so future work does not
+confuse local real-Z3 progress or staging metadata with deployability,
+accepted evidence, Level2+ evidence, score-axis population, or production
+readiness.
+
+Implemented: Phase 612 records the actual changes from Phases 603-611, the
+unchanged no-backend/no-persistence/no-deployment/no-dashboard/no-credentials
+status, the residual evidence ceilings, and the next bounded work options.
+
+Validation coverage: documentation review plus the same local gates used for
+the Phase 603-611 slice.
+
+Exit criteria: the repo has a single residual-ceiling report stating that the
+real-Z3 path is local `LocalReplay` / `Level1LocalReplay` only, the staging
+packet is ignored local metadata only, the audit summary is in-memory local
+review metadata only, and there is still no deployable system, no accepted
+external evidence, no accepted formal evidence, no Level2+ evidence, no score
+axes, no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
