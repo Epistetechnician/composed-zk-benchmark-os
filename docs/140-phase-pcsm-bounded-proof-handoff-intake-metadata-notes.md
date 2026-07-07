@@ -33,8 +33,9 @@ for PCSM CL12 bounded-proof handoff metadata:
 
 The validator requires a clean committed source identity, the declared
 `docs/pcsm-cl12-bounded-proof-handoff.md` handoff path, a nonzero SHA-256
-handoff digest, required source verifier statuses, bounded-proof admission,
-`threshold_admitted=false`, `replication_admission_status=blocked_preflight_only`,
+handoff digest, a matching `source-handoff` artifact digest entry, required
+source verifier statuses, bounded-proof admission, `threshold_admitted=false`,
+`replication_admission_status=blocked_preflight_only`,
 `blocked_item=live_external_runtime_replication`, PCSM accepted and rejected
 counts, PCSM journal evidence, digest-only source artifact references, and the
 required nonclaims.
@@ -52,10 +53,23 @@ artifacts, materialize admission journals, create generated output bundles,
 mutate accepted Evidence Ledgers, run external replay, perform provider calls,
 populate score axes, or create Level2+ evidence.
 
-The current recoverable-ghost-states handoff observed during this phase was
-still staged or dirty, so it is intentionally not treated as a stable intake
-source. A future actual intake must bind a committed source revision and a
-digest-stable handoff.
+The recoverable-ghost-states handoff originally observed during this phase was
+still staged or dirty, so the initial Phase 140 intake did not treat it as a
+stable source. That external blocker was later resolved by committing the
+bounded proof handoff in recoverable-ghost-states at:
+
+```text
+commit=8b342fe159324395174a149052b9ea1d937a50ce
+path=docs/pcsm-cl12-bounded-proof-handoff.md
+sha256=93e07a250c9a6a5f530d02f07095074e7df8a5b5ce7e8e2dfa6e5feb376ea149
+state_slice=pcsm-cl12-bounded-proof-package
+schema=pcsm-cl12-bounded-proof-handoff-v1
+```
+
+That commit resolves the dirty-source intake blocker. It does not change the
+Phase 140 claim boundary: the HSAI intake remains local metadata validation
+only and does not import PCSM runtime code, create accepted evidence, or raise
+the claim boundary above `LocalOnly`.
 
 ## Rejection Coverage
 
@@ -67,6 +81,7 @@ Focused tests cover:
 - invalid source commit rejection;
 - unsafe handoff path rejection;
 - missing handoff digest rejection;
+- missing or mismatched `source-handoff` artifact digest rejection;
 - full threshold admission rejection;
 - live-external replication escalation rejection;
 - provider and production authority rejection;

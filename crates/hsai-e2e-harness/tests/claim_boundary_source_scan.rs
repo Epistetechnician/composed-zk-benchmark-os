@@ -100,6 +100,11 @@ fn hsai_crates_do_not_use_process_or_network_apis() {
                     ) {
                         continue;
                     }
+                    if is_phase609_real_materialized_staging_runner_exception(
+                        &file, pattern, &text, line_index, line,
+                    ) {
+                        continue;
+                    }
                     violations.push(format!("{}:{}:{pattern}", file.display(), line_index + 1));
                 }
             }
@@ -191,12 +196,38 @@ fn is_phase529_tiny_z3_hermetic_backend_execution_exception(
 const GATEWAY_FORMAL_TINY_Z3_PHASE529_CLAIM_BOUNDARY_NEEDLE: &str =
     "local tiny-Z3 hermetic backend execution result metadata only";
 
+fn is_phase609_real_materialized_staging_runner_exception(
+    file: &Path,
+    pattern: &str,
+    text: &str,
+    line_index: usize,
+    line: &str,
+) -> bool {
+    if !file.ends_with(Path::new(
+        "hsai-agent-admission/examples/phase609_real_materialized_staging_runner.rs",
+    )) {
+        return false;
+    }
+    match pattern {
+        "std::process" => line.trim() == "use std::process::{Command, Stdio};",
+        "Command::new" => {
+            line.trim() == "let output = Command::new(program)"
+                && enclosing_function_name(text, line_index) == Some("run_output")
+        }
+        _ => false,
+    }
+}
+
 fn enclosing_function_name(text: &str, line_index: usize) -> Option<&str> {
     let lines = text.lines().take(line_index + 1).collect::<Vec<_>>();
     lines
         .iter()
         .rev()
-        .find_map(|line| line.trim_start().strip_prefix("pub fn "))
+        .find_map(|line| {
+            let line = line.trim_start();
+            line.strip_prefix("pub fn ")
+                .or_else(|| line.strip_prefix("fn "))
+        })
         .and_then(|rest| rest.split('(').next())
 }
 
@@ -273,6 +304,34 @@ fn phase529_tiny_z3_process_exception_is_single_function_only() {
         denied_boundary,
         3,
         "        let mut command = std::process::Command::new(z3_executable);",
+    ));
+}
+
+#[test]
+fn phase609_staging_runner_process_exception_is_single_function_only() {
+    let file =
+        Path::new("hsai-agent-admission/examples/phase609_real_materialized_staging_runner.rs");
+    let allowed = "fn run_output(program: &str) {\n\
+        let output = Command::new(program)\n\
+            .output();\n\
+    }\n";
+    let denied = "fn arbitrary_runner(program: &str) {\n\
+        let output = Command::new(program)\n\
+            .output();\n\
+    }\n";
+    assert!(is_phase609_real_materialized_staging_runner_exception(
+        file,
+        "Command::new",
+        allowed,
+        1,
+        "        let output = Command::new(program)",
+    ));
+    assert!(!is_phase609_real_materialized_staging_runner_exception(
+        file,
+        "Command::new",
+        denied,
+        1,
+        "        let output = Command::new(program)",
     ));
 }
 

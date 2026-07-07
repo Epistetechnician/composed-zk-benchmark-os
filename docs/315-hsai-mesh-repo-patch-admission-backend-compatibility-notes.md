@@ -34,8 +34,9 @@ This phase adds:
 - repo-local non-secret Mesh allow/deny fixture copies under
   `crates/hsai-agent-admission/tests/fixtures/hsai_bridge/`;
 - integration tests for Mesh canonical fixture digest parity, allow/deny
-  semantics, claim rejection, claim weakening, backend-run metadata
-  requirements, and decision digest sensitivity.
+  semantics, claim rejection, claim weakening, stale policy ids, malformed Mesh
+  ids, attestation and gate shape rejection, backend-run metadata requirements,
+  backend forbidden-flag checks, and decision digest sensitivity.
 
 ## Admission Flow
 
