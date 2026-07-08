@@ -17779,6 +17779,35 @@ Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution in this
 phase, no benchmark evidence, no external-audit claim, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 631 HSAI Tiny Z3 Packet Role Artifact Independent Operator Accepted Result Evidence Packet Boundary
+
+Status: complete for docs-first independent-operator evidence packet boundary.
+See
+`docs/631-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-evidence-packet-boundary.md`.
+
+Goal: define the future evidence packet shape after Phase 630 blocked
+independent-reproduction requirement metadata, without creating packet metadata,
+packet materialization, accepted evidence, Level2+, or score-axis population.
+
+Implemented: Phase 631 defines the future local packet metadata scope over one
+exact Phase 630
+`PacketRoleArtifactIndependentOperatorAcceptedResultIndependentReproductionEvidenceBlocked`
+record, required Phase 630/628/601/599/597/595/593/591/589/587/585 and
+inherited earlier-phase bindings, future packet roles, packet digests,
+classifications, fail-closed rules, forbidden behavior, and Phase 632
+implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a documented evidence packet boundary after Phase
+630. It still has no independent external reproduction, no accepted external
+result import, no accepted Evidence Ledger mutation, no accepted evidence, no
+Level2+ evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean
+execution, no additional SMT/Z3 execution in this phase, no benchmark evidence,
+no external-audit claim, and no production/SOTA/security/semantic-correctness
+claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
