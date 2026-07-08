@@ -9006,5 +9006,15 @@ recoverable-ghost artifact import, accepted Evidence Ledger mutation, accepted
 evidence, Level2+ evidence, score-axis population, benchmark evidence,
 external-audit claim, or production/SOTA/security/semantic-correctness claim.
 
+[docs/618-phase-pcsm-clean-source-reconciliation-materialization-boundary.md](docs/618-phase-pcsm-clean-source-reconciliation-materialization-boundary.md)
+documents the Phase 618 PCSM clean-source reconciliation materialization
+boundary. It authorizes only a future local audit bundle around a valid Phase
+617 reconciliation summary, with declared files, sidecars, nonclaims, staged
+writes, and readback validation. It allows no Rust implementation code in this
+slice, source-repo parsing, PCSM runtime import, recoverable-ghost artifact
+import, accepted Evidence Ledger mutation, accepted evidence, Level2+ evidence,
+score-axis population, benchmark evidence, external-audit claim, or
+production/SOTA/security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

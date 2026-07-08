@@ -17412,6 +17412,29 @@ accepted Evidence Ledger mutation, no accepted evidence, no Level2+ evidence,
 no populated score axes, no benchmark evidence, no external audit evidence,
 and no production/SOTA/security/semantic-correctness claim.
 
+## Phase 618 PCSM Clean-Source Reconciliation Materialization Boundary
+
+Status: complete for docs-first boundary only. See
+`docs/618-phase-pcsm-clean-source-reconciliation-materialization-boundary.md`.
+
+Goal: define the docs-first boundary for a future local materialized audit
+bundle around a valid Phase 617 clean-source PCSM reconciliation summary.
+
+Implemented: Phase 618 defines the future output-root contract, declared-file
+manifest shape, reconciliation JSON, nonclaim Markdown, validation report,
+SHA-256 sidecars, staged-write behavior, readback validation, and required
+negative tests for future materialization.
+
+Validation coverage: documentation review, repo claim-boundary docs test, repo
+hygiene test, and diff hygiene.
+
+Exit criteria: the next implementation slice is authorized to materialize one
+local audit bundle around Phase 617 reconciliation metadata only. It still has
+no source-repo parsing, no PCSM runtime import, no recoverable-ghost artifact
+import, no accepted Evidence Ledger mutation, no accepted evidence, no Level2+
+evidence, no populated score axes, no benchmark evidence, no external audit
+evidence, and no production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
