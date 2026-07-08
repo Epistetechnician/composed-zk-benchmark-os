@@ -18005,6 +18005,37 @@ Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution in this
 phase, no benchmark evidence, no external-audit claim, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 638 HSAI Tiny Z3 Packet Role Artifact Independent Operator Accepted Result Output Plumbing
+
+Status: complete for local accepted-result output plumbing. See
+`docs/638-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-plumbing-notes.md`.
+
+Goal: implement local caller-owned output-root plumbing for Phase 636
+accepted-result output metadata, without importing external results, mutating
+accepted evidence, creating accepted evidence, creating Level2+, populating
+score axes, or promoting backend/proof/claim evidence.
+
+Implemented: Phase 638 adds accepted-result output plumbing request, file,
+manifest, readback, and error types; local materialization/readback functions;
+staged writes for declared accepted-result role files and `.sha256` sidecars;
+protected-root, symlink, overwrite, stale-sidecar, undeclared-file,
+malformed-file, retained-secret, and manifest-semantic rejection; and focused
+tests for valid local-bundle materialization, protected-root rejection, Phase
+636 drift rejection, stale-sidecar rejection, undeclared-file rejection,
+retained-secret rejection, and Unix sidecar symlink rejection.
+
+Validation coverage: focused Rust test
+`cargo test -p hsai-agent-admission --lib phase638_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing --quiet`
+passes with 4 tests.
+
+Exit criteria: HSAI now has local accepted-result output bundle materialization
+and readback as quarantined local metadata. It still has no independent
+external reproduction, no accepted external result import, no accepted Evidence
+Ledger mutation, no accepted evidence, no Level2+ evidence, no populated score
+axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution in
+this phase, no benchmark evidence, no external-audit claim, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
