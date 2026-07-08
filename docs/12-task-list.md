@@ -17747,6 +17747,38 @@ Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution in this
 phase, no benchmark evidence, no external-audit claim, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 630 HSAI Tiny Z3 Packet Role Artifact Independent Operator Accepted Result Independent Reproduction Requirement Metadata
+
+Status: complete for local blocked independent-reproduction requirement
+metadata. See
+`docs/630-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-independent-reproduction-requirement-notes.md`.
+
+Goal: implement the Phase 629 boundary as local requirement metadata over one
+exact Phase 628 packet-role artifact independent-operator accepted-result
+policy-resolution record, without creating independent reproduction or accepted
+evidence.
+
+Implemented: Phase 630 adds schema/state/claim-boundary constants,
+independent-reproduction requirement input/output/issue/validation
+/classification/label types, deterministic Phase
+628/601/599/597/595/593/591/589/587/585 digest bindings, required-future
+evidence digest placeholders, policy/blocker/nonpromotion/rule/forbidden-API
+digests, fail-closed Phase 628 source-state validation, and focused tests for
+valid blocked metadata, Phase 628 drift rejection, inherited digest drift
+rejection, required-evidence digest drift rejection, and promotion rejection.
+
+Validation coverage: focused Rust test
+`cargo test -p hsai-agent-admission --lib phase630_tiny_z3_packet_role_artifact_independent_operator_accepted_result_independent_reproduction_requirement --quiet`
+passes with 4 tests.
+
+Exit criteria: HSAI now has local blocked independent-reproduction requirement
+metadata over Phase 628. It still has no independent external reproduction, no
+accepted external result import, no accepted Evidence Ledger mutation, no
+accepted evidence, no Level2+ evidence, no populated score axes, no
+Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution in this
+phase, no benchmark evidence, no external-audit claim, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
