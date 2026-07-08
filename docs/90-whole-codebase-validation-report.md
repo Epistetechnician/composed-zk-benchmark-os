@@ -9263,5 +9263,19 @@ evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
 additional SMT/Z3 execution, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/638-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-plumbing-notes.md](docs/638-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-plumbing-notes.md)
+documents the Phase 638 accepted-result output plumbing implementation. It
+adds local Rust materialization and readback over one exact Phase 636 output
+metadata record, writes only declared accepted-result JSON role files and
+`.sha256` sidecars under a caller-owned output root, binds Phase 636/634/632
+/630/628/595/593/591/589/587/585 digests in the manifest, and records
+`PacketRoleArtifactIndependentOperatorAcceptedResultOutputQuarantinedLocalBundle`.
+It imports no external result, mutates no accepted Evidence Ledger, creates no
+accepted evidence, creates no Level2+ evidence, populates no score axes, runs
+no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no
+benchmark evidence, and claims no production/SOTA/security
+/semantic-correctness result. Focused validation passed with
+`cargo test -p hsai-agent-admission --lib phase638_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing --quiet`.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

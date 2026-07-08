@@ -1313,6 +1313,13 @@ pub const GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEP
 pub const GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_STATE_SLICE:
     &str = "phase-636-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-accepted-result-output-metadata";
 pub const GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_CLAIM_BOUNDARY: &str = "local tiny-Z3 packet role artifact independent-operator accepted-result output metadata only; records one Phase 634 materialization metadata blocker as still missing caller-owned output-root artifacts, but does not read output roots, write output roots, write files, materialize a packet, import external results, mutate the accepted Evidence Ledger, accept independent external reproduction, create accepted formal evidence, create Level2+ evidence, populate score axes, generate proof artifacts, generate checker transcripts, generate solver certificates, run Lean, run another SMT/Z3 execution, run COBALT, run Rust-to-Lean extraction, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_PLUMBING_SCHEMA_VERSION:
+    &str = "hsai-gateway-formal-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-plumbing:v1";
+pub const GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_PLUMBING_STATE_SLICE:
+    &str = "phase-638-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-accepted-result-output-plumbing";
+pub const GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_PLUMBING_CLAIM_BOUNDARY: &str = "local tiny-Z3 packet role artifact independent-operator accepted-result output plumbing only; writes and reads back a caller-owned quarantined local accepted-result output bundle from one exact Phase 636 metadata record, but does not import external results, mutate the accepted Evidence Ledger, accept independent external reproduction, create accepted formal evidence, create Level2+ evidence, populate score axes, generate proof artifacts, generate checker transcripts, generate solver certificates, run Lean, run another SMT/Z3 execution, run COBALT, run Rust-to-Lean extraction, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, or grant authority to execute an action.";
+pub const GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_PLUMBING_NAMESPACE:
+    &str = "packet-role-artifact-independent-operator-accepted-result-packet";
 pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_NAMESPACE: &str =
     "gateway-formal-tiny-z3-independent-external-operator-result";
 pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_DECLARED_FILES: [&str; 8] = [
@@ -25822,6 +25829,146 @@ pub struct GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResul
     pub valid: bool,
     pub issues:
         Vec<GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingRequest
+{
+    pub plumbing_id: String,
+    pub output_root: PathBuf,
+    pub protected_roots: Vec<PathBuf>,
+    pub overwrite: bool,
+    pub created_at_unix: u64,
+}
+
+impl GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingRequest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-plumbing-request:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingFile
+{
+    pub logical_path: String,
+    pub digest: Hash,
+    pub byte_len: usize,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingManifest
+{
+    pub schema_version: String,
+    pub plumbing_id: String,
+    pub state_slice: String,
+    pub created_at_unix: u64,
+    pub phase636_output_digest: Hash,
+    pub phase636_output_input_digest: Hash,
+    pub phase636_output_policy_digest: Hash,
+    pub phase636_output_nonpromotion_digest: Hash,
+    pub phase636_output_request_digest: Hash,
+    pub phase634_materialization_digest: Hash,
+    pub phase634_declared_role_files_digest: Hash,
+    pub phase634_declared_sidecars_digest: Hash,
+    pub phase632_packet_digest: Hash,
+    pub phase632_packet_input_digest: Hash,
+    pub phase630_requirement_digest: Hash,
+    pub phase630_requirement_input_digest: Hash,
+    pub phase628_resolution_digest: Hash,
+    pub phase628_resolution_input_digest: Hash,
+    pub phase595_manifest_digest: Hash,
+    pub phase593_output_digest: Hash,
+    pub phase591_materialization_digest: Hash,
+    pub phase589_packet_digest: Hash,
+    pub phase587_requirement_digest: Hash,
+    pub phase585_resolution_digest: Hash,
+    pub request_digest: Hash,
+    pub declared_namespace: String,
+    pub declared_files: BTreeSet<String>,
+    pub declared_sidecars: BTreeSet<String>,
+    pub file_digests: BTreeMap<String, Hash>,
+    pub readback_digest: Hash,
+    pub classification:
+        GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputClassification,
+    pub claim_boundary: String,
+    pub output_root_declared: bool,
+    pub output_root_read_performed: bool,
+    pub output_root_write_performed: bool,
+    pub staged_write_performed: bool,
+    pub sidecar_write_performed: bool,
+    pub manifest_write_performed: bool,
+    pub readback_performed: bool,
+    pub artifact_output_materialized: bool,
+    pub filesystem_artifact_write_performed: bool,
+    pub imports_external_result: bool,
+    pub creates_accepted_external_result_evidence: bool,
+    pub writes_accepted_evidence_artifacts: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub accepts_independent_external_reproduction: bool,
+    pub writes_level2_artifact_files: bool,
+    pub writes_score_axis_artifact_files: bool,
+    pub populates_score_axes: bool,
+    pub creates_accepted_formal_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub lean_execution_evidence_created: bool,
+    pub additional_smt_z3_execution_created: bool,
+    pub cobalt_execution_evidence_created: bool,
+    pub rust_to_lean_execution_evidence_created: bool,
+    pub backend_execution_evidence_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingManifest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-plumbing-manifest:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingReadback
+{
+    pub manifest:
+        GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingManifest,
+    pub files: BTreeMap<
+        String,
+        GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingFile,
+    >,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError {
+    InvalidPhase636Output,
+    EmptyPlumbingId,
+    InvalidPlumbingId,
+    EmptyOutputRoot,
+    ProtectedOutputRoot,
+    OutputRootExistsWithoutOverwrite,
+    OutputRootIsSymlink,
+    OutputRootIsFile,
+    BundlePathIsSymlink(String),
+    DeclaredFileTypeMismatch(String),
+    DigestMismatch(String),
+    UndeclaredFile(String),
+    MalformedDeclaredFile(String),
+    ManifestSemanticMismatch,
+    Io(String),
+    Serialization(String),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -111138,6 +111285,887 @@ impl GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutpu
     }
 }
 
+pub fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_claim_boundary(
+) -> String {
+    GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_PLUMBING_CLAIM_BOUNDARY
+        .to_owned()
+}
+
+pub fn materialize_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_bundle(
+    output: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutput,
+    request: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingRequest,
+) -> Result<
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingReadback,
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError,
+> {
+    validate_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_request(output, request)?;
+    let staging_root =
+        gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_staging_root_for(
+            &request.output_root,
+            &request.plumbing_id,
+        )?;
+    if staging_root.exists() {
+        remove_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_dir_all_checked(
+            &staging_root,
+        )?;
+    }
+    fs::create_dir_all(staging_root.join(GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_PLUMBING_NAMESPACE))
+        .map_err(gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_io_error)?;
+
+    let files =
+        build_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_bundle_files(
+            output,
+            request,
+        )?;
+    for (logical_path, bytes) in &files {
+        let target = staging_root.join(logical_path);
+        if let Some(parent) = target.parent() {
+            fs::create_dir_all(parent).map_err(
+                gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_io_error,
+            )?;
+        }
+        fs::write(&target, bytes).map_err(
+            gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_io_error,
+        )?;
+        fs::write(
+            sidecar_path(&target),
+            hash_hex(hash_bytes(bytes)).into_bytes(),
+        )
+        .map_err(
+            gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_io_error,
+        )?;
+    }
+
+    if request.output_root.exists() {
+        if !request.overwrite {
+            remove_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_dir_all_checked(
+                &staging_root,
+            )?;
+            return Err(
+                GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::OutputRootExistsWithoutOverwrite,
+            );
+        }
+        remove_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_dir_all_checked(
+            &request.output_root,
+        )?;
+    }
+    fs::rename(&staging_root, &request.output_root).map_err(
+        gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_io_error,
+    )?;
+    read_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_bundle(
+        &request.output_root,
+        &request.protected_roots,
+    )
+}
+
+pub fn read_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_bundle(
+    output_root: &Path,
+    protected_roots: &[PathBuf],
+) -> Result<
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingReadback,
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError,
+> {
+    validate_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_existing_root(
+        output_root,
+        protected_roots,
+    )?;
+    let bundle_dir = output_root.join(
+        GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_PLUMBING_NAMESPACE,
+    );
+    let bundle_metadata = fs::symlink_metadata(&bundle_dir).map_err(
+        gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_io_error,
+    )?;
+    if bundle_metadata.file_type().is_symlink() {
+        return Err(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::BundlePathIsSymlink(
+                GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_PLUMBING_NAMESPACE
+                    .to_owned(),
+            ),
+        );
+    }
+    if !bundle_metadata.is_dir() {
+        return Err(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::DeclaredFileTypeMismatch(
+                GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_PLUMBING_NAMESPACE
+                    .to_owned(),
+            ),
+        );
+    }
+    reject_undeclared_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_files(
+        output_root,
+    )?;
+
+    let mut files = BTreeMap::new();
+    for logical_path in
+        gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_materialization_declared_role_files()
+    {
+        let path = output_root.join(&logical_path);
+        let metadata = fs::symlink_metadata(&path).map_err(
+            gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_io_error,
+        )?;
+        if metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::BundlePathIsSymlink(
+                    logical_path,
+                ),
+            );
+        }
+        if !metadata.is_file() {
+            return Err(
+                GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::DeclaredFileTypeMismatch(
+                    logical_path,
+                ),
+            );
+        }
+        let sidecar = sidecar_path(&path);
+        let sidecar_metadata = fs::symlink_metadata(&sidecar).map_err(
+            gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_io_error,
+        )?;
+        if sidecar_metadata.file_type().is_symlink() {
+            return Err(
+                GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::BundlePathIsSymlink(
+                    format!("{logical_path}.sha256"),
+                ),
+            );
+        }
+        if !sidecar_metadata.is_file() {
+            return Err(
+                GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::DeclaredFileTypeMismatch(
+                    format!("{logical_path}.sha256"),
+                ),
+            );
+        }
+        let bytes = fs::read(&path).map_err(
+            gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_io_error,
+        )?;
+        let expected_hash = fs::read_to_string(&sidecar).map_err(
+            gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_io_error,
+        )?;
+        if expected_hash.trim() != hash_hex(hash_bytes(&bytes)) {
+            return Err(
+                GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::DigestMismatch(
+                    logical_path,
+                ),
+            );
+        }
+        files.insert(logical_path, bytes);
+    }
+    validate_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_bundle_semantics(&files)
+}
+
+fn validate_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_request(
+    output: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutput,
+    request: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingRequest,
+) -> Result<
+    (),
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError,
+> {
+    if gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_phase636_state_invalid(output) {
+        return Err(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::InvalidPhase636Output,
+        );
+    }
+    if request.plumbing_id.trim().is_empty() {
+        return Err(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::EmptyPlumbingId,
+        );
+    }
+    if !is_single_segment_id(&request.plumbing_id) {
+        return Err(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::InvalidPlumbingId,
+        );
+    }
+    if request.created_at_unix == 0 {
+        return Err(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::InvalidPlumbingId,
+        );
+    }
+    validate_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_root(
+        &request.output_root,
+        &request.protected_roots,
+        request.overwrite,
+    )
+}
+
+fn build_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_bundle_files(
+    output: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutput,
+    request: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingRequest,
+) -> Result<
+    BTreeMap<String, Vec<u8>>,
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError,
+> {
+    let namespace =
+        GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_PLUMBING_NAMESPACE;
+    let mut files = BTreeMap::new();
+    for (logical_path, value) in [
+        (
+            format!("{namespace}/operator-identity.json"),
+            serde_json::json!({
+                "role": "operator-identity",
+                "phase636_output_digest": hash_hex(output.digest()),
+                "operator_identity_present": false,
+                "local_metadata_only": true,
+                "operator_private_material_retained": false,
+                "secrets_retained": false
+            }),
+        ),
+        (
+            format!("{namespace}/operator-statement.json"),
+            serde_json::json!({
+                "role": "operator-statement",
+                "phase636_output_digest": hash_hex(output.digest()),
+                "statement": "local accepted-result output plumbing materialized a quarantined local bundle only",
+                "external_result_import_created": false,
+                "independent_external_reproduction_accepted": false
+            }),
+        ),
+        (
+            format!("{namespace}/environment-declaration.json"),
+            serde_json::json!({
+                "role": "environment-declaration",
+                "phase636_output_digest": hash_hex(output.digest()),
+                "environment": "local-hermetic-test-or-caller-owned-output-root",
+                "network_access_required": false,
+                "backend_execution_performed": false
+            }),
+        ),
+        (
+            format!("{namespace}/captured-output-summary.json"),
+            serde_json::json!({
+                "role": "captured-output-summary",
+                "phase636_output_digest": hash_hex(output.digest()),
+                "phase636_output_input_digest": hash_hex(output.output_input_digest),
+                "phase634_materialization_digest": hash_hex(output.phase634_materialization_digest),
+                "phase632_packet_digest": hash_hex(output.phase632_packet_digest),
+                "captured_output": "digest-only local accepted-result output bundle",
+                "raw_stdout_retained": false,
+                "raw_stderr_retained": false
+            }),
+        ),
+        (
+            format!("{namespace}/redaction-report.json"),
+            serde_json::json!({
+                "role": "redaction-report",
+                "no_secrets_retained": true,
+                "no_credentials_retained": true,
+                "no_operator_private_material_retained": true,
+                "no_raw_stdout_retained": true,
+                "no_raw_stderr_retained": true,
+                "no_raw_provider_response_retained": true,
+                "no_undeclared_files_retained": true
+            }),
+        ),
+        (
+            format!("{namespace}/replay-correspondence.json"),
+            serde_json::json!({
+                "role": "replay-correspondence",
+                "phase636_output_digest": hash_hex(output.digest()),
+                "phase634_materialization_digest": hash_hex(output.phase634_materialization_digest),
+                "phase632_packet_digest": hash_hex(output.phase632_packet_digest),
+                "phase630_requirement_digest": hash_hex(output.phase630_requirement_digest),
+                "phase628_resolution_digest": hash_hex(output.phase628_resolution_digest),
+                "replay_correspondence_established": false,
+                "external_replay_performed": false,
+                "accepted_formal_evidence_created": false
+            }),
+        ),
+        (
+            format!("{namespace}/import-ownership.json"),
+            serde_json::json!({
+                "role": "import-ownership",
+                "phase636_output_digest": hash_hex(output.digest()),
+                "accepted_ledger_bypass_denied": true,
+                "external_result_import_created": false,
+                "ready_for_import_candidate_boundary": false
+            }),
+        ),
+    ] {
+        files.insert(
+            logical_path,
+            serde_json::to_vec_pretty(&value).map_err(
+                gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_serde_error,
+            )?,
+        );
+    }
+    let file_digests: BTreeMap<String, Hash> = files
+        .iter()
+        .map(|(logical_path, bytes)| (logical_path.clone(), hash_bytes(bytes)))
+        .collect();
+    let manifest =
+        gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_manifest(
+            output,
+            request,
+            &file_digests,
+        );
+    files.insert(
+        format!("{namespace}/manifest.json"),
+        serde_json::to_vec_pretty(&manifest).map_err(
+            gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_serde_error,
+        )?,
+    );
+    Ok(files)
+}
+
+fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_manifest(
+    output: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutput,
+    request: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingRequest,
+    file_digests: &BTreeMap<String, Hash>,
+) -> GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingManifest {
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingManifest {
+        schema_version:
+            GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_PLUMBING_SCHEMA_VERSION
+                .to_owned(),
+        plumbing_id: request.plumbing_id.clone(),
+        state_slice:
+            GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_PLUMBING_STATE_SLICE
+                .to_owned(),
+        created_at_unix: request.created_at_unix,
+        phase636_output_digest: output.digest(),
+        phase636_output_input_digest: output.output_input_digest,
+        phase636_output_policy_digest: output.output_policy_digest,
+        phase636_output_nonpromotion_digest: output.output_nonpromotion_digest,
+        phase636_output_request_digest: output.output_request_digest,
+        phase634_materialization_digest: output.phase634_materialization_digest,
+        phase634_declared_role_files_digest: output.phase634_declared_role_files_digest,
+        phase634_declared_sidecars_digest: output.phase634_declared_sidecars_digest,
+        phase632_packet_digest: output.phase632_packet_digest,
+        phase632_packet_input_digest: output.phase632_packet_input_digest,
+        phase630_requirement_digest: output.phase630_requirement_digest,
+        phase630_requirement_input_digest: output.phase630_requirement_input_digest,
+        phase628_resolution_digest: output.phase628_resolution_digest,
+        phase628_resolution_input_digest: output.phase628_resolution_input_digest,
+        phase595_manifest_digest: output.phase595_manifest_digest,
+        phase593_output_digest: output.phase593_output_digest,
+        phase591_materialization_digest: output.phase591_materialization_digest,
+        phase589_packet_digest: output.phase589_packet_digest,
+        phase587_requirement_digest: output.phase587_requirement_digest,
+        phase585_resolution_digest: output.phase585_resolution_digest,
+        request_digest: request.digest(),
+        declared_namespace:
+            GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_PLUMBING_NAMESPACE
+                .to_owned(),
+        declared_files:
+            gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_materialization_declared_role_files(),
+        declared_sidecars:
+            gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_materialization_declared_sidecars(),
+        file_digests: file_digests.clone(),
+        readback_digest: hash_tagged(
+            "hsai-agent-admission:gateway-formal-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-plumbing-readback:v1",
+            &(output.digest(), request.digest(), file_digests),
+        ),
+        classification:
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputClassification::PacketRoleArtifactIndependentOperatorAcceptedResultOutputQuarantinedLocalBundle,
+        claim_boundary:
+            gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_claim_boundary(),
+        output_root_declared: true,
+        output_root_read_performed: true,
+        output_root_write_performed: true,
+        staged_write_performed: true,
+        sidecar_write_performed: true,
+        manifest_write_performed: true,
+        readback_performed: true,
+        artifact_output_materialized: true,
+        filesystem_artifact_write_performed: true,
+        imports_external_result: false,
+        creates_accepted_external_result_evidence: false,
+        writes_accepted_evidence_artifacts: false,
+        mutates_accepted_evidence_ledger: false,
+        accepts_independent_external_reproduction: false,
+        writes_level2_artifact_files: false,
+        writes_score_axis_artifact_files: false,
+        populates_score_axes: false,
+        creates_accepted_formal_evidence: false,
+        creates_level2_evidence: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        lean_execution_evidence_created: false,
+        additional_smt_z3_execution_created: false,
+        cobalt_execution_evidence_created: false,
+        rust_to_lean_execution_evidence_created: false,
+        backend_execution_evidence_created: false,
+        benchmark_evidence_created: false,
+        external_audit_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    }
+}
+
+fn validate_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_bundle_semantics(
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingReadback,
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError,
+> {
+    let namespace =
+        GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_PLUMBING_NAMESPACE;
+    let manifest: GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingManifest =
+        parse_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_declared_json(
+            files,
+            &format!("{namespace}/manifest.json"),
+        )?;
+    let expected_non_manifest_files: BTreeSet<String> =
+        gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_materialization_declared_role_files()
+            .into_iter()
+            .filter(|path| path != &format!("{namespace}/manifest.json"))
+            .collect();
+    if manifest
+        .file_digests
+        .keys()
+        .cloned()
+        .collect::<BTreeSet<_>>()
+        != expected_non_manifest_files
+    {
+        return Err(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::ManifestSemanticMismatch,
+        );
+    }
+    let mut readback_files = BTreeMap::new();
+    for (logical_path, bytes) in files {
+        if gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_file_text_forbidden(bytes)
+        {
+            return Err(
+                GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::MalformedDeclaredFile(
+                    logical_path.clone(),
+                ),
+            );
+        }
+        let digest = hash_bytes(bytes);
+        if let Some(expected) = manifest.file_digests.get(logical_path) {
+            if *expected != digest {
+                return Err(
+                    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::ManifestSemanticMismatch,
+                );
+            }
+        }
+        readback_files.insert(
+            logical_path.clone(),
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingFile {
+                logical_path: logical_path.clone(),
+                digest,
+                byte_len: bytes.len(),
+            },
+        );
+    }
+    if manifest.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_PLUMBING_SCHEMA_VERSION
+        || manifest.state_slice
+            != GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_PLUMBING_STATE_SLICE
+        || !is_single_segment_id(&manifest.plumbing_id)
+        || manifest.phase636_output_digest == Hash([0; 32])
+        || manifest.phase636_output_input_digest == Hash([0; 32])
+        || manifest.phase636_output_policy_digest == Hash([0; 32])
+        || manifest.phase636_output_nonpromotion_digest == Hash([0; 32])
+        || manifest.phase636_output_request_digest == Hash([0; 32])
+        || manifest.phase634_materialization_digest == Hash([0; 32])
+        || manifest.phase634_declared_role_files_digest == Hash([0; 32])
+        || manifest.phase634_declared_sidecars_digest == Hash([0; 32])
+        || manifest.phase632_packet_digest == Hash([0; 32])
+        || manifest.phase632_packet_input_digest == Hash([0; 32])
+        || manifest.phase630_requirement_digest == Hash([0; 32])
+        || manifest.phase630_requirement_input_digest == Hash([0; 32])
+        || manifest.phase628_resolution_digest == Hash([0; 32])
+        || manifest.phase628_resolution_input_digest == Hash([0; 32])
+        || manifest.phase595_manifest_digest == Hash([0; 32])
+        || manifest.phase593_output_digest == Hash([0; 32])
+        || manifest.phase591_materialization_digest == Hash([0; 32])
+        || manifest.phase589_packet_digest == Hash([0; 32])
+        || manifest.phase587_requirement_digest == Hash([0; 32])
+        || manifest.phase585_resolution_digest == Hash([0; 32])
+        || manifest.request_digest == Hash([0; 32])
+        || manifest.declared_namespace
+            != GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_PLUMBING_NAMESPACE
+        || manifest.declared_files
+            != gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_materialization_declared_role_files()
+        || manifest.declared_sidecars
+            != gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_materialization_declared_sidecars()
+        || manifest.readback_digest
+            != hash_tagged(
+                "hsai-agent-admission:gateway-formal-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-plumbing-readback:v1",
+                &(
+                    manifest.phase636_output_digest,
+                    manifest.request_digest,
+                    &manifest.file_digests,
+                ),
+            )
+        || manifest.classification
+            != GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputClassification::PacketRoleArtifactIndependentOperatorAcceptedResultOutputQuarantinedLocalBundle
+        || manifest.claim_boundary
+            != gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_claim_boundary()
+        || !manifest.output_root_declared
+        || !manifest.output_root_read_performed
+        || !manifest.output_root_write_performed
+        || !manifest.staged_write_performed
+        || !manifest.sidecar_write_performed
+        || !manifest.manifest_write_performed
+        || !manifest.readback_performed
+        || !manifest.artifact_output_materialized
+        || !manifest.filesystem_artifact_write_performed
+        || manifest.imports_external_result
+        || manifest.creates_accepted_external_result_evidence
+        || manifest.writes_accepted_evidence_artifacts
+        || manifest.mutates_accepted_evidence_ledger
+        || manifest.accepts_independent_external_reproduction
+        || manifest.writes_level2_artifact_files
+        || manifest.writes_score_axis_artifact_files
+        || manifest.populates_score_axes
+        || manifest.creates_accepted_formal_evidence
+        || manifest.creates_level2_evidence
+        || manifest.proof_artifact_created
+        || manifest.checker_transcript_created
+        || manifest.solver_certificate_created
+        || manifest.lean_execution_evidence_created
+        || manifest.additional_smt_z3_execution_created
+        || manifest.cobalt_execution_evidence_created
+        || manifest.rust_to_lean_execution_evidence_created
+        || manifest.backend_execution_evidence_created
+        || manifest.benchmark_evidence_created
+        || manifest.external_audit_evidence_created
+        || manifest.semantic_correctness_claimed
+        || manifest.production_readiness_claimed
+        || manifest.sota_claimed
+        || manifest.breakthrough_claimed
+        || manifest.full_security_claimed
+        || manifest.grants_authority
+    {
+        return Err(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::ManifestSemanticMismatch,
+        );
+    }
+    Ok(
+        GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingReadback {
+            manifest,
+            files: readback_files,
+        },
+    )
+}
+
+fn declared_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_bytes<
+    'a,
+>(
+    files: &'a BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<
+    &'a [u8],
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError,
+> {
+    files.get(logical_path).map(Vec::as_slice).ok_or_else(|| {
+        GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::Io(format!(
+            "declared file missing: {logical_path}"
+        ))
+    })
+}
+
+fn parse_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_declared_json<
+    T: for<'de> Deserialize<'de> + Serialize,
+>(
+    files: &BTreeMap<String, Vec<u8>>,
+    logical_path: &str,
+) -> Result<
+    T,
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError,
+> {
+    let bytes =
+        declared_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_bytes(
+            files,
+            logical_path,
+        )?;
+    let original = parse_json_value_rejecting_duplicate_keys(bytes).map_err(|_| {
+        GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })?;
+    let parsed: T = serde_json::from_value(original.clone()).map_err(|_| {
+        GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::MalformedDeclaredFile(
+            logical_path.to_owned(),
+        )
+    })?;
+    let canonical = serde_json::to_value(&parsed).map_err(
+        gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_serde_error,
+    )?;
+    if canonical != original {
+        return Err(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::MalformedDeclaredFile(
+                logical_path.to_owned(),
+            ),
+        );
+    }
+    Ok(parsed)
+}
+
+fn reject_undeclared_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_files(
+    output_root: &Path,
+) -> Result<
+    (),
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError,
+> {
+    let mut declared =
+        gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_materialization_declared_role_files();
+    declared.extend(
+        gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_materialization_declared_sidecars(),
+    );
+    let bundle_dir = output_root.join(
+        GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_PLUMBING_NAMESPACE,
+    );
+    for entry in fs::read_dir(&bundle_dir).map_err(
+        gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_io_error,
+    )? {
+        let entry = entry.map_err(
+            gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_io_error,
+        )?;
+        let logical_path = entry
+            .path()
+            .strip_prefix(output_root)
+            .map_err(|error| {
+                GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::Io(
+                    error.to_string(),
+                )
+            })?
+            .to_string_lossy()
+            .replace('\\', "/");
+        if !declared.remove(&logical_path) {
+            return Err(
+                GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::UndeclaredFile(
+                    logical_path,
+                ),
+            );
+        }
+    }
+    if let Some(missing) = declared.into_iter().next() {
+        return Err(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::Io(
+                format!("declared file missing: {missing}"),
+            ),
+        );
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_existing_root(
+    output_root: &Path,
+    protected_roots: &[PathBuf],
+) -> Result<
+    (),
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError,
+> {
+    validate_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_root(
+        output_root,
+        protected_roots,
+        true,
+    )?;
+    let metadata = fs::symlink_metadata(output_root).map_err(
+        gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_io_error,
+    )?;
+    if metadata.file_type().is_symlink() {
+        return Err(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::OutputRootIsSymlink,
+        );
+    }
+    if !metadata.is_dir() {
+        return Err(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::OutputRootIsFile,
+        );
+    }
+    Ok(())
+}
+
+fn validate_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_root(
+    output_root: &Path,
+    protected_roots: &[PathBuf],
+    overwrite: bool,
+) -> Result<
+    (),
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError,
+> {
+    match validate_output_root(output_root, protected_roots, overwrite) {
+        Ok(()) => Ok(()),
+        Err(AdmissionJournalMaterializationError::EmptyOutputRoot) => Err(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::EmptyOutputRoot,
+        ),
+        Err(AdmissionJournalMaterializationError::ProtectedOutputRoot) => Err(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::ProtectedOutputRoot,
+        ),
+        Err(AdmissionJournalMaterializationError::OutputRootExistsWithoutOverwrite) => Err(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::OutputRootExistsWithoutOverwrite,
+        ),
+        Err(AdmissionJournalMaterializationError::OutputRootIsSymlink) => Err(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::OutputRootIsSymlink,
+        ),
+        Err(AdmissionJournalMaterializationError::OutputRootIsFile) => Err(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::OutputRootIsFile,
+        ),
+        Err(AdmissionJournalMaterializationError::Io(error)) => Err(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::Io(error),
+        ),
+        Err(other) => Err(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::Io(
+                format!("{other:?}"),
+            ),
+        ),
+    }
+}
+
+fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_staging_root_for(
+    output_root: &Path,
+    plumbing_id: &str,
+) -> Result<
+    PathBuf,
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError,
+> {
+    let parent = output_root.parent().ok_or(
+        GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::EmptyOutputRoot,
+    )?;
+    let name = output_root
+        .file_name()
+        .map(|value| value.to_string_lossy().into_owned())
+        .ok_or(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::EmptyOutputRoot,
+        )?;
+    Ok(parent.join(format!(".{name}.{plumbing_id}.staging")))
+}
+
+fn remove_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_dir_all_checked(
+    path: &Path,
+) -> Result<
+    (),
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError,
+> {
+    if !path.exists() {
+        return Ok(());
+    }
+    if fs::symlink_metadata(path)
+        .map_err(
+            gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_io_error,
+        )?
+        .file_type()
+        .is_symlink()
+    {
+        return Err(
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::OutputRootIsSymlink,
+        );
+    }
+    fs::remove_dir_all(path).map_err(
+        gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_io_error,
+    )
+}
+
+fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_file_text_forbidden(
+    bytes: &[u8],
+) -> bool {
+    let Ok(text) = std::str::from_utf8(bytes) else {
+        return true;
+    };
+    let lower = text.to_ascii_lowercase();
+    [
+        "secret_value",
+        "credential_value",
+        "\"operator_private_material_retained\": true",
+        "raw provider response",
+        "\"raw_provider_response_retained\": true",
+        "\"raw_stdout_retained\": true",
+        "\"raw_stderr_retained\": true",
+        "\"proof_artifact_created\": true",
+        "\"checker_transcript_created\": true",
+        "\"solver_certificate_created\": true",
+        "\"creates_level2_evidence\": true",
+        "\"populates_score_axes\": true",
+    ]
+    .iter()
+    .any(|token| lower.contains(token))
+}
+
+fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_phase636_state_invalid(
+    output: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutput,
+) -> bool {
+    output.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_SCHEMA_VERSION
+        || output.state_slice
+            != GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_STATE_SLICE
+        || output.promotion_state
+            != "packet_role_artifact_independent_operator_accepted_result_output_metadata"
+        || output.next_required_state
+            != "packet_role_artifact_independent_operator_accepted_result_output_still_required"
+        || output.classification
+            != GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputClassification::PacketRoleArtifactIndependentOperatorAcceptedResultOutputMissing
+        || output.phase636_required_digest_missing()
+        || output.phase634_classification
+            != GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultMaterializationClassification::PacketRoleArtifactIndependentOperatorAcceptedResultMaterializationMissing
+        || output.phase632_classification
+            != GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEvidencePacketClassification::PacketRoleArtifactIndependentOperatorAcceptedResultEvidencePacketMissing
+        || output.phase630_classification
+            != GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultIndependentReproductionRequirementClassification::PacketRoleArtifactIndependentOperatorAcceptedResultIndependentReproductionEvidenceBlocked
+        || output.phase628_classification
+            != GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultPolicyResolutionClassification::PacketRoleArtifactIndependentOperatorAcceptedResultPolicyResolutionBlocked
+        || output.phase601_classification
+            != GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultEligibilityClassification::PacketRoleArtifactIndependentOperatorAcceptedResultBlockedPolicyNotSatisfied
+        || output.phase599_classification
+            != GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorImportReviewClassification::PacketRoleArtifactIndependentOperatorImportReviewBlockedNoAcceptedExternalResult
+        || !output.phase597_validation_valid
+        || output.phase597_validation_issue_count != 0
+        || output.phase597_candidate_status != GATEWAY_FORMAL_TINY_Z3_EXTERNAL_IMPORT_CANDIDATE_STATUS
+        || output.phase597_requested_claim_boundary
+            != GATEWAY_FORMAL_TINY_Z3_EXTERNAL_IMPORT_REQUESTED_CLAIM_BOUNDARY
+        || output.phase597_external_owner_id != GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OWNER_ID
+        || output.phase597_quarantine_status != "Quarantined"
+        || output.claim_boundary
+            != gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_claim_boundary()
+        || output.output_root_declared
+        || output.output_root_read_requested
+        || output.output_root_write_requested
+        || output.staged_write_requested
+        || output.sidecar_write_requested
+        || output.manifest_write_requested
+        || output.readback_requested
+        || output.artifact_output_materialized
+        || output.filesystem_artifact_write_requested
+        || output.imports_external_result
+        || output.creates_accepted_external_result_evidence
+        || output.writes_accepted_evidence_artifacts
+        || output.mutates_accepted_evidence_ledger
+        || output.accepts_independent_external_reproduction
+        || output.writes_level2_artifact_files
+        || output.writes_score_axis_artifact_files
+        || output.populates_score_axes
+        || output.creates_accepted_formal_evidence
+        || output.creates_level2_evidence
+        || output.proof_artifact_created
+        || output.checker_transcript_created
+        || output.solver_certificate_created
+        || output.lean_execution_evidence_created
+        || output.additional_smt_z3_execution_created
+        || output.cobalt_execution_evidence_created
+        || output.rust_to_lean_execution_evidence_created
+        || output.backend_execution_evidence_created
+        || output.benchmark_evidence_created
+        || output.external_audit_evidence_created
+        || output.semantic_correctness_claimed
+        || output.production_readiness_claimed
+        || output.sota_claimed
+        || output.breakthrough_claimed
+        || output.full_security_claimed
+        || output.grants_authority
+}
+
+fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_io_error(
+    error: io::Error,
+) -> GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError {
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::Io(
+        error.to_string(),
+    )
+}
+
+fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_serde_error(
+    error: serde_json::Error,
+) -> GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError {
+    GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::Serialization(
+        error.to_string(),
+    )
+}
+
 fn gateway_formal_tiny_z3_packet_role_artifact_independent_operator_import_candidate_phase595_state_invalid(
     readback: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorOutputPlumbingReadback,
 ) -> bool {
@@ -161247,6 +162275,340 @@ mod tests {
     }
 
     #[test]
+    fn phase638_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_materializes_local_bundle(
+    ) {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            output,
+        )) = phase638_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_source(
+            "phase638-output",
+        )
+        else {
+            return;
+        };
+        let phase638_bundle_root = temp_output_root("phase638-output-bundle");
+        let request =
+            phase638_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_request(
+                "phase638-output",
+                &phase638_bundle_root,
+            );
+        let readback =
+            materialize_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_bundle(
+                &output,
+                &request,
+            )
+            .expect("phase638 local accepted-result output bundle materializes");
+
+        assert_eq!(
+            readback.manifest.state_slice,
+            GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_PLUMBING_STATE_SLICE
+        );
+        assert_eq!(readback.manifest.phase636_output_digest, output.digest());
+        assert_eq!(
+            readback.manifest.classification,
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputClassification::PacketRoleArtifactIndependentOperatorAcceptedResultOutputQuarantinedLocalBundle
+        );
+        assert!(readback.manifest.output_root_declared);
+        assert!(readback.manifest.output_root_read_performed);
+        assert!(readback.manifest.output_root_write_performed);
+        assert!(readback.manifest.staged_write_performed);
+        assert!(readback.manifest.sidecar_write_performed);
+        assert!(readback.manifest.manifest_write_performed);
+        assert!(readback.manifest.readback_performed);
+        assert!(readback.manifest.artifact_output_materialized);
+        assert!(readback.manifest.filesystem_artifact_write_performed);
+        assert!(!readback.manifest.imports_external_result);
+        assert!(!readback.manifest.creates_accepted_external_result_evidence);
+        assert!(!readback.manifest.mutates_accepted_evidence_ledger);
+        assert!(!readback.manifest.accepts_independent_external_reproduction);
+        assert!(!readback.manifest.creates_accepted_formal_evidence);
+        assert!(!readback.manifest.creates_level2_evidence);
+        assert!(!readback.manifest.populates_score_axes);
+        assert!(!readback.manifest.proof_artifact_created);
+        assert!(!readback.manifest.checker_transcript_created);
+        assert!(!readback.manifest.solver_certificate_created);
+        assert!(!readback.manifest.lean_execution_evidence_created);
+        assert!(!readback.manifest.additional_smt_z3_execution_created);
+        assert!(!readback.manifest.cobalt_execution_evidence_created);
+        assert!(!readback.manifest.rust_to_lean_execution_evidence_created);
+        assert!(!readback.manifest.backend_execution_evidence_created);
+        assert!(!readback.manifest.benchmark_evidence_created);
+        assert!(!readback.manifest.external_audit_evidence_created);
+        assert!(!readback.manifest.semantic_correctness_claimed);
+        assert!(!readback.manifest.production_readiness_claimed);
+        assert!(!readback.manifest.sota_claimed);
+        assert!(!readback.manifest.full_security_claimed);
+        assert!(!readback.manifest.grants_authority);
+
+        for logical_path in gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_materialization_declared_role_files()
+        {
+            assert!(phase638_bundle_root.join(&logical_path).is_file());
+            assert!(phase638_bundle_root
+                .join(format!("{logical_path}.sha256"))
+                .is_file());
+        }
+        let reread =
+            read_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_bundle(
+                &phase638_bundle_root,
+                &request.protected_roots,
+            )
+            .expect("phase638 local bundle readback succeeds");
+        assert_eq!(reread.manifest, readback.manifest);
+
+        for root in [
+            &phase638_bundle_root,
+            &phase595_bundle_root,
+            &bundle_root,
+            &capture_root,
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase638 output cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase638_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_rejects_phase636_drift_and_protected_root(
+    ) {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            mut output,
+        )) = phase638_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_source(
+            "phase638-invalid",
+        )
+        else {
+            return;
+        };
+        let phase638_bundle_root = temp_output_root("phase638-invalid-bundle");
+        let mut request =
+            phase638_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_request(
+                "phase638-invalid",
+                &phase638_bundle_root,
+            );
+        request.protected_roots = vec![phase638_bundle_root.clone()];
+        assert_eq!(
+            materialize_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_bundle(
+                &output,
+                &request,
+            )
+            .expect_err("protected output root rejected"),
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::ProtectedOutputRoot
+        );
+
+        request.protected_roots = Vec::new();
+        output.mutates_accepted_evidence_ledger = true;
+        assert_eq!(
+            materialize_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_bundle(
+                &output,
+                &request,
+            )
+            .expect_err("Phase 636 promotion drift rejected"),
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::InvalidPhase636Output
+        );
+
+        for root in [
+            &phase595_bundle_root,
+            &bundle_root,
+            &capture_root,
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase638 invalid cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase638_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_rejects_tampered_bundle(
+    ) {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            output,
+        )) = phase638_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_source(
+            "phase638-tamper",
+        )
+        else {
+            return;
+        };
+        let phase638_bundle_root = temp_output_root("phase638-tamper-bundle");
+        let request =
+            phase638_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_request(
+                "phase638-tamper",
+                &phase638_bundle_root,
+            );
+        materialize_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_bundle(
+            &output, &request,
+        )
+        .expect("phase638 tamper source materializes");
+
+        let statement_sidecar = phase638_bundle_root.join(
+            "packet-role-artifact-independent-operator-accepted-result-packet/operator-statement.json.sha256",
+        );
+        fs::write(&statement_sidecar, b"0000").expect("phase638 stale sidecar writes");
+        assert_eq!(
+            read_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_bundle(
+                &phase638_bundle_root,
+                &request.protected_roots,
+            )
+            .expect_err("stale sidecar rejected"),
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::DigestMismatch(
+                "packet-role-artifact-independent-operator-accepted-result-packet/operator-statement.json"
+                    .to_owned()
+            )
+        );
+
+        fs::write(
+            &statement_sidecar,
+            hash_hex(hash_bytes(
+                &fs::read(phase638_bundle_root.join(
+                    "packet-role-artifact-independent-operator-accepted-result-packet/operator-statement.json",
+                ))
+                .expect("phase638 statement reads"),
+            )),
+        )
+        .expect("phase638 sidecar restores");
+        fs::write(
+            phase638_bundle_root.join(
+                "packet-role-artifact-independent-operator-accepted-result-packet/undeclared.json",
+            ),
+            b"{}",
+        )
+        .expect("phase638 undeclared file writes");
+        assert_eq!(
+            read_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_bundle(
+                &phase638_bundle_root,
+                &request.protected_roots,
+            )
+            .expect_err("undeclared file rejected"),
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::UndeclaredFile(
+                "packet-role-artifact-independent-operator-accepted-result-packet/undeclared.json".to_owned()
+            )
+        );
+
+        fs::remove_file(phase638_bundle_root.join(
+            "packet-role-artifact-independent-operator-accepted-result-packet/undeclared.json",
+        ))
+        .expect("phase638 undeclared file removes");
+        rewrite_bundle_file(
+            &phase638_bundle_root,
+            "packet-role-artifact-independent-operator-accepted-result-packet/redaction-report.json",
+            br#"{"secret_value":"retained"}"#,
+        );
+        assert_eq!(
+            read_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_bundle(
+                &phase638_bundle_root,
+                &request.protected_roots,
+            )
+            .expect_err("secret-bearing declared file rejected"),
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::MalformedDeclaredFile(
+                "packet-role-artifact-independent-operator-accepted-result-packet/redaction-report.json"
+                    .to_owned()
+            )
+        );
+
+        for root in [
+            &phase638_bundle_root,
+            &phase595_bundle_root,
+            &bundle_root,
+            &capture_root,
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase638 tamper cleanup succeeds");
+        }
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn phase638_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_rejects_symlink_paths(
+    ) {
+        use std::os::unix::fs::symlink;
+
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            output,
+        )) = phase638_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_source(
+            "phase638-symlink",
+        )
+        else {
+            return;
+        };
+        let phase638_bundle_root = temp_output_root("phase638-symlink-bundle");
+        let request =
+            phase638_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_request(
+                "phase638-symlink",
+                &phase638_bundle_root,
+            );
+        materialize_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_bundle(
+            &output, &request,
+        )
+        .expect("phase638 symlink source materializes");
+
+        let sidecar = phase638_bundle_root.join(
+            "packet-role-artifact-independent-operator-accepted-result-packet/operator-identity.json.sha256",
+        );
+        fs::remove_file(&sidecar).expect("phase638 sidecar removes");
+        let target = temp_output_root("phase638-symlink-target");
+        fs::write(&target, b"not-a-sidecar").expect("phase638 symlink target writes");
+        symlink(&target, &sidecar).expect("phase638 sidecar symlink creates");
+        assert_eq!(
+            read_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_bundle(
+                &phase638_bundle_root,
+                &request.protected_roots,
+            )
+            .expect_err("sidecar symlink rejected"),
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingError::BundlePathIsSymlink(
+                "packet-role-artifact-independent-operator-accepted-result-packet/operator-identity.json.sha256"
+                    .to_owned()
+            )
+        );
+
+        fs::remove_file(&sidecar).expect("phase638 sidecar symlink removes");
+        fs::remove_file(&target).expect("phase638 sidecar symlink target removes");
+        for root in [
+            &phase638_bundle_root,
+            &phase595_bundle_root,
+            &bundle_root,
+            &capture_root,
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase638 symlink cleanup succeeds");
+        }
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -175847,6 +177209,68 @@ mod tests {
             breakthrough_claimed: false,
             full_security_claimed: false,
             action_authority_claimed: false,
+        }
+    }
+
+    fn phase638_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_source(
+        source_prefix: &str,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutput,
+    )> {
+        let (
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            materialization,
+        ) = phase636_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_source(
+            source_prefix,
+        )?;
+        let output_input =
+            phase636_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_input(
+                &format!("{source_prefix}-artifact-output"),
+                &materialization,
+                GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputLabel::PacketRoleArtifactIndependentOperatorAcceptedResultOutputRecorded,
+            );
+        let output =
+            build_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output(
+                &materialization,
+                &output_input,
+            )
+            .expect("phase638 source Phase 636 accepted-result output metadata builds");
+        Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            output,
+        ))
+    }
+
+    fn phase638_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_plumbing_request(
+        plumbing_id: &str,
+        output_root: &Path,
+    ) -> GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingRequest
+    {
+        GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPlumbingRequest {
+            plumbing_id: plumbing_id.to_owned(),
+            output_root: output_root.to_path_buf(),
+            protected_roots: Vec::new(),
+            overwrite: false,
+            created_at_unix: 1_800_000_638,
         }
     }
 
