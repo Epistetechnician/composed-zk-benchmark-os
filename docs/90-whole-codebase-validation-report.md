@@ -9099,5 +9099,16 @@ external result import, accepted Evidence Ledger mutation, accepted evidence,
 Level2+ evidence, score-axis population, benchmark evidence, external-audit
 claim, or production/SOTA/security/semantic-correctness claim.
 
+[docs/627-phase-pcsm-clean-source-operator-replay-output-audit-boundary.md](docs/627-phase-pcsm-clean-source-operator-replay-output-audit-boundary.md)
+documents the Phase 627 PCSM clean-source operator replay output audit
+boundary. It defines only a future in-memory audit summary over a readback-valid
+Phase 626 output manifest, its Phase 624 packet, and its Phase 624 validation
+result. It allows no Rust implementation code in this slice, Cargo metadata
+changes, source-repository command execution by HSAI, PCSM runtime import,
+recoverable-ghost artifact import, external result import, accepted Evidence
+Ledger mutation, accepted evidence, Level2+ evidence, score-axis population,
+benchmark evidence, external-audit claim, or
+production/SOTA/security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
