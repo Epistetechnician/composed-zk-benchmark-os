@@ -32067,6 +32067,66 @@ impl PcsmCleanSourceOperatorReplayValidation {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
+pub struct PcsmCleanSourceOperatorReplayOutputRequest {
+    pub bundle_id: String,
+    pub created_at_unix: u64,
+    pub overwrite: bool,
+    pub protected_roots: Vec<PathBuf>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PcsmCleanSourceOperatorReplayOutputManifest {
+    pub schema_version: String,
+    pub bundle_id: String,
+    pub created_at_unix: u64,
+    pub packet_digest: Hash,
+    pub validation_digest: Hash,
+    pub coordinate_digest: Hash,
+    pub operator_provenance_digest: Hash,
+    pub source_observation_digest: Hash,
+    pub command_observation_digest: Hash,
+    pub artifact_retention_digest: Hash,
+    pub redaction_report_digest: Hash,
+    pub nonpromotion_report_digest: Hash,
+    pub declared_files: Vec<String>,
+    pub declared_file_digests: BTreeMap<String, Hash>,
+    pub claim_boundary: String,
+    pub pcsm_runtime_imported: bool,
+    pub recoverable_artifacts_imported: bool,
+    pub accepted_evidence_created: bool,
+    pub accepted_independent_external_reproduction: bool,
+    pub level2_evidence_created: bool,
+    pub score_axes_populated: bool,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl PcsmCleanSourceOperatorReplayOutputManifest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:pcsm-clean-source-operator-replay-output-manifest:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PcsmCleanSourceOperatorReplayOutputValidationReport {
+    pub schema_version: String,
+    pub bundle_id: String,
+    pub valid: bool,
+    pub packet_digest: Hash,
+    pub validation_digest: Hash,
+    pub checked_files: Vec<String>,
+    pub claim_boundary: String,
+    pub pcsm_runtime_imported: bool,
+    pub recoverable_artifacts_imported: bool,
+    pub accepted_evidence_created: bool,
+    pub accepted_independent_external_reproduction: bool,
+    pub level2_evidence_created: bool,
+    pub score_axes_populated: bool,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum PcsmCleanSourceOperatorReplayError {
     InvalidSchema,
     StateSliceMismatch,
@@ -32104,6 +32164,12 @@ pub const PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_VALIDATION_SCHEMA_VERSION: &str =
     "hsai-pcsm-clean-source-operator-replay-validation-v1";
 pub const PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_STATE_SLICE: &str =
     "phase-624-pcsm-clean-source-operator-replay-metadata";
+pub const PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_OUTPUT_SCHEMA_VERSION: &str =
+    "hsai-pcsm-clean-source-operator-replay-output-v1";
+pub const PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_OUTPUT_VALIDATION_SCHEMA_VERSION: &str =
+    "hsai-pcsm-clean-source-operator-replay-output-validation-v1";
+pub const PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_OUTPUT_STATE_SLICE: &str =
+    "phase-626-pcsm-clean-source-operator-replay-output";
 pub const PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_CLAIM_BOUNDARY: &str =
     "local PCSM clean-source operator replay metadata only; not accepted evidence, proof, external reproduction, or benchmark evidence";
 
@@ -32203,6 +32269,121 @@ pub fn validate_pcsm_clean_source_operator_replay_packet(
         score_axes_populated: false,
         nonclaims: packet.nonclaims.clone(),
     })
+}
+
+pub fn materialize_pcsm_clean_source_operator_replay_bundle(
+    output_root: &Path,
+    packet: &PcsmCleanSourceOperatorReplayPacket,
+    validation: &PcsmCleanSourceOperatorReplayValidation,
+    request: &PcsmCleanSourceOperatorReplayOutputRequest,
+) -> Result<PcsmCleanSourceOperatorReplayOutputManifest, AdmissionJournalMaterializationError> {
+    validate_pcsm_clean_source_operator_replay_output_request(
+        output_root,
+        packet,
+        validation,
+        request,
+    )?;
+
+    let staging_root = staging_root_for(output_root, &request.bundle_id)?;
+    if staging_root.exists() {
+        remove_dir_all_checked(&staging_root)?;
+    }
+    fs::create_dir_all(staging_root.join("pcsm-clean-source-operator-replay"))
+        .map_err(materialization_io_error)?;
+
+    let files = build_pcsm_clean_source_operator_replay_bundle_files(packet, validation, request)?;
+    for (logical_path, bytes) in &files {
+        let target = staging_root.join(logical_path);
+        if let Some(parent) = target.parent() {
+            fs::create_dir_all(parent).map_err(materialization_io_error)?;
+        }
+        fs::write(&target, bytes).map_err(materialization_io_error)?;
+        fs::write(
+            sidecar_path(&target),
+            hash_hex(hash_bytes(bytes)).into_bytes(),
+        )
+        .map_err(materialization_io_error)?;
+    }
+
+    if output_root.exists() {
+        if !request.overwrite {
+            remove_dir_all_checked(&staging_root)?;
+            return Err(AdmissionJournalMaterializationError::OutputRootExistsWithoutOverwrite);
+        }
+        remove_dir_all_checked(output_root)?;
+    }
+    fs::rename(&staging_root, output_root).map_err(materialization_io_error)?;
+    read_pcsm_clean_source_operator_replay_bundle(output_root)
+}
+
+pub fn read_pcsm_clean_source_operator_replay_bundle(
+    output_root: &Path,
+) -> Result<PcsmCleanSourceOperatorReplayOutputManifest, AdmissionJournalMaterializationError> {
+    let output_metadata = fs::symlink_metadata(output_root).map_err(materialization_io_error)?;
+    if output_metadata.file_type().is_symlink() {
+        return Err(AdmissionJournalMaterializationError::OutputRootIsSymlink);
+    }
+    if !output_metadata.is_dir() {
+        return Err(AdmissionJournalMaterializationError::OutputRootIsFile);
+    }
+
+    let bundle_dir = output_root.join("pcsm-clean-source-operator-replay");
+    let bundle_metadata = fs::symlink_metadata(&bundle_dir).map_err(materialization_io_error)?;
+    if bundle_metadata.file_type().is_symlink() {
+        return Err(AdmissionJournalMaterializationError::BundleFileIsSymlink(
+            "pcsm-clean-source-operator-replay".to_owned(),
+        ));
+    }
+    if !bundle_metadata.is_dir() {
+        return Err(
+            AdmissionJournalMaterializationError::DeclaredFileTypeMismatch(
+                "pcsm-clean-source-operator-replay".to_owned(),
+            ),
+        );
+    }
+
+    reject_undeclared_pcsm_clean_source_operator_replay_files(output_root)?;
+    let mut file_bytes = BTreeMap::new();
+    for logical_path in PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_OUTPUT_DECLARED_FILES {
+        let path = output_root.join(logical_path);
+        let metadata = fs::symlink_metadata(&path).map_err(materialization_io_error)?;
+        if metadata.file_type().is_symlink() {
+            return Err(AdmissionJournalMaterializationError::BundleFileIsSymlink(
+                (*logical_path).to_owned(),
+            ));
+        }
+        if !metadata.is_file() {
+            return Err(
+                AdmissionJournalMaterializationError::DeclaredFileTypeMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        let sidecar = sidecar_path(&path);
+        let sidecar_metadata = fs::symlink_metadata(&sidecar).map_err(materialization_io_error)?;
+        if sidecar_metadata.file_type().is_symlink() {
+            return Err(AdmissionJournalMaterializationError::SidecarIsSymlink(
+                format!("{logical_path}.sha256"),
+            ));
+        }
+        if !sidecar_metadata.is_file() {
+            return Err(
+                AdmissionJournalMaterializationError::DeclaredFileTypeMismatch(format!(
+                    "{logical_path}.sha256"
+                )),
+            );
+        }
+        let bytes = fs::read(&path).map_err(materialization_io_error)?;
+        let expected = fs::read_to_string(sidecar).map_err(materialization_io_error)?;
+        if expected != hash_hex(hash_bytes(&bytes)) {
+            return Err(AdmissionJournalMaterializationError::DigestMismatch(
+                (*logical_path).to_owned(),
+            ));
+        }
+        file_bytes.insert((*logical_path).to_owned(), bytes);
+    }
+
+    validate_pcsm_clean_source_operator_replay_bundle_semantics(&file_bytes)
 }
 
 fn pcsm_clean_source_coordinate_is_expected(coordinate: &PcsmCleanSourceHandoffCoordinate) -> bool {
@@ -32447,6 +32628,352 @@ fn pcsm_clean_source_operator_replay_expected_digests(
             packet.nonpromotion_report.digest(),
         ),
     ])
+}
+
+fn validate_pcsm_clean_source_operator_replay_output_request(
+    output_root: &Path,
+    packet: &PcsmCleanSourceOperatorReplayPacket,
+    validation: &PcsmCleanSourceOperatorReplayValidation,
+    request: &PcsmCleanSourceOperatorReplayOutputRequest,
+) -> Result<(), AdmissionJournalMaterializationError> {
+    if request.bundle_id.trim().is_empty()
+        || !is_safe_relative_path(&request.bundle_id)
+        || request.bundle_id.contains(['/', '\\'])
+    {
+        return Err(AdmissionJournalMaterializationError::EmptyBundleId);
+    }
+    let expected_validation = validate_pcsm_clean_source_operator_replay_packet(
+        packet,
+        validation.phase622_closure_report_digest,
+        validation.phase621_audit_digest,
+    )
+    .map_err(|_| AdmissionJournalMaterializationError::ManifestSemanticMismatch)?;
+    if &expected_validation != validation {
+        return Err(AdmissionJournalMaterializationError::ManifestSemanticMismatch);
+    }
+    validate_output_root(output_root, &request.protected_roots, request.overwrite)
+}
+
+fn build_pcsm_clean_source_operator_replay_bundle_files(
+    packet: &PcsmCleanSourceOperatorReplayPacket,
+    validation: &PcsmCleanSourceOperatorReplayValidation,
+    request: &PcsmCleanSourceOperatorReplayOutputRequest,
+) -> Result<BTreeMap<String, Vec<u8>>, AdmissionJournalMaterializationError> {
+    let mut files = BTreeMap::from([
+        (
+            "pcsm-clean-source-operator-replay/packet.json".to_owned(),
+            serde_json::to_vec_pretty(packet).map_err(materialization_serde_error)?,
+        ),
+        (
+            "pcsm-clean-source-operator-replay/validation.json".to_owned(),
+            serde_json::to_vec_pretty(validation).map_err(materialization_serde_error)?,
+        ),
+        (
+            "pcsm-clean-source-operator-replay/clean-source-coordinate.json".to_owned(),
+            serde_json::to_vec_pretty(&packet.clean_source_coordinate)
+                .map_err(materialization_serde_error)?,
+        ),
+        (
+            "pcsm-clean-source-operator-replay/operator-provenance.json".to_owned(),
+            serde_json::to_vec_pretty(&packet.operator_provenance)
+                .map_err(materialization_serde_error)?,
+        ),
+        (
+            "pcsm-clean-source-operator-replay/source-observation.json".to_owned(),
+            serde_json::to_vec_pretty(&packet.source_observation)
+                .map_err(materialization_serde_error)?,
+        ),
+        (
+            "pcsm-clean-source-operator-replay/command-observations.json".to_owned(),
+            serde_json::to_vec_pretty(&packet.command_observations)
+                .map_err(materialization_serde_error)?,
+        ),
+        (
+            "pcsm-clean-source-operator-replay/artifact-retention.json".to_owned(),
+            serde_json::to_vec_pretty(&packet.artifact_retention)
+                .map_err(materialization_serde_error)?,
+        ),
+        (
+            "pcsm-clean-source-operator-replay/redaction-report.json".to_owned(),
+            serde_json::to_vec_pretty(&packet.redaction_report)
+                .map_err(materialization_serde_error)?,
+        ),
+        (
+            "pcsm-clean-source-operator-replay/nonpromotion-report.json".to_owned(),
+            serde_json::to_vec_pretty(&packet.nonpromotion_report)
+                .map_err(materialization_serde_error)?,
+        ),
+        (
+            "pcsm-clean-source-operator-replay/nonclaims.md".to_owned(),
+            pcsm_clean_source_operator_replay_nonclaims_markdown(&packet.nonclaims).into_bytes(),
+        ),
+    ]);
+    let validation_report = PcsmCleanSourceOperatorReplayOutputValidationReport {
+        schema_version: PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_OUTPUT_VALIDATION_SCHEMA_VERSION
+            .to_owned(),
+        bundle_id: request.bundle_id.clone(),
+        valid: true,
+        packet_digest: packet.digest(),
+        validation_digest: validation.digest(),
+        checked_files: pcsm_clean_source_operator_replay_output_declared_files(),
+        claim_boundary: PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_CLAIM_BOUNDARY.to_owned(),
+        pcsm_runtime_imported: false,
+        recoverable_artifacts_imported: false,
+        accepted_evidence_created: false,
+        accepted_independent_external_reproduction: false,
+        level2_evidence_created: false,
+        score_axes_populated: false,
+    };
+    files.insert(
+        "pcsm-clean-source-operator-replay/validation-report.json".to_owned(),
+        serde_json::to_vec_pretty(&validation_report).map_err(materialization_serde_error)?,
+    );
+    let manifest =
+        pcsm_clean_source_operator_replay_manifest_for_files(packet, validation, request, &files);
+    files.insert(
+        "pcsm-clean-source-operator-replay/manifest.json".to_owned(),
+        serde_json::to_vec_pretty(&manifest).map_err(materialization_serde_error)?,
+    );
+    Ok(files)
+}
+
+fn pcsm_clean_source_operator_replay_manifest_for_files(
+    packet: &PcsmCleanSourceOperatorReplayPacket,
+    validation: &PcsmCleanSourceOperatorReplayValidation,
+    request: &PcsmCleanSourceOperatorReplayOutputRequest,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> PcsmCleanSourceOperatorReplayOutputManifest {
+    let mut declared_file_digests = BTreeMap::new();
+    for (logical_path, bytes) in files {
+        declared_file_digests.insert(logical_path.clone(), hash_bytes(bytes));
+    }
+
+    PcsmCleanSourceOperatorReplayOutputManifest {
+        schema_version: PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_OUTPUT_SCHEMA_VERSION.to_owned(),
+        bundle_id: request.bundle_id.clone(),
+        created_at_unix: request.created_at_unix,
+        packet_digest: packet.digest(),
+        validation_digest: validation.digest(),
+        coordinate_digest: packet.clean_source_coordinate_digest,
+        operator_provenance_digest: packet.operator_provenance.digest(),
+        source_observation_digest: packet.source_observation.digest(),
+        command_observation_digest: validation.command_observation_digest,
+        artifact_retention_digest: packet.artifact_retention.digest(),
+        redaction_report_digest: packet.redaction_report.digest(),
+        nonpromotion_report_digest: packet.nonpromotion_report.digest(),
+        declared_files: pcsm_clean_source_operator_replay_output_declared_files(),
+        declared_file_digests,
+        claim_boundary: PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_CLAIM_BOUNDARY.to_owned(),
+        pcsm_runtime_imported: false,
+        recoverable_artifacts_imported: false,
+        accepted_evidence_created: false,
+        accepted_independent_external_reproduction: false,
+        level2_evidence_created: false,
+        score_axes_populated: false,
+        nonclaims: packet.nonclaims.clone(),
+    }
+}
+
+fn validate_pcsm_clean_source_operator_replay_bundle_semantics(
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<PcsmCleanSourceOperatorReplayOutputManifest, AdmissionJournalMaterializationError> {
+    let manifest: PcsmCleanSourceOperatorReplayOutputManifest =
+        parse_declared_json(files, "pcsm-clean-source-operator-replay/manifest.json")?;
+    let packet: PcsmCleanSourceOperatorReplayPacket =
+        parse_declared_json(files, "pcsm-clean-source-operator-replay/packet.json")?;
+    let validation: PcsmCleanSourceOperatorReplayValidation =
+        parse_declared_json(files, "pcsm-clean-source-operator-replay/validation.json")?;
+    let expected_validation = validate_pcsm_clean_source_operator_replay_packet(
+        &packet,
+        validation.phase622_closure_report_digest,
+        validation.phase621_audit_digest,
+    )
+    .map_err(|_| AdmissionJournalMaterializationError::ManifestSemanticMismatch)?;
+    if expected_validation != validation {
+        return Err(AdmissionJournalMaterializationError::ValidationReportMismatch);
+    }
+
+    let coordinate: PcsmCleanSourceHandoffCoordinate = parse_declared_json(
+        files,
+        "pcsm-clean-source-operator-replay/clean-source-coordinate.json",
+    )?;
+    let provenance: PcsmCleanSourceOperatorReplayProvenance = parse_declared_json(
+        files,
+        "pcsm-clean-source-operator-replay/operator-provenance.json",
+    )?;
+    let source_observation: PcsmCleanSourceOperatorReplaySourceObservation = parse_declared_json(
+        files,
+        "pcsm-clean-source-operator-replay/source-observation.json",
+    )?;
+    let command_observations: Vec<PcsmCleanSourceOperatorReplayCommandObservation> =
+        parse_declared_json(
+            files,
+            "pcsm-clean-source-operator-replay/command-observations.json",
+        )?;
+    let artifact_retention: PcsmCleanSourceOperatorReplayArtifactRetentionDeclaration =
+        parse_declared_json(
+            files,
+            "pcsm-clean-source-operator-replay/artifact-retention.json",
+        )?;
+    let redaction_report: PcsmCleanSourceOperatorReplayRedactionReport = parse_declared_json(
+        files,
+        "pcsm-clean-source-operator-replay/redaction-report.json",
+    )?;
+    let nonpromotion_report: PcsmCleanSourceOperatorReplayNonpromotionReport = parse_declared_json(
+        files,
+        "pcsm-clean-source-operator-replay/nonpromotion-report.json",
+    )?;
+    if coordinate != packet.clean_source_coordinate
+        || provenance != packet.operator_provenance
+        || source_observation != packet.source_observation
+        || command_observations != packet.command_observations
+        || artifact_retention != packet.artifact_retention
+        || redaction_report != packet.redaction_report
+        || nonpromotion_report != packet.nonpromotion_report
+    {
+        return Err(AdmissionJournalMaterializationError::ManifestSemanticMismatch);
+    }
+
+    validate_pcsm_clean_source_operator_replay_output_manifest_semantics(
+        &manifest,
+        &packet,
+        &validation,
+        files,
+    )?;
+
+    let nonclaims_bytes = declared_bytes(files, "pcsm-clean-source-operator-replay/nonclaims.md")?;
+    if nonclaims_bytes
+        != pcsm_clean_source_operator_replay_nonclaims_markdown(&packet.nonclaims).as_bytes()
+    {
+        return Err(AdmissionJournalMaterializationError::NonclaimMismatch);
+    }
+
+    let validation_report: PcsmCleanSourceOperatorReplayOutputValidationReport =
+        parse_declared_json(
+            files,
+            "pcsm-clean-source-operator-replay/validation-report.json",
+        )?;
+    let expected_report = PcsmCleanSourceOperatorReplayOutputValidationReport {
+        schema_version: PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_OUTPUT_VALIDATION_SCHEMA_VERSION
+            .to_owned(),
+        bundle_id: manifest.bundle_id.clone(),
+        valid: true,
+        packet_digest: packet.digest(),
+        validation_digest: validation.digest(),
+        checked_files: pcsm_clean_source_operator_replay_output_declared_files(),
+        claim_boundary: PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_CLAIM_BOUNDARY.to_owned(),
+        pcsm_runtime_imported: false,
+        recoverable_artifacts_imported: false,
+        accepted_evidence_created: false,
+        accepted_independent_external_reproduction: false,
+        level2_evidence_created: false,
+        score_axes_populated: false,
+    };
+    if validation_report != expected_report {
+        return Err(AdmissionJournalMaterializationError::ValidationReportMismatch);
+    }
+
+    Ok(manifest)
+}
+
+fn validate_pcsm_clean_source_operator_replay_output_manifest_semantics(
+    manifest: &PcsmCleanSourceOperatorReplayOutputManifest,
+    packet: &PcsmCleanSourceOperatorReplayPacket,
+    validation: &PcsmCleanSourceOperatorReplayValidation,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<(), AdmissionJournalMaterializationError> {
+    let expected_digest_paths: BTreeSet<String> =
+        PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_OUTPUT_DECLARED_FILES
+            .iter()
+            .filter(|path| **path != "pcsm-clean-source-operator-replay/manifest.json")
+            .map(|path| (*path).to_owned())
+            .collect();
+    let actual_digest_paths: BTreeSet<String> =
+        manifest.declared_file_digests.keys().cloned().collect();
+
+    if manifest.schema_version != PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_OUTPUT_SCHEMA_VERSION
+        || manifest.bundle_id.trim().is_empty()
+        || !is_safe_relative_path(&manifest.bundle_id)
+        || manifest.bundle_id.contains(['/', '\\'])
+        || manifest.packet_digest != packet.digest()
+        || manifest.validation_digest != validation.digest()
+        || manifest.coordinate_digest != packet.clean_source_coordinate_digest
+        || manifest.operator_provenance_digest != packet.operator_provenance.digest()
+        || manifest.source_observation_digest != packet.source_observation.digest()
+        || manifest.command_observation_digest != validation.command_observation_digest
+        || manifest.artifact_retention_digest != packet.artifact_retention.digest()
+        || manifest.redaction_report_digest != packet.redaction_report.digest()
+        || manifest.nonpromotion_report_digest != packet.nonpromotion_report.digest()
+        || manifest.declared_files != pcsm_clean_source_operator_replay_output_declared_files()
+        || actual_digest_paths != expected_digest_paths
+        || manifest.claim_boundary != PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_CLAIM_BOUNDARY
+        || manifest.pcsm_runtime_imported
+        || manifest.recoverable_artifacts_imported
+        || manifest.accepted_evidence_created
+        || manifest.accepted_independent_external_reproduction
+        || manifest.level2_evidence_created
+        || manifest.score_axes_populated
+        || manifest.nonclaims != packet.nonclaims
+    {
+        return Err(AdmissionJournalMaterializationError::ManifestSemanticMismatch);
+    }
+
+    for (logical_path, expected_digest) in &manifest.declared_file_digests {
+        if hash_bytes(declared_bytes(files, logical_path)?) != *expected_digest {
+            return Err(AdmissionJournalMaterializationError::ManifestSemanticMismatch);
+        }
+    }
+    Ok(())
+}
+
+fn pcsm_clean_source_operator_replay_output_declared_files() -> Vec<String> {
+    PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_OUTPUT_DECLARED_FILES
+        .iter()
+        .map(|path| (*path).to_owned())
+        .collect()
+}
+
+fn pcsm_clean_source_operator_replay_nonclaims_markdown(
+    nonclaims: &BTreeSet<NonClaimLabel>,
+) -> String {
+    let mut out = String::from("# PCSM Clean-Source Operator Replay Nonclaims\n\n");
+    for nonclaim in nonclaims {
+        out.push_str("- ");
+        out.push_str(&nonclaim.0);
+        out.push('\n');
+    }
+    out
+}
+
+fn reject_undeclared_pcsm_clean_source_operator_replay_files(
+    output_root: &Path,
+) -> Result<(), AdmissionJournalMaterializationError> {
+    let mut declared: BTreeSet<String> = PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_OUTPUT_DECLARED_FILES
+        .iter()
+        .chain(PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_OUTPUT_DECLARED_SIDECARS.iter())
+        .map(|value| (*value).to_owned())
+        .collect();
+    let bundle_dir = output_root.join("pcsm-clean-source-operator-replay");
+    for entry in fs::read_dir(&bundle_dir).map_err(materialization_io_error)? {
+        let entry = entry.map_err(materialization_io_error)?;
+        let logical_path = entry
+            .path()
+            .strip_prefix(output_root)
+            .map_err(|error| AdmissionJournalMaterializationError::Io(error.to_string()))?
+            .to_string_lossy()
+            .replace('\\', "/");
+        if !declared.remove(&logical_path) {
+            return Err(AdmissionJournalMaterializationError::UndeclaredFile(
+                logical_path,
+            ));
+        }
+    }
+    if let Some(missing) = declared.into_iter().next() {
+        return Err(AdmissionJournalMaterializationError::Io(format!(
+            "declared file missing: {missing}"
+        )));
+    }
+    Ok(())
 }
 
 const REQUIRED_PCSM_VERIFIERS: &[&str] = &[
@@ -125750,6 +126277,36 @@ const PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_DECLARED_FILES: &[&str] = &[
     "phase623-pcsm-clean-source-operator-replay/nonpromotion-report.json",
 ];
 
+const PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_OUTPUT_DECLARED_FILES: &[&str] = &[
+    "pcsm-clean-source-operator-replay/manifest.json",
+    "pcsm-clean-source-operator-replay/packet.json",
+    "pcsm-clean-source-operator-replay/validation.json",
+    "pcsm-clean-source-operator-replay/clean-source-coordinate.json",
+    "pcsm-clean-source-operator-replay/operator-provenance.json",
+    "pcsm-clean-source-operator-replay/source-observation.json",
+    "pcsm-clean-source-operator-replay/command-observations.json",
+    "pcsm-clean-source-operator-replay/artifact-retention.json",
+    "pcsm-clean-source-operator-replay/redaction-report.json",
+    "pcsm-clean-source-operator-replay/nonpromotion-report.json",
+    "pcsm-clean-source-operator-replay/nonclaims.md",
+    "pcsm-clean-source-operator-replay/validation-report.json",
+];
+
+const PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_OUTPUT_DECLARED_SIDECARS: &[&str] = &[
+    "pcsm-clean-source-operator-replay/manifest.json.sha256",
+    "pcsm-clean-source-operator-replay/packet.json.sha256",
+    "pcsm-clean-source-operator-replay/validation.json.sha256",
+    "pcsm-clean-source-operator-replay/clean-source-coordinate.json.sha256",
+    "pcsm-clean-source-operator-replay/operator-provenance.json.sha256",
+    "pcsm-clean-source-operator-replay/source-observation.json.sha256",
+    "pcsm-clean-source-operator-replay/command-observations.json.sha256",
+    "pcsm-clean-source-operator-replay/artifact-retention.json.sha256",
+    "pcsm-clean-source-operator-replay/redaction-report.json.sha256",
+    "pcsm-clean-source-operator-replay/nonpromotion-report.json.sha256",
+    "pcsm-clean-source-operator-replay/nonclaims.md.sha256",
+    "pcsm-clean-source-operator-replay/validation-report.json.sha256",
+];
+
 fn is_full_hex_sha(value: &str) -> bool {
     value.len() == 40 && value.bytes().all(|byte| byte.is_ascii_hexdigit())
 }
@@ -177347,6 +177904,50 @@ mod tests {
         );
     }
 
+    fn rewrite_pcsm_operator_replay_file_and_manifest_digest(
+        output_root: &Path,
+        logical_path: &str,
+        bytes: &[u8],
+    ) {
+        rewrite_bundle_file(output_root, logical_path, bytes);
+        let manifest_path = output_root.join("pcsm-clean-source-operator-replay/manifest.json");
+        let mut manifest: PcsmCleanSourceOperatorReplayOutputManifest = serde_json::from_slice(
+            &fs::read(&manifest_path).expect("PCSM operator replay manifest reads for mutation"),
+        )
+        .expect("PCSM operator replay manifest parses for mutation");
+        manifest
+            .declared_file_digests
+            .insert(logical_path.to_owned(), hash_bytes(bytes));
+        if logical_path == "pcsm-clean-source-operator-replay/packet.json" {
+            if let Ok(packet) = serde_json::from_slice::<PcsmCleanSourceOperatorReplayPacket>(bytes)
+            {
+                manifest.packet_digest = packet.digest();
+                manifest.coordinate_digest = packet.clean_source_coordinate_digest;
+                manifest.operator_provenance_digest = packet.operator_provenance.digest();
+                manifest.source_observation_digest = packet.source_observation.digest();
+                manifest.artifact_retention_digest = packet.artifact_retention.digest();
+                manifest.redaction_report_digest = packet.redaction_report.digest();
+                manifest.nonpromotion_report_digest = packet.nonpromotion_report.digest();
+                manifest.nonclaims = packet.nonclaims;
+            }
+        }
+        if logical_path == "pcsm-clean-source-operator-replay/validation.json" {
+            if let Ok(validation) =
+                serde_json::from_slice::<PcsmCleanSourceOperatorReplayValidation>(bytes)
+            {
+                manifest.validation_digest = validation.digest();
+                manifest.command_observation_digest = validation.command_observation_digest;
+            }
+        }
+        let manifest_bytes = serde_json::to_vec_pretty(&manifest)
+            .expect("mutated PCSM operator replay manifest serializes");
+        rewrite_bundle_file(
+            output_root,
+            "pcsm-clean-source-operator-replay/manifest.json",
+            &manifest_bytes,
+        );
+    }
+
     fn materialized_test_bundle(name: &str) -> (PathBuf, AgentAdmissionJournal) {
         let output_root = temp_output_root(name);
         let journal = two_entry_journal();
@@ -177619,6 +178220,36 @@ mod tests {
         };
         packet.declared_file_digests = pcsm_clean_source_operator_replay_expected_digests(&packet);
         (packet, expected_phase622_digest, expected_phase621_digest)
+    }
+
+    fn clean_source_pcsm_operator_replay_validation() -> (
+        PcsmCleanSourceOperatorReplayPacket,
+        PcsmCleanSourceOperatorReplayValidation,
+    ) {
+        let (packet, expected_phase622_digest, expected_phase621_digest) =
+            clean_source_pcsm_operator_replay_packet();
+        let validation = validate_pcsm_clean_source_operator_replay_packet(
+            &packet,
+            expected_phase622_digest,
+            expected_phase621_digest,
+        )
+        .expect("operator replay packet validates");
+        (packet, validation)
+    }
+
+    fn operator_replay_output_request(
+        bundle_id: &str,
+        output_root: &Path,
+    ) -> PcsmCleanSourceOperatorReplayOutputRequest {
+        PcsmCleanSourceOperatorReplayOutputRequest {
+            bundle_id: bundle_id.to_owned(),
+            created_at_unix: 1_800_000_200,
+            overwrite: false,
+            protected_roots: vec![output_root
+                .parent()
+                .expect("temp output root has parent")
+                .join("protected-repo")],
+        }
     }
 
     fn gateway_attestation_pubkey_hex() -> String {
@@ -190952,6 +191583,197 @@ mod tests {
         assert!(errors.contains(
             &PcsmCleanSourceOperatorReplayError::MissingRequiredNonclaim("not proof".to_owned())
         ));
+    }
+
+    #[test]
+    fn pcsm_clean_source_operator_replay_output_materializes_and_reads_back() {
+        let (packet, validation) = clean_source_pcsm_operator_replay_validation();
+        let output_root = temp_output_root("pcsm-operator-replay-output");
+        let request = operator_replay_output_request("pcsm-operator-replay-output", &output_root);
+
+        let manifest = materialize_pcsm_clean_source_operator_replay_bundle(
+            &output_root,
+            &packet,
+            &validation,
+            &request,
+        )
+        .expect("PCSM operator replay output materializes");
+
+        assert_eq!(
+            manifest.schema_version,
+            PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_OUTPUT_SCHEMA_VERSION
+        );
+        assert_eq!(manifest.packet_digest, packet.digest());
+        assert_eq!(manifest.validation_digest, validation.digest());
+        assert_eq!(
+            manifest.declared_files,
+            pcsm_clean_source_operator_replay_output_declared_files()
+        );
+        assert!(!manifest.pcsm_runtime_imported);
+        assert!(!manifest.recoverable_artifacts_imported);
+        assert!(!manifest.accepted_evidence_created);
+        assert!(!manifest.accepted_independent_external_reproduction);
+        assert!(!manifest.level2_evidence_created);
+        assert!(!manifest.score_axes_populated);
+        assert_eq!(
+            read_pcsm_clean_source_operator_replay_bundle(&output_root)
+                .expect("PCSM operator replay output reads back"),
+            manifest
+        );
+        for logical_path in PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_OUTPUT_DECLARED_FILES {
+            let path = output_root.join(logical_path);
+            assert!(path.is_file(), "{logical_path} should exist");
+            assert!(
+                sidecar_path(&path).is_file(),
+                "{logical_path} sidecar should exist"
+            );
+        }
+
+        fs::remove_dir_all(&output_root).expect("PCSM operator replay output cleanup succeeds");
+    }
+
+    #[test]
+    fn pcsm_clean_source_operator_replay_output_rejects_output_guards_and_validation_drift() {
+        let (packet, validation) = clean_source_pcsm_operator_replay_validation();
+        let output_root = temp_output_root("pcsm-operator-replay-output-guards");
+        fs::create_dir_all(&output_root).expect("existing output root creates");
+        let request =
+            operator_replay_output_request("pcsm-operator-replay-output-guards", &output_root);
+        assert_eq!(
+            materialize_pcsm_clean_source_operator_replay_bundle(
+                &output_root,
+                &packet,
+                &validation,
+                &request
+            ),
+            Err(AdmissionJournalMaterializationError::OutputRootExistsWithoutOverwrite)
+        );
+
+        let protected_parent = output_root
+            .parent()
+            .expect("temp output root has parent")
+            .to_path_buf();
+        let protected_request = PcsmCleanSourceOperatorReplayOutputRequest {
+            protected_roots: vec![protected_parent],
+            overwrite: true,
+            ..request.clone()
+        };
+        assert_eq!(
+            materialize_pcsm_clean_source_operator_replay_bundle(
+                &output_root,
+                &packet,
+                &validation,
+                &protected_request
+            ),
+            Err(AdmissionJournalMaterializationError::ProtectedOutputRoot)
+        );
+        fs::remove_dir_all(&output_root).expect("guard output cleanup succeeds");
+
+        let mut drifted_validation = validation;
+        drifted_validation.accepted_evidence_created = true;
+        let validation_root = temp_output_root("pcsm-operator-replay-validation-drift");
+        assert_eq!(
+            materialize_pcsm_clean_source_operator_replay_bundle(
+                &validation_root,
+                &packet,
+                &drifted_validation,
+                &operator_replay_output_request(
+                    "pcsm-operator-replay-validation-drift",
+                    &validation_root
+                )
+            ),
+            Err(AdmissionJournalMaterializationError::ManifestSemanticMismatch)
+        );
+    }
+
+    #[test]
+    fn pcsm_clean_source_operator_replay_output_readback_rejects_file_drift() {
+        let (packet, validation) = clean_source_pcsm_operator_replay_validation();
+        let output_root = temp_output_root("pcsm-operator-replay-file-drift");
+        materialize_pcsm_clean_source_operator_replay_bundle(
+            &output_root,
+            &packet,
+            &validation,
+            &operator_replay_output_request("pcsm-operator-replay-file-drift", &output_root),
+        )
+        .expect("PCSM operator replay output materializes");
+
+        fs::write(
+            output_root.join("pcsm-clean-source-operator-replay/unexpected.txt"),
+            b"unexpected",
+        )
+        .expect("unexpected file writes");
+        assert_eq!(
+            read_pcsm_clean_source_operator_replay_bundle(&output_root),
+            Err(AdmissionJournalMaterializationError::UndeclaredFile(
+                "pcsm-clean-source-operator-replay/unexpected.txt".to_owned()
+            ))
+        );
+        fs::remove_file(output_root.join("pcsm-clean-source-operator-replay/unexpected.txt"))
+            .expect("unexpected file removal succeeds");
+
+        fs::write(
+            output_root.join("pcsm-clean-source-operator-replay/packet.json"),
+            b"stale",
+        )
+        .expect("stale packet writes");
+        assert_eq!(
+            read_pcsm_clean_source_operator_replay_bundle(&output_root),
+            Err(AdmissionJournalMaterializationError::DigestMismatch(
+                "pcsm-clean-source-operator-replay/packet.json".to_owned()
+            ))
+        );
+
+        fs::remove_dir_all(&output_root).expect("PCSM operator replay drift cleanup succeeds");
+    }
+
+    #[test]
+    fn pcsm_clean_source_operator_replay_output_readback_rejects_semantic_drift() {
+        let (mut packet, validation) = clean_source_pcsm_operator_replay_validation();
+        let output_root = temp_output_root("pcsm-operator-replay-semantic-drift");
+        materialize_pcsm_clean_source_operator_replay_bundle(
+            &output_root,
+            &packet,
+            &validation,
+            &operator_replay_output_request("pcsm-operator-replay-semantic-drift", &output_root),
+        )
+        .expect("PCSM operator replay output materializes");
+
+        packet.nonpromotion_report.accepted_evidence_created = true;
+        rewrite_pcsm_operator_replay_file_and_manifest_digest(
+            &output_root,
+            "pcsm-clean-source-operator-replay/packet.json",
+            &serde_json::to_vec_pretty(&packet).expect("drifted packet serializes"),
+        );
+        assert_eq!(
+            read_pcsm_clean_source_operator_replay_bundle(&output_root),
+            Err(AdmissionJournalMaterializationError::ManifestSemanticMismatch)
+        );
+        fs::remove_dir_all(&output_root).expect("PCSM semantic drift cleanup succeeds");
+
+        let (packet, mut validation) = clean_source_pcsm_operator_replay_validation();
+        let validation_root = temp_output_root("pcsm-operator-replay-validation-readback-drift");
+        materialize_pcsm_clean_source_operator_replay_bundle(
+            &validation_root,
+            &packet,
+            &validation,
+            &operator_replay_output_request(
+                "pcsm-operator-replay-validation-readback-drift",
+                &validation_root,
+            ),
+        )
+        .expect("PCSM operator replay validation output materializes");
+        validation.local_operator_replay_metadata_valid = false;
+        rewrite_pcsm_operator_replay_file_and_manifest_digest(
+            &validation_root,
+            "pcsm-clean-source-operator-replay/validation.json",
+            &serde_json::to_vec_pretty(&validation).expect("drifted validation serializes"),
+        );
+        assert_eq!(
+            read_pcsm_clean_source_operator_replay_bundle(&validation_root),
+            Err(AdmissionJournalMaterializationError::ValidationReportMismatch)
+        );
+        fs::remove_dir_all(&validation_root).expect("PCSM validation drift cleanup succeeds");
     }
 
     #[cfg(unix)]

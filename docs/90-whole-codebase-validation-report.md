@@ -9089,5 +9089,15 @@ import, accepted Evidence Ledger mutation, accepted evidence, Level2+
 evidence, score-axis population, benchmark evidence, external-audit claim, or
 production/SOTA/security/semantic-correctness claim.
 
+[docs/626-phase-pcsm-clean-source-operator-replay-output-notes.md](docs/626-phase-pcsm-clean-source-operator-replay-output-notes.md)
+documents the Phase 626 PCSM clean-source operator replay output
+implementation. It adds only local output-bundle materialization and readback
+validation under `crates/hsai-agent-admission/src/lib.rs` for a Phase 624
+validated operator replay packet. It allows no source-repository command
+execution by HSAI, PCSM runtime import, recoverable-ghost artifact import,
+external result import, accepted Evidence Ledger mutation, accepted evidence,
+Level2+ evidence, score-axis population, benchmark evidence, external-audit
+claim, or production/SOTA/security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
