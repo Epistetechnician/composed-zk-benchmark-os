@@ -17871,6 +17871,41 @@ additional SMT/Z3 execution in this phase, no benchmark evidence, no
 external-audit claim, and no production/SOTA/security/semantic-correctness
 claim.
 
+## Phase 634 HSAI Tiny Z3 Packet Role Artifact Independent Operator Accepted Result Materialization Metadata
+
+Status: complete for local accepted-result missing-materialization metadata.
+See
+`docs/634-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-materialization-notes.md`.
+
+Goal: implement local materialization metadata for Phase 632 accepted-result
+packet-role metadata without writing packet files, accessing output roots,
+importing external results, creating accepted evidence, creating Level2+,
+populating score axes, or promoting backend/proof/claim evidence.
+
+Implemented: Phase 634 adds schema/state/claim-boundary constants,
+materialization input/output records, bounded classifications and labels,
+issue/validation types, digest/id/label binding helpers, declared accepted-result
+role-file and sidecar sets, manifest-shape/output-root/readback policy digests,
+policy/blocker/nonpromotion/rule/forbidden-API/inherited-digest helpers, a
+fail-closed builder/validator over one exact Phase 632 packet metadata record,
+and focused tests for successful missing-materialization metadata, Phase 632
+drift rejection, declared-role digest drift, output-root policy drift,
+file-materialization rejection, promotion flag rejection, and strong-claim
+rejection.
+
+Validation coverage: focused Rust test
+`cargo test -p hsai-agent-admission --lib phase634_tiny_z3_packet_role_artifact_independent_operator_accepted_result_materialization -- --nocapture`
+passes with 3 tests.
+
+Exit criteria: HSAI now has local accepted-result packet-role artifact
+materialization metadata. It still has no written packet-role files, no output
+root, no readback, no packet materialization, no independent external
+reproduction, no accepted external result import, no accepted Evidence Ledger
+mutation, no accepted evidence, no Level2+ evidence, no populated score axes, no
+Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution in this
+phase, no benchmark evidence, no external-audit claim, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
