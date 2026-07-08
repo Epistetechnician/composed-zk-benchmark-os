@@ -9307,5 +9307,20 @@ benchmark evidence, and claims no production/SOTA/security
 /semantic-correctness result. Focused validation passed with
 `cargo test -p hsai-agent-admission --lib phase640_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_import_candidate -- --nocapture`.
 
+[docs/641-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-import-review-boundary.md](docs/641-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-import-review-boundary.md)
+documents the Phase 641 docs-first accepted-result output import-review
+boundary. It requires one exact Phase 640
+`PacketRoleArtifactIndependentOperatorAcceptedResultOutputImportCandidateQuarantinedLocalBundle`
+record, binds Phase 640/638/636/634/632/630/628/595/593/591/589/587/585 and
+inherited Phase 583/581/579/577/575/573/571/569/567/565/563/561/559/557/555
+plus backend-execution requirements, defines future review scope,
+validator/quarantine requirements, review classifications, forbidden behavior,
+and future Phase 642 implementation exit criteria. It creates no Rust code,
+imports no external result, mutates no accepted Evidence Ledger, creates no
+accepted evidence, creates no Level2+ evidence, populates no score axes, runs
+no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no
+benchmark evidence, and claims no production/SOTA/security
+/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
