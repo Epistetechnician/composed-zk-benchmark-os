@@ -17382,6 +17382,36 @@ accepted Evidence Ledger mutation, no accepted evidence, no Level2+ evidence,
 no populated score axes, no benchmark evidence, no external audit evidence,
 and no production/SOTA/security/semantic-correctness claim.
 
+## Phase 617 PCSM Clean-Source Intake Readback Reconciliation
+
+Status: complete for local reconciliation implementation. See
+`docs/617-phase-pcsm-clean-source-intake-readback-reconciliation-notes.md`.
+
+Goal: reconcile the clean recoverable-ghost-states PCSM CL12 bounded-proof
+handoff coordinate through the existing Phase 140 through Phase 143 local
+metadata, admission-journal materialization, and semantic readback path.
+
+Implemented: Phase 617 adds typed clean-source coordinate and reconciliation
+records, deterministic digests, fail-closed reconciliation errors, and
+`reconcile_pcsm_clean_source_intake_readback` under
+`crates/hsai-agent-admission/src/lib.rs`. The implementation checks source
+coordinate agreement, Phase 140 intake validity, candidate digest preservation,
+required `source-handoff` and `pcsm-bounded-proof-intake` artifact digests,
+journal validation, accepted local decision shape, manifest/readback equality,
+admission-journal nonclaims, and nonpromotion booleans.
+
+Validation coverage: focused Rust tests cover valid clean-source reconciliation
+through candidate construction, journal materialization, and readback; source
+coordinate digest drift; dirty source intake rejection; candidate promotion
+rejection; and readback manifest drift rejection.
+
+Exit criteria: the PCSM clean-source handoff now has a local HSAI reconciliation
+path through existing metadata/readback machinery. It still has no source-repo
+parsing, no PCSM runtime import, no recoverable-ghost artifact import, no
+accepted Evidence Ledger mutation, no accepted evidence, no Level2+ evidence,
+no populated score axes, no benchmark evidence, no external audit evidence,
+and no production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

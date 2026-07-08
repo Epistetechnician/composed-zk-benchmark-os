@@ -31293,6 +31293,271 @@ pub fn pcsm_bounded_proof_handoff_candidate(
     })
 }
 
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PcsmCleanSourceHandoffCoordinate {
+    pub repo_label: String,
+    pub commit: String,
+    pub handoff_path: String,
+    pub handoff_sha256: Hash,
+    pub schema: String,
+    pub state_slice: String,
+}
+
+impl PcsmCleanSourceHandoffCoordinate {
+    pub fn from_intake(
+        repo_label: impl Into<String>,
+        intake: &PcsmBoundedProofHandoffIntake,
+    ) -> Self {
+        Self {
+            repo_label: repo_label.into(),
+            commit: intake.source_repo_commit.clone(),
+            handoff_path: intake.source_handoff_path.clone(),
+            handoff_sha256: intake.source_handoff_sha256,
+            schema: intake.source_handoff_schema.clone(),
+            state_slice: intake.source_handoff_state_slice.clone(),
+        }
+    }
+
+    pub fn digest(&self) -> Hash {
+        hash_tagged("hsai-agent-admission:pcsm-clean-source-coordinate:v1", self)
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PcsmCleanSourceIntakeReadbackReconciliation {
+    pub schema_version: String,
+    pub state_slice: String,
+    pub coordinate: PcsmCleanSourceHandoffCoordinate,
+    pub coordinate_digest: Hash,
+    pub intake_digest: Hash,
+    pub candidate_digest: Hash,
+    pub journal_tip_digest: Hash,
+    pub manifest_digest: Hash,
+    pub readback_manifest_digest: Hash,
+    pub source_handoff_artifact_digest: Hash,
+    pub claim_boundary: AdmissionClaimBoundary,
+    pub accepted_evidence_created: bool,
+    pub level2_evidence_created: bool,
+    pub score_axes_populated: bool,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl PcsmCleanSourceIntakeReadbackReconciliation {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:pcsm-clean-source-reconciliation:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum PcsmCleanSourceReconciliationError {
+    InvalidRepoLabel,
+    CoordinateCommitMismatch,
+    CoordinateHandoffPathMismatch,
+    CoordinateHandoffDigestMismatch,
+    CoordinateSchemaMismatch,
+    CoordinateStateSliceMismatch,
+    IntakeValidation(Vec<PcsmHandoffIntakeError>),
+    CandidateDrift,
+    CandidateSourceKindMismatch,
+    CandidateClaimBoundaryEscalated,
+    CandidateRetainsEnvelope,
+    CandidateRequestsAuthorityOrPromotion,
+    CandidateMissingRequiredDigest(String),
+    JournalInvalid(Vec<JournalError>),
+    CandidateNotJournaled,
+    JournalDecisionNotAccepted,
+    JournalDecisionRetainsEnvelope,
+    ManifestReadbackMismatch,
+    ManifestJournalMismatch,
+    ManifestClaimBoundaryEscalated,
+    ManifestMissingRequiredNonclaims,
+}
+
+pub const PCSM_CLEAN_SOURCE_RECONCILIATION_SCHEMA_VERSION: &str =
+    "hsai-pcsm-clean-source-intake-readback-reconciliation-v1";
+pub const PCSM_CLEAN_SOURCE_RECONCILIATION_STATE_SLICE: &str =
+    "phase-617-pcsm-clean-source-intake-readback-reconciliation";
+
+pub fn reconcile_pcsm_clean_source_intake_readback(
+    coordinate: &PcsmCleanSourceHandoffCoordinate,
+    intake: &PcsmBoundedProofHandoffIntake,
+    candidate: &AgentAdmissionCandidate,
+    journal: &AgentAdmissionJournal,
+    manifest: &AdmissionJournalBundleManifest,
+    readback_manifest: &AdmissionJournalBundleManifest,
+) -> Result<PcsmCleanSourceIntakeReadbackReconciliation, Vec<PcsmCleanSourceReconciliationError>> {
+    let mut errors = Vec::new();
+
+    if !is_portable_artifact_id(&coordinate.repo_label) {
+        errors.push(PcsmCleanSourceReconciliationError::InvalidRepoLabel);
+    }
+    if coordinate.commit != intake.source_repo_commit {
+        errors.push(PcsmCleanSourceReconciliationError::CoordinateCommitMismatch);
+    }
+    if coordinate.handoff_path != intake.source_handoff_path {
+        errors.push(PcsmCleanSourceReconciliationError::CoordinateHandoffPathMismatch);
+    }
+    if coordinate.handoff_sha256 != intake.source_handoff_sha256 {
+        errors.push(PcsmCleanSourceReconciliationError::CoordinateHandoffDigestMismatch);
+    }
+    if coordinate.schema != intake.source_handoff_schema {
+        errors.push(PcsmCleanSourceReconciliationError::CoordinateSchemaMismatch);
+    }
+    if coordinate.state_slice != intake.source_handoff_state_slice {
+        errors.push(PcsmCleanSourceReconciliationError::CoordinateStateSliceMismatch);
+    }
+
+    let intake_errors = validate_pcsm_bounded_proof_handoff_intake(intake);
+    if !intake_errors.is_empty() {
+        errors.push(PcsmCleanSourceReconciliationError::IntakeValidation(
+            intake_errors,
+        ));
+    } else {
+        let expected_candidate = pcsm_bounded_proof_handoff_candidate(
+            candidate.id.0.clone(),
+            candidate.subject.clone(),
+            intake,
+        )
+        .expect("validated PCSM intake must construct a candidate");
+        if expected_candidate != *candidate {
+            errors.push(PcsmCleanSourceReconciliationError::CandidateDrift);
+        }
+    }
+
+    if candidate.source_kind != AdmissionSourceKind::PcsmBoundedProofHandoff {
+        errors.push(PcsmCleanSourceReconciliationError::CandidateSourceKindMismatch);
+    }
+    if candidate.requested_claim_boundary != AdmissionClaimBoundary::LocalOnly {
+        errors.push(PcsmCleanSourceReconciliationError::CandidateClaimBoundaryEscalated);
+    }
+    if candidate.proposed_envelope.is_some() {
+        errors.push(PcsmCleanSourceReconciliationError::CandidateRetainsEnvelope);
+    }
+    if candidate.provider_direct_authority_requested
+        || candidate.accepted_ledger_mutation_requested
+        || candidate.score_axis_population_requested
+        || candidate.external_or_formal_evidence_claimed
+    {
+        errors.push(PcsmCleanSourceReconciliationError::CandidateRequestsAuthorityOrPromotion);
+    }
+
+    for required in [
+        (
+            PCSM_SOURCE_HANDOFF_ARTIFACT_DIGEST_ID,
+            coordinate.handoff_sha256,
+        ),
+        (PCSM_BOUNDED_PROOF_INTAKE_DIGEST_ID, intake.digest()),
+    ] {
+        if !candidate.source_artifact_digests.contains(&ArtifactDigest {
+            id: required.0.to_owned(),
+            sha256: required.1,
+        }) {
+            errors.push(
+                PcsmCleanSourceReconciliationError::CandidateMissingRequiredDigest(
+                    required.0.to_owned(),
+                ),
+            );
+        }
+    }
+
+    let journal_errors = journal.validate();
+    if !journal_errors.is_empty() {
+        errors.push(PcsmCleanSourceReconciliationError::JournalInvalid(
+            journal_errors,
+        ));
+    }
+    let candidate_digest = candidate.digest();
+    let matching_entry = journal
+        .entries
+        .iter()
+        .find(|entry| entry.candidate_digest == candidate_digest);
+    match matching_entry {
+        Some(entry) => {
+            if entry.decision.verdict != AdmissionVerdict::Accepted {
+                errors.push(PcsmCleanSourceReconciliationError::JournalDecisionNotAccepted);
+            }
+            if entry.decision.accepted_envelope.is_some() {
+                errors.push(PcsmCleanSourceReconciliationError::JournalDecisionRetainsEnvelope);
+            }
+            for required in [
+                (
+                    PCSM_SOURCE_HANDOFF_ARTIFACT_DIGEST_ID,
+                    coordinate.handoff_sha256,
+                ),
+                (PCSM_BOUNDED_PROOF_INTAKE_DIGEST_ID, intake.digest()),
+            ] {
+                if !entry.source_artifact_digests.contains(&ArtifactDigest {
+                    id: required.0.to_owned(),
+                    sha256: required.1,
+                }) {
+                    errors.push(
+                        PcsmCleanSourceReconciliationError::CandidateMissingRequiredDigest(
+                            required.0.to_owned(),
+                        ),
+                    );
+                }
+            }
+        }
+        None => errors.push(PcsmCleanSourceReconciliationError::CandidateNotJournaled),
+    }
+
+    if manifest != readback_manifest {
+        errors.push(PcsmCleanSourceReconciliationError::ManifestReadbackMismatch);
+    }
+    let journal_tip = journal
+        .entries
+        .last()
+        .map(AgentAdmissionJournalEntry::digest);
+    if manifest.journal_tip_digest_after != journal_tip
+        || manifest.entry_count != journal.entries.len() as u64
+        || manifest.accepted_count
+            != journal
+                .entries
+                .iter()
+                .filter(|entry| entry.decision.verdict == AdmissionVerdict::Accepted)
+                .count() as u64
+    {
+        errors.push(PcsmCleanSourceReconciliationError::ManifestJournalMismatch);
+    }
+    if manifest.claim_boundary != ADMISSION_JOURNAL_CLAIM_BOUNDARY {
+        errors.push(PcsmCleanSourceReconciliationError::ManifestClaimBoundaryEscalated);
+    }
+    if !admission_journal_required_nonclaims().is_subset(&manifest.non_claims) {
+        errors.push(PcsmCleanSourceReconciliationError::ManifestMissingRequiredNonclaims);
+    }
+
+    if !errors.is_empty() {
+        return Err(errors);
+    }
+
+    Ok(PcsmCleanSourceIntakeReadbackReconciliation {
+        schema_version: PCSM_CLEAN_SOURCE_RECONCILIATION_SCHEMA_VERSION.to_owned(),
+        state_slice: PCSM_CLEAN_SOURCE_RECONCILIATION_STATE_SLICE.to_owned(),
+        coordinate: coordinate.clone(),
+        coordinate_digest: coordinate.digest(),
+        intake_digest: intake.digest(),
+        candidate_digest,
+        journal_tip_digest: journal_tip.expect("nonempty journal checked above"),
+        manifest_digest: hash_tagged(
+            "hsai-agent-admission:admission-journal-manifest:v1",
+            manifest,
+        ),
+        readback_manifest_digest: hash_tagged(
+            "hsai-agent-admission:admission-journal-manifest:v1",
+            readback_manifest,
+        ),
+        source_handoff_artifact_digest: coordinate.handoff_sha256,
+        claim_boundary: AdmissionClaimBoundary::LocalOnly,
+        accepted_evidence_created: false,
+        level2_evidence_created: false,
+        score_axes_populated: false,
+        nonclaims: pcsm_bounded_proof_required_nonclaims(),
+    })
+}
+
 const REQUIRED_PCSM_VERIFIERS: &[&str] = &[
     "verify_cl12_local_mlx_pcsm_surrogate",
     "verify_cl12_external_benchmark_replication",
@@ -125774,6 +126039,17 @@ mod tests {
         }
     }
 
+    fn hash_from_hex(value: &str) -> Hash {
+        assert_eq!(value.len(), 64);
+        let mut out = [0; 32];
+        for (index, byte) in out.iter_mut().enumerate() {
+            let start = index * 2;
+            *byte = u8::from_str_radix(&value[start..start + 2], 16)
+                .expect("test hash hex should parse");
+        }
+        Hash(out)
+    }
+
     fn predicate(subject_id: &str, property: PropertyKind) -> Predicate {
         Predicate {
             subject: subject(subject_id),
@@ -175989,6 +176265,23 @@ mod tests {
         }
     }
 
+    fn clean_source_pcsm_intake() -> PcsmBoundedProofHandoffIntake {
+        let mut intake = valid_pcsm_intake();
+        let handoff_digest =
+            hash_from_hex("93e07a250c9a6a5f530d02f07095074e7df8a5b5ce7e8e2dfa6e5feb376ea149");
+        intake.source_repo_remote = "recoverable-ghost-states".to_owned();
+        intake.source_repo_commit = "8b342fe159324395174a149052b9ea1d937a50ce".to_owned();
+        intake.source_handoff_sha256 = handoff_digest;
+        intake
+            .source_artifact_digests
+            .retain(|digest| digest.id != PCSM_SOURCE_HANDOFF_ARTIFACT_DIGEST_ID);
+        intake.source_artifact_digests.insert(ArtifactDigest {
+            id: PCSM_SOURCE_HANDOFF_ARTIFACT_DIGEST_ID.to_owned(),
+            sha256: handoff_digest,
+        });
+        intake
+    }
+
     fn gateway_attestation_pubkey_hex() -> String {
         "a1".repeat(91)
     }
@@ -188609,6 +188902,200 @@ mod tests {
         assert_eq!(manifest.entry_count, 1);
         assert_eq!(manifest.accepted_count, 1);
         fs::remove_dir_all(&output_root).expect("PCSM roundtrip cleanup succeeds");
+    }
+
+    #[test]
+    fn pcsm_clean_source_reconciliation_round_trips_through_journal_readback() {
+        let intake = clean_source_pcsm_intake();
+        let coordinate =
+            PcsmCleanSourceHandoffCoordinate::from_intake("recoverable-ghost-states", &intake);
+        let candidate =
+            pcsm_bounded_proof_handoff_candidate("pcsm-clean-source", subject("pcsm"), &intake)
+                .expect("clean PCSM intake maps to local candidate");
+        let pcsm_policy =
+            AgentAdmissionPolicy::local_default(pcsm_bounded_proof_required_nonclaims());
+        let decision = evaluate_admission(&candidate, &pcsm_policy);
+        assert_eq!(decision.verdict, AdmissionVerdict::Accepted);
+        assert!(decision.accepted_envelope.is_none());
+
+        let mut journal = AgentAdmissionJournal::default();
+        journal
+            .append_decision(&candidate, &pcsm_policy, decision)
+            .expect("PCSM decision appends");
+        let output_root = temp_output_root("pcsm-clean-source-reconcile");
+        let mut request = materialization_request("pcsm-clean-source-reconcile", &output_root);
+        request.admission_policy_id = pcsm_policy.id;
+        let manifest = materialize_admission_journal_bundle(&output_root, &journal, &request)
+            .expect("PCSM clean-source bundle materializes");
+        let readback =
+            read_admission_journal_bundle(&output_root).expect("PCSM clean-source readback works");
+
+        let reconciliation = reconcile_pcsm_clean_source_intake_readback(
+            &coordinate,
+            &intake,
+            &candidate,
+            &journal,
+            &manifest,
+            &readback,
+        )
+        .expect("clean-source PCSM reconciliation succeeds");
+
+        assert_eq!(
+            reconciliation.schema_version,
+            PCSM_CLEAN_SOURCE_RECONCILIATION_SCHEMA_VERSION
+        );
+        assert_eq!(
+            reconciliation.state_slice,
+            PCSM_CLEAN_SOURCE_RECONCILIATION_STATE_SLICE
+        );
+        assert_eq!(
+            reconciliation.claim_boundary,
+            AdmissionClaimBoundary::LocalOnly
+        );
+        assert_eq!(
+            reconciliation.source_handoff_artifact_digest,
+            coordinate.handoff_sha256
+        );
+        assert!(!reconciliation.accepted_evidence_created);
+        assert!(!reconciliation.level2_evidence_created);
+        assert!(!reconciliation.score_axes_populated);
+        assert_eq!(
+            reconciliation.nonclaims,
+            pcsm_bounded_proof_required_nonclaims()
+        );
+
+        fs::remove_dir_all(&output_root).expect("PCSM clean-source cleanup succeeds");
+    }
+
+    #[test]
+    fn pcsm_clean_source_reconciliation_rejects_coordinate_and_intake_drift() {
+        let intake = clean_source_pcsm_intake();
+        let candidate = pcsm_bounded_proof_handoff_candidate(
+            "pcsm-clean-source-drift",
+            subject("pcsm"),
+            &intake,
+        )
+        .expect("clean PCSM intake maps");
+        let pcsm_policy =
+            AgentAdmissionPolicy::local_default(pcsm_bounded_proof_required_nonclaims());
+        let decision = evaluate_admission(&candidate, &pcsm_policy);
+        let mut journal = AgentAdmissionJournal::default();
+        journal
+            .append_decision(&candidate, &pcsm_policy, decision)
+            .expect("PCSM decision appends");
+        let output_root = temp_output_root("pcsm-clean-source-drift");
+        let mut request = materialization_request("pcsm-clean-source-drift", &output_root);
+        request.admission_policy_id = pcsm_policy.id;
+        let manifest = materialize_admission_journal_bundle(&output_root, &journal, &request)
+            .expect("PCSM clean-source bundle materializes");
+        let readback =
+            read_admission_journal_bundle(&output_root).expect("PCSM clean-source readback works");
+
+        let mut coordinate =
+            PcsmCleanSourceHandoffCoordinate::from_intake("recoverable-ghost-states", &intake);
+        coordinate.handoff_sha256 = Hash([77; 32]);
+        let errors = reconcile_pcsm_clean_source_intake_readback(
+            &coordinate,
+            &intake,
+            &candidate,
+            &journal,
+            &manifest,
+            &readback,
+        )
+        .expect_err("coordinate digest drift rejects");
+        assert!(
+            errors.contains(&PcsmCleanSourceReconciliationError::CoordinateHandoffDigestMismatch)
+        );
+        assert!(errors.contains(
+            &PcsmCleanSourceReconciliationError::CandidateMissingRequiredDigest(
+                PCSM_SOURCE_HANDOFF_ARTIFACT_DIGEST_ID.to_owned()
+            )
+        ));
+
+        let mut dirty = intake;
+        dirty.source_repo_status = PcsmSourceRepoStatus::Dirty;
+        let errors = reconcile_pcsm_clean_source_intake_readback(
+            &PcsmCleanSourceHandoffCoordinate::from_intake("recoverable-ghost-states", &dirty),
+            &dirty,
+            &candidate,
+            &journal,
+            &manifest,
+            &readback,
+        )
+        .expect_err("dirty source intake rejects");
+        assert!(matches!(
+            errors.as_slice(),
+            [PcsmCleanSourceReconciliationError::IntakeValidation(intake_errors), ..]
+                if intake_errors.contains(&PcsmHandoffIntakeError::SourceRepoNotClean(
+                    PcsmSourceRepoStatus::Dirty
+                ))
+        ));
+
+        fs::remove_dir_all(&output_root).expect("PCSM drift cleanup succeeds");
+    }
+
+    #[test]
+    fn pcsm_clean_source_reconciliation_rejects_candidate_promotion_and_readback_drift() {
+        let intake = clean_source_pcsm_intake();
+        let coordinate =
+            PcsmCleanSourceHandoffCoordinate::from_intake("recoverable-ghost-states", &intake);
+        let candidate = pcsm_bounded_proof_handoff_candidate(
+            "pcsm-clean-source-promotion",
+            subject("pcsm"),
+            &intake,
+        )
+        .expect("clean PCSM intake maps");
+        let pcsm_policy =
+            AgentAdmissionPolicy::local_default(pcsm_bounded_proof_required_nonclaims());
+        let decision = evaluate_admission(&candidate, &pcsm_policy);
+        let mut journal = AgentAdmissionJournal::default();
+        journal
+            .append_decision(&candidate, &pcsm_policy, decision)
+            .expect("PCSM decision appends");
+        let output_root = temp_output_root("pcsm-clean-source-promotion");
+        let mut request = materialization_request("pcsm-clean-source-promotion", &output_root);
+        request.admission_policy_id = pcsm_policy.id;
+        let manifest = materialize_admission_journal_bundle(&output_root, &journal, &request)
+            .expect("PCSM clean-source bundle materializes");
+        let readback =
+            read_admission_journal_bundle(&output_root).expect("PCSM clean-source readback works");
+
+        let mut promoted = candidate.clone();
+        promoted.requested_claim_boundary = AdmissionClaimBoundary::Level2OrHigher;
+        promoted.accepted_ledger_mutation_requested = true;
+        let errors = reconcile_pcsm_clean_source_intake_readback(
+            &coordinate,
+            &intake,
+            &promoted,
+            &journal,
+            &manifest,
+            &readback,
+        )
+        .expect_err("candidate promotion rejects");
+        assert!(errors.contains(&PcsmCleanSourceReconciliationError::CandidateDrift));
+        assert!(
+            errors.contains(&PcsmCleanSourceReconciliationError::CandidateClaimBoundaryEscalated)
+        );
+        assert!(errors
+            .contains(&PcsmCleanSourceReconciliationError::CandidateRequestsAuthorityOrPromotion));
+        assert!(errors.contains(&PcsmCleanSourceReconciliationError::CandidateNotJournaled));
+
+        let mut drifted_readback = readback.clone();
+        drifted_readback
+            .non_claims
+            .remove(&NonClaimLabel("not proof".to_owned()));
+        let errors = reconcile_pcsm_clean_source_intake_readback(
+            &coordinate,
+            &intake,
+            &candidate,
+            &journal,
+            &manifest,
+            &drifted_readback,
+        )
+        .expect_err("readback drift rejects");
+        assert!(errors.contains(&PcsmCleanSourceReconciliationError::ManifestReadbackMismatch));
+
+        fs::remove_dir_all(&output_root).expect("PCSM promotion cleanup succeeds");
     }
 
     #[cfg(unix)]

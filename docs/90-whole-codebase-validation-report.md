@@ -8993,5 +8993,18 @@ recoverable-ghost artifact import, accepted Evidence Ledger mutation, accepted
 evidence, Level2+ evidence, score-axis population, benchmark evidence,
 external-audit claim, or production/SOTA/security/semantic-correctness claim.
 
+[docs/617-phase-pcsm-clean-source-intake-readback-reconciliation-notes.md](docs/617-phase-pcsm-clean-source-intake-readback-reconciliation-notes.md)
+documents the Phase 617 PCSM clean-source intake readback reconciliation
+implementation. It adds only local typed reconciliation metadata under
+`crates/hsai-agent-admission/src/lib.rs` for the clean
+recoverable-ghost-states handoff coordinate, and checks that the Phase 140
+intake, PCSM admission candidate, admission journal, materialized manifest, and
+semantic readback manifest agree. It preserves the `source-handoff` and
+`pcsm-bounded-proof-intake` digest bindings and records explicit nonpromotion
+booleans. It allows no source-repo parsing, PCSM runtime import,
+recoverable-ghost artifact import, accepted Evidence Ledger mutation, accepted
+evidence, Level2+ evidence, score-axis population, benchmark evidence,
+external-audit claim, or production/SOTA/security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
