@@ -17542,6 +17542,32 @@ mutation, accepted evidence, Level2+ evidence, populated score axes, benchmark
 evidence, external-audit claim, or production/SOTA/security/semantic-correctness
 claim.
 
+## Phase 623 PCSM Clean-Source Operator Replay Boundary
+
+Status: complete for docs-first operator replay boundary. See
+`docs/623-phase-pcsm-clean-source-operator-replay-boundary.md`.
+
+Goal: define the future local packet shape for a quarantined
+operator-declared replay of the clean recoverable-ghost-states PCSM source
+coordinate, without authorizing HSAI source-repository execution, PCSM runtime
+import, artifact import, or evidence promotion.
+
+Implemented: Phase 623 defines the future packet namespace, authorized future
+local validator surface, required clean-source/operator/transcript/provenance
+bindings, fail-closed validation rules, evidence meaning, and nonclaims for a
+future operator replay packet. This phase is documentation-only.
+
+Validation coverage: documentation review, repo claim-boundary docs test, repo
+hygiene test, and diff hygiene.
+
+Exit criteria: the next implementation slice is authorized only to validate
+quarantined operator replay metadata for the clean source coordinate. It still
+has no HSAI source-repository command execution, no PCSM runtime import, no
+recoverable-ghost artifact import, no accepted Evidence Ledger mutation, no
+accepted evidence, no Level2+ evidence, no populated score axes, no benchmark
+evidence, no external-audit claim, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
