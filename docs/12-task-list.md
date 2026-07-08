@@ -17435,6 +17435,34 @@ import, no accepted Evidence Ledger mutation, no accepted evidence, no Level2+
 evidence, no populated score axes, no benchmark evidence, no external audit
 evidence, and no production/SOTA/security/semantic-correctness claim.
 
+## Phase 619 PCSM Clean-Source Reconciliation Materialization
+
+Status: complete for local materialization implementation. See
+`docs/619-phase-pcsm-clean-source-reconciliation-materialization-notes.md`.
+
+Goal: materialize a local audit bundle around a valid Phase 617 clean-source
+PCSM reconciliation summary and make it readback-valid without evidence
+promotion.
+
+Implemented: Phase 619 adds the materialization request, output manifest,
+validation report, declared-file bundle writer, and semantic readback validator
+under `crates/hsai-agent-admission/src/lib.rs`. The bundle writes
+`manifest.json`, `reconciliation.json`, `nonclaims.md`,
+`validation-report.json`, and SHA-256 sidecars under
+`pcsm-clean-source-reconciliation/`.
+
+Validation coverage: focused Rust tests cover valid write/readback, overwrite
+and protected-root rejection, promotion rejection before write, undeclared-file
+rejection, stale sidecar rejection, reconciliation semantic drift rejection,
+and nonclaim drift rejection.
+
+Exit criteria: Phase 617 clean-source PCSM reconciliation can now be packaged
+as a local audit bundle. It still has no source-repo parsing, no PCSM runtime
+import, no recoverable-ghost artifact import, no accepted Evidence Ledger
+mutation, no accepted evidence, no Level2+ evidence, no populated score axes,
+no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
