@@ -17568,6 +17568,39 @@ accepted evidence, no Level2+ evidence, no populated score axes, no benchmark
 evidence, no external-audit claim, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 624 PCSM Clean-Source Operator Replay Metadata
+
+Status: complete for local in-memory operator replay metadata validation. See
+`docs/624-phase-pcsm-clean-source-operator-replay-metadata-notes.md`.
+
+Goal: implement the Phase 623 local validator for a quarantined
+operator-declared replay packet over the clean recoverable-ghost-states PCSM
+source coordinate, without HSAI source-repository execution, PCSM runtime
+import, artifact import, filesystem packet materialization, or evidence
+promotion.
+
+Implemented: Phase 624 adds typed operator provenance, source observation,
+command observation, artifact-retention, redaction, nonpromotion, packet,
+validation, and error surfaces under `crates/hsai-agent-admission/src/lib.rs`.
+The validator checks source-coordinate exactness, Phase 622 and optional Phase
+621 digest bindings, operator/toolchain fields, clean source status, command
+status and transcript digests, retained-artifact path hygiene, redaction
+safety, nonpromotion flags, declared logical packet roles, deterministic role
+digests, and required PCSM nonclaims.
+
+Validation coverage: focused Rust tests cover valid metadata and rejection for
+source drift, dirty source status, command drift, unsafe artifact retention,
+redaction drift, promotion drift, declared-role digest drift, and missing
+nonclaims.
+
+Exit criteria: HSAI can now locally validate operator replay packet metadata
+for the clean PCSM source coordinate. It still has no HSAI source-repository
+command execution, no PCSM runtime import, no recoverable-ghost artifact
+import, no generated committed bundles, no accepted Evidence Ledger mutation,
+no accepted evidence, no Level2+ evidence, no populated score axes, no
+benchmark evidence, no external-audit claim, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

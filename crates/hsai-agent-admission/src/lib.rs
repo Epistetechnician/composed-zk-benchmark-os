@@ -31863,6 +31863,592 @@ pub fn audit_pcsm_clean_source_reconciliation_bundle(
     })
 }
 
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PcsmCleanSourceOperatorReplayProvenance {
+    pub operator_id: String,
+    pub operating_system: String,
+    pub architecture: String,
+    pub toolchain_versions: BTreeMap<String, String>,
+    pub non_secret: bool,
+}
+
+impl PcsmCleanSourceOperatorReplayProvenance {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:pcsm-clean-source-operator-replay-provenance:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PcsmCleanSourceOperatorReplaySourceObservation {
+    pub repository_remote_or_bundle: String,
+    pub commit: String,
+    pub branch: String,
+    pub dirty_status: PcsmSourceRepoStatus,
+    pub handoff_path: String,
+    pub handoff_sha256: Hash,
+}
+
+impl PcsmCleanSourceOperatorReplaySourceObservation {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:pcsm-clean-source-operator-replay-source-observation:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PcsmCleanSourceOperatorReplayCommandObservation {
+    pub command_id: String,
+    pub command_line: Vec<String>,
+    pub started_at_unix: u64,
+    pub finished_at_unix: u64,
+    pub exit_status: i32,
+    pub focused_result_summary: String,
+    pub skipped: bool,
+    pub stdout_sha256: Hash,
+    pub stderr_sha256: Hash,
+}
+
+impl PcsmCleanSourceOperatorReplayCommandObservation {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:pcsm-clean-source-operator-replay-command-observation:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PcsmCleanSourceOperatorReplayArtifactRetentionDeclaration {
+    pub retained_artifacts: BTreeMap<String, Hash>,
+    pub raw_stdout_retained: bool,
+    pub raw_stderr_retained: bool,
+    pub raw_provider_response_retained: bool,
+    pub accepted_evidence_artifact_retained: bool,
+    pub level2_artifact_retained: bool,
+    pub score_axis_artifact_retained: bool,
+    pub proof_artifact_retained: bool,
+    pub checker_transcript_retained: bool,
+    pub solver_certificate_retained: bool,
+    pub benchmark_artifact_retained: bool,
+    pub production_deployment_artifact_retained: bool,
+}
+
+impl PcsmCleanSourceOperatorReplayArtifactRetentionDeclaration {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:pcsm-clean-source-operator-replay-artifact-retention:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PcsmCleanSourceOperatorReplayRedactionReport {
+    pub valid: bool,
+    pub secrets_found: bool,
+    pub credentials_found: bool,
+    pub private_machine_identifiers_found: bool,
+    pub raw_provider_responses_found: bool,
+    pub undeclared_files_found: bool,
+    pub raw_logs_retained: bool,
+    pub claim_boundary: String,
+}
+
+impl PcsmCleanSourceOperatorReplayRedactionReport {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:pcsm-clean-source-operator-replay-redaction-report:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PcsmCleanSourceOperatorReplayNonpromotionReport {
+    pub pcsm_runtime_imported: bool,
+    pub recoverable_artifacts_imported: bool,
+    pub external_result_imported: bool,
+    pub accepted_evidence_created: bool,
+    pub accepted_independent_external_reproduction: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub level2_evidence_created: bool,
+    pub score_axes_populated: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub human_review_acceptance_claimed: bool,
+    pub authority_granted: bool,
+}
+
+impl PcsmCleanSourceOperatorReplayNonpromotionReport {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:pcsm-clean-source-operator-replay-nonpromotion-report:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PcsmCleanSourceOperatorReplayPacket {
+    pub schema_version: String,
+    pub state_slice: String,
+    pub packet_id: String,
+    pub phase622_closure_report_digest: Hash,
+    pub phase621_audit_digest: Option<Hash>,
+    pub clean_source_coordinate: PcsmCleanSourceHandoffCoordinate,
+    pub clean_source_coordinate_digest: Hash,
+    pub operator_provenance: PcsmCleanSourceOperatorReplayProvenance,
+    pub source_observation: PcsmCleanSourceOperatorReplaySourceObservation,
+    pub command_observations: Vec<PcsmCleanSourceOperatorReplayCommandObservation>,
+    pub artifact_retention: PcsmCleanSourceOperatorReplayArtifactRetentionDeclaration,
+    pub redaction_report: PcsmCleanSourceOperatorReplayRedactionReport,
+    pub nonpromotion_report: PcsmCleanSourceOperatorReplayNonpromotionReport,
+    pub declared_files: Vec<String>,
+    pub declared_file_digests: BTreeMap<String, Hash>,
+    pub claim_boundary: String,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl PcsmCleanSourceOperatorReplayPacket {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:pcsm-clean-source-operator-replay-packet:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PcsmCleanSourceOperatorReplayValidation {
+    pub schema_version: String,
+    pub state_slice: String,
+    pub packet_id: String,
+    pub packet_digest: Hash,
+    pub phase622_closure_report_digest: Hash,
+    pub phase621_audit_digest: Option<Hash>,
+    pub clean_source_coordinate_digest: Hash,
+    pub operator_provenance_digest: Hash,
+    pub source_observation_digest: Hash,
+    pub command_observation_digest: Hash,
+    pub artifact_retention_digest: Hash,
+    pub redaction_report_digest: Hash,
+    pub nonpromotion_report_digest: Hash,
+    pub local_operator_replay_metadata_valid: bool,
+    pub claim_boundary: String,
+    pub pcsm_runtime_imported: bool,
+    pub recoverable_artifacts_imported: bool,
+    pub accepted_evidence_created: bool,
+    pub accepted_independent_external_reproduction: bool,
+    pub level2_evidence_created: bool,
+    pub score_axes_populated: bool,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl PcsmCleanSourceOperatorReplayValidation {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:pcsm-clean-source-operator-replay-validation:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum PcsmCleanSourceOperatorReplayError {
+    InvalidSchema,
+    StateSliceMismatch,
+    InvalidPacketId,
+    Phase622ClosureDigestMismatch,
+    Phase621AuditDigestMismatch,
+    CoordinateDigestMismatch,
+    CoordinateMismatch,
+    SourceObservationMismatch,
+    SourceRepoNotClean(PcsmSourceRepoStatus),
+    InvalidOperatorProvenance,
+    InvalidToolchainVersion(String),
+    MissingCommandObservation,
+    InvalidCommandId(String),
+    InvalidCommandLine(String),
+    InvalidCommandWindow(String),
+    CommandSkipped(String),
+    CommandFailed(String),
+    MissingCommandResultSummary(String),
+    MissingTranscriptDigest(String),
+    UnsafeRetainedArtifactPath(String),
+    RetainedArtifactDigestMissing(String),
+    ForbiddenArtifactRetention,
+    UnsafeRedactionReport,
+    NonpromotionFlagSet,
+    ClaimBoundaryMismatch,
+    DeclaredFilesMismatch,
+    DeclaredFileDigestMismatch(String),
+    MissingRequiredNonclaim(String),
+}
+
+pub const PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_SCHEMA_VERSION: &str =
+    "hsai-pcsm-clean-source-operator-replay-v1";
+pub const PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_VALIDATION_SCHEMA_VERSION: &str =
+    "hsai-pcsm-clean-source-operator-replay-validation-v1";
+pub const PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_STATE_SLICE: &str =
+    "phase-624-pcsm-clean-source-operator-replay-metadata";
+pub const PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_CLAIM_BOUNDARY: &str =
+    "local PCSM clean-source operator replay metadata only; not accepted evidence, proof, external reproduction, or benchmark evidence";
+
+pub fn validate_pcsm_clean_source_operator_replay_packet(
+    packet: &PcsmCleanSourceOperatorReplayPacket,
+    expected_phase622_closure_report_digest: Hash,
+    expected_phase621_audit_digest: Option<Hash>,
+) -> Result<PcsmCleanSourceOperatorReplayValidation, Vec<PcsmCleanSourceOperatorReplayError>> {
+    let mut errors = Vec::new();
+
+    if packet.schema_version != PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_SCHEMA_VERSION {
+        errors.push(PcsmCleanSourceOperatorReplayError::InvalidSchema);
+    }
+    if packet.state_slice != PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_STATE_SLICE {
+        errors.push(PcsmCleanSourceOperatorReplayError::StateSliceMismatch);
+    }
+    if !is_portable_artifact_id(&packet.packet_id) {
+        errors.push(PcsmCleanSourceOperatorReplayError::InvalidPacketId);
+    }
+    if packet.phase622_closure_report_digest != expected_phase622_closure_report_digest {
+        errors.push(PcsmCleanSourceOperatorReplayError::Phase622ClosureDigestMismatch);
+    }
+    if packet.phase621_audit_digest != expected_phase621_audit_digest {
+        errors.push(PcsmCleanSourceOperatorReplayError::Phase621AuditDigestMismatch);
+    }
+    if packet.clean_source_coordinate_digest != packet.clean_source_coordinate.digest() {
+        errors.push(PcsmCleanSourceOperatorReplayError::CoordinateDigestMismatch);
+    }
+    if !pcsm_clean_source_coordinate_is_expected(&packet.clean_source_coordinate) {
+        errors.push(PcsmCleanSourceOperatorReplayError::CoordinateMismatch);
+    }
+    if !pcsm_operator_replay_source_matches_coordinate(
+        &packet.source_observation,
+        &packet.clean_source_coordinate,
+    ) {
+        errors.push(PcsmCleanSourceOperatorReplayError::SourceObservationMismatch);
+    }
+    if packet.source_observation.dirty_status != PcsmSourceRepoStatus::Clean {
+        errors.push(PcsmCleanSourceOperatorReplayError::SourceRepoNotClean(
+            packet.source_observation.dirty_status.clone(),
+        ));
+    }
+
+    validate_pcsm_operator_replay_provenance(&packet.operator_provenance, &mut errors);
+    validate_pcsm_operator_replay_commands(&packet.command_observations, &mut errors);
+    validate_pcsm_operator_replay_artifacts(&packet.artifact_retention, &mut errors);
+    validate_pcsm_operator_replay_redaction(&packet.redaction_report, &mut errors);
+    validate_pcsm_operator_replay_nonpromotion(&packet.nonpromotion_report, &mut errors);
+
+    if packet.claim_boundary != PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_CLAIM_BOUNDARY {
+        errors.push(PcsmCleanSourceOperatorReplayError::ClaimBoundaryMismatch);
+    }
+    if packet.declared_files != pcsm_clean_source_operator_replay_declared_files() {
+        errors.push(PcsmCleanSourceOperatorReplayError::DeclaredFilesMismatch);
+    }
+    for (path, expected) in pcsm_clean_source_operator_replay_expected_digests(packet) {
+        if packet.declared_file_digests.get(&path) != Some(&expected) {
+            errors.push(PcsmCleanSourceOperatorReplayError::DeclaredFileDigestMismatch(path));
+        }
+    }
+    for required in pcsm_bounded_proof_required_nonclaims() {
+        if !packet.nonclaims.contains(&required) {
+            errors.push(PcsmCleanSourceOperatorReplayError::MissingRequiredNonclaim(
+                required.0,
+            ));
+        }
+    }
+
+    if !errors.is_empty() {
+        return Err(errors);
+    }
+
+    Ok(PcsmCleanSourceOperatorReplayValidation {
+        schema_version: PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_VALIDATION_SCHEMA_VERSION.to_owned(),
+        state_slice: PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_STATE_SLICE.to_owned(),
+        packet_id: packet.packet_id.clone(),
+        packet_digest: packet.digest(),
+        phase622_closure_report_digest: packet.phase622_closure_report_digest,
+        phase621_audit_digest: packet.phase621_audit_digest,
+        clean_source_coordinate_digest: packet.clean_source_coordinate_digest,
+        operator_provenance_digest: packet.operator_provenance.digest(),
+        source_observation_digest: packet.source_observation.digest(),
+        command_observation_digest: hash_tagged(
+            "hsai-agent-admission:pcsm-clean-source-operator-replay-command-observations:v1",
+            &packet.command_observations,
+        ),
+        artifact_retention_digest: packet.artifact_retention.digest(),
+        redaction_report_digest: packet.redaction_report.digest(),
+        nonpromotion_report_digest: packet.nonpromotion_report.digest(),
+        local_operator_replay_metadata_valid: true,
+        claim_boundary: PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_CLAIM_BOUNDARY.to_owned(),
+        pcsm_runtime_imported: false,
+        recoverable_artifacts_imported: false,
+        accepted_evidence_created: false,
+        accepted_independent_external_reproduction: false,
+        level2_evidence_created: false,
+        score_axes_populated: false,
+        nonclaims: packet.nonclaims.clone(),
+    })
+}
+
+fn pcsm_clean_source_coordinate_is_expected(coordinate: &PcsmCleanSourceHandoffCoordinate) -> bool {
+    coordinate.repo_label == "recoverable-ghost-states"
+        && coordinate.commit == "8b342fe159324395174a149052b9ea1d937a50ce"
+        && coordinate.handoff_path == "docs/pcsm-cl12-bounded-proof-handoff.md"
+        && hash_hex(coordinate.handoff_sha256)
+            == "93e07a250c9a6a5f530d02f07095074e7df8a5b5ce7e8e2dfa6e5feb376ea149"
+        && coordinate.schema == "pcsm-cl12-bounded-proof-handoff-v1"
+        && coordinate.state_slice == "pcsm-cl12-bounded-proof-package"
+}
+
+fn pcsm_operator_replay_source_matches_coordinate(
+    observation: &PcsmCleanSourceOperatorReplaySourceObservation,
+    coordinate: &PcsmCleanSourceHandoffCoordinate,
+) -> bool {
+    observation.repository_remote_or_bundle == coordinate.repo_label
+        && observation.commit == coordinate.commit
+        && !observation.branch.trim().is_empty()
+        && observation.handoff_path == coordinate.handoff_path
+        && observation.handoff_sha256 == coordinate.handoff_sha256
+}
+
+fn validate_pcsm_operator_replay_provenance(
+    provenance: &PcsmCleanSourceOperatorReplayProvenance,
+    errors: &mut Vec<PcsmCleanSourceOperatorReplayError>,
+) {
+    if !is_portable_artifact_id(&provenance.operator_id)
+        || provenance.operating_system.trim().is_empty()
+        || provenance.architecture.trim().is_empty()
+        || provenance.toolchain_versions.is_empty()
+        || !provenance.non_secret
+    {
+        errors.push(PcsmCleanSourceOperatorReplayError::InvalidOperatorProvenance);
+    }
+    for (tool, version) in &provenance.toolchain_versions {
+        if !is_portable_artifact_id(tool) || version.trim().is_empty() {
+            errors.push(PcsmCleanSourceOperatorReplayError::InvalidToolchainVersion(
+                tool.clone(),
+            ));
+        }
+    }
+}
+
+fn validate_pcsm_operator_replay_commands(
+    commands: &[PcsmCleanSourceOperatorReplayCommandObservation],
+    errors: &mut Vec<PcsmCleanSourceOperatorReplayError>,
+) {
+    if commands.is_empty() {
+        errors.push(PcsmCleanSourceOperatorReplayError::MissingCommandObservation);
+    }
+    for command in commands {
+        if !is_portable_artifact_id(&command.command_id) {
+            errors.push(PcsmCleanSourceOperatorReplayError::InvalidCommandId(
+                command.command_id.clone(),
+            ));
+        }
+        if command.command_line.is_empty()
+            || command
+                .command_line
+                .iter()
+                .any(|part| part.trim().is_empty())
+        {
+            errors.push(PcsmCleanSourceOperatorReplayError::InvalidCommandLine(
+                command.command_id.clone(),
+            ));
+        }
+        if command.finished_at_unix < command.started_at_unix {
+            errors.push(PcsmCleanSourceOperatorReplayError::InvalidCommandWindow(
+                command.command_id.clone(),
+            ));
+        }
+        if command.skipped {
+            errors.push(PcsmCleanSourceOperatorReplayError::CommandSkipped(
+                command.command_id.clone(),
+            ));
+        }
+        if command.exit_status != 0 {
+            errors.push(PcsmCleanSourceOperatorReplayError::CommandFailed(
+                command.command_id.clone(),
+            ));
+        }
+        if command.focused_result_summary.trim().is_empty() {
+            errors.push(
+                PcsmCleanSourceOperatorReplayError::MissingCommandResultSummary(
+                    command.command_id.clone(),
+                ),
+            );
+        }
+        if command.stdout_sha256 == Hash([0; 32]) || command.stderr_sha256 == Hash([0; 32]) {
+            errors.push(PcsmCleanSourceOperatorReplayError::MissingTranscriptDigest(
+                command.command_id.clone(),
+            ));
+        }
+    }
+}
+
+fn validate_pcsm_operator_replay_artifacts(
+    retention: &PcsmCleanSourceOperatorReplayArtifactRetentionDeclaration,
+    errors: &mut Vec<PcsmCleanSourceOperatorReplayError>,
+) {
+    for (path, digest) in &retention.retained_artifacts {
+        if !is_safe_relative_path(path) {
+            errors
+                .push(PcsmCleanSourceOperatorReplayError::UnsafeRetainedArtifactPath(path.clone()));
+        }
+        if *digest == Hash([0; 32]) {
+            errors.push(
+                PcsmCleanSourceOperatorReplayError::RetainedArtifactDigestMissing(path.clone()),
+            );
+        }
+    }
+    if retention.raw_stdout_retained
+        || retention.raw_stderr_retained
+        || retention.raw_provider_response_retained
+        || retention.accepted_evidence_artifact_retained
+        || retention.level2_artifact_retained
+        || retention.score_axis_artifact_retained
+        || retention.proof_artifact_retained
+        || retention.checker_transcript_retained
+        || retention.solver_certificate_retained
+        || retention.benchmark_artifact_retained
+        || retention.production_deployment_artifact_retained
+    {
+        errors.push(PcsmCleanSourceOperatorReplayError::ForbiddenArtifactRetention);
+    }
+}
+
+fn validate_pcsm_operator_replay_redaction(
+    redaction: &PcsmCleanSourceOperatorReplayRedactionReport,
+    errors: &mut Vec<PcsmCleanSourceOperatorReplayError>,
+) {
+    if !redaction.valid
+        || redaction.secrets_found
+        || redaction.credentials_found
+        || redaction.private_machine_identifiers_found
+        || redaction.raw_provider_responses_found
+        || redaction.undeclared_files_found
+        || redaction.raw_logs_retained
+        || redaction.claim_boundary != PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_CLAIM_BOUNDARY
+    {
+        errors.push(PcsmCleanSourceOperatorReplayError::UnsafeRedactionReport);
+    }
+}
+
+fn validate_pcsm_operator_replay_nonpromotion(
+    nonpromotion: &PcsmCleanSourceOperatorReplayNonpromotionReport,
+    errors: &mut Vec<PcsmCleanSourceOperatorReplayError>,
+) {
+    if nonpromotion.pcsm_runtime_imported
+        || nonpromotion.recoverable_artifacts_imported
+        || nonpromotion.external_result_imported
+        || nonpromotion.accepted_evidence_created
+        || nonpromotion.accepted_independent_external_reproduction
+        || nonpromotion.accepted_formal_evidence_created
+        || nonpromotion.level2_evidence_created
+        || nonpromotion.score_axes_populated
+        || nonpromotion.proof_artifact_created
+        || nonpromotion.checker_transcript_created
+        || nonpromotion.solver_certificate_created
+        || nonpromotion.benchmark_evidence_created
+        || nonpromotion.external_audit_claimed
+        || nonpromotion.semantic_correctness_claimed
+        || nonpromotion.production_readiness_claimed
+        || nonpromotion.sota_claimed
+        || nonpromotion.breakthrough_claimed
+        || nonpromotion.full_security_claimed
+        || nonpromotion.human_review_acceptance_claimed
+        || nonpromotion.authority_granted
+    {
+        errors.push(PcsmCleanSourceOperatorReplayError::NonpromotionFlagSet);
+    }
+}
+
+pub fn pcsm_clean_source_operator_replay_declared_files() -> Vec<String> {
+    PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_DECLARED_FILES
+        .iter()
+        .map(|path| (*path).to_owned())
+        .collect()
+}
+
+fn pcsm_clean_source_operator_replay_expected_digests(
+    packet: &PcsmCleanSourceOperatorReplayPacket,
+) -> BTreeMap<String, Hash> {
+    BTreeMap::from([
+        (
+            "phase623-pcsm-clean-source-operator-replay/phase622-closure-report-binding.json"
+                .to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:pcsm-clean-source-operator-replay-phase622-binding:v1",
+                &packet.phase622_closure_report_digest,
+            ),
+        ),
+        (
+            "phase623-pcsm-clean-source-operator-replay/clean-source-coordinate.json".to_owned(),
+            packet.clean_source_coordinate.digest(),
+        ),
+        (
+            "phase623-pcsm-clean-source-operator-replay/operator-provenance.json".to_owned(),
+            packet.operator_provenance.digest(),
+        ),
+        (
+            "phase623-pcsm-clean-source-operator-replay/source-repository-observation.json"
+                .to_owned(),
+            packet.source_observation.digest(),
+        ),
+        (
+            "phase623-pcsm-clean-source-operator-replay/replay-command-observation.json".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:pcsm-clean-source-operator-replay-command-observations:v1",
+                &packet.command_observations,
+            ),
+        ),
+        (
+            "phase623-pcsm-clean-source-operator-replay/transcript-digests.json".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:pcsm-clean-source-operator-replay-transcript-digests:v1",
+                &packet
+                    .command_observations
+                    .iter()
+                    .map(|command| {
+                        (
+                            command.command_id.clone(),
+                            command.stdout_sha256,
+                            command.stderr_sha256,
+                        )
+                    })
+                    .collect::<Vec<_>>(),
+            ),
+        ),
+        (
+            "phase623-pcsm-clean-source-operator-replay/artifact-retention-declaration.json"
+                .to_owned(),
+            packet.artifact_retention.digest(),
+        ),
+        (
+            "phase623-pcsm-clean-source-operator-replay/redaction-report.json".to_owned(),
+            packet.redaction_report.digest(),
+        ),
+        (
+            "phase623-pcsm-clean-source-operator-replay/nonpromotion-report.json".to_owned(),
+            packet.nonpromotion_report.digest(),
+        ),
+    ])
+}
+
 const REQUIRED_PCSM_VERIFIERS: &[&str] = &[
     "verify_cl12_local_mlx_pcsm_surrogate",
     "verify_cl12_external_benchmark_replication",
@@ -125152,6 +125738,18 @@ const PCSM_CLEAN_SOURCE_RECONCILIATION_DECLARED_SIDECARS: &[&str] = &[
     "pcsm-clean-source-reconciliation/validation-report.json.sha256",
 ];
 
+const PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_DECLARED_FILES: &[&str] = &[
+    "phase623-pcsm-clean-source-operator-replay/phase622-closure-report-binding.json",
+    "phase623-pcsm-clean-source-operator-replay/clean-source-coordinate.json",
+    "phase623-pcsm-clean-source-operator-replay/operator-provenance.json",
+    "phase623-pcsm-clean-source-operator-replay/source-repository-observation.json",
+    "phase623-pcsm-clean-source-operator-replay/replay-command-observation.json",
+    "phase623-pcsm-clean-source-operator-replay/transcript-digests.json",
+    "phase623-pcsm-clean-source-operator-replay/artifact-retention-declaration.json",
+    "phase623-pcsm-clean-source-operator-replay/redaction-report.json",
+    "phase623-pcsm-clean-source-operator-replay/nonpromotion-report.json",
+];
+
 fn is_full_hex_sha(value: &str) -> bool {
     value.len() == 40 && value.bytes().all(|byte| byte.is_ascii_hexdigit())
 }
@@ -176921,6 +177519,108 @@ mod tests {
         reconciliation
     }
 
+    fn clean_source_pcsm_operator_replay_packet(
+    ) -> (PcsmCleanSourceOperatorReplayPacket, Hash, Option<Hash>) {
+        let intake = clean_source_pcsm_intake();
+        let coordinate =
+            PcsmCleanSourceHandoffCoordinate::from_intake("recoverable-ghost-states", &intake);
+        let expected_phase622_digest = Hash([62; 32]);
+        let expected_phase621_digest = Some(Hash([21; 32]));
+        let mut packet = PcsmCleanSourceOperatorReplayPacket {
+            schema_version: PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_SCHEMA_VERSION.to_owned(),
+            state_slice: PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_STATE_SLICE.to_owned(),
+            packet_id: "pcsm-clean-source-operator-replay".to_owned(),
+            phase622_closure_report_digest: expected_phase622_digest,
+            phase621_audit_digest: expected_phase621_digest,
+            clean_source_coordinate_digest: coordinate.digest(),
+            source_observation: PcsmCleanSourceOperatorReplaySourceObservation {
+                repository_remote_or_bundle: "recoverable-ghost-states".to_owned(),
+                commit: "8b342fe159324395174a149052b9ea1d937a50ce".to_owned(),
+                branch: "main".to_owned(),
+                dirty_status: PcsmSourceRepoStatus::Clean,
+                handoff_path: "docs/pcsm-cl12-bounded-proof-handoff.md".to_owned(),
+                handoff_sha256: coordinate.handoff_sha256,
+            },
+            clean_source_coordinate: coordinate,
+            operator_provenance: PcsmCleanSourceOperatorReplayProvenance {
+                operator_id: "operator-1".to_owned(),
+                operating_system: "darwin".to_owned(),
+                architecture: "arm64".to_owned(),
+                toolchain_versions: BTreeMap::from([
+                    ("git".to_owned(), "2.50.0".to_owned()),
+                    ("python".to_owned(), "3.12.0".to_owned()),
+                ]),
+                non_secret: true,
+            },
+            command_observations: vec![PcsmCleanSourceOperatorReplayCommandObservation {
+                command_id: "verify-native-pcsm".to_owned(),
+                command_line: vec!["scripts/verify_native_pcsm.sh".to_owned()],
+                started_at_unix: 1_800_000_100,
+                finished_at_unix: 1_800_000_160,
+                exit_status: 0,
+                focused_result_summary: "operator-declared replay command passed".to_owned(),
+                skipped: false,
+                stdout_sha256: Hash([1; 32]),
+                stderr_sha256: Hash([2; 32]),
+            }],
+            artifact_retention: PcsmCleanSourceOperatorReplayArtifactRetentionDeclaration {
+                retained_artifacts: BTreeMap::from([(
+                    "operator-replay/summary.json".to_owned(),
+                    Hash([3; 32]),
+                )]),
+                raw_stdout_retained: false,
+                raw_stderr_retained: false,
+                raw_provider_response_retained: false,
+                accepted_evidence_artifact_retained: false,
+                level2_artifact_retained: false,
+                score_axis_artifact_retained: false,
+                proof_artifact_retained: false,
+                checker_transcript_retained: false,
+                solver_certificate_retained: false,
+                benchmark_artifact_retained: false,
+                production_deployment_artifact_retained: false,
+            },
+            redaction_report: PcsmCleanSourceOperatorReplayRedactionReport {
+                valid: true,
+                secrets_found: false,
+                credentials_found: false,
+                private_machine_identifiers_found: false,
+                raw_provider_responses_found: false,
+                undeclared_files_found: false,
+                raw_logs_retained: false,
+                claim_boundary: PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_CLAIM_BOUNDARY.to_owned(),
+            },
+            nonpromotion_report: PcsmCleanSourceOperatorReplayNonpromotionReport {
+                pcsm_runtime_imported: false,
+                recoverable_artifacts_imported: false,
+                external_result_imported: false,
+                accepted_evidence_created: false,
+                accepted_independent_external_reproduction: false,
+                accepted_formal_evidence_created: false,
+                level2_evidence_created: false,
+                score_axes_populated: false,
+                proof_artifact_created: false,
+                checker_transcript_created: false,
+                solver_certificate_created: false,
+                benchmark_evidence_created: false,
+                external_audit_claimed: false,
+                semantic_correctness_claimed: false,
+                production_readiness_claimed: false,
+                sota_claimed: false,
+                breakthrough_claimed: false,
+                full_security_claimed: false,
+                human_review_acceptance_claimed: false,
+                authority_granted: false,
+            },
+            declared_files: pcsm_clean_source_operator_replay_declared_files(),
+            declared_file_digests: BTreeMap::new(),
+            claim_boundary: PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_CLAIM_BOUNDARY.to_owned(),
+            nonclaims: pcsm_bounded_proof_required_nonclaims(),
+        };
+        packet.declared_file_digests = pcsm_clean_source_operator_replay_expected_digests(&packet);
+        (packet, expected_phase622_digest, expected_phase621_digest)
+    }
+
     fn gateway_attestation_pubkey_hex() -> String {
         "a1".repeat(91)
     }
@@ -190085,6 +190785,173 @@ mod tests {
         ));
 
         fs::remove_dir_all(&output_root).expect("PCSM audit policy cleanup succeeds");
+    }
+
+    #[test]
+    fn pcsm_clean_source_operator_replay_packet_validates_local_metadata() {
+        let (packet, expected_phase622_digest, expected_phase621_digest) =
+            clean_source_pcsm_operator_replay_packet();
+
+        let validation = validate_pcsm_clean_source_operator_replay_packet(
+            &packet,
+            expected_phase622_digest,
+            expected_phase621_digest,
+        )
+        .expect("valid operator replay metadata validates");
+
+        assert_eq!(
+            validation.schema_version,
+            PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_VALIDATION_SCHEMA_VERSION
+        );
+        assert_eq!(
+            validation.state_slice,
+            PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_STATE_SLICE
+        );
+        assert_eq!(validation.packet_digest, packet.digest());
+        assert!(validation.local_operator_replay_metadata_valid);
+        assert!(!validation.pcsm_runtime_imported);
+        assert!(!validation.recoverable_artifacts_imported);
+        assert!(!validation.accepted_evidence_created);
+        assert!(!validation.accepted_independent_external_reproduction);
+        assert!(!validation.level2_evidence_created);
+        assert!(!validation.score_axes_populated);
+        assert_eq!(
+            validation.claim_boundary,
+            PCSM_CLEAN_SOURCE_OPERATOR_REPLAY_CLAIM_BOUNDARY
+        );
+    }
+
+    #[test]
+    fn pcsm_clean_source_operator_replay_rejects_coordinate_and_source_drift() {
+        let (mut packet, expected_phase622_digest, expected_phase621_digest) =
+            clean_source_pcsm_operator_replay_packet();
+        packet.phase622_closure_report_digest = Hash([63; 32]);
+        packet.clean_source_coordinate.commit =
+            "ffffffffffffffffffffffffffffffffffffffff".to_owned();
+        packet.clean_source_coordinate_digest = packet.clean_source_coordinate.digest();
+        packet.source_observation.dirty_status = PcsmSourceRepoStatus::Dirty;
+        packet.declared_file_digests = pcsm_clean_source_operator_replay_expected_digests(&packet);
+
+        let errors = validate_pcsm_clean_source_operator_replay_packet(
+            &packet,
+            expected_phase622_digest,
+            expected_phase621_digest,
+        )
+        .expect_err("source drift rejects");
+
+        assert!(errors.contains(&PcsmCleanSourceOperatorReplayError::Phase622ClosureDigestMismatch));
+        assert!(errors.contains(&PcsmCleanSourceOperatorReplayError::CoordinateMismatch));
+        assert!(errors.contains(&PcsmCleanSourceOperatorReplayError::SourceObservationMismatch));
+        assert!(
+            errors.contains(&PcsmCleanSourceOperatorReplayError::SourceRepoNotClean(
+                PcsmSourceRepoStatus::Dirty
+            ))
+        );
+    }
+
+    #[test]
+    fn pcsm_clean_source_operator_replay_rejects_command_and_retention_drift() {
+        let (mut packet, expected_phase622_digest, expected_phase621_digest) =
+            clean_source_pcsm_operator_replay_packet();
+        packet.command_observations[0].command_line.clear();
+        packet.command_observations[0].finished_at_unix =
+            packet.command_observations[0].started_at_unix - 1;
+        packet.command_observations[0].skipped = true;
+        packet.command_observations[0].exit_status = 1;
+        packet.command_observations[0]
+            .focused_result_summary
+            .clear();
+        packet.command_observations[0].stdout_sha256 = Hash([0; 32]);
+        packet
+            .artifact_retention
+            .retained_artifacts
+            .insert("../secret.txt".to_owned(), Hash([0; 32]));
+        packet.artifact_retention.raw_stdout_retained = true;
+        packet.declared_file_digests = pcsm_clean_source_operator_replay_expected_digests(&packet);
+
+        let errors = validate_pcsm_clean_source_operator_replay_packet(
+            &packet,
+            expected_phase622_digest,
+            expected_phase621_digest,
+        )
+        .expect_err("command and retention drift reject");
+
+        assert!(
+            errors.contains(&PcsmCleanSourceOperatorReplayError::InvalidCommandLine(
+                "verify-native-pcsm".to_owned()
+            ))
+        );
+        assert!(
+            errors.contains(&PcsmCleanSourceOperatorReplayError::InvalidCommandWindow(
+                "verify-native-pcsm".to_owned()
+            ))
+        );
+        assert!(
+            errors.contains(&PcsmCleanSourceOperatorReplayError::CommandSkipped(
+                "verify-native-pcsm".to_owned()
+            ))
+        );
+        assert!(
+            errors.contains(&PcsmCleanSourceOperatorReplayError::CommandFailed(
+                "verify-native-pcsm".to_owned()
+            ))
+        );
+        assert!(errors.contains(
+            &PcsmCleanSourceOperatorReplayError::MissingCommandResultSummary(
+                "verify-native-pcsm".to_owned()
+            )
+        ));
+        assert!(errors.contains(
+            &PcsmCleanSourceOperatorReplayError::MissingTranscriptDigest(
+                "verify-native-pcsm".to_owned()
+            )
+        ));
+        assert!(errors.contains(
+            &PcsmCleanSourceOperatorReplayError::UnsafeRetainedArtifactPath(
+                "../secret.txt".to_owned()
+            )
+        ));
+        assert!(errors.contains(
+            &PcsmCleanSourceOperatorReplayError::RetainedArtifactDigestMissing(
+                "../secret.txt".to_owned()
+            )
+        ));
+        assert!(errors.contains(&PcsmCleanSourceOperatorReplayError::ForbiddenArtifactRetention));
+    }
+
+    #[test]
+    fn pcsm_clean_source_operator_replay_rejects_promotion_redaction_digest_and_nonclaim_drift() {
+        let (mut packet, expected_phase622_digest, expected_phase621_digest) =
+            clean_source_pcsm_operator_replay_packet();
+        packet.redaction_report.secrets_found = true;
+        packet.nonpromotion_report.accepted_evidence_created = true;
+        packet.claim_boundary = "promoted".to_owned();
+        packet.declared_file_digests.insert(
+            "phase623-pcsm-clean-source-operator-replay/nonpromotion-report.json".to_owned(),
+            Hash([99; 32]),
+        );
+        packet
+            .nonclaims
+            .remove(&NonClaimLabel("not proof".to_owned()));
+
+        let errors = validate_pcsm_clean_source_operator_replay_packet(
+            &packet,
+            expected_phase622_digest,
+            expected_phase621_digest,
+        )
+        .expect_err("promotion, redaction, digest, and nonclaim drift reject");
+
+        assert!(errors.contains(&PcsmCleanSourceOperatorReplayError::UnsafeRedactionReport));
+        assert!(errors.contains(&PcsmCleanSourceOperatorReplayError::NonpromotionFlagSet));
+        assert!(errors.contains(&PcsmCleanSourceOperatorReplayError::ClaimBoundaryMismatch));
+        assert!(errors.contains(
+            &PcsmCleanSourceOperatorReplayError::DeclaredFileDigestMismatch(
+                "phase623-pcsm-clean-source-operator-replay/nonpromotion-report.json".to_owned()
+            )
+        ));
+        assert!(errors.contains(
+            &PcsmCleanSourceOperatorReplayError::MissingRequiredNonclaim("not proof".to_owned())
+        ));
     }
 
     #[cfg(unix)]
