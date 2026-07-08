@@ -17354,6 +17354,34 @@ reproduction, no Level2+ evidence, no populated score axes, no benchmark
 evidence, no external audit evidence, no proof authority, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 616 PCSM Clean-Source Intake Readback Reconciliation Boundary
+
+Status: complete for docs-first boundary only. See
+`docs/616-phase-pcsm-clean-source-intake-readback-reconciliation-boundary.md`.
+
+Goal: define the docs-first boundary for future local reconciliation of the
+clean recoverable-ghost-states PCSM CL12 bounded-proof handoff through the
+existing Phase 140 through Phase 143 metadata, materialization, and readback
+path.
+
+Implemented: Phase 616 records the clean source coordinate
+`8b342fe159324395174a149052b9ea1d937a50ce`, the handoff path
+`docs/pcsm-cl12-bounded-proof-handoff.md`, the handoff digest
+`93e07a250c9a6a5f530d02f07095074e7df8a5b5ce7e8e2dfa6e5feb376ea149`,
+the allowed future reconciliation record shape, required fail-closed tests,
+and explicit nonclaims.
+
+Validation coverage: documentation review, repo claim-boundary docs test, repo
+hygiene test, and diff hygiene.
+
+Exit criteria: the next implementation slice is authorized to reconcile one
+clean-source PCSM handoff through local metadata, local admission-journal
+materialization, and semantic readback only. It still has no source-repo
+parsing, no PCSM runtime import, no recoverable-ghost artifact import, no
+accepted Evidence Ledger mutation, no accepted evidence, no Level2+ evidence,
+no populated score axes, no benchmark evidence, no external audit evidence,
+and no production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
