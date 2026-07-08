@@ -9135,5 +9135,18 @@ no Rust code, imports no external result, mutates no accepted Evidence Ledger,
 creates no accepted evidence, creates no Level2+ evidence, populates no score
 axes, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/630-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-independent-reproduction-requirement-notes.md](docs/630-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-independent-reproduction-requirement-notes.md)
+documents the Phase 630 HSAI packet-role artifact independent-operator
+accepted-result independent-reproduction requirement metadata. It implements
+local blocked requirement metadata over one exact Phase 628 policy-resolution
+record, preserves Phase 628/601/599/597/595/593/591/589/587/585 digest
+bindings, records deterministic required-future-evidence digest placeholders,
+rejects Phase 628 drift, rejects inherited digest drift, rejects premature
+evidence satisfaction, and rejects accepted-evidence, Level2+, score-axis,
+backend, proof, audit, SOTA, full-security, semantic-correctness,
+production-readiness, breakthrough, and authority promotion. Focused validation
+passed with
+`cargo test -p hsai-agent-admission --lib phase630_tiny_z3_packet_role_artifact_independent_operator_accepted_result_independent_reproduction_requirement --quiet`.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
