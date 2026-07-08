@@ -9121,5 +9121,19 @@ semantic-correctness, production-readiness, breakthrough, and authority
 promotion. Focused validation passed with
 `cargo test -p hsai-agent-admission --lib phase628_tiny_z3_packet_role_artifact_independent_operator_accepted_result_policy_resolution --quiet`.
 
+[docs/629-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-independent-reproduction-requirement-boundary.md](docs/629-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-independent-reproduction-requirement-boundary.md)
+documents the Phase 629 docs-first independent-reproduction requirement
+boundary after Phase 628. It requires one exact Phase 628
+`PacketRoleArtifactIndependentOperatorAcceptedResultPolicyResolutionBlocked`
+record, Phase 628/601/599/597/595/593/591/589/587/585 and inherited digest
+bindings, independent operator identity, operator statement, environment
+declaration, captured-output summary, redaction report, replay/correspondence,
+and import-ownership requirements before any accepted external result evidence,
+Level2+, score-axis, proof, audit, SOTA, full-security, semantic-correctness,
+production-readiness, breakthrough, or authority claim can advance. It creates
+no Rust code, imports no external result, mutates no accepted Evidence Ledger,
+creates no accepted evidence, creates no Level2+ evidence, populates no score
+axes, and claims no production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

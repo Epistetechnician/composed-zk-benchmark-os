@@ -17716,6 +17716,37 @@ no populated score axes, no Lean/COBALT/Rust-to-Lean execution, no additional
 SMT/Z3 execution in this phase, no benchmark evidence, no external-audit claim,
 and no production/SOTA/security/semantic-correctness claim.
 
+## Phase 629 HSAI Tiny Z3 Packet Role Artifact Independent Operator Accepted Result Independent Reproduction Requirement Boundary
+
+Status: complete for docs-first independent-reproduction requirement boundary.
+See
+`docs/629-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-independent-reproduction-requirement-boundary.md`.
+
+Goal: define the next evidence gate after Phase 628 blocked policy-resolution
+metadata before any accepted external result evidence, Level2+, or score-axis
+claim can be considered.
+
+Implemented: Phase 629 defines the future local requirement metadata scope over
+one exact Phase 628
+`PacketRoleArtifactIndependentOperatorAcceptedResultPolicyResolutionBlocked`
+record, required Phase 628/601/599/597/595/593/591/589/587/585 and inherited
+earlier-phase bindings, independent operator identity requirements, operator
+statement requirements, environment declaration requirements, captured-output
+summary requirements, redaction requirements, replay/correspondence
+requirements, import-ownership requirements, fail-closed rules, forbidden
+behavior, and Phase 630 implementation exit criteria.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a documented independent-reproduction requirement
+boundary after Phase 628. It still has no independent external reproduction, no
+accepted external result import, no accepted Evidence Ledger mutation, no
+accepted evidence, no Level2+ evidence, no populated score axes, no
+Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution in this
+phase, no benchmark evidence, no external-audit claim, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
