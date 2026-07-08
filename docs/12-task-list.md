@@ -17627,6 +17627,40 @@ mutation, no accepted evidence, no Level2+ evidence, no populated score axes,
 no benchmark evidence, no external-audit claim, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 626 PCSM Clean-Source Operator Replay Output
+
+Status: complete for local operator replay output materialization. See
+`docs/626-phase-pcsm-clean-source-operator-replay-output-notes.md`.
+
+Goal: materialize and read back a caller-owned local output bundle for one
+Phase 624 validated PCSM clean-source operator replay packet, without HSAI
+source-repository execution, PCSM runtime import, recoverable artifact import,
+external result import, or evidence promotion.
+
+Implemented: Phase 626 adds `PcsmCleanSourceOperatorReplayOutputRequest`,
+`PcsmCleanSourceOperatorReplayOutputManifest`,
+`PcsmCleanSourceOperatorReplayOutputValidationReport`, output schema and
+state-slice constants, `materialize_pcsm_clean_source_operator_replay_bundle`,
+and `read_pcsm_clean_source_operator_replay_bundle`. The bundle writes declared
+JSON and Markdown roles under `pcsm-clean-source-operator-replay/`, SHA-256
+sidecars for every declared file, a nonpromotion validation report, and a
+manifest that binds packet, validation, coordinate, provenance, source
+observation, command, artifact-retention, redaction, nonpromotion, nonclaim,
+and declared-file digest state.
+
+Validation coverage: focused Rust tests cover valid materialization/readback,
+overwrite and protected-root rejection, validation promotion drift rejection,
+undeclared-file rejection, stale sidecar digest rejection, packet semantic
+drift rejection, and validation semantic drift rejection.
+
+Exit criteria: HSAI can now materialize and read back local operator replay
+metadata for a Phase 624 validated packet. It still has no HSAI
+source-repository command execution, no PCSM runtime import, no
+recoverable-ghost artifact import, no accepted Evidence Ledger mutation, no
+accepted evidence, no Level2+ evidence, no populated score axes, no benchmark
+evidence, no external-audit claim, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
