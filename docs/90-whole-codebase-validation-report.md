@@ -9059,5 +9059,15 @@ recoverable-ghost artifact import, accepted Evidence Ledger mutation, accepted
 evidence, Level2+ evidence, score-axis population, benchmark evidence,
 external-audit claim, or production/SOTA/security/semantic-correctness claim.
 
+[docs/623-phase-pcsm-clean-source-operator-replay-boundary.md](docs/623-phase-pcsm-clean-source-operator-replay-boundary.md)
+documents the Phase 623 PCSM clean-source operator replay boundary. It defines
+only a future quarantined local packet returned by an external operator after
+replaying the clean recoverable-ghost-states PCSM source coordinate. It allows
+no Rust implementation code in this slice, Cargo metadata changes, HSAI
+source-repository command execution, PCSM runtime import,
+recoverable-ghost artifact import, accepted Evidence Ledger mutation, accepted
+evidence, Level2+ evidence, score-axis population, benchmark evidence,
+external-audit claim, or production/SOTA/security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
