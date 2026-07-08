@@ -1523,9 +1523,14 @@ surfaces; sidecar-symlink rejection; digest-consistent tampering tests; one
 future PCSM-intake-through-semantic-readback test; local-only claim limits;
 source-checkout recheck; and future implementation exit criteria.
 
-Current blocker: on 2026-06-23, the recoverable-ghost-states handoff remained
-staged in a dirty checkout. Phase 142 therefore admits no current source commit
-or handoff digest and authorizes no actual cross-repo intake.
+Resolved blocker: on 2026-06-23, the recoverable-ghost-states handoff remained
+staged in a dirty checkout. That source-stability blocker is now resolved by
+the committed handoff at `8b342fe159324395174a149052b9ea1d937a50ce`, with
+`docs/pcsm-cl12-bounded-proof-handoff.md` digest
+`93e07a250c9a6a5f530d02f07095074e7df8a5b5ce7e8e2dfa6e5feb376ea149`.
+This resolves only the clean-source precondition; Phase 142 still authorizes no
+PCSM source parsing, PCSM artifact import, accepted evidence, or claim-boundary
+promotion.
 
 Anti-goals: Rust source changes, tests, Cargo metadata changes, `Cargo.lock`
 changes, recoverable-ghost file parsing or git inspection, source repo command

@@ -3816,9 +3816,13 @@ runs no source repo command, imports no PCSM runtime or artifact, creates no
 generated output, mutates no accepted Evidence Ledger, populates no score axes,
 creates no Level2+ evidence, and does not claim threshold admission, proof,
 benchmark evidence, semantic correctness, production readiness, or global
-software-agent uniqueness. Actual cross-repo intake remains blocked because
-the source handoff was staged in a dirty recoverable-ghost-states checkout on
-2026-06-23.
+software-agent uniqueness. The original dirty-source blocker from
+2026-06-23 was resolved by the committed recoverable-ghost-states handoff at
+`8b342fe159324395174a149052b9ea1d937a50ce`, with
+`docs/pcsm-cl12-bounded-proof-handoff.md` digest
+`93e07a250c9a6a5f530d02f07095074e7df8a5b5ce7e8e2dfa6e5feb376ea149`.
+That resolves the clean-source precondition only; this phase still performs no
+source-repo parsing, imports no PCSM artifact, and creates no accepted evidence.
 
 Phase 143 implements that semantic readback hardening inside
 `hsai-agent-admission`. It validates primary and sidecar file types, parses

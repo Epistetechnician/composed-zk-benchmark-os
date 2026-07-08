@@ -1292,8 +1292,13 @@ tampering across the journal, manifest, decisions, source digests, nonclaims,
 redaction report, validation report, and sidecars. It authorizes no Rust
 implementation, source-repo parsing or commands, PCSM import, generated bundle,
 accepted Evidence Ledger mutation, benchmark evidence, score axes, or Level2+
-evidence. Actual source intake remains blocked while the
-recoverable-ghost-states handoff is staged in a dirty checkout.
+evidence. The original dirty-source blocker was resolved by the committed
+recoverable-ghost-states handoff at
+`8b342fe159324395174a149052b9ea1d937a50ce`, with
+`docs/pcsm-cl12-bounded-proof-handoff.md` digest
+`93e07a250c9a6a5f530d02f07095074e7df8a5b5ce7e8e2dfa6e5feb376ea149`;
+this changes only the source-stability precondition and does not import PCSM
+artifacts or promote accepted evidence.
 [docs/143-phase-hsai-admission-journal-semantic-readback-implementation-notes.md](docs/143-phase-hsai-admission-journal-semantic-readback-implementation-notes.md)
 implements that hardening in `hsai-agent-admission`. Readback now parses and
 cross-validates every declared file, recomputes journal-derived views and
