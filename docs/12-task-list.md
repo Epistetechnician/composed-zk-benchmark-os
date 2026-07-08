@@ -18068,6 +18068,39 @@ axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution in
 this phase, no benchmark evidence, no external-audit claim, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 640 HSAI Tiny Z3 Packet Role Artifact Independent Operator Accepted Result Output Import Candidate Metadata
+
+Status: complete for local accepted-result output import-candidate metadata.
+See
+`docs/640-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-import-candidate-notes.md`.
+
+Goal: implement local quarantined import-candidate metadata over one exact
+Phase 638 quarantined accepted-result output bundle, without importing external
+results, mutating accepted evidence, accepting independent external
+reproduction, creating Level2+, populating score axes, or promoting
+backend/proof/claim evidence.
+
+Implemented: Phase 640 adds typed input/output/classification/label/issue
+models, digest/id/label binding helpers, `zkbench_core::ExternalResultCandidate`
+construction, validator/quarantine digests, policy and nonpromotion digests,
+Phase 638 readback state validation, promotion rejection, and focused tests. It
+requires the Phase 638 readback to remain
+`PacketRoleArtifactIndependentOperatorAcceptedResultOutputQuarantinedLocalBundle`
+and records the local candidate as `ExternalResultStatus::Quarantined` with
+`ClaimBoundary::Level0DesignNote`.
+
+Validation coverage: focused Rust tests cover successful quarantined metadata,
+Phase 638 drift rejection, and promotion/strong-claim rejection. Full local
+gates remain required before claim-boundary closure.
+
+Exit criteria: HSAI now has local quarantined import-candidate metadata for the
+Phase 638 accepted-result output bundle. It still has no independent external
+reproduction, no accepted external result import, no accepted Evidence Ledger
+mutation, no accepted evidence, no Level2+ evidence, no populated score axes,
+no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution in this
+phase, no benchmark evidence, no external-audit claim, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

@@ -9292,5 +9292,20 @@ axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates
 no benchmark evidence, and claims no production/SOTA/security
 /semantic-correctness result.
 
+[docs/640-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-import-candidate-notes.md](docs/640-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-import-candidate-notes.md)
+documents the Phase 640 local accepted-result output import-candidate metadata
+implementation. It consumes one exact Phase 638
+`PacketRoleArtifactIndependentOperatorAcceptedResultOutputQuarantinedLocalBundle`
+readback, constructs a local `zkbench_core::ExternalResultCandidate`, validates
+it, records quarantine/policy/nonpromotion digests, binds Phase
+638/636/634/632/630/628/595/593/591/589/587/585 digests, and records
+`ExternalResultStatus::Quarantined` with `ClaimBoundary::Level0DesignNote`.
+It imports no external result, mutates no accepted Evidence Ledger, creates no
+accepted evidence, creates no Level2+ evidence, populates no score axes, runs
+no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no
+benchmark evidence, and claims no production/SOTA/security
+/semantic-correctness result. Focused validation passed with
+`cargo test -p hsai-agent-admission --lib phase640_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_import_candidate -- --nocapture`.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
