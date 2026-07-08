@@ -9110,5 +9110,16 @@ Ledger mutation, accepted evidence, Level2+ evidence, score-axis population,
 benchmark evidence, external-audit claim, or
 production/SOTA/security/semantic-correctness claim.
 
+[docs/628-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-policy-resolution-notes.md](docs/628-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-policy-resolution-notes.md)
+documents the Phase 628 HSAI packet-role artifact independent-operator
+accepted-result policy-resolution metadata. It implements local blocked
+policy-resolution metadata over one exact Phase 601 eligibility record,
+preserves Phase 601/599/597/595/593/591/589/587/585 digest bindings, rejects
+Phase 601 drift, rejects inherited digest drift, and rejects accepted-evidence,
+Level2+, score-axis, backend, proof, audit, SOTA, full-security,
+semantic-correctness, production-readiness, breakthrough, and authority
+promotion. Focused validation passed with
+`cargo test -p hsai-agent-admission --lib phase628_tiny_z3_packet_role_artifact_independent_operator_accepted_result_policy_resolution --quiet`.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
