@@ -8980,5 +8980,18 @@ two-obligation mixed local campaign as the current `Level1LocalReplay` campaign
 and do not run a broader campaign until a future docs-first boundary justifies
 it.
 
+[docs/616-phase-pcsm-clean-source-intake-readback-reconciliation-boundary.md](docs/616-phase-pcsm-clean-source-intake-readback-reconciliation-boundary.md)
+documents the Phase 616 PCSM clean-source intake readback reconciliation
+boundary. It authorizes only a future local reconciliation record over the
+committed recoverable-ghost-states handoff at
+`8b342fe159324395174a149052b9ea1d937a50ce`, with
+`docs/pcsm-cl12-bounded-proof-handoff.md` digest
+`93e07a250c9a6a5f530d02f07095074e7df8a5b5ce7e8e2dfa6e5feb376ea149`, through
+the existing Phase 140-143 local metadata, materialization, and semantic
+readback path. It allows no source-repo parsing, PCSM runtime import,
+recoverable-ghost artifact import, accepted Evidence Ledger mutation, accepted
+evidence, Level2+ evidence, score-axis population, benchmark evidence,
+external-audit claim, or production/SOTA/security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
