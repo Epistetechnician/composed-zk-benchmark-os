@@ -9069,5 +9069,15 @@ recoverable-ghost artifact import, accepted Evidence Ledger mutation, accepted
 evidence, Level2+ evidence, score-axis population, benchmark evidence,
 external-audit claim, or production/SOTA/security/semantic-correctness claim.
 
+[docs/624-phase-pcsm-clean-source-operator-replay-metadata-notes.md](docs/624-phase-pcsm-clean-source-operator-replay-metadata-notes.md)
+documents the Phase 624 PCSM clean-source operator replay metadata
+implementation. It adds only local in-memory metadata validation under
+`crates/hsai-agent-admission/src/lib.rs` for a quarantined operator replay
+packet over the clean source coordinate. It allows no source-repository command
+execution by HSAI, PCSM runtime import, recoverable-ghost artifact import,
+filesystem packet materialization, accepted Evidence Ledger mutation, accepted
+evidence, Level2+ evidence, score-axis population, benchmark evidence,
+external-audit claim, or production/SOTA/security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
