@@ -18036,6 +18036,38 @@ axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution in
 this phase, no benchmark evidence, no external-audit claim, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 639 HSAI Tiny Z3 Packet Role Artifact Independent Operator Accepted Result Output Import Candidate Boundary
+
+Status: complete for docs-first accepted-result output import-candidate
+boundary. See
+`docs/639-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-import-candidate-boundary.md`.
+
+Goal: define the future local import-candidate metadata boundary for Phase 638
+quarantined accepted-result output bundles, without implementing import
+metadata, importing external results, mutating accepted evidence, creating
+accepted evidence, creating Level2+, populating score axes, or promoting
+backend/proof/claim evidence.
+
+Implemented: Phase 639 defines the future candidate scope, required exact
+Phase 638 source state, digest bindings, validator/quarantine requirements,
+candidate classifications, forbidden behavior, and future Phase 640
+implementation exit criteria. It requires one exact Phase 638
+`PacketRoleArtifactIndependentOperatorAcceptedResultOutputQuarantinedLocalBundle`
+readback and binds Phase 638/636/634/632/630/628/595/593/591/589/587/585 plus
+inherited Phase 583/581/579/577/575/573/571/569/567/565/563/561/559/557/555
+and backend-execution digests.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named accepted-result output import-candidate
+boundary. It still has no import-candidate implementation, no independent
+external reproduction, no accepted external result import, no accepted Evidence
+Ledger mutation, no accepted evidence, no Level2+ evidence, no populated score
+axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution in
+this phase, no benchmark evidence, no external-audit claim, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
