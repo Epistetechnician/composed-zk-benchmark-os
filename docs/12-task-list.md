@@ -17463,6 +17463,29 @@ mutation, no accepted evidence, no Level2+ evidence, no populated score axes,
 no benchmark evidence, no external audit evidence, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 620 PCSM Clean-Source Reconciliation Bundle Audit Boundary
+
+Status: complete for docs-first boundary only. See
+`docs/620-phase-pcsm-clean-source-reconciliation-bundle-audit-boundary.md`.
+
+Goal: define the docs-first boundary for a future in-memory audit summary over
+one readback-valid Phase 619 PCSM clean-source reconciliation output manifest
+and its source Phase 617 reconciliation record.
+
+Implemented: Phase 620 defines the future audit-summary fields, fail-closed
+manifest/reconciliation agreement checks, nonclaim and nonpromotion checks,
+required tests, and explicit nonclaims.
+
+Validation coverage: documentation review, repo claim-boundary docs test, repo
+hygiene test, and diff hygiene.
+
+Exit criteria: the next implementation slice is authorized to build an
+in-memory local audit summary over Phase 619 metadata only. It still has no
+source-repo parsing, no PCSM runtime import, no recoverable-ghost artifact
+import, no accepted Evidence Ledger mutation, no accepted evidence, no Level2+
+evidence, no populated score axes, no benchmark evidence, no external audit
+evidence, and no production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

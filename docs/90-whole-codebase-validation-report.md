@@ -9027,5 +9027,15 @@ Ledger mutation, accepted evidence, Level2+ evidence, score-axis population,
 benchmark evidence, external-audit claim, or
 production/SOTA/security/semantic-correctness claim.
 
+[docs/620-phase-pcsm-clean-source-reconciliation-bundle-audit-boundary.md](docs/620-phase-pcsm-clean-source-reconciliation-bundle-audit-boundary.md)
+documents the Phase 620 PCSM clean-source reconciliation bundle audit
+boundary. It authorizes only a future in-memory audit summary over a
+readback-valid Phase 619 output manifest and its source Phase 617
+reconciliation record. It allows no Rust implementation code in this slice,
+source-repo parsing, PCSM runtime import, recoverable-ghost artifact import,
+accepted Evidence Ledger mutation, accepted evidence, Level2+ evidence,
+score-axis population, benchmark evidence, external-audit claim, or
+production/SOTA/security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
