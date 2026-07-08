@@ -9079,5 +9079,15 @@ filesystem packet materialization, accepted Evidence Ledger mutation, accepted
 evidence, Level2+ evidence, score-axis population, benchmark evidence,
 external-audit claim, or production/SOTA/security/semantic-correctness claim.
 
+[docs/625-phase-pcsm-clean-source-operator-replay-output-boundary.md](docs/625-phase-pcsm-clean-source-operator-replay-output-boundary.md)
+documents the Phase 625 PCSM clean-source operator replay output boundary. It
+defines only a future caller-owned local output bundle around one Phase 624
+validated operator replay packet. It allows no Rust implementation code in
+this slice, Cargo metadata changes, source-repository command execution by
+HSAI, PCSM runtime import, recoverable-ghost artifact import, external result
+import, accepted Evidence Ledger mutation, accepted evidence, Level2+
+evidence, score-axis population, benchmark evidence, external-audit claim, or
+production/SOTA/security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

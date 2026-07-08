@@ -17601,6 +17601,32 @@ no accepted evidence, no Level2+ evidence, no populated score axes, no
 benchmark evidence, no external-audit claim, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 625 PCSM Clean-Source Operator Replay Output Boundary
+
+Status: complete for docs-first operator replay output boundary. See
+`docs/625-phase-pcsm-clean-source-operator-replay-output-boundary.md`.
+
+Goal: define the future local output-bundle contract for one Phase 624
+validated PCSM clean-source operator replay packet, without authorizing HSAI
+source-repository execution, PCSM runtime import, recoverable artifact import,
+external result import, or evidence promotion.
+
+Implemented: Phase 625 defines the future caller-owned output-root bundle
+shape, declared JSON and Markdown file roles, sidecar and readback rules,
+required semantic drift checks, required focused tests, and nonclaims for a
+future materialized Phase 624 packet bundle. This phase is documentation-only.
+
+Validation coverage: documentation review, repo claim-boundary docs test, repo
+hygiene test, and diff hygiene.
+
+Exit criteria: the next implementation slice is authorized only to materialize
+and read back local operator replay metadata for a Phase 624 validated packet.
+It still has no HSAI source-repository command execution, no PCSM runtime
+import, no recoverable-ghost artifact import, no accepted Evidence Ledger
+mutation, no accepted evidence, no Level2+ evidence, no populated score axes,
+no benchmark evidence, no external-audit claim, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
