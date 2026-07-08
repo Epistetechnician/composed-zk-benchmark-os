@@ -31558,6 +31558,173 @@ pub fn reconcile_pcsm_clean_source_intake_readback(
     })
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct PcsmCleanSourceReconciliationMaterializationRequest {
+    pub bundle_id: String,
+    pub created_at_unix: u64,
+    pub overwrite: bool,
+    pub protected_roots: Vec<PathBuf>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PcsmCleanSourceReconciliationOutputManifest {
+    pub schema_version: String,
+    pub bundle_id: String,
+    pub created_at_unix: u64,
+    pub reconciliation_digest: Hash,
+    pub coordinate_digest: Hash,
+    pub intake_digest: Hash,
+    pub candidate_digest: Hash,
+    pub journal_tip_digest: Hash,
+    pub declared_files: Vec<String>,
+    pub declared_file_digests: BTreeMap<String, Hash>,
+    pub claim_boundary: String,
+    pub accepted_evidence_created: bool,
+    pub level2_evidence_created: bool,
+    pub score_axes_populated: bool,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl PcsmCleanSourceReconciliationOutputManifest {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:pcsm-clean-source-reconciliation-output-manifest:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PcsmCleanSourceReconciliationValidationReport {
+    pub schema_version: String,
+    pub bundle_id: String,
+    pub valid: bool,
+    pub reconciliation_digest: Hash,
+    pub checked_files: Vec<String>,
+    pub claim_boundary: String,
+    pub accepted_evidence_created: bool,
+    pub level2_evidence_created: bool,
+    pub score_axes_populated: bool,
+}
+
+pub const PCSM_CLEAN_SOURCE_RECONCILIATION_OUTPUT_SCHEMA_VERSION: &str =
+    "hsai-pcsm-clean-source-reconciliation-output-v1";
+pub const PCSM_CLEAN_SOURCE_RECONCILIATION_OUTPUT_VALIDATION_SCHEMA_VERSION: &str =
+    "hsai-pcsm-clean-source-reconciliation-output-validation-v1";
+
+pub fn materialize_pcsm_clean_source_reconciliation_bundle(
+    output_root: &Path,
+    reconciliation: &PcsmCleanSourceIntakeReadbackReconciliation,
+    request: &PcsmCleanSourceReconciliationMaterializationRequest,
+) -> Result<PcsmCleanSourceReconciliationOutputManifest, AdmissionJournalMaterializationError> {
+    validate_pcsm_clean_source_reconciliation_materialization_request(
+        output_root,
+        reconciliation,
+        request,
+    )?;
+
+    let staging_root = staging_root_for(output_root, &request.bundle_id)?;
+    if staging_root.exists() {
+        remove_dir_all_checked(&staging_root)?;
+    }
+    fs::create_dir_all(staging_root.join("pcsm-clean-source-reconciliation"))
+        .map_err(materialization_io_error)?;
+
+    let files = build_pcsm_clean_source_reconciliation_bundle_files(reconciliation, request)?;
+    for (logical_path, bytes) in &files {
+        let target = staging_root.join(logical_path);
+        if let Some(parent) = target.parent() {
+            fs::create_dir_all(parent).map_err(materialization_io_error)?;
+        }
+        fs::write(&target, bytes).map_err(materialization_io_error)?;
+        fs::write(
+            sidecar_path(&target),
+            hash_hex(hash_bytes(bytes)).into_bytes(),
+        )
+        .map_err(materialization_io_error)?;
+    }
+
+    if output_root.exists() {
+        if !request.overwrite {
+            remove_dir_all_checked(&staging_root)?;
+            return Err(AdmissionJournalMaterializationError::OutputRootExistsWithoutOverwrite);
+        }
+        remove_dir_all_checked(output_root)?;
+    }
+    fs::rename(&staging_root, output_root).map_err(materialization_io_error)?;
+    read_pcsm_clean_source_reconciliation_bundle(output_root)
+}
+
+pub fn read_pcsm_clean_source_reconciliation_bundle(
+    output_root: &Path,
+) -> Result<PcsmCleanSourceReconciliationOutputManifest, AdmissionJournalMaterializationError> {
+    let output_metadata = fs::symlink_metadata(output_root).map_err(materialization_io_error)?;
+    if output_metadata.file_type().is_symlink() {
+        return Err(AdmissionJournalMaterializationError::OutputRootIsSymlink);
+    }
+    if !output_metadata.is_dir() {
+        return Err(AdmissionJournalMaterializationError::OutputRootIsFile);
+    }
+
+    let bundle_dir = output_root.join("pcsm-clean-source-reconciliation");
+    let bundle_metadata = fs::symlink_metadata(&bundle_dir).map_err(materialization_io_error)?;
+    if bundle_metadata.file_type().is_symlink() {
+        return Err(AdmissionJournalMaterializationError::BundleFileIsSymlink(
+            "pcsm-clean-source-reconciliation".to_owned(),
+        ));
+    }
+    if !bundle_metadata.is_dir() {
+        return Err(
+            AdmissionJournalMaterializationError::DeclaredFileTypeMismatch(
+                "pcsm-clean-source-reconciliation".to_owned(),
+            ),
+        );
+    }
+
+    reject_undeclared_pcsm_clean_source_reconciliation_files(output_root)?;
+    let mut file_bytes = BTreeMap::new();
+    for logical_path in PCSM_CLEAN_SOURCE_RECONCILIATION_DECLARED_FILES {
+        let path = output_root.join(logical_path);
+        let metadata = fs::symlink_metadata(&path).map_err(materialization_io_error)?;
+        if metadata.file_type().is_symlink() {
+            return Err(AdmissionJournalMaterializationError::BundleFileIsSymlink(
+                (*logical_path).to_owned(),
+            ));
+        }
+        if !metadata.is_file() {
+            return Err(
+                AdmissionJournalMaterializationError::DeclaredFileTypeMismatch(
+                    (*logical_path).to_owned(),
+                ),
+            );
+        }
+        let sidecar = sidecar_path(&path);
+        let sidecar_metadata = fs::symlink_metadata(&sidecar).map_err(materialization_io_error)?;
+        if sidecar_metadata.file_type().is_symlink() {
+            return Err(AdmissionJournalMaterializationError::SidecarIsSymlink(
+                format!("{logical_path}.sha256"),
+            ));
+        }
+        if !sidecar_metadata.is_file() {
+            return Err(
+                AdmissionJournalMaterializationError::DeclaredFileTypeMismatch(format!(
+                    "{logical_path}.sha256"
+                )),
+            );
+        }
+        let bytes = fs::read(&path).map_err(materialization_io_error)?;
+        let expected = fs::read_to_string(sidecar).map_err(materialization_io_error)?;
+        if expected != hash_hex(hash_bytes(&bytes)) {
+            return Err(AdmissionJournalMaterializationError::DigestMismatch(
+                (*logical_path).to_owned(),
+            ));
+        }
+        file_bytes.insert((*logical_path).to_owned(), bytes);
+    }
+
+    validate_pcsm_clean_source_reconciliation_bundle_semantics(&file_bytes)
+}
+
 const REQUIRED_PCSM_VERIFIERS: &[&str] = &[
     "verify_cl12_local_mlx_pcsm_surrogate",
     "verify_cl12_external_benchmark_replication",
@@ -33099,6 +33266,250 @@ fn validate_output_root(
         {
             return Err(AdmissionJournalMaterializationError::ProtectedOutputRoot);
         }
+    }
+    Ok(())
+}
+
+fn validate_pcsm_clean_source_reconciliation_materialization_request(
+    output_root: &Path,
+    reconciliation: &PcsmCleanSourceIntakeReadbackReconciliation,
+    request: &PcsmCleanSourceReconciliationMaterializationRequest,
+) -> Result<(), AdmissionJournalMaterializationError> {
+    if request.bundle_id.trim().is_empty()
+        || !is_safe_relative_path(&request.bundle_id)
+        || request.bundle_id.contains(['/', '\\'])
+    {
+        return Err(AdmissionJournalMaterializationError::EmptyBundleId);
+    }
+    validate_pcsm_clean_source_reconciliation_nonpromotion(reconciliation)?;
+    validate_output_root(output_root, &request.protected_roots, request.overwrite)
+}
+
+fn validate_pcsm_clean_source_reconciliation_nonpromotion(
+    reconciliation: &PcsmCleanSourceIntakeReadbackReconciliation,
+) -> Result<(), AdmissionJournalMaterializationError> {
+    if reconciliation.schema_version != PCSM_CLEAN_SOURCE_RECONCILIATION_SCHEMA_VERSION
+        || reconciliation.state_slice != PCSM_CLEAN_SOURCE_RECONCILIATION_STATE_SLICE
+        || reconciliation.coordinate_digest != reconciliation.coordinate.digest()
+        || reconciliation.claim_boundary != AdmissionClaimBoundary::LocalOnly
+        || reconciliation.accepted_evidence_created
+        || reconciliation.level2_evidence_created
+        || reconciliation.score_axes_populated
+        || !pcsm_bounded_proof_required_nonclaims().is_subset(&reconciliation.nonclaims)
+    {
+        return Err(AdmissionJournalMaterializationError::ManifestSemanticMismatch);
+    }
+    Ok(())
+}
+
+fn build_pcsm_clean_source_reconciliation_bundle_files(
+    reconciliation: &PcsmCleanSourceIntakeReadbackReconciliation,
+    request: &PcsmCleanSourceReconciliationMaterializationRequest,
+) -> Result<BTreeMap<String, Vec<u8>>, AdmissionJournalMaterializationError> {
+    let reconciliation_bytes =
+        serde_json::to_vec_pretty(reconciliation).map_err(materialization_serde_error)?;
+    let nonclaims_bytes =
+        pcsm_clean_source_reconciliation_nonclaims_markdown(&reconciliation.nonclaims).into_bytes();
+    let validation_bytes =
+        serde_json::to_vec_pretty(&PcsmCleanSourceReconciliationValidationReport {
+            schema_version: PCSM_CLEAN_SOURCE_RECONCILIATION_OUTPUT_VALIDATION_SCHEMA_VERSION
+                .to_owned(),
+            bundle_id: request.bundle_id.clone(),
+            valid: true,
+            reconciliation_digest: reconciliation.digest(),
+            checked_files: pcsm_clean_source_reconciliation_declared_files(),
+            claim_boundary: PCSM_CLEAN_SOURCE_RECONCILIATION_CLAIM_BOUNDARY.to_owned(),
+            accepted_evidence_created: false,
+            level2_evidence_created: false,
+            score_axes_populated: false,
+        })
+        .map_err(materialization_serde_error)?;
+
+    let mut files = BTreeMap::from([
+        (
+            "pcsm-clean-source-reconciliation/reconciliation.json".to_owned(),
+            reconciliation_bytes,
+        ),
+        (
+            "pcsm-clean-source-reconciliation/nonclaims.md".to_owned(),
+            nonclaims_bytes,
+        ),
+        (
+            "pcsm-clean-source-reconciliation/validation-report.json".to_owned(),
+            validation_bytes,
+        ),
+    ]);
+    let manifest =
+        pcsm_clean_source_reconciliation_manifest_for_files(reconciliation, request, &files);
+    files.insert(
+        "pcsm-clean-source-reconciliation/manifest.json".to_owned(),
+        serde_json::to_vec_pretty(&manifest).map_err(materialization_serde_error)?,
+    );
+    Ok(files)
+}
+
+fn pcsm_clean_source_reconciliation_manifest_for_files(
+    reconciliation: &PcsmCleanSourceIntakeReadbackReconciliation,
+    request: &PcsmCleanSourceReconciliationMaterializationRequest,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> PcsmCleanSourceReconciliationOutputManifest {
+    let mut declared_file_digests = BTreeMap::new();
+    for (logical_path, bytes) in files {
+        declared_file_digests.insert(logical_path.clone(), hash_bytes(bytes));
+    }
+
+    PcsmCleanSourceReconciliationOutputManifest {
+        schema_version: PCSM_CLEAN_SOURCE_RECONCILIATION_OUTPUT_SCHEMA_VERSION.to_owned(),
+        bundle_id: request.bundle_id.clone(),
+        created_at_unix: request.created_at_unix,
+        reconciliation_digest: reconciliation.digest(),
+        coordinate_digest: reconciliation.coordinate_digest,
+        intake_digest: reconciliation.intake_digest,
+        candidate_digest: reconciliation.candidate_digest,
+        journal_tip_digest: reconciliation.journal_tip_digest,
+        declared_files: pcsm_clean_source_reconciliation_declared_files(),
+        declared_file_digests,
+        claim_boundary: PCSM_CLEAN_SOURCE_RECONCILIATION_CLAIM_BOUNDARY.to_owned(),
+        accepted_evidence_created: false,
+        level2_evidence_created: false,
+        score_axes_populated: false,
+        nonclaims: reconciliation.nonclaims.clone(),
+    }
+}
+
+fn validate_pcsm_clean_source_reconciliation_bundle_semantics(
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<PcsmCleanSourceReconciliationOutputManifest, AdmissionJournalMaterializationError> {
+    let manifest: PcsmCleanSourceReconciliationOutputManifest =
+        parse_declared_json(files, "pcsm-clean-source-reconciliation/manifest.json")?;
+    let reconciliation: PcsmCleanSourceIntakeReadbackReconciliation = parse_declared_json(
+        files,
+        "pcsm-clean-source-reconciliation/reconciliation.json",
+    )?;
+    validate_pcsm_clean_source_reconciliation_nonpromotion(&reconciliation)?;
+    validate_pcsm_clean_source_reconciliation_manifest_semantics(
+        &manifest,
+        &reconciliation,
+        files,
+    )?;
+
+    let nonclaims_bytes = declared_bytes(files, "pcsm-clean-source-reconciliation/nonclaims.md")?;
+    if nonclaims_bytes
+        != pcsm_clean_source_reconciliation_nonclaims_markdown(&reconciliation.nonclaims).as_bytes()
+    {
+        return Err(AdmissionJournalMaterializationError::NonclaimMismatch);
+    }
+
+    let validation: PcsmCleanSourceReconciliationValidationReport = parse_declared_json(
+        files,
+        "pcsm-clean-source-reconciliation/validation-report.json",
+    )?;
+    let expected_validation = PcsmCleanSourceReconciliationValidationReport {
+        schema_version: PCSM_CLEAN_SOURCE_RECONCILIATION_OUTPUT_VALIDATION_SCHEMA_VERSION
+            .to_owned(),
+        bundle_id: manifest.bundle_id.clone(),
+        valid: true,
+        reconciliation_digest: reconciliation.digest(),
+        checked_files: pcsm_clean_source_reconciliation_declared_files(),
+        claim_boundary: PCSM_CLEAN_SOURCE_RECONCILIATION_CLAIM_BOUNDARY.to_owned(),
+        accepted_evidence_created: false,
+        level2_evidence_created: false,
+        score_axes_populated: false,
+    };
+    if validation != expected_validation {
+        return Err(AdmissionJournalMaterializationError::ValidationReportMismatch);
+    }
+
+    Ok(manifest)
+}
+
+fn validate_pcsm_clean_source_reconciliation_manifest_semantics(
+    manifest: &PcsmCleanSourceReconciliationOutputManifest,
+    reconciliation: &PcsmCleanSourceIntakeReadbackReconciliation,
+    files: &BTreeMap<String, Vec<u8>>,
+) -> Result<(), AdmissionJournalMaterializationError> {
+    let expected_digest_paths: BTreeSet<String> = PCSM_CLEAN_SOURCE_RECONCILIATION_DECLARED_FILES
+        .iter()
+        .filter(|path| **path != "pcsm-clean-source-reconciliation/manifest.json")
+        .map(|path| (*path).to_owned())
+        .collect();
+    let actual_digest_paths: BTreeSet<String> =
+        manifest.declared_file_digests.keys().cloned().collect();
+
+    if manifest.schema_version != PCSM_CLEAN_SOURCE_RECONCILIATION_OUTPUT_SCHEMA_VERSION
+        || manifest.bundle_id.trim().is_empty()
+        || !is_safe_relative_path(&manifest.bundle_id)
+        || manifest.bundle_id.contains(['/', '\\'])
+        || manifest.reconciliation_digest != reconciliation.digest()
+        || manifest.coordinate_digest != reconciliation.coordinate_digest
+        || manifest.intake_digest != reconciliation.intake_digest
+        || manifest.candidate_digest != reconciliation.candidate_digest
+        || manifest.journal_tip_digest != reconciliation.journal_tip_digest
+        || manifest.declared_files != pcsm_clean_source_reconciliation_declared_files()
+        || actual_digest_paths != expected_digest_paths
+        || manifest.claim_boundary != PCSM_CLEAN_SOURCE_RECONCILIATION_CLAIM_BOUNDARY
+        || manifest.accepted_evidence_created
+        || manifest.level2_evidence_created
+        || manifest.score_axes_populated
+        || manifest.nonclaims != reconciliation.nonclaims
+    {
+        return Err(AdmissionJournalMaterializationError::ManifestSemanticMismatch);
+    }
+
+    for (logical_path, expected_digest) in &manifest.declared_file_digests {
+        if hash_bytes(declared_bytes(files, logical_path)?) != *expected_digest {
+            return Err(AdmissionJournalMaterializationError::ManifestSemanticMismatch);
+        }
+    }
+    Ok(())
+}
+
+fn pcsm_clean_source_reconciliation_declared_files() -> Vec<String> {
+    PCSM_CLEAN_SOURCE_RECONCILIATION_DECLARED_FILES
+        .iter()
+        .map(|value| (*value).to_owned())
+        .collect()
+}
+
+fn pcsm_clean_source_reconciliation_nonclaims_markdown(
+    nonclaims: &BTreeSet<NonClaimLabel>,
+) -> String {
+    let mut out = String::from("# PCSM Clean-Source Reconciliation Nonclaims\n\n");
+    for nonclaim in nonclaims {
+        out.push_str("- ");
+        out.push_str(&nonclaim.0);
+        out.push('\n');
+    }
+    out
+}
+
+fn reject_undeclared_pcsm_clean_source_reconciliation_files(
+    output_root: &Path,
+) -> Result<(), AdmissionJournalMaterializationError> {
+    let mut declared: BTreeSet<String> = PCSM_CLEAN_SOURCE_RECONCILIATION_DECLARED_FILES
+        .iter()
+        .chain(PCSM_CLEAN_SOURCE_RECONCILIATION_DECLARED_SIDECARS.iter())
+        .map(|value| (*value).to_owned())
+        .collect();
+    let bundle_dir = output_root.join("pcsm-clean-source-reconciliation");
+    for entry in fs::read_dir(&bundle_dir).map_err(materialization_io_error)? {
+        let entry = entry.map_err(materialization_io_error)?;
+        let logical_path = entry
+            .path()
+            .strip_prefix(output_root)
+            .map_err(|error| AdmissionJournalMaterializationError::Io(error.to_string()))?
+            .to_string_lossy()
+            .replace('\\', "/");
+        if !declared.remove(&logical_path) {
+            return Err(AdmissionJournalMaterializationError::UndeclaredFile(
+                logical_path,
+            ));
+        }
+    }
+    if let Some(missing) = declared.into_iter().next() {
+        return Err(AdmissionJournalMaterializationError::Io(format!(
+            "declared file missing: {missing}"
+        )));
     }
     Ok(())
 }
@@ -124124,6 +124535,9 @@ pub fn materialize_gateway_adversarial_corpus_output_run(
 const ADMISSION_JOURNAL_CLAIM_BOUNDARY: &str =
     "local admission-trace metadata only; not accepted evidence, proof, or benchmark evidence";
 
+const PCSM_CLEAN_SOURCE_RECONCILIATION_CLAIM_BOUNDARY: &str =
+    "local PCSM clean-source reconciliation metadata only; not accepted evidence, proof, or benchmark evidence";
+
 const GATEWAY_REPORT_CLAIM_BOUNDARY: &str =
     "local gateway report metadata only; not benchmark evidence, proof, production readiness, semantic correctness, global uniqueness, or a fully secure system";
 
@@ -124584,6 +124998,20 @@ const ADMISSION_JOURNAL_DECLARED_SIDECARS: &[&str] = &[
     "admission-journal/non-claims.md.sha256",
     "admission-journal/redaction-report.json.sha256",
     "admission-journal/validation-report.json.sha256",
+];
+
+const PCSM_CLEAN_SOURCE_RECONCILIATION_DECLARED_FILES: &[&str] = &[
+    "pcsm-clean-source-reconciliation/manifest.json",
+    "pcsm-clean-source-reconciliation/reconciliation.json",
+    "pcsm-clean-source-reconciliation/nonclaims.md",
+    "pcsm-clean-source-reconciliation/validation-report.json",
+];
+
+const PCSM_CLEAN_SOURCE_RECONCILIATION_DECLARED_SIDECARS: &[&str] = &[
+    "pcsm-clean-source-reconciliation/manifest.json.sha256",
+    "pcsm-clean-source-reconciliation/reconciliation.json.sha256",
+    "pcsm-clean-source-reconciliation/nonclaims.md.sha256",
+    "pcsm-clean-source-reconciliation/validation-report.json.sha256",
 ];
 
 fn is_full_hex_sha(value: &str) -> bool {
@@ -176145,6 +176573,44 @@ mod tests {
         );
     }
 
+    fn rewrite_pcsm_reconciliation_file_and_manifest_digest(
+        output_root: &Path,
+        logical_path: &str,
+        bytes: &[u8],
+    ) {
+        rewrite_bundle_file(output_root, logical_path, bytes);
+        let manifest_path = output_root.join("pcsm-clean-source-reconciliation/manifest.json");
+        let mut manifest: PcsmCleanSourceReconciliationOutputManifest = serde_json::from_slice(
+            &fs::read(&manifest_path).expect("PCSM reconciliation manifest reads for mutation"),
+        )
+        .expect("PCSM reconciliation manifest parses for mutation");
+        manifest
+            .declared_file_digests
+            .insert(logical_path.to_owned(), hash_bytes(bytes));
+        if logical_path == "pcsm-clean-source-reconciliation/reconciliation.json" {
+            if let Ok(reconciliation) =
+                serde_json::from_slice::<PcsmCleanSourceIntakeReadbackReconciliation>(bytes)
+            {
+                manifest.reconciliation_digest = reconciliation.digest();
+                manifest.coordinate_digest = reconciliation.coordinate_digest;
+                manifest.intake_digest = reconciliation.intake_digest;
+                manifest.candidate_digest = reconciliation.candidate_digest;
+                manifest.journal_tip_digest = reconciliation.journal_tip_digest;
+                manifest.accepted_evidence_created = reconciliation.accepted_evidence_created;
+                manifest.level2_evidence_created = reconciliation.level2_evidence_created;
+                manifest.score_axes_populated = reconciliation.score_axes_populated;
+                manifest.nonclaims = reconciliation.nonclaims;
+            }
+        }
+        let manifest_bytes = serde_json::to_vec_pretty(&manifest)
+            .expect("mutated PCSM reconciliation manifest serializes");
+        rewrite_bundle_file(
+            output_root,
+            "pcsm-clean-source-reconciliation/manifest.json",
+            &manifest_bytes,
+        );
+    }
+
     fn materialized_test_bundle(name: &str) -> (PathBuf, AgentAdmissionJournal) {
         let output_root = temp_output_root(name);
         let journal = two_entry_journal();
@@ -176280,6 +176746,41 @@ mod tests {
             sha256: handoff_digest,
         });
         intake
+    }
+
+    fn clean_source_pcsm_reconciliation(
+        candidate_id: &str,
+    ) -> PcsmCleanSourceIntakeReadbackReconciliation {
+        let intake = clean_source_pcsm_intake();
+        let coordinate =
+            PcsmCleanSourceHandoffCoordinate::from_intake("recoverable-ghost-states", &intake);
+        let candidate =
+            pcsm_bounded_proof_handoff_candidate(candidate_id, subject("pcsm"), &intake)
+                .expect("clean PCSM intake maps");
+        let pcsm_policy =
+            AgentAdmissionPolicy::local_default(pcsm_bounded_proof_required_nonclaims());
+        let decision = evaluate_admission(&candidate, &pcsm_policy);
+        let mut journal = AgentAdmissionJournal::default();
+        journal
+            .append_decision(&candidate, &pcsm_policy, decision)
+            .expect("PCSM decision appends");
+        let output_root = temp_output_root(candidate_id);
+        let mut request = materialization_request(candidate_id, &output_root);
+        request.admission_policy_id = pcsm_policy.id;
+        let manifest = materialize_admission_journal_bundle(&output_root, &journal, &request)
+            .expect("PCSM source journal materializes");
+        let readback = read_admission_journal_bundle(&output_root).expect("PCSM journal reads");
+        let reconciliation = reconcile_pcsm_clean_source_intake_readback(
+            &coordinate,
+            &intake,
+            &candidate,
+            &journal,
+            &manifest,
+            &readback,
+        )
+        .expect("clean-source PCSM reconciliation succeeds");
+        fs::remove_dir_all(&output_root).expect("PCSM source journal cleanup succeeds");
+        reconciliation
     }
 
     fn gateway_attestation_pubkey_hex() -> String {
@@ -189096,6 +189597,231 @@ mod tests {
         assert!(errors.contains(&PcsmCleanSourceReconciliationError::ManifestReadbackMismatch));
 
         fs::remove_dir_all(&output_root).expect("PCSM promotion cleanup succeeds");
+    }
+
+    #[test]
+    fn pcsm_clean_source_reconciliation_bundle_materializes_and_reads_back() {
+        let reconciliation = clean_source_pcsm_reconciliation("pcsm-clean-source-output");
+        let output_root = temp_output_root("pcsm-clean-source-output");
+        let request = PcsmCleanSourceReconciliationMaterializationRequest {
+            bundle_id: "pcsm-clean-source-output".to_owned(),
+            created_at_unix: 1_800_000_010,
+            overwrite: false,
+            protected_roots: vec![output_root
+                .parent()
+                .expect("temp output root has parent")
+                .join("protected-repo")],
+        };
+
+        let manifest = materialize_pcsm_clean_source_reconciliation_bundle(
+            &output_root,
+            &reconciliation,
+            &request,
+        )
+        .expect("PCSM reconciliation bundle materializes");
+
+        assert_eq!(manifest.bundle_id, "pcsm-clean-source-output");
+        assert_eq!(manifest.reconciliation_digest, reconciliation.digest());
+        assert_eq!(manifest.coordinate_digest, reconciliation.coordinate_digest);
+        assert_eq!(
+            manifest.claim_boundary,
+            PCSM_CLEAN_SOURCE_RECONCILIATION_CLAIM_BOUNDARY
+        );
+        assert!(!manifest.accepted_evidence_created);
+        assert!(!manifest.level2_evidence_created);
+        assert!(!manifest.score_axes_populated);
+        assert_eq!(
+            manifest.declared_files,
+            pcsm_clean_source_reconciliation_declared_files()
+        );
+        assert_eq!(
+            read_pcsm_clean_source_reconciliation_bundle(&output_root)
+                .expect("PCSM reconciliation bundle reads back"),
+            manifest
+        );
+        for logical_path in PCSM_CLEAN_SOURCE_RECONCILIATION_DECLARED_FILES {
+            let path = output_root.join(logical_path);
+            assert!(path.is_file(), "{logical_path} should exist");
+            assert!(
+                sidecar_path(&path).is_file(),
+                "{logical_path} sidecar should exist"
+            );
+        }
+
+        fs::remove_dir_all(&output_root).expect("PCSM reconciliation output cleanup succeeds");
+    }
+
+    #[test]
+    fn pcsm_clean_source_reconciliation_bundle_rejects_output_guards_and_promotion() {
+        let reconciliation = clean_source_pcsm_reconciliation("pcsm-clean-source-guards");
+        let output_root = temp_output_root("pcsm-clean-source-guards");
+        fs::create_dir_all(&output_root).expect("existing output root creates");
+        let request = PcsmCleanSourceReconciliationMaterializationRequest {
+            bundle_id: "pcsm-clean-source-guards".to_owned(),
+            created_at_unix: 1_800_000_011,
+            overwrite: false,
+            protected_roots: vec![output_root
+                .parent()
+                .expect("temp output root has parent")
+                .join("protected-repo")],
+        };
+        assert_eq!(
+            materialize_pcsm_clean_source_reconciliation_bundle(
+                &output_root,
+                &reconciliation,
+                &request
+            ),
+            Err(AdmissionJournalMaterializationError::OutputRootExistsWithoutOverwrite)
+        );
+
+        let protected_parent = output_root
+            .parent()
+            .expect("temp output root has parent")
+            .to_path_buf();
+        let protected_request = PcsmCleanSourceReconciliationMaterializationRequest {
+            protected_roots: vec![protected_parent],
+            overwrite: true,
+            ..request.clone()
+        };
+        assert_eq!(
+            materialize_pcsm_clean_source_reconciliation_bundle(
+                &output_root,
+                &reconciliation,
+                &protected_request
+            ),
+            Err(AdmissionJournalMaterializationError::ProtectedOutputRoot)
+        );
+        fs::remove_dir_all(&output_root).expect("guard output cleanup succeeds");
+
+        let mut promoted = reconciliation;
+        promoted.accepted_evidence_created = true;
+        let promotion_root = temp_output_root("pcsm-clean-source-promotion-output");
+        let promotion_request = PcsmCleanSourceReconciliationMaterializationRequest {
+            bundle_id: "pcsm-clean-source-promotion-output".to_owned(),
+            created_at_unix: 1_800_000_012,
+            overwrite: false,
+            protected_roots: vec![promotion_root
+                .parent()
+                .expect("temp output root has parent")
+                .join("protected-repo")],
+        };
+        assert_eq!(
+            materialize_pcsm_clean_source_reconciliation_bundle(
+                &promotion_root,
+                &promoted,
+                &promotion_request
+            ),
+            Err(AdmissionJournalMaterializationError::ManifestSemanticMismatch)
+        );
+    }
+
+    #[test]
+    fn pcsm_clean_source_reconciliation_readback_rejects_file_drift() {
+        let reconciliation = clean_source_pcsm_reconciliation("pcsm-clean-source-drift-output");
+        let output_root = temp_output_root("pcsm-clean-source-drift-output");
+        let request = PcsmCleanSourceReconciliationMaterializationRequest {
+            bundle_id: "pcsm-clean-source-drift-output".to_owned(),
+            created_at_unix: 1_800_000_013,
+            overwrite: false,
+            protected_roots: vec![output_root
+                .parent()
+                .expect("temp output root has parent")
+                .join("protected-repo")],
+        };
+        materialize_pcsm_clean_source_reconciliation_bundle(
+            &output_root,
+            &reconciliation,
+            &request,
+        )
+        .expect("PCSM reconciliation bundle materializes");
+
+        fs::write(
+            output_root.join("pcsm-clean-source-reconciliation/unexpected.txt"),
+            b"unexpected",
+        )
+        .expect("unexpected file writes");
+        assert_eq!(
+            read_pcsm_clean_source_reconciliation_bundle(&output_root),
+            Err(AdmissionJournalMaterializationError::UndeclaredFile(
+                "pcsm-clean-source-reconciliation/unexpected.txt".to_owned()
+            ))
+        );
+        fs::remove_file(output_root.join("pcsm-clean-source-reconciliation/unexpected.txt"))
+            .expect("unexpected file removal succeeds");
+
+        fs::write(
+            output_root.join("pcsm-clean-source-reconciliation/reconciliation.json"),
+            b"stale",
+        )
+        .expect("stale digest writes");
+        assert_eq!(
+            read_pcsm_clean_source_reconciliation_bundle(&output_root),
+            Err(AdmissionJournalMaterializationError::DigestMismatch(
+                "pcsm-clean-source-reconciliation/reconciliation.json".to_owned()
+            ))
+        );
+
+        fs::remove_dir_all(&output_root).expect("PCSM readback drift cleanup succeeds");
+    }
+
+    #[test]
+    fn pcsm_clean_source_reconciliation_readback_rejects_semantic_drift() {
+        let reconciliation = clean_source_pcsm_reconciliation("pcsm-clean-source-semantic-output");
+        let output_root = temp_output_root("pcsm-clean-source-semantic-output");
+        let request = PcsmCleanSourceReconciliationMaterializationRequest {
+            bundle_id: "pcsm-clean-source-semantic-output".to_owned(),
+            created_at_unix: 1_800_000_014,
+            overwrite: false,
+            protected_roots: vec![output_root
+                .parent()
+                .expect("temp output root has parent")
+                .join("protected-repo")],
+        };
+        materialize_pcsm_clean_source_reconciliation_bundle(
+            &output_root,
+            &reconciliation,
+            &request,
+        )
+        .expect("PCSM reconciliation bundle materializes");
+
+        let mut drifted = reconciliation.clone();
+        drifted.level2_evidence_created = true;
+        rewrite_pcsm_reconciliation_file_and_manifest_digest(
+            &output_root,
+            "pcsm-clean-source-reconciliation/reconciliation.json",
+            &serde_json::to_vec_pretty(&drifted).expect("drifted reconciliation serializes"),
+        );
+        assert_eq!(
+            read_pcsm_clean_source_reconciliation_bundle(&output_root),
+            Err(AdmissionJournalMaterializationError::ManifestSemanticMismatch)
+        );
+        fs::remove_dir_all(&output_root).expect("PCSM semantic drift cleanup succeeds");
+
+        let nonclaim_root = temp_output_root("pcsm-clean-source-nonclaim-output");
+        materialize_pcsm_clean_source_reconciliation_bundle(
+            &nonclaim_root,
+            &reconciliation,
+            &PcsmCleanSourceReconciliationMaterializationRequest {
+                bundle_id: "pcsm-clean-source-nonclaim-output".to_owned(),
+                created_at_unix: 1_800_000_015,
+                overwrite: false,
+                protected_roots: vec![nonclaim_root
+                    .parent()
+                    .expect("temp output root has parent")
+                    .join("protected-repo")],
+            },
+        )
+        .expect("PCSM nonclaim bundle materializes");
+        rewrite_pcsm_reconciliation_file_and_manifest_digest(
+            &nonclaim_root,
+            "pcsm-clean-source-reconciliation/nonclaims.md",
+            b"# PCSM Clean-Source Reconciliation Nonclaims\n\n- not proof\n",
+        );
+        assert_eq!(
+            read_pcsm_clean_source_reconciliation_bundle(&nonclaim_root),
+            Err(AdmissionJournalMaterializationError::NonclaimMismatch)
+        );
+        fs::remove_dir_all(&nonclaim_root).expect("PCSM nonclaim drift cleanup succeeds");
     }
 
     #[cfg(unix)]

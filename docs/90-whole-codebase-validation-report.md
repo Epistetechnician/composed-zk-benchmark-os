@@ -9016,5 +9016,16 @@ import, accepted Evidence Ledger mutation, accepted evidence, Level2+ evidence,
 score-axis population, benchmark evidence, external-audit claim, or
 production/SOTA/security/semantic-correctness claim.
 
+[docs/619-phase-pcsm-clean-source-reconciliation-materialization-notes.md](docs/619-phase-pcsm-clean-source-reconciliation-materialization-notes.md)
+documents the Phase 619 PCSM clean-source reconciliation materialization
+implementation. It adds a local declared-file audit bundle for valid Phase 617
+reconciliation summaries under `crates/hsai-agent-admission/src/lib.rs`, with
+manifest, reconciliation JSON, nonclaims, validation report, sidecars, staged
+writes, and semantic readback validation. It allows no source-repo parsing,
+PCSM runtime import, recoverable-ghost artifact import, accepted Evidence
+Ledger mutation, accepted evidence, Level2+ evidence, score-axis population,
+benchmark evidence, external-audit claim, or
+production/SOTA/security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
