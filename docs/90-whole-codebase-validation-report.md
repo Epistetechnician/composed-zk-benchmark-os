@@ -9048,5 +9048,16 @@ Evidence Ledger mutation, accepted evidence, Level2+ evidence, score-axis
 population, benchmark evidence, external-audit claim, or
 production/SOTA/security/semantic-correctness claim.
 
+[docs/622-phase-pcsm-clean-source-local-chain-closure-report.md](docs/622-phase-pcsm-clean-source-local-chain-closure-report.md)
+documents the Phase 622 PCSM clean-source local chain closure report. It adds
+only a documentation summary of the Phase 616-621 local metadata chain, records
+the clean recoverable-ghost-states source coordinate, and states that the prior
+dirty-source blocker is closed for HSAI local metadata intake. It allows no
+Rust implementation code, Cargo metadata changes, PCSM runtime import,
+source-repository parsing, source-repository command execution,
+recoverable-ghost artifact import, accepted Evidence Ledger mutation, accepted
+evidence, Level2+ evidence, score-axis population, benchmark evidence,
+external-audit claim, or production/SOTA/security/semantic-correctness claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

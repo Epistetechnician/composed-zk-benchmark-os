@@ -17514,6 +17514,34 @@ mutation, no accepted evidence, no Level2+ evidence, no populated score axes,
 no benchmark evidence, no external audit evidence, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 622 PCSM Clean-Source Local Chain Closure Report
+
+Status: complete for docs-only local chain closure reporting. See
+`docs/622-phase-pcsm-clean-source-local-chain-closure-report.md`.
+
+Goal: record the current end-to-end state of the PCSM clean-source local chain
+after Phases 616-621, including the exact clean external coordinate, the
+resolved HSAI-side dirty-source blocker for local metadata, and the remaining
+claim/evidence ceilings.
+
+Implemented: Phase 622 adds a single documentation report that summarizes the
+Phase 616 boundary, Phase 617 reconciliation, Phase 618 materialization
+boundary, Phase 619 materialized bundle/readback path, Phase 620 audit
+boundary, and Phase 621 in-memory audit summary. It states that HSAI now has a
+clean local metadata coordinate for the recoverable-ghost-states PCSM handoff
+and that the result remains Level1LocalReplay metadata only.
+
+Validation coverage: documentation review, repo claim-boundary docs test, repo
+hygiene test, and diff hygiene.
+
+Exit criteria: the PCSM clean-source local metadata chain now has an explicit
+closure report. Any next broadening still requires a docs-first boundary and
+still has no PCSM runtime import, source-repository parsing, source-repository
+command execution, recoverable-ghost artifact import, accepted Evidence Ledger
+mutation, accepted evidence, Level2+ evidence, populated score axes, benchmark
+evidence, external-audit claim, or production/SOTA/security/semantic-correctness
+claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
