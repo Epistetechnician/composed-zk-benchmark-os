@@ -17808,6 +17808,37 @@ execution, no additional SMT/Z3 execution in this phase, no benchmark evidence,
 no external-audit claim, and no production/SOTA/security/semantic-correctness
 claim.
 
+## Phase 632 HSAI Tiny Z3 Packet Role Artifact Independent Operator Accepted Result Evidence Packet Metadata
+
+Status: complete for local missing-packet metadata. See
+`docs/632-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-evidence-packet-notes.md`.
+
+Goal: implement the Phase 631 local packet metadata boundary over one exact
+Phase 630 blocked independent-reproduction requirement, without materializing a
+packet, creating accepted evidence, creating Level2+, populating score axes, or
+promoting backend/proof/claim evidence.
+
+Implemented: Phase 632 adds local schema/state/claim-boundary constants,
+evidence-packet input/output/issue/validation/classification/label types,
+deterministic Phase 630 and inherited digest bindings, deterministic
+packet-role digests for operator identity, operator statement, environment
+declaration, captured-output summary, redaction report, replay/correspondence,
+and import ownership, plus fail-closed validation against Phase 630 drift,
+inherited digest drift, packet-role drift, packet-role presence attempts, and
+promotion attempts.
+
+Validation coverage: focused Rust test
+`cargo test -p hsai-agent-admission --lib phase632_tiny_z3_packet_role_artifact_independent_operator_accepted_result_evidence_packet -- --nocapture`
+passes with 4 tests.
+
+Exit criteria: HSAI now has local accepted-result evidence-packet metadata after
+Phase 630. It still has no packet materialization, no independent external
+reproduction, no accepted external result import, no accepted Evidence Ledger
+mutation, no accepted evidence, no Level2+ evidence, no populated score axes, no
+Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution in this
+phase, no benchmark evidence, no external-audit claim, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
