@@ -9148,5 +9148,21 @@ production-readiness, breakthrough, and authority promotion. Focused validation
 passed with
 `cargo test -p hsai-agent-admission --lib phase630_tiny_z3_packet_role_artifact_independent_operator_accepted_result_independent_reproduction_requirement --quiet`.
 
+[docs/631-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-evidence-packet-boundary.md](docs/631-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-evidence-packet-boundary.md)
+documents the Phase 631 docs-first independent-operator evidence packet
+boundary after Phase 630. It requires one exact Phase 630
+`PacketRoleArtifactIndependentOperatorAcceptedResultIndependentReproductionEvidenceBlocked`
+record, Phase 630/628/601/599/597/595/593/591/589/587/585 and inherited digest
+bindings, non-secret packet roles for operator identity, operator statement,
+environment declaration, captured-output summary, redaction report,
+replay/correspondence, and import ownership, plus fail-closed packet digest
+rules before any accepted external result evidence, Level2+, score-axis, proof,
+audit, SOTA, full-security, semantic-correctness, production-readiness,
+breakthrough, or authority claim can advance. It creates no Rust code, creates
+no packet metadata, materializes no packet, imports no external result, mutates
+no accepted Evidence Ledger, creates no accepted evidence, creates no Level2+
+evidence, populates no score axes, and claims no production/SOTA/security
+/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
