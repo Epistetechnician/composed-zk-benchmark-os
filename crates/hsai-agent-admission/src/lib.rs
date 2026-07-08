@@ -31725,6 +31725,144 @@ pub fn read_pcsm_clean_source_reconciliation_bundle(
     validate_pcsm_clean_source_reconciliation_bundle_semantics(&file_bytes)
 }
 
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct PcsmCleanSourceReconciliationBundleAudit {
+    pub schema_version: String,
+    pub state_slice: String,
+    pub bundle_id: String,
+    pub output_manifest_digest: Hash,
+    pub reconciliation_digest: Hash,
+    pub coordinate_digest: Hash,
+    pub intake_digest: Hash,
+    pub candidate_digest: Hash,
+    pub journal_tip_digest: Hash,
+    pub claim_boundary: String,
+    pub local_bundle_metadata_consistent: bool,
+    pub accepted_evidence_created: bool,
+    pub level2_evidence_created: bool,
+    pub score_axes_populated: bool,
+    pub nonclaims: BTreeSet<NonClaimLabel>,
+}
+
+impl PcsmCleanSourceReconciliationBundleAudit {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:pcsm-clean-source-reconciliation-bundle-audit:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum PcsmCleanSourceReconciliationBundleAuditError {
+    InvalidManifestSchema,
+    InvalidBundleId,
+    ManifestReconciliationDigestMismatch,
+    ManifestCoordinateDigestMismatch,
+    ManifestIntakeDigestMismatch,
+    ManifestCandidateDigestMismatch,
+    ManifestJournalTipDigestMismatch,
+    ClaimBoundaryMismatch,
+    ManifestPromotionFlagSet,
+    ReconciliationPromotionFlagSet,
+    NonclaimMismatch,
+    MissingRequiredNonclaim(String),
+}
+
+pub const PCSM_CLEAN_SOURCE_RECONCILIATION_BUNDLE_AUDIT_SCHEMA_VERSION: &str =
+    "hsai-pcsm-clean-source-reconciliation-bundle-audit-v1";
+pub const PCSM_CLEAN_SOURCE_RECONCILIATION_BUNDLE_AUDIT_STATE_SLICE: &str =
+    "phase-621-pcsm-clean-source-reconciliation-bundle-audit";
+
+pub fn audit_pcsm_clean_source_reconciliation_bundle(
+    manifest: &PcsmCleanSourceReconciliationOutputManifest,
+    reconciliation: &PcsmCleanSourceIntakeReadbackReconciliation,
+) -> Result<
+    PcsmCleanSourceReconciliationBundleAudit,
+    Vec<PcsmCleanSourceReconciliationBundleAuditError>,
+> {
+    let mut errors = Vec::new();
+
+    if manifest.schema_version != PCSM_CLEAN_SOURCE_RECONCILIATION_OUTPUT_SCHEMA_VERSION {
+        errors.push(PcsmCleanSourceReconciliationBundleAuditError::InvalidManifestSchema);
+    }
+    if manifest.bundle_id.trim().is_empty()
+        || !is_safe_relative_path(&manifest.bundle_id)
+        || manifest.bundle_id.contains(['/', '\\'])
+    {
+        errors.push(PcsmCleanSourceReconciliationBundleAuditError::InvalidBundleId);
+    }
+    if manifest.reconciliation_digest != reconciliation.digest() {
+        errors.push(
+            PcsmCleanSourceReconciliationBundleAuditError::ManifestReconciliationDigestMismatch,
+        );
+    }
+    if manifest.coordinate_digest != reconciliation.coordinate_digest {
+        errors
+            .push(PcsmCleanSourceReconciliationBundleAuditError::ManifestCoordinateDigestMismatch);
+    }
+    if manifest.intake_digest != reconciliation.intake_digest {
+        errors.push(PcsmCleanSourceReconciliationBundleAuditError::ManifestIntakeDigestMismatch);
+    }
+    if manifest.candidate_digest != reconciliation.candidate_digest {
+        errors.push(PcsmCleanSourceReconciliationBundleAuditError::ManifestCandidateDigestMismatch);
+    }
+    if manifest.journal_tip_digest != reconciliation.journal_tip_digest {
+        errors
+            .push(PcsmCleanSourceReconciliationBundleAuditError::ManifestJournalTipDigestMismatch);
+    }
+    if manifest.claim_boundary != PCSM_CLEAN_SOURCE_RECONCILIATION_CLAIM_BOUNDARY
+        || reconciliation.claim_boundary != AdmissionClaimBoundary::LocalOnly
+    {
+        errors.push(PcsmCleanSourceReconciliationBundleAuditError::ClaimBoundaryMismatch);
+    }
+    if manifest.accepted_evidence_created
+        || manifest.level2_evidence_created
+        || manifest.score_axes_populated
+    {
+        errors.push(PcsmCleanSourceReconciliationBundleAuditError::ManifestPromotionFlagSet);
+    }
+    if reconciliation.accepted_evidence_created
+        || reconciliation.level2_evidence_created
+        || reconciliation.score_axes_populated
+    {
+        errors.push(PcsmCleanSourceReconciliationBundleAuditError::ReconciliationPromotionFlagSet);
+    }
+    if manifest.nonclaims != reconciliation.nonclaims {
+        errors.push(PcsmCleanSourceReconciliationBundleAuditError::NonclaimMismatch);
+    }
+    for required in pcsm_bounded_proof_required_nonclaims() {
+        if !manifest.nonclaims.contains(&required) || !reconciliation.nonclaims.contains(&required)
+        {
+            errors.push(
+                PcsmCleanSourceReconciliationBundleAuditError::MissingRequiredNonclaim(required.0),
+            );
+        }
+    }
+
+    if !errors.is_empty() {
+        return Err(errors);
+    }
+
+    Ok(PcsmCleanSourceReconciliationBundleAudit {
+        schema_version: PCSM_CLEAN_SOURCE_RECONCILIATION_BUNDLE_AUDIT_SCHEMA_VERSION.to_owned(),
+        state_slice: PCSM_CLEAN_SOURCE_RECONCILIATION_BUNDLE_AUDIT_STATE_SLICE.to_owned(),
+        bundle_id: manifest.bundle_id.clone(),
+        output_manifest_digest: manifest.digest(),
+        reconciliation_digest: reconciliation.digest(),
+        coordinate_digest: reconciliation.coordinate_digest,
+        intake_digest: reconciliation.intake_digest,
+        candidate_digest: reconciliation.candidate_digest,
+        journal_tip_digest: reconciliation.journal_tip_digest,
+        claim_boundary: PCSM_CLEAN_SOURCE_RECONCILIATION_CLAIM_BOUNDARY.to_owned(),
+        local_bundle_metadata_consistent: true,
+        accepted_evidence_created: false,
+        level2_evidence_created: false,
+        score_axes_populated: false,
+        nonclaims: reconciliation.nonclaims.clone(),
+    })
+}
+
 const REQUIRED_PCSM_VERIFIERS: &[&str] = &[
     "verify_cl12_local_mlx_pcsm_surrogate",
     "verify_cl12_external_benchmark_replication",
@@ -189822,6 +189960,131 @@ mod tests {
             Err(AdmissionJournalMaterializationError::NonclaimMismatch)
         );
         fs::remove_dir_all(&nonclaim_root).expect("PCSM nonclaim drift cleanup succeeds");
+    }
+
+    #[test]
+    fn pcsm_clean_source_reconciliation_bundle_audit_accepts_readback_valid_manifest() {
+        let reconciliation = clean_source_pcsm_reconciliation("pcsm-clean-source-audit");
+        let output_root = temp_output_root("pcsm-clean-source-audit");
+        let request = PcsmCleanSourceReconciliationMaterializationRequest {
+            bundle_id: "pcsm-clean-source-audit".to_owned(),
+            created_at_unix: 1_800_000_016,
+            overwrite: false,
+            protected_roots: vec![output_root
+                .parent()
+                .expect("temp output root has parent")
+                .join("protected-repo")],
+        };
+        materialize_pcsm_clean_source_reconciliation_bundle(
+            &output_root,
+            &reconciliation,
+            &request,
+        )
+        .expect("PCSM reconciliation bundle materializes");
+        let manifest = read_pcsm_clean_source_reconciliation_bundle(&output_root)
+            .expect("PCSM reconciliation bundle reads back");
+
+        let audit = audit_pcsm_clean_source_reconciliation_bundle(&manifest, &reconciliation)
+            .expect("readback-valid manifest audits");
+
+        assert_eq!(
+            audit.schema_version,
+            PCSM_CLEAN_SOURCE_RECONCILIATION_BUNDLE_AUDIT_SCHEMA_VERSION
+        );
+        assert_eq!(
+            audit.state_slice,
+            PCSM_CLEAN_SOURCE_RECONCILIATION_BUNDLE_AUDIT_STATE_SLICE
+        );
+        assert_eq!(audit.output_manifest_digest, manifest.digest());
+        assert_eq!(audit.reconciliation_digest, reconciliation.digest());
+        assert!(audit.local_bundle_metadata_consistent);
+        assert!(!audit.accepted_evidence_created);
+        assert!(!audit.level2_evidence_created);
+        assert!(!audit.score_axes_populated);
+
+        fs::remove_dir_all(&output_root).expect("PCSM audit cleanup succeeds");
+    }
+
+    #[test]
+    fn pcsm_clean_source_reconciliation_bundle_audit_rejects_digest_drift() {
+        let reconciliation = clean_source_pcsm_reconciliation("pcsm-clean-source-audit-drift");
+        let output_root = temp_output_root("pcsm-clean-source-audit-drift");
+        let request = PcsmCleanSourceReconciliationMaterializationRequest {
+            bundle_id: "pcsm-clean-source-audit-drift".to_owned(),
+            created_at_unix: 1_800_000_017,
+            overwrite: false,
+            protected_roots: vec![output_root
+                .parent()
+                .expect("temp output root has parent")
+                .join("protected-repo")],
+        };
+        let mut manifest = materialize_pcsm_clean_source_reconciliation_bundle(
+            &output_root,
+            &reconciliation,
+            &request,
+        )
+        .expect("PCSM reconciliation bundle materializes");
+
+        manifest.reconciliation_digest = Hash([88; 32]);
+        manifest.coordinate_digest = Hash([89; 32]);
+        let errors = audit_pcsm_clean_source_reconciliation_bundle(&manifest, &reconciliation)
+            .expect_err("digest drift rejects");
+        assert!(errors.contains(
+            &PcsmCleanSourceReconciliationBundleAuditError::ManifestReconciliationDigestMismatch
+        ));
+        assert!(errors.contains(
+            &PcsmCleanSourceReconciliationBundleAuditError::ManifestCoordinateDigestMismatch
+        ));
+
+        fs::remove_dir_all(&output_root).expect("PCSM audit drift cleanup succeeds");
+    }
+
+    #[test]
+    fn pcsm_clean_source_reconciliation_bundle_audit_rejects_boundary_nonclaim_and_promotion_drift()
+    {
+        let mut reconciliation = clean_source_pcsm_reconciliation("pcsm-clean-source-audit-policy");
+        let output_root = temp_output_root("pcsm-clean-source-audit-policy");
+        let request = PcsmCleanSourceReconciliationMaterializationRequest {
+            bundle_id: "pcsm-clean-source-audit-policy".to_owned(),
+            created_at_unix: 1_800_000_018,
+            overwrite: false,
+            protected_roots: vec![output_root
+                .parent()
+                .expect("temp output root has parent")
+                .join("protected-repo")],
+        };
+        let mut manifest = materialize_pcsm_clean_source_reconciliation_bundle(
+            &output_root,
+            &reconciliation,
+            &request,
+        )
+        .expect("PCSM reconciliation bundle materializes");
+
+        manifest.claim_boundary = "promoted".to_owned();
+        manifest.level2_evidence_created = true;
+        manifest
+            .nonclaims
+            .remove(&NonClaimLabel("not proof".to_owned()));
+        reconciliation.score_axes_populated = true;
+        let errors = audit_pcsm_clean_source_reconciliation_bundle(&manifest, &reconciliation)
+            .expect_err("boundary, nonclaim, and promotion drift reject");
+
+        assert!(
+            errors.contains(&PcsmCleanSourceReconciliationBundleAuditError::ClaimBoundaryMismatch)
+        );
+        assert!(errors
+            .contains(&PcsmCleanSourceReconciliationBundleAuditError::ManifestPromotionFlagSet));
+        assert!(errors.contains(
+            &PcsmCleanSourceReconciliationBundleAuditError::ReconciliationPromotionFlagSet
+        ));
+        assert!(errors.contains(&PcsmCleanSourceReconciliationBundleAuditError::NonclaimMismatch));
+        assert!(errors.contains(
+            &PcsmCleanSourceReconciliationBundleAuditError::MissingRequiredNonclaim(
+                "not proof".to_owned()
+            )
+        ));
+
+        fs::remove_dir_all(&output_root).expect("PCSM audit policy cleanup succeeds");
     }
 
     #[cfg(unix)]

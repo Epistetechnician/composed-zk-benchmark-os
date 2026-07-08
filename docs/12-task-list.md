@@ -17486,6 +17486,34 @@ import, no accepted Evidence Ledger mutation, no accepted evidence, no Level2+
 evidence, no populated score axes, no benchmark evidence, no external audit
 evidence, and no production/SOTA/security/semantic-correctness claim.
 
+## Phase 621 PCSM Clean-Source Reconciliation Bundle Audit
+
+Status: complete for local audit-summary implementation. See
+`docs/621-phase-pcsm-clean-source-reconciliation-bundle-audit-notes.md`.
+
+Goal: implement an in-memory local audit summary over one readback-valid Phase
+619 PCSM clean-source reconciliation output manifest and its source Phase 617
+reconciliation record.
+
+Implemented: Phase 621 adds the audit summary type, audit error taxonomy,
+deterministic audit digest, schema/state-slice constants, and
+`audit_pcsm_clean_source_reconciliation_bundle` under
+`crates/hsai-agent-admission/src/lib.rs`. The audit checks manifest schema,
+bundle ID, reconciliation digest, coordinate digest, intake digest, candidate
+digest, journal-tip digest, claim boundary, nonclaims, and nonpromotion flags.
+
+Validation coverage: focused Rust tests cover valid audit summary construction,
+reconciliation and coordinate digest drift rejection, claim-boundary drift
+rejection, manifest and reconciliation promotion drift rejection, and nonclaim
+drift/missing-nonclaim rejection.
+
+Exit criteria: a readback-valid Phase 619 bundle can now be summarized as
+local audit metadata. It still has no source-repo parsing, no PCSM runtime
+import, no recoverable-ghost artifact import, no accepted Evidence Ledger
+mutation, no accepted evidence, no Level2+ evidence, no populated score axes,
+no benchmark evidence, no external audit evidence, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
