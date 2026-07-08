@@ -17973,6 +17973,38 @@ no populated score axes, no Lean/COBALT/Rust-to-Lean execution, no additional
 SMT/Z3 execution in this phase, no benchmark evidence, no external-audit claim,
 and no production/SOTA/security/semantic-correctness claim.
 
+## Phase 637 HSAI Tiny Z3 Packet Role Artifact Independent Operator Accepted Result Output Plumbing Boundary
+
+Status: complete for docs-first accepted-result output plumbing boundary. See
+`docs/637-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-plumbing-boundary.md`.
+
+Goal: define the future caller-owned output-root plumbing contract for Phase
+636 accepted-result output metadata, without implementing output plumbing,
+writing files, reading output roots, creating accepted evidence, creating
+Level2+, populating score axes, or promoting backend/proof/claim evidence.
+
+Implemented: Phase 637 defines future plumbing request data, declared bundle
+namespace and role files, sidecar requirements, protected-root rejection,
+staged-write requirements, readback validation rules, forbidden behavior,
+future local-bundle classifications, and future Phase 638 implementation exit
+criteria. It requires one exact Phase 636
+`PacketRoleArtifactIndependentOperatorAcceptedResultOutputMissing` record and
+binds Phase 636/634/632/630/628/601/599/597/595/593/591/589/587/585 plus
+inherited Phase 583/581/579/577/575/573/571/569/567/565/563/561/559/557/555
+and backend-execution digests.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named accepted-result output plumbing boundary.
+It still has no output plumbing implementation, no written packet-role files,
+no output-root read or write, no independent external reproduction, no accepted
+external result import, no accepted Evidence Ledger mutation, no accepted
+evidence, no Level2+ evidence, no populated score axes, no
+Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution in this
+phase, no benchmark evidence, no external-audit claim, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
