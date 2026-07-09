@@ -17342,7 +17342,12 @@ local multi-obligation Z3 campaign.
 Implemented: Phase 615 records the exact Phase 603-614 changes, confirms that
 the Phase 614 two-obligation mixed local campaign is the current campaign,
 decides not to run a broader campaign yet, and preserves the
-`Level1LocalReplay` ceiling.
+`Level1LocalReplay` ceiling. It also records the testing-acceleration policy:
+future local Z3/SMT, Lean, COBALT, Rust-to-Lean, or related formal backend
+lanes should optimize for fast quarantined execution with provenance and
+negative promotion tests, while accepted evidence, Level2+, score-axis,
+benchmark, proof-authority, production, SOTA, full-security, and action
+authority claims remain blocked until separately reviewed and accepted.
 
 Validation coverage: documentation review plus focused Phase 614 campaign gate.
 
@@ -17352,7 +17357,9 @@ artifact, no UI/dashboard, no normal-gate credential path, no accepted external
 evidence, no accepted formal evidence, no accepted independent external
 reproduction, no Level2+ evidence, no populated score axes, no benchmark
 evidence, no external audit evidence, no proof authority, and no
-production/SOTA/security/semantic-correctness claim.
+production/SOTA/security/semantic-correctness claim. The blocked claim ceiling
+does not prohibit future named nonpromoting test lanes; it prohibits treating
+their outputs as promoted evidence or strong claims by default.
 
 ## Phase 616 PCSM Clean-Source Intake Readback Reconciliation Boundary
 
@@ -18261,6 +18268,38 @@ Evidence Ledger mutation, no accepted evidence, no Level2+ evidence, no
 populated score axes, no Lean/COBALT/Rust-to-Lean execution, no additional
 SMT/Z3 execution in this phase, no benchmark evidence, no external-audit
 claim, and no production/SOTA/security/semantic-correctness claim.
+
+## Phase 646 HSAI Tiny Z3 Packet Role Artifact Independent Operator Accepted Result Output Policy Resolution Metadata
+
+Status: complete for local accepted-result output policy-resolution metadata.
+See
+`docs/646-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-policy-resolution-notes.md`.
+
+Goal: implement the Phase 645 policy-resolution boundary over one exact Phase
+644 accepted-result output evidence eligibility metadata record, without
+importing external results, mutating accepted evidence, creating accepted
+evidence, creating Level2+, populating score axes, running a backend, or
+promoting proof/claim evidence.
+
+Implemented: Phase 646 adds typed input/output/classification/label/issue
+metadata, deterministic digest/id/label bindings, resolution policy digest,
+resolution blocker digest, resolution nonpromotion digest, exact Phase 644
+source-state validation, inherited Phase 642/640/638/636/634/632/630/628/595
+/593/591/589/587/585 digest checks, and focused rejection tests for Phase 644
+drift, inherited digest drift, accepted-ledger mutation, accepted evidence,
+Level2, and strong-claim promotion attempts.
+
+Validation coverage: focused validation passed with
+`cargo test -p hsai-agent-admission --lib phase646_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_policy_resolution -- --nocapture`.
+
+Exit criteria: HSAI now has local blocked accepted-result output
+policy-resolution metadata over a blocked Phase 644 eligibility record. It
+still has no independent external reproduction, no accepted external result
+import, no accepted Evidence Ledger mutation, no accepted evidence, no Level2+
+evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean execution, no
+additional SMT/Z3 execution in this phase, no benchmark evidence, no
+external-audit claim, and no production/SOTA/security/semantic-correctness
+claim.
 
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
