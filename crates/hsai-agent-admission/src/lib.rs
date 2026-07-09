@@ -213,9 +213,19 @@ pub struct GatewayActionProposal {
     pub signer_or_tool_requested_before_admission: bool,
 }
 
+pub const GATEWAY_ACTION_PROPOSAL_DIGEST_TAG: &str =
+    "hsai-agent-admission:gateway-action-proposal:v1";
+
+/// Returns the exact source-bound Serde JSON bytes hashed by the production
+/// proposal digest. This is not a portable canonical-JSON guarantee.
+pub fn gateway_action_proposal_digest_preimage(proposal: &GatewayActionProposal) -> Vec<u8> {
+    serde_json::to_vec(&(GATEWAY_ACTION_PROPOSAL_DIGEST_TAG, proposal))
+        .expect("gateway action proposals must serialize for deterministic hashing")
+}
+
 impl GatewayActionProposal {
     pub fn digest(&self) -> Hash {
-        hash_tagged("hsai-agent-admission:gateway-action-proposal:v1", self)
+        hash_bytes(&gateway_action_proposal_digest_preimage(self))
     }
 }
 
@@ -144267,6 +144277,31 @@ mod tests {
         }
     }
 
+    fn phase660_gateway_digest_preimage_fixture() -> GatewayActionProposal {
+        GatewayActionProposal {
+            id: GatewayActionId("phase660-action".to_owned()),
+            subject: subject("agent-phase660"),
+            action_kind: GatewayActionKind::Payment,
+            target: "treasury-safe".to_owned(),
+            value_units: 50,
+            source_artifact_digests: BTreeSet::new(),
+            nonclaims: BTreeSet::new(),
+            model_lane: GatewayModelLaneProvenance {
+                lane_kind: GatewayModelLaneKind::Deterministic,
+                model_family: "model-a".to_owned(),
+                artifact_id: "artifact-a".to_owned(),
+                runtime: "runtime-a".to_owned(),
+                prompt_template_digest: Hash([1; 32]),
+                input_corpus_digest: Hash([2; 32]),
+                output_bundle_digest: Hash([3; 32]),
+                non_secret: true,
+            },
+            threat_labels: BTreeSet::new(),
+            direct_authority_requested: false,
+            signer_or_tool_requested_before_admission: false,
+        }
+    }
+
     fn gateway_adversarial_case(id: &str, threat_label: GatewayThreatLabel) -> GatewayCorpusCase {
         let mut proposal = gateway_proposal(id);
         proposal.threat_labels = BTreeSet::from([threat_label.clone()]);
@@ -175570,6 +175605,282 @@ mod tests {
             .chain(replay.cleanup_roots)
         {
             fs::remove_dir_all(root).expect("phase658 replay cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase660_gateway_digest_preimage_matches_golden_bytes_and_existing_digest() {
+        const EXPECTED_PREIMAGE: &str = concat!(
+            r#"["hsai-agent-admission:gateway-action-proposal:v1",{"id":"phase660-action","subject":"agent-phase660","action_kind":"Payment","target":"treasury-safe","value_units":50,"source_artifact_digests":[],"nonclaims":[],"model_lane":{"lane_kind":"Deterministic","model_family":"model-a","artifact_id":"artifact-a","runtime":"runtime-a","prompt_template_digest":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],"#,
+            r#""input_corpus_digest":[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],"#,
+            r#""output_bundle_digest":[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],"non_secret":true},"threat_labels":[],"direct_authority_requested":false,"signer_or_tool_requested_before_admission":false}]"#,
+        );
+        let proposal = phase660_gateway_digest_preimage_fixture();
+
+        let first = gateway_action_proposal_digest_preimage(&proposal);
+        let second = gateway_action_proposal_digest_preimage(&proposal);
+
+        assert_eq!(first, second);
+        assert_eq!(first, EXPECTED_PREIMAGE.as_bytes());
+        assert_eq!(
+            proposal.digest(),
+            hash_from_hex("52de11c37c1492b7c9fb7c42660d693f5a7cbc6ed69f3bb371d66ad2686938fa")
+        );
+        assert_eq!(proposal.digest(), hash_bytes(&first));
+        assert_eq!(
+            proposal.digest(),
+            hash_tagged(GATEWAY_ACTION_PROPOSAL_DIGEST_TAG, &proposal)
+        );
+    }
+
+    #[test]
+    fn phase660_gateway_digest_preimage_detects_each_concrete_field_mutation() {
+        let baseline = gateway_proposal("phase660-fields");
+        let baseline_preimage = gateway_action_proposal_digest_preimage(&baseline);
+        let baseline_digest = baseline.digest();
+        let mut mutations = Vec::new();
+
+        let mut mutation = baseline.clone();
+        mutation.id = GatewayActionId("phase660-fields-mutated".to_owned());
+        mutations.push(("id", mutation));
+
+        let mut mutation = baseline.clone();
+        mutation.subject = subject("agent-phase660-mutated");
+        mutations.push(("subject", mutation));
+
+        let mut mutation = baseline.clone();
+        mutation.action_kind = GatewayActionKind::Trade;
+        mutations.push(("action_kind", mutation));
+
+        let mut mutation = baseline.clone();
+        mutation.target = "phase660-target-mutated".to_owned();
+        mutations.push(("target", mutation));
+
+        let mut mutation = baseline.clone();
+        mutation.value_units = 51;
+        mutations.push(("value_units", mutation));
+
+        let mut mutation = baseline.clone();
+        mutation
+            .source_artifact_digests
+            .insert(artifact("phase660-artifact-mutated", 31));
+        mutations.push(("source_artifact_digests", mutation));
+
+        let mut mutation = baseline.clone();
+        mutation
+            .nonclaims
+            .insert(nonclaim("phase660 nonclaim mutation"));
+        mutations.push(("nonclaims", mutation));
+
+        let mut mutation = baseline.clone();
+        mutation.model_lane.lane_kind = GatewayModelLaneKind::PremiumEscalation;
+        mutations.push(("model_lane.lane_kind", mutation));
+
+        let mut mutation = baseline.clone();
+        mutation.model_lane.model_family = "phase660-family-mutated".to_owned();
+        mutations.push(("model_lane.model_family", mutation));
+
+        let mut mutation = baseline.clone();
+        mutation.model_lane.artifact_id = "phase660-artifact-id-mutated".to_owned();
+        mutations.push(("model_lane.artifact_id", mutation));
+
+        let mut mutation = baseline.clone();
+        mutation.model_lane.runtime = "phase660-runtime-mutated".to_owned();
+        mutations.push(("model_lane.runtime", mutation));
+
+        let mut mutation = baseline.clone();
+        mutation.model_lane.prompt_template_digest = Hash([41; 32]);
+        mutations.push(("model_lane.prompt_template_digest", mutation));
+
+        let mut mutation = baseline.clone();
+        mutation.model_lane.input_corpus_digest = Hash([42; 32]);
+        mutations.push(("model_lane.input_corpus_digest", mutation));
+
+        let mut mutation = baseline.clone();
+        mutation.model_lane.output_bundle_digest = Hash([43; 32]);
+        mutations.push(("model_lane.output_bundle_digest", mutation));
+
+        let mut mutation = baseline.clone();
+        mutation.model_lane.non_secret = false;
+        mutations.push(("model_lane.non_secret", mutation));
+
+        let mut mutation = baseline.clone();
+        mutation
+            .threat_labels
+            .insert(GatewayThreatLabel::WrongCounterparty);
+        mutations.push(("threat_labels", mutation));
+
+        let mut mutation = baseline.clone();
+        mutation.direct_authority_requested = true;
+        mutations.push(("direct_authority_requested", mutation));
+
+        let mut mutation = baseline.clone();
+        mutation.signer_or_tool_requested_before_admission = true;
+        mutations.push(("signer_or_tool_requested_before_admission", mutation));
+
+        assert_eq!(mutations.len(), 18);
+        for (field, mutation) in mutations {
+            assert_ne!(
+                gateway_action_proposal_digest_preimage(&mutation),
+                baseline_preimage,
+                "phase660 mutation must change preimage: {field}"
+            );
+            assert_ne!(
+                mutation.digest(),
+                baseline_digest,
+                "phase660 concrete mutation must change digest: {field}"
+            );
+        }
+    }
+
+    #[test]
+    fn phase660_gateway_digest_preimage_is_independent_of_btree_set_insertion_order() {
+        let mut first = phase660_gateway_digest_preimage_fixture();
+        first.source_artifact_digests = BTreeSet::new();
+        first
+            .source_artifact_digests
+            .insert(artifact("z-artifact", 9));
+        first
+            .source_artifact_digests
+            .insert(artifact("a-artifact", 8));
+        first.nonclaims = BTreeSet::new();
+        first.nonclaims.insert(nonclaim("z-nonclaim"));
+        first.nonclaims.insert(nonclaim("a-nonclaim"));
+        first.threat_labels = BTreeSet::new();
+        first
+            .threat_labels
+            .insert(GatewayThreatLabel::StaleApprovalReplay);
+        first.threat_labels.insert(GatewayThreatLabel::Benign);
+
+        let mut second = phase660_gateway_digest_preimage_fixture();
+        second.source_artifact_digests = BTreeSet::new();
+        second
+            .source_artifact_digests
+            .insert(artifact("a-artifact", 8));
+        second
+            .source_artifact_digests
+            .insert(artifact("z-artifact", 9));
+        second.nonclaims = BTreeSet::new();
+        second.nonclaims.insert(nonclaim("a-nonclaim"));
+        second.nonclaims.insert(nonclaim("z-nonclaim"));
+        second.threat_labels = BTreeSet::new();
+        second.threat_labels.insert(GatewayThreatLabel::Benign);
+        second
+            .threat_labels
+            .insert(GatewayThreatLabel::StaleApprovalReplay);
+
+        assert_eq!(first, second);
+        assert_eq!(
+            gateway_action_proposal_digest_preimage(&first),
+            gateway_action_proposal_digest_preimage(&second)
+        );
+        assert_eq!(first.digest(), second.digest());
+    }
+
+    #[test]
+    fn phase660_gateway_digest_preimage_locks_tag_encoding_and_enum_edges() {
+        let mut edge = phase660_gateway_digest_preimage_fixture();
+        edge.target = "quote\" slash\\ newline\n tab\t nul\0 snowman \u{2603}".to_owned();
+        edge.value_units = u64::MAX;
+        edge.source_artifact_digests = BTreeSet::from([artifact("edge-artifact", 255)]);
+        edge.nonclaims = BTreeSet::from([nonclaim("edge nonclaim")]);
+        edge.threat_labels = BTreeSet::from([GatewayThreatLabel::DuplicateJsonKeyPayload]);
+        let edge_text = String::from_utf8(gateway_action_proposal_digest_preimage(&edge))
+            .expect("phase660 preimage must be UTF-8 JSON");
+
+        let expected_target = format!(
+            r#""target":"quote\" slash\\ newline\n tab\t nul\u0000 snowman {}""#,
+            '\u{2603}'
+        );
+        assert!(edge_text.contains(&expected_target));
+        assert!(edge_text.contains(r#""value_units":18446744073709551615"#));
+        assert!(edge_text.contains(r#""source_artifact_digests":[{"id":"edge-artifact""#));
+        assert!(edge_text.contains(r#""nonclaims":["edge nonclaim"]"#));
+
+        let alternate_tag_preimage =
+            serde_json::to_vec(&("hsai-agent-admission:gateway-action-proposal:v2", &edge))
+                .expect("phase660 alternate tag fixture serializes");
+        assert_ne!(
+            alternate_tag_preimage,
+            gateway_action_proposal_digest_preimage(&edge)
+        );
+        assert_ne!(hash_bytes(&alternate_tag_preimage), edge.digest());
+
+        let action_variants = [
+            (GatewayActionKind::Payment, "Payment"),
+            (GatewayActionKind::Trade, "Trade"),
+            (GatewayActionKind::ToolCall, "ToolCall"),
+            (GatewayActionKind::DataAccess, "DataAccess"),
+            (GatewayActionKind::ComputeRental, "ComputeRental"),
+            (GatewayActionKind::Deployment, "Deployment"),
+            (GatewayActionKind::Checkout, "Checkout"),
+        ];
+        for (variant, label) in action_variants {
+            let mut proposal = phase660_gateway_digest_preimage_fixture();
+            proposal.action_kind = variant;
+            let text = String::from_utf8(gateway_action_proposal_digest_preimage(&proposal))
+                .expect("phase660 action variant preimage is UTF-8");
+            assert!(text.contains(&format!(r#""action_kind":"{label}""#)));
+        }
+
+        let model_lane_variants = [
+            (GatewayModelLaneKind::Deterministic, "Deterministic"),
+            (GatewayModelLaneKind::LocalOpenWeight, "LocalOpenWeight"),
+            (GatewayModelLaneKind::RentedOpenWeight, "RentedOpenWeight"),
+            (GatewayModelLaneKind::HostedSmall, "HostedSmall"),
+            (GatewayModelLaneKind::PremiumEscalation, "PremiumEscalation"),
+        ];
+        for (variant, label) in model_lane_variants {
+            let mut proposal = phase660_gateway_digest_preimage_fixture();
+            proposal.model_lane.lane_kind = variant;
+            let text = String::from_utf8(gateway_action_proposal_digest_preimage(&proposal))
+                .expect("phase660 model-lane variant preimage is UTF-8");
+            assert!(text.contains(&format!(r#""lane_kind":"{label}""#)));
+        }
+
+        let threat_variants = [
+            (GatewayThreatLabel::Benign, "Benign"),
+            (
+                GatewayThreatLabel::PromptInjectionPayment,
+                "PromptInjectionPayment",
+            ),
+            (GatewayThreatLabel::WrongCounterparty, "WrongCounterparty"),
+            (GatewayThreatLabel::AmountLimitBypass, "AmountLimitBypass"),
+            (GatewayThreatLabel::SourceDigestDrift, "SourceDigestDrift"),
+            (
+                GatewayThreatLabel::StaleApprovalReplay,
+                "StaleApprovalReplay",
+            ),
+            (
+                GatewayThreatLabel::DuplicateJsonKeyPayload,
+                "DuplicateJsonKeyPayload",
+            ),
+            (GatewayThreatLabel::PolicyDowngrade, "PolicyDowngrade"),
+            (
+                GatewayThreatLabel::DirectAuthorityRequest,
+                "DirectAuthorityRequest",
+            ),
+            (
+                GatewayThreatLabel::ForgedAcceptedDecision,
+                "ForgedAcceptedDecision",
+            ),
+            (GatewayThreatLabel::MissingNonclaim, "MissingNonclaim"),
+            (
+                GatewayThreatLabel::MissingSourceDigest,
+                "MissingSourceDigest",
+            ),
+            (GatewayThreatLabel::StaleJournalTip, "StaleJournalTip"),
+            (
+                GatewayThreatLabel::SignerBeforeAdmission,
+                "SignerBeforeAdmission",
+            ),
+        ];
+        for (variant, label) in threat_variants {
+            let mut proposal = phase660_gateway_digest_preimage_fixture();
+            proposal.threat_labels = BTreeSet::from([variant]);
+            let text = String::from_utf8(gateway_action_proposal_digest_preimage(&proposal))
+                .expect("phase660 threat variant preimage is UTF-8");
+            assert!(text.contains(&format!(r#""threat_labels":["{label}"]"#)));
         }
     }
 
