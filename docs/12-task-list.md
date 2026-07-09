@@ -18538,6 +18538,34 @@ mutation, no accepted evidence, no Level2+ evidence, no populated score axes,
 no benchmark evidence, no external-audit claim, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 655 HSAI Tiny-Z3 Gateway Digest-Binding Execution Boundary
+
+Status: complete for docs-first narrow tiny-Z3 execution boundary. See
+`docs/655-phase-hsai-tiny-z3-gateway-digest-binding-execution-boundary.md`.
+
+Goal: open the first responsible post-architecture execution-boundary phase by
+naming exactly one backend lane and one target property, while still forbidding
+backend execution and claim promotion in this phase.
+
+Implemented: Phase 655 names `TinyZ3ReplayExtension` as the only backend lane
+and `gateway_proposal_digest_binding_determinism_v1` as the only target
+property. It defines the required later execution inputs, output shape, failure
+taxonomy, negative promotion tests, evidence ceiling, next responsible phase,
+and defensible claim.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+claim-boundary docs checks, source scans, markdown navigation checks, and the
+root lint fallback.
+
+Exit criteria: HSAI now has a narrow tiny-Z3 execution boundary for one gateway
+proposal digest-binding determinism property. It still has no Phase 655 backend
+execution, no Lean run, no COBALT run, no Rust-to-Lean extraction, no DeepProve
+run, no proof artifacts, no checker transcripts, no solver certificates, no
+raw transcript retention, no accepted Evidence Ledger mutation, no accepted
+evidence, no Level2+ evidence, no populated score axes, no benchmark evidence,
+no external-audit claim, and no production/SOTA/security/semantic-correctness
+claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
