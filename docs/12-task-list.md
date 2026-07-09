@@ -18623,6 +18623,32 @@ proof of SHA-256, general source correspondence, gateway semantics, accepted
 evidence, Level2+ evidence, score axes, benchmark evidence, semantic
 correctness, production readiness, SOTA status, or full-security result.
 
+## Phase 658 HSAI Tiny-Z3 Gateway Digest-Binding Local Replay Comparison
+
+Status: complete for paired local replay comparison and residual-ceiling
+report. See
+`docs/658-phase-hsai-tiny-z3-gateway-digest-binding-local-replay-residual-ceiling-report.md`.
+
+Goal: replay the Phase 657 concrete obligation while separating stable
+semantic/output bindings from expected run-instance source drift.
+
+Implemented: typed replay source/input/output/classification/validation
+surfaces; explicit 24-field stable and 9-field source-instance vocabularies;
+deterministic binding maps and comparison digests; source validation through
+the Phase 657 validator; stable-mismatch, source-drift-policy, classification,
+vocabulary, promotion, invalid-source, and tampered-output rejection.
+
+Executed result: both local Z3 runs returned
+`solver_unsat_without_certificate`. All 24 stable semantic/output fields
+matched, zero stable fields mismatched, and all nine run-instance fields were
+classified as source drift. Focused validation passed 2/2.
+
+Exit criteria: HSAI has a replay-stable `Level1LocalReplayOrLower` observation
+for one concrete fixture. Repeating the identical local run is now stopped;
+the next responsible slice is a docs-first production digest
+source-correspondence boundary. No accepted evidence, Level2+, score axes,
+semantic correctness, production readiness, SOTA, or full security is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

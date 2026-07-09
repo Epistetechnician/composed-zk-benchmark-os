@@ -1394,6 +1394,11 @@ pub const HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_EXECUTION_SCHEMA_VERSION: &s
 pub const HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_EXECUTION_STATE_SLICE: &str =
     "phase-657-hsai-tiny-z3-gateway-digest-binding-local-execution";
 pub const HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_EXECUTION_CLAIM_BOUNDARY: &str = "local HSAI tiny-Z3 gateway proposal digest-binding execution observation for one concrete non-secret fixture only; consumes one exact Phase 656 preflight, runs one fixed local Z3 QF_BV obligation through -in -smt2 with an empty environment, verifies repeated-input equality and selected target/value mutation digest inequality over concrete Rust-produced digest witnesses, and retains bounded summary digests only, but does not prove SHA-256, prove general source correspondence, prove gateway semantics, create proof artifacts, checker transcripts, solver certificates, accepted evidence, Level2+ evidence, score axes, benchmark evidence, semantic-correctness claims, production-readiness claims, SOTA claims, breakthrough claims, full-security claims, external-audit claims, human-review acceptance claims, or action authority.";
+pub const HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_REPLAY_COMPARISON_SCHEMA_VERSION: &str =
+    "hsai-tiny-z3-gateway-digest-binding-local-replay-comparison:v1";
+pub const HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_REPLAY_COMPARISON_STATE_SLICE: &str =
+    "phase-658-hsai-tiny-z3-gateway-digest-binding-local-replay-comparison";
+pub const HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_REPLAY_COMPARISON_CLAIM_BOUNDARY: &str = "local HSAI tiny-Z3 gateway digest-binding replay comparison metadata only; validates two Phase 657 local execution observations for the same concrete fixture, requires equality across a named stable semantic/output digest map, records run-instance source drift separately, and remains Level1LocalReplayOrLower, but does not create proof artifacts, checker transcripts, solver certificates, accepted evidence, independent external reproduction, Level2+ evidence, score axes, benchmark evidence, semantic-correctness claims, production-readiness claims, SOTA claims, breakthrough claims, full-security claims, external-audit claims, human-review acceptance claims, or action authority.";
 pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_NAMESPACE: &str =
     "gateway-formal-tiny-z3-independent-external-operator-result";
 pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_DECLARED_FILES: [&str; 8] = [
@@ -28333,6 +28338,190 @@ pub enum HsaiTinyZ3GatewayDigestBindingLocalExecutionError {
     OutputLimitExceeded,
     InvalidOutputGrammar,
     UnexpectedSolverVerdict(GatewayFormalRealCommandLaneSolverVerdictLabel),
+}
+
+pub struct HsaiTinyZ3GatewayDigestBindingLocalReplaySource<'a> {
+    pub execution: &'a HsaiTinyZ3GatewayDigestBindingLocalExecution,
+    pub packet: &'a HsaiFormalBackendAccelerationExecutionPacket,
+    pub observation: &'a HsaiTinyZ3ExtensionLocalExecutionObservation,
+    pub preflight: &'a HsaiTinyZ3GatewayDigestBindingExecutionPreflight,
+    pub fixture: &'a HsaiTinyZ3GatewayDigestBindingLocalExecutionFixture,
+    pub input: &'a HsaiTinyZ3GatewayDigestBindingLocalExecutionInput,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiTinyZ3GatewayDigestBindingLocalReplayClassification {
+    StableSemanticOutputReplayWithSourceInstanceDrift,
+    StableSemanticOutputReplaySameSourceInstance,
+    StableSemanticOutputMismatch,
+    ReplayComparisonRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiTinyZ3GatewayDigestBindingLocalReplayLabel {
+    LocalReplayComparisonRecorded,
+    LocalReplayComparisonRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonInput {
+    pub schema_version: String,
+    pub comparison_id: String,
+    pub comparison_policy_id: String,
+    pub comparison_decision_id: String,
+    pub compared_at_unix: u64,
+    pub property_id: String,
+    pub baseline_execution_digest: Hash,
+    pub replay_execution_digest: Hash,
+    pub baseline_validation_digest: Hash,
+    pub replay_validation_digest: Hash,
+    pub baseline_stable_binding_map_digest: Hash,
+    pub replay_stable_binding_map_digest: Hash,
+    pub baseline_source_instance_map_digest: Hash,
+    pub replay_source_instance_map_digest: Hash,
+    pub stable_field_labels: BTreeSet<String>,
+    pub source_instance_field_labels: BTreeSet<String>,
+    pub stable_semantic_output_required: bool,
+    pub source_instance_drift_permitted: bool,
+    pub expected_classification: HsaiTinyZ3GatewayDigestBindingLocalReplayClassification,
+    pub nonpromotion_digest: Hash,
+    pub level_mapping: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub comparison_label: HsaiTinyZ3GatewayDigestBindingLocalReplayLabel,
+    pub comparison_summary: String,
+    pub proof_artifact_requested: bool,
+    pub checker_transcript_requested: bool,
+    pub solver_certificate_requested: bool,
+    pub raw_transcript_retention_requested: bool,
+    pub imports_external_result: bool,
+    pub accepted_evidence_requested: bool,
+    pub independent_external_reproduction_claimed: bool,
+    pub level2_evidence_requested: bool,
+    pub score_axis_population_requested: bool,
+    pub benchmark_evidence_requested: bool,
+    pub external_audit_claimed: bool,
+    pub human_review_acceptance_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-local-replay-comparison-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiTinyZ3GatewayDigestBindingLocalReplayComparison {
+    pub schema_version: String,
+    pub state_slice: String,
+    pub comparison_id: String,
+    pub compared_at_unix: u64,
+    pub comparison_input_digest: Hash,
+    pub property_id: String,
+    pub baseline_run_id: String,
+    pub replay_run_id: String,
+    pub baseline_execution_digest: Hash,
+    pub replay_execution_digest: Hash,
+    pub baseline_validation_digest: Hash,
+    pub replay_validation_digest: Hash,
+    pub baseline_stable_binding_map_digest: Hash,
+    pub replay_stable_binding_map_digest: Hash,
+    pub baseline_source_instance_map_digest: Hash,
+    pub replay_source_instance_map_digest: Hash,
+    pub stable_equal_labels: BTreeSet<String>,
+    pub stable_mismatch_labels: BTreeSet<String>,
+    pub source_instance_equal_labels: BTreeSet<String>,
+    pub source_instance_drift_labels: BTreeSet<String>,
+    pub stable_comparison_digest: Hash,
+    pub source_instance_comparison_digest: Hash,
+    pub stable_semantic_output_replay_observed: bool,
+    pub source_instance_drift_observed: bool,
+    pub classification: HsaiTinyZ3GatewayDigestBindingLocalReplayClassification,
+    pub nonpromotion_digest: Hash,
+    pub level_mapping: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub comparison_label: HsaiTinyZ3GatewayDigestBindingLocalReplayLabel,
+    pub comparison_summary: String,
+    pub claim_boundary: String,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub raw_transcript_retained: bool,
+    pub imports_external_result: bool,
+    pub creates_accepted_evidence: bool,
+    pub claims_independent_external_reproduction: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_claimed: bool,
+    pub human_review_acceptance_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl HsaiTinyZ3GatewayDigestBindingLocalReplayComparison {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-local-replay-comparison:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue {
+    InvalidSchemaVersion,
+    InvalidComparisonId,
+    InvalidComparisonPolicyId,
+    InvalidComparisonDecisionId,
+    MissingComparedTimestamp,
+    InvalidPropertyId,
+    BaselineExecutionInvalid,
+    ReplayExecutionInvalid,
+    RunIdCollision,
+    FixtureMismatch,
+    BaselineExecutionDigestMismatch,
+    ReplayExecutionDigestMismatch,
+    BaselineValidationDigestMismatch,
+    ReplayValidationDigestMismatch,
+    StableBindingMapDigestMismatch,
+    SourceInstanceMapDigestMismatch,
+    StableFieldVocabularyMismatch,
+    SourceInstanceFieldVocabularyMismatch,
+    StableSemanticOutputRequirementMissing,
+    StableSemanticOutputMismatch(BTreeSet<String>),
+    SourceInstanceDriftNotPermitted(BTreeSet<String>),
+    ClassificationMismatch,
+    InvalidNonpromotionDigest,
+    InvalidLevelMapping,
+    NonclaimMismatch,
+    InvalidComparisonLabel,
+    ComparisonSummaryPromotionClaim,
+    OutputBindingMismatch,
+    ComparisonSetMismatch,
+    ComparisonDigestMismatch,
+    ClaimBoundaryMismatch,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonValidation {
+    pub valid: bool,
+    pub issues: Vec<HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -121022,6 +121211,880 @@ pub fn validate_hsai_tiny_z3_gateway_digest_binding_local_execution(
     validation
 }
 
+pub fn hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_claim_boundary() -> String {
+    HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_REPLAY_COMPARISON_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    [
+        "Phase 658 local replay comparison only",
+        "two local Z3 observations only",
+        "source-instance drift is not semantic-output drift",
+        "not accepted evidence",
+        "not accepted formal evidence",
+        "not independent external reproduction",
+        "not proof",
+        "not SHA-256 verification",
+        "not general source correspondence proof",
+        "not gateway semantic correctness",
+        "not proof artifact",
+        "not checker transcript",
+        "not solver certificate",
+        "not Level2+ evidence",
+        "not score-axis evidence",
+        "not benchmark evidence",
+        "not Lean execution",
+        "not COBALT execution",
+        "not Rust-to-Lean extraction",
+        "not raw transcript retention",
+        "not external-audit evidence",
+        "not human-review acceptance",
+        "not production readiness",
+        "not SOTA",
+        "not breakthrough status",
+        "not full security",
+        "not authority to execute an action",
+    ]
+    .into_iter()
+    .map(|label| NonClaimLabel(label.to_owned()))
+    .collect()
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_nonclaim_digest(
+    nonclaims: &BTreeSet<NonClaimLabel>,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-local-replay-comparison-nonclaims:v1",
+        nonclaims,
+    )
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_local_replay_stable_field_labels() -> BTreeSet<String> {
+    [
+        "property_id",
+        "fixture_digest",
+        "baseline_proposal_digest",
+        "repeated_proposal_digest",
+        "target_mutation_proposal_digest",
+        "value_mutation_proposal_digest",
+        "obligation_digest",
+        "executable_digest",
+        "argv_digest",
+        "environment_digest",
+        "timeout_policy_digest",
+        "process_output_digest",
+        "stdout_summary_digest",
+        "stderr_summary_digest",
+        "solver_verdict_label",
+        "output_classification_digest",
+        "transcript_redaction_report_digest",
+        "artifact_quarantine_report_digest",
+        "replay_instruction_digest",
+        "level_mapping",
+        "classification",
+        "execution_label",
+        "claim_boundary",
+        "explicit_nonclaims_digest",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_local_replay_source_instance_field_labels(
+) -> BTreeSet<String> {
+    [
+        "execution_digest",
+        "run_id",
+        "executed_at_unix",
+        "execution_input_digest",
+        "preflight_digest",
+        "preflight_input_digest",
+        "source_execution_packet_digest",
+        "source_observation_digest",
+        "nonpromotion_digest",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_local_replay_stable_binding_map(
+    execution: &HsaiTinyZ3GatewayDigestBindingLocalExecution,
+) -> BTreeMap<String, Hash> {
+    BTreeMap::from([
+        (
+            "property_id".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:phase658-stable-property-id:v1",
+                &execution.property_id,
+            ),
+        ),
+        ("fixture_digest".to_owned(), execution.fixture_digest),
+        (
+            "baseline_proposal_digest".to_owned(),
+            execution.baseline_proposal_digest,
+        ),
+        (
+            "repeated_proposal_digest".to_owned(),
+            execution.repeated_proposal_digest,
+        ),
+        (
+            "target_mutation_proposal_digest".to_owned(),
+            execution.target_mutation_proposal_digest,
+        ),
+        (
+            "value_mutation_proposal_digest".to_owned(),
+            execution.value_mutation_proposal_digest,
+        ),
+        ("obligation_digest".to_owned(), execution.obligation_digest),
+        ("executable_digest".to_owned(), execution.executable_digest),
+        ("argv_digest".to_owned(), execution.argv_digest),
+        (
+            "environment_digest".to_owned(),
+            execution.environment_digest,
+        ),
+        (
+            "timeout_policy_digest".to_owned(),
+            execution.timeout_policy_digest,
+        ),
+        (
+            "process_output_digest".to_owned(),
+            execution.process_output_digest,
+        ),
+        (
+            "stdout_summary_digest".to_owned(),
+            execution.stdout_summary_digest,
+        ),
+        (
+            "stderr_summary_digest".to_owned(),
+            execution.stderr_summary_digest,
+        ),
+        (
+            "solver_verdict_label".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:phase658-stable-solver-verdict-label:v1",
+                &execution.solver_verdict_label,
+            ),
+        ),
+        (
+            "output_classification_digest".to_owned(),
+            execution.output_classification_digest,
+        ),
+        (
+            "transcript_redaction_report_digest".to_owned(),
+            execution.transcript_redaction_report_digest,
+        ),
+        (
+            "artifact_quarantine_report_digest".to_owned(),
+            execution.artifact_quarantine_report_digest,
+        ),
+        (
+            "replay_instruction_digest".to_owned(),
+            execution.replay_instruction_digest,
+        ),
+        (
+            "level_mapping".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:phase658-stable-level-mapping:v1",
+                &execution.level_mapping,
+            ),
+        ),
+        (
+            "classification".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:phase658-stable-classification:v1",
+                &execution.classification,
+            ),
+        ),
+        (
+            "execution_label".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:phase658-stable-execution-label:v1",
+                &execution.execution_label,
+            ),
+        ),
+        (
+            "claim_boundary".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:phase658-stable-claim-boundary:v1",
+                &execution.claim_boundary,
+            ),
+        ),
+        (
+            "explicit_nonclaims_digest".to_owned(),
+            execution.explicit_nonclaims_digest,
+        ),
+    ])
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_local_replay_source_instance_map(
+    execution: &HsaiTinyZ3GatewayDigestBindingLocalExecution,
+) -> BTreeMap<String, Hash> {
+    BTreeMap::from([
+        ("execution_digest".to_owned(), execution.digest()),
+        (
+            "run_id".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:phase658-source-run-id:v1",
+                &execution.run_id,
+            ),
+        ),
+        (
+            "executed_at_unix".to_owned(),
+            hash_tagged(
+                "hsai-agent-admission:phase658-source-executed-at:v1",
+                &execution.executed_at_unix,
+            ),
+        ),
+        (
+            "execution_input_digest".to_owned(),
+            execution.execution_input_digest,
+        ),
+        ("preflight_digest".to_owned(), execution.preflight_digest),
+        (
+            "preflight_input_digest".to_owned(),
+            execution.preflight_input_digest,
+        ),
+        (
+            "source_execution_packet_digest".to_owned(),
+            execution.source_execution_packet_digest,
+        ),
+        (
+            "source_observation_digest".to_owned(),
+            execution.source_observation_digest,
+        ),
+        (
+            "nonpromotion_digest".to_owned(),
+            execution.nonpromotion_digest,
+        ),
+    ])
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_local_replay_binding_map_digest(
+    map: &BTreeMap<String, Hash>,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-local-replay-binding-map:v1",
+        map,
+    )
+}
+
+fn hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_sets(
+    baseline: &BTreeMap<String, Hash>,
+    replay: &BTreeMap<String, Hash>,
+) -> (BTreeSet<String>, BTreeSet<String>) {
+    let labels = baseline
+        .keys()
+        .chain(replay.keys())
+        .cloned()
+        .collect::<BTreeSet<_>>();
+    labels
+        .into_iter()
+        .partition(|label| baseline.get(label) == replay.get(label))
+}
+
+fn hsai_tiny_z3_gateway_digest_binding_local_replay_classification(
+    stable_mismatch_labels: &BTreeSet<String>,
+    source_instance_drift_labels: &BTreeSet<String>,
+) -> HsaiTinyZ3GatewayDigestBindingLocalReplayClassification {
+    if !stable_mismatch_labels.is_empty() {
+        HsaiTinyZ3GatewayDigestBindingLocalReplayClassification::StableSemanticOutputMismatch
+    } else if source_instance_drift_labels.is_empty() {
+        HsaiTinyZ3GatewayDigestBindingLocalReplayClassification::StableSemanticOutputReplaySameSourceInstance
+    } else {
+        HsaiTinyZ3GatewayDigestBindingLocalReplayClassification::StableSemanticOutputReplayWithSourceInstanceDrift
+    }
+}
+
+fn hsai_tiny_z3_gateway_digest_binding_local_replay_source_validation_digest(
+    source: &HsaiTinyZ3GatewayDigestBindingLocalReplaySource<'_>,
+) -> (HsaiTinyZ3GatewayDigestBindingLocalExecutionValidation, Hash) {
+    let validation = validate_hsai_tiny_z3_gateway_digest_binding_local_execution(
+        source.execution,
+        source.packet,
+        source.observation,
+        source.preflight,
+        source.fixture,
+        source.input,
+    );
+    let digest = hash_tagged(
+        "hsai-agent-admission:phase658-phase657-source-validation:v1",
+        &validation,
+    );
+    (validation, digest)
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_local_replay_input_nonpromotion_digest(
+    baseline_execution_digest: Hash,
+    replay_execution_digest: Hash,
+    baseline_stable_binding_map_digest: Hash,
+    replay_stable_binding_map_digest: Hash,
+    baseline_source_instance_map_digest: Hash,
+    replay_source_instance_map_digest: Hash,
+    expected_classification: &HsaiTinyZ3GatewayDigestBindingLocalReplayClassification,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:phase658-hsai-tiny-z3-local-replay-input-nonpromotion:v1",
+        &(
+            baseline_execution_digest,
+            replay_execution_digest,
+            baseline_stable_binding_map_digest,
+            replay_stable_binding_map_digest,
+            baseline_source_instance_map_digest,
+            replay_source_instance_map_digest,
+            expected_classification,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ),
+    )
+}
+
+pub fn validate_hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_input(
+    baseline: &HsaiTinyZ3GatewayDigestBindingLocalReplaySource<'_>,
+    replay: &HsaiTinyZ3GatewayDigestBindingLocalReplaySource<'_>,
+    input: &HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonInput,
+) -> HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_REPLAY_COMPARISON_SCHEMA_VERSION
+    {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.comparison_id) {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::InvalidComparisonId);
+    }
+    if !is_single_segment_id(&input.comparison_policy_id) {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::InvalidComparisonPolicyId,
+        );
+    }
+    if !is_single_segment_id(&input.comparison_decision_id) {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::InvalidComparisonDecisionId,
+        );
+    }
+    if input.compared_at_unix == 0 {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::MissingComparedTimestamp,
+        );
+    }
+    if input.property_id != HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PROPERTY_ID {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::InvalidPropertyId);
+    }
+    let (baseline_validation, baseline_validation_digest) =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_source_validation_digest(baseline);
+    let (replay_validation, replay_validation_digest) =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_source_validation_digest(replay);
+    if !baseline_validation.valid {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::BaselineExecutionInvalid,
+        );
+    }
+    if !replay_validation.valid {
+        issues
+            .push(HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::ReplayExecutionInvalid);
+    }
+    if baseline.execution.run_id == replay.execution.run_id {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::RunIdCollision);
+    }
+    if baseline.fixture != replay.fixture
+        || baseline.execution.fixture_digest != replay.execution.fixture_digest
+    {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::FixtureMismatch);
+    }
+    if input.baseline_execution_digest != baseline.execution.digest() {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::BaselineExecutionDigestMismatch,
+        );
+    }
+    if input.replay_execution_digest != replay.execution.digest() {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::ReplayExecutionDigestMismatch,
+        );
+    }
+    if input.baseline_validation_digest != baseline_validation_digest {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::BaselineValidationDigestMismatch,
+        );
+    }
+    if input.replay_validation_digest != replay_validation_digest {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::ReplayValidationDigestMismatch,
+        );
+    }
+    let baseline_stable =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_stable_binding_map(baseline.execution);
+    let replay_stable =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_stable_binding_map(replay.execution);
+    let baseline_source =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_source_instance_map(baseline.execution);
+    let replay_source =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_source_instance_map(replay.execution);
+    if input.baseline_stable_binding_map_digest
+        != hsai_tiny_z3_gateway_digest_binding_local_replay_binding_map_digest(&baseline_stable)
+        || input.replay_stable_binding_map_digest
+            != hsai_tiny_z3_gateway_digest_binding_local_replay_binding_map_digest(&replay_stable)
+    {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::StableBindingMapDigestMismatch,
+        );
+    }
+    if input.baseline_source_instance_map_digest
+        != hsai_tiny_z3_gateway_digest_binding_local_replay_binding_map_digest(&baseline_source)
+        || input.replay_source_instance_map_digest
+            != hsai_tiny_z3_gateway_digest_binding_local_replay_binding_map_digest(&replay_source)
+    {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::SourceInstanceMapDigestMismatch,
+        );
+    }
+    if input.stable_field_labels
+        != hsai_tiny_z3_gateway_digest_binding_local_replay_stable_field_labels()
+    {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::StableFieldVocabularyMismatch,
+        );
+    }
+    if input.source_instance_field_labels
+        != hsai_tiny_z3_gateway_digest_binding_local_replay_source_instance_field_labels()
+    {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::SourceInstanceFieldVocabularyMismatch,
+        );
+    }
+    let (_, stable_mismatch_labels) =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_sets(
+            &baseline_stable,
+            &replay_stable,
+        );
+    let (_, source_instance_drift_labels) =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_sets(
+            &baseline_source,
+            &replay_source,
+        );
+    if !input.stable_semantic_output_required {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::StableSemanticOutputRequirementMissing,
+        );
+    } else if !stable_mismatch_labels.is_empty() {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::StableSemanticOutputMismatch(
+                stable_mismatch_labels.clone(),
+            ),
+        );
+    }
+    if !input.source_instance_drift_permitted && !source_instance_drift_labels.is_empty() {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::SourceInstanceDriftNotPermitted(
+                source_instance_drift_labels.clone(),
+            ),
+        );
+    }
+    let classification = hsai_tiny_z3_gateway_digest_binding_local_replay_classification(
+        &stable_mismatch_labels,
+        &source_instance_drift_labels,
+    );
+    if input.expected_classification != classification {
+        issues
+            .push(HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::ClassificationMismatch);
+    }
+    if input.nonpromotion_digest
+        != hsai_tiny_z3_gateway_digest_binding_local_replay_input_nonpromotion_digest(
+            input.baseline_execution_digest,
+            input.replay_execution_digest,
+            input.baseline_stable_binding_map_digest,
+            input.replay_stable_binding_map_digest,
+            input.baseline_source_instance_map_digest,
+            input.replay_source_instance_map_digest,
+            &input.expected_classification,
+        )
+    {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::InvalidNonpromotionDigest,
+        );
+    }
+    if input.level_mapping != "Level1LocalReplayOrLower" {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::InvalidLevelMapping);
+    }
+    let nonclaims =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_nonclaim_digest(
+                &nonclaims,
+            )
+    {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::NonclaimMismatch);
+    }
+    if input.comparison_label
+        != HsaiTinyZ3GatewayDigestBindingLocalReplayLabel::LocalReplayComparisonRecorded
+    {
+        issues
+            .push(HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::InvalidComparisonLabel);
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.comparison_summary,
+    ) {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::ComparisonSummaryPromotionClaim,
+        );
+    }
+    if input.proof_artifact_requested
+        || input.checker_transcript_requested
+        || input.solver_certificate_requested
+        || input.raw_transcript_retention_requested
+        || input.imports_external_result
+        || input.accepted_evidence_requested
+        || input.independent_external_reproduction_claimed
+        || input.level2_evidence_requested
+        || input.score_axis_population_requested
+        || input.benchmark_evidence_requested
+        || input.external_audit_claimed
+        || input.human_review_acceptance_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::PromotionAttempt);
+    }
+    issues.sort();
+    issues.dedup();
+    HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+fn hsai_tiny_z3_gateway_digest_binding_local_replay_result_nonpromotion_digest(
+    input: &HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonInput,
+    stable_comparison_digest: Hash,
+    source_instance_comparison_digest: Hash,
+    classification: &HsaiTinyZ3GatewayDigestBindingLocalReplayClassification,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:phase658-hsai-tiny-z3-local-replay-result-nonpromotion:v1",
+        &(
+            input.digest(),
+            stable_comparison_digest,
+            source_instance_comparison_digest,
+            classification,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ),
+    )
+}
+
+pub fn build_hsai_tiny_z3_gateway_digest_binding_local_replay_comparison(
+    baseline: &HsaiTinyZ3GatewayDigestBindingLocalReplaySource<'_>,
+    replay: &HsaiTinyZ3GatewayDigestBindingLocalReplaySource<'_>,
+    input: &HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonInput,
+) -> Result<
+    HsaiTinyZ3GatewayDigestBindingLocalReplayComparison,
+    HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonValidation,
+> {
+    let validation = validate_hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_input(
+        baseline, replay, input,
+    );
+    if !validation.valid {
+        return Err(validation);
+    }
+    let (_, baseline_validation_digest) =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_source_validation_digest(baseline);
+    let (_, replay_validation_digest) =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_source_validation_digest(replay);
+    let baseline_stable =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_stable_binding_map(baseline.execution);
+    let replay_stable =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_stable_binding_map(replay.execution);
+    let baseline_source =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_source_instance_map(baseline.execution);
+    let replay_source =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_source_instance_map(replay.execution);
+    let (stable_equal_labels, stable_mismatch_labels) =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_sets(
+            &baseline_stable,
+            &replay_stable,
+        );
+    let (source_instance_equal_labels, source_instance_drift_labels) =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_sets(
+            &baseline_source,
+            &replay_source,
+        );
+    let classification = hsai_tiny_z3_gateway_digest_binding_local_replay_classification(
+        &stable_mismatch_labels,
+        &source_instance_drift_labels,
+    );
+    let stable_comparison_digest = hash_tagged(
+        "hsai-agent-admission:phase658-stable-comparison:v1",
+        &(
+            &baseline_stable,
+            &replay_stable,
+            &stable_equal_labels,
+            &stable_mismatch_labels,
+        ),
+    );
+    let source_instance_comparison_digest = hash_tagged(
+        "hsai-agent-admission:phase658-source-instance-comparison:v1",
+        &(
+            &baseline_source,
+            &replay_source,
+            &source_instance_equal_labels,
+            &source_instance_drift_labels,
+        ),
+    );
+    let nonclaims =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_required_nonclaims();
+    Ok(HsaiTinyZ3GatewayDigestBindingLocalReplayComparison {
+        schema_version:
+            HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_REPLAY_COMPARISON_SCHEMA_VERSION.to_owned(),
+        state_slice:
+            HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_REPLAY_COMPARISON_STATE_SLICE.to_owned(),
+        comparison_id: input.comparison_id.clone(),
+        compared_at_unix: input.compared_at_unix,
+        comparison_input_digest: input.digest(),
+        property_id: input.property_id.clone(),
+        baseline_run_id: baseline.execution.run_id.clone(),
+        replay_run_id: replay.execution.run_id.clone(),
+        baseline_execution_digest: baseline.execution.digest(),
+        replay_execution_digest: replay.execution.digest(),
+        baseline_validation_digest,
+        replay_validation_digest,
+        baseline_stable_binding_map_digest:
+            hsai_tiny_z3_gateway_digest_binding_local_replay_binding_map_digest(
+                &baseline_stable,
+            ),
+        replay_stable_binding_map_digest:
+            hsai_tiny_z3_gateway_digest_binding_local_replay_binding_map_digest(&replay_stable),
+        baseline_source_instance_map_digest:
+            hsai_tiny_z3_gateway_digest_binding_local_replay_binding_map_digest(&baseline_source),
+        replay_source_instance_map_digest:
+            hsai_tiny_z3_gateway_digest_binding_local_replay_binding_map_digest(&replay_source),
+        stable_equal_labels,
+        stable_mismatch_labels,
+        source_instance_equal_labels,
+        source_instance_drift_labels: source_instance_drift_labels.clone(),
+        stable_comparison_digest,
+        source_instance_comparison_digest,
+        stable_semantic_output_replay_observed: true,
+        source_instance_drift_observed: !source_instance_drift_labels.is_empty(),
+        classification: classification.clone(),
+        nonpromotion_digest:
+            hsai_tiny_z3_gateway_digest_binding_local_replay_result_nonpromotion_digest(
+                input,
+                stable_comparison_digest,
+                source_instance_comparison_digest,
+                &classification,
+            ),
+        level_mapping: "Level1LocalReplayOrLower".to_owned(),
+        explicit_nonclaims: nonclaims.clone(),
+        explicit_nonclaims_digest:
+            hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_nonclaim_digest(&nonclaims),
+        comparison_label:
+            HsaiTinyZ3GatewayDigestBindingLocalReplayLabel::LocalReplayComparisonRecorded,
+        comparison_summary:
+            "two local tiny-Z3 observations match across the stable semantic/output map while run-instance source drift remains separately recorded"
+                .to_owned(),
+        claim_boundary:
+            hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_claim_boundary(),
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        raw_transcript_retained: false,
+        imports_external_result: false,
+        creates_accepted_evidence: false,
+        claims_independent_external_reproduction: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        benchmark_evidence_created: false,
+        external_audit_claimed: false,
+        human_review_acceptance_claimed: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_hsai_tiny_z3_gateway_digest_binding_local_replay_comparison(
+    comparison: &HsaiTinyZ3GatewayDigestBindingLocalReplayComparison,
+    baseline: &HsaiTinyZ3GatewayDigestBindingLocalReplaySource<'_>,
+    replay: &HsaiTinyZ3GatewayDigestBindingLocalReplaySource<'_>,
+    input: &HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonInput,
+) -> HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonValidation {
+    let mut validation = validate_hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_input(
+        baseline, replay, input,
+    );
+    let (_, baseline_validation_digest) =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_source_validation_digest(baseline);
+    let (_, replay_validation_digest) =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_source_validation_digest(replay);
+    let baseline_stable =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_stable_binding_map(baseline.execution);
+    let replay_stable =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_stable_binding_map(replay.execution);
+    let baseline_source =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_source_instance_map(baseline.execution);
+    let replay_source =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_source_instance_map(replay.execution);
+    let (stable_equal_labels, stable_mismatch_labels) =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_sets(
+            &baseline_stable,
+            &replay_stable,
+        );
+    let (source_instance_equal_labels, source_instance_drift_labels) =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_sets(
+            &baseline_source,
+            &replay_source,
+        );
+    let classification = hsai_tiny_z3_gateway_digest_binding_local_replay_classification(
+        &stable_mismatch_labels,
+        &source_instance_drift_labels,
+    );
+    let stable_comparison_digest = hash_tagged(
+        "hsai-agent-admission:phase658-stable-comparison:v1",
+        &(
+            &baseline_stable,
+            &replay_stable,
+            &stable_equal_labels,
+            &stable_mismatch_labels,
+        ),
+    );
+    let source_instance_comparison_digest = hash_tagged(
+        "hsai-agent-admission:phase658-source-instance-comparison:v1",
+        &(
+            &baseline_source,
+            &replay_source,
+            &source_instance_equal_labels,
+            &source_instance_drift_labels,
+        ),
+    );
+    if comparison.schema_version
+        != HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_REPLAY_COMPARISON_SCHEMA_VERSION
+        || comparison.state_slice
+            != HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_REPLAY_COMPARISON_STATE_SLICE
+        || comparison.comparison_id != input.comparison_id
+        || comparison.compared_at_unix != input.compared_at_unix
+        || comparison.comparison_input_digest != input.digest()
+        || comparison.property_id != input.property_id
+        || comparison.baseline_run_id != baseline.execution.run_id
+        || comparison.replay_run_id != replay.execution.run_id
+        || comparison.baseline_execution_digest != baseline.execution.digest()
+        || comparison.replay_execution_digest != replay.execution.digest()
+        || comparison.baseline_validation_digest != baseline_validation_digest
+        || comparison.replay_validation_digest != replay_validation_digest
+        || comparison.baseline_stable_binding_map_digest
+            != hsai_tiny_z3_gateway_digest_binding_local_replay_binding_map_digest(&baseline_stable)
+        || comparison.replay_stable_binding_map_digest
+            != hsai_tiny_z3_gateway_digest_binding_local_replay_binding_map_digest(&replay_stable)
+        || comparison.baseline_source_instance_map_digest
+            != hsai_tiny_z3_gateway_digest_binding_local_replay_binding_map_digest(&baseline_source)
+        || comparison.replay_source_instance_map_digest
+            != hsai_tiny_z3_gateway_digest_binding_local_replay_binding_map_digest(&replay_source)
+        || comparison.level_mapping != input.level_mapping
+    {
+        validation
+            .issues
+            .push(HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::OutputBindingMismatch);
+    }
+    if comparison.stable_equal_labels != stable_equal_labels
+        || comparison.stable_mismatch_labels != stable_mismatch_labels
+        || comparison.source_instance_equal_labels != source_instance_equal_labels
+        || comparison.source_instance_drift_labels != source_instance_drift_labels
+        || comparison.stable_semantic_output_replay_observed != stable_mismatch_labels.is_empty()
+        || comparison.source_instance_drift_observed == source_instance_drift_labels.is_empty()
+        || comparison.classification != classification
+        || comparison.comparison_label
+            != HsaiTinyZ3GatewayDigestBindingLocalReplayLabel::LocalReplayComparisonRecorded
+    {
+        validation
+            .issues
+            .push(HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::ComparisonSetMismatch);
+    }
+    if comparison.stable_comparison_digest != stable_comparison_digest
+        || comparison.source_instance_comparison_digest != source_instance_comparison_digest
+        || comparison.nonpromotion_digest
+            != hsai_tiny_z3_gateway_digest_binding_local_replay_result_nonpromotion_digest(
+                input,
+                stable_comparison_digest,
+                source_instance_comparison_digest,
+                &classification,
+            )
+    {
+        validation.issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::ComparisonDigestMismatch,
+        );
+    }
+    let nonclaims =
+        hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_required_nonclaims();
+    if comparison.explicit_nonclaims != nonclaims
+        || comparison.explicit_nonclaims_digest
+            != hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_nonclaim_digest(
+                &nonclaims,
+            )
+    {
+        validation
+            .issues
+            .push(HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::NonclaimMismatch);
+    }
+    if comparison.claim_boundary
+        != hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_claim_boundary()
+    {
+        validation
+            .issues
+            .push(HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::ClaimBoundaryMismatch);
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &comparison.comparison_summary,
+    ) {
+        validation.issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::ComparisonSummaryPromotionClaim,
+        );
+    }
+    if comparison.proof_artifact_created
+        || comparison.checker_transcript_created
+        || comparison.solver_certificate_created
+        || comparison.raw_transcript_retained
+        || comparison.imports_external_result
+        || comparison.creates_accepted_evidence
+        || comparison.claims_independent_external_reproduction
+        || comparison.creates_level2_evidence
+        || comparison.populates_score_axes
+        || comparison.benchmark_evidence_created
+        || comparison.external_audit_claimed
+        || comparison.human_review_acceptance_claimed
+        || comparison.semantic_correctness_claimed
+        || comparison.production_readiness_claimed
+        || comparison.sota_claimed
+        || comparison.breakthrough_claimed
+        || comparison.full_security_claimed
+        || comparison.grants_authority
+    {
+        validation
+            .issues
+            .push(HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::PromotionAttempt);
+    }
+    validation.issues.sort();
+    validation.issues.dedup();
+    validation.valid = validation.issues.is_empty();
+    validation
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -174286,6 +175349,231 @@ mod tests {
     }
 
     #[test]
+    fn phase658_hsai_tiny_z3_gateway_digest_binding_local_replay_vocabularies_are_disjoint() {
+        let stable = hsai_tiny_z3_gateway_digest_binding_local_replay_stable_field_labels();
+        let source =
+            hsai_tiny_z3_gateway_digest_binding_local_replay_source_instance_field_labels();
+
+        assert_eq!(stable.len(), 24);
+        assert_eq!(source.len(), 9);
+        assert!(stable.is_disjoint(&source));
+        assert!(stable.contains("process_output_digest"));
+        assert!(stable.contains("solver_verdict_label"));
+        assert!(source.contains("preflight_digest"));
+        assert!(source.contains("execution_input_digest"));
+
+        let baseline_map = stable
+            .iter()
+            .map(|label| (label.clone(), Hash([1; 32])))
+            .collect::<BTreeMap<_, _>>();
+        let mut drifted_map = baseline_map.clone();
+        drifted_map.insert("process_output_digest".to_owned(), Hash([2; 32]));
+        let (_, mismatch_labels) = hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_sets(
+            &baseline_map,
+            &drifted_map,
+        );
+        assert_eq!(
+            mismatch_labels,
+            BTreeSet::from(["process_output_digest".to_owned()])
+        );
+        assert_eq!(
+            hsai_tiny_z3_gateway_digest_binding_local_replay_classification(
+                &mismatch_labels,
+                &BTreeSet::new(),
+            ),
+            HsaiTinyZ3GatewayDigestBindingLocalReplayClassification::StableSemanticOutputMismatch
+        );
+    }
+
+    #[test]
+    fn phase658_hsai_tiny_z3_gateway_digest_binding_local_replay_compares_stable_output_and_source_drift(
+    ) {
+        let Some((baseline, replay)) =
+            phase658_hsai_tiny_z3_gateway_digest_binding_local_replay_pair()
+        else {
+            return;
+        };
+        let baseline_source = baseline.replay_source();
+        let replay_source = replay.replay_source();
+        let input = phase658_hsai_tiny_z3_gateway_digest_binding_local_replay_input(
+            "phase658-local-replay-comparison",
+            &baseline_source,
+            &replay_source,
+        );
+        let comparison = build_hsai_tiny_z3_gateway_digest_binding_local_replay_comparison(
+            &baseline_source,
+            &replay_source,
+            &input,
+        )
+        .expect("phase658 local replay comparison builds");
+
+        assert_eq!(comparison.stable_equal_labels.len(), 24);
+        assert!(comparison.stable_mismatch_labels.is_empty());
+        assert!(comparison.source_instance_equal_labels.is_empty());
+        assert_eq!(comparison.source_instance_drift_labels.len(), 9);
+        assert!(comparison
+            .source_instance_drift_labels
+            .contains("preflight_digest"));
+        assert!(comparison
+            .source_instance_drift_labels
+            .contains("source_execution_packet_digest"));
+        assert!(comparison.stable_semantic_output_replay_observed);
+        assert!(comparison.source_instance_drift_observed);
+        assert_eq!(
+            comparison.classification,
+            HsaiTinyZ3GatewayDigestBindingLocalReplayClassification::StableSemanticOutputReplayWithSourceInstanceDrift
+        );
+        assert_eq!(
+            baseline.execution.process_output_digest,
+            replay.execution.process_output_digest
+        );
+        assert_eq!(
+            baseline.execution.solver_verdict_label,
+            GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
+        );
+        assert_eq!(
+            replay.execution.solver_verdict_label,
+            GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
+        );
+        assert!(
+            validate_hsai_tiny_z3_gateway_digest_binding_local_replay_comparison(
+                &comparison,
+                &baseline_source,
+                &replay_source,
+                &input,
+            )
+            .valid
+        );
+
+        let mut vocabulary_drift = input.clone();
+        vocabulary_drift
+            .stable_field_labels
+            .remove("process_output_digest");
+        let vocabulary_validation =
+            validate_hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_input(
+                &baseline_source,
+                &replay_source,
+                &vocabulary_drift,
+            );
+        assert!(!vocabulary_validation.valid);
+        assert!(vocabulary_validation.issues.contains(
+            &HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::StableFieldVocabularyMismatch
+        ));
+
+        let mut drift_forbidden = input.clone();
+        drift_forbidden.source_instance_drift_permitted = false;
+        let drift_validation =
+            validate_hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_input(
+                &baseline_source,
+                &replay_source,
+                &drift_forbidden,
+            );
+        assert!(!drift_validation.valid);
+        assert!(drift_validation.issues.iter().any(|issue| matches!(
+            issue,
+            HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::SourceInstanceDriftNotPermitted(labels)
+                if labels.len() == 9
+        )));
+
+        let mut classification_drift = input.clone();
+        classification_drift.expected_classification =
+            HsaiTinyZ3GatewayDigestBindingLocalReplayClassification::StableSemanticOutputReplaySameSourceInstance;
+        classification_drift.nonpromotion_digest =
+            hsai_tiny_z3_gateway_digest_binding_local_replay_input_nonpromotion_digest(
+                classification_drift.baseline_execution_digest,
+                classification_drift.replay_execution_digest,
+                classification_drift.baseline_stable_binding_map_digest,
+                classification_drift.replay_stable_binding_map_digest,
+                classification_drift.baseline_source_instance_map_digest,
+                classification_drift.replay_source_instance_map_digest,
+                &classification_drift.expected_classification,
+            );
+        let classification_validation =
+            validate_hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_input(
+                &baseline_source,
+                &replay_source,
+                &classification_drift,
+            );
+        assert!(!classification_validation.valid);
+        assert!(classification_validation.issues.contains(
+            &HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::ClassificationMismatch
+        ));
+
+        let mut promoted = input.clone();
+        promoted.accepted_evidence_requested = true;
+        promoted.level2_evidence_requested = true;
+        promoted.score_axis_population_requested = true;
+        promoted.sota_claimed = true;
+        promoted.comparison_label =
+            HsaiTinyZ3GatewayDigestBindingLocalReplayLabel::LocalReplayComparisonRejected;
+        promoted.comparison_summary =
+            "this replay creates accepted evidence and proves HSAI is SOTA".to_owned();
+        let promoted_validation =
+            validate_hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_input(
+                &baseline_source,
+                &replay_source,
+                &promoted,
+            );
+        assert!(!promoted_validation.valid);
+        assert!(promoted_validation
+            .issues
+            .contains(&HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::PromotionAttempt));
+        assert!(promoted_validation.issues.contains(
+            &HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::ComparisonSummaryPromotionClaim
+        ));
+
+        let mut tampered_baseline_execution = baseline.execution.clone();
+        tampered_baseline_execution.creates_accepted_evidence = true;
+        let tampered_baseline_source = HsaiTinyZ3GatewayDigestBindingLocalReplaySource {
+            execution: &tampered_baseline_execution,
+            packet: &baseline.packet,
+            observation: &baseline.observation,
+            preflight: &baseline.preflight,
+            fixture: &baseline.fixture,
+            input: &baseline.input,
+        };
+        let tampered_validation =
+            validate_hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_input(
+                &tampered_baseline_source,
+                &replay_source,
+                &input,
+            );
+        assert!(!tampered_validation.valid);
+        assert!(tampered_validation.issues.contains(
+            &HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::BaselineExecutionInvalid
+        ));
+
+        let mut tampered_comparison = comparison.clone();
+        tampered_comparison
+            .stable_mismatch_labels
+            .insert("process_output_digest".to_owned());
+        tampered_comparison.stable_semantic_output_replay_observed = false;
+        tampered_comparison.creates_accepted_evidence = true;
+        let tampered_comparison_validation =
+            validate_hsai_tiny_z3_gateway_digest_binding_local_replay_comparison(
+                &tampered_comparison,
+                &baseline_source,
+                &replay_source,
+                &input,
+            );
+        assert!(!tampered_comparison_validation.valid);
+        assert!(tampered_comparison_validation.issues.contains(
+            &HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::ComparisonSetMismatch
+        ));
+        assert!(tampered_comparison_validation
+            .issues
+            .contains(&HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonIssue::PromotionAttempt));
+
+        for root in baseline
+            .cleanup_roots
+            .into_iter()
+            .chain(replay.cleanup_roots)
+        {
+            fs::remove_dir_all(root).expect("phase658 replay cleanup succeeds");
+        }
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -190303,6 +191591,217 @@ mod tests {
             raw_transcript_retention_requested: false,
             imports_external_result: false,
             accepted_evidence_requested: false,
+            level2_evidence_requested: false,
+            score_axis_population_requested: false,
+            benchmark_evidence_requested: false,
+            external_audit_claimed: false,
+            human_review_acceptance_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    struct Phase658HsaiTinyZ3GatewayDigestBindingLocalReplayTestSource {
+        cleanup_roots: Vec<PathBuf>,
+        packet: HsaiFormalBackendAccelerationExecutionPacket,
+        observation: HsaiTinyZ3ExtensionLocalExecutionObservation,
+        preflight: HsaiTinyZ3GatewayDigestBindingExecutionPreflight,
+        fixture: HsaiTinyZ3GatewayDigestBindingLocalExecutionFixture,
+        input: HsaiTinyZ3GatewayDigestBindingLocalExecutionInput,
+        execution: HsaiTinyZ3GatewayDigestBindingLocalExecution,
+    }
+
+    impl Phase658HsaiTinyZ3GatewayDigestBindingLocalReplayTestSource {
+        fn replay_source(&self) -> HsaiTinyZ3GatewayDigestBindingLocalReplaySource<'_> {
+            HsaiTinyZ3GatewayDigestBindingLocalReplaySource {
+                execution: &self.execution,
+                packet: &self.packet,
+                observation: &self.observation,
+                preflight: &self.preflight,
+                fixture: &self.fixture,
+                input: &self.input,
+            }
+        }
+    }
+
+    fn phase658_hsai_tiny_z3_gateway_digest_binding_local_replay_pair() -> Option<(
+        Phase658HsaiTinyZ3GatewayDigestBindingLocalReplayTestSource,
+        Phase658HsaiTinyZ3GatewayDigestBindingLocalReplayTestSource,
+    )> {
+        let z3_executable = phase529_z3_executable()?;
+        let executable_digest =
+            hash_bytes(&fs::read(&z3_executable).expect("phase658 z3 executable reads"));
+        let (
+            baseline_cleanup_roots,
+            baseline_packet,
+            baseline_observation,
+            baseline_preflight,
+            baseline_fixture,
+            baseline_input,
+        ) = phase657_hsai_tiny_z3_gateway_digest_binding_local_execution_source(
+            "phase657-local-run",
+            executable_digest,
+        )?;
+        let baseline_execution = run_hsai_tiny_z3_gateway_digest_binding_local_execution(
+            &baseline_packet,
+            &baseline_observation,
+            &baseline_preflight,
+            &baseline_fixture,
+            &baseline_input,
+            &z3_executable,
+        )
+        .expect("phase658 baseline local z3 observation runs");
+
+        let (
+            replay_cleanup_roots,
+            replay_packet,
+            replay_observation,
+            replay_preflight,
+            _discarded_replay_fixture,
+            _discarded_replay_input,
+        ) = phase657_hsai_tiny_z3_gateway_digest_binding_local_execution_source(
+            "phase658-replay-source",
+            executable_digest,
+        )?;
+        let replay_fixture = baseline_fixture.clone();
+        let mut replay_input = phase657_hsai_tiny_z3_gateway_digest_binding_local_execution_input(
+            "phase658-replay-run",
+            &replay_preflight,
+            &replay_fixture,
+            executable_digest,
+        );
+        replay_input.executed_at_unix = 1_800_000_658;
+        let replay_execution = run_hsai_tiny_z3_gateway_digest_binding_local_execution(
+            &replay_packet,
+            &replay_observation,
+            &replay_preflight,
+            &replay_fixture,
+            &replay_input,
+            &z3_executable,
+        )
+        .expect("phase658 replay local z3 observation runs");
+
+        Some((
+            Phase658HsaiTinyZ3GatewayDigestBindingLocalReplayTestSource {
+                cleanup_roots: baseline_cleanup_roots,
+                packet: baseline_packet,
+                observation: baseline_observation,
+                preflight: baseline_preflight,
+                fixture: baseline_fixture,
+                input: baseline_input,
+                execution: baseline_execution,
+            },
+            Phase658HsaiTinyZ3GatewayDigestBindingLocalReplayTestSource {
+                cleanup_roots: replay_cleanup_roots,
+                packet: replay_packet,
+                observation: replay_observation,
+                preflight: replay_preflight,
+                fixture: replay_fixture,
+                input: replay_input,
+                execution: replay_execution,
+            },
+        ))
+    }
+
+    fn phase658_hsai_tiny_z3_gateway_digest_binding_local_replay_input(
+        comparison_id: &str,
+        baseline: &HsaiTinyZ3GatewayDigestBindingLocalReplaySource<'_>,
+        replay: &HsaiTinyZ3GatewayDigestBindingLocalReplaySource<'_>,
+    ) -> HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonInput {
+        let (_, baseline_validation_digest) =
+            hsai_tiny_z3_gateway_digest_binding_local_replay_source_validation_digest(baseline);
+        let (_, replay_validation_digest) =
+            hsai_tiny_z3_gateway_digest_binding_local_replay_source_validation_digest(replay);
+        let baseline_stable =
+            hsai_tiny_z3_gateway_digest_binding_local_replay_stable_binding_map(baseline.execution);
+        let replay_stable =
+            hsai_tiny_z3_gateway_digest_binding_local_replay_stable_binding_map(replay.execution);
+        let baseline_source = hsai_tiny_z3_gateway_digest_binding_local_replay_source_instance_map(
+            baseline.execution,
+        );
+        let replay_source =
+            hsai_tiny_z3_gateway_digest_binding_local_replay_source_instance_map(replay.execution);
+        let (_, stable_mismatch_labels) =
+            hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_sets(
+                &baseline_stable,
+                &replay_stable,
+            );
+        let (_, source_instance_drift_labels) =
+            hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_sets(
+                &baseline_source,
+                &replay_source,
+            );
+        let expected_classification =
+            hsai_tiny_z3_gateway_digest_binding_local_replay_classification(
+                &stable_mismatch_labels,
+                &source_instance_drift_labels,
+            );
+        let baseline_stable_binding_map_digest =
+            hsai_tiny_z3_gateway_digest_binding_local_replay_binding_map_digest(&baseline_stable);
+        let replay_stable_binding_map_digest =
+            hsai_tiny_z3_gateway_digest_binding_local_replay_binding_map_digest(&replay_stable);
+        let baseline_source_instance_map_digest =
+            hsai_tiny_z3_gateway_digest_binding_local_replay_binding_map_digest(&baseline_source);
+        let replay_source_instance_map_digest =
+            hsai_tiny_z3_gateway_digest_binding_local_replay_binding_map_digest(&replay_source);
+        let nonclaims =
+            hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_required_nonclaims();
+        HsaiTinyZ3GatewayDigestBindingLocalReplayComparisonInput {
+            schema_version:
+                HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_REPLAY_COMPARISON_SCHEMA_VERSION
+                    .to_owned(),
+            comparison_id: comparison_id.to_owned(),
+            comparison_policy_id: "phase658-local-replay-comparison-policy".to_owned(),
+            comparison_decision_id: "phase658-local-replay-comparison-decision".to_owned(),
+            compared_at_unix: 1_800_000_658,
+            property_id: HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PROPERTY_ID.to_owned(),
+            baseline_execution_digest: baseline.execution.digest(),
+            replay_execution_digest: replay.execution.digest(),
+            baseline_validation_digest,
+            replay_validation_digest,
+            baseline_stable_binding_map_digest,
+            replay_stable_binding_map_digest,
+            baseline_source_instance_map_digest,
+            replay_source_instance_map_digest,
+            stable_field_labels:
+                hsai_tiny_z3_gateway_digest_binding_local_replay_stable_field_labels(),
+            source_instance_field_labels:
+                hsai_tiny_z3_gateway_digest_binding_local_replay_source_instance_field_labels(),
+            stable_semantic_output_required: true,
+            source_instance_drift_permitted: true,
+            nonpromotion_digest:
+                hsai_tiny_z3_gateway_digest_binding_local_replay_input_nonpromotion_digest(
+                    baseline.execution.digest(),
+                    replay.execution.digest(),
+                    baseline_stable_binding_map_digest,
+                    replay_stable_binding_map_digest,
+                    baseline_source_instance_map_digest,
+                    replay_source_instance_map_digest,
+                    &expected_classification,
+                ),
+            expected_classification,
+            level_mapping: "Level1LocalReplayOrLower".to_owned(),
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest:
+                hsai_tiny_z3_gateway_digest_binding_local_replay_comparison_nonclaim_digest(
+                    &nonclaims,
+                ),
+            comparison_label:
+                HsaiTinyZ3GatewayDigestBindingLocalReplayLabel::LocalReplayComparisonRecorded,
+            comparison_summary:
+                "compare two local tiny-Z3 observations across stable semantic/output and separate source-instance maps"
+                    .to_owned(),
+            proof_artifact_requested: false,
+            checker_transcript_requested: false,
+            solver_certificate_requested: false,
+            raw_transcript_retention_requested: false,
+            imports_external_result: false,
+            accepted_evidence_requested: false,
+            independent_external_reproduction_claimed: false,
             level2_evidence_requested: false,
             score_axis_population_requested: false,
             benchmark_evidence_requested: false,
