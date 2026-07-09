@@ -18230,6 +18230,38 @@ additional SMT/Z3 execution in this phase, no benchmark evidence, no
 external-audit claim, and no production/SOTA/security/semantic-correctness
 claim.
 
+## Phase 645 HSAI Tiny Z3 Packet Role Artifact Independent Operator Accepted Result Output Policy Resolution Boundary
+
+Status: complete for docs-first accepted-result output policy-resolution
+boundary. See
+`docs/645-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-policy-resolution-boundary.md`.
+
+Goal: define the future local policy-resolution metadata boundary over one
+exact Phase 644 accepted-result output evidence eligibility metadata record,
+without implementing policy-resolution metadata, importing external results,
+mutating accepted evidence, creating accepted evidence, creating Level2+,
+populating score axes, running a backend, or promoting proof/claim evidence.
+
+Implemented: Phase 645 defines the future policy-resolution source state,
+blocked resolution classifications, required future evidence before unblocking,
+forbidden behavior, and future Phase 646 implementation exit criteria. It
+requires one exact Phase 644
+`PacketRoleArtifactIndependentOperatorAcceptedResultOutputEvidenceEligibilityBlockedPolicyNotSatisfied`
+record and binds Phase 644/642/640/638/636/634/632/630/628/595/593/591/589
+/587/585 plus inherited Phase 583/581/579/577/575/573/571/569/567/565/563
+/561/559/557/555 and backend-execution requirements.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named accepted-result output policy-resolution
+boundary. It still has no policy-resolution implementation, no independent
+external reproduction, no accepted external result import, no accepted
+Evidence Ledger mutation, no accepted evidence, no Level2+ evidence, no
+populated score axes, no Lean/COBALT/Rust-to-Lean execution, no additional
+SMT/Z3 execution in this phase, no benchmark evidence, no external-audit
+claim, and no production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
