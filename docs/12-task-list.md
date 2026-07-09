@@ -18649,6 +18649,31 @@ the next responsible slice is a docs-first production digest
 source-correspondence boundary. No accepted evidence, Level2+, score axes,
 semantic correctness, production readiness, SOTA, or full security is created.
 
+## Phase 659 HSAI Gateway Proposal Digest Production Source Correspondence Boundary
+
+Status: complete for the documentation-first production source-correspondence
+boundary. See
+`docs/659-phase-hsai-gateway-proposal-digest-production-source-correspondence-boundary.md`.
+
+Goal: bind the exact production `GatewayActionProposal::digest` source path,
+separate current deterministic Serde behavior from a portable canonical-JSON
+claim, define a bounded first property set and C0-through-C4 correspondence
+ladder, and select the first source implementation surface before any formal
+backend modeling or extraction.
+
+Implemented: source and dependency anchor inventory; source-bound encoding
+contract; preimage determinism, production digest agreement, concrete field
+sensitivity, set-order independence, and encoding-edge property scopes;
+backend ranking; correspondence-package requirements; failure taxonomy;
+nonpromotion rules; and a narrow Phase 660 target for a production preimage
+witness plus golden regression vectors.
+
+Exit criteria: HSAI has an explicit boundary for closing the source-semantic
+gap identified by Phase 658. Phase 659 changes no Rust, runs no backend, and
+creates no proof artifact, checker transcript, solver certificate, accepted
+evidence, Level2+, score axes, benchmark evidence, semantic correctness,
+production readiness, SOTA, or full security.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
