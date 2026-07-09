@@ -39,6 +39,19 @@ The implementation adds digest-only metadata for:
 - reviewed receipt policy limits;
 - advisory admission bridge metadata.
 
+It also adds a fixture-only replay builder:
+
+- `HsaiDeepProveLookaheadFixtureReplayInput`
+- `HsaiDeepProveLookaheadFixtureReplayCandidate`
+- `hsai_deepprove_lookahead_fixture_replay_report_input`
+- `build_hsai_deepprove_lookahead_fixture_replay_report`
+
+The fixture replay builder accepts only committed digest-bound fixture
+candidates. It deterministically chooses the first `Selected` candidate in the
+ordered fixture map, constructs the normal Phase 651 report input, and then
+uses the same report validator. It does not generate text, call a model, retain
+raw transcripts, or invoke DeepProve.
+
 The only allowed reviewed DeepProve conclusion is:
 
 ```text
@@ -95,6 +108,11 @@ Focused tests cover:
 - valid metadata report with no DeepProve receipt;
 - A-through-K report with operator transcript metadata and reviewed DeepProve
   receipt policy;
+- deterministic fixture-only replay report construction;
+- repeated fixture replay digest stability;
+- invalid fixture schema rejection;
+- fixture with no selected candidate rejection;
+- fixture horizon overflow rejection;
 - candidate count and horizon bound rejection;
 - missing prompt-case digest rejection;
 - missing greedy baseline reference rejection;

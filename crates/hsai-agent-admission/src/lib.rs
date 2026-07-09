@@ -1357,6 +1357,8 @@ pub const HSAI_DEEPPROVE_LOOKAHEAD_EXPERIMENT_REPORT_STATE_SLICE: &str =
 pub const HSAI_DEEPPROVE_LOOKAHEAD_EXPERIMENT_REPORT_CLAIM_BOUNDARY: &str = "local HSAI DeepProve lookahead candidate-search experiment metadata only; records digest-only prompt, greedy baseline, candidate future span, branch score, backward verification, operator transcript candidate, optional declared or quarantined DeepProve receipt reference, reviewed receipt policy, and advisory admission bridge metadata, but does not run live LLM generation, attend to unavailable future tokens, clone or vendor DeepProve, run DeepProve, generate zkML proofs, verify zkML proofs, import external results, mutate the accepted Evidence Ledger, create accepted formal evidence, create Level2+ evidence, populate score axes, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, record human-review acceptance, or grant authority to execute an action.";
 pub const HSAI_DEEPPROVE_LOOKAHEAD_INERT_METADATA_STATE_SLICE: &str =
     "phase-651b-hsai-lookahead-inert-metadata";
+pub const HSAI_DEEPPROVE_LOOKAHEAD_FIXTURE_REPLAY_SCHEMA_VERSION: &str =
+    "hsai-deepprove-lookahead-fixture-replay:v1";
 pub const HSAI_DEEPPROVE_LOOKAHEAD_FIXTURE_REPLAY_STATE_SLICE: &str =
     "phase-651c-hsai-lookahead-fixture-replay";
 pub const HSAI_DEEPPROVE_LOOKAHEAD_BACKWARD_VERIFICATION_STATE_SLICE: &str =
@@ -27695,6 +27697,57 @@ pub enum HsaiDeepProveLookaheadExperimentReportIssue {
 pub struct HsaiDeepProveLookaheadExperimentReportValidation {
     pub valid: bool,
     pub issues: Vec<HsaiDeepProveLookaheadExperimentReportIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiDeepProveLookaheadFixtureReplayCandidate {
+    pub candidate_id: String,
+    pub context_digest: Hash,
+    pub candidate_future_span_digest: Hash,
+    pub completed_output_digest: Hash,
+    pub horizon_tokens: u32,
+    pub branch_score_label: HsaiDeepProveLookaheadBranchScoreLabel,
+    pub selection_label: HsaiDeepProveLookaheadSelectionLabel,
+    pub verifier_policy_id: String,
+    pub verifier_policy_digest: Hash,
+    pub finding_digest: Hash,
+    pub finding_class: HsaiDeepProveLookaheadBackwardFindingClass,
+    pub finding_summary: String,
+    pub cost_label: String,
+}
+
+impl HsaiDeepProveLookaheadFixtureReplayCandidate {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-deepprove-lookahead-fixture-replay-candidate:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiDeepProveLookaheadFixtureReplayInput {
+    pub schema_version: String,
+    pub report_id: String,
+    pub report_policy_id: String,
+    pub report_decision_id: String,
+    pub created_at_unix: u64,
+    pub prompt_case: HsaiDeepProveLookaheadPromptCaseRef,
+    pub greedy_baseline: HsaiDeepProveLookaheadGreedyBaselineRef,
+    pub lookahead_config: HsaiDeepProveLookaheadConfig,
+    pub candidates: BTreeMap<String, HsaiDeepProveLookaheadFixtureReplayCandidate>,
+    pub branch_report_section_digests: BTreeMap<String, Hash>,
+    pub admission_bridge_digest: Hash,
+    pub report_summary: String,
+}
+
+impl HsaiDeepProveLookaheadFixtureReplayInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-deepprove-lookahead-fixture-replay-input:v1",
+            self,
+        )
+    }
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
@@ -118749,6 +118802,147 @@ fn hsai_deepprove_reviewed_receipt_policy_invalid(
         )
 }
 
+pub fn hsai_deepprove_lookahead_fixture_replay_report_input(
+    fixture: &HsaiDeepProveLookaheadFixtureReplayInput,
+) -> HsaiDeepProveLookaheadExperimentReportInput {
+    let candidate_spans = fixture
+        .candidates
+        .iter()
+        .map(|(candidate_id, candidate)| {
+            (
+                candidate_id.clone(),
+                HsaiDeepProveLookaheadCandidateFutureSpan {
+                    candidate_id: candidate.candidate_id.clone(),
+                    prompt_case_digest: fixture.prompt_case.prompt_case_digest,
+                    context_digest: candidate.context_digest,
+                    candidate_future_span_digest: candidate.candidate_future_span_digest,
+                    completed_output_digest: candidate.completed_output_digest,
+                    horizon_tokens: candidate.horizon_tokens,
+                    branch_score_label: candidate.branch_score_label.clone(),
+                    selection_label: candidate.selection_label.clone(),
+                    backward_verification_finding_digest: candidate.finding_digest,
+                    cost_label: candidate.cost_label.clone(),
+                },
+            )
+        })
+        .collect::<BTreeMap<_, _>>();
+    let backward_verification_findings = fixture
+        .candidates
+        .iter()
+        .map(|(candidate_id, candidate)| {
+            let finding_id = format!("{candidate_id}-backward-finding");
+            (
+                finding_id.clone(),
+                HsaiDeepProveLookaheadBackwardVerificationFinding {
+                    finding_id,
+                    verifier_policy_id: candidate.verifier_policy_id.clone(),
+                    verifier_policy_digest: candidate.verifier_policy_digest,
+                    completed_output_digest: candidate.completed_output_digest,
+                    finding_digest: candidate.finding_digest,
+                    finding_class: candidate.finding_class.clone(),
+                    finding_summary: candidate.finding_summary.clone(),
+                    semantic_correctness_claimed: false,
+                    formal_proof_claimed: false,
+                },
+            )
+        })
+        .collect::<BTreeMap<_, _>>();
+    let selected_candidate_id =
+        hsai_deepprove_lookahead_fixture_replay_selected_candidate_id(&fixture.candidates)
+            .unwrap_or_else(|| "fixture-no-selected-candidate".to_owned());
+    let selected_context_digest = fixture
+        .candidates
+        .get(&selected_candidate_id)
+        .map(|candidate| candidate.context_digest)
+        .unwrap_or(Hash([0; 32]));
+    let nonclaims = hsai_deepprove_lookahead_experiment_report_required_nonclaims();
+    let candidate_span_digest_set =
+        hsai_deepprove_lookahead_experiment_candidate_span_digests(&candidate_spans);
+
+    HsaiDeepProveLookaheadExperimentReportInput {
+        schema_version: if fixture.schema_version
+            == HSAI_DEEPPROVE_LOOKAHEAD_FIXTURE_REPLAY_SCHEMA_VERSION
+        {
+            HSAI_DEEPPROVE_LOOKAHEAD_EXPERIMENT_REPORT_SCHEMA_VERSION.to_owned()
+        } else {
+            fixture.schema_version.clone()
+        },
+        report_id: fixture.report_id.clone(),
+        report_policy_id: fixture.report_policy_id.clone(),
+        report_decision_id: fixture.report_decision_id.clone(),
+        created_at_unix: fixture.created_at_unix,
+        prompt_case: fixture.prompt_case.clone(),
+        greedy_baseline: fixture.greedy_baseline.clone(),
+        lookahead_config: fixture.lookahead_config.clone(),
+        candidate_spans,
+        selected_candidate_id,
+        selected_context_digest,
+        backward_verification_findings,
+        branch_report_section_digests: fixture.branch_report_section_digests.clone(),
+        operator_transcript_boundary: None,
+        deepprove_receipt_ref: None,
+        reviewed_receipt_policy: None,
+        admission_bridge_digest: fixture.admission_bridge_digest,
+        maps_to_admission_candidate: true,
+        model_output_proposal_only: true,
+        explicit_nonclaims: nonclaims.clone(),
+        explicit_nonclaims_digest: hsai_deepprove_lookahead_experiment_report_nonclaim_digest(
+            &nonclaims,
+        ),
+        nonpromotion_digest: hsai_deepprove_lookahead_experiment_report_nonpromotion_digest(
+            fixture.prompt_case.digest(),
+            fixture.greedy_baseline.digest(),
+            fixture.lookahead_config.digest(),
+            hash_tagged(
+                "hsai-agent-admission:hsai-deepprove-lookahead-candidate-span-digest-set:v1",
+                &candidate_span_digest_set,
+            ),
+            &HsaiDeepProveReceiptStatus::Absent,
+            fixture.admission_bridge_digest,
+        ),
+        classification: HsaiDeepProveLookaheadReportClassification::LocalMetadataRecorded,
+        report_label: HsaiDeepProveLookaheadReportLabel::LookaheadReportRecorded,
+        report_summary: fixture.report_summary.clone(),
+        live_llm_execution_performed: false,
+        model_download_performed: false,
+        live_zkml_execution_performed: false,
+        deepprove_execution_performed: false,
+        external_result_imported: false,
+        accepted_evidence_ledger_mutated: false,
+        accepted_formal_evidence_created: false,
+        creates_level2_evidence: false,
+        score_axes_populated: false,
+        benchmark_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        external_audit_claimed: false,
+        human_review_acceptance_claimed: false,
+        authority_granted: false,
+    }
+}
+
+pub fn build_hsai_deepprove_lookahead_fixture_replay_report(
+    fixture: &HsaiDeepProveLookaheadFixtureReplayInput,
+) -> Result<HsaiDeepProveLookaheadExperimentReport, HsaiDeepProveLookaheadExperimentReportValidation>
+{
+    let report_input = hsai_deepprove_lookahead_fixture_replay_report_input(fixture);
+    build_hsai_deepprove_lookahead_experiment_report(&report_input)
+}
+
+fn hsai_deepprove_lookahead_fixture_replay_selected_candidate_id(
+    candidates: &BTreeMap<String, HsaiDeepProveLookaheadFixtureReplayCandidate>,
+) -> Option<String> {
+    candidates
+        .iter()
+        .find(|(_, candidate)| {
+            candidate.selection_label == HsaiDeepProveLookaheadSelectionLabel::Selected
+        })
+        .map(|(candidate_id, _)| candidate_id.clone())
+}
+
 pub fn hsai_tiny_z3_extension_local_execution_observation_claim_boundary() -> String {
     HSAI_TINY_Z3_EXTENSION_LOCAL_EXECUTION_OBSERVATION_CLAIM_BOUNDARY.to_owned()
 }
@@ -171284,6 +171478,88 @@ mod tests {
         }
     }
 
+    fn phase651_fixture_replay_input(report_id: &str) -> HsaiDeepProveLookaheadFixtureReplayInput {
+        HsaiDeepProveLookaheadFixtureReplayInput {
+            schema_version: HSAI_DEEPPROVE_LOOKAHEAD_FIXTURE_REPLAY_SCHEMA_VERSION.to_owned(),
+            report_id: report_id.to_owned(),
+            report_policy_id: "phase651-fixture-replay-policy".to_owned(),
+            report_decision_id: "phase651-fixture-replay-decision".to_owned(),
+            created_at_unix: 1_800_000_652,
+            prompt_case: HsaiDeepProveLookaheadPromptCaseRef {
+                prompt_case_id: "phase651-fixture-prompt-case".to_owned(),
+                prompt_case_digest: phase651_hash("fixture-prompt-case"),
+                prompt_case_metadata_digest: phase651_hash("fixture-prompt-case-metadata"),
+            },
+            greedy_baseline: HsaiDeepProveLookaheadGreedyBaselineRef {
+                baseline_id: "phase651-fixture-greedy-baseline".to_owned(),
+                baseline_trace_digest: phase651_hash("fixture-greedy-baseline-trace"),
+                baseline_output_digest: phase651_hash("fixture-greedy-baseline-output"),
+                baseline_context_digest: phase651_hash("fixture-greedy-baseline-context"),
+            },
+            lookahead_config: HsaiDeepProveLookaheadConfig {
+                config_id: "phase651-fixture-lookahead-config".to_owned(),
+                candidate_count_bound: 3,
+                horizon_token_bound: 12,
+                deterministic_fixture_only: true,
+                cost_label_set_digest: phase651_hash("fixture-cost-label-set"),
+            },
+            candidates: BTreeMap::from([
+                (
+                    "candidate-a".to_owned(),
+                    HsaiDeepProveLookaheadFixtureReplayCandidate {
+                        candidate_id: "candidate-a".to_owned(),
+                        context_digest: phase651_hash("fixture-candidate-a-context"),
+                        candidate_future_span_digest: phase651_hash(
+                            "fixture-candidate-a-future-span",
+                        ),
+                        completed_output_digest: phase651_hash("fixture-candidate-a-output"),
+                        horizon_tokens: 5,
+                        branch_score_label:
+                            HsaiDeepProveLookaheadBranchScoreLabel::CandidateMatchesLocalLabel,
+                        selection_label: HsaiDeepProveLookaheadSelectionLabel::Rejected,
+                        verifier_policy_id: "phase651-fixture-backward-verifier".to_owned(),
+                        verifier_policy_digest: phase651_hash("fixture-backward-verifier-policy"),
+                        finding_digest: phase651_hash("fixture-candidate-a-finding"),
+                        finding_class:
+                            HsaiDeepProveLookaheadBackwardFindingClass::NoLocalContradictionFound,
+                        finding_summary:
+                            "fixture replay found no local contradiction for candidate a".to_owned(),
+                        cost_label: "fixture-cost-low".to_owned(),
+                    },
+                ),
+                (
+                    "candidate-b".to_owned(),
+                    HsaiDeepProveLookaheadFixtureReplayCandidate {
+                        candidate_id: "candidate-b".to_owned(),
+                        context_digest: phase651_hash("fixture-candidate-b-context"),
+                        candidate_future_span_digest: phase651_hash(
+                            "fixture-candidate-b-future-span",
+                        ),
+                        completed_output_digest: phase651_hash("fixture-candidate-b-output"),
+                        horizon_tokens: 7,
+                        branch_score_label:
+                            HsaiDeepProveLookaheadBranchScoreLabel::CandidateImprovesLocalLabel,
+                        selection_label: HsaiDeepProveLookaheadSelectionLabel::Selected,
+                        verifier_policy_id: "phase651-fixture-backward-verifier".to_owned(),
+                        verifier_policy_digest: phase651_hash("fixture-backward-verifier-policy"),
+                        finding_digest: phase651_hash("fixture-candidate-b-finding"),
+                        finding_class:
+                            HsaiDeepProveLookaheadBackwardFindingClass::NoLocalContradictionFound,
+                        finding_summary:
+                            "fixture replay found no local contradiction for selected candidate"
+                                .to_owned(),
+                        cost_label: "fixture-cost-medium".to_owned(),
+                    },
+                ),
+            ]),
+            branch_report_section_digests: phase651_report_sections(),
+            admission_bridge_digest: phase651_hash("fixture-admission-bridge"),
+            report_summary:
+                "fixture replay compares static digest-bound branches as advisory metadata"
+                    .to_owned(),
+        }
+    }
+
     #[test]
     fn phase651_hsai_deepprove_lookahead_report_records_valid_metadata_without_receipt() {
         let input = phase651_hsai_deepprove_lookahead_experiment_report_input(
@@ -171318,6 +171594,85 @@ mod tests {
         assert!(!report.authority_granted);
         assert!(!report.accepted_formal_evidence_created);
         assert!(!report.score_axes_populated);
+    }
+
+    #[test]
+    fn phase651_hsai_deepprove_lookahead_fixture_replay_builds_deterministic_report() {
+        let fixture = phase651_fixture_replay_input("phase651-fixture-replay-report");
+        let report = build_hsai_deepprove_lookahead_fixture_replay_report(&fixture)
+            .expect("phase651 fixture replay builds report");
+        let replayed = build_hsai_deepprove_lookahead_fixture_replay_report(&fixture)
+            .expect("phase651 fixture replay rebuilds same report");
+
+        assert_eq!(
+            report.state_slice,
+            HSAI_DEEPPROVE_LOOKAHEAD_EXPERIMENT_REPORT_STATE_SLICE
+        );
+        assert!(report
+            .subphase_state_slices
+            .contains(HSAI_DEEPPROVE_LOOKAHEAD_FIXTURE_REPLAY_STATE_SLICE));
+        assert_eq!(report.digest(), replayed.digest());
+        assert_eq!(report.selected_candidate_id, "candidate-b");
+        assert_eq!(
+            report.selected_context_digest,
+            phase651_hash("fixture-candidate-b-context")
+        );
+        assert_eq!(report.candidate_span_digest_set.len(), 2);
+        assert_eq!(
+            report.deepprove_receipt_status,
+            HsaiDeepProveReceiptStatus::Absent
+        );
+        assert!(report.operator_transcript_boundary_digest.is_none());
+        assert!(report.deepprove_receipt_ref_digest.is_none());
+        assert!(!report.live_llm_execution_performed);
+        assert!(!report.deepprove_execution_performed);
+        assert!(!report.authority_granted);
+    }
+
+    #[test]
+    fn phase651_hsai_deepprove_lookahead_fixture_replay_rejects_schema_and_no_selection() {
+        let mut fixture = phase651_fixture_replay_input("phase651-fixture-invalid-schema");
+        fixture.schema_version = "wrong-fixture-schema".to_owned();
+        let report_input = hsai_deepprove_lookahead_fixture_replay_report_input(&fixture);
+        let validation = validate_hsai_deepprove_lookahead_experiment_report_input(&report_input);
+
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&HsaiDeepProveLookaheadExperimentReportIssue::InvalidSchemaVersion));
+        assert!(build_hsai_deepprove_lookahead_fixture_replay_report(&fixture).is_err());
+
+        let mut fixture = phase651_fixture_replay_input("phase651-fixture-no-selection");
+        for candidate in fixture.candidates.values_mut() {
+            candidate.selection_label = HsaiDeepProveLookaheadSelectionLabel::Rejected;
+        }
+        let report_input = hsai_deepprove_lookahead_fixture_replay_report_input(&fixture);
+        let validation = validate_hsai_deepprove_lookahead_experiment_report_input(&report_input);
+
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&HsaiDeepProveLookaheadExperimentReportIssue::SelectedCandidateMissing));
+        assert!(build_hsai_deepprove_lookahead_fixture_replay_report(&fixture).is_err());
+    }
+
+    #[test]
+    fn phase651_hsai_deepprove_lookahead_fixture_replay_rejects_horizon_overflow() {
+        let mut fixture = phase651_fixture_replay_input("phase651-fixture-horizon-overflow");
+        let overflowing_horizon = fixture.lookahead_config.horizon_token_bound + 1;
+        fixture
+            .candidates
+            .get_mut("candidate-b")
+            .expect("candidate-b fixture exists")
+            .horizon_tokens = overflowing_horizon;
+        let report_input = hsai_deepprove_lookahead_fixture_replay_report_input(&fixture);
+        let validation = validate_hsai_deepprove_lookahead_experiment_report_input(&report_input);
+
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&HsaiDeepProveLookaheadExperimentReportIssue::HorizonOutOfBounds));
+        assert!(build_hsai_deepprove_lookahead_fixture_replay_report(&fixture).is_err());
     }
 
     #[test]
