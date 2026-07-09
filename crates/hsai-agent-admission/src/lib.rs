@@ -1382,6 +1382,13 @@ pub const HSAI_TINY_Z3_EXTENSION_LOCAL_EXECUTION_OBSERVATION_SCHEMA_VERSION: &st
 pub const HSAI_TINY_Z3_EXTENSION_LOCAL_EXECUTION_OBSERVATION_STATE_SLICE: &str =
     "phase-653-hsai-tiny-z3-extension-local-execution-observation";
 pub const HSAI_TINY_Z3_EXTENSION_LOCAL_EXECUTION_OBSERVATION_CLAIM_BOUNDARY: &str = "local HSAI tiny-Z3 extension execution-observation metadata only; binds one Phase 650 TinyZ3ReplayExtension NotRun execution packet to one exact Phase 529 local hermetic SMT/Z3 backend execution observation, reusing the audited Phase 529 runner output and recording no new process spawn in this layer, but does not create accepted evidence, accepted formal evidence, Level2+ evidence, score-axis evidence, proof artifacts, checker transcripts, solver certificates, Lean proof, COBALT containment evidence, Rust-to-Lean extraction, benchmark evidence, semantic-correctness claims, production-readiness claims, SOTA claims, breakthrough claims, full-security claims, external-audit claims, human-review acceptance claims, or action authority.";
+pub const HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PROPERTY_ID: &str =
+    "gateway_proposal_digest_binding_determinism_v1";
+pub const HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PREFLIGHT_SCHEMA_VERSION: &str =
+    "hsai-tiny-z3-gateway-digest-binding-execution-preflight:v1";
+pub const HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PREFLIGHT_STATE_SLICE: &str =
+    "phase-656-hsai-tiny-z3-gateway-digest-binding-execution-preflight";
+pub const HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PREFLIGHT_CLAIM_BOUNDARY: &str = "local HSAI tiny-Z3 gateway proposal digest-binding execution preflight metadata only; binds the Phase 655 property gateway_proposal_digest_binding_determinism_v1 to one Phase 650 TinyZ3ReplayExtension NotRun packet, one Phase 653 local observation, hermetic input, command-policy, output-grammar, redaction, quarantine, replay, failure-taxonomy, and nonpromotion digests, but does not execute Z3, run any backend command, create proof artifacts, checker transcripts, solver certificates, accepted evidence, Level2+ evidence, score axes, benchmark evidence, semantic-correctness claims, production-readiness claims, SOTA claims, breakthrough claims, full-security claims, external-audit claims, human-review acceptance claims, or action authority.";
 pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_NAMESPACE: &str =
     "gateway-formal-tiny-z3-independent-external-operator-result";
 pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_DECLARED_FILES: [&str; 8] = [
@@ -27911,6 +27918,189 @@ pub enum HsaiTinyZ3ExtensionLocalExecutionObservationIssue {
 pub struct HsaiTinyZ3ExtensionLocalExecutionObservationValidation {
     pub valid: bool,
     pub issues: Vec<HsaiTinyZ3ExtensionLocalExecutionObservationIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiTinyZ3GatewayDigestBindingExecutionPreflightClassification {
+    GatewayDigestBindingExecutionPreflightRecorded,
+    GatewayDigestBindingExecutionPreflightRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiTinyZ3GatewayDigestBindingExecutionPreflightLabel {
+    GatewayDigestBindingExecutionPreflightRecorded,
+    GatewayDigestBindingExecutionPreflightRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiTinyZ3GatewayDigestBindingExecutionPreflightInput {
+    pub schema_version: String,
+    pub preflight_id: String,
+    pub preflight_policy_id: String,
+    pub preflight_decision_id: String,
+    pub prepared_at_unix: u64,
+    pub property_id: String,
+    pub lane_class: HsaiFormalBackendAccelerationLaneClass,
+    pub source_execution_packet_digest: Hash,
+    pub source_execution_packet_state_slice: String,
+    pub source_execution_packet_status: HsaiFormalBackendAccelerationExecutionPacketStatus,
+    pub source_observation_digest: Hash,
+    pub source_observation_state_slice: String,
+    pub source_observation_classification:
+        HsaiTinyZ3ExtensionLocalExecutionObservationClassification,
+    pub hermetic_input_manifest_digests: BTreeMap<String, Hash>,
+    pub expected_output_grammar_digest: Hash,
+    pub executable_identity_digest: Hash,
+    pub argv_digest: Hash,
+    pub environment_digest: Hash,
+    pub timeout_policy_digest: Hash,
+    pub transcript_redaction_policy_digest: Hash,
+    pub artifact_quarantine_policy_digest: Hash,
+    pub replay_instruction_digest: Hash,
+    pub failure_taxonomy_digest: Hash,
+    pub nonpromotion_digest: Hash,
+    pub level_mapping: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub classification: HsaiTinyZ3GatewayDigestBindingExecutionPreflightClassification,
+    pub preflight_label: HsaiTinyZ3GatewayDigestBindingExecutionPreflightLabel,
+    pub preflight_summary: String,
+    pub backend_command_invoked: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub raw_transcript_retained: bool,
+    pub imports_external_result: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_claimed: bool,
+    pub human_review_acceptance_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl HsaiTinyZ3GatewayDigestBindingExecutionPreflightInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-execution-preflight-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiTinyZ3GatewayDigestBindingExecutionPreflight {
+    pub schema_version: String,
+    pub state_slice: String,
+    pub preflight_id: String,
+    pub preflight_input_digest: Hash,
+    pub preflight_policy_id: String,
+    pub preflight_decision_id: String,
+    pub prepared_at_unix: u64,
+    pub property_id: String,
+    pub lane_class: HsaiFormalBackendAccelerationLaneClass,
+    pub source_execution_packet_digest: Hash,
+    pub source_execution_packet_input_digest: Hash,
+    pub source_execution_packet_state_slice: String,
+    pub source_execution_packet_status: HsaiFormalBackendAccelerationExecutionPacketStatus,
+    pub source_observation_digest: Hash,
+    pub source_observation_input_digest: Hash,
+    pub source_observation_state_slice: String,
+    pub source_observation_classification:
+        HsaiTinyZ3ExtensionLocalExecutionObservationClassification,
+    pub hermetic_input_manifest_digests: BTreeMap<String, Hash>,
+    pub hermetic_input_manifest_set_digest: Hash,
+    pub expected_output_grammar_digest: Hash,
+    pub executable_identity_digest: Hash,
+    pub argv_digest: Hash,
+    pub environment_digest: Hash,
+    pub timeout_policy_digest: Hash,
+    pub transcript_redaction_policy_digest: Hash,
+    pub artifact_quarantine_policy_digest: Hash,
+    pub replay_instruction_digest: Hash,
+    pub failure_taxonomy_digest: Hash,
+    pub nonpromotion_digest: Hash,
+    pub level_mapping: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub classification: HsaiTinyZ3GatewayDigestBindingExecutionPreflightClassification,
+    pub preflight_label: HsaiTinyZ3GatewayDigestBindingExecutionPreflightLabel,
+    pub preflight_summary: String,
+    pub claim_boundary: String,
+    pub backend_command_invoked: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub raw_transcript_retained: bool,
+    pub imports_external_result: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_claimed: bool,
+    pub human_review_acceptance_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl HsaiTinyZ3GatewayDigestBindingExecutionPreflight {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-execution-preflight:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue {
+    InvalidSchemaVersion,
+    InvalidPreflightId,
+    InvalidPreflightPolicyId,
+    InvalidPreflightDecisionId,
+    MissingPreparedTimestamp,
+    InvalidPropertyId,
+    InvalidLaneClass,
+    SourceExecutionPacketMismatch,
+    SourceExecutionPacketStateMismatch,
+    SourceObservationMismatch,
+    SourceObservationStateMismatch,
+    MissingHermeticInputManifest,
+    HermeticInputManifestMismatch,
+    MissingDigest(String),
+    InvalidExpectedOutputGrammarDigest,
+    InvalidExecutableIdentityDigest,
+    InvalidArgvDigest,
+    InvalidEnvironmentDigest,
+    InvalidTimeoutPolicyDigest,
+    InvalidTranscriptRedactionPolicyDigest,
+    InvalidArtifactQuarantinePolicyDigest,
+    InvalidReplayInstructionDigest,
+    InvalidFailureTaxonomyDigest,
+    InvalidNonpromotionDigest,
+    InvalidLevelMapping,
+    NonclaimMismatch,
+    InvalidClassification,
+    PreflightSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiTinyZ3GatewayDigestBindingExecutionPreflightValidation {
+    pub valid: bool,
+    pub issues: Vec<HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -119275,6 +119465,492 @@ pub fn validate_hsai_tiny_z3_extension_local_execution_observation_input(
     }
 }
 
+pub fn hsai_tiny_z3_gateway_digest_binding_execution_preflight_claim_boundary() -> String {
+    HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PREFLIGHT_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_execution_preflight_expected_output_grammar_digest(
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-execution-preflight-output-grammar:v1",
+        &"single-solver-verdict-line-unsat-or-sat-or-unknown",
+    )
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_execution_preflight_executable_identity_digest() -> Hash
+{
+    hash_tagged(
+        "hsai-agent-admission:phase656-z3-executable-identity-policy:v1",
+        &"caller-supplied-z3-path-hash-must-match-before-later-execution",
+    )
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_execution_preflight_transcript_redaction_policy_digest(
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-execution-preflight-transcript-redaction:v1",
+        &"bounded-stdout-stderr-summary-digests-only-no-raw-retention",
+    )
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_execution_preflight_artifact_quarantine_policy_digest(
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-execution-preflight-artifact-quarantine:v1",
+        &"local-quarantine-metadata-only-no-accepted-ledger-score-axis-or-benchmark-paths",
+    )
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_execution_preflight_replay_instruction_digest() -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-execution-preflight-replay-instruction:v1",
+        &"rerun-one-static-smtlib2-obligation-with-fixed-z3-argv-empty-env-and-timeout",
+    )
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_execution_preflight_failure_taxonomy_digest() -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-execution-preflight-failure-taxonomy:v1",
+        &[
+            "missing_executable",
+            "executable_digest_mismatch",
+            "invalid_phase650_packet",
+            "invalid_phase653_observation",
+            "invalid_obligation_digest",
+            "invalid_output_grammar",
+            "timeout",
+            "solver_unknown",
+            "solver_invalid_output",
+            "transcript_mismatch",
+            "nondeterministic_replay",
+            "raw_transcript_retention_attempt",
+            "artifact_quarantine_violation",
+            "promotion_attempt",
+        ],
+    )
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_execution_preflight_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims = hsai_tiny_z3_extension_local_execution_observation_required_nonclaims();
+    for label in [
+        "not Phase 656 backend execution",
+        "not Z3 execution",
+        "not accepted formal evidence",
+        "not gateway semantic correctness",
+        "not production readiness",
+        "not SOTA",
+        "not full security",
+    ] {
+        nonclaims.insert(NonClaimLabel(label.to_owned()));
+    }
+    nonclaims
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_execution_preflight_nonclaim_digest(
+    nonclaims: &BTreeSet<NonClaimLabel>,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-execution-preflight-nonclaims:v1",
+        nonclaims,
+    )
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_execution_preflight_input_manifest_set_digest(
+    input_manifest: &BTreeMap<String, Hash>,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-execution-preflight-input-manifest-set:v1",
+        input_manifest,
+    )
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_execution_preflight_nonpromotion_digest(
+    packet: &HsaiFormalBackendAccelerationExecutionPacket,
+    observation: &HsaiTinyZ3ExtensionLocalExecutionObservation,
+    input_manifest_set_digest: Hash,
+    expected_output_grammar_digest: Hash,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-execution-preflight-nonpromotion:v1",
+        &(
+            packet.digest(),
+            observation.digest(),
+            HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PROPERTY_ID,
+            input_manifest_set_digest,
+            expected_output_grammar_digest,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ),
+    )
+}
+
+pub fn build_hsai_tiny_z3_gateway_digest_binding_execution_preflight(
+    packet: &HsaiFormalBackendAccelerationExecutionPacket,
+    observation: &HsaiTinyZ3ExtensionLocalExecutionObservation,
+    input: &HsaiTinyZ3GatewayDigestBindingExecutionPreflightInput,
+) -> Result<
+    HsaiTinyZ3GatewayDigestBindingExecutionPreflight,
+    HsaiTinyZ3GatewayDigestBindingExecutionPreflightValidation,
+> {
+    let validation = validate_hsai_tiny_z3_gateway_digest_binding_execution_preflight_input(
+        packet,
+        observation,
+        input,
+    );
+    if !validation.valid {
+        return Err(validation);
+    }
+
+    Ok(HsaiTinyZ3GatewayDigestBindingExecutionPreflight {
+        schema_version: HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PREFLIGHT_SCHEMA_VERSION
+            .to_owned(),
+        state_slice: HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PREFLIGHT_STATE_SLICE.to_owned(),
+        preflight_id: input.preflight_id.clone(),
+        preflight_input_digest: input.digest(),
+        preflight_policy_id: input.preflight_policy_id.clone(),
+        preflight_decision_id: input.preflight_decision_id.clone(),
+        prepared_at_unix: input.prepared_at_unix,
+        property_id: input.property_id.clone(),
+        lane_class: input.lane_class.clone(),
+        source_execution_packet_digest: packet.digest(),
+        source_execution_packet_input_digest: packet.packet_input_digest,
+        source_execution_packet_state_slice: packet.state_slice.clone(),
+        source_execution_packet_status: packet.status.clone(),
+        source_observation_digest: observation.digest(),
+        source_observation_input_digest: observation.observation_input_digest,
+        source_observation_state_slice: observation.state_slice.clone(),
+        source_observation_classification: observation.classification.clone(),
+        hermetic_input_manifest_digests: input.hermetic_input_manifest_digests.clone(),
+        hermetic_input_manifest_set_digest:
+            hsai_tiny_z3_gateway_digest_binding_execution_preflight_input_manifest_set_digest(
+                &input.hermetic_input_manifest_digests,
+            ),
+        expected_output_grammar_digest: input.expected_output_grammar_digest,
+        executable_identity_digest: input.executable_identity_digest,
+        argv_digest: input.argv_digest,
+        environment_digest: input.environment_digest,
+        timeout_policy_digest: input.timeout_policy_digest,
+        transcript_redaction_policy_digest: input.transcript_redaction_policy_digest,
+        artifact_quarantine_policy_digest: input.artifact_quarantine_policy_digest,
+        replay_instruction_digest: input.replay_instruction_digest,
+        failure_taxonomy_digest: input.failure_taxonomy_digest,
+        nonpromotion_digest: input.nonpromotion_digest,
+        level_mapping: input.level_mapping.clone(),
+        explicit_nonclaims: input.explicit_nonclaims.clone(),
+        explicit_nonclaims_digest: input.explicit_nonclaims_digest,
+        classification: input.classification.clone(),
+        preflight_label: input.preflight_label.clone(),
+        preflight_summary: input.preflight_summary.clone(),
+        claim_boundary: hsai_tiny_z3_gateway_digest_binding_execution_preflight_claim_boundary(),
+        backend_command_invoked: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        raw_transcript_retained: false,
+        imports_external_result: false,
+        mutates_accepted_evidence_ledger: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        benchmark_evidence_created: false,
+        external_audit_claimed: false,
+        human_review_acceptance_claimed: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_hsai_tiny_z3_gateway_digest_binding_execution_preflight_input(
+    packet: &HsaiFormalBackendAccelerationExecutionPacket,
+    observation: &HsaiTinyZ3ExtensionLocalExecutionObservation,
+    input: &HsaiTinyZ3GatewayDigestBindingExecutionPreflightInput,
+) -> HsaiTinyZ3GatewayDigestBindingExecutionPreflightValidation {
+    let mut issues = Vec::new();
+    if input.schema_version
+        != HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PREFLIGHT_SCHEMA_VERSION
+    {
+        issues.push(HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.preflight_id) {
+        issues.push(HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidPreflightId);
+    }
+    if !is_single_segment_id(&input.preflight_policy_id) {
+        issues
+            .push(HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidPreflightPolicyId);
+    }
+    if !is_single_segment_id(&input.preflight_decision_id) {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidPreflightDecisionId,
+        );
+    }
+    if input.prepared_at_unix == 0 {
+        issues
+            .push(HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::MissingPreparedTimestamp);
+    }
+    if input.property_id != HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PROPERTY_ID {
+        issues.push(HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidPropertyId);
+    }
+    if input.lane_class != HsaiFormalBackendAccelerationLaneClass::TinyZ3ReplayExtension {
+        issues.push(HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidLaneClass);
+    }
+    if packet.schema_version != HSAI_FORMAL_BACKEND_ACCELERATION_EXECUTION_PACKET_SCHEMA_VERSION
+        || packet.state_slice != HSAI_FORMAL_BACKEND_ACCELERATION_EXECUTION_PACKET_STATE_SLICE
+        || packet.status != HsaiFormalBackendAccelerationExecutionPacketStatus::NotRun
+        || packet.classification
+            != HsaiFormalBackendAccelerationExecutionPacketClassification::LocalExecutionPacketMetadataRecorded
+        || packet.lane_class != HsaiFormalBackendAccelerationLaneClass::TinyZ3ReplayExtension
+        || packet.backend_command_invoked
+        || packet.creates_accepted_evidence
+        || packet.creates_level2_evidence
+        || packet.populates_score_axes
+        || packet.semantic_correctness_claimed
+        || packet.production_readiness_claimed
+        || packet.sota_claimed
+        || packet.full_security_claimed
+        || packet.grants_authority
+    {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::SourceExecutionPacketStateMismatch,
+        );
+    }
+    if input.source_execution_packet_digest != packet.digest()
+        || input.source_execution_packet_state_slice != packet.state_slice
+        || input.source_execution_packet_status != packet.status
+    {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::SourceExecutionPacketMismatch,
+        );
+    }
+    if observation.schema_version
+        != HSAI_TINY_Z3_EXTENSION_LOCAL_EXECUTION_OBSERVATION_SCHEMA_VERSION
+        || observation.state_slice != HSAI_TINY_Z3_EXTENSION_LOCAL_EXECUTION_OBSERVATION_STATE_SLICE
+        || observation.classification
+            != HsaiTinyZ3ExtensionLocalExecutionObservationClassification::TinyZ3ExtensionObservedLocalOnly
+        || observation.source_execution_packet_digest != packet.digest()
+        || observation.source_execution_packet_lane_class
+            != HsaiFormalBackendAccelerationLaneClass::TinyZ3ReplayExtension
+        || observation.new_backend_command_invoked
+        || observation.proof_artifact_created
+        || observation.checker_transcript_created
+        || observation.solver_certificate_created
+        || observation.raw_transcript_retained
+        || observation.imports_external_result
+        || observation.mutates_accepted_evidence_ledger
+        || observation.creates_accepted_evidence
+        || observation.creates_level2_evidence
+        || observation.populates_score_axes
+        || observation.benchmark_evidence_created
+        || observation.semantic_correctness_claimed
+        || observation.production_readiness_claimed
+        || observation.sota_claimed
+        || observation.full_security_claimed
+        || observation.grants_authority
+    {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::SourceObservationStateMismatch,
+        );
+    }
+    if input.source_observation_digest != observation.digest()
+        || input.source_observation_state_slice != observation.state_slice
+        || input.source_observation_classification != observation.classification
+    {
+        issues
+            .push(HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::SourceObservationMismatch);
+    }
+    if input.hermetic_input_manifest_digests.is_empty() {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::MissingHermeticInputManifest,
+        );
+    }
+    for (label, digest) in &input.hermetic_input_manifest_digests {
+        if *digest == Hash([0; 32]) {
+            issues.push(
+                HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::MissingDigest(label.clone()),
+            );
+        }
+    }
+    let expected_hermetic_input_manifest_digests = BTreeMap::from([
+        ("phase650-packet".to_owned(), packet.digest()),
+        ("phase653-observation".to_owned(), observation.digest()),
+        (
+            "property-obligation".to_owned(),
+            hash_bytes(HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PROPERTY_ID.as_bytes()),
+        ),
+    ]);
+    if input.hermetic_input_manifest_digests != expected_hermetic_input_manifest_digests {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::HermeticInputManifestMismatch,
+        );
+    }
+    for (label, digest) in [
+        (
+            "expected_output_grammar_digest",
+            input.expected_output_grammar_digest,
+        ),
+        (
+            "executable_identity_digest",
+            input.executable_identity_digest,
+        ),
+        (
+            "transcript_redaction_policy_digest",
+            input.transcript_redaction_policy_digest,
+        ),
+        (
+            "artifact_quarantine_policy_digest",
+            input.artifact_quarantine_policy_digest,
+        ),
+        ("replay_instruction_digest", input.replay_instruction_digest),
+        ("failure_taxonomy_digest", input.failure_taxonomy_digest),
+    ] {
+        if digest == Hash([0; 32]) {
+            issues.push(
+                HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::MissingDigest(
+                    label.to_owned(),
+                ),
+            );
+        }
+    }
+    if input.expected_output_grammar_digest
+        != hsai_tiny_z3_gateway_digest_binding_execution_preflight_expected_output_grammar_digest()
+    {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidExpectedOutputGrammarDigest,
+        );
+    }
+    if input.executable_identity_digest
+        != hsai_tiny_z3_gateway_digest_binding_execution_preflight_executable_identity_digest()
+    {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidExecutableIdentityDigest,
+        );
+    }
+    if input.argv_digest != gateway_formal_tiny_z3_hermetic_backend_execution_result_argv_digest() {
+        issues.push(HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidArgvDigest);
+    }
+    if input.environment_digest
+        != gateway_formal_tiny_z3_hermetic_backend_execution_result_environment_digest()
+    {
+        issues
+            .push(HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidEnvironmentDigest);
+    }
+    if input.timeout_policy_digest
+        != gateway_formal_tiny_z3_hermetic_backend_execution_result_timeout_policy_digest(5_000)
+    {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidTimeoutPolicyDigest,
+        );
+    }
+    if input.transcript_redaction_policy_digest
+        != hsai_tiny_z3_gateway_digest_binding_execution_preflight_transcript_redaction_policy_digest(
+        )
+    {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidTranscriptRedactionPolicyDigest,
+        );
+    }
+    if input.artifact_quarantine_policy_digest
+        != hsai_tiny_z3_gateway_digest_binding_execution_preflight_artifact_quarantine_policy_digest(
+        )
+    {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidArtifactQuarantinePolicyDigest,
+        );
+    }
+    if input.replay_instruction_digest
+        != hsai_tiny_z3_gateway_digest_binding_execution_preflight_replay_instruction_digest()
+    {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidReplayInstructionDigest,
+        );
+    }
+    if input.failure_taxonomy_digest
+        != hsai_tiny_z3_gateway_digest_binding_execution_preflight_failure_taxonomy_digest()
+    {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidFailureTaxonomyDigest,
+        );
+    }
+    let manifest_set_digest =
+        hsai_tiny_z3_gateway_digest_binding_execution_preflight_input_manifest_set_digest(
+            &input.hermetic_input_manifest_digests,
+        );
+    if input.nonpromotion_digest
+        != hsai_tiny_z3_gateway_digest_binding_execution_preflight_nonpromotion_digest(
+            packet,
+            observation,
+            manifest_set_digest,
+            input.expected_output_grammar_digest,
+        )
+    {
+        issues
+            .push(HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidNonpromotionDigest);
+    }
+    if input.level_mapping != "Level1LocalReplayOrLower" {
+        issues.push(HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidLevelMapping);
+    }
+    let nonclaims = hsai_tiny_z3_gateway_digest_binding_execution_preflight_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hsai_tiny_z3_gateway_digest_binding_execution_preflight_nonclaim_digest(&nonclaims)
+    {
+        issues.push(HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::NonclaimMismatch);
+    }
+    if input.classification
+        != HsaiTinyZ3GatewayDigestBindingExecutionPreflightClassification::GatewayDigestBindingExecutionPreflightRecorded
+        || input.preflight_label
+            != HsaiTinyZ3GatewayDigestBindingExecutionPreflightLabel::GatewayDigestBindingExecutionPreflightRecorded
+    {
+        issues.push(HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidClassification);
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.preflight_summary,
+    ) {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::PreflightSummaryPromotionClaim,
+        );
+    }
+    if input.backend_command_invoked
+        || input.proof_artifact_created
+        || input.checker_transcript_created
+        || input.solver_certificate_created
+        || input.raw_transcript_retained
+        || input.imports_external_result
+        || input.mutates_accepted_evidence_ledger
+        || input.creates_accepted_evidence
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.benchmark_evidence_created
+        || input.external_audit_claimed
+        || input.human_review_acceptance_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::PromotionAttempt);
+    }
+
+    HsaiTinyZ3GatewayDigestBindingExecutionPreflightValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -172022,6 +172698,263 @@ mod tests {
     }
 
     #[test]
+    fn phase656_hsai_tiny_z3_gateway_digest_binding_execution_preflight_records_metadata() {
+        let Some((cleanup_roots, packet, observation)) =
+            phase656_hsai_tiny_z3_gateway_digest_binding_execution_preflight_source(
+                "phase656-preflight",
+            )
+        else {
+            return;
+        };
+        let input = phase656_hsai_tiny_z3_gateway_digest_binding_execution_preflight_input(
+            "phase656-gateway-digest-binding-preflight",
+            &packet,
+            &observation,
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightLabel::GatewayDigestBindingExecutionPreflightRecorded,
+        );
+        let preflight = build_hsai_tiny_z3_gateway_digest_binding_execution_preflight(
+            &packet,
+            &observation,
+            &input,
+        )
+        .expect("phase656 execution preflight builds");
+
+        assert_eq!(
+            preflight.state_slice,
+            HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PREFLIGHT_STATE_SLICE
+        );
+        assert_eq!(
+            preflight.property_id,
+            HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PROPERTY_ID
+        );
+        assert_eq!(
+            preflight.lane_class,
+            HsaiFormalBackendAccelerationLaneClass::TinyZ3ReplayExtension
+        );
+        assert_eq!(preflight.source_execution_packet_digest, packet.digest());
+        assert_eq!(preflight.source_observation_digest, observation.digest());
+        assert_eq!(preflight.hermetic_input_manifest_digests.len(), 3);
+        assert_eq!(preflight.level_mapping, "Level1LocalReplayOrLower");
+        assert!(!preflight.backend_command_invoked);
+        assert!(!preflight.proof_artifact_created);
+        assert!(!preflight.checker_transcript_created);
+        assert!(!preflight.solver_certificate_created);
+        assert!(!preflight.raw_transcript_retained);
+        assert!(!preflight.imports_external_result);
+        assert!(!preflight.mutates_accepted_evidence_ledger);
+        assert!(!preflight.creates_accepted_evidence);
+        assert!(!preflight.creates_level2_evidence);
+        assert!(!preflight.populates_score_axes);
+        assert!(!preflight.benchmark_evidence_created);
+        assert!(!preflight.semantic_correctness_claimed);
+        assert!(!preflight.production_readiness_claimed);
+        assert!(!preflight.sota_claimed);
+        assert!(!preflight.full_security_claimed);
+        assert!(!preflight.grants_authority);
+
+        for root in cleanup_roots {
+            fs::remove_dir_all(root).expect("phase656 preflight cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase656_hsai_tiny_z3_gateway_digest_binding_execution_preflight_rejects_property_drift() {
+        let Some((cleanup_roots, packet, observation)) =
+            phase656_hsai_tiny_z3_gateway_digest_binding_execution_preflight_source(
+                "phase656-property-drift",
+            )
+        else {
+            return;
+        };
+        let mut input = phase656_hsai_tiny_z3_gateway_digest_binding_execution_preflight_input(
+            "phase656-property-drift-preflight",
+            &packet,
+            &observation,
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightLabel::GatewayDigestBindingExecutionPreflightRecorded,
+        );
+        input.property_id = GATEWAY_FORMAL_TINY_DIGEST_BACKEND_PROBE_PROPERTY_ID.to_owned();
+        let validation = validate_hsai_tiny_z3_gateway_digest_binding_execution_preflight_input(
+            &packet,
+            &observation,
+            &input,
+        );
+
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidPropertyId));
+        assert!(
+            build_hsai_tiny_z3_gateway_digest_binding_execution_preflight(
+                &packet,
+                &observation,
+                &input
+            )
+            .is_err()
+        );
+
+        for root in cleanup_roots {
+            fs::remove_dir_all(root).expect("phase656 property drift cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase656_hsai_tiny_z3_gateway_digest_binding_execution_preflight_rejects_policy_drift() {
+        let Some((cleanup_roots, packet, observation)) =
+            phase656_hsai_tiny_z3_gateway_digest_binding_execution_preflight_source(
+                "phase656-policy-drift",
+            )
+        else {
+            return;
+        };
+        let mut input = phase656_hsai_tiny_z3_gateway_digest_binding_execution_preflight_input(
+            "phase656-policy-drift-preflight",
+            &packet,
+            &observation,
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightLabel::GatewayDigestBindingExecutionPreflightRecorded,
+        );
+        input.hermetic_input_manifest_digests.insert(
+            "property-obligation".to_owned(),
+            hash_bytes(b"drifted-property-obligation"),
+        );
+        input.expected_output_grammar_digest = hash_bytes(b"drifted-output-grammar");
+        input.executable_identity_digest = hash_bytes(b"drifted-executable-identity");
+        input.transcript_redaction_policy_digest = hash_bytes(b"drifted-redaction-policy");
+        input.artifact_quarantine_policy_digest = hash_bytes(b"drifted-quarantine-policy");
+        input.replay_instruction_digest = hash_bytes(b"drifted-replay-instruction");
+        input.failure_taxonomy_digest = hash_bytes(b"drifted-failure-taxonomy");
+        let validation = validate_hsai_tiny_z3_gateway_digest_binding_execution_preflight_input(
+            &packet,
+            &observation,
+            &input,
+        );
+
+        assert!(!validation.valid);
+        for issue in [
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::HermeticInputManifestMismatch,
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidExpectedOutputGrammarDigest,
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidExecutableIdentityDigest,
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidTranscriptRedactionPolicyDigest,
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidArtifactQuarantinePolicyDigest,
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidReplayInstructionDigest,
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidFailureTaxonomyDigest,
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidNonpromotionDigest,
+        ] {
+            assert!(validation.issues.contains(&issue));
+        }
+        assert!(
+            build_hsai_tiny_z3_gateway_digest_binding_execution_preflight(
+                &packet,
+                &observation,
+                &input
+            )
+            .is_err()
+        );
+
+        for root in cleanup_roots {
+            fs::remove_dir_all(root).expect("phase656 policy drift cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase656_hsai_tiny_z3_gateway_digest_binding_execution_preflight_rejects_source_drift() {
+        let Some((cleanup_roots, packet, mut observation)) =
+            phase656_hsai_tiny_z3_gateway_digest_binding_execution_preflight_source(
+                "phase656-source-drift",
+            )
+        else {
+            return;
+        };
+        let input = phase656_hsai_tiny_z3_gateway_digest_binding_execution_preflight_input(
+            "phase656-source-drift-preflight",
+            &packet,
+            &observation,
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightLabel::GatewayDigestBindingExecutionPreflightRecorded,
+        );
+        observation.creates_accepted_evidence = true;
+        let validation = validate_hsai_tiny_z3_gateway_digest_binding_execution_preflight_input(
+            &packet,
+            &observation,
+            &input,
+        );
+
+        assert!(!validation.valid);
+        assert!(validation.issues.contains(
+            &HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::SourceObservationStateMismatch
+        ));
+        assert!(validation.issues.contains(
+            &HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::SourceObservationMismatch
+        ));
+        assert!(validation.issues.contains(
+            &HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidNonpromotionDigest
+        ));
+        assert!(
+            build_hsai_tiny_z3_gateway_digest_binding_execution_preflight(
+                &packet,
+                &observation,
+                &input
+            )
+            .is_err()
+        );
+
+        for root in cleanup_roots {
+            fs::remove_dir_all(root).expect("phase656 source drift cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase656_hsai_tiny_z3_gateway_digest_binding_execution_preflight_rejects_promotion_attempts()
+    {
+        let Some((cleanup_roots, packet, observation)) =
+            phase656_hsai_tiny_z3_gateway_digest_binding_execution_preflight_source(
+                "phase656-promote",
+            )
+        else {
+            return;
+        };
+        let mut input = phase656_hsai_tiny_z3_gateway_digest_binding_execution_preflight_input(
+            "phase656-promote-preflight",
+            &packet,
+            &observation,
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightLabel::GatewayDigestBindingExecutionPreflightRejected,
+        );
+        input.classification =
+            HsaiTinyZ3GatewayDigestBindingExecutionPreflightClassification::GatewayDigestBindingExecutionPreflightRejected;
+        input.backend_command_invoked = true;
+        input.creates_accepted_evidence = true;
+        input.creates_level2_evidence = true;
+        input.preflight_summary =
+            "this tiny-Z3 preflight creates accepted evidence and SOTA".to_owned();
+        let validation = validate_hsai_tiny_z3_gateway_digest_binding_execution_preflight_input(
+            &packet,
+            &observation,
+            &input,
+        );
+
+        assert!(!validation.valid);
+        assert!(validation.issues.contains(
+            &HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::InvalidClassification
+        ));
+        assert!(validation.issues.contains(
+            &HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::PreflightSummaryPromotionClaim
+        ));
+        assert!(validation
+            .issues
+            .contains(&HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue::PromotionAttempt));
+        assert!(
+            build_hsai_tiny_z3_gateway_digest_binding_execution_preflight(
+                &packet,
+                &observation,
+                &input
+            )
+            .is_err()
+        );
+
+        for root in cleanup_roots {
+            fs::remove_dir_all(root).expect("phase656 promotion cleanup succeeds");
+        }
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -187768,6 +188701,130 @@ mod tests {
                     .to_owned(),
             phase529_backend_execution_observed: true,
             new_backend_command_invoked: false,
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            raw_transcript_retained: false,
+            imports_external_result: false,
+            mutates_accepted_evidence_ledger: false,
+            creates_accepted_evidence: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            benchmark_evidence_created: false,
+            external_audit_claimed: false,
+            human_review_acceptance_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase656_hsai_tiny_z3_gateway_digest_binding_execution_preflight_source(
+        source_prefix: &str,
+    ) -> Option<(
+        Vec<PathBuf>,
+        HsaiFormalBackendAccelerationExecutionPacket,
+        HsaiTinyZ3ExtensionLocalExecutionObservation,
+    )> {
+        let (cleanup_roots, packet, result) =
+            phase653_hsai_tiny_z3_extension_local_execution_observation_source(source_prefix)?;
+        let observation_input = phase653_hsai_tiny_z3_extension_local_execution_observation_input(
+            &format!("{source_prefix}-phase653-observation"),
+            &packet,
+            &result,
+            HsaiTinyZ3ExtensionLocalExecutionObservationLabel::TinyZ3ExtensionObservationRecorded,
+        );
+        let observation = build_hsai_tiny_z3_extension_local_execution_observation(
+            &packet,
+            &result,
+            &observation_input,
+        )
+        .expect("phase656 source Phase 653 observation builds");
+        Some((cleanup_roots, packet, observation))
+    }
+
+    fn phase656_hsai_tiny_z3_gateway_digest_binding_execution_preflight_input(
+        preflight_id: &str,
+        packet: &HsaiFormalBackendAccelerationExecutionPacket,
+        observation: &HsaiTinyZ3ExtensionLocalExecutionObservation,
+        preflight_label: HsaiTinyZ3GatewayDigestBindingExecutionPreflightLabel,
+    ) -> HsaiTinyZ3GatewayDigestBindingExecutionPreflightInput {
+        let nonclaims =
+            hsai_tiny_z3_gateway_digest_binding_execution_preflight_required_nonclaims();
+        let hermetic_input_manifest_digests = BTreeMap::from([
+            ("phase650-packet".to_owned(), packet.digest()),
+            ("phase653-observation".to_owned(), observation.digest()),
+            (
+                "property-obligation".to_owned(),
+                hash_bytes(HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PROPERTY_ID.as_bytes()),
+            ),
+        ]);
+        let input_manifest_set_digest =
+            hsai_tiny_z3_gateway_digest_binding_execution_preflight_input_manifest_set_digest(
+                &hermetic_input_manifest_digests,
+            );
+        let expected_output_grammar_digest =
+            hsai_tiny_z3_gateway_digest_binding_execution_preflight_expected_output_grammar_digest(
+            );
+        HsaiTinyZ3GatewayDigestBindingExecutionPreflightInput {
+            schema_version:
+                HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PREFLIGHT_SCHEMA_VERSION.to_owned(),
+            preflight_id: preflight_id.to_owned(),
+            preflight_policy_id: "phase656-gateway-digest-binding-preflight-policy".to_owned(),
+            preflight_decision_id: "phase656-gateway-digest-binding-preflight-decision"
+                .to_owned(),
+            prepared_at_unix: 1_800_000_656,
+            property_id: HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PROPERTY_ID.to_owned(),
+            lane_class: HsaiFormalBackendAccelerationLaneClass::TinyZ3ReplayExtension,
+            source_execution_packet_digest: packet.digest(),
+            source_execution_packet_state_slice: packet.state_slice.clone(),
+            source_execution_packet_status: packet.status.clone(),
+            source_observation_digest: observation.digest(),
+            source_observation_state_slice: observation.state_slice.clone(),
+            source_observation_classification: observation.classification.clone(),
+            hermetic_input_manifest_digests: hermetic_input_manifest_digests.clone(),
+            expected_output_grammar_digest,
+            executable_identity_digest:
+                hsai_tiny_z3_gateway_digest_binding_execution_preflight_executable_identity_digest(
+                ),
+            argv_digest: gateway_formal_tiny_z3_hermetic_backend_execution_result_argv_digest(),
+            environment_digest:
+                gateway_formal_tiny_z3_hermetic_backend_execution_result_environment_digest(),
+            timeout_policy_digest:
+                gateway_formal_tiny_z3_hermetic_backend_execution_result_timeout_policy_digest(
+                    5_000,
+                ),
+            transcript_redaction_policy_digest:
+                hsai_tiny_z3_gateway_digest_binding_execution_preflight_transcript_redaction_policy_digest(),
+            artifact_quarantine_policy_digest:
+                hsai_tiny_z3_gateway_digest_binding_execution_preflight_artifact_quarantine_policy_digest(),
+            replay_instruction_digest:
+                hsai_tiny_z3_gateway_digest_binding_execution_preflight_replay_instruction_digest(),
+            failure_taxonomy_digest:
+                hsai_tiny_z3_gateway_digest_binding_execution_preflight_failure_taxonomy_digest(),
+            nonpromotion_digest:
+                hsai_tiny_z3_gateway_digest_binding_execution_preflight_nonpromotion_digest(
+                    packet,
+                    observation,
+                    input_manifest_set_digest,
+                    expected_output_grammar_digest,
+                ),
+            level_mapping: "Level1LocalReplayOrLower".to_owned(),
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest:
+                hsai_tiny_z3_gateway_digest_binding_execution_preflight_nonclaim_digest(
+                    &nonclaims,
+                ),
+            classification:
+                HsaiTinyZ3GatewayDigestBindingExecutionPreflightClassification::GatewayDigestBindingExecutionPreflightRecorded,
+            preflight_label,
+            preflight_summary:
+                "local tiny-Z3 gateway digest-binding execution preflight records exact property and source bindings without backend execution"
+                    .to_owned(),
+            backend_command_invoked: false,
             proof_artifact_created: false,
             checker_transcript_created: false,
             solver_certificate_created: false,

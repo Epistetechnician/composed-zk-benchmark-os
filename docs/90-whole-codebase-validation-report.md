@@ -9544,5 +9544,20 @@ creates no accepted evidence, creates no Level2+ evidence, populates no score
 axes, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/656-phase-hsai-tiny-z3-gateway-digest-binding-execution-preflight-notes.md](docs/656-phase-hsai-tiny-z3-gateway-digest-binding-execution-preflight-notes.md)
+records the Phase 656 local execution-preflight metadata for the single Phase
+655 property `gateway_proposal_digest_binding_determinism_v1`. The typed Rust
+surface binds one exact Phase 650 `TinyZ3ReplayExtension` `NotRun` packet and
+one exact Phase 653 local observation to hermetic inputs, command-policy
+digests, output grammar, redaction, quarantine, replay, failure taxonomy,
+required nonclaims, and all-false promotion flags. Focused tests validate the
+happy path and reject property drift, canonical manifest/policy drift, source
+drift, backend-command claims, accepted-evidence claims, Level2+ claims, and
+SOTA promotion. The phase remains
+`Level1LocalReplayOrLower` preflight metadata only: it runs no backend, creates
+no proof artifact, checker transcript, solver certificate, accepted evidence,
+Level2+ evidence, score-axis evidence, or benchmark evidence, and claims no
+production readiness, SOTA, full security, or semantic correctness.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
