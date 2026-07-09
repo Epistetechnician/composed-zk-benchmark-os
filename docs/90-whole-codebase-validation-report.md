@@ -9531,5 +9531,18 @@ accepted Evidence Ledger, creates no accepted evidence, creates no Level2+
 evidence, populates no score axes, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/655-phase-hsai-tiny-z3-gateway-digest-binding-execution-boundary.md](docs/655-phase-hsai-tiny-z3-gateway-digest-binding-execution-boundary.md)
+documents the Phase 655 docs-first narrow tiny-Z3 execution boundary. It names
+`TinyZ3ReplayExtension` as the only backend lane and
+`gateway_proposal_digest_binding_determinism_v1` as the only target property.
+It defines required later execution inputs, output metadata shape, failure
+taxonomy, transcript and artifact quarantine rules, replay rules, and negative
+promotion tests before any later run can be implemented. It runs no backend,
+creates no proof artifact, creates no checker transcript or solver
+certificate, imports no external result, mutates no accepted Evidence Ledger,
+creates no accepted evidence, creates no Level2+ evidence, populates no score
+axes, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
