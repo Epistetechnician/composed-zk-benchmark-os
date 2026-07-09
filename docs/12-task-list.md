@@ -18427,11 +18427,13 @@ mutation, no accepted evidence, no Level2+ evidence, no populated score axes,
 no benchmark evidence, no external-audit claim, and no
 production/SOTA/security/semantic-correctness claim.
 
-## Phase 651 HSAI DeepProve Lookahead Candidate Search Boundary
+## Phase 651 HSAI DeepProve Lookahead Candidate Search Boundary And Local Metadata
 
-Status: complete for docs-first DeepProve lookahead candidate-search boundary.
+Status: complete for docs-first DeepProve lookahead candidate-search boundary
+and Phase 651-B through 651-K local metadata implementation.
 See
-`docs/651-phase-hsai-deepprove-lookahead-candidate-search-boundary.md`.
+`docs/651-phase-hsai-deepprove-lookahead-candidate-search-boundary.md` and
+`docs/651b-through-651k-phase-hsai-deepprove-lookahead-local-metadata-notes.md`.
 
 Goal: explain why bounded candidate-future search matters for HSAI and define
 an end-to-end implementation path that compares greedy autoregressive generation
@@ -18439,27 +18441,66 @@ against lookahead candidate search, while keeping DeepProve as a future
 proof-receipt lane rather than an implementation dependency in the current
 state.
 
-Implemented: Phase 651 defines the experiment hypothesis, target flow, future
+Implemented: Phase 651-A defines the experiment hypothesis, target flow,
 metadata model, scoring labels, execution subphase ladder, parallel HSAI lane
 coordination, validation rules, DeepProve source position, evidence ceiling,
-and stop rule. It preserves the distinction that causal attention looks backward
-while search can evaluate proposed futures after they are materialized as
-candidates.
+and stop rule. Phase 651-B through 651-K add typed Rust metadata and validators
+for inert prompt/baseline/config/candidate/report records, deterministic
+fixture-only replay metadata, backward-verification findings, branch-scoring
+section digests, operator transcript boundary and quarantined import-candidate
+metadata, future DeepProve receipt refs, quarantined DeepProve receipt import
+candidates, reviewed receipt policy, and advisory HSAI admission bridge
+metadata.
 
-Validation coverage: docs-only phase. It is validated by repository hygiene,
-markdown/source-contract checks, source-index coverage, and claim-boundary
-source scans.
+Validation coverage: focused Rust validation target is
+`cargo test -p hsai-agent-admission --lib phase651_hsai_deepprove_lookahead -- --nocapture`.
+It covers valid metadata without a receipt, A-through-K metadata with a reviewed
+receipt policy, candidate count and horizon bounds, missing prompt/baseline
+digests, selected candidate absence, selected context digest drift, verified
+receipt status without reviewed policy, and promotion/authority rejection.
 
-Exit criteria: HSAI now has a docs-first end-to-end contract and subphase plan
-for future lookahead candidate-search metadata, fixture replay, backward
-verification metadata, operator transcript quarantine, optional later DeepProve
-receipt import, reviewed receipt policy, and HSAI admission bridging. It still
-has no DeepProve clone, no DeepProve execution, no live LLM generation, no live
-zkML execution, no proof artifacts, no transcript artifacts, no external-result
-import, no accepted Evidence Ledger mutation, no accepted evidence, no
-independent reproduction, no Level2+ evidence, no score-axis population, no
-benchmark evidence, no production/SOTA/security/semantic-correctness claim, and
-no authority to execute an action.
+Exit criteria: HSAI now has a docs-first end-to-end contract plus local
+digest-only metadata for lookahead candidate-search reports and the full
+651-B through 651-K bridge. It still has no DeepProve clone, no DeepProve
+execution, no live LLM generation, no live zkML execution, no proof artifacts,
+no raw transcript artifacts, no external-result import, no accepted Evidence
+Ledger mutation, no accepted evidence, no independent reproduction, no Level2+
+evidence, no score-axis population, no benchmark evidence, no
+production/SOTA/security/semantic-correctness claim, and no authority to execute
+an action.
+
+## Phase 653 HSAI Tiny-Z3 Extension Local Execution Observation
+
+Status: complete for local tiny-Z3 extension execution-observation metadata.
+See
+`docs/653-phase-hsai-tiny-z3-extension-local-execution-observation-notes.md`.
+
+Goal: implement the first tightly scoped local backend execution extension lane
+after the Phase 647-650 acceleration ladder by binding one Phase 650
+`TinyZ3ReplayExtension` execution packet to one exact Phase 529 local hermetic
+SMT/Z3 backend execution observation, without adding a new process-spawn site
+or widening claims.
+
+Implemented: Phase 653 adds typed observation input/output/classification,
+label, validation, and issue metadata; required nonclaim, nonclaim-digest,
+packet/result binding-digest, and nonpromotion-digest helpers; validation that
+the Phase 650 packet remains `NotRun` and local-only; validation that the Phase
+529 result is `LaneASmtZ3RunObservedLocalOnly`; and focused tests for valid
+binding, non-tiny-Z3 packet rejection, Phase 529 result drift rejection, and
+promotion rejection.
+
+Validation coverage: focused validation target is
+`cargo test -p hsai-agent-admission --lib phase653_hsai_tiny_z3_extension_local_execution_observation -- --nocapture`.
+
+Exit criteria: HSAI now has a local tiny-Z3 extension observation lane that
+digest-binds one Phase 650 TinyZ3ReplayExtension `NotRun` packet to one Phase
+529 local Z3 execution observation. It still has no new backend process spawn in
+the Phase 653 layer, no Lean run, no COBALT run, no Rust-to-Lean extraction, no
+proof artifacts, no checker transcripts, no solver certificates, no raw
+transcript retention, no accepted Evidence Ledger mutation, no accepted
+evidence, no Level2+ evidence, no populated score axes, no benchmark evidence,
+no external-audit claim, and no production/SOTA/security/semantic-correctness
+claim.
 
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
