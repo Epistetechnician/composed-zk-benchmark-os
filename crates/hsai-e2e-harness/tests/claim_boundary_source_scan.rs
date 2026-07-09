@@ -100,6 +100,11 @@ fn hsai_crates_do_not_use_process_or_network_apis() {
                     ) {
                         continue;
                     }
+                    if is_phase657_tiny_z3_gateway_digest_binding_execution_exception(
+                        &file, pattern, &text, line_index, line,
+                    ) {
+                        continue;
+                    }
                     if is_phase609_real_materialized_staging_runner_exception(
                         &file, pattern, &text, line_index, line,
                     ) {
@@ -195,6 +200,30 @@ fn is_phase529_tiny_z3_hermetic_backend_execution_exception(
 
 const GATEWAY_FORMAL_TINY_Z3_PHASE529_CLAIM_BOUNDARY_NEEDLE: &str =
     "local tiny-Z3 hermetic backend execution result metadata only";
+
+fn is_phase657_tiny_z3_gateway_digest_binding_execution_exception(
+    file: &Path,
+    pattern: &str,
+    text: &str,
+    line_index: usize,
+    line: &str,
+) -> bool {
+    if !file.ends_with(Path::new("hsai-agent-admission/src/lib.rs")) {
+        return false;
+    }
+    if !matches!(pattern, "std::process" | "Command::new") {
+        return false;
+    }
+    if line.trim() != "let mut command = std::process::Command::new(z3_executable);" {
+        return false;
+    }
+    text.contains(HSAI_TINY_Z3_PHASE657_CLAIM_BOUNDARY_NEEDLE)
+        && enclosing_function_name(text, line_index)
+            == Some("run_hsai_tiny_z3_gateway_digest_binding_local_execution")
+}
+
+const HSAI_TINY_Z3_PHASE657_CLAIM_BOUNDARY_NEEDLE: &str =
+    "local HSAI tiny-Z3 gateway proposal digest-binding execution observation";
 
 fn is_phase609_real_materialized_staging_runner_exception(
     file: &Path,
@@ -305,6 +334,59 @@ fn phase529_tiny_z3_process_exception_is_single_function_only() {
         3,
         "        let mut command = std::process::Command::new(z3_executable);",
     ));
+}
+
+#[test]
+fn phase657_tiny_z3_process_exception_is_single_function_only() {
+    let file = Path::new("hsai-agent-admission/src/lib.rs");
+    let allowed = format!(
+        "const CLAIM: &str = \"{HSAI_TINY_Z3_PHASE657_CLAIM_BOUNDARY_NEEDLE}\";\n\
+        pub fn run_hsai_tiny_z3_gateway_digest_binding_local_execution(\n\
+            z3_executable: &std::path::Path,\n\
+        ) {{\n\
+            let mut command = std::process::Command::new(z3_executable);\n\
+        }}\n"
+    );
+    let denied_function = format!(
+        "const CLAIM: &str = \"{HSAI_TINY_Z3_PHASE657_CLAIM_BOUNDARY_NEEDLE}\";\n\
+        pub fn arbitrary_backend_runner(\n\
+            z3_executable: &std::path::Path,\n\
+        ) {{\n\
+            let mut command = std::process::Command::new(z3_executable);\n\
+        }}\n"
+    );
+    let denied_boundary = "pub fn run_hsai_tiny_z3_gateway_digest_binding_local_execution(\n\
+        z3_executable: &std::path::Path,\n\
+    ) {\n\
+        let mut command = std::process::Command::new(z3_executable);\n\
+    }\n";
+    assert!(
+        is_phase657_tiny_z3_gateway_digest_binding_execution_exception(
+            file,
+            "Command::new",
+            &allowed,
+            3,
+            "        let mut command = std::process::Command::new(z3_executable);",
+        )
+    );
+    assert!(
+        !is_phase657_tiny_z3_gateway_digest_binding_execution_exception(
+            file,
+            "Command::new",
+            &denied_function,
+            3,
+            "        let mut command = std::process::Command::new(z3_executable);",
+        )
+    );
+    assert!(
+        !is_phase657_tiny_z3_gateway_digest_binding_execution_exception(
+            file,
+            "Command::new",
+            denied_boundary,
+            2,
+            "        let mut command = std::process::Command::new(z3_executable);",
+        )
+    );
 }
 
 #[test]
