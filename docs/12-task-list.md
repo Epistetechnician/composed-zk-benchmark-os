@@ -18566,6 +18566,35 @@ evidence, no Level2+ evidence, no populated score axes, no benchmark evidence,
 no external-audit claim, and no production/SOTA/security/semantic-correctness
 claim.
 
+## Phase 656 HSAI Tiny-Z3 Gateway Digest-Binding Execution Preflight
+
+Status: complete for local preflight metadata. See
+`docs/656-phase-hsai-tiny-z3-gateway-digest-binding-execution-preflight-notes.md`.
+
+Goal: bind the exact Phase 655 property to the already typed Phase 650
+`TinyZ3ReplayExtension` `NotRun` packet and Phase 653 local observation before
+any later bounded backend execution.
+
+Implemented: additive Rust types, deterministic digest helpers, build and
+validation functions, and focused tests under
+`crates/hsai-agent-admission/src/lib.rs`. The preflight locks
+`gateway_proposal_digest_binding_determinism_v1`, hermetic input manifests,
+command-policy digests, output grammar, redaction, quarantine, replay, failure
+taxonomy, required nonclaims, and all-false promotion flags. Canonical-value
+checks reject nonzero but drifted manifest and policy digests.
+
+Validation target:
+
+```bash
+cargo test -p hsai-agent-admission --lib phase656_hsai_tiny_z3_gateway_digest_binding_execution_preflight -- --nocapture
+```
+
+Exit criteria: HSAI has validated `Level1LocalReplayOrLower` preflight metadata
+for one later local tiny-Z3 obligation. Phase 656 performs no backend command,
+creates no proof artifact, checker transcript, solver certificate, accepted
+evidence, Level2+ evidence, score-axis evidence, or benchmark evidence, and
+claims no production readiness, SOTA, full security, or semantic correctness.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
