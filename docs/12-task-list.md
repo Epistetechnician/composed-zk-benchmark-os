@@ -18301,6 +18301,37 @@ additional SMT/Z3 execution in this phase, no benchmark evidence, no
 external-audit claim, and no production/SOTA/security/semantic-correctness
 claim.
 
+## Phase 647 HSAI Formal Backend Acceleration Lane Boundary
+
+Status: complete for docs-first formal backend acceleration lane boundary.
+See `docs/647-phase-hsai-formal-backend-acceleration-lane-boundary.md`.
+
+Goal: define the future local preflight metadata boundary for accelerating
+formal backend work across tiny-Z3 replay extension, Lean repository-scale
+preflight, COBALT containment preflight, Rust-to-Lean extraction preflight, and
+federated proof-dispatch preflight, without running any backend, generating
+proof artifacts, importing results, mutating accepted evidence, creating
+Level2+, populating score axes, or promoting proof/claim evidence.
+
+Implemented: Phase 647 defines lane classes, hermetic input requirements,
+expected command/output declarations, replay rules, failure taxonomy,
+provenance requirements, negative promotion requirements, forbidden behavior,
+and future Phase 648 implementation exit criteria. The current source state
+remains Phase 646 blocked policy-resolution metadata and the bounded Phase
+529/614 tiny-Z3 local replay path.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named formal backend acceleration boundary for
+future local preflight metadata. It still has no new backend execution, no Lean
+run, no COBALT run, no Rust-to-Lean extraction, no additional SMT/Z3 run in
+this phase, no proof artifacts, no checker transcripts, no solver
+certificates, no accepted Evidence Ledger mutation, no accepted evidence, no
+Level2+ evidence, no populated score axes, no benchmark evidence, no
+external-audit claim, and no production/SOTA/security/semantic-correctness
+claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

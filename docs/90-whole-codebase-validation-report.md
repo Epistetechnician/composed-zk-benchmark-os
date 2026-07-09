@@ -9403,5 +9403,20 @@ no benchmark evidence, and claims no production/SOTA/security
 /semantic-correctness result. Focused validation passed with
 `cargo test -p hsai-agent-admission --lib phase646_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_policy_resolution -- --nocapture`.
 
+[docs/647-phase-hsai-formal-backend-acceleration-lane-boundary.md](docs/647-phase-hsai-formal-backend-acceleration-lane-boundary.md)
+documents the Phase 647 docs-first formal backend acceleration lane boundary.
+It defines future local preflight lane classes for tiny-Z3 replay extension,
+Lean repository-scale preflight, COBALT containment preflight, Rust-to-Lean
+extraction preflight, and federated proof-dispatch preflight. It requires
+future hermetic input manifests, expected command/output declarations, replay
+rules, failure taxonomy, provenance fields, negative promotion tests, and
+`LocalReplay` / `Level1LocalReplay` or lower mapping unless a later reviewed
+promotion phase accepts a result through the existing evidence owner. It
+creates no Rust code, runs no Lean/SMT/Z3/COBALT/Rust-to-Lean backend,
+generates no proof artifacts, imports no external result, mutates no accepted
+Evidence Ledger, creates no accepted evidence, creates no Level2+ evidence,
+populates no score axes, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
