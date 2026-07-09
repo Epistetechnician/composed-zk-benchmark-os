@@ -1389,6 +1389,11 @@ pub const HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PREFLIGHT_SCHEMA_VERSION
 pub const HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PREFLIGHT_STATE_SLICE: &str =
     "phase-656-hsai-tiny-z3-gateway-digest-binding-execution-preflight";
 pub const HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PREFLIGHT_CLAIM_BOUNDARY: &str = "local HSAI tiny-Z3 gateway proposal digest-binding execution preflight metadata only; binds the Phase 655 property gateway_proposal_digest_binding_determinism_v1 to one Phase 650 TinyZ3ReplayExtension NotRun packet, one Phase 653 local observation, hermetic input, command-policy, output-grammar, redaction, quarantine, replay, failure-taxonomy, and nonpromotion digests, but does not execute Z3, run any backend command, create proof artifacts, checker transcripts, solver certificates, accepted evidence, Level2+ evidence, score axes, benchmark evidence, semantic-correctness claims, production-readiness claims, SOTA claims, breakthrough claims, full-security claims, external-audit claims, human-review acceptance claims, or action authority.";
+pub const HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_EXECUTION_SCHEMA_VERSION: &str =
+    "hsai-tiny-z3-gateway-digest-binding-local-execution:v1";
+pub const HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_EXECUTION_STATE_SLICE: &str =
+    "phase-657-hsai-tiny-z3-gateway-digest-binding-local-execution";
+pub const HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_EXECUTION_CLAIM_BOUNDARY: &str = "local HSAI tiny-Z3 gateway proposal digest-binding execution observation for one concrete non-secret fixture only; consumes one exact Phase 656 preflight, runs one fixed local Z3 QF_BV obligation through -in -smt2 with an empty environment, verifies repeated-input equality and selected target/value mutation digest inequality over concrete Rust-produced digest witnesses, and retains bounded summary digests only, but does not prove SHA-256, prove general source correspondence, prove gateway semantics, create proof artifacts, checker transcripts, solver certificates, accepted evidence, Level2+ evidence, score axes, benchmark evidence, semantic-correctness claims, production-readiness claims, SOTA claims, breakthrough claims, full-security claims, external-audit claims, human-review acceptance claims, or action authority.";
 pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_NAMESPACE: &str =
     "gateway-formal-tiny-z3-independent-external-operator-result";
 pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_DECLARED_FILES: [&str; 8] = [
@@ -28101,6 +28106,233 @@ pub enum HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue {
 pub struct HsaiTinyZ3GatewayDigestBindingExecutionPreflightValidation {
     pub valid: bool,
     pub issues: Vec<HsaiTinyZ3GatewayDigestBindingExecutionPreflightIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiTinyZ3GatewayDigestBindingLocalExecutionClassification {
+    GatewayDigestBindingLocalRunObserved,
+    GatewayDigestBindingLocalRunRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiTinyZ3GatewayDigestBindingLocalExecutionLabel {
+    GatewayDigestBindingLocalRunRecorded,
+    GatewayDigestBindingLocalRunRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiTinyZ3GatewayDigestBindingLocalExecutionFixture {
+    pub schema_version: String,
+    pub fixture_id: String,
+    pub baseline_proposal: GatewayActionProposal,
+    pub repeated_proposal: GatewayActionProposal,
+    pub target_mutation_proposal: GatewayActionProposal,
+    pub value_mutation_proposal: GatewayActionProposal,
+    pub non_secret: bool,
+    pub contains_credentials: bool,
+    pub contains_provider_payload: bool,
+    pub contains_raw_attestation: bool,
+    pub contains_raw_solver_output: bool,
+}
+
+impl HsaiTinyZ3GatewayDigestBindingLocalExecutionFixture {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-local-execution-fixture:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiTinyZ3GatewayDigestBindingLocalExecutionInput {
+    pub schema_version: String,
+    pub run_id: String,
+    pub execution_policy_id: String,
+    pub execution_decision_id: String,
+    pub executed_at_unix: u64,
+    pub property_id: String,
+    pub preflight_digest: Hash,
+    pub preflight_input_digest: Hash,
+    pub source_execution_packet_digest: Hash,
+    pub source_observation_digest: Hash,
+    pub fixture_digest: Hash,
+    pub obligation_digest: Hash,
+    pub expected_executable_digest: Hash,
+    pub expected_argv_digest: Hash,
+    pub expected_environment_digest: Hash,
+    pub timeout_millis: u64,
+    pub max_stdout_bytes: u64,
+    pub max_stderr_bytes: u64,
+    pub expected_solver_verdict_label: GatewayFormalRealCommandLaneSolverVerdictLabel,
+    pub transcript_redaction_policy_digest: Hash,
+    pub artifact_quarantine_policy_digest: Hash,
+    pub replay_instruction_digest: Hash,
+    pub nonpromotion_digest: Hash,
+    pub level_mapping: String,
+    pub operator_acknowledged: bool,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub execution_label: HsaiTinyZ3GatewayDigestBindingLocalExecutionLabel,
+    pub execution_summary: String,
+    pub proof_artifact_requested: bool,
+    pub checker_transcript_requested: bool,
+    pub solver_certificate_requested: bool,
+    pub raw_transcript_retention_requested: bool,
+    pub imports_external_result: bool,
+    pub accepted_evidence_requested: bool,
+    pub level2_evidence_requested: bool,
+    pub score_axis_population_requested: bool,
+    pub benchmark_evidence_requested: bool,
+    pub external_audit_claimed: bool,
+    pub human_review_acceptance_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl HsaiTinyZ3GatewayDigestBindingLocalExecutionInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-local-execution-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiTinyZ3GatewayDigestBindingLocalExecution {
+    pub schema_version: String,
+    pub state_slice: String,
+    pub run_id: String,
+    pub executed_at_unix: u64,
+    pub execution_input_digest: Hash,
+    pub property_id: String,
+    pub preflight_digest: Hash,
+    pub preflight_input_digest: Hash,
+    pub source_execution_packet_digest: Hash,
+    pub source_observation_digest: Hash,
+    pub fixture_digest: Hash,
+    pub baseline_proposal_digest: Hash,
+    pub repeated_proposal_digest: Hash,
+    pub target_mutation_proposal_digest: Hash,
+    pub value_mutation_proposal_digest: Hash,
+    pub obligation_digest: Hash,
+    pub executable_digest: Hash,
+    pub argv_digest: Hash,
+    pub environment_digest: Hash,
+    pub timeout_policy_digest: Hash,
+    pub process_output_digest: Hash,
+    pub stdout_summary_digest: Hash,
+    pub stderr_summary_digest: Hash,
+    pub solver_verdict_label: GatewayFormalRealCommandLaneSolverVerdictLabel,
+    pub output_classification_digest: Hash,
+    pub transcript_redaction_report_digest: Hash,
+    pub artifact_quarantine_report_digest: Hash,
+    pub replay_instruction_digest: Hash,
+    pub nonpromotion_digest: Hash,
+    pub level_mapping: String,
+    pub classification: HsaiTinyZ3GatewayDigestBindingLocalExecutionClassification,
+    pub execution_label: HsaiTinyZ3GatewayDigestBindingLocalExecutionLabel,
+    pub execution_summary: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub claim_boundary: String,
+    pub process_spawned: bool,
+    pub backend_executed: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub raw_transcript_retained: bool,
+    pub imports_external_result: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_claimed: bool,
+    pub human_review_acceptance_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl HsaiTinyZ3GatewayDigestBindingLocalExecution {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-local-execution:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue {
+    InvalidSchemaVersion,
+    InvalidRunId,
+    InvalidExecutionPolicyId,
+    InvalidExecutionDecisionId,
+    MissingExecutedTimestamp,
+    InvalidPropertyId,
+    PreflightStateMismatch,
+    PreflightBindingMismatch,
+    InvalidFixtureId,
+    FixtureRepeatedProposalMismatch,
+    FixtureTargetMutationMismatch,
+    FixtureValueMutationMismatch,
+    FixtureDigestExpectationMismatch,
+    FixtureContainsSecretOrRawData,
+    FixtureRequestsAuthority,
+    FixtureMissingRequiredNonclaim(String),
+    FixtureDigestMismatch,
+    ObligationDigestMismatch,
+    MissingExecutableDigest,
+    InvalidArgvDigest,
+    InvalidEnvironmentDigest,
+    InvalidTimeoutPolicy,
+    InvalidOutputLimit,
+    ExpectedVerdictMismatch,
+    TranscriptRedactionPolicyMismatch,
+    ArtifactQuarantinePolicyMismatch,
+    ReplayInstructionMismatch,
+    InvalidNonpromotionDigest,
+    InvalidLevelMapping,
+    MissingOperatorAcknowledgement,
+    NonclaimMismatch,
+    InvalidExecutionLabel,
+    ExecutionSummaryPromotionClaim,
+    ExecutionBindingMismatch,
+    OutputMetadataMismatch,
+    ResultNonpromotionMismatch,
+    ResultClassificationMismatch,
+    ClaimBoundaryMismatch,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiTinyZ3GatewayDigestBindingLocalExecutionValidation {
+    pub valid: bool,
+    pub issues: Vec<HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue>,
+}
+
+#[derive(Debug, Eq, PartialEq)]
+pub enum HsaiTinyZ3GatewayDigestBindingLocalExecutionError {
+    InvalidInput(HsaiTinyZ3GatewayDigestBindingLocalExecutionValidation),
+    ExecutableRead(String),
+    ExecutableDigestMismatch,
+    ProcessSpawn(String),
+    StdinWrite(String),
+    ProcessWait(String),
+    ProcessTimedOut,
+    ProcessFailed(String),
+    OutputLimitExceeded,
+    InvalidOutputGrammar,
+    UnexpectedSolverVerdict(GatewayFormalRealCommandLaneSolverVerdictLabel),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -119951,6 +120183,845 @@ pub fn validate_hsai_tiny_z3_gateway_digest_binding_execution_preflight_input(
     }
 }
 
+pub fn hsai_tiny_z3_gateway_digest_binding_local_execution_claim_boundary() -> String {
+    HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_EXECUTION_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_local_execution_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    [
+        "Phase 657 one-obligation local execution only",
+        "concrete fixture digest witness check only",
+        "not accepted evidence",
+        "not accepted formal evidence",
+        "not independent external reproduction",
+        "not proof",
+        "not SHA-256 verification",
+        "not general source correspondence proof",
+        "not gateway semantic correctness",
+        "not proof artifact",
+        "not checker transcript",
+        "not solver certificate",
+        "not Level2+ evidence",
+        "not score-axis evidence",
+        "not benchmark evidence",
+        "not Lean execution",
+        "not COBALT execution",
+        "not Rust-to-Lean extraction",
+        "not raw transcript retention",
+        "not external-audit evidence",
+        "not human-review acceptance",
+        "not production readiness",
+        "not SOTA",
+        "not breakthrough status",
+        "not full security",
+        "not authority to execute an action",
+    ]
+    .into_iter()
+    .map(|label| NonClaimLabel(label.to_owned()))
+    .collect()
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_local_execution_nonclaim_digest(
+    nonclaims: &BTreeSet<NonClaimLabel>,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-local-execution-nonclaims:v1",
+        nonclaims,
+    )
+}
+
+pub fn hsai_tiny_z3_gateway_digest_binding_local_execution_input_nonpromotion_digest(
+    preflight: &HsaiTinyZ3GatewayDigestBindingExecutionPreflight,
+    fixture: &HsaiTinyZ3GatewayDigestBindingLocalExecutionFixture,
+    obligation_digest: Hash,
+    expected_executable_digest: Hash,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-local-execution-input-nonpromotion:v1",
+        &(
+            preflight.digest(),
+            fixture.digest(),
+            obligation_digest,
+            expected_executable_digest,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ),
+    )
+}
+
+fn hsai_tiny_z3_gateway_digest_binding_local_execution_fixture_issues(
+    fixture: &HsaiTinyZ3GatewayDigestBindingLocalExecutionFixture,
+) -> Vec<HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue> {
+    let mut issues = Vec::new();
+    if fixture.schema_version != HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_EXECUTION_SCHEMA_VERSION
+    {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&fixture.fixture_id) {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::InvalidFixtureId);
+    }
+    if fixture.repeated_proposal != fixture.baseline_proposal {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::FixtureRepeatedProposalMismatch,
+        );
+    }
+    let mut expected_target_mutation = fixture.baseline_proposal.clone();
+    expected_target_mutation.target = fixture.target_mutation_proposal.target.clone();
+    if fixture.target_mutation_proposal.target == fixture.baseline_proposal.target
+        || fixture.target_mutation_proposal.target.trim().is_empty()
+        || has_shell_metacharacters(&fixture.target_mutation_proposal.target)
+        || looks_like_credential_value(&fixture.target_mutation_proposal.target)
+        || fixture.target_mutation_proposal != expected_target_mutation
+    {
+        issues
+            .push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::FixtureTargetMutationMismatch);
+    }
+    let mut expected_value_mutation = fixture.baseline_proposal.clone();
+    expected_value_mutation.value_units = fixture.value_mutation_proposal.value_units;
+    if fixture.value_mutation_proposal.value_units == fixture.baseline_proposal.value_units
+        || fixture.value_mutation_proposal != expected_value_mutation
+    {
+        issues
+            .push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::FixtureValueMutationMismatch);
+    }
+    let baseline_digest = fixture.baseline_proposal.digest();
+    if baseline_digest == Hash([0; 32])
+        || fixture.repeated_proposal.digest() != baseline_digest
+        || fixture.target_mutation_proposal.digest() == baseline_digest
+        || fixture.value_mutation_proposal.digest() == baseline_digest
+        || fixture.target_mutation_proposal.digest() == fixture.value_mutation_proposal.digest()
+    {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::FixtureDigestExpectationMismatch,
+        );
+    }
+    if !fixture.non_secret
+        || fixture.contains_credentials
+        || fixture.contains_provider_payload
+        || fixture.contains_raw_attestation
+        || fixture.contains_raw_solver_output
+    {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::FixtureContainsSecretOrRawData,
+        );
+    }
+    for proposal in [
+        &fixture.baseline_proposal,
+        &fixture.repeated_proposal,
+        &fixture.target_mutation_proposal,
+        &fixture.value_mutation_proposal,
+    ] {
+        if proposal.direct_authority_requested || proposal.signer_or_tool_requested_before_admission
+        {
+            issues
+                .push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::FixtureRequestsAuthority);
+        }
+        for required in gateway_required_nonclaims() {
+            if !proposal.nonclaims.contains(&required) {
+                issues.push(
+                    HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::FixtureMissingRequiredNonclaim(
+                        required.0,
+                    ),
+                );
+            }
+        }
+    }
+    issues.sort();
+    issues.dedup();
+    issues
+}
+
+fn hsai_tiny_z3_gateway_digest_binding_local_execution_smtlib2_obligation_unchecked(
+    fixture: &HsaiTinyZ3GatewayDigestBindingLocalExecutionFixture,
+) -> String {
+    let baseline = hash_hex(fixture.baseline_proposal.digest());
+    let repeated = hash_hex(fixture.repeated_proposal.digest());
+    let target_mutation = hash_hex(fixture.target_mutation_proposal.digest());
+    let value_mutation = hash_hex(fixture.value_mutation_proposal.digest());
+    format!(
+        "(set-logic QF_BV)\n; property: {property}\n; concrete non-secret Rust digest witnesses only\n(define-fun baseline_digest () (_ BitVec 256) #x{baseline})\n(define-fun repeated_digest () (_ BitVec 256) #x{repeated})\n(define-fun target_mutation_digest () (_ BitVec 256) #x{target_mutation})\n(define-fun value_mutation_digest () (_ BitVec 256) #x{value_mutation})\n(assert (or (not (= baseline_digest repeated_digest))\n            (= baseline_digest target_mutation_digest)\n            (= baseline_digest value_mutation_digest)))\n(check-sat)\n",
+        property = HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PROPERTY_ID,
+    )
+}
+
+pub fn build_hsai_tiny_z3_gateway_digest_binding_local_execution_smtlib2_obligation(
+    fixture: &HsaiTinyZ3GatewayDigestBindingLocalExecutionFixture,
+) -> Result<String, HsaiTinyZ3GatewayDigestBindingLocalExecutionValidation> {
+    let issues = hsai_tiny_z3_gateway_digest_binding_local_execution_fixture_issues(fixture);
+    if !issues.is_empty() {
+        return Err(HsaiTinyZ3GatewayDigestBindingLocalExecutionValidation {
+            valid: false,
+            issues,
+        });
+    }
+    Ok(hsai_tiny_z3_gateway_digest_binding_local_execution_smtlib2_obligation_unchecked(fixture))
+}
+
+fn hsai_tiny_z3_gateway_digest_binding_local_execution_preflight_exact(
+    packet: &HsaiFormalBackendAccelerationExecutionPacket,
+    observation: &HsaiTinyZ3ExtensionLocalExecutionObservation,
+    preflight: &HsaiTinyZ3GatewayDigestBindingExecutionPreflight,
+) -> bool {
+    let expected_manifest = BTreeMap::from([
+        ("phase650-packet".to_owned(), packet.digest()),
+        ("phase653-observation".to_owned(), observation.digest()),
+        (
+            "property-obligation".to_owned(),
+            hash_bytes(HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PROPERTY_ID.as_bytes()),
+        ),
+    ]);
+    let expected_nonclaims =
+        hsai_tiny_z3_gateway_digest_binding_execution_preflight_required_nonclaims();
+    preflight.schema_version
+        == HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PREFLIGHT_SCHEMA_VERSION
+        && preflight.state_slice
+            == HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PREFLIGHT_STATE_SLICE
+        && preflight.property_id == HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PROPERTY_ID
+        && preflight.lane_class == HsaiFormalBackendAccelerationLaneClass::TinyZ3ReplayExtension
+        && preflight.source_execution_packet_digest == packet.digest()
+        && preflight.source_execution_packet_input_digest == packet.packet_input_digest
+        && preflight.source_execution_packet_state_slice == packet.state_slice
+        && preflight.source_execution_packet_status
+            == HsaiFormalBackendAccelerationExecutionPacketStatus::NotRun
+        && preflight.source_observation_digest == observation.digest()
+        && preflight.source_observation_input_digest == observation.observation_input_digest
+        && preflight.source_observation_state_slice == observation.state_slice
+        && preflight.source_observation_classification == observation.classification
+        && preflight.hermetic_input_manifest_digests == expected_manifest
+        && preflight.hermetic_input_manifest_set_digest
+            == hsai_tiny_z3_gateway_digest_binding_execution_preflight_input_manifest_set_digest(
+                &expected_manifest,
+            )
+        && preflight.expected_output_grammar_digest
+            == hsai_tiny_z3_gateway_digest_binding_execution_preflight_expected_output_grammar_digest()
+        && preflight.executable_identity_digest
+            == hsai_tiny_z3_gateway_digest_binding_execution_preflight_executable_identity_digest()
+        && preflight.argv_digest
+            == gateway_formal_tiny_z3_hermetic_backend_execution_result_argv_digest()
+        && preflight.environment_digest
+            == gateway_formal_tiny_z3_hermetic_backend_execution_result_environment_digest()
+        && preflight.timeout_policy_digest
+            == gateway_formal_tiny_z3_hermetic_backend_execution_result_timeout_policy_digest(5_000)
+        && preflight.transcript_redaction_policy_digest
+            == hsai_tiny_z3_gateway_digest_binding_execution_preflight_transcript_redaction_policy_digest()
+        && preflight.artifact_quarantine_policy_digest
+            == hsai_tiny_z3_gateway_digest_binding_execution_preflight_artifact_quarantine_policy_digest()
+        && preflight.replay_instruction_digest
+            == hsai_tiny_z3_gateway_digest_binding_execution_preflight_replay_instruction_digest()
+        && preflight.failure_taxonomy_digest
+            == hsai_tiny_z3_gateway_digest_binding_execution_preflight_failure_taxonomy_digest()
+        && preflight.nonpromotion_digest
+            == hsai_tiny_z3_gateway_digest_binding_execution_preflight_nonpromotion_digest(
+                packet,
+                observation,
+                preflight.hermetic_input_manifest_set_digest,
+                preflight.expected_output_grammar_digest,
+            )
+        && preflight.level_mapping == "Level1LocalReplayOrLower"
+        && preflight.explicit_nonclaims == expected_nonclaims
+        && preflight.explicit_nonclaims_digest
+            == hsai_tiny_z3_gateway_digest_binding_execution_preflight_nonclaim_digest(
+                &expected_nonclaims,
+            )
+        && preflight.classification
+            == HsaiTinyZ3GatewayDigestBindingExecutionPreflightClassification::GatewayDigestBindingExecutionPreflightRecorded
+        && preflight.preflight_label
+            == HsaiTinyZ3GatewayDigestBindingExecutionPreflightLabel::GatewayDigestBindingExecutionPreflightRecorded
+        && preflight.claim_boundary
+            == hsai_tiny_z3_gateway_digest_binding_execution_preflight_claim_boundary()
+        && !preflight.backend_command_invoked
+        && !preflight.proof_artifact_created
+        && !preflight.checker_transcript_created
+        && !preflight.solver_certificate_created
+        && !preflight.raw_transcript_retained
+        && !preflight.imports_external_result
+        && !preflight.mutates_accepted_evidence_ledger
+        && !preflight.creates_accepted_evidence
+        && !preflight.creates_level2_evidence
+        && !preflight.populates_score_axes
+        && !preflight.benchmark_evidence_created
+        && !preflight.external_audit_claimed
+        && !preflight.human_review_acceptance_claimed
+        && !preflight.semantic_correctness_claimed
+        && !preflight.production_readiness_claimed
+        && !preflight.sota_claimed
+        && !preflight.breakthrough_claimed
+        && !preflight.full_security_claimed
+        && !preflight.grants_authority
+}
+
+pub fn validate_hsai_tiny_z3_gateway_digest_binding_local_execution_input(
+    packet: &HsaiFormalBackendAccelerationExecutionPacket,
+    observation: &HsaiTinyZ3ExtensionLocalExecutionObservation,
+    preflight: &HsaiTinyZ3GatewayDigestBindingExecutionPreflight,
+    fixture: &HsaiTinyZ3GatewayDigestBindingLocalExecutionFixture,
+    input: &HsaiTinyZ3GatewayDigestBindingLocalExecutionInput,
+) -> HsaiTinyZ3GatewayDigestBindingLocalExecutionValidation {
+    let mut issues = hsai_tiny_z3_gateway_digest_binding_local_execution_fixture_issues(fixture);
+    if input.schema_version != HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_EXECUTION_SCHEMA_VERSION {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.run_id) {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::InvalidRunId);
+    }
+    if !is_single_segment_id(&input.execution_policy_id) {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::InvalidExecutionPolicyId);
+    }
+    if !is_single_segment_id(&input.execution_decision_id) {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::InvalidExecutionDecisionId);
+    }
+    if input.executed_at_unix == 0 {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::MissingExecutedTimestamp);
+    }
+    if input.property_id != HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PROPERTY_ID {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::InvalidPropertyId);
+    }
+    if !hsai_tiny_z3_gateway_digest_binding_local_execution_preflight_exact(
+        packet,
+        observation,
+        preflight,
+    ) {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::PreflightStateMismatch);
+    }
+    if input.preflight_digest != preflight.digest()
+        || input.preflight_input_digest != preflight.preflight_input_digest
+        || input.source_execution_packet_digest != packet.digest()
+        || input.source_observation_digest != observation.digest()
+    {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::PreflightBindingMismatch);
+    }
+    if input.fixture_digest != fixture.digest() {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::FixtureDigestMismatch);
+    }
+    let obligation =
+        hsai_tiny_z3_gateway_digest_binding_local_execution_smtlib2_obligation_unchecked(fixture);
+    if input.obligation_digest != hash_bytes(obligation.as_bytes()) {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::ObligationDigestMismatch);
+    }
+    if input.expected_executable_digest == Hash([0; 32]) {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::MissingExecutableDigest);
+    }
+    if input.expected_argv_digest
+        != gateway_formal_tiny_z3_hermetic_backend_execution_result_argv_digest()
+    {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::InvalidArgvDigest);
+    }
+    if input.expected_environment_digest
+        != gateway_formal_tiny_z3_hermetic_backend_execution_result_environment_digest()
+    {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::InvalidEnvironmentDigest);
+    }
+    if input.timeout_millis != 5_000
+        || preflight.timeout_policy_digest
+            != gateway_formal_tiny_z3_hermetic_backend_execution_result_timeout_policy_digest(
+                input.timeout_millis,
+            )
+    {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::InvalidTimeoutPolicy);
+    }
+    if input.max_stdout_bytes == 0
+        || input.max_stdout_bytes > 4_096
+        || input.max_stderr_bytes == 0
+        || input.max_stderr_bytes > 4_096
+    {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::InvalidOutputLimit);
+    }
+    if input.expected_solver_verdict_label
+        != GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
+    {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::ExpectedVerdictMismatch);
+    }
+    if input.transcript_redaction_policy_digest != preflight.transcript_redaction_policy_digest {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::TranscriptRedactionPolicyMismatch,
+        );
+    }
+    if input.artifact_quarantine_policy_digest != preflight.artifact_quarantine_policy_digest {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::ArtifactQuarantinePolicyMismatch,
+        );
+    }
+    if input.replay_instruction_digest != preflight.replay_instruction_digest {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::ReplayInstructionMismatch);
+    }
+    if input.nonpromotion_digest
+        != hsai_tiny_z3_gateway_digest_binding_local_execution_input_nonpromotion_digest(
+            preflight,
+            fixture,
+            input.obligation_digest,
+            input.expected_executable_digest,
+        )
+    {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::InvalidNonpromotionDigest);
+    }
+    if input.level_mapping != "Level1LocalReplayOrLower" {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::InvalidLevelMapping);
+    }
+    if !input.operator_acknowledged {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::MissingOperatorAcknowledgement,
+        );
+    }
+    let nonclaims = hsai_tiny_z3_gateway_digest_binding_local_execution_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hsai_tiny_z3_gateway_digest_binding_local_execution_nonclaim_digest(&nonclaims)
+    {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::NonclaimMismatch);
+    }
+    if input.execution_label
+        != HsaiTinyZ3GatewayDigestBindingLocalExecutionLabel::GatewayDigestBindingLocalRunRecorded
+    {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::InvalidExecutionLabel);
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.execution_summary,
+    ) {
+        issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::ExecutionSummaryPromotionClaim,
+        );
+    }
+    if input.proof_artifact_requested
+        || input.checker_transcript_requested
+        || input.solver_certificate_requested
+        || input.raw_transcript_retention_requested
+        || input.imports_external_result
+        || input.accepted_evidence_requested
+        || input.level2_evidence_requested
+        || input.score_axis_population_requested
+        || input.benchmark_evidence_requested
+        || input.external_audit_claimed
+        || input.human_review_acceptance_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::PromotionAttempt);
+    }
+    issues.sort();
+    issues.dedup();
+    HsaiTinyZ3GatewayDigestBindingLocalExecutionValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+fn hsai_tiny_z3_gateway_digest_binding_local_execution_result_nonpromotion_digest(
+    input: &HsaiTinyZ3GatewayDigestBindingLocalExecutionInput,
+    process_output_digest: Hash,
+    stdout_summary_digest: Hash,
+    stderr_summary_digest: Hash,
+    solver_verdict_label: &GatewayFormalRealCommandLaneSolverVerdictLabel,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-local-execution-result-nonpromotion:v1",
+        &(
+            input.digest(),
+            process_output_digest,
+            stdout_summary_digest,
+            stderr_summary_digest,
+            solver_verdict_label,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ),
+    )
+}
+
+pub fn run_hsai_tiny_z3_gateway_digest_binding_local_execution(
+    packet: &HsaiFormalBackendAccelerationExecutionPacket,
+    observation: &HsaiTinyZ3ExtensionLocalExecutionObservation,
+    preflight: &HsaiTinyZ3GatewayDigestBindingExecutionPreflight,
+    fixture: &HsaiTinyZ3GatewayDigestBindingLocalExecutionFixture,
+    input: &HsaiTinyZ3GatewayDigestBindingLocalExecutionInput,
+    z3_executable: &Path,
+) -> Result<
+    HsaiTinyZ3GatewayDigestBindingLocalExecution,
+    HsaiTinyZ3GatewayDigestBindingLocalExecutionError,
+> {
+    let validation = validate_hsai_tiny_z3_gateway_digest_binding_local_execution_input(
+        packet,
+        observation,
+        preflight,
+        fixture,
+        input,
+    );
+    if !validation.valid {
+        return Err(HsaiTinyZ3GatewayDigestBindingLocalExecutionError::InvalidInput(validation));
+    }
+    let obligation =
+        build_hsai_tiny_z3_gateway_digest_binding_local_execution_smtlib2_obligation(fixture)
+            .map_err(HsaiTinyZ3GatewayDigestBindingLocalExecutionError::InvalidInput)?;
+    let executable_bytes = fs::read(z3_executable).map_err(|error| {
+        HsaiTinyZ3GatewayDigestBindingLocalExecutionError::ExecutableRead(error.to_string())
+    })?;
+    let executable_digest = hash_bytes(&executable_bytes);
+    if executable_digest != input.expected_executable_digest {
+        return Err(HsaiTinyZ3GatewayDigestBindingLocalExecutionError::ExecutableDigestMismatch);
+    }
+
+    let mut command = std::process::Command::new(z3_executable);
+    command
+        .args(["-in", "-smt2"])
+        .env_clear()
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped());
+    let mut child = command.spawn().map_err(|error| {
+        HsaiTinyZ3GatewayDigestBindingLocalExecutionError::ProcessSpawn(error.to_string())
+    })?;
+    {
+        let mut stdin = child.stdin.take().ok_or_else(|| {
+            HsaiTinyZ3GatewayDigestBindingLocalExecutionError::StdinWrite(
+                "z3 stdin unavailable".to_owned(),
+            )
+        })?;
+        stdin.write_all(obligation.as_bytes()).map_err(|error| {
+            HsaiTinyZ3GatewayDigestBindingLocalExecutionError::StdinWrite(error.to_string())
+        })?;
+    }
+    let deadline = Instant::now() + Duration::from_millis(input.timeout_millis);
+    let (exit_code, timeout, stdout, stderr) = loop {
+        if child
+            .try_wait()
+            .map_err(|error| {
+                HsaiTinyZ3GatewayDigestBindingLocalExecutionError::ProcessWait(error.to_string())
+            })?
+            .is_some()
+        {
+            let output = child.wait_with_output().map_err(|error| {
+                HsaiTinyZ3GatewayDigestBindingLocalExecutionError::ProcessWait(error.to_string())
+            })?;
+            break (output.status.code(), false, output.stdout, output.stderr);
+        }
+        if Instant::now() >= deadline {
+            let _ = child.kill();
+            let output = child.wait_with_output().map_err(|error| {
+                HsaiTinyZ3GatewayDigestBindingLocalExecutionError::ProcessWait(error.to_string())
+            })?;
+            break (output.status.code(), true, output.stdout, output.stderr);
+        }
+        std::thread::sleep(Duration::from_millis(5));
+    };
+    if timeout {
+        return Err(HsaiTinyZ3GatewayDigestBindingLocalExecutionError::ProcessTimedOut);
+    }
+    if exit_code != Some(0) {
+        return Err(
+            HsaiTinyZ3GatewayDigestBindingLocalExecutionError::ProcessFailed(
+                exit_code
+                    .map(|code| format!("exit_{code}"))
+                    .unwrap_or_else(|| "signal".to_owned()),
+            ),
+        );
+    }
+    if stdout.len() > input.max_stdout_bytes as usize
+        || stderr.len() > input.max_stderr_bytes as usize
+    {
+        return Err(HsaiTinyZ3GatewayDigestBindingLocalExecutionError::OutputLimitExceeded);
+    }
+    let stdout_text = std::str::from_utf8(&stdout)
+        .map_err(|_| HsaiTinyZ3GatewayDigestBindingLocalExecutionError::InvalidOutputGrammar)?;
+    let stdout_lines = stdout_text
+        .lines()
+        .map(str::trim)
+        .filter(|line| !line.is_empty())
+        .collect::<Vec<_>>();
+    if stdout_lines != ["unsat"] || !stderr.is_empty() {
+        return Err(HsaiTinyZ3GatewayDigestBindingLocalExecutionError::InvalidOutputGrammar);
+    }
+    let solver_verdict_label =
+        gateway_formal_real_command_lane_fixed_smt_solver_verdict(false, &stdout, &stderr);
+    if solver_verdict_label != input.expected_solver_verdict_label {
+        return Err(
+            HsaiTinyZ3GatewayDigestBindingLocalExecutionError::UnexpectedSolverVerdict(
+                solver_verdict_label,
+            ),
+        );
+    }
+    let stdout_summary = gateway_formal_real_command_lane_fixed_smt_stream_summary(
+        "stdout",
+        input.max_stdout_bytes,
+        &stdout,
+    );
+    let stderr_summary = gateway_formal_real_command_lane_fixed_smt_stream_summary(
+        "stderr",
+        input.max_stderr_bytes,
+        &stderr,
+    );
+    if !stdout_summary.secret_scan_passed || !stderr_summary.secret_scan_passed {
+        return Err(HsaiTinyZ3GatewayDigestBindingLocalExecutionError::InvalidOutputGrammar);
+    }
+    let stdout_summary_digest = stdout_summary.digest();
+    let stderr_summary_digest = stderr_summary.digest();
+    let process_output_digest = hash_tagged(
+        "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-local-execution-process-output:v1",
+        &(
+            executable_digest,
+            input.expected_argv_digest,
+            input.expected_environment_digest,
+            input.obligation_digest,
+            exit_code,
+            stdout_summary_digest,
+            stderr_summary_digest,
+            &solver_verdict_label,
+        ),
+    );
+    let output_classification_digest = hash_tagged(
+        "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-local-execution-output-classification:v1",
+        &(
+            "single_unsat_line_empty_stderr",
+            process_output_digest,
+            &solver_verdict_label,
+        ),
+    );
+    let transcript_redaction_report_digest = hash_tagged(
+        "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-local-execution-redaction-report:v1",
+        &(
+            input.transcript_redaction_policy_digest,
+            stdout_summary_digest,
+            stderr_summary_digest,
+            false,
+        ),
+    );
+    let artifact_quarantine_report_digest = hash_tagged(
+        "hsai-agent-admission:hsai-tiny-z3-gateway-digest-binding-local-execution-quarantine-report:v1",
+        &(
+            input.artifact_quarantine_policy_digest,
+            process_output_digest,
+            false,
+            false,
+            false,
+            false,
+        ),
+    );
+    let nonclaims = hsai_tiny_z3_gateway_digest_binding_local_execution_required_nonclaims();
+    Ok(HsaiTinyZ3GatewayDigestBindingLocalExecution {
+        schema_version: HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_EXECUTION_SCHEMA_VERSION
+            .to_owned(),
+        state_slice: HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_EXECUTION_STATE_SLICE.to_owned(),
+        run_id: input.run_id.clone(),
+        executed_at_unix: input.executed_at_unix,
+        execution_input_digest: input.digest(),
+        property_id: input.property_id.clone(),
+        preflight_digest: preflight.digest(),
+        preflight_input_digest: preflight.preflight_input_digest,
+        source_execution_packet_digest: packet.digest(),
+        source_observation_digest: observation.digest(),
+        fixture_digest: fixture.digest(),
+        baseline_proposal_digest: fixture.baseline_proposal.digest(),
+        repeated_proposal_digest: fixture.repeated_proposal.digest(),
+        target_mutation_proposal_digest: fixture.target_mutation_proposal.digest(),
+        value_mutation_proposal_digest: fixture.value_mutation_proposal.digest(),
+        obligation_digest: input.obligation_digest,
+        executable_digest,
+        argv_digest: input.expected_argv_digest,
+        environment_digest: input.expected_environment_digest,
+        timeout_policy_digest:
+            gateway_formal_tiny_z3_hermetic_backend_execution_result_timeout_policy_digest(
+                input.timeout_millis,
+            ),
+        process_output_digest,
+        stdout_summary_digest,
+        stderr_summary_digest,
+        solver_verdict_label: solver_verdict_label.clone(),
+        output_classification_digest,
+        transcript_redaction_report_digest,
+        artifact_quarantine_report_digest,
+        replay_instruction_digest: input.replay_instruction_digest,
+        nonpromotion_digest:
+            hsai_tiny_z3_gateway_digest_binding_local_execution_result_nonpromotion_digest(
+                input,
+                process_output_digest,
+                stdout_summary_digest,
+                stderr_summary_digest,
+                &solver_verdict_label,
+            ),
+        level_mapping: "Level1LocalReplayOrLower".to_owned(),
+        classification:
+            HsaiTinyZ3GatewayDigestBindingLocalExecutionClassification::GatewayDigestBindingLocalRunObserved,
+        execution_label:
+            HsaiTinyZ3GatewayDigestBindingLocalExecutionLabel::GatewayDigestBindingLocalRunRecorded,
+        execution_summary:
+            "one local tiny-Z3 concrete gateway digest-binding obligation observed with bounded summary digests"
+                .to_owned(),
+        explicit_nonclaims: nonclaims.clone(),
+        explicit_nonclaims_digest:
+            hsai_tiny_z3_gateway_digest_binding_local_execution_nonclaim_digest(&nonclaims),
+        claim_boundary: hsai_tiny_z3_gateway_digest_binding_local_execution_claim_boundary(),
+        process_spawned: true,
+        backend_executed: true,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        raw_transcript_retained: false,
+        imports_external_result: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        benchmark_evidence_created: false,
+        external_audit_claimed: false,
+        human_review_acceptance_claimed: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_hsai_tiny_z3_gateway_digest_binding_local_execution(
+    execution: &HsaiTinyZ3GatewayDigestBindingLocalExecution,
+    packet: &HsaiFormalBackendAccelerationExecutionPacket,
+    observation: &HsaiTinyZ3ExtensionLocalExecutionObservation,
+    preflight: &HsaiTinyZ3GatewayDigestBindingExecutionPreflight,
+    fixture: &HsaiTinyZ3GatewayDigestBindingLocalExecutionFixture,
+    input: &HsaiTinyZ3GatewayDigestBindingLocalExecutionInput,
+) -> HsaiTinyZ3GatewayDigestBindingLocalExecutionValidation {
+    let mut validation = validate_hsai_tiny_z3_gateway_digest_binding_local_execution_input(
+        packet,
+        observation,
+        preflight,
+        fixture,
+        input,
+    );
+    if execution.schema_version
+        != HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_EXECUTION_SCHEMA_VERSION
+        || execution.state_slice != HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_EXECUTION_STATE_SLICE
+        || execution.run_id != input.run_id
+        || execution.executed_at_unix != input.executed_at_unix
+        || execution.execution_input_digest != input.digest()
+        || execution.property_id != input.property_id
+        || execution.preflight_digest != preflight.digest()
+        || execution.preflight_input_digest != preflight.preflight_input_digest
+        || execution.source_execution_packet_digest != packet.digest()
+        || execution.source_observation_digest != observation.digest()
+        || execution.fixture_digest != fixture.digest()
+        || execution.baseline_proposal_digest != fixture.baseline_proposal.digest()
+        || execution.repeated_proposal_digest != fixture.repeated_proposal.digest()
+        || execution.target_mutation_proposal_digest != fixture.target_mutation_proposal.digest()
+        || execution.value_mutation_proposal_digest != fixture.value_mutation_proposal.digest()
+        || execution.obligation_digest != input.obligation_digest
+        || execution.executable_digest != input.expected_executable_digest
+        || execution.argv_digest != input.expected_argv_digest
+        || execution.environment_digest != input.expected_environment_digest
+        || execution.timeout_policy_digest
+            != gateway_formal_tiny_z3_hermetic_backend_execution_result_timeout_policy_digest(
+                input.timeout_millis,
+            )
+        || execution.replay_instruction_digest != input.replay_instruction_digest
+        || execution.level_mapping != input.level_mapping
+    {
+        validation
+            .issues
+            .push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::ExecutionBindingMismatch);
+    }
+    if execution.process_output_digest == Hash([0; 32])
+        || execution.stdout_summary_digest == Hash([0; 32])
+        || execution.stderr_summary_digest == Hash([0; 32])
+        || execution.output_classification_digest == Hash([0; 32])
+        || execution.transcript_redaction_report_digest == Hash([0; 32])
+        || execution.artifact_quarantine_report_digest == Hash([0; 32])
+        || execution.solver_verdict_label != input.expected_solver_verdict_label
+        || !execution.process_spawned
+        || !execution.backend_executed
+    {
+        validation
+            .issues
+            .push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::OutputMetadataMismatch);
+    }
+    if execution.nonpromotion_digest
+        != hsai_tiny_z3_gateway_digest_binding_local_execution_result_nonpromotion_digest(
+            input,
+            execution.process_output_digest,
+            execution.stdout_summary_digest,
+            execution.stderr_summary_digest,
+            &execution.solver_verdict_label,
+        )
+    {
+        validation
+            .issues
+            .push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::ResultNonpromotionMismatch);
+    }
+    let nonclaims = hsai_tiny_z3_gateway_digest_binding_local_execution_required_nonclaims();
+    if execution.explicit_nonclaims != nonclaims
+        || execution.explicit_nonclaims_digest
+            != hsai_tiny_z3_gateway_digest_binding_local_execution_nonclaim_digest(&nonclaims)
+    {
+        validation
+            .issues
+            .push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::NonclaimMismatch);
+    }
+    if execution.classification
+        != HsaiTinyZ3GatewayDigestBindingLocalExecutionClassification::GatewayDigestBindingLocalRunObserved
+        || execution.execution_label
+            != HsaiTinyZ3GatewayDigestBindingLocalExecutionLabel::GatewayDigestBindingLocalRunRecorded
+    {
+        validation.issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::ResultClassificationMismatch,
+        );
+    }
+    if execution.claim_boundary
+        != hsai_tiny_z3_gateway_digest_binding_local_execution_claim_boundary()
+    {
+        validation
+            .issues
+            .push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::ClaimBoundaryMismatch);
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &execution.execution_summary,
+    ) {
+        validation.issues.push(
+            HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::ExecutionSummaryPromotionClaim,
+        );
+    }
+    if execution.proof_artifact_created
+        || execution.checker_transcript_created
+        || execution.solver_certificate_created
+        || execution.raw_transcript_retained
+        || execution.imports_external_result
+        || execution.creates_accepted_evidence
+        || execution.creates_level2_evidence
+        || execution.populates_score_axes
+        || execution.benchmark_evidence_created
+        || execution.external_audit_claimed
+        || execution.human_review_acceptance_claimed
+        || execution.semantic_correctness_claimed
+        || execution.production_readiness_claimed
+        || execution.sota_claimed
+        || execution.breakthrough_claimed
+        || execution.full_security_claimed
+        || execution.grants_authority
+    {
+        validation
+            .issues
+            .push(HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::PromotionAttempt);
+    }
+    validation.issues.sort();
+    validation.issues.dedup();
+    validation.valid = validation.issues.is_empty();
+    validation
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -172955,6 +174026,266 @@ mod tests {
     }
 
     #[test]
+    fn phase657_hsai_tiny_z3_gateway_digest_binding_local_execution_builds_concrete_obligation() {
+        let Some((cleanup_roots, _packet, _observation, _preflight, fixture, _input)) =
+            phase657_hsai_tiny_z3_gateway_digest_binding_local_execution_source(
+                "phase657-obligation",
+                Hash([77; 32]),
+            )
+        else {
+            return;
+        };
+        let obligation =
+            build_hsai_tiny_z3_gateway_digest_binding_local_execution_smtlib2_obligation(&fixture)
+                .expect("phase657 concrete obligation builds");
+
+        assert!(obligation.contains("(set-logic QF_BV)"));
+        assert!(obligation.contains(HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PROPERTY_ID));
+        assert!(obligation.contains(&hash_hex(fixture.baseline_proposal.digest())));
+        assert!(obligation.contains(&hash_hex(fixture.target_mutation_proposal.digest())));
+        assert!(obligation.contains(&hash_hex(fixture.value_mutation_proposal.digest())));
+        assert!(!obligation.contains(&fixture.baseline_proposal.target));
+
+        for root in cleanup_roots {
+            fs::remove_dir_all(root).expect("phase657 obligation cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase657_hsai_tiny_z3_gateway_digest_binding_local_execution_runs_one_z3_obligation() {
+        let Some(z3_executable) = phase529_z3_executable() else {
+            return;
+        };
+        let executable_digest =
+            hash_bytes(&fs::read(&z3_executable).expect("phase657 z3 executable reads"));
+        let Some((cleanup_roots, packet, observation, preflight, fixture, input)) =
+            phase657_hsai_tiny_z3_gateway_digest_binding_local_execution_source(
+                "phase657-local-run",
+                executable_digest,
+            )
+        else {
+            return;
+        };
+        let execution = run_hsai_tiny_z3_gateway_digest_binding_local_execution(
+            &packet,
+            &observation,
+            &preflight,
+            &fixture,
+            &input,
+            &z3_executable,
+        )
+        .expect("phase657 one local z3 obligation runs");
+
+        assert_eq!(
+            execution.state_slice,
+            HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_EXECUTION_STATE_SLICE
+        );
+        assert_eq!(
+            execution.solver_verdict_label,
+            GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate
+        );
+        assert_eq!(
+            execution.baseline_proposal_digest,
+            execution.repeated_proposal_digest
+        );
+        assert_ne!(
+            execution.baseline_proposal_digest,
+            execution.target_mutation_proposal_digest
+        );
+        assert_ne!(
+            execution.baseline_proposal_digest,
+            execution.value_mutation_proposal_digest
+        );
+        assert!(execution.process_spawned);
+        assert!(execution.backend_executed);
+        assert!(!execution.proof_artifact_created);
+        assert!(!execution.checker_transcript_created);
+        assert!(!execution.solver_certificate_created);
+        assert!(!execution.raw_transcript_retained);
+        assert!(!execution.creates_accepted_evidence);
+        assert!(!execution.creates_level2_evidence);
+        assert!(!execution.populates_score_axes);
+        assert!(!execution.benchmark_evidence_created);
+        assert!(!execution.semantic_correctness_claimed);
+        assert!(!execution.production_readiness_claimed);
+        assert!(!execution.sota_claimed);
+        assert!(!execution.full_security_claimed);
+        assert!(!execution.grants_authority);
+        assert!(
+            validate_hsai_tiny_z3_gateway_digest_binding_local_execution(
+                &execution,
+                &packet,
+                &observation,
+                &preflight,
+                &fixture,
+                &input,
+            )
+            .valid
+        );
+
+        let mut promoted = execution.clone();
+        promoted.creates_accepted_evidence = true;
+        promoted.sota_claimed = true;
+        let promoted_validation = validate_hsai_tiny_z3_gateway_digest_binding_local_execution(
+            &promoted,
+            &packet,
+            &observation,
+            &preflight,
+            &fixture,
+            &input,
+        );
+        assert!(!promoted_validation.valid);
+        assert!(promoted_validation
+            .issues
+            .contains(&HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::PromotionAttempt));
+
+        let mut wrong_executable_input = input.clone();
+        wrong_executable_input.expected_executable_digest = Hash([88; 32]);
+        wrong_executable_input.nonpromotion_digest =
+            hsai_tiny_z3_gateway_digest_binding_local_execution_input_nonpromotion_digest(
+                &preflight,
+                &fixture,
+                wrong_executable_input.obligation_digest,
+                wrong_executable_input.expected_executable_digest,
+            );
+        assert_eq!(
+            run_hsai_tiny_z3_gateway_digest_binding_local_execution(
+                &packet,
+                &observation,
+                &preflight,
+                &fixture,
+                &wrong_executable_input,
+                &z3_executable,
+            ),
+            Err(HsaiTinyZ3GatewayDigestBindingLocalExecutionError::ExecutableDigestMismatch)
+        );
+
+        for root in cleanup_roots {
+            fs::remove_dir_all(root).expect("phase657 local run cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase657_hsai_tiny_z3_gateway_digest_binding_local_execution_rejects_fixture_drift() {
+        let Some((cleanup_roots, packet, observation, preflight, mut fixture, _input)) =
+            phase657_hsai_tiny_z3_gateway_digest_binding_local_execution_source(
+                "phase657-fixture-drift",
+                Hash([77; 32]),
+            )
+        else {
+            return;
+        };
+        fixture.target_mutation_proposal.value_units = fixture
+            .target_mutation_proposal
+            .value_units
+            .saturating_add(1);
+        let input = phase657_hsai_tiny_z3_gateway_digest_binding_local_execution_input(
+            "phase657-fixture-drift-run",
+            &preflight,
+            &fixture,
+            Hash([77; 32]),
+        );
+        let validation = validate_hsai_tiny_z3_gateway_digest_binding_local_execution_input(
+            &packet,
+            &observation,
+            &preflight,
+            &fixture,
+            &input,
+        );
+
+        assert!(!validation.valid);
+        assert!(validation.issues.contains(
+            &HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::FixtureTargetMutationMismatch
+        ));
+        assert!(
+            build_hsai_tiny_z3_gateway_digest_binding_local_execution_smtlib2_obligation(&fixture)
+                .is_err()
+        );
+
+        for root in cleanup_roots {
+            fs::remove_dir_all(root).expect("phase657 fixture drift cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase657_hsai_tiny_z3_gateway_digest_binding_local_execution_rejects_preflight_drift() {
+        let Some((cleanup_roots, packet, observation, mut preflight, fixture, _input)) =
+            phase657_hsai_tiny_z3_gateway_digest_binding_local_execution_source(
+                "phase657-preflight-drift",
+                Hash([77; 32]),
+            )
+        else {
+            return;
+        };
+        preflight.creates_level2_evidence = true;
+        let input = phase657_hsai_tiny_z3_gateway_digest_binding_local_execution_input(
+            "phase657-preflight-drift-run",
+            &preflight,
+            &fixture,
+            Hash([77; 32]),
+        );
+        let validation = validate_hsai_tiny_z3_gateway_digest_binding_local_execution_input(
+            &packet,
+            &observation,
+            &preflight,
+            &fixture,
+            &input,
+        );
+
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::PreflightStateMismatch));
+
+        for root in cleanup_roots {
+            fs::remove_dir_all(root).expect("phase657 preflight drift cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase657_hsai_tiny_z3_gateway_digest_binding_local_execution_rejects_promotion_attempts() {
+        let Some((cleanup_roots, packet, observation, preflight, fixture, mut input)) =
+            phase657_hsai_tiny_z3_gateway_digest_binding_local_execution_source(
+                "phase657-promotion",
+                Hash([77; 32]),
+            )
+        else {
+            return;
+        };
+        input.execution_label =
+            HsaiTinyZ3GatewayDigestBindingLocalExecutionLabel::GatewayDigestBindingLocalRunRejected;
+        input.proof_artifact_requested = true;
+        input.accepted_evidence_requested = true;
+        input.level2_evidence_requested = true;
+        input.score_axis_population_requested = true;
+        input.sota_claimed = true;
+        input.execution_summary =
+            "this local Z3 run creates accepted evidence and proves HSAI is SOTA".to_owned();
+        let validation = validate_hsai_tiny_z3_gateway_digest_binding_local_execution_input(
+            &packet,
+            &observation,
+            &preflight,
+            &fixture,
+            &input,
+        );
+
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::InvalidExecutionLabel));
+        assert!(validation.issues.contains(
+            &HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::ExecutionSummaryPromotionClaim
+        ));
+        assert!(validation
+            .issues
+            .contains(&HsaiTinyZ3GatewayDigestBindingLocalExecutionIssue::PromotionAttempt));
+
+        for root in cleanup_roots {
+            fs::remove_dir_all(root).expect("phase657 promotion cleanup succeeds");
+        }
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -188835,6 +190166,146 @@ mod tests {
             creates_level2_evidence: false,
             populates_score_axes: false,
             benchmark_evidence_created: false,
+            external_audit_claimed: false,
+            human_review_acceptance_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase657_hsai_tiny_z3_gateway_digest_binding_local_execution_source(
+        source_prefix: &str,
+        expected_executable_digest: Hash,
+    ) -> Option<(
+        Vec<PathBuf>,
+        HsaiFormalBackendAccelerationExecutionPacket,
+        HsaiTinyZ3ExtensionLocalExecutionObservation,
+        HsaiTinyZ3GatewayDigestBindingExecutionPreflight,
+        HsaiTinyZ3GatewayDigestBindingLocalExecutionFixture,
+        HsaiTinyZ3GatewayDigestBindingLocalExecutionInput,
+    )> {
+        let (cleanup_roots, packet, observation) =
+            phase656_hsai_tiny_z3_gateway_digest_binding_execution_preflight_source(source_prefix)?;
+        let preflight_input =
+            phase656_hsai_tiny_z3_gateway_digest_binding_execution_preflight_input(
+                &format!("{source_prefix}-phase656-preflight"),
+                &packet,
+                &observation,
+                HsaiTinyZ3GatewayDigestBindingExecutionPreflightLabel::GatewayDigestBindingExecutionPreflightRecorded,
+            );
+        let preflight = build_hsai_tiny_z3_gateway_digest_binding_execution_preflight(
+            &packet,
+            &observation,
+            &preflight_input,
+        )
+        .expect("phase657 source Phase 656 preflight builds");
+        let baseline_proposal = gateway_proposal(&format!("{source_prefix}-proposal"));
+        let repeated_proposal = baseline_proposal.clone();
+        let mut target_mutation_proposal = baseline_proposal.clone();
+        target_mutation_proposal.target = format!("{}-variant", baseline_proposal.target);
+        let mut value_mutation_proposal = baseline_proposal.clone();
+        value_mutation_proposal.value_units = baseline_proposal.value_units.saturating_add(1);
+        let fixture = HsaiTinyZ3GatewayDigestBindingLocalExecutionFixture {
+            schema_version: HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_EXECUTION_SCHEMA_VERSION
+                .to_owned(),
+            fixture_id: format!("{source_prefix}-fixture"),
+            baseline_proposal,
+            repeated_proposal,
+            target_mutation_proposal,
+            value_mutation_proposal,
+            non_secret: true,
+            contains_credentials: false,
+            contains_provider_payload: false,
+            contains_raw_attestation: false,
+            contains_raw_solver_output: false,
+        };
+        let input = phase657_hsai_tiny_z3_gateway_digest_binding_local_execution_input(
+            &format!("{source_prefix}-run"),
+            &preflight,
+            &fixture,
+            expected_executable_digest,
+        );
+        Some((
+            cleanup_roots,
+            packet,
+            observation,
+            preflight,
+            fixture,
+            input,
+        ))
+    }
+
+    fn phase657_hsai_tiny_z3_gateway_digest_binding_local_execution_input(
+        run_id: &str,
+        preflight: &HsaiTinyZ3GatewayDigestBindingExecutionPreflight,
+        fixture: &HsaiTinyZ3GatewayDigestBindingLocalExecutionFixture,
+        expected_executable_digest: Hash,
+    ) -> HsaiTinyZ3GatewayDigestBindingLocalExecutionInput {
+        let obligation =
+            hsai_tiny_z3_gateway_digest_binding_local_execution_smtlib2_obligation_unchecked(
+                fixture,
+            );
+        let obligation_digest = hash_bytes(obligation.as_bytes());
+        let nonclaims = hsai_tiny_z3_gateway_digest_binding_local_execution_required_nonclaims();
+        HsaiTinyZ3GatewayDigestBindingLocalExecutionInput {
+            schema_version: HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_LOCAL_EXECUTION_SCHEMA_VERSION
+                .to_owned(),
+            run_id: run_id.to_owned(),
+            execution_policy_id: "phase657-gateway-digest-binding-local-execution-policy"
+                .to_owned(),
+            execution_decision_id: "phase657-gateway-digest-binding-local-execution-decision"
+                .to_owned(),
+            executed_at_unix: 1_800_000_657,
+            property_id: HSAI_TINY_Z3_GATEWAY_DIGEST_BINDING_EXECUTION_PROPERTY_ID.to_owned(),
+            preflight_digest: preflight.digest(),
+            preflight_input_digest: preflight.preflight_input_digest,
+            source_execution_packet_digest: preflight.source_execution_packet_digest,
+            source_observation_digest: preflight.source_observation_digest,
+            fixture_digest: fixture.digest(),
+            obligation_digest,
+            expected_executable_digest,
+            expected_argv_digest:
+                gateway_formal_tiny_z3_hermetic_backend_execution_result_argv_digest(),
+            expected_environment_digest:
+                gateway_formal_tiny_z3_hermetic_backend_execution_result_environment_digest(),
+            timeout_millis: 5_000,
+            max_stdout_bytes: 256,
+            max_stderr_bytes: 256,
+            expected_solver_verdict_label:
+                GatewayFormalRealCommandLaneSolverVerdictLabel::SolverUnsatWithoutCertificate,
+            transcript_redaction_policy_digest: preflight.transcript_redaction_policy_digest,
+            artifact_quarantine_policy_digest: preflight.artifact_quarantine_policy_digest,
+            replay_instruction_digest: preflight.replay_instruction_digest,
+            nonpromotion_digest:
+                hsai_tiny_z3_gateway_digest_binding_local_execution_input_nonpromotion_digest(
+                    preflight,
+                    fixture,
+                    obligation_digest,
+                    expected_executable_digest,
+                ),
+            level_mapping: "Level1LocalReplayOrLower".to_owned(),
+            operator_acknowledged: true,
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest:
+                hsai_tiny_z3_gateway_digest_binding_local_execution_nonclaim_digest(&nonclaims),
+            execution_label:
+                HsaiTinyZ3GatewayDigestBindingLocalExecutionLabel::GatewayDigestBindingLocalRunRecorded,
+            execution_summary:
+                "one local tiny-Z3 concrete gateway digest-binding obligation requested under Phase 656 preflight"
+                    .to_owned(),
+            proof_artifact_requested: false,
+            checker_transcript_requested: false,
+            solver_certificate_requested: false,
+            raw_transcript_retention_requested: false,
+            imports_external_result: false,
+            accepted_evidence_requested: false,
+            level2_evidence_requested: false,
+            score_axis_population_requested: false,
+            benchmark_evidence_requested: false,
             external_audit_claimed: false,
             human_review_acceptance_claimed: false,
             semantic_correctness_claimed: false,

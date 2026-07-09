@@ -9559,5 +9559,21 @@ no proof artifact, checker transcript, solver certificate, accepted evidence,
 Level2+ evidence, score-axis evidence, or benchmark evidence, and claims no
 production readiness, SOTA, full security, or semantic correctness.
 
+[docs/657-phase-hsai-tiny-z3-gateway-digest-binding-local-execution-notes.md](docs/657-phase-hsai-tiny-z3-gateway-digest-binding-local-execution-notes.md)
+records the Phase 657 local backend execution. One exact Phase 656 preflight
+was consumed to run Z3 4.15.0 through fixed `-in -smt2` arguments and an empty
+environment over a canonical QF_BV obligation derived from concrete Rust
+proposal digest witnesses. Z3 returned `solver_unsat_without_certificate`;
+the typed result records process spawn and backend execution while retaining
+only bounded summary, classification, redaction, quarantine, replay, and
+nonpromotion digests. Five focused tests passed, including fixture drift,
+preflight drift, executable mismatch, and promotion rejection. The result is
+`Level1LocalReplayOrLower` local execution observation only and creates no
+proof of SHA-256, general source correspondence, gateway semantics, accepted
+evidence, Level2+ evidence, score-axis evidence, benchmark evidence, semantic
+correctness, production readiness, SOTA status, or full-security result. The
+process call is permitted only by an exact-function Phase 657 source-scan
+exception; the scan rejects arbitrary functions and missing claim boundaries.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

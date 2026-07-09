@@ -18595,6 +18595,34 @@ creates no proof artifact, checker transcript, solver certificate, accepted
 evidence, Level2+ evidence, score-axis evidence, or benchmark evidence, and
 claims no production readiness, SOTA, full security, or semantic correctness.
 
+## Phase 657 HSAI Tiny-Z3 Gateway Digest-Binding Local Execution
+
+Status: complete for one preflight-bound local Z3 execution. See
+`docs/657-phase-hsai-tiny-z3-gateway-digest-binding-local-execution-notes.md`.
+
+Goal: consume the exact Phase 656 preflight and execute one fixed local Z3
+QF_BV obligation for `gateway_proposal_digest_binding_determinism_v1` over one
+concrete non-secret `GatewayActionProposal` fixture.
+
+Implemented: typed fixture/input/result/validation/error surfaces, canonical
+SMT-LIB2 generation from Rust proposal digest witnesses, exact Phase
+650/653/656 binding validation, executable SHA-256 verification, fixed
+`-in -smt2` invocation with an empty environment, exact `unsat` output grammar,
+bounded summary digests, quarantine/redaction/replay/nonpromotion digests, and
+five focused tests. The process API remains guarded by an exact-function Phase
+657 source-scan exception with negative exception-scope tests.
+
+Executed result: local Z3 4.15.0 returned
+`solver_unsat_without_certificate`; the result records
+`process_spawned = true` and `backend_executed = true`. The focused suite
+passed 5/5.
+
+Exit criteria: HSAI now has one `Level1LocalReplayOrLower` local execution
+observation for a concrete gateway proposal digest-binding fixture. It has no
+proof of SHA-256, general source correspondence, gateway semantics, accepted
+evidence, Level2+ evidence, score axes, benchmark evidence, semantic
+correctness, production readiness, SOTA status, or full-security result.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
