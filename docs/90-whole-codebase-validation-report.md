@@ -9617,5 +9617,19 @@ remains `Level1LocalReplayOrLower` local regression evidence and leaves Serde,
 `serde_json`, `sha2`, compiler, finite-coverage, and future
 independent-correspondence assumptions open.
 
+[docs/661-phase-hsai-gateway-proposal-digest-independent-preimage-checker-boundary.md](docs/661-phase-hsai-gateway-proposal-digest-independent-preimage-checker-boundary.md)
+records the Phase 661 documentation-first C2 checker boundary. It selects a
+future dependency-isolated `hsai-gateway-digest-checker` crate with checker-owned
+types, a manual schema-specific JSON encoder, explicit set ordering and
+duplicate rejection, and `ring` SHA-256 instead of production `sha2`. It also
+requires an axis-level independence profile, discloses shared Rust/compiler/
+fixture/host/harness trust, defines the e2e production comparison, enumerates
+17 required test classes and fail-closed mismatches, and limits future success
+to `LocalImplementationDiverseCheckerAgreement`. Phase 661 changes no Rust or
+Cargo metadata, runs no checker or backend, creates no transcript or artifact,
+and creates no accepted evidence, Level2+, score-axis evidence, semantic
+correctness, production readiness, SOTA, or full security. The evidence
+ceiling remains `Level1LocalReplayOrLower`.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

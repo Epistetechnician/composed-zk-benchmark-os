@@ -388,5 +388,7 @@ regression evidence and runs no formal backend.
 
 ## Next Responsible Slice
 
-Phase 661 should define the docs-first C2 independent-preimage-checker
-boundary before any C3 Lean or Rust-to-Lean correspondence execution.
+Phase 661 defines the docs-first C2 checker boundary in
+`docs/661-phase-hsai-gateway-proposal-digest-independent-preimage-checker-boundary.md`.
+Phase 662 should implement that bounded local implementation-diverse checker
+before any C3 Lean or Rust-to-Lean correspondence execution.

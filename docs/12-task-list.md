@@ -18704,6 +18704,29 @@ Level2+, score axes, semantic correctness, production readiness, SOTA, or full
 security. The next slice is a docs-first C2 independent-preimage-checker
 boundary.
 
+## Phase 661 HSAI Gateway Proposal Digest Independent Preimage Checker Boundary
+
+Status: complete for the documentation-first C2 checker boundary. See
+`docs/661-phase-hsai-gateway-proposal-digest-independent-preimage-checker-boundary.md`.
+
+Goal: define a local implementation-diverse checker that does not share the
+production HSAI types, Serde serializer, `serde_json`, or `sha2`, while
+disclosing the Rust compiler, fixture, schema-transcription, host, and harness
+trust that remains shared.
+
+Implemented: future separate checker-crate ownership; prohibited dependency
+set; checker-owned model; manual v1 JSON encoder contract; explicit set sort
+keys and duplicate rejection; distinct `ring` SHA-256 path; diverse/shared/
+imported-trust profile; in-memory checker result; e2e comparison contract;
+17 required test classes; failure taxonomy; exact Phase 662 touch surface; and
+nonpromotion rules.
+
+Exit criteria: HSAI has a bounded C2 design but no checker implementation or
+run. Phase 661 creates no independent external reproduction, independent
+formal verification, source-correspondence proof, checker transcript, accepted
+evidence, Level2+, score axes, semantic correctness, production readiness,
+SOTA, or full security. Phase 662 is the next implementation slice.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
