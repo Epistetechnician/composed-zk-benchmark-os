@@ -18198,6 +18198,38 @@ no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution in this
 phase, no benchmark evidence, no external-audit claim, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 644 HSAI Tiny Z3 Packet Role Artifact Independent Operator Accepted Result Output Evidence Eligibility Metadata
+
+Status: complete for local accepted-result output evidence eligibility
+metadata. See
+`docs/644-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-evidence-eligibility-notes.md`.
+
+Goal: implement the Phase 643 eligibility boundary over one exact Phase 642
+blocked accepted-result output import-review metadata record, without importing
+external results, mutating accepted evidence, creating accepted evidence,
+creating Level2+, populating score axes, running a backend, or promoting
+proof/claim evidence.
+
+Implemented: Phase 644 adds typed input/output/classification/label/issue
+metadata, deterministic digest/id/label bindings, eligibility policy digest,
+eligibility blocker digest, eligibility nonpromotion digest, exact Phase 642
+source-state validation, inherited Phase 640/638/636/634/632/630/628/595/593
+/591/589/587/585 digest checks, and focused rejection tests for Phase 642
+drift, inherited digest drift, accepted-ledger mutation, accepted evidence,
+Level2, and strong-claim promotion attempts.
+
+Validation coverage: focused validation passed with
+`cargo test -p hsai-agent-admission --lib phase644_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_evidence_eligibility -- --nocapture`.
+
+Exit criteria: HSAI now has local blocked accepted-result output evidence
+eligibility metadata over a blocked Phase 642 import-review record. It still
+has no independent external reproduction, no accepted external result import,
+no accepted Evidence Ledger mutation, no accepted evidence, no Level2+
+evidence, no populated score axes, no Lean/COBALT/Rust-to-Lean execution, no
+additional SMT/Z3 execution in this phase, no benchmark evidence, no
+external-audit claim, and no production/SOTA/security/semantic-correctness
+claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
