@@ -18674,6 +18674,36 @@ creates no proof artifact, checker transcript, solver certificate, accepted
 evidence, Level2+, score axes, benchmark evidence, semantic correctness,
 production readiness, SOTA, or full security.
 
+## Phase 660 HSAI Gateway Proposal Digest Production Preimage Witness
+
+Status: complete for the C1 production preimage witness and focused local
+regression coverage. See
+`docs/660-phase-hsai-gateway-proposal-digest-production-preimage-witness-notes.md`.
+
+Goal: expose the exact source-bound Serde bytes consumed by
+`GatewayActionProposal::digest`, preserve the prior digest result, and lock the
+current source behavior before an independent checker or formal model is
+attempted.
+
+Implemented: public digest-tag constant; public exact-preimage helper;
+production digest routing through the helper and existing byte-level SHA-256
+function; one complete golden preimage and digest; prior `hash_tagged`
+agreement; 18 concrete field mutations; insertion-order independence for all
+three `BTreeSet` fields; all action, model-lane, and threat enum variants; tag,
+escaping, UTF-8, nonempty-collection, and maximum-`u64` cases.
+
+Validation: focused Phase 660 tests passed 4/4; the full admission library
+passed 675 tests with five ignored and zero failures; all-target clippy passed
+with warnings denied. No process, network, solver, proof assistant, checker, or
+model backend ran for the Phase 660 tests.
+
+Exit criteria: HSAI has C1 local regression evidence for the exact production
+preimage seam. It has no independent checker, source-correspondence theorem,
+proof artifact, checker transcript, solver certificate, accepted evidence,
+Level2+, score axes, semantic correctness, production readiness, SOTA, or full
+security. The next slice is a docs-first C2 independent-preimage-checker
+boundary.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

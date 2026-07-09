@@ -9602,5 +9602,20 @@ Level2+, score-axis evidence, benchmark evidence, semantic correctness,
 production readiness, SOTA, or full security is created. The evidence ceiling
 remains `Level1LocalReplayOrLower`.
 
+[docs/660-phase-hsai-gateway-proposal-digest-production-preimage-witness-notes.md](docs/660-phase-hsai-gateway-proposal-digest-production-preimage-witness-notes.md)
+records the Phase 660 C1 implementation. `GatewayActionProposal::digest` now
+hashes bytes returned by the public exact-preimage helper under a public fixed
+tag. Four focused tests pass: complete golden bytes and digest plus prior-path
+agreement, 18 concrete field mutations, `BTreeSet` insertion-order
+independence, and tag/encoding/integer/collection/enum edges. No dependency,
+process, network, backend, proof artifact, checker transcript, solver
+certificate, accepted evidence, Level2+, score-axis evidence, benchmark
+evidence, semantic correctness, production readiness, SOTA, or full security
+is created. The full admission library passed 675 tests with five ignored and
+zero failures; all-target clippy passed with warnings denied. The result
+remains `Level1LocalReplayOrLower` local regression evidence and leaves Serde,
+`serde_json`, `sha2`, compiler, finite-coverage, and future
+independent-correspondence assumptions open.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
