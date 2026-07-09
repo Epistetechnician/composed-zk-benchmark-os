@@ -9352,5 +9352,20 @@ evidence, creates no Level2+ evidence, populates no score axes, runs no
 Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates no benchmark
 evidence, and claims no production/SOTA/security/semantic-correctness result.
 
+[docs/644-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-evidence-eligibility-notes.md](docs/644-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-evidence-eligibility-notes.md)
+documents the Phase 644 local accepted-result output evidence eligibility
+metadata implementation. It adds typed input/output/classification/label/issue
+metadata, deterministic Phase 642 review bindings, eligibility policy,
+blocker, and nonpromotion digests, exact Phase 642 source-state validation,
+and focused tests for successful blocked eligibility metadata, Phase 642 drift
+rejection, inherited digest drift rejection, accepted-ledger mutation
+rejection, accepted-evidence rejection, Level2 rejection, and strong-claim
+rejection. It imports no external result, mutates no accepted Evidence Ledger,
+creates no accepted evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates
+no benchmark evidence, and claims no production/SOTA/security
+/semantic-correctness result. Focused validation passed with
+`cargo test -p hsai-agent-admission --lib phase644_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_evidence_eligibility -- --nocapture`.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
