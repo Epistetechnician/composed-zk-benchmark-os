@@ -18395,6 +18395,38 @@ accepted Evidence Ledger mutation, no accepted evidence, no Level2+ evidence,
 no populated score axes, no benchmark evidence, no external-audit claim, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 650 HSAI Formal Backend Acceleration Execution Packet Metadata
+
+Status: complete for local formal backend acceleration execution-packet
+metadata. See
+`docs/650-phase-hsai-formal-backend-acceleration-execution-packet-metadata-notes.md`.
+
+Goal: implement the Phase 649 execution-packet metadata boundary over one exact
+Phase 648 preflight metadata record, without invoking backend commands,
+generating proof artifacts, importing results, mutating accepted evidence,
+creating Level2+, populating score axes, or promoting proof/claim evidence.
+
+Implemented: Phase 650 adds typed execution-packet input/output/status,
+classification, label, validation, and issue metadata; required nonclaim,
+status-vocabulary, nonclaim-digest, and nonpromotion digest helpers; Phase 648
+source binding; digest-only command descriptor, input manifest, output schema,
+transcript redaction policy, timeout/nondeterminism policy, artifact
+quarantine policy, replay instruction, and `NotRun` status validation; and
+focused tests for valid metadata, source drift, missing digest, invalid status,
+and promotion attempts.
+
+Validation coverage: focused validation passed with
+`cargo test -p hsai-agent-admission --lib phase650_hsai_formal_backend_acceleration_execution_packet -- --nocapture`.
+
+Exit criteria: HSAI now has local formal backend acceleration execution-packet
+metadata with `NotRun` status over a Phase 648 preflight record. It still has
+no backend command execution, no Lean run, no COBALT run, no Rust-to-Lean
+extraction, no additional SMT/Z3 run in this phase, no proof artifacts, no
+checker transcripts, no solver certificates, no accepted Evidence Ledger
+mutation, no accepted evidence, no Level2+ evidence, no populated score axes,
+no benchmark evidence, no external-audit claim, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

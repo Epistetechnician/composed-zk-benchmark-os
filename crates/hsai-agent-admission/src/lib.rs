@@ -1345,6 +1345,11 @@ pub const HSAI_FORMAL_BACKEND_ACCELERATION_PREFLIGHT_SCHEMA_VERSION: &str =
 pub const HSAI_FORMAL_BACKEND_ACCELERATION_PREFLIGHT_STATE_SLICE: &str =
     "phase-648-hsai-formal-backend-acceleration-preflight-metadata";
 pub const HSAI_FORMAL_BACKEND_ACCELERATION_PREFLIGHT_CLAIM_BOUNDARY: &str = "local HSAI formal backend acceleration preflight metadata only; binds one Phase 646 blocked accepted-result output policy-resolution record to hermetic input, expected command-role, expected output schema, declared output-root, replay-rule, failure-taxonomy, provenance, and negative-promotion digests for a future local Lean/SMT/COBALT/Rust-to-Lean lane, but does not invoke a backend command, generate proof artifacts, generate checker transcripts, generate solver certificates, import external results, mutate the accepted Evidence Ledger, create accepted formal evidence, create Level2+ evidence, populate score axes, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, or grant authority to execute an action.";
+pub const HSAI_FORMAL_BACKEND_ACCELERATION_EXECUTION_PACKET_SCHEMA_VERSION: &str =
+    "hsai-formal-backend-acceleration-execution-packet:v1";
+pub const HSAI_FORMAL_BACKEND_ACCELERATION_EXECUTION_PACKET_STATE_SLICE: &str =
+    "phase-650-hsai-formal-backend-acceleration-execution-packet-metadata";
+pub const HSAI_FORMAL_BACKEND_ACCELERATION_EXECUTION_PACKET_CLAIM_BOUNDARY: &str = "local HSAI formal backend acceleration execution-packet metadata only; binds one Phase 648 preflight metadata record to digest-only command descriptor, input manifest, output packet schema, transcript redaction policy, status vocabulary, timeout and nondeterminism policy, artifact quarantine policy, replay instruction, and nonpromotion metadata with NotRun status, but does not invoke a backend command, generate proof artifacts, generate checker transcripts, generate solver certificates, import external results, mutate the accepted Evidence Ledger, create accepted formal evidence, create Level2+ evidence, populate score axes, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, record human-review acceptance, or grant authority to execute an action.";
 pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_NAMESPACE: &str =
     "gateway-formal-tiny-z3-independent-external-operator-result";
 pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_DECLARED_FILES: [&str; 8] = [
@@ -27101,6 +27106,188 @@ pub enum HsaiFormalBackendAccelerationPreflightIssue {
 pub struct HsaiFormalBackendAccelerationPreflightValidation {
     pub valid: bool,
     pub issues: Vec<HsaiFormalBackendAccelerationPreflightIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiFormalBackendAccelerationExecutionPacketStatus {
+    NotRun,
+    RunRequested,
+    RunObserved,
+    CheckerFailed,
+    SolverUnknown,
+    TimedOut,
+    TranscriptMismatch,
+    Rejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiFormalBackendAccelerationExecutionPacketClassification {
+    LocalExecutionPacketMetadataRecorded,
+    LocalExecutionPacketMetadataRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiFormalBackendAccelerationExecutionPacketLabel {
+    ExecutionPacketRecorded,
+    ExecutionPacketRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiFormalBackendAccelerationExecutionPacketInput {
+    pub schema_version: String,
+    pub packet_id: String,
+    pub local_run_id: String,
+    pub packet_policy_id: String,
+    pub packet_decision_id: String,
+    pub prepared_at_unix: u64,
+    pub lane_class: HsaiFormalBackendAccelerationLaneClass,
+    pub source_preflight_digest: Hash,
+    pub source_preflight_state_slice: String,
+    pub source_preflight_classification: HsaiFormalBackendAccelerationPreflightClassification,
+    pub tool_role_label: String,
+    pub expected_tool_family: String,
+    pub command_descriptor_digest: Hash,
+    pub input_manifest_digest_set: BTreeMap<String, Hash>,
+    pub output_packet_schema_digest: Hash,
+    pub transcript_redaction_policy_digest: Hash,
+    pub status_vocabulary_digest: Hash,
+    pub timeout_nondeterminism_policy_digest: Hash,
+    pub artifact_quarantine_policy_digest: Hash,
+    pub replay_instruction_digest: Hash,
+    pub nonpromotion_digest: Hash,
+    pub level_mapping: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub status: HsaiFormalBackendAccelerationExecutionPacketStatus,
+    pub classification: HsaiFormalBackendAccelerationExecutionPacketClassification,
+    pub packet_label: HsaiFormalBackendAccelerationExecutionPacketLabel,
+    pub packet_summary: String,
+    pub backend_command_invoked: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub raw_transcript_retained: bool,
+    pub raw_proof_artifact_retained: bool,
+    pub imports_external_result: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_claimed: bool,
+    pub human_review_acceptance_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl HsaiFormalBackendAccelerationExecutionPacketInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-formal-backend-acceleration-execution-packet-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiFormalBackendAccelerationExecutionPacket {
+    pub schema_version: String,
+    pub state_slice: String,
+    pub packet_id: String,
+    pub packet_input_digest: Hash,
+    pub local_run_id: String,
+    pub packet_policy_id: String,
+    pub packet_decision_id: String,
+    pub prepared_at_unix: u64,
+    pub lane_class: HsaiFormalBackendAccelerationLaneClass,
+    pub source_preflight_digest: Hash,
+    pub source_preflight_input_digest: Hash,
+    pub source_preflight_state_slice: String,
+    pub source_preflight_classification: HsaiFormalBackendAccelerationPreflightClassification,
+    pub source_preflight_level_mapping: String,
+    pub tool_role_label: String,
+    pub expected_tool_family: String,
+    pub command_descriptor_digest: Hash,
+    pub input_manifest_digest_set: BTreeMap<String, Hash>,
+    pub input_manifest_digest_set_digest: Hash,
+    pub output_packet_schema_digest: Hash,
+    pub transcript_redaction_policy_digest: Hash,
+    pub status_vocabulary_digest: Hash,
+    pub timeout_nondeterminism_policy_digest: Hash,
+    pub artifact_quarantine_policy_digest: Hash,
+    pub replay_instruction_digest: Hash,
+    pub nonpromotion_digest: Hash,
+    pub level_mapping: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub status: HsaiFormalBackendAccelerationExecutionPacketStatus,
+    pub classification: HsaiFormalBackendAccelerationExecutionPacketClassification,
+    pub packet_label: HsaiFormalBackendAccelerationExecutionPacketLabel,
+    pub packet_summary: String,
+    pub claim_boundary: String,
+    pub backend_command_invoked: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub raw_transcript_retained: bool,
+    pub raw_proof_artifact_retained: bool,
+    pub imports_external_result: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_claimed: bool,
+    pub human_review_acceptance_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl HsaiFormalBackendAccelerationExecutionPacket {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-formal-backend-acceleration-execution-packet:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiFormalBackendAccelerationExecutionPacketIssue {
+    InvalidSchemaVersion,
+    InvalidPacketId,
+    InvalidLocalRunId,
+    InvalidPacketPolicyId,
+    InvalidPacketDecisionId,
+    MissingPreparedTimestamp,
+    SourcePreflightMismatch,
+    SourcePreflightStateMismatch,
+    InvalidToolRoleLabel,
+    InvalidExpectedToolFamily,
+    MissingInputManifestDigest,
+    MissingDigest(String),
+    InvalidStatusVocabularyDigest,
+    InvalidNonpromotionDigest,
+    InvalidLevelMapping,
+    NonclaimMismatch,
+    InvalidStatus,
+    InvalidClassification,
+    PacketSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiFormalBackendAccelerationExecutionPacketValidation {
+    pub valid: bool,
+    pub issues: Vec<HsaiFormalBackendAccelerationExecutionPacketIssue>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -117147,6 +117334,313 @@ pub fn validate_hsai_formal_backend_acceleration_preflight_input(
     }
 }
 
+pub fn hsai_formal_backend_acceleration_execution_packet_claim_boundary() -> String {
+    HSAI_FORMAL_BACKEND_ACCELERATION_EXECUTION_PACKET_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn hsai_formal_backend_acceleration_execution_packet_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims = hsai_formal_backend_acceleration_preflight_required_nonclaims();
+    nonclaims.insert(NonClaimLabel("not execution evidence".to_owned()));
+    nonclaims.insert(NonClaimLabel("not raw transcript retention".to_owned()));
+    nonclaims.insert(NonClaimLabel("not human-review acceptance".to_owned()));
+    nonclaims
+}
+
+pub fn hsai_formal_backend_acceleration_execution_packet_status_vocabulary_digest() -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-formal-backend-acceleration-execution-packet-status-vocabulary:v1",
+        &BTreeSet::from([
+            "NotRun",
+            "RunRequested",
+            "RunObserved",
+            "CheckerFailed",
+            "SolverUnknown",
+            "TimedOut",
+            "TranscriptMismatch",
+            "Rejected",
+        ]),
+    )
+}
+
+pub fn hsai_formal_backend_acceleration_execution_packet_nonclaim_digest(
+    nonclaims: &BTreeSet<NonClaimLabel>,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-formal-backend-acceleration-execution-packet-nonclaims:v1",
+        nonclaims,
+    )
+}
+
+pub fn hsai_formal_backend_acceleration_execution_packet_nonpromotion_digest(
+    source_digest: Hash,
+    command_descriptor_digest: Hash,
+    input_manifest_digest_set_digest: Hash,
+    status: &HsaiFormalBackendAccelerationExecutionPacketStatus,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-formal-backend-acceleration-execution-packet-nonpromotion:v1",
+        &(
+            source_digest,
+            command_descriptor_digest,
+            input_manifest_digest_set_digest,
+            status,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ),
+    )
+}
+
+pub fn build_hsai_formal_backend_acceleration_execution_packet(
+    source: &HsaiFormalBackendAccelerationPreflight,
+    input: &HsaiFormalBackendAccelerationExecutionPacketInput,
+) -> Result<
+    HsaiFormalBackendAccelerationExecutionPacket,
+    HsaiFormalBackendAccelerationExecutionPacketValidation,
+> {
+    let validation =
+        validate_hsai_formal_backend_acceleration_execution_packet_input(source, input);
+    if !validation.valid {
+        return Err(validation);
+    }
+
+    Ok(HsaiFormalBackendAccelerationExecutionPacket {
+        schema_version: HSAI_FORMAL_BACKEND_ACCELERATION_EXECUTION_PACKET_SCHEMA_VERSION.to_owned(),
+        state_slice: HSAI_FORMAL_BACKEND_ACCELERATION_EXECUTION_PACKET_STATE_SLICE.to_owned(),
+        packet_id: input.packet_id.clone(),
+        packet_input_digest: input.digest(),
+        local_run_id: input.local_run_id.clone(),
+        packet_policy_id: input.packet_policy_id.clone(),
+        packet_decision_id: input.packet_decision_id.clone(),
+        prepared_at_unix: input.prepared_at_unix,
+        lane_class: input.lane_class.clone(),
+        source_preflight_digest: source.digest(),
+        source_preflight_input_digest: source.preflight_input_digest,
+        source_preflight_state_slice: source.state_slice.clone(),
+        source_preflight_classification: source.classification.clone(),
+        source_preflight_level_mapping: source.level_mapping.clone(),
+        tool_role_label: input.tool_role_label.clone(),
+        expected_tool_family: input.expected_tool_family.clone(),
+        command_descriptor_digest: input.command_descriptor_digest,
+        input_manifest_digest_set: input.input_manifest_digest_set.clone(),
+        input_manifest_digest_set_digest: hash_tagged(
+            "hsai-agent-admission:hsai-formal-backend-acceleration-execution-packet-input-manifest-set:v1",
+            &input.input_manifest_digest_set,
+        ),
+        output_packet_schema_digest: input.output_packet_schema_digest,
+        transcript_redaction_policy_digest: input.transcript_redaction_policy_digest,
+        status_vocabulary_digest: input.status_vocabulary_digest,
+        timeout_nondeterminism_policy_digest: input.timeout_nondeterminism_policy_digest,
+        artifact_quarantine_policy_digest: input.artifact_quarantine_policy_digest,
+        replay_instruction_digest: input.replay_instruction_digest,
+        nonpromotion_digest: input.nonpromotion_digest,
+        level_mapping: input.level_mapping.clone(),
+        explicit_nonclaims: input.explicit_nonclaims.clone(),
+        explicit_nonclaims_digest: input.explicit_nonclaims_digest,
+        status: input.status.clone(),
+        classification: input.classification.clone(),
+        packet_label: input.packet_label.clone(),
+        packet_summary: input.packet_summary.clone(),
+        claim_boundary: hsai_formal_backend_acceleration_execution_packet_claim_boundary(),
+        backend_command_invoked: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        raw_transcript_retained: false,
+        raw_proof_artifact_retained: false,
+        imports_external_result: false,
+        mutates_accepted_evidence_ledger: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        benchmark_evidence_created: false,
+        external_audit_claimed: false,
+        human_review_acceptance_claimed: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_hsai_formal_backend_acceleration_execution_packet_input(
+    source: &HsaiFormalBackendAccelerationPreflight,
+    input: &HsaiFormalBackendAccelerationExecutionPacketInput,
+) -> HsaiFormalBackendAccelerationExecutionPacketValidation {
+    let mut issues = Vec::new();
+    if input.schema_version != HSAI_FORMAL_BACKEND_ACCELERATION_EXECUTION_PACKET_SCHEMA_VERSION {
+        issues.push(HsaiFormalBackendAccelerationExecutionPacketIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.packet_id) {
+        issues.push(HsaiFormalBackendAccelerationExecutionPacketIssue::InvalidPacketId);
+    }
+    if !is_single_segment_id(&input.local_run_id) {
+        issues.push(HsaiFormalBackendAccelerationExecutionPacketIssue::InvalidLocalRunId);
+    }
+    if !is_single_segment_id(&input.packet_policy_id) {
+        issues.push(HsaiFormalBackendAccelerationExecutionPacketIssue::InvalidPacketPolicyId);
+    }
+    if !is_single_segment_id(&input.packet_decision_id) {
+        issues.push(HsaiFormalBackendAccelerationExecutionPacketIssue::InvalidPacketDecisionId);
+    }
+    if input.prepared_at_unix == 0 {
+        issues.push(HsaiFormalBackendAccelerationExecutionPacketIssue::MissingPreparedTimestamp);
+    }
+    if source.schema_version != HSAI_FORMAL_BACKEND_ACCELERATION_PREFLIGHT_SCHEMA_VERSION
+        || source.state_slice != HSAI_FORMAL_BACKEND_ACCELERATION_PREFLIGHT_STATE_SLICE
+        || source.classification
+            != HsaiFormalBackendAccelerationPreflightClassification::LocalPreflightMetadataRecorded
+        || source.claim_boundary != hsai_formal_backend_acceleration_preflight_claim_boundary()
+        || source.level_mapping != "Level1LocalReplayOrLower"
+        || source.backend_command_invoked
+        || source.proof_artifact_created
+        || source.checker_transcript_created
+        || source.solver_certificate_created
+        || source.imports_external_result
+        || source.mutates_accepted_evidence_ledger
+        || source.creates_accepted_evidence
+        || source.creates_level2_evidence
+        || source.populates_score_axes
+        || source.benchmark_evidence_created
+        || source.external_audit_claimed
+        || source.semantic_correctness_claimed
+        || source.production_readiness_claimed
+        || source.sota_claimed
+        || source.full_security_claimed
+        || source.grants_authority
+    {
+        issues
+            .push(HsaiFormalBackendAccelerationExecutionPacketIssue::SourcePreflightStateMismatch);
+    }
+    if input.source_preflight_digest != source.digest()
+        || input.source_preflight_state_slice != source.state_slice
+        || input.source_preflight_classification != source.classification
+        || input.lane_class != source.lane_class
+    {
+        issues.push(HsaiFormalBackendAccelerationExecutionPacketIssue::SourcePreflightMismatch);
+    }
+    if !is_single_segment_id(&input.tool_role_label) {
+        issues.push(HsaiFormalBackendAccelerationExecutionPacketIssue::InvalidToolRoleLabel);
+    }
+    if !is_single_segment_id(&input.expected_tool_family) {
+        issues.push(HsaiFormalBackendAccelerationExecutionPacketIssue::InvalidExpectedToolFamily);
+    }
+    if input.input_manifest_digest_set.is_empty() {
+        issues.push(HsaiFormalBackendAccelerationExecutionPacketIssue::MissingInputManifestDigest);
+    }
+    for (label, digest) in &input.input_manifest_digest_set {
+        if *digest == Hash([0; 32]) {
+            issues.push(
+                HsaiFormalBackendAccelerationExecutionPacketIssue::MissingDigest(label.clone()),
+            );
+        }
+    }
+    for (label, digest) in [
+        ("command_descriptor_digest", input.command_descriptor_digest),
+        (
+            "output_packet_schema_digest",
+            input.output_packet_schema_digest,
+        ),
+        (
+            "transcript_redaction_policy_digest",
+            input.transcript_redaction_policy_digest,
+        ),
+        (
+            "timeout_nondeterminism_policy_digest",
+            input.timeout_nondeterminism_policy_digest,
+        ),
+        (
+            "artifact_quarantine_policy_digest",
+            input.artifact_quarantine_policy_digest,
+        ),
+        ("replay_instruction_digest", input.replay_instruction_digest),
+    ] {
+        if digest == Hash([0; 32]) {
+            issues.push(
+                HsaiFormalBackendAccelerationExecutionPacketIssue::MissingDigest(label.to_owned()),
+            );
+        }
+    }
+    if input.status_vocabulary_digest
+        != hsai_formal_backend_acceleration_execution_packet_status_vocabulary_digest()
+    {
+        issues
+            .push(HsaiFormalBackendAccelerationExecutionPacketIssue::InvalidStatusVocabularyDigest);
+    }
+    let input_set_digest = hash_tagged(
+        "hsai-agent-admission:hsai-formal-backend-acceleration-execution-packet-input-manifest-set:v1",
+        &input.input_manifest_digest_set,
+    );
+    if input.nonpromotion_digest
+        != hsai_formal_backend_acceleration_execution_packet_nonpromotion_digest(
+            source.digest(),
+            input.command_descriptor_digest,
+            input_set_digest,
+            &input.status,
+        )
+    {
+        issues.push(HsaiFormalBackendAccelerationExecutionPacketIssue::InvalidNonpromotionDigest);
+    }
+    if input.level_mapping != "Level1LocalReplayOrLower" {
+        issues.push(HsaiFormalBackendAccelerationExecutionPacketIssue::InvalidLevelMapping);
+    }
+    let nonclaims = hsai_formal_backend_acceleration_execution_packet_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hsai_formal_backend_acceleration_execution_packet_nonclaim_digest(&nonclaims)
+    {
+        issues.push(HsaiFormalBackendAccelerationExecutionPacketIssue::NonclaimMismatch);
+    }
+    if input.status != HsaiFormalBackendAccelerationExecutionPacketStatus::NotRun {
+        issues.push(HsaiFormalBackendAccelerationExecutionPacketIssue::InvalidStatus);
+    }
+    if input.classification
+        != HsaiFormalBackendAccelerationExecutionPacketClassification::LocalExecutionPacketMetadataRecorded
+    {
+        issues.push(HsaiFormalBackendAccelerationExecutionPacketIssue::InvalidClassification);
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.packet_summary,
+    ) {
+        issues.push(HsaiFormalBackendAccelerationExecutionPacketIssue::PacketSummaryPromotionClaim);
+    }
+    if input.backend_command_invoked
+        || input.proof_artifact_created
+        || input.checker_transcript_created
+        || input.solver_certificate_created
+        || input.raw_transcript_retained
+        || input.raw_proof_artifact_retained
+        || input.imports_external_result
+        || input.mutates_accepted_evidence_ledger
+        || input.creates_accepted_evidence
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.benchmark_evidence_created
+        || input.external_audit_claimed
+        || input.human_review_acceptance_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(HsaiFormalBackendAccelerationExecutionPacketIssue::PromotionAttempt);
+    }
+
+    HsaiFormalBackendAccelerationExecutionPacketValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -168803,6 +169297,295 @@ mod tests {
     }
 
     #[test]
+    fn phase650_hsai_formal_backend_acceleration_execution_packet_records_notrun_metadata() {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            phase638_bundle_root,
+            source,
+        )) = phase650_hsai_formal_backend_acceleration_execution_packet_source("phase650-packet")
+        else {
+            return;
+        };
+        let input = phase650_hsai_formal_backend_acceleration_execution_packet_input(
+            "phase650-formal-backend-execution-packet",
+            &source,
+            HsaiFormalBackendAccelerationExecutionPacketStatus::NotRun,
+            HsaiFormalBackendAccelerationExecutionPacketLabel::ExecutionPacketRecorded,
+        );
+        let packet = build_hsai_formal_backend_acceleration_execution_packet(&source, &input)
+            .expect("phase650 execution-packet metadata builds");
+
+        assert_eq!(
+            packet.state_slice,
+            HSAI_FORMAL_BACKEND_ACCELERATION_EXECUTION_PACKET_STATE_SLICE
+        );
+        assert_eq!(packet.source_preflight_digest, source.digest());
+        assert_eq!(
+            packet.status,
+            HsaiFormalBackendAccelerationExecutionPacketStatus::NotRun
+        );
+        assert_eq!(
+            packet.classification,
+            HsaiFormalBackendAccelerationExecutionPacketClassification::LocalExecutionPacketMetadataRecorded
+        );
+        assert_eq!(packet.level_mapping, "Level1LocalReplayOrLower");
+        assert_eq!(packet.input_manifest_digest_set.len(), 2);
+        assert!(!packet.backend_command_invoked);
+        assert!(!packet.proof_artifact_created);
+        assert!(!packet.checker_transcript_created);
+        assert!(!packet.solver_certificate_created);
+        assert!(!packet.raw_transcript_retained);
+        assert!(!packet.raw_proof_artifact_retained);
+        assert!(!packet.imports_external_result);
+        assert!(!packet.mutates_accepted_evidence_ledger);
+        assert!(!packet.creates_accepted_evidence);
+        assert!(!packet.creates_level2_evidence);
+        assert!(!packet.populates_score_axes);
+        assert!(!packet.benchmark_evidence_created);
+        assert!(!packet.external_audit_claimed);
+        assert!(!packet.human_review_acceptance_claimed);
+        assert!(!packet.semantic_correctness_claimed);
+        assert!(!packet.production_readiness_claimed);
+        assert!(!packet.sota_claimed);
+        assert!(!packet.breakthrough_claimed);
+        assert!(!packet.full_security_claimed);
+        assert!(!packet.grants_authority);
+
+        for root in [
+            &phase638_bundle_root,
+            &phase595_bundle_root,
+            &bundle_root,
+            &capture_root,
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase650 packet cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase650_hsai_formal_backend_acceleration_execution_packet_rejects_source_drift() {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            phase638_bundle_root,
+            mut source,
+        )) = phase650_hsai_formal_backend_acceleration_execution_packet_source(
+            "phase650-source-drift",
+        )
+        else {
+            return;
+        };
+        let input = phase650_hsai_formal_backend_acceleration_execution_packet_input(
+            "phase650-source-drift-packet",
+            &source,
+            HsaiFormalBackendAccelerationExecutionPacketStatus::NotRun,
+            HsaiFormalBackendAccelerationExecutionPacketLabel::ExecutionPacketRejected,
+        );
+        source.backend_command_invoked = true;
+        let validation =
+            validate_hsai_formal_backend_acceleration_execution_packet_input(&source, &input);
+
+        assert!(!validation.valid);
+        assert!(validation.issues.contains(
+            &HsaiFormalBackendAccelerationExecutionPacketIssue::SourcePreflightStateMismatch
+        ));
+        assert!(validation
+            .issues
+            .contains(&HsaiFormalBackendAccelerationExecutionPacketIssue::SourcePreflightMismatch));
+        assert!(build_hsai_formal_backend_acceleration_execution_packet(&source, &input).is_err());
+
+        for root in [
+            &phase638_bundle_root,
+            &phase595_bundle_root,
+            &bundle_root,
+            &capture_root,
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase650 source drift cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase650_hsai_formal_backend_acceleration_execution_packet_rejects_missing_digest() {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            phase638_bundle_root,
+            source,
+        )) = phase650_hsai_formal_backend_acceleration_execution_packet_source(
+            "phase650-missing-digest",
+        )
+        else {
+            return;
+        };
+        let mut input = phase650_hsai_formal_backend_acceleration_execution_packet_input(
+            "phase650-missing-digest-packet",
+            &source,
+            HsaiFormalBackendAccelerationExecutionPacketStatus::NotRun,
+            HsaiFormalBackendAccelerationExecutionPacketLabel::ExecutionPacketRejected,
+        );
+        input.input_manifest_digest_set.clear();
+        input.command_descriptor_digest = Hash([0; 32]);
+        let validation =
+            validate_hsai_formal_backend_acceleration_execution_packet_input(&source, &input);
+
+        assert!(!validation.valid);
+        assert!(validation.issues.contains(
+            &HsaiFormalBackendAccelerationExecutionPacketIssue::MissingInputManifestDigest
+        ));
+        assert!(validation.issues.contains(
+            &HsaiFormalBackendAccelerationExecutionPacketIssue::MissingDigest(
+                "command_descriptor_digest".to_owned()
+            )
+        ));
+        assert!(validation.issues.contains(
+            &HsaiFormalBackendAccelerationExecutionPacketIssue::InvalidNonpromotionDigest
+        ));
+        assert!(build_hsai_formal_backend_acceleration_execution_packet(&source, &input).is_err());
+
+        for root in [
+            &phase638_bundle_root,
+            &phase595_bundle_root,
+            &bundle_root,
+            &capture_root,
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase650 missing digest cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase650_hsai_formal_backend_acceleration_execution_packet_rejects_run_status() {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            phase638_bundle_root,
+            source,
+        )) = phase650_hsai_formal_backend_acceleration_execution_packet_source(
+            "phase650-run-status",
+        )
+        else {
+            return;
+        };
+        let input = phase650_hsai_formal_backend_acceleration_execution_packet_input(
+            "phase650-run-status-packet",
+            &source,
+            HsaiFormalBackendAccelerationExecutionPacketStatus::RunObserved,
+            HsaiFormalBackendAccelerationExecutionPacketLabel::ExecutionPacketRejected,
+        );
+        let validation =
+            validate_hsai_formal_backend_acceleration_execution_packet_input(&source, &input);
+
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&HsaiFormalBackendAccelerationExecutionPacketIssue::InvalidStatus));
+        assert!(build_hsai_formal_backend_acceleration_execution_packet(&source, &input).is_err());
+
+        for root in [
+            &phase638_bundle_root,
+            &phase595_bundle_root,
+            &bundle_root,
+            &capture_root,
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase650 run status cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase650_hsai_formal_backend_acceleration_execution_packet_rejects_promotion_attempts() {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            phase638_bundle_root,
+            source,
+        )) = phase650_hsai_formal_backend_acceleration_execution_packet_source("phase650-promote")
+        else {
+            return;
+        };
+        let mut input = phase650_hsai_formal_backend_acceleration_execution_packet_input(
+            "phase650-promote-packet",
+            &source,
+            HsaiFormalBackendAccelerationExecutionPacketStatus::NotRun,
+            HsaiFormalBackendAccelerationExecutionPacketLabel::ExecutionPacketRejected,
+        );
+        input.classification =
+            HsaiFormalBackendAccelerationExecutionPacketClassification::LocalExecutionPacketMetadataRejected;
+        input.backend_command_invoked = true;
+        input.raw_transcript_retained = true;
+        input.creates_accepted_evidence = true;
+        input.creates_level2_evidence = true;
+        input.packet_summary =
+            "this formal backend execution packet creates accepted evidence and SOTA".to_owned();
+        let validation =
+            validate_hsai_formal_backend_acceleration_execution_packet_input(&source, &input);
+
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&HsaiFormalBackendAccelerationExecutionPacketIssue::InvalidClassification));
+        assert!(validation.issues.contains(
+            &HsaiFormalBackendAccelerationExecutionPacketIssue::PacketSummaryPromotionClaim
+        ));
+        assert!(validation
+            .issues
+            .contains(&HsaiFormalBackendAccelerationExecutionPacketIssue::PromotionAttempt));
+        assert!(build_hsai_formal_backend_acceleration_execution_packet(&source, &input).is_err());
+
+        for root in [
+            &phase638_bundle_root,
+            &phase595_bundle_root,
+            &bundle_root,
+            &capture_root,
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase650 promotion cleanup succeeds");
+        }
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -184268,6 +185051,152 @@ mod tests {
             populates_score_axes: false,
             benchmark_evidence_created: false,
             external_audit_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase650_hsai_formal_backend_acceleration_execution_packet_source(
+        source_prefix: &str,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        HsaiFormalBackendAccelerationPreflight,
+    )> {
+        let (
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            phase638_bundle_root,
+            resolution,
+        ) = phase648_hsai_formal_backend_acceleration_preflight_source(source_prefix)?;
+        let input = phase648_hsai_formal_backend_acceleration_preflight_input(
+            &format!("{source_prefix}-phase648-preflight"),
+            &resolution,
+            HsaiFormalBackendAccelerationLaneClass::CobaltContainmentPreflight,
+            HsaiFormalBackendAccelerationPreflightLabel::PreflightRecorded,
+        );
+        let preflight = build_hsai_formal_backend_acceleration_preflight(&resolution, &input)
+            .expect("phase650 source Phase 648 preflight metadata builds");
+        Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            phase638_bundle_root,
+            preflight,
+        ))
+    }
+
+    fn phase650_hsai_formal_backend_acceleration_execution_packet_input(
+        packet_id: &str,
+        source: &HsaiFormalBackendAccelerationPreflight,
+        status: HsaiFormalBackendAccelerationExecutionPacketStatus,
+        packet_label: HsaiFormalBackendAccelerationExecutionPacketLabel,
+    ) -> HsaiFormalBackendAccelerationExecutionPacketInput {
+        let nonclaims = hsai_formal_backend_acceleration_execution_packet_required_nonclaims();
+        let input_manifest_digest_set = BTreeMap::from([
+            ("phase648-preflight".to_owned(), source.digest()),
+            (
+                "phase648-hermetic-inputs".to_owned(),
+                source.hermetic_input_manifest_set_digest,
+            ),
+        ]);
+        let command_descriptor_digest = hash_tagged(
+            "hsai-agent-admission:phase650-command-descriptor:v1",
+            &"future-command-descriptor-not-invoked",
+        );
+        let input_manifest_digest_set_digest = hash_tagged(
+            "hsai-agent-admission:hsai-formal-backend-acceleration-execution-packet-input-manifest-set:v1",
+            &input_manifest_digest_set,
+        );
+        HsaiFormalBackendAccelerationExecutionPacketInput {
+            schema_version: HSAI_FORMAL_BACKEND_ACCELERATION_EXECUTION_PACKET_SCHEMA_VERSION
+                .to_owned(),
+            packet_id: packet_id.to_owned(),
+            local_run_id: "phase650-local-run".to_owned(),
+            packet_policy_id: "phase650-formal-backend-execution-packet-policy".to_owned(),
+            packet_decision_id: "phase650-formal-backend-execution-packet-decision".to_owned(),
+            prepared_at_unix: 1_800_000_650,
+            lane_class: source.lane_class.clone(),
+            source_preflight_digest: source.digest(),
+            source_preflight_state_slice: source.state_slice.clone(),
+            source_preflight_classification: source.classification.clone(),
+            tool_role_label: "future-tool-role".to_owned(),
+            expected_tool_family: "cobalt-containment".to_owned(),
+            command_descriptor_digest,
+            input_manifest_digest_set: input_manifest_digest_set.clone(),
+            output_packet_schema_digest: hash_tagged(
+                "hsai-agent-admission:phase650-output-packet-schema:v1",
+                &"future-output-packet-schema",
+            ),
+            transcript_redaction_policy_digest: hash_tagged(
+                "hsai-agent-admission:phase650-transcript-redaction-policy:v1",
+                &"digest-only-redacted-transcript-policy",
+            ),
+            status_vocabulary_digest:
+                hsai_formal_backend_acceleration_execution_packet_status_vocabulary_digest(),
+            timeout_nondeterminism_policy_digest: hash_tagged(
+                "hsai-agent-admission:phase650-timeout-nondeterminism-policy:v1",
+                &"timeout-and-nondeterminism-fail-closed",
+            ),
+            artifact_quarantine_policy_digest: hash_tagged(
+                "hsai-agent-admission:phase650-artifact-quarantine-policy:v1",
+                &"all-future-artifacts-quarantined-local-replay",
+            ),
+            replay_instruction_digest: hash_tagged(
+                "hsai-agent-admission:phase650-replay-instruction:v1",
+                &"future-replay-instructions-digest-only",
+            ),
+            nonpromotion_digest:
+                hsai_formal_backend_acceleration_execution_packet_nonpromotion_digest(
+                    source.digest(),
+                    command_descriptor_digest,
+                    input_manifest_digest_set_digest,
+                    &status,
+                ),
+            level_mapping: "Level1LocalReplayOrLower".to_owned(),
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest:
+                hsai_formal_backend_acceleration_execution_packet_nonclaim_digest(&nonclaims),
+            status,
+            classification:
+                HsaiFormalBackendAccelerationExecutionPacketClassification::LocalExecutionPacketMetadataRecorded,
+            packet_label,
+            packet_summary:
+                "local formal backend execution packet metadata recorded with NotRun status"
+                    .to_owned(),
+            backend_command_invoked: false,
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            raw_transcript_retained: false,
+            raw_proof_artifact_retained: false,
+            imports_external_result: false,
+            mutates_accepted_evidence_ledger: false,
+            creates_accepted_evidence: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            benchmark_evidence_created: false,
+            external_audit_claimed: false,
+            human_review_acceptance_claimed: false,
             semantic_correctness_claimed: false,
             production_readiness_claimed: false,
             sota_claimed: false,
