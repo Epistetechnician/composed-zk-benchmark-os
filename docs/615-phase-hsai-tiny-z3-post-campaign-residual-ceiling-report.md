@@ -11,12 +11,13 @@ metadata, add dependencies, add command runners, write generated artifacts,
 read raw transcripts, call network services, read credentials, import external
 results, mutate the accepted Evidence Ledger, accept independent external
 reproduction, create accepted formal evidence, create Level2+ evidence,
-populate score axes, run Lean, run SMT/Z3, run COBALT, run Rust-to-Lean
-extraction, create proof artifacts, create checker transcripts, create solver
-certificates, create benchmark evidence, record human-review acceptance, claim
-semantic correctness, claim production readiness, claim SOTA, claim
-breakthrough status, claim full security, claim external audit status, or
-grant authority to execute an action.
+populate score axes, run Lean, run COBALT, run Rust-to-Lean extraction, run
+SMT/Z3 outside the already bounded Phase 529/614 local verification path,
+create proof artifacts, create checker transcripts, create solver certificates,
+create benchmark evidence, record human-review acceptance, claim semantic
+correctness, claim production readiness, claim SOTA, claim breakthrough status,
+claim full security, claim external audit status, or grant authority to execute
+an action.
 
 ## What Changed
 
@@ -91,6 +92,23 @@ Until that boundary exists, the correct campaign state is:
 - do not claim formal proof, semantic correctness, production readiness, SOTA,
   or full security from the campaign.
 
+## Testing Acceleration Policy
+
+The SOTA pursuit should accelerate execution lanes, not relax claim promotion.
+
+Future phases should prefer high-throughput experimental lanes over broad claim
+language. A future local Z3/SMT, Lean, COBALT, Rust-to-Lean, or related formal
+backend lane may be added only when that lane has a named state slice,
+hermetic inputs, captured outputs, replay rules, failure taxonomy, provenance
+records, and negative promotion tests.
+
+Outputs from those lanes remain quarantined `LocalReplay` /
+`Level1LocalReplay` or lower unless a separate reviewed promotion phase accepts
+them. Tool execution alone does not create accepted evidence, Level2+
+evidence, score-axis population, benchmark evidence, proof authority,
+semantic-correctness claims, production-readiness claims, SOTA claims,
+full-security claims, or authority to execute actions.
+
 ## What Remains Blocked
 
 The repo remains a Level 1 local Rust foundation. It is not a deployable
@@ -160,3 +178,8 @@ Do not deploy.
 Do not widen beyond the current Phase 614 two-obligation local campaign until a
 new docs-first boundary justifies a larger local campaign and preserves the
 `Level1LocalReplay` ceiling.
+
+When a future boundary does justify expansion, optimize for fast quarantined
+testing and strict promotion gates: run the strongest local tests early, record
+the results with provenance, and promote only through explicit accepted-evidence
+review.
