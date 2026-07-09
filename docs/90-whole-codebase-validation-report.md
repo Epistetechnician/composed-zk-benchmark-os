@@ -9486,11 +9486,15 @@ branch-score labels, selected/rejected decisions, backward-verification
 findings, required branch-scoring report sections, operator transcript boundary
 and import-candidate checks, future DeepProve receipt refs, quarantined receipt
 import-candidate checks, reviewed receipt policy limits, and advisory admission
-bridge metadata. It validates candidate count and horizon bounds, selected
-candidate membership, selected context digest binding, prompt/baseline digest
-presence, backward-verifier output binding, operator transcript quarantine
-constraints, receipt status vocabulary, reviewed receipt policy exactness,
-nonclaims, nonpromotion digests, and no authority grant. It performs no live LLM
+bridge metadata. It also adds a fixture-only replay builder that accepts
+digest-bound toy candidates, deterministically selects the first `Selected`
+branch from the ordered fixture map, constructs a normal Phase 651 report input,
+and reuses the report validator. It validates candidate count and horizon
+bounds, selected candidate membership, selected context digest binding,
+prompt/baseline digest presence, backward-verifier output binding, operator
+transcript quarantine constraints, receipt status vocabulary, reviewed receipt
+policy exactness, fixture schema exactness, nonclaims, nonpromotion digests, and
+no authority grant. It performs no live LLM
 generation, clones or vendors no DeepProve source, runs no DeepProve or zkML
 execution, generates no proof artifact, retains no raw transcript, imports no
 external result, mutates no accepted Evidence Ledger, creates no accepted
@@ -9512,6 +9516,20 @@ Level2+ evidence, populates no score axes, creates no benchmark evidence, and
 claims no production/SOTA/security/semantic-correctness result. Focused
 validation target:
 `cargo test -p hsai-agent-admission --lib phase653_hsai_tiny_z3_extension_local_execution_observation -- --nocapture`.
+
+[docs/654-phase-hsai-responsible-pre-execution-architecture-closure.md](docs/654-phase-hsai-responsible-pre-execution-architecture-closure.md)
+documents the Phase 654 docs-only responsible pre-execution architecture
+closure. It consolidates Phase 647 lane boundaries, Phase 648 preflight
+metadata, Phase 649 execution-packet boundary, Phase 650 execution-packet
+metadata, Phase 651-A through 651-K DeepProve/lookahead metadata, and Phase
+653 tiny-Z3 observation binding into one stop-rule and readiness record. It
+states that the architecture phase is closed and that any next backend step
+must be a narrow execution-boundary phase naming one target property and one
+backend lane. It runs no backend, creates no proof artifact, creates no checker
+transcript or solver certificate, imports no external result, mutates no
+accepted Evidence Ledger, creates no accepted evidence, creates no Level2+
+evidence, populates no score axes, creates no benchmark evidence, and claims no
+production/SOTA/security/semantic-correctness result.
 
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
