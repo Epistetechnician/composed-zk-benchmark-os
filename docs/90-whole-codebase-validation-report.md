@@ -9418,5 +9418,20 @@ Evidence Ledger, creates no accepted evidence, creates no Level2+ evidence,
 populates no score axes, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
 
+[docs/648-phase-hsai-formal-backend-acceleration-preflight-metadata-notes.md](docs/648-phase-hsai-formal-backend-acceleration-preflight-metadata-notes.md)
+documents the Phase 648 local formal backend acceleration preflight metadata
+implementation. It adds lane-class/input/output/classification/label/validation
+types, Phase 646 source binding, hermetic input manifest requirements,
+expected command-role and output-schema digests, declared output-root,
+replay-rule, failure-taxonomy, provenance, negative-promotion digests,
+Level1-or-lower mapping, and focused tests for valid metadata, source drift,
+missing hermetic/provenance data, and promotion attempts. It runs no
+Lean/SMT/Z3/COBALT/Rust-to-Lean backend, generates no proof artifacts, imports
+no external result, mutates no accepted Evidence Ledger, creates no accepted
+evidence, creates no Level2+ evidence, populates no score axes, creates no
+benchmark evidence, and claims no production/SOTA/security/semantic-correctness
+result. Focused validation passed with
+`cargo test -p hsai-agent-admission --lib phase648_hsai_formal_backend_acceleration_preflight -- --nocapture`.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

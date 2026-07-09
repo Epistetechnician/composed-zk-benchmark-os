@@ -1340,6 +1340,11 @@ pub const GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEP
 pub const GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_POLICY_RESOLUTION_STATE_SLICE:
     &str = "phase-646-hsai-tiny-z3-backend-execution-packet-role-artifact-independent-operator-accepted-result-output-policy-resolution-metadata";
 pub const GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_POLICY_RESOLUTION_CLAIM_BOUNDARY: &str = "local tiny-Z3 packet role artifact independent-operator accepted-result output policy-resolution metadata only; records one Phase 644 evidence eligibility metadata record as still blocked by missing independent external reproduction and accepted external result evidence, but does not import external results, mutate the accepted Evidence Ledger, accept independent external reproduction, create accepted formal evidence, create Level2+ evidence, populate score axes, generate proof artifacts, generate checker transcripts, generate solver certificates, run Lean, run another SMT/Z3 execution, run COBALT, run Rust-to-Lean extraction, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, or grant authority to execute an action.";
+pub const HSAI_FORMAL_BACKEND_ACCELERATION_PREFLIGHT_SCHEMA_VERSION: &str =
+    "hsai-formal-backend-acceleration-preflight:v1";
+pub const HSAI_FORMAL_BACKEND_ACCELERATION_PREFLIGHT_STATE_SLICE: &str =
+    "phase-648-hsai-formal-backend-acceleration-preflight-metadata";
+pub const HSAI_FORMAL_BACKEND_ACCELERATION_PREFLIGHT_CLAIM_BOUNDARY: &str = "local HSAI formal backend acceleration preflight metadata only; binds one Phase 646 blocked accepted-result output policy-resolution record to hermetic input, expected command-role, expected output schema, declared output-root, replay-rule, failure-taxonomy, provenance, and negative-promotion digests for a future local Lean/SMT/COBALT/Rust-to-Lean lane, but does not invoke a backend command, generate proof artifacts, generate checker transcripts, generate solver certificates, import external results, mutate the accepted Evidence Ledger, create accepted formal evidence, create Level2+ evidence, populate score axes, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, or grant authority to execute an action.";
 pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_NAMESPACE: &str =
     "gateway-formal-tiny-z3-independent-external-operator-result";
 pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_DECLARED_FILES: [&str; 8] = [
@@ -26936,6 +26941,166 @@ pub struct GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResul
     pub issues: Vec<
         GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPolicyResolutionIssue,
     >,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiFormalBackendAccelerationLaneClass {
+    TinyZ3ReplayExtension,
+    LeanRepositoryScalePreflight,
+    CobaltContainmentPreflight,
+    RustToLeanExtractionPreflight,
+    FederatedProofDispatchPreflight,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiFormalBackendAccelerationPreflightClassification {
+    LocalPreflightMetadataRecorded,
+    LocalPreflightMetadataRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiFormalBackendAccelerationPreflightLabel {
+    PreflightRecorded,
+    PreflightRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiFormalBackendAccelerationPreflightInput {
+    pub schema_version: String,
+    pub preflight_id: String,
+    pub lane_policy_id: String,
+    pub preflight_decision_id: String,
+    pub prepared_at_unix: u64,
+    pub lane_class: HsaiFormalBackendAccelerationLaneClass,
+    pub source_policy_resolution_digest: Hash,
+    pub source_policy_resolution_state_slice: String,
+    pub source_policy_resolution_classification:
+        GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPolicyResolutionClassification,
+    pub hermetic_input_manifest_digests: BTreeMap<String, Hash>,
+    pub expected_command_role_digest: Hash,
+    pub expected_output_schema_digest: Hash,
+    pub declared_output_root_digest: Hash,
+    pub replay_rules_digest: Hash,
+    pub failure_taxonomy_digest: Hash,
+    pub provenance_requirements_digest: Hash,
+    pub negative_promotion_requirements_digest: Hash,
+    pub level_mapping: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub classification: HsaiFormalBackendAccelerationPreflightClassification,
+    pub preflight_label: HsaiFormalBackendAccelerationPreflightLabel,
+    pub preflight_summary: String,
+    pub backend_command_invoked: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub imports_external_result: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl HsaiFormalBackendAccelerationPreflightInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-formal-backend-acceleration-preflight-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiFormalBackendAccelerationPreflight {
+    pub schema_version: String,
+    pub state_slice: String,
+    pub preflight_id: String,
+    pub preflight_input_digest: Hash,
+    pub lane_policy_id: String,
+    pub preflight_decision_id: String,
+    pub prepared_at_unix: u64,
+    pub lane_class: HsaiFormalBackendAccelerationLaneClass,
+    pub source_policy_resolution_digest: Hash,
+    pub source_policy_resolution_input_digest: Hash,
+    pub source_policy_resolution_policy_digest: Hash,
+    pub source_policy_resolution_nonpromotion_digest: Hash,
+    pub source_policy_resolution_state_slice: String,
+    pub source_policy_resolution_classification:
+        GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPolicyResolutionClassification,
+    pub hermetic_input_manifest_digests: BTreeMap<String, Hash>,
+    pub hermetic_input_manifest_set_digest: Hash,
+    pub expected_command_role_digest: Hash,
+    pub expected_output_schema_digest: Hash,
+    pub declared_output_root_digest: Hash,
+    pub replay_rules_digest: Hash,
+    pub failure_taxonomy_digest: Hash,
+    pub provenance_requirements_digest: Hash,
+    pub negative_promotion_requirements_digest: Hash,
+    pub level_mapping: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub classification: HsaiFormalBackendAccelerationPreflightClassification,
+    pub preflight_label: HsaiFormalBackendAccelerationPreflightLabel,
+    pub preflight_summary: String,
+    pub claim_boundary: String,
+    pub backend_command_invoked: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub imports_external_result: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl HsaiFormalBackendAccelerationPreflight {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-formal-backend-acceleration-preflight:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiFormalBackendAccelerationPreflightIssue {
+    InvalidSchemaVersion,
+    InvalidPreflightId,
+    InvalidLanePolicyId,
+    InvalidPreflightDecisionId,
+    MissingPreparedTimestamp,
+    SourcePolicyResolutionMismatch,
+    SourcePolicyResolutionStateMismatch,
+    MissingHermeticInputManifest,
+    MissingDigest(String),
+    InvalidLevelMapping,
+    NonclaimMismatch,
+    InvalidClassification,
+    PreflightSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiFormalBackendAccelerationPreflightValidation {
+    pub valid: bool,
+    pub issues: Vec<HsaiFormalBackendAccelerationPreflightIssue>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -116736,6 +116901,252 @@ impl
     }
 }
 
+pub fn hsai_formal_backend_acceleration_preflight_claim_boundary() -> String {
+    HSAI_FORMAL_BACKEND_ACCELERATION_PREFLIGHT_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn hsai_formal_backend_acceleration_preflight_required_nonclaims() -> BTreeSet<NonClaimLabel> {
+    BTreeSet::from([
+        NonClaimLabel("not backend execution".to_owned()),
+        NonClaimLabel("not Lean execution".to_owned()),
+        NonClaimLabel("not SMT/Z3 execution".to_owned()),
+        NonClaimLabel("not COBALT execution".to_owned()),
+        NonClaimLabel("not Rust-to-Lean extraction".to_owned()),
+        NonClaimLabel("not proof artifact".to_owned()),
+        NonClaimLabel("not checker transcript".to_owned()),
+        NonClaimLabel("not solver certificate".to_owned()),
+        NonClaimLabel("not accepted evidence".to_owned()),
+        NonClaimLabel("not Level2+ evidence".to_owned()),
+        NonClaimLabel("not score-axis population".to_owned()),
+        NonClaimLabel("not benchmark evidence".to_owned()),
+        NonClaimLabel("not semantic correctness".to_owned()),
+        NonClaimLabel("not production readiness".to_owned()),
+        NonClaimLabel("not SOTA status".to_owned()),
+        NonClaimLabel("not breakthrough status".to_owned()),
+        NonClaimLabel("not full security".to_owned()),
+        NonClaimLabel("not authority to execute an action".to_owned()),
+    ])
+}
+
+pub fn hsai_formal_backend_acceleration_preflight_nonclaim_digest(
+    nonclaims: &BTreeSet<NonClaimLabel>,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-formal-backend-acceleration-preflight-nonclaims:v1",
+        nonclaims,
+    )
+}
+
+pub fn build_hsai_formal_backend_acceleration_preflight(
+    source: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPolicyResolution,
+    input: &HsaiFormalBackendAccelerationPreflightInput,
+) -> Result<HsaiFormalBackendAccelerationPreflight, HsaiFormalBackendAccelerationPreflightValidation>
+{
+    let validation = validate_hsai_formal_backend_acceleration_preflight_input(source, input);
+    if !validation.valid {
+        return Err(validation);
+    }
+
+    Ok(HsaiFormalBackendAccelerationPreflight {
+        schema_version: HSAI_FORMAL_BACKEND_ACCELERATION_PREFLIGHT_SCHEMA_VERSION.to_owned(),
+        state_slice: HSAI_FORMAL_BACKEND_ACCELERATION_PREFLIGHT_STATE_SLICE.to_owned(),
+        preflight_id: input.preflight_id.clone(),
+        preflight_input_digest: input.digest(),
+        lane_policy_id: input.lane_policy_id.clone(),
+        preflight_decision_id: input.preflight_decision_id.clone(),
+        prepared_at_unix: input.prepared_at_unix,
+        lane_class: input.lane_class.clone(),
+        source_policy_resolution_digest: source.digest(),
+        source_policy_resolution_input_digest: source.resolution_input_digest,
+        source_policy_resolution_policy_digest: source.resolution_policy_digest,
+        source_policy_resolution_nonpromotion_digest: source.resolution_nonpromotion_digest,
+        source_policy_resolution_state_slice: source.state_slice.clone(),
+        source_policy_resolution_classification: source.classification.clone(),
+        hermetic_input_manifest_digests: input.hermetic_input_manifest_digests.clone(),
+        hermetic_input_manifest_set_digest: hash_tagged(
+            "hsai-agent-admission:hsai-formal-backend-acceleration-preflight-hermetic-input-manifest-set:v1",
+            &input.hermetic_input_manifest_digests,
+        ),
+        expected_command_role_digest: input.expected_command_role_digest,
+        expected_output_schema_digest: input.expected_output_schema_digest,
+        declared_output_root_digest: input.declared_output_root_digest,
+        replay_rules_digest: input.replay_rules_digest,
+        failure_taxonomy_digest: input.failure_taxonomy_digest,
+        provenance_requirements_digest: input.provenance_requirements_digest,
+        negative_promotion_requirements_digest: input.negative_promotion_requirements_digest,
+        level_mapping: input.level_mapping.clone(),
+        explicit_nonclaims: input.explicit_nonclaims.clone(),
+        explicit_nonclaims_digest: input.explicit_nonclaims_digest,
+        classification: input.classification.clone(),
+        preflight_label: input.preflight_label.clone(),
+        preflight_summary: input.preflight_summary.clone(),
+        claim_boundary: hsai_formal_backend_acceleration_preflight_claim_boundary(),
+        backend_command_invoked: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        imports_external_result: false,
+        mutates_accepted_evidence_ledger: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        benchmark_evidence_created: false,
+        external_audit_claimed: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_hsai_formal_backend_acceleration_preflight_input(
+    source: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPolicyResolution,
+    input: &HsaiFormalBackendAccelerationPreflightInput,
+) -> HsaiFormalBackendAccelerationPreflightValidation {
+    let mut issues = Vec::new();
+    if input.schema_version != HSAI_FORMAL_BACKEND_ACCELERATION_PREFLIGHT_SCHEMA_VERSION {
+        issues.push(HsaiFormalBackendAccelerationPreflightIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.preflight_id) {
+        issues.push(HsaiFormalBackendAccelerationPreflightIssue::InvalidPreflightId);
+    }
+    if !is_single_segment_id(&input.lane_policy_id) {
+        issues.push(HsaiFormalBackendAccelerationPreflightIssue::InvalidLanePolicyId);
+    }
+    if !is_single_segment_id(&input.preflight_decision_id) {
+        issues.push(HsaiFormalBackendAccelerationPreflightIssue::InvalidPreflightDecisionId);
+    }
+    if input.prepared_at_unix == 0 {
+        issues.push(HsaiFormalBackendAccelerationPreflightIssue::MissingPreparedTimestamp);
+    }
+    if source.schema_version
+        != GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_POLICY_RESOLUTION_SCHEMA_VERSION
+        || source.state_slice
+            != GATEWAY_FORMAL_TINY_Z3_PACKET_ROLE_ARTIFACT_INDEPENDENT_OPERATOR_ACCEPTED_RESULT_OUTPUT_POLICY_RESOLUTION_STATE_SLICE
+        || source.classification
+            != GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPolicyResolutionClassification::PacketRoleArtifactIndependentOperatorAcceptedResultOutputPolicyResolutionBlocked
+        || source.claim_boundary
+            != gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_policy_resolution_claim_boundary()
+        || source.imports_external_result
+        || source.creates_accepted_external_result_evidence
+        || source.mutates_accepted_evidence_ledger
+        || source.creates_accepted_formal_evidence
+        || source.creates_level2_evidence
+        || source.populates_score_axes
+        || source.proof_artifact_created
+        || source.checker_transcript_created
+        || source.solver_certificate_created
+        || source.lean_execution_evidence_created
+        || source.additional_smt_z3_execution_created
+        || source.cobalt_execution_evidence_created
+        || source.rust_to_lean_execution_evidence_created
+        || source.backend_execution_evidence_created
+        || source.benchmark_evidence_created
+        || source.semantic_correctness_claimed
+        || source.production_readiness_claimed
+        || source.sota_claimed
+        || source.full_security_claimed
+        || source.grants_authority
+    {
+        issues.push(
+            HsaiFormalBackendAccelerationPreflightIssue::SourcePolicyResolutionStateMismatch,
+        );
+    }
+    if input.source_policy_resolution_digest != source.digest()
+        || input.source_policy_resolution_state_slice != source.state_slice
+        || input.source_policy_resolution_classification != source.classification
+    {
+        issues.push(HsaiFormalBackendAccelerationPreflightIssue::SourcePolicyResolutionMismatch);
+    }
+    if input.hermetic_input_manifest_digests.is_empty() {
+        issues.push(HsaiFormalBackendAccelerationPreflightIssue::MissingHermeticInputManifest);
+    }
+    for (label, digest) in &input.hermetic_input_manifest_digests {
+        if *digest == Hash([0; 32]) {
+            issues.push(HsaiFormalBackendAccelerationPreflightIssue::MissingDigest(
+                label.clone(),
+            ));
+        }
+    }
+    for (label, digest) in [
+        (
+            "expected_command_role_digest",
+            input.expected_command_role_digest,
+        ),
+        (
+            "expected_output_schema_digest",
+            input.expected_output_schema_digest,
+        ),
+        (
+            "declared_output_root_digest",
+            input.declared_output_root_digest,
+        ),
+        ("replay_rules_digest", input.replay_rules_digest),
+        ("failure_taxonomy_digest", input.failure_taxonomy_digest),
+        (
+            "provenance_requirements_digest",
+            input.provenance_requirements_digest,
+        ),
+        (
+            "negative_promotion_requirements_digest",
+            input.negative_promotion_requirements_digest,
+        ),
+    ] {
+        if digest == Hash([0; 32]) {
+            issues.push(HsaiFormalBackendAccelerationPreflightIssue::MissingDigest(
+                label.to_owned(),
+            ));
+        }
+    }
+    if input.level_mapping != "Level1LocalReplayOrLower" {
+        issues.push(HsaiFormalBackendAccelerationPreflightIssue::InvalidLevelMapping);
+    }
+    let nonclaims = hsai_formal_backend_acceleration_preflight_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hsai_formal_backend_acceleration_preflight_nonclaim_digest(&nonclaims)
+    {
+        issues.push(HsaiFormalBackendAccelerationPreflightIssue::NonclaimMismatch);
+    }
+    if input.classification
+        != HsaiFormalBackendAccelerationPreflightClassification::LocalPreflightMetadataRecorded
+    {
+        issues.push(HsaiFormalBackendAccelerationPreflightIssue::InvalidClassification);
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.preflight_summary,
+    ) {
+        issues.push(HsaiFormalBackendAccelerationPreflightIssue::PreflightSummaryPromotionClaim);
+    }
+    if input.backend_command_invoked
+        || input.proof_artifact_created
+        || input.checker_transcript_created
+        || input.solver_certificate_created
+        || input.imports_external_result
+        || input.mutates_accepted_evidence_ledger
+        || input.creates_accepted_evidence
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.benchmark_evidence_created
+        || input.external_audit_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(HsaiFormalBackendAccelerationPreflightIssue::PromotionAttempt);
+    }
+
+    HsaiFormalBackendAccelerationPreflightValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -168163,6 +168574,235 @@ mod tests {
     }
 
     #[test]
+    fn phase648_hsai_formal_backend_acceleration_preflight_records_local_metadata() {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            phase638_bundle_root,
+            source,
+        )) = phase648_hsai_formal_backend_acceleration_preflight_source("phase648-preflight")
+        else {
+            return;
+        };
+        let input = phase648_hsai_formal_backend_acceleration_preflight_input(
+            "phase648-formal-backend-acceleration-preflight",
+            &source,
+            HsaiFormalBackendAccelerationLaneClass::CobaltContainmentPreflight,
+            HsaiFormalBackendAccelerationPreflightLabel::PreflightRecorded,
+        );
+        let preflight = build_hsai_formal_backend_acceleration_preflight(&source, &input)
+            .expect("phase648 formal backend acceleration preflight metadata builds");
+
+        assert_eq!(
+            preflight.state_slice,
+            HSAI_FORMAL_BACKEND_ACCELERATION_PREFLIGHT_STATE_SLICE
+        );
+        assert_eq!(preflight.source_policy_resolution_digest, source.digest());
+        assert_eq!(
+            preflight.source_policy_resolution_classification,
+            GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPolicyResolutionClassification::PacketRoleArtifactIndependentOperatorAcceptedResultOutputPolicyResolutionBlocked
+        );
+        assert_eq!(
+            preflight.classification,
+            HsaiFormalBackendAccelerationPreflightClassification::LocalPreflightMetadataRecorded
+        );
+        assert_eq!(preflight.level_mapping, "Level1LocalReplayOrLower");
+        assert_eq!(preflight.hermetic_input_manifest_digests.len(), 2);
+        assert!(!preflight.backend_command_invoked);
+        assert!(!preflight.proof_artifact_created);
+        assert!(!preflight.checker_transcript_created);
+        assert!(!preflight.solver_certificate_created);
+        assert!(!preflight.imports_external_result);
+        assert!(!preflight.mutates_accepted_evidence_ledger);
+        assert!(!preflight.creates_accepted_evidence);
+        assert!(!preflight.creates_level2_evidence);
+        assert!(!preflight.populates_score_axes);
+        assert!(!preflight.benchmark_evidence_created);
+        assert!(!preflight.external_audit_claimed);
+        assert!(!preflight.semantic_correctness_claimed);
+        assert!(!preflight.production_readiness_claimed);
+        assert!(!preflight.sota_claimed);
+        assert!(!preflight.breakthrough_claimed);
+        assert!(!preflight.full_security_claimed);
+        assert!(!preflight.grants_authority);
+
+        for root in [
+            &phase638_bundle_root,
+            &phase595_bundle_root,
+            &bundle_root,
+            &capture_root,
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase648 preflight cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase648_hsai_formal_backend_acceleration_preflight_rejects_source_drift() {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            phase638_bundle_root,
+            mut source,
+        )) = phase648_hsai_formal_backend_acceleration_preflight_source("phase648-source-drift")
+        else {
+            return;
+        };
+        let input = phase648_hsai_formal_backend_acceleration_preflight_input(
+            "phase648-source-drift-preflight",
+            &source,
+            HsaiFormalBackendAccelerationLaneClass::TinyZ3ReplayExtension,
+            HsaiFormalBackendAccelerationPreflightLabel::PreflightRejected,
+        );
+        source.backend_execution_evidence_created = true;
+        let validation = validate_hsai_formal_backend_acceleration_preflight_input(&source, &input);
+
+        assert!(!validation.valid);
+        assert!(validation.issues.contains(
+            &HsaiFormalBackendAccelerationPreflightIssue::SourcePolicyResolutionStateMismatch
+        ));
+        assert!(validation.issues.contains(
+            &HsaiFormalBackendAccelerationPreflightIssue::SourcePolicyResolutionMismatch
+        ));
+        assert!(build_hsai_formal_backend_acceleration_preflight(&source, &input).is_err());
+
+        for root in [
+            &phase638_bundle_root,
+            &phase595_bundle_root,
+            &bundle_root,
+            &capture_root,
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase648 source drift cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase648_hsai_formal_backend_acceleration_preflight_rejects_missing_digests() {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            phase638_bundle_root,
+            source,
+        )) = phase648_hsai_formal_backend_acceleration_preflight_source("phase648-missing-digests")
+        else {
+            return;
+        };
+        let mut input = phase648_hsai_formal_backend_acceleration_preflight_input(
+            "phase648-missing-digests-preflight",
+            &source,
+            HsaiFormalBackendAccelerationLaneClass::LeanRepositoryScalePreflight,
+            HsaiFormalBackendAccelerationPreflightLabel::PreflightRejected,
+        );
+        input.hermetic_input_manifest_digests.clear();
+        input.provenance_requirements_digest = Hash([0; 32]);
+        let validation = validate_hsai_formal_backend_acceleration_preflight_input(&source, &input);
+
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&HsaiFormalBackendAccelerationPreflightIssue::MissingHermeticInputManifest));
+        assert!(validation.issues.contains(
+            &HsaiFormalBackendAccelerationPreflightIssue::MissingDigest(
+                "provenance_requirements_digest".to_owned()
+            )
+        ));
+        assert!(build_hsai_formal_backend_acceleration_preflight(&source, &input).is_err());
+
+        for root in [
+            &phase638_bundle_root,
+            &phase595_bundle_root,
+            &bundle_root,
+            &capture_root,
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase648 missing digest cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase648_hsai_formal_backend_acceleration_preflight_rejects_promotion_attempts() {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            phase638_bundle_root,
+            source,
+        )) = phase648_hsai_formal_backend_acceleration_preflight_source("phase648-promote")
+        else {
+            return;
+        };
+        let mut input = phase648_hsai_formal_backend_acceleration_preflight_input(
+            "phase648-promote-preflight",
+            &source,
+            HsaiFormalBackendAccelerationLaneClass::RustToLeanExtractionPreflight,
+            HsaiFormalBackendAccelerationPreflightLabel::PreflightRejected,
+        );
+        input.classification =
+            HsaiFormalBackendAccelerationPreflightClassification::LocalPreflightMetadataRejected;
+        input.backend_command_invoked = true;
+        input.creates_accepted_evidence = true;
+        input.creates_level2_evidence = true;
+        input.preflight_summary =
+            "this formal backend acceleration preflight creates accepted evidence and SOTA"
+                .to_owned();
+        let validation = validate_hsai_formal_backend_acceleration_preflight_input(&source, &input);
+
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&HsaiFormalBackendAccelerationPreflightIssue::InvalidClassification));
+        assert!(validation.issues.contains(
+            &HsaiFormalBackendAccelerationPreflightIssue::PreflightSummaryPromotionClaim
+        ));
+        assert!(validation
+            .issues
+            .contains(&HsaiFormalBackendAccelerationPreflightIssue::PromotionAttempt));
+        assert!(build_hsai_formal_backend_acceleration_preflight(&source, &input).is_err());
+
+        for root in [
+            &phase638_bundle_root,
+            &phase595_bundle_root,
+            &bundle_root,
+            &capture_root,
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase648 promotion cleanup succeeds");
+        }
+    }
+
+    #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
             execution_root,
@@ -183488,6 +184128,146 @@ mod tests {
             backend_execution_evidence_created: false,
             benchmark_evidence_created: false,
             external_audit_evidence_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase648_hsai_formal_backend_acceleration_preflight_source(
+        source_prefix: &str,
+    ) -> Option<(
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        PathBuf,
+        GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPolicyResolution,
+    )>{
+        let (
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            phase638_bundle_root,
+            eligibility,
+        ) = phase646_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_policy_resolution_source(
+            source_prefix,
+        )?;
+        let input =
+            phase646_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_policy_resolution_input(
+                &format!("{source_prefix}-phase646-resolution"),
+                &eligibility,
+                GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPolicyResolutionLabel::PacketRoleArtifactIndependentOperatorAcceptedResultOutputPolicyResolutionRecorded,
+            );
+        let resolution =
+            build_gateway_formal_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_policy_resolution(
+                &eligibility,
+                &input,
+            )
+            .expect("phase648 source Phase 646 policy-resolution metadata builds");
+        Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            phase638_bundle_root,
+            resolution,
+        ))
+    }
+
+    fn phase648_hsai_formal_backend_acceleration_preflight_input(
+        preflight_id: &str,
+        source: &GatewayFormalTinyZ3PacketRoleArtifactIndependentOperatorAcceptedResultOutputPolicyResolution,
+        lane_class: HsaiFormalBackendAccelerationLaneClass,
+        preflight_label: HsaiFormalBackendAccelerationPreflightLabel,
+    ) -> HsaiFormalBackendAccelerationPreflightInput {
+        let nonclaims = hsai_formal_backend_acceleration_preflight_required_nonclaims();
+        HsaiFormalBackendAccelerationPreflightInput {
+            schema_version: HSAI_FORMAL_BACKEND_ACCELERATION_PREFLIGHT_SCHEMA_VERSION.to_owned(),
+            preflight_id: preflight_id.to_owned(),
+            lane_policy_id: "phase648-formal-backend-acceleration-preflight-policy".to_owned(),
+            preflight_decision_id:
+                "phase648-formal-backend-acceleration-preflight-decision".to_owned(),
+            prepared_at_unix: 1_800_000_648,
+            lane_class,
+            source_policy_resolution_digest: source.digest(),
+            source_policy_resolution_state_slice: source.state_slice.clone(),
+            source_policy_resolution_classification: source.classification.clone(),
+            hermetic_input_manifest_digests: BTreeMap::from([
+                (
+                    "phase646-policy-resolution".to_owned(),
+                    source.digest(),
+                ),
+                (
+                    "phase647-boundary".to_owned(),
+                    hash_tagged(
+                        "hsai-agent-admission:phase647-formal-backend-acceleration-boundary:v1",
+                        &HSAI_FORMAL_BACKEND_ACCELERATION_PREFLIGHT_STATE_SLICE,
+                    ),
+                ),
+            ]),
+            expected_command_role_digest: hash_tagged(
+                "hsai-agent-admission:phase648-expected-command-role:v1",
+                &"future-command-role-not-invoked",
+            ),
+            expected_output_schema_digest: hash_tagged(
+                "hsai-agent-admission:phase648-expected-output-schema:v1",
+                &"future-local-preflight-output-schema",
+            ),
+            declared_output_root_digest: hash_tagged(
+                "hsai-agent-admission:phase648-declared-output-root:v1",
+                &"no-output-root-written-in-phase648",
+            ),
+            replay_rules_digest: hash_tagged(
+                "hsai-agent-admission:phase648-replay-rules:v1",
+                &"deterministic-local-replay-rules-required-before-execution",
+            ),
+            failure_taxonomy_digest: hash_tagged(
+                "hsai-agent-admission:phase648-failure-taxonomy:v1",
+                &"missing-tool-invalid-input-checker-failure-solver-unknown-timeout-nondeterminism-transcript-mismatch",
+            ),
+            provenance_requirements_digest: hash_tagged(
+                "hsai-agent-admission:phase648-provenance-requirements:v1",
+                &"tool-version-command-input-output-transcript-digests-required",
+            ),
+            negative_promotion_requirements_digest: hash_tagged(
+                "hsai-agent-admission:phase648-negative-promotion-requirements:v1",
+                &"reject-accepted-evidence-level2-score-axis-semantic-production-sota-security-authority",
+            ),
+            level_mapping: "Level1LocalReplayOrLower".to_owned(),
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest:
+                hsai_formal_backend_acceleration_preflight_nonclaim_digest(&nonclaims),
+            classification:
+                HsaiFormalBackendAccelerationPreflightClassification::LocalPreflightMetadataRecorded,
+            preflight_label,
+            preflight_summary:
+                "local formal backend acceleration preflight metadata prepared without backend execution"
+                    .to_owned(),
+            backend_command_invoked: false,
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            imports_external_result: false,
+            mutates_accepted_evidence_ledger: false,
+            creates_accepted_evidence: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            benchmark_evidence_created: false,
+            external_audit_claimed: false,
             semantic_correctness_claimed: false,
             production_readiness_claimed: false,
             sota_claimed: false,
