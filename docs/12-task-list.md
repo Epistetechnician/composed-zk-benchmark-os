@@ -18364,6 +18364,37 @@ mutation, no accepted evidence, no Level2+ evidence, no populated score axes,
 no benchmark evidence, no external-audit claim, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 649 HSAI Formal Backend Acceleration Execution Packet Boundary
+
+Status: complete for docs-first formal backend acceleration execution-packet
+boundary. See
+`docs/649-phase-hsai-formal-backend-acceleration-execution-packet-boundary.md`.
+
+Goal: define the future local execution-packet metadata boundary over one exact
+Phase 648 preflight metadata record, without implementing packet metadata,
+invoking backend commands, generating proof artifacts, importing results,
+mutating accepted evidence, creating Level2+, populating score axes, or
+promoting proof/claim evidence.
+
+Implemented: Phase 649 defines the required Phase 648 source state, future
+execution-packet fields, future status vocabulary, future Phase 650
+implementation exit criteria, and forbidden behavior. The execution packet must
+record command descriptors, input/output digests, redaction policy, status
+vocabulary, timeout/nondeterminism policy, artifact quarantine policy, replay
+instructions, and nonpromotion digest before any future command invocation is
+allowed.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, and claim-boundary source scans.
+
+Exit criteria: HSAI now has a named execution-packet boundary over Phase 648
+preflight metadata. It still has no backend command execution, no Lean run, no
+COBALT run, no Rust-to-Lean extraction, no additional SMT/Z3 run in this phase,
+no proof artifacts, no checker transcripts, no solver certificates, no
+accepted Evidence Ledger mutation, no accepted evidence, no Level2+ evidence,
+no populated score axes, no benchmark evidence, no external-audit claim, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

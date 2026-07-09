@@ -9433,5 +9433,18 @@ benchmark evidence, and claims no production/SOTA/security/semantic-correctness
 result. Focused validation passed with
 `cargo test -p hsai-agent-admission --lib phase648_hsai_formal_backend_acceleration_preflight -- --nocapture`.
 
+[docs/649-phase-hsai-formal-backend-acceleration-execution-packet-boundary.md](docs/649-phase-hsai-formal-backend-acceleration-execution-packet-boundary.md)
+documents the Phase 649 docs-first formal backend acceleration
+execution-packet boundary. It requires a valid Phase 648 preflight metadata
+record and defines future execution-packet fields for command descriptor
+digests, input/output digests, transcript redaction policy, solver/checker/proof
+status vocabulary, timeout/nondeterminism policy, artifact quarantine policy,
+replay instructions, and nonpromotion digest. It creates no Rust code, runs no
+Lean/SMT/Z3/COBALT/Rust-to-Lean backend, generates no proof artifacts, imports
+no external result, mutates no accepted Evidence Ledger, creates no accepted
+evidence, creates no Level2+ evidence, populates no score axes, creates no
+benchmark evidence, and claims no production/SOTA/security/semantic-correctness
+result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
