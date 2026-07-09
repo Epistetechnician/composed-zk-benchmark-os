@@ -246,12 +246,17 @@ encoding-edge coverage.
 
 The defensible claim remains local regression evidence only.
 
+## Phase 661 Boundary Status
+
+Phase 661 defines the C2 checker boundary in
+`docs/661-phase-hsai-gateway-proposal-digest-independent-preimage-checker-boundary.md`.
+It selects a separate dependency-isolated checker crate, checker-owned model,
+manual schema encoder, distinct `ring` SHA-256 implementation, explicit
+independence profile, cross-implementation harness, and fail-closed test plan.
+No checker is implemented or run in Phase 661.
+
 ## Next Responsible Slice
 
-Phase 661 should define the docs-first C2 independent-preimage-checker
-boundary. It must specify an implementation independent enough to identify
-shared Serde, JSON, SHA-256, type, and fixture trust, plus exact input/output,
-drift, replay, and nonpromotion rules.
-
-Only after C2 is bounded should a C3 Lean or Rust-to-Lean execution boundary
-claim correspondence with this production preimage surface.
+Phase 662 should implement only the bounded local implementation-diverse
+checker and e2e comparison. C3 Lean or Rust-to-Lean execution remains a later
+boundary.
