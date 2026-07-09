@@ -1350,6 +1350,36 @@ pub const HSAI_FORMAL_BACKEND_ACCELERATION_EXECUTION_PACKET_SCHEMA_VERSION: &str
 pub const HSAI_FORMAL_BACKEND_ACCELERATION_EXECUTION_PACKET_STATE_SLICE: &str =
     "phase-650-hsai-formal-backend-acceleration-execution-packet-metadata";
 pub const HSAI_FORMAL_BACKEND_ACCELERATION_EXECUTION_PACKET_CLAIM_BOUNDARY: &str = "local HSAI formal backend acceleration execution-packet metadata only; binds one Phase 648 preflight metadata record to digest-only command descriptor, input manifest, output packet schema, transcript redaction policy, status vocabulary, timeout and nondeterminism policy, artifact quarantine policy, replay instruction, and nonpromotion metadata with NotRun status, but does not invoke a backend command, generate proof artifacts, generate checker transcripts, generate solver certificates, import external results, mutate the accepted Evidence Ledger, create accepted formal evidence, create Level2+ evidence, populate score axes, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, record human-review acceptance, or grant authority to execute an action.";
+pub const HSAI_DEEPPROVE_LOOKAHEAD_EXPERIMENT_REPORT_SCHEMA_VERSION: &str =
+    "hsai-deepprove-lookahead-experiment-report:v1";
+pub const HSAI_DEEPPROVE_LOOKAHEAD_EXPERIMENT_REPORT_STATE_SLICE: &str =
+    "phase-651b-through-651k-hsai-deepprove-lookahead-local-metadata";
+pub const HSAI_DEEPPROVE_LOOKAHEAD_EXPERIMENT_REPORT_CLAIM_BOUNDARY: &str = "local HSAI DeepProve lookahead candidate-search experiment metadata only; records digest-only prompt, greedy baseline, candidate future span, branch score, backward verification, operator transcript candidate, optional declared or quarantined DeepProve receipt reference, reviewed receipt policy, and advisory admission bridge metadata, but does not run live LLM generation, attend to unavailable future tokens, clone or vendor DeepProve, run DeepProve, generate zkML proofs, verify zkML proofs, import external results, mutate the accepted Evidence Ledger, create accepted formal evidence, create Level2+ evidence, populate score axes, create benchmark evidence, prove semantic correctness, establish production readiness, establish SOTA, establish breakthrough status, establish full security, establish external audit status, record human-review acceptance, or grant authority to execute an action.";
+pub const HSAI_DEEPPROVE_LOOKAHEAD_INERT_METADATA_STATE_SLICE: &str =
+    "phase-651b-hsai-lookahead-inert-metadata";
+pub const HSAI_DEEPPROVE_LOOKAHEAD_FIXTURE_REPLAY_STATE_SLICE: &str =
+    "phase-651c-hsai-lookahead-fixture-replay";
+pub const HSAI_DEEPPROVE_LOOKAHEAD_BACKWARD_VERIFICATION_STATE_SLICE: &str =
+    "phase-651d-hsai-lookahead-backward-verification-metadata";
+pub const HSAI_DEEPPROVE_LOOKAHEAD_BRANCH_SCORING_REPORT_STATE_SLICE: &str =
+    "phase-651e-hsai-lookahead-branch-scoring-report";
+pub const HSAI_DEEPPROVE_OPERATOR_TRANSCRIPT_BOUNDARY_STATE_SLICE: &str =
+    "phase-651f-hsai-lookahead-operator-transcript-boundary";
+pub const HSAI_DEEPPROVE_OPERATOR_TRANSCRIPT_IMPORT_CANDIDATE_STATE_SLICE: &str =
+    "phase-651g-hsai-lookahead-operator-transcript-import-candidate";
+pub const HSAI_DEEPPROVE_RECEIPT_BOUNDARY_STATE_SLICE: &str =
+    "phase-651h-hsai-deepprove-receipt-boundary";
+pub const HSAI_DEEPPROVE_RECEIPT_IMPORT_CANDIDATE_STATE_SLICE: &str =
+    "phase-651i-hsai-deepprove-receipt-import-candidate";
+pub const HSAI_DEEPPROVE_REVIEWED_RECEIPT_POLICY_STATE_SLICE: &str =
+    "phase-651j-hsai-deepprove-reviewed-receipt-policy";
+pub const HSAI_DEEPPROVE_ADMISSION_BRIDGE_STATE_SLICE: &str =
+    "phase-651k-hsai-lookahead-admission-bridge";
+pub const HSAI_TINY_Z3_EXTENSION_LOCAL_EXECUTION_OBSERVATION_SCHEMA_VERSION: &str =
+    "hsai-tiny-z3-extension-local-execution-observation:v1";
+pub const HSAI_TINY_Z3_EXTENSION_LOCAL_EXECUTION_OBSERVATION_STATE_SLICE: &str =
+    "phase-653-hsai-tiny-z3-extension-local-execution-observation";
+pub const HSAI_TINY_Z3_EXTENSION_LOCAL_EXECUTION_OBSERVATION_CLAIM_BOUNDARY: &str = "local HSAI tiny-Z3 extension execution-observation metadata only; binds one Phase 650 TinyZ3ReplayExtension NotRun execution packet to one exact Phase 529 local hermetic SMT/Z3 backend execution observation, reusing the audited Phase 529 runner output and recording no new process spawn in this layer, but does not create accepted evidence, accepted formal evidence, Level2+ evidence, score-axis evidence, proof artifacts, checker transcripts, solver certificates, Lean proof, COBALT containment evidence, Rust-to-Lean extraction, benchmark evidence, semantic-correctness claims, production-readiness claims, SOTA claims, breakthrough claims, full-security claims, external-audit claims, human-review acceptance claims, or action authority.";
 pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_NAMESPACE: &str =
     "gateway-formal-tiny-z3-independent-external-operator-result";
 pub const GATEWAY_FORMAL_TINY_Z3_EXTERNAL_OPERATOR_CAPTURE_DECLARED_FILES: [&str; 8] = [
@@ -27288,6 +27318,546 @@ pub enum HsaiFormalBackendAccelerationExecutionPacketIssue {
 pub struct HsaiFormalBackendAccelerationExecutionPacketValidation {
     pub valid: bool,
     pub issues: Vec<HsaiFormalBackendAccelerationExecutionPacketIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiDeepProveLookaheadBranchScoreLabel {
+    GreedyBaseline,
+    CandidateImprovesLocalLabel,
+    CandidateMatchesLocalLabel,
+    CandidateRegressesLocalLabel,
+    CandidateRejectedByBackwardVerifier,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiDeepProveLookaheadSelectionLabel {
+    Selected,
+    Rejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiDeepProveLookaheadBackwardFindingClass {
+    NotRun,
+    NoLocalContradictionFound,
+    LocalContradictionFound,
+    PolicyDriftFound,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiDeepProveReceiptStatus {
+    Absent,
+    DeclaredOnly,
+    QuarantinedImportCandidate,
+    ReviewedVerifiedInferenceOnly,
+    Rejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiDeepProveLookaheadReportClassification {
+    LocalMetadataRecorded,
+    LocalMetadataRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiDeepProveLookaheadReportLabel {
+    LookaheadReportRecorded,
+    LookaheadReportRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiDeepProveLookaheadPromptCaseRef {
+    pub prompt_case_id: String,
+    pub prompt_case_digest: Hash,
+    pub prompt_case_metadata_digest: Hash,
+}
+
+impl HsaiDeepProveLookaheadPromptCaseRef {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-deepprove-lookahead-prompt-case-ref:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiDeepProveLookaheadGreedyBaselineRef {
+    pub baseline_id: String,
+    pub baseline_trace_digest: Hash,
+    pub baseline_output_digest: Hash,
+    pub baseline_context_digest: Hash,
+}
+
+impl HsaiDeepProveLookaheadGreedyBaselineRef {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-deepprove-lookahead-greedy-baseline-ref:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiDeepProveLookaheadConfig {
+    pub config_id: String,
+    pub candidate_count_bound: u32,
+    pub horizon_token_bound: u32,
+    pub deterministic_fixture_only: bool,
+    pub cost_label_set_digest: Hash,
+}
+
+impl HsaiDeepProveLookaheadConfig {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-deepprove-lookahead-config:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiDeepProveLookaheadCandidateFutureSpan {
+    pub candidate_id: String,
+    pub prompt_case_digest: Hash,
+    pub context_digest: Hash,
+    pub candidate_future_span_digest: Hash,
+    pub completed_output_digest: Hash,
+    pub horizon_tokens: u32,
+    pub branch_score_label: HsaiDeepProveLookaheadBranchScoreLabel,
+    pub selection_label: HsaiDeepProveLookaheadSelectionLabel,
+    pub backward_verification_finding_digest: Hash,
+    pub cost_label: String,
+}
+
+impl HsaiDeepProveLookaheadCandidateFutureSpan {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-deepprove-lookahead-candidate-future-span:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiDeepProveLookaheadBackwardVerificationFinding {
+    pub finding_id: String,
+    pub verifier_policy_id: String,
+    pub verifier_policy_digest: Hash,
+    pub completed_output_digest: Hash,
+    pub finding_digest: Hash,
+    pub finding_class: HsaiDeepProveLookaheadBackwardFindingClass,
+    pub finding_summary: String,
+    pub semantic_correctness_claimed: bool,
+    pub formal_proof_claimed: bool,
+}
+
+impl HsaiDeepProveLookaheadBackwardVerificationFinding {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-deepprove-lookahead-backward-verification-finding:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiDeepProveOperatorTranscriptBoundary {
+    pub operator_acknowledgement_digest: Hash,
+    pub model_ref_digest: Hash,
+    pub prompt_digest: Hash,
+    pub baseline_transcript_digest: Hash,
+    pub candidate_transcript_digest_set: BTreeMap<String, Hash>,
+    pub redaction_policy_digest: Hash,
+    pub output_root_policy_digest: Hash,
+    pub replay_notes_digest: Hash,
+    pub limitation_labels: BTreeSet<String>,
+    pub declared_file_set_digest: Hash,
+    pub declared_file_set_only: bool,
+    pub portable_paths_only: bool,
+    pub digest_agreement: bool,
+    pub raw_secret_retained: bool,
+}
+
+impl HsaiDeepProveOperatorTranscriptBoundary {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-deepprove-operator-transcript-boundary:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiDeepProveReceiptRef {
+    pub receipt_id: String,
+    pub proof_system_id: String,
+    pub deepprove_source_ref_digest: Hash,
+    pub model_ref_digest: Hash,
+    pub input_digest: Hash,
+    pub output_digest: Hash,
+    pub proof_artifact_digest: Hash,
+    pub verifier_artifact_digest: Hash,
+    pub verification_status_vocabulary_digest: Hash,
+    pub trust_root_disclosure_digest: Hash,
+    pub replay_instruction_digest: Hash,
+    pub limitation_labels: BTreeSet<String>,
+    pub receipt_import_candidate_digest: Hash,
+    pub status: HsaiDeepProveReceiptStatus,
+    pub hidden_network_dependency: bool,
+    pub proof_artifact_committed: bool,
+    pub deepprove_invoked: bool,
+    pub deepprove_cloned_or_vendored: bool,
+}
+
+impl HsaiDeepProveReceiptRef {
+    pub fn digest(&self) -> Hash {
+        hash_tagged("hsai-agent-admission:hsai-deepprove-receipt-ref:v1", self)
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiDeepProveReviewedReceiptPolicy {
+    pub policy_id: String,
+    pub policy_digest: Hash,
+    pub conclusion: String,
+    pub limits_digest: Hash,
+    pub reviewed_verified_inference_only: bool,
+}
+
+impl HsaiDeepProveReviewedReceiptPolicy {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-deepprove-reviewed-receipt-policy:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiDeepProveLookaheadExperimentReportInput {
+    pub schema_version: String,
+    pub report_id: String,
+    pub report_policy_id: String,
+    pub report_decision_id: String,
+    pub created_at_unix: u64,
+    pub prompt_case: HsaiDeepProveLookaheadPromptCaseRef,
+    pub greedy_baseline: HsaiDeepProveLookaheadGreedyBaselineRef,
+    pub lookahead_config: HsaiDeepProveLookaheadConfig,
+    pub candidate_spans: BTreeMap<String, HsaiDeepProveLookaheadCandidateFutureSpan>,
+    pub selected_candidate_id: String,
+    pub selected_context_digest: Hash,
+    pub backward_verification_findings:
+        BTreeMap<String, HsaiDeepProveLookaheadBackwardVerificationFinding>,
+    pub branch_report_section_digests: BTreeMap<String, Hash>,
+    pub operator_transcript_boundary: Option<HsaiDeepProveOperatorTranscriptBoundary>,
+    pub deepprove_receipt_ref: Option<HsaiDeepProveReceiptRef>,
+    pub reviewed_receipt_policy: Option<HsaiDeepProveReviewedReceiptPolicy>,
+    pub admission_bridge_digest: Hash,
+    pub maps_to_admission_candidate: bool,
+    pub model_output_proposal_only: bool,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub nonpromotion_digest: Hash,
+    pub classification: HsaiDeepProveLookaheadReportClassification,
+    pub report_label: HsaiDeepProveLookaheadReportLabel,
+    pub report_summary: String,
+    pub live_llm_execution_performed: bool,
+    pub model_download_performed: bool,
+    pub live_zkml_execution_performed: bool,
+    pub deepprove_execution_performed: bool,
+    pub external_result_imported: bool,
+    pub accepted_evidence_ledger_mutated: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub score_axes_populated: bool,
+    pub benchmark_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub external_audit_claimed: bool,
+    pub human_review_acceptance_claimed: bool,
+    pub authority_granted: bool,
+}
+
+impl HsaiDeepProveLookaheadExperimentReportInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-deepprove-lookahead-experiment-report-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiDeepProveLookaheadExperimentReport {
+    pub schema_version: String,
+    pub state_slice: String,
+    pub subphase_state_slices: BTreeSet<String>,
+    pub report_id: String,
+    pub report_input_digest: Hash,
+    pub report_policy_id: String,
+    pub report_decision_id: String,
+    pub created_at_unix: u64,
+    pub prompt_case_digest: Hash,
+    pub greedy_baseline_digest: Hash,
+    pub lookahead_config_digest: Hash,
+    pub candidate_span_digest_set: BTreeMap<String, Hash>,
+    pub candidate_span_digest_set_digest: Hash,
+    pub selected_candidate_id: String,
+    pub selected_candidate_digest: Hash,
+    pub selected_context_digest: Hash,
+    pub backward_verification_finding_digest_set: BTreeMap<String, Hash>,
+    pub backward_verification_finding_digest_set_digest: Hash,
+    pub branch_report_section_digests: BTreeMap<String, Hash>,
+    pub branch_report_section_set_digest: Hash,
+    pub operator_transcript_boundary_digest: Option<Hash>,
+    pub deepprove_receipt_ref_digest: Option<Hash>,
+    pub reviewed_receipt_policy_digest: Option<Hash>,
+    pub deepprove_receipt_status: HsaiDeepProveReceiptStatus,
+    pub admission_bridge_digest: Hash,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub nonpromotion_digest: Hash,
+    pub classification: HsaiDeepProveLookaheadReportClassification,
+    pub report_label: HsaiDeepProveLookaheadReportLabel,
+    pub report_summary: String,
+    pub claim_boundary: String,
+    pub evidence_ceiling: String,
+    pub maps_to_admission_candidate: bool,
+    pub model_output_proposal_only: bool,
+    pub live_llm_execution_performed: bool,
+    pub model_download_performed: bool,
+    pub live_zkml_execution_performed: bool,
+    pub deepprove_execution_performed: bool,
+    pub external_result_imported: bool,
+    pub accepted_evidence_ledger_mutated: bool,
+    pub accepted_formal_evidence_created: bool,
+    pub creates_level2_evidence: bool,
+    pub score_axes_populated: bool,
+    pub benchmark_evidence_created: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub external_audit_claimed: bool,
+    pub human_review_acceptance_claimed: bool,
+    pub authority_granted: bool,
+}
+
+impl HsaiDeepProveLookaheadExperimentReport {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-deepprove-lookahead-experiment-report:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiDeepProveLookaheadExperimentReportIssue {
+    InvalidSchemaVersion,
+    InvalidReportId,
+    InvalidReportPolicyId,
+    InvalidReportDecisionId,
+    MissingCreatedTimestamp,
+    InvalidPromptCaseId,
+    MissingPromptCaseDigest,
+    InvalidBaselineId,
+    MissingBaselineReference,
+    InvalidLookaheadConfig,
+    CandidateCountOutOfBounds,
+    HorizonOutOfBounds,
+    MissingCandidateSpanDigest(String),
+    CandidatePromptDigestMismatch(String),
+    SelectedCandidateMissing,
+    SelectedCandidateNotMarkedSelected,
+    SelectedContextDigestMismatch,
+    InvalidBackwardVerificationFinding(String),
+    BackwardVerificationPromotionClaim(String),
+    MissingReportSection(String),
+    InvalidOperatorTranscriptBoundary,
+    InvalidDeepProveReceiptRef,
+    VerifiedReceiptBeforeReviewedPolicy,
+    InvalidReviewedReceiptPolicy,
+    MissingAdmissionBridgeDigest,
+    InvalidAdmissionBridge,
+    NonclaimMismatch,
+    NonpromotionDigestMismatch,
+    InvalidClassification,
+    ReportSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiDeepProveLookaheadExperimentReportValidation {
+    pub valid: bool,
+    pub issues: Vec<HsaiDeepProveLookaheadExperimentReportIssue>,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiTinyZ3ExtensionLocalExecutionObservationClassification {
+    TinyZ3ExtensionObservedLocalOnly,
+    TinyZ3ExtensionObservationRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiTinyZ3ExtensionLocalExecutionObservationLabel {
+    TinyZ3ExtensionObservationRecorded,
+    TinyZ3ExtensionObservationRejected,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiTinyZ3ExtensionLocalExecutionObservationInput {
+    pub schema_version: String,
+    pub observation_id: String,
+    pub observation_policy_id: String,
+    pub observation_decision_id: String,
+    pub observed_at_unix: u64,
+    pub source_execution_packet_digest: Hash,
+    pub source_execution_packet_state_slice: String,
+    pub source_execution_packet_status: HsaiFormalBackendAccelerationExecutionPacketStatus,
+    pub source_execution_packet_classification:
+        HsaiFormalBackendAccelerationExecutionPacketClassification,
+    pub source_execution_packet_lane_class: HsaiFormalBackendAccelerationLaneClass,
+    pub phase529_result_digest: Hash,
+    pub phase529_request_digest: Hash,
+    pub phase529_candidate_digest: Hash,
+    pub phase529_candidate_input_digest: Hash,
+    pub phase529_result_classification:
+        GatewayFormalTinyZ3HermeticBackendExecutionResultClassification,
+    pub phase529_solver_verdict_label: GatewayFormalRealCommandLaneSolverVerdictLabel,
+    pub packet_result_binding_digest: Hash,
+    pub nonpromotion_digest: Hash,
+    pub level_mapping: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub classification: HsaiTinyZ3ExtensionLocalExecutionObservationClassification,
+    pub observation_label: HsaiTinyZ3ExtensionLocalExecutionObservationLabel,
+    pub observation_summary: String,
+    pub phase529_backend_execution_observed: bool,
+    pub new_backend_command_invoked: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub raw_transcript_retained: bool,
+    pub imports_external_result: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_claimed: bool,
+    pub human_review_acceptance_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub action_authority_claimed: bool,
+}
+
+impl HsaiTinyZ3ExtensionLocalExecutionObservationInput {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-tiny-z3-extension-local-execution-observation-input:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiTinyZ3ExtensionLocalExecutionObservation {
+    pub schema_version: String,
+    pub state_slice: String,
+    pub observation_id: String,
+    pub observation_input_digest: Hash,
+    pub observation_policy_id: String,
+    pub observation_decision_id: String,
+    pub observed_at_unix: u64,
+    pub source_execution_packet_digest: Hash,
+    pub source_execution_packet_input_digest: Hash,
+    pub source_execution_packet_state_slice: String,
+    pub source_execution_packet_status: HsaiFormalBackendAccelerationExecutionPacketStatus,
+    pub source_execution_packet_classification:
+        HsaiFormalBackendAccelerationExecutionPacketClassification,
+    pub source_execution_packet_lane_class: HsaiFormalBackendAccelerationLaneClass,
+    pub phase529_result_digest: Hash,
+    pub phase529_request_digest: Hash,
+    pub phase529_candidate_digest: Hash,
+    pub phase529_candidate_input_digest: Hash,
+    pub phase529_requested_lane: GatewayFormalTinyZ3BackendExecutionLane,
+    pub phase529_result_classification:
+        GatewayFormalTinyZ3HermeticBackendExecutionResultClassification,
+    pub phase529_solver_verdict_label: GatewayFormalRealCommandLaneSolverVerdictLabel,
+    pub phase529_executable_digest: Hash,
+    pub phase529_output_classification_digest: Hash,
+    pub packet_result_binding_digest: Hash,
+    pub nonpromotion_digest: Hash,
+    pub level_mapping: String,
+    pub explicit_nonclaims: BTreeSet<NonClaimLabel>,
+    pub explicit_nonclaims_digest: Hash,
+    pub classification: HsaiTinyZ3ExtensionLocalExecutionObservationClassification,
+    pub observation_label: HsaiTinyZ3ExtensionLocalExecutionObservationLabel,
+    pub observation_summary: String,
+    pub claim_boundary: String,
+    pub phase529_backend_execution_observed: bool,
+    pub new_backend_command_invoked: bool,
+    pub proof_artifact_created: bool,
+    pub checker_transcript_created: bool,
+    pub solver_certificate_created: bool,
+    pub raw_transcript_retained: bool,
+    pub imports_external_result: bool,
+    pub mutates_accepted_evidence_ledger: bool,
+    pub creates_accepted_evidence: bool,
+    pub creates_level2_evidence: bool,
+    pub populates_score_axes: bool,
+    pub benchmark_evidence_created: bool,
+    pub external_audit_claimed: bool,
+    pub human_review_acceptance_claimed: bool,
+    pub semantic_correctness_claimed: bool,
+    pub production_readiness_claimed: bool,
+    pub sota_claimed: bool,
+    pub breakthrough_claimed: bool,
+    pub full_security_claimed: bool,
+    pub grants_authority: bool,
+}
+
+impl HsaiTinyZ3ExtensionLocalExecutionObservation {
+    pub fn digest(&self) -> Hash {
+        hash_tagged(
+            "hsai-agent-admission:hsai-tiny-z3-extension-local-execution-observation:v1",
+            self,
+        )
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+pub enum HsaiTinyZ3ExtensionLocalExecutionObservationIssue {
+    InvalidSchemaVersion,
+    InvalidObservationId,
+    InvalidObservationPolicyId,
+    InvalidObservationDecisionId,
+    MissingObservedTimestamp,
+    SourceExecutionPacketMismatch,
+    SourceExecutionPacketStateMismatch,
+    Phase529ResultMismatch,
+    Phase529ResultStateMismatch,
+    InvalidPacketResultBindingDigest,
+    InvalidNonpromotionDigest,
+    InvalidLevelMapping,
+    NonclaimMismatch,
+    InvalidClassification,
+    ObservationSummaryPromotionClaim,
+    PromotionAttempt,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct HsaiTinyZ3ExtensionLocalExecutionObservationValidation {
+    pub valid: bool,
+    pub issues: Vec<HsaiTinyZ3ExtensionLocalExecutionObservationIssue>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -117641,6 +118211,876 @@ pub fn validate_hsai_formal_backend_acceleration_execution_packet_input(
     }
 }
 
+pub fn hsai_deepprove_lookahead_experiment_report_claim_boundary() -> String {
+    HSAI_DEEPPROVE_LOOKAHEAD_EXPERIMENT_REPORT_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn hsai_deepprove_lookahead_experiment_report_subphase_state_slices() -> BTreeSet<String> {
+    [
+        HSAI_DEEPPROVE_LOOKAHEAD_INERT_METADATA_STATE_SLICE,
+        HSAI_DEEPPROVE_LOOKAHEAD_FIXTURE_REPLAY_STATE_SLICE,
+        HSAI_DEEPPROVE_LOOKAHEAD_BACKWARD_VERIFICATION_STATE_SLICE,
+        HSAI_DEEPPROVE_LOOKAHEAD_BRANCH_SCORING_REPORT_STATE_SLICE,
+        HSAI_DEEPPROVE_OPERATOR_TRANSCRIPT_BOUNDARY_STATE_SLICE,
+        HSAI_DEEPPROVE_OPERATOR_TRANSCRIPT_IMPORT_CANDIDATE_STATE_SLICE,
+        HSAI_DEEPPROVE_RECEIPT_BOUNDARY_STATE_SLICE,
+        HSAI_DEEPPROVE_RECEIPT_IMPORT_CANDIDATE_STATE_SLICE,
+        HSAI_DEEPPROVE_REVIEWED_RECEIPT_POLICY_STATE_SLICE,
+        HSAI_DEEPPROVE_ADMISSION_BRIDGE_STATE_SLICE,
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn hsai_deepprove_lookahead_experiment_report_required_nonclaims() -> BTreeSet<NonClaimLabel> {
+    [
+        "not live LLM execution",
+        "not DeepProve execution",
+        "not zkML proof generation",
+        "not zkML proof verification",
+        "not accepted evidence",
+        "not Level2 evidence",
+        "not score-axis population",
+        "not semantic correctness",
+        "not production readiness",
+        "not SOTA",
+        "not full security",
+        "not human-review acceptance",
+        "not authority to execute",
+    ]
+    .into_iter()
+    .map(|label| NonClaimLabel(label.to_owned()))
+    .collect()
+}
+
+pub fn hsai_deepprove_lookahead_experiment_report_required_sections() -> BTreeSet<String> {
+    [
+        "prompt_case_digest_summary",
+        "greedy_baseline_digest_summary",
+        "lookahead_config_summary",
+        "candidate_count_and_horizon_summary",
+        "selected_rejected_branch_summary",
+        "backward_verification_finding_summary",
+        "cost_label_summary",
+        "limitation_and_nonclaim_summary",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect()
+}
+
+pub fn hsai_deepprove_receipt_status_vocabulary_digest() -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-deepprove-receipt-status-vocabulary:v1",
+        &BTreeSet::from([
+            "Absent",
+            "DeclaredOnly",
+            "QuarantinedImportCandidate",
+            "ReviewedVerifiedInferenceOnly",
+            "Rejected",
+        ]),
+    )
+}
+
+pub fn hsai_deepprove_reviewed_receipt_allowed_conclusion() -> &'static str {
+    "The declared model inference for this input/output pair was verified according to the disclosed DeepProve receipt and verifier artifacts."
+}
+
+pub fn hsai_deepprove_lookahead_experiment_report_nonclaim_digest(
+    nonclaims: &BTreeSet<NonClaimLabel>,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-deepprove-lookahead-experiment-report-nonclaims:v1",
+        nonclaims,
+    )
+}
+
+pub fn hsai_deepprove_lookahead_experiment_report_nonpromotion_digest(
+    prompt_case_digest: Hash,
+    greedy_baseline_digest: Hash,
+    lookahead_config_digest: Hash,
+    candidate_span_digest_set_digest: Hash,
+    deepprove_receipt_status: &HsaiDeepProveReceiptStatus,
+    admission_bridge_digest: Hash,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-deepprove-lookahead-experiment-report-nonpromotion:v1",
+        &(
+            prompt_case_digest,
+            greedy_baseline_digest,
+            lookahead_config_digest,
+            candidate_span_digest_set_digest,
+            deepprove_receipt_status,
+            admission_bridge_digest,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ),
+    )
+}
+
+pub fn hsai_deepprove_lookahead_experiment_candidate_span_digests(
+    candidate_spans: &BTreeMap<String, HsaiDeepProveLookaheadCandidateFutureSpan>,
+) -> BTreeMap<String, Hash> {
+    candidate_spans
+        .iter()
+        .map(|(candidate_id, span)| (candidate_id.clone(), span.digest()))
+        .collect()
+}
+
+pub fn hsai_deepprove_lookahead_backward_finding_digests(
+    findings: &BTreeMap<String, HsaiDeepProveLookaheadBackwardVerificationFinding>,
+) -> BTreeMap<String, Hash> {
+    findings
+        .iter()
+        .map(|(finding_id, finding)| (finding_id.clone(), finding.digest()))
+        .collect()
+}
+
+pub fn build_hsai_deepprove_lookahead_experiment_report(
+    input: &HsaiDeepProveLookaheadExperimentReportInput,
+) -> Result<HsaiDeepProveLookaheadExperimentReport, HsaiDeepProveLookaheadExperimentReportValidation>
+{
+    let validation = validate_hsai_deepprove_lookahead_experiment_report_input(input);
+    if !validation.valid {
+        return Err(validation);
+    }
+
+    let candidate_span_digest_set =
+        hsai_deepprove_lookahead_experiment_candidate_span_digests(&input.candidate_spans);
+    let selected_candidate_digest = candidate_span_digest_set[&input.selected_candidate_id];
+    let backward_verification_finding_digest_set =
+        hsai_deepprove_lookahead_backward_finding_digests(&input.backward_verification_findings);
+    let deepprove_receipt_status = input
+        .deepprove_receipt_ref
+        .as_ref()
+        .map(|receipt| receipt.status.clone())
+        .unwrap_or(HsaiDeepProveReceiptStatus::Absent);
+
+    Ok(HsaiDeepProveLookaheadExperimentReport {
+        schema_version: HSAI_DEEPPROVE_LOOKAHEAD_EXPERIMENT_REPORT_SCHEMA_VERSION.to_owned(),
+        state_slice: HSAI_DEEPPROVE_LOOKAHEAD_EXPERIMENT_REPORT_STATE_SLICE.to_owned(),
+        subphase_state_slices: hsai_deepprove_lookahead_experiment_report_subphase_state_slices(),
+        report_id: input.report_id.clone(),
+        report_input_digest: input.digest(),
+        report_policy_id: input.report_policy_id.clone(),
+        report_decision_id: input.report_decision_id.clone(),
+        created_at_unix: input.created_at_unix,
+        prompt_case_digest: input.prompt_case.digest(),
+        greedy_baseline_digest: input.greedy_baseline.digest(),
+        lookahead_config_digest: input.lookahead_config.digest(),
+        candidate_span_digest_set_digest: hash_tagged(
+            "hsai-agent-admission:hsai-deepprove-lookahead-candidate-span-digest-set:v1",
+            &candidate_span_digest_set,
+        ),
+        candidate_span_digest_set,
+        selected_candidate_id: input.selected_candidate_id.clone(),
+        selected_candidate_digest,
+        selected_context_digest: input.selected_context_digest,
+        backward_verification_finding_digest_set_digest: hash_tagged(
+            "hsai-agent-admission:hsai-deepprove-lookahead-backward-finding-digest-set:v1",
+            &backward_verification_finding_digest_set,
+        ),
+        backward_verification_finding_digest_set,
+        branch_report_section_digests: input.branch_report_section_digests.clone(),
+        branch_report_section_set_digest: hash_tagged(
+            "hsai-agent-admission:hsai-deepprove-lookahead-branch-report-section-set:v1",
+            &input.branch_report_section_digests,
+        ),
+        operator_transcript_boundary_digest: input
+            .operator_transcript_boundary
+            .as_ref()
+            .map(HsaiDeepProveOperatorTranscriptBoundary::digest),
+        deepprove_receipt_ref_digest: input
+            .deepprove_receipt_ref
+            .as_ref()
+            .map(HsaiDeepProveReceiptRef::digest),
+        reviewed_receipt_policy_digest: input
+            .reviewed_receipt_policy
+            .as_ref()
+            .map(HsaiDeepProveReviewedReceiptPolicy::digest),
+        deepprove_receipt_status,
+        admission_bridge_digest: input.admission_bridge_digest,
+        explicit_nonclaims: input.explicit_nonclaims.clone(),
+        explicit_nonclaims_digest: input.explicit_nonclaims_digest,
+        nonpromotion_digest: input.nonpromotion_digest,
+        classification: input.classification.clone(),
+        report_label: input.report_label.clone(),
+        report_summary: input.report_summary.clone(),
+        claim_boundary: hsai_deepprove_lookahead_experiment_report_claim_boundary(),
+        evidence_ceiling: "Level1LocalReplayQuarantinedMetadataOnly".to_owned(),
+        maps_to_admission_candidate: true,
+        model_output_proposal_only: true,
+        live_llm_execution_performed: false,
+        model_download_performed: false,
+        live_zkml_execution_performed: false,
+        deepprove_execution_performed: false,
+        external_result_imported: false,
+        accepted_evidence_ledger_mutated: false,
+        accepted_formal_evidence_created: false,
+        creates_level2_evidence: false,
+        score_axes_populated: false,
+        benchmark_evidence_created: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        external_audit_claimed: false,
+        human_review_acceptance_claimed: false,
+        authority_granted: false,
+    })
+}
+
+pub fn validate_hsai_deepprove_lookahead_experiment_report_input(
+    input: &HsaiDeepProveLookaheadExperimentReportInput,
+) -> HsaiDeepProveLookaheadExperimentReportValidation {
+    let mut issues = Vec::new();
+    if input.schema_version != HSAI_DEEPPROVE_LOOKAHEAD_EXPERIMENT_REPORT_SCHEMA_VERSION {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.report_id) {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::InvalidReportId);
+    }
+    if !is_single_segment_id(&input.report_policy_id) {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::InvalidReportPolicyId);
+    }
+    if !is_single_segment_id(&input.report_decision_id) {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::InvalidReportDecisionId);
+    }
+    if input.created_at_unix == 0 {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::MissingCreatedTimestamp);
+    }
+    if !is_single_segment_id(&input.prompt_case.prompt_case_id) {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::InvalidPromptCaseId);
+    }
+    if input.prompt_case.prompt_case_digest == Hash([0; 32])
+        || input.prompt_case.prompt_case_metadata_digest == Hash([0; 32])
+    {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::MissingPromptCaseDigest);
+    }
+    if !is_single_segment_id(&input.greedy_baseline.baseline_id) {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::InvalidBaselineId);
+    }
+    if input.greedy_baseline.baseline_trace_digest == Hash([0; 32])
+        || input.greedy_baseline.baseline_output_digest == Hash([0; 32])
+        || input.greedy_baseline.baseline_context_digest == Hash([0; 32])
+    {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::MissingBaselineReference);
+    }
+    if !is_single_segment_id(&input.lookahead_config.config_id)
+        || input.lookahead_config.candidate_count_bound == 0
+        || input.lookahead_config.candidate_count_bound > 16
+        || input.lookahead_config.horizon_token_bound == 0
+        || input.lookahead_config.horizon_token_bound > 128
+        || !input.lookahead_config.deterministic_fixture_only
+        || input.lookahead_config.cost_label_set_digest == Hash([0; 32])
+    {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::InvalidLookaheadConfig);
+    }
+    if input.candidate_spans.is_empty()
+        || input.candidate_spans.len() as u32 > input.lookahead_config.candidate_count_bound
+    {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::CandidateCountOutOfBounds);
+    }
+    for (candidate_id, span) in &input.candidate_spans {
+        if candidate_id != &span.candidate_id || !is_single_segment_id(candidate_id) {
+            issues.push(
+                HsaiDeepProveLookaheadExperimentReportIssue::MissingCandidateSpanDigest(
+                    candidate_id.clone(),
+                ),
+            );
+        }
+        if span.context_digest == Hash([0; 32])
+            || span.candidate_future_span_digest == Hash([0; 32])
+            || span.completed_output_digest == Hash([0; 32])
+            || span.backward_verification_finding_digest == Hash([0; 32])
+        {
+            issues.push(
+                HsaiDeepProveLookaheadExperimentReportIssue::MissingCandidateSpanDigest(
+                    candidate_id.clone(),
+                ),
+            );
+        }
+        if span.prompt_case_digest != input.prompt_case.prompt_case_digest {
+            issues.push(
+                HsaiDeepProveLookaheadExperimentReportIssue::CandidatePromptDigestMismatch(
+                    candidate_id.clone(),
+                ),
+            );
+        }
+        if span.horizon_tokens == 0
+            || span.horizon_tokens > input.lookahead_config.horizon_token_bound
+        {
+            issues.push(HsaiDeepProveLookaheadExperimentReportIssue::HorizonOutOfBounds);
+        }
+    }
+    match input.candidate_spans.get(&input.selected_candidate_id) {
+        Some(selected) => {
+            if selected.selection_label != HsaiDeepProveLookaheadSelectionLabel::Selected {
+                issues.push(
+                    HsaiDeepProveLookaheadExperimentReportIssue::SelectedCandidateNotMarkedSelected,
+                );
+            }
+            if selected.context_digest != input.selected_context_digest {
+                issues.push(
+                    HsaiDeepProveLookaheadExperimentReportIssue::SelectedContextDigestMismatch,
+                );
+            }
+        }
+        None => issues.push(HsaiDeepProveLookaheadExperimentReportIssue::SelectedCandidateMissing),
+    }
+    for (finding_id, finding) in &input.backward_verification_findings {
+        if finding_id != &finding.finding_id
+            || !is_single_segment_id(finding_id)
+            || !is_single_segment_id(&finding.verifier_policy_id)
+            || finding.verifier_policy_digest == Hash([0; 32])
+            || finding.completed_output_digest == Hash([0; 32])
+            || finding.finding_digest == Hash([0; 32])
+        {
+            issues.push(
+                HsaiDeepProveLookaheadExperimentReportIssue::InvalidBackwardVerificationFinding(
+                    finding_id.clone(),
+                ),
+            );
+        }
+        let bound_to_candidate = input.candidate_spans.values().any(|span| {
+            span.completed_output_digest == finding.completed_output_digest
+                && span.backward_verification_finding_digest == finding.finding_digest
+        });
+        if !bound_to_candidate {
+            issues.push(
+                HsaiDeepProveLookaheadExperimentReportIssue::InvalidBackwardVerificationFinding(
+                    finding_id.clone(),
+                ),
+            );
+        }
+        if finding.semantic_correctness_claimed
+            || finding.formal_proof_claimed
+            || gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+                &finding.finding_summary,
+            )
+        {
+            issues.push(
+                HsaiDeepProveLookaheadExperimentReportIssue::BackwardVerificationPromotionClaim(
+                    finding_id.clone(),
+                ),
+            );
+        }
+    }
+    for section in hsai_deepprove_lookahead_experiment_report_required_sections() {
+        if input
+            .branch_report_section_digests
+            .get(&section)
+            .copied()
+            .unwrap_or(Hash([0; 32]))
+            == Hash([0; 32])
+        {
+            issues.push(HsaiDeepProveLookaheadExperimentReportIssue::MissingReportSection(section));
+        }
+    }
+    if input
+        .operator_transcript_boundary
+        .as_ref()
+        .map(hsai_deepprove_operator_transcript_boundary_invalid)
+        .unwrap_or(false)
+    {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::InvalidOperatorTranscriptBoundary);
+    }
+    let receipt_status = input
+        .deepprove_receipt_ref
+        .as_ref()
+        .map(|receipt| receipt.status.clone())
+        .unwrap_or(HsaiDeepProveReceiptStatus::Absent);
+    if input
+        .deepprove_receipt_ref
+        .as_ref()
+        .map(hsai_deepprove_receipt_ref_invalid)
+        .unwrap_or(false)
+    {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::InvalidDeepProveReceiptRef);
+    }
+    if receipt_status == HsaiDeepProveReceiptStatus::ReviewedVerifiedInferenceOnly {
+        match &input.reviewed_receipt_policy {
+            Some(policy) if !hsai_deepprove_reviewed_receipt_policy_invalid(policy) => {}
+            Some(_) => issues
+                .push(HsaiDeepProveLookaheadExperimentReportIssue::InvalidReviewedReceiptPolicy),
+            None => issues.push(
+                HsaiDeepProveLookaheadExperimentReportIssue::VerifiedReceiptBeforeReviewedPolicy,
+            ),
+        }
+    } else if input
+        .reviewed_receipt_policy
+        .as_ref()
+        .map(hsai_deepprove_reviewed_receipt_policy_invalid)
+        .unwrap_or(false)
+    {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::InvalidReviewedReceiptPolicy);
+    }
+    if input.admission_bridge_digest == Hash([0; 32]) {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::MissingAdmissionBridgeDigest);
+    }
+    if !input.maps_to_admission_candidate || !input.model_output_proposal_only {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::InvalidAdmissionBridge);
+    }
+    let nonclaims = hsai_deepprove_lookahead_experiment_report_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hsai_deepprove_lookahead_experiment_report_nonclaim_digest(&nonclaims)
+    {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::NonclaimMismatch);
+    }
+    let candidate_span_digest_set =
+        hsai_deepprove_lookahead_experiment_candidate_span_digests(&input.candidate_spans);
+    if input.nonpromotion_digest
+        != hsai_deepprove_lookahead_experiment_report_nonpromotion_digest(
+            input.prompt_case.digest(),
+            input.greedy_baseline.digest(),
+            input.lookahead_config.digest(),
+            hash_tagged(
+                "hsai-agent-admission:hsai-deepprove-lookahead-candidate-span-digest-set:v1",
+                &candidate_span_digest_set,
+            ),
+            &receipt_status,
+            input.admission_bridge_digest,
+        )
+    {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::NonpromotionDigestMismatch);
+    }
+    if input.classification != HsaiDeepProveLookaheadReportClassification::LocalMetadataRecorded {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::InvalidClassification);
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.report_summary,
+    ) {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::ReportSummaryPromotionClaim);
+    }
+    if input.live_llm_execution_performed
+        || input.model_download_performed
+        || input.live_zkml_execution_performed
+        || input.deepprove_execution_performed
+        || input.external_result_imported
+        || input.accepted_evidence_ledger_mutated
+        || input.accepted_formal_evidence_created
+        || input.creates_level2_evidence
+        || input.score_axes_populated
+        || input.benchmark_evidence_created
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.external_audit_claimed
+        || input.human_review_acceptance_claimed
+        || input.authority_granted
+    {
+        issues.push(HsaiDeepProveLookaheadExperimentReportIssue::PromotionAttempt);
+    }
+
+    HsaiDeepProveLookaheadExperimentReportValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
+fn hsai_deepprove_operator_transcript_boundary_invalid(
+    boundary: &HsaiDeepProveOperatorTranscriptBoundary,
+) -> bool {
+    boundary.operator_acknowledgement_digest == Hash([0; 32])
+        || boundary.model_ref_digest == Hash([0; 32])
+        || boundary.prompt_digest == Hash([0; 32])
+        || boundary.baseline_transcript_digest == Hash([0; 32])
+        || boundary.candidate_transcript_digest_set.is_empty()
+        || boundary
+            .candidate_transcript_digest_set
+            .values()
+            .any(|digest| *digest == Hash([0; 32]))
+        || boundary.redaction_policy_digest == Hash([0; 32])
+        || boundary.output_root_policy_digest == Hash([0; 32])
+        || boundary.replay_notes_digest == Hash([0; 32])
+        || boundary.limitation_labels.is_empty()
+        || boundary.declared_file_set_digest == Hash([0; 32])
+        || !boundary.declared_file_set_only
+        || !boundary.portable_paths_only
+        || !boundary.digest_agreement
+        || boundary.raw_secret_retained
+}
+
+fn hsai_deepprove_receipt_ref_invalid(receipt: &HsaiDeepProveReceiptRef) -> bool {
+    !is_single_segment_id(&receipt.receipt_id)
+        || !is_single_segment_id(&receipt.proof_system_id)
+        || receipt.deepprove_source_ref_digest == Hash([0; 32])
+        || receipt.model_ref_digest == Hash([0; 32])
+        || receipt.input_digest == Hash([0; 32])
+        || receipt.output_digest == Hash([0; 32])
+        || receipt.proof_artifact_digest == Hash([0; 32])
+        || receipt.verifier_artifact_digest == Hash([0; 32])
+        || receipt.verification_status_vocabulary_digest
+            != hsai_deepprove_receipt_status_vocabulary_digest()
+        || receipt.trust_root_disclosure_digest == Hash([0; 32])
+        || receipt.replay_instruction_digest == Hash([0; 32])
+        || receipt.limitation_labels.is_empty()
+        || matches!(
+            receipt.status,
+            HsaiDeepProveReceiptStatus::QuarantinedImportCandidate
+                | HsaiDeepProveReceiptStatus::ReviewedVerifiedInferenceOnly
+        ) && receipt.receipt_import_candidate_digest == Hash([0; 32])
+        || receipt.hidden_network_dependency
+        || receipt.proof_artifact_committed
+        || receipt.deepprove_invoked
+        || receipt.deepprove_cloned_or_vendored
+}
+
+fn hsai_deepprove_reviewed_receipt_policy_invalid(
+    policy: &HsaiDeepProveReviewedReceiptPolicy,
+) -> bool {
+    !is_single_segment_id(&policy.policy_id)
+        || policy.policy_digest == Hash([0; 32])
+        || policy.limits_digest == Hash([0; 32])
+        || !policy.reviewed_verified_inference_only
+        || policy.conclusion != hsai_deepprove_reviewed_receipt_allowed_conclusion()
+        || gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+            &policy.conclusion,
+        )
+}
+
+pub fn hsai_tiny_z3_extension_local_execution_observation_claim_boundary() -> String {
+    HSAI_TINY_Z3_EXTENSION_LOCAL_EXECUTION_OBSERVATION_CLAIM_BOUNDARY.to_owned()
+}
+
+pub fn hsai_tiny_z3_extension_local_execution_observation_required_nonclaims(
+) -> BTreeSet<NonClaimLabel> {
+    let mut nonclaims = hsai_formal_backend_acceleration_execution_packet_required_nonclaims();
+    for label in [
+        "not new backend command invocation",
+        "not raw transcript retention",
+        "not checker transcript",
+        "not solver certificate",
+        "not proof artifact",
+        "not accepted backend evidence",
+        "not semantic correctness",
+        "not production readiness",
+        "not SOTA",
+        "not full security",
+    ] {
+        nonclaims.insert(NonClaimLabel(label.to_owned()));
+    }
+    nonclaims
+}
+
+pub fn hsai_tiny_z3_extension_local_execution_observation_nonclaim_digest(
+    nonclaims: &BTreeSet<NonClaimLabel>,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-tiny-z3-extension-local-execution-observation-nonclaims:v1",
+        nonclaims,
+    )
+}
+
+pub fn hsai_tiny_z3_extension_local_execution_observation_packet_result_binding_digest(
+    packet: &HsaiFormalBackendAccelerationExecutionPacket,
+    result: &GatewayFormalTinyZ3HermeticBackendExecutionResult,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-tiny-z3-extension-local-execution-observation-packet-result-binding:v1",
+        &(
+            packet.digest(),
+            packet.packet_input_digest,
+            packet.lane_class.clone(),
+            packet.status.clone(),
+            result.digest(),
+            result.request_digest,
+            result.phase527_candidate_digest,
+            result.phase527_requested_lane.clone(),
+            result.classification.clone(),
+            result.solver_verdict_label.clone(),
+        ),
+    )
+}
+
+pub fn hsai_tiny_z3_extension_local_execution_observation_nonpromotion_digest(
+    packet: &HsaiFormalBackendAccelerationExecutionPacket,
+    result: &GatewayFormalTinyZ3HermeticBackendExecutionResult,
+    packet_result_binding_digest: Hash,
+) -> Hash {
+    hash_tagged(
+        "hsai-agent-admission:hsai-tiny-z3-extension-local-execution-observation-nonpromotion:v1",
+        &(
+            packet.digest(),
+            result.digest(),
+            packet_result_binding_digest,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+        ),
+    )
+}
+
+pub fn build_hsai_tiny_z3_extension_local_execution_observation(
+    packet: &HsaiFormalBackendAccelerationExecutionPacket,
+    result: &GatewayFormalTinyZ3HermeticBackendExecutionResult,
+    input: &HsaiTinyZ3ExtensionLocalExecutionObservationInput,
+) -> Result<
+    HsaiTinyZ3ExtensionLocalExecutionObservation,
+    HsaiTinyZ3ExtensionLocalExecutionObservationValidation,
+> {
+    let validation =
+        validate_hsai_tiny_z3_extension_local_execution_observation_input(packet, result, input);
+    if !validation.valid {
+        return Err(validation);
+    }
+
+    Ok(HsaiTinyZ3ExtensionLocalExecutionObservation {
+        schema_version: HSAI_TINY_Z3_EXTENSION_LOCAL_EXECUTION_OBSERVATION_SCHEMA_VERSION
+            .to_owned(),
+        state_slice: HSAI_TINY_Z3_EXTENSION_LOCAL_EXECUTION_OBSERVATION_STATE_SLICE.to_owned(),
+        observation_id: input.observation_id.clone(),
+        observation_input_digest: input.digest(),
+        observation_policy_id: input.observation_policy_id.clone(),
+        observation_decision_id: input.observation_decision_id.clone(),
+        observed_at_unix: input.observed_at_unix,
+        source_execution_packet_digest: packet.digest(),
+        source_execution_packet_input_digest: packet.packet_input_digest,
+        source_execution_packet_state_slice: packet.state_slice.clone(),
+        source_execution_packet_status: packet.status.clone(),
+        source_execution_packet_classification: packet.classification.clone(),
+        source_execution_packet_lane_class: packet.lane_class.clone(),
+        phase529_result_digest: result.digest(),
+        phase529_request_digest: result.request_digest,
+        phase529_candidate_digest: result.phase527_candidate_digest,
+        phase529_candidate_input_digest: result.phase527_candidate_input_digest,
+        phase529_requested_lane: result.phase527_requested_lane.clone(),
+        phase529_result_classification: result.classification.clone(),
+        phase529_solver_verdict_label: result.solver_verdict_label.clone(),
+        phase529_executable_digest: result.executable_digest,
+        phase529_output_classification_digest: result.output_classification_digest,
+        packet_result_binding_digest: input.packet_result_binding_digest,
+        nonpromotion_digest: input.nonpromotion_digest,
+        level_mapping: input.level_mapping.clone(),
+        explicit_nonclaims: input.explicit_nonclaims.clone(),
+        explicit_nonclaims_digest: input.explicit_nonclaims_digest,
+        classification: input.classification.clone(),
+        observation_label: input.observation_label.clone(),
+        observation_summary: input.observation_summary.clone(),
+        claim_boundary: hsai_tiny_z3_extension_local_execution_observation_claim_boundary(),
+        phase529_backend_execution_observed: true,
+        new_backend_command_invoked: false,
+        proof_artifact_created: false,
+        checker_transcript_created: false,
+        solver_certificate_created: false,
+        raw_transcript_retained: false,
+        imports_external_result: false,
+        mutates_accepted_evidence_ledger: false,
+        creates_accepted_evidence: false,
+        creates_level2_evidence: false,
+        populates_score_axes: false,
+        benchmark_evidence_created: false,
+        external_audit_claimed: false,
+        human_review_acceptance_claimed: false,
+        semantic_correctness_claimed: false,
+        production_readiness_claimed: false,
+        sota_claimed: false,
+        breakthrough_claimed: false,
+        full_security_claimed: false,
+        grants_authority: false,
+    })
+}
+
+pub fn validate_hsai_tiny_z3_extension_local_execution_observation_input(
+    packet: &HsaiFormalBackendAccelerationExecutionPacket,
+    result: &GatewayFormalTinyZ3HermeticBackendExecutionResult,
+    input: &HsaiTinyZ3ExtensionLocalExecutionObservationInput,
+) -> HsaiTinyZ3ExtensionLocalExecutionObservationValidation {
+    let mut issues = Vec::new();
+    if input.schema_version != HSAI_TINY_Z3_EXTENSION_LOCAL_EXECUTION_OBSERVATION_SCHEMA_VERSION {
+        issues.push(HsaiTinyZ3ExtensionLocalExecutionObservationIssue::InvalidSchemaVersion);
+    }
+    if !is_single_segment_id(&input.observation_id) {
+        issues.push(HsaiTinyZ3ExtensionLocalExecutionObservationIssue::InvalidObservationId);
+    }
+    if !is_single_segment_id(&input.observation_policy_id) {
+        issues.push(HsaiTinyZ3ExtensionLocalExecutionObservationIssue::InvalidObservationPolicyId);
+    }
+    if !is_single_segment_id(&input.observation_decision_id) {
+        issues
+            .push(HsaiTinyZ3ExtensionLocalExecutionObservationIssue::InvalidObservationDecisionId);
+    }
+    if input.observed_at_unix == 0 {
+        issues.push(HsaiTinyZ3ExtensionLocalExecutionObservationIssue::MissingObservedTimestamp);
+    }
+    if packet.schema_version != HSAI_FORMAL_BACKEND_ACCELERATION_EXECUTION_PACKET_SCHEMA_VERSION
+        || packet.state_slice != HSAI_FORMAL_BACKEND_ACCELERATION_EXECUTION_PACKET_STATE_SLICE
+        || packet.status != HsaiFormalBackendAccelerationExecutionPacketStatus::NotRun
+        || packet.classification
+            != HsaiFormalBackendAccelerationExecutionPacketClassification::LocalExecutionPacketMetadataRecorded
+        || packet.lane_class != HsaiFormalBackendAccelerationLaneClass::TinyZ3ReplayExtension
+        || packet.claim_boundary != hsai_formal_backend_acceleration_execution_packet_claim_boundary()
+        || packet.level_mapping != "Level1LocalReplayOrLower"
+        || packet.backend_command_invoked
+        || packet.proof_artifact_created
+        || packet.checker_transcript_created
+        || packet.solver_certificate_created
+        || packet.raw_transcript_retained
+        || packet.raw_proof_artifact_retained
+        || packet.imports_external_result
+        || packet.mutates_accepted_evidence_ledger
+        || packet.creates_accepted_evidence
+        || packet.creates_level2_evidence
+        || packet.populates_score_axes
+        || packet.benchmark_evidence_created
+        || packet.external_audit_claimed
+        || packet.human_review_acceptance_claimed
+        || packet.semantic_correctness_claimed
+        || packet.production_readiness_claimed
+        || packet.sota_claimed
+        || packet.breakthrough_claimed
+        || packet.full_security_claimed
+        || packet.grants_authority
+    {
+        issues.push(
+            HsaiTinyZ3ExtensionLocalExecutionObservationIssue::SourceExecutionPacketStateMismatch,
+        );
+    }
+    if input.source_execution_packet_digest != packet.digest()
+        || input.source_execution_packet_state_slice != packet.state_slice
+        || input.source_execution_packet_status != packet.status
+        || input.source_execution_packet_classification != packet.classification
+        || input.source_execution_packet_lane_class != packet.lane_class
+    {
+        issues
+            .push(HsaiTinyZ3ExtensionLocalExecutionObservationIssue::SourceExecutionPacketMismatch);
+    }
+    if result.schema_version != GATEWAY_FORMAL_TINY_Z3_HERMETIC_BACKEND_EXECUTION_RESULT_SCHEMA_VERSION
+        || result.state_slice != GATEWAY_FORMAL_TINY_Z3_HERMETIC_BACKEND_EXECUTION_RESULT_STATE_SLICE
+        || result.classification
+            != GatewayFormalTinyZ3HermeticBackendExecutionResultClassification::LaneASmtZ3RunObservedLocalOnly
+        || result.execution_label
+            != GatewayFormalTinyZ3HermeticBackendExecutionResultLabel::HermeticBackendExecutionResultRecorded
+        || result.phase527_requested_lane
+            != GatewayFormalTinyZ3BackendExecutionLane::LaneAScopedSmtZ3Replay
+        || result.claim_boundary != gateway_formal_tiny_z3_hermetic_backend_execution_result_claim_boundary()
+        || !result.process_spawned
+        || !result.backend_executed
+        || result.backend_artifact_written
+        || result.network_access_observed
+        || result.repository_root_write_observed
+        || result.raw_stdout_stderr_retained
+        || result.creates_accepted_external_result_evidence
+        || result.writes_accepted_evidence_artifacts
+        || result.creates_accepted_formal_evidence
+        || result.creates_level2_evidence
+        || result.populates_score_axes
+        || result.proof_artifact_created
+        || result.checker_transcript_created
+        || result.solver_certificate_created
+        || result.lean_execution_evidence_created
+        || result.cobalt_execution_evidence_created
+        || result.rust_to_lean_execution_evidence_created
+        || result.benchmark_evidence_created
+        || result.external_audit_evidence_created
+        || result.semantic_correctness_claimed
+        || result.production_readiness_claimed
+        || result.sota_claimed
+        || result.breakthrough_claimed
+        || result.full_security_claimed
+        || result.grants_authority
+    {
+        issues.push(
+            HsaiTinyZ3ExtensionLocalExecutionObservationIssue::Phase529ResultStateMismatch,
+        );
+    }
+    if input.phase529_result_digest != result.digest()
+        || input.phase529_request_digest != result.request_digest
+        || input.phase529_candidate_digest != result.phase527_candidate_digest
+        || input.phase529_candidate_input_digest != result.phase527_candidate_input_digest
+        || input.phase529_result_classification != result.classification
+        || input.phase529_solver_verdict_label != result.solver_verdict_label
+    {
+        issues.push(HsaiTinyZ3ExtensionLocalExecutionObservationIssue::Phase529ResultMismatch);
+    }
+    let packet_result_binding_digest =
+        hsai_tiny_z3_extension_local_execution_observation_packet_result_binding_digest(
+            packet, result,
+        );
+    if input.packet_result_binding_digest != packet_result_binding_digest {
+        issues.push(
+            HsaiTinyZ3ExtensionLocalExecutionObservationIssue::InvalidPacketResultBindingDigest,
+        );
+    }
+    if input.nonpromotion_digest
+        != hsai_tiny_z3_extension_local_execution_observation_nonpromotion_digest(
+            packet,
+            result,
+            packet_result_binding_digest,
+        )
+    {
+        issues.push(HsaiTinyZ3ExtensionLocalExecutionObservationIssue::InvalidNonpromotionDigest);
+    }
+    if input.level_mapping != "Level1LocalReplayOrLower" {
+        issues.push(HsaiTinyZ3ExtensionLocalExecutionObservationIssue::InvalidLevelMapping);
+    }
+    let nonclaims = hsai_tiny_z3_extension_local_execution_observation_required_nonclaims();
+    if input.explicit_nonclaims != nonclaims
+        || input.explicit_nonclaims_digest
+            != hsai_tiny_z3_extension_local_execution_observation_nonclaim_digest(&nonclaims)
+    {
+        issues.push(HsaiTinyZ3ExtensionLocalExecutionObservationIssue::NonclaimMismatch);
+    }
+    if input.classification
+        != HsaiTinyZ3ExtensionLocalExecutionObservationClassification::TinyZ3ExtensionObservedLocalOnly
+        || input.observation_label
+            != HsaiTinyZ3ExtensionLocalExecutionObservationLabel::TinyZ3ExtensionObservationRecorded
+    {
+        issues.push(HsaiTinyZ3ExtensionLocalExecutionObservationIssue::InvalidClassification);
+    }
+    if gateway_formal_real_command_lane_local_review_audit_package_text_promotes(
+        &input.observation_summary,
+    ) {
+        issues.push(
+            HsaiTinyZ3ExtensionLocalExecutionObservationIssue::ObservationSummaryPromotionClaim,
+        );
+    }
+    if !input.phase529_backend_execution_observed
+        || input.new_backend_command_invoked
+        || input.proof_artifact_created
+        || input.checker_transcript_created
+        || input.solver_certificate_created
+        || input.raw_transcript_retained
+        || input.imports_external_result
+        || input.mutates_accepted_evidence_ledger
+        || input.creates_accepted_evidence
+        || input.creates_level2_evidence
+        || input.populates_score_axes
+        || input.benchmark_evidence_created
+        || input.external_audit_claimed
+        || input.human_review_acceptance_claimed
+        || input.semantic_correctness_claimed
+        || input.production_readiness_claimed
+        || input.sota_claimed
+        || input.breakthrough_claimed
+        || input.full_security_claimed
+        || input.action_authority_claimed
+    {
+        issues.push(HsaiTinyZ3ExtensionLocalExecutionObservationIssue::PromotionAttempt);
+    }
+
+    HsaiTinyZ3ExtensionLocalExecutionObservationValidation {
+        valid: issues.is_empty(),
+        issues,
+    }
+}
+
 pub fn build_gateway_formal_real_command_lane_formal_evidence_candidate(
     phase323_manifest: &GatewayFormalRealCommandLaneOutputManifest,
     preflight: &GatewayFormalRealCommandLaneExecutionPreflight,
@@ -169585,6 +171025,647 @@ mod tests {
         }
     }
 
+    fn phase651_hash(label: &str) -> Hash {
+        hash_tagged("hsai-agent-admission:test-phase651-hash:v1", &label)
+    }
+
+    fn phase651_report_sections() -> BTreeMap<String, Hash> {
+        hsai_deepprove_lookahead_experiment_report_required_sections()
+            .into_iter()
+            .map(|section| {
+                let digest = phase651_hash(&format!("section-{section}"));
+                (section, digest)
+            })
+            .collect()
+    }
+
+    fn phase651_operator_transcript_boundary() -> HsaiDeepProveOperatorTranscriptBoundary {
+        HsaiDeepProveOperatorTranscriptBoundary {
+            operator_acknowledgement_digest: phase651_hash("operator-ack"),
+            model_ref_digest: phase651_hash("operator-model-ref"),
+            prompt_digest: phase651_hash("operator-prompt"),
+            baseline_transcript_digest: phase651_hash("operator-baseline-transcript"),
+            candidate_transcript_digest_set: BTreeMap::from([
+                (
+                    "candidate-a".to_owned(),
+                    phase651_hash("candidate-a-transcript"),
+                ),
+                (
+                    "candidate-b".to_owned(),
+                    phase651_hash("candidate-b-transcript"),
+                ),
+            ]),
+            redaction_policy_digest: phase651_hash("operator-redaction-policy"),
+            output_root_policy_digest: phase651_hash("operator-output-root-policy"),
+            replay_notes_digest: phase651_hash("operator-replay-notes"),
+            limitation_labels: BTreeSet::from([
+                "redacted-transcript-metadata-only".to_owned(),
+                "not-proof".to_owned(),
+            ]),
+            declared_file_set_digest: phase651_hash("operator-declared-file-set"),
+            declared_file_set_only: true,
+            portable_paths_only: true,
+            digest_agreement: true,
+            raw_secret_retained: false,
+        }
+    }
+
+    fn phase651_deepprove_receipt_ref(
+        status: HsaiDeepProveReceiptStatus,
+    ) -> HsaiDeepProveReceiptRef {
+        let import_digest = match status {
+            HsaiDeepProveReceiptStatus::QuarantinedImportCandidate
+            | HsaiDeepProveReceiptStatus::ReviewedVerifiedInferenceOnly => {
+                phase651_hash("deepprove-receipt-import-candidate")
+            }
+            _ => Hash([0; 32]),
+        };
+        HsaiDeepProveReceiptRef {
+            receipt_id: "phase651-deepprove-receipt".to_owned(),
+            proof_system_id: "deepprove".to_owned(),
+            deepprove_source_ref_digest: phase651_hash("deepprove-source-ref"),
+            model_ref_digest: phase651_hash("deepprove-model-ref"),
+            input_digest: phase651_hash("deepprove-input"),
+            output_digest: phase651_hash("deepprove-output"),
+            proof_artifact_digest: phase651_hash("deepprove-proof-artifact"),
+            verifier_artifact_digest: phase651_hash("deepprove-verifier-artifact"),
+            verification_status_vocabulary_digest: hsai_deepprove_receipt_status_vocabulary_digest(
+            ),
+            trust_root_disclosure_digest: phase651_hash("deepprove-trust-root"),
+            replay_instruction_digest: phase651_hash("deepprove-replay-instruction"),
+            limitation_labels: BTreeSet::from([
+                "inference-only".to_owned(),
+                "not-agent-correctness".to_owned(),
+            ]),
+            receipt_import_candidate_digest: import_digest,
+            status,
+            hidden_network_dependency: false,
+            proof_artifact_committed: false,
+            deepprove_invoked: false,
+            deepprove_cloned_or_vendored: false,
+        }
+    }
+
+    fn phase651_reviewed_receipt_policy() -> HsaiDeepProveReviewedReceiptPolicy {
+        HsaiDeepProveReviewedReceiptPolicy {
+            policy_id: "phase651-reviewed-receipt-policy".to_owned(),
+            policy_digest: phase651_hash("reviewed-receipt-policy"),
+            conclusion: hsai_deepprove_reviewed_receipt_allowed_conclusion().to_owned(),
+            limits_digest: phase651_hash("reviewed-receipt-limits"),
+            reviewed_verified_inference_only: true,
+        }
+    }
+
+    fn phase651_hsai_deepprove_lookahead_experiment_report_input(
+        report_id: &str,
+        receipt_status: Option<HsaiDeepProveReceiptStatus>,
+    ) -> HsaiDeepProveLookaheadExperimentReportInput {
+        let prompt_case = HsaiDeepProveLookaheadPromptCaseRef {
+            prompt_case_id: "phase651-prompt-case".to_owned(),
+            prompt_case_digest: phase651_hash("prompt-case"),
+            prompt_case_metadata_digest: phase651_hash("prompt-case-metadata"),
+        };
+        let greedy_baseline = HsaiDeepProveLookaheadGreedyBaselineRef {
+            baseline_id: "phase651-greedy-baseline".to_owned(),
+            baseline_trace_digest: phase651_hash("greedy-baseline-trace"),
+            baseline_output_digest: phase651_hash("greedy-baseline-output"),
+            baseline_context_digest: phase651_hash("greedy-baseline-context"),
+        };
+        let lookahead_config = HsaiDeepProveLookaheadConfig {
+            config_id: "phase651-lookahead-config".to_owned(),
+            candidate_count_bound: 4,
+            horizon_token_bound: 16,
+            deterministic_fixture_only: true,
+            cost_label_set_digest: phase651_hash("cost-label-set"),
+        };
+        let finding_a_digest = phase651_hash("finding-a");
+        let finding_b_digest = phase651_hash("finding-b");
+        let candidate_a = HsaiDeepProveLookaheadCandidateFutureSpan {
+            candidate_id: "candidate-a".to_owned(),
+            prompt_case_digest: prompt_case.prompt_case_digest,
+            context_digest: phase651_hash("candidate-a-context"),
+            candidate_future_span_digest: phase651_hash("candidate-a-future-span"),
+            completed_output_digest: phase651_hash("candidate-a-output"),
+            horizon_tokens: 8,
+            branch_score_label: HsaiDeepProveLookaheadBranchScoreLabel::CandidateImprovesLocalLabel,
+            selection_label: HsaiDeepProveLookaheadSelectionLabel::Selected,
+            backward_verification_finding_digest: finding_a_digest,
+            cost_label: "bounded-fixture-cost-low".to_owned(),
+        };
+        let candidate_b = HsaiDeepProveLookaheadCandidateFutureSpan {
+            candidate_id: "candidate-b".to_owned(),
+            prompt_case_digest: prompt_case.prompt_case_digest,
+            context_digest: phase651_hash("candidate-b-context"),
+            candidate_future_span_digest: phase651_hash("candidate-b-future-span"),
+            completed_output_digest: phase651_hash("candidate-b-output"),
+            horizon_tokens: 6,
+            branch_score_label: HsaiDeepProveLookaheadBranchScoreLabel::CandidateMatchesLocalLabel,
+            selection_label: HsaiDeepProveLookaheadSelectionLabel::Rejected,
+            backward_verification_finding_digest: finding_b_digest,
+            cost_label: "bounded-fixture-cost-medium".to_owned(),
+        };
+        let candidate_spans = BTreeMap::from([
+            ("candidate-a".to_owned(), candidate_a.clone()),
+            ("candidate-b".to_owned(), candidate_b.clone()),
+        ]);
+        let backward_verification_findings = BTreeMap::from([
+            (
+                "finding-a".to_owned(),
+                HsaiDeepProveLookaheadBackwardVerificationFinding {
+                    finding_id: "finding-a".to_owned(),
+                    verifier_policy_id: "phase651-backward-verifier".to_owned(),
+                    verifier_policy_digest: phase651_hash("verifier-policy"),
+                    completed_output_digest: candidate_a.completed_output_digest,
+                    finding_digest: finding_a_digest,
+                    finding_class:
+                        HsaiDeepProveLookaheadBackwardFindingClass::NoLocalContradictionFound,
+                    finding_summary:
+                        "local fixture verifier found no contradiction in digest-bound output"
+                            .to_owned(),
+                    semantic_correctness_claimed: false,
+                    formal_proof_claimed: false,
+                },
+            ),
+            (
+                "finding-b".to_owned(),
+                HsaiDeepProveLookaheadBackwardVerificationFinding {
+                    finding_id: "finding-b".to_owned(),
+                    verifier_policy_id: "phase651-backward-verifier".to_owned(),
+                    verifier_policy_digest: phase651_hash("verifier-policy"),
+                    completed_output_digest: candidate_b.completed_output_digest,
+                    finding_digest: finding_b_digest,
+                    finding_class:
+                        HsaiDeepProveLookaheadBackwardFindingClass::NoLocalContradictionFound,
+                    finding_summary:
+                        "local fixture verifier found no policy drift in digest-bound output"
+                            .to_owned(),
+                    semantic_correctness_claimed: false,
+                    formal_proof_claimed: false,
+                },
+            ),
+        ]);
+        let receipt_ref = receipt_status.clone().map(phase651_deepprove_receipt_ref);
+        let reviewed_receipt_policy = match receipt_status {
+            Some(HsaiDeepProveReceiptStatus::ReviewedVerifiedInferenceOnly) => {
+                Some(phase651_reviewed_receipt_policy())
+            }
+            _ => None,
+        };
+        let nonclaims = hsai_deepprove_lookahead_experiment_report_required_nonclaims();
+        let candidate_span_digest_set =
+            hsai_deepprove_lookahead_experiment_candidate_span_digests(&candidate_spans);
+        let prompt_case_ref_digest = prompt_case.digest();
+        let greedy_baseline_ref_digest = greedy_baseline.digest();
+        let lookahead_config_digest = lookahead_config.digest();
+        let receipt_status_for_digest = receipt_ref
+            .as_ref()
+            .map(|receipt| receipt.status.clone())
+            .unwrap_or(HsaiDeepProveReceiptStatus::Absent);
+        let admission_bridge_digest = phase651_hash("admission-bridge");
+
+        HsaiDeepProveLookaheadExperimentReportInput {
+            schema_version: HSAI_DEEPPROVE_LOOKAHEAD_EXPERIMENT_REPORT_SCHEMA_VERSION.to_owned(),
+            report_id: report_id.to_owned(),
+            report_policy_id: "phase651-lookahead-report-policy".to_owned(),
+            report_decision_id: "phase651-lookahead-report-decision".to_owned(),
+            created_at_unix: 1_800_000_651,
+            prompt_case,
+            greedy_baseline,
+            lookahead_config,
+            candidate_spans,
+            selected_candidate_id: "candidate-a".to_owned(),
+            selected_context_digest: phase651_hash("candidate-a-context"),
+            backward_verification_findings,
+            branch_report_section_digests: phase651_report_sections(),
+            operator_transcript_boundary: Some(phase651_operator_transcript_boundary()),
+            deepprove_receipt_ref: receipt_ref,
+            reviewed_receipt_policy,
+            admission_bridge_digest,
+            maps_to_admission_candidate: true,
+            model_output_proposal_only: true,
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest: hsai_deepprove_lookahead_experiment_report_nonclaim_digest(
+                &nonclaims,
+            ),
+            nonpromotion_digest: hsai_deepprove_lookahead_experiment_report_nonpromotion_digest(
+                prompt_case_ref_digest,
+                greedy_baseline_ref_digest,
+                lookahead_config_digest,
+                hash_tagged(
+                    "hsai-agent-admission:hsai-deepprove-lookahead-candidate-span-digest-set:v1",
+                    &candidate_span_digest_set,
+                ),
+                &receipt_status_for_digest,
+                admission_bridge_digest,
+            ),
+            classification: HsaiDeepProveLookaheadReportClassification::LocalMetadataRecorded,
+            report_label: HsaiDeepProveLookaheadReportLabel::LookaheadReportRecorded,
+            report_summary:
+                "local fixture lookahead metadata compares digest-bound branches as advisory proposal metadata"
+                    .to_owned(),
+            live_llm_execution_performed: false,
+            model_download_performed: false,
+            live_zkml_execution_performed: false,
+            deepprove_execution_performed: false,
+            external_result_imported: false,
+            accepted_evidence_ledger_mutated: false,
+            accepted_formal_evidence_created: false,
+            creates_level2_evidence: false,
+            score_axes_populated: false,
+            benchmark_evidence_created: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            external_audit_claimed: false,
+            human_review_acceptance_claimed: false,
+            authority_granted: false,
+        }
+    }
+
+    #[test]
+    fn phase651_hsai_deepprove_lookahead_report_records_valid_metadata_without_receipt() {
+        let input = phase651_hsai_deepprove_lookahead_experiment_report_input(
+            "phase651-lookahead-report",
+            None,
+        );
+        let report = build_hsai_deepprove_lookahead_experiment_report(&input)
+            .expect("phase651 lookahead report builds without DeepProve receipt");
+
+        assert_eq!(
+            report.state_slice,
+            HSAI_DEEPPROVE_LOOKAHEAD_EXPERIMENT_REPORT_STATE_SLICE
+        );
+        assert!(report
+            .subphase_state_slices
+            .contains(HSAI_DEEPPROVE_LOOKAHEAD_INERT_METADATA_STATE_SLICE));
+        assert!(report
+            .subphase_state_slices
+            .contains(HSAI_DEEPPROVE_ADMISSION_BRIDGE_STATE_SLICE));
+        assert_eq!(report.candidate_span_digest_set.len(), 2);
+        assert_eq!(report.selected_candidate_id, "candidate-a");
+        assert_eq!(
+            report.deepprove_receipt_status,
+            HsaiDeepProveReceiptStatus::Absent
+        );
+        assert!(report.deepprove_receipt_ref_digest.is_none());
+        assert!(report.operator_transcript_boundary_digest.is_some());
+        assert_eq!(
+            report.evidence_ceiling,
+            "Level1LocalReplayQuarantinedMetadataOnly"
+        );
+        assert!(!report.authority_granted);
+        assert!(!report.accepted_formal_evidence_created);
+        assert!(!report.score_axes_populated);
+    }
+
+    #[test]
+    fn phase651_hsai_deepprove_lookahead_report_records_a_to_k_with_reviewed_receipt() {
+        let input = phase651_hsai_deepprove_lookahead_experiment_report_input(
+            "phase651-lookahead-reviewed-receipt-report",
+            Some(HsaiDeepProveReceiptStatus::ReviewedVerifiedInferenceOnly),
+        );
+        let report = build_hsai_deepprove_lookahead_experiment_report(&input)
+            .expect("phase651 lookahead report builds with reviewed receipt policy");
+
+        assert_eq!(
+            report.deepprove_receipt_status,
+            HsaiDeepProveReceiptStatus::ReviewedVerifiedInferenceOnly
+        );
+        assert!(report.deepprove_receipt_ref_digest.is_some());
+        assert!(report.reviewed_receipt_policy_digest.is_some());
+        assert!(report.maps_to_admission_candidate);
+        assert!(report.model_output_proposal_only);
+        assert!(!report.deepprove_execution_performed);
+        assert!(!report.live_llm_execution_performed);
+        assert!(!report.external_result_imported);
+        assert!(!report.authority_granted);
+    }
+
+    #[test]
+    fn phase651_hsai_deepprove_lookahead_report_rejects_bounds_and_missing_sources() {
+        let mut input = phase651_hsai_deepprove_lookahead_experiment_report_input(
+            "phase651-lookahead-bounds-rejection",
+            None,
+        );
+        input.prompt_case.prompt_case_digest = Hash([0; 32]);
+        input.greedy_baseline.baseline_trace_digest = Hash([0; 32]);
+        input.lookahead_config.candidate_count_bound = 1;
+        input.lookahead_config.horizon_token_bound = 4;
+        input.nonpromotion_digest = Hash([0; 32]);
+        let validation = validate_hsai_deepprove_lookahead_experiment_report_input(&input);
+
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&HsaiDeepProveLookaheadExperimentReportIssue::MissingPromptCaseDigest));
+        assert!(validation
+            .issues
+            .contains(&HsaiDeepProveLookaheadExperimentReportIssue::MissingBaselineReference));
+        assert!(validation
+            .issues
+            .contains(&HsaiDeepProveLookaheadExperimentReportIssue::CandidateCountOutOfBounds));
+        assert!(validation
+            .issues
+            .contains(&HsaiDeepProveLookaheadExperimentReportIssue::HorizonOutOfBounds));
+        assert!(validation
+            .issues
+            .contains(&HsaiDeepProveLookaheadExperimentReportIssue::NonpromotionDigestMismatch));
+        assert!(build_hsai_deepprove_lookahead_experiment_report(&input).is_err());
+    }
+
+    #[test]
+    fn phase651_hsai_deepprove_lookahead_report_rejects_selected_candidate_drift() {
+        let mut input = phase651_hsai_deepprove_lookahead_experiment_report_input(
+            "phase651-lookahead-selection-drift",
+            None,
+        );
+        input.selected_candidate_id = "candidate-missing".to_owned();
+        input.selected_context_digest = phase651_hash("different-context");
+        let validation = validate_hsai_deepprove_lookahead_experiment_report_input(&input);
+
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&HsaiDeepProveLookaheadExperimentReportIssue::SelectedCandidateMissing));
+
+        let mut input = phase651_hsai_deepprove_lookahead_experiment_report_input(
+            "phase651-lookahead-context-drift",
+            None,
+        );
+        input.selected_context_digest = phase651_hash("different-context");
+        let validation = validate_hsai_deepprove_lookahead_experiment_report_input(&input);
+
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&HsaiDeepProveLookaheadExperimentReportIssue::SelectedContextDigestMismatch));
+    }
+
+    #[test]
+    fn phase651_hsai_deepprove_lookahead_report_rejects_verified_receipt_without_policy() {
+        let mut input = phase651_hsai_deepprove_lookahead_experiment_report_input(
+            "phase651-lookahead-verified-receipt-without-policy",
+            Some(HsaiDeepProveReceiptStatus::ReviewedVerifiedInferenceOnly),
+        );
+        input.reviewed_receipt_policy = None;
+        let validation = validate_hsai_deepprove_lookahead_experiment_report_input(&input);
+
+        assert!(!validation.valid);
+        assert!(validation.issues.contains(
+            &HsaiDeepProveLookaheadExperimentReportIssue::VerifiedReceiptBeforeReviewedPolicy
+        ));
+        assert!(build_hsai_deepprove_lookahead_experiment_report(&input).is_err());
+    }
+
+    #[test]
+    fn phase651_hsai_deepprove_lookahead_report_rejects_promotion_and_authority() {
+        let mut input = phase651_hsai_deepprove_lookahead_experiment_report_input(
+            "phase651-lookahead-promotion-rejection",
+            None,
+        );
+        input.authority_granted = true;
+        input.accepted_formal_evidence_created = true;
+        input.creates_level2_evidence = true;
+        input.score_axes_populated = true;
+        input.semantic_correctness_claimed = true;
+        input.report_summary =
+            "this lookahead report creates accepted evidence and proves semantic correctness"
+                .to_owned();
+        let validation = validate_hsai_deepprove_lookahead_experiment_report_input(&input);
+
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&HsaiDeepProveLookaheadExperimentReportIssue::ReportSummaryPromotionClaim));
+        assert!(validation
+            .issues
+            .contains(&HsaiDeepProveLookaheadExperimentReportIssue::PromotionAttempt));
+        assert!(build_hsai_deepprove_lookahead_experiment_report(&input).is_err());
+    }
+
+    #[test]
+    fn phase653_hsai_tiny_z3_extension_local_execution_observation_records_local_phase529_binding()
+    {
+        let Some((cleanup_roots, packet, result)) =
+            phase653_hsai_tiny_z3_extension_local_execution_observation_source(
+                "phase653-observation",
+            )
+        else {
+            return;
+        };
+        let input = phase653_hsai_tiny_z3_extension_local_execution_observation_input(
+            "phase653-tiny-z3-extension-observation",
+            &packet,
+            &result,
+            HsaiTinyZ3ExtensionLocalExecutionObservationLabel::TinyZ3ExtensionObservationRecorded,
+        );
+        let observation =
+            build_hsai_tiny_z3_extension_local_execution_observation(&packet, &result, &input)
+                .expect("phase653 tiny-Z3 extension local observation builds");
+
+        assert_eq!(
+            observation.state_slice,
+            HSAI_TINY_Z3_EXTENSION_LOCAL_EXECUTION_OBSERVATION_STATE_SLICE
+        );
+        assert_eq!(observation.source_execution_packet_digest, packet.digest());
+        assert_eq!(observation.phase529_result_digest, result.digest());
+        assert_eq!(
+            observation.source_execution_packet_lane_class,
+            HsaiFormalBackendAccelerationLaneClass::TinyZ3ReplayExtension
+        );
+        assert_eq!(
+            observation.source_execution_packet_status,
+            HsaiFormalBackendAccelerationExecutionPacketStatus::NotRun
+        );
+        assert_eq!(
+            observation.phase529_result_classification,
+            GatewayFormalTinyZ3HermeticBackendExecutionResultClassification::LaneASmtZ3RunObservedLocalOnly
+        );
+        assert_eq!(observation.level_mapping, "Level1LocalReplayOrLower");
+        assert!(observation.phase529_backend_execution_observed);
+        assert!(!observation.new_backend_command_invoked);
+        assert!(!observation.proof_artifact_created);
+        assert!(!observation.checker_transcript_created);
+        assert!(!observation.solver_certificate_created);
+        assert!(!observation.raw_transcript_retained);
+        assert!(!observation.imports_external_result);
+        assert!(!observation.mutates_accepted_evidence_ledger);
+        assert!(!observation.creates_accepted_evidence);
+        assert!(!observation.creates_level2_evidence);
+        assert!(!observation.populates_score_axes);
+        assert!(!observation.benchmark_evidence_created);
+        assert!(!observation.external_audit_claimed);
+        assert!(!observation.human_review_acceptance_claimed);
+        assert!(!observation.semantic_correctness_claimed);
+        assert!(!observation.production_readiness_claimed);
+        assert!(!observation.sota_claimed);
+        assert!(!observation.breakthrough_claimed);
+        assert!(!observation.full_security_claimed);
+        assert!(!observation.grants_authority);
+
+        for root in cleanup_roots {
+            fs::remove_dir_all(root).expect("phase653 observation cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase653_hsai_tiny_z3_extension_local_execution_observation_rejects_non_tiny_z3_packet() {
+        let Some((
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            phase638_bundle_root,
+            source,
+        )) = phase650_hsai_formal_backend_acceleration_execution_packet_source(
+            "phase653-cobalt-packet",
+        )
+        else {
+            return;
+        };
+        let packet_input = phase650_hsai_formal_backend_acceleration_execution_packet_input(
+            "phase653-cobalt-packet",
+            &source,
+            HsaiFormalBackendAccelerationExecutionPacketStatus::NotRun,
+            HsaiFormalBackendAccelerationExecutionPacketLabel::ExecutionPacketRecorded,
+        );
+        let packet =
+            build_hsai_formal_backend_acceleration_execution_packet(&source, &packet_input)
+                .expect("phase653 cobalt packet source builds");
+        let Some((phase529_roots, _, result)) =
+            phase653_hsai_tiny_z3_extension_local_execution_observation_source(
+                "phase653-cobalt-result",
+            )
+        else {
+            return;
+        };
+        let input = phase653_hsai_tiny_z3_extension_local_execution_observation_input(
+            "phase653-cobalt-rejected",
+            &packet,
+            &result,
+            HsaiTinyZ3ExtensionLocalExecutionObservationLabel::TinyZ3ExtensionObservationRecorded,
+        );
+        let validation = validate_hsai_tiny_z3_extension_local_execution_observation_input(
+            &packet, &result, &input,
+        );
+
+        assert!(!validation.valid);
+        assert!(validation.issues.contains(
+            &HsaiTinyZ3ExtensionLocalExecutionObservationIssue::SourceExecutionPacketStateMismatch
+        ));
+        assert!(
+            build_hsai_tiny_z3_extension_local_execution_observation(&packet, &result, &input)
+                .is_err()
+        );
+
+        for root in phase529_roots {
+            fs::remove_dir_all(root).expect("phase653 cobalt result cleanup succeeds");
+        }
+        for root in [
+            &phase638_bundle_root,
+            &phase595_bundle_root,
+            &bundle_root,
+            &capture_root,
+            &packet_root,
+            &output_root,
+            &phase405_output_root,
+            &obligation_root,
+        ] {
+            fs::remove_dir_all(root).expect("phase653 cobalt packet cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase653_hsai_tiny_z3_extension_local_execution_observation_rejects_phase529_drift() {
+        let Some((cleanup_roots, packet, mut result)) =
+            phase653_hsai_tiny_z3_extension_local_execution_observation_source("phase653-drift")
+        else {
+            return;
+        };
+        let input = phase653_hsai_tiny_z3_extension_local_execution_observation_input(
+            "phase653-drift-observation",
+            &packet,
+            &result,
+            HsaiTinyZ3ExtensionLocalExecutionObservationLabel::TinyZ3ExtensionObservationRecorded,
+        );
+        result.classification =
+            GatewayFormalTinyZ3HermeticBackendExecutionResultClassification::LaneASmtZ3RunTimedOut;
+        let validation = validate_hsai_tiny_z3_extension_local_execution_observation_input(
+            &packet, &result, &input,
+        );
+
+        assert!(!validation.valid);
+        assert!(validation.issues.contains(
+            &HsaiTinyZ3ExtensionLocalExecutionObservationIssue::Phase529ResultStateMismatch
+        ));
+        assert!(validation
+            .issues
+            .contains(&HsaiTinyZ3ExtensionLocalExecutionObservationIssue::Phase529ResultMismatch));
+        assert!(validation.issues.contains(
+            &HsaiTinyZ3ExtensionLocalExecutionObservationIssue::InvalidPacketResultBindingDigest
+        ));
+        assert!(validation.issues.contains(
+            &HsaiTinyZ3ExtensionLocalExecutionObservationIssue::InvalidNonpromotionDigest
+        ));
+        assert!(
+            build_hsai_tiny_z3_extension_local_execution_observation(&packet, &result, &input)
+                .is_err()
+        );
+
+        for root in cleanup_roots {
+            fs::remove_dir_all(root).expect("phase653 drift cleanup succeeds");
+        }
+    }
+
+    #[test]
+    fn phase653_hsai_tiny_z3_extension_local_execution_observation_rejects_promotion_attempts() {
+        let Some((cleanup_roots, packet, result)) =
+            phase653_hsai_tiny_z3_extension_local_execution_observation_source("phase653-promote")
+        else {
+            return;
+        };
+        let mut input = phase653_hsai_tiny_z3_extension_local_execution_observation_input(
+            "phase653-promote-observation",
+            &packet,
+            &result,
+            HsaiTinyZ3ExtensionLocalExecutionObservationLabel::TinyZ3ExtensionObservationRejected,
+        );
+        input.classification =
+            HsaiTinyZ3ExtensionLocalExecutionObservationClassification::TinyZ3ExtensionObservationRejected;
+        input.new_backend_command_invoked = true;
+        input.creates_accepted_evidence = true;
+        input.creates_level2_evidence = true;
+        input.observation_summary =
+            "this tiny-Z3 extension observation creates accepted evidence and SOTA".to_owned();
+        let validation = validate_hsai_tiny_z3_extension_local_execution_observation_input(
+            &packet, &result, &input,
+        );
+
+        assert!(!validation.valid);
+        assert!(validation
+            .issues
+            .contains(&HsaiTinyZ3ExtensionLocalExecutionObservationIssue::InvalidClassification));
+        assert!(validation.issues.contains(
+            &HsaiTinyZ3ExtensionLocalExecutionObservationIssue::ObservationSummaryPromotionClaim
+        ));
+        assert!(validation
+            .issues
+            .contains(&HsaiTinyZ3ExtensionLocalExecutionObservationIssue::PromotionAttempt));
+        assert!(
+            build_hsai_tiny_z3_extension_local_execution_observation(&packet, &result, &input)
+                .is_err()
+        );
+
+        for root in cleanup_roots {
+            fs::remove_dir_all(root).expect("phase653 promotion cleanup succeeds");
+        }
+    }
+
     #[test]
     fn gateway_formal_real_command_lane_contract_builds_without_execution_or_promotion() {
         let (
@@ -185189,6 +187270,153 @@ mod tests {
             solver_certificate_created: false,
             raw_transcript_retained: false,
             raw_proof_artifact_retained: false,
+            imports_external_result: false,
+            mutates_accepted_evidence_ledger: false,
+            creates_accepted_evidence: false,
+            creates_level2_evidence: false,
+            populates_score_axes: false,
+            benchmark_evidence_created: false,
+            external_audit_claimed: false,
+            human_review_acceptance_claimed: false,
+            semantic_correctness_claimed: false,
+            production_readiness_claimed: false,
+            sota_claimed: false,
+            breakthrough_claimed: false,
+            full_security_claimed: false,
+            action_authority_claimed: false,
+        }
+    }
+
+    fn phase653_hsai_tiny_z3_extension_local_execution_observation_source(
+        source_prefix: &str,
+    ) -> Option<(
+        Vec<PathBuf>,
+        HsaiFormalBackendAccelerationExecutionPacket,
+        GatewayFormalTinyZ3HermeticBackendExecutionResult,
+    )> {
+        let (
+            obligation_root,
+            phase405_output_root,
+            output_root,
+            packet_root,
+            capture_root,
+            bundle_root,
+            phase595_bundle_root,
+            phase638_bundle_root,
+            resolution,
+        ) = phase648_hsai_formal_backend_acceleration_preflight_source(source_prefix)?;
+        let preflight_input = phase648_hsai_formal_backend_acceleration_preflight_input(
+            &format!("{source_prefix}-phase648-preflight"),
+            &resolution,
+            HsaiFormalBackendAccelerationLaneClass::TinyZ3ReplayExtension,
+            HsaiFormalBackendAccelerationPreflightLabel::PreflightRecorded,
+        );
+        let preflight =
+            build_hsai_formal_backend_acceleration_preflight(&resolution, &preflight_input)
+                .expect("phase653 source Phase 648 tiny-Z3 preflight metadata builds");
+        let mut packet_input = phase650_hsai_formal_backend_acceleration_execution_packet_input(
+            &format!("{source_prefix}-phase650-packet"),
+            &preflight,
+            HsaiFormalBackendAccelerationExecutionPacketStatus::NotRun,
+            HsaiFormalBackendAccelerationExecutionPacketLabel::ExecutionPacketRecorded,
+        );
+        packet_input.tool_role_label = "tiny-z3-replay".to_owned();
+        packet_input.expected_tool_family = "tiny-z3".to_owned();
+        packet_input.command_descriptor_digest = hash_tagged(
+            "hsai-agent-admission:phase653-tiny-z3-extension-command-descriptor:v1",
+            &"reuse-phase529-hermetic-z3-runner-output-no-new-spawn",
+        );
+        let input_manifest_digest_set_digest = hash_tagged(
+            "hsai-agent-admission:hsai-formal-backend-acceleration-execution-packet-input-manifest-set:v1",
+            &packet_input.input_manifest_digest_set,
+        );
+        packet_input.nonpromotion_digest =
+            hsai_formal_backend_acceleration_execution_packet_nonpromotion_digest(
+                preflight.digest(),
+                packet_input.command_descriptor_digest,
+                input_manifest_digest_set_digest,
+                &packet_input.status,
+            );
+        packet_input.packet_summary =
+            "local tiny-Z3 replay extension execution packet metadata recorded with NotRun status"
+                .to_owned();
+        let packet =
+            build_hsai_formal_backend_acceleration_execution_packet(&preflight, &packet_input)
+                .expect("phase653 source Phase 650 tiny-Z3 execution packet metadata builds");
+
+        let (phase529_obligation_root, phase529_phase405_output_root, phase529_output_root, result) =
+            phase531_tiny_z3_backend_execution_artifact_package_source(&format!(
+                "{source_prefix}-phase529"
+            ))?;
+        let cleanup_roots = vec![
+            phase529_output_root,
+            phase529_phase405_output_root,
+            phase529_obligation_root,
+            phase638_bundle_root,
+            phase595_bundle_root,
+            bundle_root,
+            capture_root,
+            packet_root,
+            output_root,
+            phase405_output_root,
+            obligation_root,
+        ];
+
+        Some((cleanup_roots, packet, result))
+    }
+
+    fn phase653_hsai_tiny_z3_extension_local_execution_observation_input(
+        observation_id: &str,
+        packet: &HsaiFormalBackendAccelerationExecutionPacket,
+        result: &GatewayFormalTinyZ3HermeticBackendExecutionResult,
+        observation_label: HsaiTinyZ3ExtensionLocalExecutionObservationLabel,
+    ) -> HsaiTinyZ3ExtensionLocalExecutionObservationInput {
+        let packet_result_binding_digest =
+            hsai_tiny_z3_extension_local_execution_observation_packet_result_binding_digest(
+                packet, result,
+            );
+        let nonclaims = hsai_tiny_z3_extension_local_execution_observation_required_nonclaims();
+        HsaiTinyZ3ExtensionLocalExecutionObservationInput {
+            schema_version: HSAI_TINY_Z3_EXTENSION_LOCAL_EXECUTION_OBSERVATION_SCHEMA_VERSION
+                .to_owned(),
+            observation_id: observation_id.to_owned(),
+            observation_policy_id: "phase653-tiny-z3-extension-observation-policy".to_owned(),
+            observation_decision_id: "phase653-tiny-z3-extension-observation-decision".to_owned(),
+            observed_at_unix: 1_800_000_653,
+            source_execution_packet_digest: packet.digest(),
+            source_execution_packet_state_slice: packet.state_slice.clone(),
+            source_execution_packet_status: packet.status.clone(),
+            source_execution_packet_classification: packet.classification.clone(),
+            source_execution_packet_lane_class: packet.lane_class.clone(),
+            phase529_result_digest: result.digest(),
+            phase529_request_digest: result.request_digest,
+            phase529_candidate_digest: result.phase527_candidate_digest,
+            phase529_candidate_input_digest: result.phase527_candidate_input_digest,
+            phase529_result_classification: result.classification.clone(),
+            phase529_solver_verdict_label: result.solver_verdict_label.clone(),
+            packet_result_binding_digest,
+            nonpromotion_digest:
+                hsai_tiny_z3_extension_local_execution_observation_nonpromotion_digest(
+                    packet,
+                    result,
+                    packet_result_binding_digest,
+                ),
+            level_mapping: "Level1LocalReplayOrLower".to_owned(),
+            explicit_nonclaims: nonclaims.clone(),
+            explicit_nonclaims_digest:
+                hsai_tiny_z3_extension_local_execution_observation_nonclaim_digest(&nonclaims),
+            classification:
+                HsaiTinyZ3ExtensionLocalExecutionObservationClassification::TinyZ3ExtensionObservedLocalOnly,
+            observation_label,
+            observation_summary:
+                "local tiny-Z3 extension observation binds Phase 650 packet metadata to one Phase 529 local Z3 observation without new spawn"
+                    .to_owned(),
+            phase529_backend_execution_observed: true,
+            new_backend_command_invoked: false,
+            proof_artifact_created: false,
+            checker_transcript_created: false,
+            solver_certificate_created: false,
+            raw_transcript_retained: false,
             imports_external_result: false,
             mutates_accepted_evidence_ledger: false,
             creates_accepted_evidence: false,

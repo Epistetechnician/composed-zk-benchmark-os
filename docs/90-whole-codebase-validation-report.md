@@ -9478,5 +9478,40 @@ reproduction, creates no Level2+ evidence, populates no score axes, creates no
 benchmark evidence, and claims no production/SOTA/security/semantic-correctness
 result.
 
+[docs/651b-through-651k-phase-hsai-deepprove-lookahead-local-metadata-notes.md](docs/651b-through-651k-phase-hsai-deepprove-lookahead-local-metadata-notes.md)
+documents the Phase 651-B through 651-K local DeepProve lookahead metadata
+implementation. It adds typed digest-only report metadata for prompt cases,
+greedy baselines, bounded lookahead config, candidate future spans, local
+branch-score labels, selected/rejected decisions, backward-verification
+findings, required branch-scoring report sections, operator transcript boundary
+and import-candidate checks, future DeepProve receipt refs, quarantined receipt
+import-candidate checks, reviewed receipt policy limits, and advisory admission
+bridge metadata. It validates candidate count and horizon bounds, selected
+candidate membership, selected context digest binding, prompt/baseline digest
+presence, backward-verifier output binding, operator transcript quarantine
+constraints, receipt status vocabulary, reviewed receipt policy exactness,
+nonclaims, nonpromotion digests, and no authority grant. It performs no live LLM
+generation, clones or vendors no DeepProve source, runs no DeepProve or zkML
+execution, generates no proof artifact, retains no raw transcript, imports no
+external result, mutates no accepted Evidence Ledger, creates no accepted
+evidence, creates no Level2+ evidence, populates no score axes, creates no
+benchmark evidence, and claims no production/SOTA/security/semantic-correctness
+result. Focused validation target:
+`cargo test -p hsai-agent-admission --lib phase651_hsai_deepprove_lookahead -- --nocapture`.
+
+[docs/653-phase-hsai-tiny-z3-extension-local-execution-observation-notes.md](docs/653-phase-hsai-tiny-z3-extension-local-execution-observation-notes.md)
+documents the Phase 653 local tiny-Z3 extension execution-observation
+implementation. It adds observation input/output/classification, label,
+validation, and issue types, binds one Phase 650 `TinyZ3ReplayExtension`
+`NotRun` packet to one exact Phase 529 local hermetic SMT/Z3 backend execution
+observation, and records that no new backend command is invoked in the Phase
+653 layer. It retains no raw transcript, generates no proof artifact, creates
+no checker transcript or solver certificate, imports no external result,
+mutates no accepted Evidence Ledger, creates no accepted evidence, creates no
+Level2+ evidence, populates no score axes, creates no benchmark evidence, and
+claims no production/SOTA/security/semantic-correctness result. Focused
+validation target:
+`cargo test -p hsai-agent-admission --lib phase653_hsai_tiny_z3_extension_local_execution_observation -- --nocapture`.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
