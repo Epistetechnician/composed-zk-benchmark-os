@@ -9589,5 +9589,18 @@ or process-API exception was added. The evidence remains
 proof, SHA-256 proof, accepted evidence, Level2+, score-axis evidence,
 semantic correctness, production readiness, SOTA, or full security.
 
+[docs/659-phase-hsai-gateway-proposal-digest-production-source-correspondence-boundary.md](docs/659-phase-hsai-gateway-proposal-digest-production-source-correspondence-boundary.md)
+records the Phase 659 documentation-first production source-correspondence
+boundary. It binds the current `GatewayActionProposal::digest` call path,
+admission and imported type anchors, `serde_json` and `sha2` dependency locks,
+source-bound Serde encoding behavior, a bounded first property set, the
+C0-through-C4 correspondence ladder, backend responsibilities, a fail-closed
+taxonomy, and the narrow Phase 660 preimage-witness target. It explicitly does
+not call the current encoding a portable canonical-JSON standard. No Rust,
+Cargo metadata, backend execution, generated artifact, accepted evidence,
+Level2+, score-axis evidence, benchmark evidence, semantic correctness,
+production readiness, SOTA, or full security is created. The evidence ceiling
+remains `Level1LocalReplayOrLower`.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
