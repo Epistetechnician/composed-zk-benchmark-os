@@ -18450,14 +18450,19 @@ fixture-only replay metadata, backward-verification findings, branch-scoring
 section digests, operator transcript boundary and quarantined import-candidate
 metadata, future DeepProve receipt refs, quarantined DeepProve receipt import
 candidates, reviewed receipt policy, and advisory HSAI admission bridge
-metadata.
+metadata. The fixture replay builder accepts digest-bound toy candidates,
+deterministically selects the first `Selected` branch from the ordered fixture
+map, constructs a normal Phase 651 report input, and reuses the report
+validator.
 
 Validation coverage: focused Rust validation target is
 `cargo test -p hsai-agent-admission --lib phase651_hsai_deepprove_lookahead -- --nocapture`.
 It covers valid metadata without a receipt, A-through-K metadata with a reviewed
-receipt policy, candidate count and horizon bounds, missing prompt/baseline
-digests, selected candidate absence, selected context digest drift, verified
-receipt status without reviewed policy, and promotion/authority rejection.
+receipt policy, deterministic fixture-only replay digest stability, invalid
+fixture schema rejection, fixture no-selection rejection, candidate count and
+horizon bounds, missing prompt/baseline digests, selected candidate absence,
+selected context digest drift, verified receipt status without reviewed policy,
+and promotion/authority rejection.
 
 Exit criteria: HSAI now has a docs-first end-to-end contract plus local
 digest-only metadata for lookahead candidate-search reports and the full
@@ -18501,6 +18506,37 @@ transcript retention, no accepted Evidence Ledger mutation, no accepted
 evidence, no Level2+ evidence, no populated score axes, no benchmark evidence,
 no external-audit claim, and no production/SOTA/security/semantic-correctness
 claim.
+
+## Phase 654 HSAI Responsible Pre-Execution Architecture Closure
+
+Status: complete for docs-only responsible pre-execution architecture closure.
+See
+`docs/654-phase-hsai-responsible-pre-execution-architecture-closure.md`.
+
+Goal: close the architecture phase before any later formal-backend execution
+request by consolidating the Phase 647-650 acceleration ladder, Phase 651-A
+through 651-K lookahead metadata lane, and Phase 653 tiny-Z3 observation
+binding into one explicit readiness and stop-rule record.
+
+Implemented: Phase 654 records the completed pre-execution architecture,
+required next boundary before any new execution, lane-by-lane readiness,
+evidence ceiling, responsible stop rule, and defensible claim ceiling. It
+identifies `TinyZ3ReplayExtension` as ready for a later narrow execution
+boundary request and keeps Lean, COBALT, Rust-to-Lean, federated dispatch, and
+DeepProve behind later explicit boundaries.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+claim-boundary docs checks, source scans, and markdown navigation checks.
+
+Exit criteria: the responsible pre-execution architecture phase is closed. The
+next responsible step is not another broad architecture report; it is a narrow
+execution-boundary phase that names one target property and one backend lane.
+The repo still has no new Phase 654 backend execution, no Lean run, no COBALT
+run, no Rust-to-Lean extraction, no DeepProve run, no proof artifacts, no
+checker transcripts, no solver certificates, no accepted Evidence Ledger
+mutation, no accepted evidence, no Level2+ evidence, no populated score axes,
+no benchmark evidence, no external-audit claim, and no
+production/SOTA/security/semantic-correctness claim.
 
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
