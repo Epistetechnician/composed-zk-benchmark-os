@@ -8978,7 +8978,13 @@ persistence, deployment, UI, credential, evidence-promotion, proof-authority,
 and claim-escalation surfaces, and the campaign decision: keep the Phase 614
 two-obligation mixed local campaign as the current `Level1LocalReplay` campaign
 and do not run a broader campaign until a future docs-first boundary justifies
-it.
+it. The report separates testing acceleration from claim promotion: future
+named local Z3/SMT, Lean, COBALT, Rust-to-Lean, or related formal backend lanes
+may accelerate quarantined execution only with hermetic inputs, provenance,
+replay rules, failure taxonomy, and negative promotion tests, while accepted
+evidence, Level2+, score-axis, benchmark, proof-authority, production, SOTA,
+full-security, and action-authority claims remain blocked until separately
+reviewed and accepted.
 
 [docs/616-phase-pcsm-clean-source-intake-readback-reconciliation-boundary.md](docs/616-phase-pcsm-clean-source-intake-readback-reconciliation-boundary.md)
 documents the Phase 616 PCSM clean-source intake readback reconciliation
@@ -9381,6 +9387,21 @@ accepted Evidence Ledger, creates no accepted evidence, creates no Level2+
 evidence, populates no score axes, runs no Lean/COBALT/Rust-to-Lean or
 additional SMT/Z3 execution, creates no benchmark evidence, and claims no
 production/SOTA/security/semantic-correctness result.
+
+[docs/646-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-policy-resolution-notes.md](docs/646-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-policy-resolution-notes.md)
+documents the Phase 646 local accepted-result output policy-resolution
+metadata implementation. It adds typed input/output/classification/label/issue
+metadata, deterministic Phase 644 eligibility bindings, resolution policy,
+blocker, and nonpromotion digests, exact Phase 644 source-state validation,
+and focused tests for successful blocked policy-resolution metadata, Phase 644
+drift rejection, inherited digest drift rejection, accepted-ledger mutation
+rejection, accepted-evidence rejection, Level2 rejection, and strong-claim
+rejection. It imports no external result, mutates no accepted Evidence Ledger,
+creates no accepted evidence, creates no Level2+ evidence, populates no score
+axes, runs no Lean/COBALT/Rust-to-Lean or additional SMT/Z3 execution, creates
+no benchmark evidence, and claims no production/SOTA/security
+/semantic-correctness result. Focused validation passed with
+`cargo test -p hsai-agent-admission --lib phase646_tiny_z3_packet_role_artifact_independent_operator_accepted_result_output_policy_resolution -- --nocapture`.
 
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
