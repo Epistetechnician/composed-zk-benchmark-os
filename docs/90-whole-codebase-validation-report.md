@@ -9461,5 +9461,22 @@ evidence, and claims no production/SOTA/security/semantic-correctness result.
 Focused validation passed with
 `cargo test -p hsai-agent-admission --lib phase650_hsai_formal_backend_acceleration_execution_packet -- --nocapture`.
 
+[docs/651-phase-hsai-deepprove-lookahead-candidate-search-boundary.md](docs/651-phase-hsai-deepprove-lookahead-candidate-search-boundary.md)
+documents the Phase 651 docs-first DeepProve lookahead candidate-search
+boundary. It explains why bounded candidate-future search matters for HSAI,
+defines a future end-to-end flow from prompt case to greedy baseline,
+lookahead rounds, backward verification, experiment report, and optional future
+DeepProve receipt references, and caps the current state at `Level0DesignNote`.
+It also defines execution subphases for inert metadata, fixture replay, backward
+verification metadata, branch-scoring reports, operator transcript quarantine,
+DeepProve receipt boundaries, reviewed receipt policy, and HSAI admission
+bridging. It creates no Rust code, clones or vendors no DeepProve source, runs
+no live LLM generation, runs no live zkML execution, generates no proof
+artifacts or transcripts, imports no external result, mutates no accepted
+Evidence Ledger, creates no accepted evidence, creates no independent
+reproduction, creates no Level2+ evidence, populates no score axes, creates no
+benchmark evidence, and claims no production/SOTA/security/semantic-correctness
+result.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

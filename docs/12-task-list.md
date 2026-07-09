@@ -18427,6 +18427,40 @@ mutation, no accepted evidence, no Level2+ evidence, no populated score axes,
 no benchmark evidence, no external-audit claim, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 651 HSAI DeepProve Lookahead Candidate Search Boundary
+
+Status: complete for docs-first DeepProve lookahead candidate-search boundary.
+See
+`docs/651-phase-hsai-deepprove-lookahead-candidate-search-boundary.md`.
+
+Goal: explain why bounded candidate-future search matters for HSAI and define
+an end-to-end implementation path that compares greedy autoregressive generation
+against lookahead candidate search, while keeping DeepProve as a future
+proof-receipt lane rather than an implementation dependency in the current
+state.
+
+Implemented: Phase 651 defines the experiment hypothesis, target flow, future
+metadata model, scoring labels, execution subphase ladder, parallel HSAI lane
+coordination, validation rules, DeepProve source position, evidence ceiling,
+and stop rule. It preserves the distinction that causal attention looks backward
+while search can evaluate proposed futures after they are materialized as
+candidates.
+
+Validation coverage: docs-only phase. It is validated by repository hygiene,
+markdown/source-contract checks, source-index coverage, and claim-boundary
+source scans.
+
+Exit criteria: HSAI now has a docs-first end-to-end contract and subphase plan
+for future lookahead candidate-search metadata, fixture replay, backward
+verification metadata, operator transcript quarantine, optional later DeepProve
+receipt import, reviewed receipt policy, and HSAI admission bridging. It still
+has no DeepProve clone, no DeepProve execution, no live LLM generation, no live
+zkML execution, no proof artifacts, no transcript artifacts, no external-result
+import, no accepted Evidence Ledger mutation, no accepted evidence, no
+independent reproduction, no Level2+ evidence, no score-axis population, no
+benchmark evidence, no production/SOTA/security/semantic-correctness claim, and
+no authority to execute an action.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
