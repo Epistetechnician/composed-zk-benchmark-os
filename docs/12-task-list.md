@@ -18133,6 +18133,39 @@ axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution in
 this phase, no benchmark evidence, no external-audit claim, and no
 production/SOTA/security/semantic-correctness claim.
 
+## Phase 642 HSAI Tiny Z3 Packet Role Artifact Independent Operator Accepted Result Output Import Review Metadata
+
+Status: complete for local accepted-result output import-review metadata. See
+`docs/642-phase-hsai-tiny-z3-packet-role-artifact-independent-operator-accepted-result-output-import-review-notes.md`.
+
+Goal: implement local blocked import-review metadata over one exact Phase 640
+quarantined accepted-result output import candidate, without importing external
+results, mutating accepted evidence, accepting independent external
+reproduction, creating Level2+, populating score axes, or promoting
+backend/proof/claim evidence.
+
+Implemented: Phase 642 adds typed input/output/classification/label/issue
+models, digest/id/label binding helpers, source-state validation over the Phase
+640 candidate, review blocker/policy/nonpromotion/rule/forbidden-API/inherited
+digest helpers, promotion rejection, and focused tests. It requires the Phase
+640 candidate to remain
+`PacketRoleArtifactIndependentOperatorAcceptedResultOutputImportCandidateQuarantinedLocalBundle`
+and records the review as
+`PacketRoleArtifactIndependentOperatorAcceptedResultOutputImportReviewBlockedNoAcceptedExternalResult`.
+
+Validation coverage: focused Rust tests cover successful blocked review
+metadata, Phase 640 drift rejection, inherited Phase 638 digest drift
+rejection, and promotion/strong-claim rejection. Full local gates remain
+required before claim-boundary closure.
+
+Exit criteria: HSAI now has local blocked import-review metadata over the
+Phase 640 accepted-result output import candidate. It still has no independent
+external reproduction, no accepted external result import, no accepted Evidence
+Ledger mutation, no accepted evidence, no Level2+ evidence, no populated score
+axes, no Lean/COBALT/Rust-to-Lean execution, no additional SMT/Z3 execution in
+this phase, no benchmark evidence, no external-audit claim, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
