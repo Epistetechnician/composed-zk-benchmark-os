@@ -9446,5 +9446,20 @@ evidence, creates no Level2+ evidence, populates no score axes, creates no
 benchmark evidence, and claims no production/SOTA/security/semantic-correctness
 result.
 
+[docs/650-phase-hsai-formal-backend-acceleration-execution-packet-metadata-notes.md](docs/650-phase-hsai-formal-backend-acceleration-execution-packet-metadata-notes.md)
+documents the Phase 650 local formal backend acceleration execution-packet
+metadata implementation. It adds execution-packet input/output/status,
+classification, label, validation, and issue types, Phase 648 source binding,
+digest-only command descriptor, input manifest, output schema, transcript
+redaction policy, status vocabulary, timeout/nondeterminism policy, artifact
+quarantine policy, replay instruction, nonpromotion digest, and `NotRun`
+status validation. It runs no Lean/SMT/Z3/COBALT/Rust-to-Lean backend,
+generates no proof artifacts, retains no raw transcript, imports no external
+result, mutates no accepted Evidence Ledger, creates no accepted evidence,
+creates no Level2+ evidence, populates no score axes, creates no benchmark
+evidence, and claims no production/SOTA/security/semantic-correctness result.
+Focused validation passed with
+`cargo test -p hsai-agent-admission --lib phase650_hsai_formal_backend_acceleration_execution_packet -- --nocapture`.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
