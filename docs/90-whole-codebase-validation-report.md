@@ -9575,5 +9575,19 @@ correctness, production readiness, SOTA status, or full-security result. The
 process call is permitted only by an exact-function Phase 657 source-scan
 exception; the scan rejects arbitrary functions and missing claim boundaries.
 
+[docs/658-phase-hsai-tiny-z3-gateway-digest-binding-local-replay-residual-ceiling-report.md](docs/658-phase-hsai-tiny-z3-gateway-digest-binding-local-replay-residual-ceiling-report.md)
+records the Phase 658 paired local replay and residual ceiling. Two validated
+Phase 657 observations over the same concrete fixture both returned
+`solver_unsat_without_certificate`. The typed comparison found 24/24 stable
+semantic/output fields equal and zero stable mismatches while classifying all
+nine execution/preflight/source-instance fields as expected source drift.
+Focused tests passed 2/2 and covered vocabulary partitioning, stable mismatch
+policy, source-drift policy, classification drift, promotion rejection,
+invalid Phase 657 sources, and tampered comparison output. No new process API
+or process-API exception was added. The evidence remains
+`Level1LocalReplayOrLower`; it is not production digest source-correspondence
+proof, SHA-256 proof, accepted evidence, Level2+, score-axis evidence,
+semantic correctness, production readiness, SOTA, or full security.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
