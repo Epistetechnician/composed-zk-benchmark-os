@@ -18332,6 +18332,38 @@ Level2+ evidence, no populated score axes, no benchmark evidence, no
 external-audit claim, and no production/SOTA/security/semantic-correctness
 claim.
 
+## Phase 648 HSAI Formal Backend Acceleration Preflight Metadata
+
+Status: complete for local formal backend acceleration preflight metadata.
+See
+`docs/648-phase-hsai-formal-backend-acceleration-preflight-metadata-notes.md`.
+
+Goal: implement the Phase 647 preflight metadata boundary over one exact Phase
+646 blocked accepted-result output policy-resolution record, without invoking
+backend commands, generating proof artifacts, importing results, mutating
+accepted evidence, creating Level2+, populating score axes, or promoting
+proof/claim evidence.
+
+Implemented: Phase 648 adds typed lane-class, input, output, classification,
+label, validation, and issue metadata; required nonclaim digest helpers; Phase
+646 source binding; hermetic input manifest requirements; expected command-role
+and output-schema digests; declared output-root, replay-rule,
+failure-taxonomy, provenance, and negative-promotion digests; Level1-or-lower
+mapping; and focused tests for valid metadata, source drift, missing
+hermetic/provenance data, and promotion attempts.
+
+Validation coverage: focused validation passed with
+`cargo test -p hsai-agent-admission --lib phase648_hsai_formal_backend_acceleration_preflight -- --nocapture`.
+
+Exit criteria: HSAI now has local formal backend acceleration preflight
+metadata over a blocked Phase 646 policy-resolution record. It still has no
+backend command execution, no Lean run, no COBALT run, no Rust-to-Lean
+extraction, no additional SMT/Z3 run in this phase, no proof artifacts, no
+checker transcripts, no solver certificates, no accepted Evidence Ledger
+mutation, no accepted evidence, no Level2+ evidence, no populated score axes,
+no benchmark evidence, no external-audit claim, and no
+production/SOTA/security/semantic-correctness claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
