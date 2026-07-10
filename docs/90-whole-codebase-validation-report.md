@@ -9850,6 +9850,18 @@ classification is `CharonCargoManifestBindingSpecified`, execution status is
 proof, accepted evidence, Level2+, score axis, semantic correctness,
 production readiness, SOTA, breakthrough, or full-security claim.
 
+[docs/687-phase-hsai-gateway-threat-ordinal-unlocalized-acquisition-stop.md](docs/687-phase-hsai-gateway-threat-ordinal-unlocalized-acquisition-stop.md)
+records a cleaned pre-Lean-toolchain-acquisition stop. Complete Lean-build
+materialization and pinned hashes were present, but the combined command lacked
+a checkpoint identifying its nonzero operation. Backend/kernel statuses remain
+`NotRun` and all attempt-owned roots were removed.
+
+[docs/688-phase-hsai-gateway-threat-ordinal-acquisition-checkpoint-closure.md](docs/688-phase-hsai-gateway-threat-ordinal-acquisition-checkpoint-closure.md)
+requires per-command numeric status, bounded streams, labeled checkpoints, and
+expected/actual hash records for future acquisition. Phase 688 runs no tool or
+backend and creates no proof, accepted evidence, Level2+, score axis, semantic
+correctness, production readiness, SOTA, breakthrough, or full-security claim.
+
 [docs/675-phase-hsai-gateway-threat-ordinal-charon-canonical-path-mismatch.md](docs/675-phase-hsai-gateway-threat-ordinal-charon-canonical-path-mismatch.md)
 records the cleaned Phase 675 pre-Cargo failure. Exact Rust and Charon source
 identities passed, then the Phase 674 assertion compared declared `/tmp/...`

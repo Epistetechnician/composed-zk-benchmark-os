@@ -19236,6 +19236,29 @@ root, and `phase687ExtractedThreatOrdinalWitnesses`. See
 Exit criteria: `TwoStepAssertionSemanticsSpecified`, execution `NotRun`, and
 evidence ceiling `Level1LocalReplayOrLower` without claim promotion.
 
+## Phase 687 HSAI Gateway Threat Ordinal Unlocalized Acquisition Stop
+
+Status: complete as a cleaned pre-Lean-toolchain-acquisition stop. All 2,125
+Lean-build entries and pinned materialized hashes existed, but the combined
+command returned nonzero before a command-level checkpoint identified the
+failing operation. See
+`docs/687-phase-hsai-gateway-threat-ordinal-unlocalized-acquisition-stop.md`.
+
+Exit criteria: backend/kernel statuses remain `NotRun`; no generated source,
+proof, accepted evidence, Level2+, score axis, semantic correctness,
+production readiness, SOTA, breakthrough, or full-security claim exists.
+
+## Phase 688 HSAI Gateway Threat Ordinal Acquisition Checkpoint Closure
+
+Status: complete as a documentation-first correction. Requires one producer
+per command, numeric status, bounded stdout/stderr, labeled checkpoints,
+recorded expected/actual hashes, the Phase 689 run root, and
+`phase689ExtractedThreatOrdinalWitnesses`. See
+`docs/688-phase-hsai-gateway-threat-ordinal-acquisition-checkpoint-closure.md`.
+
+Exit criteria: `AcquisitionCheckpointProtocolSpecified`, execution `NotRun`,
+and evidence ceiling `Level1LocalReplayOrLower` without claim promotion.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
