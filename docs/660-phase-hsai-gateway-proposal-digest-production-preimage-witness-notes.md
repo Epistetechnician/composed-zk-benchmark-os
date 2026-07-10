@@ -259,5 +259,7 @@ No checker is implemented or run in Phase 661.
 
 Phase 662 implements the bounded local checker and e2e comparison in
 `docs/662-phase-hsai-gateway-proposal-digest-local-implementation-diverse-checker-notes.md`.
-Phase 663 should define the C3 Lean or Rust-to-Lean theorem/extraction boundary
-without executing it.
+Phase 663 defines the C3 handwritten-Lean theorem and extraction boundary in
+`docs/663-phase-hsai-gateway-proposal-preimage-c3-theorem-extraction-boundary.md`
+without executing it. Phase 664 is the first eligible Lean implementation and
+local kernel-check slice.

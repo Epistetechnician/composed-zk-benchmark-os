@@ -392,5 +392,7 @@ Phase 661 defines the docs-first C2 checker boundary in
 `docs/661-phase-hsai-gateway-proposal-digest-independent-preimage-checker-boundary.md`.
 Phase 662 implements that checker in
 `docs/662-phase-hsai-gateway-proposal-digest-local-implementation-diverse-checker-notes.md`.
-Phase 663 should define the C3 theorem or extraction boundary before any Lean
-or Rust-to-Lean correspondence execution.
+Phase 663 defines the C3 theorem and extraction boundary in
+`docs/663-phase-hsai-gateway-proposal-preimage-c3-theorem-extraction-boundary.md`.
+It selects one handwritten Lean set-permutation theorem over the Phase 662
+checker model, pins the future Lean release, and leaves execution to Phase 664.

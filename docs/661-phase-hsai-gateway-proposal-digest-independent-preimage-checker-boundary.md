@@ -397,5 +397,7 @@ generated differential cases, and classified the result as
 
 ## Next Responsible Slice
 
-Phase 663 should define the docs-first C3 theorem or extraction boundary. No
-Lean or Rust-to-Lean execution is authorized by Phase 662.
+Phase 663 defines the docs-first C3 theorem and extraction boundary in
+`docs/663-phase-hsai-gateway-proposal-preimage-c3-theorem-extraction-boundary.md`.
+It selects a handwritten Lean set-permutation theorem over the Phase 662
+checker model. No Lean or Rust-to-Lean execution occurs in Phase 663.

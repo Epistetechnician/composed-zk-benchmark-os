@@ -301,9 +301,10 @@ HSAI is fully secure.
 
 ## Next Responsible Slice
 
-Phase 663 should define the docs-first C3 bounded theorem or extraction
-boundary. It must select one exact theorem over the pure preimage surface,
-state whether Lean is handwritten or Rust-to-Lean generated, disclose all
-serializer and SHA assumptions, and prohibit execution until the theorem,
-source anchors, toolchain lock, artifact shape, and nonpromotion policy are
-fixed.
+Phase 663 defines the docs-first C3 bounded theorem and extraction boundary in
+`docs/663-phase-hsai-gateway-proposal-preimage-c3-theorem-extraction-boundary.md`.
+It selects one handwritten Lean theorem for duplicate-free permutation
+invariance of the three set-valued checker inputs, excludes SHA-256 and
+production Serde, pins the future Lean release, and fixes the source,
+correspondence, artifact, failure, and nonpromotion contracts. Phase 664 is the
+first eligible Lean implementation and local kernel-check slice.

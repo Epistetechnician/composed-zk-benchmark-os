@@ -9646,5 +9646,19 @@ workspace-wide all-target warning-denied clippy passed. The result is
 source correspondence, accepted evidence, Level2+, score-axis evidence,
 semantic correctness, production readiness, SOTA, or full security.
 
+[docs/663-phase-hsai-gateway-proposal-preimage-c3-theorem-extraction-boundary.md](docs/663-phase-hsai-gateway-proposal-preimage-c3-theorem-extraction-boundary.md)
+records the Phase 663 documentation-first C3 boundary. It selects exactly one
+handwritten Lean theorem: duplicate-free permutations of the checker-owned
+source-artifact, nonclaim, and threat lists produce the same successful modeled
+v1 preimage bytes when all other proposal fields are fixed. It binds the Phase
+662 checker source commit, source/lock/workspace digests, and canonicalization
+symbols; excludes SHA-256 and production Serde from the theorem; pins the
+future project to official Lean 4.30.0; records that Lean, Lake, and Elan are
+not locally installed; and fixes the Phase 664 project, correspondence, run,
+failure, and nonpromotion contracts. Phase 663 adds no Lean files, toolchain,
+backend run, proof artifact, accepted evidence, Level2+, score-axis evidence,
+semantic correctness, production readiness, SOTA, or full security. The
+evidence ceiling remains `Level1LocalReplayOrLower`.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
