@@ -84,3 +84,7 @@ or action authority.
 HSAI has made the future Aeneas run tree canonical before deriving any child
 path; no tool or checker ran in Phase 676.
 ```
+
+Phase 677 stopped before Cargo as `ExecutionProtocolAmbiguousPreBuild`,
+recorded in
+`docs/677-phase-hsai-gateway-threat-ordinal-execution-protocol-ambiguity.md`.

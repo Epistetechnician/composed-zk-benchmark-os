@@ -19053,6 +19053,24 @@ Exit criteria: Phase 674 is `CharonCargoManifestBindingSpecified` with status
 artifact, proof, accepted evidence, Level2+, score axis, semantic correctness,
 production readiness, SOTA, breakthrough, or full-security claim.
 
+## Phase 677 HSAI Gateway Threat Ordinal Execution-Protocol Ambiguity
+
+Status: complete as one cleaned-up pre-build stop. See
+`docs/677-phase-hsai-gateway-threat-ordinal-execution-protocol-ambiguity.md`.
+
+Observed: canonical path, exact Rust, and exact Charon source gates passed. A
+pre-Cargo audit then found unresolved Charon-binary, verbose-build, Lake-package
+ownership, acquisition-order, Cargo-home, witness-name, and cleanup contracts.
+The attempt stopped as `ExecutionProtocolAmbiguousPreBuild` and removed the
+temporary source plus isolated Rust toolchain before any Cargo or backend
+command.
+
+Exit criteria: all backend/kernel statuses remain `NotRun` at
+`Level1LocalReplayOrLower`; there is no artifact, proof, accepted evidence,
+Level2+, score axis, semantic correctness, production readiness, SOTA,
+breakthrough, or full-security claim. Phase 678 must define one authoritative
+ordered execution protocol.
+
 ## Phase 675 HSAI Gateway Threat Ordinal Charon Canonical-Path Mismatch
 
 Status: complete as one cleaned-up pre-Cargo failure. See
