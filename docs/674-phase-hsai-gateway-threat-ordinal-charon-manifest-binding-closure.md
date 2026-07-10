@@ -116,3 +116,7 @@ HSAI has made future Charon Cargo acquisition and build selection explicit by
 canonical directory, absolute manifest, exact lock digest, and empty isolated
 Cargo home; no tool ran in Phase 674.
 ```
+
+Phase 675 stopped before Cargo as `CharonPackageCanonicalPathMismatch`,
+recorded in
+`docs/675-phase-hsai-gateway-threat-ordinal-charon-canonical-path-mismatch.md`.
