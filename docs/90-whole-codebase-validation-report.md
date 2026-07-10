@@ -9908,5 +9908,16 @@ were removed before Cargo or backend execution. Backend/kernel statuses remain
 evidence, Level2+, score axis, semantic correctness, production readiness,
 SOTA, breakthrough, or full-security claim.
 
+[docs/680-phase-hsai-gateway-threat-ordinal-rustup-override-isolation.md](docs/680-phase-hsai-gateway-threat-ordinal-rustup-override-isolation.md)
+records the completed Phase 680 documentation-first toolchain-context
+correction. It moves all rustup identity/component checks to the canonical run
+root, binds the isolated home and explicit nightly, freezes the installed
+component list, prohibits rustup from Charon's package directory, and limits
+that directory to direct Cargo. Phase 680 runs no tool or backend. Its
+classification is `RustupOverrideIsolationSpecified`, status is `NotRun`, and
+ceiling is `Level1LocalReplayOrLower`; there is no artifact, proof, accepted
+evidence, Level2+, score axis, semantic correctness, production readiness,
+SOTA, breakthrough, or full-security claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

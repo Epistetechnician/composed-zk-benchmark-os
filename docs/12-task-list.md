@@ -19033,6 +19033,22 @@ Level2+, score axis, semantic correctness, production readiness, SOTA,
 breakthrough, or full-security claim. Phase 680 must isolate rustup identity
 checks from the Charon directory override.
 
+## Phase 680 HSAI Gateway Threat Ordinal Rustup-Override Isolation
+
+Status: complete as a documentation-first toolchain-context correction. See
+`docs/680-phase-hsai-gateway-threat-ordinal-rustup-override-isolation.md`.
+
+Implemented: requires rustup identity/component/driver preflights from the
+canonical run root with explicit isolated home and toolchain; freezes the
+installed-component list; prohibits rustup commands from Charon's package
+directory; preserves direct Cargo there; and binds later Charon runtime rustup
+loading to the HSAI repository workdir and isolated nightly.
+
+Exit criteria: Phase 680 is `RustupOverrideIsolationSpecified` with status
+`NotRun` at `Level1LocalReplayOrLower`. It creates no tool, backend result,
+artifact, proof, accepted evidence, Level2+, score axis, semantic correctness,
+production readiness, SOTA, breakthrough, or full-security claim.
+
 ## Phase 673 HSAI Gateway Threat Ordinal Charon Cargo-Lock Mismatch
 
 Status: complete as one cleaned-up pre-build failure. See
