@@ -18966,6 +18966,32 @@ binary, LLBC, generated source, proof, accepted evidence, Level2+, score axes,
 semantic correctness, production readiness, SOTA, breakthrough, or full-
 security claim.
 
+## Phase 671 HSAI Gateway Threat Ordinal Aeneas Nonconforming Execution Observation
+
+Status: complete as one cleaned-up local attempt. See
+`docs/671-phase-hsai-gateway-threat-ordinal-aeneas-nonconforming-execution-observation.md`.
+
+Goal: perform the exact pinned Charon source build, isolated ordinal
+extraction, Aeneas Lean generation, exhaustive witness, and kernel checks under
+the combined Phase 668 and Phase 670 boundaries.
+
+Observed: all frozen source/tool/dependency identities matched. The first
+Charon build failed because Cargo child processes did not receive the direct
+pinned rustc path, which is the phase's primary `CharonSourceBuildFailed` stop.
+A later diagnostic continuation built Charon, produced a one-body LLBC, and
+generated two hole-free Lean files, but those observations do not qualify as
+the authorized success. The first direct Lean command then triggered a Lake
+dependency update and Mathlib cache network access and exceeded its bound
+before Lean ran. All acquired tools, package trees, LLBC, generated source,
+partial Lake state, downloads, and logs were removed.
+
+Exit criteria: Phase 671 retains only bounded failure/status documentation at
+`Level1LocalReplayOrLower`. Lean kernel and Lake build statuses remain
+`NotRun`; there is no proof artifact, accepted evidence, Level2+, score axis,
+semantic correctness, production readiness, SOTA, breakthrough, or full-
+security claim. Phase 672 must first define direct toolchain binding and a
+pre-existing, enforceably network-disabled Lake client closure.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
