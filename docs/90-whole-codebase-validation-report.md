@@ -9825,5 +9825,19 @@ diff hygiene passed, and the local process/network controls returned the
 expected results. Root `pnpm run lint` was inapplicable because there is no
 root `package.json`.
 
+[docs/673-phase-hsai-gateway-threat-ordinal-charon-cargo-lock-mismatch.md](docs/673-phase-hsai-gateway-threat-ordinal-charon-cargo-lock-mismatch.md)
+records the cleaned Phase 673 pre-build failure. The isolated Rust and pinned
+Charon source identities matched, but Cargo fetch ran from the HSAI workspace
+and populated the Charon Cargo home from HSAI lock
+`87e72fd27531b91d25097d810efa2a876971310fba77ac464c0169ef0d0df893`
+instead of required Charon lock
+`4e361622e601cfe93fce40e5a13bf6b5a89a84394875b409f8c8f27ec86272db`.
+The attempt stopped as `CharonCargoLockMismatch` and removed the temporary
+source, isolated toolchain, and contaminated Cargo home before any build or
+backend command. All backend and kernel statuses remain `NotRun` at
+`Level1LocalReplayOrLower`; there is no artifact, proof, accepted evidence,
+Level2+, score axis, semantic correctness, production readiness, SOTA,
+breakthrough, or full-security claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

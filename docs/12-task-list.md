@@ -19016,6 +19016,26 @@ status `NotRun` at `Level1LocalReplayOrLower`. It creates no tool, cache,
 generated source, proof, accepted evidence, Level2+, score axis, semantic
 correctness, production readiness, SOTA, breakthrough, or full-security claim.
 
+## Phase 673 HSAI Gateway Threat Ordinal Charon Cargo-Lock Mismatch
+
+Status: complete as one cleaned-up pre-build failure. See
+`docs/673-phase-hsai-gateway-threat-ordinal-charon-cargo-lock-mismatch.md`.
+
+Observed: the exact isolated Rust toolchain and pinned Charon source passed
+identity checks, but Cargo fetch ran from the HSAI workspace and populated the
+isolated Charon Cargo home from HSAI lock
+`87e72fd27531b91d25097d810efa2a876971310fba77ac464c0169ef0d0df893`
+instead of Charon lock
+`4e361622e601cfe93fce40e5a13bf6b5a89a84394875b409f8c8f27ec86272db`.
+The attempt stopped as `CharonCargoLockMismatch` and removed all acquired
+state before any build or backend command.
+
+Exit criteria: all backend and kernel statuses remain `NotRun` at
+`Level1LocalReplayOrLower`. Phase 673 creates no artifact, proof, accepted
+evidence, Level2+, score axis, semantic correctness, production readiness,
+SOTA, breakthrough, or full-security claim. Phase 674 must bind Cargo fetch and
+build through an exact directory assertion and absolute manifest path.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

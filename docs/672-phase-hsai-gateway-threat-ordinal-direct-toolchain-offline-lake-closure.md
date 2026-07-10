@@ -255,3 +255,8 @@ Phase 672.
 
 After Phase 672 is committed and the 20 GiB disk gate still passes, Phase 673
 may perform one attempt under this corrected protocol.
+
+Phase 673 stopped before source build as `CharonCargoLockMismatch`, recorded in
+`docs/673-phase-hsai-gateway-threat-ordinal-charon-cargo-lock-mismatch.md`.
+Phase 674 must close the Cargo working-directory and manifest binding before
+another attempt.
