@@ -9861,5 +9861,17 @@ or backend command. All backend/kernel statuses remain `NotRun` at
 Level2+, score axis, semantic correctness, production readiness, SOTA,
 breakthrough, or full-security claim.
 
+[docs/676-phase-hsai-gateway-threat-ordinal-canonical-run-root-closure.md](docs/676-phase-hsai-gateway-threat-ordinal-canonical-run-root-closure.md)
+records the completed Phase 676 documentation-first host-path correction. It
+canonicalizes the temporary base before deriving the run root and every source,
+manifest, lock, target, LLBC, and client path; rejects existing, symlinked,
+relative, recomputed, and literal `/tmp` child paths; and preserves all prior
+direct compiler, exact-lock, Lake/cache, sandbox, cleanup, and claim rules.
+Phase 676 runs no tool or backend. Its classification is
+`CanonicalRunRootSpecified`, execution status is `NotRun`, and ceiling is
+`Level1LocalReplayOrLower`; there is no artifact, proof, accepted evidence,
+Level2+, score axis, semantic correctness, production readiness, SOTA,
+breakthrough, or full-security claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

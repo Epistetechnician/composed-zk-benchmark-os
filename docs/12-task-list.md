@@ -19069,6 +19069,23 @@ Level2+, score axis, semantic correctness, production readiness, SOTA,
 breakthrough, or full-security claim. Phase 676 must canonicalize the run root
 before deriving any child path.
 
+## Phase 676 HSAI Gateway Threat Ordinal Canonical Run-Root Closure
+
+Status: complete as a documentation-first host-path correction. See
+`docs/676-phase-hsai-gateway-threat-ordinal-canonical-run-root-closure.md`.
+
+Implemented: canonicalizes `${TMPDIR:-/tmp}` with `pwd -P` before creating the
+run root; derives every source, manifest, lock, target, and client path from
+that canonical value; rejects existing or symlinked roots and literal `/tmp`
+child paths; preserves all direct compiler, absolute-manifest, exact-lock,
+Lake/cache, sandbox, cleanup, and claim rules; and authorizes one future Phase
+677 attempt.
+
+Exit criteria: Phase 676 is `CanonicalRunRootSpecified` with status `NotRun`
+at `Level1LocalReplayOrLower`. It creates no tool, backend result, artifact,
+proof, accepted evidence, Level2+, score axis, semantic correctness,
+production readiness, SOTA, breakthrough, or full-security claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
