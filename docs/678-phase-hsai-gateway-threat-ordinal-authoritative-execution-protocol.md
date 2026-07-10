@@ -375,3 +375,7 @@ HSAI has one authoritative, ordered, fail-closed protocol for a future
 target-isolated Aeneas extraction and sandboxed Lean kernel check; no tool ran
 in Phase 678.
 ```
+
+Phase 679 stopped before Cargo as `ToolchainIdentityMismatch` after a rustup
+identity check inherited Charon's multi-target directory override. See
+`docs/679-phase-hsai-gateway-threat-ordinal-rustup-override-stop.md`.
