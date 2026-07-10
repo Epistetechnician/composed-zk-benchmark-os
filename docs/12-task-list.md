@@ -18892,6 +18892,30 @@ readiness, SOTA, breakthrough, or full-security claim. Phase 668 must first pin
 and authorize the missing official Rust and Lean acquisition paths, exact
 selector, offline dependency closure, and process envelope.
 
+## Phase 668 HSAI Gateway Threat Ordinal Aeneas Execution Prerequisite Closure
+
+Status: complete as a documentation-first execution-prerequisite boundary. See
+`docs/668-phase-hsai-gateway-threat-ordinal-aeneas-execution-prerequisite-closure.md`.
+
+Goal: close every Phase 667 blocker without installing tools or executing a
+backend, then define one corrected Phase 669 attempt.
+
+Implemented: pinned the official Lean 4.31.0 Darwin arm64 URL, size, SHA-256,
+and user-local root; pinned Rust nightly 2026-06-01 channel-manifest and
+component hashes under an isolated future `RUSTUP_HOME`; pinned the Aeneas
+Lake manifest, lakefile, and all nine exact dependency commits; replaced the
+invalid inherent-method selector with `crate::_::ordinal` plus source and LLBC
+collision audits; defined archive, binary, code-signing, dynamic-link, Cargo
+offline, `ring` build-script, environment, argv, timeout, output, generated-
+source, witness, mutation, cleanup, success, failure, and validation rules.
+
+Exit criteria: Phase 668 is `AeneasOrdinalExecutionPrerequisitesSpecified`
+with execution status `NotRun` at `Level1LocalReplayOrLower`. It creates no
+tool installation, external package checkout, LLBC, generated source, theorem,
+proof result, accepted evidence, Level2+, score axes, semantic correctness,
+production readiness, SOTA, breakthrough, or full-security claim. Phase 669
+is the first eligible corrected execution attempt.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

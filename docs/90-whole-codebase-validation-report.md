@@ -9738,5 +9738,21 @@ claim-boundary coverage 6/6, the full workspace suite including 675 passed and
 all passed. Root `pnpm run lint` was inapplicable because there is no root
 `package.json`.
 
+[docs/668-phase-hsai-gateway-threat-ordinal-aeneas-execution-prerequisite-closure.md](docs/668-phase-hsai-gateway-threat-ordinal-aeneas-execution-prerequisite-closure.md)
+records the completed Phase 668 documentation-first execution-prerequisite
+closure. It pins the exact official Lean 4.31.0 arm64 asset and Rust nightly
+channel/component identities; the Aeneas Lake manifest, lakefile, and nine
+dependency commits; the corrected `crate::_::ordinal` selector with collision
+and LLBC audits; and archive, driver, code-signing, dynamic-link, Cargo offline,
+`ring` build-script, environment, argv, timeout, output, generated-source,
+witness, mutation, cleanup, success, failure, and validation rules. Phase 668
+does not install tooling, acquire packages, run Charon/Aeneas/Lean/Lake, create
+artifacts, or promote evidence. Its classification is
+`AeneasOrdinalExecutionPrerequisitesSpecified` with status `NotRun` and ceiling
+`Level1LocalReplayOrLower`. Repository hygiene 1/1, documentation claim-
+boundary coverage 1/1, source claim-boundary coverage 6/6, selector inventory,
+critical-pin checks, formatting, and diff hygiene passed. Root `pnpm run lint`
+was inapplicable because there is no root `package.json`.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
