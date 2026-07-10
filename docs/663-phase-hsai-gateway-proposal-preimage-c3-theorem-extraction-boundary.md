@@ -412,8 +412,8 @@ HSAI is fully secure.
 
 ## Next Responsible Slice
 
-Phase 664 should implement the exact minimal Lean project, validate or obtain
-the pinned toolchain under an explicit acquisition policy, prove and
-kernel-check `gatewayProposalV1SetPermutationInvariant`, create the bounded
-local correspondence/run record, run repository gates, and preserve the
-`Level1LocalReplayOrLower` evidence ceiling.
+Phase 664 is authorized in
+`docs/664-phase-hsai-gateway-proposal-preimage-lean-local-kernel-check.md`.
+Its authorization commits the exact acquisition asset and SHA-256, user-local
+install policy, minimal project surface, bounded commands, run record, failure
+taxonomy, and nonpromotion contract before any tool installation or execution.

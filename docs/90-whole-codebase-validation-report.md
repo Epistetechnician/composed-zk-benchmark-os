@@ -9660,5 +9660,16 @@ backend run, proof artifact, accepted evidence, Level2+, score-axis evidence,
 semantic correctness, production readiness, SOTA, or full security. The
 evidence ceiling remains `Level1LocalReplayOrLower`.
 
+[docs/664-phase-hsai-gateway-proposal-preimage-lean-local-kernel-check.md](docs/664-phase-hsai-gateway-proposal-preimage-lean-local-kernel-check.md)
+records the committed Phase 664 acquisition and execution authorization. It
+binds the official Lean 4.30.0 Darwin arm64 release asset, published byte size
+and SHA-256, user-local nonprivileged install root, temporary acquisition and
+cleanup policy, exact core/Std-only formal project, selected theorem commands,
+forbidden-token scan, bounded run record, failure taxonomy, maximum local
+candidate classification, and all-false promotion flags. Its current execution
+status is `NotRun`; it creates no toolchain, Lean source, theorem result, proof
+artifact, accepted evidence, Level2+, score-axis evidence, semantic
+correctness, production readiness, SOTA, or full security.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
