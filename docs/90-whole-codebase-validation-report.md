@@ -9807,5 +9807,23 @@ workspace clippy passed, workspace docs built, and formatting/diff hygiene
 passed. Root `pnpm run lint` was inapplicable because there is no root
 `package.json`.
 
+[docs/672-phase-hsai-gateway-threat-ordinal-direct-toolchain-offline-lake-closure.md](docs/672-phase-hsai-gateway-threat-ordinal-direct-toolchain-offline-lake-closure.md)
+records the completed Phase 672 documentation-first correction boundary. It
+binds direct pinned Cargo/rustc/rustdoc binaries from the first Charon build,
+requires a direct `rustc_private` probe, separates `lake update` and explicit
+Mathlib cache acquisition from checking, suppresses the automatic cache hook,
+freezes client/package/cache/build-tree state, and requires macOS sandbox
+network denial for direct Lean and Lake commands. Local controls confirmed
+that the sandbox permits ordinary processes while denying DNS and direct TCP.
+Phase 672 runs no backend or checker and creates no artifact or evidence. Its
+classification is `AeneasRetryProtocolCorrected`, status is `NotRun`, and
+ceiling is `Level1LocalReplayOrLower`; there is no proof, Level2+, score axis,
+semantic correctness, production readiness, SOTA, breakthrough, or full-
+security claim. Repository hygiene passed 1/1, documentation claim-boundary
+coverage passed 1/1, source claim-boundary coverage passed 6/6, formatting and
+diff hygiene passed, and the local process/network controls returned the
+expected results. Root `pnpm run lint` was inapplicable because there is no
+root `package.json`.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

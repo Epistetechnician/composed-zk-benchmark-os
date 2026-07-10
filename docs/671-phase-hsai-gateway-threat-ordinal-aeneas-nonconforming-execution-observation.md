@@ -183,3 +183,7 @@ another attempt:
    or cache hook in the direct-check and build commands.
 
 No identical Phase 671 replay is authorized.
+
+Phase 672 completed this documentation-first correction in
+`docs/672-phase-hsai-gateway-threat-ordinal-direct-toolchain-offline-lake-closure.md`.
+One future Phase 673 attempt may proceed only after that boundary is committed.

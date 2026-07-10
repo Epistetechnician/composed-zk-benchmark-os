@@ -18992,6 +18992,30 @@ semantic correctness, production readiness, SOTA, breakthrough, or full-
 security claim. Phase 672 must first define direct toolchain binding and a
 pre-existing, enforceably network-disabled Lake client closure.
 
+## Phase 672 HSAI Gateway Threat Ordinal Direct-Toolchain and Offline-Lake Closure
+
+Status: complete as a documentation-first execution-correction boundary. See
+`docs/672-phase-hsai-gateway-threat-ordinal-direct-toolchain-offline-lake-closure.md`.
+
+Goal: correct both Phase 671 protocol defects without replaying the backend:
+bind direct pinned Cargo/rustc/rustdoc binaries from the first Charon build,
+and separate Lake/Mathlib acquisition from enforceably network-disabled Lean
+checking.
+
+Implemented: froze the exact direct-toolchain environment and pre-build
+`rustc_private` probe; split `lake update` and explicit `lake exe cache get`
+into a bounded acquisition stage with the automatic cache hook disabled;
+pinned the Mathlib cache documentation and Lake file hashes; required manifest,
+package, cache, and build-tree snapshots; measured a macOS sandbox profile that
+permits ordinary processes while denying DNS and direct TCP; defined the exact
+checking order, timeout/output bounds, mutation surface, failure rules, trust
+roots, and nonclaims for one future Phase 673 attempt.
+
+Exit criteria: Phase 672 is `AeneasRetryProtocolCorrected` with execution
+status `NotRun` at `Level1LocalReplayOrLower`. It creates no tool, cache,
+generated source, proof, accepted evidence, Level2+, score axis, semantic
+correctness, production readiness, SOTA, breakthrough, or full-security claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
