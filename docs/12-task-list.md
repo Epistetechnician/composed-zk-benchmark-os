@@ -18916,6 +18916,30 @@ proof result, accepted evidence, Level2+, score axes, semantic correctness,
 production readiness, SOTA, breakthrough, or full-security claim. Phase 669
 is the first eligible corrected execution attempt.
 
+## Phase 669 HSAI Gateway Threat Ordinal Aeneas Driver-Link Failure
+
+Status: complete as one corrected attempt stopped at the first named failure.
+See
+`docs/669-phase-hsai-gateway-threat-ordinal-aeneas-driver-link-failure.md`.
+
+Goal: pass archive and unmodified-driver portability before spending disk or
+network on the full Rust, Lean, and Lake dependency closure.
+
+Observed: both Aeneas assets, archive entry counts, path/link safety, nested
+asset equality, native arm64 binary hashes, Aeneas/Charon identities, and
+code-signing posture matched the Phase 668 contract. `otool` showed that
+`charon-driver` requires two absent absolute Nix-store libraries and has no
+`LC_RPATH`. The attempt stopped as `DriverDynamicLinkUnavailable` before any
+Rust/Lean installation, package acquisition, Cargo/build-script execution,
+Charon extraction, LLBC, Aeneas extraction, generated source, witness, Lean,
+or Lake run. The 592 MiB temporary tree was removed.
+
+Exit criteria: Phase 669 remains `Level1LocalReplayOrLower` with all backend
+and kernel statuses `NotRun`. It creates no accepted evidence, Level2+, score
+axes, semantic correctness, production readiness, SOTA, breakthrough, or full-
+security claim. Phase 670 must first select a reproducible source-built driver
+or Nix closure and pass an explicit disk-budget gate.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
