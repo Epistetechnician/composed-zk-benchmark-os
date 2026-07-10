@@ -57,3 +57,6 @@ action authority.
 
 Phase 680 must be documentation-first and isolate rustup identity checks from
 Charon's directory override. No identical Phase 679 replay is authorized.
+
+Phase 680 completed that correction in
+`docs/680-phase-hsai-gateway-threat-ordinal-rustup-override-isolation.md`.
