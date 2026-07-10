@@ -9788,5 +9788,24 @@ coverage 6/6, critical-pin checks, workspace all-target warning-denied clippy,
 formatting, and diff hygiene passed. Root `pnpm run lint` was inapplicable
 because there is no root `package.json`.
 
+[docs/671-phase-hsai-gateway-threat-ordinal-aeneas-nonconforming-execution-observation.md](docs/671-phase-hsai-gateway-threat-ordinal-aeneas-nonconforming-execution-observation.md)
+records the cleaned-up Phase 671 local attempt. Frozen source, tool, archive,
+and dependency identities matched. The first Charon source build failed from
+incorrect child-rustc binding and therefore terminated the qualifying attempt
+as `CharonSourceBuildFailed`. A later diagnostic continuation built native
+Charon 0.1.220, resolved exactly one LLBC function body, and generated two
+hole-free Lean files, but the direct Lean command triggered Lake update/cache
+network activity and exceeded its bound before Lean ran. No generated source,
+LLBC, toolchain, package tree, proof, raw log, or accepted evidence was
+retained. Kernel and Lake statuses remain `NotRun`, and the ceiling remains
+`Level1LocalReplayOrLower`; there is no Level2+, score axis, semantic
+correctness, production readiness, SOTA, breakthrough, or full-security
+claim. Repository hygiene passed 1/1, documentation claim-boundary coverage
+passed 1/1, source claim-boundary coverage passed 6/6, both workspace test
+modes exited zero, the primary group passed 675 with 5 ignored, warning-denied
+workspace clippy passed, workspace docs built, and formatting/diff hygiene
+passed. Root `pnpm run lint` was inapplicable because there is no root
+`package.json`.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
