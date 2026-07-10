@@ -14,6 +14,7 @@ hsai-claim-envelope = { path = "../hsai-claim-envelope" }
 hsai-distinct-agent = { path = "../hsai-distinct-agent" }
 hsai-economy = { path = "../hsai-economy" }
 hsai-economy-sim = { path = "../hsai-economy-sim" }
+hsai-gateway-digest-checker = { path = "../hsai-gateway-digest-checker" }
 hsai-membrane = { path = "../hsai-membrane" }
 
 [dev-dependencies]

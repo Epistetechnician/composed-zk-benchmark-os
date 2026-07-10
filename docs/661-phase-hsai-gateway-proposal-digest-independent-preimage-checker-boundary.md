@@ -386,9 +386,16 @@ HSAI is SOTA.
 HSAI is fully secure.
 ```
 
+## Phase 662 Implementation Status
+
+Phase 662 implements the bounded checker in
+`docs/662-phase-hsai-gateway-proposal-digest-local-implementation-diverse-checker-notes.md`.
+The dependency-isolated manual encoder and `ring` SHA-256 checker passed 5/5
+internal tests; the production comparison passed 7/7 e2e tests, including 256
+generated differential cases, and classified the result as
+`LocalImplementationDiverseCheckerAgreement`.
+
 ## Next Responsible Slice
 
-Phase 662 should implement only the bounded local
-`hsai-gateway-digest-checker` crate and cross-implementation e2e comparison.
-It must stop after local implementation-diverse agreement or a classified
-mismatch. C3 Lean or Rust-to-Lean work remains a later boundary.
+Phase 663 should define the docs-first C3 theorem or extraction boundary. No
+Lean or Rust-to-Lean execution is authorized by Phase 662.

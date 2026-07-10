@@ -11,6 +11,7 @@ members = [
     "crates/hsai-economy",
     "crates/hsai-economy-sim",
     "crates/hsai-e2e-harness",
+    "crates/hsai-gateway-digest-checker",
     "crates/hsai-membrane",
     "crates/zkbench-core",
 ]

@@ -401,6 +401,7 @@ dependencies = [
  "hsai-distinct-agent",
  "hsai-economy",
  "hsai-economy-sim",
+ "hsai-gateway-digest-checker",
  "hsai-membrane",
  "proptest",
 ]
@@ -426,6 +427,13 @@ dependencies = [
  "hsai-economy",
  "proptest",
  "serde",
+]
+
+[[package]]
+name = "hsai-gateway-digest-checker"
+version = "0.1.0"
+dependencies = [
+ "ring",
 ]
 
 [[package]]
