@@ -9693,5 +9693,27 @@ semantic correctness, production readiness, SOTA, or full security. Formatting,
 repository hygiene, documentation and source claim-boundary checks, the full
 workspace suite, and workspace-wide all-target warning-denied clippy passed.
 
+[docs/666-phase-hsai-gateway-threat-ordinal-rust-to-lean-extraction-feasibility-boundary.md](docs/666-phase-hsai-gateway-threat-ordinal-rust-to-lean-extraction-feasibility-boundary.md)
+records the completed Phase 666 documentation-first feasibility boundary. It
+freezes the exact Phase 665 commit, checker source/manifest/workspace/lock
+digests, enum and method slices, and sole future root
+`crate::CheckerGatewayThreatLabel::ordinal`. Primary-source review selected
+Aeneas nightly `nightly-2026.07.10-c2015b8` at exact commit
+`c2015b8668ba6d5b41f5f19d00a881c12bbb0b5d`, pinned Charon commit
+`909ff09ad0f144f83d354f2c3d26f631fb9f8e9a`, Lean 4.31.0, and two exact
+macOS arm64 asset size/SHA-256 pairs for one future Phase 667 attempt. Hax
+remains an unauthorized fallback. Generated-source review, target-isolation,
+proof-hole, exhaustive fourteen-case witness, trust-root, cleanup, failure,
+and nonpromotion rules are explicit. Phase 666 ran no extractor or kernel and
+created no generated source, proof artifact, accepted evidence, Level2+,
+score-axis value, or claim promotion. Its classification is
+`AeneasSelectedForOneBoundedPhase667Attempt`, execution status `NotRun`, and
+ceiling `Level1LocalReplayOrLower`. Frozen digest rechecks, formatting, diff
+hygiene, repository hygiene 1/1, documentation claim-boundary coverage 1/1,
+source claim-boundary coverage 6/6, the full workspace suite including 675
+passed and 5 ignored in its primary group, and workspace all-target
+warning-denied clippy all passed. Root `pnpm run lint` was inapplicable because
+the repository has no root `package.json`.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
