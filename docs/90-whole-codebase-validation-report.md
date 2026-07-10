@@ -9860,6 +9860,14 @@ binds exact Lean sysroot and native `leantar` discovery for Phase 695. It runs
 no backend and creates no proof, accepted evidence, Level2+, score axis,
 semantic correctness, production readiness, SOTA, or full-security claim.
 
+[docs/697-phase-hsai-gateway-threat-ordinal-unexpected-command-stop.md](docs/697-phase-hsai-gateway-threat-ordinal-unexpected-command-stop.md)
+records the cleaned pre-source stop after an unintended masked wrong-token
+no-op violated exact-command rules. Backend/kernel statuses remain `NotRun`.
+
+[docs/698-phase-hsai-gateway-threat-ordinal-exact-rust-preflight-closure.md](docs/698-phase-hsai-gateway-threat-ordinal-exact-rust-preflight-closure.md)
+restricts Phase 699 Rust identity to the exact permitted sequence. It runs no
+backend and creates no proof, evidence, Level2+, or stronger claim.
+
 [docs/695-phase-hsai-gateway-threat-ordinal-sandbox-diagnostic-stop.md](docs/695-phase-hsai-gateway-threat-ordinal-sandbox-diagnostic-stop.md)
 records the cleaned stop after full cache closure passed but sandbox-denial
 attribution failed before build. Backend/kernel statuses remain `NotRun`.
