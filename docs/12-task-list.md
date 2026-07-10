@@ -19295,6 +19295,19 @@ identity strings, Phase 693 run root, and
 `phase693ExtractedThreatOrdinalWitnesses`. See
 `docs/692-phase-hsai-gateway-threat-ordinal-exact-lake-identity-closure.md`.
 
+## Phase 693 HSAI Gateway Threat Ordinal Leantar Path Stop
+
+Status: complete as a cleaned pre-build stop. Charon and Lake dependency gates
+passed, but cache acquisition could not discover the verified sysroot's
+`leantar` because Stage 4 omitted Lean-first `PATH`. Backend statuses remain
+`NotRun`. See `docs/693-phase-hsai-gateway-threat-ordinal-leantar-path-stop.md`.
+
+## Phase 694 HSAI Gateway Threat Ordinal Lean Cache Path Closure
+
+Status: complete as a documentation-first correction. Binds Lean-first Stage 4
+PATH, exact sysroot prefix, native `leantar`, Phase 695 root, and witness. See
+`docs/694-phase-hsai-gateway-threat-ordinal-lean-cache-path-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

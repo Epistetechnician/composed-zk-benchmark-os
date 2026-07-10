@@ -9850,6 +9850,16 @@ classification is `CharonCargoManifestBindingSpecified`, execution status is
 proof, accepted evidence, Level2+, score axis, semantic correctness,
 production readiness, SOTA, breakthrough, or full-security claim.
 
+[docs/693-phase-hsai-gateway-threat-ordinal-leantar-path-stop.md](docs/693-phase-hsai-gateway-threat-ordinal-leantar-path-stop.md)
+records the cleaned pre-build stop after cache-helper sysroot discovery failed
+because Stage 4 omitted Lean-first PATH. Backend/kernel statuses remain
+`NotRun`.
+
+[docs/694-phase-hsai-gateway-threat-ordinal-lean-cache-path-closure.md](docs/694-phase-hsai-gateway-threat-ordinal-lean-cache-path-closure.md)
+binds exact Lean sysroot and native `leantar` discovery for Phase 695. It runs
+no backend and creates no proof, accepted evidence, Level2+, score axis,
+semantic correctness, production readiness, SOTA, or full-security claim.
+
 [docs/687-phase-hsai-gateway-threat-ordinal-unlocalized-acquisition-stop.md](docs/687-phase-hsai-gateway-threat-ordinal-unlocalized-acquisition-stop.md)
 records a cleaned pre-Lean-toolchain-acquisition stop. Complete Lean-build
 materialization and pinned hashes were present, but the combined command lacked
