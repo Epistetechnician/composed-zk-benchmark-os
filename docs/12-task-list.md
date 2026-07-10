@@ -19155,6 +19155,36 @@ at `Level1LocalReplayOrLower`. It creates no tool, backend result, artifact,
 proof, accepted evidence, Level2+, score axis, semantic correctness,
 production readiness, SOTA, breakthrough, or full-security claim.
 
+## Phase 681 HSAI Gateway Threat Ordinal Identity-Log Scan Stop
+
+Status: complete as one cleaned-up pre-Charon-acquisition stop. See
+`docs/681-phase-hsai-gateway-threat-ordinal-identity-log-scan-stop.md`.
+
+Observed: the isolated nightly printed the expected identities and retained a
+byte-stable component list, but restricted `PATH` hid bare `rg` and `|| true`
+masked the required negative transcript scan's failure. The attempt stopped as
+`PreExecutionAssertionUnavailable` and removed only its run and Rust roots.
+
+Exit criteria: all backend/kernel statuses remain `NotRun` at
+`Level1LocalReplayOrLower`; there is no generated source, artifact, proof,
+accepted evidence, Level2+, score axis, semantic correctness, production
+readiness, SOTA, breakthrough, or full-security claim.
+
+## Phase 682 HSAI Gateway Threat Ordinal Identity Scanner and Witness Closure
+
+Status: complete as a documentation-first correction. See
+`docs/682-phase-hsai-gateway-threat-ordinal-identity-scanner-and-witness-closure.md`.
+
+Implemented: resolves and hashes an absolute `rg` before `PATH` restriction;
+classifies scan exit codes without `|| true` or pipeline masking; and replaces
+the stale Phase 679 witness token with
+`phase683ExtractedThreatOrdinalWitnesses` for one future attempt.
+
+Exit criteria: Phase 682 is `IdentityScannerAndWitnessSpecified` with status
+`NotRun` at `Level1LocalReplayOrLower`. It creates no backend result, artifact,
+proof, accepted evidence, Level2+, score axis, semantic correctness,
+production readiness, SOTA, breakthrough, or full-security claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
