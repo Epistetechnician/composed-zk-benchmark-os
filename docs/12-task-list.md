@@ -19185,6 +19185,36 @@ Exit criteria: Phase 682 is `IdentityScannerAndWitnessSpecified` with status
 proof, accepted evidence, Level2+, score axis, semantic correctness,
 production readiness, SOTA, breakthrough, or full-security claim.
 
+## Phase 683 HSAI Gateway Threat Ordinal Aeneas Version-Flag Stop
+
+Status: complete as one cleaned-up pre-Lean-acquisition stop. See
+`docs/683-phase-hsai-gateway-threat-ordinal-aeneas-version-flag-stop.md`.
+
+Observed: frozen state, exact isolated Rust, Charon source, and Aeneas asset
+gates passed. Materialized hashes matched, but `aeneas --version` was rejected
+with exit 2 because this pinned CLI exposes `-version`. The attempt stopped and
+all owned roots were removed before Cargo or backend execution.
+
+Exit criteria: all backend/kernel statuses remain `NotRun` at
+`Level1LocalReplayOrLower`; there is no generated source, artifact, proof,
+accepted evidence, Level2+, score axis, semantic correctness, production
+readiness, SOTA, breakthrough, or full-security claim.
+
+## Phase 684 HSAI Gateway Threat Ordinal Aeneas Materialization Closure
+
+Status: complete as a documentation-first correction. See
+`docs/684-phase-hsai-gateway-threat-ordinal-aeneas-materialization-closure.md`.
+
+Implemented: binds the Phase 685 canonical run root; exact main and Lean-build
+archive destinations; the single permitted `aeneas -version` identity command;
+the expected identity; pinned materialized-file checks; and the current Phase
+685 exhaustive-witness name.
+
+Exit criteria: Phase 684 is `AeneasMaterializationSpecified` with status
+`NotRun` at `Level1LocalReplayOrLower`. It creates no backend result, artifact,
+proof, accepted evidence, Level2+, score axis, semantic correctness,
+production readiness, SOTA, breakthrough, or full-security claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
