@@ -214,7 +214,9 @@ contain the separately required Rust and Lean toolchains.
 
 ## Next Gate
 
-Phase 668 must be documentation-first execution-prerequisite closure. It must:
+Phase 668 is complete in
+`docs/668-phase-hsai-gateway-threat-ordinal-aeneas-execution-prerequisite-closure.md`.
+It:
 
 - pin the official Lean 4.31.0 Darwin arm64 archive by URL, byte count, and
   SHA-256;
@@ -226,6 +228,7 @@ Phase 668 must be documentation-first execution-prerequisite closure. It must:
 - define the exact Charon/Aeneas/Lean argv, package, environment, timeout,
   archive-safety, code-signing, dynamic-link, output-bound, `ring`
   build-script, cleanup, success, and failure rules; and
-- authorize no extraction.
+- authorizes no extraction.
 
-Only a later committed phase may reopen one target-isolated Aeneas attempt.
+Phase 669 is the first later phase eligible to reopen one target-isolated
+Aeneas attempt under the corrected boundary.
