@@ -9715,5 +9715,28 @@ passed and 5 ignored in its primary group, and workspace all-target
 warning-denied clippy all passed. Root `pnpm run lint` was inapplicable because
 the repository has no root `package.json`.
 
+[docs/667-phase-hsai-gateway-threat-ordinal-aeneas-local-attempt-preflight-failure.md](docs/667-phase-hsai-gateway-threat-ordinal-aeneas-local-attempt-preflight-failure.md)
+records the bounded Phase 667 preflight failure. All frozen repository digests
+and both exact Aeneas asset byte-count/SHA-256 pairs matched. The packaged
+arm64 Aeneas, Charon, driver, and `libgmp` identities were recorded, and the
+nested Lean-build payload matched the separately downloaded asset. The archive
+contained zero `lean`, `lake`, `rustc`, or `cargo` executables, while Rust
+nightly 2026-06-01 and Lean 4.31.0 were absent locally. Phase 667 therefore
+stopped as `PackagedToolIdentityMismatch` before `charon cargo`, LLBC, Aeneas
+extraction, generated source, witness implementation, or kernel checking. All
+temporary downloads, unpacked files, and partial named-toolchain state were
+removed. The ceiling remains `Level1LocalReplayOrLower`; no accepted evidence,
+Level2+, score axis, semantic correctness, production readiness, SOTA,
+breakthrough, or full-security claim was created. A read-only pinned-source
+audit additionally found that the authorized selector cannot name the inherent
+method as written, the offline Aeneas/Mathlib/Lake source closure is missing,
+and the Cargo/build-script/process envelope is incomplete. Those findings were
+not bypassed or tested with alternate execution. Formatting, diff hygiene,
+repository hygiene 1/1, documentation claim-boundary coverage 1/1, source
+claim-boundary coverage 6/6, the full workspace suite including 675 passed and
+5 ignored in its primary group, and workspace all-target warning-denied clippy
+all passed. Root `pnpm run lint` was inapplicable because there is no root
+`package.json`.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

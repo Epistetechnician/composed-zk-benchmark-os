@@ -18863,6 +18863,35 @@ semantic-correctness, production-readiness, SOTA, breakthrough, or full-
 security claim is created. Phase 667 is the first eligible one-attempt Aeneas
 execution slice and must fail closed rather than widen or switch backends.
 
+## Phase 667 HSAI Gateway Threat Ordinal Aeneas Local Attempt Preflight Failure
+
+Status: complete as one bounded failed preflight attempt. See
+`docs/667-phase-hsai-gateway-threat-ordinal-aeneas-local-attempt-preflight-failure.md`.
+
+Goal: execute the Phase 666 preflight and proceed to the sole target-isolated
+Aeneas attempt only if every source, asset, packaged-tool, and local-toolchain
+identity is present and exact.
+
+Observed: all frozen repository digests matched; both Aeneas assets matched
+their exact byte counts and SHA-256 values; the nested Lean-build asset was
+byte-identical; native arm64 Aeneas `nightly-2026.07.10-c2015b8`, Charon
+`0.1.220`, `charon-driver`, and `libgmp` identities were recorded; the archive
+contained zero `lean`, `lake`, `rustc`, or `cargo` executables; and the required
+Rust nightly and Lean 4.31.0 toolchains were absent locally. The attempt stopped
+as `PackagedToolIdentityMismatch`, removed all temporary and partial toolchain
+state, and did not run `charon cargo`, Aeneas extraction, Lean, or Lake. A
+read-only pinned-source audit also found that the authorized inherent-method
+selector is not valid as written, the network-disabled Aeneas/Mathlib/Lake
+source closure is missing, and the Cargo/build-script/process envelope is
+underspecified.
+
+Exit criteria: Phase 667 remains `Level1LocalReplayOrLower` with extraction and
+kernel status `NotRun`. It creates no LLBC, generated source, witness, proof,
+accepted evidence, Level2+, score axes, semantic correctness, production
+readiness, SOTA, breakthrough, or full-security claim. Phase 668 must first pin
+and authorize the missing official Rust and Lean acquisition paths, exact
+selector, offline dependency closure, and process envelope.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
