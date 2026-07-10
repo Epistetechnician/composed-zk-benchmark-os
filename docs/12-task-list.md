@@ -19215,6 +19215,27 @@ Exit criteria: Phase 684 is `AeneasMaterializationSpecified` with status
 proof, accepted evidence, Level2+, score axis, semantic correctness,
 production readiness, SOTA, breakthrough, or full-security claim.
 
+## Phase 685 HSAI Gateway Threat Ordinal Architecture-Pipeline Stop
+
+Status: complete as a cleaned pre-Lean-acquisition stop. Matching arm64 output
+was converted into a nonzero `pipefail` pipeline status by early-exit
+`grep -q`. See
+`docs/685-phase-hsai-gateway-threat-ordinal-architecture-pipeline-stop.md`.
+
+Exit criteria: backend/kernel statuses remain `NotRun`; no generated source,
+proof, accepted evidence, Level2+, score axis, semantic correctness,
+production readiness, SOTA, breakthrough, or full-security claim exists.
+
+## Phase 686 HSAI Gateway Threat Ordinal Two-Step Assertion Closure
+
+Status: complete as a documentation-first correction. Requires producer
+completion, captured regular-file output, separate scanning, the Phase 687 run
+root, and `phase687ExtractedThreatOrdinalWitnesses`. See
+`docs/686-phase-hsai-gateway-threat-ordinal-two-step-assertion-closure.md`.
+
+Exit criteria: `TwoStepAssertionSemanticsSpecified`, execution `NotRun`, and
+evidence ceiling `Level1LocalReplayOrLower` without claim promotion.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
