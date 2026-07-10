@@ -365,7 +365,14 @@ semantically correct, production ready, SOTA, breakthrough, or fully secure.
 
 ## Next Gate
 
-Phase 667 is the first eligible bounded Aeneas execution slice. It must either
-produce a hole-free generated target plus a kernel-checked fourteen-case
-witness under the exact pins above, or stop with one named failure. It must not
-silently widen the source root, change backends, or promote claims.
+Phase 667 completed as the named `PackagedToolIdentityMismatch` preflight
+failure recorded in
+`docs/667-phase-hsai-gateway-threat-ordinal-aeneas-local-attempt-preflight-failure.md`.
+Both Aeneas assets matched, but they contained no Lean kernel or Rust compiler,
+and the required local toolchains were absent. No extraction ran.
+
+Phase 668 is the next gate: documentation-first closure for exact official
+Rust and Lean toolchain acquisition, an inherent-method selector collision
+audit, an offline Aeneas/Mathlib/Lake dependency closure, and a complete
+process envelope. It must not execute Charon, Aeneas, Lean, or Lake and must
+not create generated source, evidence, or claim promotion.
