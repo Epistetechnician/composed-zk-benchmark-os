@@ -9873,5 +9873,16 @@ Phase 676 runs no tool or backend. Its classification is
 Level2+, score axis, semantic correctness, production readiness, SOTA,
 breakthrough, or full-security claim.
 
+[docs/677-phase-hsai-gateway-threat-ordinal-execution-protocol-ambiguity.md](docs/677-phase-hsai-gateway-threat-ordinal-execution-protocol-ambiguity.md)
+records the cleaned Phase 677 pre-build stop. Canonical path, exact Rust, and
+exact Charon source gates passed; an independent pre-Cargo audit then found
+seven unresolved command, ownership, ordering, environment, naming, and
+cleanup conflicts. The attempt stopped as
+`ExecutionProtocolAmbiguousPreBuild`, removed its 11 MiB source/run tree and
+1.6 GiB Rust toolchain, and never created Cargo/Aeneas/Lean roots. All
+backend/kernel statuses remain `NotRun` at `Level1LocalReplayOrLower`; there is
+no artifact, proof, accepted evidence, Level2+, score axis, semantic
+correctness, production readiness, SOTA, breakthrough, or full-security claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
