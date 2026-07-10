@@ -160,8 +160,11 @@ driver references unavailable absolute Nix libraries.
 
 ## Next Gate
 
-Phase 670 must be documentation-first source-built Charon fallback and disk-
-budget feasibility. It must compare a pinned source build against Nix closure
-acquisition without modifying the published binary, select one reproducible
-path or fail closed, define required free space and cleanup, and authorize no
-backend execution. Only a later committed phase may attempt extraction again.
+Phase 670 is complete in
+`docs/670-phase-hsai-gateway-threat-ordinal-charon-source-build-and-disk-budget-boundary.md`.
+It selects a local build of exact Charon commit
+`909ff09ad0f144f83d354f2c3d26f631fb9f8e9a`, rejects binary patching and Nix
+closure acquisition, and requires 20 GiB available before Phase 671.
+
+Current free space is only about 6.2 GiB, so no later execution is presently
+authorized.

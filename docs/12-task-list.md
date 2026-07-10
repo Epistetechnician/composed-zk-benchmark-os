@@ -18940,6 +18940,32 @@ axes, semantic correctness, production readiness, SOTA, breakthrough, or full-
 security claim. Phase 670 must first select a reproducible source-built driver
 or Nix closure and pass an explicit disk-budget gate.
 
+## Phase 670 HSAI Gateway Threat Ordinal Charon Source-Build and Disk-Budget Boundary
+
+Status: complete as a documentation-first fallback-selection and resource
+boundary. See
+`docs/670-phase-hsai-gateway-threat-ordinal-charon-source-build-and-disk-budget-boundary.md`.
+
+Goal: replace the nonportable published Charon driver without patching it,
+choose between a pinned source build and Nix closure, and prevent a partial
+multi-toolchain run on insufficient disk.
+
+Implemented: rejected published-binary patching and global Nix acquisition;
+selected exact verified Charon commit
+`909ff09ad0f144f83d354f2c3d26f631fb9f8e9a`; pinned license, README,
+Cargo manifest, Cargo lock, and Rust-toolchain hashes; defined exact shallow
+source acquisition, isolated Cargo fetch, locked offline release build,
+built-binary/linkage acceptance, cleanup, trust, success, and failure rules;
+and required at least 20 GiB available with a continuing 5 GiB reserve.
+
+Exit criteria: Phase 670 is
+`PinnedCharonSourceBuildSelectedDiskBudgetNotMet` with status `NotRun` at
+`Level1LocalReplayOrLower`. Current free space is approximately 6.2 GiB, so
+Phase 671 is not authorized. Phase 670 creates no source checkout, toolchain,
+binary, LLBC, generated source, proof, accepted evidence, Level2+, score axes,
+semantic correctness, production readiness, SOTA, breakthrough, or full-
+security claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
