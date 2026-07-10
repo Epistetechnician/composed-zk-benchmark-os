@@ -18780,6 +18780,27 @@ source-correspondence proof, accepted evidence, Level2+, score axes, semantic
 correctness, production readiness, SOTA, or full security is created. Phase
 664 is the first eligible Lean implementation and local kernel-check slice.
 
+## Phase 664 HSAI Gateway Proposal Preimage Lean Local Kernel Check
+
+Status: authorized and `NotRun`. See
+`docs/664-phase-hsai-gateway-proposal-preimage-lean-local-kernel-check.md`.
+
+Goal: acquire one official checksum-verified Lean 4.30.0 Darwin arm64
+toolchain outside the repository, implement the exact Phase 663 core/Std-only
+model and theorem, run one bounded local kernel check, and record the result
+without evidence or claim promotion.
+
+Authorized: exact release asset, published size and SHA-256, user-local install
+root, temporary-download and cleanup policy, no-global-state rule, acquisition
+failure taxonomy, exact formal project files, exact theorem-check commands,
+forbidden-token scan, bounded run record, success classification, and all-false
+promotion flags.
+
+Current exit state: authorization is committed before execution. No toolchain,
+Lean project, theorem result, proof artifact, accepted evidence, Level2+, score
+axes, semantic correctness, production readiness, SOTA, or full security has
+been created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
