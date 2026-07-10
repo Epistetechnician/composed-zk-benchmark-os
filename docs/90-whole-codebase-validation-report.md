@@ -9771,5 +9771,22 @@ boundary coverage 1/1, source claim-boundary coverage 6/6, formatting, and
 diff hygiene passed. Root `pnpm run lint` was inapplicable because there is no
 root `package.json`.
 
+[docs/670-phase-hsai-gateway-threat-ordinal-charon-source-build-and-disk-budget-boundary.md](docs/670-phase-hsai-gateway-threat-ordinal-charon-source-build-and-disk-budget-boundary.md)
+records the completed Phase 670 documentation-first fallback and resource
+boundary. It rejects patching the nonportable published driver and adding a
+global Nix closure, selects a local release build of verified Charon commit
+`909ff09ad0f144f83d354f2c3d26f631fb9f8e9a`, freezes license/source/Cargo-lock/
+Rust-toolchain hashes, and defines exact fetch, locked offline build, local
+binary/linkage, trust, cleanup, success, and failure rules. The boundary
+requires 20 GiB available and a continuing 5 GiB reserve; only approximately
+6.2 GiB is currently free. Classification is
+`PinnedCharonSourceBuildSelectedDiskBudgetNotMet`, execution status `NotRun`,
+and ceiling `Level1LocalReplayOrLower`. No source clone, tool install, build,
+backend execution, artifact, evidence, or claim promotion occurred. Repository
+hygiene 1/1, documentation claim-boundary coverage 1/1, source claim-boundary
+coverage 6/6, critical-pin checks, workspace all-target warning-denied clippy,
+formatting, and diff hygiene passed. Root `pnpm run lint` was inapplicable
+because there is no root `package.json`.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
