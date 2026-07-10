@@ -9860,6 +9860,15 @@ binds exact Lean sysroot and native `leantar` discovery for Phase 695. It runs
 no backend and creates no proof, accepted evidence, Level2+, score axis,
 semantic correctness, production readiness, SOTA, or full-security claim.
 
+[docs/695-phase-hsai-gateway-threat-ordinal-sandbox-diagnostic-stop.md](docs/695-phase-hsai-gateway-threat-ordinal-sandbox-diagnostic-stop.md)
+records the cleaned stop after full cache closure passed but sandbox-denial
+attribution failed before build. Backend/kernel statuses remain `NotRun`.
+
+[docs/696-phase-hsai-gateway-threat-ordinal-sandbox-attribution-closure.md](docs/696-phase-hsai-gateway-threat-ordinal-sandbox-attribution-closure.md)
+binds paired DNS and verbose direct-IP sandbox evidence for Phase 697. It runs
+no backend and creates no proof, accepted evidence, Level2+, score axis,
+semantic correctness, production readiness, SOTA, or full-security claim.
+
 [docs/687-phase-hsai-gateway-threat-ordinal-unlocalized-acquisition-stop.md](docs/687-phase-hsai-gateway-threat-ordinal-unlocalized-acquisition-stop.md)
 records a cleaned pre-Lean-toolchain-acquisition stop. Complete Lean-build
 materialization and pinned hashes were present, but the combined command lacked
