@@ -9677,5 +9677,18 @@ production readiness, SOTA, or full security. Formatting, repository hygiene,
 documentation and source claim-boundary checks, the full workspace suite, and
 workspace-wide all-target warning-denied clippy passed.
 
+[docs/665-phase-hsai-gateway-proposal-preimage-lean-model-checker-witness.md](docs/665-phase-hsai-gateway-proposal-preimage-lean-model-checker-witness.md)
+records the authorized, `NotRun` Phase 665 shared-fixture witness boundary. It
+freezes the production, checker, e2e-test, Lean-model, theorem, workspace, and
+lockfile hashes; selects exactly the Phase 660 golden and Phase 662 nonempty
+ordering vectors; permits two non-secret fixture files, one test-only Rust
+binding, one Lean `CorrespondenceWitness` module, and one Lake-root addition;
+requires kernel reduction and focused cross-language fixture checks; and caps
+future success at `LocalLeanKernelCheckedSharedFixtureWitnessAgreement` and
+`Level1LocalReplayOrLower`. No witness run, production/checker/Cargo change,
+source-correspondence proof, accepted evidence, Level2+, score-axis evidence,
+semantic correctness, production readiness, SOTA, or full security exists at
+this authorization point.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
