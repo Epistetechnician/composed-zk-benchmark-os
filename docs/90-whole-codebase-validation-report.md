@@ -9884,5 +9884,18 @@ backend/kernel statuses remain `NotRun` at `Level1LocalReplayOrLower`; there is
 no artifact, proof, accepted evidence, Level2+, score axis, semantic
 correctness, production readiness, SOTA, breakthrough, or full-security claim.
 
+[docs/678-phase-hsai-gateway-threat-ordinal-authoritative-execution-protocol.md](docs/678-phase-hsai-gateway-threat-ordinal-authoritative-execution-protocol.md)
+records the completed Phase 678 documentation-first protocol replacement. It
+resolves all Phase 677 ambiguities through one controlling order: canonical
+attempt ownership, exact acquisition, locally built Charon only, direct and
+verbose compiler evidence, client-owned Lake packages/cache before execution,
+stage-specific Cargo homes, permanent network closure, sandboxed build and
+extraction, exact Phase 679 witness naming, frozen-state kernel checks, scoped
+retention, and ownership-safe cleanup. Phase 678 runs no tool or backend. Its
+classification is `AuthoritativeAeneasExecutionProtocolSpecified`, execution
+status is `NotRun`, and ceiling is `Level1LocalReplayOrLower`; there is no
+artifact, proof, accepted evidence, Level2+, score axis, semantic correctness,
+production readiness, SOTA, breakthrough, or full-security claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

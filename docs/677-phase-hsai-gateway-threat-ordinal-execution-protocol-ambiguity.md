@@ -61,3 +61,6 @@ action authority.
 Phase 678 must be documentation-first and replace the accumulated ambiguous
 commands with one authoritative ordered protocol covering all seven findings.
 No identical Phase 677 replay is authorized.
+
+Phase 678 completed that replacement in
+`docs/678-phase-hsai-gateway-threat-ordinal-authoritative-execution-protocol.md`.
