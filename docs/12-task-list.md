@@ -19036,6 +19036,23 @@ evidence, Level2+, score axis, semantic correctness, production readiness,
 SOTA, breakthrough, or full-security claim. Phase 674 must bind Cargo fetch and
 build through an exact directory assertion and absolute manifest path.
 
+## Phase 674 HSAI Gateway Threat Ordinal Charon Manifest-Binding Closure
+
+Status: complete as a documentation-first command-binding correction. See
+`docs/674-phase-hsai-gateway-threat-ordinal-charon-manifest-binding-closure.md`.
+
+Implemented: froze canonical Charon source/package/manifest/lock paths;
+required the exact commit, manifest digest, lock digest, and empty isolated
+Cargo home before acquisition; added an absolute `--manifest-path` to both
+fetch and build; retained the canonical Charon package as command workdir;
+required pre/post path and lock records with the HSAI lock as a negative
+control; and authorized one future fail-closed Phase 675 attempt.
+
+Exit criteria: Phase 674 is `CharonCargoManifestBindingSpecified` with status
+`NotRun` at `Level1LocalReplayOrLower`. It creates no tool, backend result,
+artifact, proof, accepted evidence, Level2+, score axis, semantic correctness,
+production readiness, SOTA, breakthrough, or full-security claim.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

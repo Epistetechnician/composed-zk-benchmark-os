@@ -74,3 +74,6 @@ acquisition was bound to the wrong lockfile, then removed all acquired state.
 Phase 674 must be documentation-first and require both an exact current-directory
 assertion and an absolute `--manifest-path` on every Charon Cargo fetch/build
 operation. No identical Phase 673 replay is authorized.
+
+Phase 674 completed that correction in
+`docs/674-phase-hsai-gateway-threat-ordinal-charon-manifest-binding-closure.md`.
