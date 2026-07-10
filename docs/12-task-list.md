@@ -18755,6 +18755,31 @@ checker transcript, accepted evidence, Level2+, score axes, semantic
 correctness, production readiness, SOTA, or full security. Phase 663 is the
 docs-first C3 theorem/extraction boundary.
 
+## Phase 663 HSAI Gateway Proposal Preimage C3 Theorem And Extraction Boundary
+
+Status: complete for the documentation-first C3 boundary. See
+`docs/663-phase-hsai-gateway-proposal-preimage-c3-theorem-extraction-boundary.md`.
+
+Goal: select one exact first Lean theorem over the Phase 662 checker
+canonicalization surface, choose handwritten modeling or Rust extraction,
+freeze source and toolchain bindings, and define the future run/artifact and
+nonpromotion contract before Lean setup or execution.
+
+Implemented: theorem id and exact quantified property; handwritten Lean 4
+model decision; duplicate-free permutation hypotheses for source artifacts,
+nonclaims, and threat labels; equal successful modeled preimage conclusion;
+Phase 662 source commit, source/lock/workspace digests, and symbol anchors;
+explicit handwritten replacements and imported trust; official Lean 4.30.0
+future toolchain pin; current `LeanToolchainNotInstalled` readiness; exact
+Phase 664 project surface; bounded run record; failure taxonomy; and claim
+ceiling.
+
+Exit criteria: HSAI has a docs-first C3 boundary only. No Lean project,
+toolchain installation, backend execution, theorem result, proof artifact,
+source-correspondence proof, accepted evidence, Level2+, score axes, semantic
+correctness, production readiness, SOTA, or full security is created. Phase
+664 is the first eligible Lean implementation and local kernel-check slice.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
