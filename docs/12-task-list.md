@@ -19308,6 +19308,19 @@ Status: complete as a documentation-first correction. Binds Lean-first Stage 4
 PATH, exact sysroot prefix, native `leantar`, Phase 695 root, and witness. See
 `docs/694-phase-hsai-gateway-threat-ordinal-lean-cache-path-closure.md`.
 
+## Phase 695 HSAI Gateway Threat Ordinal Sandbox Diagnostic Stop
+
+Status: complete as a cleaned pre-build stop. Full dependency/cache closure
+passed, then sandbox denial probes lacked required attribution. Backend statuses
+remain `NotRun`. See
+`docs/695-phase-hsai-gateway-threat-ordinal-sandbox-diagnostic-stop.md`.
+
+## Phase 696 HSAI Gateway Threat Ordinal Sandbox Attribution Closure
+
+Status: complete as a documentation-first correction. Requires paired DNS
+success/failure and verbose direct-IP EPERM evidence for Phase 697. See
+`docs/696-phase-hsai-gateway-threat-ordinal-sandbox-attribution-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
