@@ -9678,17 +9678,20 @@ documentation and source claim-boundary checks, the full workspace suite, and
 workspace-wide all-target warning-denied clippy passed.
 
 [docs/665-phase-hsai-gateway-proposal-preimage-lean-model-checker-witness.md](docs/665-phase-hsai-gateway-proposal-preimage-lean-model-checker-witness.md)
-records the authorized, `NotRun` Phase 665 shared-fixture witness boundary. It
-freezes the production, checker, e2e-test, Lean-model, theorem, workspace, and
-lockfile hashes; selects exactly the Phase 660 golden and Phase 662 nonempty
-ordering vectors; permits two non-secret fixture files, one test-only Rust
-binding, one Lean `CorrespondenceWitness` module, and one Lake-root addition;
-requires kernel reduction and focused cross-language fixture checks; and caps
-future success at `LocalLeanKernelCheckedSharedFixtureWitnessAgreement` and
-`Level1LocalReplayOrLower`. No witness run, production/checker/Cargo change,
-source-correspondence proof, accepted evidence, Level2+, score-axis evidence,
-semantic correctness, production readiness, SOTA, or full security exists at
-this authorization point.
+records the completed Phase 665 shared-fixture witness run. Two non-secret
+compact JSON files bind the existing Phase 660 golden and Phase 662 nonempty
+ordering vectors to both the Rust production/checker test paths and the
+handwritten Lean model. The normalized fixtures are 720 and 964 bytes; their
+SHA-256 values are recorded. The witness module exposes one theorem proving the
+golden and both insertion-order encoder equalities. Direct Lean checking and
+Lake build exited 0, the focused Rust contract passed 7/7, and forbidden-token
+and external-package counts were zero. The result is
+`LocalLeanKernelCheckedSharedFixtureWitnessAgreement` at
+`Level1LocalReplayOrLower`, not source correspondence, arbitrary-input
+equivalence, SHA-256 proof, accepted evidence, Level2+, score-axis evidence,
+semantic correctness, production readiness, SOTA, or full security. Formatting,
+repository hygiene, documentation and source claim-boundary checks, the full
+workspace suite, and workspace-wide all-target warning-denied clippy passed.
 
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

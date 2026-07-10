@@ -18806,7 +18806,7 @@ axes, semantic correctness, production readiness, SOTA, or full security.
 
 ## Phase 665 HSAI Gateway Proposal Preimage Lean Model-Checker Witness
 
-Status: authorized and `NotRun`. See
+Status: complete for one bounded shared-fixture witness run. See
 `docs/665-phase-hsai-gateway-proposal-preimage-lean-model-checker-witness.md`.
 
 Goal: bind the Phase 664 handwritten Lean model to exactly the existing Phase
@@ -18814,19 +18814,21 @@ Goal: bind the Phase 664 handwritten Lean model to exactly the existing Phase
 compile-time fixtures, one test-only Rust binding, and one kernel-checkable
 Lean witness theorem.
 
-Authorized surface: exactly two compact JSON fixture files under the existing
-formal project; test-only `include_str!` assertions in the Phase 662 e2e
-contract; one `CorrespondenceWitness.lean` module; one Lake root; direct Lean
-checking, Lake build, and the focused Rust test. Production Rust, checker Rust,
-Cargo metadata, dependencies, the Phase 664 model, and the Phase 664 theorem
-remain frozen.
+Implemented and observed: exactly two compact JSON fixture files under the
+existing formal project; test-only `include_str!` assertions in the Phase 662
+e2e contract; one `CorrespondenceWitness.lean` module; one Lake root; one
+public three-equality theorem; direct Lean checking and Lake build both exit
+0; the focused Rust contract passes 7/7; and forbidden-token and external-
+package counts are zero. Production Rust, checker Rust, Cargo metadata,
+dependencies, the Phase 664 model, and the Phase 664 theorem remain frozen.
 
-Exit criteria: only a fully passing run may create
+Exit criteria: the fully passing run creates
 `LocalLeanKernelCheckedSharedFixtureWitnessAgreement` at
 `Level1LocalReplayOrLower`. The result remains finite-fixture agreement over a
 handwritten model, not source correspondence, arbitrary-input equivalence,
 SHA-256 proof, accepted evidence, Level2+, score axes, semantic correctness,
-production readiness, SOTA, or full security.
+production readiness, SOTA, or full security. Phase 666 is the docs-first
+Rust-to-Lean extraction-feasibility boundary for one smaller checker function.
 
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
