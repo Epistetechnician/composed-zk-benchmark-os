@@ -395,4 +395,6 @@ Phase 662 implements that checker in
 Phase 663 defines the C3 theorem and extraction boundary in
 `docs/663-phase-hsai-gateway-proposal-preimage-c3-theorem-extraction-boundary.md`.
 It selects one handwritten Lean set-permutation theorem over the Phase 662
-checker model, pins the future Lean release, and leaves execution to Phase 664.
+checker model and pins the Lean release. Phase 664 implements and locally
+kernel-checks that theorem at `Level1LocalReplayOrLower`; the handwritten
+model-to-source correspondence assumption remains open.

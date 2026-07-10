@@ -307,4 +307,6 @@ It selects one handwritten Lean theorem for duplicate-free permutation
 invariance of the three set-valued checker inputs, excludes SHA-256 and
 production Serde, pins the future Lean release, and fixes the source,
 correspondence, artifact, failure, and nonpromotion contracts. Phase 664 is the
-first eligible Lean implementation and local kernel-check slice.
+implemented local Lean kernel-check slice. Its theorem covers duplicate-free
+set permutation invariance in the handwritten checker model only; it does not
+prove arbitrary-input checker/production equivalence or source correspondence.

@@ -414,6 +414,8 @@ HSAI is fully secure.
 
 Phase 664 is authorized in
 `docs/664-phase-hsai-gateway-proposal-preimage-lean-local-kernel-check.md`.
-Its authorization commits the exact acquisition asset and SHA-256, user-local
-install policy, minimal project surface, bounded commands, run record, failure
-taxonomy, and nonpromotion contract before any tool installation or execution.
+Its committed authorization fixed the acquisition and execution contract
+before the run. Phase 664 then verified and installed Lean 4.30.0 user-locally,
+implemented the exact core/Std-only model and theorem, and completed both the
+direct Lean check and Lake build. The result remains a local handwritten-model
+candidate at `Level1LocalReplayOrLower`.

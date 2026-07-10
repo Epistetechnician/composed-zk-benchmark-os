@@ -18782,7 +18782,7 @@ correctness, production readiness, SOTA, or full security is created. Phase
 
 ## Phase 664 HSAI Gateway Proposal Preimage Lean Local Kernel Check
 
-Status: authorized and `NotRun`. See
+Status: complete for one bounded local Lean model theorem. See
 `docs/664-phase-hsai-gateway-proposal-preimage-lean-local-kernel-check.md`.
 
 Goal: acquire one official checksum-verified Lean 4.30.0 Darwin arm64
@@ -18790,16 +18790,19 @@ toolchain outside the repository, implement the exact Phase 663 core/Std-only
 model and theorem, run one bounded local kernel check, and record the result
 without evidence or claim promotion.
 
-Authorized: exact release asset, published size and SHA-256, user-local install
-root, temporary-download and cleanup policy, no-global-state rule, acquisition
-failure taxonomy, exact formal project files, exact theorem-check commands,
-forbidden-token scan, bounded run record, success classification, and all-false
-promotion flags.
+Implemented and observed: the authorization was committed first; the exact
+517539007-byte official asset matched its published SHA-256; Lean 4.30.0 and
+Lake 5.0.0 were installed user-locally; the exact four-file core/Std-only
+project was implemented; the selected theorem preserves duplicate-free set
+permutation invariance; direct Lean checking and Lake build both exited 0;
+forbidden-token and external-package counts were zero; and source, model,
+theorem, toolchain, command, and bounded-output digests were recorded.
 
-Current exit state: authorization is committed before execution. No toolchain,
-Lean project, theorem result, proof artifact, accepted evidence, Level2+, score
-axes, semantic correctness, production readiness, SOTA, or full security has
-been created.
+Exit criteria: the result is
+`LocalLeanKernelCheckedCheckerModelTheoremCandidate` at
+`Level1LocalReplayOrLower`. It is a theorem over a handwritten model, not Rust
+or production source correspondence, accepted formal evidence, Level2+, score
+axes, semantic correctness, production readiness, SOTA, or full security.
 
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
