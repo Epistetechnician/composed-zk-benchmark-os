@@ -1,0 +1,9 @@
+[package]
+name = "hsai-gateway-digest-checker"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "Implementation-diverse local checker for the HSAI gateway proposal digest preimage."
+
+[dependencies]
+ring = "=0.17.14"

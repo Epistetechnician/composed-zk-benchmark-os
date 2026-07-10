@@ -18727,6 +18727,34 @@ formal verification, source-correspondence proof, checker transcript, accepted
 evidence, Level2+, score axes, semantic correctness, production readiness,
 SOTA, or full security. Phase 662 is the next implementation slice.
 
+## Phase 662 HSAI Gateway Proposal Digest Local Implementation-Diverse Checker
+
+Status: complete for the bounded C2 checker and production comparison. See
+`docs/662-phase-hsai-gateway-proposal-digest-local-implementation-diverse-checker-notes.md`.
+
+Goal: reproduce the production proposal preimage and digest with separate
+types, manual JSON encoding, explicit set ordering, and `ring` SHA-256 while
+recording every shared and imported-trust axis.
+
+Implemented: standalone checker crate with only `ring` in its normal dependency
+tree; checker-owned proposal model; compact manual v1 encoder; duplicate set
+rejection; `ring` SHA-256; typed result, independence profile, nonclaims, and
+validator; e2e comparison against production; manifest/source dependency scan;
+golden, mutation, ordering, enum, encoding, mismatch, and promotion coverage.
+
+Executed result: checker tests passed 5/5; production-comparison tests passed
+7/7, including 256 generated differential cases; workspace tests and
+workspace-wide all-target warning-denied clippy passed. The result is
+`LocalImplementationDiverseCheckerAgreement` at
+`Level1LocalReplayOrLower`.
+
+Exit criteria: HSAI has local implementation-diverse agreement for the bounded
+fixture corpus. It has no arbitrary-input equivalence theorem, independent
+external reproduction, formal source correspondence, proof artifact, committed
+checker transcript, accepted evidence, Level2+, score axes, semantic
+correctness, production readiness, SOTA, or full security. Phase 663 is the
+docs-first C3 theorem/extraction boundary.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

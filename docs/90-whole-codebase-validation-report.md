@@ -9631,5 +9631,20 @@ and creates no accepted evidence, Level2+, score-axis evidence, semantic
 correctness, production readiness, SOTA, or full security. The evidence
 ceiling remains `Level1LocalReplayOrLower`.
 
+[docs/662-phase-hsai-gateway-proposal-digest-local-implementation-diverse-checker-notes.md](docs/662-phase-hsai-gateway-proposal-digest-local-implementation-diverse-checker-notes.md)
+records the Phase 662 C2 implementation and local run. A new isolated checker
+crate uses checker-owned types, manual compact JSON encoding, explicit set
+ordering and duplicate rejection, and `ring` SHA-256 with no HSAI, Serde,
+`serde_json`, or `sha2` dependency. Five checker tests and seven production e2e
+comparison tests passed across the complete Phase 660 golden vector, 18 field
+mutations, opposite set orders, all action/model-lane/threat enums, selected
+encoding edges, 256 generated differential cases, classified drift,
+claim/nonclaim tampering, and dependency coupling. Workspace tests and
+workspace-wide all-target warning-denied clippy passed. The result is
+`LocalImplementationDiverseCheckerAgreement` at
+`Level1LocalReplayOrLower`, not independent external reproduction, formal
+source correspondence, accepted evidence, Level2+, score-axis evidence,
+semantic correctness, production readiness, SOTA, or full security.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

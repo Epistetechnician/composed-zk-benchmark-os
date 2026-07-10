@@ -257,6 +257,7 @@ No checker is implemented or run in Phase 661.
 
 ## Next Responsible Slice
 
-Phase 662 should implement only the bounded local implementation-diverse
-checker and e2e comparison. C3 Lean or Rust-to-Lean execution remains a later
-boundary.
+Phase 662 implements the bounded local checker and e2e comparison in
+`docs/662-phase-hsai-gateway-proposal-digest-local-implementation-diverse-checker-notes.md`.
+Phase 663 should define the C3 Lean or Rust-to-Lean theorem/extraction boundary
+without executing it.

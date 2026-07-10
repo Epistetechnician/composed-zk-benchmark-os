@@ -390,5 +390,7 @@ regression evidence and runs no formal backend.
 
 Phase 661 defines the docs-first C2 checker boundary in
 `docs/661-phase-hsai-gateway-proposal-digest-independent-preimage-checker-boundary.md`.
-Phase 662 should implement that bounded local implementation-diverse checker
-before any C3 Lean or Rust-to-Lean correspondence execution.
+Phase 662 implements that checker in
+`docs/662-phase-hsai-gateway-proposal-digest-local-implementation-diverse-checker-notes.md`.
+Phase 663 should define the C3 theorem or extraction boundary before any Lean
+or Rust-to-Lean correspondence execution.
