@@ -9938,3 +9938,18 @@ runs no tool or backend. Its status is `NotRun`, and its ceiling is
 `Level1LocalReplayOrLower`; there is no proof, accepted evidence, Level2+,
 score axis, semantic correctness, production readiness, SOTA, breakthrough,
 or full-security claim.
+
+[docs/683-phase-hsai-gateway-threat-ordinal-aeneas-version-flag-stop.md](docs/683-phase-hsai-gateway-threat-ordinal-aeneas-version-flag-stop.md)
+records the cleaned Phase 683 pre-Lean-acquisition stop. Frozen state, exact
+Rust, Charon source, and Aeneas asset gates passed, but unsupported
+`aeneas --version` exited 2. All owned state was removed before Cargo, backend,
+or kernel execution. Backend/kernel statuses remain `NotRun` at
+`Level1LocalReplayOrLower`.
+
+[docs/684-phase-hsai-gateway-threat-ordinal-aeneas-materialization-closure.md](docs/684-phase-hsai-gateway-threat-ordinal-aeneas-materialization-closure.md)
+records the completed documentation-first correction. It binds a current
+canonical run root, exact archive destinations, the pinned CLI's `-version`
+identity command, materialized-file checks, and the current witness name.
+Phase 684 runs no tool or backend; there is no proof, accepted evidence,
+Level2+, score axis, semantic correctness, production readiness, SOTA,
+breakthrough, or full-security claim.
