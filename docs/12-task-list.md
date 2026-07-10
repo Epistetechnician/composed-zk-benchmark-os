@@ -19016,6 +19016,23 @@ status `NotRun` at `Level1LocalReplayOrLower`. It creates no tool, cache,
 generated source, proof, accepted evidence, Level2+, score axis, semantic
 correctness, production readiness, SOTA, breakthrough, or full-security claim.
 
+## Phase 679 HSAI Gateway Threat Ordinal Rustup-Override Stop
+
+Status: complete as one cleaned-up pre-Cargo stop. See
+`docs/679-phase-hsai-gateway-threat-ordinal-rustup-override-stop.md`.
+
+Observed: repository, disk, canonical path, exact Rust/Charon/Aeneas/Lean
+acquisition gates passed. A rustup identity check then ran from Charon's package
+directory, inherited its multi-target toolchain override, and began automatic
+component/target synchronization. It was terminated immediately and the
+attempt stopped as `ToolchainIdentityMismatch` before Cargo.
+
+Exit criteria: all backend/kernel statuses remain `NotRun` at
+`Level1LocalReplayOrLower`; there is no artifact, proof, accepted evidence,
+Level2+, score axis, semantic correctness, production readiness, SOTA,
+breakthrough, or full-security claim. Phase 680 must isolate rustup identity
+checks from the Charon directory override.
+
 ## Phase 673 HSAI Gateway Threat Ordinal Charon Cargo-Lock Mismatch
 
 Status: complete as one cleaned-up pre-build failure. See

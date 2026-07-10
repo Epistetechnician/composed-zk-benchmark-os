@@ -9897,5 +9897,16 @@ status is `NotRun`, and ceiling is `Level1LocalReplayOrLower`; there is no
 artifact, proof, accepted evidence, Level2+, score axis, semantic correctness,
 production readiness, SOTA, breakthrough, or full-security claim.
 
+[docs/679-phase-hsai-gateway-threat-ordinal-rustup-override-stop.md](docs/679-phase-hsai-gateway-threat-ordinal-rustup-override-stop.md)
+records the cleaned Phase 679 pre-Cargo stop. Repository, disk, canonical-root,
+Rust, Charon, Aeneas, and Lean acquisition gates passed; a rustup identity
+check then inherited Charon's multi-target directory override and began an
+unauthorized component/target synchronization. The process was terminated and
+the attempt stopped as `ToolchainIdentityMismatch`. All attempt-owned roots
+were removed before Cargo or backend execution. Backend/kernel statuses remain
+`NotRun` at `Level1LocalReplayOrLower`; there is no artifact, proof, accepted
+evidence, Level2+, score axis, semantic correctness, production readiness,
+SOTA, breakthrough, or full-security claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
