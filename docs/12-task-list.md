@@ -19321,6 +19321,19 @@ Status: complete as a documentation-first correction. Requires paired DNS
 success/failure and verbose direct-IP EPERM evidence for Phase 697. See
 `docs/696-phase-hsai-gateway-threat-ordinal-sandbox-attribution-closure.md`.
 
+## Phase 697 HSAI Gateway Threat Ordinal Unexpected Command Stop
+
+Status: complete as a cleaned pre-source stop. Exact Rust passed, but an
+unintended masked wrong-token no-op violated the command protocol. All backend
+statuses remain `NotRun`. See
+`docs/697-phase-hsai-gateway-threat-ordinal-unexpected-command-stop.md`.
+
+## Phase 698 HSAI Gateway Threat Ordinal Exact Rust Preflight Closure
+
+Status: complete as a documentation-first correction. Restricts Rust identity
+to the exact Phase 680 sequence for Phase 699. See
+`docs/698-phase-hsai-gateway-threat-ordinal-exact-rust-preflight-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
