@@ -9850,5 +9850,16 @@ classification is `CharonCargoManifestBindingSpecified`, execution status is
 proof, accepted evidence, Level2+, score axis, semantic correctness,
 production readiness, SOTA, breakthrough, or full-security claim.
 
+[docs/675-phase-hsai-gateway-threat-ordinal-charon-canonical-path-mismatch.md](docs/675-phase-hsai-gateway-threat-ordinal-charon-canonical-path-mismatch.md)
+records the cleaned Phase 675 pre-Cargo failure. Exact Rust and Charon source
+identities passed, then the Phase 674 assertion compared declared `/tmp/...`
+with canonical `/private/tmp/...` and stopped as
+`CharonPackageCanonicalPathMismatch`. The isolated Cargo home never existed;
+the temporary source and Rust toolchain were removed before any Cargo, build,
+or backend command. All backend/kernel statuses remain `NotRun` at
+`Level1LocalReplayOrLower`; there is no artifact, proof, accepted evidence,
+Level2+, score axis, semantic correctness, production readiness, SOTA,
+breakthrough, or full-security claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.

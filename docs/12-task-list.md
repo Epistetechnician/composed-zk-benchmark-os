@@ -19053,6 +19053,22 @@ Exit criteria: Phase 674 is `CharonCargoManifestBindingSpecified` with status
 artifact, proof, accepted evidence, Level2+, score axis, semantic correctness,
 production readiness, SOTA, breakthrough, or full-security claim.
 
+## Phase 675 HSAI Gateway Threat Ordinal Charon Canonical-Path Mismatch
+
+Status: complete as one cleaned-up pre-Cargo failure. See
+`docs/675-phase-hsai-gateway-threat-ordinal-charon-canonical-path-mismatch.md`.
+
+Observed: the exact Rust and Charon source identities passed, then the Phase
+674 assertion compared declared `/tmp/...` with canonical `/private/tmp/...`
+and stopped before Cargo. The isolated Cargo home never existed. The temporary
+source and isolated Rust toolchain were removed.
+
+Exit criteria: all backend and kernel statuses remain `NotRun` at
+`Level1LocalReplayOrLower`; there is no artifact, proof, accepted evidence,
+Level2+, score axis, semantic correctness, production readiness, SOTA,
+breakthrough, or full-security claim. Phase 676 must canonicalize the run root
+before deriving any child path.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
