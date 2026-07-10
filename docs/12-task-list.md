@@ -19071,6 +19071,24 @@ Level2+, score axis, semantic correctness, production readiness, SOTA,
 breakthrough, or full-security claim. Phase 678 must define one authoritative
 ordered execution protocol.
 
+## Phase 678 HSAI Gateway Threat Ordinal Authoritative Execution Protocol
+
+Status: complete as a documentation-first protocol replacement. See
+`docs/678-phase-hsai-gateway-threat-ordinal-authoritative-execution-protocol.md`.
+
+Implemented: defines one controlling Phase 679 order; selects only locally
+built Charon for extraction; explicitly authorizes bounded verbose Cargo child-
+compiler evidence; assigns all nine Lake packages to the client; completes all
+network acquisition before build/extraction/checking; separates isolated
+Charon-build and pre-existing checker-cache Cargo homes; fixes the witness name
+to `phase679ExtractedThreatOrdinalWitnesses`; requires sandboxed build,
+extraction, and Lean checking; and names exact attempt-owned roots for cleanup.
+
+Exit criteria: Phase 678 is `AuthoritativeAeneasExecutionProtocolSpecified`
+with status `NotRun` at `Level1LocalReplayOrLower`. It creates no tool, backend
+result, artifact, proof, accepted evidence, Level2+, score axis, semantic
+correctness, production readiness, SOTA, breakthrough, or full-security claim.
+
 ## Phase 675 HSAI Gateway Threat Ordinal Charon Canonical-Path Mismatch
 
 Status: complete as one cleaned-up pre-Cargo failure. See
