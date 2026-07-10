@@ -51,3 +51,6 @@ action authority.
 Phase 676 must be documentation-first and canonicalize the run root before
 deriving any source, manifest, lock, target, or output path. No identical Phase
 675 replay is authorized.
+
+Phase 676 completed that correction in
+`docs/676-phase-hsai-gateway-threat-ordinal-canonical-run-root-closure.md`.
