@@ -409,7 +409,12 @@ no extractor or proof checker ran in Phase 668.
 
 ## Next Gate
 
-Phase 669 is the first eligible execution attempt under this corrected
-boundary. It must pass every acquisition, selector, dependency, driver,
-Cargo, process, generated-source, theorem, and cleanup gate or stop at the
-first named failure.
+Phase 669 completed as `DriverDynamicLinkUnavailable`, recorded in
+`docs/669-phase-hsai-gateway-threat-ordinal-aeneas-driver-link-failure.md`.
+Both exact assets and archive-safety gates passed, but the unmodified pinned
+Charon driver references two absent absolute Nix-store libraries. No compiler
+toolchain was installed and no extraction ran.
+
+Phase 670 is the next gate: documentation-first source-built Charon fallback
+and disk-budget feasibility. It must not patch the published binary or execute
+a backend.

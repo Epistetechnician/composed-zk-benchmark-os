@@ -9754,5 +9754,22 @@ boundary coverage 1/1, source claim-boundary coverage 6/6, selector inventory,
 critical-pin checks, formatting, and diff hygiene passed. Root `pnpm run lint`
 was inapplicable because there is no root `package.json`.
 
+[docs/669-phase-hsai-gateway-threat-ordinal-aeneas-driver-link-failure.md](docs/669-phase-hsai-gateway-threat-ordinal-aeneas-driver-link-failure.md)
+records the corrected Phase 669 attempt stopped at
+`DriverDynamicLinkUnavailable`. Exact asset bytes/digests, archive counts,
+path/link safety, nested asset equality, native arm64 binary hashes,
+Aeneas/Charon identities, and signing posture matched. The unmodified
+`charon-driver` referenced two absent absolute Nix-store libraries and had no
+`LC_RPATH`, so the attempt stopped before Rust/Lean provisioning, Lake package
+acquisition, Cargo or `ring` build-script execution, `charon cargo`, LLBC,
+Aeneas extraction, generated source, witness implementation, Lean, or Lake.
+All 592 MiB of temporary state was removed. The ceiling remains
+`Level1LocalReplayOrLower`; no accepted evidence, Level2+, score axis,
+semantic correctness, production readiness, SOTA, breakthrough, or full-
+security claim was created. Repository hygiene 1/1, documentation claim-
+boundary coverage 1/1, source claim-boundary coverage 6/6, formatting, and
+diff hygiene passed. Root `pnpm run lint` was inapplicable because there is no
+root `package.json`.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
