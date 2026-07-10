@@ -195,6 +195,23 @@ fn materialized_append_rejects_symlink_parent_directory() {
     assert!(!real_parent.join("accepted-ledger.json").exists());
 }
 
+#[cfg(unix)]
+#[test]
+fn materialized_append_rejects_non_utf8_file_name_without_writing() {
+    use std::os::unix::ffi::OsStringExt;
+
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let non_utf8_name = std::ffi::OsString::from_vec(vec![0xFF, 0xFE, 0xFD]);
+    let ledger_path = dir.path().join(non_utf8_name);
+
+    let request = request_for_path(ledger_path.clone(), true);
+    let error = apply_materialized_accepted_ledger_append_transaction(&request)
+        .expect_err("non-UTF-8 file name should reject before atomic write");
+    assert!(error
+        .to_string()
+        .contains("accepted ledger path must have a valid file name"));
+}
+
 #[test]
 fn materialized_append_source_scan_keeps_atomic_json_only_boundary_visible() {
     let source_path = Path::new(env!("CARGO_MANIFEST_DIR"))
