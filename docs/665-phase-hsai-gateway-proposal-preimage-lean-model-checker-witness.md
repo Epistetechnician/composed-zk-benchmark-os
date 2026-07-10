@@ -460,10 +460,15 @@ security.
 
 ## Next Gate
 
-Phase 666 should be a docs-first Rust-to-Lean extraction feasibility boundary
-for one smaller dependency-isolated checker function. It should compare Aeneas
-and Hax support against the exact Phase 662 Rust constructs, select one source-
-owned pure-data target or fail closed, define generated-source review and
-correspondence rules, and preserve the current evidence ceiling. It must not
-authorize extraction execution, SHA-256 proof, accepted evidence, or claim
-promotion until that boundary is reviewed and committed.
+Phase 666 is complete in
+`docs/666-phase-hsai-gateway-threat-ordinal-rust-to-lean-extraction-feasibility-boundary.md`.
+It selects the checker-owned `CheckerGatewayThreatLabel::ordinal` method and a
+fully pinned Aeneas/Charon/Lean toolchain for one fail-closed Phase 667 attempt.
+No extraction ran and the evidence ceiling did not change.
+
+Phase 667 is the next gate. It may run only the exact Aeneas target-isolated
+attempt authorized by Phase 666, retain generated source only after the
+generated-source review contract passes, and add one kernel-checked exhaustive
+fourteen-constructor witness. It must stop on source widening, handwritten
+replacement, proof holes, or tool drift and must not create accepted evidence,
+Level2+, score axes, SHA-256 proof, or claim promotion.

@@ -18830,6 +18830,39 @@ SHA-256 proof, accepted evidence, Level2+, score axes, semantic correctness,
 production readiness, SOTA, or full security. Phase 666 is the docs-first
 Rust-to-Lean extraction-feasibility boundary for one smaller checker function.
 
+## Phase 666 HSAI Gateway Threat Ordinal Rust-to-Lean Extraction Feasibility Boundary
+
+Status: complete for documentation-first feasibility and exact next-phase
+authorization. See
+`docs/666-phase-hsai-gateway-threat-ordinal-rust-to-lean-extraction-feasibility-boundary.md`.
+
+Goal: freeze one dependency-isolated checker function, compare current Aeneas
+and Hax primary-source facts, select one backend or fail closed, define
+generated-source correspondence review, and authorize one exact Phase 667
+attempt without executing an extractor.
+
+Implemented: froze commit `38c3d4175fd8336b1386aa9e78fed46e53a07f22`,
+the checker source/manifest/workspace/lock digests, the
+`CheckerGatewayThreatLabel` and `ordinal` source slices, and the sole target
+root `crate::CheckerGatewayThreatLabel::ordinal`; excluded the encoder,
+sorting, strings, collections, errors, JSON, hashing, production code, and all
+other checker functions; refreshed official Aeneas and Hax license, release,
+toolchain, source-selection, Lean-backend, and proof-posture facts; selected
+Aeneas nightly `nightly-2026.07.10-c2015b8` at commit
+`c2015b8668ba6d5b41f5f19d00a881c12bbb0b5d` with Charon
+`909ff09ad0f144f83d354f2c3d26f631fb9f8e9a`, Lean 4.31.0, and exact macOS
+arm64 asset sizes and SHA-256 values; classified Hax as an unauthorized
+fallback; and defined source-isolation, generated-code, proof-hole, exhaustive
+witness, trust-root, failure, cleanup, and nonpromotion rules.
+
+Exit criteria: Phase 666 is
+`AeneasSelectedForOneBoundedPhase667Attempt` with execution status `NotRun`
+and ceiling `Level1LocalReplayOrLower`. No Rust, Cargo, Lean project, generated
+source, extractor run, proof artifact, accepted evidence, Level2+, score axis,
+semantic-correctness, production-readiness, SOTA, breakthrough, or full-
+security claim is created. Phase 667 is the first eligible one-attempt Aeneas
+execution slice and must fail closed rather than widen or switch backends.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
