@@ -9921,3 +9921,20 @@ SOTA, breakthrough, or full-security claim.
 
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
+
+[docs/681-phase-hsai-gateway-threat-ordinal-identity-log-scan-stop.md](docs/681-phase-hsai-gateway-threat-ordinal-identity-log-scan-stop.md)
+records the cleaned Phase 681 pre-Charon-acquisition stop. The isolated nightly
+printed the expected identities and retained a byte-stable installed-component
+list, but restricted `PATH` hid bare `rg` and `|| true` masked the required
+negative transcript scan failure. The attempt-owned run and Rust roots were
+removed; all backend/kernel statuses remain `NotRun` at
+`Level1LocalReplayOrLower`.
+
+[docs/682-phase-hsai-gateway-threat-ordinal-identity-scanner-and-witness-closure.md](docs/682-phase-hsai-gateway-threat-ordinal-identity-scanner-and-witness-closure.md)
+records the completed documentation-first correction. It binds and hashes an
+absolute scanner before `PATH` restriction, classifies scan status without
+masking, and supplies the current Phase 683 exhaustive-witness name. Phase 682
+runs no tool or backend. Its status is `NotRun`, and its ceiling is
+`Level1LocalReplayOrLower`; there is no proof, accepted evidence, Level2+,
+score axis, semantic correctness, production readiness, SOTA, breakthrough,
+or full-security claim.
