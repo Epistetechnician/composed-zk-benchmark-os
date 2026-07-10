@@ -18804,6 +18804,30 @@ Exit criteria: the result is
 or production source correspondence, accepted formal evidence, Level2+, score
 axes, semantic correctness, production readiness, SOTA, or full security.
 
+## Phase 665 HSAI Gateway Proposal Preimage Lean Model-Checker Witness
+
+Status: authorized and `NotRun`. See
+`docs/665-phase-hsai-gateway-proposal-preimage-lean-model-checker-witness.md`.
+
+Goal: bind the Phase 664 handwritten Lean model to exactly the existing Phase
+660 golden and Phase 662 nonempty ordering byte vectors through two shared
+compile-time fixtures, one test-only Rust binding, and one kernel-checkable
+Lean witness theorem.
+
+Authorized surface: exactly two compact JSON fixture files under the existing
+formal project; test-only `include_str!` assertions in the Phase 662 e2e
+contract; one `CorrespondenceWitness.lean` module; one Lake root; direct Lean
+checking, Lake build, and the focused Rust test. Production Rust, checker Rust,
+Cargo metadata, dependencies, the Phase 664 model, and the Phase 664 theorem
+remain frozen.
+
+Exit criteria: only a fully passing run may create
+`LocalLeanKernelCheckedSharedFixtureWitnessAgreement` at
+`Level1LocalReplayOrLower`. The result remains finite-fixture agreement over a
+handwritten model, not source correspondence, arbitrary-input equivalence,
+SHA-256 proof, accepted evidence, Level2+, score axes, semantic correctness,
+production readiness, SOTA, or full security.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

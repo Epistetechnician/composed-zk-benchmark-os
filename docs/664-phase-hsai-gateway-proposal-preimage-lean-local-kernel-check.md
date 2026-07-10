@@ -470,9 +470,11 @@ full security.
 
 ## Next Responsible Slice
 
-Phase 665 should define a docs-first Lean-model-to-checker correspondence
-witness boundary. It should select exact golden and ordering witnesses,
-preserve the handwritten-model assumptions, and forbid accepted-evidence or
-claim promotion. It should not jump directly to Aeneas/Hax extraction or a
-broader theorem until the local model's byte outputs are bound to the existing
-Phase 660/662 vectors.
+Phase 665 now defines the docs-first Lean-model-to-checker shared-fixture
+witness boundary in
+`docs/665-phase-hsai-gateway-proposal-preimage-lean-model-checker-witness.md`.
+Its execution status is `NotRun`. It selects exactly the Phase 660 golden bytes
+and Phase 662 nonempty ordering bytes, preserves the handwritten-model
+assumptions, and forbids accepted-evidence or claim promotion. It does not
+authorize Aeneas/Hax extraction, SHA-256 proof, source correspondence, or a
+broader theorem.
