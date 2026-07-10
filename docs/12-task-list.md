@@ -19281,6 +19281,20 @@ with the main archive's embedded build. See
 Exit criteria: `AeneasLeanBuildEquivalenceSpecified`, execution `NotRun`, and
 evidence ceiling `Level1LocalReplayOrLower` without claim promotion.
 
+## Phase 691 HSAI Gateway Threat Ordinal Lake Identity Stop
+
+Status: complete as a cleaned pre-Cargo stop. Aeneas build equivalence and
+exact Lean acquisition passed, then Lake's `+68218e8` suffix mismatched the
+underspecified identity. Backend/kernel statuses remain `NotRun`. See
+`docs/691-phase-hsai-gateway-threat-ordinal-lake-identity-stop.md`.
+
+## Phase 692 HSAI Gateway Threat Ordinal Exact Lake Identity Closure
+
+Status: complete as a documentation-first correction. Binds full Lean and Lake
+identity strings, Phase 693 run root, and
+`phase693ExtractedThreatOrdinalWitnesses`. See
+`docs/692-phase-hsai-gateway-threat-ordinal-exact-lake-identity-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
