@@ -473,8 +473,11 @@ full security.
 Phase 665 now defines the docs-first Lean-model-to-checker shared-fixture
 witness boundary in
 `docs/665-phase-hsai-gateway-proposal-preimage-lean-model-checker-witness.md`.
-Its execution status is `NotRun`. It selects exactly the Phase 660 golden bytes
-and Phase 662 nonempty ordering bytes, preserves the handwritten-model
-assumptions, and forbids accepted-evidence or claim promotion. It does not
-authorize Aeneas/Hax extraction, SHA-256 proof, source correspondence, or a
-broader theorem.
+Its bounded run is complete as
+`LocalLeanKernelCheckedSharedFixtureWitnessAgreement` at
+`Level1LocalReplayOrLower`. It binds exactly the Phase 660 golden bytes and
+Phase 662 nonempty ordering bytes, preserves the handwritten-model assumptions,
+and forbids accepted-evidence or claim promotion. Phase 666 should define a
+docs-first Aeneas/Hax extraction-feasibility boundary for one smaller checker
+function; SHA-256 proof, source correspondence, and a broader theorem remain
+unauthorized.

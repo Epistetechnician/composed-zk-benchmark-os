@@ -15,6 +15,11 @@ use hsai_gateway_digest_checker::{
 use proptest::prelude::*;
 use std::collections::BTreeSet;
 
+const PHASE665_GOLDEN_PREIMAGE_FIXTURE: &str =
+    include_str!("../../../formal/hsai-gateway-digest/fixtures/phase660-golden-preimage.json");
+const PHASE665_ORDERING_PREIMAGE_FIXTURE: &str =
+    include_str!("../../../formal/hsai-gateway-digest/fixtures/phase662-ordering-preimage.json");
+
 #[derive(Clone, Copy, Debug)]
 enum Mutation {
     Id,
@@ -282,6 +287,21 @@ fn hash_from_hex(value: &str) -> [u8; 32] {
     out
 }
 
+fn phase665_fixture_bytes(value: &'static str, fixture_name: &str) -> &'static [u8] {
+    let bytes = value.as_bytes();
+    assert_eq!(
+        bytes.last(),
+        Some(&b'\n'),
+        "{fixture_name} must end in exactly one LF"
+    );
+    assert_ne!(
+        bytes.get(bytes.len().saturating_sub(2)),
+        Some(&b'\n'),
+        "{fixture_name} must end in exactly one LF"
+    );
+    &bytes[..bytes.len() - 1]
+}
+
 fn arbitrary_string() -> impl Strategy<Value = String> {
     proptest::collection::vec(any::<char>(), 0..24)
         .prop_map(|characters| characters.into_iter().collect())
@@ -379,6 +399,15 @@ fn phase662_checker_matches_production_and_the_phase660_golden_vector() {
 
     assert_eq!(production.digest().0, expected_digest);
     assert_eq!(result.digest, expected_digest);
+    let expected_preimage = phase665_fixture_bytes(
+        PHASE665_GOLDEN_PREIMAGE_FIXTURE,
+        "phase660-golden-preimage.json",
+    );
+    assert_eq!(
+        gateway_action_proposal_digest_preimage(&production),
+        expected_preimage
+    );
+    assert_eq!(result.encoded_preimage, expected_preimage);
     assert_eq!(
         result.encoded_preimage,
         gateway_action_proposal_digest_preimage(&production)
@@ -473,6 +502,16 @@ fn phase662_checker_matches_production_for_set_ordering_and_encoding_edges() {
 
     let first = assert_agreement(&production, &checker_first);
     let second = assert_agreement(&production, &checker_second);
+    let expected_preimage = phase665_fixture_bytes(
+        PHASE665_ORDERING_PREIMAGE_FIXTURE,
+        "phase662-ordering-preimage.json",
+    );
+    assert_eq!(
+        gateway_action_proposal_digest_preimage(&production),
+        expected_preimage
+    );
+    assert_eq!(first.encoded_preimage, expected_preimage);
+    assert_eq!(second.encoded_preimage, expected_preimage);
     assert_eq!(first.encoded_preimage, second.encoded_preimage);
     assert_eq!(first.digest, second.digest);
 

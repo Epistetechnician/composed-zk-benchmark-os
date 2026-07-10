@@ -7,4 +7,5 @@ name = "HsaiGatewayDigest"
 roots = [
   "HsaiGatewayDigest.Model",
   "HsaiGatewayDigest.SetPermutationInvariant",
+  "HsaiGatewayDigest.CorrespondenceWitness",
 ]
