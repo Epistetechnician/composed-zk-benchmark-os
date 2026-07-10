@@ -9839,5 +9839,16 @@ backend command. All backend and kernel statuses remain `NotRun` at
 Level2+, score axis, semantic correctness, production readiness, SOTA,
 breakthrough, or full-security claim.
 
+[docs/674-phase-hsai-gateway-threat-ordinal-charon-manifest-binding-closure.md](docs/674-phase-hsai-gateway-threat-ordinal-charon-manifest-binding-closure.md)
+records the completed Phase 674 documentation-first command correction. It
+freezes canonical Charon paths, exact source/manifest/lock checks, an empty
+isolated Cargo home, direct compiler binding, absolute `--manifest-path` on
+fetch and build, canonical workdir, and pre/post path/lock records with the
+HSAI lock as a negative control. Phase 674 runs no tool or backend. Its
+classification is `CharonCargoManifestBindingSpecified`, execution status is
+`NotRun`, and ceiling is `Level1LocalReplayOrLower`; there is no artifact,
+proof, accepted evidence, Level2+, score axis, semantic correctness,
+production readiness, SOTA, breakthrough, or full-security claim.
+
 Any next broadening should start with a docs-first boundary and should name the
 state slice before mutation.
