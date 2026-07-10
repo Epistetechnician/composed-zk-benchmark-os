@@ -9953,3 +9953,14 @@ identity command, materialized-file checks, and the current witness name.
 Phase 684 runs no tool or backend; there is no proof, accepted evidence,
 Level2+, score axis, semantic correctness, production readiness, SOTA,
 breakthrough, or full-security claim.
+
+[docs/685-phase-hsai-gateway-threat-ordinal-architecture-pipeline-stop.md](docs/685-phase-hsai-gateway-threat-ordinal-architecture-pipeline-stop.md)
+records a cleaned pre-Lean-acquisition stop caused by a matching architecture
+pipeline's `pipefail` false negative. All owned roots were removed before
+Cargo or backend execution; backend/kernel statuses remain `NotRun`.
+
+[docs/686-phase-hsai-gateway-threat-ordinal-two-step-assertion-closure.md](docs/686-phase-hsai-gateway-threat-ordinal-two-step-assertion-closure.md)
+requires producer completion and separate captured-file scanning for every
+future output assertion. Phase 686 runs no tool or backend and creates no
+proof, accepted evidence, Level2+, score axis, semantic correctness,
+production readiness, SOTA, breakthrough, or full-security claim.
