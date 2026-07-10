@@ -19259,6 +19259,28 @@ recorded expected/actual hashes, the Phase 689 run root, and
 Exit criteria: `AcquisitionCheckpointProtocolSpecified`, execution `NotRun`,
 and evidence ceiling `Level1LocalReplayOrLower` without claim promotion.
 
+## Phase 689 HSAI Gateway Threat Ordinal Embedded Lean-Build Stop
+
+Status: complete as a cleaned pre-Lean-toolchain-acquisition stop. Main archive
+extraction exited zero, then the absence assertion failed because that verified
+archive already embeds 2,021 Lean-build files. The separate asset was not
+overlaid. See
+`docs/689-phase-hsai-gateway-threat-ordinal-embedded-lean-build-stop.md`.
+
+Exit criteria: backend/kernel statuses remain `NotRun`; no generated source,
+proof, accepted evidence, Level2+, score axis, semantic correctness,
+production readiness, SOTA, breakthrough, or full-security claim exists.
+
+## Phase 690 HSAI Gateway Threat Ordinal Lean-Build Equivalence Closure
+
+Status: complete as a documentation-first correction. Requires separate
+staging of the duplicate asset and exact path/file-digest inventory equivalence
+with the main archive's embedded build. See
+`docs/690-phase-hsai-gateway-threat-ordinal-lean-build-equivalence-closure.md`.
+
+Exit criteria: `AeneasLeanBuildEquivalenceSpecified`, execution `NotRun`, and
+evidence ceiling `Level1LocalReplayOrLower` without claim promotion.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

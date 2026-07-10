@@ -9862,6 +9862,17 @@ expected/actual hash records for future acquisition. Phase 688 runs no tool or
 backend and creates no proof, accepted evidence, Level2+, score axis, semantic
 correctness, production readiness, SOTA, breakthrough, or full-security claim.
 
+[docs/689-phase-hsai-gateway-threat-ordinal-embedded-lean-build-stop.md](docs/689-phase-hsai-gateway-threat-ordinal-embedded-lean-build-stop.md)
+records the cleaned stop after checkpointed main extraction succeeded and the
+main archive's embedded Lean build invalidated the required absence assertion.
+The separate asset was not overlaid; backend/kernel statuses remain `NotRun`.
+
+[docs/690-phase-hsai-gateway-threat-ordinal-lean-build-equivalence-closure.md](docs/690-phase-hsai-gateway-threat-ordinal-lean-build-equivalence-closure.md)
+requires separate staging and deterministic path/file-digest equivalence for
+the duplicate Lean-build asset. Phase 690 runs no tool or backend and creates
+no proof, accepted evidence, Level2+, score axis, semantic correctness,
+production readiness, SOTA, breakthrough, or full-security claim.
+
 [docs/675-phase-hsai-gateway-threat-ordinal-charon-canonical-path-mismatch.md](docs/675-phase-hsai-gateway-threat-ordinal-charon-canonical-path-mismatch.md)
 records the cleaned Phase 675 pre-Cargo failure. Exact Rust and Charon source
 identities passed, then the Phase 674 assertion compared declared `/tmp/...`
