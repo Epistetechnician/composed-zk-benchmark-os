@@ -261,5 +261,6 @@ Phase 662 implements the bounded local checker and e2e comparison in
 `docs/662-phase-hsai-gateway-proposal-digest-local-implementation-diverse-checker-notes.md`.
 Phase 663 defines the C3 handwritten-Lean theorem and extraction boundary in
 `docs/663-phase-hsai-gateway-proposal-preimage-c3-theorem-extraction-boundary.md`
-without executing it. Phase 664 is the first eligible Lean implementation and
-local kernel-check slice.
+without executing it. Phase 664 implements and locally kernel-checks the exact
+set-permutation theorem over the handwritten checker model. It remains local
+model evidence and does not prove production Serde correspondence.

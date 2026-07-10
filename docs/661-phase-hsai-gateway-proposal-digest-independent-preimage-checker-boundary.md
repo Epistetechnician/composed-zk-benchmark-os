@@ -400,4 +400,6 @@ generated differential cases, and classified the result as
 Phase 663 defines the docs-first C3 theorem and extraction boundary in
 `docs/663-phase-hsai-gateway-proposal-preimage-c3-theorem-extraction-boundary.md`.
 It selects a handwritten Lean set-permutation theorem over the Phase 662
-checker model. No Lean or Rust-to-Lean execution occurs in Phase 663.
+checker model. No Lean or Rust-to-Lean execution occurs in Phase 663. Phase
+664 implements and locally kernel-checks that selected model theorem without
+promoting the C2 checker result or claiming Rust source correspondence.

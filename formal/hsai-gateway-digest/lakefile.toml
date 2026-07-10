@@ -1,0 +1,10 @@
+name = "HsaiGatewayDigest"
+version = "0.1.0"
+defaultTargets = ["HsaiGatewayDigest"]
+
+[[lean_lib]]
+name = "HsaiGatewayDigest"
+roots = [
+  "HsaiGatewayDigest.Model",
+  "HsaiGatewayDigest.SetPermutationInvariant",
+]
