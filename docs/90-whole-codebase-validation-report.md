@@ -9873,6 +9873,16 @@ the duplicate Lean-build asset. Phase 690 runs no tool or backend and creates
 no proof, accepted evidence, Level2+, score axis, semantic correctness,
 production readiness, SOTA, breakthrough, or full-security claim.
 
+[docs/691-phase-hsai-gateway-threat-ordinal-lake-identity-stop.md](docs/691-phase-hsai-gateway-threat-ordinal-lake-identity-stop.md)
+records the cleaned pre-Cargo stop after exact Aeneas build equivalence and
+Lean acquisition passed but Lake's build suffix mismatched the expected
+string. Backend/kernel statuses remain `NotRun`.
+
+[docs/692-phase-hsai-gateway-threat-ordinal-exact-lake-identity-closure.md](docs/692-phase-hsai-gateway-threat-ordinal-exact-lake-identity-closure.md)
+binds complete Lean and Lake identities for Phase 693. It runs no backend and
+creates no proof, accepted evidence, Level2+, score axis, semantic correctness,
+production readiness, SOTA, breakthrough, or full-security claim.
+
 [docs/675-phase-hsai-gateway-threat-ordinal-charon-canonical-path-mismatch.md](docs/675-phase-hsai-gateway-threat-ordinal-charon-canonical-path-mismatch.md)
 records the cleaned Phase 675 pre-Cargo failure. Exact Rust and Charon source
 identities passed, then the Phase 674 assertion compared declared `/tmp/...`
