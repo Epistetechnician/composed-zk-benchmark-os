@@ -731,6 +731,14 @@ independent producer provenance. Backend statuses remain `NotRun`.
 binds independent status, bounded streams, and checkpoints for every Phase 719
 network producer. It creates no proof, evidence, Level2+, or stronger claim.
 
+[docs/719-phase-hsai-gateway-threat-ordinal-generated-module-import-stop.md](docs/719-phase-hsai-gateway-threat-ordinal-generated-module-import-stop.md)
+records successful Charon/Aeneas extraction and generated-types checking,
+followed by missing client-local `Types.olean` during function checking.
+
+[docs/720-phase-hsai-gateway-threat-ordinal-direct-olean-closure.md](docs/720-phase-hsai-gateway-threat-ordinal-direct-olean-closure.md)
+binds ordered direct `.olean` outputs under the client build root for Phase 721.
+It creates no proof, evidence, Level2+, or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
