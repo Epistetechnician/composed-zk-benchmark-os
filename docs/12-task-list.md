@@ -19412,6 +19412,20 @@ Status: complete as a documentation-first correction. Binds the exact U+2190
 token and immediate client hash checks for Phase 711. See
 `docs/710-phase-hsai-gateway-threat-ordinal-utf8-lakefile-closure.md`.
 
+## Phase 711 HSAI Gateway Threat Ordinal Charon Fetch Toolchain Token Stop
+
+Status: complete as a cleaned nonconforming pre-build stop. All prefetch gates
+passed, but a wrong nightly environment token invalidated the otherwise
+successful dependency fetch. Backend statuses remain `NotRun`. See
+`docs/711-phase-hsai-gateway-threat-ordinal-charon-fetch-toolchain-token-stop.md`.
+
+## Phase 712 HSAI Gateway Threat Ordinal Charon Toolchain Token Closure
+
+Status: complete as a documentation-first correction. Requires the exact
+nightly token to be captured and checked before every Charon producer in Phase
+713. See
+`docs/712-phase-hsai-gateway-threat-ordinal-charon-toolchain-token-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

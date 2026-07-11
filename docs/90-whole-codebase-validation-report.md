@@ -697,6 +697,15 @@ records the cleaned pre-Cargo stop after tool/source gates passed but ASCII
 binds the exact U+2190 client token and immediate hash checks for Phase 711. It
 creates no proof, evidence, Level2+, or stronger claim.
 
+[docs/711-phase-hsai-gateway-threat-ordinal-charon-fetch-toolchain-token-stop.md](docs/711-phase-hsai-gateway-threat-ordinal-charon-fetch-toolchain-token-stop.md)
+records the cleaned pre-build stop after a wrong nightly token made an otherwise
+successful isolated Charon dependency fetch nonconforming. Backend statuses
+remain `NotRun`.
+
+[docs/712-phase-hsai-gateway-threat-ordinal-charon-toolchain-token-closure.md](docs/712-phase-hsai-gateway-threat-ordinal-charon-toolchain-token-closure.md)
+binds the exact Charon nightly token and prelaunch comparison for Phase 713. It
+creates no proof, evidence, Level2+, or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
