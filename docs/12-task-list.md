@@ -19399,6 +19399,19 @@ Status: complete as a documentation-first correction. Restricts the transfer
 scan to the exact six identity producers for Phase 709. See
 `docs/708-phase-hsai-gateway-threat-ordinal-identity-log-allowlist-closure.md`.
 
+## Phase 709 HSAI Gateway Threat Ordinal Lean Bind Token Stop
+
+Status: complete as a cleaned pre-Cargo stop. All prior tool/source gates
+passed, but ASCII `<-` mismatched the canonical UTF-8 lakefile before any Cargo
+producer. Backend statuses remain `NotRun`. See
+`docs/709-phase-hsai-gateway-threat-ordinal-lean-bind-token-stop.md`.
+
+## Phase 710 HSAI Gateway Threat Ordinal UTF-8 Lakefile Closure
+
+Status: complete as a documentation-first correction. Binds the exact U+2190
+token and immediate client hash checks for Phase 711. See
+`docs/710-phase-hsai-gateway-threat-ordinal-utf8-lakefile-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
