@@ -19452,6 +19452,20 @@ Status: complete as a documentation-first correction. Binds exact sandboxed
 `charon version` output for Phase 717. See
 `docs/716-phase-hsai-gateway-threat-ordinal-charon-version-subcommand-closure.md`.
 
+## Phase 717 HSAI Gateway Threat Ordinal Acquisition Provenance Stop
+
+Status: complete as a cleaned pre-materialization stop. Charon source and both
+Aeneas assets matched content pins but lacked required independent producer
+records. Backend statuses remain `NotRun`. See
+`docs/717-phase-hsai-gateway-threat-ordinal-acquisition-provenance-stop.md`.
+
+## Phase 718 HSAI Gateway Threat Ordinal Acquisition Producer Closure
+
+Status: complete as a documentation-first correction. Requires each network
+producer to record its own status, bounded streams, and checkpoint in Phase
+719. See
+`docs/718-phase-hsai-gateway-threat-ordinal-acquisition-producer-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

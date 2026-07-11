@@ -723,6 +723,14 @@ extraction statuses remain `NotRun`.
 binds exact `charon version` output for Phase 717. It creates no proof,
 evidence, Level2+, or stronger claim.
 
+[docs/717-phase-hsai-gateway-threat-ordinal-acquisition-provenance-stop.md](docs/717-phase-hsai-gateway-threat-ordinal-acquisition-provenance-stop.md)
+records the cleaned stop after matching Charon/Aeneas content lacked required
+independent producer provenance. Backend statuses remain `NotRun`.
+
+[docs/718-phase-hsai-gateway-threat-ordinal-acquisition-producer-closure.md](docs/718-phase-hsai-gateway-threat-ordinal-acquisition-producer-closure.md)
+binds independent status, bounded streams, and checkpoints for every Phase 719
+network producer. It creates no proof, evidence, Level2+, or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
