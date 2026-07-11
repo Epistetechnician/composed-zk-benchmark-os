@@ -680,6 +680,15 @@ Backend statuses remain `NotRun`.
 binds the exact seven-line filtered component output for Phase 707. It creates
 no proof, evidence, Level2+, or stronger claim.
 
+[docs/707-phase-hsai-gateway-threat-ordinal-identity-log-scope-stop.md](docs/707-phase-hsai-gateway-threat-ordinal-identity-log-scope-stop.md)
+records the cleaned pre-Charon stop after exact Rust identities passed but an
+acquisition transcript contaminated the forbidden-transfer scan. Backend
+statuses remain `NotRun`.
+
+[docs/708-phase-hsai-gateway-threat-ordinal-identity-log-allowlist-closure.md](docs/708-phase-hsai-gateway-threat-ordinal-identity-log-allowlist-closure.md)
+binds the exact six-producer identity-log allowlist for Phase 709. It creates no
+proof, evidence, Level2+, or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
