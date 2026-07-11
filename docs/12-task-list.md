@@ -19372,6 +19372,20 @@ Status: complete as a documentation-first correction. Requires canonical run
 root creation before non-recursive child creation for Phase 705. See
 `docs/704-phase-hsai-gateway-threat-ordinal-run-root-ownership-closure.md`.
 
+## Phase 705 HSAI Gateway Threat Ordinal Component Assertion Stop
+
+Status: complete as a cleaned pre-Charon stop. Runner fixtures, frozen-source
+gates, the Rust channel pin, and isolated installation passed, but an incorrect
+`(installed)` suffix assertion stopped before Charon acquisition. Backend
+statuses remain `NotRun`. See
+`docs/705-phase-hsai-gateway-threat-ordinal-component-assertion-stop.md`.
+
+## Phase 706 HSAI Gateway Threat Ordinal Component List Closure
+
+Status: complete as a documentation-first correction. Binds the exact
+seven-line output of filtered rustup component listing for Phase 707. See
+`docs/706-phase-hsai-gateway-threat-ordinal-component-list-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

@@ -671,6 +671,15 @@ before the run root existed. No attempt or backend state was created.
 binds parent-before-child run-root creation for Phase 705. It creates no proof,
 evidence, Level2+, or stronger claim.
 
+[docs/705-phase-hsai-gateway-threat-ordinal-component-assertion-stop.md](docs/705-phase-hsai-gateway-threat-ordinal-component-assertion-stop.md)
+records the cleaned pre-Charon stop after runner, frozen-source, channel, and
+isolated-install gates passed but a filtered rustup suffix assertion failed.
+Backend statuses remain `NotRun`.
+
+[docs/706-phase-hsai-gateway-threat-ordinal-component-list-closure.md](docs/706-phase-hsai-gateway-threat-ordinal-component-list-closure.md)
+binds the exact seven-line filtered component output for Phase 707. It creates
+no proof, evidence, Level2+, or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
