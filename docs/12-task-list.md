@@ -19466,6 +19466,19 @@ producer to record its own status, bounded streams, and checkpoint in Phase
 719. See
 `docs/718-phase-hsai-gateway-threat-ordinal-acquisition-producer-closure.md`.
 
+## Phase 719 HSAI Gateway Threat Ordinal Generated Module Import Stop
+
+Status: complete as a cleaned post-extraction kernel stop. Charon extraction,
+Aeneas extraction, and generated-types checking passed; generated-functions
+checking failed because no client-local `Types.olean` had been written. See
+`docs/719-phase-hsai-gateway-threat-ordinal-generated-module-import-stop.md`.
+
+## Phase 720 HSAI Gateway Threat Ordinal Direct Olean Closure
+
+Status: complete as a documentation-first correction. Binds ordered `-o`
+outputs beneath the client Lake build root for Phase 721. See
+`docs/720-phase-hsai-gateway-threat-ordinal-direct-olean-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
