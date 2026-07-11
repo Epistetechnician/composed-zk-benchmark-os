@@ -663,6 +663,14 @@ canonical lakefile bytes mismatched. Backend statuses remain `NotRun`.
 binds exact client metadata hashes for Phase 703. It creates no proof,
 evidence, Level2+, or stronger claim.
 
+[docs/703-phase-hsai-gateway-threat-ordinal-run-root-order-stop.md](docs/703-phase-hsai-gateway-threat-ordinal-run-root-order-stop.md)
+records a clean pre-acquisition stop after nested directory creation failed
+before the run root existed. No attempt or backend state was created.
+
+[docs/704-phase-hsai-gateway-threat-ordinal-run-root-ownership-closure.md](docs/704-phase-hsai-gateway-threat-ordinal-run-root-ownership-closure.md)
+binds parent-before-child run-root creation for Phase 705. It creates no proof,
+evidence, Level2+, or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

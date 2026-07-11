@@ -19360,6 +19360,18 @@ Status: complete as a documentation-first correction. Binds exact lakefile and
 toolchain digests for Phase 703. See
 `docs/702-phase-hsai-gateway-threat-ordinal-canonical-client-metadata-closure.md`.
 
+## Phase 703 HSAI Gateway Threat Ordinal Run-Root Order Stop
+
+Status: complete as a clean pre-acquisition stop. Nested client creation failed
+before the absent run root was created. No attempt state or backend operation
+occurred. See `docs/703-phase-hsai-gateway-threat-ordinal-run-root-order-stop.md`.
+
+## Phase 704 HSAI Gateway Threat Ordinal Run-Root Ownership Closure
+
+Status: complete as a documentation-first correction. Requires canonical run
+root creation before non-recursive child creation for Phase 705. See
+`docs/704-phase-hsai-gateway-threat-ordinal-run-root-ownership-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
