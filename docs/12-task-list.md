@@ -19439,6 +19439,19 @@ Status: complete as a documentation-first correction. Restricts Phase 715 to
 the exact four runner fixtures followed by one validator. See
 `docs/714-phase-hsai-gateway-threat-ordinal-fixture-command-closure.md`.
 
+## Phase 715 HSAI Gateway Threat Ordinal Charon Version Command Stop
+
+Status: complete as a cleaned post-build stop. The first bounded offline
+sandboxed Charon source build passed, but unsupported `--version` stopped before
+extraction. Backend extraction and kernel statuses remain `NotRun`. See
+`docs/715-phase-hsai-gateway-threat-ordinal-charon-version-command-stop.md`.
+
+## Phase 716 HSAI Gateway Threat Ordinal Charon Version Subcommand Closure
+
+Status: complete as a documentation-first correction. Binds exact sandboxed
+`charon version` output for Phase 717. See
+`docs/716-phase-hsai-gateway-threat-ordinal-charon-version-subcommand-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
