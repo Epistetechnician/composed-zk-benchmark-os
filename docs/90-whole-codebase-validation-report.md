@@ -714,6 +714,15 @@ violated the exact fixture command sequence. Backend statuses remain `NotRun`.
 binds four exact fixture producers and one validator for Phase 715. It creates
 no proof, evidence, Level2+, or stronger claim.
 
+[docs/715-phase-hsai-gateway-threat-ordinal-charon-version-command-stop.md](docs/715-phase-hsai-gateway-threat-ordinal-charon-version-command-stop.md)
+records the first successful bounded offline sandboxed Charon source build and
+the unsupported `--version` stop before extraction. Kernel and backend
+extraction statuses remain `NotRun`.
+
+[docs/716-phase-hsai-gateway-threat-ordinal-charon-version-subcommand-closure.md](docs/716-phase-hsai-gateway-threat-ordinal-charon-version-subcommand-closure.md)
+binds exact `charon version` output for Phase 717. It creates no proof,
+evidence, Level2+, or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
