@@ -19426,6 +19426,19 @@ nightly token to be captured and checked before every Charon producer in Phase
 713. See
 `docs/712-phase-hsai-gateway-threat-ordinal-charon-toolchain-token-closure.md`.
 
+## Phase 713 HSAI Gateway Threat Ordinal Fixture Command Stop
+
+Status: complete as a cleaned pre-acquisition stop. Canonical client hashes
+passed, but an unintended unused shell loop violated the exact fixture command
+sequence. Backend and acquisition statuses remain `NotRun`. See
+`docs/713-phase-hsai-gateway-threat-ordinal-fixture-command-stop.md`.
+
+## Phase 714 HSAI Gateway Threat Ordinal Fixture Command Closure
+
+Status: complete as a documentation-first correction. Restricts Phase 715 to
+the exact four runner fixtures followed by one validator. See
+`docs/714-phase-hsai-gateway-threat-ordinal-fixture-command-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
