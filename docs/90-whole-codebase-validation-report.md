@@ -689,6 +689,14 @@ statuses remain `NotRun`.
 binds the exact six-producer identity-log allowlist for Phase 709. It creates no
 proof, evidence, Level2+, or stronger claim.
 
+[docs/709-phase-hsai-gateway-threat-ordinal-lean-bind-token-stop.md](docs/709-phase-hsai-gateway-threat-ordinal-lean-bind-token-stop.md)
+records the cleaned pre-Cargo stop after tool/source gates passed but ASCII
+`<-` mismatched the canonical UTF-8 lakefile. Backend statuses remain `NotRun`.
+
+[docs/710-phase-hsai-gateway-threat-ordinal-utf8-lakefile-closure.md](docs/710-phase-hsai-gateway-threat-ordinal-utf8-lakefile-closure.md)
+binds the exact U+2190 client token and immediate hash checks for Phase 711. It
+creates no proof, evidence, Level2+, or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
