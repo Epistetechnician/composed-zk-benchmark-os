@@ -19347,6 +19347,19 @@ Status: complete as a documentation-first correction. Specifies a pinned
 temporary Python process-group runner and four fixtures for Phase 701. See
 `docs/700-phase-hsai-gateway-threat-ordinal-bounded-runner-closure.md`.
 
+## Phase 701 HSAI Gateway Threat Ordinal Client Metadata Stop
+
+Status: complete as a cleaned pre-Lake stop. Bounded-runner fixtures and tool
+gates passed, but noncanonical lakefile bytes stopped the attempt. Backend
+statuses remain `NotRun`. See
+`docs/701-phase-hsai-gateway-threat-ordinal-client-metadata-stop.md`.
+
+## Phase 702 HSAI Gateway Threat Ordinal Canonical Client Metadata Closure
+
+Status: complete as a documentation-first correction. Binds exact lakefile and
+toolchain digests for Phase 703. See
+`docs/702-phase-hsai-gateway-threat-ordinal-canonical-client-metadata-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
