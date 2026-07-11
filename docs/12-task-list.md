@@ -19334,6 +19334,19 @@ Status: complete as a documentation-first correction. Restricts Rust identity
 to the exact Phase 680 sequence for Phase 699. See
 `docs/698-phase-hsai-gateway-threat-ordinal-exact-rust-preflight-closure.md`.
 
+## Phase 699 HSAI Gateway Threat Ordinal Timeout Runner Stop
+
+Status: complete as a cleaned pre-build stop. Cache and attributed sandbox
+controls passed, but no compliant complete-process-group timeout/output runner
+was available. Backend statuses remain `NotRun`. See
+`docs/699-phase-hsai-gateway-threat-ordinal-timeout-runner-stop.md`.
+
+## Phase 700 HSAI Gateway Threat Ordinal Bounded Runner Closure
+
+Status: complete as a documentation-first correction. Specifies a pinned
+temporary Python process-group runner and four fixtures for Phase 701. See
+`docs/700-phase-hsai-gateway-threat-ordinal-bounded-runner-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

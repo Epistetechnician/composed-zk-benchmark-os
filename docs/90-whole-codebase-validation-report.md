@@ -9868,6 +9868,16 @@ no-op violated exact-command rules. Backend/kernel statuses remain `NotRun`.
 restricts Phase 699 Rust identity to the exact permitted sequence. It runs no
 backend and creates no proof, evidence, Level2+, or stronger claim.
 
+[docs/699-phase-hsai-gateway-threat-ordinal-timeout-runner-stop.md](docs/699-phase-hsai-gateway-threat-ordinal-timeout-runner-stop.md)
+records the cleaned pre-build stop after dependency and sandbox gates passed
+but a compliant process-group runner was absent. Backend statuses remain
+`NotRun`.
+
+[docs/700-phase-hsai-gateway-threat-ordinal-bounded-runner-closure.md](docs/700-phase-hsai-gateway-threat-ordinal-bounded-runner-closure.md)
+specifies a temporary pinned Python runner with process-group timeout and live
+stream caps for Phase 701. It creates no proof, evidence, Level2+, or stronger
+claim.
+
 [docs/695-phase-hsai-gateway-threat-ordinal-sandbox-diagnostic-stop.md](docs/695-phase-hsai-gateway-threat-ordinal-sandbox-diagnostic-stop.md)
 records the cleaned stop after full cache closure passed but sandbox-denial
 attribution failed before build. Backend/kernel statuses remain `NotRun`.
