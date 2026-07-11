@@ -19386,6 +19386,19 @@ Status: complete as a documentation-first correction. Binds the exact
 seven-line output of filtered rustup component listing for Phase 707. See
 `docs/706-phase-hsai-gateway-threat-ordinal-component-list-closure.md`.
 
+## Phase 707 HSAI Gateway Threat Ordinal Identity Log Scope Stop
+
+Status: complete as a cleaned pre-Charon stop. Exact component and compiler
+identities passed, but an overbroad stderr glob contaminated the transfer scan
+with the earlier installation transcript. Backend statuses remain `NotRun`.
+See `docs/707-phase-hsai-gateway-threat-ordinal-identity-log-scope-stop.md`.
+
+## Phase 708 HSAI Gateway Threat Ordinal Identity Log Allowlist Closure
+
+Status: complete as a documentation-first correction. Restricts the transfer
+scan to the exact six identity producers for Phase 709. See
+`docs/708-phase-hsai-gateway-threat-ordinal-identity-log-allowlist-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
