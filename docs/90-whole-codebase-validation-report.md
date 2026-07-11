@@ -655,6 +655,14 @@ the phase creates no production-readiness, semantic-correctness, SOTA,
 breakthrough, official benchmark, live-provider, accepted-ledger, or Level2+
 claim.
 
+[docs/701-phase-hsai-gateway-threat-ordinal-client-metadata-stop.md](docs/701-phase-hsai-gateway-threat-ordinal-client-metadata-stop.md)
+records the cleaned pre-Lake stop after bounded-runner fixtures passed but
+canonical lakefile bytes mismatched. Backend statuses remain `NotRun`.
+
+[docs/702-phase-hsai-gateway-threat-ordinal-canonical-client-metadata-closure.md](docs/702-phase-hsai-gateway-threat-ordinal-canonical-client-metadata-closure.md)
+binds exact client metadata hashes for Phase 703. It creates no proof,
+evidence, Level2+, or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
