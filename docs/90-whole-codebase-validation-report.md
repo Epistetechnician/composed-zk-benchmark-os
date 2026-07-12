@@ -747,6 +747,14 @@ test modification. No attempt or backend state was created.
 binds a detached clean execution checkout for Phase 723 without mutating the
 primary user change. It creates no proof, evidence, Level2+, or stronger claim.
 
+[docs/723-phase-hsai-gateway-threat-ordinal-witness-decidable-stop.md](docs/723-phase-hsai-gateway-threat-ordinal-witness-decidable-stop.md)
+records successful detached extraction and Types/Funs `.olean` checks followed
+by missing `Decidable` synthesis during exhaustive witness checking.
+
+[docs/724-phase-hsai-gateway-threat-ordinal-rfl-witness-closure.md](docs/724-phase-hsai-gateway-threat-ordinal-rfl-witness-closure.md)
+binds fourteen explicit definitional equality proofs for Phase 725. It creates
+no proof, evidence, Level2+, or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
