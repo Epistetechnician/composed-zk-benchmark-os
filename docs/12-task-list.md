@@ -19545,6 +19545,20 @@ loopback listener, a successful unsandboxed control, and a failed byte-identical
 sandboxed connection before Phase 731 may build. See
 `docs/730-phase-hsai-gateway-threat-ordinal-sandbox-loopback-attribution-closure.md`.
 
+## Phase 731 HSAI Gateway Threat Ordinal Runner Fixture Stop
+
+Status: complete as a cleaned detached-worktree pre-source stop. Alternate
+fixture commands and 64-byte flood caps invalidated the runner gate; subsequent
+Rust activity was discarded and all owned state was removed. See
+`docs/731-phase-hsai-gateway-threat-ordinal-runner-fixture-stop.md`.
+
+## Phase 732 HSAI Gateway Threat Ordinal Exact Fixture And Loopback Closure
+
+Status: complete as a documentation-first correction. Freezes the four exact
+runner commands, 1,024-byte caps, pinned listener source, and byte-identical
+loopback connection argv for Phase 733. See
+`docs/732-phase-hsai-gateway-threat-ordinal-exact-fixture-and-loopback-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

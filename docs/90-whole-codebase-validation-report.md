@@ -780,6 +780,16 @@ kernel execution remained `NotRun`.
 binds controlled loopback positive/negative attribution for Phase 731. It runs
 no backend and creates no proof, evidence, Level2+, or stronger claim.
 
+[docs/731-phase-hsai-gateway-threat-ordinal-runner-fixture-stop.md](docs/731-phase-hsai-gateway-threat-ordinal-runner-fixture-stop.md)
+records the cleaned pre-source stop after alternate fixture commands and
+64-byte flood caps invalidated the bounded-runner gate. Charon, Aeneas, Lean,
+Cargo, Lake, sandbox, backend, and kernel statuses remained `NotRun`.
+
+[docs/732-phase-hsai-gateway-threat-ordinal-exact-fixture-and-loopback-closure.md](docs/732-phase-hsai-gateway-threat-ordinal-exact-fixture-and-loopback-closure.md)
+binds exact runner commands, 1,024-byte caps, pinned listener source, and one
+byte-identical loopback connection argv for Phase 733. It runs no backend and
+creates no proof, evidence, Level2+, or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
