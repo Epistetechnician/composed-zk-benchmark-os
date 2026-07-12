@@ -771,6 +771,15 @@ the exact forbidden-transfer scan.
 binds the exact twelve-file Rust identity transcript set for Phase 729. It
 creates no proof, evidence, Level2+, or stronger claim.
 
+[docs/729-phase-hsai-gateway-threat-ordinal-sandbox-diagnostic-stop.md](docs/729-phase-hsai-gateway-threat-ordinal-sandbox-diagnostic-stop.md)
+records the cleaned pre-build stop after the required direct-IP sandbox denial
+diagnostic was absent. Acquisitions and dependency closure passed; backend and
+kernel execution remained `NotRun`.
+
+[docs/730-phase-hsai-gateway-threat-ordinal-sandbox-loopback-attribution-closure.md](docs/730-phase-hsai-gateway-threat-ordinal-sandbox-loopback-attribution-closure.md)
+binds controlled loopback positive/negative attribution for Phase 731. It runs
+no backend and creates no proof, evidence, Level2+, or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

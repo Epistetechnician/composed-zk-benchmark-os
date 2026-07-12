@@ -19531,6 +19531,20 @@ Status: complete as a documentation-first correction. Requires six explicit
 stdout/stderr pairs before identity assertions in Phase 729. See
 `docs/728-phase-hsai-gateway-threat-ordinal-identity-transcript-closure.md`.
 
+## Phase 729 HSAI Gateway Threat Ordinal Sandbox Diagnostic Stop
+
+Status: complete as a cleaned detached-worktree pre-build stop. All acquisition
+and dependency gates passed, but the direct-IP denial probe produced empty
+stderr instead of the required diagnostic. See
+`docs/729-phase-hsai-gateway-threat-ordinal-sandbox-diagnostic-stop.md`.
+
+## Phase 730 HSAI Gateway Threat Ordinal Sandbox Loopback Attribution Closure
+
+Status: complete as a documentation-first correction. Requires a bounded
+loopback listener, a successful unsandboxed control, and a failed byte-identical
+sandboxed connection before Phase 731 may build. See
+`docs/730-phase-hsai-gateway-threat-ordinal-sandbox-loopback-attribution-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
