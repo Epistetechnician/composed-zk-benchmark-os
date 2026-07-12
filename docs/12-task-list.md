@@ -19696,6 +19696,19 @@ from exact committed `HEAD` in a clean detached worktree while proving the
 concurrent primary state byte-identical before and after. See
 `docs/753-phase-hsai-gateway-threat-ordinal-detached-isolation-closure.md`.
 
+## Phase 754 HSAI Gateway Threat Ordinal Charon License Path Stop
+
+Status: complete as a cleaned pre-Aeneas stop. Exact-token Rust identity and
+Charon fetch passed, then the source check used absent `LICENSE` instead of the
+real `LICENSE.md` path. See
+`docs/754-phase-hsai-gateway-threat-ordinal-charon-license-path-stop.md`.
+
+## Phase 755 HSAI Gateway Threat Ordinal Charon License Path Closure
+
+Status: complete as a documentation-first correction. Binds `LICENSE.md` and
+the other four exact Charon source paths and hashes for Phase 756. See
+`docs/755-phase-hsai-gateway-threat-ordinal-charon-license-path-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
