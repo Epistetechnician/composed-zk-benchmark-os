@@ -19631,6 +19631,22 @@ profiles, including main `rust-toolchain`, and requires an unmasked standalone
 acceptance parser before Phase 743 extraction. See
 `docs/742-phase-hsai-gateway-threat-ordinal-exact-archive-profile-closure.md`.
 
+## Phase 743 HSAI Gateway Threat Ordinal Execution Protocol Stop
+
+Status: complete as a cleaned pre-acquisition stop. The inherited client
+metadata, parser-self-test, fixture, and acquisition order was contradictory,
+so the attempt stopped before self-tests or network and removed all temporary
+state. See
+`docs/743-phase-hsai-gateway-threat-ordinal-execution-protocol-stop.md`.
+
+## Phase 744 HSAI Gateway Threat Ordinal Authoritative Order Closure
+
+Status: complete as a documentation-first correction. Defines one
+precedence-controlled Phase 745 sequence from detached-worktree and parser
+self-tests through archive validation, sandboxed extraction, direct `.olean`
+checks, cleanup, and bounded retention. See
+`docs/744-phase-hsai-gateway-threat-ordinal-authoritative-order-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
