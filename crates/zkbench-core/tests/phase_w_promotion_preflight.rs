@@ -1662,6 +1662,22 @@ fn phase_w_source_scan_exposes_no_mutation_runtime_or_submission_surface() {
 }
 
 #[test]
+fn external_replay_preflight_outputs_reject_empty_output_root() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let mut request = valid_external_replay_preflight_output_request(&dir);
+    request.output_root = PathBuf::new();
+    request.preflight_request.future_output_root = request.output_root.clone();
+    request.preflight_report =
+        build_external_replay_submission_preflight_report(&request.preflight_request);
+    let error = write_external_replay_submission_preflight_outputs(&request)
+        .expect_err("empty output root should reject before any filesystem access");
+    assert!(
+        error.to_string().contains("output root must be non-empty"),
+        "unexpected error: {error}"
+    );
+}
+
+#[test]
 fn official_submission_output_source_scan_exposes_no_endpoint_runtime_or_credentials() {
     let source_path = Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("src")
