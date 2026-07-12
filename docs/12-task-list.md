@@ -19559,6 +19559,20 @@ runner commands, 1,024-byte caps, pinned listener source, and byte-identical
 loopback connection argv for Phase 733. See
 `docs/732-phase-hsai-gateway-threat-ordinal-exact-fixture-and-loopback-closure.md`.
 
+## Phase 733 HSAI Gateway Threat Ordinal Archive Validator Stop
+
+Status: complete as a cleaned detached-worktree pre-materialization stop. The
+validator rejected a legitimate `./` root marker and later display commands
+masked its Python status. See
+`docs/733-phase-hsai-gateway-threat-ordinal-archive-validator-stop.md`.
+
+## Phase 734 HSAI Gateway Threat Ordinal Archive Validator Status Closure
+
+Status: complete as a documentation-first correction. Allows only exact archive
+root markers, normalizes all other paths, rejects links and traversal, and
+requires immediate validator-status assertion for Phase 735. See
+`docs/734-phase-hsai-gateway-threat-ordinal-archive-validator-status-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

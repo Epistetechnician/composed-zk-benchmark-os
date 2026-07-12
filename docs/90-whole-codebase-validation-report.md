@@ -790,6 +790,16 @@ binds exact runner commands, 1,024-byte caps, pinned listener source, and one
 byte-identical loopback connection argv for Phase 733. It runs no backend and
 creates no proof, evidence, Level2+, or stronger claim.
 
+[docs/733-phase-hsai-gateway-threat-ordinal-archive-validator-stop.md](docs/733-phase-hsai-gateway-threat-ordinal-archive-validator-stop.md)
+records the cleaned pre-materialization stop after a legitimate `./` archive
+root marker was rejected and the validator's status was masked. No archive was
+extracted; backend and kernel execution remained `NotRun`.
+
+[docs/734-phase-hsai-gateway-threat-ordinal-archive-validator-status-closure.md](docs/734-phase-hsai-gateway-threat-ordinal-archive-validator-status-closure.md)
+binds exact archive root-marker, normalization, traversal, link, duplicate, and
+status-propagation rules for Phase 735. It runs no backend and creates no proof,
+evidence, Level2+, or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
