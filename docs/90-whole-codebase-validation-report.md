@@ -823,6 +823,16 @@ checks, canonical summaries, and mandatory adversarial parser self-tests for
 Phase 739. It runs no backend and creates no proof, evidence, Level2+, or
 stronger claim.
 
+[docs/739-phase-hsai-gateway-threat-ordinal-archive-profile-stop.md](docs/739-phase-hsai-gateway-threat-ordinal-archive-profile-stop.md)
+records the cleaned pre-extraction stop after the raw parser rejected the
+guessed main top-level profile and the acceptance shell masked that failure.
+No extraction, backend, or kernel command ran.
+
+[docs/740-phase-hsai-gateway-threat-ordinal-archive-profile-discovery-boundary.md](docs/740-phase-hsai-gateway-threat-ordinal-archive-profile-discovery-boundary.md)
+binds one acquisition-only Phase 741 profile-discovery run with no archive
+acceptance or extraction. Phase 740 runs no network/backend/kernel command and
+creates no proof, evidence, Level2+, or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

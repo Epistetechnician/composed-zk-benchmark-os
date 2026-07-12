@@ -19603,6 +19603,20 @@ summary output, and bounded adversarial parser self-tests before Phase 739
 acquisition. See
 `docs/738-phase-hsai-gateway-threat-ordinal-raw-aware-tar-validator-closure.md`.
 
+## Phase 739 HSAI Gateway Threat Ordinal Archive Profile Stop
+
+Status: complete as a cleaned detached-worktree pre-extraction stop. Raw-parser
+self-tests passed, but the guessed main top-level set mismatched and later
+checkpoint commands masked the acceptance assertion. See
+`docs/739-phase-hsai-gateway-threat-ordinal-archive-profile-stop.md`.
+
+## Phase 740 HSAI Gateway Threat Ordinal Archive Profile Discovery Boundary
+
+Status: complete as a documentation-first acquisition-only boundary. Authorizes
+one Phase 741 run to discover raw top-level sets and inventory digests without
+accepting a profile, extracting an archive, or running a backend. See
+`docs/740-phase-hsai-gateway-threat-ordinal-archive-profile-discovery-boundary.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
