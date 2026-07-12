@@ -755,6 +755,14 @@ by missing `Decidable` synthesis during exhaustive witness checking.
 binds fourteen explicit definitional equality proofs for Phase 725. It creates
 no proof, evidence, Level2+, or stronger claim.
 
+[docs/725-phase-hsai-gateway-threat-ordinal-materialization-provenance-stop.md](docs/725-phase-hsai-gateway-threat-ordinal-materialization-provenance-stop.md)
+records a cleaned stop after condensed Aeneas extraction producers lacked
+independent status and checkpoint records. Later execution remained `NotRun`.
+
+[docs/726-phase-hsai-gateway-threat-ordinal-materialization-producer-closure.md](docs/726-phase-hsai-gateway-threat-ordinal-materialization-producer-closure.md)
+binds separate local Aeneas materialization records for Phase 727. It creates no
+proof, evidence, Level2+, or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

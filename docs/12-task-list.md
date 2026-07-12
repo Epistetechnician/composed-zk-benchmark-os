@@ -19506,6 +19506,19 @@ Status: complete as a documentation-first correction. Replaces the decision
 procedure with fourteen explicit definitional `rfl` proofs for Phase 725. See
 `docs/724-phase-hsai-gateway-threat-ordinal-rfl-witness-closure.md`.
 
+## Phase 725 HSAI Gateway Threat Ordinal Materialization Provenance Stop
+
+Status: complete as a cleaned detached-worktree pre-Lean stop. Two condensed
+Aeneas extraction producers lacked independent status/checkpoint records. See
+`docs/725-phase-hsai-gateway-threat-ordinal-materialization-provenance-stop.md`.
+
+## Phase 726 HSAI Gateway Threat Ordinal Materialization Producer Closure
+
+Status: complete as a documentation-first correction. Requires separate
+top-level Aeneas main and Lean-build staging extraction records for Phase 727.
+See
+`docs/726-phase-hsai-gateway-threat-ordinal-materialization-producer-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
