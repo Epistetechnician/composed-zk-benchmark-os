@@ -843,6 +843,16 @@ binds the exact observed profiles and standalone unmasked acceptance rule for
 Phase 743. It runs no backend and creates no proof, evidence, Level2+, or
 stronger claim.
 
+[docs/743-phase-hsai-gateway-threat-ordinal-execution-protocol-stop.md](docs/743-phase-hsai-gateway-threat-ordinal-execution-protocol-stop.md)
+records the cleaned stop before parser self-tests or network acquisition. The
+inherited client-metadata, self-test, fixture, and acquisition stage order was
+contradictory, so no backend or kernel command ran.
+
+[docs/744-phase-hsai-gateway-threat-ordinal-authoritative-order-closure.md](docs/744-phase-hsai-gateway-threat-ordinal-authoritative-order-closure.md)
+replaces only the conflicting execution order with one precedence-controlled
+Phase 745 sequence. It runs no tool or backend and creates no proof, evidence,
+Level2+, or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
