@@ -868,6 +868,14 @@ records the committed helper implementation, 30 focused tests, exact source
 hashes, and measured 31-case parser self-test. No external asset, network,
 backend, generated source, or kernel command ran.
 
+[docs/750-phase-hsai-gateway-threat-ordinal-rust-token-stop.md](docs/750-phase-hsai-gateway-threat-ordinal-rust-token-stop.md)
+records the cleaned stop after an incorrect Rust identity environment token.
+No Charon, Aeneas, Lean, backend, generated-source, or kernel command ran.
+
+[docs/751-phase-hsai-gateway-threat-ordinal-identity-token-closure.md](docs/751-phase-hsai-gateway-threat-ordinal-identity-token-closure.md)
+binds an immutable exact toolchain token and standalone pre-launch comparison
+for Phase 752. It runs no tool or backend and creates no stronger evidence.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

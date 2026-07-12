@@ -19670,6 +19670,19 @@ the raw parser derives 31 named passing cases rather than printing a literal.
 Phase 750 is the next bounded execution attempt. See
 `docs/749-phase-hsai-gateway-threat-ordinal-canonical-helper-implementation.md`.
 
+## Phase 750 HSAI Gateway Threat Ordinal Rust Token Stop
+
+Status: complete as a cleaned pre-Charon stop. The parser, client, fixtures,
+Rust manifest, and installation passed, but an incorrect identity environment
+token invalidated all identity commands. See
+`docs/750-phase-hsai-gateway-threat-ordinal-rust-token-stop.md`.
+
+## Phase 751 HSAI Gateway Threat Ordinal Identity Token Closure
+
+Status: complete as a documentation-first correction. Binds one immutable exact
+`nightly-2026-06-01` token and standalone pre-launch comparison for Phase 752.
+See `docs/751-phase-hsai-gateway-threat-ordinal-identity-token-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
