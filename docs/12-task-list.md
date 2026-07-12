@@ -19479,6 +19479,20 @@ Status: complete as a documentation-first correction. Binds ordered `-o`
 outputs beneath the client Lake build root for Phase 721. See
 `docs/720-phase-hsai-gateway-threat-ordinal-direct-olean-closure.md`.
 
+## Phase 721 HSAI Gateway Threat Ordinal Primary Worktree Stop
+
+Status: complete as a pre-execution repository-state stop. A preserved
+pre-existing user test modification blocked the clean-tree gate before any
+attempt root or tool process existed. See
+`docs/721-phase-hsai-gateway-threat-ordinal-primary-worktree-stop.md`.
+
+## Phase 722 HSAI Gateway Threat Ordinal Isolated Worktree Closure
+
+Status: complete as a documentation-first correction. Authorizes one detached
+clean execution worktree for Phase 723 while preserving the primary user change.
+See
+`docs/722-phase-hsai-gateway-threat-ordinal-isolated-worktree-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

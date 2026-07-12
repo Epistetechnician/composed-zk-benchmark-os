@@ -739,6 +739,14 @@ followed by missing client-local `Types.olean` during function checking.
 binds ordered direct `.olean` outputs under the client build root for Phase 721.
 It creates no proof, evidence, Level2+, or stronger claim.
 
+[docs/721-phase-hsai-gateway-threat-ordinal-primary-worktree-stop.md](docs/721-phase-hsai-gateway-threat-ordinal-primary-worktree-stop.md)
+records the pre-execution clean-tree stop while preserving an unrelated user
+test modification. No attempt or backend state was created.
+
+[docs/722-phase-hsai-gateway-threat-ordinal-isolated-worktree-closure.md](docs/722-phase-hsai-gateway-threat-ordinal-isolated-worktree-closure.md)
+binds a detached clean execution checkout for Phase 723 without mutating the
+primary user change. It creates no proof, evidence, Level2+, or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
