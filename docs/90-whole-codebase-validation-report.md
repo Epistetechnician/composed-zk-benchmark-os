@@ -853,6 +853,16 @@ replaces only the conflicting execution order with one precedence-controlled
 Phase 745 sequence. It runs no tool or backend and creates no proof, evidence,
 Level2+, or stronger claim.
 
+[docs/745-phase-hsai-gateway-threat-ordinal-helper-specification-stop.md](docs/745-phase-hsai-gateway-threat-ordinal-helper-specification-stop.md)
+records the clean pre-root stop after audit found duplicate listener ordering
+and no retained exact runner/parser implementation. No helper, network, backend,
+or kernel command ran.
+
+[docs/748-phase-hsai-gateway-threat-ordinal-canonical-helper-boundary.md](docs/748-phase-hsai-gateway-threat-ordinal-canonical-helper-boundary.md)
+authorizes one narrow standard-library Phase 749 helper implementation with
+fixed schemas and hermetic tests. It runs no tool or backend and creates no
+proof, evidence, Level2+, or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
