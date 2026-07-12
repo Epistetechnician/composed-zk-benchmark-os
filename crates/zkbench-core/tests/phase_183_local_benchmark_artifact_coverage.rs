@@ -235,4 +235,33 @@ fn local_artifact_outputs_reject_sidecar_manifest_and_markdown_byte_drift() {
     assert!(markdown_utf8
         .to_string()
         .contains("rendered Markdown is not UTF-8"));
+
+    // Tamper the markdown to valid UTF-8 with different content and a matching
+    // digest sidecar so the UTF-8 and digest checks pass but the deterministic
+    // render-match check fails.
+    fs::remove_dir_all(&output_root).expect("reset outputs before markdown drift");
+    write_local_benchmark_artifact_outputs(&output_root, &manifest, false, &[])
+        .expect("restore outputs for markdown drift");
+    let tampered_markdown = "tampered markdown content that is valid utf-8\n";
+    let tampered_bytes = tampered_markdown.as_bytes();
+    fs::write(
+        output_root.join(LOCAL_BENCHMARK_ARTIFACT_MARKDOWN_PATH),
+        tampered_bytes,
+    )
+    .expect("tamper markdown to valid utf-8");
+    let tampered_digest = compute_artifact_digest_bytes(
+        tampered_bytes,
+        Some(ArtifactKind::Other),
+        Some(ArtifactRole::Report),
+    );
+    fs::write(
+        output_root.join(LOCAL_BENCHMARK_ARTIFACT_MARKDOWN_DIGEST_PATH),
+        format!("{}\n", tampered_digest.hex_digest),
+    )
+    .expect("matching digest for tampered markdown");
+    let markdown_drift = read_local_benchmark_artifact_outputs(&output_root, &[])
+        .expect_err("markdown not matching manifest render should reject");
+    assert!(markdown_drift
+        .to_string()
+        .contains("rendered Markdown does not match manifest"));
 }
