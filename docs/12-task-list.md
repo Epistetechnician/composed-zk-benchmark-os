@@ -19647,6 +19647,21 @@ self-tests through archive validation, sandboxed extraction, direct `.olean`
 checks, cleanup, and bounded retention. See
 `docs/744-phase-hsai-gateway-threat-ordinal-authoritative-order-closure.md`.
 
+## Phase 745 HSAI Gateway Threat Ordinal Helper Specification Stop
+
+Status: complete as a clean pre-root stop. Duplicate listener materialization
+and missing retained runner/parser sources made exact execution ambiguous before
+self-tests or network. See
+`docs/745-phase-hsai-gateway-threat-ordinal-helper-specification-stop.md`.
+
+## Phase 748 HSAI Gateway Threat Ordinal Canonical Helper Boundary
+
+Status: complete as a documentation-first implementation boundary. Authorizes
+one standard-library Phase 749 helper surface with fixed schemas, canonical
+archive inventory, 31 hermetic parser cases, exact fixture validation, hashes,
+and focused tests. See
+`docs/748-phase-hsai-gateway-threat-ordinal-canonical-helper-boundary.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
