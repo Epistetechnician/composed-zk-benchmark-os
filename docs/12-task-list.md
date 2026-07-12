@@ -19573,6 +19573,21 @@ root markers, normalizes all other paths, rejects links and traversal, and
 requires immediate validator-status assertion for Phase 735. See
 `docs/734-phase-hsai-gateway-threat-ordinal-archive-validator-status-closure.md`.
 
+## Phase 735 HSAI Gateway Threat Ordinal Archive Specification Stop
+
+Status: complete as a cleaned detached-worktree pre-source stop. Independent
+audit found fail-open inventory provenance, extraction-alias, root-entry, and
+member-type gaps before Charon or Aeneas acquisition. See
+`docs/735-phase-hsai-gateway-threat-ordinal-archive-specification-stop.md`.
+
+## Phase 736 HSAI Gateway Threat Ordinal Structured Archive Validator Closure
+
+Status: complete as a documentation-first correction. Replaces text inventories
+with bounded structured member validation, exact counts/top-level sets, type and
+alias allowlists, embedded-asset equality, and pre-extraction rehashing for
+Phase 737. See
+`docs/736-phase-hsai-gateway-threat-ordinal-structured-archive-validator-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

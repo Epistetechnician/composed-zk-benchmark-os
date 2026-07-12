@@ -800,6 +800,17 @@ binds exact archive root-marker, normalization, traversal, link, duplicate, and
 status-propagation rules for Phase 735. It runs no backend and creates no proof,
 evidence, Level2+, or stronger claim.
 
+[docs/735-phase-hsai-gateway-threat-ordinal-archive-specification-stop.md](docs/735-phase-hsai-gateway-threat-ordinal-archive-specification-stop.md)
+records the cleaned pre-source stop after independent audit found remaining
+inventory provenance, extraction-alias, root-entry, and member-type gaps.
+Charon, Aeneas, archive, backend, and kernel execution remained `NotRun`.
+
+[docs/736-phase-hsai-gateway-threat-ordinal-structured-archive-validator-closure.md](docs/736-phase-hsai-gateway-threat-ordinal-structured-archive-validator-closure.md)
+binds bounded structured member validation, exact counts/top-level sets, member
+type and extraction-key allowlists, embedded-asset equality, and extraction
+rehashing for Phase 737. It runs no backend and creates no proof, evidence,
+Level2+, or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
