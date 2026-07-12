@@ -811,6 +811,18 @@ type and extraction-key allowlists, embedded-asset equality, and extraction
 rehashing for Phase 737. It runs no backend and creates no proof, evidence,
 Level2+, or stronger claim.
 
+[docs/737-phase-hsai-gateway-threat-ordinal-tarinfo-normalization-stop.md](docs/737-phase-hsai-gateway-threat-ordinal-tarinfo-normalization-stop.md)
+records the cleaned pre-validation stop after audit found raw-name
+normalization, overly broad regular-file classification, and missing
+file-ancestor collision rejection. Archive/backend/kernel execution remained
+`NotRun`.
+
+[docs/738-phase-hsai-gateway-threat-ordinal-raw-aware-tar-validator-closure.md](docs/738-phase-hsai-gateway-threat-ordinal-raw-aware-tar-validator-closure.md)
+binds raw USTAR/PAX/GNU path preservation, direct type allowlists, ancestor
+checks, canonical summaries, and mandatory adversarial parser self-tests for
+Phase 739. It runs no backend and creates no proof, evidence, Level2+, or
+stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

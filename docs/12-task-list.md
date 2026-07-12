@@ -19588,6 +19588,21 @@ alias allowlists, embedded-asset equality, and pre-extraction rehashing for
 Phase 737. See
 `docs/736-phase-hsai-gateway-threat-ordinal-structured-archive-validator-closure.md`.
 
+## Phase 737 HSAI Gateway Threat Ordinal TarInfo Normalization Stop
+
+Status: complete as a cleaned detached-worktree pre-validation stop. Audit
+found Python raw-name normalization, broad `isreg()` behavior, and missing
+regular-file ancestor collision rejection before archive validation. See
+`docs/737-phase-hsai-gateway-threat-ordinal-tarinfo-normalization-stop.md`.
+
+## Phase 738 HSAI Gateway Threat Ordinal Raw-Aware Tar Validator Closure
+
+Status: complete as a documentation-first correction. Requires raw USTAR/PAX/GNU
+path preservation, direct member-type allowlists, ancestor checks, canonical
+summary output, and bounded adversarial parser self-tests before Phase 739
+acquisition. See
+`docs/738-phase-hsai-gateway-threat-ordinal-raw-aware-tar-validator-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
