@@ -763,6 +763,14 @@ independent status and checkpoint records. Later execution remained `NotRun`.
 binds separate local Aeneas materialization records for Phase 727. It creates no
 proof, evidence, Level2+, or stronger claim.
 
+[docs/727-phase-hsai-gateway-threat-ordinal-identity-stderr-stop.md](docs/727-phase-hsai-gateway-threat-ordinal-identity-stderr-stop.md)
+records the clean pre-source stop after missing identity stderr files prevented
+the exact forbidden-transfer scan.
+
+[docs/728-phase-hsai-gateway-threat-ordinal-identity-transcript-closure.md](docs/728-phase-hsai-gateway-threat-ordinal-identity-transcript-closure.md)
+binds the exact twelve-file Rust identity transcript set for Phase 729. It
+creates no proof, evidence, Level2+, or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

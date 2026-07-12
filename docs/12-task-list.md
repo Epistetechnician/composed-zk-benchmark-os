@@ -19519,6 +19519,18 @@ top-level Aeneas main and Lean-build staging extraction records for Phase 727.
 See
 `docs/726-phase-hsai-gateway-threat-ordinal-materialization-producer-closure.md`.
 
+## Phase 727 HSAI Gateway Threat Ordinal Identity Stderr Stop
+
+Status: complete as a cleaned detached-worktree pre-source stop. Five Rust
+identity producers lacked required stderr files, so the identity scan could not
+run. See `docs/727-phase-hsai-gateway-threat-ordinal-identity-stderr-stop.md`.
+
+## Phase 728 HSAI Gateway Threat Ordinal Identity Transcript Closure
+
+Status: complete as a documentation-first correction. Requires six explicit
+stdout/stderr pairs before identity assertions in Phase 729. See
+`docs/728-phase-hsai-gateway-threat-ordinal-identity-transcript-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
