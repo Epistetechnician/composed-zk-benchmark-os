@@ -19493,6 +19493,19 @@ clean execution worktree for Phase 723 while preserving the primary user change.
 See
 `docs/722-phase-hsai-gateway-threat-ordinal-isolated-worktree-closure.md`.
 
+## Phase 723 HSAI Gateway Threat Ordinal Witness Decidable Stop
+
+Status: complete as a cleaned detached-worktree kernel stop. Charon/Aeneas
+extraction and Types/Funs `.olean` checks passed; the witness failed because its
+decision procedure lacked the required `Decidable` instance. See
+`docs/723-phase-hsai-gateway-threat-ordinal-witness-decidable-stop.md`.
+
+## Phase 724 HSAI Gateway Threat Ordinal Rfl Witness Closure
+
+Status: complete as a documentation-first correction. Replaces the decision
+procedure with fourteen explicit definitional `rfl` proofs for Phase 725. See
+`docs/724-phase-hsai-gateway-threat-ordinal-rfl-witness-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
