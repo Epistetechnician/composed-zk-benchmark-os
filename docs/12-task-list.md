@@ -19683,6 +19683,19 @@ Status: complete as a documentation-first correction. Binds one immutable exact
 `nightly-2026-06-01` token and standalone pre-launch comparison for Phase 752.
 See `docs/751-phase-hsai-gateway-threat-ordinal-identity-token-closure.md`.
 
+## Phase 752 HSAI Gateway Threat Ordinal Dirty Primary Stop
+
+Status: complete as a pre-root stop. Preserved concurrent Mesh changes blocked
+the inherited clean-primary gate; no execution state was created. See
+`docs/752-phase-hsai-gateway-threat-ordinal-dirty-primary-stop.md`.
+
+## Phase 753 HSAI Gateway Threat Ordinal Detached Isolation Closure
+
+Status: complete as a documentation-first correction. Phase 754 may execute
+from exact committed `HEAD` in a clean detached worktree while proving the
+concurrent primary state byte-identical before and after. See
+`docs/753-phase-hsai-gateway-threat-ordinal-detached-isolation-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
