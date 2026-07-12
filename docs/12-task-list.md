@@ -19617,6 +19617,20 @@ one Phase 741 run to discover raw top-level sets and inventory digests without
 accepting a profile, extracting an archive, or running a backend. See
 `docs/740-phase-hsai-gateway-threat-ordinal-archive-profile-discovery-boundary.md`.
 
+## Phase 741 HSAI Gateway Threat Ordinal Archive Profile Discovery Report
+
+Status: complete as a cleaned acquisition-only run. The raw parser discovered
+exact main/Lean top-level sets, type counts, and inventory digests while
+accepting no profile and extracting nothing. See
+`docs/741-phase-hsai-gateway-threat-ordinal-archive-profile-discovery-report.md`.
+
+## Phase 742 HSAI Gateway Threat Ordinal Exact Archive Profile Closure
+
+Status: complete as a documentation-first correction. Binds the exact observed
+profiles, including main `rust-toolchain`, and requires an unmasked standalone
+acceptance parser before Phase 743 extraction. See
+`docs/742-phase-hsai-gateway-threat-ordinal-exact-archive-profile-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
