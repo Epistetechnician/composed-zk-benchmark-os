@@ -863,6 +863,11 @@ authorizes one narrow standard-library Phase 749 helper implementation with
 fixed schemas and hermetic tests. It runs no tool or backend and creates no
 proof, evidence, Level2+, or stronger claim.
 
+[docs/749-phase-hsai-gateway-threat-ordinal-canonical-helper-implementation.md](docs/749-phase-hsai-gateway-threat-ordinal-canonical-helper-implementation.md)
+records the committed helper implementation, 30 focused tests, exact source
+hashes, and measured 31-case parser self-test. No external asset, network,
+backend, generated source, or kernel command ran.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
