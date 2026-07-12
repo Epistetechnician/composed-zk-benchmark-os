@@ -19662,6 +19662,14 @@ archive inventory, 31 hermetic parser cases, exact fixture validation, hashes,
 and focused tests. See
 `docs/748-phase-hsai-gateway-threat-ordinal-canonical-helper-boundary.md`.
 
+## Phase 749 HSAI Gateway Threat Ordinal Canonical Helper Implementation
+
+Status: complete for the committed standard-library helper surface. The bounded
+runner, raw archive validator, and exact fixture validator pass 30 focused tests;
+the raw parser derives 31 named passing cases rather than printing a literal.
+Phase 750 is the next bounded execution attempt. See
+`docs/749-phase-hsai-gateway-threat-ordinal-canonical-helper-implementation.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
