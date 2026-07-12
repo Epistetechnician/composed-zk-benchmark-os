@@ -884,6 +884,14 @@ inherited clean-primary gate. No execution command ran.
 allows one exact committed detached execution worktree while preserving and
 rehashing unrelated primary changes. It runs no tool or backend.
 
+[docs/754-phase-hsai-gateway-threat-ordinal-charon-license-path-stop.md](docs/754-phase-hsai-gateway-threat-ordinal-charon-license-path-stop.md)
+records the cleaned stop after exact Charon fetch because the identity check
+used absent `LICENSE` instead of pinned `LICENSE.md`. No Aeneas/backend ran.
+
+[docs/755-phase-hsai-gateway-threat-ordinal-charon-license-path-closure.md](docs/755-phase-hsai-gateway-threat-ordinal-charon-license-path-closure.md)
+binds all five exact Charon source paths and hashes for Phase 756. It runs no
+tool or backend.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
