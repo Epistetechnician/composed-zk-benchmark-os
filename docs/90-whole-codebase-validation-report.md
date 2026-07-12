@@ -833,6 +833,16 @@ binds one acquisition-only Phase 741 profile-discovery run with no archive
 acceptance or extraction. Phase 740 runs no network/backend/kernel command and
 creates no proof, evidence, Level2+, or stronger claim.
 
+[docs/741-phase-hsai-gateway-threat-ordinal-archive-profile-discovery-report.md](docs/741-phase-hsai-gateway-threat-ordinal-archive-profile-discovery-report.md)
+records the cleaned acquisition-only success. The raw parser observed exact
+main/Lean top-level sets, type counts, inventory digests, and embedded-asset
+equality without accepting a profile or extracting either archive.
+
+[docs/742-phase-hsai-gateway-threat-ordinal-exact-archive-profile-closure.md](docs/742-phase-hsai-gateway-threat-ordinal-exact-archive-profile-closure.md)
+binds the exact observed profiles and standalone unmasked acceptance rule for
+Phase 743. It runs no backend and creates no proof, evidence, Level2+, or
+stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
