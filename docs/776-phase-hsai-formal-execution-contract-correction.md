@@ -420,3 +420,8 @@ machine-resolved attempt, backend result, generated Lean, retained kernel
 result, proof artifact, checker transcript, accepted evidence, Level2+, score
 axis, semantic correctness, production readiness, SOTA, breakthrough, full
 security, external audit, or action authority.
+
+Phase 777 subsequently stops before ledger expansion because the packaged and
+source-built version producers precede their required native acceptance. See
+`docs/777-phase-hsai-formal-execution-pre-use-ordering-stop.md`. Phase 778 must
+correct the exact 102-command order before any row expansion.
