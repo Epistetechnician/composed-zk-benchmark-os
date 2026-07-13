@@ -971,6 +971,12 @@ to lack at least one exact `CommandSpec` field and several were found to
 aggregate independently bounded child commands. No source or producer ran;
 Phase 773 must normalize one exact source row per actual child command.
 
+[docs/773-phase-hsai-formal-execution-source-normalization-stop.md](docs/773-phase-hsai-formal-execution-source-normalization-stop.md)
+normalizes 74 identifiable command obligations and the capability-closure
+order, then stops because the exact child total and a truthful ledger digest
+remain blocked by four unresolved command-cardinality families. No source,
+producer, network, tool, or backend was touched.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

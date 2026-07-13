@@ -19875,6 +19875,16 @@ docs-first source-normalization ledger with one complete row per actual child
 command before plan-v2 implementation. See
 `docs/772-phase-hsai-formal-execution-command-spec-completeness-stop.md`.
 
+## Phase 773 HSAI Formal Execution Source Normalization Stop
+
+Status: stopped documentation-only after normalizing 74 identifiable command
+obligations. Exact child-command count and source-ledger digest remain unknown
+because repository gates, Lean extraction, native-binary audits, and cleanup
+do not freeze their child cardinality. No source, producer, network, tool, or
+backend was touched. Phase 774 must resolve those families and the shared
+transcript/cwd/environment/bounds rules before a complete ledger can exist.
+See `docs/773-phase-hsai-formal-execution-source-normalization-stop.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
