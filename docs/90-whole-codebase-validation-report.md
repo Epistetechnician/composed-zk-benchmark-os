@@ -1004,6 +1004,14 @@ Aeneas and source-built Charon version producers before their required native
 acceptance. The 102-command cardinality is preserved, but no expanded ledger or
 digest exists until Phase 778 publishes and audits the corrected exact order.
 
+[docs/778-phase-hsai-formal-execution-operation-order-correction.md](docs/778-phase-hsai-formal-execution-operation-order-correction.md)
+publishes the corrected 102-ID order and deterministic order-contract digest.
+Static packaged and source-built native acceptance now precedes executable
+version and driver-load producers; fresh Charon source identities follow build
+and precede extraction; network closure, loopback, sandbox, kernel,
+cleanup, and final-primary constraints are preserved. No ledger or producer
+exists.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
