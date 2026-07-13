@@ -977,6 +977,12 @@ order, then stops because the exact child total and a truthful ledger digest
 remain blocked by four unresolved command-cardinality families. No source,
 producer, network, tool, or backend was touched.
 
+[docs/774-phase-hsai-formal-execution-command-family-resolution.md](docs/774-phase-hsai-formal-execution-command-family-resolution.md)
+resolves those families to exactly 84 ordinary bounded commands, freezes
+shared transcript/environment/bounds rules and network closure, and publishes
+a non-executable resolution-contract digest. It creates no 84-row source
+ledger and runs no producer or backend.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
