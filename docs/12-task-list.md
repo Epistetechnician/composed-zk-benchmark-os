@@ -19780,6 +19780,20 @@ no-option self-test through the bounded runner and validate canonical stdout in
 one standalone acceptance command. See
 `docs/761-phase-hsai-gateway-threat-ordinal-bounded-self-test-closure.md`.
 
+## Phase 762 HSAI Gateway Threat Ordinal Rustup Inventory Stop
+
+Status: complete as a cleaned pre-Charon stop. All preflight, parser, client,
+fixture, and Rust producers passed; rustup 1.29 full-inventory output stopped a
+stale bare-component assertion. See
+`docs/762-phase-hsai-gateway-threat-ordinal-rustup-inventory-stop.md`.
+
+## Phase 763 HSAI Gateway Threat Ordinal Rustup Inventory Closure
+
+Status: complete as a documentation-first correction. Phase 764 must bind the
+exact rustup identity and inventory hash, parse exactly seven marked installed
+components, and propagate every acceptance failure directly. See
+`docs/763-phase-hsai-gateway-threat-ordinal-rustup-inventory-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

@@ -916,6 +916,14 @@ unsupported `--output`. No parser self-test or later producer ran.
 binds the exact bounded self-test producer and standalone stdout acceptance
 parser for Phase 762. It runs no tool or backend.
 
+[docs/762-phase-hsai-gateway-threat-ordinal-rustup-inventory-stop.md](docs/762-phase-hsai-gateway-threat-ordinal-rustup-inventory-stop.md)
+records the cleaned pre-Charon stop after rustup 1.29 emitted a full marked
+component inventory instead of seven bare names.
+
+[docs/763-phase-hsai-gateway-threat-ordinal-rustup-inventory-closure.md](docs/763-phase-hsai-gateway-threat-ordinal-rustup-inventory-closure.md)
+binds exact rustup identity, inventory hash, marked-installed parsing, and
+direct acceptance failure propagation for Phase 764. It runs no tool/backend.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
