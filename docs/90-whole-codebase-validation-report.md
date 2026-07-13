@@ -892,6 +892,14 @@ used absent `LICENSE` instead of pinned `LICENSE.md`. No Aeneas/backend ran.
 binds all five exact Charon source paths and hashes for Phase 756. It runs no
 tool or backend.
 
+[docs/756-phase-hsai-gateway-threat-ordinal-charon-identity-assertion-stop.md](docs/756-phase-hsai-gateway-threat-ordinal-charon-identity-assertion-stop.md)
+records the cleaned stop after a non-diagnostic combined source assertion. No
+Aeneas asset or backend command ran.
+
+[docs/757-phase-hsai-gateway-threat-ordinal-source-identity-producer-closure.md](docs/757-phase-hsai-gateway-threat-ordinal-source-identity-producer-closure.md)
+requires one bounded producer and immediate assertion per source identity fact
+for Phase 758. It runs no tool or backend.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
