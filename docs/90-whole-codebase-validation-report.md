@@ -937,6 +937,10 @@ implements the twelve-stage canonical state, command validation, terminal
 first-failure executor, and clean-or-dirty primary snapshot verification. Its
 25 focused and 55 total helper tests pass; no backend ran.
 
+[docs/767-phase-hsai-formal-execution-fixture-adapter-boundary.md](docs/767-phase-hsai-formal-execution-fixture-adapter-boundary.md)
+closes the exact Phase 732 fixture conflict and specifies the typed bounded-
+runner producer adapter for Phase 768. It runs no producer or backend.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

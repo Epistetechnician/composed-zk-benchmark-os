@@ -19817,6 +19817,14 @@ canonical JSON, clean-or-dirty primary preservation, an injected executor, and
 25 focused tests. No backend ran. See
 `docs/766-phase-hsai-formal-execution-state-machine-implementation.md`.
 
+## Phase 767 HSAI Formal Execution Fixture Adapter Boundary
+
+Status: complete as a documentation-first compatibility correction. It permits
+only the two byte-exact Phase 732 shell fixtures and specifies typed cwd,
+bounds, expected outcomes, outputs, and bounded-runner adapter behavior for
+Phase 768. No producer ran. See
+`docs/767-phase-hsai-formal-execution-fixture-adapter-boundary.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
