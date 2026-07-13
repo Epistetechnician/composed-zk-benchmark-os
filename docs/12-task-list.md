@@ -19155,6 +19155,37 @@ at `Level1LocalReplayOrLower`. It creates no tool, backend result, artifact,
 proof, accepted evidence, Level2+, score axis, semantic correctness,
 production readiness, SOTA, breakthrough, or full-security claim.
 
+## Phase 747 HSAI Mesh Evidence-Aware Admission CLI
+
+State slice: `phase-747-hsai-mesh-evidence-aware-admission-cli`.
+
+Goal: replace the Mesh Python metadata-allow compatibility path with one strict,
+hermetic Rust stdin/stdout evaluator while preserving HSAI's non-authoritative
+claim boundary.
+
+Status: complete for the v1 Rust parity CLI and additive evidence-aware v2
+wire contract. Mesh runtime construction and wiring remain a separate future
+slice.
+
+Tasks:
+
+- implement bounded duplicate-safe wire parsing and canonical Mesh JSON hashing;
+- map the frozen v1 request into the existing HSAI evaluator;
+- implement additive v2 candidate, evidence, stage-results, action-proposal,
+  path, policy, preflight-receipt, and test-result structural validation;
+- add one no-network, no-write CLI with explicit current-policy input;
+- prove allow, deny, malformed-input, stale-policy, duplicate-key, unknown-field,
+  digest-tamper, oversized-input, and claim-boundary behavior;
+- keep every HSAI decision at `grants_authority=false`.
+
+Validation gate: formatting, clippy, focused library and CLI tests, claim-boundary
+source scan, repository hygiene, workspace tests, external-runner workspace
+tests, docs, and `git diff --check`.
+
+Nonclaims: no live Mesh call, action authority, accepted evidence, Level2+,
+benchmark evidence, proof, semantic correctness, production readiness, SOTA,
+breakthrough, full security, or global uniqueness.
+
 ## Phase 681 HSAI Gateway Threat Ordinal Identity-Log Scan Stop
 
 Status: complete as one cleaned-up pre-Charon-acquisition stop. See

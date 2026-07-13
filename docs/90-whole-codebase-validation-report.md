@@ -10095,6 +10095,29 @@ classification is `CharonCargoManifestBindingSpecified`, execution status is
 proof, accepted evidence, Level2+, score axis, semantic correctness,
 production readiness, SOTA, breakthrough, or full-security claim.
 
+## Phase 747 HSAI Mesh evidence-aware admission CLI boundary
+
+Phase 747 implements the exact binary-local Rust source and focused test surface
+for a hermetic Mesh v1/v2 admission evaluator. It provides bounded
+duplicate-safe parsing, canonical Mesh digest parity, explicit current-policy
+selection, v2 candidate/evidence/stage/action digest recomputation, structural
+preflight receipt and path/test/policy binding, wire-to-domain conversion,
+invocation of the existing HSAI evaluator, and fail-closed Mesh decision
+mapping. Focused results are 12/12 new CLI contracts, 17/17 existing Mesh
+admission contracts, and 6/6 claim-boundary source scans, with targeted Clippy
+passing under `-D warnings` and repository hygiene/docs checks passing.
+
+V1 still carries only evidence digest/reference parity. V2 validates embedded
+bytes and declarations structurally; it is not proof that declared commands
+ran, not formal proof, not accepted evidence, and not action authority.
+
+The phase preserves the architecture boundary: HSAI admits evidence and claims
+but emits `grants_authority=false`; Mesh owns any separately authenticated local
+execution capability. No network, listener, credential, filesystem-write, live
+Mesh, accepted-evidence, Level2+, benchmark, proof, semantic-correctness,
+production-readiness, SOTA, breakthrough, full-security, or global-uniqueness
+claim is authorized.
+
 [docs/693-phase-hsai-gateway-threat-ordinal-leantar-path-stop.md](docs/693-phase-hsai-gateway-threat-ordinal-leantar-path-stop.md)
 records the cleaned pre-build stop after cache-helper sysroot discovery failed
 because Stage 4 omitted Lean-first PATH. Backend/kernel statuses remain

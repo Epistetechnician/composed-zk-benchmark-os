@@ -2279,3 +2279,12 @@ production-readiness claim, semantic-correctness claim, or 100% coverage claim.
 - The scoring rubric prevents overclaiming.
 - The semantic/oracle doc defines expected verdicts and claim boundary levels.
 - No benchmark results are fabricated.
+
+Phase 747 implements the bounded HSAI Mesh v1/v2 admission CLI described in
+[docs/747-hsai-mesh-evidence-aware-admission-cli-boundary.md](docs/747-hsai-mesh-evidence-aware-admission-cli-boundary.md).
+The CLI executes the existing Rust admission policy over strict, bounded local
+JSON. V2 recomputes embedded candidate, evidence, stage-results, and
+action-proposal digests and structurally validates bounded disposable-worktree
+preflight declarations before deriving gates. This is not proof that declared
+commands ran. The CLI performs no network or filesystem mutation and never
+grants action authority; Mesh owns the separate execution-capability boundary.
