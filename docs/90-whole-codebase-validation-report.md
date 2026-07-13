@@ -941,6 +941,11 @@ first-failure executor, and clean-or-dirty primary snapshot verification. Its
 closes the exact Phase 732 fixture conflict and specifies the typed bounded-
 runner producer adapter for Phase 768. It runs no producer or backend.
 
+[docs/768-phase-hsai-formal-execution-bounded-adapter-implementation.md](docs/768-phase-hsai-formal-execution-bounded-adapter-implementation.md)
+implements typed producer metadata, the exact fixture-only exception, and the
+canonical bounded-runner adapter. Its 36 focused and 66 total preflight tests
+pass; no network or backend ran.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

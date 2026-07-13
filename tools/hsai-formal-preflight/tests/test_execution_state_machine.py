@@ -8,6 +8,7 @@ from pathlib import Path
 
 
 MODULE_PATH = Path(__file__).resolve().parents[1] / "execution_state_machine.py"
+RUNNER_PATH = Path(__file__).resolve().parents[1] / "bounded_runner.py"
 SPEC = importlib.util.spec_from_file_location("execution_state_machine", MODULE_PATH)
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
@@ -15,13 +16,24 @@ SPEC.loader.exec_module(MODULE)
 
 class ExecutionStateMachineTests(unittest.TestCase):
     def command(self, command_id="check", stage_id="frozen-identities", **changes):
+        output_root = "/tmp/hsai-state-machine-{}".format(command_id)
         values = {
             "command_id": command_id,
             "stage_id": stage_id,
             "argv": ("/usr/bin/true",),
             "env": (),
             "network_policy": MODULE.STAGE_BY_ID[stage_id].network_policy,
-            "output_paths": (),
+            "role": "producer",
+            "cwd": "/tmp",
+            "timeout_seconds": 5.0,
+            "stdout_cap": 1024,
+            "stderr_cap": 1024,
+            "status_path": output_root + ".status",
+            "stdout_path": output_root + ".stdout",
+            "stderr_path": output_root + ".stderr",
+            "expected_reason": "exit",
+            "expected_returncode": 0,
+            "expected_signal": None,
         }
         values.update(changes)
         return MODULE.CommandSpec(**values)
@@ -71,6 +83,40 @@ class ExecutionStateMachineTests(unittest.TestCase):
         with self.assertRaises(MODULE.StateMachineError):
             self.command(argv=("/bin/sh", "-c", "true")).validate()
 
+    def test_exact_phase732_shell_fixtures_are_accepted(self):
+        timeout = self.command(
+            "timeout-fixture",
+            "client-and-fixtures",
+            argv=MODULE.EXACT_TIMEOUT_FIXTURE,
+            role="exact-process-fixture",
+            timeout_seconds=1.0,
+            expected_reason="timeout",
+            expected_returncode=None,
+            expected_signal=15,
+        )
+        stderr = self.command(
+            "stderr-fixture",
+            "client-and-fixtures",
+            argv=MODULE.EXACT_STDERR_FIXTURE,
+            role="exact-process-fixture",
+            expected_reason="stderr_limit",
+            expected_returncode=None,
+            expected_signal=15,
+        )
+        timeout.validate()
+        stderr.validate()
+
+    def test_near_match_phase732_shell_fixture_is_rejected(self):
+        with self.assertRaises(MODULE.StateMachineError):
+            self.command(
+                "near-fixture",
+                "client-and-fixtures",
+                argv=("/bin/sh", "-c", "exec /usr/bin/yes y >&2"),
+                role="exact-process-fixture",
+                expected_reason="stderr_limit",
+                expected_returncode=None,
+            ).validate()
+
     def test_relative_executable_is_rejected(self):
         with self.assertRaises(MODULE.StateMachineError):
             self.command(argv=("git", "status")).validate()
@@ -85,13 +131,130 @@ class ExecutionStateMachineTests(unittest.TestCase):
 
     def test_output_collision_is_rejected_within_command(self):
         with self.assertRaises(MODULE.StateMachineError):
-            self.command(output_paths=("a", "./a")).validate()
+            self.command(status_path="/tmp/a", stdout_path="/tmp/a").validate()
 
     def test_output_collision_is_rejected_across_plan(self):
-        first = self.command("first", output_paths=("result",))
-        second = self.command("second", output_paths=("./result",))
+        first = self.command("first", status_path="/tmp/shared")
+        second = self.command("second", stdout_path="/tmp/shared")
         with self.assertRaises(MODULE.StateMachineError):
             MODULE.ExecutionPlan("phase-test", (first, second)).validate()
+
+    def test_noncanonical_cwd_is_rejected(self):
+        with self.assertRaises(MODULE.StateMachineError):
+            self.command(cwd="/tmp/../tmp").validate()
+
+    def invoke_adapter(self, producer, **changes):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        command = self.command(
+            "adapter",
+            argv=tuple(producer),
+            cwd=str(root),
+            status_path=str(root / "status.json"),
+            stdout_path=str(root / "stdout.bin"),
+            stderr_path=str(root / "stderr.bin"),
+            env=(("LC_ALL", "C"), ("PATH", "/usr/bin:/bin")),
+            **changes
+        )
+        adapter = MODULE.BoundedRunnerAdapter(sys.executable, str(RUNNER_PATH))
+        return root, command, adapter(command)
+
+    def test_bounded_adapter_accepts_normal_exit(self):
+        root, _, result = self.invoke_adapter(("/bin/echo", "ok"))
+        self.assertTrue(result.succeeded)
+        self.assertEqual((root / "stdout.bin").read_bytes(), b"ok\n")
+
+    def test_bounded_adapter_accepts_expected_nonzero_exit(self):
+        _, _, result = self.invoke_adapter(
+            ("/usr/bin/false",), expected_returncode=1
+        )
+        self.assertTrue(result.succeeded)
+
+    def test_bounded_adapter_accepts_timeout(self):
+        _, _, result = self.invoke_adapter(
+            ("/bin/sleep", "30"),
+            timeout_seconds=0.1,
+            expected_reason="timeout",
+            expected_returncode=None,
+            expected_signal=15,
+        )
+        self.assertTrue(result.succeeded)
+
+    def test_bounded_adapter_accepts_stdout_limit(self):
+        _, _, result = self.invoke_adapter(
+            (sys.executable, "-c", "import sys; sys.stdout.buffer.write(b'x'*4096)"),
+            stdout_cap=64,
+            expected_reason="stdout_limit",
+            expected_returncode=None,
+            expected_signal=15,
+        )
+        self.assertTrue(result.succeeded)
+
+    def test_bounded_adapter_accepts_stderr_limit(self):
+        _, _, result = self.invoke_adapter(
+            (sys.executable, "-c", "import sys; sys.stderr.buffer.write(b'x'*4096)"),
+            stderr_cap=64,
+            expected_reason="stderr_limit",
+            expected_returncode=None,
+            expected_signal=15,
+        )
+        self.assertTrue(result.succeeded)
+
+    def test_bounded_adapter_rejects_preexisting_output(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        status_path = root / "status.json"
+        status_path.write_text("owned\n", encoding="ascii")
+        command = self.command(
+            "adapter",
+            cwd=str(root),
+            status_path=str(status_path),
+            stdout_path=str(root / "stdout.bin"),
+            stderr_path=str(root / "stderr.bin"),
+        )
+        result = MODULE.BoundedRunnerAdapter(sys.executable, str(RUNNER_PATH))(command)
+        self.assertFalse(result.succeeded)
+        self.assertEqual(result.failure_code, "OutputPathAlreadyExists")
+
+    def test_bounded_adapter_replaces_environment(self):
+        root, _, result = self.invoke_adapter(
+            (
+                sys.executable,
+                "-c",
+                "import os; print(','.join(sorted(os.environ)))",
+            )
+        )
+        self.assertTrue(result.succeeded)
+        observed = set((root / "stdout.bin").read_text(encoding="ascii").strip().split(","))
+        self.assertEqual(observed - {"__CF_USER_TEXT_ENCODING"}, {"LC_ALL", "PATH"})
+
+    def test_bounded_adapter_rejects_status_argv_drift(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        fake_runner = root / "fake_runner.py"
+        fake_runner.write_text(
+            "import json,pathlib,sys\n"
+            "def value(flag): return sys.argv[sys.argv.index(flag)+1]\n"
+            "stdout=pathlib.Path(value('--stdout-path')); stderr=pathlib.Path(value('--stderr-path')); status=pathlib.Path(value('--status-path'))\n"
+            "stdout.write_bytes(b''); stderr.write_bytes(b'')\n"
+            "document={'argv':['/usr/bin/false'],'elapsed_ms':0,'reason':'exit','returncode':0,'schema':'hsai-bounded-runner-status-v1','signal':None,'stderr_bytes':0,'stderr_cap':1024,'stdout_bytes':0,'stdout_cap':1024}\n"
+            "status.write_text(json.dumps(document,separators=(',',':'),sort_keys=True)+'\\n',encoding='ascii')\n",
+            encoding="ascii",
+        )
+        command = self.command(
+            "adapter",
+            cwd=str(root),
+            status_path=str(root / "status.json"),
+            stdout_path=str(root / "stdout.bin"),
+            stderr_path=str(root / "stderr.bin"),
+            env=(("LC_ALL", "C"), ("PATH", "/usr/bin:/bin")),
+        )
+        result = MODULE.BoundedRunnerAdapter(sys.executable, str(fake_runner))(command)
+        self.assertFalse(result.succeeded)
+        self.assertEqual(result.failure_code, "BoundedStatusArgvDrift")
 
     def test_state_rejects_stage_skip(self):
         state = MODULE.AttemptState("phase-test")
