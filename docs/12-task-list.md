@@ -19926,6 +19926,20 @@ documentation-first and fully expand the ordered 102-row source ledger, with
 unresolved machine or command facts remaining blocked. See
 `docs/776-phase-hsai-formal-execution-contract-correction.md`.
 
+## Phase 777 HSAI Formal Execution Pre-Use Ordering Stop
+
+Status: stopped documentation-only. State slice:
+`phase-777-hsai-formal-execution-pre-use-ordering-stop`.
+
+Phase 777 stopped before ledger expansion because Phase 776 places packaged
+native audits after `capture-aeneas-version` and source-built native audits
+after `capture-charon-version`. Both version commands execute a binary before
+the static architecture, signature, and loader checks intended to admit it.
+
+The 102-command count remains valid. Phase 778 must correct and publish the
+exact order without expanding row fields or running a producer. See
+`docs/777-phase-hsai-formal-execution-pre-use-ordering-stop.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
