@@ -19864,6 +19864,17 @@ per-operation capabilities, typed artifacts and templates, closed
 non-producer variants, and aggregate cleanup. No backend ran. See
 `docs/771-phase-hsai-formal-execution-correspondence-correction-boundary.md`.
 
+## Phase 772 HSAI Formal Execution Command-Spec Completeness Stop
+
+Status: stopped before implementation. The audit found that none of the 35 v1
+bounded entries has exact values for every required `CommandSpec` field, every
+entry lacks exact transcript paths, and several aggregate independently
+bounded children or mixed outcomes. No Python source, attempt root, producer,
+network, or backend was touched. Phase 773 must publish a deterministic
+docs-first source-normalization ledger with one complete row per actual child
+command before plan-v2 implementation. See
+`docs/772-phase-hsai-formal-execution-command-spec-completeness-stop.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

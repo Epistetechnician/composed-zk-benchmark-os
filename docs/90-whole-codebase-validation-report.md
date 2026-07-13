@@ -965,6 +965,12 @@ capabilities, templates and artifacts lack safe resolution contracts, and
 cleanup lacks aggregate results. It specifies a versioned plan-v2 correction
 before executor materialization; no tool or backend ran.
 
+[docs/772-phase-hsai-formal-execution-command-spec-completeness-stop.md](docs/772-phase-hsai-formal-execution-command-spec-completeness-stop.md)
+records the pre-implementation stop after all 35 bounded v1 entries were found
+to lack at least one exact `CommandSpec` field and several were found to
+aggregate independently bounded child commands. No source or producer ran;
+Phase 773 must normalize one exact source row per actual child command.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
