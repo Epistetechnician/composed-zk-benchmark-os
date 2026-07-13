@@ -932,6 +932,11 @@ the committed detached dirty-primary rule. No owned path or producer ran.
 replaces further ad hoc shell attempts with an immutable, tested execution
 state-machine implementation boundary for Phase 766. It runs no backend.
 
+[docs/766-phase-hsai-formal-execution-state-machine-implementation.md](docs/766-phase-hsai-formal-execution-state-machine-implementation.md)
+implements the twelve-stage canonical state, command validation, terminal
+first-failure executor, and clean-or-dirty primary snapshot verification. Its
+25 focused and 55 total helper tests pass; no backend ran.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

@@ -19809,6 +19809,14 @@ immutable stages, argv arrays, first-failure terminality, dirty-primary
 preservation, and hermetic tests. See
 `docs/765-phase-hsai-formal-execution-state-machine-boundary.md`.
 
+## Phase 766 HSAI Formal Execution State Machine Implementation
+
+Status: complete as a committed hermetic implementation. Adds twelve immutable
+stages, argv/environment/network/output validation, terminal first failure,
+canonical JSON, clean-or-dirty primary preservation, an injected executor, and
+25 focused tests. No backend ran. See
+`docs/766-phase-hsai-formal-execution-state-machine-implementation.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
