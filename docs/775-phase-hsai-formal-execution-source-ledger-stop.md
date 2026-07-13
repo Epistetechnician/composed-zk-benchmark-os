@@ -166,3 +166,10 @@ Phase 775 creates no executable plan, source-ledger digest, backend result,
 generated Lean source, retained kernel result, proof artifact, accepted
 evidence, Level2+, score axis, semantic correctness, production readiness,
 SOTA, breakthrough, full-security claim, external audit, or action authority.
+
+Phase 776 subsequently corrects the executable-identity, sandbox binding,
+native-audit cardinality, replacement-environment, and retained-kernel-evidence
+contracts in
+`docs/776-phase-hsai-formal-execution-contract-correction.md`. The corrected
+ordinary command count is 102; Phase 777 must expand that ledger without
+running a producer.

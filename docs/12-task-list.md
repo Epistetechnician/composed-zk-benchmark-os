@@ -19907,6 +19907,25 @@ retained-kernel-evidence schema remain incomplete. Phase 776 must correct those
 contracts before a fully expanded ledger or plan v2 may exist. See
 `docs/775-phase-hsai-formal-execution-source-ledger-stop.md`.
 
+## Phase 776 HSAI Formal Execution Contract Correction
+
+Status: complete documentation-only. State slice:
+`phase-776-hsai-formal-execution-contract-correction`.
+
+Phase 776 replaces symlink-sensitive executable assertions with typed
+executable identities, binds the deny-network sandbox directly into every
+`sandbox-closed` argv, removes Lean decompression overwrite authority,
+separates 18 packaged-Aeneas native audits from 10 source-built Charon audits,
+and corrects the ordinary producer total from 84 to 102. It also closes the
+replacement-environment vocabulary and defines the exact path-free retained
+kernel result tree and consumers.
+
+No source, producer, backend, kernel command, source ledger, plan v2, accepted
+evidence, or stronger claim was created. Phase 777 must remain
+documentation-first and fully expand the ordered 102-row source ledger, with
+unresolved machine or command facts remaining blocked. See
+`docs/776-phase-hsai-formal-execution-contract-correction.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

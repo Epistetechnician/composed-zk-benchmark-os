@@ -990,6 +990,14 @@ sandbox wrapping, packaged-asset audit cardinality, the Charon-driver loader
 target, environment compatibility, and retained green-kernel evidence remain
 blocked. No source ledger, plan v2, producer, backend, or kernel command exists.
 
+[docs/776-phase-hsai-formal-execution-contract-correction.md](docs/776-phase-hsai-formal-execution-contract-correction.md)
+closes that documentation boundary with typed executable-role resolution,
+literal sandbox-wrapper argv correspondence, no-overwrite Lean extraction,
+18 packaged-Aeneas audits, 10 source-built Charon audits, a corrected total of
+102 ordinary commands, a closed replacement environment, and a path-free
+retained kernel evidence schema. The correction digest identifies design
+decisions only; no source ledger, producer, backend, or kernel command exists.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
