@@ -17,8 +17,8 @@ use zkbench_core::{
     FormalLanePipelineOutcome, FormalLaneProofStatus, FormalPropertyScopeKind,
     InternalTimingMetricKind, LocalSoakRunner, MockTelemetryClock, MutationClass,
     MutationDistinguishabilityAxis, MutationDistinguishabilityCell, SoakShardId,
-    SoakTelemetryClassification, SoakTelemetryClock, SoakTelemetryCounters,
-    SoakTelemetryDurations, SoakTelemetryReport, SoakTelemetrySnapshot,
+    SoakTelemetryClassification, SoakTelemetryClock, SoakTelemetryCounters, SoakTelemetryDurations,
+    SoakTelemetryReport, SoakTelemetrySnapshot,
 };
 
 fn run_tiny() -> SoakTelemetryReport {
