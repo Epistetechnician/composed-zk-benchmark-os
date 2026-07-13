@@ -983,6 +983,13 @@ shared transcript/environment/bounds rules and network closure, and publishes
 a non-executable resolution-contract digest. It creates no 84-row source
 ledger and runs no producer or backend.
 
+[docs/775-phase-hsai-formal-execution-source-ledger-stop.md](docs/775-phase-hsai-formal-execution-source-ledger-stop.md)
+records that the Phase 774 arithmetic is mechanically valid but not yet a
+canonical producer closure. Executable symlink identity, typed placeholders,
+sandbox wrapping, packaged-asset audit cardinality, the Charon-driver loader
+target, environment compatibility, and retained green-kernel evidence remain
+blocked. No source ledger, plan v2, producer, backend, or kernel command exists.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
