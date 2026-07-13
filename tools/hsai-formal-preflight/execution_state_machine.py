@@ -40,6 +40,16 @@ ALLOWED_ENV_KEYS = frozenset(
 )
 COMMAND_ROLES = ("producer", "exact-process-fixture")
 BOUNDED_REASONS = ("exit", "timeout", "stdout_limit", "stderr_limit")
+OPERATION_KINDS = (
+    "internal-assertion",
+    "atomic-materialization",
+    "bounded-producer",
+    "persistent-loopback-control",
+    "cleanup-and-verify",
+)
+COMPLETE_PLAN_SCHEMA = "hsai-formal-complete-operation-plan-v1"
+CONTRACT_REF_RE = re.compile(r"^phase[0-9]+-[a-z0-9-]+$")
+SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 EXACT_TIMEOUT_FIXTURE = (
     "/bin/sh",
     "-c",
@@ -460,6 +470,292 @@ class BoundedRunnerAdapter:
         ):
             raise StateMachineError("bounded status numeric drift")
         return value
+
+
+@dataclass(frozen=True)
+class OperationSpec:
+    operation_id: str
+    stage_id: str
+    predecessor: Optional[str]
+    mutation_owner: str
+    network_policy: str
+    kind: str
+    payload: Tuple[Tuple[str, str], ...]
+
+    def validate(self) -> None:
+        if not COMMAND_ID_RE.fullmatch(self.operation_id):
+            raise StateMachineError("invalid operation id")
+        stage = STAGE_BY_ID.get(self.stage_id)
+        if stage is None:
+            raise StateMachineError("unknown operation stage")
+        if self.mutation_owner != stage.mutation_owner:
+            raise StateMachineError("operation mutation owner differs from stage")
+        if self.network_policy != stage.network_policy:
+            raise StateMachineError("operation network policy differs from stage")
+        if self.kind not in OPERATION_KINDS:
+            raise StateMachineError("unknown operation kind")
+        keys = [key for key, _ in self.payload]
+        if (
+            len(keys) != len(set(keys))
+            or any(not key for key in keys)
+            or any(not isinstance(value, str) or "\x00" in value or "\n" in value for _, value in self.payload)
+        ):
+            raise StateMachineError("invalid operation payload keys")
+        values = dict(self.payload)
+        if not CONTRACT_REF_RE.fullmatch(values.get("contract_ref", "")):
+            raise StateMachineError("operation lacks a contract reference")
+        if any(shell in value for value in values.values() for shell in ("/bin/sh", "/bin/bash", "/bin/zsh")):
+            raise StateMachineError("operation payload contains hidden shell text")
+        if self.kind == "internal-assertion":
+            required = {"contract_ref"}
+        elif self.kind == "atomic-materialization":
+            required = {"contract_ref", "target_template"}
+            if values.get("target_template") != "{{RUN}}/operations/{}".format(self.operation_id):
+                raise StateMachineError("materialization target drift")
+        elif self.kind == "bounded-producer":
+            required = {"command_id", "contract_ref"}
+            if values.get("command_id") != self.operation_id:
+                raise StateMachineError("bounded command identity drift")
+        elif self.kind == "persistent-loopback-control":
+            required = {
+                "contract_ref",
+                "listener_sha256",
+                "positive_argv",
+                "sandboxed_negative_argv",
+            }
+            if not SHA256_RE.fullmatch(values.get("listener_sha256", "")):
+                raise StateMachineError("loopback listener identity drift")
+            try:
+                positive = json.loads(values["positive_argv"])
+                negative = json.loads(values["sandboxed_negative_argv"])
+            except (KeyError, json.JSONDecodeError) as error:
+                raise StateMachineError("loopback argv is invalid JSON") from error
+            if positive != ["/usr/bin/nc", "-G", "2", "-z", "127.0.0.1", "{PORT}"]:
+                raise StateMachineError("loopback positive argv drift")
+            if negative != ["/usr/bin/sandbox-exec", "-f", "{SANDBOX_PROFILE}"] + positive:
+                raise StateMachineError("loopback probe argv is not byte-identical")
+        else:
+            required = {"contract_ref", "roots", "verify_primary"}
+            expected_roots = (
+                "{RUN},{DETACHED_REPO},{RUSTUP_ROOT},{CHARON_CARGO_HOME},"
+                "{AENEAS_ROOT},{LEAN_ROOT}"
+            )
+            if values.get("verify_primary") != "true" or values.get("roots") != expected_roots:
+                raise StateMachineError("cleanup contract drift")
+        if set(values) != required:
+            raise StateMachineError("operation payload shape drift")
+
+    def to_dict(self) -> Dict[str, object]:
+        self.validate()
+        return {
+            "kind": self.kind,
+            "mutation_owner": self.mutation_owner,
+            "network_policy": self.network_policy,
+            "operation_id": self.operation_id,
+            "payload": dict(self.payload),
+            "predecessor": self.predecessor,
+            "stage_id": self.stage_id,
+        }
+
+
+@dataclass(frozen=True)
+class CompleteOperationPlan:
+    attempt_id: str
+    operations: Tuple[OperationSpec, ...]
+
+    def validate(self) -> None:
+        if not COMMAND_ID_RE.fullmatch(self.attempt_id):
+            raise StateMachineError("invalid operation-plan attempt id")
+        if not self.operations:
+            raise StateMachineError("operation plan is empty")
+        ids = [operation.operation_id for operation in self.operations]
+        if len(ids) != len(set(ids)):
+            raise StateMachineError("duplicate operation id")
+        seen_stages = set()
+        previous = None
+        previous_ordinal = -1
+        for operation in self.operations:
+            operation.validate()
+            if operation.predecessor != previous:
+                raise StateMachineError("operation predecessor gap")
+            ordinal = STAGE_BY_ID[operation.stage_id].ordinal
+            if ordinal < previous_ordinal:
+                raise StateMachineError("operation stage order drift")
+            previous_ordinal = ordinal
+            previous = operation.operation_id
+            seen_stages.add(operation.stage_id)
+        if seen_stages != set(STAGE_BY_ID):
+            raise StateMachineError("one or more stages are empty")
+        if self.operations[-1].kind != "cleanup-and-verify":
+            raise StateMachineError("cleanup must be the final operation")
+        if any(operation.kind == "cleanup-and-verify" for operation in self.operations[:-1]):
+            raise StateMachineError("cleanup appears before the final operation")
+
+    def to_dict(self) -> Dict[str, object]:
+        self.validate()
+        return {
+            "attempt_id": self.attempt_id,
+            "operations": [operation.to_dict() for operation in self.operations],
+            "schema": COMPLETE_PLAN_SCHEMA,
+        }
+
+    def sha256(self) -> str:
+        return hashlib.sha256(canonical_json_line(self.to_dict())).hexdigest()
+
+
+class OperationAttemptState:
+    def __init__(self, plan: CompleteOperationPlan):
+        plan.validate()
+        self.plan = plan
+        self.completed: List[str] = []
+        self.first_failure: Optional[Dict[str, str]] = None
+        self.status = "running"
+
+    @property
+    def cleanup(self) -> OperationSpec:
+        return self.plan.operations[-1]
+
+    @property
+    def next_operation(self) -> Optional[OperationSpec]:
+        if self.status in ("complete", "failed-cleaned", "cleanup-failed"):
+            return None
+        if self.first_failure is not None:
+            return self.cleanup
+        return self.plan.operations[len(self.completed)]
+
+    def record(self, operation_id: str, succeeded: bool, failure_code: str = "") -> None:
+        expected = self.next_operation
+        if expected is None or expected.operation_id != operation_id:
+            raise StateMachineError("operation skip, replay, or post-terminal transition")
+        if not succeeded:
+            if expected.kind == "cleanup-and-verify":
+                self.status = "cleanup-failed"
+            else:
+                self.first_failure = {
+                    "failure_code": failure_code or "UnspecifiedFailure",
+                    "operation_id": operation_id,
+                }
+            return
+        self.completed.append(operation_id)
+        if expected.kind == "cleanup-and-verify":
+            self.status = "failed-cleaned" if self.first_failure else "complete"
+
+
+def _payload(**values: str) -> Tuple[Tuple[str, str], ...]:
+    return tuple(sorted(values.items()))
+
+
+def build_complete_operation_plan(attempt_id: str = "phase770-plan") -> CompleteOperationPlan:
+    """Build the path-normalized complete inherited operation inventory."""
+    rows = (
+        ("snapshot-primary", "primary-preservation", "internal-assertion", "phase753-primary-snapshot"),
+        ("create-owned-roots", "primary-preservation", "atomic-materialization", "phase744-owned-roots"),
+        ("verify-frozen-repository", "frozen-identities", "internal-assertion", "phase668-source-and-lock-pins"),
+        ("verify-helper-identities", "frozen-identities", "internal-assertion", "phase749-helper-hashes"),
+        ("compile-helper-sources", "helper-self-tests", "bounded-producer", "phase749-py-compile"),
+        ("run-helper-tests", "helper-self-tests", "bounded-producer", "phase749-focused-tests"),
+        ("run-raw-parser-self-test", "helper-self-tests", "bounded-producer", "phase761-bounded-self-test"),
+        ("accept-raw-parser-self-test", "helper-self-tests", "internal-assertion", "phase761-self-test-acceptance"),
+        ("materialize-client-metadata", "client-and-fixtures", "atomic-materialization", "phase702-client-bytes"),
+        ("fixture-normal-exit", "client-and-fixtures", "bounded-producer", "phase732-fixture-1"),
+        ("fixture-process-timeout", "client-and-fixtures", "bounded-producer", "phase732-fixture-2"),
+        ("fixture-stdout-limit", "client-and-fixtures", "bounded-producer", "phase732-fixture-3"),
+        ("fixture-stderr-limit", "client-and-fixtures", "bounded-producer", "phase732-fixture-4"),
+        ("validate-process-fixtures", "client-and-fixtures", "bounded-producer", "phase749-fixture-validator"),
+        ("download-rust-manifest", "rust-acquisition", "bounded-producer", "phase744-rust-manifest"),
+        ("verify-rust-manifest", "rust-acquisition", "internal-assertion", "phase744-rust-manifest-pin"),
+        ("install-rust-toolchain", "rust-acquisition", "bounded-producer", "phase751-exact-toolchain-token"),
+        ("capture-rust-identities", "rust-acquisition", "bounded-producer", "phase728-six-identity-transcripts"),
+        ("accept-rust-identities", "rust-acquisition", "internal-assertion", "phase763-marked-components"),
+        ("initialize-charon-source", "charon-source", "bounded-producer", "phase744-charon-init"),
+        ("fetch-charon-source", "charon-source", "bounded-producer", "phase755-charon-commit"),
+        ("checkout-charon-source", "charon-source", "bounded-producer", "phase755-detached-checkout"),
+        ("assert-charon-head", "charon-source", "internal-assertion", "phase757-independent-head"),
+        ("assert-charon-status", "charon-source", "internal-assertion", "phase757-independent-status"),
+        ("assert-charon-paths", "charon-source", "internal-assertion", "phase755-five-regular-paths"),
+        ("hash-charon-paths", "charon-source", "bounded-producer", "phase757-five-independent-hashes"),
+        ("assert-charon-license-absence", "charon-source", "internal-assertion", "phase757-license-absence"),
+        ("assert-charon-stability", "charon-source", "internal-assertion", "phase757-final-stability"),
+        ("download-aeneas-main", "aeneas-assets", "bounded-producer", "phase741-main-asset"),
+        ("download-aeneas-lean", "aeneas-assets", "bounded-producer", "phase741-lean-asset"),
+        ("verify-aeneas-assets", "aeneas-assets", "internal-assertion", "phase742-asset-pins"),
+        ("validate-aeneas-archives", "aeneas-assets", "bounded-producer", "phase742-raw-archive-profile"),
+        ("extract-aeneas-main", "archive-equivalence", "bounded-producer", "phase726-main-extraction"),
+        ("extract-aeneas-lean-staging", "archive-equivalence", "bounded-producer", "phase726-lean-extraction"),
+        ("assert-lean-tree-equivalence", "archive-equivalence", "internal-assertion", "phase744-lean-tree-equivalence"),
+        ("remove-lean-staging", "archive-equivalence", "atomic-materialization", "phase744-remove-duplicate-staging"),
+        ("download-lean", "lean-acquisition", "bounded-producer", "phase668-lean-4-31-asset"),
+        ("verify-lean-archive", "lean-acquisition", "internal-assertion", "phase668-lean-size-sha"),
+        ("extract-lean", "lean-acquisition", "bounded-producer", "phase744-lean-extraction"),
+        ("accept-lean-identities", "lean-acquisition", "internal-assertion", "phase692-lean-lake-identities"),
+        ("compile-rustc-private-probe", "dependency-freeze", "bounded-producer", "phase678-rustc-private-probe"),
+        ("fetch-charon-dependencies", "dependency-freeze", "bounded-producer", "phase678-locked-cargo-fetch"),
+        ("lake-update", "dependency-freeze", "bounded-producer", "phase678-client-lake-update"),
+        ("lake-cache-get", "dependency-freeze", "bounded-producer", "phase678-client-cache-get"),
+        ("freeze-dependencies", "dependency-freeze", "internal-assertion", "phase678-nine-package-freeze"),
+        ("materialize-sandbox-profile", "sandboxed-backends", "atomic-materialization", "phase672-deny-network-profile"),
+        ("materialize-loopback-listener", "sandboxed-backends", "atomic-materialization", "phase732-listener-bytes"),
+        ("run-loopback-control", "sandboxed-backends", "persistent-loopback-control", "phase732-loopback-lifetime"),
+        ("run-sandbox-controls", "sandboxed-backends", "bounded-producer", "phase678-network-denial-controls"),
+        ("build-charon", "sandboxed-backends", "bounded-producer", "phase678-sandboxed-charon-build"),
+        ("verify-charon-binaries", "sandboxed-backends", "internal-assertion", "phase678-charon-version-and-driver"),
+        ("freeze-checker-cargo-cache", "sandboxed-backends", "internal-assertion", "phase678-checker-cache-digest"),
+        ("extract-checker-llbc", "sandboxed-backends", "bounded-producer", "phase668-charon-cargo-extraction"),
+        ("pretty-print-checker-llbc", "sandboxed-backends", "bounded-producer", "phase668-charon-pretty-print"),
+        ("assert-single-ordinal-body", "sandboxed-backends", "internal-assertion", "phase668-target-selector"),
+        ("generate-aeneas-lean", "sandboxed-backends", "bounded-producer", "phase678-aeneas-generation"),
+        ("assert-generated-source", "sandboxed-backends", "internal-assertion", "phase678-generated-source-review"),
+        ("materialize-rfl-witness", "sandboxed-backends", "atomic-materialization", "phase724-fourteen-rfl-witness"),
+        ("check-types-olean", "sandboxed-backends", "bounded-producer", "phase720-types-olean"),
+        ("check-funs-olean", "sandboxed-backends", "bounded-producer", "phase720-funs-olean"),
+        ("check-witness-olean", "sandboxed-backends", "bounded-producer", "phase720-witness-olean"),
+        ("lake-build", "sandboxed-backends", "bounded-producer", "phase678-final-lake-build"),
+        ("assert-final-freeze", "sandboxed-backends", "internal-assertion", "phase678-final-state-freeze"),
+        ("retain-path-free-proof-slice", "retention-and-cleanup", "atomic-materialization", "phase678-success-retention"),
+        ("cleanup-and-verify-primary", "retention-and-cleanup", "cleanup-and-verify", "phase753-cleanup-preservation"),
+    )
+    operations = []
+    predecessor = None
+    for operation_id, stage_id, kind, contract_ref in rows:
+        stage = STAGE_BY_ID[stage_id]
+        values = {"contract_ref": contract_ref}
+        if kind == "atomic-materialization":
+            values["target_template"] = "{{RUN}}/operations/{}".format(operation_id)
+        elif kind == "bounded-producer":
+            values["command_id"] = operation_id
+        elif kind == "persistent-loopback-control":
+            positive = ["/usr/bin/nc", "-G", "2", "-z", "127.0.0.1", "{PORT}"]
+            values.update(
+                {
+                    "listener_sha256": "31dbedb07e9a75a3d70ed8b3a070d3e394137aa698c1ef1295d3f13e5c525b8d",
+                    "positive_argv": json.dumps(positive, separators=(",", ":")),
+                    "sandboxed_negative_argv": json.dumps(
+                        ["/usr/bin/sandbox-exec", "-f", "{SANDBOX_PROFILE}"] + positive,
+                        separators=(",", ":"),
+                    ),
+                }
+            )
+        elif kind == "cleanup-and-verify":
+            values.update(
+                {
+                    "roots": "{RUN},{DETACHED_REPO},{RUSTUP_ROOT},{CHARON_CARGO_HOME},{AENEAS_ROOT},{LEAN_ROOT}",
+                    "verify_primary": "true",
+                }
+            )
+        operation = OperationSpec(
+            operation_id,
+            stage_id,
+            predecessor,
+            stage.mutation_owner,
+            stage.network_policy,
+            kind,
+            _payload(**values),
+        )
+        operations.append(operation)
+        predecessor = operation_id
+    plan = CompleteOperationPlan(attempt_id, tuple(operations))
+    plan.validate()
+    return plan
 
 
 def _git(repo_root: pathlib.Path, arguments: Sequence[str]) -> bytes:

@@ -951,6 +951,13 @@ specifies the closed operation taxonomy and deterministic complete-plan gate
 needed to represent assertions, materialization, loopback lifetime, cleanup,
 and every inherited command without hidden shell orchestration.
 
+[docs/770-phase-hsai-formal-execution-complete-plan-implementation.md](docs/770-phase-hsai-formal-execution-complete-plan-implementation.md)
+implements the canonical 65-operation contract plan, exact closed payload
+validation, deterministic plan hashing, exhaustive reachability and
+first-failure routing, and mandatory cleanup. Its 53 focused and 83 total
+preflight tests pass; no acquisition, formal backend, SMT, or COBALT run
+occurred.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
