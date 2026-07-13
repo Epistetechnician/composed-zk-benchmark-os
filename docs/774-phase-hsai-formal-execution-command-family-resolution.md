@@ -283,3 +283,8 @@ Phase 774 creates no executable plan, source-ledger digest, backend result,
 proof artifact, checker transcript, accepted evidence, Level2+, score axis,
 semantic correctness, production readiness, SOTA, breakthrough, full-security
 claim, external audit, or action authority.
+
+Phase 775 subsequently stopped before ledger expansion because executable
+identity, typed-placeholder, sandbox-wrapper, native-audit cardinality, driver
+target, environment, and retained-kernel-evidence contracts remain incomplete.
+See `docs/775-phase-hsai-formal-execution-source-ledger-stop.md`.

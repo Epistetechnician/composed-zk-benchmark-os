@@ -19896,6 +19896,17 @@ the fully expanded source ledger or run a producer. Phase 775 must expand all
 84 rows. See
 `docs/774-phase-hsai-formal-execution-command-family-resolution.md`.
 
+## Phase 775 HSAI Formal Execution Source Ledger Stop
+
+Status: stopped documentation-only before expanding or hashing the source
+ledger. The Phase 774 arithmetic and resolution digest are mechanically valid,
+but executable symlink identity, typed placeholders, sandbox-wrapper binding,
+packaged-asset versus built-binary audit cardinality, the Charon-driver loader
+target, exact native outcomes, replacement-environment compatibility, and the
+retained-kernel-evidence schema remain incomplete. Phase 776 must correct those
+contracts before a fully expanded ledger or plan v2 may exist. See
+`docs/775-phase-hsai-formal-execution-source-ledger-stop.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
