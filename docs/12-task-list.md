@@ -19794,6 +19794,21 @@ exact rustup identity and inventory hash, parse exactly seven marked installed
 components, and propagate every acceptance failure directly. See
 `docs/763-phase-hsai-gateway-threat-ordinal-rustup-inventory-closure.md`.
 
+## Phase 764 HSAI Gateway Threat Ordinal Manual Orchestration Stop
+
+Status: complete as a pre-root stop. A stale clean-primary assertion
+contradicted Phase 753 dirty-primary preservation after unrelated soak coverage
+appeared. No owned path or producer was created. See
+`docs/764-phase-hsai-gateway-threat-ordinal-manual-orchestration-stop.md`.
+
+## Phase 765 HSAI Formal Execution State Machine Boundary
+
+Status: complete as a documentation-first implementation boundary. Phase 766
+must replace ad hoc shell assembly with a standard-library state machine over
+immutable stages, argv arrays, first-failure terminality, dirty-primary
+preservation, and hermetic tests. See
+`docs/765-phase-hsai-formal-execution-state-machine-boundary.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
