@@ -924,6 +924,14 @@ component inventory instead of seven bare names.
 binds exact rustup identity, inventory hash, marked-installed parsing, and
 direct acceptance failure propagation for Phase 764. It runs no tool/backend.
 
+[docs/764-phase-hsai-gateway-threat-ordinal-manual-orchestration-stop.md](docs/764-phase-hsai-gateway-threat-ordinal-manual-orchestration-stop.md)
+records the pre-root stop after a stale clean-primary assertion contradicted
+the committed detached dirty-primary rule. No owned path or producer ran.
+
+[docs/765-phase-hsai-formal-execution-state-machine-boundary.md](docs/765-phase-hsai-formal-execution-state-machine-boundary.md)
+replaces further ad hoc shell attempts with an immutable, tested execution
+state-machine implementation boundary for Phase 766. It runs no backend.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
