@@ -19885,6 +19885,17 @@ backend was touched. Phase 774 must resolve those families and the shared
 transcript/cwd/environment/bounds rules before a complete ledger can exist.
 See `docs/773-phase-hsai-formal-execution-source-normalization-stop.md`.
 
+## Phase 774 HSAI Formal Execution Command Family Resolution
+
+Status: complete documentation-only. It resolves the four unknown command
+families to exactly 84 ordinary bounded commands, freezes two-step Lean
+extraction, ten native-audit commands, four repository probes, in-process
+cleanup boundaries, shared transcript/environment/bounds profiles, the exact
+external-acquisition set, and a resolution-contract SHA-256. It does not create
+the fully expanded source ledger or run a producer. Phase 775 must expand all
+84 rows. See
+`docs/774-phase-hsai-formal-execution-command-family-resolution.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

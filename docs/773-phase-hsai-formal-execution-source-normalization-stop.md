@@ -281,3 +281,9 @@ Phase 773 creates no executable plan, ledger digest, backend result, proof
 artifact, checker transcript, accepted evidence, Level2+, score axis, semantic
 correctness, production readiness, SOTA, breakthrough, full-security claim,
 external audit, or action authority.
+
+Phase 774 subsequently resolves the four unknown command families to exactly
+84 ordinary bounded commands, freezes shared profiles and transcript paths,
+and publishes a non-executable resolution-contract digest. Phase 775 must
+expand all 84 rows under
+`docs/774-phase-hsai-formal-execution-command-family-resolution.md`.
