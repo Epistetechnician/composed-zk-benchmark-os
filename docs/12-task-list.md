@@ -19709,6 +19709,18 @@ Status: complete as a documentation-first correction. Binds `LICENSE.md` and
 the other four exact Charon source paths and hashes for Phase 756. See
 `docs/755-phase-hsai-gateway-threat-ordinal-charon-license-path-closure.md`.
 
+## Phase 756 HSAI Gateway Threat Ordinal Charon Identity Assertion Stop
+
+Status: complete as a cleaned pre-Aeneas stop. One combined assertion returned
+nonzero although each declared source identity fact matched independently. See
+`docs/756-phase-hsai-gateway-threat-ordinal-charon-identity-assertion-stop.md`.
+
+## Phase 757 HSAI Gateway Threat Ordinal Source Identity Producer Closure
+
+Status: complete as a documentation-first correction. Phase 758 must capture
+and assert each Charon commit/status/path/hash/absence fact independently. See
+`docs/757-phase-hsai-gateway-threat-ordinal-source-identity-producer-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
