@@ -99,3 +99,11 @@ Phase 770 creates no backend result, proof artifact, checker transcript,
 accepted evidence, Level2+, score axis, semantic correctness, production
 readiness, SOTA, breakthrough, full-security claim, external audit, or action
 authority.
+
+Phase 771 subsequently found that several v1 operations aggregate independently
+bounded inherited child commands and that stage network labels are too coarse
+for executor capabilities. The v1 digest remains valid as a conceptual
+inventory identity but is not an executable-plan identity. Phase 772 must
+implement the versioned correspondence correction in
+`docs/771-phase-hsai-formal-execution-correspondence-correction-boundary.md`
+before executor materialization.

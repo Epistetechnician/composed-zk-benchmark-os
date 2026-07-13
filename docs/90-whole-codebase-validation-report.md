@@ -958,6 +958,13 @@ first-failure routing, and mandatory cleanup. Its 53 focused and 83 total
 preflight tests pass; no acquisition, formal backend, SMT, or COBALT run
 occurred.
 
+[docs/771-phase-hsai-formal-execution-correspondence-correction-boundary.md](docs/771-phase-hsai-formal-execution-correspondence-correction-boundary.md)
+records that the Phase 770 v1 digest is not executable: several operations
+aggregate independently bounded commands, stage network labels are not exact
+capabilities, templates and artifacts lack safe resolution contracts, and
+cleanup lacks aggregate results. It specifies a versioned plan-v2 correction
+before executor materialization; no tool or backend ran.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
