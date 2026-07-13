@@ -946,6 +946,11 @@ implements typed producer metadata, the exact fixture-only exception, and the
 canonical bounded-runner adapter. Its 36 focused and 66 total preflight tests
 pass; no network or backend ran.
 
+[docs/769-phase-hsai-formal-execution-complete-plan-boundary.md](docs/769-phase-hsai-formal-execution-complete-plan-boundary.md)
+specifies the closed operation taxonomy and deterministic complete-plan gate
+needed to represent assertions, materialization, loopback lifetime, cleanup,
+and every inherited command without hidden shell orchestration.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
