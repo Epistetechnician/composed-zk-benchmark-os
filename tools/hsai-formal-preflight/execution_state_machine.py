@@ -5,9 +5,11 @@ import argparse
 import base64
 import hashlib
 import json
+import math
 import os
 import pathlib
 import re
+import stat
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -36,6 +38,15 @@ ALLOWED_ENV_KEYS = frozenset(
         "RUSTUP_TOOLCHAIN",
     }
 )
+COMMAND_ROLES = ("producer", "exact-process-fixture")
+BOUNDED_REASONS = ("exit", "timeout", "stdout_limit", "stderr_limit")
+EXACT_TIMEOUT_FIXTURE = (
+    "/bin/sh",
+    "-c",
+    '/bin/sh -c "/bin/sleep 30" & child=$!; printf "%s\\n" "$child" '
+    '> "$RUN/grandchild.pid"; wait "$child"',
+)
+EXACT_STDERR_FIXTURE = ("/bin/sh", "-c", "exec /usr/bin/yes x >&2")
 
 
 class StateMachineError(Exception):
@@ -116,7 +127,21 @@ class CommandSpec:
     argv: Tuple[str, ...]
     env: Tuple[Tuple[str, str], ...]
     network_policy: str
-    output_paths: Tuple[str, ...]
+    role: str
+    cwd: str
+    timeout_seconds: float
+    stdout_cap: int
+    stderr_cap: int
+    status_path: str
+    stdout_path: str
+    stderr_path: str
+    expected_reason: str
+    expected_returncode: Optional[int]
+    expected_signal: Optional[int]
+
+    @property
+    def output_paths(self) -> Tuple[str, str, str]:
+        return (self.status_path, self.stdout_path, self.stderr_path)
 
     def validate(self) -> None:
         if not COMMAND_ID_RE.fullmatch(self.command_id):
@@ -126,13 +151,15 @@ class CommandSpec:
             raise StateMachineError("unknown command stage: {}".format(self.stage_id))
         if self.network_policy != stage.network_policy:
             raise StateMachineError("command network policy differs from stage")
+        if self.role not in COMMAND_ROLES:
+            raise StateMachineError("unknown command role")
         if not self.argv or not os.path.isabs(self.argv[0]):
             raise StateMachineError("command executable must be absolute")
         for argument in self.argv:
             if not isinstance(argument, str) or "\x00" in argument:
                 raise StateMachineError("invalid argv value")
         if self.argv[0] in ("/bin/bash", "/bin/sh", "/bin/zsh"):
-            raise StateMachineError("shell command execution is prohibited")
+            self._validate_exact_shell_fixture()
         keys = [key for key, _ in self.env]
         if len(keys) != len(set(keys)):
             raise StateMachineError("duplicate environment key")
@@ -141,18 +168,74 @@ class CommandSpec:
                 raise StateMachineError("unknown environment key: {}".format(key))
             if "\x00" in value:
                 raise StateMachineError("invalid environment value")
+        if not os.path.isabs(self.cwd) or os.path.normpath(self.cwd) != self.cwd:
+            raise StateMachineError("command cwd must be absolute and canonical")
+        if not math.isfinite(self.timeout_seconds) or self.timeout_seconds <= 0:
+            raise StateMachineError("command timeout must be finite and positive")
+        if (
+            not isinstance(self.stdout_cap, int)
+            or isinstance(self.stdout_cap, bool)
+            or self.stdout_cap <= 0
+            or not isinstance(self.stderr_cap, int)
+            or isinstance(self.stderr_cap, bool)
+            or self.stderr_cap <= 0
+        ):
+            raise StateMachineError("stream caps must be positive integers")
+        if self.expected_reason not in BOUNDED_REASONS:
+            raise StateMachineError("invalid expected bounded reason")
+        if self.expected_reason == "exit":
+            if self.expected_returncode is None or self.expected_returncode < 0:
+                raise StateMachineError("exit requires a nonnegative return code")
+            if self.expected_signal is not None:
+                raise StateMachineError("exit cannot expect a signal")
+        elif self.expected_returncode is not None:
+            raise StateMachineError("bounded termination cannot expect a return code")
+        elif self.expected_signal is None or self.expected_signal <= 0:
+            raise StateMachineError("bounded termination requires a positive signal")
+        if not all(os.path.isabs(path) for path in self.output_paths):
+            raise StateMachineError("command output paths must be absolute")
         absolute_outputs = [os.path.abspath(path) for path in self.output_paths]
         if len(absolute_outputs) != len(set(absolute_outputs)):
             raise StateMachineError("command reuses an output path")
+
+    def _validate_exact_shell_fixture(self) -> None:
+        if self.role != "exact-process-fixture":
+            raise StateMachineError("shell command execution is prohibited")
+        if self.stage_id != "client-and-fixtures" or self.network_policy != "none":
+            raise StateMachineError("exact fixture has the wrong stage or network policy")
+        if self.argv == EXACT_TIMEOUT_FIXTURE:
+            expected = (1.0, 1024, 1024, "timeout", None, 15)
+        elif self.argv == EXACT_STDERR_FIXTURE:
+            expected = (5.0, 1024, 1024, "stderr_limit", None, 15)
+        else:
+            raise StateMachineError("shell fixture argv does not match Phase 732")
+        observed = (
+            self.timeout_seconds,
+            self.stdout_cap,
+            self.stderr_cap,
+            self.expected_reason,
+            self.expected_returncode,
+            self.expected_signal,
+        )
+        if observed != expected:
+            raise StateMachineError("shell fixture bounds or outcome drift")
 
     def to_dict(self) -> Dict[str, object]:
         return {
             "argv": list(self.argv),
             "command_id": self.command_id,
             "env": {key: value for key, value in self.env},
+            "cwd": self.cwd,
+            "expected_reason": self.expected_reason,
+            "expected_returncode": self.expected_returncode,
+            "expected_signal": self.expected_signal,
             "network_policy": self.network_policy,
             "output_paths": list(self.output_paths),
+            "role": self.role,
             "stage_id": self.stage_id,
+            "stderr_cap": self.stderr_cap,
+            "stdout_cap": self.stdout_cap,
+            "timeout_seconds": self.timeout_seconds,
         }
 
 
@@ -273,6 +356,110 @@ def execute_stage(
         if not result.succeeded:
             break
     state.record_stage(stage_id, results)
+
+
+class BoundedRunnerAdapter:
+    """Invoke the committed bounded runner and accept one exact status."""
+
+    def __init__(self, python_path: str, runner_path: str):
+        if not os.path.isabs(python_path) or not os.path.isabs(runner_path):
+            raise StateMachineError("adapter paths must be absolute")
+        self.python_path = python_path
+        self.runner_path = runner_path
+
+    def __call__(self, command: CommandSpec) -> CommandResult:
+        try:
+            command.validate()
+            for path in command.output_paths:
+                if os.path.lexists(path):
+                    return CommandResult(command.command_id, False, "OutputPathAlreadyExists")
+            argv = [
+                self.python_path,
+                self.runner_path,
+                "run-v1",
+                "--timeout-seconds",
+                str(command.timeout_seconds),
+                "--stdout-cap",
+                str(command.stdout_cap),
+                "--stderr-cap",
+                str(command.stderr_cap),
+                "--status-path",
+                command.status_path,
+                "--stdout-path",
+                command.stdout_path,
+                "--stderr-path",
+                command.stderr_path,
+                "--",
+            ] + list(command.argv)
+            completed = subprocess.run(
+                argv,
+                cwd=command.cwd,
+                env={key: value for key, value in command.env},
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            if completed.returncode != 0:
+                return CommandResult(command.command_id, False, "BoundedRunnerInvocationFailed")
+            status = self._read_status(command)
+            if status["argv"] != list(command.argv):
+                return CommandResult(command.command_id, False, "BoundedStatusArgvDrift")
+            if status["reason"] != command.expected_reason:
+                return CommandResult(command.command_id, False, "BoundedStatusReasonDrift")
+            if status["returncode"] != command.expected_returncode:
+                return CommandResult(command.command_id, False, "BoundedStatusReturncodeDrift")
+            if status["signal"] != command.expected_signal:
+                return CommandResult(command.command_id, False, "BoundedStatusSignalDrift")
+            if status["stdout_cap"] != command.stdout_cap or status["stderr_cap"] != command.stderr_cap:
+                return CommandResult(command.command_id, False, "BoundedStatusCapDrift")
+            if status["stdout_bytes"] > command.stdout_cap or status["stderr_bytes"] > command.stderr_cap:
+                return CommandResult(command.command_id, False, "BoundedStatusByteCountDrift")
+            if (
+                os.stat(command.stdout_path).st_size != status["stdout_bytes"]
+                or os.stat(command.stderr_path).st_size != status["stderr_bytes"]
+            ):
+                return CommandResult(command.command_id, False, "BoundedStreamSizeDrift")
+            return CommandResult(command.command_id, True)
+        except (OSError, StateMachineError):
+            return CommandResult(command.command_id, False, "BoundedStatusInvalid")
+
+    def _read_status(self, command: CommandSpec) -> Mapping[str, object]:
+        expected_keys = {
+            "argv",
+            "elapsed_ms",
+            "reason",
+            "returncode",
+            "schema",
+            "signal",
+            "stderr_bytes",
+            "stderr_cap",
+            "stdout_bytes",
+            "stdout_cap",
+        }
+        for path in command.output_paths:
+            path_stat = os.lstat(path)
+            if stat.S_ISLNK(path_stat.st_mode) or not stat.S_ISREG(path_stat.st_mode):
+                raise StateMachineError("bounded output is not a regular file")
+        value = load_canonical_json(pathlib.Path(command.status_path).read_bytes())
+        if not isinstance(value, dict) or set(value) != expected_keys:
+            raise StateMachineError("bounded status shape drift")
+        if value["schema"] != "hsai-bounded-runner-status-v1":
+            raise StateMachineError("bounded status schema drift")
+        integer_fields = (
+            "elapsed_ms",
+            "stderr_bytes",
+            "stderr_cap",
+            "stdout_bytes",
+            "stdout_cap",
+        )
+        if any(
+            not isinstance(value[field], int)
+            or isinstance(value[field], bool)
+            or value[field] < 0
+            for field in integer_fields
+        ):
+            raise StateMachineError("bounded status numeric drift")
+        return value
 
 
 def _git(repo_root: pathlib.Path, arguments: Sequence[str]) -> bytes:

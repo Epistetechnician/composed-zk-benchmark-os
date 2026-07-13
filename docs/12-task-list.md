@@ -19825,6 +19825,14 @@ bounds, expected outcomes, outputs, and bounded-runner adapter behavior for
 Phase 768. No producer ran. See
 `docs/767-phase-hsai-formal-execution-fixture-adapter-boundary.md`.
 
+## Phase 768 HSAI Formal Execution Bounded Adapter Implementation
+
+Status: complete as a committed hermetic implementation. Adds typed cwd,
+bounds, expected outcomes, exact fixture-only shell handling, and an argv-only
+bounded-runner adapter with canonical status/stream acceptance. All 36 focused
+and 66 total preflight tests pass; no backend ran. See
+`docs/768-phase-hsai-formal-execution-bounded-adapter-implementation.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
