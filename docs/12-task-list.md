@@ -19940,6 +19940,22 @@ The 102-command count remains valid. Phase 778 must correct and publish the
 exact order without expanding row fields or running a producer. See
 `docs/777-phase-hsai-formal-execution-pre-use-ordering-stop.md`.
 
+## Phase 778 HSAI Formal Execution Operation Order Correction
+
+Status: complete documentation-only. State slice:
+`phase-778-hsai-formal-execution-operation-order-correction`.
+
+Phase 778 publishes 102 unique ordered command IDs. Packaged static audits now
+precede Aeneas version execution; nine source-built static audits precede
+Charon version execution; and the driver-load preflight follows version and
+toolchain-library acceptance. Fresh Charon source and lock identities follow
+build and precede version and extraction. External closure, controlled loopback, sandbox,
+kernel-check, cleanup, and final-primary ordering remain intact.
+
+The order digest binds membership and order only. Phase 779 must expand all
+row fields without source mutation or producer execution. See
+`docs/778-phase-hsai-formal-execution-operation-order-correction.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

@@ -141,3 +141,8 @@ machine-resolved attempt, backend result, generated Lean, retained kernel
 result, proof artifact, checker transcript, accepted evidence, Level2+, score
 axis, semantic correctness, production readiness, SOTA, breakthrough, full
 security, external audit, or action authority.
+
+Phase 778 subsequently publishes and hashes the corrected exact 102-command
+order in
+`docs/778-phase-hsai-formal-execution-operation-order-correction.md`. Phase 779
+must expand that order without running a producer.
