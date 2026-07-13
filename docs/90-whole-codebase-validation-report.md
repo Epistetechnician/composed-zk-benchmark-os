@@ -908,6 +908,14 @@ hash parsing. No helper, acquisition, or backend command ran.
 requires three explicit shell-independent helper hash producers and assertions
 before Phase 760 may run. It runs no tool or backend.
 
+[docs/760-phase-hsai-gateway-threat-ordinal-parser-cli-stop.md](docs/760-phase-hsai-gateway-threat-ordinal-parser-cli-stop.md)
+records the cleaned stop after helper tests because the self-test command used
+unsupported `--output`. No parser self-test or later producer ran.
+
+[docs/761-phase-hsai-gateway-threat-ordinal-bounded-self-test-closure.md](docs/761-phase-hsai-gateway-threat-ordinal-bounded-self-test-closure.md)
+binds the exact bounded self-test producer and standalone stdout acceptance
+parser for Phase 762. It runs no tool or backend.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

@@ -19766,6 +19766,20 @@ explicit helper hash producers and immediate single-digest assertions without
 shell splitting or loop parsing. See
 `docs/759-phase-hsai-gateway-threat-ordinal-helper-hash-command-closure.md`.
 
+## Phase 760 HSAI Gateway Threat Ordinal Parser CLI Stop
+
+Status: complete as a cleaned pre-parser stop. Helper compilation and 30 tests
+passed, then unsupported `--output` caused argparse to stop before the parser
+self-test ran. See
+`docs/760-phase-hsai-gateway-threat-ordinal-parser-cli-stop.md`.
+
+## Phase 761 HSAI Gateway Threat Ordinal Bounded Self-Test Closure
+
+Status: complete as a documentation-first correction. Phase 762 must run the
+no-option self-test through the bounded runner and validate canonical stdout in
+one standalone acceptance command. See
+`docs/761-phase-hsai-gateway-threat-ordinal-bounded-self-test-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
