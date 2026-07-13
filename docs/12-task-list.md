@@ -19833,6 +19833,14 @@ bounded-runner adapter with canonical status/stream acceptance. All 36 focused
 and 66 total preflight tests pass; no backend ran. See
 `docs/768-phase-hsai-formal-execution-bounded-adapter-implementation.md`.
 
+## Phase 769 HSAI Formal Execution Complete Plan Boundary
+
+Status: complete as a documentation-first operation-model boundary. Phase 770
+must type assertions, materialization, bounded producers, the exact persistent
+loopback control, cleanup, and primary verification, then bind every inherited
+operation into one deterministic path-normalized plan. No backend ran. See
+`docs/769-phase-hsai-formal-execution-complete-plan-boundary.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
