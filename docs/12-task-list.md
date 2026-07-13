@@ -19852,6 +19852,18 @@ All 53 focused and 83 total preflight tests pass. No backend ran. Phase 771
 must freeze exact operation-to-executor materialization before a live attempt.
 See `docs/770-phase-hsai-formal-execution-complete-plan-implementation.md`.
 
+## Phase 771 HSAI Formal Execution Correspondence Correction Boundary
+
+Status: complete as a documentation-first executor-correspondence audit. It
+finds that the Phase 770 v1 digest is a conceptual inventory rather than an
+executable plan because several entries aggregate independently bounded child
+commands, stage network labels overgrant local operations, filesystem/template
+contracts are incomplete, and cleanup loses step-level failures. Phase 772
+must implement a versioned plan v2 with exact producer cardinality,
+per-operation capabilities, typed artifacts and templates, closed
+non-producer variants, and aggregate cleanup. No backend ran. See
+`docs/771-phase-hsai-formal-execution-correspondence-correction-boundary.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
