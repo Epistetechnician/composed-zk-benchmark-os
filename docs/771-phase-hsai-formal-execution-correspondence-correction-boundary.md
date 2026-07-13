@@ -208,3 +208,10 @@ Phase 771 creates no executable executor coverage, backend result, proof
 artifact, checker transcript, accepted evidence, Level2+, score axis, semantic
 correctness, production readiness, SOTA, breakthrough, full-security claim,
 external audit, or action authority.
+
+Phase 772 subsequently stopped before implementation because none of the 35 v1
+bounded entries has every exact `CommandSpec` field and several entries have
+incorrect child-command cardinality. Phase 773 must complete the docs-first
+source-normalization ledger in
+`docs/772-phase-hsai-formal-execution-command-spec-completeness-stop.md` before
+plan-v2 implementation.
