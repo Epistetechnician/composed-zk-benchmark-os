@@ -900,6 +900,14 @@ Aeneas asset or backend command ran.
 requires one bounded producer and immediate assertion per source identity fact
 for Phase 758. It runs no tool or backend.
 
+[docs/758-phase-hsai-gateway-threat-ordinal-zsh-splitting-stop.md](docs/758-phase-hsai-gateway-threat-ordinal-zsh-splitting-stop.md)
+records the cleaned stop after zsh rejected scalar-splitting-dependent helper
+hash parsing. No helper, acquisition, or backend command ran.
+
+[docs/759-phase-hsai-gateway-threat-ordinal-helper-hash-command-closure.md](docs/759-phase-hsai-gateway-threat-ordinal-helper-hash-command-closure.md)
+requires three explicit shell-independent helper hash producers and assertions
+before Phase 760 may run. It runs no tool or backend.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

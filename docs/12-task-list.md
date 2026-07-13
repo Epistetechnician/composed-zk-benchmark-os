@@ -19752,6 +19752,20 @@ Status: complete as a documentation-first correction. Phase 758 must capture
 and assert each Charon commit/status/path/hash/absence fact independently. See
 `docs/757-phase-hsai-gateway-threat-ordinal-source-identity-producer-closure.md`.
 
+## Phase 758 HSAI Gateway Threat Ordinal Zsh Splitting Stop
+
+Status: complete as a cleaned pre-helper stop. Frozen repository gates passed,
+then zsh correctly refused implicit scalar splitting in the helper-hash loop.
+No helper or later producer ran. See
+`docs/758-phase-hsai-gateway-threat-ordinal-zsh-splitting-stop.md`.
+
+## Phase 759 HSAI Gateway Threat Ordinal Helper Hash Command Closure
+
+Status: complete as a documentation-first correction. Phase 760 must use three
+explicit helper hash producers and immediate single-digest assertions without
+shell splitting or loop parsing. See
+`docs/759-phase-hsai-gateway-threat-ordinal-helper-hash-command-closure.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
