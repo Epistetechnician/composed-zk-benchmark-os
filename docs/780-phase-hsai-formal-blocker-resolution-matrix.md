@@ -270,3 +270,12 @@ not authorized. No Phase 780 lane closes: resolved lanes remain
 `L01-L04,L09`, open lanes remain `L05-L08,L10-L11`, all 1,469 historical
 blockers and 102 blocked rows remain unchanged, and no source-ledger digest
 exists.
+
+Phase 789 subsequently corrects the post-stop prerequisite route in
+`docs/789-phase-hsai-formal-native-transcript-capture-prerequisite-route-correction.md`.
+It adds the omitted wrapper identity requirement, separates input preparation,
+capture, and grammar authority, and moves the earliest possible plan-v2 phase
+to 801. It runs nothing and closes no lane. Resolved lanes remain
+`L01-L04,L09`, open lanes remain `L05-L08,L10-L11`, all 1,469 historical
+blockers and 102 blocked rows remain unchanged, and no source-ledger digest
+exists.

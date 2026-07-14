@@ -20151,6 +20151,24 @@ and named reviewers are absent. Phase 789 capture is not authorized. No Phase
 1,469 blockers and no source-ledger digest. See
 `docs/788-phase-hsai-formal-native-transcript-fixture-acquisition-readiness-audit.md`.
 
+## Phase 789 HSAI Formal Native Transcript Capture Prerequisite Route Correction
+
+Status: complete documentation-only route correction. State slice:
+`phase-789-hsai-formal-native-transcript-capture-prerequisite-route-correction`.
+
+Phase 789 replaces unauthorized `P02` capture with a preparation contract. It
+adds the omitted sandbox-wrapper observation, separates preparation and capture
+roots, freezes the seven-role preparation closure and thirteen checkpoints,
+and keeps materialization, capture, and `L05` grammar authority separate.
+
+The corrected schedule assigns Phase 790 to conditional machine/target input
+materialization, Phase 791 to conditional capture, Phase 792 to `L05`, Phases
+793-796 to `L06-L08,L10`, Phases 797-799 to the three `L11` tranches, Phase
+800 to independent audit and conditional digest publication, and Phase 801 to
+the earliest plan-v2 boundary. No lane closes and no execution is authorized.
+See
+`docs/789-phase-hsai-formal-native-transcript-capture-prerequisite-route-correction.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

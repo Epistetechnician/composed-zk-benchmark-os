@@ -413,3 +413,14 @@ result, generated Lean, retained kernel result, proof artifact, checker
 transcript, accepted evidence, Level2+, score axis, semantic correctness,
 production readiness, SOTA, breakthrough, full security, external audit, or
 action authority.
+
+## Phase 789 Forward Result
+
+Phase 789 subsequently replaces the unauthorized capture step with the
+preparation route in
+`docs/789-phase-hsai-formal-native-transcript-capture-prerequisite-route-correction.md`.
+It corrects the omitted built-row wrapper observation and capture-root
+prepopulation conflict, separates input materialization, capture, and grammar
+authority, and moves the earliest plan-v2 boundary to Phase 801. Phase 789 runs
+nothing, closes no lane, and preserves this phase's `not-ready` result and all
+claim limits.
