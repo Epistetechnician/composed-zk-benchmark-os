@@ -20072,6 +20072,27 @@ corrected schedule assigns Phases 785-790 to `L05`-`L10`, Phases 791-793 to
 transcript grammars and fixtures. See
 `docs/784-phase-hsai-formal-helper-pre-use-route-correction.md`.
 
+## Phase 785 HSAI Formal Native Transcript Fixture Provenance Stop
+
+Status: stopped documentation-only. State slice:
+`phase-785-hsai-formal-native-transcript-fixture-provenance-stop`.
+
+Phase 785 does not resolve Phase 780 lane `L05`. The exact 21 native-audit rows,
+command families, expected process outcomes, and high-level historical audit
+facts are known, but the repository has no accepted native-tool identity and
+version bindings, raw identity-bound transcript corpus, immutable positive and
+negative fixtures, or independently reviewed total parser grammars. Machine
+identity acceptance remains deferred to `L09`, while `L05` requires those
+identities as grammar authority. Phase 785's non-execution gate prohibits
+creating the missing observations.
+
+Historical Phase 779 JSONL, all 1,469 blockers, all 102 blocked rows, and the
+no-digest boundary remain unchanged. `L05` through `L11` remain open. The
+ordered closure program stops pending explicit dependency and
+fixture-acquisition route correction; Phase 786's previously assigned `L06`
+work is not authorized. See
+`docs/785-phase-hsai-formal-native-transcript-fixture-provenance-stop.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

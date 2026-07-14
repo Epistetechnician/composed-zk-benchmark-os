@@ -1068,6 +1068,17 @@ blockers, all 102 blocked rows, and the absent source-ledger digest remain
 unchanged. `L05` through `L11` stay open; Phase 785 is the next authorized
 documentation-first native-transcript lane under the corrected schedule.
 
+[docs/785-phase-hsai-formal-native-transcript-fixture-provenance-stop.md](docs/785-phase-hsai-formal-native-transcript-fixture-provenance-stop.md)
+records the Phase 785 stop before Phase 780 lane `L05` closure. The exact 21
+native-audit rows and expected process outcomes are known, but accepted
+native-tool identity and version bindings, raw identity-bound transcript bytes,
+immutable positive and negative fixtures, and reviewed total parser grammars
+are absent. Because machine identity acceptance remains deferred to `L09` and
+Phase 785 prohibits native capture, closing `L05` would invent provenance.
+Historical Phase 779 JSONL, all 1,469 blockers, all 102 blocked rows, and the
+absent source-ledger digest remain unchanged. `L05` through `L11` stay open;
+Phase 786 is restricted to documentation-first route correction.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

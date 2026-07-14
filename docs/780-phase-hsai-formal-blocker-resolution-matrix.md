@@ -227,3 +227,15 @@ resolve `L05`-`L10`, Phases 791-793 expand `L11`, Phase 794 performs the
 conditional whole-ledger audit, and Phase 795 is the earliest possible plan-v2
 boundary. Historical Phase 779 JSONL and its 1,469 blockers remain unchanged,
 all 102 rows remain blocked, and no source-ledger digest exists.
+
+Phase 785 subsequently stops before resolving `L05` in
+`docs/785-phase-hsai-formal-native-transcript-fixture-provenance-stop.md`.
+The required `codesign`, `spctl`, and `otool` grammars must be bound to accepted
+native-tool identities and immutable raw transcript fixtures. Machine identity
+acceptance remains deferred to `L09`, no identity-bound raw positive and
+negative fixture corpus exists, and Phase 785 prohibits native capture or
+machine observation. `L05` through `L11` remain open, historical Phase 779
+JSONL and its 1,469 blockers remain unchanged, all 102 rows remain blocked, and
+no source-ledger digest exists. The closure program is stopped pending an
+explicit dependency and fixture-acquisition route correction; Phase 786's
+previously assigned `L06` work is not authorized.
