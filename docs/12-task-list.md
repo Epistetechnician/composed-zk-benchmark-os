@@ -20050,6 +20050,28 @@ correction; Phase 784's previously assigned native-transcript work is not
 authorized. See
 `docs/783-phase-hsai-formal-helper-pre-use-ordering-stop.md`.
 
+## Phase 784 HSAI Formal Helper Pre-Use Route Correction
+
+Status: complete documentation-only. State slice:
+`phase-784-hsai-formal-helper-pre-use-route-correction`.
+
+Phase 784 resolves Phase 780 lane `L04` without changing the 102-operation
+order. It narrowly supersedes Phase 759's three `shasum` child producers with
+typed, descriptor-relative, in-process SHA-256 acceptance over the exact three
+Phase 749 helpers and three focused tests. It freezes a no-bytecode built-in
+`compile()` argv and an explicit ordered three-module unittest argv, excludes
+the Phase 766 state-machine files and all discovery, and clarifies that Phase
+771 cardinality counts executor-submitted logical commands rather than
+descendants contained in one bounded process group.
+
+Historical Phase 779 JSONL, all 1,469 blockers, all 102 blocked rows, and the
+no-digest boundary remain unchanged. `L05` through `L11` remain open. The
+corrected schedule assigns Phases 785-790 to `L05`-`L10`, Phases 791-793 to
+`L11` row expansion, Phase 794 to conditional whole-ledger audit, and Phase
+795 to the earliest possible plan-v2 boundary. Phase 785 is next for native
+transcript grammars and fixtures. See
+`docs/784-phase-hsai-formal-helper-pre-use-route-correction.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
