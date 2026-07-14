@@ -244,5 +244,7 @@ Phase 780 subsequently audits all blocker families in
 their Phase 779 `sandbox-closed` values lack an explicit supersession of the
 earlier `host-offline` contracts. The Phase 779 JSONL remains an immutable
 blocked historical artifact; its declared capability counts are not accepted
-source correspondence. Phase 781 must resolve that discrepancy before any
-row-expansion successor.
+source correspondence. Phase 781 subsequently resolves the successor values
+to `host-offline` in
+`docs/781-phase-hsai-formal-capability-source-correspondence-correction.md`.
+Historical Phase 779 rows remain unchanged.

@@ -1029,6 +1029,16 @@ fields, source inputs, immutable outputs, review criteria, exit gates, and
 ordered successor phases. It resolves no row and preserves the no-digest,
 no-plan, and no-execution boundary.
 
+[docs/781-phase-hsai-formal-capability-source-correspondence-correction.md](docs/781-phase-hsai-formal-capability-source-correspondence-correction.md)
+records Phase 781 resolution of the Phase 780 `L01` discrepancy for
+successor-ledger construction.
+Rows 036, 037, 059, and 060 return to `host-offline`; the exact capability
+partition becomes 10 external-acquisition, 63 host-offline, and 29
+sandbox-closed rows. Sandbox obligations are removed from those four rows,
+while unresolved extractor roles on rows 036 and 037 remain blocked. The
+historical ledger, 1,469 blockers, 102 blocked rows, and no-digest boundary are
+unchanged.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
