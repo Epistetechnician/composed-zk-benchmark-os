@@ -1100,6 +1100,16 @@ JSONL, all 1,469 blockers, all 102 blocked rows, and the absent source-ledger
 digest remain unchanged. Resolved lanes are `L01-L04,L09`; Phase 788 is next
 for the documentation-first `P01` fixture-acquisition readiness audit.
 
+[docs/788-phase-hsai-formal-native-transcript-fixture-acquisition-readiness-audit.md](docs/788-phase-hsai-formal-native-transcript-fixture-acquisition-readiness-audit.md)
+records the complete documentation-first `P01` protocol and a `not-ready`
+decision. Static correspondence confirms 21 exact `N21` rows partitioned as
+`5/5/3/6/2`, exact argv and capture bounds, six target slots, positive-corpus
+and portable path schemas, byte-preserving publication, seven deterministic
+negative classes, and distinct reviewer roles. No concrete native-tool policy,
+identity observation, target bytes, ordinal-073 build receipt, raw corpus,
+manifest, or named reviewers exist, so Phase 789 capture is not authorized.
+No lane closes and the Phase 779 blocker state and claim ceiling are unchanged.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

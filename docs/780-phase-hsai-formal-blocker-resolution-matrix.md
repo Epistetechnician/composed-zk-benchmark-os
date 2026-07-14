@@ -259,3 +259,14 @@ open lanes are `L05-L08,L10-L11`. Historical Phase 779 JSONL and its 1,469
 blockers remain unchanged, all 102 rows remain blocked, and no source-ledger
 digest exists. Phase 788 is next for the documentation-first `P01` native
 transcript fixture-acquisition protocol and readiness audit.
+
+Phase 788 subsequently freezes the complete documentation-first `P01` capture
+protocol in
+`docs/788-phase-hsai-formal-native-transcript-fixture-acquisition-readiness-audit.md`
+but records `not-ready`. Exact native-tool identity observations, target bytes,
+an accepted ordinal-073 build receipt, raw transcripts, a corpus manifest, and
+named independent reviewers are absent. Phase 789 `P02` capture is therefore
+not authorized. No Phase 780 lane closes: resolved lanes remain
+`L01-L04,L09`, open lanes remain `L05-L08,L10-L11`, all 1,469 historical
+blockers and 102 blocked rows remain unchanged, and no source-ledger digest
+exists.

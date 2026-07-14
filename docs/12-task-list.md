@@ -20133,6 +20133,24 @@ lanes are `L05-L08,L10-L11`. Phase 788 is documentation-first only for the
 `P01` fixture-acquisition protocol and readiness audit. See
 `docs/787-phase-hsai-formal-executable-role-registry-machine-policy.md`.
 
+## Phase 788 HSAI Formal Native Transcript Fixture Acquisition Readiness Audit
+
+Status: stopped documentation-only before `P02`. State slice:
+`phase-788-hsai-formal-native-transcript-fixture-acquisition-readiness-audit`.
+
+Phase 788 freezes the complete `P01` protocol for all 21 `N21` rows: five
+semantic shapes, exact capture argv and envelope, six target slots, raw-byte
+and publication rules, positive-corpus schemas, deterministic synthetic
+negatives, distinct reviewer roles, and fail-closed readiness checks.
+
+The readiness decision is `not-ready`. Concrete native-tool policy and identity
+observations, target bytes, the ordinal-073 build receipt, raw corpus, manifest,
+and named reviewers are absent. Phase 789 capture is not authorized. No Phase
+780 lane closes; resolved lanes remain `L01-L04,L09`, open lanes remain
+`L05-L08,L10-L11`, and historical Phase 779 remains 102 blocked rows with
+1,469 blockers and no source-ledger digest. See
+`docs/788-phase-hsai-formal-native-transcript-fixture-acquisition-readiness-audit.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
