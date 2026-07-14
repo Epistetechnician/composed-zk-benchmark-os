@@ -239,3 +239,13 @@ JSONL and its 1,469 blockers remain unchanged, all 102 rows remain blocked, and
 no source-ledger digest exists. The closure program is stopped pending an
 explicit dependency and fixture-acquisition route correction; Phase 786's
 previously assigned `L06` work is not authorized.
+
+Phase 786 subsequently corrects that dependency route in
+`docs/786-phase-hsai-formal-native-transcript-dependency-route-correction.md`.
+It resolves no lane. The corrected chain is `L09`, fixture-acquisition protocol
+and readiness audit, conditional identity-bound local corpus capture, `L05`,
+then the remaining specialized lanes and `L11`. Phases 787-799 replace the
+prior downstream schedule; Phase 799 is the earliest possible plan-v2 boundary
+and remains conditional on Phase 798 whole-ledger success. Historical Phase
+779 JSONL and its 1,469 blockers remain unchanged, all 102 rows remain blocked,
+and no source-ledger digest exists.
