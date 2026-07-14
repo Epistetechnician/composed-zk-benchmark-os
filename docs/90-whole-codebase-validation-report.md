@@ -1131,6 +1131,16 @@ the crate. `P01B` remains stopped; no lane closes; earliest plan v2 moves to
 Phase 806 behind a safe collector, driver, conditional materialization,
 capture, grammar closure, row expansion, and independent audit.
 
+[docs/791-phase-hsai-native-transcript-descriptor-relative-collector-boundary.md](docs/791-phase-hsai-native-transcript-descriptor-relative-collector-boundary.md)
+records the docs-first safety contract for Phase 792. Local dependency review
+confirmed the locked `rustix 1.1.4` filesystem API, locked `libc 0.2.186`
+`MNT_LOCAL` constant, and their Rust 1.63/1.65 minimums, while the workspace
+Rust 1.74 toolchain is installed. The contract requires retained
+descriptor-relative traversal, normalized non-overlapping roots, 32-hop and
+1-GiB bounds, exact stable metadata, final object rechecks, closed errors, and
+deterministic race injection. Static review confirms Phase 791 changes no Rust
+or Cargo file and collects no machine observation.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

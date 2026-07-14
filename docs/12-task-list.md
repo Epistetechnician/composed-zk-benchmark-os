@@ -20192,6 +20192,25 @@ earliest possible plan-v2 boundary is Phase 806. No lane closes and the Phase
 779 blocker state is unchanged. See
 `docs/790-phase-hsai-native-transcript-preparation-candidate-validation.md`.
 
+## Phase 791 HSAI Native Transcript Descriptor-Relative Collector Boundary
+
+Status: complete documentation-first boundary. State slice:
+`phase-791-hsai-native-transcript-descriptor-relative-collector-boundary`.
+
+Phase 791 rejects the pathname-plus-terminal-no-follow design and freezes the
+only authorized Phase 792 collector route: macOS-only retained directory
+descriptors, component-by-component no-follow traversal, one unambiguous
+allowed root, bounded symlink resolution, terminal descriptor hashing under a
+1 GiB ceiling, complete stable metadata, final object rechecks, typed errors,
+and deterministic mutation checkpoints. Exact `rustix = 1.1.4` and
+`libc = 0.2.186` dependencies are authorized; libc is limited to the macOS
+`MNT_LOCAL` constant, while libc calls and unsafe code remain forbidden.
+
+This phase adds no Rust capability, collects no machine fact, and leaves
+`P01B` stopped. Phase 792 remains conditional implementation only; Phase 795
+remains the earliest possible materialization phase. See
+`docs/791-phase-hsai-native-transcript-descriptor-relative-collector-boundary.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
