@@ -1110,6 +1110,15 @@ identity observation, target bytes, ordinal-073 build receipt, raw corpus,
 manifest, or named reviewers exist, so Phase 789 capture is not authorized.
 No lane closes and the Phase 779 blocker state and claim ceiling are unchanged.
 
+[docs/789-phase-hsai-formal-native-transcript-capture-prerequisite-route-correction.md](docs/789-phase-hsai-formal-native-transcript-capture-prerequisite-route-correction.md)
+records the documentation-first correction after that stop. It adds the omitted
+`SANDBOX_EXEC_EXE` observation and wrapper/profile provenance, separates
+preparation and capture roots, freezes the seven-role preparation closure,
+orders thirteen materialization checkpoints, and keeps input materialization,
+corpus capture, and `L05` grammar closure distinct. Static review confirms that
+Phase 789 runs nothing, closes no lane, preserves the historical blocker state,
+and moves the earliest plan-v2 boundary to Phase 801.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
