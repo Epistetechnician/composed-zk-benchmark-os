@@ -20114,6 +20114,25 @@ possible plan-v2 boundary. Historical Phase 779 JSONL, all 1,469 blockers, all
 787 is documentation-first only. See
 `docs/786-phase-hsai-formal-native-transcript-dependency-route-correction.md`.
 
+## Phase 787 HSAI Formal Executable Role Registry And Machine Policy
+
+Status: complete documentation-only. State slice:
+`phase-787-hsai-formal-executable-role-registry-machine-policy`.
+
+Phase 787 resolves Phase 780 lane `L09` at the immutable contract-input level.
+It freezes 26 executable roles, four acceptance-policy classes, exact complete
+role bindings for all 83 `E83` rows, the external machine-policy schema, the
+attempt-specific identity-observation schema, and exact native grammar-selector
+inputs for `codesign`, `spctl`, and `otool`.
+
+No host path, symlink chain, device, inode, owner, mode, executable SHA-256,
+platform observation, or concrete policy instance is published. Historical
+Phase 779 JSONL, all 1,469 blockers, all 102 blocked rows, and the absent
+source-ledger digest remain unchanged. Resolved lanes are `L01-L04,L09`; open
+lanes are `L05-L08,L10-L11`. Phase 788 is documentation-first only for the
+`P01` fixture-acquisition protocol and readiness audit. See
+`docs/787-phase-hsai-formal-executable-role-registry-machine-policy.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
