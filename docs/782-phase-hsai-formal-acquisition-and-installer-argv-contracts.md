@@ -245,6 +245,15 @@ remain, and the closure schedule is stopped pending an explicit route and
 operation-order correction. Phase 784's previously assigned `L05` work is not
 authorized.
 
+Phase 784 subsequently resolves that correction in
+`docs/784-phase-hsai-formal-helper-pre-use-route-correction.md`. `L04` closes
+without changing the 102-operation order. Its corrected forward schedule
+supersedes this document's earlier phase-number references: mutable-output
+inventory is Phase 788, executable-role acceptance is Phase 789, canonical
+JSONL is Phase 790, and successor-ledger expansion is Phases 791-793. The
+ordinal-016 Rustup inventory and acquisition-cap reconciliation therefore
+remain Phase 791 row-expansion work.
+
 ## Claim Boundary
 
 Phase 782 creates argv-contract metadata only. It is not an executable source

@@ -131,6 +131,18 @@ Phase 784's previously assigned `L05` native-transcript work is deferred. A
 future phase number may not be assumed from the stale Phase 780 schedule. No
 later lane may proceed until the route correction explicitly reauthorizes it.
 
+## Phase 784 Forward Resolution
+
+Phase 784 subsequently resolves this stop in
+`docs/784-phase-hsai-formal-helper-pre-use-route-correction.md`. It narrowly
+supersedes Phase 759's child-based hash mechanism with six typed in-process
+identity acceptances, freezes no-bytecode compile and explicit focused-test
+argv arrays, clarifies top-level command cardinality, preserves the Phase 778
+102-operation order and digest, and closes `L04` at the contract-input level.
+`L05` through `L11` remain open. The corrected schedule assigns native
+transcript work to Phase 785 and the earliest possible plan-v2 boundary to
+Phase 795.
+
 ## Source Correspondence
 
 | Conflict or fact | Controlling source |

@@ -1058,6 +1058,16 @@ all 102 blocked rows, and the absent source-ledger digest remain unchanged.
 `L04` through `L11` stay open; the closure schedule requires explicit route
 and operation-order correction before native-transcript work.
 
+[docs/784-phase-hsai-formal-helper-pre-use-route-correction.md](docs/784-phase-hsai-formal-helper-pre-use-route-correction.md)
+records the Phase 784 resolution of that conflict and Phase 780 lane `L04`.
+Six exact Phase 749 files now require typed descriptor-relative in-process
+identity acceptance before use, so no helper-hash child row is added. Exact
+no-bytecode compile and explicit three-module unittest argv arrays preserve the
+Phase 778 102-operation order and digest. Historical Phase 779 JSONL, all 1,469
+blockers, all 102 blocked rows, and the absent source-ledger digest remain
+unchanged. `L05` through `L11` stay open; Phase 785 is the next authorized
+documentation-first native-transcript lane under the corrected schedule.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

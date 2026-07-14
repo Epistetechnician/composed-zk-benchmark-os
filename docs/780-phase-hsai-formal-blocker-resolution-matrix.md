@@ -215,3 +215,15 @@ Phase 779 JSONL and its 1,469 blockers remain unchanged, all 102 rows remain
 blocked, and no source-ledger digest exists. The ordered closure program is
 stopped pending an explicit route and operation-order correction; Phase 784's
 previously assigned `L05` work is not authorized.
+
+Phase 784 subsequently resolves the route conflict and `L04` in
+`docs/784-phase-hsai-formal-helper-pre-use-route-correction.md`. Six exact
+Phase 749 file identities now use typed descriptor-relative in-process
+acceptance, so no helper-hash child row is added. Exact no-bytecode compile and
+explicit three-module unittest argv arrays preserve the 102-operation order
+and its digest. The historical matrix's lane definitions remain authoritative,
+but its assigned phases are superseded from `L05` onward: Phases 785-790
+resolve `L05`-`L10`, Phases 791-793 expand `L11`, Phase 794 performs the
+conditional whole-ledger audit, and Phase 795 is the earliest possible plan-v2
+boundary. Historical Phase 779 JSONL and its 1,469 blockers remain unchanged,
+all 102 rows remain blocked, and no source-ledger digest exists.
