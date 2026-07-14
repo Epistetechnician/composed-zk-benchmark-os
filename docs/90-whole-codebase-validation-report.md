@@ -1119,6 +1119,18 @@ corpus capture, and `L05` grammar closure distinct. Static review confirms that
 Phase 789 runs nothing, closes no lane, preserves the historical blocker state,
 and moves the earliest plan-v2 boundary to Phase 801.
 
+[docs/790-phase-hsai-native-transcript-preparation-candidate-validation.md](docs/790-phase-hsai-native-transcript-preparation-candidate-validation.md)
+records the next fail-closed implementation slice. The standalone
+`hsai-native-transcript-preparation` crate validates only caller-supplied
+policy, platform, identity-fact, owned-tool, target, sandbox, root, and reviewer
+declarations. It exposes no host collector or authority input and always emits
+`materialization_accepted=false` and `capture_authorized=false`. Eight focused
+integration tests pass. Static source review confirms no filesystem, process,
+environment, or network API exists in
+the crate. `P01B` remains stopped; no lane closes; earliest plan v2 moves to
+Phase 806 behind a safe collector, driver, conditional materialization,
+capture, grammar closure, row expansion, and independent audit.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

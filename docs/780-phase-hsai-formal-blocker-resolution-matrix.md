@@ -179,6 +179,15 @@ the Phase 778 order digest, zero blockers, no capability-source discrepancy,
 complete role coverage, and byte-identical canonicalization under two
 independent implementations. Only then may it publish a source-ledger digest.
 
+## Phase 790 Forward Result
+
+The historical assigned phases above are retained as routing history. Phases
+786-790 exposed additional prerequisite ordering. Phase 790 implemented a
+pure-data preparation-candidate validator but did not materialize `P01B`.
+`L05-L08,L10-L11` remain open. The current forward schedule, including the
+earliest Phase 806 plan-v2 boundary, is authoritative in
+`docs/790-phase-hsai-native-transcript-preparation-candidate-validation.md`.
+
 ## Claim Boundary
 
 This matrix is routing metadata. It is not a source-ledger correction,
