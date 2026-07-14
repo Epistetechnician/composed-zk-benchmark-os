@@ -1090,6 +1090,16 @@ Phase 779 JSONL, all 1,469 blockers, all 102 blocked rows, and the absent
 source-ledger digest remain unchanged. Phase 787 is documentation-first only
 for `L09`.
 
+[docs/787-phase-hsai-formal-executable-role-registry-machine-policy.md](docs/787-phase-hsai-formal-executable-role-registry-machine-policy.md)
+records Phase 787 closure of `L09` at the immutable contract-input level. The
+registry defines 26 roles, four acceptance-policy classes, exact complete
+bindings for all 83 `E83` rows, an external machine-policy schema, an
+attempt-specific observation schema, and exact `darwin-native-v1` selector
+inputs. Machine paths and observations remain external. Historical Phase 779
+JSONL, all 1,469 blockers, all 102 blocked rows, and the absent source-ledger
+digest remain unchanged. Resolved lanes are `L01-L04,L09`; Phase 788 is next
+for the documentation-first `P01` fixture-acquisition readiness audit.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

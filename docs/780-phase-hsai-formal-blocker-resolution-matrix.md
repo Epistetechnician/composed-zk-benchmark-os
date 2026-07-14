@@ -249,3 +249,13 @@ prior downstream schedule; Phase 799 is the earliest possible plan-v2 boundary
 and remains conditional on Phase 798 whole-ledger success. Historical Phase
 779 JSONL and its 1,469 blockers remain unchanged, all 102 rows remain blocked,
 and no source-ledger digest exists.
+
+Phase 787 subsequently resolves `L09` at the immutable contract-input level in
+`docs/787-phase-hsai-formal-executable-role-registry-machine-policy.md`.
+The complete registry has 26 roles and exact bindings for all 83 `E83` rows,
+with machine-specific path, owner, mode, symlink, device/inode, digest, and
+platform observations remaining external. Resolved lanes are `L01-L04,L09`;
+open lanes are `L05-L08,L10-L11`. Historical Phase 779 JSONL and its 1,469
+blockers remain unchanged, all 102 rows remain blocked, and no source-ledger
+digest exists. Phase 788 is next for the documentation-first `P01` native
+transcript fixture-acquisition protocol and readiness audit.

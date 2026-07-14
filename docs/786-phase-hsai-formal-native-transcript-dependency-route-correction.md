@@ -251,3 +251,15 @@ binding, backend result, generated Lean, retained kernel result, proof artifact,
 checker transcript, accepted evidence, Level2+, score axis, semantic
 correctness, production readiness, SOTA, breakthrough, full security, external
 audit, or action authority.
+
+## Phase 787 Forward Result
+
+Phase 787 subsequently resolves `L09` at the immutable contract-input level in
+`docs/787-phase-hsai-formal-executable-role-registry-machine-policy.md`.
+It publishes 26 role definitions, four acceptance-policy classes, exact role
+bindings for all 83 `E83` rows, an external machine-policy schema, an
+attempt-specific observation schema, and exact `darwin-native-v1` selector
+inputs. It records no machine observation or executable digest. `L05` through
+`L08`, `L10`, and `L11` remain open. Phase 788 is authorized
+documentation-first only for the `P01` fixture-acquisition protocol and
+readiness audit.
