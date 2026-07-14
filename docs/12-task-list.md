@@ -20169,6 +20169,29 @@ the earliest plan-v2 boundary. No lane closes and no execution is authorized.
 See
 `docs/789-phase-hsai-formal-native-transcript-capture-prerequisite-route-correction.md`.
 
+## Phase 790 HSAI Native Transcript Preparation Candidate Validation
+
+Status: pure-data validator implemented; `P01B` materialization stopped. State
+slice: `phase-790-hsai-native-transcript-preparation-candidate`.
+
+Phase 790 adds the standalone `hsai-native-transcript-preparation` crate. It
+validates closed caller-supplied declarations for the reviewed machine-policy
+digest, platform, eight host roles, two owned Rust tools, six target receipts,
+the fixed archive/commit/sandbox inputs, capture-root absence, and reviewer
+separation. The candidate schema has no capture-authority input and validation
+always returns `materialization_accepted=false` and
+`capture_authorized=false`.
+
+The crate performs no filesystem, process, environment, network, acquisition,
+build, root-materialization, or reviewer-authentication work. A pathname-based
+collector was rejected before commit because terminal `O_NOFOLLOW` does not
+protect ancestor traversal from replacement races. Safe fact collection now
+requires a descriptor-relative boundary in Phase 791. Materialization remains
+conditional no earlier than Phase 795; capture no earlier than Phase 796; the
+earliest possible plan-v2 boundary is Phase 806. No lane closes and the Phase
+779 blocker state is unchanged. See
+`docs/790-phase-hsai-native-transcript-preparation-candidate-validation.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

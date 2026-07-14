@@ -1,0 +1,11 @@
+[package]
+name = "hsai-native-transcript-preparation"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "Pure-data validation for HSAI native-transcript preparation candidates."
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"

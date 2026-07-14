@@ -258,6 +258,14 @@ The phase number is not evidence. Any failed preparation, capture, grammar,
 inventory, row-expansion, canonicalization, or independent-audit gate produces
 another stop.
 
+## Phase 790 Forward Result
+
+Phase 790 implemented only the pure-data preparation-candidate validator and
+stopped before `P01B`. It found that pathname resolution plus terminal
+`O_NOFOLLOW` was insufficient for race-safe host identity collection. The
+superseding schedule and earliest Phase 806 plan-v2 boundary are recorded in
+`docs/790-phase-hsai-native-transcript-preparation-candidate-validation.md`.
+
 ## Post-Plan Boundary
 
 Capture-only identity observations do not resolve the 102-row campaign
