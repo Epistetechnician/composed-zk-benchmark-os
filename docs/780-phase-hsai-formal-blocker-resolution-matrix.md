@@ -196,3 +196,11 @@ The successor ledger must restore rows 036, 037, 059, and 060 to
 `host-offline`, producing the corrected partition 10 external-acquisition, 63
 host-offline, and 29 sandbox-closed rows. `L02` through `L11` remain open, all
 102 rows remain blocked, and Phase 782 is the next authorized docs-first lane.
+
+Phase 782 subsequently resolves `L02` and `L03` in
+`docs/782-phase-hsai-formal-acquisition-and-installer-argv-contracts.md`.
+The four downloader and one isolated Rust installer argv contracts are exact
+inputs to successor-ledger expansion. `L04` through `L11` remain open,
+historical Phase 779 JSONL and its 1,469 blockers remain unchanged, all 102
+rows remain blocked, no source-ledger digest exists, and Phase 783 is the next
+authorized docs-first lane.

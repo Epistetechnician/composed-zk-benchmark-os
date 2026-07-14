@@ -117,6 +117,11 @@ rows, resolve machine observations, create attempt roots, publish a
 source-ledger digest, or run any producer. Phase 783 and later lanes remain
 blocked behind the Phase 780 order.
 
+Phase 782 subsequently completed in
+`docs/782-phase-hsai-formal-acquisition-and-installer-argv-contracts.md`. It
+resolves `L02` and `L03` without changing this historical gate or Phase 779
+JSONL. `L04` through `L11` remain open, and Phase 783 is next.
+
 ## Claim Boundary
 
 Phase 781 is source-correspondence metadata. It is not an executable ledger,

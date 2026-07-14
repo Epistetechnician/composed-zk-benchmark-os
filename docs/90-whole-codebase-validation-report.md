@@ -1039,6 +1039,15 @@ while unresolved extractor roles on rows 036 and 037 remain blocked. The
 historical ledger, 1,469 blockers, 102 blocked rows, and no-digest boundary are
 unchanged.
 
+[docs/782-phase-hsai-formal-acquisition-and-installer-argv-contracts.md](docs/782-phase-hsai-formal-acquisition-and-installer-argv-contracts.md)
+records Phase 782 resolution of Phase 780 lanes `L02` and `L03`. It freezes
+four complete curl argv arrays and one isolated noninteractive Rustup argv
+array with exact URLs, output paths, toolchain token, profile, and component
+requests. Executable-role machine acceptance remains deferred to Phase 788;
+historical Phase 779 JSONL, all 1,469 blockers, all 102 blocked rows, and the
+absent source-ledger digest remain unchanged. Phase 783 is the next authorized
+documentation-first helper-order lane.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
