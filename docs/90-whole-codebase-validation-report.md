@@ -1048,6 +1048,16 @@ historical Phase 779 JSONL, all 1,469 blockers, all 102 blocked rows, and the
 absent source-ledger digest remain unchanged. Phase 783 is the next authorized
 documentation-first helper-order lane.
 
+[docs/783-phase-hsai-formal-helper-pre-use-ordering-stop.md](docs/783-phase-hsai-formal-helper-pre-use-ordering-stop.md)
+records a source-correspondence stop before Phase 780 lane `L04` closure.
+Phase 759 requires three helper-hash child producers before ordinal 007, but
+Phase 771 requires one operation per child and the fixed Phase 778 order has
+no helper-hash rows. The inherited `py_compile` validation shape also creates
+undeclared bytecode output. Historical Phase 779 JSONL, all 1,469 blockers,
+all 102 blocked rows, and the absent source-ledger digest remain unchanged.
+`L04` through `L11` stay open; the closure schedule requires explicit route
+and operation-order correction before native-transcript work.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
