@@ -19991,6 +19991,23 @@ specialized blocker contracts or successor row expansion. Plan-v2 remains
 prohibited before an independently audited zero-blocker ledger. See
 `docs/780-phase-hsai-formal-blocker-resolution-matrix.md`.
 
+## Phase 781 HSAI Formal Capability Source Correspondence Correction
+
+Status: complete documentation-only. State slice:
+`phase-781-hsai-formal-capability-source-correspondence-correction`.
+
+Phase 781 restores rows 036, 037, 059, and 060 to `host-offline`, matching the
+later operation-specific materialization contracts. Controlled loopback
+precedes sandbox control row 070, and controls 070-072 precede the first
+build/backend row, 073. Corrected counts are 10 external-acquisition, 63
+host-offline, and 29 sandbox-closed rows. Rows 059 and 060 retain only
+`ZSTD_EXE` and `TAR_EXE`; rows 036 and 037 remain role-blocked.
+
+Historical Phase 779 JSONL remains unchanged. All 1,469 blockers and 102
+blocked rows remain, and no ledger digest exists. Phase 782 is next for the
+four downloader and one installer argv contracts. See
+`docs/781-phase-hsai-formal-capability-source-correspondence-correction.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

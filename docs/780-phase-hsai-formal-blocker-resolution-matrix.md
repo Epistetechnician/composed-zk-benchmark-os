@@ -189,3 +189,10 @@ Phase 780 creates no generated Lean, retained kernel result, proof artifact,
 checker transcript, accepted evidence, Level2+, score axis, semantic
 correctness, production readiness, SOTA, breakthrough, full security,
 external audit, or action authority.
+
+Phase 781 subsequently resolves `L01` in
+`docs/781-phase-hsai-formal-capability-source-correspondence-correction.md`.
+The successor ledger must restore rows 036, 037, 059, and 060 to
+`host-offline`, producing the corrected partition 10 external-acquisition, 63
+host-offline, and 29 sandbox-closed rows. `L02` through `L11` remain open, all
+102 rows remain blocked, and Phase 782 is the next authorized docs-first lane.
