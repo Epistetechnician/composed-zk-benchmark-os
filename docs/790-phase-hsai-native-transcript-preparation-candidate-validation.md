@@ -141,3 +141,10 @@ acceptance operation, plan v2, executor binding, backend execution, generated
 Lean, an SMT or COBALT run, a proof artifact, checker transcript, accepted
 evidence, Level2+, a score axis, semantic correctness, production readiness,
 SOTA, breakthrough, full security, external audit, or action authority.
+
+## Phase 791 Forward Result
+
+Phase 791 completed the descriptor-relative collector boundary without adding
+or running collector code. Phase 792 is the only conditional implementation
+route and must satisfy
+`docs/791-phase-hsai-native-transcript-descriptor-relative-collector-boundary.md`.
