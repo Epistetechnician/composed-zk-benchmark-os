@@ -237,3 +237,9 @@ machine-resolved attempt, backend result, generated Lean, retained kernel
 result, proof artifact, checker transcript, accepted evidence, Level2+, score
 axis, semantic correctness, production readiness, SOTA, breakthrough, full
 security, external audit, or action authority.
+
+Phase 779 subsequently expands all 102 rows with every required field and
+explicit typed blockers in
+`docs/779-phase-hsai-formal-source-ledger-expansion.md`. All rows remain
+blocked and no source-ledger digest exists. Phase 780 must map each blocker to
+an exact closure contract before implementation.

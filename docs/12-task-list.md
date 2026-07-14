@@ -19956,6 +19956,22 @@ The order digest binds membership and order only. Phase 779 must expand all
 row fields without source mutation or producer execution. See
 `docs/778-phase-hsai-formal-execution-operation-order-correction.md`.
 
+## Phase 779 HSAI Formal Source Ledger Expansion
+
+Status: complete documentation-only. State slice:
+`phase-779-hsai-formal-source-ledger-expansion`.
+
+Phase 779 expands all 102 ordered commands into field-complete JSONL rows.
+Ordinals, IDs, capability classes, three unique transcript paths, 28 native
+outcomes, and selected immutable executable roles are exact. Every unsupported
+controlling source, argv, cwd, environment, bound, outcome, artifact,
+acceptance, placeholder, or executable-role field carries a typed
+blocker. All 102 rows remain blocked, so no source-ledger digest exists.
+
+Phase 780 must map every blocker cause to exact sources, affected operations
+and fields, outputs, review criteria, exit gates, and canonicalization. See
+`docs/779-phase-hsai-formal-source-ledger-expansion.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

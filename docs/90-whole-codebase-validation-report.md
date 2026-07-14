@@ -1012,6 +1012,14 @@ and precede extraction; network closure, loopback, sandbox, kernel,
 cleanup, and final-primary constraints are preserved. No ledger or producer
 exists.
 
+[docs/779-phase-hsai-formal-source-ledger-expansion.md](docs/779-phase-hsai-formal-source-ledger-expansion.md)
+expands the 102-command order into closed field-complete JSONL rows. Exact
+ordinals, IDs, capabilities, transcript paths, 28 native outcomes, and selected
+immutable executable roles coexist with typed blockers for every unsupported
+field, including exact row-level controlling sources and placeholders. All
+rows remain blocked; no source-ledger digest, plan, executor, machine
+resolution, or producer exists.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
