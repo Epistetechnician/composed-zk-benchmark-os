@@ -1014,11 +1014,20 @@ exists.
 
 [docs/779-phase-hsai-formal-source-ledger-expansion.md](docs/779-phase-hsai-formal-source-ledger-expansion.md)
 expands the 102-command order into closed field-complete JSONL rows. Exact
-ordinals, IDs, capabilities, transcript paths, 28 native outcomes, and selected
-immutable executable roles coexist with typed blockers for every unsupported
-field, including exact row-level controlling sources and placeholders. All
-rows remain blocked; no source-ledger digest, plan, executor, machine
-resolution, or producer exists.
+ordinals, IDs, transcript paths, 28 native outcomes, and selected immutable
+executable roles coexist with declared capabilities and typed blockers for
+every unsupported field, including unresolved exact row-level controlling
+sources and placeholders. All rows remain blocked; no source-ledger digest,
+plan, executor, machine resolution, or producer exists. Phase 780 later
+disputes capability source correspondence for rows 036, 037, 059, and 060.
+
+[docs/780-phase-hsai-formal-blocker-resolution-matrix.md](docs/780-phase-hsai-formal-blocker-resolution-matrix.md)
+recomputes 1,469 JSONL blockers across nine causes, assigns canonical JSONL
+serialization, and identifies a separate capability-source discrepancy on
+rows 036, 037, 059, and 060. Its eleven-lane matrix names exact operation sets,
+fields, source inputs, immutable outputs, review criteria, exit gates, and
+ordered successor phases. It resolves no row and preserves the no-digest,
+no-plan, and no-execution boundary.
 
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator

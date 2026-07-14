@@ -17,9 +17,11 @@ Phase 779 expands all 102 Phase 778 ordinary command IDs into closed
 no additional key is permitted. Exact values use `kind=resolved`; unsupported
 values use nonempty blocker references.
 
-Ordinal, operation ID, capability, and three unique transcript paths are exact.
-Phase 776 also resolves 28 native expected outcomes and immutable Git, zstd,
-and tar executable roles. All other fields remain fail-closed.
+Ordinal, operation ID, and three unique transcript paths are exact. Capability
+values are declared in every row, but Phase 780 later disputes source
+correspondence for four materialization rows. Phase 776 also resolves 28 native
+expected outcomes and immutable Git, zstd, and tar executable roles. All other
+fields remain fail-closed.
 
 All 102 rows are `blocked`. Therefore no source-ledger SHA-256 is published,
 and the document creates no executable plan or execution authority.
@@ -179,6 +181,10 @@ not authoring blockers.
 
 ## Mechanical Expansion Results
 
+These are Phase 779's declared row values. Phase 780 does not accept the
+capability split as source-correspondent until rows 036, 037, 059, and 060 are
+resolved.
+
 ```text
 row_count=102
 unique_operation_id_count=102
@@ -231,3 +237,12 @@ machine-resolved attempt, backend result, generated Lean, retained kernel
 result, proof artifact, checker transcript, accepted evidence, Level2+, score
 axis, semantic correctness, production readiness, SOTA, breakthrough, full
 security, external audit, or action authority.
+
+Phase 780 subsequently audits all blocker families in
+`docs/780-phase-hsai-formal-blocker-resolution-matrix.md`. It finds that rows
+036, 037, 059, and 060 have a capability-source correspondence discrepancy:
+their Phase 779 `sandbox-closed` values lack an explicit supersession of the
+earlier `host-offline` contracts. The Phase 779 JSONL remains an immutable
+blocked historical artifact; its declared capability counts are not accepted
+source correspondence. Phase 781 must resolve that discrepancy before any
+row-expansion successor.

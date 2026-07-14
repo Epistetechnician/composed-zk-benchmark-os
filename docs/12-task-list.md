@@ -19962,15 +19962,34 @@ Status: complete documentation-only. State slice:
 `phase-779-hsai-formal-source-ledger-expansion`.
 
 Phase 779 expands all 102 ordered commands into field-complete JSONL rows.
-Ordinals, IDs, capability classes, three unique transcript paths, 28 native
-outcomes, and selected immutable executable roles are exact. Every unsupported
-controlling source, argv, cwd, environment, bound, outcome, artifact,
-acceptance, placeholder, or executable-role field carries a typed
+Ordinals, IDs, declared capability classes, three unique transcript paths, 28
+native outcomes, and selected immutable executable roles are recorded. Every
+unsupported controlling source, argv, cwd, environment, bound, outcome,
+artifact, acceptance, placeholder, or executable-role field carries a typed
 blocker. All 102 rows remain blocked, so no source-ledger digest exists.
+
+Phase 780 later disputes the capability source correspondence for rows 036,
+037, 059, and 060; Phase 779's capability split is not accepted ledger truth.
 
 Phase 780 must map every blocker cause to exact sources, affected operations
 and fields, outputs, review criteria, exit gates, and canonicalization. See
 `docs/779-phase-hsai-formal-source-ledger-expansion.md`.
+
+## Phase 780 HSAI Formal Blocker Resolution Matrix
+
+Status: complete documentation-only. State slice:
+`phase-780-hsai-formal-blocker-resolution-matrix`.
+
+Phase 780 recomputes 1,469 blocker objects across nine JSONL causes, assigns
+canonical serialization, and records a separate source-correspondence stop for
+the capability values on rows 036, 037, 059, and 060. It routes eleven closure
+lanes through Phases 781-793. It resolves no row, publishes no source-ledger
+digest, and authorizes no execution.
+
+Phase 781 must resolve the four-row capability-source correspondence before
+specialized blocker contracts or successor row expansion. Plan-v2 remains
+prohibited before an independently audited zero-blocker ledger. See
+`docs/780-phase-hsai-formal-blocker-resolution-matrix.md`.
 
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
