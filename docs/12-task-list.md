@@ -20008,6 +20008,28 @@ blocked rows remain, and no ledger digest exists. Phase 782 is next for the
 four downloader and one installer argv contracts. See
 `docs/781-phase-hsai-formal-capability-source-correspondence-correction.md`.
 
+## Phase 782 HSAI Formal Acquisition And Installer Argv Contracts
+
+Status: complete documentation-only. State slice:
+`phase-782-hsai-formal-acquisition-and-installer-argv-contracts`.
+
+Phase 782 resolves Phase 780 lanes `L02` and `L03` by freezing the complete
+ordered argv arrays for downloader ordinals 015, 033, 034, and 058 and Rust
+installer ordinal 016. The downloader contract disables curl configuration,
+permits HTTPS only with TLS 1.2 or later, rejects URL usernames, bounds
+redirects and timing, disables retries and overwrite, removes failed outputs,
+binds exact output paths, and retains the existing size and SHA-256 pins. The
+installer contract uses a future accepted absolute Rustup role,
+the full dated Darwin arm64 toolchain token, explicit minimal profile, and four
+additive components yielding the exact required seven-component inventory,
+with rustup self-update disabled.
+
+Executable-role paths and digests remain Phase 788 work. Historical Phase 779
+JSONL, all 1,469 blockers, all 102 blocked rows, and the no-digest boundary are
+unchanged. `L04` through `L11` remain open. Phase 783 is next for exact helper
+compile/test file and module order. See
+`docs/782-phase-hsai-formal-acquisition-and-installer-argv-contracts.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
