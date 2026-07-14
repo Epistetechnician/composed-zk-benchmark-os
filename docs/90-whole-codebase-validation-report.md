@@ -1079,6 +1079,17 @@ Historical Phase 779 JSONL, all 1,469 blockers, all 102 blocked rows, and the
 absent source-ledger digest remain unchanged. `L05` through `L11` stay open;
 Phase 786 is restricted to documentation-first route correction.
 
+[docs/786-phase-hsai-formal-native-transcript-dependency-route-correction.md](docs/786-phase-hsai-formal-native-transcript-dependency-route-correction.md)
+records the Phase 786 correction of the `L05`/`L09` dependency order. It
+resolves no lane and authorizes no native capture. `L09` executable-role and
+machine-policy authority now precedes a fixture-acquisition protocol and
+readiness audit, conditional identity-bound corpus capture, and `L05` grammar
+closure. The corrected downstream schedule ends with Phase 798 whole-ledger
+audit and makes Phase 799 the earliest possible plan-v2 boundary. Historical
+Phase 779 JSONL, all 1,469 blockers, all 102 blocked rows, and the absent
+source-ledger digest remain unchanged. Phase 787 is documentation-first only
+for `L09`.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

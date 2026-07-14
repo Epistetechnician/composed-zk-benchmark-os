@@ -20093,6 +20093,27 @@ fixture-acquisition route correction; Phase 786's previously assigned `L06`
 work is not authorized. See
 `docs/785-phase-hsai-formal-native-transcript-fixture-provenance-stop.md`.
 
+## Phase 786 HSAI Formal Native Transcript Dependency Route Correction
+
+Status: complete documentation-only. State slice:
+`phase-786-hsai-formal-native-transcript-dependency-route-correction`.
+
+Phase 786 resolves no Phase 780 lane. It corrects the invalid ordering that
+placed identity-bound `L05` transcript grammar work before `L09` executable-role
+and machine-policy authority. The corrected route places `L09` first, followed
+by a documentation-first fixture-acquisition protocol and readiness audit, a
+conditional identity-bound local corpus capture, and only then `L05` grammar,
+typed-output, acceptance-ID, and fixture closure.
+
+The corrected schedule assigns Phase 787 to `L09`, Phase 788 to capture
+readiness, Phase 789 to conditional local corpus capture, Phase 790 to `L05`,
+Phases 791-794 to `L06`, `L07`, `L08`, and `L10`, Phases 795-797 to `L11`,
+Phase 798 to conditional whole-ledger audit, and Phase 799 to the earliest
+possible plan-v2 boundary. Historical Phase 779 JSONL, all 1,469 blockers, all
+102 blocked rows, and the absent source-ledger digest remain unchanged. Phase
+787 is documentation-first only. See
+`docs/786-phase-hsai-formal-native-transcript-dependency-route-correction.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
