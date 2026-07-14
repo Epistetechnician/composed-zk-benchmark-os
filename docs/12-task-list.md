@@ -20030,6 +20030,26 @@ unchanged. `L04` through `L11` remain open. Phase 783 is next for exact helper
 compile/test file and module order. See
 `docs/782-phase-hsai-formal-acquisition-and-installer-argv-contracts.md`.
 
+## Phase 783 HSAI Formal Helper Pre-Use Ordering Stop
+
+Status: stopped documentation-only. State slice:
+`phase-783-hsai-formal-helper-pre-use-ordering-stop`.
+
+Phase 783 does not resolve Phase 780 lane `L04`. Phase 759 requires three
+separate helper-hash child producers before ordinal 007, Phase 771 requires one
+operation per child invocation, and the fixed Phase 778 102-operation order
+contains no helper-hash rows. The inherited `python3 -m py_compile` validation
+shape also writes bytecode, while no typed output, placement, or cleanup
+contract exists. Exact helper and test sets are recorded, but their candidate
+argv arrays are not accepted contracts.
+
+Historical Phase 779 JSONL, all 1,469 blockers, all 102 blocked rows, and the
+no-digest boundary are unchanged. `L04` through `L11` remain open. The ordered
+closure program is stopped pending an explicit route and operation-order
+correction; Phase 784's previously assigned native-transcript work is not
+authorized. See
+`docs/783-phase-hsai-formal-helper-pre-use-ordering-stop.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

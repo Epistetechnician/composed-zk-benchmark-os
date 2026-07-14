@@ -236,6 +236,15 @@ ordered committed file and module sets. It may not rewrite historical Phase
 run a helper, test, producer, network command, Rustup, Cargo, Charon, Aeneas,
 Lean, Lake, native audit, sandbox, SMT, Z3, COBALT, or kernel command.
 
+Phase 783 subsequently stops before resolving `L04` in
+`docs/783-phase-hsai-formal-helper-pre-use-ordering-stop.md`. The inherited
+Phase 759 helper-hash producers have no operations in the fixed Phase 778
+order, and the inherited `py_compile` shape has undeclared bytecode output.
+`L04` through `L11` remain open, all historical blockers and blocked rows
+remain, and the closure schedule is stopped pending an explicit route and
+operation-order correction. Phase 784's previously assigned `L05` work is not
+authorized.
+
 ## Claim Boundary
 
 Phase 782 creates argv-contract metadata only. It is not an executable source
