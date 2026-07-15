@@ -1337,6 +1337,39 @@ unauthorized. The corrected route requires a docs-first implementation
 boundary, implementation, hermetic tests including synthetic C09, and
 clean-commit audit before a separate synthetic-run decision.
 
+[docs/796a3l2-phase-hsai-p01b-linux-container-implementation-boundary.md](docs/796a3l2-phase-hsai-p01b-linux-container-implementation-boundary.md)
+records the docs-only Phase 796-A3L2 corpus/profile code authorization. The
+future state slice is exactly six runtime/data files and five documentation
+files: a read-only checker, expanded corpus, pinned seccomp bytes, upstream
+license, canonical provenance, one hermetic test module, one exact phase note,
+and standard mirrors. Cargo and external Python dependencies remain forbidden.
+The implementation is a six-file candidate commit followed by a five-file
+audit/documentation commit. The cumulative range is exactly eleven paths; the
+phase note is not self-hashed and obtains its identity from the final Git tree.
+
+Static validation binds the Moby profile to peeled commit `836ae4d`, 13,470
+bytes, and SHA-256
+`536529b665dd0972c37bfb569f5d4ac8a53592e7b00752bc39ff063ca9864c74`.
+Checker-owned code may not import or call subprocess or socket, use network or
+Docker, inspect a container, write runtime files, parse an archive, or implement
+a transport. TestLoader may transitively import only the frozen suite modules
+without executing tests. Provenance embeds the exact 135-byte `ls-remote`
+output and its SHA-256.
+The corpus schema digest is
+`3494d76c1e9b0cd29ac00218b7aac06f55213fae9fca862d19c740eebb0adac2`;
+the provenance schema digest is
+`31f43727cb321bc0943019bc0a6d48c36900047a64e0cf2db2b62d1ebab8260f`.
+The clean-audit schema digest is
+`544da1c5356c622e56960059b68f31e46bb521673ce76e3c8ae140c6ce84b305`.
+
+The canonical 3106-byte implementation-boundary digest is
+`a9e43d8d354759f7a55f45b9ef650e3e36c108dc3d30f09844b1cd3688c29f8a`.
+Two independent final re-reviews return `ACCEPT` with zero findings for this
+corrected documentation state only.
+Only the narrow A3L3 implementation is authorized. Driver, probe, Docker,
+container, archive, backend, accepted-evidence, Level2+, and stronger-claim
+authority remain false.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
