@@ -20291,6 +20291,32 @@ closure, source-ledger digest, plan v2, backend result, or accepted evidence is
 created. The earliest possible plan-v2 boundary moves to Phase 809. See
 `docs/795-phase-hsai-external-attempt-authorization-p01b-materialization-boundary.md`.
 
+## Phase 796 HSAI P01B Execution Correspondence and Transaction Authority Stop
+
+Status: complete documentation-only audit; `P01B` materialization remains
+stopped. State slice:
+`phase-796-hsai-p01b-execution-correspondence-transaction-authority-stop`.
+
+Phase 796 finds that the Phase 795 conditional exit is not satisfied. The
+operation-family order is known, but documented macOS interfaces do not provide
+the required verified-descriptor launch primitive; the pinned Aeneas archive's
+exact gzip/TAR header ledger and ordered member rows were not retained; the
+per-member and aggregate extraction bounds are not frozen; the
+Cargo/Rustc/build-script/linker/SDK/loader trust-root census has not been
+observed; trusted-time and anti-rollback compare-and-swap authorities are not
+provisioned; and all 56 operation wires are not byte-complete.
+
+Therefore `preparation_contract_sha256` is absent, Phase 797 is unauthorized,
+and `materialization_authorized=false` and `capture_authorized=false` remain
+fixed. Remediation is ordered as archive-ledger acquisition and extraction-bound
+closure, strict launch-architecture decision, offline
+build-child census, transaction-authority provisioning,
+field-complete operation rows, and independent zero-gap audit. No Rust, Cargo,
+source acquisition, archive read, process, network, filesystem materialization,
+journal mutation, plan, backend execution, accepted evidence, Level2+, semantic
+correctness, production readiness, SOTA, or full-security claim is created. See
+`docs/796-phase-hsai-p01b-execution-correspondence-transaction-authority-stop.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
