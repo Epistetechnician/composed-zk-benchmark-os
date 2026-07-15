@@ -20590,6 +20590,31 @@ synthetic evidence under explicit local runtime-honesty assumptions, with
 moat/evidence estimates capped at 4/10. See
 `docs/796a3l5-phase-hsai-p01b-retained-container-execution-evidence-boundary.md`.
 
+## Phase 796-A3L5C HSAI P01B Retained Container Boundary Correction
+
+Status: complete as a documentation-only correction. State slice:
+`phase-796a3l5c-hsai-p01b-retained-container-boundary-correction`.
+
+The correction replaces only the conflicting A3L5 wire/order/recovery/gate and
+review sections. It freezes an acyclic candidate -> exclusive publication ->
+decision -> fresh session/reviews -> aggregate -> acceptance graph, exactly
+200 candidate payloads plus manifest file 201, exactly 270 publication events,
+total deterministic recovery, complete raw provenance, an exact five-file A3L6
+code surface, an immutable sandboxed 21-Git-blob gate source, and atomic
+C02-C07/C09/C10 reconstruction. The canonical claim-boundary object binds all
+seven honesty assumptions and ten nonclaims through final acceptance.
+
+The exact correction SHA-256 is
+`bf42bce535863e8bff3c6343d43d3ce2ab653ace39e6945535f93525ccde9de0`;
+two independent reviews returned zero findings. No Docker, registry, container,
+native, normal, OOM, publication, decision, review, or acceptance execution ran.
+Correspondence remains 2/10, commercial moat 3/10, and defensible breakthrough
+evidence 2-3/10. The stopped A3L6 draft remains rejected/untracked. Next: bring
+exactly the five A3L6 Python files into conformance, obtain immutable-source
+gate results and two code reviews, then and only then run A3L7 readiness.
+See
+`docs/796a3l5c-phase-hsai-p01b-retained-container-boundary-correction.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

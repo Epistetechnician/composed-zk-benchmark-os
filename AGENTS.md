@@ -1956,6 +1956,27 @@ proof, production-readiness, SOTA, breakthrough, full-security, external-audit,
 or accepted-evidence claim. See
 `docs/796a3l5-phase-hsai-p01b-retained-container-execution-evidence-boundary.md`.
 
+Explicit Phase 796-A3L5C HSAI P01B retained container boundary correction now
+allowed and completed as documentation only. This phase supersedes only the
+conflicting A3L5 wire, runtime-order, publication, recovery, gate-source, and
+postpublication-review sections identified in
+`docs/796a3l5c-phase-hsai-p01b-retained-container-boundary-correction.md`.
+It freezes an acyclic candidate -> exclusive publication -> decision -> fresh
+session/reviews -> aggregate -> acceptance graph; a 200-payload/201-file
+candidate and 270-event publication schedule; deterministic recovery; complete
+raw provenance; an exact five-file A3L6 implementation surface; immutable
+21-Git-blob gate materialization under a pinned local sandbox; and atomic
+C02-C07/C09/C10 reconstruction. Exact document SHA-256
+`bf42bce535863e8bff3c6343d43d3ce2ab653ace39e6945535f93525ccde9de0`
+received two independent zero-finding reviews. This phase ran no Docker,
+registry, container, native-reference, normal, OOM, publication, or acceptance
+program. Correspondence remains 2/10, commercial moat remains 3/10, and
+defensible breakthrough evidence remains 2-3/10. The stopped untracked A3L6
+draft is rejected and gains no authority from this docs commit. A3L7/A3L8/A3L9
+remain prohibited until the corrected A3L6 immutable implementation and review
+gates pass. Any eventual acceptance remains Level 1 local synthetic evidence
+under the exact honesty assumptions and nonclaims in A3L5C.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.
