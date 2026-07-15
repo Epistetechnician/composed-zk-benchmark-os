@@ -1193,6 +1193,23 @@ process, network access, filesystem write, target, handoff, transcript, lane
 closure, source-ledger digest, backend result, or evidence. Phase 796 is
 documentation-only for those execution-correspondence closures.
 
+[docs/796-phase-hsai-p01b-execution-correspondence-transaction-authority-stop.md](docs/796-phase-hsai-p01b-execution-correspondence-transaction-authority-stop.md)
+records the resulting fail-closed audit. Exact operation ordering is available,
+but the repository lacks a documented macOS descriptor-bound launch mechanism,
+the retained byte-complete Aeneas archive ledger and its exact extraction
+bounds, an observed build-descendant and loader trust census, provisioned
+trusted-time and anti-rollback journal
+authorities, and field-complete wires for all 56 bootstrap/runtime/failure/
+recovery operations.
+
+Static review confirms that Phase 796 publishes no
+`preparation_contract_sha256` and does not activate Phase 797. It changes
+Markdown only and adds no Rust, Cargo metadata, archive access, source
+acquisition, process, network, filesystem materialization, journal mutation,
+plan template, backend result, accepted evidence, or stronger claim. The Phase
+780 lane state remains `L01-L04,L09` resolved and `L05-L08,L10-L11` open; the
+Phase 779 ledger remains 102 blocked rows with 1,469 blockers and no digest.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

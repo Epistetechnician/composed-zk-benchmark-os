@@ -1629,6 +1629,32 @@ for exact P01B execution correspondence, archive inventory, build trust-root,
 trusted-time, journal, recovery, and audit-root closure. The earliest possible
 plan-v2 boundary moves to Phase 809.
 
+Explicit Phase 796 HSAI P01B execution-correspondence and transaction-authority
+audit now allowed and completed: additive Markdown under `docs/`, the Phase 795
+forward-result note, and standard mirrors only. This documentation-only slice
+records a mandatory stop because the reviewed public macOS interfaces do not
+provide Phase 795's required descriptor-bound executable launch; the pinned
+Aeneas archive's exact gzip/TAR header ledger and ordered member rows were not
+retained and its per-member and aggregate extraction bounds are not frozen; the
+Cargo, Rustc, build-script, native-tool, linker, SDK, loader, and
+dynamic-library trust-root census has not been observed; trusted-time and
+authenticated anti-rollback compare-and-swap authorities are not provisioned;
+and the seven bootstrap, 33 runtime, eight failure, and eight recovery operation
+wires are not byte-complete. `preparation_contract_sha256` remains absent,
+Phase 797 is not authorized, and both `materialization_authorized=false` and
+`capture_authorized=false` remain fixed. Phase 796 permits no Rust or Cargo
+change, source acquisition, archive read or extraction, machine observation,
+build, process, environment, network, filesystem materialization, trusted-time
+request, journal mutation, attempt reservation, target, handoff, transcript,
+fixture or grammar authority, Phase 780 lane closure, source-ledger digest,
+plan v2, executor, backend execution, proof artifact, accepted evidence,
+Level2+, score axes, semantic correctness, production readiness, SOTA,
+breakthrough, full security, external audit, or action authority. Remediation
+must separately close archive-ledger acquisition and extraction bounds, the
+strict Phase 795 launch architecture,
+build-child trust census, transaction-authority provisioning, all 56 operation
+rows, and an independent zero-gap audit before Phase 797 can be reconsidered.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.
