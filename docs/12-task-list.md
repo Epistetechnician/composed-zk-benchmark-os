@@ -20342,6 +20342,30 @@ decision, not a proposal; it cannot close Phase 780 lane `L07` or the complete
 Phase 796 stop. See
 `docs/796a-phase-hsai-p01b-archive-ledger-parser-and-acquisition-separation-boundary.md`.
 
+## Phase 796-A1 HSAI P01B Archive Ledger Parser Implementation
+
+Status: hermetic implementation complete; clean-commit Phase 796-A2 audit
+pending. State slice: `phase-796a1-hsai-p01b-archive-ledger-helper`.
+
+Phase 796-A1 implements the separately authorized standard-library helper and
+synthetic tests. The helper directly parses one RFC 1952 member, raw DEFLATE,
+and strict ustar blocks; retains descriptor-relative object identity; applies
+all fixed parser, extraction, output, and process limits; writes four
+transactional candidate artifacts; independently reconstructs their grammar,
+authority, measurements, limits, and false authority fields; and uses the
+final status hard link as the commit marker. The historical validator and the
+immutable Phase 796-A boundary remain unchanged.
+
+Local validation passes 68 focused and 151 complete formal-preflight tests
+under `/usr/bin/python3` 3.9.6, plus Ruff, Rust formatting, and diff hygiene.
+Two independent development reviews return `READY`. No real archive, network,
+durable candidate, acquisition, backend, Lean, SMT, Z3, COBALT, proof artifact,
+accepted evidence, Level2+, stronger claim, or authority is created. Phase
+796-A2 remains a separate clean-commit audit; Phase 796-A3 remains separately
+blocked by acquisition authority and enforced 512-MiB resident-memory
+containment. See
+`docs/796a1-phase-hsai-p01b-archive-ledger-parser-implementation.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

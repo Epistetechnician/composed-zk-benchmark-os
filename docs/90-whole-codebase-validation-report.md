@@ -1225,6 +1225,28 @@ use network, emit candidate ledgers, accept extraction bounds, close `P796-02`
 or Phase 780 lane `L07`, publish `preparation_contract_sha256`, activate Phase
 797, materialize P01B, execute a backend, or create evidence or stronger claims.
 
+[docs/796a1-phase-hsai-p01b-archive-ledger-parser-implementation.md](docs/796a1-phase-hsai-p01b-archive-ledger-parser-implementation.md)
+records the hermetic Phase 796-A1 implementation. Static review confirms the
+new helper uses only the authorized Python 3.9.6 standard-library surface,
+directly parses bounded gzip/DEFLATE/ustar framing, preserves descriptor-bound
+path identity, publishes only a transactional four-file candidate, and
+independently reconstructs all candidate schemas, fixed limits, pinned
+production authority, and false authority fields.
+
+Observed validation is 68 focused tests and 151 complete formal-preflight
+tests passing, Ruff passing, `cargo fmt --all -- --check` passing, and
+`git diff --check` passing. Two independent development reviews return
+`READY`. Workspace-wide Cargo checking remains blocked by an unrelated,
+preserved mutation in `crates/hsai-agent-admission/src/lib.rs`; Phase 796-A1
+does not modify or stage it.
+
+No real archive is read or acquired and no durable candidate is retained.
+Phase 796-A2 clean-commit audit remains pending. Phase 796-A3 acquisition,
+Phase 797, P01B materialization, transcript capture, backend execution, proof
+artifacts, accepted evidence, Level2+, score axes, semantic correctness,
+production readiness, SOTA, breakthrough, full security, and action authority
+remain unauthorized.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
