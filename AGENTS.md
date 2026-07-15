@@ -1520,6 +1520,40 @@ Phase 791 dependency clarification: exact `libc 0.2.186` is permitted only for
 the macOS `MNT_LOCAL` constant. The Phase 791 prohibition on direct libc means
 libc function calls; unsafe code and all libc function calls remain forbidden.
 
+Explicit Phase 792 HSAI native-transcript descriptor-relative collector now
+allowed and implemented: additive Rust source and tests under
+`crates/hsai-native-transcript-preparation`, exact locked `rustix 1.1.4` and
+macOS-only `libc 0.2.186` metadata, `Cargo.lock`, phase notes under `docs/`, and
+standard mirrors. This slice is limited to the macOS-only
+`collect_executable_identity_fact` path in
+`docs/792-phase-hsai-native-transcript-descriptor-relative-collector-implementation.md`:
+structurally accepted machine-policy input, exact role and non-overlapping-root
+preflight, retained read-only no-follow directory descriptors, `MNT_LOCAL`
+classification, bounded in-root UTF-8 symlink resolution, terminal descriptor
+identity comparison, regular-file/mode/owner/size checks, exact-length SHA-256,
+stable pre/post metadata, final directory/symlink/terminal rechecks, typed
+failure, independently observed compile-time OS/architecture, explicitly
+declared policy product/build versions, and private channel-coordinated
+deterministic mutation checkpoints. `libc` is used only
+for the `MNT_LOCAL` constant; unsafe code and libc function calls remain
+forbidden. The preparation candidate, executable fact, candidate digest domain,
+and state-slice wire identities are v2/Phase 792; explicit v1 constants identify
+but do not silently accept the superseded Phase 790 wire shape. The sole
+test-process exception is exact `/usr/bin/mkfifo <unique-private-tmp-path>` for
+one real FIFO rejection fixture; it creates no production process surface. A
+successful fact is a local observation-window record only. This
+phase does not authenticate the policy or reviewer, make an executable
+immutable, create a preparation handoff, materialize `P01B`, acquire or build a
+target, run Rustup/Cargo/Git/native tools, capture a transcript, close a Phase
+780 lane, publish a source-ledger digest, create plan v2, bind an executor,
+execute Lean/SMT/Z3/COBALT or another backend, create a proof artifact or
+checker transcript, mutate accepted evidence, create Level2+, establish a score
+axis, semantic correctness, production readiness, SOTA, breakthrough, full
+security, external audit, or action authority. Phase 793 is documentation-first
+for operator preparation-driver and source-receipt authority; Phase 795 remains
+the earliest conditional materialization phase, Phase 796 capture, and Phase
+806 plan v2.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.

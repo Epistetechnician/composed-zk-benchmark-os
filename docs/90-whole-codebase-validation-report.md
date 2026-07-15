@@ -1141,6 +1141,18 @@ descriptor-relative traversal, normalized non-overlapping roots, 32-hop and
 deterministic race injection. Static review confirms Phase 791 changes no Rust
 or Cargo file and collects no machine observation.
 
+[docs/792-phase-hsai-native-transcript-descriptor-relative-collector-implementation.md](docs/792-phase-hsai-native-transcript-descriptor-relative-collector-implementation.md)
+records the bounded local implementation. The macOS collector uses retained
+`rustix` directory descriptors, no-follow component traversal, exact-root
+symlink resolution, bounded descriptor hashing, complete stable metadata, and
+final object rechecks. Focused current-toolchain tests, strict clippy, and the
+locked Rust 1.74 test lane pass; the focused suite contains 28 tests, including
+channel-coordinated deterministic mutation-window tests. Static source checks
+reject process, network, environment-variable, shell, pathname-canonicalization,
+unsafe, and libc-call surfaces. The output is a local observation-window fact only. `P01B`,
+capture, all open Phase 780 lanes, source-ledger digest publication, plan v2,
+backend execution, and accepted evidence remain stopped.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

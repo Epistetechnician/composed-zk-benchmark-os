@@ -8,15 +8,26 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Component, Path, PathBuf};
 
-pub const PREPARATION_CANDIDATE_SCHEMA: &str =
+mod collector;
+
+pub use collector::{collect_executable_identity_fact, CollectorError};
+
+pub const PREPARATION_CANDIDATE_SCHEMA_V1: &str =
     "hsai-formal-native-transcript-preparation-candidate-v1";
+pub const PREPARATION_CANDIDATE_SCHEMA: &str =
+    "hsai-formal-native-transcript-preparation-candidate-v2";
 pub const MACHINE_POLICY_SCHEMA: &str = "hsai-formal-machine-executable-policy-v1";
 pub const EXECUTABLE_REGISTRY_ID: &str = "phase787-e83-executable-role-registry";
-pub const EXECUTABLE_FACT_SCHEMA: &str = "hsai-formal-executable-identity-fact-v1";
+pub const EXECUTABLE_FACT_SCHEMA_V1: &str = "hsai-formal-executable-identity-fact-v1";
+pub const EXECUTABLE_FACT_SCHEMA: &str = "hsai-formal-executable-identity-fact-v2";
 pub const MACHINE_POLICY_DIGEST_DOMAIN: &[u8] =
     b"hsai-native-transcript-preparation:machine-policy:v1\0";
-pub const CANDIDATE_DIGEST_DOMAIN: &[u8] = b"hsai-native-transcript-preparation:candidate:v1\0";
-pub const STATE_SLICE: &str = "phase-790-hsai-native-transcript-preparation-candidate";
+pub const MACHINE_POLICY_ENTRY_DIGEST_DOMAIN: &[u8] =
+    b"hsai-native-transcript-preparation:machine-policy-entry:v1\0";
+pub const CANDIDATE_DIGEST_DOMAIN_V1: &[u8] = b"hsai-native-transcript-preparation:candidate:v1\0";
+pub const CANDIDATE_DIGEST_DOMAIN: &[u8] = b"hsai-native-transcript-preparation:candidate:v2\0";
+pub const STATE_SLICE_V1: &str = "phase-790-hsai-native-transcript-preparation-candidate";
+pub const STATE_SLICE: &str = "phase-792-hsai-native-transcript-descriptor-relative-collector";
 pub const OPERATION_ORDER_SHA256: &str =
     "490c30a8098214754d20e4025696e2e3c702df8d4f7114a611157653ea7a4464";
 pub const REGISTRY_DOCUMENT_SHA256: &str =
@@ -214,6 +225,13 @@ pub struct PlatformIdentity {
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
+pub struct ObservedPlatformIdentity {
+    pub os: String,
+    pub arch: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct PolicyReviewDeclaration {
     pub policy_object_producer_id: String,
     pub reviewer_id: String,
@@ -248,6 +266,7 @@ pub struct MachinePolicyCandidate {
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct SymlinkHop {
+    pub containing_directory: String,
     pub path: String,
     pub link_text: String,
     pub resolved_path: String,
@@ -258,11 +277,14 @@ pub struct SymlinkHop {
 pub struct MetadataSnapshot {
     pub device: u64,
     pub inode: u64,
-    pub byte_length: u64,
     pub mode: u32,
     pub owner_uid: u32,
+    pub link_count: u64,
+    pub byte_length: u64,
     pub modified_seconds: i64,
     pub modified_nanoseconds: i64,
+    pub changed_seconds: i64,
+    pub changed_nanoseconds: i64,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -270,8 +292,14 @@ pub struct MetadataSnapshot {
 pub struct ExecutableIdentityFact {
     pub schema: String,
     pub role_id: HostExecutableRole,
+    pub registry_id: String,
+    pub machine_policy_id: String,
     pub machine_policy_sha256: String,
-    pub platform: PlatformIdentity,
+    pub policy_entry_sha256: String,
+    pub acceptance_policy_id: String,
+    pub decision: ReviewDecision,
+    pub declared_platform: PlatformIdentity,
+    pub observed_platform: ObservedPlatformIdentity,
     pub requested_path: String,
     pub ordered_symlink_hops: Vec<SymlinkHop>,
     pub canonical_regular_file_path: String,
@@ -579,6 +607,25 @@ fn validate_machine_policy(policy: &MachinePolicyCandidate, issues: &mut Vec<Val
             );
         }
     }
+    let normalized_roots = policy
+        .allowed_roots
+        .iter()
+        .filter(|root| is_normal_absolute_path(root))
+        .map(PathBuf::from)
+        .collect::<Vec<_>>();
+    if normalized_roots.iter().enumerate().any(|(index, root)| {
+        normalized_roots
+            .iter()
+            .skip(index + 1)
+            .any(|other| root.starts_with(other) || other.starts_with(root))
+    }) {
+        push_issue(
+            issues,
+            ValidationIssueClass::Structural,
+            "machine_policy.allowed_roots",
+            "allowed roots must not overlap",
+        );
+    }
 
     let declared_entry_order = policy
         .entries
@@ -740,6 +787,16 @@ fn validate_executable_facts(candidate: &PreparationCandidate, issues: &mut Vec<
             &fact.schema,
             EXECUTABLE_FACT_SCHEMA,
         );
+        if fact.registry_id != candidate.machine_policy.registry_id
+            || fact.machine_policy_id != candidate.machine_policy.policy_id
+        {
+            push_issue(
+                issues,
+                ValidationIssueClass::IdentityDrift,
+                fact.role_id.label(),
+                "executable fact does not bind the registry and machine-policy ids",
+            );
+        }
         if fact.machine_policy_sha256 != expected_policy_sha256 {
             push_issue(
                 issues,
@@ -748,12 +805,30 @@ fn validate_executable_facts(candidate: &PreparationCandidate, issues: &mut Vec<
                 "executable fact does not bind the reviewed machine-policy object",
             );
         }
-        if fact.platform != candidate.machine_policy.platform {
+        if let Some(entry) = entries.get(&fact.role_id) {
+            let expected_entry_sha256 = machine_policy_entry_sha256(entry)
+                .expect("serializing a Rust data structure cannot fail");
+            if fact.policy_entry_sha256 != expected_entry_sha256
+                || fact.acceptance_policy_id != entry.acceptance_policy_id
+                || fact.decision != ReviewDecision::Accepted
+            {
+                push_issue(
+                    issues,
+                    ValidationIssueClass::IdentityDrift,
+                    fact.role_id.label(),
+                    "executable fact does not bind the accepted policy entry",
+                );
+            }
+        }
+        if fact.declared_platform != candidate.machine_policy.platform
+            || fact.observed_platform.os != candidate.machine_policy.platform.os
+            || fact.observed_platform.arch != candidate.machine_policy.platform.arch
+        {
             push_issue(
                 issues,
                 ValidationIssueClass::IdentityDrift,
                 fact.role_id.label(),
-                "executable fact platform does not match the machine policy",
+                "executable fact declared or observed platform does not match the machine policy",
             );
         }
         check_sha256(issues, fact.role_id.label(), &fact.observed_sha256);
@@ -808,8 +883,10 @@ fn validate_executable_facts(candidate: &PreparationCandidate, issues: &mut Vec<
                     "declared symlink chain repeats a path",
                 );
             }
-            if !is_normal_absolute_path(&hop.path)
+            if !is_normal_absolute_path(&hop.containing_directory)
+                || !is_normal_absolute_path(&hop.path)
                 || !is_normal_absolute_path(&hop.resolved_path)
+                || !inside_any_root(Path::new(&hop.containing_directory), &allowed_roots)
                 || !inside_any_root(Path::new(&hop.path), &allowed_roots)
                 || !inside_any_root(Path::new(&hop.resolved_path), &allowed_roots)
             {
@@ -1078,6 +1155,22 @@ pub fn machine_policy_sha256(policy: &MachinePolicyCandidate) -> Result<String, 
     Ok(hex_digest(&hasher.finalize()))
 }
 
+pub fn machine_policy_entry_sha256(
+    entry: &MachinePolicyEntry,
+) -> Result<String, serde_json::Error> {
+    let bytes = serde_json::to_vec(entry)?;
+    let mut hasher = Sha256::new();
+    hasher.update(MACHINE_POLICY_ENTRY_DIGEST_DOMAIN);
+    hasher.update(bytes);
+    Ok(hex_digest(&hasher.finalize()))
+}
+
+pub fn validate_machine_policy_candidate(policy: &MachinePolicyCandidate) -> Vec<ValidationIssue> {
+    let mut issues = Vec::new();
+    validate_machine_policy(policy, &mut issues);
+    issues
+}
+
 pub fn candidate_sha256(candidate: &PreparationCandidate) -> Result<String, serde_json::Error> {
     let bytes = serialize_candidate_json(candidate)?;
     let mut hasher = Sha256::new();
@@ -1145,7 +1238,14 @@ fn is_portable_relative_path(value: &str) -> bool {
 
 fn is_normal_absolute_path(value: &str) -> bool {
     let path = Path::new(value);
-    path.is_absolute()
+    !value.as_bytes().contains(&0)
+        && !value.contains("//")
+        && !value.contains("/./")
+        && !value.contains("/../")
+        && !value.ends_with("/.")
+        && !value.ends_with("/..")
+        && (value == "/" || !value.ends_with('/'))
+        && path.is_absolute()
         && path
             .components()
             .all(|component| matches!(component, Component::RootDir | Component::Normal(_)))

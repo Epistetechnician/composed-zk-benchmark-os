@@ -36,13 +36,23 @@ crates/hsai-native-transcript-preparation/Cargo.toml
 crates/hsai-native-transcript-preparation/src/lib.rs
 crates/hsai-native-transcript-preparation/src/collector.rs
 crates/hsai-native-transcript-preparation/tests/descriptor_relative_collector.rs
+crates/hsai-native-transcript-preparation/tests/preparation_candidate.rs
 Cargo.lock
+docs/791-phase-hsai-native-transcript-descriptor-relative-collector-boundary.md
 docs/792-phase-hsai-native-transcript-descriptor-relative-collector-implementation.md
 README.md
 docs/12-task-list.md
 docs/90-whole-codebase-validation-report.md
 AGENTS.md
 ```
+
+Authorization correction recorded during Phase 792 review: the original list
+omitted `tests/preparation_candidate.rs`, but the mandated stable-metadata and
+fact-correspondence field extension cannot compile without updating the existing
+pure-data fixture literal. That test file is authorized only for mechanical
+fixture correspondence with the Phase 792 schema extension; this Phase 791 file
+is authorized only to record that correction. No test behavior or authority
+widening is authorized there.
 
 The implementation dependencies are exactly:
 
@@ -57,6 +67,12 @@ compatibility. `libc 0.2.186` declares Rust 1.65 compatibility and is authorized
 only for the macOS `MNT_LOCAL` constant. Phase 792 must also compile and test
 with the installed `1.74.0-aarch64-apple-darwin` toolchain. No `libc` function
 call or unsafe block is authorized.
+
+Test-only FIFO correction recorded during Phase 792 review: because
+`rustix 1.1.4` excludes `mkfifoat` on Apple targets, the public integration test
+may invoke exactly `/usr/bin/mkfifo <unique-private-tmp-path>` to construct one
+FIFO fixture. This exception permits no shell, inherited command authority,
+production process API, transcript capture, or other helper execution.
 
 Phase 792 is macOS-only. Other targets must return a typed
 `UnsupportedPlatform` result and must not emulate weaker semantics.
