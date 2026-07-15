@@ -20249,6 +20249,27 @@ every future Phase 794 result must keep `materialization_authorized=false` and
 pinned real reviewer-key authorization and immediate fact recollection. See
 `docs/793-phase-hsai-operator-preparation-driver-source-receipt-boundary.md`.
 
+## Phase 794 HSAI Hermetic Operator Preparation Driver Implementation
+
+Status: implemented and locally validated. State slice:
+`phase-794-hsai-hermetic-operator-preparation-driver-implementation`.
+
+Phase 794 implements the one-request hermetic preflight frozen by Phase 793.
+It validates exact eight-class subject and receipt correspondence, strict Rust
+and Charon manifests, exact fixture-profile census, low-S raw ES256 signatures,
+deterministic request/decision identities, and fresh direct Phase 792 collector
+dispatch. Private `cfg(test)` bindings cover deterministic success because the
+pinned Aeneas archive is not committed; production bindings are not injectable.
+
+The focused crate suite passes 50 tests. Every result preserves
+`materialization_authorized=false` and `capture_authorized=false`. No real
+reviewer authority, source acquisition, materialization, capture, Phase 780 lane
+closure, source-ledger digest, plan v2, backend execution, accepted evidence,
+Level2+, semantic correctness, production readiness, SOTA, or full-security
+claim is created. Phase 795 remains the earliest conditional authorization and
+materialization phase. See
+`docs/794-phase-hsai-hermetic-operator-preparation-driver-implementation.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
