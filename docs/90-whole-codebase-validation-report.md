@@ -1268,6 +1268,28 @@ accepted evidence, Level2+, score axes, semantic correctness, production
 readiness, SOTA, breakthrough, full security, external audit, and action
 authority remain unauthorized.
 
+[docs/796a2s-phase-hsai-p01b-resident-memory-supervisor-feasibility-stop.md](docs/796a2s-phase-hsai-p01b-resident-memory-supervisor-feasibility-stop.md)
+records the docs-first Phase 796-A2S prerequisite stop. Primary-source review
+confirms Darwin's `RLIMIT_RSS` is an alias for address-space
+`RLIMIT_AS`, not an independent hard resident-set ceiling. The
+selected macOS 15.7.5 arm64 host reports both constants as 5, and direct libc
+installation of the required 536,870,912-byte soft and hard limit returns
+`EINVAL` while preserving unlimited values.
+
+The host has Docker Desktop with a Linux arm64, cgroup-v2 engine. Docker
+documents a hard `--memory` control, but no container was run and
+that Linux substrate does not preserve the frozen native macOS Python and
+descriptor correspondence. Two independent reviewers accept both findings.
+The retained blocked-decision digest is
+`b67e4e734deb959328ebd795320e777def9b886f6d3c141f4344a94f64071fa6`.
+
+Static review confirms no archive access, download, extraction, image pull,
+container run, parser run, candidate generation, or network-enabled execution.
+Phase 796-A3, acquisition, Phase 797, materialization, transcript capture,
+backend execution, accepted evidence, Level2+, score axes, semantic
+correctness, production readiness, SOTA, breakthrough, full security,
+external audit, and action authority remain unauthorized.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

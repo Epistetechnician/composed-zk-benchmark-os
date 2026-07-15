@@ -20389,6 +20389,28 @@ A3 authorization remains blocked by explicit acquisition authority and an
 accepted 512-MiB resident-memory supervisor. See
 `docs/796a2-phase-hsai-p01b-archive-ledger-clean-commit-audit.md`.
 
+## Phase 796-A2S HSAI P01B Resident-Memory Supervisor Feasibility Stop
+
+Status: complete as a docs-first blocked decision. State slice:
+`phase-796a2s-hsai-p01b-resident-memory-supervisor-feasibility-stop`.
+
+Phase 796-A2S confirms that native Darwin aliases `RLIMIT_RSS` to
+`RLIMIT_AS`; the selected Python process already has virtual usage
+far above 512 MiB; and a direct finite 512-MiB limit request fails with
+`EINVAL`. Userspace polling is rejected because it cannot prove zero
+overshoot. Docker Desktop exposes a Linux cgroup-v2 hard-memory path, but
+substituting it would change the selected native macOS execution and
+archive-descriptor correspondence.
+
+Two independent reviewers accept the native-enforcement and
+substrate-correspondence findings. The retained blocked-decision digest is
+`b67e4e734deb959328ebd795320e777def9b886f6d3c141f4344a94f64071fa6`. It explicitly keeps
+`phase_796_a3_authorized=false`,
+`acquisition_authorized=false`, and
+`network_run_authorized=false`. No archive, container, image, parser,
+candidate, backend, evidence, stronger claim, or authority is created. See
+`docs/796a2s-phase-hsai-p01b-resident-memory-supervisor-feasibility-stop.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

@@ -1729,6 +1729,31 @@ action authority. The retained decision explicitly keeps
 Phase 796-A3 decision remains blocked by explicit acquisition authority and an
 accepted supervisor enforcing `max_resident_bytes=536870912`.
 
+Explicit Phase 796-A2S HSAI P01B resident-memory supervisor feasibility stop
+now allowed and completed: one feasibility record, four primary-source index
+rows, and standard documentation mirrors only. This slice confirms on the
+selected macOS 15.7.5 arm64 host that Darwin aliases `RLIMIT_RSS` to
+address-space `RLIMIT_AS`, the selected Python process's baseline
+virtual size exceeds 512 MiB, and a direct libc request for the required finite
+limit fails with `EINVAL`. It rejects userspace polling as a hard
+ceiling because polling cannot prove zero overshoot. It records Docker
+Desktop's Linux cgroup-v2 hard-memory primitive as an alternate substrate that
+does not preserve the frozen native macOS Python and archive-descriptor
+correspondence. Two independent read-only reviewers return `accept`;
+the retained blocked-decision digest is
+`b67e4e734deb959328ebd795320e777def9b886f6d3c141f4344a94f64071fa6`. Phase 796-A2S permits no
+source, test, Cargo, parser, supervisor, container, immutable-boundary, or
+historical-validator mutation; archive request, read, acquisition, network
+run, image pull, extraction, materialization, transcript capture, Phase 797
+activation, backend, Lean, SMT, Z3, or COBALT execution; proof artifact;
+accepted evidence; Level2+; score axes; semantic correctness; production
+readiness; SOTA; breakthrough; full security; external audit; or action
+authority. It explicitly keeps `phase_796_a3_authorized=false`,
+`acquisition_authorized=false`, and
+`network_run_authorized=false`. A later native enforcement primitive
+or a new Linux-container correspondence boundary requires separate
+authorization.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.
