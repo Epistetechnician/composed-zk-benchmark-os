@@ -59,10 +59,24 @@ class ContainerContractTests(unittest.TestCase):
     def command_template(self, role):
         return next(command for command in self.plan.commands if command.role == role)
 
-    def receipt(self, state, outcome="exit", exit_code=0, signal=None, **changes):
+    def state_for(self, prior_receipts):
+        if not prior_receipts:
+            return contract.AttemptState.initial(self.plan, self.root, self.bindings)
+        return contract.advance_attempt_state(
+            self.plan,
+            prior_receipts[:-1],
+            prior_receipts[-1],
+            self.root,
+            self.bindings,
+        )
+
+    def receipt(self, prior_receipts, outcome="exit", exit_code=0, signal=None, **changes):
+        state = self.state_for(prior_receipts)
         role = state.next_role
         self.assertIsNotNone(role)
-        command = contract.next_container_command(self.plan, state)
+        command = contract.next_container_command(
+            self.plan, prior_receipts, self.root, self.bindings
+        )
         if command is None:
             command = self.command_template(role)
             if state.container_id is not None:
@@ -88,10 +102,12 @@ class ContainerContractTests(unittest.TestCase):
                 exit_code = None
                 signal = None
             started = 10_000 + len(state.completed_receipt_sha256) * 100
-            ended = started + 25
-            duration = 25
-            stdout_bytes = len(b"stdout")
-            stderr_bytes = len(b"stderr")
+            duration = command.timeout_ns if outcome == "timeout" else 25
+            ended = started + duration
+            stdout_bytes = command.stdout_cap if outcome == "stdout_limit" else len(b"stdout")
+            stdout_total_bytes = command.stdout_cap + 1 if outcome == "stdout_limit" else stdout_bytes
+            stderr_bytes = command.stderr_cap if outcome == "stderr_limit" else len(b"stderr")
+            stderr_total_bytes = command.stderr_cap + 1 if outcome == "stderr_limit" else stderr_bytes
             stdout_sha256 = STDOUT_SHA256
             stderr_sha256 = STDERR_SHA256
             observed = True
@@ -103,7 +119,7 @@ class ContainerContractTests(unittest.TestCase):
         values = {
             "plan_sha256": self.plan.digest,
             "authorization_root_sha256": self.plan.authorization_root_sha256,
-            "ordinal": len(state.completed_receipt_sha256),
+            "ordinal": len(prior_receipts),
             "role": role,
             "argv": command.argv,
             "environment": command.environment,
@@ -116,10 +132,12 @@ class ContainerContractTests(unittest.TestCase):
             "exit_code": exit_code,
             "signal": signal,
             "stdout_bytes": stdout_bytes,
+            "stdout_total_bytes": 0 if outcome == "not_run" else stdout_total_bytes,
             "stdout_sha256": stdout_sha256,
             "stdout_cap": command.stdout_cap,
             "stdout_truncated": outcome == "stdout_limit",
             "stderr_bytes": stderr_bytes,
+            "stderr_total_bytes": 0 if outcome == "not_run" else stderr_total_bytes,
             "stderr_sha256": stderr_sha256,
             "stderr_cap": command.stderr_cap,
             "stderr_truncated": outcome == "stderr_limit",
@@ -134,27 +152,38 @@ class ContainerContractTests(unittest.TestCase):
         values.update(changes)
         return contract.CommandReceipt(**values)
 
-    def advance(self, state, outcome="exit", exit_code=0, signal=None, **changes):
+    def advance(self, prior_receipts, outcome="exit", exit_code=0, signal=None, **changes):
         receipt = self.receipt(
-            state,
+            prior_receipts,
             outcome=outcome,
             exit_code=exit_code,
             signal=signal,
             **changes,
         )
-        return contract.advance_attempt_state(self.plan, state, receipt), receipt
+        return (
+            contract.advance_attempt_state(
+                self.plan,
+                prior_receipts,
+                receipt,
+                self.root,
+                self.bindings,
+            ),
+            receipt,
+        )
 
     def advance_successfully_to(self, role):
-        state = contract.AttemptState.initial(self.plan)
+        state = contract.AttemptState.initial(self.plan, self.root, self.bindings)
         receipts = []
         while state.next_role != role:
-            state, receipt = self.advance(state)
+            state, receipt = self.advance(receipts)
             receipts.append(receipt)
         return state, receipts
 
-    def assert_rejected(self, receipt, state):
+    def assert_rejected(self, receipt, prior_receipts):
         with self.assertRaises(contract.ContainerContractError):
-            contract.validate_command_receipt(receipt, self.plan, state)
+            contract.validate_command_receipt(
+                receipt, self.plan, prior_receipts, self.root, self.bindings
+            )
 
     def test_authorization_bindings_and_plan_are_exact_and_deterministic(self):
         expected_host_environment = (
@@ -272,7 +301,7 @@ class ContainerContractTests(unittest.TestCase):
         )
         self.assertEqual(
             self.plan.digest,
-            "78c8d9f620734e1800f66ec9d03d31a508ec416f757218c26e8b223e64c044f9",
+            "b6d5a4afeebf68cab792451f848c5a1c91fe25f1b39222abd21c31395d038e84",
         )
         self.assertEqual(self.bindings.host_environment, expected_host_environment)
         self.assertEqual(
@@ -286,6 +315,7 @@ class ContainerContractTests(unittest.TestCase):
             self.assertEqual(command.environment, expected_host_environment)
             self.assertEqual(command.cwd, "/")
             self.assertEqual((command.stdout_cap, command.stderr_cap), (16384, 16384))
+            self.assertEqual(command.timeout_ns, 1_800_000_000_000)
         rebuilt = contract.build_container_command_plan(self.root, self.bindings)
         self.assertEqual(rebuilt, self.plan)
         self.assertEqual(contract.canonical_json_bytes(rebuilt), contract.canonical_json_bytes(self.plan))
@@ -307,6 +337,9 @@ class ContainerContractTests(unittest.TestCase):
             replace(self.bindings, docker_executable_sha256="0" * 64),
             replace(self.bindings, empty_docker_config_abs="relative/config"),
             replace(self.bindings, empty_docker_config_abs="/contract/../config"),
+            replace(self.bindings, empty_docker_config_abs="/contract,bad"),
+            replace(self.bindings, seccomp_profile_abs="/contract=bad"),
+            replace(self.bindings, clean_corpus_root_abs="/contract/\nbad"),
             replace(self.bindings, clean_corpus_root_abs="//contract/corpus"),
             replace(self.bindings, attempt_tmpdir_abs=self.bindings.clean_corpus_root_abs),
             replace(self.bindings, docker_host_uri="unix:///tmp/docker.sock"),
@@ -315,6 +348,10 @@ class ContainerContractTests(unittest.TestCase):
             replace(self.bindings, source_manifest_sha256="0" * 64),
             replace(self.bindings, test_id_sha256="0" * 64),
             replace(self.bindings, platform_manifest_reference="sha256:" + "a" * 64),
+            replace(
+                self.bindings,
+                platform_manifest_reference="--python@sha256:" + "a" * 64,
+            ),
             replace(self.bindings, image_config_digest="sha256:" + "0" * 64),
             replace(self.bindings, workload_profile="arbitrary"),
             replace(self.bindings, schema="wrong"),
@@ -336,6 +373,8 @@ class ContainerContractTests(unittest.TestCase):
             + commands[1:],
             (replace(commands[0], cwd="/tmp"),) + commands[1:],
             (replace(commands[0], stdout_cap=1),) + commands[1:],
+            (replace(commands[0], timeout_ns=contract.COMMAND_TIMEOUT_NS - 1),)
+            + commands[1:],
             (replace(commands[0], activation="sometimes"),) + commands[1:],
             (replace(commands[0], template_ordinal=7),) + commands[1:],
             (commands[1], commands[0]) + commands[2:],
@@ -359,8 +398,7 @@ class ContainerContractTests(unittest.TestCase):
                     contract.validate_container_command_plan(candidate, self.root, self.bindings)
 
     def test_receipt_parser_accepts_only_strict_canonical_ascii_json(self):
-        state = contract.AttemptState.initial(self.plan)
-        receipt = self.receipt(state)
+        receipt = self.receipt([])
         raw = contract.canonical_json_bytes(receipt.to_dict())
         self.assertEqual(contract.parse_command_receipt(raw), receipt)
         self.assertEqual(raw, raw.strip())
@@ -384,6 +422,7 @@ class ContainerContractTests(unittest.TestCase):
             contract.canonical_json_bytes(unknown),
             contract.canonical_json_bytes(bool_ordinal),
             b"{" + b" " * contract.MAX_RECEIPT_BYTES,
+            b"[" * 2_000 + b"0" + b"]" * 2_000,
         )
         for attack in attacks:
             with self.subTest(attack=attack[:80]):
@@ -396,8 +435,8 @@ class ContainerContractTests(unittest.TestCase):
             contract.parse_command_receipt(unsorted)
 
     def test_receipt_binding_context_time_stream_and_authority_drift_are_rejected(self):
-        state = contract.AttemptState.initial(self.plan)
-        valid = self.receipt(state)
+        receipts = []
+        valid = self.receipt(receipts)
         drifted = (
             replace(valid, authorization_root_sha256="f" * 64),
             replace(valid, plan_sha256="f" * 64),
@@ -424,12 +463,13 @@ class ContainerContractTests(unittest.TestCase):
         )
         for candidate in drifted:
             with self.subTest(receipt=candidate):
-                self.assert_rejected(candidate, state)
+                self.assert_rejected(candidate, receipts)
 
-        after_create, _ = self.advance(state)
-        inspect_receipt = self.receipt(after_create)
-        self.assert_rejected(replace(inspect_receipt, container_id="d" * 64), after_create)
-        self.assert_rejected(replace(inspect_receipt, previous_receipt_sha256=None), after_create)
+        _, create = self.advance(receipts)
+        receipts.append(create)
+        inspect_receipt = self.receipt(receipts)
+        self.assert_rejected(replace(inspect_receipt, container_id="d" * 64), receipts)
+        self.assert_rejected(replace(inspect_receipt, previous_receipt_sha256=None), receipts)
 
         invalid_signal = replace(
             inspect_receipt,
@@ -437,13 +477,16 @@ class ContainerContractTests(unittest.TestCase):
             exit_code=1,
             signal=9,
         )
-        self.assert_rejected(invalid_signal, after_create)
+        self.assert_rejected(invalid_signal, receipts)
 
     def test_not_run_receipt_cannot_fabricate_observations(self):
-        state = contract.AttemptState.initial(self.plan)
-        state, _ = self.advance(state, exit_code=1)
-        valid = self.receipt(state, outcome="not_run")
-        contract.validate_command_receipt(valid, self.plan, state)
+        receipts = []
+        _, create = self.advance(receipts, exit_code=1)
+        receipts.append(create)
+        valid = self.receipt(receipts, outcome="not_run")
+        contract.validate_command_receipt(
+            valid, self.plan, receipts, self.root, self.bindings
+        )
         attacks = (
             replace(valid, container_action_observed=True),
             replace(valid, started_monotonic_ns=1),
@@ -454,15 +497,19 @@ class ContainerContractTests(unittest.TestCase):
         )
         for attack in attacks:
             with self.subTest(receipt=attack):
-                self.assert_rejected(attack, state)
+                self.assert_rejected(attack, receipts)
 
     def test_create_failure_marks_every_later_role_not_run_without_removal(self):
-        state = contract.AttemptState.initial(self.plan)
-        state, create = self.advance(state, exit_code=125)
-        receipts = [create]
+        receipts = []
+        state, create = self.advance(receipts, exit_code=125)
+        receipts.append(create)
         while state.status not in contract.TERMINAL_STATUSES:
-            self.assertIsNone(contract.next_container_command(self.plan, state))
-            state, receipt = self.advance(state, outcome="not_run")
+            self.assertIsNone(
+                contract.next_container_command(
+                    self.plan, receipts, self.root, self.bindings
+                )
+            )
+            state, receipt = self.advance(receipts, outcome="not_run")
             receipts.append(receipt)
 
         self.assertEqual(
@@ -473,40 +520,57 @@ class ContainerContractTests(unittest.TestCase):
         self.assertFalse(receipts[-1].container_action_observed)
         self.assertIsNone(receipts[-1].container_id)
         self.assertEqual(state.status, "cleanup_not_applicable_no_container_created")
-        self.assertEqual(contract.validate_receipt_chain(self.plan, receipts), state)
+        self.assertEqual(
+            contract.validate_receipt_chain(
+                self.plan, receipts, self.root, self.bindings
+            ),
+            state,
+        )
 
     def test_prestart_inspection_failure_skips_execution_then_removes(self):
-        state = contract.AttemptState.initial(self.plan)
         receipts = []
-        state, receipt = self.advance(state)
+        state, receipt = self.advance(receipts)
         receipts.append(receipt)
-        state, receipt = self.advance(state, exit_code=1)
+        state, receipt = self.advance(receipts, exit_code=1)
         receipts.append(receipt)
         for role in ("start-attach", "kill", "wait", "inspect-terminal"):
             self.assertEqual(state.next_role, role)
-            self.assertIsNone(contract.next_container_command(self.plan, state))
-            state, receipt = self.advance(state, outcome="not_run")
+            self.assertIsNone(
+                contract.next_container_command(
+                    self.plan, receipts, self.root, self.bindings
+                )
+            )
+            state, receipt = self.advance(receipts, outcome="not_run")
             receipts.append(receipt)
 
-        remove = contract.next_container_command(self.plan, state)
+        remove = contract.next_container_command(
+            self.plan, receipts, self.root, self.bindings
+        )
         self.assertIsNotNone(remove)
         self.assertEqual(remove.role, "remove")
         self.assertEqual(remove.argv[-1], CONTAINER_ID)
-        state, receipt = self.advance(state)
+        state, receipt = self.advance(receipts)
         receipts.append(receipt)
         self.assertEqual(state.status, "failed")
         self.assertEqual(receipts[-1].role, "remove")
         self.assertEqual(receipts[-1].outcome, "exit")
-        self.assertEqual(contract.validate_receipt_chain(self.plan, receipts), state)
+        self.assertEqual(
+            contract.validate_receipt_chain(
+                self.plan, receipts, self.root, self.bindings
+            ),
+            state,
+        )
 
     def test_normal_success_has_no_kill_and_resolves_every_placeholder(self):
-        state = contract.AttemptState.initial(self.plan)
+        state = contract.AttemptState.initial(self.plan, self.root, self.bindings)
         receipts = []
         while state.status not in contract.TERMINAL_STATUSES:
-            command = contract.next_container_command(self.plan, state)
+            command = contract.next_container_command(
+                self.plan, receipts, self.root, self.bindings
+            )
             self.assertIsNotNone(command)
             self.assertFalse(any("${" in item for item in command.argv))
-            state, receipt = self.advance(state)
+            state, receipt = self.advance(receipts)
             receipts.append(receipt)
 
         self.assertEqual(
@@ -515,24 +579,31 @@ class ContainerContractTests(unittest.TestCase):
         )
         self.assertEqual(state.status, "succeeded")
         self.assertFalse(state.bounded_start_failure)
-        self.assertEqual(contract.validate_receipt_chain(self.plan, receipts), state)
+        self.assertEqual(
+            contract.validate_receipt_chain(
+                self.plan, receipts, self.root, self.bindings
+            ),
+            state,
+        )
 
     def test_bounded_start_failure_requires_kill_before_wait(self):
         state, receipts = self.advance_successfully_to("start-attach")
-        state, bounded = self.advance(state, outcome="timeout")
+        state, bounded = self.advance(receipts, outcome="timeout")
         receipts.append(bounded)
         self.assertEqual(state.next_role, "kill")
         self.assertTrue(state.container_started)
         self.assertTrue(state.bounded_start_failure)
 
-        kill = self.receipt(state)
+        kill = self.receipt(receipts)
         illegal_wait = replace(kill, role="wait")
-        self.assert_rejected(illegal_wait, state)
-        state = contract.advance_attempt_state(self.plan, state, kill)
+        self.assert_rejected(illegal_wait, receipts)
+        state = contract.advance_attempt_state(
+            self.plan, receipts, kill, self.root, self.bindings
+        )
         receipts.append(kill)
         self.assertEqual(state.next_role, "wait")
         while state.status not in contract.TERMINAL_STATUSES:
-            state, receipt = self.advance(state)
+            state, receipt = self.advance(receipts)
             receipts.append(receipt)
         self.assertEqual(
             tuple(receipt.role for receipt in receipts),
@@ -541,52 +612,307 @@ class ContainerContractTests(unittest.TestCase):
         self.assertEqual(state.status, "failed")
 
     def test_kill_without_started_bounded_container_is_rejected(self):
-        state, _ = self.advance_successfully_to("start-attach")
-        illegal_state = replace(state, next_role="kill")
-        receipt = self.receipt(illegal_state)
-        self.assert_rejected(receipt, illegal_state)
-
-        started_only = replace(illegal_state, container_started=True)
-        receipt = self.receipt(started_only)
-        self.assert_rejected(receipt, started_only)
+        _, receipts = self.advance_successfully_to("start-attach")
+        start_receipt = self.receipt(receipts)
+        kill_template = self.command_template("kill")
+        kill_argv = tuple(
+            CONTAINER_ID if item == contract.CREATED_CONTAINER_ID else item
+            for item in kill_template.argv
+        )
+        forged_kill = replace(start_receipt, role="kill", argv=kill_argv)
+        self.assert_rejected(forged_kill, receipts)
 
     def test_wait_or_terminal_inspection_failure_still_removes(self):
         for failing_role in ("wait", "inspect-terminal"):
             with self.subTest(failing_role=failing_role):
                 state, receipts = self.advance_successfully_to(failing_role)
-                state, failed = self.advance(state, exit_code=1)
+                state, failed = self.advance(receipts, exit_code=1)
                 receipts.append(failed)
                 while state.next_role != "remove":
-                    state, receipt = self.advance(state)
+                    state, receipt = self.advance(receipts)
                     receipts.append(receipt)
                 self.assertEqual(state.next_role, "remove")
                 self.assertNotIn("kill", tuple(receipt.role for receipt in receipts))
-                state, removed = self.advance(state)
+                state, removed = self.advance(receipts)
                 receipts.append(removed)
                 self.assertEqual(removed.role, "remove")
                 self.assertEqual(state.status, "failed")
-                self.assertEqual(contract.validate_receipt_chain(self.plan, receipts), state)
+                self.assertEqual(
+                    contract.validate_receipt_chain(
+                        self.plan, receipts, self.root, self.bindings
+                    ),
+                    state,
+                )
 
     def test_cleanup_failure_is_terminal_and_rejects_later_transition(self):
         state, receipts = self.advance_successfully_to("remove")
-        state, failed_remove = self.advance(state, exit_code=1)
+        state, failed_remove = self.advance(receipts, exit_code=1)
         receipts.append(failed_remove)
         self.assertEqual(state.status, "cleanup_failed")
         self.assertIsNone(state.next_role)
         with self.assertRaises(contract.ContainerContractError):
-            contract.next_container_command(self.plan, state)
+            contract.next_container_command(
+                self.plan, receipts, self.root, self.bindings
+            )
         with self.assertRaises(contract.ContainerContractError):
-            contract.advance_attempt_state(self.plan, state, failed_remove)
-        self.assertEqual(contract.validate_receipt_chain(self.plan, receipts), state)
+            contract.advance_attempt_state(
+                self.plan,
+                receipts,
+                failed_remove,
+                self.root,
+                self.bindings,
+            )
+        self.assertEqual(
+            contract.validate_receipt_chain(
+                self.plan, receipts, self.root, self.bindings
+            ),
+            state,
+        )
 
     def test_successful_cleanup_is_terminal_and_rejects_later_transition(self):
         state, receipts = self.advance_successfully_to("remove")
-        state, removed = self.advance(state)
+        state, removed = self.advance(receipts)
         receipts.append(removed)
         self.assertEqual(state.status, "succeeded")
         with self.assertRaises(contract.ContainerContractError):
-            contract.advance_attempt_state(self.plan, state, removed)
-        self.assertEqual(contract.validate_receipt_chain(self.plan, receipts), state)
+            contract.advance_attempt_state(
+                self.plan,
+                receipts,
+                removed,
+                self.root,
+                self.bindings,
+            )
+        self.assertEqual(
+            contract.validate_receipt_chain(
+                self.plan, receipts, self.root, self.bindings
+            ),
+            state,
+        )
+
+    def test_forged_privileged_and_shell_plans_cannot_be_returned_or_executed(self):
+        create = self.plan.commands[0]
+        privileged_argv = tuple(
+            "--privileged=true" if item == "--privileged=false" else item
+            for item in create.argv
+        )
+        forged_plans = (
+            replace(
+                self.plan,
+                commands=(replace(create, argv=privileged_argv),)
+                + self.plan.commands[1:],
+            ),
+            replace(
+                self.plan,
+                commands=(replace(create, argv=("/bin/sh", "-c", "id")),)
+                + self.plan.commands[1:],
+            ),
+        )
+        valid_receipt = self.receipt([])
+        for forged in forged_plans:
+            with self.subTest(argv=forged.commands[0].argv):
+                with self.assertRaises(contract.ContainerContractError):
+                    contract.next_container_command(
+                        forged, [], self.root, self.bindings
+                    )
+                forged_receipt = replace(
+                    valid_receipt,
+                    plan_sha256=forged.digest,
+                    argv=forged.commands[0].argv,
+                )
+                with self.assertRaises(contract.ContainerContractError):
+                    contract.validate_command_receipt(
+                        forged_receipt,
+                        forged,
+                        [],
+                        self.root,
+                        self.bindings,
+                    )
+
+    def test_public_boundaries_replay_receipts_and_reject_forged_attempt_state(self):
+        expected_parameters = {
+            contract.next_container_command: (
+                "plan",
+                "prior_receipts",
+                "authorization_root",
+                "bindings",
+            ),
+            contract.validate_command_receipt: (
+                "receipt",
+                "plan",
+                "prior_receipts",
+                "authorization_root",
+                "bindings",
+            ),
+            contract.advance_attempt_state: (
+                "plan",
+                "prior_receipts",
+                "receipt",
+                "authorization_root",
+                "bindings",
+            ),
+            contract.validate_receipt_chain: (
+                "plan",
+                "receipts",
+                "authorization_root",
+                "bindings",
+            ),
+        }
+        for function, expected in expected_parameters.items():
+            with self.subTest(function=function.__name__):
+                self.assertEqual(tuple(inspect.signature(function).parameters), expected)
+                self.assertNotIn("state", inspect.signature(function).parameters)
+
+        forged_state = replace(
+            contract.AttemptState.initial(self.plan, self.root, self.bindings),
+            next_role="remove",
+            container_id=CONTAINER_ID,
+            container_started=True,
+        )
+        receipt = self.receipt([])
+        calls = (
+            lambda: contract.next_container_command(
+                self.plan, forged_state, self.root, self.bindings
+            ),
+            lambda: contract.validate_command_receipt(
+                receipt, self.plan, forged_state, self.root, self.bindings
+            ),
+            lambda: contract.advance_attempt_state(
+                self.plan,
+                forged_state,
+                receipt,
+                self.root,
+                self.bindings,
+            ),
+            lambda: contract.validate_receipt_chain(
+                self.plan, forged_state, self.root, self.bindings
+            ),
+        )
+        for call in calls:
+            with self.assertRaises(contract.ContainerContractError):
+                call()
+
+    def test_incomplete_create_bounded_and_cleanup_chains_are_rejected(self):
+        receipts = []
+        _, create = self.advance(receipts)
+        receipts.append(create)
+        with self.assertRaises(contract.ContainerContractError):
+            contract.validate_receipt_chain(
+                self.plan, receipts, self.root, self.bindings
+            )
+
+        state, receipts = self.advance_successfully_to("start-attach")
+        state, bounded = self.advance(receipts, outcome="timeout")
+        receipts.append(bounded)
+        self.assertEqual(state.next_role, "kill")
+        with self.assertRaises(contract.ContainerContractError):
+            contract.validate_receipt_chain(
+                self.plan, receipts, self.root, self.bindings
+            )
+
+        state, kill = self.advance(receipts)
+        receipts.append(kill)
+        while state.next_role != "remove":
+            state, receipt = self.advance(receipts)
+            receipts.append(receipt)
+        with self.assertRaises(contract.ContainerContractError):
+            contract.validate_receipt_chain(
+                self.plan, receipts, self.root, self.bindings
+            )
+
+    def test_timeout_requires_the_exact_command_lower_bound(self):
+        _, receipts = self.advance_successfully_to("start-attach")
+        exact = self.receipt(receipts, outcome="timeout")
+        self.assertEqual(exact.duration_ns, contract.COMMAND_TIMEOUT_NS)
+        contract.validate_command_receipt(
+            exact, self.plan, receipts, self.root, self.bindings
+        )
+
+        below = replace(
+            exact,
+            ended_monotonic_ns=exact.ended_monotonic_ns - 1,
+            duration_ns=exact.duration_ns - 1,
+        )
+        self.assert_rejected(below, receipts)
+
+    def test_stream_retained_total_and_cap_arithmetic_is_exact(self):
+        _, receipts = self.advance_successfully_to("start-attach")
+        for outcome, retained_name, total_name, truncated_name in (
+            (
+                "stdout_limit",
+                "stdout_bytes",
+                "stdout_total_bytes",
+                "stdout_truncated",
+            ),
+            (
+                "stderr_limit",
+                "stderr_bytes",
+                "stderr_total_bytes",
+                "stderr_truncated",
+            ),
+        ):
+            with self.subTest(outcome=outcome):
+                valid = self.receipt(receipts, outcome=outcome)
+                cap = getattr(valid, retained_name.replace("bytes", "cap"))
+                self.assertEqual(getattr(valid, retained_name), cap)
+                self.assertEqual(getattr(valid, total_name), cap + 1)
+                contract.validate_command_receipt(
+                    valid, self.plan, receipts, self.root, self.bindings
+                )
+                attacks = (
+                    replace(valid, **{retained_name: cap - 1}),
+                    replace(valid, **{total_name: cap}),
+                    replace(valid, **{truncated_name: False}),
+                )
+                for attack in attacks:
+                    self.assert_rejected(attack, receipts)
+
+        ordinary = self.receipt(receipts)
+        self.assert_rejected(
+            replace(ordinary, stdout_total_bytes=ordinary.stdout_bytes + 1),
+            receipts,
+        )
+        self.assert_rejected(
+            replace(ordinary, stderr_total_bytes=ordinary.stderr_bytes + 1),
+            receipts,
+        )
+
+    def test_nonzero_and_signaled_start_route_through_wait_and_cleanup(self):
+        cases = (
+            {"outcome": "exit", "exit_code": 7},
+            {"outcome": "signal", "signal": 9},
+        )
+        for changes in cases:
+            with self.subTest(changes=changes):
+                state, receipts = self.advance_successfully_to("start-attach")
+                state, start = self.advance(receipts, **changes)
+                receipts.append(start)
+                self.assertEqual(state.next_role, "wait")
+                command = contract.next_container_command(
+                    self.plan, receipts, self.root, self.bindings
+                )
+                self.assertIsNotNone(command)
+                self.assertEqual(command.role, "wait")
+                while state.status not in contract.TERMINAL_STATUSES:
+                    state, receipt = self.advance(receipts)
+                    receipts.append(receipt)
+                self.assertEqual(
+                    tuple(receipt.role for receipt in receipts),
+                    (
+                        "create",
+                        "inspect-prestart",
+                        "start-attach",
+                        "wait",
+                        "inspect-terminal",
+                        "remove",
+                    ),
+                )
+                self.assertEqual(state.status, "failed")
+                self.assertEqual(
+                    contract.validate_receipt_chain(
+                        self.plan, receipts, self.root, self.bindings
+                    ),
+                    state,
+                )
 
     def test_source_has_no_execution_io_network_environment_or_cli_surface(self):
         source = inspect.getsource(contract)

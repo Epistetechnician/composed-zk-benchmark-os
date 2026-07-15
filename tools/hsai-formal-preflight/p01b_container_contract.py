@@ -106,12 +106,19 @@ TERMINAL_STATUSES = (
     "cleanup_not_applicable_no_container_created",
 )
 MAX_RECEIPT_BYTES = 65536
+COMMAND_TIMEOUT_NS = 1_800_000_000_000
 
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 PREFIXED_SHA256_RE = re.compile(r"^sha256:[0-9a-f]{64}$")
 ATTEMPT_ID_RE = re.compile(r"^[a-z][a-z0-9-]{0,62}[a-z0-9]$")
 AUTHORIZATION_ID_RE = re.compile(r"^[a-z][a-z0-9-]{0,126}[a-z0-9]$")
 CONTAINER_ID_RE = re.compile(r"^[0-9a-f]{64}$")
+OCI_REPOSITORY_RE = re.compile(
+    r"^[a-z0-9]+(?:[._-][a-z0-9]+)*(?:/[a-z0-9]+(?:[._-][a-z0-9]+)*)*$"
+)
+SAFE_PATH_RE = re.compile(r"^/[A-Za-z0-9._/@+\-/]+$")
+MAX_JSON_DEPTH = 32
+MAX_JSON_NODES = 4096
 
 
 class ContainerContractError(Exception):
@@ -149,7 +156,7 @@ def canonical_json_bytes(value: object) -> bytes:
             separators=(",", ":"),
             sort_keys=True,
         ).encode("ascii")
-    except (TypeError, ValueError, UnicodeEncodeError) as error:
+    except (TypeError, ValueError, UnicodeEncodeError, RecursionError) as error:
         raise ContainerContractError("value is not canonical-JSON encodable") from error
 
 
@@ -179,8 +186,19 @@ def _strict_json(raw: bytes) -> object:
                 ContainerContractError("non-finite JSON value: {}".format(value))
             ),
         )
-    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+    except (UnicodeDecodeError, json.JSONDecodeError, RecursionError) as error:
         raise ContainerContractError("malformed canonical JSON") from error
+    stack = [(value, 0)]
+    nodes = 0
+    while stack:
+        item, depth = stack.pop()
+        nodes += 1
+        _require(nodes <= MAX_JSON_NODES, "JSON node count exceeds limit")
+        _require(depth <= MAX_JSON_DEPTH, "JSON nesting exceeds limit")
+        if isinstance(item, dict):
+            stack.extend((child, depth + 1) for child in item.values())
+        elif isinstance(item, list):
+            stack.extend((child, depth + 1) for child in item)
     _require(raw == canonical_json_bytes(value), "JSON is not canonical")
     return value
 
@@ -201,6 +219,7 @@ def _validate_absolute_path(value: object, name: str) -> None:
     _require("\x00" not in value, "invalid {}".format(name))
     if value == "/":
         return
+    _require(SAFE_PATH_RE.fullmatch(value) is not None, "unsafe characters in {}".format(name))
     components = value.split("/")[1:]
     _require(all(component not in ("", ".", "..") for component in components), "noncanonical {}".format(name))
 
@@ -319,7 +338,11 @@ def validate_placeholder_bindings(bindings: PlaceholderBindings) -> None:
         "platform manifest must be a repository digest reference",
     )
     repository, digest = bindings.platform_manifest_reference.rsplit("@", 1)
-    _require(bool(repository) and PREFIXED_SHA256_RE.fullmatch(digest) is not None, "invalid platform manifest")
+    _require(
+        OCI_REPOSITORY_RE.fullmatch(repository) is not None
+        and PREFIXED_SHA256_RE.fullmatch(digest) is not None,
+        "invalid platform manifest",
+    )
     _validate_prefixed_sha256(bindings.image_config_digest, "image config digest")
     _require(bindings.image_config_digest == IMAGE_CONFIG_DIGEST, "image config digest drift")
     _validate_environment(bindings.host_environment, bindings.host_environment)
@@ -335,6 +358,7 @@ class ContainerCommand:
     cwd: str
     stdout_cap: int
     stderr_cap: int
+    timeout_ns: int
     activation: str
 
     def to_dict(self) -> Dict[str, object]:
@@ -347,6 +371,7 @@ class ContainerCommand:
             "stderr_cap": self.stderr_cap,
             "stdout_cap": self.stdout_cap,
             "template_ordinal": self.template_ordinal,
+            "timeout_ns": self.timeout_ns,
         }
 
 
@@ -464,6 +489,7 @@ def _expected_commands(bindings: PlaceholderBindings) -> Tuple[ContainerCommand,
                 cwd="/",
                 stdout_cap=16384,
                 stderr_cap=16384,
+                timeout_ns=COMMAND_TIMEOUT_NS,
                 activation=activation,
             )
         )
@@ -524,6 +550,7 @@ def validate_container_command_plan(
         _validate_environment(command.environment, bindings.host_environment)
         _validate_absolute_path(command.cwd, "command cwd")
         _require(command.stdout_cap == 16384 and command.stderr_cap == 16384, "stream cap drift")
+        _require(command.timeout_ns == COMMAND_TIMEOUT_NS, "command timeout drift")
         unresolved = [arg for arg in command.argv if "${" in arg]
         if command.role == "create":
             _require(not unresolved, "create command contains a placeholder")
@@ -548,10 +575,12 @@ class CommandReceipt:
     exit_code: Optional[int]
     signal: Optional[int]
     stdout_bytes: int
+    stdout_total_bytes: int
     stdout_sha256: str
     stdout_cap: int
     stdout_truncated: bool
     stderr_bytes: int
+    stderr_total_bytes: int
     stderr_sha256: str
     stderr_cap: int
     stderr_truncated: bool
@@ -605,10 +634,12 @@ def parse_command_receipt(raw: bytes) -> CommandReceipt:
             exit_code=value["exit_code"],
             signal=value["signal"],
             stdout_bytes=value["stdout_bytes"],
+            stdout_total_bytes=value["stdout_total_bytes"],
             stdout_sha256=value["stdout_sha256"],
             stdout_cap=value["stdout_cap"],
             stdout_truncated=value["stdout_truncated"],
             stderr_bytes=value["stderr_bytes"],
+            stderr_total_bytes=value["stderr_total_bytes"],
             stderr_sha256=value["stderr_sha256"],
             stderr_cap=value["stderr_cap"],
             stderr_truncated=value["stderr_truncated"],
@@ -643,7 +674,13 @@ class AttemptState:
     schema: str = ATTEMPT_STATE_SCHEMA
 
     @classmethod
-    def initial(cls, plan: ContainerCommandPlan) -> "AttemptState":
+    def initial(
+        cls,
+        plan: ContainerCommandPlan,
+        authorization_root: AuthorizationRoot,
+        bindings: PlaceholderBindings,
+    ) -> "AttemptState":
+        validate_container_command_plan(plan, authorization_root, bindings)
         return cls(
             plan_sha256=plan.digest,
             authorization_root_sha256=plan.authorization_root_sha256,
@@ -671,7 +708,10 @@ def _template(plan: ContainerCommandPlan, role: str) -> ContainerCommand:
     raise ContainerContractError("plan is missing role: {}".format(role))
 
 
-def next_container_command(plan: ContainerCommandPlan, state: AttemptState) -> Optional[ContainerCommand]:
+def _next_container_command_for_state(
+    plan: ContainerCommandPlan,
+    state: AttemptState,
+) -> Optional[ContainerCommand]:
     _require(state.plan_sha256 == plan.digest, "state plan binding drift")
     _require(state.authorization_root_sha256 == plan.authorization_root_sha256, "state authorization binding drift")
     _require(state.status not in TERMINAL_STATUSES, "attempt is terminal")
@@ -704,8 +744,10 @@ def _validate_receipt_shape(receipt: CommandReceipt) -> None:
         "ended_monotonic_ns",
         "duration_ns",
         "stdout_bytes",
+        "stdout_total_bytes",
         "stdout_cap",
         "stderr_bytes",
+        "stderr_total_bytes",
         "stderr_cap",
     ):
         value = getattr(receipt, name)
@@ -720,9 +762,31 @@ def _validate_receipt_shape(receipt: CommandReceipt) -> None:
         _require(receipt.exit_code is None and receipt.signal is None, "bounded/not-run outcome carries exit or signal")
     _validate_sha256(receipt.stdout_sha256, "stdout digest")
     _validate_sha256(receipt.stderr_sha256, "stderr digest")
-    _require(receipt.stdout_bytes <= receipt.stdout_cap and receipt.stderr_bytes <= receipt.stderr_cap, "stream exceeds cap")
-    _require(receipt.stdout_truncated == (receipt.outcome == "stdout_limit"), "stdout truncation drift")
-    _require(receipt.stderr_truncated == (receipt.outcome == "stderr_limit"), "stderr truncation drift")
+    _require(receipt.stdout_bytes <= receipt.stdout_cap and receipt.stderr_bytes <= receipt.stderr_cap, "retained stream exceeds cap")
+    if receipt.outcome == "stdout_limit":
+        _require(
+            receipt.stdout_bytes == receipt.stdout_cap
+            and receipt.stdout_total_bytes > receipt.stdout_cap
+            and receipt.stdout_truncated,
+            "stdout-limit arithmetic drift",
+        )
+    else:
+        _require(
+            receipt.stdout_total_bytes == receipt.stdout_bytes and not receipt.stdout_truncated,
+            "stdout length or truncation drift",
+        )
+    if receipt.outcome == "stderr_limit":
+        _require(
+            receipt.stderr_bytes == receipt.stderr_cap
+            and receipt.stderr_total_bytes > receipt.stderr_cap
+            and receipt.stderr_truncated,
+            "stderr-limit arithmetic drift",
+        )
+    else:
+        _require(
+            receipt.stderr_total_bytes == receipt.stderr_bytes and not receipt.stderr_truncated,
+            "stderr length or truncation drift",
+        )
     if receipt.container_id is not None:
         _require(CONTAINER_ID_RE.fullmatch(receipt.container_id) is not None, "invalid container id")
     if receipt.previous_receipt_sha256 is not None:
@@ -742,7 +806,14 @@ def _validate_receipt_shape(receipt: CommandReceipt) -> None:
     if receipt.outcome == "not_run":
         _require(not receipt.container_action_observed, "not-run receipt fabricates an observation")
         _require(receipt.started_monotonic_ns == receipt.ended_monotonic_ns == receipt.duration_ns == 0, "not-run receipt carries time")
-        _require(receipt.stdout_bytes == receipt.stderr_bytes == 0, "not-run receipt carries stream bytes")
+        _require(
+            receipt.stdout_bytes
+            == receipt.stdout_total_bytes
+            == receipt.stderr_bytes
+            == receipt.stderr_total_bytes
+            == 0,
+            "not-run receipt carries stream bytes",
+        )
         _require(receipt.stdout_sha256 == EMPTY_SHA256 and receipt.stderr_sha256 == EMPTY_SHA256, "not-run receipt carries stream digests")
         _require(receipt.container_id is None, "not-run receipt carries container identity")
     else:
@@ -751,7 +822,7 @@ def _validate_receipt_shape(receipt: CommandReceipt) -> None:
         _require(receipt.duration_ns == receipt.ended_monotonic_ns - receipt.started_monotonic_ns, "duration drift")
 
 
-def validate_command_receipt(
+def _validate_command_receipt_for_state(
     receipt: CommandReceipt,
     plan: ContainerCommandPlan,
     state: AttemptState,
@@ -766,7 +837,7 @@ def validate_command_receipt(
     _require(receipt.ordinal == len(state.completed_receipt_sha256), "receipt ordinal drift")
     _require(receipt.role == state.next_role, "receipt role drift")
     _require(receipt.previous_receipt_sha256 == state.previous_receipt_sha256, "receipt chain drift")
-    expected = next_container_command(plan, state)
+    expected = _next_container_command_for_state(plan, state)
     if expected is None:
         _require(receipt.outcome == "not_run", "skipped role must be not-run")
         template = _template(plan, receipt.role)
@@ -784,6 +855,8 @@ def validate_command_receipt(
         _require(receipt.environment == expected.environment, "receipt environment drift")
         _require(receipt.cwd == expected.cwd, "receipt cwd drift")
         _require(receipt.stdout_cap == expected.stdout_cap and receipt.stderr_cap == expected.stderr_cap, "receipt cap drift")
+        if receipt.outcome == "timeout":
+            _require(receipt.duration_ns >= expected.timeout_ns, "timeout below command bound")
     _require(receipt.docker_executable_sha256 == plan.docker_executable_sha256, "receipt Docker digest drift")
     if receipt.role == "create":
         if receipt.outcome == "exit" and receipt.exit_code == 0:
@@ -805,12 +878,12 @@ def _is_success(receipt: CommandReceipt) -> bool:
     return receipt.outcome == "exit" and receipt.exit_code == 0
 
 
-def advance_attempt_state(
+def _advance_attempt_state_for_state(
     plan: ContainerCommandPlan,
     state: AttemptState,
     receipt: CommandReceipt,
 ) -> AttemptState:
-    validate_command_receipt(receipt, plan, state)
+    _validate_command_receipt_for_state(receipt, plan, state)
     digest = receipt.digest
     completed = state.completed_receipt_sha256 + (digest,)
     common = {
@@ -887,7 +960,7 @@ def advance_attempt_state(
         return replace(
             state,
             **common,
-            next_role="inspect-terminal",
+            next_role="wait",
             first_failure=failure or "start-attach:failed",
         )
 
@@ -916,12 +989,58 @@ def advance_attempt_state(
     )
 
 
+def _replay_receipt_prefix(
+    plan: ContainerCommandPlan,
+    receipts: Sequence[CommandReceipt],
+    authorization_root: AuthorizationRoot,
+    bindings: PlaceholderBindings,
+) -> AttemptState:
+    _require(isinstance(receipts, (tuple, list)), "receipt chain has wrong type")
+    _require(len(receipts) <= len(ALL_ROLES), "receipt chain exceeds lifecycle bound")
+    state = AttemptState.initial(plan, authorization_root, bindings)
+    for receipt in receipts:
+        state = _advance_attempt_state_for_state(plan, state, receipt)
+    return state
+
+
+def next_container_command(
+    plan: ContainerCommandPlan,
+    prior_receipts: Sequence[CommandReceipt],
+    authorization_root: AuthorizationRoot,
+    bindings: PlaceholderBindings,
+) -> Optional[ContainerCommand]:
+    state = _replay_receipt_prefix(plan, prior_receipts, authorization_root, bindings)
+    return _next_container_command_for_state(plan, state)
+
+
+def validate_command_receipt(
+    receipt: CommandReceipt,
+    plan: ContainerCommandPlan,
+    prior_receipts: Sequence[CommandReceipt],
+    authorization_root: AuthorizationRoot,
+    bindings: PlaceholderBindings,
+) -> None:
+    state = _replay_receipt_prefix(plan, prior_receipts, authorization_root, bindings)
+    _validate_command_receipt_for_state(receipt, plan, state)
+
+
+def advance_attempt_state(
+    plan: ContainerCommandPlan,
+    prior_receipts: Sequence[CommandReceipt],
+    receipt: CommandReceipt,
+    authorization_root: AuthorizationRoot,
+    bindings: PlaceholderBindings,
+) -> AttemptState:
+    state = _replay_receipt_prefix(plan, prior_receipts, authorization_root, bindings)
+    return _advance_attempt_state_for_state(plan, state, receipt)
+
+
 def validate_receipt_chain(
     plan: ContainerCommandPlan,
     receipts: Sequence[CommandReceipt],
+    authorization_root: AuthorizationRoot,
+    bindings: PlaceholderBindings,
 ) -> AttemptState:
-    _require(isinstance(receipts, (tuple, list)), "receipt chain has wrong type")
-    state = AttemptState.initial(plan)
-    for receipt in receipts:
-        state = advance_attempt_state(plan, state, receipt)
+    state = _replay_receipt_prefix(plan, receipts, authorization_root, bindings)
+    _require(state.status in TERMINAL_STATUSES, "receipt chain is missing terminal cleanup")
     return state
