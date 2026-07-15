@@ -452,6 +452,8 @@ dependencies = [
 name = "hsai-native-transcript-preparation"
 version = "0.1.0"
 dependencies = [
+ "libc",
+ "rustix",
  "serde",
  "serde_json",
  "sha2",

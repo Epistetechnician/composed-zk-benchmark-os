@@ -12,11 +12,14 @@ fn metadata() -> MetadataSnapshot {
     MetadataSnapshot {
         device: 1,
         inode: 2,
-        byte_length: 3,
         mode: 0o100755,
         owner_uid: 501,
+        link_count: 1,
+        byte_length: 3,
         modified_seconds: 4,
         modified_nanoseconds: 5,
+        changed_seconds: 6,
+        changed_nanoseconds: 7,
     }
 }
 
@@ -71,8 +74,24 @@ fn complete_candidate() -> PreparationCandidate {
         .map(|role| ExecutableIdentityFact {
             schema: EXECUTABLE_FACT_SCHEMA.to_string(),
             role_id: role,
+            registry_id: machine_policy.registry_id.clone(),
+            machine_policy_id: machine_policy.policy_id.clone(),
             machine_policy_sha256: policy_sha256.clone(),
-            platform: platform.clone(),
+            policy_entry_sha256: machine_policy_entry_sha256(
+                machine_policy
+                    .entries
+                    .iter()
+                    .find(|entry| entry.role_id == role)
+                    .unwrap(),
+            )
+            .unwrap(),
+            acceptance_policy_id: role.expected_policy_id().to_string(),
+            decision: ReviewDecision::Accepted,
+            declared_platform: platform.clone(),
+            observed_platform: ObservedPlatformIdentity {
+                os: "macos".to_string(),
+                arch: "aarch64".to_string(),
+            },
             requested_path: requested_path(role),
             ordered_symlink_hops: vec![],
             canonical_regular_file_path: requested_path(role),
@@ -222,6 +241,12 @@ fn capture_authorization_and_claim_boundary_drift_are_rejected() {
 #[test]
 fn candidate_serialization_and_digest_are_deterministic() {
     let candidate = complete_candidate();
+    assert!(PREPARATION_CANDIDATE_SCHEMA.ends_with("-v2"));
+    assert!(EXECUTABLE_FACT_SCHEMA.ends_with("-v2"));
+    assert!(PREPARATION_CANDIDATE_SCHEMA_V1.ends_with("-v1"));
+    assert!(EXECUTABLE_FACT_SCHEMA_V1.ends_with("-v1"));
+    assert_ne!(CANDIDATE_DIGEST_DOMAIN, CANDIDATE_DIGEST_DOMAIN_V1);
+    assert_ne!(STATE_SLICE, STATE_SLICE_V1);
     assert_eq!(
         serialize_candidate_json(&candidate).unwrap(),
         serialize_candidate_json(&candidate).unwrap()

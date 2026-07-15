@@ -20211,6 +20211,26 @@ This phase adds no Rust capability, collects no machine fact, and leaves
 remains the earliest possible materialization phase. See
 `docs/791-phase-hsai-native-transcript-descriptor-relative-collector-boundary.md`.
 
+## Phase 792 HSAI Native Transcript Descriptor-Relative Collector Implementation
+
+Status: bounded local collector implemented. State slice:
+`phase-792-hsai-native-transcript-descriptor-relative-collector`.
+
+Phase 792 adds the macOS-only `collect_executable_identity_fact` path with
+retained descriptor-relative traversal, exact-root containment, 32-hop bounded
+symlink resolution, 1-GiB bounded descriptor hashing, complete stable metadata,
+final directory/symlink/terminal rechecks, policy-entry digest binding, and a
+closed typed rejection surface. Current, strict-clippy, and Rust 1.74 focused
+gates pass across 28 tests, including channel-coordinated deterministic mutation
+checkpoints.
+
+The result is a local observation-window fact only. `P01B` remains stopped; no
+Phase 780 lane closes, no transcript is captured, and no evidence is accepted.
+Phase 793 is docs-first for operator preparation-driver and source-receipt
+authority; Phase 795 remains the earliest conditional materialization phase,
+Phase 796 capture, and Phase 806 plan v2. See
+`docs/792-phase-hsai-native-transcript-descriptor-relative-collector-implementation.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
