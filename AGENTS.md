@@ -1888,6 +1888,32 @@ Every such authority remains false. The next step, if separately authorized,
 is another docs-first boundary for the remaining driver, probe, containment,
 runtime-provenance, filesystem-certificate, and receipt-schema classes.
 
+Explicit Phase 796-A3L4 HSAI P01B portable evidence-carrying authorization
+receipt boundary now allowed and completed as documentation only: the phase
+record and standard documentation mirrors under `docs/`, `README.md`, and
+`AGENTS.md`. This slice authorizes a later A3L4I implementation in exactly
+`tools/hsai-formal-preflight/p01b_container_contract.py` and
+`tools/hsai-formal-preflight/tests/p01b_container_contract_tests.py`, followed
+by a separate five-file audit/documentation commit. A3L4I is limited to pure-
+data placeholder bindings, exact create/pre-start-inspect/start/wait/terminal-
+inspect/remove and conditional-kill command plans, canonical command receipts,
+digest chaining, a caller-supplied action/policy/evidence/admission
+authorization root, and a fail-closed lifecycle state machine. Its test filename
+must remain outside `test_*.py` so the Phase 796-A3L3 172-test corpus identity
+does not change. Success may change only the separate
+`c10_local_contract_implemented` readiness bit from false to true; C10 and all
+of C02-C07/C09 remain open until retained execution receipts receive
+independent review.
+
+Phase 796-A3L4 and A3L4I permit no CLI, runner, subprocess or socket import,
+Docker SDK, environment-derived authority, filesystem write, Docker inspection
+or socket access, image or container action, network or archive access, backend
+execution, receipt observation, accepted-evidence mutation, Level2+ evidence,
+score-axis population, independent-reproduction claim, commercial-moat claim,
+semantic-correctness claim, production-readiness claim, SOTA claim,
+breakthrough claim, full-security claim, external audit, or action authority.
+A3L5 and every synthetic or live container run remain separately gated.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.

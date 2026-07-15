@@ -20524,6 +20524,30 @@ production-readiness, SOTA, breakthrough, full-security, external-audit, or
 action authority was exercised or created. See
 `docs/796a3l3-phase-hsai-p01b-container-corpus-profile-implementation.md`.
 
+## Phase 796-A3L4 HSAI P01B Portable Authorization Receipt Boundary
+
+Status: complete as a documentation-only code-phase boundary. State slice:
+`phase-796a3l4-hsai-p01b-portable-evidence-carrying-authorization-receipt-boundary`.
+
+Phase 796-A3L4 freezes one narrow future implementation over exactly two new
+Python files: a pure-data container command/receipt contract and an explicitly
+invoked hermetic test module whose filename does not alter the frozen 172-test
+formal-preflight discovery corpus. The future A3L4I implementation may define
+typed placeholder bindings, exact create/inspect/start/wait/remove plus
+conditional-kill plans, canonical receipt parsing and chaining, and a fail-
+closed lifecycle state machine. It may not run Docker, read the Docker socket,
+load process environment as authority, write files, access the network or an
+archive, execute a backend, or mutate evidence.
+
+The mechanical correspondence baseline is C01 and C08 closed, or 2/10, and it
+does not move under a pure-data implementation. A green and independently
+reviewed A3L4I candidate may change only
+`c10_local_contract_implemented=false` to `true`; C10 and all of C02-C07/C09
+remain open until retained execution receipts receive independent review. A3L5
+and every container run remain unauthorized. This boundary does not improve
+commercial moat or end-to-end evidence by itself. See
+`docs/796a3l4-phase-hsai-p01b-portable-authorization-receipt-boundary.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
