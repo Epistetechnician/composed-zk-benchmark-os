@@ -1933,6 +1933,29 @@ breakthrough-evidence score moves. A3L5 and every retained run remain separately
 gated by the driver/probe/provenance/certificate boundary recorded in
 `docs/796a3l4i-phase-hsai-p01b-container-command-receipt-contract-implementation.md`.
 
+Explicit Phase 796-A3L5 HSAI P01B retained container execution/evidence
+boundary now allowed and completed as documentation only. It freezes an atomic
+2/10-to-10/10 correspondence program: one native 3.9.6 reference, one normal
+container attempt, one survivor-collector child-OOM attempt, content-addressed
+index/platform-manifest provenance, exact security/cgroup/runtime observations,
+running-container raw-TAR export with controlled `SIGUSR1` release,
+descriptor-safe ingress, Darwin-exclusive transactional publication, mandatory
+cleanup/absence verification, and two independent local reviews. It authorizes
+a later A3L6 implementation in exactly five new non-discovery Python files and
+a separate five-file audit commit. A3L6 remains hermetic and may not contact
+Docker, the socket, registry, or network. A3L7 alone may perform two direct,
+digest-addressed Buildx registry reads and must bind the immutable
+implementation plus current machine/image identities; A3L8 is network-disabled.
+The v2 control supersedes `ipc=none` with private IPC so the 1-MiB shared-memory
+mount can be observed. No partial attempt moves the accepted metric. A zero-gap
+single-host A3L9 decision may close C02-C07/C09/C10 and move local correspondence
+to 10/10, but remains Level 1 synthetic local evidence under explicit signed-
+app/Docker-daemon honesty assumptions. Commercial moat and defensible
+breakthrough evidence are capped at 4/10, with no Level2, external reproduction,
+proof, production-readiness, SOTA, breakthrough, full-security, external-audit,
+or accepted-evidence claim. See
+`docs/796a3l5-phase-hsai-p01b-retained-container-execution-evidence-boundary.md`.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.
