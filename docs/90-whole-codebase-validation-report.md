@@ -1290,6 +1290,31 @@ backend execution, accepted evidence, Level2+, score axes, semantic
 correctness, production readiness, SOTA, breakthrough, full security,
 external audit, and action authority remain unauthorized.
 
+[docs/796a3l-phase-hsai-p01b-linux-container-correspondence-boundary.md](docs/796a3l-phase-hsai-p01b-linux-container-correspondence-boundary.md)
+records the docs-first blocked alternate Linux-container correspondence
+assessment.
+Read-only inspection pins the Docker client SHA-256 and signature, Desktop
+4.77.0, Engine 29.5.3, LinuxKit 6.12.76, cgroup v2, containerd, runc, context,
+and one local Python 3.11.15 image candidate by repo and config digest.
+
+Static review confirms the candidate remains unaccepted and that no image was
+pulled, built, or run. Two independent reviews reject run authorization and
+normalize 18 findings into ten blocking containment, runtime, OOM-receipt,
+sandbox, cgroup-receipt, resource-bound, provenance, test-identity,
+filesystem-certificate, and exact-command classes. The retained record marks
+execution `NotRun`, contains no successful result fields, and keeps
+all unresolved schema and identity digests null.
+Both final re-reviews return `accept_blocked_assessment` with zero findings;
+this is not run authorization.
+
+The canonical boundary digest is
+`87fb100d4454e9cc05c1b19baf47749230324fbc9ccf32f6a150a67e2f4b0ea7`. Image pull, container run,
+Phase 796-A3L1, native Phase 796-A3, archive acquisition, Phase 797,
+materialization, transcript capture, backend execution, accepted evidence,
+evidence escalation, Level2+, score axes, semantic correctness, production
+readiness, SOTA, breakthrough, full security, external audit, and action
+authority remain unauthorized.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

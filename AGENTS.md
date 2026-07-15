@@ -1754,6 +1754,38 @@ authority. It explicitly keeps `phase_796_a3_authorized=false`,
 or a new Linux-container correspondence boundary requires separate
 authorization.
 
+Explicit Phase 796-A3L HSAI P01B Linux-container correspondence boundary now
+allowed and completed as a blocked assessment: one docs-first record, six
+external-source index rows, and standard documentation mirrors only. This
+slice binds observed Docker
+client, Desktop, engine, context, cgroup, containerd, and runc identities plus
+one local Python 3.11.15 image candidate by repo and config digest. The
+candidate remains `accepted=false` because it is not the audited
+native Python 3.9.6 runtime. Two independent reviews reject run authorization
+and normalize 18 findings into ten blocking classes covering memory semantics,
+runtime and golden projection, OOM receipts, sandbox identities, effective
+cgroup receipts, bounded resources, image provenance, test identity,
+filesystem certificates, and exact create/start/receipt grammar. The record
+uses `container_execution_status=NotRun`, leaves unresolved schema
+and identity digests null, and carries no successful compatibility-result
+fields. Both final re-reviews return `accept_blocked_assessment` with zero
+findings; this accepts only the blocker record. Its canonical digest is
+`87fb100d4454e9cc05c1b19baf47749230324fbc9ccf32f6a150a67e2f4b0ea7`. Phase 796-A3L permits no
+source, test, Cargo, parser, container-driver, immutable-boundary, or
+historical-validator mutation; image pull or build; container create, start, or
+exec; archive request, read, acquisition, or extraction; volume or staged
+parser creation; materialization; transcript capture; Phase 797 activation;
+backend, Lean, SMT, Z3, or COBALT execution; proof artifact; accepted evidence;
+Level2+; score axes; semantic correctness; production readiness; SOTA;
+breakthrough; full security; external audit; or action authority. It explicitly
+keeps the image unaccepted and
+`phase_796_a3l1_compatibility_run_authorized=false`,
+`phase_796_a3_authorized=false`, and
+`archive_acquisition_authorized=false`. Accepted-evidence,
+evidence-escalation, and Level2+ authority are also false. Phase 796-A3L1 may
+close documentation blockers only; every execution successor requires a later
+separate explicit phase.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.
