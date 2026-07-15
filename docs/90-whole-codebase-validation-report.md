@@ -1435,6 +1435,27 @@ network, archive, backend, proof, accepted evidence, Level2+, score axis,
 independent reproduction, commercial moat, breakthrough evidence, or stronger
 claim is created.
 
+[docs/796a3l5-phase-hsai-p01b-retained-container-execution-evidence-boundary.md](docs/796a3l5-phase-hsai-p01b-retained-container-execution-evidence-boundary.md)
+records the next docs-first boundary. Read-only readiness confirmed exact Docker
+client, daemon, socket, kernel, containerd, runc, cgroup-v2, image-config,
+RootFS, seccomp, corpus, and native-interpreter identities, while retaining the
+platform-manifest, collector, effective-control, runtime-provenance, C09, and
+observed-chain gaps. The boundary therefore authorizes no direct Docker action.
+
+It freezes a five-file hermetic A3L6 implementation slice for a native/normal/
+child-OOM probe, pure-data reconstruction, and the sole later Docker/filesystem
+authority driver. A3L7 alone may retain two direct digest-addressed registry
+responses and must bind the accepted immutable implementation to current
+machine/image identities. A3L8 is network-disabled and may run only one native
+reference, one normal container, one survivor-collector child-OOM container,
+running-container raw-TAR export, controlled release, and exact cleanup. A3L9
+accepts C02-C07/C09/C10 only atomically after two deterministic zero-finding
+reconstructions. Partial or rejected evidence leaves correspondence at 2/10.
+An accepted single-host result may reach 10/10 local correspondence and at most
+4/10 estimated commercial moat/evidence, but remains Level 1 synthetic local
+evidence under explicit signed-app/Docker-daemon honesty assumptions with no
+external reproduction or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

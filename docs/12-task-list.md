@@ -20572,6 +20572,24 @@ evidence, Level2+, score-axis, commercial-moat, or breakthrough-evidence action
 or claim is created. See
 `docs/796a3l4i-phase-hsai-p01b-container-command-receipt-contract-implementation.md`.
 
+## Phase 796-A3L5 HSAI P01B Retained Container Execution/Evidence Boundary
+
+Status: complete as a documentation-only boundary. State slice:
+`phase-796a3l5-hsai-p01b-retained-container-execution-evidence-boundary`.
+
+The boundary freezes one atomic score-moving program: native Python 3.9.6,
+normal Python 3.11.15, survivor-collector child-OOM, exact registry/image/runtime
+provenance, raw cgroup/security/resource observations, descriptor-safe ingress,
+running-container raw-TAR export, controlled release, exclusive transactional
+publication, exact cleanup/absence proof, and deterministic two-reviewer
+reconstruction. Five new Python files are authorized for hermetic A3L6; A3L7
+alone may perform two direct digest-addressed registry reads, and A3L8 is
+network-disabled. Partial evidence gets zero class credit. A zero-gap A3L9 may
+move correspondence from 2/10 to 10/10 but remains Level 1 single-host
+synthetic evidence under explicit local runtime-honesty assumptions, with
+moat/evidence estimates capped at 4/10. See
+`docs/796a3l5-phase-hsai-p01b-retained-container-execution-evidence-boundary.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
