@@ -1370,6 +1370,31 @@ Only the narrow A3L3 implementation is authorized. Driver, probe, Docker,
 container, archive, backend, accepted-evidence, Level2+, and stronger-claim
 authority remain false.
 
+[docs/796a3l3-phase-hsai-p01b-container-corpus-profile-implementation.md](docs/796a3l3-phase-hsai-p01b-container-corpus-profile-implementation.md)
+records the audited Phase 796-A3L3 implementation. Candidate commit
+`0d67de690625fb47b26c3b47f7cc195ec2adfc7c` changes exactly the six
+authorized runtime/data files and binds tree
+`3c81b177f66ade993862810df8d1174f05927c18`. The checker validates the
+canonical corpus, source manifest, profile, license, and provenance through
+bounded descriptor-relative reads. It reconstructs test identities with a
+static TestLoader model and an independent AST pass over retained validated
+bytes, so it does not import, execute, or reopen suite source.
+
+The first immutable candidate was rejected for a pathname-discovery TOCTOU and
+import-shadow authority gap. The replacement removes that authority and adds a
+no-import/no-execution regression test. Python 3.9.6 and 3.11 each pass 21
+focused and 172 complete formal-preflight tests; ruff, Rust formatting, the
+unaffected Rust workspace tests, clippy, diff hygiene, exact source-tree
+correspondence, and six-path commit checks pass. Two independent immutable-
+commit reviewers accept with zero findings.
+
+The implementation closes C08 and pins profile provenance only. It performs no
+Docker, image, container, archive, network, backend, proof, accepted-evidence,
+Level2+, score-axis, semantic-correctness, production-readiness, SOTA,
+breakthrough, full-security, external-audit, or action-authority operation.
+Remaining container correspondence classes require a separate docs-first
+boundary.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

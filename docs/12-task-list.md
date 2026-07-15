@@ -20495,6 +20495,35 @@ C09-C10, container execution, archive acquisition, backend execution, accepted
 evidence, Level2+, and stronger claims remain unauthorized. See
 `docs/796a3l2-phase-hsai-p01b-linux-container-implementation-boundary.md`.
 
+## Phase 796-A3L3 HSAI P01B Container Corpus/Profile Implementation
+
+Status: complete as an audited local implementation. State slice:
+`phase-796a3l3-hsai-p01b-container-corpus-profile-implementation`.
+
+The exact six-file implementation commit is
+`0d67de690625fb47b26c3b47f7cc195ec2adfc7c`. It adds a read-only
+standard-library corpus checker, the canonical 68-test focused and 151-test
+future workload corpus, the pinned Moby seccomp profile and upstream license,
+canonical provenance, and hermetic tests. The checker uses descriptor-relative
+regular-file reads and compares independent static TestLoader and AST identity
+reconstructions over retained manifest-bound bytes. It imports and executes no
+suite source.
+
+An earlier immutable candidate was rejected because pathname discovery could
+reopen replaced source or execute an unmanifested local import shadow. The
+replacement removes pathname discovery and adds explicit no-import/no-execution
+coverage. Validation passes 21 focused tests and 172 complete formal-preflight
+tests on Python 3.9.6 and 3.11, plus ruff, Rust formatting, the unaffected Rust
+workspace tests, and clippy with warnings denied. Two independent reviewers
+accept the replacement commit with zero findings.
+
+This closes only C08 and pins one profile-provenance input. No Docker command,
+socket, image, container, archive, network, backend, Lean, SMT, Z3, COBALT,
+proof, accepted-evidence, Level2+, score-axis, semantic-correctness,
+production-readiness, SOTA, breakthrough, full-security, external-audit, or
+action authority was exercised or created. See
+`docs/796a3l3-phase-hsai-p01b-container-corpus-profile-implementation.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
