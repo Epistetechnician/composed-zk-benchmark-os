@@ -20411,6 +20411,34 @@ substrate-correspondence findings. The retained blocked-decision digest is
 candidate, backend, evidence, stronger claim, or authority is created. See
 `docs/796a2s-phase-hsai-p01b-resident-memory-supervisor-feasibility-stop.md`.
 
+## Phase 796-A3L HSAI P01B Linux-Container Correspondence Boundary
+
+Status: complete as a docs-first blocked alternate-substrate assessment. State
+slice:
+`phase-796a3l-hsai-p01b-linux-container-correspondence-boundary`.
+
+Phase 796-A3L binds the observed signed Docker client, Desktop/engine/context,
+cgroup-v2 capabilities, and one local content-addressed
+`python:3.11-slim-bookworm` candidate. The image remains
+`accepted=false` because Python 3.11.15 is not the Phase 796-A1
+audited native Python 3.9.6 runtime.
+
+Two independent reviews reject execution authorization and normalize 18
+findings into ten blocking classes: cgroup-versus-RSS semantics, runtime and
+golden projection, OOM receipt topology, sandbox identities, effective cgroup
+receipts, stream/resource bounds, complete image provenance, test identity,
+filesystem certificates, and exact create/start/receipt grammar. All unrun
+result fields are absent; unresolved identities and schema digests remain null.
+Both final re-reviews accept the blocked assessment with zero findings; neither
+accepts execution.
+
+The 4377-byte canonical blocked-decision digest is
+`87fb100d4454e9cc05c1b19baf47749230324fbc9ccf32f6a150a67e2f4b0ea7`. Image pull, container run,
+Phase 796-A3L1, native Phase 796-A3, archive acquisition, backend execution,
+accepted evidence, evidence escalation, Level2+, and stronger claims remain
+false. The next request may close documentation blockers only. See
+`docs/796a3l-phase-hsai-p01b-linux-container-correspondence-boundary.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
