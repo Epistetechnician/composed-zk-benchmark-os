@@ -20344,8 +20344,9 @@ Phase 796 stop. See
 
 ## Phase 796-A1 HSAI P01B Archive Ledger Parser Implementation
 
-Status: hermetic implementation complete; clean-commit Phase 796-A2 audit
-pending. State slice: `phase-796a1-hsai-p01b-archive-ledger-helper`.
+Status: hermetic implementation complete; the clean-commit Phase 796-A2 audit
+is recorded separately below. State slice:
+`phase-796a1-hsai-p01b-archive-ledger-helper`.
 
 Phase 796-A1 implements the separately authorized standard-library helper and
 synthetic tests. The helper directly parses one RFC 1952 member, raw DEFLATE,
@@ -20361,10 +20362,32 @@ under `/usr/bin/python3` 3.9.6, plus Ruff, Rust formatting, and diff hygiene.
 Two independent development reviews return `READY`. No real archive, network,
 durable candidate, acquisition, backend, Lean, SMT, Z3, COBALT, proof artifact,
 accepted evidence, Level2+, stronger claim, or authority is created. Phase
-796-A2 remains a separate clean-commit audit; Phase 796-A3 remains separately
-blocked by acquisition authority and enforced 512-MiB resident-memory
-containment. See
+796-A2 is recorded separately below; Phase 796-A3 remains blocked by
+acquisition authority and enforced 512-MiB resident-memory containment. See
 `docs/796a1-phase-hsai-p01b-archive-ledger-parser-implementation.md`.
+
+## Phase 796-A2 HSAI P01B Archive Ledger Clean-Commit Audit
+
+Status: complete with a retained zero-gap clean-commit decision. State slice:
+`phase-796a2-hsai-p01b-archive-ledger-clean-commit-audit`.
+
+Phase 796-A2 audits exact commit
+`53442464ec851be46dd1e47b44b0918a14e9cf4a` in a clean detached worktree.
+The 68 focused and 151 complete formal-preflight tests pass; all 56 observed
+deterministic failure classes are covered; Ruff, Rust formatting, and
+workspace-wide Cargo checking pass; and the runner enforces the selected host
+CPU, output-size, and descriptor limits. Two fresh independent reviewers
+accept all ten immutable audit controls with zero findings.
+
+The retained aggregate decision is `zero_gap` with digest
+`5301f672b057396791e85af8c16194617accaf40df087f9a967e4ef148d15dfb`.
+It explicitly keeps `phase_796_a3_authorized=false` and
+`acquisition_authorized=false`. No real archive, network, extraction, durable
+candidate, materialization, capture, backend execution, proof artifact,
+accepted evidence, Level2+, stronger claim, or authority is created. A future
+A3 authorization remains blocked by explicit acquisition authority and an
+accepted 512-MiB resident-memory supervisor. See
+`docs/796a2-phase-hsai-p01b-archive-ledger-clean-commit-audit.md`.
 
 ## Managed-Attestation Track: Managed JWT Signature Verification
 

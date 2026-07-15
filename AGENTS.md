@@ -1705,9 +1705,29 @@ build, P01B materialization, transcript capture, Phase 797 activation, backend,
 Lean, SMT, Z3, or COBALT execution, proof artifact, accepted evidence,
 Level2+, score axes, semantic correctness, production readiness, SOTA,
 breakthrough, full security, external audit, or action authority. Phase 796-A2
-remains a separate clean-commit audit. Phase 796-A3 remains separately blocked
-by explicit acquisition authority and accepted enforcement of
+was kept as a separate clean-commit audit and is recorded below. Phase 796-A3
+remains separately blocked by explicit acquisition authority and enforcement of
 `max_resident_bytes=536870912`.
+
+Explicit Phase 796-A2 HSAI P01B archive-ledger clean-commit audit now allowed
+and completed: one retained audit record plus standard documentation mirrors
+only. This slice reviews exact commit
+`53442464ec851be46dd1e47b44b0918a14e9cf4a` in a clean detached worktree,
+re-runs 68 focused and 151 complete formal-preflight tests, accounts for all 56
+observed deterministic failure classes, confirms the selected host CPU,
+output-size, and descriptor limits, and records two fresh independent
+ten-of-ten accept decisions with zero findings. Its canonical aggregate digest
+is `5301f672b057396791e85af8c16194617accaf40df087f9a967e4ef148d15dfb`.
+Phase 796-A2 permits no source, test, Cargo, parser, immutable-boundary, or
+historical-validator mutation; real archive read or acquisition; network;
+durable generated candidate; extraction; build; materialization; transcript
+capture; Phase 797 activation; backend, Lean, SMT, Z3, or COBALT execution;
+proof artifact; accepted evidence; Level2+; score axes; semantic correctness;
+production readiness; SOTA; breakthrough; full security; external audit; or
+action authority. The retained decision explicitly keeps
+`phase_796_a3_authorized=false` and `acquisition_authorized=false`. A separate
+Phase 796-A3 decision remains blocked by explicit acquisition authority and an
+accepted supervisor enforcing `max_resident_bytes=536870912`.
 
 Forbidden in the current Level 1 state:
 
