@@ -1412,6 +1412,29 @@ populate score axes, or claim independent reproduction, commercial moat,
 semantic correctness, production readiness, SOTA, breakthrough, full security,
 external audit, or action authority. The correspondence metric remains 2/10.
 
+[docs/796a3l4i-phase-hsai-p01b-container-command-receipt-contract-implementation.md](docs/796a3l4i-phase-hsai-p01b-container-command-receipt-contract-implementation.md)
+records the accepted pure-data implementation. The cumulative two-file range
+`ad8b8b63..ddb1cca3` binds caller-supplied action, policy, evidence, and
+admission digests into an exact command plan and derives every executable role
+from a validated receipt prefix. It rejects forged plans or lifecycle state,
+incomplete cleanup, fabricated timeout/stream-limit outcomes, unsafe Docker
+path or OCI inputs, and over-deep canonical JSON. Nonzero and signaled start
+outcomes retain wait, terminal inspection, and cleanup.
+
+The first immutable candidate was rejected with nine combined reviewer
+findings. Correction `ddb1cca3` closes all findings. Focused A3L4I tests pass
+21/21, the frozen corpus guard passes 21/21, normal discovery remains exactly
+172/172, Ruff and unaffected Rust guards pass, and two independent immutable-
+head reviewers accept with zero findings. The preserved admission edit remains
+unstaged at SHA-256
+`41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de`.
+
+This changes only `c10_local_contract_implemented=false` to `true`.
+Correspondence remains 2/10; C02-C07/C09/C10 remain open. No Docker, container,
+network, archive, backend, proof, accepted evidence, Level2+, score axis,
+independent reproduction, commercial moat, breakthrough evidence, or stronger
+claim is created.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

@@ -1914,6 +1914,25 @@ semantic-correctness claim, production-readiness claim, SOTA claim,
 breakthrough claim, full-security claim, external audit, or action authority.
 A3L5 and every synthetic or live container run remain separately gated.
 
+Explicit Phase 796-A3L4I HSAI P01B container command/receipt contract now
+allowed, implemented, and independently accepted in the exact two-file state
+slice authorized by Phase 796-A3L4. The cumulative implementation range
+`ad8b8b63..ddb1cca3` changes only
+`tools/hsai-formal-preflight/p01b_container_contract.py` and
+`tools/hsai-formal-preflight/tests/p01b_container_contract_tests.py`. The first
+immutable candidate was rejected for forged plan/state, incomplete cleanup,
+timeout/cap fabrication, start-failure routing, input-injection, and recursive-
+JSON defects. Correction `ddb1cca3` closes every finding; 21 focused, 21 frozen
+corpus, and exactly 172 normal-discovery tests pass, and two independent
+immutable-head reviewers accept with zero findings. The implementation is pure
+data and performs no Docker, filesystem, process, environment, socket, network,
+archive, container, or backend action. It changes only
+`c10_local_contract_implemented=false` to `true`; the correspondence metric
+remains 2/10, C02-C07/C09/C10 remain open, and no commercial-moat or defensible-
+breakthrough-evidence score moves. A3L5 and every retained run remain separately
+gated by the driver/probe/provenance/certificate boundary recorded in
+`docs/796a3l4i-phase-hsai-p01b-container-command-receipt-contract-implementation.md`.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.
