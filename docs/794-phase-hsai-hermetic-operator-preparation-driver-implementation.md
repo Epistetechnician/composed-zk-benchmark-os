@@ -148,3 +148,16 @@ Historical Phase 779 remains 102 blocked rows and 1,469 blockers without a
 source-ledger digest. Phase 795 is the earliest conditional real authorization
 and materialization slice; Phase 796 remains the earliest capture slice; Phase
 806 remains the earliest plan-v2 boundary.
+
+## Phase 795 Forward Result
+
+Phase 795 stopped before materialization because independently rooted reviewer
+authority, single-use attempt authorization, kernel-bound verified-object launch,
+exact P01B producer command contracts, and complete archive/build trust
+inventories do not exist. Trusted reservation time, anti-rollback journal
+compare-and-swap, recovery, and durable attempt-audit inventory are also open.
+It freezes those requirements in
+`docs/795-phase-hsai-external-attempt-authorization-p01b-materialization-boundary.md`.
+Phase 796 is documentation-only for execution-correspondence and transaction-
+authority closure; the
+earliest possible plan-v2 boundary moves to Phase 809.

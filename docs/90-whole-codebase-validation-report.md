@@ -1177,6 +1177,22 @@ tests. Materialization and capture booleans remain false; reviewer authority,
 `P01B`, capture, all open Phase 780 lanes, source-ledger digest publication,
 plan v2, backend execution, and accepted evidence remain stopped.
 
+[docs/795-phase-hsai-external-attempt-authorization-p01b-materialization-boundary.md](docs/795-phase-hsai-external-attempt-authorization-p01b-materialization-boundary.md)
+records the docs-first external-authority and transactional materialization
+contract. It separates fixture-key correspondence from operator-pinned trust,
+binds any future authorization to exact Phase 794 request, decision, receipt,
+profile, subject, and fact identities, and freezes strict time, replay,
+independent output-review, publication, and cleanup requirements.
+
+The audit also records unresolved prerequisites: Phase 792 observations do not
+yet prove launch of the same inode; P01B has no exact producer command contract;
+and archive/build child trust inventories, trusted reservation time, anti-
+rollback journal compare-and-swap, recovery, and audit-root inventory remain
+incomplete. Static review confirms Phase 795 adds no Rust or Cargo change, authorization, plan,
+process, network access, filesystem write, target, handoff, transcript, lane
+closure, source-ledger digest, backend result, or evidence. Phase 796 is
+documentation-only for those execution-correspondence closures.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
