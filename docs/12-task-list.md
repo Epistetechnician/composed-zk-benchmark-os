@@ -20434,10 +20434,36 @@ accepts execution.
 
 The 4377-byte canonical blocked-decision digest is
 `87fb100d4454e9cc05c1b19baf47749230324fbc9ccf32f6a150a67e2f4b0ea7`. Image pull, container run,
-Phase 796-A3L1, native Phase 796-A3, archive acquisition, backend execution,
+Phase 796-A3L1 compatibility execution, native Phase 796-A3, archive acquisition, backend execution,
 accepted evidence, evidence escalation, Level2+, and stronger claims remain
 false. The next request may close documentation blockers only. See
 `docs/796a3l-phase-hsai-p01b-linux-container-correspondence-boundary.md`.
+
+## Phase 796-A3L1 HSAI P01B Linux-Container Contract Closure Stop
+
+Status: complete as a docs-only blocked closure attempt. State slice:
+`phase-796a3l1-hsai-p01b-linux-container-contract-closure-stop`.
+
+Phase 796-A3L1 closes C01 by limiting the future claim to aggregate cgroup-v2
+containment. It advances but does not close C08: five suite digests, 68 focused
+IDs, 151 complete IDs, and candidate test-corpus digest
+`1439a56e935a1c0194db37e5a7e4ad926658e16aa8491246c56e88d8bb5a6726`.
+It does not retroactively invent the unretained Phase 796-A2 argv.
+
+C02, C03, C04, C05, C06, C07, C08, C09, and C10 remain open. Missing identities
+include the native golden projection, collector, supervisor, seccomp and LSM
+profiles, platform manifest and runtime closure, ingress/egress certificates,
+canonical corpus artifact, and receipt schema. The 2738-byte canonical stop
+digest is
+`458d1d7c0688f45920d5308fa6670ef5f0ec2e6a4a30da6cd52af31424c3bb12`.
+Both final independent re-reviews accept the blocked assessment with zero
+findings; neither accepts the candidate corpus, implementation, or execution.
+
+No image pull/build, container action, archive access, backend execution,
+accepted evidence, Level2+, or stronger claim occurred. Phase 796-A3L2 is not
+authorized; its future request must remain a docs-first implementation
+boundary. See
+`docs/796a3l1-phase-hsai-p01b-linux-container-contract-closure-stop.md`.
 
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
