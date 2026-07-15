@@ -1395,6 +1395,23 @@ breakthrough, full-security, external-audit, or action-authority operation.
 Remaining container correspondence classes require a separate docs-first
 boundary.
 
+[docs/796a3l4-phase-hsai-p01b-portable-authorization-receipt-boundary.md](docs/796a3l4-phase-hsai-p01b-portable-authorization-receipt-boundary.md)
+records the next docs-only boundary. It binds the green Phase 796-A3L3 corpus
+and profile identities plus the preserved dirty admission hash, then authorizes
+exactly two new Python files for a pure-data command-plan, canonical receipt-
+chain, and lifecycle-state implementation. The test filename remains outside
+`test_*.py`, so normal formal-preflight discovery must stay at 172 tests.
+
+The future implementation may change only the separate
+`c10_local_contract_implemented` readiness bit from false to true. C10
+correspondence stays open without retained execution receipts and independent
+review. The implementation cannot run or inspect Docker, use the socket or
+network, load environment-derived authority, write receipt artifacts, access
+an archive, execute a backend, mutate accepted evidence, create Level2+,
+populate score axes, or claim independent reproduction, commercial moat,
+semantic correctness, production readiness, SOTA, breakthrough, full security,
+external audit, or action authority. The correspondence metric remains 2/10.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
