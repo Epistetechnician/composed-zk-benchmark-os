@@ -1859,6 +1859,35 @@ action authority. It explicitly sets
 `archive_acquisition_authorized=false`, all evidence-escalation authority
 false, and all stronger claims false.
 
+Explicit Phase 796-A3L3 HSAI P01B container corpus/profile implementation now
+allowed and completed in the exact two-commit form authorized by Phase
+796-A3L2. The implementation commit changes exactly the six authorized
+runtime/data paths: a standard-library read-only corpus checker, canonical
+corpus, byte-identical seccomp profile, byte-identical upstream license,
+canonical provenance record, and hermetic tests. The checker performs
+descriptor-relative reads and reconstructs TestLoader identities from a second
+static scan over retained manifest-bound bytes before cross-checking AST output;
+it does not import, reopen, or execute suite source.
+
+The first immutable development candidate was rejected because pathname-based
+TestLoader discovery left a source-replacement and import-shadow authority gap.
+The replacement commit `0d67de690625fb47b26c3b47f7cc195ec2adfc7c`
+removes that path and passes 21 focused tests plus 172 complete
+formal-preflight tests on Python 3.9.6 and 3.11. Two independent immutable-
+commit reviews accept the replacement with zero findings. Phase 796-A3L3
+closes only the canonical corpus class C08 and pins the seccomp/profile
+provenance input; it does not close complete runtime containment or authorize a
+run.
+
+Phase 796-A3L3 performs no image action, Docker inspection, Docker socket
+access, container action, archive access, network access, backend execution,
+proof production, accepted-evidence mutation, Level2+ evidence, score-axis
+population, semantic-correctness claim, production-readiness claim, SOTA claim,
+breakthrough claim, full-security claim, external audit, or action authority.
+Every such authority remains false. The next step, if separately authorized,
+is another docs-first boundary for the remaining driver, probe, containment,
+runtime-provenance, filesystem-certificate, and receipt-schema classes.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.
