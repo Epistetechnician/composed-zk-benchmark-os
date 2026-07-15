@@ -1686,6 +1686,29 @@ audit. Only a valid retained Phase 796-A5 acceptance decision can close
 `P796-02`; candidate artifacts and proposals cannot. It does not close Phase
 780 lane `L07` or the complete Phase 796 stop.
 
+Explicit Phase 796-A1 HSAI P01B archive-ledger parser implementation now
+allowed and implemented: additive Python 3.9.6 standard-library source and
+synthetic tests under `tools/hsai-formal-preflight`, one implementation note,
+and standard mirrors only. This slice directly parses one RFC 1952 member, raw
+DEFLATE, and strict ustar blocks; retains descriptor-relative path identity;
+applies the immutable fixed resource and candidate limits; publishes one
+exclusive transactional four-file candidate with a final-status hard-link
+commit marker; independently reconstructs candidate grammar, pinned production
+asset/profile authority, measurements, limits, and false authority fields; and
+uses one atomic pipe-bounded terminal record. The historical
+`raw_archive_validator.py` and immutable Phase 796-A boundary remain unchanged.
+Hermetic validation passes 68 focused and 151 complete formal-preflight tests
+under `/usr/bin/python3` 3.9.6, Ruff, Rust formatting, and diff hygiene; two
+independent development reviews return `READY`. Phase 796-A1 permits no real
+archive read or acquisition, network, durable generated candidate, extraction,
+build, P01B materialization, transcript capture, Phase 797 activation, backend,
+Lean, SMT, Z3, or COBALT execution, proof artifact, accepted evidence,
+Level2+, score axes, semantic correctness, production readiness, SOTA,
+breakthrough, full security, external audit, or action authority. Phase 796-A2
+remains a separate clean-commit audit. Phase 796-A3 remains separately blocked
+by explicit acquisition authority and accepted enforcement of
+`max_resident_bytes=536870912`.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.
