@@ -1817,6 +1817,48 @@ docs-first A3L2 implementation boundary, implementation and hermetic tests,
 including synthetic C09 certificates, clean-commit audit, and a separate run
 decision before any synthetic attempt.
 
+Explicit Phase 796-A3L2 HSAI P01B corpus/profile implementation boundary now
+allowed and completed as documentation only: one phase record, one external
+source-index row, and standard documentation mirrors. Future A3L3 may change
+exactly six runtime/data files and five documentation files named in the
+canonical boundary. The runtime slice is limited to a read-only
+standard-library corpus checker, expanded corpus, byte-identical seccomp
+profile, byte-identical upstream license, canonical provenance record, and one
+hermetic test module. This is a narrow exception to the general no-vendored-
+source rule for only the two pinned immutable policy-data files.
+A3L3 must use a six-file candidate implementation commit followed by a
+five-file audit/documentation commit. The cumulative range must equal the exact
+eleven-path union. The phase note may hash the ten non-self files but may not
+self-hash or claim the identity of the commit containing it.
+
+A3L3 checker-owned code may not import or call subprocess or socket, use network
+or Docker, inspect a container, write runtime files, parse an archive, implement
+a transport, or modify Cargo/package metadata. TestLoader may transitively
+import only the frozen suite modules without executing tests. The provenance
+must embed the exact 135-byte `ls-remote` output. The profile is pinned to peeled commit
+`836ae4d37ef2ec995c77c99fc55f5b5f3af3a897`, 13,470 bytes, SHA-256
+`536529b665dd0972c37bfb569f5d4ac8a53592e7b00752bc39ff063ca9864c74`;
+the license is 11,358 bytes with SHA-256
+`cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30`.
+The canonical 3106-byte boundary digest is
+`a9e43d8d354759f7a55f45b9ef650e3e36c108dc3d30f09844b1cd3688c29f8a`.
+Two independent final re-reviews accept only this corrected documentation
+boundary with zero findings.
+
+Phase 796-A3L2 permits no Python/source/test/profile/corpus/license mutation in
+this docs slice; image pull/build; container create/start/exec/copy/kill/remove;
+Docker socket access by new code; archive request/read/acquisition/extraction;
+materialization; transcript capture; backend, Lean/SMT/Z3/COBALT execution;
+proof artifact; accepted evidence; Level2+; score axes; semantic correctness;
+production readiness; SOTA; breakthrough; full security; external audit; or
+action authority. It explicitly sets
+`phase_796_a3l3_implementation_authorized=true` while keeping
+`container_execution_authorized=false`,
+`container_action_authorized=false`, `docker_socket_access_authorized=false`,
+`subprocess_import_authorized=false`, `network_authorized=false`,
+`archive_acquisition_authorized=false`, all evidence-escalation authority
+false, and all stronger claims false.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.

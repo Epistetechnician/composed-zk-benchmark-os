@@ -20465,6 +20465,36 @@ authorized; its future request must remain a docs-first implementation
 boundary. See
 `docs/796a3l1-phase-hsai-p01b-linux-container-contract-closure-stop.md`.
 
+## Phase 796-A3L2 HSAI P01B Corpus/Profile Implementation Boundary
+
+Status: complete as a docs-only code-phase authorization. State slice:
+`phase-796a3l2-hsai-p01b-corpus-profile-implementation-boundary`.
+
+Phase 796-A3L2 authorizes a future A3L3 implementation in exactly six runtime
+or data files and five named documentation files. The runtime slice is a
+read-only standard-library corpus checker, expanded canonical corpus, exact
+seccomp profile, upstream license, provenance record, and one hermetic test
+module. The Moby profile is pinned at commit `836ae4d`, 13,470 bytes, SHA-256
+`536529b665dd0972c37bfb569f5d4ac8a53592e7b00752bc39ff063ca9864c74`.
+A3L3 uses a six-file candidate implementation commit followed by a five-file
+audit/documentation commit; the cumulative range is exactly eleven paths and
+the self-containing phase note is externally identified by Git, not self-hashed.
+
+Checker-owned subprocess, socket, network, Docker inspection, Docker transport,
+runtime file writes, archive access, and container actions are explicitly
+forbidden. TestLoader may transitively import only frozen suite modules but may
+not execute tests. The provenance embeds the exact 135-byte `ls-remote` output.
+The corpus, provenance, and clean-audit schema digests are frozen. The canonical
+3106-byte boundary digest is
+`a9e43d8d354759f7a55f45b9ef650e3e36c108dc3d30f09844b1cd3688c29f8a`.
+Two independent final re-reviews accept the corrected documentation boundary
+with zero findings; they do not accept implementation or execution.
+
+At most C08 and profile provenance may close. Driver, probe, C03, C05-C07,
+C09-C10, container execution, archive acquisition, backend execution, accepted
+evidence, Level2+, and stronger claims remain unauthorized. See
+`docs/796a3l2-phase-hsai-p01b-linux-container-implementation-boundary.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
