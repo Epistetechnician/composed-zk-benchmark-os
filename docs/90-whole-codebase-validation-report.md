@@ -1166,6 +1166,17 @@ filesystem output, or materialization capability is added. `P01B`, capture,
 open Phase 780 lanes, source-ledger digest publication, plan v2, backend
 execution, and accepted evidence remain stopped.
 
+[docs/794-phase-hsai-hermetic-operator-preparation-driver-implementation.md](docs/794-phase-hsai-hermetic-operator-preparation-driver-implementation.md)
+records the bounded Phase 794 implementation. The crate now exposes one
+in-memory request entrypoint, strict receipt/profile/source-manifest wires,
+domain-separated identities, low-S raw ES256 fixture-key verification, and
+direct ordered Phase 792 collector dispatch. Private test-only subject bindings
+and collection cover deterministic success and failure without weakening the
+production API. Focused current-toolchain and strict-clippy gates pass across 50
+tests. Materialization and capture booleans remain false; reviewer authority,
+`P01B`, capture, all open Phase 780 lanes, source-ledger digest publication,
+plan v2, backend execution, and accepted evidence remain stopped.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

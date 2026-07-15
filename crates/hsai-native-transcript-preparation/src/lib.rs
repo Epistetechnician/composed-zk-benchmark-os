@@ -1,7 +1,9 @@
 //! Pure-data candidate validation for HSAI native-transcript preparation.
 //!
-//! This crate does not inspect a host, acquire or materialize artifacts, launch
-//! executables, authenticate reviewers, authorize capture, or create evidence.
+//! The preparation driver may inspect caller-authorized host executable paths
+//! through the descriptor-relative collector. This crate does not acquire or
+//! materialize artifacts, launch executables, authenticate reviewers, authorize
+//! capture, or create evidence.
 
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -9,8 +11,10 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Component, Path, PathBuf};
 
 mod collector;
+mod driver;
 
 pub use collector::{collect_executable_identity_fact, CollectorError};
+pub use driver::*;
 
 pub const PREPARATION_CANDIDATE_SCHEMA_V1: &str =
     "hsai-formal-native-transcript-preparation-candidate-v1";

@@ -1579,6 +1579,31 @@ test, and claim surface frozen by Phase 793; Phase 795 remains separately
 conditional on explicit real reviewer-key authorization and immediate fact
 recollection.
 
+Explicit Phase 794 HSAI hermetic operator-preparation driver implementation now
+allowed and implemented: additive Rust source under
+`crates/hsai-native-transcript-preparation/src/driver.rs`, crate export and the
+exact pinned `p256 0.13.2` dependency, focused tests, one Cargo.lock dependency
+edge and the MSRV-compatible `zeroize 1.8.1` lock pin, phase notes under `docs/`,
+and standard mirrors. This slice is limited to
+strict in-memory eight-class source receipt binding; exact Phase 668 Rust and
+Phase 670 Charon manifest checks; compact request identity; raw low-S ES256
+signature verification against caller-selected fixture profiles; exact profile
+census; typed pre-identity rejection and digest-bound decisions; and direct
+ordered Phase 792 descriptor-relative collector dispatch. Private `cfg(test)`
+subject bindings and collector injection cover deterministic success and
+failure only and are absent from the public API and non-test builds. Every
+decision keeps `materialization_authorized=false` and
+`capture_authorized=false`. It does not permit real reviewer-key authority,
+secrets, source acquisition, filesystem writes, process, environment, network,
+shell, helper execution, extraction, compilation, target production, `P01B`
+materialization, preparation handoff, native transcript capture, fixture or
+grammar authority, Phase 780 lane closure, source-ledger digest publication,
+plan v2, executor binding, backend execution, proof artifacts, accepted
+evidence, Level2+, score axes, semantic correctness, production readiness,
+SOTA, breakthrough, full security, external audit, or action authority. Phase
+795 remains separately conditional on explicit real reviewer-key authorization
+and immediate host-fact recollection.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.
