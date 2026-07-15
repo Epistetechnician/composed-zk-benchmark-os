@@ -346,3 +346,16 @@ authorization, backend execution, Lean/SMT/Z3/COBALT run, proof artifact, checke
 transcript, accepted evidence, Level2+ evidence, populated score axis, semantic
 correctness, production readiness, SOTA, breakthrough, full security, external
 audit, or action authority.
+
+## Phase 796-A Forward Route
+
+Phase 796-A records the documentation-first parser and acquisition-separation
+boundary for blocker `P796-02`. It treats `796-A` as an umbrella workstream:
+hermetic parser implementation and a two-reviewer audit must precede a
+separately authorized acquisition-only run and candidate-ledger review. No
+parser or acquisition runs in Phase 796-A, and no proposal accepts itself. A
+later separately authorized local repository two-reviewer decision is required to
+close `P796-02`; it remains Level 1 local evidence and does not close the live
+anti-rollback blocker. The Phase 796 stop and every other blocker remain
+unchanged; Phase 797 stays unauthorized. See
+`docs/796a-phase-hsai-p01b-archive-ledger-parser-and-acquisition-separation-boundary.md`.

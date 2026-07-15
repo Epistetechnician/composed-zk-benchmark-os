@@ -1655,6 +1655,37 @@ strict Phase 795 launch architecture,
 build-child trust census, transaction-authority provisioning, all 56 operation
 rows, and an independent zero-gap audit before Phase 797 can be reconsidered.
 
+Explicit Phase 796-A HSAI P01B archive-ledger parser and acquisition-separation
+boundary now allowed and completed: additive Markdown under `docs/`, one Phase
+796 forward-route note, and standard mirrors only. This documentation-first
+slice freezes a future additive Python-standard-library helper that directly
+parses one RFC 1952 member and strict raw 512-byte ustar blocks without
+`gzip.GzipFile`, `tarfile`, external tools, extraction, subprocess, environment,
+or network; finite gzip, process-resource, header, extension, member, path,
+uncompressed, aggregate regular, candidate-output, and publication bounds;
+exact physical-header and logical-member candidate ledgers; transactional
+four-file candidate publication; strict historical-profile and embedded-Lean
+checks; a closed failure taxonomy; and deterministic synthetic tests. It leaves
+`raw_archive_validator.py` unchanged and separates future hermetic
+implementation, two-reviewer implementation audit, separately authorized
+acquisition-only execution, independent candidate review, and separately
+authorized local repository two-reviewer acceptance. Phase 796-A
+permits no Python or Rust code change, Cargo change, archive read, network,
+downloader, parser run, generated candidate, extraction, build,
+materialization, target execution, journal mutation, transcript capture, Phase
+780 lane closure, source-ledger digest, plan v2, executor, backend execution,
+proof artifact, accepted evidence, Level2+, score axes, semantic correctness,
+production readiness, SOTA, breakthrough, full security, external audit, or
+action authority. `preparation_contract_sha256` remains absent; Phase 797,
+materialization, and capture remain unauthorized. The conditionally authorized
+Phase 796-A1 file surface is exactly the new helper, its focused tests, one
+implementation note, and standard mirrors; the committed boundary is immutable
+to that implementation. A later acquisition
+requires a separate explicit authorization after a clean independent parser
+audit. Only a valid retained Phase 796-A5 acceptance decision can close
+`P796-02`; candidate artifacts and proposals cannot. It does not close Phase
+780 lane `L07` or the complete Phase 796 stop.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.
