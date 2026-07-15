@@ -1153,6 +1153,19 @@ unsafe, and libc-call surfaces. The output is a local observation-window fact on
 capture, all open Phase 780 lanes, source-ledger digest publication, plan v2,
 backend execution, and accepted evidence remain stopped.
 
+[docs/793-phase-hsai-operator-preparation-driver-source-receipt-boundary.md](docs/793-phase-hsai-operator-preparation-driver-source-receipt-boundary.md)
+records the docs-first Phase 794 contract. It defines closed source-receipt
+classes, exact subject-byte correspondence, domain-separated raw ES256
+signatures, separate in-memory fixture verification profiles,
+producer/reviewer separation, ordered fresh collection for all eight host
+roles, and an always-false materialization/capture authority result. Fixture
+profiles prove correspondence to caller-selected keys only; real reviewer-key
+authority remains deferred to Phase 795.
+Static review confirms no driver, key, source, machine fact, process, network,
+filesystem output, or materialization capability is added. `P01B`, capture,
+open Phase 780 lanes, source-ledger digest publication, plan v2, backend
+execution, and accepted evidence remain stopped.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,

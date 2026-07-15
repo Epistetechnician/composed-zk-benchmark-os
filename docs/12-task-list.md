@@ -20227,9 +20227,27 @@ checkpoints.
 The result is a local observation-window fact only. `P01B` remains stopped; no
 Phase 780 lane closes, no transcript is captured, and no evidence is accepted.
 Phase 793 is docs-first for operator preparation-driver and source-receipt
-authority; Phase 795 remains the earliest conditional materialization phase,
+correspondence; Phase 795 remains the earliest conditional materialization phase,
 Phase 796 capture, and Phase 806 plan v2. See
 `docs/792-phase-hsai-native-transcript-descriptor-relative-collector-implementation.md`.
+
+## Phase 793 HSAI Operator Preparation Driver and Source Receipt Boundary
+
+Status: complete documentation-first boundary. State slice:
+`phase-793-hsai-operator-preparation-driver-source-receipt-boundary`.
+
+Phase 793 freezes a future hermetic Phase 794 preflight contract: exact source
+receipt bodies, domain-separated raw ES256 signatures, independently supplied
+fixture verification profiles, subject-byte digest recomputation,
+producer/reviewer separation, and eight-role fresh collector dispatch. It
+establishes byte correspondence and signature validity against caller-selected
+fixture keys only; real reviewer-key authority remains deferred.
+
+No driver is implemented or run. Fixture keys cannot authorize real work, and
+every future Phase 794 result must keep `materialization_authorized=false` and
+`capture_authorized=false`. Phase 795 remains conditional on a separately
+pinned real reviewer-key authorization and immediate fact recollection. See
+`docs/793-phase-hsai-operator-preparation-driver-source-receipt-boundary.md`.
 
 ## Managed-Attestation Track: Managed JWT Signature Verification
 

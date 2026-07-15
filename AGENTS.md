@@ -1550,9 +1550,34 @@ execute Lean/SMT/Z3/COBALT or another backend, create a proof artifact or
 checker transcript, mutate accepted evidence, create Level2+, establish a score
 axis, semantic correctness, production readiness, SOTA, breakthrough, full
 security, external audit, or action authority. Phase 793 is documentation-first
-for operator preparation-driver and source-receipt authority; Phase 795 remains
+for operator preparation-driver and source-receipt correspondence; Phase 795
+remains
 the earliest conditional materialization phase, Phase 796 capture, and Phase
 806 plan v2.
+
+Explicit Phase 793 HSAI operator preparation-driver and source-receipt boundary
+now allowed and completed: additive Markdown contracts under `docs/` and
+standard mirrors only. This documentation-first slice is limited to
+`docs/793-phase-hsai-operator-preparation-driver-source-receipt-boundary.md`:
+closed source-receipt classes, exact subject-byte length/SHA-256 correspondence,
+domain-separated raw ES256 signature encoding, separately supplied reviewer
+fixture verification profiles, producer/reviewer separation, ordered fresh
+Phase 792 collector dispatch, deterministic decision digests, and always-false
+materialization/capture authorization. Fixture profiles establish
+correspondence to caller-selected keys only and do not authenticate reviewer
+authority. It does not
+permit Rust implementation in this slice, Cargo changes, key generation,
+secrets, real reviewer authorization, filesystem writes, process, environment,
+network, shell, helper, source acquisition, extraction, compilation, target
+production, `P01B` materialization, native transcript capture, fixture or
+grammar authority, Phase 780 lane closure, source-ledger digest publication,
+plan v2, executor binding, backend execution, proof artifacts, accepted
+evidence, Level2+, score axes, semantic correctness, production readiness,
+SOTA, breakthrough, full security, external audit, or action authority. Phase
+794 is conditionally authorized only within the exact file, dependency, API,
+test, and claim surface frozen by Phase 793; Phase 795 remains separately
+conditional on explicit real reviewer-key authorization and immediate fact
+recollection.
 
 Forbidden in the current Level 1 state:
 
