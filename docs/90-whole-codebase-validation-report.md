@@ -1240,12 +1240,33 @@ tests passing, Ruff passing, `cargo fmt --all -- --check` passing, and
 preserved mutation in `crates/hsai-agent-admission/src/lib.rs`; Phase 796-A1
 does not modify or stage it.
 
-No real archive is read or acquired and no durable candidate is retained.
-Phase 796-A2 clean-commit audit remains pending. Phase 796-A3 acquisition,
-Phase 797, P01B materialization, transcript capture, backend execution, proof
-artifacts, accepted evidence, Level2+, score axes, semantic correctness,
-production readiness, SOTA, breakthrough, full security, and action authority
-remain unauthorized.
+No real archive is read or acquired and no durable candidate is retained. The
+Phase 796-A1 implementation record precedes the clean-commit A2 audit recorded
+below. Phase 796-A3 acquisition, Phase 797, P01B materialization, transcript
+capture, backend execution, proof artifacts, accepted evidence, Level2+, score
+axes, semantic correctness, production readiness, SOTA, breakthrough, full
+security, and action authority remain unauthorized.
+
+[docs/796a2-phase-hsai-p01b-archive-ledger-clean-commit-audit.md](docs/796a2-phase-hsai-p01b-archive-ledger-clean-commit-audit.md)
+records the Phase 796-A2 zero-gap audit over exact clean commit
+`53442464ec851be46dd1e47b44b0918a14e9cf4a`. Detached validation passes 68
+focused and 151 complete formal-preflight tests, accounts for all 56 observed
+deterministic failure classes, and passes Ruff, Rust formatting, and
+`cargo check --workspace --all-targets`. The actual child limit probe confirms
+CPU 900 seconds, output size 67,108,864 bytes, and 32 open descriptors.
+
+Two independent reviewers accept all ten contract controls with zero findings.
+The retained canonical aggregate digest is
+`5301f672b057396791e85af8c16194617accaf40df087f9a967e4ef148d15dfb`.
+Static review confirms no convenience gzip/TAR parser, extraction, network,
+real archive access, or durable candidate path was exercised.
+
+The A2 decision explicitly retains `phase_796_a3_authorized=false` and
+`acquisition_authorized=false`. Phase 796-A3 acquisition, Phase 797, P01B
+materialization, transcript capture, backend execution, proof artifacts,
+accepted evidence, Level2+, score axes, semantic correctness, production
+readiness, SOTA, breakthrough, full security, external audit, and action
+authority remain unauthorized.
 
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
