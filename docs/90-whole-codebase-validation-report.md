@@ -1309,11 +1309,33 @@ this is not run authorization.
 
 The canonical boundary digest is
 `87fb100d4454e9cc05c1b19baf47749230324fbc9ccf32f6a150a67e2f4b0ea7`. Image pull, container run,
-Phase 796-A3L1, native Phase 796-A3, archive acquisition, Phase 797,
+Phase 796-A3L1 compatibility execution, native Phase 796-A3, archive acquisition, Phase 797,
 materialization, transcript capture, backend execution, accepted evidence,
 evidence escalation, Level2+, score axes, semantic correctness, production
 readiness, SOTA, breakthrough, full security, external audit, and action
 authority remain unauthorized.
+
+[docs/796a3l1-phase-hsai-p01b-linux-container-contract-closure-stop.md](docs/796a3l1-phase-hsai-p01b-linux-container-contract-closure-stop.md)
+records the docs-only Phase 796-A3L1 closure attempt. Read-only image
+inspection adds four ordered RootFS diff IDs, while static test discovery binds
+five suite hashes, 68 focused IDs, 151 full IDs, and test-corpus digest
+`1439a56e935a1c0194db37e5a7e4ad926658e16aa8491246c56e88d8bb5a6726`.
+
+The retained matrix closes documentation class C01 only. Nine classes remain
+open because the native projection, collector, supervisor,
+security-profile bytes, effective receipt parser, full runtime provenance,
+canonical corpus artifact, filesystem certificates, and exact executable state
+machine are absent. The 2738-byte canonical stop digest is
+`458d1d7c0688f45920d5308fa6670ef5f0ec2e6a4a30da6cd52af31424c3bb12`.
+Both final independent re-reviews return `accept_blocked_assessment` with zero
+findings; this accepts only the stop record.
+
+Validation confirms `container_execution_status=NotRun`, all unresolved
+identity digests remain null, and A3L2 implementation, A3L5 run, native A3,
+backend execution, accepted evidence, Level2+, and stronger claims remain
+unauthorized. The corrected route requires a docs-first implementation
+boundary, implementation, hermetic tests including synthetic C09, and
+clean-commit audit before a separate synthetic-run decision.
 
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator

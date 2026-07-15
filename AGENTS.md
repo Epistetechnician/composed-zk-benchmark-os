@@ -1786,6 +1786,37 @@ evidence-escalation, and Level2+ authority are also false. Phase 796-A3L1 may
 close documentation blockers only; every execution successor requires a later
 separate explicit phase.
 
+Explicit Phase 796-A3L1 HSAI P01B Linux-container contract closure now allowed
+and completed as a blocked docs-only attempt: one phase record, two external
+source-index rows, and standard documentation mirrors only. This slice closes
+C01 for an aggregate cgroup-memory claim that explicitly forbids per-process
+RSS equivalence. It advances but does not close C08: five suite digests, 68
+focused IDs, 151 complete IDs, and candidate test-corpus digest
+`1439a56e935a1c0194db37e5a7e4ad926658e16aa8491246c56e88d8bb5a6726`.
+It adds the local image's four RootFS diff IDs but does not accept the image.
+C02, C03, C04, C05, C06, C07, C08, C09, and C10 remain open because the native
+golden projection, collector, supervisor, seccomp/LSM profile bytes, effective
+receipt parser, complete runtime provenance, ingress/egress certificates, and
+canonical corpus artifact plus executable state machine are absent. The
+canonical 2738-byte stop digest is
+`458d1d7c0688f45920d5308fa6670ef5f0ec2e6a4a30da6cd52af31424c3bb12`.
+Both final independent re-reviews return `accept_blocked_assessment` with zero
+findings; this accepts only the stop record.
+Phase 796-A3L1 permits no source, test, Cargo, driver, supervisor, collector,
+profile, immutable-boundary, or historical-validator mutation; image pull or
+build; container create/start/exec/copy/kill/remove; archive request/read/
+acquisition/extraction; materialization; transcript capture; backend,
+Lean/SMT/Z3/COBALT execution; proof artifact; accepted evidence; Level2+;
+score axes; semantic correctness; production readiness; SOTA; breakthrough;
+full security; external audit; or action authority. It explicitly keeps
+`phase_796_a3l2_implementation_authorized=false`,
+`phase_796_a3l5_run_authorized=false`,
+`phase_796_a3_authorized=false`, `container_run_authorized=false`, and all
+stronger evidence authority false. The corrected route requires a future
+docs-first A3L2 implementation boundary, implementation and hermetic tests,
+including synthetic C09 certificates, clean-commit audit, and a separate run
+decision before any synthetic attempt.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.
