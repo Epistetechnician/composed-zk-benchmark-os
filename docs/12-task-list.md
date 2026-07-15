@@ -20548,6 +20548,30 @@ and every container run remain unauthorized. This boundary does not improve
 commercial moat or end-to-end evidence by itself. See
 `docs/796a3l4-phase-hsai-p01b-portable-authorization-receipt-boundary.md`.
 
+## Phase 796-A3L4I HSAI P01B Container Command/Receipt Contract
+
+Status: complete as an independently reviewed local pure-data implementation.
+State slice:
+`phase-796a3l4i-hsai-p01b-container-command-receipt-contract-implementation`.
+
+The exact two-file range `ad8b8b63..ddb1cca3` implements authorization-root
+binding, exact command plans, receipt-prefix-derived lifecycle transitions,
+strict canonical receipts, stable container-id resolution, mandatory terminal
+cleanup, bounded start kill/wait routing, 1,800-second command bounds, and
+16,384-byte retained/total stream accounting. The rejected first candidate is
+retained in history; its plan/state, cleanup, timeout/cap, lifecycle, injection,
+and recursion findings are closed by `ddb1cca3` and six added adversarial tests.
+
+Focused tests pass 21/21, the frozen corpus guard passes 21/21, normal discovery
+remains exactly 172/172, and two independent immutable-head reviews return
+`accept` with zero findings. Only
+`c10_local_contract_implemented=false` changes to `true`; the correspondence
+metric remains 2/10 and C02-C07/C09/C10 remain open. No Docker, filesystem,
+process, environment, socket, network, archive, container, backend, accepted-
+evidence, Level2+, score-axis, commercial-moat, or breakthrough-evidence action
+or claim is created. See
+`docs/796a3l4i-phase-hsai-p01b-container-command-receipt-contract-implementation.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
