@@ -20317,6 +20317,31 @@ journal mutation, plan, backend execution, accepted evidence, Level2+, semantic
 correctness, production readiness, SOTA, or full-security claim is created. See
 `docs/796-phase-hsai-p01b-execution-correspondence-transaction-authority-stop.md`.
 
+## Phase 796-A HSAI P01B Archive Ledger Parser and Acquisition Separation Boundary
+
+Status: complete documentation-first boundary; parser implementation and
+acquisition not run. State slice:
+`phase-796a-hsai-p01b-archive-ledger-parser-and-acquisition-separation-boundary`.
+
+Phase 796-A defines a separate standard-library Python helper for direct,
+bounded, streaming RFC 1952 and raw TAR framing; exact gzip, header, member,
+extension, path, expanded-byte, process-resource, ledger-output, and publication
+limits; one manifest, two canonical ledgers, and one status record; strict legacy
+profile and embedded-Lean correspondence; closed failures; and deterministic
+adversarial tests. It leaves the historical archive validator unchanged.
+
+The workstream is ordered as docs-first boundary, hermetic parser
+implementation, two-reviewer implementation audit, separately authorized
+acquisition-only run, independent candidate-ledger review, and separately
+authorized local repository two-reviewer acceptance. This slice authorizes none
+of those later actions. No archive is read or downloaded, no
+candidate is emitted, and `preparation_contract_sha256` remains absent. Phase
+797, materialization, and capture remain unauthorized. Even later Phase 796-A
+success can close `P796-02` only through a valid Phase 796-A5 acceptance
+decision, not a proposal; it cannot close Phase 780 lane `L07` or the complete
+Phase 796 stop. See
+`docs/796a-phase-hsai-p01b-archive-ledger-parser-and-acquisition-separation-boundary.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

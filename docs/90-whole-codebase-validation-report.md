@@ -1210,6 +1210,21 @@ plan template, backend result, accepted evidence, or stronger claim. The Phase
 780 lane state remains `L01-L04,L09` resolved and `L05-L08,L10-L11` open; the
 Phase 779 ledger remains 102 blocked rows with 1,469 blockers and no digest.
 
+[docs/796a-phase-hsai-p01b-archive-ledger-parser-and-acquisition-separation-boundary.md](docs/796a-phase-hsai-p01b-archive-ledger-parser-and-acquisition-separation-boundary.md)
+records the first Phase 796 remediation boundary. It freezes a future additive
+hermetic parser for explicit gzip-member framing and raw TAR blocks, finite
+decompression, extraction, process-resource, and ledger-output counters, exact
+canonical candidate artifacts, transactional publication, strict profile
+checks, and adversarial tests. It also separates implementation review from any
+later network-enabled acquisition-only run, candidate review, and separately
+authorized local repository two-reviewer acceptance.
+
+Static review confirms that Phase 796-A changes Markdown only. It does not
+modify the historical validator, implement or run a parser, access an archive,
+use network, emit candidate ledgers, accept extraction bounds, close `P796-02`
+or Phase 780 lane `L07`, publish `preparation_contract_sha256`, activate Phase
+797, materialize P01B, execute a backend, or create evidence or stronger claims.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
