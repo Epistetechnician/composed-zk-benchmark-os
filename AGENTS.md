@@ -1604,6 +1604,31 @@ SOTA, breakthrough, full security, external audit, or action authority. Phase
 795 remains separately conditional on explicit real reviewer-key authorization
 and immediate host-fact recollection.
 
+Explicit Phase 795 HSAI external-attempt authorization and P01B materialization
+boundary now allowed and completed: additive Markdown under `docs/` and standard
+mirrors only. This documentation-first slice freezes an independently pinned
+trust anchor, reviewer-key policy, and signed single-attempt authorization;
+exact bindings to Phase 794 request, decision, subject, receipt, profile, and
+fact identities; strict time and single-use journal rules; actor separation;
+independent output review; and transactional staging, durability, publication,
+and cleanup requirements. It records that Phase 792 observations do not yet
+prove launch of the same inode, P01B producer argv and environments remain
+unclosed; P01B archive plus build-child trust inventories are incomplete; and
+trusted reservation time, anti-rollback journal compare-and-swap, recovery, and
+the durable audit-root census remain unresolved.
+Phase 795 accepts no real authorization and does not permit Rust or Cargo
+changes, plan construction, replay-journal mutation, host collection, process,
+network, environment, filesystem writes, shell, helpers, secrets, credentials,
+acquisition, extraction, compilation, target production, `P01B` materialization,
+preparation handoff, native transcript capture, fixture or grammar authority,
+Phase 780 lane closure, source-ledger digest publication, plan v2, executor
+binding, backend execution, proof artifacts, accepted evidence, Level2+, score
+axes, semantic correctness, production readiness, SOTA, breakthrough, full
+security, external audit, or action authority. Phase 796 is documentation-only
+for exact P01B execution correspondence, archive inventory, build trust-root,
+trusted-time, journal, recovery, and audit-root closure. The earliest possible
+plan-v2 boundary moves to Phase 809.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.

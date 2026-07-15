@@ -20270,6 +20270,27 @@ claim is created. Phase 795 remains the earliest conditional authorization and
 materialization phase. See
 `docs/794-phase-hsai-hermetic-operator-preparation-driver-implementation.md`.
 
+## Phase 795 HSAI External Attempt Authorization and P01B Materialization Boundary
+
+Status: complete documentation-first boundary; materialization stopped. State
+slice: `phase-795-hsai-external-attempt-authorization-p01b-materialization-boundary`.
+
+Phase 795 records that fixture-key correspondence cannot authorize its own
+materialization. It freezes a separately pinned trust anchor, reviewer-key policy,
+and signed attempt authorization; exact Phase 794 digest bindings; strict
+freshness and single-use journal requirements; immediate fact recollection; and
+transactional staging, independent output review, publication, and cleanup rules.
+
+It also records unresolved execution prerequisites: kernel-bound identity from
+verified executable object to launch, exact producer command contracts, P01B
+archive/build trust-root inventories, trusted reservation time, anti-rollback
+journal compare-and-swap, recovery, and the durable audit-root census. Phase 796
+is documentation-only for those closures. No external authorization, plan, process, network access,
+filesystem write, source acquisition, target, handoff, transcript, Phase 780 lane
+closure, source-ledger digest, plan v2, backend result, or accepted evidence is
+created. The earliest possible plan-v2 boundary moves to Phase 809. See
+`docs/795-phase-hsai-external-attempt-authorization-p01b-materialization-boundary.md`.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
