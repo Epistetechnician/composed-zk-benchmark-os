@@ -10858,3 +10858,50 @@ requires producer completion and separate captured-file scanning for every
 future output assertion. Phase 686 runs no tool or backend and creates no
 proof, accepted evidence, Level2+, score axis, semantic correctness,
 production readiness, SOTA, breakthrough, or full-security claim.
+
+## Phase 796-A3L5C HSAI P01B Retained Container Boundary Correction
+
+Date: 15 July 2026.
+
+Outcome: `DocumentationOnly`, `NotRun`, and accepted by three independent
+zero-finding reviews over exact correction SHA-256
+`bf42bce535863e8bff3c6343d43d3ce2ab653ace39e6945535f93525ccde9de0`.
+
+State slice:
+
+- `AGENTS.md`;
+- `README.md`;
+- `docs/12-task-list.md`;
+- `docs/796a3l5c-phase-hsai-p01b-retained-container-boundary-correction.md`;
+- this report.
+
+The correction was required because the prior A3L5 order attempted to decide
+C09 before exclusive publication and parent-directory durability. The accepted
+replacement is acyclic and fail closed: prepublication candidate validation,
+exclusive publication, repository-state verification, v3 decision, durable
+fresh review session, two parent-observed independent review processes,
+aggregate, then acceptance. It freezes exactly 200 payload files plus manifest
+file 201, 62 candidate directories, and 270 publication events. It also closes
+recovery wire totality, Docker `none` endpoint teardown, raw registry/signature
+provenance, descriptor equality, immutable 21-Git-blob gate materialization,
+pinned local sandbox execution, and the canonical seven-assumption/ten-nonclaim
+claim boundary.
+
+Validation performed for this docs slice:
+
+- `git diff --check`: pass;
+- exact document SHA-256: pass;
+- independent Docker/readiness review: zero findings;
+- independent class/recovery/publication review: zero findings;
+- independent evidence/session/acceptance review: zero findings;
+- protected user-owned admission file remained byte-identical at SHA-256
+  `41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de`.
+
+No Docker, socket, registry, container, native reference, normal attempt,
+intentional OOM, publication, decision, review, aggregate, or acceptance
+execution ran. The five untracked A3L6 files remain rejected follow-on work,
+outside this state slice. Correspondence remains 2/10, commercial moat remains
+3/10, and defensible breakthrough evidence remains 2-3/10. No accepted Evidence
+Ledger mutation, Level2+, external reproduction, benchmark evidence, proof,
+production-readiness, SOTA, breakthrough, full-security, or external-audit
+claim was created.
