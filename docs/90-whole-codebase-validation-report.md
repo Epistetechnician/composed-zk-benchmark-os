@@ -11022,5 +11022,36 @@ remain outside this slice.
 This documentation-only slice adds no Rust or Cargo change and creates no
 proof, accepted evidence, Level2+, score axis, semantic correctness, production
 readiness, SOTA, breakthrough, full security, external audit, or action
-authority. Implementation requires a separately committed state slice
+authority.
+
+## Statebook P7 Authority Integration Implementation
+
+Date: 16 July 2026.
+
+Outcome: `Level1LocalReplay`, `Pass`, named state slice
 `statebook-p7-authority-integration`.
+
+State slice:
+
+- root `Cargo.toml` / `Cargo.lock` membership for `statebook-authority`;
+- `crates/statebook-authority/**`;
+- `docs/statebook-p7-authority-integration-implementation-notes.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+The crate attaches hermetic synthetic authority statements through a
+fail-closed envelope, registers revoke-aware provenance, emits capital overlays
+that preserve economic residual digests, records legal/ops gate deferred
+checklist constants, and reproduces domain-separated P7 digests via an
+independent `ring` encoder. Seventeen focused integration tests pass; unchanged
+`statebook-core`, `statebook-settlement`, `statebook-report`, and
+`statebook-source` tests pass; focused format and warning-denied Clippy pass for
+`statebook-authority`. Live authority products remain deferred.
+
+This is local hermetic synthetic authority-statement / capital-overlay
+regression evidence only. It does not establish live clearing recognition,
+legal finality, admission authority, Evidence Ledger mutation, production
+readiness, SOTA, independent audit, or full security. Completing P7 does not
+satisfy the legal/ops gate for live authority products. No value moves.
