@@ -915,6 +915,7 @@ Surface DSL
 | [docs/statebook-product-requirements.md](docs/statebook-product-requirements.md) | Implementation-ready Statebook PRD with 70 user stories, explicit financial/evidence boundaries, one settlement-transition kernel, adversarial acceptance suite, delivery sequence, and non-goals. |
 | [docs/statebook-literature-source-index.md](docs/statebook-literature-source-index.md) | Annotated literature, standards, law, venue, pinned-code, incident, media, AI, energy, and macro source index with supported claims and limitations. |
 | [docs/statebook-p1-core-semantic-fixtures-boundary-spec.md](docs/statebook-p1-core-semantic-fixtures-boundary-spec.md) | Docs-first P1 authorization for one isolated exact-arithmetic semantic-normalization and deterministic `StateKeyV1` fixture crate; no execution, settlement, HSAI, or external-I/O authority. |
+| [docs/statebook-p1-core-semantic-fixtures-implementation-notes.md](docs/statebook-p1-core-semantic-fixtures-implementation-notes.md) | Implemented P1 local fixture crate: closed semantic completeness, exact normalization, source-lineage separation, frozen TLV `StateKeyV1`, 27 material mutations, negatives, and a second test encoder. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -937,6 +938,14 @@ normalization, semantic-completeness reports, source-lineage receipts, and a
 canonical `StateKeyV1`. It grants no payoff evaluation, residual, execution,
 capital, settlement, assurance, recovery, HSAI, network, filesystem-write, or
 external authority.
+
+Statebook P1 implementation status: `statebook-core` is implemented locally and
+fixture-backed. Only complete closed-schema terminal indicator inputs can lower
+to an opaque validated contract. The frozen 701-byte V1 preimage hashes to
+`f1662f3fb5a10c074680c0baf76ba488b7230337456358be92f3127d8a632c08` in
+both production and implementation-diverse test encoders. This is deterministic
+regression evidence only, not economic equivalence, execution, settlement,
+proof, independent verification, or production readiness.
 
 ## Current Implementation Status
 

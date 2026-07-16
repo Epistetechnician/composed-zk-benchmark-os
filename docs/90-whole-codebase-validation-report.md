@@ -11185,6 +11185,73 @@ Validation requires Markdown and named-slice mirror presence, `git diff
 --check`, Rust formatting, repository hygiene and documentation claim-boundary
 tests, plus preservation of unrelated dirty HSAI and agent-routing paths.
 
+## Statebook P1 Core Semantic Fixtures Implementation
+
+Date: 15 July 2026.
+
+Outcome: local implementation complete for named state slice
+`statebook-p1-core-semantic-fixtures`.
+
+Evidence ceiling: local fixture-backed regression evidence only.
+
+The implementation adds one isolated `statebook-core` workspace crate. Its
+closed V1 pipeline is duplicate-key-aware source parsing, closed profile
+validation, typed semantic-completeness assessment, fail-closed exact lowering,
+manual binary identity encoding, and separate source-lineage binding. Only
+`Complete` creates an opaque `ValidatedContract`; validated types and StateKey
+cannot be deserialized directly.
+
+The frozen baseline produces a 701-byte canonical preimage and
+`StateKeyV1=f1662f3fb5a10c074680c0baf76ba488b7230337456358be92f3127d8a632c08`.
+Production `sha2` encoding and a test-only independently written `ring` encoder
+agree byte for byte. This is implementation-diverse local regression evidence,
+not independent verification.
+
+The fixture corpus contains one closed 31-field mapping profile, one baseline,
+27 material one-field mutations, exact-equivalence pairs, range endpoint
+divergence, source and profile lineage separation, and fail-closed malformed,
+incomplete, unknown, unsupported, duplicate, arithmetic, ASCII-policy, range,
+and time-order cases. Focused results before final mirror validation: 13 tests
+passed and warning-denied package clippy passed.
+
+The authorized implementation paths are `crates/statebook-core`, root workspace
+metadata, this implementation note, and the standard mirrors. Publication
+Markdown, SVG, and PDF artifacts remain unchanged. Unrelated AGENTS routing,
+admission, `docs/agents/`, and A3L6 surfaces remain excluded.
+
+Final validation results:
+
+- focused Statebook tests: pass, 13 tests;
+- focused Statebook warning-denied clippy: pass;
+- repository hygiene and documentation claim-boundary tests: pass, 1 each;
+- formatting and diff hygiene: pass;
+- exact staged-path scope audit: pass, with publication artifacts unchanged and
+  unrelated admission, AGENTS routing, `docs/agents/`, and A3L6 paths excluded;
+- two independent read-only implementation audits: final zero blockers after
+  comparator-shape, completeness, exact-multiplication, and fixture-coverage
+  corrections;
+- clean exact-staged-tree full warning-denied workspace clippy: pass;
+- clean exact-staged-tree workspace tests with only
+  `hsai_crates_do_not_use_process_or_network_apis` skipped: pass;
+- unskipped clean exact-staged-tree workspace tests: one inherited non-P1
+  failure. The HSAI claim-boundary scan flags existing literal process/network
+  API names in already committed `hsai-native-transcript-preparation` test
+  sources. No flagged file belongs to this state slice.
+
+The live worktree's pre-existing admission mutation separately removes symbols
+needed by its downstream harness, so a live unexcluded workspace build also
+fails outside P1. The clean staged-tree runs prove that this dirty edit was not
+absorbed. The remaining HSAI source-scan baseline failure means this report does
+not claim a globally green unskipped workspace gate.
+
+The implementation creates no payoff evaluation, portfolio residual, execution
+or book model, margin or capital recognition, oracle or benchmark truth, legal
+equivalence, custody, signing, pause, transfer, settlement, value movement,
+HSAI evidence mapping, network, credential, process-spawn, filesystem-write,
+external-adapter, accepted Evidence Ledger, benchmark, Level2+,
+semantic-correctness, production-readiness, SOTA, proof,
+independent-verification, external-audit, or full-security capability or claim.
+
 ## Phase 796-A3L5E HSAI P01B Gate Sandbox Root-Read Correction
 
 Date: 15 July 2026.
