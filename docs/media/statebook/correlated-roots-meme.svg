@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Correlated trust roots teaching meme</title>
+  <desc id="desc">Three apparently independent signers and two oracle vendors converge on one shared cloud, key management, data, and operator root. A separate root graph counts the group as one.</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#9b3a37"/></marker><style>.h{font:700 54px Georgia,serif;fill:#17283b}.head{font:700 24px 'Courier New',monospace;fill:#17283b}.b{font:22px Georgia,serif;fill:#344554}.m{font:17px 'Courier New',monospace;fill:#5f6b73}.box{fill:#fffdf8;stroke:#1e3a5f;stroke-width:2}.root{fill:#f8e8e5;stroke:#9b3a37;stroke-width:3}.good{fill:#edf3f0;stroke:#3d776f;stroke-width:3}.edge{fill:none;stroke:#9b3a37;stroke-width:3;marker-end:url(#a)}</style></defs>
+  <rect width="1600" height="900" fill="#faf7ef"/>
+  <text x="70" y="75" class="h">Five vendors. One failure root.</text><text x="70" y="112" class="m">Independence is a dependency graph, not a headcount.</text>
+  <g transform="translate(90 190)">
+    <rect width="250" height="100" rx="14" class="box"/><text x="42" y="43" class="head">Signer A</text><text x="42" y="74" class="m">“independent”</text>
+    <rect x="300" width="250" height="100" rx="14" class="box"/><text x="342" y="43" class="head">Signer B</text><text x="342" y="74" class="m">“independent”</text>
+    <rect x="600" width="250" height="100" rx="14" class="box"/><text x="642" y="43" class="head">Signer C</text><text x="642" y="74" class="m">“independent”</text>
+    <rect x="900" width="250" height="100" rx="14" class="box"/><text x="936" y="43" class="head">Oracle X</text><text x="936" y="74" class="m">vendor one</text>
+    <rect x="1200" width="250" height="100" rx="14" class="box"/><text x="1236" y="43" class="head">Oracle Y</text><text x="1236" y="74" class="m">vendor two</text>
+  </g>
+  <path d="M215 290C215 410 650 420 770 510" class="edge"/><path d="M515 290C515 395 700 425 785 510" class="edge"/><path d="M815 290V510" class="edge"/><path d="M1115 290C1115 395 930 425 845 510" class="edge"/><path d="M1415 290C1415 410 980 420 860 510" class="edge"/>
+  <rect x="500" y="510" width="600" height="190" rx="22" class="root"/><text x="585" y="565" class="head">SHARED ULTIMATE ROOT</text><text x="585" y="610" class="b">cloud · KMS · RPC · upstream data</text><text x="585" y="650" class="b">CI/CD · operator · model · renderer</text>
+  <rect x="210" y="735" width="1180" height="95" rx="16" class="good"/><text x="290" y="775" class="h" style="font-size:34px">Quorum count: 1 until the shared root is separated.</text><text x="415" y="808" class="m">Three signatures on one compromised screen are one control domain.</text>
+  <text x="70" y="875" class="m">Original Statebook teaching artifact · illustration, not evidence · 15 July 2026</text>
+</svg>

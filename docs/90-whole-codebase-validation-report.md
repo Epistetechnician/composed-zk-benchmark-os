@@ -10906,6 +10906,109 @@ Ledger mutation, Level2+, external reproduction, benchmark evidence, proof,
 production-readiness, SOTA, breakthrough, full-security, or external-audit
 claim was created.
 
+## Statebook Terminal-Payoff And Assurance-Adjusted Settlement Boundary
+
+Date: 15 July 2026.
+
+Outcome: `DocumentationOnly` boundary complete at `Level0DesignNote` for the
+named state slice
+`statebook-terminal-payoff-and-assurance-adjusted-settlement-boundary`.
+
+The declared Statebook state slice spans:
+
+- `docs/integrations/statebook_terminal_payoff_and_trust_settlement.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+These paths establish the Statebook's declared validation surface. Independently
+owned Phase 796-A3L5 was committed during this task as predecessor baseline
+`a05fc73041ccd87c2f83a9f07da7b552c9a06a17`; its mirror changes are not part of
+the current Statebook working delta.
+
+The worktree also contains a pre-existing user-owned change to
+`crates/hsai-agent-admission/src/lib.rs`, outside the Statebook state slice. The
+admission file remained byte-identical at SHA-256
+`41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de`
+and Git object id `a4feb2f54ca90c3b52789b2dcb0d40af5bbe096a`.
+Separately owned, concurrently mutable A3L6 implementation work began
+materializing under the five Python paths authorized by committed A3L5. That
+entire A3L6 path envelope is outside the Statebook slice; this slice did not
+mutate, format, stage, commit, assign stable identity to, or claim validation
+of those paths.
+A generated untracked Python bytecode cache also appeared beside that
+concurrent work. It is outside the Statebook slice and was neither removed nor
+validated by this slice.
+
+The boundary retains:
+
+- a terminal scalar cash-settled `TerminalContractIR` with source terms,
+  economic reference, observation, comparator, payoff, and settlement terms;
+- a canonical terms-digest join between financial semantics and separate HSAI
+  evidence references;
+- exact versus approximate portfolio residual rules and explicit perpetual
+  path-dependence limits;
+- separate semantic, product, execution, settlement, and capital completeness;
+- the direct incident lesson that an LP withdrawal delay does not control an
+  immediate trader-profit payout path;
+- read-only primary-chain evidence of five alternating same-transaction
+  round trips through matching `MarketOpenExecuted` and
+  `MarketCloseExecutedV2` order/trade ids, without claiming how authorized
+  reports were obtained;
+- immediate internal risk state, prefunded and unencumbered hard-gated and
+  capped conditional DvP/PvP with represented linked legs, narrowly defined
+  destination-restricted all-or-none external risk-reducing obligations, and
+  unconditional irreversible externalization as separate classes;
+- current-evidence hard gates, discrete assurance tiers, independent
+  common-numeraire valuation, atomic exactly-once aggregate budget
+  reservations across native and common axes, deterministic epoch-and-journal
+  refill, zero reuse value for pending anomalous PnL,
+  maximum-of-risks delay, staged release, fresh revalidation, enforceable
+  hysteresis, and cumulatively bounded challenge and circuit-breaker contracts;
+- explicit attack coverage, residual risks, macro feedback loops, two-, five-,
+  and ten-year AI/technology scenario hypotheses, pre-registered evaluation and
+  rejection criteria for any future pilot, and a docs-first future
+  implementation sequence.
+
+Validation results:
+
+- direct Arbitrum RPC receipt and pinned public-source inspection: pass for the
+  documented event counts, order-type alternation, feed/timestamp identity,
+  5,000/60,000 price values, five matching open/close execution-event pairs,
+  verifier boundary, upkeep binding, router timestamp bound, and immediate
+  profitable-close vault path;
+- three iterative independent read-only audit tracks over settlement security,
+  macro/falsifiability, and repository terminology/provenance: final zero
+  residual findings after correction;
+- `git diff --check`: pass;
+- `cargo fmt --all -- --check`: pass;
+- `cargo test -p zkbench-core --test repo_hygiene --quiet`: pass, 1 test;
+- `cargo test -p zkbench-core --test repo_claim_boundary_docs --quiet`: pass,
+  1 test;
+- `cargo test --workspace --all-features --exclude hsai-agent-admission
+  --exclude hsai-e2e-harness --quiet`: pass;
+- `cargo clippy --workspace --all-targets --all-features --exclude
+  hsai-agent-admission --exclude hsai-e2e-harness -- -D warnings`: pass;
+- repository package-manager scan: pass; no root `package.json` or pnpm gate
+  exists, so no npm or pnpm command was invented;
+- named-slice presence and semantic mirror scan for the Statebook boundary:
+  pass; current Statebook working surface is the five declared documentation
+  paths, alongside the separately owned admission edit and active A3L6 path
+  envelope;
+- preserved admission-file identity: pass.
+
+The exclusions from the workspace commands are not a Statebook test waiver.
+They preserve the pre-existing user-owned admission mutation and its downstream
+consumer while the documentation-only slice is checked against every other
+workspace member.
+
+No Rust, Python, Cargo, fixture, package runtime, market adapter, networked venue
+path, oracle, router, execution, custody, margin, settlement, circuit-breaker
+action, accepted Evidence Ledger mutation, benchmark output, Level2+ evidence,
+action authority, semantic-correctness, production-readiness, SOTA, final Ostium
+root cause, or full-security claim was created.
+
 ## Phase 796-A3L5D HSAI P01B Inspect Census Correction
 
 Date: 15 July 2026.
@@ -10927,6 +11030,132 @@ checks, and preservation of the pre-existing admission SHA-256
 A3L6 remains unaccepted and A3L7/A3L8 remain prohibited. Correspondence remains
 2/10, commercial moat remains 3/10, and defensible breakthrough evidence
 remains 2-3/10. No runtime evidence or stronger claim was created.
+
+## Statebook Whitepaper, PRD, Source, Media, and PDF Publication Boundary
+
+Date: 15 July 2026.
+
+Outcome: completed documentation and publication package for named state slice
+`statebook-whitepaper-prd-and-publication-media-boundary`.
+
+Status: `DocumentationOnly`.
+
+Evidence ceiling: `Level0DesignNote`.
+
+Repository HEAD at final validation start:
+`f139b10977e7b1d2c33e7ffd3bf8b535a6961a2f`.
+
+The package converts the Statebook thesis into an end-to-end whitepaper, an
+implementation-ready but non-authoritative PRD, an annotated literature/code/
+media/incident index, seven original explanatory SVGs, and two rendered PDFs.
+It defines seven separate completeness dimensions, a bounded terminal-payoff
+model, a dynamic assurance-to-externalization controller, exactly-once exposure
+accounting, queue and recovery behavior, AI and macroeconomic scenarios, a
+threat model, falsification criteria, product governance, and a separately
+authorized implementation sequence. The package grants no runtime or external
+authority.
+
+Primary artifact manifest:
+
+| Artifact | SHA-256 | Verification note |
+| --- | --- | --- |
+| `docs/statebook-whitepaper.md` | `a4154f5bc7d68e56f3ad104c841e7ddef568e9c5cb155164d29f7f90e64ccc18` | Whitepaper source |
+| `docs/statebook-product-requirements.md` | `b9b4769780d9426e052804a0a41f357bf550bb322eef99dbcb47193119cab1d2` | PRD source: 70 user stories, 20 implementation decisions, 18 functional requirements, and 34 adversarial cases |
+| `docs/statebook-literature-source-index.md` | `725c0e495547f3ea6d7b5cb0e77af6dbb4078d29ddd97372e6d0a53a065bf8f8` | 98 annotated entries and 111 unique public URLs |
+| `docs/integrations/statebook_terminal_payoff_and_trust_settlement.md` | `2ab7a8c1927004ba9a5487b8fc3dcb47bd3f9b6c8428de9d36296edc54610568` | Governing integration boundary |
+| `docs/media/statebook/README.md` | `58889f45e02ad8a7f1bf6f1ee0e8bb819a5b0b124bfb4a8bd1b8aab5dc147b55` | Media manifest and evidence classification |
+| `docs/media/statebook/assurance-settlement-controller.svg` | `86528766a75f09b62299a6b8656722f80289254b6325484c49550d14152d1868` | Controller diagram |
+| `docs/media/statebook/correlated-roots-meme.svg` | `95d9bd3463bb631f3c7b637f964849ad81086bcdc3417904067863a4a31a1237` | Correlated-root teaching meme |
+| `docs/media/statebook/frontier-risk-market-map.svg` | `925d69260f2bc952b846545b3f976f75093db2118ef4322e08db564efb68575a` | Frontier-risk map |
+| `docs/media/statebook/orderbook-statebook-meme.svg` | `78b5cbdf97056ee2853b0e58d004472268d5b90f970f2f3da979338a77662033` | Order-book/Statebook teaching meme |
+| `docs/media/statebook/settlement-delay-meme.svg` | `48c44534ebf7fb1754cd4135098a427c730d880b035ed8885aa8c5737a399d49` | Delay/airlock teaching meme |
+| `docs/media/statebook/seven-completeness-tests.svg` | `33942ebc362950d55720c186de8bca4d548bada95afe95725553ac75a0552c74` | Seven-verdict diagram |
+| `docs/media/statebook/statebook-layer-map.svg` | `6a55772750df8a49c2eb24cbe943cf0afd200e394adfe228c704b1de0c8eb35a` | Layer map |
+| `output/pdf/statebook-whitepaper.pdf` | `8dad2b27848ccd6bec659ab5eef18d3cbc6bd37d79120c160e393d58c203195b` | 59 pages, 1,548,029 bytes |
+| `output/pdf/statebook-product-requirements.pdf` | `41e2ed05d55c10c591b370f05d7103966899b07abe0b0385e24169d5abd4bbfa` | 22 pages, 217,596 bytes |
+
+Publication mirrors at validation time:
+
+- `README.md` SHA-256
+  `6b5206f1f362f453502fed31330b508590b1faca2e17d11d25f10d4f1c5c4164`;
+- `docs/12-task-list.md` SHA-256
+  `525275377095cc6335cc8cb7deab135bcd15e46d1826eaf987405741df1b8282`;
+- `AGENTS.md` SHA-256
+  `b82205c46e713288125dcaefed7a310bc3430aba3727dda3e8dba19b6d753a05`.
+
+Publication record:
+
+- GitHub issue:
+  <https://github.com/Epistetechnician/composed-zk-benchmark-os/issues/17>;
+- issue state: open;
+- label: `ready-for-agent`;
+- verified issue-body boundaries: `ReuseFinality`, per-part `ReleasePart`
+  lifecycle, and explicit non-authorization language;
+- issue publication means the PRD is ready for a future separately authorized
+  implementation slice. It does not authorize implementation by itself.
+
+Research and review results:
+
+- source-index census: pass, 98 annotated entries and 111 unique URLs;
+- whitepaper citation-token resolution against source identifiers: pass, zero
+  unresolved identifiers;
+- local Markdown-link validation across the whitepaper, PRD, source index,
+  integration boundary, and media manifest: pass, zero missing paths;
+- independent literature and source audit: final pass after correcting source
+  destinations, release pins, direct citations, incident provenance, and local
+  committed-revision lineage;
+- independent settlement-security audit: final pass; challenged or frozen
+  parts block only new reservation and submission while preserving observation,
+  finality, no-outflow proof, and reconciliation for already submitted
+  transfers;
+- initial independent repository-integration audit: seven blocking findings;
+  all seven were corrected before this record, including issue publication,
+  completeness ownership, source path, README status, historical-baseline
+  wording, PDF regeneration, and temporary-workspace removal;
+- final independent repository-integration re-audit: pass after all seven
+  blocking findings were corrected.
+
+Media and PDF verification:
+
+- seven SVGs parse with `xmllint`, and each remains explanatory media rather
+  than financial, security, incident, or settlement evidence;
+- `pdfinfo` reports coherent titles, Letter page size, no encryption, no form,
+  and no JavaScript for both PDFs;
+- `pypdf` and `pdfplumber` extracted non-empty text from all 81 pages, with zero
+  replacement characters;
+- all 81 pages were rasterized and visually inspected. No clipping, overlap,
+  missing glyph, broken table, missing image, unreadable figure, or blank content
+  page was found;
+- the final whitepaper PDF contains the complete source index as Appendix A;
+- temporary renderer, raster, and contact-sheet intermediates were removed;
+  exactly the two declared publication PDFs remain under `output/pdf/`.
+
+Repository validation results:
+
+- `git diff --check`: pass;
+- `cargo fmt --all -- --check`: pass;
+- `cargo test -p zkbench-core --test repo_hygiene --quiet`: pass, 1 test;
+- `cargo test -p zkbench-core --test repo_claim_boundary_docs --quiet`: pass,
+  1 test;
+- `cargo test --workspace --all-features --exclude hsai-agent-admission
+  --exclude hsai-e2e-harness --quiet`: pass;
+- `cargo clippy --workspace --all-targets --all-features --exclude
+  hsai-agent-admission --exclude hsai-e2e-harness -- -D warnings`: pass;
+- repository package-manager scan: pass; no root `package.json` or
+  `pnpm-lock.yaml` exists, so no npm or pnpm command was invented.
+
+The two workspace exclusions preserve the pre-existing user-owned admission
+mutation and its downstream consumer. The preserved admission file remained
+SHA-256 `41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de`
+and Git object `a4feb2f54ca90c3b52789b2dcb0d40af5bbe096a`. Concurrent Phase
+796/A3L6 material and the separate `agent-skills-repository-routing-configuration`
+slice under `docs/agents/` remain outside the Statebook package.
+
+No Statebook Rust or Python runtime, live adapter, order placement, execution,
+custody, pause authority, signer, margin recognition, oracle, bridge,
+withdrawal, transfer, settlement, accepted Evidence Ledger mutation, benchmark
+output, Level2+ evidence, production-readiness, full-security, legal-finality,
+final incident-attribution, SOTA, or semantic-correctness claim was created.
 
 ## Phase 796-A3L5E HSAI P01B Gate Sandbox Root-Read Correction
 

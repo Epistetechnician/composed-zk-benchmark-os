@@ -21811,3 +21811,141 @@ Exit criteria: the operator example compiles only behind its feature, normal
 tests remain hermetic, one live run records TLS 1.3 and a 32-byte RFC 9266
 exporter with the accepted Phala response on the same connection, exactly five
 digest-bound files exist outside git, and all non-claims remain explicit.
+
+## Integration Track: Statebook And Assurance-Adjusted Settlement
+
+Status: `DocumentationOnly`; docs-first boundary complete at
+`Level0DesignNote`. See
+`docs/integrations/statebook_terminal_payoff_and_trust_settlement.md`.
+
+Named state slice:
+`statebook-terminal-payoff-and-assurance-adjusted-settlement-boundary`.
+
+Completed:
+
+- froze one future terminal scalar cash-settled `TerminalContractIR` with
+  source-term digests, economic reference, observation, comparator, payoff, and
+  settlement profiles;
+- separated financial payoff and residual composition from HSAI
+  `ClaimEnvelope` evidence composition;
+- separated semantic coherence, product span, execution completeness,
+  settlement completeness, and capital completeness;
+- grounded the externalization boundary in the preliminary Ostium incident
+  evidence while preserving the unknown final root cause and loss accounting;
+- distinguished immediate internal risk state, hard-gated and capped atomic
+  DvP/PvP with represented linked legs, narrowly prefunded and
+  destination-restricted all-or-none external risk-reducing obligations, and
+  unconditional irreversible external release;
+- rejected scalar trust scoring in favor of current-evidence hard gates,
+  discrete assurance tiers, independent common-numeraire valuation, atomic
+  native and aggregate loss-budget reservations, deterministic epoch-and-journal
+  refill, zero reuse value for pending anomalous PnL, staged release, fresh
+  revalidation, hysteresis, and bounded challenge and breaker contracts;
+- recorded required invariants, adversarial scenarios, explicit limitations,
+  and base, acceleration, and constraint scenarios for 2026-2028, 2029-2031,
+  and 2032-2036 across AI, compute, power, semiconductors, agents, robotics,
+  biotech, defense, climate, finance, and global infrastructure, with
+  pre-registered evaluation and rejection criteria for any future pilot;
+- froze the next sequence as synthetic terminal fixtures, a local exact-rational
+  residual engine, hermetic execution modeling, a non-authoritative settlement
+  simulator, a separately reviewed external-evidence boundary, and only then a
+  separately owned authority integration.
+
+Validation gate: the declared Statebook surface spans the integration spec plus
+`README.md`, `AGENTS.md`, this task ledger, and
+`docs/90-whole-codebase-validation-report.md`; source links present; named-slice
+and semantic mirror scans; `git diff --check`; Rust formatting; repository
+hygiene and claim-boundary documentation tests; no package-manager surface;
+preserved pre-existing admission edit identity; no executable state mutation.
+The independently owned Phase 796-A3L5 mirror changes are part of committed
+baseline `a05fc73041ccd87c2f83a9f07da7b552c9a06a17`, not this Statebook slice.
+Separately owned, concurrently mutable A3L6 implementation work began
+materializing under the five Python paths authorized by committed A3L5. That
+entire A3L6 path envelope is outside this slice and was not mutated, assigned a
+stable identity, or claimed as validated by the Statebook work.
+A generated untracked Python bytecode cache also appeared beside that
+concurrent work and was neither removed nor validated by this slice.
+
+Anti-goals: implementation, floating-point or empirical calibration, live
+market or venue access, oracle or router code, orders, fills, custody, asset
+movement, settlement, margin or capital-offset recognition, circuit-breaker
+action, accepted Evidence Ledger mutation, benchmark outputs, action authority,
+semantic-correctness, production-readiness, SOTA, full-security, or final Ostium
+root-cause claims.
+
+Exit criteria: the five-file documentation slice names one state boundary;
+financial terms join assurance evidence only through digests; every weak
+completeness and assurance lane remains visible; no trust score, waiting period,
+or HSAI evidence object is reinterpreted as market truth or execution authority;
+and all focused repository gates pass without changing the pre-existing dirty
+file.
+
+## Integration Track: Statebook Whitepaper, PRD, Sources, And Publication Media
+
+Status: `DocumentationOnly`; publication package complete at
+`Level0DesignNote`.
+
+Named state slice:
+`statebook-whitepaper-prd-and-publication-media-boundary`.
+
+Completed:
+
+- expanded the Statebook thesis into an end-to-end whitepaper grounded in
+  state-contingent claims, replication, contract semantics, microstructure,
+  clearing, finality, assurance, recovery, AI, energy, and macroeconomics;
+- separated semantic, payoff, execution, capital, settlement, assurance, and
+  recovery completeness into seven typed verdicts with no aggregate
+  `complete=true`;
+- converted the trust-versus-instant-settlement prompt into a noncompensable
+  controller: hard gates decide whether, simultaneous budgets decide how much,
+  maximum risk clocks decide when, and an exactly-once queue decides what next;
+- produced an implementation-ready PRD with 70 user stories, 20 implementation
+  decisions, 18 functional requirements, deterministic test strategy, 34-case
+  adversarial corpus, phased delivery, and explicit non-goals;
+- built an annotated source index separating theory, standards, law, venue
+  claims, pinned code, incident artifacts, preliminary analysis, media, AI,
+  energy, macro scenarios, and repository-grounded precedents;
+- corrected Ostium incident language to distinguish direct event evidence,
+  current mutable documentation, pinned code observations, preliminary
+  hypotheses, unknown final root cause, and uncovered payout paths;
+- created seven original accessible SVG architecture and teaching assets with no
+  copied meme template, third-party logo, or victim imagery;
+- rendered and visually inspected two non-benchmark publication PDFs;
+- published the PRD to the configured GitHub issue tracker with
+  `ready-for-agent` as
+  [issue #17](https://github.com/Epistetechnician/composed-zk-benchmark-os/issues/17),
+  which signals specification quality only and grants no implementation
+  authority.
+
+Declared repository surface:
+
+- `docs/statebook-whitepaper.md`;
+- `docs/statebook-product-requirements.md`;
+- `docs/statebook-literature-source-index.md`;
+- `docs/media/statebook/README.md` and seven SVG assets;
+- `output/pdf/statebook-whitepaper.pdf`;
+- `output/pdf/statebook-product-requirements.pdf`;
+- the pre-existing Statebook boundary and four standard navigation mirrors.
+
+Validation gate: Markdown structure and cross-reference scans; source-link
+inventory; SVG XML parsing and raster inspection; PDF metadata, text extraction,
+full-page rasterization, and visual inspection; independent literature,
+security, repository-interface, PRD, claim-boundary, and publication reviews;
+`git diff --check`; Rust formatting; repository hygiene and claim-boundary
+documentation tests; workspace test and clippy gates excluding only the
+concurrent dirty admission surface and its downstream harness; no invented
+package-manager gate; preservation of unrelated worktree paths.
+
+Anti-goals: Statebook runtime code, live venue or network access, empirical
+calibration, price or oracle truth, executable equivalence, margin recognition,
+legal fungibility, custody, signing, pause, asset movement, settlement,
+production readiness, accepted Evidence Ledger mutation, benchmark output,
+Level2+ evidence, final incident attribution, SOTA, proof, semantic correctness,
+or full security.
+
+Exit criteria: all publication artifacts name the same state slice and evidence
+ceiling; every external claim is source-classed and limitation-bound; all seven
+completeness dimensions remain independent; media remains non-evidentiary; both
+PDFs render without clipping or missing glyphs; the GitHub PRD issue preserves
+the same non-goals; and the unrelated admission and A3L6 paths remain outside the
+validated Statebook surface.

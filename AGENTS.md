@@ -2060,6 +2060,58 @@ and independently reviewed. The dirty admission source remains outside this
 state slice at SHA-256
 `41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de`.
 
+Explicit Statebook terminal-payoff and assurance-adjusted settlement boundary
+now allowed and completed as documentation only in
+`docs/integrations/statebook_terminal_payoff_and_trust_settlement.md` plus the
+four standard mirrors in `README.md`, `AGENTS.md`, `docs/12-task-list.md`, and
+`docs/90-whole-codebase-validation-report.md`. This slice is limited to the
+`statebook-terminal-payoff-and-assurance-adjusted-settlement-boundary`: a future
+terminal scalar cash-settled `TerminalContractIR`, payoff and residual algebra,
+separate semantic/product/execution/settlement/capital completeness, an
+incident-grounded distinction between internal risk state, atomic linked
+settlement, time-critical external risk-reducing obligations, and unconditional
+externalization, current-evidence hard gates, independent common-numeraire
+valuation, atomic aggregate loss-budget reservations, zero reuse value for
+pending anomalous PnL, staged release, revalidation, bounded challenge and
+circuit-breaker contracts, and two-, five-, and ten-year AI/technology market
+scenarios. Atomic DvP/PvP and external risk-reducing obligations remain
+fully represented, prefunded, unencumbered, hard-gated, capped, and all-or-none;
+the external obligation is destination-restricted and its in-flight exposure
+remains counted until observed finality. Native and common-numeraire counters
+reserve exactly once and refill only by the deterministic epoch and journal
+rules. It does not permit Rust, Python, Cargo, fixtures, network or venue access,
+live data, oracle or router implementation, order execution, margin or
+capital-offset recognition, custody, asset settlement, circuit-breaker action,
+accepted Evidence Ledger mutation, benchmark outputs, action authority, or any
+claim above `Level0DesignNote`.
+Financial payoff composition must remain separate from
+`hsai_claim_envelope::conjoin`; HSAI evidence maturity must not be reinterpreted
+as financial contract expiry; no scalar trust score may hide a failed critical
+assurance lane.
+
+Explicit Statebook whitepaper, product-requirements, literature, publication-
+media, and non-benchmark PDF package now allowed and completed as documentation
+only. The named state slice is
+`statebook-whitepaper-prd-and-publication-media-boundary`, limited to
+`docs/statebook-whitepaper.md`, `docs/statebook-product-requirements.md`,
+`docs/statebook-literature-source-index.md`, original explanatory SVGs and their
+manifest under `docs/media/statebook/`, exactly two rendered publication PDFs
+under `output/pdf/`, the existing Statebook integration boundary, and the four
+standard navigation mirrors in `README.md`, `AGENTS.md`,
+`docs/12-task-list.md`, and `docs/90-whole-codebase-validation-report.md`. The
+two PDFs are documentation publications, not benchmark artifacts, durable
+benchmark outputs, evidence bundles, or runtime outputs. This slice expands the
+analysis to seven separate semantic, payoff, execution, capital, settlement,
+assurance, and recovery completeness verdicts; an annotated literature, code,
+standards, media, and incident corpus; a 70-story implementation-ready PRD; an
+original visual system; and a source-constrained Ostium case study. It does not
+permit new Rust, Python, Cargo, package runtime, fixture, network, venue, oracle,
+router, order, margin, custody, pause, signing, bridge, settlement, or asset-
+movement capability. It does not grant a GitHub issue execution authority, and
+it creates no accepted Evidence Ledger mutation, benchmark result, Level2+
+evidence, empirical calibration, legal conclusion, final incident attribution,
+production-readiness, SOTA, proof, semantic-correctness, or full-security claim.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.
