@@ -103,6 +103,76 @@ pub fn decide_and_transition(
         }
     }
 
+    if current_state.queue.status == QueueStatusV1::Cancelled {
+        let ledger_tip_before = current_state.ledger.tip_digest;
+        let transfer_status_before = current_state.transfer.status;
+        return Ok(build_record(
+            DecisionOutcomeV1::Rejected,
+            None,
+            zero_rational(),
+            zero_rational(),
+            intent,
+            decision_context,
+            None,
+            request.financial_basis.analysis_subject_digest,
+            request.financial_basis.composition_digest,
+            evidence_digest,
+            valuation_digest,
+            policy_d,
+            linked_or_obligation_digest(&request),
+            ledger_tip_before,
+            ledger_tip_before,
+            QueueStatusV1::Cancelled,
+            QueueStatusV1::Cancelled,
+            transfer_status_before,
+            transfer_status_before,
+            vec![DecisionReasonV1::QueueCancelled],
+            Vec::new(),
+            default_nonclaims(),
+            evaluated_at,
+            release_class,
+            current_state,
+        ));
+    }
+
+    if let (Some(bound_intent), Some(bound_destination)) = (
+        current_state.bound_intent_digest,
+        current_state.bound_destination.as_deref(),
+    ) {
+        if intent == bound_intent && request.destination() != bound_destination {
+            let ledger_tip_before = current_state.ledger.tip_digest;
+            let queue_status_before = current_state.queue.status;
+            let transfer_status_before = current_state.transfer.status;
+            return Ok(build_record(
+                DecisionOutcomeV1::Rejected,
+                None,
+                zero_rational(),
+                zero_rational(),
+                intent,
+                decision_context,
+                None,
+                request.financial_basis.analysis_subject_digest,
+                request.financial_basis.composition_digest,
+                evidence_digest,
+                valuation_digest,
+                policy_d,
+                linked_or_obligation_digest(&request),
+                ledger_tip_before,
+                ledger_tip_before,
+                queue_status_before,
+                queue_status_before,
+                transfer_status_before,
+                transfer_status_before,
+                vec![DecisionReasonV1::IntentDigestMismatch],
+                Vec::new(),
+                default_nonclaims(),
+                evaluated_at,
+                release_class,
+                current_state,
+            ));
+        }
+    }
+
     let ledger_tip_before = current_state.ledger.tip_digest;
     let queue_status_before = current_state.queue.status;
     let transfer_status_before = current_state.transfer.status;
@@ -426,6 +496,8 @@ pub fn decide_and_transition(
         {
             next_state.queue.status = QueueStatusV1::Queued;
             next_state.transfer.status = TransferStatusV1::Unreserved;
+            next_state.bound_intent_digest = Some(intent);
+            next_state.bound_destination = Some(request.destination().to_owned());
             (
                 DecisionOutcomeV1::Queued,
                 instant,

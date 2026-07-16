@@ -561,6 +561,14 @@ fn parse_state(
             .get("clean_epochs")
             .and_then(Value::as_u64)
             .unwrap_or(0) as u32,
+        bound_intent_digest: match object.get("bound_intent_digest") {
+            Some(value) if !value.is_null() => Some(parse_digest(value)?),
+            _ => None,
+        },
+        bound_destination: object
+            .get("bound_destination")
+            .and_then(Value::as_str)
+            .map(str::to_owned),
     })
 }
 
