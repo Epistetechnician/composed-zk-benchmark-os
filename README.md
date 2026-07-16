@@ -917,6 +917,7 @@ Surface DSL
 | [docs/statebook-p1-core-semantic-fixtures-boundary-spec.md](docs/statebook-p1-core-semantic-fixtures-boundary-spec.md) | Docs-first P1 authorization for one isolated exact-arithmetic semantic-normalization and deterministic `StateKeyV1` fixture crate; no execution, settlement, HSAI, or external-I/O authority. |
 | [docs/statebook-p1-core-semantic-fixtures-implementation-notes.md](docs/statebook-p1-core-semantic-fixtures-implementation-notes.md) | Implemented P1 local fixture crate: closed semantic completeness, exact normalization, source-lineage separation, frozen TLV `StateKeyV1`, 27 material mutations, negatives, and a second test encoder. |
 | [docs/statebook-p2-payoff-residual-engine-boundary-spec.md](docs/statebook-p2-payoff-residual-engine-boundary-spec.md) | Docs-first P2 authorization for exact finite-domain indicator payoff evaluation, asset-vector residuals, and typed incompleteness; no books, execution, capital, or settlement authority. |
+| [docs/statebook-p2-payoff-residual-engine-implementation-notes.md](docs/statebook-p2-payoff-residual-engine-implementation-notes.md) | Implemented local P2 exact indicator payoff and finite-domain residual engine with checked rational arithmetic, deterministic aggregation, non-netted asset vectors, and whole-report fail closure. |
 | [docs/797-phase-hsai-native-transcript-source-scan-correction-boundary.md](docs/797-phase-hsai-native-transcript-source-scan-correction-boundary.md) | Docs-first correction boundary for exact Phase 792/794 native-transcript test-only source-scan exceptions; no broader process or network authority. |
 | [docs/798-phase-hsai-native-transcript-source-scan-correction-implementation.md](docs/798-phase-hsai-native-transcript-source-scan-correction-implementation.md) | Implemented exact Phase 792/794 native-transcript test-only scanner exceptions with file, line, function, executable, and near-miss confinement. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
@@ -965,6 +966,17 @@ Statebook P2 authorization status: the named docs-first slice
 `statebook-p2-payoff-residual-engine-boundary` freezes one future exact
 finite-domain indicator payoff and asset-vector residual engine. It does not
 authorize implementation in this commit, alter P1 identity, or grant execution,
+capital, settlement, external-I/O, or evidence authority.
+
+Statebook P2 implementation status: the named slice
+`statebook-p2-payoff-residual-engine` is implemented inside `statebook-core`.
+It evaluates only P1-validated indicator contracts over at most 256 declared
+states and 64 candidate legs, applies exact unit scaling and contract-level
+rounding, aggregates duplicate StateKeys deterministically, and reports
+non-netted per-asset residuals as `ExactOnDeclaredDomain`,
+`ApproximateOnDeclaredDomain`, or `Incomplete`. Coordinate or arithmetic
+failure invalidates the whole numeric report. The frozen P1 StateKey remains
+unchanged. This is local regression evidence only and creates no execution,
 capital, settlement, external-I/O, or evidence authority.
 
 ## Current Implementation Status

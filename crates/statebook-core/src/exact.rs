@@ -1,5 +1,6 @@
 use core::cmp::Ordering;
 use serde::{Deserialize, Serialize};
+use std::collections::BTreeMap;
 use thiserror::Error;
 
 pub const MAX_DECIMAL_SCALE_V1: u8 = 18;
@@ -18,6 +19,8 @@ pub enum ExactError {
     Overflow,
     #[error("rational denominator is zero")]
     ZeroDenominator,
+    #[error("rounding quantum must be strictly positive")]
+    NonPositiveQuantum,
 }
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq, Serialize)]
@@ -158,6 +161,129 @@ impl SignedRational {
         self.denominator
     }
 
+    pub const fn is_zero(self) -> bool {
+        self.numerator == 0
+    }
+
+    pub fn checked_neg(self) -> Result<Self, ExactError> {
+        Self::new(
+            self.numerator.checked_neg().ok_or(ExactError::Overflow)?,
+            self.denominator,
+        )
+    }
+
+    pub fn checked_abs(self) -> Result<Self, ExactError> {
+        if self.numerator.is_negative() {
+            self.checked_neg()
+        } else {
+            Ok(self)
+        }
+    }
+
+    pub fn checked_add(self, rhs: Self) -> Result<Self, ExactError> {
+        let rhs_denominator = rhs.denominator;
+        let shared = gcd(self.denominator, rhs_denominator);
+        let lhs_factor = rhs_denominator / shared;
+        let rhs_factor = self.denominator / shared;
+        let lhs_factor = i128::try_from(lhs_factor).map_err(|_| ExactError::Overflow)?;
+        let rhs_factor = i128::try_from(rhs_factor).map_err(|_| ExactError::Overflow)?;
+        let lhs = self
+            .numerator
+            .checked_mul(lhs_factor)
+            .ok_or(ExactError::Overflow)?;
+        let rhs = rhs
+            .numerator
+            .checked_mul(rhs_factor)
+            .ok_or(ExactError::Overflow)?;
+        let numerator = lhs.checked_add(rhs).ok_or(ExactError::Overflow)?;
+        let final_cancel = gcd(numerator.unsigned_abs(), shared);
+        let numerator = signed_from_magnitude(
+            numerator.unsigned_abs() / final_cancel,
+            numerator.is_negative(),
+        )?;
+        let denominator = (self.denominator / shared)
+            .checked_mul(rhs_denominator / final_cancel)
+            .ok_or(ExactError::Overflow)?;
+        Self::new(numerator, denominator)
+    }
+
+    pub fn checked_sub(self, rhs: Self) -> Result<Self, ExactError> {
+        let rhs_denominator = rhs.denominator;
+        let shared = gcd(self.denominator, rhs_denominator);
+        let lhs_factor =
+            i128::try_from(rhs_denominator / shared).map_err(|_| ExactError::Overflow)?;
+        let rhs_factor =
+            i128::try_from(self.denominator / shared).map_err(|_| ExactError::Overflow)?;
+        let lhs = self
+            .numerator
+            .checked_mul(lhs_factor)
+            .ok_or(ExactError::Overflow)?;
+        let rhs = rhs
+            .numerator
+            .checked_mul(rhs_factor)
+            .ok_or(ExactError::Overflow)?;
+        let numerator = lhs.checked_sub(rhs).ok_or(ExactError::Overflow)?;
+        let final_cancel = gcd(numerator.unsigned_abs(), shared);
+        let numerator = signed_from_magnitude(
+            numerator.unsigned_abs() / final_cancel,
+            numerator.is_negative(),
+        )?;
+        let denominator = (self.denominator / shared)
+            .checked_mul(rhs_denominator / final_cancel)
+            .ok_or(ExactError::Overflow)?;
+        Self::new(numerator, denominator)
+    }
+
+    pub fn checked_mul(self, rhs: Self) -> Result<Self, ExactError> {
+        if self.is_zero() || rhs.is_zero() {
+            return Self::new(0, 1);
+        }
+        let left_cancel = gcd(self.numerator.unsigned_abs(), rhs.denominator);
+        let right_cancel = gcd(rhs.numerator.unsigned_abs(), self.denominator);
+        let left = signed_from_magnitude(
+            self.numerator.unsigned_abs() / left_cancel,
+            self.numerator.is_negative(),
+        )?;
+        let right = signed_from_magnitude(
+            rhs.numerator.unsigned_abs() / right_cancel,
+            rhs.numerator.is_negative(),
+        )?;
+        let numerator = left.checked_mul(right).ok_or(ExactError::Overflow)?;
+        let denominator = (self.denominator / right_cancel)
+            .checked_mul(rhs.denominator / left_cancel)
+            .ok_or(ExactError::Overflow)?;
+        Self::new(numerator, denominator)
+    }
+
+    pub fn checked_div(self, rhs: Self) -> Result<Self, ExactError> {
+        if rhs.is_zero() {
+            return Err(ExactError::ZeroDenominator);
+        }
+        if self.is_zero() {
+            return Self::new(0, 1);
+        }
+        let numerator_cancel = gcd(self.numerator.unsigned_abs(), rhs.numerator.unsigned_abs());
+        let denominator_cancel = gcd(rhs.denominator, self.denominator);
+        let magnitude = (self.numerator.unsigned_abs() / numerator_cancel)
+            .checked_mul(rhs.denominator / denominator_cancel)
+            .ok_or(ExactError::Overflow)?;
+        let numerator = signed_from_magnitude(
+            magnitude,
+            self.numerator.is_negative() != rhs.numerator.is_negative(),
+        )?;
+        let denominator = (self.denominator / denominator_cancel)
+            .checked_mul(rhs.numerator.unsigned_abs() / numerator_cancel)
+            .ok_or(ExactError::Overflow)?;
+        Self::new(numerator, denominator)
+    }
+
+    pub fn from_scaled(value: ScaledInteger) -> Result<Self, ExactError> {
+        let denominator = 10_u128
+            .checked_pow(u32::from(value.scale()))
+            .ok_or(ExactError::Overflow)?;
+        Self::new(value.coefficient(), denominator)
+    }
+
     pub fn checked_cmp(self, rhs: Self) -> Result<Ordering, ExactError> {
         let lhs = self
             .numerator
@@ -169,6 +295,82 @@ impl SignedRational {
             .ok_or(ExactError::Overflow)?;
         Ok(lhs.cmp(&rhs))
     }
+}
+
+pub fn quantize_exact(
+    value: SignedRational,
+    quantum: SignedRational,
+    mode: crate::RoundingMode,
+) -> Result<SignedRational, ExactError> {
+    if quantum.numerator() <= 0 {
+        return Err(ExactError::NonPositiveQuantum);
+    }
+    let units = value.checked_div(quantum)?;
+    let magnitude = units.numerator().unsigned_abs();
+    let denominator = units.denominator();
+    let quotient = magnitude / denominator;
+    let remainder = magnitude % denominator;
+    let increment = match mode {
+        crate::RoundingMode::TowardZero => false,
+        crate::RoundingMode::Floor => units.numerator().is_negative() && remainder != 0,
+        crate::RoundingMode::Ceiling => !units.numerator().is_negative() && remainder != 0,
+        crate::RoundingMode::HalfEven => match remainder.cmp(&(denominator - remainder)) {
+            Ordering::Less => false,
+            Ordering::Greater => true,
+            Ordering::Equal => quotient % 2 == 1,
+        },
+    };
+    let rounded_magnitude = if increment {
+        quotient.checked_add(1).ok_or(ExactError::Overflow)?
+    } else {
+        quotient
+    };
+    let rounded = signed_from_magnitude(rounded_magnitude, units.numerator().is_negative())?;
+    SignedRational::new(rounded, 1)?.checked_mul(quantum)
+}
+
+pub(crate) fn sum_rationals_canonical(
+    values: &[SignedRational],
+) -> Result<SignedRational, ExactError> {
+    let mut counts: BTreeMap<(u128, u128), (usize, usize)> = BTreeMap::new();
+    for value in values.iter().filter(|value| !value.is_zero()) {
+        let entry = counts
+            .entry((value.denominator(), value.numerator().unsigned_abs()))
+            .or_default();
+        if value.numerator().is_negative() {
+            entry.1 += 1;
+        } else {
+            entry.0 += 1;
+        }
+    }
+
+    let mut remaining = Vec::with_capacity(values.len());
+    for ((denominator, magnitude), (positive, negative)) in counts {
+        let (count, is_negative) = if positive >= negative {
+            (positive - negative, false)
+        } else {
+            (negative - positive, true)
+        };
+        let numerator = signed_from_magnitude(magnitude, is_negative)?;
+        remaining
+            .extend(std::iter::repeat(SignedRational::new(numerator, denominator)?).take(count));
+    }
+    remaining.sort_by_key(|value| {
+        (
+            value.denominator(),
+            value.numerator().unsigned_abs(),
+            value.numerator().is_negative(),
+        )
+    });
+
+    let mut values = remaining.into_iter();
+    let Some(mut total) = values.next() else {
+        return SignedRational::new(0, 1);
+    };
+    for value in values {
+        total = total.checked_add(value)?;
+    }
+    Ok(total)
 }
 
 #[derive(Clone, Debug, Deserialize)]

@@ -11427,3 +11427,41 @@ validated-contract digest remain frozen. This commit adds no Rust and creates no
 execution, capital, settlement, external-I/O, evidence, benchmark, proof, or
 production authority. The user-owned admission, AGENTS routing, `docs/agents/`,
 and A3L6 paths remain outside the slice and untouched.
+
+## Statebook P2 Payoff And Residual Engine Implementation
+
+Date: 16 July 2026.
+
+Outcome: implemented named state slice
+`statebook-p2-payoff-residual-engine`.
+
+The additive `statebook-core` surface evaluates P1-validated terminal indicator
+contracts over a deterministic domain of at most 256 exact scalar states and a
+candidate portfolio of at most 64 legs. Contract payout applies exact amount,
+unit scale, quantum, and rounding before the exact rational position quantity.
+Residuals remain separate by settlement asset; no conversion or scalar cross-
+asset ranking exists.
+
+Duplicate StateKeys aggregate deterministically while retaining every observed
+validated-contract digest. Aggregation cancels canonical exact opposites, sorts
+remaining terms by denominator, unsigned numerator magnitude, and sign, then
+uses only checked fixed-width addition. Caller order cannot change the result;
+genuine or canonical-intermediate overflow fails closed. Domain construction
+rejects immediately on the 257th item. All fourteen normalized reference and
+observation fields must match the target coordinate. Any coordinate mismatch
+or material arithmetic failure returns `Incomplete`, marks every state
+unsupported, and emits no numeric residual or worst-case section.
+
+Fixture-backed checks cover exact decomposition, one-state boundary residual,
+duplicate halves, signed decomposition, multi-asset non-netting, coordinate
+mismatch, all comparator and range endpoints, positive and negative rounding
+ties, four overflow paths, resource ceilings, input permutations, additive
+cancellation, bounded reference arithmetic, and preservation of the P1 701-byte
+StateKey preimage and digest. The P2 domain digest is
+`67cb8e1807cd3e619f73d569f70de494ef60610f4d44acea236b0ee006e45e6a`.
+
+This result remains local fixture-backed payoff regression evidence over finite
+declared states. It is not execution, capital recognition, settlement
+authority, semantic proof, independent audit, production readiness, SOTA, or a
+full-security claim. Unrelated admission, AGENTS routing, `docs/agents/`, A3L6,
+HSAI, and zkbench paths remain outside this state slice.

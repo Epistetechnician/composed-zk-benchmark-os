@@ -332,7 +332,7 @@ impl ValidatedContract {
     }
 }
 
-#[derive(Clone, Copy, Eq, Hash, PartialEq, Serialize)]
+#[derive(Clone, Copy, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct StateKeyV1(Sha256Digest);
 
 impl StateKeyV1 {
