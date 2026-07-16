@@ -101,6 +101,14 @@ pub fn encodable_corpus_cases_v1() -> &'static [CorpusCaseV1] {
             id: "td004_26_recovery_mismatch",
             expected_outcome: DecisionOutcomeV1::Rejected,
         },
+        CorpusCaseV1 {
+            id: "td004_17_breaker_ttl_resolution",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_17_breaker_expired_no_silent_renew",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
     ]
 }
 
@@ -201,6 +209,24 @@ pub fn build_corpus_scenario_v1(id: &str) -> Result<SettlementScenarioV1, Evalua
         }),
         "td004_26_recovery_mismatch" => mutate(|value| {
             value["initial_state"]["recovery"]["reconciliation_mismatch"] = json!(true);
+        }),
+        "td004_17_breaker_ttl_resolution" => mutate(|value| {
+            value["initial_state"]["breakers"][0] = json!({
+                "scope_id": "global",
+                "state": "halted",
+                "expires_at": 1709999999,
+                "renewal_count": 3,
+                "renewal_ceiling": 3
+            });
+        }),
+        "td004_17_breaker_expired_no_silent_renew" => mutate(|value| {
+            value["initial_state"]["breakers"][0] = json!({
+                "scope_id": "global",
+                "state": "guarded",
+                "expires_at": 1709999999,
+                "renewal_count": 1,
+                "renewal_ceiling": 3
+            });
         }),
         _ => Err(EvaluationErrorV1::Settlement(format!(
             "unknown corpus id: {id}"

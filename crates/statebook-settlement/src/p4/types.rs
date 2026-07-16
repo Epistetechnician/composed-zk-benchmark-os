@@ -116,6 +116,8 @@ pub enum DecisionReasonV1 {
     BreakerHalted,
     BreakerFrozen,
     BreakerInvalidTransition,
+    BreakerResolutionRequired,
+    BreakerRenewalRejected,
     QueueTimerOnly,
     ChallengeInvalid,
     ChallengeDuplicate,
@@ -461,6 +463,28 @@ pub struct BreakerScopeV1 {
     pub(crate) expires_at: Option<i64>,
     pub(crate) renewal_count: u32,
     pub(crate) renewal_ceiling: u32,
+}
+
+impl BreakerScopeV1 {
+    pub fn scope_id(&self) -> &str {
+        &self.scope_id
+    }
+
+    pub const fn state(&self) -> BreakerStateV1 {
+        self.state
+    }
+
+    pub const fn expires_at(&self) -> Option<i64> {
+        self.expires_at
+    }
+
+    pub const fn renewal_count(&self) -> u32 {
+        self.renewal_count
+    }
+
+    pub const fn renewal_ceiling(&self) -> u32 {
+        self.renewal_ceiling
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
