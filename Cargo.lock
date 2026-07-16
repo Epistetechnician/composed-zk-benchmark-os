@@ -1000,6 +1000,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "statebook-report"
+version = "0.1.0"
+dependencies = [
+ "hex",
+ "ring",
+ "serde",
+ "serde_json",
+ "sha2",
+ "statebook-settlement",
+ "tempfile",
+ "thiserror",
+]
+
+[[package]]
 name = "statebook-settlement"
 version = "0.1.0"
 dependencies = [

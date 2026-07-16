@@ -10894,7 +10894,7 @@ State slice:
 - `docs/12-task-list.md`;
 - this report.
 
-The boundary freezes a future portable digest-bound audit-bundle and narrow
+The boundary freezes a portable digest-bound audit-bundle and narrow
 HSAI/fixture adapter surface. It authorizes at most `crates/statebook-report`
 and optional `crates/statebook-hsai`, independent readback validation,
 domain-separated manifest digests, and `grants_authority=false` handoff rules.
@@ -10904,6 +10904,67 @@ external-evidence/credential work remains PRD P6 and is outside this slice.
 This documentation-only slice adds no Rust or Cargo change and creates no
 proof, accepted evidence, Level2+, score axis, semantic correctness, production
 readiness, SOTA, breakthrough, full security, external audit, or action
-authority. Implementation requires a separately committed state slice
+authority.
+
+## Statebook P5 Evidence Adapters And Report Bundles Implementation
+
+Date: 16 July 2026.
+
+Outcome: local hermetic regression evidence under named state slice
 `statebook-p5-evidence-adapters-and-report-bundles`.
+
+State slice:
+
+- root `Cargo.toml` / `Cargo.lock` membership for `statebook-report`;
+- `crates/statebook-report/**`;
+- `docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+The crate materializes closed digest-bound audit bundles, independently
+validates them on readback, maps hermetic/HSAI fixture envelopes without
+inventing unknowns, and emits proposal handoffs with `grants_authority=false`.
+Domain-separated P5 digests are reproduced by an independent `ring` encoder.
+Nineteen focused integration tests pass; unchanged `statebook-core` and
+`statebook-settlement` tests pass; focused format and warning-denied Clippy
+pass for `statebook-report`.
+
+This is explicit local regression evidence only. It does not establish live
+venue ingestion, clearing recognition, legal finality, admission authority,
+Evidence Ledger mutation, P6/P7 capability, production readiness, SOTA,
+independent audit, or full security. No value moves.
+
+## Statebook P5 Evidence Adapters And Report Bundles Implementation Validation
+
+Date: 16 July 2026.
+
+Outcome: `Level1LocalReplay`, `Pass`, named state slice
+`statebook-p5-evidence-adapters-and-report-bundles`.
+
+State slice:
+
+- `crates/statebook-report/**`;
+- `docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+The implementation adds portable digest-bound audit bundles, hermetic fixture and
+ClaimEnvelope-fixture adapters, independent readback validation, domain-separated P5 TLV
+digests, and proposal-only handoffs with `grants_authority=false`. No `hsai-*` production
+dependencies. P1-P4 identities and the P4 kernel remain unchanged.
+
+Focused P5 format, test, and warning-denied Clippy gates pass. Unchanged P3/P4
+`statebook-settlement` and P1/P2 `statebook-core` regressions pass. Nineteen P5 integration
+tests cover bundle round-trip, fail-closed readback rejection paths, adapter unknown
+preservation, claim-boundary scans, independent digest golden vectors, and resource
+limit-plus-one rejection.
+
+This is local hermetic fixture regression and readback evidence only. It is not live
+execution, clearing recognition, legal finality, admission authority, Evidence Ledger
+mutation, P6 external source ingestion, P7 authority integration, benchmark evidence,
+production readiness, SOTA, independent audit, or full security. No value moves.
 
