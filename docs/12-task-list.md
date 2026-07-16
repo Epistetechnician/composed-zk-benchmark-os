@@ -21273,3 +21273,35 @@ custody, signing, pause, transfer, externalization, HSAI, admission, zkbench,
 network, process, filesystem output, evidence promotion, proof, production
 readiness, SOTA, independent audit, or full-security claims.
 
+## Statebook P4 Settlement Simulator Implementation
+
+Status: complete for named state slice `statebook-p4-settlement-simulator`.
+
+Implemented deliverables:
+
+- additive P4 modules under `crates/statebook-settlement/src/p4/` with unchanged P3
+  `completeness.rs` semantics;
+- `decide_and_transition` fail-closed kernel and `parse_settlement_scenario_v1` fixture
+  parser;
+- serialize-only `DecisionRecordV1` with closed five-way outcomes;
+- hard gates 1–12, conservative valuation, assurance tiers, linked-plan and obligation
+  validation, budget CAS reservations, queue and breaker interaction;
+- domain-separated P4 TLV digests and independent `ring` intent golden coverage;
+- hermetic fixtures under `tests/fixtures/p4/` plus thirteen kernel and five claim-boundary
+  tests;
+- frozen resource ceilings including 1,048,576-byte fixture cap, eight linked-plan legs, and
+  sixteen budget axes.
+
+Focused gates pass:
+
+```text
+cargo fmt -p statebook-settlement -- --check
+cargo test -p statebook-settlement --tests
+cargo clippy -p statebook-settlement --all-targets -- -D warnings
+cargo test -p statebook-core
+```
+
+Claim ceiling: local hermetic fixture regression evidence only. No value moves. Full
+thirty-seven-scenario adversarial corpus replay remains a documented follow-on fixture
+expansion; minimum acceptance scenarios and resource bounds are covered.
+
