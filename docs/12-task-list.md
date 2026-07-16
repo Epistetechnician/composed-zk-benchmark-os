@@ -21949,3 +21949,52 @@ completeness dimensions remain independent; media remains non-evidentiary; both
 PDFs render without clipping or missing glyphs; the GitHub PRD issue preserves
 the same non-goals; and the unrelated admission and A3L6 paths remain outside the
 validated Statebook surface.
+
+## Integration Track: Statebook P1 Core Semantic Fixtures Boundary
+
+Status: docs-first implementation authorization complete. See
+`docs/statebook-p1-core-semantic-fixtures-boundary-spec.md`.
+
+Named boundary state slice:
+`statebook-p1-core-semantic-fixtures-boundary`.
+
+Authorized future implementation state slice:
+`statebook-p1-core-semantic-fixtures`.
+
+Goal: establish a deliberately narrow falsification surface for semantic
+equivalence before execution, capital, settlement, assurance, or recovery
+layers exist.
+
+Authorized implementation:
+
+- one standalone `crates/statebook-core` crate with no HSAI or `zkbench-core`
+  dependency;
+- exact decimal and signed-rational normalization with checked arithmetic;
+- closed synthetic source and normalization-profile schemas;
+- typed `Complete`, `Incomplete`, and `Unknown` semantic-completeness reports;
+- opaque lowering for complete terminal indicator contracts only;
+- source-lineage receipts kept outside state identity;
+- a manual tagged binary encoding and deterministic `StateKeyV1`;
+- material one-field mutation fixtures, malformed and incomplete negatives,
+  order-invariance tests, a frozen golden vector, and a test-only
+  implementation-diverse encoder;
+- root workspace metadata, one implementation note, and the standard mirrors.
+
+Validation gate: focused Statebook tests and warning-denied clippy; golden and
+independent-encoder equality; material-mutation divergence or rejection;
+permutation invariance; source-scan claim boundaries; repository hygiene and
+claim-boundary tests; full workspace tests and warning-denied clippy; formatting
+and diff hygiene.
+
+Anti-goals: payoff evaluation, portfolio residuals, perpetuals, execution or
+book data, margin or capital recognition, oracle or benchmark truth, custody,
+signing, pause, transfer, settlement, value movement, legal equivalence, HSAI
+mapping, network, credentials, process spawning, filesystem writes, external
+adapters, accepted Evidence Ledger mutation, benchmark outputs, Level2+,
+semantic correctness, production readiness, SOTA, proof, independent
+verification, external audit, or full security.
+
+Exit criteria: the boundary is mirrored and committed separately; P1 stays
+inside the exact authorized file surface; only complete validated semantics can
+produce a key; the golden vector is cross-checked by an implementation-diverse
+test encoder; all gates pass without staging or mutating unrelated dirty work.

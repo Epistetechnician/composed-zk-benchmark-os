@@ -914,6 +914,7 @@ Surface DSL
 | [docs/statebook-whitepaper.md](docs/statebook-whitepaper.md) | End-to-end Statebook whitepaper: state-contingent foundations, frontier-risk convergence, seven typed completeness verdicts, assurance-adjusted externalization, incident limits, AI/global-economy scenarios, architecture, governance, and falsification. |
 | [docs/statebook-product-requirements.md](docs/statebook-product-requirements.md) | Implementation-ready Statebook PRD with 70 user stories, explicit financial/evidence boundaries, one settlement-transition kernel, adversarial acceptance suite, delivery sequence, and non-goals. |
 | [docs/statebook-literature-source-index.md](docs/statebook-literature-source-index.md) | Annotated literature, standards, law, venue, pinned-code, incident, media, AI, energy, and macro source index with supported claims and limitations. |
+| [docs/statebook-p1-core-semantic-fixtures-boundary-spec.md](docs/statebook-p1-core-semantic-fixtures-boundary-spec.md) | Docs-first P1 authorization for one isolated exact-arithmetic semantic-normalization and deterministic `StateKeyV1` fixture crate; no execution, settlement, HSAI, or external-I/O authority. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -927,6 +928,15 @@ The synchronized PRD is published as
 [GitHub issue #17](https://github.com/Epistetechnician/composed-zk-benchmark-os/issues/17)
 with `ready-for-agent`; that label means the specification is bounded enough for
 a future separately authorized phase, not that the phase is authorized now.
+
+Statebook P1 authorization status: the named docs-first slice
+`statebook-p1-core-semantic-fixtures-boundary` authorizes a separately committed
+`statebook-p1-core-semantic-fixtures` implementation limited to an isolated
+`statebook-core` crate, synthetic JSON fixtures, deterministic exact-arithmetic
+normalization, semantic-completeness reports, source-lineage receipts, and a
+canonical `StateKeyV1`. It grants no payoff evaluation, residual, execution,
+capital, settlement, assurance, recovery, HSAI, network, filesystem-write, or
+external authority.
 
 ## Current Implementation Status
 
