@@ -21350,23 +21350,33 @@ covered.
 Status: documentation-first boundary complete for named state slice
 `statebook-p6-read-only-external-sources-boundary`.
 
-The next separately committed slice is
-`statebook-p6-read-only-external-sources`. It may add at most
-`crates/statebook-source` for captured-first read-only import of the frozen
-`synthetic-clearing-terms-v1` profile, provenance registry, import receipts,
-and domain-separated digests. Live network clients are deferred. P1-P5
-identities remain unchanged. Outputs never move value or grant authority.
+## Integration Track: Statebook P6 Read-Only External Sources Implementation
 
-Validation gate: unchanged P1-P5 source and golden vectors; no
-`statebook-core` / `statebook-settlement` / `statebook-report` mutation; closed
-profile import; fail-closed missing-provenance/unknown-schema/digest-mismatch
-paths; adapter unknown preservation and nonclaims; no generic adapter trait
-while only one profile exists; domain-separated P6 digests with an
-implementation-diverse encoder; focused format/test/Clippy; repository docs and
-hygiene checks; and independent scope plus import/digest reviews.
+Status: implemented under named state slice
+`statebook-p6-read-only-external-sources`.
 
-Anti-goals: P7 authority, trading, signing, custody, pause, transfer, live
-venue network in the first implementation, admission mutation, Evidence Ledger
-append, scalar trust score, empirical calibration, media-as-assurance, proof,
+Delivered in isolated `crates/statebook-source`:
+
+- captured-first import for `synthetic-clearing-terms-v1`;
+- provenance registry with supersede/historical digest retention;
+- fail-closed schema/profile/digest/narrative/resource rejection;
+- domain-separated P6 TLV digests with an independent `ring` golden encoder;
+- fourteen focused integration tests.
+
+P1-P5 identities remain unchanged. No live network client and no generic
+adapter trait were added.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-source -- --check
+cargo test -p statebook-source --tests
+cargo clippy -p statebook-source --all-targets -- -D warnings
+cargo test -p statebook-core -p statebook-settlement -p statebook-report --tests
+```
+
+Claim ceiling: local hermetic captured-source import regression only. No value
+moves. No P7 authority, trading, signing, custody, live venue network in this
+slice, admission mutation, Evidence Ledger append, scalar trust score,
 production readiness, SOTA, independent audit, or full-security claims.
 

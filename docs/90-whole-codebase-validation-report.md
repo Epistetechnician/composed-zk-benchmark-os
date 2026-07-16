@@ -10963,6 +10963,35 @@ remains outside this slice.
 This documentation-only slice adds no Rust or Cargo change and creates no
 proof, accepted evidence, Level2+, score axis, semantic correctness, production
 readiness, SOTA, breakthrough, full security, external audit, or action
-authority. Implementation requires a separately committed state slice
+authority.
+
+## Statebook P6 Read-Only External Sources Implementation
+
+Date: 16 July 2026.
+
+Outcome: `Level1LocalReplay`, `Pass`, named state slice
 `statebook-p6-read-only-external-sources`.
+
+State slice:
+
+- root `Cargo.toml` / `Cargo.lock` membership for `statebook-source`;
+- `crates/statebook-source/**`;
+- `docs/statebook-p6-read-only-external-sources-implementation-notes.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+The crate imports captured synthetic clearing terms through a fail-closed
+envelope, registers provenance, emits import receipts with adapter nonclaims,
+and reproduces domain-separated P6 digests via an independent `ring` encoder.
+Fourteen focused integration tests pass; unchanged `statebook-core`,
+`statebook-settlement`, and `statebook-report` tests pass; focused format and
+warning-denied Clippy pass for `statebook-source`. Live network remains
+deferred.
+
+This is local hermetic captured-source import regression evidence only. It does
+not establish live venue truth, clearing recognition, legal finality, admission
+authority, Evidence Ledger mutation, P7 capability, production readiness, SOTA,
+independent audit, or full security. No value moves.
 
