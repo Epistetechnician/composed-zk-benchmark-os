@@ -85,11 +85,11 @@ ATTEMPT_TIMEOUT_NS = 1_800_000_000_000
 TERMINATION_GRACE_SECONDS = 1.0
 READ_CHUNK_BYTES = 65_536
 SNAPSHOT_FILE_LIMIT = 16_777_216
-SNAPSHOT_FILE_COUNT = 21
-CANDIDATE_PAYLOAD_COUNT = 200
-CANDIDATE_FILE_COUNT = 201
+SNAPSHOT_FILE_COUNT = 22
+CANDIDATE_PAYLOAD_COUNT = 201
+CANDIDATE_FILE_COUNT = 202
 CANDIDATE_DIRECTORY_COUNT = 62
-PUBLICATION_EVENT_COUNT = 270
+PUBLICATION_EVENT_COUNT = 271
 
 READY_RE = re.compile(rb"\AP01B_RESULT_READY ([1-9][0-9]{0,6}) ([0-9a-f]{64})\n\Z")
 HEX64_RE = re.compile(r"\A[0-9a-f]{64}\Z")
@@ -199,6 +199,7 @@ SOURCE_PATHS = (
     "tools/hsai-formal-preflight/tests/test_execution_state_machine.py",
     "tools/hsai-formal-preflight/tests/test_fixture_validator.py",
     "tools/hsai-formal-preflight/tests/test_p01b_archive_ledger.py",
+    "tools/hsai-formal-preflight/tests/test_p01b_container_corpus.py",
     "tools/hsai-formal-preflight/tests/test_raw_archive_validator.py",
     "tools/hsai-formal-preflight/p01b_container_corpus.py",
     "tools/hsai-formal-preflight/p01b_container_test_corpus.json",
@@ -1068,7 +1069,9 @@ def _capture_gate_tree(
     files = tuple(str(row["path"]) for row in rows if row["type"] == "regular")
     expected_files = tuple(sorted(SOURCE_PATHS, key=lambda path: path.encode("ascii")))
     if files != expected_files:
-        raise ExecutionError("gate source inventory is not the exact 21-file set")
+        raise ExecutionError(
+            "gate source inventory is not the exact %d-file set" % len(SOURCE_PATHS)
+        )
     identities = [(row["device"], row["inode"]) for row in rows if row["type"] == "regular"]
     if len(identities) != len(set(identities)):
         raise ExecutionError("gate source files are not inode-unique")
@@ -2323,7 +2326,7 @@ def _review_findings(value: object) -> List[str]:
 
 def _reviewed_file_projection(source_manifest: Mapping[str, object]) -> List[Dict[str, object]]:
     rows = source_manifest.get("ordered_sources")
-    if not isinstance(rows, list) or len(rows) != 21:
+    if not isinstance(rows, list) or len(rows) != len(SOURCE_PATHS):
         raise ExecutionError("gate source rows are absent")
     by_path = {row.get("path"): row for row in rows if isinstance(row, dict)}
     if set(by_path) != set(SOURCE_PATHS):
@@ -5031,7 +5034,7 @@ def _build_expected_bindings(
         "seccomp_sha256": seccomp["sha256"],
         "normal_expected_test_count": 151,
         "discovery_expected_test_count": 172,
-        "candidate_payload_count": 200,
+        "candidate_payload_count": 201,
         "attempt_deadline_ns": ATTEMPT_TIMEOUT_NS,
         "class_order": list(CLASS_ORDER),
         "evidence_level": "Level1LocalReplayOrLower",
@@ -6222,7 +6225,7 @@ ATTEMPT_COMPLETION_ROLES = (
 
 
 def candidate_payload_paths(source_paths: Sequence[str] = SOURCE_PATHS) -> Tuple[str, ...]:
-    """Return the bytewise-sorted exact 200-file A3L8 payload grammar."""
+    """Return the bytewise-sorted exact 201-file A3L8 payload grammar."""
     if tuple(source_paths) != SOURCE_PATHS:
         raise ExecutionError("candidate source path set changed")
     paths = {
@@ -6273,7 +6276,7 @@ def candidate_payload_paths(source_paths: Sequence[str] = SOURCE_PATHS) -> Tuple
         paths.add("attempts/%s/export.tar" % attempt)
     result = tuple(sorted(paths, key=lambda item: item.encode("ascii")))
     if len(result) != CANDIDATE_PAYLOAD_COUNT:
-        raise ExecutionError("candidate payload census is not exactly 200")
+        raise ExecutionError("candidate payload census is not exactly 201")
     return result
 
 
@@ -6297,7 +6300,7 @@ def materialize_exact_candidate(
     authorization_sha256: str,
     implementation_commit: str,
 ) -> Dict[str, object]:
-    """Exclusively write the exact 200 payloads and file-201 manifest."""
+    """Exclusively write the exact 201 payloads and file-202 manifest."""
     _require_hex64(authorization_sha256, "authorization_sha256")
     _require_git(implementation_commit, "implementation_commit")
     expected = candidate_payload_paths()
@@ -6436,9 +6439,9 @@ def build_publication_record_v2(
     _require_absolute(staging_path, "staging_path")
     _require_absolute(final_path, "final_path")
     if len(ordered_file_reopens) != CANDIDATE_FILE_COUNT:
-        raise ExecutionError("publication must reopen exactly 201 files")
+        raise ExecutionError("publication must reopen exactly 202 files")
     if len(ordered_publication_events) != PUBLICATION_EVENT_COUNT:
-        raise ExecutionError("publication must retain exactly 270 events")
+        raise ExecutionError("publication must retain exactly 271 events")
     operations = [event.get("operation") for event in ordered_publication_events]
     expected_operations = (
         ["payload-file-fsync"] * CANDIDATE_PAYLOAD_COUNT
@@ -8003,7 +8006,7 @@ def _materialize_and_publish_candidate_v2_at(
         )
     )
     if tuple(sorted(complete_payloads, key=lambda item: item.encode("ascii"))) != expected_paths:
-        raise ExecutionError("A3L8 payload map differs from exact 200-file grammar")
+        raise ExecutionError("A3L8 payload map differs from exact 201-file grammar")
     for relative in expected_paths:
         if relative.endswith(".json"):
             try:
@@ -9389,12 +9392,14 @@ def create_frozen_snapshot(
     snapshot_root: Path,
     relative_paths: Sequence[str],
 ) -> SnapshotResult:
-    """Copy exactly 21 source files through no-follow descriptors."""
+    """Copy the exact snapshot file set through no-follow descriptors."""
     if (
         len(relative_paths) != SNAPSHOT_FILE_COUNT
         or len(set(relative_paths)) != SNAPSHOT_FILE_COUNT
     ):
-        raise ExecutionError("snapshot must contain exactly 21 unique paths")
+        raise ExecutionError(
+            "snapshot must contain exactly %d unique paths" % SNAPSHOT_FILE_COUNT
+        )
     ordered = sorted(relative_paths)
     if list(relative_paths) != ordered:
         raise ExecutionError("snapshot paths must be lexicographically ordered")

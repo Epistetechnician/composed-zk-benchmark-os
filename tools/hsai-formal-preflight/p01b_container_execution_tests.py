@@ -69,7 +69,9 @@ def command(
 
 
 def make_source(root: Path) -> list[str]:
-    paths = ["files/%02d.txt" % index for index in range(21)]
+    paths = [
+        "files/%02d.txt" % index for index in range(execution.SNAPSHOT_FILE_COUNT)
+    ]
     (root / "files").mkdir()
     for index, relative in enumerate(paths):
         path = root / relative
@@ -236,7 +238,8 @@ def make_gate_repository(
     root: Path, fixture_parent: Optional[Path] = None
 ) -> tuple[str, str]:
     fixture_git(root, "init", "-q")
-    discovery_counts = (35, 35, 34, 34, 34)
+    discovery_counts = (12, 53, 13, 68, 21, 5)
+    discovery_paths = execution.SOURCE_PATHS[6:12]
     for index, relative in enumerate(execution.SOURCE_PATHS):
         path = root / relative
         path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
@@ -254,8 +257,8 @@ def make_gate_repository(
             raw = focused_test_source("ExecutionGateFixture")
         elif relative == execution.SOURCE_PATHS[-1]:
             raw = focused_test_source("EvidenceGateFixture")
-        elif relative in execution.SOURCE_PATHS[6:11]:
-            discovery_index = execution.SOURCE_PATHS[6:11].index(relative)
+        elif relative in discovery_paths:
+            discovery_index = discovery_paths.index(relative)
             raw = focused_test_source(
                 "DiscoveryGateFixture%02d" % discovery_index,
                 discovery_counts[discovery_index],
@@ -381,7 +384,7 @@ def gate_expected_bindings(
             "expected_focused_test_count": 64,
             "normal_expected_test_count": 151,
             "discovery_expected_test_count": 172,
-            "candidate_payload_count": 200,
+            "candidate_payload_count": 201,
             "attempt_deadline_ns": 1_800_000_000_000,
             "class_order": list(execution.CLASS_ORDER),
             "evidence_level": "Level1LocalReplayOrLower",
@@ -1496,8 +1499,14 @@ class PlanBuilderTests(unittest.TestCase):
                     audit_commit=commit,
                 )
                 materialized = capture.materialization
-                self.assertEqual(len(capture.ordered_blob_observations), 21)
-                self.assertEqual(len(materialized.source_observations), 21)
+                self.assertEqual(
+                    len(capture.ordered_blob_observations),
+                    len(execution.SOURCE_PATHS),
+                )
+                self.assertEqual(
+                    len(materialized.source_observations),
+                    len(execution.SOURCE_PATHS),
+                )
                 self.assertEqual(len(capture.focused_test_ids), 64)
                 self.assertEqual(
                     stat.S_IMODE(Path(materialized.source_root).stat().st_mode),
@@ -1544,10 +1553,12 @@ class PlanBuilderTests(unittest.TestCase):
                     live_bundle, parent / "a3l7-snapshot"
                 )
                 self.assertEqual(
-                    len(snapshot.source_manifest["ordered_entries"]), 21
+                    len(snapshot.source_manifest["ordered_entries"]),
+                    len(execution.SOURCE_PATHS),
                 )
                 self.assertEqual(
-                    len(snapshot.copy_manifest["ordered_entries"]), 21
+                    len(snapshot.copy_manifest["ordered_entries"]),
+                    len(execution.SOURCE_PATHS),
                 )
                 self.assertNotEqual(
                     snapshot.source_manifest_sha256,
@@ -1703,7 +1714,7 @@ class PlanBuilderTests(unittest.TestCase):
                 )
                 self.assertEqual(
                     len(campaign_execution.publication["ordered_publication_events"]),
-                    270,
+                    271,
                 )
                 self.assertFalse((candidate_root / "candidate-decision.json").exists())
                 self.assertFalse((candidate_root / "reviews").exists())
@@ -2892,7 +2903,7 @@ class SnapshotAndPublicationTests(unittest.TestCase):
             snapshot = parent / "snapshot"
             try:
                 result = execution.create_frozen_snapshot(source, snapshot, paths)
-                self.assertEqual(len(result.entries), 21)
+                self.assertEqual(len(result.entries), execution.SNAPSHOT_FILE_COUNT)
                 self.assertEqual(stat.S_IMODE(snapshot.stat().st_mode), 0o555)
                 self.assertEqual(
                     stat.S_IMODE((snapshot / paths[0]).stat().st_mode), 0o444
@@ -2975,15 +2986,15 @@ class SnapshotAndPublicationTests(unittest.TestCase):
             after = os.lstat(final)
             self.assertEqual((before.st_dev, before.st_ino), (after.st_dev, after.st_ino))
 
-    def test_candidate_grammar_has_exact_200_payloads_and_62_directories(self) -> None:
+    def test_candidate_grammar_has_exact_201_payloads_and_62_directories(self) -> None:
         paths = execution.candidate_payload_paths()
-        self.assertEqual(len(paths), 200)
+        self.assertEqual(len(paths), 201)
         self.assertEqual(len(execution.candidate_directory_paths(paths)), 62)
         self.assertIn("operations/readiness/005-codesign-display/stderr.bin", paths)
         self.assertIn("operations/normal/006-start-attach/observation.json", paths)
         self.assertNotIn("candidate-manifest.json", paths)
 
-    def test_exact_candidate_materializer_writes_200_payloads_plus_manifest(self) -> None:
+    def test_exact_candidate_materializer_writes_201_payloads_plus_manifest(self) -> None:
         paths = execution.candidate_payload_paths()
         payloads = {path: (path + "\n").encode("ascii") for path in paths}
         with tempfile.TemporaryDirectory() as temporary:
@@ -2994,9 +3005,9 @@ class SnapshotAndPublicationTests(unittest.TestCase):
                 authorization_sha256=HEX_A,
                 implementation_commit=GIT_A,
             )
-            self.assertEqual(len(manifest["entries"]), 200)
+            self.assertEqual(len(manifest["entries"]), 201)
             files = [path for path in root.rglob("*") if path.is_file()]
-            self.assertEqual(len(files), 201)
+            self.assertEqual(len(files), 202)
             self.assertEqual(
                 (root / "candidate-manifest.json").read_bytes(),
                 execution.canonical_json_bytes(manifest),
@@ -3004,7 +3015,7 @@ class SnapshotAndPublicationTests(unittest.TestCase):
 
     def test_publication_v2_and_decision_bind_exact_events_and_claim_ceiling(self) -> None:
         operations = (
-            ["payload-file-fsync"] * 200
+            ["payload-file-fsync"] * 201
             + ["candidate-manifest-fsync"]
             + ["candidate-directory-fsync"] * 62
             + ["prepublication-inventory", "renameatx-np", "final-parent-fsync",
@@ -3023,7 +3034,7 @@ class SnapshotAndPublicationTests(unittest.TestCase):
             postpublication_inventory_sha256=HEX_C,
             staging_identity=identity,
             final_identity=identity,
-            ordered_file_reopens=[{} for _ in range(201)],
+            ordered_file_reopens=[{} for _ in range(202)],
             ordered_publication_events=events,
             final_manifest_sha256=HEX_A,
         )

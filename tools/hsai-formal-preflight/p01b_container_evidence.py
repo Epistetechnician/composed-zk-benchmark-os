@@ -2116,7 +2116,7 @@ def validate_certificate(value: object) -> Mapping[str, object]:
             _sha(item, "predicate " + name)
     if predicate_schema == "ingress-v1":
         _require(
-            predicates["source_count"] == 21
+            predicates["source_count"] == len(SNAPSHOT_PATHS)
             and predicates["container_mount_read_only"] is True,
             "ingress predicate drift",
         )
@@ -3122,33 +3122,33 @@ def _publication_semantics(record: Mapping[str, object], files: Mapping[str, byt
             _require(observed["bytes"] == len(raw) and observed["sha256"] == sha256_hex(raw),
                      "publication reopen byte drift: " + path)
     events = record["ordered_publication_events"]
-    for event, entry in zip(events[:200], manifest["entries"]):
+    for event, entry in zip(events[:201], manifest["entries"]):
         raw = files[entry["path"]]
         _require(event["target"] == entry["path"] and event["flags"] == [] and
                  event["result"] == event["errno"] == 0 and
                  event["sha256"] == entry["sha256"] == sha256_hex(raw) and
                  event["identity"] == reopen_by_path[entry["path"]]["prepublication"]["identity"],
                  "payload fsync evidence drift")
-    manifest_event = events[200]
+    manifest_event = events[201]
     _require(manifest_event["target"] == "candidate-manifest.json" and
              manifest_event["flags"] == [] and
              manifest_event["result"] == manifest_event["errno"] == 0 and
              manifest_event["identity"] == reopen_by_path["candidate-manifest.json"]["prepublication"]["identity"] and
              manifest_event["sha256"] == sha256_hex(manifest_raw),
              "manifest fsync evidence drift")
-    for event, target in zip(events[201:263], _candidate_directory_order()):
+    for event, target in zip(events[202:264], _candidate_directory_order()):
         _require(event["target"] == target and event["flags"] == [] and
                  event["result"] == event["errno"] == 0 and
                  event["identity"] is not None and event["sha256"] is None,
                  "directory fsync evidence drift")
-    _require(events[263]["identity"] == record["staging_identity"] and
-             events[263]["sha256"] == record["prepublication_inventory_sha256"] and
-             events[267]["identity"] == record["final_identity"] and
+    _require(events[264]["identity"] == record["staging_identity"] and
+             events[264]["sha256"] == record["prepublication_inventory_sha256"] and
              events[268]["identity"] == record["final_identity"] and
-             events[268]["sha256"] == record["postpublication_inventory_sha256"] and
-             events[269]["target"] == "candidate-manifest.json" and
-             events[269]["identity"] == reopen_by_path["candidate-manifest.json"]["postpublication"]["identity"] and
-             events[269]["sha256"] == record["candidate_manifest_sha256"],
+             events[269]["identity"] == record["final_identity"] and
+             events[269]["sha256"] == record["postpublication_inventory_sha256"] and
+             events[270]["target"] == "candidate-manifest.json" and
+             events[270]["identity"] == reopen_by_path["candidate-manifest.json"]["postpublication"]["identity"] and
+             events[270]["sha256"] == record["candidate_manifest_sha256"],
              "publication terminal evidence drift")
 
 
@@ -3156,7 +3156,7 @@ def _reconstruct_c09(files: Mapping[str, bytes], manifest: Mapping[str, object],
     plan = _fields(_semantic_json(files, "publication/prepublication-descriptor-plan.json"),
                    ("schema", "candidate_root", "parent_identity", "staging_identity", "expected_file_count", "expected_manifest_path", "overwrite_policy"),
                    "prepublication descriptor plan")
-    _require(plan["schema"] == SCHEMAS["prepublication_plan"] and plan["expected_file_count"] == 201 and
+    _require(plan["schema"] == SCHEMAS["prepublication_plan"] and plan["expected_file_count"] == 202 and
              plan["overwrite_policy"] == "exclusive" and
              plan["expected_manifest_path"] == plan["candidate_root"] + "/candidate-manifest.json" and
              publication["final_path"] == plan["candidate_root"] and
@@ -3717,6 +3717,7 @@ SNAPSHOT_PATHS = (
     "tools/hsai-formal-preflight/tests/test_execution_state_machine.py",
     "tools/hsai-formal-preflight/tests/test_fixture_validator.py",
     "tools/hsai-formal-preflight/tests/test_p01b_archive_ledger.py",
+    "tools/hsai-formal-preflight/tests/test_p01b_container_corpus.py",
     "tools/hsai-formal-preflight/tests/test_raw_archive_validator.py",
     "tools/hsai-formal-preflight/p01b_container_corpus.py",
     "tools/hsai-formal-preflight/p01b_container_test_corpus.json",
@@ -3768,7 +3769,7 @@ def _candidate_payload_paths() -> Tuple[str, ...]:
                 paths.append("operations/{}/{}/{}".format(namespace, basename, leaf))
     for attempt in ("normal", "oom"):
         paths.extend("attempts/{}/{}".format(attempt, leaf) for leaf in _ATTEMPT_FILES)
-    _require(len(paths) == 200 and len(set(paths)) == 200, "candidate grammar bug")
+    _require(len(paths) == 201 and len(set(paths)) == 201, "candidate grammar bug")
     return tuple(sorted(paths))
 
 
@@ -3894,7 +3895,10 @@ def _validate_snapshot_manifest(value: object, kind: str) -> Mapping[str, object
     schema_name = "snapshot_source" if kind == "source" else "snapshot_copy"
     _require(row["schema"] == SCHEMAS[schema_name], "snapshot manifest schema drift")
     entries = row["ordered_entries"]
-    _require(isinstance(entries, list) and len(entries) == 21, "snapshot manifest census drift")
+    _require(
+        isinstance(entries, list) and len(entries) == len(SNAPSHOT_PATHS),
+        "snapshot manifest census drift",
+    )
     for entry, path in zip(entries, SNAPSHOT_PATHS):
         checked = _fields(entry, SNAPSHOT_MANIFEST_ENTRY_FIELDS, "snapshot manifest entry")
         _require(checked["path"] == path, "snapshot manifest path order drift")
@@ -4027,7 +4031,7 @@ def validate_expected_bindings(value: object) -> Mapping[str, object]:
     _require(bindings["expected_focused_test_count"] == 64, "focused test count drift")
     _require(bindings["normal_expected_test_count"] == 151, "normal test count drift")
     _require(bindings["discovery_expected_test_count"] == 172, "discovery count drift")
-    _require(bindings["candidate_payload_count"] == 200, "candidate payload count drift")
+    _require(bindings["candidate_payload_count"] == 201, "candidate payload count drift")
     _require(bindings["class_order"] == list(CLASS_ORDER), "class order binding drift")
     _require(bindings["evidence_level"] == EVIDENCE_LEVEL, "binding evidence level drift")
     _require(bindings["native_python_path"] == "/usr/bin/python3" and bindings["native_python_sha256"] == NATIVE_PYTHON_SHA256 and bindings["native_python_version"] == "3.9.6", "native Python binding drift")
@@ -5269,7 +5273,7 @@ def validate_candidate_manifest(value: object) -> Mapping[str, object]:
     _sha(manifest["authorization_sha256"], "manifest authorization digest")
     _git(manifest["implementation_commit"], "manifest implementation commit")
     entries = manifest["entries"]
-    _require(isinstance(entries, list) and len(entries) == 200, "manifest payload census drift")
+    _require(isinstance(entries, list) and len(entries) == 201, "manifest payload census drift")
     checked_paths = []
     total = 0
     for value_entry in entries:
@@ -5327,7 +5331,7 @@ def validate_prepublication_candidate(files: object, manifest: object, expected_
                 else MAX_RESULT_BYTES
             )
             strict_json_bytes(raw, limit)
-    return {"candidate_manifest_sha256": manifest_digest(manifest_object), "expected_bindings_sha256": expected_bindings_digest(bindings), "payload_count": 200}
+    return {"candidate_manifest_sha256": manifest_digest(manifest_object), "expected_bindings_sha256": expected_bindings_digest(bindings), "payload_count": 201}
 
 
 _PUBLICATION_IDENTITY_FIELDS = ("device", "inode", "mode", "uid", "gid", "link_count")
@@ -5363,7 +5367,7 @@ def validate_publication_record(value: object) -> Mapping[str, object]:
     final = _identity(record["final_identity"], "final identity")
     _require(staging == final and record["final_manifest_sha256"] == record["candidate_manifest_sha256"], "publication final identity drift")
     rows = record["ordered_file_reopens"]
-    _require(isinstance(rows, list) and len(rows) == 201, "publication reopen census drift")
+    _require(isinstance(rows, list) and len(rows) == 202, "publication reopen census drift")
     expected_paths = list(CANDIDATE_PAYLOAD_PATHS) + ["candidate-manifest.json"]
     expected_paths.sort()
     for row, path in zip(rows, expected_paths):
@@ -5373,7 +5377,7 @@ def validate_publication_record(value: object) -> Mapping[str, object]:
     _require(pre == post, "publication inventory changed")
     _require(domain_sha256(DOMAINS["publication_inventory"], pre) == record["prepublication_inventory_sha256"] == record["postpublication_inventory_sha256"], "publication inventory digest drift")
     events = record["ordered_publication_events"]
-    _require(isinstance(events, list) and len(events) == 270, "publication event census drift")
+    _require(isinstance(events, list) and len(events) == 271, "publication event census drift")
     event_fields = ("ordinal", "operation", "target", "flags", "started_monotonic_ns", "ended_monotonic_ns", "result", "errno", "identity", "sha256")
     for ordinal, event in enumerate(events):
         _fields(event, event_fields, "publication event")
@@ -5403,10 +5407,10 @@ def validate_publication_record(value: object) -> Mapping[str, object]:
         if ordinal:
             _require(events[ordinal - 1]["ended_monotonic_ns"] <= event["started_monotonic_ns"], "publication events overlap")
     operations = [item["operation"] for item in events]
-    _require(operations[:200] == ["payload-file-fsync"] * 200 and operations[200] == "candidate-manifest-fsync" and operations[201:263] == ["candidate-directory-fsync"] * 62, "publication fsync sequence drift")
-    _require(operations[263:] == ["prepublication-inventory", "renameatx-np", "final-parent-fsync", "staging-absence", "final-root-reopen", "postpublication-inventory", "final-manifest-read"], "publication terminal sequence drift")
+    _require(operations[:201] == ["payload-file-fsync"] * 201 and operations[201] == "candidate-manifest-fsync" and operations[202:264] == ["candidate-directory-fsync"] * 62, "publication fsync sequence drift")
+    _require(operations[264:] == ["prepublication-inventory", "renameatx-np", "final-parent-fsync", "staging-absence", "final-root-reopen", "postpublication-inventory", "final-manifest-read"], "publication terminal sequence drift")
     reopen_by_path = {row["path"]: row for row in rows}
-    for event, path in zip(events[:200], CANDIDATE_PAYLOAD_PATHS):
+    for event, path in zip(events[:201], CANDIDATE_PAYLOAD_PATHS):
         observed = reopen_by_path[path]["prepublication"]
         _require(
             event["target"] == path
@@ -5417,7 +5421,7 @@ def validate_publication_record(value: object) -> Mapping[str, object]:
             "payload publication event drift: " + path,
         )
     manifest_observed = reopen_by_path["candidate-manifest.json"]
-    manifest_event = events[200]
+    manifest_event = events[201]
     _require(
         manifest_event["target"] == "candidate-manifest.json"
         and manifest_event["flags"] == []
@@ -5427,7 +5431,7 @@ def validate_publication_record(value: object) -> Mapping[str, object]:
         "candidate manifest publication event drift",
     )
     directory_order = _candidate_directory_order()
-    for event, target in zip(events[201:263], directory_order):
+    for event, target in zip(events[202:264], directory_order):
         identity = _identity(event["identity"], "publication directory identity")
         _require(
             event["target"] == target
@@ -5439,13 +5443,13 @@ def validate_publication_record(value: object) -> Mapping[str, object]:
             "candidate directory publication event drift: " + target,
         )
     _require(
-        events[262]["identity"] == staging,
+        events[263]["identity"] == staging,
         "candidate root fsync identity drift",
     )
     terminal_expectations = (
-        (263, ".", [], 0, 0, staging, record["prepublication_inventory_sha256"]),
+        (264, ".", [], 0, 0, staging, record["prepublication_inventory_sha256"]),
         (
-            264,
+            265,
             {"source": staging_name, "destination": final_name},
             ["RENAME_EXCL"],
             0,
@@ -5453,12 +5457,12 @@ def validate_publication_record(value: object) -> Mapping[str, object]:
             None,
             None,
         ),
-        (265, final_parent, [], 0, 0, parent, None),
-        (266, staging_name, [], -1, 2, None, None),
-        (267, final_name, [], 0, 0, final, None),
-        (268, ".", [], 0, 0, final, record["postpublication_inventory_sha256"]),
+        (266, final_parent, [], 0, 0, parent, None),
+        (267, staging_name, [], -1, 2, None, None),
+        (268, final_name, [], 0, 0, final, None),
+        (269, ".", [], 0, 0, final, record["postpublication_inventory_sha256"]),
         (
-            269,
+            270,
             "candidate-manifest.json",
             [],
             0,
@@ -6665,9 +6669,15 @@ def validate_a3l6_gate_source(value: object) -> Mapping[str, object]:
     forbidden = tuple(path.encode("utf-8") for path in SNAPSHOT_PATHS) + (b".gitmodules",)
     _require(not any(path in status_before for path in forbidden), "gate protected source status drift")
     blob_observations = source["ordered_blob_observations"]
-    _require(isinstance(blob_observations, list) and len(blob_observations) == 21, "gate blob observation census drift")
+    _require(
+        isinstance(blob_observations, list) and len(blob_observations) == len(SNAPSHOT_PATHS),
+        "gate blob observation census drift",
+    )
     source_values = source["ordered_sources"]
-    _require(isinstance(source_values, list) and len(source_values) == 21, "gate source census drift")
+    _require(
+        isinstance(source_values, list) and len(source_values) == len(SNAPSHOT_PATHS),
+        "gate source census drift",
+    )
     source_rows = []
     for ordinal, (path, observation_value, source_value) in enumerate(zip(SNAPSHOT_PATHS, blob_observations, source_values)):
         expression = source["implementation_commit"] + ":" + path

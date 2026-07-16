@@ -44,7 +44,7 @@ WORKLOAD_STDOUT_CAP = 65_536
 WORKLOAD_STDERR_CAP = 65_536
 PROCESS_REAP_TIMEOUT_SECONDS = 5
 ALLOCATION_BYTES = 640 * 1024 * 1024
-EXPECTED_INPUT_FILES = 21
+EXPECTED_INPUT_FILES = 22
 EXPECTED_TESTS = 151
 OUTPUT_PATH = "/work/result.json"
 READY_PREFIX = b"P01B_RESULT_READY "
@@ -100,6 +100,7 @@ INPUT_PATHS = (
     "tools/hsai-formal-preflight/tests/test_execution_state_machine.py",
     "tools/hsai-formal-preflight/tests/test_fixture_validator.py",
     "tools/hsai-formal-preflight/tests/test_p01b_archive_ledger.py",
+    "tools/hsai-formal-preflight/tests/test_p01b_container_corpus.py",
     "tools/hsai-formal-preflight/tests/test_raw_archive_validator.py",
     "tools/hsai-formal-preflight/p01b_container_corpus.py",
     "tools/hsai-formal-preflight/p01b_container_test_corpus.json",
@@ -592,7 +593,7 @@ def _validate_input_manifest_sha256(value: str) -> str:
 
 
 def _validate_mounted_input_tree(root: pathlib.Path) -> None:
-    """Validate the exact immutable container-visible 21-file tree."""
+    """Validate the exact immutable container-visible 22-file tree."""
     entries = _inventory_regular_files(root, file_limit=INPUT_FILE_LIMIT)
     paths = [entry["path"] for entry in entries]
     expected_paths = sorted(INPUT_PATHS)
@@ -1900,7 +1901,9 @@ def _oom_result(root: pathlib.Path, input_manifest_sha256: str) -> Dict[str, Any
 def _copy_validation_tree(source: pathlib.Path, destination: pathlib.Path) -> None:
     entries = _inventory_regular_files(source)
     if len(entries) != EXPECTED_INPUT_FILES:
-        raise ProbeError("validation source must contain exactly 21 files")
+        raise ProbeError(
+            "validation source must contain exactly %d files" % EXPECTED_INPUT_FILES
+        )
     for entry in entries:
         relative = pathlib.PurePosixPath(entry["path"])
         target = destination.joinpath(*relative.parts)

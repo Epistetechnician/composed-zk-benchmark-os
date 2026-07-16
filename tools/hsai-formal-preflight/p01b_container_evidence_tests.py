@@ -109,7 +109,7 @@ def expected_bindings() -> dict:
             "expected_focused_test_count": 64,
             "normal_expected_test_count": 151,
             "discovery_expected_test_count": 172,
-            "candidate_payload_count": 200,
+            "candidate_payload_count": 201,
             "attempt_deadline_ns": 1_800_000_000_000,
             "class_order": list(evidence.CLASS_ORDER),
             "evidence_level": evidence.EVIDENCE_LEVEL,
@@ -207,7 +207,7 @@ def publication(manifest: dict, repository_digest: str) -> dict:
         for row in rows
     ]
     inventory_digest = evidence.domain_sha256(evidence.DOMAINS["publication_inventory"], inventory)
-    operations = ["payload-file-fsync"] * 200
+    operations = ["payload-file-fsync"] * 201
     operations += ["candidate-manifest-fsync"] + ["candidate-directory-fsync"] * 62
     operations += [
         "prepublication-inventory",
@@ -234,34 +234,34 @@ def publication(manifest: dict, repository_digest: str) -> dict:
                 "sha256": None,
             }
         )
-    events[264]["target"] = {"source": ".p01b-staging-campaign", "destination": "p01b-candidate-campaign"}
-    events[264]["flags"] = ["RENAME_EXCL"]
-    events[265]["target"] = "/private/tmp/p01b"
-    events[265]["identity"] = publication_identity(7)
-    events[266]["target"] = ".p01b-staging-campaign"
-    events[266]["result"] = -1
-    events[266]["errno"] = 2
+    events[265]["target"] = {"source": ".p01b-staging-campaign", "destination": "p01b-candidate-campaign"}
+    events[265]["flags"] = ["RENAME_EXCL"]
+    events[266]["target"] = "/private/tmp/p01b"
+    events[266]["identity"] = publication_identity(7)
+    events[267]["target"] = ".p01b-staging-campaign"
+    events[267]["result"] = -1
+    events[267]["errno"] = 2
     by_path = {row["path"]: row for row in rows}
-    for event, entry in zip(events[:200], manifest["entries"]):
+    for event, entry in zip(events[:201], manifest["entries"]):
         event["target"] = entry["path"]
         event["identity"] = by_path[entry["path"]]["prepublication"]["identity"]
         event["sha256"] = entry["sha256"]
-    events[200]["target"] = "candidate-manifest.json"
-    events[200]["identity"] = by_path["candidate-manifest.json"]["prepublication"]["identity"]
-    events[200]["sha256"] = evidence.sha256_hex(manifest_raw)
-    for event, target in zip(events[201:263], evidence._candidate_directory_order()):
+    events[201]["target"] = "candidate-manifest.json"
+    events[201]["identity"] = by_path["candidate-manifest.json"]["prepublication"]["identity"]
+    events[201]["sha256"] = evidence.sha256_hex(manifest_raw)
+    for event, target in zip(events[202:264], evidence._candidate_directory_order()):
         event["target"] = target
         event["identity"] = publication_identity(3000 + event["ordinal"])
-    events[262]["identity"] = publication_identity(8)
     events[263]["identity"] = publication_identity(8)
-    events[263]["sha256"] = inventory_digest
-    events[267]["target"] = "p01b-candidate-campaign"
-    events[267]["identity"] = publication_identity(8)
+    events[264]["identity"] = publication_identity(8)
+    events[264]["sha256"] = inventory_digest
+    events[268]["target"] = "p01b-candidate-campaign"
     events[268]["identity"] = publication_identity(8)
-    events[268]["sha256"] = inventory_digest
-    events[269]["target"] = "candidate-manifest.json"
-    events[269]["identity"] = by_path["candidate-manifest.json"]["postpublication"]["identity"]
-    events[269]["sha256"] = evidence.manifest_digest(manifest)
+    events[269]["identity"] = publication_identity(8)
+    events[269]["sha256"] = inventory_digest
+    events[270]["target"] = "candidate-manifest.json"
+    events[270]["identity"] = by_path["candidate-manifest.json"]["postpublication"]["identity"]
+    events[270]["sha256"] = evidence.manifest_digest(manifest)
     return {
         "schema": evidence.SCHEMAS["publication"],
         "candidate_manifest_sha256": evidence.manifest_digest(manifest),
@@ -1203,7 +1203,7 @@ def complete_candidate() -> tuple:
     files["snapshot/ingress-certificates.json"] = evidence.canonical_json_bytes(ingress_certificates)
     state = repository_state()
     files["provenance/git.json"] = evidence.canonical_json_bytes(state["before"])
-    plan = {"schema": evidence.SCHEMAS["prepublication_plan"], "candidate_root": "/private/tmp/p01b/p01b-candidate-campaign", "parent_identity": publication_identity(7), "staging_identity": publication_identity(8), "expected_file_count": 201, "expected_manifest_path": "/private/tmp/p01b/p01b-candidate-campaign/candidate-manifest.json", "overwrite_policy": "exclusive"}
+    plan = {"schema": evidence.SCHEMAS["prepublication_plan"], "candidate_root": "/private/tmp/p01b/p01b-candidate-campaign", "parent_identity": publication_identity(7), "staging_identity": publication_identity(8), "expected_file_count": 202, "expected_manifest_path": "/private/tmp/p01b/p01b-candidate-campaign/candidate-manifest.json", "overwrite_policy": "exclusive"}
     files["publication/prepublication-descriptor-plan.json"] = evidence.canonical_json_bytes(plan)
     files["authority/expected-bindings.json"] = evidence.canonical_json_bytes(bindings)
     manifest, publication_record = reseal_candidate(files, authorization_sha, state)
@@ -1631,16 +1631,16 @@ class InspectTests(unittest.TestCase):
 
 
 class CandidateTests(unittest.TestCase):
-    def test_16_exact_candidate_grammar_has_200_payloads(self) -> None:
-        self.assertEqual((len(evidence.CANDIDATE_PAYLOAD_PATHS), len(set(evidence.CANDIDATE_PAYLOAD_PATHS))), (200, 200))
+    def test_16_exact_candidate_grammar_has_201_payloads(self) -> None:
+        self.assertEqual((len(evidence.CANDIDATE_PAYLOAD_PATHS), len(set(evidence.CANDIDATE_PAYLOAD_PATHS))), (201, 201))
         self.assertNotIn("candidate-manifest.json", evidence.CANDIDATE_PAYLOAD_PATHS)
 
     def test_17_expected_bindings_exact_fields_and_constants(self) -> None:
         evidence.validate_expected_bindings(expected_bindings())
-        value = expected_bindings(); value["candidate_payload_count"] = 199
+        value = expected_bindings(); value["candidate_payload_count"] = 200
         with self.assertRaises(evidence.EvidenceError): evidence.validate_expected_bindings(value)
 
-    def test_18_manifest_exact_200_sorted_paths(self) -> None:
+    def test_18_manifest_exact_201_sorted_paths(self) -> None:
         _, manifest, _ = candidate(); evidence.validate_candidate_manifest(manifest)
         manifest["entries"].reverse()
         with self.assertRaises(evidence.EvidenceError): evidence.validate_candidate_manifest(manifest)
@@ -1648,7 +1648,7 @@ class CandidateTests(unittest.TestCase):
     def test_19_prepublication_validates_bytes_without_classes(self) -> None:
         files, manifest, bindings = candidate()
         result = evidence.validate_prepublication_candidate(files, manifest, bindings)
-        self.assertEqual(result["payload_count"], 200)
+        self.assertEqual(result["payload_count"], 201)
         self.assertNotIn("class_results", result)
         retained_path = "snapshot/files/tools/hsai-formal-preflight/p01b_container_seccomp.json"
         retained_raw = b'{\n  "defaultAction": "SCMP_ACT_ERRNO"\n}\n'
@@ -1746,7 +1746,7 @@ class PublicationRepositoryDecisionTests(unittest.TestCase):
         value = repository_state(); value["after"]["ordered_commands"][2]["stdout_base64"] = b64(b"")
         with self.assertRaises(evidence.EvidenceError): evidence.validate_repository_state(value)
 
-    def test_24_publication_requires_201_reopens_and_270_events(self) -> None:
+    def test_24_publication_requires_202_reopens_and_271_events(self) -> None:
         _, manifest, _ = candidate(); state = repository_state()
         evidence.validate_publication_record(publication(manifest, evidence.repository_state_digest(state)))
         directories = evidence._candidate_directory_order()
@@ -1775,51 +1775,51 @@ class PublicationRepositoryDecisionTests(unittest.TestCase):
             mutations = (
                 ("ordinal", 0, "ordinal", 1),
                 ("payload-operation", 0, "operation", "alternate-operation"),
-                ("rename-operation", 264, "operation", "rename"),
+                ("rename-operation", 265, "operation", "rename"),
                 ("payload-target", 0, "target", evidence.CANDIDATE_PAYLOAD_PATHS[1]),
-                ("manifest-target", 200, "target", "authority/action.json"),
-                ("directory-target", 201, "target", evidence._candidate_directory_order()[1]),
-                ("preinventory-target", 263, "target", "authority"),
-                ("rename-target", 264, "target", {"source": "other", "destination": "other-final"}),
-                ("parent-target", 265, "target", "/private/tmp/other"),
-                ("staging-target", 266, "target", "other-staging"),
-                ("final-root-target", 267, "target", "other-final"),
-                ("postinventory-target", 268, "target", "authority"),
-                ("final-manifest-target", 269, "target", "authority/action.json"),
+                ("manifest-target", 201, "target", "authority/action.json"),
+                ("directory-target", 202, "target", evidence._candidate_directory_order()[1]),
+                ("preinventory-target", 264, "target", "authority"),
+                ("rename-target", 265, "target", {"source": "other", "destination": "other-final"}),
+                ("parent-target", 266, "target", "/private/tmp/other"),
+                ("staging-target", 267, "target", "other-staging"),
+                ("final-root-target", 268, "target", "other-final"),
+                ("postinventory-target", 269, "target", "authority"),
+                ("final-manifest-target", 270, "target", "authority/action.json"),
                 ("payload-flags", 0, "flags", ["OTHER"]),
-                ("directory-flags", 201, "flags", ["OTHER"]),
-                ("rename-flags", 264, "flags", []),
-                ("terminal-flags", 263, "flags", ["OTHER"]),
+                ("directory-flags", 202, "flags", ["OTHER"]),
+                ("rename-flags", 265, "flags", []),
+                ("terminal-flags", 264, "flags", ["OTHER"]),
                 ("negative-start", 0, "started_monotonic_ns", -1),
                 ("empty-duration", 0, "ended_monotonic_ns", 1),
                 ("event-overlap", 1, "started_monotonic_ns", 1),
                 ("success-result", 0, "result", 1),
                 ("success-errno", 0, "errno", 1),
-                ("rename-result", 264, "result", 1),
-                ("rename-errno", 264, "errno", 1),
-                ("absence-result", 266, "result", 0),
-                ("absence-errno", 266, "errno", 0),
+                ("rename-result", 265, "result", 1),
+                ("rename-errno", 265, "errno", 1),
+                ("absence-result", 267, "result", 0),
+                ("absence-errno", 267, "errno", 0),
                 ("payload-identity", 0, "identity", alternate_file_identity),
-                ("manifest-identity", 200, "identity", alternate_file_identity),
-                ("directory-identity-kind", 201, "identity", alternate_file_identity),
-                ("root-fsync-identity", 262, "identity", alternate_directory_identity),
-                ("preinventory-identity", 263, "identity", alternate_directory_identity),
-                ("rename-identity-nullability", 264, "identity", alternate_directory_identity),
-                ("parent-identity", 265, "identity", alternate_directory_identity),
-                ("absence-identity-nullability", 266, "identity", alternate_directory_identity),
-                ("final-root-identity", 267, "identity", alternate_directory_identity),
-                ("postinventory-identity", 268, "identity", alternate_directory_identity),
-                ("final-manifest-identity", 269, "identity", alternate_file_identity),
+                ("manifest-identity", 201, "identity", alternate_file_identity),
+                ("directory-identity-kind", 202, "identity", alternate_file_identity),
+                ("root-fsync-identity", 263, "identity", alternate_directory_identity),
+                ("preinventory-identity", 264, "identity", alternate_directory_identity),
+                ("rename-identity-nullability", 265, "identity", alternate_directory_identity),
+                ("parent-identity", 266, "identity", alternate_directory_identity),
+                ("absence-identity-nullability", 267, "identity", alternate_directory_identity),
+                ("final-root-identity", 268, "identity", alternate_directory_identity),
+                ("postinventory-identity", 269, "identity", alternate_directory_identity),
+                ("final-manifest-identity", 270, "identity", alternate_file_identity),
                 ("payload-sha", 0, "sha256", SHA_B),
-                ("manifest-raw-sha", 200, "sha256", SHA_B),
-                ("directory-sha-nullability", 201, "sha256", SHA_B),
-                ("preinventory-sha", 263, "sha256", SHA_B),
-                ("rename-sha-nullability", 264, "sha256", SHA_B),
-                ("parent-sha-nullability", 265, "sha256", SHA_B),
-                ("absence-sha-nullability", 266, "sha256", SHA_B),
-                ("final-root-sha-nullability", 267, "sha256", SHA_B),
-                ("postinventory-sha", 268, "sha256", SHA_B),
-                ("final-manifest-domain-sha", 269, "sha256", SHA_B),
+                ("manifest-raw-sha", 201, "sha256", SHA_B),
+                ("directory-sha-nullability", 202, "sha256", SHA_B),
+                ("preinventory-sha", 264, "sha256", SHA_B),
+                ("rename-sha-nullability", 265, "sha256", SHA_B),
+                ("parent-sha-nullability", 266, "sha256", SHA_B),
+                ("absence-sha-nullability", 267, "sha256", SHA_B),
+                ("final-root-sha-nullability", 268, "sha256", SHA_B),
+                ("postinventory-sha", 269, "sha256", SHA_B),
+                ("final-manifest-domain-sha", 270, "sha256", SHA_B),
             )
             for name, ordinal, field, changed in mutations:
                 with self.subTest(name=name):
