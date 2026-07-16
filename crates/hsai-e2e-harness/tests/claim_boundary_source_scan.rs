@@ -110,6 +110,16 @@ fn hsai_crates_do_not_use_process_or_network_apis() {
                     ) {
                         continue;
                     }
+                    if is_phase798_native_transcript_test_exception(
+                        workspace_root,
+                        &file,
+                        pattern,
+                        &text,
+                        line_index,
+                        line,
+                    ) {
+                        continue;
+                    }
                     violations.push(format!("{}:{}:{pattern}", file.display(), line_index + 1));
                 }
             }
@@ -245,6 +255,150 @@ fn is_phase609_real_materialized_staging_runner_exception(
         }
         _ => false,
     }
+}
+
+fn is_phase798_native_transcript_test_exception(
+    workspace_root: &Path,
+    file: &Path,
+    pattern: &str,
+    text: &str,
+    line_index: usize,
+    line: &str,
+) -> bool {
+    let descriptor_test = file
+        == workspace_root.join(
+            "crates/hsai-native-transcript-preparation/tests/descriptor_relative_collector.rs",
+        );
+    let driver_test = file
+        == workspace_root
+            .join("crates/hsai-native-transcript-preparation/tests/operator_preparation_driver.rs");
+
+    let authorized = if descriptor_test {
+        match (line_index, pattern, line) {
+            (9, "std::process", "use std::process::Command;") => true,
+            (36, "std::process", "            std::process::id(),") => {
+                line_is_within_impl_function(text, line_index, "impl Fixture {", "new")
+            }
+            (282, "Command::new", "    let fifo_status = Command::new(\"/usr/bin/mkfifo\")") => {
+                line_is_within_function(
+                    text,
+                    line_index,
+                    "rejects_non_utf8_symlink_and_terminal_kind_and_size_boundaries",
+                )
+            }
+            (492, "std::process", "        \"std::process\",")
+            | (494, "std::net", "        \"std::net\",")
+            | (495, "TcpStream", "        \"TcpStream\",") => line_is_within_function(
+                text,
+                line_index,
+                "collector_source_has_no_process_network_shell_or_canonicalization_path",
+            ),
+            _ => false,
+        }
+    } else if driver_test {
+        match (line_index, pattern, line) {
+            (199, "std::process", "        \"std::process\",")
+            | (200, "std::net", "        \"std::net\",")
+            | (206, "Command::new", "        \"Command::new\",")
+            | (207, "TcpStream", "        \"TcpStream\",")
+            | (208, "UdpSocket", "        \"UdpSocket\",") => line_is_within_function(
+                text,
+                line_index,
+                "driver_source_has_no_forbidden_execution_or_io_surface",
+            ),
+            _ => false,
+        }
+    } else {
+        false
+    };
+
+    authorized && text.lines().filter(|candidate| *candidate == line).count() == 1
+}
+
+fn line_is_within_impl_function(
+    text: &str,
+    line_index: usize,
+    expected_impl: &str,
+    expected_function: &str,
+) -> bool {
+    let lines = text.lines().collect::<Vec<_>>();
+    let Some(impl_index) = lines
+        .iter()
+        .take(line_index + 1)
+        .rposition(|line| line.trim() == expected_impl)
+    else {
+        return false;
+    };
+    let mut depth = 0;
+    for line in &lines[impl_index..line_index] {
+        depth += source_brace_delta(line);
+        if depth <= 0 {
+            return false;
+        }
+    }
+    line_is_within_function(
+        &lines[impl_index..=line_index].join("\n"),
+        line_index - impl_index,
+        expected_function,
+    )
+}
+
+fn line_is_within_function(text: &str, line_index: usize, expected: &str) -> bool {
+    let mut target_depth = None;
+    for (index, line) in text.lines().enumerate().take(line_index + 1) {
+        if target_depth.is_none() {
+            let trimmed = line.trim_start();
+            let name = trimmed
+                .strip_prefix("pub fn ")
+                .or_else(|| trimmed.strip_prefix("fn "))
+                .and_then(|rest| rest.split('(').next());
+            if name == Some(expected) {
+                let depth = source_brace_delta(line);
+                if depth <= 0 {
+                    return false;
+                }
+                target_depth = Some(depth);
+            }
+        } else if index < line_index {
+            let depth = target_depth.expect("target depth should be initialized")
+                + source_brace_delta(line);
+            if depth <= 0 {
+                return false;
+            }
+            target_depth = Some(depth);
+        }
+    }
+    target_depth.is_some()
+}
+
+fn source_brace_delta(line: &str) -> i32 {
+    let mut delta = 0;
+    let mut in_string = false;
+    let mut escaped = false;
+    let bytes = line.as_bytes();
+    let mut index = 0;
+    while index < bytes.len() {
+        let byte = bytes[index];
+        if in_string {
+            if escaped {
+                escaped = false;
+            } else if byte == b'\\' {
+                escaped = true;
+            } else if byte == b'"' {
+                in_string = false;
+            }
+        } else if byte == b'"' {
+            in_string = true;
+        } else if byte == b'/' && bytes.get(index + 1) == Some(&b'/') {
+            break;
+        } else if byte == b'{' {
+            delta += 1;
+        } else if byte == b'}' {
+            delta -= 1;
+        }
+        index += 1;
+    }
+    delta
 }
 
 fn enclosing_function_name(text: &str, line_index: usize) -> Option<&str> {
@@ -414,6 +568,134 @@ fn phase609_staging_runner_process_exception_is_single_function_only() {
         denied,
         1,
         "        let output = Command::new(program)",
+    ));
+}
+
+#[test]
+fn phase798_native_transcript_test_exception_is_exactly_confined() {
+    let workspace_root = Path::new("/workspace");
+    let descriptor_file = workspace_root
+        .join("crates/hsai-native-transcript-preparation/tests/descriptor_relative_collector.rs");
+    let driver_file = workspace_root
+        .join("crates/hsai-native-transcript-preparation/tests/operator_preparation_driver.rs");
+    let descriptor = include_str!(
+        "../../hsai-native-transcript-preparation/tests/descriptor_relative_collector.rs"
+    );
+    let driver = include_str!(
+        "../../hsai-native-transcript-preparation/tests/operator_preparation_driver.rs"
+    );
+
+    for (line_index, pattern) in [
+        (9, "std::process"),
+        (36, "std::process"),
+        (282, "Command::new"),
+        (492, "std::process"),
+        (494, "std::net"),
+        (495, "TcpStream"),
+    ] {
+        let line = descriptor.lines().nth(line_index).unwrap();
+        assert!(is_phase798_native_transcript_test_exception(
+            workspace_root,
+            &descriptor_file,
+            pattern,
+            descriptor,
+            line_index,
+            line,
+        ));
+    }
+    for (line_index, pattern) in [
+        (199, "std::process"),
+        (200, "std::net"),
+        (206, "Command::new"),
+        (207, "TcpStream"),
+        (208, "UdpSocket"),
+    ] {
+        let line = driver.lines().nth(line_index).unwrap();
+        assert!(is_phase798_native_transcript_test_exception(
+            workspace_root,
+            &driver_file,
+            pattern,
+            driver,
+            line_index,
+            line,
+        ));
+    }
+
+    let import = descriptor.lines().nth(9).unwrap();
+    assert!(!is_phase798_native_transcript_test_exception(
+        workspace_root,
+        Path::new(
+            "/workspace/crates/nested/crates/hsai-native-transcript-preparation/tests/descriptor_relative_collector.rs",
+        ),
+        "std::process",
+        descriptor,
+        9,
+        import,
+    ));
+    assert!(!is_phase798_native_transcript_test_exception(
+        workspace_root,
+        &descriptor_file,
+        "std::process",
+        descriptor,
+        10,
+        import,
+    ));
+    assert!(!is_phase798_native_transcript_test_exception(
+        workspace_root,
+        &descriptor_file,
+        "Command::new",
+        descriptor,
+        282,
+        "    let fifo_status = Command::new(\"/usr/bin/printf\")",
+    ));
+
+    let duplicate_import = format!("{descriptor}{import}\n");
+    assert!(!is_phase798_native_transcript_test_exception(
+        workspace_root,
+        &descriptor_file,
+        "std::process",
+        &duplicate_import,
+        9,
+        import,
+    ));
+
+    let wrong_impl = descriptor.replace("impl Fixture {", "mod OtherScope {");
+    let process_id = descriptor.lines().nth(36).unwrap();
+    assert!(!is_phase798_native_transcript_test_exception(
+        workspace_root,
+        &descriptor_file,
+        "std::process",
+        &wrong_impl,
+        36,
+        process_id,
+    ));
+
+    let descriptor_after_close = descriptor.replace(
+        "    let source = include_str!(\"../src/collector.rs\");",
+        "} // close before the exact forbidden literals",
+    );
+    let descriptor_literal = descriptor.lines().nth(492).unwrap();
+    assert!(!is_phase798_native_transcript_test_exception(
+        workspace_root,
+        &descriptor_file,
+        "std::process",
+        &descriptor_after_close,
+        492,
+        descriptor_literal,
+    ));
+
+    let driver_after_close = driver.replace(
+        "    let source = include_str!(\"../src/driver.rs\");",
+        "} // close before the exact forbidden literals",
+    );
+    let driver_literal = driver.lines().nth(199).unwrap();
+    assert!(!is_phase798_native_transcript_test_exception(
+        workspace_root,
+        &driver_file,
+        "std::process",
+        &driver_after_close,
+        199,
+        driver_literal,
     ));
 }
 
