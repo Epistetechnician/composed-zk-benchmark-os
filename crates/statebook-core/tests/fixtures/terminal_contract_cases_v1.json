@@ -1,0 +1,80 @@
+{
+  "baseline": {
+    "schema_version": "statebook-terminal-source:v1",
+    "venue_namespace": "fixture.venue.alpha",
+    "source_contract_id": "BTC-USD-2026",
+    "source_revision": "rev-1",
+    "source_observed_at": 1788200000,
+    "economic_reference": {
+      "namespace": "fixture.reference",
+      "identifier": "BTC-USD",
+      "unit": "USD/BTC",
+      "benchmark_administrator": "fixture.benchmark-admin",
+      "methodology_version": "2026-01",
+      "methodology_sha256": "9f7b4f3422481487b905332cddebbde49e5c2ce86b568ec1fbf81d06d6d54d3f",
+      "fallback_rule": "fixture.fallback.none",
+      "calendar": "fixture.calendar.24x7.v1",
+      "timezone": "UTC"
+    },
+    "observation": {
+      "start": 1798732740,
+      "end": 1798732800,
+      "sampling_rule": "fixture.sampling.last-valid",
+      "disruption_rule": "fixture.disruption.no-observation-no-payoff",
+      "correction_rule": "fixture.correction.final-after-window"
+    },
+    "payoff": {
+      "kind": "indicator",
+      "comparator": {
+        "kind": "greater_than_or_equal",
+        "threshold": {"numerator":"100000","denominator":"1"},
+        "lower": null,
+        "upper": null,
+        "endpoints": null
+      },
+      "amount": {"numerator":"100","denominator":"1"}
+    },
+    "settlement": {
+      "asset": "fixture.asset.USD",
+      "unit_scale": "0.01",
+      "rounding_mode": "toward_zero",
+      "rounding_quantum": "0.01",
+      "deadline": 1798905600,
+      "dispute_rule": "fixture.dispute.window-86400",
+      "default_rule": "fixture.default.void",
+      "governing_rule": "fixture.rules.v1",
+      "finality_domain": "fixture.ledger.v1"
+    },
+    "explicit_non_equivalences": ["no-physical-delivery","no-path-dependence"],
+    "unknown_terms": []
+  },
+  "material_mutations": [
+    {"name":"reference_namespace","pointer":"/economic_reference/namespace","value":"fixture.reference.other"},
+    {"name":"reference_identifier","pointer":"/economic_reference/identifier","value":"ETH-USD"},
+    {"name":"reference_unit","pointer":"/economic_reference/unit","value":"EUR/BTC"},
+    {"name":"benchmark_administrator","pointer":"/economic_reference/benchmark_administrator","value":"fixture.benchmark-admin.other"},
+    {"name":"methodology_version","pointer":"/economic_reference/methodology_version","value":"2026-02"},
+    {"name":"methodology_sha256","pointer":"/economic_reference/methodology_sha256","value":"af7b4f3422481487b905332cddebbde49e5c2ce86b568ec1fbf81d06d6d54d3f"},
+    {"name":"fallback_rule","pointer":"/economic_reference/fallback_rule","value":"fixture.fallback.alt"},
+    {"name":"calendar","pointer":"/economic_reference/calendar","value":"fixture.calendar.weekdays.v1"},
+    {"name":"timezone","pointer":"/economic_reference/timezone","value":"Etc/GMT+1"},
+    {"name":"observation_start","pointer":"/observation/start","value":1798732739},
+    {"name":"observation_end","pointer":"/observation/end","value":1798732801},
+    {"name":"sampling_rule","pointer":"/observation/sampling_rule","value":"fixture.sampling.vwap"},
+    {"name":"disruption_rule","pointer":"/observation/disruption_rule","value":"fixture.disruption.delay"},
+    {"name":"correction_rule","pointer":"/observation/correction_rule","value":"fixture.correction.none"},
+    {"name":"comparator","pointer":"/payoff/comparator/kind","value":"greater_than"},
+    {"name":"threshold","pointer":"/payoff/comparator/threshold/numerator","value":"100001"},
+    {"name":"payoff_amount","pointer":"/payoff/amount/numerator","value":"101"},
+    {"name":"settlement_asset","pointer":"/settlement/asset","value":"fixture.asset.USDC"},
+    {"name":"unit_scale","pointer":"/settlement/unit_scale","value":"0.000001"},
+    {"name":"rounding_mode","pointer":"/settlement/rounding_mode","value":"floor"},
+    {"name":"rounding_quantum","pointer":"/settlement/rounding_quantum","value":"0.1"},
+    {"name":"deadline","pointer":"/settlement/deadline","value":1798905601},
+    {"name":"dispute_rule","pointer":"/settlement/dispute_rule","value":"fixture.dispute.window-172800"},
+    {"name":"default_rule","pointer":"/settlement/default_rule","value":"fixture.default.refund"},
+    {"name":"governing_rule","pointer":"/settlement/governing_rule","value":"fixture.rules.v2"},
+    {"name":"finality_domain","pointer":"/settlement/finality_domain","value":"fixture.ledger.v2"},
+    {"name":"non_equivalence","pointer":"/explicit_non_equivalences/0","value":"no-cash-substitution"}
+  ]
+}

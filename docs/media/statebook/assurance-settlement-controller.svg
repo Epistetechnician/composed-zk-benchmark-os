@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Assurance-adjusted externalization controller</title>
+  <desc id="desc">A request is classified, checked against noncompensable hard gates, bounded by exposure budgets, assigned the maximum applicable delay, and persisted through an exactly-once queue and finality state machine.</desc>
+  <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#1e3a5f"/></marker><style>.h{font:700 50px Georgia,serif;fill:#17283b}.sub{font:19px 'Courier New',monospace;fill:#5f6b73}.t{font:700 24px Georgia,serif;fill:#17283b}.b{font:18px Georgia,serif;fill:#344554}.m{font:16px 'Courier New',monospace;fill:#5f6b73}.box{fill:#fffdf8;stroke:#1e3a5f;stroke-width:2}.green{fill:#edf3f0;stroke:#3d776f;stroke-width:2}.gold{fill:#f6edcf;stroke:#b78619;stroke-width:2}.red{fill:#f8e8e5;stroke:#9b3a37;stroke-width:2}.edge{fill:none;stroke:#1e3a5f;stroke-width:3;marker-end:url(#arr)}</style></defs>
+  <rect width="1600" height="900" fill="#faf7ef"/>
+  <text x="70" y="70" class="h">Assurance controls are orthogonal</text><text x="70" y="108" class="sub">Whether · how much · when · what happens next</text>
+  <rect x="70" y="170" width="220" height="110" rx="16" class="box"/><text x="115" y="215" class="t">Request Q</text><text x="98" y="250" class="m">intent · amount · path</text>
+  <path d="M290 225H365" class="edge"/>
+  <rect x="365" y="150" width="270" height="150" rx="16" class="gold"/><text x="405" y="194" class="t">Classify path</text><text x="395" y="232" class="m">internal · atomic</text><text x="395" y="260" class="m">obligation · unilateral</text><text x="395" y="288" class="m">systemic / exceptional</text>
+  <path d="M635 225H710" class="edge"/>
+  <rect x="710" y="135" width="350" height="180" rx="16" class="red"/><text x="750" y="178" class="t">1 · WHETHER</text><text x="750" y="214" class="b">Noncompensable hard gates</text><text x="750" y="248" class="m">authorization · oracle · state</text><text x="750" y="276" class="m">solvency · replay · finality</text><text x="750" y="303" class="m">Any Fail or Unknown → zero</text>
+  <path d="M1060 225H1135" class="edge"/>
+  <rect x="1135" y="135" width="395" height="180" rx="16" class="green"/><text x="1175" y="178" class="t">2 · HOW MUCH</text><text x="1175" y="214" class="b">Minimum remaining budget</text><text x="1175" y="248" class="m">account · entity · asset · venue</text><text x="1175" y="276" class="m">destination · root · system</text><text x="1175" y="303" class="m">ratio = permitted amount / Q</text>
+  <path d="M1335 315V390" class="edge"/>
+  <rect x="1020" y="390" width="510" height="170" rx="16" class="gold"/><text x="1060" y="432" class="t">3 · WHEN</text><text x="1060" y="468" class="b">Maximum applicable risk clock</text><text x="1060" y="502" class="m">novelty · amount · anomaly · route</text><text x="1060" y="530" class="m">evidence · source/destination · legal</text>
+  <path d="M1020 475H930" class="edge"/>
+  <rect x="470" y="380" width="460" height="190" rx="16" class="box"/><text x="510" y="425" class="t">4 · WHAT HAPPENS NEXT</text><text x="510" y="462" class="b">Exactly-once queue and ledger</text><text x="510" y="498" class="m">reserve → submit → observe → finalize</text><text x="510" y="528" class="m">challenge · freeze · reconcile · recover</text><text x="510" y="556" class="m">Time alone never releases.</text>
+  <path d="M470 475H360" class="edge"/>
+  <rect x="70" y="390" width="290" height="170" rx="16" class="green"/><text x="110" y="432" class="t">Decision record</text><text x="105" y="469" class="m">Immediate · queued</text><text x="105" y="498" class="m">rejected · frozen</text><text x="105" y="530" class="m">No execution authority</text>
+  <rect x="120" y="650" width="1360" height="130" rx="18" class="box"/>
+  <text x="165" y="698" class="h" style="font-size:36px">Fast inside the recovery domain. Gated at irreversible externalization.</text>
+  <text x="165" y="736" class="sub">Atomic DvP/PvP may remain fast when all legs pass and settle all-or-none.</text>
+  <text x="165" y="766" class="sub">Inbound value never refills outbound caps in the same action.</text>
+  <text x="70" y="850" class="sub">The ratio is a consequence bound, not a probability of correctness and not a reputation score.</text>
+</svg>
