@@ -456,10 +456,20 @@ fn parse_state(
     let mut parsed_axes = Vec::new();
     for axis in axes {
         let item = axis.as_object().ok_or(missing_field("axis"))?;
-        parsed_axes.push(default_axis(
+        let mut parsed = default_axis(
             &required_string(item, "asset")?,
             parse_rational(item.get("cap").ok_or(missing_field("cap"))?)?,
-        ));
+        );
+        if let Some(value) = item.get("reserved") {
+            parsed.reserved = parse_rational(value)?;
+        }
+        if let Some(value) = item.get("in_flight") {
+            parsed.in_flight = parse_rational(value)?;
+        }
+        if let Some(value) = item.get("consumed") {
+            parsed.consumed = parse_rational(value)?;
+        }
+        parsed_axes.push(parsed);
     }
     let mut ledger_state = super::types::BudgetLedgerStateV1 {
         tip_digest: parse_digest(

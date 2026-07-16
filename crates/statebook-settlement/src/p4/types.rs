@@ -127,6 +127,7 @@ pub enum DecisionReasonV1 {
     PolicyRollback,
     PolicyRelaxRejected,
     QueueCancelled,
+    ProvenNoOutflowRejected,
     RecoveryFailed,
     IntentDigestMismatch,
     ModelConfidenceIgnored,
@@ -438,12 +439,44 @@ pub struct BudgetAxisV1 {
     pub(crate) consumed: SignedRational,
 }
 
+impl BudgetAxisV1 {
+    pub fn asset(&self) -> &str {
+        &self.asset
+    }
+
+    pub const fn reserved(&self) -> SignedRational {
+        self.reserved
+    }
+
+    pub const fn in_flight(&self) -> SignedRational {
+        self.in_flight
+    }
+
+    pub const fn consumed(&self) -> SignedRational {
+        self.consumed
+    }
+
+    pub const fn cap(&self) -> SignedRational {
+        self.cap
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct BudgetLedgerStateV1 {
     pub(crate) tip_digest: DigestV1,
     pub(crate) epoch: u32,
     pub(crate) axes: Vec<BudgetAxisV1>,
     pub(crate) journal: Vec<String>,
+}
+
+impl BudgetLedgerStateV1 {
+    pub fn axes(&self) -> &[BudgetAxisV1] {
+        &self.axes
+    }
+
+    pub const fn tip_digest(&self) -> DigestV1 {
+        self.tip_digest
+    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
