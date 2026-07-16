@@ -1,6 +1,7 @@
 const P8_SOURCES: &[&str] = &[
     include_str!("../src/lib.rs"),
     include_str!("../src/bounds.rs"),
+    include_str!("../src/corpus.rs"),
     include_str!("../src/error.rs"),
     include_str!("../src/golden.rs"),
     include_str!("../src/types.rs"),

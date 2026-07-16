@@ -11111,3 +11111,55 @@ evidence only. It does not establish live clearing recognition, legal finality,
 admission authority, Evidence Ledger mutation, production thresholds,
 production readiness, SOTA, independent audit, or full security. Completing P8
 does not satisfy the P7 legal/ops gate. No value moves.
+
+## Statebook P9 Adversarial Corpus Replay Boundary
+
+Date: 16 July 2026.
+
+Outcome: `DocumentationOnly`, `NotRun`, named state slice
+`statebook-p9-adversarial-corpus-replay-boundary`.
+
+State slice:
+
+- `docs/statebook-p9-adversarial-corpus-replay-boundary-spec.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+The boundary freezes encodable TD-004 / P4 adversarial corpus replay inside
+`statebook-e2e-harness` using public P4 APIs. Kernel-deferred scenarios remain
+outside. All P1–P8 identities stay unchanged.
+
+This documentation-only slice adds no Rust or Cargo change and creates no
+proof, accepted evidence, Level2+, score axis, semantic correctness, production
+readiness, SOTA, breakthrough, full security, external audit, or action
+authority.
+
+## Statebook P9 Adversarial Corpus Replay Implementation
+
+Date: 16 July 2026.
+
+Outcome: `Level1LocalReplay`, `Pass`, named state slice
+`statebook-p9-adversarial-corpus-replay`.
+
+State slice:
+
+- additive `crates/statebook-e2e-harness/src/corpus.rs` and
+  `tests/adversarial_corpus.rs`;
+- `docs/statebook-p9-adversarial-corpus-replay-implementation-notes.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+Twelve encodable TD-004 / P4 adversarial cases plus the timer-alone chain
+replay fail-closed with zero instant release. Thirteen harness tests pass;
+unchanged P1–P7 crate tests pass; focused format and warning-denied Clippy pass
+for `statebook-e2e-harness`. No P4 kernel edits. Live authority products remain
+deferred.
+
+This is local hermetic adversarial fixture regression evidence only. It does
+not establish complete TD-004 satisfaction, live clearing recognition, legal
+finality, admission authority, Evidence Ledger mutation, production readiness,
+SOTA, independent audit, or full security. No value moves.

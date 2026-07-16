@@ -879,6 +879,8 @@ Surface DSL
 | [docs/statebook-p7-authority-integration-implementation-notes.md](docs/statebook-p7-authority-integration-implementation-notes.md) | Implemented P7 `statebook-authority` crate: hermetic synthetic authority-statement attach, capital overlay only, legal/ops gate deferred, permanent non-grant of execution authority; no value moves. |
 | [docs/statebook-p8-evaluation-and-falsification-boundary-spec.md](docs/statebook-p8-evaluation-and-falsification-boundary-spec.md) | Docs-first P8 authorization for hermetic P1–P7 evaluation/falsification harness (`statebook-e2e-harness`); TD-011/§15 surfaces only; no live authority or value moves. |
 | [docs/statebook-p8-evaluation-and-falsification-implementation-notes.md](docs/statebook-p8-evaluation-and-falsification-implementation-notes.md) | Implemented P8 `statebook-e2e-harness`: hermetic P1–P7 golden path, structured evaluation receipts, TD-011/§15 falsifiers; no live authority or value moves. |
+| [docs/statebook-p9-adversarial-corpus-replay-boundary-spec.md](docs/statebook-p9-adversarial-corpus-replay-boundary-spec.md) | Docs-first P9 authorization for encodable TD-004 / P4 adversarial corpus replay in `statebook-e2e-harness`; no kernel edits, no live authority. |
+| [docs/statebook-p9-adversarial-corpus-replay-implementation-notes.md](docs/statebook-p9-adversarial-corpus-replay-implementation-notes.md) | Implemented P9 encodable TD-004 / P4 adversarial corpus replay in `statebook-e2e-harness`; fail-closed zero-instant invariants; no kernel edits. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -1040,6 +1042,17 @@ movement is authorized. See
 
 This is local hermetic composed P1–P7 regression and falsification-surface
 evidence only. No value moves.
+
+Statebook P9 authorization status: the named docs-first slice
+`statebook-p9-adversarial-corpus-replay-boundary` freezes encodable TD-004 / P4
+adversarial corpus replay inside `statebook-e2e-harness`. The separately
+committed implementation slice `statebook-p9-adversarial-corpus-replay` adds
+twelve corpus cases plus the timer-alone chain using public P4 APIs only. All
+P1-P8 identities stay unchanged. No kernel edits, live authority, or value
+movement is authorized. See
+[docs/statebook-p9-adversarial-corpus-replay-implementation-notes.md](docs/statebook-p9-adversarial-corpus-replay-implementation-notes.md).
+
+This is local hermetic adversarial fixture regression evidence only. No value moves.
 
 ## Current Implementation Status
 
