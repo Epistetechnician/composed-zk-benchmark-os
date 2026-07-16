@@ -21546,3 +21546,26 @@ cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -
 Claim ceiling: local hermetic breaker TTL/resolution regression only. No value
 moves. Not live pause authority, complete TD-004 satisfaction, production
 readiness, SOTA, independent audit, or full-security claims.
+
+## Integration Track: Statebook P12 Challenge Grammar And Evidence Expiry Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p12-challenge-grammar-evidence-expiry-boundary`.
+
+The next separately committed slice is
+`statebook-p12-challenge-grammar-evidence-expiry`. It may add
+`apply_challenge_v1`, wire evidence-expiry → `RevalidationRequired` into
+`decide_and_transition`, support fresh-evidence revalidation with a new
+decision context, and extend harness corpus coverage for TD-004 #31 / P4 #11
+#13 #14. Hysteresis and cancel remain deferred. Outputs never move value or
+grant live authority.
+
+Validation gate: valid→Frozen; invalid/duplicate/censored/unavailable reject
+without release; queued expired evidence → RevalidationRequired; fresh evidence
+new context; existing suites green; focused format/test/Clippy; claim-boundary
+hygiene.
+
+Anti-goals: hysteresis relax/rollback, cancel intents, live authority, trading,
+signing, custody, pause product, transfer, admission mutation, Evidence Ledger
+append, scalar trust score, complete TD-004 claim, production readiness, SOTA,
+independent audit, or full-security claims.

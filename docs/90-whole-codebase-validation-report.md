@@ -11261,3 +11261,15 @@ existing P4 five-outcome and harness suites remain green.
 This is local hermetic breaker TTL/resolution regression evidence only. It does
 not establish live pause authority, complete TD-004 satisfaction, production
 readiness, SOTA, independent audit, or full security. No value moves.
+
+## Statebook P12 Challenge Grammar And Evidence Expiry Boundary
+
+Date: 16 July 2026.
+
+Outcome: `DocumentationOnly`, `Level0DesignNote`, named state slice
+`statebook-p12-challenge-grammar-evidence-expiry-boundary`.
+
+This documentation-only slice creates no proof, accepted evidence, Level2+,
+score axis, production readiness, SOTA, breakthrough, full security, external
+audit, or action authority. Implementation requires a separately committed
+state slice `statebook-p12-challenge-grammar-evidence-expiry`.
