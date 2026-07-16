@@ -11163,3 +11163,28 @@ This is local hermetic adversarial fixture regression evidence only. It does
 not establish complete TD-004 satisfaction, live clearing recognition, legal
 finality, admission authority, Evidence Ledger mutation, production readiness,
 SOTA, independent audit, or full security. No value moves.
+
+## Statebook P10 Semantic Equivalence Corpus Boundary
+
+Date: 16 July 2026.
+
+Outcome: `DocumentationOnly`, `NotRun`, named state slice
+`statebook-p10-semantic-equivalence-corpus-boundary`.
+
+State slice:
+
+- `docs/statebook-p10-semantic-equivalence-corpus-boundary-spec.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+The boundary freezes a labeled StateKey equivalence precision/recall corpus
+inside `statebook-e2e-harness` using public P1 APIs. Fixture-local acceptance
+requires zero false-equivalence rate. All P1–P9 identities stay unchanged.
+
+This documentation-only slice adds no Rust or Cargo change and creates no
+proof, accepted evidence, Level2+, score axis, semantic correctness at scale,
+production readiness, SOTA, breakthrough, full security, external audit, or
+action authority. Implementation requires a separately committed state slice
+`statebook-p10-semantic-equivalence-corpus`.
