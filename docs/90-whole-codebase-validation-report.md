@@ -11213,3 +11213,28 @@ This is local hermetic labeled-fixture StateKey equivalence evidence only. It
 does not establish automatic economic-equivalence discovery, legal fungibility,
 AI oracle correctness, live authority, production thresholds, production
 readiness, SOTA, independent audit, or full security. No value moves.
+
+## Statebook P11 Breaker TTL And Resolution Boundary
+
+Date: 16 July 2026.
+
+Outcome: `DocumentationOnly`, `NotRun`, named state slice
+`statebook-p11-breaker-ttl-resolution-boundary`.
+
+State slice:
+
+- `docs/statebook-p11-breaker-ttl-resolution-boundary-spec.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+The boundary freezes P4 breaker TTL→Resolution wiring, fail-closed expired
+scope handling without silent renewal, and malicious renewal rejection.
+Challenge grammar, hysteresis, and cancel remain outside. No Rust or Cargo
+change in this commit.
+
+This documentation-only slice creates no proof, accepted evidence, Level2+,
+score axis, production readiness, SOTA, breakthrough, full security, external
+audit, or action authority. Implementation requires a separately committed
+state slice `statebook-p11-breaker-ttl-resolution`.
