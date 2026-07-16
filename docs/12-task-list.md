@@ -20636,6 +20636,29 @@ class closure, score movement, accepted Evidence Ledger mutation, Level2+,
 benchmark evidence, proof, production readiness, SOTA, breakthrough, full
 security, or external-audit claim is created.
 
+## Phase 796-A3L5E HSAI P01B Gate Sandbox Root-Read Correction
+
+Status: complete documentation-only correction; execution remains `NotRun` and
+correspondence remains `2/10`.
+
+Named state slice:
+`phase-796a3l5e-hsai-p01b-gate-sandbox-root-read-correction`.
+
+Completed: measured the exact A3L5C profile aborting both the positive control
+and `/usr/bin/true` with signal 6; minimized the required policy change to one
+`file-read-data` literal `/` capability; preserved every other profile line,
+declared source/system subpath, scratch-only write, network denial, and claim
+boundary. See
+`docs/796a3l5e-phase-hsai-p01b-gate-sandbox-root-read-correction.md`.
+
+Exit criteria: two independent zero-finding reviews over the correction, then
+an A3L6 focused test proving the positive control and all four negative controls
+under the exact corrected profile. A3L6 remains unaccepted; A3L7/A3L8 remain
+prohibited; no runtime evidence, class closure, score movement, accepted
+Evidence Ledger mutation, Level2+, benchmark evidence, proof, production
+readiness, SOTA, breakthrough, full security, or external-audit claim is
+created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

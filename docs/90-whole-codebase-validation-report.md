@@ -10927,3 +10927,28 @@ checks, and preservation of the pre-existing admission SHA-256
 A3L6 remains unaccepted and A3L7/A3L8 remain prohibited. Correspondence remains
 2/10, commercial moat remains 3/10, and defensible breakthrough evidence
 remains 2-3/10. No runtime evidence or stronger claim was created.
+
+## Phase 796-A3L5E HSAI P01B Gate Sandbox Root-Read Correction
+
+Date: 15 July 2026.
+
+Outcome: documentation-only correction at execution state `NotRun` for named
+state slice `phase-796a3l5e-hsai-p01b-gate-sandbox-root-read-correction`.
+
+The byte-exact A3L5C Seatbelt profile made both the A3L6 positive control and
+the minimized `/usr/bin/true` process abort with signal 6 and empty retained
+streams on the pinned host. Adding only
+`(allow file-read-data (literal "/"))` made the minimized control exit zero.
+A3L5E therefore inserts that exact line after the global metadata-read line.
+The literal applies only to the root directory object; it does not authorize
+descendant file data. All declared read subpaths, scratch-only writes, default
+denial, and network denial remain unchanged.
+
+Validation requires two independent zero-finding reviews, a corrected-profile
+positive control, direct IPv4/IPv6/DNS/Mach negative controls, the pinned
+focused/discovery gates, Git diff checks, and preservation of the pre-existing
+admission SHA-256
+`41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de`.
+A3L6 remains unaccepted and A3L7/A3L8 remain prohibited. Correspondence remains
+2/10, commercial moat remains 3/10, and defensible breakthrough evidence
+remains 2-3/10. No runtime evidence or stronger claim was created.
