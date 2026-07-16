@@ -78,8 +78,8 @@ The implementation bytes passed:
 ```text
 evidence focused = 32/32
 execution focused = 32/32
-formal discovery = 172/172
-combined focused census = 64 unique ids
+formal discovery = 172/172 (Seatbelt stubbed census; not full-suite semantics)
+combined focused census = 64 unique ids (real semantics under Seatbelt)
 protected admission SHA-256 = 41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de
 git diff check = pass
 bytecode cache residue = none
@@ -88,6 +88,14 @@ bytecode cache residue = none
 These are local pre-freeze results. The authoritative A3L6 result must be
 re-executed from Git blobs at the audit commit, under the pinned sandbox and
 Python identities, with repository status byte-identical before and after.
+
+Honesty: when `P01B_GATE_SANDBOX_ACTIVE=1`, six formal-preflight `tests/test_*.py`
+modules replace their `test_*` methods with trivial stubs so discovery can
+complete under Seatbelt. That yields a 172-id census, not full-suite execution.
+Focused evidence/execution gates (64 ids) are not stubbed and run for real.
+Claim boundary honesty assumes
+`formal-discovery-under-seatbelt-is-stubbed-census-not-full-suite-semantics`
+and nonclaims `not-full-suite-execution-under-seatbelt`.
 
 ## Literal Focused Test Census
 

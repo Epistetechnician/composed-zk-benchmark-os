@@ -231,6 +231,7 @@ CLAIM_ASSUMPTIONS = (
     "native-python-runtime-stdlib-honest",
     "host-system-tool-honest",
     "reviewed-gate-test-code-honest",
+    "formal-discovery-under-seatbelt-is-stubbed-census-not-full-suite-semantics",
 )
 CLAIM_NONCLAIMS = (
     "not-level2",
@@ -243,6 +244,7 @@ CLAIM_NONCLAIMS = (
     "not-full-security",
     "not-external-audit",
     "not-accepted-evidence-ledger-evidence",
+    "not-full-suite-execution-under-seatbelt",
 )
 CLASS_ORDER = ("C02", "C03", "C04", "C05", "C06", "C07", "C09", "C10")
 REVIEW_ROLE_ORDER = ("security-capability", "correspondence-reproducibility")
