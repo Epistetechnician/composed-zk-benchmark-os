@@ -3666,6 +3666,7 @@ HONESTY_ASSUMPTIONS = (
     "native-python-runtime-stdlib-honest",
     "host-system-tool-honest",
     "reviewed-gate-test-code-honest",
+    "formal-discovery-under-seatbelt-is-stubbed-census-not-full-suite-semantics",
 )
 NONCLAIMS = (
     "not-level2",
@@ -3678,6 +3679,7 @@ NONCLAIMS = (
     "not-full-security",
     "not-external-audit",
     "not-accepted-evidence-ledger-evidence",
+    "not-full-suite-execution-under-seatbelt",
 )
 
 EXPECTED_BINDING_FIELDS = (

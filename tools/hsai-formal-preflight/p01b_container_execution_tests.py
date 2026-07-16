@@ -3054,8 +3054,8 @@ class SnapshotAndPublicationTests(unittest.TestCase):
         )
         self.assertEqual(decision["atomic_result"], "accept")
         self.assertFalse(decision["accepted_evidence_created"])
-        self.assertEqual(len(boundary["ordered_honesty_assumptions"]), 7)
-        self.assertEqual(len(boundary["ordered_nonclaims"]), 10)
+        self.assertEqual(len(boundary["ordered_honesty_assumptions"]), 8)
+        self.assertEqual(len(boundary["ordered_nonclaims"]), 11)
 
 
 class BoundaryGuardTests(unittest.TestCase):
