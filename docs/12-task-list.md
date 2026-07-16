@@ -21679,14 +21679,27 @@ readiness, SOTA, independent audit, or full-security claims.
 Status: documentation-first boundary complete for named state slice
 `statebook-p16-recovery-transitions-boundary`.
 
-The next separately committed slice is `statebook-p16-recovery-transitions`. It
-may add recovery halt/reconcile/canary/reopen APIs and corpus coverage for P4
-#19 / TD-004 #26. Live authority remains deferred. Outputs never move value.
+## Integration Track: Statebook P16 Recovery Transitions Implementation
 
-Validation gate: all-path halt reject; mismatch/canary reject; reopen gated;
-suites green; format/test/Clippy; claim-boundary hygiene.
+Status: implemented under named state slice `statebook-p16-recovery-transitions`.
 
-Anti-goals: live authority, production recovery claim, trading, signing,
-custody, pause product, transfer command, admission mutation, Evidence Ledger
-append, scalar trust score, complete TD-004 claim, production readiness, SOTA,
-independent audit, or full-security claims.
+Delivered:
+
+- recovery halt/reconcile/canary/reopen APIs;
+- release blocked on non-empty halt inventory, mismatch, or canary failure;
+- four settlement recovery tests and two new harness corpus cases.
+
+Live authority remains deferred behind the legal/ops gate.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic recovery-drill regression only. No value moves.
+Not live pause authority, production recovery readiness, complete TD-004
+satisfaction, SOTA, independent audit, or full-security claims.

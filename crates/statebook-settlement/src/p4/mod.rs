@@ -6,6 +6,10 @@ pub use budget::{
 pub use cancel::apply_cancel_v1;
 pub use challenge::apply_challenge_v1;
 pub use hysteresis::{attempt_policy_transition_v1, evaluate_policy_transition_v1};
+pub use recovery::{
+    apply_recovery_canary_v1, apply_recovery_halt_all_v1, apply_recovery_reconciliation_v1,
+    apply_recovery_reopen_v1, RecoveryApplyResultV1,
+};
 
 mod amounts;
 mod assurance;
@@ -24,6 +28,7 @@ mod kernel;
 mod linked_plan;
 mod obligation;
 mod parse;
+mod recovery;
 mod types;
 mod valuation;
 
