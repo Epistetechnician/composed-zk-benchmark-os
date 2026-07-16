@@ -896,6 +896,7 @@ Surface DSL
 | [docs/statebook-p16-recovery-transitions-boundary-spec.md](docs/statebook-p16-recovery-transitions-boundary-spec.md) | Docs-first P16 authorization for hermetic recovery halt/reconcile/canary/reopen drills; no live authority. |
 | [docs/statebook-p16-recovery-transitions-implementation-notes.md](docs/statebook-p16-recovery-transitions-implementation-notes.md) | Implemented P16 recovery halt/reconcile/canary/reopen drills with fail-closed release blocking. |
 | [docs/statebook-p17-adversarial-corpus-expansion-boundary-spec.md](docs/statebook-p17-adversarial-corpus-expansion-boundary-spec.md) | Docs-first P17 authorization for further hermetic TD-004 corpus cases and future-valuation reject; no live authority. |
+| [docs/statebook-p17-adversarial-corpus-expansion-implementation-notes.md](docs/statebook-p17-adversarial-corpus-expansion-implementation-notes.md) | Implemented P17 future-valuation reject and five additional hermetic TD-004 corpus cases. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -1151,9 +1152,14 @@ See
 This is local hermetic recovery-drill regression evidence only. No value moves.
 
 Statebook P17 authorization status: the named docs-first slice
-`statebook-p17-adversarial-corpus-expansion-boundary` freezes further hermetic
-TD-004 corpus expansion and a fail-closed future-valuation observation check.
-Live authority remains deferred. This commit adds no Rust or Cargo change.
+`statebook-p17-adversarial-corpus-expansion-boundary` freezes further corpus
+expansion. The separately committed implementation slice
+`statebook-p17-adversarial-corpus-expansion` rejects future valuation
+observations and adds five hermetic TD-004 corpus cases. Live authority remains
+deferred. See
+[docs/statebook-p17-adversarial-corpus-expansion-implementation-notes.md](docs/statebook-p17-adversarial-corpus-expansion-implementation-notes.md).
+
+This is local hermetic adversarial fixture regression evidence only. No value moves.
 
 ## Current Implementation Status
 

@@ -21709,16 +21709,27 @@ satisfaction, SOTA, independent audit, or full-security claims.
 Status: documentation-first boundary complete for named state slice
 `statebook-p17-adversarial-corpus-expansion-boundary`.
 
-The next separately committed slice is
-`statebook-p17-adversarial-corpus-expansion`. It may add further encodable
-TD-004 harness cases and a fail-closed future-valuation observation check. Live
-authority remains deferred. Outputs never move value.
+## Integration Track: Statebook P17 Adversarial Corpus Expansion Implementation
 
-Validation gate: new corpus cases fail-closed; future valuation rejects;
-Halted→Normal forbidden; suites green; format/test/Clippy; claim-boundary
-hygiene.
+Status: implemented under named state slice
+`statebook-p17-adversarial-corpus-expansion`.
 
-Anti-goals: live authority, complete TD-004 claim, trading, signing, custody,
-pause product, transfer command, admission mutation, Evidence Ledger append,
-scalar trust score, production readiness, SOTA, independent audit, or
-full-security claims.
+Delivered:
+
+- future valuation observation reject;
+- five new harness corpus cases (33 encodable cases total).
+
+Live authority remains deferred behind the legal/ops gate.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic adversarial fixture regression only. No value
+moves. Not complete TD-004 satisfaction, live authority, production readiness,
+SOTA, independent audit, or full-security claims.

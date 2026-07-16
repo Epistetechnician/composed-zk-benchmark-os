@@ -11443,5 +11443,26 @@ Outcome: `DocumentationOnly`, `Level0DesignNote`, named state slice
 
 This documentation-only slice creates no proof, accepted evidence, Level2+,
 score axis, production readiness, SOTA, breakthrough, full security, external
-audit, or action authority. Implementation requires a separately committed
-state slice `statebook-p17-adversarial-corpus-expansion`.
+audit, or action authority.
+
+## Statebook P17 Adversarial Corpus Expansion Implementation
+
+Date: 16 July 2026.
+
+Outcome: `Level1LocalReplay`, `Pass`, named state slice
+`statebook-p17-adversarial-corpus-expansion`.
+
+State slice:
+
+- additive future-observation reject in
+  `crates/statebook-settlement/src/p4/valuation.rs`;
+- additive harness corpus cases under `crates/statebook-e2e-harness`;
+- `docs/statebook-p17-adversarial-corpus-expansion-implementation-notes.md`;
+- navigation/status mirrors.
+
+Thirty-three encodable corpus cases replay fail-closed; existing suites remain
+green.
+
+This is local hermetic adversarial fixture regression evidence only. It does
+not establish complete TD-004 satisfaction, live authority, production
+readiness, SOTA, independent audit, or full security. No value moves.
