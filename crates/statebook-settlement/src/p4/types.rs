@@ -340,7 +340,7 @@ pub struct GateOverridesV1 {
     pub(crate) linked_plan_valid: Option<bool>,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct EvidenceObservationV1 {
     pub(crate) property: AssurancePropertyV1,
     pub(crate) verdict: AssuranceVerdictV1,
