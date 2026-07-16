@@ -917,6 +917,7 @@ Surface DSL
 | [docs/statebook-p1-core-semantic-fixtures-boundary-spec.md](docs/statebook-p1-core-semantic-fixtures-boundary-spec.md) | Docs-first P1 authorization for one isolated exact-arithmetic semantic-normalization and deterministic `StateKeyV1` fixture crate; no execution, settlement, HSAI, or external-I/O authority. |
 | [docs/statebook-p1-core-semantic-fixtures-implementation-notes.md](docs/statebook-p1-core-semantic-fixtures-implementation-notes.md) | Implemented P1 local fixture crate: closed semantic completeness, exact normalization, source-lineage separation, frozen TLV `StateKeyV1`, 27 material mutations, negatives, and a second test encoder. |
 | [docs/797-phase-hsai-native-transcript-source-scan-correction-boundary.md](docs/797-phase-hsai-native-transcript-source-scan-correction-boundary.md) | Docs-first correction boundary for exact Phase 792/794 native-transcript test-only source-scan exceptions; no broader process or network authority. |
+| [docs/798-phase-hsai-native-transcript-source-scan-correction-implementation.md](docs/798-phase-hsai-native-transcript-source-scan-correction-implementation.md) | Implemented exact Phase 792/794 native-transcript test-only scanner exceptions with file, line, function, executable, and near-miss confinement. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -953,6 +954,11 @@ Phase 797 status: the named docs-first slice
 future correction to the HSAI claim-boundary scanner. It permits no Rust change
 in this commit and no exception outside the two named Phase 792/794 integration
 test files, exact source lines, and exact enclosing test functions.
+
+Phase 798 status: the named implementation slice
+`hsai-native-transcript-source-scan-authorized-test-exceptions` corrects the
+inherited HSAI gate without broadening runtime authority. Exact and near-miss
+tests bind every exception to the committed Phase 792/794 security-test surface.
 
 ## Current Implementation Status
 

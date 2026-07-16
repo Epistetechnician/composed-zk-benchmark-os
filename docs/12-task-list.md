@@ -22064,3 +22064,19 @@ Validation gate: focused scanner tests, the native-transcript package suite,
 formatting, warning-denied focused Clippy, repository docs/hygiene checks, and a
 clean-tree workspace gate. The current dirty admission rewrite is independent
 and must not be staged, restored, or absorbed.
+
+## Phase 798 HSAI Native-Transcript Source-Scan Correction Implementation
+
+Status: implemented for named state slice
+`hsai-native-transcript-source-scan-authorized-test-exceptions`.
+
+Deliverables: one exact exception helper in the HSAI claim-boundary scanner,
+positive coverage for all eleven committed matches, and near-miss rejection for
+different files, functions, executables, import shapes, and literal contexts.
+The native-transcript integration tests and production code remain unchanged.
+
+Exit criteria: the exact scanner test, full scanner suite, native-transcript
+suite, formatting, focused warning-denied Clippy, docs/hygiene checks, and a
+clean-tree workspace gate pass. All do. Full clean-tree workspace Clippy reaches
+one unrelated committed `const_is_empty` finding in a zkbench-core test; the
+finding is recorded rather than absorbed. Dirty admission work remains excluded.

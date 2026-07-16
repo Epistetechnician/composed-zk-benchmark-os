@@ -11381,3 +11381,29 @@ breaks all-target compilation by removing public APIs used by a committed
 example. That edit is outside this state slice and remains untouched. Therefore
 this docs-first result claims only boundary correctness, not a globally green
 workspace.
+
+## Phase 798 HSAI Native-Transcript Source-Scan Correction Implementation
+
+Date: 16 July 2026.
+
+Outcome: implemented for named state slice
+`hsai-native-transcript-source-scan-authorized-test-exceptions`.
+
+The HSAI scanner now recognizes the eleven committed Phase 792/794 test-only
+matches through one exact helper. File path, source line, forbidden pattern,
+enclosing function, and the fixed `/usr/bin/mkfifo` executable are bound where
+applicable. Adversarial tests reject different files, functions, executables,
+import shapes, and literal contexts. No native-transcript source or production
+runtime changed.
+
+The evidence ceiling is local scanner regression evidence. This correction
+does not create process or network authority or any stronger system claim.
+
+Final validation: exact and full scanner tests pass 7/7; native-transcript tests
+pass 50/50; clean-tree focused warning-denied Clippy passes; repository
+docs/hygiene checks pass; and clean-tree workspace tests across all targets and
+features pass. Clean-tree full workspace warning-denied Clippy has one
+independent committed `const_is_empty` finding in
+`zkbench-core/tests/operator_soak_campaign_contract.rs`. That file is outside
+this slice and remains unchanged. The live worktree's separate admission rewrite
+also remains excluded and untouched.
