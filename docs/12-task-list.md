@@ -21616,16 +21616,28 @@ independent audit, or full-security claims.
 Status: documentation-first boundary complete for named state slice
 `statebook-p14-cancel-race-intents-boundary`.
 
-The next separately committed slice is `statebook-p14-cancel-race-intents`. It
-may add `apply_cancel_v1`, bind intent/destination on queue, reject
-same-digest cancel and destination replacement without new intent, and extend
-harness corpus coverage for TD-004 #25 / P4 #12. Live authority remains
-deferred. Outputs never move value.
+## Integration Track: Statebook P14 Cancel And Race Intents Implementation
 
-Validation gate: cancel with new intent; same-digest cancel reject; cancelled
-decide reject; destination mismatch reject; race zero-instant; suites green;
-format/test/Clippy; claim-boundary hygiene.
+Status: implemented under named state slice `statebook-p14-cancel-race-intents`.
 
-Anti-goals: live authority, trading, signing, custody, pause product, transfer,
-admission mutation, Evidence Ledger append, scalar trust score, complete TD-004
-claim, production readiness, SOTA, independent audit, or full-security claims.
+Delivered:
+
+- `apply_cancel_v1` with new-intent requirement;
+- bound intent/destination on Queued;
+- Cancelled / destination-mismatch reject paths;
+- five settlement cancel tests and two new harness corpus cases.
+
+Live authority remains deferred behind the legal/ops gate.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic cancel/race regression only. No value moves. Not
+live pause authority, complete TD-004 satisfaction, production readiness, SOTA,
+independent audit, or full-security claims.

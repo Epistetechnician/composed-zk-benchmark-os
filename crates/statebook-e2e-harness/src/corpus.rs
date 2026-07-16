@@ -1,8 +1,8 @@
 use serde_json::{json, Value};
 use statebook_settlement::{
-    apply_challenge_v1, decide_and_transition, parse_settlement_scenario_v1,
-    ChallengeApplyResultV1, ChallengeKindV1, ChallengeSubmissionV1, ClockV1, DecisionOutcomeV1,
-    DecisionRecordV1, SettlementScenarioV1,
+    apply_cancel_v1, apply_challenge_v1, decide_and_transition, intent_digest,
+    parse_settlement_scenario_v1, ChallengeApplyResultV1, ChallengeKindV1, ChallengeSubmissionV1,
+    ClockV1, DecisionOutcomeV1, DecisionRecordV1, DigestV1, SettlementScenarioV1,
 };
 
 use crate::error::EvaluationErrorV1;
@@ -140,6 +140,14 @@ pub fn encodable_corpus_cases_v1() -> &'static [CorpusCaseV1] {
         },
         CorpusCaseV1 {
             id: "td004_21_policy_relax_rejected",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_25_cancel_race",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_25_destination_without_new_intent",
             expected_outcome: DecisionOutcomeV1::Rejected,
         },
     ]
@@ -298,6 +306,10 @@ pub fn build_corpus_scenario_v1(id: &str) -> Result<SettlementScenarioV1, Evalua
             value["policy"]["assurance_tiers"]["currently_assured"]["instant_fraction"] =
                 json!({ "numerator": "1", "denominator": "2" });
         }),
+        "td004_25_cancel_race" => mutate(|_| {}),
+        "td004_25_destination_without_new_intent" => mutate(|value| {
+            value["request"]["destination"] = json!("dest-replacement");
+        }),
         _ => Err(EvaluationErrorV1::Settlement(format!(
             "unknown corpus id: {id}"
         ))),
@@ -358,9 +370,56 @@ fn replay_challenge_corpus_case_v1(
     }
 }
 
+fn replay_cancel_race_corpus_case_v1(id: &str) -> Result<CorpusReplayReceiptV1, EvaluationErrorV1> {
+    let scenario = parse_settlement_scenario_v1(QUEUED)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let first = run(scenario)?;
+    if first.outcome() != DecisionOutcomeV1::Queued {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} expected Queued setup got {:?}",
+            first.outcome()
+        )));
+    }
+    let scenario = parse_settlement_scenario_v1(QUEUED)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let (request, _, _) = scenario.into_kernel_input();
+    let bound = first
+        .next_state()
+        .bound_intent_digest()
+        .ok_or_else(|| EvaluationErrorV1::Settlement(format!("{id} missing bound intent")))?;
+    let mut state = first.next_state().clone();
+    apply_cancel_v1(&mut state, bound, DigestV1::from_raw_bytes([0x25; 32]))
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let record = decide_and_transition(request, state, ClockV1::new(1_710_100_000))
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    Ok(receipt(id, &record))
+}
+
+fn replay_destination_mismatch_corpus_case_v1(
+    id: &str,
+) -> Result<CorpusReplayReceiptV1, EvaluationErrorV1> {
+    let scenario = build_corpus_scenario_v1(id)?;
+    let (request, _, _) = scenario.clone().into_kernel_input();
+    let intent = intent_digest(&request);
+    let scenario = mutate(|value| {
+        value["initial_state"]["queue"]["status"] = json!("queued");
+        value["initial_state"]["bound_intent_digest"] = json!(intent.to_hex());
+        value["initial_state"]["bound_destination"] = json!("dest-original");
+        value["request"]["destination"] = json!("dest-replacement");
+    })?;
+    let record = run(scenario)?;
+    Ok(receipt(id, &record))
+}
+
 pub fn replay_corpus_case_v1(id: &str) -> Result<CorpusReplayReceiptV1, EvaluationErrorV1> {
     if let Some(kind) = challenge_kind_for_corpus(id) {
         return replay_challenge_corpus_case_v1(id, kind);
+    }
+    if id == "td004_25_cancel_race" {
+        return replay_cancel_race_corpus_case_v1(id);
+    }
+    if id == "td004_25_destination_without_new_intent" {
+        return replay_destination_mismatch_corpus_case_v1(id);
     }
     let scenario = build_corpus_scenario_v1(id)?;
     let record = run(scenario)?;

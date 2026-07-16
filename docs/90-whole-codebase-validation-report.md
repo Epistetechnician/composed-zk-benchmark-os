@@ -11340,5 +11340,27 @@ Outcome: `DocumentationOnly`, `Level0DesignNote`, named state slice
 
 This documentation-only slice creates no proof, accepted evidence, Level2+,
 score axis, production readiness, SOTA, breakthrough, full security, external
-audit, or action authority. Implementation requires a separately committed
-state slice `statebook-p14-cancel-race-intents`.
+audit, or action authority.
+
+## Statebook P14 Cancel And Race Intents Implementation
+
+Date: 16 July 2026.
+
+Outcome: `Level1LocalReplay`, `Pass`, named state slice
+`statebook-p14-cancel-race-intents`.
+
+State slice:
+
+- additive `crates/statebook-settlement/src/p4/{cancel,kernel,types,digest,parse,mod}.rs`
+  and `src/lib.rs` exports;
+- `crates/statebook-settlement/tests/cancel_race.rs`;
+- additive harness corpus cases under `crates/statebook-e2e-harness`;
+- `docs/statebook-p14-cancel-race-intents-implementation-notes.md`;
+- navigation/status mirrors.
+
+Cancel and destination-replacement races remain fail-closed with zero instant;
+existing P4/P9–P13 suites remain green.
+
+This is local hermetic cancel/race regression evidence only. It does not
+establish live pause authority, complete TD-004 satisfaction, production
+readiness, SOTA, independent audit, or full security. No value moves.

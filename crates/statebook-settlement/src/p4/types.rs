@@ -126,6 +126,7 @@ pub enum DecisionReasonV1 {
     EvidenceExpired,
     PolicyRollback,
     PolicyRelaxRejected,
+    QueueCancelled,
     RecoveryFailed,
     IntentDigestMismatch,
     ModelConfidenceIgnored,
@@ -295,6 +296,10 @@ impl ExternalizationRequestV1 {
 
     pub fn asset(&self) -> &str {
         &self.asset
+    }
+
+    pub fn destination(&self) -> &str {
+        &self.destination
     }
 
     pub const fn financial_basis(&self) -> &FinancialBasisV1 {
@@ -504,6 +509,12 @@ pub enum ChallengeApplyResultV1 {
     Rejected { reason: DecisionReasonV1 },
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum CancelApplyResultV1 {
+    Accepted,
+    Rejected { reason: DecisionReasonV1 },
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct QueuePartV1 {
     part_id: String,
@@ -574,6 +585,8 @@ pub struct SettlementStateV1 {
     pub(crate) active_policy: SettlementPolicyV1,
     pub(crate) last_policy_change_at: i64,
     pub(crate) clean_epochs: u32,
+    pub(crate) bound_intent_digest: Option<DigestV1>,
+    pub(crate) bound_destination: Option<String>,
 }
 
 impl QueueStateV1 {
@@ -607,6 +620,14 @@ impl SettlementStateV1 {
 
     pub const fn recovery(&self) -> &RecoverySnapshotV1 {
         &self.recovery
+    }
+
+    pub const fn bound_intent_digest(&self) -> Option<DigestV1> {
+        self.bound_intent_digest
+    }
+
+    pub fn bound_destination(&self) -> Option<&str> {
+        self.bound_destination.as_deref()
     }
 }
 
