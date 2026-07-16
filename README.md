@@ -875,6 +875,7 @@ Surface DSL
 | [docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md](docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md) | Implemented P5 `statebook-report` crate: hermetic/HSAI fixture adapters, `grants_authority=false` handoff, portable digest-bound audit bundles, independent readback, and domain-separated digests; no value moves. |
 | [docs/statebook-p6-read-only-external-sources-boundary-spec.md](docs/statebook-p6-read-only-external-sources-boundary-spec.md) | Docs-first P6 authorization for captured-first read-only external import (`statebook-source`), Stage 5 freeze for one synthetic clearing profile, provenance registry, and fail-closed import; no live network in first implementation, no authority. |
 | [docs/statebook-p6-read-only-external-sources-implementation-notes.md](docs/statebook-p6-read-only-external-sources-implementation-notes.md) | Implemented P6 `statebook-source` crate: captured-first synthetic clearing import, provenance registry, fail-closed digests/nonclaims, deferred live network; no authority. |
+| [docs/statebook-p7-authority-integration-boundary-spec.md](docs/statebook-p7-authority-integration-boundary-spec.md) | Docs-first P7 legal/ops authorization for hermetic synthetic authority-statement attach (`statebook-authority`), capital overlay only, deferred live authority products; no value moves. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -1007,6 +1008,16 @@ or value movement is authorized. See
 [docs/statebook-p6-read-only-external-sources-implementation-notes.md](docs/statebook-p6-read-only-external-sources-implementation-notes.md).
 
 This is local hermetic captured-source import regression evidence only. No value moves.
+
+Statebook P7 authorization status: the named docs-first slice
+`statebook-p7-authority-integration-boundary` freezes a future hermetic synthetic
+authority-statement attach surface in `statebook-authority`. The legal/ops gate
+requires threat model, legal review, operational evidence, loss limits, and an
+authority owner before any live execution, custody, signing, pause, real margin
+recognition, or settlement product. The first implementation is limited to
+capital-recognition overlay with permanent `grants_execution_authority=false`.
+All P1-P6 identities stay unchanged. No value movement is authorized. This
+commit adds no Rust or Cargo change.
 
 ## Current Implementation Status
 
