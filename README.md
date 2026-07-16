@@ -993,6 +993,12 @@ change. The follow-on documentation-only state slice
 recovery limits with their closed identities: nine unique properties and
 fourteen implementation-owned paths.
 
+The documentation-only state slice
+`statebook-p3-capital-context-binding-correction` also requires every synthetic
+capital receipt to bind the full fixture authority/account/model/rule/context
+digest. Mismatch rejects composition; coherent rebinding remains a different
+hermetic fixture and creates no clearing or margin authority.
+
 ## Current Implementation Status
 
 - `zkbench-core` exists as a Rust core crate.

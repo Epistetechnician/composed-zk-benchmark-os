@@ -14,12 +14,24 @@ Future implementation state slice:
 Closed-identity bound correction state slice:
 `statebook-p3-closed-identity-bound-correction`.
 
+Capital-context binding correction state slice:
+`statebook-p3-capital-context-binding-correction`.
+
 The correction sets the effective assurance-observation ceiling to the nine
 unique closed properties and the effective recovery-path ceiling to the
 fourteen implementation-owned path ids. The earlier nominal 128 and 64 values
 could not be reached by any valid fixture because duplicate assurance
 properties and unknown or duplicate recovery paths reject. This is a
 documentation-only consistency correction and grants no new capability.
+
+The capital-context correction binds every synthetic receipt to the statement
+context it claims to interpret. A domain-separated digest covers the analysis
+subject, authority, eligible account, model id/version/digest, haircut, margin
+rule, jurisdiction, liquidation horizon, and observation interval. A receipt
+whose context digest does not match the recomputed fixture context rejects the
+composition. Coherently changing the context and receipt digest creates a
+different synthetic fixture; it does not establish external recognition or
+authority.
 
 ## Objective
 
@@ -352,6 +364,7 @@ statebook:p3-payoff-report:v1\0
 statebook:p3-analysis-subject:v1\0
 statebook:p3-execution-fixture:v1\0
 statebook:p3-capital-fixture:v1\0
+statebook:p3-capital-context:v1\0
 statebook:p3-settlement-fixture:v1\0
 statebook:p3-assurance-fixture:v1\0
 statebook:p3-recovery-profile:v1\0
@@ -461,7 +474,9 @@ digests.
 Capital fixture fields are limited to subject digest, observation interval,
 named synthetic authority and account, model id/version/digest, haircut and
 margin-rule refs, jurisdiction, liquidation horizon, recognized receipt refs
-and exact quantities, explicit fixture verdict, and source digests.
+and exact quantities, explicit fixture verdict, a recomputed capital-context
+digest on each receipt, and source digests. Context-digest mismatch returns a
+typed evaluation error and produces no composition.
 
 Settlement fixture fields are limited to subject digest, source and destination
 finality domains, six distinct stage observations, reversal and insolvency
@@ -556,8 +571,9 @@ The future implementation must cover:
 4. explicitly unsupported required atomicity or zero common capacity ->
    `NotExecutableInFixture`;
 5. full, partial, denied, absent, and expired synthetic capital statements;
-6. capital subject, authority, account, model, or time mismatch cannot produce
-   fixture recognition;
+6. capital subject mismatch rejects, and authority, account, model, rule,
+   jurisdiction, haircut, horizon, or time mutation without a matching
+   recomputed receipt context digest cannot produce fixture recognition;
 7. all six settlement statuses and the fixed precedence order;
 8. source finality alone cannot produce `FinalInFixture`;
 9. all nine assurance properties present with current-root disclosure;

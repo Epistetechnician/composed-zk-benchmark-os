@@ -22160,3 +22160,10 @@ nominal assurance-observation and recovery-path exact limits with the closed
 semantic maxima: nine unique assurance properties and fourteen
 implementation-owned recovery paths. Exact-limit and limit-plus-one tests use
 those effective maxima. No implementation authority or capability is added.
+
+Capital binding correction: named documentation-only state slice
+`statebook-p3-capital-context-binding-correction` adds the canonical domain
+`statebook:p3-capital-context:v1\0`. Every fixture receipt must carry the digest
+of its analysis subject, authority, eligible account, model, haircut, rule,
+jurisdiction, horizon, and observation interval. Mismatch rejects before report
+composition. Coherent rebinding remains synthetic fixture evidence only.
