@@ -21998,3 +21998,51 @@ Exit criteria: the boundary is mirrored and committed separately; P1 stays
 inside the exact authorized file surface; only complete validated semantics can
 produce a key; the golden vector is cross-checked by an implementation-diverse
 test encoder; all gates pass without staging or mutating unrelated dirty work.
+
+## Integration Track: Statebook P1 Core Semantic Fixtures Implementation
+
+Status: implemented locally with fixture-backed regression evidence. See
+`docs/statebook-p1-core-semantic-fixtures-implementation-notes.md`.
+
+Named state slice: `statebook-p1-core-semantic-fixtures`.
+
+Implemented:
+
+- added one isolated `statebook-core` workspace crate with no HSAI or
+  `zkbench-core` dependency;
+- rejected duplicate JSON keys before typed deserialization and kept source-byte
+  SHA-256 independent of declared content;
+- enforced one closed 31-field normalization profile with explicit unknown
+  mappings;
+- normalized exact decimals and signed rationals without floating point,
+  saturation, implicit rounding, or conversion;
+- emitted `Complete`, `Incomplete`, or `Unknown`, with unsupported material
+  terms retained rather than discarded;
+- lowered only complete terminal indicator inputs into opaque validated
+  semantics;
+- separated source and profile lineage from StateKey while binding both into a
+  separate validated-contract receipt digest;
+- froze a 701-byte manual TLV preimage and
+  `StateKeyV1=f1662f3fb5a10c074680c0baf76ba488b7230337456358be92f3127d8a632c08`;
+- added 27 material single-field mutations, endpoint-policy divergence,
+  rational and decimal convergence, serialization and set-order invariance,
+  lineage-separation tests, malformed/incomplete/unknown/unsupported negatives,
+  and a `ring`-based second test encoder independent of production `sha2`
+  encoding helpers.
+
+Validation gate: 13 focused tests; warning-denied focused clippy; formatting;
+repository hygiene and claim-boundary checks; full workspace test and clippy;
+diff hygiene; immutable publication artifacts; unrelated dirty paths excluded
+from staging.
+
+Anti-goals: economic-equivalence claims, payoff evaluation, residuals,
+execution, capital, margin, oracle truth, legal fungibility, custody, signing,
+pause, transfer, settlement, HSAI mapping, network, credentials, processes,
+filesystem writes, external adapters, accepted evidence, benchmark outputs,
+Level2+, semantic correctness, production readiness, SOTA, proof, independent
+verification, external audit, or full security.
+
+Exit criteria: focused and full gates pass; the golden vector agrees byte for
+byte across both test implementations; all implementation paths match the
+authorized surface; the implementation commit excludes the preserved AGENTS
+routing hunk, admission edit, `docs/agents/`, and A3L6 files.

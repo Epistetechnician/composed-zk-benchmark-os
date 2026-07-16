@@ -2135,6 +2135,25 @@ filesystem writes, external adapters, accepted Evidence Ledger mutation,
 benchmark output, Level2+ evidence, semantic-correctness, production-readiness,
 SOTA, proof, independent-verification, external-audit, or full-security claims.
 
+Explicit Statebook P1 core semantic-fixtures implementation now allowed and
+implemented under named state slice `statebook-p1-core-semantic-fixtures`.
+The implemented surface is exactly `crates/statebook-core`, root `Cargo.toml`
+workspace membership, the resulting `Cargo.lock` entry,
+`docs/statebook-p1-core-semantic-fixtures-implementation-notes.md`, and the four
+standard mirrors. It is limited to duplicate-key-aware parsing of one synthetic
+source schema and one closed profile schema, exact decimal and signed-rational
+normalization, three-state semantic completeness, one unevaluated indicator
+payoff, opaque validated lowering, separate source-lineage binding, manual TLV
+`StateKeyV1`, small JSON fixtures, material-mutation and negative tests, and one
+test-only implementation-diverse encoder using `ring` while production uses
+`sha2`. It does not permit payoff evaluation, residuals, execution or books,
+capital or margin recognition, oracle truth, legal equivalence, custody,
+signing, pause, transfer, settlement, value movement, HSAI mapping, network,
+credentials, process spawning, filesystem writes, external adapters, accepted
+Evidence Ledger mutation, benchmark output, Level2+, semantic correctness,
+production readiness, SOTA, proof, independent verification, external audit,
+or full security.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.
