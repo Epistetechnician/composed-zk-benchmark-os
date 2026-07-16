@@ -21514,3 +21514,24 @@ Claim ceiling: local hermetic labeled-fixture StateKey equivalence metrics
 only. No value moves. Not automatic economic-equivalence discovery, legal
 fungibility, AI oracle, live authority, production readiness, SOTA, independent
 audit, or full-security claims.
+
+## Integration Track: Statebook P11 Breaker TTL And Resolution Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p11-breaker-ttl-resolution-boundary`.
+
+The next separately committed slice is
+`statebook-p11-breaker-ttl-resolution`. It may wire P4 breaker TTL exhaustion
+into `decide_and_transition`, block release in Resolution / expired scopes
+without silent renewal, add `attempt_breaker_renewal_v1`, and extend harness
+corpus coverage. Challenge grammar, hysteresis, and cancel remain deferred.
+Outputs never move value or grant live authority.
+
+Validation gate: TTL→Resolution reject; expired-below-ceiling blocks without
+silent renew; renewal at ceiling rejects; renewal below ceiling succeeds;
+existing P4/P9 suites green; focused format/test/Clippy; claim-boundary hygiene.
+
+Anti-goals: challenge grammar, hysteresis relax/rollback, cancel intents, live
+authority, trading, signing, custody, pause product, transfer, admission
+mutation, Evidence Ledger append, scalar trust score, complete TD-004 claim,
+production readiness, SOTA, independent audit, or full-security claims.

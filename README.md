@@ -883,6 +883,7 @@ Surface DSL
 | [docs/statebook-p9-adversarial-corpus-replay-implementation-notes.md](docs/statebook-p9-adversarial-corpus-replay-implementation-notes.md) | Implemented P9 encodable TD-004 / P4 adversarial corpus replay in `statebook-e2e-harness`; fail-closed zero-instant invariants; no kernel edits. |
 | [docs/statebook-p10-semantic-equivalence-corpus-boundary-spec.md](docs/statebook-p10-semantic-equivalence-corpus-boundary-spec.md) | Docs-first P10 authorization for labeled StateKey equivalence precision/recall corpus in `statebook-e2e-harness`; fixture-local metrics only. |
 | [docs/statebook-p10-semantic-equivalence-corpus-implementation-notes.md](docs/statebook-p10-semantic-equivalence-corpus-implementation-notes.md) | Implemented P10 labeled StateKey equivalence corpus with fixture-local precision/recall=1 and false-equivalence rate=0. |
+| [docs/statebook-p11-breaker-ttl-resolution-boundary-spec.md](docs/statebook-p11-breaker-ttl-resolution-boundary-spec.md) | Docs-first P11 authorization to wire P4 breaker TTL exhaustion into Resolution with fail-closed renewal rejection; no live authority. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -1068,6 +1069,14 @@ See
 [docs/statebook-p10-semantic-equivalence-corpus-implementation-notes.md](docs/statebook-p10-semantic-equivalence-corpus-implementation-notes.md).
 
 This is local hermetic labeled-fixture StateKey equivalence evidence only. No value moves.
+
+Statebook P11 authorization status: the named docs-first slice
+`statebook-p11-breaker-ttl-resolution-boundary` freezes future P4 kernel wiring
+of breaker TTL exhaustion into Resolution, fail-closed release blocking without
+silent renewal, and malicious renewal rejection. Challenge grammar, hysteresis,
+and cancel remain deferred. All prior identities stay unchanged except appended
+decision-reason tags for new paths. No live authority or value movement is
+authorized. This commit adds no Rust or Cargo change.
 
 ## Current Implementation Status
 
