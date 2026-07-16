@@ -21451,3 +21451,23 @@ surface evidence only. No value moves. Completing P8 does not satisfy the P7
 legal/ops gate for live authority products. No admission mutation, Evidence
 Ledger append, scalar trust score, production thresholds, production readiness,
 SOTA, independent audit, or full-security claims.
+
+## Integration Track: Statebook P9 Adversarial Corpus Replay Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p9-adversarial-corpus-replay-boundary`.
+
+The next separately committed slice is
+`statebook-p9-adversarial-corpus-replay`. It may add corpus builders/tests under
+`crates/statebook-e2e-harness` for the encodable TD-004 / P4 adversarial subset
+using public P4 APIs only. No P4 kernel edits. P1–P8 identities remain
+unchanged. Outputs never move value or grant live authority.
+
+Validation gate: every listed encodable case fails closed with zero instant
+release when not Immediate; chained timer-alone case; focused format/test/
+Clippy; unchanged P1–P8 tests; claim-boundary hygiene.
+
+Anti-goals: kernel feature expansion, live authority products, trading,
+signing, custody, pause, transfer, admission mutation, Evidence Ledger append,
+scalar trust score, empirical calibration, complete TD-004 claim, production
+readiness, SOTA, independent audit, or full-security claims.

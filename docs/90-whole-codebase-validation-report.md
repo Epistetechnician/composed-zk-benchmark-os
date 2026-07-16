@@ -11111,3 +11111,28 @@ evidence only. It does not establish live clearing recognition, legal finality,
 admission authority, Evidence Ledger mutation, production thresholds,
 production readiness, SOTA, independent audit, or full security. Completing P8
 does not satisfy the P7 legal/ops gate. No value moves.
+
+## Statebook P9 Adversarial Corpus Replay Boundary
+
+Date: 16 July 2026.
+
+Outcome: `DocumentationOnly`, `NotRun`, named state slice
+`statebook-p9-adversarial-corpus-replay-boundary`.
+
+State slice:
+
+- `docs/statebook-p9-adversarial-corpus-replay-boundary-spec.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+The boundary freezes encodable TD-004 / P4 adversarial corpus replay inside
+`statebook-e2e-harness` using public P4 APIs. Kernel-deferred scenarios remain
+outside. All P1–P8 identities stay unchanged.
+
+This documentation-only slice adds no Rust or Cargo change and creates no
+proof, accepted evidence, Level2+, score axis, semantic correctness, production
+readiness, SOTA, breakthrough, full security, external audit, or action
+authority. Implementation requires a separately committed state slice
+`statebook-p9-adversarial-corpus-replay`.
