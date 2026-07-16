@@ -157,6 +157,12 @@ impl DigestV1 {
     }
 }
 
+impl DigestV1 {
+    pub fn from_raw_bytes(bytes: [u8; 32]) -> Self {
+        Self(bytes)
+    }
+}
+
 impl fmt::Debug for DigestV1 {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         formatter
@@ -385,7 +391,7 @@ const REQUIRED_RECOVERY_PATHS: [&str; 14] = [
     "internal-credit-monetization",
 ];
 
-#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct AssuranceRootV1 {
     root_class: RootClassV1,
     root_id: String,
