@@ -21305,3 +21305,43 @@ Claim ceiling: local hermetic fixture regression evidence only. No value moves. 
 thirty-seven-scenario adversarial corpus replay remains a documented follow-on fixture
 expansion; minimum acceptance scenarios and resource bounds are covered.
 
+## Integration Track: Statebook P5 Evidence Adapters And Report Bundles Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p5-evidence-adapters-and-report-bundles-boundary`.
+
+## Integration Track: Statebook P5 Evidence Adapters And Report Bundles Implementation
+
+Status: implemented under named state slice
+`statebook-p5-evidence-adapters-and-report-bundles`.
+
+Delivered in isolated `crates/statebook-report`:
+
+- hermetic fixture and HSAI fixture-envelope adapters preserving unknown facts
+  and evidence maturity;
+- proposal-only decision handoff with `grants_authority=false`;
+- portable digest-bound audit-bundle materialization and independent readback;
+- domain-separated P5 TLV digests with an independent `ring` golden encoder;
+- nineteen focused integration tests covering round-trip, fail-closed readback,
+  adapters, claim boundary, and digest goldens.
+
+P1-P4 identities and the P4 kernel remain unchanged. No `statebook-hsai` or
+`statebook-sim` crate was added.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-report -- --check
+cargo test -p statebook-report --tests
+cargo clippy -p statebook-report --all-targets -- -D warnings
+cargo test -p statebook-core -p statebook-settlement --tests
+```
+
+Claim ceiling: local hermetic digest-bound audit-bundle and adapter regression
+only. No value moves. No P6 external sources, P7 authority, network, credentials,
+admission mutation, Evidence Ledger append, scalar trust score, production
+readiness, SOTA, independent audit, or full-security claims. Full eighteen-scenario
+adversarial corpus replay and in-bundle P1-P4 golden byte checks remain documented
+follow-on fixture expansion; minimum acceptance scenarios and resource bounds are
+covered.
+
