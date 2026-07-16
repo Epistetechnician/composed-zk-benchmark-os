@@ -1,0 +1,126 @@
+{
+  "schema_version": "statebook-completeness-fixture:v1",
+  "execution": {
+    "analysis_subject_digest": "fd4c10a8b9cadc57e5021b9fdf380ce3abbbb7e270bbb981113de47eded7d73a",
+    "observed_at": 1000,
+    "expires_at": 2000,
+    "venue_id": "fixture-venue",
+    "account_id": "fixture-account",
+    "legs": [{
+      "leg_id": "candidate-1",
+      "state_key": "f1662f3fb5a10c074680c0baf76ba488b7230337456358be92f3127d8a632c08",
+      "asset": "fixture.asset.USD",
+      "side": "buy",
+      "requested_quantity": {"numerator":"1","denominator":"1"},
+      "reference_price": {"numerator":"100","denominator":"1"},
+      "price_bound": {"numerator":"102","denominator":"1"},
+      "fee_rate": {"numerator":"1","denominator":"1000"},
+      "maximum_fee": {"numerator":"1","denominator":"1"},
+      "maximum_slippage": {"numerator":"1","denominator":"100"},
+      "deadline": 1900,
+      "queue": "supported",
+      "atomicity": "supported",
+      "leg_failure_model": "supported",
+      "levels": [
+        {"level_id":"level-b","price":{"numerator":"101","denominator":"1"},"quantity":{"numerator":"1","denominator":"2"}},
+        {"level_id":"level-a","price":{"numerator":"100","denominator":"1"},"quantity":{"numerator":"1","denominator":"2"}}
+      ]
+    }],
+    "source_evidence_digests": ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"]
+  },
+  "capital": {
+    "analysis_subject_digest": "fd4c10a8b9cadc57e5021b9fdf380ce3abbbb7e270bbb981113de47eded7d73a",
+    "observed_at": 1000,
+    "expires_at": 2000,
+    "authority_id": "fixture-clearing-authority",
+    "eligible_account": "fixture-account",
+    "model_id": "fixture-margin-model",
+    "model_version": 1,
+    "model_digest": "1111111111111111111111111111111111111111111111111111111111111111",
+    "haircut": {"numerator":"0","denominator":"1"},
+    "margin_rule_id": "fixture-rule",
+    "jurisdiction": "fixture-jurisdiction",
+    "liquidation_horizon_seconds": 3600,
+    "receipts": [{
+      "state_key": "f1662f3fb5a10c074680c0baf76ba488b7230337456358be92f3127d8a632c08",
+      "recognized_quantity": {"numerator":"1","denominator":"1"},
+      "verdict": "recognized",
+      "capital_context_digest": "8c59a23201677f0502e0b0f0fae5997838ef37d0f4b407b9440c7bd4aa5c4e96"
+    }],
+    "source_evidence_digests": ["bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"]
+  },
+  "settlement": {
+    "analysis_subject_digest": "fd4c10a8b9cadc57e5021b9fdf380ce3abbbb7e270bbb981113de47eded7d73a",
+    "observed_at": 1000,
+    "expires_at": 2000,
+    "source_finality_domain": "fixture-finality",
+    "destination_finality_domain": "fixture-finality",
+    "domains_compatible": true,
+    "transition_supported": true,
+    "reversal_rule": "fixture-reversal-rule",
+    "insolvency_rule": "fixture-insolvency-rule",
+    "disputed": false,
+    "reversed": false,
+    "reconciliation_mismatch": false,
+    "stages": [
+      {"obligation_id":"obligation-1","stage":"source_observation","verdict":"passed"},
+      {"obligation_id":"obligation-1","stage":"source_finality","verdict":"passed"},
+      {"obligation_id":"obligation-1","stage":"destination_observation","verdict":"passed"},
+      {"obligation_id":"obligation-1","stage":"destination_finality","verdict":"passed"},
+      {"obligation_id":"obligation-1","stage":"operational_reconciliation","verdict":"passed"},
+      {"obligation_id":"obligation-1","stage":"legal_finality","verdict":"passed"}
+    ],
+    "source_evidence_digests": ["cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"]
+  },
+  "assurance": {
+    "analysis_subject_digest": "fd4c10a8b9cadc57e5021b9fdf380ce3abbbb7e270bbb981113de47eded7d73a",
+    "observed_at": 1000,
+    "expires_at": 2000,
+    "issuer_id": "fixture-issuer",
+    "subject_id": "fixture-subject",
+    "scope_digest": "2222222222222222222222222222222222222222222222222222222222222222",
+    "nonce": "fixture-nonce",
+    "observations": [
+      {"property":"action_authorization","verdict":"pass","current_roots":[{"root_class":"signer","root_id":"shared-root"}],"dependency_roots":[{"root_class":"cloud","root_id":"shared-cloud"}],"dependency_disclosure":"complete","replayed":false,"revoked":false,"superseded":false,"equivocated":false},
+      {"property":"source_authenticity_and_freshness","verdict":"pass","current_roots":[{"root_class":"data","root_id":"shared-root"}],"dependency_roots":[{"root_class":"cloud","root_id":"shared-cloud"}],"dependency_disclosure":"complete","replayed":false,"revoked":false,"superseded":false,"equivocated":false},
+      {"property":"calculation_integrity","verdict":"pass","current_roots":[{"root_class":"model","root_id":"shared-root"}],"dependency_roots":[{"root_class":"cloud","root_id":"shared-cloud"}],"dependency_disclosure":"complete","replayed":false,"revoked":false,"superseded":false,"equivocated":false},
+      {"property":"state_transition_integrity","verdict":"pass","current_roots":[{"root_class":"operator","root_id":"shared-root"}],"dependency_roots":[{"root_class":"cloud","root_id":"shared-cloud"}],"dependency_disclosure":"complete","replayed":false,"revoked":false,"superseded":false,"equivocated":false},
+      {"property":"solvency_and_liquid_resource_support","verdict":"pass","current_roots":[{"root_class":"data","root_id":"solvency-root"}],"dependency_roots":[{"root_class":"cloud","root_id":"shared-cloud"}],"dependency_disclosure":"complete","replayed":false,"revoked":false,"superseded":false,"equivocated":false},
+      {"property":"destination_and_route_policy","verdict":"pass","current_roots":[{"root_class":"rpc","root_id":"route-root"}],"dependency_roots":[{"root_class":"cloud","root_id":"shared-cloud"}],"dependency_disclosure":"complete","replayed":false,"revoked":false,"superseded":false,"equivocated":false},
+      {"property":"anomaly_and_emergency_clearance","verdict":"pass","current_roots":[{"root_class":"operator","root_id":"anomaly-root"}],"dependency_roots":[{"root_class":"cloud","root_id":"shared-cloud"}],"dependency_disclosure":"complete","replayed":false,"revoked":false,"superseded":false,"equivocated":false},
+      {"property":"evidence_root_disclosure","verdict":"pass","current_roots":[{"root_class":"cloud","root_id":"shared-cloud"}],"dependency_roots":[{"root_class":"operator","root_id":"root-registry"}],"dependency_disclosure":"complete","replayed":false,"revoked":false,"superseded":false,"equivocated":false},
+      {"property":"financial_basis_binding","verdict":"pass","current_roots":[{"root_class":"data","root_id":"basis-root"}],"dependency_roots":[{"root_class":"cloud","root_id":"shared-cloud"}],"dependency_disclosure":"complete","replayed":false,"revoked":false,"superseded":false,"equivocated":false}
+    ],
+    "source_evidence_digests": ["dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"]
+  },
+  "recovery": {
+    "analysis_subject_digest": "fd4c10a8b9cadc57e5021b9fdf380ce3abbbb7e270bbb981113de47eded7d73a",
+    "recovery_profile_digest": "3d412a89c19e5e2ec4812bde5233784574815cab2fc063dab5653d113730601e",
+    "observed_at": 1000,
+    "expires_at": 2000,
+    "paths": [
+      {"path_id":"release-class-all","capabilities":[{"capability":"stop_externalization","verdict":"pass"},{"capability":"reconcile_every_in_flight_item","verdict":"pass"},{"capability":"preserve_evidence","verdict":"pass"},{"capability":"restore_liabilities_without_duplication","verdict":"pass"},{"capability":"reopen_through_bounded_canary_stages","verdict":"pass"}]},
+      {"path_id":"profitable-close-payout","capabilities":[{"capability":"stop_externalization","verdict":"pass"},{"capability":"reconcile_every_in_flight_item","verdict":"pass"},{"capability":"preserve_evidence","verdict":"pass"},{"capability":"restore_liabilities_without_duplication","verdict":"pass"},{"capability":"reopen_through_bounded_canary_stages","verdict":"pass"}]},
+      {"path_id":"liquidation-surplus","capabilities":[{"capability":"stop_externalization","verdict":"pass"},{"capability":"reconcile_every_in_flight_item","verdict":"pass"},{"capability":"preserve_evidence","verdict":"pass"},{"capability":"restore_liabilities_without_duplication","verdict":"pass"},{"capability":"reopen_through_bounded_canary_stages","verdict":"pass"}]},
+      {"path_id":"lp-withdrawal","capabilities":[{"capability":"stop_externalization","verdict":"pass"},{"capability":"reconcile_every_in_flight_item","verdict":"pass"},{"capability":"preserve_evidence","verdict":"pass"},{"capability":"restore_liabilities_without_duplication","verdict":"pass"},{"capability":"reopen_through_bounded_canary_stages","verdict":"pass"}]},
+      {"path_id":"collateral-withdrawal","capabilities":[{"capability":"stop_externalization","verdict":"pass"},{"capability":"reconcile_every_in_flight_item","verdict":"pass"},{"capability":"preserve_evidence","verdict":"pass"},{"capability":"restore_liabilities_without_duplication","verdict":"pass"},{"capability":"reopen_through_bounded_canary_stages","verdict":"pass"}]},
+      {"path_id":"linked-exchange-outbound-leg","capabilities":[{"capability":"stop_externalization","verdict":"pass"},{"capability":"reconcile_every_in_flight_item","verdict":"pass"},{"capability":"preserve_evidence","verdict":"pass"},{"capability":"restore_liabilities_without_duplication","verdict":"pass"},{"capability":"reopen_through_bounded_canary_stages","verdict":"pass"}]},
+      {"path_id":"risk-reducing-obligation-endpoint","capabilities":[{"capability":"stop_externalization","verdict":"pass"},{"capability":"reconcile_every_in_flight_item","verdict":"pass"},{"capability":"preserve_evidence","verdict":"pass"},{"capability":"restore_liabilities_without_duplication","verdict":"pass"},{"capability":"reopen_through_bounded_canary_stages","verdict":"pass"}]},
+      {"path_id":"bridge","capabilities":[{"capability":"stop_externalization","verdict":"pass"},{"capability":"reconcile_every_in_flight_item","verdict":"pass"},{"capability":"preserve_evidence","verdict":"pass"},{"capability":"restore_liabilities_without_duplication","verdict":"pass"},{"capability":"reopen_through_bounded_canary_stages","verdict":"pass"}]},
+      {"path_id":"administrative-transfer","capabilities":[{"capability":"stop_externalization","verdict":"pass"},{"capability":"reconcile_every_in_flight_item","verdict":"pass"},{"capability":"preserve_evidence","verdict":"pass"},{"capability":"restore_liabilities_without_duplication","verdict":"pass"},{"capability":"reopen_through_bounded_canary_stages","verdict":"pass"}]},
+      {"path_id":"emergency-route","capabilities":[{"capability":"stop_externalization","verdict":"pass"},{"capability":"reconcile_every_in_flight_item","verdict":"pass"},{"capability":"preserve_evidence","verdict":"pass"},{"capability":"restore_liabilities_without_duplication","verdict":"pass"},{"capability":"reopen_through_bounded_canary_stages","verdict":"pass"}]},
+      {"path_id":"transferable-queued-claim","capabilities":[{"capability":"stop_externalization","verdict":"pass"},{"capability":"reconcile_every_in_flight_item","verdict":"pass"},{"capability":"preserve_evidence","verdict":"pass"},{"capability":"restore_liabilities_without_duplication","verdict":"pass"},{"capability":"reopen_through_bounded_canary_stages","verdict":"pass"}]},
+      {"path_id":"borrowing","capabilities":[{"capability":"stop_externalization","verdict":"pass"},{"capability":"reconcile_every_in_flight_item","verdict":"pass"},{"capability":"preserve_evidence","verdict":"pass"},{"capability":"restore_liabilities_without_duplication","verdict":"pass"},{"capability":"reopen_through_bounded_canary_stages","verdict":"pass"}]},
+      {"path_id":"margin-reuse","capabilities":[{"capability":"stop_externalization","verdict":"pass"},{"capability":"reconcile_every_in_flight_item","verdict":"pass"},{"capability":"preserve_evidence","verdict":"pass"},{"capability":"restore_liabilities_without_duplication","verdict":"pass"},{"capability":"reopen_through_bounded_canary_stages","verdict":"pass"}]},
+      {"path_id":"internal-credit-monetization","capabilities":[{"capability":"stop_externalization","verdict":"pass"},{"capability":"reconcile_every_in_flight_item","verdict":"pass"},{"capability":"preserve_evidence","verdict":"pass"},{"capability":"restore_liabilities_without_duplication","verdict":"pass"},{"capability":"reopen_through_bounded_canary_stages","verdict":"pass"}]}
+    ],
+    "in_flight_items": [{"item_id":"item-1","expected_digest":"3333333333333333333333333333333333333333333333333333333333333333","observed_digest":"3333333333333333333333333333333333333333333333333333333333333333"}],
+    "evidence_preservation_ref": "fixture-evidence-store",
+    "liability_before_digest": "5555555555555555555555555555555555555555555555555555555555555555",
+    "liability_after_digest": "6666666666666666666666666666666666666666666666666666666666666666",
+    "evidence_preserved": "pass",
+    "liabilities_duplicate_free": "pass",
+    "canary_stages": ["pass"],
+    "source_evidence_digests": ["eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"]
+  }
+}

@@ -13,6 +13,8 @@ members = [
     "crates/hsai-e2e-harness",
     "crates/hsai-gateway-digest-checker",
     "crates/hsai-membrane",
+    "crates/statebook-core",
+    "crates/statebook-settlement",
     "crates/zkbench-core",
 ]
 
