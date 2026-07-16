@@ -11186,5 +11186,30 @@ requires zero false-equivalence rate. All P1–P9 identities stay unchanged.
 This documentation-only slice adds no Rust or Cargo change and creates no
 proof, accepted evidence, Level2+, score axis, semantic correctness at scale,
 production readiness, SOTA, breakthrough, full security, external audit, or
-action authority. Implementation requires a separately committed state slice
+action authority.
+
+## Statebook P10 Semantic Equivalence Corpus Implementation
+
+Date: 16 July 2026.
+
+Outcome: `Level1LocalReplay`, `Pass`, named state slice
 `statebook-p10-semantic-equivalence-corpus`.
+
+State slice:
+
+- additive `crates/statebook-e2e-harness/src/semantic.rs` and
+  `tests/semantic_corpus.rs`;
+- `docs/statebook-p10-semantic-equivalence-corpus-implementation-notes.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+Labeled StateKey equivalence corpus replays with precision=1, recall=1, and
+false-equivalence rate=0 on the hermetic fixture labels. Sixteen harness tests
+pass; focused format and warning-denied Clippy pass for `statebook-e2e-harness`.
+
+This is local hermetic labeled-fixture StateKey equivalence evidence only. It
+does not establish automatic economic-equivalence discovery, legal fungibility,
+AI oracle correctness, live authority, production thresholds, production
+readiness, SOTA, independent audit, or full security. No value moves.

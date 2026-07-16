@@ -21489,17 +21489,28 @@ SOTA, independent audit, or full-security claims.
 Status: documentation-first boundary complete for named state slice
 `statebook-p10-semantic-equivalence-corpus-boundary`.
 
-The next separately committed slice is
-`statebook-p10-semantic-equivalence-corpus`. It may add labeled StateKey
-equivalence corpus builders/tests under `crates/statebook-e2e-harness` using
-public P1 APIs and existing hermetic fixtures. Fixture-local acceptance:
-precision=1, recall=1, false-equivalence rate=0. P1–P9 identities remain
-unchanged. Outputs never move value or grant live authority.
+## Integration Track: Statebook P10 Semantic Equivalence Corpus Implementation
 
-Validation gate: labeled corpus metrics; focused format/test/Clippy; unchanged
-P1–P9 tests; claim-boundary hygiene.
+Status: implemented under named state slice
+`statebook-p10-semantic-equivalence-corpus`.
 
-Anti-goals: automatic economic-equivalence discovery, legal fungibility, AI
-oracle, live authority, production threshold calibration beyond fixture-local
-acceptance, scalar trust score, production readiness, SOTA, independent audit,
-or full-security claims.
+Delivered in `crates/statebook-e2e-harness`:
+
+- labeled StateKey equivalence pairs (2 equivalent + 27 distinct);
+- fixture-local precision/recall/false-equivalence metrics with exact acceptance;
+- three new semantic corpus tests (sixteen harness tests overall).
+
+P1–P9 identities remain unchanged.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-e2e-harness -- --check
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic labeled-fixture StateKey equivalence metrics
+only. No value moves. Not automatic economic-equivalence discovery, legal
+fungibility, AI oracle, live authority, production readiness, SOTA, independent
+audit, or full-security claims.
