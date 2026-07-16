@@ -2112,6 +2112,29 @@ it creates no accepted Evidence Ledger mutation, benchmark result, Level2+
 evidence, empirical calibration, legal conclusion, final incident attribution,
 production-readiness, SOTA, proof, semantic-correctness, or full-security claim.
 
+Explicit Statebook P1 core semantic-fixtures docs-first boundary now allowed
+and completed in
+`docs/statebook-p1-core-semantic-fixtures-boundary-spec.md` plus the four
+standard mirrors. The future named implementation state slice is
+`statebook-p1-core-semantic-fixtures`, limited to one standalone
+`crates/statebook-core` Rust crate, small synthetic JSON fixtures and Rust
+integration tests beneath that crate, root workspace membership and resulting
+`Cargo.lock` update, one implementation note, and the four standard mirrors.
+It may parse one closed terminal-contract source schema and one closed
+normalization-profile schema; validate exact decimal and rational values;
+report `Complete`, `Incomplete`, or `Unknown` semantic completeness; lower only
+complete inputs into opaque validated semantics; retain source lineage outside
+state identity; and derive `StateKeyV1` from a frozen manual binary encoding.
+It must ship a golden vector, material one-field mutations, fail-closed negative
+fixtures, permutation invariance, and a test-only implementation-diverse encoder.
+It does not permit payoff evaluation, portfolio residuals, perpetuals, order or
+book data, execution, margin or capital recognition, oracle truth, legal
+fungibility, custody, pause, signing, transfer, settlement, value movement,
+HSAI evidence mapping, network access, credentials, process spawning,
+filesystem writes, external adapters, accepted Evidence Ledger mutation,
+benchmark output, Level2+ evidence, semantic-correctness, production-readiness,
+SOTA, proof, independent-verification, external-audit, or full-security claims.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.

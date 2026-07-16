@@ -11157,6 +11157,34 @@ withdrawal, transfer, settlement, accepted Evidence Ledger mutation, benchmark
 output, Level2+ evidence, production-readiness, full-security, legal-finality,
 final incident-attribution, SOTA, or semantic-correctness claim was created.
 
+## Statebook P1 Core Semantic Fixtures Boundary
+
+Date: 15 July 2026.
+
+Outcome: docs-first implementation authorization complete for named state slice
+`statebook-p1-core-semantic-fixtures-boundary`.
+
+Evidence ceiling: `Level0DesignNote`.
+
+The boundary authorizes one future separately committed
+`statebook-p1-core-semantic-fixtures` implementation. Its entire code surface is
+one isolated `crates/statebook-core` crate, local synthetic fixtures, root
+workspace membership and lockfile update, one implementation note, and the four
+standard mirrors. It freezes exact arithmetic, closed V1 source and profile
+schemas, three-state semantic completeness, opaque validated lowering, separate
+source lineage, and a manual canonical binary `StateKeyV1` preimage.
+
+Static review confirms this boundary changes Markdown only. It creates no Rust,
+Cargo, lockfile, fixture, execution, payoff evaluation, residual, margin,
+capital, oracle, settlement, custody, signing, transfer, HSAI mapping, network,
+credentials, process, filesystem-write, external-adapter, evidence-promotion,
+benchmark, Level2+, semantic-correctness, production-readiness, SOTA, proof,
+independent-verification, external-audit, or full-security capability or claim.
+
+Validation requires Markdown and named-slice mirror presence, `git diff
+--check`, Rust formatting, repository hygiene and documentation claim-boundary
+tests, plus preservation of unrelated dirty HSAI and agent-routing paths.
+
 ## Phase 796-A3L5E HSAI P01B Gate Sandbox Root-Read Correction
 
 Date: 15 July 2026.
