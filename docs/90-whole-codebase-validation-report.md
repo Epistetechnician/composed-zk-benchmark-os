@@ -11494,3 +11494,11 @@ promotion, benchmark evidence, proof, semantic correctness, production
 readiness, SOTA, independent audit, or full security. Unrelated dirty admission,
 AGENTS routing, `docs/agents/`, and P01B paths remain outside this state slice
 and untouched.
+
+Follow-on correction outcome: named documentation-only state slice
+`statebook-p3-closed-identity-bound-correction` resolves an unreachable-bound
+contradiction. Because duplicate assurance properties reject, the exact valid
+assurance ceiling is nine. Because recovery paths come from the fixed
+implementation-owned profile and unknown or duplicate paths reject, the exact
+valid recovery ceiling is fourteen. The correction changes no code, status,
+claim ceiling, runtime capability, or authority.
