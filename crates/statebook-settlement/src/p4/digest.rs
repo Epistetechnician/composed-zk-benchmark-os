@@ -451,6 +451,8 @@ fn decision_reason_tag(value: DecisionReasonV1) -> u8 {
         DecisionReasonV1::BreakerHalted => 24,
         DecisionReasonV1::BreakerFrozen => 25,
         DecisionReasonV1::BreakerInvalidTransition => 26,
+        DecisionReasonV1::BreakerResolutionRequired => 34,
+        DecisionReasonV1::BreakerRenewalRejected => 35,
         DecisionReasonV1::QueueTimerOnly => 27,
         DecisionReasonV1::ChallengeInvalid => 28,
         DecisionReasonV1::ChallengeDuplicate => 29,

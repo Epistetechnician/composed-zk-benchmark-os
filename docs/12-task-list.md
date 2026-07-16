@@ -21520,18 +21520,29 @@ audit, or full-security claims.
 Status: documentation-first boundary complete for named state slice
 `statebook-p11-breaker-ttl-resolution-boundary`.
 
-The next separately committed slice is
-`statebook-p11-breaker-ttl-resolution`. It may wire P4 breaker TTL exhaustion
-into `decide_and_transition`, block release in Resolution / expired scopes
-without silent renewal, add `attempt_breaker_renewal_v1`, and extend harness
-corpus coverage. Challenge grammar, hysteresis, and cancel remain deferred.
-Outputs never move value or grant live authority.
+## Integration Track: Statebook P11 Breaker TTL And Resolution Implementation
 
-Validation gate: TTL→Resolution reject; expired-below-ceiling blocks without
-silent renew; renewal at ceiling rejects; renewal below ceiling succeeds;
-existing P4/P9 suites green; focused format/test/Clippy; claim-boundary hygiene.
+Status: implemented under named state slice
+`statebook-p11-breaker-ttl-resolution`.
 
-Anti-goals: challenge grammar, hysteresis relax/rollback, cancel intents, live
-authority, trading, signing, custody, pause product, transfer, admission
-mutation, Evidence Ledger append, scalar trust score, complete TD-004 claim,
-production readiness, SOTA, independent audit, or full-security claims.
+Delivered:
+
+- P4 kernel TTL exhaustion → Resolution with zero-instant reject;
+- expired Guarded/Recovery scopes block without silent renewal;
+- `attempt_breaker_renewal_v1` ceiling reject / below-ceiling extend;
+- five settlement breaker TTL tests and two new harness corpus cases.
+
+Challenge grammar, hysteresis, and cancel remain deferred.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic breaker TTL/resolution regression only. No value
+moves. Not live pause authority, complete TD-004 satisfaction, production
+readiness, SOTA, independent audit, or full-security claims.

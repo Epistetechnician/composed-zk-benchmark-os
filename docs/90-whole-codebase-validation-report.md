@@ -11236,5 +11236,28 @@ change in this commit.
 
 This documentation-only slice creates no proof, accepted evidence, Level2+,
 score axis, production readiness, SOTA, breakthrough, full security, external
-audit, or action authority. Implementation requires a separately committed
-state slice `statebook-p11-breaker-ttl-resolution`.
+audit, or action authority.
+
+## Statebook P11 Breaker TTL And Resolution Implementation
+
+Date: 16 July 2026.
+
+Outcome: `Level1LocalReplay`, `Pass`, named state slice
+`statebook-p11-breaker-ttl-resolution`.
+
+State slice:
+
+- additive `crates/statebook-settlement/src/p4/{breaker,kernel,types,digest,error,mod}.rs`
+  and `src/lib.rs` exports;
+- `crates/statebook-settlement/tests/breaker_ttl.rs`;
+- additive harness corpus cases under `crates/statebook-e2e-harness`;
+- `docs/statebook-p11-breaker-ttl-resolution-implementation-notes.md`;
+- navigation/status mirrors.
+
+TTL exhaustion enters Resolution and rejects with zero instant release; expired
+protective scopes block without silent renewal; renewal at ceiling rejects;
+existing P4 five-outcome and harness suites remain green.
+
+This is local hermetic breaker TTL/resolution regression evidence only. It does
+not establish live pause authority, complete TD-004 satisfaction, production
+readiness, SOTA, independent audit, or full security. No value moves.
