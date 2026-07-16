@@ -21457,17 +21457,29 @@ SOTA, independent audit, or full-security claims.
 Status: documentation-first boundary complete for named state slice
 `statebook-p9-adversarial-corpus-replay-boundary`.
 
-The next separately committed slice is
-`statebook-p9-adversarial-corpus-replay`. It may add corpus builders/tests under
-`crates/statebook-e2e-harness` for the encodable TD-004 / P4 adversarial subset
-using public P4 APIs only. No P4 kernel edits. P1–P8 identities remain
-unchanged. Outputs never move value or grant live authority.
+## Integration Track: Statebook P9 Adversarial Corpus Replay Implementation
 
-Validation gate: every listed encodable case fails closed with zero instant
-release when not Immediate; chained timer-alone case; focused format/test/
-Clippy; unchanged P1–P8 tests; claim-boundary hygiene.
+Status: implemented under named state slice
+`statebook-p9-adversarial-corpus-replay`.
 
-Anti-goals: kernel feature expansion, live authority products, trading,
-signing, custody, pause, transfer, admission mutation, Evidence Ledger append,
-scalar trust score, empirical calibration, complete TD-004 claim, production
-readiness, SOTA, independent audit, or full-security claims.
+Delivered in `crates/statebook-e2e-harness`:
+
+- twelve encodable TD-004 / P4 adversarial corpus replays;
+- timer-alone chained queue rejection;
+- fail-closed zero-instant invariants;
+- four new corpus tests (thirteen harness tests overall).
+
+No P4 kernel edits. P1–P8 identities remain unchanged.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-e2e-harness -- --check
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-e2e-harness --all-targets -- -D warnings
+cargo test -p statebook-core -p statebook-settlement -p statebook-report -p statebook-source -p statebook-authority --tests
+```
+
+Claim ceiling: local hermetic adversarial fixture regression only. No value
+moves. Not complete TD-004 satisfaction, live authority, production readiness,
+SOTA, independent audit, or full-security claims.
