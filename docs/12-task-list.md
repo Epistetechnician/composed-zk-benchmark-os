@@ -21484,6 +21484,25 @@ Claim ceiling: local hermetic adversarial fixture regression only. No value
 moves. Not complete TD-004 satisfaction, live authority, production readiness,
 SOTA, independent audit, or full-security claims.
 
+## Integration Track: Statebook P18 Budget Refill Split And Slow Drain Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p18-budget-refill-split-drain-boundary`.
+
+The next separately committed slice is `statebook-p18-budget-refill-split-drain`.
+It may add `apply_budget_refill_v1` and harness corpus for slow-drain /
+contended-CAS aggregate caps. Live authority remains deferred. Outputs never
+move value.
+
+Validation gate: sequential refill; skip/backfill/over-ceiling reject; slow
+drain exhausts; CAS one-success; suites green; format/test/Clippy;
+claim-boundary hygiene.
+
+Anti-goals: live authority, complete TD-004 claim, trading, signing, custody,
+pause product, transfer command, admission mutation, Evidence Ledger append,
+scalar trust score, production readiness, SOTA, independent audit, or
+full-security claims.
+
 ## Integration Track: Statebook P10 Semantic Equivalence Corpus Boundary
 
 Status: documentation-first boundary complete for named state slice
