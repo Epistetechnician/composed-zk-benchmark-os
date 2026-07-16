@@ -15,6 +15,7 @@ use super::digest::{
 };
 use super::error::SettlementTransitionErrorV1;
 use super::gates::evaluate_hard_gates;
+use super::hysteresis::{apply_accepted_policy_to_state, collect_hysteresis_block_reason};
 use super::linked_plan::linked_outbound_total;
 use super::types::{
     default_nonclaims, zero_rational, AssuranceTierV1, BreakerStateV1, ClockV1, DecisionOutcomeV1,
@@ -111,8 +112,46 @@ pub fn decide_and_transition(
     let nonclaims = default_nonclaims();
 
     reasons.extend(collect_breaker_block_reasons(&current_state, evaluated_at));
+    if let Some(reason) = collect_hysteresis_block_reason(&current_state, policy, evaluated_at) {
+        reasons.push(reason);
+    }
     if current_state.recovery.reconciliation_mismatch || current_state.recovery.canary_failed {
         reasons.push(DecisionReasonV1::RecoveryFailed);
+    }
+
+    if reasons.iter().any(|reason| {
+        matches!(
+            reason,
+            DecisionReasonV1::PolicyRollback | DecisionReasonV1::PolicyRelaxRejected
+        )
+    }) {
+        return Ok(build_record(
+            DecisionOutcomeV1::Rejected,
+            None,
+            zero_rational(),
+            zero_rational(),
+            intent,
+            decision_context,
+            None,
+            request.financial_basis.analysis_subject_digest,
+            request.financial_basis.composition_digest,
+            evidence_digest,
+            valuation_digest,
+            policy_d,
+            linked_or_obligation_digest(&request),
+            ledger_tip_before,
+            ledger_tip_before,
+            queue_status_before,
+            queue_status_before,
+            transfer_status_before,
+            transfer_status_before,
+            reasons,
+            missing_facts,
+            nonclaims,
+            evaluated_at,
+            release_class,
+            current_state,
+        ));
     }
 
     let amount = match validate_amount_before_valuation(&request) {
@@ -415,6 +454,13 @@ pub fn decide_and_transition(
 
     if ledger_tip_after != ledger_tip_digest(&next_state.ledger) {
         next_state.ledger.tip_digest = ledger_tip_digest(&next_state.ledger);
+    }
+
+    if matches!(
+        outcome,
+        DecisionOutcomeV1::Immediate | DecisionOutcomeV1::Queued | DecisionOutcomeV1::Frozen
+    ) {
+        apply_accepted_policy_to_state(&mut next_state, policy, evaluated_at);
     }
 
     Ok(build_record(
