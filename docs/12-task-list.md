@@ -22125,3 +22125,31 @@ prices, ranking, optimization, routing, execution, margin, collateral,
 settlement authority, external I/O, HSAI, zkbench, Cargo changes, evidence
 promotion, proof, production readiness, SOTA, independent-audit, or full-
 security claims.
+
+## Integration Track: Statebook P3 Seven Completeness Reports Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p3-seven-completeness-reports-boundary`.
+
+The next separately committed slice is
+`statebook-p3-seven-completeness-reports`. It may add one isolated
+`statebook-settlement` crate that consumes unchanged public P1 and P2 report
+APIs, derives domain-separated canonical digests, evaluates bounded hermetic
+execution, capital, settlement, assurance, and versioned-path recovery
+fixtures, and returns five fixture-qualified reports beside the unchanged
+semantic and payoff reports.
+
+Validation gate: unchanged P1/P2 source and golden vectors; no
+`statebook-core` changes; exact fixed-width arithmetic and fail closure; strict
+resource ceilings; fixture-qualified serialized statuses; separate recovery
+path-profile binding; current-root disclosure without P4 resolution; no
+aggregate boolean, score, rank, recommendation, or authority; deterministic
+tagged-binary golden digests with an implementation-diverse test encoder;
+focused format/test/Clippy; repository docs and hygiene checks; clean-tree
+workspace tests; and independent scope plus fixture/digest reviews.
+
+Anti-goals: live books or evidence, JSON-hash identity, P4 assurance or
+settlement policy, P5 adapters, routing, execution, capital authority, legal
+finality, custody, signing, pause, transfer, externalization, HSAI, admission,
+zkbench, network, process, filesystem output, evidence promotion, proof,
+production readiness, SOTA, independent audit, or full-security claims.

@@ -11465,3 +11465,32 @@ declared states. It is not execution, capital recognition, settlement
 authority, semantic proof, independent audit, production readiness, SOTA, or a
 full-security claim. Unrelated admission, AGENTS routing, `docs/agents/`, A3L6,
 HSAI, and zkbench paths remain outside this state slice.
+
+## Statebook P3 Seven Completeness Reports Boundary
+
+Date: 16 July 2026.
+
+Outcome: documentation-only authorization for named state slice
+`statebook-p3-seven-completeness-reports-boundary`.
+
+The boundary freezes a future isolated `statebook-settlement` crate. It may
+consume only unchanged public P1 semantic and P2 payoff report APIs, construct
+domain-separated tagged-binary digests without hashing JSON, perform checked
+fixed-width exact arithmetic over bounded synthetic fixtures, and return five
+new fixture-qualified execution, capital, settlement, assurance, and recovery
+reports beside the unchanged first two dimensions.
+
+The future recovery report is measured against a separate versioned expected-
+path profile. Assurance observations disclose current and dependency roots but
+do not resolve independence, quorum, tiers, hard gates, or permitted release.
+The seven-report composition has no aggregate completion boolean, score, rank,
+weakest-dimension shortcut, recommendation, action, or authority.
+
+This docs-first slice adds no Rust or Cargo change and does not authorize a
+`statebook-core` mutation, P4 policy or state transitions, P5 adapters, live
+sources, external I/O, execution, capital recognition, legal finality, custody,
+signing, pause, transfer, externalization, HSAI, admission, zkbench, evidence
+promotion, benchmark evidence, proof, semantic correctness, production
+readiness, SOTA, independent audit, or full security. Unrelated dirty admission,
+AGENTS routing, `docs/agents/`, and P01B paths remain outside this state slice
+and untouched.
