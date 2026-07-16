@@ -20877,3 +20877,369 @@ Exit criteria: the operator example compiles only behind its feature, normal
 tests remain hermetic, one live run records TLS 1.3 and a 32-byte RFC 9266
 exporter with the accepted Phala response on the same connection, exactly five
 digest-bound files exist outside git, and all non-claims remain explicit.
+
+## Integration Track: Statebook And Assurance-Adjusted Settlement
+
+Status: `DocumentationOnly`; docs-first boundary complete at
+`Level0DesignNote`. See
+`docs/integrations/statebook_terminal_payoff_and_trust_settlement.md`.
+
+Named state slice:
+`statebook-terminal-payoff-and-assurance-adjusted-settlement-boundary`.
+
+Completed:
+
+- froze one future terminal scalar cash-settled `TerminalContractIR` with
+  source-term digests, economic reference, observation, comparator, payoff, and
+  settlement profiles;
+- separated financial payoff and residual composition from HSAI
+  `ClaimEnvelope` evidence composition;
+- separated semantic coherence, product span, execution completeness,
+  settlement completeness, and capital completeness;
+- grounded the externalization boundary in the preliminary Ostium incident
+  evidence while preserving the unknown final root cause and loss accounting;
+- distinguished immediate internal risk state, hard-gated and capped atomic
+  DvP/PvP with represented linked legs, narrowly prefunded and
+  destination-restricted all-or-none external risk-reducing obligations, and
+  unconditional irreversible external release;
+- rejected scalar trust scoring in favor of current-evidence hard gates,
+  discrete assurance tiers, independent common-numeraire valuation, atomic
+  native and aggregate loss-budget reservations, deterministic epoch-and-journal
+  refill, zero reuse value for pending anomalous PnL, staged release, fresh
+  revalidation, hysteresis, and bounded challenge and breaker contracts;
+- recorded required invariants, adversarial scenarios, explicit limitations,
+  and base, acceleration, and constraint scenarios for 2026-2028, 2029-2031,
+  and 2032-2036 across AI, compute, power, semiconductors, agents, robotics,
+  biotech, defense, climate, finance, and global infrastructure, with
+  pre-registered evaluation and rejection criteria for any future pilot;
+- froze the next sequence as synthetic terminal fixtures, a local exact-rational
+  residual engine, hermetic execution modeling, a non-authoritative settlement
+  simulator, a separately reviewed external-evidence boundary, and only then a
+  separately owned authority integration.
+
+Validation gate: the declared Statebook surface spans the integration spec plus
+`README.md`, `AGENTS.md`, this task ledger, and
+`docs/90-whole-codebase-validation-report.md`; source links present; named-slice
+and semantic mirror scans; `git diff --check`; Rust formatting; repository
+hygiene and claim-boundary documentation tests; no package-manager surface;
+preserved pre-existing admission edit identity; no executable state mutation.
+The independently owned Phase 796-A3L5 mirror changes are part of committed
+baseline `a05fc73041ccd87c2f83a9f07da7b552c9a06a17`, not this Statebook slice.
+Separately owned, concurrently mutable A3L6 implementation work began
+materializing under the five Python paths authorized by committed A3L5. That
+entire A3L6 path envelope is outside this slice and was not mutated, assigned a
+stable identity, or claimed as validated by the Statebook work.
+A generated untracked Python bytecode cache also appeared beside that
+concurrent work and was neither removed nor validated by this slice.
+
+Anti-goals: implementation, floating-point or empirical calibration, live
+market or venue access, oracle or router code, orders, fills, custody, asset
+movement, settlement, margin or capital-offset recognition, circuit-breaker
+action, accepted Evidence Ledger mutation, benchmark outputs, action authority,
+semantic-correctness, production-readiness, SOTA, full-security, or final Ostium
+root-cause claims.
+
+Exit criteria: the five-file documentation slice names one state boundary;
+financial terms join assurance evidence only through digests; every weak
+completeness and assurance lane remains visible; no trust score, waiting period,
+or HSAI evidence object is reinterpreted as market truth or execution authority;
+and all focused repository gates pass without changing the pre-existing dirty
+file.
+
+## Integration Track: Statebook Whitepaper, PRD, Sources, And Publication Media
+
+Status: `DocumentationOnly`; publication package complete at
+`Level0DesignNote`.
+
+Named state slice:
+`statebook-whitepaper-prd-and-publication-media-boundary`.
+
+Completed:
+
+- expanded the Statebook thesis into an end-to-end whitepaper grounded in
+  state-contingent claims, replication, contract semantics, microstructure,
+  clearing, finality, assurance, recovery, AI, energy, and macroeconomics;
+- separated semantic, payoff, execution, capital, settlement, assurance, and
+  recovery completeness into seven typed verdicts with no aggregate
+  `complete=true`;
+- converted the trust-versus-instant-settlement prompt into a noncompensable
+  controller: hard gates decide whether, simultaneous budgets decide how much,
+  maximum risk clocks decide when, and an exactly-once queue decides what next;
+- produced an implementation-ready PRD with 70 user stories, 20 implementation
+  decisions, 18 functional requirements, deterministic test strategy, 34-case
+  adversarial corpus, phased delivery, and explicit non-goals;
+- built an annotated source index separating theory, standards, law, venue
+  claims, pinned code, incident artifacts, preliminary analysis, media, AI,
+  energy, macro scenarios, and repository-grounded precedents;
+- corrected Ostium incident language to distinguish direct event evidence,
+  current mutable documentation, pinned code observations, preliminary
+  hypotheses, unknown final root cause, and uncovered payout paths;
+- created seven original accessible SVG architecture and teaching assets with no
+  copied meme template, third-party logo, or victim imagery;
+- rendered and visually inspected two non-benchmark publication PDFs;
+- published the PRD to the configured GitHub issue tracker with
+  `ready-for-agent` as
+  [issue #17](https://github.com/Epistetechnician/composed-zk-benchmark-os/issues/17),
+  which signals specification quality only and grants no implementation
+  authority.
+
+Declared repository surface:
+
+- `docs/statebook-whitepaper.md`;
+- `docs/statebook-product-requirements.md`;
+- `docs/statebook-literature-source-index.md`;
+- `docs/media/statebook/README.md` and seven SVG assets;
+- `output/pdf/statebook-whitepaper.pdf`;
+- `output/pdf/statebook-product-requirements.pdf`;
+- the pre-existing Statebook boundary and four standard navigation mirrors.
+
+Validation gate: Markdown structure and cross-reference scans; source-link
+inventory; SVG XML parsing and raster inspection; PDF metadata, text extraction,
+full-page rasterization, and visual inspection; independent literature,
+security, repository-interface, PRD, claim-boundary, and publication reviews;
+`git diff --check`; Rust formatting; repository hygiene and claim-boundary
+documentation tests; workspace test and clippy gates excluding only the
+concurrent dirty admission surface and its downstream harness; no invented
+package-manager gate; preservation of unrelated worktree paths.
+
+Anti-goals: Statebook runtime code, live venue or network access, empirical
+calibration, price or oracle truth, executable equivalence, margin recognition,
+legal fungibility, custody, signing, pause, asset movement, settlement,
+production readiness, accepted Evidence Ledger mutation, benchmark output,
+Level2+ evidence, final incident attribution, SOTA, proof, semantic correctness,
+or full security.
+
+Exit criteria: all publication artifacts name the same state slice and evidence
+ceiling; every external claim is source-classed and limitation-bound; all seven
+completeness dimensions remain independent; media remains non-evidentiary; both
+PDFs render without clipping or missing glyphs; the GitHub PRD issue preserves
+the same non-goals; and the unrelated admission and A3L6 paths remain outside the
+validated Statebook surface.
+
+## Integration Track: Statebook P1 Core Semantic Fixtures Boundary
+
+Status: docs-first implementation authorization complete. See
+`docs/statebook-p1-core-semantic-fixtures-boundary-spec.md`.
+
+Named boundary state slice:
+`statebook-p1-core-semantic-fixtures-boundary`.
+
+Authorized future implementation state slice:
+`statebook-p1-core-semantic-fixtures`.
+
+Goal: establish a deliberately narrow falsification surface for semantic
+equivalence before execution, capital, settlement, assurance, or recovery
+layers exist.
+
+Authorized implementation:
+
+- one standalone `crates/statebook-core` crate with no HSAI or `zkbench-core`
+  dependency;
+- exact decimal and signed-rational normalization with checked arithmetic;
+- closed synthetic source and normalization-profile schemas;
+- typed `Complete`, `Incomplete`, and `Unknown` semantic-completeness reports;
+- opaque lowering for complete terminal indicator contracts only;
+- source-lineage receipts kept outside state identity;
+- a manual tagged binary encoding and deterministic `StateKeyV1`;
+- material one-field mutation fixtures, malformed and incomplete negatives,
+  order-invariance tests, a frozen golden vector, and a test-only
+  implementation-diverse encoder;
+- root workspace metadata, one implementation note, and the standard mirrors.
+
+Validation gate: focused Statebook tests and warning-denied clippy; golden and
+independent-encoder equality; material-mutation divergence or rejection;
+permutation invariance; source-scan claim boundaries; repository hygiene and
+claim-boundary tests; full workspace tests and warning-denied clippy; formatting
+and diff hygiene.
+
+Anti-goals: payoff evaluation, portfolio residuals, perpetuals, execution or
+book data, margin or capital recognition, oracle or benchmark truth, custody,
+signing, pause, transfer, settlement, value movement, legal equivalence, HSAI
+mapping, network, credentials, process spawning, filesystem writes, external
+adapters, accepted Evidence Ledger mutation, benchmark outputs, Level2+,
+semantic correctness, production readiness, SOTA, proof, independent
+verification, external audit, or full security.
+
+Exit criteria: the boundary is mirrored and committed separately; P1 stays
+inside the exact authorized file surface; only complete validated semantics can
+produce a key; the golden vector is cross-checked by an implementation-diverse
+test encoder; all gates pass without staging or mutating unrelated dirty work.
+
+## Integration Track: Statebook P1 Core Semantic Fixtures Implementation
+
+Status: implemented locally with fixture-backed regression evidence. See
+`docs/statebook-p1-core-semantic-fixtures-implementation-notes.md`.
+
+Named state slice: `statebook-p1-core-semantic-fixtures`.
+
+Implemented:
+
+- added one isolated `statebook-core` workspace crate with no HSAI or
+  `zkbench-core` dependency;
+- rejected duplicate JSON keys before typed deserialization and kept source-byte
+  SHA-256 independent of declared content;
+- enforced one closed 31-field normalization profile with explicit unknown
+  mappings;
+- normalized exact decimals and signed rationals without floating point,
+  saturation, implicit rounding, or conversion;
+- emitted `Complete`, `Incomplete`, or `Unknown`, with unsupported material
+  terms retained rather than discarded;
+- lowered only complete terminal indicator inputs into opaque validated
+  semantics;
+- separated source and profile lineage from StateKey while binding both into a
+  separate validated-contract receipt digest;
+- froze a 701-byte manual TLV preimage and
+  `StateKeyV1=f1662f3fb5a10c074680c0baf76ba488b7230337456358be92f3127d8a632c08`;
+- added 27 material single-field mutations, endpoint-policy divergence,
+  rational and decimal convergence, serialization and set-order invariance,
+  lineage-separation tests, malformed/incomplete/unknown/unsupported negatives,
+  and a `ring`-based second test encoder independent of production `sha2`
+  encoding helpers.
+
+Validation gate: 13 focused tests; warning-denied focused clippy; formatting;
+repository hygiene and claim-boundary checks; full workspace test and clippy;
+diff hygiene; immutable publication artifacts; unrelated dirty paths excluded
+from staging.
+
+Anti-goals: economic-equivalence claims, payoff evaluation, residuals,
+execution, capital, margin, oracle truth, legal fungibility, custody, signing,
+pause, transfer, settlement, HSAI mapping, network, credentials, processes,
+filesystem writes, external adapters, accepted evidence, benchmark outputs,
+Level2+, semantic correctness, production readiness, SOTA, proof, independent
+verification, external audit, or full security.
+
+Exit criteria: focused and full gates pass; the golden vector agrees byte for
+byte across both test implementations; all implementation paths match the
+authorized surface; the implementation commit excludes the preserved AGENTS
+routing hunk, admission edit, `docs/agents/`, and A3L6 files.
+
+## Integration Track: Statebook P2 Payoff And Residual Engine Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p2-payoff-residual-engine-boundary`.
+
+The next separately committed slice is
+`statebook-p2-payoff-residual-engine`. It is limited to exact finite-domain
+evaluation of P1-validated indicator contracts, rational position composition,
+non-netted asset-vector residuals, deterministic duplicate aggregation, and
+typed exact/approximate/incomplete reports. P1 schema, StateKey bytes, and
+fixtures remain frozen.
+
+Validation gate: frozen payoff vectors, exact arithmetic and rounding edges,
+resource bounds, order invariance, unsupported-state fail-closure, multi-asset
+non-netting, unchanged P1 golden vectors, focused format/test/Clippy, docs and
+hygiene checks, clean-tree workspace tests, and two independent reviews.
+
+Anti-goals: other payoff forms, global equivalence, books, prices, optimization,
+routing, execution, capital recognition, settlement, external I/O, HSAI,
+zkbench, Cargo changes, evidence promotion, or stronger claims.
+
+## Integration Track: Statebook P2 Payoff And Residual Engine Implementation
+
+Status: implemented for named state slice
+`statebook-p2-payoff-residual-engine`.
+
+Deliverables: additive checked rational arithmetic and exact quantization in
+`statebook-core`; one bounded finite-state indicator payoff and asset-vector
+residual engine; deterministic StateKey aggregation with contributing receipt
+digests; strict observation-coordinate compatibility; typed exact,
+approximate, and incomplete reports; a frozen residual fixture and domain
+digest; exhaustive comparator, endpoint, rounding, arithmetic-failure,
+resource-bound, ordering, multi-asset, and P1-regression tests; and updated
+claim-boundary scanning.
+
+Validation gate: focused formatting, all-feature package tests, warning-denied
+all-target package Clippy, unchanged P1 golden vectors, repository docs and
+hygiene checks, and two independent arithmetic and scope reviews.
+
+Anti-goals: any non-indicator payoff, extrapolated global equivalence, books,
+prices, ranking, optimization, routing, execution, margin, collateral,
+settlement authority, external I/O, HSAI, zkbench, Cargo changes, evidence
+promotion, proof, production readiness, SOTA, independent-audit, or full-
+security claims.
+
+## Integration Track: Statebook P3 Seven Completeness Reports Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p3-seven-completeness-reports-boundary`.
+
+The next separately committed slice is
+`statebook-p3-seven-completeness-reports`. It may add one isolated
+`statebook-settlement` crate that consumes unchanged public P1 and P2 report
+APIs, derives domain-separated canonical digests, evaluates bounded hermetic
+execution, capital, settlement, assurance, and versioned-path recovery
+fixtures, and returns five fixture-qualified reports beside the unchanged
+semantic and payoff reports.
+
+Validation gate: unchanged P1/P2 source and golden vectors; no
+`statebook-core` changes; exact fixed-width arithmetic and fail closure; strict
+resource ceilings; fixture-qualified serialized statuses; separate recovery
+path-profile binding; current-root disclosure without P4 resolution; no
+aggregate boolean, score, rank, recommendation, or authority; deterministic
+tagged-binary golden digests with an implementation-diverse test encoder;
+focused format/test/Clippy; repository docs and hygiene checks; clean-tree
+workspace tests; and independent scope plus fixture/digest reviews.
+
+Anti-goals: live books or evidence, JSON-hash identity, P4 assurance or
+settlement policy, P5 adapters, routing, execution, capital authority, legal
+finality, custody, signing, pause, transfer, externalization, HSAI, admission,
+zkbench, network, process, filesystem output, evidence promotion, proof,
+production readiness, SOTA, independent audit, or full-security claims.
+
+Bound correction: the documentation-only state slice
+`statebook-p3-closed-identity-bound-correction` replaces the unreachable
+nominal assurance-observation and recovery-path exact limits with the closed
+semantic maxima: nine unique assurance properties and fourteen
+implementation-owned recovery paths. Exact-limit and limit-plus-one tests use
+those effective maxima. No implementation authority or capability is added.
+
+Capital binding correction: named documentation-only state slice
+`statebook-p3-capital-context-binding-correction` adds the canonical domain
+`statebook:p3-capital-context:v1\0`. Every fixture receipt must carry the digest
+of its analysis subject, authority, eligible account, model, haircut, rule,
+jurisdiction, horizon, and observation interval. Mismatch rejects before report
+composition. Coherent rebinding remains synthetic fixture evidence only.
+
+## Statebook P3 Seven Completeness Reports Implementation
+
+Status: complete for named state slice
+`statebook-p3-seven-completeness-reports`.
+
+Implemented deliverables:
+
+- isolated `statebook-settlement` workspace crate with no `statebook-core`
+  mutation;
+- unchanged P1 semantic and P2 payoff reports plus five fixture-qualified
+  execution, capital, settlement, assurance, and recovery reports;
+- strict duplicate-key and unknown-field rejection, exact rational strings,
+  canonical digests and identifiers, valid time intervals, and fail-closed
+  arithmetic;
+- bounded incremental deserialization with exact byte, leg, level, receipt,
+  obligation, property, root, recovery, in-flight, canary, and evidence limits;
+- nine closed assurance properties and fourteen implementation-owned recovery
+  paths;
+- typed assumptions, typed missing facts, typed reasons, and explicit
+  dimension residuals without aggregate status authority;
+- synthetic capital-context receipt binding with typed mismatch rejection;
+- deterministic domain-separated TLV encodings and an independent `ring`
+  encoder covering semantic, payoff, subject, all fixtures, capital context,
+  recovery profile, all five reports, and composition; and
+- frozen P1 701-byte preimage/identity, P2 domain, P3 subject/profile/report,
+  permutation, isolation, precedence, resource, malformed-input, overflow, and
+  claim-boundary regression coverage.
+
+Focused gates pass:
+
+```text
+cargo fmt -p statebook-settlement -- --check
+cargo test -p statebook-settlement --tests
+cargo clippy -p statebook-settlement --all-targets -- -D warnings
+cargo test -p statebook-core
+cargo clippy -p statebook-core --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic fixture regression evidence only. No live source,
+execution, clearing, margin, legal-finality, trust-resolution, recovery,
+release, P4/P5, HSAI, admission, zkbench, evidence-promotion, proof, production,
+SOTA, independent-audit, or full-security authority is created.
+

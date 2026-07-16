@@ -860,7 +860,82 @@ Surface DSL
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
 | [docs/integrations/zkml_benchmark_manifest.md](docs/integrations/zkml_benchmark_manifest.md) | Future narrow zkML workload adapter. |
+| [docs/integrations/statebook_terminal_payoff_and_trust_settlement.md](docs/integrations/statebook_terminal_payoff_and_trust_settlement.md) | Documentation-only Statebook terminal-payoff normalization and assurance-adjusted externalization boundary, including the Ostium incident lesson, hard gates, loss-budget caps, challenge queues, and two-, five-, and ten-year AI/technology market scenarios. |
+| [docs/statebook-whitepaper.md](docs/statebook-whitepaper.md) | End-to-end Statebook whitepaper: state-contingent foundations, frontier-risk convergence, seven typed completeness verdicts, assurance-adjusted externalization, incident limits, AI/global-economy scenarios, architecture, governance, and falsification. |
+| [docs/statebook-product-requirements.md](docs/statebook-product-requirements.md) | Implementation-ready Statebook PRD with 70 user stories, explicit financial/evidence boundaries, one settlement-transition kernel, adversarial acceptance suite, delivery sequence, and non-goals. |
+| [docs/statebook-literature-source-index.md](docs/statebook-literature-source-index.md) | Annotated literature, standards, law, venue, pinned-code, incident, media, AI, energy, and macro source index with supported claims and limitations. |
+| [docs/statebook-p1-core-semantic-fixtures-boundary-spec.md](docs/statebook-p1-core-semantic-fixtures-boundary-spec.md) | Docs-first P1 authorization for one isolated exact-arithmetic semantic-normalization and deterministic `StateKeyV1` fixture crate; no execution, settlement, HSAI, or external-I/O authority. |
+| [docs/statebook-p1-core-semantic-fixtures-implementation-notes.md](docs/statebook-p1-core-semantic-fixtures-implementation-notes.md) | Implemented P1 local fixture crate: closed semantic completeness, exact normalization, source-lineage separation, frozen TLV `StateKeyV1`, 27 material mutations, negatives, and a second test encoder. |
+| [docs/statebook-p2-payoff-residual-engine-boundary-spec.md](docs/statebook-p2-payoff-residual-engine-boundary-spec.md) | Docs-first P2 authorization for exact finite-domain indicator payoff evaluation, asset-vector residuals, and typed incompleteness; no books, execution, capital, or settlement authority. |
+| [docs/statebook-p2-payoff-residual-engine-implementation-notes.md](docs/statebook-p2-payoff-residual-engine-implementation-notes.md) | Implemented local P2 exact indicator payoff and finite-domain residual engine with checked rational arithmetic, deterministic aggregation, non-netted asset vectors, and whole-report fail closure. |
+| [docs/statebook-p3-seven-completeness-reports-boundary-spec.md](docs/statebook-p3-seven-completeness-reports-boundary-spec.md) | Docs-first P3 authorization for a future isolated `statebook-settlement` crate that composes unchanged P1/P2 reports with five hermetic fixture-qualified completeness reports; no aggregate boolean, P4 policy, P5 adapter, or authority. |
+| [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
+| [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
+
+Statebook publication status: the named slice
+`statebook-whitepaper-prd-and-publication-media-boundary` is
+`DocumentationOnly` at `Level0DesignNote`. The whitepaper, PRD, source index,
+original media, and two publication PDFs create no execution, margin, custody,
+pause, signing, oracle, settlement, evidence-promotion, or production authority.
+The synchronized PRD is published as
+[GitHub issue #17](https://github.com/Epistetechnician/composed-zk-benchmark-os/issues/17)
+with `ready-for-agent`; that label means the specification is bounded enough for
+a future separately authorized phase, not that the phase is authorized now.
+
+Statebook P1 authorization status: the named docs-first slice
+`statebook-p1-core-semantic-fixtures-boundary` authorizes a separately committed
+`statebook-p1-core-semantic-fixtures` implementation limited to an isolated
+`statebook-core` crate, synthetic JSON fixtures, deterministic exact-arithmetic
+normalization, semantic-completeness reports, source-lineage receipts, and a
+canonical `StateKeyV1`. It grants no payoff evaluation, residual, execution,
+capital, settlement, assurance, recovery, HSAI, network, filesystem-write, or
+external authority.
+
+Statebook P1 implementation status: `statebook-core` is implemented locally and
+fixture-backed. Only complete closed-schema terminal indicator inputs can lower
+to an opaque validated contract. The frozen 701-byte V1 preimage hashes to
+`f1662f3fb5a10c074680c0baf76ba488b7230337456358be92f3127d8a632c08` in
+both production and implementation-diverse test encoders. This is deterministic
+regression evidence only, not economic equivalence, execution, settlement,
+proof, independent verification, or production readiness.
+
+
+Statebook P2 authorization status: the named docs-first slice
+`statebook-p2-payoff-residual-engine-boundary` freezes one future exact
+finite-domain indicator payoff and asset-vector residual engine. It does not
+authorize implementation in this commit, alter P1 identity, or grant execution,
+capital, settlement, external-I/O, or evidence authority.
+
+Statebook P2 implementation status: the named slice
+`statebook-p2-payoff-residual-engine` is implemented inside `statebook-core`.
+It evaluates only P1-validated indicator contracts over at most 256 declared
+states and 64 candidate legs, applies exact unit scaling and contract-level
+rounding, aggregates duplicate StateKeys deterministically, and reports
+non-netted per-asset residuals as `ExactOnDeclaredDomain`,
+`ApproximateOnDeclaredDomain`, or `Incomplete`. Coordinate or arithmetic
+failure invalidates the whole numeric report. The frozen P1 StateKey remains
+unchanged. This is local regression evidence only and creates no execution,
+capital, settlement, external-I/O, or evidence authority.
+
+Statebook P3 authorization status: the named docs-first slice
+`statebook-p3-seven-completeness-reports-boundary` freezes a future isolated
+`statebook-settlement` crate. The future implementation may compose the
+unchanged P1 semantic and P2 payoff reports with bounded hermetic execution,
+capital, settlement, assurance, and versioned-path recovery reports. Every new
+status remains fixture-qualified; current roots are disclosed without P4
+assurance resolution; no aggregate boolean, score, action, P5 adapter, live
+source, external I/O, or authority exists. This commit adds no Rust or Cargo
+change. The follow-on documentation-only state slice
+`statebook-p3-closed-identity-bound-correction` aligns the exact assurance and
+recovery limits with their closed identities: nine unique properties and
+fourteen implementation-owned paths.
+
+The documentation-only state slice
+`statebook-p3-capital-context-binding-correction` also requires every synthetic
+capital receipt to bind the full fixture authority/account/model/rule/context
+digest. Mismatch rejects composition; coherent rebinding remains a different
+hermetic fixture and creates no clearing or margin authority.
 
 ## Current Implementation Status
 
@@ -2294,3 +2369,48 @@ action-proposal digests and structurally validates bounded disposable-worktree
 preflight declarations before deriving gates. This is not proof that declared
 commands ran. The CLI performs no network or filesystem mutation and never
 grants action authority; Mesh owns the separate execution-capability boundary.
+
+The documentation-only
+`statebook-terminal-payoff-and-assurance-adjusted-settlement-boundary` defines a
+future `TerminalContractIR` above HSAI, keeps payoff composition separate from
+`ClaimEnvelope` evidence composition, and separates semantic, product,
+execution, settlement, and capital completeness. Its security policy preserves
+immediate internal risk updates; permits atomic DvP/PvP and time-critical
+external risk-reducing obligations only when fully represented, prefunded,
+unencumbered, hard-gated, capped, and all-or-none, with destination-restricted
+obligation use; assigns pending anomalous PnL zero reuse value; and uses
+independently valued common-numeraire and native-asset loss budgets,
+exactly-once reservations and deterministic refill, staged release, fresh
+revalidation, and bounded challenge and freeze windows.
+It adds no implementation, venue access, routing, custody, settlement,
+circuit-breaker authority, benchmark evidence, or claim above
+`Level0DesignNote`.
+
+## Statebook P3 Seven Completeness Reports Implementation
+
+The named state slice `statebook-p3-seven-completeness-reports` is implemented
+in the isolated `statebook-settlement` crate. It preserves the unchanged P1
+semantic and P2 payoff reports and adds fixture-qualified execution, capital,
+settlement, assurance, and recovery reports plus one seven-report composition.
+There is no aggregate completion boolean, score, rank, action, or authority.
+
+The implementation uses checked exact arithmetic, strict private fixture
+parsing, bounded incremental sequence deserialization, domain-separated tagged
+binary identities, typed assumptions/missing facts/reasons, dimension-local
+freshness, obligation-scoped settlement stages, disclosed assurance roots, and
+the fourteen-path implementation-owned recovery profile. Capital receipts bind
+the synthetic statement through `statebook:p3-capital-context:v1\0`; mismatch
+rejects, while coherent rebinding remains only a different hermetic fixture.
+
+An independently written TLV encoder using `ring` SHA-256 reproduces the frozen
+semantic, payoff, subject, five fixture, capital-context, recovery-profile,
+five report, and composition digests. Focused P3 format, test, and warning-
+denied Clippy gates pass, as do unchanged `statebook-core` tests and Clippy.
+See
+[docs/statebook-p3-seven-completeness-reports-implementation-notes.md](docs/statebook-p3-seven-completeness-reports-implementation-notes.md).
+
+This is local hermetic fixture regression evidence only. It is not execution,
+capital recognition, legal finality, assurance-root resolution, recovery proof,
+permitted release, benchmark evidence, production readiness, SOTA, independent
+audit, or full security.
+

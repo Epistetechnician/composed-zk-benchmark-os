@@ -1,0 +1,40 @@
+{
+  "schema_version": "statebook-payoff-residual-vectors:v1",
+  "baseline": {
+    "threshold": {"numerator":"100000","denominator":"1"},
+    "effective_true_payoff": {"numerator":"1","denominator":"1"},
+    "settlement_asset": "fixture.asset.USD",
+    "p1_state_key_sha256": "f1662f3fb5a10c074680c0baf76ba488b7230337456358be92f3127d8a632c08"
+  },
+  "declared_domain": {
+    "states": [
+      {"id":"below","observation":{"numerator":"99999","denominator":"1"}},
+      {"id":"equal","observation":{"numerator":"100000","denominator":"1"}},
+      {"id":"above","observation":{"numerator":"100001","denominator":"1"}}
+    ],
+    "digest_sha256": "67cb8e1807cd3e619f73d569f70de494ef60610f4d44acea236b0ee006e45e6a"
+  },
+  "scenarios": {
+    "ge_equals_eq_plus_gt": "exact_on_declared_domain",
+    "ge_minus_gt": {
+      "status": "approximate_on_declared_domain",
+      "equal_residual": {"fixture.asset.USD":{"numerator":"1","denominator":"1"}}
+    },
+    "duplicate_halves": "exact_on_declared_domain",
+    "eq_equals_ge_minus_gt": "exact_on_declared_domain",
+    "usd_usdc": {
+      "status": "approximate_on_declared_domain",
+      "residual": {
+        "fixture.asset.USD":{"numerator":"1","denominator":"1"},
+        "fixture.asset.USDC":{"numerator":"-1","denominator":"1"}
+      }
+    },
+    "coordinate_mismatch": "incomplete"
+  },
+  "rounding": {
+    "positive_half_quantum": {"toward_zero":"0/1","floor":"0/1","ceiling":"1/100","half_even":"0/1"},
+    "positive_one_and_half": {"half_even":"1/50"},
+    "negative_half_quantum": {"toward_zero":"0/1","floor":"-1/100","ceiling":"0/1","half_even":"0/1"},
+    "negative_one_and_half": {"half_even":"-1/50"}
+  }
+}
