@@ -21483,3 +21483,23 @@ cargo test -p statebook-core -p statebook-settlement -p statebook-report -p stat
 Claim ceiling: local hermetic adversarial fixture regression only. No value
 moves. Not complete TD-004 satisfaction, live authority, production readiness,
 SOTA, independent audit, or full-security claims.
+
+## Integration Track: Statebook P10 Semantic Equivalence Corpus Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p10-semantic-equivalence-corpus-boundary`.
+
+The next separately committed slice is
+`statebook-p10-semantic-equivalence-corpus`. It may add labeled StateKey
+equivalence corpus builders/tests under `crates/statebook-e2e-harness` using
+public P1 APIs and existing hermetic fixtures. Fixture-local acceptance:
+precision=1, recall=1, false-equivalence rate=0. P1–P9 identities remain
+unchanged. Outputs never move value or grant live authority.
+
+Validation gate: labeled corpus metrics; focused format/test/Clippy; unchanged
+P1–P9 tests; claim-boundary hygiene.
+
+Anti-goals: automatic economic-equivalence discovery, legal fungibility, AI
+oracle, live authority, production threshold calibration beyond fixture-local
+acceptance, scalar trust score, production readiness, SOTA, independent audit,
+or full-security claims.

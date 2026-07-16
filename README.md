@@ -881,6 +881,7 @@ Surface DSL
 | [docs/statebook-p8-evaluation-and-falsification-implementation-notes.md](docs/statebook-p8-evaluation-and-falsification-implementation-notes.md) | Implemented P8 `statebook-e2e-harness`: hermetic P1–P7 golden path, structured evaluation receipts, TD-011/§15 falsifiers; no live authority or value moves. |
 | [docs/statebook-p9-adversarial-corpus-replay-boundary-spec.md](docs/statebook-p9-adversarial-corpus-replay-boundary-spec.md) | Docs-first P9 authorization for encodable TD-004 / P4 adversarial corpus replay in `statebook-e2e-harness`; no kernel edits, no live authority. |
 | [docs/statebook-p9-adversarial-corpus-replay-implementation-notes.md](docs/statebook-p9-adversarial-corpus-replay-implementation-notes.md) | Implemented P9 encodable TD-004 / P4 adversarial corpus replay in `statebook-e2e-harness`; fail-closed zero-instant invariants; no kernel edits. |
+| [docs/statebook-p10-semantic-equivalence-corpus-boundary-spec.md](docs/statebook-p10-semantic-equivalence-corpus-boundary-spec.md) | Docs-first P10 authorization for labeled StateKey equivalence precision/recall corpus in `statebook-e2e-harness`; fixture-local metrics only. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -1053,6 +1054,14 @@ movement is authorized. See
 [docs/statebook-p9-adversarial-corpus-replay-implementation-notes.md](docs/statebook-p9-adversarial-corpus-replay-implementation-notes.md).
 
 This is local hermetic adversarial fixture regression evidence only. No value moves.
+
+Statebook P10 authorization status: the named docs-first slice
+`statebook-p10-semantic-equivalence-corpus-boundary` freezes a future labeled
+StateKey equivalence precision/recall corpus inside `statebook-e2e-harness`
+using public P1 APIs. Fixture-local acceptance requires zero false-equivalence
+rate and perfect precision/recall on the hermetic labels. All P1-P9 identities
+stay unchanged. No live authority, AI oracle, or value movement is authorized.
+This commit adds no Rust or Cargo change.
 
 ## Current Implementation Status
 
