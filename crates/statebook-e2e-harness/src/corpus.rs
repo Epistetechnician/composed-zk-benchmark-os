@@ -1,10 +1,10 @@
 use serde_json::{json, Value};
 use statebook_settlement::{
-    apply_cancel_v1, apply_challenge_v1, apply_proven_no_outflow_v1, apply_transfer_submit_v1,
-    decide_and_transition, intent_digest, parse_settlement_scenario_v1,
-    validate_breaker_transition, BreakerStateV1, ChallengeApplyResultV1, ChallengeKindV1,
-    ChallengeSubmissionV1, ClockV1, DecisionOutcomeV1, DecisionReasonV1, DecisionRecordV1,
-    DigestV1, SettlementScenarioV1, TransferBudgetResultV1,
+    apply_budget_refill_v1, apply_cancel_v1, apply_challenge_v1, apply_destination_finality_v1,
+    apply_proven_no_outflow_v1, apply_transfer_submit_v1, decide_and_transition, intent_digest,
+    parse_settlement_scenario_v1, validate_breaker_transition, BreakerStateV1,
+    ChallengeApplyResultV1, ChallengeKindV1, ChallengeSubmissionV1, ClockV1, DecisionOutcomeV1,
+    DecisionReasonV1, DecisionRecordV1, DigestV1, SettlementScenarioV1, TransferBudgetResultV1,
 };
 
 use crate::error::EvaluationErrorV1;
@@ -186,6 +186,18 @@ pub fn encodable_corpus_cases_v1() -> &'static [CorpusCaseV1] {
         },
         CorpusCaseV1 {
             id: "td004_32_halted_to_normal_blocked",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_30_slow_drain",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_08_split_cannot_expand_caps",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_52_refill_skip_epoch",
             expected_outcome: DecisionOutcomeV1::Rejected,
         },
     ]
@@ -410,6 +422,20 @@ pub fn build_corpus_scenario_v1(id: &str) -> Result<SettlementScenarioV1, Evalua
             ]);
         }),
         "td004_32_halted_to_normal_blocked" => mutate(|_| {}),
+        "td004_30_slow_drain" | "td004_52_refill_skip_epoch" => mutate(|value| {
+            value["initial_state"]["ledger"]["axes"] = json!([{
+                "asset": "ETH",
+                "cap": { "numerator": "12", "denominator": "1" }
+            }]);
+            value["request"]["total_amount"] = json!({ "numerator": "5", "denominator": "1" });
+        }),
+        "td004_08_split_cannot_expand_caps" => mutate(|value| {
+            value["initial_state"]["ledger"]["axes"] = json!([{
+                "asset": "ETH",
+                "cap": { "numerator": "12", "denominator": "1" }
+            }]);
+            value["request"]["total_amount"] = json!({ "numerator": "8", "denominator": "1" });
+        }),
         _ => Err(EvaluationErrorV1::Settlement(format!(
             "unknown corpus id: {id}"
         ))),
@@ -610,9 +636,123 @@ pub fn replay_corpus_case_v1(id: &str) -> Result<CorpusReplayReceiptV1, Evaluati
             record_digest: format!("halted-to-normal-blocked-{id}"),
         });
     }
+    if id == "td004_30_slow_drain" {
+        return replay_slow_drain_v1(id);
+    }
+    if id == "td004_08_split_cannot_expand_caps" {
+        return replay_split_cannot_expand_caps_v1(id);
+    }
+    if id == "td004_52_refill_skip_epoch" {
+        return replay_refill_skip_epoch_v1(id);
+    }
     let scenario = build_corpus_scenario_v1(id)?;
     let record = run(scenario)?;
     Ok(receipt(id, &record))
+}
+
+fn replay_slow_drain_v1(id: &str) -> Result<CorpusReplayReceiptV1, EvaluationErrorV1> {
+    let scenario = build_corpus_scenario_v1(id)?;
+    let (request, state, clock) = scenario.into_kernel_input();
+    let first = decide_and_transition(request.clone(), state, clock)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    if first.outcome() != DecisionOutcomeV1::Immediate {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} first drain step expected Immediate got {:?}",
+            first.outcome()
+        )));
+    }
+    let scenario = build_corpus_scenario_v1(id)?;
+    let (request, _, clock) = scenario.into_kernel_input();
+    let second = decide_and_transition(request.clone(), first.next_state().clone(), clock)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    if second.outcome() != DecisionOutcomeV1::Immediate {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} second drain step expected Immediate got {:?}",
+            second.outcome()
+        )));
+    }
+    let scenario = build_corpus_scenario_v1(id)?;
+    let (request, _, clock) = scenario.into_kernel_input();
+    let third = decide_and_transition(request, second.next_state().clone(), clock)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    if third.outcome() != DecisionOutcomeV1::Rejected || !third.instant_release_amount().is_zero() {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} third drain step expected Rejected zero-instant got {:?}",
+            third.outcome()
+        )));
+    }
+    Ok(receipt(id, &third))
+}
+
+fn replay_split_cannot_expand_caps_v1(
+    id: &str,
+) -> Result<CorpusReplayReceiptV1, EvaluationErrorV1> {
+    // Two sequential "split" requests of 8 against cap 12: first fits, second cannot expand.
+    let scenario = build_corpus_scenario_v1(id)?;
+    let (request, state, clock) = scenario.into_kernel_input();
+    let first = decide_and_transition(request, state, clock)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    if first.outcome() != DecisionOutcomeV1::Immediate {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} first split leg expected Immediate got {:?}",
+            first.outcome()
+        )));
+    }
+    let scenario = build_corpus_scenario_v1(id)?;
+    let (request, _, clock) = scenario.into_kernel_input();
+    // Same request shape on post-first ledger: aggregate cap still binds.
+    let second = decide_and_transition(request, first.next_state().clone(), clock)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    if second.outcome() != DecisionOutcomeV1::Rejected || !second.instant_release_amount().is_zero()
+    {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} second split leg expected Rejected zero-instant got {:?}",
+            second.outcome()
+        )));
+    }
+    Ok(receipt(id, &second))
+}
+
+fn replay_refill_skip_epoch_v1(id: &str) -> Result<CorpusReplayReceiptV1, EvaluationErrorV1> {
+    use statebook_core::SignedRational;
+    let scenario = parse_settlement_scenario_v1(IMMEDIATE)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let first = run(scenario)?;
+    let mut state = first.next_state().clone();
+    // Seed consumed via submit+finality so refill is meaningful, then skip epoch.
+    let tip = state.ledger().tip_digest();
+    let reserved = state.ledger().axes()[0].reserved();
+    apply_transfer_submit_v1(&mut state, "ETH", reserved, tip)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let tip = state.ledger().tip_digest();
+    let in_flight = state.ledger().axes()[0].in_flight();
+    apply_destination_finality_v1(&mut state, "ETH", in_flight, tip)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let tip = state.ledger().tip_digest();
+    let skipped_epoch = state.ledger().epoch().saturating_add(2);
+    let result = apply_budget_refill_v1(
+        &mut state,
+        "ETH",
+        SignedRational::new(1, 1).unwrap(),
+        skipped_epoch,
+        tip,
+    )
+    .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    if result
+        != (TransferBudgetResultV1::Rejected {
+            reason: DecisionReasonV1::BudgetRefillRejected,
+        })
+    {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} expected refill skip reject got {result:?}"
+        )));
+    }
+    Ok(CorpusReplayReceiptV1 {
+        id: id.to_owned(),
+        outcome: "rejected".to_owned(),
+        instant_release_is_zero: true,
+        record_digest: format!("refill-skip-{id}"),
+    })
 }
 
 pub fn replay_encodable_corpus_v1() -> Result<Vec<CorpusReplayReceiptV1>, EvaluationErrorV1> {

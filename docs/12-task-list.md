@@ -21489,14 +21489,33 @@ SOTA, independent audit, or full-security claims.
 Status: documentation-first boundary complete for named state slice
 `statebook-p18-budget-refill-split-drain-boundary`.
 
-The next separately committed slice is `statebook-p18-budget-refill-split-drain`.
-It may add `apply_budget_refill_v1` and harness corpus for slow-drain /
-contended-CAS aggregate caps. Live authority remains deferred. Outputs never
-move value.
+## Integration Track: Statebook P18 Budget Refill Split And Slow Drain Implementation
 
-Validation gate: sequential refill; skip/backfill/over-ceiling reject; slow
-drain exhausts; CAS one-success; suites green; format/test/Clippy;
-claim-boundary hygiene.
+Status: implemented under named state slice
+`statebook-p18-budget-refill-split-drain`.
+
+Delivered:
+
+- `apply_budget_refill_v1` with sequential epoch bump and per-epoch ceiling;
+- skip/backfill/over-ceiling/non-positive refill reject;
+- three harness corpus cases (slow drain, split cannot expand caps, refill
+  skip-epoch); 36 encodable cases total;
+- CAS tip one-success remains covered by existing settlement kernel tests.
+
+Live authority remains deferred behind the legal/ops gate.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic budget-refill / aggregate-cap fixture regression
+only. No value moves. Not complete TD-004 satisfaction, live authority,
+production readiness, SOTA, independent audit, or full-security claims.
 
 Anti-goals: live authority, complete TD-004 claim, trading, signing, custody,
 pause product, transfer command, admission mutation, Evidence Ledger append,

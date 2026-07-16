@@ -11476,5 +11476,26 @@ Outcome: `DocumentationOnly`, `Level0DesignNote`, named state slice
 
 This documentation-only slice creates no proof, accepted evidence, Level2+,
 score axis, production readiness, SOTA, breakthrough, full security, external
-audit, or action authority. Implementation requires a separately committed
-state slice `statebook-p18-budget-refill-split-drain`.
+audit, or action authority.
+
+## Statebook P18 Budget Refill Split And Slow Drain Implementation
+
+Date: 16 July 2026.
+
+Outcome: `Level1LocalReplay`, `Pass`, named state slice
+`statebook-p18-budget-refill-split-drain`.
+
+State slice:
+
+- additive `apply_budget_refill_v1` and refill bounds under
+  `crates/statebook-settlement`;
+- additive harness corpus cases under `crates/statebook-e2e-harness`;
+- `docs/statebook-p18-budget-refill-split-drain-implementation-notes.md`;
+- navigation/status mirrors.
+
+Thirty-six encodable corpus cases replay fail-closed; existing suites remain
+green.
+
+This is local hermetic budget-refill / aggregate-cap fixture regression evidence
+only. It does not establish complete TD-004 satisfaction, live authority,
+production readiness, SOTA, independent audit, or full security. No value moves.
