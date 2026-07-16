@@ -10995,3 +10995,31 @@ not establish live venue truth, clearing recognition, legal finality, admission
 authority, Evidence Ledger mutation, P7 capability, production readiness, SOTA,
 independent audit, or full security. No value moves.
 
+## Statebook P7 Authority Integration Preflight Boundary
+
+Date: 16 July 2026.
+
+Outcome: `DocumentationOnly`, `NotRun`, named state slice
+`statebook-p7-authority-integration-preflight-boundary`.
+
+State slice:
+
+- `docs/statebook-p7-authority-integration-preflight-boundary-spec.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+The boundary freezes Integration Stage 6 as a fail-closed authority-package
+preflight for profile `hermetic-authority-preflight-v1`. It requires owner,
+maximum loss, rollback/pause semantics, audit retention, legal domain, and
+production gate, while forbidding controller invocation and rejecting
+`production_gate=authorized` in this slice. It authorizes at most
+`crates/statebook-authority` and preserves all P1-P6 identities.
+
+This documentation-only slice adds no Rust or Cargo change and creates no
+proof, accepted evidence, Level2+, score axis, semantic correctness, production
+readiness, SOTA, breakthrough, full security, external audit, or action
+authority. Implementation requires a separately committed state slice
+`statebook-p7-authority-integration-preflight`.
+
