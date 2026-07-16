@@ -21380,3 +21380,39 @@ moves. No P7 authority, trading, signing, custody, live venue network in this
 slice, admission mutation, Evidence Ledger append, scalar trust score,
 production readiness, SOTA, independent audit, or full-security claims.
 
+
+## Integration Track: Statebook P7 Authority Integration Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p7-authority-integration-boundary`.
+
+## Integration Track: Statebook P7 Authority Integration Implementation
+
+Status: implemented under named state slice
+`statebook-p7-authority-integration`.
+
+Delivered in isolated `crates/statebook-authority`:
+
+- hermetic attach for `synthetic-clearing-authority-v1`;
+- authority registry with revoke/historical digest retention;
+- capital-recognition overlays that preserve economic residual digests;
+- permanent `grants_execution_authority=false` and legal/ops gate deferred checklist;
+- domain-separated P7 TLV digests with an independent `ring` golden encoder;
+- seventeen focused integration tests.
+
+P1-P6 identities remain unchanged. Live authority products remain deferred.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-authority -- --check
+cargo test -p statebook-authority --tests
+cargo clippy -p statebook-authority --all-targets -- -D warnings
+cargo test -p statebook-core -p statebook-settlement -p statebook-report -p statebook-source --tests
+```
+
+Claim ceiling: local hermetic synthetic authority-statement / capital-overlay
+regression only. No value moves. Completing P7 does not satisfy the legal/ops
+gate for live execution, custody, signing, pause, real margin recognition, or
+settlement. No admission mutation, Evidence Ledger append, scalar trust score,
+production readiness, SOTA, independent audit, or full-security claims.

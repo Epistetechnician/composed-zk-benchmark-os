@@ -1,0 +1,21 @@
+{
+  "schema_version": "statebook-p7-authority-statement:v1",
+  "profile_id": "synthetic-clearing-authority-v1",
+  "authority_namespace": "synthetic.clearing.authority.v1",
+  "authority_id": "synthetic-clearing-officer-v1",
+  "statement_revision": "rev-1",
+  "eligible_account": "acct-fixture-001",
+  "model_id": "synthetic-margin-model-v1",
+  "model_version": "1",
+  "model_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "margin_rule_id": "synthetic-margin-rule-v1",
+  "jurisdiction": "synthetic-jurisdiction-v1",
+  "subject_terms_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "economic_residual_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "recognized_numerator": "1",
+  "recognized_denominator": "1",
+  "issued_at": 1000,
+  "expires_at": 2000,
+  "grants_execution_authority": false,
+  "limitations": ["synthetic-non-authoritative"]
+}

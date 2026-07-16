@@ -10995,3 +10995,63 @@ not establish live venue truth, clearing recognition, legal finality, admission
 authority, Evidence Ledger mutation, P7 capability, production readiness, SOTA,
 independent audit, or full security. No value moves.
 
+
+## Statebook P7 Authority Integration Boundary
+
+Date: 16 July 2026.
+
+Outcome: `DocumentationOnly`, `NotRun`, named state slice
+`statebook-p7-authority-integration-boundary`.
+
+State slice:
+
+- `docs/statebook-p7-authority-integration-boundary-spec.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+The boundary freezes the P7 legal/ops gate and one synthetic authority profile
+(`synthetic-clearing-authority-v1`), hermetic statement attach, capital-
+recognition overlay only, permanent `grants_execution_authority=false`, and
+deferred live authority products. It authorizes at most
+`crates/statebook-authority`. It preserves all P1-P6 identities. Live
+execution, custody, signing, pause, real margin recognition, and settlement
+remain outside this slice.
+
+This documentation-only slice adds no Rust or Cargo change and creates no
+proof, accepted evidence, Level2+, score axis, semantic correctness, production
+readiness, SOTA, breakthrough, full security, external audit, or action
+authority.
+
+## Statebook P7 Authority Integration Implementation
+
+Date: 16 July 2026.
+
+Outcome: `Level1LocalReplay`, `Pass`, named state slice
+`statebook-p7-authority-integration`.
+
+State slice:
+
+- root `Cargo.toml` / `Cargo.lock` membership for `statebook-authority`;
+- `crates/statebook-authority/**`;
+- `docs/statebook-p7-authority-integration-implementation-notes.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+The crate attaches hermetic synthetic authority statements through a
+fail-closed envelope, registers revoke-aware provenance, emits capital overlays
+that preserve economic residual digests, records legal/ops gate deferred
+checklist constants, and reproduces domain-separated P7 digests via an
+independent `ring` encoder. Seventeen focused integration tests pass; unchanged
+`statebook-core`, `statebook-settlement`, `statebook-report`, and
+`statebook-source` tests pass; focused format and warning-denied Clippy pass for
+`statebook-authority`. Live authority products remain deferred.
+
+This is local hermetic synthetic authority-statement / capital-overlay
+regression evidence only. It does not establish live clearing recognition,
+legal finality, admission authority, Evidence Ledger mutation, production
+readiness, SOTA, independent audit, or full security. Completing P7 does not
+satisfy the legal/ops gate for live authority products. No value moves.

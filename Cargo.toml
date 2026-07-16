@@ -17,6 +17,7 @@ members = [
     "crates/statebook-report",
     "crates/statebook-settlement",
     "crates/statebook-source",
+    "crates/statebook-authority",
     "crates/zkbench-core",
 ]
 
