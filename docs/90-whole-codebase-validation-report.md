@@ -10952,3 +10952,28 @@ admission SHA-256
 A3L6 remains unaccepted and A3L7/A3L8 remain prohibited. Correspondence remains
 2/10, commercial moat remains 3/10, and defensible breakthrough evidence
 remains 2-3/10. No runtime evidence or stronger claim was created.
+
+## Phase 796-A3L5F HSAI P01B Probe Binding Correction
+
+Date: 15 July 2026.
+
+Outcome: documentation-only correction at execution state `NotRun` for named
+state slice `phase-796a3l5f-hsai-p01b-probe-binding-correction`.
+
+The pinned native direct argv executes `/usr/bin/python3`, while
+`sys.executable` reports a different CommandLineTools path on this host. Native
+runtime executable provenance now means the descriptor-verified direct launch
+path. Separately, the descriptor-bound snapshot-copy manifest contains host
+descriptor digests that container-visible bytes cannot derive. Normal/OOM argv
+therefore adds one required `--input-manifest-sha256` value carrying that frozen
+domain digest. The probe still inventories the exact mounted 21-file tree and
+validates the corpus; A3L9 still replays candidate bytes, manifests,
+descriptors, ingress, argv, and the complete digest equality chain.
+
+Validation requires two independent zero-finding reviews, the pinned
+focused/discovery gates, Git diff checks, and preservation of the pre-existing
+admission SHA-256
+`41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de`.
+A3L6 remains unaccepted and A3L7/A3L8 remain prohibited. Correspondence remains
+2/10, commercial moat remains 3/10, and defensible breakthrough evidence
+remains 2-3/10. No runtime evidence or stronger claim was created.
