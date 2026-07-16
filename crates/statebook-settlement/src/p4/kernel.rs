@@ -6,6 +6,7 @@ use super::breaker::{
     apply_ttl_exhaustion_to_state, collect_breaker_block_reasons, global_breaker_state,
 };
 use super::budget::{gross_reserve_linked_plan, try_reserve, ReservationResult};
+use super::challenge::{apply_evidence_expiry_to_state, evidence_is_fresh};
 use super::classify::classify_release_class;
 use super::digest::{
     decision_context_digest, decision_record_digest, evidence_snapshot_digest, intent_digest,
@@ -47,6 +48,59 @@ pub fn decide_and_transition(
 
     let mut current_state = current_state;
     apply_ttl_exhaustion_to_state(&mut current_state, evaluated_at);
+
+    let mut expiry_values: Vec<i64> = evidence
+        .observations()
+        .iter()
+        .map(|observation| observation.expires_at)
+        .collect();
+    expiry_values.push(request.expires_at);
+    apply_evidence_expiry_to_state(
+        &mut current_state,
+        expiry_values.iter().copied(),
+        evaluated_at,
+    );
+
+    let mut revalidating = false;
+    if current_state.queue.status == QueueStatusV1::RevalidationRequired {
+        if evidence_is_fresh(expiry_values.iter().copied(), evaluated_at) {
+            // Fresh evidence binds a new decision context (above) and clears the
+            // revalidation block toward Reserved — never timer-alone release.
+            current_state.queue.status = QueueStatusV1::None;
+            revalidating = true;
+        } else {
+            let ledger_tip_before = current_state.ledger.tip_digest;
+            let queue_status_before = current_state.queue.status;
+            let transfer_status_before = current_state.transfer.status;
+            return Ok(build_record(
+                DecisionOutcomeV1::Rejected,
+                None,
+                zero_rational(),
+                zero_rational(),
+                intent,
+                decision_context,
+                None,
+                request.financial_basis.analysis_subject_digest,
+                request.financial_basis.composition_digest,
+                evidence_digest,
+                valuation_digest,
+                policy_d,
+                linked_or_obligation_digest(&request),
+                ledger_tip_before,
+                ledger_tip_before,
+                queue_status_before,
+                QueueStatusV1::RevalidationRequired,
+                transfer_status_before,
+                transfer_status_before,
+                vec![DecisionReasonV1::EvidenceExpired],
+                Vec::new(),
+                default_nonclaims(),
+                evaluated_at,
+                release_class,
+                current_state,
+            ));
+        }
+    }
 
     let ledger_tip_before = current_state.ledger.tip_digest;
     let queue_status_before = current_state.queue.status;
@@ -304,13 +358,28 @@ pub fn decide_and_transition(
         release_attempt_digest("instant-part-1", decision_context, "reservation-1");
 
     let (outcome, instant_release, queued_release, queue_after, transfer_after) =
-        if global_breaker_state(next_state.breakers()) == BreakerStateV1::Challenged {
+        if global_breaker_state(next_state.breakers()) == BreakerStateV1::Challenged
+            || queue_status_before == QueueStatusV1::Challenged
+            || next_state.queue.status == QueueStatusV1::Challenged
+        {
+            next_state.queue.status = QueueStatusV1::Frozen;
+            next_state.transfer.status = TransferStatusV1::Unreserved;
             (
                 DecisionOutcomeV1::Frozen,
                 zero_rational(),
                 zero_rational(),
                 QueueStatusV1::Frozen,
                 TransferStatusV1::Unreserved,
+            )
+        } else if revalidating && instant.numerator() > 0 {
+            next_state.queue.status = QueueStatusV1::None;
+            next_state.transfer.status = TransferStatusV1::Reserved;
+            (
+                DecisionOutcomeV1::Immediate,
+                instant,
+                zero_rational(),
+                QueueStatusV1::None,
+                TransferStatusV1::Reserved,
             )
         } else if release_class == ReleaseClassV1::ExternalUnconditional
             && queued.numerator() > 0
