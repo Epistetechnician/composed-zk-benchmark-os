@@ -11364,3 +11364,38 @@ existing P4/P9–P13 suites remain green.
 This is local hermetic cancel/race regression evidence only. It does not
 establish live pause authority, complete TD-004 satisfaction, production
 readiness, SOTA, independent audit, or full security. No value moves.
+
+## Statebook P15 Destination Finality And Proven No-Outflow Boundary
+
+Date: 16 July 2026.
+
+Outcome: `DocumentationOnly`, `Level0DesignNote`, named state slice
+`statebook-p15-destination-finality-proven-no-outflow-boundary`.
+
+This documentation-only slice creates no proof, accepted evidence, Level2+,
+score axis, production readiness, SOTA, breakthrough, full security, external
+audit, or action authority.
+
+## Statebook P15 Destination Finality And Proven No-Outflow Implementation
+
+Date: 16 July 2026.
+
+Outcome: `Level1LocalReplay`, `Pass`, named state slice
+`statebook-p15-destination-finality-proven-no-outflow`.
+
+State slice:
+
+- additive `crates/statebook-settlement/src/p4/{budget,types,digest,parse,mod}.rs`
+  and `src/lib.rs` exports;
+- `crates/statebook-settlement/tests/destination_finality.rs`;
+- additive harness corpus cases under `crates/statebook-e2e-harness`;
+- `docs/statebook-p15-destination-finality-proven-no-outflow-implementation-notes.md`;
+- navigation/status mirrors.
+
+Destination finality consumes without restoring capacity; validated
+ProvenNoOutflow restores; invalid proof leaves in_flight; existing suites remain
+green.
+
+This is local hermetic finality/no-outflow regression evidence only. It does not
+establish live pause authority, complete TD-004 satisfaction, production
+readiness, SOTA, independent audit, or full security. No value moves.

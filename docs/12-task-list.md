@@ -21641,3 +21641,35 @@ cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -
 Claim ceiling: local hermetic cancel/race regression only. No value moves. Not
 live pause authority, complete TD-004 satisfaction, production readiness, SOTA,
 independent audit, or full-security claims.
+
+## Integration Track: Statebook P15 Destination Finality And Proven No-Outflow Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p15-destination-finality-proven-no-outflow-boundary`.
+
+## Integration Track: Statebook P15 Destination Finality And Proven No-Outflow Implementation
+
+Status: implemented under named state slice
+`statebook-p15-destination-finality-proven-no-outflow`.
+
+Delivered:
+
+- `apply_transfer_submit_v1` / `apply_destination_finality_v1` /
+  `apply_proven_no_outflow_v1`;
+- available capacity subtracts consumed;
+- four settlement finality tests and two new harness corpus cases.
+
+Recovery reopen and live authority remain deferred.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic finality/no-outflow regression only. No value
+moves. Not live pause authority, complete TD-004 satisfaction, production
+readiness, SOTA, independent audit, or full-security claims.
