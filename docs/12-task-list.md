@@ -22101,3 +22101,27 @@ hygiene checks, clean-tree workspace tests, and two independent reviews.
 Anti-goals: other payoff forms, global equivalence, books, prices, optimization,
 routing, execution, capital recognition, settlement, external I/O, HSAI,
 zkbench, Cargo changes, evidence promotion, or stronger claims.
+
+## Integration Track: Statebook P2 Payoff And Residual Engine Implementation
+
+Status: implemented for named state slice
+`statebook-p2-payoff-residual-engine`.
+
+Deliverables: additive checked rational arithmetic and exact quantization in
+`statebook-core`; one bounded finite-state indicator payoff and asset-vector
+residual engine; deterministic StateKey aggregation with contributing receipt
+digests; strict observation-coordinate compatibility; typed exact,
+approximate, and incomplete reports; a frozen residual fixture and domain
+digest; exhaustive comparator, endpoint, rounding, arithmetic-failure,
+resource-bound, ordering, multi-asset, and P1-regression tests; and updated
+claim-boundary scanning.
+
+Validation gate: focused formatting, all-feature package tests, warning-denied
+all-target package Clippy, unchanged P1 golden vectors, repository docs and
+hygiene checks, and two independent arithmetic and scope reviews.
+
+Anti-goals: any non-indicator payoff, extrapolated global equivalence, books,
+prices, ranking, optimization, routing, execution, margin, collateral,
+settlement authority, external I/O, HSAI, zkbench, Cargo changes, evidence
+promotion, proof, production readiness, SOTA, independent-audit, or full-
+security claims.
