@@ -17,6 +17,7 @@ use super::error::SettlementTransitionErrorV1;
 use super::gates::evaluate_hard_gates;
 use super::hysteresis::{apply_accepted_policy_to_state, collect_hysteresis_block_reason};
 use super::linked_plan::linked_outbound_total;
+use super::recovery::recovery_blocks_release;
 use super::types::{
     default_nonclaims, zero_rational, AssuranceTierV1, BreakerStateV1, ClockV1, DecisionOutcomeV1,
     DecisionReasonV1, DecisionRecordV1, ExternalizationRequestV1, QueueStatusV1, ReleaseClassV1,
@@ -185,7 +186,7 @@ pub fn decide_and_transition(
     if let Some(reason) = collect_hysteresis_block_reason(&current_state, policy, evaluated_at) {
         reasons.push(reason);
     }
-    if current_state.recovery.reconciliation_mismatch || current_state.recovery.canary_failed {
+    if recovery_blocks_release(&current_state) {
         reasons.push(DecisionReasonV1::RecoveryFailed);
     }
 
