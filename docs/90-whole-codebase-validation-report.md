@@ -10939,3 +10939,30 @@ not establish live venue ingestion, clearing recognition, legal finality,
 admission authority, Evidence Ledger mutation, P6/P7 capability, production
 readiness, SOTA, independent audit, or full security. No value moves.
 
+## Statebook P6 Read-Only External Sources Boundary
+
+Date: 16 July 2026.
+
+Outcome: `DocumentationOnly`, `NotRun`, named state slice
+`statebook-p6-read-only-external-sources-boundary`.
+
+State slice:
+
+- `docs/statebook-p6-read-only-external-sources-boundary-spec.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+The boundary freezes Integration Stage 5 for one synthetic clearing profile
+(`synthetic-clearing-terms-v1`), captured-first import, provenance registry,
+fail-closed import contract, and deferred live network. It authorizes at most
+`crates/statebook-source`. It preserves all P1-P5 identities. P7 authority
+remains outside this slice.
+
+This documentation-only slice adds no Rust or Cargo change and creates no
+proof, accepted evidence, Level2+, score axis, semantic correctness, production
+readiness, SOTA, breakthrough, full security, external audit, or action
+authority. Implementation requires a separately committed state slice
+`statebook-p6-read-only-external-sources`.
+

@@ -873,6 +873,7 @@ Surface DSL
 | [docs/statebook-p4-settlement-simulator-implementation-notes.md](docs/statebook-p4-settlement-simulator-implementation-notes.md) | Implemented P4 pure deterministic settlement transition kernel with fail-closed hard gates, hermetic fixtures, domain-separated digests, and non-authoritative decision records; no value moves. |
 | [docs/statebook-p5-evidence-adapters-and-report-bundles-boundary-spec.md](docs/statebook-p5-evidence-adapters-and-report-bundles-boundary-spec.md) | Docs-first P5 authorization for narrow HSAI/fixture adapters, portable digest-bound audit bundles, independent digest checks, and fail-closed readback validation; no live sources or authority. |
 | [docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md](docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md) | Implemented P5 `statebook-report` crate: hermetic/HSAI fixture adapters, `grants_authority=false` handoff, portable digest-bound audit bundles, independent readback, and domain-separated digests; no value moves. |
+| [docs/statebook-p6-read-only-external-sources-boundary-spec.md](docs/statebook-p6-read-only-external-sources-boundary-spec.md) | Docs-first P6 authorization for captured-first read-only external import (`statebook-source`), Stage 5 freeze for one synthetic clearing profile, provenance registry, and fail-closed import; no live network in first implementation, no authority. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -992,6 +993,15 @@ Focused P5 format, test, and warning-denied Clippy gates pass, as do unchanged
 [docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md](docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md).
 
 This is local hermetic fixture regression and readback evidence only. No value moves.
+
+Statebook P6 authorization status: the named docs-first slice
+`statebook-p6-read-only-external-sources-boundary` freezes a future captured-first
+read-only external import surface in `statebook-source`. The Stage 5 freeze names one
+synthetic clearing profile (`synthetic-clearing-terms-v1`), operator-local captured
+import, out-of-crate credential rules, a hermetic test double, and a fail-closed import
+contract. Live network clients are deferred past the first implementation. All P1-P5
+identities stay unchanged. No P7 authority, trading, signing, custody, or value movement
+is authorized. This commit adds no Rust or Cargo change.
 
 ## Current Implementation Status
 
