@@ -11000,3 +11000,34 @@ admission SHA-256
 A3L6 remains unaccepted and A3L7/A3L8 remain prohibited. Correspondence remains
 2/10, commercial moat remains 3/10, and defensible breakthrough evidence
 remains 2-3/10. No runtime evidence or stronger claim was created.
+
+## Phase 796-A3L5H HSAI P01B Authority Adapter Correction
+
+Date: 15 July 2026.
+
+Outcome: documentation-only correction at execution state `NotRun` for named
+state slice `phase-796a3l5h-hsai-p01b-authority-adapter-correction`.
+
+Repository-grounded audit found that the four prior HSAI gateway admission
+objects do not carry schema fields, the gateway policy has no production
+digest, and A3L5C did not freeze a P01B program/network mapping. The previous
+generic schema-labelled-object interpretation could not establish C10.
+A3L5H therefore defines four P01B wrapper domains around the exact production
+proposal, policy, derived candidate, and recomputed decision; preserves Rust
+Serde declaration-order tagged hashing separately from P01B sorted-key
+NUL-domain hashing; binds the implementation, A3L6 bundle, readiness plan,
+claim boundary, source artifacts, deterministic no-model lane, and wrapper
+graph; and freezes the only permitted A3L7-A3L9 network scope. The graph remains
+acyclic because normal/OOM/campaign plans bind authorization-v3 one-way after
+authorization rather than being hashed by an earlier authority object.
+
+Validation requires two independent zero-finding documentation reviews, exact
+empty-object domain vectors, the later exact 32/32 focused evidence and 32/32
+focused execution suites, Git diff checks, and preservation of the pre-existing
+admission SHA-256
+`41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de`.
+C10 remains fail-closed until implementation acceptance. A3L6 remains
+unaccepted and A3L7/A3L8 remain prohibited. Correspondence remains 2/10,
+commercial moat remains 3/10, and defensible breakthrough evidence remains
+2-3/10. No Docker/network action, runtime evidence, or stronger claim was
+created.

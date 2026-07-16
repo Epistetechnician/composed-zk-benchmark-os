@@ -2038,6 +2038,28 @@ Docker or network action, runtime evidence, class closure, score movement,
 accepted Evidence Ledger mutation, Level2+, benchmark evidence, proof,
 production readiness, SOTA, breakthrough, full security, or external audit.
 
+Explicit Phase 796-A3L5H HSAI P01B authority-adapter correction now allowed
+and completed as documentation only under
+`docs/796a3l5h-phase-hsai-p01b-authority-adapter-correction.md` plus the four
+standard navigation mirrors. This named state slice is limited to resolving
+the under-specified A3L5C authority objects by wrapping the exact existing
+`GatewayActionProposal`, `GatewayActionPolicy`, `AgentAdmissionCandidate`, and
+`AgentAdmissionDecision` Serde objects in four P01B schema/domain documents;
+freezing the production Rust tagged-hash reconstruction, P01B wrapper domains,
+program/action/policy/source-artifact/model-lane constants, implementation,
+A3L6, readiness-plan, claim-boundary, and cross-wrapper bindings; freezing an
+acyclic construction order; and freezing an exact network scope that permits
+only the two A3L7 registry reads, local Unix Docker control after readiness,
+`--network=none` for normal/OOM, and no A3L9 network. It does not permit Rust
+or Python implementation in this slice, Cargo or package changes, Docker or
+network action, container creation, retained runtime evidence, class closure,
+score movement, accepted Evidence Ledger mutation, Level2+, benchmark evidence,
+proof, production readiness, SOTA, breakthrough, full security, or external
+audit. C10 remains fail-closed until the exact adapter is implemented, pinned,
+and independently reviewed. The dirty admission source remains outside this
+state slice at SHA-256
+`41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de`.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.

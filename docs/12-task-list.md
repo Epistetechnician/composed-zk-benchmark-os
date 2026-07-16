@@ -20703,6 +20703,31 @@ Evidence Ledger mutation, Level2+, benchmark evidence, proof, production
 readiness, SOTA, breakthrough, full security, or external-audit claim is
 created.
 
+## Phase 796-A3L5H HSAI P01B Authority Adapter Correction
+
+Status: complete documentation-only correction; C10 remains fail-closed,
+execution remains `NotRun`, and correspondence remains `2/10`.
+
+Named state slice:
+`phase-796a3l5h-hsai-p01b-authority-adapter-correction`.
+
+Completed: defined four P01B wrapper schemas/domains over the exact existing
+HSAI gateway action, policy, candidate, and admission-decision Serde objects;
+froze production Rust field-order/tagged-digest reconstruction separately from
+P01B canonical wrapper hashing; froze the exact P01B program, action, subject,
+policy, source-artifact, nonclaim, deterministic model-lane, implementation,
+A3L6, readiness-plan, claim-boundary, and network bindings; preserved the
+acyclic authorization-to-postauthorization-plan direction; and specified the
+mandatory negative tests. See
+`docs/796a3l5h-phase-hsai-p01b-authority-adapter-correction.md`.
+
+Exit criteria: two independent zero-finding documentation reviews, then exact
+five-file implementation, pinned gates, and two independent code reviews.
+A3L7/A3L8 remain prohibited; no Docker, registry, network, container, retained
+runtime evidence, class closure, score movement, accepted Evidence Ledger
+mutation, Level2+, benchmark evidence, proof, production readiness, SOTA,
+breakthrough, full-security, or external-audit claim is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
