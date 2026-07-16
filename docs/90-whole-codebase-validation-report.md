@@ -11296,3 +11296,15 @@ evidence revalidates toward Reserved; existing P4/P9/P11 suites remain green.
 This is local hermetic challenge grammar / evidence-expiry regression evidence
 only. It does not establish live pause authority, complete TD-004 satisfaction,
 production readiness, SOTA, independent audit, or full security. No value moves.
+
+## Statebook P13 Hysteresis Relax And Rollback Boundary
+
+Date: 16 July 2026.
+
+Outcome: `DocumentationOnly`, `Level0DesignNote`, named state slice
+`statebook-p13-hysteresis-relax-rollback-boundary`.
+
+This documentation-only slice creates no proof, accepted evidence, Level2+,
+score axis, production readiness, SOTA, breakthrough, full security, external
+audit, or action authority. Implementation requires a separately committed
+state slice `statebook-p13-hysteresis-relax-rollback`.
