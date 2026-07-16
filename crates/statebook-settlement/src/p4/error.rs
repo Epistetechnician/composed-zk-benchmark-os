@@ -41,4 +41,6 @@ pub enum SettlementTransitionErrorV1 {
     InvalidBreakerRenewal,
     #[error("breaker renewal rejected at ceiling")]
     BreakerRenewalRejected,
+    #[error("challenge count exceeds max_challenges_v1")]
+    ChallengeLimitExceeded,
 }

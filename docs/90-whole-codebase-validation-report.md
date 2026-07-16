@@ -11261,3 +11261,38 @@ existing P4 five-outcome and harness suites remain green.
 This is local hermetic breaker TTL/resolution regression evidence only. It does
 not establish live pause authority, complete TD-004 satisfaction, production
 readiness, SOTA, independent audit, or full security. No value moves.
+
+## Statebook P12 Challenge Grammar And Evidence Expiry Boundary
+
+Date: 16 July 2026.
+
+Outcome: `DocumentationOnly`, `Level0DesignNote`, named state slice
+`statebook-p12-challenge-grammar-evidence-expiry-boundary`.
+
+This documentation-only slice creates no proof, accepted evidence, Level2+,
+score axis, production readiness, SOTA, breakthrough, full security, external
+audit, or action authority.
+
+## Statebook P12 Challenge Grammar And Evidence Expiry Implementation
+
+Date: 16 July 2026.
+
+Outcome: `Level1LocalReplay`, `Pass`, named state slice
+`statebook-p12-challenge-grammar-evidence-expiry`.
+
+State slice:
+
+- additive `crates/statebook-settlement/src/p4/{challenge,kernel,types,digest,error,parse,mod}.rs`
+  and `src/lib.rs` exports;
+- `crates/statebook-settlement/tests/challenge_grammar.rs`;
+- additive harness corpus cases under `crates/statebook-e2e-harness`;
+- `docs/statebook-p12-challenge-grammar-evidence-expiry-implementation-notes.md`;
+- navigation/status mirrors.
+
+Valid challenge freezes queued parts; invalid/duplicate/censored/unavailable
+reject without release; evidence expiry enters RevalidationRequired; fresh
+evidence revalidates toward Reserved; existing P4/P9/P11 suites remain green.
+
+This is local hermetic challenge grammar / evidence-expiry regression evidence
+only. It does not establish live pause authority, complete TD-004 satisfaction,
+production readiness, SOTA, independent audit, or full security. No value moves.

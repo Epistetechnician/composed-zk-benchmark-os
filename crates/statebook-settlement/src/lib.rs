@@ -26,11 +26,12 @@ pub use completeness::{
 };
 
 pub use p4::{
-    attempt_breaker_renewal_v1, decide_and_transition, decision_context_digest,
+    apply_challenge_v1, attempt_breaker_renewal_v1, decide_and_transition, decision_context_digest,
     evidence_snapshot_digest, intent_digest, intent_payload, parse_settlement_scenario_v1,
     policy_digest, validate_breaker_transition, valuation_profile_digest, AssuranceTierV1,
-    AtomicLinkedExchangePlanV1, BreakerScopeV1, BreakerStateV1, ClockV1, DecisionMissingFactV1,
-    DecisionNonclaimV1, DecisionOutcomeV1, DecisionReasonV1, DecisionRecordV1, DirectionV1,
+    AtomicLinkedExchangePlanV1, BreakerScopeV1, BreakerStateV1, ChallengeApplyResultV1,
+    ChallengeKindV1, ChallengeSubmissionV1, ClockV1, DecisionMissingFactV1, DecisionNonclaimV1,
+    DecisionOutcomeV1, DecisionReasonV1, DecisionRecordV1, DirectionV1,
     ExternalRiskReducingObligationV1, ExternalizationRequestV1, FinancialBasisKindV1,
     FinancialBasisV1, QueueStatusV1, ReleaseClassV1, SettlementParseErrorV1, SettlementPolicyV1,
     SettlementScenarioV1, SettlementStateV1, SettlementTransitionErrorV1, TransferStatusV1,
