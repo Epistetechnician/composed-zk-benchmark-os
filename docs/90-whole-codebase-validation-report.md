@@ -11055,3 +11055,30 @@ regression evidence only. It does not establish live clearing recognition,
 legal finality, admission authority, Evidence Ledger mutation, production
 readiness, SOTA, independent audit, or full security. Completing P7 does not
 satisfy the legal/ops gate for live authority products. No value moves.
+
+## Statebook P8 Evaluation And Falsification Boundary
+
+Date: 16 July 2026.
+
+Outcome: `DocumentationOnly`, `NotRun`, named state slice
+`statebook-p8-evaluation-and-falsification-boundary`.
+
+State slice:
+
+- `docs/statebook-p8-evaluation-and-falsification-boundary-spec.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+The boundary freezes a hermetic composing evaluation harness for public P1–P7
+APIs under whitepaper §15 / PRD TD-011. It authorizes at most
+`crates/statebook-e2e-harness`. It preserves all P1–P7 identities. Live
+authority products and production threshold calibration remain outside this
+slice.
+
+This documentation-only slice adds no Rust or Cargo change and creates no
+proof, accepted evidence, Level2+, score axis, semantic correctness, production
+readiness, SOTA, breakthrough, full security, external audit, or action
+authority. Implementation requires a separately committed state slice
+`statebook-p8-evaluation-and-falsification`.
