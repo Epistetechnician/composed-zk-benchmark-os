@@ -121,6 +121,9 @@ pub enum DecisionReasonV1 {
     QueueTimerOnly,
     ChallengeInvalid,
     ChallengeDuplicate,
+    ChallengeCensored,
+    ChallengeUnavailable,
+    EvidenceExpired,
     PolicyRollback,
     RecoveryFailed,
     IntentDigestMismatch,
@@ -437,6 +440,69 @@ pub struct BudgetLedgerStateV1 {
     pub(crate) journal: Vec<String>,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ChallengeKindV1 {
+    Valid,
+    Invalid,
+    Duplicate,
+    Censored,
+    Unavailable,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct ChallengeSubmissionV1 {
+    challenge_id: String,
+    trust_root_id: String,
+    deadline: i64,
+    affected_scope_id: String,
+    kind: ChallengeKindV1,
+}
+
+impl ChallengeSubmissionV1 {
+    pub fn new(
+        challenge_id: impl Into<String>,
+        trust_root_id: impl Into<String>,
+        deadline: i64,
+        affected_scope_id: impl Into<String>,
+        kind: ChallengeKindV1,
+    ) -> Self {
+        Self {
+            challenge_id: challenge_id.into(),
+            trust_root_id: trust_root_id.into(),
+            deadline,
+            affected_scope_id: affected_scope_id.into(),
+            kind,
+        }
+    }
+
+    pub fn challenge_id(&self) -> &str {
+        &self.challenge_id
+    }
+
+    pub fn trust_root_id(&self) -> &str {
+        &self.trust_root_id
+    }
+
+    pub const fn deadline(&self) -> i64 {
+        self.deadline
+    }
+
+    pub fn affected_scope_id(&self) -> &str {
+        &self.affected_scope_id
+    }
+
+    pub const fn kind(&self) -> ChallengeKindV1 {
+        self.kind
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum ChallengeApplyResultV1 {
+    Accepted,
+    Rejected { reason: DecisionReasonV1 },
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct QueuePartV1 {
     part_id: String,
@@ -503,6 +569,7 @@ pub struct SettlementStateV1 {
     pub(crate) breakers: Vec<BreakerScopeV1>,
     pub(crate) recovery: RecoverySnapshotV1,
     pub(crate) expected_ledger_tip: DigestV1,
+    pub(crate) applied_challenge_ids: BTreeSet<String>,
 }
 
 impl QueueStateV1 {

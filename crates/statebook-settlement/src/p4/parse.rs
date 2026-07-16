@@ -526,6 +526,23 @@ fn parse_state(value: &Value) -> Result<SettlementStateV1, SettlementParseErrorV
             Some(value) => parse_digest(value)?,
             None => ledger_state.tip_digest,
         },
+        applied_challenge_ids: object
+            .get("applied_challenge_ids")
+            .and_then(Value::as_array)
+            .map(|items| {
+                items
+                    .iter()
+                    .map(|item| {
+                        item.as_str().map(str::to_owned).ok_or_else(|| {
+                            SettlementParseErrorV1::InvalidIdentifier(
+                                "applied_challenge_ids".to_owned(),
+                            )
+                        })
+                    })
+                    .collect::<Result<BTreeSet<_>, _>>()
+            })
+            .transpose()?
+            .unwrap_or_default(),
     })
 }
 

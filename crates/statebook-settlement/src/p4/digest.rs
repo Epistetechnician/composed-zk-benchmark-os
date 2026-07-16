@@ -410,6 +410,7 @@ pub fn settlement_state_digest(state: &SettlementStateV1) -> DigestV1 {
         &encode_sequence(state.breakers.iter().map(encode_breaker)),
     );
     encoder.field(5, state.recovery.profile_digest.as_bytes());
+    encoder.field(6, &encode_string_set(&state.applied_challenge_ids));
     digest(SETTLEMENT_STATE_DOMAIN, &encoder.finish())
 }
 
@@ -456,6 +457,9 @@ fn decision_reason_tag(value: DecisionReasonV1) -> u8 {
         DecisionReasonV1::QueueTimerOnly => 27,
         DecisionReasonV1::ChallengeInvalid => 28,
         DecisionReasonV1::ChallengeDuplicate => 29,
+        DecisionReasonV1::ChallengeCensored => 36,
+        DecisionReasonV1::ChallengeUnavailable => 37,
+        DecisionReasonV1::EvidenceExpired => 38,
         DecisionReasonV1::PolicyRollback => 30,
         DecisionReasonV1::RecoveryFailed => 31,
         DecisionReasonV1::IntentDigestMismatch => 32,

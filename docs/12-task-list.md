@@ -21552,20 +21552,30 @@ readiness, SOTA, independent audit, or full-security claims.
 Status: documentation-first boundary complete for named state slice
 `statebook-p12-challenge-grammar-evidence-expiry-boundary`.
 
-The next separately committed slice is
-`statebook-p12-challenge-grammar-evidence-expiry`. It may add
-`apply_challenge_v1`, wire evidence-expiry → `RevalidationRequired` into
-`decide_and_transition`, support fresh-evidence revalidation with a new
-decision context, and extend harness corpus coverage for TD-004 #31 / P4 #11
-#13 #14. Hysteresis and cancel remain deferred. Outputs never move value or
-grant live authority.
+## Integration Track: Statebook P12 Challenge Grammar And Evidence Expiry Implementation
 
-Validation gate: valid→Frozen; invalid/duplicate/censored/unavailable reject
-without release; queued expired evidence → RevalidationRequired; fresh evidence
-new context; existing suites green; focused format/test/Clippy; claim-boundary
-hygiene.
+Status: implemented under named state slice
+`statebook-p12-challenge-grammar-evidence-expiry`.
 
-Anti-goals: hysteresis relax/rollback, cancel intents, live authority, trading,
-signing, custody, pause product, transfer, admission mutation, Evidence Ledger
-append, scalar trust score, complete TD-004 claim, production readiness, SOTA,
-independent audit, or full-security claims.
+Delivered:
+
+- `apply_challenge_v1` for valid/invalid/duplicate/censored/unavailable;
+- valid challenge → Challenged → Frozen with zero instant;
+- evidence expiry while queued → RevalidationRequired reject;
+- fresh evidence revalidation toward Reserved (not timer-alone);
+- seven settlement challenge tests and six new harness corpus cases.
+
+Hysteresis and cancel remain deferred.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic challenge grammar / evidence-expiry regression
+only. No value moves. Not live pause authority, complete TD-004 satisfaction,
+production readiness, SOTA, independent audit, or full-security claims.

@@ -1,6 +1,7 @@
 use serde_json::{json, Value};
 use statebook_settlement::{
-    decide_and_transition, parse_settlement_scenario_v1, ClockV1, DecisionOutcomeV1,
+    apply_challenge_v1, decide_and_transition, parse_settlement_scenario_v1,
+    ChallengeApplyResultV1, ChallengeKindV1, ChallengeSubmissionV1, ClockV1, DecisionOutcomeV1,
     DecisionRecordV1, SettlementScenarioV1,
 };
 
@@ -107,6 +108,30 @@ pub fn encodable_corpus_cases_v1() -> &'static [CorpusCaseV1] {
         },
         CorpusCaseV1 {
             id: "td004_17_breaker_expired_no_silent_renew",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_31_challenge_valid",
+            expected_outcome: DecisionOutcomeV1::Frozen,
+        },
+        CorpusCaseV1 {
+            id: "td004_31_challenge_invalid",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_31_challenge_duplicate",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_31_challenge_censored",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_31_challenge_unavailable",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_31_evidence_expired",
             expected_outcome: DecisionOutcomeV1::Rejected,
         },
     ]
@@ -228,13 +253,87 @@ pub fn build_corpus_scenario_v1(id: &str) -> Result<SettlementScenarioV1, Evalua
                 "renewal_ceiling": 3
             });
         }),
+        "td004_31_challenge_valid"
+        | "td004_31_challenge_invalid"
+        | "td004_31_challenge_duplicate"
+        | "td004_31_challenge_censored"
+        | "td004_31_challenge_unavailable" => mutate(|value| {
+            value["initial_state"]["queue"]["status"] = json!("queued");
+        }),
+        "td004_31_evidence_expired" => mutate(|value| {
+            value["initial_state"]["queue"]["status"] = json!("queued");
+            value["clock"]["now"] = json!(1_710_003_700);
+            value["request"]["expires_at"] = json!(1_710_003_600);
+            if let Some(observations) = value["evidence_snapshot"]["observations"].as_array_mut() {
+                for observation in observations {
+                    observation["expires_at"] = json!(1_710_003_600);
+                }
+            }
+        }),
         _ => Err(EvaluationErrorV1::Settlement(format!(
             "unknown corpus id: {id}"
         ))),
     }
 }
 
+fn challenge_kind_for_corpus(id: &str) -> Option<ChallengeKindV1> {
+    match id {
+        "td004_31_challenge_valid" => Some(ChallengeKindV1::Valid),
+        "td004_31_challenge_invalid" => Some(ChallengeKindV1::Invalid),
+        "td004_31_challenge_duplicate" => Some(ChallengeKindV1::Duplicate),
+        "td004_31_challenge_censored" => Some(ChallengeKindV1::Censored),
+        "td004_31_challenge_unavailable" => Some(ChallengeKindV1::Unavailable),
+        _ => None,
+    }
+}
+
+fn replay_challenge_corpus_case_v1(
+    id: &str,
+    kind: ChallengeKindV1,
+) -> Result<CorpusReplayReceiptV1, EvaluationErrorV1> {
+    let scenario = build_corpus_scenario_v1(id)?;
+    let clock = ClockV1::new(scenario.clock().now());
+    let (request, mut state, _) = scenario.into_kernel_input();
+    let submission = ChallengeSubmissionV1::new(
+        "chal-corpus-1",
+        "watcher-root-a",
+        clock.now() + 60,
+        "scope-global",
+        kind,
+    );
+    let applied = apply_challenge_v1(&mut state, &submission, &clock)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    match kind {
+        ChallengeKindV1::Valid => {
+            if applied != ChallengeApplyResultV1::Accepted {
+                return Err(EvaluationErrorV1::Settlement(format!(
+                    "{id} expected accepted challenge got {applied:?}"
+                )));
+            }
+            let record = decide_and_transition(request, state, clock)
+                .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+            Ok(receipt(id, &record))
+        }
+        _ => {
+            if !matches!(applied, ChallengeApplyResultV1::Rejected { .. }) {
+                return Err(EvaluationErrorV1::Settlement(format!(
+                    "{id} expected rejected challenge got {applied:?}"
+                )));
+            }
+            Ok(CorpusReplayReceiptV1 {
+                id: id.to_owned(),
+                outcome: "rejected".to_owned(),
+                instant_release_is_zero: true,
+                record_digest: format!("challenge-reject-{id}"),
+            })
+        }
+    }
+}
+
 pub fn replay_corpus_case_v1(id: &str) -> Result<CorpusReplayReceiptV1, EvaluationErrorV1> {
+    if let Some(kind) = challenge_kind_for_corpus(id) {
+        return replay_challenge_corpus_case_v1(id, kind);
+    }
     let scenario = build_corpus_scenario_v1(id)?;
     let record = run(scenario)?;
     Ok(receipt(id, &record))
