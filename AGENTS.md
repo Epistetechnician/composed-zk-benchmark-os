@@ -1990,6 +1990,23 @@ Docker or network action, runtime evidence, class closure, score movement,
 accepted Evidence Ledger mutation, Level2+, benchmark evidence, proof,
 production readiness, SOTA, breakthrough, full security, or external audit.
 
+Explicit Phase 796-A3L5E HSAI P01B gate-sandbox root-read correction now
+allowed and completed as documentation only under
+`docs/796a3l5e-phase-hsai-p01b-gate-sandbox-root-read-correction.md` plus the
+standard navigation mirrors. This slice is limited to inserting exactly
+`(allow file-read-data (literal "/"))` after the existing global metadata-read
+line in the A3L5C Seatbelt profile. The correction is required because the
+unchanged A3L5C profile made even `/usr/bin/true` abort with signal 6 on the
+pinned host, while the single literal-root clause allowed the minimized
+`/usr/bin/true` control to exit zero. It does not grant descendant data reads,
+import an opaque system profile, broaden the declared source/system subpaths,
+broaden scratch-only writes, weaken network/Mach denial, add an unsandboxed
+fallback, or authorize
+A3L6 acceptance or A3L7/A3L8 execution, create runtime evidence or class
+closure, move scores, mutate an accepted Evidence Ledger, create Level2+ or
+benchmark evidence, or support proof, production-readiness, SOTA,
+breakthrough, full-security, or external-audit claims.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.
