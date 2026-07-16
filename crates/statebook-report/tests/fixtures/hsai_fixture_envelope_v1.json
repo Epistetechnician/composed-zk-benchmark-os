@@ -1,0 +1,18 @@
+{
+  "schema_version": "statebook-p5-hsai-fixture-envelope:v1",
+  "maturity": "provisional",
+  "trust_roots": ["trust-root-a"],
+  "valid": { "start": 1710000000, "end": 1710003600 },
+  "facts": {
+    "issuer": "hsai-fixture-issuer",
+    "subject": "hsai-fixture-subject",
+    "property": "evidence_root_disclosure",
+    "scope": "claim-envelope-fixture",
+    "nonce": "hsai-nonce-1",
+    "issue_at": 1710000000,
+    "policy_version": "hsai-policy-v1",
+    "source_refs": ["src-ref-1"],
+    "dependency_roots": ["dep-root-a"]
+  },
+  "unknown_facts": ["finality_status", "legal_classification"]
+}

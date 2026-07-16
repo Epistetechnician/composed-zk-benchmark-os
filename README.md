@@ -872,6 +872,8 @@ Surface DSL
 | [docs/statebook-p4-settlement-simulator-boundary-spec.md](docs/statebook-p4-settlement-simulator-boundary-spec.md) | Docs-first P4 authorization for a pure deterministic settlement transition kernel inside `statebook-settlement`: hard gates, assurance tiers, valuation, budgets, linked plans, obligations, queue, breakers, and recovery transitions; decision records only; no value moves. |
 | [docs/statebook-p4-settlement-simulator-implementation-notes.md](docs/statebook-p4-settlement-simulator-implementation-notes.md) | Implemented P4 pure deterministic settlement transition kernel with fail-closed hard gates, hermetic fixtures, domain-separated digests, and non-authoritative decision records; no value moves. |
 | [docs/statebook-p5-evidence-adapters-and-report-bundles-boundary-spec.md](docs/statebook-p5-evidence-adapters-and-report-bundles-boundary-spec.md) | Docs-first P5 authorization for narrow HSAI/fixture adapters, portable digest-bound audit bundles, independent digest checks, and fail-closed readback validation; no live sources or authority. |
+| [docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md](docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md) | Implemented P5 `statebook-report` crate: hermetic/HSAI fixture adapters, `grants_authority=false` handoff, portable digest-bound audit bundles, independent readback, and domain-separated digests; no value moves. |
+| [docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md](docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md) | Implemented P5 portable digest-bound audit bundles, hermetic fixture and ClaimEnvelope-fixture adapters, independent readback validation, and proposal-only handoffs with `grants_authority=false`; no value moves. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -970,12 +972,27 @@ This is local hermetic fixture regression evidence only. No value moves.
 Statebook P5 authorization status: the named docs-first slice
 `statebook-p5-evidence-adapters-and-report-bundles-boundary` freezes a future portable
 digest-bound audit-bundle and narrow HSAI/fixture adapter surface in at most
-`statebook-report` and optional `statebook-hsai`. The future implementation may materialize
-and independently read back closed file sets, recompute domain-separated digests, map
-hermetic ClaimEnvelope fixtures without inventing unknowns, and emit proposal handoffs with
-`grants_authority=false`. All P1-P4 identities and the P4 kernel stay unchanged. No P6
+`statebook-report`. All P1-P4 identities and the P4 kernel stay unchanged. No P6
 external source, P7 authority, network, credential, value movement, or runtime action is
-authorized. This commit adds no Rust or Cargo change.
+authorized.
+
+## Statebook P5 Evidence Adapters And Report Bundles Implementation
+
+The named state slice `statebook-p5-evidence-adapters-and-report-bundles` is implemented as
+a new `statebook-report` crate with:
+
+- closed manifest and record file sets with domain-separated P5 TLV digests;
+- materialization plus independent fail-closed readback validation;
+- hermetic fixture adapters and ClaimEnvelope-shaped fixture doubles without `hsai-*`
+  production dependencies;
+- proposal-only decision handoffs that always preserve `grants_authority=false`;
+- an independent `ring` golden encoder for every new public digest family.
+
+Focused P5 format, test, and warning-denied Clippy gates pass, as do unchanged
+`statebook-core` and unchanged P3/P4 `statebook-settlement` regressions. See
+[docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md](docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md).
+
+This is local hermetic fixture regression and readback evidence only. No value moves.
 
 ## Current Implementation Status
 
