@@ -21380,3 +21380,32 @@ moves. No P7 authority, trading, signing, custody, live venue network in this
 slice, admission mutation, Evidence Ledger append, scalar trust score,
 production readiness, SOTA, independent audit, or full-security claims.
 
+
+## Integration Track: Statebook P7 Authority Integration Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p7-authority-integration-boundary`.
+
+The next separately committed slice is
+`statebook-p7-authority-integration`. It may add at most
+`crates/statebook-authority` for hermetic synthetic authority-statement attach
+of the frozen `synthetic-clearing-authority-v1` profile, capital-recognition
+overlay receipts, revoke/expire evaluation, and domain-separated digests. Live
+execution, custody, signing, pause, real margin recognition, and settlement
+remain deferred behind the legal/ops gate. P1-P6 identities remain unchanged.
+Outputs never move value; `grants_execution_authority` remains false.
+
+Validation gate: unchanged P1-P6 source and golden vectors; no
+`statebook-core` / `statebook-settlement` / `statebook-report` /
+`statebook-source` mutation; closed profile attach; fail-closed
+missing-field/unknown-schema/true-authority-grant/expire paths; capital overlay
+does not rewrite economic residual digests; adapter nonclaims; no generic
+authority-adapter trait while only one profile exists; domain-separated P7
+digests with an implementation-diverse encoder; focused format/test/Clippy;
+repository docs and hygiene checks; and independent scope plus authority/digest
+reviews.
+
+Anti-goals: live authority products, trading, signing, custody, pause,
+transfer, admission mutation, Evidence Ledger append, scalar trust score,
+empirical calibration, media-as-assurance, proof, production readiness, SOTA,
+independent audit, or full-security claims.
