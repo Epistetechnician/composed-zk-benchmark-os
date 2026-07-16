@@ -1027,6 +1027,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "statebook-source"
+version = "0.1.0"
+dependencies = [
+ "hex",
+ "ring",
+ "serde",
+ "serde_json",
+ "sha2",
+ "statebook-core",
+ "thiserror",
+]
+
+[[package]]
 name = "subtle"
 version = "2.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"

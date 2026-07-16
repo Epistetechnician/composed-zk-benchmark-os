@@ -21345,3 +21345,38 @@ adversarial corpus replay and in-bundle P1-P4 golden byte checks remain document
 follow-on fixture expansion; minimum acceptance scenarios and resource bounds are
 covered.
 
+## Integration Track: Statebook P6 Read-Only External Sources Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p6-read-only-external-sources-boundary`.
+
+## Integration Track: Statebook P6 Read-Only External Sources Implementation
+
+Status: implemented under named state slice
+`statebook-p6-read-only-external-sources`.
+
+Delivered in isolated `crates/statebook-source`:
+
+- captured-first import for `synthetic-clearing-terms-v1`;
+- provenance registry with supersede/historical digest retention;
+- fail-closed schema/profile/digest/narrative/resource rejection;
+- domain-separated P6 TLV digests with an independent `ring` golden encoder;
+- fourteen focused integration tests.
+
+P1-P5 identities remain unchanged. No live network client and no generic
+adapter trait were added.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-source -- --check
+cargo test -p statebook-source --tests
+cargo clippy -p statebook-source --all-targets -- -D warnings
+cargo test -p statebook-core -p statebook-settlement -p statebook-report --tests
+```
+
+Claim ceiling: local hermetic captured-source import regression only. No value
+moves. No P7 authority, trading, signing, custody, live venue network in this
+slice, admission mutation, Evidence Ledger append, scalar trust score,
+production readiness, SOTA, independent audit, or full-security claims.
+

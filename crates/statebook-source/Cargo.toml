@@ -1,0 +1,17 @@
+[package]
+name = "statebook-source"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "Captured-first read-only external source import and provenance registry for Statebook P6."
+
+[dependencies]
+hex = "0.4"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+thiserror = "1"
+statebook-core = { path = "../statebook-core" }
+
+[dev-dependencies]
+ring = "=0.17.14"
