@@ -869,6 +869,7 @@ Surface DSL
 | [docs/statebook-p2-payoff-residual-engine-boundary-spec.md](docs/statebook-p2-payoff-residual-engine-boundary-spec.md) | Docs-first P2 authorization for exact finite-domain indicator payoff evaluation, asset-vector residuals, and typed incompleteness; no books, execution, capital, or settlement authority. |
 | [docs/statebook-p2-payoff-residual-engine-implementation-notes.md](docs/statebook-p2-payoff-residual-engine-implementation-notes.md) | Implemented local P2 exact indicator payoff and finite-domain residual engine with checked rational arithmetic, deterministic aggregation, non-netted asset vectors, and whole-report fail closure. |
 | [docs/statebook-p3-seven-completeness-reports-boundary-spec.md](docs/statebook-p3-seven-completeness-reports-boundary-spec.md) | Docs-first P3 authorization for a future isolated `statebook-settlement` crate that composes unchanged P1/P2 reports with five hermetic fixture-qualified completeness reports; no aggregate boolean, P4 policy, P5 adapter, or authority. |
+| [docs/statebook-p4-settlement-simulator-boundary-spec.md](docs/statebook-p4-settlement-simulator-boundary-spec.md) | Docs-first P4 authorization for a pure deterministic settlement transition kernel inside `statebook-settlement`: hard gates, assurance tiers, valuation, budgets, linked plans, obligations, queue, breakers, and recovery transitions; decision records only; no value moves. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -936,6 +937,17 @@ The documentation-only state slice
 capital receipt to bind the full fixture authority/account/model/rule/context
 digest. Mismatch rejects composition; coherent rebinding remains a different
 hermetic fixture and creates no clearing or margin authority.
+
+Statebook P4 authorization status: the named docs-first slice
+`statebook-p4-settlement-simulator-boundary` freezes a future pure deterministic settlement
+transition kernel inside the existing `statebook-settlement` crate. The future implementation
+may evaluate synthetic externalization requests through hard gates, assurance resolution,
+conservative valuation, linked-plan and obligation validation, multi-axis exactly-once
+budgets, queue and challenge transitions, circuit breakers, hysteresis, and recovery
+transitions under an injected clock. Outputs remain non-authoritative decision records.
+All P1/P2/P3 identities stay unchanged. No new crate, value movement, P5 adapter, P6 source,
+P7 authority, live I/O, or runtime action is authorized. This commit adds no Rust or Cargo
+change.
 
 ## Current Implementation Status
 
