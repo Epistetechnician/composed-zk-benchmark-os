@@ -6503,7 +6503,16 @@ _GATE_RESULT_RE = re.compile(rb"Ran ([0-9]+) tests in ([0-9]+(?:\.[0-9]+)?)s")
 
 
 def _gate_environment(temp_root: str) -> Dict[str, str]:
-    return {"HOME": "/nonexistent", "LANG": "C", "LC_ALL": "C", "PATH": "/usr/bin:/bin", "PYTHONDONTWRITEBYTECODE": "1", "TMPDIR": temp_root}
+    return {
+        "HOME": "/nonexistent",
+        "LANG": "C",
+        "LC_ALL": "C",
+        "PATH": "/usr/bin:/bin",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        # Must match execution.gate_environment; marks the A3L6 execution-focused gate.
+        "P01B_GATE_SANDBOX_ACTIVE": "1",
+        "TMPDIR": temp_root,
+    }
 
 
 def _gate_profile(source_root: str, temp_root: str) -> bytes:

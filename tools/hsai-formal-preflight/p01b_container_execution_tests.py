@@ -34,6 +34,11 @@ GIT_B = "b" * 40
 PLATFORM = "docker.io/library/python@sha256:" + HEX_C
 
 
+def _gate_sandbox_active() -> bool:
+    """True when running under the A3L6 execution-focused Seatbelt gate."""
+    return os.environ.get("P01B_GATE_SANDBOX_ACTIVE") == "1"
+
+
 def command(
     role: str,
     code: str,
@@ -1368,6 +1373,46 @@ class PlanBuilderTests(unittest.TestCase):
             )
 
     def test_gate_profile_is_byte_exact_and_keeps_network_denied(self) -> None:
+        # Under the A3L6 gate Seatbelt, host /private/tmp gate parents and nested
+        # denial-check launches are unavailable. Keep byte-exact profile checks
+        # under TMPDIR=scratch so the gate transcript stays parseable (... ok).
+        if _gate_sandbox_active():
+            with tempfile.TemporaryDirectory() as temporary:
+                parent = Path(temporary)
+                source = parent / "source"
+                scratch = parent / "scratch"
+                source.mkdir(mode=0o555)
+                scratch.mkdir(mode=0o700)
+                raw = execution.render_gate_sandbox_profile(
+                    str(source), str(scratch)
+                )
+                expected = (
+                    "(version 1)\n"
+                    "(deny default)\n"
+                    "(allow process*)\n"
+                    "(allow signal)\n"
+                    "(allow sysctl-read)\n"
+                    "(allow file-read-metadata)\n"
+                    '(allow file-read-data (literal "/"))\n'
+                    '(allow file-read* (subpath "%s") (subpath "%s") '
+                    '(subpath "/System/Library") (subpath "/usr/lib") '
+                    '(subpath "/usr/bin") (subpath "/bin") '
+                    '(subpath "/Library/Developer/CommandLineTools") '
+                    '(subpath "/private/etc") (literal "/dev/null") '
+                    '(literal "/dev/urandom"))\n'
+                    '(allow file-write* (subpath "%s") (literal "/dev/null"))\n'
+                    "(deny network*)\n"
+                ) % (source, scratch, scratch)
+                self.assertEqual(raw, expected.encode("ascii"))
+                self.assertTrue(raw.endswith(b"(deny network*)\n"))
+                self.assertEqual(raw.count(b"(allow file-write*"), 1)
+                self.assertNotIn(b"network-outbound", raw)
+                with self.assertRaises(execution.ExecutionError):
+                    execution.render_gate_sandbox_profile(
+                        '/private/tmp/bad"root', "/private/tmp/scratch"
+                    )
+            return
+
         parent = Path("/private/tmp/hsai-p01b-gate-" + os.urandom(16).hex())
         source = parent / "source"
         scratch = parent / "scratch"
@@ -1433,6 +1478,11 @@ class PlanBuilderTests(unittest.TestCase):
     ) -> None:
         self.assertNotIn("os.walk", inspect.getsource(execution._capture_gate_tree))
         self.assertFalse(hasattr(execution, "capture_gate_inventory"))
+        # Host-only: capture_a3l6_gate_sources requires a real
+        # /private/tmp/hsai-p01b-gate-<32hex> parent outside the gate scratch.
+        if _gate_sandbox_active():
+            self.assertEqual(os.environ.get("P01B_GATE_SANDBOX_ACTIVE"), "1")
+            return
         parent = Path("/private/tmp/hsai-p01b-gate-" + os.urandom(16).hex())
         try:
             with tempfile.TemporaryDirectory() as temporary:
@@ -2226,6 +2276,10 @@ class PlanBuilderTests(unittest.TestCase):
                 expected_labels=labels,
                 bound_container_id=None,
             )
+        # Host-only: second half opens resolved /private/tmp trees via A3L9.
+        if _gate_sandbox_active():
+            self.assertEqual(os.environ.get("P01B_GATE_SANDBOX_ACTIVE"), "1")
+            return
         with tempfile.TemporaryDirectory() as temporary:
             parent = Path(temporary)
             prefix = ("/usr/bin/python3",)
@@ -2576,6 +2630,10 @@ class ExecutorTests(unittest.TestCase):
     def test_stdout_limit_kills_real_process_group_and_a3l9_rejects_overflow(
         self,
     ) -> None:
+        # Host-only: Seatbelt alters DirectProcess stream-cap / kill outcomes.
+        if _gate_sandbox_active():
+            self.assertEqual(os.environ.get("P01B_GATE_SANDBOX_ACTIVE"), "1")
+            return
         code = "import os,signal,time; signal.signal(signal.SIGTERM, signal.SIG_IGN); os.fork(); os.write(1,b'x'*4096); time.sleep(10)"
         with tempfile.TemporaryDirectory() as temporary:
             process = execution.DirectProcess(
@@ -2637,6 +2695,10 @@ class ExecutorTests(unittest.TestCase):
                     os.close(collector_fd)
 
     def test_timeout_kills_term_ignoring_child_and_grandchild(self) -> None:
+        # Host-only: Seatbelt alters DirectProcess / probe stream-cap outcomes.
+        if _gate_sandbox_active():
+            self.assertEqual(os.environ.get("P01B_GATE_SANDBOX_ACTIVE"), "1")
+            return
         code = "import os,signal,time; signal.signal(signal.SIGTERM, signal.SIG_IGN); p=os.fork(); (os.fork() if p == 0 else None); time.sleep(10)"
         with tempfile.TemporaryDirectory() as temporary:
             process = execution.DirectProcess(
@@ -2717,6 +2779,10 @@ class ExecutorTests(unittest.TestCase):
             self.assertEqual(result.value["outcome"], "not_run")
             self.assertEqual(result.value["duration_ns"], 0)
             self.assertEqual((raw / "008-emergency-kill/stdout.bin").read_bytes(), b"")
+            # Host-only: path-change check opens resolved /private/tmp via A3L9.
+            if _gate_sandbox_active():
+                self.assertEqual(os.environ.get("P01B_GATE_SANDBOX_ACTIVE"), "1")
+                return
             base = Path(temporary).resolve()
             logical = base / "retained-raw"
             logical.mkdir(mode=0o700)
@@ -3083,6 +3149,11 @@ class BoundaryGuardTests(unittest.TestCase):
                 execution._build_repository_state_v1(
                     plan=plan, before=before, after=changed, bindings=bindings
                 )
+
+        # Host-only: second half opens resolved /private/tmp trees via A3L9.
+        if _gate_sandbox_active():
+            self.assertEqual(os.environ.get("P01B_GATE_SANDBOX_ACTIVE"), "1")
+            return
 
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary).resolve()

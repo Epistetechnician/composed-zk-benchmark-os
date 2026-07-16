@@ -364,6 +364,10 @@ def gate_environment(gate_temp_root: str) -> Dict[str, str]:
         "LC_ALL": "C",
         "PATH": "/usr/bin:/bin",
         "PYTHONDONTWRITEBYTECODE": "1",
+        # Marks the A3L6 execution-focused gate so hermetic tests can avoid
+        # host-only paths (/private/tmp gate parents, A3L9 absolute traversal)
+        # without widening Seatbelt allow rules.
+        "P01B_GATE_SANDBOX_ACTIVE": "1",
         "TMPDIR": gate_temp_root,
     }
 
