@@ -22046,3 +22046,21 @@ Exit criteria: focused and full gates pass; the golden vector agrees byte for
 byte across both test implementations; all implementation paths match the
 authorized surface; the implementation commit excludes the preserved AGENTS
 routing hunk, admission edit, `docs/agents/`, and A3L6 files.
+
+## Phase 797 HSAI Native-Transcript Source-Scan Correction Boundary
+
+Status: documentation-first boundary complete for named state slice
+`hsai-native-transcript-source-scan-correction-boundary`.
+
+The next separately committed slice is
+`hsai-native-transcript-source-scan-authorized-test-exceptions`. It may change
+only the HSAI claim-boundary source-scan integration test and the standard phase
+note/status mirrors. The correction must bind the exact two Phase 792/794 test
+files, three actual test-only process references, two named source-scan test
+functions, and exact source lines. Positive and near-miss negative tests are
+mandatory. Any generic process or network exception remains forbidden.
+
+Validation gate: focused scanner tests, the native-transcript package suite,
+formatting, warning-denied focused Clippy, repository docs/hygiene checks, and a
+clean-tree workspace gate. The current dirty admission rewrite is independent
+and must not be staged, restored, or absorbed.

@@ -11355,3 +11355,29 @@ unaccepted and A3L7/A3L8 remain prohibited. Correspondence remains 2/10,
 commercial moat remains 3/10, and defensible breakthrough evidence remains
 2-3/10. No Docker/network action, runtime evidence, or stronger claim was
 created.
+
+## Phase 797 HSAI Native-Transcript Source-Scan Correction Boundary
+
+Date: 16 July 2026.
+
+Outcome: documentation-only authorization for named state slice
+`hsai-native-transcript-source-scan-correction-boundary`.
+
+The clean committed baseline has one inherited claim-boundary scan failure. The
+line-oriented HSAI scanner reports three already authorized Phase 792 test-only
+process references and eight forbidden-pattern literals used by two Phase
+792/794 negative source-scan tests. The native-transcript package itself passes
+50 focused tests. The scanner predates these tests and received no matching
+narrow exception when they landed.
+
+This boundary authorizes a future correction only in
+`crates/hsai-e2e-harness/tests/claim_boundary_source_scan.rs`, with exact file,
+line, function, and executable binding plus positive and near-miss negative
+tests. It does not authorize any implementation mutation in this commit or any
+broader process/network surface.
+
+The live worktree also contains an unrelated user-owned admission rewrite that
+breaks all-target compilation by removing public APIs used by a committed
+example. That edit is outside this state slice and remains untouched. Therefore
+this docs-first result claims only boundary correctness, not a globally green
+workspace.
