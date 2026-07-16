@@ -21579,3 +21579,22 @@ cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -
 Claim ceiling: local hermetic challenge grammar / evidence-expiry regression
 only. No value moves. Not live pause authority, complete TD-004 satisfaction,
 production readiness, SOTA, independent audit, or full-security claims.
+
+## Integration Track: Statebook P13 Hysteresis Relax And Rollback Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p13-hysteresis-relax-rollback-boundary`.
+
+The next separately committed slice is
+`statebook-p13-hysteresis-relax-rollback`. It may add
+`attempt_policy_transition_v1`, wire hysteresis into `decide_and_transition`,
+and extend harness corpus coverage for TD-004 #21 / P4 #16. Cancel remains
+deferred. Outputs never move value or grant live authority.
+
+Validation gate: rollback reject; tighten immediate; relax gated reject/accept;
+existing suites green; focused format/test/Clippy; claim-boundary hygiene.
+
+Anti-goals: cancel intents, live authority, trading, signing, custody, pause
+product, transfer, admission mutation, Evidence Ledger append, scalar trust
+score, complete TD-004 claim, production readiness, SOTA, independent audit, or
+full-security claims.
