@@ -11502,3 +11502,11 @@ assurance ceiling is nine. Because recovery paths come from the fixed
 implementation-owned profile and unknown or duplicate paths reject, the exact
 valid recovery ceiling is fourteen. The correction changes no code, status,
 claim ceiling, runtime capability, or authority.
+
+Capital-context correction outcome: named documentation-only state slice
+`statebook-p3-capital-context-binding-correction` closes receipt
+transplantation inside the hermetic fixture. The recomputed context digest binds
+the analysis subject, authority/account/model, haircut, rule, jurisdiction,
+horizon, and time interval. Mismatch must reject composition. The correction
+does not make the synthetic statement independent evidence and grants no
+clearing, margin, collateral, liquidation, or settlement authority.
