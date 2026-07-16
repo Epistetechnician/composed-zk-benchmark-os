@@ -1,0 +1,275 @@
+{
+  "schema_version": "statebook-settlement-fixture:v1",
+  "scenario_id": "quarantined_v1",
+  "clock": {
+    "now": 1710000000
+  },
+  "policy": {
+    "policy_id": "synthetic-tier-policy-v1",
+    "policy_version": 1,
+    "policy_digest": "0000000000000000000000000000000000000000000000000000000000000001",
+    "assurance_tiers": {
+      "quarantined": {
+        "instant_fraction": {
+          "numerator": "0",
+          "denominator": "1"
+        },
+        "delay_seconds": 0
+      },
+      "unproven_or_novel": {
+        "instant_fraction": {
+          "numerator": "1",
+          "denominator": "4"
+        },
+        "delay_seconds": 3600
+      },
+      "currently_assured": {
+        "instant_fraction": {
+          "numerator": "1",
+          "denominator": "2"
+        },
+        "delay_seconds": 1800
+      },
+      "strong_current_assurance_low_impact": {
+        "instant_fraction": {
+          "numerator": "1",
+          "denominator": "1"
+        },
+        "delay_seconds": 0
+      }
+    },
+    "hysteresis": {
+      "min_relax_dwell_seconds": 86400,
+      "required_clean_epochs": 2,
+      "successor_policy_digest": "0000000000000000000000000000000000000000000000000000000000000002"
+    }
+  },
+  "valuation_profile": {
+    "profile_id": "conservative-upper-v1",
+    "numeraire_asset": "USD",
+    "max_age_seconds": 300,
+    "stress_multiplier": {
+      "numerator": "11",
+      "denominator": "10"
+    },
+    "observations": [
+      {
+        "asset": "ETH",
+        "rate": {
+          "numerator": "2000",
+          "denominator": "1"
+        },
+        "observed_at": 1709999900,
+        "root_id": "oracle-a",
+        "root_class": "data"
+      }
+    ],
+    "independence_roots": [
+      "oracle-a"
+    ]
+  },
+  "evidence_snapshot": {
+    "snapshot_id": "snap-1",
+    "request_id": "req-1",
+    "nonce": "nonce-1",
+    "observations": [
+      {
+        "property": "action_authorization",
+        "verdict": "pass",
+        "current_roots": [
+          {
+            "root_id": "auth-a",
+            "root_class": "signer"
+          }
+        ],
+        "dependency_roots": [],
+        "dependency_disclosure": "complete",
+        "observed_at": 1709999950,
+        "expires_at": 1710003600,
+        "bound_request_id": "req-1",
+        "replayed": false,
+        "equivocated": false
+      },
+      {
+        "property": "source_authenticity_and_freshness",
+        "verdict": "pass",
+        "current_roots": [
+          {
+            "root_id": "src-a",
+            "root_class": "rpc"
+          }
+        ],
+        "dependency_roots": [],
+        "dependency_disclosure": "complete",
+        "observed_at": 1709999950,
+        "expires_at": 1710003600,
+        "bound_request_id": "req-1",
+        "replayed": false,
+        "equivocated": false
+      },
+      {
+        "property": "calculation_integrity",
+        "verdict": "pass",
+        "current_roots": [
+          {
+            "root_id": "calc-a",
+            "root_class": "data"
+          }
+        ],
+        "dependency_roots": [],
+        "dependency_disclosure": "complete",
+        "observed_at": 1709999950,
+        "expires_at": 1710003600,
+        "bound_request_id": "req-1",
+        "replayed": false,
+        "equivocated": false
+      },
+      {
+        "property": "state_transition_integrity",
+        "verdict": "pass",
+        "current_roots": [
+          {
+            "root_id": "tx-a",
+            "root_class": "data"
+          }
+        ],
+        "dependency_roots": [],
+        "dependency_disclosure": "complete",
+        "observed_at": 1709999950,
+        "expires_at": 1710003600,
+        "bound_request_id": "req-1",
+        "replayed": false,
+        "equivocated": false
+      },
+      {
+        "property": "solvency_and_liquid_resource_support",
+        "verdict": "pass",
+        "current_roots": [
+          {
+            "root_id": "sol-a",
+            "root_class": "data"
+          }
+        ],
+        "dependency_roots": [],
+        "dependency_disclosure": "complete",
+        "observed_at": 1709999950,
+        "expires_at": 1710003600,
+        "bound_request_id": "req-1",
+        "replayed": false,
+        "equivocated": false
+      },
+      {
+        "property": "destination_and_route_policy",
+        "verdict": "pass",
+        "current_roots": [
+          {
+            "root_id": "route-a",
+            "root_class": "data"
+          }
+        ],
+        "dependency_roots": [],
+        "dependency_disclosure": "complete",
+        "observed_at": 1709999950,
+        "expires_at": 1710003600,
+        "bound_request_id": "req-1",
+        "replayed": false,
+        "equivocated": false
+      },
+      {
+        "property": "anomaly_and_emergency_clearance",
+        "verdict": "pass",
+        "current_roots": [
+          {
+            "root_id": "anom-a",
+            "root_class": "data"
+          }
+        ],
+        "dependency_roots": [],
+        "dependency_disclosure": "complete",
+        "observed_at": 1709999950,
+        "expires_at": 1710003600,
+        "bound_request_id": "req-1",
+        "replayed": false,
+        "equivocated": false
+      },
+      {
+        "property": "evidence_root_disclosure",
+        "verdict": "pass",
+        "current_roots": [
+          {
+            "root_id": "root-a",
+            "root_class": "data"
+          }
+        ],
+        "dependency_roots": [],
+        "dependency_disclosure": "complete",
+        "observed_at": 1709999950,
+        "expires_at": 1710003600,
+        "bound_request_id": "req-1",
+        "replayed": false,
+        "equivocated": false
+      }
+    ]
+  },
+  "initial_state": {
+    "ledger": {
+      "tip_digest": "0000000000000000000000000000000000000000000000000000000000000000",
+      "epoch": 1,
+      "axes": [
+        {
+          "asset": "ETH",
+          "cap": {
+            "numerator": "100",
+            "denominator": "1"
+          }
+        }
+      ]
+    },
+    "queue": {
+      "status": "none"
+    },
+    "transfer": {
+      "status": "unreserved"
+    },
+    "breakers": [
+      {
+        "scope_id": "global",
+        "state": "normal",
+        "expires_at": null,
+        "renewal_count": 0,
+        "renewal_ceiling": 3
+      }
+    ],
+    "recovery": {
+      "profile_digest": "3d412a89c19e5e2ec4812bde5233784574815cab2fc063dab5653d113730601e",
+      "reconciliation_mismatch": false,
+      "canary_failed": false
+    }
+  },
+  "request": {
+    "request_id": "req-1",
+    "declared_release_class": "external_unconditional",
+    "subject": "acct-1",
+    "source_account": "vault-1",
+    "destination": "dest-1",
+    "route": "route-1",
+    "asset": "ETH",
+    "direction": "outbound",
+    "total_amount": {
+      "numerator": "10",
+      "denominator": "1"
+    },
+    "financial_basis": {
+      "kind": "synthetic_account"
+    },
+    "originating_transition": "tx-abc",
+    "nonce": "nonce-1",
+    "requested_at": 1709999980,
+    "expires_at": 1710003600,
+    "action_authorization_digest": "0000000000000000000000000000000000000000000000000000000000000003",
+    "reuse_finality_passed": true,
+    "gate_overrides": {
+      "evidence_independent": false
+    }
+  }
+}
