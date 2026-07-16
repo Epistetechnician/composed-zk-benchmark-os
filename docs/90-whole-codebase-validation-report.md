@@ -10879,3 +10879,31 @@ encoded as named fixtures; minimum acceptance scenarios and resource bound matri
 covered. This is explicit local regression evidence only, not production readiness or
 authority.
 
+## Statebook P5 Evidence Adapters And Report Bundles Boundary
+
+Date: 16 July 2026.
+
+Outcome: `DocumentationOnly`, `NotRun`, named state slice
+`statebook-p5-evidence-adapters-and-report-bundles-boundary`.
+
+State slice:
+
+- `docs/statebook-p5-evidence-adapters-and-report-bundles-boundary-spec.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+The boundary freezes a future portable digest-bound audit-bundle and narrow
+HSAI/fixture adapter surface. It authorizes at most `crates/statebook-report`
+and optional `crates/statebook-hsai`, independent readback validation,
+domain-separated manifest digests, and `grants_authority=false` handoff rules.
+It preserves all P1-P4 identities and the P4 kernel. Integration Stage 5
+external-evidence/credential work remains PRD P6 and is outside this slice.
+
+This documentation-only slice adds no Rust or Cargo change and creates no
+proof, accepted evidence, Level2+, score axis, semantic correctness, production
+readiness, SOTA, breakthrough, full security, external audit, or action
+authority. Implementation requires a separately committed state slice
+`statebook-p5-evidence-adapters-and-report-bundles`.
+

@@ -21305,3 +21305,30 @@ Claim ceiling: local hermetic fixture regression evidence only. No value moves. 
 thirty-seven-scenario adversarial corpus replay remains a documented follow-on fixture
 expansion; minimum acceptance scenarios and resource bounds are covered.
 
+## Integration Track: Statebook P5 Evidence Adapters And Report Bundles Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p5-evidence-adapters-and-report-bundles-boundary`.
+
+The next separately committed slice is
+`statebook-p5-evidence-adapters-and-report-bundles`. It may add at most
+`crates/statebook-report` and optional `crates/statebook-hsai` for narrow
+HSAI/fixture adapters, portable digest-bound audit bundles, independent digest
+checks, and fail-closed readback validation. P1-P4 identities and the P4 kernel
+remain unchanged. Outputs never move value or grant authority.
+
+Validation gate: unchanged P1-P4 source and golden vectors; no
+`statebook-core` or `statebook-settlement` mutation; closed manifest file set;
+independent materialization/readback; fail-closed missing/extra/traversal/
+symlink/stale-digest/malformed/nonclaim-tamper paths; adapter unknown and
+maturity preservation; `grants_authority=false`; domain-separated P5 digests
+with an implementation-diverse encoder; focused format/test/Clippy; repository
+docs and hygiene checks; clean-tree workspace tests; and independent scope plus
+bundle/digest reviews.
+
+Anti-goals: P6 external sources, P7 authority, `statebook-sim`, network,
+credentials, process spawn, admission mutation, Evidence Ledger append, value
+movement, live venue authority, scalar trust score, empirical calibration,
+HSAI market-truth claims, evidence promotion, proof, production readiness,
+SOTA, independent audit, or full-security claims.
+
