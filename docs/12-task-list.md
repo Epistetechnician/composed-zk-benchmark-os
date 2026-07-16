@@ -20615,6 +20615,27 @@ gate results and two code reviews, then and only then run A3L7 readiness.
 See
 `docs/796a3l5c-phase-hsai-p01b-retained-container-boundary-correction.md`.
 
+## Phase 796-A3L5D HSAI P01B Inspect Census Correction
+
+Status: complete documentation-only correction; execution remains `NotRun` and
+correspondence remains `2/10`.
+
+Named state slice:
+`phase-796a3l5d-hsai-p01b-inspect-census-correction`.
+
+Completed: independently counted the inherited and corrected exact inspect
+lists; confirmed both contain the identical ordered 56 fields; confirmed no
+57th field is named by the contract, implementation, or focused tests; and
+superseded only the five inconsistent A3L5C prose counts without changing any
+field or predicate. See
+`docs/796a3l5d-phase-hsai-p01b-inspect-census-correction.md`.
+
+Exit criteria: two independent zero-finding reviews over this correction.
+A3L6 remains unaccepted; A3L7/A3L8 remain prohibited; no runtime evidence,
+class closure, score movement, accepted Evidence Ledger mutation, Level2+,
+benchmark evidence, proof, production readiness, SOTA, breakthrough, full
+security, or external-audit claim is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
