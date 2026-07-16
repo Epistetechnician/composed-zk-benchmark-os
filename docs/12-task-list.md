@@ -22153,3 +22153,10 @@ settlement policy, P5 adapters, routing, execution, capital authority, legal
 finality, custody, signing, pause, transfer, externalization, HSAI, admission,
 zkbench, network, process, filesystem output, evidence promotion, proof,
 production readiness, SOTA, independent audit, or full-security claims.
+
+Bound correction: the documentation-only state slice
+`statebook-p3-closed-identity-bound-correction` replaces the unreachable
+nominal assurance-observation and recovery-path exact limits with the closed
+semantic maxima: nine unique assurance properties and fourteen
+implementation-owned recovery paths. Exact-limit and limit-plus-one tests use
+those effective maxima. No implementation authority or capability is added.

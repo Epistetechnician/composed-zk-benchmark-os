@@ -11,6 +11,16 @@ Named boundary state slice:
 Future implementation state slice:
 `statebook-p3-seven-completeness-reports`.
 
+Closed-identity bound correction state slice:
+`statebook-p3-closed-identity-bound-correction`.
+
+The correction sets the effective assurance-observation ceiling to the nine
+unique closed properties and the effective recovery-path ceiling to the
+fourteen implementation-owned path ids. The earlier nominal 128 and 64 values
+could not be reached by any valid fixture because duplicate assurance
+properties and unknown or duplicate recovery paths reject. This is a
+documentation-only consistency correction and grants no new capability.
+
 ## Objective
 
 Compose the unchanged P1 semantic-completeness report and unchanged P2
@@ -488,9 +498,10 @@ Future implementation freezes:
 - book depth: at most 64 levels per leg and 4,096 total;
 - capital receipt references: at most 64;
 - settlement obligations: at most 64;
-- assurance observations: at most 128;
+- assurance observations: at most 9, one for each unique required property;
 - current or dependency roots per observation: at most 32 each;
-- recovery-profile paths: at most 64;
+- recovery-profile paths: exactly the 14 implementation-owned path ids, with a
+  parser ceiling of 14;
 - in-flight recovery items: at most 256;
 - canary stages: at most 16;
 - source-evidence digests per dimension: at most 256.
@@ -564,7 +575,9 @@ The future implementation must cover:
     bytes and digests unchanged;
 17. input and set permutation invariance, with changed raw document digest but
     unchanged canonical fixture/report identity for reordered semantic sets;
-18. every exact resource limit succeeds and limit plus one rejects;
+18. every exact effective resource limit succeeds and limit plus one rejects,
+    including the closed nine-property assurance and fourteen-path recovery
+    identity ceilings;
 19. duplicate-key, unknown-field, JSON-number, malformed digest/time,
     noncanonical identifier, and overflow negatives;
 20. independent test encoding reproduces frozen semantic, payoff, subject,

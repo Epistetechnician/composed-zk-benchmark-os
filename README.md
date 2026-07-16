@@ -988,7 +988,10 @@ capital, settlement, assurance, and versioned-path recovery reports. Every new
 status remains fixture-qualified; current roots are disclosed without P4
 assurance resolution; no aggregate boolean, score, action, P5 adapter, live
 source, external I/O, or authority exists. This commit adds no Rust or Cargo
-change.
+change. The follow-on documentation-only state slice
+`statebook-p3-closed-identity-bound-correction` aligns the exact assurance and
+recovery limits with their closed identities: nine unique properties and
+fourteen implementation-owned paths.
 
 ## Current Implementation Status
 
