@@ -13,6 +13,7 @@ members = [
     "crates/hsai-e2e-harness",
     "crates/hsai-gateway-digest-checker",
     "crates/hsai-membrane",
+    "crates/statebook-authority",
     "crates/statebook-core",
     "crates/statebook-report",
     "crates/statebook-settlement",

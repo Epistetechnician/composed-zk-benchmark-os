@@ -876,6 +876,7 @@ Surface DSL
 | [docs/statebook-p6-read-only-external-sources-boundary-spec.md](docs/statebook-p6-read-only-external-sources-boundary-spec.md) | Docs-first P6 authorization for captured-first read-only external import (`statebook-source`), Stage 5 freeze for one synthetic clearing profile, provenance registry, and fail-closed import; no live network in first implementation, no authority. |
 | [docs/statebook-p6-read-only-external-sources-implementation-notes.md](docs/statebook-p6-read-only-external-sources-implementation-notes.md) | Implemented P6 `statebook-source` crate: captured-first synthetic clearing import, provenance registry, fail-closed digests/nonclaims, deferred live network; no authority. |
 | [docs/statebook-p7-authority-integration-preflight-boundary-spec.md](docs/statebook-p7-authority-integration-preflight-boundary-spec.md) | Docs-first P7 authorization for fail-closed authority-integration preflight (`statebook-authority`); Stage 6 package fields required; `Authorized` / controller invocation forbidden in this slice. |
+| [docs/statebook-p7-authority-integration-preflight-implementation-notes.md](docs/statebook-p7-authority-integration-preflight-implementation-notes.md) | Implemented P7 `statebook-authority` crate: fail-closed Stage 6 package preflight with `Denied`/`Incomplete` only; never grants authority or invokes controllers. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -1010,13 +1011,17 @@ or value movement is authorized. See
 This is local hermetic captured-source import regression evidence only. No value moves.
 
 Statebook P7 authorization status: the named docs-first slice
-`statebook-p7-authority-integration-preflight-boundary` freezes a future fail-closed
-authority-integration preflight surface in `statebook-authority`. The Stage 6 freeze
-requires owner, maximum loss, rollback/pause semantics, audit retention, legal domain,
-and production gate, while forbidding controller invocation and rejecting
-`production_gate=authorized` in this slice. All P1-P6 identities stay unchanged. No
-trading, signing, custody, or value movement is authorized. This commit adds no Rust
-or Cargo change.
+`statebook-p7-authority-integration-preflight-boundary` freezes a fail-closed
+authority-integration preflight surface in `statebook-authority`. The separately
+committed implementation slice `statebook-p7-authority-integration-preflight` adds
+isolated `crates/statebook-authority` with Stage 6 package validation, mandatory
+`grants_authority=false` handoff binding, rejection of `production_gate=authorized`,
+and domain-separated P7 digests with an independent `ring` golden check. Outcomes are
+limited to `Incomplete` and `Denied`. No controller is invoked. All P1-P6 identities
+stay unchanged. See
+[docs/statebook-p7-authority-integration-preflight-implementation-notes.md](docs/statebook-p7-authority-integration-preflight-implementation-notes.md).
+
+This is local hermetic authority-preflight regression evidence only. No value moves.
 
 ## Current Implementation Status
 
