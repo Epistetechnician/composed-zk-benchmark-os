@@ -871,6 +871,7 @@ Surface DSL
 | [docs/statebook-p3-seven-completeness-reports-boundary-spec.md](docs/statebook-p3-seven-completeness-reports-boundary-spec.md) | Docs-first P3 authorization for a future isolated `statebook-settlement` crate that composes unchanged P1/P2 reports with five hermetic fixture-qualified completeness reports; no aggregate boolean, P4 policy, P5 adapter, or authority. |
 | [docs/statebook-p4-settlement-simulator-boundary-spec.md](docs/statebook-p4-settlement-simulator-boundary-spec.md) | Docs-first P4 authorization for a pure deterministic settlement transition kernel inside `statebook-settlement`: hard gates, assurance tiers, valuation, budgets, linked plans, obligations, queue, breakers, and recovery transitions; decision records only; no value moves. |
 | [docs/statebook-p4-settlement-simulator-implementation-notes.md](docs/statebook-p4-settlement-simulator-implementation-notes.md) | Implemented P4 pure deterministic settlement transition kernel with fail-closed hard gates, hermetic fixtures, domain-separated digests, and non-authoritative decision records; no value moves. |
+| [docs/statebook-p5-evidence-adapters-and-report-bundles-boundary-spec.md](docs/statebook-p5-evidence-adapters-and-report-bundles-boundary-spec.md) | Docs-first P5 authorization for narrow HSAI/fixture adapters, portable digest-bound audit bundles, independent digest checks, and fail-closed readback validation; no live sources or authority. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -965,6 +966,16 @@ Focused P4 format, test, and warning-denied Clippy gates pass, as do unchanged
 [docs/statebook-p4-settlement-simulator-implementation-notes.md](docs/statebook-p4-settlement-simulator-implementation-notes.md).
 
 This is local hermetic fixture regression evidence only. No value moves.
+
+Statebook P5 authorization status: the named docs-first slice
+`statebook-p5-evidence-adapters-and-report-bundles-boundary` freezes a future portable
+digest-bound audit-bundle and narrow HSAI/fixture adapter surface in at most
+`statebook-report` and optional `statebook-hsai`. The future implementation may materialize
+and independently read back closed file sets, recompute domain-separated digests, map
+hermetic ClaimEnvelope fixtures without inventing unknowns, and emit proposal handoffs with
+`grants_authority=false`. All P1-P4 identities and the P4 kernel stay unchanged. No P6
+external source, P7 authority, network, credential, value movement, or runtime action is
+authorized. This commit adds no Rust or Cargo change.
 
 ## Current Implementation Status
 
