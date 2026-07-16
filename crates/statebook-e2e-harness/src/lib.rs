@@ -4,6 +4,7 @@ mod bounds;
 mod corpus;
 mod error;
 mod golden;
+mod semantic;
 mod types;
 
 pub use bounds::{
@@ -15,4 +16,8 @@ pub use corpus::{
 };
 pub use error::EvaluationErrorV1;
 pub use golden::{reject_unbound_authority_statement_v1, run_hermetic_golden_path_v1};
+pub use semantic::{
+    evaluate_semantic_metrics_v1, labeled_semantic_pairs_v1, replay_semantic_equivalence_corpus_v1,
+    EquivalenceLabelV1, LabeledPairV1, SemanticMetricsV1,
+};
 pub use types::EvaluationReceiptV1;

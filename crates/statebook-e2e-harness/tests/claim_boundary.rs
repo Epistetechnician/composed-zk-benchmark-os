@@ -4,6 +4,7 @@ const P8_SOURCES: &[&str] = &[
     include_str!("../src/corpus.rs"),
     include_str!("../src/error.rs"),
     include_str!("../src/golden.rs"),
+    include_str!("../src/semantic.rs"),
     include_str!("../src/types.rs"),
 ];
 
