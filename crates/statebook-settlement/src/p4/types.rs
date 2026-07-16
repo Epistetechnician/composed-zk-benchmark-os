@@ -125,6 +125,7 @@ pub enum DecisionReasonV1 {
     ChallengeUnavailable,
     EvidenceExpired,
     PolicyRollback,
+    PolicyRelaxRejected,
     RecoveryFailed,
     IntentDigestMismatch,
     ModelConfidenceIgnored,
@@ -570,6 +571,9 @@ pub struct SettlementStateV1 {
     pub(crate) recovery: RecoverySnapshotV1,
     pub(crate) expected_ledger_tip: DigestV1,
     pub(crate) applied_challenge_ids: BTreeSet<String>,
+    pub(crate) active_policy: SettlementPolicyV1,
+    pub(crate) last_policy_change_at: i64,
+    pub(crate) clean_epochs: u32,
 }
 
 impl QueueStateV1 {

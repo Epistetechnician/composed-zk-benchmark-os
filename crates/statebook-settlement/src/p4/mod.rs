@@ -1,5 +1,6 @@
 pub use breaker::{attempt_breaker_renewal_v1, validate_breaker_transition};
 pub use challenge::apply_challenge_v1;
+pub use hysteresis::{attempt_policy_transition_v1, evaluate_policy_transition_v1};
 
 mod amounts;
 mod assurance;
@@ -12,6 +13,7 @@ mod classify;
 mod digest;
 mod error;
 mod gates;
+mod hysteresis;
 mod kernel;
 mod linked_plan;
 mod obligation;
@@ -31,6 +33,7 @@ pub use digest::{
     policy_digest, valuation_profile_digest,
 };
 pub use error::{SettlementParseErrorV1, SettlementTransitionErrorV1};
+pub use hysteresis::PolicyTransitionResultV1;
 pub use kernel::decide_and_transition;
 pub use parse::parse_settlement_scenario_v1;
 pub use types::{

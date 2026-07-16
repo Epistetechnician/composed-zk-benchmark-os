@@ -11306,5 +11306,27 @@ Outcome: `DocumentationOnly`, `Level0DesignNote`, named state slice
 
 This documentation-only slice creates no proof, accepted evidence, Level2+,
 score axis, production readiness, SOTA, breakthrough, full security, external
-audit, or action authority. Implementation requires a separately committed
-state slice `statebook-p13-hysteresis-relax-rollback`.
+audit, or action authority.
+
+## Statebook P13 Hysteresis Relax And Rollback Implementation
+
+Date: 16 July 2026.
+
+Outcome: `Level1LocalReplay`, `Pass`, named state slice
+`statebook-p13-hysteresis-relax-rollback`.
+
+State slice:
+
+- additive `crates/statebook-settlement/src/p4/{hysteresis,kernel,types,digest,parse,mod}.rs`
+  and `src/lib.rs` exports;
+- `crates/statebook-settlement/tests/hysteresis.rs`;
+- additive harness corpus cases under `crates/statebook-e2e-harness`;
+- `docs/statebook-p13-hysteresis-relax-rollback-implementation-notes.md`;
+- navigation/status mirrors.
+
+Rollback and ungated relax reject with zero instant; tighten and gated relax
+succeed; existing P4/P9–P12 suites remain green.
+
+This is local hermetic hysteresis regression evidence only. It does not
+establish live pause authority, complete TD-004 satisfaction, production
+readiness, SOTA, independent audit, or full security. No value moves.
