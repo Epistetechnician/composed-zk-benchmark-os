@@ -1460,6 +1460,100 @@ Explicit Phase 762 HSAI gateway threat-ordinal rustup-inventory stop now allowed
 
 Explicit Phase 763 HSAI gateway threat-ordinal rustup-inventory closure now allowed and completed: additive Markdown boundary notes under `docs/`; Phase 762 next-gate closure; and standard mirrors. This documentation-only phase names Phase 764 canonical roots and witness; binds exact rustup 1.29 identity and full-inventory SHA-256; requires three byte-identical inventories, exactly seven canonical ` (installed)` markers, exact ordered installed-component equality, existing rustc/Cargo identities, and rejection of extra marked components; requires standalone acceptance commands or `set -eu` and a separate no-transfer scan so later commands cannot mask failure; preserves every inherited gate and stop rule; and authorizes one future Phase 764 attempt after commit. It runs no tool, network, compiler, backend, or kernel command and creates no proof, accepted evidence, Level2+, score axis, semantic correctness, production readiness, SOTA, breakthrough, full security, external audit, or action authority. Phase 763 is `MarkedInstalledComponentParsingSpecified` with execution status `NotRun` at `Level1LocalReplayOrLower`.
 
+Explicit Statebook terminal-payoff and assurance-adjusted settlement boundary
+now allowed and completed as documentation only in
+`docs/integrations/statebook_terminal_payoff_and_trust_settlement.md` plus the
+four standard mirrors in `README.md`, `AGENTS.md`, `docs/12-task-list.md`, and
+`docs/90-whole-codebase-validation-report.md`. This slice is limited to the
+`statebook-terminal-payoff-and-assurance-adjusted-settlement-boundary`: a future
+terminal scalar cash-settled `TerminalContractIR`, payoff and residual algebra,
+separate semantic/product/execution/settlement/capital completeness, an
+incident-grounded distinction between internal risk state, atomic linked
+settlement, time-critical external risk-reducing obligations, and unconditional
+externalization, current-evidence hard gates, independent common-numeraire
+valuation, atomic aggregate loss-budget reservations, zero reuse value for
+pending anomalous PnL, staged release, revalidation, bounded challenge and
+circuit-breaker contracts, and two-, five-, and ten-year AI/technology market
+scenarios. Atomic DvP/PvP and external risk-reducing obligations remain
+fully represented, prefunded, unencumbered, hard-gated, capped, and all-or-none;
+the external obligation is destination-restricted and its in-flight exposure
+remains counted until observed finality. Native and common-numeraire counters
+reserve exactly once and refill only by the deterministic epoch and journal
+rules. It does not permit Rust, Python, Cargo, fixtures, network or venue access,
+live data, oracle or router implementation, order execution, margin or
+capital-offset recognition, custody, asset settlement, circuit-breaker action,
+accepted Evidence Ledger mutation, benchmark outputs, action authority, or any
+claim above `Level0DesignNote`.
+Financial payoff composition must remain separate from
+`hsai_claim_envelope::conjoin`; HSAI evidence maturity must not be reinterpreted
+as financial contract expiry; no scalar trust score may hide a failed critical
+assurance lane.
+
+Explicit Statebook whitepaper, product-requirements, literature, publication-
+media, and non-benchmark PDF package now allowed and completed as documentation
+only. The named state slice is
+`statebook-whitepaper-prd-and-publication-media-boundary`, limited to
+`docs/statebook-whitepaper.md`, `docs/statebook-product-requirements.md`,
+`docs/statebook-literature-source-index.md`, original explanatory SVGs and their
+manifest under `docs/media/statebook/`, exactly two rendered publication PDFs
+under `output/pdf/`, the existing Statebook integration boundary, and the four
+standard navigation mirrors in `README.md`, `AGENTS.md`,
+`docs/12-task-list.md`, and `docs/90-whole-codebase-validation-report.md`. The
+two PDFs are documentation publications, not benchmark artifacts, durable
+benchmark outputs, evidence bundles, or runtime outputs. This slice expands the
+analysis to seven separate semantic, payoff, execution, capital, settlement,
+assurance, and recovery completeness verdicts; an annotated literature, code,
+standards, media, and incident corpus; a 70-story implementation-ready PRD; an
+original visual system; and a source-constrained Ostium case study. It does not
+permit new Rust, Python, Cargo, package runtime, fixture, network, venue, oracle,
+router, order, margin, custody, pause, signing, bridge, settlement, or asset-
+movement capability. It does not grant a GitHub issue execution authority, and
+it creates no accepted Evidence Ledger mutation, benchmark result, Level2+
+evidence, empirical calibration, legal conclusion, final incident attribution,
+production-readiness, SOTA, proof, semantic-correctness, or full-security claim.
+
+Explicit Statebook P1 core semantic-fixtures docs-first boundary now allowed
+and completed in
+`docs/statebook-p1-core-semantic-fixtures-boundary-spec.md` plus the four
+standard mirrors. The future named implementation state slice is
+`statebook-p1-core-semantic-fixtures`, limited to one standalone
+`crates/statebook-core` Rust crate, small synthetic JSON fixtures and Rust
+integration tests beneath that crate, root workspace membership and resulting
+`Cargo.lock` update, one implementation note, and the four standard mirrors.
+It may parse one closed terminal-contract source schema and one closed
+normalization-profile schema; validate exact decimal and rational values;
+report `Complete`, `Incomplete`, or `Unknown` semantic completeness; lower only
+complete inputs into opaque validated semantics; retain source lineage outside
+state identity; and derive `StateKeyV1` from a frozen manual binary encoding.
+It must ship a golden vector, material one-field mutations, fail-closed negative
+fixtures, permutation invariance, and a test-only implementation-diverse encoder.
+It does not permit payoff evaluation, portfolio residuals, perpetuals, order or
+book data, execution, margin or capital recognition, oracle truth, legal
+fungibility, custody, pause, signing, transfer, settlement, value movement,
+HSAI evidence mapping, network access, credentials, process spawning,
+filesystem writes, external adapters, accepted Evidence Ledger mutation,
+benchmark output, Level2+ evidence, semantic-correctness, production-readiness,
+SOTA, proof, independent-verification, external-audit, or full-security claims.
+
+Explicit Statebook P1 core semantic-fixtures implementation now allowed and
+implemented under named state slice `statebook-p1-core-semantic-fixtures`.
+The implemented surface is exactly `crates/statebook-core`, root `Cargo.toml`
+workspace membership, the resulting `Cargo.lock` entry,
+`docs/statebook-p1-core-semantic-fixtures-implementation-notes.md`, and the four
+standard mirrors. It is limited to duplicate-key-aware parsing of one synthetic
+source schema and one closed profile schema, exact decimal and signed-rational
+normalization, three-state semantic completeness, one unevaluated indicator
+payoff, opaque validated lowering, separate source-lineage binding, manual TLV
+`StateKeyV1`, small JSON fixtures, material-mutation and negative tests, and one
+test-only implementation-diverse encoder using `ring` while production uses
+`sha2`. It does not permit payoff evaluation, residuals, execution or books,
+capital or margin recognition, oracle truth, legal equivalence, custody,
+signing, pause, transfer, settlement, value movement, HSAI mapping, network,
+credentials, process spawning, filesystem writes, external adapters, accepted
+Evidence Ledger mutation, benchmark output, Level2+, semantic correctness,
+production readiness, SOTA, proof, independent verification, external audit,
+or full security.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.
@@ -1630,3 +1724,15 @@ Do not claim Level 2+ without artifacts. Do not claim Level 5 without a scoped m
 The novelty is semantic benchmark generation with formal hooks and adversarial mutation scoring. Avoid adapter sprawl, dashboard-first work, and broad cloning. The core must stay centered on Semantic IR, Oracle, Expected Verdict, Backend Outcome, Evidence Record, Claim Boundary, and Score Report.
 
 Explicit Phase 747 HSAI Mesh evidence-aware admission CLI boundary now allowed and implemented: binary-local Rust source under `crates/hsai-agent-admission/src/bin/hsai-mesh-admission/`, focused tests under `crates/hsai-agent-admission/tests/`, phase notes under `docs/`, and standard navigation/status mirrors. This phase is limited to strict bounded v1/v2 Mesh admission wire parsing; duplicate, unknown, trailing, oversized, over-depth, missing, malformed, and duplicate-set rejection; canonical Mesh JSON hashing; explicit current-policy selection; v2 recomputation of embedded candidate, pre-execution-evidence, stage-results, and action-proposal digests; structural decision/run/action/actor/policy, disposable-worktree receipt, allowed/protected/changed-path, test-command/result, and attestation-reference binding; execution of the existing `evaluate_mesh_hsai_admission_request` policy; and fail-closed Mesh decision mapping. V1 remains digest/reference parity only. V2 is structural local preflight validation, not proof that declared commands ran. This phase does not permit network access, a service listener, credential access, filesystem writes, live Mesh runtime calls, external process execution, accepted Evidence Ledger mutation, Level2+ evidence, benchmark outputs, semantic-correctness claims, production-readiness claims, SOTA claims, breakthrough claims, full-security claims, global uniqueness claims, or HSAI authority to execute a patch. Every decision preserves `grants_authority=false` and `production_readiness_claimed=false`; Mesh remains the sole owner of any separate execution capability.
+
+Explicit Statebook P2 payoff/residual engine boundary now allowed and completed: Markdown spec and navigation/status updates under `docs/`, `README.md`, `docs/12-task-list.md`, `docs/90-whole-codebase-validation-report.md`, and `AGENTS.md`. This docs-first slice is limited to freezing a future exact finite-domain evaluation of P1-validated terminal indicator contracts, rational position composition, non-netted settlement-asset residual vectors, exact/approximate/incomplete status, unsupported-state reporting, unmodeled residual disclosures, resource bounds, deterministic domain digesting, and preservation of the P1 StateKey golden. It does not permit Rust changes in this slice, P1 schema or identity changes, other payoff forms, order books, prices, optimization, routing, execution, margin, collateral, liquidation, funding, fees, custody, signing, pause, withdrawal, transfer, settlement, legal enforcement, default realization, live sources, filesystem writes, processes, network access, HSAI integration, zkbench integration, Cargo changes, accepted Evidence Ledger mutation, benchmark evidence, Level2+ evidence, proof claims, semantic-correctness claims, production-readiness claims, SOTA claims, independent-verification claims, external-audit claims, or full-security claims.
+
+Explicit Statebook P2 payoff/residual engine implementation now allowed and implemented: additive Rust source and tests under `crates/statebook-core`, one small payoff-vector fixture, phase notes under `docs/`, and standard navigation/status mirrors. This phase is limited to checked exact rational arithmetic and quantization; finite domains of at most 256 states; at most 64 P1-validated indicator candidate legs; strict observation-coordinate matching; deterministic duplicate StateKey aggregation with contributing validated-contract digests; non-netted settlement-asset residual vectors; per-asset worst residuals; exact-on-declared-domain, approximate-on-declared-domain, and incomplete status; whole-report fail closure; unmodeled residual disclosure; and preservation of all P1 identity bytes and fixtures. It does not permit P1 schema or StateKey changes, other payoff forms, global equivalence, order books, prices, ranking, optimization, routing, execution, margin, collateral, liquidation, funding, fees, custody, signing, pause, withdrawal, transfer, settlement authority, legal enforcement, default realization, live sources, filesystem writes, processes, network access, HSAI integration, zkbench integration, Cargo changes, accepted Evidence Ledger mutation, benchmark evidence, Level2+ evidence, proof claims, semantic-correctness claims, production-readiness claims, SOTA claims, independent-verification claims, external-audit claims, or full-security claims.
+
+Explicit Statebook P3 seven-completeness-reports docs-first boundary now allowed and completed: Markdown spec and navigation/status updates under `docs/`, `README.md`, `docs/12-task-list.md`, `docs/90-whole-codebase-validation-report.md`, and `AGENTS.md`. This docs-first slice is limited to freezing a future isolated `statebook-settlement` crate that consumes unchanged public P1 semantic and P2 payoff reports, performs fixed-width exact calculations over bounded synthetic fixtures, and adds fixture-qualified execution, capital, settlement, assurance, and recovery reports plus one seven-report composition without an aggregate boolean, score, rank, weakest-result shortcut, action, or authority. The recovery report is bound to a separate versioned expected-path profile. Assurance observations disclose current and dependency roots but do not implement P4 root resolution, independence, quorum, tiers, gates, valuation, budgets, queues, challenges, release ratios, or transitions. Canonical identities use domain-separated tagged binary encodings in the new crate, never JSON hashes, and preserve all P1/P2 bytes, reports, fixtures, statuses, and source. This slice does not permit Rust or Cargo changes, `statebook-core` changes, HSAI, admission, zkbench, P4 policy, P5 adapters, live sources, network, processes, filesystem writes, credentials, execution, margin or clearing authority, legal finality, custody, signing, pause, transfers, externalization, accepted Evidence Ledger mutation, benchmark evidence, Level2+ evidence, proof claims, semantic-correctness claims, production-readiness claims, SOTA claims, independent-audit claims, or full-security claims.
+
+Explicit Statebook P3 closed-identity bound correction now allowed and completed: Markdown-only updates under `docs/statebook-p3-seven-completeness-reports-boundary-spec.md`, `README.md`, `docs/12-task-list.md`, `docs/90-whole-codebase-validation-report.md`, and `AGENTS.md`. This state slice is limited to replacing unreachable nominal exact limits with the closed semantic maxima of nine unique assurance properties and fourteen implementation-owned recovery paths. It adds no Rust or Cargo change, new fixture vocabulary, P4 or P5 behavior, external I/O, runtime action, evidence promotion, claim escalation, or authority.
+
+Explicit Statebook P3 capital-context binding correction now allowed and completed: Markdown-only updates under `docs/statebook-p3-seven-completeness-reports-boundary-spec.md`, `README.md`, `docs/12-task-list.md`, `docs/90-whole-codebase-validation-report.md`, and `AGENTS.md`. This state slice is limited to adding the domain-separated synthetic capital-context commitment and requiring each fixture receipt to match the recomputed analysis-subject, authority, account, model, haircut, rule, jurisdiction, horizon, and observation-interval digest before composition. Coherent rebinding creates a different hermetic fixture only. It does not permit real clearing or margin recognition, external evidence, network access, P4/P5 behavior, runtime action, claim escalation, or authority.
+
+Explicit Statebook P3 seven-completeness-reports implementation now allowed and implemented: root workspace membership and `Cargo.lock`, standalone Rust source, strict bounded fixture parsing, tests, and a small fixture under `crates/statebook-settlement`, implementation notes under `docs/`, and standard navigation/status mirrors. This phase is limited to composing unchanged public P1 semantic and P2 payoff reports with fixture-qualified execution, capital, settlement, assurance, and versioned-profile recovery reports; typed assumptions, missing facts, reasons, and dimension residuals; bounded incremental sequence deserialization; checked fixed-width exact arithmetic; domain-separated tagged-binary identities; the synthetic capital-context receipt commitment; and an implementation-diverse `ring` golden encoder. It does not permit `statebook-core` changes, aggregate completeness, trust scoring, ranking, recommendations, P4 assurance resolution or policy, P5 adapters, live sources, network or process access, filesystem output, credentials, routing, execution, real clearing or margin recognition, legal-finality authority, custody, signing, pause, transfer, externalization, HSAI, admission, zkbench, accepted Evidence Ledger mutation, benchmark evidence, Level2+ evidence, proof claims, semantic-correctness claims, production-readiness claims, SOTA claims, independent-audit claims, or full-security claims. Every mutation in this phase names state slice `statebook-p3-seven-completeness-reports`.
