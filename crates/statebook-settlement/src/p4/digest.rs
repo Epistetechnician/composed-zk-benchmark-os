@@ -479,6 +479,7 @@ fn decision_reason_tag(value: DecisionReasonV1) -> u8 {
         DecisionReasonV1::PolicyRelaxRejected => 39,
         DecisionReasonV1::QueueCancelled => 40,
         DecisionReasonV1::ProvenNoOutflowRejected => 41,
+        DecisionReasonV1::BudgetRefillRejected => 42,
         DecisionReasonV1::RecoveryFailed => 31,
         DecisionReasonV1::IntentDigestMismatch => 32,
         DecisionReasonV1::ModelConfidenceIgnored => 33,
