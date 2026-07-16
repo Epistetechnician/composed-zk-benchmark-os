@@ -10905,3 +10905,25 @@ outside this state slice. Correspondence remains 2/10, commercial moat remains
 Ledger mutation, Level2+, external reproduction, benchmark evidence, proof,
 production-readiness, SOTA, breakthrough, full-security, or external-audit
 claim was created.
+
+## Phase 796-A3L5D HSAI P01B Inspect Census Correction
+
+Date: 15 July 2026.
+
+Outcome: documentation-only correction at execution state `NotRun` for named
+state slice `phase-796a3l5d-hsai-p01b-inspect-census-correction`.
+
+The inherited A3L5 exact inspect list and the repeated A3L5C exact list each
+contain 56 ordered fields. A3L5C refers to that unchanged list as having 57
+fields in five prose locations but names no additional field. The evidence and
+execution constants contain the same 56 names. Adding a field would therefore
+guess and alter the raw transcript grammar. A3L5D supersedes only those five
+counts with 56; the list and every per-field predicate remain unchanged.
+
+Validation requires two independent zero-finding reviews, exact list/census
+checks, the pinned `/usr/bin/python3` 3.9.6 focused/discovery gates, Git diff
+checks, and preservation of the pre-existing admission SHA-256
+`41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de`.
+A3L6 remains unaccepted and A3L7/A3L8 remain prohibited. Correspondence remains
+2/10, commercial moat remains 3/10, and defensible breakthrough evidence
+remains 2-3/10. No runtime evidence or stronger claim was created.

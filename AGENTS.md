@@ -1977,6 +1977,19 @@ remain prohibited until the corrected A3L6 immutable implementation and review
 gates pass. Any eventual acceptance remains Level 1 local synthetic evidence
 under the exact honesty assumptions and nonclaims in A3L5C.
 
+Explicit Phase 796-A3L5D HSAI P01B inspect-census correction now allowed and
+completed as documentation only under
+`docs/796a3l5d-phase-hsai-p01b-inspect-census-correction.md` plus the standard
+navigation mirrors. This slice is limited to superseding five inconsistent
+`57` prose counts in A3L5C with the independently counted exact value `56`.
+The inherited A3L5 list, repeated A3L5C list, implementation constants, and
+focused test all contain the same ordered 56 fields, and no source names a
+57th field. The correction does not add, remove, rename, reorder, or weaken an
+inspect predicate and does not authorize A3L6 acceptance, A3L7/A3L8 execution,
+Docker or network action, runtime evidence, class closure, score movement,
+accepted Evidence Ledger mutation, Level2+, benchmark evidence, proof,
+production readiness, SOTA, breakthrough, full security, or external audit.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.
