@@ -21385,21 +21385,33 @@ production readiness, SOTA, independent audit, or full-security claims.
 Status: documentation-first boundary complete for named state slice
 `statebook-p7-authority-integration-preflight-boundary`.
 
-The next separately committed slice is
-`statebook-p7-authority-integration-preflight`. It may add at most
-`crates/statebook-authority` for fail-closed Stage 6 package preflight over P5
-handoffs. Production gate may only evaluate to `incomplete` or `denied` in this
-slice; controller invocation and `grants_authority=true` are forbidden. P1-P6
-identities remain unchanged. Outputs never move value or grant authority.
+## Integration Track: Statebook P7 Authority Integration Preflight Implementation
 
-Validation gate: unchanged P1-P6 source and golden vectors; no prior Statebook
-crate mutation; fail-closed missing-field/authorized-gate/handoff-authority
-paths; domain-separated P7 digests with an implementation-diverse encoder;
-focused format/test/Clippy; repository docs and hygiene checks; and independent
-scope plus digest reviews.
+Status: implemented under named state slice
+`statebook-p7-authority-integration-preflight`.
 
-Anti-goals: live execution/custody/signing/pause/margin/settlement clients,
-`production_gate=authorized` acceptance, admission mutation, Evidence Ledger
-append, scalar trust score, production readiness, SOTA, independent audit, or
-full-security claims.
+Delivered in isolated `crates/statebook-authority`:
+
+- fail-closed Stage 6 package preflight for `hermetic-authority-preflight-v1`;
+- mandatory `grants_authority=false` handoff binding;
+- rejection of `production_gate=authorized`;
+- outcomes limited to `Incomplete` and `Denied`;
+- domain-separated P7 TLV digests with an independent `ring` golden encoder;
+- sixteen focused integration tests.
+
+P1-P6 identities remain unchanged. No controller client was added.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-authority -- --check
+cargo test -p statebook-authority --tests
+cargo clippy -p statebook-authority --all-targets -- -D warnings
+cargo test -p statebook-core -p statebook-settlement -p statebook-report -p statebook-source --tests
+```
+
+Claim ceiling: local hermetic authority-preflight regression only. No value
+moves. No controller invocation, production authorization, trading, signing,
+custody, admission mutation, Evidence Ledger append, scalar trust score,
+production readiness, SOTA, independent audit, or full-security claims.
 
