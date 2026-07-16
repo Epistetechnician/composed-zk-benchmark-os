@@ -889,6 +889,7 @@ Surface DSL
 | [docs/statebook-p12-challenge-grammar-evidence-expiry-implementation-notes.md](docs/statebook-p12-challenge-grammar-evidence-expiry-implementation-notes.md) | Implemented P12 `apply_challenge_v1`, evidence-expiry → RevalidationRequired, and fresh-evidence revalidation toward Reserved. |
 | [docs/statebook-p13-hysteresis-relax-rollback-boundary-spec.md](docs/statebook-p13-hysteresis-relax-rollback-boundary-spec.md) | Docs-first P13 authorization for asymmetric P4 policy hysteresis (fast tighten, slow relax, rollback reject); no live authority. |
 | [docs/statebook-p13-hysteresis-relax-rollback-implementation-notes.md](docs/statebook-p13-hysteresis-relax-rollback-implementation-notes.md) | Implemented P13 asymmetric policy hysteresis with `attempt_policy_transition_v1`, rollback reject, and gated relax. |
+| [docs/statebook-p14-cancel-race-intents-boundary-spec.md](docs/statebook-p14-cancel-race-intents-boundary-spec.md) | Docs-first P14 authorization for cancel/destination-replacement intent rotation and cancel-vs-release races; no live authority. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -1109,6 +1110,12 @@ live authority or value movement is authorized. See
 [docs/statebook-p13-hysteresis-relax-rollback-implementation-notes.md](docs/statebook-p13-hysteresis-relax-rollback-implementation-notes.md).
 
 This is local hermetic hysteresis regression evidence only. No value moves.
+
+Statebook P14 authorization status: the named docs-first slice
+`statebook-p14-cancel-race-intents-boundary` freezes future P4 cancel and
+destination-replacement intent rotation plus cancel-vs-release race
+fail-closed behavior. No live authority or value movement is authorized. This
+commit adds no Rust or Cargo change.
 
 ## Current Implementation Status
 
