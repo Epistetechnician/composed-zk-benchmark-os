@@ -128,6 +128,7 @@ pub enum DecisionReasonV1 {
     PolicyRelaxRejected,
     QueueCancelled,
     ProvenNoOutflowRejected,
+    BudgetRefillRejected,
     RecoveryFailed,
     IntentDigestMismatch,
     ModelConfidenceIgnored,
@@ -476,6 +477,10 @@ impl BudgetLedgerStateV1 {
 
     pub const fn tip_digest(&self) -> DigestV1 {
         self.tip_digest
+    }
+
+    pub const fn epoch(&self) -> u32 {
+        self.epoch
     }
 }
 

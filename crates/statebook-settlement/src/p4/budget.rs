@@ -259,3 +259,58 @@ pub fn apply_proven_no_outflow_v1(
     state.expected_ledger_tip = state.ledger.tip_digest;
     Ok(TransferBudgetResultV1::Applied)
 }
+
+/// Sequential epoch refill: reduce consumed (restore capacity) without backfill or cap increase.
+pub fn apply_budget_refill_v1(
+    state: &mut SettlementStateV1,
+    asset: &str,
+    amount: SignedRational,
+    target_epoch: u32,
+    expected_tip: DigestV1,
+) -> Result<TransferBudgetResultV1, SettlementTransitionErrorV1> {
+    use super::bounds::MAX_REFILL_PER_EPOCH_V1;
+
+    if amount.is_zero() || amount.numerator() < 0 {
+        return Ok(TransferBudgetResultV1::Rejected {
+            reason: DecisionReasonV1::BudgetRefillRejected,
+        });
+    }
+    let ceiling = SignedRational::new(MAX_REFILL_PER_EPOCH_V1, 1)
+        .map_err(|_| SettlementTransitionErrorV1::ArithmeticOverflow)?;
+    if amount
+        .checked_cmp(ceiling)
+        .map_err(|_| SettlementTransitionErrorV1::ArithmeticOverflow)?
+        == std::cmp::Ordering::Greater
+    {
+        return Ok(TransferBudgetResultV1::Rejected {
+            reason: DecisionReasonV1::BudgetRefillRejected,
+        });
+    }
+    if target_epoch != state.ledger.epoch.saturating_add(1) {
+        return Ok(TransferBudgetResultV1::Rejected {
+            reason: DecisionReasonV1::BudgetRefillRejected,
+        });
+    }
+    if state.ledger.tip_digest != expected_tip {
+        return Err(SettlementTransitionErrorV1::LedgerCasConflict);
+    }
+    let axis = axis_mut(&mut state.ledger, asset)?;
+    let refill = if axis
+        .consumed
+        .checked_cmp(amount)
+        .map_err(|_| SettlementTransitionErrorV1::ArithmeticOverflow)?
+        == std::cmp::Ordering::Less
+    {
+        axis.consumed
+    } else {
+        amount
+    };
+    axis.consumed = axis
+        .consumed
+        .checked_sub(refill)
+        .map_err(|_| SettlementTransitionErrorV1::ArithmeticOverflow)?;
+    state.ledger.epoch = target_epoch;
+    state.ledger.tip_digest = ledger_tip_digest(&state.ledger);
+    state.expected_ledger_tip = state.ledger.tip_digest;
+    Ok(TransferBudgetResultV1::Applied)
+}

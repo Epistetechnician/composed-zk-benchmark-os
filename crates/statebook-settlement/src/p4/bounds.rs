@@ -14,3 +14,5 @@ pub const MAX_VALUATION_OBSERVATIONS_V1: usize = 32;
 pub const MAX_IN_FLIGHT_TRANSFERS_V1: usize = 64;
 pub const MAX_SCENARIO_STEPS_V1: usize = 16;
 pub const MAX_IDENTIFIER_LEN_V1: usize = 64;
+/// Hermetic per-epoch refill ceiling numerator (denominator 1).
+pub const MAX_REFILL_PER_EPOCH_V1: i128 = 50;
