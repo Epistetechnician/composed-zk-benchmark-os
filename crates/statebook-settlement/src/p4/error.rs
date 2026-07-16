@@ -37,4 +37,8 @@ pub enum SettlementTransitionErrorV1 {
     InvalidBreakerTransition,
     #[error("invalid queue transfer combination")]
     InvalidQueueTransferCombination,
+    #[error("invalid breaker renewal request")]
+    InvalidBreakerRenewal,
+    #[error("breaker renewal rejected at ceiling")]
+    BreakerRenewalRejected,
 }
