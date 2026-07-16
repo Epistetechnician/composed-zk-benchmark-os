@@ -10977,3 +10977,26 @@ admission SHA-256
 A3L6 remains unaccepted and A3L7/A3L8 remain prohibited. Correspondence remains
 2/10, commercial moat remains 3/10, and defensible breakthrough evidence
 remains 2-3/10. No runtime evidence or stronger claim was created.
+
+## Phase 796-A3L5G HSAI P01B Snapshot Binding Graph Correction
+
+Date: 15 July 2026.
+
+Outcome: documentation-only correction at execution state `NotRun` for named
+state slice `phase-796a3l5g-hsai-p01b-snapshot-binding-graph-correction`.
+
+The A3L5 exact attempt-plan and A3L5C authorization-v3 schemas have no new
+snapshot field. A3L5G therefore retains both frozen field sets and defines the
+normal/OOM `source_manifest_sha256` plan field as the domain digest of the
+descriptor-bound snapshot-copy manifest. That value equals the required create
+argv and probe-result input binding. Authorization-v3 binds it transitively by
+binding the complete expected-bindings object, whose separately named source
+and copy manifest digests remain mandatory and are reparsed by A3L9.
+
+Validation requires two independent zero-finding reviews, the pinned
+focused/discovery gates, Git diff checks, and preservation of the pre-existing
+admission SHA-256
+`41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de`.
+A3L6 remains unaccepted and A3L7/A3L8 remain prohibited. Correspondence remains
+2/10, commercial moat remains 3/10, and defensible breakthrough evidence
+remains 2-3/10. No runtime evidence or stronger claim was created.

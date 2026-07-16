@@ -20681,6 +20681,28 @@ Evidence Ledger mutation, Level2+, benchmark evidence, proof, production
 readiness, SOTA, breakthrough, full security, or external-audit claim is
 created.
 
+## Phase 796-A3L5G HSAI P01B Snapshot Binding Graph Correction
+
+Status: complete documentation-only correction; execution remains `NotRun` and
+correspondence remains `2/10`.
+
+Named state slice:
+`phase-796a3l5g-hsai-p01b-snapshot-binding-graph-correction`.
+
+Completed: retained the exact attempt-plan and authorization-v3 field sets;
+defined normal/OOM `source_manifest_sha256` as the snapshot-copy manifest
+domain digest; required equality with create argv and probe result; and made
+authorization's binding explicit through the complete expected-bindings
+object. The separately named source-manifest digest remains mandatory. See
+`docs/796a3l5g-phase-hsai-p01b-snapshot-binding-graph-correction.md`.
+
+Exit criteria: two independent zero-finding reviews over the correction, then
+the exact A3L6 immutable gate. A3L6 remains unaccepted; A3L7/A3L8 remain
+prohibited; no runtime evidence, class closure, score movement, accepted
+Evidence Ledger mutation, Level2+, benchmark evidence, proof, production
+readiness, SOTA, breakthrough, full security, or external-audit claim is
+created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

@@ -2023,6 +2023,21 @@ action, runtime evidence, class closure, score movement, accepted Evidence
 Ledger mutation, Level2+, benchmark evidence, proof, production readiness,
 SOTA, breakthrough, full security, or external audit.
 
+Explicit Phase 796-A3L5G HSAI P01B snapshot-binding graph correction now
+allowed and completed as documentation only under
+`docs/796a3l5g-phase-hsai-p01b-snapshot-binding-graph-correction.md` plus the
+standard navigation mirrors. This slice is limited to clarifying that the
+unchanged normal/OOM attempt-plan field `source_manifest_sha256` carries the
+domain digest of the descriptor-bound snapshot-copy manifest, equals the
+required create/probe `--input-manifest-sha256` value, and is bound by
+authorization-v3 transitively through `expected_bindings_sha256` and the inner
+`expected_bindings.snapshot_copy_manifest_sha256` field. The separately named
+snapshot-source digest remains mandatory. This slice changes no schema or
+domain vector and does not authorize A3L6 acceptance, A3L7/A3L8 execution,
+Docker or network action, runtime evidence, class closure, score movement,
+accepted Evidence Ledger mutation, Level2+, benchmark evidence, proof,
+production readiness, SOTA, breakthrough, full security, or external audit.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.
