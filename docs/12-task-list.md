@@ -21416,3 +21416,25 @@ regression only. No value moves. Completing P7 does not satisfy the legal/ops
 gate for live execution, custody, signing, pause, real margin recognition, or
 settlement. No admission mutation, Evidence Ledger append, scalar trust score,
 production readiness, SOTA, independent audit, or full-security claims.
+
+## Integration Track: Statebook P8 Evaluation And Falsification Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p8-evaluation-and-falsification-boundary`.
+
+The next separately committed slice is
+`statebook-p8-evaluation-and-falsification`. It may add at most
+`crates/statebook-e2e-harness` composing public P1–P7 APIs for one hermetic
+golden path, TD-011/§15 falsifiers, structured evaluation receipts, and
+claim-boundary scans. P1–P7 identities remain unchanged. Outputs never move
+value or grant live authority.
+
+Validation gate: unchanged P1–P7 source and golden vectors; no P1–P7 crate
+mutation; golden-path digest binding; listed falsifiers fail closed; focused
+format/test/Clippy; repository docs and hygiene checks; and independent scope
+plus composition/digest reviews.
+
+Anti-goals: live authority products, trading, signing, custody, pause,
+transfer, admission mutation, Evidence Ledger append, scalar trust score,
+empirical calibration, production thresholds, proof, production readiness,
+SOTA, independent audit, or full-security claims.
