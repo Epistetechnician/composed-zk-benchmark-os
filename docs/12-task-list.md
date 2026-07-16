@@ -21703,3 +21703,33 @@ cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -
 Claim ceiling: local hermetic recovery-drill regression only. No value moves.
 Not live pause authority, production recovery readiness, complete TD-004
 satisfaction, SOTA, independent audit, or full-security claims.
+
+## Integration Track: Statebook P17 Adversarial Corpus Expansion Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p17-adversarial-corpus-expansion-boundary`.
+
+## Integration Track: Statebook P17 Adversarial Corpus Expansion Implementation
+
+Status: implemented under named state slice
+`statebook-p17-adversarial-corpus-expansion`.
+
+Delivered:
+
+- future valuation observation reject;
+- five new harness corpus cases (33 encodable cases total).
+
+Live authority remains deferred behind the legal/ops gate.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic adversarial fixture regression only. No value
+moves. Not complete TD-004 satisfaction, live authority, production readiness,
+SOTA, independent audit, or full-security claims.

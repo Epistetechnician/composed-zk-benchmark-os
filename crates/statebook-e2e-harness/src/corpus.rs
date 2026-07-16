@@ -1,9 +1,10 @@
 use serde_json::{json, Value};
 use statebook_settlement::{
     apply_cancel_v1, apply_challenge_v1, apply_proven_no_outflow_v1, apply_transfer_submit_v1,
-    decide_and_transition, intent_digest, parse_settlement_scenario_v1, ChallengeApplyResultV1,
-    ChallengeKindV1, ChallengeSubmissionV1, ClockV1, DecisionOutcomeV1, DecisionReasonV1,
-    DecisionRecordV1, DigestV1, SettlementScenarioV1, TransferBudgetResultV1,
+    decide_and_transition, intent_digest, parse_settlement_scenario_v1,
+    validate_breaker_transition, BreakerStateV1, ChallengeApplyResultV1, ChallengeKindV1,
+    ChallengeSubmissionV1, ClockV1, DecisionOutcomeV1, DecisionReasonV1, DecisionRecordV1,
+    DigestV1, SettlementScenarioV1, TransferBudgetResultV1,
 };
 
 use crate::error::EvaluationErrorV1;
@@ -165,6 +166,26 @@ pub fn encodable_corpus_cases_v1() -> &'static [CorpusCaseV1] {
         },
         CorpusCaseV1 {
             id: "td004_26_canary_failed",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_02_bound_request_mismatch",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_07_future_valuation",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_07_equivocated_evidence",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_20_valuation_conflict",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_32_halted_to_normal_blocked",
             expected_outcome: DecisionOutcomeV1::Rejected,
         },
     ]
@@ -351,6 +372,44 @@ pub fn build_corpus_scenario_v1(id: &str) -> Result<SettlementScenarioV1, Evalua
         "td004_26_canary_failed" => mutate(|value| {
             value["initial_state"]["recovery"]["canary_failed"] = json!(true);
         }),
+        "td004_02_bound_request_mismatch" => mutate(|value| {
+            if let Some(observations) = value["evidence_snapshot"]["observations"].as_array_mut() {
+                for observation in observations {
+                    if observation["property"] == "source_authenticity_and_freshness" {
+                        observation["bound_request_id"] = json!("req-other");
+                    }
+                }
+            }
+        }),
+        "td004_07_future_valuation" => mutate(|value| {
+            value["valuation_profile"]["observations"][0]["observed_at"] = json!(1_710_100_000);
+        }),
+        "td004_07_equivocated_evidence" => mutate(|value| {
+            if let Some(observations) = value["evidence_snapshot"]["observations"].as_array_mut() {
+                for observation in observations {
+                    observation["equivocated"] = json!(true);
+                }
+            }
+        }),
+        "td004_20_valuation_conflict" => mutate(|value| {
+            value["valuation_profile"]["observations"] = json!([
+                {
+                    "asset": "ETH",
+                    "rate": { "numerator": "2000", "denominator": "1" },
+                    "observed_at": 1709999900,
+                    "root_id": "oracle-a",
+                    "root_class": "data"
+                },
+                {
+                    "asset": "ETH",
+                    "rate": { "numerator": "2100", "denominator": "1" },
+                    "observed_at": 1709999900,
+                    "root_id": "oracle-a",
+                    "root_class": "data"
+                }
+            ]);
+        }),
+        "td004_32_halted_to_normal_blocked" => mutate(|_| {}),
         _ => Err(EvaluationErrorV1::Settlement(format!(
             "unknown corpus id: {id}"
         ))),
@@ -537,6 +596,19 @@ pub fn replay_corpus_case_v1(id: &str) -> Result<CorpusReplayReceiptV1, Evaluati
     }
     if id == "td004_16_finality_no_capacity_restore" {
         return replay_finality_no_capacity_restore_v1(id);
+    }
+    if id == "td004_32_halted_to_normal_blocked" {
+        if validate_breaker_transition(BreakerStateV1::Halted, BreakerStateV1::Normal) {
+            return Err(EvaluationErrorV1::Settlement(
+                "halted→normal must remain forbidden".into(),
+            ));
+        }
+        return Ok(CorpusReplayReceiptV1 {
+            id: id.to_owned(),
+            outcome: "rejected".to_owned(),
+            instant_release_is_zero: true,
+            record_digest: format!("halted-to-normal-blocked-{id}"),
+        });
     }
     let scenario = build_corpus_scenario_v1(id)?;
     let record = run(scenario)?;
