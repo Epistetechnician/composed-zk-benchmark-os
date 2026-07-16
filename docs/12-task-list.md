@@ -21386,26 +21386,33 @@ production readiness, SOTA, independent audit, or full-security claims.
 Status: documentation-first boundary complete for named state slice
 `statebook-p7-authority-integration-boundary`.
 
-The next separately committed slice is
-`statebook-p7-authority-integration`. It may add at most
-`crates/statebook-authority` for hermetic synthetic authority-statement attach
-of the frozen `synthetic-clearing-authority-v1` profile, capital-recognition
-overlay receipts, revoke/expire evaluation, and domain-separated digests. Live
-execution, custody, signing, pause, real margin recognition, and settlement
-remain deferred behind the legal/ops gate. P1-P6 identities remain unchanged.
-Outputs never move value; `grants_execution_authority` remains false.
+## Integration Track: Statebook P7 Authority Integration Implementation
 
-Validation gate: unchanged P1-P6 source and golden vectors; no
-`statebook-core` / `statebook-settlement` / `statebook-report` /
-`statebook-source` mutation; closed profile attach; fail-closed
-missing-field/unknown-schema/true-authority-grant/expire paths; capital overlay
-does not rewrite economic residual digests; adapter nonclaims; no generic
-authority-adapter trait while only one profile exists; domain-separated P7
-digests with an implementation-diverse encoder; focused format/test/Clippy;
-repository docs and hygiene checks; and independent scope plus authority/digest
-reviews.
+Status: implemented under named state slice
+`statebook-p7-authority-integration`.
 
-Anti-goals: live authority products, trading, signing, custody, pause,
-transfer, admission mutation, Evidence Ledger append, scalar trust score,
-empirical calibration, media-as-assurance, proof, production readiness, SOTA,
-independent audit, or full-security claims.
+Delivered in isolated `crates/statebook-authority`:
+
+- hermetic attach for `synthetic-clearing-authority-v1`;
+- authority registry with revoke/historical digest retention;
+- capital-recognition overlays that preserve economic residual digests;
+- permanent `grants_execution_authority=false` and legal/ops gate deferred checklist;
+- domain-separated P7 TLV digests with an independent `ring` golden encoder;
+- seventeen focused integration tests.
+
+P1-P6 identities remain unchanged. Live authority products remain deferred.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-authority -- --check
+cargo test -p statebook-authority --tests
+cargo clippy -p statebook-authority --all-targets -- -D warnings
+cargo test -p statebook-core -p statebook-settlement -p statebook-report -p statebook-source --tests
+```
+
+Claim ceiling: local hermetic synthetic authority-statement / capital-overlay
+regression only. No value moves. Completing P7 does not satisfy the legal/ops
+gate for live execution, custody, signing, pause, real margin recognition, or
+settlement. No admission mutation, Evidence Ledger append, scalar trust score,
+production readiness, SOTA, independent audit, or full-security claims.
