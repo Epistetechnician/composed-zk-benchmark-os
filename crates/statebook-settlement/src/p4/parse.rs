@@ -80,6 +80,8 @@ pub fn parse_settlement_scenario_v1(
         object
             .get("initial_state")
             .ok_or(missing_field("initial_state"))?,
+        &policy,
+        clock.now(),
     )?;
     let request = parse_request(
         object.get("request").ok_or(missing_field("request"))?,
@@ -434,7 +436,11 @@ fn parse_evidence(value: &Value) -> Result<EvidenceSnapshotV1, SettlementParseEr
     })
 }
 
-fn parse_state(value: &Value) -> Result<SettlementStateV1, SettlementParseErrorV1> {
+fn parse_state(
+    value: &Value,
+    scenario_policy: &SettlementPolicyV1,
+    now: i64,
+) -> Result<SettlementStateV1, SettlementParseErrorV1> {
     let object = value.as_object().ok_or(missing_field("initial_state"))?;
     let ledger = object.get("ledger").ok_or(missing_field("ledger"))?;
     let ledger_object = ledger.as_object().ok_or(missing_field("ledger"))?;
@@ -543,6 +549,18 @@ fn parse_state(value: &Value) -> Result<SettlementStateV1, SettlementParseErrorV
             })
             .transpose()?
             .unwrap_or_default(),
+        active_policy: match object.get("active_policy") {
+            Some(value) => parse_policy(value)?,
+            None => scenario_policy.clone(),
+        },
+        last_policy_change_at: object
+            .get("last_policy_change_at")
+            .and_then(Value::as_i64)
+            .unwrap_or(now),
+        clean_epochs: object
+            .get("clean_epochs")
+            .and_then(Value::as_u64)
+            .unwrap_or(0) as u32,
     })
 }
 

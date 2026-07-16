@@ -26,19 +26,21 @@ pub use completeness::{
 };
 
 pub use p4::{
-    apply_challenge_v1, attempt_breaker_renewal_v1, decide_and_transition, decision_context_digest,
+    apply_challenge_v1, attempt_breaker_renewal_v1, attempt_policy_transition_v1,
+    decide_and_transition, decision_context_digest, evaluate_policy_transition_v1,
     evidence_snapshot_digest, intent_digest, intent_payload, parse_settlement_scenario_v1,
     policy_digest, validate_breaker_transition, valuation_profile_digest, AssuranceTierV1,
     AtomicLinkedExchangePlanV1, BreakerScopeV1, BreakerStateV1, ChallengeApplyResultV1,
     ChallengeKindV1, ChallengeSubmissionV1, ClockV1, DecisionMissingFactV1, DecisionNonclaimV1,
     DecisionOutcomeV1, DecisionReasonV1, DecisionRecordV1, DirectionV1,
     ExternalRiskReducingObligationV1, ExternalizationRequestV1, FinancialBasisKindV1,
-    FinancialBasisV1, QueueStatusV1, ReleaseClassV1, SettlementParseErrorV1, SettlementPolicyV1,
-    SettlementScenarioV1, SettlementStateV1, SettlementTransitionErrorV1, TransferStatusV1,
-    CLAIM_BOUNDARY_P4, MAX_BREAKER_SCOPES_V1, MAX_BUDGET_AXES_V1, MAX_CHALLENGES_V1,
-    MAX_EVIDENCE_OBSERVATIONS_V1, MAX_EVIDENCE_ROOTS_V1, MAX_IN_FLIGHT_TRANSFERS_V1,
-    MAX_LEDGER_JOURNAL_ENTRIES_V1, MAX_LINKED_PLAN_LEGS_V1, MAX_QUEUE_DEPTH_V1, MAX_QUEUE_PARTS_V1,
-    MAX_SCENARIO_STEPS_V1, MAX_VALUATION_OBSERVATIONS_V1, STATE_SLICE_P4,
+    FinancialBasisV1, PolicyTransitionResultV1, QueueStatusV1, ReleaseClassV1,
+    SettlementParseErrorV1, SettlementPolicyV1, SettlementScenarioV1, SettlementStateV1,
+    SettlementTransitionErrorV1, TransferStatusV1, CLAIM_BOUNDARY_P4, MAX_BREAKER_SCOPES_V1,
+    MAX_BUDGET_AXES_V1, MAX_CHALLENGES_V1, MAX_EVIDENCE_OBSERVATIONS_V1, MAX_EVIDENCE_ROOTS_V1,
+    MAX_IN_FLIGHT_TRANSFERS_V1, MAX_LEDGER_JOURNAL_ENTRIES_V1, MAX_LINKED_PLAN_LEGS_V1,
+    MAX_QUEUE_DEPTH_V1, MAX_QUEUE_PARTS_V1, MAX_SCENARIO_STEPS_V1, MAX_VALUATION_OBSERVATIONS_V1,
+    STATE_SLICE_P4,
 };
 
 pub const STATE_SLICE: &str = "statebook-p3-seven-completeness-reports";

@@ -134,6 +134,14 @@ pub fn encodable_corpus_cases_v1() -> &'static [CorpusCaseV1] {
             id: "td004_31_evidence_expired",
             expected_outcome: DecisionOutcomeV1::Rejected,
         },
+        CorpusCaseV1 {
+            id: "td004_21_policy_rollback",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_21_policy_relax_rejected",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
     ]
 }
 
@@ -269,6 +277,26 @@ pub fn build_corpus_scenario_v1(id: &str) -> Result<SettlementScenarioV1, Evalua
                     observation["expires_at"] = json!(1_710_003_600);
                 }
             }
+        }),
+        "td004_21_policy_rollback" => mutate(|value| {
+            let mut active = value["policy"].clone();
+            active["policy_version"] = json!(2);
+            value["initial_state"]["active_policy"] = active;
+            value["initial_state"]["last_policy_change_at"] = json!(1_709_900_000);
+            value["policy"]["policy_version"] = json!(1);
+        }),
+        "td004_21_policy_relax_rejected" => mutate(|value| {
+            let mut active = value["policy"].clone();
+            active["assurance_tiers"]["currently_assured"]["instant_fraction"] =
+                json!({ "numerator": "1", "denominator": "4" });
+            value["initial_state"]["active_policy"] = active;
+            value["initial_state"]["last_policy_change_at"] = json!(1_710_000_000);
+            value["initial_state"]["clean_epochs"] = json!(0);
+            value["policy"]["policy_version"] = json!(2);
+            value["policy"]["policy_digest"] =
+                json!("0000000000000000000000000000000000000000000000000000000000000002");
+            value["policy"]["assurance_tiers"]["currently_assured"]["instant_fraction"] =
+                json!({ "numerator": "1", "denominator": "2" });
         }),
         _ => Err(EvaluationErrorV1::Settlement(format!(
             "unknown corpus id: {id}"
