@@ -1,0 +1,14 @@
+{
+  "schema_version": "statebook-p6-captured-artifact:v1",
+  "profile_id": "synthetic-clearing-terms-v1",
+  "venue_namespace": "synthetic.clearing.v1",
+  "source_contract_id": "BTC-USD-2026",
+  "source_revision": "rev-1",
+  "published_at": 1788200000,
+  "retrieved_at": 1788200100,
+  "evidence_class": "captured_replay",
+  "content_sha256": "b2e2c19561b98a9240fc638c27c75a5f76ebfcc93f24f10cc903548d867928f3",
+  "supported_claims": ["terms-normalization-input"],
+  "limitations": ["synthetic-non-authoritative", "not-live-venue-data"],
+  "unknown_facts": ["legal-classification"]
+}
