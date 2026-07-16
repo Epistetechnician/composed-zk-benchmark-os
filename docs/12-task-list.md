@@ -21416,3 +21416,38 @@ regression only. No value moves. Completing P7 does not satisfy the legal/ops
 gate for live execution, custody, signing, pause, real margin recognition, or
 settlement. No admission mutation, Evidence Ledger append, scalar trust score,
 production readiness, SOTA, independent audit, or full-security claims.
+
+## Integration Track: Statebook P8 Evaluation And Falsification Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p8-evaluation-and-falsification-boundary`.
+
+## Integration Track: Statebook P8 Evaluation And Falsification Implementation
+
+Status: implemented under named state slice
+`statebook-p8-evaluation-and-falsification`.
+
+Delivered in isolated `crates/statebook-e2e-harness`:
+
+- hermetic P1–P7 golden path via `run_hermetic_golden_path_v1`;
+- structured `EvaluationReceiptV1` digest/outcome binding;
+- falsifiers for P4 hard-gate failure, P5 readback tamper, P7 execution grant,
+  and unbound authority digest binding;
+- nine focused harness tests and claim-boundary scans.
+
+P1–P7 identities remain unchanged. Live authority products remain deferred.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-e2e-harness -- --check
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-e2e-harness --all-targets -- -D warnings
+cargo test -p statebook-core -p statebook-settlement -p statebook-report -p statebook-source -p statebook-authority --tests
+```
+
+Claim ceiling: local hermetic composed P1–P7 regression and falsification-
+surface evidence only. No value moves. Completing P8 does not satisfy the P7
+legal/ops gate for live authority products. No admission mutation, Evidence
+Ledger append, scalar trust score, production thresholds, production readiness,
+SOTA, independent audit, or full-security claims.

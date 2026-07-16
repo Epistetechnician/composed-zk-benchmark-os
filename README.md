@@ -877,6 +877,8 @@ Surface DSL
 | [docs/statebook-p6-read-only-external-sources-implementation-notes.md](docs/statebook-p6-read-only-external-sources-implementation-notes.md) | Implemented P6 `statebook-source` crate: captured-first synthetic clearing import, provenance registry, fail-closed digests/nonclaims, deferred live network; no authority. |
 | [docs/statebook-p7-authority-integration-boundary-spec.md](docs/statebook-p7-authority-integration-boundary-spec.md) | Docs-first P7 legal/ops authorization for hermetic synthetic authority-statement attach (`statebook-authority`), capital overlay only, deferred live authority products; no value moves. |
 | [docs/statebook-p7-authority-integration-implementation-notes.md](docs/statebook-p7-authority-integration-implementation-notes.md) | Implemented P7 `statebook-authority` crate: hermetic synthetic authority-statement attach, capital overlay only, legal/ops gate deferred, permanent non-grant of execution authority; no value moves. |
+| [docs/statebook-p8-evaluation-and-falsification-boundary-spec.md](docs/statebook-p8-evaluation-and-falsification-boundary-spec.md) | Docs-first P8 authorization for hermetic P1–P7 evaluation/falsification harness (`statebook-e2e-harness`); TD-011/§15 surfaces only; no live authority or value moves. |
+| [docs/statebook-p8-evaluation-and-falsification-implementation-notes.md](docs/statebook-p8-evaluation-and-falsification-implementation-notes.md) | Implemented P8 `statebook-e2e-harness`: hermetic P1–P7 golden path, structured evaluation receipts, TD-011/§15 falsifiers; no live authority or value moves. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -1024,6 +1026,19 @@ No value movement is authorized. See
 [docs/statebook-p7-authority-integration-implementation-notes.md](docs/statebook-p7-authority-integration-implementation-notes.md).
 
 This is local hermetic synthetic authority-statement / capital-overlay regression
+evidence only. No value moves.
+
+Statebook P8 authorization status: the named docs-first slice
+`statebook-p8-evaluation-and-falsification-boundary` freezes a hermetic
+composing evaluation harness in `statebook-e2e-harness`. The separately
+committed implementation slice `statebook-p8-evaluation-and-falsification` adds
+isolated `crates/statebook-e2e-harness` with one P1–P7 golden path, structured
+evaluation receipts, and TD-011/§15 falsifiers. All P1-P7 identities stay
+unchanged. No live authority, production threshold calibration, or value
+movement is authorized. See
+[docs/statebook-p8-evaluation-and-falsification-implementation-notes.md](docs/statebook-p8-evaluation-and-falsification-implementation-notes.md).
+
+This is local hermetic composed P1–P7 regression and falsification-surface
 evidence only. No value moves.
 
 ## Current Implementation Status

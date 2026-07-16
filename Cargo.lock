@@ -1012,6 +1012,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "statebook-e2e-harness"
+version = "0.1.0"
+dependencies = [
+ "hex",
+ "serde",
+ "serde_json",
+ "statebook-authority",
+ "statebook-core",
+ "statebook-report",
+ "statebook-settlement",
+ "statebook-source",
+ "tempfile",
+ "thiserror",
+]
+
+[[package]]
 name = "statebook-report"
 version = "0.1.0"
 dependencies = [

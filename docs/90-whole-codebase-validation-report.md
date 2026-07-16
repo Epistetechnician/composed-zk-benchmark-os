@@ -11055,3 +11055,59 @@ regression evidence only. It does not establish live clearing recognition,
 legal finality, admission authority, Evidence Ledger mutation, production
 readiness, SOTA, independent audit, or full security. Completing P7 does not
 satisfy the legal/ops gate for live authority products. No value moves.
+
+## Statebook P8 Evaluation And Falsification Boundary
+
+Date: 16 July 2026.
+
+Outcome: `DocumentationOnly`, `NotRun`, named state slice
+`statebook-p8-evaluation-and-falsification-boundary`.
+
+State slice:
+
+- `docs/statebook-p8-evaluation-and-falsification-boundary-spec.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+The boundary freezes a hermetic composing evaluation harness for public P1–P7
+APIs under whitepaper §15 / PRD TD-011. It authorizes at most
+`crates/statebook-e2e-harness`. It preserves all P1–P7 identities. Live
+authority products and production threshold calibration remain outside this
+slice.
+
+This documentation-only slice adds no Rust or Cargo change and creates no
+proof, accepted evidence, Level2+, score axis, semantic correctness, production
+readiness, SOTA, breakthrough, full security, external audit, or action
+authority.
+
+## Statebook P8 Evaluation And Falsification Implementation
+
+Date: 16 July 2026.
+
+Outcome: `Level1LocalReplay`, `Pass`, named state slice
+`statebook-p8-evaluation-and-falsification`.
+
+State slice:
+
+- root `Cargo.toml` / `Cargo.lock` membership for `statebook-e2e-harness`;
+- `crates/statebook-e2e-harness/**`;
+- `docs/statebook-p8-evaluation-and-falsification-implementation-notes.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+The crate composes public P1–P7 APIs into one hermetic golden path, emits a
+structured evaluation receipt, and covers TD-011/§15 falsifiers for hard-gate
+failure, readback tamper, execution-authority grant rejection, and unbound
+authority digest binding. Nine focused harness tests pass; unchanged P1–P7
+crate tests pass; focused format and warning-denied Clippy pass for
+`statebook-e2e-harness`. Live authority products remain deferred.
+
+This is local hermetic composed P1–P7 regression and falsification-surface
+evidence only. It does not establish live clearing recognition, legal finality,
+admission authority, Evidence Ledger mutation, production thresholds,
+production readiness, SOTA, independent audit, or full security. Completing P8
+does not satisfy the P7 legal/ops gate. No value moves.
