@@ -134,6 +134,11 @@ impl DigestV1 {
         Self(bytes)
     }
 
+    /// Shared constructor for crate-local digest materialization (P3/P4).
+    pub fn from_raw_bytes(bytes: [u8; 32]) -> Self {
+        Self(bytes)
+    }
+
     fn parse(value: &str) -> Result<Self, FixtureParseErrorV1> {
         if value.len() != 64
             || !value
@@ -154,12 +159,6 @@ impl DigestV1 {
 
     pub fn to_hex(self) -> String {
         hex::encode(self.0)
-    }
-}
-
-impl DigestV1 {
-    pub fn from_raw_bytes(bytes: [u8; 32]) -> Self {
-        Self(bytes)
     }
 }
 
@@ -391,13 +390,20 @@ const REQUIRED_RECOVERY_PATHS: [&str; 14] = [
     "internal-credit-monetization",
 ];
 
-#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct AssuranceRootV1 {
     root_class: RootClassV1,
     root_id: String,
 }
 
 impl AssuranceRootV1 {
+    pub fn new(root_class: RootClassV1, root_id: impl Into<String>) -> Self {
+        Self {
+            root_class,
+            root_id: root_id.into(),
+        }
+    }
+
     pub const fn root_class(&self) -> RootClassV1 {
         self.root_class
     }

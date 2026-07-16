@@ -1,9 +1,9 @@
 mod support;
 
 use statebook_settlement::{
-    parse_settlement_scenario_v1, validate_breaker_transition, BreakerStateV1,
-    DecisionOutcomeV1, DecisionReasonV1, QueueStatusV1, TransferStatusV1, MAX_BUDGET_AXES_V1,
-    MAX_FIXTURE_BYTES_V1, MAX_LINKED_PLAN_LEGS_V1,
+    parse_settlement_scenario_v1, validate_breaker_transition, BreakerStateV1, DecisionOutcomeV1,
+    DecisionReasonV1, QueueStatusV1, TransferStatusV1, MAX_BUDGET_AXES_V1, MAX_FIXTURE_BYTES_V1,
+    MAX_LINKED_PLAN_LEGS_V1,
 };
 
 const IMMEDIATE_FIXTURE: &[u8] = include_bytes!("fixtures/p4/immediate_v1.json");

@@ -351,8 +351,15 @@ fn parse_assurance_property(value: &str) -> Result<AssurancePropertyV1, Settleme
 }
 
 fn parse_root(value: &Value) -> Result<AssuranceRootV1, SettlementParseErrorV1> {
-    serde_json::from_value(value.clone())
-        .map_err(|error| SettlementParseErrorV1::InvalidJson(error.to_string()))
+    let object = value.as_object().ok_or(missing_field("root"))?;
+    let root_id = required_string(object, "root_id")?;
+    let root_class = object
+        .get("root_class")
+        .cloned()
+        .ok_or(missing_field("root_class"))?;
+    let root_class: RootClassV1 = serde_json::from_value(root_class)
+        .map_err(|error| SettlementParseErrorV1::InvalidJson(error.to_string()))?;
+    Ok(AssuranceRootV1::new(root_class, root_id))
 }
 
 fn parse_evidence(value: &Value) -> Result<EvidenceSnapshotV1, SettlementParseErrorV1> {
