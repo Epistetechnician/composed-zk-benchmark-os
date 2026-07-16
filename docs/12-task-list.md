@@ -21340,35 +21340,8 @@ cargo test -p statebook-core -p statebook-settlement --tests
 Claim ceiling: local hermetic digest-bound audit-bundle and adapter regression
 only. No value moves. No P6 external sources, P7 authority, network, credentials,
 admission mutation, Evidence Ledger append, scalar trust score, production
-readiness, SOTA, independent audit, or full-security claims.
-
-## Statebook P5 Evidence Adapters And Report Bundles Implementation
-
-Status: complete for named state slice
-`statebook-p5-evidence-adapters-and-report-bundles`.
-
-Delivered:
-
-- new `crates/statebook-report` with closed audit bundle materialization and
-  readback validation;
-- hermetic fixture adapters and ClaimEnvelope-shaped fixture doubles without
-  `hsai-*` production dependencies;
-- domain-separated P5 TLV digests and independent `ring` golden coverage;
-- proposal-only decision handoffs with `grants_authority=false` always;
-- nineteen focused integration tests including bundle rejection paths, adapter
-  unknown preservation, claim-boundary scans, and resource limit-plus-one checks.
-
-Validation gate:
-
-```text
-cargo fmt -p statebook-report -- --check
-cargo test -p statebook-report --tests
-cargo clippy -p statebook-report --all-targets -- -D warnings
-cargo test -p statebook-core -p statebook-settlement --tests
-```
-
-Claim ceiling: local hermetic fixture regression and readback evidence only. No value
-moves. Full eighteen-scenario adversarial corpus replay and in-bundle P1-P4 golden byte
-checks remain documented follow-on fixture expansion; minimum acceptance scenarios and
-resource bounds are covered.
+readiness, SOTA, independent audit, or full-security claims. Full eighteen-scenario
+adversarial corpus replay and in-bundle P1-P4 golden byte checks remain documented
+follow-on fixture expansion; minimum acceptance scenarios and resource bounds are
+covered.
 
