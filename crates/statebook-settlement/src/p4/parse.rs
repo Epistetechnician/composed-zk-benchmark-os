@@ -528,7 +528,21 @@ fn parse_state(
                     .get("profile_digest")
                     .ok_or(missing_field("profile_digest"))?,
             )?,
-            halted_paths: BTreeSet::new(),
+            halted_paths: recovery_object
+                .get("halted_paths")
+                .and_then(Value::as_array)
+                .map(|items| {
+                    items
+                        .iter()
+                        .map(|item| {
+                            item.as_str().map(str::to_owned).ok_or_else(|| {
+                                SettlementParseErrorV1::InvalidIdentifier("halted_paths".to_owned())
+                            })
+                        })
+                        .collect::<Result<BTreeSet<_>, _>>()
+                })
+                .transpose()?
+                .unwrap_or_default(),
             reconciliation_mismatch: recovery_object
                 .get("reconciliation_mismatch")
                 .and_then(Value::as_bool)
