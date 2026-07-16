@@ -893,6 +893,7 @@ Surface DSL
 | [docs/statebook-p14-cancel-race-intents-implementation-notes.md](docs/statebook-p14-cancel-race-intents-implementation-notes.md) | Implemented P14 `apply_cancel_v1`, bound intent/destination, and cancel/destination race fail-closed paths. |
 | [docs/statebook-p15-destination-finality-proven-no-outflow-boundary-spec.md](docs/statebook-p15-destination-finality-proven-no-outflow-boundary-spec.md) | Docs-first P15 authorization for destination-finality consume and ProvenNoOutflow capacity restore; no live authority. |
 | [docs/statebook-p15-destination-finality-proven-no-outflow-implementation-notes.md](docs/statebook-p15-destination-finality-proven-no-outflow-implementation-notes.md) | Implemented P15 submit/finality/ProvenNoOutflow budget transitions with consumed-aware capacity. |
+| [docs/statebook-p16-recovery-transitions-boundary-spec.md](docs/statebook-p16-recovery-transitions-boundary-spec.md) | Docs-first P16 authorization for hermetic recovery halt/reconcile/canary/reopen drills; no live authority. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -1136,6 +1137,12 @@ corpus coverage. Recovery reopen and live authority remain deferred. See
 [docs/statebook-p15-destination-finality-proven-no-outflow-implementation-notes.md](docs/statebook-p15-destination-finality-proven-no-outflow-implementation-notes.md).
 
 This is local hermetic finality/no-outflow regression evidence only. No value moves.
+
+Statebook P16 authorization status: the named docs-first slice
+`statebook-p16-recovery-transitions-boundary` freezes future P4 recovery drill
+transitions (all-path halt, reconciliation mismatch, canary failure, gated
+reopen) bound to the fourteen-path inventory. Live authority remains deferred.
+This commit adds no Rust or Cargo change.
 
 ## Current Implementation Status
 
