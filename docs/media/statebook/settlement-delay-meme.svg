@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Settlement airlock teaching meme</title>
+  <desc id="desc">A split illustration contrasts delaying everything with keeping valid internal market state fast while placing an evidence-bound airlock before irreversible externalization.</desc>
+  <style>.h{font:700 54px Georgia,serif;fill:#17283b}.head{font:700 27px 'Courier New',monospace;fill:#17283b}.body{font:24px Georgia,serif;fill:#344554}.m{font:17px 'Courier New',monospace;fill:#5f6b73}.bad{fill:#f8e8e5;stroke:#9b3a37;stroke-width:3}.good{fill:#edf3f0;stroke:#3d776f;stroke-width:3}.box{fill:#fffdf8;stroke:#1e3a5f;stroke-width:2}.gate{fill:#f6edcf;stroke:#b78619;stroke-width:3}</style>
+  <rect width="1600" height="900" fill="#faf7ef"/>
+  <text x="70" y="75" class="h">“Just delay settlement” is not a system design.</text>
+  <rect x="70" y="140" width="690" height="650" rx="20" class="bad"/><rect x="840" y="140" width="690" height="650" rx="20" class="good"/>
+  <text x="110" y="198" class="head">THE BLUNT SWITCH</text><text x="880" y="198" class="head">THE SETTLEMENT AIRLOCK</text>
+  <g transform="translate(120 250)">
+    <rect width="560" height="80" rx="12" class="box"/><text x="35" y="49" class="body">Mark, margin, liquidation, loss</text>
+    <rect y="115" width="560" height="80" rx="12" class="box"/><text x="35" y="164" class="body">Atomic linked exchange</text>
+    <rect y="230" width="560" height="80" rx="12" class="box"/><text x="35" y="279" class="body">Unilateral withdrawal</text>
+    <rect y="345" width="560" height="80" rx="12" class="box"/><text x="35" y="394" class="body">Risk-reducing obligation</text>
+    <line x1="280" y1="-20" x2="280" y2="455" stroke="#9b3a37" stroke-width="18"/>
+    <text x="90" y="510" class="h" style="font-size:36px">Everything waits.</text><text x="40" y="548" class="m">Liquidity and solvency risk can rise.</text>
+  </g>
+  <g transform="translate(890 240)">
+    <rect width="260" height="170" rx="16" class="box"/><text x="28" y="45" class="head" style="font-size:20px">FAST INTERNAL</text><text x="28" y="86" class="body">mark</text><text x="28" y="118" class="body">margin</text><text x="28" y="150" class="body">loss recognition</text>
+    <rect x="290" y="0" width="270" height="310" rx="16" class="gate"/><text x="325" y="45" class="head" style="font-size:20px">AIRLOCK</text><text x="325" y="88" class="body">intent binding</text><text x="325" y="123" class="body">oracle &amp; state</text><text x="325" y="158" class="body">solvency</text><text x="325" y="193" class="body">replay</text><text x="325" y="228" class="body">budgets</text><text x="325" y="263" class="body">challenge</text><text x="325" y="296" class="m">Fail / Unknown → zero</text>
+    <rect x="0" y="350" width="560" height="110" rx="16" class="box"/><text x="30" y="394" class="head" style="font-size:20px">FAST WHEN ALL-OR-NONE</text><text x="30" y="430" class="body">Atomic DvP/PvP inside gross caps</text>
+    <text x="40" y="520" class="h" style="font-size:34px">Fast state. Bounded exit.</text><text x="20" y="558" class="m">Delay only buys safety on paths it covers.</text>
+  </g>
+  <text x="70" y="858" class="m">Original Statebook teaching artifact · illustration, not evidence · 15 July 2026</text>
+</svg>

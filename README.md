@@ -910,7 +910,23 @@ Surface DSL
 | [docs/integrations/formal_semantics_lanes.md](docs/integrations/formal_semantics_lanes.md) | Future clean, zkLean, and Garden formal lanes. |
 | [docs/integrations/gnark_recursion_adapter.md](docs/integrations/gnark_recursion_adapter.md) | Future gnark recursion-envelope adapter. |
 | [docs/integrations/zkml_benchmark_manifest.md](docs/integrations/zkml_benchmark_manifest.md) | Future narrow zkML workload adapter. |
+| [docs/integrations/statebook_terminal_payoff_and_trust_settlement.md](docs/integrations/statebook_terminal_payoff_and_trust_settlement.md) | Documentation-only Statebook terminal-payoff normalization and assurance-adjusted externalization boundary, including the Ostium incident lesson, hard gates, loss-budget caps, challenge queues, and two-, five-, and ten-year AI/technology market scenarios. |
+| [docs/statebook-whitepaper.md](docs/statebook-whitepaper.md) | End-to-end Statebook whitepaper: state-contingent foundations, frontier-risk convergence, seven typed completeness verdicts, assurance-adjusted externalization, incident limits, AI/global-economy scenarios, architecture, governance, and falsification. |
+| [docs/statebook-product-requirements.md](docs/statebook-product-requirements.md) | Implementation-ready Statebook PRD with 70 user stories, explicit financial/evidence boundaries, one settlement-transition kernel, adversarial acceptance suite, delivery sequence, and non-goals. |
+| [docs/statebook-literature-source-index.md](docs/statebook-literature-source-index.md) | Annotated literature, standards, law, venue, pinned-code, incident, media, AI, energy, and macro source index with supported claims and limitations. |
+| [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
+| [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
+
+Statebook publication status: the named slice
+`statebook-whitepaper-prd-and-publication-media-boundary` is
+`DocumentationOnly` at `Level0DesignNote`. The whitepaper, PRD, source index,
+original media, and two publication PDFs create no execution, margin, custody,
+pause, signing, oracle, settlement, evidence-promotion, or production authority.
+The synchronized PRD is published as
+[GitHub issue #17](https://github.com/Epistetechnician/composed-zk-benchmark-os/issues/17)
+with `ready-for-agent`; that label means the specification is bounded enough for
+a future separately authorized phase, not that the phase is authorized now.
 
 ## Current Implementation Status
 
@@ -2344,3 +2360,19 @@ action-proposal digests and structurally validates bounded disposable-worktree
 preflight declarations before deriving gates. This is not proof that declared
 commands ran. The CLI performs no network or filesystem mutation and never
 grants action authority; Mesh owns the separate execution-capability boundary.
+
+The documentation-only
+`statebook-terminal-payoff-and-assurance-adjusted-settlement-boundary` defines a
+future `TerminalContractIR` above HSAI, keeps payoff composition separate from
+`ClaimEnvelope` evidence composition, and separates semantic, product,
+execution, settlement, and capital completeness. Its security policy preserves
+immediate internal risk updates; permits atomic DvP/PvP and time-critical
+external risk-reducing obligations only when fully represented, prefunded,
+unencumbered, hard-gated, capped, and all-or-none, with destination-restricted
+obligation use; assigns pending anomalous PnL zero reuse value; and uses
+independently valued common-numeraire and native-asset loss budgets,
+exactly-once reservations and deterministic refill, staged release, fresh
+revalidation, and bounded challenge and freeze windows.
+It adds no implementation, venue access, routing, custody, settlement,
+circuit-breaker authority, benchmark evidence, or claim above
+`Level0DesignNote`.
