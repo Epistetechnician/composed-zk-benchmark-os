@@ -22080,3 +22080,24 @@ suite, formatting, focused warning-denied Clippy, docs/hygiene checks, and a
 clean-tree workspace gate pass. All do. Full clean-tree workspace Clippy reaches
 one unrelated committed `const_is_empty` finding in a zkbench-core test; the
 finding is recorded rather than absorbed. Dirty admission work remains excluded.
+
+## Integration Track: Statebook P2 Payoff And Residual Engine Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p2-payoff-residual-engine-boundary`.
+
+The next separately committed slice is
+`statebook-p2-payoff-residual-engine`. It is limited to exact finite-domain
+evaluation of P1-validated indicator contracts, rational position composition,
+non-netted asset-vector residuals, deterministic duplicate aggregation, and
+typed exact/approximate/incomplete reports. P1 schema, StateKey bytes, and
+fixtures remain frozen.
+
+Validation gate: frozen payoff vectors, exact arithmetic and rounding edges,
+resource bounds, order invariance, unsupported-state fail-closure, multi-asset
+non-netting, unchanged P1 golden vectors, focused format/test/Clippy, docs and
+hygiene checks, clean-tree workspace tests, and two independent reviews.
+
+Anti-goals: other payoff forms, global equivalence, books, prices, optimization,
+routing, execution, capital recognition, settlement, external I/O, HSAI,
+zkbench, Cargo changes, evidence promotion, or stronger claims.

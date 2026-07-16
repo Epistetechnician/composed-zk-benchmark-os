@@ -11407,3 +11407,23 @@ independent committed `const_is_empty` finding in
 `zkbench-core/tests/operator_soak_campaign_contract.rs`. That file is outside
 this slice and remains unchanged. The live worktree's separate admission rewrite
 also remains excluded and untouched.
+
+## Statebook P2 Payoff And Residual Engine Boundary
+
+Date: 16 July 2026.
+
+Outcome: documentation-only authorization for named state slice
+`statebook-p2-payoff-residual-engine-boundary`.
+
+The boundary freezes the exact operation order for P1 indicator payoff,
+contract-level rounding, and rational position quantity; one bounded finite
+state domain; strict observation-coordinate compatibility; deterministic
+StateKey aggregation with lineage retention; non-netted settlement-asset
+vectors; exact/approximate/incomplete status; unsupported-state and unmodeled
+residual disclosures; and exact arithmetic failure behavior.
+
+The P1 schema, fixture corpus, 701-byte StateKey preimage, StateKey digest, and
+validated-contract digest remain frozen. This commit adds no Rust and creates no
+execution, capital, settlement, external-I/O, evidence, benchmark, proof, or
+production authority. The user-owned admission, AGENTS routing, `docs/agents/`,
+and A3L6 paths remain outside the slice and untouched.
