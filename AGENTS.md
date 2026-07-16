@@ -2007,6 +2007,22 @@ closure, move scores, mutate an accepted Evidence Ledger, create Level2+ or
 benchmark evidence, or support proof, production-readiness, SOTA,
 breakthrough, full-security, or external-audit claims.
 
+Explicit Phase 796-A3L5F HSAI P01B probe-binding correction now allowed and
+completed as documentation only under
+`docs/796a3l5f-phase-hsai-p01b-probe-binding-correction.md` plus the standard
+navigation mirrors. This slice is limited to clarifying that native
+`runtime.executable` binds the exact `/usr/bin/python3` direct launch path and
+adding exact required normal/OOM argv
+`--input-manifest-sha256 SNAPSHOT_COPY_MANIFEST_SHA256`. The supplied digest is
+the frozen descriptor-bound snapshot-copy manifest join; it does not replace
+the probe's 21-file mounted-tree inventory, corpus validation, candidate
+snapshot bytes, source/copy manifests, descriptor observations, ingress mount
+reconstruction, or A3L9 replay. Native rejects the new argument. This slice
+does not authorize A3L6 acceptance, A3L7/A3L8 execution, Docker or network
+action, runtime evidence, class closure, score movement, accepted Evidence
+Ledger mutation, Level2+, benchmark evidence, proof, production readiness,
+SOTA, breakthrough, full security, or external audit.
+
 Forbidden in the current Level 1 state:
 
 - `package.json`, `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`, `node_modules`, JavaScript or TypeScript runtime files, `Makefile`, CI files, committed generated benchmark artifact files, official benchmark outputs, or durable benchmark outputs outside an explicitly authorized ignored artifact root.

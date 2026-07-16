@@ -20659,6 +20659,28 @@ Evidence Ledger mutation, Level2+, benchmark evidence, proof, production
 readiness, SOTA, breakthrough, full security, or external-audit claim is
 created.
 
+## Phase 796-A3L5F HSAI P01B Probe Binding Correction
+
+Status: complete documentation-only correction; execution remains `NotRun` and
+correspondence remains `2/10`.
+
+Named state slice:
+`phase-796a3l5f-hsai-p01b-probe-binding-correction`.
+
+Completed: separated the pinned native direct launch path from Python's
+runtime-reported `sys.executable`; added one required normal/OOM
+`--input-manifest-sha256` argument carrying the frozen descriptor-bound
+snapshot-copy manifest digest; preserved independent mounted-tree, corpus,
+candidate snapshot, descriptor, ingress, and A3L9 validation. See
+`docs/796a3l5f-phase-hsai-p01b-probe-binding-correction.md`.
+
+Exit criteria: two independent zero-finding reviews over the correction, then
+the exact A3L6 immutable gate. A3L6 remains unaccepted; A3L7/A3L8 remain
+prohibited; no runtime evidence, class closure, score movement, accepted
+Evidence Ledger mutation, Level2+, benchmark evidence, proof, production
+readiness, SOTA, breakthrough, full security, or external-audit claim is
+created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
