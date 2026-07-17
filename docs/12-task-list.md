@@ -21560,6 +21560,25 @@ pause product, transfer command, admission mutation, Evidence Ledger append,
 scalar trust score, production readiness, SOTA, independent audit, or
 full-security claims.
 
+## Integration Track: Statebook P20 Model Confidence Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p20-model-confidence-boundary`.
+
+The next separately committed slice is `statebook-p20-model-confidence`. It may
+add optional `model_confidence_claimed` and ensure claimed confidence cannot
+bypass failed hard gates or valuation. Live authority remains deferred. Outputs
+never move value.
+
+Validation gate: claimed confidence + failed gate yields
+`ModelConfidenceIgnored` with zero instant; baseline unchanged; suites green;
+format/test/Clippy; claim-boundary hygiene.
+
+Anti-goals: live authority, complete TD-004 claim, trading, signing, custody,
+pause product, transfer command, admission mutation, Evidence Ledger append,
+scalar trust score, production readiness, SOTA, independent audit, or
+full-security claims.
+
 ## Integration Track: Statebook P10 Semantic Equivalence Corpus Boundary
 
 Status: documentation-first boundary complete for named state slice
