@@ -21595,6 +21595,26 @@ pause product, transfer command, admission mutation, Evidence Ledger append,
 scalar trust score, production readiness, SOTA, independent audit, or
 full-security claims.
 
+## Integration Track: Statebook P21 Failed Transfer Reservation Rollback Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p21-failed-transfer-reservation-rollback-boundary`.
+
+The next separately committed slice is
+`statebook-p21-failed-transfer-reservation-rollback`. It may add
+`apply_failed_transfer_rollback_v1`, wire Frozen-path rollback, and corpus for
+rollback plus sequential finalizer CAS. Live authority remains deferred.
+Outputs never move value.
+
+Validation gate: rollback restores capacity; Frozen does not leak reserved;
+sequential finalizer one-success; suites green; format/test/Clippy;
+claim-boundary hygiene.
+
+Anti-goals: live authority, complete TD-004 claim, artificial-profit PnL (#23),
+true threaded concurrency, trading, signing, custody, pause product, transfer
+command, admission mutation, Evidence Ledger append, scalar trust score,
+production readiness, SOTA, independent audit, or full-security claims.
+
 ## Integration Track: Statebook P10 Semantic Equivalence Corpus Boundary
 
 Status: documentation-first boundary complete for named state slice

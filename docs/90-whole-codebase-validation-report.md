@@ -11565,3 +11565,15 @@ Claimed confidence cannot bypass failed gates; existing suites remain green.
 This is local hermetic model-confidence fixture regression evidence only. It
 does not establish complete TD-004 satisfaction, live authority, production
 readiness, SOTA, independent audit, or full security. No value moves.
+
+## Statebook P21 Failed Transfer Reservation Rollback Boundary
+
+Date: 16 July 2026.
+
+Outcome: `DocumentationOnly`, `Level0DesignNote`, named state slice
+`statebook-p21-failed-transfer-reservation-rollback-boundary`.
+
+This documentation-only slice creates no proof, accepted evidence, Level2+,
+score axis, production readiness, SOTA, breakthrough, full security, external
+audit, or action authority. Implementation requires a separately committed
+state slice `statebook-p21-failed-transfer-reservation-rollback`.
