@@ -2631,7 +2631,7 @@ def _receipt_wrapper(files: Mapping[str, bytes], namespace: str, plan: Mapping[s
 
 def _reconstruct_c06(files: Mapping[str, bytes], bindings: Mapping[str, object]) -> bool:
     gate = validate_a3l6_gate_bundle(_semantic_json(files, "authority/a3l6-gate-bundle.json"), bindings)
-    _require(gate["result"] == "accept" and gate["focused_test_count"] == 64 and gate["discovery_test_count"] == 172,
+    _require(gate["result"] == "accept" and gate["focused_test_count"] == 65 and gate["discovery_test_count"] == 172,
              "C06 A3L6 gate not accepted")
     plans = {
         "campaign": validate_campaign_plan(_semantic_json(files, "readiness/campaign-plan.json")),
@@ -4030,7 +4030,7 @@ def validate_expected_bindings(value: object) -> Mapping[str, object]:
             _sha(bindings[name], name.replace("_", " "))
     boundary = validate_claim_boundary(bindings["claim_boundary"])
     _require(bindings["claim_boundary_sha256"] == claim_boundary_digest(boundary), "claim boundary binding drift")
-    _require(bindings["expected_focused_test_count"] == 64, "focused test count drift")
+    _require(bindings["expected_focused_test_count"] == 65, "focused test count drift")
     _require(bindings["normal_expected_test_count"] == 151, "normal test count drift")
     _require(bindings["discovery_expected_test_count"] == 172, "discovery count drift")
     _require(bindings["candidate_payload_count"] == 201, "candidate payload count drift")
@@ -6630,9 +6630,9 @@ def validate_a3l6_gate_plan(value: object) -> Mapping[str, object]:
     root_identity = _identity(plan["gate_source_root_identity"], "gate source root identity")
     _require(root_identity["mode"] == 365 and plan["environment"] == _gate_environment(plan["gate_temp_root"]), "gate root/environment drift")
     _require(plan["cwd"] == plan["gate_source_root"] and plan["reviewed_paths"] == list(REVIEWED_PATHS), "gate path binding drift")
-    _require(plan["expected_focused_test_count"] == 64 and plan["expected_discovery_test_count"] == 172, "gate count drift")
+    _require(plan["expected_focused_test_count"] == 65 and plan["expected_discovery_test_count"] == 172, "gate count drift")
     ids = plan["expected_focused_test_ids"]
-    _require(isinstance(ids, list) and len(ids) == 64 and ids == sorted(set(ids)) and all(isinstance(item, str) and _GATE_TEST_ID_RE.fullmatch(item) for item in ids), "focused test id census drift")
+    _require(isinstance(ids, list) and len(ids) == 65 and ids == sorted(set(ids)) and all(isinstance(item, str) and _GATE_TEST_ID_RE.fullmatch(item) for item in ids), "focused test id census drift")
     commands = plan["commands"]
     _require(isinstance(commands, list) and len(commands) == 3, "gate command census drift")
     roles = ("evidence-focused", "execution-focused", "formal-discovery")
@@ -6768,16 +6768,16 @@ def validate_a3l6_gate_bundle(value: object, expected_bindings: Optional[Mapping
     _require((bundle["python_path"], bundle["python_sha256"], bundle["python_version"]) == (plan["python_path"], plan["python_sha256"], plan["python_version"]), "gate Python chain drift")
     version_observation, version_stdout = _validate_gate_capture(bundle["python_version_observation"], "gate-python-version", [plan["python_path"], "--version"], plan["environment"], plan["cwd"], plan["python_path"], plan["python_sha256"], 16_384)
     _require(version_observation["stderr_cap_bytes"] == 16_384 and version_stdout == b"Python 3.9.6\n", "gate Python version transcript drift")
-    _require(bundle["focused_test_ids"] == plan["expected_focused_test_ids"] and bundle["focused_test_count"] == 64 and bundle["discovery_test_count"] == 172, "gate test census drift")
+    _require(bundle["focused_test_ids"] == plan["expected_focused_test_ids"] and bundle["focused_test_count"] == 65 and bundle["discovery_test_count"] == 172, "gate test census drift")
     observations = bundle["ordered_gate_observations"]
     _require(isinstance(observations, list) and len(observations) == 3, "gate observation census drift")
     focused = plan["expected_focused_test_ids"]
     expected_sets = (None, None, None)
-    counts = (32, 32, 172)
+    counts = (32, 33, 172)
     checked_observations = [_validate_gate_observation(item, command, plan["gate_source_root_identity"], ids, count) for item, command, ids, count in zip(observations, plan["commands"], expected_sets, counts)]
     focused_observation_ids = [
-        _gate_test_ids(_validate_gate_stream(observation, "stderr"), 32)
-        for observation in checked_observations[:2]
+        _gate_test_ids(_validate_gate_stream(observation, "stderr"), count)
+        for observation, count in zip(checked_observations[:2], (32, 33))
     ]
     _require(
         all(ids == sorted(set(ids)) for ids in focused_observation_ids)
