@@ -764,13 +764,21 @@ def _focused_ids_from_source(path: str, raw: bytes) -> List[str]:
             if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)) and child.name.startswith("test_"):
                 identifiers.append("__main__.%s.%s" % (node.name, child.name))
     identifiers.sort()
-    if len(identifiers) != 32 or len(set(identifiers)) != 32:
-        raise ExecutionError("focused test source must contain exactly 32 unique test methods")
+    if path == SOURCE_PATHS[-1]:
+        expected = 32
+    elif path == SOURCE_PATHS[-2]:
+        expected = 33
+    else:
+        raise ExecutionError("focused test source path is not a reviewed focused suite")
+    if len(identifiers) != expected or len(set(identifiers)) != expected:
+        raise ExecutionError(
+            "focused test source must contain exactly %d unique test methods" % expected
+        )
     return identifiers
 
 
 def census_focused_test_ids(ordered_sources: Mapping[str, bytes]) -> Tuple[str, ...]:
-    """Derive, rather than accept, the exact 64 immutable focused test ids."""
+    """Derive, rather than accept, the exact 65 immutable focused test ids."""
     if tuple(ordered_sources) != SOURCE_PATHS:
         raise ExecutionError("focused test census is not over the exact source set")
     paths = SOURCE_PATHS[-2:]
@@ -778,8 +786,8 @@ def census_focused_test_ids(ordered_sources: Mapping[str, bytes]) -> Tuple[str, 
     for path in paths:
         identifiers.extend(_focused_ids_from_source(path, ordered_sources[path]))
     identifiers.sort()
-    if len(identifiers) != 64 or len(set(identifiers)) != 64:
-        raise ExecutionError("combined focused test census is not 64 sorted unique ids")
+    if len(identifiers) != 65 or len(set(identifiers)) != 65:
+        raise ExecutionError("combined focused test census is not 65 sorted unique ids")
     return tuple(identifiers)
 
 
@@ -1348,7 +1356,7 @@ def build_a3l6_gate_plan(
         "commands": commands,
         "reviewed_paths": list(REVIEWED_PATHS),
         "expected_focused_test_ids": list(capture.focused_test_ids),
-        "expected_focused_test_count": 64,
+        "expected_focused_test_count": 65,
         "expected_discovery_test_count": 172,
     }
 
@@ -1521,7 +1529,7 @@ def execute_a3l6_gates(capture: A3L6GateCapture) -> A3L6GateRun:
             expected_ids: Optional[Sequence[str]] = _focused_ids_from_source(
                 focused_paths[role], raw
             )
-            expected_count = 32
+            expected_count = 32 if role == "evidence-focused" else 33
         else:
             expected_ids = None
             expected_count = 172
@@ -1619,7 +1627,7 @@ def execute_a3l6_gates(capture: A3L6GateCapture) -> A3L6GateRun:
         python_observation,
         tuple(observations),
         capture.focused_test_ids,
-        64,
+        65,
         172,
     )
 
@@ -2216,7 +2224,7 @@ def _validate_a3l6_gate_plan(
         or value["commands"] != expected_commands
         or value["reviewed_paths"] != list(REVIEWED_PATHS)
         or value["expected_focused_test_ids"] != list(focused)
-        or value["expected_focused_test_count"] != 64
+        or value["expected_focused_test_count"] != 65
         or value["expected_discovery_test_count"] != 172
     ):
         raise ExecutionError("gate plan immutable reconstruction drifted")
@@ -2267,7 +2275,7 @@ def _validate_a3l6_gate_observations(
             expected_ids: Optional[Sequence[str]] = focused_by_path[
                 focused_paths[role]
             ]
-            expected_count = 32
+            expected_count = 32 if role == "evidence-focused" else 33
         else:
             expected_ids = None
             expected_count = 172
@@ -2475,7 +2483,7 @@ def _validate_a3l6_expected_bindings(
         "a3l6_gate_source_manifest_sha256": source_sha256,
         "a3l6_gate_bundle_sha256": bundle_sha256,
         "expected_focused_test_ids_sha256": focused_sha256,
-        "expected_focused_test_count": 64,
+        "expected_focused_test_count": 65,
         "discovery_expected_test_count": 172,
         "native_python_path": run.gate_plan["python_path"],
         "native_python_sha256": run.gate_plan["python_sha256"],
@@ -2504,7 +2512,7 @@ def assemble_a3l6_gate_bundle(
     if (
         tuple(run.focused_test_ids)
         != tuple(run.gate_plan["expected_focused_test_ids"])
-        or run.focused_test_count != 64
+        or run.focused_test_count != 65
         or run.discovery_test_count != 172
     ):
         raise ExecutionError("gate run test census drifted")
@@ -2579,7 +2587,7 @@ def validate_a3l6_gate_bundle(
         or bundle["python_sha256"] != plan["python_sha256"]
         or bundle["python_version"] != plan["python_version"]
         or tuple(focused_ids) != tuple(plan["expected_focused_test_ids"])
-        or bundle["focused_test_count"] != 64
+        or bundle["focused_test_count"] != 65
         or bundle["discovery_test_count"] != 172
         or len(reviews) != 2
     ):
@@ -4987,7 +4995,7 @@ def _build_expected_bindings(
         "collector_sha256": source_rows[
             "tools/hsai-formal-preflight/p01b_container_execution.py"
         ]["sha256"],
-        "expected_focused_test_count": 64,
+        "expected_focused_test_count": 65,
         "protected_path": PROTECTED_ADMISSION_PATH,
         "protected_sha256": PROTECTED_ADMISSION_SHA256,
         "native_python_path": "/usr/bin/python3",

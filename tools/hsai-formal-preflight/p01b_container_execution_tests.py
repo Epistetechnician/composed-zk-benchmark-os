@@ -254,7 +254,7 @@ def make_gate_repository(
                     for name, value in overrides.items()
                 ) + b"\n"
         elif relative == execution.SOURCE_PATHS[-2]:
-            raw = focused_test_source("ExecutionGateFixture")
+            raw = focused_test_source("ExecutionGateFixture", 33)
         elif relative == execution.SOURCE_PATHS[-1]:
             raw = focused_test_source("EvidenceGateFixture")
         elif relative in discovery_paths:
@@ -381,7 +381,7 @@ def gate_expected_bindings(
             "implementation_tree": run.gate_plan["implementation_tree"],
             "a3l6_audit_commit": run.gate_plan["audit_commit"],
             "claim_boundary": execution.canonical_claim_boundary(),
-            "expected_focused_test_count": 64,
+            "expected_focused_test_count": 65,
             "normal_expected_test_count": 151,
             "discovery_expected_test_count": 172,
             "candidate_payload_count": 201,
@@ -1507,7 +1507,7 @@ class PlanBuilderTests(unittest.TestCase):
                     len(materialized.source_observations),
                     len(execution.SOURCE_PATHS),
                 )
-                self.assertEqual(len(capture.focused_test_ids), 64)
+                self.assertEqual(len(capture.focused_test_ids), 65)
                 self.assertEqual(
                     stat.S_IMODE(Path(materialized.source_root).stat().st_mode),
                     0o555,
@@ -1522,7 +1522,7 @@ class PlanBuilderTests(unittest.TestCase):
                     )
                 )
                 live_run = execution.execute_a3l6_gates(capture)
-                self.assertEqual(live_run.focused_test_count, 64)
+                self.assertEqual(live_run.focused_test_count, 65)
                 self.assertEqual(live_run.discovery_test_count, 172)
                 self.assertEqual(len(live_run.ordered_gate_observations), 3)
                 self.assertEqual(
@@ -2184,7 +2184,7 @@ class PlanBuilderTests(unittest.TestCase):
                     python_observation,
                     observations,
                     capture.focused_test_ids,
-                    64,
+                    65,
                     172,
                 )
                 reviews = (

@@ -106,7 +106,7 @@ def expected_bindings() -> dict:
             "implementation_tree": TREE,
             "a3l6_audit_commit": COMMIT,
             "claim_boundary": claim_boundary(),
-            "expected_focused_test_count": 64,
+            "expected_focused_test_count": 65,
             "normal_expected_test_count": 151,
             "discovery_expected_test_count": 172,
             "candidate_payload_count": 201,
@@ -889,7 +889,7 @@ def synthetic_gate(source_bytes: dict, bindings: dict) -> dict:
     source = {"schema": evidence.SCHEMAS["a3l6_gate_source"], "implementation_commit": COMMIT, "implementation_tree": TREE, "audit_commit": COMMIT, "git_path": git, "git_sha256": git_sha, "environment": environment, "repository_cwd": "/repo", "materialized_root": root, "materialized_root_identity": root_identity, "gate_temp_root": scratch, "sandbox_exec_descriptor_observation": sandbox_descriptor, "sandbox_profile_path": profile_path, "sandbox_profile_descriptor_observation": profile_descriptor, "sandbox_profile_base64": b64(profile), "sandbox_profile_sha256": evidence.sha256_hex(profile), "materialized_inventory_before_sha256": inventory_sha, "materialized_inventory_before": inventory, "materialized_inventory_after_sha256": inventory_sha, "materialized_inventory_after": copy.deepcopy(inventory), "head_observation": head, "tree_observation": tree, "status_before_observation": status_before, "ordered_blob_observations": captures, "ordered_sources": source_rows, "pre_gate_capture_ended_monotonic_ns": 1000, "post_gate_capture_started_monotonic_ns": 2000, "status_after_observation": status_after}
     source_sha = evidence.a3l6_gate_source_digest(source)
     evidence_ids = ["__main__.EvidenceSynthetic.test_{:02d}".format(index) for index in range(32)]
-    execution_ids = ["__main__.ExecutionSynthetic.test_{:02d}".format(index) for index in range(32)]
+    execution_ids = ["__main__.ExecutionSynthetic.test_{:02d}".format(index) for index in range(33)]
     ids = evidence_ids + execution_ids
     ids.sort()
     command_argv = (
@@ -899,7 +899,7 @@ def synthetic_gate(source_bytes: dict, bindings: dict) -> dict:
     )
     roles = ("evidence-focused", "execution-focused", "formal-discovery")
     commands = [{"role": role, "argv": argv, "environment": environment, "cwd": root, "stdin_policy": "closed", "timeout_ns": 600_000_000_000, "stdout_cap_bytes": 262_144, "stderr_cap_bytes": 262_144, "activation": "always", "expected_exit_code": 0, "expected_signal": None} for role, argv in zip(roles, command_argv)]
-    plan = {"schema": evidence.SCHEMAS["a3l6_gate_plan"], "implementation_commit": COMMIT, "implementation_tree": TREE, "audit_commit": COMMIT, "python_path": "/usr/bin/python3", "python_sha256": evidence.NATIVE_PYTHON_SHA256, "python_version": "3.9.6", "environment": environment, "gate_source_root": root, "gate_source_root_identity": root_identity, "gate_temp_root": scratch, "sandbox_exec_path": "/usr/bin/sandbox-exec", "sandbox_exec_sha256": evidence.SANDBOX_EXEC_SHA256, "sandbox_profile_path": profile_path, "sandbox_profile_sha256": evidence.sha256_hex(profile), "gate_source_manifest_sha256": source_sha, "cwd": root, "commands": commands, "reviewed_paths": list(evidence.REVIEWED_PATHS), "expected_focused_test_ids": ids, "expected_focused_test_count": 64, "expected_discovery_test_count": 172}
+    plan = {"schema": evidence.SCHEMAS["a3l6_gate_plan"], "implementation_commit": COMMIT, "implementation_tree": TREE, "audit_commit": COMMIT, "python_path": "/usr/bin/python3", "python_sha256": evidence.NATIVE_PYTHON_SHA256, "python_version": "3.9.6", "environment": environment, "gate_source_root": root, "gate_source_root_identity": root_identity, "gate_temp_root": scratch, "sandbox_exec_path": "/usr/bin/sandbox-exec", "sandbox_exec_sha256": evidence.SANDBOX_EXEC_SHA256, "sandbox_profile_path": profile_path, "sandbox_profile_sha256": evidence.sha256_hex(profile), "gate_source_manifest_sha256": source_sha, "cwd": root, "commands": commands, "reviewed_paths": list(evidence.REVIEWED_PATHS), "expected_focused_test_ids": ids, "expected_focused_test_count": 65, "expected_discovery_test_count": 172}
     gate_observations = []
     gate_id_sets = (evidence_ids, execution_ids, ["formal_tests.Synthetic.test_{:03d}".format(index) for index in range(172)])
     for index, (command, test_ids) in enumerate(zip(commands, gate_id_sets)):
@@ -914,7 +914,7 @@ def synthetic_gate(source_bytes: dict, bindings: dict) -> dict:
     reviewed = [{"path": path, "sha256": source_sha_by_path[path]} for path in evidence.REVIEWED_PATHS]
     plan_sha = evidence.a3l6_gate_plan_digest(plan)
     reviews = [{"schema": evidence.SCHEMAS["a3l6_code_review"], "role": role, "reviewer_id": "gate-reviewer-" + str(index), "implementation_commit": COMMIT, "implementation_tree": TREE, "ordered_file_sha256": reviewed, "gate_plan_sha256": plan_sha, "gate_source_manifest_sha256": source_sha, "gate_observation_sha256": observation_sha, "findings": [], "result": "accept"} for index, role in enumerate(evidence.REVIEW_ROLE_ORDER)]
-    bundle = {"schema": evidence.SCHEMAS["a3l6_gate_bundle"], "gate_plan": plan, "gate_source_manifest": source, "implementation_commit": COMMIT, "implementation_tree": TREE, "python_path": "/usr/bin/python3", "python_sha256": evidence.NATIVE_PYTHON_SHA256, "python_version": "3.9.6", "python_version_observation": version, "ordered_gate_observations": gate_observations, "focused_test_ids": ids, "focused_test_count": 64, "discovery_test_count": 172, "ordered_review_records": reviews, "result": "accept"}
+    bundle = {"schema": evidence.SCHEMAS["a3l6_gate_bundle"], "gate_plan": plan, "gate_source_manifest": source, "implementation_commit": COMMIT, "implementation_tree": TREE, "python_path": "/usr/bin/python3", "python_sha256": evidence.NATIVE_PYTHON_SHA256, "python_version": "3.9.6", "python_version_observation": version, "ordered_gate_observations": gate_observations, "focused_test_ids": ids, "focused_test_count": 65, "discovery_test_count": 172, "ordered_review_records": reviews, "result": "accept"}
     bindings.update({"a3l6_audit_commit": COMMIT, "a3l6_gate_plan_sha256": plan_sha, "a3l6_gate_source_manifest_sha256": source_sha, "a3l6_gate_bundle_sha256": evidence._digest("a3l6_gate_bundle", bundle), "expected_focused_test_ids_sha256": evidence.sha256_hex(evidence.canonical_json_bytes(ids)), "validator_sha256": source_sha_by_path[evidence.REVIEWED_PATHS[1]], "collector_sha256": source_sha_by_path[evidence.REVIEWED_PATHS[2]], "sandbox_exec_path": "/usr/bin/sandbox-exec", "sandbox_exec_sha256": evidence.SANDBOX_EXEC_SHA256, "gate_sandbox_profile_sha256": evidence.sha256_hex(profile), "git_path": git, "git_sha256": git_sha})
     return bundle
 
