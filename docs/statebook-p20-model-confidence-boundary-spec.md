@@ -2,8 +2,8 @@
 
 Date: 16 July 2026.
 
-Status: documentation-first boundary complete; implementation requires a
-separate commit.
+Status: documentation-first boundary complete; implementation shipped under
+`statebook-p20-model-confidence`.
 
 Evidence ceiling for this document: `DocumentationOnly` at
 `Level0DesignNote`.

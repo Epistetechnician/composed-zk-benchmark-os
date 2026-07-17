@@ -11542,5 +11542,26 @@ Outcome: `DocumentationOnly`, `Level0DesignNote`, named state slice
 
 This documentation-only slice creates no proof, accepted evidence, Level2+,
 score axis, production readiness, SOTA, breakthrough, full security, external
-audit, or action authority. Implementation requires a separately committed
-state slice `statebook-p20-model-confidence`.
+audit, or action authority.
+
+## Statebook P20 Model Confidence Implementation
+
+Date: 16 July 2026.
+
+Outcome: `Level1LocalReplay`, `Pass`, named state slice
+`statebook-p20-model-confidence`.
+
+State slice:
+
+- additive `model_confidence_claimed` request field and kernel reason under
+  `crates/statebook-settlement`;
+- `crates/statebook-settlement/tests/model_confidence.rs`;
+- corpus update under `crates/statebook-e2e-harness`;
+- `docs/statebook-p20-model-confidence-implementation-notes.md`;
+- navigation/status mirrors.
+
+Claimed confidence cannot bypass failed gates; existing suites remain green.
+
+This is local hermetic model-confidence fixture regression evidence only. It
+does not establish complete TD-004 satisfaction, live authority, production
+readiness, SOTA, independent audit, or full security. No value moves.

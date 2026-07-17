@@ -274,8 +274,10 @@ pub fn decide_and_transition(
         evaluated_at,
     );
     let mut quarantined = false;
+    let mut gate_or_valuation_failed = false;
     for result in gate_results {
         if !result.passed {
+            gate_or_valuation_failed = true;
             if let Some(reason) = result.reason {
                 reasons.push(reason);
             }
@@ -293,9 +295,14 @@ pub fn decide_and_transition(
         &forbidden_oracle_roots,
     );
     if !valuation.ok {
+        gate_or_valuation_failed = true;
         if let Some(reason) = valuation.reason {
             reasons.push(reason);
         }
+    }
+
+    if request.model_confidence_claimed() && gate_or_valuation_failed {
+        reasons.push(DecisionReasonV1::ModelConfidenceIgnored);
     }
 
     if !reasons.is_empty() {
