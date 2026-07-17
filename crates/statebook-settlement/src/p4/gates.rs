@@ -2,7 +2,7 @@ use crate::{AssurancePropertyV1, AssuranceVerdictV1};
 
 use super::types::{
     DecisionReasonV1, EvidenceObservationV1, EvidenceSnapshotV1, ExternalizationRequestV1,
-    FinancialBasisKindV1, GateOverridesV1, ReleaseClassV1, SettlementStateV1,
+    FinancialBasisKindV1, GateOverridesV1, QueueStatusV1, ReleaseClassV1, SettlementStateV1,
 };
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -222,6 +222,14 @@ pub fn evaluate_hard_gates(
     } else {
         GateResult::pass()
     });
+
+    results.push(
+        if request.monetizes_queued_value() && state.queue().status() == QueueStatusV1::Queued {
+            GateResult::fail(DecisionReasonV1::QueuedValueMonetization, false)
+        } else {
+            GateResult::pass()
+        },
+    );
 
     results
 }
