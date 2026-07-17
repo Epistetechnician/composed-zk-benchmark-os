@@ -11499,3 +11499,15 @@ green.
 This is local hermetic budget-refill / aggregate-cap fixture regression evidence
 only. It does not establish complete TD-004 satisfaction, live authority,
 production readiness, SOTA, independent audit, or full security. No value moves.
+
+## Statebook P19 Oracle Freshness And Compromised Source Boundary
+
+Date: 16 July 2026.
+
+Outcome: `DocumentationOnly`, `Level0DesignNote`, named state slice
+`statebook-p19-oracle-freshness-compromised-source-boundary`.
+
+This documentation-only slice creates no proof, accepted evidence, Level2+,
+score axis, production readiness, SOTA, breakthrough, full security, external
+audit, or action authority. Implementation requires a separately committed
+state slice `statebook-p19-oracle-freshness-compromised-source`.
