@@ -65,7 +65,10 @@ pub fn evaluate_hard_gates(
     state: &SettlementStateV1,
     release_class: ReleaseClassV1,
     overrides: &GateOverridesV1,
+    now: i64,
 ) -> Vec<GateResult> {
+    use super::bounds::MAX_EVIDENCE_CONTENT_AGE_SECONDS_V1;
+
     let mut results = Vec::with_capacity(12);
 
     results.push(if overrides.action_authorized == Some(false) {
@@ -85,6 +88,16 @@ pub fn evaluate_hard_gates(
             AssurancePropertyV1::SourceAuthenticityAndFreshness,
         );
         match observation {
+            Some(value) if value.prepared_earlier => {
+                GateResult::fail(DecisionReasonV1::GatePreparedEarlierReuse, false)
+            }
+            Some(value)
+                if value.content_observed_at > now
+                    || now.saturating_sub(value.content_observed_at)
+                        > MAX_EVIDENCE_CONTENT_AGE_SECONDS_V1 =>
+            {
+                GateResult::fail(DecisionReasonV1::GateSourceContentStale, false)
+            }
             Some(value)
                 if verdict_passes(value.verdict)
                     && value.bound_request_id == request.request_id()

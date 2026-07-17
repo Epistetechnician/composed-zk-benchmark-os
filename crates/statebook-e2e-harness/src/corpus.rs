@@ -200,6 +200,22 @@ pub fn encodable_corpus_cases_v1() -> &'static [CorpusCaseV1] {
             id: "td004_52_refill_skip_epoch",
             expected_outcome: DecisionOutcomeV1::Rejected,
         },
+        CorpusCaseV1 {
+            id: "td004_20_prepared_later_fresh_transport",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_21_stale_content_fresh_transport",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_22_dual_vendor_compromised_upstream",
+            expected_outcome: DecisionOutcomeV1::Quarantined,
+        },
+        CorpusCaseV1 {
+            id: "td004_32_action_oracle_valuation_blocked",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
     ]
 }
 
@@ -293,6 +309,60 @@ pub fn build_corpus_scenario_v1(id: &str) -> Result<SettlementScenarioV1, Evalua
         }),
         "td004_18_model_confidence_bypass" => mutate(|value| {
             value["request"]["gate_overrides"] = json!({ "calculation_valid": false });
+        }),
+        "td004_20_prepared_later_fresh_transport" => mutate(|value| {
+            if let Some(observations) = value["evidence_snapshot"]["observations"].as_array_mut() {
+                for observation in observations.iter_mut() {
+                    if observation["property"] == "source_authenticity_and_freshness" {
+                        observation["prepared_earlier"] = json!(true);
+                        observation["replayed"] = json!(false);
+                        observation["observed_at"] = json!(1_709_999_950);
+                        observation["content_observed_at"] = json!(1_709_999_350);
+                    }
+                }
+            }
+        }),
+        "td004_21_stale_content_fresh_transport" => mutate(|value| {
+            if let Some(observations) = value["evidence_snapshot"]["observations"].as_array_mut() {
+                for observation in observations.iter_mut() {
+                    if observation["property"] == "source_authenticity_and_freshness" {
+                        observation["observed_at"] = json!(1_709_999_950);
+                        observation["content_observed_at"] = json!(1);
+                        observation["replayed"] = json!(false);
+                    }
+                }
+            }
+        }),
+        "td004_22_dual_vendor_compromised_upstream" => mutate(|value| {
+            if let Some(observations) = value["evidence_snapshot"]["observations"].as_array_mut() {
+                for observation in observations.iter_mut() {
+                    let property = observation["property"].as_str().unwrap_or("").to_owned();
+                    if property == "calculation_integrity" {
+                        observation["current_roots"] =
+                            json!([{ "root_id": "vendor-a", "root_class": "data" }]);
+                        observation["dependency_roots"] =
+                            json!([{ "root_id": "compromised-upstream", "root_class": "data" }]);
+                    }
+                    if property == "solvency_and_liquid_resource_support" {
+                        observation["current_roots"] =
+                            json!([{ "root_id": "vendor-b", "root_class": "data" }]);
+                        observation["dependency_roots"] =
+                            json!([{ "root_id": "compromised-upstream", "root_class": "data" }]);
+                    }
+                    if property == "evidence_root_disclosure" {
+                        observation["current_roots"] = json!([
+                            { "root_id": "vendor-a", "root_class": "data" },
+                            { "root_id": "vendor-b", "root_class": "data" }
+                        ]);
+                        observation["dependency_roots"] =
+                            json!([{ "root_id": "compromised-upstream", "root_class": "data" }]);
+                    }
+                }
+            }
+        }),
+        "td004_32_action_oracle_valuation_blocked" => mutate(|value| {
+            value["valuation_profile"]["observations"][0]["root_id"] = json!("calc-a");
+            value["valuation_profile"]["independence_roots"] = json!(["calc-a"]);
         }),
         "td004_22_cas_tip_mismatch" => mutate(|value| {
             value["initial_state"]["expected_ledger_tip"] =

@@ -114,6 +114,12 @@ fn encode_evidence_observation(observation: &EvidenceObservationV1) -> Vec<u8> {
     encoder.field(8, observation.bound_request_id.as_bytes());
     encoder.field(9, &encode_bool(observation.replayed));
     encoder.field(10, &encode_bool(observation.equivocated));
+    if observation.content_observed_at != observation.observed_at {
+        encoder.field(11, &encode_i64(observation.content_observed_at));
+    }
+    if observation.prepared_earlier {
+        encoder.field(12, &encode_bool(true));
+    }
     encoder.finish()
 }
 
@@ -480,6 +486,9 @@ fn decision_reason_tag(value: DecisionReasonV1) -> u8 {
         DecisionReasonV1::QueueCancelled => 40,
         DecisionReasonV1::ProvenNoOutflowRejected => 41,
         DecisionReasonV1::BudgetRefillRejected => 42,
+        DecisionReasonV1::GateSourceContentStale => 43,
+        DecisionReasonV1::GatePreparedEarlierReuse => 44,
+        DecisionReasonV1::ValuationActionOracleFallback => 45,
         DecisionReasonV1::RecoveryFailed => 31,
         DecisionReasonV1::IntentDigestMismatch => 32,
         DecisionReasonV1::ModelConfidenceIgnored => 33,
