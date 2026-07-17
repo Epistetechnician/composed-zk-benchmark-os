@@ -21565,14 +21565,30 @@ full-security claims.
 Status: documentation-first boundary complete for named state slice
 `statebook-p20-model-confidence-boundary`.
 
-The next separately committed slice is `statebook-p20-model-confidence`. It may
-add optional `model_confidence_claimed` and ensure claimed confidence cannot
-bypass failed hard gates or valuation. Live authority remains deferred. Outputs
-never move value.
+## Integration Track: Statebook P20 Model Confidence Implementation
 
-Validation gate: claimed confidence + failed gate yields
-`ModelConfidenceIgnored` with zero instant; baseline unchanged; suites green;
-format/test/Clippy; claim-boundary hygiene.
+Status: implemented under named state slice `statebook-p20-model-confidence`.
+
+Delivered:
+
+- optional `model_confidence_claimed` on requests (digest-preserving when false);
+- `ModelConfidenceIgnored` when claimed against failed hard gate or valuation;
+- corpus `td004_18_model_confidence_bypass` claims confidence.
+
+Live authority remains deferred behind the legal/ops gate.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic model-confidence fixture regression only. No
+value moves. Not complete TD-004 satisfaction, live authority, production
+readiness, SOTA, independent audit, or full-security claims.
 
 Anti-goals: live authority, complete TD-004 claim, trading, signing, custody,
 pause product, transfer command, admission mutation, Evidence Ledger append,
