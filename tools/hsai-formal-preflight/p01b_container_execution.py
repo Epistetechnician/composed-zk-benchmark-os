@@ -5361,11 +5361,13 @@ def _rejected_readiness_result(
 def _context_companion(
     observation: Mapping[str, object], raw: bytes
 ) -> Dict[str, object]:
+    # Docker Desktop owns meta.json field order. Pin exact raw bytes via
+    # validate_docker_context; do not require repository-canonical JSON.
     evidence = _load_evidence_module()
     try:
-        parsed = evidence.strict_json_bytes(raw, max(len(raw), 1))
+        parsed = evidence._parse_json_bytes(raw, max(len(raw), 1))
     except Exception as error:
-        raise ExecutionError("Docker context is not strict canonical JSON") from error
+        raise ExecutionError("Docker context is not valid JSON") from error
     if not isinstance(parsed, Mapping):
         raise ExecutionError("Docker context root is not an object")
     metadata = parsed.get("Metadata")

@@ -3505,18 +3505,84 @@ class BoundaryGuardTests(unittest.TestCase):
             status = execution.main(invalid)
         self.assertEqual(status, 2)
         self.assertIn("argv order", stderr.getvalue())
-        old_context = execution.canonical_json_bytes({
-            "Name": "desktop-linux",
-            "Metadata": {"Host": "unix:///old", "SkipTLSVerify": False},
-        })
-        with self.assertRaisesRegex(execution.ExecutionError, "shape changed"):
-            execution._context_companion({}, old_context)
         parser = execution.build_parser()
         self.assertTrue(
             {"decide-v3", "review-v2", "aggregate-v2", "accept-v2"}.issubset(
                 parser._subparsers._group_actions[0].choices
             )
         )
+
+    def test_docker_context_companion_accepts_pinned_noncanonical_raw(
+        self,
+    ) -> None:
+        fixture_path = Path(__file__).with_name("p01b_container_evidence_tests.py")
+        spec = importlib.util.spec_from_file_location(
+            "p01b_docker_context_fixtures", fixture_path
+        )
+        if spec is None or spec.loader is None:
+            raise AssertionError("evidence fixture module is unavailable")
+        fixtures = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(fixtures)
+        pinned_raw = fixtures.PINNED_DOCKER_CONTEXT_RAW
+        pinned_digest = evidence.sha256_hex(pinned_raw)
+
+        def docker_context_descriptor(raw: bytes) -> dict:
+            size = len(raw)
+            digest = evidence.sha256_hex(raw)
+            return {
+                "schema": evidence.SCHEMAS["descriptor_observation"],
+                "role": "docker-context",
+                "path": execution.DOCKER_CONTEXT_PATH,
+                "relative_path": None,
+                "before": {
+                    "device": 1,
+                    "inode": 2,
+                    "mode": 0o600,
+                    "uid": 501,
+                    "gid": 20,
+                    "link_count": 1,
+                    "size": size,
+                    "mtime_ns": 3,
+                    "ctime_ns": 4,
+                },
+                "after": {
+                    "device": 1,
+                    "inode": 2,
+                    "mode": 0o600,
+                    "uid": 501,
+                    "gid": 20,
+                    "link_count": 1,
+                    "size": size,
+                    "mtime_ns": 3,
+                    "ctime_ns": 4,
+                },
+                "sha256": digest,
+            }
+
+        companion = execution._context_companion(
+            docker_context_descriptor(pinned_raw),
+            pinned_raw,
+        )
+        self.assertEqual(companion["schema"], "hsai-p01b-docker-context-v1")
+        self.assertEqual(companion["name"], "desktop-linux")
+        self.assertEqual(companion["host"], fixtures.PINNED_DOCKER_CONTEXT_HOST)
+        self.assertEqual(companion["sha256"], pinned_digest)
+        self.assertEqual(companion["bytes"], len(pinned_raw))
+        # Docker Desktop owns meta.json field order; companion must accept the
+        # pinned raw bytes even though they are not repository-canonical JSON.
+        self.assertNotEqual(
+            pinned_raw,
+            execution.canonical_json_bytes(json.loads(pinned_raw.decode("utf-8"))),
+        )
+        old_context = execution.canonical_json_bytes({
+            "Name": "desktop-linux",
+            "Metadata": {"Host": "unix:///old", "SkipTLSVerify": False},
+        })
+        with self.assertRaisesRegex(execution.ExecutionError, "shape changed"):
+            execution._context_companion(
+                docker_context_descriptor(old_context),
+                old_context,
+            )
 
 
 if __name__ == "__main__":
