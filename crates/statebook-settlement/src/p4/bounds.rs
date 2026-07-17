@@ -16,3 +16,5 @@ pub const MAX_SCENARIO_STEPS_V1: usize = 16;
 pub const MAX_IDENTIFIER_LEN_V1: usize = 64;
 /// Hermetic per-epoch refill ceiling numerator (denominator 1).
 pub const MAX_REFILL_PER_EPOCH_V1: i128 = 50;
+/// Max age for evidence content timestamps vs injected clock (gate 2).
+pub const MAX_EVIDENCE_CONTENT_AGE_SECONDS_V1: i64 = 300;

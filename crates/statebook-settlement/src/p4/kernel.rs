@@ -23,7 +23,7 @@ use super::types::{
     DecisionReasonV1, DecisionRecordV1, ExternalizationRequestV1, QueueStatusV1, ReleaseClassV1,
     SettlementStateV1, TransferStatusV1,
 };
-use super::valuation::evaluate_valuation;
+use super::valuation::{action_oracle_roots, evaluate_valuation};
 
 pub fn decide_and_transition(
     request: ExternalizationRequestV1,
@@ -271,6 +271,7 @@ pub fn decide_and_transition(
         &current_state,
         release_class,
         request.gate_overrides(),
+        evaluated_at,
     );
     let mut quarantined = false;
     for result in gate_results {
@@ -284,7 +285,13 @@ pub fn decide_and_transition(
         }
     }
 
-    let valuation = evaluate_valuation(valuation_profile, request.asset(), evaluated_at);
+    let forbidden_oracle_roots = action_oracle_roots(evidence);
+    let valuation = evaluate_valuation(
+        valuation_profile,
+        request.asset(),
+        evaluated_at,
+        &forbidden_oracle_roots,
+    );
     if !valuation.ok {
         if let Some(reason) = valuation.reason {
             reasons.push(reason);
