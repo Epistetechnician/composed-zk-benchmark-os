@@ -21522,6 +21522,26 @@ pause product, transfer command, admission mutation, Evidence Ledger append,
 scalar trust score, production readiness, SOTA, independent audit, or
 full-security claims.
 
+## Integration Track: Statebook P19 Oracle Freshness And Compromised Source Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p19-oracle-freshness-compromised-source-boundary`.
+
+The next separately committed slice is
+`statebook-p19-oracle-freshness-compromised-source`. It may harden gate 2
+freshness/prepared-earlier checks, cross-observation independence quarantine,
+and action-oracle valuation overlap reject, plus four harness corpus cases.
+Live authority remains deferred. Outputs never move value.
+
+Validation gate: prepared-earlier reject; stale-content/fresh-transport reject;
+dual-vendor shared upstream quarantine; action-oracle valuation reject; suites
+green; format/test/Clippy; claim-boundary hygiene.
+
+Anti-goals: live authority, complete TD-004 claim, trading, signing, custody,
+pause product, transfer command, admission mutation, Evidence Ledger append,
+scalar trust score, production readiness, SOTA, independent audit, or
+full-security claims.
+
 ## Integration Track: Statebook P10 Semantic Equivalence Corpus Boundary
 
 Status: documentation-first boundary complete for named state slice

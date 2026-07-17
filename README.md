@@ -899,6 +899,7 @@ Surface DSL
 | [docs/statebook-p17-adversarial-corpus-expansion-implementation-notes.md](docs/statebook-p17-adversarial-corpus-expansion-implementation-notes.md) | Implemented P17 future-valuation reject and five additional hermetic TD-004 corpus cases. |
 | [docs/statebook-p18-budget-refill-split-drain-boundary-spec.md](docs/statebook-p18-budget-refill-split-drain-boundary-spec.md) | Docs-first P18 authorization for sequential budget epoch refill and slow-drain/split aggregate-cap corpus; no live authority. |
 | [docs/statebook-p18-budget-refill-split-drain-implementation-notes.md](docs/statebook-p18-budget-refill-split-drain-implementation-notes.md) | Implemented P18 sequential budget epoch refill and slow-drain/split aggregate-cap corpus. |
+| [docs/statebook-p19-oracle-freshness-compromised-source-boundary-spec.md](docs/statebook-p19-oracle-freshness-compromised-source-boundary-spec.md) | Docs-first P19 authorization for prepared-earlier reuse, stale-content/fresh-transport, dual-vendor compromised upstream, and action-oracle valuation reject; no live authority. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -1173,6 +1174,13 @@ authority remains deferred. See
 
 This is local hermetic budget-refill / aggregate-cap fixture regression evidence
 only. No value moves.
+
+Statebook P19 authorization status: the named docs-first slice
+`statebook-p19-oracle-freshness-compromised-source-boundary` freezes future P4
+oracle-freshness and compromised-source fail-closed coverage (prepared-earlier,
+stale content with fresh transport, dual-vendor shared upstream, action-oracle
+valuation overlap). Live authority remains deferred. This commit adds no Rust
+or Cargo change.
 
 ## Current Implementation Status
 
