@@ -903,6 +903,7 @@ Surface DSL
 | [docs/statebook-p19-oracle-freshness-compromised-source-implementation-notes.md](docs/statebook-p19-oracle-freshness-compromised-source-implementation-notes.md) | Implemented P19 prepared-earlier/stale-content gate-2, dual-vendor quarantine, and action-oracle valuation reject. |
 | [docs/statebook-p20-model-confidence-boundary-spec.md](docs/statebook-p20-model-confidence-boundary-spec.md) | Docs-first P20 authorization for model/AI confidence non-bypass of failed hard gates or valuation; no live authority. |
 | [docs/statebook-p20-model-confidence-implementation-notes.md](docs/statebook-p20-model-confidence-implementation-notes.md) | Implemented P20 `model_confidence_claimed` non-bypass of failed hard gates or valuation. |
+| [docs/statebook-p21-failed-transfer-reservation-rollback-boundary-spec.md](docs/statebook-p21-failed-transfer-reservation-rollback-boundary-spec.md) | Docs-first P21 authorization for failed-transfer reservation rollback and sequential finalizer CAS; no live authority. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -1201,6 +1202,11 @@ hard gate or valuation. Live authority remains deferred. See
 
 This is local hermetic model-confidence fixture regression evidence only. No
 value moves.
+
+Statebook P21 authorization status: the named docs-first slice
+`statebook-p21-failed-transfer-reservation-rollback-boundary` freezes failed
+transfer reservation rollback and sequential finalizer CAS coverage. Live
+authority remains deferred. This commit adds no Rust or Cargo change.
 
 ## Current Implementation Status
 
