@@ -133,6 +133,7 @@ pub enum DecisionReasonV1 {
     GateSourceContentStale,
     GatePreparedEarlierReuse,
     ValuationActionOracleFallback,
+    QueuedValueMonetization,
     RecoveryFailed,
     IntentDigestMismatch,
     ModelConfidenceIgnored,
@@ -279,6 +280,8 @@ pub struct ExternalizationRequestV1 {
     pub(crate) reuse_finality_passed: bool,
     /// Claimed AI/model confidence; cannot bypass failed hard gates or valuation.
     pub(crate) model_confidence_claimed: bool,
+    /// Attempt to monetize queued value (loan/claim/credit) while queue is Queued.
+    pub(crate) monetizes_queued_value: bool,
     pub(crate) gate_overrides: GateOverridesV1,
     pub(crate) evidence_snapshot: EvidenceSnapshotV1,
     pub(crate) valuation_profile: ConservativeValuationProfileV1,
@@ -328,6 +331,10 @@ impl ExternalizationRequestV1 {
 
     pub const fn model_confidence_claimed(&self) -> bool {
         self.model_confidence_claimed
+    }
+
+    pub const fn monetizes_queued_value(&self) -> bool {
+        self.monetizes_queued_value
     }
 
     pub const fn gate_overrides(&self) -> &GateOverridesV1 {

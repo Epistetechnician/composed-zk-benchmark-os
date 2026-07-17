@@ -225,6 +225,14 @@ pub fn encodable_corpus_cases_v1() -> &'static [CorpusCaseV1] {
             id: "td004_31_finalizer_cas_contention",
             expected_outcome: DecisionOutcomeV1::Rejected,
         },
+        CorpusCaseV1 {
+            id: "td004_29_queued_value_monetization",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_27_anomaly_after_instant_before_queued",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
     ]
 }
 
@@ -378,6 +386,9 @@ pub fn build_corpus_scenario_v1(id: &str) -> Result<SettlementScenarioV1, Evalua
             value["initial_state"]["queue"]["status"] = json!("challenged");
         }),
         "td004_31_finalizer_cas_contention" => mutate(|_| {}),
+        "td004_29_queued_value_monetization" | "td004_27_anomaly_after_instant_before_queued" => {
+            mutate(|_| {})
+        }
         "td004_22_cas_tip_mismatch" => mutate(|value| {
             value["initial_state"]["expected_ledger_tip"] =
                 json!("9999999999999999999999999999999999999999999999999999999999999999");
@@ -735,9 +746,91 @@ pub fn replay_corpus_case_v1(id: &str) -> Result<CorpusReplayReceiptV1, Evaluati
     if id == "td004_31_finalizer_cas_contention" {
         return replay_finalizer_cas_contention_v1(id);
     }
+    if id == "td004_29_queued_value_monetization" {
+        return replay_queued_value_monetization_v1(id);
+    }
+    if id == "td004_27_anomaly_after_instant_before_queued" {
+        return replay_anomaly_after_instant_before_queued_v1(id);
+    }
     let scenario = build_corpus_scenario_v1(id)?;
     let record = run(scenario)?;
     Ok(receipt(id, &record))
+}
+
+fn replay_queued_value_monetization_v1(
+    id: &str,
+) -> Result<CorpusReplayReceiptV1, EvaluationErrorV1> {
+    let scenario = parse_settlement_scenario_v1(QUEUED)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let first = run(scenario)?;
+    if first.outcome() != DecisionOutcomeV1::Queued {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} setup expected Queued got {:?}",
+            first.outcome()
+        )));
+    }
+    let mut value: Value = serde_json::from_slice(QUEUED)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    value["request"]["monetizes_queued_value"] = json!(true);
+    let scenario = parse_settlement_scenario_v1(
+        &serde_json::to_vec(&value)
+            .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?,
+    )
+    .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let (request, _, clock) = scenario.into_kernel_input();
+    let second = decide_and_transition(request, first.next_state().clone(), clock)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    if second.outcome() != DecisionOutcomeV1::Rejected
+        || !second.instant_release_amount().is_zero()
+        || !second
+            .reasons()
+            .contains(&DecisionReasonV1::QueuedValueMonetization)
+    {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} expected Rejected QueuedValueMonetization zero-instant got {:?} {:?}",
+            second.outcome(),
+            second.reasons()
+        )));
+    }
+    Ok(receipt(id, &second))
+}
+
+fn replay_anomaly_after_instant_before_queued_v1(
+    id: &str,
+) -> Result<CorpusReplayReceiptV1, EvaluationErrorV1> {
+    let scenario = parse_settlement_scenario_v1(QUEUED)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let first = run(scenario)?;
+    if first.outcome() != DecisionOutcomeV1::Queued || first.instant_release_amount().is_zero() {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} setup expected Queued with nonzero instant got {:?}",
+            first.outcome()
+        )));
+    }
+    let mut value: Value = serde_json::from_slice(QUEUED)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    value["request"]["gate_overrides"] = json!({ "anomaly_clear": false });
+    let scenario = parse_settlement_scenario_v1(
+        &serde_json::to_vec(&value)
+            .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?,
+    )
+    .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let (request, _, clock) = scenario.into_kernel_input();
+    let second = decide_and_transition(request, first.next_state().clone(), clock)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    if second.outcome() != DecisionOutcomeV1::Rejected
+        || !second.instant_release_amount().is_zero()
+        || !second
+            .reasons()
+            .contains(&DecisionReasonV1::GateAnomalyEmergency)
+    {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} expected Rejected GateAnomalyEmergency zero-instant got {:?} {:?}",
+            second.outcome(),
+            second.reasons()
+        )));
+    }
+    Ok(receipt(id, &second))
 }
 
 fn replay_slow_drain_v1(id: &str) -> Result<CorpusReplayReceiptV1, EvaluationErrorV1> {
