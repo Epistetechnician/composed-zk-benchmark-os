@@ -904,6 +904,7 @@ Surface DSL
 | [docs/statebook-p20-model-confidence-boundary-spec.md](docs/statebook-p20-model-confidence-boundary-spec.md) | Docs-first P20 authorization for model/AI confidence non-bypass of failed hard gates or valuation; no live authority. |
 | [docs/statebook-p20-model-confidence-implementation-notes.md](docs/statebook-p20-model-confidence-implementation-notes.md) | Implemented P20 `model_confidence_claimed` non-bypass of failed hard gates or valuation. |
 | [docs/statebook-p21-failed-transfer-reservation-rollback-boundary-spec.md](docs/statebook-p21-failed-transfer-reservation-rollback-boundary-spec.md) | Docs-first P21 authorization for failed-transfer reservation rollback and sequential finalizer CAS; no live authority. |
+| [docs/statebook-p21-failed-transfer-reservation-rollback-implementation-notes.md](docs/statebook-p21-failed-transfer-reservation-rollback-implementation-notes.md) | Implemented P21 failed-transfer reservation rollback and sequential finalizer CAS. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -1205,8 +1206,15 @@ value moves.
 
 Statebook P21 authorization status: the named docs-first slice
 `statebook-p21-failed-transfer-reservation-rollback-boundary` freezes failed
-transfer reservation rollback and sequential finalizer CAS coverage. Live
-authority remains deferred. This commit adds no Rust or Cargo change.
+transfer reservation rollback and sequential finalizer CAS coverage. The
+separately committed implementation slice
+`statebook-p21-failed-transfer-reservation-rollback` adds
+`apply_failed_transfer_rollback_v1`, wires Frozen-path rollback, and extends
+the corpus to 42 cases. Live authority remains deferred. See
+[docs/statebook-p21-failed-transfer-reservation-rollback-implementation-notes.md](docs/statebook-p21-failed-transfer-reservation-rollback-implementation-notes.md).
+
+This is local hermetic reservation-rollback / CAS-finalizer fixture regression
+evidence only. No value moves.
 
 ## Current Implementation Status
 

@@ -48,8 +48,10 @@ fn corpus_case_ids_are_stable() {
     assert!(ids.contains(&"td004_01_oracle_replay"));
     assert!(ids.contains(&"td004_18_model_confidence_bypass"));
     assert!(ids.contains(&"td004_26_recovery_mismatch"));
-    assert_eq!(ids.len(), 40);
+    assert_eq!(ids.len(), 42);
     assert!(ids.contains(&"td004_17_breaker_ttl_resolution"));
+    assert!(ids.contains(&"td004_31_failed_transfer_rollback"));
+    assert!(ids.contains(&"td004_31_finalizer_cas_contention"));
     assert!(ids.contains(&"td004_31_challenge_valid"));
     assert!(ids.contains(&"td004_31_evidence_expired"));
     assert!(ids.contains(&"td004_21_policy_rollback"));

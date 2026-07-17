@@ -1,8 +1,9 @@
 pub use bounds::MAX_REFILL_PER_EPOCH_V1;
 pub use breaker::{attempt_breaker_renewal_v1, validate_breaker_transition};
 pub use budget::{
-    apply_budget_refill_v1, apply_destination_finality_v1, apply_proven_no_outflow_v1,
-    apply_transfer_submit_v1, available_capacity, TransferBudgetResultV1,
+    apply_budget_refill_v1, apply_destination_finality_v1, apply_failed_transfer_rollback_v1,
+    apply_proven_no_outflow_v1, apply_transfer_submit_v1, available_capacity,
+    TransferBudgetResultV1,
 };
 pub use cancel::apply_cancel_v1;
 pub use challenge::apply_challenge_v1;
