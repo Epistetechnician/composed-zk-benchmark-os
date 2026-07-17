@@ -309,6 +309,7 @@ pub fn build_corpus_scenario_v1(id: &str) -> Result<SettlementScenarioV1, Evalua
         }),
         "td004_18_model_confidence_bypass" => mutate(|value| {
             value["request"]["gate_overrides"] = json!({ "calculation_valid": false });
+            value["request"]["model_confidence_claimed"] = json!(true);
         }),
         "td004_20_prepared_later_fresh_transport" => mutate(|value| {
             if let Some(observations) = value["evidence_snapshot"]["observations"].as_array_mut() {

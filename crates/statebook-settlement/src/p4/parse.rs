@@ -792,6 +792,10 @@ fn parse_request(
             .get("reuse_finality_passed")
             .and_then(Value::as_bool)
             .unwrap_or(true),
+        model_confidence_claimed: object
+            .get("model_confidence_claimed")
+            .and_then(Value::as_bool)
+            .unwrap_or(false),
         gate_overrides: parse_gate_overrides(object.get("gate_overrides")),
         evidence_snapshot,
         valuation_profile,

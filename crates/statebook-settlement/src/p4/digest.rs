@@ -317,6 +317,9 @@ pub fn intent_payload(request: &ExternalizationRequestV1) -> Vec<u8> {
     encoder.field(17, request.nonce.as_bytes());
     encoder.field(18, &encode_i64(request.requested_at));
     encoder.field(19, &encode_i64(request.expires_at));
+    if request.model_confidence_claimed {
+        encoder.field(20, &encode_bool(true));
+    }
     encoder.finish()
 }
 

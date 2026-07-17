@@ -276,6 +276,8 @@ pub struct ExternalizationRequestV1 {
     pub(crate) linked_plan: Option<AtomicLinkedExchangePlanV1>,
     pub(crate) obligation: Option<ExternalRiskReducingObligationV1>,
     pub(crate) reuse_finality_passed: bool,
+    /// Claimed AI/model confidence; cannot bypass failed hard gates or valuation.
+    pub(crate) model_confidence_claimed: bool,
     pub(crate) gate_overrides: GateOverridesV1,
     pub(crate) evidence_snapshot: EvidenceSnapshotV1,
     pub(crate) valuation_profile: ConservativeValuationProfileV1,
@@ -321,6 +323,10 @@ impl ExternalizationRequestV1 {
 
     pub const fn reuse_finality_passed(&self) -> bool {
         self.reuse_finality_passed
+    }
+
+    pub const fn model_confidence_claimed(&self) -> bool {
+        self.model_confidence_claimed
     }
 
     pub const fn gate_overrides(&self) -> &GateOverridesV1 {
