@@ -905,6 +905,7 @@ Surface DSL
 | [docs/statebook-p20-model-confidence-implementation-notes.md](docs/statebook-p20-model-confidence-implementation-notes.md) | Implemented P20 `model_confidence_claimed` non-bypass of failed hard gates or valuation. |
 | [docs/statebook-p21-failed-transfer-reservation-rollback-boundary-spec.md](docs/statebook-p21-failed-transfer-reservation-rollback-boundary-spec.md) | Docs-first P21 authorization for failed-transfer reservation rollback and sequential finalizer CAS; no live authority. |
 | [docs/statebook-p21-failed-transfer-reservation-rollback-implementation-notes.md](docs/statebook-p21-failed-transfer-reservation-rollback-implementation-notes.md) | Implemented P21 failed-transfer reservation rollback and sequential finalizer CAS. |
+| [docs/statebook-p22-queued-value-monetization-boundary-spec.md](docs/statebook-p22-queued-value-monetization-boundary-spec.md) | Docs-first P22 authorization for queued-value monetization reject and post-instant anomaly block; no live authority. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -1215,6 +1216,12 @@ the corpus to 42 cases. Live authority remains deferred. See
 
 This is local hermetic reservation-rollback / CAS-finalizer fixture regression
 evidence only. No value moves.
+
+Statebook P22 authorization status: the named docs-first slice
+`statebook-p22-queued-value-monetization-boundary` freezes future P4
+queued-value monetization reject and post-instant anomaly blocking of the
+queued remainder. Live authority remains deferred. This commit adds no Rust or
+Cargo change.
 
 ## Current Implementation Status
 
