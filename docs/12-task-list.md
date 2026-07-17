@@ -21633,6 +21633,24 @@ true threaded concurrency, trading, signing, custody, pause product, transfer
 command, admission mutation, Evidence Ledger append, scalar trust score,
 production readiness, SOTA, independent audit, or full-security claims.
 
+## Integration Track: Statebook P22 Queued Value Monetization Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p22-queued-value-monetization-boundary`.
+
+The next separately committed slice is `statebook-p22-queued-value-monetization`.
+It may add `monetizes_queued_value` reject-while-queued and post-instant anomaly
+blocking of the queued remainder, plus two harness corpus cases. Live authority
+remains deferred. Outputs never move value.
+
+Validation gate: monetize-while-queued reject; anomaly-after-instant reject;
+suites green; format/test/Clippy; claim-boundary hygiene.
+
+Anti-goals: live authority, complete TD-004 claim, artificial-profit PnL (#23),
+venue solvency digest binding (#33), trading, signing, custody, pause product,
+transfer command, admission mutation, Evidence Ledger append, scalar trust
+score, production readiness, SOTA, independent audit, or full-security claims.
+
 ## Integration Track: Statebook P10 Semantic Equivalence Corpus Boundary
 
 Status: documentation-first boundary complete for named state slice
