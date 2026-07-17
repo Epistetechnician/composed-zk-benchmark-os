@@ -320,6 +320,9 @@ pub fn intent_payload(request: &ExternalizationRequestV1) -> Vec<u8> {
     if request.model_confidence_claimed {
         encoder.field(20, &encode_bool(true));
     }
+    if request.monetizes_queued_value {
+        encoder.field(21, &encode_bool(true));
+    }
     encoder.finish()
 }
 
@@ -493,6 +496,7 @@ fn decision_reason_tag(value: DecisionReasonV1) -> u8 {
         DecisionReasonV1::GateSourceContentStale => 43,
         DecisionReasonV1::GatePreparedEarlierReuse => 44,
         DecisionReasonV1::ValuationActionOracleFallback => 45,
+        DecisionReasonV1::QueuedValueMonetization => 47,
         DecisionReasonV1::RecoveryFailed => 31,
         DecisionReasonV1::IntentDigestMismatch => 32,
         DecisionReasonV1::ModelConfidenceIgnored => 33,

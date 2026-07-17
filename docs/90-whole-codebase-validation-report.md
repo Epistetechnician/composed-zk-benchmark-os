@@ -11599,3 +11599,37 @@ This is local hermetic reservation-rollback / CAS-finalizer fixture regression
 evidence only. It does not establish complete TD-004 satisfaction, live
 authority, production readiness, SOTA, independent audit, or full security. No
 value moves.
+
+## Statebook P22 Queued Value Monetization Boundary
+
+Date: 16 July 2026.
+
+Outcome: `DocumentationOnly`, `Level0DesignNote`, named state slice
+`statebook-p22-queued-value-monetization-boundary`.
+
+This documentation-only slice creates no proof, accepted evidence, Level2+,
+score axis, production readiness, SOTA, breakthrough, full security, external
+audit, or action authority.
+
+## Statebook P22 Queued Value Monetization Implementation
+
+Date: 16 July 2026.
+
+Outcome: `Level1LocalReplay`, `Pass`, named state slice
+`statebook-p22-queued-value-monetization`.
+
+State slice:
+
+- additive `monetizes_queued_value` gate under `crates/statebook-settlement`;
+- `crates/statebook-settlement/tests/queued_value_monetization.rs`;
+- additive harness corpus under `crates/statebook-e2e-harness`;
+- `docs/statebook-p22-queued-value-monetization-implementation-notes.md`;
+- navigation/status mirrors.
+
+Forty-four encodable corpus cases replay fail-closed; existing suites remain
+green.
+
+This is local hermetic queued-value / post-instant-anomaly fixture regression
+evidence only. It does not establish complete TD-004 satisfaction, live
+authority, production readiness, SOTA, independent audit, or full security. No
+value moves.
