@@ -21600,15 +21600,33 @@ full-security claims.
 Status: documentation-first boundary complete for named state slice
 `statebook-p21-failed-transfer-reservation-rollback-boundary`.
 
-The next separately committed slice is
-`statebook-p21-failed-transfer-reservation-rollback`. It may add
-`apply_failed_transfer_rollback_v1`, wire Frozen-path rollback, and corpus for
-rollback plus sequential finalizer CAS. Live authority remains deferred.
-Outputs never move value.
+## Integration Track: Statebook P21 Failed Transfer Reservation Rollback Implementation
 
-Validation gate: rollback restores capacity; Frozen does not leak reserved;
-sequential finalizer one-success; suites green; format/test/Clippy;
-claim-boundary hygiene.
+Status: implemented under named state slice
+`statebook-p21-failed-transfer-reservation-rollback`.
+
+Delivered:
+
+- `apply_failed_transfer_rollback_v1` with CAS-guarded reserved/in-flight
+  release;
+- Frozen-path kernel rollback so reserved exposure cannot leak;
+- two harness corpus cases (42 encodable total).
+
+Live authority remains deferred behind the legal/ops gate.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic reservation-rollback / CAS-finalizer fixture
+regression only. No value moves. Not complete TD-004 satisfaction, live
+authority, production readiness, SOTA, independent audit, or full-security
+claims.
 
 Anti-goals: live authority, complete TD-004 claim, artificial-profit PnL (#23),
 true threaded concurrency, trading, signing, custody, pause product, transfer

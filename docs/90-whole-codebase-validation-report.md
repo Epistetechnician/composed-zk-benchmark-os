@@ -11575,5 +11575,27 @@ Outcome: `DocumentationOnly`, `Level0DesignNote`, named state slice
 
 This documentation-only slice creates no proof, accepted evidence, Level2+,
 score axis, production readiness, SOTA, breakthrough, full security, external
-audit, or action authority. Implementation requires a separately committed
-state slice `statebook-p21-failed-transfer-reservation-rollback`.
+audit, or action authority.
+
+## Statebook P21 Failed Transfer Reservation Rollback Implementation
+
+Date: 16 July 2026.
+
+Outcome: `Level1LocalReplay`, `Pass`, named state slice
+`statebook-p21-failed-transfer-reservation-rollback`.
+
+State slice:
+
+- additive `apply_failed_transfer_rollback_v1` and Frozen-path wiring under
+  `crates/statebook-settlement`;
+- additive harness corpus under `crates/statebook-e2e-harness`;
+- `docs/statebook-p21-failed-transfer-reservation-rollback-implementation-notes.md`;
+- navigation/status mirrors.
+
+Forty-two encodable corpus cases replay fail-closed; existing suites remain
+green.
+
+This is local hermetic reservation-rollback / CAS-finalizer fixture regression
+evidence only. It does not establish complete TD-004 satisfaction, live
+authority, production readiness, SOTA, independent audit, or full security. No
+value moves.
