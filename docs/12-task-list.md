@@ -21380,3 +21380,38 @@ moves. No P7 authority, trading, signing, custody, live venue network in this
 slice, admission mutation, Evidence Ledger append, scalar trust score,
 production readiness, SOTA, independent audit, or full-security claims.
 
+## Integration Track: Statebook P7 Authority Integration Preflight Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p7-authority-integration-preflight-boundary`.
+
+## Integration Track: Statebook P7 Authority Integration Preflight Implementation
+
+Status: implemented under named state slice
+`statebook-p7-authority-integration-preflight`.
+
+Delivered in isolated `crates/statebook-authority`:
+
+- fail-closed Stage 6 package preflight for `hermetic-authority-preflight-v1`;
+- mandatory `grants_authority=false` handoff binding;
+- rejection of `production_gate=authorized`;
+- outcomes limited to `Incomplete` and `Denied`;
+- domain-separated P7 TLV digests with an independent `ring` golden encoder;
+- sixteen focused integration tests.
+
+P1-P6 identities remain unchanged. No controller client was added.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-authority -- --check
+cargo test -p statebook-authority --tests
+cargo clippy -p statebook-authority --all-targets -- -D warnings
+cargo test -p statebook-core -p statebook-settlement -p statebook-report -p statebook-source --tests
+```
+
+Claim ceiling: local hermetic authority-preflight regression only. No value
+moves. No controller invocation, production authorization, trading, signing,
+custody, admission mutation, Evidence Ledger append, scalar trust score,
+production readiness, SOTA, independent audit, or full-security claims.
+

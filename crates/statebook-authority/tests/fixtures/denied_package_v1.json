@@ -1,0 +1,22 @@
+{
+  "schema_version": "statebook-p7-authority-package:v1",
+  "profile_id": "hermetic-authority-preflight-v1",
+  "authority_owner": "synthetic-ops-owner",
+  "maximum_loss": {
+    "numerator": "0",
+    "denominator": "1"
+  },
+  "rollback_semantics": "reject_and_journal",
+  "pause_semantics": "scoped_halt",
+  "audit_retention": "days_90",
+  "legal_domain": "synthetic.legal.v1",
+  "production_gate": "denied",
+  "controller_names": ["synthetic-executor-metadata-only"],
+  "handoff": {
+    "decision_record_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "intent_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "decision_context_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "outcome": "immediate",
+    "grants_authority": false
+  }
+}
