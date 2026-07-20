@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
   <title id="title">Correlated dependency roots</title>
   <desc id="desc">Five apparently distinct providers or signers can share a single ultimate dependency root. Effective independence must be assessed from shared control domains, not a raw count of labels.</desc>
-  <defs><style>.ink{fill:#162b45}.muted{fill:#667789}.h{font:700 56px Georgia,serif}.t{font:700 28px Georgia,serif}.b{font:25px Georgia,serif}.k{font:700 22px ui-monospace,Consolas,monospace;letter-spacing:1.5px}.x{font:22px ui-monospace,Consolas,monospace}.navy{fill:#fffdfa;stroke:#173a63;stroke-width:3}.teal{fill:#edf7f4;stroke:#19766f;stroke-width:3}.red{fill:#fbe9e7;stroke:#b3423c;stroke-width:3}</style><marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#b3423c"/></marker></defs>
+  <defs><style>.ink{fill:#162b45}.muted{fill:#667789}.h{font:700 56px Georgia,serif}.t{font:700 28px Georgia,serif}.b{font:25px Georgia,serif}.k{font:700 22px ui-monospace,Consolas,monospace;letter-spacing:1.5px}.x{font:22px ui-monospace,Consolas,monospace}.navy{fill:#fffdfa;stroke:#173a63;stroke-width:3}.teal{fill:#edf7f4;stroke:#19766f;stroke-width:3}.red{fill:#fbe9e7;stroke:#b3423c;stroke-width:3}</style><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#b3423c"/></marker></defs>
   <rect width="1600" height="900" fill="#fbf8f1"/>
   <text x="70" y="72" class="k ink">FIG 09 / DEPENDENCY TOPOLOGY</text>
   <text x="70" y="136" class="h ink">Five providers and signers. One shared control root.</text>
@@ -13,7 +13,11 @@
     <rect x="970" y="270" width="270" height="98" rx="16" class="navy"/><text x="1002" y="312" class="t ink">Oracle X</text><text x="1002" y="346" class="x muted">vendor one</text>
     <rect x="1270" y="270" width="260" height="98" rx="16" class="navy"/><text x="1302" y="312" class="t ink">Oracle Y</text><text x="1302" y="346" class="x muted">vendor two</text>
   </g>
-  <path d="M205 368V430L800 550 M505 368V430L800 550 M805 368V550 M1105 368V430L800 550 M1400 368V430L800 550" fill="none" stroke="#b3423c" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M205 368V430L620 550" fill="none" stroke="#b3423c" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M505 368V438L710 550" fill="none" stroke="#b3423c" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M805 368V550" fill="none" stroke="#b3423c" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M1105 368V438L890 550" fill="none" stroke="#b3423c" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M1400 368V430L980 550" fill="none" stroke="#b3423c" stroke-width="3" marker-end="url(#arrow)"/>
   <rect x="490" y="550" width="620" height="136" rx="20" class="red"/>
   <text x="530" y="598" class="k ink">SHARED ULTIMATE ROOT</text><text x="530" y="642" class="t ink">cloud · KMS · RPC · upstream data</text><text x="530" y="674" class="x muted">CI/CD operator · model · renderer</text>
   <rect x="270" y="754" width="1060" height="58" rx="14" class="teal"/>
