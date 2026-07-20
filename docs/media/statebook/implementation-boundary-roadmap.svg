@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Statebook implementation boundary roadmap</title>
+  <desc id="desc">A P0 through P7 roadmap distinguishes publication, local fixtures, local payoff analysis, local completeness reports, local simulation, evidence adapters, read-only external adapters, and separately governed authority integration. No phase automatically authorizes execution or settlement.</desc>
+  <defs><style>.ink{fill:#162b45}.muted{fill:#667789}.h{font:700 56px Georgia,serif}.t{font:700 26px Georgia,serif}.b{font:24px Georgia,serif}.k{font:700 21px ui-monospace,Consolas,monospace;letter-spacing:1.4px}.x{font:20px ui-monospace,Consolas,monospace}.navy{fill:#fffdfa;stroke:#173a63;stroke-width:3}.teal{fill:#edf7f4;stroke:#19766f;stroke-width:3}.gold{fill:#fff3cf;stroke:#c38508;stroke-width:3}.red{fill:#fbe9e7;stroke:#b3423c;stroke-width:3}</style></defs>
+  <rect width="1600" height="900" fill="#fbf8f1"/>
+  <text x="70" y="72" class="k ink">FIG 13 / IMPLEMENTATION SEQUENCE</text>
+  <text x="70" y="136" class="h ink">Capability advances only through separate gates.</text>
+  <text x="70" y="178" class="b muted">A phase can improve analysis or observability without granting a higher-risk authority.</text>
+  <g>
+    <rect x="50" y="280" width="176" height="184" rx="18" class="navy"/><text x="74" y="330" class="k ink">P0</text><text x="74" y="374" class="t ink">Publish</text><text x="74" y="414" class="x muted">docs only</text>
+    <rect x="244" y="280" width="176" height="184" rx="18" class="teal"/><text x="268" y="330" class="k ink">P1</text><text x="268" y="374" class="t ink">Terms</text><text x="268" y="414" class="x muted">local fixtures</text>
+    <rect x="438" y="280" width="176" height="184" rx="18" class="teal"/><text x="462" y="330" class="k ink">P2</text><text x="462" y="374" class="t ink">Payoff</text><text x="462" y="414" class="x muted">residuals</text>
+    <rect x="632" y="280" width="176" height="184" rx="18" class="teal"/><text x="656" y="330" class="k ink">P3</text><text x="656" y="374" class="t ink">Reports</text><text x="656" y="414" class="x muted">completeness</text>
+    <rect x="826" y="280" width="176" height="184" rx="18" class="gold"/><text x="850" y="330" class="k ink">P4</text><text x="850" y="374" class="t ink">Simulate</text><text x="850" y="414" class="x muted">local only</text>
+    <rect x="1020" y="280" width="176" height="184" rx="18" class="gold"/><text x="1044" y="330" class="k ink">P5</text><text x="1044" y="374" class="t ink">Evidence</text><text x="1044" y="414" class="x muted">adapters</text>
+    <rect x="1214" y="280" width="176" height="184" rx="18" class="gold"/><text x="1238" y="330" class="k ink">P6</text><text x="1238" y="374" class="t ink">Read-only</text><text x="1238" y="414" class="x muted">sources</text>
+    <rect x="1408" y="280" width="142" height="184" rx="18" class="red"/><text x="1430" y="330" class="k ink">P7</text><text x="1430" y="374" class="t ink">Authority</text><text x="1430" y="414" class="x muted">explicit gate</text>
+  </g>
+  <rect x="170" y="554" width="1260" height="128" rx="20" class="red"/>
+  <text x="210" y="602" class="t ink">No automatic transition to execution, custody, margin recognition, signing, pause, or settlement.</text>
+  <text x="210" y="646" class="x muted">Each authority surface requires its own owner, policy, evidence, tests, and explicit authorization.</text>
+  <rect x="70" y="766" width="1460" height="48" rx="12" class="navy"/>
+  <text x="98" y="798" class="k ink">ROADMAP IS A GOVERNANCE MAP / NOT A DEPLOYMENT COMMITMENT OR PRODUCTION-READINESS CLAIM</text>
+</svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Three finality clocks</title>
+  <desc id="desc">Execution finality, economic settlement, and externalization finality are separate clocks. Statebook tracks their distinction and does not treat a quick technical transition as legal or economic finality.</desc>
+  <defs><style>.ink{fill:#162b45}.muted{fill:#667789}.h{font:700 56px Georgia,serif}.t{font:700 28px Georgia,serif}.b{font:25px Georgia,serif}.k{font:700 22px ui-monospace,Consolas,monospace;letter-spacing:1.5px}.x{font:22px ui-monospace,Consolas,monospace}.navy{fill:#fffdfa;stroke:#173a63;stroke-width:3}.teal{fill:#edf7f4;stroke:#19766f;stroke-width:3}.gold{fill:#fff3cf;stroke:#c38508;stroke-width:3}.red{fill:#fbe9e7;stroke:#b3423c;stroke-width:3}</style></defs>
+  <rect width="1600" height="900" fill="#fbf8f1"/>
+  <text x="70" y="72" class="k ink">FIG 05 / THREE FINALITY CLOCKS</text>
+  <text x="70" y="136" class="h ink">Fast state. Deliberate irreversible exit.</text>
+  <text x="70" y="178" class="b muted">The controls track different clocks because unilateral externalization is not slow internal risk control.</text>
+  <text x="70" y="282" class="t ink">1 / Execution finality</text><path d="M400 276H1490" stroke="#173a63" stroke-width="4"/><circle cx="500" cy="276" r="10" fill="#173a63"/>
+  <rect x="430" y="314" width="360" height="84" rx="16" class="navy"/><text x="460" y="352" class="b ink">match or engine transition</text><text x="460" y="380" class="x muted">venue-local irrevocability</text>
+  <text x="70" y="478" class="t ink">2 / Economic settlement</text><path d="M400 472H1490" stroke="#173a63" stroke-width="4"/><circle cx="620" cy="472" r="10" fill="#173a63"/>
+  <rect x="430" y="510" width="520" height="84" rx="16" class="teal"/><text x="460" y="548" class="b ink">mark · margin lock · liquidation · loss recognition</text><text x="460" y="576" class="x muted">fast inside the recovery domain</text>
+  <text x="70" y="674" class="t ink">3 / Externalization finality</text><path d="M400 668H1490" stroke="#173a63" stroke-width="4"/><circle cx="1230" cy="668" r="10" fill="#173a63"/>
+  <rect x="430" y="706" width="430" height="84" rx="16" class="gold"/><text x="460" y="744" class="b ink">hard gates · budget · clock</text><text x="460" y="772" class="x muted">challenge queue · revalidation</text>
+  <rect x="900" y="706" width="590" height="84" rx="16" class="red"/><text x="930" y="744" class="b ink">withdrawal · bridge · collateral reuse · payout</text><text x="930" y="772" class="x muted">crosses a separately governed boundary</text>
+  <rect x="70" y="830" width="1420" height="38" rx="12" class="red"/>
+  <text x="96" y="856" class="k ink">ATOMIC LINKED EXCHANGE MAY REMAIN FAST ONLY WHEN EVERY LEG SETTLES OR NONE DOES.</text>
+</svg>

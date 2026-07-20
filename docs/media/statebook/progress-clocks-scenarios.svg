@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Mismatched progress clocks and a scenario envelope</title>
+  <desc id="desc">Four lanes show different rates of software and AI capability, physical infrastructure, market and clearing infrastructure, and law and governance. Three periods are scenarios, not forecasts, ending in either coherent federation or systemic monoculture.</desc>
+  <defs><style>.ink{fill:#162b45}.muted{fill:#667789}.h{font:700 56px Georgia,serif}.t{font:700 26px Georgia,serif}.b{font:24px Georgia,serif}.k{font:700 21px ui-monospace,Consolas,monospace;letter-spacing:1.4px}.navy{fill:#fffdfa;stroke:#173a63;stroke-width:3}.teal{fill:#edf7f4;stroke:#19766f;stroke-width:3}.gold{fill:#fff3cf;stroke:#c38508;stroke-width:3}.red{fill:#fbe9e7;stroke:#b3423c;stroke-width:3}</style></defs>
+  <rect width="1600" height="900" fill="#fbf8f1"/>
+  <text x="70" y="72" class="k ink">FIG 11 / SCENARIO ENVELOPE</text>
+  <text x="70" y="136" class="h ink">Progress happens on different clocks.</text>
+  <text x="70" y="178" class="b muted">Scenario architecture, not a forecast. No probabilities or quantitative trajectories are implied.</text>
+  <text x="470" y="248" class="k ink">2026–2028 / NORMALIZE</text><text x="825" y="248" class="k ink">2029–2031 / FEDERATE</text><text x="1180" y="248" class="k ink">2032–2036 / CHOOSE</text>
+  <text x="70" y="326" class="t ink">Software and AI capability</text>
+  <rect x="420" y="282" width="315" height="78" rx="14" class="teal"/><text x="446" y="330" class="b ink">rapid model and tool change</text>
+  <rect x="780" y="282" width="315" height="78" rx="14" class="teal"/><text x="806" y="330" class="b ink">new underlyings and agents</text>
+  <rect x="1140" y="282" width="385" height="78" rx="14" class="gold"/><text x="1166" y="330" class="b ink">capability may outpace control</text>
+  <text x="70" y="450" class="t ink">Physical infrastructure</text>
+  <rect x="420" y="406" width="315" height="78" rx="14" class="gold"/><text x="446" y="454" class="b ink">power, chips, sites constrain</text>
+  <rect x="780" y="406" width="315" height="78" rx="14" class="gold"/><text x="806" y="454" class="b ink">buildout and congestion</text>
+  <rect x="1140" y="406" width="385" height="78" rx="14" class="gold"/><text x="1166" y="454" class="b ink">geography still matters</text>
+  <text x="70" y="574" class="t ink">Market and clearing</text>
+  <rect x="420" y="530" width="315" height="78" rx="14" class="navy"/><text x="446" y="578" class="b ink">semantics before unification</text>
+  <rect x="780" y="530" width="315" height="78" rx="14" class="navy"/><text x="806" y="578" class="b ink">selective execution and capital</text>
+  <rect x="1140" y="530" width="385" height="78" rx="14" class="red"/><text x="1166" y="578" class="b ink">fragmentation or concentration</text>
+  <text x="70" y="698" class="t ink">Law and governance</text>
+  <rect x="420" y="654" width="315" height="78" rx="14" class="navy"/><text x="446" y="702" class="b ink">definitions and disclosures</text>
+  <rect x="780" y="654" width="315" height="78" rx="14" class="navy"/><text x="806" y="702" class="b ink">authority-specific recognition</text>
+  <rect x="1140" y="654" width="180" height="78" rx="14" class="teal"/><text x="1176" y="702" class="b ink">coherent</text>
+  <rect x="1345" y="654" width="180" height="78" rx="14" class="red"/><text x="1370" y="702" class="b ink">monoculture</text>
+  <rect x="70" y="800" width="1455" height="44" rx="12" class="red"/>
+  <text x="96" y="829" class="k ink">STATEBOOK KEEPS DIFFERENCES VISIBLE WHILE SURROUNDING SYSTEMS ADVANCE AT UNEVEN RATES.</text>
+</svg>
