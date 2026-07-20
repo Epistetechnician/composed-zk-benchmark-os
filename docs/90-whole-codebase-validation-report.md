@@ -11065,27 +11065,27 @@ Current publication artifact manifest after the visual refresh:
 
 | Artifact | SHA-256 | Verification note |
 | --- | --- | --- |
-| `docs/statebook-whitepaper.md` | `d53a0858ebd6f5b288fa48063762fff0f0a81c08296611610be3f35ded116564` | Whitepaper source with thirteen original explanatory figures |
+| `docs/statebook-whitepaper.md` | `9330b8af37878c7de49b74ddeed0737ffc716555c04ab85ec15bf644a98ad468` | Whitepaper source with thirteen original explanatory figures |
 | `docs/statebook-product-requirements.md` | `898414eaf8799afd341eeb39b4c7161c9d4a7a8d2b4d84f6b5a96f171277db4c` | PRD source: 70 user stories, 20 implementation decisions, 18 functional requirements, 34 adversarial cases, and two explanatory figures |
 | `docs/statebook-literature-source-index.md` | `725c0e495547f3ea6d7b5cb0e77af6dbb4078d29ddd97372e6d0a53a065bf8f8` | 98 annotated entries and 111 unique public URLs |
 | `docs/integrations/statebook_terminal_payoff_and_trust_settlement.md` | `2ab7a8c1927004ba9a5487b8fc3dcb47bd3f9b6c8428de9d36296edc54610568` | Governing integration boundary |
 | `docs/media/statebook/README.md` | `c82af5ffc9b70cde339ddd826c638ecbf45e7024dd54b90ca4d09a60d40f76db` | Manifest, accessibility, and evidence classification |
-| `docs/media/statebook/assurance-settlement-controller.svg` | `8b0fe0271ebc7817e41d033dc5ba15f83edd9c886c0bd025d07fd7aa0daefd94` | Assurance-to-externalization controller |
-| `docs/media/statebook/capital-legal-coherence.svg` | `40f31054a2b6e391256a304517a5183d05a186e22ebdb1372e1843fb4a1fafb4` | Economic offset, capital recognition, and legal finality separation |
+| `docs/media/statebook/assurance-settlement-controller.svg` | `616c513c91cf1ee78f3b92b5047f68dd436c329a7efd2ae0a303d83d5e41dc14` | Assurance-to-externalization controller |
+| `docs/media/statebook/capital-legal-coherence.svg` | `126d74a1a3d5aa4754bcf7eea0a6a8d11742ba477d239c97915df067a13057f8` | Economic offset, capital recognition, and legal finality separation |
 | `docs/media/statebook/correlated-roots-meme.svg` | `e3d3a96b672cf82d2d35802eaaf5886ff84f184d6f2de7f199fa0f914772cec0` | Correlated-root independence illustration |
-| `docs/media/statebook/exposure-lifecycle.svg` | `dc8cb0dc1ca300820026c08525a58aafd403e35fb0a9cc198104dc3612d21520` | Reservation, observation, challenge, and recovery lifecycle |
-| `docs/media/statebook/frontier-risk-market-map.svg` | `d051aa187be7ebd704768af69e229e541eae756255ea93cea14c2dac562e1d02` | Frontier-risk map |
-| `docs/media/statebook/implementation-boundary-roadmap.svg` | `78068f4682604b3ca22bca9cfe2dc0ded6139d149d9665e7b842e8dfeb3caa7a` | Analysis sequence and authority boundary |
+| `docs/media/statebook/exposure-lifecycle.svg` | `671b79a28fd11b9c9d76596f65c8bebc7a71bca5aab817ae4fc214613444996d` | Reservation, observation, challenge, and recovery lifecycle |
+| `docs/media/statebook/frontier-risk-market-map.svg` | `5363067bd2a793fec83997746db2a9406299b0f31aa6256d7acc2a6cd63039f0` | Frontier-risk map |
+| `docs/media/statebook/implementation-boundary-roadmap.svg` | `d6a04b85107503c59224e4653b107a53df18dd1cfa861e5ce10d62d7b39c6484` | Analysis sequence and authority boundary |
 | `docs/media/statebook/orderbook-statebook-meme.svg` | `018e50974563e3ce84ec163d5ee84772204160851d293fbdd50c393c3c732a37` | Order-book/Statebook architecture illustration |
-| `docs/media/statebook/progress-clocks-scenarios.svg` | `64c11e4430802619d71dddc71321392d50d5382623ed01835b523479d1505eab` | AI, physical, market, and governance scenario clocks |
-| `docs/media/statebook/settlement-delay-meme.svg` | `8ac287541c16937d54907493e9d07a2e74579f1a8993ace2cf448aca60a56e38` | Delay/airlock architecture illustration |
+| `docs/media/statebook/progress-clocks-scenarios.svg` | `63d6baaba3f28995ff0ff78ce5276c9ed2a6a937c613d221119a22c69b7dc356` | AI, physical, market, and governance scenario clocks |
+| `docs/media/statebook/settlement-delay-meme.svg` | `af6a643ae747cf70b1b61aad49ea724c3778375d0893f180a37413c83f149c8a` | Delay/airlock architecture illustration |
 | `docs/media/statebook/seven-completeness-tests.svg` | `3d09ec33a388815bd301a4855a8da2889b27788b0d8aebb3d4a3200c19c16bef` | Seven independent completeness verdicts |
-| `docs/media/statebook/source-terms-to-residual.svg` | `a26e42c84bdf2f28fb165c81a0d40e8b53d2ba6b0f67d88e043adf3b99121bfa` | Material terms, StateKeys, residuals, and perpetual path dependence |
-| `docs/media/statebook/statebook-layer-map.svg` | `62590cdee537b927a444a2b36b4c4882adf1f81ee71c01aefcab8c64ba6556e1` | Statebook layer and authority map |
-| `docs/media/statebook/three-finality-clocks.svg` | `7b87b3ee5e8de91df201153befe02e5241b8f01b08bed8a86040c2d9b55494ec` | Execution, economic, and externalization finality |
+| `docs/media/statebook/source-terms-to-residual.svg` | `9b499cc5b3fe7ac21d63a857cfe9c61404cd9018188c215ad1a6312ce5169d19` | Material terms, StateKeys, residuals, and perpetual path dependence |
+| `docs/media/statebook/statebook-layer-map.svg` | `ae9d3d46fcd5059c94d84a4c7679751631013b7e71fce6c1ab4a9e9cec2f9525` | Statebook layer and authority map |
+| `docs/media/statebook/three-finality-clocks.svg` | `3143b02491718a4a94678945a31c3d6c330e765c63f107423f10d29f60efb4dd` | Execution, economic, and externalization finality |
 | `.gitattributes` | `56d05e88e353827a8c63eaeef0171d1692362fb3af4529017cb52c3f16066e63` | PDF-only binary classification for the two generated Statebook publications |
-| `output/pdf/statebook-whitepaper.pdf` | `6e7bc026896ba2d3c610d83dc615f9892eb61b1060e01b35bae3ea0e392bb441` | 63 pages, 2,646,743 bytes |
-| `output/pdf/statebook-product-requirements.pdf` | `2a9e5301c7c50b3b30358bdade9b34cad2842697a0056054dd5755262b4fb2f4` | 23 pages, 569,338 bytes |
+| `output/pdf/statebook-whitepaper.pdf` | `ccab3a725ce0bf80546ee447ab4125e47bcae51f7294e86952bcf40e86ee943a` | 63 pages, 2,683,047 bytes |
+| `output/pdf/statebook-product-requirements.pdf` | `18cc65429d09643d50c9792aff29d06ed69605bd4c2bc486fe40540a6e2e0856` | 23 pages, 569,260 bytes |
 
 Publication mirrors in the committed package:
 

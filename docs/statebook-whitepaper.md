@@ -487,11 +487,11 @@ externalization whose evidence or consequence is uncertain.
 
 *Figure 5. Execution finality, economic settlement, and externalization finality move on separate clocks; the last receives the strongest control. Original explanatory architecture illustration; not evidence of implementation, authority, or market fact.*
 
+### 7.3 Why there is no trust score
+
 ![Assurance-adjusted settlement controller](media/statebook/assurance-settlement-controller.svg)
 
 *Figure 6. Evaluation order is lexicographic rather than compensatory: no strong score on one axis can offset a failed hard gate on another. Original explanatory architecture illustration; not evidence of implementation, authority, or market fact.*
-
-### 7.3 Why there is no trust score
 
 A single ratio between “trust” and “instant settlement” is unsafe. It lets
 strong identity or history compensate numerically for a failed oracle, stale
