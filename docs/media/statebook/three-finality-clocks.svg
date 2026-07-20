@@ -7,12 +7,12 @@
   <text x="70" y="136" class="h ink">Fast state. Deliberate irreversible exit.</text>
   <text x="70" y="178" class="b muted">The controls track different clocks because unilateral externalization is not slow internal risk control.</text>
   <text x="70" y="282" class="t ink">1 / Execution finality</text><path d="M400 276H1490" stroke="#173a63" stroke-width="4"/><circle cx="500" cy="276" r="10" fill="#173a63"/>
-  <rect x="430" y="314" width="360" height="84" rx="16" class="navy"/><text x="460" y="352" class="b ink">match or engine transition</text><text x="460" y="380" class="x muted">venue-local irrevocability</text>
+  <rect x="430" y="314" width="360" height="108" rx="16" class="navy"/><text x="460" y="352" class="b ink">match or engine transition</text><text x="460" y="380" class="x muted"><tspan x="460">venue-local</tspan><tspan x="460" dy="24">irrevocability</tspan></text>
   <text x="70" y="478" class="t ink">2 / Economic settlement</text><path d="M400 472H1490" stroke="#173a63" stroke-width="4"/><circle cx="620" cy="472" r="10" fill="#173a63"/>
-  <rect x="430" y="510" width="520" height="84" rx="16" class="teal"/><text x="460" y="548" class="b ink">mark · margin lock · liquidation · loss recognition</text><text x="460" y="576" class="x muted">fast inside the recovery domain</text>
+  <rect x="430" y="500" width="520" height="116" rx="16" class="teal"/><text x="460" y="538" class="b ink"><tspan x="460">mark · margin lock · liquidation</tspan><tspan x="460" dy="30">loss recognition</tspan></text><text x="460" y="598" class="x muted">fast inside the recovery domain</text>
   <text x="70" y="674" class="t ink">3 / Externalization finality</text><path d="M400 668H1490" stroke="#173a63" stroke-width="4"/><circle cx="1230" cy="668" r="10" fill="#173a63"/>
-  <rect x="430" y="706" width="430" height="84" rx="16" class="gold"/><text x="460" y="744" class="b ink">hard gates · budget · clock</text><text x="460" y="772" class="x muted">challenge queue · revalidation</text>
-  <rect x="900" y="706" width="590" height="84" rx="16" class="red"/><text x="930" y="744" class="b ink">withdrawal · bridge · collateral reuse · payout</text><text x="930" y="772" class="x muted">crosses a separately governed boundary</text>
+  <rect x="430" y="690" width="430" height="116" rx="16" class="gold"/><text x="460" y="728" class="b ink">hard gates · budget · clock</text><text x="460" y="766" class="x muted">challenge queue · revalidation</text>
+  <rect x="900" y="690" width="590" height="116" rx="16" class="red"/><text x="930" y="728" class="b ink"><tspan x="930">withdrawal · bridge · collateral reuse</tspan><tspan x="930" dy="30">payout</tspan></text><text x="930" y="788" class="x muted">crosses a separately governed boundary</text>
   <rect x="70" y="830" width="1420" height="38" rx="12" class="red"/>
   <text x="96" y="856" class="k ink">ATOMIC LINKED EXCHANGE MAY REMAIN FAST ONLY WHEN EVERY LEG SETTLES OR NONE DOES.</text>
 </svg>

@@ -7,17 +7,17 @@
   <text x="70" y="136" class="h ink">Frontier risks need an evaluator.</text>
   <text x="70" y="178" class="b muted">New payoff forms emerge faster than common semantics, infrastructure, capital treatment, and law.</text>
   <g>
-    <rect x="70" y="254" width="320" height="96" rx="16" class="teal"/><text x="98" y="294" class="t ink">Compute capacity</text><text x="98" y="326" class="x muted">GPU hours · latency · availability</text>
-    <rect x="430" y="254" width="320" height="96" rx="16" class="teal"/><text x="458" y="294" class="t ink">Chips and packaging</text><text x="458" y="326" class="x muted">delivery · yield · capacity</text>
-    <rect x="790" y="254" width="320" height="96" rx="16" class="teal"/><text x="818" y="294" class="t ink">Model capability</text><text x="818" y="326" class="x muted">benchmarks · reliability · cost</text>
-    <rect x="1150" y="254" width="380" height="96" rx="16" class="red"/><text x="1178" y="294" class="t ink">Cyber and protocol</text><text x="1178" y="326" class="x muted">oracle · bridge · exploit risk</text>
-    <rect x="70" y="570" width="320" height="96" rx="16" class="gold"/><text x="98" y="610" class="t ink">Power and grid</text><text x="98" y="642" class="x muted">location · congestion · curtailment</text>
-    <rect x="430" y="570" width="320" height="96" rx="16" class="gold"/><text x="458" y="610" class="t ink">Labor and adoption</text><text x="458" y="642" class="x muted">tasks · skills · diffusion</text>
-    <rect x="790" y="570" width="320" height="96" rx="16" class="gold"/><text x="818" y="610" class="t ink">Policy and trade</text><text x="818" y="642" class="x muted">sanctions · export controls · privacy</text>
-    <rect x="1150" y="570" width="380" height="96" rx="16" class="red"/><text x="1178" y="610" class="t ink">Macro and climate</text><text x="1178" y="642" class="x muted">rates · debt · energy · weather</text>
+    <rect x="70" y="254" width="320" height="96" rx="16" class="teal"/><text x="98" y="294" class="t ink">Compute capacity</text><text x="98" y="320" class="x muted"><tspan x="98">GPU hours · latency</tspan><tspan x="98" dy="24">availability</tspan></text>
+    <rect x="430" y="254" width="320" height="96" rx="16" class="teal"/><text x="458" y="294" class="t ink">Chips and packaging</text><text x="458" y="320" class="x muted"><tspan x="458">delivery · yield</tspan><tspan x="458" dy="24">capacity</tspan></text>
+    <rect x="790" y="254" width="320" height="96" rx="16" class="teal"/><text x="818" y="294" class="t ink">Model capability</text><text x="818" y="320" class="x muted"><tspan x="818">benchmarks ·</tspan><tspan x="818" dy="24">reliability · cost</tspan></text>
+    <rect x="1150" y="254" width="380" height="96" rx="16" class="red"/><text x="1178" y="294" class="t ink">Cyber and protocol</text><text x="1178" y="320" class="x muted"><tspan x="1178">oracle · bridge</tspan><tspan x="1178" dy="24">exploit risk</tspan></text>
+    <rect x="70" y="570" width="320" height="96" rx="16" class="gold"/><text x="98" y="610" class="t ink">Power and grid</text><text x="98" y="636" class="x muted"><tspan x="98">location · congestion</tspan><tspan x="98" dy="24">curtailment</tspan></text>
+    <rect x="430" y="570" width="320" height="96" rx="16" class="gold"/><text x="458" y="610" class="t ink">Labor and adoption</text><text x="458" y="636" class="x muted"><tspan x="458">tasks · skills</tspan><tspan x="458" dy="24">diffusion</tspan></text>
+    <rect x="790" y="570" width="320" height="96" rx="16" class="gold"/><text x="818" y="610" class="t ink">Policy and trade</text><text x="818" y="636" class="x muted"><tspan x="818">sanctions · export</tspan><tspan x="818" dy="24">controls · privacy</tspan></text>
+    <rect x="1150" y="570" width="380" height="96" rx="16" class="red"/><text x="1178" y="610" class="t ink">Macro and climate</text><text x="1178" y="636" class="x muted"><tspan x="1178">rates · debt · energy</tspan><tspan x="1178" dy="24">weather</tspan></text>
   </g>
   <rect x="400" y="400" width="800" height="116" rx="20" class="gold"/>
-  <text x="434" y="442" class="k ink">STATEBOOK / RELATION EVALUATOR</text><text x="434" y="484" class="t ink">state identity · payoff relation · residual · execution condition</text>
+  <text x="434" y="442" class="k ink">STATEBOOK / RELATION EVALUATOR</text><text x="434" y="476" class="t ink"><tspan x="434">state identity · payoff relation · residual</tspan><tspan x="434" dy="30">execution condition</tspan></text>
   <path d="M230 350V400 M590 350V400 M950 350V400 M1340 350V400 M230 570V516 M590 570V516 M950 570V516 M1340 570V516" fill="none" stroke="#19766f" stroke-width="3" marker-end="url(#arrow)"/>
   <rect x="70" y="770" width="1460" height="44" rx="12" class="red"/>
   <text x="98" y="799" class="k ink">RELATED UNDERLYINGS DO NOT IMPLY SHARED BOOKS, MARGIN, ORACLE GOVERNANCE, OR LEGAL FINALITY.</text>
