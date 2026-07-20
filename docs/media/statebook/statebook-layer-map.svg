@@ -3,7 +3,7 @@
   <desc id="desc">Federated source books supply declared terms to a semantic coherence core. The core emits separate economic, execution, and assurance graphs. HSAI supplies bounded evidence only. The diagram explicitly excludes authority.</desc>
   <defs>
     <style>
-      .ink{fill:#162b45}.muted{fill:#667789}.h{font:700 56px Georgia,serif}.t{font:700 27px Georgia,serif}.b{font:25px Georgia,serif}.k{font:700 21px ui-monospace,Consolas,monospace;letter-spacing:1.6px}.x{font:21px ui-monospace,Consolas,monospace}.navy{fill:#fffdfa;stroke:#173a63;stroke-width:3}.teal{fill:#edf7f4;stroke:#19766f;stroke-width:3}.gold{fill:#fff3cf;stroke:#c38508;stroke-width:3}.red{fill:#fbe9e7;stroke:#b3423c;stroke-width:3}.dash{fill:#edf7f4;stroke:#19766f;stroke-width:3;stroke-dasharray:10 8}
+      .ink{fill:#162b45}.muted{fill:#667789}.h{font:700 56px Georgia,serif}.t{font:700 27px Georgia,serif}.b{font:25px Georgia,serif}.k{font:700 20px ui-monospace,Consolas,monospace;letter-spacing:1.5px}.x{font:22px ui-monospace,Consolas,monospace}.navy{fill:#fffdfa;stroke:#173a63;stroke-width:3}.teal{fill:#edf7f4;stroke:#19766f;stroke-width:3}.gold{fill:#fff3cf;stroke:#c38508;stroke-width:3}.red{fill:#fbe9e7;stroke:#b3423c;stroke-width:3}.dash{fill:#edf7f4;stroke:#19766f;stroke-width:3;stroke-dasharray:10 8}
     </style>
     <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#173a63"/></marker>
     <marker id="teal-arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#19766f"/></marker>
@@ -12,29 +12,67 @@
   <text x="70" y="66" class="k ink">FIG 12 / ARCHITECTURE BOUNDARY</text>
   <text x="70" y="126" class="h ink">Statebook is a coherence layer.</text>
   <text x="70" y="166" class="b muted">It compares declared relationships across books. It does not become their authority.</text>
-  <text x="70" y="216" class="k ink">FEDERATED SOURCE BOOKS / DECLARED TERMS</text>
+
+  <text x="70" y="214" class="k ink">FEDERATED SOURCE BOOKS / DECLARED TERMS</text>
   <g>
-    <rect x="70" y="236" width="270" height="116" rx="16" class="navy"/><text x="96" y="270" class="t ink">Perpetual books</text><text x="96" y="298" class="x muted"><tspan x="96">marks · funding</tspan><tspan x="96" dy="24">collateral</tspan></text>
-    <rect x="360" y="236" width="270" height="116" rx="16" class="navy"/><text x="386" y="270" class="t ink">Event books</text><text x="386" y="298" class="x muted"><tspan x="386">conditions · disputes</tspan><tspan x="386" dy="24">expiry</tspan></text>
-    <rect x="650" y="236" width="270" height="116" rx="16" class="navy"/><text x="676" y="270" class="t ink">Options and futures</text><text x="676" y="298" class="x muted"><tspan x="676">strikes · delivery</tspan><tspan x="676" dy="24">exercise</tspan></text>
-    <rect x="940" y="236" width="270" height="116" rx="16" class="navy"/><text x="966" y="270" class="t ink">Standards and law</text><text x="966" y="298" class="x muted"><tspan x="966">definitions · finality</tspan><tspan x="966" dy="24">rules</tspan></text>
-    <rect x="1230" y="236" width="300" height="116" rx="16" class="navy"/><text x="1256" y="270" class="t ink">Frontier references</text><text x="1256" y="298" class="x muted"><tspan x="1256">compute · power</tspan><tspan x="1256" dy="24">policy</tspan></text>
+    <rect x="70" y="234" width="275" height="144" rx="16" class="navy"/>
+    <text x="98" y="274" class="t ink"><tspan x="98">Perpetual</tspan><tspan x="98" dy="29">books</tspan></text>
+    <text x="98" y="335" class="x muted"><tspan x="98">marks · funding</tspan><tspan x="98" dy="25">collateral</tspan></text>
+
+    <rect x="365" y="234" width="275" height="144" rx="16" class="navy"/>
+    <text x="393" y="274" class="t ink"><tspan x="393">Event</tspan><tspan x="393" dy="29">books</tspan></text>
+    <text x="393" y="335" class="x muted"><tspan x="393">conditions</tspan><tspan x="393" dy="25">dispute / expiry</tspan></text>
+
+    <rect x="660" y="234" width="275" height="144" rx="16" class="navy"/>
+    <text x="688" y="274" class="t ink"><tspan x="688">Options and</tspan><tspan x="688" dy="29">futures</tspan></text>
+    <text x="688" y="335" class="x muted"><tspan x="688">strikes</tspan><tspan x="688" dy="25">delivery</tspan></text>
+
+    <rect x="955" y="234" width="275" height="144" rx="16" class="navy"/>
+    <text x="983" y="274" class="t ink"><tspan x="983">Standards</tspan><tspan x="983" dy="29">and law</tspan></text>
+    <text x="983" y="335" class="x muted"><tspan x="983">definitions</tspan><tspan x="983" dy="25">finality rules</tspan></text>
+
+    <rect x="1250" y="234" width="280" height="144" rx="16" class="navy"/>
+    <text x="1278" y="274" class="t ink"><tspan x="1278">Frontier</tspan><tspan x="1278" dy="29">references</tspan></text>
+    <text x="1278" y="335" class="x muted"><tspan x="1278">compute · power</tspan><tspan x="1278" dy="25">policy</tspan></text>
   </g>
-  <path d="M205 352V380H800V398 M495 352V380 M785 352V380 M1075 352V380 M1380 352V380" fill="none" stroke="#173a63" stroke-width="3" marker-end="url(#arrow)"/>
-  <rect x="250" y="398" width="980" height="180" rx="22" class="gold"/>
-  <text x="292" y="440" class="k ink">SEMANTIC COHERENCE CORE</text>
-  <rect x="292" y="462" width="260" height="58" rx="12" class="navy"/><text x="320" y="500" class="t ink">Validated terms</text>
-  <rect x="610" y="462" width="200" height="58" rx="12" class="navy"/><text x="640" y="500" class="t ink">StateKey</text>
-  <rect x="868" y="462" width="320" height="58" rx="12" class="navy"/><text x="896" y="500" class="t ink">Payoff and residual</text>
-  <text x="292" y="536" class="x muted"><tspan x="292">exact source binding · material state identity</tspan><tspan x="292" dy="24">explicit unsupported states</tspan></text>
-  <rect x="1280" y="398" width="250" height="180" rx="22" class="dash"/>
-  <text x="1310" y="440" class="k ink">HSAI</text><text x="1310" y="474" class="t ink"><tspan x="1310">Bounded</tspan><tspan x="1310" dy="30">evidence</tspan></text><text x="1310" y="548" class="x muted">inputs only</text>
-  <path d="M1280 476H1230" fill="none" stroke="#19766f" stroke-width="3" stroke-dasharray="10 8" marker-end="url(#teal-arrow)"/>
-  <path d="M740 578V610 M740 610H305 M740 610H800 M740 610H1295" fill="none" stroke="#173a63" stroke-width="3" marker-end="url(#arrow)"/>
-  <text x="70" y="604" class="k ink">THREE LINKED GRAPHS / INDEPENDENT QUESTIONS</text>
-  <rect x="70" y="630" width="440" height="150" rx="18" class="teal"/><text x="102" y="672" class="t ink">Economic state graph</text><text x="102" y="704" class="x muted"><tspan x="102">payoffs · comparators</tspan><tspan x="102" dy="24">maturity</tspan></text>
-  <rect x="580" y="630" width="440" height="150" rx="18" class="teal"/><text x="612" y="672" class="t ink">Execution graph</text><text x="612" y="704" class="x muted"><tspan x="612">books · size · slippage</tspan><tspan x="612" dy="24">legs</tspan></text>
-  <rect x="1090" y="630" width="440" height="150" rx="18" class="teal"/><text x="1122" y="672" class="t ink">Assurance and release graph</text><text x="1122" y="704" class="x muted"><tspan x="1122">evidence · budgets · queue</tspan><tspan x="1122" dy="24">recovery</tspan></text>
-  <rect x="70" y="804" width="1460" height="44" rx="12" class="red"/>
-  <text x="98" y="833" class="k ink">AUTHORITY BOUNDARY / NO EXECUTION · CUSTODY · MARGIN RECOGNITION · PAUSE · SIGNING · SETTLEMENT</text>
+
+  <g fill="none" stroke="#173a63" stroke-width="3">
+    <path d="M207 378V402 M502 378V402 M797 378V402 M1092 378V402 M1390 378V402"/>
+    <path d="M207 402H1390"/>
+    <path d="M800 402V430" marker-end="url(#arrow)"/>
+  </g>
+
+  <rect x="70" y="430" width="1140" height="180" rx="22" class="gold"/>
+  <text x="108" y="472" class="k ink">SEMANTIC COHERENCE CORE</text>
+  <rect x="108" y="494" width="286" height="56" rx="12" class="navy"/><text x="134" y="531" class="t ink">Validated terms</text>
+  <rect x="424" y="494" width="216" height="56" rx="12" class="navy"/><text x="454" y="531" class="t ink">StateKey</text>
+  <rect x="670" y="494" width="430" height="56" rx="12" class="navy"/><text x="698" y="531" class="t ink">Payoff and residual</text>
+  <text x="108" y="576" class="x muted"><tspan x="108">exact source binding · material state identity</tspan><tspan x="108" dy="25">explicit unsupported states</tspan></text>
+
+  <rect x="1240" y="430" width="290" height="180" rx="22" class="dash"/>
+  <text x="1272" y="472" class="k ink">HSAI</text>
+  <text x="1272" y="511" class="t ink"><tspan x="1272">Bounded</tspan><tspan x="1272" dy="29">evidence</tspan></text>
+  <text x="1272" y="576" class="x muted">inputs only</text>
+  <path d="M1240 520H1210" fill="none" stroke="#19766f" stroke-width="3" stroke-dasharray="10 8" marker-end="url(#teal-arrow)"/>
+
+  <text x="70" y="652" class="k ink">THREE LINKED GRAPHS / INDEPENDENT QUESTIONS</text>
+  <g fill="none" stroke="#173a63" stroke-width="3">
+    <path d="M800 610V670"/>
+    <path d="M290 670H1310"/>
+    <path d="M290 670V688" marker-end="url(#arrow)"/>
+    <path d="M800 670V688" marker-end="url(#arrow)"/>
+    <path d="M1310 670V688" marker-end="url(#arrow)"/>
+  </g>
+  <rect x="70" y="688" width="440" height="112" rx="18" class="teal"/>
+  <text x="102" y="728" class="t ink">Economic state graph</text>
+  <text x="102" y="761" class="x muted"><tspan x="102">payoffs · comparators</tspan><tspan x="102" dy="25">maturity</tspan></text>
+  <rect x="580" y="688" width="440" height="112" rx="18" class="teal"/>
+  <text x="612" y="728" class="t ink">Execution graph</text>
+  <text x="612" y="761" class="x muted"><tspan x="612">books · size · slippage</tspan><tspan x="612" dy="25">legs</tspan></text>
+  <rect x="1090" y="688" width="440" height="112" rx="18" class="teal"/>
+  <text x="1122" y="728" class="t ink">Assurance and release graph</text>
+  <text x="1122" y="761" class="x muted"><tspan x="1122">evidence · budgets · queue</tspan><tspan x="1122" dy="25">recovery</tspan></text>
+
+  <rect x="70" y="830" width="1460" height="42" rx="12" class="red"/>
+  <text x="98" y="858" class="k ink">AUTHORITY BOUNDARY / NO EXECUTION · CUSTODY · MARGIN RECOGNITION · PAUSE · SIGNING · SETTLEMENT</text>
 </svg>

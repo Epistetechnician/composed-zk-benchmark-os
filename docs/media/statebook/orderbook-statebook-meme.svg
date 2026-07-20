@@ -10,9 +10,9 @@
   <text x="132" y="316" class="k ink">ORDER BOOK</text><text x="132" y="366" class="t ink">One identified contract</text>
   <rect x="132" y="416" width="496" height="66" rx="12" class="navy"/><text x="160" y="458" class="x muted">BUY 101.20 · 24 units</text>
   <rect x="132" y="506" width="496" height="66" rx="12" class="navy"/><text x="160" y="548" class="x muted">SELL 101.30 · 19 units</text>
-  <path d="M380 602V664" fill="none" stroke="#173a63" stroke-width="3" marker-end="url(#arrow)"/>
-  <text x="224" y="712" class="h ink" style="font-size:38px">“I match orders.”</text>
-  <text x="180" y="736" class="x muted">Correct question. Local scope.</text>
+  <path d="M380 602V650" fill="none" stroke="#173a63" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="224" y="690" class="h ink" style="font-size:38px">“I match orders.”</text>
+  <text x="180" y="720" class="x muted">Correct question. Local scope.</text>
   <rect x="930" y="264" width="580" height="480" rx="22" class="gold"/>
   <text x="972" y="316" class="k ink">STATEBOOK</text><text x="972" y="366" class="t ink">Several related exposures</text>
   <rect x="972" y="404" width="150" height="46" rx="23" class="navy"/><text x="1000" y="435" class="x muted">event</text>

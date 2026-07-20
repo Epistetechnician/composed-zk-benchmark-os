@@ -6,15 +6,18 @@
   <text x="70" y="72" class="k ink">FIG 06 / ASSURANCE AND SETTLEMENT CONTROL</text>
   <text x="70" y="136" class="h ink">Independent controls. Lexicographic release decision.</text>
   <text x="70" y="178" class="b muted">Evaluation order is visible. A pass in one control cannot offset a failure in another.</text>
-  <rect x="70" y="286" width="210" height="144" rx="18" class="navy"/><text x="102" y="334" class="t ink">Request Q</text><text x="102" y="364" class="x muted"><tspan x="102">intent · amount</tspan><tspan x="102" dy="24">route</tspan></text>
-  <path d="M280 353H370" fill="none" stroke="#173a63" stroke-width="3" marker-end="url(#arrow)"/>
-  <rect x="370" y="220" width="430" height="156" rx="18" class="red"/><text x="402" y="268" class="k ink">1 / WHETHER</text><text x="402" y="312" class="t ink">Authorization and hard gates</text><text x="402" y="344" class="x muted"><tspan x="402">source · state · replay</tspan><tspan x="402" dy="24">solvency</tspan></text>
-  <rect x="850" y="220" width="430" height="156" rx="18" class="gold"/><text x="882" y="268" class="k ink">2 / HOW MUCH</text><text x="882" y="312" class="t ink">Remaining capacity</text><text x="882" y="344" class="x muted"><tspan x="882">account · asset</tspan><tspan x="882" dy="24">destination · route</tspan></text>
-  <rect x="370" y="438" width="430" height="156" rx="18" class="gold"/><text x="402" y="486" class="k ink">3 / WHEN</text><text x="402" y="530" class="t ink">Applicable risk clock</text><text x="402" y="562" class="x muted"><tspan x="402">novelty · amount · anomaly</tspan><tspan x="402" dy="24">recovery</tspan></text>
-  <rect x="850" y="438" width="430" height="156" rx="18" class="navy"/><text x="882" y="486" class="k ink">4 / WHAT HAPPENS NEXT</text><text x="882" y="530" class="t ink">Action-bound recovery state</text><text x="882" y="562" class="x muted"><tspan x="882">reserve · observe · reconcile</tspan><tspan x="882" dy="24">freeze</tspan></text>
-  <path d="M800 298H850 M1065 376V438 M850 516H800 M585 594V640" fill="none" stroke="#173a63" stroke-width="3" marker-end="url(#arrow)"/>
-  <rect x="370" y="640" width="910" height="144" rx="18" class="teal"/>
-  <text x="408" y="690" class="t ink">Decision record</text><text x="408" y="724" class="x muted"><tspan x="408">executed · queued · rejected · frozen</tspan><tspan x="408" dy="24">explicit reason and recovery owner</tspan></text>
+  <rect x="70" y="306" width="230" height="158" rx="18" class="navy"/><text x="102" y="356" class="t ink">Request Q</text><text x="102" y="390" class="x muted"><tspan x="102">intent · amount</tspan><tspan x="102" dy="24">route</tspan></text>
+  <path d="M300 385H334V365H370" fill="none" stroke="#173a63" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="370" y="220" width="420" height="190" rx="18" class="red"/><text x="402" y="268" class="k ink">1 / WHETHER</text><text x="402" y="314" class="t ink"><tspan x="402">Authorization and</tspan><tspan x="402" dy="31">hard gates</tspan></text><text x="402" y="374" class="x muted"><tspan x="402">source · state · replay</tspan><tspan x="402" dy="24">solvency</tspan></text>
+  <rect x="860" y="220" width="420" height="190" rx="18" class="gold"/><text x="892" y="268" class="k ink">2 / HOW MUCH</text><text x="892" y="324" class="t ink">Remaining capacity</text><text x="892" y="374" class="x muted"><tspan x="892">account · asset</tspan><tspan x="892" dy="24">destination · route</tspan></text>
+  <rect x="370" y="460" width="420" height="190" rx="18" class="gold"/><text x="402" y="508" class="k ink">3 / WHEN</text><text x="402" y="560" class="t ink">Applicable risk clock</text><text x="402" y="610" class="x muted"><tspan x="402">novelty · amount · anomaly</tspan><tspan x="402" dy="24">recovery</tspan></text>
+  <rect x="860" y="460" width="420" height="190" rx="18" class="navy"/><text x="892" y="508" class="k ink">4 / WHAT HAPPENS NEXT</text><text x="892" y="554" class="t ink"><tspan x="892">Action-bound recovery</tspan><tspan x="892" dy="31">state</tspan></text><text x="892" y="610" class="x muted"><tspan x="892">reserve · observe</tspan><tspan x="892" dy="24">reconcile · freeze</tspan></text>
+  <path d="M760 220V200H890V220" fill="none" stroke="#173a63" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M1070 410V460" fill="none" stroke="#173a63" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M1070 650V670H580V650" fill="none" stroke="#173a63" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M580 650V690" fill="none" stroke="#173a63" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="370" y="690" width="910" height="108" rx="18" class="teal"/>
+  <text x="408" y="734" class="t ink">Decision record</text><text x="408" y="766" class="x muted"><tspan x="408">executed · queued · rejected · frozen</tspan><tspan x="408" dy="23">explicit reason and recovery owner</tspan></text>
   <rect x="70" y="824" width="1460" height="42" rx="12" class="navy"/>
   <text x="98" y="853" class="k ink">FAST INSIDE THE RECOVERY DOMAIN. GATED AT UNILATERAL IRREVERSIBLE EXTERNALIZATION.</text>
 </svg>

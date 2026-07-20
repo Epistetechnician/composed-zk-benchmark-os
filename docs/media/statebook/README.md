@@ -33,7 +33,8 @@ differences carry meaning without requiring color perception.
 All figures use the same print-first system: navy means structure or identity,
 teal means constrained in-domain capability, gold means conditional analysis,
 and red marks a failure, unknown, or authority boundary. Labels and line styles
-carry the same distinctions without relying on color. Panel copy is set at a
-minimum 24px source size for publication-scale legibility. Reader-facing
-captions remain in the Markdown publications because image metadata does not
-survive the raster PDF publication path.
+carry the same distinctions without relying on color. Primary panel copy is
+24px or larger; compact monospace metadata and phase labels use deliberately
+reflowed 20–23px source type and are rasterized at 2400px for publication-scale
+legibility. Reader-facing captions remain in the Markdown publications because
+image metadata does not survive the raster PDF publication path.

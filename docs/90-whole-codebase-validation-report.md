@@ -11033,7 +11033,8 @@ remains 2-3/10. No runtime evidence or stronger claim was created.
 
 ## Statebook Whitepaper, PRD, Source, Media, and PDF Publication Boundary
 
-Initial publication: 15 July 2026. Visual refresh validated: 20 July 2026.
+Initial publication: 15 July 2026. Visual layout correction validated: 20 July
+2026.
 
 Outcome: completed documentation and publication package for named state slice
 `statebook-whitepaper-prd-and-publication-media-boundary`.
@@ -11042,11 +11043,11 @@ Status: `DocumentationOnly`.
 
 Evidence ceiling: `Level0DesignNote`.
 
-The additive visual-refresh state slice is
-`statebook-publication-visual-refresh-v1`. It changes explanatory publication
-media, the two matching PDF-only Git attribute declarations, and its documented
-publication artifacts only; it grants no runtime, financial, security, incident,
-settlement, or authority claim.
+The additive visual-layout state slice is
+`statebook-publication-media-layout-correction`. It changes explanatory
+publication media, the media manifest, and the two rendered publication
+artifacts only; it grants no runtime, financial, security, incident, settlement,
+or authority claim.
 
 Repository HEAD at final validation start:
 `f139b10977e7b1d2c33e7ffd3bf8b535a6961a2f`.
@@ -11061,7 +11062,7 @@ threat model, falsification criteria, product governance, and a separately
 authorized implementation sequence. The package grants no runtime or external
 authority.
 
-Current publication artifact manifest after the visual refresh:
+Current publication artifact manifest after the visual layout correction:
 
 | Artifact | SHA-256 | Verification note |
 | --- | --- | --- |
@@ -11069,23 +11070,23 @@ Current publication artifact manifest after the visual refresh:
 | `docs/statebook-product-requirements.md` | `898414eaf8799afd341eeb39b4c7161c9d4a7a8d2b4d84f6b5a96f171277db4c` | PRD source: 70 user stories, 20 implementation decisions, 18 functional requirements, 34 adversarial cases, and two explanatory figures |
 | `docs/statebook-literature-source-index.md` | `725c0e495547f3ea6d7b5cb0e77af6dbb4078d29ddd97372e6d0a53a065bf8f8` | 98 annotated entries and 111 unique public URLs |
 | `docs/integrations/statebook_terminal_payoff_and_trust_settlement.md` | `2ab7a8c1927004ba9a5487b8fc3dcb47bd3f9b6c8428de9d36296edc54610568` | Governing integration boundary |
-| `docs/media/statebook/README.md` | `c82af5ffc9b70cde339ddd826c638ecbf45e7024dd54b90ca4d09a60d40f76db` | Manifest, accessibility, and evidence classification |
-| `docs/media/statebook/assurance-settlement-controller.svg` | `616c513c91cf1ee78f3b92b5047f68dd436c329a7efd2ae0a303d83d5e41dc14` | Assurance-to-externalization controller |
-| `docs/media/statebook/capital-legal-coherence.svg` | `126d74a1a3d5aa4754bcf7eea0a6a8d11742ba477d239c97915df067a13057f8` | Economic offset, capital recognition, and legal finality separation |
-| `docs/media/statebook/correlated-roots-meme.svg` | `e3d3a96b672cf82d2d35802eaaf5886ff84f184d6f2de7f199fa0f914772cec0` | Correlated-root independence illustration |
-| `docs/media/statebook/exposure-lifecycle.svg` | `671b79a28fd11b9c9d76596f65c8bebc7a71bca5aab817ae4fc214613444996d` | Reservation, observation, challenge, and recovery lifecycle |
-| `docs/media/statebook/frontier-risk-market-map.svg` | `5363067bd2a793fec83997746db2a9406299b0f31aa6256d7acc2a6cd63039f0` | Frontier-risk map |
-| `docs/media/statebook/implementation-boundary-roadmap.svg` | `d6a04b85107503c59224e4653b107a53df18dd1cfa861e5ce10d62d7b39c6484` | Analysis sequence and authority boundary |
-| `docs/media/statebook/orderbook-statebook-meme.svg` | `018e50974563e3ce84ec163d5ee84772204160851d293fbdd50c393c3c732a37` | Order-book/Statebook architecture illustration |
-| `docs/media/statebook/progress-clocks-scenarios.svg` | `63d6baaba3f28995ff0ff78ce5276c9ed2a6a937c613d221119a22c69b7dc356` | AI, physical, market, and governance scenario clocks |
-| `docs/media/statebook/settlement-delay-meme.svg` | `af6a643ae747cf70b1b61aad49ea724c3778375d0893f180a37413c83f149c8a` | Delay/airlock architecture illustration |
+| `docs/media/statebook/README.md` | `a9464d0b342f1cf516d98e3f732ae6071ca90df63e9662296831517a48684e38` | Manifest, accessibility, evidence classification, and publication type scale |
+| `docs/media/statebook/assurance-settlement-controller.svg` | `30fca94228361ce9b128fa38c137f40219116d8c200970de62d831c3a6248684` | Assurance-to-externalization controller |
+| `docs/media/statebook/capital-legal-coherence.svg` | `e7888c22539b3828087a672d03eee374f7572f53cc24f43922e0f7cb28ea7660` | Economic offset, capital recognition, and legal finality separation |
+| `docs/media/statebook/correlated-roots-meme.svg` | `220701d5216322014cb02d742eed6dd12f815d6e73d65e86d7a1d3bf17b8895d` | Correlated-root independence illustration |
+| `docs/media/statebook/exposure-lifecycle.svg` | `fcbebf61ad4b7a928e367bfc8e793e61a808e033e46fbb92457957a635688b32` | Reservation, observation, challenge, and recovery lifecycle |
+| `docs/media/statebook/frontier-risk-market-map.svg` | `5ded708a4c1f8915c4bfc80c2f1fced475830d0a21eef2616fc7e7a1801b9f0c` | Frontier-risk map |
+| `docs/media/statebook/implementation-boundary-roadmap.svg` | `85ab6d4b472774f6bc8be2becb13f97df7afab9728ee97d809d394f63fc3e404` | Analysis sequence and authority boundary |
+| `docs/media/statebook/orderbook-statebook-meme.svg` | `544a84181835f4b460f17e854947410e77c410e4bec9210b602461c5a6f281b4` | Order-book/Statebook architecture illustration |
+| `docs/media/statebook/progress-clocks-scenarios.svg` | `793a8b1f7aadc85ebb960c9ff224a1c0935e73d64d11aefa7fe3b292437a7694` | AI, physical, market, and governance scenario clocks |
+| `docs/media/statebook/settlement-delay-meme.svg` | `1089f628e11d6166d3a5411c6356e7963b79dc8b570f3db8318a443b2f81ac4a` | Delay/airlock architecture illustration |
 | `docs/media/statebook/seven-completeness-tests.svg` | `3d09ec33a388815bd301a4855a8da2889b27788b0d8aebb3d4a3200c19c16bef` | Seven independent completeness verdicts |
-| `docs/media/statebook/source-terms-to-residual.svg` | `9b499cc5b3fe7ac21d63a857cfe9c61404cd9018188c215ad1a6312ce5169d19` | Material terms, StateKeys, residuals, and perpetual path dependence |
-| `docs/media/statebook/statebook-layer-map.svg` | `ae9d3d46fcd5059c94d84a4c7679751631013b7e71fce6c1ab4a9e9cec2f9525` | Statebook layer and authority map |
-| `docs/media/statebook/three-finality-clocks.svg` | `3143b02491718a4a94678945a31c3d6c330e765c63f107423f10d29f60efb4dd` | Execution, economic, and externalization finality |
+| `docs/media/statebook/source-terms-to-residual.svg` | `5778c1e2f1f756153d3d32c43d911b14fa2b5dccb6c909f5df5df956f90cc713` | Material terms, StateKeys, residuals, and perpetual path dependence |
+| `docs/media/statebook/statebook-layer-map.svg` | `18ee2f8f32d9382c16265ef474ba0926faa61916c288d99c759294ea0ebe39f7` | Statebook layer and authority map |
+| `docs/media/statebook/three-finality-clocks.svg` | `517832626393fccb09ee32a22a8589bc9135cbac9d7a36eb62c970a9adfc466d` | Execution, economic, and externalization finality |
 | `.gitattributes` | `56d05e88e353827a8c63eaeef0171d1692362fb3af4529017cb52c3f16066e63` | PDF-only binary classification for the two generated Statebook publications |
-| `output/pdf/statebook-whitepaper.pdf` | `ccab3a725ce0bf80546ee447ab4125e47bcae51f7294e86952bcf40e86ee943a` | 63 pages, 2,683,047 bytes |
-| `output/pdf/statebook-product-requirements.pdf` | `18cc65429d09643d50c9792aff29d06ed69605bd4c2bc486fe40540a6e2e0856` | 23 pages, 569,260 bytes |
+| `output/pdf/statebook-whitepaper.pdf` | `a0c8650718a26ae0d8f205bd55f353a212ff46e169a5b8f37c158e93ccf6d17e` | 72 pages, 3,998,383 bytes |
+| `output/pdf/statebook-product-requirements.pdf` | `bd216fb458a827acf469634f686f010517a9ee8afd6133095298b6f7ff5a2408` | 24 pages, 808,724 bytes |
 
 Publication mirrors in the committed package:
 
@@ -11134,14 +11135,22 @@ Media and PDF verification:
   than financial, security, incident, or settlement evidence;
 - `pdfinfo` reports coherent titles, Letter page size, no encryption, no form,
   and no JavaScript for both PDFs;
-- `pypdf` and `pdfplumber` extracted non-empty text from all 86 pages, with zero
-  replacement characters;
-- all 86 pages were rasterized and visually inspected. No clipping, overlap,
-  missing glyph, broken table, missing image, unreadable figure, or blank content
-  page was found;
+- `pypdf` and `pdfplumber` extracted non-empty text from all 96 pages, with zero
+  replacement characters and no text outside a PDF page boundary;
+- all 96 pages were rasterized at publication review scale. Contact-sheet review
+  covered every page; full-scale review covered every figure-bearing page. No
+  clipping, overlap, missing glyph, broken table, missing image, unreadable
+  figure, orphaned figure caption, or blank content page was found;
 - the final whitepaper PDF contains the complete source index as Appendix A;
 - temporary renderer, raster, and contact-sheet intermediates were removed;
   exactly the two declared publication PDFs remain under `output/pdf/`.
+
+Final layout-correction checks: `xmllint --noout` passed for all thirteen SVGs;
+the recorded artifact hashes match the generated files; `git diff --check`,
+`cargo fmt --all -- --check`, `cargo test -p zkbench-core --test repo_hygiene
+--quiet`, and `cargo test -p zkbench-core --test repo_claim_boundary_docs
+--quiet` passed. No root `package.json` or `pnpm-lock.yaml` exists, so no root
+pnpm gate applies.
 
 Repository validation results:
 
