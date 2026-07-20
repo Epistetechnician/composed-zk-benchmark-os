@@ -1,35 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
-  <title id="title">Order book versus Statebook teaching meme</title>
-  <desc id="desc">The left panel shows an order book matching one contract. The right panel shows a Statebook asking whether differently labeled contracts describe the same state, can execute, receive margin recognition, and settle.</desc>
-  <style>.big{font:700 58px Georgia,serif;fill:#17283b}.head{font:700 28px 'Courier New',monospace;fill:#17283b}.body{font:25px Georgia,serif;fill:#263746}.mono{font:18px 'Courier New',monospace;fill:#5f6b73}.left{fill:#edf3f0;stroke:#3d776f;stroke-width:3}.right{fill:#f6edcf;stroke:#b78619;stroke-width:3}.line{stroke:#1e3a5f;stroke-width:3}.pill{fill:#fffdf8;stroke:#1e3a5f;stroke-width:2}</style>
-  <rect width="1600" height="900" fill="#faf7ef"/>
-  <text x="80" y="85" class="big">The order book was built for one contract.</text>
-  <text x="80" y="130" class="mono">The Statebook starts when several contracts describe pieces of the same world.</text>
-  <rect x="70" y="180" width="690" height="620" rx="20" class="left"/>
-  <rect x="840" y="180" width="690" height="620" rx="20" class="right"/>
-  <text x="115" y="235" class="head">ORDER BOOK</text><text x="885" y="235" class="head">STATEBOOK</text>
-  <g transform="translate(130 295)">
-    <text x="0" y="0" class="body">One identified contract</text>
-    <rect x="0" y="45" width="560" height="72" rx="10" class="pill"/><text x="26" y="88" class="mono">BUY  101.20  ·  24 units</text>
-    <rect x="0" y="132" width="560" height="72" rx="10" class="pill"/><text x="26" y="175" class="mono">SELL 101.30  ·  19 units</text>
-    <line x1="280" y1="222" x2="280" y2="340" class="line"/>
-    <path d="M250 315L280 345L310 315" fill="none" class="line"/>
-    <text x="85" y="390" class="big" style="font-size:42px">“I match orders.”</text>
-    <text x="58" y="438" class="mono">Correct question. Local scope.</text>
-  </g>
-  <g transform="translate(900 285)">
-    <rect x="0" y="0" width="185" height="64" rx="32" class="pill"/><text x="22" y="39" class="mono">event claim</text>
-    <rect x="205" y="0" width="155" height="64" rx="32" class="pill"/><text x="231" y="39" class="mono">call spread</text>
-    <rect x="380" y="0" width="175" height="64" rx="32" class="pill"/><text x="405" y="39" class="mono">perpetual</text>
-    <text x="0" y="115" class="body">Do they observe the same state?</text>
-    <text x="0" y="164" class="body">Does the payoff really span?</text>
-    <text x="0" y="213" class="body">Can every leg fill?</text>
-    <text x="0" y="262" class="body">Who recognizes the offset?</text>
-    <text x="0" y="311" class="body">What becomes legally final?</text>
-    <text x="0" y="360" class="body">Can every release path recover?</text>
-    <rect x="0" y="405" width="555" height="105" rx="12" fill="#f8e8e5" stroke="#9b3a37" stroke-width="2"/>
-    <text x="25" y="450" class="big" style="font-size:36px">“Related” is not “complete.”</text>
-    <text x="25" y="486" class="mono">Residuals stay visible.</text>
-  </g>
-  <text x="80" y="858" class="mono">Original Statebook teaching artifact · illustration, not evidence · 15 July 2026</text>
+  <title id="title">Order book and Statebook comparison</title>
+  <desc id="desc">An order book matches orders for one identified contract. A Statebook asks whether multiple contracts describe compatible states, can be executed as a portfolio, and receive recognized treatment.</desc>
+  <defs><style>.ink{fill:#162b45}.muted{fill:#667789}.h{font:700 56px Georgia,serif}.t{font:700 29px Georgia,serif}.b{font:27px Georgia,serif}.k{font:700 22px ui-monospace,Consolas,monospace;letter-spacing:1.5px}.x{font:23px ui-monospace,Consolas,monospace}.navy{fill:#fffdfa;stroke:#173a63;stroke-width:3}.teal{fill:#edf7f4;stroke:#19766f;stroke-width:3}.gold{fill:#fff3cf;stroke:#c38508;stroke-width:3}.red{fill:#fbe9e7;stroke:#b3423c;stroke-width:3}</style><marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#173a63"/></marker></defs>
+  <rect width="1600" height="900" fill="#fbf8f1"/>
+  <text x="70" y="72" class="k ink">FIG 01 / CONCEPTUAL COMPARISON</text>
+  <text x="70" y="136" class="h ink">The order book was built for one contract.</text>
+  <text x="70" y="178" class="b muted">The Statebook starts when several contracts describe pieces of the same world.</text>
+  <rect x="90" y="264" width="580" height="480" rx="22" class="teal"/>
+  <text x="132" y="316" class="k ink">ORDER BOOK</text><text x="132" y="366" class="t ink">One identified contract</text>
+  <rect x="132" y="416" width="496" height="66" rx="12" class="navy"/><text x="160" y="458" class="x muted">BUY 101.20 · 24 units</text>
+  <rect x="132" y="506" width="496" height="66" rx="12" class="navy"/><text x="160" y="548" class="x muted">SELL 101.30 · 19 units</text>
+  <path d="M380 602V664" fill="none" stroke="#173a63" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="224" y="712" class="h ink" style="font-size:38px">“I match orders.”</text>
+  <text x="180" y="736" class="x muted">Correct question. Local scope.</text>
+  <rect x="930" y="264" width="580" height="480" rx="22" class="gold"/>
+  <text x="972" y="316" class="k ink">STATEBOOK</text><text x="972" y="366" class="t ink">Several related exposures</text>
+  <rect x="972" y="404" width="150" height="46" rx="23" class="navy"/><text x="1000" y="435" class="x muted">event</text>
+  <rect x="1140" y="404" width="150" height="46" rx="23" class="navy"/><text x="1168" y="435" class="x muted">spread</text>
+  <rect x="1308" y="404" width="160" height="46" rx="23" class="navy"/><text x="1334" y="435" class="x muted">perpetual</text>
+  <text x="972" y="506" class="b ink">Do they observe the same state?</text><text x="972" y="550" class="b ink">Does the payoff really span?</text><text x="972" y="594" class="b ink">Can every leg fill?</text><text x="972" y="638" class="b ink">Who recognizes the offset?</text>
+  <rect x="972" y="670" width="496" height="52" rx="12" class="red"/><text x="1000" y="704" class="t ink">“Related” is not “complete.”</text>
+  <rect x="70" y="804" width="1460" height="42" rx="12" class="red"/>
+  <text x="98" y="833" class="k ink">COMPARISON ILLUSTRATION / NOT EVIDENCE OF EXECUTION, CAPITAL RECOGNITION, OR LEGAL FINALITY</text>
 </svg>

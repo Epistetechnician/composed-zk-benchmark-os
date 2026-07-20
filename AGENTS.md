@@ -2112,6 +2112,19 @@ it creates no accepted Evidence Ledger mutation, benchmark result, Level2+
 evidence, empirical calibration, legal conclusion, final incident attribution,
 production-readiness, SOTA, proof, semantic-correctness, or full-security claim.
 
+Explicit Statebook publication visual refresh now allowed and completed under
+the named documentation-only state slice `statebook-publication-visual-refresh-v1`.
+It is limited to the thirteen original explanatory SVGs and manifest under
+`docs/media/statebook/`, their adjacent whitepaper and PRD figure references and
+captions, the two rendered non-benchmark PDFs under `output/pdf/`, the two
+corresponding binary declarations in `.gitattributes`, and the existing
+navigation and validation mirrors. It improves print legibility and theory
+coverage for payoff normalization, completeness, finality, controlled
+externalization, capital/legal separation, scenarios, and authority boundaries.
+It creates no runtime, network, venue, oracle, order, margin, custody, signing,
+pause, transfer, settlement, evidence, benchmark, security, incident, legal,
+production, proof, semantic-correctness, or authority claim.
+
 Explicit Statebook P1 core semantic-fixtures docs-first boundary now allowed
 and completed in
 `docs/statebook-p1-core-semantic-fixtures-boundary-spec.md` plus the four

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="capital-title capital-desc">
+  <title id="capital-title">Economic offset, recognized capital, and legal finality are distinct</title>
+  <desc id="capital-desc">A three-layer model separates economic payoff offset, a named authority's recognized margin model, and enforceable netting and finality. Each layer has additional conditions and cannot be inferred from the layer below.</desc>
+  <defs>
+    <style>
+      .i{fill:#162b45}.m{fill:#667789}.h{font:700 56px Georgia,serif}.k{font:700 23px ui-monospace,Consolas,monospace;letter-spacing:2px}.t{font:700 32px Georgia,serif}.b{font:28px Georgia,serif}.x{font:23px ui-monospace,Consolas,monospace}.n{fill:#fffdfa;stroke:#173a63;stroke-width:3}.a{fill:#fff3cf;stroke:#c38508;stroke-width:3}.r{fill:#fbe9e7;stroke:#b3423c;stroke-width:3}
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="#fbf8f1"/>
+  <text x="70" y="72" class="k i">FIG 10 / CAPITAL AND LEGAL COHERENCE</text>
+  <text x="70" y="136" class="h i">Offset is not recognition. Recognition is not finality.</text>
+  <text x="70" y="178" class="b m">The three layers are separately governed and must each be evidenced in context.</text>
+  <rect x="140" y="250" width="1320" height="130" rx="20" class="n"/>
+  <text x="182" y="302" class="k i">1 / ECONOMIC PAYOFF OFFSET</text>
+  <text x="182" y="346" class="b i">same declared domain · candidate portfolio · explicit residual</text>
+  <text x="1180" y="330" class="t i">mathematical relation</text>
+  <rect x="220" y="425" width="1160" height="154" rx="20" class="a"/>
+  <text x="262" y="478" class="k i">2 / RECOGNIZED CAPITAL RELIEF</text>
+  <text x="262" y="522" class="b i">named authority · account/entity · model/version · haircut · liquidation horizon</text>
+  <text x="262" y="558" class="x m">the authority may deny, cap, or change recognition despite economic offset</text>
+  <rect x="300" y="624" width="1000" height="142" rx="20" class="r"/>
+  <text x="342" y="676" class="k i">3 / ENFORCEABLE NETTING AND FINALITY</text>
+  <text x="342" y="720" class="b i">jurisdiction · close-out netting · customer protection · default process · finality domain</text>
+  <text x="342" y="752" class="x m">technical transfer does not establish legal discharge</text>
+  <rect x="70" y="824" width="1460" height="42" rx="12" class="r"/>
+  <text x="98" y="853" class="k i">A STATEBOOK CAN REPORT THE GAP. IT DOES NOT GRANT MARGIN, CLEARING, OR LEGAL AUTHORITY.</text>
+</svg>

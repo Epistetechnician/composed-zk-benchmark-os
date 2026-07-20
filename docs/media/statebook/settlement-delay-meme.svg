@@ -1,24 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
-  <title id="title">Settlement airlock teaching meme</title>
-  <desc id="desc">A split illustration contrasts delaying everything with keeping valid internal market state fast while placing an evidence-bound airlock before irreversible externalization.</desc>
-  <style>.h{font:700 54px Georgia,serif;fill:#17283b}.head{font:700 27px 'Courier New',monospace;fill:#17283b}.body{font:24px Georgia,serif;fill:#344554}.m{font:17px 'Courier New',monospace;fill:#5f6b73}.bad{fill:#f8e8e5;stroke:#9b3a37;stroke-width:3}.good{fill:#edf3f0;stroke:#3d776f;stroke-width:3}.box{fill:#fffdf8;stroke:#1e3a5f;stroke-width:2}.gate{fill:#f6edcf;stroke:#b78619;stroke-width:3}</style>
-  <rect width="1600" height="900" fill="#faf7ef"/>
-  <text x="70" y="75" class="h">“Just delay settlement” is not a system design.</text>
-  <rect x="70" y="140" width="690" height="650" rx="20" class="bad"/><rect x="840" y="140" width="690" height="650" rx="20" class="good"/>
-  <text x="110" y="198" class="head">THE BLUNT SWITCH</text><text x="880" y="198" class="head">THE SETTLEMENT AIRLOCK</text>
-  <g transform="translate(120 250)">
-    <rect width="560" height="80" rx="12" class="box"/><text x="35" y="49" class="body">Mark, margin, liquidation, loss</text>
-    <rect y="115" width="560" height="80" rx="12" class="box"/><text x="35" y="164" class="body">Atomic linked exchange</text>
-    <rect y="230" width="560" height="80" rx="12" class="box"/><text x="35" y="279" class="body">Unilateral withdrawal</text>
-    <rect y="345" width="560" height="80" rx="12" class="box"/><text x="35" y="394" class="body">Risk-reducing obligation</text>
-    <line x1="280" y1="-20" x2="280" y2="455" stroke="#9b3a37" stroke-width="18"/>
-    <text x="90" y="510" class="h" style="font-size:36px">Everything waits.</text><text x="40" y="548" class="m">Liquidity and solvency risk can rise.</text>
-  </g>
-  <g transform="translate(890 240)">
-    <rect width="260" height="170" rx="16" class="box"/><text x="28" y="45" class="head" style="font-size:20px">FAST INTERNAL</text><text x="28" y="86" class="body">mark</text><text x="28" y="118" class="body">margin</text><text x="28" y="150" class="body">loss recognition</text>
-    <rect x="290" y="0" width="270" height="310" rx="16" class="gate"/><text x="325" y="45" class="head" style="font-size:20px">AIRLOCK</text><text x="325" y="88" class="body">intent binding</text><text x="325" y="123" class="body">oracle &amp; state</text><text x="325" y="158" class="body">solvency</text><text x="325" y="193" class="body">replay</text><text x="325" y="228" class="body">budgets</text><text x="325" y="263" class="body">challenge</text><text x="325" y="296" class="m">Fail / Unknown → zero</text>
-    <rect x="0" y="350" width="560" height="110" rx="16" class="box"/><text x="30" y="394" class="head" style="font-size:20px">FAST WHEN ALL-OR-NONE</text><text x="30" y="430" class="body">Atomic DvP/PvP inside gross caps</text>
-    <text x="40" y="520" class="h" style="font-size:34px">Fast state. Bounded exit.</text><text x="20" y="558" class="m">Delay only buys safety on paths it covers.</text>
-  </g>
-  <text x="70" y="858" class="m">Original Statebook teaching artifact · illustration, not evidence · 15 July 2026</text>
+  <title id="title">The right control depends on the settlement path</title>
+  <desc id="desc">A blunt mandatory delay treats every path alike. A settlement airlock keeps bounded internal and atomic linked paths fast while applying gates to unilateral irreversible externalization.</desc>
+  <defs><style>.ink{fill:#162b45}.muted{fill:#667789}.h{font:700 56px Georgia,serif}.t{font:700 28px Georgia,serif}.b{font:25px Georgia,serif}.k{font:700 22px ui-monospace,Consolas,monospace;letter-spacing:1.5px}.x{font:21px ui-monospace,Consolas,monospace}.navy{fill:#fffdfa;stroke:#173a63;stroke-width:3}.teal{fill:#edf7f4;stroke:#19766f;stroke-width:3}.gold{fill:#fff3cf;stroke:#c38508;stroke-width:3}.red{fill:#fbe9e7;stroke:#b3423c;stroke-width:3}</style></defs>
+  <rect width="1600" height="900" fill="#fbf8f1"/>
+  <text x="70" y="72" class="k ink">FIG 08 / EXTERNALIZATION AIRLOCK</text>
+  <text x="70" y="136" class="h ink">The right control depends on the path.</text>
+  <text x="70" y="178" class="b muted">Delay is not a scalar safety setting. It belongs on unilateral irreversible release.</text>
+  <rect x="70" y="250" width="350" height="430" rx="22" class="red"/>
+  <text x="104" y="300" class="k ink">BLUNT SWITCH</text><text x="104" y="350" class="t ink">Delay every path</text>
+  <text x="104" y="406" class="b ink">Mark and margin wait.</text><text x="104" y="446" class="b ink">Loss recognition waits.</text><text x="104" y="486" class="b ink">Atomic exchange waits.</text><text x="104" y="526" class="b ink">Safe exit waits.</text>
+  <rect x="104" y="570" width="282" height="74" rx="14" class="navy"/><text x="130" y="612" class="t ink">Outcome: slower control</text>
+  <rect x="470" y="250" width="1060" height="430" rx="22" class="teal"/>
+  <text x="505" y="300" class="k ink">SETTLEMENT AIRLOCK</text>
+  <rect x="505" y="338" width="280" height="210" rx="16" class="navy"/><text x="535" y="384" class="t ink">1 / Fast internal</text><text x="535" y="428" class="b ink">mark · margin lock</text><text x="535" y="466" class="b ink">loss recognition</text><text x="535" y="510" class="x muted">inside recovery domain</text>
+  <rect x="835" y="338" width="280" height="210" rx="16" class="navy"/><text x="865" y="384" class="t ink">2 / Linked exchange</text><text x="865" y="428" class="b ink">fast only if every leg</text><text x="865" y="466" class="b ink">settles or none does</text><text x="865" y="510" class="x muted">atomic bounded path</text>
+  <rect x="1165" y="338" width="330" height="210" rx="16" class="gold"/><text x="1195" y="384" class="t ink">3 / Airlock</text><text x="1195" y="428" class="b ink">intent · budget · clock</text><text x="1195" y="466" class="b ink">challenge · recovery</text><text x="1195" y="510" class="x muted">unilateral release gate</text>
+  <rect x="505" y="584" width="990" height="56" rx="12" class="navy"/><text x="534" y="620" class="t ink">Fast state. Fast linked exchange when all-or-none. Bounded exit otherwise.</text>
+  <rect x="70" y="768" width="1460" height="48" rx="12" class="red"/>
+  <text x="98" y="800" class="k ink">NO SCALAR TRUST SCORE / INPUTS ARE NON-SUBSTITUTABLE; DELAY COVERS ONLY THE PATHS IT GATES.</text>
 </svg>

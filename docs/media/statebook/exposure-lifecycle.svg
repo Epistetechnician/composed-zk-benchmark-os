@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Capacity is released by proof, not time</title>
+  <desc id="desc">An exposure moves from request to reservation, submission, observation, and validated finality. Challenge, expiry, and reconciliation are separate non-final states. Time alone never releases capacity.</desc>
+  <defs><style>.ink{fill:#162b45}.muted{fill:#667789}.h{font:700 56px Georgia,serif}.t{font:700 27px Georgia,serif}.b{font:25px Georgia,serif}.k{font:700 22px ui-monospace,Consolas,monospace;letter-spacing:1.5px}.x{font:21px ui-monospace,Consolas,monospace}.navy{fill:#fffdfa;stroke:#173a63;stroke-width:3}.teal{fill:#edf7f4;stroke:#19766f;stroke-width:3}.gold{fill:#fff3cf;stroke:#c38508;stroke-width:3}.red{fill:#fbe9e7;stroke:#b3423c;stroke-width:3}</style><marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#173a63"/></marker></defs>
+  <rect width="1600" height="900" fill="#fbf8f1"/>
+  <text x="70" y="72" class="k ink">FIG 07 / EXACTLY-ONCE EXPOSURE ACCOUNTING</text>
+  <text x="70" y="136" class="h ink">Capacity is released by proof, not time.</text>
+  <text x="70" y="178" class="b muted">Every transition is digest-bound, observable, and reconciled before normal operation resumes.</text>
+  <g>
+    <rect x="70" y="286" width="230" height="120" rx="18" class="navy"/><text x="100" y="332" class="t ink">1 / Request</text><text x="100" y="370" class="x muted">intent · amount · route</text>
+    <rect x="350" y="286" width="230" height="120" rx="18" class="gold"/><text x="380" y="332" class="t ink">2 / Reserve</text><text x="380" y="370" class="x muted">gross outbound cap</text>
+    <rect x="630" y="286" width="230" height="120" rx="18" class="navy"/><text x="660" y="332" class="t ink">3 / Submit</text><text x="660" y="370" class="x muted">exactly-once id</text>
+    <rect x="910" y="286" width="230" height="120" rx="18" class="navy"/><text x="940" y="332" class="t ink">4 / Observe</text><text x="940" y="370" class="x muted">in-flight ledger</text>
+    <rect x="1190" y="286" width="340" height="120" rx="18" class="teal"/><text x="1220" y="332" class="t ink">5 / Finalize or no-outflow</text><text x="1220" y="370" class="x muted">validated capacity release</text>
+  </g>
+  <path d="M300 346H350 M580 346H630 M860 346H910 M1140 346H1190" fill="none" stroke="#173a63" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M1025 406V492 M1025 492H245 M1025 492H720 M1025 492H1325" fill="none" stroke="#173a63" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="70" y="542" width="360" height="126" rx="18" class="red"/><text x="102" y="588" class="t ink">Challenge or freeze</text><text x="102" y="628" class="x muted">blocks new reservation</text>
+  <rect x="540" y="542" width="360" height="126" rx="18" class="gold"/><text x="572" y="588" class="t ink">Expiry or revalidation</text><text x="572" y="628" class="x muted">does not release dispute</text>
+  <rect x="1010" y="542" width="520" height="126" rx="18" class="navy"/><text x="1042" y="588" class="t ink">Reconcile and recover</text><text x="1042" y="628" class="x muted">evidence · liabilities · canary reopen</text>
+  <rect x="70" y="766" width="1460" height="48" rx="12" class="red"/>
+  <text x="98" y="798" class="k ink">INVARIANT / TIMEOUT NEVER RESTORES CAPACITY; ONLY OBSERVED FINALITY OR VALIDATED NO-OUTFLOW DOES.</text>
+</svg>

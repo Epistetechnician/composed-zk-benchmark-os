@@ -921,7 +921,7 @@ Surface DSL
 | [docs/statebook-p3-seven-completeness-reports-boundary-spec.md](docs/statebook-p3-seven-completeness-reports-boundary-spec.md) | Docs-first P3 authorization for a future isolated `statebook-settlement` crate that composes unchanged P1/P2 reports with five hermetic fixture-qualified completeness reports; no aggregate boolean, P4 policy, P5 adapter, or authority. |
 | [docs/797-phase-hsai-native-transcript-source-scan-correction-boundary.md](docs/797-phase-hsai-native-transcript-source-scan-correction-boundary.md) | Docs-first correction boundary for exact Phase 792/794 native-transcript test-only source-scan exceptions; no broader process or network authority. |
 | [docs/798-phase-hsai-native-transcript-source-scan-correction-implementation.md](docs/798-phase-hsai-native-transcript-source-scan-correction-implementation.md) | Implemented exact Phase 792/794 native-transcript test-only scanner exceptions with file, line, function, executable, and near-miss confinement. |
-| [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
+| [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for thirteen original Statebook architecture illustrations; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
 
@@ -930,6 +930,9 @@ Statebook publication status: the named slice
 `DocumentationOnly` at `Level0DesignNote`. The whitepaper, PRD, source index,
 original media, and two publication PDFs create no execution, margin, custody,
 pause, signing, oracle, settlement, evidence-promotion, or production authority.
+The 20 July 2026 visual refresh provides thirteen original, source-captioned
+illustrations and page-by-page reviewed PDF publications; it remains explanatory
+media only and creates no financial, security, incident, or settlement evidence.
 The synchronized PRD is published as
 [GitHub issue #17](https://github.com/Epistetechnician/composed-zk-benchmark-os/issues/17)
 with `ready-for-agent`; that label means the specification is bounded enough for

@@ -17,8 +17,6 @@ a product launch, production evidence, incident attribution, or authority to
 execute trades, recognize margin, hold collateral, pause a venue, sign a
 transaction, or settle value.
 
-![Statebook layer map](media/statebook/statebook-layer-map.svg)
-
 ## Abstract
 
 Financial venues are converging in product surface while remaining fragmented
@@ -130,6 +128,8 @@ The Statebook problem begins where the order book ends:
 - Is the evidence authorizing irreversible release current and independent?
 
 ![From order book to Statebook](media/statebook/orderbook-statebook-meme.svg)
+
+*Figure 1. A local order book matches one identified contract; Statebook keeps semantic, payoff, execution, capital, finality, and recovery gaps visible. Original explanatory architecture illustration; not evidence of implementation, authority, or market fact.*
 
 ## 3. Intellectual lineage
 
@@ -250,6 +250,8 @@ may face public-interest restrictions. Statebook's value is not to erase these
 differences. It is to make them machine-visible.
 
 ![Frontier-risk market map](media/statebook/frontier-risk-market-map.svg)
+
+*Figure 2. Frontier-risk categories can share economic references while retaining distinct benchmarks, books, collateral, and legal domains. Original explanatory architecture illustration; not evidence of implementation, authority, or market fact.*
 
 ### 4.3 The structured-product implication
 
@@ -372,6 +374,10 @@ perpetual as a continuing hedge profile beside terminal claims. Any conversion
 to a terminal exposure requires an explicit close, roll, liquidation, and
 funding model. The remaining path residual stays visible.
 
+![From source terms to StateKey to residual](media/statebook/source-terms-to-residual.svg)
+
+*Figure 3. Normalization binds material terms before a bounded payoff comparison reports target, candidate, and residual; a perpetual remains a separate hedge profile. Original explanatory architecture illustration; not evidence of implementation, authority, or market fact.*
+
 ### 5.6 Seven typed completeness dimensions
 
 The initial three-part distinction — product, execution, and capital
@@ -396,6 +402,8 @@ seven typed dimensions:
    duplication, and the system reopen through bounded canary stages?
 
 ![Seven completeness tests](media/statebook/seven-completeness-tests.svg)
+
+*Figure 4. The seven reports are independent planes, each carrying typed status, evidence references, missing facts, and residuals. Original explanatory architecture illustration; not evidence of implementation, authority, or market fact.*
 
 There is no aggregate `complete = true`. Each dimension returns a typed status,
 evidence references, missing facts, and residuals. The weakest relevant
@@ -475,7 +483,13 @@ less safe. Atomic DvP or PvP should remain available where it truly guarantees
 all legs or none. The highest friction belongs on unilateral irreversible
 externalization whose evidence or consequence is uncertain.
 
+![Three finality clocks](media/statebook/three-finality-clocks.svg)
+
+*Figure 5. Execution finality, economic settlement, and externalization finality move on separate clocks; the last receives the strongest control. Original explanatory architecture illustration; not evidence of implementation, authority, or market fact.*
+
 ![Assurance-adjusted settlement controller](media/statebook/assurance-settlement-controller.svg)
+
+*Figure 6. Evaluation order is lexicographic rather than compensatory: no strong score on one axis can offset a failed hard gate on another. Original explanatory architecture illustration; not evidence of implementation, authority, or market fact.*
 
 ### 7.3 Why there is no trust score
 
@@ -738,9 +752,15 @@ based safe exits, insolvency priority, adjudication authority, and pending-
 obligation treatment are declared by policy. There is no direct
 `Halted -> Normal` transition.
 
+![Exactly-once exposure lifecycle](media/statebook/exposure-lifecycle.svg)
+
+*Figure 7. Capacity remains reserved or in flight until observed finality or a validated no-outflow proof; time alone cannot restore it. Original explanatory architecture illustration; not evidence of implementation, authority, or market fact.*
+
 ### 7.9 Control tradeoff
 
 ![Settlement-delay meme](media/statebook/settlement-delay-meme.svg)
+
+*Figure 8. Fast internal risk updates, all-or-none linked exchange, and gated unilateral externalization are different paths with different controls. Original explanatory architecture illustration; not evidence of implementation, authority, or market fact.*
 
 A delay buys a detection and intervention option. It also creates liquidity,
 censorship, custody, governance, and false-positive costs. The objective is not
@@ -862,6 +882,8 @@ The design assumes possible:
 
 ![Correlated dependency roots](media/statebook/correlated-roots-meme.svg)
 
+*Figure 9. Reported provider count is not a measure of independent control roots. Original explanatory architecture illustration; not evidence of implementation, authority, or market fact.*
+
 ### 9.4 What delays do not solve
 
 Delay does not repair a false oracle, replace solvency, validate legal rights,
@@ -893,6 +915,10 @@ Capital completeness must name:
 
 A Statebook may calculate an economic residual. It cannot award margin relief
 unless the governing authority adopts it.
+
+![Capital and legal coherence](media/statebook/capital-legal-coherence.svg)
+
+*Figure 10. Economic payoff offset, recognized capital relief, and enforceable netting/finality are separately governed layers. Original explanatory architecture illustration; not evidence of implementation, authority, or market fact.*
 
 ### 10.2 Technical and legal finality
 
@@ -994,6 +1020,10 @@ software speed removes physical or legal latency.
 
 These are scenarios, not forecasts.
 
+![Mismatched progress clocks and scenarios](media/statebook/progress-clocks-scenarios.svg)
+
+*Figure 11. AI capability, physical infrastructure, market structure, and law advance at different speeds; this is a scenario envelope, not a forecast. Original explanatory architecture illustration; not evidence of implementation, authority, or market fact.*
+
 #### 2026-2028: normalization before unification
 
 Likely developments:
@@ -1067,6 +1097,10 @@ The proposed product has six layers:
    reopening.
 6. **Authority layer:** separately governed execution, clearing, custody, pause,
    signing, and settlement systems. This layer is outside the first product.
+
+![Statebook layer map](media/statebook/statebook-layer-map.svg)
+
+*Figure 12. Federated source terms converge into a semantic core and fan out to economic, execution, and assurance/release graphs; authority stays separately governed. Original explanatory architecture illustration; not evidence of implementation, authority, or market fact.*
 
 ### 12.2 Proposed modules
 
@@ -1207,6 +1241,10 @@ data without trading. Validate source identity, version, schema, and provenance.
 Execution, custody, clearing, pause, signing, margin, or settlement requires a
 new threat model, legal review, operational evidence, loss limits, and authority
 boundary. It is not implied by completing prior phases.
+
+![Implementation boundary roadmap](media/statebook/implementation-boundary-roadmap.svg)
+
+*Figure 13. Analysis capability progresses through separately bounded phases; no prior phase grants execution, custody, margin, signing, pause, or settlement authority. Original explanatory architecture illustration; not evidence of implementation, authority, or market fact.*
 
 ## 15. Evaluation and falsification
 

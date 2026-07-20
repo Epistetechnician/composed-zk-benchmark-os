@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Declared source terms become a typed payoff claim and residual</title>
+  <desc id="desc">An event claim and call spread are normalized through declared material terms before a StateKey, bounded candidate payoff, and residual are reported. A perpetual hedge remains a separate continuing exposure.</desc>
+  <defs>
+    <style>.ink{fill:#162b45}.muted{fill:#667789}.h{font:700 56px Georgia,serif}.t{font:700 29px Georgia,serif}.b{font:26px Georgia,serif}.k{font:700 22px ui-monospace,Consolas,monospace;letter-spacing:1.6px}.x{font:21px ui-monospace,Consolas,monospace}.navy{fill:#fffdfa;stroke:#173a63;stroke-width:3}.teal{fill:#edf7f4;stroke:#19766f;stroke-width:3}.gold{fill:#fff3cf;stroke:#c38508;stroke-width:3}.red{fill:#fbe9e7;stroke:#b3423c;stroke-width:3}</style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#173a63"/></marker>
+  </defs>
+  <rect width="1600" height="900" fill="#fbf8f1"/>
+  <text x="70" y="72" class="k ink">FIG 03 / BOUNDED PAYOFF ANALYSIS</text>
+  <text x="70" y="136" class="h ink">Same reference is not the same state.</text>
+  <text x="70" y="178" class="b muted">Normalization binds material terms before it compares payoffs.</text>
+  <rect x="70" y="260" width="300" height="160" rx="20" class="navy"/>
+  <text x="102" y="306" class="t ink">Event claim</text><text x="102" y="348" class="x muted">threshold · window · payout</text><text x="102" y="388" class="k ink">STATEKEY / A91F…</text>
+  <rect x="70" y="468" width="300" height="160" rx="20" class="navy"/>
+  <text x="102" y="514" class="t ink">Call spread</text><text x="102" y="556" class="x muted">K1/K2 · expiry · cash settle</text><text x="102" y="596" class="k ink">STATEKEY / C47B…</text>
+  <path d="M370 340H468 M370 548H468" fill="none" stroke="#173a63" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="468" y="314" width="340" height="260" rx="20" class="gold"/>
+  <text x="502" y="362" class="k ink">NORMALIZATION PROFILE</text><text x="502" y="406" class="t ink">Material identity</text>
+  <text x="502" y="452" class="b ink">reference · comparator · time</text><text x="502" y="490" class="b ink">settlement · rounding · correction</text><text x="502" y="528" class="b ink">dispute · default · finality domain</text>
+  <path d="M808 444H920" fill="none" stroke="#173a63" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="920" y="260" width="580" height="238" rx="20" class="teal"/>
+  <text x="956" y="306" class="k ink">DECLARED FINITE DOMAIN</text><text x="956" y="352" class="t ink">Target / candidate / residual</text>
+  <text x="956" y="398" class="x ink">state target     candidate     residual</text><text x="956" y="436" class="x ink">x ≤ K      0            0</text><text x="956" y="470" class="x ink">x ≈ K      1            0.8          +0.2</text>
+  <rect x="920" y="550" width="580" height="112" rx="18" class="red"/>
+  <text x="956" y="594" class="t ink">Perpetual hedge profile stays separate.</text><text x="956" y="632" class="x muted">funding · mark path · collateral · liquidation</text>
+  <rect x="70" y="758" width="1430" height="48" rx="12" class="red"/>
+  <text x="98" y="790" class="k ink">OUTPUT IS A TYPED PAYOFF CLAIM WITH EXPLICIT RESIDUALS / NOT A TRADE OR EQUIVALENCE ASSERTION</text>
+</svg>

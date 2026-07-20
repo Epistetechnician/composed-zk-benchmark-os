@@ -21908,9 +21908,10 @@ Completed:
 - corrected Ostium incident language to distinguish direct event evidence,
   current mutable documentation, pinned code observations, preliminary
   hypotheses, unknown final root cause, and uncovered payout paths;
-- created seven original accessible SVG architecture and teaching assets with no
+- print-refreshed thirteen original accessible SVG architecture illustrations with no
   copied meme template, third-party logo, or victim imagery;
-- rendered and visually inspected two non-benchmark publication PDFs;
+- rendered and visually inspected two non-benchmark publication PDFs across 63
+  whitepaper pages and 23 PRD pages;
 - published the PRD to the configured GitHub issue tracker with
   `ready-for-agent` as
   [issue #17](https://github.com/Epistetechnician/composed-zk-benchmark-os/issues/17),
@@ -21922,9 +21923,10 @@ Declared repository surface:
 - `docs/statebook-whitepaper.md`;
 - `docs/statebook-product-requirements.md`;
 - `docs/statebook-literature-source-index.md`;
-- `docs/media/statebook/README.md` and seven SVG assets;
+- `docs/media/statebook/README.md` and thirteen SVG assets;
 - `output/pdf/statebook-whitepaper.pdf`;
 - `output/pdf/statebook-product-requirements.pdf`;
+- the two corresponding PDF-only entries in `.gitattributes`;
 - the pre-existing Statebook boundary and four standard navigation mirrors.
 
 Validation gate: Markdown structure and cross-reference scans; source-link
