@@ -11588,3 +11588,22 @@ Level2+ evidence, proof, semantic correctness, production readiness, SOTA,
 independent audit, or full security. No P4/P5, HSAI, admission, zkbench,
 network, process, filesystem output, credential, runtime-action, or external
 authority surface is added.
+
+## Phase 796-A3L5I HSAI P01B A3L6 Current Contract And Rejection-Retention Boundary
+
+Outcome: documentation-only correction at execution state `NotRun` for named
+state slice `phase-796a3l5i-p01b-a3l6-current-contract-and-rejection-retention-boundary`.
+
+The immutable A3L6 audit was stale relative to the current clean committed
+five-file source state. The correction replaces its superseded 21/64/2 MiB/
+200/201/270 numbers with the source-derived 22 materialized paths, 32 evidence
+plus 33 execution focused tests, 172 Seatbelt-stubbed discovery-census tests,
+4 MiB A3L6 source/bundle cap, 201 candidate payloads, 202 file reopens, and
+271 publication events. It expressly distinguishes a passing local gate run
+from A3L6 acceptance: a future runner must retain both rejected and
+pending-review outcomes outside the repository, cross-bind an audited expected
+bindings document, disclose stubbed discovery semantics, and await two genuine
+independent reviews. No Docker, registry, network, container, external replay,
+accepted Evidence Ledger mutation, score-axis population, Level2+ evidence,
+proof, production-readiness, semantic-correctness, or authority result was
+created. A3L6 remains unaccepted and A3L7/A3L8 remain prohibited.
