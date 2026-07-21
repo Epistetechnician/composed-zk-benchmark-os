@@ -11649,3 +11649,25 @@ operation, Docker, registry, network, external replay, independent review,
 accepted Evidence Ledger mutation, score movement, Level2+ evidence, benchmark
 submission, production operation, or claim escalation. See
 `docs/796a3l6s-phase-hsai-p01b-gate-sandbox-test-root-correction.md`.
+
+## Phase 796-A3L6A2 HSAI P01B Corrected Immutable-Gate Audit
+
+Outcome: corrected immutable audit baseline for named state slice
+`phase-796a3l6a2-p01b-corrected-immutable-gate-audit`.
+
+The audit binds the clean corrected implementation identity, five reviewed blob
+digests, exact 22-path source census, 32 evidence plus 33 execution focused
+tests, 172 Seatbelt-stubbed discovery census, 1 MiB/4 MiB caps, and 201/202/271
+candidate/publication counts. The dirty primary checkout, its A3L7-adjacent
+P01B work, and unrelated admission/docs work are excluded.
+
+The audit commit is introduced only after this document is committed, through
+a canonical expected-bindings JSON and a clean detached checkout. The next
+required retained result is `pending-review`; it cannot accept A3L6 or
+authorize A3L7. The validators cannot prove reviewer identity or independence.
+
+No A3L6 acceptance, runtime operation, Docker, registry, network, external
+replay, independent review, accepted Evidence Ledger mutation, score movement,
+Level2+ evidence, benchmark submission, production operation, or claim
+escalation was created. Two genuine human reviews remain a distinct dependency.
+See `docs/796a3l6a2-phase-hsai-p01b-corrected-immutable-gate-audit.md`.
