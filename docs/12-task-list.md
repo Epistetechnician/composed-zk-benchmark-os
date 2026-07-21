@@ -20778,6 +20778,29 @@ external replay, accepted Evidence Ledger mutation, score movement, Level2+
 evidence, benchmark evidence, production operation, or submission authority is
 created here.
 
+## Phase 796-A3L6S HSAI P01B Gate-Sandbox Test-Root Correction
+
+Status: complete local test-root correction; A3L6 remains unaccepted,
+`a3l7_authorized=false`, and correspondence remains `2/10`.
+
+Named state slice:
+`phase-796a3l6s-p01b-gate-sandbox-test-root-correction`.
+
+Completed: corrected one execution-focused test so its test-owned temporary
+root uses the existing gate scratch under the nested A3L6 Seatbelt profile,
+while preserving its `/private/tmp` fixture placement outside that gate. This
+addresses the retained rejected diagnosis without widening the profile or
+changing runtime behavior. See
+`docs/796a3l6s-phase-hsai-p01b-gate-sandbox-test-root-correction.md`.
+
+Remaining: create a fresh immutable audit and detached retained gate run for
+this new implementation identity. Only a retained `pending-review` result and
+two genuine independent human reviews may be considered by a separately
+authorized A3L7 phase. No Docker, registry, network, container, external
+replay, accepted Evidence Ledger mutation, score movement, Level2+ evidence,
+benchmark submission, production operation, or submission authority is
+created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
