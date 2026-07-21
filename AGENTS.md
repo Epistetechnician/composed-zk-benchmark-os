@@ -2102,8 +2102,10 @@ allowed and implemented under
 standard navigation mirrors. This narrow state slice corrects only the
 execution-focused test fixture root: when the existing A3L6 nested Seatbelt
 marker is active, the test uses the already permitted `TMPDIR` scratch root;
-outside that gate, its host-only `/private/tmp` fixture location is preserved.
-It does not widen Seatbelt, change the runner, accept A3L6, authorize
+outside that gate, its host-only `/private/tmp` fixture location and A3L9
+absolute-traversal cases are preserved. The gate-marked path retains its CLI
+and malformed-argv boundary checks but omits only those host-only traversal
+cases. It does not widen Seatbelt, change the runner, accept A3L6, authorize
 A3L7/A3L8/A3L9, invoke Docker, registry, network, container, backend, or
 external replay, mutate an Evidence Ledger, move a score, create Level2+
 evidence, create benchmark-submission or production authority, or support

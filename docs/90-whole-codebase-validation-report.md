@@ -11641,7 +11641,9 @@ unconditionally requested a `/private/tmp` temporary root inside the nested
 Seatbelt profile. The profile correctly denies that write; it permits the
 gate-provided `TMPDIR` scratch root. The test now selects that existing scratch
 only when the existing gate marker is present and preserves the host-only
-`/private/tmp` fixture location otherwise. The runner and profile are unchanged.
+`/private/tmp` fixture location and A3L9 absolute-traversal cases otherwise.
+The nested-gate path retains CLI and malformed-argv checks but omits only those
+host-only traversal cases. The runner and profile are unchanged.
 
 The rejection is diagnostic only. The correction requires a new implementation
 audit and detached run. It accepts neither A3L6 nor A3L7 and creates no runtime
