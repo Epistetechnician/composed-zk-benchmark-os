@@ -2095,6 +2095,26 @@ score, create Level2+ evidence, or support proof, production-readiness, SOTA,
 breakthrough, full-security, or external-audit claims. A pending-review record
 is local regression evidence only.
 
+Explicit Phase 796-A3L6A HSAI P01B current immutable-gate audit is now allowed
+and completed as audit documentation under
+`docs/796a3l6a-phase-hsai-p01b-current-immutable-gate-audit.md` plus standard
+navigation mirrors. This named state slice freezes clean implementation commit
+`07ec1e0a916ebbed5c3ab0bc14fb9c0b33663662`, its five reviewed blobs, the exact
+22-path census, 32+33 focused tests, 172 Seatbelt-stubbed discovery census,
+caps, and 201/202/271 cardinalities. It excludes the dirty primary checkout,
+including A3L7-adjacent P01B changes, and requires a post-commit canonical
+expected-bindings JSON, a clean detached audit checkout, and an atomically
+retained `pending-review` or `rejected` local result at a caller-owned
+mode-0700 non-repository output root. It cannot prove reviewer identity or
+independence; two genuine human reviews of the exact immutable audit and
+pending-review run remain required in security-capability then
+correspondence-reproducibility order. This audit does not accept A3L6,
+authorize A3L7/A3L8/A3L9, invoke Docker, registry, network, container,
+backend, or external replay, mutate an Evidence Ledger, move a score, create
+Level2+ evidence, create benchmark-submission or production authority, or
+support proof, production-readiness, SOTA, breakthrough, full-security, or
+external-audit claims.
+
 Explicit Statebook terminal-payoff and assurance-adjusted settlement boundary
 now allowed and completed as documentation only in
 `docs/integrations/statebook_terminal_payoff_and_trust_settlement.md` plus the

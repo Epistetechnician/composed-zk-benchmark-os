@@ -11630,3 +11630,30 @@ runtime operation, external benchmark submission, evidence promotion,
 production-readiness result, or claim escalation. A3L7/A3L8 remain prohibited.
 See
 `docs/796a3l6r-phase-hsai-p01b-immutable-gate-rebase-retention-implementation-notes.md`.
+
+## Phase 796-A3L6A HSAI P01B Current Immutable-Gate Audit
+
+Outcome: immutable audit baseline for named state slice
+`phase-796a3l6a-p01b-current-immutable-gate-audit`.
+
+The audit fixes the clean A3L6R implementation identity, five reviewed blob
+digests, the exact 22-path census, 32 evidence plus 33 execution focused tests,
+172 Seatbelt-stubbed discovery-census tests, the ordinary 1 MiB and gate 4 MiB
+caps, and 201 candidate payloads, 202 files, and 271 publication events. It
+deliberately excludes the dirty primary checkout because its active P01B edits
+are A3L7-adjacent readiness work, while unrelated admission and `docs/agents/`
+work remains separately owned.
+
+The audit commit is bound only after this document is committed, through a
+canonical expected-bindings JSON and a clean detached checkout. The retained
+runner can return only `pending-review` or `rejected`; both fix A3L6 acceptance
+and A3L7 authority to false. JSON validators establish only schema and digest
+correspondence. They cannot establish reviewer identity or independence.
+
+No A3L6 acceptance, independent review, runtime operation, Docker, registry,
+network, external replay, accepted Evidence Ledger mutation, score movement,
+Level2+ evidence, benchmark submission, production operation, or claim
+escalation was created. The next dependency is a retained `pending-review` run
+and two genuine human reviews in security-capability then
+correspondence-reproducibility order; A3L7 remains separately authorized.
+See `docs/796a3l6a-phase-hsai-p01b-current-immutable-gate-audit.md`.
