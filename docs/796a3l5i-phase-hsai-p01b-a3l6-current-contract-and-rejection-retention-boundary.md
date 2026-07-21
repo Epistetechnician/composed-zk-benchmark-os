@@ -112,7 +112,7 @@ a3l6-gate/
   gate-run.sha256
 ```
 
-`gate-run.json` must include the accepted or rejected classification, complete
+`gate-run.json` must include the pending-review or rejected classification, complete
 bounded per-command observations, command role, exit code or signal, truncation
 facts, retained stream digests, source/audit bindings, and the reason when a
 capture or gate step fails. It may retain only the already bounded stream bytes;
@@ -144,7 +144,7 @@ state, registry/network access, container execution, external replay,
 credentials, score axes, evidence level, or A3L7/A3L8/A3L9 authority.
 
 Its exit criteria are exact source and expected-bindings validation, retained
-accepted-or-rejected output, error-path regression coverage, unchanged-status
+pending-review-or-rejected output, error-path regression coverage, unchanged-status
 enforcement, and an honest statement of the Seatbelt-stubbed discovery limit.
 It does not accept A3L6. A separate immutable audit and two genuine reviews
 remain mandatory afterward.

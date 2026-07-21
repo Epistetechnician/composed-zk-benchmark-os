@@ -37,6 +37,8 @@ SCHEMAS = {
     "review": "hsai-p01b-container-review-v1",
     "review_aggregate": "hsai-p01b-container-review-aggregate-v1",
     "acceptance": "hsai-p01b-container-acceptance-v1",
+    "a3l6_audit_bindings": "hsai-p01b-a3l6-audit-bindings-v1",
+    "a3l6_gate_run_record": "hsai-p01b-a3l6-gate-run-record-v1",
 }
 
 DOMAINS = {
@@ -6502,6 +6504,79 @@ GATE_CAPTURE_FIELDS = tuple(name for name in GATE_OBSERVATION_FIELDS if name not
 GATE_SOURCE_ROW_FIELDS = ("path", "git_object_expression", "git_blob_oid", "bytes", "sha256", "pre_gate_started_monotonic_ns", "pre_gate_ended_monotonic_ns", "pre_gate_descriptor_observation", "post_gate_started_monotonic_ns", "post_gate_ended_monotonic_ns", "post_gate_descriptor_observation")
 GATE_INVENTORY_FIELDS = ("path", "type", "mode", "device", "inode", "uid", "gid", "link_count", "bytes", "sha256")
 REVIEWED_PATHS = tuple("tools/hsai-formal-preflight/" + name for name in ("p01b_container_probe.py", "p01b_container_evidence.py", "p01b_container_execution.py", "p01b_container_evidence_tests.py", "p01b_container_execution_tests.py"))
+A3L6_AUDIT_BINDING_FIELDS = (
+    "schema",
+    "implementation_commit",
+    "implementation_tree",
+    "audit_commit",
+    "ordered_source_paths",
+    "ordered_reviewed_file_sha256",
+    "focused_evidence_test_count",
+    "focused_execution_test_count",
+    "focused_test_count",
+    "discovery_test_count",
+    "ordinary_json_cap_bytes",
+    "a3l6_gate_json_cap_bytes",
+    "candidate_payload_count",
+    "candidate_file_count",
+    "publication_event_count",
+)
+A3L6_GATE_RUN_COMPLETED_FIELDS = (
+    "gate_plan",
+    "gate_source_manifest",
+    "python_version_observation",
+    "ordered_gate_observations",
+    "focused_test_ids",
+    "focused_test_count",
+    "discovery_test_count",
+)
+A3L6_GATE_RUN_FAILURE_FIELDS = ("stage", "role", "reason")
+A3L6_GATE_FAILURE_OBSERVATION_FIELDS = (
+    "role",
+    "argv",
+    "environment",
+    "cwd",
+    "stdin_policy",
+    "executable_path",
+    "executable_sha256",
+    "timeout_ns",
+    "stdout_cap_bytes",
+    "stderr_cap_bytes",
+    "started_monotonic_ns",
+    "ended_monotonic_ns",
+    "outcome",
+    "exit_code",
+    "signal",
+    "stdout_total_bytes",
+    "stdout_retained_bytes",
+    "stdout_truncated",
+    "stdout_base64",
+    "stdout_sha256",
+    "stdout_observed_sha256",
+    "stderr_total_bytes",
+    "stderr_retained_bytes",
+    "stderr_truncated",
+    "stderr_base64",
+    "stderr_sha256",
+    "stderr_observed_sha256",
+)
+A3L6_GATE_RUN_RECORD_FIELDS = (
+    "schema",
+    "result",
+    "implementation_commit",
+    "implementation_tree",
+    "audit_commit",
+    "expected_bindings",
+    "expected_bindings_valid",
+    "expected_bindings_sha256",
+    "formal_discovery_semantics",
+    "a3l6_accepted",
+    "a3l7_authorized",
+    "evidence_level",
+    "completed_run",
+    "failure",
+    "partial_command_observations",
+)
 
 _GATE_PARENT_RE = re.compile(r"^/private/tmp/hsai-p01b-gate-[0-9a-f]{32}$")
 _GATE_TEST_ID_RE = re.compile(r"^__main__\.[A-Za-z_][A-Za-z0-9_]*\.test_[A-Za-z0-9_]+$")
@@ -6806,6 +6881,327 @@ def validate_a3l6_gate_bundle(value: object, expected_bindings: Optional[Mapping
         _require(bindings["git_path"] == source["git_path"] and bindings["git_sha256"] == source["git_sha256"] and bindings["validator_sha256"] == source_sha[REVIEWED_PATHS[1]] and bindings["collector_sha256"] == source_sha[REVIEWED_PATHS[2]], "gate expected source digest drift")
         _require(bindings["a3l6_gate_bundle_sha256"] == _digest("a3l6_gate_bundle", bundle), "gate bundle expected binding drift")
     return bundle
+
+
+def validate_a3l6_audit_bindings(value: object) -> Mapping[str, object]:
+    """Validate the static pre-run A3L6 cross-binding document."""
+    bindings = _fields(value, A3L6_AUDIT_BINDING_FIELDS, "A3L6 audit bindings")
+    _require(
+        bindings["schema"] == SCHEMAS["a3l6_audit_bindings"],
+        "A3L6 audit binding schema drift",
+    )
+    for name in ("implementation_commit", "implementation_tree", "audit_commit"):
+        _git(bindings[name], "A3L6 audit " + name.replace("_", " "))
+    _require(
+        bindings["ordered_source_paths"] == list(SNAPSHOT_PATHS),
+        "A3L6 audit source path order drift",
+    )
+    reviewed = bindings["ordered_reviewed_file_sha256"]
+    _require(
+        isinstance(reviewed, list) and len(reviewed) == len(REVIEWED_PATHS),
+        "A3L6 audit reviewed-file census drift",
+    )
+    for row, path in zip(reviewed, REVIEWED_PATHS):
+        checked = _fields(row, ("path", "sha256"), "A3L6 audit reviewed file")
+        _require(checked["path"] == path, "A3L6 audit reviewed-file order drift")
+        _sha(checked["sha256"], "A3L6 audit reviewed-file digest")
+    exact = {
+        "focused_evidence_test_count": 32,
+        "focused_execution_test_count": 33,
+        "focused_test_count": 65,
+        "discovery_test_count": 172,
+        "ordinary_json_cap_bytes": MAX_JSON_BYTES,
+        "a3l6_gate_json_cap_bytes": MAX_A3L6_GATE_JSON_BYTES,
+        "candidate_payload_count": 201,
+        "candidate_file_count": 202,
+        "publication_event_count": 271,
+    }
+    _require(
+        all(bindings[name] == expected for name, expected in exact.items()),
+        "A3L6 audit cardinality or cap drift",
+    )
+    return bindings
+
+
+def a3l6_audit_bindings_digest(value: object) -> str:
+    bindings = validate_a3l6_audit_bindings(value)
+    return sha256_hex(canonical_json_bytes(bindings, MAX_A3L6_GATE_JSON_BYTES))
+
+
+def _validate_a3l6_failure_observation(value: object) -> Mapping[str, object]:
+    observation = _fields(
+        value, A3L6_GATE_FAILURE_OBSERVATION_FIELDS, "A3L6 failure observation"
+    )
+    _ascii(observation["role"], "A3L6 failure role")
+    argv = observation["argv"]
+    _require(isinstance(argv, list) and argv, "A3L6 failure argv is absent")
+    _path(argv[0], "A3L6 failure executable", absolute=True)
+    for item in argv[1:]:
+        _ascii(item, "A3L6 failure argv item", allow_empty=True)
+    environment = observation["environment"]
+    _require(
+        isinstance(environment, dict) and environment,
+        "A3L6 failure environment is absent",
+    )
+    for key, item in environment.items():
+        _ascii(key, "A3L6 failure environment key")
+        _ascii(item, "A3L6 failure environment value", allow_empty=True)
+    _path(observation["cwd"], "A3L6 failure cwd", absolute=True)
+    _require(
+        observation["stdin_policy"] == "closed-null",
+        "A3L6 failure stdin policy drift",
+    )
+    _path(
+        observation["executable_path"], "A3L6 failure executable path", absolute=True
+    )
+    _sha(observation["executable_sha256"], "A3L6 failure executable digest")
+    _require(
+        observation["executable_path"] == argv[0],
+        "A3L6 failure executable projection drift",
+    )
+    for name in (
+        "timeout_ns",
+        "stdout_cap_bytes",
+        "stderr_cap_bytes",
+        "started_monotonic_ns",
+        "ended_monotonic_ns",
+        "stdout_total_bytes",
+        "stdout_retained_bytes",
+        "stderr_total_bytes",
+        "stderr_retained_bytes",
+    ):
+        _require(
+            _is_int(observation[name]) and observation[name] >= 0,
+            "invalid A3L6 failure " + name,
+        )
+    _require(
+        observation["timeout_ns"] > 0
+        and observation["stdout_cap_bytes"] > 0
+        and observation["stderr_cap_bytes"] > 0
+        and observation["started_monotonic_ns"] <= observation["ended_monotonic_ns"],
+        "A3L6 failure timing or cap drift",
+    )
+    outcome = observation["outcome"]
+    _require(
+        outcome in {"exit", "signal", "timeout", "stdout_limit", "stderr_limit"},
+        "A3L6 failure outcome drift",
+    )
+    if outcome == "exit":
+        _require(
+            _is_int(observation["exit_code"]) and observation["exit_code"] >= 0,
+            "A3L6 failure exit code drift",
+        )
+        _require(observation["signal"] is None, "A3L6 failure exit signal drift")
+    elif outcome == "signal":
+        _require(
+            observation["exit_code"] is None
+            and _is_int(observation["signal"])
+            and observation["signal"] > 0,
+            "A3L6 failure signal drift",
+        )
+    else:
+        _require(
+            observation["exit_code"] is None and observation["signal"] is None,
+            "A3L6 failure termination projection drift",
+        )
+    for prefix in ("stdout", "stderr"):
+        retained = _decode_b64(
+            observation[prefix + "_base64"], "A3L6 failure " + prefix
+        )
+        _sha(
+            observation[prefix + "_sha256"],
+            "A3L6 failure retained " + prefix + " digest",
+        )
+        _sha(
+            observation[prefix + "_observed_sha256"],
+            "A3L6 failure observed " + prefix + " digest",
+        )
+        _require(
+            observation[prefix + "_retained_bytes"] == len(retained)
+            and observation[prefix + "_total_bytes"] >= len(retained)
+            and observation[prefix + "_sha256"] == sha256_hex(retained)
+            and type(observation[prefix + "_truncated"]) is bool
+            and observation[prefix + "_truncated"]
+            == (observation[prefix + "_total_bytes"] > len(retained)),
+            "A3L6 failure " + prefix + " retention drift",
+        )
+        if not observation[prefix + "_truncated"]:
+            _require(
+                observation[prefix + "_observed_sha256"]
+                == observation[prefix + "_sha256"],
+                "A3L6 failure complete " + prefix + " digest drift",
+            )
+    return observation
+
+
+def _validate_a3l6_completed_run(
+    value: object, bindings: Mapping[str, object]
+) -> Mapping[str, object]:
+    completed = _fields(value, A3L6_GATE_RUN_COMPLETED_FIELDS, "A3L6 completed run")
+    plan = validate_a3l6_gate_plan(completed["gate_plan"])
+    source = validate_a3l6_gate_source(completed["gate_source_manifest"])
+    _require(
+        plan["implementation_commit"]
+        == source["implementation_commit"]
+        == bindings["implementation_commit"]
+        and plan["implementation_tree"]
+        == source["implementation_tree"]
+        == bindings["implementation_tree"]
+        and plan["audit_commit"]
+        == source["audit_commit"]
+        == bindings["audit_commit"],
+        "A3L6 completed-run identity drift",
+    )
+    _require(
+        plan["gate_source_manifest_sha256"] == a3l6_gate_source_digest(source),
+        "A3L6 completed-run source binding drift",
+    )
+    version_observation, version_stdout = _validate_gate_capture(
+        completed["python_version_observation"],
+        "gate-python-version",
+        [plan["python_path"], "--version"],
+        plan["environment"],
+        plan["cwd"],
+        plan["python_path"],
+        plan["python_sha256"],
+        16_384,
+    )
+    _require(
+        version_observation["stderr_cap_bytes"] == 16_384
+        and version_stdout == b"Python 3.9.6\n",
+        "A3L6 completed-run Python transcript drift",
+    )
+    observations = completed["ordered_gate_observations"]
+    _require(
+        isinstance(observations, list) and len(observations) == 3,
+        "A3L6 completed-run gate observation census drift",
+    )
+    checked_observations = [
+        _validate_gate_observation(item, command, plan["gate_source_root_identity"], ids, count)
+        for item, command, ids, count in zip(
+            observations,
+            plan["commands"],
+            (None, None, None),
+            (32, 33, 172),
+        )
+    ]
+    focused_observation_ids = [
+        _gate_test_ids(_validate_gate_stream(observation, "stderr"), count)
+        for observation, count in zip(checked_observations[:2], (32, 33))
+    ]
+    _require(
+        all(ids == sorted(set(ids)) for ids in focused_observation_ids)
+        and set(focused_observation_ids[0]).isdisjoint(focused_observation_ids[1])
+        and sorted(focused_observation_ids[0] + focused_observation_ids[1])
+        == plan["expected_focused_test_ids"],
+        "A3L6 completed-run focused census drift",
+    )
+    for index, observation in enumerate(checked_observations):
+        _require(
+            source["pre_gate_capture_ended_monotonic_ns"]
+            <= observation["started_monotonic_ns"]
+            < observation["ended_monotonic_ns"]
+            <= source["post_gate_capture_started_monotonic_ns"],
+            "A3L6 completed-run gate capture bracket drift",
+        )
+        if index:
+            _require(
+                checked_observations[index - 1]["ended_monotonic_ns"]
+                <= observation["started_monotonic_ns"],
+                "A3L6 completed-run gate observations overlap",
+            )
+    focused_ids = completed["focused_test_ids"]
+    _require(
+        isinstance(focused_ids, list)
+        and focused_ids == plan["expected_focused_test_ids"]
+        and completed["focused_test_count"] == 65
+        and completed["discovery_test_count"] == 172,
+        "A3L6 completed-run test projection drift",
+    )
+    source_sha = {item["path"]: item["sha256"] for item in source["ordered_sources"]}
+    expected_reviewed = [
+        {"path": path, "sha256": source_sha[path]} for path in REVIEWED_PATHS
+    ]
+    _require(
+        bindings["ordered_reviewed_file_sha256"] == expected_reviewed,
+        "A3L6 completed-run reviewed source binding drift",
+    )
+    return completed
+
+
+def validate_a3l6_gate_run_record(value: object) -> Mapping[str, object]:
+    """Validate a retained A3L6 run without granting review or A3L7 authority."""
+    record = _fields(value, A3L6_GATE_RUN_RECORD_FIELDS, "A3L6 gate run record")
+    _require(
+        record["schema"] == SCHEMAS["a3l6_gate_run_record"],
+        "A3L6 gate run-record schema drift",
+    )
+    _sha(record["expected_bindings_sha256"], "A3L6 expected-binding digest")
+    _require(
+        record["formal_discovery_semantics"]
+        == "seatbelt-stubbed-census-not-full-suite-semantics"
+        and record["a3l6_accepted"] is False
+        and record["a3l7_authorized"] is False
+        and record["evidence_level"] == EVIDENCE_LEVEL,
+        "A3L6 gate-run claim boundary drift",
+    )
+    partial = record["partial_command_observations"]
+    _require(isinstance(partial, list), "A3L6 partial observations are not an array")
+    [_validate_a3l6_failure_observation(item) for item in partial]
+    valid = record["expected_bindings_valid"]
+    _require(type(valid) is bool, "A3L6 expected-binding validity is not boolean")
+    if valid:
+        bindings = validate_a3l6_audit_bindings(record["expected_bindings"])
+        _require(
+            record["expected_bindings_sha256"] == a3l6_audit_bindings_digest(bindings)
+            and record["implementation_commit"] == bindings["implementation_commit"]
+            and record["implementation_tree"] == bindings["implementation_tree"]
+            and record["audit_commit"] == bindings["audit_commit"],
+            "A3L6 gate-run expected-binding projection drift",
+        )
+    else:
+        bindings = None
+        _require(
+            record["expected_bindings"] is None
+            and record["implementation_commit"] is None
+            and record["implementation_tree"] is None
+            and record["audit_commit"] is None,
+            "A3L6 invalid-binding projection drift",
+        )
+    result = record["result"]
+    _require(result in {"pending-review", "rejected"}, "A3L6 gate-run result drift")
+    if result == "pending-review":
+        _require(
+            bindings is not None
+            and record["failure"] is None
+            and partial == []
+            and record["completed_run"] is not None,
+            "A3L6 pending-review projection drift",
+        )
+        _validate_a3l6_completed_run(record["completed_run"], bindings)
+    else:
+        failure = _fields(
+            record["failure"], A3L6_GATE_RUN_FAILURE_FIELDS, "A3L6 gate-run failure"
+        )
+        _require(
+            record["completed_run"] is None
+            and failure["stage"] in {"bindings", "capture", "execution", "record"}
+            and (failure["role"] is None or isinstance(failure["role"], str)),
+            "A3L6 rejection projection drift",
+        )
+        if failure["role"] is not None:
+            _ascii(failure["role"], "A3L6 failure role")
+        reason = _ascii(failure["reason"], "A3L6 failure reason")
+        _require(
+            len(reason) <= 512 and "\n" not in reason and "\r" not in reason,
+            "A3L6 failure reason is not bounded",
+        )
+        if bindings is None:
+            _require(
+                failure["stage"] == "bindings" and not partial,
+                "A3L6 invalid binding rejection drift",
+            )
+    return record
 
 
 def a3l6_gate_bundle_digest(value: Mapping[str, object], expected_bindings: Optional[Mapping[str, object]] = None) -> str:

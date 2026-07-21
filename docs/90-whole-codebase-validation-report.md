@@ -11607,3 +11607,26 @@ independent reviews. No Docker, registry, network, container, external replay,
 accepted Evidence Ledger mutation, score-axis population, Level2+ evidence,
 proof, production-readiness, semantic-correctness, or authority result was
 created. A3L6 remains unaccepted and A3L7/A3L8 remain prohibited.
+
+## Phase 796-A3L6R HSAI P01B Immutable-Gate Rebase And Retention Implementation
+
+Outcome: local regression implementation for named state slice
+`phase-796a3l6r-p01b-immutable-gate-rebase-retention-implementation`.
+
+The implementation adds a static current-contract audit-binding validator and
+a local-only `a3l6-gate-v1` entry point. It derives Git identity from canonical
+bindings, runs only the pre-existing Git/Python/Seatbelt gate rows, retains an
+atomically materialized three-file output, and returns only `pending-review` or
+`rejected`. Rejected output keeps compact bounded command facts; pending output
+keeps the existing complete plan/source/Python/gate observations without
+creating review records. Both outcomes fix A3L6 acceptance and A3L7 authority
+to false and disclose the Seatbelt-stubbed discovery census.
+
+Focused validation passed: `p01b_container_evidence_tests.py -v` (32 tests)
+and `p01b_container_execution_tests.py -v` (33 tests), including a hermetic
+fixture run that reached `pending-review` and retained-output readback checks.
+This is not a new immutable audit, accepted A3L6 bundle, independent review,
+runtime operation, external benchmark submission, evidence promotion,
+production-readiness result, or claim escalation. A3L7/A3L8 remain prohibited.
+See
+`docs/796a3l6r-phase-hsai-p01b-immutable-gate-rebase-retention-implementation-notes.md`.

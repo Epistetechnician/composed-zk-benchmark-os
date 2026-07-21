@@ -159,6 +159,53 @@ def expected_bindings() -> dict:
     return value
 
 
+def a3l6_audit_bindings() -> dict:
+    return {
+        "schema": evidence.SCHEMAS["a3l6_audit_bindings"],
+        "implementation_commit": COMMIT,
+        "implementation_tree": TREE,
+        "audit_commit": COMMIT,
+        "ordered_source_paths": list(evidence.SNAPSHOT_PATHS),
+        "ordered_reviewed_file_sha256": [
+            {"path": path, "sha256": SHA} for path in evidence.REVIEWED_PATHS
+        ],
+        "focused_evidence_test_count": 32,
+        "focused_execution_test_count": 33,
+        "focused_test_count": 65,
+        "discovery_test_count": 172,
+        "ordinary_json_cap_bytes": evidence.MAX_JSON_BYTES,
+        "a3l6_gate_json_cap_bytes": evidence.MAX_A3L6_GATE_JSON_BYTES,
+        "candidate_payload_count": 201,
+        "candidate_file_count": 202,
+        "publication_event_count": 271,
+    }
+
+
+def rejected_a3l6_gate_run_record() -> dict:
+    bindings = a3l6_audit_bindings()
+    return {
+        "schema": evidence.SCHEMAS["a3l6_gate_run_record"],
+        "result": "rejected",
+        "implementation_commit": COMMIT,
+        "implementation_tree": TREE,
+        "audit_commit": COMMIT,
+        "expected_bindings": bindings,
+        "expected_bindings_valid": True,
+        "expected_bindings_sha256": evidence.a3l6_audit_bindings_digest(bindings),
+        "formal_discovery_semantics": "seatbelt-stubbed-census-not-full-suite-semantics",
+        "a3l6_accepted": False,
+        "a3l7_authorized": False,
+        "evidence_level": evidence.EVIDENCE_LEVEL,
+        "completed_run": None,
+        "failure": {
+            "stage": "capture",
+            "role": None,
+            "reason": "captured gate command failed",
+        },
+        "partial_command_observations": [],
+    }
+
+
 def candidate() -> tuple:
     bindings = expected_bindings()
     files = {}
@@ -1639,6 +1686,14 @@ class CandidateTests(unittest.TestCase):
         evidence.validate_expected_bindings(expected_bindings())
         value = expected_bindings(); value["candidate_payload_count"] = 200
         with self.assertRaises(evidence.EvidenceError): evidence.validate_expected_bindings(value)
+        audit = a3l6_audit_bindings()
+        evidence.validate_a3l6_audit_bindings(audit)
+        record = rejected_a3l6_gate_run_record()
+        evidence.validate_a3l6_gate_run_record(record)
+        audit["candidate_file_count"] = 201
+        with self.assertRaises(evidence.EvidenceError): evidence.validate_a3l6_audit_bindings(audit)
+        record["a3l7_authorized"] = True
+        with self.assertRaises(evidence.EvidenceError): evidence.validate_a3l6_gate_run_record(record)
 
     def test_18_manifest_exact_201_sorted_paths(self) -> None:
         _, manifest, _ = candidate(); evidence.validate_candidate_manifest(manifest)
