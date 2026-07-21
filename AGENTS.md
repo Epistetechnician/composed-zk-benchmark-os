@@ -2129,6 +2129,20 @@ move a score, create Level2+ evidence, create benchmark-submission or
 production authority, or support proof, production-readiness, SOTA,
 breakthrough, full-security, or external-audit claims.
 
+Explicit Phase 796-A3L6P HSAI P01B retained pending-review run is now recorded
+under `docs/796a3l6p-phase-hsai-p01b-retained-pending-review-run.md` plus
+standard navigation mirrors. This named state slice records the clean detached
+audit commit, canonical expected-bindings digest, retained three-file
+mode-0700 output, and 65/172 local gate counts. It fixes
+`a3l6_accepted=false` and `a3l7_authorized=false`. It cannot establish reviewer
+identity, reviewer independence, A3L6 acceptance, A3L7/A3L8/A3L9 authority,
+Docker, registry, network, container, backend, external replay, accepted
+Evidence Ledger mutation, score movement, Level2+ evidence, benchmark
+submission, production authority, proof, production readiness, SOTA,
+breakthrough, full security, or external-audit claims. Two genuine human reviews
+in security-capability then correspondence-reproducibility order remain
+required before a separately authorized successor phase can be considered.
+
 Explicit Statebook terminal-payoff and assurance-adjusted settlement boundary
 now allowed and completed as documentation only in
 `docs/integrations/statebook_terminal_payoff_and_trust_settlement.md` plus the

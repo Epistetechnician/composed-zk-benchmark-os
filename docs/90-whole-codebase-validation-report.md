@@ -11673,3 +11673,22 @@ replay, independent review, accepted Evidence Ledger mutation, score movement,
 Level2+ evidence, benchmark submission, production operation, or claim
 escalation was created. Two genuine human reviews remain a distinct dependency.
 See `docs/796a3l6a3-phase-hsai-p01b-final-immutable-gate-audit.md`.
+
+## Phase 796-A3L6P HSAI P01B Retained Pending-Review Run
+
+Outcome: retained local `pending-review` record for named state slice
+`phase-796a3l6p-p01b-retained-pending-review-run`.
+
+The clean detached final audit checkout retained canonical expected bindings,
+`gate-run.json`, and its SHA-256 sidecar at a caller-owned mode-0700
+non-repository root. The record binds 65 focused tests and 172
+Seatbelt-stubbed discovery-census tests and fixes A3L6 acceptance and A3L7
+authority to false.
+
+This is local regression evidence only. It establishes no reviewer identity or
+independence, A3L6 acceptance, runtime operation, Docker, registry, network,
+external replay, accepted Evidence Ledger mutation, score movement, Level2+
+evidence, benchmark submission, production operation, or claim escalation.
+Two genuine human reviews in security-capability then
+correspondence-reproducibility order remain the next dependency. See
+`docs/796a3l6p-phase-hsai-p01b-retained-pending-review-run.md`.
