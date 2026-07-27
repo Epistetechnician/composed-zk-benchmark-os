@@ -1,5 +1,28 @@
 # Agent Rules
 
+Explicit Astral Docker closed-loop correction simulation V25 now allowed:
+additive Python source, a digest-pinned Dockerfile, hermetic tests, frozen JSON
+contracts, and validators under `tools/astral-continual-correction-v25/`;
+protocol and execution notes under `docs/research/astral-self-modeling/`;
+append-only Astral claim-ledger and navigation updates; and one
+repository-external content-addressed V25 artifact and validation report. This
+phase is limited to the construction-known synthetic positive-control and null
+worlds in
+`docs/research/astral-self-modeling/53-docker-closed-loop-correction-simulation-v25.md`:
+a frozen five-dimensional actor, task-local bounded adapters, fixed episode
+streams, one update budget per task, future-unseen and replay evaluation,
+telemetry, no-update, reflection, critic, ordinary-update, shuffled,
+incorrect, and random-direction conditions, deterministic bootstrap,
+calibration and retention guards, immutable raw observations, Docker
+network isolation, content addressing, and a claim-completeness gate over the
+Astral ledger. It does not permit model downloads, cached-model access,
+training or modifying V24, adaptive assessment tuning, treating a planted
+signal as model introspection, independent-review promotion, Stage 0C or Stage
+1 promotion, consciousness claims, general continual-learning claims, general
+self-improvement claims, or claims above
+`SyntheticDockerContinualCorrectionHarnessQualified`. Every mutation in this
+phase names state slice `astral-docker-closed-loop-correction-simulation-v25`.
+
 Explicit Astral V24 independent-validation release V2 now allowed and
 completed locally: additive
 Python source, hermetic tests, schemas, and templates under

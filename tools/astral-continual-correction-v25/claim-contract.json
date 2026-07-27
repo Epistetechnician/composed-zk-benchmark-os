@@ -1,0 +1,98 @@
+{
+  "claim_ceiling": "SyntheticDockerContinualCorrectionHarnessQualified",
+  "expected_claim_statuses": {
+    "C001": "Not refuted",
+    "C002": "Not refuted",
+    "C003": "Proposed",
+    "C004": "Proposed",
+    "C005": "Proposed",
+    "C006": "Proposed",
+    "C007": "Proposed",
+    "C008": "Inconclusive",
+    "C009": "Accepted-as-design-choice",
+    "C010": "Accepted-as-design-choice",
+    "C011": "Proposed",
+    "C012": "Proposed",
+    "C013": "Proposed",
+    "C014": "Proposed",
+    "C015": "Not refuted",
+    "C016": "Refuted",
+    "C017": "Refuted",
+    "C018": "Weakened",
+    "C019": "Not refuted",
+    "C020": "Not refuted",
+    "C021": "Proposed",
+    "C022": "Refuted",
+    "C023": "Not refuted",
+    "C024": "Not refuted",
+    "C025": "Refuted",
+    "C026": "Not refuted",
+    "C027": "Not refuted",
+    "C028": "Not refuted",
+    "C029": "Not refuted",
+    "C030": "Refuted",
+    "C031": "Not refuted",
+    "C032": "Refuted",
+    "C033": "Refuted",
+    "C034": "Not refuted",
+    "C035": "Not refuted",
+    "C036": "Proposed",
+    "C037": "Refuted",
+    "C038": "Refuted",
+    "C039": "Not refuted",
+    "C040": "Refuted",
+    "C041": "Not refuted",
+    "C042": "Refuted",
+    "C043": "Refuted",
+    "C044": "Not refuted",
+    "C045": "Not refuted"
+  },
+  "immutable_release_bindings": {
+    "legacy_v18_v23": {
+      "claim_ids": ["C035", "C036", "C037", "C038", "C039", "C040", "C041", "C042", "C043"],
+      "identity": "7dd61f997bd2cbd8f55f497331ed83757bf994c80a2dc3f01fc1bf1516a9a483",
+      "manifest": "PACKAGE-MANIFEST.sha256",
+      "prefix": "astral-validation-release-v1"
+    },
+    "v24": {
+      "claim_ids": ["C044"],
+      "identity": "52b8e594e7c7c8dc07afa8871310171f797248a563114c00ab26979bb266ff02",
+      "manifest": "RELEASE-MANIFEST.sha256",
+      "prefix": "astral-v24-validation-release-v2"
+    },
+    "v25": {
+      "claim_ids": ["C045"],
+      "manifest": "MANIFEST.sha256",
+      "prefix": "astral-v25"
+    }
+  },
+  "required_thesis_gates": [
+    {
+      "gate": "stage_0c_fresh_confirmation",
+      "required_claims": ["C003"],
+      "state": "Blocked"
+    },
+    {
+      "gate": "model_backed_correction_gain",
+      "required_claims": ["C005"],
+      "state": "NotRun"
+    },
+    {
+      "gate": "prospective_failure_prediction",
+      "required_claims": ["C014"],
+      "state": "NotRun"
+    },
+    {
+      "gate": "independent_human_review",
+      "required_claims": [],
+      "state": "NotRun"
+    },
+    {
+      "gate": "independent_implementation_replication",
+      "required_claims": [],
+      "state": "NotRun"
+    }
+  ],
+  "schema_version": 1,
+  "thesis_status": "NotValidated"
+}

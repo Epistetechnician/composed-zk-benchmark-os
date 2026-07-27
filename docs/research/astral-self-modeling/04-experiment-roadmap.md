@@ -7,6 +7,13 @@ validated measurement plumbing, but V5 returned `Null` and V10 selected no
 method because activation magnitude remained stronger. Stage 1 observer work is
 blocked until a redesigned Stage 0C passes fresh confirmation.
 
+V25 is a separate protocol-engineering lane. Its Docker synthetic positive
+control may qualify the continual-correction harness and holistic claim gate,
+but cannot unblock Stage 0C or Stage 1. A later model-backed continual-learning
+study requires a fresh prospective authorization and must preserve V25's
+future-unseen, retention, calibration, null-specificity, and matched-control
+requirements.
+
 ## Evidence Disposition
 
 | Slice | Disposition | Scientific use |
@@ -34,6 +41,7 @@ blocked until a redesigned Stage 0C passes fresh confirmation.
 | V22 | `NotRunPerturbationDiscriminationQualification` | Three-way activation/input/no-change feasibility failed fit/tune and exact-text activation-versus-none gates; assessment stayed unopened |
 | V23 | `NotRunCapabilityTierPerturbationQualification` | Fresh-concept Llama 1B replication failed unchanged fit/tune and activation-versus-none gates; assessment stayed unopened |
 | V24 | `AuthorDevelopmentPerturbationReadoutObserved` | A fixed downstream linear residual readout passed both development gates and the sealed assessment against text, output-logit, anomaly, and shuffled-label controls; independent verification and confirmation remain `NotRun`/`NotAuthorized` |
+| V25 | `PreregisteredAssessmentUnopened` | Docker synthetic continual-correction sensitivity/null-specificity gate; protocol qualification only |
 
 ## Stage 0A: Instrument Integrity — Complete
 
