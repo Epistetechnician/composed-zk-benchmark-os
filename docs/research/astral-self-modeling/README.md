@@ -176,6 +176,10 @@ review and experiments rule out equivalent prior work.
 - [V24 downstream perturbation readout preregistration](48-v24-downstream-perturbation-readout-preregistration.md):
   author-development-only fixed downstream residual readout with text,
   output-logit, anomaly, and shuffled-label controls.
+- [V24 execution record](49-v24-execution-record.md):
+  validated local downstream perturbation-readout observation with sealed
+  assessment, exact claim ceiling, and independent verification still
+  `NotRun`.
 - [Stage 0 measurement-validity preregistration](08-stage0-measurement-validity-preregistration.md):
   documentation-only compiled-circuit study boundary, locked comparisons,
   endpoints, stop rules, artifact contract, and advancement gate.

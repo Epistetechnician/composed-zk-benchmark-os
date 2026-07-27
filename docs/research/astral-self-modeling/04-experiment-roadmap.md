@@ -33,6 +33,7 @@ blocked until a redesigned Stage 0C passes fresh confirmation.
 | V21 | `NaturalTextResidualReplicationNoCandidate` | Document-disjoint residual effects qualified, but trained Qwen did not beat zero residual, trained Llama, or the calibration gate |
 | V22 | `NotRunPerturbationDiscriminationQualification` | Three-way activation/input/no-change feasibility failed fit/tune and exact-text activation-versus-none gates; assessment stayed unopened |
 | V23 | `NotRunCapabilityTierPerturbationQualification` | Fresh-concept Llama 1B replication failed unchanged fit/tune and activation-versus-none gates; assessment stayed unopened |
+| V24 | `AuthorDevelopmentPerturbationReadoutObserved` | A fixed downstream linear residual readout passed both development gates and the sealed assessment against text, output-logit, anomaly, and shuffled-label controls; independent verification and confirmation remain `NotRun`/`NotAuthorized` |
 
 ## Stage 0A: Instrument Integrity — Complete
 
@@ -131,15 +132,23 @@ new externally authorized model tier or a separately reviewed hybrid-state
 instrument for the cached Nemotron checkpoint. Neither path may reuse exposed
 V22/V23 concepts or tune their prompts and strengths.
 
-V24 is separately authorized as an author-development measurement experiment,
-not as another direct self-report replication. It fixes one Qwen intervention
-and downstream capture configuration before execution and tests whether a
-fit-only linear internal readout carries cross-concept activation-versus-none
-signal beyond text, output-logit, anomaly, and shuffled-label controls.
-`AuthorDevelopmentAuthorized` permits this bounded measurement run while
-`IndependentlyVerified` remains `NotRun`. Even a positive V24 result would show
-downstream decodability under a construction-known intervention, not
-introspection, self-modeling, Stage 0C confirmation, or independent proof.
+V24 completed the separately authorized author-development measurement
+experiment. Its fixed linear downstream residual readout passed both
+development gates and the one-shot assessment. On four fresh assessment
+concepts, telemetry activation-versus-none balanced accuracy was `1.0000`
+against `0.6875` for the strongest primary control, for an advantage of
+`0.3125`; the concept-bootstrap 95% interval was `[0.1875, 0.4375]`.
+
+This result establishes only that the construction-known unit-norm layer-5
+intervention leaves a cross-concept linearly decodable signature at layer 17
+in this local cached-Qwen setup. V24 is not a direct self-report test. It does
+not show that the unmodified model can access, identify, or faithfully report
+that state. `IndependentlyVerified` remains `NotRun`, confirmation remains
+`NotAuthorized`, and Stage 0C remains blocked. The next admissible action is
+independent artifact review and clean-room reproduction. A new confirmation
+experiment requires separate authorization and a fresh preregistration; it
+must add matched random-direction or other intervention-specificity controls
+rather than reusing V24 assessment concepts or tuning its exposed setup.
 
 ## Stage 1: Frozen-Actor Privileged Intervention Prediction — Blocked
 

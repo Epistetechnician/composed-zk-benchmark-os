@@ -61,6 +61,12 @@ Accepted-as-design-choice.
 | C043 | Cached Llama 1B qualifies on a fresh-concept replication of V22 perturbation-location discrimination | V23 manifest `7d2a0185d409e4ac2c6cd1b80ffeb83a8cdc8ab9da2fcd0ebc0028461e5411c6`; tune macro balanced accuracy `0.3125`, activation-versus-none accuracy `0.2813`; assessment unopened | Refuted | High / exposed V23 fit/tune feasibility setup only |
 | C044 | A fixed downstream Qwen residual readout distinguishes hidden layer-5 activation intervention from byte-identical no intervention better than text-only, output-logit, anomaly, and shuffled-label controls on fresh concepts | `48-v24-downstream-perturbation-readout-preregistration.md`; assessment sealed pending both development qualification gates | In test | None / author-development measurement experiment only |
 
+## Experimental Updates — 2026-07-27
+
+| ID | Old status | New status | Evidence artifact | Reviewer | Reason | Unchanged claim ceiling |
+|---|---|---|---|---|---|---|
+| C044 | In test | Not refuted | V24 manifest `288feb32b4833544d57988a61c9e76f95856777ab4346dea553eee539fcba9c3`; assessment telemetry activation-versus-none balanced accuracy `1.0000`, strongest primary control `0.6875`, advantage `0.3125`, concept-bootstrap 95% interval `[0.1875, 0.4375]` | Author-run fail-closed validator; independent review `NotRun` | Both development gates passed, the configuration lock validated before the one-shot assessment, and the sealed assessment passed every preregistered gate | Medium / four-concept local author-development assessment; not independent verification, Stage 0C, introspection, self-modeling, or confirmation |
+
 C003-C007 and C013-C014 retain the historical status `Proposed`; their current
 execution disposition is `BlockedByStage0C`. No observer, correction,
 prospective-prediction, or actor-observer optimization evidence exists. C008
