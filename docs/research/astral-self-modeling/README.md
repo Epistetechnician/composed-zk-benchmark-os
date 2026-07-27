@@ -188,6 +188,10 @@ review and experiments rule out equivalent prior work.
   content-addressed release and capsule identities, successful author and
   clean-room replay, valid `shaanp` AdminCoordinator kit, and the exact
   unexecuted external-review boundary.
+- [V24 signed advisory-review rehearsal](52-v24-signed-advisory-review-rehearsal.md):
+  admin-signed role-separated agent review, retained environment-mismatch
+  rejection, successful pinned-runtime retry, scientific limitations, and the
+  unchanged external-human and independent-replication gates.
 - [Stage 0 measurement-validity preregistration](08-stage0-measurement-validity-preregistration.md):
   documentation-only compiled-circuit study boundary, locked comparisons,
   endpoints, stop rules, artifact contract, and advancement gate.

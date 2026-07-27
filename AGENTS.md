@@ -23,8 +23,11 @@ Stage 0C or Stage 1, or raise the claim ceiling above
 `LocalAuthorDevelopmentPerturbationReadout`. Reviewer agents authorized from
 the author environment are `AdvisoryOnly` and never count as independent human
 review or independent replication. The completed local construction is recorded
-in `docs/research/astral-self-modeling/51-v24-independent-validation-release-v2-execution-record.md`;
-it preserves independent verification as `NotRun`, confirmation as
+in `docs/research/astral-self-modeling/51-v24-independent-validation-release-v2-execution-record.md`.
+The signed role-separated agent-advisory rehearsal, including its retained
+failed first attempt and successful second attempt, is recorded in
+`docs/research/astral-self-modeling/52-v24-signed-advisory-review-rehearsal.md`.
+Both preserve independent verification as `NotRun`, confirmation as
 `NotAuthorized`, and Stage 0C as `Blocked`. Every mutation in this phase names
 state slice `astral-v24-independent-validation-release-v2`.
 
