@@ -944,6 +944,7 @@ Surface DSL
 | [docs/research/astral-self-modeling/46-independent-review-capsule-v1.md](docs/research/astral-self-modeling/46-independent-review-capsule-v1.md) | Portable source-and-artifact capsule and exact-by-default clean-room replay contract. |
 | [docs/research/astral-self-modeling/47-signed-independent-review-attestation-gate-v1.md](docs/research/astral-self-modeling/47-signed-independent-review-attestation-gate-v1.md) | Role-bound signed-review challenges and fail-closed two-reviewer quorum gate. |
 | [docs/research/astral-self-modeling/48-v24-downstream-perturbation-readout-preregistration.md](docs/research/astral-self-modeling/48-v24-downstream-perturbation-readout-preregistration.md) | V24 author-development preregistration for a fixed downstream internal perturbation readout. |
+| [docs/research/astral-self-modeling/49-v24-execution-record.md](docs/research/astral-self-modeling/49-v24-execution-record.md) | V24 validated local downstream perturbation-readout observation; independent verification and confirmation remain absent. |
 
 Statebook publication status: the named slice
 `statebook-whitepaper-prd-and-publication-media-boundary` is

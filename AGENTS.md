@@ -1,7 +1,7 @@
 # Agent Rules
 
 Explicit Astral V24 author-development downstream perturbation readout now
-allowed: additive Python source, hermetic tests, and a fail-closed validator
+allowed and completed: additive Python source, hermetic tests, and a fail-closed validator
 under `tools/astral-perturbation-readout-v24/`; prospective protocol and
 execution notes under `docs/research/astral-self-modeling/`; append-only Astral
 claim-ledger and navigation updates; and one repository-external complete V24
