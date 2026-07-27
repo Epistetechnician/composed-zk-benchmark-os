@@ -941,6 +941,7 @@ Surface DSL
 | [docs/research/astral-self-modeling/43-v23-execution-record.md](docs/research/astral-self-modeling/43-v23-execution-record.md) | V23 validated Llama 1B qualification stop with assessment unopened. |
 | [docs/research/astral-self-modeling/44-immutable-validation-release-v1.md](docs/research/astral-self-modeling/44-immutable-validation-release-v1.md) | Astral immutable validation release contract and authoritative validator. |
 | [docs/research/astral-self-modeling/45-independent-validation-handoff.md](docs/research/astral-self-modeling/45-independent-validation-handoff.md) | Fail-closed independent-review and independent-replication handoff. |
+| [docs/research/astral-self-modeling/46-independent-review-capsule-v1.md](docs/research/astral-self-modeling/46-independent-review-capsule-v1.md) | Portable source-and-artifact capsule and exact-by-default clean-room replay contract. |
 
 Statebook publication status: the named slice
 `statebook-whitepaper-prd-and-publication-media-boundary` is
