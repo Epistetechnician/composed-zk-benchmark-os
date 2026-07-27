@@ -943,6 +943,7 @@ Surface DSL
 | [docs/research/astral-self-modeling/45-independent-validation-handoff.md](docs/research/astral-self-modeling/45-independent-validation-handoff.md) | Fail-closed independent-review and independent-replication handoff. |
 | [docs/research/astral-self-modeling/46-independent-review-capsule-v1.md](docs/research/astral-self-modeling/46-independent-review-capsule-v1.md) | Portable source-and-artifact capsule and exact-by-default clean-room replay contract. |
 | [docs/research/astral-self-modeling/47-signed-independent-review-attestation-gate-v1.md](docs/research/astral-self-modeling/47-signed-independent-review-attestation-gate-v1.md) | Role-bound signed-review challenges and fail-closed two-reviewer quorum gate. |
+| [docs/research/astral-self-modeling/48-v24-downstream-perturbation-readout-preregistration.md](docs/research/astral-self-modeling/48-v24-downstream-perturbation-readout-preregistration.md) | V24 author-development preregistration for a fixed downstream internal perturbation readout. |
 
 Statebook publication status: the named slice
 `statebook-whitepaper-prd-and-publication-media-boundary` is

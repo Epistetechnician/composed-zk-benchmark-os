@@ -1,5 +1,28 @@
 # Agent Rules
 
+Explicit Astral V24 author-development downstream perturbation readout now
+allowed: additive Python source, hermetic tests, and a fail-closed validator
+under `tools/astral-perturbation-readout-v24/`; prospective protocol and
+execution notes under `docs/research/astral-self-modeling/`; append-only Astral
+claim-ledger and navigation updates; and one repository-external complete V24
+artifact bundle. This phase is limited to the preregistered cached Qwen
+0.5B fixed-configuration experiment in
+`docs/research/astral-self-modeling/48-v24-downstream-perturbation-readout-preregistration.md`:
+twenty fresh concepts, byte-identical activation/no-intervention prompts, fixed
+layer-5 concept-direction injection at strength 1.0, fixed downstream layer-17
+capture, a fit-only PCA-16 ridge readout, text-only, output-logit, anomaly, and
+shuffled-label controls, separate fit/development-replication/tune/assessment
+concepts, configuration locking, and assessment execution only after both
+development gates pass. It does not permit post-assessment tuning, V22/V23
+concept reuse, prompt/strength/site search, network access, downloads, model
+training, independent-verification claims, external-review status changes,
+Stage 0C confirmation, Stage 1, accepted evidence, benchmark claims,
+consciousness claims, global introspection claims, or claims above
+`LocalAuthorDevelopmentPerturbationReadout`. `AuthorDevelopmentAuthorized` and
+`IndependentlyVerified` remain separate states; the latter stays `NotRun`.
+Every mutation in this phase names state slice
+`astral-v24-author-development-exploratory`.
+
 Explicit Astral independent-review attestation gate V1 now allowed: additive
 Python source, a fixed gate specification, unfilled reviewer-registry template,
 and hermetic cryptographic protocol tests under

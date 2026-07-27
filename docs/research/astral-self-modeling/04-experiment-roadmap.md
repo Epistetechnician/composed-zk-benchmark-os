@@ -131,6 +131,16 @@ new externally authorized model tier or a separately reviewed hybrid-state
 instrument for the cached Nemotron checkpoint. Neither path may reuse exposed
 V22/V23 concepts or tune their prompts and strengths.
 
+V24 is separately authorized as an author-development measurement experiment,
+not as another direct self-report replication. It fixes one Qwen intervention
+and downstream capture configuration before execution and tests whether a
+fit-only linear internal readout carries cross-concept activation-versus-none
+signal beyond text, output-logit, anomaly, and shuffled-label controls.
+`AuthorDevelopmentAuthorized` permits this bounded measurement run while
+`IndependentlyVerified` remains `NotRun`. Even a positive V24 result would show
+downstream decodability under a construction-known intervention, not
+introspection, self-modeling, Stage 0C confirmation, or independent proof.
+
 ## Stage 1: Frozen-Actor Privileged Intervention Prediction — Blocked
 
 After Stage 0C fresh confirmation, compare text-only, activation-only,
