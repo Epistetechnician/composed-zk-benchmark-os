@@ -170,6 +170,9 @@ review and experiments rule out equivalent prior work.
 - [Independent-review capsule V1](46-independent-review-capsule-v1.md):
   portable Git source bundle, immutable artifacts, runtime contract, and
   clean-room replay entrypoint.
+- [Signed independent-review attestation gate V1](47-signed-independent-review-attestation-gate-v1.md):
+  preregistered reviewer keys, role-bound challenges, signed decisions, and
+  fail-closed distinct-reviewer quorum.
 - [Stage 0 measurement-validity preregistration](08-stage0-measurement-validity-preregistration.md):
   documentation-only compiled-circuit study boundary, locked comparisons,
   endpoints, stop rules, artifact contract, and advancement gate.

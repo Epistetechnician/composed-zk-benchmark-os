@@ -1,5 +1,24 @@
 # Agent Rules
 
+Explicit Astral independent-review attestation gate V1 now allowed: additive
+Python source, a fixed gate specification, unfilled reviewer-registry template,
+and hermetic cryptographic protocol tests under
+`tools/astral-independent-review-attestation-v1/`; a signed-review protocol
+note under `docs/research/astral-self-modeling/`; Astral navigation updates; an
+isolated Astral-only branch and commit; and a small repository-external,
+content-addressed attestation kit. This phase is limited to preregistered
+Ed25519 reviewer public keys, role-bound nonces and requests, canonical JSON
+decisions, OpenSSH namespace-separated signatures, exact capsule/release/report
+binding, evidence-file hashing, distinct-reviewer enforcement, material-finding
+fail closure, digest-sealed gate reports, and synthetic protocol rehearsal with
+ephemeral test keys. It does not permit retaining private keys, assigning real
+reviewer identities, fabricating human independence, treating synthetic keys
+or agent review as external review, automatic evidence acceptance, new
+experiments, V24, network access, assessment opening, result modification,
+Stage 0C confirmation, Stage 1, benchmark claims, introspection or self-modeling
+claims, or claims above `LocalImmutableValidationCandidate`. Every mutation in
+this phase names state slice `astral-independent-review-attestation-gate-v1`.
+
 Explicit Astral independent-review capsule V1 now allowed: additive Python
 source, capsule specification, fail-closed review templates, and hermetic tests
 under `tools/astral-independent-review-capsule-v1/`; a capsule and reviewer
