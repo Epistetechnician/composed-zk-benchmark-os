@@ -946,6 +946,7 @@ Surface DSL
 | [docs/research/astral-self-modeling/48-v24-downstream-perturbation-readout-preregistration.md](docs/research/astral-self-modeling/48-v24-downstream-perturbation-readout-preregistration.md) | V24 author-development preregistration for a fixed downstream internal perturbation readout. |
 | [docs/research/astral-self-modeling/49-v24-execution-record.md](docs/research/astral-self-modeling/49-v24-execution-record.md) | V24 validated local downstream perturbation-readout observation; independent verification and confirmation remain absent. |
 | [docs/research/astral-self-modeling/50-v24-independent-validation-release-v2-spec.md](docs/research/astral-self-modeling/50-v24-independent-validation-release-v2-spec.md) | V24-specific immutable release, clean-room capsule, and admin-signed advisory reviewer-agent authorization boundary. |
+| [docs/research/astral-self-modeling/51-v24-independent-validation-release-v2-execution-record.md](docs/research/astral-self-modeling/51-v24-independent-validation-release-v2-execution-record.md) | Content-addressed V24 release, successful clean-room replay, and valid `shaanp` AdminCoordinator review kit; external review remains unexecuted. |
 
 Statebook publication status: the named slice
 `statebook-whitepaper-prd-and-publication-media-boundary` is

@@ -184,6 +184,10 @@ review and experiments rule out equivalent prior work.
   V24-specific immutable package, portable clean-room replay, and
   admin-signed role-separated reviewer-agent authorization with advisory-only
   agent status.
+- [V24 independent-validation release V2 execution record](51-v24-independent-validation-release-v2-execution-record.md):
+  content-addressed release and capsule identities, successful author and
+  clean-room replay, valid `shaanp` AdminCoordinator kit, and the exact
+  unexecuted external-review boundary.
 - [Stage 0 measurement-validity preregistration](08-stage0-measurement-validity-preregistration.md):
   documentation-only compiled-circuit study boundary, locked comparisons,
   endpoints, stop rules, artifact contract, and advancement gate.
