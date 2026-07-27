@@ -1,0 +1,21 @@
+{
+  "assistance_disclosure": "UNFILLED",
+  "evidence": [],
+  "findings": [],
+  "material_findings_unresolved": true,
+  "request_sha256": "UNFILLED",
+  "result": "UNFILLED",
+  "reviewed_at": "UNFILLED",
+  "reviewer_kind": "UNFILLED",
+  "role": "scientific_validity",
+  "schema_version": 2,
+  "sections": {
+    "assessment_sealing": "UNFILLED",
+    "claim_ceiling": "UNFILLED",
+    "control_strength": "UNFILLED",
+    "corpus_overlap_and_leakage": "UNFILLED",
+    "preregistration_chronology": "UNFILLED",
+    "statistics_and_uncertainty": "UNFILLED",
+    "stopping_and_selection_rules": "UNFILLED"
+  }
+}

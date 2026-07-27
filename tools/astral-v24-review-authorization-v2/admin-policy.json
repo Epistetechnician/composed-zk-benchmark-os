@@ -1,0 +1,32 @@
+{
+  "admin_id": "shaanp",
+  "allowed_public_keys": [
+    {
+      "fingerprint": "SHA256:WHIhl2ms0coQUY3AzGDnbbjzO/IkFXYOWAj/lZGkrFs",
+      "public_key": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINR9b6ps7EaF0nsGSLTCcFSkBTTPd+d+b3NGyt6nuli6 hermes-ecloud"
+    },
+    {
+      "fingerprint": "SHA256:3ZJtYkE/2lq+KjHOaUQq+qqdYAhydmGMRz/KNfp+1oU",
+      "public_key": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOZINJ7Fpy6u0nHygPoFCTNLykP3i96PK64CD659Cn7K local-system"
+    }
+  ],
+  "assignment_capabilities": [
+    "register_distinct_reviewer_identities",
+    "assign_artifact_reproducibility_role",
+    "assign_scientific_validity_role",
+    "classify_agent_advisory_or_external_human",
+    "issue_fresh_review_requests"
+  ],
+  "display_name": "Epistetechnic",
+  "namespace": "astral-v24-review-admin-v2",
+  "prohibitions": [
+    "sign_reviewer_decisions_on_behalf_of_reviewers",
+    "waive_unresolved_material_findings",
+    "assert_reviewer_independence",
+    "set_independently_verified",
+    "authorize_confirmation",
+    "unblock_stage_0c_or_stage_1"
+  ],
+  "role": "AdminCoordinator",
+  "schema_version": 2
+}

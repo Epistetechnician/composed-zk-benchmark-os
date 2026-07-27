@@ -1,0 +1,12 @@
+{
+  "assistance_disclosure": "UNFILLED",
+  "evidence": [],
+  "findings": [],
+  "material_findings_unresolved": true,
+  "request_sha256": "UNFILLED",
+  "result": "UNFILLED",
+  "reviewed_at": "UNFILLED",
+  "reviewer_kind": "UNFILLED",
+  "role": "artifact_reproducibility",
+  "schema_version": 2
+}
