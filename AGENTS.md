@@ -1,6 +1,7 @@
 # Agent Rules
 
-Explicit Astral V24 independent-validation release V2 now allowed: additive
+Explicit Astral V24 independent-validation release V2 now allowed and
+completed locally: additive
 Python source, hermetic tests, schemas, and templates under
 `tools/astral-v24-validation-release-v2/`,
 `tools/astral-v24-independent-review-capsule-v2/`, and
@@ -21,8 +22,11 @@ waive findings, set `IndependentlyVerified`, authorize confirmation, unblock
 Stage 0C or Stage 1, or raise the claim ceiling above
 `LocalAuthorDevelopmentPerturbationReadout`. Reviewer agents authorized from
 the author environment are `AdvisoryOnly` and never count as independent human
-review or independent replication. Every mutation in this phase names state
-slice `astral-v24-independent-validation-release-v2`.
+review or independent replication. The completed local construction is recorded
+in `docs/research/astral-self-modeling/51-v24-independent-validation-release-v2-execution-record.md`;
+it preserves independent verification as `NotRun`, confirmation as
+`NotAuthorized`, and Stage 0C as `Blocked`. Every mutation in this phase names
+state slice `astral-v24-independent-validation-release-v2`.
 
 Explicit Astral V24 author-development downstream perturbation readout now
 allowed and completed: additive Python source, hermetic tests, and a fail-closed validator

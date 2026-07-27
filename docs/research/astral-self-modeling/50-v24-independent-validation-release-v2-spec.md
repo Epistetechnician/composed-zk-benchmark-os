@@ -2,7 +2,7 @@
 
 State slice: `astral-v24-independent-validation-release-v2`.
 
-Status: `AuthorizedForLocalConstruction`.
+Status: `CompletedLocalConstructionAndReplay`.
 
 Claim ceiling: `LocalAuthorDevelopmentPerturbationReadout`.
 
@@ -85,3 +85,7 @@ metric, gate, role, key, signature, evidence, or claim-boundary mismatch.
 Nothing in V2 authorizes a V24 assessment rerun, a confirmation experiment,
 Stage 0C, Stage 1, evidence acceptance, introspection claims, self-modeling
 claims, or independent-verification status changes.
+
+The exact local construction, replay, admin policy, and remaining review gates
+are recorded in
+[the V2 execution record](51-v24-independent-validation-release-v2-execution-record.md).
