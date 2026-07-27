@@ -1,5 +1,29 @@
 # Agent Rules
 
+Explicit Astral V24 independent-validation release V2 now allowed: additive
+Python source, hermetic tests, schemas, and templates under
+`tools/astral-v24-validation-release-v2/`,
+`tools/astral-v24-independent-review-capsule-v2/`, and
+`tools/astral-v24-review-authorization-v2/`; release and handoff notes under
+`docs/research/astral-self-modeling/`; append-only navigation and claim-status
+records; and repository-external content-addressed release, capsule, review-kit,
+and local rehearsal outputs. This phase is limited to commit
+`de4ac8145ed3e730f9a2ed1495921084a078ab39`, tree
+`4a2cbaaebfba15186ae9a2829b516eca74b71b40`, V24 manifest
+`288feb32b4833544d57988a61c9e76f95856777ab4346dea553eee539fcba9c3`,
+the exact cached Qwen model bytes named by that artifact, deterministic artifact
+validation and clean-room replay, an `AdminCoordinator` policy pinned to the
+`shaanp` account, admin-signed reviewer assignment registries, role-separated
+review requests, and reviewer-agent advisory decisions. Admin authority may
+assign reviewers and issue requests but may not sign reviewer decisions for
+them, fabricate identity or independence, alter V24 evidence, rerun assessment,
+waive findings, set `IndependentlyVerified`, authorize confirmation, unblock
+Stage 0C or Stage 1, or raise the claim ceiling above
+`LocalAuthorDevelopmentPerturbationReadout`. Reviewer agents authorized from
+the author environment are `AdvisoryOnly` and never count as independent human
+review or independent replication. Every mutation in this phase names state
+slice `astral-v24-independent-validation-release-v2`.
+
 Explicit Astral V24 author-development downstream perturbation readout now
 allowed and completed: additive Python source, hermetic tests, and a fail-closed validator
 under `tools/astral-perturbation-readout-v24/`; prospective protocol and

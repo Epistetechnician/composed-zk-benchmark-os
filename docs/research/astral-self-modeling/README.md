@@ -180,6 +180,10 @@ review and experiments rule out equivalent prior work.
   validated local downstream perturbation-readout observation with sealed
   assessment, exact claim ceiling, and independent verification still
   `NotRun`.
+- [V24 independent-validation release V2 specification](50-v24-independent-validation-release-v2-spec.md):
+  V24-specific immutable package, portable clean-room replay, and
+  admin-signed role-separated reviewer-agent authorization with advisory-only
+  agent status.
 - [Stage 0 measurement-validity preregistration](08-stage0-measurement-validity-preregistration.md):
   documentation-only compiled-circuit study boundary, locked comparisons,
   endpoints, stop rules, artifact contract, and advancement gate.
