@@ -1,6 +1,230 @@
 # Agent Rules
 
+Explicit Astral immutable validation release V1 now allowed: additive Python
+source, release specification, and hermetic tests under
+`tools/astral-validation-release-v1/`; release and independent-review handoff
+notes under `docs/research/astral-self-modeling/`; Astral navigation updates;
+an Astral-only clean Git branch and commit; and a repository-external,
+content-addressed V18-V23 artifact package. This phase is limited to preserving
+and validating existing results: exact artifact census and hashes, staged
+Git-tree binding, environment and model inventories, existing validators,
+structural tests, deterministic corpus replay, V20/V21 metric recomputation,
+assessment-absence checks, claim-ledger correspondence, digest-sealed local
+reports, and fail-closed forms for two genuine independent reviewers and one
+independent implementation. It does not permit new experiments, V24,
+assessment opening, result modification, fabricated reviewer identities,
+self-review counted as independence, external-replication claims, evidence
+acceptance, Stage 0C confirmation, Stage 1, benchmark claims, introspection or
+self-modeling claims, or claims above `LocalImmutableValidationCandidate`.
+
+Explicit Astral higher-capability perturbation discrimination replication V23
+now allowed: additive Python source and hermetic tests under
+`tools/astral-activation-discrimination-v23/`, phase notes under
+`docs/research/astral-self-modeling/`, and Astral ledger/navigation updates.
+This phase is limited to the fresh-concept Llama-3.2-1B offline replication in
+`docs/research/astral-self-modeling/42-capability-tier-replication-v23.md`:
+the cached 4-bit model, controlled MLX forward parity, proportional residual
+sites 3/7/11, unchanged V22 strengths and anti-shortcut gates, byte-identical
+activation/no-intervention prompts, textual gaslight controls, first-token
+three-way reports, fit selection, tune qualification, configuration locking,
+sealed assessment, repository-external artifacts, validation, and tests. It
+does not permit the incompatible local Nemotron hybrid seam, network access,
+downloads, model training, adaptive assessment tuning, reuse of V22 concepts,
+free-form mental-state reports, Stage 0C confirmation, Stage 1, accepted
+evidence, benchmark claims, consciousness claims, global introspection claims,
+or claims above `LocalDevelopmentCapabilityTierPerturbationReplication`.
+
+Explicit Astral activation-versus-input perturbation discrimination V22 now
+allowed: additive Python source and hermetic tests under
+`tools/astral-activation-discrimination-v22/`, phase notes under
+`docs/research/astral-self-modeling/`, and Astral ledger/navigation updates.
+This phase is limited to the local cached Qwen feasibility protocol in
+`docs/research/astral-self-modeling/40-activation-input-discrimination-v22.md`:
+deterministic concept directions, the existing controlled MLX forward seam,
+three preregistered residual sites, bounded fit/tune strength selection,
+activation-injection, matched input-level gaslight, and no-intervention
+conditions, exact-text activation/no-intervention controls, first-token
+three-way reports, assessment execution only after configuration locking,
+repository-external artifacts, validation, and tests. It does not permit
+network access, downloads, model training, LoRA, adaptive assessment tuning,
+free-form mental-state reports, sensitive prompts, Stage 0C confirmation,
+Stage 1, accepted evidence, benchmark claims, consciousness claims, global
+introspection claims, or claims above
+`LocalDevelopmentPerturbationDiscriminationFeasibility`.
+
+Explicit Astral heterogeneous natural-text residual-effect replication V21 now
+allowed: additive Python source and hermetic tests under
+`tools/astral-lm-explainer-v21/`, phase notes under
+`docs/research/astral-self-modeling/`, and Astral ledger/navigation updates.
+This phase is limited to the prospective protocol in
+`docs/research/astral-self-modeling/38-heterogeneous-natural-text-replication-v21.md`:
+deterministically extracted repository-owned Markdown lines excluding Astral
+research, document-disjoint splits, cached Qwen and Llama 4-bit models, offline
+MLX LoRA, continuous hint-ablation effects residualized by a fit-only
+wrapper-by-hint baseline, fit-only ordinal calibration, best-Llama-seed and
+source-blind controls, prediction locking before assessment effects,
+repository-external artifacts, validation, and tests. It does not permit
+network access, downloads, Astral document inputs, cross-document split
+leakage, V20 data reuse, assessment residual fitting, confirmation, Stage 1,
+accepted evidence, benchmark claims, introspection/self-modeling claims, or
+claims above `LocalDevelopmentNaturalTextResidualReplication`.
+
+Explicit Astral continuous margin-effect trained-LM replication V20 now
+allowed: additive Python source and hermetic tests under
+`tools/astral-lm-explainer-v20/`, phase notes under
+`docs/research/astral-self-modeling/`, and Astral ledger/navigation updates.
+This phase is limited to the prospective protocol in
+`docs/research/astral-self-modeling/36-continuous-margin-effect-replication-v20.md`:
+already-cached Qwen2.5-0.5B and Llama-3.2-1B 4-bit conversions, offline MLX
+LoRA, new ambiguous preference families, the continuous Qwen
+ablated-minus-hinted A-versus-B margin effect, fit-only ordinal thresholds and
+centroids, probabilistic five-bin prediction, best-Llama-seed and fit-only
+controls, prediction locking before assessment effects, repository-external
+artifacts, validation, and tests. It does not permit downloads, network access,
+V19 family or effect reuse, assessment threshold fitting, binary-label
+filtering, confirmation, Stage 1, accepted evidence, benchmark claims,
+introspection/self-modeling claims, or claims above
+`LocalDevelopmentContinuousMarginEffectReplication`.
+
+Explicit Astral opaque-preference trained-LM replication V19 now allowed:
+additive Python source and hermetic tests under
+`tools/astral-lm-explainer-v19/`, phase notes under
+`docs/research/astral-self-modeling/`, and Astral ledger/navigation updates.
+This phase is limited to the prospective replication protocol in
+`docs/research/astral-self-modeling/34-opaque-preference-replication-v19.md`:
+the already-cached Qwen2.5-0.5B and Llama-3.2-1B 4-bit conversions, offline
+MLX LoRA training, new deterministic ambiguous language-preference families,
+Qwen target hint-ablation labels, majority-vote ensembles, best-Llama-seed
+sensitivity, fit/tune-only ablations before adapter freezing, assessment
+prediction locking before no-hint target execution, repository-external
+artifacts, validation, and tests. It does not permit downloads, network access,
+remote APIs or judges, V18 data or adapter reuse, arithmetic ground truth,
+assessment retraining, confirmation, Stage 1, accepted evidence, benchmark
+claims, introspection/self-modeling claims, or claims above
+`LocalDevelopmentOpaquePreferenceReplication`.
+
+Explicit Astral trained language-model input-ablation explainer V18 now
+allowed: additive Python source and hermetic tests under
+`tools/astral-lm-explainer-v18/`, phase notes under
+`docs/research/astral-self-modeling/`, and Astral ledger/navigation updates.
+This phase is limited to the prospective development protocol in
+`docs/research/astral-self-modeling/32-trained-lm-input-ablation-explainer-v18.md`:
+already-cached Qwen2.5-0.5B and Llama-3.2-1B 4-bit conversions, offline MLX
+LoRA training, a new deterministic arithmetic-hint corpus, Qwen target
+input-ablation labels, same-model and other-model explainer comparison,
+fit/tune-only target effects before adapter freezing, assessment prediction
+locking before no-hint target execution, repository-external data/adapters and
+artifacts, validation, and tests. It does not permit downloads, network access,
+remote APIs or judges, V17 families or effects, full-model fine-tuning,
+assessment retraining, confirmation, Stage 1, accepted evidence, benchmark
+claims, introspection/self-modeling claims, or claims above
+`LocalDevelopmentTrainedLmInputAblationExplainerPilot`.
+
+Explicit Astral pretrained-LM explainer feasibility V17 now allowed: additive
+Python source and hermetic tests under `tools/astral-lm-explainer-v17/`, phase
+notes under `docs/research/astral-self-modeling/`, and Astral
+ledger/navigation updates. This phase is limited to the prospective
+development protocol in
+`docs/research/astral-self-modeling/30-pretrained-lm-effect-explainer-v17.md`:
+locally cached open-weight causal decoders, offline MLX execution, deterministic
+subject-verb-agreement prompts, exact residual-stream capture/replacement,
+fit-only transforms, capacity-matched nonlinear controls, prediction locking
+before assessment effects, repository-external artifacts, validation, and
+tests. A single eligible model permits only
+`SingleModelFeasibilityOnly`; reciprocal same-model claims require two eligible
+models satisfying the frozen comparability rules. It does not permit downloads,
+network access, remote APIs, model fine-tuning, prior Astral ranges, assessment
+reuse, confirmation, Stage 1, accepted evidence, benchmark claims,
+introspection/self-modeling claims, or claims above
+`LocalDevelopmentPretrainedModelEffectExplainerPilot`.
+
+Explicit Astral Stage 0C structured effect explainer V16 now allowed: additive
+Python source and hermetic tests under
+`tools/astral-stage0-structured-v16/`, phase notes under
+`docs/research/astral-self-modeling/`, and Astral ledger/navigation updates.
+This phase is limited to the prospective development protocol in
+`docs/research/astral-self-modeling/28-stage0c-structured-effect-explainer-v16.md`:
+four new frozen actors, new families, the existing five CLS sites/two
+operators, fit-only rank-four effect basis, capacity-matched multivariate ridge
+projections, same/other-actor controls, prediction locking before assessment
+effects, external artifacts, validation, and tests. It does not permit prior
+assessment ranges, seeds `173/179/181`, families `512..575`, confirmation,
+Stage 1, observer language training, accepted evidence, network access,
+benchmark claims, or introspection/self-modeling claims.
+
+Explicit Astral Stage 0C prospective actor-specific explainer V15 now allowed:
+additive Python source and hermetic tests under
+`tools/astral-stage0-actor-specific-v15/`, phase notes under
+`docs/research/astral-self-modeling/`, and Astral ledger/navigation updates.
+This phase is limited to the development-only protocol in
+`docs/research/astral-self-modeling/26-stage0c-prospective-actor-specific-explainer-v15.md`:
+the existing five causally connected CLS sites, frozen family-complete actor
+training, new seeds/families, per-actor deterministic linear projections,
+same-actor versus other-actor and matched controls, assessment prediction
+locking before effects, repository-external artifacts, validation, and tests.
+It does not permit seeds `173/179/181`, families `512..575`, prior assessment
+ranges, confirmation, observer language training, Stage 1, accepted evidence,
+network access, benchmark claims, or introspection/self-modeling claims.
+
+Explicit Astral V14 effect-transportability diagnostic now allowed: additive
+read-only Python source and tests under
+`tools/astral-stage0-transport-v14/`, phase notes under
+`docs/research/astral-self-modeling/`, and Astral ledger/navigation updates.
+This phase may consume only a validator-approved V13 repository-external bundle
+and produce a separate repository-external diagnostic bundle. It is limited to
+variance decomposition, actor-conditioned site/operator constants, and
+within-actor ridge fits using a frozen half-family split. It does not permit new
+actor training, interventions, predictions before effects, confirmation data,
+seeds `173/179/181`, families `512..575`, Stage 1, accepted evidence, benchmark
+claims, or self-modeling claims.
+
+Explicit Astral Stage 0C prediction-locked causal-target V13 now allowed:
+additive Python source and hermetic tests under
+`tools/astral-stage0-causal-target-v13/`, phase notes under
+`docs/research/astral-self-modeling/`, and Astral navigation/ledger updates.
+This phase is limited to the development-only CLS-site protocol in
+`docs/research/astral-self-modeling/22-stage0c-prediction-locked-causal-target-v13.md`:
+four attention-head outputs plus the MLP output, zero and matched-patch
+interventions, new nonreserved seeds/families, prediction sealing before
+assessment-effect generation, capacity-matched deterministic estimators,
+repository-external artifacts, validation, and local tests. It does not permit
+seeds `173/179/181`, families `512..575`, confirmation, observer training,
+Stage 1, accepted evidence, network access, benchmark claims, or self-modeling
+claims.
+
+Explicit Astral Stage 0C intervention-effect target-validity V12 now allowed:
+additive Python source and hermetic tests under
+`tools/astral-stage0-intervention-v12/`, phase notes under
+`docs/research/astral-self-modeling/`, and navigation/status updates in the
+Astral research README and claim ledger. This phase is limited to the
+development-only protocol in
+`docs/research/astral-self-modeling/20-stage0c-intervention-effect-target-validity-v12.md`:
+the frozen family-complete-2000 actor recipe, new exploratory seeds and prompt
+families, zero-ablation and matched-counterexample patch effects, deterministic
+closed-form ridge estimators, capacity-matched feature panels, leave-one-actor-
+out assessment, repository-external artifacts, validators, and local tests. It
+does not permit seeds `173/179/181`, families `512..575`, a fresh confirmation
+run, observer training, Stage 1 authorization, accepted Evidence Ledger
+mutation, benchmark evidence, external models, network access, production
+claims, self-modeling claims, or claims above setup-scoped local exploratory
+intervention-prediction diagnostics.
+
 ## Scope
+
+Explicit Astral Stage 0 Rust protocol migration V9 now allowed: standalone
+pure-data Rust source, tests, and crate metadata under
+`crates/astral-stage0-protocol`, workspace membership and `Cargo.lock`, phase
+notes under `docs/research/astral-self-modeling/`, and navigation under
+`README.md`. This phase is limited to the local family/example boundary, seed
+and family seals, frozen method/baseline identifiers, top-one selection,
+dead-zone normalized regret, exploratory method-selection algebra, deterministic
+tagged hashing, claim-boundary types, and hermetic tests from
+`docs/research/astral-self-modeling/16-stage0-rust-migration-boundary-v8.md`.
+It does not permit tensor or ML dependencies, process execution, filesystem or
+environment access, network access, Python invocation, checkpoint loading,
+training, attribution scoring, interventions, holdout construction, new
+scientific results, accepted evidence, benchmark evidence, Stage 0 pass,
+independent replication, self-modeling claims, or Stage 1 authorization.
 
 This repository has been explicitly promoted from the documentation-only Level 0 scaffold to a Level 1 local Rust foundation. Future agents must treat every mutation as a named state slice. Do not infer mutation scope from imports, file names, or convenience.
 

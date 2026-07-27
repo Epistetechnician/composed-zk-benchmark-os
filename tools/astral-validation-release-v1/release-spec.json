@@ -1,0 +1,56 @@
+{
+  "claim_ceiling": "LocalImmutableValidationCandidate",
+  "release_id": "astral-validation-release-v1",
+  "bundles": {
+    "v18": {
+      "assessment": "complete",
+      "claim_id": "C035",
+      "claim_status": "Not refuted",
+      "expected_classification": "TrainedSameModelDevelopmentCandidate",
+      "expected_manifest_sha256": "a1710a217452fd74312fef171d0986a9c4e27c6f353d442943420bd5f315cc33",
+      "validator": "tools/astral-lm-explainer-v18/validator_v18.py"
+    },
+    "v19": {
+      "assessment": "absent",
+      "claim_id": "C037",
+      "claim_status": "Refuted",
+      "expected_classification": "NotRunTargetLabelImbalance",
+      "expected_manifest_sha256": "73cb90ee38dabfabc55d4885c6a1ddadb3327f4235850b3b2c20096846906bef",
+      "validator": "tools/astral-lm-explainer-v19/validator_v19.py"
+    },
+    "v20": {
+      "assessment": "complete",
+      "claim_id": "C038",
+      "claim_status": "Refuted",
+      "expected_classification": "ContinuousMarginReplicationNoCandidate",
+      "expected_manifest_sha256": "03772cab10160e875e579180951e4fef54f7bf4a10959e98bbf6aa4eb643b02a",
+      "recompute_metrics": true,
+      "validator": "tools/astral-lm-explainer-v20/validator_v20.py"
+    },
+    "v21": {
+      "assessment": "complete",
+      "claim_id": "C040",
+      "claim_status": "Refuted",
+      "expected_classification": "NaturalTextResidualReplicationNoCandidate",
+      "expected_manifest_sha256": "9c7ee7be93c09e9d2dcd5390b0d56e66abf5d24628c4d92d5e108d0405347817",
+      "recompute_metrics": true,
+      "validator": "tools/astral-lm-explainer-v21/validator_v21.py"
+    },
+    "v22": {
+      "assessment": "absent",
+      "claim_id": "C042",
+      "claim_status": "Refuted",
+      "expected_classification": "NotRunPerturbationDiscriminationQualification",
+      "expected_manifest_sha256": "2ad5659fac41c61094356e6b1b2987feeab93490b13d5fc22b36209ec173a29a",
+      "validator": "tools/astral-activation-discrimination-v22/validator_v22.py"
+    },
+    "v23": {
+      "assessment": "absent",
+      "claim_id": "C043",
+      "claim_status": "Refuted",
+      "expected_classification": "NotRunCapabilityTierPerturbationQualification",
+      "expected_manifest_sha256": "7d2a0185d409e4ac2c6cd1b80ffeb83a8cdc8ab9da2fcd0ebc0028461e5411c6",
+      "validator": "tools/astral-activation-discrimination-v23/validator_v23.py"
+    }
+  }
+}
