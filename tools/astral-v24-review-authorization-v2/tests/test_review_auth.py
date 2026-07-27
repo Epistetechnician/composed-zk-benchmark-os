@@ -25,6 +25,14 @@ sys.modules[KIT_SPEC.name] = KIT
 assert KIT_SPEC.loader
 KIT_SPEC.loader.exec_module(KIT)
 
+BUILD_SPEC = importlib.util.spec_from_file_location(
+    "astral_v24_review_kit_builder", ROOT / "build_kit.py"
+)
+BUILD = importlib.util.module_from_spec(BUILD_SPEC)
+sys.modules[BUILD_SPEC.name] = BUILD
+assert BUILD_SPEC.loader
+BUILD_SPEC.loader.exec_module(BUILD)
+
 
 def generate_key(root: Path, name: str) -> tuple[Path, str, str]:
     private = root / name
@@ -80,6 +88,28 @@ def test_committed_admin_policy_pins_shaanp_without_promotion_power():
     assert policy["role"] == "AdminCoordinator"
     assert len(policy["allowed_public_keys"]) == 2
     assert "set_independently_verified" in policy["prohibitions"]
+
+
+def test_kit_readme_contains_complete_signed_review_sequence():
+    readme = BUILD.render_readme(
+        {
+            "capsule_identity": "c" * 64,
+            "claim_ceiling": "LocalAuthorDevelopmentPerturbationReadout",
+            "release_identity": "d" * 64,
+        }
+    )
+    for required in (
+        "canonicalize_json.py",
+        "astral-v24-review-admin-v2",
+        "prepare_review.py",
+        "run_capsule.py",
+        "astral-v24-independent-review-v2",
+        "verify_review_gate.py",
+        "AuthorizedAgentReviewAdvisoryCandidate",
+        "SignedExternalReviewQuorumCandidate",
+    ):
+        assert required in readme
+    assert "Neither output sets\n`IndependentlyVerified`" in readme
 
 
 def test_admin_signed_registry_authorizes_two_distinct_advisory_agents(tmp_path):
