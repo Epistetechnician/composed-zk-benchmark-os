@@ -1,0 +1,15 @@
+{
+  "author_assistance": "",
+  "commit_identity": "",
+  "conflict_disclosure": "",
+  "environment_differences": [],
+  "findings": [],
+  "package_identity": "",
+  "report_sha256": "",
+  "result": "NotRun",
+  "review_type": "artifact_reproducibility",
+  "reviewer_affiliation": "",
+  "reviewer_name": "",
+  "signature": "",
+  "signature_timestamp": ""
+}

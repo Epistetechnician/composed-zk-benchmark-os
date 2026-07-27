@@ -1,0 +1,9 @@
+{
+  "author_report_sha256": "3f7c64895d3e910c71bbc3dfe856e4dd6fa5ced802c70ccc5899f10b6a8b5b8c",
+  "capsule_id": "astral-independent-review-capsule-v1",
+  "claim_ceiling": "LocalImmutableValidationCandidate",
+  "release_commit": "a875957cc1f0ba12e0027fd69a44f8b6a94bcfdf",
+  "release_package_identity": "7dd61f997bd2cbd8f55f497331ed83757bf994c80a2dc3f01fc1bf1516a9a483",
+  "release_ref": "codex/astral-validation-release-v1",
+  "release_tree": "055b7642791c5948e1735dcd59fb1c1dd00d3b69"
+}

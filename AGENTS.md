@@ -1,5 +1,25 @@
 # Agent Rules
 
+Explicit Astral independent-review capsule V1 now allowed: additive Python
+source, capsule specification, fail-closed review templates, and hermetic tests
+under `tools/astral-independent-review-capsule-v1/`; a capsule and reviewer
+runbook note under `docs/research/astral-self-modeling/`; Astral navigation
+updates; an isolated Astral-only branch and commit; and a repository-external,
+content-addressed capsule containing the immutable release package, author
+report, complete Git bundle, runtime contract, and one-command clean replay
+tooling. This phase is limited to making the existing Astral validation release
+portable and independently exercisable: exact capsule census and hashes,
+release commit/tree/package/report binding, complete Git-bundle verification,
+clean clone construction, exact-by-default runtime comparison, existing
+authoritative validation execution, digest-sealed replay reports, and unfilled
+review forms. It does not permit new experiments, V24, network access,
+dependency installation, assessment opening, result modification, fabricated
+reviewer identities, completed review decisions, self-review counted as
+independence, external-replication claims, evidence acceptance, Stage 0C
+confirmation, Stage 1, benchmark claims, introspection or self-modeling claims,
+or claims above `LocalImmutableValidationCandidate`. Every mutation in this
+phase names state slice `astral-independent-review-capsule-v1`.
+
 Explicit Astral immutable validation release V1 now allowed: additive Python
 source, release specification, and hermetic tests under
 `tools/astral-validation-release-v1/`; release and independent-review handoff

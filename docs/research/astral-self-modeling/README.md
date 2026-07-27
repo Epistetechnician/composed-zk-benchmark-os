@@ -167,6 +167,9 @@ review and experiments rule out equivalent prior work.
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
   fail-closed reviewer forms and independent-implementation boundary.
+- [Independent-review capsule V1](46-independent-review-capsule-v1.md):
+  portable Git source bundle, immutable artifacts, runtime contract, and
+  clean-room replay entrypoint.
 - [Stage 0 measurement-validity preregistration](08-stage0-measurement-validity-preregistration.md):
   documentation-only compiled-circuit study boundary, locked comparisons,
   endpoints, stop rules, artifact contract, and advancement gate.
