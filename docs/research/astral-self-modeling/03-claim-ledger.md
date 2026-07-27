@@ -67,6 +67,12 @@ Accepted-as-design-choice.
 |---|---|---|---|---|---|---|
 | C044 | In test | Not refuted | V24 manifest `288feb32b4833544d57988a61c9e76f95856777ab4346dea553eee539fcba9c3`; assessment telemetry activation-versus-none balanced accuracy `1.0000`, strongest primary control `0.6875`, advantage `0.3125`, concept-bootstrap 95% interval `[0.1875, 0.4375]` | Author-run fail-closed validator; independent review `NotRun` | Both development gates passed, the configuration lock validated before the one-shot assessment, and the sealed assessment passed every preregistered gate | Medium / four-concept local author-development assessment; not independent verification, Stage 0C, introspection, self-modeling, or confirmation |
 
+## Docker Continual-Correction Simulation — 2026-07-27
+
+| ID | Exact claim | Type / lane | Operationalization and falsifier | Required artifact | Sources | Status | Confidence / ceiling |
+|---|---|---|---|---|---|---|---|
+| C045 | The Docker V25 validation harness distinguishes its construction-known continual-correction mechanism from matched controls and rejects the same gate in a null world | Engineering / synthetic positive control | Frozen V25 positive sensitivity and null specificity gates; refuted by either gate failure | Content-addressed V25 raw-observation bundle and fail-closed recomputation report | `53-docker-closed-loop-correction-simulation-v25.md` | In test | None / synthetic Docker harness only |
+
 C003-C007 and C013-C014 retain the historical status `Proposed`; their current
 execution disposition is `BlockedByStage0C`. No observer, correction,
 prospective-prediction, or actor-observer optimization evidence exists. C008
