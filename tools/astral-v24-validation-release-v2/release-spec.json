@@ -1,0 +1,18 @@
+{
+  "artifact_identity": "288feb32b4833544d57988a61c9e76f95856777ab4346dea553eee539fcba9c3",
+  "claim_ceiling": "LocalAuthorDevelopmentPerturbationReadout",
+  "expected_classification": "AuthorDevelopmentPerturbationReadoutObserved",
+  "external_states": {
+    "confirmation": "NotAuthorized",
+    "independent_implementation_replication": "NotRun",
+    "independently_verified": "NotRun",
+    "reproducibility_reviewer": "NotRun",
+    "scientific_reviewer": "NotRun",
+    "stage_0c": "Blocked",
+    "stage_1": "BlockedByStage0C"
+  },
+  "release_id": "astral-v24-validation-release-v2",
+  "schema_version": 2,
+  "source_commit": "de4ac8145ed3e730f9a2ed1495921084a078ab39",
+  "source_tree": "4a2cbaaebfba15186ae9a2829b516eca74b71b40"
+}

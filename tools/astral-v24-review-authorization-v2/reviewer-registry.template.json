@@ -1,0 +1,30 @@
+{
+  "admin_id": "shaanp",
+  "purpose": "astral_v24_review",
+  "registered_at": "UNFILLED",
+  "reviewers": [
+    {
+      "affiliation": "UNFILLED",
+      "counts_toward_independent_verification": false,
+      "independence_disclosure": "UNFILLED",
+      "public_key": "UNFILLED",
+      "public_key_fingerprint": "UNFILLED",
+      "reviewer_kind": "agent_advisory",
+      "reviewer_name": "UNFILLED",
+      "role": "artifact_reproducibility",
+      "signer_identity": "UNFILLED"
+    },
+    {
+      "affiliation": "UNFILLED",
+      "counts_toward_independent_verification": false,
+      "independence_disclosure": "UNFILLED",
+      "public_key": "UNFILLED",
+      "public_key_fingerprint": "UNFILLED",
+      "reviewer_kind": "agent_advisory",
+      "reviewer_name": "UNFILLED",
+      "role": "scientific_validity",
+      "signer_identity": "UNFILLED"
+    }
+  ],
+  "schema_version": 2
+}
