@@ -197,6 +197,9 @@ review and experiments rule out equivalent prior work.
 - [V28R2 acquisition-qualification validator notes](66-v28r2-acquisition-qualification-validator-notes.md):
   implemented clean-room validator, synthetic-only fingerprint builder,
   full-census hermetic fixture, and fail-closed claim boundary.
+- [V28R2 retired-R1 fingerprint construction boundary](67-v28r2-retired-r1-fingerprint-construction-boundary.md):
+  docs-first one-time hash-only construction contract; construction and
+  protocol pinning remain unrun and separate.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):

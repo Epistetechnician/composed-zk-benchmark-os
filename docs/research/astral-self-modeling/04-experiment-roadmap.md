@@ -29,8 +29,10 @@ Its first 96-family novelty corpus produced near-chance point estimates but
 failed the frozen family-cluster equivalence intervals and was retired before
 updates. A disjoint 6,144-family V28R2 replacement corpus is now preregistered
 from a conservative assumption-based precision and power calculation;
-the additive clean-room validator is implemented, while producer
-implementation and model execution remain unauthorized.
+the additive clean-room validator is implemented. A docs-first boundary now
+pins a future one-time hash-only retired-R1 fingerprint construction, but that
+construction, protocol pinning, producer implementation, and model execution
+remain unrun or unauthorized.
 Retention and process-level recovery are a second gate. Prospective Astral
 selection is a third gate and remains sealed unless multiple qualified native
 arms first exhibit a meaningful acquisition-retention tradeoff. The validator
@@ -73,7 +75,7 @@ requirements.
 | V24 | `AuthorDevelopmentPerturbationReadoutObserved` | A fixed downstream linear residual readout passed both development gates and the sealed assessment against text, output-logit, anomaly, and shuffled-label controls; independent verification and confirmation remain `NotRun`/`NotAuthorized` |
 | V25 | `SyntheticDockerContinualCorrectionHarnessQualified` | Construction-known positive sensitivity and null specificity passed; protocol qualification only, with model-backed learning and thesis validation still `NotRun`/`NotValidated` |
 | V27 | `DeterministicDevelopmentReplayMatchedNoCandidateAssessmentNotRun` | Two complete 54-execution development packets matched every deterministic scientific lock; no-update dominated, Astral did not beat the strongest nonprivileged selector, and assessment stayed sealed |
-| V28 | `R1CorpusNotNovelRetiredR2ValidatorImplemented` | The 96-family V28R1 packet was structurally valid and deterministic but failed the frozen equivalence intervals; its corpus and seed are retired, the additive clean-room V28R2 validator and hermetic tests are implemented, the real R1 fingerprint and R2 packet are absent, producer/model execution remains unauthorized, and no update, retention/recovery, selector, or assessment evidence exists |
+| V28 | `R1CorpusNotNovelRetiredR2ValidatorImplementedFingerprintConstructionBounded` | The 96-family V28R1 packet was structurally valid and deterministic but failed the frozen equivalence intervals; its corpus and seed are retired, the additive clean-room V28R2 validator and hermetic tests are implemented, and a docs-first one-time real-R1 fingerprint construction boundary is pinned; the fingerprint and R2 packet remain absent, producer/model execution remains unauthorized, and no update, retention/recovery, selector, or assessment evidence exists |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 
@@ -153,7 +155,10 @@ in `64-v28r2-powered-acquisition-novelty-preregistration.md`; that note does
 not authorize execution. Additive clean-room validator implementation is
 bounded separately in
 `65-v28r2-acquisition-qualification-validator-boundary.md`; no R2 packet or
-model-backed result exists.
+model-backed result exists. The future one-time hash-only retained-R1
+fingerprint construction is fixed separately in
+`67-v28r2-retired-r1-fingerprint-construction-boundary.md`; that construction
+and the later protocol-pinning gate remain unrun.
 
 ## Stage 0A: Instrument Integrity — Complete
 

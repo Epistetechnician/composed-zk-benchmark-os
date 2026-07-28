@@ -171,8 +171,10 @@ question, prompt, option, dependency, and mapping hashes; template and concept
 AST hashes; typed normalized skeleton and line hashes; typed structural
 eight-token n-grams; and future-assessment family identities.
 
-Running the builder on the real retained R1 bundle and committing its output
-requires a later separate authorization.
+Running the builder on the real retained R1 bundle requires a later
+construction authorization. Committing an accepted output and pinning it into
+the protocol require a later, distinct reviewed authorization after
+construction audit.
 
 ## Artifact and packet validation
 

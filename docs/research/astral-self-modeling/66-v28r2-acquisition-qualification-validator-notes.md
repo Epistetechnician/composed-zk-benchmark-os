@@ -92,8 +92,10 @@ content, AST, normalized-skeleton, line, structural eight-token n-gram, seed,
 and future-assessment intersections.
 
 The real retired-R1 fingerprint was not built. The committed protocol says
-`not-built`, so any scientific packet fails closed until a later separately
-authorized slice builds, reviews, commits, and pins the real fingerprint.
+`not-built`, so any scientific packet fails closed. A later separately
+authorized slice may construct and audit the real fingerprint. Only after that
+audit may a distinct reviewed slice commit the accepted fingerprint and repin
+the protocol.
 
 ## Operator surface
 
