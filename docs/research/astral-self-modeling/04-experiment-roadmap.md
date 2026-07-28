@@ -50,7 +50,7 @@ requirements.
 | V23 | `NotRunCapabilityTierPerturbationQualification` | Fresh-concept Llama 1B replication failed unchanged fit/tune and activation-versus-none gates; assessment stayed unopened |
 | V24 | `AuthorDevelopmentPerturbationReadoutObserved` | A fixed downstream linear residual readout passed both development gates and the sealed assessment against text, output-logit, anomaly, and shuffled-label controls; independent verification and confirmation remain `NotRun`/`NotAuthorized` |
 | V25 | `SyntheticDockerContinualCorrectionHarnessQualified` | Construction-known positive sensitivity and null specificity passed; protocol qualification only, with model-backed learning and thesis validation still `NotRun`/`NotValidated` |
-| V27 | `QualificationPlanLockedSelectorsPendingAssessmentNotRun` | The revised immutable release reproduced all six native Qwen 0.5B mechanisms and the exact 54-run plan plus sealed assessment commitment are locked; selector implementation/ranking, prediction locking, independent review, and qualification execution remain incomplete or `NotRun` |
+| V27 | `QualificationPlanLockedEstimatorCoreImplementedAssessmentNotRun` | The revised immutable release reproduced all six mechanisms; the exact 54-run plan and assessment commitment are locked; the capacity-matched selector estimator core is implemented, while feature extraction/ranking, prediction locking, review, and qualification remain incomplete or `NotRun` |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 
@@ -73,6 +73,11 @@ assessment commitment must be locked. The plan artifact at internal digest
 now freezes 54 planned executions, 12 assessment-family commitments, budgets,
 statistics, and recovery policy. It intentionally leaves every selector
 implementation pending and the prediction lock open.
+
+RGS commit `16466ef` subsequently implemented the capacity-matched selector
+estimator core. It does not alter the frozen plan or close the gate: real
+model-derived feature extraction, development-only selector ranking, and a new
+content-addressed prediction-lock transition are still required.
 
 The primary endpoint is constrained update-selection regret. Candidates first
 pass acquisition, retention, forgetting, calibration, exact recovery, budget,

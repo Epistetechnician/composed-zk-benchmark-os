@@ -4,7 +4,7 @@ State slice: `astral-rgs-v27-model-backed-qualification-r1`.
 
 Protocol slice: `astral-rgs-nested-recoverable-update-v27`.
 
-Status: `ImmutableNativeAuthorReplayPassed / QualificationPlanLockedSelectorsPending / ModelBackedAssessmentNotRun`.
+Status: `ImmutableNativeAuthorReplayPassed / QualificationPlanLocked / SelectorEstimatorCoreImplemented / FeatureExtractionAndRankingPending / ModelBackedAssessmentNotRun`.
 
 Thesis status: `NotValidated`.
 
@@ -232,6 +232,12 @@ The assessment commitment is
 Assessment content and outcomes remain absent. All selector implementations
 and the development ranking remain pending, so the prediction lock is not
 sealed.
+
+RGS commit `16466ef` later implemented and tested the capacity-matched selector
+estimator core. It is outside the source identity of the passing immutable
+native replay and has not consumed real development features. A successor
+source-bound transition artifact is required after feature extraction and
+development ranking; no prediction or assessment status changes here.
 
 - C046 remains `In test`: the author-side engineering machinery and immutable
   replay passed, but independent review is `NotRun`.

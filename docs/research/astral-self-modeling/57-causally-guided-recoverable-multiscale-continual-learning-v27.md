@@ -2,7 +2,7 @@
 
 State slice: `astral-rgs-nested-recoverable-update-v27`.
 
-Status: `Preregistered / ImmutableNativeAuthorReplayPassed / QualificationPlanLockedSelectorsPending / ModelBackedAssessmentNotRun`.
+Status: `Preregistered / ImmutableNativeAuthorReplayPassed / QualificationPlanLocked / SelectorEstimatorCoreImplemented / FeatureExtractionAndRankingPending / ModelBackedAssessmentNotRun`.
 
 ## Research question
 
@@ -64,6 +64,12 @@ freezes the selector feature schemas but truthfully marks every selector
 implementation `PendingDevelopmentImplementation`. The strongest
 nonprivileged selector is `PendingDevelopmentRanking`; the prediction lock is
 `NotLockedSelectorsPending`. Assessment cannot open in this state.
+
+RGS commit `16466ef` implements a single capacity-matched estimator family for
+the seven learned or telemetry-control selectors and deterministic random,
+fixed-development, and no-update selectors. That code has not yet consumed real
+model-derived development features or produced a development ranking. It does
+not retroactively change the plan's pending status and cannot seal predictions.
 
 Before assessment outcomes exist, every selector seals predicted future-unseen
 reward, protected-retention change, calibration change, recovery success and
