@@ -135,6 +135,12 @@ Accepted-as-design-choice.
 |---|---|---|---|---|---|---|
 | `V28-C01` | Validator implemented; real retired-R1 fingerprint absent | Docs-first one-time hash-only construction boundary pinned; construction and protocol pinning not run | `67-v28r2-retired-r1-fingerprint-construction-boundary.md`; implementation commit `8cf75d745c20afa885286fecfbd8d67c253b8707` | Author boundary plus later independent construction audit required; external independent scientific review `NotRun` | The validator must remain fail-closed until the frozen R1 corpus is represented by a reviewed hash-only nonreuse inventory without exposing raw R1 material | Boundary only; no fingerprint, protocol pin, R2 corpus, model-backed novelty, acquisition, retention/recovery, selector, or assessment evidence |
 
+## V28R2 Retired-R1 Fingerprint Construction Authorization — 2026-07-28
+
+| ID | Old execution posture | New execution posture | Evidence artifact | Reviewer | Reason | Unchanged claim ceiling |
+|---|---|---|---|---|---|---|
+| `V28-C01` | One-time construction boundary pinned; construction not run | Pinned no-argument exact-path controller implemented; one-invocation hash-only construction authorized; output inspection authorized; commit and protocol pinning remain separate and unauthorized | Controller `sha256:105a11041bc9fa7a116c02de9ec40ba4e8a7098a87b196e119c52906c3210e87`; `68-v28r2-retired-r1-fingerprint-construction-authorization.md` | Eight hermetic controller tests plus pre-execution repository, validation, and research-scope audit; external independent scientific review `NotRun` | The construction must be non-adaptive, non-repeatable, and unable to substitute copied inputs or alternate outputs | Local controller engineering evidence and authorization only; no fingerprint yet, protocol pin, R2 corpus, model-backed novelty, acquisition, retention/recovery, selector, or assessment evidence |
+
 C003-C007 and C013-C014 retain the historical status `Proposed`; their current
 execution disposition is `BlockedByStage0C`. No observer, correction,
 prospective-prediction, or actor-observer optimization evidence exists. C008
