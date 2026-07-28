@@ -1,5 +1,27 @@
 # Agent Rules
 
+Explicit Astral-RGS novel-knowledge acquisition and recoverable-consolidation
+V28 docs-first preregistration now allowed: one prospective protocol note under
+`docs/research/astral-self-modeling/`, append-only Astral roadmap, claim-ledger,
+and navigation updates, and this authorization record. This slice is limited to
+state slice `astral-rgs-novel-knowledge-acquisition-recoverable-consolidation-v28`:
+checkpoint-first corpus generation commitments; nonce facts, entity relations,
+changed rules, and mappings; near-chance pre-update and no-update gates;
+source-context removal and process restart; paraphrase, multi-hop, and withheld
+composition evaluation; explicit context-only, retrieval, sequential-LoRA,
+replay, SCoL-style, and nested/multiscale comparators; protected-capability,
+superseded-fact, calibration, and process-level recovery gates; and prospective
+Astral selection only after acquisition/retention tradeoff heterogeneity is
+demonstrated. It does not permit Python or Rust implementation, corpus or
+assessment generation, model access, model training or updates, downloads,
+network access, RGS runtime mutation, tuning, prediction sealing, assessment
+opening, artifact or Evidence Ledger promotion, independent-replication claims,
+benchmark claims, continual-learning breakthrough claims, self-improvement,
+introspection or self-modeling claims, Stage 0C or Stage 1 promotion, production
+claims, or claims above `LocalProspectiveNovelKnowledgeAcquisitionProtocolV28`.
+Every mutation in this slice names state slice
+`astral-rgs-novel-knowledge-acquisition-recoverable-consolidation-v28`.
+
 Explicit Astral-RGS causally guided recoverable multiscale continual-learning
 evaluation V27 now allowed: additive Python source, frozen JSON contracts,
 hermetic tests, and fail-closed validators under
