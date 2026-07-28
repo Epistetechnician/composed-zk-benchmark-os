@@ -126,7 +126,7 @@ PROTECTED_ADMISSION_PATH = (
     "crates/hsai-agent-admission/src/lib.rs"
 )
 PROTECTED_ADMISSION_SHA256 = (
-    "41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de"
+    "5ebaf3484bc0b2348ebf8b45c877def0b35a2a858126e32ec8e8bbe1ad6e1607"
 )
 
 INSPECT_FIELDS = (
