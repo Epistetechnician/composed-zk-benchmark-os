@@ -1,0 +1,526 @@
+{
+  "baseline_contract": {
+    "all_four_process_ids_distinct": true,
+    "exact_cross_arm_row_parity": true,
+    "fresh_checkpoint_reload_for_no_update": true,
+    "no_update_runs": 1,
+    "pre_update_runs": 1,
+    "retrieval_enabled": false,
+    "source_context_present": false,
+    "update_budget": {
+      "adapter_rank": 0,
+      "gradient_steps": 0,
+      "update_tokens": 0
+    }
+  },
+  "choice_count": 4,
+  "choice_labels": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "claim_ceiling": "LocalAcquisitionQualificationValidatorV28R2",
+  "derivation_contract": {
+    "algorithm": "hmac_sha256",
+    "canonical_json": "utf8_nfc_ascii_sorted_compact_no_nan",
+    "domain_prefix": "astral-v28r2-acquisition-v2",
+    "identifier_hex_length": 24,
+    "seed_bytes": 32
+  },
+  "derivation_grammar": {
+    "candidate_count": 4,
+    "common_edges": [
+      {
+        "from_slot": "alias",
+        "id": "alias_to_subject",
+        "predicate": "denotes",
+        "status": "active",
+        "to_slot": "subject"
+      },
+      {
+        "from_slot": "wrapper",
+        "id": "wrapper_to_alias",
+        "predicate": "unwraps_to",
+        "status": "active",
+        "to_slot": "alias"
+      }
+    ],
+    "correct_candidate_index": 0,
+    "evaluation_kinds": {
+      "multi_hop": {
+        "path": [
+          "alias_to_subject",
+          "$fact.value_edge"
+        ],
+        "required_edge_count": 2,
+        "start_slot": "alias"
+      },
+      "paraphrase": {
+        "path": [
+          "$fact.value_edge"
+        ],
+        "required_edge_count": 1,
+        "start_slot": "subject"
+      },
+      "withheld_composition": {
+        "path": [
+          "wrapper_to_alias",
+          "alias_to_subject",
+          "$fact.value_edge"
+        ],
+        "required_edge_count": 3,
+        "start_slot": "wrapper"
+      }
+    },
+    "fact_kinds": {
+      "changed_rule": {
+        "descriptor_surface": "the current non-superseded rule",
+        "source_surface": "Rule {subject} now maps to {new_value}; the prior value {old_value} is superseded.",
+        "superseded_edges": [
+          {
+            "from_slot": "subject",
+            "id": "changed_rule_old_value",
+            "predicate": "rule_value",
+            "status": "superseded",
+            "to_slot": "candidate_values[1]"
+          }
+        ],
+        "support_surface": "{alias} denotes {subject}. {wrapper} unwraps to {alias}. Only the active rule may answer a query.",
+        "value_edge": {
+          "from_slot": "subject",
+          "id": "changed_rule_current_value",
+          "predicate": "rule_value",
+          "status": "active",
+          "to_slot": "candidate_values[0]"
+        }
+      },
+      "entity_relation": {
+        "descriptor_surface": "relation {relation_name}",
+        "source_surface": "{subject} has relation {relation_name} to {value}.",
+        "superseded_edges": [],
+        "support_surface": "{alias} denotes {subject}. {wrapper} unwraps to {alias}.",
+        "value_edge": {
+          "from_slot": "subject",
+          "id": "entity_relation_value",
+          "predicate": "relation_value",
+          "qualifier_slot": "relation_name",
+          "status": "active",
+          "to_slot": "candidate_values[0]"
+        }
+      },
+      "nonce_fact": {
+        "descriptor_surface": "the sealed fact",
+        "source_surface": "The sealed fact for {subject} is {value}.",
+        "superseded_edges": [],
+        "support_surface": "{alias} denotes {subject}. {wrapper} unwraps to {alias}.",
+        "value_edge": {
+          "from_slot": "subject",
+          "id": "nonce_fact_value",
+          "predicate": "fact_value",
+          "status": "active",
+          "to_slot": "candidate_values[0]"
+        }
+      },
+      "opaque_mapping": {
+        "descriptor_surface": "the sealed mapping",
+        "source_surface": "In the sealed mapping, {subject} maps to {value}.",
+        "superseded_edges": [],
+        "support_surface": "{alias} denotes {subject}. {wrapper} unwraps to {alias}.",
+        "value_edge": {
+          "from_slot": "subject",
+          "id": "opaque_mapping_value",
+          "predicate": "mapping_value",
+          "status": "active",
+          "to_slot": "candidate_values[0]"
+        }
+      }
+    },
+    "training_payload_separator": "\n",
+    "training_premise_order": [
+      "$fact.value_edge",
+      "$fact.superseded_edges",
+      "alias_to_subject",
+      "wrapper_to_alias"
+    ],
+    "version": "astral.rgs_acquisition_v28r2.derivation_grammar.v1",
+    "withheld_composite_edges_forbidden": true
+  },
+  "domain_tags": {
+    "hmac_domain_prefix": "astral-v28r2-acquisition-v2",
+    "tags": {
+      "alias": "alias",
+      "candidate_value": "candidate-value",
+      "family_id": "family",
+      "item_id": "item",
+      "namespace_id": "namespace",
+      "query_id": "query",
+      "relation_name": "relation-name",
+      "subject": "subject",
+      "wrapper": "wrapper"
+    },
+    "version": "astral.rgs_acquisition_v28r2.domain_tags.v1"
+  },
+  "generator_input_allowlist": [
+    "campaign_id",
+    "checkpoint_inventory_sha256",
+    "configuration_sha256",
+    "derivation_grammar_sha256",
+    "domain_tags_sha256",
+    "future_assessment_identity_commitment_sha256",
+    "generator_inventory_sha256",
+    "one_shot_execution_claim_sha256",
+    "output_root",
+    "power_profile_sha256",
+    "protocol_sha256",
+    "retired_r1_fingerprint_manifest_sha256",
+    "runtime_sha256",
+    "scorer_contract_sha256",
+    "seed_hex",
+    "source_commit",
+    "source_tree",
+    "template_ast_catalog_sha256",
+    "tokenizer_inventory_sha256",
+    "validator_inventory_sha256"
+  ],
+  "nonreuse_contract": {
+    "exact_set_disjointness_required": true,
+    "normalization": "NFC_lowercase_typed_placeholder_whitespace_v1",
+    "normalized_line_disjointness_required": true,
+    "normalized_skeleton_disjointness_required": true,
+    "retired_r1_artifact_manifest_sha256": "sha256:5b01a32e1ba9d7d9ce84c8b301f29e0145962ac8c0eac0ec59b07cd5cfca846e",
+    "retired_r1_fingerprint_manifest_sha256": "not-built",
+    "retired_r1_packet_sha256": "sha256:2fd74b389907d3167518a0d91d9d63f18fda7c1231a51764657e791286ee2ad0",
+    "retired_r1_report_sha256": "sha256:3e24804dc84744a300bb11bc246fdfd40256459f97a68da0df7993d676b9ea3d",
+    "structural_ngram_disjointness_required": true,
+    "structural_ngram_size": 8,
+    "template_ast_disjointness_required": true
+  },
+  "ordering_contract": {
+    "baseline_execution_order": 7,
+    "configuration_lock_order": 6,
+    "corpus_generation_order": 5,
+    "input_inventory_order": 1,
+    "ledger_claim_order": 3,
+    "power_and_catalog_lock_order": 2,
+    "seed_draw_order": 4,
+    "validation_order": 8
+  },
+  "packet_state_slice": "astral-rgs-v28r2-powered-acquisition-novelty",
+  "packet_version": "mesh.astral_v28r2_acquisition_packet.v1",
+  "permutation_contract": {
+    "answer_positions": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "blocks_per_fact_kind": 64,
+    "every_permutation_once_per_fact_kind_evaluation_kind_block": true,
+    "family_block_size": 24,
+    "mapping": "template_ordinal_to_expected_choice",
+    "permutation_count": 24,
+    "permutation_enumeration": "lexicographic_permutations_0_1_2_3",
+    "surface_templates_per_evaluation_kind": 4
+  },
+  "power_profile": {
+    "adjusted_alpha": 0.003125,
+    "baseline_run_count": 2,
+    "chance_accuracy": 0.25,
+    "chance_normalized_lift_formula": "(accuracy-0.25)/0.75",
+    "cluster_unit": "family_id",
+    "equivalence_margin": 0.05,
+    "families_per_fact_kind": 1536,
+    "family_count": 6144,
+    "familywise_alpha": 0.05,
+    "interval_method": "per_run_family_cluster_student_t_interval",
+    "minimum_student_t_critical_value": 5.0,
+    "multiplicity_policy": "bonferroni_two_arms_eight_dimensions",
+    "queries_per_evaluation_kind": 4,
+    "queries_per_family": 12,
+    "queries_per_run": 73728,
+    "two_sided_comparison_count": 16
+  },
+  "prompt_shell": {
+    "allowed_slots": [
+      "question",
+      "options"
+    ],
+    "ast": {
+      "children": [
+        {
+          "operator": "literal",
+          "value": "Answer using exactly one label: A, B, C, or D."
+        },
+        {
+          "name": "question",
+          "operator": "slot",
+          "type": "question_text"
+        },
+        {
+          "format": "{label}. {option}",
+          "labels": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "operator": "zip_lines",
+          "slot": "options"
+        },
+        {
+          "operator": "literal",
+          "value": "Answer:"
+        }
+      ],
+      "operator": "prompt.sequence"
+    },
+    "forbidden_slots": [
+      "source",
+      "support",
+      "premise_block",
+      "answer"
+    ],
+    "line_separator": "\n",
+    "terminal_newline": false,
+    "unicode": "NFC",
+    "version": "astral.rgs_acquisition_v28r2.prompt_shell.v1"
+  },
+  "required_evaluation_kinds": [
+    "paraphrase",
+    "multi_hop",
+    "withheld_composition"
+  ],
+  "required_fact_kinds": [
+    "nonce_fact",
+    "entity_relation",
+    "changed_rule",
+    "opaque_mapping"
+  ],
+  "required_false_claims": [
+    "model_backed_acquisition",
+    "retention_recovery_qualified",
+    "astral_selection_authorized",
+    "continual_learning_solved",
+    "continual_learning_breakthrough",
+    "autonomous_self_improvement",
+    "introspection",
+    "self_modeling",
+    "stage_0c",
+    "stage_1",
+    "independently_replicated",
+    "benchmark_dominance",
+    "production_readiness"
+  ],
+  "scorer_contract": {
+    "choice_labels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "contextual_tokenization_precondition": "tokenize(prompt || label_surface) == tokenize(prompt) || [choice_token_id]",
+    "generation_allowed": false,
+    "ineligible_on_precondition_failure": true,
+    "input_token_hash": "canonical_sha256(input_token_ids)",
+    "label_surfaces": [
+      " A",
+      " B",
+      " C",
+      " D"
+    ],
+    "method": "single_next_token_label_log_probability",
+    "observed_choice": "argmax(label_log_probability_scores)",
+    "prompt_binding": "sha256(utf8_nfc(prompt_text))",
+    "sampling_allowed": false,
+    "score": "log_softmax(final_prompt_logits)[choice_token_id]",
+    "score_count": 4,
+    "scores_must_be_finite_non_boolean": true,
+    "tie_break": "lowest_option_index",
+    "version": "astral.rgs_acquisition_v28r2.scorer_contract.v1"
+  },
+  "state_slice": "astral-rgs-v28r2-acquisition-qualification-validator",
+  "template_ast_catalog": {
+    "evaluation": {
+      "multi_hop": [
+        {
+          "derivation": "multi_hop",
+          "id": "v28r2-eval-multi-hop-0",
+          "operator": "evaluation.select.multi_hop",
+          "slots": [
+            "alias",
+            "fact_descriptor"
+          ],
+          "surface": "Starting from {alias}, follow its anchor and then {fact_descriptor}; which option is terminal?"
+        },
+        {
+          "derivation": "multi_hop",
+          "id": "v28r2-eval-multi-hop-1",
+          "operator": "evaluation.choose.multi_hop",
+          "slots": [
+            "alias",
+            "fact_descriptor"
+          ],
+          "surface": "Resolve {alias} through its declared anchor under {fact_descriptor} and select the result."
+        },
+        {
+          "derivation": "multi_hop",
+          "id": "v28r2-eval-multi-hop-2",
+          "operator": "evaluation.identify.multi_hop",
+          "slots": [
+            "alias",
+            "fact_descriptor"
+          ],
+          "surface": "Which candidate terminates the alias-to-anchor path from {alias} followed by {fact_descriptor}?"
+        },
+        {
+          "derivation": "multi_hop",
+          "id": "v28r2-eval-multi-hop-3",
+          "operator": "evaluation.resolve.multi_hop",
+          "slots": [
+            "alias",
+            "fact_descriptor"
+          ],
+          "surface": "Complete the two-edge derivation beginning at {alias} and ending through {fact_descriptor}."
+        }
+      ],
+      "paraphrase": [
+        {
+          "derivation": "paraphrase",
+          "id": "v28r2-eval-paraphrase-0",
+          "operator": "evaluation.select.paraphrase",
+          "slots": [
+            "subject",
+            "fact_descriptor"
+          ],
+          "surface": "Under {fact_descriptor}, which option is the active terminal value for {subject}?"
+        },
+        {
+          "derivation": "paraphrase",
+          "id": "v28r2-eval-paraphrase-1",
+          "operator": "evaluation.choose.paraphrase",
+          "slots": [
+            "subject",
+            "fact_descriptor"
+          ],
+          "surface": "Select the active value reached directly from {subject} under {fact_descriptor}."
+        },
+        {
+          "derivation": "paraphrase",
+          "id": "v28r2-eval-paraphrase-2",
+          "operator": "evaluation.identify.paraphrase",
+          "slots": [
+            "subject",
+            "fact_descriptor"
+          ],
+          "surface": "Identify the current terminal assigned to {subject} by {fact_descriptor}."
+        },
+        {
+          "derivation": "paraphrase",
+          "id": "v28r2-eval-paraphrase-3",
+          "operator": "evaluation.resolve.paraphrase",
+          "slots": [
+            "subject",
+            "fact_descriptor"
+          ],
+          "surface": "Resolve {subject} through {fact_descriptor} and choose its active terminal."
+        }
+      ],
+      "withheld_composition": [
+        {
+          "derivation": "withheld_composition",
+          "id": "v28r2-eval-withheld-composition-0",
+          "operator": "evaluation.select.withheld_composition",
+          "slots": [
+            "wrapper",
+            "fact_descriptor"
+          ],
+          "surface": "Starting from {wrapper}, follow wrapper, alias, and anchor under {fact_descriptor}; which option is terminal?"
+        },
+        {
+          "derivation": "withheld_composition",
+          "id": "v28r2-eval-withheld-composition-1",
+          "operator": "evaluation.choose.withheld_composition",
+          "slots": [
+            "wrapper",
+            "fact_descriptor"
+          ],
+          "surface": "Resolve {wrapper} through its alias and anchor, then apply {fact_descriptor}."
+        },
+        {
+          "derivation": "withheld_composition",
+          "id": "v28r2-eval-withheld-composition-2",
+          "operator": "evaluation.identify.withheld_composition",
+          "slots": [
+            "wrapper",
+            "fact_descriptor"
+          ],
+          "surface": "Which candidate terminates the three-edge composition rooted at {wrapper} under {fact_descriptor}?"
+        },
+        {
+          "derivation": "withheld_composition",
+          "id": "v28r2-eval-withheld-composition-3",
+          "operator": "evaluation.resolve.withheld_composition",
+          "slots": [
+            "wrapper",
+            "fact_descriptor"
+          ],
+          "surface": "Complete the wrapper-to-alias-to-anchor derivation beginning at {wrapper}, followed by {fact_descriptor}."
+        }
+      ]
+    },
+    "skeleton_projection": [
+      "operator",
+      "derivation",
+      "ordered_typed_slots"
+    ],
+    "training": [
+      {
+        "id": "v28r2-training-0",
+        "operator": "training.present_atomic_premises",
+        "slots": [
+          {
+            "name": "premise_block",
+            "type": "premise_block"
+          }
+        ],
+        "surface": "Store these atomic declarations:\n{premise_block}"
+      },
+      {
+        "id": "v28r2-training-1",
+        "operator": "training.record_atomic_premises",
+        "slots": [
+          {
+            "name": "premise_block",
+            "type": "premise_block"
+          }
+        ],
+        "surface": "Current authoritative atomic record:\n{premise_block}"
+      },
+      {
+        "id": "v28r2-training-2",
+        "operator": "training.update_atomic_premises",
+        "slots": [
+          {
+            "name": "premise_block",
+            "type": "premise_block"
+          }
+        ],
+        "surface": "Persist each declaration in this record:\n{premise_block}"
+      },
+      {
+        "id": "v28r2-training-3",
+        "operator": "training.consolidate_atomic_premises",
+        "slots": [
+          {
+            "name": "premise_block",
+            "type": "premise_block"
+          }
+        ],
+        "surface": "Consolidate these atomic bindings:\n{premise_block}"
+      }
+    ],
+    "version": "astral.rgs_acquisition_v28r2.template_ast_catalog.v1"
+  },
+  "version": "astral.rgs_acquisition_v28r2.protocol.v1"
+}

@@ -4,7 +4,7 @@ State slice:
 `astral-rgs-novel-knowledge-acquisition-recoverable-consolidation-v28`.
 
 Status: `DocsFirstPreregistered / V28R1CorpusNotNovelRetired /
-V28R2PoweredProtocolLocked / V28R2ValidatorImplementationAuthorized /
+V28R2PoweredProtocolLocked / V28R2ValidatorImplemented /
 V28R2ProducerNotAuthorized / UpdateArmsNotAuthorized /
 AssessmentSealedNotAuthorized`.
 

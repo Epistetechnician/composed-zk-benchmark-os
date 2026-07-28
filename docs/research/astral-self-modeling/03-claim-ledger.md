@@ -123,6 +123,12 @@ Accepted-as-design-choice.
 |---|---|---|---|---|---|---|
 | `V28-C01` | Powered V28R2 protocol docs-first only | Additive clean-room validator implementation authorized; implementation and execution not started | `65-v28r2-acquisition-qualification-validator-boundary.md` | Repository, statistical, and validation design audits; external independent scientific review `NotRun` | The validator must independently reconstruct the frozen power, semantic, permutation, score, process, and R1-nonreuse contracts before any producer or run exists | Authorization only; no real fingerprint, corpus, model-backed packet, acquisition, retention/recovery, selector, or assessment evidence |
 
+## V28R2 Validator Implementation Update — 2026-07-28
+
+| ID | Old execution posture | New execution posture | Evidence artifact | Reviewer | Reason | Unchanged claim ceiling |
+|---|---|---|---|---|---|---|
+| `V28-C01` | Additive clean-room validator authorized | Validator, CLI, synthetic-only fingerprint builder, full-census fixture, and adversarial tests implemented; real fingerprint and R2 packet absent | `tools/astral-rgs-acquisition-v28r2/`; `66-v28r2-acquisition-qualification-validator-notes.md` | Author implementation plus internal independent code/statistics/scope audits; external independent scientific review `NotRun` | Exact 6,144-family and 147,456-row public-path fixture plus focused adversarial contracts pass; committed protocol remains fail-closed at `not-built` for the real R1 fingerprint | Local engineering validator evidence only; no corpus, model-backed novelty, acquisition, retention/recovery, selector, or assessment evidence |
+
 C003-C007 and C013-C014 retain the historical status `Proposed`; their current
 execution disposition is `BlockedByStage0C`. No observer, correction,
 prospective-prediction, or actor-observer optimization evidence exists. C008

@@ -1,7 +1,7 @@
 # Agent Rules
 
 Explicit Astral-RGS V28R2 acquisition-qualification validator implementation
-now allowed: additive standard-library Python source, a declarative JSON
+now allowed and implemented: additive standard-library Python source, a declarative JSON
 protocol, hermetic tests, and one synthetic-fixture-only retired-R1 fingerprint
 builder under `tools/astral-rgs-acquisition-v28r2/`; implementation notes under
 `docs/research/astral-self-modeling/`; and status-only Astral roadmap,
@@ -24,7 +24,12 @@ Evidence Ledger promotion, acquisition or continual-learning claims,
 independent-replication claims, benchmark or breakthrough claims,
 self-improvement, introspection or self-modeling claims, Stage 0C or Stage 1
 promotion, production claims, or claims above
-`LocalAcquisitionQualificationValidatorV28R2`. Every mutation in this slice
+`LocalAcquisitionQualificationValidatorV28R2`. The additive validator, CLI,
+synthetic-only fingerprint builder, and 89 hermetic V28R2 tests are implemented;
+the focused V28R1+V28R2 suite passes 127 tests, the V27 regression suite passes
+17 tests, and Ruff passes. The real R1
+fingerprint remains unbuilt, no R2 packet exists, and no model execution
+occurred. Every mutation in this slice
 names state slice
 `astral-rgs-v28r2-acquisition-qualification-validator`.
 

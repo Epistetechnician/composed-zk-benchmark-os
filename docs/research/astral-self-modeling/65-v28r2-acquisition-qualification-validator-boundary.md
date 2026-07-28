@@ -3,7 +3,7 @@
 State slice:
 `astral-rgs-v28r2-acquisition-qualification-validator`.
 
-Status: `ImplementationAuthorized / ImplementationNotStarted /
+Status: `ImplementationComplete / HermeticContractTestsPassed /
 RealR1FingerprintNotBuilt / R2PacketNotSupplied /
 ModelBackedExecutionNotRun / UpdateArmsNotAuthorized /
 Gate2SealedNotAuthorized / Gate3SealedNotAuthorized /
@@ -162,7 +162,7 @@ artifact-manifest digests match:
 - report
   `sha256:3e24804dc84744a300bb11bc246fdfd40256459f97a68da0df7993d676b9ea3d`;
 - manifest
-  `sha256:5b01a32e1ba9d7d9ce84c8b301f29e0145962ac8c0eac59b07cd5cfca846e`.
+  `sha256:5b01a32e1ba9d7d9ce84c8b301f29e0145962ac8c0eac0ec59b07cd5cfca846e`.
 
 The output contains domain-separated hashes only, with no raw R1 text or model
 outcome. Required sets cover seeds and commitments; namespaces; family, item,
@@ -193,22 +193,32 @@ Every baseline score row binds:
 The validator rejects unknown, missing, duplicate, reordered, swapped,
 counterfeit, rebound, or noncanonical rows. It requires all four process
 identities to be distinct and retains exact runtime inventories and ordered
-process receipts. `pre_update` must fresh-load the checkpoint before any
-update-data processing. `no_update` must use a distinct zero-budget no-op
-preparation process, prove removal of every source-context and retrieval byte,
-then start a distinct evaluator that fresh-loads the exact checkpoint. It
-requires zero update budgets, no context or retrieval, and exact cross-arm
-prompt, score, argmax, and observation parity.
+process receipts. `pre_update` must carry a receipt chain declaring a fresh
+checkpoint load before any update-data processing. `no_update` must use a
+distinct zero-budget no-op preparation process, carry a canonical
+source-removal receipt declaring removal of source-context and retrieval
+material, then start a distinct evaluator that declares a fresh load of the
+exact checkpoint. The clean-room validator binds these producer records and
+their hashes; it does not independently observe the operating-system processes
+or execute the tokenizer. Lifecycle records are closed-schema,
+content-addressed producer attestations only. They are not independently
+reconstructed process, filesystem-durability, restart, or byte-removal proof.
+The validator requires zero update budgets, no declared context or retrieval,
+and exact cross-arm prompt, score, argmax, and observation parity.
 
-The validator also reconstructs the complete one-shot lifecycle. The fixed
+The validator also reconstructs the complete producer-declared one-shot receipt
+chain. The fixed
 power profile, catalogs, grammar, generator-input allowlist, future-assessment
 identity commitment, and all inventories precede an exclusive ledger claim.
-The ledger and parent directory must be durably synced before exactly one seed
-draw. Exactly one corpus may follow. Any second seed or corpus, discarded
+The receipt chain must declare that the ledger and parent directory were durably
+synced before exactly one seed draw. Exactly one corpus may follow. Any second
+seed or corpus, discarded
 candidate, adaptive family expansion, post-seed power change, alternate output
 root, reused R1 ledger or seed, or recovery after a post-claim failure is
-`Invalid`. Concurrent ledger claims must have exactly one winner, and any
-failure after the winning claim permanently retires the campaign.
+`Invalid`. A future producer must record concurrent ledger claims with exactly
+one winner, and any failure after the winning claim permanently retires the
+campaign. These are fail-closed artifact semantics, not independent proof of
+filesystem durability or process history.
 
 With the same sealed inputs and seed, independent reconstruction must yield a
 byte-identical corpus and manifest. Any nondeterministic field or ordering
@@ -216,8 +226,10 @@ difference is `Invalid`.
 
 The only passing baseline disposition is
 `NoveltyPacketCandidateUnverifiedAcquisitionArmsNotRun`. A valid interval
-failure is `CorpusNotNovel`. Malformed or contaminated material is `Invalid`;
-absent material is `NotRun`.
+failure is `CorpusNotNovel` with only
+`acquisition.v28r2_permanently_retired_corpus_not_novel`; it does not request
+or authorize another V28R2 corpus. Malformed or contaminated material is
+`Invalid`; absent material is `NotRun`.
 
 ## Hermetic test boundary
 
@@ -243,7 +255,7 @@ Adversarial coverage must include:
 - byte-identical deterministic generation and manifest reconstruction from the
   same sealed inputs/seed, with nondeterministic fields or ordering rejected;
 - repeated preparation or evaluator IDs, evaluator reuse, incorrect process
-  order, runtime drift, missing source-removal proof, and retained source or
+  order, runtime drift, missing source-removal receipt, and retained source or
   retrieval material;
 - every score-row binding and failure class;
 - cross-arm parity failures;

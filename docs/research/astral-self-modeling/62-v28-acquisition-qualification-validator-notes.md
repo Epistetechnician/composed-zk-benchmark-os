@@ -7,7 +7,7 @@ Protocol slice:
 
 Status: `LocalValidatorImplemented / HermeticContractTestsPassed /
 R1ModelBackedBaselineValidatedCorpusNotNovel /
-R2ValidatorImplementationAuthorizedSeparately / RetentionRecoveryNotRun /
+R2ValidatorImplementedSeparately / RetentionRecoveryNotRun /
 AstralSelectionNotAuthorized / AssessmentSealedNotAuthorized`.
 
 ## Implemented boundary

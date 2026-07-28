@@ -4,7 +4,7 @@ State slice:
 `astral-rgs-v28r2-powered-acquisition-novelty-preregistration`.
 
 Status: `DocsFirstPreregistered / R1CorpusNotNovelRetired /
-R2PowerProfileLocked / R2ValidatorImplementationAuthorizedSeparately /
+R2PowerProfileLocked / R2ValidatorImplementedHermeticTestsPassed /
 R2ProducerNotAuthorized / R2CorpusNotGenerated / R2ModelBackedExecutionNotRun /
 UpdateArmsNotAuthorized / Gate2SealedNotAuthorized /
 Gate3SealedNotAuthorized / AssessmentSealedNotAuthorized`.

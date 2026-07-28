@@ -192,8 +192,11 @@ review and experiments rule out equivalent prior work.
   producer, model execution, update, recovery, selection, and assessment gates
   remain sealed.
 - [V28R2 acquisition-qualification validator boundary](65-v28r2-acquisition-qualification-validator-boundary.md):
-  additive clean-room protocol/validator implementation authorization; no real
-  R1 fingerprint, R2 corpus, model execution, or later gate.
+  additive clean-room protocol/validator implementation boundary; no real R1
+  fingerprint, R2 corpus, model execution, or later gate.
+- [V28R2 acquisition-qualification validator notes](66-v28r2-acquisition-qualification-validator-notes.md):
+  implemented clean-room validator, synthetic-only fingerprint builder,
+  full-census hermetic fixture, and fail-closed claim boundary.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
