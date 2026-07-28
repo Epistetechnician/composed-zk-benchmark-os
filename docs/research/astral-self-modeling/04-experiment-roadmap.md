@@ -15,6 +15,12 @@ be used for training, calibration, distillation, architecture selection, or
 threshold fitting. V27 cannot change C005, C014, Stage 0C, Stage 1, independent
 review, replication, or thesis status.
 
+The V27 development matrix has now executed twice from RGS commit `57a66f9`
+with exact deterministic scientific-lock agreement. It produced no scientific
+candidate: `no_update` dominated all updated arms, and Astral's development
+regret was worse than the strongest nonprivileged selector. Assessment remains
+sealed and is not authorized for this candidate.
+
 V25 is a separate protocol-engineering lane. Its Docker synthetic positive
 control may qualify the continual-correction harness and holistic claim gate,
 but cannot unblock Stage 0C or Stage 1. A later model-backed continual-learning
@@ -50,7 +56,7 @@ requirements.
 | V23 | `NotRunCapabilityTierPerturbationQualification` | Fresh-concept Llama 1B replication failed unchanged fit/tune and activation-versus-none gates; assessment stayed unopened |
 | V24 | `AuthorDevelopmentPerturbationReadoutObserved` | A fixed downstream linear residual readout passed both development gates and the sealed assessment against text, output-logit, anomaly, and shuffled-label controls; independent verification and confirmation remain `NotRun`/`NotAuthorized` |
 | V25 | `SyntheticDockerContinualCorrectionHarnessQualified` | Construction-known positive sensitivity and null specificity passed; protocol qualification only, with model-backed learning and thesis validation still `NotRun`/`NotValidated` |
-| V27 | `QualificationPlanLockedEstimatorCoreImplementedAssessmentNotRun` | The revised immutable release reproduced all six mechanisms; the exact 54-run plan and assessment commitment are locked; the capacity-matched selector estimator core is implemented, while feature extraction/ranking, prediction locking, review, and qualification remain incomplete or `NotRun` |
+| V27 | `DeterministicDevelopmentReplayMatchedNoCandidateAssessmentNotRun` | Two complete 54-execution development packets matched every deterministic scientific lock; no-update dominated, Astral did not beat the strongest nonprivileged selector, and assessment stayed sealed |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 
@@ -74,10 +80,16 @@ now freezes 54 planned executions, 12 assessment-family commitments, budgets,
 statistics, and recovery policy. It intentionally leaves every selector
 implementation pending and the prediction lock open.
 
-RGS commit `16466ef` subsequently implemented the capacity-matched selector
-estimator core. It does not alter the frozen plan or close the gate: real
-model-derived feature extraction, development-only selector ranking, and a new
-content-addressed prediction-lock transition are still required.
+RGS commit `57a66f9` subsequently completed the exact-budget model-derived
+development features, outcomes, selector fit, and ranking twice. Both 539-file
+packet manifests validate, and the deterministic comparison at internal digest
+`sha256:3964d71e0e8f5f4499673c0f12961dc479e2313d59447044328d79b4a46e403e`
+has no mismatches. The strongest nonprivileged selector is
+`text_only_reflection` with zero development regret; Astral has development
+regret `0.222222`. No-update future score is `1.000000`, while the best updated
+arms score `0.746914`. This is a reproducible development negative, not a
+qualification candidate. Assessment predictions were not sealed and
+assessment stayed unopened.
 
 The primary endpoint is constrained update-selection regret. Candidates first
 pass acquisition, retention, forgetting, calibration, exact recovery, budget,

@@ -4,7 +4,9 @@ State slice: `astral-rgs-v27-model-backed-qualification-r1`.
 
 Protocol slice: `astral-rgs-nested-recoverable-update-v27`.
 
-Status: `ImmutableNativeAuthorReplayPassed / QualificationPlanLocked / SelectorEstimatorCoreImplemented / FeatureExtractionAndRankingPending / ModelBackedAssessmentNotRun`.
+Status: `ImmutableNativeAuthorReplayPassed / QualificationPlanLocked /
+DeterministicDevelopmentReplayMatched / DevelopmentNoCandidate /
+AssessmentSealedNotAuthorized / ModelBackedAssessmentNotRun`.
 
 Thesis status: `NotValidated`.
 
@@ -229,21 +231,17 @@ its manifest file SHA-256 is
 `863539f8c25c69b447cbb352f7c5e4c74c10f32930d0d1004ff1c29398914fa6`.
 The assessment commitment is
 `sha256:46c52f95e595f2da04d427dcd576db7772767bc63e53873c55fbefb3617a8564`.
-Assessment content and outcomes remain absent. All selector implementations
-and the development ranking remain pending, so the prediction lock is not
-sealed.
-
-RGS commit `16466ef` later implemented and tested the capacity-matched selector
-estimator core. It is outside the source identity of the passing immutable
-native replay and has not consumed real development features. A successor
-source-bound transition artifact is required after feature extraction and
-development ranking; no prediction or assessment status changes here.
+Assessment content and outcomes remain absent. The immutable plan retains its
+historical pending-selector posture. A successor source-bound transition from
+RGS commit `57a66f9` now records completed development feature extraction and
+ranking, but the assessment prediction lock remains unsealed.
 
 - C046 remains `In test`: the author-side engineering machinery and immutable
   replay passed, but independent review is `NotRun`.
-- C047 remains `In test`: a six-arm development smoke exists, but no native
-  54-run qualification matrix or assessment result exists.
-- C048 remains `In test`: no sealed model-backed selector comparison exists.
+- C047 remains `In test`: the native 54-run development matrix produced no
+  candidate, and no assessment result exists.
+- C048 remains `In test`: the development comparison is negative and no sealed
+  assessment selector comparison exists.
 - model-backed assessment: `NotRun`;
 - fresh Stage 0C confirmation: `Blocked`;
 - Stage 1: `BlockedByStage0C`;
@@ -254,9 +252,62 @@ development ranking; no prediction or assessment status changes here.
 The strongest supported conclusion is:
 
 > V27-R1 provides a copy-isolated, author-replayable, fail-closed scientific
-> validator whose detached replay exercises all six native update mechanisms
-> with a normalized probe match. It does not yet provide qualification-scale model-backed
-> continual-learning evidence, a valid
+> validator and a deterministic 54-execution development replay. The
+> development result is negative, so assessment remains sealed. It does not
+> provide qualification-scale model-backed continual-learning evidence, a valid
 > Tencent V2 result, independent reproduction, recoverable self-improvement,
 > introspection, self-modeling, Stage 0C, Stage 1, benchmark dominance, or
 > thesis validation.
+
+## Qualification-scale development execution — 2026-07-28
+
+RGS commit `57a66f9bb28cc57641f1a2b3191eed70dcfc4a22` executed the
+six-arm, three-seed, three-task-order development matrix twice. Each packet
+contains 54 exact-budget native candidate executions and 539 manifest entries.
+Every updated arm used 64 gradient steps, 128 examples, 4,096 update tokens,
+LoRA rank 8, and the frozen storage ceiling; `no_update` used exact zero.
+
+The durable packets are:
+
+- `/Users/shaanp/Documents/ResearchArtifacts/astral-rgs-v27-development-57a66f9-r5`,
+  manifest file SHA-256
+  `6b37a032c25ad9a2b9d07de566d88fe2ddaccbb6384557051b032da8b739c52d`;
+- `/Users/shaanp/Documents/ResearchArtifacts/astral-rgs-v27-development-57a66f9-r6`,
+  manifest file SHA-256
+  `143e5fa4b67de32aea1388920deebb2d813a6ffd174abc7f8975acbfb292da02`.
+
+The comparison report is
+`/Users/shaanp/Documents/ResearchArtifacts/astral-rgs-v27-development-57a66f9-replay-comparison.json`.
+Its file SHA-256 is
+`0fad5a18aa47452b52fc155c051042460af128062033afd693756c1d2e75d678`;
+its internal digest is
+`sha256:3964d71e0e8f5f4499673c0f12961dc479e2313d59447044328d79b4a46e403e`.
+Both packet validators report zero errors; every deterministic lock matches;
+assessment remained sealed.
+
+The outcome-free feature lock contains 486 rows over 54 development cells and
+27 tuning cells. It was written before development outcomes in both observed
+runs. The strongest nonprivileged selector is `text_only_reflection` with
+development and tuning regret `0.000000`. Astral has development regret
+`0.222222` and tuning regret `0.000000`.
+
+No-update mean future score is `1.000000`. Compressed recollection and modular
+ghost state are the best updated arms at `0.746914`; representation-time
+distillation is `0.651235`; nested multiscale LoRA is `0.623457`; naive
+sequential LoRA is `0.617284`. All updated arms exceeded the final `0.02`
+Brier-degradation ceiling in at least one development cell. The recorded
+recovery value is an in-memory byte roundtrip only and cannot satisfy the final
+process-level injected-failure gate.
+
+An earlier two-run comparison at RGS commit `625ec32` was rejected and retained.
+Its only non-hash mismatch was storage cost, whose maximum drift was
+`4.470348358154297e-08`, because audit wall-time metadata contributed one to
+three variable bytes. Commit `57a66f9` binds cost to the validated artifact
+manifest instead. The rejected packets were not rewritten.
+
+The development result does not justify assessment. Opening it would spend the
+sealed evidence on a candidate that fails to beat no-update and the strongest
+nonprivileged selector. A successor must preregister a new development corpus
+whose facts or mappings are absent from the starting checkpoint and add
+process-level corruption, restart, rollback, and replay before seeking a fresh
+assessment commitment.
