@@ -2,7 +2,7 @@
 
 State slice: `astral-rgs-nested-recoverable-update-v27`.
 
-Status: `Preregistered / ImmutableNativeAuthorReplayPassed / ModelBackedAssessmentNotRun`.
+Status: `Preregistered / ImmutableNativeAuthorReplayPassed / QualificationPlanLockedSelectorsPending / ModelBackedAssessmentNotRun`.
 
 ## Research question
 
@@ -57,6 +57,13 @@ hyperparameters, or support C047/C048.
 - strongest fixed development arm;
 - no update;
 - post-hoc oracle, used only as a non-actionable regret upper bound.
+
+The pre-assessment plan digest
+`sha256:d8b761824e348e23e5d341118d730c94f5769cc6a2a63b1b3d4c7c49522f7e90`
+freezes the selector feature schemas but truthfully marks every selector
+implementation `PendingDevelopmentImplementation`. The strongest
+nonprivileged selector is `PendingDevelopmentRanking`; the prediction lock is
+`NotLockedSelectorsPending`. Assessment cannot open in this state.
 
 Before assessment outcomes exist, every selector seals predicted future-unseen
 reward, protected-retention change, calibration change, recovery success and

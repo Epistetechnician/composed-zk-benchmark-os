@@ -50,7 +50,7 @@ requirements.
 | V23 | `NotRunCapabilityTierPerturbationQualification` | Fresh-concept Llama 1B replication failed unchanged fit/tune and activation-versus-none gates; assessment stayed unopened |
 | V24 | `AuthorDevelopmentPerturbationReadoutObserved` | A fixed downstream linear residual readout passed both development gates and the sealed assessment against text, output-logit, anomaly, and shuffled-label controls; independent verification and confirmation remain `NotRun`/`NotAuthorized` |
 | V25 | `SyntheticDockerContinualCorrectionHarnessQualified` | Construction-known positive sensitivity and null specificity passed; protocol qualification only, with model-backed learning and thesis validation still `NotRun`/`NotValidated` |
-| V27 | `ImmutableNativeReplayPassedModelBackedAssessmentNotRun` | The revised immutable release reproduced all six native Qwen 0.5B mechanisms from detached source with a normalized probe match; selector fit, independent review, and the native 54-run qualification assessment remain incomplete or `NotRun` |
+| V27 | `QualificationPlanLockedSelectorsPendingAssessmentNotRun` | The revised immutable release reproduced all six native Qwen 0.5B mechanisms and the exact 54-run plan plus sealed assessment commitment are locked; selector implementation/ranking, prediction locking, independent review, and qualification execution remain incomplete or `NotRun` |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 
@@ -68,7 +68,11 @@ then reproduced the smoke from a detached checkout and copied model with a
 normalized probe match. This closes implementation exercisability and author
 replay only. Before qualification, the family corpus, selector features,
 fit/tune-only ranking, equal qualification budgets, recovery injections, and
-assessment commitment must be locked.
+assessment commitment must be locked. The plan artifact at internal digest
+`sha256:d8b761824e348e23e5d341118d730c94f5769cc6a2a63b1b3d4c7c49522f7e90`
+now freezes 54 planned executions, 12 assessment-family commitments, budgets,
+statistics, and recovery policy. It intentionally leaves every selector
+implementation pending and the prediction lock open.
 
 The primary endpoint is constrained update-selection regret. Candidates first
 pass acquisition, retention, forgetting, calibration, exact recovery, budget,
