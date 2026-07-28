@@ -67,7 +67,7 @@ requirements.
 | V24 | `AuthorDevelopmentPerturbationReadoutObserved` | A fixed downstream linear residual readout passed both development gates and the sealed assessment against text, output-logit, anomaly, and shuffled-label controls; independent verification and confirmation remain `NotRun`/`NotAuthorized` |
 | V25 | `SyntheticDockerContinualCorrectionHarnessQualified` | Construction-known positive sensitivity and null specificity passed; protocol qualification only, with model-backed learning and thesis validation still `NotRun`/`NotValidated` |
 | V27 | `DeterministicDevelopmentReplayMatchedNoCandidateAssessmentNotRun` | Two complete 54-execution development packets matched every deterministic scientific lock; no-update dominated, Astral did not beat the strongest nonprivileged selector, and assessment stayed sealed |
-| V28 | `AcquisitionValidatorImplementedModelBackedNotRun` | The Gate 1 external-packet validator and hermetic contract fixtures are implemented; no corpus generation, model execution, model-backed packet, retention/recovery result, or selector evidence exists |
+| V28 | `AcquisitionNoveltyProducerAuthorizedModelBackedNotRun` | The Gate 1 external-packet validator is implemented and the baseline-only RGS producer slice is authorized; no corpus has been generated, no model execution or packet exists, update arms remain unauthorized, and no retention/recovery or selector evidence exists |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 

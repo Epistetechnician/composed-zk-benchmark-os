@@ -29,7 +29,8 @@ It independently checks and recomputes:
 - exactly four paraphrase, four multi-hop, and four withheld-composition
   queries per family, including disjoint training/evaluation template
   identities, committed source dependencies, and derivation manifests;
-- four-choice answer-position balance within every fact-kind/query-kind cell;
+- query-specific answer-option mappings that rotate one semantic answer
+  through all four positions exactly once within every family/query-kind cell;
 - exact rejection of same-item and cross-item training-form prompt hashes;
 - complete raw-row coverage and independently recomputed accuracy;
 - symmetric near-chance pre-update and separately restarted no-update
@@ -93,6 +94,20 @@ The focused gate is:
 PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -p no:cacheprovider \
   tools/astral-rgs-acquisition-v28/tests/test_v28.py -q
 ```
+
+The read-only operator entrypoint is:
+
+```text
+PYTHONDONTWRITEBYTECODE=1 python3 \
+  tools/astral-rgs-acquisition-v28/validate_packet.py \
+  --packet /repository-external/acquisition-packet.json \
+  --output /new/repository-external/astral-validation.json
+```
+
+The CLI creates its output exclusively. Exit `0` is restricted to a positive
+unverified packet candidate, exit `2` denotes a structurally valid scientific
+negative, and exit `1` denotes `Invalid`, `NotRun`, or another noncandidate
+state. Operators must also inspect the exact report status.
 
 V27 remains a regression guard:
 

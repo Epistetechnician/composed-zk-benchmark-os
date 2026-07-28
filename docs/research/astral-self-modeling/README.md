@@ -183,6 +183,9 @@ review and experiments rule out equivalent prior work.
 - [V28 acquisition-qualification validator notes](62-v28-acquisition-qualification-validator-notes.md):
   fail-closed local Gate 1 packet validation and hermetic contract-test boundary;
   no model-backed packet, retention/recovery, or selector evidence.
+- [V28 acquisition-novelty producer boundary](63-v28-acquisition-novelty-producer-boundary.md):
+  checkpoint-first offline corpus generation and fresh-process baseline-only
+  execution, with an unconditional pre-update stop rule.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):

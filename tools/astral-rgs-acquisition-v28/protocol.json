@@ -1,6 +1,6 @@
 {
-  "version": "astral.rgs_acquisition_v28.protocol.v1",
-  "packet_version": "mesh.astral_v28_acquisition_packet.v1",
+  "version": "astral.rgs_acquisition_v28.protocol.v2",
+  "packet_version": "mesh.astral_v28_acquisition_packet.v2",
   "state_slice": "astral-rgs-v28-acquisition-qualification-validator",
   "packet_state_slice": "astral-rgs-novel-knowledge-acquisition-recoverable-consolidation-v28",
   "claim_ceiling": "LocalAcquisitionQualificationValidatorV28",

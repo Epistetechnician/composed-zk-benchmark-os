@@ -195,6 +195,7 @@ def _validate_corpus(
     prompt_hashes: set[str] = set()
     training_template_ids: set[str] = set()
     evaluation_template_ids: set[str] = set()
+    evaluation_template_kinds: dict[str, str] = {}
     answer_option_hashes: set[str] = set()
     query_index: dict[str, dict[str, Any]] = {}
     query_fact_kind: dict[str, str] = {}
@@ -214,9 +215,7 @@ def _validate_corpus(
                 "support_source_sha256s",
                 "training_template_family_id",
                 "answer_option_sha256s",
-                "answer_position",
                 "expected_answer_sha256",
-                "answer_mapping_sha256",
                 "queries",
             },
             prefix,
@@ -229,7 +228,6 @@ def _validate_corpus(
         support_hashes = _list(item.get("support_source_sha256s"))
         training_template_id = item.get("training_template_family_id")
         answer_options = _list(item.get("answer_option_sha256s"))
-        answer_position = item.get("answer_position")
         expected_answer_sha256 = item.get("expected_answer_sha256")
         if not _nonempty(item_id) or item_id in item_ids:
             errors.append(f"{prefix}.item_id")
@@ -256,10 +254,7 @@ def _validate_corpus(
             errors.append(f"{prefix}.support_source_sha256s")
         else:
             source_hashes.add(support_hashes[0])
-        if (
-            not _nonempty(training_template_id)
-            or training_template_id in training_template_ids
-        ):
+        if not _nonempty(training_template_id):
             errors.append(f"{prefix}.training_template_family_id")
         else:
             training_template_ids.add(training_template_id)
@@ -272,27 +267,10 @@ def _validate_corpus(
             errors.append(f"{prefix}.answer_option_sha256s")
         else:
             answer_option_hashes.update(answer_options)
-        if (
-            not isinstance(answer_position, int)
-            or isinstance(answer_position, bool)
-            or not 0 <= answer_position < contract["choice_count"]
-        ):
-            errors.append(f"{prefix}.answer_position")
-        elif (
-            len(answer_options) != contract["choice_count"]
-            or expected_answer_sha256 != answer_options[answer_position]
-        ):
+        if expected_answer_sha256 not in answer_options:
             errors.append(f"{prefix}.expected_answer_sha256")
-        answer_mapping = {
-            "item_id": item_id,
-            "family_id": family_id,
-            "answer_option_sha256s": answer_options,
-            "answer_position": answer_position,
-            "expected_answer_sha256": expected_answer_sha256,
-        }
-        if not _hash_matches(answer_mapping, item.get("answer_mapping_sha256")):
-            errors.append(f"{prefix}.answer_mapping_sha256")
         queries = _list(item.get("queries"))
+        item_answer_positions: dict[str, Counter[int]] = defaultdict(Counter)
         query_kind_counts = Counter(
             str(_dict(query).get("evaluation_kind")) for query in queries
         )
@@ -316,6 +294,7 @@ def _validate_corpus(
                     "evaluation_kind",
                     "prompt_sha256",
                     "expected_choice",
+                    "answer_option_sha256s",
                     "expected_answer_sha256",
                     "answer_mapping_sha256",
                     "template_family_id",
@@ -330,6 +309,7 @@ def _validate_corpus(
             eval_kind = query.get("evaluation_kind")
             prompt_hash = query.get("prompt_sha256")
             expected_choice = query.get("expected_choice")
+            query_answer_options = _list(query.get("answer_option_sha256s"))
             query_expected_answer = query.get("expected_answer_sha256")
             template_family_id = query.get("template_family_id")
             dependencies = _list(query.get("dependency_source_sha256s"))
@@ -347,19 +327,40 @@ def _validate_corpus(
                 or not 0 <= expected_choice < contract["choice_count"]
             ):
                 errors.append(f"{query_prefix}.expected_choice")
-            if expected_choice != answer_position:
-                errors.append(f"{query_prefix}.answer_position_binding")
             if query_expected_answer != expected_answer_sha256:
                 errors.append(f"{query_prefix}.expected_answer_sha256")
-            if query.get("answer_mapping_sha256") != item.get("answer_mapping_sha256"):
-                errors.append(f"{query_prefix}.answer_mapping_sha256")
             if (
-                not _nonempty(template_family_id)
-                or template_family_id in evaluation_template_ids
+                len(query_answer_options) != contract["choice_count"]
+                or len(set(query_answer_options)) != contract["choice_count"]
+                or set(query_answer_options) != set(answer_options)
             ):
+                errors.append(f"{query_prefix}.answer_option_sha256s")
+            elif (
+                isinstance(expected_choice, int)
+                and not isinstance(expected_choice, bool)
+                and 0 <= expected_choice < contract["choice_count"]
+                and query_answer_options[expected_choice] != expected_answer_sha256
+            ):
+                errors.append(f"{query_prefix}.answer_position_binding")
+            answer_mapping = {
+                "item_id": item_id,
+                "family_id": family_id,
+                "query_id": query_id,
+                "answer_option_sha256s": query_answer_options,
+                "expected_choice": expected_choice,
+                "expected_answer_sha256": query_expected_answer,
+            }
+            if not _hash_matches(answer_mapping, query.get("answer_mapping_sha256")):
+                errors.append(f"{query_prefix}.answer_mapping_sha256")
+            if not _nonempty(template_family_id):
                 errors.append(f"{query_prefix}.template_family_id")
             else:
                 evaluation_template_ids.add(template_family_id)
+                previous_kind = evaluation_template_kinds.setdefault(
+                    template_family_id, str(eval_kind)
+                )
+                if previous_kind != eval_kind:
+                    errors.append(f"{query_prefix}.template_family_kind_binding")
             valid_local_sources = _sha256(source_hash) and all(
                 _sha256(value) for value in support_hashes
             )
@@ -410,6 +411,12 @@ def _validate_corpus(
                 query_fact_kind[query_id] = fact_kind
                 query_family_id[query_id] = family_id
                 answer_counts[(fact_kind, eval_kind)][expected_choice] += 1
+                item_answer_positions[eval_kind][expected_choice] += 1
+        for eval_kind in required_eval_kinds:
+            if item_answer_positions[eval_kind] != Counter(
+                {position: 1 for position in range(contract["choice_count"])}
+            ):
+                errors.append(f"{prefix}.answer_position_rotation.{eval_kind}")
 
     if source_hashes & prompt_hashes:
         errors.append("corpus.global_training_form_overlap")
@@ -432,10 +439,8 @@ def _validate_corpus(
                 * contract["queries_per_evaluation_kind"]
                 // contract["choice_count"]
             )
-            if (
-                fact_counts[fact_kind] % contract["choice_count"] != 0
-                or set(counts) != set(range(contract["choice_count"]))
-                or any(count != expected for count in counts.values())
+            if set(counts) != set(range(contract["choice_count"])) or any(
+                count != expected for count in counts.values()
             ):
                 errors.append(f"corpus.answer_balance.{fact_kind}.{eval_kind}")
     return query_index, query_fact_kind, query_family_id
@@ -837,7 +842,7 @@ def validate_packet(packet: dict[str, Any] | None) -> dict[str, Any]:
     contract = protocol()
     if packet is None:
         report = {
-            "version": "astral.rgs_acquisition_v28.validation.v1",
+            "version": "astral.rgs_acquisition_v28.validation.v2",
             "state_slice": contract["state_slice"],
             "status": "NotRun",
             "errors": [],
@@ -854,7 +859,7 @@ def validate_packet(packet: dict[str, Any] | None) -> dict[str, Any]:
 
     if not isinstance(packet, dict):
         report = {
-            "version": "astral.rgs_acquisition_v28.validation.v1",
+            "version": "astral.rgs_acquisition_v28.validation.v2",
             "state_slice": contract["state_slice"],
             "protocol_state_slice": contract["packet_state_slice"],
             "status": "Invalid",
@@ -1322,7 +1327,7 @@ def validate_packet(packet: dict[str, Any] | None) -> dict[str, Any]:
         ]
 
     report = {
-        "version": "astral.rgs_acquisition_v28.validation.v1",
+        "version": "astral.rgs_acquisition_v28.validation.v2",
         "state_slice": contract["state_slice"],
         "protocol_state_slice": contract["packet_state_slice"],
         "status": status,

@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import importlib.util
+import json
+import subprocess
+import sys
 from pathlib import Path
 
 
@@ -24,6 +27,61 @@ def test_non_object_packet_is_invalid_not_exception() -> None:
 
     assert report["status"] == "Invalid"
     assert report["errors"] == ["packet.object"]
+
+
+def test_operator_cli_writes_the_recomputed_report(tmp_path: Path) -> None:
+    packet_path = tmp_path / "packet.json"
+    output_path = tmp_path / "report.json"
+    packet_path.write_text(
+        json.dumps(_packet(full=False), sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            str(HERE / "validate_packet.py"),
+            "--packet",
+            str(packet_path),
+            "--output",
+            str(output_path),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+    assert completed.returncode == 0
+    assert (
+        "status=NoveltyPacketCandidateUnverifiedAcquisitionArmsNotRun"
+        in completed.stdout
+    )
+    assert json.loads(output_path.read_text(encoding="utf-8"))["status"] == (
+        "NoveltyPacketCandidateUnverifiedAcquisitionArmsNotRun"
+    )
+
+
+def test_operator_cli_fails_closed_for_json_null_packet(tmp_path: Path) -> None:
+    packet_path = tmp_path / "packet.json"
+    output_path = tmp_path / "report.json"
+    packet_path.write_text("null\n", encoding="utf-8")
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            str(HERE / "validate_packet.py"),
+            "--packet",
+            str(packet_path),
+            "--output",
+            str(output_path),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+    assert completed.returncode == 1
+    assert json.loads(output_path.read_text(encoding="utf-8"))["status"] == "NotRun"
 
 
 def test_low_baselines_and_two_persistent_arms_qualify_gate_1() -> None:
@@ -370,6 +428,76 @@ def test_point_near_chance_without_equivalence_precision_is_not_novel() -> None:
     )
 
 
+def test_fixed_choice_bias_is_neutralized_within_every_family() -> None:
+    packet = _packet(full=False)
+    for arm_id in ("pre_update", "no_update"):
+        for run in _runs(packet, arm_id):
+            for observation in run["observations"]:
+                observation["observed_choice"] = 0
+            run["observations_sha256"] = V28.stable_hash(run["observations"])
+    packet = V28.seal_packet(packet)
+
+    report = V28.validate_packet(packet)
+
+    assert report["status"] == "NoveltyPacketCandidateUnverifiedAcquisitionArmsNotRun"
+    assert all(
+        report["baseline_chance_normalized_lifts"][arm_id]["equivalence_passed"]
+        for arm_id in ("pre_update", "no_update")
+    )
+
+
+def test_family_census_above_minimum_need_not_be_divisible_by_choice_count() -> None:
+    report = V28.validate_packet(_packet(full=False, families_per_kind=25))
+
+    assert report["status"] == "NoveltyPacketCandidateUnverifiedAcquisitionArmsNotRun"
+    assert report["errors"] == []
+
+
+def test_each_query_class_rotates_the_semantic_answer_through_all_positions() -> None:
+    packet = _packet(full=False)
+    item = packet["corpus"]["items"][0]
+    query = item["queries"][1]
+    expected_answer = query["expected_answer_sha256"]
+    reordered = list(query["answer_option_sha256s"])
+    expected_index = reordered.index(expected_answer)
+    reordered[0], reordered[expected_index] = reordered[expected_index], reordered[0]
+    query["expected_choice"] = 0
+    query["answer_option_sha256s"] = reordered
+    query["answer_mapping_sha256"] = V28.stable_hash(
+        {
+            "item_id": item["item_id"],
+            "family_id": item["family_id"],
+            "query_id": query["query_id"],
+            "answer_option_sha256s": reordered,
+            "expected_choice": 0,
+            "expected_answer_sha256": expected_answer,
+        }
+    )
+    query["derivation_manifest_sha256"] = V28.stable_hash(
+        {
+            "item_id": item["item_id"],
+            "family_id": item["family_id"],
+            "query_id": query["query_id"],
+            "evaluation_kind": query["evaluation_kind"],
+            "prompt_sha256": query["prompt_sha256"],
+            "template_family_id": query["template_family_id"],
+            "dependency_source_sha256s": query["dependency_source_sha256s"],
+            "expected_choice": query["expected_choice"],
+            "expected_answer_sha256": query["expected_answer_sha256"],
+            "answer_mapping_sha256": query["answer_mapping_sha256"],
+            "withheld_from_training": query["withheld_from_training"],
+        }
+    )
+    packet["corpus"]["manifest_sha256"] = V28.stable_hash(packet["corpus"]["items"])
+    packet["provenance"]["corpus_manifest_sha256"] = packet["corpus"]["manifest_sha256"]
+    packet = V28.seal_packet(packet)
+
+    report = V28.validate_packet(packet)
+
+    assert report["status"] == "Invalid"
+    assert "corpus.items[0].answer_position_rotation.paraphrase" in report["errors"]
+
+
 def test_persistent_arm_must_pass_every_fact_kind() -> None:
     packet = _packet(full=True)
     for run in _runs(packet, "naive_sequential_lora"):
@@ -457,8 +585,8 @@ def test_query_answer_commitment_cannot_be_rebound_by_rehashing() -> None:
     packet = _packet(full=False)
     item = packet["corpus"]["items"][0]
     query = item["queries"][0]
-    query["expected_answer_sha256"] = item["answer_option_sha256s"][
-        (item["answer_position"] + 1) % V28.protocol()["choice_count"]
+    query["expected_answer_sha256"] = query["answer_option_sha256s"][
+        (query["expected_choice"] + 1) % V28.protocol()["choice_count"]
     ]
     query["derivation_manifest_sha256"] = V28.stable_hash(
         {
@@ -540,10 +668,15 @@ def test_per_cell_interval_captures_balanced_crossed_interactions() -> None:
     )
 
 
-def _packet(*, full: bool, baseline_accuracy: float = 0.25) -> dict:
+def _packet(
+    *,
+    full: bool,
+    baseline_accuracy: float = 0.25,
+    families_per_kind: int | None = None,
+) -> dict:
     contract = V28.protocol()
     checkpoint = V28.stable_hash("checkpoint")
-    items = _items(contract)
+    items = _items(contract, per_kind=families_per_kind)
     manifest = V28.stable_hash(items)
     provenance = {
         "starting_checkpoint_sha256": checkpoint,
@@ -603,9 +736,13 @@ def _packet(*, full: bool, baseline_accuracy: float = 0.25) -> dict:
     return V28.seal_packet(packet)
 
 
-def _items(contract: dict) -> list[dict]:
+def _items(contract: dict, *, per_kind: int | None = None) -> list[dict]:
     items = []
-    per_kind = contract["thresholds"]["minimum_families_per_fact_kind"]
+    per_kind = (
+        contract["thresholds"]["minimum_families_per_fact_kind"]
+        if per_kind is None
+        else per_kind
+    )
     for kind_index, fact_kind in enumerate(contract["required_fact_kinds"]):
         for item_index in range(per_kind):
             item_id = f"item-{kind_index}-{item_index:02d}"
@@ -616,17 +753,7 @@ def _items(contract: dict) -> list[dict]:
                 V28.stable_hash(f"answer:{item_id}:{position}")
                 for position in range(contract["choice_count"])
             ]
-            answer_position = item_index % contract["choice_count"]
-            expected_answer_sha256 = answer_options[answer_position]
-            answer_mapping_sha256 = V28.stable_hash(
-                {
-                    "item_id": item_id,
-                    "family_id": f"family-{kind_index}-{item_index:02d}",
-                    "answer_option_sha256s": answer_options,
-                    "answer_position": answer_position,
-                    "expected_answer_sha256": expected_answer_sha256,
-                }
-            )
+            expected_answer_sha256 = answer_options[0]
             for eval_index, eval_kind in enumerate(
                 contract["required_evaluation_kinds"]
             ):
@@ -635,14 +762,32 @@ def _items(contract: dict) -> list[dict]:
                         f"query-{kind_index}-{item_index:02d}-{eval_index}-"
                         f"{variant_index}"
                     )
-                    template_id = (
-                        f"eval-template-{kind_index}-{item_index:02d}-{eval_index}-"
-                        f"{variant_index}"
-                    )
+                    template_id = f"eval-template-{eval_index}-{variant_index}"
+                    query_answer_options: list[str | None] = [
+                        None for _ in range(contract["choice_count"])
+                    ]
+                    query_answer_options[variant_index] = expected_answer_sha256
+                    distractors = iter(answer_options[1:])
+                    for position in range(contract["choice_count"]):
+                        if query_answer_options[position] is None:
+                            query_answer_options[position] = next(distractors)
+                    ordered_answer_options = [
+                        str(value) for value in query_answer_options
+                    ]
                     dependencies = (
                         [source_hash]
                         if eval_kind == "paraphrase"
                         else [source_hash, support_hash]
+                    )
+                    answer_mapping_sha256 = V28.stable_hash(
+                        {
+                            "item_id": item_id,
+                            "family_id": f"family-{kind_index}-{item_index:02d}",
+                            "query_id": query_id,
+                            "answer_option_sha256s": ordered_answer_options,
+                            "expected_choice": variant_index,
+                            "expected_answer_sha256": expected_answer_sha256,
+                        }
                     )
                     query = {
                         "query_id": query_id,
@@ -651,7 +796,8 @@ def _items(contract: dict) -> list[dict]:
                             f"prompt:{kind_index}:{item_index}:{eval_index}:"
                             f"{variant_index}"
                         ),
-                        "expected_choice": answer_position,
+                        "expected_choice": variant_index,
+                        "answer_option_sha256s": ordered_answer_options,
                         "expected_answer_sha256": expected_answer_sha256,
                         "answer_mapping_sha256": answer_mapping_sha256,
                         "template_family_id": template_id,
@@ -681,13 +827,9 @@ def _items(contract: dict) -> list[dict]:
                     "fact_kind": fact_kind,
                     "source_form_sha256": source_hash,
                     "support_source_sha256s": [support_hash],
-                    "training_template_family_id": (
-                        f"train-template-{kind_index}-{item_index:02d}"
-                    ),
+                    "training_template_family_id": f"train-template-{kind_index}",
                     "answer_option_sha256s": answer_options,
-                    "answer_position": answer_position,
                     "expected_answer_sha256": expected_answer_sha256,
-                    "answer_mapping_sha256": answer_mapping_sha256,
                     "queries": queries,
                 }
             )

@@ -108,6 +108,7 @@ Accepted-as-design-choice.
 | ID | Old execution posture | New execution posture | Evidence artifact | Reviewer | Reason | Unchanged claim ceiling |
 |---|---|---|---|---|---|---|
 | `V28-C01` | Docs-first protocol only | Local fail-closed validator implemented; model-backed packet not supplied | `tools/astral-rgs-acquisition-v28/` frozen contract and hermetic tests | Author implementation plus internal read-only agent review; external independent scientific review `NotRun` | The validator recomputes novelty and acquisition gates from raw rows and rejects leakage, high baselines, partial comparisons, later-stage material, and overclaims | Local engineering contract coverage only; no model-backed acquisition or continual-learning evidence |
+| `V28-C01` | Validator implemented; producer absent | Baseline-only RGS novelty producer authorized; implementation and execution `NotRun` | `63-v28-acquisition-novelty-producer-boundary.md` | Pre-implementation repository, corpus, and contract audits; external independent scientific review `NotRun` | A clean committed producer may now generate one checkpoint-bound corpus and run only fresh-process pre-update/no-update falsification | Authorization only; no corpus, model-backed packet, acquisition evidence, update-arm authority, or continual-learning evidence |
 
 C003-C007 and C013-C014 retain the historical status `Proposed`; their current
 execution disposition is `BlockedByStage0C`. No observer, correction,
