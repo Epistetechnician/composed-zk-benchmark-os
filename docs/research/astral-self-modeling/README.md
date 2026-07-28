@@ -176,6 +176,10 @@ review and experiments rule out equivalent prior work.
 - [Dynamic rate-distortion DreamCycle research plan](60-dynamic-rate-distortion-dream-cycle-plan.md):
   post-qualification compression and offline-consolidation design, explicitly
   excluded from the frozen V27-R1 arms and evidence.
+- [V28 novel-knowledge acquisition and recoverable consolidation](61-novel-knowledge-acquisition-and-recoverable-consolidation-v28.md):
+  acquisition-first three-gate preregistration after the V27 no-update
+  falsification; implementation, execution, assessment, and Astral tuning remain
+  unauthorized.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
