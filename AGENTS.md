@@ -1,18 +1,45 @@
 # Agent Rules
 
-Explicit Astral-RGS V28R2 retired-R1 fingerprint one-time construction now
-allowed and controller implemented: additive standard-library controller
-source and eight hermetic tests under
-`tools/astral-rgs-acquisition-v28r2/`; exactly one future invocation of
-controller SHA-256
+Explicit Astral-RGS V28R2 retired-R1 fingerprint construction R2 now allowed:
+status-only recording that the R1 external commit precheck failed before
+controller or builder invocation and permanently consumed the R1 construction
+identity; one fixed-output change in the no-argument standard-library
+controller under `tools/astral-rgs-acquisition-v28r2/`, producing controller
+SHA-256
+`92bdb88cff100ccbc6f212605b7117fccda5f141679e9f30b73e46656878244e`;
+its hermetic tests; one R2 authorization/record note and status mirrors; and,
+only after commit and independent audit, exactly one future R2 controller
+invocation described in
+`docs/research/astral-self-modeling/69-v28r2-retired-r1-fingerprint-construction-r2-authorization.md`.
+This slice is limited to state slice
+`astral-rgs-v28r2-retired-r1-fingerprint-construction-r2`, permanent retirement
+of the absent `r1` output identity, the new absent `r2` repository-external
+output, the same implementation commit and retained bundle pinned in documents
+67-68, and the same mandatory stop with the protocol `not-built`. It does not
+permit retrying R1, committing a fingerprint, changing the V28R2 protocol or
+validator, RGS source or package mutation, seed or corpus generation, tokenizer
+or model access, baseline or update-arm execution, recovery, Astral selection,
+assessment, downloads, network access, artifact or Evidence Ledger promotion,
+acquisition or continual-learning claims, independent-replication claims,
+benchmark or breakthrough claims, self-improvement, introspection or
+self-modeling claims, Stage 0C or Stage 1 promotion, production claims, or
+claims above `LocalRetiredR1FingerprintConstructedUnpinnedV28R2`.
+
+Historical Astral-RGS V28R2 retired-R1 fingerprint R1 construction
+authorization is consumed and no longer executable. It implemented additive
+standard-library controller source and eight hermetic tests under
+`tools/astral-rgs-acquisition-v28r2/` and had authorized exactly one future
+invocation of controller SHA-256
 `105a11041bc9fa7a116c02de9ec40ba4e8a7098a87b196e119c52906c3210e87`;
-its no-follow exact-path preflight; and, only after it passes, one invocation
-of the pinned hash-only builder against the single retained V28R1 root and
-single absent repository-external output in
+its no-follow exact-path preflight, and then one invocation of the pinned
+hash-only builder against the single retained V28R1 root and single
+repository-external R1 output in
 `docs/research/astral-self-modeling/68-v28r2-retired-r1-fingerprint-construction-authorization.md`;
 read-only output inspection and independent audits; one Markdown execution
-record; and status-only Astral roadmap, claim-ledger, navigation, and
-`AGENTS.md` updates. This slice is limited to state slice
+record, and status-only Astral roadmap, claim-ledger, navigation, and
+`AGENTS.md` updates. Its external commit comparison failed before controller
+or builder invocation, permanently retiring the absent R1 output. The
+historical slice was limited to state slice
 `astral-rgs-v28r2-retired-r1-fingerprint-construction`, implementation checkout
 commit `8cf75d745c20afa885286fecfbd8d67c253b8707`, the six implementation
 identities and six retained semantic/raw identities pinned in document 67,

@@ -141,6 +141,12 @@ Accepted-as-design-choice.
 |---|---|---|---|---|---|---|
 | `V28-C01` | One-time construction boundary pinned; construction not run | Pinned no-argument exact-path controller implemented; one-invocation hash-only construction authorized; output inspection authorized; commit and protocol pinning remain separate and unauthorized | Controller `sha256:105a11041bc9fa7a116c02de9ec40ba4e8a7098a87b196e119c52906c3210e87`; `68-v28r2-retired-r1-fingerprint-construction-authorization.md` | Eight hermetic controller tests plus pre-execution repository, validation, and research-scope audit; external independent scientific review `NotRun` | The construction must be non-adaptive, non-repeatable, and unable to substitute copied inputs or alternate outputs | Local controller engineering evidence and authorization only; no fingerprint yet, protocol pin, R2 corpus, model-backed novelty, acquisition, retention/recovery, selector, or assessment evidence |
 
+## V28R2 Retired-R1 Fingerprint Construction R1 Failure / R2 Authorization — 2026-07-28
+
+| ID | Old execution posture | New execution posture | Evidence artifact | Reviewer | Reason | Unchanged claim ceiling |
+|---|---|---|---|---|---|---|
+| `V28-C01` | R1 controller implemented and authorized; construction not run | R1 external commit precheck failed before controller invocation; R1 identity permanently retired; fresh fixed-output R2 controller `sha256:92bdb88cff100ccbc6f212605b7117fccda5f141679e9f30b73e46656878244e` implemented pending commit and audit | `69-v28r2-retired-r1-fingerprint-construction-r2-authorization.md`; actual R1 authorization commit `e1085dd19b8313cd80dffd7ad72b7b0fff08d295` | Author failure record; R2 independent pre-execution audits required; external independent scientific review `NotRun` | The no-retry rule forbids reusing R1 even though no controller or builder ran; R2 must be a new explicit identity | No fingerprint, protocol pin, R2 corpus, model-backed novelty, acquisition, retention/recovery, selector, or assessment evidence |
+
 C003-C007 and C013-C014 retain the historical status `Proposed`; their current
 execution disposition is `BlockedByStage0C`. No observer, correction,
 prospective-prediction, or actor-observer optimization evidence exists. C008

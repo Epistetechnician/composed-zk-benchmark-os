@@ -28,7 +28,7 @@ VALIDATION_REPORT = INPUT_ROOT / "astral-validation-report.json"
 ARTIFACT_MANIFEST = INPUT_ROOT / "artifact-manifest.json"
 OUTPUT = Path(
     "/Users/shaanp/Documents/ResearchArtifacts/"
-    "astral-rgs-v28r1-retired-fingerprint-8cf75d7-r1.json"
+    "astral-rgs-v28r1-retired-fingerprint-8cf75d7-r2.json"
 )
 GIT = Path("/usr/bin/git")
 IMPLEMENTATION_FILE_SHA256 = {
@@ -153,7 +153,7 @@ def _validate_static_configuration() -> None:
         ),
         "output": (
             "/Users/shaanp/Documents/ResearchArtifacts/"
-            "astral-rgs-v28r1-retired-fingerprint-8cf75d7-r1.json"
+            "astral-rgs-v28r1-retired-fingerprint-8cf75d7-r2.json"
         ),
     }
     observed = {
