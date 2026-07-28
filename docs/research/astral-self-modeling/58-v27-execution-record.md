@@ -1,0 +1,154 @@
+# V27-R1 Execution Record
+
+State slice: `astral-rgs-v27-model-backed-qualification-r1`.
+
+Protocol slice: `astral-rgs-nested-recoverable-update-v27`.
+
+Status: `ImmutableAuthorReplayPassed / ModelBackedAssessmentNotRun`.
+
+Thesis status: `NotValidated`.
+
+## Immutable source boundary
+
+- Astral source commit:
+  `900f5e23a8c80bea242a969f1cbb926509f7a87d`.
+- RGS source commit:
+  `12b36e9c0168f7e3adbc4e07f4c0879f80520f09`.
+- RGS source tree:
+  `aaa97f427167ef634e4a6817d2cfe823fdee693e`.
+- Tencent CL-bench source commit recorded by the historical packet:
+  `16bffd1cfa05927e72ec75c835177d6e23e82172`.
+- Tencent dataset revision recorded by the historical packet:
+  `b28a5832a09b0d96c0cf4c22e90d7c60ede25b80`.
+
+The Astral and RGS sources are clean commits on the isolated branch
+`codex/astral-rgs-v27-qualification-r1`. Unrelated dirty RGS changes in the
+original checkout were not staged, normalized, or incorporated.
+
+## Implemented validator
+
+The RGS V2 validator now requires:
+
+- all six mandatory native arms over three seeds and three task orders;
+- at least 12 family-disjoint assessment families;
+- content-addressed prediction and configuration locks before outcomes;
+- one Astral selector, six confirmatory nonprivileged selectors, and three
+  null or specificity selectors over shared candidate outcomes;
+- acquisition, protected retention, forgetting, calibration, recovery,
+  resource-parity, and governance gates;
+- byte-exact rollback and replay after an injected corruption causing at least
+  `0.10` loss, with recovered-score loss at most `0.01`;
+- future-unseen constrained selection regret, with infeasible selections
+  assigned regret `1`;
+- a paired, two-stage, equal-family bootstrap with 20,000 replicates and seed
+  `270047`, plus the frozen Holm comparison sequence for C047, C048, and
+  specificity;
+- a V2 Tencent packet that rehashes the model, dataset, licenses, raw output,
+  graded output, runtime inventory, and exact execution and grading commands.
+
+Astral independently recomputes the scientific gates, selector regrets,
+C047/C048 contrasts, bootstrap, Holm decisions, specificity, source censuses,
+native-arm statuses, lock ordering, and final disposition. A supplied malformed
+RGS packet is `Invalid`; an absent packet is explicitly `NotRun`.
+
+## Immutable validation release
+
+The release is stored outside both repositories at:
+
+`/Users/shaanp/Documents/ResearchArtifacts/astral-rgs-v27-r1-dda916c83d326cc3`
+
+Its top-level release manifest is:
+
+`RELEASE-MANIFEST.sha256 = dda916c83d326cc3016f9ff01aa141d4a3b708304a3edab0d075024827e33839`
+
+Additional release identities:
+
+- `RELEASE.json` file SHA-256:
+  `d82e36df0de5d1b120f05e6dcbd7592db4d329028399cc1def60773f05079965`;
+- internal release digest:
+  `sha256:8d9f98a0916ce2d65972ec883a80b8973156dc924bf2656a78de56b1e5f3fd06`;
+- runtime-inventory digest:
+  `sha256:d1013d71efad224b9350b81f655d4a03917f637e3bb00254402ddd13280840bc`.
+
+The release contains Git bundles and exact source inventories for both commits,
+the digest-bound V25 historical validation report, runtime inventory, license
+files, the historical Tencent packet and subset manifest, and every referenced
+Tencent byte object. The 5.63 GB model file is durably hard-linked inside the
+release and covered by the content manifest.
+
+## Clean detached replay
+
+The author replay report is:
+
+`/Users/shaanp/Documents/ResearchArtifacts/astral-rgs-v27-r1-dda916c83d326cc3-author-replay.json`
+
+- file SHA-256:
+  `ad51db2304fdfdc385b087d2c089f36e93b33c356fe29c9e64f259f451a75f65`;
+- internal report digest:
+  `sha256:64da549a1853bba9a59fc4e929d286275160b2468ba3a44f58b2d3a1fe077c54`;
+- disposition: `pass`;
+- errors: none.
+
+The authoritative replay cloned both bundled repositories into detached
+checkouts, verified the release manifest and source inventories, and completed:
+
+- Astral V27 tests: `9 passed`;
+- RGS holistic and adversarial tests: `15 passed`;
+- RGS `lint:fast`: passed;
+- Astral independent V2 validation: `ValidatedWithOpenGates`.
+
+The replay's only open gates are:
+
+- `tencent.valid_v2_packet_not_supplied`;
+- `rgs.model_backed_report_not_supplied`.
+
+This author-operated replay establishes deterministic artifact exercisability.
+It is not an unaffiliated clean-room reproduction, independent review, or
+independent implementation replication.
+
+## Historical Tencent diagnostic
+
+The release preserves the four-task historical Tencent observation and all its
+referenced bytes. It does not promote that observation to a V2 packet because
+the exact inference and grading commands were not recorded at execution time.
+Reconstructing commands after the fact would weaken the provenance contract.
+Its release status is
+`HistoricalV1NonReplayableMissingExactCommands`.
+
+The retained observation used Qwen3.5 9B Q4_K_M and recorded one locally judged
+pass among four tasks. It remains noncanonical: it is not the official judge,
+not a full benchmark, not leaderboard-comparable, and not a parametric
+continual-learning result. CL-bench remains evaluation-only and cannot be used
+for training, calibration, distillation, adaptation, or architecture selection.
+
+## Heavy root-gate boundary
+
+The RGS heavy root gate passed its preceding Phase 36-45, CL12, advisory-pilot,
+PCSM-native, and V27 checks after reconstructing ignored inherited artifacts in
+the isolated worktree. It then stopped at the pre-existing public-metrics check
+because `docs/public-breakthrough-metrics.json` and its Markdown mirror are
+stale against the inherited sidecar-ledger refresh. Those unrelated tracked
+generated files were not changed. The focused V27 gates and immutable detached
+replay passed; the inherited root gate is not represented as green.
+
+## Claim disposition
+
+- C046 remains `In test`: the author-side engineering machinery and immutable
+  replay passed, but independent review is `NotRun`.
+- C047 remains `In test`: no native model-backed six-arm execution exists.
+- C048 remains `In test`: no sealed model-backed selector comparison exists.
+- model-backed assessment: `NotRun`;
+- fresh Stage 0C confirmation: `Blocked`;
+- Stage 1: `BlockedByStage0C`;
+- independent human review: `NotRun`;
+- independent implementation replication: `NotRun`;
+- thesis: `NotValidated`.
+
+The strongest supported conclusion is:
+
+> V27-R1 provides an immutable, author-replayable, fail-closed scientific
+> validator for a future model-backed recoverable continual-learning study.
+> It does not yet provide model-backed continual-learning evidence, a valid
+> Tencent V2 result, independent reproduction, recoverable self-improvement,
+> introspection, self-modeling, Stage 0C, Stage 1, benchmark dominance, or
+> thesis validation.
