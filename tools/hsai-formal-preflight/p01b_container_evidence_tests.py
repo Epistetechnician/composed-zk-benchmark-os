@@ -355,7 +355,7 @@ def readiness_command(ordinal: int, role: str, argv: list, activation: str) -> d
         "ordinal": ordinal,
         "role": role,
         "argv": argv,
-        "environment": {"HOME": "/nonexistent", "LANG": "C", "LC_ALL": "C", "PATH": "/usr/bin:/bin", "TMPDIR": "/private/tmp/p01b-readiness", "TZ": "UTC", "DOCKER_CONFIG": "/private/tmp/p01b-docker-config"},
+        "environment": {"HOME": "/private/tmp/p01b-readiness/host-home", "LANG": "C", "LC_ALL": "C", "PATH": "/usr/bin:/bin:/Applications/Docker.app/Contents/Resources/bin", "TMPDIR": "/private/tmp/p01b-readiness", "TZ": "UTC", "DOCKER_CONFIG": "/private/tmp/p01b-docker-config"},
         "cwd": "/",
         "stdin_policy": "closed-null",
         "stdout_cap": 262_144,

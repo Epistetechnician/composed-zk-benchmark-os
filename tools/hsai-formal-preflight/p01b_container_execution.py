@@ -53,7 +53,8 @@ READINESS_PLAN_DOMAIN = "hsai:p01b-container-readiness-plan:v2"
 OBSERVATION_DOMAIN = "hsai:p01b-container-observation:v2"
 READINESS_EVENT_DOMAIN = "hsai:p01b-container-readiness-event:v1"
 
-DOCKER_EXE = "/Applications/Docker.app/Contents/Resources/bin/docker"
+DOCKER_BIN_DIR = "/Applications/Docker.app/Contents/Resources/bin"
+DOCKER_EXE = DOCKER_BIN_DIR + "/docker"
 DOCKER_SHA256 = "73206884cd100a165e20fbab2b1f9e09e0ae8fc959ec9b02fed46152a99c5e79"
 BUILDX_EXE = "/Applications/Docker.app/Contents/Resources/cli-plugins/docker-buildx"
 BUILDX_SHA256 = "9d594c8c396e02385b8de8d7594ede893a64ceebbaefb37f7fa99fcd991cf94e"
@@ -109,6 +110,8 @@ ROOTFS_DIFF_IDS = (
 DOCKER_CONTEXT_PATH = "/Users/shaanp/.docker/contexts/meta/fe9c6bd7a66301f49ca9b6a70b217107cd1284598bfc254700c989b916da791e/meta.json"
 READINESS_PREDECESSOR_COMMIT = "e443797acbbd73b321253f799a84e6794c924794"
 READINESS_TEMP_BASENAME = "runtime-tmp"
+HOST_HOME_BASENAME = "host-home"
+CLOSED_HOST_PATH = "/usr/bin:/bin:" + DOCKER_BIN_DIR
 DOCKER_CONTEXT_SHA256 = "c36db611bb2256cd052f36471538d4c8d1ff3dc36a978d325391c3813072cb2c"
 READINESS_ACKNOWLEDGEMENT = "I_ACKNOWLEDGE_P01B_REGISTRY_AND_DOCKER_AUTHORITY"
 RUN_ACKNOWLEDGEMENT = "I_ACKNOWLEDGE_P01B_LOCAL_CONTAINER_EXECUTION"
@@ -349,10 +352,10 @@ def closed_host_environment(config_root: str, temporary_root: str) -> Dict[str, 
     _require_absolute(temporary_root, "temporary_root")
     return {
         "DOCKER_CONFIG": config_root,
-        "HOME": "/nonexistent",
+        "HOME": temporary_root + "/" + HOST_HOME_BASENAME,
         "LANG": "C",
         "LC_ALL": "C",
-        "PATH": "/usr/bin:/bin",
+        "PATH": CLOSED_HOST_PATH,
         "TMPDIR": temporary_root,
         "TZ": "UTC",
     }
@@ -5664,6 +5667,7 @@ def _execute_a3l7_readiness_at(
         READINESS_TEMP_BASENAME,
     ):
         _a3l7_create_directory(output_root_fd, directory)
+    _a3l7_create_directory(output_root_fd, READINESS_TEMP_BASENAME + "/" + HOST_HOME_BASENAME)
     authority_documents = {
         "action.json": action_document,
         "policy.json": policy_document,
@@ -7622,7 +7626,8 @@ def _a3l7_candidate_payloads(root: Path) -> Dict[str, bytes]:
             for path in paths
             for index in range(1, len(path.split("/")))
         }
-        directories.add("runtime-tmp")
+        directories.add(READINESS_TEMP_BASENAME)
+        directories.add(READINESS_TEMP_BASENAME + "/" + HOST_HOME_BASENAME)
         expected_children: Dict[str, set[str]] = {
             directory: set() for directory in directories | {""}
         }
