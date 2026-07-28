@@ -4,7 +4,7 @@ State slice: `astral-rgs-v27-model-backed-qualification-r1`.
 
 Protocol slice: `astral-rgs-nested-recoverable-update-v27`.
 
-Status: `ImmutableNativeAuthorReplayPassed / ModelBackedAssessmentNotRun`.
+Status: `ImmutableNativeAuthorReplayPassed / QualificationPlanLockedSelectorsPending / ModelBackedAssessmentNotRun`.
 
 Thesis status: `NotValidated`.
 
@@ -216,6 +216,22 @@ generated files were not changed. The focused V27 gates and immutable detached
 replay passed; the inherited root gate is not represented as green.
 
 ## Claim disposition
+
+The repository-external pre-assessment plan is:
+
+`/Users/shaanp/Documents/ResearchArtifacts/astral-rgs-v27-qualification-plan-e9e4c86`
+
+It binds 54 planned executions, three seeds, three orders, six methods, 12
+assessment-family commitments, equal updated-arm budgets, exact-zero no-update
+budget, the statistical policy, and recovery gates. Its internal digest is
+`sha256:d8b761824e348e23e5d341118d730c94f5769cc6a2a63b1b3d4c7c49522f7e90`;
+its manifest file SHA-256 is
+`863539f8c25c69b447cbb352f7c5e4c74c10f32930d0d1004ff1c29398914fa6`.
+The assessment commitment is
+`sha256:46c52f95e595f2da04d427dcd576db7772767bc63e53873c55fbefb3617a8564`.
+Assessment content and outcomes remain absent. All selector implementations
+and the development ranking remain pending, so the prediction lock is not
+sealed.
 
 - C046 remains `In test`: the author-side engineering machinery and immutable
   replay passed, but independent review is `NotRun`.
