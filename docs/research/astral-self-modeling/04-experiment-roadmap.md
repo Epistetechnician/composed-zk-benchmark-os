@@ -79,6 +79,11 @@ The immutable V27-R1 author replay is recorded in
 fail-closed open-gate behavior; it is not independent reproduction or
 model-backed evidence.
 
+The dynamic rate-distortion DreamCycle is deferred by
+`60-dynamic-rate-distortion-dream-cycle-plan.md`. It is a separately
+preregistered post-qualification experiment, not a retroactive seventh V27 arm.
+It remains `DesignOnly`, `NotAuthorized`, `NotImplemented`, and `NotRun`.
+
 ## Stage 0A: Instrument Integrity — Complete
 
 Retain the compiled/planted positive control as a regression. It does not
