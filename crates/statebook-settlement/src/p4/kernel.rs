@@ -5,7 +5,9 @@ use super::assurance::{evaluate_independence, resolve_assurance_tier};
 use super::breaker::{
     apply_ttl_exhaustion_to_state, collect_breaker_block_reasons, global_breaker_state,
 };
-use super::budget::{gross_reserve_linked_plan, try_reserve, ReservationResult};
+use super::budget::{
+    apply_failed_transfer_rollback_v1, gross_reserve_linked_plan, try_reserve, ReservationResult,
+};
 use super::challenge::{apply_evidence_expiry_to_state, evidence_is_fresh};
 use super::classify::classify_release_class;
 use super::digest::{
@@ -488,6 +490,17 @@ pub fn decide_and_transition(
         {
             next_state.queue.status = QueueStatusV1::Frozen;
             next_state.transfer.status = TransferStatusV1::Unreserved;
+            // Reservation already succeeded; release exposure so Frozen cannot leak capacity.
+            if !reserve_amount.is_zero() {
+                let tip = next_state.ledger.tip_digest;
+                apply_failed_transfer_rollback_v1(
+                    &mut next_state,
+                    request.asset(),
+                    reserve_amount,
+                    tip,
+                )?;
+                next_state.queue.status = QueueStatusV1::Frozen;
+            }
             (
                 DecisionOutcomeV1::Frozen,
                 zero_rational(),

@@ -1,10 +1,11 @@
 use serde_json::{json, Value};
 use statebook_settlement::{
     apply_budget_refill_v1, apply_cancel_v1, apply_challenge_v1, apply_destination_finality_v1,
-    apply_proven_no_outflow_v1, apply_transfer_submit_v1, decide_and_transition, intent_digest,
-    parse_settlement_scenario_v1, validate_breaker_transition, BreakerStateV1,
-    ChallengeApplyResultV1, ChallengeKindV1, ChallengeSubmissionV1, ClockV1, DecisionOutcomeV1,
-    DecisionReasonV1, DecisionRecordV1, DigestV1, SettlementScenarioV1, TransferBudgetResultV1,
+    apply_proven_no_outflow_v1, apply_transfer_submit_v1, available_capacity,
+    decide_and_transition, intent_digest, parse_settlement_scenario_v1,
+    validate_breaker_transition, BreakerStateV1, ChallengeApplyResultV1, ChallengeKindV1,
+    ChallengeSubmissionV1, ClockV1, DecisionOutcomeV1, DecisionReasonV1, DecisionRecordV1,
+    DigestV1, SettlementScenarioV1, SettlementTransitionErrorV1, TransferBudgetResultV1,
 };
 
 use crate::error::EvaluationErrorV1;
@@ -216,6 +217,22 @@ pub fn encodable_corpus_cases_v1() -> &'static [CorpusCaseV1] {
             id: "td004_32_action_oracle_valuation_blocked",
             expected_outcome: DecisionOutcomeV1::Rejected,
         },
+        CorpusCaseV1 {
+            id: "td004_31_failed_transfer_rollback",
+            expected_outcome: DecisionOutcomeV1::Frozen,
+        },
+        CorpusCaseV1 {
+            id: "td004_31_finalizer_cas_contention",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_29_queued_value_monetization",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_27_anomaly_after_instant_before_queued",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
     ]
 }
 
@@ -365,6 +382,13 @@ pub fn build_corpus_scenario_v1(id: &str) -> Result<SettlementScenarioV1, Evalua
             value["valuation_profile"]["observations"][0]["root_id"] = json!("calc-a");
             value["valuation_profile"]["independence_roots"] = json!(["calc-a"]);
         }),
+        "td004_31_failed_transfer_rollback" => mutate(|value| {
+            value["initial_state"]["queue"]["status"] = json!("challenged");
+        }),
+        "td004_31_finalizer_cas_contention" => mutate(|_| {}),
+        "td004_29_queued_value_monetization" | "td004_27_anomaly_after_instant_before_queued" => {
+            mutate(|_| {})
+        }
         "td004_22_cas_tip_mismatch" => mutate(|value| {
             value["initial_state"]["expected_ledger_tip"] =
                 json!("9999999999999999999999999999999999999999999999999999999999999999");
@@ -716,9 +740,97 @@ pub fn replay_corpus_case_v1(id: &str) -> Result<CorpusReplayReceiptV1, Evaluati
     if id == "td004_52_refill_skip_epoch" {
         return replay_refill_skip_epoch_v1(id);
     }
+    if id == "td004_31_failed_transfer_rollback" {
+        return replay_failed_transfer_rollback_v1(id);
+    }
+    if id == "td004_31_finalizer_cas_contention" {
+        return replay_finalizer_cas_contention_v1(id);
+    }
+    if id == "td004_29_queued_value_monetization" {
+        return replay_queued_value_monetization_v1(id);
+    }
+    if id == "td004_27_anomaly_after_instant_before_queued" {
+        return replay_anomaly_after_instant_before_queued_v1(id);
+    }
     let scenario = build_corpus_scenario_v1(id)?;
     let record = run(scenario)?;
     Ok(receipt(id, &record))
+}
+
+fn replay_queued_value_monetization_v1(
+    id: &str,
+) -> Result<CorpusReplayReceiptV1, EvaluationErrorV1> {
+    let scenario = parse_settlement_scenario_v1(QUEUED)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let first = run(scenario)?;
+    if first.outcome() != DecisionOutcomeV1::Queued {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} setup expected Queued got {:?}",
+            first.outcome()
+        )));
+    }
+    let mut value: Value = serde_json::from_slice(QUEUED)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    value["request"]["monetizes_queued_value"] = json!(true);
+    let scenario = parse_settlement_scenario_v1(
+        &serde_json::to_vec(&value)
+            .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?,
+    )
+    .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let (request, _, clock) = scenario.into_kernel_input();
+    let second = decide_and_transition(request, first.next_state().clone(), clock)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    if second.outcome() != DecisionOutcomeV1::Rejected
+        || !second.instant_release_amount().is_zero()
+        || !second
+            .reasons()
+            .contains(&DecisionReasonV1::QueuedValueMonetization)
+    {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} expected Rejected QueuedValueMonetization zero-instant got {:?} {:?}",
+            second.outcome(),
+            second.reasons()
+        )));
+    }
+    Ok(receipt(id, &second))
+}
+
+fn replay_anomaly_after_instant_before_queued_v1(
+    id: &str,
+) -> Result<CorpusReplayReceiptV1, EvaluationErrorV1> {
+    let scenario = parse_settlement_scenario_v1(QUEUED)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let first = run(scenario)?;
+    if first.outcome() != DecisionOutcomeV1::Queued || first.instant_release_amount().is_zero() {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} setup expected Queued with nonzero instant got {:?}",
+            first.outcome()
+        )));
+    }
+    let mut value: Value = serde_json::from_slice(QUEUED)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    value["request"]["gate_overrides"] = json!({ "anomaly_clear": false });
+    let scenario = parse_settlement_scenario_v1(
+        &serde_json::to_vec(&value)
+            .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?,
+    )
+    .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let (request, _, clock) = scenario.into_kernel_input();
+    let second = decide_and_transition(request, first.next_state().clone(), clock)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    if second.outcome() != DecisionOutcomeV1::Rejected
+        || !second.instant_release_amount().is_zero()
+        || !second
+            .reasons()
+            .contains(&DecisionReasonV1::GateAnomalyEmergency)
+    {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} expected Rejected GateAnomalyEmergency zero-instant got {:?} {:?}",
+            second.outcome(),
+            second.reasons()
+        )));
+    }
+    Ok(receipt(id, &second))
 }
 
 fn replay_slow_drain_v1(id: &str) -> Result<CorpusReplayReceiptV1, EvaluationErrorV1> {
@@ -782,6 +894,81 @@ fn replay_split_cannot_expand_caps_v1(
         )));
     }
     Ok(receipt(id, &second))
+}
+
+fn replay_failed_transfer_rollback_v1(
+    id: &str,
+) -> Result<CorpusReplayReceiptV1, EvaluationErrorV1> {
+    let scenario = build_corpus_scenario_v1(id)?;
+    let (request, state, clock) = scenario.into_kernel_input();
+    let available_before = available_capacity(&state.ledger().axes()[0])
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let record = decide_and_transition(request, state, clock)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    if record.outcome() != DecisionOutcomeV1::Frozen || !record.instant_release_amount().is_zero() {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} expected Frozen zero-instant got {:?}",
+            record.outcome()
+        )));
+    }
+    let next = record.next_state();
+    if !next.ledger().axes()[0].reserved().is_zero()
+        || !next.ledger().axes()[0].in_flight().is_zero()
+    {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} Frozen leaked reserved/in_flight exposure"
+        )));
+    }
+    let available_after = available_capacity(&next.ledger().axes()[0])
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    if available_after != available_before {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} available capacity changed across Frozen rollback"
+        )));
+    }
+    Ok(receipt(id, &record))
+}
+
+fn replay_finalizer_cas_contention_v1(
+    id: &str,
+) -> Result<CorpusReplayReceiptV1, EvaluationErrorV1> {
+    let scenario = build_corpus_scenario_v1(id)?;
+    let (request, state, clock) = scenario.into_kernel_input();
+    let first = decide_and_transition(request, state, clock)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    if first.outcome() != DecisionOutcomeV1::Immediate {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} expected Immediate reserve got {:?}",
+            first.outcome()
+        )));
+    }
+    let mut state = first.next_state().clone();
+    let reserved = state.ledger().axes()[0].reserved();
+    let tip_before = state.ledger().tip_digest();
+    apply_transfer_submit_v1(&mut state, "ETH", reserved, tip_before)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let tip_after = state.ledger().tip_digest();
+    let in_flight = state.ledger().axes()[0].in_flight();
+    let stale = apply_destination_finality_v1(&mut state, "ETH", in_flight, tip_before);
+    if !matches!(stale, Err(SettlementTransitionErrorV1::LedgerCasConflict)) {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} expected stale-tip LedgerCasConflict"
+        )));
+    }
+    let ok = apply_destination_finality_v1(&mut state, "ETH", in_flight, tip_after)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    if ok != TransferBudgetResultV1::Applied {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} current tip finality expected Applied"
+        )));
+    }
+    // Synthetic Rejected receipt: stale arm is the fail-closed contention result.
+    Ok(CorpusReplayReceiptV1 {
+        id: id.to_owned(),
+        outcome: "rejected".to_owned(),
+        instant_release_is_zero: true,
+        record_digest: format!("finalizer-cas-contention-{id}"),
+    })
 }
 
 fn replay_refill_skip_epoch_v1(id: &str) -> Result<CorpusReplayReceiptV1, EvaluationErrorV1> {

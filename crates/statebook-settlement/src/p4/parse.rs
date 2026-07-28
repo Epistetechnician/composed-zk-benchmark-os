@@ -796,6 +796,10 @@ fn parse_request(
             .get("model_confidence_claimed")
             .and_then(Value::as_bool)
             .unwrap_or(false),
+        monetizes_queued_value: object
+            .get("monetizes_queued_value")
+            .and_then(Value::as_bool)
+            .unwrap_or(false),
         gate_overrides: parse_gate_overrides(object.get("gate_overrides")),
         evidence_snapshot,
         valuation_profile,

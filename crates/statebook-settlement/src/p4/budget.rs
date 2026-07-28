@@ -260,6 +260,53 @@ pub fn apply_proven_no_outflow_v1(
     Ok(TransferBudgetResultV1::Applied)
 }
 
+/// Failed-transfer rollback: release reserved (or in-flight) exposure under CAS.
+pub fn apply_failed_transfer_rollback_v1(
+    state: &mut SettlementStateV1,
+    asset: &str,
+    amount: SignedRational,
+    expected_tip: DigestV1,
+) -> Result<TransferBudgetResultV1, SettlementTransitionErrorV1> {
+    if amount.is_zero() || amount.numerator() < 0 {
+        return Ok(TransferBudgetResultV1::Rejected {
+            reason: DecisionReasonV1::FailedTransferRollbackRejected,
+        });
+    }
+    if state.ledger.tip_digest != expected_tip {
+        return Err(SettlementTransitionErrorV1::LedgerCasConflict);
+    }
+    let axis = axis_mut(&mut state.ledger, asset)?;
+    if axis
+        .reserved
+        .checked_cmp(amount)
+        .map_err(|_| SettlementTransitionErrorV1::ArithmeticOverflow)?
+        != std::cmp::Ordering::Less
+    {
+        axis.reserved = axis
+            .reserved
+            .checked_sub(amount)
+            .map_err(|_| SettlementTransitionErrorV1::ArithmeticOverflow)?;
+    } else if axis
+        .in_flight
+        .checked_cmp(amount)
+        .map_err(|_| SettlementTransitionErrorV1::ArithmeticOverflow)?
+        != std::cmp::Ordering::Less
+    {
+        axis.in_flight = axis
+            .in_flight
+            .checked_sub(amount)
+            .map_err(|_| SettlementTransitionErrorV1::ArithmeticOverflow)?;
+    } else {
+        return Ok(TransferBudgetResultV1::Rejected {
+            reason: DecisionReasonV1::FailedTransferRollbackRejected,
+        });
+    }
+    state.transfer.status = TransferStatusV1::Unreserved;
+    state.ledger.tip_digest = ledger_tip_digest(&state.ledger);
+    state.expected_ledger_tip = state.ledger.tip_digest;
+    Ok(TransferBudgetResultV1::Applied)
+}
+
 /// Sequential epoch refill: reduce consumed (restore capacity) without backfill or cap increase.
 pub fn apply_budget_refill_v1(
     state: &mut SettlementStateV1,
