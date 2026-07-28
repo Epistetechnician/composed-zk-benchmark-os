@@ -73,6 +73,12 @@ Accepted-as-design-choice.
 |---|---|---|---|---|---|---|---|
 | C045 | The Docker V25 validation harness distinguishes its construction-known continual-correction mechanism from matched controls and rejects the same gate in a null world | Engineering / synthetic positive control | Frozen V25 positive sensitivity and null specificity gates; refuted by either gate failure | Content-addressed V25 raw-observation bundle and fail-closed recomputation report | `53-docker-closed-loop-correction-simulation-v25.md` | In test | None / synthetic Docker harness only |
 
+## V25 Experimental Update — 2026-07-27
+
+| ID | Old status | New status | Evidence artifact | Reviewer | Reason | Unchanged claim ceiling |
+|---|---|---|---|---|---|---|
+| C045 | In test | Not refuted | V25 manifest `8da3411441d8de84b53bf7e8cbce62008a1eb72c60a68d4029cecb4ed83eab95`; positive telemetry accuracy `0.9989`, strongest control `0.7459`, advantage `0.2530`, bootstrap 95% interval `[0.2376, 0.2684]`; null advantage `-0.1280`; maximum replay loss `0.0` | Author-run Docker execution and fail-closed raw-record validator; independent review `NotRun` | The construction-known positive world passed every frozen gate and the independent-signal null world kept the same gate closed | High / synthetic Docker harness qualification only; not model-backed continual learning, self-improvement, Stage 0C, or thesis validation |
+
 C003-C007 and C013-C014 retain the historical status `Proposed`; their current
 execution disposition is `BlockedByStage0C`. No observer, correction,
 prospective-prediction, or actor-observer optimization evidence exists. C008

@@ -4,6 +4,10 @@ State slice: `astral-docker-closed-loop-correction-simulation-v25`.
 
 Status: `Preregistered / AssessmentUnopened`.
 
+Execution disposition: see
+[V25 execution record](54-v25-execution-record.md). The preregistration above
+remains the frozen pre-assessment contract.
+
 ## Purpose
 
 V25 tests whether the proposed continual-correction measurement and validation
