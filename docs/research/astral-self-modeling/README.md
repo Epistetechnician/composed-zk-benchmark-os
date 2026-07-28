@@ -172,6 +172,9 @@ review and experiments rule out equivalent prior work.
 - [Holistic continual-learning benchmark V2](59-holistic-continual-learning-benchmark-v2.md):
   separate local-update, frozen Tencent CL-bench, and independent-replication
   evidence lanes with fail-closed claim boundaries.
+- [Dynamic rate-distortion DreamCycle research plan](60-dynamic-rate-distortion-dream-cycle-plan.md):
+  post-qualification compression and offline-consolidation design, explicitly
+  excluded from the frozen V27-R1 arms and evidence.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
