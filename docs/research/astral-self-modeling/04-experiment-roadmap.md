@@ -50,7 +50,7 @@ requirements.
 | V23 | `NotRunCapabilityTierPerturbationQualification` | Fresh-concept Llama 1B replication failed unchanged fit/tune and activation-versus-none gates; assessment stayed unopened |
 | V24 | `AuthorDevelopmentPerturbationReadoutObserved` | A fixed downstream linear residual readout passed both development gates and the sealed assessment against text, output-logit, anomaly, and shuffled-label controls; independent verification and confirmation remain `NotRun`/`NotAuthorized` |
 | V25 | `SyntheticDockerContinualCorrectionHarnessQualified` | Construction-known positive sensitivity and null specificity passed; protocol qualification only, with model-backed learning and thesis validation still `NotRun`/`NotValidated` |
-| V27 | `ImmutableAuthorReplayPassedModelBackedAssessmentNotRun` | Matched selector V2, paired 20,000-replicate inference, adversarial recovery and leakage guards, independent Astral recomputation, and the content-addressed detached replay passed; independent review and the native 54-run assessment remain `NotRun` |
+| V27 | `NativeArmDevelopmentSmokePassedModelBackedAssessmentNotRun` | The immutable validator replay and commit-bound six-arm Qwen 0.5B mechanism smoke passed; the revised release, selector fit, independent review, and native 54-run qualification assessment remain incomplete or `NotRun` |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 
@@ -59,6 +59,13 @@ LoRA, modular ghost-state, compressed adapter recollection,
 representation-through-time distillation, and nested fast/medium/slow LoRA.
 Every model-backed arm must be native-observed. Any missing implementation
 keeps the complete model-backed assessment `NotRun`.
+
+All six mechanisms passed a commit-bound one-seed, one-order development smoke
+at RGS commit `b80518c31c5830ab172fe1f5f6ff88ff1bd28810`. This closes the
+implementation-exercisability prerequisite only. Before qualification, the new
+RGS source and native-smoke evidence must enter a revised immutable release;
+the family corpus, selector features, fit/tune-only ranking, equal qualification
+budgets, recovery injections, and assessment commitment must then be locked.
 
 The primary endpoint is constrained update-selection regret. Candidates first
 pass acquisition, retention, forgetting, calibration, exact recovery, budget,
