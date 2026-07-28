@@ -41,7 +41,7 @@ requirements.
 | V22 | `NotRunPerturbationDiscriminationQualification` | Three-way activation/input/no-change feasibility failed fit/tune and exact-text activation-versus-none gates; assessment stayed unopened |
 | V23 | `NotRunCapabilityTierPerturbationQualification` | Fresh-concept Llama 1B replication failed unchanged fit/tune and activation-versus-none gates; assessment stayed unopened |
 | V24 | `AuthorDevelopmentPerturbationReadoutObserved` | A fixed downstream linear residual readout passed both development gates and the sealed assessment against text, output-logit, anomaly, and shuffled-label controls; independent verification and confirmation remain `NotRun`/`NotAuthorized` |
-| V25 | `PreregisteredAssessmentUnopened` | Docker synthetic continual-correction sensitivity/null-specificity gate; protocol qualification only |
+| V25 | `SyntheticDockerContinualCorrectionHarnessQualified` | Construction-known positive sensitivity and null specificity passed; protocol qualification only, with model-backed learning and thesis validation still `NotRun`/`NotValidated` |
 
 ## Stage 0A: Instrument Integrity — Complete
 
