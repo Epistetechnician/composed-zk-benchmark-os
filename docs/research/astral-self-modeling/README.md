@@ -178,8 +178,11 @@ review and experiments rule out equivalent prior work.
   excluded from the frozen V27-R1 arms and evidence.
 - [V28 novel-knowledge acquisition and recoverable consolidation](61-novel-knowledge-acquisition-and-recoverable-consolidation-v28.md):
   acquisition-first three-gate preregistration after the V27 no-update
-  falsification; implementation, execution, assessment, and Astral tuning remain
-  unauthorized.
+  falsification; corpus generation, model/update execution, process recovery,
+  assessment, and Astral selector implementation or tuning remain unauthorized.
+- [V28 acquisition-qualification validator notes](62-v28-acquisition-qualification-validator-notes.md):
+  fail-closed local Gate 1 packet validation and hermetic contract-test boundary;
+  no model-backed packet, retention/recovery, or selector evidence.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):

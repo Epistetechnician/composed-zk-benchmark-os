@@ -68,10 +68,12 @@ chance_normalized_lift = (accuracy - 0.25) / 0.75
 ```
 
 Both the untouched pre-update model and a separately restarted `no_update` arm
-must have chance-normalized lift at most `0.05` overall and within each fact
-kind. Any score above that ceiling yields `CorpusNotNovel` and stops V28 before
-update-arm comparison. A high baseline is a task failure, not evidence that the
-model already learned the V28 corpus.
+must have absolute chance-normalized lift at most `0.05` overall and within
+each fact kind. Systematic below-chance behavior is not near chance and fails
+the same gate because it may expose answer inversion or another shortcut. Any
+score outside the symmetric interval yields `CorpusNotNovel` and stops V28
+before update-arm comparison. A non-chance baseline is a task failure, not
+evidence that the model already learned the V28 corpus.
 
 Each fact kind requires at least 24 knowledge families per model family before
 qualification. Answer positions are balanced within fact kind and split.
@@ -85,7 +87,8 @@ evaluation. The evaluator records distinct pre-update, update, and evaluation
 process identities. Evaluation loads only the declared post-update persistent
 state from a fresh process.
 
-Each knowledge family is evaluated through all three held-out query classes:
+Each knowledge family is evaluated through four distinct held-out queries in
+each of three query classes:
 
 - paraphrase;
 - multi-hop consequence;
@@ -185,8 +188,8 @@ baseline; specificity controls must remain null.
 ## Statistical and artifact contract
 
 Qualification uses complete-family clusters, at least three seeds, at least
-three task orders, paired candidate outcomes, a frozen bootstrap seed and
-replicate count, multiplicity correction, and separate confidence intervals
+three task orders, paired candidate outcomes, frozen per-seed/order
+family-cluster interval rules, multiplicity correction, and separate confidence intervals
 for acquisition, retention, calibration, recovery, and selector regret.
 
 Required repository-external artifacts include exact source and tree

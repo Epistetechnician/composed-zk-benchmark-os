@@ -1,0 +1,86 @@
+{
+  "version": "astral.rgs_acquisition_v28.protocol.v1",
+  "packet_version": "mesh.astral_v28_acquisition_packet.v1",
+  "state_slice": "astral-rgs-v28-acquisition-qualification-validator",
+  "packet_state_slice": "astral-rgs-novel-knowledge-acquisition-recoverable-consolidation-v28",
+  "claim_ceiling": "LocalAcquisitionQualificationValidatorV28",
+  "choice_count": 4,
+  "queries_per_evaluation_kind": 4,
+  "required_fact_kinds": [
+    "nonce_fact",
+    "entity_relation",
+    "changed_rule",
+    "opaque_mapping"
+  ],
+  "required_evaluation_kinds": [
+    "paraphrase",
+    "multi_hop",
+    "withheld_composition"
+  ],
+  "required_baseline_arm_ids": [
+    "pre_update",
+    "no_update"
+  ],
+  "required_comparison_arm_ids": [
+    "context_only",
+    "retrieval",
+    "naive_sequential_lora",
+    "replay",
+    "scol_style_consolidation"
+  ],
+  "optional_experimental_arm_ids": [
+    "nested_multiscale_learning"
+  ],
+  "required_seeds": [280101, 280103, 280107],
+  "required_task_order_ids": ["order-abc", "order-acb", "order-bac"],
+  "persistent_arm_ids": [
+    "naive_sequential_lora",
+    "replay",
+    "scol_style_consolidation",
+    "nested_multiscale_learning"
+  ],
+  "persistence_classes": {
+    "pre_update": "unchanged_checkpoint",
+    "no_update": "unchanged_checkpoint",
+    "context_only": "external_context",
+    "retrieval": "external_retrieval",
+    "naive_sequential_lora": "persistent_state",
+    "replay": "persistent_state",
+    "scol_style_consolidation": "persistent_state",
+    "nested_multiscale_learning": "persistent_state"
+  },
+  "thresholds": {
+    "minimum_families_per_fact_kind": 24,
+    "maximum_absolute_baseline_chance_normalized_lift": 0.05,
+    "minimum_persistent_overall_accuracy": 0.70,
+    "minimum_persistent_accuracy_per_evaluation_kind": 0.60,
+    "minimum_persistent_accuracy_per_fact_kind": 0.60,
+    "minimum_gain_over_no_update": 0.20,
+    "minimum_packet_threshold_passing_persistent_arms": 2
+  },
+  "statistics": {
+    "familywise_alpha": 0.05,
+    "minimum_paired_gain_lower_bound": 0.0,
+    "minimum_family_clusters_per_interval": 24,
+    "minimum_student_t_critical_value": 5.0,
+    "critical_value_maximum_one_sided_comparisons": 324,
+    "critical_value_maximum_two_sided_comparisons": 144,
+    "interval_method": "per_seed_order_family_cluster_student_t_interval",
+    "multiplicity_policy": "bonferroni_all_arms_gate_dimensions_and_seed_order_cells"
+  },
+  "required_false_claims": [
+    "model_backed_acquisition",
+    "retention_recovery_qualified",
+    "astral_selection_authorized",
+    "continual_learning_solved",
+    "continual_learning_breakthrough",
+    "autonomous_self_improvement",
+    "introspection",
+    "self_modeling",
+    "stage_0c",
+    "stage_1",
+    "independently_replicated",
+    "benchmark_dominance",
+    "production_readiness"
+  ]
+}

@@ -67,7 +67,7 @@ requirements.
 | V24 | `AuthorDevelopmentPerturbationReadoutObserved` | A fixed downstream linear residual readout passed both development gates and the sealed assessment against text, output-logit, anomaly, and shuffled-label controls; independent verification and confirmation remain `NotRun`/`NotAuthorized` |
 | V25 | `SyntheticDockerContinualCorrectionHarnessQualified` | Construction-known positive sensitivity and null specificity passed; protocol qualification only, with model-backed learning and thesis validation still `NotRun`/`NotValidated` |
 | V27 | `DeterministicDevelopmentReplayMatchedNoCandidateAssessmentNotRun` | Two complete 54-execution development packets matched every deterministic scientific lock; no-update dominated, Astral did not beat the strongest nonprivileged selector, and assessment stayed sealed |
-| V28 | `DocsFirstPreregisteredImplementationNotAuthorized` | Acquisition-first novelty, context-removal/restart, retention/recovery, and conditional selector gates are frozen prospectively; no V28 implementation or model-backed result exists |
+| V28 | `AcquisitionValidatorImplementedModelBackedNotRun` | The Gate 1 external-packet validator and hermetic contract fixtures are implemented; no corpus generation, model execution, model-backed packet, retention/recovery result, or selector evidence exists |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 
@@ -139,6 +139,9 @@ Prospective Astral selection remains `NotRun` until at least two native update
 arms qualify both earlier gates and show a statistically supported tradeoff.
 The full frozen boundary and breakthrough ceiling are in
 `61-novel-knowledge-acquisition-and-recoverable-consolidation-v28.md`.
+The separately bounded local Gate 1 packet validator is recorded in
+`62-v28-acquisition-qualification-validator-notes.md`. It provides contract
+coverage only and leaves all model-backed and later-stage gates unopened.
 
 ## Stage 0A: Instrument Integrity — Complete
 

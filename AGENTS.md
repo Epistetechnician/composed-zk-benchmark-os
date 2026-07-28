@@ -1,5 +1,32 @@
 # Agent Rules
 
+Explicit Astral-RGS V28 acquisition-qualification validator now allowed:
+additive Python source, a frozen JSON contract, and hermetic tests under
+`tools/astral-rgs-acquisition-v28/`; implementation notes under
+`docs/research/astral-self-modeling/`; and append-only Astral roadmap,
+claim-ledger, and navigation updates. This slice is limited to state slice
+`astral-rgs-v28-acquisition-qualification-validator`: read-only validation of a
+caller-supplied repository-external acquisition packet; canonical hashing;
+checkpoint-before-generation ordering; exact nonce-fact, entity-relation,
+changed-rule, opaque-mapping, paraphrase, multi-hop, and withheld-composition
+censuses; balanced answer positions; independent raw-row accuracy
+recomputation; near-chance pre-update and restarted no-update stops; explicit
+context-only and retrieval baseline roles; persistent-state restart binding;
+matched producer-declared arm and budget checks; and fail-closed Gate 2 and Gate
+3 states.
+It does not permit corpus generation, model or tokenizer access, cached-model
+loading, training, parameter updates, downloads, network access, RGS runtime
+mutation, process-recovery execution, retention qualification, Astral feature
+development or tuning, prediction sealing, assessment generation or opening,
+release construction, artifact or Evidence Ledger promotion, model-backed
+evidence, independent-replication claims, benchmark claims, continual-learning
+breakthrough claims, self-improvement, introspection or self-modeling claims,
+Stage 0C or Stage 1 promotion, production claims, or claims above
+`LocalAcquisitionQualificationValidatorV28`. Synthetic test fixtures are
+contract coverage only and may not fill a scientific cell. Every mutation in
+this slice names state slice
+`astral-rgs-v28-acquisition-qualification-validator`.
+
 Explicit Astral-RGS novel-knowledge acquisition and recoverable-consolidation
 V28 docs-first preregistration now allowed: one prospective protocol note under
 `docs/research/astral-self-modeling/`, append-only Astral roadmap, claim-ledger,
