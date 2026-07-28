@@ -2,7 +2,7 @@
 
 State slice: `astral-rgs-nested-recoverable-update-v27`.
 
-Status: `Preregistered / ImmutableAuthorReplayPassed / NativeArmDevelopmentSmokePassed / ModelBackedAssessmentNotRun`.
+Status: `Preregistered / ImmutableNativeAuthorReplayPassed / ModelBackedAssessmentNotRun`.
 
 ## Research question
 
@@ -35,12 +35,15 @@ All six arms must declare `native_observed` before assessment. An emulation may
 test the validator but cannot fill a scientific cell. A missing, emulated, or
 `not_run` arm keeps the complete assessment `NotRun`.
 
-RGS commit `b80518c31c5830ab172fe1f5f6ff88ff1bd28810` implements all six
-mechanisms and the commit-bound Qwen 0.5B development smoke passed with zero
-method failures. That smoke used one seed, one task order, three examples, and
-six optimizer steps per updated arm. It establishes native mechanism
-exercisability only. It does not fill any of the 54 qualification executions,
-open assessment, select hyperparameters, or support C047/C048.
+RGS commit `d88b04213ddfbd03b3287fe5b8e2265be91a3fff` implements all six
+mechanisms with deterministic pre-conversion seeding and content-addressed
+adapter metadata. The commit-bound Qwen 0.5B development smoke passed with zero
+method failures, and the revised immutable release reproduced it from detached
+source and a copied model with an exact normalized probe match. That smoke used
+one seed, one task order, three examples, and six optimizer steps per updated
+arm. It establishes native mechanism exercisability and author replay only. It
+does not fill any of the 54 qualification executions, open assessment, select
+hyperparameters, or support C047/C048.
 
 ## Frozen selectors
 

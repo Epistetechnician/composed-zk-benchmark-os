@@ -50,7 +50,7 @@ requirements.
 | V23 | `NotRunCapabilityTierPerturbationQualification` | Fresh-concept Llama 1B replication failed unchanged fit/tune and activation-versus-none gates; assessment stayed unopened |
 | V24 | `AuthorDevelopmentPerturbationReadoutObserved` | A fixed downstream linear residual readout passed both development gates and the sealed assessment against text, output-logit, anomaly, and shuffled-label controls; independent verification and confirmation remain `NotRun`/`NotAuthorized` |
 | V25 | `SyntheticDockerContinualCorrectionHarnessQualified` | Construction-known positive sensitivity and null specificity passed; protocol qualification only, with model-backed learning and thesis validation still `NotRun`/`NotValidated` |
-| V27 | `NativeArmDevelopmentSmokePassedModelBackedAssessmentNotRun` | The immutable validator replay and commit-bound six-arm Qwen 0.5B mechanism smoke passed; the revised release, selector fit, independent review, and native 54-run qualification assessment remain incomplete or `NotRun` |
+| V27 | `ImmutableNativeReplayPassedModelBackedAssessmentNotRun` | The revised immutable release reproduced all six native Qwen 0.5B mechanisms from detached source with a normalized probe match; selector fit, independent review, and the native 54-run qualification assessment remain incomplete or `NotRun` |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 
@@ -61,11 +61,14 @@ Every model-backed arm must be native-observed. Any missing implementation
 keeps the complete model-backed assessment `NotRun`.
 
 All six mechanisms passed a commit-bound one-seed, one-order development smoke
-at RGS commit `b80518c31c5830ab172fe1f5f6ff88ff1bd28810`. This closes the
-implementation-exercisability prerequisite only. Before qualification, the new
-RGS source and native-smoke evidence must enter a revised immutable release;
-the family corpus, selector features, fit/tune-only ranking, equal qualification
-budgets, recovery injections, and assessment commitment must then be locked.
+at RGS commit `d88b04213ddfbd03b3287fe5b8e2265be91a3fff`. The revised immutable
+release at manifest
+`2f1028dcab2e3b9db7d0a1a809452ff9a5536895f615d206784c03aeb04962fe`
+then reproduced the smoke from a detached checkout and copied model with a
+normalized probe match. This closes implementation exercisability and author
+replay only. Before qualification, the family corpus, selector features,
+fit/tune-only ranking, equal qualification budgets, recovery injections, and
+assessment commitment must be locked.
 
 The primary endpoint is constrained update-selection regret. Candidates first
 pass acquisition, retention, forgetting, calibration, exact recovery, budget,
@@ -81,7 +84,7 @@ update-token/gradient-step/rank budgets, and retention of every negative, null,
 failure, crash, and exclusion. A result is invalid if candidate outcomes exist
 before the prediction lock or if any assessment row influences fitting.
 
-The immutable V27-R1 author replay is recorded in
+The immutable V27-R1 and revised native author replays are recorded in
 `58-v27-execution-record.md`. It validates artifact exercisability and the
 fail-closed open-gate behavior; it is not independent reproduction or
 model-backed evidence.
