@@ -6,7 +6,8 @@ Protocol slice:
 `astral-rgs-novel-knowledge-acquisition-recoverable-consolidation-v28`.
 
 Status: `LocalValidatorImplemented / HermeticContractTestsPassed /
-ModelBackedPacketNotSupplied / RetentionRecoveryNotRun /
+R1ModelBackedBaselineValidatedCorpusNotNovel /
+R2PowerProfileDocsFirstOnly / RetentionRecoveryNotRun /
 AstralSelectionNotAuthorized / AssessmentSealedNotAuthorized`.
 
 ## Implemented boundary
@@ -117,6 +118,26 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -p no:cacheprovider \
   tools/astral-rgs-continual-v27/tests/test_release_v2.py -q
 ```
 
-No V28 model-backed packet has been supplied or validated. Gate 2 process
-recovery and Gate 3 prospective selection require separately authorized source
-slices after a genuine Gate 1 packet exists.
+## V28R1 validator result
+
+The one authorized V28R1 packet was supplied and validated on 2026-07-28. Both
+baseline arms produced identical overall accuracy `0.2517361111` over 96
+families and 1,152 queries. The packet was structurally valid, but some frozen
+two-sided multiplicity-adjusted family-cluster intervals crossed the `0.05`
+equivalence margin. The validator returned `CorpusNotNovel` and opened only
+`acquisition.new_corpus_required`.
+
+The packet, report, and manifest SHA-256 digests are recorded in
+`64-v28r2-powered-acquisition-novelty-preregistration.md`. V28R1 is retired, no
+update arm ran, and its rows may not be pooled into V28R2.
+
+The powered V28R2 replacement protocol freezes 1,536 families per fact kind and
+exactly one full-corpus `pre_update` plus one separately restarted `no_update`
+run. Supporting that distinct two-run baseline packet will require a separately
+authorized additive V28R2 validator. The current V28R1 protocol and validator
+require a 3-seed by 3-order baseline census and do not mechanically enforce the
+V28R2 power profile. No V28R2 packet exists, and no V28R2 implementation is
+authorized by the docs-first note.
+
+Gate 2 process recovery and Gate 3 prospective selection require separately
+authorized source slices after a genuine Gate 1 acquisition result exists.

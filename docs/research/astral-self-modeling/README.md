@@ -177,15 +177,20 @@ review and experiments rule out equivalent prior work.
   post-qualification compression and offline-consolidation design, explicitly
   excluded from the frozen V27-R1 arms and evidence.
 - [V28 novel-knowledge acquisition and recoverable consolidation](61-novel-knowledge-acquisition-and-recoverable-consolidation-v28.md):
-  acquisition-first three-gate preregistration after the V27 no-update
-  falsification; corpus generation, model/update execution, process recovery,
+  acquisition-first three-gate protocol after the V27 no-update falsification;
+  V28R1 stopped at `CorpusNotNovel`, and update execution, process recovery,
   assessment, and Astral selector implementation or tuning remain unauthorized.
 - [V28 acquisition-qualification validator notes](62-v28-acquisition-qualification-validator-notes.md):
-  fail-closed local Gate 1 packet validation and hermetic contract-test boundary;
-  no model-backed packet, retention/recovery, or selector evidence.
+  fail-closed local Gate 1 packet validation, hermetic contract-test boundary,
+  and the V28R1 `CorpusNotNovel` disposition; no retention/recovery or selector
+  evidence.
 - [V28 acquisition-novelty producer boundary](63-v28-acquisition-novelty-producer-boundary.md):
-  checkpoint-first offline corpus generation and fresh-process baseline-only
-  execution, with an unconditional pre-update stop rule.
+  completed checkpoint-first V28R1 corpus generation and fresh-process
+  baseline-only execution; the corpus and seed are retired.
+- [V28R2 powered acquisition-novelty preregistration](64-v28r2-powered-acquisition-novelty-preregistration.md):
+  docs-only 6,144-family precision census, complete V28R1 nonreuse, and sealed
+  implementation, model execution, update, recovery, selection, and assessment
+  gates.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):

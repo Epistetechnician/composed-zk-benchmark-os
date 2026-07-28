@@ -21,10 +21,15 @@ candidate: `no_update` dominated all updated arms, and Astral's development
 regret was worse than the strongest nonprivileged selector. Assessment remains
 sealed and is not authorized for this candidate.
 
-V28 is now preregistered as a separate acquisition-first protocol. It requires
+V28 is preregistered as a separate acquisition-first protocol. It requires
 checkpoint-first generation of genuinely unseen knowledge, near-chance
 pre-update and restarted no-update performance, source-context removal, fresh-
 process evaluation, and paraphrase, multi-hop, and withheld-composition tests.
+Its first 96-family novelty corpus produced near-chance point estimates but
+failed the frozen family-cluster equivalence intervals and was retired before
+updates. A disjoint 6,144-family V28R2 replacement corpus is now preregistered
+from a conservative assumption-based precision and power calculation;
+implementation and model execution remain unauthorized.
 Retention and process-level recovery are a second gate. Prospective Astral
 selection is a third gate and remains sealed unless multiple qualified native
 arms first exhibit a meaningful acquisition-retention tradeoff. This docs-first
@@ -67,7 +72,7 @@ requirements.
 | V24 | `AuthorDevelopmentPerturbationReadoutObserved` | A fixed downstream linear residual readout passed both development gates and the sealed assessment against text, output-logit, anomaly, and shuffled-label controls; independent verification and confirmation remain `NotRun`/`NotAuthorized` |
 | V25 | `SyntheticDockerContinualCorrectionHarnessQualified` | Construction-known positive sensitivity and null specificity passed; protocol qualification only, with model-backed learning and thesis validation still `NotRun`/`NotValidated` |
 | V27 | `DeterministicDevelopmentReplayMatchedNoCandidateAssessmentNotRun` | Two complete 54-execution development packets matched every deterministic scientific lock; no-update dominated, Astral did not beat the strongest nonprivileged selector, and assessment stayed sealed |
-| V28 | `AcquisitionNoveltyProducerAuthorizedModelBackedNotRun` | The Gate 1 external-packet validator is implemented and the baseline-only RGS producer slice is authorized; no corpus has been generated, no model execution or packet exists, update arms remain unauthorized, and no retention/recovery or selector evidence exists |
+| V28 | `R1CorpusNotNovelRetiredR2PoweredProtocolDocsFirstOnly` | The 96-family V28R1 packet was structurally valid and deterministic but failed the frozen equivalence intervals; its corpus and seed are retired, the 6,144-family V28R2 precision census is docs-only, and no update, retention/recovery, selector, or assessment evidence exists |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 
@@ -141,7 +146,10 @@ The full frozen boundary and breakthrough ceiling are in
 `61-novel-knowledge-acquisition-and-recoverable-consolidation-v28.md`.
 The separately bounded local Gate 1 packet validator is recorded in
 `62-v28-acquisition-qualification-validator-notes.md`. It provides contract
-coverage only and leaves all model-backed and later-stage gates unopened.
+coverage and returned `CorpusNotNovel` for V28R1, leaving every later-stage
+gate unopened. The powered, completely disjoint V28R2 corpus census is frozen
+in `64-v28r2-powered-acquisition-novelty-preregistration.md`; that note does
+not authorize implementation or execution.
 
 ## Stage 0A: Instrument Integrity — Complete
 

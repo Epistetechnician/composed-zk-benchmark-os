@@ -3,9 +3,9 @@
 State slice:
 `astral-rgs-novel-knowledge-acquisition-recoverable-consolidation-v28`.
 
-Status: `DocsFirstPreregistered / BaselineNoveltyProducerAuthorized /
-ModelBackedExecutionNotRun / UpdateArmsNotAuthorized /
-AssessmentSealedNotAuthorized`.
+Status: `DocsFirstPreregistered / V28R1CorpusNotNovelRetired /
+V28R2PoweredProtocolDocsFirstOnly / V28R2ImplementationNotAuthorized /
+UpdateArmsNotAuthorized / AssessmentSealedNotAuthorized`.
 
 ## Decision
 
@@ -22,6 +22,18 @@ support a continual-learning claim.
 
 V28 is acquisition-first. It has three ordered gates. A later gate is `NotRun`
 unless every earlier gate is valid and qualified.
+
+The first Gate 1 novelty corpus has now run and stopped correctly. V28R1
+produced identical `pre_update` and restarted `no_update` point estimates of
+`0.2517361111` accuracy against chance `0.25`, but failed the frozen
+multiplicity-adjusted family-cluster equivalence intervals. Its authoritative
+disposition is `CorpusNotNovel`; its corpus and seed are retired, and no update
+arm ran.
+
+A distinct, powered V28R2 replacement corpus is preregistered in
+`64-v28r2-powered-acquisition-novelty-preregistration.md`. That docs-only note
+freezes 1,536 families per fact kind and complete nonreuse. It does not
+authorize implementation or model execution.
 
 ## Research question
 
@@ -76,11 +88,13 @@ score outside the symmetric interval yields `CorpusNotNovel` and stops V28
 before update-arm comparison. A non-chance baseline is a task failure, not
 evidence that the model already learned the V28 corpus.
 
-Each fact kind requires at least 24 knowledge families per model family before
-qualification. The four queries in every family/query-class cell rotate the
-same semantic answer through positions A-D exactly once. Query-specific answer
-mappings commit each permutation. Prompt-template or answer-position leakage
-invalidates the packet.
+The original V28R1 corpus required at least 24 knowledge families per fact kind
+and failed for insufficient interval precision. It is retired. V28R2 freezes
+exactly 1,536 knowledge families per fact kind under the disjoint protocol in
+`64-v28r2-powered-acquisition-novelty-preregistration.md`. The four queries in
+every family/query-class cell rotate the same semantic answer through positions
+A-D exactly once. Query-specific answer mappings commit each permutation.
+Prompt-template or answer-position leakage invalidates the packet.
 
 ### Context-free restart evaluation
 
@@ -192,10 +206,13 @@ baseline; specificity controls must remain null.
 
 ## Statistical and artifact contract
 
-Qualification uses complete-family clusters, at least three seeds, at least
-three task orders, paired candidate outcomes, frozen per-seed/order
-family-cluster interval rules, multiplicity correction, and separate confidence intervals
-for acquisition, retention, calibration, recovery, and selector regret.
+V28R2 baseline novelty qualification uses exactly one `pre_update` run and one
+separately prepared and restarted `no_update` run; complete knowledge families,
+not duplicated processes, are its statistical clusters. Every later persistent
+update-arm qualification uses at least three update seeds, at least three task
+orders, paired candidate outcomes, frozen per-seed/order family-cluster
+interval rules, multiplicity correction, and separate confidence intervals for
+acquisition, retention, calibration, recovery, and selector regret.
 
 Required repository-external artifacts include exact source and tree
 identities, model and tokenizer hashes, checkpoint-before-generation receipt,
