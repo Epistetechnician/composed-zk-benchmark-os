@@ -4,8 +4,8 @@ State slice:
 `astral-rgs-v28r2-powered-acquisition-novelty-preregistration`.
 
 Status: `DocsFirstPreregistered / R1CorpusNotNovelRetired /
-R2PowerProfileLocked / R2ImplementationNotAuthorized /
-R2CorpusNotGenerated / R2ModelBackedExecutionNotRun /
+R2PowerProfileLocked / R2ValidatorImplementationAuthorizedSeparately /
+R2ProducerNotAuthorized / R2CorpusNotGenerated / R2ModelBackedExecutionNotRun /
 UpdateArmsNotAuthorized / Gate2SealedNotAuthorized /
 Gate3SealedNotAuthorized / AssessmentSealedNotAuthorized`.
 
@@ -244,7 +244,8 @@ tests/test_v28r2_acquisition.py
 ```
 
 These paths describe a future review surface. They are not implementation
-authority.
+authority. The separate validator implementation authority is
+`65-v28r2-acquisition-qualification-validator-boundary.md`.
 
 ### Required V28R2 validator contract
 

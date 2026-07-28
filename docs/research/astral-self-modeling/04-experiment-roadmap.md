@@ -29,11 +29,12 @@ Its first 96-family novelty corpus produced near-chance point estimates but
 failed the frozen family-cluster equivalence intervals and was retired before
 updates. A disjoint 6,144-family V28R2 replacement corpus is now preregistered
 from a conservative assumption-based precision and power calculation;
+additive clean-room validator implementation is authorized, while producer
 implementation and model execution remain unauthorized.
 Retention and process-level recovery are a second gate. Prospective Astral
 selection is a third gate and remains sealed unless multiple qualified native
-arms first exhibit a meaningful acquisition-retention tradeoff. This docs-first
-slice does not authorize implementation, model execution, assessment, or claim
+arms first exhibit a meaningful acquisition-retention tradeoff. The validator
+implementation slice does not authorize model execution, assessment, or claim
 promotion.
 
 V25 is a separate protocol-engineering lane. Its Docker synthetic positive
@@ -72,7 +73,7 @@ requirements.
 | V24 | `AuthorDevelopmentPerturbationReadoutObserved` | A fixed downstream linear residual readout passed both development gates and the sealed assessment against text, output-logit, anomaly, and shuffled-label controls; independent verification and confirmation remain `NotRun`/`NotAuthorized` |
 | V25 | `SyntheticDockerContinualCorrectionHarnessQualified` | Construction-known positive sensitivity and null specificity passed; protocol qualification only, with model-backed learning and thesis validation still `NotRun`/`NotValidated` |
 | V27 | `DeterministicDevelopmentReplayMatchedNoCandidateAssessmentNotRun` | Two complete 54-execution development packets matched every deterministic scientific lock; no-update dominated, Astral did not beat the strongest nonprivileged selector, and assessment stayed sealed |
-| V28 | `R1CorpusNotNovelRetiredR2PoweredProtocolDocsFirstOnly` | The 96-family V28R1 packet was structurally valid and deterministic but failed the frozen equivalence intervals; its corpus and seed are retired, the 6,144-family V28R2 precision census is docs-only, and no update, retention/recovery, selector, or assessment evidence exists |
+| V28 | `R1CorpusNotNovelRetiredR2ValidatorImplementationAuthorized` | The 96-family V28R1 packet was structurally valid and deterministic but failed the frozen equivalence intervals; its corpus and seed are retired, additive clean-room V28R2 validator implementation is authorized, producer/model execution remains unauthorized, and no update, retention/recovery, selector, or assessment evidence exists |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 
@@ -149,7 +150,10 @@ The separately bounded local Gate 1 packet validator is recorded in
 coverage and returned `CorpusNotNovel` for V28R1, leaving every later-stage
 gate unopened. The powered, completely disjoint V28R2 corpus census is frozen
 in `64-v28r2-powered-acquisition-novelty-preregistration.md`; that note does
-not authorize implementation or execution.
+not authorize execution. Additive clean-room validator implementation is
+bounded separately in
+`65-v28r2-acquisition-qualification-validator-boundary.md`; no R2 packet or
+model-backed result exists.
 
 ## Stage 0A: Instrument Integrity — Complete
 

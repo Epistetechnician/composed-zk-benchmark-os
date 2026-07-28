@@ -7,7 +7,7 @@ Protocol slice:
 
 Status: `LocalValidatorImplemented / HermeticContractTestsPassed /
 R1ModelBackedBaselineValidatedCorpusNotNovel /
-R2PowerProfileDocsFirstOnly / RetentionRecoveryNotRun /
+R2ValidatorImplementationAuthorizedSeparately / RetentionRecoveryNotRun /
 AstralSelectionNotAuthorized / AssessmentSealedNotAuthorized`.
 
 ## Implemented boundary
@@ -141,3 +141,7 @@ authorized by the docs-first note.
 
 Gate 2 process recovery and Gate 3 prospective selection require separately
 authorized source slices after a genuine Gate 1 acquisition result exists.
+
+The additive V28R2 clean-room validator implementation boundary is
+`65-v28r2-acquisition-qualification-validator-boundary.md`. It does not alter
+this V28R1 validator or authorize a scientific V28R2 packet.

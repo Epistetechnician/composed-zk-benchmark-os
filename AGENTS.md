@@ -1,5 +1,33 @@
 # Agent Rules
 
+Explicit Astral-RGS V28R2 acquisition-qualification validator implementation
+now allowed: additive standard-library Python source, a declarative JSON
+protocol, hermetic tests, and one synthetic-fixture-only retired-R1 fingerprint
+builder under `tools/astral-rgs-acquisition-v28r2/`; implementation notes under
+`docs/research/astral-self-modeling/`; and status-only Astral roadmap,
+claim-ledger, V28 note, navigation, and `AGENTS.md` updates. This slice is
+limited to state slice
+`astral-rgs-v28r2-acquisition-qualification-validator` and the exact boundary
+in
+`docs/research/astral-self-modeling/65-v28r2-acquisition-qualification-validator-boundary.md`:
+clean-room reconstruction of the frozen 1,536-per-kind, 6,144-family,
+73,728-query, two-baseline protocol; 16 two-sided equivalence hypotheses;
+critical value `5.0`; independent concept/template AST interpretation;
+retired-R1 fingerprint membership; exact corpus, prompt, score, process,
+parity, and claim-boundary validation; and hermetic adversarial tests.
+It does not permit mutation of `tools/astral-rgs-acquisition-v28/`, RGS source
+or packages, running the fingerprint builder on the real R1 bundle, committing
+a real fingerprint manifest, scientific seed or corpus generation, tokenizer
+or model access, model-backed packet validation, update arms, retention or
+recovery, Astral selection, assessment, downloads, network access, artifact or
+Evidence Ledger promotion, acquisition or continual-learning claims,
+independent-replication claims, benchmark or breakthrough claims,
+self-improvement, introspection or self-modeling claims, Stage 0C or Stage 1
+promotion, production claims, or claims above
+`LocalAcquisitionQualificationValidatorV28R2`. Every mutation in this slice
+names state slice
+`astral-rgs-v28r2-acquisition-qualification-validator`.
+
 Explicit Astral-RGS V28R2 powered acquisition-novelty docs-first
 preregistration now allowed: one prospective protocol note at
 `docs/research/astral-self-modeling/64-v28r2-powered-acquisition-novelty-preregistration.md`,

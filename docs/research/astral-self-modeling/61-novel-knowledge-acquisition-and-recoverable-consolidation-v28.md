@@ -4,8 +4,9 @@ State slice:
 `astral-rgs-novel-knowledge-acquisition-recoverable-consolidation-v28`.
 
 Status: `DocsFirstPreregistered / V28R1CorpusNotNovelRetired /
-V28R2PoweredProtocolDocsFirstOnly / V28R2ImplementationNotAuthorized /
-UpdateArmsNotAuthorized / AssessmentSealedNotAuthorized`.
+V28R2PoweredProtocolLocked / V28R2ValidatorImplementationAuthorized /
+V28R2ProducerNotAuthorized / UpdateArmsNotAuthorized /
+AssessmentSealedNotAuthorized`.
 
 ## Decision
 
@@ -33,7 +34,9 @@ arm ran.
 A distinct, powered V28R2 replacement corpus is preregistered in
 `64-v28r2-powered-acquisition-novelty-preregistration.md`. That docs-only note
 freezes 1,536 families per fact kind and complete nonreuse. It does not
-authorize implementation or model execution.
+authorize model execution. The separate additive clean-room validator
+implementation boundary is
+`65-v28r2-acquisition-qualification-validator-boundary.md`.
 
 ## Research question
 

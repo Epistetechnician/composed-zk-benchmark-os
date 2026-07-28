@@ -188,9 +188,12 @@ review and experiments rule out equivalent prior work.
   completed checkpoint-first V28R1 corpus generation and fresh-process
   baseline-only execution; the corpus and seed are retired.
 - [V28R2 powered acquisition-novelty preregistration](64-v28r2-powered-acquisition-novelty-preregistration.md):
-  docs-only 6,144-family precision census, complete V28R1 nonreuse, and sealed
-  implementation, model execution, update, recovery, selection, and assessment
-  gates.
+  docs-only 6,144-family precision census and complete V28R1 nonreuse;
+  producer, model execution, update, recovery, selection, and assessment gates
+  remain sealed.
+- [V28R2 acquisition-qualification validator boundary](65-v28r2-acquisition-qualification-validator-boundary.md):
+  additive clean-room protocol/validator implementation authorization; no real
+  R1 fingerprint, R2 corpus, model execution, or later gate.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
