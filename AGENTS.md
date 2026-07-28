@@ -1,5 +1,36 @@
 # Agent Rules
 
+Explicit Astral-RGS V28R2 powered acquisition-novelty docs-first
+preregistration now allowed: one prospective protocol note at
+`docs/research/astral-self-modeling/64-v28r2-powered-acquisition-novelty-preregistration.md`,
+updates to V28 notes `61` through `63`, append-only Astral roadmap,
+claim-ledger, and navigation updates, and this authorization record. This slice
+is limited to state slice
+`astral-rgs-v28r2-powered-acquisition-novelty-preregistration`: recording the
+retained `CorpusNotNovel` V28R1 result; permanently retiring its corpus, seed,
+namespace, generator bytes, concepts, templates, future-assessment identities,
+and model outcomes; freezing an assumption-based conservative V28R2 census of
+exactly 1,536 families per fact kind, 6,144 families total, 12 queries per
+family, and 73,728 queries per baseline run; retaining the `0.05` symmetric
+chance-normalized-lift equivalence margin, familywise alpha `0.05`, and frozen
+minimum critical value `5.0`; defining exactly one fresh-process `pre_update`
+and one separately prepared and restarted `no_update` full-corpus baseline
+run with exact row parity; freezing a new disjoint campaign, generator,
+namespace, seed commitment, and future-assessment identity commitment; and
+keeping update arms, retention/recovery, Astral selection, and assessment
+sealed.
+It does not permit Python or Rust implementation, protocol or validator
+mutation, RGS source or package mutation, seed or corpus generation, tokenizer
+or model access, baseline or update-arm execution, downloads, network access,
+threshold repair, adaptive item selection, assessment generation or opening,
+artifact or Evidence Ledger promotion, acquisition or continual-learning
+claims, independent-replication claims, benchmark or breakthrough claims,
+self-improvement, introspection or self-modeling claims, Stage 0C or Stage 1
+promotion, production claims, or claims above
+`LocalProspectivePoweredAcquisitionNoveltyProtocolV28R2`. Every mutation in
+this slice names state slice
+`astral-rgs-v28r2-powered-acquisition-novelty-preregistration`.
+
 Explicit Astral-RGS V28 acquisition-novelty producer preflight now allowed:
 one bounded authorization and execution-boundary note under
 `docs/research/astral-self-modeling/`, append-only Astral roadmap,

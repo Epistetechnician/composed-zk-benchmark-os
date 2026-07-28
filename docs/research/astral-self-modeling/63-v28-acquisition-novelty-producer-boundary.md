@@ -2,15 +2,16 @@
 
 State slice: `astral-rgs-v28-acquisition-novelty-producer`.
 
-Status: `ImplementationAuthorized / CorpusNotGenerated /
-ModelBackedBaselineNotRun / UpdateArmsNotAuthorized / AssessmentSealed`.
+Status: `ImplementationComplete / ModelBackedBaselineComplete /
+CorpusNotNovel / CorpusAndSeedRetired / UpdateArmsNotAuthorized /
+AssessmentSealed`.
 
 ## Decision
 
-The next executable V28 slice is only the Gate 1 novelty falsification. A clean
-committed Recoverable Ghost States producer may hash the cached starting state,
-generate one corpus without consulting model outputs, and run `pre_update` and
-separately restarted `no_update`. It may not train or dispatch any update arm.
+The one authorized Gate 1 novelty falsification is complete. A clean committed
+Recoverable Ghost States producer hashed the cached starting state, generated
+one corpus without consulting model outputs, and ran `pre_update` and
+separately restarted `no_update`. It did not train or dispatch any update arm.
 
 The Astral V28 validator remains the authoritative packet consumer. A valid
 baseline-only packet can reach only
@@ -78,6 +79,33 @@ Paraphrase queries depend on the source document. Multi-hop queries require
 `wrapper -> alias -> anchor -> value`. Neither prompt contains the missing
 premises. Changed rules use the same candidate set under old and new deranged
 permutations so recency wording or token exposure cannot reveal the answer.
+
+## One-shot result
+
+The V28R1 run executed from RGS commit
+`a4e9dd032c414f977233dd73a09c70584fb23254` and completed all 18 baseline
+cells over 96 families and 1,152 queries. `pre_update` and `no_update` produced
+identical observations and each reached overall accuracy `0.2517361111`
+against chance `0.25`. Some frozen multiplicity-adjusted family-cluster
+equivalence intervals were too wide, so the authoritative validator returned
+`CorpusNotNovel` without a structural validation error.
+
+Retained integrity bindings are:
+
+- packet
+  `sha256:2fd74b389907d3167518a0d91d9d63f18fda7c1231a51764657e791286ee2ad0`;
+- validation report
+  `sha256:3e24804dc84744a300bb11bc246fdfd40256459f97a68da0df7993d676b9ea3d`;
+- artifact manifest
+  `sha256:5b01a32e1ba9d7d9ce84c8b301f29e0145962ac8c0eac0ec59b07cd5cfca846e`.
+
+The corpus, seed, and one-shot execution budget are permanently retired. No
+replacement execution is authorized under this boundary.
+
+V28R2 is a wholly distinct, powered replacement-corpus protocol. Its docs-first
+preregistration is
+`64-v28r2-powered-acquisition-novelty-preregistration.md`; implementation and
+model execution remain unauthorized.
 
 ## Hard stops and claim ceiling
 
