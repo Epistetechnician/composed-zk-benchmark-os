@@ -2,7 +2,10 @@
 
 State slice: `astral-docker-closed-loop-correction-simulation-v25`.
 
-Status: `Implemented / ExecutionPending`.
+Status: `Validated / HolisticClaimValidationCompleteWithOpenClaims`.
+
+Execution disposition: see the
+[holistic validation execution record](56-holistic-claim-validation-execution-record.md).
 
 ## Purpose
 
