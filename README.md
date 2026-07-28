@@ -924,6 +924,21 @@ Surface DSL
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for thirteen original Statebook architecture illustrations; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
+| [docs/research/astral-self-modeling/README.md](docs/research/astral-self-modeling/README.md) | Level 0 research project for mechanistic self-model prediction and causally validated self-correction. |
+| [docs/research/astral-self-modeling/30-pretrained-lm-effect-explainer-v17.md](docs/research/astral-self-modeling/30-pretrained-lm-effect-explainer-v17.md) | V17 prospective pretrained-LM intervention-effect explainer feasibility protocol and claim boundary. |
+| [docs/research/astral-self-modeling/31-v17-execution-record.md](docs/research/astral-self-modeling/31-v17-execution-record.md) | V17 validated execution record: exact intervention plumbing and no nonlinear-telemetry candidate. |
+| [docs/research/astral-self-modeling/32-trained-lm-input-ablation-explainer-v18.md](docs/research/astral-self-modeling/32-trained-lm-input-ablation-explainer-v18.md) | V18 prospective local LoRA-trained language-model input-ablation explainer protocol. |
+| [docs/research/astral-self-modeling/33-v18-execution-record.md](docs/research/astral-self-modeling/33-v18-execution-record.md) | V18 validated execution: trained-Qwen development candidate with explicit cross-model limitations. |
+| [docs/research/astral-self-modeling/34-opaque-preference-replication-v19.md](docs/research/astral-self-modeling/34-opaque-preference-replication-v19.md) | V19 prospective ambiguous-language input-ablation replication with stronger cross-model controls. |
+| [docs/research/astral-self-modeling/35-v19-execution-record.md](docs/research/astral-self-modeling/35-v19-execution-record.md) | V19 validated preflight stop: near-degenerate weak-hint labels with sealed assessment. |
+| [docs/research/astral-self-modeling/36-continuous-margin-effect-replication-v20.md](docs/research/astral-self-modeling/36-continuous-margin-effect-replication-v20.md) | V20 prospective continuous hint-ablation margin-effect replication protocol. |
+| [docs/research/astral-self-modeling/37-v20-execution-record.md](docs/research/astral-self-modeling/37-v20-execution-record.md) | V20 validated negative replication with a qualified continuous target and stronger template baseline. |
+| [docs/research/astral-self-modeling/38-heterogeneous-natural-text-replication-v21.md](docs/research/astral-self-modeling/38-heterogeneous-natural-text-replication-v21.md) | V21 prospective document-disjoint natural-text residual-effect replication. |
+| [docs/research/astral-self-modeling/39-v21-execution-record.md](docs/research/astral-self-modeling/39-v21-execution-record.md) | V21 validated execution and no-candidate disposition. |
+| [docs/research/astral-self-modeling/40-activation-input-discrimination-v22.md](docs/research/astral-self-modeling/40-activation-input-discrimination-v22.md) | V22 prospective activation-versus-input perturbation discrimination feasibility protocol. |
+| [docs/research/astral-self-modeling/41-v22-execution-record.md](docs/research/astral-self-modeling/41-v22-execution-record.md) | V22 validated qualification stop with assessment unopened. |
+| [docs/research/astral-self-modeling/42-capability-tier-replication-v23.md](docs/research/astral-self-modeling/42-capability-tier-replication-v23.md) | V23 prospective fresh-concept Llama 1B perturbation replication. |
+| [docs/research/astral-self-modeling/43-v23-execution-record.md](docs/research/astral-self-modeling/43-v23-execution-record.md) | V23 validated Llama 1B qualification stop with assessment unopened. |
 
 Statebook publication status: the named slice
 `statebook-whitepaper-prd-and-publication-media-boundary` is

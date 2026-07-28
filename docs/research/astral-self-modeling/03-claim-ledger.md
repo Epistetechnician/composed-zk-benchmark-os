@@ -1,0 +1,72 @@
+# Claim Ledger
+
+This ledger is append-only once experiments begin. `Not refuted` means current
+evidence did not refute a claim; it does not mean established. Empirical claims
+never receive a `Proven` status.
+
+Statuses: Proposed / In test / Not refuted / Weakened / Refuted / Inconclusive /
+Accepted-as-design-choice.
+
+## Initial Claims — 2026-07-26
+
+| ID | Exact claim | Type / lane | Operationalization and falsifier | Required artifact | Sources | Status | Confidence / ceiling |
+|---|---|---|---|---|---|---|---|
+| C001 | External circuit tracing can produce useful approximate graphs of a model forward pass | Empirical / literature | Useful if traced paths support validated behavior hypotheses; weakened by low coverage or failed perturbations | Annotated source review and replicated trace case | S001, S002 | Not refuted | Medium / prior-work summary |
+| C002 | Models can be trained to describe feature content, causal activation structure, and token influence | Empirical / literature | Refuted if the cited study does not show held-out performance on these targets | Paper extraction with task and result table | S003 | Not refuted | Medium / prior-work summary |
+| C003 | A telemetry observer outperforms matched text-only baselines on held-out intervention-effect prediction | Empirical / experiment | H1 protocol | Frozen-actor experiment bundle | none | Proposed | None / local experiment |
+| C004 | Intervention supervision is more useful than feature-label supervision for causal fidelity | Empirical / experiment | H3 protocol | Objective ablation report | none | Proposed | None / local experiment |
+| C005 | Causal prediction quality enables better correction than ordinary reflection | Empirical / experiment | H2 protocol and shuffled-report mediation control | Paired correction report | none | Proposed | None / local experiment |
+| C006 | Alternating actor-observer training can create tracer gaming | Empirical / experiment | H4 protocol | Auditor-disagreement and transfer report | none | Proposed | None / local experiment |
+| C007 | Calibration supervision reduces confident incorrect mechanism reports | Empirical / experiment | Lower calibration error without hiding accuracy loss | Calibration ablation report | none | Proposed | None / local experiment |
+| C008 | The proposed combination is novel | Empirical / literature | Refuted by materially equivalent prior work | Systematic related-work matrix and search log | S001-S005 | Inconclusive | Low / novelty unestablished |
+| C009 | A frozen actor is the correct first experimental stage | Engineering / design | Reverse if a validated design requires actor adaptation to expose the target phenomenon | Review decision | none | Accepted-as-design-choice | Medium / project policy |
+| C010 | `G_trace` is an approximate measurement rather than ground truth | Definition / methodological | Reverse only for a synthetic system with known causal structure | Tracer validation protocol | S001, S002 | Accepted-as-design-choice | High / project policy |
+| C011 | Observer capability explains the user-reported pilot results better than subject identity or self-access | Empirical / pilot | Replicate with capacity- and access-matched models, multiple seeds, and a preregistered model | Reproduction bundle and model comparison | P001 | Proposed | Low / user-reported pilot |
+| C012 | A frontier optimizer improves a fixed SRE harness more than a small-model optimizer under equal feedback and iterations | Empirical / pilot | Reproduce with locked tasks, budgets, feedback, and hidden split | SRE harness reproduction bundle | P002 | Proposed | Low / user-reported pilot |
+| C013 | Latent graph representations are more useful than natural-language mechanism descriptions | Empirical / experiment | Compare graph-only, label-only, and combined conditions under equal information and compute | Representation ablation report | none | Proposed | None / local experiment |
+| C014 | Mechanistic access improves prospective failure prediction before final output | Empirical / experiment | Compare telemetry and matched text-only observers on a locked prospective endpoint | Prospective metacognition report | none | Proposed | None / local experiment |
+
+## Experimental Updates — 2026-07-26
+
+| ID | Exact claim or update | Evidence artifact | Status | Confidence / ceiling |
+|---|---|---|---|---|
+| C015 | The compiled planted-circuit measurement plumbing distinguishes its construction-privileged candidate from distractors | `08-stage0-measurement-validity-preregistration.md`, manifest `2c367ff91ad37f4c782aad9297580afb73669529b9b096151eeed3a70c31796c` | Not refuted | High / construction-specific local regression |
+| C016 | Gradient-times-activation reliably beats activation magnitude for the learned width-32 actor | V5 manifest `badd29b1bd9b168b76cf8562bc61851247f328e616eb90831b9c97a304d3e603`; mean advantage `0.0922`, interval `[-0.0552, 0.2877]` | Refuted | High / tested setup only |
+| C017 | One of the five frozen V10 gradient-derived methods is eligible for confirmation | V10 manifest `642597af25cedd25d477eedd9ad5b30a8a23de982743e97b9b122c6fbc7d0a2a`; all mean advantages versus activation norm were negative | Refuted | High / tested panel and setup only |
+| C018 | IID actor training is stable across the frozen seed panels | V1, V2, and V6 qualification failures | Weakened | High / named local panels |
+| C019 | Family-complete-2000 training reproducibly meets actor eligibility on the exposed and fresh V7 panels | V7 seeds 167, 191, 193, and 197 | Not refuted | High / local training diagnostic only |
+| C020 | Activation magnitude is the strongest tested learned-model head selector | V5 and V10 | Not refuted | Medium / descriptive, task- and candidate-scoped |
+| C021 | The Rust protocol crate has exact numerical parity with the Python instrument | V9 pure-data implementation; numerical parity absent | Proposed | None / no parity claim |
+| C022 | The V12 capacity-matched local telemetry ridge estimator predicts held-out continuous head-intervention effects better than activation-only | V12 manifest `aadb7a2002a7169b6cf3b712f2e9a5fa36d6a6d2b8aa3b13031b88cd69fce3fe`; telemetry MSE `148.1014`, activation-only MSE `132.2657` | Refuted | High / V12 actors, families, features, and operators only |
+| C023 | Family-complete-2000 actor training reproduces on V12 seeds `211/223/229` | V12 qualification records; all train/development accuracies `1.0` | Not refuted | High / named local seeds only |
+| C024 | V12 telemetry has lower top-one regret than activation-only despite worse continuous-effect prediction | V12 telemetry regret `0.5913`, activation-only regret `0.6557` | Not refuted | Medium / secondary development diagnostic only |
+| C025 | V13 prediction-locked CLS head-plus-MLP telemetry beats activation-only for cross-actor effect prediction | V13 manifest `d54125f2f5f4a8177dd267c509c5ba8026cea7cfddb57ab2d3c2b2fbd6de3ff4`; MSE `266.4422` versus `148.1730` | Refuted | High / V13 ridge panel and local setup only |
+| C026 | Prediction sealing before assessment effects is mechanically enforceable | V13 prediction lock and independent validator | Not refuted | High / local protocol-control regression |
+| C027 | V13 failure is dominated by cross-actor transport rather than complete within-actor linear nonpredictability | V14 manifest `c08e50873cfecbf700f2885889cbd9e84ed340f2f53280c6e356bf30f08c013d`; within-actor telemetry MSE `52.0259` versus cross-actor `266.9838` | Not refuted | Medium / retrospective local diagnostic |
+| C028 | Within-actor telemetry beats within-actor activation-only on the frozen V14 split | V14 MSE `52.0259` versus `58.2625`, favorable in every actor/operator cell | Not refuted | Medium / post-hoc, non-confirmatory |
+| C029 | Actor-specific supervised telemetry predicts unseen-family effects better than other-actor telemetry | V15 manifest `6f482fe5320a9bac219b6b8454977a48308acf49b51d512238ddda3152bea7a8`; MSE `49.2301` versus `365.9778` | Not refuted | High / prospective local development diagnostic |
+| C030 | Actor-specific telemetry beats activation-only by at least 5% for every actor and operator | V15: seed 269 zero advantage `1.60%`; seed 271 patch advantage `-1.57%` | Refuted | High / V15 setup only |
+| C031 | Joint rank-four effect prediction makes own telemetry directionally better than activation-only for every V16 actor/operator | V16 manifest `79137c9fc857f008e4668273a26422a65e53fc7f4df62dde95a6ee08b01f9ab5`; all eight advantages positive | Not refuted | High / prospective V16 setup only |
+| C032 | Joint rank-four own telemetry beats activation-only by the 5% practical margin for every actor/operator | V16 advantages ranged from `0.05%` to `3.82%` | Refuted | High / prospective V16 setup only |
+| C033 | A nonlinear explainer over local Qwen residual telemetry predicts sealed intervention effects better than activation summaries for both V17 operators | V17 manifest `fc6cb18433549a17357005a2cbf97fe84d6085382bd5da3e1bf868a524435f23`; telemetry MSE `0.453493/0.225315` versus activation `0.141903/0.143601` | Refuted | High / single cached 4-bit Qwen and frozen V17 task only |
+| C034 | The V17 MLX controlled-forward and residual-replacement instrument preserves clean and no-op logits exactly at the tested sites | V17 qualification: native parity, deterministic repeat, and no-op replacement maximum errors all `0` | Not refuted | High / local cached model, runtime, prompts, and sites only |
+| C035 | A LoRA-trained Qwen explainer predicts its sealed Qwen input-ablation labels better than the preregistered V18 controls | V18 manifest `a1710a217452fd74312fef171d0986a9c4e27c6f353d442943420bd5f315cc33`; Qwen ensemble balanced accuracy `1.0` versus `0.5` for every primary comparator | Not refuted | High / single prospective local arithmetic-hint development setup |
+| C036 | V18 demonstrates privileged introspective access to Qwen internal computation | No activations were supplied; visible arithmetic can determine labels; Llama seeds scored `0.5/0.5/1.0` | Proposed | None / V18 does not identify introspection |
+| C037 | Weak hints on ambiguous V19 language-preference prompts produce a qualified binary answer-change target | V19 manifest `73cb90ee38dabfabc55d4885c6a1ddadb3327f4235850b3b2c20096846906bef`; fit labels were 13 changed and 227 unchanged | Refuted | High / frozen V19 weak-hint setup only |
+| C038 | Trained Qwen predicts sealed V20 continuous Qwen margin effects better than trained Llama and fit-only controls | V20 manifest `03772cab10160e875e579180951e4fef54f7bf4a10959e98bbf6aa4eb643b02a`; Qwen MSE `0.2589`, Llama ensemble `0.2248`, template mean `0.2131` | Refuted | High / prospective V20 setup only |
+| C039 | The V20 continuous margin-effect target is non-degenerate under fit-only ordinal calibration | Fit/tune/assessment effect standard deviations `0.5774/0.5861/0.5945`; every fit bin exceeded 15% | Not refuted | High / frozen V20 target and corpus only |
+| C040 | Trained Qwen predicts sealed V21 heterogeneous natural-text residual effects better than trained Llama and source-blind controls | V21 manifest `9c7ee7be93c09e9d2dcd5390b0d56e66abf5d24628c4d92d5e108d0405347817`; Qwen MSE `0.37794`, Llama ensemble `0.37666`, zero residual `0.37510` | Refuted | High / prospective V21 setup only |
+| C041 | The V21 document-disjoint wrapper-residual target is non-degenerate under fit-only ordinal calibration | Fit/tune/assessment residual standard deviations `0.6370/0.5973/0.6124`; every fit bin contained 80 rows and tune occupied all five bins | Not refuted | High / frozen V21 corpus and target only |
+| C042 | Cached 0.5B Qwen qualifies to distinguish a hidden activation intervention from textual manipulation and an identical-text unmodified pass | V22 manifest `2ad5659fac41c61094356e6b1b2987feeab93490b13d5fc22b36209ec173a29a`; tune macro balanced accuracy `0.2917`, activation-versus-none accuracy `0.2188`; assessment unopened | Refuted | High / exposed V22 fit/tune feasibility setup only |
+| C043 | Cached Llama 1B qualifies on a fresh-concept replication of V22 perturbation-location discrimination | V23 manifest `7d2a0185d409e4ac2c6cd1b80ffeb83a8cdc8ab9da2fcd0ebc0028461e5411c6`; tune macro balanced accuracy `0.3125`, activation-versus-none accuracy `0.2813`; assessment unopened | Refuted | High / exposed V23 fit/tune feasibility setup only |
+
+C003-C007 and C013-C014 retain the historical status `Proposed`; their current
+execution disposition is `BlockedByStage0C`. No observer, correction,
+prospective-prediction, or actor-observer optimization evidence exists. C008
+remains inconclusive.
+
+## Review Rule
+
+Each update must retain the prior row history or append a dated change record
+containing: claim ID, old status, new status, evidence artifact, reviewer,
+reason, and unchanged claim ceiling.
