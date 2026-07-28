@@ -167,8 +167,9 @@ review and experiments rule out equivalent prior work.
   preregistered cross-repository model-backed update-selection lane with sealed
   candidate predictions and constrained regret.
 - [V27-R1 execution record](58-v27-execution-record.md):
-  immutable author replay of the scientific validator with the model-backed
-  assessment and independent review still `NotRun`.
+  immutable author replay plus deterministic 54-execution development replay;
+  the development result is negative, assessment stays sealed, and independent
+  review remains `NotRun`.
 - [Holistic continual-learning benchmark V2](59-holistic-continual-learning-benchmark-v2.md):
   separate local-update, frozen Tencent CL-bench, and independent-replication
   evidence lanes with fail-closed claim boundaries.

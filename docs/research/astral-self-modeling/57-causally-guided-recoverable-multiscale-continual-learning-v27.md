@@ -2,7 +2,9 @@
 
 State slice: `astral-rgs-nested-recoverable-update-v27`.
 
-Status: `Preregistered / ImmutableNativeAuthorReplayPassed / QualificationPlanLocked / SelectorEstimatorCoreImplemented / FeatureExtractionAndRankingPending / ModelBackedAssessmentNotRun`.
+Status: `Preregistered / DeterministicDevelopmentReplayMatched /
+DevelopmentNoCandidate / AssessmentSealedNotAuthorized /
+ModelBackedAssessmentNotRun`.
 
 ## Research question
 
@@ -65,11 +67,12 @@ implementation `PendingDevelopmentImplementation`. The strongest
 nonprivileged selector is `PendingDevelopmentRanking`; the prediction lock is
 `NotLockedSelectorsPending`. Assessment cannot open in this state.
 
-RGS commit `16466ef` implements a single capacity-matched estimator family for
-the seven learned or telemetry-control selectors and deterministic random,
-fixed-development, and no-update selectors. That code has not yet consumed real
-model-derived development features or produced a development ranking. It does
-not retroactively change the plan's pending status and cannot seal predictions.
+RGS commit `57a66f9` implements the single capacity-matched estimator family,
+model-derived feature extraction, exact-budget 54-execution development matrix,
+and deterministic replay comparator. It consumed only development and tuning
+families, produced the strongest-nonprivileged ranking, and left assessment
+content and outcomes absent. It does not retroactively change the immutable
+plan; the successor transition records the completed development state.
 
 Before assessment outcomes exist, every selector seals predicted future-unseen
 reward, protected-retention change, calibration change, recovery success and
@@ -142,6 +145,28 @@ or selector.
   under every mandatory gate.
 - Retain qualification failures, nulls, crashes, exclusions, and negative
   replications.
+
+## Development execution result
+
+Two complete 54-execution packets from RGS commit `57a66f9` passed their
+539-file manifests and matched every deterministic source, plan, model,
+candidate-execution, feature, outcome, fit, ranking, and transition lock. The
+comparison digest is
+`sha256:3964d71e0e8f5f4499673c0f12961dc479e2313d59447044328d79b4a46e403e`.
+
+The result is a development negative. `no_update` achieved mean future score
+`1.000000`; the best updated arms achieved `0.746914`. The strongest
+nonprivileged selector, `text_only_reflection`, had zero development regret;
+Astral had `0.222222`. Consequently, the development analogue of the primary
+Astral advantage is `-0.222222`, below the required positive `0.05` margin.
+Every updated arm also exceeded the final `0.02` Brier-degradation ceiling in
+at least one development cell.
+
+The assessment prediction lock was not sealed, assessment stayed unopened,
+and no C047 or C048 assessment test was run. The development recovery value is
+only an in-memory byte corruption roundtrip, not the final injected
+process-level recovery experiment. The full artifact record and retained
+nondeterministic-cost defect are in `58-v27-execution-record.md`.
 
 ## Claim ceiling
 
