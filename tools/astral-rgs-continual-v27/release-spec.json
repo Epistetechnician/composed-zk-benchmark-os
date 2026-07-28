@@ -1,0 +1,43 @@
+{
+  "version": "astral.rgs_v27_immutable_release_spec.v1",
+  "state_slice": "astral-rgs-v27-model-backed-qualification-r1",
+  "required_source_repositories": ["astral", "recoverable-ghost-states"],
+  "required_evidence": [
+    "historical_v25_report",
+    "tencent_packet_v2_or_retained_historical_v1",
+    "tencent_subset_manifest",
+    "tencent_source_license",
+    "tencent_dataset",
+    "tencent_dataset_license",
+    "tencent_model",
+    "tencent_raw_output"
+  ],
+  "optional_evidence_pair": ["rgs_locked_input", "rgs_recomputed_report"],
+  "manifest": {
+    "algorithm": "sha256",
+    "path_order": "lexicographic",
+    "self_entry_forbidden": true,
+    "symlinks_forbidden": true,
+    "undeclared_files_forbidden": true
+  },
+  "replay": {
+    "detached_checkouts_required": true,
+    "source_inventory_recheck_required": true,
+    "rgs_report_recomputation_required_when_supplied": true,
+    "astral_independent_scientific_recomputation_required": true,
+    "nonzero_on_supplied_invalid_rgs": true,
+    "release_mutation_forbidden": true
+  },
+  "claim_boundary": {
+    "immutable_author_development_release": true,
+    "model_backed_assessment": false,
+    "independent_review": false,
+    "independent_replication": false,
+    "continual_learning_solved": false,
+    "autonomous_self_improvement": false,
+    "introspection": false,
+    "self_modeling": false,
+    "stage_0c": false,
+    "stage_1": false
+  }
+}

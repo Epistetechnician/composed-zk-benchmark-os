@@ -1,0 +1,94 @@
+{
+  "version": "astral.rgs_continual_v27.protocol.v2",
+  "state_slice": "astral-rgs-nested-recoverable-update-v27",
+  "claim_ceiling": "LocalAuthorDevelopmentCausallyGuidedRecoverableMultiscaleContinualLearningCandidateRequiresFreshReplicationAndReview",
+  "claim_ids": ["C046", "C047", "C048"],
+  "required_method_ids": [
+    "no_update",
+    "naive_sequential_lora",
+    "modular_ghost_state",
+    "compressed_adapter_recollection",
+    "representation_time_distillation",
+    "nested_multiscale_lora"
+  ],
+  "architecture_candidate_ids": [
+    "modular_ghost_state",
+    "compressed_adapter_recollection",
+    "representation_time_distillation",
+    "nested_multiscale_lora"
+  ],
+  "confirmatory_selector_ids": [
+    "text_only_reflection",
+    "output_only_critic",
+    "activation_only_predictor",
+    "random_update",
+    "fixed_development_arm",
+    "no_update"
+  ],
+  "null_selector_ids": [
+    "shuffled_telemetry",
+    "wrong_intervention_report",
+    "null_telemetry"
+  ],
+  "required_control_ids": [
+    "random_update",
+    "shuffled_telemetry",
+    "text_only_reflection",
+    "output_only_critic",
+    "activation_only_predictor",
+    "wrong_intervention_report",
+    "null_telemetry",
+    "equal_compute",
+    "hidden_task_boundary",
+    "shortcut_free_prompts"
+  ],
+  "scientific_thresholds": {
+    "acquisition_min": 0.70,
+    "retention_min": 0.80,
+    "forgetting_max": 0.10,
+    "calibration_mae_max": 0.10,
+    "selection_regret_max": 0.02,
+    "maximum_protected_retention_drop_max": 0.02,
+    "brier_degradation_max": 0.02,
+    "minimum_corruption_drop": 0.10,
+    "recovered_score_loss_max": 0.01,
+    "c047_practical_margin": 0.05,
+    "c048_regret_advantage_margin": 0.05,
+    "specificity_advantage_max": 0.02,
+    "alpha": 0.05
+  },
+  "rgs_exchange": {
+    "report_version": "mesh.holistic_matched_selector_result.v2",
+    "minimum_seeds": 3,
+    "minimum_task_orders": 3,
+    "minimum_assessment_families": 12,
+    "minimum_execution_count": 54,
+    "bootstrap_seed": 270047,
+    "bootstrap_replicates": 20000
+  },
+  "tencent_clbench": {
+    "packet_version": "mesh.tencent_clbench_frozen_evaluation.v2",
+    "repository": "https://github.com/Tencent-Hunyuan/CL-bench",
+    "commit": "16bffd1cfa05927e72ec75c835177d6e23e82172",
+    "dataset_revision": "b28a5832a09b0d96c0cf4c22e90d7c60ede25b80",
+    "dataset_sha256": "d5fc88d4b2eea75c61dd40862021b6ae2fba26bd21b58e8c5e18377a763943be",
+    "license": "custom-evaluation-only"
+  },
+  "historical_baseline": {
+    "report_sha256": "8f3e8ea960c2d61273987fb49c2ee67a4599131f5d510b2106416649c09b88d3",
+    "claim_census": "C001..C045",
+    "thesis_status": "NotValidated"
+  },
+  "required_false_claims": [
+    "continual_learning_solved",
+    "autonomous_self_improvement",
+    "introspection",
+    "self_modeling",
+    "universal_continual_learning",
+    "external_benchmark_dominance",
+    "production_readiness",
+    "stage_0c",
+    "stage_1",
+    "independently_replicated"
+  ]
+}
