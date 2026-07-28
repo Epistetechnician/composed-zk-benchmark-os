@@ -3,8 +3,9 @@
 State slice:
 `astral-rgs-novel-knowledge-acquisition-recoverable-consolidation-v28`.
 
-Status: `DocsFirstPreregistered / AcquisitionImplementationNotAuthorized /
-ModelBackedExecutionNotRun / AssessmentSealedNotAuthorized`.
+Status: `DocsFirstPreregistered / BaselineNoveltyProducerAuthorized /
+ModelBackedExecutionNotRun / UpdateArmsNotAuthorized /
+AssessmentSealedNotAuthorized`.
 
 ## Decision
 
@@ -76,8 +77,10 @@ before update-arm comparison. A non-chance baseline is a task failure, not
 evidence that the model already learned the V28 corpus.
 
 Each fact kind requires at least 24 knowledge families per model family before
-qualification. Answer positions are balanced within fact kind and split.
-Prompt-template or answer-position leakage invalidates the packet.
+qualification. The four queries in every family/query-class cell rotate the
+same semantic answer through positions A-D exactly once. Query-specific answer
+mappings commit each permutation. Prompt-template or answer-position leakage
+invalidates the packet.
 
 ### Context-free restart evaluation
 
@@ -94,9 +97,11 @@ each of three query classes:
 - multi-hop consequence;
 - withheld composition.
 
-Exact training-form prompts are forbidden in evaluation. The multi-hop and
-withheld-composition constructions use family-disjoint templates and may not be
-fitted from assessment outcomes.
+Exact training-form prompts are forbidden in evaluation. Training and
+evaluation template families are disjoint; evaluation template-family IDs may
+repeat only within one query class, while prompt-instance hashes remain unique.
+The multi-hop and withheld-composition constructions may not be fitted from
+assessment outcomes.
 
 ### Acquisition arms and baseline roles
 

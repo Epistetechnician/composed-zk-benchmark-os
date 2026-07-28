@@ -1,5 +1,35 @@
 # Agent Rules
 
+Explicit Astral-RGS V28 acquisition-novelty producer preflight now allowed:
+one bounded authorization and execution-boundary note under
+`docs/research/astral-self-modeling/`, append-only Astral roadmap,
+claim-ledger, and navigation updates in this repository; and additive Python
+source, hermetic tests, an operator script, a validation-registry entry, and a
+scoped `AGENTS.md` in a clean committed Recoverable Ghost States worktree.
+This slice is limited to state slice
+`astral-rgs-v28-acquisition-novelty-producer`: offline inventory and hashing of
+the already-cached Qwen2.5-0.5B-Instruct 4-bit checkpoint, tokenizer, runtime,
+clean RGS source commit/tree, and Astral V28 protocol before seed creation;
+post-receipt cryptographic seed commitment; deterministic repository-owned
+qualification-corpus generation without model outputs; raw corpus and hash
+manifests; frozen configuration; four-choice label-log-probability evaluation;
+separate no-op preparation and fresh model-evaluation processes for
+`pre_update` and `no_update`; baseline-only packet V2 emission; repository-
+external artifacts; Astral validator intake; and an unconditional stop before
+updates unless the baseline-only disposition is exactly
+`NoveltyPacketCandidateUnverifiedAcquisitionArmsNotRun`.
+It does not permit downloads, network access, corpus rejection sampling,
+model-guided item generation, alternative seeds after outcomes, training,
+LoRA or any parameter update, context-only or retrieval execution, persistent
+arm execution, Gate 2 retention or recovery, corruption injection, Astral
+feature work, selection, prediction sealing, assessment generation or opening,
+artifact promotion, accepted Evidence Ledger mutation, model-backed
+acquisition claims, independent-replication claims, benchmark or breakthrough
+claims, self-improvement, introspection or self-modeling claims, Stage 0C or
+Stage 1 promotion, production claims, or claims above
+`LocalModelBackedAcquisitionNoveltyPreflightV28`. Every mutation in this slice
+names state slice `astral-rgs-v28-acquisition-novelty-producer`.
+
 Explicit Astral-RGS V28 acquisition-qualification validator now allowed:
 additive Python source, a frozen JSON contract, and hermetic tests under
 `tools/astral-rgs-acquisition-v28/`; implementation notes under
@@ -9,7 +39,8 @@ claim-ledger, and navigation updates. This slice is limited to state slice
 caller-supplied repository-external acquisition packet; canonical hashing;
 checkpoint-before-generation ordering; exact nonce-fact, entity-relation,
 changed-rule, opaque-mapping, paraphrase, multi-hop, and withheld-composition
-censuses; balanced answer positions; independent raw-row accuracy
+censuses; query-specific answer mappings with within-family answer-position
+rotation; independent raw-row accuracy
 recomputation; near-chance pre-update and restarted no-update stops; explicit
 context-only and retrieval baseline roles; persistent-state restart binding;
 matched producer-declared arm and budget checks; and fail-closed Gate 2 and Gate
