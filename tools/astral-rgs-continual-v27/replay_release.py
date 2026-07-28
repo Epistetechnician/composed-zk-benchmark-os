@@ -14,8 +14,13 @@ def main() -> int:
     )
     parser.add_argument("--release", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--native-python", type=Path, required=True)
     args = parser.parse_args()
-    report = replay_release(release_root=args.release, output_path=args.output)
+    report = replay_release(
+        release_root=args.release,
+        output_path=args.output,
+        native_python=args.native_python,
+    )
     print(json.dumps(report, indent=2, sort_keys=True))
     return 0 if report["status"] == "pass" else 1
 

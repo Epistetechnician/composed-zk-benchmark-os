@@ -1,5 +1,5 @@
 {
-  "version": "astral.rgs_v27_immutable_release_spec.v1",
+  "version": "astral.rgs_v27_immutable_release_spec.v2",
   "state_slice": "astral-rgs-v27-model-backed-qualification-r1",
   "required_source_repositories": ["astral", "recoverable-ghost-states"],
   "required_evidence": [
@@ -10,7 +10,10 @@
     "tencent_dataset",
     "tencent_dataset_license",
     "tencent_model",
-    "tencent_raw_output"
+    "tencent_raw_output",
+    "native_smoke_complete_tree",
+    "native_model_complete_tree",
+    "native_runtime_inventory"
   ],
   "optional_evidence_pair": ["rgs_locked_input", "rgs_recomputed_report"],
   "manifest": {
@@ -25,11 +28,15 @@
     "source_inventory_recheck_required": true,
     "rgs_report_recomputation_required_when_supplied": true,
     "astral_independent_scientific_recomputation_required": true,
+    "native_smoke_source_model_and_artifact_binding_required": true,
+    "native_smoke_detached_rerun_required": true,
+    "native_smoke_normalized_probe_match_required": true,
     "nonzero_on_supplied_invalid_rgs": true,
     "release_mutation_forbidden": true
   },
   "claim_boundary": {
     "immutable_author_development_release": true,
+    "native_arm_development_smoke": true,
     "model_backed_assessment": false,
     "independent_review": false,
     "independent_replication": false,
