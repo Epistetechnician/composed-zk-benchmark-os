@@ -50,7 +50,7 @@ requirements.
 | V23 | `NotRunCapabilityTierPerturbationQualification` | Fresh-concept Llama 1B replication failed unchanged fit/tune and activation-versus-none gates; assessment stayed unopened |
 | V24 | `AuthorDevelopmentPerturbationReadoutObserved` | A fixed downstream linear residual readout passed both development gates and the sealed assessment against text, output-logit, anomaly, and shuffled-label controls; independent verification and confirmation remain `NotRun`/`NotAuthorized` |
 | V25 | `SyntheticDockerContinualCorrectionHarnessQualified` | Construction-known positive sensitivity and null specificity passed; protocol qualification only, with model-backed learning and thesis validation still `NotRun`/`NotValidated` |
-| V27 | `ScientificValidatorImplementedImmutableReplayPendingAssessmentNotRun` | Matched selector V2, paired 20,000-replicate inference, adversarial recovery and leakage guards, independent Astral recomputation, and immutable-release tooling are implemented; the native 54-run assessment remains unopened |
+| V27 | `ImmutableAuthorReplayPassedModelBackedAssessmentNotRun` | Matched selector V2, paired 20,000-replicate inference, adversarial recovery and leakage guards, independent Astral recomputation, and the content-addressed detached replay passed; independent review and the native 54-run assessment remain `NotRun` |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 
@@ -73,6 +73,11 @@ families, three seeds, three task orders, equal
 update-token/gradient-step/rank budgets, and retention of every negative, null,
 failure, crash, and exclusion. A result is invalid if candidate outcomes exist
 before the prediction lock or if any assessment row influences fitting.
+
+The immutable V27-R1 author replay is recorded in
+`58-v27-execution-record.md`. It validates artifact exercisability and the
+fail-closed open-gate behavior; it is not independent reproduction or
+model-backed evidence.
 
 ## Stage 0A: Instrument Integrity — Complete
 

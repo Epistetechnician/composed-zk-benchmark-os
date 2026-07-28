@@ -166,6 +166,9 @@ review and experiments rule out equivalent prior work.
 - [V27 recoverable multiscale continual learning](57-causally-guided-recoverable-multiscale-continual-learning-v27.md):
   preregistered cross-repository model-backed update-selection lane with sealed
   candidate predictions and constrained regret.
+- [V27-R1 execution record](58-v27-execution-record.md):
+  immutable author replay of the scientific validator with the model-backed
+  assessment and independent review still `NotRun`.
 - [Holistic continual-learning benchmark V2](59-holistic-continual-learning-benchmark-v2.md):
   separate local-update, frozen Tencent CL-bench, and independent-replication
   evidence lanes with fail-closed claim boundaries.
