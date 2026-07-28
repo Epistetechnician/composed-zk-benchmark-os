@@ -4084,18 +4084,22 @@ _FAILURES = {"registry_failed", "selection_failed", "platform_digest_failed", "l
 UNAVAILABLE_SHA256 = "0" * 64
 UNAVAILABLE_PREFIXED_SHA256 = "sha256:" + UNAVAILABLE_SHA256
 _READINESS_ENVIRONMENT_FIELDS = ("HOME", "LANG", "LC_ALL", "PATH", "TMPDIR", "TZ", "DOCKER_CONFIG")
+_READINESS_HOST_HOME_BASENAME = "host-home"
+_READINESS_DOCKER_BIN_DIR = "/Applications/Docker.app/Contents/Resources/bin"
+_READINESS_CLOSED_HOST_PATH = "/usr/bin:/bin:" + _READINESS_DOCKER_BIN_DIR
 
 
 def _validate_readiness_environment(value: object) -> Mapping[str, object]:
     environment = _fields(value, _READINESS_ENVIRONMENT_FIELDS, "readiness environment")
+    _path(environment["TMPDIR"], "readiness temporary root", absolute=True)
+    expected_home = environment["TMPDIR"] + "/" + _READINESS_HOST_HOME_BASENAME
     _require(
-        environment["HOME"] == "/nonexistent"
-        and environment["LANG"] == environment["LC_ALL"] == "C"
-        and environment["PATH"] == "/usr/bin:/bin"
-        and environment["TZ"] == "UTC",
+        environment["LANG"] == environment["LC_ALL"] == "C"
+        and environment["PATH"] == _READINESS_CLOSED_HOST_PATH
+        and environment["TZ"] == "UTC"
+        and environment["HOME"] == expected_home,
         "readiness environment constant drift",
     )
-    _path(environment["TMPDIR"], "readiness temporary root", absolute=True)
     _path(environment["DOCKER_CONFIG"], "readiness Docker config", absolute=True)
     _require(
         environment["TMPDIR"] != environment["DOCKER_CONFIG"],
