@@ -1,6 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
+    "crates/astral-stage0-protocol",
     "crates/hsai-agent-admission",
     "crates/hsai-agent-case",
     "crates/hsai-agent-anchor-registry",
