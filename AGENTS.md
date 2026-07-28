@@ -1,5 +1,37 @@
 # Agent Rules
 
+Explicit Astral-RGS causally guided recoverable multiscale continual-learning
+evaluation V27 now allowed: additive Python source, frozen JSON contracts,
+hermetic tests, and fail-closed validators under
+`tools/astral-rgs-continual-v27/`; protocol, benchmark, and execution notes
+under `docs/research/astral-self-modeling/`; append-only Astral claim-ledger and
+navigation updates; repository-external content-addressed reports; pinned
+read-only intake of Recoverable Ghost States result packets; and pinned
+evaluation-only intake of Tencent-Hunyuan CL-bench outputs. This phase is
+limited to state slice `astral-rgs-nested-recoverable-update-v27`, frozen
+no-update, naive sequential LoRA, modular ghost-state, compressed adapter
+recollection, representation-through-time distillation, and nested
+fast/medium/slow LoRA arms; prediction locks before candidate outcomes;
+constrained update-selection regret; acquisition, retention, forgetting,
+calibration, recovery, budget, and governance gates; deterministic diagnostic
+CL-bench subset selection; and external packet validation. RGS owns model
+training and PCSM journals; Astral consumes only pinned content-addressed
+exchange packets and does not duplicate training code. Tencent CL-bench data is
+evaluation-only and may not be used for training, fine-tuning, calibration,
+distillation, adaptation, parameter updates, architecture selection, or
+threshold fitting. All six native arms are mandatory before assessment;
+missing arms keep the complete model-backed assessment `NotRun`. Synthetic or
+emulated outputs may not substitute for model-backed results. This phase does
+not permit
+V24/V25 evidence modification, adaptive assessment tuning, fabricated runs,
+independent-review promotion, replication claims, Stage 0C or Stage 1
+promotion, consciousness claims, introspection or self-modeling claims,
+general continual-learning or self-improvement claims, benchmark-dominance
+claims, production claims, or claims above
+`LocalAuthorDevelopmentCausallyGuidedRecoverableMultiscaleContinualLearningCandidateRequiresFreshReplicationAndReview`.
+Every mutation in this phase names state slice
+`astral-rgs-nested-recoverable-update-v27`.
+
 Explicit Astral Docker closed-loop correction simulation V25 now allowed and
 completed locally:
 additive Python source, a digest-pinned Dockerfile, hermetic tests, frozen JSON

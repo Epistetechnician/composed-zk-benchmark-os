@@ -163,6 +163,12 @@ review and experiments rule out equivalent prior work.
   fresh-concept Llama 1B replication with unchanged V22 anti-shortcut gates.
 - [V23 execution record](43-v23-execution-record.md):
   validated Llama 1B qualification stop with assessment unopened.
+- [V27 recoverable multiscale continual learning](57-causally-guided-recoverable-multiscale-continual-learning-v27.md):
+  preregistered cross-repository model-backed update-selection lane with sealed
+  candidate predictions and constrained regret.
+- [Holistic continual-learning benchmark V2](59-holistic-continual-learning-benchmark-v2.md):
+  separate local-update, frozen Tencent CL-bench, and independent-replication
+  evidence lanes with fail-closed claim boundaries.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):

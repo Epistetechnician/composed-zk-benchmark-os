@@ -7,6 +7,14 @@ validated measurement plumbing, but V5 returned `Null` and V10 selected no
 method because activation magnitude remained stronger. Stage 1 observer work is
 blocked until a redesigned Stage 0C passes fresh confirmation.
 
+V27 opens a separate model-backed continual-update development lane without
+unblocking Stage 0C. It tests whether sealed telemetry predictions can improve
+constrained update selection across recoverable architecture arms. Tencent
+CL-bench is an evaluation-only frozen-system context-learning lane and cannot
+be used for training, calibration, distillation, architecture selection, or
+threshold fitting. V27 cannot change C005, C014, Stage 0C, Stage 1, independent
+review, replication, or thesis status.
+
 V25 is a separate protocol-engineering lane. Its Docker synthetic positive
 control may qualify the continual-correction harness and holistic claim gate,
 but cannot unblock Stage 0C or Stage 1. A later model-backed continual-learning
@@ -42,6 +50,29 @@ requirements.
 | V23 | `NotRunCapabilityTierPerturbationQualification` | Fresh-concept Llama 1B replication failed unchanged fit/tune and activation-versus-none gates; assessment stayed unopened |
 | V24 | `AuthorDevelopmentPerturbationReadoutObserved` | A fixed downstream linear residual readout passed both development gates and the sealed assessment against text, output-logit, anomaly, and shuffled-label controls; independent verification and confirmation remain `NotRun`/`NotAuthorized` |
 | V25 | `SyntheticDockerContinualCorrectionHarnessQualified` | Construction-known positive sensitivity and null specificity passed; protocol qualification only, with model-backed learning and thesis validation still `NotRun`/`NotValidated` |
+| V27 | `ScientificValidatorImplementedImmutableReplayPendingAssessmentNotRun` | Matched selector V2, paired 20,000-replicate inference, adversarial recovery and leakage guards, independent Astral recomputation, and immutable-release tooling are implemented; the native 54-run assessment remains unopened |
+
+## V27: Recoverable Multiscale Continual Update Selection
+
+V27 freezes six mandatory native architecture arms: no update, naive sequential
+LoRA, modular ghost-state, compressed adapter recollection,
+representation-through-time distillation, and nested fast/medium/slow LoRA.
+Every model-backed arm must be native-observed. Any missing implementation
+keeps the complete model-backed assessment `NotRun`.
+
+The primary endpoint is constrained update-selection regret. Candidates first
+pass acquisition, retention, forgetting, calibration, exact recovery, budget,
+and governance gates. The post-hoc best feasible candidate is then compared
+with the prospectively selected candidate. The Astral selector must reduce
+regret by at least `0.05` relative to the strongest nonprivileged selector,
+with a task-family/seed clustered-bootstrap 95% lower bound above zero. Shuffled
+telemetry must close the positive gate.
+
+The development matrix requires at least 12 family-disjoint assessment
+families, three seeds, three task orders, equal
+update-token/gradient-step/rank budgets, and retention of every negative, null,
+failure, crash, and exclusion. A result is invalid if candidate outcomes exist
+before the prediction lock or if any assessment row influences fitting.
 
 ## Stage 0A: Instrument Integrity — Complete
 
