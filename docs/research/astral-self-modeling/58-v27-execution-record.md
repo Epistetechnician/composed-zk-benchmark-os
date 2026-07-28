@@ -4,7 +4,7 @@ State slice: `astral-rgs-v27-model-backed-qualification-r1`.
 
 Protocol slice: `astral-rgs-nested-recoverable-update-v27`.
 
-Status: `ImmutableAuthorReplayPassed / NativeArmDevelopmentSmokePassed / ModelBackedAssessmentNotRun`.
+Status: `ImmutableNativeAuthorReplayPassed / ModelBackedAssessmentNotRun`.
 
 Thesis status: `NotValidated`.
 
@@ -76,11 +76,13 @@ Additional release identities:
 - runtime-inventory digest:
   `sha256:d1013d71efad224b9350b81f655d4a03917f637e3bb00254402ddd13280840bc`.
 
-The release contains Git bundles and exact source inventories for both commits,
+The historical R1 release contains Git bundles and exact source inventories for both commits,
 the digest-bound V25 historical validation report, runtime inventory, license
 files, the historical Tencent packet and subset manifest, and every referenced
-Tencent byte object. The 5.63 GB model file is durably hard-linked inside the
-release and covered by the content manifest.
+Tencent byte object. Its 5.63 GB model was hard-linked and content-manifested.
+That made deletion of the source harmless but did not isolate the release from
+later mutation of the shared inode. R1 is therefore retained as a historical
+author replay and superseded by the copy-isolated release below.
 
 ## Clean detached replay
 
@@ -112,6 +114,52 @@ This author-operated replay establishes deterministic artifact exercisability.
 It is not an unaffiliated clean-room reproduction, independent review, or
 independent implementation replication.
 
+## Revised immutable native release and replay
+
+The copy-isolated revised release is:
+
+`/Users/shaanp/Documents/ResearchArtifacts/astral-rgs-v27-r2-2f1028dcab2e3b9d`
+
+- release-manifest file SHA-256:
+  `2f1028dcab2e3b9db7d0a1a809452ff9a5536895f615d206784c03aeb04962fe`;
+- internal release digest:
+  `sha256:5010fa9e6ff192c45589aec126d15410d3879d919fc4776e99e709b2dc505712`;
+- Astral source commit:
+  `2f5de3caf68c940f6197cd08658cfb4ff618592e`;
+- RGS source commit:
+  `d88b04213ddfbd03b3287fe5b8e2265be91a3fff`;
+- native model inventory:
+  `sha256:65bb07b694edadf0659e0e21af54872b709696a0c7225bd1d21609924ce13acc`.
+
+Every source and evidence byte is copied rather than hard-linked. The release
+contains the complete native Qwen model and smoke tree, exact source bundles,
+runtime inventories, licenses, historical evidence, and a closed content
+census.
+
+The passing replay report is:
+
+`/Users/shaanp/Documents/ResearchArtifacts/astral-rgs-v27-r2-2f1028dcab2e3b9d-author-replay.json`
+
+- file SHA-256:
+  `1c76c83e0b40272f0d97f470640b5c692d66107d6ca725e318d038cc77c206b3`;
+- internal report digest:
+  `sha256:ae2dc9c6b05b870912ef49737203e2522e3e9ed846df2380e493ada11da50b98`;
+- status: `pass`;
+- errors: none;
+- supplied native smoke: `Validated`;
+- detached native rerun: `Validated`;
+- normalized native-probe match: true;
+- Astral tests: 9 passed;
+- RGS holistic and native tests: 26 passed;
+- RGS `lint:fast`: passed;
+- Astral validation: `ValidatedWithOpenGates`.
+
+An earlier revised package at manifest `e7092764c6568197...` is retained with
+its failed replay. It exposed pre-seed LoRA initialization and absolute-path
+adapter metadata through `replay.native_probe_nondeterministic`. The corrected
+RGS commit and release close those engineering defects without deleting the
+negative execution record.
+
 ## Historical Tencent diagnostic
 
 The release preserves the four-task historical Tencent observation and all its
@@ -130,20 +178,20 @@ for training, calibration, distillation, adaptation, or architecture selection.
 ## Commit-bound native-arm smoke
 
 RGS executed all six frozen mechanisms on the cached Qwen2.5 0.5B 4-bit model
-from clean implementation commit
-`b80518c31c5830ab172fe1f5f6ff88ff1bd28810`. The authoritative development
+from clean deterministic implementation commit
+`d88b04213ddfbd03b3287fe5b8e2265be91a3fff`. The authoritative development
 artifact is:
 
-`/Users/shaanp/Documents/ResearchArtifacts/astral-rgs-v27-native-smoke-qwen05b-s270001-r5`
+`/Users/shaanp/Documents/ResearchArtifacts/astral-rgs-v27-native-smoke-qwen05b-s270001-r8`
 
 - native-probe file SHA-256:
-  `72ffe711efb926544ae3be6e21bcb5ec7ccc28058a1999032a34d4b0de75ca5b`;
+  `6c7320ee16df6fcb3e4242b5fe835b43bfa8df7c6b3b92297b23c02bcc0b4e46`;
 - internal native-probe digest:
-  `sha256:adf9ff692330d28d1d19a7c96b827d61ba7a30720a295afb08ac213c7aa8ce74`;
+  `sha256:c7a086993ee13877e45885339afe8097fca05462cf185979bdb30157fa6e265d`;
 - native-preflight file SHA-256:
-  `c4ed6274c892b36dd5f5a9cf5586dbd4782193fbad1858f6beb403c8b342989d`;
+  `e1e502cd068127d8bc6eddab1c4862efb6b15269495bff6d86cbedf9608e4b26`;
 - internal native-preflight digest:
-  `sha256:99a999f8d33c66fea5c01680462bd08acdf8a04d6e4e527f9a33caec0905032b`;
+  `sha256:bc3779106490e7336366560886718c67ddd9af8f8e42121b21949b368b463807`;
 - failures: zero;
 - assessment opened: false.
 
@@ -151,7 +199,7 @@ The five updated arms each used six optimizer steps and 75 supervised tokens.
 The nested fast, medium, and slow clocks executed 6, 3, and 1 times. Temporal
 distillation applied a nonzero representation-preservation term on four steps.
 The int8 recollection maximum absolute reconstruction error was
-`0.00013275258243083954`.
+`0.00013274885714054108`.
 
 This is mechanism exercisability, not efficacy. The three-example accuracy was
 `2/3` for five arms and `1/3` for nested multiscale LoRA. It is not pooled with
@@ -183,9 +231,9 @@ replay passed; the inherited root gate is not represented as green.
 
 The strongest supported conclusion is:
 
-> V27-R1 provides an immutable, author-replayable, fail-closed scientific
-> validator, and a later commit-bound smoke exercises all six native update
-> mechanisms. It does not yet provide qualification-scale model-backed
+> V27-R1 provides a copy-isolated, author-replayable, fail-closed scientific
+> validator whose detached replay exercises all six native update mechanisms
+> with a normalized probe match. It does not yet provide qualification-scale model-backed
 > continual-learning evidence, a valid
 > Tencent V2 result, independent reproduction, recoverable self-improvement,
 > introspection, self-modeling, Stage 0C, Stage 1, benchmark dominance, or
