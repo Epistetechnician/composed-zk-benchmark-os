@@ -95,6 +95,52 @@ def test_tencent_materialization_is_portable_and_survives_source_unlink(
     assert digest == RELEASE.stable_hash(core)
 
 
+def test_materialization_is_copy_isolated_from_source_mutation(tmp_path: Path) -> None:
+    source = tmp_path / "source.txt"
+    target = tmp_path / "target.txt"
+    source.write_text("frozen\n", encoding="utf-8")
+
+    assert RELEASE._materialize(source, target) == "copy"
+    source.write_text("mutated\n", encoding="utf-8")
+
+    assert target.read_text(encoding="utf-8") == "frozen\n"
+
+
+def test_model_inventory_identity_is_location_independent(tmp_path: Path) -> None:
+    first = tmp_path / "first"
+    second = tmp_path / "second"
+    first.mkdir()
+    second.mkdir()
+    for root in (first, second):
+        (root / "config.json").write_text("{}\n", encoding="utf-8")
+        (root / "tokenizer.json").write_text("{}\n", encoding="utf-8")
+        (root / "tokenizer_config.json").write_text("{}\n", encoding="utf-8")
+        (root / "model.safetensors").write_bytes(b"weights")
+
+    first_inventory = RELEASE._model_inventory(first)
+    second_inventory = RELEASE._model_inventory(second)
+
+    assert first_inventory["path"] != second_inventory["path"]
+    assert first_inventory["inventory_sha256"] == second_inventory["inventory_sha256"]
+
+
+def test_normalized_native_probe_ignores_only_wall_time() -> None:
+    first = {
+        "probe_sha256": "sha256:first",
+        "methods": [{"method_id": "no_update", "wall_time_seconds": 1.0, "value": 7}],
+        "failures": [],
+    }
+    second = {
+        "probe_sha256": "sha256:second",
+        "methods": [{"method_id": "no_update", "wall_time_seconds": 9.0, "value": 7}],
+        "failures": [],
+    }
+
+    assert RELEASE._normalized_native_probe(first) == RELEASE._normalized_native_probe(second)
+    second["methods"][0]["value"] = 8
+    assert RELEASE._normalized_native_probe(first) != RELEASE._normalized_native_probe(second)
+
+
 def test_release_spec_preserves_claim_ceiling() -> None:
     spec = json.loads(RELEASE.RELEASE_SPEC_PATH.read_text(encoding="utf-8"))
 

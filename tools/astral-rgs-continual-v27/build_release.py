@@ -21,6 +21,9 @@ def main() -> int:
     parser.add_argument("--tencent-dataset-license", type=Path)
     parser.add_argument("--rgs-input", type=Path)
     parser.add_argument("--rgs-report", type=Path)
+    parser.add_argument("--native-smoke-root", type=Path, required=True)
+    parser.add_argument("--native-model", type=Path, required=True)
+    parser.add_argument("--native-python", type=Path, required=True)
     parser.add_argument("--output-parent", type=Path, required=True)
     args = parser.parse_args()
     release = build_release(
@@ -34,12 +37,15 @@ def main() -> int:
         output_parent=args.output_parent,
         rgs_input=args.rgs_input,
         rgs_report=args.rgs_report,
+        native_smoke_root=args.native_smoke_root,
+        native_model_path=args.native_model,
+        native_python=args.native_python,
     )
     print(
         json.dumps(
             {
                 "state_slice": "astral-rgs-v27-model-backed-qualification-r1",
-                "status": "immutable_release_built",
+                "status": "immutable_release_v2_built",
                 "release": str(release),
             },
             indent=2,
