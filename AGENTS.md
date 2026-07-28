@@ -1,6 +1,7 @@
 # Agent Rules
 
-Explicit Astral Docker closed-loop correction simulation V25 now allowed:
+Explicit Astral Docker closed-loop correction simulation V25 now allowed and
+completed locally:
 additive Python source, a digest-pinned Dockerfile, hermetic tests, frozen JSON
 contracts, and validators under `tools/astral-continual-correction-v25/`;
 protocol and execution notes under `docs/research/astral-self-modeling/`;
@@ -20,7 +21,12 @@ training or modifying V24, adaptive assessment tuning, treating a planted
 signal as model introspection, independent-review promotion, Stage 0C or Stage
 1 promotion, consciousness claims, general continual-learning claims, general
 self-improvement claims, or claims above
-`SyntheticDockerContinualCorrectionHarnessQualified`. Every mutation in this
+`SyntheticDockerContinualCorrectionHarnessQualified`. The completed Docker
+artifact, raw-record validation, and holistic claim-validation disposition are
+recorded in `docs/research/astral-self-modeling/54-v25-execution-record.md` and
+`docs/research/astral-self-modeling/56-holistic-claim-validation-execution-record.md`.
+The holistic pipeline completed with open claims and retained thesis status
+`NotValidated`. Every mutation in this
 phase names state slice `astral-docker-closed-loop-correction-simulation-v25`.
 
 Explicit Astral V24 independent-validation release V2 now allowed and
