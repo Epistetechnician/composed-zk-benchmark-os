@@ -4,7 +4,7 @@ State slice: `astral-rgs-v27-model-backed-qualification-r1`.
 
 Protocol slice: `astral-rgs-nested-recoverable-update-v27`.
 
-Status: `ImmutableAuthorReplayPassed / ModelBackedAssessmentNotRun`.
+Status: `ImmutableAuthorReplayPassed / NativeArmDevelopmentSmokePassed / ModelBackedAssessmentNotRun`.
 
 Thesis status: `NotValidated`.
 
@@ -24,6 +24,12 @@ Thesis status: `NotValidated`.
 The Astral and RGS sources are clean commits on the isolated branch
 `codex/astral-rgs-v27-qualification-r1`. Unrelated dirty RGS changes in the
 original checkout were not staged, normalized, or incorporated.
+
+Those RGS identities are the validator sources bound into the immutable R1
+release. The later native-arm implementation is RGS commit
+`b80518c31c5830ab172fe1f5f6ff88ff1bd28810`, tree
+`e0d0e2d961f93a0a30f1a490dd8473e816f4b4f0`. It requires a revised immutable
+release before qualification.
 
 ## Implemented validator
 
@@ -121,6 +127,36 @@ not a full benchmark, not leaderboard-comparable, and not a parametric
 continual-learning result. CL-bench remains evaluation-only and cannot be used
 for training, calibration, distillation, adaptation, or architecture selection.
 
+## Commit-bound native-arm smoke
+
+RGS executed all six frozen mechanisms on the cached Qwen2.5 0.5B 4-bit model
+from clean implementation commit
+`b80518c31c5830ab172fe1f5f6ff88ff1bd28810`. The authoritative development
+artifact is:
+
+`/Users/shaanp/Documents/ResearchArtifacts/astral-rgs-v27-native-smoke-qwen05b-s270001-r5`
+
+- native-probe file SHA-256:
+  `72ffe711efb926544ae3be6e21bcb5ec7ccc28058a1999032a34d4b0de75ca5b`;
+- internal native-probe digest:
+  `sha256:adf9ff692330d28d1d19a7c96b827d61ba7a30720a295afb08ac213c7aa8ce74`;
+- native-preflight file SHA-256:
+  `c4ed6274c892b36dd5f5a9cf5586dbd4782193fbad1858f6beb403c8b342989d`;
+- internal native-preflight digest:
+  `sha256:99a999f8d33c66fea5c01680462bd08acdf8a04d6e4e527f9a33caec0905032b`;
+- failures: zero;
+- assessment opened: false.
+
+The five updated arms each used six optimizer steps and 75 supervised tokens.
+The nested fast, medium, and slow clocks executed 6, 3, and 1 times. Temporal
+distillation applied a nonzero representation-preservation term on four steps.
+The int8 recollection maximum absolute reconstruction error was
+`0.00013275258243083954`.
+
+This is mechanism exercisability, not efficacy. The three-example accuracy was
+`2/3` for five arms and `1/3` for nested multiscale LoRA. It is not pooled with
+qualification and cannot fill the 54-run execution registry.
+
 ## Heavy root-gate boundary
 
 The RGS heavy root gate passed its preceding Phase 36-45, CL12, advisory-pilot,
@@ -135,7 +171,8 @@ replay passed; the inherited root gate is not represented as green.
 
 - C046 remains `In test`: the author-side engineering machinery and immutable
   replay passed, but independent review is `NotRun`.
-- C047 remains `In test`: no native model-backed six-arm execution exists.
+- C047 remains `In test`: a six-arm development smoke exists, but no native
+  54-run qualification matrix or assessment result exists.
 - C048 remains `In test`: no sealed model-backed selector comparison exists.
 - model-backed assessment: `NotRun`;
 - fresh Stage 0C confirmation: `Blocked`;
@@ -147,8 +184,9 @@ replay passed; the inherited root gate is not represented as green.
 The strongest supported conclusion is:
 
 > V27-R1 provides an immutable, author-replayable, fail-closed scientific
-> validator for a future model-backed recoverable continual-learning study.
-> It does not yet provide model-backed continual-learning evidence, a valid
+> validator, and a later commit-bound smoke exercises all six native update
+> mechanisms. It does not yet provide qualification-scale model-backed
+> continual-learning evidence, a valid
 > Tencent V2 result, independent reproduction, recoverable self-improvement,
 > introspection, self-modeling, Stage 0C, Stage 1, benchmark dominance, or
 > thesis validation.
