@@ -1,5 +1,13 @@
 # Agent Rules
 
+Explicit V29R2 canonical token-boundary implementation now allowed: state slice
+`astral-rgs-v29r2-canonical-token-boundary-implementation`. Additive R2 core,
+worker, coordinator, tests, notes, and matching Astral protocol/validator are
+permitted. Implementation must reuse the V29 fixture and thresholds exactly,
+enforce canonical `Answer:` plus leading-space label tokenization, and remain
+model-free. Model access, training, candidate data, prompt changes,
+acquisition, assessment, SOTA, breakthrough, and claim promotion are forbidden.
+
 Explicit V29R2 canonical token-boundary preregistration now allowed: state
 slice `astral-rgs-v29r2-canonical-token-boundary-preregistration`. This
 docs-first slice may freeze only the immutable V29 public fixture and
