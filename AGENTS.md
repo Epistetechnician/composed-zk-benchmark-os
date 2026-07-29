@@ -1,5 +1,37 @@
 # Agent Rules
 
+Explicit Astral-RGS V28R2 powered acquisition-novelty implementation now
+allowed: additive protocol, validator, fingerprint-builder, hermetic tests, and
+implementation notes under `tools/astral-rgs-acquisition-v28r2/` and
+`docs/research/astral-self-modeling/`; append-only ledger, roadmap, and
+navigation updates; and the corresponding additive Recoverable Ghost States
+producer, offline MLX worker, operator entrypoint, tests, package/registry
+entries, and scoped authorization. Every mutation in this slice must name
+state slice `astral-rgs-v28r2-powered-acquisition-novelty-implementation`.
+
+This slice is limited to the prospective V28R2 contract frozen in
+`docs/research/astral-self-modeling/64-v28r2-powered-acquisition-novelty-preregistration.md`:
+exactly 1,536 families per fact kind, 6,144 families total, 12 queries per
+family, exactly one fresh `pre_update` and one separately prepared and
+restarted `no_update` full-corpus baseline, exact row parity, the unchanged
+`[-0.05, 0.05]` equivalence interval, minimum critical value `5.0`, a new
+one-shot ledger and seed created only after clean committed source and durable
+pre-generation receipts, and complete content-level disjointness from retired
+V28R1. The RGS generator may consume only a sealed retired-R1 fingerprint
+manifest, never R1 corpus rows or model outcomes. The Astral validator must be
+an independent protocol consumer and may not import either generator.
+
+It does not permit mutation or rerun of V28R1, adaptive item selection,
+replacement seeds, downloads, network access, update arms, training, LoRA,
+retention/recovery execution, corruption injection, Astral selection,
+assessment generation or opening, evidence promotion, acquisition or
+continual-learning claims, independent-replication claims, benchmark or
+breakthrough claims, autonomous self-improvement, introspection, self-modeling,
+Stage 0C or Stage 1 promotion, production claims, or claims above
+`LocalModelBackedAcquisitionNoveltyPreflightV28R2`. Source must be committed and
+clean before seed creation; any failure or negative consumes the V28R2
+one-shot campaign and stops.
+
 Explicit Astral-RGS V28R2 powered acquisition-novelty docs-first
 preregistration now allowed: one prospective protocol note at
 `docs/research/astral-self-modeling/64-v28r2-powered-acquisition-novelty-preregistration.md`,

@@ -191,6 +191,9 @@ review and experiments rule out equivalent prior work.
   docs-only 6,144-family precision census, complete V28R1 nonreuse, and sealed
   implementation, model execution, update, recovery, selection, and assessment
   gates.
+- [V28R2 powered acquisition-novelty implementation notes](65-v28r2-powered-acquisition-novelty-implementation-notes.md):
+  additive clean-room fingerprint and validation instrument; source freeze,
+  one-shot execution, and every downstream gate remain pending.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
