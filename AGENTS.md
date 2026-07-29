@@ -1,5 +1,17 @@
 # Agent Rules
 
+Explicit V28R4 streaming-control preflight negative sealing now allowed:
+one execution record plus claim-ledger, roadmap, and navigation updates. Every
+mutation must name state slice
+`astral-rgs-v28r4-streaming-control-preflight-negative-sealing`.
+
+This slice may record only the immutable artifact
+`astral-rgs-v28r4-preflight-ef386f74732e-r1`, exact batch-8 parity, the
+batch-64 Metal out-of-memory failure, corrected independent
+`valid=true/qualified=false` validation, and zero scientific activity. It does
+not permit artifact mutation, model rerun, candidate data, batch or threshold
+changes, updates/adapters, scientific evidence, or claim promotion.
+
 Explicit V28R4 retained-negative artifact validation correction now allowed:
 backward-compatible Astral validator and hermetic-test changes under
 `tools/astral-rgs-acquisition-v28r4/`, one correction note, and ledger/roadmap

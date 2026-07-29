@@ -228,6 +228,11 @@ review and experiments rule out equivalent prior work.
 - [V28R4 streaming-control preflight execution authorization](76-v28r4-streaming-control-preflight-execution-authorization.md):
   binds the two clean implementation commits and permits one fixed-fixture,
   model-backed, fail-closed infrastructure preflight.
+- [V28R4 retained-negative validation correction](77-v28r4-negative-artifact-validation-correction.md):
+  distinguishes a manifest-complete failed child from artifact corruption.
+- [V28R4 streaming-control preflight execution record](78-v28r4-streaming-control-preflight-execution-record.md):
+  records exact batch-8 parity and the independently validated batch-64 Metal
+  out-of-memory negative result.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
