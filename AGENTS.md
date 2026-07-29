@@ -1,5 +1,11 @@
 # Agent Rules
 
+V29R2 execution is complete and consumed. Artifact
+`astral-rgs-v29r2-canonical-boundary-731885d2c9a2-r1` is immutable and valid
+with `CanonicalBoundaryStillBlocked`. No V29R2 retry, prompt wrapper, threshold
+change, or artifact mutation is authorized. The next instrument must be
+separately preregistered and must avoid single-letter next-token scoring.
+
 Explicit V29R2 canonical token-boundary execution now authorized once: state
 slice `astral-rgs-v29r2-canonical-token-boundary-execution`. Bind RGS
 `4575d86de4c8399e0099ed0356d55a4b3e3c2f89` and Astral
