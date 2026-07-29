@@ -78,7 +78,7 @@ requirements.
 | V28R5 | `ValidNegativeMemorySafeRawScoreParityFailed` | Optimized batch 8 and 64 completed below 847 MiB RSS with identical predictions, but raw label-score drift exceeded the frozen `1e-5` tolerance; independent validation is valid and qualification is false, so scientific execution remains unauthorized |
 | V28R6 | `LocallyQualifiedLegacyBatch8EnduranceExternalReviewNotRun` | Eight superblocks and 9,216 endurance queries completed with zero observed peak-RSS growth; fresh first/last controls matched every semantic field and raw score exactly; independent local validation passed, while scientific execution and external review remain unrun |
 | V28R7 | `PilotNoSignalAstralR2ValidExternalReviewNotRun` | The completed pilot found no signal arm; both positive controls stayed at chance and most runs always selected A, so a powered acquisition campaign is blocked |
-| V29 | `PositiveControlInstrumentRepairAuthorizedOnceNotRun` | The deterministic four-rung implementation is hermetically validated and one clean, single-process, no-training execution is authorized |
+| V29 | `ValidNegativeInstrumentStillBlocked` | No response format passed all four positive-control gates; tokenizer-only diagnosis found a noncanonical answer-cue token boundary, requiring a new preregistered identity |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 
