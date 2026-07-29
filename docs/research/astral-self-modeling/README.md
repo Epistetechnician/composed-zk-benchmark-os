@@ -216,6 +216,9 @@ review and experiments rule out equivalent prior work.
   hermetic tests without authorizing runtime execution.
 - [V28R3 fresh acquisition-campaign execution authorization](72-v28r3-fresh-acquisition-campaign-execution-authorization.md):
   binds the clean implementation commits and permits one fail-closed run.
+- [V28R3 infrastructure-failure execution record](73-v28r3-infrastructure-failure-execution-record.md):
+  records the independently validated novelty pass and sealed Phase B Metal
+  out-of-memory failure before any update or adapter.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
