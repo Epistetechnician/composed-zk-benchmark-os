@@ -3,9 +3,9 @@
 State slice:
 `astral-rgs-v28r2-retired-r1-fingerprint-construction-r2`.
 
-Status: `R1PreflightFailureRecorded / R1IdentityRetired /
-R2ControllerImplemented / R2ConstructionAuthorized /
-R2ConstructionNotRun / FingerprintNotBuilt / ProtocolPinUnchanged`.
+Status: `R1IdentityRetired / R2ControllerAndBuilderInvokedOnce /
+R2BuilderFailedClosed / R2IdentityConsumed / FingerprintNotBuilt /
+ProtocolPinUnchanged`.
 
 ## R1 failure record
 
@@ -50,25 +50,25 @@ sha256:92bdb88cff100ccbc6f212605b7117fccda5f141679e9f30b73e46656878244e
 
 ## Exact invocation
 
-After the R2 controller and this authorization are committed, independently
-audited, and the fixed R2 output is confirmed absent, the only permitted
-invocation is:
+After the R2 controller and this authorization were committed, independently
+audited, and the fixed R2 output was confirmed absent, the only permitted
+invocation was:
 
 ```text
 PYTHONDONTWRITEBYTECODE=1 python3 \
   /Users/shaanp/.codex/worktrees/composed-zk-benchmark-os-astral-v28r2-r1-fingerprint-construction-r2/tools/astral-rgs-acquisition-v28r2/construct_retired_v28r1_fingerprint.py
 ```
 
-The pre-execution shell may verify and display the controller SHA-256, clean
-status, and fixed-output absence, but it must not compare against a manually
-invented or abbreviated commit identity. The controller itself verifies the
-only execution-relevant source commit:
+The pre-execution shell verified the controller SHA-256, clean status, and
+fixed-output absence without comparing a manually invented or abbreviated
+commit identity. The controller itself verified the only execution-relevant
+source commit:
 `8cf75d745c20afa885286fecfbd8d67c253b8707`.
 
-The R2 controller and builder invocation counts may each become exactly one.
-Any R2 controller, preflight, or builder failure consumes R2. No retry,
-alternate path, repair, overwrite, or fallback identity is authorized in this
-slice.
+The R2 controller and builder invocation counts each became exactly one. The
+builder failed closed with `invalid text record` before output creation. R2 is
+consumed. No retry, alternate path, repair, overwrite, or fallback identity is
+authorized in this slice. The root-cause boundary is recorded in document 70.
 
 ## Mandatory stop and claim boundary
 

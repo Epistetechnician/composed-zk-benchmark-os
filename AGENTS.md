@@ -1,21 +1,46 @@
 # Agent Rules
 
-Explicit Astral-RGS V28R2 retired-R1 fingerprint construction R2 now allowed:
-status-only recording that the R1 external commit precheck failed before
+Explicit Astral-RGS V28R2 retired-R1 fingerprint builder schema-correction
+docs-first boundary now allowed and completed: status-only recording that the
+R2 controller and builder each ran once, the builder failed closed with
+`invalid text record`, the R2 output remained absent, and R2 is consumed; one
+Markdown correction boundary under `docs/research/astral-self-modeling/`; and
+status-only Astral roadmap, claim-ledger, navigation, and `AGENTS.md` updates.
+This slice is limited to state slice
+`astral-rgs-v28r2-retired-r1-fingerprint-builder-schema-correction-boundary`,
+the read-only finding that authentic source/support records have three keys
+while authentic answer-option records have two, and a future narrow
+builder/test-only correction contract in
+`docs/research/astral-self-modeling/70-v28r2-retired-r1-fingerprint-builder-schema-correction-boundary.md`.
+It does not permit retrying R1 or R2, Python implementation changes in this
+docs slice, creating a fingerprint, changing the V28R2 protocol, validator, or
+controller, RGS source or package mutation, seed or corpus generation,
+tokenizer or model access, baseline or update-arm execution, recovery, Astral
+selection, assessment, downloads, network access, artifact or Evidence Ledger
+promotion, acquisition or continual-learning claims, independent-replication
+claims, benchmark or breakthrough claims, self-improvement, introspection or
+self-modeling claims, Stage 0C or Stage 1 promotion, production claims, or
+claims above
+`LocalRetiredR1FingerprintBuilderSchemaCorrectionBoundaryV28R2`.
+
+Historical Astral-RGS V28R2 retired-R1 fingerprint construction R2
+authorization is consumed and no longer executable. It recorded that the R1
+external commit precheck failed before
 controller or builder invocation and permanently consumed the R1 construction
 identity; one fixed-output change in the no-argument standard-library
 controller under `tools/astral-rgs-acquisition-v28r2/`, producing controller
 SHA-256
 `92bdb88cff100ccbc6f212605b7117fccda5f141679e9f30b73e46656878244e`;
-its hermetic tests; one R2 authorization/record note and status mirrors; and,
-only after commit and independent audit, exactly one future R2 controller
-invocation described in
+its hermetic tests; one R2 authorization/record note and status mirrors; and
+had authorized exactly one R2 controller invocation described in
 `docs/research/astral-self-modeling/69-v28r2-retired-r1-fingerprint-construction-r2-authorization.md`.
 This slice is limited to state slice
 `astral-rgs-v28r2-retired-r1-fingerprint-construction-r2`, permanent retirement
 of the absent `r1` output identity, the new absent `r2` repository-external
 output, the same implementation commit and retained bundle pinned in documents
-67-68, and the same mandatory stop with the protocol `not-built`. It does not
+67-68, and the same mandatory stop with the protocol `not-built`. R2 ran once,
+the builder failed closed, the output stayed absent, and R2 is retired. It does
+not
 permit retrying R1, committing a fingerprint, changing the V28R2 protocol or
 validator, RGS source or package mutation, seed or corpus generation, tokenizer
 or model access, baseline or update-arm execution, recovery, Astral selection,
