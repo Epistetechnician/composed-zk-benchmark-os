@@ -17,6 +17,8 @@ independent intake side of the frozen V28R2 novelty campaign. It contains:
   signatures without exporting V28R1 rows or model outcomes;
 - a clean-room packet validator that does not import either RGS producer or
   the V28R1 implementation;
+- a separate corpus-only entrypoint that must pass before tokenizer or model
+  access;
 - exact corpus, query, 24-permutation-block, prompt, token, score, argmax,
   process, parity, disjointness, and later-gate-absence checks;
 - family-cluster equivalence intervals with the frozen critical value `5.0`
