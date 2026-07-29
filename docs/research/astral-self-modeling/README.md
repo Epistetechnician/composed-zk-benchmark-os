@@ -275,6 +275,9 @@ review and experiments rule out equivalent prior work.
 - [V29 positive-control instrument repair preregistration](92-v29-positive-control-instrument-repair-preregistration.md):
   freezes a non-candidate four-rung diagnostic and response-format gate before
   any new acquisition training or candidate corpus is permitted.
+- [V29 positive-control instrument repair implementation](93-v29-positive-control-instrument-repair-implementation.md):
+  records the one-process RGS scorer and independent fail-closed Astral
+  validator without authorizing model execution.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
