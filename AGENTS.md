@@ -1,5 +1,17 @@
 # Agent Rules
 
+Explicit V28R4 streaming-control preflight implementation now allowed:
+additive protocol, independent validator, CLI and hermetic tests under
+`tools/astral-rgs-acquisition-v28r4/`, implementation notes and ledger/roadmap
+updates, plus the matching RGS streaming worker/harness/tests/registry. Every
+mutation must name state slice
+`astral-rgs-v28r4-streaming-control-preflight-implementation`.
+
+Implementation is limited to the preregistered fixed fixture, semantic parity,
+1,152-row materialization, batch-64, 8 GiB RSS, source identity, artifact and
+claim gates. It does not permit model access, runtime execution, candidate
+data, V28R3 rerun, updates/adapters, or scientific claim promotion.
+
 Explicit V28R4 streaming-control preflight preregistration now allowed:
 one prospective note and protocol boundary under
 `docs/research/astral-self-modeling/`, claim-ledger/roadmap/navigation updates,
