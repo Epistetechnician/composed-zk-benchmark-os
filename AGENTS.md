@@ -1,5 +1,18 @@
 # Agent Rules
 
+Explicit V28R6 legacy batch-8 endurance implementation now allowed: additive
+protocol, independent validator, CLI, and hermetic tests under
+`tools/astral-rgs-acquisition-v28r6/`, implementation notes and ledger/roadmap
+updates, plus matching RGS worker, harness, tests, and registry. Every mutation
+must name state slice
+`astral-rgs-v28r6-legacy-batch8-endurance-implementation`.
+
+Implementation is limited to the preregistered public 768-family fixture,
+single-process eight-superblock legacy batch-8 run, fresh-process endpoint
+controls, exact parity, RSS, identity, source, artifact, and claim gates. It
+does not permit model access or execution, candidate data, updates, adapters,
+scientific evidence, assessment, confirmation, or claim promotion.
+
 Explicit V28R6 legacy batch-8 endurance preregistration now allowed: one
 prospective protocol note plus claim-ledger, roadmap, navigation, matching RGS
 documentation, and scoped authorization text. Every mutation must name state
