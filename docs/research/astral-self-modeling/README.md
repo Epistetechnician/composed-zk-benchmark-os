@@ -239,6 +239,9 @@ review and experiments rule out equivalent prior work.
 - [V28R5 last-token projection preflight implementation](80-v28r5-last-token-projection-preflight-implementation.md):
   records the optimized worker, source-bound harness, independent validator,
   and hermetic tests without authorizing model execution.
+- [V28R5 last-token projection preflight execution authorization](81-v28r5-last-token-projection-preflight-execution-authorization.md):
+  binds the two implementation commits and permits one two-child infrastructure
+  preflight against the sealed V28R4 reference.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
