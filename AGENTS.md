@@ -1,5 +1,32 @@
 # Agent Rules
 
+Explicit Astral-RGS V28 Gate 1 acquisition-qualification one-shot execution
+now allowed. Every mutation and external artifact in this slice must name
+state slice `astral-rgs-v28-gate1-acquisition-qualification-execution`.
+
+This slice is bound to Astral implementation commit
+`2dc712ea42f77bb34c137444e2e3ba16972389ce`, RGS implementation commit
+`86922c98d37f5bba871389c7efeca367558301a4`, their clean execution-
+authorization descendants, the immutable V28R2 packet
+`sha256:5e830ee437e8d67faa9dedc667db35114fa5ccf84809a9b2874c60a1ed622ddc`,
+baseline-family digest
+`sha256:52f1da63e9446e43a927713f95168371137bf49d0e4287dfae9ff1c3fb604705`,
+and cached checkpoint inventory
+`sha256:0a321941ffa31f920284c932f98bd4dba7c7cb95acd797c01ec2fa0fdd1321ab`.
+It permits one durable ledger claim, both nonpersistent controls, the seven
+locked persistent arms, exact preregistered seed/order cells, mathematical
+arm futility, repository-external content-addressed artifacts, independent
+Astral validation, and a bounded execution record. The first ledger claim is
+consuming even on failure; no replacement campaign, seed, corpus, threshold,
+hyperparameter, router, scorer, or assessment is permitted.
+
+It does not permit Gate 2 retention/recovery, corruption or rollback, Gate 3
+Astral selection, assessment access, confirmation, external-review
+simulation, evidence promotion, benchmark or SOTA claims, breakthrough or
+autonomous-self-improvement claims, introspection, self-modeling, Stage 0C or
+Stage 1 promotion, production claims, or claims above
+`LocalModelBackedAcquisitionQualificationV28Gate1`.
+
 Explicit Astral-RGS V28 Gate 1 acquisition-qualification implementation now
 allowed: additive protocol-lock, independent packet validator, CLI, hermetic
 tests, and implementation notes under
