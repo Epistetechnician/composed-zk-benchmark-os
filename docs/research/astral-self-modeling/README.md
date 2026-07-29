@@ -251,6 +251,9 @@ review and experiments rule out equivalent prior work.
 - [V28R6 legacy batch-8 endurance implementation](84-v28r6-legacy-batch8-endurance-implementation.md):
   records the source-bound worker, endpoint controls, independent validator,
   and fail-closed artifact gate without authorizing model execution.
+- [V28R6 legacy batch-8 endurance execution authorization](85-v28r6-legacy-batch8-endurance-execution-authorization.md):
+  binds the clean implementation commits and permits one fixed-fixture,
+  three-child model-backed endurance preflight.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
