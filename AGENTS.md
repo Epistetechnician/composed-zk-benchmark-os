@@ -1,5 +1,15 @@
 # Agent Rules
 
+Explicit V29R2 canonical token-boundary preregistration now allowed: state
+slice `astral-rgs-v29r2-canonical-token-boundary-preregistration`. This
+docs-first slice may freeze only the immutable V29 public fixture and
+thresholds, chat-template serialization, the assistant prefill `Answer:` with
+no trailing space, canonical leading-space A-D token ids `362/425/356/422`,
+one model process, an external artifact, and independent validation. It does
+not permit implementation, model access, prompt or threshold changes,
+training, adapters, candidate data, acquisition, assessment, SOTA,
+breakthrough, or claim promotion.
+
 V29 positive-control execution is complete and consumed. Artifact
 `astral-rgs-v29-positive-control-80ac177a2c77-r1` is immutable and the valid
 status is `InstrumentStillBlocked`. No V29 retry or artifact mutation is

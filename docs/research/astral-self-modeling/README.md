@@ -284,6 +284,8 @@ review and experiments rule out equivalent prior work.
 - [V29 positive-control instrument repair execution record](95-v29-positive-control-instrument-repair-execution-record.md):
   records the valid negative result, failed response-format gate, and the
   post-result leading-space token-boundary diagnosis.
+- [V29R2 canonical token-boundary preregistration](96-v29r2-canonical-token-boundary-preregistration.md):
+  freezes a one-variable correction using the same public fixture and gates.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
