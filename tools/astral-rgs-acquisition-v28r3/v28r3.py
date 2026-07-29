@@ -505,7 +505,13 @@ def validate_manifest(root: Path, errors: list[str]) -> None:
         listed.add(relative)
         if not path.is_file() or path.is_symlink() or sha256_file(path) != row.get("sha256") or path.stat().st_size != row.get("size_bytes"):
             errors.append("artifact.file")
-    allowed_late = {"artifact-manifest.json", "astral-validation-report.json", "astral-validation-process.json"}
+    allowed_late = {
+        "artifact-manifest.json",
+        "astral-validation-report.json",
+        "astral-validation-process.json",
+        "astral-abort-validation-report.json",
+        "astral-abort-validation-process.json",
+    }
     actual = {path.relative_to(root).as_posix() for path in root.rglob("*") if path.is_file() and path.relative_to(root).as_posix() not in allowed_late}
     if actual != listed:
         errors.append("artifact.census")

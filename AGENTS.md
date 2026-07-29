@@ -1,5 +1,17 @@
 # Agent Rules
 
+Explicit V28R3 infrastructure-failure sealing now allowed: an additive abort
+validator and tests, a failure execution record, matching RGS finalizer/tests
+and disposition, and immutable packaging of the consumed V28R3 artifact.
+Every mutation must name state slice
+`astral-rgs-v28r3-infrastructure-failure-sealing`.
+
+This slice may only validate and package the existing ledger/artifact,
+rederive the corpus and novelty result, verify the Metal out-of-memory control
+failure and absence of updates/adapters/cells, and record the bounded outcome.
+It does not permit model access, new inference, repair, rerun, batch-size or
+protocol changes, Gate 1 evidence, later gates, or claim promotion.
+
 Explicit Astral-RGS V28R3 fresh acquisition-campaign execution now allowed:
 one invocation of the committed RGS coordinator using RGS implementation
 commit `5c4ea4d7478fbdadbbeb9be214644230f4221c90`, Astral implementation
