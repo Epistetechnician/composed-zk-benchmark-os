@@ -1,5 +1,15 @@
 # Agent Rules
 
+Explicit V29R2 canonical token-boundary execution now authorized once: state
+slice `astral-rgs-v29r2-canonical-token-boundary-execution`. Bind RGS
+`4575d86de4c8399e0099ed0356d55a4b3e3c2f89` and Astral
+`8f1d471bc1006514f8a7bad9f27b2048d6e68ab7`, the frozen V29 fixture,
+checkpoint/tokenizer/runtime, one model process, consuming ledger, external
+content-addressed artifact, and read-only Astral validation. First ledger claim
+consumes the identity. No retry, training, prompt/threshold change, candidate
+data, acquisition, assessment, SOTA, breakthrough, or claim above
+`LocalCanonicalTokenBoundaryQualificationV29R2` is allowed.
+
 Explicit V29R2 canonical token-boundary implementation now allowed: state slice
 `astral-rgs-v29r2-canonical-token-boundary-implementation`. Additive R2 core,
 worker, coordinator, tests, notes, and matching Astral protocol/validator are

@@ -288,6 +288,8 @@ review and experiments rule out equivalent prior work.
   freezes a one-variable correction using the same public fixture and gates.
 - [V29R2 canonical token-boundary implementation](97-v29r2-canonical-token-boundary-implementation.md):
   records the additive canonical-boundary worker and independent validator.
+- [V29R2 canonical token-boundary execution authorization](98-v29r2-canonical-token-boundary-execution-authorization.md):
+  binds clean commits and authorizes one consuming no-training diagnostic.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
