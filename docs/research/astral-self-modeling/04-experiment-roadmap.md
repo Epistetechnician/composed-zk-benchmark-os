@@ -74,6 +74,7 @@ requirements.
 | V27 | `DeterministicDevelopmentReplayMatchedNoCandidateAssessmentNotRun` | Two complete 54-execution development packets matched every deterministic scientific lock; no-update dominated, Astral did not beat the strongest nonprivileged selector, and assessment stayed sealed |
 | V28 | `Gate1InfrastructureAbortConsumedNoModelOutcome` | V28R2 novelty passed and the Gate 1 instrument is implemented, but the one-shot campaign was consumed by a pre-model MLX-runtime import failure; no acquisition result exists and a fresh preregistered corpus is required |
 | V28R3 | `NoveltyPassedPhaseBInfrastructureFailureSealed` | The independent validator accepted exact chance-equivalent baseline parity on the fresh R3 corpus; the first context control hit Metal OOM before any acquisition result, update, or adapter, and rerun is unauthorized |
+| V28R4 | `StreamingControlPreflightDocsFirstOnly` | A fixed non-candidate monolithic-versus-streaming parity and batch-64 memory stress is preregistered; implementation, model access, and any fresh campaign remain unauthorized |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 

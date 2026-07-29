@@ -1,5 +1,18 @@
 # Agent Rules
 
+Explicit V28R4 streaming-control preflight preregistration now allowed:
+one prospective note and protocol boundary under
+`docs/research/astral-self-modeling/`, claim-ledger/roadmap/navigation updates,
+matching RGS documentation, and scoped authorization text. Every mutation must
+name state slice
+`astral-rgs-v28r4-streaming-control-preflight-preregistration`.
+
+This slice may freeze only the fixed non-candidate 96-family fixture,
+monolithic/streaming parity, 1,152-row materialization ceiling, batch-8 parity,
+batch-64 stress, 8 GiB RSS ceiling, existing runtime/checkpoint, independent
+validation, and pass/fail states. It does not permit implementation, model
+access, candidate data, V28R3 rerun, updates, adapters, or claim promotion.
+
 V28R3 infrastructure-failure sealing is complete. The consumed artifact is
 `astral-rgs-v28r3-abort-0b65ab1e0971-r1`; no further mutation, packaging,
 repair, or rerun is authorized by this completed slice.
