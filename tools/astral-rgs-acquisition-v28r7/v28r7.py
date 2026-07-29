@@ -20,6 +20,7 @@ SOURCE_LOCK_NAMES = (
     "rgs_corpus", "rgs_model_worker", "rgs_update_worker", "rgs_gate_core",
     "rgs_coordinator", "astral_protocol", "astral_validator", "astral_cli",
 )
+R1_VALIDATOR_SHA256 = "sha256:69a31f76df2fc470241d7050e27e170437aedba87a6c904e899a0888dc2f0fce"
 ATOM = re.compile(r"\br7(?:entity|handle|route|token|vault|family|query)-[0-9a-f]{5,}\b")
 GENERIC_ATOM = re.compile(r"\b(?:[a-z]{2,12}-)?[a-z]{4,}-[0-9a-f]{5,}\b")
 HEX = re.compile(r"\b[0-9a-f]{16,}\b")
@@ -136,6 +137,17 @@ def panel_indices(seed: bytes) -> list[int]:
         hashlib.sha256(b"v28r7-panel" + seed + index.to_bytes(2, "big")).digest(), index,
     ))
     return sorted(ranked[:8])
+
+
+def evaluation_panel(families: list[dict[str, Any]], indices: list[int]) -> list[dict[str, Any]]:
+    selected = set(indices)
+    return sorted(
+        (family for family in families if family["block_index"] in selected),
+        key=lambda family: (
+            int(family["block_index"]), FACT_KINDS.index(family["fact_kind"]),
+            int(family["family_in_block"]), family["family_id"],
+        ),
+    )
 
 
 def external_prompt(family: dict[str, Any], query: dict[str, Any]) -> str:
@@ -276,12 +288,22 @@ def novelty_metrics(panel: list[dict[str, Any]], rows: list[dict[str, Any]]) -> 
 
 def pilot_metrics(rows: list[dict[str, Any]], baseline: dict[str, float]) -> dict[str, Any]:
     scores = family_scores(rows)
-    result: dict[str, Any] = {"overall": interval(list(scores.values()), floor=PROTOCOL["overall_floor"])}
-    result["fact_kinds"] = {kind: interval(list(family_scores([r for r in rows if r["fact_kind"] == kind]).values()), floor=PROTOCOL["dimension_floor"]) for kind in FACT_KINDS}
-    result["query_classes"] = {name: interval(list(family_scores([r for r in rows if r["query_class"] == name]).values()), floor=PROTOCOL["dimension_floor"]) for name in QUERY_CLASSES}
-    result["paired_mean_gain"] = statistics.fmean(scores[key] - baseline[key] for key in scores)
+    result: dict[str, Any] = {"overall": cluster_metric(list(scores.values()), PROTOCOL["overall_floor"])}
+    result["fact_kinds"] = {kind: cluster_metric(list(family_scores([r for r in rows if r["fact_kind"] == kind]).values()), PROTOCOL["dimension_floor"]) for kind in FACT_KINDS}
+    result["query_classes"] = {name: cluster_metric(list(family_scores([r for r in rows if r["query_class"] == name]).values()), PROTOCOL["dimension_floor"]) for name in QUERY_CLASSES}
+    result["paired_mean_gain"] = sum(scores[key] - baseline[key] for key in scores) / len(scores)
     result["absolute_gates_pass"] = result["overall"]["passes"] and all(row["passes"] for row in [*result["fact_kinds"].values(), *result["query_classes"].values()]) and result["paired_mean_gain"] >= PROTOCOL["gain_floor"]
     return result
+
+
+def cluster_metric(values: list[float], floor: float) -> dict[str, Any]:
+    mean = sum(values) / len(values)
+    variance = sum((value - mean) ** 2 for value in values) / max(1, len(values) - 1)
+    standard_error = math.sqrt(variance / len(values))
+    lower = mean - PROTOCOL["critical_value"] * standard_error
+    return {"accuracy": mean, "floor": floor, "family_count": len(values),
+            "standard_error": standard_error, "critical_value": PROTOCOL["critical_value"],
+            "lower_bound": lower, "passes": mean >= floor and lower > floor}
 
 
 def bootstrap(rows: list[dict[str, Any]], baseline: dict[str, float], seed_material: str) -> dict[str, Any]:
@@ -292,7 +314,7 @@ def bootstrap(rows: list[dict[str, Any]], baseline: dict[str, float], seed_mater
     gains = []
     for _ in range(PROTOCOL["bootstrap_draws"]):
         selected = [key for kind in FACT_KINDS for key in (rng.choice(strata[kind]) for _ in strata[kind])]
-        gains.append(statistics.fmean(scores[key] - baseline[key] for key in selected))
+        gains.append(sum(scores[key] - baseline[key] for key in selected) / len(selected))
     gains.sort()
     alpha = PROTOCOL["familywise_alpha"] / len(PROTOCOL["persistent_arms"])
     lower = gains[max(0, math.floor(alpha * len(gains)) - 1)]
@@ -317,7 +339,7 @@ def validate_manifest(root: Path, errors: list[str]) -> None:
         target = root / relative; listed.add(relative)
         if not target.is_file() or target.is_symlink() or sha256_file(target) != row.get("sha256") or target.stat().st_size != row.get("size_bytes"):
             errors.append(f"artifact.file:{relative}")
-    late = {"artifact-manifest.json", "astral-validation-report.json", "astral-validation-process.json"}
+    late = {"artifact-manifest.json", "astral-validation-report.json", "astral-validation-process.json", "astral-validation-report-r2.json", "astral-validation-process-r2.json"}
     actual = {p.relative_to(root).as_posix() for p in root.rglob("*") if p.is_file() and p.relative_to(root).as_posix() not in late}
     if actual != listed:
         errors.append("artifact.census")
@@ -341,7 +363,7 @@ def validate_source_locks(root: Path, packet: dict[str, Any], errors: list[str])
         path = root / "source-locks" / f"{name}.source"
         if not path.is_file() or sha256_file(path) != locks.get(name):
             errors.append(f"source_locks.hash:{name}")
-    if locks.get("astral_protocol") != sha256_file(PROTOCOL_PATH) or locks.get("astral_validator") != sha256_file(Path(__file__)):
+    if locks.get("astral_protocol") != sha256_file(PROTOCOL_PATH) or locks.get("astral_validator") != R1_VALIDATOR_SHA256:
         errors.append("source_locks.astral")
 
 
@@ -439,7 +461,7 @@ def validate(root: Path) -> dict[str, Any]:
                     validate_disjoint(families[cursor], fingerprint_sets, errors)
                 cursor += 1
     indices = panel_indices(seed) if len(seed) == 32 else []
-    panel = [family for family in families if family.get("block_index") in indices]
+    panel = evaluation_panel(families, indices)
     panel_lock = values["panel"]
     if panel_lock.get("block_indices") != indices or panel_lock.get("family_ids") != [row["family_id"] for row in panel] or len(panel) != PROTOCOL["panel_family_count"]:
         errors.append("panel.binding")
@@ -513,12 +535,14 @@ def validate(root: Path) -> dict[str, Any]:
 
 def report(errors: list[str], status: str, signals: list[str]) -> dict[str, Any]:
     value = {
-        "version": "astral.rgs_acquisition_v28r7.validation_report.v1",
+        "version": "astral.rgs_acquisition_v28r7.validation_report.r2",
         "state_slice": PROTOCOL["state_slice"], "valid": not errors,
         "status": "Invalid" if errors else status, "errors": sorted(set(errors)),
         "signal_arms": signals, "claim_ceiling": PROTOCOL["claim_ceiling"] if not errors else "NoScientificClaim",
         "qualification_validated": False, "assessment_validated": False,
         "retention_recovery_validated": False, "independent_replication_validated": False,
         "validator_source_sha256": sha256_file(Path(__file__)),
+        "r1_validator_source_sha256": R1_VALIDATOR_SHA256,
+        "model_execution_reused": False,
     }
     return {**value, "report_sha256": stable_hash(value)}

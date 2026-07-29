@@ -266,6 +266,9 @@ review and experiments rule out equivalent prior work.
 - [V28R7 single-cell acquisition pilot execution authorization](89-v28r7-single-cell-acquisition-pilot-execution-authorization.md):
   authorizes one clean committed pilot run with a consuming ledger and no
   qualification or assessment access.
+- [V28R7 validator correction R2](90-v28r7-validator-correction-r2.md):
+  preserves the failed R1 report and authorizes a read-only ordering/arithmetic
+  correction over the already sealed artifact.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):

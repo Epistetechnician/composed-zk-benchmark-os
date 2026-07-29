@@ -1,5 +1,16 @@
 # Agent Rules
 
+Explicit V28R7 validator correction R2 now allowed: state slice
+`astral-rgs-v28r7-validator-correction-r2`. This slice may correct only the
+independent validator's panel ordering and exact metric arithmetic, add
+regression tests, document the R1 validator failure, and run a new read-only R2
+validation over the already sealed V28R7 artifact. It must preserve the R1
+report, original source-lock snapshots, packet, manifest, model outputs, and
+all failures. It does not permit model execution, artifact rewriting, a new
+seed, retry, outcome changes, threshold changes, qualification, assessment,
+claim promotion, or any claim above
+`LocalSingleSeedOrderAcquisitionPilotV28R7`.
+
 Explicit V28R7 single-cell acquisition pilot execution now authorized once:
 state slice `astral-rgs-v28r7-single-cell-acquisition-pilot-execution`. Permit
 only the committed RGS coordinator, frozen runtime/model/predecessors, exclusive
