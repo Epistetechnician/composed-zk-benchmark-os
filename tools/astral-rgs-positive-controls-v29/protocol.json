@@ -1,0 +1,22 @@
+{
+  "version": "astral.v29_positive_control_protocol.v1",
+  "state_slice": "astral-rgs-v29-positive-control-instrument-repair-execution",
+  "fixture_version": "mesh.astral_v29_positive_control_fixture.v1",
+  "result_version": "mesh.astral_v29_positive_control_result.v1",
+  "packet_version": "mesh.astral_v29_positive_control_packet.v1",
+  "labels": ["A", "B", "C", "D"],
+  "rungs": ["literal_symbol", "direct_lookup", "one_hop", "two_hop"],
+  "formats": ["legacy_raw", "chat_template", "chat_template_answer_cue"],
+  "cases_per_rung": 16,
+  "thresholds": {
+    "literal_symbol": 0.95,
+    "direct_lookup": 0.90,
+    "one_hop": 0.80,
+    "two_hop": 0.70
+  },
+  "batch_size": 8,
+  "model_load_count": 1,
+  "checkpoint_sha256": "sha256:0a321941ffa31f920284c932f98bd4dba7c7cb95acd797c01ec2fa0fdd1321ab",
+  "tokenizer_sha256": "sha256:43c4bf51c8db8d03b43a5c2b3d1c44adf886d12fe3eba979b9d41f6101d10f5b",
+  "claim_ceiling": "LocalPositiveControlInstrumentQualificationV29"
+}

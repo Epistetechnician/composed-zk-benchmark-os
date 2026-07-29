@@ -1,5 +1,14 @@
 # Agent Rules
 
+Explicit V29 positive-control instrument repair implementation now allowed:
+state slice `astral-rgs-v29-positive-control-instrument-repair-implementation`.
+This slice may add the deterministic fixture, one-process RGS MLX scorer,
+content-addressed coordinator, hermetic tests, implementation notes, and the
+matching independent Astral protocol/validator/CLI/tests. It may use source and
+fixture data only; model access and execution remain unauthorized. It does not
+permit training, adapters, candidate corpus generation, acquisition,
+assessment, confirmation, SOTA, breakthrough, or claim promotion.
+
 Explicit V29 positive-control instrument repair preregistration now allowed:
 state slice `astral-rgs-v29-positive-control-instrument-repair-preregistration`.
 This docs-first slice may freeze a deterministic non-candidate four-rung
