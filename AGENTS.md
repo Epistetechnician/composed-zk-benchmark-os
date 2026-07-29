@@ -1,5 +1,18 @@
 # Agent Rules
 
+Explicit V28R7 single-cell acquisition pilot preregistration now allowed: one
+prospective protocol note plus claim-ledger, roadmap, navigation, matching RGS
+documentation, and scoped authorization text. Every mutation must name state
+slice `astral-rgs-v28r7-single-cell-acquisition-pilot-preregistration`.
+
+This docs-first slice may freeze only one fresh development corpus, predecessor
+nonreuse through V28R6, a hash-selected eight-superblock panel, two unchanged-
+checkpoint novelty runs, context and retrieval controls, seven full-budget
+persistent arms at one seed/order, family-cluster statistics, RSS/source/model
+locks, repository-external artifacts, and independent validation. It does not
+permit implementation, model access, corpus generation, updates, assessment,
+confirmation, powered qualification, SOTA, or claim promotion.
+
 Explicit V28R6 legacy batch-8 endurance qualified sealing now allowed: one
 execution record plus claim-ledger, roadmap, and navigation updates. Every
 mutation must name state slice
