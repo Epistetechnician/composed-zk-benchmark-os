@@ -207,6 +207,9 @@ review and experiments rule out equivalent prior work.
 - [V28 Gate 1 infrastructure-abort execution record](69-v28-gate1-infrastructure-abort-execution-record.md):
   retained pre-model MLX-runtime failure, consumed-campaign disposition,
   content-addressed abort artifact, and mandatory fresh-campaign boundary.
+- [V28R3 fresh acquisition-campaign preregistration](70-v28r3-fresh-acquisition-campaign-preregistration.md):
+  new disjoint corpus and ledger, mandatory pre-ledger runtime/capacity gate,
+  integrated novelty-first execution, and unchanged Gate 1 decision rules.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
