@@ -1,5 +1,11 @@
 # Agent Rules
 
+V29 positive-control execution is complete and consumed. Artifact
+`astral-rgs-v29-positive-control-80ac177a2c77-r1` is immutable and the valid
+status is `InstrumentStillBlocked`. No V29 retry or artifact mutation is
+authorized. Read-only diagnosis may inform a separately preregistered identity,
+but V29 cannot authorize acquisition or claim promotion.
+
 Explicit V29 positive-control instrument repair execution now authorized once:
 state slice `astral-rgs-v29-positive-control-instrument-repair-execution`.
 Run only RGS implementation `733425dd6e9d87bbbc388634c7764aff85ab83fa`

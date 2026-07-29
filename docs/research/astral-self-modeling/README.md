@@ -281,6 +281,9 @@ review and experiments rule out equivalent prior work.
 - [V29 positive-control instrument repair execution authorization](94-v29-positive-control-instrument-repair-execution-authorization.md):
   binds clean implementation commits and authorizes one consuming read-only
   model diagnostic with no training or candidate corpus.
+- [V29 positive-control instrument repair execution record](95-v29-positive-control-instrument-repair-execution-record.md):
+  records the valid negative result, failed response-format gate, and the
+  post-result leading-space token-boundary diagnosis.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
