@@ -79,7 +79,7 @@ requirements.
 | V28R6 | `LocallyQualifiedLegacyBatch8EnduranceExternalReviewNotRun` | Eight superblocks and 9,216 endurance queries completed with zero observed peak-RSS growth; fresh first/last controls matched every semantic field and raw score exactly; independent local validation passed, while scientific execution and external review remain unrun |
 | V28R7 | `PilotNoSignalAstralR2ValidExternalReviewNotRun` | The completed pilot found no signal arm; both positive controls stayed at chance and most runs always selected A, so a powered acquisition campaign is blocked |
 | V29 | `ValidNegativeInstrumentStillBlocked` | No response format passed all four positive-control gates; tokenizer-only diagnosis found a noncanonical answer-cue token boundary, requiring a new preregistered identity |
-| V29R2 | `DocsFirstCanonicalTokenBoundaryPreregistered` | The same public fixture and thresholds are frozen; only canonical leading-space label scoring may change |
+| V29R2 | `CanonicalTokenBoundaryAuthorizedOnceNotRun` | The one-variable correction is implemented, tested, commit-bound, and authorized for one no-training process |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 
