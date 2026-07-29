@@ -1,5 +1,18 @@
 # Agent Rules
 
+Explicit V28R6 legacy batch-8 endurance qualified sealing now allowed: one
+execution record plus claim-ledger, roadmap, and navigation updates. Every
+mutation must name state slice
+`astral-rgs-v28r6-legacy-batch8-endurance-qualified-sealing`.
+
+This slice may record only immutable artifact
+`astral-rgs-v28r6-preflight-3b707bf7d36b-r1`, exact endpoint parity, completed
+eight-superblock endurance, flat observed peak RSS, independent
+`valid=true/qualified=true` validation, and the local infrastructure claim
+ceiling. It does not permit artifact mutation, model rerun, candidate data,
+updates, adapters, acquisition evidence, scientific confirmation, external
+review claims, or claims above the frozen V28R6 ceiling.
+
 Explicit V28R6 legacy batch-8 endurance execution now allowed: one committed
 RGS fixed-fixture invocation and one independent Astral validation. Every
 mutation must name state slice
