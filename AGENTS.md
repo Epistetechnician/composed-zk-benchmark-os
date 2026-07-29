@@ -1,5 +1,27 @@
 # Agent Rules
 
+Explicit Astral-RGS V28 Gate 1 acquisition-qualification docs-first
+preregistration now allowed: one prospective protocol note under
+`docs/research/astral-self-modeling/`, claim-ledger, roadmap, navigation, and
+source-index updates, plus a matching Recoverable Ghost States protocol note
+and scoped authorization. Every mutation in this slice must name state slice
+`astral-rgs-v28-gate1-acquisition-qualification-preregistration`.
+
+This slice may bind only the immutable V28R2 novelty packet and source commits,
+lock native and nonpersistent arm identities, matched update/storage budgets,
+three fresh seeds, three four-task orders, source/evaluation isolation,
+restart semantics, deterministic blockwise futility rules, family-cluster
+statistics, artifact requirements, and fail-closed Gate 1 dispositions. It may
+use the completed V28R2 baseline only as the fixed no-update reference.
+
+It does not permit Python implementation, model or tokenizer access, a new
+seed or corpus, mutation or rerun of V28R1/V28R2 baselines, update execution,
+training, adapter creation, context or retrieval scoring, retention/recovery,
+corruption, selection, assessment access, evidence promotion, benchmark or
+breakthrough claims, autonomous self-improvement, introspection, self-modeling,
+Stage 0C or Stage 1 promotion, production claims, or claims above
+`LocalProspectiveAcquisitionQualificationProtocolV28Gate1`.
+
 Explicit Astral-RGS V28R2 powered acquisition-novelty implementation now
 allowed: additive protocol, validator, fingerprint-builder, hermetic tests, and
 implementation notes under `tools/astral-rgs-acquisition-v28r2/` and

@@ -72,7 +72,7 @@ requirements.
 | V24 | `AuthorDevelopmentPerturbationReadoutObserved` | A fixed downstream linear residual readout passed both development gates and the sealed assessment against text, output-logit, anomaly, and shuffled-label controls; independent verification and confirmation remain `NotRun`/`NotAuthorized` |
 | V25 | `SyntheticDockerContinualCorrectionHarnessQualified` | Construction-known positive sensitivity and null specificity passed; protocol qualification only, with model-backed learning and thesis validation still `NotRun`/`NotValidated` |
 | V27 | `DeterministicDevelopmentReplayMatchedNoCandidateAssessmentNotRun` | Two complete 54-execution development packets matched every deterministic scientific lock; no-update dominated, Astral did not beat the strongest nonprivileged selector, and assessment stayed sealed |
-| V28 | `R1RetiredR2NoveltyPacketCandidateUpdateArmsNotAuthorized` | The one-shot 6,144-family V28R2 packet passed all frozen unchanged-checkpoint novelty intervals with exact restarted-baseline parity; acquisition and every update, retention/recovery, selector, and assessment gate remain untested or unauthorized |
+| V28 | `R1RetiredR2NoveltyPacketCandidateGate1DocsFirstOnly` | The one-shot 6,144-family V28R2 packet passed all frozen unchanged-checkpoint novelty intervals; a seven-arm Gate 1 acquisition matrix is now docs-first preregistered, while implementation, updates, retention/recovery, selection, and assessment remain unauthorized |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 
@@ -156,7 +156,9 @@ one-shot seed creation, corpus generation, and model-backed execution later
 completed as `NoveltyPacketCandidate` in
 `66-v28r2-powered-acquisition-novelty-execution-record.md`. This opens only a
 future docs-first Gate 1 update-arm decision; it does not establish acquisition
-or authorize execution by itself.
+or authorize execution by itself. That decision is now frozen in
+`67-v28-gate1-acquisition-qualification-preregistration.md`; its code and
+runtime remain separate future state slices.
 
 ## Stage 0A: Instrument Integrity — Complete
 
