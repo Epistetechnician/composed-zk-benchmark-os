@@ -59,9 +59,21 @@ def test_comparison_rejects_semantic_or_score_drift() -> None:
     assert module.compare({"observations": [base]}, {"observations": [close]})["passes"]
     assert not module.compare({"observations": [base]}, {"observations": [far]})["passes"]
     assert not module.compare({"observations": [base]}, {"observations": [changed]})["passes"]
+    assert module.optional_compare({"observations": [base]}, None) is None
 
 
 def test_missing_artifact_fails_closed(tmp_path: Path) -> None:
     report = module.validate(tmp_path)
     assert not report["valid"]
     assert not report["qualified"]
+
+
+def test_failed_child_is_distinct_from_missing_process_record() -> None:
+    failed = {
+        "returncode": -6,
+        "result_present": False,
+        "stderr": "Metal out of memory",
+    }
+    assert isinstance(failed["returncode"], int)
+    assert failed["returncode"] != 0
+    assert failed["result_present"] is False

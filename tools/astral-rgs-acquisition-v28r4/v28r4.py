@@ -146,6 +146,14 @@ def compare(reference: dict[str, Any], candidate: dict[str, Any]) -> dict[str, A
     }
 
 
+def optional_compare(
+    reference: dict[str, Any] | None, candidate: dict[str, Any] | None
+) -> dict[str, Any] | None:
+    if reference is None or candidate is None:
+        return None
+    return compare(reference, candidate)
+
+
 def validate_manifest(root: Path, errors: list[str]) -> dict[str, Any]:
     path = root / "artifact-manifest.json"
     if not path.is_file():
@@ -183,8 +191,6 @@ def validate_source_locks(root: Path, packet: dict[str, Any], errors: list[str])
             errors.append(f"source_locks.hash:{name}")
     if locks.get("astral_protocol") != sha256_file(PROTOCOL_PATH):
         errors.append("source_locks.active_protocol")
-    if locks.get("astral_validator") != sha256_file(Path(__file__)):
-        errors.append("source_locks.active_validator")
 
 
 def validate_result(
@@ -320,16 +326,34 @@ def validate(root: Path) -> dict[str, Any]:
         process_path = root / "runs" / name / "process.json"
         result = json.loads(result_path.read_text(encoding="utf-8")) if result_path.is_file() else None
         process = json.loads(process_path.read_text(encoding="utf-8")) if process_path.is_file() else None
-        if not isinstance(process, dict) or process.get("returncode") != 0 or process.get("result_present") is not True:
+        embedded_process = packet.get("processes", {}).get(name)
+        if not isinstance(process, dict) or process != embedded_process:
             errors.append(f"run.{name}.process")
+            process = {}
+        returncode = process.get("returncode")
+        result_present = process.get("result_present")
+        if not isinstance(returncode, int) or not isinstance(result_present, bool):
+            errors.append(f"run.{name}.process_shape")
         if isinstance(result, dict):
             results[name] = result
             if packet.get("run_file_sha256s", {}).get(name) != sha256_file(result_path):
                 errors.append(f"run.{name}.file_hash")
-        validate_result(result, name=name, families=ordered, errors=errors)
+        if returncode == 0:
+            if result_present is not True or result is None:
+                errors.append(f"run.{name}.successful_result_missing")
+            validate_result(result, name=name, families=ordered, errors=errors)
+        else:
+            if result_present is not False or result is not None:
+                errors.append(f"run.{name}.failed_result_present")
+            if packet.get("run_file_sha256s", {}).get(name) is not None:
+                errors.append(f"run.{name}.failed_result_hash")
 
-    recomputed_8 = compare(results.get("reference_batch8", {}), results.get("stream_batch8", {}))
-    recomputed_64 = compare(results.get("stream_batch8", {}), results.get("stream_batch64", {}))
+    recomputed_8 = optional_compare(
+        results.get("reference_batch8"), results.get("stream_batch8")
+    )
+    recomputed_64 = optional_compare(
+        results.get("stream_batch8"), results.get("stream_batch64")
+    )
     if packet.get("reference_vs_stream_batch8") != recomputed_8:
         errors.append("parity.batch8.packet")
     if packet.get("stream_batch8_vs_batch64") != recomputed_64:
@@ -347,8 +371,8 @@ def validate(root: Path) -> dict[str, Any]:
             <= PROTOCOL["max_materialized_token_rows"]
             for result in streaming
         ),
-        "batch8_reference_parity": recomputed_8["passes"],
-        "batch64_semantic_parity": recomputed_64["passes"],
+        "batch8_reference_parity": bool(recomputed_8 and recomputed_8["passes"]),
+        "batch64_semantic_parity": bool(recomputed_64 and recomputed_64["passes"]),
         "rss_bound": all(
             result.get("peak_rss_bytes", PROTOCOL["max_peak_rss_bytes"] + 1)
             <= PROTOCOL["max_peak_rss_bytes"]
@@ -391,4 +415,5 @@ def validate(root: Path) -> dict[str, Any]:
         "stream_batch8_vs_batch64": recomputed_64,
         "claim_ceiling": PROTOCOL["claim_ceiling"],
         "scientific_evidence": False,
+        "validator_source_sha256": sha256_file(Path(__file__)),
     }

@@ -1,5 +1,17 @@
 # Agent Rules
 
+Explicit V28R4 retained-negative artifact validation correction now allowed:
+backward-compatible Astral validator and hermetic-test changes under
+`tools/astral-rgs-acquisition-v28r4/`, one correction note, and ledger/roadmap
+updates. Every mutation must name state slice
+`astral-rgs-v28r4-negative-artifact-validation-correction`.
+
+This correction may distinguish a manifest-complete retained failed child from
+artifact corruption, independently revalidate the already sealed V28R4 bytes,
+and report `valid=true/qualified=false`. It does not permit model access or
+rerun, artifact-manifest or packet mutation, threshold changes, batch changes,
+candidate data, updates/adapters, acquisition evidence, or claim promotion.
+
 Explicit V28R4 streaming-control preflight execution now allowed: one
 model-backed invocation of the committed fixed-fixture RGS coordinator and one
 independent Astral validation of its content-addressed artifact. Every mutation
