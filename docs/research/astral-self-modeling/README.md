@@ -233,6 +233,9 @@ review and experiments rule out equivalent prior work.
 - [V28R4 streaming-control preflight execution record](78-v28r4-streaming-control-preflight-execution-record.md):
   records exact batch-8 parity and the independently validated batch-64 Metal
   out-of-memory negative result.
+- [V28R5 last-token projection preflight preregistration](79-v28r5-last-token-projection-preflight-preregistration.md):
+  freezes candidate-neutral removal of unused sequence-wide vocabulary logits,
+  with the sealed V28R4 batch-8 result as immutable reference.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):

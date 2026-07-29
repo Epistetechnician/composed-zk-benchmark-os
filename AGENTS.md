@@ -1,5 +1,17 @@
 # Agent Rules
 
+Explicit V28R5 last-token projection preflight preregistration now allowed:
+one prospective note plus claim-ledger, roadmap, navigation, matching RGS
+documentation, and scoped authorization text. Every mutation must name state
+slice `astral-rgs-v28r5-last-token-projection-preflight-preregistration`.
+
+This docs-first slice may freeze only the public V28R4 fixture, sealed V28R4
+batch-8 reference, last-hidden-token-only output projection, optimized batch-8
+and batch-64 parity/stress, existing identities and RSS limit, source/artifact
+locks, and independent validation. It does not permit implementation, model
+access, candidate data, prior-run inference, updates/adapters, scientific
+evidence, or claim promotion.
+
 Explicit V28R4 streaming-control preflight negative sealing now allowed:
 one execution record plus claim-ledger, roadmap, and navigation updates. Every
 mutation must name state slice
