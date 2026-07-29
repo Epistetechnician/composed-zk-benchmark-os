@@ -208,8 +208,12 @@ review and experiments rule out equivalent prior work.
   retained pre-model MLX-runtime failure, consumed-campaign disposition,
   content-addressed abort artifact, and mandatory fresh-campaign boundary.
 - [V28R3 fresh acquisition-campaign preregistration](70-v28r3-fresh-acquisition-campaign-preregistration.md):
-  new disjoint corpus and ledger, mandatory pre-ledger runtime/capacity gate,
-  integrated novelty-first execution, and unchanged Gate 1 decision rules.
+  freezes the new one-shot novelty-then-acquisition campaign, its pre-ledger
+  gates, disjoint corpus and ledger, integrated novelty-first execution, and
+  unchanged Gate 1 decision rules.
+- [V28R3 fresh acquisition-campaign implementation](71-v28r3-fresh-acquisition-campaign-implementation.md):
+  records the generator, coordinator, independent rederivation validator, and
+  hermetic tests without authorizing runtime execution.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
