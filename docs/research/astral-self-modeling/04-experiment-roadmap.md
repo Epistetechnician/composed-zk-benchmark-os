@@ -72,7 +72,7 @@ requirements.
 | V24 | `AuthorDevelopmentPerturbationReadoutObserved` | A fixed downstream linear residual readout passed both development gates and the sealed assessment against text, output-logit, anomaly, and shuffled-label controls; independent verification and confirmation remain `NotRun`/`NotAuthorized` |
 | V25 | `SyntheticDockerContinualCorrectionHarnessQualified` | Construction-known positive sensitivity and null specificity passed; protocol qualification only, with model-backed learning and thesis validation still `NotRun`/`NotValidated` |
 | V27 | `DeterministicDevelopmentReplayMatchedNoCandidateAssessmentNotRun` | Two complete 54-execution development packets matched every deterministic scientific lock; no-update dominated, Astral did not beat the strongest nonprivileged selector, and assessment stayed sealed |
-| V28 | `R1RetiredR2NoveltyPacketCandidateGate1DocsFirstOnly` | The one-shot 6,144-family V28R2 packet passed all frozen unchanged-checkpoint novelty intervals; a seven-arm Gate 1 acquisition matrix is now docs-first preregistered, while implementation, updates, retention/recovery, selection, and assessment remain unauthorized |
+| V28 | `R1RetiredR2NoveltyPacketCandidateGate1ImplementationCandidate` | The one-shot 6,144-family V28R2 packet passed all frozen unchanged-checkpoint novelty intervals; the seven-arm Gate 1 instrument is implemented and hermetically tested, while model-backed execution, retention/recovery, selection, and assessment remain unauthorized |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 
