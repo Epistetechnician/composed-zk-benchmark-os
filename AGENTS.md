@@ -1,5 +1,30 @@
 # Agent Rules
 
+Explicit Astral-RGS V28R3 fresh acquisition-campaign docs-first
+preregistration now allowed: one prospective protocol note under
+`docs/research/astral-self-modeling/`, claim-ledger, roadmap, navigation, and
+matching RGS protocol/authorization updates. Every mutation in this slice must
+name state slice `astral-rgs-v28r3-fresh-acquisition-campaign-preregistration`.
+
+This slice may freeze only a new corpus/seed/namespace/generator identity,
+complete disjointness from V28R1 and V28R2, the previously inventoried MLX
+runtime/checkpoint, pre-ledger runtime and storage checks, one integrated
+novelty-then-acquisition campaign, the unchanged two novelty baselines, two
+nonpersistent controls, seven persistent arms, exact Gate 1 budgets,
+seed/order cells, process isolation, mathematical futility, family-paired
+statistics, append-only failure retention, and fail-closed dispositions. It
+may specify outcome-neutral resumability only for byte-verified completed
+artifacts; it may never rerun a completed inference or update cell.
+
+It does not permit Python implementation, runtime or checkpoint access, a
+ledger or seed, corpus or fingerprint generation, model inference, training,
+adapter creation, mutation or rerun of any V28R1/V28R2/V28 Gate 1 artifact,
+Gate 2 retention/recovery, Gate 3 selection, assessment, confirmation,
+evidence promotion, benchmark/SOTA/breakthrough claims, autonomous self-
+improvement, introspection, self-modeling, Stage 0C or Stage 1 promotion,
+production claims, or claims above
+`LocalProspectiveFreshAcquisitionCampaignV28R3`.
+
 Explicit V28 Gate 1 infrastructure-abort sealing and runtime-preflight
 remediation now allowed: one retained execution record, claim-ledger,
 roadmap, and navigation updates; an independent invalid-run report; and the
