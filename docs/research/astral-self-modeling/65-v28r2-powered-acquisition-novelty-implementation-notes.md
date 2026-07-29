@@ -3,9 +3,8 @@
 State slice:
 `astral-rgs-v28r2-powered-acquisition-novelty-implementation`.
 
-Status: `ImplementationCandidate / SourceNotYetFrozen /
-OneShotLedgerNotClaimed / SeedNotCreated / CorpusNotGenerated /
-ModelBackedExecutionNotRun`.
+Status: `ImplementationFrozen / OneShotCampaignConsumed /
+NoveltyPacketCandidate / UpdateArmsNotAuthorized / AcquisitionNotTested`.
 
 ## Implemented boundary
 
@@ -48,8 +47,13 @@ repair path in this slice.
 
 ## Claim boundary
 
-This implementation is an unexecuted local research instrument. It is not a
-new corpus, acquisition evidence, continual-learning evidence, independent
+At its source freeze, this implementation was an unexecuted local research
+instrument. The later bounded execution does not turn it into
+a new corpus, acquisition evidence, continual-learning evidence, independent
 replication, a benchmark result, a breakthrough, autonomous self-improvement,
 introspection, self-modeling, Stage 0C or Stage 1 evidence, or production
 evidence.
+
+The later one-shot execution and bounded positive novelty result are recorded
+in `66-v28r2-powered-acquisition-novelty-execution-record.md`. This file retains
+the pre-execution implementation boundary.
