@@ -75,7 +75,7 @@ requirements.
 | V28 | `Gate1InfrastructureAbortConsumedNoModelOutcome` | V28R2 novelty passed and the Gate 1 instrument is implemented, but the one-shot campaign was consumed by a pre-model MLX-runtime import failure; no acquisition result exists and a fresh preregistered corpus is required |
 | V28R3 | `NoveltyPassedPhaseBInfrastructureFailureSealed` | The independent validator accepted exact chance-equivalent baseline parity on the fresh R3 corpus; the first context control hit Metal OOM before any acquisition result, update, or adapter, and rerun is unauthorized |
 | V28R4 | `ValidNegativeBatch8ExactBatch64MetalOOM` | Monolithic and streaming batch 8 matched exactly on all 1,152 fixed-fixture queries, but streaming batch 64 hit Metal OOM; the corrected independent report is valid and qualification is false, so a fresh scientific campaign remains unauthorized |
-| V28R5 | `LastTokenProjectionPreflightImplementedNotRun` | The optimized worker, sealed-reference harness, source-bound artifact gate, and independent validator pass six hermetic tests; model execution remains unauthorized |
+| V28R5 | `LastTokenProjectionPreflightAuthorizedNotRun` | The optimized worker and validator pass six hermetic tests; one two-child fixed-fixture execution is bound to the clean implementation commits, while scientific execution remains unauthorized |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 
