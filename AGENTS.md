@@ -1,5 +1,18 @@
 # Agent Rules
 
+Explicit V28R5 last-token projection preflight negative sealing now allowed:
+one execution record plus claim-ledger, roadmap, and navigation updates. Every
+mutation must name state slice
+`astral-rgs-v28r5-last-token-projection-preflight-negative-sealing`.
+
+This slice may record only artifact
+`astral-rgs-v28r5-preflight-07fd6d885124-r1`, its completed memory-safe runs,
+semantic parity, failed raw-score tolerance, independent
+`valid=true/qualified=false` report, and a clearly post-hoc read-only margin
+diagnostic. It does not permit artifact mutation, model rerun, threshold
+revision, candidate data, updates/adapters, scientific evidence, or claim
+promotion.
+
 Explicit V28R5 last-token projection preflight execution now allowed: one
 fixed-fixture RGS invocation and one independent Astral validation. Every
 mutation must name state slice
