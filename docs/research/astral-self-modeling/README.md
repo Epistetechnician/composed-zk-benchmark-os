@@ -236,6 +236,9 @@ review and experiments rule out equivalent prior work.
 - [V28R5 last-token projection preflight preregistration](79-v28r5-last-token-projection-preflight-preregistration.md):
   freezes candidate-neutral removal of unused sequence-wide vocabulary logits,
   with the sealed V28R4 batch-8 result as immutable reference.
+- [V28R5 last-token projection preflight implementation](80-v28r5-last-token-projection-preflight-implementation.md):
+  records the optimized worker, source-bound harness, independent validator,
+  and hermetic tests without authorizing model execution.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
