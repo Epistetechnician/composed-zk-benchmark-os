@@ -198,6 +198,10 @@ review and experiments rule out equivalent prior work.
   one-shot 6,144-family `NoveltyPacketCandidate` with exact restarted-baseline
   parity; acquisition, update, recovery, selection, and assessment remain
   untested or unauthorized.
+- [V28 Gate 1 acquisition-qualification preregistration](67-v28-gate1-acquisition-qualification-preregistration.md):
+  docs-first matched persistent-arm matrix, exact budgets, restart isolation,
+  blockwise mathematical futility, and family-cluster decision rules; code and
+  execution remain unauthorized.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
