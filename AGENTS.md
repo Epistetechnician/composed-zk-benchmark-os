@@ -1,5 +1,15 @@
 # Agent Rules
 
+Explicit V29 positive-control instrument repair preregistration now allowed:
+state slice `astral-rgs-v29-positive-control-instrument-repair-preregistration`.
+This docs-first slice may freeze a deterministic non-candidate four-rung
+positive-control ladder, three response formats, fixed eligibility thresholds,
+one local checkpoint, content-addressed repository-external artifacts, and an
+independent Astral validator contract. It does not permit Python implementation,
+model access, training, adapters, reuse or mutation of the V28R7 candidate
+artifact, acquisition claims, continual-learning claims, assessment,
+confirmation, SOTA, breakthrough, or claim promotion.
+
 Explicit V28R7 validator correction R2 now allowed: state slice
 `astral-rgs-v28r7-validator-correction-r2`. This slice may correct only the
 independent validator's panel ordering and exact metric arithmetic, add
