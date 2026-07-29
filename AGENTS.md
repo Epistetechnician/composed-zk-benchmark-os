@@ -1,5 +1,16 @@
 # Agent Rules
 
+Explicit V28R7 single-cell acquisition pilot execution now authorized once:
+state slice `astral-rgs-v28r7-single-cell-acquisition-pilot-execution`. Permit
+only the committed RGS coordinator, frozen runtime/model/predecessors, exclusive
+ledger, fresh seed and corpus, seed-ranked panel, two novelty baselines, two
+controls, seven exact-budget cells, retained failures, content-addressed
+artifact, and independent Astral validation. The first ledger claim consumes
+the identity. No retry, assessment, qualification, retention/recovery,
+selection, confirmation, replication, network access, download, SOTA claim,
+continual-learning claim, or claim above
+`LocalSingleSeedOrderAcquisitionPilotV28R7` is permitted.
+
 Explicit V28R7 single-cell acquisition pilot implementation now allowed:
 additive protocol, independent validator, CLI, hermetic tests and notes, plus
 matching RGS exact-budget repair, generator, worker, coordinator, tests, and

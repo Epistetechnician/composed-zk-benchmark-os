@@ -263,6 +263,9 @@ review and experiments rule out equivalent prior work.
 - [V28R7 single-cell acquisition pilot implementation](88-v28r7-single-cell-acquisition-pilot-implementation.md):
   records the pre-execution modular exact-budget repair and the bounded pilot
   implementation boundary.
+- [V28R7 single-cell acquisition pilot execution authorization](89-v28r7-single-cell-acquisition-pilot-execution-authorization.md):
+  authorizes one clean committed pilot run with a consuming ledger and no
+  qualification or assessment access.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
