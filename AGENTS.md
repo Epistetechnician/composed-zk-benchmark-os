@@ -1,5 +1,17 @@
 # Agent Rules
 
+Explicit V28R5 last-token projection preflight implementation now allowed:
+additive protocol, independent validator, CLI and hermetic tests under
+`tools/astral-rgs-acquisition-v28r5/`, implementation notes and ledger/roadmap
+updates, plus matching RGS worker/harness/tests/registry. Every mutation must
+name state slice
+`astral-rgs-v28r5-last-token-projection-preflight-implementation`.
+
+Implementation is limited to the frozen public fixture, sealed V28R4 reference,
+last-token output projection, batch-8/batch-64 parity, RSS, identity, source,
+artifact, and claim gates. It does not permit model access or execution,
+candidate data, updates/adapters, scientific evidence, or claim promotion.
+
 Explicit V28R5 last-token projection preflight preregistration now allowed:
 one prospective note plus claim-ledger, roadmap, navigation, matching RGS
 documentation, and scoped authorization text. Every mutation must name state
