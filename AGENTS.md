@@ -1,5 +1,17 @@
 # Agent Rules
 
+Explicit V28R6 legacy batch-8 endurance execution now allowed: one committed
+RGS fixed-fixture invocation and one independent Astral validation. Every
+mutation must name state slice
+`astral-rgs-v28r6-legacy-batch8-endurance-execution`.
+
+Execution is bound to RGS implementation commit
+`403b3428aa34d041df8b2c4409a72a59a034e444` and Astral implementation commit
+`8c64a482e42a142c7ff8dbcfcc66d9cd59de8ea4`, with only the frozen public
+fixture, legacy batch 8, one eight-superblock process, and two endpoint-control
+processes. It does not permit candidate data, persistent state, updates,
+adapters, scientific evidence, assessment, confirmation, or claim promotion.
+
 Explicit V28R6 legacy batch-8 endurance implementation now allowed: additive
 protocol, independent validator, CLI, and hermetic tests under
 `tools/astral-rgs-acquisition-v28r6/`, implementation notes and ledger/roadmap
