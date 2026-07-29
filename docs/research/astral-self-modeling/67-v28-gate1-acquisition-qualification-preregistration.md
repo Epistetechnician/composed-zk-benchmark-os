@@ -4,7 +4,7 @@ State slice:
 `astral-rgs-v28-gate1-acquisition-qualification-preregistration`.
 
 Status: `DocsFirstPreregistered / V28R2NoveltyPacketBound /
-ImplementationNotAuthorized / UpdateExecutionNotAuthorized /
+ImplementationCandidate / UpdateExecutionNotAuthorized /
 RetentionRecoverySealed / SelectionSealed / AssessmentSealed`.
 
 ## Decision

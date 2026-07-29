@@ -1,0 +1,85 @@
+{
+  "assessment_opened": false,
+  "budget": {
+    "examples_per_step": 8,
+    "gradient_steps": 768,
+    "learning_rate": 0.0001,
+    "lora_rank": 8,
+    "num_layers": 6,
+    "persistent_state_bytes_max": 67108864,
+    "tokens_per_example": 128,
+    "update_tokens": 786432
+  },
+  "fact_kinds": [
+    "nonce_fact",
+    "entity_relation",
+    "changed_rule",
+    "opaque_mapping"
+  ],
+  "futility": {
+    "dimension_floor": 0.6,
+    "families_per_kind_per_superblock": 24,
+    "families_per_superblock": 96,
+    "overall_floor": 0.7,
+    "strict_comparison": true
+  },
+  "nonpersistent_arms": [
+    "context_only",
+    "retrieval"
+  ],
+  "persistent_arms": [
+    "naive_sequential_lora",
+    "replay_lora",
+    "scol_style_sparse_lora",
+    "nested_multiscale_lora",
+    "modular_ghost_state",
+    "compressed_adapter_recollection",
+    "representation_time_distillation"
+  ],
+  "query_classes": [
+    "paraphrase",
+    "multi_hop",
+    "withheld_composition"
+  ],
+  "retention_recovery_run": false,
+  "seeds": [
+    280301,
+    280303,
+    280307
+  ],
+  "selection_run": false,
+  "state_slice": "astral-rgs-v28-gate1-acquisition-qualification-implementation",
+  "statistics": {
+    "bonferroni_arm_count": 7,
+    "bootstrap_draws": 10000,
+    "cell_critical_value": 5.0,
+    "familywise_alpha": 0.05,
+    "gain_floor": 0.2
+  },
+  "task_orders": {
+    "order-abcd": [
+      "nonce_fact",
+      "entity_relation",
+      "changed_rule",
+      "opaque_mapping"
+    ],
+    "order-acdb": [
+      "nonce_fact",
+      "changed_rule",
+      "opaque_mapping",
+      "entity_relation"
+    ],
+    "order-bdac": [
+      "entity_relation",
+      "opaque_mapping",
+      "nonce_fact",
+      "changed_rule"
+    ]
+  },
+  "v28r2_corpus_manifest_sha256": "sha256:0264b3c922e567f53f539e09582cea1becb60156b1a92dbbe7906f3541b460a2",
+  "v28r2_baseline_family_scores_sha256": "sha256:52f1da63e9446e43a927713f95168371137bf49d0e4287dfae9ff1c3fb604705",
+  "v28r2_baseline_observations_sha256": "sha256:7739c7afd1d2ca52f8e8c1acd7c01594201fbec1c7fba9500da036da5ce099d2",
+  "v28r2_no_update_accuracy": 0.2500678168402778,
+  "v28r2_packet_sha256": "sha256:5e830ee437e8d67faa9dedc667db35114fa5ccf84809a9b2874c60a1ed622ddc",
+  "version": "mesh.astral_v28_gate1_protocol.v1"
+}

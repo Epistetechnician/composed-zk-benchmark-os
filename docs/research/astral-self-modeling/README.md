@@ -200,8 +200,10 @@ review and experiments rule out equivalent prior work.
   untested or unauthorized.
 - [V28 Gate 1 acquisition-qualification preregistration](67-v28-gate1-acquisition-qualification-preregistration.md):
   docs-first matched persistent-arm matrix, exact budgets, restart isolation,
-  blockwise mathematical futility, and family-cluster decision rules; code and
-  execution remain unauthorized.
+  blockwise mathematical futility, and family-cluster decision rules.
+- [V28 Gate 1 acquisition-qualification implementation notes](68-v28-gate1-acquisition-qualification-implementation-notes.md):
+  independent fail-closed validator, isolated native worker contract, and
+  target-blind source projection; model-backed execution remains unauthorized.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
