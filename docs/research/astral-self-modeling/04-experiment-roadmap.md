@@ -72,7 +72,7 @@ requirements.
 | V24 | `AuthorDevelopmentPerturbationReadoutObserved` | A fixed downstream linear residual readout passed both development gates and the sealed assessment against text, output-logit, anomaly, and shuffled-label controls; independent verification and confirmation remain `NotRun`/`NotAuthorized` |
 | V25 | `SyntheticDockerContinualCorrectionHarnessQualified` | Construction-known positive sensitivity and null specificity passed; protocol qualification only, with model-backed learning and thesis validation still `NotRun`/`NotValidated` |
 | V27 | `DeterministicDevelopmentReplayMatchedNoCandidateAssessmentNotRun` | Two complete 54-execution development packets matched every deterministic scientific lock; no-update dominated, Astral did not beat the strongest nonprivileged selector, and assessment stayed sealed |
-| V28 | `R1CorpusNotNovelRetiredR2PoweredProtocolDocsFirstOnly` | The 96-family V28R1 packet was structurally valid and deterministic but failed the frozen equivalence intervals; its corpus and seed are retired, the 6,144-family V28R2 precision census is docs-only, and no update, retention/recovery, selector, or assessment evidence exists |
+| V28 | `R1CorpusNotNovelRetiredR2ImplementationCandidateExecutionNotRun` | The 96-family V28R1 packet was structurally valid and deterministic but failed the frozen equivalence intervals; its corpus and seed are retired, the additive 6,144-family V28R2 validator is implemented but not source-frozen or executed, and no update, retention/recovery, selector, or assessment evidence exists |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 
@@ -149,7 +149,11 @@ The separately bounded local Gate 1 packet validator is recorded in
 coverage and returned `CorpusNotNovel` for V28R1, leaving every later-stage
 gate unopened. The powered, completely disjoint V28R2 corpus census is frozen
 in `64-v28r2-powered-acquisition-novelty-preregistration.md`; that note does
-not authorize implementation or execution.
+not itself authorize implementation or execution. The later bounded
+implementation authorization and clean-room intake surface are recorded in
+`65-v28r2-powered-acquisition-novelty-implementation-notes.md`; source freeze,
+one-shot seed creation, corpus generation, and model-backed execution remain
+pending.
 
 ## Stage 0A: Instrument Integrity — Complete
 

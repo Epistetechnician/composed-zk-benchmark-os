@@ -1,0 +1,65 @@
+{
+  "version": "astral.rgs_acquisition_v28r2.protocol.v1",
+  "packet_version": "mesh.astral_v28r2_acquisition_packet.v1",
+  "state_slice": "astral-rgs-v28r2-powered-acquisition-novelty-implementation",
+  "packet_state_slice": "astral-rgs-v28r2-powered-acquisition-novelty-implementation",
+  "claim_ceiling": "LocalModelBackedAcquisitionNoveltyPreflightV28R2",
+  "choice_labels": ["A", "B", "C", "D"],
+  "required_fact_kinds": [
+    "nonce_fact",
+    "entity_relation",
+    "changed_rule",
+    "opaque_mapping"
+  ],
+  "required_evaluation_kinds": [
+    "paraphrase",
+    "multi_hop",
+    "withheld_composition"
+  ],
+  "families_per_fact_kind": 1536,
+  "queries_per_family": 12,
+  "queries_per_evaluation_kind": 4,
+  "families_per_permutation_block": 24,
+  "required_baseline_arm_ids": ["pre_update", "no_update"],
+  "required_seed_ids": [280201],
+  "required_task_order_ids": ["full-corpus"],
+  "chance_accuracy": 0.25,
+  "equivalence_margin": 0.05,
+  "familywise_alpha": 0.05,
+  "minimum_student_t_critical_value": 5.0,
+  "two_sided_hypothesis_count": 16,
+  "planning": {
+    "design_effect": 2.0,
+    "planning_absolute_lift": 0.01,
+    "planning_standard_deviation": 0.2357022604,
+    "normal_design_quantile": 1.64485363,
+    "computed_minimum_families_per_fact_kind": 1533.1278,
+    "projected_standard_error": 0.0060140653,
+    "projected_design_bound": 0.049962584
+  },
+  "retired_r1": {
+    "packet_sha256": "sha256:2fd74b389907d3167518a0d91d9d63f18fda7c1231a51764657e791286ee2ad0",
+    "validation_report_sha256": "sha256:3e24804dc84744a300bb11bc246fdfd40256459f97a68da0df7993d676b9ea3d",
+    "artifact_manifest_sha256": "sha256:5b01a32e1ba9d7d9ce84c8b301f29e0145962ac8c0eac0ec59b07cd5cfca846e"
+  },
+  "forbidden_material_keys": [
+    "updates",
+    "training",
+    "retention_recovery",
+    "selection",
+    "assessment"
+  ],
+  "required_false_claims": [
+    "model_backed_acquisition",
+    "continual_learning",
+    "continual_learning_breakthrough",
+    "autonomous_self_improvement",
+    "introspection",
+    "self_modeling",
+    "stage_0c",
+    "stage_1",
+    "independently_replicated",
+    "benchmark_dominance",
+    "production_readiness"
+  ]
+}
