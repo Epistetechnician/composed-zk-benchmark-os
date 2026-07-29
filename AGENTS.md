@@ -1,5 +1,26 @@
 # Agent Rules
 
+Explicit V28 Gate 1 infrastructure-abort sealing and runtime-preflight
+remediation now allowed: one retained execution record, claim-ledger,
+roadmap, and navigation updates; an independent invalid-run report; and the
+matching additive RGS finalizer, pre-ledger runtime gate, focused tests, and
+notes. Every mutation in this slice must name state slice
+`astral-rgs-v28-gate1-infrastructure-abort-remediation`.
+
+This slice is limited to sealing the consumed Gate 1 ledger and failed
+artifact caused by `ModuleNotFoundError: No module named 'mlx'`, proving from
+the retained traceback that failure preceded checkpoint loading and update,
+binding the correct previously inventoried MLX runtime executable, and making
+future one-shot coordinators fail before ledger creation when that runtime is
+unavailable or mismatched. It may define a prospective fresh-campaign
+requirement but may not create that campaign or corpus.
+
+It does not permit resuming, replacing, rerunning, or deleting the consumed
+V28 Gate 1 campaign; changing its ledger; model or tokenizer loading;
+optimizer or adapter execution; Gate 2 or Gate 3; assessment; evidence
+promotion; benchmark, SOTA, breakthrough, or self-improvement claims; or
+claims above `RetainedInfrastructureAbortNoModelOutcomeV28Gate1`.
+
 Explicit Astral-RGS V28 Gate 1 acquisition-qualification one-shot execution
 now allowed. Every mutation and external artifact in this slice must name
 state slice `astral-rgs-v28-gate1-acquisition-qualification-execution`.
