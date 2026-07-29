@@ -1,5 +1,18 @@
 # Agent Rules
 
+Explicit V28R4 streaming-control preflight execution now allowed: one
+model-backed invocation of the committed fixed-fixture RGS coordinator and one
+independent Astral validation of its content-addressed artifact. Every mutation
+must name state slice
+`astral-rgs-v28r4-streaming-control-preflight-execution`.
+
+Execution is bound to RGS implementation commit
+`80e654d46d634562d235012c51da49984b99d8dc` and Astral implementation commit
+`2e654c5772e02be72a4e1faf22fdc038c30346f7`. It permits only the frozen public
+96-family fixture and three preregistered control processes. It does not permit
+candidate data, V28R3 rerun, persistent updates, adapters, acquisition or
+continual-learning evidence, assessment, confirmation, or claim promotion.
+
 Explicit V28R4 streaming-control preflight implementation now allowed:
 additive protocol, independent validator, CLI and hermetic tests under
 `tools/astral-rgs-acquisition-v28r4/`, implementation notes and ledger/roadmap
