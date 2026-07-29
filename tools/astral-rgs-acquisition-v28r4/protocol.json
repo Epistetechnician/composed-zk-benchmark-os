@@ -1,0 +1,28 @@
+{
+  "version": "astral.rgs_acquisition_v28r4.streaming_preflight.v1",
+  "state_slice": "astral-rgs-v28r4-streaming-control-preflight-execution",
+  "packet_version": "mesh.astral_v28r4_streaming_preflight_packet.v1",
+  "result_version": "mesh.astral_v28r4_external_control_result.v1",
+  "fixture_seed_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+  "families_per_fact_kind": 24,
+  "family_count": 96,
+  "queries_per_family": 12,
+  "query_count": 1152,
+  "fact_kinds": ["nonce_fact", "entity_relation", "changed_rule", "opaque_mapping"],
+  "query_classes": ["paraphrase", "multi_hop", "withheld_composition"],
+  "labels": ["A", "B", "C", "D"],
+  "runs": {
+    "reference_batch8": {"mode": "monolithic-reference", "batch_size": 8},
+    "stream_batch8": {"mode": "streaming-superblock", "batch_size": 8},
+    "stream_batch64": {"mode": "streaming-superblock", "batch_size": 64}
+  },
+  "max_materialized_query_rows": 1152,
+  "max_materialized_token_rows": 1152,
+  "score_tolerance": 0.00001,
+  "max_peak_rss_bytes": 8589934592,
+  "checkpoint_sha256": "sha256:0a321941ffa31f920284c932f98bd4dba7c7cb95acd797c01ec2fa0fdd1321ab",
+  "tokenizer_sha256": "sha256:43c4bf51c8db8d03b43a5c2b3d1c44adf886d12fe3eba979b9d41f6101d10f5b",
+  "claim_ceiling": "LocalStreamingExternalControlInfrastructurePreflightV28R4",
+  "candidate_data": false,
+  "scientific_campaign_authorized": false
+}

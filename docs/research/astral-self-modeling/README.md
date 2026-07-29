@@ -222,6 +222,9 @@ review and experiments rule out equivalent prior work.
 - [V28R4 streaming-control preflight preregistration](74-v28r4-streaming-control-preflight-preregistration.md):
   freezes the non-candidate parity, materialization, batch-64 stress, and RSS
   gates required before another scientific campaign can be considered.
+- [V28R4 streaming-control preflight implementation](75-v28r4-streaming-control-preflight-implementation.md):
+  records the independent fixture rederivation, streaming parity validator,
+  source snapshots, artifact checks, and hermetic tests without model access.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
