@@ -12,6 +12,7 @@ from typing import Any, Iterable
 sys.dont_write_bytecode = True
 VERSION = "astral.v28r2.retired_r1_fingerprint.v1"
 ATOM = re.compile(r"\b(?:[a-z]{2,8}-)?[a-z]{4,}-[0-9a-f]{5,}\b")
+R2_ATOM = re.compile(r"\br2(?:family|query|subject|alias|bridge|value|ns)-[0-9a-f]{5,}\b")
 HEX = re.compile(r"\b[0-9a-f]{16,}\b")
 SPACE = re.compile(r"\s+")
 
@@ -66,7 +67,8 @@ def content_strings(family: dict[str, Any]) -> Iterable[str]:
 
 
 def normalize_skeleton(value: str) -> str:
-    value = ATOM.sub("<atom>", value.lower())
+    value = R2_ATOM.sub("<atom>", value.lower())
+    value = ATOM.sub("<atom>", value)
     value = HEX.sub("<hex>", value)
     value = re.sub(r"\d+", "<n>", value)
     return SPACE.sub(" ", value).strip()
