@@ -1,5 +1,33 @@
 # Agent Rules
 
+Explicit Astral-RGS V28R3 fresh acquisition-campaign implementation now
+allowed: additive protocol, independent validator, combined predecessor-
+fingerprint builder, CLI, hermetic tests, and implementation notes under
+`tools/astral-rgs-acquisition-v28r3/` and
+`docs/research/astral-self-modeling/`; append-only ledger, roadmap, and
+navigation updates; and matching RGS producer, isolated workers, coordinator,
+tests, package/registry entries, and notes. Every mutation in this slice must
+name state slice `astral-rgs-v28r3-fresh-acquisition-campaign-implementation`.
+
+This slice is limited to implementing the exact V28R3 contract in
+`70-v28r3-fresh-acquisition-campaign-preregistration.md`: pre-ledger runtime,
+model, storage, source, and predecessor checks; a new R3 generator and complete
+R1/R2 fingerprint rejection; two fresh novelty baselines; the unchanged Gate
+1 controls/arms/budgets; transactional journals; mathematical futility;
+family-paired statistics; independent packet/artifact validation; and retained
+failure dispositions. Existing V28R2 and Gate 1 utilities may be reused only
+through explicit source-bound wrappers; predecessor rows/outcomes may be used
+only for fingerprinting and the frozen no-update reference, never content or
+hyperparameter selection.
+
+It does not permit runtime/checkpoint access, ledger or seed creation, corpus
+generation, inference, update execution, adapter creation, mutation or rerun
+of predecessor artifacts, Gate 2/3, assessment, confirmation, evidence
+promotion, benchmark/SOTA/breakthrough claims, self-improvement,
+introspection, self-modeling, Stage 0C or Stage 1 promotion, production claims,
+or claims above `LocalFreshAcquisitionCampaignImplementationV28R3`. Source
+must be committed and clean before a separately authorized execution.
+
 Explicit Astral-RGS V28R3 fresh acquisition-campaign docs-first
 preregistration now allowed: one prospective protocol note under
 `docs/research/astral-self-modeling/`, claim-ledger, roadmap, navigation, and
