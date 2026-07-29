@@ -1,5 +1,32 @@
 # Agent Rules
 
+Explicit Astral-RGS V28 Gate 1 acquisition-qualification implementation now
+allowed: additive protocol-lock, independent packet validator, CLI, hermetic
+tests, and implementation notes under
+`tools/astral-rgs-acquisition-v28-gate1/` and
+`docs/research/astral-self-modeling/`, plus append-only claim-ledger, roadmap,
+and navigation updates. Every mutation in this slice must name state slice
+`astral-rgs-v28-gate1-acquisition-qualification-implementation`.
+
+This slice is limited to implementing the immutable inputs, comparison matrix,
+matched budgets, process isolation, evaluation schedule, exact futility
+arithmetic, family-cluster statistics, packet schema, artifact manifest, and
+fail-closed dispositions frozen in
+`docs/research/astral-self-modeling/67-v28-gate1-acquisition-qualification-preregistration.md`.
+The Astral validator must remain an independent consumer and may not import
+the RGS producer or update implementation.
+
+It does not permit model or tokenizer access, a seed or corpus change,
+mutation or rerun of V28R1/V28R2, update execution, adapter creation, context
+or retrieval scoring, campaign-ledger creation, retention/recovery,
+corruption, Astral selection, assessment access, evidence promotion,
+independent-review simulation, benchmark or breakthrough claims, autonomous
+self-improvement, introspection, self-modeling, Stage 0C or Stage 1 promotion,
+production claims, or claims above
+`LocalAcquisitionQualificationImplementationV28Gate1`. Implementation must be
+committed and both source trees clean before a separately authorized one-shot
+execution may begin.
+
 Explicit Astral-RGS V28 Gate 1 acquisition-qualification docs-first
 preregistration now allowed: one prospective protocol note under
 `docs/research/astral-self-modeling/`, claim-ledger, roadmap, navigation, and
