@@ -73,7 +73,7 @@ requirements.
 | V25 | `SyntheticDockerContinualCorrectionHarnessQualified` | Construction-known positive sensitivity and null specificity passed; protocol qualification only, with model-backed learning and thesis validation still `NotRun`/`NotValidated` |
 | V27 | `DeterministicDevelopmentReplayMatchedNoCandidateAssessmentNotRun` | Two complete 54-execution development packets matched every deterministic scientific lock; no-update dominated, Astral did not beat the strongest nonprivileged selector, and assessment stayed sealed |
 | V28 | `Gate1InfrastructureAbortConsumedNoModelOutcome` | V28R2 novelty passed and the Gate 1 instrument is implemented, but the one-shot campaign was consumed by a pre-model MLX-runtime import failure; no acquisition result exists and a fresh preregistered corpus is required |
-| V28R3 | `FreshCampaignImplementedExecutionSealed` | The new disjoint novelty-then-acquisition generator, coordinator, independent validator, and adversarial tests are committed; ledger creation, corpus generation, model access, and execution remain separately unauthorized |
+| V28R3 | `FreshCampaignOneShotAuthorizedNotRun` | The new disjoint novelty-then-acquisition implementation is committed and one fail-closed run is authorized; authorization is not evidence and no ledger, corpus, or outcome exists yet |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 

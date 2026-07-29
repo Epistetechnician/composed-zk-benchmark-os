@@ -214,6 +214,8 @@ review and experiments rule out equivalent prior work.
 - [V28R3 fresh acquisition-campaign implementation](71-v28r3-fresh-acquisition-campaign-implementation.md):
   records the generator, coordinator, independent rederivation validator, and
   hermetic tests without authorizing runtime execution.
+- [V28R3 fresh acquisition-campaign execution authorization](72-v28r3-fresh-acquisition-campaign-execution-authorization.md):
+  binds the clean implementation commits and permits one fail-closed run.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
