@@ -1,5 +1,18 @@
 # Agent Rules
 
+Explicit V28R6 legacy batch-8 endurance preregistration now allowed: one
+prospective protocol note plus claim-ledger, roadmap, navigation, matching RGS
+documentation, and scoped authorization text. Every mutation must name state
+slice `astral-rgs-v28r6-legacy-batch8-endurance-preregistration`.
+
+This docs-first slice may freeze only a new public deterministic non-candidate
+fixture, eight 96-family superblocks, one single-process legacy batch-8
+endurance run, fresh-process first/last-superblock controls, exact semantic and
+raw-score parity, RSS ceilings, frozen runtime/model identities, content-
+addressed repository-external artifacts, and independent validation. It does
+not permit implementation, model access, candidate data, updates, adapters,
+acquisition evidence, assessment, scientific confirmation, or claim promotion.
+
 Explicit V28R5 last-token projection preflight negative sealing now allowed:
 one execution record plus claim-ledger, roadmap, and navigation updates. Every
 mutation must name state slice

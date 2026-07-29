@@ -245,6 +245,9 @@ review and experiments rule out equivalent prior work.
 - [V28R5 last-token projection preflight execution record](82-v28r5-last-token-projection-preflight-execution-record.md):
   records memory-safe batch 64, semantic parity, failed raw-score tolerance,
   and the independently validated negative verdict.
+- [V28R6 legacy batch-8 endurance preregistration](83-v28r6-legacy-batch8-endurance-preregistration.md):
+  freezes an eight-superblock, non-candidate stability test for the only
+  numerically qualified external-control scorer.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
