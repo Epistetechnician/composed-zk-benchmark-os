@@ -35,6 +35,18 @@ def test_panel_selector_is_seed_bound_complete_and_deterministic() -> None:
     assert all(0 <= value < 64 for value in selected)
 
 
+def test_evaluation_panel_uses_balanced_block_order() -> None:
+    families = [
+        {"block_index": block, "fact_kind": kind, "family_in_block": position, "family_id": f"{kind}-{block}-{position}"}
+        for kind in reversed(MODULE.FACT_KINDS) for block in (1, 2) for position in (1, 0)
+    ]
+    ordered = MODULE.evaluation_panel(families, [1, 2])
+    assert [(row["block_index"], row["fact_kind"], row["family_in_block"]) for row in ordered] == [
+        (block, kind, position)
+        for block in (1, 2) for kind in MODULE.FACT_KINDS for position in (0, 1)
+    ]
+
+
 def test_pilot_metric_rejects_chance_rows() -> None:
     rows = []
     baseline = {}
