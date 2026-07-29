@@ -269,6 +269,9 @@ review and experiments rule out equivalent prior work.
 - [V28R7 validator correction R2](90-v28r7-validator-correction-r2.md):
   preserves the failed R1 report and authorizes a read-only ordering/arithmetic
   correction over the already sealed artifact.
+- [V28R7 single-cell acquisition pilot execution record](91-v28r7-single-cell-acquisition-pilot-execution-record.md):
+  records the valid `PilotNoSignal` result, failed positive controls, seven
+  negative arms, and the preserved R1/corrected R2 validation chain.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):

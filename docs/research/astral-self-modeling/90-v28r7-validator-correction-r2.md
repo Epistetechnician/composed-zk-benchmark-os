@@ -2,7 +2,7 @@
 
 State slice: `astral-rgs-v28r7-validator-correction-r2`.
 
-Status: `AuthorizedReadOnlyCorrection / R1Failed / R2NotRun`.
+Status: `Completed / R1FailedPreserved / R2Valid`.
 
 The one-shot model campaign completed and sealed artifact
 `astral-rgs-v28r7-pilot-8ae838f1e467-r1`. Its first independent validation
@@ -20,3 +20,7 @@ R2 must implement the frozen balanced order and byte-matching arithmetic, add
 regression tests, verify the original R1 validator snapshot hash, and run once
 against the existing artifact. It must write new `-r2` validation files and
 must not modify or replace any manifest-listed byte or the failed R1 report.
+
+R2 completed at commit `b5b4696` with `valid=true`, `errors=[]`, status
+`PilotNoSignal`, and `model_execution=false`. Its canonical report hash is
+`sha256:bac9c99be9afeaedc310f7c41fb98048d43dbd69431a8e7f6712c19dfa1f2292`.
