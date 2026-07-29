@@ -1,10 +1,8 @@
 # Agent Rules
 
-Explicit V28R3 infrastructure-failure sealing now allowed: an additive abort
-validator and tests, a failure execution record, matching RGS finalizer/tests
-and disposition, and immutable packaging of the consumed V28R3 artifact.
-Every mutation must name state slice
-`astral-rgs-v28r3-infrastructure-failure-sealing`.
+V28R3 infrastructure-failure sealing is complete. The consumed artifact is
+`astral-rgs-v28r3-abort-0b65ab1e0971-r1`; no further mutation, packaging,
+repair, or rerun is authorized by this completed slice.
 
 This slice may only validate and package the existing ledger/artifact,
 rederive the corpus and novelty result, verify the Metal out-of-memory control
