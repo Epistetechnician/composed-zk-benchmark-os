@@ -4,7 +4,7 @@ State slice:
 `astral-rgs-v28-gate1-acquisition-qualification-implementation`.
 
 Status: `ImplementationFrozen / HermeticTestsPass /
-ModelAccessNotRun / OneShotExecutionAuthorized`.
+OneShotExecutionConsumedInfrastructureAbort / NoModelOutcome`.
 
 ## Implemented boundary
 

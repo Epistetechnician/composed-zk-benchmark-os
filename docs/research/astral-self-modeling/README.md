@@ -203,7 +203,10 @@ review and experiments rule out equivalent prior work.
   blockwise mathematical futility, and family-cluster decision rules.
 - [V28 Gate 1 acquisition-qualification implementation notes](68-v28-gate1-acquisition-qualification-implementation-notes.md):
   independent fail-closed validator, isolated native worker contract, and
-  target-blind source projection; model-backed execution remains unauthorized.
+  target-blind source projection.
+- [V28 Gate 1 infrastructure-abort execution record](69-v28-gate1-infrastructure-abort-execution-record.md):
+  retained pre-model MLX-runtime failure, consumed-campaign disposition,
+  content-addressed abort artifact, and mandatory fresh-campaign boundary.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
