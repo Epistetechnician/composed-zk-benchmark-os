@@ -192,8 +192,12 @@ review and experiments rule out equivalent prior work.
   implementation, model execution, update, recovery, selection, and assessment
   gates.
 - [V28R2 powered acquisition-novelty implementation notes](65-v28r2-powered-acquisition-novelty-implementation-notes.md):
-  additive clean-room fingerprint and validation instrument; source freeze,
-  one-shot execution, and every downstream gate remain pending.
+  additive clean-room fingerprint and validation instrument plus the preserved
+  pre-execution boundary; the subsequent result is recorded separately.
+- [V28R2 powered acquisition-novelty execution record](66-v28r2-powered-acquisition-novelty-execution-record.md):
+  one-shot 6,144-family `NoveltyPacketCandidate` with exact restarted-baseline
+  parity; acquisition, update, recovery, selection, and assessment remain
+  untested or unauthorized.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
