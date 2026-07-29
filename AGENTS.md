@@ -1,5 +1,18 @@
 # Agent Rules
 
+Explicit V28R7 single-cell acquisition pilot implementation now allowed:
+additive protocol, independent validator, CLI, hermetic tests and notes, plus
+matching RGS exact-budget repair, generator, worker, coordinator, tests, and
+registry. Every mutation must name state slice
+`astral-rgs-v28r7-single-cell-acquisition-pilot-implementation`.
+
+Implementation is limited to the preregistered fresh development corpus,
+predecessor nonreuse, seed-ranked eight-block panel, two novelty baselines, two
+controls, seven full-budget single-cell persistent arms, statistics, RSS,
+source/model/artifact gates, and correction of the existing per-task budget
+seam. It does not permit model access or execution, corpus generation,
+assessment, powered qualification, confirmation, SOTA, or claim promotion.
+
 Explicit V28R7 single-cell acquisition pilot preregistration now allowed: one
 prospective protocol note plus claim-ledger, roadmap, navigation, matching RGS
 documentation, and scoped authorization text. Every mutation must name state
