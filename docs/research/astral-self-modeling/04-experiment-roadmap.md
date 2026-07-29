@@ -77,7 +77,8 @@ requirements.
 | V28R4 | `ValidNegativeBatch8ExactBatch64MetalOOM` | Monolithic and streaming batch 8 matched exactly on all 1,152 fixed-fixture queries, but streaming batch 64 hit Metal OOM; the corrected independent report is valid and qualification is false, so a fresh scientific campaign remains unauthorized |
 | V28R5 | `ValidNegativeMemorySafeRawScoreParityFailed` | Optimized batch 8 and 64 completed below 847 MiB RSS with identical predictions, but raw label-score drift exceeded the frozen `1e-5` tolerance; independent validation is valid and qualification is false, so scientific execution remains unauthorized |
 | V28R6 | `LocallyQualifiedLegacyBatch8EnduranceExternalReviewNotRun` | Eight superblocks and 9,216 endurance queries completed with zero observed peak-RSS growth; fresh first/last controls matched every semantic field and raw score exactly; independent local validation passed, while scientific execution and external review remain unrun |
-| V28R7 | `DocsFirstSingleCellPilotPreregisteredImplementationNotAuthorized` | A fresh 6,144-family development corpus, seed-selected 768-family panel, two controls, and seven matched full-budget persistent arms are frozen to estimate acquisition signal before a powered Gate 1 campaign |
+| V28R7 | `PilotNoSignalAstralR2ValidExternalReviewNotRun` | The completed pilot found no signal arm; both positive controls stayed at chance and most runs always selected A, so a powered acquisition campaign is blocked |
+| V29 | `DocsFirstPositiveControlInstrumentRepairPreregistered` | A deterministic non-candidate four-rung ladder will compare three locked response formats; no training or acquisition run is authorized |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 
