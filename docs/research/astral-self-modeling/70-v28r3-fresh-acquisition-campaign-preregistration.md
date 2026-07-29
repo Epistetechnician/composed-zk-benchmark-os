@@ -3,7 +3,7 @@
 State slice:
 `astral-rgs-v28r3-fresh-acquisition-campaign-preregistration`.
 
-Status: `DocsFirstPreregistered / ImplementationNotAuthorized /
+Status: `DocsFirstPreregistered / ImplementationAuthorized /
 RuntimeNotAccessed / CorpusNotGenerated / CampaignNotRun`.
 
 ## Decision
