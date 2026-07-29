@@ -1,5 +1,17 @@
 # Agent Rules
 
+Explicit V29 positive-control instrument repair execution now authorized once:
+state slice `astral-rgs-v29-positive-control-instrument-repair-execution`.
+Run only RGS implementation `733425dd6e9d87bbbc388634c7764aff85ab83fa`
+and Astral implementation `2d4d096cc1333c718ec4f2db34b486ff637177ea`
+from clean worktrees, using the frozen local Qwen checkpoint, Python 3.14.5,
+batch 8, the deterministic 64-case fixture, three response formats, one model
+process, a consuming ledger, content-addressed repository-external artifact,
+and read-only Astral validation. The first ledger claim consumes the identity.
+No retry, training, adapter, candidate corpus, acquisition, assessment,
+confirmation, SOTA, breakthrough, or claim above
+`LocalPositiveControlInstrumentQualificationV29` is permitted.
+
 Explicit V29 positive-control instrument repair implementation now allowed:
 state slice `astral-rgs-v29-positive-control-instrument-repair-implementation`.
 This slice may add the deterministic fixture, one-process RGS MLX scorer,
