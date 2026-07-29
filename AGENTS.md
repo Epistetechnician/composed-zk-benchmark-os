@@ -1,5 +1,24 @@
 # Agent Rules
 
+Explicit Astral-RGS V28R3 fresh acquisition-campaign execution now allowed:
+one invocation of the committed RGS coordinator using RGS implementation
+commit `5c4ea4d7478fbdadbbeb9be214644230f4221c90`, Astral implementation
+commit `1fdbf9d03fcf75c1eff70d0fa95e934269b17960`, worker
+`/Users/shaanp/.pyenv/versions/3.14.5/bin/python`, the frozen local Qwen
+checkpoint, immutable V28R1/V28R2 predecessors, the consumed Gate 1 abort, and
+repository-external artifacts. Every execution artifact must name state slice
+`astral-rgs-v28r3-fresh-acquisition-campaign-execution`.
+
+Execution must obey
+`72-v28r3-fresh-acquisition-campaign-execution-authorization.md` and the V28R3
+preregistration: all pre-ledger gates first; one ledger, OS seed, and corpus;
+novelty before updates; retained negative/crash/null results; frozen futility
+and statistics; immutable sealing; and independent Astral replay. It does not
+permit post-ledger repair, discarded candidates, adaptive reruns, Gate 2/3,
+assessment, confirmation, independent-replication claims, benchmarks,
+SOTA/breakthrough claims, self-improvement, introspection, self-modeling,
+Stage 0C/1 promotion, production claims, or evidence-ledger promotion.
+
 Explicit Astral-RGS V28R3 fresh acquisition-campaign implementation now
 allowed: additive protocol, independent validator, combined predecessor-
 fingerprint builder, CLI, hermetic tests, and implementation notes under
