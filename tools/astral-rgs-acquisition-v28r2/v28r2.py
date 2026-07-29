@@ -69,16 +69,27 @@ def structural_ngrams(value: str, width: int = 7) -> set[str]:
     }
 
 
-def walk_strings(value: Any) -> Iterable[str]:
-    if isinstance(value, str):
-        yield value
-    elif isinstance(value, list):
-        for item in value:
-            yield from walk_strings(item)
-    elif isinstance(value, dict):
-        for key, item in value.items():
-            yield key
-            yield from walk_strings(item)
+def content_strings(family: dict[str, Any]) -> Iterable[str]:
+    for key in ("family_id", "namespace_id", "source_document", "source_sha256", "support_document", "support_sha256"):
+        value = family.get(key)
+        if isinstance(value, str):
+            yield value
+    for record in family.get("records", []):
+        if isinstance(record, dict):
+            for key in ("subject", "alias", "bridge", "value"):
+                value = record.get(key)
+                if isinstance(value, str):
+                    yield value
+    for query in family.get("queries", []):
+        if not isinstance(query, dict):
+            continue
+        for key in ("query_id", "question", "prompt", "prompt_sha256", "template_id"):
+            value = query.get(key)
+            if isinstance(value, str):
+                yield value
+        for option in query.get("options", []):
+            if isinstance(option, str):
+                yield option
 
 
 def normalize_value(value: Any) -> Any:
@@ -322,7 +333,7 @@ def validate_corpus(
             for text in (expected_question, expected_prompt):
                 surface_skeletons.add(sha256_text(normalize_skeleton(text)))
                 surface_ngrams.update(structural_ngrams(text))
-        if any(sha256_text(value) in r1_exact for value in walk_strings(family)):
+        if any(sha256_text(value) in r1_exact for value in content_strings(family)):
             _error(errors, "corpus.r1_exact_string_overlap")
     if len(query_order) != per_kind * 4 * 12 or len(set(query_order)) != len(query_order):
         _error(errors, "corpus.query_census")

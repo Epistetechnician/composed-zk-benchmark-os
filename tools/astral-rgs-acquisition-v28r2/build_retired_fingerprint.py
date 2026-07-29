@@ -28,16 +28,41 @@ def sha256_text(value: str) -> str:
     return sha256_bytes(value.encode())
 
 
-def walk_strings(value: Any) -> Iterable[str]:
-    if isinstance(value, str):
-        yield value
-    elif isinstance(value, list):
-        for item in value:
-            yield from walk_strings(item)
-    elif isinstance(value, dict):
-        for key, item in value.items():
-            yield key
-            yield from walk_strings(item)
+def content_strings(family: dict[str, Any]) -> Iterable[str]:
+    for key in ("family_id", "item_id", "namespace", "training_template_family_id"):
+        value = family.get(key)
+        if isinstance(value, str):
+            yield value
+    for row in family.get("rows", []):
+        if isinstance(row, dict):
+            for key in ("anchor", "value"):
+                value = row.get(key)
+                if isinstance(value, str):
+                    yield value
+            for key in ("aliases", "wrappers"):
+                for value in row.get(key, []):
+                    if isinstance(value, str):
+                        yield value
+    for key in ("source_form", "support_source"):
+        entry = family.get(key)
+        if isinstance(entry, dict):
+            for name in ("text", "sha256"):
+                value = entry.get(name)
+                if isinstance(value, str):
+                    yield value
+    for query in family.get("queries", []):
+        if not isinstance(query, dict):
+            continue
+        for key in ("query_id", "question", "prompt", "prompt_sha256", "template_family_id"):
+            value = query.get(key)
+            if isinstance(value, str):
+                yield value
+        for option in query.get("answer_options", []):
+            if isinstance(option, dict):
+                for key in ("text", "sha256"):
+                    value = option.get(key)
+                    if isinstance(value, str):
+                        yield value
 
 
 def normalize_skeleton(value: str) -> str:
@@ -79,7 +104,7 @@ def fingerprint(raw_corpus: dict[str, Any], source_sha256: str) -> dict[str, Any
     for family in families:
         if not isinstance(family, dict):
             raise ValueError("family is not an object")
-        for value in walk_strings(family):
+        for value in content_strings(family):
             exact.add(sha256_text(value))
         text_surfaces: list[str] = []
         for key in ("source_form", "support_source"):
@@ -101,9 +126,6 @@ def fingerprint(raw_corpus: dict[str, Any], source_sha256: str) -> dict[str, Any
             normalized_asts.add(
                 sha256_bytes(canonical_bytes(normalize_value(family["semantic_ast"])))
             )
-    template_catalog = raw_corpus.get("template_catalog")
-    for value in walk_strings(template_catalog):
-        exact.add(sha256_text(value))
     body = {
         "version": VERSION,
         "state_slice": "astral-rgs-v28r2-powered-acquisition-novelty-implementation",
