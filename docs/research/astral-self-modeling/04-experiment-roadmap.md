@@ -76,7 +76,7 @@ requirements.
 | V28R3 | `NoveltyPassedPhaseBInfrastructureFailureSealed` | The independent validator accepted exact chance-equivalent baseline parity on the fresh R3 corpus; the first context control hit Metal OOM before any acquisition result, update, or adapter, and rerun is unauthorized |
 | V28R4 | `ValidNegativeBatch8ExactBatch64MetalOOM` | Monolithic and streaming batch 8 matched exactly on all 1,152 fixed-fixture queries, but streaming batch 64 hit Metal OOM; the corrected independent report is valid and qualification is false, so a fresh scientific campaign remains unauthorized |
 | V28R5 | `ValidNegativeMemorySafeRawScoreParityFailed` | Optimized batch 8 and 64 completed below 847 MiB RSS with identical predictions, but raw label-score drift exceeded the frozen `1e-5` tolerance; independent validation is valid and qualification is false, so scientific execution remains unauthorized |
-| V28R6 | `OneShotFixedFixtureExecutionAuthorizedNotRun` | Clean implementation commits are bound and one three-child legacy batch-8 endurance preflight is authorized; candidate data and scientific execution remain closed |
+| V28R6 | `LocallyQualifiedLegacyBatch8EnduranceExternalReviewNotRun` | Eight superblocks and 9,216 endurance queries completed with zero observed peak-RSS growth; fresh first/last controls matched every semantic field and raw score exactly; independent local validation passed, while scientific execution and external review remain unrun |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 
