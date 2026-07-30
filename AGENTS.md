@@ -1,5 +1,14 @@
 # Agent Rules
 
+Explicit V36R2 two-task execution now authorized once: state slice
+`astral-rgs-v36r2-two-task-stream-execution`. Bind RGS
+`441705c7c9ad56b02489659df2dc9fd3d2eceb26` and Astral
+`6d88c55c595cc18f5c7059a3c185d701f537eaa0`, all 12 frozen cells, one Qwen
+process, tokenizer preflight before training, exactly 768 gradient steps and
+294,912 update tokens, exclusive V36R2 ledger, external artifact, and
+model-free validation. No retry, threshold change, CL-bench, assessment, or
+claim above `LocalTwoTaskContinualLearningPilotV36R2` is authorized.
+
 V36 execution is consumed and retired as a construction failure. The retained
 artifact is `incomplete-astral-rgs-v36-d9c586dc`; the pinned tokenizer measured
 protected prompts up to 83 tokens against the frozen 64-token window. Zero

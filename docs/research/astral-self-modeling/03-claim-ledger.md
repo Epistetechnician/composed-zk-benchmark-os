@@ -1,5 +1,6 @@
 # Claim Ledger
 
+- V36R2 is authorized once against exact clean commits; status is `NotRun`.
 - V36 is consumed as a construction failure: zero gradient steps and no model
   result. V36R2 corrective implementation is authorized, not execution. Claim
   status remains unchanged.
