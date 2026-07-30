@@ -1,5 +1,7 @@
 # Astral Self-Modeling Research Project
 
+- [V36 failed execution and V36R2 correction](127-v36-failed-execution-and-v36r2-correction.md)
+
 ## Status and State Slice
 
 State slice: `astral-self-modeling-evidence-ledger-and-research-reset-v11`.

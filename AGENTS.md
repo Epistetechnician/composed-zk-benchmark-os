@@ -1,5 +1,19 @@
 # Agent Rules
 
+V36 execution is consumed and retired as a construction failure. The retained
+artifact is `incomplete-astral-rgs-v36-d9c586dc`; the pinned tokenizer measured
+protected prompts up to 83 tokens against the frozen 64-token window. Zero
+gradient steps ran, no model result exists, and this is not scientific
+evidence. No V36 retry is authorized.
+
+Explicit V36R2 token-window correction now allowed: state slice
+`astral-rgs-v36r2-token-window-correction`. Preserve the V36 tasks, arms,
+seeds, orders, steps, gates, and evaluation points; change only the fixed
+window from 64 to 96 tokens, recompute exact token budgets, add tokenizer-aware
+preflight before the first gradient step, use a new exclusive identity, and
+update hermetic tests, validators, and notes. Model execution is forbidden
+until the corrected implementation is committed and separately authorized.
+
 Explicit V36 two-task stream execution now authorized once: state slice
 `astral-rgs-v36-two-task-stream-execution`. Bind RGS
 `f0f8aa8f50c1022bb98c7797b6cfda56d196a0e6` and Astral
