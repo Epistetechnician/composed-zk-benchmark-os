@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V40R2 fit counterfactual acquisition protocol](150-v40r2-fit-counterfactual-acquisition-protocol.md)
 - [V40R2 fit-feature schema boundary](149-v40r2-fit-feature-schema-boundary.md)
 - [V40R2 tokenizer qualification record](148-v40r2-tokenizer-qualification-record.md)
 - [V40 failure and V40R2 boundary](147-v40-tokenizer-failure-and-v40r2-boundary.md)
