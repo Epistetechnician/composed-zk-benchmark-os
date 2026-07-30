@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V37 implementation authorization](131-v37-implementation-authorization.md)
 - [V37 four-task interference-stream preregistration](130-v37-four-task-interference-stream-preregistration.md)
 - [V36R2 execution record](129-v36r2-execution-record.md)
 - [V36R2 execution authorization](128-v36r2-execution-authorization.md)
