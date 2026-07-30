@@ -1,5 +1,8 @@
 # Claim Ledger
 
+- V41R2 authorizes one fresh infrastructure-recovery profile with unchanged
+  scientific inputs and one provider-managed worker-loss restart. It is
+  `NotRun`; no downstream stage or higher claim is authorized.
 - V41 runtime profiling is consumed as a platform execution failure. The final
   job ended `worker_lost` before the command began, with zero run-log bytes, no
   result, and no artifact. This is not a negative model result and provides no
