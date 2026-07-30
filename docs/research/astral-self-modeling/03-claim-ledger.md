@@ -1,5 +1,9 @@
 # Claim Ledger
 
+- V36 is consumed as a construction failure: zero gradient steps and no model
+  result. V36R2 corrective implementation is authorized, not execution. Claim
+  status remains unchanged.
+
 This ledger is append-only once experiments begin. `Not refuted` means current
 evidence did not refute a claim; it does not mean established. Empirical claims
 never receive a `Proven` status.
