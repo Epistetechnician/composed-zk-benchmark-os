@@ -1,5 +1,7 @@
 # Claim Ledger
 
+- V40R2 corpus/tokenizer structure is locally qualified and independently
+  model-free validated. No model execution or scientific claim promotion.
 - V40 prospective routing is preregistered documentation only. Implementation,
   execution, assessment, and claim promotion remain unauthorized.
 - V38R2 is a valid negative result: protection was restored, but both joint
