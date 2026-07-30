@@ -1,5 +1,13 @@
 # Agent Rules
 
+Explicit V33 target-free objective implementation now allowed: state slice
+`astral-rgs-v33-target-free-objective-implementation`. Additive target-free
+fixture, one-arm MLX worker, coordinator, tests, notes, and independent Astral
+validator are permitted. Implementation must remain model-free and preserve
+the V32 keys, optimizer, budgets, evaluator, gates, and development-only claim
+ceiling. Model access, training execution, confirmation, assessment, continual
+learning, SOTA, and breakthrough claims are forbidden.
+
 V32 execution is complete and consumed. Artifact
 `astral-rgs-v32-optimizer-development-f2471c7c4030-r1` is valid with
 `OptimizerDevelopmentBlocked`. Both arms were numerically stable and preserved
