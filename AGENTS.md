@@ -1,5 +1,13 @@
 # Agent Rules
 
+Explicit V31R2 corrected execution now authorized once: state slice
+`astral-rgs-v31r2-tiny-acquisition-execution`. Bind RGS
+`aee23d54c04ecf145999331f58290303b143acc3` and Astral
+`b5033ae3922f45803249445242047bd9c925b10a`. Preserve every V31 scientific
+lock and change only the tested complete-inventory identity binding. Use a new
+exclusive ledger and artifact identity. No retry or claim above
+`LocalTinyAcquisitionSanityV31` is permitted.
+
 Explicit V31R2 inventory-binding correction now allowed: state slice
 `astral-rgs-v31r2-inventory-binding-correction`. Change only the missing
 inventory identity lookup to a canonical hash of the complete established

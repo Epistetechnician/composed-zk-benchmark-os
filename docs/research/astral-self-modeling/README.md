@@ -310,6 +310,8 @@ review and experiments rule out equivalent prior work.
   retains the consumed pre-training inventory-schema failure.
 - [V31R2 inventory-binding correction](108-v31r2-inventory-binding-correction.md):
   fixes only the failed inventory identity seam and freezes a regression test.
+- [V31R2 corrected execution authorization](109-v31r2-execution-authorization.md):
+  authorizes one new identity with every scientific lock preserved.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
