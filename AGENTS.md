@@ -1,5 +1,16 @@
 # Agent Rules
 
+Explicit V40 prospective protection-router preregistration now allowed: state
+slice `astral-rgs-v40-prospective-protection-router-preregistration`. This is
+documentation-only. It may freeze a fresh four-task corpus, family-disjoint
+fit/tune/assessment partitions, exactly eight protected replay slots per later
+stage selected before outcomes, fixed-quarter/fixed-half/random/shuffled/
+nonprivileged-router/telemetry-router controls, prediction locks, matched
+compute and storage, and fail-closed acquisition/retention/protection/
+calibration/regret gates. It does not permit implementation, corpus
+construction, tokenizer access, model execution, assessment access, telemetry
+fitting, Stage 0C promotion, CL-bench, confirmation, or higher claims.
+
 V39 is complete and consumed. Artifact
 `astral-rgs-v39-quarter-allocation-338072fe87ec-r1` is independently valid but
 blocked. Joint recent achieved protection 1.0, retention 0.6875, and
