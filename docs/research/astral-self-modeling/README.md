@@ -322,6 +322,8 @@ review and experiments rule out equivalent prior work.
   authorizes one consuming development comparison while withholding confirmation.
 - [V32 execution and V33 objective preregistration](114-v32-execution-v33-objective-preregistration.md):
   records the stable-but-nonacquiring negative and freezes a target-free supervised objective.
+- [V33 target-free objective implementation](115-v33-target-free-objective-implementation.md):
+  adds the one-arm development worker and independent validator without execution.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
