@@ -1,0 +1,12 @@
+{
+  "version": "astral.tiny_acquisition_protocol.v31",
+  "state_slice": "astral-rgs-v31-tiny-acquisition-execution",
+  "fixture_version": "mesh.astral_v31_tiny_acquisition_fixture.v1",
+  "result_version": "mesh.astral_v31_tiny_acquisition_result.v1",
+  "packet_version": "mesh.astral_v31_tiny_acquisition_packet.v1",
+  "claim_ceiling": "LocalTinyAcquisitionSanityV31",
+  "checkpoint_sha256": "sha256:0a321941ffa31f920284c932f98bd4dba7c7cb95acd797c01ec2fa0fdd1321ab",
+  "tokenizer_sha256": "sha256:43c4bf51c8db8d03b43a5c2b3d1c44adf886d12fe3eba979b9d41f6101d10f5b",
+  "budget": {"gradient_steps": 64, "batch_size": 4, "lora_rank": 4, "num_layers": 8, "max_update_tokens": 16384},
+  "gates": {"pre_direct_ceiling": 0.375, "post_direct_floor": 0.875, "improvement_floor": 0.5, "paraphrase_floor": 0.75, "protected_drop_ceiling": 0.02, "reload_score_tolerance": 0.00001}
+}

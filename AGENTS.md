@@ -1,5 +1,14 @@
 # Agent Rules
 
+Explicit V31 tiny-acquisition implementation now allowed: state slice
+`astral-rgs-v31-tiny-acquisition-implementation`. Additive deterministic
+fixture, one-process MLX LoRA worker, consuming coordinator, tests, notes, and
+matching independent Astral validator are permitted. Implementation must
+remain model-free, preserve the frozen 64-step/rank-4/eight-layer budget and
+V30 content-likelihood evaluator, and retain raw scores plus adapter hashes.
+Model access, training execution, assessment, continual-learning, SOTA,
+breakthrough, and claim promotion are forbidden.
+
 Explicit V31 tiny-acquisition preregistration now allowed: state slice
 `astral-rgs-v31-tiny-acquisition-preregistration`. This docs-first slice may
 freeze only the qualified Qwen content-likelihood evaluator, 16 fresh
