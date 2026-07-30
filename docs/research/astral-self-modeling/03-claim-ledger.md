@@ -1,5 +1,8 @@
 # Claim Ledger
 
+- V37 is a valid negative result. It established nonsaturated interference and
+  replay separation, but three replay cells failed protected retention. Dynamic
+  selection and claim promotion remain blocked.
 - V37 execution is authorized once against exact clean implementation commits;
   result status remains `NotRun`.
 - V37 implementation is authorized; model execution remains `NotAuthorized`.
