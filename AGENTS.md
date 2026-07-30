@@ -1,5 +1,21 @@
 # Agent Rules
 
+V33 execution is complete and consumed. Artifact
+`astral-rgs-v33-target-free-717292ceeec5-r1` is valid with
+`TargetFreeObjectiveBlocked`. Direct and paraphrase acquisition reached 1.0,
+but protected V30 fell to 0.71875 and maximum loss exceeded its development
+ceiling. No V33 retry or confirmation is authorized.
+
+Explicit V34 protected-replay development preregistration now allowed: state
+slice `astral-rgs-v34-protected-replay-preregistration`. This docs-first slice
+may reuse the V33 development keys and target-free objective, compare fixed 25%
+and 50% V30 protected-replay ratios under the same batch/step/rank/layer/clip
+budget, require direct/paraphrase at least 0.75, protected accuracy at least
+0.95, finite loss and final-eight mean below initial-eight mean, and retain
+independent validation. It does not permit implementation, model access,
+training, confirmation data, assessment, continual learning, SOTA, or
+breakthrough claims.
+
 Explicit V33 target-free development execution now authorized once: state
 slice `astral-rgs-v33-target-free-objective-execution`. Bind RGS
 `ca94a4ed2489a2b300339aecc1dc4056d9fb4f21` and Astral

@@ -326,6 +326,8 @@ review and experiments rule out equivalent prior work.
   adds the one-arm development worker and independent validator without execution.
 - [V33 execution authorization](116-v33-execution-authorization.md):
   authorizes one development run while withholding fresh confirmation.
+- [V33 result and V34 replay preregistration](117-v33-result-v34-replay-preregistration.md):
+  records successful development acquisition with failed retention and freezes two replay ratios.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
