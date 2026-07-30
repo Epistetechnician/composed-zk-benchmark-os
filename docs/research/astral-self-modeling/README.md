@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V40R2 executable batch boundary](157-v40r2-executable-batch-boundary.md)
 - [V40R2 MLX backend primitives](156-v40r2-mlx-backend-primitives.md)
 - [V40R2 fit runner core implementation](155-v40r2-fit-runner-core-implementation.md)
 - [V40R2 fit probe qualification record](154-v40r2-fit-probe-qualification-record.md)
