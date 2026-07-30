@@ -1,5 +1,19 @@
 # Agent Rules
 
+Explicit V31 tiny-acquisition preregistration now allowed: state slice
+`astral-rgs-v31-tiny-acquisition-preregistration`. This docs-first slice may
+freeze only the qualified Qwen content-likelihood evaluator, 16 fresh
+associations, a bounded LoRA budget, reload/no-update/protected-panel controls,
+and acquisition gates. It does not permit implementation, model access,
+training, assessment, continual-learning, SOTA, breakthrough, or claim
+promotion.
+
+V30 execution is complete and consumed. Artifact
+`astral-rgs-v30-response-free-95062687c1cf-r1` is immutable and valid with
+`DualCheckpointEvaluatorQualified`. No V30 retry or artifact mutation is
+authorized. This qualifies a measurement channel only; it does not establish
+acquisition or continual learning.
+
 Explicit V30 response-free evaluator execution now authorized once: state
 slice `astral-rgs-v30-response-free-evaluator-execution`. Bind RGS
 `b8bfed6073d927e82c903a825fc3239fb1209c93` and Astral

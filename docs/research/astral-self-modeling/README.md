@@ -298,6 +298,10 @@ review and experiments rule out equivalent prior work.
   adds raw-score retention, independent decision rederivation, and a fail-closed 128-forward coordinator without executing models.
 - [V30 response-free evaluator execution authorization](102-v30-response-free-evaluator-execution-authorization.md):
   binds immutable implementations and authorizes one consuming two-checkpoint run.
+- [V30 response-free evaluator execution record](103-v30-response-free-evaluator-execution-record.md):
+  records the valid dual-checkpoint content-likelihood qualification.
+- [V31 tiny acquisition preregistration](104-v31-tiny-acquisition-preregistration.md):
+  freezes a minimal Qwen LoRA acquisition sanity check before implementation.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
