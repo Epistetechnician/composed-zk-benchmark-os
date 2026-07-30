@@ -1,12 +1,19 @@
 # Agent Rules
 
+V40R2 native MLX runtime is implemented and hermetically tested under state
+slice `V40R2NativeMLXRuntimeImplementation`. Concrete model updates have not
+run. The next allowed slice is a bounded native-runtime qualification smoke,
+independent validator, and exact-commit authorization boundary. Full fit
+acquisition execution, tune/assessment access, and scientific promotion remain
+forbidden.
+
 V40R2 native MLX runtime parameters are prospectively locked under state slice
 `V40R2NativeMLXRuntimeContractLock`: rank-4/scale-8 LoRA over the final eight
 layers, seed `400042`, explicit AdamW `1e-4`, norm clip `1.0`, batch 4, and
 96 tokens. Feature capture must cache the exact current-batch gradient and the
 following update must consume it without a second current-batch forward.
-Concrete native-runtime implementation is the next allowed slice. Model
-execution, tune/assessment access, and scientific promotion remain forbidden.
+Model execution, tune/assessment access, and scientific promotion remain
+forbidden except through the separately bounded qualification-smoke gate.
 
 V40R2 real-tokenizer/logit smoke is complete and consumed. Artifact
 `astral-rgs-v40r2-real-logit-smoke-7ff4abf93f4e-r1` independently validates

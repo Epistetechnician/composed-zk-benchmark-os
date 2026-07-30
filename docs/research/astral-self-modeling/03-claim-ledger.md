@@ -1,5 +1,8 @@
 # Claim Ledger
 
+- V40R2 concrete native MLX runtime is implemented and hermetically tested.
+  No real gradient or model update has run; this is implementation evidence,
+  not acquisition or continual-learning evidence.
 - V40R2 native runtime hyperparameters and single-forward gradient-cache
   semantics are prospectively locked and hermetically tested. No native model
   update or scientific result exists yet.
