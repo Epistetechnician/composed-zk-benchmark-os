@@ -1,8 +1,8 @@
 {
-  "version": "astral.fixed_allocation_protocol.v38r2",
-  "result_version": "mesh.astral_v38r2_fixed_allocation_result.v1",
-  "packet_version": "mesh.astral_v38r2_fixed_allocation_packet.v1",
-  "claim_ceiling": "LocalFixedProtectionAllocationDevelopmentV38R2",
+  "version": "astral.quarter_allocation_protocol.v39",
+  "result_version": "mesh.astral_v39_quarter_allocation_result.v1",
+  "packet_version": "mesh.astral_v39_quarter_allocation_packet.v1",
+  "claim_ceiling": "LocalQuarterProtectionAllocationDevelopmentV39",
   "arms": ["recent_task_25", "reservoir_task_25", "joint_recent_alt_25", "joint_reservoir_alt_25"],
   "seeds": [370037, 370038],
   "orders": {"forward": ["A", "B", "C", "D"], "reverse": ["D", "C", "B", "A"]},
