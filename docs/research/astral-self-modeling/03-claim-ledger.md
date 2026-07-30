@@ -1,5 +1,10 @@
 # Claim Ledger
 
+- V40R2 real tokenizer/logit plumbing is locally operational and independently
+  artifact-validated over a fixed 12-prompt smoke panel. The untouched model
+  scored 1/8 fit direct and 4/4 protected positive cases. This is forward-path
+  evidence only, not acquisition, retention, routing, continual learning,
+  introspection, or self-modeling evidence.
 - V40R2 corpus/tokenizer structure is locally qualified and independently
   model-free validated. No model execution or scientific claim promotion.
 - V40 prospective routing is preregistered documentation only. Implementation,
