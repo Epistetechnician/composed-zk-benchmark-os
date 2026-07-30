@@ -15,6 +15,12 @@ passes independent validation. It seals 400 prompts, an 83-token maximum input
 length, and a 3,256,320-token evaluation-forward budget. No model forward pass
 occurred.
 
+Runner inspection found an additional required compute surface:
+`protected_output_margin` needs one rotating protected prompt at each of 384
+pre-update feature rows. R2 remains valid for the counterfactual evaluation
+budget but is insufficient for runner authorization. Qualification schema V2
+must seal this feature-probe budget under a fresh R3 identity.
+
 The deterministic overlay adds training, direct, paraphrase, candidate, and
 calibration definitions only for the four fit families without changing the
 sealed base corpus. It also selects a balanced 16-case protected panel from
