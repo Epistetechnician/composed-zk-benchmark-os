@@ -1,5 +1,9 @@
 # Agent Rules
 
+Explicit V40R2 model-free fit-feature schema kernel is allowed in RGS. It does
+not authorize feature acquisition, model access, telemetry values, fitting,
+tune/assessment access, gradients, or scientific execution.
+
 V40R2 tokenizer-first corpus qualification is complete. Artifact
 `astral-rgs-v40r2-tokenizer-43c608ba9ac8-r1` contains 32 canonical
 single-token targets and 12 family-disjoint corpus families; independent
