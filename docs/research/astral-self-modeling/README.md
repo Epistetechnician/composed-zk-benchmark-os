@@ -294,6 +294,8 @@ review and experiments rule out equivalent prior work.
   records the valid all-A negative and closes single-letter next-token scoring.
 - [V30 response-free evaluator preregistration](100-v30-response-free-evaluator-preregistration.md):
   freezes a two-checkpoint, shared-logit answer-content qualification gate.
+- [V30 response-free evaluator implementation](101-v30-response-free-evaluator-implementation.md):
+  adds raw-score retention, independent decision rederivation, and a fail-closed 128-forward coordinator without executing models.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):

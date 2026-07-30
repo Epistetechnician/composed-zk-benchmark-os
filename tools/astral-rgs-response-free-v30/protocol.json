@@ -1,0 +1,53 @@
+{
+  "version": "astral.response_free_evaluator_protocol.v30",
+  "state_slice": "astral-rgs-v30-response-free-evaluator-execution",
+  "fixture_version": "mesh.astral_v30_response_free_fixture.v1",
+  "result_version": "mesh.astral_v30_response_free_result.v1",
+  "packet_version": "mesh.astral_v30_response_free_packet.v1",
+  "claim_ceiling": "LocalResponseFreeEvaluatorQualificationV30",
+  "models": {
+    "qwen_0_5b": {
+      "checkpoint_sha256": "sha256:0a321941ffa31f920284c932f98bd4dba7c7cb95acd797c01ec2fa0fdd1321ab",
+      "tokenizer_sha256": "sha256:43c4bf51c8db8d03b43a5c2b3d1c44adf886d12fe3eba979b9d41f6101d10f5b"
+    },
+    "llama_1b": {
+      "checkpoint_sha256": "sha256:87fea5fdc875ea89ce147a436a806c8f1ebe215d0d4fe8de71f58bb722f32b4f",
+      "tokenizer_sha256": "sha256:0a9d537e5d85ffdb0582c24f64710dd817d49ae3097007c1ebca85eaa7043f45"
+    }
+  },
+  "word_token_ids": {
+    "qwen_0_5b": {
+      "amber": 67605, "cedar": 75296, "maple": 54380, "orbit": 26507,
+      "comet": 69986, "violin": 62037, "trumpet": 91259, "silver": 14961,
+      "golden": 20748, "purple": 24932, "orange": 18575, "winter": 12406,
+      "summer": 7324, "river": 14796, "forest": 13638, "ocean": 17951,
+      "mountain": 16301, "valley": 33581, "garden": 13551, "planet": 11580,
+      "rocket": 24306, "tiger": 51735, "panda": 88222, "coral": 52003,
+      "quartz": 51155, "copper": 23285, "marble": 41290, "velvet": 71326,
+      "satin": 77084, "lemon": 29464, "cherry": 40880, "apple": 23268
+    },
+    "llama_1b": {
+      "amber": 68705, "cedar": 76396, "maple": 55480, "orbit": 27605,
+      "comet": 71086, "violin": 63137, "trumpet": 92359, "silver": 15310,
+      "golden": 21411, "purple": 25977, "orange": 19087, "winter": 12688,
+      "summer": 7474, "river": 15140, "forest": 13952, "ocean": 18435,
+      "mountain": 16700, "valley": 34681, "garden": 13863, "planet": 11841,
+      "rocket": 25294, "tiger": 52835, "panda": 89322, "coral": 53103,
+      "quartz": 52255, "copper": 24166, "marble": 42390, "velvet": 72426,
+      "satin": 78184, "lemon": 30564, "cherry": 41980, "apple": 24149
+    }
+  },
+  "rungs": ["literal_copy", "direct_lookup", "one_hop", "two_hop"],
+  "methods": ["content_likelihood", "contrastive_likelihood", "greedy_content"],
+  "thresholds": {
+    "literal_copy": 0.95,
+    "direct_lookup": 0.9,
+    "one_hop": 0.8,
+    "two_hop": 0.7
+  },
+  "control_ceiling": 0.375,
+  "case_count": 32,
+  "prompt_forward_count_per_model": 64,
+  "total_prompt_forward_count": 128,
+  "batch_size": 8
+}

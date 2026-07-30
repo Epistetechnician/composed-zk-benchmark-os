@@ -1,5 +1,14 @@
 # Agent Rules
 
+Explicit V30 response-free evaluator implementation now allowed: state slice
+`astral-rgs-v30-response-free-evaluator-implementation`. Additive response-free
+protocol, validator, CLI, hermetic tests, implementation notes, and matching
+RGS core/worker/coordinator are permitted. Implementation must retain raw
+positive/null likelihood evidence, independently rederive all decisions,
+enforce the frozen 128-forward budget, and remain model-free. Model access,
+training, adapters, candidate data, acquisition, assessment, SOTA,
+breakthrough, or claim promotion are forbidden.
+
 Explicit V30 response-free evaluator qualification preregistration now allowed:
 state slice `astral-rgs-v30-response-free-evaluator-preregistration`. This
 docs-first slice may freeze a deterministic 32-case public fixture, Qwen 0.5B
