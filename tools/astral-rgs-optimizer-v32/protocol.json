@@ -1,0 +1,13 @@
+{
+  "version": "astral.optimizer_development_protocol.v32",
+  "state_slice": "astral-rgs-v32-optimizer-development-execution",
+  "fixture_version": "mesh.astral_v32_optimizer_fixture.v1",
+  "result_version": "mesh.astral_v32_optimizer_result.v1",
+  "packet_version": "mesh.astral_v32_optimizer_packet.v1",
+  "claim_ceiling": "LocalDevelopmentOptimizerQualificationV32",
+  "checkpoint_sha256": "sha256:0a321941ffa31f920284c932f98bd4dba7c7cb95acd797c01ec2fa0fdd1321ab",
+  "tokenizer_sha256": "sha256:43c4bf51c8db8d03b43a5c2b3d1c44adf886d12fe3eba979b9d41f6101d10f5b",
+  "arms": {"fp32_clip_lr1e4": {"learning_rate": 0.0001}, "fp32_clip_lr5e5": {"learning_rate": 0.00005}},
+  "budget": {"gradient_steps": 32, "batch_size": 4, "lora_rank": 4, "num_layers": 8, "max_update_tokens_per_arm": 8192, "gradient_norm_ceiling": 1.0},
+  "gates": {"direct_floor": 0.75, "paraphrase_floor": 0.625, "protected_drop_ceiling": 0.05, "max_loss_ceiling": 10.0}
+}
