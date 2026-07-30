@@ -1,5 +1,14 @@
 # Agent Rules
 
+Explicit V37 interference-stream execution now authorized once: state slice
+`astral-rgs-v37-interference-stream-execution`. Bind RGS
+`10e025788ba3221409772bda630f843deb316f49` and Astral
+`7dc4686b131da7801a4d7fec9ab2913270a459ba`, all 12 frozen cells, one Qwen
+process, tokenizer preflight before training, exactly 1,536 gradient steps and
+589,824 update tokens, exclusive V37 ledger, external artifact, and model-free
+validation. No retry, threshold change, dynamic selector, CL-bench, assessment,
+confirmation, or higher claim is authorized.
+
 Explicit V37 interference-stream implementation now allowed: state slice
 `astral-rgs-v37-interference-stream-implementation`. Additive V37 fixture,
 one-process MLX worker, exclusive coordinator, tests, notes, and independent

@@ -1,5 +1,7 @@
 # Claim Ledger
 
+- V37 execution is authorized once against exact clean implementation commits;
+  result status remains `NotRun`.
 - V37 implementation is authorized; model execution remains `NotAuthorized`.
 - V37 is preregistered as a four-task difficulty qualification only.
   Implementation and execution are `NotAuthorized`; no claim promotion.
