@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V40 router kernel boundary](144-v40-router-kernel-boundary.md)
 - [V40 prospective protection-router preregistration](143-v40-prospective-protection-router-preregistration.md)
 - [V39 execution record](142-v39-execution-record.md)
 - [V39 quarter-protection preregistration](141-v39-quarter-protection-preregistration.md)
