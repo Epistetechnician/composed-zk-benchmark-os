@@ -1,5 +1,13 @@
 # Agent Rules
 
+Explicit V38 fixed-allocation execution now authorized once: state slice
+`astral-rgs-v38-fixed-protection-allocation-execution`. Bind RGS
+`dd9bda908d2c3fdc4d169cb78241bc46fcd3cee5` and Astral
+`2ce9de832959796ba26774ca28e933fdcf4ed988`, all 16 frozen cells, one Qwen
+process, tokenizer preflight, exactly 2,048 gradient steps and 786,432 update
+tokens, exclusive ledger, external artifact, and independent validation. No
+retry, tuning, dynamic controller, CL-bench, assessment, or higher claim.
+
 Explicit V38 fixed protection-allocation development now allowed: state slice
 `astral-rgs-v38-fixed-protection-allocation`. This docs-first and additive
 implementation slice may reuse the V37 four-task development corpus while
