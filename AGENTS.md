@@ -1,5 +1,13 @@
 # Agent Rules
 
+V35 execution is complete and consumed. Artifact
+`astral-rgs-v35-confirmation-8765db154d79-r1` is valid with
+`FreshAcquisitionConfirmed`: direct, paraphrase and protected V30 accuracy are
+all 1.0, and adapter reload is exact. No retry or claim above
+`LocalFreshAcquisitionConfirmationV35` is authorized. This is one small-model,
+single-update confirmation, not continual-learning, recovery, selector,
+multi-model, SOTA, or breakthrough evidence.
+
 Explicit V35 fresh confirmation execution now authorized once: state slice
 `astral-rgs-v35-fresh-acquisition-confirmation-execution`. Bind RGS
 `84501745fec27e7c7b43bce3fea626623d7b8e25` and Astral
