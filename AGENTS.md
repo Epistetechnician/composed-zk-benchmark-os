@@ -1,5 +1,13 @@
 # Agent Rules
 
+Explicit V34 protected-replay execution now authorized once: state slice
+`astral-rgs-v34-protected-replay-execution`. Bind RGS
+`37f303ce70aeeddbce1541270600024277515705` and Astral
+`b1ddb3a364768b3d421bf17e704b6ccacfa50400`, both frozen replay arms, one
+Qwen process, fixed budgets, exclusive ledger, external artifact, and
+model-free validation. No retry, confirmation, assessment, or claim above
+`LocalDevelopmentProtectedReplayQualificationV34` is authorized.
+
 Explicit V34 protected-replay implementation now allowed: state slice
 `astral-rgs-v34-protected-replay-implementation`. Additive two-arm fixture,
 one-process MLX worker, coordinator, tests, notes, and independent Astral
