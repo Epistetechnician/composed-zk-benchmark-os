@@ -1,5 +1,13 @@
 # Agent Rules
 
+V39 is complete and consumed. Artifact
+`astral-rgs-v39-quarter-allocation-338072fe87ec-r1` is independently valid but
+blocked. Joint recent achieved protection 1.0, retention 0.6875, and
+paraphrase 0.773438, but its matched retention drop 0.104167 exceeded the
+frozen 0.10 ceiling. Joint reservoir had retention drop 0.020833 but minimum
+protection 0.8125. Threshold relaxation, retry, and dynamic routing are
+forbidden.
+
 Explicit V39 execution authorized once, binding RGS
 `7b9c87dcf6ceef57cf17275d7e1863205d422319` and Astral
 `e15d0e9bbc2380ad1265286c5ffdcf1c1cf2a4e6`, 16 cells, 2,048 steps,

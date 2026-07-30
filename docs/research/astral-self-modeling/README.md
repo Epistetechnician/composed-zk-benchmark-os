@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V39 execution record](142-v39-execution-record.md)
 - [V39 quarter-protection preregistration](141-v39-quarter-protection-preregistration.md)
 - [V38R2 execution record](140-v38r2-execution-record.md)
 - [V38R2 execution authorization](139-v38r2-execution-authorization.md)
