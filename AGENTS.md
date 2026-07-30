@@ -1,5 +1,11 @@
 # Agent Rules
 
+Explicit V39 execution authorized once, binding RGS
+`7b9c87dcf6ceef57cf17275d7e1863205d422319` and Astral
+`e15d0e9bbc2380ad1265286c5ffdcf1c1cf2a4e6`, 16 cells, 2,048 steps,
+786,432 tokens, fresh exclusive identity, and independent validation. No retry
+or downstream gate is authorized.
+
 Explicit V39 quarter-protection fixed-allocation development and implementation
 now allowed: state slice `astral-rgs-v39-quarter-protection-allocation`.
 Preserve every V38R2 task, arm pairing, seed, order, checkpoint, budget,
