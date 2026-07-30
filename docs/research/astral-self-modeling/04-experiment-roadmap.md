@@ -2,6 +2,11 @@
 
 ## Current Decision
 
+V38R2 restored protected retention with a fixed alternating replay slot but
+lost too much task memory. Dynamic routing remains blocked. Any next allocation
+study must use a newly preregistered lower protected fraction or a genuinely
+prospective controller and must not reinterpret V38R2 as qualification.
+
 V37 completed with a useful nonsaturated retention regime, but three replay
 cells violated the protected V30 gate. The next permissible development slice
 is a fresh fixed-allocation protection-restoration study under identical

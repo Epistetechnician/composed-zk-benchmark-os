@@ -1,5 +1,12 @@
 # Agent Rules
 
+V38R2 is complete and consumed. Artifact
+`astral-rgs-v38r2-fixed-allocation-772ecd50efff-r1` is independently valid
+with `FixedProtectionAllocationBlocked`. Both joint arms restored every V30
+cell to 1.0, but mean task retention fell to 0.59375 and 0.541667, below the
+0.60 band, with matched retention drops 0.197917 and 0.145833 above 0.10.
+Dynamic allocation, CL-bench, confirmation, and claim promotion remain blocked.
+
 Explicit V38R2 execution now authorized once. Bind RGS
 `2403d1e26594d5317976675341c107b6ac147b8a` and Astral
 `7f2c626ff5ea850f2f6276aa48190ba5f2918130`, the unchanged 16 cells, 2,048
