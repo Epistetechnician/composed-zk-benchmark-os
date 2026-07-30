@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V40R2 native runtime contract lock](162-v40r2-native-runtime-contract-lock.md)
 - [V40R2 real tokenizer and logit smoke record](161-v40r2-real-tokenizer-logit-smoke-record.md)
 - [V40R2 native tokenization and scoring](160-v40r2-native-token-scoring.md)
 - [V40R2 current-margin forward correction](159-v40r2-current-margin-forward-correction.md)
