@@ -1,13 +1,13 @@
 {
-  "version": "astral.two_task_stream_protocol.v36",
-  "result_version": "mesh.astral_v36_two_task_result.v1",
-  "packet_version": "mesh.astral_v36_two_task_packet.v1",
-  "claim_ceiling": "LocalTwoTaskContinualLearningPilotV36",
+  "version": "astral.two_task_stream_protocol.v36r2",
+  "result_version": "mesh.astral_v36r2_two_task_result.v1",
+  "packet_version": "mesh.astral_v36r2_two_task_packet.v1",
+  "claim_ceiling": "LocalTwoTaskContinualLearningPilotV36R2",
   "arms": ["no_task_replay", "task_replay_25", "joint_replay_25"],
   "seeds": [360036, 360037],
   "orders": {"A_then_B": ["A", "B"], "B_then_A": ["B", "A"]},
   "steps_per_task": 32,
-  "tokens_per_example": 64,
-  "update_tokens_per_task": 8192,
+  "tokens_per_example": 96,
+  "update_tokens_per_task": 12288,
   "advantage_floor": 0.1
 }

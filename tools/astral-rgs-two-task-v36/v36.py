@@ -32,7 +32,7 @@ def _task(task_id: str, words: tuple[str, ...]) -> dict[str, Any]:
 
 
 def fixture() -> dict[str, Any]:
-    body = {"version": "mesh.astral_v36_two_task_fixture.v1", "tasks": [_task("A", V30.WORDS[:8]), _task("B", V30.WORDS[8:16])], "protected_fixture": V30.expected_fixture(), "arms": PROTOCOL["arms"], "seeds": PROTOCOL["seeds"], "orders": PROTOCOL["orders"], "steps_per_task": 32, "tokens_per_example": 64, "update_tokens_per_task": 8192}
+    body = {"version": "mesh.astral_v36r2_two_task_fixture.v1", "tasks": [_task("A", V30.WORDS[:8]), _task("B", V30.WORDS[8:16])], "protected_fixture": V30.expected_fixture(), "arms": PROTOCOL["arms"], "seeds": PROTOCOL["seeds"], "orders": PROTOCOL["orders"], "steps_per_task": 32, "tokens_per_example": 96, "update_tokens_per_task": 12288}
     return {**body, "fixture_sha256": V30.stable_hash(body)}
 
 
@@ -49,7 +49,7 @@ def summary(cells: list[dict[str, Any]]) -> dict[str, Any]:
         evaluated = []
         for cell in [c for c in cells if c["arm_id"] == arm]:
             first1 = accuracy(cell["first_after_first_direct"]); first2 = accuracy(cell["first_after_second_direct"]); second2 = accuracy(cell["second_after_second_direct"]); firstp = accuracy(cell["first_after_second_paraphrase"]); secondp = accuracy(cell["second_after_second_paraphrase"]); protected = accuracy(cell["protected_after_second"]); forgetting = first1 - first2; losses = [float(row["loss"]) for row in cell["loss_trace"]]
-            gates = {"first_acquisition": first1 >= .75, "second_acquisition": second2 >= .75, "first_retention": first2 >= .75, "first_paraphrase": firstp >= .75, "second_paraphrase": secondp >= .75, "forgetting": forgetting <= .125, "protected": protected >= .95, "reload": cell["reload_max_score_delta"] <= 1e-5, "update_parity": cell["update_tokens"] == 16384, "finite_loss": len(losses) == 64 and all(math.isfinite(x) for x in losses)}
+            gates = {"first_acquisition": first1 >= .75, "second_acquisition": second2 >= .75, "first_retention": first2 >= .75, "first_paraphrase": firstp >= .75, "second_paraphrase": secondp >= .75, "forgetting": forgetting <= .125, "protected": protected >= .95, "reload": cell["reload_max_score_delta"] <= 1e-5, "update_parity": cell["update_tokens"] == 24576, "finite_loss": len(losses) == 64 and all(math.isfinite(x) for x in losses)}
             evaluated.append({"seed": cell["seed"], "order_id": cell["order_id"], "first_after_first": first1, "first_after_second": first2, "second_after_second": second2, "first_paraphrase": firstp, "second_paraphrase": secondp, "protected": protected, "forgetting": forgetting, "gates": gates, "qualified": all(gates.values())})
         arms[arm] = {"cells": evaluated, "all_cells_qualified": all(c["qualified"] for c in evaluated), "mean_first_retention": statistics.mean(c["first_after_second"] for c in evaluated), "mean_forgetting": statistics.mean(c["forgetting"] for c in evaluated)}
     baseline_value, baseline_id = max((arms[a]["mean_first_retention"], a) for a in PROTOCOL["arms"][:2])
@@ -73,7 +73,7 @@ def validate(root: Path) -> dict[str, Any]:
         if not path.is_file() or path.is_symlink() or entry["sha256"] != V30.sha256_file(path) or entry["size_bytes"] != path.stat().st_size:
             errors.append("manifest.entry")
     actual = {p.relative_to(root).as_posix() for p in root.rglob("*") if p.is_file() and p.name != "artifact-manifest.json" and not p.name.startswith("astral-validation-")}
-    if actual != listed or root.name != f"astral-rgs-v36-two-task-stream-{str(manifest.get('manifest_sha256',''))[7:19]}-r1":
+    if actual != listed or root.name != f"astral-rgs-v36r2-two-task-stream-{str(manifest.get('manifest_sha256',''))[7:19]}-r1":
         errors.append("manifest.census")
     if frozen != fixture():
         errors.append("fixture")
@@ -85,7 +85,7 @@ def validate(root: Path) -> dict[str, Any]:
     for cell in cells:
         expected_mixes = ({(3, 0, 1)} if cell["arm_id"] == "no_task_replay" else {(3, 0, 1), (3, 1, 0)} if cell["arm_id"] == "task_replay_25" else {(3, 0, 1), (2, 1, 1)})
         observed_mixes = {(row["current_examples"], row["prior_examples"], row["protected_examples"]) for row in cell.get("loss_trace", [])}
-        if not observed_mixes.issubset(expected_mixes) or cell.get("update_tokens") != 16384:
+        if not observed_mixes.issubset(expected_mixes) or cell.get("update_tokens") != 24576:
             errors.append("cell.schedule")
         for key in decision_keys:
             for row in cell.get(key, []):
@@ -117,7 +117,10 @@ def validate(root: Path) -> dict[str, Any]:
         if locks.get(name) != V30.sha256_file(path):
             errors.append(f"local.{name}")
     packet_body = {key: value for key, value in packet.items() if key != "packet_sha256"}
-    if packet.get("packet_sha256") != V30.stable_hash(packet_body) or packet.get("version") != PROTOCOL["packet_version"] or packet.get("summary") != derived or packet.get("cell_count") != 12 or packet.get("total_update_tokens") != 196608:
+    token_preflight = result.get("tokenizer_preflight", {})
+    if token_preflight != {"prompt_count": 48, "maximum_tokens": 83, "window_tokens": 96, "all_fit": True}:
+        errors.append("tokenizer.preflight")
+    if packet.get("packet_sha256") != V30.stable_hash(packet_body) or packet.get("version") != PROTOCOL["packet_version"] or packet.get("summary") != derived or packet.get("cell_count") != 12 or packet.get("total_update_tokens") != 294912:
         errors.append("packet")
     status = (derived or {}).get("status", "Invalid") if not errors else "Invalid"
-    return {"version": "astral.v36_validation_report.v1", "valid": not errors, "status": status, "errors": errors, "artifact_manifest_sha256": manifest.get("manifest_sha256"), "claim_ceiling": PROTOCOL["claim_ceiling"], "model_execution": False, "external_review": "NotRun"}
+    return {"version": "astral.v36r2_validation_report.v1", "valid": not errors, "status": status, "errors": errors, "artifact_manifest_sha256": manifest.get("manifest_sha256"), "claim_ceiling": PROTOCOL["claim_ceiling"], "model_execution": False, "external_review": "NotRun"}
