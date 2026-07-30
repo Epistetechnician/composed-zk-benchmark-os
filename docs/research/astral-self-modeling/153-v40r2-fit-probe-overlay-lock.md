@@ -2,12 +2,18 @@
 
 State slice: `V40R2FitProbeOverlayLock`.
 
-Status: `OverlayImplemented / TokenizerQualificationPending`.
+Status: `TokenizerQualified / ModelForwardPassNotAuthorized`.
 
 The initial `e5c251f-r1` tokenizer construction is retired because it used
 uncommitted source and omitted source, runtime, and model inventories. It
 performed no forward pass. It cannot be promoted or retried under the same
 identity.
+
+The fresh R2 artifact
+`/Users/shaanp/Documents/ResearchArtifacts/astral-rgs-v40r2-fit-probes-fadf0a814514-r2`
+passes independent validation. It seals 400 prompts, an 83-token maximum input
+length, and a 3,256,320-token evaluation-forward budget. No model forward pass
+occurred.
 
 The deterministic overlay adds training, direct, paraphrase, candidate, and
 calibration definitions only for the four fit families without changing the
