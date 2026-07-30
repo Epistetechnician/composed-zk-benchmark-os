@@ -1,5 +1,15 @@
 # Agent Rules
 
+Explicit V30 response-free evaluator qualification preregistration now allowed:
+state slice `astral-rgs-v30-response-free-evaluator-preregistration`. This
+docs-first slice may freeze a deterministic 32-case public fixture, Qwen 0.5B
+and Llama 1B cached checkpoints, single-token answer-content vocabulary, three
+evaluators derived from shared positive/null logits, shuffled/null/permutation
+controls, existing rung floors, two model processes, external artifacts, and
+independent validation. It does not permit implementation, model access,
+training, adapters, candidate data, acquisition, assessment, SOTA,
+breakthrough, or claim promotion.
+
 V29R2 execution is complete and consumed. Artifact
 `astral-rgs-v29r2-canonical-boundary-731885d2c9a2-r1` is immutable and valid
 with `CanonicalBoundaryStillBlocked`. No V29R2 retry, prompt wrapper, threshold
