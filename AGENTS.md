@@ -1,5 +1,12 @@
 # Agent Rules
 
+V40R2 real-tokenizer/logit smoke is complete and consumed. Artifact
+`astral-rgs-v40r2-real-logit-smoke-7ff4abf93f4e-r1` independently validates
+one model load and 12 real forward passes with no training, tune, or assessment
+access. The untouched model scored 1/8 fit direct and 4/4 protected positive
+cases. No retry or claim above
+`LocalForwardOnlyRealTokenizerLogitSmokeV40R2` is authorized.
+
 Explicit V40R2 model-free fit-feature schema kernel is allowed in RGS. It does
 not authorize feature acquisition, model access, telemetry values, fitting,
 tune/assessment access, gradients, or scientific execution.
