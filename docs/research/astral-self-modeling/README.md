@@ -304,6 +304,8 @@ review and experiments rule out equivalent prior work.
   freezes a minimal Qwen LoRA acquisition sanity check before implementation.
 - [V31 tiny acquisition implementation](105-v31-tiny-acquisition-implementation.md):
   adds the bounded LoRA worker and independent artifact validator without model execution.
+- [V31 tiny acquisition execution authorization](106-v31-tiny-acquisition-execution-authorization.md):
+  binds immutable implementations and authorizes one consuming bounded update.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
