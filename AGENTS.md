@@ -1,5 +1,14 @@
 # Agent Rules
 
+V38 is consumed and retired as a construction failure. The retained directory
+`incomplete-astral-rgs-v38-0c63d3cb` stopped after stage 1 of the first cell
+because the worker called nonexistent `_max_delta` instead of `max_delta`.
+No model result or scientific classification exists. Explicit V38R2 call-site
+correction is allowed under state slice
+`astral-rgs-v38r2-fixed-protection-allocation-correction`: change only that
+helper call and all ledger/result/packet/artifact identities to V38R2, update
+validators and tests, then require separate execution authorization.
+
 Explicit V38 fixed-allocation execution now authorized once: state slice
 `astral-rgs-v38-fixed-protection-allocation-execution`. Bind RGS
 `dd9bda908d2c3fdc4d169cb78241bc46fcd3cee5` and Astral
