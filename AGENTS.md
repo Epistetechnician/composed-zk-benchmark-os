@@ -1,5 +1,9 @@
 # Agent Rules
 
+Explicit V40 model-free protocol kernel now allowed in RGS. This does not
+authorize Astral implementation, corpus construction, telemetry, model
+execution, or assessment.
+
 Explicit V40 prospective protection-router preregistration now allowed: state
 slice `astral-rgs-v40-prospective-protection-router-preregistration`. This is
 documentation-only. It may freeze a fresh four-task corpus, family-disjoint
