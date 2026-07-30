@@ -1,5 +1,16 @@
 # Agent Rules
 
+Explicit V30 response-free evaluator execution now authorized once: state
+slice `astral-rgs-v30-response-free-evaluator-execution`. Bind RGS
+`b8bfed6073d927e82c903a825fc3239fb1209c93` and Astral
+`b2ba7c66402a59b1e441b9d76e7df4e55168bcda`, both frozen cached model
+inventories, the public 32-case fixture, exactly two model processes and 128
+prompt forwards, an exclusive consuming ledger, a content-addressed external
+artifact, and read-only Astral validation. The first ledger claim consumes this
+identity. No retry, training, adapters, candidate corpus, acquisition,
+assessment, SOTA, breakthrough, or claim above
+`LocalResponseFreeEvaluatorQualificationV30` is permitted.
+
 Explicit V30 response-free evaluator implementation now allowed: state slice
 `astral-rgs-v30-response-free-evaluator-implementation`. Additive response-free
 protocol, validator, CLI, hermetic tests, implementation notes, and matching
