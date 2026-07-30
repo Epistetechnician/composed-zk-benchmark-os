@@ -68,7 +68,7 @@ def validate_artifact(root: Path) -> dict[str, Any]:
         if not path.is_file() or path.is_symlink() or entry.get("sha256") != V30.sha256_file(path) or entry.get("size_bytes") != path.stat().st_size:
             errors.append("manifest.entry")
     actual = {path.relative_to(root).as_posix() for path in root.rglob("*") if path.is_file() and path.name != "artifact-manifest.json" and not path.name.startswith("astral-validation-")}
-    if actual != listed or root.name != f"astral-rgs-v31-tiny-acquisition-{str(manifest.get('manifest_sha256',''))[7:19]}-r1":
+    if actual != listed or root.name != f"astral-rgs-v31r2-tiny-acquisition-{str(manifest.get('manifest_sha256',''))[7:19]}-r1":
         errors.append("manifest.census")
     expected = expected_fixture()
     if fixture != expected:
