@@ -330,6 +330,8 @@ review and experiments rule out equivalent prior work.
   records successful development acquisition with failed retention and freezes two replay ratios.
 - [V34 protected-replay implementation](118-v34-protected-replay-implementation.md):
   adds the two-arm replay worker and independent validator without execution.
+- [V34 execution authorization](119-v34-execution-authorization.md):
+  authorizes one matched replay comparison while withholding confirmation.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
