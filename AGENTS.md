@@ -1,5 +1,15 @@
 # Agent Rules
 
+Explicit V39 quarter-protection fixed-allocation development and implementation
+now allowed: state slice `astral-rgs-v39-quarter-protection-allocation`.
+Preserve every V38R2 task, arm pairing, seed, order, checkpoint, budget,
+evaluation, and gate, but change joint schedules from alternating 50% protected
+fourth slots to exactly 25% protected fourth slots (`steps 3,7,...,31`) and 75%
+matched task replay. Rerun matched task-only controls. Add new identities,
+tests, source locks, and independent validation. Model execution requires a
+separate exact-commit authorization. Dynamic routing and higher claims remain
+forbidden.
+
 V38R2 is complete and consumed. Artifact
 `astral-rgs-v38r2-fixed-allocation-772ecd50efff-r1` is independently valid
 with `FixedProtectionAllocationBlocked`. Both joint arms restored every V30
