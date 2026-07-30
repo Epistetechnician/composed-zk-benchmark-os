@@ -1,5 +1,14 @@
 # Agent Rules
 
+Explicit V37 interference-stream implementation now allowed: state slice
+`astral-rgs-v37-interference-stream-implementation`. Additive V37 fixture,
+one-process MLX worker, exclusive coordinator, tests, notes, and independent
+Astral validator are permitted. Implementation must remain model-free, bind
+the exact preregistration, preflight all prompts, and preserve every frozen
+task, arm, schedule, budget, evaluation, gate, and claim ceiling. Model
+execution, CL-bench, assessment, dynamic selection, threshold changes, and
+higher claims are forbidden.
+
 Explicit V37 four-task interference-stream preregistration now allowed: state
 slice `astral-rgs-v37-interference-stream-preregistration`. This docs-first
 slice may freeze four disjoint eight-association tasks, forward/reverse orders,

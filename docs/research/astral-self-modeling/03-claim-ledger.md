@@ -1,5 +1,6 @@
 # Claim Ledger
 
+- V37 implementation is authorized; model execution remains `NotAuthorized`.
 - V37 is preregistered as a four-task difficulty qualification only.
   Implementation and execution are `NotAuthorized`; no claim promotion.
 - V36R2 is a valid negative result. The candidate is blocked because joint
