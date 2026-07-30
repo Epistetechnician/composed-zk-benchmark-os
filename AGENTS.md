@@ -1,5 +1,15 @@
 # Agent Rules
 
+Explicit V32 acquisition-objective diagnosis and optimizer-development
+preregistration now allowed: state slice
+`astral-rgs-v32-acquisition-objective-diagnosis`. This docs-first slice may
+record the V31R2 loss/retention diagnostics and freeze two development-only
+optimizer arms on eight new associations: float32 target loss, gradient-norm
+clipping at 1.0, learning rates `1e-4` and `5e-5`, 32 batch-4 steps, unchanged
+rank/layers, V30 protection, and fixed gates. It does not permit
+implementation, model access, training, confirmation, assessment, continual
+learning, SOTA, or breakthrough claims.
+
 V31R2 execution is complete and consumed. Artifact
 `astral-rgs-v31r2-tiny-acquisition-a36975fa2f90-r1` is a valid negative with
 `TinyAcquisitionBlocked`. Direct accuracy improved only 0.0625, paraphrase
