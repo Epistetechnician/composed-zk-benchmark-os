@@ -1,5 +1,9 @@
 # Agent Rules
 
+Explicit V40 offline tokenizer qualification is allowed against the committed
+fresh corpus and cached Qwen tokenizer only. No forward pass, telemetry,
+training, fitting, assessment, network access, or corpus repair is authorized.
+
 Explicit V40 model-free fresh-corpus kernel is allowed in RGS. It does not
 authorize tokenizer qualification, telemetry, fitting, training, assessment,
 or scientific execution.
