@@ -1,5 +1,11 @@
 # Agent Rules
 
+V40R2 tokenizer-first corpus qualification is complete. Artifact
+`astral-rgs-v40r2-tokenizer-43c608ba9ac8-r1` contains 32 canonical
+single-token targets and 12 family-disjoint corpus families; independent
+model-free validation passed with no errors. No forward pass occurred.
+Telemetry, fitting, training, assessment, and scientific claims remain blocked.
+
 V40 tokenizer qualification is consumed and failed: 9 of 32 targets were
 canonical single tokens and 23 were multi-token. The corpus is retired.
 Explicit V40R2 tokenizer-first construction is allowed using a precommitted
