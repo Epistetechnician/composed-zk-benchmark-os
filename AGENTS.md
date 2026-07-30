@@ -1,5 +1,9 @@
 # Agent Rules
 
+Explicit V40 model-free fresh-corpus kernel is allowed in RGS. It does not
+authorize tokenizer qualification, telemetry, fitting, training, assessment,
+or scientific execution.
+
 Explicit V40 model-free protocol kernel now allowed in RGS. This does not
 authorize Astral implementation, corpus construction, telemetry, model
 execution, or assessment.
