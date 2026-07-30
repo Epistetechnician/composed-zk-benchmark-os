@@ -1,5 +1,15 @@
 # Agent Rules
 
+V41R2 infrastructure recovery is explicitly authorized under state slice
+`V41R2H100RuntimeProfileRecovery`. It may reuse the exact committed V41 runner,
+model revision, corpus, one-step profile, validator, `$13.50` job ceiling, and
+closed tune/assessment boundary under a fresh job and mission identity. The
+only change is `max_restarts=1`, permitting one provider-managed restart after
+worker loss. It does not authorize scientific retries after a completed
+profile, pilot, qualification, tune, assessment, Astral selection, or claims
+above the unchanged inner-artifact ceiling
+`RemoteH100RuntimeProfileOnlyV41`.
+
 V41 H100 runtime profile is consumed as a platform execution failure. Jobs
 `job-h7uu8`, `job-9gxm5`, `job-kuaz4`, and `job-cbjzc` are retained
 pre-execution packaging failures. Job `job-psr8z` reached attempt 1 but ended
