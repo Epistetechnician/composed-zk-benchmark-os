@@ -338,6 +338,8 @@ review and experiments rule out equivalent prior work.
   adds the locked fresh-corpus worker and independent validator without execution.
 - [V35 execution authorization](122-v35-execution-authorization.md):
   authorizes one immutable fresh confirmation run without tuning or retry.
+- [V35 execution record](123-v35-execution-record.md):
+  records valid fresh acquisition confirmation with exact protection and reload gates.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
