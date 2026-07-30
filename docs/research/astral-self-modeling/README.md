@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V40R2 current-margin forward correction](159-v40r2-current-margin-forward-correction.md)
 - [V40R2 executable backend adapter](158-v40r2-executable-backend-adapter.md)
 - [V40R2 executable batch boundary](157-v40r2-executable-batch-boundary.md)
 - [V40R2 MLX backend primitives](156-v40r2-mlx-backend-primitives.md)

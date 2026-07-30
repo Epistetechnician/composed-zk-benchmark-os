@@ -11,7 +11,9 @@ schedule: recent-task replay or protected replay.
 Feature capture receives that same continuation, preventing telemetry from
 being computed on a different batch than the gradient update. The rotating
 current/protected margin probes and counterfactual acquisition, protection,
-retention, and paraphrase groups are deterministic and fit-only.
+retention, and paraphrase groups are deterministic and fit-only. Current
+margin uses the first current example in the exact gradient batch and adds no
+forward pass; protected margin remains the only extra feature probe.
 
 Optimizer wiring, scoring, branch evaluation, and concrete runner integration
 remain incomplete. No model execution is authorized.
