@@ -312,6 +312,8 @@ review and experiments rule out equivalent prior work.
   fixes only the failed inventory identity seam and freezes a regression test.
 - [V31R2 corrected execution authorization](109-v31r2-execution-authorization.md):
   authorizes one new identity with every scientific lock preserved.
+- [V31R2 execution record](110-v31r2-execution-record.md):
+  records the valid negative acquisition result and read-only replay correction.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):

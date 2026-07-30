@@ -1,5 +1,12 @@
 # Agent Rules
 
+V31R2 execution is complete and consumed. Artifact
+`astral-rgs-v31r2-tiny-acquisition-a36975fa2f90-r1` is a valid negative with
+`TinyAcquisitionBlocked`. Direct accuracy improved only 0.0625, paraphrase
+failed, and protected V30 accuracy dropped 0.71875. No retry or claim promotion
+is authorized. The no-update metadata-comparison defect was corrected
+read-only; the outcome remained blocked.
+
 Explicit V31R2 corrected execution now authorized once: state slice
 `astral-rgs-v31r2-tiny-acquisition-execution`. Bind RGS
 `aee23d54c04ecf145999331f58290303b143acc3` and Astral

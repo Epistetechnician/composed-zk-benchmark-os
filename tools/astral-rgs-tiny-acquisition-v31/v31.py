@@ -90,7 +90,7 @@ def validate_artifact(root: Path) -> dict[str, Any]:
     try:
         post, reload = phases["post_direct"], phases["reload_direct"]
         delta = max(abs(a["candidate_scores"][word] - b["candidate_scores"][word]) for a, b in zip(post, reload, strict=True) for word in a["candidates"])
-        no_update_exact = phases["pre_direct"] == phases["no_update_direct"]
+        no_update_exact = [{key: value for key, value in row.items() if key != "phase"} for row in phases["pre_direct"]] == [{key: value for key, value in row.items() if key != "phase"} for row in phases["no_update_direct"]]
         derived = summarize(phases, delta, no_update_exact)
     except Exception:
         errors.append("summary.rederive"); derived = None
