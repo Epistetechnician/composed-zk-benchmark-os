@@ -1,5 +1,20 @@
 # Agent Rules
 
+V32 execution is complete and consumed. Artifact
+`astral-rgs-v32-optimizer-development-f2471c7c4030-r1` is valid with
+`OptimizerDevelopmentBlocked`. Both arms were numerically stable and preserved
+V30 exactly, but direct and paraphrase accuracy remained 0.125. No V32 retry or
+confirmation is authorized.
+
+Explicit V33 target-free acquisition-objective preregistration now allowed:
+state slice `astral-rgs-v33-target-free-objective-preregistration`. This
+docs-first slice may reuse only the V32 development associations, lock
+`fp32_clip_lr1e4`, remove the target value from the training input while
+retaining it solely as the supervised completion, preserve the 32-step budget
+and V32 gates, and define independent validation. It does not permit
+implementation, model access, training, fresh confirmation data, assessment,
+continual learning, SOTA, or breakthrough claims.
+
 Explicit V32 optimizer-development execution now authorized once: state slice
 `astral-rgs-v32-optimizer-development-execution`. Bind RGS
 `62d399d2a56c57d616117f0670ee5cca1944e60a` and Astral
