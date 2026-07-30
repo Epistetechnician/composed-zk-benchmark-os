@@ -318,6 +318,8 @@ review and experiments rule out equivalent prior work.
   diagnoses V31R2 instability and freezes a two-arm development optimizer comparison.
 - [V32 optimizer-development implementation](112-v32-optimizer-development-implementation.md):
   adds the bounded two-arm worker and independent validator without model execution.
+- [V32 optimizer-development execution authorization](113-v32-optimizer-development-execution-authorization.md):
+  authorizes one consuming development comparison while withholding confirmation.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):

@@ -1,5 +1,14 @@
 # Agent Rules
 
+Explicit V32 optimizer-development execution now authorized once: state slice
+`astral-rgs-v32-optimizer-development-execution`. Bind RGS
+`62d399d2a56c57d616117f0670ee5cca1944e60a` and Astral
+`a5cfe03cd5c06723f59518fa49813312b4b2ad17`, the two frozen arms, one
+Qwen process, 64 total gradient steps, per-arm 8,192-token ceilings, a new
+exclusive ledger, external content-addressed artifact, and model-free Astral
+validation. No retry, confirmation, assessment, or claim above
+`LocalDevelopmentOptimizerQualificationV32` is authorized.
+
 Explicit V32 optimizer-development implementation now allowed: state slice
 `astral-rgs-v32-optimizer-development-implementation`. Additive eight-case
 fixture, two-arm one-process MLX worker, coordinator, tests, notes, and
