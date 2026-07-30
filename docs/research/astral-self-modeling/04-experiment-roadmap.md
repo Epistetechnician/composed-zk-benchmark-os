@@ -2,6 +2,13 @@
 
 ## Current Decision
 
+V36R2 is a valid negative two-task result: ordinary and joint replay both
+saturated at mean retention 1.0. V37 therefore qualifies a four-task
+interference stream before any dynamic-memory method is introduced. It must
+place the strongest fixed replay baseline inside the frozen `[0.60, 0.90]`
+retention band and preserve acquisition, protection, reload, and compute gates.
+Otherwise the stream is retired without candidate testing.
+
 The tested one-pass local gradient-selector lane is closed. The planted control
 validated measurement plumbing, but V5 returned `Null` and V10 selected no
 method because activation magnitude remained stronger. Stage 1 observer work is

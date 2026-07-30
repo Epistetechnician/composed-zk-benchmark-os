@@ -1,5 +1,16 @@
 # Agent Rules
 
+Explicit V37 four-task interference-stream preregistration now allowed: state
+slice `astral-rgs-v37-interference-stream-preregistration`. This docs-first
+slice may freeze four disjoint eight-association tasks, forward/reverse orders,
+seeds `370037/370038`, arms
+`no_task_replay/recent_replay_25/reservoir_replay_25`, 32 batch-4 steps per
+task, fixed 96-token windows, identical starting checkpoints, stage-wise
+restart evaluation, direct/paraphrase/V30 controls, exact budget and reload
+gates, and a useful-difficulty band that rejects replay retention above 0.90
+as saturated. It does not permit implementation, model execution, CL-bench,
+assessment, dynamic selection, confirmation, SOTA, or breakthrough claims.
+
 V36R2 execution is complete and consumed. Artifact
 `astral-rgs-v36r2-two-task-stream-c39462eb2676-r1` is valid with
 `TwoTaskContinualLearningPilotBlocked`. Ordinary task replay and joint replay
