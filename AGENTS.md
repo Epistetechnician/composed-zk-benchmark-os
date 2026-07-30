@@ -1,5 +1,20 @@
 # Agent Rules
 
+V34 execution is complete and consumed. Artifact
+`astral-rgs-v34-protected-replay-cc777697532e-r1` is valid with
+`ProtectedReplayQualified`; only `protected_replay_25` qualified. No V34 retry
+or selector change is authorized.
+
+Explicit V35 fresh acquisition confirmation preregistration now allowed:
+state slice `astral-rgs-v35-fresh-acquisition-confirmation-preregistration`.
+This docs-first slice may lock `protected_replay_25` unchanged, use the eight
+previously unused V30 words at indices 8 through 15 with new keys, keep the
+target-free objective and exact V34 budget, require direct/paraphrase at least
+0.75, V30 protection at least 0.95, stable finite loss, adapter reload
+equivalence, and independent validation. It does not permit implementation,
+model access, training, threshold changes, continual-learning streams,
+assessment, SOTA, or breakthrough claims.
+
 Explicit V34 protected-replay execution now authorized once: state slice
 `astral-rgs-v34-protected-replay-execution`. Bind RGS
 `37f303ce70aeeddbce1541270600024277515705` and Astral
