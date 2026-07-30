@@ -1,5 +1,9 @@
 # Claim Ledger
 
+- V41 prospectively locks a GPT-OSS-20B H100 persistent-acquisition
+  tournament and a `$15` runtime-profile gate. No remote job or scientific
+  result exists; GiveMeNode MCP execution remains unavailable in the active
+  task.
 - V40R2 concrete native MLX runtime is implemented and hermetically tested.
   No real gradient or model update has run; this is implementation evidence,
   not acquisition or continual-learning evidence.
