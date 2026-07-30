@@ -1,5 +1,17 @@
 # Agent Rules
 
+Explicit V31R2 inventory-binding correction now allowed: state slice
+`astral-rgs-v31r2-inventory-binding-correction`. Change only the missing
+inventory identity lookup to a canonical hash of the complete established
+inventory object, add its regression test, update R2 identity strings, and
+retain every V31 fixture, model, prompt, update budget, gate, and artifact
+contract. Model access and execution remain unauthorized.
+
+V31 execution is consumed by a retained pre-training infrastructure failure.
+No gradient step ran and no adapter exists. V31 may not be retried. A separate
+V31R2 may change only the missing model-inventory identity binding, add a
+regression test, and retain every other fixture, budget, gate, and source path.
+
 Explicit V31 tiny-acquisition execution now authorized once: state slice
 `astral-rgs-v31-tiny-acquisition-execution`. Bind RGS
 `081f383894f63d6c4abc9c0ea301b327597347a5` and Astral
