@@ -1,0 +1,14 @@
+{
+  "version": "astral.fixed_allocation_protocol.v38",
+  "result_version": "mesh.astral_v38_fixed_allocation_result.v1",
+  "packet_version": "mesh.astral_v38_fixed_allocation_packet.v1",
+  "claim_ceiling": "LocalFixedProtectionAllocationDevelopmentV38",
+  "arms": ["recent_task_25", "reservoir_task_25", "joint_recent_alt_25", "joint_reservoir_alt_25"],
+  "seeds": [370037, 370038],
+  "orders": {"forward": ["A", "B", "C", "D"], "reverse": ["D", "C", "B", "A"]},
+  "update_tokens_per_cell": 49152,
+  "total_update_tokens": 786432,
+  "retention_band": [0.6, 0.9],
+  "paraphrase_floor": 0.7,
+  "retention_drop_ceiling": 0.1
+}
