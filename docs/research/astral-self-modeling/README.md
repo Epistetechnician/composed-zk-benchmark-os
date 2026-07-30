@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V40R2 fit runner core implementation](155-v40r2-fit-runner-core-implementation.md)
 - [V40R2 fit probe qualification record](154-v40r2-fit-probe-qualification-record.md)
 - [V40R2 fit probe overlay lock](153-v40r2-fit-probe-overlay-lock.md)
 - [V40R2 fit acquisition runner authorization](152-v40r2-fit-acquisition-runner-authorization.md)
