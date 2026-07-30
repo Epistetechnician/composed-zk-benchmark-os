@@ -1,5 +1,13 @@
 # Agent Rules
 
+Explicit V34 protected-replay implementation now allowed: state slice
+`astral-rgs-v34-protected-replay-implementation`. Additive two-arm fixture,
+one-process MLX worker, coordinator, tests, notes, and independent Astral
+validator are permitted. Implementation must remain model-free and preserve
+the frozen V34 ratios, schedule, budgets, gates, and development-only ceiling.
+Model access, execution, confirmation, assessment, continual learning, SOTA,
+and breakthrough claims are forbidden.
+
 V33 execution is complete and consumed. Artifact
 `astral-rgs-v33-target-free-717292ceeec5-r1` is valid with
 `TargetFreeObjectiveBlocked`. Direct and paraphrase acquisition reached 1.0,
