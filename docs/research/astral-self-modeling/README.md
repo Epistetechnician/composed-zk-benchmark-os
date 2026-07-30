@@ -316,6 +316,8 @@ review and experiments rule out equivalent prior work.
   records the valid negative acquisition result and read-only replay correction.
 - [V32 acquisition-objective diagnosis](111-v32-acquisition-objective-diagnosis.md):
   diagnoses V31R2 instability and freezes a two-arm development optimizer comparison.
+- [V32 optimizer-development implementation](112-v32-optimizer-development-implementation.md):
+  adds the bounded two-arm worker and independent validator without model execution.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):

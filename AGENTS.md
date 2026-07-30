@@ -1,5 +1,13 @@
 # Agent Rules
 
+Explicit V32 optimizer-development implementation now allowed: state slice
+`astral-rgs-v32-optimizer-development-implementation`. Additive eight-case
+fixture, two-arm one-process MLX worker, coordinator, tests, notes, and
+independent Astral validator are permitted. Implementation must remain
+model-free and preserve all V32 arms, budgets, gates, and development-only
+claim ceilings. Model access, training execution, confirmation, assessment,
+continual learning, SOTA, and breakthrough claims are forbidden.
+
 Explicit V32 acquisition-objective diagnosis and optimizer-development
 preregistration now allowed: state slice
 `astral-rgs-v32-acquisition-objective-diagnosis`. This docs-first slice may
