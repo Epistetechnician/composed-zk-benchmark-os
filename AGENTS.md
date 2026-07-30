@@ -1,5 +1,15 @@
 # Agent Rules
 
+Explicit V31 tiny-acquisition execution now authorized once: state slice
+`astral-rgs-v31-tiny-acquisition-execution`. Bind RGS
+`081f383894f63d6c4abc9c0ea301b327597347a5` and Astral
+`f3a534fd0dd0972307851cc1e9d970b7719faa1c`, the frozen Qwen checkpoint,
+64 batch-4 rank-4 LoRA steps, a 16,384-token ceiling, exclusive ledger,
+external content-addressed artifact, and read-only Astral validation. First
+ledger claim consumes the identity. No retry, threshold change, assessment,
+continual-learning campaign, SOTA, breakthrough, or claim above
+`LocalTinyAcquisitionSanityV31` is permitted.
+
 Explicit V31 tiny-acquisition implementation now allowed: state slice
 `astral-rgs-v31-tiny-acquisition-implementation`. Additive deterministic
 fixture, one-process MLX LoRA worker, consuming coordinator, tests, notes, and
