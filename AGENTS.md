@@ -1,5 +1,13 @@
 # Agent Rules
 
+Explicit V35 fresh confirmation execution now authorized once: state slice
+`astral-rgs-v35-fresh-acquisition-confirmation-execution`. Bind RGS
+`84501745fec27e7c7b43bce3fea626623d7b8e25` and Astral
+`d78e5bc6b11c343e3d76e772cf68b040f43824ed`, the untouched fixture, locked
+25% replay method, one Qwen process, fixed budget, exclusive ledger, external
+artifact, and model-free validation. No retry, tuning, continual-learning run,
+assessment, or claim above `LocalFreshAcquisitionConfirmationV35` is allowed.
+
 Explicit V35 fresh confirmation implementation now allowed: state slice
 `astral-rgs-v35-fresh-confirmation-implementation`. Additive untouched fixture,
 one-arm MLX worker, coordinator, tests, notes, and independent Astral validator
