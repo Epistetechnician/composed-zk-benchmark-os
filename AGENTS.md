@@ -1,5 +1,11 @@
 # Agent Rules
 
+Explicit V38R2 execution now authorized once. Bind RGS
+`2403d1e26594d5317976675341c107b6ac147b8a` and Astral
+`7f2c626ff5ea850f2f6276aa48190ba5f2918130`, the unchanged 16 cells, 2,048
+steps, 786,432 tokens, new exclusive V38R2 identity, and independent
+validation. No retry or downstream gate is authorized.
+
 V38 is consumed and retired as a construction failure. The retained directory
 `incomplete-astral-rgs-v38-0c63d3cb` stopped after stage 1 of the first cell
 because the worker called nonexistent `_max_delta` instead of `max_delta`.
