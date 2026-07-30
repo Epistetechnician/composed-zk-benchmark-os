@@ -80,6 +80,7 @@ requirements.
 | V28R7 | `PilotNoSignalAstralR2ValidExternalReviewNotRun` | The completed pilot found no signal arm; both positive controls stayed at chance and most runs always selected A, so a powered acquisition campaign is blocked |
 | V29 | `ValidNegativeInstrumentStillBlocked` | No response format passed all four positive-control gates; tokenizer-only diagnosis found a noncanonical answer-cue token boundary, requiring a new preregistered identity |
 | V29R2 | `ValidNegativeCanonicalBoundaryStillBlocked` | Canonical tokenization passed, but all 64 predictions remained A and every rung stayed at chance; single-letter next-token scoring is closed |
+| V30 | `DocsFirstResponseFreeEvaluatorPreregistered` | Thirty-two public cases and two cached checkpoints will qualify answer-content scoring before any tiny acquisition run |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 
