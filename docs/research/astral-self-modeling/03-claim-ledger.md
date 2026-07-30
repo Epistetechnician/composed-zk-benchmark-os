@@ -1,5 +1,7 @@
 # Claim Ledger
 
+- V38 execution is authorized once against exact clean commits; status
+  `NotRun`.
 - V38 fixed-allocation development is preregistered and implementation
   authorized. Execution remains `NotAuthorized`; no claim promotion.
 - V37 is a valid negative result. It established nonsaturated interference and
