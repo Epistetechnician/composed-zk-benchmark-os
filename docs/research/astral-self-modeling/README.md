@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V38 fixed protection-allocation preregistration](135-v38-fixed-protection-allocation-preregistration.md)
 - [V37 execution record](134-v37-execution-record.md)
 - [V37 execution authorization](133-v37-execution-authorization.md)
 - [V37 interference-stream implementation](132-v37-interference-stream-implementation.md)

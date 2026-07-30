@@ -1,5 +1,7 @@
 # Claim Ledger
 
+- V38 fixed-allocation development is preregistered and implementation
+  authorized. Execution remains `NotAuthorized`; no claim promotion.
 - V37 is a valid negative result. It established nonsaturated interference and
   replay separation, but three replay cells failed protected retention. Dynamic
   selection and claim promotion remain blocked.

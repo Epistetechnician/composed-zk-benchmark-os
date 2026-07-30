@@ -1,5 +1,17 @@
 # Agent Rules
 
+Explicit V38 fixed protection-allocation development now allowed: state slice
+`astral-rgs-v38-fixed-protection-allocation`. This docs-first and additive
+implementation slice may reuse the V37 four-task development corpus while
+rerunning four matched arms: task-only recent, task-only reservoir, alternating
+recent/protected, and alternating reservoir/protected. All arms retain three
+current rows plus one fixed fourth-slot policy, 32 batch-4 steps per task,
+96-token windows, the V37 seeds/orders, identical checkpoints, stage-wise
+restart evaluation, source locks, external artifacts, tests, and independent
+validation. Implementation is allowed; model execution requires a separate
+commit-bound authorization. No adaptive allocation, Astral telemetry, dynamic
+compression, CL-bench, confirmation, SOTA, or higher claim is permitted.
+
 V37 execution is complete and consumed. Artifact
 `astral-rgs-v37-interference-stream-e7a24a93e4d0-r1` is independently valid
 with `MechanicalOrAcquisitionBlocked`. The stream avoided saturation:
