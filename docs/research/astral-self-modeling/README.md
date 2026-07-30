@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41 H100 runtime-profile failure record](165-v41-h100-runtime-profile-failure-record.md)
 - [V41 H100 persistent-acquisition tournament](164-v41-h100-persistent-acquisition-tournament.md)
 - [V40R2 native runtime implementation](163-v40r2-native-runtime-implementation.md)
 - [V40R2 native runtime contract lock](162-v40r2-native-runtime-contract-lock.md)
