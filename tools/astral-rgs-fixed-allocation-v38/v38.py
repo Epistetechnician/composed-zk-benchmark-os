@@ -21,7 +21,7 @@ MATCHED = {"joint_recent_alt_25": "recent_task_25", "joint_reservoir_alt_25": "r
 
 def fixture() -> dict[str, Any]:
     base = V37.fixture()
-    body = {**{key: value for key, value in base.items() if key not in {"version", "arms", "fixture_sha256"}}, "version": "mesh.astral_v38_fixed_allocation_fixture.v1", "arms": PROTOCOL["arms"]}
+    body = {**{key: value for key, value in base.items() if key not in {"version", "arms", "fixture_sha256"}}, "version": "mesh.astral_v38r2_fixed_allocation_fixture.v1", "arms": PROTOCOL["arms"]}
     return {**body, "fixture_sha256": V30.stable_hash(body)}
 
 
@@ -68,7 +68,7 @@ def validate(root: Path) -> dict[str, Any]:
         path = root / entry["path"]; listed.add(entry["path"])
         if not path.is_file() or path.is_symlink() or entry["sha256"] != V30.sha256_file(path) or entry["size_bytes"] != path.stat().st_size: errors.append("manifest.entry")
     actual = {p.relative_to(root).as_posix() for p in root.rglob("*") if p.is_file() and p.name != "artifact-manifest.json" and not p.name.startswith("astral-validation-")}
-    expected_name = f"astral-rgs-v38-fixed-allocation-{str(manifest.get('manifest_sha256',''))[7:19]}-r1"
+    expected_name = f"astral-rgs-v38r2-fixed-allocation-{str(manifest.get('manifest_sha256',''))[7:19]}-r1"
     if actual != listed or root.name != expected_name: errors.append("manifest.census")
     if frozen != fixture(): errors.append("fixture")
     cells = result.get("cells", []); body = {key: value for key, value in result.items() if key != "result_sha256"}
@@ -100,4 +100,4 @@ def validate(root: Path) -> dict[str, Any]:
     packet_body = {key: value for key, value in packet.items() if key != "packet_sha256"}
     if packet.get("packet_sha256") != V30.stable_hash(packet_body) or packet.get("version") != PROTOCOL["packet_version"] or packet.get("summary") != derived or packet.get("cell_count") != 16 or packet.get("total_update_tokens") != 786432: errors.append("packet")
     status = (derived or {}).get("status", "Invalid") if not errors else "Invalid"
-    return {"version": "astral.v38_validation_report.v1", "valid": not errors, "status": status, "errors": errors, "artifact_manifest_sha256": manifest.get("manifest_sha256"), "claim_ceiling": PROTOCOL["claim_ceiling"], "model_execution": False, "external_review": "NotRun"}
+    return {"version": "astral.v38r2_validation_report.v1", "valid": not errors, "status": status, "errors": errors, "artifact_manifest_sha256": manifest.get("manifest_sha256"), "claim_ceiling": PROTOCOL["claim_ceiling"], "model_execution": False, "external_review": "NotRun"}
