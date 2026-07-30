@@ -1,5 +1,7 @@
 # Claim Ledger
 
+- V37 is preregistered as a four-task difficulty qualification only.
+  Implementation and execution are `NotAuthorized`; no claim promotion.
 - V36R2 is a valid negative result. The candidate is blocked because joint
   replay's retention advantage over ordinary task replay was 0.0, below 0.1,
   and one shared acquisition cell missed its gate. No claim promotion.
