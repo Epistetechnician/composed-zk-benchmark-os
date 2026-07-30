@@ -1,5 +1,12 @@
 # Agent Rules
 
+Explicit V35 fresh confirmation implementation now allowed: state slice
+`astral-rgs-v35-fresh-confirmation-implementation`. Additive untouched fixture,
+one-arm MLX worker, coordinator, tests, notes, and independent Astral validator
+are permitted. Implementation must remain model-free and preserve every V35
+lock. Model access, execution, tuning, threshold changes, continual-learning
+streams, assessment, SOTA, and breakthrough claims are forbidden.
+
 V34 execution is complete and consumed. Artifact
 `astral-rgs-v34-protected-replay-cc777697532e-r1` is valid with
 `ProtectedReplayQualified`; only `protected_replay_25` qualified. No V34 retry
