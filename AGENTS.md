@@ -1,5 +1,13 @@
 # Agent Rules
 
+Explicit V36 two-task stream implementation now allowed: state slice
+`astral-rgs-v36-two-task-stream-implementation`. Additive two-task fixture,
+12-cell one-process MLX runner, coordinator, tests, notes, and independent
+Astral validator are permitted. Implementation must remain model-free and
+preserve every V36 arm, seed, order, fixed-window budget, evaluation point,
+gate, and claim ceiling. Model access, execution, CL-bench, assessment, SOTA,
+and breakthrough claims are forbidden.
+
 Explicit V36 two-task continual-learning pilot preregistration now allowed:
 state slice `astral-rgs-v36-two-task-stream-preregistration`. This docs-first
 slice may freeze two new eight-association tasks, both task orders, seeds

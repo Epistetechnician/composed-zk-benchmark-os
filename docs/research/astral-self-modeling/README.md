@@ -342,6 +342,8 @@ review and experiments rule out equivalent prior work.
   records valid fresh acquisition confirmation with exact protection and reload gates.
 - [V36 two-task stream preregistration](124-v36-two-task-stream-preregistration.md):
   freezes a matched 12-cell sequential-learning pilot before implementation.
+- [V36 two-task stream implementation](125-v36-two-task-stream-implementation.md):
+  adds the exact-parity 12-cell runner and independent validator without execution.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
