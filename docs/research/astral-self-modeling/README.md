@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V38R2 execution record](140-v38r2-execution-record.md)
 - [V38R2 execution authorization](139-v38r2-execution-authorization.md)
 - [V38 failure and V38R2 correction](138-v38-failure-and-v38r2-correction.md)
 - [V38 execution authorization](137-v38-execution-authorization.md)

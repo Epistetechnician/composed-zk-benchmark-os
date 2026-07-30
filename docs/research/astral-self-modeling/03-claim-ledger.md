@@ -1,5 +1,7 @@
 # Claim Ledger
 
+- V38R2 is a valid negative result: protection was restored, but both joint
+  arms exceeded the task-retention cost ceiling. No claim promotion.
 - V38 execution is authorized once against exact clean commits; status
   `NotRun`.
 - V38 fixed-allocation development is preregistered and implementation
