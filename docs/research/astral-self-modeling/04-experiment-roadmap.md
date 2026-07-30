@@ -2,6 +2,12 @@
 
 ## Current Decision
 
+V39 narrowly missed its fixed retention-cost gate without threshold
+relaxation. V40 therefore freezes the first prospective equal-budget routing
+protocol on a fresh corpus. It must beat fixed, random, shuffled, and
+nonprivileged routers under prediction locks before any confirmation or
+benchmark escalation.
+
 V38R2 restored protected retention with a fixed alternating replay slot but
 lost too much task memory. Dynamic routing remains blocked. Any next allocation
 study must use a newly preregistered lower protected fraction or a genuinely
