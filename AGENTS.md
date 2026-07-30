@@ -1,5 +1,12 @@
 # Agent Rules
 
+V36R2 execution is complete and consumed. Artifact
+`astral-rgs-v36r2-two-task-stream-c39462eb2676-r1` is valid with
+`TwoTaskContinualLearningPilotBlocked`. Ordinary task replay and joint replay
+both reached mean first-task retention 1.0, so joint replay's advantage was
+0.0 against the frozen 0.1 floor. One shared first-task acquisition cell scored
+0.5. No retry, confirmation, CL-bench, or claim promotion is authorized.
+
 Explicit V36R2 two-task execution now authorized once: state slice
 `astral-rgs-v36r2-two-task-stream-execution`. Bind RGS
 `441705c7c9ad56b02489659df2dc9fd3d2eceb26` and Astral
