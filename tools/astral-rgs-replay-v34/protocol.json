@@ -1,0 +1,1 @@
+{"version":"astral.protected_replay_protocol.v34","result_version":"mesh.astral_v34_replay_result.v1","packet_version":"mesh.astral_v34_replay_packet.v1","claim_ceiling":"LocalDevelopmentProtectedReplayQualificationV34","arms":{"protected_replay_25":{"acquisition_per_batch":3,"protected_per_batch":1},"protected_replay_50":{"acquisition_per_batch":2,"protected_per_batch":2}}}
