@@ -1,5 +1,16 @@
 # Agent Rules
 
+Explicit V36 two-task continual-learning pilot preregistration now allowed:
+state slice `astral-rgs-v36-two-task-stream-preregistration`. This docs-first
+slice may freeze two new eight-association tasks, both task orders, seeds
+`360036/360037`, arms `no_task_replay/task_replay_25/joint_replay_25`,
+identical Task-A training, 32 steps per task, batch 4, fixed 64-token compute
+windows, exact per-cell update parity, post-A and post-B restart evaluations,
+direct/paraphrase/V30 controls, forgetting and matched-baseline advantage gates,
+external artifacts, and independent validation. It does not permit
+implementation, model access, training, CL-bench, assessment, SOTA,
+breakthrough, or claims above a local two-task pilot.
+
 V35 execution is complete and consumed. Artifact
 `astral-rgs-v35-confirmation-8765db154d79-r1` is valid with
 `FreshAcquisitionConfirmed`: direct, paraphrase and protected V30 accuracy are
