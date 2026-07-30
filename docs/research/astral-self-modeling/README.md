@@ -324,6 +324,8 @@ review and experiments rule out equivalent prior work.
   records the stable-but-nonacquiring negative and freezes a target-free supervised objective.
 - [V33 target-free objective implementation](115-v33-target-free-objective-implementation.md):
   adds the one-arm development worker and independent validator without execution.
+- [V33 execution authorization](116-v33-execution-authorization.md):
+  authorizes one development run while withholding fresh confirmation.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):

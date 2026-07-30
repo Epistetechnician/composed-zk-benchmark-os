@@ -1,5 +1,13 @@
 # Agent Rules
 
+Explicit V33 target-free development execution now authorized once: state
+slice `astral-rgs-v33-target-free-objective-execution`. Bind RGS
+`ca94a4ed2489a2b300339aecc1dc4056d9fb4f21` and Astral
+`1a3ca0f9c9edd74dcb99ce0e4aed401644790446`, one Qwen process, the locked
+32-step stable optimizer, exclusive ledger, external artifact, and model-free
+validation. No retry, confirmation, assessment, or claim above
+`LocalDevelopmentTargetFreeObjectiveQualificationV33` is authorized.
+
 Explicit V33 target-free objective implementation now allowed: state slice
 `astral-rgs-v33-target-free-objective-implementation`. Additive target-free
 fixture, one-arm MLX worker, coordinator, tests, notes, and independent Astral
