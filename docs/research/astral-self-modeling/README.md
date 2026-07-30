@@ -332,6 +332,8 @@ review and experiments rule out equivalent prior work.
   adds the two-arm replay worker and independent validator without execution.
 - [V34 execution authorization](119-v34-execution-authorization.md):
   authorizes one matched replay comparison while withholding confirmation.
+- [V34 result and V35 confirmation preregistration](120-v34-result-v35-confirmation-preregistration.md):
+  locks the qualified 25% replay arm on eight untouched confirmation associations.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):
