@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V40 failure and V40R2 boundary](147-v40-tokenizer-failure-and-v40r2-boundary.md)
 - [V40 tokenizer qualification authorization](146-v40-tokenizer-qualification-authorization.md)
 - [V40 fresh-corpus kernel boundary](145-v40-fresh-corpus-kernel-boundary.md)
 - [V40 router kernel boundary](144-v40-router-kernel-boundary.md)

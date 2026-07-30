@@ -1,5 +1,11 @@
 # Agent Rules
 
+V40 tokenizer qualification is consumed and failed: 9 of 32 targets were
+canonical single tokens and 23 were multi-token. The corpus is retired.
+Explicit V40R2 tokenizer-first construction is allowed using a precommitted
+ordered allowlist and first-32 canonical selection. No forward pass, telemetry,
+training, fitting, assessment, downloads, or network access.
+
 Explicit V40 offline tokenizer qualification is allowed against the committed
 fresh corpus and cached Qwen tokenizer only. No forward pass, telemetry,
 training, fitting, assessment, network access, or corpus repair is authorized.
