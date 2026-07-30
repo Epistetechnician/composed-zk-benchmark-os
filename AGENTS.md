@@ -1,5 +1,14 @@
 # Agent Rules
 
+V41 H100 runtime profile is consumed as a platform execution failure. Jobs
+`job-h7uu8`, `job-9gxm5`, `job-kuaz4`, and `job-cbjzc` are retained
+pre-execution packaging failures. Job `job-psr8z` reached attempt 1 but ended
+`worker_lost` with zero run-log bytes, no result, no artifact, and no restart.
+This is not scientific evidence. The frozen `stop_after_profile_failure` rule
+blocks pilot, qualification, tune, assessment, and claim promotion. No retry is
+authorized pending resolution of GiveMeNode ticket `tkt-mf4ym` and a fresh
+explicit execution identity.
+
 V41 GPT-OSS-20B H100 acquisition tournament is prospectively locked under
 state slice `V41H100PersistentAcquisitionTournament`. The next permitted paid
 action is one batch H100 runtime profile capped at `$15`, using the exact

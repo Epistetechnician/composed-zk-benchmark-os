@@ -1,9 +1,12 @@
 # Claim Ledger
 
+- V41 runtime profiling is consumed as a platform execution failure. The final
+  job ended `worker_lost` before the command began, with zero run-log bytes, no
+  result, and no artifact. This is not a negative model result and provides no
+  acquisition evidence. All later paid stages are blocked.
 - V41 prospectively locks a GPT-OSS-20B H100 persistent-acquisition
-  tournament and a `$15` runtime-profile gate. No remote job or scientific
-  result exists; GiveMeNode MCP execution remains unavailable in the active
-  task.
+  tournament and a `$15` runtime-profile gate. Remote execution was attempted,
+  but no scientific result exists.
 - V40R2 concrete native MLX runtime is implemented and hermetically tested.
   No real gradient or model update has run; this is implementation evidence,
   not acquisition or continual-learning evidence.
