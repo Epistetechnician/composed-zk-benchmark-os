@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V36R2 execution record](129-v36r2-execution-record.md)
 - [V36R2 execution authorization](128-v36r2-execution-authorization.md)
 - [V36 failed execution and V36R2 correction](127-v36-failed-execution-and-v36r2-correction.md)
 

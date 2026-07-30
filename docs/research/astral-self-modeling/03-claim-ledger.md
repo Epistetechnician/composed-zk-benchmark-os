@@ -1,5 +1,8 @@
 # Claim Ledger
 
+- V36R2 is a valid negative result. The candidate is blocked because joint
+  replay's retention advantage over ordinary task replay was 0.0, below 0.1,
+  and one shared acquisition cell missed its gate. No claim promotion.
 - V36R2 is authorized once against exact clean commits; status is `NotRun`.
 - V36 is consumed as a construction failure: zero gradient steps and no model
   result. V36R2 corrective implementation is authorized, not execution. Claim
