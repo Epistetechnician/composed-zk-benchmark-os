@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41 H100 persistent-acquisition tournament](164-v41-h100-persistent-acquisition-tournament.md)
 - [V40R2 native runtime implementation](163-v40r2-native-runtime-implementation.md)
 - [V40R2 native runtime contract lock](162-v40r2-native-runtime-contract-lock.md)
 - [V40R2 real tokenizer and logit smoke record](161-v40r2-real-tokenizer-logit-smoke-record.md)

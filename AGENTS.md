@@ -1,5 +1,14 @@
 # Agent Rules
 
+V41 GPT-OSS-20B H100 acquisition tournament is prospectively locked under
+state slice `V41H100PersistentAcquisitionTournament`. The next permitted paid
+action is one batch H100 runtime profile capped at `$15`, using the exact
+committed runner and independent validator. Pilot, qualification, tune,
+assessment, Astral selection, and claims above
+`RemoteH100RuntimeProfileOnlyV41` remain forbidden until the profile validates.
+If the GiveMeNode MCP is unavailable, no alternate provisioning transport or
+credential bypass is permitted.
+
 V40R2 native MLX runtime is implemented and hermetically tested under state
 slice `V40R2NativeMLXRuntimeImplementation`. Concrete model updates have not
 run. The next allowed slice is a bounded native-runtime qualification smoke,
