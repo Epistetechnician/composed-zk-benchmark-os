@@ -1,5 +1,13 @@
 # Agent Rules
 
+V40R2 native MLX runtime parameters are prospectively locked under state slice
+`V40R2NativeMLXRuntimeContractLock`: rank-4/scale-8 LoRA over the final eight
+layers, seed `400042`, explicit AdamW `1e-4`, norm clip `1.0`, batch 4, and
+96 tokens. Feature capture must cache the exact current-batch gradient and the
+following update must consume it without a second current-batch forward.
+Concrete native-runtime implementation is the next allowed slice. Model
+execution, tune/assessment access, and scientific promotion remain forbidden.
+
 V40R2 real-tokenizer/logit smoke is complete and consumed. Artifact
 `astral-rgs-v40r2-real-logit-smoke-7ff4abf93f4e-r1` independently validates
 one model load and 12 real forward passes with no training, tune, or assessment

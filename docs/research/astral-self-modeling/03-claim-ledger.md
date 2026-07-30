@@ -1,5 +1,8 @@
 # Claim Ledger
 
+- V40R2 native runtime hyperparameters and single-forward gradient-cache
+  semantics are prospectively locked and hermetically tested. No native model
+  update or scientific result exists yet.
 - V40R2 real tokenizer/logit plumbing is locally operational and independently
   artifact-validated over a fixed 12-prompt smoke panel. The untouched model
   scored 1/8 fit direct and 4/4 protected positive cases. This is forward-path
