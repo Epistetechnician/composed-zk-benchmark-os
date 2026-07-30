@@ -1,5 +1,15 @@
 # Agent Rules
 
+V37 execution is complete and consumed. Artifact
+`astral-rgs-v37-interference-stream-e7a24a93e4d0-r1` is independently valid
+with `MechanicalOrAcquisitionBlocked`. The stream avoided saturation:
+recent replay retained 0.791667, reservoir replay retained 0.6875, no replay
+retained 0.364583, and the strongest replay advantage was 0.427083. Three
+replay cells failed the frozen V30 protection gate at 0.625, 0.84375, and
+0.9375. No retry, dynamic selector, CL-bench, confirmation, or claim promotion
+is authorized. The next permissible design step is a fresh fixed-allocation
+protection-restoration preregistration, not outcome-adaptive V37 tuning.
+
 Explicit V37 interference-stream execution now authorized once: state slice
 `astral-rgs-v37-interference-stream-execution`. Bind RGS
 `10e025788ba3221409772bda630f843deb316f49` and Astral

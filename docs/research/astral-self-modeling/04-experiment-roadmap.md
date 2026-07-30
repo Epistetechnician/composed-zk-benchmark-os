@@ -2,6 +2,12 @@
 
 ## Current Decision
 
+V37 completed with a useful nonsaturated retention regime, but three replay
+cells violated the protected V30 gate. The next permissible development slice
+is a fresh fixed-allocation protection-restoration study under identical
+per-step compute and memory. It must rerun matched task-only controls and cannot
+introduce Astral selection, dynamic compression, CL-bench, or confirmation.
+
 V36R2 is a valid negative two-task result: ordinary and joint replay both
 saturated at mean retention 1.0. V37 therefore qualifies a four-task
 interference stream before any dynamic-memory method is introduced. It must
