@@ -1,5 +1,14 @@
 # Agent Rules
 
+Explicit V36 two-task stream execution now authorized once: state slice
+`astral-rgs-v36-two-task-stream-execution`. Bind RGS
+`f0f8aa8f50c1022bb98c7797b6cfda56d196a0e6` and Astral
+`6b9430c3f429b248d394dca688b4b604df2e2e7b`, all 12 frozen cells, one Qwen
+process, exactly 768 gradient steps and 196,608 update tokens, exclusive
+ledger, external artifact, and model-free validation. No retry, CL-bench,
+assessment, threshold change, or claim above
+`LocalTwoTaskContinualLearningPilotV36` is authorized.
+
 Explicit V36 two-task stream implementation now allowed: state slice
 `astral-rgs-v36-two-task-stream-implementation`. Additive two-task fixture,
 12-cell one-process MLX runner, coordinator, tests, notes, and independent
