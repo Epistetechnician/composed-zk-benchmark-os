@@ -21,6 +21,11 @@ pre-update feature rows. R2 remains valid for the counterfactual evaluation
 budget but is insufficient for runner authorization. Qualification schema V2
 must seal this feature-probe budget under a fresh R3 identity.
 
+The corrected R3 artifact
+`/Users/shaanp/Documents/ResearchArtifacts/astral-rgs-v40r2-fit-probes-97e7ebe81c9f-r3`
+passes independent validation with a 25,728-token feature-probe budget in
+addition to the unchanged 3,256,320-token counterfactual evaluation budget.
+
 The deterministic overlay adds training, direct, paraphrase, candidate, and
 calibration definitions only for the four fit families without changing the
 sealed base corpus. It also selects a balanced 16-case protected panel from

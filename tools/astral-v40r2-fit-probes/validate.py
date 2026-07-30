@@ -61,6 +61,8 @@ def validate(data: dict) -> dict:
     }
     if qualification.get("qualification_sha256") != _stable(qualification_body):
         errors.append("qualification hash")
+    if qualification.get("version") != "mesh.astral_v40r2_fit_probe_qualification.v2":
+        errors.append("qualification version")
     if qualification.get("overlay_sha256") != overlay.get("overlay_sha256"):
         errors.append("overlay binding")
     if qualification.get("tokenizer_sha256") != EXPECTED_TOKENIZER:
@@ -153,6 +155,12 @@ def validate(data: dict) -> dict:
             budget += 32 * 2 * (current + prior + paraphrase + protected_tokens)
     if qualification.get("evaluation_forward_tokens") != budget or budget <= 0:
         errors.append("evaluation budget")
+    feature_budget = 4 * 3 * 2 * protected_tokens
+    if (
+        qualification.get("feature_probe_forward_tokens") != feature_budget
+        or feature_budget <= 0
+    ):
+        errors.append("feature probe budget")
     return {
         "valid": not errors,
         "errors": errors,
@@ -161,6 +169,7 @@ def validate(data: dict) -> dict:
         "prompt_count": len(prompt_rows),
         "maximum_input_tokens": maximum,
         "evaluation_forward_tokens": budget,
+        "feature_probe_forward_tokens": feature_budget,
         "forward_pass": False,
     }
 
