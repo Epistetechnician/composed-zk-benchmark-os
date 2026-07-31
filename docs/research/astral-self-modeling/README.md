@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R4 CUDA-native feasibility boundary](169-v41r4-cuda-native-feasibility-boundary.md)
 - [V41R3 build loss and persistent-node recovery record](168-v41r3-build-loss-and-node-recovery-record.md)
 - [V41R3 slim-runtime recovery authorization](167-v41r3-slim-runtime-recovery-authorization.md)
 - [V41R2 H100 runtime-profile recovery authorization](166-v41r2-h100-runtime-profile-recovery-authorization.md)

@@ -1,5 +1,9 @@
 # Claim Ledger
 
+- V41R4 design confirms that the preinstalled CUDA 12.4 toolchain can support
+  an infrastructure-only `sm_90` probe but cannot replace the locked tokenizer,
+  model, autograd, PEFT, optimizer, or rollback runtime. Scientific execution
+  remains unauthorized and unrun; the claim ceiling is unchanged.
 - V41R3 remains scientifically unrun. Batch job `job-q7phu` failed during
   pre-container context fetch, while the persistent-node path passed H100 and
   exact-source preflight but was stopped before Torch installation completed
