@@ -1,5 +1,11 @@
 # Claim Ledger
 
+- V41R3 remains scientifically unrun. Batch job `job-q7phu` failed during
+  pre-container context fetch, while the persistent-node path passed H100 and
+  exact-source preflight but was stopped before Torch installation completed
+  because package transfer projected multiple paid hours. The parked node may
+  resume only with a verified preloaded PyTorch image/snapshot or restored
+  throughput. No result or claim promotion exists.
 - V41R3 authorizes one fresh slim-runtime recovery profile after V41R2 was
   canceled pre-execution during repeated image-pull/worker infrastructure
   failures. It changes only the pinned runtime image and adds fail-closed
