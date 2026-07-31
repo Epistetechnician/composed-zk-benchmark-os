@@ -1,5 +1,8 @@
 # Claim Ledger
 
+- V41R5 cache-hit the verified image but failed before Python execution because
+  `/bin/sh` rejected `pipefail`. V41R6 authorizes only a POSIX wrapper
+  correction; scientific execution remains unrun.
 - V41R5 authorizes one cache-only recovery from the exact successful
   `job-psr8z` image digest. A cache miss must be canceled; no result exists yet.
 - V41R4 design confirms that the preinstalled CUDA 12.4 toolchain can support
