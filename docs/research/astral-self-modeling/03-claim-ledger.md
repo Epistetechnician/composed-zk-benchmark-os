@@ -1,5 +1,8 @@
 # Claim Ledger
 
+- V41R7 prospectively freezes a token-weighted batch-one accumulation
+  correction with exact local parity gates. Implementation is authorized;
+  model-backed execution and scientific claims are not.
 - V41R6 reached the real GPT-OSS-20B/PEFT training forward and failed with an
   H100 OOM while materializing expert LoRA `W + delta_weight`. The profile is
   consumed and did not qualify; acquisition and later claims remain unrun.
