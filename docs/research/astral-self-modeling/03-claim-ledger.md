@@ -1,5 +1,10 @@
 # Claim Ledger
 
+- V41R3 authorizes one fresh slim-runtime recovery profile after V41R2 was
+  canceled pre-execution during repeated image-pull/worker infrastructure
+  failures. It changes only the pinned runtime image and adds fail-closed
+  dependency/GPU preflight checks. The ceiling remains
+  `RemoteH100RuntimeProfileOnlyV41`.
 - V41R2 authorizes one fresh infrastructure-recovery profile with unchanged
   scientific inputs and one provider-managed worker-loss restart. It is
   `NotRun`; no downstream stage or higher claim is authorized.

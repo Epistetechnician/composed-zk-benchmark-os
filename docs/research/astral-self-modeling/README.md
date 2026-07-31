@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R3 slim-runtime recovery authorization](167-v41r3-slim-runtime-recovery-authorization.md)
 - [V41R2 H100 runtime-profile recovery authorization](166-v41r2-h100-runtime-profile-recovery-authorization.md)
 - [V41 H100 runtime-profile failure record](165-v41-h100-runtime-profile-failure-record.md)
 - [V41 H100 persistent-acquisition tournament](164-v41-h100-persistent-acquisition-tournament.md)

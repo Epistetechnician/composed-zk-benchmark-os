@@ -1,5 +1,16 @@
 # Agent Rules
 
+V41R3 slim-runtime recovery is explicitly authorized under state slice
+`V41R3SlimRuntimeRecovery`. V41R2 job `job-c5tv2` was canceled before
+scientific execution after repeated worker/image-pull infrastructure failures.
+V41R3 may use one fresh H100 job identity with exact V41 source commit
+`0403e731a91ead32f895b3822db8bcd044424f13`, the pinned official PyTorch
+runtime manifest in the V41R3 authorization, exact dependency assertions, and
+a fail-closed H100/CUDA preflight. Scientific inputs, method, budget, stopping
+rule, validator, and claim ceiling are unchanged. It does not authorize pilot,
+qualification, tune, assessment, retries after completed scientific execution,
+or claims above `RemoteH100RuntimeProfileOnlyV41`.
+
 V41R2 infrastructure recovery is explicitly authorized under state slice
 `V41R2H100RuntimeProfileRecovery`. It may reuse the exact committed V41 runner,
 model revision, corpus, one-step profile, validator, `$13.50` job ceiling, and
