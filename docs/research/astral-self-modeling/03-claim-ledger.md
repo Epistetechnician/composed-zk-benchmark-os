@@ -1,5 +1,8 @@
 # Claim Ledger
 
+- V41R6 reached the real GPT-OSS-20B/PEFT training forward and failed with an
+  H100 OOM while materializing expert LoRA `W + delta_weight`. The profile is
+  consumed and did not qualify; acquisition and later claims remain unrun.
 - V41R5 cache-hit the verified image but failed before Python execution because
   `/bin/sh` rejected `pipefail`. V41R6 authorizes only a POSIX wrapper
   correction; scientific execution remains unrun.
