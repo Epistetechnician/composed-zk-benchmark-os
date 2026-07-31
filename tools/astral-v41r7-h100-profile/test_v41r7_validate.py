@@ -34,6 +34,7 @@ def valid_update():
 
 def test_microbatch_gate_accepts_exact_coverage() -> None:
     assert MODULE.validate_microbatches(valid_update()) == []
+    assert MODULE.EXPECTED_RUNTIME["torch"] == "2.10.0+cu128"
 
 
 def test_microbatch_gate_rejects_weight_and_coverage_drift() -> None:

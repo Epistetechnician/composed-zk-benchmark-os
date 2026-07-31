@@ -14,7 +14,7 @@ EXPECTED_MODEL = "openai/gpt-oss-20b"
 EXPECTED_REVISION = "d0e2aa76789354d715f8b22553b9feb6c462fcf0"
 EXPECTED_CEILING = "RemoteH100RuntimeProfileOnlyV41R7"
 EXPECTED_RUNTIME = {
-    "torch": "2.10.0",
+    "torch": "2.10.0+cu128",
     "transformers": "4.57.6",
     "peft": "0.18.1",
     "cuda": "12.8",
