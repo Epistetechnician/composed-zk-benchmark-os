@@ -1,5 +1,7 @@
 # Claim Ledger
 
+- V41R5 authorizes one cache-only recovery from the exact successful
+  `job-psr8z` image digest. A cache miss must be canceled; no result exists yet.
 - V41R4 design confirms that the preinstalled CUDA 12.4 toolchain can support
   an infrastructure-only `sm_90` probe but cannot replace the locked tokenizer,
   model, autograd, PEFT, optimizer, or rollback runtime. Scientific execution
