@@ -1,5 +1,13 @@
 # Agent Rules
 
+V41R3 is blocked at `V41R3BuildLossDiagnosis`. Batch job `job-q7phu` failed
+before container start, and persistent node `astral-v41r3-profile-node-r1` was
+stopped after exact H100/source preflight because Torch/package transfer
+projected multiple paid hours. Its disk is intact. Do not submit another build
+or resume the slow install. Resume only with a verified catalog image/snapshot
+containing PyTorch 2.10.0+cu128 or restored throughput, as recorded in
+`docs/research/astral-self-modeling/168-v41r3-build-loss-and-node-recovery-record.md`.
+
 V41R3 slim-runtime recovery is explicitly authorized under state slice
 `V41R3SlimRuntimeRecovery`. V41R2 job `job-c5tv2` was canceled before
 scientific execution after repeated worker/image-pull infrastructure failures.
