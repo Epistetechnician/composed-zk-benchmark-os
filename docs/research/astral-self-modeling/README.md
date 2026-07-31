@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R6 H100 runtime-profile OOM record](172-v41r6-h100-runtime-profile-oom-record.md)
 - [V41R5 wrapper failure and V41R6 authorization](171-v41r5-wrapper-failure-and-v41r6-authorization.md)
 - [V41R5 cached-image recovery authorization](170-v41r5-cached-image-recovery-authorization.md)
 - [V41R4 CUDA-native feasibility boundary](169-v41r4-cuda-native-feasibility-boundary.md)
