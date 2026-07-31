@@ -1,5 +1,8 @@
 # Claim Ledger
 
+- V41R7 passed 13/13 build-time parity tests in exact Torch 2.10.0+cu128/CUDA
+  12.8. The no-model run receipt is unread because GiveMeNode OAuth
+  disconnected; model-backed execution remains unauthorized and unrun.
 - V41R7 prospectively freezes a token-weighted batch-one accumulation
   correction with exact local parity gates. Implementation is authorized;
   model-backed execution and scientific claims are not.
