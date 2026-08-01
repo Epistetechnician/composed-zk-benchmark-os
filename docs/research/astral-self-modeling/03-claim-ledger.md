@@ -1,11 +1,12 @@
 # Claim Ledger
 
-- V41R7 passed 13/13 build-time parity tests in exact Torch 2.10.0+cu128/CUDA
-  12.8. The no-model run receipt is unread because GiveMeNode OAuth
-  disconnected; model-backed execution remains unauthorized and unrun.
+- V41R7 passed 13/13 parity tests in exact Torch 2.10.0+cu128/CUDA 12.8.
+  Retained no-model job `job-t8anv` subsequently returned the exact valid
+  `V41R7TorchParityPassed` receipt. Exactly one frozen H100 runtime profile is
+  authorized and remains unrun; no scientific result exists yet.
 - V41R7 prospectively freezes a token-weighted batch-one accumulation
-  correction with exact local parity gates. Implementation is authorized;
-  model-backed execution and scientific claims are not.
+  correction with exact parity gates. One model-backed profile is authorized;
+  pilot, qualification, tune, assessment, and scientific claims are not.
 - V41R6 reached the real GPT-OSS-20B/PEFT training forward and failed with an
   H100 OOM while materializing expert LoRA `W + delta_weight`. The profile is
   consumed and did not qualify; acquisition and later claims remain unrun.
