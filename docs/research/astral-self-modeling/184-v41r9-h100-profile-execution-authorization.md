@@ -2,7 +2,7 @@
 
 State slice: `V41R9ModelBackedH100ProfileAuthorizationAndExecution`.
 
-Status: `OneModelBackedRuntimeProfileAuthorized / PilotUnauthorized`.
+Status: `Consumed / RuntimeProfileOperational / PilotUnauthorized`.
 
 Exact-runtime no-model parity passed as `job-tr7dz`. One fresh model-backed
 profile may test the corrected 24-layer GPT-OSS-20B native-MXFP4 attention-LoRA
@@ -35,3 +35,8 @@ The first terminal outcome consumes the identity. No restart, retry,
 resubmission, adaptive patch, pilot, qualification, tune, assessment, Astral
 selection, or scientific promotion is authorized. Maximum passing ceiling:
 `RemoteH100RuntimeProfileOnlyV41R9`.
+
+The authorized identity completed as job `job-nburr`. Its immutable outcome is
+recorded in
+`docs/research/astral-self-modeling/185-v41r9-h100-profile-execution-record.md`.
+This authorization cannot be reused.
