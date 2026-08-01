@@ -1,5 +1,8 @@
 # Claim Ledger
 
+- V41R8 native-MXFP4 attention-LoRA and an independent fail-closed validator
+  are locally implemented. Focused and repository guards pass, but exact
+  runtime parity, model execution, and every scientific claim remain unrun.
 - V41R8 prospectively freezes a native-MXFP4, frozen-expert,
   attention-projection LoRA correction with exact inventory, parity, rollback,
   and memory gates. Implementation and independent validation are authorized;
