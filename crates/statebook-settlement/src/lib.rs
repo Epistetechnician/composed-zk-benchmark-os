@@ -1,6 +1,7 @@
 #![forbid(unsafe_code)]
 
 mod completeness;
+mod p4;
 
 pub use completeness::{
     compose_completeness_reports_v1, derive_analysis_subject_v1, parse_completeness_fixture_v1,
@@ -22,6 +23,21 @@ pub use completeness::{
     MAX_EXECUTION_LEGS_V1, MAX_FIXTURE_BYTES_V1, MAX_IN_FLIGHT_RECOVERY_ITEMS_V1,
     MAX_RECOVERY_PATHS_V1, MAX_SETTLEMENT_OBLIGATIONS_V1, MAX_SOURCE_EVIDENCE_DIGESTS_V1,
     RECOVERY_CAPABILITY_COUNT_V1, RECOVERY_PATH_COUNT_V1,
+};
+
+pub use p4::{
+    decide_and_transition, decision_context_digest, evidence_snapshot_digest, intent_digest,
+    intent_payload, parse_settlement_scenario_v1, policy_digest, validate_breaker_transition,
+    valuation_profile_digest, AssuranceTierV1, AtomicLinkedExchangePlanV1, BreakerStateV1, ClockV1,
+    DecisionMissingFactV1, DecisionNonclaimV1, DecisionOutcomeV1, DecisionReasonV1,
+    DecisionRecordV1, DirectionV1, ExternalRiskReducingObligationV1, ExternalizationRequestV1,
+    FinancialBasisKindV1, FinancialBasisV1, QueueStatusV1, ReleaseClassV1, SettlementParseErrorV1,
+    SettlementPolicyV1, SettlementScenarioV1, SettlementStateV1, SettlementTransitionErrorV1,
+    TransferStatusV1, CLAIM_BOUNDARY_P4, MAX_BREAKER_SCOPES_V1, MAX_BUDGET_AXES_V1,
+    MAX_CHALLENGES_V1, MAX_EVIDENCE_OBSERVATIONS_V1, MAX_EVIDENCE_ROOTS_V1,
+    MAX_IN_FLIGHT_TRANSFERS_V1, MAX_LEDGER_JOURNAL_ENTRIES_V1, MAX_LINKED_PLAN_LEGS_V1,
+    MAX_QUEUE_DEPTH_V1, MAX_QUEUE_PARTS_V1, MAX_SCENARIO_STEPS_V1, MAX_VALUATION_OBSERVATIONS_V1,
+    STATE_SLICE_P4,
 };
 
 pub const STATE_SLICE: &str = "statebook-p3-seven-completeness-reports";
