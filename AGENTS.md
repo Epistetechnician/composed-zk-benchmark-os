@@ -1,34 +1,31 @@
 # Agent Rules
 
-One V41R8 model-backed H100 runtime profile is authorized under state slice
-`V41R8H100ProfileExecution`, bound to RGS implementation `d13fc6c`, context
-`ctx-f71c03bd`, the passed exact-runtime parity receipt, one clock-locked H100,
-zero restarts, 300 run minutes, and `$13.50`. It may run only the frozen V41R8
-profile and retain its first terminal success or failure. No retry, pilot,
-qualification, tune, assessment, Astral selection, or claim above
-`RemoteH100RuntimeProfileOnlyV41R8` is authorized. See
-`docs/research/astral-self-modeling/179-v41r8-h100-profile-execution-authorization.md`.
+V41R8 is consumed as `RuntimeProfileIncomplete` under state slice
+`V41R8H100ProfileExecution`. Job `job-s9mx4` loaded real GPT-OSS-20B native
+MXFP4 weights and the real tokenizer, completed base scoring, then failed the
+live inventory gate because the checkpoint declares 24 layers while V41R8
+froze 36. No optimizer or update ran. Do not retry V41R8. See
+`docs/research/astral-self-modeling/180-v41r8-h100-profile-execution-record.md`.
 
-V41R8 native-MXFP4 attention-LoRA implementation is authorized under state
+V41R8 native-MXFP4 attention-LoRA implementation is complete under state
 slice `V41R8NativeMXFP4AttentionLoRACorrection`. Additive RGS source/tests and
 an additive Astral validator may freeze all base/expert/router state, target
 exactly q/k/v/o attention projections across 36 layers, preserve the V41R7
 microbatch contract, and enforce inventory, forward-parity, rollback, and
-memory gates. Model-backed execution is authorized only by the separately
-bounded V41R8 profile slice above; pilot, qualification, tune, assessment, and
-scientific promotion remain unauthorized. See
+memory gates. The single V41R8 model-backed identity is consumed; pilot,
+qualification, tune, assessment, and scientific promotion remain unauthorized.
+See
 `docs/research/astral-self-modeling/176-v41r8-native-mxfp4-attention-lora-preregistration.md`.
 
 V41R8 local implementation, the independent Astral validator, and exact-runtime
-no-model parity are complete. Model execution is authorized only by the
-one-shot profile slice above; the parity receipt cannot promote a scientific
-claim. See
+no-model parity completed, but the one-shot profile failed and is consumed as
+recorded above. The parity receipt cannot promote a scientific claim. See
 `docs/research/astral-self-modeling/177-v41r8-native-mxfp4-attention-lora-implementation.md`.
 
-One exact-runtime no-model V41R8 parity job is authorized under state slice
+The exact-runtime no-model V41R8 parity job completed under state slice
 `V41R8ExactRuntimeNoModelParity`, bound to RGS `d13fc6c`, context
 `ctx-f71c03bd`, one clock-locked H100, zero restarts, and 30 run minutes. It may
-not access GPT-OSS tokenizer or model weights. See
+did not access GPT-OSS tokenizer or model weights. See
 `docs/research/astral-self-modeling/178-v41r8-exact-runtime-parity-authorization.md`.
 
 V41R7 is consumed as `RuntimeProfileIncomplete` under state slice
