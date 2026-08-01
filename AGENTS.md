@@ -1,5 +1,16 @@
 # Agent Rules
 
+V41R7 H100 profile execution is authorized exactly once under state slice
+`V41R7H100ProfileExecution`. Retained parity job `job-t8anv` succeeded with
+`V41R7TorchParityPassed`, `model_access=false`, and
+`scientific_execution=false`. The execution must use RGS commit
+`6d865d147a5d912994540c3aff21eac2f090b58b`, context `ctx-125c868a`, one
+clock-locked H100, the frozen V41R7 runner, and a 300-minute maximum runtime.
+The first completed model attempt consumes the identity. No scientific retry,
+pilot, qualification, tune, assessment, Astral selection, or claim above
+`RemoteH100RuntimeProfileOnlyV41R7` is authorized. See
+`docs/research/astral-self-modeling/174-v41r7-implementation-and-torch-parity-record.md`.
+
 V41R3 is blocked at `V41R3BuildLossDiagnosis`. Batch job `job-q7phu` failed
 before container start, and persistent node `astral-v41r3-profile-node-r1` was
 stopped after exact H100/source preflight because Torch/package transfer
