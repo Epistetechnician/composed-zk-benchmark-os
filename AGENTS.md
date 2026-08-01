@@ -1,18 +1,28 @@
 # Agent Rules
 
+One V41R8 model-backed H100 runtime profile is authorized under state slice
+`V41R8H100ProfileExecution`, bound to RGS implementation `d13fc6c`, context
+`ctx-f71c03bd`, the passed exact-runtime parity receipt, one clock-locked H100,
+zero restarts, 300 run minutes, and `$13.50`. It may run only the frozen V41R8
+profile and retain its first terminal success or failure. No retry, pilot,
+qualification, tune, assessment, Astral selection, or claim above
+`RemoteH100RuntimeProfileOnlyV41R8` is authorized. See
+`docs/research/astral-self-modeling/179-v41r8-h100-profile-execution-authorization.md`.
+
 V41R8 native-MXFP4 attention-LoRA implementation is authorized under state
 slice `V41R8NativeMXFP4AttentionLoRACorrection`. Additive RGS source/tests and
 an additive Astral validator may freeze all base/expert/router state, target
 exactly q/k/v/o attention projections across 36 layers, preserve the V41R7
 microbatch contract, and enforce inventory, forward-parity, rollback, and
-memory gates. Model-backed execution, pilot, qualification, tune, assessment,
-and scientific promotion remain unauthorized. See
+memory gates. Model-backed execution is authorized only by the separately
+bounded V41R8 profile slice above; pilot, qualification, tune, assessment, and
+scientific promotion remain unauthorized. See
 `docs/research/astral-self-modeling/176-v41r8-native-mxfp4-attention-lora-preregistration.md`.
 
-V41R8 local implementation and the independent Astral validator are complete.
-The next permitted action is a separately committed exact-runtime no-model
-image parity build and receipt. It may not access GPT-OSS weights or promote a
-scientific claim. Model-backed execution remains unauthorized. See
+V41R8 local implementation, the independent Astral validator, and exact-runtime
+no-model parity are complete. Model execution is authorized only by the
+one-shot profile slice above; the parity receipt cannot promote a scientific
+claim. See
 `docs/research/astral-self-modeling/177-v41r8-native-mxfp4-attention-lora-implementation.md`.
 
 One exact-runtime no-model V41R8 parity job is authorized under state slice
