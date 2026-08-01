@@ -21,3 +21,24 @@ not access the GPT-OSS tokenizer or checkpoint. The only passing receipt is:
 Any failure consumes this parity identity. A pass does not authorize model
 access or a scientific run; it opens only a separate review and authorization
 decision.
+
+## Execution receipt
+
+Status: `V41R8ExactRuntimeParityPassed / ModelExecutionUnauthorized`.
+
+The sole authorized job `job-sxtwy` completed at
+`2026-08-01T18:32:50.211958+00:00` on one clock-locked H100. It used one
+attempt, zero restarts, zero preemptions, and passed all 19 runtime tests in
+3.24 seconds. The exported OCI manifest is
+`sha256:137a686d2840f0ecf38756edd4e738c87537ed974ae201527b140049dca78558`
+with config
+`sha256:1009150023051c9f52ba0c0219f67ac2a6d399740440ca0666d41c2b5a0d08a6`.
+Mission cost was USD 0.045 and is no longer accruing. The authoritative result
+was:
+
+```json
+{"classification":"V41R8ExactRuntimeParityPassed","model_access":false,"scientific_execution":false}
+```
+
+This closes exact-runtime parity only. Model access, model-backed execution,
+assessment, status promotion, and scientific claims remain unauthorized.
