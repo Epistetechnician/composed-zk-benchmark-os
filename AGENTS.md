@@ -1,14 +1,14 @@
 # Agent Rules
 
 V41R10 single-task acquisition pilot design and independent-validator
-implementation are authorized under state slice
+implementation are complete under state slice
 `V41R10AcquisitionPilotDesignAndImplementation`. The pilot is prospectively
 limited to pinned GPT-OSS-20B, task A, seed 410041, `no_update`,
 `context_only`, and one V41R9 attention-LoRA arm with context removal, fresh
 model reload, direct/paraphrase/withheld-composition acquisition, protected
 retention, and exact adapter recovery. Model access, GPU execution, tuning,
 qualification, assessment, and scientific promotion remain unauthorized. See
-`docs/research/astral-self-modeling/186-v41r10-single-task-acquisition-pilot-preregistration.md`.
+`docs/research/astral-self-modeling/187-v41r10-single-task-acquisition-pilot-implementation.md`.
 
 V41R9 model-backed H100 runtime profiling is complete under state slice
 `V41R9ModelBackedH100ProfileAuthorizationAndExecution`. Job `job-nburr`
