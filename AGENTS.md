@@ -1,5 +1,12 @@
 # Agent Rules
 
+One exact-runtime no-model V41R9 parity job is authorized under state slice
+`V41R9ExactRuntimeNoModelParity`, bound to RGS `2f5544d`, the exact context
+hashes in the V41R9 authorization, one clock-locked H100, zero restarts, and 30
+run minutes. It may build/test the pinned image and inspect runtime/config
+objects only; tokenizer, checkpoint, and model access remain forbidden. See
+`docs/research/astral-self-modeling/183-v41r9-exact-runtime-parity-authorization.md`.
+
 V41R9 checkpoint-bound layer-geometry correction implementation is complete
 under state slice `V41R9CheckpointBoundLayerGeometryCorrection`. RGS and the
 independent Astral validator replace V41R8's invalid 36-layer family

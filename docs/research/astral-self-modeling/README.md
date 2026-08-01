@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R9 exact-runtime parity authorization](183-v41r9-exact-runtime-parity-authorization.md)
 - [V41R9 checkpoint-bound layer-geometry implementation](182-v41r9-checkpoint-bound-layer-geometry-implementation.md)
 - [V41R9 checkpoint-bound layer-geometry preregistration](181-v41r9-checkpoint-bound-layer-geometry-preregistration.md)
 - [V41R8 H100 profile execution record](180-v41r8-h100-profile-execution-record.md)
