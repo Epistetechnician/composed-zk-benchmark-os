@@ -19794,6 +19794,940 @@ exact rustup identity and inventory hash, parse exactly seven marked installed
 components, and propagate every acceptance failure directly. See
 `docs/763-phase-hsai-gateway-threat-ordinal-rustup-inventory-closure.md`.
 
+## Phase 764 HSAI Gateway Threat Ordinal Manual Orchestration Stop
+
+Status: complete as a pre-root stop. A stale clean-primary assertion
+contradicted Phase 753 dirty-primary preservation after unrelated soak coverage
+appeared. No owned path or producer was created. See
+`docs/764-phase-hsai-gateway-threat-ordinal-manual-orchestration-stop.md`.
+
+## Phase 765 HSAI Formal Execution State Machine Boundary
+
+Status: complete as a documentation-first implementation boundary. Phase 766
+must replace ad hoc shell assembly with a standard-library state machine over
+immutable stages, argv arrays, first-failure terminality, dirty-primary
+preservation, and hermetic tests. See
+`docs/765-phase-hsai-formal-execution-state-machine-boundary.md`.
+
+## Phase 766 HSAI Formal Execution State Machine Implementation
+
+Status: complete as a committed hermetic implementation. Adds twelve immutable
+stages, argv/environment/network/output validation, terminal first failure,
+canonical JSON, clean-or-dirty primary preservation, an injected executor, and
+25 focused tests. No backend ran. See
+`docs/766-phase-hsai-formal-execution-state-machine-implementation.md`.
+
+## Phase 767 HSAI Formal Execution Fixture Adapter Boundary
+
+Status: complete as a documentation-first compatibility correction. It permits
+only the two byte-exact Phase 732 shell fixtures and specifies typed cwd,
+bounds, expected outcomes, outputs, and bounded-runner adapter behavior for
+Phase 768. No producer ran. See
+`docs/767-phase-hsai-formal-execution-fixture-adapter-boundary.md`.
+
+## Phase 768 HSAI Formal Execution Bounded Adapter Implementation
+
+Status: complete as a committed hermetic implementation. Adds typed cwd,
+bounds, expected outcomes, exact fixture-only shell handling, and an argv-only
+bounded-runner adapter with canonical status/stream acceptance. All 36 focused
+and 66 total preflight tests pass; no backend ran. See
+`docs/768-phase-hsai-formal-execution-bounded-adapter-implementation.md`.
+
+## Phase 769 HSAI Formal Execution Complete Plan Boundary
+
+Status: complete as a documentation-first operation-model boundary. Phase 770
+must type assertions, materialization, bounded producers, the exact persistent
+loopback control, cleanup, and primary verification, then bind every inherited
+operation into one deterministic path-normalized plan. No backend ran. See
+`docs/769-phase-hsai-formal-execution-complete-plan-boundary.md`.
+
+## Phase 770 HSAI Formal Execution Complete Plan Implementation
+
+Status: complete as a committed hermetic operation-plan implementation. It
+binds 65 inherited operations across all twelve stages to closed operation
+kinds, exact predecessors, mutation owners, network policies, and normalized
+payload contracts; publishes a canonical plan SHA-256; and proves exhaustive
+reachability, first-failure successor blocking, and mandatory cleanup routing.
+All 53 focused and 83 total preflight tests pass. No backend ran. Phase 771
+must freeze exact operation-to-executor materialization before a live attempt.
+See `docs/770-phase-hsai-formal-execution-complete-plan-implementation.md`.
+
+## Phase 771 HSAI Formal Execution Correspondence Correction Boundary
+
+Status: complete as a documentation-first executor-correspondence audit. It
+finds that the Phase 770 v1 digest is a conceptual inventory rather than an
+executable plan because several entries aggregate independently bounded child
+commands, stage network labels overgrant local operations, filesystem/template
+contracts are incomplete, and cleanup loses step-level failures. Phase 772
+must implement a versioned plan v2 with exact producer cardinality,
+per-operation capabilities, typed artifacts and templates, closed
+non-producer variants, and aggregate cleanup. No backend ran. See
+`docs/771-phase-hsai-formal-execution-correspondence-correction-boundary.md`.
+
+## Phase 772 HSAI Formal Execution Command-Spec Completeness Stop
+
+Status: stopped before implementation. The audit found that none of the 35 v1
+bounded entries has exact values for every required `CommandSpec` field, every
+entry lacks exact transcript paths, and several aggregate independently
+bounded children or mixed outcomes. No Python source, attempt root, producer,
+network, or backend was touched. Phase 773 must publish a deterministic
+docs-first source-normalization ledger with one complete row per actual child
+command before plan-v2 implementation. See
+`docs/772-phase-hsai-formal-execution-command-spec-completeness-stop.md`.
+
+## Phase 773 HSAI Formal Execution Source Normalization Stop
+
+Status: stopped documentation-only after normalizing 74 identifiable command
+obligations. Exact child-command count and source-ledger digest remain unknown
+because repository gates, Lean extraction, native-binary audits, and cleanup
+do not freeze their child cardinality. No source, producer, network, tool, or
+backend was touched. Phase 774 must resolve those families and the shared
+transcript/cwd/environment/bounds rules before a complete ledger can exist.
+See `docs/773-phase-hsai-formal-execution-source-normalization-stop.md`.
+
+## Phase 774 HSAI Formal Execution Command Family Resolution
+
+Status: complete documentation-only. It resolves the four unknown command
+families to exactly 84 ordinary bounded commands, freezes two-step Lean
+extraction, ten native-audit commands, four repository probes, in-process
+cleanup boundaries, shared transcript/environment/bounds profiles, the exact
+external-acquisition set, and a resolution-contract SHA-256. It does not create
+the fully expanded source ledger or run a producer. Phase 775 must expand all
+84 rows. See
+`docs/774-phase-hsai-formal-execution-command-family-resolution.md`.
+
+## Phase 775 HSAI Formal Execution Source Ledger Stop
+
+Status: stopped documentation-only before expanding or hashing the source
+ledger. The Phase 774 arithmetic and resolution digest are mechanically valid,
+but executable symlink identity, typed placeholders, sandbox-wrapper binding,
+packaged-asset versus built-binary audit cardinality, the Charon-driver loader
+target, exact native outcomes, replacement-environment compatibility, and the
+retained-kernel-evidence schema remain incomplete. Phase 776 must correct those
+contracts before a fully expanded ledger or plan v2 may exist. See
+`docs/775-phase-hsai-formal-execution-source-ledger-stop.md`.
+
+## Phase 776 HSAI Formal Execution Contract Correction
+
+Status: complete documentation-only. State slice:
+`phase-776-hsai-formal-execution-contract-correction`.
+
+Phase 776 replaces symlink-sensitive executable assertions with typed
+executable identities, binds the deny-network sandbox directly into every
+`sandbox-closed` argv, removes Lean decompression overwrite authority,
+separates 18 packaged-Aeneas native audits from 10 source-built Charon audits,
+and corrects the ordinary producer total from 84 to 102. It also closes the
+replacement-environment vocabulary and defines the exact path-free retained
+kernel result tree and consumers.
+
+No source, producer, backend, kernel command, source ledger, plan v2, accepted
+evidence, or stronger claim was created. Phase 777 must remain
+documentation-first and fully expand the ordered 102-row source ledger, with
+unresolved machine or command facts remaining blocked. See
+`docs/776-phase-hsai-formal-execution-contract-correction.md`.
+
+## Phase 777 HSAI Formal Execution Pre-Use Ordering Stop
+
+Status: stopped documentation-only. State slice:
+`phase-777-hsai-formal-execution-pre-use-ordering-stop`.
+
+Phase 777 stopped before ledger expansion because Phase 776 places packaged
+native audits after `capture-aeneas-version` and source-built native audits
+after `capture-charon-version`. Both version commands execute a binary before
+the static architecture, signature, and loader checks intended to admit it.
+
+The 102-command count remains valid. Phase 778 must correct and publish the
+exact order without expanding row fields or running a producer. See
+`docs/777-phase-hsai-formal-execution-pre-use-ordering-stop.md`.
+
+## Phase 778 HSAI Formal Execution Operation Order Correction
+
+Status: complete documentation-only. State slice:
+`phase-778-hsai-formal-execution-operation-order-correction`.
+
+Phase 778 publishes 102 unique ordered command IDs. Packaged static audits now
+precede Aeneas version execution; nine source-built static audits precede
+Charon version execution; and the driver-load preflight follows version and
+toolchain-library acceptance. Fresh Charon source and lock identities follow
+build and precede version and extraction. External closure, controlled loopback, sandbox,
+kernel-check, cleanup, and final-primary ordering remain intact.
+
+The order digest binds membership and order only. Phase 779 must expand all
+row fields without source mutation or producer execution. See
+`docs/778-phase-hsai-formal-execution-operation-order-correction.md`.
+
+## Phase 779 HSAI Formal Source Ledger Expansion
+
+Status: complete documentation-only. State slice:
+`phase-779-hsai-formal-source-ledger-expansion`.
+
+Phase 779 expands all 102 ordered commands into field-complete JSONL rows.
+Ordinals, IDs, declared capability classes, three unique transcript paths, 28
+native outcomes, and selected immutable executable roles are recorded. Every
+unsupported controlling source, argv, cwd, environment, bound, outcome,
+artifact, acceptance, placeholder, or executable-role field carries a typed
+blocker. All 102 rows remain blocked, so no source-ledger digest exists.
+
+Phase 780 later disputes the capability source correspondence for rows 036,
+037, 059, and 060; Phase 779's capability split is not accepted ledger truth.
+
+Phase 780 must map every blocker cause to exact sources, affected operations
+and fields, outputs, review criteria, exit gates, and canonicalization. See
+`docs/779-phase-hsai-formal-source-ledger-expansion.md`.
+
+## Phase 780 HSAI Formal Blocker Resolution Matrix
+
+Status: complete documentation-only. State slice:
+`phase-780-hsai-formal-blocker-resolution-matrix`.
+
+Phase 780 recomputes 1,469 blocker objects across nine JSONL causes, assigns
+canonical serialization, and records a separate source-correspondence stop for
+the capability values on rows 036, 037, 059, and 060. It routes eleven closure
+lanes through Phases 781-793. It resolves no row, publishes no source-ledger
+digest, and authorizes no execution.
+
+Phase 781 must resolve the four-row capability-source correspondence before
+specialized blocker contracts or successor row expansion. Plan-v2 remains
+prohibited before an independently audited zero-blocker ledger. See
+`docs/780-phase-hsai-formal-blocker-resolution-matrix.md`.
+
+## Phase 781 HSAI Formal Capability Source Correspondence Correction
+
+Status: complete documentation-only. State slice:
+`phase-781-hsai-formal-capability-source-correspondence-correction`.
+
+Phase 781 restores rows 036, 037, 059, and 060 to `host-offline`, matching the
+later operation-specific materialization contracts. Controlled loopback
+precedes sandbox control row 070, and controls 070-072 precede the first
+build/backend row, 073. Corrected counts are 10 external-acquisition, 63
+host-offline, and 29 sandbox-closed rows. Rows 059 and 060 retain only
+`ZSTD_EXE` and `TAR_EXE`; rows 036 and 037 remain role-blocked.
+
+Historical Phase 779 JSONL remains unchanged. All 1,469 blockers and 102
+blocked rows remain, and no ledger digest exists. Phase 782 is next for the
+four downloader and one installer argv contracts. See
+`docs/781-phase-hsai-formal-capability-source-correspondence-correction.md`.
+
+## Phase 782 HSAI Formal Acquisition And Installer Argv Contracts
+
+Status: complete documentation-only. State slice:
+`phase-782-hsai-formal-acquisition-and-installer-argv-contracts`.
+
+Phase 782 resolves Phase 780 lanes `L02` and `L03` by freezing the complete
+ordered argv arrays for downloader ordinals 015, 033, 034, and 058 and Rust
+installer ordinal 016. The downloader contract disables curl configuration,
+permits HTTPS only with TLS 1.2 or later, rejects URL usernames, bounds
+redirects and timing, disables retries and overwrite, removes failed outputs,
+binds exact output paths, and retains the existing size and SHA-256 pins. The
+installer contract uses a future accepted absolute Rustup role,
+the full dated Darwin arm64 toolchain token, explicit minimal profile, and four
+additive components yielding the exact required seven-component inventory,
+with rustup self-update disabled.
+
+Executable-role paths and digests remain Phase 788 work. Historical Phase 779
+JSONL, all 1,469 blockers, all 102 blocked rows, and the no-digest boundary are
+unchanged. `L04` through `L11` remain open. Phase 783 is next for exact helper
+compile/test file and module order. See
+`docs/782-phase-hsai-formal-acquisition-and-installer-argv-contracts.md`.
+
+## Phase 783 HSAI Formal Helper Pre-Use Ordering Stop
+
+Status: stopped documentation-only. State slice:
+`phase-783-hsai-formal-helper-pre-use-ordering-stop`.
+
+Phase 783 does not resolve Phase 780 lane `L04`. Phase 759 requires three
+separate helper-hash child producers before ordinal 007, Phase 771 requires one
+operation per child invocation, and the fixed Phase 778 102-operation order
+contains no helper-hash rows. The inherited `python3 -m py_compile` validation
+shape also writes bytecode, while no typed output, placement, or cleanup
+contract exists. Exact helper and test sets are recorded, but their candidate
+argv arrays are not accepted contracts.
+
+Historical Phase 779 JSONL, all 1,469 blockers, all 102 blocked rows, and the
+no-digest boundary are unchanged. `L04` through `L11` remain open. The ordered
+closure program is stopped pending an explicit route and operation-order
+correction; Phase 784's previously assigned native-transcript work is not
+authorized. See
+`docs/783-phase-hsai-formal-helper-pre-use-ordering-stop.md`.
+
+## Phase 784 HSAI Formal Helper Pre-Use Route Correction
+
+Status: complete documentation-only. State slice:
+`phase-784-hsai-formal-helper-pre-use-route-correction`.
+
+Phase 784 resolves Phase 780 lane `L04` without changing the 102-operation
+order. It narrowly supersedes Phase 759's three `shasum` child producers with
+typed, descriptor-relative, in-process SHA-256 acceptance over the exact three
+Phase 749 helpers and three focused tests. It freezes a no-bytecode built-in
+`compile()` argv and an explicit ordered three-module unittest argv, excludes
+the Phase 766 state-machine files and all discovery, and clarifies that Phase
+771 cardinality counts executor-submitted logical commands rather than
+descendants contained in one bounded process group.
+
+Historical Phase 779 JSONL, all 1,469 blockers, all 102 blocked rows, and the
+no-digest boundary remain unchanged. `L05` through `L11` remain open. The
+corrected schedule assigns Phases 785-790 to `L05`-`L10`, Phases 791-793 to
+`L11` row expansion, Phase 794 to conditional whole-ledger audit, and Phase
+795 to the earliest possible plan-v2 boundary. Phase 785 is next for native
+transcript grammars and fixtures. See
+`docs/784-phase-hsai-formal-helper-pre-use-route-correction.md`.
+
+## Phase 785 HSAI Formal Native Transcript Fixture Provenance Stop
+
+Status: stopped documentation-only. State slice:
+`phase-785-hsai-formal-native-transcript-fixture-provenance-stop`.
+
+Phase 785 does not resolve Phase 780 lane `L05`. The exact 21 native-audit rows,
+command families, expected process outcomes, and high-level historical audit
+facts are known, but the repository has no accepted native-tool identity and
+version bindings, raw identity-bound transcript corpus, immutable positive and
+negative fixtures, or independently reviewed total parser grammars. Machine
+identity acceptance remains deferred to `L09`, while `L05` requires those
+identities as grammar authority. Phase 785's non-execution gate prohibits
+creating the missing observations.
+
+Historical Phase 779 JSONL, all 1,469 blockers, all 102 blocked rows, and the
+no-digest boundary remain unchanged. `L05` through `L11` remain open. The
+ordered closure program stops pending explicit dependency and
+fixture-acquisition route correction; Phase 786's previously assigned `L06`
+work is not authorized. See
+`docs/785-phase-hsai-formal-native-transcript-fixture-provenance-stop.md`.
+
+## Phase 786 HSAI Formal Native Transcript Dependency Route Correction
+
+Status: complete documentation-only. State slice:
+`phase-786-hsai-formal-native-transcript-dependency-route-correction`.
+
+Phase 786 resolves no Phase 780 lane. It corrects the invalid ordering that
+placed identity-bound `L05` transcript grammar work before `L09` executable-role
+and machine-policy authority. The corrected route places `L09` first, followed
+by a documentation-first fixture-acquisition protocol and readiness audit, a
+conditional identity-bound local corpus capture, and only then `L05` grammar,
+typed-output, acceptance-ID, and fixture closure.
+
+The corrected schedule assigns Phase 787 to `L09`, Phase 788 to capture
+readiness, Phase 789 to conditional local corpus capture, Phase 790 to `L05`,
+Phases 791-794 to `L06`, `L07`, `L08`, and `L10`, Phases 795-797 to `L11`,
+Phase 798 to conditional whole-ledger audit, and Phase 799 to the earliest
+possible plan-v2 boundary. Historical Phase 779 JSONL, all 1,469 blockers, all
+102 blocked rows, and the absent source-ledger digest remain unchanged. Phase
+787 is documentation-first only. See
+`docs/786-phase-hsai-formal-native-transcript-dependency-route-correction.md`.
+
+## Phase 787 HSAI Formal Executable Role Registry And Machine Policy
+
+Status: complete documentation-only. State slice:
+`phase-787-hsai-formal-executable-role-registry-machine-policy`.
+
+Phase 787 resolves Phase 780 lane `L09` at the immutable contract-input level.
+It freezes 26 executable roles, four acceptance-policy classes, exact complete
+role bindings for all 83 `E83` rows, the external machine-policy schema, the
+attempt-specific identity-observation schema, and exact native grammar-selector
+inputs for `codesign`, `spctl`, and `otool`.
+
+No host path, symlink chain, device, inode, owner, mode, executable SHA-256,
+platform observation, or concrete policy instance is published. Historical
+Phase 779 JSONL, all 1,469 blockers, all 102 blocked rows, and the absent
+source-ledger digest remain unchanged. Resolved lanes are `L01-L04,L09`; open
+lanes are `L05-L08,L10-L11`. Phase 788 is documentation-first only for the
+`P01` fixture-acquisition protocol and readiness audit. See
+`docs/787-phase-hsai-formal-executable-role-registry-machine-policy.md`.
+
+## Phase 788 HSAI Formal Native Transcript Fixture Acquisition Readiness Audit
+
+Status: stopped documentation-only before `P02`. State slice:
+`phase-788-hsai-formal-native-transcript-fixture-acquisition-readiness-audit`.
+
+Phase 788 freezes the complete `P01` protocol for all 21 `N21` rows: five
+semantic shapes, exact capture argv and envelope, six target slots, raw-byte
+and publication rules, positive-corpus schemas, deterministic synthetic
+negatives, distinct reviewer roles, and fail-closed readiness checks.
+
+The readiness decision is `not-ready`. Concrete native-tool policy and identity
+observations, target bytes, the ordinal-073 build receipt, raw corpus, manifest,
+and named reviewers are absent. Phase 789 capture is not authorized. No Phase
+780 lane closes; resolved lanes remain `L01-L04,L09`, open lanes remain
+`L05-L08,L10-L11`, and historical Phase 779 remains 102 blocked rows with
+1,469 blockers and no source-ledger digest. See
+`docs/788-phase-hsai-formal-native-transcript-fixture-acquisition-readiness-audit.md`.
+
+## Phase 789 HSAI Formal Native Transcript Capture Prerequisite Route Correction
+
+Status: complete documentation-only route correction. State slice:
+`phase-789-hsai-formal-native-transcript-capture-prerequisite-route-correction`.
+
+Phase 789 replaces unauthorized `P02` capture with a preparation contract. It
+adds the omitted sandbox-wrapper observation, separates preparation and capture
+roots, freezes the seven-role preparation closure and thirteen checkpoints,
+and keeps materialization, capture, and `L05` grammar authority separate.
+
+The corrected schedule assigns Phase 790 to conditional machine/target input
+materialization, Phase 791 to conditional capture, Phase 792 to `L05`, Phases
+793-796 to `L06-L08,L10`, Phases 797-799 to the three `L11` tranches, Phase
+800 to independent audit and conditional digest publication, and Phase 801 to
+the earliest plan-v2 boundary. No lane closes and no execution is authorized.
+See
+`docs/789-phase-hsai-formal-native-transcript-capture-prerequisite-route-correction.md`.
+
+## Phase 790 HSAI Native Transcript Preparation Candidate Validation
+
+Status: pure-data validator implemented; `P01B` materialization stopped. State
+slice: `phase-790-hsai-native-transcript-preparation-candidate`.
+
+Phase 790 adds the standalone `hsai-native-transcript-preparation` crate. It
+validates closed caller-supplied declarations for the reviewed machine-policy
+digest, platform, eight host roles, two owned Rust tools, six target receipts,
+the fixed archive/commit/sandbox inputs, capture-root absence, and reviewer
+separation. The candidate schema has no capture-authority input and validation
+always returns `materialization_accepted=false` and
+`capture_authorized=false`.
+
+The crate performs no filesystem, process, environment, network, acquisition,
+build, root-materialization, or reviewer-authentication work. A pathname-based
+collector was rejected before commit because terminal `O_NOFOLLOW` does not
+protect ancestor traversal from replacement races. Safe fact collection now
+requires a descriptor-relative boundary in Phase 791. Materialization remains
+conditional no earlier than Phase 795; capture no earlier than Phase 796; the
+earliest possible plan-v2 boundary is Phase 806. No lane closes and the Phase
+779 blocker state is unchanged. See
+`docs/790-phase-hsai-native-transcript-preparation-candidate-validation.md`.
+
+## Phase 791 HSAI Native Transcript Descriptor-Relative Collector Boundary
+
+Status: complete documentation-first boundary. State slice:
+`phase-791-hsai-native-transcript-descriptor-relative-collector-boundary`.
+
+Phase 791 rejects the pathname-plus-terminal-no-follow design and freezes the
+only authorized Phase 792 collector route: macOS-only retained directory
+descriptors, component-by-component no-follow traversal, one unambiguous
+allowed root, bounded symlink resolution, terminal descriptor hashing under a
+1 GiB ceiling, complete stable metadata, final object rechecks, typed errors,
+and deterministic mutation checkpoints. Exact `rustix = 1.1.4` and
+`libc = 0.2.186` dependencies are authorized; libc is limited to the macOS
+`MNT_LOCAL` constant, while libc calls and unsafe code remain forbidden.
+
+This phase adds no Rust capability, collects no machine fact, and leaves
+`P01B` stopped. Phase 792 remains conditional implementation only; Phase 795
+remains the earliest possible materialization phase. See
+`docs/791-phase-hsai-native-transcript-descriptor-relative-collector-boundary.md`.
+
+## Phase 792 HSAI Native Transcript Descriptor-Relative Collector Implementation
+
+Status: bounded local collector implemented. State slice:
+`phase-792-hsai-native-transcript-descriptor-relative-collector`.
+
+Phase 792 adds the macOS-only `collect_executable_identity_fact` path with
+retained descriptor-relative traversal, exact-root containment, 32-hop bounded
+symlink resolution, 1-GiB bounded descriptor hashing, complete stable metadata,
+final directory/symlink/terminal rechecks, policy-entry digest binding, and a
+closed typed rejection surface. Current, strict-clippy, and Rust 1.74 focused
+gates pass across 28 tests, including channel-coordinated deterministic mutation
+checkpoints.
+
+The result is a local observation-window fact only. `P01B` remains stopped; no
+Phase 780 lane closes, no transcript is captured, and no evidence is accepted.
+Phase 793 is docs-first for operator preparation-driver and source-receipt
+correspondence; Phase 795 remains the earliest conditional materialization phase,
+Phase 796 capture, and Phase 806 plan v2. See
+`docs/792-phase-hsai-native-transcript-descriptor-relative-collector-implementation.md`.
+
+## Phase 793 HSAI Operator Preparation Driver and Source Receipt Boundary
+
+Status: complete documentation-first boundary. State slice:
+`phase-793-hsai-operator-preparation-driver-source-receipt-boundary`.
+
+Phase 793 freezes a future hermetic Phase 794 preflight contract: exact source
+receipt bodies, domain-separated raw ES256 signatures, independently supplied
+fixture verification profiles, subject-byte digest recomputation,
+producer/reviewer separation, and eight-role fresh collector dispatch. It
+establishes byte correspondence and signature validity against caller-selected
+fixture keys only; real reviewer-key authority remains deferred.
+
+No driver is implemented or run. Fixture keys cannot authorize real work, and
+every future Phase 794 result must keep `materialization_authorized=false` and
+`capture_authorized=false`. Phase 795 remains conditional on a separately
+pinned real reviewer-key authorization and immediate fact recollection. See
+`docs/793-phase-hsai-operator-preparation-driver-source-receipt-boundary.md`.
+
+## Phase 794 HSAI Hermetic Operator Preparation Driver Implementation
+
+Status: implemented and locally validated. State slice:
+`phase-794-hsai-hermetic-operator-preparation-driver-implementation`.
+
+Phase 794 implements the one-request hermetic preflight frozen by Phase 793.
+It validates exact eight-class subject and receipt correspondence, strict Rust
+and Charon manifests, exact fixture-profile census, low-S raw ES256 signatures,
+deterministic request/decision identities, and fresh direct Phase 792 collector
+dispatch. Private `cfg(test)` bindings cover deterministic success because the
+pinned Aeneas archive is not committed; production bindings are not injectable.
+
+The focused crate suite passes 50 tests. Every result preserves
+`materialization_authorized=false` and `capture_authorized=false`. No real
+reviewer authority, source acquisition, materialization, capture, Phase 780 lane
+closure, source-ledger digest, plan v2, backend execution, accepted evidence,
+Level2+, semantic correctness, production readiness, SOTA, or full-security
+claim is created. Phase 795 remains the earliest conditional authorization and
+materialization phase. See
+`docs/794-phase-hsai-hermetic-operator-preparation-driver-implementation.md`.
+
+## Phase 795 HSAI External Attempt Authorization and P01B Materialization Boundary
+
+Status: complete documentation-first boundary; materialization stopped. State
+slice: `phase-795-hsai-external-attempt-authorization-p01b-materialization-boundary`.
+
+Phase 795 records that fixture-key correspondence cannot authorize its own
+materialization. It freezes a separately pinned trust anchor, reviewer-key policy,
+and signed attempt authorization; exact Phase 794 digest bindings; strict
+freshness and single-use journal requirements; immediate fact recollection; and
+transactional staging, independent output review, publication, and cleanup rules.
+
+It also records unresolved execution prerequisites: kernel-bound identity from
+verified executable object to launch, exact producer command contracts, P01B
+archive/build trust-root inventories, trusted reservation time, anti-rollback
+journal compare-and-swap, recovery, and the durable audit-root census. Phase 796
+is documentation-only for those closures. No external authorization, plan, process, network access,
+filesystem write, source acquisition, target, handoff, transcript, Phase 780 lane
+closure, source-ledger digest, plan v2, backend result, or accepted evidence is
+created. The earliest possible plan-v2 boundary moves to Phase 809. See
+`docs/795-phase-hsai-external-attempt-authorization-p01b-materialization-boundary.md`.
+
+## Phase 796 HSAI P01B Execution Correspondence and Transaction Authority Stop
+
+Status: complete documentation-only audit; `P01B` materialization remains
+stopped. State slice:
+`phase-796-hsai-p01b-execution-correspondence-transaction-authority-stop`.
+
+Phase 796 finds that the Phase 795 conditional exit is not satisfied. The
+operation-family order is known, but documented macOS interfaces do not provide
+the required verified-descriptor launch primitive; the pinned Aeneas archive's
+exact gzip/TAR header ledger and ordered member rows were not retained; the
+per-member and aggregate extraction bounds are not frozen; the
+Cargo/Rustc/build-script/linker/SDK/loader trust-root census has not been
+observed; trusted-time and anti-rollback compare-and-swap authorities are not
+provisioned; and all 56 operation wires are not byte-complete.
+
+Therefore `preparation_contract_sha256` is absent, Phase 797 is unauthorized,
+and `materialization_authorized=false` and `capture_authorized=false` remain
+fixed. Remediation is ordered as archive-ledger acquisition and extraction-bound
+closure, strict launch-architecture decision, offline
+build-child census, transaction-authority provisioning,
+field-complete operation rows, and independent zero-gap audit. No Rust, Cargo,
+source acquisition, archive read, process, network, filesystem materialization,
+journal mutation, plan, backend execution, accepted evidence, Level2+, semantic
+correctness, production readiness, SOTA, or full-security claim is created. See
+`docs/796-phase-hsai-p01b-execution-correspondence-transaction-authority-stop.md`.
+
+## Phase 796-A HSAI P01B Archive Ledger Parser and Acquisition Separation Boundary
+
+Status: complete documentation-first boundary; parser implementation and
+acquisition not run. State slice:
+`phase-796a-hsai-p01b-archive-ledger-parser-and-acquisition-separation-boundary`.
+
+Phase 796-A defines a separate standard-library Python helper for direct,
+bounded, streaming RFC 1952 and raw TAR framing; exact gzip, header, member,
+extension, path, expanded-byte, process-resource, ledger-output, and publication
+limits; one manifest, two canonical ledgers, and one status record; strict legacy
+profile and embedded-Lean correspondence; closed failures; and deterministic
+adversarial tests. It leaves the historical archive validator unchanged.
+
+The workstream is ordered as docs-first boundary, hermetic parser
+implementation, two-reviewer implementation audit, separately authorized
+acquisition-only run, independent candidate-ledger review, and separately
+authorized local repository two-reviewer acceptance. This slice authorizes none
+of those later actions. No archive is read or downloaded, no
+candidate is emitted, and `preparation_contract_sha256` remains absent. Phase
+797, materialization, and capture remain unauthorized. Even later Phase 796-A
+success can close `P796-02` only through a valid Phase 796-A5 acceptance
+decision, not a proposal; it cannot close Phase 780 lane `L07` or the complete
+Phase 796 stop. See
+`docs/796a-phase-hsai-p01b-archive-ledger-parser-and-acquisition-separation-boundary.md`.
+
+## Phase 796-A1 HSAI P01B Archive Ledger Parser Implementation
+
+Status: hermetic implementation complete; the clean-commit Phase 796-A2 audit
+is recorded separately below. State slice:
+`phase-796a1-hsai-p01b-archive-ledger-helper`.
+
+Phase 796-A1 implements the separately authorized standard-library helper and
+synthetic tests. The helper directly parses one RFC 1952 member, raw DEFLATE,
+and strict ustar blocks; retains descriptor-relative object identity; applies
+all fixed parser, extraction, output, and process limits; writes four
+transactional candidate artifacts; independently reconstructs their grammar,
+authority, measurements, limits, and false authority fields; and uses the
+final status hard link as the commit marker. The historical validator and the
+immutable Phase 796-A boundary remain unchanged.
+
+Local validation passes 68 focused and 151 complete formal-preflight tests
+under `/usr/bin/python3` 3.9.6, plus Ruff, Rust formatting, and diff hygiene.
+Two independent development reviews return `READY`. No real archive, network,
+durable candidate, acquisition, backend, Lean, SMT, Z3, COBALT, proof artifact,
+accepted evidence, Level2+, stronger claim, or authority is created. Phase
+796-A2 is recorded separately below; Phase 796-A3 remains blocked by
+acquisition authority and enforced 512-MiB resident-memory containment. See
+`docs/796a1-phase-hsai-p01b-archive-ledger-parser-implementation.md`.
+
+## Phase 796-A2 HSAI P01B Archive Ledger Clean-Commit Audit
+
+Status: complete with a retained zero-gap clean-commit decision. State slice:
+`phase-796a2-hsai-p01b-archive-ledger-clean-commit-audit`.
+
+Phase 796-A2 audits exact commit
+`53442464ec851be46dd1e47b44b0918a14e9cf4a` in a clean detached worktree.
+The 68 focused and 151 complete formal-preflight tests pass; all 56 observed
+deterministic failure classes are covered; Ruff, Rust formatting, and
+workspace-wide Cargo checking pass; and the runner enforces the selected host
+CPU, output-size, and descriptor limits. Two fresh independent reviewers
+accept all ten immutable audit controls with zero findings.
+
+The retained aggregate decision is `zero_gap` with digest
+`5301f672b057396791e85af8c16194617accaf40df087f9a967e4ef148d15dfb`.
+It explicitly keeps `phase_796_a3_authorized=false` and
+`acquisition_authorized=false`. No real archive, network, extraction, durable
+candidate, materialization, capture, backend execution, proof artifact,
+accepted evidence, Level2+, stronger claim, or authority is created. A future
+A3 authorization remains blocked by explicit acquisition authority and an
+accepted 512-MiB resident-memory supervisor. See
+`docs/796a2-phase-hsai-p01b-archive-ledger-clean-commit-audit.md`.
+
+## Phase 796-A2S HSAI P01B Resident-Memory Supervisor Feasibility Stop
+
+Status: complete as a docs-first blocked decision. State slice:
+`phase-796a2s-hsai-p01b-resident-memory-supervisor-feasibility-stop`.
+
+Phase 796-A2S confirms that native Darwin aliases `RLIMIT_RSS` to
+`RLIMIT_AS`; the selected Python process already has virtual usage
+far above 512 MiB; and a direct finite 512-MiB limit request fails with
+`EINVAL`. Userspace polling is rejected because it cannot prove zero
+overshoot. Docker Desktop exposes a Linux cgroup-v2 hard-memory path, but
+substituting it would change the selected native macOS execution and
+archive-descriptor correspondence.
+
+Two independent reviewers accept the native-enforcement and
+substrate-correspondence findings. The retained blocked-decision digest is
+`b67e4e734deb959328ebd795320e777def9b886f6d3c141f4344a94f64071fa6`. It explicitly keeps
+`phase_796_a3_authorized=false`,
+`acquisition_authorized=false`, and
+`network_run_authorized=false`. No archive, container, image, parser,
+candidate, backend, evidence, stronger claim, or authority is created. See
+`docs/796a2s-phase-hsai-p01b-resident-memory-supervisor-feasibility-stop.md`.
+
+## Phase 796-A3L HSAI P01B Linux-Container Correspondence Boundary
+
+Status: complete as a docs-first blocked alternate-substrate assessment. State
+slice:
+`phase-796a3l-hsai-p01b-linux-container-correspondence-boundary`.
+
+Phase 796-A3L binds the observed signed Docker client, Desktop/engine/context,
+cgroup-v2 capabilities, and one local content-addressed
+`python:3.11-slim-bookworm` candidate. The image remains
+`accepted=false` because Python 3.11.15 is not the Phase 796-A1
+audited native Python 3.9.6 runtime.
+
+Two independent reviews reject execution authorization and normalize 18
+findings into ten blocking classes: cgroup-versus-RSS semantics, runtime and
+golden projection, OOM receipt topology, sandbox identities, effective cgroup
+receipts, stream/resource bounds, complete image provenance, test identity,
+filesystem certificates, and exact create/start/receipt grammar. All unrun
+result fields are absent; unresolved identities and schema digests remain null.
+Both final re-reviews accept the blocked assessment with zero findings; neither
+accepts execution.
+
+The 4377-byte canonical blocked-decision digest is
+`87fb100d4454e9cc05c1b19baf47749230324fbc9ccf32f6a150a67e2f4b0ea7`. Image pull, container run,
+Phase 796-A3L1 compatibility execution, native Phase 796-A3, archive acquisition, backend execution,
+accepted evidence, evidence escalation, Level2+, and stronger claims remain
+false. The next request may close documentation blockers only. See
+`docs/796a3l-phase-hsai-p01b-linux-container-correspondence-boundary.md`.
+
+## Phase 796-A3L1 HSAI P01B Linux-Container Contract Closure Stop
+
+Status: complete as a docs-only blocked closure attempt. State slice:
+`phase-796a3l1-hsai-p01b-linux-container-contract-closure-stop`.
+
+Phase 796-A3L1 closes C01 by limiting the future claim to aggregate cgroup-v2
+containment. It advances but does not close C08: five suite digests, 68 focused
+IDs, 151 complete IDs, and candidate test-corpus digest
+`1439a56e935a1c0194db37e5a7e4ad926658e16aa8491246c56e88d8bb5a6726`.
+It does not retroactively invent the unretained Phase 796-A2 argv.
+
+C02, C03, C04, C05, C06, C07, C08, C09, and C10 remain open. Missing identities
+include the native golden projection, collector, supervisor, seccomp and LSM
+profiles, platform manifest and runtime closure, ingress/egress certificates,
+canonical corpus artifact, and receipt schema. The 2738-byte canonical stop
+digest is
+`458d1d7c0688f45920d5308fa6670ef5f0ec2e6a4a30da6cd52af31424c3bb12`.
+Both final independent re-reviews accept the blocked assessment with zero
+findings; neither accepts the candidate corpus, implementation, or execution.
+
+No image pull/build, container action, archive access, backend execution,
+accepted evidence, Level2+, or stronger claim occurred. Phase 796-A3L2 is not
+authorized; its future request must remain a docs-first implementation
+boundary. See
+`docs/796a3l1-phase-hsai-p01b-linux-container-contract-closure-stop.md`.
+
+## Phase 796-A3L2 HSAI P01B Corpus/Profile Implementation Boundary
+
+Status: complete as a docs-only code-phase authorization. State slice:
+`phase-796a3l2-hsai-p01b-corpus-profile-implementation-boundary`.
+
+Phase 796-A3L2 authorizes a future A3L3 implementation in exactly six runtime
+or data files and five named documentation files. The runtime slice is a
+read-only standard-library corpus checker, expanded canonical corpus, exact
+seccomp profile, upstream license, provenance record, and one hermetic test
+module. The Moby profile is pinned at commit `836ae4d`, 13,470 bytes, SHA-256
+`536529b665dd0972c37bfb569f5d4ac8a53592e7b00752bc39ff063ca9864c74`.
+A3L3 uses a six-file candidate implementation commit followed by a five-file
+audit/documentation commit; the cumulative range is exactly eleven paths and
+the self-containing phase note is externally identified by Git, not self-hashed.
+
+Checker-owned subprocess, socket, network, Docker inspection, Docker transport,
+runtime file writes, archive access, and container actions are explicitly
+forbidden. TestLoader may transitively import only frozen suite modules but may
+not execute tests. The provenance embeds the exact 135-byte `ls-remote` output.
+The corpus, provenance, and clean-audit schema digests are frozen. The canonical
+3106-byte boundary digest is
+`a9e43d8d354759f7a55f45b9ef650e3e36c108dc3d30f09844b1cd3688c29f8a`.
+Two independent final re-reviews accept the corrected documentation boundary
+with zero findings; they do not accept implementation or execution.
+
+At most C08 and profile provenance may close. Driver, probe, C03, C05-C07,
+C09-C10, container execution, archive acquisition, backend execution, accepted
+evidence, Level2+, and stronger claims remain unauthorized. See
+`docs/796a3l2-phase-hsai-p01b-linux-container-implementation-boundary.md`.
+
+## Phase 796-A3L3 HSAI P01B Container Corpus/Profile Implementation
+
+Status: complete as an audited local implementation. State slice:
+`phase-796a3l3-hsai-p01b-container-corpus-profile-implementation`.
+
+The exact six-file implementation commit is
+`0d67de690625fb47b26c3b47f7cc195ec2adfc7c`. It adds a read-only
+standard-library corpus checker, the canonical 68-test focused and 151-test
+future workload corpus, the pinned Moby seccomp profile and upstream license,
+canonical provenance, and hermetic tests. The checker uses descriptor-relative
+regular-file reads and compares independent static TestLoader and AST identity
+reconstructions over retained manifest-bound bytes. It imports and executes no
+suite source.
+
+An earlier immutable candidate was rejected because pathname discovery could
+reopen replaced source or execute an unmanifested local import shadow. The
+replacement removes pathname discovery and adds explicit no-import/no-execution
+coverage. Validation passes 21 focused tests and 172 complete formal-preflight
+tests on Python 3.9.6 and 3.11, plus ruff, Rust formatting, the unaffected Rust
+workspace tests, and clippy with warnings denied. Two independent reviewers
+accept the replacement commit with zero findings.
+
+This closes only C08 and pins one profile-provenance input. No Docker command,
+socket, image, container, archive, network, backend, Lean, SMT, Z3, COBALT,
+proof, accepted-evidence, Level2+, score-axis, semantic-correctness,
+production-readiness, SOTA, breakthrough, full-security, external-audit, or
+action authority was exercised or created. See
+`docs/796a3l3-phase-hsai-p01b-container-corpus-profile-implementation.md`.
+
+## Phase 796-A3L4 HSAI P01B Portable Authorization Receipt Boundary
+
+Status: complete as a documentation-only code-phase boundary. State slice:
+`phase-796a3l4-hsai-p01b-portable-evidence-carrying-authorization-receipt-boundary`.
+
+Phase 796-A3L4 freezes one narrow future implementation over exactly two new
+Python files: a pure-data container command/receipt contract and an explicitly
+invoked hermetic test module whose filename does not alter the frozen 172-test
+formal-preflight discovery corpus. The future A3L4I implementation may define
+typed placeholder bindings, exact create/inspect/start/wait/remove plus
+conditional-kill plans, canonical receipt parsing and chaining, and a fail-
+closed lifecycle state machine. It may not run Docker, read the Docker socket,
+load process environment as authority, write files, access the network or an
+archive, execute a backend, or mutate evidence.
+
+The mechanical correspondence baseline is C01 and C08 closed, or 2/10, and it
+does not move under a pure-data implementation. A green and independently
+reviewed A3L4I candidate may change only
+`c10_local_contract_implemented=false` to `true`; C10 and all of C02-C07/C09
+remain open until retained execution receipts receive independent review. A3L5
+and every container run remain unauthorized. This boundary does not improve
+commercial moat or end-to-end evidence by itself. See
+`docs/796a3l4-phase-hsai-p01b-portable-authorization-receipt-boundary.md`.
+
+## Phase 796-A3L4I HSAI P01B Container Command/Receipt Contract
+
+Status: complete as an independently reviewed local pure-data implementation.
+State slice:
+`phase-796a3l4i-hsai-p01b-container-command-receipt-contract-implementation`.
+
+The exact two-file range `ad8b8b63..ddb1cca3` implements authorization-root
+binding, exact command plans, receipt-prefix-derived lifecycle transitions,
+strict canonical receipts, stable container-id resolution, mandatory terminal
+cleanup, bounded start kill/wait routing, 1,800-second command bounds, and
+16,384-byte retained/total stream accounting. The rejected first candidate is
+retained in history; its plan/state, cleanup, timeout/cap, lifecycle, injection,
+and recursion findings are closed by `ddb1cca3` and six added adversarial tests.
+
+Focused tests pass 21/21, the frozen corpus guard passes 21/21, normal discovery
+remains exactly 172/172, and two independent immutable-head reviews return
+`accept` with zero findings. Only
+`c10_local_contract_implemented=false` changes to `true`; the correspondence
+metric remains 2/10 and C02-C07/C09/C10 remain open. No Docker, filesystem,
+process, environment, socket, network, archive, container, backend, accepted-
+evidence, Level2+, score-axis, commercial-moat, or breakthrough-evidence action
+or claim is created. See
+`docs/796a3l4i-phase-hsai-p01b-container-command-receipt-contract-implementation.md`.
+
+## Phase 796-A3L5 HSAI P01B Retained Container Execution/Evidence Boundary
+
+Status: complete as a documentation-only boundary. State slice:
+`phase-796a3l5-hsai-p01b-retained-container-execution-evidence-boundary`.
+
+The boundary freezes one atomic score-moving program: native Python 3.9.6,
+normal Python 3.11.15, survivor-collector child-OOM, exact registry/image/runtime
+provenance, raw cgroup/security/resource observations, descriptor-safe ingress,
+running-container raw-TAR export, controlled release, exclusive transactional
+publication, exact cleanup/absence proof, and deterministic two-reviewer
+reconstruction. Five new Python files are authorized for hermetic A3L6; A3L7
+alone may perform two direct digest-addressed registry reads, and A3L8 is
+network-disabled. Partial evidence gets zero class credit. A zero-gap A3L9 may
+move correspondence from 2/10 to 10/10 but remains Level 1 single-host
+synthetic evidence under explicit local runtime-honesty assumptions, with
+moat/evidence estimates capped at 4/10. See
+`docs/796a3l5-phase-hsai-p01b-retained-container-execution-evidence-boundary.md`.
+
+## Phase 796-A3L5C HSAI P01B Retained Container Boundary Correction
+
+Status: complete as a documentation-only correction. State slice:
+`phase-796a3l5c-hsai-p01b-retained-container-boundary-correction`.
+
+The correction replaces only the conflicting A3L5 wire/order/recovery/gate and
+review sections. It freezes an acyclic candidate -> exclusive publication ->
+decision -> fresh session/reviews -> aggregate -> acceptance graph, exactly
+200 candidate payloads plus manifest file 201, exactly 270 publication events,
+total deterministic recovery, complete raw provenance, an exact five-file A3L6
+code surface, an immutable sandboxed 21-Git-blob gate source, and atomic
+C02-C07/C09/C10 reconstruction. The canonical claim-boundary object binds all
+seven honesty assumptions and ten nonclaims through final acceptance.
+
+The exact correction SHA-256 is
+`bf42bce535863e8bff3c6343d43d3ce2ab653ace39e6945535f93525ccde9de0`;
+two independent reviews returned zero findings. No Docker, registry, container,
+native, normal, OOM, publication, decision, review, or acceptance execution ran.
+Correspondence remains 2/10, commercial moat 3/10, and defensible breakthrough
+evidence 2-3/10. The stopped A3L6 draft remains rejected/untracked. Next: bring
+exactly the five A3L6 Python files into conformance, obtain immutable-source
+gate results and two code reviews, then and only then run A3L7 readiness.
+See
+`docs/796a3l5c-phase-hsai-p01b-retained-container-boundary-correction.md`.
+
+## Phase 796-A3L5D HSAI P01B Inspect Census Correction
+
+Status: complete documentation-only correction; execution remains `NotRun` and
+correspondence remains `2/10`.
+
+Named state slice:
+`phase-796a3l5d-hsai-p01b-inspect-census-correction`.
+
+Completed: independently counted the inherited and corrected exact inspect
+lists; confirmed both contain the identical ordered 56 fields; confirmed no
+57th field is named by the contract, implementation, or focused tests; and
+superseded only the five inconsistent A3L5C prose counts without changing any
+field or predicate. See
+`docs/796a3l5d-phase-hsai-p01b-inspect-census-correction.md`.
+
+Exit criteria: two independent zero-finding reviews over this correction.
+A3L6 remains unaccepted; A3L7/A3L8 remain prohibited; no runtime evidence,
+class closure, score movement, accepted Evidence Ledger mutation, Level2+,
+benchmark evidence, proof, production readiness, SOTA, breakthrough, full
+security, or external-audit claim is created.
+
+## Phase 796-A3L5E HSAI P01B Gate Sandbox Root-Read Correction
+
+Status: complete documentation-only correction; execution remains `NotRun` and
+correspondence remains `2/10`.
+
+Named state slice:
+`phase-796a3l5e-hsai-p01b-gate-sandbox-root-read-correction`.
+
+Completed: measured the exact A3L5C profile aborting both the positive control
+and `/usr/bin/true` with signal 6; minimized the required policy change to one
+`file-read-data` literal `/` capability; preserved every other profile line,
+declared source/system subpath, scratch-only write, network denial, and claim
+boundary. See
+`docs/796a3l5e-phase-hsai-p01b-gate-sandbox-root-read-correction.md`.
+
+Exit criteria: two independent zero-finding reviews over the correction, then
+an A3L6 focused test proving the positive control and all four negative controls
+under the exact corrected profile. A3L6 remains unaccepted; A3L7/A3L8 remain
+prohibited; no runtime evidence, class closure, score movement, accepted
+Evidence Ledger mutation, Level2+, benchmark evidence, proof, production
+readiness, SOTA, breakthrough, full security, or external-audit claim is
+created.
+
+## Phase 796-A3L5F HSAI P01B Probe Binding Correction
+
+Status: complete documentation-only correction; execution remains `NotRun` and
+correspondence remains `2/10`.
+
+Named state slice:
+`phase-796a3l5f-hsai-p01b-probe-binding-correction`.
+
+Completed: separated the pinned native direct launch path from Python's
+runtime-reported `sys.executable`; added one required normal/OOM
+`--input-manifest-sha256` argument carrying the frozen descriptor-bound
+snapshot-copy manifest digest; preserved independent mounted-tree, corpus,
+candidate snapshot, descriptor, ingress, and A3L9 validation. See
+`docs/796a3l5f-phase-hsai-p01b-probe-binding-correction.md`.
+
+Exit criteria: two independent zero-finding reviews over the correction, then
+the exact A3L6 immutable gate. A3L6 remains unaccepted; A3L7/A3L8 remain
+prohibited; no runtime evidence, class closure, score movement, accepted
+Evidence Ledger mutation, Level2+, benchmark evidence, proof, production
+readiness, SOTA, breakthrough, full security, or external-audit claim is
+created.
+
+## Phase 796-A3L5G HSAI P01B Snapshot Binding Graph Correction
+
+Status: complete documentation-only correction; execution remains `NotRun` and
+correspondence remains `2/10`.
+
+Named state slice:
+`phase-796a3l5g-hsai-p01b-snapshot-binding-graph-correction`.
+
+Completed: retained the exact attempt-plan and authorization-v3 field sets;
+defined normal/OOM `source_manifest_sha256` as the snapshot-copy manifest
+domain digest; required equality with create argv and probe result; and made
+authorization's binding explicit through the complete expected-bindings
+object. The separately named source-manifest digest remains mandatory. See
+`docs/796a3l5g-phase-hsai-p01b-snapshot-binding-graph-correction.md`.
+
+Exit criteria: two independent zero-finding reviews over the correction, then
+the exact A3L6 immutable gate. A3L6 remains unaccepted; A3L7/A3L8 remain
+prohibited; no runtime evidence, class closure, score movement, accepted
+Evidence Ledger mutation, Level2+, benchmark evidence, proof, production
+readiness, SOTA, breakthrough, full security, or external-audit claim is
+created.
+
+## Phase 796-A3L5H HSAI P01B Authority Adapter Correction
+
+Status: complete documentation-only correction; C10 remains fail-closed,
+execution remains `NotRun`, and correspondence remains `2/10`.
+
+Named state slice:
+`phase-796a3l5h-hsai-p01b-authority-adapter-correction`.
+
+Completed: defined four P01B wrapper schemas/domains over the exact existing
+HSAI gateway action, policy, candidate, and admission-decision Serde objects;
+froze production Rust field-order/tagged-digest reconstruction separately from
+P01B canonical wrapper hashing; froze the exact P01B program, action, subject,
+policy, source-artifact, nonclaim, deterministic model-lane, implementation,
+A3L6, readiness-plan, claim-boundary, and network bindings; preserved the
+acyclic authorization-to-postauthorization-plan direction; and specified the
+mandatory negative tests. See
+`docs/796a3l5h-phase-hsai-p01b-authority-adapter-correction.md`.
+
+Exit criteria: two independent zero-finding documentation reviews, then exact
+five-file implementation, pinned gates, and two independent code reviews.
+A3L7/A3L8 remain prohibited; no Docker, registry, network, container, retained
+runtime evidence, class closure, score movement, accepted Evidence Ledger
+mutation, Level2+, benchmark evidence, proof, production readiness, SOTA,
+breakthrough, full-security, or external-audit claim is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
@@ -20974,9 +21908,10 @@ Completed:
 - corrected Ostium incident language to distinguish direct event evidence,
   current mutable documentation, pinned code observations, preliminary
   hypotheses, unknown final root cause, and uncovered payout paths;
-- created seven original accessible SVG architecture and teaching assets with no
+- print-refreshed thirteen original accessible SVG architecture illustrations with no
   copied meme template, third-party logo, or victim imagery;
-- rendered and visually inspected two non-benchmark publication PDFs;
+- rendered and visually inspected two non-benchmark publication PDFs across 63
+  whitepaper pages and 23 PRD pages;
 - published the PRD to the configured GitHub issue tracker with
   `ready-for-agent` as
   [issue #17](https://github.com/Epistetechnician/composed-zk-benchmark-os/issues/17),
@@ -20988,9 +21923,10 @@ Declared repository surface:
 - `docs/statebook-whitepaper.md`;
 - `docs/statebook-product-requirements.md`;
 - `docs/statebook-literature-source-index.md`;
-- `docs/media/statebook/README.md` and seven SVG assets;
+- `docs/media/statebook/README.md` and thirteen SVG assets;
 - `output/pdf/statebook-whitepaper.pdf`;
 - `output/pdf/statebook-product-requirements.pdf`;
+- the two corresponding PDF-only entries in `.gitattributes`;
 - the pre-existing Statebook boundary and four standard navigation mirrors.
 
 Validation gate: Markdown structure and cross-reference scans; source-link
@@ -21112,6 +22048,40 @@ Exit criteria: focused and full gates pass; the golden vector agrees byte for
 byte across both test implementations; all implementation paths match the
 authorized surface; the implementation commit excludes the preserved AGENTS
 routing hunk, admission edit, `docs/agents/`, and A3L6 files.
+
+## Phase 797 HSAI Native-Transcript Source-Scan Correction Boundary
+
+Status: documentation-first boundary complete for named state slice
+`hsai-native-transcript-source-scan-correction-boundary`.
+
+The next separately committed slice is
+`hsai-native-transcript-source-scan-authorized-test-exceptions`. It may change
+only the HSAI claim-boundary source-scan integration test and the standard phase
+note/status mirrors. The correction must bind the exact two Phase 792/794 test
+files, three actual test-only process references, two named source-scan test
+functions, and exact source lines. Positive and near-miss negative tests are
+mandatory. Any generic process or network exception remains forbidden.
+
+Validation gate: focused scanner tests, the native-transcript package suite,
+formatting, warning-denied focused Clippy, repository docs/hygiene checks, and a
+clean-tree workspace gate. The current dirty admission rewrite is independent
+and must not be staged, restored, or absorbed.
+
+## Phase 798 HSAI Native-Transcript Source-Scan Correction Implementation
+
+Status: implemented for named state slice
+`hsai-native-transcript-source-scan-authorized-test-exceptions`.
+
+Deliverables: one exact exception helper in the HSAI claim-boundary scanner,
+positive coverage for all eleven committed matches, and near-miss rejection for
+different files, functions, executables, import shapes, and literal contexts.
+The native-transcript integration tests and production code remain unchanged.
+
+Exit criteria: the exact scanner test, full scanner suite, native-transcript
+suite, formatting, focused warning-denied Clippy, docs/hygiene checks, and a
+clean-tree workspace gate pass. All do. Full clean-tree workspace Clippy reaches
+one unrelated committed `const_is_empty` finding in a zkbench-core test; the
+finding is recorded rather than absorbed. Dirty admission work remains excluded.
 
 ## Integration Track: Statebook P2 Payoff And Residual Engine Boundary
 
@@ -21242,176 +22212,3 @@ Claim ceiling: local hermetic fixture regression evidence only. No live source,
 execution, clearing, margin, legal-finality, trust-resolution, recovery,
 release, P4/P5, HSAI, admission, zkbench, evidence-promotion, proof, production,
 SOTA, independent-audit, or full-security authority is created.
-
-## Integration Track: Statebook P4 Settlement Simulator Boundary
-
-Status: documentation-first boundary complete for named state slice
-`statebook-p4-settlement-simulator-boundary`.
-
-The next separately committed slice is
-`statebook-p4-settlement-simulator`. It may extend the existing
-`statebook-settlement` crate with one pure deterministic settlement transition
-kernel over synthetic requests, evidence, caps, anomalies, and queues. The
-kernel covers hard gates, assurance resolution, conservative valuation, linked
-plans, obligations, multi-axis exactly-once budgets, queue and challenge
-transitions, circuit breakers, hysteresis, and recovery transitions under an
-injected clock. Outputs are non-authoritative decision records only.
-
-Validation gate: unchanged P1/P2/P3 source and golden vectors; no
-`statebook-core` mutation; no new workspace crate; fail-closed hard gates with
-zero instant release on fail or unknown; no timer-only release; no
-`Halted -> Normal` breaker edge; domain-separated intent, decision-context, and
-release-attempt digests with an implementation-diverse encoder; frozen
-adversarial corpus replay; focused format/test/Clippy; repository docs and
-hygiene checks; clean-tree workspace tests; and independent scope plus
-kernel/digest reviews.
-
-Anti-goals: value movement, live books or evidence, JSON-hash identity, P5
-adapters, P6 external sources, P7 authority integration, scalar trust score,
-empirical calibration, routing, execution, capital authority, legal finality,
-custody, signing, pause, transfer, externalization, HSAI, admission, zkbench,
-network, process, filesystem output, evidence promotion, proof, production
-readiness, SOTA, independent audit, or full-security claims.
-
-## Statebook P4 Settlement Simulator Implementation
-
-Status: complete for named state slice `statebook-p4-settlement-simulator`.
-
-Implemented deliverables:
-
-- additive P4 modules under `crates/statebook-settlement/src/p4/` with unchanged P3
-  `completeness.rs` semantics;
-- `decide_and_transition` fail-closed kernel and `parse_settlement_scenario_v1` fixture
-  parser;
-- serialize-only `DecisionRecordV1` with closed five-way outcomes;
-- hard gates 1–12, conservative valuation, assurance tiers, linked-plan and obligation
-  validation, budget CAS reservations, queue and breaker interaction;
-- domain-separated P4 TLV digests and independent `ring` intent golden coverage;
-- hermetic fixtures under `tests/fixtures/p4/` plus thirteen kernel and five claim-boundary
-  tests;
-- frozen resource ceilings including 1,048,576-byte fixture cap, eight linked-plan legs, and
-  sixteen budget axes.
-
-Focused gates pass:
-
-```text
-cargo fmt -p statebook-settlement -- --check
-cargo test -p statebook-settlement --tests
-cargo clippy -p statebook-settlement --all-targets -- -D warnings
-cargo test -p statebook-core
-```
-
-Claim ceiling: local hermetic fixture regression evidence only. No value moves. Full
-thirty-seven-scenario adversarial corpus replay remains a documented follow-on fixture
-expansion; minimum acceptance scenarios and resource bounds are covered.
-
-## Integration Track: Statebook P5 Evidence Adapters And Report Bundles Boundary
-
-Status: documentation-first boundary complete for named state slice
-`statebook-p5-evidence-adapters-and-report-bundles-boundary`.
-
-## Integration Track: Statebook P5 Evidence Adapters And Report Bundles Implementation
-
-Status: implemented under named state slice
-`statebook-p5-evidence-adapters-and-report-bundles`.
-
-Delivered in isolated `crates/statebook-report`:
-
-- hermetic fixture and HSAI fixture-envelope adapters preserving unknown facts
-  and evidence maturity;
-- proposal-only decision handoff with `grants_authority=false`;
-- portable digest-bound audit-bundle materialization and independent readback;
-- domain-separated P5 TLV digests with an independent `ring` golden encoder;
-- nineteen focused integration tests covering round-trip, fail-closed readback,
-  adapters, claim boundary, and digest goldens.
-
-P1-P4 identities and the P4 kernel remain unchanged. No `statebook-hsai` or
-`statebook-sim` crate was added.
-
-Validation gate:
-
-```text
-cargo fmt -p statebook-report -- --check
-cargo test -p statebook-report --tests
-cargo clippy -p statebook-report --all-targets -- -D warnings
-cargo test -p statebook-core -p statebook-settlement --tests
-```
-
-Claim ceiling: local hermetic digest-bound audit-bundle and adapter regression
-only. No value moves. No P6 external sources, P7 authority, network, credentials,
-admission mutation, Evidence Ledger append, scalar trust score, production
-readiness, SOTA, independent audit, or full-security claims. Full eighteen-scenario
-adversarial corpus replay and in-bundle P1-P4 golden byte checks remain documented
-follow-on fixture expansion; minimum acceptance scenarios and resource bounds are
-covered.
-
-## Integration Track: Statebook P6 Read-Only External Sources Boundary
-
-Status: documentation-first boundary complete for named state slice
-`statebook-p6-read-only-external-sources-boundary`.
-
-## Integration Track: Statebook P6 Read-Only External Sources Implementation
-
-Status: implemented under named state slice
-`statebook-p6-read-only-external-sources`.
-
-Delivered in isolated `crates/statebook-source`:
-
-- captured-first import for `synthetic-clearing-terms-v1`;
-- provenance registry with supersede/historical digest retention;
-- fail-closed schema/profile/digest/narrative/resource rejection;
-- domain-separated P6 TLV digests with an independent `ring` golden encoder;
-- fourteen focused integration tests.
-
-P1-P5 identities remain unchanged. No live network client and no generic
-adapter trait were added.
-
-Validation gate:
-
-```text
-cargo fmt -p statebook-source -- --check
-cargo test -p statebook-source --tests
-cargo clippy -p statebook-source --all-targets -- -D warnings
-cargo test -p statebook-core -p statebook-settlement -p statebook-report --tests
-```
-
-Claim ceiling: local hermetic captured-source import regression only. No value
-moves. No P7 authority, trading, signing, custody, live venue network in this
-slice, admission mutation, Evidence Ledger append, scalar trust score,
-production readiness, SOTA, independent audit, or full-security claims.
-
-## Integration Track: Statebook P7 Authority Integration Preflight Boundary
-
-Status: documentation-first boundary complete for named state slice
-`statebook-p7-authority-integration-preflight-boundary`.
-
-## Integration Track: Statebook P7 Authority Integration Preflight Implementation
-
-Status: implemented under named state slice
-`statebook-p7-authority-integration-preflight`.
-
-Delivered in isolated `crates/statebook-authority`:
-
-- fail-closed Stage 6 package preflight for `hermetic-authority-preflight-v1`;
-- mandatory `grants_authority=false` handoff binding;
-- rejection of `production_gate=authorized`;
-- outcomes limited to `Incomplete` and `Denied`;
-- domain-separated P7 TLV digests with an independent `ring` golden encoder;
-- sixteen focused integration tests.
-
-P1-P6 identities remain unchanged. No controller client was added.
-
-Validation gate:
-
-```text
-cargo fmt -p statebook-authority -- --check
-cargo test -p statebook-authority --tests
-cargo clippy -p statebook-authority --all-targets -- -D warnings
-cargo test -p statebook-core -p statebook-settlement -p statebook-report -p statebook-source --tests
-```
-
-Claim ceiling: local hermetic authority-preflight regression only. No value
-moves. No controller invocation, production authorization, trading, signing,
-custody, admission mutation, Evidence Ledger append, scalar trust score,
-production readiness, SOTA, independent audit, or full-security claims.
-

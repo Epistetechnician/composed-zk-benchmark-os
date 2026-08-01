@@ -847,6 +847,56 @@ Surface DSL
 | [docs/761-phase-hsai-gateway-threat-ordinal-bounded-self-test-closure.md](docs/761-phase-hsai-gateway-threat-ordinal-bounded-self-test-closure.md) | Phase 761 HSAI gateway threat-ordinal bounded-self-test closure: docs-first exact bounded producer and standalone stdout acceptance parser for Phase 762. |
 | [docs/762-phase-hsai-gateway-threat-ordinal-rustup-inventory-stop.md](docs/762-phase-hsai-gateway-threat-ordinal-rustup-inventory-stop.md) | Phase 762 HSAI gateway threat-ordinal rustup-inventory stop: parser, client, fixtures, and Rust producers passed; rustup 1.29 full-inventory output stopped stale component acceptance before Charon. |
 | [docs/763-phase-hsai-gateway-threat-ordinal-rustup-inventory-closure.md](docs/763-phase-hsai-gateway-threat-ordinal-rustup-inventory-closure.md) | Phase 763 HSAI gateway threat-ordinal rustup-inventory closure: docs-first exact marked-installed parser and fail-propagating acceptance for Phase 764. |
+| [docs/764-phase-hsai-gateway-threat-ordinal-manual-orchestration-stop.md](docs/764-phase-hsai-gateway-threat-ordinal-manual-orchestration-stop.md) | Phase 764 HSAI gateway threat-ordinal manual-orchestration stop: a stale clean-primary assertion stopped before root creation and triggered the canonical-driver threshold. |
+| [docs/765-phase-hsai-formal-execution-state-machine-boundary.md](docs/765-phase-hsai-formal-execution-state-machine-boundary.md) | Phase 765 HSAI formal-execution state-machine boundary: docs-first immutable stage, argv, first-failure, dirty-primary preservation, and hermetic-test contract for Phase 766. |
+| [docs/766-phase-hsai-formal-execution-state-machine-implementation.md](docs/766-phase-hsai-formal-execution-state-machine-implementation.md) | Phase 766 HSAI formal-execution state-machine implementation: twelve immutable stages, canonical plans/state/snapshots, terminal first failure, dirty-primary verification, injected execution, and 25 focused tests. |
+| [docs/767-phase-hsai-formal-execution-fixture-adapter-boundary.md](docs/767-phase-hsai-formal-execution-fixture-adapter-boundary.md) | Phase 767 HSAI formal-execution fixture-adapter boundary: docs-first exact two-fixture shell exception and typed bounded-runner producer contract for Phase 768. |
+| [docs/768-phase-hsai-formal-execution-bounded-adapter-implementation.md](docs/768-phase-hsai-formal-execution-bounded-adapter-implementation.md) | Phase 768 HSAI formal-execution bounded adapter: typed cwd/bounds/outcomes, exact fixture exception, argv-only bounded execution, canonical status acceptance, and 36 focused tests. |
+| [docs/769-phase-hsai-formal-execution-complete-plan-boundary.md](docs/769-phase-hsai-formal-execution-complete-plan-boundary.md) | Phase 769 HSAI formal-execution complete-plan boundary: docs-first typed assertions, materialization, bounded producers, loopback control, cleanup, and complete deterministic operation-plan contract for Phase 770. |
+| [docs/770-phase-hsai-formal-execution-complete-plan-implementation.md](docs/770-phase-hsai-formal-execution-complete-plan-implementation.md) | Phase 770 HSAI formal-execution complete plan: canonical 65-operation contract inventory, closed payload validation, deterministic plan digest, exhaustive reachability/failure routing, and mandatory cleanup; no backend ran. |
+| [docs/771-phase-hsai-formal-execution-correspondence-correction-boundary.md](docs/771-phase-hsai-formal-execution-correspondence-correction-boundary.md) | Phase 771 HSAI formal-execution correspondence correction: docs-first plan-v2 boundary for exact child-command cardinality, per-operation capabilities, typed templates/artifacts, closed executors, and aggregate cleanup; no backend ran. |
+| [docs/772-phase-hsai-formal-execution-command-spec-completeness-stop.md](docs/772-phase-hsai-formal-execution-command-spec-completeness-stop.md) | Phase 772 HSAI formal-execution completeness stop: all 35 v1 bounded entries lack at least one exact CommandSpec field and several aggregate multiple children, so implementation stopped before source mutation or execution. |
+| [docs/773-phase-hsai-formal-execution-source-normalization-stop.md](docs/773-phase-hsai-formal-execution-source-normalization-stop.md) | Phase 773 HSAI source-normalization stop: 74 identifiable command obligations normalized, but exact total and ledger digest remain blocked by unresolved repository, Lean-extraction, native-audit, and cleanup command cardinality. |
+| [docs/774-phase-hsai-formal-execution-command-family-resolution.md](docs/774-phase-hsai-formal-execution-command-family-resolution.md) | Phase 774 HSAI command-family resolution: exact 84-command cardinality, pipeline-free Lean extraction, explicit native audits, shared transcript/environment/bounds profiles, and resolution-contract digest; no execution. |
+| [docs/775-phase-hsai-formal-execution-source-ledger-stop.md](docs/775-phase-hsai-formal-execution-source-ledger-stop.md) | Phase 775 HSAI source-ledger stop: executable symlinks, untyped placeholders, missing sandbox binding, incomplete native-audit cardinality, wrong driver target, and unmodeled retained kernel evidence block the expanded ledger and plan v2. |
+| [docs/776-phase-hsai-formal-execution-contract-correction.md](docs/776-phase-hsai-formal-execution-contract-correction.md) | Phase 776 HSAI formal-execution contract correction: typed executable identities, argv-bound sandboxing, 102-command corrected cardinality, closed replacement environment, and path-free retained kernel evidence; no producer ran. |
+| [docs/777-phase-hsai-formal-execution-pre-use-ordering-stop.md](docs/777-phase-hsai-formal-execution-pre-use-ordering-stop.md) | Phase 777 HSAI pre-use ordering stop: packaged Aeneas and source-built Charon version commands precede required native acceptance, so the 102-row ledger remains unexpanded. |
+| [docs/778-phase-hsai-formal-execution-operation-order-correction.md](docs/778-phase-hsai-formal-execution-operation-order-correction.md) | Phase 778 HSAI operation-order correction: exact 102-command order, pre-use native acceptance, post-build Charon source stability, preserved network closure and loopback position, and deterministic order digest; no producer ran. |
+| [docs/779-phase-hsai-formal-source-ledger-expansion.md](docs/779-phase-hsai-formal-source-ledger-expansion.md) | Phase 779 HSAI source-ledger expansion: 102 field-complete JSONL rows with exact order, declared capabilities, transcript paths, and typed blockers; all rows remain blocked, Phase 780 disputes four capability values, and no ledger digest exists. |
+| [docs/780-phase-hsai-formal-blocker-resolution-matrix.md](docs/780-phase-hsai-formal-blocker-resolution-matrix.md) | Phase 780 HSAI blocker-resolution matrix: routes nine JSONL blocker causes, canonical serialization, and a four-row capability-source discrepancy through fail-closed successor phases; no row is resolved. |
+| [docs/781-phase-hsai-formal-capability-source-correspondence-correction.md](docs/781-phase-hsai-formal-capability-source-correspondence-correction.md) | Phase 781 HSAI capability-source correction: restores four pre-closure materialization rows to host-offline, yields the 10/63/29 capability partition, and leaves all ledger blockers and execution gates intact. |
+| [docs/782-phase-hsai-formal-acquisition-and-installer-argv-contracts.md](docs/782-phase-hsai-formal-acquisition-and-installer-argv-contracts.md) | Phase 782 HSAI acquisition and installer argv contracts: freezes four downloader and one isolated noninteractive Rust installer argv contract while preserving machine-identity, row-expansion, execution, and evidence gates. |
+| [docs/783-phase-hsai-formal-helper-pre-use-ordering-stop.md](docs/783-phase-hsai-formal-helper-pre-use-ordering-stop.md) | Phase 783 HSAI helper pre-use ordering stop: identifies three required helper-hash child producers missing from the fixed 102-operation order and an unresolved py_compile bytecode-output conflict; L04 remains open. |
+| [docs/784-phase-hsai-formal-helper-pre-use-route-correction.md](docs/784-phase-hsai-formal-helper-pre-use-route-correction.md) | Phase 784 HSAI helper pre-use route correction: replaces child hash producers with typed in-process six-file acceptance, freezes no-bytecode compile and explicit focused-test argv, preserves the 102-operation order, and closes L04. |
+| [docs/785-phase-hsai-formal-native-transcript-fixture-provenance-stop.md](docs/785-phase-hsai-formal-native-transcript-fixture-provenance-stop.md) | Phase 785 HSAI native-transcript fixture provenance stop: blocks L05 because accepted native-tool identity bindings and immutable raw positive/negative transcript fixtures do not yet exist. |
+| [docs/786-phase-hsai-formal-native-transcript-dependency-route-correction.md](docs/786-phase-hsai-formal-native-transcript-dependency-route-correction.md) | Phase 786 HSAI native-transcript dependency route correction: moves L09 identity authority and provenance-gated fixture acquisition ahead of L05 grammar closure without authorizing capture or execution. |
+| [docs/787-phase-hsai-formal-executable-role-registry-machine-policy.md](docs/787-phase-hsai-formal-executable-role-registry-machine-policy.md) | Phase 787 HSAI executable-role registry and machine-policy schema: closes L09 at the contract-input level with 26 roles and exact E83 coverage while keeping all machine observations external. |
+| [docs/788-phase-hsai-formal-native-transcript-fixture-acquisition-readiness-audit.md](docs/788-phase-hsai-formal-native-transcript-fixture-acquisition-readiness-audit.md) | Phase 788 HSAI native-transcript fixture-acquisition protocol and readiness audit: freezes P01 capture inputs for N21 but stops before P02 because executable observations, target bytes, build receipt, raw corpus, and reviewers are absent. |
+| [docs/789-phase-hsai-formal-native-transcript-capture-prerequisite-route-correction.md](docs/789-phase-hsai-formal-native-transcript-capture-prerequisite-route-correction.md) | Phase 789 HSAI native-transcript capture-prerequisite route correction: adds wrapper identity, separates preparation/capture/grammar authority, and moves the earliest plan-v2 boundary to Phase 801 without authorizing execution. |
+| [docs/790-phase-hsai-native-transcript-preparation-candidate-validation.md](docs/790-phase-hsai-native-transcript-preparation-candidate-validation.md) | Phase 790 pure-data preparation-candidate validator: binds declared policy, platform, host-role, owned-tool, target, sandbox, and reviewer inputs while stopping before host collection or P01B materialization; earliest plan-v2 moves to Phase 806. |
+| [docs/791-phase-hsai-native-transcript-descriptor-relative-collector-boundary.md](docs/791-phase-hsai-native-transcript-descriptor-relative-collector-boundary.md) | Phase 791 descriptor-relative host executable collector boundary: freezes retained-descriptor traversal, stable object identity, bounded hashing, typed failures, and deterministic race tests for Phase 792; no host observation is collected. |
+| [docs/792-phase-hsai-native-transcript-descriptor-relative-collector-implementation.md](docs/792-phase-hsai-native-transcript-descriptor-relative-collector-implementation.md) | Phase 792 descriptor-relative collector: macOS retained-descriptor traversal, bounded symlink resolution and hashing, stable-object rechecks, v2 wire identities, typed rejection, and 28 focused tests; local observation-window facts only. |
+| [docs/793-phase-hsai-operator-preparation-driver-source-receipt-boundary.md](docs/793-phase-hsai-operator-preparation-driver-source-receipt-boundary.md) | Phase 793 operator preparation-driver and source-receipt boundary: freezes byte integrity and detached ES256 fixture-key correspondence for a future hermetic preflight while deferring real reviewer-key authority to Phase 795; no driver or materialization. |
+| [docs/794-phase-hsai-hermetic-operator-preparation-driver-implementation.md](docs/794-phase-hsai-hermetic-operator-preparation-driver-implementation.md) | Phase 794 hermetic operator-preparation driver: strict eight-receipt binding, low-S ES256 fixture-key verification, compact request identity, direct Phase 792 collector dispatch, and 50 focused tests; materialization and capture authority remain false. |
+| [docs/795-phase-hsai-external-attempt-authorization-p01b-materialization-boundary.md](docs/795-phase-hsai-external-attempt-authorization-p01b-materialization-boundary.md) | Phase 795 external-attempt authorization and P01B materialization boundary: freezes independently pinned role-capability and attempt-authorization wires, anti-rollback replay requirements, signed output review, and transactional output constraints; no authorization is accepted and no materialization runs. |
+| [docs/796-phase-hsai-p01b-execution-correspondence-transaction-authority-stop.md](docs/796-phase-hsai-p01b-execution-correspondence-transaction-authority-stop.md) | Phase 796 P01B execution-correspondence and transaction-authority stop: records missing descriptor-bound macOS launch, archive ledgers and extraction bounds, build-descendant trust census, provisioned transaction authority, and byte-complete operation wires; Phase 797 remains unauthorized. |
+| [docs/796a-phase-hsai-p01b-archive-ledger-parser-and-acquisition-separation-boundary.md](docs/796a-phase-hsai-p01b-archive-ledger-parser-and-acquisition-separation-boundary.md) | Phase 796-A archive-ledger parser and acquisition-separation boundary: freezes a future hermetic raw gzip/TAR ledger parser, exact resource limits and candidate artifacts, while keeping implementation and acquisition separately gated and Phase 797 unauthorized. |
+| [docs/796a1-phase-hsai-p01b-archive-ledger-parser-implementation.md](docs/796a1-phase-hsai-p01b-archive-ledger-parser-implementation.md) | Phase 796-A1 hermetic archive-ledger parser implementation: adds direct bounded gzip/DEFLATE/ustar parsing, descriptor-bound transactional candidate publication, independent reconstruction, and adversarial tests; A2 was kept as a separate audit and A3 acquisition remains unauthorized. |
+| [docs/796a2-phase-hsai-p01b-archive-ledger-clean-commit-audit.md](docs/796a2-phase-hsai-p01b-archive-ledger-clean-commit-audit.md) | Phase 796-A2 clean-commit archive-ledger audit: two independent reviewers accept all ten contract controls with zero findings over exact commit `53442464`; A3 acquisition, materialization, capture, backend execution, and stronger evidence remain unauthorized. |
+| [docs/796a2s-phase-hsai-p01b-resident-memory-supervisor-feasibility-stop.md](docs/796a2s-phase-hsai-p01b-resident-memory-supervisor-feasibility-stop.md) | Phase 796-A2S resident-memory supervisor feasibility stop: native Darwin lacks an accepted hard 512-MiB RSS primitive and Docker would change the execution substrate; A3 acquisition remains unauthorized pending a separate native primitive or Linux-container correspondence boundary. |
+| [docs/796a3l-phase-hsai-p01b-linux-container-correspondence-boundary.md](docs/796a3l-phase-hsai-p01b-linux-container-correspondence-boundary.md) | Phase 796-A3L blocked Linux-container correspondence assessment: pins observed Docker and image candidates, normalizes ten unresolved containment/correspondence classes, and keeps image acceptance, pulls, container runs, and archive acquisition unauthorized. |
+| [docs/796a3l1-phase-hsai-p01b-linux-container-contract-closure-stop.md](docs/796a3l1-phase-hsai-p01b-linux-container-contract-closure-stop.md) | Phase 796-A3L1 docs-only contract-closure stop: closes aggregate-memory claim semantics, records a candidate test-corpus identity, retains nine implementation/runtime blockers, and requires implementation plus audit before any synthetic run. |
+| [docs/796a3l2-phase-hsai-p01b-linux-container-implementation-boundary.md](docs/796a3l2-phase-hsai-p01b-linux-container-implementation-boundary.md) | Phase 796-A3L2 docs-only corpus/profile implementation boundary: authorizes a six-file candidate commit followed by a five-file audit/docs commit for a read-only corpus checker, expanded corpus, exact seccomp/license/provenance bytes, and one hermetic test module; all transport and execution authority remain false. |
+| [docs/796a3l3-phase-hsai-p01b-container-corpus-profile-implementation.md](docs/796a3l3-phase-hsai-p01b-container-corpus-profile-implementation.md) | Phase 796-A3L3 audited corpus/profile implementation: exact six-file read-only checker and immutable policy-data candidate, static retained-byte TestLoader/AST correspondence, 21 focused and 172 complete tests, and two zero-finding immutable-commit reviews; no Docker, container, archive, network, backend, or evidence escalation. |
+| [docs/796a3l4-phase-hsai-p01b-portable-authorization-receipt-boundary.md](docs/796a3l4-phase-hsai-p01b-portable-authorization-receipt-boundary.md) | Phase 796-A3L4 docs-only portable authorization-receipt boundary: authorizes one pure-data authorization-root, exact command-plan, canonical receipt-chain, and lifecycle-state implementation; C10 correspondence, Docker, runtime, evidence, and claim gates remain open. |
+| [docs/796a3l4i-phase-hsai-p01b-container-command-receipt-contract-implementation.md](docs/796a3l4i-phase-hsai-p01b-container-command-receipt-contract-implementation.md) | Phase 796-A3L4I audited pure-data command/receipt contract: exact authorization binding, receipt-prefix-derived lifecycle, bounded canonical parsing, 21 focused tests, and two zero-finding immutable-head reviews; readiness only, with correspondence fixed at 2/10. |
+| [docs/796a3l5-phase-hsai-p01b-retained-container-execution-evidence-boundary.md](docs/796a3l5-phase-hsai-p01b-retained-container-execution-evidence-boundary.md) | Phase 796-A3L5 docs-first retained execution/evidence boundary: atomic native-reference, normal, and survivor-collector child-OOM program; direct digest-addressed registry readiness; running-container TAR export and controlled release; exact raw observations, cleanup, publication, and deterministic two-reviewer local acceptance; no runtime action in this phase. |
+| [docs/796a3l5c-phase-hsai-p01b-retained-container-boundary-correction.md](docs/796a3l5c-phase-hsai-p01b-retained-container-boundary-correction.md) | Phase 796-A3L5C corrected retained-container boundary: acyclic prepublication/publication/decision/review ordering, exact 200-payload candidate and 270-event publication, deterministic recovery, immutable sandboxed 21-blob A3L6 gate, fresh postdecision review sessions, and atomic C02-C07/C09/C10 reconstruction; two zero-finding reviews, no runtime action, scores unchanged. |
+| [docs/796a3l5d-phase-hsai-p01b-inspect-census-correction.md](docs/796a3l5d-phase-hsai-p01b-inspect-census-correction.md) | Phase 796-A3L5D inspect-census correction: the unchanged exact A3L5/A3L5C list contains 56 fields, so five inconsistent `57` prose counts are superseded without inventing a field, weakening evaluation, authorizing execution, or moving scores. |
+| [docs/796a3l5e-phase-hsai-p01b-gate-sandbox-root-read-correction.md](docs/796a3l5e-phase-hsai-p01b-gate-sandbox-root-read-correction.md) | Phase 796-A3L5E gate-sandbox correction: adds one literal-root data-read capability required for pinned-host process startup while preserving exact declared subpath reads, scratch-only writes, network denial, execution `NotRun`, and unchanged scores. |
+| [docs/796a3l5f-phase-hsai-p01b-probe-binding-correction.md](docs/796a3l5f-phase-hsai-p01b-probe-binding-correction.md) | Phase 796-A3L5F probe-binding correction: native provenance binds the pinned direct launch executable, while normal/OOM argv carries the frozen descriptor-bound snapshot digest as a required cross-layer join; execution remains `NotRun` and scores remain unchanged. |
+| [docs/796a3l5g-phase-hsai-p01b-snapshot-binding-graph-correction.md](docs/796a3l5g-phase-hsai-p01b-snapshot-binding-graph-correction.md) | Phase 796-A3L5G snapshot-binding correction: the unchanged attempt-plan `source_manifest_sha256` field carries the copy-manifest domain digest, which authorization-v3 binds transitively through expected bindings; no schema, execution, or score changes. |
+| [docs/796a3l5h-phase-hsai-p01b-authority-adapter-correction.md](docs/796a3l5h-phase-hsai-p01b-authority-adapter-correction.md) | Phase 796-A3L5H authority-adapter correction: wraps the exact existing HSAI gateway proposal, policy, candidate, and decision objects in four P01B domains; freezes production Serde reconstruction, implementation/readiness/claim bindings, and the A3L7-A3L9 network scope; no runtime action or score change. |
 | [docs/77-managed-jwt-signature-verification-notes.md](docs/77-managed-jwt-signature-verification-notes.md) | Managed-JWT offline ES256 signature-verification implementation notes. |
 | [docs/78-phala-live-managed-verifier-boundary-spec.md](docs/78-phala-live-managed-verifier-boundary-spec.md) | Phala/dstack live managed-verifier docs-first boundary. |
 | [docs/79-phala-hermetic-live-verifier-implementation-spec.md](docs/79-phala-hermetic-live-verifier-implementation-spec.md) | Phala/dstack hermetic live-verifier implementation authorization spec. |
@@ -869,23 +919,35 @@ Surface DSL
 | [docs/statebook-p2-payoff-residual-engine-boundary-spec.md](docs/statebook-p2-payoff-residual-engine-boundary-spec.md) | Docs-first P2 authorization for exact finite-domain indicator payoff evaluation, asset-vector residuals, and typed incompleteness; no books, execution, capital, or settlement authority. |
 | [docs/statebook-p2-payoff-residual-engine-implementation-notes.md](docs/statebook-p2-payoff-residual-engine-implementation-notes.md) | Implemented local P2 exact indicator payoff and finite-domain residual engine with checked rational arithmetic, deterministic aggregation, non-netted asset vectors, and whole-report fail closure. |
 | [docs/statebook-p3-seven-completeness-reports-boundary-spec.md](docs/statebook-p3-seven-completeness-reports-boundary-spec.md) | Docs-first P3 authorization for a future isolated `statebook-settlement` crate that composes unchanged P1/P2 reports with five hermetic fixture-qualified completeness reports; no aggregate boolean, P4 policy, P5 adapter, or authority. |
-| [docs/statebook-p4-settlement-simulator-boundary-spec.md](docs/statebook-p4-settlement-simulator-boundary-spec.md) | Docs-first P4 authorization for a pure deterministic settlement transition kernel inside `statebook-settlement`: hard gates, assurance tiers, valuation, budgets, linked plans, obligations, queue, breakers, and recovery transitions; decision records only; no value moves. |
-| [docs/statebook-p4-settlement-simulator-implementation-notes.md](docs/statebook-p4-settlement-simulator-implementation-notes.md) | Implemented P4 pure deterministic settlement transition kernel with fail-closed hard gates, hermetic fixtures, domain-separated digests, and non-authoritative decision records; no value moves. |
-| [docs/statebook-p5-evidence-adapters-and-report-bundles-boundary-spec.md](docs/statebook-p5-evidence-adapters-and-report-bundles-boundary-spec.md) | Docs-first P5 authorization for narrow HSAI/fixture adapters, portable digest-bound audit bundles, independent digest checks, and fail-closed readback validation; no live sources or authority. |
-| [docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md](docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md) | Implemented P5 `statebook-report` crate: hermetic/HSAI fixture adapters, `grants_authority=false` handoff, portable digest-bound audit bundles, independent readback, and domain-separated digests; no value moves. |
-| [docs/statebook-p6-read-only-external-sources-boundary-spec.md](docs/statebook-p6-read-only-external-sources-boundary-spec.md) | Docs-first P6 authorization for captured-first read-only external import (`statebook-source`), Stage 5 freeze for one synthetic clearing profile, provenance registry, and fail-closed import; no live network in first implementation, no authority. |
-| [docs/statebook-p6-read-only-external-sources-implementation-notes.md](docs/statebook-p6-read-only-external-sources-implementation-notes.md) | Implemented P6 `statebook-source` crate: captured-first synthetic clearing import, provenance registry, fail-closed digests/nonclaims, deferred live network; no authority. |
-| [docs/statebook-p7-authority-integration-preflight-boundary-spec.md](docs/statebook-p7-authority-integration-preflight-boundary-spec.md) | Docs-first P7 authorization for fail-closed authority-integration preflight (`statebook-authority`); Stage 6 package fields required; `Authorized` / controller invocation forbidden in this slice. |
-| [docs/statebook-p7-authority-integration-preflight-implementation-notes.md](docs/statebook-p7-authority-integration-preflight-implementation-notes.md) | Implemented P7 `statebook-authority` crate: fail-closed Stage 6 package preflight with `Denied`/`Incomplete` only; never grants authority or invokes controllers. |
-| [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
+| [docs/797-phase-hsai-native-transcript-source-scan-correction-boundary.md](docs/797-phase-hsai-native-transcript-source-scan-correction-boundary.md) | Docs-first correction boundary for exact Phase 792/794 native-transcript test-only source-scan exceptions; no broader process or network authority. |
+| [docs/798-phase-hsai-native-transcript-source-scan-correction-implementation.md](docs/798-phase-hsai-native-transcript-source-scan-correction-implementation.md) | Implemented exact Phase 792/794 native-transcript test-only scanner exceptions with file, line, function, executable, and near-miss confinement. |
+| [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for thirteen original Statebook architecture illustrations; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
+| [docs/research/astral-self-modeling/README.md](docs/research/astral-self-modeling/README.md) | Level 0 research project for mechanistic self-model prediction and causally validated self-correction. |
+| [docs/research/astral-self-modeling/30-pretrained-lm-effect-explainer-v17.md](docs/research/astral-self-modeling/30-pretrained-lm-effect-explainer-v17.md) | V17 prospective pretrained-LM intervention-effect explainer feasibility protocol and claim boundary. |
+| [docs/research/astral-self-modeling/31-v17-execution-record.md](docs/research/astral-self-modeling/31-v17-execution-record.md) | V17 validated execution record: exact intervention plumbing and no nonlinear-telemetry candidate. |
+| [docs/research/astral-self-modeling/32-trained-lm-input-ablation-explainer-v18.md](docs/research/astral-self-modeling/32-trained-lm-input-ablation-explainer-v18.md) | V18 prospective local LoRA-trained language-model input-ablation explainer protocol. |
+| [docs/research/astral-self-modeling/33-v18-execution-record.md](docs/research/astral-self-modeling/33-v18-execution-record.md) | V18 validated execution: trained-Qwen development candidate with explicit cross-model limitations. |
+| [docs/research/astral-self-modeling/34-opaque-preference-replication-v19.md](docs/research/astral-self-modeling/34-opaque-preference-replication-v19.md) | V19 prospective ambiguous-language input-ablation replication with stronger cross-model controls. |
+| [docs/research/astral-self-modeling/35-v19-execution-record.md](docs/research/astral-self-modeling/35-v19-execution-record.md) | V19 validated preflight stop: near-degenerate weak-hint labels with sealed assessment. |
+| [docs/research/astral-self-modeling/36-continuous-margin-effect-replication-v20.md](docs/research/astral-self-modeling/36-continuous-margin-effect-replication-v20.md) | V20 prospective continuous hint-ablation margin-effect replication protocol. |
+| [docs/research/astral-self-modeling/37-v20-execution-record.md](docs/research/astral-self-modeling/37-v20-execution-record.md) | V20 validated negative replication with a qualified continuous target and stronger template baseline. |
+| [docs/research/astral-self-modeling/38-heterogeneous-natural-text-replication-v21.md](docs/research/astral-self-modeling/38-heterogeneous-natural-text-replication-v21.md) | V21 prospective document-disjoint natural-text residual-effect replication. |
+| [docs/research/astral-self-modeling/39-v21-execution-record.md](docs/research/astral-self-modeling/39-v21-execution-record.md) | V21 validated execution and no-candidate disposition. |
+| [docs/research/astral-self-modeling/40-activation-input-discrimination-v22.md](docs/research/astral-self-modeling/40-activation-input-discrimination-v22.md) | V22 prospective activation-versus-input perturbation discrimination feasibility protocol. |
+| [docs/research/astral-self-modeling/41-v22-execution-record.md](docs/research/astral-self-modeling/41-v22-execution-record.md) | V22 validated qualification stop with assessment unopened. |
+| [docs/research/astral-self-modeling/42-capability-tier-replication-v23.md](docs/research/astral-self-modeling/42-capability-tier-replication-v23.md) | V23 prospective fresh-concept Llama 1B perturbation replication. |
+| [docs/research/astral-self-modeling/43-v23-execution-record.md](docs/research/astral-self-modeling/43-v23-execution-record.md) | V23 validated Llama 1B qualification stop with assessment unopened. |
 
 Statebook publication status: the named slice
 `statebook-whitepaper-prd-and-publication-media-boundary` is
 `DocumentationOnly` at `Level0DesignNote`. The whitepaper, PRD, source index,
 original media, and two publication PDFs create no execution, margin, custody,
 pause, signing, oracle, settlement, evidence-promotion, or production authority.
+The 20 July 2026 visual refresh provides thirteen original, source-captioned
+illustrations and page-by-page reviewed PDF publications; it remains explanatory
+media only and creates no financial, security, incident, or settlement evidence.
 The synchronized PRD is published as
 [GitHub issue #17](https://github.com/Epistetechnician/composed-zk-benchmark-os/issues/17)
 with `ready-for-agent`; that label means the specification is bounded enough for
@@ -908,6 +970,16 @@ both production and implementation-diverse test encoders. This is deterministic
 regression evidence only, not economic equivalence, execution, settlement,
 proof, independent verification, or production readiness.
 
+Phase 797 status: the named docs-first slice
+`hsai-native-transcript-source-scan-correction-boundary` freezes one exact
+future correction to the HSAI claim-boundary scanner. It permits no Rust change
+in this commit and no exception outside the two named Phase 792/794 integration
+test files, exact source lines, and exact enclosing test functions.
+
+Phase 798 status: the named implementation slice
+`hsai-native-transcript-source-scan-authorized-test-exceptions` corrects the
+inherited HSAI gate without broadening runtime authority. Exact and near-miss
+tests bind every exception to the committed Phase 792/794 security-test surface.
 
 Statebook P2 authorization status: the named docs-first slice
 `statebook-p2-payoff-residual-engine-boundary` freezes one future exact
@@ -944,84 +1016,6 @@ The documentation-only state slice
 capital receipt to bind the full fixture authority/account/model/rule/context
 digest. Mismatch rejects composition; coherent rebinding remains a different
 hermetic fixture and creates no clearing or margin authority.
-
-Statebook P4 authorization status: the named docs-first slice
-`statebook-p4-settlement-simulator-boundary` freezes a future pure deterministic settlement
-transition kernel inside the existing `statebook-settlement` crate. The future implementation
-may evaluate synthetic externalization requests through hard gates, assurance resolution,
-conservative valuation, linked-plan and obligation validation, multi-axis exactly-once
-budgets, queue and challenge transitions, circuit breakers, hysteresis, and recovery
-transitions under an injected clock. Outputs remain non-authoritative decision records.
-All P1/P2/P3 identities stay unchanged. No new crate, value movement, P5 adapter, P6 source,
-P7 authority, live I/O, or runtime action is authorized. This commit adds no Rust or Cargo
-change.
-
-## Statebook P4 Settlement Simulator Implementation
-
-The named state slice `statebook-p4-settlement-simulator` is implemented as an additive
-extension of `statebook-settlement`. It exposes `decide_and_transition` and
-`parse_settlement_scenario_v1`, a serialize-only non-authoritative `DecisionRecordV1`,
-fail-closed hard gates with zero instant release on fail or unknown, conservative
-valuation, assurance tier selection, linked-plan and obligation validation, budget
-ledger CAS reservations, queue and breaker interaction, and domain-separated P4 TLV
-digests with an independent `ring` golden check.
-
-Focused P4 format, test, and warning-denied Clippy gates pass, as do unchanged
-`statebook-core` tests and unchanged P3 completeness regressions. See
-[docs/statebook-p4-settlement-simulator-implementation-notes.md](docs/statebook-p4-settlement-simulator-implementation-notes.md).
-
-This is local hermetic fixture regression evidence only. No value moves.
-
-Statebook P5 authorization status: the named docs-first slice
-`statebook-p5-evidence-adapters-and-report-bundles-boundary` freezes a future portable
-digest-bound audit-bundle and narrow HSAI/fixture adapter surface in at most
-`statebook-report`. All P1-P4 identities and the P4 kernel stay unchanged. No P6
-external source, P7 authority, network, credential, value movement, or runtime action is
-authorized.
-
-## Statebook P5 Evidence Adapters And Report Bundles Implementation
-
-The named state slice `statebook-p5-evidence-adapters-and-report-bundles` is implemented as
-a new `statebook-report` crate with:
-
-- closed manifest and record file sets with domain-separated P5 TLV digests;
-- materialization plus independent fail-closed readback validation;
-- hermetic fixture adapters and ClaimEnvelope-shaped fixture doubles without `hsai-*`
-  production dependencies;
-- proposal-only decision handoffs that always preserve `grants_authority=false`;
-- an independent `ring` golden encoder for every new public digest family.
-
-Focused P5 format, test, and warning-denied Clippy gates pass, as do unchanged
-`statebook-core` and unchanged P3/P4 `statebook-settlement` regressions. See
-[docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md](docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md).
-
-This is local hermetic fixture regression and readback evidence only. No value moves.
-
-Statebook P6 authorization status: the named docs-first slice
-`statebook-p6-read-only-external-sources-boundary` freezes a captured-first
-read-only external import surface in `statebook-source`. The separately committed
-implementation slice `statebook-p6-read-only-external-sources` adds isolated
-`crates/statebook-source` with the frozen `synthetic-clearing-terms-v1` profile,
-provenance registry, fail-closed import receipts, and domain-separated P6 digests
-with an independent `ring` golden check. Live network clients remain deferred.
-All P1-P5 identities stay unchanged. No P7 authority, trading, signing, custody,
-or value movement is authorized. See
-[docs/statebook-p6-read-only-external-sources-implementation-notes.md](docs/statebook-p6-read-only-external-sources-implementation-notes.md).
-
-This is local hermetic captured-source import regression evidence only. No value moves.
-
-Statebook P7 authorization status: the named docs-first slice
-`statebook-p7-authority-integration-preflight-boundary` freezes a fail-closed
-authority-integration preflight surface in `statebook-authority`. The separately
-committed implementation slice `statebook-p7-authority-integration-preflight` adds
-isolated `crates/statebook-authority` with Stage 6 package validation, mandatory
-`grants_authority=false` handoff binding, rejection of `production_gate=authorized`,
-and domain-separated P7 digests with an independent `ring` golden check. Outcomes are
-limited to `Incomplete` and `Denied`. No controller is invoked. All P1-P6 identities
-stay unchanged. See
-[docs/statebook-p7-authority-integration-preflight-implementation-notes.md](docs/statebook-p7-authority-integration-preflight-implementation-notes.md).
-
-This is local hermetic authority-preflight regression evidence only. No value moves.
 
 ## Current Implementation Status
 
@@ -2499,4 +2493,3 @@ This is local hermetic fixture regression evidence only. It is not execution,
 capital recognition, legal finality, assurance-root resolution, recovery proof,
 permitted release, benchmark evidence, production readiness, SOTA, independent
 audit, or full security.
-

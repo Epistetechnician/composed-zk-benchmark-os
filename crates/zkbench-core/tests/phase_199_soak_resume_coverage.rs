@@ -140,6 +140,86 @@ fn validate_rejects_empty_failed_id_after_completed_subset_check() {
 }
 
 #[test]
+fn validate_rejects_empty_failure_corpus_ref() {
+    let (mut checkpoint, expected_digest, expected_token) = baseline_triple();
+    checkpoint.failure_corpus_refs.push("   ".to_string());
+    let error = validate_soak_shard_checkpoint(&checkpoint, &expected_digest, &expected_token)
+        .expect_err("empty failure corpus ref should be rejected");
+    assert!(error.to_string().contains("empty"));
+}
+
+#[test]
+fn validate_rejects_duplicate_completed_case_id() {
+    let (mut checkpoint, expected_digest, expected_token) = baseline_triple();
+    checkpoint.completed_case_ids = vec!["case_a".to_string(), "case_a".to_string()];
+    let error = validate_soak_shard_checkpoint(&checkpoint, &expected_digest, &expected_token)
+        .expect_err("duplicate completed id should be rejected");
+    assert!(error.to_string().contains("duplicated"));
+}
+
+#[test]
+fn validate_rejects_absolute_artifact_ref_path() {
+    let (mut checkpoint, expected_digest, expected_token) = baseline_triple();
+    checkpoint.artifact_refs_written.push(FailureArtifactRef {
+        relative_path: "/tmp/absolute-checkpoint.json".to_string(),
+        role: "checkpoint".to_string(),
+        notes: Vec::new(),
+    });
+    let error = validate_soak_shard_checkpoint(&checkpoint, &expected_digest, &expected_token)
+        .expect_err("absolute artifact path should be rejected");
+    assert!(error.to_string().contains("relative portable paths"));
+}
+
+#[test]
+fn validate_rejects_skipped_case_not_subset_of_completed() {
+    let (mut checkpoint, expected_digest, expected_token) = baseline_triple();
+    checkpoint.completed_case_ids.push("case_a".to_string());
+    checkpoint.skipped_case_ids.push("case_missing".to_string());
+    let error = validate_soak_shard_checkpoint(&checkpoint, &expected_digest, &expected_token)
+        .expect_err("skipped outside completed should be rejected");
+    assert!(error.to_string().contains("subset of completed"));
+}
+
+#[test]
+fn validate_rejects_completed_and_failed_overlap() {
+    let (mut checkpoint, expected_digest, expected_token) = baseline_triple();
+    checkpoint.completed_case_ids.push("case_a".to_string());
+    checkpoint.failed_case_ids.push("case_a".to_string());
+    let error = validate_soak_shard_checkpoint(&checkpoint, &expected_digest, &expected_token)
+        .expect_err("completed/failed overlap should be rejected");
+    assert!(error.to_string().contains("overlap"));
+}
+
+#[test]
+fn mark_helpers_are_idempotent_for_duplicate_case_ids() {
+    let (mut checkpoint, _expected_digest, _expected_token) = baseline_triple();
+    checkpoint.mark_completed("case_a".to_string(), 0);
+    checkpoint.mark_completed("case_a".to_string(), 3);
+    checkpoint.mark_failed("case_b".to_string());
+    checkpoint.mark_failed("case_b".to_string());
+    checkpoint.mark_skipped("case_a".to_string());
+    checkpoint.mark_skipped("case_a".to_string());
+
+    assert!(checkpoint.completed_case("case_a"));
+    assert_eq!(checkpoint.completed_case_ids, vec!["case_a".to_string()]);
+    assert_eq!(checkpoint.failed_case_ids, vec!["case_b".to_string()]);
+    assert_eq!(checkpoint.skipped_case_ids, vec!["case_a".to_string()]);
+    assert_eq!(checkpoint.last_completed_case_index, Some(3));
+}
+
+#[test]
+fn write_checkpoint_rejects_parent_path_that_is_a_file() {
+    let dir = tempdir().expect("tempdir should be available");
+    let (checkpoint, _expected_digest, _expected_token) = baseline_triple();
+    let parent_as_file = dir.path().join("not-a-directory");
+    std::fs::write(&parent_as_file, b"block parent creation").expect("blocker file should write");
+    let nested = parent_as_file.join("checkpoint.json");
+    let error = write_soak_shard_checkpoint(&nested, &checkpoint)
+        .expect_err("file-as-parent should fail create_dir_all");
+    assert!(error.to_string().contains("not-a-directory"));
+}
+
+#[test]
 fn write_then_read_checkpoint_round_trip_with_parent_creation() {
     let dir = tempdir().expect("tempdir should be available");
     let (checkpoint, _expected_digest, _expected_token) = baseline_triple();

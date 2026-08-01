@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Mismatched progress clocks and a scenario envelope</title>
+  <desc id="desc">Four lanes show different rates of software and AI capability, physical infrastructure, market and clearing infrastructure, and law and governance. Three periods are scenarios, not forecasts, ending in either coherent federation or systemic monoculture.</desc>
+  <defs><style>.ink{fill:#162b45}.muted{fill:#667789}.h{font:700 56px Georgia,serif}.t{font:700 26px Georgia,serif}.b{font:24px Georgia,serif}.s{font:700 21px Georgia,serif}.k{font:700 21px ui-monospace,Consolas,monospace;letter-spacing:1.4px}.period{font:700 20px ui-monospace,Consolas,monospace;letter-spacing:1.4px}.navy{fill:#fffdfa;stroke:#173a63;stroke-width:3}.teal{fill:#edf7f4;stroke:#19766f;stroke-width:3}.gold{fill:#fff3cf;stroke:#c38508;stroke-width:3}.red{fill:#fbe9e7;stroke:#b3423c;stroke-width:3}</style></defs>
+  <rect width="1600" height="900" fill="#fbf8f1"/>
+  <text x="70" y="72" class="k ink">FIG 11 / SCENARIO ENVELOPE</text>
+  <text x="70" y="136" class="h ink">Progress happens on different clocks.</text>
+  <text x="70" y="178" class="b muted">Scenario architecture, not a forecast. No probabilities or quantitative trajectories are implied.</text>
+  <text x="588" y="248" class="period ink" text-anchor="middle">2026–2028 / NORMALIZE</text><text x="937" y="248" class="period ink" text-anchor="middle">2029–2031 / FEDERATE</text><text x="1332" y="248" class="period ink" text-anchor="middle">2032–2036 / CHOOSE</text>
+  <text x="70" y="326" class="t ink">Software and AI capability</text>
+  <rect x="440" y="282" width="295" height="96" rx="14" class="teal"/><text x="466" y="320" class="b ink"><tspan x="466">rapid model and tool</tspan><tspan x="466" dy="28">change</tspan></text>
+  <rect x="780" y="282" width="315" height="96" rx="14" class="teal"/><text x="806" y="320" class="b ink"><tspan x="806">new underlyings</tspan><tspan x="806" dy="28">and agents</tspan></text>
+  <rect x="1140" y="282" width="385" height="96" rx="14" class="gold"/><text x="1166" y="320" class="b ink"><tspan x="1166">capability may outpace</tspan><tspan x="1166" dy="28">control</tspan></text>
+  <text x="70" y="450" class="t ink">Physical infrastructure</text>
+  <rect x="440" y="406" width="295" height="96" rx="14" class="gold"/><text x="466" y="444" class="b ink"><tspan x="466">power, chips, sites</tspan><tspan x="466" dy="28">constrain</tspan></text>
+  <rect x="780" y="406" width="315" height="96" rx="14" class="gold"/><text x="806" y="444" class="b ink">buildout and congestion</text>
+  <rect x="1140" y="406" width="385" height="96" rx="14" class="gold"/><text x="1166" y="444" class="b ink">geography still matters</text>
+  <text x="70" y="574" class="t ink">Market and clearing</text>
+  <rect x="440" y="530" width="295" height="96" rx="14" class="navy"/><text x="466" y="568" class="b ink"><tspan x="466">semantics before</tspan><tspan x="466" dy="28">unification</tspan></text>
+  <rect x="780" y="530" width="315" height="96" rx="14" class="navy"/><text x="806" y="568" class="b ink"><tspan x="806">selective execution</tspan><tspan x="806" dy="28">and capital</tspan></text>
+  <rect x="1140" y="530" width="385" height="96" rx="14" class="red"/><text x="1166" y="568" class="b ink"><tspan x="1166">fragmentation or</tspan><tspan x="1166" dy="28">concentration</tspan></text>
+  <text x="70" y="698" class="t ink">Law and governance</text>
+  <rect x="440" y="654" width="295" height="96" rx="14" class="navy"/><text x="466" y="692" class="b ink"><tspan x="466">definitions and</tspan><tspan x="466" dy="28">disclosures</tspan></text>
+  <rect x="780" y="654" width="315" height="96" rx="14" class="navy"/><text x="806" y="692" class="b ink"><tspan x="806">authority-specific</tspan><tspan x="806" dy="28">recognition</tspan></text>
+  <rect x="1140" y="644" width="385" height="118" rx="16" class="navy"/>
+  <text x="1166" y="675" class="k ink">ALTERNATIVE END STATES</text>
+  <rect x="1162" y="692" width="160" height="48" rx="12" class="teal"/><text x="1190" y="723" class="s ink">coherent</text>
+  <rect x="1335" y="692" width="168" height="48" rx="12" class="red"/><text x="1354" y="723" class="s ink">monoculture</text>
+  <rect x="70" y="800" width="1455" height="44" rx="12" class="red"/>
+  <text x="96" y="829" class="k ink">STATEBOOK KEEPS DIFFERENCES VISIBLE WHILE SURROUNDING SYSTEMS ADVANCE AT UNEVEN RATES.</text>
+</svg>
