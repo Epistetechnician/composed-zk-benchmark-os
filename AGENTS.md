@@ -1,14 +1,13 @@
 # Agent Rules
 
-One V41R9 model-backed H100 runtime profile is authorized under state slice
-`V41R9ModelBackedH100ProfileAuthorizationAndExecution`, bound to RGS
-`2f5544d5f1707785ef509e407ba68ab656235dc8`, context `ctx-a5180e1d`, the
-pinned GPT-OSS-20B revision and checkpoint configuration, one clock-locked
-H100, zero restarts, 300 run minutes, and USD 13.50. It may execute only the
-frozen real-tokenizer/real-logit four-case runtime profile and exact rollback.
-The first terminal outcome consumes the identity. Pilot, qualification, tune,
+V41R9 model-backed H100 runtime profiling is complete under state slice
+`V41R9ModelBackedH100ProfileAuthorizationAndExecution`. Job `job-nburr`
+passed with the real tokenizer, native-MXFP4 checkpoint, real logits, exact
+checkpoint-bound inventory, one four-microbatch update, and byte-exact plus
+zero-logit-drift rollback. The independent Astral validator accepted the
+durable artifact. The identity is consumed; pilot, qualification, tune,
 assessment, retry, and scientific promotion remain unauthorized. See
-`docs/research/astral-self-modeling/184-v41r9-h100-profile-execution-authorization.md`.
+`docs/research/astral-self-modeling/185-v41r9-h100-profile-execution-record.md`.
 
 V41R9 exact-runtime no-model parity is complete under state slice
 `V41R9ExactRuntimeNoModelParity`. Job `job-tr7dz` passed on one clock-locked
