@@ -9,6 +9,12 @@ memory gates. Model-backed execution, pilot, qualification, tune, assessment,
 and scientific promotion remain unauthorized. See
 `docs/research/astral-self-modeling/176-v41r8-native-mxfp4-attention-lora-preregistration.md`.
 
+V41R8 local implementation and the independent Astral validator are complete.
+The next permitted action is a separately committed exact-runtime no-model
+image parity build and receipt. It may not access GPT-OSS weights or promote a
+scientific claim. Model-backed execution remains unauthorized. See
+`docs/research/astral-self-modeling/177-v41r8-native-mxfp4-attention-lora-implementation.md`.
+
 V41R7 is consumed as `RuntimeProfileIncomplete` under state slice
 `V41R7H100ProfileExecution`. Job `job-e52w6` loaded real GPT-OSS-20B weights,
 completed pre-update scoring, and OOMed in PEFT expert parametrization at
