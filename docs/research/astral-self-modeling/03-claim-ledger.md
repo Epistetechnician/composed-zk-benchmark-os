@@ -1,5 +1,9 @@
 # Claim Ledger
 
+- V41R8 prospectively freezes a native-MXFP4, frozen-expert,
+  attention-projection LoRA correction with exact inventory, parity, rollback,
+  and memory gates. Implementation and independent validation are authorized;
+  model execution and scientific claims are not.
 - V41R7 is consumed as a valid negative engineering result. Real GPT-OSS-20B
   loading and pre-update scoring succeeded, but the first batch-one update
   forward OOMed while PEFT materialized an adapted expert weight. This is not

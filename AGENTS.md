@@ -1,5 +1,14 @@
 # Agent Rules
 
+V41R8 native-MXFP4 attention-LoRA implementation is authorized under state
+slice `V41R8NativeMXFP4AttentionLoRACorrection`. Additive RGS source/tests and
+an additive Astral validator may freeze all base/expert/router state, target
+exactly q/k/v/o attention projections across 36 layers, preserve the V41R7
+microbatch contract, and enforce inventory, forward-parity, rollback, and
+memory gates. Model-backed execution, pilot, qualification, tune, assessment,
+and scientific promotion remain unauthorized. See
+`docs/research/astral-self-modeling/176-v41r8-native-mxfp4-attention-lora-preregistration.md`.
+
 V41R7 is consumed as `RuntimeProfileIncomplete` under state slice
 `V41R7H100ProfileExecution`. Job `job-e52w6` loaded real GPT-OSS-20B weights,
 completed pre-update scoring, and OOMed in PEFT expert parametrization at
