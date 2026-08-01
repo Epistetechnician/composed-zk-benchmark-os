@@ -1,5 +1,14 @@
 # Agent Rules
 
+One V41R10 model-backed acquisition pilot is authorized under state slice
+`V41R10AcquisitionPilotExecution`, bound to RGS `a01ef536`, Astral `ca308c7`,
+context `ctx-0ccf54a2` and its hashes, one clock-locked H100, zero restarts, 300
+minutes, and USD 13.50. It may execute only the frozen single-task/single-seed
+pilot and independent validation. The first terminal outcome consumes the
+identity. Retry, tuning, qualification, assessment, extra cells, and scientific
+promotion remain unauthorized. See
+`docs/research/astral-self-modeling/188-v41r10-single-task-acquisition-pilot-execution-authorization.md`.
+
 V41R10 single-task acquisition pilot design and independent-validator
 implementation are complete under state slice
 `V41R10AcquisitionPilotDesignAndImplementation`. The pilot is prospectively
