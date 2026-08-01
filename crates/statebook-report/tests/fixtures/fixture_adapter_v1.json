@@ -1,0 +1,16 @@
+{
+  "schema_version": "statebook-p5-fixture-adapter:v1",
+  "profile_id": "hermetic-observation-v1",
+  "issuer": "fixture-issuer",
+  "subject": "fixture-subject",
+  "property": "source_authenticity",
+  "scope": "synthetic-fixture",
+  "nonce": "nonce-fixture-1",
+  "issue_at": 1710000000,
+  "expiry_at": 1710003600,
+  "trust_roots": ["root-a", "root-b"],
+  "policy_version": "policy-v1",
+  "source_refs": ["ref-1"],
+  "dependency_roots": ["dep-root-1"],
+  "unknown_facts": ["market_price", "solvency_status"]
+}

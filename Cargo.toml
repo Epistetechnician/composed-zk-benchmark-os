@@ -15,8 +15,11 @@ members = [
     "crates/hsai-gateway-digest-checker",
     "crates/hsai-membrane",
     "crates/hsai-native-transcript-preparation",
+    "crates/statebook-authority",
     "crates/statebook-core",
+    "crates/statebook-report",
     "crates/statebook-settlement",
+    "crates/statebook-source",
     "crates/zkbench-core",
 ]
 

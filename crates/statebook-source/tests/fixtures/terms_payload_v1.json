@@ -1,0 +1,49 @@
+{
+  "schema_version": "statebook-terminal-source:v1",
+  "venue_namespace": "fixture.venue.alpha",
+  "source_contract_id": "BTC-USD-2026",
+  "source_revision": "rev-1",
+  "source_observed_at": 1788200000,
+  "economic_reference": {
+    "namespace": "fixture.reference",
+    "identifier": "BTC-USD",
+    "unit": "USD/BTC",
+    "benchmark_administrator": "fixture.benchmark-admin",
+    "methodology_version": "2026-01",
+    "methodology_sha256": "9f7b4f3422481487b905332cddebbde49e5c2ce86b568ec1fbf81d06d6d54d3f",
+    "fallback_rule": "fixture.fallback.none",
+    "calendar": "fixture.calendar.24x7.v1",
+    "timezone": "UTC"
+  },
+  "observation": {
+    "start": 1798732740,
+    "end": 1798732800,
+    "sampling_rule": "fixture.sampling.last-valid",
+    "disruption_rule": "fixture.disruption.no-observation-no-payoff",
+    "correction_rule": "fixture.correction.final-after-window"
+  },
+  "payoff": {
+    "kind": "indicator",
+    "comparator": {
+      "kind": "greater_than_or_equal",
+      "threshold": {"numerator":"100000","denominator":"1"},
+      "lower": null,
+      "upper": null,
+      "endpoints": null
+    },
+    "amount": {"numerator":"100","denominator":"1"}
+  },
+  "settlement": {
+    "asset": "fixture.asset.USD",
+    "unit_scale": "0.01",
+    "rounding_mode": "toward_zero",
+    "rounding_quantum": "0.01",
+    "deadline": 1798905600,
+    "dispute_rule": "fixture.dispute.window-86400",
+    "default_rule": "fixture.default.void",
+    "governing_rule": "fixture.rules.v1",
+    "finality_domain": "fixture.ledger.v1"
+  },
+  "explicit_non_equivalences": ["no-physical-delivery","no-path-dependence"],
+  "unknown_terms": []
+}
