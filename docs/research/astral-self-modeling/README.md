@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R8 native-MXFP4 attention-LoRA preregistration](176-v41r8-native-mxfp4-attention-lora-preregistration.md)
 - [V41R7 H100 profile execution record](175-v41r7-h100-profile-execution-record.md)
 - [V41R7 implementation and Torch-parity record](174-v41r7-implementation-and-torch-parity-record.md)
 - [V41R7 microbatch memory-correction preregistration](173-v41r7-microbatch-memory-correction-preregistration.md)
