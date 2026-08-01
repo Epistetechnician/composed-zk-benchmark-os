@@ -1,5 +1,8 @@
 # Claim Ledger
 
+- V41R8 authorizes one exact-runtime no-model parity job bound to immutable
+  source, context, dependency, hardware, and receipt checks. It does not
+  authorize tokenizer/model access or scientific execution.
 - V41R8 native-MXFP4 attention-LoRA and an independent fail-closed validator
   are locally implemented. Focused and repository guards pass, but exact
   runtime parity, model execution, and every scientific claim remain unrun.

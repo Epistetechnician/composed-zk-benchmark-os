@@ -15,6 +15,12 @@ image parity build and receipt. It may not access GPT-OSS weights or promote a
 scientific claim. Model-backed execution remains unauthorized. See
 `docs/research/astral-self-modeling/177-v41r8-native-mxfp4-attention-lora-implementation.md`.
 
+One exact-runtime no-model V41R8 parity job is authorized under state slice
+`V41R8ExactRuntimeNoModelParity`, bound to RGS `d13fc6c`, context
+`ctx-f71c03bd`, one clock-locked H100, zero restarts, and 30 run minutes. It may
+not access GPT-OSS tokenizer or model weights. See
+`docs/research/astral-self-modeling/178-v41r8-exact-runtime-parity-authorization.md`.
+
 V41R7 is consumed as `RuntimeProfileIncomplete` under state slice
 `V41R7H100ProfileExecution`. Job `job-e52w6` loaded real GPT-OSS-20B weights,
 completed pre-update scoring, and OOMed in PEFT expert parametrization at

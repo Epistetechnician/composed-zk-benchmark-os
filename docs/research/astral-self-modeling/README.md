@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R8 exact-runtime parity authorization](178-v41r8-exact-runtime-parity-authorization.md)
 - [V41R8 native-MXFP4 attention-LoRA implementation](177-v41r8-native-mxfp4-attention-lora-implementation.md)
 - [V41R8 native-MXFP4 attention-LoRA preregistration](176-v41r8-native-mxfp4-attention-lora-preregistration.md)
 - [V41R7 H100 profile execution record](175-v41r7-h100-profile-execution-record.md)
