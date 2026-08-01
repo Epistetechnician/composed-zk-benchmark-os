@@ -1,5 +1,16 @@
 # Agent Rules
 
+V41R9 checkpoint-bound layer-geometry correction implementation is authorized
+under state slice `V41R9CheckpointBoundLayerGeometryCorrection`. RGS and the
+independent Astral validator may replace V41R8's invalid 36-layer family
+default with the pinned GPT-OSS-20B checkpoint config's 24 layers, 96 q/k/v/o
+targets, 192 LoRA tensors, and 3,981,312 trainable parameters, with live config
+validation before adapter construction. Model execution, runtime parity,
+pilot, qualification, tune, assessment, and claims above
+`LocalImplementationCheckpointBoundAttentionLoRAV41R9` remain unauthorized.
+See
+`docs/research/astral-self-modeling/181-v41r9-checkpoint-bound-layer-geometry-preregistration.md`.
+
 V41R8 is consumed as `RuntimeProfileIncomplete` under state slice
 `V41R8H100ProfileExecution`. Job `job-s9mx4` loaded real GPT-OSS-20B native
 MXFP4 weights and the real tokenizer, completed base scoring, then failed the
