@@ -1,10 +1,11 @@
 # Agent Rules
 
-One exact-runtime no-model V41R9 parity job is authorized under state slice
-`V41R9ExactRuntimeNoModelParity`, bound to RGS `2f5544d`, the exact context
-hashes in the V41R9 authorization, one clock-locked H100, zero restarts, and 30
-run minutes. It may build/test the pinned image and inspect runtime/config
-objects only; tokenizer, checkpoint, and model access remain forbidden. See
+V41R9 exact-runtime no-model parity is complete under state slice
+`V41R9ExactRuntimeNoModelParity`. Job `job-tr7dz` passed on one clock-locked
+H100 with zero restarts or preemptions, validating the exact dependency image,
+native MXFP4 construction, and checkpoint-bound 24-layer geometry. No
+tokenizer, checkpoint, or model was accessed and no science was executed. The
+identity is consumed; paid model execution remains separately unauthorized. See
 `docs/research/astral-self-modeling/183-v41r9-exact-runtime-parity-authorization.md`.
 
 V41R9 checkpoint-bound layer-geometry correction implementation is complete
