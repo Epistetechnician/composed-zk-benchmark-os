@@ -1,12 +1,18 @@
 # Claim Ledger
 
+- V41R7 is consumed as a valid negative engineering result. Real GPT-OSS-20B
+  loading and pre-update scoring succeeded, but the first batch-one update
+  forward OOMed while PEFT materialized an adapted expert weight. This is not
+  acquisition or continual-learning evidence; V41R8 remains only a proposed
+  native-MXFP4 frozen-expert, attention-LoRA correction.
 - V41R7 passed 13/13 parity tests in exact Torch 2.10.0+cu128/CUDA 12.8.
   Retained no-model job `job-t8anv` subsequently returned the exact valid
-  `V41R7TorchParityPassed` receipt. Exactly one frozen H100 runtime profile is
-  authorized and remains unrun; no scientific result exists yet.
+  `V41R7TorchParityPassed` receipt. Exactly one frozen H100 runtime profile was
+  authorized and has now been consumed by the recorded OOM.
 - V41R7 prospectively freezes a token-weighted batch-one accumulation
-  correction with exact parity gates. One model-backed profile is authorized;
-  pilot, qualification, tune, assessment, and scientific claims are not.
+  correction with exact parity gates. Its one model-backed profile is
+  consumed; pilot, qualification, tune, assessment, and scientific claims are
+  not authorized.
 - V41R6 reached the real GPT-OSS-20B/PEFT training forward and failed with an
   H100 OOM while materializing expert LoRA `W + delta_weight`. The profile is
   consumed and did not qualify; acquisition and later claims remain unrun.

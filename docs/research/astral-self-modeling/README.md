@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R7 H100 profile execution record](175-v41r7-h100-profile-execution-record.md)
 - [V41R7 implementation and Torch-parity record](174-v41r7-implementation-and-torch-parity-record.md)
 - [V41R7 microbatch memory-correction preregistration](173-v41r7-microbatch-memory-correction-preregistration.md)
 - [V41R6 H100 runtime-profile OOM record](172-v41r6-h100-runtime-profile-oom-record.md)
