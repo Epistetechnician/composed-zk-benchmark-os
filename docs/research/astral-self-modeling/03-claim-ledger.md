@@ -1,5 +1,10 @@
 # Claim Ledger
 
+- V41R12 completed the byte-identical V41R11 model-backed novelty preflight.
+  No-update accuracy was exactly 0.25 overall and per class; context-only was
+  exactly 1.00. The independent validator accepted all 192 raw decisions and
+  confirmed zero adapters or updates. The ceiling is model-backed instrument
+  novelty only; acquisition and continual learning remain untested.
 - V41R11 model-backed preflight R1 is consumed as a provider infrastructure
   failure. Job `job-ybuqi` hit build-workspace `ENOSPC` at attempt zero and
   USD 0.00; no model or scientific operation ran. The local instrument remains

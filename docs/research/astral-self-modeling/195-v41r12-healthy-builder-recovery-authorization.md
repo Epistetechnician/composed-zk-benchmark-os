@@ -2,7 +2,7 @@
 
 State slice: `V41R12HealthyBuilderRecoveryExecution`.
 
-Status: `OneRecoveryPreflightAuthorized / TrainingUnauthorized`.
+Status: `ConsumedByNoveltyPreflightPassed / TrainingUnauthorized`.
 
 Provider ticket `tkt-ubg9g` establishes that R1 failed before context fetch on
 a low-disk builder, the worker was drained, five full pipeline canaries passed,
@@ -21,3 +21,6 @@ The first terminal outcome consumes V41R12. A pass may establish only
 `RemoteH100ModelBackedNoveltyPreflightV41R11` under the V41R12 recovery
 identity and open a separately reviewed
 acquisition-pilot design.
+
+Job `job-3nn6y` consumed V41R12 with a valid pass. See
+`196-v41r12-novelty-preflight-execution-record.md`.
