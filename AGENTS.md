@@ -4057,3 +4057,9 @@ authorization after clean commits. Tune, assessment, retry, qualification, and
 claims above `RemoteH100PanelBalancedAcquisitionDevelopmentV41R20` are
 forbidden. See
 `docs/research/astral-self-modeling/214-v41r20-prospective-gradient-balancing-preregistration.md`.
+V41R20 persistent-node execution is authorized once against RGS commit
+`353fb0d4de8645c33260c47e2cc19e35834882a5`, provider context
+`ctx-00581056`, and Astral validator commit
+`d31800a3fd2b9e6c01278dd978f0988a6536f77a`. Restart, retuning, assessment,
+layer selection, baseline rerun, and claim promotion remain forbidden. See
+`docs/research/astral-self-modeling/215-v41r20-panel-balancing-execution-authorization.md`.
