@@ -1,5 +1,13 @@
 # Agent Rules
 
+V41R19 persistent-node recovery is authorized once under state slice
+`V41R19PersistentNodeRuntimeAndGradientProfile` on restored node
+`astral-v41r3-profile-node-r1`. It must install exact Python 3.12.3 and V41
+runtime pins, verify context `ctx-b71ccbe0` and RGS commit `0e8197f...`, preserve
+the V41R16 no-update boundary, export and validate before stopping the node.
+See
+`docs/research/astral-self-modeling/212-v41r19-persistent-node-gradient-profile-authorization.md`.
+
 V41R18 registry canary is consumed and failed under state slice
 `V41R18RegistryRepairCanaryAndGradientProfile`. Job `job-exijp` exact-cache-hit
 the successful V41R15 image but failed on three free provider attempts before
