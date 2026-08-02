@@ -18,6 +18,7 @@ def sha256(path: Path) -> str:
 
 def validate(rgs_root: Path) -> dict[str, object]:
     required = {
+        "runner": rgs_root / "scripts/run_v41r25_disjoint_replay.py",
         "method": rgs_root / "mesh_brain/meshmodel/v41r25_disjoint_replay_replication.py",
         "test": rgs_root / "tests/test_v41r25_disjoint_replay_replication.py",
         "preregistration": rgs_root / "docs/v41r25-disjoint-protected-replay-preregistration.md",

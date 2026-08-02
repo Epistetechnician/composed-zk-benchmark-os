@@ -2,7 +2,7 @@
 
 State slice: `V41R25DisjointProtectedReplayReplication`.
 
-Status: `ProspectivelyFrozen / LocallyQualified / RuntimeUnauthorized`.
+Status: `ProspectivelyFrozen / Implemented / LocallyQualified / RuntimeUnauthorized`.
 
 V41R25 freezes an unchanged-method replication of V41R24R2. Acquisition cases
 4--7 and protected rows 16--31 are identity-disjoint from V41R24R2 acquisition
@@ -16,9 +16,9 @@ This design intentionally does not raise protected replay to 50%. V41R24R2's
 allocation would make this another outcome-adaptive development intervention.
 
 The RGS implementation independently checks row identity and freezes the exact
-case IDs and source hashes in its contract. A model-backed runner and an
-artifact validator must be implemented and reviewed before one execution
-identity can be authorized. No runtime, tuning, assessment access, or claims
+case IDs and source hashes in its contract. The model-backed runner and
+artifact validator are implemented; their committed hashes must be reviewed
+before one execution identity can be authorized. No runtime, tuning, assessment access, or claims
 above `RemoteH100DisjointProtectedReplayDevelopmentV41R25` are authorized.
 
 A pass would be a disjoint development replication only. It would not establish
