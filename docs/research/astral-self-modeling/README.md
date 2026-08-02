@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R25 execution record](234-v41r25-disjoint-replay-execution-record.md)
 - [V41R25 execution authorization](233-v41r25-disjoint-replay-execution-authorization.md)
 - [V41R25 runner and validator implementation](232-v41r25-runner-and-validator-implementation.md)
 - [V41R25 disjoint protected-replay preregistration](231-v41r25-disjoint-protected-replay-preregistration.md)
