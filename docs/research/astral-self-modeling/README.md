@@ -1,5 +1,10 @@
 # Astral Self-Modeling Research Project
 
+- [V41R24R2 protected-replay execution record](230-v41r24r2-protected-replay-execution-record.md)
+- [V41R24R2 projection-recovery authorization](229-v41r24r2-projection-recovery-execution-authorization.md)
+- [V41R24 failure and R2 correction](228-v41r24-runtime-failure-and-r2-projection-recovery.md)
+- [V41R24 execution authorization](227-v41r24-protected-replay-retention-execution-authorization.md)
+- [V41R24 preregistration](226-v41r24-protected-replay-retention-preregistration.md)
 - [V41R23 multi-case interference execution record](225-v41r23-multicase-interference-isolation-execution-record.md)
 - [V41R23 multi-case interference execution authorization](224-v41r23-multicase-interference-isolation-execution-authorization.md)
 - [V41R23 multi-case interference preregistration](223-v41r23-multicase-interference-isolation-preregistration.md)

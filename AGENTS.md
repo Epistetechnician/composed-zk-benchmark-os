@@ -1,10 +1,9 @@
 # Agent Rules
 
-V41R24R2 is authorized once under state slice
-`V41R24R2ProtectedReplayProjectionRecovery`, bound to producer `333488b...`,
-validator `b4fd75a...`, and context `ctx-04c633c2`. Run once offline with
-restart `never`, a `$3.00` cap, export, and immediate stop. See
-`docs/research/astral-self-modeling/229-v41r24r2-projection-recovery-execution-authorization.md`.
+V41R24R2 is complete, independently validated, and consumed. Protected replay
+preserved 4/4 acquisition and improved protected accuracy from 0.1875 to 0.875,
+but missed the 0.98 gate. The candidate is rejected. See
+`docs/research/astral-self-modeling/230-v41r24r2-protected-replay-execution-record.md`.
 
 V41R24 is consumed as a pre-update runtime failure. V41R24R2 local correction
 is allowed under state slice `V41R24R2ProtectedReplayProjectionRecovery` and
