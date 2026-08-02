@@ -1,5 +1,12 @@
 # Agent Rules
 
+V41R24 is consumed as a pre-update runtime failure. V41R24R2 local correction
+is allowed under state slice `V41R24R2ProtectedReplayProjectionRecovery` and
+is limited to the exact protected-row `target` to training-row `answer`
+projection, contract identity, tests, validator, and records. Remote execution
+requires new authorization. See
+`docs/research/astral-self-modeling/228-v41r24-runtime-failure-and-r2-projection-recovery.md`.
+
 V41R24 one-shot H100 execution is authorized under state slice
 `V41R24ProtectedReplayRetentionIntervention`, bound to producer
 `5addf6b655c2aadfc97ee914f3de22302f8e76da`, validator

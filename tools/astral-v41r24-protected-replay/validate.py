@@ -16,8 +16,8 @@ assert SPEC and SPEC.loader
 BASE23 = importlib.util.module_from_spec(SPEC); SPEC.loader.exec_module(BASE23)
 BASE = BASE23.BASE
 
-VERSION = "mesh.astral_v41r24_protected_replay.v1"
-STATE_SLICE = "V41R24ProtectedReplayRetentionIntervention"
+VERSION = "mesh.astral_v41r24r2_protected_replay.v1"
+STATE_SLICE = "V41R24R2ProtectedReplayProjectionRecovery"
 CLAIM_CEILING = "RemoteH100ProtectedReplayRetentionDevelopmentV41R24"
 INDICES = (0, 1, 2, 3)
 BASELINE_SHA = "sha256:ec4d7975befd54d675e484aec6acc5ba1f651cd44a6a6f087c6d777ea585eeef"
@@ -29,7 +29,7 @@ def file_hash(path: Path) -> str:
 
 def expected_contract(instrument: dict[str, Any]) -> dict[str, Any]:
     cases = [instrument["cases"][i] for i in INDICES]
-    body = {"version": "mesh.astral_v41r24_protected_replay_contract.v1", "state_slice": STATE_SLICE,
+    body = {"version": "mesh.astral_v41r24r2_protected_replay_contract.v1", "state_slice": STATE_SLICE,
             "seed": 411013, "instrument_sha256": instrument["instrument_sha256"], "case_indices": list(INDICES),
             "case_bindings": [{"case_id": c["case_id"], "prompt": c["composition_prompt"],
                                "target": c["target"], "candidates": list(c["candidates"])} for c in cases],
@@ -38,7 +38,9 @@ def expected_contract(instrument: dict[str, Any]) -> dict[str, Any]:
             "optimizer_steps": 256, "round_robin_case_order": list(INDICES),
             "acquisition_examples_per_step": 4, "acquisition_examples_per_case": 256,
             "protected_examples_per_step": 4, "protected_schedule": "cyclic_four_of_sixteen",
-            "protected_examples_per_row": 64, "panel_weights": {"acquisition": 0.75, "protected": 0.25},
+            "protected_examples_per_row": 64,
+            "protected_training_projection": "prompt_unchanged_target_to_answer_exact",
+            "panel_weights": {"acquisition": 0.75, "protected": 0.25},
             "loss_reduction": "token_mean_within_panel_then_frozen_panel_weight",
             "lora": {"rank": 8, "alpha": 16, "targets": "qkvo_all24"}, "optimizer": "AdamW",
             "learning_rate": 2.0e-4, "gradient_clip": 1.0,
