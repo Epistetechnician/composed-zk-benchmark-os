@@ -1,5 +1,11 @@
 # Agent Rules
 
+V41R14 wrapper-only recovery execution is authorized under state slice
+`V41R14ShellWrapperRecoveryExecution`. It may change only the Givemeanode
+command preamble to POSIX `set -eu`; the committed V41R13 executable, context,
+scientific protocol, thresholds, and no-retry rule remain byte-identical. See
+`docs/research/astral-self-modeling/200-v41r14-posix-shell-wrapper-recovery-authorization.md`.
+
 V41R13 one-shot persistent-acquisition pilot execution is authorized under
 state slice `V41R13PersistentAcquisitionPilotDesignAndExecution`, bound to the
 exact identities and stop rules in
