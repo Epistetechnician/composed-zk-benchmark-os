@@ -1,5 +1,13 @@
 # Agent Rules
 
+V41R14 execution is complete under state slice
+`V41R14ShellWrapperRecoveryExecution`. Job `job-qh7gh` returned the
+independently validated negative `PilotNoSignal`: 0.25 no-update, 0.3229167
+persistent, protected 1.0 to 0.75, exact reload, and 64 steps. V41R14 is
+consumed; retry, tuning, assessment, and qualification remain unauthorized.
+See
+`docs/research/astral-self-modeling/201-v41r14-persistent-acquisition-pilot-execution-record.md`.
+
 V41R14 wrapper-only recovery execution is authorized under state slice
 `V41R14ShellWrapperRecoveryExecution`. It may change only the Givemeanode
 command preamble to POSIX `set -eu`; the committed V41R13 executable, context,
