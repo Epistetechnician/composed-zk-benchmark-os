@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R17 prebuilt-image gradient profile authorization](208-v41r17-prebuilt-image-gradient-profile-authorization.md)
 - [V41R16 gradient interference profile infrastructure failure record](207-v41r16-gradient-interference-profile-infrastructure-failure-record.md)
 - [V41R16 gradient interference profile execution authorization](206-v41r16-gradient-interference-profile-execution-authorization.md)
 - [V41R16 gradient interference profile preregistration](205-v41r16-gradient-interference-profile-preregistration.md)
