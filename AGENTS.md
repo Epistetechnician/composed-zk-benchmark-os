@@ -4069,3 +4069,13 @@ all-layer panel-normalized candidate tied V41R15 persistent acquisition at
 gates failed. Retry, adaptive reweighting, assessment, qualification, and claim
 promotion are forbidden. See
 `docs/research/astral-self-modeling/216-v41r20-panel-balancing-execution-record.md`.
+Explicit V41R21 acquisition-learnability decomposition design and independent
+validator implementation are allowed under state slice
+`V41R21AcquisitionLearnabilityDecomposition`. Freeze exactly no-update,
+direct-oracle, two-edge without replay, and unchanged V41R15-style two-edge
+with protected replay. Each update arm has 64 steps and 256 equal-weight
+examples from a reset checkpoint. Model execution requires separate clean
+commit authorization. Tune, assessment, layer selection, adaptive weighting,
+and claims above `RemoteH100AcquisitionLearnabilityDecompositionV41R21` are
+forbidden. See
+`docs/research/astral-self-modeling/217-v41r21-learnability-decomposition-preregistration.md`.
