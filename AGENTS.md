@@ -1,5 +1,12 @@
 # Agent Rules
 
+V41R18 permits one non-scientific exact-cache-hit canary under state slice
+`V41R18RegistryRepairCanaryAndGradientProfile`, bound to successful V41R15
+context `ctx-e84c48d1`. It may verify runtime/GPU/source only and may not load a
+model or execute V41R16. Scientific execution remains unauthorized until the
+canary passes. See
+`docs/research/astral-self-modeling/210-v41r18-registry-cache-hit-canary-authorization.md`.
+
 V41R17 is consumed under state slice
 `V41R17ProviderResolvedGradientProfileExecution`. Job `job-842y9` reproduced
 the provider internal-registry blob-HEAD HTTP 500 on a prebuilt-image import
