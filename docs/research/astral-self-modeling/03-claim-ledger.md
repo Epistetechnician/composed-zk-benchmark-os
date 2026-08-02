@@ -1,5 +1,10 @@
 # Claim Ledger
 
+- V41R19 is a complete independently validated no-update diagnostic. All 24
+  acquisition/protection layer cosines were positive; global cosine was
+  0.804440 and protected gradient norm was 2.47x acquisition. This supports a
+  magnitude-imbalance hypothesis only and does not establish acquisition or a
+  superior update method.
 - V41R18 scientific execution was not authorized. Its no-model exact-cache-hit
   canary `job-exijp` failed before container start while pulling the existing
   internal image. This closes all current provider-registry delivery paths and

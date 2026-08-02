@@ -131,6 +131,13 @@ def close(left: Any, right: Any) -> bool:
     return left == right
 
 
+def valid_torch_runtime(runtime: dict[str, Any]) -> bool:
+    # PyPI distribution metadata omits the CUDA local-version suffix that
+    # torch.__version__ exposes. CUDA is bound independently below, so both
+    # metadata spellings identify the same frozen torch 2.10/cu128 runtime.
+    return runtime.get("torch") in {"2.10.0", "2.10.0+cu128"} and runtime.get("cuda") == "12.8"
+
+
 def validate(artifact: Path, rgs_root: Path) -> dict[str, Any]:
     result_path = artifact / "profile-result.json"
     gradients_path = artifact / "gradient-state.pt"
@@ -161,9 +168,11 @@ def validate(artifact: Path, rgs_root: Path) -> dict[str, Any]:
     model, runtime = result.get("model", {}), result.get("runtime", {})
     if model.get("id") != MODEL or model.get("revision") != REVISION:
         errors.append("model")
-    for key, expected in {"torch": "2.10.0+cu128", "transformers": "4.57.6", "peft": "0.18.1", "cuda": "12.8"}.items():
+    for key, expected in {"transformers": "4.57.6", "peft": "0.18.1", "cuda": "12.8"}.items():
         if runtime.get(key) != expected:
             errors.append(f"runtime:{key}")
+    if not valid_torch_runtime(runtime):
+        errors.append("runtime:torch")
     if "H100" not in str(runtime.get("gpu", "")).upper():
         errors.append("runtime:gpu")
     if result.get("geometry", {}).get("checkpoint_config_sha256") != CONFIG or result.get("quantization") != {"quant_method": "mxfp4", "dequantize": False}:
