@@ -1,5 +1,13 @@
 # Agent Rules
 
+V41R15 execution is complete under state slice
+`V41R15EqualExampleDevelopmentExecution`. Job `job-kgyid` returned the valid,
+independently validated `EqualExampleDevelopmentNoSignal`: 0.25 no-update,
+0.2604167 persistent, protected 1.0 to 0.8125, exact reload, and exact 0.25
+microbatch weights. V41R15 is consumed; retry, confirmation, assessment, and
+qualification remain unauthorized. See
+`docs/research/astral-self-modeling/204-v41r15-equal-example-development-execution-record.md`.
+
 V41R15 one-shot development execution is authorized under state slice
 `V41R15EqualExampleDevelopmentExecution`, bound to the exact identities and
 stop rules in

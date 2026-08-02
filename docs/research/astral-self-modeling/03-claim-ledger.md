@@ -1,5 +1,11 @@
 # Claim Ledger
 
+- V41R15 is a valid, independently validated development negative. Exact
+  equal-example weighting improved protected accuracy relative to V41R14 from
+  0.75 to 0.8125, but persistent acquisition declined from 0.3229167 to
+  0.2604167 and all four scientific gates still failed. Weight distortion was
+  relevant but insufficient; V41R15 is consumed and confirmation remains
+  blocked.
 - V41R15 diagnoses V41R14's token-weighted objective as inconsistent with its
   declared example policy: protected replay received 11.0641% rather than 25%
   of loss, while bridge outputs received 63.7534%. An isolated equal-example
