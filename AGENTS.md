@@ -1,5 +1,15 @@
 # Agent Rules
 
+One V41R12 healthy-builder recovery preflight is authorized under state slice
+`V41R12HealthyBuilderRecoveryExecution`, using byte-identical RGS `a9cd29c`,
+Astral `4a9290c`, context `ctx-35bb0f03`, runtime, model, instrument, command,
+gates, and zero-update boundary from consumed V41R11 R1. Provider ticket
+`tkt-ubg9g` confirms the bad builder was drained after a pre-context provider
+failure. One clock-locked H100, zero restarts, 120 minutes, and USD 5.40 are
+allowed. First terminal outcome consumes V41R12. Training and claims above
+`RemoteH100ModelBackedNoveltyPreflightV41R11` remain unauthorized. See
+`docs/research/astral-self-modeling/195-v41r12-healthy-builder-recovery-authorization.md`.
+
 V41R11 model-backed novelty-preflight identity R1 is consumed under state slice
 `V41R11ModelBackedNoveltyPreflightAuthorizationAndExecution`. Job `job-ybuqi`
 failed during provider image construction with build-workspace `ENOSPC` at
