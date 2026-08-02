@@ -1,5 +1,13 @@
 # Agent Rules
 
+V41R22 one-shot H100 execution is authorized under state slice
+`V41R22SingleCaseUpdateSubstrateCalibration`, bound to producer commit
+`5983daddefa2db6a8929155d9521fb4583af5734`, validator commit
+`8ddfca348a4ee4e7ccf1383666eb6f6a136f4520`, and context `ctx-c4129125`.
+All four frozen arms must run once with restart policy `never`, offline model
+access, a `$5.00` maximum new-spend cap, export, and immediate node stop. See
+`docs/research/astral-self-modeling/221-v41r22-single-case-substrate-calibration-execution-authorization.md`.
+
 V41R22 design and independent local validation are allowed under state slice
 `V41R22SingleCaseUpdateSubstrateCalibration`. Mutations are limited to the
 prospectively frozen exact-case 2x2 step/learning-rate matrix, independent
