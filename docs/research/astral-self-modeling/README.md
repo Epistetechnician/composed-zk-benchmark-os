@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R12 healthy-builder recovery authorization](195-v41r12-healthy-builder-recovery-authorization.md)
 - [V41R11 preflight infrastructure failure](194-v41r11-preflight-infrastructure-failure-record.md)
 - [V41R11 novelty preflight execution authorization](193-v41r11-novelty-preflight-execution-authorization.md)
 - [V41R11 model-backed novelty preflight preregistration](192-v41r11-model-backed-novelty-preflight-preregistration.md)
