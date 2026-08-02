@@ -1,5 +1,10 @@
 # Claim Ledger
 
+- V41R24R2 is a valid independently recomputed retention intervention. Frozen
+  25% protected replay preserved 4/4 acquisition and improved protected
+  accuracy from 0.1875 to 0.875, but its 0.125 drop failed the 0.02 gate.
+  V41R24 itself failed before updates on a retained projection error. The R2
+  candidate is rejected and continual learning remains unvalidated.
 - V41R23 is a valid independently recomputed four-case interference isolation.
   Shared and modular arms both passed 4/4 exact cases under matched 64-step
   per-case exposure, so modular advantage was zero and four-case shared
