@@ -1,5 +1,9 @@
 # Claim Ledger
 
+- V41R16 prospectively freezes a no-update raw-gradient diagnostic for the
+  V41R15 failure. Local source and an independent tensor-level validator are
+  implemented; execution is unauthorized. The profile has no selector or
+  positive gate and cannot support acquisition or continual-learning claims.
 - V41R15 is a valid, independently validated development negative. Exact
   equal-example weighting improved protected accuracy relative to V41R14 from
   0.75 to 0.8125, but persistent acquisition declined from 0.3229167 to

@@ -1,5 +1,14 @@
 # Agent Rules
 
+V41R16 gradient-interference design and local independent validation are
+allowed under state slice `V41R16GradientInterferenceProfileDesignAndExecution`.
+Mutations are limited to no-update raw-gradient capture, independent summaries,
+adversarial tests, and phase records. Model/GPU execution, optimizer
+construction, parameter updates, layer selection, tuning, assessment, and
+claims above `LocalGradientInterferenceDiagnosticV41R16` remain unauthorized.
+See
+`docs/research/astral-self-modeling/205-v41r16-gradient-interference-profile-preregistration.md`.
+
 V41R15 execution is complete under state slice
 `V41R15EqualExampleDevelopmentExecution`. Job `job-kgyid` returned the valid,
 independently validated `EqualExampleDevelopmentNoSignal`: 0.25 no-update,
