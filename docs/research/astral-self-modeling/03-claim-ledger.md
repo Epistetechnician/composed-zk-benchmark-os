@@ -1,5 +1,11 @@
 # Claim Ledger
 
+- V41R23 is a valid independently recomputed four-case interference isolation.
+  Shared and modular arms both passed 4/4 exact cases under matched 64-step
+  per-case exposure, so modular advantage was zero and four-case shared
+  interference is unsupported. Protected accuracy fell from 1.0000 to 0.1875
+  shared and as low as 0.0625 modular. Exposure dilution is the stronger next
+  acquisition hypothesis; retention and continual learning remain blocked.
 - V41R22 is a valid independently recomputed isolated-acquisition calibration.
   The original 64-step, `2e-4` adapter learned the exact case with a 64.0526-nat
   margin and 0.000365 last8/first8 loss ratio, supporting multi-case

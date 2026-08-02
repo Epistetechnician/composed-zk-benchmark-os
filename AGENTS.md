@@ -1,12 +1,11 @@
 # Agent Rules
 
-V41R23 one-shot H100 execution is authorized under state slice
-`V41R23MultiCaseInterferenceIsolation`, bound to producer commit
-`e014040a62eca119c75d51abf58e7a661c6a5694`, validator commit
-`87160a4db8a052ac45ad19a94f07cb4e9bd8e5dc`, and context `ctx-492003b0`.
-The shared arm and four modules must run once with restart `never`, offline
-model access, a `$3.00` new-spend cap, export, and immediate node stop. See
-`docs/research/astral-self-modeling/224-v41r23-multicase-interference-isolation-execution-authorization.md`.
+V41R23 is complete, independently validated, and consumed under state slice
+`V41R23MultiCaseInterferenceIsolation`. Shared and modular arms each passed
+4/4 exact cases, while protected accuracy collapsed. Modularization is
+rejected; exposure dilution becomes the stronger next acquisition hypothesis,
+but retention and continual learning remain blocked. See
+`docs/research/astral-self-modeling/225-v41r23-multicase-interference-isolation-execution-record.md`.
 
 V41R23 design and independent local validation are allowed under state slice
 `V41R23MultiCaseInterferenceIsolation`. Mutations are limited to the frozen
@@ -4130,3 +4129,8 @@ absolute single-case update failure. Every arm severely damaged protected
 accuracy; retention, continual learning, and self-improvement remain blocked.
 See
 `docs/research/astral-self-modeling/222-v41r22-single-case-substrate-calibration-execution-record.md`.
+V41R23 is complete, independently validated, and consumed. Both shared and
+modular arms passed all four matched-exposure exact cases, producing zero
+modular advantage. Severe protected loss rejects the modular candidate and
+blocks continual-learning claims. See
+`docs/research/astral-self-modeling/225-v41r23-multicase-interference-isolation-execution-record.md`.
