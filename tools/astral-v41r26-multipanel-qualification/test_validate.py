@@ -8,6 +8,10 @@ PATH = Path(__file__).with_name("validate.py")
 SPEC = importlib.util.spec_from_file_location("v41r26_validator", PATH)
 assert SPEC and SPEC.loader
 MODULE = importlib.util.module_from_spec(SPEC); SPEC.loader.exec_module(MODULE)
+WORKER_PATH = Path(__file__).with_name("validate_worker.py")
+WORKER_SPEC = importlib.util.spec_from_file_location("v41r26_worker_validator", WORKER_PATH)
+assert WORKER_SPEC and WORKER_SPEC.loader
+WORKER = importlib.util.module_from_spec(WORKER_SPEC); WORKER_SPEC.loader.exec_module(WORKER)
 
 
 def test_contract_has_sixteen_disjoint_panels_and_fortyeight_runs() -> None:
@@ -25,3 +29,14 @@ def test_gate_requires_all_sixteen_independent_panels() -> None:
 def test_missing_producer_fails_closed(tmp_path: Path) -> None:
     report = MODULE.validate(tmp_path)
     assert report["valid"] is False and report["runtime_authorized"] is False
+
+
+def test_worker_specs_cover_exact_cross_product() -> None:
+    specs = WORKER.expected_specs()
+    assert len(specs) == 48
+    assert "v41r26-panel-0-seed-411017" in specs
+    assert "v41r26-panel-15-seed-411043" in specs
+
+
+def test_missing_worker_bundle_fails_closed(tmp_path: Path) -> None:
+    assert WORKER.validate(tmp_path, tmp_path) == {"valid": False, "errors": ["worker artifact files missing"]}
