@@ -1,5 +1,11 @@
 # Claim Ledger
 
+- V41R14 is a valid, independently validated `PilotNoSignal`. The frozen
+  protected-replay attention-LoRA update moved context-free accuracy from 0.25
+  to only 0.3229167, left every query class below 0.60, and reduced protected
+  accuracy from 1.0 to 0.75. Exact reload and all 64 steps passed, but four
+  scientific gates failed. This recipe is rejected and multi-cell
+  qualification remains blocked.
 - V41R12 completed the byte-identical V41R11 model-backed novelty preflight.
   No-update accuracy was exactly 0.25 overall and per class; context-only was
   exactly 1.00. The independent validator accepted all 192 raw decisions and

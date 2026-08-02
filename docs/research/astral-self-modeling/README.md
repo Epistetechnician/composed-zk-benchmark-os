@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R14 persistent acquisition pilot execution record](201-v41r14-persistent-acquisition-pilot-execution-record.md)
 - [V41R14 POSIX shell wrapper recovery authorization](200-v41r14-posix-shell-wrapper-recovery-authorization.md)
 - [V41R13 persistent acquisition pilot runtime failure](199-v41r13-persistent-acquisition-pilot-runtime-failure.md)
 - [V41R13 persistent acquisition pilot execution authorization](198-v41r13-persistent-acquisition-pilot-execution-authorization.md)
