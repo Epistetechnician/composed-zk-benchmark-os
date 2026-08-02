@@ -2,7 +2,7 @@
 
 State slice: `V41R11NoveltyInstrumentDesignAndLocalQualification`.
 
-Status: `IndependentLocalValidatorImplemented / ModelExecutionUnauthorized`.
+Status: `IndependentLocalValidationPassed / ModelExecutionUnauthorized`.
 
 V41R10 stopped before training because its no-update result exceeded the
 frozen novelty ceiling. The retained rows show that its varying lexical target
@@ -24,3 +24,6 @@ Passing both local validators establishes only
 separately authorized unchanged-checkpoint run. No training, adapter, tune,
 assessment, acquisition, continual-learning, or self-improvement conclusion is
 authorized by this slice.
+
+The immutable local replay is recorded in
+`191-v41r11-local-qualification-record.md`.
