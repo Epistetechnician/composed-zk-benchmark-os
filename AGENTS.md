@@ -1,5 +1,13 @@
 # Agent Rules
 
+V41R17 is consumed under state slice
+`V41R17ProviderResolvedGradientProfileExecution`. Job `job-842y9` reproduced
+the provider internal-registry blob-HEAD HTTP 500 on a prebuilt-image import
+after a zero-byte cache hit. No H100 attempt or scientific result exists. Do
+not submit a third job before provider repair/canary or a separately authorized
+non-registry runtime. See
+`docs/research/astral-self-modeling/209-v41r17-prebuilt-image-gradient-profile-infrastructure-failure.md`.
+
 V41R17 authorizes one prebuilt-image recovery under state slice
 `V41R17ProviderResolvedGradientProfileExecution`. It must bypass provider image
 build/push, use the pinned PyTorch 2.10/CUDA 12.8 image digest, verify context
