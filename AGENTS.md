@@ -4079,3 +4079,10 @@ commit authorization. Tune, assessment, layer selection, adaptive weighting,
 and claims above `RemoteH100AcquisitionLearnabilityDecompositionV41R21` are
 forbidden. See
 `docs/research/astral-self-modeling/217-v41r21-learnability-decomposition-preregistration.md`.
+V41R21 execution is authorized once against RGS commit
+`bf4baf20ab1a52f34feb8718536db557d20a3095`, provider context
+`ctx-12681485`, and validator commit
+`7341327efd8f713ccb421379321482122da65766`. The exact four-arm campaign may
+run once on the restored persistent H100 with restart `never`; all terminal
+outcomes are consumed. See
+`docs/research/astral-self-modeling/218-v41r21-learnability-execution-authorization.md`.
