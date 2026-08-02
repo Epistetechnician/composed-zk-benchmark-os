@@ -1,5 +1,14 @@
 # Agent Rules
 
+V41R23 design and independent local validation are allowed under state slice
+`V41R23MultiCaseInterferenceIsolation`. Mutations are limited to the frozen
+four-case shared-versus-modular comparison, an independent validator,
+adversarial tests, and phase records. GPU/model execution requires separately
+committed one-shot authorization. Tune, assessment, protected base bypass,
+adaptive selection, and claims above `LocalFourCaseInterferenceIsolationV41R23`
+are forbidden. See
+`docs/research/astral-self-modeling/223-v41r23-multicase-interference-isolation-preregistration.md`.
+
 V41R22 is complete, independently validated, and consumed under state slice
 `V41R22SingleCaseUpdateSubstrateCalibration`. The original 64-step, `2e-4`
 substrate passed isolated acquisition, supporting multi-case interference as
