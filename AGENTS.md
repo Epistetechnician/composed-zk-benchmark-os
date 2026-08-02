@@ -1,5 +1,12 @@
 # Agent Rules
 
+V41R16 execution identity is consumed under state slice
+`V41R16GradientInterferenceProfileExecution`. Job `job-3t878` failed before
+attempt start when the provider registry returned HTTP 500 while pushing the
+completed, test-passing image. No model or H100 ran and no scientific result
+exists. Do not retry or resubmit this identity. See
+`docs/research/astral-self-modeling/207-v41r16-gradient-interference-profile-infrastructure-failure-record.md`.
+
 V41R16 remote no-update diagnostic execution is authorized once under state
 slice `V41R16GradientInterferenceProfileExecution`, bound to RGS commit
 `0e8197fca05c42bd64ad74173385845d06c615ae`, context `ctx-b71ccbe0`, and Astral

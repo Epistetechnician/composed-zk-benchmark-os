@@ -1,5 +1,8 @@
 # Claim Ledger
 
+- V41R16 remote execution remains `NotRun`. Job `job-3t878` failed before
+  attempt start on a provider registry HTTP 500 after its immutable image built
+  and passed 35 tests. No model ran and no scientific result exists.
 - V41R16 prospectively freezes a no-update raw-gradient diagnostic for the
   V41R15 failure. Local source and an independent tensor-level validator are
   implemented; execution is unauthorized. The profile has no selector or
