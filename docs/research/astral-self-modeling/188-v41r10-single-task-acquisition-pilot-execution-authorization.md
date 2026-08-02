@@ -2,7 +2,7 @@
 
 State slice: `V41R10AcquisitionPilotExecution`.
 
-Status: `OneModelBackedPilotAuthorized / QualificationUnauthorized`.
+Status: `ConsumedByPilotInstrumentInvalid / QualificationUnauthorized`.
 
 One immutable pilot identity may execute using:
 
@@ -24,3 +24,7 @@ outcome consumes the identity. No retry, adaptive patch, extra cell, tune,
 qualification, assessment, or scientific promotion is authorized.
 
 Maximum passing ceiling: `RemoteH100SingleTaskAcquisitionPilotV41R10`.
+
+The identity was consumed by job `job-ivs9u` on 2026-08-02. The frozen
+instrument gate failed before training. See
+`189-v41r10-single-task-acquisition-pilot-execution-record.md`.
