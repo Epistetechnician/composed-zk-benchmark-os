@@ -80,7 +80,7 @@ def score_row_errors(row: Any, expected: dict[str, Any]) -> set[str]:
     errors: set[str] = set()
     if not isinstance(row, dict):
         return {"score_row_type"}
-    for key in ("case_id", "prompt", "target", "candidates"):
+    for key in ("case_id", "target", "candidates"):
         if row.get(key) != expected[key]: errors.add(f"score_row:{key}")
     scores = row.get("candidate_log_probabilities")
     if not isinstance(scores, dict) or set(scores) != set(expected["candidates"]):
