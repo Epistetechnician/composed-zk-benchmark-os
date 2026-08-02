@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R18 registry cache-hit canary authorization](210-v41r18-registry-cache-hit-canary-authorization.md)
 - [V41R17 prebuilt-image gradient profile infrastructure failure](209-v41r17-prebuilt-image-gradient-profile-infrastructure-failure.md)
 - [V41R17 prebuilt-image gradient profile authorization](208-v41r17-prebuilt-image-gradient-profile-authorization.md)
 - [V41R16 gradient interference profile infrastructure failure record](207-v41r16-gradient-interference-profile-infrastructure-failure-record.md)
