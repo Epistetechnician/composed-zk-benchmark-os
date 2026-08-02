@@ -4063,3 +4063,9 @@ V41R20 persistent-node execution is authorized once against RGS commit
 `d31800a3fd2b9e6c01278dd978f0988a6536f77a`. Restart, retuning, assessment,
 layer selection, baseline rerun, and claim promotion remain forbidden. See
 `docs/research/astral-self-modeling/215-v41r20-panel-balancing-execution-authorization.md`.
+V41R20 is complete, independently validated, and consumed. The frozen
+all-layer panel-normalized candidate tied V41R15 persistent acquisition at
+25/96 and worsened protected accuracy from 13/16 to 10/16. All scientific
+gates failed. Retry, adaptive reweighting, assessment, qualification, and claim
+promotion are forbidden. See
+`docs/research/astral-self-modeling/216-v41r20-panel-balancing-execution-record.md`.

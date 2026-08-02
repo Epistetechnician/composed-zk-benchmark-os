@@ -22,6 +22,13 @@ SHARES = {"bridge": 0.375, "terminal": 0.375, "protected": 0.25}
 BASELINE_SHA256 = "sha256:893451b417e6654096e87e7494e638f37daf0efe5cb73c2eacf28a6b415966b3"
 
 
+def valid_torch_runtime(runtime: dict[str, Any]) -> bool:
+    # importlib.metadata reports the distribution version without torch's
+    # local CUDA suffix. The separately frozen CUDA value prevents accepting
+    # another wheel family under the shorter metadata spelling.
+    return runtime.get("torch") in {"2.10.0", "2.10.0+cu128"} and runtime.get("cuda") == "12.8"
+
+
 def expected_contract(instrument_hash: str) -> dict[str, Any]:
     prior = BASE.expected_contract(instrument_hash)
     prior.update(
@@ -115,6 +122,8 @@ def validate(artifact: Path, rgs_root: Path) -> dict[str, Any]:
         return report
     result = json.loads((artifact / "pilot-result.json").read_text())
     errors = set(report.get("errors", []))
+    if valid_torch_runtime(result.get("runtime", {})):
+        errors.discard("runtime:torch")
     errors.update(receipt_errors(result.get("update", {}).get("receipts")))
     report["errors"] = sorted(errors)
     report["valid"] = not errors
