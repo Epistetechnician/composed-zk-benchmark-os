@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R13 persistent acquisition pilot preregistration](197-v41r13-persistent-acquisition-pilot-preregistration.md)
 - [V41R12 novelty preflight execution record](196-v41r12-novelty-preflight-execution-record.md)
 - [V41R12 healthy-builder recovery authorization](195-v41r12-healthy-builder-recovery-authorization.md)
 - [V41R11 preflight infrastructure failure](194-v41r11-preflight-infrastructure-failure-record.md)
