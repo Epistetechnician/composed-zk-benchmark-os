@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R15 equal-example development execution authorization](203-v41r15-equal-example-development-execution-authorization.md)
 - [V41R15 equal-example acquisition development preregistration](202-v41r15-equal-example-acquisition-development-preregistration.md)
 - [V41R14 persistent acquisition pilot execution record](201-v41r14-persistent-acquisition-pilot-execution-record.md)
 - [V41R14 POSIX shell wrapper recovery authorization](200-v41r14-posix-shell-wrapper-recovery-authorization.md)
