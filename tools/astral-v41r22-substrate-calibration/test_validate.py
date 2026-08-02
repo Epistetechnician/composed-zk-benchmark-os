@@ -48,5 +48,14 @@ def test_runtime_requires_exact_cuda_stack() -> None:
     assert not MODULE.valid_runtime(runtime)
 
 
+def test_scored_projection_uses_separately_bound_prompt() -> None:
+    expected = {"case_id": "case", "prompt": "bound separately", "target": "a",
+                "candidates": ["a", "b", "c", "d"]}
+    row = {"case_id": "case", "target": "a", "candidates": ["a", "b", "c", "d"],
+           "candidate_log_probabilities": {"a": 0.0, "b": -1.0, "c": -2.0, "d": -3.0},
+           "selected": "a", "correct": True}
+    assert MODULE.score_row_errors(row, expected) == set()
+
+
 def test_missing_artifact_fails_closed(tmp_path: Path) -> None:
     assert MODULE.validate(tmp_path, tmp_path) == {"valid": False, "errors": ["calibration artifact files missing"]}
