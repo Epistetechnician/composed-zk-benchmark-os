@@ -1,5 +1,12 @@
 # Astral Self-Modeling Research Project
 
+- [V41R11 balanced novelty instrument](190-v41r11-balanced-novelty-instrument.md)
+- [V41R10 pilot execution record](189-v41r10-single-task-acquisition-pilot-execution-record.md)
+- [V41R10 pilot execution authorization](188-v41r10-single-task-acquisition-pilot-execution-authorization.md)
+- [V41R10 pilot implementation](187-v41r10-single-task-acquisition-pilot-implementation.md)
+- [V41R10 pilot preregistration](186-v41r10-single-task-acquisition-pilot-preregistration.md)
+- [V41R9 model-backed H100 profile record](185-v41r9-h100-profile-execution-record.md)
+- [V41R9 model-backed H100 profile authorization](184-v41r9-h100-profile-execution-authorization.md)
 - [V41R9 exact-runtime parity authorization](183-v41r9-exact-runtime-parity-authorization.md)
 - [V41R9 checkpoint-bound layer-geometry implementation](182-v41r9-checkpoint-bound-layer-geometry-implementation.md)
 - [V41R9 checkpoint-bound layer-geometry preregistration](181-v41r9-checkpoint-bound-layer-geometry-preregistration.md)

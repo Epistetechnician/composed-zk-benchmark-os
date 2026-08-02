@@ -1,5 +1,13 @@
 # Agent Rules
 
+V41R11 balanced novelty-instrument design and independent local validation are
+allowed under state slice `V41R11NoveltyInstrumentDesignAndLocalQualification`.
+Mutations are limited to the independent validator, adversarial tests, and
+phase documentation. Model access, network access, GPU execution, training,
+adapter construction, tuning, assessment, qualification, V41R10 retry, and
+claims above `LocalQualifiedNoveltyInstrumentV41R11` remain unauthorized. See
+`docs/research/astral-self-modeling/190-v41r11-balanced-novelty-instrument.md`.
+
 V41R10 model-backed acquisition pilot execution is complete under state slice
 `V41R10AcquisitionPilotExecution`. Job `job-ivs9u` stopped before training as
 `PilotInstrumentInvalid`: no-update accuracy was 0.375 overall and 0.500 on

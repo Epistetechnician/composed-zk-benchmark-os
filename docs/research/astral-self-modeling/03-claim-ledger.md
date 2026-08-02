@@ -1,5 +1,18 @@
 # Claim Ledger
 
+- V41R11 locally qualifies a deterministic 32-chain, 96-query novelty
+  instrument under independent reconstruction. Its four opaque labels are
+  exactly balanced as targets, candidate positions, and target positions.
+  Model access, GPU execution, training, qualification, and scientific claims
+  remain unauthorized; the ceiling is `LocalQualifiedNoveltyInstrumentV41R11`.
+- V41R10 is consumed as `PilotInstrumentInvalid`. Job `job-ivs9u` stopped
+  before training because no-update accuracy was 0.375 overall and 0.500 on
+  withheld composition, above the frozen novelty ceilings. The context-only
+  control was 1.000 and independent artifact validation passed. This is no
+  acquisition or continual-learning evidence.
+- V41R9 model-backed profiling passed on one H100 with the real GPT-OSS-20B
+  tokenizer, native-MXFP4 checkpoint, real logits, one update, and exact
+  rollback. Its ceiling is runtime-profile evidence only.
 - V41R8 authorizes one exact-runtime no-model parity job bound to immutable
   source, context, dependency, hardware, and receipt checks. It does not
   authorize tokenizer/model access or scientific execution.
