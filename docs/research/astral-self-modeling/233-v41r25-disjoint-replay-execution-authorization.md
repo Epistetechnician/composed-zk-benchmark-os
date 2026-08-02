@@ -2,7 +2,7 @@
 
 State slice: `V41R25DisjointProtectedReplayReplication`.
 
-Status: `AuthorizedOnce / NotYetConsumed`.
+Status: `Consumed`.
 
 One execution identity, `astral-v41r25-disjoint-replay-r1`, is authorized on
 `astral-v41r3-profile-node-r1`. It is bound to RGS producer commit
