@@ -1,12 +1,11 @@
 # Agent Rules
 
-V41R22 one-shot H100 execution is authorized under state slice
-`V41R22SingleCaseUpdateSubstrateCalibration`, bound to producer commit
-`5983daddefa2db6a8929155d9521fb4583af5734`, validator commit
-`8ddfca348a4ee4e7ccf1383666eb6f6a136f4520`, and context `ctx-c4129125`.
-All four frozen arms must run once with restart policy `never`, offline model
-access, a `$5.00` maximum new-spend cap, export, and immediate node stop. See
-`docs/research/astral-self-modeling/221-v41r22-single-case-substrate-calibration-execution-authorization.md`.
+V41R22 is complete, independently validated, and consumed under state slice
+`V41R22SingleCaseUpdateSubstrateCalibration`. The original 64-step, `2e-4`
+substrate passed isolated acquisition, supporting multi-case interference as
+the V41R21 bottleneck, while protected accuracy collapsed from 1.0000 to
+0.2500. This is not continual-learning or self-improvement evidence. See
+`docs/research/astral-self-modeling/222-v41r22-single-case-substrate-calibration-execution-record.md`.
 
 V41R22 design and independent local validation are allowed under state slice
 `V41R22SingleCaseUpdateSubstrateCalibration`. Mutations are limited to the
@@ -4108,3 +4107,9 @@ update substrate as `UpdateSubstrateUnqualified`. Later primitive,
 composition, and replay differences are descriptive only. Rerun, threshold
 change, assessment, and claim promotion are forbidden. See
 `docs/research/astral-self-modeling/219-v41r21-learnability-execution-record.md`.
+V41R22 is complete, independently validated, and consumed. The original
+64-step, `2e-4` substrate learned one exact case, so V41R21's failure is not an
+absolute single-case update failure. Every arm severely damaged protected
+accuracy; retention, continual learning, and self-improvement remain blocked.
+See
+`docs/research/astral-self-modeling/222-v41r22-single-case-substrate-calibration-execution-record.md`.

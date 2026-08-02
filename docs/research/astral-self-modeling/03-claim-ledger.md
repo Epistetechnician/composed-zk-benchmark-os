@@ -1,5 +1,11 @@
 # Claim Ledger
 
+- V41R22 is a valid independently recomputed isolated-acquisition calibration.
+  The original 64-step, `2e-4` adapter learned the exact case with a 64.0526-nat
+  margin and 0.000365 last8/first8 loss ratio, supporting multi-case
+  interference as the V41R21 bottleneck. Protected accuracy collapsed from
+  1.0000 to 0.2500, so retention, continual learning, and self-improvement
+  remain unvalidated.
 - V41R21 is a valid independently recomputed decomposition negative. The exact
   end-to-end oracle reached only `0.28125` against its frozen `0.90` floor and
   reduced protected accuracy to `0.375`; the tested rank-8 all-attention LoRA,

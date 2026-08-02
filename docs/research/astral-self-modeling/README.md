@@ -1,5 +1,14 @@
 # Astral Self-Modeling Research Project
 
+- [V41R22 single-case substrate calibration execution record](222-v41r22-single-case-substrate-calibration-execution-record.md)
+- [V41R22 single-case substrate calibration execution authorization](221-v41r22-single-case-substrate-calibration-execution-authorization.md)
+- [V41R22 single-case substrate calibration preregistration](220-v41r22-single-case-substrate-calibration-preregistration.md)
+- [V41R21 learnability-decomposition execution record](219-v41r21-learnability-execution-record.md)
+- [V41R21 learnability-decomposition execution authorization](218-v41r21-learnability-execution-authorization.md)
+- [V41R21 learnability-decomposition preregistration](217-v41r21-learnability-decomposition-preregistration.md)
+- [V41R20 panel-balancing execution record](216-v41r20-panel-balancing-execution-record.md)
+- [V41R20 panel-balancing execution authorization](215-v41r20-panel-balancing-execution-authorization.md)
+- [V41R20 gradient-balancing preregistration](214-v41r20-prospective-gradient-balancing-preregistration.md)
 - [V41R19 persistent-node gradient profile execution record](213-v41r19-persistent-node-gradient-profile-execution-record.md)
 - [V41R19 persistent-node gradient profile authorization](212-v41r19-persistent-node-gradient-profile-authorization.md)
 - [V41R18 registry cache-hit canary failure](211-v41r18-registry-cache-hit-canary-failure.md)
