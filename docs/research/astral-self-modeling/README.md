@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R16 gradient interference profile preregistration](205-v41r16-gradient-interference-profile-preregistration.md)
 - [V41R15 equal-example development execution record](204-v41r15-equal-example-development-execution-record.md)
 - [V41R15 equal-example development execution authorization](203-v41r15-equal-example-development-execution-authorization.md)
 - [V41R15 equal-example acquisition development preregistration](202-v41r15-equal-example-acquisition-development-preregistration.md)
