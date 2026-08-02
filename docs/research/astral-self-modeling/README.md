@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R25 disjoint protected-replay preregistration](231-v41r25-disjoint-protected-replay-preregistration.md)
 - [V41R24R2 protected-replay execution record](230-v41r24r2-protected-replay-execution-record.md)
 - [V41R24R2 projection-recovery authorization](229-v41r24r2-projection-recovery-execution-authorization.md)
 - [V41R24 failure and R2 correction](228-v41r24-runtime-failure-and-r2-projection-recovery.md)
