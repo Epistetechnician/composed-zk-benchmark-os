@@ -1,5 +1,13 @@
 # Agent Rules
 
+V41R24 design and independent local validation are allowed under state slice
+`V41R24ProtectedReplayRetentionIntervention`. Mutations are limited to the
+frozen 0.75/0.25 protected-replay candidate over the immutable V41R23 shared
+baseline, validator, tests, and phase records. GPU execution requires separate
+authorization. Tune, assessment, adaptive replay or weights, and claims above
+`LocalProtectedReplayRetentionV41R24` are forbidden. See
+`docs/research/astral-self-modeling/226-v41r24-protected-replay-retention-preregistration.md`.
+
 V41R23 is complete, independently validated, and consumed under state slice
 `V41R23MultiCaseInterferenceIsolation`. Shared and modular arms each passed
 4/4 exact cases, while protected accuracy collapsed. Modularization is
