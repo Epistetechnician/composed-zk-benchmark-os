@@ -1,5 +1,13 @@
 # Agent Rules
 
+V41R23 one-shot H100 execution is authorized under state slice
+`V41R23MultiCaseInterferenceIsolation`, bound to producer commit
+`e014040a62eca119c75d51abf58e7a661c6a5694`, validator commit
+`87160a4db8a052ac45ad19a94f07cb4e9bd8e5dc`, and context `ctx-492003b0`.
+The shared arm and four modules must run once with restart `never`, offline
+model access, a `$3.00` new-spend cap, export, and immediate node stop. See
+`docs/research/astral-self-modeling/224-v41r23-multicase-interference-isolation-execution-authorization.md`.
+
 V41R23 design and independent local validation are allowed under state slice
 `V41R23MultiCaseInterferenceIsolation`. Mutations are limited to the frozen
 four-case shared-versus-modular comparison, an independent validator,
