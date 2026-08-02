@@ -1,5 +1,9 @@
 # Claim Ledger
 
+- V41R11 model-backed preflight R1 is consumed as a provider infrastructure
+  failure. Job `job-ybuqi` hit build-workspace `ENOSPC` at attempt zero and
+  USD 0.00; no model or scientific operation ran. The local instrument remains
+  qualified, but model-backed novelty remains untested.
 - V41R11 locally qualifies a deterministic 32-chain, 96-query novelty
   instrument under independent reconstruction. Its four opaque labels are
   exactly balanced as targets, candidate positions, and target positions.

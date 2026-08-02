@@ -2,7 +2,7 @@
 
 State slice: `V41R11ModelBackedNoveltyPreflightAuthorizationAndExecution`.
 
-Status: `OneBaselinePreflightAuthorized / TrainingUnauthorized`.
+Status: `ConsumedByBuildWorkspaceENOSPC / TrainingUnauthorized`.
 
 One immutable identity may execute using RGS
 `a9cd29c2e6aa19d8369f0edbce63380e4673e4cb`, Astral validator
@@ -18,3 +18,6 @@ optimizer, schedule, update, tune, or assessment access is permitted. The
 first terminal result consumes the identity. A passing result opens only a
 separate acquisition-pilot review and cannot itself promote an acquisition or
 continual-learning claim.
+
+Job `job-ybuqi` consumed this identity before attempt start. See
+`194-v41r11-preflight-infrastructure-failure-record.md`.

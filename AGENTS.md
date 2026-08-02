@@ -1,13 +1,12 @@
 # Agent Rules
 
-One V41R11 model-backed novelty preflight is authorized under state slice
-`V41R11ModelBackedNoveltyPreflightAuthorizationAndExecution`, bound to RGS
-`a9cd29c`, Astral `4a9290c`, context `ctx-35bb0f03` and its hashes, one
-clock-locked H100, zero restarts, 120 minutes, and USD 5.40. Only unchanged-
-checkpoint and context-only panels plus independent validation may run. The
-first terminal outcome consumes the identity. Adapter construction, training,
-retry, tune, assessment, and acquisition qualification remain unauthorized.
-See `docs/research/astral-self-modeling/193-v41r11-novelty-preflight-execution-authorization.md`.
+V41R11 model-backed novelty-preflight identity R1 is consumed under state slice
+`V41R11ModelBackedNoveltyPreflightAuthorizationAndExecution`. Job `job-ybuqi`
+failed during provider image construction with build-workspace `ENOSPC` at
+attempt zero and USD 0.00. No model, tokenizer, forward pass, adapter, optimizer,
+or update ran. Retry, training, tune, assessment, acquisition qualification,
+and model-backed novelty claims remain unauthorized. See
+`docs/research/astral-self-modeling/194-v41r11-preflight-infrastructure-failure-record.md`.
 
 V41R11 balanced novelty-instrument design and independent local validation are
 complete under state slice `V41R11NoveltyInstrumentDesignAndLocalQualification`.
