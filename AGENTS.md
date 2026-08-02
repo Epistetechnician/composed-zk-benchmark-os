@@ -4086,3 +4086,9 @@ V41R21 execution is authorized once against RGS commit
 run once on the restored persistent H100 with restart `never`; all terminal
 outcomes are consumed. See
 `docs/research/astral-self-modeling/218-v41r21-learnability-execution-authorization.md`.
+V41R21 is complete, independently validated, and consumed. The exact-prompt
+oracle reached 0.28125 against the frozen 0.90 floor, classifying the tested
+update substrate as `UpdateSubstrateUnqualified`. Later primitive,
+composition, and replay differences are descriptive only. Rerun, threshold
+change, assessment, and claim promotion are forbidden. See
+`docs/research/astral-self-modeling/219-v41r21-learnability-execution-record.md`.

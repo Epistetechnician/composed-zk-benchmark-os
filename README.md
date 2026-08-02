@@ -2507,3 +2507,8 @@ clock-locked H100. The independently validated candidate tied the V41R15
 acquisition result and worsened protected retention, so it is retained as a
 negative result. See
 `docs/research/astral-self-modeling/216-v41r20-panel-balancing-execution-record.md`.
+V41R21 decomposed acquisition learnability across no-update, exact-oracle,
+two-edge, and protected-replay arms. The independently validated exact-oracle
+control missed its positive-control floor, so the tested update substrate is
+unqualified and later continual-learning interpretations remain blocked. See
+`docs/research/astral-self-modeling/219-v41r21-learnability-execution-record.md`.
