@@ -1,5 +1,14 @@
 # Agent Rules
 
+V41R18 registry canary is consumed and failed under state slice
+`V41R18RegistryRepairCanaryAndGradientProfile`. Job `job-exijp` exact-cache-hit
+the successful V41R15 image but failed on three free provider attempts before
+container start while pulling the internal image. No scientific execution was
+authorized. Do not submit another job until a provider end-to-end canary,
+pinned non-registry snapshot, or separately authorized provider migration.
+See
+`docs/research/astral-self-modeling/211-v41r18-registry-cache-hit-canary-failure.md`.
+
 V41R18 permits one non-scientific exact-cache-hit canary under state slice
 `V41R18RegistryRepairCanaryAndGradientProfile`, bound to successful V41R15
 context `ctx-e84c48d1`. It may verify runtime/GPU/source only and may not load a

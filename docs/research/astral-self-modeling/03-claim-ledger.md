@@ -1,5 +1,9 @@
 # Claim Ledger
 
+- V41R18 scientific execution was not authorized. Its no-model exact-cache-hit
+  canary `job-exijp` failed before container start while pulling the existing
+  internal image. This closes all current provider-registry delivery paths and
+  adds no model evidence.
 - V41R17 also remains `NotRun`. Job `job-842y9` reproduced the provider
   internal-registry blob-HEAD HTTP 500 using a cached prebuilt image and failed
   before attempt start. The two-path reproduction is infrastructure diagnosis,
