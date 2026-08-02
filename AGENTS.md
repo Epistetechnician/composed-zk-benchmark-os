@@ -1,13 +1,11 @@
 # Agent Rules
 
-V41R13 persistent-acquisition pilot design and independent validation are
-allowed under state slice `V41R13PersistentAcquisitionPilotDesignAndExecution`.
-Mutations are limited to the fail-closed validator, adversarial tests, phase
-documentation, and matching RGS protected-replay implementation. Model/GPU
-execution, tune, assessment, multi-cell qualification, and claims above
-`LocalImplementationPersistentAcquisitionPilotV41R13` remain separately
-unauthorized. See
-`docs/research/astral-self-modeling/197-v41r13-persistent-acquisition-pilot-preregistration.md`.
+V41R13 one-shot persistent-acquisition pilot execution is authorized under
+state slice `V41R13PersistentAcquisitionPilotDesignAndExecution`, bound to the
+exact identities and stop rules in
+`docs/research/astral-self-modeling/198-v41r13-persistent-acquisition-pilot-execution-authorization.md`.
+Tuning, assessment, adaptive retry, multi-cell qualification, and claims above
+`RemoteH100PersistentAcquisitionPilotV41R13` remain unauthorized.
 
 V41R12 healthy-builder recovery execution is complete under state slice
 `V41R12HealthyBuilderRecoveryExecution`. Job `job-3nn6y` passed the byte-
