@@ -113,7 +113,19 @@ def decision(no_update: dict[str, Any], persistent: dict[str, Any], before: floa
     return ("PilotAcquisitionSignal" if not errors else "PilotNoSignal", errors)
 
 
-def validate(artifact: Path, rgs_root: Path) -> dict[str, Any]:
+def validate(
+    artifact: Path,
+    rgs_root: Path,
+    *,
+    expected_version: str = VERSION,
+    expected_state_slice: str = STATE_SLICE,
+    contract_builder=expected_contract,
+    decision_builder=decision,
+    expected_claim_ceiling: str = "RemoteH100PersistentAcquisitionPilotV41R13",
+    runner_relative: str = "scripts/run_v41r13_acquisition_pilot.py",
+    method_relative: str = "mesh_brain/meshmodel/v41r13_acquisition_pilot.py",
+    report_version: str = "astral.v41r13_acquisition_pilot_validation.v1",
+) -> dict[str, Any]:
     result_path, manifest_path, adapter_path = artifact / "pilot-result.json", artifact / "MANIFEST.sha256", artifact / "adapter-state.pt"
     if not all(path.is_file() for path in (result_path, manifest_path, adapter_path)):
         return {"valid": False, "errors": ["pilot artifact files missing"]}
@@ -122,14 +134,14 @@ def validate(artifact: Path, rgs_root: Path) -> dict[str, Any]:
     body = {key: value for key, value in result.items() if key != "result_sha256"}
     if result.get("result_sha256") != canonical_hash(body):
         errors.append("result_sha256")
-    for key, expected in {"version": VERSION, "state_slice": STATE_SLICE, "tune_opened": False, "assessment_opened": False}.items():
+    for key, expected in {"version": expected_version, "state_slice": expected_state_slice, "tune_opened": False, "assessment_opened": False}.items():
         if result.get(key) != expected:
             errors.append(key)
     instrument = result.get("instrument")
     instrument_report = INSTRUMENT.validate(instrument)
     if not instrument_report.get("valid"):
         errors.append("instrument")
-    if result.get("contract") != expected_contract(instrument_report.get("instrument_sha256")):
+    if result.get("contract") != contract_builder(instrument_report.get("instrument_sha256")):
         errors.append("contract")
     model, runtime = result.get("model", {}), result.get("runtime", {})
     if model.get("id") != MODEL or model.get("revision") != REVISION:
@@ -169,23 +181,23 @@ def validate(artifact: Path, rgs_root: Path) -> dict[str, Any]:
                 errors.append("receipt_structure")
     if update.get("adapter_file_sha256") != file_hash(adapter_path) or update.get("post_update_state_sha256") != reload.get("state_sha256"):
         errors.append("adapter_binding")
-    expected_class, gate_errors = decision(no_update, persistent, before, after, reload.get("state_exact") is True, steps)
+    expected_class, gate_errors = decision_builder(no_update, persistent, before, after, reload.get("state_exact") is True, steps)
     if result.get("classification") != expected_class or result.get("gate_errors") != gate_errors:
         errors.append("decision")
-    if result.get("claim_ceiling") != "RemoteH100PersistentAcquisitionPilotV41R13":
+    if result.get("claim_ceiling") != expected_claim_ceiling:
         errors.append("claim_ceiling")
     expected_manifest = "".join(file_hash(path).removeprefix("sha256:") + f"  {path.name}\n" for path in (result_path, adapter_path))
     if manifest_path.read_text() != expected_manifest:
         errors.append("manifest")
     source, commit = result.get("source", {}), result.get("source", {}).get("rgs_commit", "")
-    for key, relative in (("runner_sha256", "scripts/run_v41r13_acquisition_pilot.py"), ("pilot_source_sha256", "mesh_brain/meshmodel/v41r13_acquisition_pilot.py"), ("instrument_source_sha256", "mesh_brain/meshmodel/v41r11_novelty_instrument.py"), ("requirements_sha256", "requirements-v41-h100-profile.txt")):
+    for key, relative in (("runner_sha256", runner_relative), ("pilot_source_sha256", method_relative), ("instrument_source_sha256", "mesh_brain/meshmodel/v41r11_novelty_instrument.py"), ("requirements_sha256", "requirements-v41-h100-profile.txt")):
         try:
             content = subprocess.run(["git", "show", f"{commit}:{relative}"], cwd=rgs_root, check=True, capture_output=True).stdout
             if source.get(key) != "sha256:" + hashlib.sha256(content).hexdigest():
                 errors.append(key)
         except (subprocess.CalledProcessError, TypeError):
             errors.append(f"{key}:unavailable")
-    return {"version": "astral.v41r13_acquisition_pilot_validation.v1", "valid": not errors, "errors": sorted(set(errors)), "classification": result.get("classification"), "result_sha256": result.get("result_sha256"), "claim_ceiling": result.get("claim_ceiling") if not errors else None}
+    return {"version": report_version, "valid": not errors, "errors": sorted(set(errors)), "classification": result.get("classification"), "result_sha256": result.get("result_sha256"), "claim_ceiling": result.get("claim_ceiling") if not errors else None}
 
 
 def main() -> int:

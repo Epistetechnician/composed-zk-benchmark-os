@@ -1,5 +1,11 @@
 # Claim Ledger
 
+- V41R15 diagnoses V41R14's token-weighted objective as inconsistent with its
+  declared example policy: protected replay received 11.0641% rather than 25%
+  of loss, while bridge outputs received 63.7534%. An isolated equal-example
+  implementation and independent validator are locally complete. Execution is
+  unauthorized and any future result is development-only because the
+  instrument informed method selection.
 - V41R14 is a valid, independently validated `PilotNoSignal`. The frozen
   protected-replay attention-LoRA update moved context-free accuracy from 0.25
   to only 0.3229167, left every query class below 0.60, and reduced protected
