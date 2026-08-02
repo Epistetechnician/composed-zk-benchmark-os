@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R19 persistent-node gradient profile execution record](213-v41r19-persistent-node-gradient-profile-execution-record.md)
 - [V41R19 persistent-node gradient profile authorization](212-v41r19-persistent-node-gradient-profile-authorization.md)
 - [V41R18 registry cache-hit canary failure](211-v41r18-registry-cache-hit-canary-failure.md)
 - [V41R18 registry cache-hit canary authorization](210-v41r18-registry-cache-hit-canary-authorization.md)

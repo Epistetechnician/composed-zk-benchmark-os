@@ -1,5 +1,13 @@
 # Agent Rules
 
+V41R19 completed under state slice
+`V41R19PersistentNodeRuntimeAndGradientProfile`. Command `cmd-safk5` produced
+independently validated artifact `art-935kf`: all acquisition/protection layer
+cosines were positive, global cosine was 0.804440, and protected norm was 2.47x
+acquisition. The result supports magnitude imbalance, not directional conflict,
+and reaches only `RemoteH100GradientInterferenceDiagnosticV41R16`. See
+`docs/research/astral-self-modeling/213-v41r19-persistent-node-gradient-profile-execution-record.md`.
+
 V41R19 persistent-node recovery is authorized once under state slice
 `V41R19PersistentNodeRuntimeAndGradientProfile` on restored node
 `astral-v41r3-profile-node-r1`. It must install exact Python 3.12.3 and V41

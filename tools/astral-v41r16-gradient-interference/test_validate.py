@@ -49,3 +49,10 @@ def test_contract_and_missing_artifact() -> None:
         "valid": False,
         "errors": ["profile artifact files missing"],
     }
+
+
+def test_torch_distribution_metadata_requires_exact_cuda_binding() -> None:
+    assert MODULE.valid_torch_runtime({"torch": "2.10.0", "cuda": "12.8"})
+    assert MODULE.valid_torch_runtime({"torch": "2.10.0+cu128", "cuda": "12.8"})
+    assert not MODULE.valid_torch_runtime({"torch": "2.10.0", "cuda": "12.4"})
+    assert not MODULE.valid_torch_runtime({"torch": "2.9.0", "cuda": "12.8"})
