@@ -1,5 +1,13 @@
 # Agent Rules
 
+V41R24 one-shot H100 execution is authorized under state slice
+`V41R24ProtectedReplayRetentionIntervention`, bound to producer
+`5addf6b655c2aadfc97ee914f3de22302f8e76da`, validator
+`84f5d51d16ea5647f669bd72a8aedc52564fe709`, and context `ctx-05b26f22`.
+It must run once with restart `never`, offline access, a `$3.00` new-spend cap,
+export, and immediate node stop. See
+`docs/research/astral-self-modeling/227-v41r24-protected-replay-retention-execution-authorization.md`.
+
 V41R24 design and independent local validation are allowed under state slice
 `V41R24ProtectedReplayRetentionIntervention`. Mutations are limited to the
 frozen 0.75/0.25 protected-replay candidate over the immutable V41R23 shared
