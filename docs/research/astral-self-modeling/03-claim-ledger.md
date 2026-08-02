@@ -1,5 +1,10 @@
 # Claim Ledger
 
+- V41R21 is a valid independently recomputed decomposition negative. The exact
+  end-to-end oracle reached only `0.28125` against its frozen `0.90` floor and
+  reduced protected accuracy to `0.375`; the tested rank-8 all-attention LoRA,
+  AdamW `2e-4`, 64-step update substrate is unqualified. Later arm differences
+  are descriptive only and cannot support continual-learning interpretation.
 - V41R20 is a valid, independently recomputed negative. The prospectively
   frozen all-layer panel-normalized candidate tied V41R15 persistent accuracy
   at `0.2604167` and reduced protected accuracy from `0.8125` to `0.625`.
