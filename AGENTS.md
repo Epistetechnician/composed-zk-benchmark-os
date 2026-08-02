@@ -1,5 +1,12 @@
 # Agent Rules
 
+V41R17 authorizes one prebuilt-image recovery under state slice
+`V41R17ProviderResolvedGradientProfileExecution`. It must bypass provider image
+build/push, use the pinned PyTorch 2.10/CUDA 12.8 image digest, verify context
+`ctx-b71ccbe0` and RGS commit `0e8197fca05c42bd64ad74173385845d06c615ae`,
+and preserve every V41R16 zero-update boundary. See
+`docs/research/astral-self-modeling/208-v41r17-prebuilt-image-gradient-profile-authorization.md`.
+
 V41R16 execution identity is consumed under state slice
 `V41R16GradientInterferenceProfileExecution`. Job `job-3t878` failed before
 attempt start when the provider registry returned HTTP 500 while pushing the
