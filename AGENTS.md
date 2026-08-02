@@ -1,5 +1,12 @@
 # Agent Rules
 
+V41R15 one-shot development execution is authorized under state slice
+`V41R15EqualExampleDevelopmentExecution`, bound to the exact identities and
+stop rules in
+`docs/research/astral-self-modeling/203-v41r15-equal-example-development-execution-authorization.md`.
+Retry, a second cell, tuning, assessment, qualification, and claims above
+`RemoteH100EqualExampleAcquisitionDevelopmentV41R15` remain unauthorized.
+
 V41R15 diagnosis and local equal-example development validation are allowed
 under state slice `V41R15AcquisitionFailureDiagnosisAndAlternativeDesign`.
 Mutations are limited to deterministic diagnosis, the isolated loss-weighting
