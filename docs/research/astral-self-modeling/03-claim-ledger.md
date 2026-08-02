@@ -1,5 +1,9 @@
 # Claim Ledger
 
+- V41R17 also remains `NotRun`. Job `job-842y9` reproduced the provider
+  internal-registry blob-HEAD HTTP 500 using a cached prebuilt image and failed
+  before attempt start. The two-path reproduction is infrastructure diagnosis,
+  not model or scientific evidence.
 - V41R16 remote execution remains `NotRun`. Job `job-3t878` failed before
   attempt start on a provider registry HTTP 500 after its immutable image built
   and passed 35 tests. No model ran and no scientific result exists.
