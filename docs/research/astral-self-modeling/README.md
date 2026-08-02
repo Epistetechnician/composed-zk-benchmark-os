@@ -1,5 +1,8 @@
 # Astral Self-Modeling Research Project
 
+- [V41R23 multi-case interference execution record](225-v41r23-multicase-interference-isolation-execution-record.md)
+- [V41R23 multi-case interference execution authorization](224-v41r23-multicase-interference-isolation-execution-authorization.md)
+- [V41R23 multi-case interference preregistration](223-v41r23-multicase-interference-isolation-preregistration.md)
 - [V41R22 single-case substrate calibration execution record](222-v41r22-single-case-substrate-calibration-execution-record.md)
 - [V41R22 single-case substrate calibration execution authorization](221-v41r22-single-case-substrate-calibration-execution-authorization.md)
 - [V41R22 single-case substrate calibration preregistration](220-v41r22-single-case-substrate-calibration-preregistration.md)
