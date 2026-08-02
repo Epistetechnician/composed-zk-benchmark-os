@@ -1,5 +1,14 @@
 # Agent Rules
 
+V41R11 model-backed novelty-preflight independent validation is allowed under
+state slice `V41R11ModelBackedNoveltyPreflightAuthorizationAndExecution`.
+Mutations are limited to a fail-closed artifact validator, adversarial tests,
+and phase documentation. A separately bound execution may later permit one
+unchanged-checkpoint and context-only run. Adapter construction, training,
+updates, tune, assessment, acquisition qualification, V41R10 retry, and claims
+above `RemoteH100ModelBackedNoveltyPreflightV41R11` remain unauthorized. See
+`docs/research/astral-self-modeling/192-v41r11-model-backed-novelty-preflight-preregistration.md`.
+
 V41R11 balanced novelty-instrument design and independent local validation are
 complete under state slice `V41R11NoveltyInstrumentDesignAndLocalQualification`.
 The independent validator accepts the canonical 32-case, 96-query packet with

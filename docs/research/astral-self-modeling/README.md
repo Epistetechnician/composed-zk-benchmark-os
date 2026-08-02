@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R11 model-backed novelty preflight preregistration](192-v41r11-model-backed-novelty-preflight-preregistration.md)
 - [V41R11 local qualification record](191-v41r11-local-qualification-record.md)
 - [V41R11 balanced novelty instrument](190-v41r11-balanced-novelty-instrument.md)
 - [V41R10 pilot execution record](189-v41r10-single-task-acquisition-pilot-execution-record.md)
