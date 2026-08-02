@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R26 multi-panel qualification preregistration](235-v41r26-multipanel-replay-qualification-preregistration.md)
 - [V41R25 execution record](234-v41r25-disjoint-replay-execution-record.md)
 - [V41R25 execution authorization](233-v41r25-disjoint-replay-execution-authorization.md)
 - [V41R25 runner and validator implementation](232-v41r25-runner-and-validator-implementation.md)
