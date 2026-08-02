@@ -1,5 +1,13 @@
 # Agent Rules
 
+V41R16 remote no-update diagnostic execution is authorized once under state
+slice `V41R16GradientInterferenceProfileExecution`, bound to RGS commit
+`0e8197fca05c42bd64ad74173385845d06c615ae`, context `ctx-b71ccbe0`, and Astral
+validator commit `a5aca309b75350937e801330be5d54282261207a`. It permits one clock-locked
+H100 job with zero restarts and no optimizer, updates, selection, tune, or
+assessment. See
+`docs/research/astral-self-modeling/206-v41r16-gradient-interference-profile-execution-authorization.md`.
+
 V41R16 gradient-interference design and local independent validation are
 allowed under state slice `V41R16GradientInterferenceProfileDesignAndExecution`.
 Mutations are limited to no-update raw-gradient capture, independent summaries,
