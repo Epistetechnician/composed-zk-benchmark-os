@@ -1,5 +1,10 @@
 # Claim Ledger
 
+- V41R20 is a valid, independently recomputed negative. The prospectively
+  frozen all-layer panel-normalized candidate tied V41R15 persistent accuracy
+  at `0.2604167` and reduced protected accuracy from `0.8125` to `0.625`.
+  Every scientific gate failed. This rejects that exact balancing
+  intervention; it does not establish acquisition or continual learning.
 - V41R19 is a complete independently validated no-update diagnostic. All 24
   acquisition/protection layer cosines were positive; global cosine was
   0.804440 and protected gradient norm was 2.47x acquisition. This supports a

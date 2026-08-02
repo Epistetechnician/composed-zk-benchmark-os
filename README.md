@@ -2502,3 +2502,8 @@ This is local hermetic fixture regression evidence only. It is not execution,
 capital recognition, legal finality, assurance-root resolution, recovery proof,
 permitted release, benchmark evidence, production readiness, SOTA, independent
 audit, or full security.
+V41R20 prospectively tested whole-adapter per-panel gradient normalization on a
+clock-locked H100. The independently validated candidate tied the V41R15
+acquisition result and worsened protected retention, so it is retained as a
+negative result. See
+`docs/research/astral-self-modeling/216-v41r20-panel-balancing-execution-record.md`.
