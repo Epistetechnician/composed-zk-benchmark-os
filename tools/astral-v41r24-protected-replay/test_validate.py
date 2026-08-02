@@ -13,6 +13,7 @@ def test_contract_rederives_baseline_and_weights() -> None:
     packet = MODULE.expected_contract(MODULE.BASE.INSTRUMENT.expected_packet())
     assert packet["immutable_baseline"]["result_sha256"] == MODULE.BASELINE_SHA
     assert packet["panel_weights"] == {"acquisition": 0.75, "protected": 0.25}
+    assert packet["protected_training_projection"] == "prompt_unchanged_target_to_answer_exact"
     assert packet["acquisition_examples_per_case"] == 256
 
 
