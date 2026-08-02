@@ -1,5 +1,13 @@
 # Agent Rules
 
+V41R15 diagnosis and local equal-example development validation are allowed
+under state slice `V41R15AcquisitionFailureDiagnosisAndAlternativeDesign`.
+Mutations are limited to deterministic diagnosis, the isolated loss-weighting
+delta, hermetic tests, independent validation, and phase records. Model/GPU
+execution, tuning, assessment, further method changes, and claims above
+`LocalEqualExampleAcquisitionDevelopmentV41R15` remain unauthorized. See
+`docs/research/astral-self-modeling/202-v41r15-equal-example-acquisition-development-preregistration.md`.
+
 V41R14 execution is complete under state slice
 `V41R14ShellWrapperRecoveryExecution`. Job `job-qh7gh` returned the
 independently validated negative `PilotNoSignal`: 0.25 no-update, 0.3229167
