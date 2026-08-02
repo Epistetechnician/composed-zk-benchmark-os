@@ -1,5 +1,13 @@
 # Agent Rules
 
+V41R22 design and independent local validation are allowed under state slice
+`V41R22SingleCaseUpdateSubstrateCalibration`. Mutations are limited to the
+prospectively frozen exact-case 2x2 step/learning-rate matrix, independent
+validator, adversarial tests, and phase records. GPU/model execution requires
+a separately committed one-shot authorization. Tune, assessment, adaptive
+selection, and claims above `LocalSingleCaseSubstrateCalibrationV41R22` remain
+unauthorized. See `docs/research/astral-self-modeling/220-v41r22-single-case-substrate-calibration-preregistration.md`.
+
 V41R19 completed under state slice
 `V41R19PersistentNodeRuntimeAndGradientProfile`. Command `cmd-safk5` produced
 independently validated artifact `art-935kf`: all acquisition/protection layer
