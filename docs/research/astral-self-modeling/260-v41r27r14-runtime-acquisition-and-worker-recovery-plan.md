@@ -6,6 +6,14 @@
 
 Status: `FrozenDesign / ExecutionNotAuthorized`.
 
+The operator subsequently authorized the exact plan. Fresh node
+`astral-v41r27r14-recovery-node-r1` returned a locked H100 rate of
+`$0.0666/min` before model access. The derived hard ceilings are 160 billed
+minutes and `$10.6560`: at most 28 minutes for bootstrap, checkpoint
+acquisition, hashing, and V41R27R13 reproduction, followed by exactly 22
+six-minute worker budgets. Status is now
+`ExecutionAuthorized / ModelUnopened`; either ceiling remains terminal.
+
 V41R27R13 established a bounded native-MXFP4 H100 real-weight and real-logit
 canary. It did not construct an adapter or optimizer, execute an update, or add
 a worker to the 26-of-48 qualification census.
