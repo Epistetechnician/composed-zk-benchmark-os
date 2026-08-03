@@ -15,3 +15,15 @@ model access. The exact 22-worker complement, six-minute worker limits,
 immediate export, and no-retry gates remain binding.
 
 Status: `ExecutionAuthorized / ModelUnopened`.
+
+## Terminal result
+
+Bootstrap command `cmd-ku6ah` validated the context and source archive, then
+became `lost` during pinned dependency download. The no-retry gate terminated
+V41R27R18. No model, V41R27R13 receipt, adapter, optimizer, update, assessment,
+or worker was accessed. The node was stopped and the mission reported zero
+accrued cost.
+
+Classification:
+`V41R27R18ProviderCommandLostBeforeDependencyInstall`. Qualification remains
+`NotAssessed` at 26 of 48 workers with no claim-ceiling change.
