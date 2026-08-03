@@ -35,6 +35,38 @@ retry.
 The claim ceiling remains
 `RemoteH100AGEMPartialQualificationInfrastructureInterruptedV41R27R2`.
 
+## V41R27R11 tokenizer-runtime canary boundary
+
+`V41R27R11TokenizerRuntimeCanary` may build one new immutable image containing
+the exact source/runtime plus only tokenizer and configuration assets from the
+frozen model revision. It must validate the real tokenizer at build time and on
+one H100 runtime with attempt zero and zero restarts. Model weights, logits,
+optimizer construction, scientific workers, assessment access, and claim
+promotion remain forbidden.
+
+A valid pass establishes only
+`RemoteH100RealTokenizerRuntimeCanaryV41R27R11`; it cannot qualify the
+model-backed scientific runtime or change the current Astral claim ceiling.
+
+## V41R27R11 result
+
+Job `job-dy4hp` succeeded with one visible runtime attempt and zero restarts.
+Its compact image fetched six exact-revision tokenizer/config files and emitted
+manifest
+`sha256:02e911340c3b3d109dbc45ae9ce54a69734248a7496c8e1b9a23e3f8512fb7f7`.
+
+The runtime result classified
+`RemoteH100RealTokenizerRuntimeCanaryV41R27R11`: NVIDIA H100 80GB HBM3,
+capability `[9, 0]`, CUDA `12.8`, PyTorch `2.10.0+cu128`, real
+`PreTrainedTokenizerFast`, 11 tokens, and exact source/archive/model identities.
+Model weights were not accessed; no optimizer or scientific execution occurred.
+
+Artifact `art-y9v8h` independently matches provider SHA-256
+`9a6cec571dff95dd643fd4f01553926dfa1c683875adaceb980c4473f24ee531`
+at 10,240 bytes. V41R27R11 passes only the H100 real-tokenizer runtime canary.
+It does not qualify real logits, scientific workers, confirmation, or a higher
+Astral claim ceiling.
+
 ## V41R27R6
 
 Job `job-xw96t` accepted and extracted the corrected Zstandard context, then
