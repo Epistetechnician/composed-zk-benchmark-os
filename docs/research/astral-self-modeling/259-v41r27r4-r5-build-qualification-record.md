@@ -58,3 +58,47 @@ size 83,584,855 bytes, and provider identity `ctx-f748a052`. Build-only job
 `job-hjv44` is attempt zero with zero restarts, a one-minute runtime ceiling,
 and maximum runtime charge `$0.04995`. Its submitted, queued, or building state
 does not qualify the image and does not change the claim ceiling.
+
+## V41R27R7 terminal result and V41R27R8 boundary
+
+Job `job-hjv44` failed at attempt zero because the pinned image omits
+`ensurepip` and `python3.12-venv`; its isolated environment could not be
+created. No container started, no GPU or model was accessed, no tokenizer was
+loaded, no optimizer was constructed, no runtime charge was added, and no
+scientific result exists. V41R27R7 is terminal and was not retried.
+
+`V41R27R8PinnedContainerPythonBuildQualification` may replace only that failed
+layer with pip's documented PEP 668 override inside the immutable container,
+then require `pip check` and exact direct-package version assertions. It remains
+one zero-restart build-only canary and does not authorize scientific workers,
+assessment access, or claim promotion.
+
+## V41R27R8 terminal result and V41R27R9 boundary
+
+Job `job-2y6wt` installed the frozen requirements and passed `pip check`, then
+failed because its version assertion expected `torch` metadata `2.10.0` rather
+than the pinned CUDA build's PEP 440 local version `2.10.0+cu128`. It did not
+start a container or produce scientific evidence and is terminal.
+
+`V41R27R9CudaLocalVersionBuildQualification` may change only that assertion to
+the exact observed local version. It remains a zero-restart build-only canary
+without assessment access, scientific-worker authorization, or claim promotion.
+
+## V41R27R9 terminal result and V41R27R10 boundary
+
+Job `job-nm97u` passed pinned installation, `pip check`, and exact package
+versions, then failed the source-tree binding after BuildKit directory-copy
+reconstruction. The submitted context independently reproduces the frozen hash
+when decompressed locally. No model, GPU, tokenizer, optimizer, or scientific
+execution occurred, and V41R27R9 is terminal.
+
+`V41R27R10ArchiveExtractionBuildQualification` may verify and extract the raw
+content-addressed Git archive inside the image, add the immutable binding, run
+the unchanged validator, and correct the canary's return-value assertion. It
+may not regenerate the binding or authorize scientific execution or claims.
+
+V41R27R10 context `ctx-59535d63` has SHA-256
+`11b00616f2c6fedbcc994e2104a530ed850d5d3b4dbcd0053e36838b60d17cfa`
+and size 41,751,817 bytes. Job `job-md3dg` is attempt zero with zero restarts,
+a one-minute runtime ceiling, and maximum runtime charge `$0.04995`. Building
+does not change any evidence or claim state.
