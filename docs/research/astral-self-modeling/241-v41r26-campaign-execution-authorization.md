@@ -2,7 +2,7 @@
 
 State slice: `V41R26CampaignExecutionAuthorizationAndCostGate`.
 
-Status: `AuthorizedOnce / NotYetConsumed`.
+Status: `R1SupersededBeforeScientificExecution / R2AuthorizedOnce`.
 
 One frozen 48-run H100 campaign is authorized under identity
 `astral-v41r26-campaign-r1`, bound to producer commit
@@ -19,3 +19,11 @@ the complete campaign artifact, pass the independent campaign validator, and
 stop the node immediately. The first optimizer construction consumes the
 identity; any scientific failure consumes it. No retry, adaptive selection,
 tune, assessment, confirmation, or claim promotion is authorized.
+
+R1 stopped during Python 3.12 test collection before model loading or optimizer
+construction. Fresh R2 identity `astral-v41r26-campaign-r2` binds producer
+commit `3e3b850ba57ecb7258f25061191082327af8fa68`, context `ctx-bd974a3b`,
+51,431,936 bytes, SHA-256
+`064ab54b6451fa655d81508a14626120ae9be97cbee189f8ceb3b9f3d7397ff7`,
+and the pinned `/home/dev/v41r19/venv/bin/python` interpreter. All scientific
+and operational boundaries above remain unchanged.
