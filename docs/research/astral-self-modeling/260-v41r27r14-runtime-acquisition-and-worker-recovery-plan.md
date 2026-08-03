@@ -49,3 +49,16 @@ Astral validators must then independently pass the same content-addressed
 release. Until that occurs, qualification remains `NotAssessed` and the claim
 ceiling remains
 `RemoteH100AGEMPartialQualificationInfrastructureInterruptedV41R27R2`.
+
+## Terminal execution result
+
+The fresh node confirmed an H100 80GB HBM3 at compute capability 9.0, but its
+provider `cuda-12.4` image did not contain a `python` executable. The first
+bootstrap diagnostic exited 127. The no-retry rule terminated V41R27R14 before
+model access; no substitute interpreter, installation, model, adapter,
+optimizer, update, assessment, or worker followed. The node was stopped and the
+mission receipt reported zero accrued cost.
+
+Classification:
+`V41R27R14BootstrapEnvironmentMismatchBeforeModelAccess`. Qualification remains
+`NotAssessed` at 26 of 48 workers, with no claim-ceiling change.
