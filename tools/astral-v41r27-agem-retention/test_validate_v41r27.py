@@ -15,6 +15,7 @@ SENTINEL = importlib.util.module_from_spec(SENTINEL_SPEC); SENTINEL_SPEC.loader.
 
 
 def test_contract_is_fresh_and_staged() -> None:
+    assert SENTINEL.PREFLIGHT.PREFLIGHT_RESULT_VERSION == "mesh.astral_v41r27_agem_retention.v2"
     packet = MODULE.expected_contract()
     assert packet["run_count"] == 48 and packet["stages"]["sentinel_run_count"] == 9
     assert packet["v41r26_data_or_seeds_reused"] is False
