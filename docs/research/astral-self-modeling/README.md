@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R26 campaign execution authorization](241-v41r26-campaign-execution-authorization.md)
 - [V41R26 campaign coordinator and independent validator](240-v41r26-campaign-coordinator-and-validator.md)
 - [V41R26 preflight execution record](239-v41r26-preflight-execution-record.md)
 - [V41R26 preflight execution authorization](238-v41r26-preflight-execution-authorization.md)
