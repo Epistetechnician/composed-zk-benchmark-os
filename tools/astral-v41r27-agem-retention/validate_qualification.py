@@ -22,6 +22,11 @@ def load(name: str, filename: str):
 CONTRACT = load("v41r27_qualification_contract", "validate.py")
 WORKER = load("v41r27_qualification_worker", "validate_worker.py")
 SENTINEL = load("v41r27_qualification_sentinel", "validate_sentinel.py")
+PARTIAL_ARCHIVE_SHA256 = "93d6bedc8e9e6ae3ab9595a5f924963539a3ac8476e0c5d39da270d588ba0577"
+RECOVERED_RUN_IDS = {
+    f"v41r27-panel-{panel}-seed-{seed}"
+    for panel in range(1, 6) for seed in (412003, 412007, 412019)
+} | {"v41r27-panel-6-seed-412003", "v41r27-panel-6-seed-412007"}
 
 
 def file_hash(path: Path) -> str:
@@ -60,19 +65,36 @@ def validate(artifact: Path, rgs_root: Path) -> dict[str, Any]:
     binding = json.loads(binding_path.read_text())
     if binding != {"sentinel_result_sha256": sentinel_report.get("result_sha256")}:
         errors.add("sentinel_binding")
+    recovery_path = artifact / "recovery-binding.json"; recovery = recovery_path.is_file()
     constants = {"version": "mesh.astral_v41r27_agem_retention.v2",
                  "state_slice": "V41R27ProspectiveRetentionStabilityMechanism",
-                 "classification": "V41R27QualificationComplete", "worker_count": 48,
-                 "imported_sentinel_workers": 9, "fresh_remaining_workers": 39,
+                 "classification": ("V41R27R3RecoveredQualificationComplete" if recovery
+                                    else "V41R27QualificationComplete"), "worker_count": 48,
+                 "imported_sentinel_workers": 9, "fresh_remaining_workers": 22 if recovery else 39,
+                 "recovered_remaining_workers": 17 if recovery else 0,
                  "adaptive_stopping": False, "tune_opened": False, "assessment_opened": False,
-                 "claim_ceiling": "RemoteH100AGEMQualificationV41R27"}
+                 "claim_ceiling": ("RemoteH100AGEMRecoveredQualificationV41R27R3" if recovery
+                                   else "RemoteH100AGEMQualificationV41R27")}
     for key, value in constants.items():
         if result.get(key) != value: errors.add(key)
     sentinel_ids = {spec["run_id"] for spec in SENTINEL.sentinel_specs()}
+    expected_specs = WORKER.expected_specs()
+    expected_remaining = set(expected_specs) - sentinel_ids
+    completion_ids = expected_remaining - RECOVERED_RUN_IDS
+    if recovery:
+        try: recovery_binding = json.loads(recovery_path.read_text())
+        except (OSError, json.JSONDecodeError): recovery_binding = None
+        expected_binding = {"partial_archive_sha256": PARTIAL_ARCHIVE_SHA256,
+                            "recovered_run_ids": sorted(RECOVERED_RUN_IDS),
+                            "completion_run_ids": [spec["run_id"] for spec in expected_specs.values()
+                                                   if spec["run_id"] in completion_ids]}
+        if recovery_binding != expected_binding: errors.add("recovery_binding")
     workers = []; summaries = []; expected_specs = WORKER.expected_specs()
     for run_id, spec in expected_specs.items():
-        worker_dir = (sentinel_path / "workers" / run_id if run_id in sentinel_ids
-                      else artifact / "remaining-workers" / run_id)
+        worker_dir = (sentinel_path / "workers" / run_id if run_id in sentinel_ids else
+                      artifact / "recovered-workers" / run_id if recovery and run_id in RECOVERED_RUN_IDS else
+                      artifact / "completion-workers" / run_id if recovery else
+                      artifact / "remaining-workers" / run_id)
         report = WORKER.validate(worker_dir, rgs_root)
         if not report.get("valid"): errors.add(f"worker:{run_id}")
         try: worker = json.loads((worker_dir / "worker-result.json").read_text())
@@ -80,10 +102,14 @@ def validate(artifact: Path, rgs_root: Path) -> dict[str, Any]:
         workers.append(worker); summaries.append({"run_id": run_id,
                                                   "result_sha256": worker.get("result_sha256"),
                                                   "pass": worker.get("pass")})
-    remaining_root = artifact / "remaining-workers"
-    expected_remaining = sorted(set(expected_specs) - sentinel_ids)
-    if not remaining_root.is_dir() or sorted(path.name for path in remaining_root.iterdir()) != expected_remaining:
-        errors.add("remaining_worker_census")
+    if recovery:
+        for root, expected, name in ((artifact / "recovered-workers", RECOVERED_RUN_IDS, "recovered_worker_census"),
+                                     (artifact / "completion-workers", completion_ids, "completion_worker_census")):
+            if not root.is_dir() or {path.name for path in root.iterdir()} != expected: errors.add(name)
+    else:
+        remaining_root = artifact / "remaining-workers"
+        if not remaining_root.is_dir() or {path.name for path in remaining_root.iterdir()} != expected_remaining:
+            errors.add("remaining_worker_census")
     if result.get("worker_results") != summaries: errors.add("worker_results")
     for key, value in decision(workers).items():
         actual = result.get(key)
@@ -102,7 +128,8 @@ def validate(artifact: Path, rgs_root: Path) -> dict[str, Any]:
         f'{file_hash(path).removeprefix("sha256:")}  {path.relative_to(artifact)}\n' for path in files)
     if manifest.read_text() != expected_manifest: errors.add("manifest")
     source = result.get("source", {}); commit = source.get("rgs_commit", "")
-    for key, relative in (("coordinator_sha256", "scripts/run_v41r27_qualification.py"),
+    for key, relative in (("coordinator_sha256", ("scripts/run_v41r27r3_recovery.py" if recovery
+                                                  else "scripts/run_v41r27_qualification.py")),
                           ("worker_sha256", "scripts/run_v41r27_worker.py"),
                           ("method_sha256", "mesh_brain/meshmodel/v41r27_agem_retention.py"),
                           ("requirements_sha256", "requirements-v41-h100-profile.txt")):
