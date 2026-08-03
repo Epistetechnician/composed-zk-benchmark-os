@@ -1,5 +1,13 @@
 # Agent Rules
 
+Explicit V41R27 prospective A-GEM retention-stability protocol design is now
+allowed: additive pure-data source and tests in the RGS producer, independent
+validator source and tests under `tools/astral-v41r27-agem-retention/`, phase
+records, and navigation updates. It is limited to fresh V41R27 instruments and
+seeds, the frozen gradient-projection contract, and a nine-run sentinel design.
+It does not permit model/GPU execution, V41R26 data reuse, coefficient tuning,
+assessment, confirmation, SOTA claims, continual-learning claims, or Stage 0C.
+
 V41R24R2 is complete, independently validated, and consumed. Protected replay
 preserved 4/4 acquisition and improved protected accuracy from 0.1875 to 0.875,
 but missed the 0.98 gate. The candidate is rejected. See
