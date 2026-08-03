@@ -2,7 +2,7 @@
 
 State slice: `V41R26ModelBackedCampaignPreflightScorer`.
 
-Status: `AuthorizedOnce / NotYetConsumed`.
+Status: `Consumed`.
 
 One base-model-only execution identity, `astral-v41r26-preflight-r1`, is bound
 to RGS `0062848861e342609153ac6f038ee9e2256e22c1`, Astral validator
