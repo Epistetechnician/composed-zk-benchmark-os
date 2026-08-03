@@ -72,6 +72,10 @@ def validate(artifact: Path, rgs_root: Path) -> dict[str, Any]:
                  "claim_ceiling": "RemoteH100MultiPanelReplayQualificationV41R26"}
     for key, value in constants.items():
         if result.get(key) != value: errors.add(key)
+    if result.get("operational_envelope") != {
+        "maximum_campaign_seconds": 14_400, "maximum_worker_seconds": 600,
+        "maximum_provider_spend_usd": 15.0, "restart_policy": "never"
+    }: errors.add("operational_envelope")
     specs = WORKER.expected_specs(); workers = []; summaries = []
     for run_id, spec in specs.items():
         worker_dir = artifact / "workers" / run_id
