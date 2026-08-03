@@ -16,6 +16,10 @@ PREFLIGHT_PATH = Path(__file__).with_name("validate_preflight.py")
 PREFLIGHT_SPEC = importlib.util.spec_from_file_location("v41r26_preflight_validator", PREFLIGHT_PATH)
 assert PREFLIGHT_SPEC and PREFLIGHT_SPEC.loader
 PREFLIGHT = importlib.util.module_from_spec(PREFLIGHT_SPEC); PREFLIGHT_SPEC.loader.exec_module(PREFLIGHT)
+CAMPAIGN_PATH = Path(__file__).with_name("validate_campaign.py")
+CAMPAIGN_SPEC = importlib.util.spec_from_file_location("v41r26_campaign_validator", CAMPAIGN_PATH)
+assert CAMPAIGN_SPEC and CAMPAIGN_SPEC.loader
+CAMPAIGN = importlib.util.module_from_spec(CAMPAIGN_SPEC); CAMPAIGN_SPEC.loader.exec_module(CAMPAIGN)
 
 
 def test_contract_has_sixteen_disjoint_panels_and_fortyeight_runs() -> None:
@@ -61,3 +65,16 @@ def test_preflight_decision_rejects_one_protected_failure() -> None:
     assert PREFLIGHT.decision(acquisition, protected)["training_authorized"] is True
     protected[0]["correct"] = False
     assert PREFLIGHT.decision(acquisition, protected)["errors"] == ["protected_accuracy"]
+
+
+def test_campaign_aggregate_requires_all_fortyeight_runs() -> None:
+    rows = [{"run_spec": spec, "pass": True, "governance_violations": 0}
+            for spec in WORKER.expected_specs().values()]
+    assert CAMPAIGN.aggregate(rows)["candidate_keep"] is True
+    rows[-1]["pass"] = False
+    assert CAMPAIGN.aggregate(rows)["candidate_keep"] is False
+
+
+def test_missing_campaign_bundle_fails_closed(tmp_path: Path) -> None:
+    assert CAMPAIGN.validate(tmp_path, tmp_path) == {
+        "valid": False, "errors": ["campaign artifact files missing"]}
