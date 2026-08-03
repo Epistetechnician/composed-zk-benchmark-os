@@ -114,3 +114,18 @@ configured 90-minute build ceiling, before H100 runtime or tokenizer execution.
 Provider ticket `tkt-6smjh` requests reconciliation of that stuck state without
 retry or substitution. The canary is not passed, failed, or scientific evidence
 while provider state remains nonterminal. The claim ceiling is unchanged.
+
+## V41R27R10 terminal governance result
+
+The provider changed `build.started_at` from `2026-08-03T16:55:22Z` to
+`2026-08-03T18:30:23Z` and launched a second full build while still reporting
+attempt zero, zero allowed restarts, and zero used restarts. This hidden rebuild
+violated the preregistered no-retry identity after the first build exceeded its
+90-minute ceiling.
+
+Job `job-md3dg` was canceled at `2026-08-03T18:32:39Z` before runtime, GPU,
+tokenizer, optimizer, scientific execution, or runtime spend. Ticket
+`tkt-6smjh` retains the provider accounting defect. V41R27R10 is terminal as
+`ProviderHiddenBuildRetryGovernanceViolation`; no image is qualified and the
+claim ceiling remains
+`RemoteH100AGEMPartialQualificationInfrastructureInterruptedV41R27R2`.
