@@ -67,6 +67,50 @@ at 10,240 bytes. V41R27R11 passes only the H100 real-tokenizer runtime canary.
 It does not qualify real logits, scientific workers, confirmation, or a higher
 Astral claim ceiling.
 
+## V41R27R12 runtime-weight real-logit boundary
+
+`V41R27R12RuntimeWeightAcquisitionRealLogitCanary` may reuse the exact compact
+V41R27R11 context under a fresh job identity, acquire the complete frozen model
+revision at runtime, hash its file inventory, load native MXFP4 on one H100, and
+emit one deterministic next-token real-logit receipt. The receipt must bind the
+source/model/runtime identities, finite-logit gate, vocabulary size, top token,
+logit-vector hash, geometry, quantization and peak memory.
+
+The slice permits model-weight access but forbids adapters, optimizer
+construction, updates, corpus/assessment scoring and scientific workers. It is
+bounded to zero restarts, 15 runtime minutes and `$0.74925`. A pass establishes
+only `RemoteH100RealWeightRealLogitCanaryV41R27R12` and cannot change the
+current Astral claim ceiling.
+
+## V41R27R12 terminal result and V41R27R13 boundary
+
+Job `job-uixae` failed on its sole runtime attempt before model acquisition
+because the reused loader's sibling module directory was absent from
+`sys.path`. No model snapshot, weights, logits, optimizer, update or scientific
+result occurred. V41R27R12 is terminal.
+
+`V41R27R13RuntimeWeightAcquisitionRealLogitCanary` may add only the exact
+`/workspace/rgs/scripts` import path before loading the unchanged implementation.
+All identities, runtime/cost ceilings, gates and claim restrictions remain
+unchanged.
+
+V41R27R13 job `job-u3cp7` then succeeded on attempt one with zero restarts.
+Artifact `art-jexbz` is durably retained at
+`/Users/shaanp/Documents/research-artifacts/astral-v41r27r13-real-logit-canary-r1/art-jexbz.tar`;
+its provider and local SHA-256 is
+`8b9b65bf68078159ba30e464ccd48e8f356c406b09479d5147a6fd8b26058088`.
+Independent validation confirmed 20 unique model files totaling
+41,301,470,293 bytes, native MXFP4 loading of the frozen 24-layer checkpoint,
+finite 201,088-way real logits, logit-vector SHA-256
+`2a212e6c8051d20fd8e290124a31632c03a5afff70b38488237261be5dd1eb62`,
+and peak reserved CUDA memory of 16,808,673,280 bytes.
+
+The result is bounded to
+`RemoteH100RealWeightRealLogitCanaryV41R27R13`. Model weights were accessed;
+no optimizer, update, assessment, or scientific worker ran. The qualification
+census remains 26 of 48, and this canary does not authorize the 22 missing
+workers or raise the Astral claim ceiling.
+
 ## V41R27R6
 
 Job `job-xw96t` accepted and extracted the corrected Zstandard context, then
