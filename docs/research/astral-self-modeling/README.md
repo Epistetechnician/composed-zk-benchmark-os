@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R27 native worker and sentinel validation](244-v41r27-native-worker-and-sentinel-validation.md)
 - [V41R27 A-GEM retention-stability preregistration](243-v41r27-agem-retention-stability-preregistration.md)
 - [V41R26 campaign R3 negative execution record](242-v41r26-campaign-r3-negative-execution-record.md)
 - [V41R26 campaign execution authorization](241-v41r26-campaign-execution-authorization.md)

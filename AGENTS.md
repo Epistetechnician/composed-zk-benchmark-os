@@ -8,6 +8,11 @@ seeds, the frozen gradient-projection contract, and a nine-run sentinel design.
 It does not permit model/GPU execution, V41R26 data reuse, coefficient tuning,
 assessment, confirmation, SOTA claims, continual-learning claims, or Stage 0C.
 
+The local implementation boundary additionally permits the native V41R27
+worker, full-corpus base-only preflight, crash-safe nine-run sentinel
+coordinator, projection-receipt validators, artifact validators, hermetic tests,
+and implementation records. This does not authorize runtime execution.
+
 V41R24R2 is complete, independently validated, and consumed. Protected replay
 preserved 4/4 acquisition and improved protected accuracy from 0.1875 to 0.875,
 but missed the 0.98 gate. The candidate is rejected. See
