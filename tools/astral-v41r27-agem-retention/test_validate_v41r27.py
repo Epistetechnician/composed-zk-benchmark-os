@@ -67,3 +67,12 @@ def test_qualification_decision_requires_all_48_workers() -> None:
 def test_missing_qualification_artifact_fails_closed(tmp_path: Path) -> None:
     assert QUALIFICATION.validate(tmp_path, tmp_path) == {
         "valid": False, "errors": ["qualification artifact files missing"]}
+
+
+def test_recovery_partition_is_exact() -> None:
+    sentinel = {spec["run_id"] for spec in SENTINEL.sentinel_specs()}
+    all_ids = set(QUALIFICATION.WORKER.expected_specs())
+    completion = all_ids - sentinel - QUALIFICATION.RECOVERED_RUN_IDS
+    assert len(sentinel) == 9 and len(QUALIFICATION.RECOVERED_RUN_IDS) == 17 and len(completion) == 22
+    assert not sentinel & QUALIFICATION.RECOVERED_RUN_IDS
+    assert QUALIFICATION.PARTIAL_ARCHIVE_SHA256 == "93d6bedc8e9e6ae3ab9595a5f924963539a3ac8476e0c5d39da270d588ba0577"
