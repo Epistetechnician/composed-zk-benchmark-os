@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R26 preflight execution record](239-v41r26-preflight-execution-record.md)
 - [V41R26 preflight execution authorization](238-v41r26-preflight-execution-authorization.md)
 - [V41R26 model-backed preflight implementation](237-v41r26-model-backed-preflight-implementation.md)
 - [V41R26 native worker and validator](236-v41r26-native-worker-and-validator.md)
