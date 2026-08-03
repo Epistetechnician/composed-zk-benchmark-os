@@ -102,3 +102,15 @@ V41R27R10 context `ctx-59535d63` has SHA-256
 and size 41,751,817 bytes. Job `job-md3dg` is attempt zero with zero restarts,
 a one-minute runtime ceiling, and maximum runtime charge `$0.04995`. Building
 does not change any evidence or claim state.
+
+## V41R27R10 provider finalization hold
+
+BuildKit completed the full image, exact 20-file model snapshot, image manifest
+`sha256:7831a071c81717267cbdb2dd316d52a47a0bd1e2115a482ddc4f6e91ed9732c5`,
+config `sha256:274e20cb25a65f9ae5c04101832713bc5dfbb07d58b0d53e794df8b595ddf6a0`,
+and tarball transfer. Job `job-md3dg` still reported `building` after the
+configured 90-minute build ceiling, before H100 runtime or tokenizer execution.
+
+Provider ticket `tkt-6smjh` requests reconciliation of that stuck state without
+retry or substitution. The canary is not passed, failed, or scientific evidence
+while provider state remains nonterminal. The claim ceiling is unchanged.
