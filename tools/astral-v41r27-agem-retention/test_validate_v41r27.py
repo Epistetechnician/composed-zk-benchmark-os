@@ -12,6 +12,10 @@ SENTINEL_PATH = Path(__file__).with_name("validate_sentinel.py")
 SENTINEL_SPEC = importlib.util.spec_from_file_location("v41r27_sentinel_validator", SENTINEL_PATH)
 assert SENTINEL_SPEC and SENTINEL_SPEC.loader
 SENTINEL = importlib.util.module_from_spec(SENTINEL_SPEC); SENTINEL_SPEC.loader.exec_module(SENTINEL)
+QUALIFICATION_PATH = Path(__file__).with_name("validate_qualification.py")
+QUALIFICATION_SPEC = importlib.util.spec_from_file_location("v41r27_qualification_validator", QUALIFICATION_PATH)
+assert QUALIFICATION_SPEC and QUALIFICATION_SPEC.loader
+QUALIFICATION = importlib.util.module_from_spec(QUALIFICATION_SPEC); QUALIFICATION_SPEC.loader.exec_module(QUALIFICATION)
 
 
 def test_contract_is_fresh_and_staged() -> None:
@@ -49,3 +53,17 @@ def test_sentinel_decision_requires_nine_passes() -> None:
 def test_missing_sentinel_artifact_fails_closed(tmp_path: Path) -> None:
     assert SENTINEL.validate(tmp_path, tmp_path) == {
         "valid": False, "errors": ["sentinel artifact files missing"]}
+
+
+def test_qualification_decision_requires_all_48_workers() -> None:
+    workers = [{"pass": True, "governance_violations": 0} for _ in range(48)]
+    decision = QUALIFICATION.decision(workers)
+    assert decision["qualification_keep"] is True
+    assert 0.92 < decision["wilson_95_lower_bound"] < 0.93
+    workers[-1]["pass"] = False
+    assert QUALIFICATION.decision(workers)["qualification_keep"] is False
+
+
+def test_missing_qualification_artifact_fails_closed(tmp_path: Path) -> None:
+    assert QUALIFICATION.validate(tmp_path, tmp_path) == {
+        "valid": False, "errors": ["qualification artifact files missing"]}
