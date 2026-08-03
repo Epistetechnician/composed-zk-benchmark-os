@@ -21,6 +21,7 @@ def load(name: str, filename: str):
 CONTRACT = load("v41r27_sentinel_contract", "validate.py")
 WORKER = load("v41r27_sentinel_worker", "validate_worker.py")
 PREFLIGHT = load("v41r27_sentinel_preflight", "validate_preflight.py")
+SENTINEL_RESULT_VERSION = "mesh.astral_v41r27_agem_retention.v2"
 
 
 def file_hash(path: Path) -> str:
@@ -56,7 +57,7 @@ def validate(artifact: Path, rgs_root: Path) -> dict[str, Any]:
     binding = json.loads(paths[2].read_text())
     if binding != {"preflight_result_sha256": preflight_report.get("result_sha256")}:
         errors.add("preflight_binding")
-    constants = {"version": "mesh.astral_v41r27_agem_retention.v1",
+    constants = {"version": SENTINEL_RESULT_VERSION,
                  "state_slice": "V41R27ProspectiveRetentionStabilityMechanism",
                  "classification": "V41R27SentinelComplete", "worker_count": 9,
                  "adaptive_stopping": False, "tune_opened": False, "assessment_opened": False,
