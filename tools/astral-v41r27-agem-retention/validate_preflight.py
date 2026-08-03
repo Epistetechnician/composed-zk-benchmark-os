@@ -17,6 +17,7 @@ CONTRACT = importlib.util.module_from_spec(CONTRACT_SPEC); CONTRACT_SPEC.loader.
 WORKER_SPEC = importlib.util.spec_from_file_location("v41r27_preflight_base", HERE / "validate_worker.py")
 assert WORKER_SPEC and WORKER_SPEC.loader
 WORKER = importlib.util.module_from_spec(WORKER_SPEC); WORKER_SPEC.loader.exec_module(WORKER)
+PREFLIGHT_RESULT_VERSION = "mesh.astral_v41r27_agem_retention.v2"
 
 
 def file_hash(path: Path) -> str:
@@ -50,7 +51,7 @@ def validate(artifact: Path, rgs_root: Path, *, result_name: str = "preflight-re
     result = json.loads(result_path.read_text()); errors: set[str] = set()
     body = {key: value for key, value in result.items() if key != "result_sha256"}
     if result.get("result_sha256") != CONTRACT.canonical_hash(body): errors.add("result_sha256")
-    for key, value in {"version": "mesh.astral_v41r27_agem_retention.v1",
+    for key, value in {"version": PREFLIGHT_RESULT_VERSION,
                        "state_slice": "V41R27ProspectiveRetentionStabilityMechanism",
                        "adapter_constructed": False, "optimizer_constructed": False,
                        "tune_opened": False, "assessment_opened": False,
