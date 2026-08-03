@@ -2,7 +2,7 @@
 
 State slice: `V41R26CampaignExecutionAuthorizationAndCostGate`.
 
-Status: `R1SupersededBeforeScientificExecution / R2AuthorizedOnce`.
+Status: `R1AndR2SupersededBeforeScientificExecution / R3AuthorizedOnce`.
 
 One frozen 48-run H100 campaign is authorized under identity
 `astral-v41r26-campaign-r1`, bound to producer commit
@@ -27,3 +27,8 @@ commit `3e3b850ba57ecb7258f25061191082327af8fa68`, context `ctx-bd974a3b`,
 `064ab54b6451fa655d81508a14626120ae9be97cbee189f8ceb3b9f3d7397ff7`,
 and the pinned `/home/dev/v41r19/venv/bin/python` interpreter. All scientific
 and operational boundaries above remain unchanged.
+
+R2 stopped before checkout because its manually expanded producer suffix was
+not a Git object. R3 replaces only that identifier with the directly resolved,
+bundle-verified object `3e3b850d098a9ace5d7aa0ff10bd8715214fa22e` and uses the
+same byte-identical context and protocol. No R1 or R2 optimizer was constructed.
