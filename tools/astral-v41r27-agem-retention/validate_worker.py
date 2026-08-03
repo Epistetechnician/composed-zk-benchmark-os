@@ -44,7 +44,7 @@ def validate(artifact: Path, rgs_root: Path) -> dict[str, Any]:
     result = json.loads(result_path.read_text()); errors: set[str] = set()
     body = {key: value for key, value in result.items() if key != "result_sha256"}
     if result.get("result_sha256") != CONTRACT.canonical_hash(body): errors.add("result_sha256")
-    expected_constants = {"version": "mesh.astral_v41r27_agem_retention.v1",
+    expected_constants = {"version": "mesh.astral_v41r27_agem_retention.v2",
                           "state_slice": "V41R27ProspectiveRetentionStabilityMechanism",
                           "classification": "V41R27WorkerComplete", "status": "completed",
                           "tune_opened": False, "assessment_opened": False,
@@ -79,20 +79,33 @@ def validate(artifact: Path, rgs_root: Path) -> dict[str, Any]:
             values = (receipt.get("acquisition_loss"), receipt.get("protected_loss"), receipt.get("weighted_loss"),
                       receipt.get("gradient_norm"), receipt.get("pre_projection_dot"),
                       receipt.get("post_projection_dot"), receipt.get("protected_gradient_norm_sq"),
-                      receipt.get("projection_coefficient"))
+                      receipt.get("projected_gradient_norm_sq"), receipt.get("projection_dtype_epsilon"),
+                      receipt.get("projection_roundoff_tolerance"), receipt.get("projection_coefficient"))
             if any(not isinstance(value, (int, float)) or not math.isfinite(value) for value in values): errors.add("receipt_finite")
             elif abs(receipt["weighted_loss"] - (0.75 * receipt["acquisition_loss"] + 0.25 * receipt["protected_loss"])) > 1e-9: errors.add("receipt_weight")
             else:
                 applied = receipt.get("projection_applied") is True
                 if applied != (receipt["pre_projection_dot"] < 0.0): errors.add("projection_condition")
                 if receipt["protected_gradient_norm_sq"] < 0.0: errors.add("projection_norm")
+                if receipt["projected_gradient_norm_sq"] < 0.0: errors.add("projection_norm")
+                if receipt["projection_dtype_epsilon"] <= 0.0: errors.add("projection_tolerance")
+                if receipt["projection_roundoff_tolerance"] <= 0.0: errors.add("projection_tolerance")
                 if applied and receipt["protected_gradient_norm_sq"] <= 0.0: errors.add("projection_norm")
                 if not applied or receipt["protected_gradient_norm_sq"] > 0.0:
                     expected_coefficient = (receipt["pre_projection_dot"] / receipt["protected_gradient_norm_sq"]
                                             if applied else 0.0)
                     if not math.isclose(receipt["projection_coefficient"], expected_coefficient,
                                         rel_tol=1e-6, abs_tol=1e-8): errors.add("projection_coefficient")
-                if receipt["post_projection_dot"] < -1e-5: errors.add("projection_invariant")
+                expected_tolerance = None
+                if receipt["projected_gradient_norm_sq"] >= 0.0 and receipt["protected_gradient_norm_sq"] >= 0.0:
+                    expected_tolerance = 64.0 * receipt["projection_dtype_epsilon"] * max(
+                        math.sqrt(receipt["projected_gradient_norm_sq"] *
+                                  receipt["protected_gradient_norm_sq"]), 1.0)
+                if expected_tolerance is None or not math.isclose(
+                        receipt["projection_roundoff_tolerance"], expected_tolerance,
+                        rel_tol=1e-12, abs_tol=0.0): errors.add("projection_tolerance")
+                if receipt["post_projection_dot"] < -receipt["projection_roundoff_tolerance"]:
+                    errors.add("projection_invariant")
                 if not applied and not math.isclose(receipt["post_projection_dot"], receipt["pre_projection_dot"],
                                                     rel_tol=1e-6, abs_tol=1e-8): errors.add("projection_passthrough")
         if candidate.get("update", {}).get("projection_steps") != sum(
