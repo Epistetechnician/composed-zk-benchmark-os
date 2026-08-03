@@ -11,10 +11,13 @@ independent 22-variant batch sweep with one shared immutable build. The
 scientific method and frozen worker partition are unchanged.
 
 An initial sweep whose declared maximum was `$10.989` was canceled at attempt
-zero because it exceeded the authorized `$8` aggregate ceiling. The active
-`astral-v41r27r3-recovery-r2` sweep uses seven-minute variants, zero restarts,
-and a provider-declared aggregate maximum of `$7.69230`. It is currently
-waiting for build capacity. Queueing and builds are not evidence, and the
+zero because it exceeded the authorized `$8` aggregate ceiling. The restored
+host subsequently charged `$1.00011`; R2 was therefore canceled at attempt zero
+because its ceiling would have put worst-case incremental spend above `$8`.
+The active `astral-v41r27r3-recovery-r3` sweep uses six-minute variants, zero
+restarts, and a provider-declared sweep maximum of `$6.59340`. Combined with
+the restore, the worst case is `$7.59351`. It is currently waiting for build
+capacity. Queueing and builds are not evidence, and the
 scientific identity remains unconsumed until optimizer construction.
 
 The claim ceiling remains
