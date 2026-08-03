@@ -32,6 +32,7 @@ def test_missing_producer_fails_closed(tmp_path: Path) -> None:
 
 
 def test_sentinel_specs_are_exact_nine_run_cross_product() -> None:
+    assert SENTINEL.SENTINEL_RESULT_VERSION == "mesh.astral_v41r27_agem_retention.v2"
     specs = SENTINEL.sentinel_specs()
     assert len(specs) == 9
     assert [spec["panel_id"] for spec in specs[::3]] == ["v41r27-panel-0", "v41r27-panel-7", "v41r27-panel-15"]
