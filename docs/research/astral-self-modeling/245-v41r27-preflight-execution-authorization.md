@@ -2,7 +2,7 @@
 
 State slice: `V41R27ModelBackedPreflightAuthorizationAndExecution`.
 
-Status: `AuthorizedOnce / NotYetConsumed`.
+Status: `Consumed`.
 
 One base-only H100 preflight is authorized as
 `astral-v41r27-preflight-r1`, bound to producer

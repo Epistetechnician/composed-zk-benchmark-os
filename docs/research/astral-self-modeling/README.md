@@ -1,5 +1,6 @@
 # Astral Self-Modeling Research Project
 
+- [V41R27 preflight execution record](246-v41r27-preflight-execution-record.md)
 - [V41R27 preflight execution authorization](245-v41r27-preflight-execution-authorization.md)
 - [V41R27 native worker and sentinel validation](244-v41r27-native-worker-and-sentinel-validation.md)
 - [V41R27 A-GEM retention-stability preregistration](243-v41r27-agem-retention-stability-preregistration.md)
