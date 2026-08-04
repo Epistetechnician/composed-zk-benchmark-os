@@ -11588,3 +11588,32 @@ Level2+ evidence, proof, semantic correctness, production readiness, SOTA,
 independent audit, or full security. No P4/P5, HSAI, admission, zkbench,
 network, process, filesystem output, credential, runtime-action, or external
 authority surface is added.
+
+## Memory Architecture Sustainability and Serving Efficiency Boundary
+
+Date: 4 August 2026.
+
+Outcome: documentation-only authorization for named state slice
+`phase-799-memory-architecture-sustainability-serving-efficiency-boundary`.
+
+The boundary records the current durable-memory baseline (append-only
+digest-chained ledgers and journals with repository-external raw payloads) and
+the serving reference baseline embedded in the Phase 57+ Phala CVM attestation
+fixture (single-instance vLLM serving Qwen3-Next-80B-A3B-Thinking-FP8 with
+prefix caching at 128K context and 256 concurrent sequences). It locks
+log-structured append-only digest-chained memory as the repository's only
+durable memory architecture, records a standing preference for fixed-size-state
+hybrid-attention serving in long-context and high-concurrency lanes, and routes
+all future serving-efficiency candidates (KDA-class model lanes, serving-side
+KV management, disaggregated KV storage/routing, agent memory-policy modes)
+through measured full economic cost per verified utility evaluation before any
+adoption.
+
+This docs-first slice adds no Rust, Python, Cargo, deployment, manifest, model,
+provider, benchmark, or evidence-lane change and does not permit accepted
+Evidence Ledger mutation, Level2+ evidence, benchmark evidence,
+production-readiness claims, semantic-correctness claims, SOTA claims,
+breakthrough claims, independent-audit claims, full-security claims,
+global-uniqueness claims, or action authority. Model-architecture facts about
+the served model are sourced from the model's public documentation and are not
+verified by this repository.
