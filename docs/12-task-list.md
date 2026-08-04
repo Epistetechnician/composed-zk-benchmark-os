@@ -22212,3 +22212,61 @@ Claim ceiling: local hermetic fixture regression evidence only. No live source,
 execution, clearing, margin, legal-finality, trust-resolution, recovery,
 release, P4/P5, HSAI, admission, zkbench, evidence-promotion, proof, production,
 SOTA, independent-audit, or full-security authority is created.
+
+## Phase 799: Memory Architecture Sustainability and Serving Efficiency Boundary
+
+Status: docs-first boundary complete for named state slice
+`phase-799-memory-architecture-sustainability-serving-efficiency-boundary`.
+
+Goal: lock the durable memory architecture stance and open an evaluation-only
+lane for future serving-efficiency improvements.
+
+Deliverables: one boundary document recording the current durable-memory and
+serving baselines, the standing log-structured append-only digest-chained
+memory policy, the fixed-size-state serving preference, the
+evidence-before-adoption rule, separated cached/uncached cost lines, four
+future candidate classes (KDA-class model lanes, serving-side KV management,
+disaggregated KV storage/routing, agent memory-policy modes), adoption
+preconditions, and the long-term log-growth sustainability note.
+
+Dependencies: existing evidence and admission ledger architecture; the recorded
+Phala CVM attestation fixture baseline; the prospective Recursive Meta-Harness
+P0 cost framework.
+
+Validation gate: docs-only; no code, Cargo, deployment, manifest, model,
+provider, or benchmark surface changes; preserved claim ceilings.
+
+Anti-goals: adopting any candidate technology, model download or acquisition,
+provider spend, CVM manifest mutation, deployment mutation, benchmark
+execution, evidence promotion, SOTA or production-readiness claims.
+
+Exit criteria: the standing policy is recorded so future serving or durable
+memory changes require a separately reviewed state slice with measured
+cost/utility evidence.
+
+## Catalyst Strategy Layer (docs-only, Level 0)
+
+Status: complete as named state slice `catalyst-strategy-operating-model-v1`.
+
+Goal: add a market-facing targeting system on top of the evidence-disciplined
+module portfolio so the repository evolves modularly as market catalysts emerge,
+rather than only accumulating technical depth.
+
+Deliverables: `docs/research/catalyst-strategy/` with the operating model
+(README), the append-only catalyst ledger, the module sensitivity matrix
+(targeting system), the claim-packet forge recipe, and the competitive moat
+statement.
+
+Dependencies: the autoresearch loop, the assumption ledger, and the Phase
+214/254/255 claim-packet-and-reproduction-checker pattern.
+
+Validation gate: docs-only; no code, Cargo, evidence, benchmark, or authority
+changes; every catalyst, sensitivity rating, and promotion remains a Level 0
+design note.
+
+Anti-goals: claiming any catalyst will fire, packaging that creates or raises
+evidence, production-readiness or SOTA claims, competitor capability claims, or
+any execution, settlement, or authority.
+
+Exit criteria: the targeting layer is indexed in the README and can drive
+claim-packet stamping via the forge without touching evidence maturity.

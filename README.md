@@ -939,6 +939,11 @@ Surface DSL
 | [docs/research/astral-self-modeling/41-v22-execution-record.md](docs/research/astral-self-modeling/41-v22-execution-record.md) | V22 validated qualification stop with assessment unopened. |
 | [docs/research/astral-self-modeling/42-capability-tier-replication-v23.md](docs/research/astral-self-modeling/42-capability-tier-replication-v23.md) | V23 prospective fresh-concept Llama 1B perturbation replication. |
 | [docs/research/astral-self-modeling/43-v23-execution-record.md](docs/research/astral-self-modeling/43-v23-execution-record.md) | V23 validated Llama 1B qualification stop with assessment unopened. |
+| [docs/research/catalyst-strategy/README.md](docs/research/catalyst-strategy/README.md) | Catalyst strategy operating model: market-facing loop, claim boundary, cadence, artifact index. |
+| [docs/research/catalyst-strategy/catalyst-ledger.md](docs/research/catalyst-strategy/catalyst-ledger.md) | Append-only ledger of market catalysts, statuses, and dated iterations. |
+| [docs/research/catalyst-strategy/module-sensitivity-matrix.md](docs/research/catalyst-strategy/module-sensitivity-matrix.md) | Targeting system mapping modules to catalysts and pre-declared exercise actions. |
+| [docs/research/catalyst-strategy/claim-packet-forge.md](docs/research/catalyst-strategy/claim-packet-forge.md) | Repeatable recipe to stamp a verifiable claim packet and reproduction checker for a module. |
+| [docs/research/catalyst-strategy/competitive-moat.md](docs/research/catalyst-strategy/competitive-moat.md) | Differentiation thesis vs. tracked competitors and the honest attack surface. |
 
 Statebook publication status: the named slice
 `statebook-whitepaper-prd-and-publication-media-boundary` is
@@ -2493,3 +2498,22 @@ This is local hermetic fixture regression evidence only. It is not execution,
 capital recognition, legal finality, assurance-root resolution, recovery proof,
 permitted release, benchmark evidence, production readiness, SOTA, independent
 audit, or full security.
+
+## Memory Architecture Sustainability and Serving Efficiency Boundary
+
+The docs-first state slice
+`phase-799-memory-architecture-sustainability-serving-efficiency-boundary`
+locks the durable memory architecture stance: log-structured append-only
+digest-chained memory remains the repository's only durable memory layer for
+evidence, admission, journal, trace, and campaign state, and cache- or
+KV-based state is never a source of truth. It records the serving reference
+baseline embedded in the Phase 57+ Phala CVM attestation fixture and a standing
+preference for fixed-size-state hybrid-attention serving in long-context and
+high-concurrency lanes. Future serving-efficiency candidates (KDA-class model
+lanes, serving-side KV management, disaggregated KV storage/routing, agent
+memory-policy modes) are recorded as REFERENCE-ONLY evaluation candidates that
+must be justified by measured full economic cost per verified utility before
+any adoption. See
+[docs/799-phase-memory-architecture-sustainability-serving-efficiency-boundary.md](docs/799-phase-memory-architecture-sustainability-serving-efficiency-boundary.md).
+It adds no code, no deployment change, no model acquisition, no benchmark
+evidence, and no claim above `Level0DesignNote`.
