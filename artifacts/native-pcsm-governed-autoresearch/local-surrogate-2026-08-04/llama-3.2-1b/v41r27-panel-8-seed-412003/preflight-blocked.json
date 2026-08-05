@@ -1,0 +1,15 @@
+{
+  "assessment_opened": false,
+  "classification": "V41R28SurrogatePreflightBlocked",
+  "elapsed_seconds": 3.555597999948077,
+  "preflight": {
+    "incorrect_acquisition_cases": 3,
+    "protected_accuracy": 0.375
+  },
+  "reason": "protected_accuracy_below_1.0",
+  "run_id": "v41r27-panel-8-seed-412003",
+  "state_slice": "V41R28LocalSurrogateAcquisitionGateCharacterization",
+  "substrate": "llama-3.2-1b",
+  "tune_opened": false,
+  "version": "astral.v41r28_local_surrogate_runner.v1"
+}
