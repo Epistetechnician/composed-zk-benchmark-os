@@ -1,0 +1,1 @@
+{"classification": "V41R28SurrogatePreflightBlocked", "run_id": "v41r27-panel-6-seed-412019", "substrate": "llama-3.2-1b", "protected_accuracy": null, "pass": null, "output": "artifacts/native-pcsm-governed-autoresearch/local-surrogate-2026-08-04/llama-3.2-1b/v41r27-panel-6-seed-412019"}
