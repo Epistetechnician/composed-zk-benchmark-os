@@ -2517,3 +2517,18 @@ any adoption. See
 [docs/799-phase-memory-architecture-sustainability-serving-efficiency-boundary.md](docs/799-phase-memory-architecture-sustainability-serving-efficiency-boundary.md).
 It adds no code, no deployment change, no model acquisition, no benchmark
 evidence, and no claim above `Level0DesignNote`.
+
+## Serving Efficiency Lane Inert Metadata
+
+The named state slice `phase-800-serving-efficiency-lane-inert-metadata` is
+implemented in the isolated pure-data `serving-efficiency-lane` crate
+(serde and sha2 only). It binds the Phase 799 recorded serving baseline —
+including the Phase 57+ Phala CVM attestation fixture SHA-256 — into typed
+lane descriptors, the four REFERENCE-ONLY candidate classes, separated
+cached/uncached cost lines, preregistered gates, digest-chained evaluation
+request/report contracts, and a fail-closed adoption decision that stays
+unauthorized without a separately reviewed adoption phase. See
+[docs/800-phase-serving-efficiency-lane-inert-metadata-notes.md](docs/800-phase-serving-efficiency-lane-inert-metadata-notes.md).
+It performs no execution, serving, benchmarking, network, process, or
+filesystem I/O, adopts no candidate technology, changes no deployment, and
+creates no claim above `Level0DesignNote`.

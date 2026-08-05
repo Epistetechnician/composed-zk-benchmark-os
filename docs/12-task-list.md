@@ -22270,3 +22270,34 @@ any execution, settlement, or authority.
 
 Exit criteria: the targeting layer is indexed in the README and can drive
 claim-packet stamping via the forge without touching evidence maturity.
+
+## Phase 800: Serving Efficiency Lane Inert Metadata
+
+Status: implemented for named state slice
+`phase-800-serving-efficiency-lane-inert-metadata`.
+
+Goal: bind the Phase 799 boundary into typed, digest-chained, fail-closed
+inert metadata.
+
+Deliverables: isolated pure-data `serving-efficiency-lane` crate with the
+four candidate classes closed at `ReferenceOnly`; exact Phase 799 baseline
+binding with fixture path, SHA-256, and byte length; lane descriptor
+validation; preregistered gates and measured-results contracts with separated
+cached/uncached cost lines; digest-chained evaluation request/report
+contracts; regime pooling rejection; a fail-closed adoption decision that
+requires every gate plus a named separately reviewed adoption phase; and the
+default inert claim boundary.
+
+Dependencies: Phase 799 boundary; the Phase 57+ Phala CVM attestation
+fixture; workspace serde/sha2.
+
+Validation gate: focused formatting, warning-denied Clippy, eleven crate
+integration tests, and the workspace claim-boundary source scan.
+
+Anti-goals: model execution, serving, benchmarking, network, process, or
+filesystem I/O; model download or acquisition; provider spend; CVM manifest
+or deployment mutation; candidate adoption; evidence promotion; claims above
+`Level0DesignNote`.
+
+Exit criteria: crate compiles and passes all focused gates; adoption remains
+unauthorized without a separately reviewed phase.

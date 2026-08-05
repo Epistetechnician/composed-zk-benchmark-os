@@ -11617,3 +11617,40 @@ breakthrough claims, independent-audit claims, full-security claims,
 global-uniqueness claims, or action authority. Model-architecture facts about
 the served model are sourced from the model's public documentation and are not
 verified by this repository.
+
+## Serving Efficiency Lane Inert Metadata Validation
+
+Date: 4 August 2026.
+
+Outcome: implemented named state slice
+`phase-800-serving-efficiency-lane-inert-metadata`.
+
+The isolated pure-data `serving-efficiency-lane` crate (serde and sha2 only)
+binds the Phase 799 recorded serving baseline into typed contracts. Baseline
+binding is exact-equality fail-closed against fixture path
+`crates/hsai-attestation-phala/tests/fixtures/phala_trust_center_app_2026_06_16.json`,
+SHA-256 `33135af6b978a4f0255cdcf453c3479c46b1fa2d8aac8f019649b4c1ed6becf3`,
+and byte length `54662`. Candidate classes are closed at `ReferenceOnly`;
+evaluation contracts carry separated cached/uncached cost lines; regime
+pooling rejects; and the adoption decision stays unauthorized unless every
+preregistered gate passes and a separately reviewed adoption phase is named —
+and even then remains a metadata-level decision only.
+
+Focused local results:
+
+```text
+cargo fmt -p serving-efficiency-lane -- --check                          PASS
+cargo clippy -p serving-efficiency-lane --all-targets -- -D warnings     PASS
+cargo test -p serving-efficiency-lane                                    PASS (11 tests)
+cargo test -p hsai-e2e-harness --test claim_boundary_source_scan         PASS (7 tests)
+```
+
+The workspace claim-boundary source scan covers the new crate and confirms no
+process or network API usage and no `Proven` maturity emission.
+
+Claim ceiling: inert local metadata only. Not model execution, serving,
+benchmark evidence, accepted evidence, Level2+ evidence, production readiness,
+semantic correctness, SOTA, breakthrough, independent audit, full security, or
+action authority. No candidate technology is adopted and no deployment is
+changed. Model-architecture facts about the served model remain sourced from
+the model's public documentation and are not verified by this repository.
