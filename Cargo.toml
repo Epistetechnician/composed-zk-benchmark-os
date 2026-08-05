@@ -15,6 +15,7 @@ members = [
     "crates/hsai-gateway-digest-checker",
     "crates/hsai-membrane",
     "crates/hsai-native-transcript-preparation",
+    "crates/serving-efficiency-lane",
     "crates/statebook-core",
     "crates/statebook-settlement",
     "crates/zkbench-core",
