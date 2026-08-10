@@ -62,6 +62,16 @@ outcome.
   and do not start either scientific arm;
 - no retries, substitutions, tuning, threshold changes, assessment, or census update;
 - export and verify both result directories, then stop the node immediately.
+- execute the control first, then the intervention, on the same physical node
+  and disk with separate fresh Python processes; do not reset or recreate the
+  node between arms, and record the node identity and arm timestamps;
+- the wrapper must be committed and content-addressed before node creation,
+  with its exact source hash, entrypoint, command bytes, and expected import
+  paths recorded in this identity; a missing or mismatched wrapper is a
+  fail-closed infrastructure result;
+- bind the independent artifact validator identity, validator source hash,
+  and durable artifact destination before launch; missing custody or validator
+  verification is non-scientific and stops the identity.
 
 ## Outcomes and interpretation
 
