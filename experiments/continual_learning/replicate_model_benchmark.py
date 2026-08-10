@@ -43,10 +43,10 @@ def summarize(rows: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def run_campaign(output_root: Path, model: Path, iters: int) -> dict[str, Any]:
-    if output_root.exists():
+def run_campaign(output_root: Path, model: Path, iters: int, resume: bool = False) -> dict[str, Any]:
+    if output_root.exists() and not resume:
         raise RuntimeError(f"refusing overwrite of immutable output: {output_root}")
-    output_root.mkdir(parents=True)
+    output_root.mkdir(parents=True, exist_ok=True)
     env = os.environ.copy()
     env.update({"HF_HUB_OFFLINE": "1", "TRANSFORMERS_OFFLINE": "1"})
     rows: list[dict[str, Any]] = []
@@ -75,13 +75,16 @@ def run_campaign(output_root: Path, model: Path, iters: int) -> dict[str, Any]:
             "--iters",
             str(iters),
         ]
-        completed = subprocess.run(command, env=env, text=True, capture_output=True, check=False)
-        (output_root / f"seed-{seed}-order-{order_name}.log").write_text(
-            completed.stdout + "\n" + completed.stderr,
-            encoding="utf8",
-        )
-        if completed.returncode != 0:
-            raise RuntimeError(f"replication failed for seed={seed}, order={order}: {completed.returncode}")
+        if not run_root.exists():
+            completed = subprocess.run(command, env=env, text=True, capture_output=True, check=False)
+            (output_root / f"seed-{seed}-order-{order_name}.log").write_text(
+                completed.stdout + "\n" + completed.stderr,
+                encoding="utf8",
+            )
+            if completed.returncode != 0:
+                raise RuntimeError(f"replication failed for seed={seed}, order={order}: {completed.returncode}")
+        elif not (run_root / "result.json").exists():
+            raise RuntimeError(f"incomplete immutable output for seed={seed}, order={order}")
         validation = subprocess.run(
             [
                 sys.executable,
@@ -139,8 +142,13 @@ def main() -> int:
         default=Path("/Users/shaanp/.lmstudio/models/mlx-community/Qwen2.5-0.5B-Instruct-4bit"),
     )
     parser.add_argument("--iters", type=int, default=40)
+    parser.add_argument("--resume", action="store_true")
     args = parser.parse_args()
-    print(json.dumps(run_campaign(args.output.resolve(), args.model.resolve(), args.iters), indent=2, sort_keys=True))
+    print(json.dumps(
+        run_campaign(args.output.resolve(), args.model.resolve(), args.iters, args.resume),
+        indent=2,
+        sort_keys=True,
+    ))
     return 0
 
 
