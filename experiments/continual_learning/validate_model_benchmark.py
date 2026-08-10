@@ -22,7 +22,7 @@ def validate(root: Path) -> dict:
     config = json.loads((root / "config.json").read_text())
     tasks = json.loads((root / "tasks.json").read_text())
     result = json.loads((root / "result.json").read_text())
-    if result["state_slice"] != "continual-learning-model-adapter-v5-replay-exposure-audit":
+    if result["state_slice"] != "continual-learning-model-adapter-v6-balanced-full-memory-replay":
         raise ValueError("state slice mismatch")
     if result["breakthrough_claim_eligible"] is not False:
         raise ValueError("pilot cannot claim breakthrough eligibility")
@@ -35,17 +35,17 @@ def validate(root: Path) -> dict:
         raise ValueError("training/assessment prompt parity is not locked")
     if prompt_contract.get("answer_suffix") != "\nAnswer:":
         raise ValueError("answer suffix drift")
-    if config.get("replay_policy") != "stratified_hash_replay_v1":
+    if config.get("replay_policy") != "balanced_full_memory_v1":
         raise ValueError("replay policy drift")
-    if config.get("replay_examples_per_update") != 8 or config.get("current_examples_per_update") != 8:
+    if config.get("replay_examples_per_update") != 24 or config.get("current_examples_per_update") != 8:
         raise ValueError("update budget split drift")
     fixed_config = {
         "seed": 20260810,
         "order": [0, 1, 2, 3],
         "task_count": 4,
         "facts_per_task": 8,
-        "replay_capacity": 16,
-        "update_budget": 16,
+        "replay_capacity": 24,
+        "update_budget": 32,
         "optimizer": "adamw",
         "learning_rate": 0.0001,
         "batch_size": 2,
@@ -57,6 +57,7 @@ def validate(root: Path) -> dict:
         "checkpoint_target_task_id": 0,
         "checkpoint_assessment_variant": "direct",
         "checkpoint_assessment_context_mode": "none",
+        "iters": 40,
     }
     for key, expected in fixed_config.items():
         if config.get(key) != expected:
@@ -120,6 +121,13 @@ def validate(root: Path) -> dict:
             ))
             if update["replay_counts_by_task"] != expected_counts:
                 raise ValueError(f"replay count audit mismatch: {strategy}/step-{step}")
+            if strategy == "replay_lora":
+                expected_full_replay = {
+                    str(prior_task): config["facts_per_task"]
+                    for prior_task in range(task_id)
+                }
+                if update["replay_counts_by_task"] != expected_full_replay:
+                    raise ValueError(f"full replay policy mismatch: {strategy}/step-{step}")
             dataset_path = root / "data" / strategy / f"step-{step}" / "train.jsonl"
             rows = [json.loads(line) for line in dataset_path.read_text().splitlines()]
             if len(rows) != config["update_budget"] or update["dataset_row_count"] != len(rows):

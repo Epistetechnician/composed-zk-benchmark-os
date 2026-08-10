@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 
-STATE_SLICE = "continual-learning-model-adapter-v5-replay-exposure-audit"
+STATE_SLICE = "continual-learning-model-adapter-v6-balanced-full-memory-replay"
 LABELS = ("A", "B", "C", "D")
 ANSWER_SUFFIX = "\nAnswer:"
 DEFAULT_MODEL = Path(
@@ -141,6 +141,18 @@ def replay_counts_by_task(facts: Iterable[Fact]) -> dict[str, int]:
     return dict(sorted(counts.items()))
 
 
+def choose_balanced_full_replay(
+    previous: Iterable[Fact], capacity: int, limit: int | None = None
+) -> list[Fact]:
+    """Return every prior fact once, ordered deterministically by task and id."""
+
+    if capacity <= 0:
+        return []
+    facts = sorted(previous, key=lambda fact: (fact.task_id, fact.fact_id))
+    selected = facts[:capacity]
+    return selected if limit is None else selected[:limit]
+
+
 def write_json(path: Path, value: Any) -> None:
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf8")
 
@@ -234,10 +246,9 @@ def train_sequence(
         if strategy == "naive_sequential_lora":
             selected = current
         elif strategy == "replay_lora":
-            replay = choose_replay(
+            replay = choose_balanced_full_replay(
                 observed,
                 replay_capacity,
-                seed,
                 limit=update_budget - len(current),
             )
             selected = current + replay
@@ -441,7 +452,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "update_budget": args.update_budget,
         "current_examples_per_update": args.facts_per_task,
         "replay_examples_per_update": args.update_budget - args.facts_per_task,
-        "replay_policy": "stratified_hash_replay_v1",
+        "replay_policy": "balanced_full_memory_v1",
         "optimizer": "adamw",
         "learning_rate": 0.0001,
         "batch_size": 2,
@@ -504,8 +515,8 @@ def main() -> int:
     parser.add_argument("--order", default="0,1,2,3")
     parser.add_argument("--task-count", type=int, default=4)
     parser.add_argument("--facts-per-task", type=int, default=8)
-    parser.add_argument("--replay-capacity", type=int, default=16)
-    parser.add_argument("--update-budget", type=int, default=16)
+    parser.add_argument("--replay-capacity", type=int, default=24)
+    parser.add_argument("--update-budget", type=int, default=32)
     parser.add_argument("--iters", type=int, default=40)
     args = parser.parse_args()
     print(json.dumps(run(args), indent=2, sort_keys=True))
