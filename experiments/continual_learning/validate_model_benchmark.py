@@ -18,7 +18,15 @@ def digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
-def validate(root: Path) -> dict:
+def validate(
+    root: Path,
+    expected_seed: int | None = None,
+    expected_order: list[int] | None = None,
+) -> dict:
+    if expected_seed is None:
+        expected_seed = 20260810
+    if expected_order is None:
+        expected_order = [0, 1, 2, 3]
     config = json.loads((root / "config.json").read_text())
     tasks = json.loads((root / "tasks.json").read_text())
     result = json.loads((root / "result.json").read_text())
@@ -40,8 +48,8 @@ def validate(root: Path) -> dict:
     if config.get("replay_examples_per_update") != 24 or config.get("current_examples_per_update") != 8:
         raise ValueError("update budget split drift")
     fixed_config = {
-        "seed": 20260810,
-        "order": [0, 1, 2, 3],
+        "seed": expected_seed,
+        "order": expected_order,
         "task_count": 4,
         "facts_per_task": 8,
         "replay_capacity": 24,
@@ -176,9 +184,17 @@ def validate(root: Path) -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("root", type=Path)
+    parser.add_argument("--expected-seed", type=int)
+    parser.add_argument("--expected-order")
     args = parser.parse_args()
+    expected_order = None
+    if args.expected_order is not None:
+        expected_order = [int(value) for value in args.expected_order.split(",")]
     try:
-        print(json.dumps(validate(args.root.resolve()), sort_keys=True))
+        print(json.dumps(
+            validate(args.root.resolve(), args.expected_seed, expected_order),
+            sort_keys=True,
+        ))
     except Exception as exc:
         print(json.dumps({"valid": False, "reason": str(exc)}, sort_keys=True))
         return 1
