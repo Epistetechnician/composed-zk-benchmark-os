@@ -21,10 +21,6 @@ const AUTHORIZED_ENV_VARS: &[&str] = &[
 #[test]
 fn example_source_exists_and_carries_fixed_acknowledgement() {
     assert!(
-        !EXAMPLE_SOURCE.is_empty(),
-        "operator soak campaign example source must exist"
-    );
-    assert!(
         EXAMPLE_SOURCE.contains(
             "\"I acknowledge this soak campaign produces local Level0DesignNote telemetry only.\""
         ),

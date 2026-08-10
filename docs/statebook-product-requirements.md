@@ -72,6 +72,10 @@ margin relief, or settles value. AI may propose source mappings, portfolio
 candidates, scenarios, and explanations. Deterministic validation and human-
 governed policy remain authoritative.
 
+![Seven independent completeness reports](media/statebook/seven-completeness-tests.svg)
+
+*Figure 1. The product reports seven independent dimensions rather than a single completion score. Original explanatory architecture illustration; not evidence of implementation, authority, or market fact.*
+
 ## Product Principles
 
 1. Same reference is not same contract.
@@ -86,6 +90,10 @@ governed policy remain authoritative.
 9. Pending or anomalous value has zero reusable financial value.
 10. Every consequential decision is digest-bound, reproducible, and explicitly
     non-authoritative until a separate authority consumes it.
+
+![Assurance-adjusted settlement controller](media/statebook/assurance-settlement-controller.svg)
+
+*Figure 2. Hard gates, budgets, clocks, and state transitions are non-substitutable controls; a failure on one cannot be compensated by another. Original explanatory architecture illustration; not evidence of implementation, authority, or market fact.*
 
 ## Users and Jobs
 

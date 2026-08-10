@@ -1,0 +1,44 @@
+{
+  "case_id": 3070,
+  "stage": 1,
+  "input_length": 3,
+  "num_states": 3,
+  "valid_json": false,
+  "recoverable_json": true,
+  "schema_valid": true,
+  "expected_trajectory_length": 4,
+  "reported_trajectory_length": 4,
+  "trajectory_exact": false,
+  "final_state_exact": false,
+  "accepted_exact": false,
+  "state_accuracy": 0.75,
+  "prefix_accuracy": 0.75,
+  "first_divergence_index": 3,
+  "symbol_at_first_divergence": "1",
+  "state_before_first_divergence": "B",
+  "expected_state_at_divergence": "A",
+  "reported_state_at_divergence": "B",
+  "overall_exact": false,
+  "oracle_answer": {
+    "trajectory": [
+      "A",
+      "C",
+      "B",
+      "A"
+    ],
+    "final_state": "A",
+    "accepted": false
+  },
+  "parsed_response": {
+    "trajectory": [
+      "A",
+      "C",
+      "B",
+      "B"
+    ],
+    "final_state": "B",
+    "accepted": true
+  },
+  "condition": "control",
+  "baseline_case_id": 3070
+}

@@ -1,0 +1,4 @@
+# Generated Statebook publication artifacts contain legal PDF stream whitespace.
+# Keep their bytes intact and exclude them from source-text whitespace checks.
+output/pdf/statebook-whitepaper.pdf binary
+output/pdf/statebook-product-requirements.pdf binary

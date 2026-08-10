@@ -924,6 +924,538 @@ component inventory instead of seven bare names.
 binds exact rustup identity, inventory hash, marked-installed parsing, and
 direct acceptance failure propagation for Phase 764. It runs no tool/backend.
 
+[docs/764-phase-hsai-gateway-threat-ordinal-manual-orchestration-stop.md](docs/764-phase-hsai-gateway-threat-ordinal-manual-orchestration-stop.md)
+records the pre-root stop after a stale clean-primary assertion contradicted
+the committed detached dirty-primary rule. No owned path or producer ran.
+
+[docs/765-phase-hsai-formal-execution-state-machine-boundary.md](docs/765-phase-hsai-formal-execution-state-machine-boundary.md)
+replaces further ad hoc shell attempts with an immutable, tested execution
+state-machine implementation boundary for Phase 766. It runs no backend.
+
+[docs/766-phase-hsai-formal-execution-state-machine-implementation.md](docs/766-phase-hsai-formal-execution-state-machine-implementation.md)
+implements the twelve-stage canonical state, command validation, terminal
+first-failure executor, and clean-or-dirty primary snapshot verification. Its
+25 focused and 55 total helper tests pass; no backend ran.
+
+[docs/767-phase-hsai-formal-execution-fixture-adapter-boundary.md](docs/767-phase-hsai-formal-execution-fixture-adapter-boundary.md)
+closes the exact Phase 732 fixture conflict and specifies the typed bounded-
+runner producer adapter for Phase 768. It runs no producer or backend.
+
+[docs/768-phase-hsai-formal-execution-bounded-adapter-implementation.md](docs/768-phase-hsai-formal-execution-bounded-adapter-implementation.md)
+implements typed producer metadata, the exact fixture-only exception, and the
+canonical bounded-runner adapter. Its 36 focused and 66 total preflight tests
+pass; no network or backend ran.
+
+[docs/769-phase-hsai-formal-execution-complete-plan-boundary.md](docs/769-phase-hsai-formal-execution-complete-plan-boundary.md)
+specifies the closed operation taxonomy and deterministic complete-plan gate
+needed to represent assertions, materialization, loopback lifetime, cleanup,
+and every inherited command without hidden shell orchestration.
+
+[docs/770-phase-hsai-formal-execution-complete-plan-implementation.md](docs/770-phase-hsai-formal-execution-complete-plan-implementation.md)
+implements the canonical 65-operation contract plan, exact closed payload
+validation, deterministic plan hashing, exhaustive reachability and
+first-failure routing, and mandatory cleanup. Its 53 focused and 83 total
+preflight tests pass; no acquisition, formal backend, SMT, or COBALT run
+occurred.
+
+[docs/771-phase-hsai-formal-execution-correspondence-correction-boundary.md](docs/771-phase-hsai-formal-execution-correspondence-correction-boundary.md)
+records that the Phase 770 v1 digest is not executable: several operations
+aggregate independently bounded commands, stage network labels are not exact
+capabilities, templates and artifacts lack safe resolution contracts, and
+cleanup lacks aggregate results. It specifies a versioned plan-v2 correction
+before executor materialization; no tool or backend ran.
+
+[docs/772-phase-hsai-formal-execution-command-spec-completeness-stop.md](docs/772-phase-hsai-formal-execution-command-spec-completeness-stop.md)
+records the pre-implementation stop after all 35 bounded v1 entries were found
+to lack at least one exact `CommandSpec` field and several were found to
+aggregate independently bounded child commands. No source or producer ran;
+Phase 773 must normalize one exact source row per actual child command.
+
+[docs/773-phase-hsai-formal-execution-source-normalization-stop.md](docs/773-phase-hsai-formal-execution-source-normalization-stop.md)
+normalizes 74 identifiable command obligations and the capability-closure
+order, then stops because the exact child total and a truthful ledger digest
+remain blocked by four unresolved command-cardinality families. No source,
+producer, network, tool, or backend was touched.
+
+[docs/774-phase-hsai-formal-execution-command-family-resolution.md](docs/774-phase-hsai-formal-execution-command-family-resolution.md)
+resolves those families to exactly 84 ordinary bounded commands, freezes
+shared transcript/environment/bounds rules and network closure, and publishes
+a non-executable resolution-contract digest. It creates no 84-row source
+ledger and runs no producer or backend.
+
+[docs/775-phase-hsai-formal-execution-source-ledger-stop.md](docs/775-phase-hsai-formal-execution-source-ledger-stop.md)
+records that the Phase 774 arithmetic is mechanically valid but not yet a
+canonical producer closure. Executable symlink identity, typed placeholders,
+sandbox wrapping, packaged-asset audit cardinality, the Charon-driver loader
+target, environment compatibility, and retained green-kernel evidence remain
+blocked. No source ledger, plan v2, producer, backend, or kernel command exists.
+
+[docs/776-phase-hsai-formal-execution-contract-correction.md](docs/776-phase-hsai-formal-execution-contract-correction.md)
+closes that documentation boundary with typed executable-role resolution,
+literal sandbox-wrapper argv correspondence, no-overwrite Lean extraction,
+18 packaged-Aeneas audits, 10 source-built Charon audits, a corrected total of
+102 ordinary commands, a closed replacement environment, and a path-free
+retained kernel evidence schema. The correction digest identifies design
+decisions only; no source ledger, producer, backend, or kernel command exists.
+
+[docs/777-phase-hsai-formal-execution-pre-use-ordering-stop.md](docs/777-phase-hsai-formal-execution-pre-use-ordering-stop.md)
+records the fail-closed pre-use ordering audit. Phase 776 places packaged
+Aeneas and source-built Charon version producers before their required native
+acceptance. The 102-command cardinality is preserved, but no expanded ledger or
+digest exists until Phase 778 publishes and audits the corrected exact order.
+
+[docs/778-phase-hsai-formal-execution-operation-order-correction.md](docs/778-phase-hsai-formal-execution-operation-order-correction.md)
+publishes the corrected 102-ID order and deterministic order-contract digest.
+Static packaged and source-built native acceptance now precedes executable
+version and driver-load producers; fresh Charon source identities follow build
+and precede extraction; network closure, loopback, sandbox, kernel,
+cleanup, and final-primary constraints are preserved. No ledger or producer
+exists.
+
+[docs/779-phase-hsai-formal-source-ledger-expansion.md](docs/779-phase-hsai-formal-source-ledger-expansion.md)
+expands the 102-command order into closed field-complete JSONL rows. Exact
+ordinals, IDs, transcript paths, 28 native outcomes, and selected immutable
+executable roles coexist with declared capabilities and typed blockers for
+every unsupported field, including unresolved exact row-level controlling
+sources and placeholders. All rows remain blocked; no source-ledger digest,
+plan, executor, machine resolution, or producer exists. Phase 780 later
+disputes capability source correspondence for rows 036, 037, 059, and 060.
+
+[docs/780-phase-hsai-formal-blocker-resolution-matrix.md](docs/780-phase-hsai-formal-blocker-resolution-matrix.md)
+recomputes 1,469 JSONL blockers across nine causes, assigns canonical JSONL
+serialization, and identifies a separate capability-source discrepancy on
+rows 036, 037, 059, and 060. Its eleven-lane matrix names exact operation sets,
+fields, source inputs, immutable outputs, review criteria, exit gates, and
+ordered successor phases. It resolves no row and preserves the no-digest,
+no-plan, and no-execution boundary.
+
+[docs/781-phase-hsai-formal-capability-source-correspondence-correction.md](docs/781-phase-hsai-formal-capability-source-correspondence-correction.md)
+records Phase 781 resolution of the Phase 780 `L01` discrepancy for
+successor-ledger construction.
+Rows 036, 037, 059, and 060 return to `host-offline`; the exact capability
+partition becomes 10 external-acquisition, 63 host-offline, and 29
+sandbox-closed rows. Sandbox obligations are removed from those four rows,
+while unresolved extractor roles on rows 036 and 037 remain blocked. The
+historical ledger, 1,469 blockers, 102 blocked rows, and no-digest boundary are
+unchanged.
+
+[docs/782-phase-hsai-formal-acquisition-and-installer-argv-contracts.md](docs/782-phase-hsai-formal-acquisition-and-installer-argv-contracts.md)
+records Phase 782 resolution of Phase 780 lanes `L02` and `L03`. It freezes
+four complete curl argv arrays and one isolated noninteractive Rustup argv
+array with exact URLs, output paths, toolchain token, profile, and component
+requests. Executable-role machine acceptance remains deferred to Phase 788;
+historical Phase 779 JSONL, all 1,469 blockers, all 102 blocked rows, and the
+absent source-ledger digest remain unchanged. Phase 783 is the next authorized
+documentation-first helper-order lane.
+
+[docs/783-phase-hsai-formal-helper-pre-use-ordering-stop.md](docs/783-phase-hsai-formal-helper-pre-use-ordering-stop.md)
+records a source-correspondence stop before Phase 780 lane `L04` closure.
+Phase 759 requires three helper-hash child producers before ordinal 007, but
+Phase 771 requires one operation per child and the fixed Phase 778 order has
+no helper-hash rows. The inherited `py_compile` validation shape also creates
+undeclared bytecode output. Historical Phase 779 JSONL, all 1,469 blockers,
+all 102 blocked rows, and the absent source-ledger digest remain unchanged.
+`L04` through `L11` stay open; the closure schedule requires explicit route
+and operation-order correction before native-transcript work.
+
+[docs/784-phase-hsai-formal-helper-pre-use-route-correction.md](docs/784-phase-hsai-formal-helper-pre-use-route-correction.md)
+records the Phase 784 resolution of that conflict and Phase 780 lane `L04`.
+Six exact Phase 749 files now require typed descriptor-relative in-process
+identity acceptance before use, so no helper-hash child row is added. Exact
+no-bytecode compile and explicit three-module unittest argv arrays preserve the
+Phase 778 102-operation order and digest. Historical Phase 779 JSONL, all 1,469
+blockers, all 102 blocked rows, and the absent source-ledger digest remain
+unchanged. `L05` through `L11` stay open; Phase 785 is the next authorized
+documentation-first native-transcript lane under the corrected schedule.
+
+[docs/785-phase-hsai-formal-native-transcript-fixture-provenance-stop.md](docs/785-phase-hsai-formal-native-transcript-fixture-provenance-stop.md)
+records the Phase 785 stop before Phase 780 lane `L05` closure. The exact 21
+native-audit rows and expected process outcomes are known, but accepted
+native-tool identity and version bindings, raw identity-bound transcript bytes,
+immutable positive and negative fixtures, and reviewed total parser grammars
+are absent. Because machine identity acceptance remains deferred to `L09` and
+Phase 785 prohibits native capture, closing `L05` would invent provenance.
+Historical Phase 779 JSONL, all 1,469 blockers, all 102 blocked rows, and the
+absent source-ledger digest remain unchanged. `L05` through `L11` stay open;
+Phase 786 is restricted to documentation-first route correction.
+
+[docs/786-phase-hsai-formal-native-transcript-dependency-route-correction.md](docs/786-phase-hsai-formal-native-transcript-dependency-route-correction.md)
+records the Phase 786 correction of the `L05`/`L09` dependency order. It
+resolves no lane and authorizes no native capture. `L09` executable-role and
+machine-policy authority now precedes a fixture-acquisition protocol and
+readiness audit, conditional identity-bound corpus capture, and `L05` grammar
+closure. The corrected downstream schedule ends with Phase 798 whole-ledger
+audit and makes Phase 799 the earliest possible plan-v2 boundary. Historical
+Phase 779 JSONL, all 1,469 blockers, all 102 blocked rows, and the absent
+source-ledger digest remain unchanged. Phase 787 is documentation-first only
+for `L09`.
+
+[docs/787-phase-hsai-formal-executable-role-registry-machine-policy.md](docs/787-phase-hsai-formal-executable-role-registry-machine-policy.md)
+records Phase 787 closure of `L09` at the immutable contract-input level. The
+registry defines 26 roles, four acceptance-policy classes, exact complete
+bindings for all 83 `E83` rows, an external machine-policy schema, an
+attempt-specific observation schema, and exact `darwin-native-v1` selector
+inputs. Machine paths and observations remain external. Historical Phase 779
+JSONL, all 1,469 blockers, all 102 blocked rows, and the absent source-ledger
+digest remain unchanged. Resolved lanes are `L01-L04,L09`; Phase 788 is next
+for the documentation-first `P01` fixture-acquisition readiness audit.
+
+[docs/788-phase-hsai-formal-native-transcript-fixture-acquisition-readiness-audit.md](docs/788-phase-hsai-formal-native-transcript-fixture-acquisition-readiness-audit.md)
+records the complete documentation-first `P01` protocol and a `not-ready`
+decision. Static correspondence confirms 21 exact `N21` rows partitioned as
+`5/5/3/6/2`, exact argv and capture bounds, six target slots, positive-corpus
+and portable path schemas, byte-preserving publication, seven deterministic
+negative classes, and distinct reviewer roles. No concrete native-tool policy,
+identity observation, target bytes, ordinal-073 build receipt, raw corpus,
+manifest, or named reviewers exist, so Phase 789 capture is not authorized.
+No lane closes and the Phase 779 blocker state and claim ceiling are unchanged.
+
+[docs/789-phase-hsai-formal-native-transcript-capture-prerequisite-route-correction.md](docs/789-phase-hsai-formal-native-transcript-capture-prerequisite-route-correction.md)
+records the documentation-first correction after that stop. It adds the omitted
+`SANDBOX_EXEC_EXE` observation and wrapper/profile provenance, separates
+preparation and capture roots, freezes the seven-role preparation closure,
+orders thirteen materialization checkpoints, and keeps input materialization,
+corpus capture, and `L05` grammar closure distinct. Static review confirms that
+Phase 789 runs nothing, closes no lane, preserves the historical blocker state,
+and moves the earliest plan-v2 boundary to Phase 801.
+
+[docs/790-phase-hsai-native-transcript-preparation-candidate-validation.md](docs/790-phase-hsai-native-transcript-preparation-candidate-validation.md)
+records the next fail-closed implementation slice. The standalone
+`hsai-native-transcript-preparation` crate validates only caller-supplied
+policy, platform, identity-fact, owned-tool, target, sandbox, root, and reviewer
+declarations. It exposes no host collector or authority input and always emits
+`materialization_accepted=false` and `capture_authorized=false`. Eight focused
+integration tests pass. Static source review confirms no filesystem, process,
+environment, or network API exists in
+the crate. `P01B` remains stopped; no lane closes; earliest plan v2 moves to
+Phase 806 behind a safe collector, driver, conditional materialization,
+capture, grammar closure, row expansion, and independent audit.
+
+[docs/791-phase-hsai-native-transcript-descriptor-relative-collector-boundary.md](docs/791-phase-hsai-native-transcript-descriptor-relative-collector-boundary.md)
+records the docs-first safety contract for Phase 792. Local dependency review
+confirmed the locked `rustix 1.1.4` filesystem API, locked `libc 0.2.186`
+`MNT_LOCAL` constant, and their Rust 1.63/1.65 minimums, while the workspace
+Rust 1.74 toolchain is installed. The contract requires retained
+descriptor-relative traversal, normalized non-overlapping roots, 32-hop and
+1-GiB bounds, exact stable metadata, final object rechecks, closed errors, and
+deterministic race injection. Static review confirms Phase 791 changes no Rust
+or Cargo file and collects no machine observation.
+
+[docs/792-phase-hsai-native-transcript-descriptor-relative-collector-implementation.md](docs/792-phase-hsai-native-transcript-descriptor-relative-collector-implementation.md)
+records the bounded local implementation. The macOS collector uses retained
+`rustix` directory descriptors, no-follow component traversal, exact-root
+symlink resolution, bounded descriptor hashing, complete stable metadata, and
+final object rechecks. Focused current-toolchain tests, strict clippy, and the
+locked Rust 1.74 test lane pass; the focused suite contains 28 tests, including
+channel-coordinated deterministic mutation-window tests. Static source checks
+reject process, network, environment-variable, shell, pathname-canonicalization,
+unsafe, and libc-call surfaces. The output is a local observation-window fact only. `P01B`,
+capture, all open Phase 780 lanes, source-ledger digest publication, plan v2,
+backend execution, and accepted evidence remain stopped.
+
+[docs/793-phase-hsai-operator-preparation-driver-source-receipt-boundary.md](docs/793-phase-hsai-operator-preparation-driver-source-receipt-boundary.md)
+records the docs-first Phase 794 contract. It defines closed source-receipt
+classes, exact subject-byte correspondence, domain-separated raw ES256
+signatures, separate in-memory fixture verification profiles,
+producer/reviewer separation, ordered fresh collection for all eight host
+roles, and an always-false materialization/capture authority result. Fixture
+profiles prove correspondence to caller-selected keys only; real reviewer-key
+authority remains deferred to Phase 795.
+Static review confirms no driver, key, source, machine fact, process, network,
+filesystem output, or materialization capability is added. `P01B`, capture,
+open Phase 780 lanes, source-ledger digest publication, plan v2, backend
+execution, and accepted evidence remain stopped.
+
+[docs/794-phase-hsai-hermetic-operator-preparation-driver-implementation.md](docs/794-phase-hsai-hermetic-operator-preparation-driver-implementation.md)
+records the bounded Phase 794 implementation. The crate now exposes one
+in-memory request entrypoint, strict receipt/profile/source-manifest wires,
+domain-separated identities, low-S raw ES256 fixture-key verification, and
+direct ordered Phase 792 collector dispatch. Private test-only subject bindings
+and collection cover deterministic success and failure without weakening the
+production API. Focused current-toolchain and strict-clippy gates pass across 50
+tests. Materialization and capture booleans remain false; reviewer authority,
+`P01B`, capture, all open Phase 780 lanes, source-ledger digest publication,
+plan v2, backend execution, and accepted evidence remain stopped.
+
+[docs/795-phase-hsai-external-attempt-authorization-p01b-materialization-boundary.md](docs/795-phase-hsai-external-attempt-authorization-p01b-materialization-boundary.md)
+records the docs-first external-authority and transactional materialization
+contract. It separates fixture-key correspondence from operator-pinned trust,
+binds any future authorization to exact Phase 794 request, decision, receipt,
+profile, subject, and fact identities, and freezes strict time, replay,
+independent output-review, publication, and cleanup requirements.
+
+The audit also records unresolved prerequisites: Phase 792 observations do not
+yet prove launch of the same inode; P01B has no exact producer command contract;
+and archive/build child trust inventories, trusted reservation time, anti-
+rollback journal compare-and-swap, recovery, and audit-root inventory remain
+incomplete. Static review confirms Phase 795 adds no Rust or Cargo change, authorization, plan,
+process, network access, filesystem write, target, handoff, transcript, lane
+closure, source-ledger digest, backend result, or evidence. Phase 796 is
+documentation-only for those execution-correspondence closures.
+
+[docs/796-phase-hsai-p01b-execution-correspondence-transaction-authority-stop.md](docs/796-phase-hsai-p01b-execution-correspondence-transaction-authority-stop.md)
+records the resulting fail-closed audit. Exact operation ordering is available,
+but the repository lacks a documented macOS descriptor-bound launch mechanism,
+the retained byte-complete Aeneas archive ledger and its exact extraction
+bounds, an observed build-descendant and loader trust census, provisioned
+trusted-time and anti-rollback journal
+authorities, and field-complete wires for all 56 bootstrap/runtime/failure/
+recovery operations.
+
+Static review confirms that Phase 796 publishes no
+`preparation_contract_sha256` and does not activate Phase 797. It changes
+Markdown only and adds no Rust, Cargo metadata, archive access, source
+acquisition, process, network, filesystem materialization, journal mutation,
+plan template, backend result, accepted evidence, or stronger claim. The Phase
+780 lane state remains `L01-L04,L09` resolved and `L05-L08,L10-L11` open; the
+Phase 779 ledger remains 102 blocked rows with 1,469 blockers and no digest.
+
+[docs/796a-phase-hsai-p01b-archive-ledger-parser-and-acquisition-separation-boundary.md](docs/796a-phase-hsai-p01b-archive-ledger-parser-and-acquisition-separation-boundary.md)
+records the first Phase 796 remediation boundary. It freezes a future additive
+hermetic parser for explicit gzip-member framing and raw TAR blocks, finite
+decompression, extraction, process-resource, and ledger-output counters, exact
+canonical candidate artifacts, transactional publication, strict profile
+checks, and adversarial tests. It also separates implementation review from any
+later network-enabled acquisition-only run, candidate review, and separately
+authorized local repository two-reviewer acceptance.
+
+Static review confirms that Phase 796-A changes Markdown only. It does not
+modify the historical validator, implement or run a parser, access an archive,
+use network, emit candidate ledgers, accept extraction bounds, close `P796-02`
+or Phase 780 lane `L07`, publish `preparation_contract_sha256`, activate Phase
+797, materialize P01B, execute a backend, or create evidence or stronger claims.
+
+[docs/796a1-phase-hsai-p01b-archive-ledger-parser-implementation.md](docs/796a1-phase-hsai-p01b-archive-ledger-parser-implementation.md)
+records the hermetic Phase 796-A1 implementation. Static review confirms the
+new helper uses only the authorized Python 3.9.6 standard-library surface,
+directly parses bounded gzip/DEFLATE/ustar framing, preserves descriptor-bound
+path identity, publishes only a transactional four-file candidate, and
+independently reconstructs all candidate schemas, fixed limits, pinned
+production authority, and false authority fields.
+
+Observed validation is 68 focused tests and 151 complete formal-preflight
+tests passing, Ruff passing, `cargo fmt --all -- --check` passing, and
+`git diff --check` passing. Two independent development reviews return
+`READY`. Workspace-wide Cargo checking remains blocked by an unrelated,
+preserved mutation in `crates/hsai-agent-admission/src/lib.rs`; Phase 796-A1
+does not modify or stage it.
+
+No real archive is read or acquired and no durable candidate is retained. The
+Phase 796-A1 implementation record precedes the clean-commit A2 audit recorded
+below. Phase 796-A3 acquisition, Phase 797, P01B materialization, transcript
+capture, backend execution, proof artifacts, accepted evidence, Level2+, score
+axes, semantic correctness, production readiness, SOTA, breakthrough, full
+security, and action authority remain unauthorized.
+
+[docs/796a2-phase-hsai-p01b-archive-ledger-clean-commit-audit.md](docs/796a2-phase-hsai-p01b-archive-ledger-clean-commit-audit.md)
+records the Phase 796-A2 zero-gap audit over exact clean commit
+`53442464ec851be46dd1e47b44b0918a14e9cf4a`. Detached validation passes 68
+focused and 151 complete formal-preflight tests, accounts for all 56 observed
+deterministic failure classes, and passes Ruff, Rust formatting, and
+`cargo check --workspace --all-targets`. The actual child limit probe confirms
+CPU 900 seconds, output size 67,108,864 bytes, and 32 open descriptors.
+
+Two independent reviewers accept all ten contract controls with zero findings.
+The retained canonical aggregate digest is
+`5301f672b057396791e85af8c16194617accaf40df087f9a967e4ef148d15dfb`.
+Static review confirms no convenience gzip/TAR parser, extraction, network,
+real archive access, or durable candidate path was exercised.
+
+The A2 decision explicitly retains `phase_796_a3_authorized=false` and
+`acquisition_authorized=false`. Phase 796-A3 acquisition, Phase 797, P01B
+materialization, transcript capture, backend execution, proof artifacts,
+accepted evidence, Level2+, score axes, semantic correctness, production
+readiness, SOTA, breakthrough, full security, external audit, and action
+authority remain unauthorized.
+
+[docs/796a2s-phase-hsai-p01b-resident-memory-supervisor-feasibility-stop.md](docs/796a2s-phase-hsai-p01b-resident-memory-supervisor-feasibility-stop.md)
+records the docs-first Phase 796-A2S prerequisite stop. Primary-source review
+confirms Darwin's `RLIMIT_RSS` is an alias for address-space
+`RLIMIT_AS`, not an independent hard resident-set ceiling. The
+selected macOS 15.7.5 arm64 host reports both constants as 5, and direct libc
+installation of the required 536,870,912-byte soft and hard limit returns
+`EINVAL` while preserving unlimited values.
+
+The host has Docker Desktop with a Linux arm64, cgroup-v2 engine. Docker
+documents a hard `--memory` control, but no container was run and
+that Linux substrate does not preserve the frozen native macOS Python and
+descriptor correspondence. Two independent reviewers accept both findings.
+The retained blocked-decision digest is
+`b67e4e734deb959328ebd795320e777def9b886f6d3c141f4344a94f64071fa6`.
+
+Static review confirms no archive access, download, extraction, image pull,
+container run, parser run, candidate generation, or network-enabled execution.
+Phase 796-A3, acquisition, Phase 797, materialization, transcript capture,
+backend execution, accepted evidence, Level2+, score axes, semantic
+correctness, production readiness, SOTA, breakthrough, full security,
+external audit, and action authority remain unauthorized.
+
+[docs/796a3l-phase-hsai-p01b-linux-container-correspondence-boundary.md](docs/796a3l-phase-hsai-p01b-linux-container-correspondence-boundary.md)
+records the docs-first blocked alternate Linux-container correspondence
+assessment.
+Read-only inspection pins the Docker client SHA-256 and signature, Desktop
+4.77.0, Engine 29.5.3, LinuxKit 6.12.76, cgroup v2, containerd, runc, context,
+and one local Python 3.11.15 image candidate by repo and config digest.
+
+Static review confirms the candidate remains unaccepted and that no image was
+pulled, built, or run. Two independent reviews reject run authorization and
+normalize 18 findings into ten blocking containment, runtime, OOM-receipt,
+sandbox, cgroup-receipt, resource-bound, provenance, test-identity,
+filesystem-certificate, and exact-command classes. The retained record marks
+execution `NotRun`, contains no successful result fields, and keeps
+all unresolved schema and identity digests null.
+Both final re-reviews return `accept_blocked_assessment` with zero findings;
+this is not run authorization.
+
+The canonical boundary digest is
+`87fb100d4454e9cc05c1b19baf47749230324fbc9ccf32f6a150a67e2f4b0ea7`. Image pull, container run,
+Phase 796-A3L1 compatibility execution, native Phase 796-A3, archive acquisition, Phase 797,
+materialization, transcript capture, backend execution, accepted evidence,
+evidence escalation, Level2+, score axes, semantic correctness, production
+readiness, SOTA, breakthrough, full security, external audit, and action
+authority remain unauthorized.
+
+[docs/796a3l1-phase-hsai-p01b-linux-container-contract-closure-stop.md](docs/796a3l1-phase-hsai-p01b-linux-container-contract-closure-stop.md)
+records the docs-only Phase 796-A3L1 closure attempt. Read-only image
+inspection adds four ordered RootFS diff IDs, while static test discovery binds
+five suite hashes, 68 focused IDs, 151 full IDs, and test-corpus digest
+`1439a56e935a1c0194db37e5a7e4ad926658e16aa8491246c56e88d8bb5a6726`.
+
+The retained matrix closes documentation class C01 only. Nine classes remain
+open because the native projection, collector, supervisor,
+security-profile bytes, effective receipt parser, full runtime provenance,
+canonical corpus artifact, filesystem certificates, and exact executable state
+machine are absent. The 2738-byte canonical stop digest is
+`458d1d7c0688f45920d5308fa6670ef5f0ec2e6a4a30da6cd52af31424c3bb12`.
+Both final independent re-reviews return `accept_blocked_assessment` with zero
+findings; this accepts only the stop record.
+
+Validation confirms `container_execution_status=NotRun`, all unresolved
+identity digests remain null, and A3L2 implementation, A3L5 run, native A3,
+backend execution, accepted evidence, Level2+, and stronger claims remain
+unauthorized. The corrected route requires a docs-first implementation
+boundary, implementation, hermetic tests including synthetic C09, and
+clean-commit audit before a separate synthetic-run decision.
+
+[docs/796a3l2-phase-hsai-p01b-linux-container-implementation-boundary.md](docs/796a3l2-phase-hsai-p01b-linux-container-implementation-boundary.md)
+records the docs-only Phase 796-A3L2 corpus/profile code authorization. The
+future state slice is exactly six runtime/data files and five documentation
+files: a read-only checker, expanded corpus, pinned seccomp bytes, upstream
+license, canonical provenance, one hermetic test module, one exact phase note,
+and standard mirrors. Cargo and external Python dependencies remain forbidden.
+The implementation is a six-file candidate commit followed by a five-file
+audit/documentation commit. The cumulative range is exactly eleven paths; the
+phase note is not self-hashed and obtains its identity from the final Git tree.
+
+Static validation binds the Moby profile to peeled commit `836ae4d`, 13,470
+bytes, and SHA-256
+`536529b665dd0972c37bfb569f5d4ac8a53592e7b00752bc39ff063ca9864c74`.
+Checker-owned code may not import or call subprocess or socket, use network or
+Docker, inspect a container, write runtime files, parse an archive, or implement
+a transport. TestLoader may transitively import only the frozen suite modules
+without executing tests. Provenance embeds the exact 135-byte `ls-remote`
+output and its SHA-256.
+The corpus schema digest is
+`3494d76c1e9b0cd29ac00218b7aac06f55213fae9fca862d19c740eebb0adac2`;
+the provenance schema digest is
+`31f43727cb321bc0943019bc0a6d48c36900047a64e0cf2db2b62d1ebab8260f`.
+The clean-audit schema digest is
+`544da1c5356c622e56960059b68f31e46bb521673ce76e3c8ae140c6ce84b305`.
+
+The canonical 3106-byte implementation-boundary digest is
+`a9e43d8d354759f7a55f45b9ef650e3e36c108dc3d30f09844b1cd3688c29f8a`.
+Two independent final re-reviews return `ACCEPT` with zero findings for this
+corrected documentation state only.
+Only the narrow A3L3 implementation is authorized. Driver, probe, Docker,
+container, archive, backend, accepted-evidence, Level2+, and stronger-claim
+authority remain false.
+
+[docs/796a3l3-phase-hsai-p01b-container-corpus-profile-implementation.md](docs/796a3l3-phase-hsai-p01b-container-corpus-profile-implementation.md)
+records the audited Phase 796-A3L3 implementation. Candidate commit
+`0d67de690625fb47b26c3b47f7cc195ec2adfc7c` changes exactly the six
+authorized runtime/data files and binds tree
+`3c81b177f66ade993862810df8d1174f05927c18`. The checker validates the
+canonical corpus, source manifest, profile, license, and provenance through
+bounded descriptor-relative reads. It reconstructs test identities with a
+static TestLoader model and an independent AST pass over retained validated
+bytes, so it does not import, execute, or reopen suite source.
+
+The first immutable candidate was rejected for a pathname-discovery TOCTOU and
+import-shadow authority gap. The replacement removes that authority and adds a
+no-import/no-execution regression test. Python 3.9.6 and 3.11 each pass 21
+focused and 172 complete formal-preflight tests; ruff, Rust formatting, the
+unaffected Rust workspace tests, clippy, diff hygiene, exact source-tree
+correspondence, and six-path commit checks pass. Two independent immutable-
+commit reviewers accept with zero findings.
+
+The implementation closes C08 and pins profile provenance only. It performs no
+Docker, image, container, archive, network, backend, proof, accepted-evidence,
+Level2+, score-axis, semantic-correctness, production-readiness, SOTA,
+breakthrough, full-security, external-audit, or action-authority operation.
+Remaining container correspondence classes require a separate docs-first
+boundary.
+
+[docs/796a3l4-phase-hsai-p01b-portable-authorization-receipt-boundary.md](docs/796a3l4-phase-hsai-p01b-portable-authorization-receipt-boundary.md)
+records the next docs-only boundary. It binds the green Phase 796-A3L3 corpus
+and profile identities plus the preserved dirty admission hash, then authorizes
+exactly two new Python files for a pure-data command-plan, canonical receipt-
+chain, and lifecycle-state implementation. The test filename remains outside
+`test_*.py`, so normal formal-preflight discovery must stay at 172 tests.
+
+The future implementation may change only the separate
+`c10_local_contract_implemented` readiness bit from false to true. C10
+correspondence stays open without retained execution receipts and independent
+review. The implementation cannot run or inspect Docker, use the socket or
+network, load environment-derived authority, write receipt artifacts, access
+an archive, execute a backend, mutate accepted evidence, create Level2+,
+populate score axes, or claim independent reproduction, commercial moat,
+semantic correctness, production readiness, SOTA, breakthrough, full security,
+external audit, or action authority. The correspondence metric remains 2/10.
+
+[docs/796a3l4i-phase-hsai-p01b-container-command-receipt-contract-implementation.md](docs/796a3l4i-phase-hsai-p01b-container-command-receipt-contract-implementation.md)
+records the accepted pure-data implementation. The cumulative two-file range
+`ad8b8b63..ddb1cca3` binds caller-supplied action, policy, evidence, and
+admission digests into an exact command plan and derives every executable role
+from a validated receipt prefix. It rejects forged plans or lifecycle state,
+incomplete cleanup, fabricated timeout/stream-limit outcomes, unsafe Docker
+path or OCI inputs, and over-deep canonical JSON. Nonzero and signaled start
+outcomes retain wait, terminal inspection, and cleanup.
+
+The first immutable candidate was rejected with nine combined reviewer
+findings. Correction `ddb1cca3` closes all findings. Focused A3L4I tests pass
+21/21, the frozen corpus guard passes 21/21, normal discovery remains exactly
+172/172, Ruff and unaffected Rust guards pass, and two independent immutable-
+head reviewers accept with zero findings. The preserved admission edit remains
+unstaged at SHA-256
+`41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de`.
+
+This changes only `c10_local_contract_implemented=false` to `true`.
+Correspondence remains 2/10; C02-C07/C09/C10 remain open. No Docker, container,
+network, archive, backend, proof, accepted evidence, Level2+, score axis,
+independent reproduction, commercial moat, breakthrough evidence, or stronger
+claim is created.
+
+[docs/796a3l5-phase-hsai-p01b-retained-container-execution-evidence-boundary.md](docs/796a3l5-phase-hsai-p01b-retained-container-execution-evidence-boundary.md)
+records the next docs-first boundary. Read-only readiness confirmed exact Docker
+client, daemon, socket, kernel, containerd, runc, cgroup-v2, image-config,
+RootFS, seccomp, corpus, and native-interpreter identities, while retaining the
+platform-manifest, collector, effective-control, runtime-provenance, C09, and
+observed-chain gaps. The boundary therefore authorizes no direct Docker action.
+
+It freezes a five-file hermetic A3L6 implementation slice for a native/normal/
+child-OOM probe, pure-data reconstruction, and the sole later Docker/filesystem
+authority driver. A3L7 alone may retain two direct digest-addressed registry
+responses and must bind the accepted immutable implementation to current
+machine/image identities. A3L8 is network-disabled and may run only one native
+reference, one normal container, one survivor-collector child-OOM container,
+running-container raw-TAR export, controlled release, and exact cleanup. A3L9
+accepts C02-C07/C09/C10 only atomically after two deterministic zero-finding
+reconstructions. Partial or rejected evidence leaves correspondence at 2/10.
+An accepted single-host result may reach 10/10 local correspondence and at most
+4/10 estimated commercial moat/evidence, but remains Level 1 synthetic local
+evidence under explicit signed-app/Docker-daemon honesty assumptions with no
+external reproduction or stronger claim.
+
 Phase 248 records the first bounded gateway-facing external-evidence lane map.
 It connects the Phase 247 local gateway surface to the existing real/operator
 external-evidence surfaces: the Phase 57 HSAI-owned Phala/dstack real fixture,
@@ -10327,6 +10859,53 @@ future output assertion. Phase 686 runs no tool or backend and creates no
 proof, accepted evidence, Level2+, score axis, semantic correctness,
 production readiness, SOTA, breakthrough, or full-security claim.
 
+## Phase 796-A3L5C HSAI P01B Retained Container Boundary Correction
+
+Date: 15 July 2026.
+
+Outcome: `DocumentationOnly`, `NotRun`, and accepted by three independent
+zero-finding reviews over exact correction SHA-256
+`bf42bce535863e8bff3c6343d43d3ce2ab653ace39e6945535f93525ccde9de0`.
+
+State slice:
+
+- `AGENTS.md`;
+- `README.md`;
+- `docs/12-task-list.md`;
+- `docs/796a3l5c-phase-hsai-p01b-retained-container-boundary-correction.md`;
+- this report.
+
+The correction was required because the prior A3L5 order attempted to decide
+C09 before exclusive publication and parent-directory durability. The accepted
+replacement is acyclic and fail closed: prepublication candidate validation,
+exclusive publication, repository-state verification, v3 decision, durable
+fresh review session, two parent-observed independent review processes,
+aggregate, then acceptance. It freezes exactly 200 payload files plus manifest
+file 201, 62 candidate directories, and 270 publication events. It also closes
+recovery wire totality, Docker `none` endpoint teardown, raw registry/signature
+provenance, descriptor equality, immutable 21-Git-blob gate materialization,
+pinned local sandbox execution, and the canonical seven-assumption/ten-nonclaim
+claim boundary.
+
+Validation performed for this docs slice:
+
+- `git diff --check`: pass;
+- exact document SHA-256: pass;
+- independent Docker/readiness review: zero findings;
+- independent class/recovery/publication review: zero findings;
+- independent evidence/session/acceptance review: zero findings;
+- protected user-owned admission file remained byte-identical at SHA-256
+  `41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de`.
+
+No Docker, socket, registry, container, native reference, normal attempt,
+intentional OOM, publication, decision, review, aggregate, or acceptance
+execution ran. The five untracked A3L6 files remain rejected follow-on work,
+outside this state slice. Correspondence remains 2/10, commercial moat remains
+3/10, and defensible breakthrough evidence remains 2-3/10. No accepted Evidence
+Ledger mutation, Level2+, external reproduction, benchmark evidence, proof,
+production-readiness, SOTA, breakthrough, full-security, or external-audit
+claim was created.
+
 ## Statebook Terminal-Payoff And Assurance-Adjusted Settlement Boundary
 
 Date: 15 July 2026.
@@ -10430,9 +11009,32 @@ action, accepted Evidence Ledger mutation, benchmark output, Level2+ evidence,
 action authority, semantic-correctness, production-readiness, SOTA, final Ostium
 root cause, or full-security claim was created.
 
-## Statebook Whitepaper, PRD, Source, Media, and PDF Publication Boundary
+## Phase 796-A3L5D HSAI P01B Inspect Census Correction
 
 Date: 15 July 2026.
+
+Outcome: documentation-only correction at execution state `NotRun` for named
+state slice `phase-796a3l5d-hsai-p01b-inspect-census-correction`.
+
+The inherited A3L5 exact inspect list and the repeated A3L5C exact list each
+contain 56 ordered fields. A3L5C refers to that unchanged list as having 57
+fields in five prose locations but names no additional field. The evidence and
+execution constants contain the same 56 names. Adding a field would therefore
+guess and alter the raw transcript grammar. A3L5D supersedes only those five
+counts with 56; the list and every per-field predicate remain unchanged.
+
+Validation requires two independent zero-finding reviews, exact list/census
+checks, the pinned `/usr/bin/python3` 3.9.6 focused/discovery gates, Git diff
+checks, and preservation of the pre-existing admission SHA-256
+`41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de`.
+A3L6 remains unaccepted and A3L7/A3L8 remain prohibited. Correspondence remains
+2/10, commercial moat remains 3/10, and defensible breakthrough evidence
+remains 2-3/10. No runtime evidence or stronger claim was created.
+
+## Statebook Whitepaper, PRD, Source, Media, and PDF Publication Boundary
+
+Initial publication: 15 July 2026. Visual layout correction validated: 20 July
+2026.
 
 Outcome: completed documentation and publication package for named state slice
 `statebook-whitepaper-prd-and-publication-media-boundary`.
@@ -10441,12 +11043,18 @@ Status: `DocumentationOnly`.
 
 Evidence ceiling: `Level0DesignNote`.
 
+The additive visual-layout state slice is
+`statebook-publication-media-layout-correction`. It changes explanatory
+publication media, the media manifest, and the two rendered publication
+artifacts only; it grants no runtime, financial, security, incident, settlement,
+or authority claim.
+
 Repository HEAD at final validation start:
 `f139b10977e7b1d2c33e7ffd3bf8b535a6961a2f`.
 
 The package converts the Statebook thesis into an end-to-end whitepaper, an
 implementation-ready but non-authoritative PRD, an annotated literature/code/
-media/incident index, seven original explanatory SVGs, and two rendered PDFs.
+media/incident index, thirteen original explanatory SVGs, and two rendered PDFs.
 It defines seven separate completeness dimensions, a bounded terminal-payoff
 model, a dynamic assurance-to-externalization controller, exactly-once exposure
 accounting, queue and recovery behavior, AI and macroeconomic scenarios, a
@@ -10454,33 +11062,40 @@ threat model, falsification criteria, product governance, and a separately
 authorized implementation sequence. The package grants no runtime or external
 authority.
 
-Primary artifact manifest:
+Current publication artifact manifest after the visual layout correction:
 
 | Artifact | SHA-256 | Verification note |
 | --- | --- | --- |
-| `docs/statebook-whitepaper.md` | `a4154f5bc7d68e56f3ad104c841e7ddef568e9c5cb155164d29f7f90e64ccc18` | Whitepaper source |
-| `docs/statebook-product-requirements.md` | `b9b4769780d9426e052804a0a41f357bf550bb322eef99dbcb47193119cab1d2` | PRD source: 70 user stories, 20 implementation decisions, 18 functional requirements, and 34 adversarial cases |
+| `docs/statebook-whitepaper.md` | `9330b8af37878c7de49b74ddeed0737ffc716555c04ab85ec15bf644a98ad468` | Whitepaper source with thirteen original explanatory figures |
+| `docs/statebook-product-requirements.md` | `898414eaf8799afd341eeb39b4c7161c9d4a7a8d2b4d84f6b5a96f171277db4c` | PRD source: 70 user stories, 20 implementation decisions, 18 functional requirements, 34 adversarial cases, and two explanatory figures |
 | `docs/statebook-literature-source-index.md` | `725c0e495547f3ea6d7b5cb0e77af6dbb4078d29ddd97372e6d0a53a065bf8f8` | 98 annotated entries and 111 unique public URLs |
 | `docs/integrations/statebook_terminal_payoff_and_trust_settlement.md` | `2ab7a8c1927004ba9a5487b8fc3dcb47bd3f9b6c8428de9d36296edc54610568` | Governing integration boundary |
-| `docs/media/statebook/README.md` | `58889f45e02ad8a7f1bf6f1ee0e8bb819a5b0b124bfb4a8bd1b8aab5dc147b55` | Media manifest and evidence classification |
-| `docs/media/statebook/assurance-settlement-controller.svg` | `86528766a75f09b62299a6b8656722f80289254b6325484c49550d14152d1868` | Controller diagram |
-| `docs/media/statebook/correlated-roots-meme.svg` | `95d9bd3463bb631f3c7b637f964849ad81086bcdc3417904067863a4a31a1237` | Correlated-root teaching meme |
-| `docs/media/statebook/frontier-risk-market-map.svg` | `925d69260f2bc952b846545b3f976f75093db2118ef4322e08db564efb68575a` | Frontier-risk map |
-| `docs/media/statebook/orderbook-statebook-meme.svg` | `78b5cbdf97056ee2853b0e58d004472268d5b90f970f2f3da979338a77662033` | Order-book/Statebook teaching meme |
-| `docs/media/statebook/settlement-delay-meme.svg` | `48c44534ebf7fb1754cd4135098a427c730d880b035ed8885aa8c5737a399d49` | Delay/airlock teaching meme |
-| `docs/media/statebook/seven-completeness-tests.svg` | `33942ebc362950d55720c186de8bca4d548bada95afe95725553ac75a0552c74` | Seven-verdict diagram |
-| `docs/media/statebook/statebook-layer-map.svg` | `6a55772750df8a49c2eb24cbe943cf0afd200e394adfe228c704b1de0c8eb35a` | Layer map |
-| `output/pdf/statebook-whitepaper.pdf` | `8dad2b27848ccd6bec659ab5eef18d3cbc6bd37d79120c160e393d58c203195b` | 59 pages, 1,548,029 bytes |
-| `output/pdf/statebook-product-requirements.pdf` | `41e2ed05d55c10c591b370f05d7103966899b07abe0b0385e24169d5abd4bbfa` | 22 pages, 217,596 bytes |
+| `docs/media/statebook/README.md` | `a9464d0b342f1cf516d98e3f732ae6071ca90df63e9662296831517a48684e38` | Manifest, accessibility, evidence classification, and publication type scale |
+| `docs/media/statebook/assurance-settlement-controller.svg` | `30fca94228361ce9b128fa38c137f40219116d8c200970de62d831c3a6248684` | Assurance-to-externalization controller |
+| `docs/media/statebook/capital-legal-coherence.svg` | `e7888c22539b3828087a672d03eee374f7572f53cc24f43922e0f7cb28ea7660` | Economic offset, capital recognition, and legal finality separation |
+| `docs/media/statebook/correlated-roots-meme.svg` | `220701d5216322014cb02d742eed6dd12f815d6e73d65e86d7a1d3bf17b8895d` | Correlated-root independence illustration |
+| `docs/media/statebook/exposure-lifecycle.svg` | `fcbebf61ad4b7a928e367bfc8e793e61a808e033e46fbb92457957a635688b32` | Reservation, observation, challenge, and recovery lifecycle |
+| `docs/media/statebook/frontier-risk-market-map.svg` | `5ded708a4c1f8915c4bfc80c2f1fced475830d0a21eef2616fc7e7a1801b9f0c` | Frontier-risk map |
+| `docs/media/statebook/implementation-boundary-roadmap.svg` | `85ab6d4b472774f6bc8be2becb13f97df7afab9728ee97d809d394f63fc3e404` | Analysis sequence and authority boundary |
+| `docs/media/statebook/orderbook-statebook-meme.svg` | `544a84181835f4b460f17e854947410e77c410e4bec9210b602461c5a6f281b4` | Order-book/Statebook architecture illustration |
+| `docs/media/statebook/progress-clocks-scenarios.svg` | `793a8b1f7aadc85ebb960c9ff224a1c0935e73d64d11aefa7fe3b292437a7694` | AI, physical, market, and governance scenario clocks |
+| `docs/media/statebook/settlement-delay-meme.svg` | `1089f628e11d6166d3a5411c6356e7963b79dc8b570f3db8318a443b2f81ac4a` | Delay/airlock architecture illustration |
+| `docs/media/statebook/seven-completeness-tests.svg` | `3d09ec33a388815bd301a4855a8da2889b27788b0d8aebb3d4a3200c19c16bef` | Seven independent completeness verdicts |
+| `docs/media/statebook/source-terms-to-residual.svg` | `5778c1e2f1f756153d3d32c43d911b14fa2b5dccb6c909f5df5df956f90cc713` | Material terms, StateKeys, residuals, and perpetual path dependence |
+| `docs/media/statebook/statebook-layer-map.svg` | `18ee2f8f32d9382c16265ef474ba0926faa61916c288d99c759294ea0ebe39f7` | Statebook layer and authority map |
+| `docs/media/statebook/three-finality-clocks.svg` | `517832626393fccb09ee32a22a8589bc9135cbac9d7a36eb62c970a9adfc466d` | Execution, economic, and externalization finality |
+| `.gitattributes` | `56d05e88e353827a8c63eaeef0171d1692362fb3af4529017cb52c3f16066e63` | PDF-only binary classification for the two generated Statebook publications |
+| `output/pdf/statebook-whitepaper.pdf` | `a0c8650718a26ae0d8f205bd55f353a212ff46e169a5b8f37c158e93ccf6d17e` | 72 pages, 3,998,383 bytes |
+| `output/pdf/statebook-product-requirements.pdf` | `bd216fb458a827acf469634f686f010517a9ee8afd6133095298b6f7ff5a2408` | 24 pages, 808,724 bytes |
 
-Publication mirrors at validation time:
+Publication mirrors in the committed package:
 
 - `README.md` SHA-256
-  `6b5206f1f362f453502fed31330b508590b1faca2e17d11d25f10d4f1c5c4164`;
+  `6b3fef45b4988676ac71fa01bd820c96e408ff7c1bf0738dc74811409562e7cd`;
 - `docs/12-task-list.md` SHA-256
-  `525275377095cc6335cc8cb7deab135bcd15e46d1826eaf987405741df1b8282`;
+  `f5102381e0400b57028106520d2bebd04eca1fcee202d7d61cfb7621896a7431`;
 - `AGENTS.md` SHA-256
-  `b82205c46e713288125dcaefed7a310bc3430aba3727dda3e8dba19b6d753a05`.
+  `939c2df01fc37272f0d80b0d2cf845ab712e5d74e47681554f3bc0eebefe797b`.
 
 Publication record:
 
@@ -10516,18 +11131,26 @@ Research and review results:
 
 Media and PDF verification:
 
-- seven SVGs parse with `xmllint`, and each remains explanatory media rather
+- thirteen SVGs parse with `xmllint`, and each remains explanatory media rather
   than financial, security, incident, or settlement evidence;
 - `pdfinfo` reports coherent titles, Letter page size, no encryption, no form,
   and no JavaScript for both PDFs;
-- `pypdf` and `pdfplumber` extracted non-empty text from all 81 pages, with zero
-  replacement characters;
-- all 81 pages were rasterized and visually inspected. No clipping, overlap,
-  missing glyph, broken table, missing image, unreadable figure, or blank content
-  page was found;
+- `pypdf` and `pdfplumber` extracted non-empty text from all 96 pages, with zero
+  replacement characters and no text outside a PDF page boundary;
+- all 96 pages were rasterized at publication review scale. Contact-sheet review
+  covered every page; full-scale review covered every figure-bearing page. No
+  clipping, overlap, missing glyph, broken table, missing image, unreadable
+  figure, orphaned figure caption, or blank content page was found;
 - the final whitepaper PDF contains the complete source index as Appendix A;
 - temporary renderer, raster, and contact-sheet intermediates were removed;
   exactly the two declared publication PDFs remain under `output/pdf/`.
+
+Final layout-correction checks: `xmllint --noout` passed for all thirteen SVGs;
+the recorded artifact hashes match the generated files; `git diff --check`,
+`cargo fmt --all -- --check`, `cargo test -p zkbench-core --test repo_hygiene
+--quiet`, and `cargo test -p zkbench-core --test repo_claim_boundary_docs
+--quiet` passed. No root `package.json` or `pnpm-lock.yaml` exists, so no root
+pnpm gate applies.
 
 Repository validation results:
 
@@ -10650,6 +11273,162 @@ HSAI evidence mapping, network, credential, process-spawn, filesystem-write,
 external-adapter, accepted Evidence Ledger, benchmark, Level2+,
 semantic-correctness, production-readiness, SOTA, proof,
 independent-verification, external-audit, or full-security capability or claim.
+
+## Phase 796-A3L5E HSAI P01B Gate Sandbox Root-Read Correction
+
+Date: 15 July 2026.
+
+Outcome: documentation-only correction at execution state `NotRun` for named
+state slice `phase-796a3l5e-hsai-p01b-gate-sandbox-root-read-correction`.
+
+The byte-exact A3L5C Seatbelt profile made both the A3L6 positive control and
+the minimized `/usr/bin/true` process abort with signal 6 and empty retained
+streams on the pinned host. Adding only
+`(allow file-read-data (literal "/"))` made the minimized control exit zero.
+A3L5E therefore inserts that exact line after the global metadata-read line.
+The literal applies only to the root directory object; it does not authorize
+descendant file data. All declared read subpaths, scratch-only writes, default
+denial, and network denial remain unchanged.
+
+Validation requires two independent zero-finding reviews, a corrected-profile
+positive control, direct IPv4/IPv6/DNS/Mach negative controls, the pinned
+focused/discovery gates, Git diff checks, and preservation of the pre-existing
+admission SHA-256
+`41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de`.
+A3L6 remains unaccepted and A3L7/A3L8 remain prohibited. Correspondence remains
+2/10, commercial moat remains 3/10, and defensible breakthrough evidence
+remains 2-3/10. No runtime evidence or stronger claim was created.
+
+## Phase 796-A3L5F HSAI P01B Probe Binding Correction
+
+Date: 15 July 2026.
+
+Outcome: documentation-only correction at execution state `NotRun` for named
+state slice `phase-796a3l5f-hsai-p01b-probe-binding-correction`.
+
+The pinned native direct argv executes `/usr/bin/python3`, while
+`sys.executable` reports a different CommandLineTools path on this host. Native
+runtime executable provenance now means the descriptor-verified direct launch
+path. Separately, the descriptor-bound snapshot-copy manifest contains host
+descriptor digests that container-visible bytes cannot derive. Normal/OOM argv
+therefore adds one required `--input-manifest-sha256` value carrying that frozen
+domain digest. The probe still inventories the exact mounted 21-file tree and
+validates the corpus; A3L9 still replays candidate bytes, manifests,
+descriptors, ingress, argv, and the complete digest equality chain.
+
+Validation requires two independent zero-finding reviews, the pinned
+focused/discovery gates, Git diff checks, and preservation of the pre-existing
+admission SHA-256
+`41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de`.
+A3L6 remains unaccepted and A3L7/A3L8 remain prohibited. Correspondence remains
+2/10, commercial moat remains 3/10, and defensible breakthrough evidence
+remains 2-3/10. No runtime evidence or stronger claim was created.
+
+## Phase 796-A3L5G HSAI P01B Snapshot Binding Graph Correction
+
+Date: 15 July 2026.
+
+Outcome: documentation-only correction at execution state `NotRun` for named
+state slice `phase-796a3l5g-hsai-p01b-snapshot-binding-graph-correction`.
+
+The A3L5 exact attempt-plan and A3L5C authorization-v3 schemas have no new
+snapshot field. A3L5G therefore retains both frozen field sets and defines the
+normal/OOM `source_manifest_sha256` plan field as the domain digest of the
+descriptor-bound snapshot-copy manifest. That value equals the required create
+argv and probe-result input binding. Authorization-v3 binds it transitively by
+binding the complete expected-bindings object, whose separately named source
+and copy manifest digests remain mandatory and are reparsed by A3L9.
+
+Validation requires two independent zero-finding reviews, the pinned
+focused/discovery gates, Git diff checks, and preservation of the pre-existing
+admission SHA-256
+`41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de`.
+A3L6 remains unaccepted and A3L7/A3L8 remain prohibited. Correspondence remains
+2/10, commercial moat remains 3/10, and defensible breakthrough evidence
+remains 2-3/10. No runtime evidence or stronger claim was created.
+
+## Phase 796-A3L5H HSAI P01B Authority Adapter Correction
+
+Date: 15 July 2026.
+
+Outcome: documentation-only correction at execution state `NotRun` for named
+state slice `phase-796a3l5h-hsai-p01b-authority-adapter-correction`.
+
+Repository-grounded audit found that the four prior HSAI gateway admission
+objects do not carry schema fields, the gateway policy has no production
+digest, and A3L5C did not freeze a P01B program/network mapping. The previous
+generic schema-labelled-object interpretation could not establish C10.
+A3L5H therefore defines four P01B wrapper domains around the exact production
+proposal, policy, derived candidate, and recomputed decision; preserves Rust
+Serde declaration-order tagged hashing separately from P01B sorted-key
+NUL-domain hashing; binds the implementation, A3L6 bundle, readiness plan,
+claim boundary, source artifacts, deterministic no-model lane, and wrapper
+graph; and freezes the only permitted A3L7-A3L9 network scope. The graph remains
+acyclic because normal/OOM/campaign plans bind authorization-v3 one-way after
+authorization rather than being hashed by an earlier authority object.
+
+Validation requires two independent zero-finding documentation reviews, exact
+empty-object domain vectors, the later exact 32/32 focused evidence and 32/32
+focused execution suites, Git diff checks, and preservation of the pre-existing
+admission SHA-256
+`41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de`.
+C10 remains fail-closed until implementation acceptance. A3L6 remains
+unaccepted and A3L7/A3L8 remain prohibited. Correspondence remains 2/10,
+commercial moat remains 3/10, and defensible breakthrough evidence remains
+2-3/10. No Docker/network action, runtime evidence, or stronger claim was
+created.
+
+## Phase 797 HSAI Native-Transcript Source-Scan Correction Boundary
+
+Date: 16 July 2026.
+
+Outcome: documentation-only authorization for named state slice
+`hsai-native-transcript-source-scan-correction-boundary`.
+
+The clean committed baseline has one inherited claim-boundary scan failure. The
+line-oriented HSAI scanner reports three already authorized Phase 792 test-only
+process references and eight forbidden-pattern literals used by two Phase
+792/794 negative source-scan tests. The native-transcript package itself passes
+50 focused tests. The scanner predates these tests and received no matching
+narrow exception when they landed.
+
+This boundary authorizes a future correction only in
+`crates/hsai-e2e-harness/tests/claim_boundary_source_scan.rs`, with exact file,
+line, function, and executable binding plus positive and near-miss negative
+tests. It does not authorize any implementation mutation in this commit or any
+broader process/network surface.
+
+The live worktree also contains an unrelated user-owned admission rewrite that
+breaks all-target compilation by removing public APIs used by a committed
+example. That edit is outside this state slice and remains untouched. Therefore
+this docs-first result claims only boundary correctness, not a globally green
+workspace.
+
+## Phase 798 HSAI Native-Transcript Source-Scan Correction Implementation
+
+Date: 16 July 2026.
+
+Outcome: implemented for named state slice
+`hsai-native-transcript-source-scan-authorized-test-exceptions`.
+
+The HSAI scanner now recognizes the eleven committed Phase 792/794 test-only
+matches through one exact helper. File path, source line, forbidden pattern,
+enclosing function, and the fixed `/usr/bin/mkfifo` executable are bound where
+applicable. Adversarial tests reject different files, functions, executables,
+import shapes, and literal contexts. No native-transcript source or production
+runtime changed.
+
+The evidence ceiling is local scanner regression evidence. This correction
+does not create process or network authority or any stronger system claim.
+
+Final validation: exact and full scanner tests pass 7/7; native-transcript tests
+pass 50/50; clean-tree focused warning-denied Clippy passes; repository
+docs/hygiene checks pass; and clean-tree workspace tests across all targets and
+features pass. Clean-tree full workspace warning-denied Clippy has one
+independent committed `const_is_empty` finding in
+`zkbench-core/tests/operator_soak_campaign_contract.rs`. That file is outside
+this slice and remains unchanged. The live worktree's separate admission rewrite
+also remains excluded and untouched.
 
 ## Statebook P2 Payoff And Residual Engine Boundary
 
@@ -10810,6 +11589,72 @@ independent audit, or full security. No P4/P5, HSAI, admission, zkbench,
 network, process, filesystem output, credential, runtime-action, or external
 authority surface is added.
 
+## Memory Architecture Sustainability and Serving Efficiency Boundary
+
+Date: 4 August 2026.
+
+Outcome: documentation-only authorization for named state slice
+`phase-799-memory-architecture-sustainability-serving-efficiency-boundary`.
+
+The boundary records the current durable-memory baseline (append-only
+digest-chained ledgers and journals with repository-external raw payloads) and
+the serving reference baseline embedded in the Phase 57+ Phala CVM attestation
+fixture (single-instance vLLM serving Qwen3-Next-80B-A3B-Thinking-FP8 with
+prefix caching at 128K context and 256 concurrent sequences). It locks
+log-structured append-only digest-chained memory as the repository's only
+durable memory architecture, records a standing preference for fixed-size-state
+hybrid-attention serving in long-context and high-concurrency lanes, and routes
+all future serving-efficiency candidates (KDA-class model lanes, serving-side
+KV management, disaggregated KV storage/routing, agent memory-policy modes)
+through measured full economic cost per verified utility evaluation before any
+adoption.
+
+This docs-first slice adds no Rust, Python, Cargo, deployment, manifest, model,
+provider, benchmark, or evidence-lane change and does not permit accepted
+Evidence Ledger mutation, Level2+ evidence, benchmark evidence,
+production-readiness claims, semantic-correctness claims, SOTA claims,
+breakthrough claims, independent-audit claims, full-security claims,
+global-uniqueness claims, or action authority. Model-architecture facts about
+the served model are sourced from the model's public documentation and are not
+verified by this repository.
+
+## Serving Efficiency Lane Inert Metadata Validation
+
+Date: 4 August 2026.
+
+Outcome: implemented named state slice
+`phase-800-serving-efficiency-lane-inert-metadata`.
+
+The isolated pure-data `serving-efficiency-lane` crate (serde and sha2 only)
+binds the Phase 799 recorded serving baseline into typed contracts. Baseline
+binding is exact-equality fail-closed against fixture path
+`crates/hsai-attestation-phala/tests/fixtures/phala_trust_center_app_2026_06_16.json`,
+SHA-256 `33135af6b978a4f0255cdcf453c3479c46b1fa2d8aac8f019649b4c1ed6becf3`,
+and byte length `54662`. Candidate classes are closed at `ReferenceOnly`;
+evaluation contracts carry separated cached/uncached cost lines; regime
+pooling rejects; and the adoption decision stays unauthorized unless every
+preregistered gate passes and a separately reviewed adoption phase is named —
+and even then remains a metadata-level decision only.
+
+Focused local results:
+
+```text
+cargo fmt -p serving-efficiency-lane -- --check                          PASS
+cargo clippy -p serving-efficiency-lane --all-targets -- -D warnings     PASS
+cargo test -p serving-efficiency-lane                                    PASS (11 tests)
+cargo test -p hsai-e2e-harness --test claim_boundary_source_scan         PASS (7 tests)
+```
+
+The workspace claim-boundary source scan covers the new crate and confirms no
+process or network API usage and no `Proven` maturity emission.
+
+Claim ceiling: inert local metadata only. Not model execution, serving,
+benchmark evidence, accepted evidence, Level2+ evidence, production readiness,
+semantic correctness, SOTA, breakthrough, independent audit, full security, or
+action authority. No candidate technology is adopted and no deployment is
+changed. Model-architecture facts about the served model remain sourced from
+the model's public documentation and are not verified by this repository.
+
 ## Statebook P4 Settlement Simulator Boundary
 
 Date: 16 July 2026.
@@ -10833,13 +11678,6 @@ multi-axis exactly-once budgets, queue and challenge transitions, circuit
 breakers, hysteresis, and recovery transitions under an injected clock. The
 only authorized output is a non-authoritative decision record. No value moves.
 
-The boundary preserves all P1, P2, and P3 identities, reports, fixtures, and
-public APIs. It forbids a new `statebook-sim` crate, P5 portable bundles, P6
-external sources, P7 authority integration, HSAI, admission, zkbench, network,
-process, filesystem write, credential, and runtime-action surfaces. Tier
-fractions and delays remain versioned synthetic policy fixtures, not empirical
-production calibration.
-
 This documentation-only slice adds no Rust or Cargo change and creates no
 proof, accepted evidence, Level2+, score axis, semantic correctness, production
 readiness, SOTA, breakthrough, full security, external audit, or action
@@ -10853,31 +11691,21 @@ Date: 16 July 2026.
 Outcome: `Implemented`, `Passed`, named state slice
 `statebook-p4-settlement-simulator`.
 
-State slice:
-
-- additive `crates/statebook-settlement/src/p4/` modules and tests;
-- `tests/fixtures/p4/` hermetic JSON fixtures;
-- `docs/statebook-p4-settlement-simulator-implementation-notes.md`;
-- `README.md`;
-- `AGENTS.md`;
-- `docs/12-task-list.md`;
-- this report.
-
 The implementation adds one pure deterministic settlement transition kernel with
 fail-closed hard gates, conservative valuation, assurance tiers, linked-plan and
-obligation validation, budget CAS reservations, queue and breaker interaction, and
-domain-separated P4 TLV digests. Outputs are serialize-only decision records. No
-value moves.
+obligation validation, budget CAS reservations, queue and breaker interaction,
+and domain-separated P4 TLV digests. Outputs are serialize-only decision
+records. No value moves.
 
 The crate reports forty-eight passing integration tests including unchanged P3
-completeness regressions, thirteen P4 kernel tests, and five P4 claim-boundary scans.
-Focused format, test, and warning-denied Clippy gates pass for `statebook-settlement`;
-unchanged `statebook-core` tests pass.
+completeness regressions, thirteen P4 kernel tests, and five P4 claim-boundary
+scans. Focused format, test, and warning-denied Clippy gates pass for
+`statebook-settlement`; unchanged `statebook-core` tests pass.
 
-Remaining gap: the full thirty-seven-scenario boundary adversarial corpus is not yet
-encoded as named fixtures; minimum acceptance scenarios and resource bound matrix are
-covered. This is explicit local regression evidence only, not production readiness or
-authority.
+Remaining gap: the full thirty-seven-scenario boundary adversarial corpus is not
+yet encoded as named fixtures; minimum acceptance scenarios and resource bound
+matrix are covered. This is explicit local regression evidence only, not
+production readiness or authority.
 
 ## Statebook P5 Evidence Adapters And Report Bundles Boundary
 
@@ -10886,17 +11714,8 @@ Date: 16 July 2026.
 Outcome: `DocumentationOnly`, `NotRun`, named state slice
 `statebook-p5-evidence-adapters-and-report-bundles-boundary`.
 
-State slice:
-
-- `docs/statebook-p5-evidence-adapters-and-report-bundles-boundary-spec.md`;
-- `README.md`;
-- `AGENTS.md`;
-- `docs/12-task-list.md`;
-- this report.
-
 The boundary freezes a portable digest-bound audit-bundle and narrow
-HSAI/fixture adapter surface. It authorizes at most `crates/statebook-report`
-and optional `crates/statebook-hsai`, independent readback validation,
+HSAI/fixture adapter surface, independent readback validation,
 domain-separated manifest digests, and `grants_authority=false` handoff rules.
 It preserves all P1-P4 identities and the P4 kernel. Integration Stage 5
 external-evidence/credential work remains PRD P6 and is outside this slice.
@@ -10913,16 +11732,6 @@ Date: 16 July 2026.
 Outcome: `Level1LocalReplay`, `Pass`, named state slice
 `statebook-p5-evidence-adapters-and-report-bundles`.
 
-State slice:
-
-- root `Cargo.toml` / `Cargo.lock` membership for `statebook-report`;
-- `crates/statebook-report/**`;
-- `docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md`;
-- `README.md`;
-- `AGENTS.md`;
-- `docs/12-task-list.md`;
-- this report.
-
 The crate materializes closed digest-bound audit bundles, independently
 validates them on readback, maps hermetic/HSAI fixture envelopes without
 inventing unknowns, and emits proposal handoffs with `grants_authority=false`.
@@ -10931,8 +11740,8 @@ by an independent `ring` encoder. Nineteen focused integration tests cover
 bundle round-trip, fail-closed readback rejection paths, adapter unknown
 preservation, claim-boundary scans, independent digest golden vectors, and
 resource limit-plus-one rejection. Unchanged `statebook-core` and
-`statebook-settlement` tests pass; focused format and warning-denied Clippy
-pass for `statebook-report`.
+`statebook-settlement` tests pass; focused format and warning-denied Clippy pass
+for `statebook-report`.
 
 This is local hermetic fixture regression and readback evidence only. It does
 not establish live venue ingestion, clearing recognition, legal finality,
@@ -10946,18 +11755,10 @@ Date: 16 July 2026.
 Outcome: `DocumentationOnly`, `NotRun`, named state slice
 `statebook-p6-read-only-external-sources-boundary`.
 
-State slice:
-
-- `docs/statebook-p6-read-only-external-sources-boundary-spec.md`;
-- `README.md`;
-- `AGENTS.md`;
-- `docs/12-task-list.md`;
-- this report.
-
 The boundary freezes Integration Stage 5 for one synthetic clearing profile
 (`synthetic-clearing-terms-v1`), captured-first import, provenance registry,
 fail-closed import contract, and deferred live network. It authorizes at most
-`crates/statebook-source`. It preserves all P1-P5 identities. P7 authority
+`crates/statebook-source` and preserves all P1-P5 identities. P7 authority
 remains outside this slice.
 
 This documentation-only slice adds no Rust or Cargo change and creates no
@@ -10971,16 +11772,6 @@ Date: 16 July 2026.
 
 Outcome: `Level1LocalReplay`, `Pass`, named state slice
 `statebook-p6-read-only-external-sources`.
-
-State slice:
-
-- root `Cargo.toml` / `Cargo.lock` membership for `statebook-source`;
-- `crates/statebook-source/**`;
-- `docs/statebook-p6-read-only-external-sources-implementation-notes.md`;
-- `README.md`;
-- `AGENTS.md`;
-- `docs/12-task-list.md`;
-- this report.
 
 The crate imports captured synthetic clearing terms through a fail-closed
 envelope, registers provenance, emits import receipts with adapter nonclaims,
@@ -11002,14 +11793,6 @@ Date: 16 July 2026.
 Outcome: `DocumentationOnly`, `NotRun`, named state slice
 `statebook-p7-authority-integration-preflight-boundary`.
 
-State slice:
-
-- `docs/statebook-p7-authority-integration-preflight-boundary-spec.md`;
-- `README.md`;
-- `AGENTS.md`;
-- `docs/12-task-list.md`;
-- this report.
-
 The boundary freezes Integration Stage 6 as a fail-closed authority-package
 preflight for profile `hermetic-authority-preflight-v1`. It requires owner,
 maximum loss, rollback/pause semantics, audit retention, legal domain, and
@@ -11029,16 +11812,6 @@ Date: 16 July 2026.
 Outcome: `Level1LocalReplay`, `Pass`, named state slice
 `statebook-p7-authority-integration-preflight`.
 
-State slice:
-
-- root `Cargo.toml` / `Cargo.lock` membership for `statebook-authority`;
-- `crates/statebook-authority/**`;
-- `docs/statebook-p7-authority-integration-preflight-implementation-notes.md`;
-- `README.md`;
-- `AGENTS.md`;
-- `docs/12-task-list.md`;
-- this report.
-
 The crate evaluates hermetic Stage 6 authority packages, binds P5 handoffs with
 `grants_authority=false`, rejects `production_gate=authorized`, and emits only
 `Incomplete` or `Denied` receipts with adapter nonclaims. Domain-separated P7
@@ -11046,8 +11819,7 @@ digests are reproduced by an independent `ring` encoder. Sixteen focused
 integration tests pass; unchanged prior Statebook crate tests pass; focused
 format and warning-denied Clippy pass for `statebook-authority`.
 
-This is local hermetic authority-preflight regression evidence only. It does
-not establish controller connection, production authorization, custody, signing,
-pause, settlement, admission authority, Evidence Ledger mutation, production
-readiness, SOTA, independent audit, or full security. No value moves.
-
+This is local hermetic authority-preflight regression evidence only. It does not
+establish controller invocation, production authorization, value movement,
+admission authority, Evidence Ledger mutation, production readiness, SOTA,
+independent audit, or full security.
