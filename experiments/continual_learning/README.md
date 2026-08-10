@@ -25,7 +25,7 @@ This harness validates endpoint definitions and control behavior. It is not a
 neural-training result and cannot support breakthrough, transfer, production,
 or general continual-learning claims.
 
-The signed task/update pilot is documented in
-`docs/research/continual-learning/17-v8-execution-record.md`. Its outputs
+The latest signed task/update pilot is documented in
+`docs/research/continual-learning/19-v9-execution-record.md`. Its outputs
 must stay outside the repository because adapter weights and raw run logs are
 generated artifacts, not source fixtures.
