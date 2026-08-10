@@ -1,0 +1,68 @@
+# Retry Analysis
+
+```json
+{
+  "n_paired_cases": 64,
+  "accuracy": {
+    "control": 0.078125,
+    "localize": 0.0625,
+    "corrective": 0.421875,
+    "sham": 0.046875
+  },
+  "effects": {
+    "localize_minus_control": {
+      "estimate": -0.015625,
+      "ci95": [
+        -0.046875,
+        0.0
+      ],
+      "bootstrap_seed": 20260810,
+      "iterations": 10000
+    },
+    "corrective_minus_control": {
+      "estimate": 0.34375,
+      "ci95": [
+        0.21875,
+        0.46875
+      ],
+      "bootstrap_seed": 20260810,
+      "iterations": 10000
+    },
+    "localize_minus_sham": {
+      "estimate": 0.015625,
+      "ci95": [
+        0.0,
+        0.046875
+      ],
+      "bootstrap_seed": 20260810,
+      "iterations": 10000
+    },
+    "corrective_minus_localize": {
+      "estimate": 0.359375,
+      "ci95": [
+        0.234375,
+        0.484375
+      ],
+      "bootstrap_seed": 20260810,
+      "iterations": 10000
+    }
+  },
+  "mcnemar": {
+    "localize_vs_control": {
+      "a_only": 0,
+      "b_only": 1,
+      "two_sided_p": 1.0
+    },
+    "corrective_vs_control": {
+      "a_only": 23,
+      "b_only": 1,
+      "two_sided_p": 2.9802322387695312e-06
+    },
+    "localize_vs_sham": {
+      "a_only": 1,
+      "b_only": 0,
+      "two_sided_p": 1.0
+    }
+  }
+}
+```

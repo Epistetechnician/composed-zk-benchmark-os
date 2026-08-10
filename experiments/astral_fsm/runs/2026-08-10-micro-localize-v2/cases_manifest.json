@@ -1,0 +1,3202 @@
+[
+  {
+    "case_id": 6001,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "B"
+      },
+      "B": {
+        "0": "B",
+        "1": "B"
+      },
+      "C": {
+        "0": "C",
+        "1": "B"
+      }
+    },
+    "input": "11"
+  },
+  {
+    "case_id": 6002,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "A"
+      },
+      "B": {
+        "0": "B",
+        "1": "C"
+      },
+      "C": {
+        "0": "A",
+        "1": "A"
+      }
+    },
+    "input": "110"
+  },
+  {
+    "case_id": 6003,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "A"
+      },
+      "B": {
+        "0": "C",
+        "1": "C"
+      },
+      "C": {
+        "0": "A",
+        "1": "A"
+      }
+    },
+    "input": "1001"
+  },
+  {
+    "case_id": 6004,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "B"
+      },
+      "B": {
+        "0": "B",
+        "1": "A"
+      },
+      "C": {
+        "0": "B",
+        "1": "B"
+      }
+    },
+    "input": "00000"
+  },
+  {
+    "case_id": 6005,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "A"
+      },
+      "B": {
+        "0": "C",
+        "1": "B"
+      },
+      "C": {
+        "0": "B",
+        "1": "A"
+      }
+    },
+    "input": "10"
+  },
+  {
+    "case_id": 6006,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "A"
+      },
+      "B": {
+        "0": "C",
+        "1": "B"
+      },
+      "C": {
+        "0": "A",
+        "1": "B"
+      }
+    },
+    "input": "001"
+  },
+  {
+    "case_id": 6007,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "C"
+      },
+      "B": {
+        "0": "A",
+        "1": "B"
+      },
+      "C": {
+        "0": "C",
+        "1": "C"
+      }
+    },
+    "input": "0011"
+  },
+  {
+    "case_id": 6008,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "B"
+      },
+      "B": {
+        "0": "C",
+        "1": "B"
+      },
+      "C": {
+        "0": "C",
+        "1": "C"
+      }
+    },
+    "input": "11011"
+  },
+  {
+    "case_id": 6009,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "A"
+      },
+      "B": {
+        "0": "A",
+        "1": "C"
+      },
+      "C": {
+        "0": "B",
+        "1": "A"
+      }
+    },
+    "input": "01"
+  },
+  {
+    "case_id": 6010,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "A"
+      },
+      "B": {
+        "0": "A",
+        "1": "C"
+      },
+      "C": {
+        "0": "A",
+        "1": "C"
+      }
+    },
+    "input": "011"
+  },
+  {
+    "case_id": 6011,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "C"
+      },
+      "B": {
+        "0": "B",
+        "1": "C"
+      },
+      "C": {
+        "0": "B",
+        "1": "B"
+      }
+    },
+    "input": "0100"
+  },
+  {
+    "case_id": 6012,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "A"
+      },
+      "B": {
+        "0": "B",
+        "1": "B"
+      },
+      "C": {
+        "0": "B",
+        "1": "A"
+      }
+    },
+    "input": "00011"
+  },
+  {
+    "case_id": 6013,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "C"
+      },
+      "B": {
+        "0": "B",
+        "1": "C"
+      },
+      "C": {
+        "0": "B",
+        "1": "C"
+      }
+    },
+    "input": "01"
+  },
+  {
+    "case_id": 6014,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "B"
+      },
+      "B": {
+        "0": "C",
+        "1": "B"
+      },
+      "C": {
+        "0": "C",
+        "1": "A"
+      }
+    },
+    "input": "110"
+  },
+  {
+    "case_id": 6015,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "B"
+      },
+      "B": {
+        "0": "A",
+        "1": "C"
+      },
+      "C": {
+        "0": "B",
+        "1": "A"
+      }
+    },
+    "input": "0011"
+  },
+  {
+    "case_id": 6016,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "C"
+      },
+      "B": {
+        "0": "B",
+        "1": "A"
+      },
+      "C": {
+        "0": "A",
+        "1": "A"
+      }
+    },
+    "input": "11101"
+  },
+  {
+    "case_id": 6017,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "B"
+      },
+      "B": {
+        "0": "A",
+        "1": "B"
+      },
+      "C": {
+        "0": "B",
+        "1": "A"
+      }
+    },
+    "input": "01"
+  },
+  {
+    "case_id": 6018,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "B"
+      },
+      "B": {
+        "0": "C",
+        "1": "C"
+      },
+      "C": {
+        "0": "A",
+        "1": "A"
+      }
+    },
+    "input": "010"
+  },
+  {
+    "case_id": 6019,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "A"
+      },
+      "B": {
+        "0": "B",
+        "1": "B"
+      },
+      "C": {
+        "0": "B",
+        "1": "B"
+      }
+    },
+    "input": "0000"
+  },
+  {
+    "case_id": 6020,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "A"
+      },
+      "B": {
+        "0": "A",
+        "1": "A"
+      },
+      "C": {
+        "0": "A",
+        "1": "B"
+      }
+    },
+    "input": "00000"
+  },
+  {
+    "case_id": 6021,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "B"
+      },
+      "B": {
+        "0": "C",
+        "1": "A"
+      },
+      "C": {
+        "0": "B",
+        "1": "C"
+      }
+    },
+    "input": "00"
+  },
+  {
+    "case_id": 6022,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "B"
+      },
+      "B": {
+        "0": "B",
+        "1": "C"
+      },
+      "C": {
+        "0": "A",
+        "1": "C"
+      }
+    },
+    "input": "011"
+  },
+  {
+    "case_id": 6023,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "C"
+      },
+      "B": {
+        "0": "B",
+        "1": "B"
+      },
+      "C": {
+        "0": "B",
+        "1": "C"
+      }
+    },
+    "input": "1101"
+  },
+  {
+    "case_id": 6024,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "B"
+      },
+      "B": {
+        "0": "A",
+        "1": "C"
+      },
+      "C": {
+        "0": "A",
+        "1": "B"
+      }
+    },
+    "input": "10000"
+  },
+  {
+    "case_id": 6025,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "B"
+      },
+      "B": {
+        "0": "B",
+        "1": "B"
+      },
+      "C": {
+        "0": "A",
+        "1": "C"
+      }
+    },
+    "input": "00"
+  },
+  {
+    "case_id": 6026,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "B"
+      },
+      "B": {
+        "0": "A",
+        "1": "A"
+      },
+      "C": {
+        "0": "C",
+        "1": "C"
+      }
+    },
+    "input": "010"
+  },
+  {
+    "case_id": 6027,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "A"
+      },
+      "B": {
+        "0": "C",
+        "1": "B"
+      },
+      "C": {
+        "0": "A",
+        "1": "B"
+      }
+    },
+    "input": "0110"
+  },
+  {
+    "case_id": 6028,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "A"
+      },
+      "B": {
+        "0": "A",
+        "1": "B"
+      },
+      "C": {
+        "0": "A",
+        "1": "C"
+      }
+    },
+    "input": "00010"
+  },
+  {
+    "case_id": 6029,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "C"
+      },
+      "B": {
+        "0": "A",
+        "1": "C"
+      },
+      "C": {
+        "0": "B",
+        "1": "A"
+      }
+    },
+    "input": "11"
+  },
+  {
+    "case_id": 6030,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "C"
+      },
+      "B": {
+        "0": "B",
+        "1": "A"
+      },
+      "C": {
+        "0": "C",
+        "1": "A"
+      }
+    },
+    "input": "000"
+  },
+  {
+    "case_id": 6031,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "B"
+      },
+      "B": {
+        "0": "C",
+        "1": "C"
+      },
+      "C": {
+        "0": "B",
+        "1": "A"
+      }
+    },
+    "input": "0010"
+  },
+  {
+    "case_id": 6032,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "C"
+      },
+      "B": {
+        "0": "B",
+        "1": "B"
+      },
+      "C": {
+        "0": "A",
+        "1": "B"
+      }
+    },
+    "input": "00001"
+  },
+  {
+    "case_id": 6033,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "C"
+      },
+      "B": {
+        "0": "C",
+        "1": "A"
+      },
+      "C": {
+        "0": "A",
+        "1": "B"
+      }
+    },
+    "input": "10"
+  },
+  {
+    "case_id": 6034,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "B"
+      },
+      "B": {
+        "0": "B",
+        "1": "A"
+      },
+      "C": {
+        "0": "B",
+        "1": "C"
+      }
+    },
+    "input": "101"
+  },
+  {
+    "case_id": 6035,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "B"
+      },
+      "B": {
+        "0": "A",
+        "1": "A"
+      },
+      "C": {
+        "0": "C",
+        "1": "C"
+      }
+    },
+    "input": "0000"
+  },
+  {
+    "case_id": 6036,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "A"
+      },
+      "B": {
+        "0": "C",
+        "1": "B"
+      },
+      "C": {
+        "0": "C",
+        "1": "B"
+      }
+    },
+    "input": "01100"
+  },
+  {
+    "case_id": 6037,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "C"
+      },
+      "B": {
+        "0": "A",
+        "1": "A"
+      },
+      "C": {
+        "0": "C",
+        "1": "C"
+      }
+    },
+    "input": "11"
+  },
+  {
+    "case_id": 6038,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "A"
+      },
+      "B": {
+        "0": "C",
+        "1": "A"
+      },
+      "C": {
+        "0": "B",
+        "1": "A"
+      }
+    },
+    "input": "100"
+  },
+  {
+    "case_id": 6039,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "B"
+      },
+      "B": {
+        "0": "B",
+        "1": "A"
+      },
+      "C": {
+        "0": "A",
+        "1": "A"
+      }
+    },
+    "input": "1101"
+  },
+  {
+    "case_id": 6040,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "A"
+      },
+      "B": {
+        "0": "C",
+        "1": "C"
+      },
+      "C": {
+        "0": "B",
+        "1": "B"
+      }
+    },
+    "input": "00100"
+  },
+  {
+    "case_id": 6041,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "B"
+      },
+      "B": {
+        "0": "C",
+        "1": "C"
+      },
+      "C": {
+        "0": "C",
+        "1": "B"
+      }
+    },
+    "input": "10"
+  },
+  {
+    "case_id": 6042,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "C"
+      },
+      "B": {
+        "0": "A",
+        "1": "A"
+      },
+      "C": {
+        "0": "B",
+        "1": "C"
+      }
+    },
+    "input": "101"
+  },
+  {
+    "case_id": 6043,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "C"
+      },
+      "B": {
+        "0": "B",
+        "1": "B"
+      },
+      "C": {
+        "0": "C",
+        "1": "C"
+      }
+    },
+    "input": "0001"
+  },
+  {
+    "case_id": 6044,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "A"
+      },
+      "B": {
+        "0": "A",
+        "1": "B"
+      },
+      "C": {
+        "0": "A",
+        "1": "C"
+      }
+    },
+    "input": "10000"
+  },
+  {
+    "case_id": 6045,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "B"
+      },
+      "B": {
+        "0": "B",
+        "1": "B"
+      },
+      "C": {
+        "0": "C",
+        "1": "A"
+      }
+    },
+    "input": "10"
+  },
+  {
+    "case_id": 6046,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "B"
+      },
+      "B": {
+        "0": "B",
+        "1": "B"
+      },
+      "C": {
+        "0": "B",
+        "1": "B"
+      }
+    },
+    "input": "011"
+  },
+  {
+    "case_id": 6047,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "B"
+      },
+      "B": {
+        "0": "A",
+        "1": "B"
+      },
+      "C": {
+        "0": "A",
+        "1": "B"
+      }
+    },
+    "input": "1000"
+  },
+  {
+    "case_id": 6048,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "A"
+      },
+      "B": {
+        "0": "A",
+        "1": "C"
+      },
+      "C": {
+        "0": "A",
+        "1": "C"
+      }
+    },
+    "input": "11110"
+  },
+  {
+    "case_id": 6049,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "C"
+      },
+      "B": {
+        "0": "B",
+        "1": "C"
+      },
+      "C": {
+        "0": "C",
+        "1": "A"
+      }
+    },
+    "input": "01"
+  },
+  {
+    "case_id": 6050,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "B"
+      },
+      "B": {
+        "0": "A",
+        "1": "A"
+      },
+      "C": {
+        "0": "C",
+        "1": "C"
+      }
+    },
+    "input": "001"
+  },
+  {
+    "case_id": 6051,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "B"
+      },
+      "B": {
+        "0": "B",
+        "1": "A"
+      },
+      "C": {
+        "0": "C",
+        "1": "B"
+      }
+    },
+    "input": "1010"
+  },
+  {
+    "case_id": 6052,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "B"
+      },
+      "B": {
+        "0": "C",
+        "1": "B"
+      },
+      "C": {
+        "0": "B",
+        "1": "C"
+      }
+    },
+    "input": "01110"
+  },
+  {
+    "case_id": 6053,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "A"
+      },
+      "B": {
+        "0": "A",
+        "1": "B"
+      },
+      "C": {
+        "0": "A",
+        "1": "C"
+      }
+    },
+    "input": "00"
+  },
+  {
+    "case_id": 6054,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "C"
+      },
+      "B": {
+        "0": "A",
+        "1": "B"
+      },
+      "C": {
+        "0": "B",
+        "1": "C"
+      }
+    },
+    "input": "001"
+  },
+  {
+    "case_id": 6055,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "C"
+      },
+      "B": {
+        "0": "A",
+        "1": "A"
+      },
+      "C": {
+        "0": "C",
+        "1": "A"
+      }
+    },
+    "input": "1010"
+  },
+  {
+    "case_id": 6056,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "B"
+      },
+      "B": {
+        "0": "C",
+        "1": "A"
+      },
+      "C": {
+        "0": "A",
+        "1": "B"
+      }
+    },
+    "input": "00110"
+  },
+  {
+    "case_id": 6057,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "A"
+      },
+      "B": {
+        "0": "C",
+        "1": "B"
+      },
+      "C": {
+        "0": "B",
+        "1": "C"
+      }
+    },
+    "input": "11"
+  },
+  {
+    "case_id": 6058,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "A"
+      },
+      "B": {
+        "0": "C",
+        "1": "C"
+      },
+      "C": {
+        "0": "C",
+        "1": "C"
+      }
+    },
+    "input": "100"
+  },
+  {
+    "case_id": 6059,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "C"
+      },
+      "B": {
+        "0": "B",
+        "1": "B"
+      },
+      "C": {
+        "0": "C",
+        "1": "A"
+      }
+    },
+    "input": "1110"
+  },
+  {
+    "case_id": 6060,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "C"
+      },
+      "B": {
+        "0": "B",
+        "1": "C"
+      },
+      "C": {
+        "0": "B",
+        "1": "C"
+      }
+    },
+    "input": "00011"
+  },
+  {
+    "case_id": 6061,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "A"
+      },
+      "B": {
+        "0": "B",
+        "1": "C"
+      },
+      "C": {
+        "0": "C",
+        "1": "A"
+      }
+    },
+    "input": "11"
+  },
+  {
+    "case_id": 6062,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "C"
+      },
+      "B": {
+        "0": "A",
+        "1": "C"
+      },
+      "C": {
+        "0": "A",
+        "1": "B"
+      }
+    },
+    "input": "001"
+  },
+  {
+    "case_id": 6063,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "A"
+      },
+      "B": {
+        "0": "C",
+        "1": "B"
+      },
+      "C": {
+        "0": "C",
+        "1": "B"
+      }
+    },
+    "input": "1111"
+  },
+  {
+    "case_id": 6064,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "C"
+      },
+      "B": {
+        "0": "C",
+        "1": "B"
+      },
+      "C": {
+        "0": "C",
+        "1": "B"
+      }
+    },
+    "input": "11110"
+  },
+  {
+    "case_id": 6065,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "A"
+      },
+      "B": {
+        "0": "B",
+        "1": "A"
+      },
+      "C": {
+        "0": "A",
+        "1": "B"
+      }
+    },
+    "input": "11"
+  },
+  {
+    "case_id": 6066,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "A"
+      },
+      "B": {
+        "0": "B",
+        "1": "B"
+      },
+      "C": {
+        "0": "C",
+        "1": "C"
+      }
+    },
+    "input": "100"
+  },
+  {
+    "case_id": 6067,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "A"
+      },
+      "B": {
+        "0": "A",
+        "1": "C"
+      },
+      "C": {
+        "0": "B",
+        "1": "C"
+      }
+    },
+    "input": "1110"
+  },
+  {
+    "case_id": 6068,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "A"
+      },
+      "B": {
+        "0": "B",
+        "1": "B"
+      },
+      "C": {
+        "0": "A",
+        "1": "B"
+      }
+    },
+    "input": "01100"
+  },
+  {
+    "case_id": 6069,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "A"
+      },
+      "B": {
+        "0": "B",
+        "1": "A"
+      },
+      "C": {
+        "0": "C",
+        "1": "B"
+      }
+    },
+    "input": "01"
+  },
+  {
+    "case_id": 6070,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "B"
+      },
+      "B": {
+        "0": "A",
+        "1": "B"
+      },
+      "C": {
+        "0": "A",
+        "1": "A"
+      }
+    },
+    "input": "010"
+  },
+  {
+    "case_id": 6071,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "B"
+      },
+      "B": {
+        "0": "C",
+        "1": "C"
+      },
+      "C": {
+        "0": "B",
+        "1": "A"
+      }
+    },
+    "input": "0111"
+  },
+  {
+    "case_id": 6072,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "A"
+      },
+      "B": {
+        "0": "C",
+        "1": "A"
+      },
+      "C": {
+        "0": "C",
+        "1": "B"
+      }
+    },
+    "input": "11001"
+  },
+  {
+    "case_id": 6073,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "A"
+      },
+      "B": {
+        "0": "C",
+        "1": "C"
+      },
+      "C": {
+        "0": "A",
+        "1": "A"
+      }
+    },
+    "input": "01"
+  },
+  {
+    "case_id": 6074,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "B"
+      },
+      "B": {
+        "0": "C",
+        "1": "C"
+      },
+      "C": {
+        "0": "B",
+        "1": "B"
+      }
+    },
+    "input": "010"
+  },
+  {
+    "case_id": 6075,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "C"
+      },
+      "B": {
+        "0": "A",
+        "1": "B"
+      },
+      "C": {
+        "0": "C",
+        "1": "B"
+      }
+    },
+    "input": "0001"
+  },
+  {
+    "case_id": 6076,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "A"
+      },
+      "B": {
+        "0": "A",
+        "1": "A"
+      },
+      "C": {
+        "0": "B",
+        "1": "A"
+      }
+    },
+    "input": "10110"
+  },
+  {
+    "case_id": 6077,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "C"
+      },
+      "B": {
+        "0": "A",
+        "1": "B"
+      },
+      "C": {
+        "0": "B",
+        "1": "A"
+      }
+    },
+    "input": "10"
+  },
+  {
+    "case_id": 6078,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "C"
+      },
+      "B": {
+        "0": "C",
+        "1": "A"
+      },
+      "C": {
+        "0": "B",
+        "1": "C"
+      }
+    },
+    "input": "001"
+  },
+  {
+    "case_id": 6079,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "A"
+      },
+      "B": {
+        "0": "B",
+        "1": "B"
+      },
+      "C": {
+        "0": "B",
+        "1": "A"
+      }
+    },
+    "input": "0101"
+  },
+  {
+    "case_id": 6080,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "A"
+      },
+      "B": {
+        "0": "B",
+        "1": "A"
+      },
+      "C": {
+        "0": "A",
+        "1": "B"
+      }
+    },
+    "input": "10011"
+  },
+  {
+    "case_id": 6081,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "A"
+      },
+      "B": {
+        "0": "C",
+        "1": "A"
+      },
+      "C": {
+        "0": "A",
+        "1": "C"
+      }
+    },
+    "input": "00"
+  },
+  {
+    "case_id": 6082,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "C"
+      },
+      "B": {
+        "0": "A",
+        "1": "C"
+      },
+      "C": {
+        "0": "C",
+        "1": "A"
+      }
+    },
+    "input": "010"
+  },
+  {
+    "case_id": 6083,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "B"
+      },
+      "B": {
+        "0": "C",
+        "1": "B"
+      },
+      "C": {
+        "0": "C",
+        "1": "B"
+      }
+    },
+    "input": "1111"
+  },
+  {
+    "case_id": 6084,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "A"
+      },
+      "B": {
+        "0": "C",
+        "1": "A"
+      },
+      "C": {
+        "0": "B",
+        "1": "C"
+      }
+    },
+    "input": "11000"
+  },
+  {
+    "case_id": 6085,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "B"
+      },
+      "B": {
+        "0": "A",
+        "1": "A"
+      },
+      "C": {
+        "0": "B",
+        "1": "C"
+      }
+    },
+    "input": "01"
+  },
+  {
+    "case_id": 6086,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "A"
+      },
+      "B": {
+        "0": "C",
+        "1": "C"
+      },
+      "C": {
+        "0": "C",
+        "1": "C"
+      }
+    },
+    "input": "000"
+  },
+  {
+    "case_id": 6087,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "C"
+      },
+      "B": {
+        "0": "B",
+        "1": "A"
+      },
+      "C": {
+        "0": "C",
+        "1": "B"
+      }
+    },
+    "input": "0000"
+  },
+  {
+    "case_id": 6088,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "A"
+      },
+      "B": {
+        "0": "A",
+        "1": "A"
+      },
+      "C": {
+        "0": "A",
+        "1": "B"
+      }
+    },
+    "input": "01000"
+  },
+  {
+    "case_id": 6089,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "B"
+      },
+      "B": {
+        "0": "C",
+        "1": "A"
+      },
+      "C": {
+        "0": "B",
+        "1": "A"
+      }
+    },
+    "input": "11"
+  },
+  {
+    "case_id": 6090,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "B"
+      },
+      "B": {
+        "0": "C",
+        "1": "B"
+      },
+      "C": {
+        "0": "C",
+        "1": "A"
+      }
+    },
+    "input": "110"
+  },
+  {
+    "case_id": 6091,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "A"
+      },
+      "B": {
+        "0": "A",
+        "1": "C"
+      },
+      "C": {
+        "0": "B",
+        "1": "C"
+      }
+    },
+    "input": "1100"
+  },
+  {
+    "case_id": 6092,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "A"
+      },
+      "B": {
+        "0": "C",
+        "1": "B"
+      },
+      "C": {
+        "0": "B",
+        "1": "A"
+      }
+    },
+    "input": "00000"
+  },
+  {
+    "case_id": 6093,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "B"
+      },
+      "B": {
+        "0": "B",
+        "1": "A"
+      },
+      "C": {
+        "0": "B",
+        "1": "B"
+      }
+    },
+    "input": "10"
+  },
+  {
+    "case_id": 6094,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "C"
+      },
+      "B": {
+        "0": "A",
+        "1": "B"
+      },
+      "C": {
+        "0": "B",
+        "1": "A"
+      }
+    },
+    "input": "100"
+  },
+  {
+    "case_id": 6095,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "C"
+      },
+      "B": {
+        "0": "A",
+        "1": "B"
+      },
+      "C": {
+        "0": "C",
+        "1": "A"
+      }
+    },
+    "input": "0000"
+  },
+  {
+    "case_id": 6096,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "A"
+      },
+      "B": {
+        "0": "A",
+        "1": "A"
+      },
+      "C": {
+        "0": "A",
+        "1": "A"
+      }
+    },
+    "input": "01001"
+  },
+  {
+    "case_id": 6097,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "B"
+      },
+      "B": {
+        "0": "C",
+        "1": "B"
+      },
+      "C": {
+        "0": "C",
+        "1": "A"
+      }
+    },
+    "input": "10"
+  },
+  {
+    "case_id": 6098,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "C"
+    ],
+    "transitions": {
+      "A": {
+        "0": "A",
+        "1": "A"
+      },
+      "B": {
+        "0": "C",
+        "1": "A"
+      },
+      "C": {
+        "0": "C",
+        "1": "C"
+      }
+    },
+    "input": "011"
+  },
+  {
+    "case_id": 6099,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "A"
+    ],
+    "transitions": {
+      "A": {
+        "0": "B",
+        "1": "A"
+      },
+      "B": {
+        "0": "B",
+        "1": "B"
+      },
+      "C": {
+        "0": "A",
+        "1": "A"
+      }
+    },
+    "input": "1010"
+  },
+  {
+    "case_id": 6100,
+    "stage": 1,
+    "states": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alphabet": [
+      "0",
+      "1"
+    ],
+    "start": "A",
+    "accepting": [
+      "B"
+    ],
+    "transitions": {
+      "A": {
+        "0": "C",
+        "1": "B"
+      },
+      "B": {
+        "0": "C",
+        "1": "B"
+      },
+      "C": {
+        "0": "B",
+        "1": "B"
+      }
+    },
+    "input": "00111"
+  }
+]
