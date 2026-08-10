@@ -13,14 +13,18 @@ result and does not revise V41R27.
 - archive format: Git commit tar archive;
 - archive SHA-256:
   `sha256:1b2d2e6c96b89749cddd2e48a727f08a090a21634bf9c48c12734a2174968580`;
+- extracted-tree manifest SHA-256:
+  `sha256:652633475af44cd6053b9dec6f44c7420c2668eb0e9253c4b994e9199ff9b9f5`;
 - local custody path:
   `/Users/shaanp/.codex/source-freezes/v41r33r1-rgs-754220f7.tar`;
 - source worktree branch:
   `codex/astral-rgs-v28-acquisition-novelty-v1`;
 - source worktree was clean at freeze time.
 
-The archive must be copied into the future GMAN node and re-hashed before any
-worker starts. A missing, altered, or unverified archive is an
+The archive must be copied into the future GMAN node, re-hashed from its actual
+archive path, extracted into a clean checkout, and checked against both the
+locked commit and extracted-tree manifest before any worker starts. A missing,
+altered, dirty, or unverified archive/tree is an
 `InfrastructureSourceFreezeIncomplete` result and consumes no scientific arm.
 
 ## Governance

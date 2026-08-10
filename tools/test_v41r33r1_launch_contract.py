@@ -1,0 +1,205 @@
+from __future__ import annotations
+
+import hashlib
+import importlib.util
+from pathlib import Path
+import subprocess
+import sys
+
+
+ROOT = Path(__file__).parent
+
+def load(name: str, path: Path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+WRAPPER = load("v41r33r1_wrapper", ROOT / "v41r32r1_history_prelude_wrapper.py")
+COORDINATOR = load(
+    "v41r33r1_coordinator", ROOT / "v41r33r1_history_dependence_coordinator.py"
+)
+
+
+def test_archive_mismatch_fails_closed(tmp_path: Path) -> None:
+    archive = tmp_path / "archive.tar"
+    archive.write_bytes(b"not-the-frozen-archive")
+    expected = WRAPPER.EXPECTED_ARCHIVE
+    try:
+        WRAPPER.EXPECTED_ARCHIVE = "sha256:" + hashlib.sha256(b"frozen").hexdigest()
+        try:
+            WRAPPER.verify_archive(archive)
+        except RuntimeError as error:
+            assert "archive" in str(error)
+        else:
+            raise AssertionError("archive mismatch was accepted")
+    finally:
+        WRAPPER.EXPECTED_ARCHIVE = expected
+
+
+def test_launcher_rejects_bad_archive_before_wrapper_import(tmp_path: Path) -> None:
+    bad_archive = tmp_path / "bad.tar"
+    bad_archive.write_bytes(b"bad")
+    completed = subprocess.run(
+        [sys.executable, str(ROOT / "v41r33r1_history_prelude_launcher.py"),
+         "--output", str(tmp_path / "out"), "--archive", str(bad_archive)],
+        cwd=ROOT, capture_output=True, text=True,
+    )
+    assert completed.returncode != 0
+    assert "before wrapper import" in completed.stderr
+    assert "ModuleNotFoundError" not in completed.stderr
+
+
+def test_tree_mismatch_fails_closed(tmp_path: Path) -> None:
+    (tmp_path / "worker.py").write_text("frozen\n")
+    expected = WRAPPER.EXPECTED_TREE
+    try:
+        WRAPPER.EXPECTED_TREE = "sha256:" + "0" * 64
+        try:
+            WRAPPER.verify_extracted_tree(tmp_path)
+        except RuntimeError as error:
+            assert "tree" in str(error)
+        else:
+            raise AssertionError("tree mismatch was accepted")
+    finally:
+        WRAPPER.EXPECTED_TREE = expected
+
+
+def test_imported_module_mismatch_fails_closed(tmp_path: Path) -> None:
+    module = tmp_path / "worker.py"
+    module.write_text("frozen\n")
+    expected = WRAPPER.EXPECTED_SOURCE_FILES.copy()
+    try:
+        WRAPPER.EXPECTED_SOURCE_FILES = {"worker.py": "sha256:" + "0" * 64}
+        try:
+            WRAPPER.verify_source_files(tmp_path)
+        except RuntimeError as error:
+            assert "source file" in str(error)
+        else:
+            raise AssertionError("source mismatch was accepted")
+    finally:
+        WRAPPER.EXPECTED_SOURCE_FILES = expected
+
+
+def test_launcher_and_wrapper_mismatch_fails_closed(tmp_path: Path) -> None:
+    launcher = tmp_path / "launcher.py"
+    wrapper = tmp_path / "wrapper.py"
+    launcher.write_text("launcher\n")
+    wrapper.write_text("wrapper\n")
+    try:
+        COORDINATOR.verify_runtime_hashes(
+            launcher,
+            wrapper,
+            "sha256:" + "0" * 64,
+            "sha256:" + hashlib.sha256(wrapper.read_bytes()).hexdigest(),
+        )
+    except RuntimeError as error:
+        assert "launcher" in str(error)
+    else:
+        raise AssertionError("launcher mismatch was accepted")
+
+
+def test_wrong_argv_fails_closed(tmp_path: Path) -> None:
+    output = tmp_path / "out"
+    archive = tmp_path / "archive.tar"
+    expected = COORDINATOR.command_argv("intervention", output, archive=archive)
+    wrong = [*expected[:-1], "wrong-output"]
+    try:
+        COORDINATOR.verify_command("intervention", wrong, output, archive=archive)
+    except RuntimeError as error:
+        assert "command" in str(error)
+    else:
+        raise AssertionError("wrong command was accepted")
+
+
+def test_custom_launcher_is_bound_into_intervention_argv(tmp_path: Path) -> None:
+    launcher = tmp_path / "v41r33r1-launcher.py"
+    archive = tmp_path / "archive.tar"
+    argv = COORDINATOR.command_argv(
+        "intervention", tmp_path / "out", archive=archive, launcher=launcher)
+    assert argv[1] == str(launcher)
+    COORDINATOR.verify_command(
+        "intervention", argv, tmp_path / "out", archive=archive, launcher=launcher)
+    relative = COORDINATOR.command_argv(
+        "intervention", Path("relative-output"), archive=Path("relative-archive"),
+        launcher=Path("relative-launcher"))
+    assert Path(relative[1]).is_absolute()
+    assert Path(relative[3]).is_absolute()
+    assert Path(relative[5]).is_absolute()
+
+
+def test_validator_commands_are_exact_per_arm(tmp_path: Path) -> None:
+    validator = tmp_path / "validate_worker.py"
+    root = tmp_path / "rgs"
+    control = tmp_path / "control"
+    intervention = tmp_path / "intervention"
+    assert COORDINATOR.validator_argv(validator, control, root) == [
+        COORDINATOR.PYTHON, str(validator.resolve()), "--artifact", str(control.resolve()),
+        "--rgs-root", str(root.resolve())]
+    assert COORDINATOR.validator_argv(validator, intervention, root)[3] == str(intervention)
+
+
+def test_reversed_arm_order_fails_closed() -> None:
+    try:
+        COORDINATOR.require_arm_order(["intervention", "control"])
+    except RuntimeError as error:
+        assert "order" in str(error)
+    else:
+        raise AssertionError("reversed arm order was accepted")
+
+
+def test_same_node_disk_binding_is_recorded(tmp_path: Path) -> None:
+    binding = COORDINATOR.verify_same_node_disk(tmp_path, tmp_path / "output")
+    assert binding["working_directory"] == str(tmp_path.resolve())
+    assert binding["working_directory_device"] == binding["output_parent_device"]
+
+
+def test_consumed_output_root_fails_closed(tmp_path: Path) -> None:
+    output = tmp_path / "output"
+    output.mkdir()
+    (output / "campaign-ledger.json").write_text("consumed\n")
+    try:
+        COORDINATOR.require_fresh_output_root(output)
+    except RuntimeError as error:
+        assert "consumed" in str(error)
+    else:
+        raise AssertionError("consumed output root was accepted")
+
+
+def test_wrapper_receipt_missing_or_mismatched_fails_closed(tmp_path: Path) -> None:
+    archive = tmp_path / "archive.tar"
+    launcher = tmp_path / "launcher.py"
+    wrapper = tmp_path / "wrapper.py"
+    archive.write_bytes(b"archive")
+    launcher.write_text("launcher")
+    wrapper.write_text("wrapper")
+    output = tmp_path / "output"
+    output.mkdir()
+    try:
+        COORDINATOR.verify_wrapper_receipt(
+            output, archive=archive, launcher=launcher, wrapper=wrapper)
+    except RuntimeError as error:
+        assert "receipt" in str(error)
+    else:
+        raise AssertionError("missing wrapper receipt was accepted")
+    (output / "v41r32r1-wrapper-receipt.json").write_text("{}\n")
+    try:
+        COORDINATOR.verify_wrapper_receipt(
+            output, archive=archive, launcher=launcher, wrapper=wrapper)
+    except RuntimeError as error:
+        assert "receipt" in str(error)
+    else:
+        raise AssertionError("mismatched wrapper receipt was accepted")
+
+
+def test_validator_mismatch_fails_closed(tmp_path: Path) -> None:
+    validator = tmp_path / "validate_worker.py"
+    validator.write_text("validator\n")
+    try:
+        COORDINATOR.verify_validator(validator, "sha256:" + "0" * 64)
+    except RuntimeError as error:
+        assert "validator" in str(error)
+    else:
+        raise AssertionError("validator mismatch was accepted")

@@ -19,12 +19,19 @@ from pathlib import Path
 
 
 RGS_ROOT = Path(os.environ.get("RGS_ROOT", "/home/dev/rgs")).resolve()
-EXPECTED_COMMIT = "c3b287d4227db94a43af7888d0211fb337c330fa"
-EXPECTED_ARCHIVE = "sha256:8b1802d97b14d83b6d6d4596589664885efd973cec1e02ac03250acf0e250645"
-EXPECTED_TREE = "sha256:19c1f485125c0cb7d113fd763f972c28df0d02e02e26c6f0777de6ab08a06db5"
+EXPECTED_COMMIT = "754220f7fc360d8dd15e5837190b895ea0550f30"
+EXPECTED_ARCHIVE = "sha256:1b2d2e6c96b89749cddd2e48a727f08a090a21634bf9c48c12734a2174968580"
+EXPECTED_TREE = "sha256:652633475af44cd6053b9dec6f44c7420c2668eb0e9253c4b994e9199ff9b9f5"
 EXPECTED_ENTRYPOINT = "sha256:cccc6a69caace07871274a929785c75de98a3fe6975acd67d4866ee4c7ae8859"
 EXPECTED_METHOD = "sha256:f9fa45c268fccdecde2f3dfb2c6720ed0a47e2004f1f4b50d9c4c89767ba98dd"
 EXPECTED_REQUIREMENTS = "sha256:0a114a8f7abaee60c0aff87e27354e2eae5090772b20b1bbd30093ad6d1c3541"
+EXPECTED_WRAPPER = ""
+EXPECTED_LAUNCHER = ""
+EXPECTED_SOURCE_FILES = {
+    "scripts/run_v41r27_worker.py": EXPECTED_ENTRYPOINT,
+    "mesh_brain/meshmodel/v41r27_agem_retention.py": EXPECTED_METHOD,
+    "requirements-v41-h100-profile.txt": EXPECTED_REQUIREMENTS,
+}
 RUN_ID = "v41r27-panel-8-seed-412019"
 
 
@@ -36,26 +43,60 @@ def sha256(path: Path) -> str:
     return "sha256:" + digest.hexdigest()
 
 
-def require_bindings() -> None:
+def tree_manifest_sha256(root: Path) -> str:
+    rows = []
+    for path in sorted(root.rglob("*")):
+        if not path.is_file() or ".git" in path.relative_to(root).parts:
+            continue
+        relative = path.relative_to(root).as_posix()
+        rows.append(f"{relative}\0{sha256(path)}\n")
+    return "sha256:" + hashlib.sha256("".join(rows).encode()).hexdigest()
+
+
+def verify_archive(archive_path: Path) -> None:
+    if not archive_path.is_file() or sha256(archive_path) != EXPECTED_ARCHIVE:
+        raise RuntimeError("V41R33R1 uploaded source archive mismatch")
+
+
+def verify_extracted_tree(root: Path) -> None:
+    if tree_manifest_sha256(root) != EXPECTED_TREE:
+        raise RuntimeError("V41R33R1 extracted source tree mismatch")
+
+
+def verify_source_files(root: Path) -> None:
+    for relative, expected in EXPECTED_SOURCE_FILES.items():
+        path = root / relative
+        if not path.is_file() or sha256(path) != expected:
+            raise RuntimeError(f"V41R33R1 source file mismatch: {relative}")
+
+
+def verify_runtime_hashes(launcher_path: Path | None) -> None:
+    if EXPECTED_WRAPPER and sha256(Path(__file__).resolve()) != EXPECTED_WRAPPER:
+        raise RuntimeError("V41R33R1 wrapper hash mismatch")
+    if EXPECTED_LAUNCHER:
+        if launcher_path is None or sha256(launcher_path.resolve()) != EXPECTED_LAUNCHER:
+            raise RuntimeError("V41R33R1 launcher hash mismatch")
+
+
+def require_bindings(archive_path: Path) -> None:
     if os.environ.get("RGS_SOURCE_COMMIT") != EXPECTED_COMMIT:
-        raise RuntimeError("V41R32R1 source commit binding mismatch")
+        raise RuntimeError("V41R33R1 source commit binding mismatch")
     if os.environ.get("RGS_SOURCE_ARCHIVE_SHA256") != EXPECTED_ARCHIVE:
-        raise RuntimeError("V41R32R1 source archive binding mismatch")
+        raise RuntimeError("V41R33R1 source archive environment binding mismatch")
+    verify_archive(archive_path.resolve())
+    actual_commit = subprocess.run(
+        ["git", "get-tar-commit-id"],
+        input=archive_path.resolve().read_bytes(), check=True, capture_output=True,
+    ).stdout.decode().strip()
+    if actual_commit != EXPECTED_COMMIT:
+        raise RuntimeError("V41R33R1 extracted source commit mismatch")
     entrypoint = RGS_ROOT / "scripts" / "run_v41r27_worker.py"
     method = RGS_ROOT / "mesh_brain/meshmodel/v41r27_agem_retention.py"
     requirements = RGS_ROOT / "requirements-v41-h100-profile.txt"
     if not all(path.is_file() for path in (entrypoint, method, requirements)):
-        raise RuntimeError("V41R32R1 frozen source missing")
-    archive = subprocess.run(
-        ["git", "-C", str(RGS_ROOT), "archive", EXPECTED_COMMIT],
-        check=True, capture_output=True,
-    ).stdout
-    if "sha256:" + hashlib.sha256(archive).hexdigest() != EXPECTED_TREE:
-        raise RuntimeError("V41R32R1 source tree mismatch")
-    for path, expected in ((entrypoint, EXPECTED_ENTRYPOINT), (method, EXPECTED_METHOD),
-                           (requirements, EXPECTED_REQUIREMENTS)):
-        if sha256(path) != expected:
-            raise RuntimeError(f"V41R32R1 source file mismatch: {path}")
+        raise RuntimeError("V41R33R1 frozen source missing")
+    verify_extracted_tree(RGS_ROOT)
+    verify_source_files(RGS_ROOT)
 
 
 def capture_rng(torch: object) -> dict[str, object]:
@@ -79,17 +120,19 @@ def restore_rng(torch: object, state: dict[str, object]) -> None:
     torch.cuda.set_rng_state_all(state["torch_cuda"])  # type: ignore[attr-defined]
 
 
-def main() -> int:
+def main(argv: list[str] | None = None, *, launcher_path: Path | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", required=True, type=Path)
-    args = parser.parse_args()
+    parser.add_argument("--archive", required=True, type=Path)
+    args = parser.parse_args(argv)
     initial_python = random.getstate()
     try:
         import numpy
         initial_numpy = numpy.random.get_state()
     except ImportError:
         initial_numpy = None
-    require_bindings()
+    verify_runtime_hashes(launcher_path)
+    require_bindings(args.archive)
     sys.path.insert(0, str(RGS_ROOT / "scripts"))
     os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
 
@@ -139,6 +182,11 @@ def main() -> int:
     result = worker.run(args.output, RUN_ID)
     receipt = {
         "wrapper_sha256": sha256(Path(__file__).resolve()),
+        "launcher_sha256": sha256(launcher_path.resolve()) if launcher_path else None,
+        "launcher_path": str(launcher_path.resolve()) if launcher_path else None,
+        "implementation_path": str(Path(__file__).resolve()),
+        "archive_path": str(args.archive.resolve()),
+        "archive_sha256": sha256(args.archive.resolve()),
         "run_id": RUN_ID,
         "source_commit": EXPECTED_COMMIT,
         "source_archive_sha256": EXPECTED_ARCHIVE,
