@@ -32,13 +32,20 @@ def expected_prompt(fact):
     )
 
 
-def validate(root: Path, expected_seed: int = 20260810, expected_order: list[int] | None = None) -> dict:
+def validate(
+    root: Path,
+    expected_seed: int = 20260810,
+    expected_order: list[int] | None = None,
+    expected_state_slice: str = STATE_SLICE,
+    expected_task_rule: str = "mod4_sum_then_task_permutation_v1",
+    expected_mapping_policy: str = "seeded_task_permutation_v1",
+) -> dict:
     if expected_order is None:
         expected_order = [0, 1, 2, 3]
     config = json.loads((root / "config.json").read_text())
     tasks = json.loads((root / "tasks.json").read_text())
     result = json.loads((root / "result.json").read_text())
-    if result["state_slice"] != STATE_SLICE:
+    if result["state_slice"] != expected_state_slice:
         raise ValueError("state slice mismatch")
     if result["breakthrough_claim_eligible"] is not False:
         raise ValueError("pilot cannot claim breakthrough eligibility")
@@ -48,7 +55,8 @@ def validate(root: Path, expected_seed: int = 20260810, expected_order: list[int
         "task_count": 4,
         "train_facts_per_task": 8,
         "test_facts_per_task": 8,
-        "task_rule": "mod4_sum_then_task_permutation_v1",
+        "task_rule": expected_task_rule,
+        "mapping_policy": expected_mapping_policy,
         "split_policy": "two_train_two_test_per_residue_v1",
         "replay_capacity": 24,
         "update_budget": 32,
@@ -86,8 +94,12 @@ def validate(root: Path, expected_seed: int = 20260810, expected_order: list[int
     test_by_id = {}
     all_train_facts = []
     for task in tasks:
-        if task["mapping"] == sorted(task["mapping"]) or set(task["mapping"]) != set(LABELS):
+        if set(task["mapping"]) != set(LABELS):
             raise ValueError("task mapping is not a label permutation")
+        if expected_task_rule == "mod4_sum_then_task_shift_v2":
+            expected_mapping = [LABELS[(residue + task["task_id"]) % 4] for residue in range(4)]
+            if task["mapping"] != expected_mapping:
+                raise ValueError("task shift mapping drift")
         if len(task["train_facts"]) != 8 or len(task["test_facts"]) != 8:
             raise ValueError("train/test split size drift")
         train_ids = {fact["fact_id"] for fact in task["train_facts"]}
@@ -178,9 +190,19 @@ def main() -> int:
     parser.add_argument("root", type=Path)
     parser.add_argument("--expected-seed", type=int, default=20260810)
     parser.add_argument("--expected-order", default="0,1,2,3")
+    parser.add_argument("--expected-state-slice", default=STATE_SLICE)
+    parser.add_argument("--expected-task-rule", default="mod4_sum_then_task_permutation_v1")
+    parser.add_argument("--expected-mapping-policy", default="seeded_task_permutation_v1")
     args = parser.parse_args()
     try:
-        print(json.dumps(validate(args.root.resolve(), args.expected_seed, [int(value) for value in args.expected_order.split(",")]), sort_keys=True))
+        print(json.dumps(validate(
+            args.root.resolve(),
+            args.expected_seed,
+            [int(value) for value in args.expected_order.split(",")],
+            args.expected_state_slice,
+            args.expected_task_rule,
+            args.expected_mapping_policy,
+        ), sort_keys=True))
     except Exception as exc:
         print(json.dumps({"valid": False, "reason": str(exc)}, sort_keys=True))
         return 1
