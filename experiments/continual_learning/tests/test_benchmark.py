@@ -9,6 +9,7 @@ from experiments.continual_learning.benchmark import (
 )
 from experiments.continual_learning.model_benchmark import (
     LABELS,
+    choose_replay,
     make_tasks as make_model_tasks,
     prompt_for,
     training_example,
@@ -75,3 +76,12 @@ def test_model_prompts_keep_context_explicit_and_training_schema_bounded():
     assert prompt_for(fact).endswith("\nAnswer:")
     assert training_example(fact)["prompt"] == prompt_for(fact)
     assert training_example(fact)["completion"] == f" {fact.label}"
+
+
+def test_replay_sample_is_bounded_and_spans_prior_tasks():
+    tasks = make_model_tasks(17, task_count=4, facts_per_task=8)
+    prior = [fact for task in tasks[:3] for fact in task.facts]
+    sample = choose_replay(prior, capacity=16, seed=17, limit=8)
+    assert len(sample) == 8
+    assert len({fact.task_id for fact in sample}) == 3
+    assert len(choose_replay(prior, capacity=16, seed=17)) == 16
