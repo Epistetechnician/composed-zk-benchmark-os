@@ -14,8 +14,9 @@ from pathlib import Path
 from typing import Any, Iterable
 
 
-STATE_SLICE = "continual-learning-model-adapter-v2"
+STATE_SLICE = "continual-learning-model-adapter-v3-prompt-parity"
 LABELS = ("A", "B", "C", "D")
+ANSWER_SUFFIX = "\nAnswer:"
 DEFAULT_MODEL = Path(
     "/Users/shaanp/.lmstudio/models/mlx-community/Qwen2.5-0.5B-Instruct-4bit"
 )
@@ -79,15 +80,15 @@ def prompt_for(fact: Fact, variant: str = "direct", context: Iterable[Fact] = ()
         "Answer with exactly one letter: A, B, C, or D.\n"
         f"{reference}{query}\n"
         "Return only the letter."
+        f"{ANSWER_SUFFIX}"
     )
 
 
 def training_example(fact: Fact) -> dict[str, str]:
     return {
-        # Keep the supervised prefix identical to the direct assessment
-        # prompt. The label is the only masked completion; this tests whether
-        # the update changes the frozen query rather than a different task.
-        "prompt": prompt_for(fact) + "\nAnswer:",
+        # The supervised prefix is byte-identical to the direct assessment
+        # prompt. The label is the only masked completion.
+        "prompt": prompt_for(fact),
         "completion": f" {fact.label}",
     }
 
@@ -353,6 +354,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "facts_per_task": args.facts_per_task,
         "replay_capacity": args.replay_capacity,
         "update_budget": args.update_budget,
+        "prompt_contract": {
+            "training_prompt_equals_assessment_prompt": True,
+            "answer_suffix": ANSWER_SUFFIX,
+        },
         "iters": args.iters,
         "source_context_removed_for": ["acquisition", "retention_after_interference", "recovery_after_reacquisition"],
         "assessment_effects_generated_before_prediction_lock": False,
