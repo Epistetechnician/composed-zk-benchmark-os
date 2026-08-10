@@ -66,12 +66,17 @@ outcome.
   and disk with separate fresh Python processes; do not reset or recreate the
   node between arms, and record the node identity and arm timestamps;
 - the wrapper must be committed and content-addressed before node creation,
-  with its exact source hash, entrypoint, command bytes, and expected import
-  paths recorded in this identity; a missing or mismatched wrapper is a
-  fail-closed infrastructure result;
+  with wrapper path `tools/v41r32r1_history_prelude_wrapper.py`, SHA-256
+  `sha256:e5d2a6455fcab601838f9b47c127eacfe207ee779341c362329b69a5850236b`,
+  entrypoint `main`, command bytes `python3 tools/v41r32r1_history_prelude_wrapper.py
+  --output <arm-output>`, and expected imports rooted at `/home/dev/rgs/scripts`;
+  a missing or mismatched wrapper is a fail-closed infrastructure result;
 - bind the independent artifact validator identity, validator source hash,
-  and durable artifact destination before launch; missing custody or validator
-  verification is non-scientific and stops the identity.
+  and durable artifact destination before launch. The validator is
+  `tools/astral-v41r27-agem-retention/validate_worker.py`, SHA-256
+  `sha256:f1b9f45cfc7d58812b0f72fba890d3ccb274224b578a74e9f87d584af645dfd4`,
+  invoked against each exported directory with the frozen RGS root. Missing
+  custody or validator verification is non-scientific and stops the identity.
 
 ## Outcomes and interpretation
 
