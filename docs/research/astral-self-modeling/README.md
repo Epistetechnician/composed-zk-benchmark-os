@@ -163,6 +163,17 @@ review and experiments rule out equivalent prior work.
   fresh-concept Llama 1B replication with unchanged V22 anti-shortcut gates.
 - [V23 execution record](43-v23-execution-record.md):
   validated Llama 1B qualification stop with assessment unopened.
+- [Hybrid-instrument capability-tier replication V24](44-hybrid-instrument-capability-tier-v24.md):
+  two-stage offline protocol: validate a controlled seam for the cached 4B
+  `nemotron_h` hybrid checkpoint, then run the unchanged V22/V23 three-way
+  discrimination protocol at the 4B tier. Status: `NotRunHybridInstrumentQualification`.
+- [V24 execution record](45-v24-execution-record.md):
+  certified zero-parity hybrid instrument; behavioral-effect gate excluded
+  injection invisibility; qualification stop with assessment unopened.
+- [Privileged-telemetry information-presence probe V25](46-telemetry-information-presence-v25.md):
+  fork-deciding protocol: decode activation-versus-none from captured
+  residuals with a closed-form probe and compare against the model's own
+  report on identical assessment trials. Status: `NotRunInformationPresenceProbe`.
 - [Stage 0 measurement-validity preregistration](08-stage0-measurement-validity-preregistration.md):
   documentation-only compiled-circuit study boundary, locked comparisons,
   endpoints, stop rules, artifact contract, and advancement gate.

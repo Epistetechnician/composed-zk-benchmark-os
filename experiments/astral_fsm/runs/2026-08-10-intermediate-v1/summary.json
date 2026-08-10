@@ -1,0 +1,40 @@
+{
+  "n": 100,
+  "successful_http_calls": 100,
+  "transport_failures": 0,
+  "exact": 6,
+  "exact_accuracy": 0.06,
+  "strict_json_rate": 0.0,
+  "recoverable_json_rate": 1.0,
+  "mean_state_accuracy": 0.6501969696969697,
+  "stages": {
+    "1": {
+      "n": 100,
+      "exact": 6,
+      "accuracy": 0.06
+    },
+    "2": {
+      "n": 0,
+      "exact": 0,
+      "accuracy": null
+    },
+    "3": {
+      "n": 0,
+      "exact": 0,
+      "accuracy": null
+    }
+  },
+  "natural_failures": 94,
+  "divergence_positions": {
+    "1": 7,
+    "2": 32,
+    "3": 17,
+    "4": 10,
+    "5": 2,
+    "6": 7,
+    "7": 3,
+    "8": 8,
+    "9": 3,
+    "10": 5
+  }
+}
