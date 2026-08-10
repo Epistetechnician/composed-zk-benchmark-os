@@ -13,6 +13,7 @@ import hashlib
 import json
 import os
 import random
+import subprocess
 import sys
 from pathlib import Path
 
@@ -20,6 +21,10 @@ from pathlib import Path
 RGS_ROOT = Path(os.environ.get("RGS_ROOT", "/home/dev/rgs")).resolve()
 EXPECTED_COMMIT = "c3b287d4227db94a43af7888d0211fb337c330fa"
 EXPECTED_ARCHIVE = "sha256:8b1802d97b14d83b6d6d4596589664885efd973cec1e02ac03250acf0e250645"
+EXPECTED_TREE = "sha256:19c1f485125c0cb7d113fd763f972c28df0d02e02e26c6f0777de6ab08a06db5"
+EXPECTED_ENTRYPOINT = "sha256:cccc6a69caace07871274a929785c75de98a3fe6975acd67d4866ee4c7ae8859"
+EXPECTED_METHOD = "sha256:f9fa45c268fccdecde2f3dfb2c6720ed0a47e2004f1f4b50d9c4c89767ba98dd"
+EXPECTED_REQUIREMENTS = "sha256:0a114a8f7abaee60c0aff87e27354e2eae5090772b20b1bbd30093ad6d1c3541"
 RUN_ID = "v41r27-panel-8-seed-412019"
 
 
@@ -36,8 +41,21 @@ def require_bindings() -> None:
         raise RuntimeError("V41R32R1 source commit binding mismatch")
     if os.environ.get("RGS_SOURCE_ARCHIVE_SHA256") != EXPECTED_ARCHIVE:
         raise RuntimeError("V41R32R1 source archive binding mismatch")
-    if not (RGS_ROOT / "scripts" / "run_v41r27_worker.py").is_file():
-        raise RuntimeError("V41R32R1 frozen worker missing")
+    entrypoint = RGS_ROOT / "scripts" / "run_v41r27_worker.py"
+    method = RGS_ROOT / "mesh_brain/meshmodel/v41r27_agem_retention.py"
+    requirements = RGS_ROOT / "requirements-v41-h100-profile.txt"
+    if not all(path.is_file() for path in (entrypoint, method, requirements)):
+        raise RuntimeError("V41R32R1 frozen source missing")
+    archive = subprocess.run(
+        ["git", "-C", str(RGS_ROOT), "archive", EXPECTED_COMMIT],
+        check=True, capture_output=True,
+    ).stdout
+    if "sha256:" + hashlib.sha256(archive).hexdigest() != EXPECTED_TREE:
+        raise RuntimeError("V41R32R1 source tree mismatch")
+    for path, expected in ((entrypoint, EXPECTED_ENTRYPOINT), (method, EXPECTED_METHOD),
+                           (requirements, EXPECTED_REQUIREMENTS)):
+        if sha256(path) != expected:
+            raise RuntimeError(f"V41R32R1 source file mismatch: {path}")
 
 
 def capture_rng(torch: object) -> dict[str, object]:
@@ -65,6 +83,12 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
+    initial_python = random.getstate()
+    try:
+        import numpy
+        initial_numpy = numpy.random.get_state()
+    except ImportError:
+        initial_numpy = None
     require_bindings()
     sys.path.insert(0, str(RGS_ROOT / "scripts"))
     os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
@@ -100,12 +124,18 @@ def main() -> int:
         worker.score_rows(base, tokenizer, protected_selected, torch)
     torch.cuda.synchronize()
     post_prelude_rng = capture_rng(torch)
+    allocator_before_delete = dict(torch.cuda.memory_stats())
     del base, tokenizer
     gc.collect()
     torch.cuda.empty_cache()
     torch.cuda.synchronize()
     restore_rng(torch, prelude_start_rng)
+    random.setstate(initial_python)
+    if initial_numpy is not None:
+        import numpy
+        numpy.random.set_state(initial_numpy)
     torch.cuda.synchronize()
+    allocator_after_delete = dict(torch.cuda.memory_stats())
     result = worker.run(args.output, RUN_ID)
     receipt = {
         "wrapper_sha256": sha256(Path(__file__).resolve()),
@@ -115,6 +145,15 @@ def main() -> int:
         "prelude_case_ids": [case["case_id"] for case in selected],
         "prelude_protected_case_ids": [row["case_id"] for row in protected_selected],
         "prelude_rng_captured": bool(before_import_rng and prelude_start_rng and post_prelude_rng),
+        "explicit_generators": [],
+        "dataloader_worker_seeds": [],
+        "allocator_before_delete": allocator_before_delete,
+        "allocator_after_delete": allocator_after_delete,
+        "objects_deleted": True,
+        "source_tree_sha256": EXPECTED_TREE,
+        "entrypoint_sha256": EXPECTED_ENTRYPOINT,
+        "method_sha256": EXPECTED_METHOD,
+        "requirements_sha256": EXPECTED_REQUIREMENTS,
         "result_sha256": result.get("result_sha256"),
     }
     args.output.joinpath("v41r32r1-wrapper-receipt.json").write_text(
