@@ -14,6 +14,21 @@ outcome.
 - two arms, one worker per arm: `v41r27-panel-8-seed-412019`;
 - same frozen source commit `c3b287d4227db94a43af7888d0211fb337c330fa`;
 - same source archive `sha256:8b1802d97b14d83b6d6d4596589664885efd973cec1e02ac03250acf0e250645`;
+- canonical frozen Git archive SHA-256
+  `sha256:19c1f485125c0cb7d113fd763f972c28df0d02e02e26c6f0777de6ab08a06db5`;
+- frozen entrypoint SHA-256
+  `sha256:cccc6a69caace07871274a929785c75de98a3fe6975acd67d4866ee4c7ae8859`;
+- frozen method SHA-256
+  `sha256:f9fa45c268fccdecde2f3dfb2c6720ed0a47e2004f1f4b50d9c4c89767ba98dd`;
+- frozen requirements SHA-256
+  `sha256:0a114a8f7abaee60c0aff87e27354e2eae5090772b20b1bbd30093ad6d1c3541`;
+- model `openai/gpt-oss-20b`, revision
+  `d0e2aa76789354d715f8b22553b9feb6c462fcf0`, tokenizer class
+  `PreTrainedTokenizerFast`; runtime Python `3.10.12`, torch `2.10.0`, CUDA
+  `12.8`, transformers `4.57.6`, peft `0.18.1`, GPU `NVIDIA H100 80GB HBM3`;
+- exact run spec: acquisition cases `v41r27-acquisition-032` through
+  `035`, protected cases `v41r27-protected-128` through `143`, contract
+  SHA-256 `sha256:ddf7f95ea4bf9b109dbdb1b02b87542a2a8ea56fd694f508c0b8647bc716ed4e`;
 - same H100 class, model, tokenizer, optimizer, seed, 256 steps, gates, and thresholds;
 - control: fresh process invokes the frozen worker directly;
 - intervention: one external wrapper imports the frozen model/tokenizer, runs a
@@ -42,6 +57,9 @@ outcome.
   frozen manifest order, with the frozen worker's tokenizer, batch construction,
   dtype, device, and scoring callable; it synchronizes before deletion and
   records object deletion and allocator state hashes;
+- if the exact container/image digest or NVIDIA driver version cannot be
+  captured before launch, classify the identity as infrastructure-incomplete
+  and do not start either scientific arm;
 - no retries, substitutions, tuning, threshold changes, assessment, or census update;
 - export and verify both result directories, then stop the node immediately.
 
