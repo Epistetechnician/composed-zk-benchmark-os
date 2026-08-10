@@ -16,6 +16,7 @@ from experiments.continual_learning.model_benchmark import (
     replay_counts_by_task,
     training_example,
 )
+from experiments.continual_learning.replicate_model_benchmark import campaign_cases, summarize
 
 
 def test_task_generation_and_protocol_are_deterministic():
@@ -101,3 +102,15 @@ def test_balanced_full_replay_keeps_every_prior_task_complete():
     sample = choose_balanced_full_replay(prior, capacity=24, limit=24)
     assert len(sample) == 24
     assert replay_counts_by_task(sample) == {"0": 8, "1": 8, "2": 8}
+
+
+def test_replication_campaign_has_nine_fixed_cases_and_strict_gate():
+    cases = campaign_cases()
+    assert len(cases) == 9
+    rows = [
+        {"seed": seed, "order": list(order), "retention_delta": 0.125}
+        for seed, order in cases
+    ]
+    summary = summarize(rows)
+    assert summary["all_nine_retention_deltas_positive"] is True
+    assert summary["replication_gate_passed"] is True
