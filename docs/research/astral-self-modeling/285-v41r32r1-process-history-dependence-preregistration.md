@@ -68,7 +68,7 @@ outcome.
   node between arms, and record the node identity and arm timestamps;
 - the wrapper must be committed and content-addressed before node creation,
   with wrapper path `tools/v41r32r1_history_prelude_wrapper.py`, SHA-256
-  `sha256:04c2cb2590fd57d7689e1fc919aa76bc9ccc399b522d0570b2f65f2a2f0818ed`,
+  `sha256:7429fe46ac4d8feb5f9a7aaa7b7f9fc6d32258d6466b9e2fe07abc6498a1a1e7`,
   entrypoint `main`, command bytes `python3 tools/v41r32r1_history_prelude_wrapper.py
   --output <arm-output>`, and expected imports rooted at `/home/dev/rgs/scripts`;
   a missing or mismatched wrapper is a fail-closed infrastructure result;
