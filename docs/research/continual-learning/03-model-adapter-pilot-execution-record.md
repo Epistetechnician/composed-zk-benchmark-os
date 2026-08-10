@@ -2,7 +2,7 @@
 
 State slice: `continual-learning-model-adapter-v2`.
 
-Status: `LocalDevelopmentModelContinualLearningPilotStoppedNoCandidate`.
+Status: `RetiredPromptMismatchDiagnostic`.
 
 ## Execution boundary
 
@@ -41,12 +41,10 @@ naive sequential retention on either model.
 
 ## Decision
 
-Stop this pilot. The result is a negative model/task/update-path diagnostic.
-It does not refute continual learning generally, and it does not justify a
-breakthrough claim. Three update seeds, three orders, larger models,
-withheld-composition tests, and any public claim remain blocked until a new
-task/update design first passes acquisition above the frozen baseline and then
-shows a replay retention advantage under matched budgets.
+Retire this pilot as scientific evidence. The structural validator was valid,
+but V2 trained after an `Answer:` suffix while assessing before that suffix.
+The result is therefore a prompt-transfer diagnostic, not a valid negative
+continual-learning result. V3 repairs this boundary in a new state slice.
 
 External artifacts:
 

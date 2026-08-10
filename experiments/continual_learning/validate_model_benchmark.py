@@ -20,7 +20,7 @@ def validate(root: Path) -> dict:
     config = json.loads((root / "config.json").read_text())
     tasks = json.loads((root / "tasks.json").read_text())
     result = json.loads((root / "result.json").read_text())
-    if result["state_slice"] != "continual-learning-model-adapter-v2":
+    if result["state_slice"] != "continual-learning-model-adapter-v3-prompt-parity":
         raise ValueError("state slice mismatch")
     if result["breakthrough_claim_eligible"] is not False:
         raise ValueError("pilot cannot claim breakthrough eligibility")
@@ -28,6 +28,11 @@ def validate(root: Path) -> dict:
         raise ValueError("source-context boundary drift")
     if config["assessment_effects_generated_before_prediction_lock"] is not False:
         raise ValueError("prediction-lock boundary drift")
+    prompt_contract = config.get("prompt_contract", {})
+    if prompt_contract.get("training_prompt_equals_assessment_prompt") is not True:
+        raise ValueError("training/assessment prompt parity is not locked")
+    if prompt_contract.get("answer_suffix") != "\nAnswer:":
+        raise ValueError("answer suffix drift")
     task_ids = [task["task_id"] for task in tasks]
     if task_ids != list(range(config["task_count"])):
         raise ValueError("task ids are not contiguous")
@@ -39,6 +44,11 @@ def validate(root: Path) -> dict:
         raise ValueError("manifest digest mismatch")
     if set(result["results"]) != set(STRATEGIES):
         raise ValueError("strategy panel drift")
+    for path in root.glob("data/*/step-*/train.jsonl"):
+        for line in path.read_text().splitlines():
+            row = json.loads(line)
+            if not row["prompt"].endswith("\nAnswer:"):
+                raise ValueError(f"training prompt parity failure: {path}")
     expected_n = config["facts_per_task"]
     for strategy in STRATEGIES:
         metrics = result["results"][strategy]
@@ -47,7 +57,24 @@ def validate(root: Path) -> dict:
                 raise ValueError(f"denominator mismatch: {strategy}/{endpoint}")
             if not 0 <= metrics[endpoint]["accuracy"] <= 1:
                 raise ValueError(f"accuracy outside range: {strategy}/{endpoint}")
-    return {"valid": True, "claim_ceiling": result["claim_ceiling"], "manifest_sha256": result["manifest_sha256"]}
+    no_update = result["results"]["no_update"]
+    retrieval = result["results"]["retrieval"]
+    naive = result["results"]["naive_sequential_lora"]
+    replay = result["results"]["replay_lora"]
+    gates = {
+        "retrieval_above_no_update": retrieval["acquisition"]["accuracy"] > no_update["acquisition"]["accuracy"],
+        "trainable_acquisition_above_no_update": max(
+            naive["acquisition"]["accuracy"], replay["acquisition"]["accuracy"]
+        ) > no_update["acquisition"]["accuracy"],
+        "replay_retention_above_naive": replay["retention_after_interference"]["accuracy"] > naive["retention_after_interference"]["accuracy"],
+    }
+    return {
+        "valid": True,
+        "claim_ceiling": result["claim_ceiling"],
+        "manifest_sha256": result["manifest_sha256"],
+        "candidate_gates": gates,
+        "candidate_eligible": all(gates.values()),
+    }
 
 
 def main() -> int:

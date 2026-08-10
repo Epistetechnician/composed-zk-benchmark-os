@@ -72,5 +72,6 @@ def test_model_prompts_keep_context_explicit_and_training_schema_bounded():
     assert fact.fact_id in prompt_for(fact)
     assert "Reference facts" not in prompt_for(fact)
     assert fact.fact_id in prompt_for(fact, context=(fact,))
-    assert training_example(fact)["prompt"].endswith("\nAnswer:")
+    assert prompt_for(fact).endswith("\nAnswer:")
+    assert training_example(fact)["prompt"] == prompt_for(fact)
     assert training_example(fact)["completion"] == f" {fact.label}"
