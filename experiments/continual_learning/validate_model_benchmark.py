@@ -6,10 +6,12 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+from collections import Counter
 from pathlib import Path
 
 
 STRATEGIES = ("no_update", "context_only", "retrieval", "naive_sequential_lora", "replay_lora")
+AUDIT_STRATEGIES = ("naive_sequential_lora", "replay_lora")
 
 
 def digest(value):
@@ -20,7 +22,7 @@ def validate(root: Path) -> dict:
     config = json.loads((root / "config.json").read_text())
     tasks = json.loads((root / "tasks.json").read_text())
     result = json.loads((root / "result.json").read_text())
-    if result["state_slice"] != "continual-learning-model-adapter-v4-signed-replay-path":
+    if result["state_slice"] != "continual-learning-model-adapter-v5-replay-exposure-audit":
         raise ValueError("state slice mismatch")
     if result["breakthrough_claim_eligible"] is not False:
         raise ValueError("pilot cannot claim breakthrough eligibility")
@@ -37,6 +39,28 @@ def validate(root: Path) -> dict:
         raise ValueError("replay policy drift")
     if config.get("replay_examples_per_update") != 8 or config.get("current_examples_per_update") != 8:
         raise ValueError("update budget split drift")
+    fixed_config = {
+        "seed": 20260810,
+        "order": [0, 1, 2, 3],
+        "task_count": 4,
+        "facts_per_task": 8,
+        "replay_capacity": 16,
+        "update_budget": 16,
+        "optimizer": "adamw",
+        "learning_rate": 0.0001,
+        "batch_size": 2,
+        "num_layers": 8,
+        "mask_prompt": True,
+        "max_seq_length": 192,
+        "fine_tune_type": "lora",
+        "audit_schema": "replay_exposure_audit_v1",
+        "checkpoint_target_task_id": 0,
+        "checkpoint_assessment_variant": "direct",
+        "checkpoint_assessment_context_mode": "none",
+    }
+    for key, expected in fixed_config.items():
+        if config.get(key) != expected:
+            raise ValueError(f"fixed training contract drift: {key}")
     unsigned_config = {key: value for key, value in config.items() if key != "contract_sha256"}
     if config.get("contract_sha256") != digest(unsigned_config):
         raise ValueError("contract digest mismatch")
@@ -46,7 +70,17 @@ def validate(root: Path) -> dict:
     fact_ids = [fact["fact_id"] for task in tasks for fact in task["facts"]]
     if len(fact_ids) != len(set(fact_ids)):
         raise ValueError("fact identifiers are not disjoint")
-    expected_manifest = digest({"config": config, "tasks": tasks})
+    audits = {}
+    for strategy in AUDIT_STRATEGIES:
+        audit_path = root / "audit" / f"{strategy}.json"
+        if not audit_path.exists():
+            raise ValueError(f"missing replay exposure audit: {strategy}")
+        audits[strategy] = json.loads(audit_path.read_text())
+        if len(audits[strategy]) != len(config["order"]):
+            raise ValueError(f"update count mismatch: {strategy}")
+    if result.get("audit_sha256") != {strategy: digest(audits[strategy]) for strategy in AUDIT_STRATEGIES}:
+        raise ValueError("audit digest mismatch")
+    expected_manifest = digest({"config": config, "tasks": tasks, "audits": audits})
     if result["manifest_sha256"] != expected_manifest:
         raise ValueError("manifest digest mismatch")
     if set(result["results"]) != set(STRATEGIES):
@@ -56,6 +90,53 @@ def validate(root: Path) -> dict:
             row = json.loads(line)
             if not row["prompt"].endswith("\nAnswer:"):
                 raise ValueError(f"training prompt parity failure: {path}")
+    task_fact_lists = {
+        task["task_id"]: [fact["fact_id"] for fact in task["facts"]]
+        for task in tasks
+    }
+    task_facts = {task_id: set(fact_ids) for task_id, fact_ids in task_fact_lists.items()}
+    fact_to_task = {
+        fact_id: task_id
+        for task_id, fact_ids in task_fact_lists.items()
+        for fact_id in fact_ids
+    }
+    all_fact_ids = sorted(fact_to_task)
+    for strategy in AUDIT_STRATEGIES:
+        for update in audits[strategy]:
+            step = update["step"]
+            task_id = update["task_id"]
+            current_ids = update["current_fact_ids"]
+            replay_ids = update["replay_fact_ids"]
+            selected_ids = update["selected_fact_ids"]
+            if current_ids != task_fact_lists[task_id]:
+                raise ValueError(f"current fact audit mismatch: {strategy}/step-{step}")
+            if set(replay_ids) & set(current_ids):
+                raise ValueError(f"replay/current overlap: {strategy}/step-{step}")
+            if selected_ids != current_ids + replay_ids:
+                raise ValueError(f"selected fact audit mismatch: {strategy}/step-{step}")
+            expected_counts = dict(sorted(
+                (str(task), count)
+                for task, count in Counter(fact_to_task[fact_id] for fact_id in replay_ids).items()
+            ))
+            if update["replay_counts_by_task"] != expected_counts:
+                raise ValueError(f"replay count audit mismatch: {strategy}/step-{step}")
+            dataset_path = root / "data" / strategy / f"step-{step}" / "train.jsonl"
+            rows = [json.loads(line) for line in dataset_path.read_text().splitlines()]
+            if len(rows) != config["update_budget"] or update["dataset_row_count"] != len(rows):
+                raise ValueError(f"dataset budget audit mismatch: {strategy}/step-{step}")
+            row_ids = []
+            for row in rows:
+                matches = [fact_id for fact_id in all_fact_ids if f"identifier {fact_id}" in row["prompt"]]
+                if len(matches) != 1:
+                    raise ValueError(f"dataset fact identity missing: {strategy}/step-{step}")
+                row_ids.append(matches[0])
+            if set(row_ids) != set(selected_ids):
+                raise ValueError(f"dataset membership mismatch: {strategy}/step-{step}")
+            if not set(replay_ids).issubset(row_ids):
+                raise ValueError(f"replay examples absent from dataset: {strategy}/step-{step}")
+            checkpoint = update["target_task_accuracy_after_update"]
+            if checkpoint["n"] != config["facts_per_task"] or not 0 <= checkpoint["accuracy"] <= 1:
+                raise ValueError(f"checkpoint accuracy audit mismatch: {strategy}/step-{step}")
     expected_n = config["facts_per_task"]
     for strategy in STRATEGIES:
         metrics = result["results"][strategy]

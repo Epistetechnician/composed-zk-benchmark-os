@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 
-STATE_SLICE = "continual-learning-model-adapter-v4-signed-replay-path"
+STATE_SLICE = "continual-learning-model-adapter-v5-replay-exposure-audit"
 LABELS = ("A", "B", "C", "D")
 ANSWER_SUFFIX = "\nAnswer:"
 DEFAULT_MODEL = Path(
@@ -133,6 +133,14 @@ def choose_replay(
     return selected
 
 
+def replay_counts_by_task(facts: Iterable[Fact]) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for fact in facts:
+        key = str(fact.task_id)
+        counts[key] = counts.get(key, 0) + 1
+    return dict(sorted(counts.items()))
+
+
 def write_json(path: Path, value: Any) -> None:
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf8")
 
@@ -214,10 +222,13 @@ def train_sequence(
     adapter_root = root / "adapters" / strategy
     data_root.mkdir(parents=True, exist_ok=False)
     adapter_root.mkdir(parents=True, exist_ok=False)
+    audit_root = root / "audit"
+    audit_root.mkdir(exist_ok=True)
     task_by_id = {task.task_id: task for task in tasks}
     observed: list[Fact] = []
     previous_adapter: Path | None = None
     adapter_paths: list[Path] = []
+    updates: list[dict[str, Any]] = []
     for step, task_id in enumerate(order):
         current = list(task_by_id[task_id].facts)
         if strategy == "naive_sequential_lora":
@@ -234,6 +245,7 @@ def train_sequence(
             raise ValueError(f"training strategy not supported: {strategy}")
         if not selected:
             raise ValueError("empty update set")
+        replay_facts = [fact for fact in selected if fact not in current]
         rows = [training_example(fact) for fact in selected]
         # Equalize the number of examples per update. Repetition is explicit
         # and deterministic, so replay does not receive a hidden budget.
@@ -257,9 +269,27 @@ def train_sequence(
         )
         if completed.returncode != 0:
             raise RuntimeError(f"training failed for {strategy}/step-{step}: {completed.returncode}")
+        checkpoint = ChoiceModel(model, adapter_path)
+        checkpoint_result = accuracy(
+            checkpoint, task_by_id[0].facts, "direct", "none"
+        )
+        updates.append(
+            {
+                "step": step,
+                "task_id": task_id,
+                "current_fact_ids": [fact.fact_id for fact in current],
+                "replay_fact_ids": [fact.fact_id for fact in replay_facts],
+                "selected_fact_ids": [fact.fact_id for fact in selected],
+                "replay_counts_by_task": replay_counts_by_task(replay_facts),
+                "dataset_row_count": len(rows),
+                "target_task_id": 0,
+                "target_task_accuracy_after_update": checkpoint_result,
+            }
+        )
         previous_adapter = adapter_path
         adapter_paths.append(adapter_path)
         observed.extend(current)
+    write_json(audit_root / f"{strategy}.json", updates)
     return adapter_paths
 
 
@@ -412,6 +442,17 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "current_examples_per_update": args.facts_per_task,
         "replay_examples_per_update": args.update_budget - args.facts_per_task,
         "replay_policy": "stratified_hash_replay_v1",
+        "optimizer": "adamw",
+        "learning_rate": 0.0001,
+        "batch_size": 2,
+        "num_layers": 8,
+        "mask_prompt": True,
+        "max_seq_length": 192,
+        "fine_tune_type": "lora",
+        "audit_schema": "replay_exposure_audit_v1",
+        "checkpoint_target_task_id": 0,
+        "checkpoint_assessment_variant": "direct",
+        "checkpoint_assessment_context_mode": "none",
         "prompt_contract": {
             "training_prompt_equals_assessment_prompt": True,
             "answer_suffix": ANSWER_SUFFIX,
@@ -427,6 +468,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         adapters[strategy] = train_sequence(
             root, model, tasks, order, strategy, args.seed, args.iters, args.replay_capacity, args.update_budget
         )
+    audits = {
+        strategy: json.loads((root / "audit" / f"{strategy}.json").read_text())
+        for strategy in adapters
+    }
     results = {
         strategy: evaluate_strategy(model, tasks, adapters.get(strategy), order, root, strategy)
         for strategy in STRATEGIES
@@ -437,7 +482,14 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "classification": "ModelContinualLearningPilotNoBreakthroughClaim",
         "config": config,
         "results": results,
-        "manifest_sha256": digest({"config": config, "tasks": [asdict(task) for task in tasks]}),
+        "audit_sha256": {strategy: digest(audit) for strategy, audit in audits.items()},
+        "manifest_sha256": digest(
+            {
+                "config": config,
+                "tasks": [asdict(task) for task in tasks],
+                "audits": audits,
+            }
+        ),
         "breakthrough_claim_eligible": False,
     }
     write_json(root / "result.json", result)

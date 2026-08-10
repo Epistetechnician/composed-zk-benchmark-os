@@ -12,6 +12,7 @@ from experiments.continual_learning.model_benchmark import (
     choose_replay,
     make_tasks as make_model_tasks,
     prompt_for,
+    replay_counts_by_task,
     training_example,
 )
 
@@ -85,3 +86,9 @@ def test_replay_sample_is_bounded_and_spans_prior_tasks():
     assert len(sample) == 8
     assert len({fact.task_id for fact in sample}) == 3
     assert len(choose_replay(prior, capacity=16, seed=17)) == 16
+
+
+def test_replay_counts_are_task_keyed_and_deterministic():
+    tasks = make_model_tasks(17, task_count=4, facts_per_task=8)
+    facts = [tasks[0].facts[0], tasks[2].facts[0], tasks[2].facts[1]]
+    assert replay_counts_by_task(facts) == {"0": 1, "2": 2}
