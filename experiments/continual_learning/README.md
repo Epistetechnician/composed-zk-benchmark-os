@@ -25,7 +25,7 @@ This harness validates endpoint definitions and control behavior. It is not a
 neural-training result and cannot support breakthrough, transfer, production,
 or general continual-learning claims.
 
-The corrected model-specific pilot is documented in
-`docs/research/continual-learning/04-model-adapter-prompt-parity-v3.md`. Its outputs
+The signed task/update pilot is documented in
+`docs/research/continual-learning/06-signed-replay-path-v4.md`. Its outputs
 must stay outside the repository because adapter weights and raw run logs are
 generated artifacts, not source fixtures.

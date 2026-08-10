@@ -20,7 +20,7 @@ def validate(root: Path) -> dict:
     config = json.loads((root / "config.json").read_text())
     tasks = json.loads((root / "tasks.json").read_text())
     result = json.loads((root / "result.json").read_text())
-    if result["state_slice"] != "continual-learning-model-adapter-v3-prompt-parity":
+    if result["state_slice"] != "continual-learning-model-adapter-v4-signed-replay-path":
         raise ValueError("state slice mismatch")
     if result["breakthrough_claim_eligible"] is not False:
         raise ValueError("pilot cannot claim breakthrough eligibility")
@@ -33,6 +33,13 @@ def validate(root: Path) -> dict:
         raise ValueError("training/assessment prompt parity is not locked")
     if prompt_contract.get("answer_suffix") != "\nAnswer:":
         raise ValueError("answer suffix drift")
+    if config.get("replay_policy") != "stratified_hash_replay_v1":
+        raise ValueError("replay policy drift")
+    if config.get("replay_examples_per_update") != 8 or config.get("current_examples_per_update") != 8:
+        raise ValueError("update budget split drift")
+    unsigned_config = {key: value for key, value in config.items() if key != "contract_sha256"}
+    if config.get("contract_sha256") != digest(unsigned_config):
+        raise ValueError("contract digest mismatch")
     task_ids = [task["task_id"] for task in tasks]
     if task_ids != list(range(config["task_count"])):
         raise ValueError("task ids are not contiguous")

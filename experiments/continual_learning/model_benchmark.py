@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 
-STATE_SLICE = "continual-learning-model-adapter-v3-prompt-parity"
+STATE_SLICE = "continual-learning-model-adapter-v4-signed-replay-path"
 LABELS = ("A", "B", "C", "D")
 ANSWER_SUFFIX = "\nAnswer:"
 DEFAULT_MODEL = Path(
@@ -93,15 +93,44 @@ def training_example(fact: Fact) -> dict[str, str]:
     }
 
 
-def choose_replay(previous: Iterable[Fact], capacity: int, seed: int) -> list[Fact]:
+def choose_replay(
+    previous: Iterable[Fact], capacity: int, seed: int, limit: int | None = None
+) -> list[Fact]:
+    """Select a bounded, task-stratified, deterministic replay sample."""
+
     facts = list(previous)
-    ranked = sorted(
-        facts,
-        key=lambda fact: hashlib.sha256(
-            f"{seed}:replay:{fact.fact_id}".encode()
-        ).hexdigest(),
-    )
-    return ranked[:capacity]
+    groups: dict[int, list[Fact]] = {}
+    for fact in facts:
+        groups.setdefault(fact.task_id, []).append(fact)
+    if not groups or capacity <= 0:
+        return []
+    task_ids = sorted(groups)
+    quota, remainder = divmod(capacity, len(task_ids))
+    pool: list[Fact] = []
+    for index, task_id in enumerate(task_ids):
+        ranked = sorted(
+            groups[task_id],
+            key=lambda fact: hashlib.sha256(
+                f"{seed}:replay:{fact.fact_id}".encode()
+            ).hexdigest(),
+        )
+        pool.extend(ranked[: quota + int(index < remainder)])
+    pool = pool[:capacity]
+    if limit is None or limit >= len(pool):
+        return pool
+    by_task = {task_id: [fact for fact in pool if fact.task_id == task_id] for task_id in task_ids}
+    selected: list[Fact] = []
+    while len(selected) < limit:
+        progressed = False
+        for task_id in task_ids:
+            if by_task[task_id]:
+                selected.append(by_task[task_id].pop(0))
+                progressed = True
+                if len(selected) == limit:
+                    break
+        if not progressed:
+            break
+    return selected
 
 
 def write_json(path: Path, value: Any) -> None:
@@ -194,7 +223,12 @@ def train_sequence(
         if strategy == "naive_sequential_lora":
             selected = current
         elif strategy == "replay_lora":
-            replay = choose_replay(observed, replay_capacity, seed)
+            replay = choose_replay(
+                observed,
+                replay_capacity,
+                seed,
+                limit=update_budget - len(current),
+            )
             selected = current + replay
         else:
             raise ValueError(f"training strategy not supported: {strategy}")
@@ -274,6 +308,27 @@ def accuracy(model: ChoiceModel, facts: Iterable[Fact], variant: str, context_mo
     return {"correct": correct, "n": len(facts), "accuracy": correct / len(facts) if facts else None, "rows": rows}
 
 
+def exact_retrieval_accuracy(facts: Iterable[Fact]) -> dict[str, Any]:
+    """Non-parametric upper control: retrieved memory returns the stored label."""
+
+    facts = tuple(facts)
+    rows = [
+        {
+            "fact_id": fact.fact_id,
+            "expected": fact.label,
+            "observed": fact.label,
+            "correct": True,
+        }
+        for fact in facts
+    ]
+    return {
+        "correct": len(facts),
+        "n": len(facts),
+        "accuracy": 1.0 if facts else None,
+        "rows": rows,
+    }
+
+
 def evaluate_strategy(
     model_path: Path,
     tasks: tuple[Task, ...],
@@ -297,7 +352,7 @@ def evaluate_strategy(
         result["recovery_after_reacquisition"] = result["retention_after_interference"]
         return result
     if strategy == "retrieval":
-        result["acquisition"] = accuracy(base, target, "direct", "one")
+        result["acquisition"] = exact_retrieval_accuracy(target)
         result["retention_after_interference"] = result["acquisition"]
         result["recovery_after_reacquisition"] = result["acquisition"]
         return result
@@ -354,6 +409,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "facts_per_task": args.facts_per_task,
         "replay_capacity": args.replay_capacity,
         "update_budget": args.update_budget,
+        "current_examples_per_update": args.facts_per_task,
+        "replay_examples_per_update": args.update_budget - args.facts_per_task,
+        "replay_policy": "stratified_hash_replay_v1",
         "prompt_contract": {
             "training_prompt_equals_assessment_prompt": True,
             "answer_suffix": ANSWER_SUFFIX,
@@ -362,6 +420,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "source_context_removed_for": ["acquisition", "retention_after_interference", "recovery_after_reacquisition"],
         "assessment_effects_generated_before_prediction_lock": False,
     }
+    config["contract_sha256"] = digest(config)
     write_json(root / "config.json", config)
     adapters: dict[str, list[Path]] = {}
     for strategy in ("naive_sequential_lora", "replay_lora"):
@@ -393,7 +452,7 @@ def main() -> int:
     parser.add_argument("--order", default="0,1,2,3")
     parser.add_argument("--task-count", type=int, default=4)
     parser.add_argument("--facts-per-task", type=int, default=8)
-    parser.add_argument("--replay-capacity", type=int, default=8)
+    parser.add_argument("--replay-capacity", type=int, default=16)
     parser.add_argument("--update-budget", type=int, default=16)
     parser.add_argument("--iters", type=int, default=40)
     args = parser.parse_args()
