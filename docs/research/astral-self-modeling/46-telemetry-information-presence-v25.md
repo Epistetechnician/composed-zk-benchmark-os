@@ -2,8 +2,11 @@
 
 State slice: `astral-telemetry-information-presence-v25`.
 
-Status: `NotRunInformationPresenceProbe`. Confirmation: `NotAuthorized`.
+Status: `InformationPresenceReportGapObserved`. Confirmation: `NotAuthorized`.
 Stage 0C: `Blocked`. Stage 1: `BlockedByStage0C`.
+
+Execution record: [V25 execution record](47-v25-execution-record.md). The
+validated result is external-artifact, local-development evidence only.
 
 ## Purpose
 

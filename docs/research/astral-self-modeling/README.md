@@ -4,14 +4,16 @@
 
 State slice: `astral-self-modeling-evidence-ledger-and-research-reset-v11`.
 
-Status: `ActiveLocalResearch / Stage0CDevelopmentNoCandidate`. The compiled positive
+Status: `ActiveLocalResearch / InformationPresenceReportGapObserved`. The compiled positive
 control completed, V5 returned a valid learned-model `Null`, V7 qualified the
 family-complete actor-training recipe, and V10 completed with
 `ExploratoryNoSelection`. V12 then found no eligible cross-actor continuous
 effect estimator. Stage 1 remains blocked. The evidence ceiling is
 setup-scoped local measurement and attribution-method diagnostics, not a
 mechanistic explanation, benchmark result, proof, or accepted Evidence Ledger
-record.
+record. The latest V25 result is limited to
+`LocalDevelopmentPrivilegedTelemetryInformationPresence`; Stage 0C and Stage 1
+remain blocked.
 
 ## Project Thesis
 
@@ -173,7 +175,11 @@ review and experiments rule out equivalent prior work.
 - [Privileged-telemetry information-presence probe V25](46-telemetry-information-presence-v25.md):
   fork-deciding protocol: decode activation-versus-none from captured
   residuals with a closed-form probe and compare against the model's own
-  report on identical assessment trials. Status: `NotRunInformationPresenceProbe`.
+  report on identical assessment trials. Status:
+  `InformationPresenceReportGapObserved`.
+- [V25 execution record](47-v25-execution-record.md): validated external-artifact
+  result with probe accuracy `1.0`, model-report accuracy `0.34375`, and
+  observed fork margin `0.65625`; no confirmation or Stage 1 authority.
 - [Stage 0 measurement-validity preregistration](08-stage0-measurement-validity-preregistration.md):
   documentation-only compiled-circuit study boundary, locked comparisons,
   endpoints, stop rules, artifact contract, and advancement gate.
