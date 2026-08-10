@@ -7,6 +7,12 @@ from experiments.continual_learning.benchmark import (
     run_protocol,
     validate_protocol,
 )
+from experiments.continual_learning.model_benchmark import (
+    LABELS,
+    make_tasks as make_model_tasks,
+    prompt_for,
+    training_example,
+)
 
 
 def test_task_generation_and_protocol_are_deterministic():
@@ -51,3 +57,20 @@ def test_protocol_rejects_digest_drift():
     result["results"]["replay"]["retention_after_interference"]["correct"] = 0
     with pytest.raises(ValueError, match="digest"):
         validate_protocol(result)
+
+
+def test_model_task_manifest_is_disjoint_and_four_choice():
+    tasks = make_model_tasks(17, task_count=4, facts_per_task=8)
+    facts = [fact for task in tasks for fact in task.facts]
+    assert len({fact.fact_id for fact in facts}) == 32
+    assert {fact.label for fact in facts} == set(LABELS)
+    assert {fact.label: sum(item.label == fact.label for item in tasks[0].facts) for fact in tasks[0].facts} == {label: 2 for label in LABELS}
+
+
+def test_model_prompts_keep_context_explicit_and_training_schema_bounded():
+    fact = make_model_tasks(17, task_count=4, facts_per_task=8)[0].facts[0]
+    assert fact.fact_id in prompt_for(fact)
+    assert "Reference facts" not in prompt_for(fact)
+    assert fact.fact_id in prompt_for(fact, context=(fact,))
+    assert training_example(fact)["prompt"].endswith("\nAnswer:")
+    assert training_example(fact)["completion"] == f" {fact.label}"

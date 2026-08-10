@@ -24,3 +24,8 @@ python experiments/continual_learning/benchmark.py --output /tmp/continual-learn
 This harness validates endpoint definitions and control behavior. It is not a
 neural-training result and cannot support breakthrough, transfer, production,
 or general continual-learning claims.
+
+The model-specific pilot is documented in
+`docs/research/continual-learning/02-model-adapter-pilot-v2.md`. Its outputs
+must stay outside the repository because adapter weights and raw run logs are
+generated artifacts, not source fixtures.
