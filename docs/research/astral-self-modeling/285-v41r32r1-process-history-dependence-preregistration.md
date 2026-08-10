@@ -52,11 +52,12 @@ outcome.
   verification recomputes SHA-256 for the canonical archive, the complete
   worker tree, the entrypoint, and every imported worker module and fails closed
   on any mismatch;
-- the prelude is exactly one evaluation-mode, no-grad forward pass over the
-  four selected acquisition rows and sixteen selected protected rows, in the
-  frozen manifest order, with the frozen worker's tokenizer, batch construction,
-  dtype, device, and scoring callable; it synchronizes before deletion and
-  records object deletion and allocator state hashes;
+- the prelude is exactly one evaluation-mode, no-grad scoring block consisting
+  of the frozen worker's two scoring calls: four selected acquisition rows and
+  sixteen selected protected rows, each in frozen manifest order, using the
+  frozen worker's tokenizer, batch construction, dtype, device, and scoring
+  callable; it synchronizes before deletion and records object deletion and
+  allocator state hashes;
 - if the exact container/image digest or NVIDIA driver version cannot be
   captured before launch, classify the identity as infrastructure-incomplete
   and do not start either scientific arm;
@@ -67,7 +68,7 @@ outcome.
   node between arms, and record the node identity and arm timestamps;
 - the wrapper must be committed and content-addressed before node creation,
   with wrapper path `tools/v41r32r1_history_prelude_wrapper.py`, SHA-256
-  `sha256:e5d2a6455fcab601838f9b47c127eacfe207ee779341c362329b69a5850236b`,
+  `sha256:04c2cb2590fd57d7689e1fc919aa76bc9ccc399b522d0570b2f65f2a2f0818ed`,
   entrypoint `main`, command bytes `python3 tools/v41r32r1_history_prelude_wrapper.py
   --output <arm-output>`, and expected imports rooted at `/home/dev/rgs/scripts`;
   a missing or mismatched wrapper is a fail-closed infrastructure result;

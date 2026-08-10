@@ -42,6 +42,11 @@ def require_bindings() -> None:
 
 def capture_rng(torch: object) -> dict[str, object]:
     state: dict[str, object] = {"python": random.getstate()}
+    try:
+        import numpy
+        state["numpy"] = numpy.random.get_state()
+    except ImportError:
+        state["numpy"] = None
     state["torch_cpu"] = torch.get_rng_state()  # type: ignore[attr-defined]
     state["torch_cuda"] = torch.cuda.get_rng_state_all()  # type: ignore[attr-defined]
     return state
@@ -49,6 +54,9 @@ def capture_rng(torch: object) -> dict[str, object]:
 
 def restore_rng(torch: object, state: dict[str, object]) -> None:
     random.setstate(state["python"])  # type: ignore[arg-type]
+    if state["numpy"] is not None:
+        import numpy
+        numpy.random.set_state(state["numpy"])  # type: ignore[arg-type]
     torch.set_rng_state(state["torch_cpu"])  # type: ignore[attr-defined]
     torch.cuda.set_rng_state_all(state["torch_cuda"])  # type: ignore[attr-defined]
 
@@ -86,15 +94,17 @@ def main() -> int:
     selected = [cases[index] for index in range(panel * 4, panel * 4 + 4)]
     protected_selected = [protected[index] for index in range(panel * 16, panel * 16 + 16)]
     exact_rows = [worker.score_row(case) for case in selected]
-    worker.score_rows(base, tokenizer, exact_rows, torch)
-    worker.score_rows(base, tokenizer, protected_selected, torch)
+    prelude_start_rng = capture_rng(torch)
+    with torch.no_grad():
+        worker.score_rows(base, tokenizer, exact_rows, torch)
+        worker.score_rows(base, tokenizer, protected_selected, torch)
     torch.cuda.synchronize()
     post_prelude_rng = capture_rng(torch)
     del base, tokenizer
     gc.collect()
     torch.cuda.empty_cache()
     torch.cuda.synchronize()
-    restore_rng(torch, before_import_rng)
+    restore_rng(torch, prelude_start_rng)
     torch.cuda.synchronize()
     result = worker.run(args.output, RUN_ID)
     receipt = {
@@ -104,7 +114,7 @@ def main() -> int:
         "source_archive_sha256": EXPECTED_ARCHIVE,
         "prelude_case_ids": [case["case_id"] for case in selected],
         "prelude_protected_case_ids": [row["case_id"] for row in protected_selected],
-        "prelude_rng_captured": bool(before_import_rng and post_prelude_rng),
+        "prelude_rng_captured": bool(before_import_rng and prelude_start_rng and post_prelude_rng),
         "result_sha256": result.get("result_sha256"),
     }
     args.output.joinpath("v41r32r1-wrapper-receipt.json").write_text(
