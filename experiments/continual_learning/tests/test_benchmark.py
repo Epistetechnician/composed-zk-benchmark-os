@@ -9,6 +9,7 @@ from experiments.continual_learning.benchmark import (
 )
 from experiments.continual_learning.model_benchmark import (
     LABELS,
+    choose_balanced_full_replay,
     choose_replay,
     make_tasks as make_model_tasks,
     prompt_for,
@@ -92,3 +93,11 @@ def test_replay_counts_are_task_keyed_and_deterministic():
     tasks = make_model_tasks(17, task_count=4, facts_per_task=8)
     facts = [tasks[0].facts[0], tasks[2].facts[0], tasks[2].facts[1]]
     assert replay_counts_by_task(facts) == {"0": 1, "2": 2}
+
+
+def test_balanced_full_replay_keeps_every_prior_task_complete():
+    tasks = make_model_tasks(17, task_count=4, facts_per_task=8)
+    prior = [fact for task in tasks[:3] for fact in task.facts]
+    sample = choose_balanced_full_replay(prior, capacity=24, limit=24)
+    assert len(sample) == 24
+    assert replay_counts_by_task(sample) == {"0": 8, "1": 8, "2": 8}
