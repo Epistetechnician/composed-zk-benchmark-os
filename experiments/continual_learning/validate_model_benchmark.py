@@ -132,7 +132,7 @@ def validate(
             if strategy == "replay_lora":
                 expected_full_replay = {
                     str(prior_task): config["facts_per_task"]
-                    for prior_task in range(task_id)
+                    for prior_task in config["order"][:step]
                 }
                 if update["replay_counts_by_task"] != expected_full_replay:
                     raise ValueError(f"full replay policy mismatch: {strategy}/step-{step}")
