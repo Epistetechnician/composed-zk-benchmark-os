@@ -1,5 +1,43 @@
 # Agent Rules
 
+Explicit Astral privileged-telemetry information-presence probe V25 now
+allowed: additive Python source and hermetic tests under
+`tools/astral-telemetry-probe-v25/`, phase notes under
+`docs/research/astral-self-modeling/`, and Astral ledger/navigation updates.
+This phase is limited to the offline fork-deciding protocol in
+`docs/research/astral-self-modeling/46-telemetry-information-presence-v25.md`:
+reuse of the V24-certified hybrid seam with all-layer final-position capture
+and re-validated zero parity; sixteen fresh concepts disjoint from
+V22/V23/V24; unchanged V22-V24 injection sites, strengths, wrappers, and
+byte-identical prompt controls; a closed-form Fisher probe with fit/tune
+qualification and sealed assessment; preregistered control floors,
+behavioral-effect gate, and fork margin against the model's own report on
+identical assessment trials. It does not permit network access, downloads,
+model training, nonlinear or multi-layer probes, adaptive tuning, reuse of
+V22/V23/V24 concepts, free-form mental-state reports, Stage 0C confirmation,
+Stage 1, accepted evidence, benchmark claims, consciousness claims, global
+introspection claims, or claims above
+`LocalDevelopmentPrivilegedTelemetryInformationPresence`.
+
+Explicit Astral hybrid-instrument capability-tier replication V24 now allowed:
+additive Python source and hermetic tests under
+`tools/astral-hybrid-instrument-v24/`, phase notes under
+`docs/research/astral-self-modeling/`, and Astral ledger/navigation updates.
+This phase is limited to the offline two-stage protocol in
+`docs/research/astral-self-modeling/44-hybrid-instrument-capability-tier-v24.md`:
+Stage A develops and validates a controlled MLX forward seam for the local
+cached `nemotron_h` 4B hybrid checkpoint with exact native parity,
+determinism, zero-strength, pattern-coverage, tokenizer, and behavioral-effect
+gates; Stage B, authorized only by a certified instrument, runs the unchanged
+V22/V23 three-way discrimination protocol with sixteen fresh concepts,
+proportional sites `10/21/32`, unchanged strengths, wrappers, anti-shortcut
+gates, fit/tune qualification, configuration locking, and sealed assessment.
+It does not permit network access, downloads, model training, adaptive tuning,
+reuse of V22/V23 concepts, free-form mental-state reports, Stage 0C
+confirmation, Stage 1, accepted evidence, benchmark claims, consciousness
+claims, global introspection claims, or claims above
+`LocalDevelopmentHybridInstrumentCapabilityTierReplication`.
+
 Explicit Astral higher-capability perturbation discrimination replication V23
 now allowed: additive Python source and hermetic tests under
 `tools/astral-activation-discrimination-v23/`, phase notes under

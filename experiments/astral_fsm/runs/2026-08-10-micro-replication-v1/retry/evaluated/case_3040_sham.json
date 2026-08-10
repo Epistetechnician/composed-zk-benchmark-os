@@ -1,0 +1,48 @@
+{
+  "case_id": 3040,
+  "stage": 1,
+  "input_length": 5,
+  "num_states": 3,
+  "valid_json": false,
+  "recoverable_json": true,
+  "schema_valid": true,
+  "expected_trajectory_length": 6,
+  "reported_trajectory_length": 6,
+  "trajectory_exact": false,
+  "final_state_exact": false,
+  "accepted_exact": true,
+  "state_accuracy": 0.5,
+  "prefix_accuracy": 0.16666666666666666,
+  "first_divergence_index": 1,
+  "symbol_at_first_divergence": "0",
+  "state_before_first_divergence": "A",
+  "expected_state_at_divergence": "A",
+  "reported_state_at_divergence": "B",
+  "overall_exact": false,
+  "oracle_answer": {
+    "trajectory": [
+      "A",
+      "A",
+      "B",
+      "C",
+      "A",
+      "A"
+    ],
+    "final_state": "A",
+    "accepted": false
+  },
+  "parsed_response": {
+    "trajectory": [
+      "A",
+      "B",
+      "A",
+      "C",
+      "A",
+      "C"
+    ],
+    "final_state": "C",
+    "accepted": false
+  },
+  "condition": "sham",
+  "baseline_case_id": 3040
+}

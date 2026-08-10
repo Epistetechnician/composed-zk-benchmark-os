@@ -1,0 +1,64 @@
+{
+  "case_id": 3035,
+  "condition": "random_fact",
+  "feedback": "One true transition fact: from state A, on input symbol 0, the next state is C. This fact is not a diagnosis of your previous trajectory. Recompute the FSM and return the complete required JSON.",
+  "request": {
+    "model": "openresearchtools/Qwen3.5-4B-GGUF:Q4_K_M",
+    "temperature": 0.0,
+    "max_tokens": 1024,
+    "chat_template_kwargs": {
+      "enable_thinking": false
+    },
+    "messages": [
+      {
+        "role": "system",
+        "content": "You execute deterministic finite-state machines. Return only valid JSON matching the requested schema."
+      },
+      {
+        "role": "user",
+        "content": "Solve the deterministic finite-state machine.\n\nStates: ['A', 'B', 'C']\nAlphabet: 0, 1\nStart State: A\nAccepting States: C\nTransitions: {\"A\": {\"0\": \"C\", \"1\": \"C\"}, \"B\": {\"0\": \"B\", \"1\": \"A\"}, \"C\": {\"0\": \"B\", \"1\": \"A\"}}\nInput: 0111\n\nReturn JSON: {\"trajectory\": [...], \"final_state\": \"...\", \"accepted\": ...}\n\n\nPrevious answer:\n```json\n{\n  \"trajectory\": [\"A\", \"C\", \"C\", \"A\", \"A\"],\n  \"final_state\": \"A\",\n  \"accepted\": false\n}\n```\n\nFeedback:\nOne true transition fact: from state A, on input symbol 0, the next state is C. This fact is not a diagnosis of your previous trajectory. Recompute the FSM and return the complete required JSON."
+      }
+    ]
+  },
+  "prompt_sha256": "7d25d7e73abadbeaa15c7cbce29377430692c067b7a3e6540ca92c851cf862d4",
+  "timestamp": 1786338201.555338,
+  "http_status": 200,
+  "raw_http_response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"```json\\n{\\n  \\\"trajectory\\\": [\\\"A\\\", \\\"C\\\", \\\"A\\\", \\\"B\\\", \\\"A\\\"],\\n  \\\"final_state\\\": \\\"A\\\",\\n  \\\"accepted\\\": false\\n}\\n```\"}}],\"created\":1786338203,\"model\":\"openresearchtools/Qwen3.5-4B-GGUF:Q4_K_M\",\"system_fingerprint\":\"b10217-ddd4ec142\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":44,\"prompt_tokens\":245,\"total_tokens\":289,\"prompt_tokens_details\":{\"cached_tokens\":21}},\"id\":\"chatcmpl-JSEisGKtLiv85TMXoMIajuNsxeckq3HT\",\"timings\":{\"cache_n\":21,\"prompt_n\":224,\"prompt_ms\":445.42,\"prompt_per_token_ms\":1.9884821428571429,\"prompt_per_second\":502.8961429661892,\"predicted_n\":44,\"predicted_ms\":1015.255,\"predicted_per_token_ms\":23.073977272727273,\"predicted_per_second\":43.33886560519279}}",
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"trajectory\": [\"A\", \"C\", \"A\", \"B\", \"A\"],\n  \"final_state\": \"A\",\n  \"accepted\": false\n}\n```"
+        }
+      }
+    ],
+    "created": 1786338203,
+    "model": "openresearchtools/Qwen3.5-4B-GGUF:Q4_K_M",
+    "system_fingerprint": "b10217-ddd4ec142",
+    "object": "chat.completion",
+    "usage": {
+      "completion_tokens": 44,
+      "prompt_tokens": 245,
+      "total_tokens": 289,
+      "prompt_tokens_details": {
+        "cached_tokens": 21
+      }
+    },
+    "id": "chatcmpl-JSEisGKtLiv85TMXoMIajuNsxeckq3HT",
+    "timings": {
+      "cache_n": 21,
+      "prompt_n": 224,
+      "prompt_ms": 445.42,
+      "prompt_per_token_ms": 1.9884821428571429,
+      "prompt_per_second": 502.8961429661892,
+      "predicted_n": 44,
+      "predicted_ms": 1015.255,
+      "predicted_per_token_ms": 23.073977272727273,
+      "predicted_per_second": 43.33886560519279
+    }
+  },
+  "latency_ms": 1472.82
+}

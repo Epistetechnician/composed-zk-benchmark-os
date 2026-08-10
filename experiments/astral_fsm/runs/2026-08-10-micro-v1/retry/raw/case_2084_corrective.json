@@ -1,0 +1,64 @@
+{
+  "case_id": 2084,
+  "condition": "corrective",
+  "feedback": "Your previous trajectory first diverged at trajectory position 5. Immediately before that transition the current state was A. You reported another state as the next state, but the correct next state for that transition is None. Recompute from that point and return the complete required JSON.",
+  "request": {
+    "model": "openresearchtools/Qwen3.5-4B-GGUF:Q4_K_M",
+    "temperature": 0.0,
+    "max_tokens": 1024,
+    "chat_template_kwargs": {
+      "enable_thinking": false
+    },
+    "messages": [
+      {
+        "role": "system",
+        "content": "You execute deterministic finite-state machines. Return only valid JSON matching the requested schema."
+      },
+      {
+        "role": "user",
+        "content": "Solve the deterministic finite-state machine.\n\nStates: ['A', 'B', 'C']\nAlphabet: 0, 1\nStart State: A\nAccepting States: C\nTransitions: {\"A\": {\"0\": \"C\", \"1\": \"A\"}, \"B\": {\"0\": \"A\", \"1\": \"A\"}, \"C\": {\"0\": \"A\", \"1\": \"C\"}}\nInput: 11111\n\nReturn JSON: {\"trajectory\": [...], \"final_state\": \"...\", \"accepted\": ...}\n\n\nPrevious answer:\n```json\n{\n  \"trajectory\": [\"A\", \"A\", \"A\", \"A\", \"A\"],\n  \"final_state\": \"A\",\n  \"accepted\": false\n}\n```\n\nFeedback:\nYour previous trajectory first diverged at trajectory position 5. Immediately before that transition the current state was A. You reported another state as the next state, but the correct next state for that transition is None. Recompute from that point and return the complete required JSON."
+      }
+    ]
+  },
+  "prompt_sha256": "aa2a069d642510f38321fbecfd8a4d5ac66fa6fb8f9d3a37ebccf158c024a11f",
+  "timestamp": 1786335516.24263,
+  "http_status": 200,
+  "raw_http_response": "{\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"```json\\n{\\n  \\\"trajectory\\\": [\\\"A\\\", \\\"A\\\", \\\"A\\\", \\\"A\\\", \\\"A\\\", \\\"A\\\"],\\n  \\\"final_state\\\": \\\"A\\\",\\n  \\\"accepted\\\": false\\n}\\n```\"}}],\"created\":1786335518,\"model\":\"openresearchtools/Qwen3.5-4B-GGUF:Q4_K_M\",\"system_fingerprint\":\"b10217-ddd4ec142\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":47,\"prompt_tokens\":257,\"total_tokens\":304,\"prompt_tokens_details\":{\"cached_tokens\":21}},\"id\":\"chatcmpl-64v5upDRzRVA25WyAs6niKBhkEYU0Vr1\",\"timings\":{\"cache_n\":21,\"prompt_n\":236,\"prompt_ms\":827.259,\"prompt_per_token_ms\":3.505334745762712,\"prompt_per_second\":285.27945903278174,\"predicted_n\":47,\"predicted_ms\":1397.833,\"predicted_per_token_ms\":29.74112765957447,\"predicted_per_second\":33.62347290413089}}",
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "```json\n{\n  \"trajectory\": [\"A\", \"A\", \"A\", \"A\", \"A\", \"A\"],\n  \"final_state\": \"A\",\n  \"accepted\": false\n}\n```"
+        }
+      }
+    ],
+    "created": 1786335518,
+    "model": "openresearchtools/Qwen3.5-4B-GGUF:Q4_K_M",
+    "system_fingerprint": "b10217-ddd4ec142",
+    "object": "chat.completion",
+    "usage": {
+      "completion_tokens": 47,
+      "prompt_tokens": 257,
+      "total_tokens": 304,
+      "prompt_tokens_details": {
+        "cached_tokens": 21
+      }
+    },
+    "id": "chatcmpl-64v5upDRzRVA25WyAs6niKBhkEYU0Vr1",
+    "timings": {
+      "cache_n": 21,
+      "prompt_n": 236,
+      "prompt_ms": 827.259,
+      "prompt_per_token_ms": 3.505334745762712,
+      "prompt_per_second": 285.27945903278174,
+      "predicted_n": 47,
+      "predicted_ms": 1397.833,
+      "predicted_per_token_ms": 29.74112765957447,
+      "predicted_per_second": 33.62347290413089
+    }
+  },
+  "latency_ms": 2237.06
+}

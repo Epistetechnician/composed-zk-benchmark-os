@@ -1,0 +1,8 @@
+{
+  "attempted": 100,
+  "successful_http_calls": 0,
+  "transport_failures": 100,
+  "model_outputs_collected": 0,
+  "scientific_baseline_valid": false,
+  "reason": "All requests failed with ConnectionRefusedError before receiving model output."
+}
