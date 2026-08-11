@@ -1,11 +1,42 @@
-# V41R33R1 Model-Custody Launch Identity V1
+# V41R33R1 Source-Binding Runtime-Custody Launch Identity V4
 
-State slice: `V41R33R1ModelCustodyLaunchIdentityV1`.
+State slice: `V41R33R1SourceBindingRuntimeCustodyLaunchIdentityV4`.
 
-This is an authorized custody extension after the original V41R33R1 target
-preflight stopped on a missing model revision. It does not reuse the failed
-launch identity, does not change the worker method, and does not claim a
-scientific result.
+This is an authorized runtime-custody extension after the target preflight
+stopped on an incomplete base image. It does not bypass the failed launch
+identity, does not change the worker method, and does not claim a scientific
+result.
+
+The first runtime-custody launch also stopped before model loading because the
+worker requires a source-binding sidecar that is not part of the plain archive
+tree. This identity seals that deterministic sidecar and preserves the failed
+control output under its original output root.
+
+## Source-binding sidecar
+
+- target path: `/home/dev/v41r33r1/rgs/.astral-source-binding.json`;
+- exact fields: `source_commit`, `source_archive_sha256`, and
+  `source_tree_sha256`;
+- values are bound to the frozen archive and extracted-tree digest already
+  checked by the wrapper;
+- the coordinator verifies the sidecar before either arm;
+- fresh consuming output root for this identity:
+  `/home/dev/v41r33r1/output-runtime-v2`.
+
+## Runtime custody
+
+- isolated interpreter: `/home/dev/v41r33r1/runtime/python/bin/python`;
+- Python: `3.10.12`;
+- torch distribution: `2.10.0+cu128`, base version `2.10.0`;
+- CUDA runtime reported by torch: `12.8`;
+- transformers: `4.57.6`;
+- peft: `0.18.1`;
+- corrected package manifest: `runtime-custody-manifest-v2.json`;
+- manifest digest:
+  `sha256:65608b8799eab02afc04151ef77cbb45956bbad4dc806a97de8164d36858aa50`;
+- model loading and worker import were both false during provisioning;
+- the earlier v1 manifest is retained as invalid audit residue because its
+  `pip freeze` was captured through the resolved system interpreter.
 
 ## Model custody
 
@@ -30,16 +61,22 @@ model-custody phase. Acquisition completed before launch-contract acceptance.
 
 ## New launch identity
 
-- launch identity: `v41r33r1-model-custody-v1`;
+- launch identity: `v41r33r1-source-binding-runtime-custody-v4`;
 - scientific worker run id remains the preregistered
   `v41r27-panel-8-seed-412019`;
-- source archive, source commit, extracted-tree digest, wrapper, launcher, and
-  validator identities remain those frozen by V41R33R1;
-- model-custody coordinator SHA-256:
-  `sha256:fc2280872d59a05f72127ee7fade09813577dc13f2ec2d604940884ad81fa8cf`;
+- source archive and source commit remain frozen by V41R33R1;
+- the extracted-tree digest excludes only the designated sidecar and remains
+  `sha256:652633475af44cd6053b9dec6f44c7420c2668eb0e9253c4b994e9199ff9b9f5`;
+- runtime-custody coordinator SHA-256:
+  `sha256:bdc66ed562313034b799d12ddc95203a502dabb9ae4e73306063f0e590f360bd`;
+- wrapper SHA-256 for the sidecar-aware extracted tree:
+  `sha256:6b1fe655980033235ac9e925b1b7fdfa321404551c6087a2e05d748b4a001379`;
 - launch-contract test SHA-256:
-  `sha256:f67e2d9864124f553078a9eedf4fb47a5584348dd5a5731eb8674b2effee2b8c`;
-- the consuming coordinator is the new model-custody-bound implementation in
+  `sha256:28726914c56259de6fa67d742d4be4a94f60b91544cfe296213bc3af33091cec`;
+- coordinator must verify the runtime manifest digest before model custody or
+  either arm;
+- launch-contract tests include runtime-custody acceptance and mismatch cases;
+- the consuming coordinator is the new source-binding/runtime-custody-bound implementation in
   this identity, not the prior coordinator;
 - the coordinator records the model custody binding before either arm and
   writes `model-custody-binding.json` beside the campaign ledger;
@@ -51,12 +88,13 @@ model-custody phase. Acquisition completed before launch-contract acceptance.
 The resolved command is:
 
 ```text
-<resolved-python> <resolved-model-custody-coordinator>
+<resolved-python> <resolved-runtime-custody-coordinator>
   --archive <resolved-custody-archive>
   --rgs-root <resolved-plain-rgs-root>
   --output-root <resolved-fresh-output-root>
   --model-root <resolved-model-custody-root>
   --hf-cache-root <resolved-local-hf-cache-root>
+  --runtime-manifest <resolved-runtime-custody-manifest>
 ```
 
 The coordinator refuses missing, altered, incomplete, symlinked, or

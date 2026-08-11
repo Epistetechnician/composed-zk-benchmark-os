@@ -20,12 +20,14 @@ from typing import Sequence
 
 
 HERE = Path(__file__).resolve().parent
-PYTHON = str(Path(sys.executable).resolve())
+# Preserve the venv entrypoint spelling. Resolving its symlink would escape the
+# isolated runtime and silently relaunch arms under the base interpreter.
+PYTHON = str(Path(sys.executable))
 RUN_ID = "v41r27-panel-8-seed-412019"
-LAUNCH_ID = "v41r33r1-model-custody-v1"
+LAUNCH_ID = "v41r33r1-source-binding-runtime-custody-v4"
 EXPECTED_ARCHIVE = "sha256:1b2d2e6c96b89749cddd2e48a727f08a090a21634bf9c48c12734a2174968580"
 EXPECTED_TREE = "sha256:652633475af44cd6053b9dec6f44c7420c2668eb0e9253c4b994e9199ff9b9f5"
-EXPECTED_WRAPPER = "sha256:e3fb6e35082d078734375c4e93d070d2ad8a7107c7cf4c0dc320949f24f8b4a5"
+EXPECTED_WRAPPER = "sha256:6b1fe655980033235ac9e925b1b7fdfa321404551c6087a2e05d748b4a001379"
 EXPECTED_LAUNCHER = "sha256:1c12648503f39c4c1aae4bcc5cddedcf7c545b37ca50d8e012445e76d3a4169e"
 EXPECTED_VALIDATOR = "sha256:f1b9f45cfc7d58812b0f72fba890d3ccb274224b578a74e9f87d584af645dfd4"
 EXPECTED_COMMIT = "754220f7fc360d8dd15e5837190b895ea0550f30"
@@ -33,6 +35,12 @@ EXPECTED_MODEL_ID = "openai/gpt-oss-20b"
 EXPECTED_MODEL_REVISION = "d0e2aa76789354d715f8b22553b9feb6c462fcf0"
 EXPECTED_MODEL_MANIFEST = "sha256:5c768d8f240f7a1b6f49b008e6d0f21a235d8509f62fb85b099afdd50a060213"
 EXPECTED_MODEL_MANIFEST_BYTES = "sha256:4d9726e0c665de76f960ed3dc77d939374ab60b040351872f0e4c0731f5c3370"
+EXPECTED_RUNTIME_MANIFEST = "sha256:65608b8799eab02afc04151ef77cbb45956bbad4dc806a97de8164d36858aa50"
+EXPECTED_SOURCE_BINDING = {
+    "source_commit": EXPECTED_COMMIT,
+    "source_archive_sha256": EXPECTED_ARCHIVE,
+    "source_tree_sha256": EXPECTED_TREE,
+}
 
 
 def sha256(path: Path) -> str:
@@ -208,6 +216,35 @@ def verify_validator(path: Path, expected: str) -> None:
         raise RuntimeError("V41R33R1 validator hash mismatch")
 
 
+def verify_runtime_custody(path: Path) -> dict[str, object]:
+    path = path.resolve()
+    if not path.is_file() or sha256(path) != EXPECTED_RUNTIME_MANIFEST:
+        raise RuntimeError("V41R33R1 runtime custody manifest mismatch")
+    try:
+        record = json.loads(path.read_text())
+    except (OSError, json.JSONDecodeError) as error:
+        raise RuntimeError("V41R33R1 runtime custody manifest unreadable") from error
+    expected = {
+        "runtime_identity": "v41r33r1-runtime-custody-v1",
+        "python": "3.10.12",
+        "torch_base_version": "2.10.0",
+        "cuda": "12.8",
+        "transformers": "4.57.6",
+        "peft": "0.18.1",
+        "model_loaded": False,
+        "worker_imported": False,
+    }
+    for key, value in expected.items():
+        if record.get(key) != value:
+            raise RuntimeError(f"V41R33R1 runtime custody mismatch: {key}")
+    resolved_python = record.get("resolved_python")
+    if not isinstance(resolved_python, str) or not Path(resolved_python).is_file():
+        raise RuntimeError("V41R33R1 resolved runtime interpreter missing")
+    if record.get("sys_prefix") != str(Path(resolved_python).parent.parent):
+        raise RuntimeError("V41R33R1 runtime prefix mismatch")
+    return record
+
+
 def verify_wrapper_receipt(
     output: Path,
     *,
@@ -259,6 +296,13 @@ def verify_source_snapshot(archive: Path, rgs_root: Path, wrapper: Path) -> None
         raise RuntimeError("V41R33R1 extracted source commit mismatch")
     module.verify_extracted_tree(rgs_root.resolve())
     module.verify_source_files(rgs_root.resolve())
+    binding_path = rgs_root.resolve() / ".astral-source-binding.json"
+    try:
+        binding = json.loads(binding_path.read_text())
+    except (OSError, json.JSONDecodeError) as error:
+        raise RuntimeError("V41R33R1 source archive binding unavailable") from error
+    if binding != EXPECTED_SOURCE_BINDING:
+        raise RuntimeError("V41R33R1 source archive binding mismatch")
 
 
 def require_arm_order(completed: Sequence[str]) -> None:
@@ -345,6 +389,7 @@ def run_campaign(
     output_root: Path,
     model_root: Path,
     hf_cache_root: Path,
+    runtime_manifest: Path,
     *,
     launcher: Path = HERE / "v41r33r1_history_prelude_launcher.py",
     wrapper: Path = HERE / "v41r32r1_history_prelude_wrapper.py",
@@ -356,6 +401,7 @@ def run_campaign(
     verify_runtime_hashes(launcher, wrapper, EXPECTED_LAUNCHER, EXPECTED_WRAPPER)
     verify_validator(validator, EXPECTED_VALIDATOR)
     verify_source_snapshot(archive, rgs_root, wrapper)
+    runtime_custody = verify_runtime_custody(runtime_manifest)
     model_custody = verify_model_custody(model_root, hf_cache_root)
     require_fresh_output_root(output_root)
     execution_binding = verify_same_node_disk(rgs_root, output_root)
@@ -374,6 +420,9 @@ def run_campaign(
         "V41R33R1_MODEL_ID": EXPECTED_MODEL_ID,
         "V41R33R1_MODEL_REVISION": EXPECTED_MODEL_REVISION,
         "V41R33R1_MODEL_MANIFEST_SHA256": EXPECTED_MODEL_MANIFEST,
+        "V41R33R1_RUNTIME_IDENTITY": LAUNCH_ID,
+        "V41R33R1_RUNTIME_MANIFEST_SHA256": EXPECTED_RUNTIME_MANIFEST,
+        "V41R33R1_RUNTIME_MANIFEST": str(runtime_manifest.resolve()),
         "V41R33R1_MODEL_ROOT": str(model_root.resolve()),
         "V41R33R1_HF_CACHE_ROOT": str(hf_cache_root.resolve()),
         "HF_HOME": str(hf_cache_root.resolve()),
@@ -395,6 +444,7 @@ def run_campaign(
         "working_directory": str(rgs_root.resolve()),
         "wrapper_receipt_path": str((intervention / "v41r32r1-wrapper-receipt.json").resolve()),
         "model_custody": model_custody,
+        "runtime_custody": runtime_custody,
         "coordinator_argv": list(launch_argv) if launch_argv is not None else None,
     }
     control_argv = command_argv("control", control, rgs_root=rgs_root)
@@ -417,6 +467,9 @@ def run_campaign(
     state["environment"] = environment
     (output_root / "model-custody-binding.json").write_text(
         json.dumps(model_custody, indent=2, sort_keys=True) + "\n"
+    )
+    (output_root / "runtime-custody-binding.json").write_text(
+        json.dumps(runtime_custody, indent=2, sort_keys=True) + "\n"
     )
     state["arm_command_bytes"] = {
         "control": command_bytes(control_argv),
@@ -486,6 +539,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--output-root", type=Path, required=True)
     parser.add_argument("--model-root", type=Path, required=True)
     parser.add_argument("--hf-cache-root", type=Path, required=True)
+    parser.add_argument("--runtime-manifest", type=Path, required=True)
     args = parser.parse_args(argv)
     launch_argv = [
         PYTHON,
@@ -495,6 +549,7 @@ def main(argv: list[str] | None = None) -> int:
         "--output-root", str(args.output_root.resolve()),
         "--model-root", str(args.model_root.resolve()),
         "--hf-cache-root", str(args.hf_cache_root.resolve()),
+        "--runtime-manifest", str(args.runtime_manifest.resolve()),
     ]
     run_campaign(
         args.archive,
@@ -502,6 +557,7 @@ def main(argv: list[str] | None = None) -> int:
         args.output_root,
         args.model_root,
         args.hf_cache_root,
+        args.runtime_manifest,
         launch_argv=launch_argv,
     )
     return 0

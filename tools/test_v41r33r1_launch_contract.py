@@ -226,6 +226,41 @@ def test_model_custody_manifest_mismatch_fails_closed(tmp_path: Path) -> None:
         raise AssertionError("model custody mismatch was accepted")
 
 
+def test_runtime_custody_manifest_mismatch_fails_closed(tmp_path: Path) -> None:
+    manifest = tmp_path / "runtime-custody-manifest.json"
+    manifest.write_text("{}\n")
+    try:
+        COORDINATOR.verify_runtime_custody(manifest)
+    except RuntimeError as error:
+        assert "runtime custody" in str(error)
+    else:
+        raise AssertionError("runtime custody mismatch was accepted")
+
+
+def test_runtime_custody_accepts_exact_identity(tmp_path: Path) -> None:
+    record = {
+        "runtime_identity": "v41r33r1-runtime-custody-v1",
+        "python": "3.10.12",
+        "resolved_python": sys.executable,
+        "sys_prefix": str(Path(sys.executable).parent.parent),
+        "torch_base_version": "2.10.0",
+        "cuda": "12.8",
+        "transformers": "4.57.6",
+        "peft": "0.18.1",
+        "model_loaded": False,
+        "worker_imported": False,
+    }
+    manifest = tmp_path / "runtime-custody-manifest.json"
+    raw = json.dumps(record, sort_keys=True, separators=(",", ":")) + "\n"
+    manifest.write_text(raw)
+    expected = COORDINATOR.EXPECTED_RUNTIME_MANIFEST
+    try:
+        COORDINATOR.EXPECTED_RUNTIME_MANIFEST = COORDINATOR.sha256(manifest)
+        assert COORDINATOR.verify_runtime_custody(manifest) == record
+    finally:
+        COORDINATOR.EXPECTED_RUNTIME_MANIFEST = expected
+
+
 def test_model_custody_requires_hard_bound_cache_files(tmp_path: Path) -> None:
     model_root = tmp_path / "model"
     cache_root = tmp_path / "cache"
