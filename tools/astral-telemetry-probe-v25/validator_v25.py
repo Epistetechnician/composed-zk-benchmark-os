@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 
 FIT_PROBE_GATE = 0.70
@@ -90,6 +91,14 @@ def _validate_silent(root: Path, result: dict) -> None:
 def _validate_fork(result: dict) -> None:
     if result.get("assessment_unopened") is True:
         raise ValueError("fork classification has assessment marked unopened")
+    for field in ("probe_accuracy", "self_report_accuracy", "fork_margin_observed"):
+        value = result[field]
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+            raise ValueError(f"non-finite fork metric: {field}")
+    for field in ("lower_95", "mean_over_chance", "upper_95"):
+        value = result["bootstrap"][field]
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+            raise ValueError(f"non-finite bootstrap metric: {field}")
     assessment = result
     probe_pass = (
         assessment["probe_accuracy"] >= ASSESS_PROBE_GATE

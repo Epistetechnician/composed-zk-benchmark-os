@@ -6,6 +6,7 @@ from collections import Counter
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 HERE = Path(__file__).resolve().parents[1]
 
@@ -228,6 +229,27 @@ def test_validator_fork_semantics():
         except ValueError:
             continue
         raise AssertionError(f"validator accepted unsupported fork result: {bad['classification']}")
+
+
+@pytest.mark.parametrize(
+    ("field_path", "value"),
+    [
+        (("probe_accuracy",), float("nan")),
+        (("self_report_accuracy",), float("inf")),
+        (("fork_margin_observed",), float("-inf")),
+        (("bootstrap", "lower_95"), float("nan")),
+        (("bootstrap", "mean_over_chance"), float("inf")),
+        (("bootstrap", "upper_95"), float("-inf")),
+    ],
+)
+def test_validator_rejects_nonfinite_fork_metrics(field_path, value):
+    result = _fork_result("InformationPresenceParityObserved", 0.90, 0.80, 0.6)
+    target = result
+    for key in field_path[:-1]:
+        target = target[key]
+    target[field_path[-1]] = value
+    with pytest.raises(ValueError, match="non-finite"):
+        VALIDATOR._validate_fork(result)
 
 
 def _sha(path: Path) -> str:
