@@ -10,6 +10,7 @@ from pathlib import Path
 
 FIT_PROBE_GATE = 0.70
 ASSESS_PROBE_GATE = 0.75
+ASSESS_CHANCE_FLOOR = 0.5
 FORK_MARGIN = 0.15
 CLAIM = "LocalDevelopmentPrivilegedTelemetryInformationPresence"
 STOP_CLASSIFICATIONS = {
@@ -92,7 +93,7 @@ def _validate_fork(result: dict) -> None:
     assessment = result
     probe_pass = (
         assessment["probe_accuracy"] >= ASSESS_PROBE_GATE
-        and assessment["bootstrap"]["lower_95"] > 0
+        and assessment["bootstrap"]["lower_95"] > ASSESS_CHANCE_FLOOR
     )
     margin = assessment["fork_margin_observed"]
     expected_margin = assessment["probe_accuracy"] - assessment["self_report_accuracy"]
