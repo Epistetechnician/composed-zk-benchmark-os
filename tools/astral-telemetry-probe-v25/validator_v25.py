@@ -130,6 +130,8 @@ def _validate_result_boundary(result: dict) -> None:
     for field, value in expected.items():
         if result.get(field) != value:
             raise ValueError(f"result boundary mismatch: {field}")
+    if not isinstance(result.get("assessment_unopened"), bool):
+        raise ValueError("result boundary mismatch: assessment_unopened")
 
 
 def validate(root: Path) -> dict:
