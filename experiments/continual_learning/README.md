@@ -26,6 +26,6 @@ neural-training result and cannot support breakthrough, transfer, production,
 or general continual-learning claims.
 
 The latest signed task/update pilot is documented in
-`docs/research/continual-learning/25-v12-training-fit-audit-record.md`. Its outputs
+`docs/research/continual-learning/27-v13-training-objective-repair-record.md`. Its outputs
 must stay outside the repository because adapter weights and raw run logs are
 generated artifacts, not source fixtures.
