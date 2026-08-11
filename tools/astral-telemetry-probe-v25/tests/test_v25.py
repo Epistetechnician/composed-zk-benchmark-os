@@ -287,3 +287,23 @@ def test_validator_rejects_floor_stop_without_violations(tmp_path):
         assert "without violations" in str(exc)
     else:
         raise AssertionError("validator accepted a floor stop without violations")
+
+
+def test_validator_rejects_fork_marked_assessment_unopened(tmp_path):
+    result = _fork_result("InformationPresenceParityObserved", 0.90, 0.80, 0.2)
+    result.update({
+        "confirmation": "NotAuthorized", "stage_0c": "Blocked",
+        "stage_1": "BlockedByStage0C", "claim_ceiling": V25.CLAIM,
+        "assessment_unopened": True,
+    })
+    bundle = tmp_path / "fork-marked-unopened"
+    _write_stop_bundle(bundle, result, [])
+    (bundle / "assessment-results.json").write_text(json.dumps({"rows": []}) + "\n")
+    files = {path.name: _sha(path) for path in sorted(bundle.glob("*")) if path.name != "manifest.json"}
+    (bundle / "manifest.json").write_text(json.dumps({"files": files}, indent=2, sort_keys=True) + "\n")
+    try:
+        VALIDATOR.validate(bundle)
+    except ValueError as exc:
+        assert "assessment marked unopened" in str(exc)
+    else:
+        raise AssertionError("validator accepted a fork result marked assessment unopened")
