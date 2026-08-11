@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import importlib.util
+import json
 from pathlib import Path
 import subprocess
 import sys
@@ -203,3 +204,70 @@ def test_validator_mismatch_fails_closed(tmp_path: Path) -> None:
         assert "validator" in str(error)
     else:
         raise AssertionError("validator mismatch was accepted")
+
+
+def test_model_custody_manifest_mismatch_fails_closed(tmp_path: Path) -> None:
+    model_root = tmp_path / "model"
+    cache_root = tmp_path / "cache"
+    model_root.mkdir()
+    cache_snapshot = cache_root / "hub" / "models--openai--gpt-oss-20b" / "snapshots" / COORDINATOR.EXPECTED_MODEL_REVISION
+    cache_snapshot.mkdir(parents=True)
+    (model_root / "model-custody-manifest.json").write_text(json.dumps({
+        "model_id": COORDINATOR.EXPECTED_MODEL_ID,
+        "revision": COORDINATOR.EXPECTED_MODEL_REVISION,
+        "manifest_sha256": "sha256:" + "0" * 64,
+        "files": [],
+    }))
+    try:
+        COORDINATOR.verify_model_custody(model_root, cache_root)
+    except RuntimeError as error:
+        assert "file list" in str(error)
+    else:
+        raise AssertionError("model custody mismatch was accepted")
+
+
+def test_model_custody_requires_hard_bound_cache_files(tmp_path: Path) -> None:
+    model_root = tmp_path / "model"
+    cache_root = tmp_path / "cache"
+    model_root.mkdir()
+    cache_snapshot = cache_root / "hub" / "models--openai--gpt-oss-20b" / "snapshots" / COORDINATOR.EXPECTED_MODEL_REVISION
+    cache_snapshot.mkdir(parents=True)
+    payload = b"frozen-model-file\n"
+    file_path = model_root / "config.json"
+    file_path.write_bytes(payload)
+    row = {
+        "path": "config.json",
+        "sha256": "sha256:" + hashlib.sha256(payload).hexdigest(),
+        "size_bytes": len(payload),
+    }
+    manifest_hash = COORDINATOR.model_manifest_rows_digest([row])
+    manifest_path = model_root / "model-custody-manifest.json"
+    manifest_path.write_text(json.dumps({
+        "model_id": COORDINATOR.EXPECTED_MODEL_ID,
+        "revision": COORDINATOR.EXPECTED_MODEL_REVISION,
+        "manifest_sha256": manifest_hash,
+        "files": [row],
+    }))
+    cached = cache_snapshot / "config.json"
+    cached.write_bytes(payload)
+    expected_manifest = COORDINATOR.EXPECTED_MODEL_MANIFEST
+    expected_manifest_bytes = COORDINATOR.EXPECTED_MODEL_MANIFEST_BYTES
+    try:
+        COORDINATOR.EXPECTED_MODEL_MANIFEST = manifest_hash
+        COORDINATOR.EXPECTED_MODEL_MANIFEST_BYTES = "sha256:" + "0" * 64
+        try:
+            COORDINATOR.verify_model_custody(model_root, cache_root)
+        except RuntimeError as error:
+            assert "bytes hash" in str(error)
+        else:
+            raise AssertionError("manifest byte mismatch was accepted")
+        COORDINATOR.EXPECTED_MODEL_MANIFEST_BYTES = COORDINATOR.sha256(manifest_path)
+        try:
+            COORDINATOR.verify_model_custody(model_root, cache_root)
+        except RuntimeError as error:
+            assert "binding" in str(error)
+        else:
+            raise AssertionError("unbound model cache file was accepted")
+    finally:
+        COORDINATOR.EXPECTED_MODEL_MANIFEST = expected_manifest
+        COORDINATOR.EXPECTED_MODEL_MANIFEST_BYTES = expected_manifest_bytes
