@@ -44,3 +44,14 @@ def test_validate_lock_rejects_symlinked_input_tree(tmp_path):
     payload.symlink_to(outside)
     with pytest.raises(ValueError, match="symlinked file"):
         VALIDATOR.validate_lock(bundle)
+
+
+@pytest.mark.parametrize("absent", [False, 1, "true", "false", None])
+def test_validate_lock_requires_boolean_true_ordering_marker(tmp_path, absent):
+    bundle = _lock_bundle(tmp_path / "bundle", "payload.bin")
+    lock = json.loads((bundle / "configuration-lock.json").read_text())
+    lock["assessment_results_absent"] = absent
+    (bundle / "configuration-lock.json").write_text(json.dumps(lock))
+
+    with pytest.raises(ValueError, match="lock ordering failure"):
+        VALIDATOR.validate_lock(bundle)
