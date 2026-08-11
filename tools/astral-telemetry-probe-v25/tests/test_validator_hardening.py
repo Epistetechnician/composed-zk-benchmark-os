@@ -83,3 +83,22 @@ def test_validator_rejects_tampered_result_boundary(tmp_path, field, value):
     (bundle / "manifest.json").write_text(json.dumps(manifest))
     with pytest.raises(ValueError, match=f"result boundary mismatch: {field}"):
         VALIDATOR.validate(bundle)
+
+
+@pytest.mark.parametrize("value", [0, 1, "false", None])
+def test_validator_rejects_non_boolean_assessment_order_marker(tmp_path, value):
+    result = {
+        "classification": "NotRunInformationPresenceProbe",
+        "confirmation": "NotAuthorized", "stage_0c": "Blocked",
+        "stage_1": "BlockedByStage0C", "claim_ceiling": "LocalDevelopmentPrivilegedTelemetryInformationPresence",
+        "assessment_unopened": value,
+    }
+    bundle = _bundle(tmp_path / "bundle", {
+        "qualification.json": json.dumps({"qualified": False}).encode(),
+    })
+    (bundle / "result.json").write_text(json.dumps(result))
+    manifest = json.loads((bundle / "manifest.json").read_text())
+    manifest["files"]["result.json"] = _sha(bundle / "result.json")
+    (bundle / "manifest.json").write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="result boundary mismatch: assessment_unopened"):
+        VALIDATOR.validate(bundle)
