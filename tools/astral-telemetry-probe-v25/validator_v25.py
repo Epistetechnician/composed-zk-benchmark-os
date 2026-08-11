@@ -52,6 +52,8 @@ def _bundle_path(root: Path, name: str, label: str) -> Path:
 def _reject_symlinks(root: Path) -> None:
     if root.is_symlink():
         raise ValueError("symlinked bundle root")
+    if not root.is_dir():
+        raise ValueError("bundle root is not a directory")
     for path in root.rglob("*"):
         if path.is_symlink():
             raise ValueError(f"symlinked file in bundle: {path.relative_to(root)}")
