@@ -289,6 +289,31 @@ def test_validator_rejects_floor_stop_without_violations(tmp_path):
         raise AssertionError("validator accepted a floor stop without violations")
 
 
+def test_validator_rejects_unknown_classification(tmp_path):
+    cell = {
+        "site": 21, "strength": 2.0, "pair_count": 32,
+        "mean_abs_logit_shift": 0.0, "max_abs_logit_shift": 0.0,
+        "top1_token_change_rate": 0.0, "silent": True,
+    }
+    result = {
+        "classification": "UnexpectedFutureOutcome",
+        "confirmation": "NotAuthorized", "stage_0c": "Blocked",
+        "stage_1": "BlockedByStage0C", "claim_ceiling": V25.CLAIM,
+        "assessment_unopened": True,
+    }
+    bundle = tmp_path / "unknown-classification"
+    _write_stop_bundle(bundle, result, [cell])
+    manifest = json.loads((bundle / "manifest.json").read_text())
+    manifest["files"]["result.json"] = _sha(bundle / "result.json")
+    (bundle / "manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
+    try:
+        VALIDATOR.validate(bundle)
+    except ValueError as exc:
+        assert "unknown classification" in str(exc)
+    else:
+        raise AssertionError("validator accepted an unknown classification")
+
+
 def test_validator_rejects_fork_marked_assessment_unopened(tmp_path):
     result = _fork_result("InformationPresenceParityObserved", 0.90, 0.80, 0.2)
     result.update({
