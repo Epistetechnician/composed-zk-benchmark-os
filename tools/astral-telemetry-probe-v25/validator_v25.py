@@ -168,7 +168,7 @@ def main() -> int:
     parser.add_argument("--lock-only", action="store_true")
     args = parser.parse_args()
     try:
-        result = validate_lock(args.root.resolve()) if args.lock_only else validate(args.root.resolve())
+        result = validate_lock(args.root) if args.lock_only else validate(args.root)
         print(json.dumps(result, sort_keys=True))
     except Exception as exc:
         print(json.dumps({"valid": False, "reason": str(exc)}, sort_keys=True))
