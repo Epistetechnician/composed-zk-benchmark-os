@@ -123,3 +123,5 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+    if result.get("assessment_unopened") is True:
+        raise ValueError("fork classification has assessment marked unopened")
