@@ -22,3 +22,11 @@ def test_validator_rejects_symlinked_bundle_root_before_reading_manifest(tmp_pat
 
     with pytest.raises(ValueError, match="symlinked bundle root"):
         VALIDATOR.validate(bundle_link)
+
+
+def test_validator_rejects_non_directory_bundle_root_before_reading_manifest(tmp_path):
+    bundle_file = tmp_path / "bundle-file"
+    bundle_file.write_text("not a bundle")
+
+    with pytest.raises(ValueError, match="bundle root is not a directory"):
+        VALIDATOR.validate(bundle_file)
