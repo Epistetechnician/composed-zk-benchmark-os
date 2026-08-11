@@ -213,14 +213,15 @@ def _fork_result(classification: str, probe: float, report: float, lower: float)
 
 
 def test_validator_fork_semantics():
-    VALIDATOR._validate_fork(_fork_result("InformationPresenceReportGapObserved", 0.90, 0.50, 0.2))
-    VALIDATOR._validate_fork(_fork_result("InformationPresenceParityObserved", 0.90, 0.80, 0.2))
+    VALIDATOR._validate_fork(_fork_result("InformationPresenceReportGapObserved", 0.90, 0.50, 0.6))
+    VALIDATOR._validate_fork(_fork_result("InformationPresenceParityObserved", 0.90, 0.80, 0.6))
     VALIDATOR._validate_fork(_fork_result("InformationPresenceNoCandidate", 0.60, 0.50, -0.1))
     for bad in (
-        _fork_result("InformationPresenceReportGapObserved", 0.90, 0.85, 0.2),
-        _fork_result("InformationPresenceParityObserved", 0.90, 0.50, 0.2),
-        _fork_result("InformationPresenceNoCandidate", 0.90, 0.50, 0.2),
+        _fork_result("InformationPresenceReportGapObserved", 0.90, 0.85, 0.6),
+        _fork_result("InformationPresenceParityObserved", 0.90, 0.50, 0.6),
+        _fork_result("InformationPresenceNoCandidate", 0.90, 0.50, 0.6),
         _fork_result("InformationPresenceReportGapObserved", 0.60, 0.30, -0.1),
+        _fork_result("InformationPresenceReportGapObserved", 0.90, 0.50, 0.1),
     ):
         try:
             VALIDATOR._validate_fork(bad)
