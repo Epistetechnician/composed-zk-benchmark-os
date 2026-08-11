@@ -60,7 +60,7 @@ def validate_lock(root: Path) -> dict:
     if (root / "assessment-results.json").exists():
         raise ValueError("assessment exists before lock validation")
     lock = json.loads((root / "configuration-lock.json").read_text())
-    if not lock["assessment_results_absent"]:
+    if lock["assessment_results_absent"] is not True:
         raise ValueError("lock ordering failure")
     for name, expected in lock["inputs"].items():
         if sha(_bundle_path(root, name, "lock input")) != expected:
