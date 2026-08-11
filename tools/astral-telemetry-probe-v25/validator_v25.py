@@ -11,6 +11,7 @@ from pathlib import Path
 FIT_PROBE_GATE = 0.70
 ASSESS_PROBE_GATE = 0.75
 FORK_MARGIN = 0.15
+CLAIM = "LocalDevelopmentPrivilegedTelemetryInformationPresence"
 STOP_CLASSIFICATIONS = {
     "NotRunInformationPresenceProbe",
     "ProbeTargetBehaviorallySilent",
@@ -21,6 +22,7 @@ FORK_CLASSIFICATIONS = {
     "InformationPresenceParityObserved",
     "InformationPresenceNoCandidate",
 }
+KNOWN_CLASSIFICATIONS = STOP_CLASSIFICATIONS | FORK_CLASSIFICATIONS
 
 
 def sha(path: Path) -> str:
@@ -31,14 +33,37 @@ def sha(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _bundle_path(root: Path, name: str, label: str) -> Path:
+    """Resolve a declared bundle path without allowing root escape."""
+    if not isinstance(name, str) or not name or Path(name).is_absolute():
+        raise ValueError(f"{label} path escapes bundle root: {name!r}")
+    parts = Path(name).parts
+    if any(part in ("", ".", "..") for part in parts):
+        raise ValueError(f"{label} path escapes bundle root: {name!r}")
+    bundle_root = root.resolve()
+    candidate = (root / name).resolve(strict=False)
+    try:
+        candidate.relative_to(bundle_root)
+    except ValueError as exc:
+        raise ValueError(f"{label} path escapes bundle root: {name!r}") from exc
+    return candidate
+
+
+def _reject_symlinks(root: Path) -> None:
+    for path in root.rglob("*"):
+        if path.is_symlink():
+            raise ValueError(f"symlinked file in bundle: {path.relative_to(root)}")
+
+
 def validate_lock(root: Path) -> dict:
+    _reject_symlinks(root)
     if (root / "assessment-results.json").exists():
         raise ValueError("assessment exists before lock validation")
     lock = json.loads((root / "configuration-lock.json").read_text())
     if not lock["assessment_results_absent"]:
         raise ValueError("lock ordering failure")
     for name, expected in lock["inputs"].items():
-        if sha(root / name) != expected:
+        if sha(_bundle_path(root, name, "lock input")) != expected:
             raise ValueError(f"lock digest mismatch: {name}")
     return {"lock_valid": True, "configuration_lock_sha256": sha(root / "configuration-lock.json")}
 
@@ -58,6 +83,8 @@ def _validate_silent(root: Path, result: dict) -> None:
 
 
 def _validate_fork(result: dict) -> None:
+    if result.get("assessment_unopened") is True:
+        raise ValueError("fork classification has assessment marked unopened")
     assessment = result
     probe_pass = (
         assessment["probe_accuracy"] >= ASSESS_PROBE_GATE
@@ -79,16 +106,35 @@ def _validate_fork(result: dict) -> None:
             raise ValueError("no-candidate classification despite passing probe")
 
 
+def _validate_result_boundary(result: dict) -> None:
+    expected = {
+        "confirmation": "NotAuthorized",
+        "stage_0c": "Blocked",
+        "stage_1": "BlockedByStage0C",
+        "claim_ceiling": CLAIM,
+    }
+    for field, value in expected.items():
+        if result.get(field) != value:
+            raise ValueError(f"result boundary mismatch: {field}")
+
+
 def validate(root: Path) -> dict:
+    _reject_symlinks(root)
     manifest = json.loads((root / "manifest.json").read_text())
     actual = {str(path.relative_to(root)) for path in root.rglob("*") if path.is_file() and path.name != "manifest.json"}
+    for name in manifest["files"]:
+        _bundle_path(root, name, "manifest")
     if actual != set(manifest["files"]):
         raise ValueError("manifest census mismatch")
     for name, expected in manifest["files"].items():
-        if sha(root / name) != expected:
+        if sha(_bundle_path(root, name, "manifest")) != expected:
             raise ValueError(f"manifest digest mismatch: {name}")
     result = json.loads((root / "result.json").read_text())
-    if result["classification"] in STOP_CLASSIFICATIONS:
+    classification = result.get("classification")
+    if classification not in KNOWN_CLASSIFICATIONS:
+        raise ValueError(f"unknown classification: {classification!r}")
+    _validate_result_boundary(result)
+    if classification in STOP_CLASSIFICATIONS:
         if not result["assessment_unopened"] or (root / "assessment-results.json").exists():
             raise ValueError("qualification stop opened assessment")
     if result["classification"] == "ProbeTargetBehaviorallySilent":
@@ -123,5 +169,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-    if result.get("assessment_unopened") is True:
-        raise ValueError("fork classification has assessment marked unopened")
