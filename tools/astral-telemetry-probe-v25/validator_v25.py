@@ -121,7 +121,11 @@ def _validate_result_boundary(result: dict) -> None:
 def validate(root: Path) -> dict:
     _reject_symlinks(root)
     manifest = json.loads((root / "manifest.json").read_text())
-    actual = {str(path.relative_to(root)) for path in root.rglob("*") if path.is_file() and path.name != "manifest.json"}
+    actual = {
+        str(path.relative_to(root))
+        for path in root.rglob("*")
+        if path.is_file() and path.relative_to(root) != Path("manifest.json")
+    }
     for name in manifest["files"]:
         _bundle_path(root, name, "manifest")
     if actual != set(manifest["files"]):
