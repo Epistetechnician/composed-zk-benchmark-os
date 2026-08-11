@@ -21,7 +21,7 @@ from pathlib import Path
 RGS_ROOT = Path(os.environ.get("RGS_ROOT", "/home/dev/rgs")).resolve()
 EXPECTED_COMMIT = "754220f7fc360d8dd15e5837190b895ea0550f30"
 EXPECTED_ARCHIVE = "sha256:1b2d2e6c96b89749cddd2e48a727f08a090a21634bf9c48c12734a2174968580"
-EXPECTED_TREE = "sha256:8af3681cbee926b3d5b1255184537d7b5147f3e8ce3c62e0e4c6ff8bf927de52"
+EXPECTED_TREE = "sha256:5b2329186f89f53e5a1e8798e096815a5e52bee8d99d596887dbbd1266b79690"
 EXPECTED_ENTRYPOINT = "sha256:cccc6a69caace07871274a929785c75de98a3fe6975acd67d4866ee4c7ae8859"
 EXPECTED_METHOD = "sha256:f9fa45c268fccdecde2f3dfb2c6720ed0a47e2004f1f4b50d9c4c89767ba98dd"
 EXPECTED_REQUIREMENTS = "sha256:0a114a8f7abaee60c0aff87e27354e2eae5090772b20b1bbd30093ad6d1c3541"
@@ -51,8 +51,11 @@ def tree_manifest_sha256(root: Path) -> str:
         relative = path.relative_to(root).as_posix()
         if relative == ".astral-source-binding.json":
             continue
-        rows.append(f"{relative}\0{sha256(path)}\n")
-    return "sha256:" + hashlib.sha256("".join(rows).encode()).hexdigest()
+        rows.append({"path": relative, "sha256": sha256(path)})
+    canonical = json.dumps(
+        rows, allow_nan=False, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
+    return "sha256:" + hashlib.sha256(canonical).hexdigest()
 
 
 def verify_archive(archive_path: Path) -> None:

@@ -1,27 +1,27 @@
-# V41R33R1 Source-Binding Runtime-Custody Launch Identity V4
+# V41R33R1 Source-Binding Runtime-Custody Launch Identity V5
 
-State slice: `V41R33R1SourceBindingRuntimeCustodyLaunchIdentityV4`.
+State slice: `V41R33R1SourceBindingRuntimeCustodyLaunchIdentityV5`.
 
-This is an authorized runtime-custody extension after the target preflight
-stopped on an incomplete base image. It does not bypass the failed launch
-identity, does not change the worker method, and does not claim a scientific
-result.
+This is a new authorized runtime-custody phase after launch identity V4
+failed closed on a source-binding algorithm mismatch. It does not reuse the
+failed identity, alter the worker method, or claim a scientific result.
 
-The first runtime-custody launch also stopped before model loading because the
-worker requires a source-binding sidecar that is not part of the plain archive
-tree. This identity seals that deterministic sidecar and preserves the failed
-control output under its original output root.
+The prior runtime-custody launch stopped before model loading because the
+coordinator and wrapper used a delimiter-based tree digest while the worker
+used its canonical JSON row digest. This identity makes the worker's canonical
+digest the single source-tree identity and preserves the prior failed output
+under its original output root.
 
 ## Source-binding sidecar
 
 - target path: `/home/dev/v41r33r1/rgs/.astral-source-binding.json`;
 - exact fields: `source_commit`, `source_archive_sha256`, and
   `source_tree_sha256`;
-- values are bound to the frozen archive and extracted-tree digest already
-  checked by the wrapper;
+- values are bound to the frozen archive and the worker-compatible canonical
+  extracted-tree digest;
 - the coordinator verifies the sidecar before either arm;
 - fresh consuming output root for this identity:
-  `/home/dev/v41r33r1/output-runtime-v2`.
+  `/home/dev/v41r33r1/output-runtime-v3`.
 
 ## Runtime custody
 
@@ -61,23 +61,26 @@ model-custody phase. Acquisition completed before launch-contract acceptance.
 
 ## New launch identity
 
-- launch identity: `v41r33r1-source-binding-runtime-custody-v4`;
+- launch identity: `v41r33r1-source-binding-runtime-custody-v5`;
 - scientific worker run id remains the preregistered
   `v41r27-panel-8-seed-412019`;
 - source archive and source commit remain frozen by V41R33R1;
-- the extracted-tree digest excludes only the designated sidecar and remains
-  `sha256:652633475af44cd6053b9dec6f44c7420c2668eb0e9253c4b994e9199ff9b9f5`;
+- the extracted-tree digest excludes only the designated sidecar and uses the
+  worker's canonical JSON row digest:
+  `sha256:5b2329186f89f53e5a1e8798e096815a5e52bee8d99d596887dbbd1266b79690`;
 - runtime-custody coordinator SHA-256:
-  `sha256:bdc66ed562313034b799d12ddc95203a502dabb9ae4e73306063f0e590f360bd`;
-- wrapper SHA-256 for the sidecar-aware extracted tree:
-  `sha256:6b1fe655980033235ac9e925b1b7fdfa321404551c6087a2e05d748b4a001379`;
+  `sha256:8c72e88c400461e2d34bd8dedb7c2a446cb526fa3fe0f9adbcd609846ae5b114`;
+- wrapper SHA-256 for the worker-compatible extracted tree:
+  `sha256:9c6af359e51134c083cd4d4fb64995a4580a8c59af3bd5765d4cc8c15142dd74`;
+- launch-contract test SHA-256:
+  `sha256:6b96ae779e555650376266330af165eb7aab425b63b315ff45c21e4c89df954a`;
 - launch-contract test SHA-256:
   `sha256:28726914c56259de6fa67d742d4be4a94f60b91544cfe296213bc3af33091cec`;
 - coordinator must verify the runtime manifest digest before model custody or
   either arm;
 - launch-contract tests include runtime-custody acceptance and mismatch cases;
-- the consuming coordinator is the new source-binding/runtime-custody-bound implementation in
-  this identity, not the prior coordinator;
+- the consuming coordinator is the new source-binding/runtime-custody-bound
+  implementation in this identity, not the prior coordinator;
 - the coordinator records the model custody binding before either arm and
   writes `model-custody-binding.json` beside the campaign ledger;
 - control remains first, validator acceptance remains required before

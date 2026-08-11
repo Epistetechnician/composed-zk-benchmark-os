@@ -68,6 +68,29 @@ def test_tree_mismatch_fails_closed(tmp_path: Path) -> None:
         WRAPPER.EXPECTED_TREE = expected
 
 
+def test_source_tree_identity_matches_worker_algorithm(tmp_path: Path) -> None:
+    (tmp_path / "alpha.txt").write_text("alpha\n")
+    nested = tmp_path / "nested"
+    nested.mkdir()
+    (nested / "beta.txt").write_text("beta\n")
+    (tmp_path / ".astral-source-binding.json").write_text("sidecar\n")
+    rows = []
+    for candidate in sorted(tmp_path.rglob("*")):
+        if not candidate.is_file() or candidate.name == ".astral-source-binding.json":
+            continue
+        relative = candidate.relative_to(tmp_path).as_posix()
+        rows.append({
+            "path": relative,
+            "sha256": "sha256:" + hashlib.sha256(candidate.read_bytes()).hexdigest(),
+        })
+    canonical = json.dumps(
+        rows, allow_nan=False, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
+    expected = "sha256:" + hashlib.sha256(canonical).hexdigest()
+    assert WRAPPER.tree_manifest_sha256(tmp_path) == expected
+    assert WRAPPER.EXPECTED_TREE == COORDINATOR.EXPECTED_TREE
+
+
 def test_imported_module_mismatch_fails_closed(tmp_path: Path) -> None:
     module = tmp_path / "worker.py"
     module.write_text("frozen\n")
