@@ -26,6 +26,28 @@ def test_validator_rejects_malformed_manifest_files_shape(tmp_path, files):
         VALIDATOR.validate(bundle)
 
 
+@pytest.mark.parametrize("document", [None, [], "manifest"])
+def test_validator_rejects_non_object_manifest_document(tmp_path, document):
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    (bundle / "manifest.json").write_text(json.dumps(document))
+    with pytest.raises(ValueError, match="manifest must be an object"):
+        VALIDATOR.validate(bundle)
+
+
+@pytest.mark.parametrize("document", [None, [], "result"])
+def test_validator_rejects_non_object_result_document(tmp_path, document):
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    result = bundle / "result.json"
+    result.write_text(json.dumps(document))
+    (bundle / "manifest.json").write_text(
+        json.dumps({"files": {"result.json": VALIDATOR.sha(result)}})
+    )
+    with pytest.raises(ValueError, match="result must be an object"):
+        VALIDATOR.validate(bundle)
+
+
 @pytest.mark.parametrize("inputs", [None, [], "payload.bin"])
 def test_validate_lock_rejects_malformed_inputs_shape(tmp_path, inputs):
     bundle = tmp_path / "bundle"
@@ -35,4 +57,13 @@ def test_validate_lock_rejects_malformed_inputs_shape(tmp_path, inputs):
     )
 
     with pytest.raises(ValueError, match="lock inputs must be an object"):
+        VALIDATOR.validate_lock(bundle)
+
+
+@pytest.mark.parametrize("document", [None, [], "lock"])
+def test_validate_lock_rejects_non_object_lock_document(tmp_path, document):
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    (bundle / "configuration-lock.json").write_text(json.dumps(document))
+    with pytest.raises(ValueError, match="configuration lock must be an object"):
         VALIDATOR.validate_lock(bundle)
