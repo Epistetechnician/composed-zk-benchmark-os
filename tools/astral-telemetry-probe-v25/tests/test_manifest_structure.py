@@ -96,3 +96,26 @@ def test_validator_rejects_manifest_missing_files(tmp_path):
 
     with pytest.raises(ValueError, match="manifest missing files"):
         VALIDATOR.validate(bundle)
+
+
+def test_validator_reports_missing_manifest_before_json_decode(tmp_path):
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    with pytest.raises(ValueError, match="manifest missing: manifest.json"):
+        VALIDATOR.validate(bundle)
+
+
+def test_validator_reports_missing_result_before_json_decode(tmp_path):
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    (bundle / "manifest.json").write_text(json.dumps({"files": {}}))
+
+    with pytest.raises(ValueError, match="result missing: result.json"):
+        VALIDATOR.validate(bundle)
+
+
+def test_validate_lock_reports_missing_lock_before_json_decode(tmp_path):
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    with pytest.raises(ValueError, match="configuration lock missing: configuration-lock.json"):
+        VALIDATOR.validate_lock(bundle)
