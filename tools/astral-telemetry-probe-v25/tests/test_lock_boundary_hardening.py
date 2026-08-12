@@ -46,6 +46,19 @@ def test_validate_lock_rejects_symlinked_input_tree(tmp_path):
         VALIDATOR.validate_lock(bundle)
 
 
+def test_validate_lock_rejects_symlinked_nested_directory(tmp_path):
+    bundle = _lock_bundle(tmp_path / "bundle", "inputs/payload.bin")
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    (outside / "payload.bin").write_bytes(b"outside")
+    (bundle / "payload.bin").unlink()
+    nested = bundle / "inputs"
+    nested.symlink_to(outside, target_is_directory=True)
+
+    with pytest.raises(ValueError, match="symlinked file in bundle"):
+        VALIDATOR.validate_lock(bundle)
+
+
 def test_validate_lock_accepts_declared_nested_input_and_returns_lock_digest(tmp_path):
     bundle = tmp_path / "bundle"
     bundle.mkdir()
