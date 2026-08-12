@@ -1,10 +1,13 @@
-# V41R33R1 Source-Binding Runtime-Custody Launch Identity V5
+# V41R33R1 Source-Binding Runtime-Custody Launch Identity V6
 
-State slice: `V41R33R1SourceBindingRuntimeCustodyLaunchIdentityV5`.
+State slice: `V41R33R1SourceBindingRuntimeCustodyLaunchIdentityV6`.
 
-This is a new authorized runtime-custody phase after launch identity V4
-failed closed on a source-binding algorithm mismatch. It does not reuse the
-failed identity, alter the worker method, or claim a scientific result.
+This is a new authorized runtime-custody phase after launch identity V5 was
+unable to start because its restored host did not support scratch disks and
+the node disk was lost. It uses a new mission-owned target identity restored
+from the verified snapshot with scratch allocation disabled. It does not reuse
+the failed physical target, alter the worker method, or claim a scientific
+result.
 
 The prior runtime-custody launch stopped before model loading because the
 coordinator and wrapper used a delimiter-based tree digest while the worker
@@ -21,7 +24,7 @@ under its original output root.
   extracted-tree digest;
 - the coordinator verifies the sidecar before either arm;
 - fresh consuming output root for this identity:
-  `/home/dev/v41r33r1/output-runtime-v3`.
+  `/home/dev/v41r33r1/output-runtime-v4`.
 
 ## Runtime custody
 
@@ -61,7 +64,7 @@ model-custody phase. Acquisition completed before launch-contract acceptance.
 
 ## New launch identity
 
-- launch identity: `v41r33r1-source-binding-runtime-custody-v5`;
+- launch identity: `v41r33r1-source-binding-runtime-custody-v6`;
 - scientific worker run id remains the preregistered
   `v41r27-panel-8-seed-412019`;
 - source archive and source commit remain frozen by V41R33R1;
@@ -69,7 +72,7 @@ model-custody phase. Acquisition completed before launch-contract acceptance.
   worker's canonical JSON row digest:
   `sha256:5b2329186f89f53e5a1e8798e096815a5e52bee8d99d596887dbbd1266b79690`;
 - runtime-custody coordinator SHA-256:
-  `sha256:8c72e88c400461e2d34bd8dedb7c2a446cb526fa3fe0f9adbcd609846ae5b114`;
+  `sha256:91fb3a8d4ccfed61e5dfe996fc3e93190d0421fe977b2a859914ec8d0509f876`;
 - wrapper SHA-256 for the worker-compatible extracted tree:
   `sha256:9c6af359e51134c083cd4d4fb64995a4580a8c59af3bd5765d4cc8c15142dd74`;
 - launch-contract test SHA-256:
