@@ -37,6 +37,7 @@ ADAMW_LEARNING_RATE = 0.0001
 BATCH_SIZE = 2
 MAX_SEQUENCE_LENGTH = 192
 SHARED_ADAPTER_LAYERS = protocol.v24.SHARED_ADAPTER_LAYERS
+FIXED_PREFLIGHT_ORDER = (0, 1, 2, 3)
 
 
 def write_json(path: Path, value) -> None:
@@ -233,7 +234,7 @@ def run_strategy(*, root: Path, model_path: Path, tasks: tuple, order: tuple[int
 def run(args: argparse.Namespace) -> dict:
     model_path = args.model.resolve()
     order = tuple(int(value) for value in args.order.split(","))
-    if args.seed != protocol.DATA_SEED or order != (0, 1, 2, 3) or args.task_count != protocol.v24.TASK_COUNT or args.iters != protocol.v24.ITERS_PER_UPDATE or model_path != MODEL_DEFAULT.resolve():
+    if args.seed != protocol.DATA_SEED or order != FIXED_PREFLIGHT_ORDER or args.task_count != protocol.v24.TASK_COUNT or args.iters != protocol.v24.ITERS_PER_UPDATE or model_path != MODEL_DEFAULT.resolve():
         raise ValueError("V26 corrected preflight fixed contract drift")
     output = args.output.resolve()
     if output.exists():

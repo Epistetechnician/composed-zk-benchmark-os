@@ -50,5 +50,12 @@ V26 shared-global-update-stream protocol:
 V26 corrected local preflight candidate:
 
 `docs/research/continual-learning/56-v26-shared-global-update-stream-preflight-record.md`.
+V27 bounded replication protocol:
+
+`docs/research/continual-learning/57-v27-shared-global-update-stream-replication-protocol.md`.
+
+V27 replication record:
+
+`docs/research/continual-learning/58-v27-shared-global-update-stream-replication-record.md`.
 Outputs must stay outside the repository because adapter weights and raw run
 logs are generated artifacts, not source fixtures.
