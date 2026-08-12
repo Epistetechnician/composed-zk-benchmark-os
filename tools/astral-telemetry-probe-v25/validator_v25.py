@@ -70,9 +70,17 @@ def _required_file(root: Path, name: str, label: str) -> Path:
 
 
 def _read_json(path: Path, label: str) -> Any:
+    def reject_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        document: dict[str, Any] = {}
+        for key, value in pairs:
+            if key in document:
+                raise ValueError(f"duplicate JSON key: {key}")
+            document[key] = value
+        return document
+
     try:
-        return json.loads(path.read_text())
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        return json.loads(path.read_text(), object_pairs_hook=reject_duplicate_keys)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
         raise ValueError(f"{label} is not valid JSON: {path.name}") from exc
 
 

@@ -69,6 +69,17 @@ def test_validate_lock_reports_malformed_json_as_bundle_error(tmp_path):
         VALIDATOR.validate_lock(bundle)
 
 
+def test_validate_lock_rejects_duplicate_json_keys(tmp_path):
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    (bundle / "configuration-lock.json").write_text(
+        '{"assessment_results_absent": true, "assessment_results_absent": false, "inputs": {}}'
+    )
+
+    with pytest.raises(ValueError, match="configuration lock is not valid JSON"):
+        VALIDATOR.validate_lock(bundle)
+
+
 @pytest.mark.parametrize("field,value", [
     ("confirmation", "Authorized"),
     ("stage_0c", "Confirmed"),
