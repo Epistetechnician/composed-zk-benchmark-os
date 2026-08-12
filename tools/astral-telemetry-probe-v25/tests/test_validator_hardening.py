@@ -246,6 +246,30 @@ def test_validator_rejects_missing_or_non_boolean_qualification(tmp_path):
             VALIDATOR.validate(bundle)
 
 
+def test_validator_rejects_directory_instead_of_fork_assessment_results(tmp_path):
+    result = {
+        "classification": "InformationPresenceNoCandidate",
+        "confirmation": "NotAuthorized",
+        "stage_0c": "Blocked",
+        "stage_1": "BlockedByStage0C",
+        "claim_ceiling": "LocalDevelopmentPrivilegedTelemetryInformationPresence",
+        "assessment_unopened": False,
+        "probe_accuracy": 0.5,
+        "self_report_accuracy": 0.5,
+        "fork_margin_observed": 0.0,
+        "bootstrap": {"lower_95": -0.1, "mean_over_chance": 0.0, "upper_95": 0.1},
+    }
+    bundle = _bundle(tmp_path / "bundle")
+    (bundle / "result.json").write_text(json.dumps(result))
+    (bundle / "assessment-results.json").mkdir()
+    manifest = json.loads((bundle / "manifest.json").read_text())
+    manifest["files"]["result.json"] = _sha(bundle / "result.json")
+    (bundle / "manifest.json").write_text(json.dumps(manifest))
+
+    with pytest.raises(ValueError, match="fork classification without assessment"):
+        VALIDATOR.validate(bundle)
+
+
 def _silent_result():
     return {
         "classification": "ProbeTargetBehaviorallySilent",
