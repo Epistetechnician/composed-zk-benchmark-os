@@ -66,6 +66,8 @@ def validate_lock(root: Path) -> dict:
     if (root / "assessment-results.json").exists():
         raise ValueError("assessment exists before lock validation")
     lock = json.loads((root / "configuration-lock.json").read_text())
+    if not isinstance(lock, dict):
+        raise ValueError("configuration lock must be an object")
     if lock["assessment_results_absent"] is not True:
         raise ValueError("lock ordering failure")
     inputs = lock["inputs"]
@@ -140,6 +142,8 @@ def _validate_result_boundary(result: dict) -> None:
 def validate(root: Path) -> dict:
     _reject_symlinks(root)
     manifest = json.loads((root / "manifest.json").read_text())
+    if not isinstance(manifest, dict):
+        raise ValueError("manifest must be an object")
     files = manifest["files"]
     if not isinstance(files, dict):
         raise ValueError("manifest files must be an object")
@@ -156,6 +160,8 @@ def validate(root: Path) -> dict:
         if sha(_bundle_path(root, name, "manifest")) != expected:
             raise ValueError(f"manifest digest mismatch: {name}")
     result = json.loads((root / "result.json").read_text())
+    if not isinstance(result, dict):
+        raise ValueError("result must be an object")
     classification = result.get("classification")
     if classification not in KNOWN_CLASSIFICATIONS:
         raise ValueError(f"unknown classification: {classification!r}")
