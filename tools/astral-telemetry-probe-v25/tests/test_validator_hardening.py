@@ -134,6 +134,20 @@ def test_validator_rejects_non_object_fork_bootstrap():
         })
 
 
+def test_validator_rejects_incomplete_fork_bootstrap():
+    with pytest.raises(
+        ValueError,
+        match="fork bootstrap missing required fields: lower_95, upper_95",
+    ):
+        VALIDATOR._validate_fork({
+            "assessment_unopened": False,
+            "probe_accuracy": 0.9,
+            "self_report_accuracy": 0.8,
+            "fork_margin_observed": 0.1,
+            "bootstrap": {"mean_over_chance": 0.4},
+        })
+
+
 def test_validator_rejects_missing_or_non_boolean_qualification(tmp_path):
     result = {
         "classification": "NotRunInformationPresenceProbe",
