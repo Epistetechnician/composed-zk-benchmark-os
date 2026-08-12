@@ -97,6 +97,7 @@ def discover_layout(
     mlx_lm_root = _require_one(cache_root, "mlx_lm/__init__.py", "MLX-LM package")
     package_markers = {
         "numpy": f"numpy/_core/_multiarray_umath.{abi_tag}-darwin.so",
+        "tokenizers": "tokenizers/tokenizers.abi3.so",
         "regex": f"regex/_{abi_tag.replace('cpython-', '')}",
     }
     package_roots = []

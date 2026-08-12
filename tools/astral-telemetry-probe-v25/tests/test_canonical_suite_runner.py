@@ -24,8 +24,13 @@ def _fake_archive(root: Path, name: str, files: tuple[str, ...]) -> Path:
 def _populate_runtime_archives(cache: Path) -> None:
     _fake_archive(cache, "mlx-archive", ("mlx/core.cpython-313-darwin.so",))
     _fake_archive(cache, "mlx-lm-archive", ("mlx_lm/__init__.py",))
-    for package in ("transformers", "safetensors", "tokenizers"):
+    for package in ("transformers", "safetensors"):
         _fake_archive(cache, f"{package}-archive", (f"{package}/__init__.py",))
+    _fake_archive(
+        cache,
+        "tokenizers-archive",
+        ("tokenizers/__init__.py", "tokenizers/tokenizers.abi3.so"),
+    )
     _fake_archive(
         cache,
         "numpy-archive",
@@ -94,6 +99,22 @@ def test_discover_layout_rejects_missing_native_mlx_library(tmp_path):
     python.write_text("placeholder")
 
     with pytest.raises(RuntimeError, match="MLX native library"):
+        RUNNER.discover_layout(cache, site_packages, torch_stub, python)
+
+
+def test_discover_layout_rejects_tokenizers_archive_without_native_extension(tmp_path):
+    cache = tmp_path / "archive-v0"
+    cache.mkdir()
+    _populate_runtime_archives(cache)
+    (cache / "tokenizers-archive" / "tokenizers" / "tokenizers.abi3.so").unlink()
+    site_packages = tmp_path / "site-packages"
+    site_packages.mkdir()
+    torch_stub = tmp_path / "torch.py"
+    torch_stub.write_text("nn = object()\n")
+    python = tmp_path / "python3.13"
+    python.write_text("placeholder")
+
+    with pytest.raises(RuntimeError, match="missing cached tokenizers"):
         RUNNER.discover_layout(cache, site_packages, torch_stub, python)
 
 
