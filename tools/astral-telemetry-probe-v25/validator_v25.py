@@ -36,6 +36,14 @@ def sha(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _require_digest(value: Any, label: str) -> str:
+    if not isinstance(value, str) or len(value) != 64:
+        raise ValueError(f"{label} digest must be 64 lowercase hex characters")
+    if any(character not in "0123456789abcdef" for character in value):
+        raise ValueError(f"{label} digest must be 64 lowercase hex characters")
+    return value
+
+
 def _bundle_path(root: Path, name: str, label: str) -> Path:
     """Resolve a declared bundle path without allowing root escape."""
     if not isinstance(name, str) or not name or Path(name).is_absolute():
@@ -107,7 +115,7 @@ def validate_lock(root: Path) -> dict:
         path = _bundle_path(root, name, "lock input")
         if not path.is_file():
             raise ValueError(f"lock input missing: {name}")
-        if sha(path) != expected:
+        if sha(path) != _require_digest(expected, f"lock input {name}"):
             raise ValueError(f"lock digest mismatch: {name}")
     return {"lock_valid": True, "configuration_lock_sha256": sha(root / "configuration-lock.json")}
 
@@ -234,7 +242,9 @@ def validate(root: Path) -> dict:
     if actual != set(files):
         raise ValueError("manifest census mismatch")
     for name, expected in files.items():
-        if sha(_bundle_path(root, name, "manifest")) != expected:
+        if sha(_bundle_path(root, name, "manifest")) != _require_digest(
+            expected, f"manifest {name}"
+        ):
             raise ValueError(f"manifest digest mismatch: {name}")
     result = _read_json(_required_file(root, "result.json", "result"), "result")
     if not isinstance(result, dict):

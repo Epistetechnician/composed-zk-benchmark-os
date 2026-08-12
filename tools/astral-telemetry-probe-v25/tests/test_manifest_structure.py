@@ -80,6 +80,31 @@ def test_validate_lock_rejects_missing_inputs(tmp_path):
         VALIDATOR.validate_lock(bundle)
 
 
+@pytest.mark.parametrize("digest", [None, 0, "", "0" * 63, "0" * 64 + "0", "A" * 64])
+def test_validate_lock_rejects_malformed_input_digest(tmp_path, digest):
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    (bundle / "payload.bin").write_bytes(b"payload")
+    (bundle / "configuration-lock.json").write_text(
+        json.dumps({"assessment_results_absent": True, "inputs": {"payload.bin": digest}})
+    )
+
+    with pytest.raises(ValueError, match="lock input payload.bin digest must be 64 lowercase hex characters"):
+        VALIDATOR.validate_lock(bundle)
+
+
+@pytest.mark.parametrize("digest", [None, 0, "", "0" * 63, "0" * 64 + "0", "A" * 64])
+def test_validate_rejects_malformed_manifest_digest(tmp_path, digest):
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    result = bundle / "result.json"
+    result.write_text(json.dumps({"classification": "NotRunInformationPresenceProbe"}))
+    (bundle / "manifest.json").write_text(json.dumps({"files": {"result.json": digest}}))
+
+    with pytest.raises(ValueError, match="manifest result.json digest must be 64 lowercase hex characters"):
+        VALIDATOR.validate(bundle)
+
+
 @pytest.mark.parametrize("document", [None, [], "lock"])
 def test_validate_lock_rejects_non_object_lock_document(tmp_path, document):
     bundle = tmp_path / "bundle"

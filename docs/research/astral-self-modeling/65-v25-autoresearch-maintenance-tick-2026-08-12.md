@@ -73,6 +73,23 @@ recorded in the delivered tick report. No network, download, model execution,
 training, tuning, assessment rerun, or prior V22–V25 data/adapter reuse
 occurred.
 
+## Follow-up bounded tick — digest-shape fail-closed validation
+
+Question: does the independent V25 validator reject malformed manifest and
+configuration-lock digest values before comparing them, rather than accepting
+non-string/truncated/uppercase values or producing incidental type errors?
+
+Added `_require_digest`, requiring exactly 64 lowercase hexadecimal characters,
+and applied it to every declared manifest and lock-input digest. Added twelve
+hermetic parameterized cases covering null, numeric, empty, truncated,
+overlong, and uppercase digest values. The targeted tests passed `49 passed in
+0.09s`; the canonical suite result, final diff check, commit, and status are
+recorded in the delivered tick report. No concepts, prompts, sites, strengths,
+wrappers, probe mathematics, thresholds, assessment artifacts, V19 record, or
+Evidence Ledger changed. No network, download, model execution, training,
+adaptive tuning, assessment rerun, retuning, or prior V22–V25 data/adapter
+reuse occurred.
+
 ## Follow-up bounded tick — classification-document malformed JSON coverage
 
 Question: does the independent validator produce the same stable fail-closed
