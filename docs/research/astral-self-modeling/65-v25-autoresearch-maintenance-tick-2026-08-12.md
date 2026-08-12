@@ -72,3 +72,21 @@ The final canonical command, diff check, commit, and status verification are
 recorded in the delivered tick report. No network, download, model execution,
 training, tuning, assessment rerun, or prior V22–V25 data/adapter reuse
 occurred.
+
+## Follow-up bounded tick — classification-document malformed JSON coverage
+
+Question: does the independent validator produce the same stable fail-closed
+`ValueError` boundary for malformed manifest, result, qualification, and
+behavioral-effect documents, rather than leaking parser exceptions? Added one
+parametrized hermetic test covering those four documents. The validator already
+used the shared JSON boundary for each path, so no production source change was
+needed. No protocol configuration, concepts, prompts, sites, strengths,
+wrappers, probe mathematics, thresholds, assessment data, V19 record, or
+Evidence Ledger changed; no network, download, model execution, training,
+adaptive tuning, assessment rerun, retuning, or prior V22–V25 data/adapter
+reuse occurred.
+
+Claim ceiling remains
+`LocalDevelopmentPrivilegedTelemetryInformationPresence`; this tick makes no
+accepted-evidence, benchmark, Stage 0C, Stage 1, introspection, consciousness,
+SOTA, breakthrough, or generalization claim.

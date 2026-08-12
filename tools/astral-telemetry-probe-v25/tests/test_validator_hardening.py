@@ -80,6 +80,48 @@ def test_validate_lock_rejects_duplicate_json_keys(tmp_path):
         VALIDATOR.validate_lock(bundle)
 
 
+@pytest.mark.parametrize(
+    ("document", "expected"),
+    [
+        ("manifest.json", "manifest is not valid JSON"),
+        ("result.json", "result is not valid JSON"),
+        ("qualification.json", "qualification is not valid JSON"),
+        ("behavioral-effect.json", "behavioral effect is not valid JSON"),
+    ],
+)
+def test_validate_reports_malformed_classification_documents_as_bundle_errors(
+    tmp_path, document, expected
+):
+    if document == "qualification.json":
+        result = {
+            "classification": "NotRunInformationPresenceProbe",
+            "confirmation": "NotAuthorized",
+            "stage_0c": "Blocked",
+            "stage_1": "BlockedByStage0C",
+            "claim_ceiling": "LocalDevelopmentPrivilegedTelemetryInformationPresence",
+            "assessment_unopened": True,
+        }
+        bundle = _bundle(tmp_path / "bundle", {document: b'{"qualified": true}'})
+        (bundle / "result.json").write_text(json.dumps(result))
+    elif document == "behavioral-effect.json":
+        bundle = _bundle(tmp_path / "bundle", {document: b"[]"})
+        (bundle / "result.json").write_text(json.dumps(_silent_result()))
+    else:
+        bundle = _bundle(tmp_path / "bundle")
+    (bundle / document).write_text("{")
+    if document == "manifest.json":
+        pass
+    else:
+        manifest = json.loads((bundle / "manifest.json").read_text())
+        manifest["files"][document] = _sha(bundle / document)
+        if document in {"qualification.json", "behavioral-effect.json"}:
+            manifest["files"]["result.json"] = _sha(bundle / "result.json")
+        (bundle / "manifest.json").write_text(json.dumps(manifest))
+
+    with pytest.raises(ValueError, match=expected):
+        VALIDATOR.validate(bundle)
+
+
 @pytest.mark.parametrize("field,value", [
     ("confirmation", "Authorized"),
     ("stage_0c", "Confirmed"),
