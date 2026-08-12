@@ -47,3 +47,25 @@ def test_cli_rejects_symlinked_bundle_root_before_resolving_it(tmp_path, monkeyp
         "reason": "symlinked bundle root",
         "valid": False,
     }
+
+
+def test_lock_only_cli_rejects_symlinked_bundle_root_before_reading_lock(
+    tmp_path, monkeypatch, capsys
+):
+    real_bundle = tmp_path / "real-bundle"
+    real_bundle.mkdir()
+    (real_bundle / "configuration-lock.json").write_text(
+        json.dumps({"assessment_results_absent": True, "inputs": {}})
+    )
+    bundle_link = tmp_path / "bundle-link"
+    bundle_link.symlink_to(real_bundle, target_is_directory=True)
+
+    monkeypatch.setattr(
+        sys, "argv", ["validator_v25.py", str(bundle_link), "--lock-only"]
+    )
+
+    assert VALIDATOR.main() == 1
+    assert json.loads(capsys.readouterr().out) == {
+        "reason": "symlinked bundle root",
+        "valid": False,
+    }

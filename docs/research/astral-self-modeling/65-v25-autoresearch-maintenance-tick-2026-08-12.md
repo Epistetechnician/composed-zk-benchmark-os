@@ -46,6 +46,16 @@ Claim ceiling remains
 accepted-evidence, benchmark, Stage 0C, Stage 1, introspection, consciousness,
 SOTA, breakthrough, or generalization claim.
 
+## Follow-up bounded tick — lock-only CLI root boundary
+
+Question: does the validator's `--lock-only` CLI path reject a symlinked bundle
+root before attempting to read the configuration lock, just as the full
+validation CLI does? The new hermetic regression test exercises that exact
+entrypoint and checks the stable JSON failure shape. No validator behavior,
+protocol configuration, concepts, assessment artifacts, or claim boundary
+changed; no network, download, model execution, training, tuning, assessment
+rerun, or prior V22–V25 data/adapter reuse occurred.
+
 ## Follow-up bounded tick — valid nested lock input
 
 The next snapshot retained the same pre-existing untracked paths and had no
