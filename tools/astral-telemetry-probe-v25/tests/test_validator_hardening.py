@@ -83,6 +83,30 @@ def test_validate_lock_rejects_duplicate_json_keys(tmp_path):
 @pytest.mark.parametrize(
     ("document", "expected"),
     [
+        ("configuration-lock.json", "configuration lock is not valid JSON"),
+        ("manifest.json", "manifest is not valid JSON"),
+        ("result.json", "result is not valid JSON"),
+    ],
+)
+def test_validator_rejects_nonstandard_json_constants(tmp_path, document, expected):
+    bundle = tmp_path / document.replace(".json", "")
+    bundle.mkdir()
+    (bundle / document).write_text('{"value": NaN}')
+    if document == "result.json":
+        (bundle / "manifest.json").write_text(
+            json.dumps({"files": {"result.json": _sha(bundle / document)}})
+        )
+
+    with pytest.raises(ValueError, match=expected):
+        if document == "configuration-lock.json":
+            VALIDATOR.validate_lock(bundle)
+        else:
+            VALIDATOR.validate(bundle)
+
+
+@pytest.mark.parametrize(
+    ("document", "expected"),
+    [
         ("manifest.json", "manifest is not valid JSON"),
         ("result.json", "result is not valid JSON"),
         ("qualification.json", "qualification is not valid JSON"),
