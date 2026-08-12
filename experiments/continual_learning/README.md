@@ -57,5 +57,12 @@ V27 bounded replication protocol:
 V27 replication record:
 
 `docs/research/continual-learning/58-v27-shared-global-update-stream-replication-record.md`.
+V28 task-stratified microbatch protocol:
+
+`docs/research/continual-learning/59-v28-task-stratified-microbatch-protocol.md`.
+
+V28 corrected local preflight record:
+
+`docs/research/continual-learning/60-v28-task-stratified-microbatch-preflight-record.md`.
 Outputs must stay outside the repository because adapter weights and raw run
 logs are generated artifacts, not source fixtures.
