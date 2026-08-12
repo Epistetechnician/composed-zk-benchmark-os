@@ -102,3 +102,45 @@ def test_validator_rejects_non_boolean_assessment_order_marker(tmp_path, value):
     (bundle / "manifest.json").write_text(json.dumps(manifest))
     with pytest.raises(ValueError, match="result boundary mismatch: assessment_unopened"):
         VALIDATOR.validate(bundle)
+
+
+def test_validator_rejects_missing_fork_required_fields():
+    with pytest.raises(ValueError, match="fork result missing required fields: bootstrap"):
+        VALIDATOR._validate_fork({
+            "assessment_unopened": False,
+            "probe_accuracy": 0.9,
+            "self_report_accuracy": 0.8,
+            "fork_margin_observed": 0.1,
+        })
+
+
+def test_validator_rejects_non_object_fork_bootstrap():
+    with pytest.raises(ValueError, match="fork bootstrap must be an object"):
+        VALIDATOR._validate_fork({
+            "assessment_unopened": False,
+            "probe_accuracy": 0.9,
+            "self_report_accuracy": 0.8,
+            "fork_margin_observed": 0.1,
+            "bootstrap": [],
+        })
+
+
+def test_validator_rejects_missing_or_non_boolean_qualification(tmp_path):
+    result = {
+        "classification": "NotRunInformationPresenceProbe",
+        "confirmation": "NotAuthorized", "stage_0c": "Blocked",
+        "stage_1": "BlockedByStage0C",
+        "claim_ceiling": "LocalDevelopmentPrivilegedTelemetryInformationPresence",
+        "assessment_unopened": True,
+    }
+    for qualification, message in (({}, "qualification missing qualified"),
+                                   ({"qualified": "false"}, "qualification qualified must be boolean")):
+        bundle = _bundle(tmp_path / message.replace(" ", "-"), {
+            "qualification.json": json.dumps(qualification).encode(),
+        })
+        (bundle / "result.json").write_text(json.dumps(result))
+        manifest = json.loads((bundle / "manifest.json").read_text())
+        manifest["files"]["result.json"] = _sha(bundle / "result.json")
+        (bundle / "manifest.json").write_text(json.dumps(manifest))
+        with pytest.raises(ValueError, match=message):
+            VALIDATOR.validate(bundle)

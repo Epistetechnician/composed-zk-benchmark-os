@@ -100,6 +100,17 @@ def _validate_silent(root: Path, result: dict) -> None:
 def _validate_fork(result: dict) -> None:
     if result.get("assessment_unopened") is True:
         raise ValueError("fork classification has assessment marked unopened")
+    required = {
+        "probe_accuracy",
+        "self_report_accuracy",
+        "fork_margin_observed",
+        "bootstrap",
+    }
+    missing = sorted(field for field in required if field not in result)
+    if missing:
+        raise ValueError(f"fork result missing required fields: {', '.join(missing)}")
+    if not isinstance(result["bootstrap"], dict):
+        raise ValueError("fork bootstrap must be an object")
     for field in ("probe_accuracy", "self_report_accuracy", "fork_margin_observed"):
         value = result[field]
         if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
@@ -178,7 +189,8 @@ def validate(root: Path) -> dict:
     if result["classification"] == "ProbeTargetBehaviorallySilent":
         _validate_silent(root, result)
     if result["classification"] == "ProbeControlFloorViolation":
-        if not result["violations"]:
+        violations = result.get("violations")
+        if not isinstance(violations, list) or not violations:
             raise ValueError("floor violation stop without violations")
     if result["classification"] in FORK_CLASSIFICATIONS:
         if not (root / "assessment-results.json").exists():
@@ -186,6 +198,10 @@ def validate(root: Path) -> dict:
         _validate_fork(result)
     if result["classification"] == "NotRunInformationPresenceProbe":
         qualification = json.loads((root / "qualification.json").read_text())
+        if not isinstance(qualification, dict) or "qualified" not in qualification:
+            raise ValueError("qualification missing qualified")
+        if not isinstance(qualification["qualified"], bool):
+            raise ValueError("qualification qualified must be boolean")
         if qualification["qualified"]:
             raise ValueError("stop despite qualified probe")
     return {"valid": True, "classification": result["classification"], "manifest_sha256": sha(root / "manifest.json")}
