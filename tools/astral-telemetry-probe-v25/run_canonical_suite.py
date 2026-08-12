@@ -48,6 +48,44 @@ def _archive_roots(cache_root: Path, relative: str) -> list[Path]:
     )
 
 
+def _distribution_version(archive: Path, distribution: str) -> str:
+    """Read one cached distribution's version without importing it."""
+    expected_name = distribution.replace("-", "_").lower()
+    matches: list[str] = []
+    for metadata_path in sorted(archive.glob("*.dist-info/METADATA")):
+        fields: dict[str, str] = {}
+        for line in metadata_path.read_text(encoding="utf-8").splitlines():
+            name, separator, value = line.partition(":")
+            if separator:
+                fields[name.strip().lower()] = value.strip()
+        if fields.get("name", "").replace("-", "_").lower() == expected_name:
+            version = fields.get("version")
+            if version:
+                matches.append(version)
+    if len(matches) != 1:
+        raise RuntimeError(f"cached {distribution} metadata is missing or ambiguous: {archive}")
+    return matches[0]
+
+
+def _matching_mlx_roots(cache_root: Path, abi_tag: str) -> tuple[Path, Path]:
+    mlx_roots = _archive_roots(cache_root, f"mlx/core.{abi_tag}-darwin.so")
+    if not mlx_roots:
+        raise RuntimeError(f"missing cached MLX {abi_tag} extension")
+    native_matches = sorted(cache_root.glob("*/mlx/lib/libmlx.dylib"), key=lambda path: str(path))
+    if not native_matches:
+        raise RuntimeError("missing MLX native library: mlx/lib/libmlx.dylib")
+    candidates: list[tuple[Path, Path]] = []
+    for mlx_root in mlx_roots:
+        mlx_version = _distribution_version(mlx_root, "mlx")
+        for native_path in native_matches:
+            native_root = native_path.parent.parent.parent
+            if mlx_version == _distribution_version(native_root, "mlx-metal"):
+                candidates.append((mlx_root, native_path.parent))
+    if len(candidates) != 1:
+        raise RuntimeError("missing unique cached MLX native library matching MLX version")
+    return candidates[0]
+
+
 def _require_one(
     cache_root: Path,
     relative: str,
@@ -90,10 +128,7 @@ def discover_layout(
         raise RuntimeError(f"Python interpreter is missing: {python}")
 
     abi_tag = _cpython_abi_tag(python)
-    mlx_roots = _archive_roots(cache_root, "mlx/core.cpython-313-darwin.so")
-    if not mlx_roots:
-        raise RuntimeError("missing cached MLX CPython 3.13 extension")
-    mlx_root = mlx_roots[0]
+    mlx_root, native_library_path = _matching_mlx_roots(cache_root, abi_tag)
     mlx_lm_root = _require_one(cache_root, "mlx_lm/__init__.py", "MLX-LM package")
     package_markers = {
         "numpy": f"numpy/_core/_multiarray_umath.{abi_tag}-darwin.so",
@@ -108,23 +143,20 @@ def discover_layout(
         package_roots.append(
             _require_one(cache_root, f"{package}/__init__.py", package, marker)
         )
-    native_matches = sorted(cache_root.glob("*/mlx/lib/libmlx.dylib"), key=lambda path: str(path))
-    if not native_matches:
-        raise RuntimeError("missing MLX native library: mlx/lib/libmlx.dylib")
-    native_root = native_matches[0]
-
     paths: list[Path] = [torch_stub.parent, mlx_root, mlx_lm_root, *package_roots, site_packages]
     deduped = tuple(dict.fromkeys(paths))
     return RuntimeLayout(
         python=python,
         pythonpath=deduped,
-        dyld_library_path=native_root.parent,
+        dyld_library_path=native_library_path,
         torch_stub=torch_stub,
     )
 
 
 def build_env(layout: RuntimeLayout, base_env: dict[str, str] | None = None) -> dict[str, str]:
     env = dict(os.environ if base_env is None else base_env)
+    env.pop("PYTEST_ADDOPTS", None)
+    env.pop("PYTEST_PLUGINS", None)
     env["PYTHONPATH"] = os.pathsep.join(str(path) for path in layout.pythonpath)
     env["DYLD_LIBRARY_PATH"] = str(layout.dyld_library_path)
     env["PYTHONNOUSERSITE"] = "1"
@@ -132,6 +164,7 @@ def build_env(layout: RuntimeLayout, base_env: dict[str, str] | None = None) -> 
     env["PYTHONHASHSEED"] = "0"
     env["HF_HUB_OFFLINE"] = "1"
     env["TRANSFORMERS_OFFLINE"] = "1"
+    env["PYTEST_DISABLE_PLUGIN_AUTOLOAD"] = "1"
     return env
 
 
@@ -144,6 +177,8 @@ def _preflight_command(layout: RuntimeLayout) -> list[str]:
 
 
 def canonical_command(layout: RuntimeLayout, extra_args: tuple[str, ...] = ()) -> list[str]:
+    if extra_args:
+        raise ValueError("exact canonical suite does not accept extra pytest arguments")
     return [
         str(layout.python),
         "-m",
@@ -190,10 +225,10 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--python", dest="python_path", type=_default_path, default=Path("/opt/homebrew/bin/python3.13"))
     parser.add_argument("--repo-root", type=_default_path, default=Path(__file__).resolve().parents[2])
-    args, extra_args = parser.parse_known_args(argv)
+    args = parser.parse_args(argv)
     try:
         layout = discover_layout(args.cache_root, args.site_packages, args.torch_stub, args.python_path)
-        return run_canonical_suite(layout, args.repo_root, tuple(extra_args))
+        return run_canonical_suite(layout, args.repo_root)
     except (OSError, RuntimeError) as exc:
         print(f"offline canonical preflight blocked: {exc}", file=sys.stderr)
         return 2
