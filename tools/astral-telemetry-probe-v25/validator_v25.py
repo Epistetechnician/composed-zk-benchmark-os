@@ -78,6 +78,9 @@ def _required_file(root: Path, name: str, label: str) -> Path:
 
 
 def _read_json(path: Path, label: str) -> Any:
+    def reject_nonstandard_constant(value: str) -> Any:
+        raise ValueError(f"non-standard JSON constant: {value}")
+
     def reject_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
         document: dict[str, Any] = {}
         for key, value in pairs:
@@ -87,7 +90,11 @@ def _read_json(path: Path, label: str) -> Any:
         return document
 
     try:
-        return json.loads(path.read_text(), object_pairs_hook=reject_duplicate_keys)
+        return json.loads(
+            path.read_text(),
+            object_pairs_hook=reject_duplicate_keys,
+            parse_constant=reject_nonstandard_constant,
+        )
     except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
         raise ValueError(f"{label} is not valid JSON: {path.name}") from exc
 

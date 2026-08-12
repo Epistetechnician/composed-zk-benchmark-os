@@ -107,3 +107,14 @@ Claim ceiling remains
 `LocalDevelopmentPrivilegedTelemetryInformationPresence`; this tick makes no
 accepted-evidence, benchmark, Stage 0C, Stage 1, introspection, consciousness,
 SOTA, breakthrough, or generalization claim.
+
+## Follow-up bounded tick — non-standard JSON constants
+
+Question: does the shared V25 JSON boundary reject non-standard `NaN`/`Infinity`
+constants in lock, manifest, and result documents, rather than accepting them
+through Python's permissive decoder? Added a `parse_constant` rejection hook
+and three hermetic cases. No protocol configuration, concepts, prompts, sites,
+strengths, wrappers, probe mathematics, thresholds, assessment data, V19
+record, or Evidence Ledger changed; no network, download, model execution,
+training, adaptive tuning, assessment rerun, retuning, or prior V22–V25
+data/adapter reuse occurred.
