@@ -8,6 +8,7 @@ import hashlib
 import json
 import math
 from pathlib import Path
+from typing import Any
 
 FIT_PROBE_GATE = 0.70
 ASSESS_PROBE_GATE = 0.75
@@ -68,11 +69,21 @@ def _required_file(root: Path, name: str, label: str) -> Path:
     return path
 
 
+def _read_json(path: Path, label: str) -> Any:
+    try:
+        return json.loads(path.read_text())
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f"{label} is not valid JSON: {path.name}") from exc
+
+
 def validate_lock(root: Path) -> dict:
     _reject_symlinks(root)
     if (root / "assessment-results.json").exists():
         raise ValueError("assessment exists before lock validation")
-    lock = json.loads(_required_file(root, "configuration-lock.json", "configuration lock").read_text())
+    lock = _read_json(
+        _required_file(root, "configuration-lock.json", "configuration lock"),
+        "configuration lock",
+    )
     if not isinstance(lock, dict):
         raise ValueError("configuration lock must be an object")
     if "assessment_results_absent" not in lock:
@@ -91,8 +102,9 @@ def validate_lock(root: Path) -> dict:
 
 
 def _validate_silent(root: Path, result: dict) -> None:
-    behavioral = json.loads(
-        _required_file(root, "behavioral-effect.json", "behavioral effect").read_text()
+    behavioral = _read_json(
+        _required_file(root, "behavioral-effect.json", "behavioral effect"),
+        "behavioral effect",
     )
     selected = result["selected_configuration"]
     cell = next(
@@ -165,7 +177,7 @@ def _validate_result_boundary(result: dict) -> None:
 
 def validate(root: Path) -> dict:
     _reject_symlinks(root)
-    manifest = json.loads(_required_file(root, "manifest.json", "manifest").read_text())
+    manifest = _read_json(_required_file(root, "manifest.json", "manifest"), "manifest")
     if not isinstance(manifest, dict):
         raise ValueError("manifest must be an object")
     if "files" not in manifest:
@@ -185,7 +197,7 @@ def validate(root: Path) -> dict:
     for name, expected in files.items():
         if sha(_bundle_path(root, name, "manifest")) != expected:
             raise ValueError(f"manifest digest mismatch: {name}")
-    result = json.loads(_required_file(root, "result.json", "result").read_text())
+    result = _read_json(_required_file(root, "result.json", "result"), "result")
     if not isinstance(result, dict):
         raise ValueError("result must be an object")
     classification = result.get("classification")
@@ -206,8 +218,9 @@ def validate(root: Path) -> dict:
             raise ValueError("fork classification without assessment")
         _validate_fork(result)
     if result["classification"] == "NotRunInformationPresenceProbe":
-        qualification = json.loads(
-            _required_file(root, "qualification.json", "qualification").read_text()
+        qualification = _read_json(
+            _required_file(root, "qualification.json", "qualification"),
+            "qualification",
         )
         if not isinstance(qualification, dict) or "qualified" not in qualification:
             raise ValueError("qualification missing qualified")
