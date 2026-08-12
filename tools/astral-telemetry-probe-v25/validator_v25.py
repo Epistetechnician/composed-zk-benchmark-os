@@ -68,8 +68,12 @@ def validate_lock(root: Path) -> dict:
     lock = json.loads((root / "configuration-lock.json").read_text())
     if not isinstance(lock, dict):
         raise ValueError("configuration lock must be an object")
+    if "assessment_results_absent" not in lock:
+        raise ValueError("configuration lock missing assessment_results_absent")
     if lock["assessment_results_absent"] is not True:
         raise ValueError("lock ordering failure")
+    if "inputs" not in lock:
+        raise ValueError("configuration lock missing inputs")
     inputs = lock["inputs"]
     if not isinstance(inputs, dict):
         raise ValueError("lock inputs must be an object")
@@ -144,6 +148,8 @@ def validate(root: Path) -> dict:
     manifest = json.loads((root / "manifest.json").read_text())
     if not isinstance(manifest, dict):
         raise ValueError("manifest must be an object")
+    if "files" not in manifest:
+        raise ValueError("manifest missing files")
     files = manifest["files"]
     if not isinstance(files, dict):
         raise ValueError("manifest files must be an object")
