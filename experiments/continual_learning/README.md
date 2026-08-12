@@ -25,7 +25,9 @@ This harness validates endpoint definitions and control behavior. It is not a
 neural-training result and cannot support breakthrough, transfer, production,
 or general continual-learning claims.
 
-The latest signed task/update pilot is documented in
-`docs/research/continual-learning/47-v23-task-routed-replay-consolidation-record.md`. Its outputs
-must stay outside the repository because adapter weights and raw run logs are
-generated artifacts, not source fixtures.
+The latest signed task/update protocol is documented in
+`docs/research/continual-learning/47-v23-task-routed-replay-consolidation-record.md`.
+Its one corrected local preflight is recorded in
+`docs/research/continual-learning/48-v23-corrected-replay-preflight-record.md`.
+Outputs must stay outside the repository because adapter weights and raw run
+logs are generated artifacts, not source fixtures.
