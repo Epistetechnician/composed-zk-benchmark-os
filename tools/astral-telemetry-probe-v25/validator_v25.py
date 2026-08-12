@@ -270,7 +270,8 @@ def validate(root: Path) -> dict:
         if not isinstance(violations, list) or not violations:
             raise ValueError("floor violation stop without violations")
     if result["classification"] in FORK_CLASSIFICATIONS:
-        if not (root / "assessment-results.json").exists():
+        assessment_results = root / "assessment-results.json"
+        if not assessment_results.is_file():
             raise ValueError("fork classification without assessment")
         _validate_fork(result)
     if result["classification"] == "NotRunInformationPresenceProbe":
