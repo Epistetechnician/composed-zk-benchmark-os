@@ -118,3 +118,21 @@ strengths, wrappers, probe mathematics, thresholds, assessment data, V19
 record, or Evidence Ledger changed; no network, download, model execution,
 training, adaptive tuning, assessment rerun, retuning, or prior V22–V25
 data/adapter reuse occurred.
+
+## Follow-up bounded tick — non-string classification boundary
+
+Question: does the independent V25 validator reject JSON values of the wrong
+shape in `result.json`'s `classification` field before set membership or later
+classification-dependent validation? Added an explicit string-type guard and
+four hermetic cases for `null`, number, array, and object values. Targeted
+validation passed `36 passed in 0.11s`; the repository-owned canonical suite
+passed `147 passed in 0.97s`. No concepts, prompts, sites, strengths, wrappers,
+probe mathematics, thresholds, assessment artifacts, V19 record, or Evidence
+Ledger changed. No network, download, model execution, training, adaptive
+tuning, assessment rerun, retuning, or prior V22–V25 data/adapter reuse
+occurred.
+
+Claim ceiling remains
+`LocalDevelopmentPrivilegedTelemetryInformationPresence`; this tick makes no
+accepted-evidence, benchmark, Stage 0C, Stage 1, introspection, consciousness,
+SOTA, breakthrough, or generalization claim.

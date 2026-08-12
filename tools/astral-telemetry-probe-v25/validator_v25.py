@@ -257,7 +257,7 @@ def validate(root: Path) -> dict:
     if not isinstance(result, dict):
         raise ValueError("result must be an object")
     classification = result.get("classification")
-    if classification not in KNOWN_CLASSIFICATIONS:
+    if not isinstance(classification, str) or classification not in KNOWN_CLASSIFICATIONS:
         raise ValueError(f"unknown classification: {classification!r}")
     _validate_result_boundary(result)
     if classification in STOP_CLASSIFICATIONS:

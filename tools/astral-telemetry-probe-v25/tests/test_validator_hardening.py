@@ -146,6 +146,26 @@ def test_validate_reports_malformed_classification_documents_as_bundle_errors(
         VALIDATOR.validate(bundle)
 
 
+@pytest.mark.parametrize("classification", [None, 0, [], {}])
+def test_validator_rejects_non_string_classification(tmp_path, classification):
+    result = {
+        "classification": classification,
+        "confirmation": "NotAuthorized",
+        "stage_0c": "Blocked",
+        "stage_1": "BlockedByStage0C",
+        "claim_ceiling": "LocalDevelopmentPrivilegedTelemetryInformationPresence",
+        "assessment_unopened": True,
+    }
+    bundle = _bundle(tmp_path / "bundle")
+    (bundle / "result.json").write_text(json.dumps(result))
+    manifest = json.loads((bundle / "manifest.json").read_text())
+    manifest["files"]["result.json"] = _sha(bundle / "result.json")
+    (bundle / "manifest.json").write_text(json.dumps(manifest))
+
+    with pytest.raises(ValueError, match="unknown classification"):
+        VALIDATOR.validate(bundle)
+
+
 @pytest.mark.parametrize("field,value", [
     ("confirmation", "Authorized"),
     ("stage_0c", "Confirmed"),
