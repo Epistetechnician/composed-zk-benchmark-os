@@ -129,7 +129,11 @@ def _validate_silent(root: Path, result: dict) -> None:
             )
         if not isinstance(entry["silent"], bool):
             raise ValueError(f"behavioral effect entry {index} silent must be boolean")
-    selected = result["selected_configuration"]
+    selected = result.get("selected_configuration")
+    if not isinstance(selected, dict):
+        raise ValueError("silent stop missing selected configuration")
+    if "site" not in selected or "strength" not in selected:
+        raise ValueError("silent stop selected configuration missing site or strength")
     cell = next(
         (entry for entry in behavioral
          if entry["site"] == selected["site"] and entry["strength"] == selected["strength"]),
@@ -137,7 +141,10 @@ def _validate_silent(root: Path, result: dict) -> None:
     )
     if cell is None or not cell["silent"]:
         raise ValueError("silent stop without a silent selected cell")
-    if cell != result["selected_behavioral_effect"]:
+    selected_effect = result.get("selected_behavioral_effect")
+    if not isinstance(selected_effect, dict):
+        raise ValueError("silent stop missing selected behavioral effect")
+    if cell != selected_effect:
         raise ValueError("silent stop effect record mismatch")
 
 
