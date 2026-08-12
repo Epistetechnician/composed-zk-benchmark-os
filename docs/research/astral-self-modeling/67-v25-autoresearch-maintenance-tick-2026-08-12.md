@@ -1,48 +1,50 @@
-# V25 bounded autoresearch maintenance tick — 2026-08-12 (behavioral-effect shape)
+# V25 bounded autoresearch maintenance tick — 2026-08-12 (duplicate-JSON-key diagnostics)
 
 State slice: `astral-telemetry-information-presence-v25`.
 
-## Snapshot and question
+## Snapshot and measurable question
 
-The initial `git status --short --untracked-files=all` contained only
-pre-existing untracked Python caches and generated/user paths. They were not
-modified, staged, or adopted. The tick started at `52d5b407` on `master`.
+Initial snapshot: `master` at `fb4adee8`, with pre-existing untracked caches,
+generated outputs, `fsm_result.json`, and other user paths. None were modified,
+staged, or adopted.
 
-Question: does the independent V25 validator reject malformed behavioral-effect
-documents with stable fail-closed diagnostics, rather than leaking `TypeError`
-or `KeyError` while checking a silent-stop result?
+Question: does the independent V25 validator reject duplicate JSON object keys
+in configuration-lock input instead of silently applying last-key-wins parsing to
+a locked gate or boundary field?
 
 ## Change
 
-Added shape checks for the behavioral-effect array, its entries, required
-`site`/`strength`/`silent` fields, and the boolean `silent` marker, with four
-hermetic regressions. No concepts, prompts, sites, strengths, wrappers, probe
-mathematics, thresholds, assessment data, configuration, V19 record, or
-Evidence Ledger changed. No network, download, model execution, training,
-adaptive tuning, assessment rerun, retuning, or prior V22–V25 data/adapter
-reuse occurred.
+`_read_json` now rejects duplicate object keys in every validator document and
+maps the rejection to the stable document-specific `ValueError` boundary. One
+hermetic configuration-lock regression test covers a duplicated ordering marker.
+No concepts, prompts, sites, strengths, wrappers, probe mathematics, thresholds,
+assessment data, V19 record, or Evidence Ledger changed. No network, download,
+model execution, training, adaptive tuning, assessment rerun, retuning, or prior
+V22–V25 data/adapter reuse occurred.
 
 ## Validation
 
-Targeted command:
+Targeted command used the exact prescribed environment:
 
 ```text
-PYTHONPATH=/tmp/astral_torch_import_stub:/Users/shaanp/.cache/uv/archive-v0/DD4lPkGabhq7gIuUlQUdL:/Users/shaanp/.cache/uv/archive-v0/oDCUdaF3CoZQZwAVwTpox:/Users/shaanp/.cache/uv/archive-v0/eWGr8IC0NtaMkom2aqcVR:/Users/shaanp/.cache/uv/archive-v0/vnmgrwvNUMDgXjyLtw4ee:/Users/shaanp/.cache/uv/archive-v0/faDZ9cYbXTm6vuM4VP3ge:/Users/shaanp/.cache/uv/archive-v0/ZpKB9X2S45gW2-D3cgrbC:/Users/shaanp/.cache/uv/archive-v0/MIQf_H2GFFb0O0k9k2fuK:/Users/shaanp/.hermes/hermes-agent/venv/lib/python3.11/site-packages DYLD_LIBRARY_PATH=/Users/shaanp/.cache/uv/archive-v0/FX94lcPaFbhQQDA6j1NpI/mlx/lib /opt/homebrew/bin/python3.13 -m pytest -q tools/astral-telemetry-probe-v25/tests/test_validator_hardening.py
-21 passed in 0.05s
+... /opt/homebrew/bin/python3.13 -m pytest -q tools/astral-telemetry-probe-v25/tests/test_validator_hardening.py
+......................                                                   [100%]
+22 passed in 0.06s
 ```
 
-Canonical command, first attempt with the exact prescribed environment, failed
-collection because `transformers` was absent (`ModuleNotFoundError` from the
-cached `mlx_lm` import in V24/V25 tests). The same exact command was rerun
-without any installation or network access and returned:
+The canonical command used the exact prescribed environment:
 
 ```text
-111 passed in 0.83s
+... /opt/homebrew/bin/python3.13 -m pytest -q experiments/astral_fsm/tests tools/astral-hybrid-instrument-v24/tests tools/astral-telemetry-probe-v25/tests
+........................................................................ [ 64%]
+........................................                                 [100%]
+112 passed in 0.82s
 ```
 
-This maintenance tick is validator hardening and local regression evidence only.
+`git diff --check` passed before commit. Final `git show --stat --oneline HEAD`
+and `git status` verification are recorded in the maintenance report.
 
 Claim ceiling remains
-`LocalDevelopmentPrivilegedTelemetryInformationPresence`; no accepted
-evidence, benchmark, Stage 0C, Stage 1, introspection, consciousness, SOTA,
-breakthrough, or generalization claim is made.
+`LocalDevelopmentPrivilegedTelemetryInformationPresence`; this tick makes no
+accepted-evidence, benchmark, Stage 0C, Stage 1, introspection, consciousness,
+SOTA, breakthrough, or generalization claim.
