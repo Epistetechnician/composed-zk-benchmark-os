@@ -43,5 +43,12 @@ Its pure-data record is
 V25 corrected local preflight result and rejection:
 
 `docs/research/continual-learning/54-v25-shared-adapter-reference-initialization-preflight-record.md`.
+V26 shared-global-update-stream protocol:
+
+`docs/research/continual-learning/55-v26-shared-global-update-stream-protocol.md`.
+
+V26 corrected local preflight candidate:
+
+`docs/research/continual-learning/56-v26-shared-global-update-stream-preflight-record.md`.
 Outputs must stay outside the repository because adapter weights and raw run
 logs are generated artifacts, not source fixtures.
