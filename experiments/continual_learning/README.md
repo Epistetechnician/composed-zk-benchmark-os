@@ -35,5 +35,13 @@ Its pure-data record is
 `docs/research/continual-learning/50-v24-shared-adapter-task-keyed-optimizer-state-record.md`.
 Its corrected local preflight is recorded in
 `docs/research/continual-learning/51-v24-corrected-shared-adapter-preflight-record.md`.
+The next acquisition-repair protocol is
+`docs/research/continual-learning/52-v25-shared-adapter-reference-initialization-protocol.md`.
+Its pure-data record is
+`docs/research/continual-learning/53-v25-shared-adapter-reference-initialization-record.md`.
+
+V25 corrected local preflight result and rejection:
+
+`docs/research/continual-learning/54-v25-shared-adapter-reference-initialization-preflight-record.md`.
 Outputs must stay outside the repository because adapter weights and raw run
 logs are generated artifacts, not source fixtures.
