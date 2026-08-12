@@ -29,5 +29,11 @@ The latest signed task/update protocol is documented in
 `docs/research/continual-learning/47-v23-task-routed-replay-consolidation-record.md`.
 Its one corrected local preflight is recorded in
 `docs/research/continual-learning/48-v23-corrected-replay-preflight-record.md`.
+The next preregistered protocol is
+`docs/research/continual-learning/49-v24-shared-adapter-task-keyed-optimizer-state-protocol.md`.
+Its pure-data record is
+`docs/research/continual-learning/50-v24-shared-adapter-task-keyed-optimizer-state-record.md`.
+Its corrected local preflight is recorded in
+`docs/research/continual-learning/51-v24-corrected-shared-adapter-preflight-record.md`.
 Outputs must stay outside the repository because adapter weights and raw run
 logs are generated artifacts, not source fixtures.
