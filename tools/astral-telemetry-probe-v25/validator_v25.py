@@ -61,11 +61,18 @@ def _reject_symlinks(root: Path) -> None:
             raise ValueError(f"symlinked file in bundle: {path.relative_to(root)}")
 
 
+def _required_file(root: Path, name: str, label: str) -> Path:
+    path = root / name
+    if not path.is_file():
+        raise ValueError(f"{label} missing: {name}")
+    return path
+
+
 def validate_lock(root: Path) -> dict:
     _reject_symlinks(root)
     if (root / "assessment-results.json").exists():
         raise ValueError("assessment exists before lock validation")
-    lock = json.loads((root / "configuration-lock.json").read_text())
+    lock = json.loads(_required_file(root, "configuration-lock.json", "configuration lock").read_text())
     if not isinstance(lock, dict):
         raise ValueError("configuration lock must be an object")
     if "assessment_results_absent" not in lock:
@@ -156,7 +163,7 @@ def _validate_result_boundary(result: dict) -> None:
 
 def validate(root: Path) -> dict:
     _reject_symlinks(root)
-    manifest = json.loads((root / "manifest.json").read_text())
+    manifest = json.loads(_required_file(root, "manifest.json", "manifest").read_text())
     if not isinstance(manifest, dict):
         raise ValueError("manifest must be an object")
     if "files" not in manifest:
@@ -176,7 +183,7 @@ def validate(root: Path) -> dict:
     for name, expected in files.items():
         if sha(_bundle_path(root, name, "manifest")) != expected:
             raise ValueError(f"manifest digest mismatch: {name}")
-    result = json.loads((root / "result.json").read_text())
+    result = json.loads(_required_file(root, "result.json", "result").read_text())
     if not isinstance(result, dict):
         raise ValueError("result must be an object")
     classification = result.get("classification")
