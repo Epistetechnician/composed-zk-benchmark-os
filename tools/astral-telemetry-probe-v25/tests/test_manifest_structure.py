@@ -60,6 +60,26 @@ def test_validate_lock_rejects_malformed_inputs_shape(tmp_path, inputs):
         VALIDATOR.validate_lock(bundle)
 
 
+def test_validate_lock_rejects_missing_ordering_marker(tmp_path):
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    (bundle / "configuration-lock.json").write_text(json.dumps({"inputs": {}}))
+
+    with pytest.raises(ValueError, match="configuration lock missing assessment_results_absent"):
+        VALIDATOR.validate_lock(bundle)
+
+
+def test_validate_lock_rejects_missing_inputs(tmp_path):
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    (bundle / "configuration-lock.json").write_text(
+        json.dumps({"assessment_results_absent": True})
+    )
+
+    with pytest.raises(ValueError, match="configuration lock missing inputs"):
+        VALIDATOR.validate_lock(bundle)
+
+
 @pytest.mark.parametrize("document", [None, [], "lock"])
 def test_validate_lock_rejects_non_object_lock_document(tmp_path, document):
     bundle = tmp_path / "bundle"
@@ -67,3 +87,12 @@ def test_validate_lock_rejects_non_object_lock_document(tmp_path, document):
     (bundle / "configuration-lock.json").write_text(json.dumps(document))
     with pytest.raises(ValueError, match="configuration lock must be an object"):
         VALIDATOR.validate_lock(bundle)
+
+
+def test_validator_rejects_manifest_missing_files(tmp_path):
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    (bundle / "manifest.json").write_text(json.dumps({}))
+
+    with pytest.raises(ValueError, match="manifest missing files"):
+        VALIDATOR.validate(bundle)
