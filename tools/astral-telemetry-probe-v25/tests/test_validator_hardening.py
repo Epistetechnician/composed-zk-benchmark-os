@@ -60,6 +60,15 @@ def test_validator_rejects_symlinked_bundle_file(tmp_path):
         VALIDATOR.validate(bundle)
 
 
+def test_validate_lock_reports_malformed_json_as_bundle_error(tmp_path):
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    (bundle / "configuration-lock.json").write_text("{")
+
+    with pytest.raises(ValueError, match="configuration lock is not valid JSON"):
+        VALIDATOR.validate_lock(bundle)
+
+
 @pytest.mark.parametrize("field,value", [
     ("confirmation", "Authorized"),
     ("stage_0c", "Confirmed"),
