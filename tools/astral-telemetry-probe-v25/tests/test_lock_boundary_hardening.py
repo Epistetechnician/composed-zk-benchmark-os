@@ -42,7 +42,21 @@ def test_validate_lock_rejects_symlinked_input_tree(tmp_path):
     payload = bundle / "payload.bin"
     payload.unlink()
     payload.symlink_to(outside)
-    with pytest.raises(ValueError, match="symlinked file"):
+    with pytest.raises(ValueError, match="symlinked file in bundle"):
+        VALIDATOR.validate_lock(bundle)
+
+
+@pytest.mark.parametrize("input_name", ["missing.json", "directory"])
+def test_validate_lock_reports_non_file_input_before_hash(tmp_path, input_name):
+    bundle = _lock_bundle(tmp_path / "bundle", "payload.bin", b"input")
+    (bundle / "payload.bin").unlink()
+    if input_name == "directory":
+        (bundle / input_name).mkdir()
+    lock = json.loads((bundle / "configuration-lock.json").read_text())
+    lock["inputs"] = {input_name: "0" * 64}
+    (bundle / "configuration-lock.json").write_text(json.dumps(lock))
+
+    with pytest.raises(ValueError, match=f"lock input missing: {input_name}"):
         VALIDATOR.validate_lock(bundle)
 
 

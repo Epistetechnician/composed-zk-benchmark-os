@@ -104,7 +104,10 @@ def validate_lock(root: Path) -> dict:
     if not isinstance(inputs, dict):
         raise ValueError("lock inputs must be an object")
     for name, expected in inputs.items():
-        if sha(_bundle_path(root, name, "lock input")) != expected:
+        path = _bundle_path(root, name, "lock input")
+        if not path.is_file():
+            raise ValueError(f"lock input missing: {name}")
+        if sha(path) != expected:
             raise ValueError(f"lock digest mismatch: {name}")
     return {"lock_valid": True, "configuration_lock_sha256": sha(root / "configuration-lock.json")}
 
