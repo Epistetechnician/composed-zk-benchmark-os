@@ -13,7 +13,7 @@ VALIDATOR = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(VALIDATOR)
 
 
-@pytest.mark.parametrize("files", [[], "result.json", {"result.json": []}])
+@pytest.mark.parametrize("files", [None, [], "result.json", {"result.json": []}])
 def test_validator_rejects_malformed_manifest_files_shape(tmp_path, files):
     bundle = tmp_path / "bundle"
     bundle.mkdir()
@@ -24,3 +24,15 @@ def test_validator_rejects_malformed_manifest_files_shape(tmp_path, files):
 
     with pytest.raises(ValueError):
         VALIDATOR.validate(bundle)
+
+
+@pytest.mark.parametrize("inputs", [None, [], "payload.bin"])
+def test_validate_lock_rejects_malformed_inputs_shape(tmp_path, inputs):
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    (bundle / "configuration-lock.json").write_text(
+        json.dumps({"assessment_results_absent": True, "inputs": inputs})
+    )
+
+    with pytest.raises(ValueError, match="lock inputs must be an object"):
+        VALIDATOR.validate_lock(bundle)

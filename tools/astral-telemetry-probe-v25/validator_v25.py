@@ -68,7 +68,10 @@ def validate_lock(root: Path) -> dict:
     lock = json.loads((root / "configuration-lock.json").read_text())
     if lock["assessment_results_absent"] is not True:
         raise ValueError("lock ordering failure")
-    for name, expected in lock["inputs"].items():
+    inputs = lock["inputs"]
+    if not isinstance(inputs, dict):
+        raise ValueError("lock inputs must be an object")
+    for name, expected in inputs.items():
         if sha(_bundle_path(root, name, "lock input")) != expected:
             raise ValueError(f"lock digest mismatch: {name}")
     return {"lock_valid": True, "configuration_lock_sha256": sha(root / "configuration-lock.json")}
@@ -137,16 +140,19 @@ def _validate_result_boundary(result: dict) -> None:
 def validate(root: Path) -> dict:
     _reject_symlinks(root)
     manifest = json.loads((root / "manifest.json").read_text())
+    files = manifest["files"]
+    if not isinstance(files, dict):
+        raise ValueError("manifest files must be an object")
     actual = {
         str(path.relative_to(root))
         for path in root.rglob("*")
         if path.is_file() and path.relative_to(root) != Path("manifest.json")
     }
-    for name in manifest["files"]:
+    for name in files:
         _bundle_path(root, name, "manifest")
-    if actual != set(manifest["files"]):
+    if actual != set(files):
         raise ValueError("manifest census mismatch")
-    for name, expected in manifest["files"].items():
+    for name, expected in files.items():
         if sha(_bundle_path(root, name, "manifest")) != expected:
             raise ValueError(f"manifest digest mismatch: {name}")
     result = json.loads((root / "result.json").read_text())
