@@ -46,6 +46,30 @@ def test_validate_lock_rejects_symlinked_input_tree(tmp_path):
         VALIDATOR.validate_lock(bundle)
 
 
+def test_validate_lock_accepts_declared_nested_input_and_returns_lock_digest(tmp_path):
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    nested = bundle / "inputs" / "corpus.json"
+    nested.parent.mkdir()
+    nested.write_bytes(b"nested input")
+    lock = bundle / "configuration-lock.json"
+    lock.write_text(
+        json.dumps(
+            {
+                "assessment_results_absent": True,
+                "inputs": {"inputs/corpus.json": VALIDATOR.sha(nested)},
+            }
+        )
+    )
+
+    result = VALIDATOR.validate_lock(bundle)
+
+    assert result == {
+        "lock_valid": True,
+        "configuration_lock_sha256": VALIDATOR.sha(lock),
+    }
+
+
 @pytest.mark.parametrize("input_name", ["missing.json", "directory"])
 def test_validate_lock_reports_non_file_input_before_hash(tmp_path, input_name):
     bundle = _lock_bundle(tmp_path / "bundle", "payload.bin", b"input")

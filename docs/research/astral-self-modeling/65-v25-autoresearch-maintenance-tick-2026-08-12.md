@@ -45,3 +45,20 @@ Claim ceiling remains
 `LocalDevelopmentPrivilegedTelemetryInformationPresence`; this tick makes no
 accepted-evidence, benchmark, Stage 0C, Stage 1, introspection, consciousness,
 SOTA, breakthrough, or generalization claim.
+
+## Follow-up bounded tick — valid nested lock input
+
+The next snapshot retained the same pre-existing untracked paths and had no
+staged or modified tracked paths. Question: does `validate_lock` accept a valid
+declared nested input path and return the deterministic SHA-256 of the lock
+document, while retaining the existing path-escape and symlink rejection
+checks? The answer was tested with a hermetic fixture; no validator behavior,
+protocol configuration, concepts, assessment artifacts, or claim boundary was
+changed.
+
+Targeted validation used the exact canonical environment and
+`tools/astral-telemetry-probe-v25/tests/test_lock_boundary_hardening.py`.
+The final canonical command, diff check, commit, and status verification are
+recorded in the delivered tick report. No network, download, model execution,
+training, tuning, assessment rerun, or prior V22–V25 data/adapter reuse
+occurred.
