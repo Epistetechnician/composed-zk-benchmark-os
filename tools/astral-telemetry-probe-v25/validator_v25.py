@@ -106,6 +106,18 @@ def _validate_silent(root: Path, result: dict) -> None:
         _required_file(root, "behavioral-effect.json", "behavioral effect"),
         "behavioral effect",
     )
+    if not isinstance(behavioral, list):
+        raise ValueError("behavioral effect must be an array")
+    for index, entry in enumerate(behavioral):
+        if not isinstance(entry, dict):
+            raise ValueError(f"behavioral effect entry {index} must be an object")
+        missing = sorted({"site", "strength", "silent"} - entry.keys())
+        if missing:
+            raise ValueError(
+                f"behavioral effect entry {index} missing fields: {', '.join(missing)}"
+            )
+        if not isinstance(entry["silent"], bool):
+            raise ValueError(f"behavioral effect entry {index} silent must be boolean")
     selected = result["selected_configuration"]
     cell = next(
         (entry for entry in behavioral

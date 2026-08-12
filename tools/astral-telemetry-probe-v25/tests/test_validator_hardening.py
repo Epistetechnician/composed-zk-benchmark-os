@@ -167,3 +167,38 @@ def test_validator_rejects_missing_or_non_boolean_qualification(tmp_path):
         (bundle / "manifest.json").write_text(json.dumps(manifest))
         with pytest.raises(ValueError, match=message):
             VALIDATOR.validate(bundle)
+
+
+def _silent_result():
+    return {
+        "classification": "ProbeTargetBehaviorallySilent",
+        "confirmation": "NotAuthorized",
+        "stage_0c": "Blocked",
+        "stage_1": "BlockedByStage0C",
+        "claim_ceiling": "LocalDevelopmentPrivilegedTelemetryInformationPresence",
+        "assessment_unopened": True,
+        "selected_configuration": {"site": 3, "strength": 0.1},
+        "selected_behavioral_effect": {"site": 3, "strength": 0.1, "silent": True},
+    }
+
+
+@pytest.mark.parametrize(
+    ("behavioral", "message"),
+    [
+        ({"site": 3}, "behavioral effect must be an array"),
+        ([None], "behavioral effect entry 0 must be an object"),
+        ([{"site": 3, "strength": 0.1}], "behavioral effect entry 0 missing fields: silent"),
+        ([{"site": 3, "strength": 0.1, "silent": "yes"}], "behavioral effect entry 0 silent must be boolean"),
+    ],
+)
+def test_validator_rejects_malformed_silent_behavioral_effect(tmp_path, behavioral, message):
+    bundle = _bundle(
+        tmp_path / "bundle",
+        {"behavioral-effect.json": json.dumps(behavioral).encode()},
+    )
+    (bundle / "result.json").write_text(json.dumps(_silent_result()))
+    manifest = json.loads((bundle / "manifest.json").read_text())
+    manifest["files"]["result.json"] = _sha(bundle / "result.json")
+    (bundle / "manifest.json").write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match=message):
+        VALIDATOR.validate(bundle)
