@@ -119,3 +119,40 @@ def test_validate_lock_reports_missing_lock_before_json_decode(tmp_path):
     bundle.mkdir()
     with pytest.raises(ValueError, match="configuration lock missing: configuration-lock.json"):
         VALIDATOR.validate_lock(bundle)
+
+
+def _result_boundary(classification):
+    return {
+        "classification": classification,
+        "confirmation": "NotAuthorized",
+        "stage_0c": "Blocked",
+        "stage_1": "BlockedByStage0C",
+        "claim_ceiling": "LocalDevelopmentPrivilegedTelemetryInformationPresence",
+        "assessment_unopened": True,
+    }
+
+
+def test_validator_reports_missing_qualification_before_json_decode(tmp_path):
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    result = bundle / "result.json"
+    result.write_text(json.dumps(_result_boundary("NotRunInformationPresenceProbe")))
+    (bundle / "manifest.json").write_text(
+        json.dumps({"files": {"result.json": VALIDATOR.sha(result)}})
+    )
+
+    with pytest.raises(ValueError, match="qualification missing: qualification.json"):
+        VALIDATOR.validate(bundle)
+
+
+def test_validator_reports_missing_behavioral_effect_before_json_decode(tmp_path):
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    result = bundle / "result.json"
+    result.write_text(json.dumps(_result_boundary("ProbeTargetBehaviorallySilent")))
+    (bundle / "manifest.json").write_text(
+        json.dumps({"files": {"result.json": VALIDATOR.sha(result)}})
+    )
+
+    with pytest.raises(ValueError, match="behavioral effect missing: behavioral-effect.json"):
+        VALIDATOR.validate(bundle)

@@ -91,7 +91,9 @@ def validate_lock(root: Path) -> dict:
 
 
 def _validate_silent(root: Path, result: dict) -> None:
-    behavioral = json.loads((root / "behavioral-effect.json").read_text())
+    behavioral = json.loads(
+        _required_file(root, "behavioral-effect.json", "behavioral effect").read_text()
+    )
     selected = result["selected_configuration"]
     cell = next(
         (entry for entry in behavioral
@@ -204,7 +206,9 @@ def validate(root: Path) -> dict:
             raise ValueError("fork classification without assessment")
         _validate_fork(result)
     if result["classification"] == "NotRunInformationPresenceProbe":
-        qualification = json.loads((root / "qualification.json").read_text())
+        qualification = json.loads(
+            _required_file(root, "qualification.json", "qualification").read_text()
+        )
         if not isinstance(qualification, dict) or "qualified" not in qualification:
             raise ValueError("qualification missing qualified")
         if not isinstance(qualification["qualified"], bool):
