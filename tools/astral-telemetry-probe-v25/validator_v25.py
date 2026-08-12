@@ -132,6 +132,15 @@ def _validate_fork(result: dict) -> None:
         raise ValueError(f"fork result missing required fields: {', '.join(missing)}")
     if not isinstance(result["bootstrap"], dict):
         raise ValueError("fork bootstrap must be an object")
+    missing_bootstrap = sorted(
+        field for field in ("lower_95", "mean_over_chance", "upper_95")
+        if field not in result["bootstrap"]
+    )
+    if missing_bootstrap:
+        raise ValueError(
+            "fork bootstrap missing required fields: "
+            + ", ".join(missing_bootstrap)
+        )
     for field in ("probe_accuracy", "self_report_accuracy", "fork_margin_observed"):
         value = result[field]
         if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
