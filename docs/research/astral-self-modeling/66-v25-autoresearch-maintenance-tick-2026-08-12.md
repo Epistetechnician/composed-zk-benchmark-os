@@ -34,12 +34,32 @@ Targeted result: `17 passed in 0.05s`.
 Canonical command (the exact verified environment and current canonical suite):
 
 ```text
-PYTHONPATH=/tmp/astral_torch_import_stub:/Users/shaanp/.cache/uv/archive-v0/DD4lPkGabhq7gIuUlQUdL:/Users/shaanp/.cache/uv/archive-v0/oDCUdaF3CoZQZwAVwTpox:/Users/shaanp/.cache/uv/archive-v0/eWGr8IC0NtaMkom2aqcVR:/Users/shaanp/.cache/uv/archive-v0/vnmgrwvNUMDgXjyLtw4ee:/Users/shaanp/.cache/uv/archive-v0/faDZ9cYbXTm6vuM4VP3ge:/Users/shaanp/.cache/uv/archive-v0/ZpKB9X2S45gW2-D3cgrbC:/Users/shaanp/.cache/uv/archive-v0/MIQf_H2GFFb0O0k9k2fuK:/Users/shaanp/.hermes/hermes-agent/venv/lib/python3.11/site-packages DYLD_LIBRARY_PATH=/Users/shaanp/.cache/uv/archive-v0/FX94lcPaFbhQQDA6j1NpI/mlx/lib /opt/homebrew/bin/python3.13 -m pytest -q experiments/astral_fsm/tests tools/astral-hybrid-instrument-v24/tests tools/astral-telemetry-probe-v25/tests
+PYTHONPATH=/tmp/astral_torch_import_stub:/Users/shaanp/.cache/uv/archive-v0/DD4lPkGabhq7gIuUlQUdL:/Users/shaanp/.cache/uv/archive-v0/oDCUdaF3CoZQZwAVwTpox:/Users/shaanp/.cache/uv/archive-v0/eWGr8IC0NtaMkom2aqcVR:/Users/shaanp/.cache/uv/archive-v0/vnmgrwvNUMDgXjyLtw4ee:/Users/shaanp/.cache/uv/archive-v0/faDZ9cYbXTm6vuM4VP3ge:/Users/shaanp/.cache/uv/archive-v0/ZpKB9X2S45gW2-D3cgrbC:/Users/shaanp/.cache/uv/archive-v0/MIQf_H2GFFb0O0k9k2fuK:/Users/shaanp/.hermes/hermes-agent/venv/lib/python3.11/site-packages DYLD_LIBRARY_PATH=/Users/shaanp/.cache/uv/archive-v0/FX94lcPaFbhQQDA6j1NpI/mlx/lib /opt/homebrew/bin/python3.13 /opt/homebrew/bin/python3.13 -m pytest -q experiments/astral_fsm/tests tools/astral-hybrid-instrument-v24/tests tools/astral-telemetry-probe-v25/tests
 ```
 
 Result: `107 passed in 1.30s`. `git diff --check` passed with no output.
 
 The unchanged claim ceiling is
 `LocalDevelopmentPrivilegedTelemetryInformationPresence`. This tick makes no
+accepted-evidence, benchmark, Stage 0C, Stage 1, introspection, consciousness,
+SOTA, breakthrough, or generalization claim.
+
+## This tick — silent-result boundary
+
+Question: does the independent V25 validator reject a silent-stop result that
+omits either the selected configuration or its selected behavioral-effect
+record with a stable fail-closed `ValueError`, rather than leaking `KeyError`?
+
+The validator now type-checks both silent-stop result records and requires the
+selected configuration to contain `site` and `strength` before matching it to
+the behavioral-effect table. Two hermetic tests cover the missing-record cases.
+This is an artifact-boundary hardening change only; no V25 concepts, prompts,
+assessment artifacts, configuration, or claim boundary changed.
+
+No network, download, model execution, training, adaptive tuning, assessment
+rerun, retuning, or V22–V25 data/adapter reuse occurred.
+
+Claim ceiling remains
+`LocalDevelopmentPrivilegedTelemetryInformationPresence`; this tick makes no
 accepted-evidence, benchmark, Stage 0C, Stage 1, introspection, consciousness,
 SOTA, breakthrough, or generalization claim.

@@ -213,3 +213,26 @@ def test_validator_rejects_malformed_silent_behavioral_effect(tmp_path, behavior
     (bundle / "manifest.json").write_text(json.dumps(manifest))
     with pytest.raises(ValueError, match=message):
         VALIDATOR.validate(bundle)
+
+
+@pytest.mark.parametrize(
+    ("field", "message"),
+    [
+        ("selected_configuration", "silent stop missing selected configuration"),
+        ("selected_behavioral_effect", "silent stop missing selected behavioral effect"),
+    ],
+)
+def test_validator_rejects_missing_silent_result_records(tmp_path, field, message):
+    result = _silent_result()
+    del result[field]
+    bundle = _bundle(
+        tmp_path / field,
+        {"behavioral-effect.json": json.dumps([{"site": 3, "strength": 0.1, "silent": True}]).encode()},
+    )
+    (bundle / "result.json").write_text(json.dumps(result))
+    manifest = json.loads((bundle / "manifest.json").read_text())
+    manifest["files"]["result.json"] = _sha(bundle / "result.json")
+    (bundle / "manifest.json").write_text(json.dumps(manifest))
+
+    with pytest.raises(ValueError, match=message):
+        VALIDATOR.validate(bundle)
