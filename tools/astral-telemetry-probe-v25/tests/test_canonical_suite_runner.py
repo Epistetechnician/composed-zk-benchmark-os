@@ -1,4 +1,6 @@
 import importlib.util
+import subprocess
+import sys
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -157,12 +159,8 @@ def test_discover_layout_rejects_invalid_mlx_metadata(tmp_path, metadata_kind, e
     python = tmp_path / "python3.13"
     python.write_text("placeholder")
 
-    if metadata_kind == "missing":
-        with pytest.raises(RuntimeError, match=expected_message):
-            RUNNER.discover_layout(cache, site_packages, torch_stub, python)
-    else:
-        with pytest.raises(RuntimeError, match=expected_message):
-            RUNNER.discover_layout(cache, site_packages, torch_stub, python)
+    with pytest.raises(RuntimeError, match=expected_message):
+        RUNNER.discover_layout(cache, site_packages, torch_stub, python)
 
 
 def test_discover_layout_rejects_multiple_matching_mlx_metal_pairs(tmp_path):
@@ -285,3 +283,43 @@ def test_run_canonical_suite_rejects_extra_args_before_subprocess(monkeypatch, t
 
     with pytest.raises(ValueError, match="exact canonical suite"):
         RUNNER.run_canonical_suite(layout, tmp_path, ("-k", "only_one_test"))
+
+
+def test_cli_rejects_malformed_mlx_metadata_with_controlled_exit(tmp_path):
+    cache = tmp_path / "archive-v0"
+    mlx = _fake_archive(cache, "mlx-archive", ("mlx/core.cpython-313-darwin.so",))
+    metadata = mlx / "mlx-0.31.2.dist-info" / "METADATA"
+    metadata.parent.mkdir(parents=True, exist_ok=True)
+    metadata.write_bytes(b"Name: mlx\nVersion: \xff\n")
+    native = _fake_archive(cache, "mlx-native", ("mlx/lib/libmlx.dylib",))
+    _write_metadata(native, "mlx-metal", "0.31.2")
+    site_packages = tmp_path / "site-packages"
+    site_packages.mkdir()
+    torch_stub = tmp_path / "torch.py"
+    torch_stub.write_text("nn = object()\n")
+    python = tmp_path / "python3.13"
+    python.write_text("placeholder")
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(HERE / "run_canonical_suite.py"),
+            "--cache-root",
+            str(cache),
+            "--site-packages",
+            str(site_packages),
+            "--torch-stub",
+            str(torch_stub),
+            "--python",
+            str(python),
+            "--repo-root",
+            str(tmp_path),
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert result.returncode == 2
+    assert result.stdout == ""
+    assert result.stderr == f"offline canonical preflight blocked: cached mlx metadata is malformed: {mlx}\n"
