@@ -216,6 +216,7 @@ def test_build_env_is_explicit_and_does_not_write_bytecode(tmp_path):
             "PYTEST_ADDOPTS": "-k only_one_test",
             "PYTEST_PLUGINS": "untrusted_plugin",
             "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "0",
+            "PYTHONOPTIMIZE": "1",
         },
     )
 
@@ -225,6 +226,7 @@ def test_build_env_is_explicit_and_does_not_write_bytecode(tmp_path):
     assert env["PYTHONNOUSERSITE"] == "1"
     assert env["PYTHONDONTWRITEBYTECODE"] == "1"
     assert env["PYTHONHASHSEED"] == "0"
+    assert env["PYTHONOPTIMIZE"] == "0"
     assert "PYTEST_ADDOPTS" not in env
     assert "PYTEST_PLUGINS" not in env
     assert env["PYTEST_DISABLE_PLUGIN_AUTOLOAD"] == "1"
