@@ -80,6 +80,36 @@ The same runner was also executed with hostile ambient values for
 still ran the complete suite and reported `150 passed in 1.05s`, with no
 deselected tests.
 
+## Follow-up hardening
+
+The independent review passed the previous checkpoint and identified two
+non-blocking robustness improvements. The runner now validates the canonical
+pytest command before launching the MLX preflight, so a direct caller supplying
+extra arguments causes zero subprocesses. It also converts corrupt UTF-8
+package metadata into a controlled `RuntimeError` rather than leaking a raw
+`UnicodeDecodeError`.
+
+Additional hermetic cases cover missing, malformed, duplicate, and multiple
+matching MLX/Metal metadata layouts. The new regressions were run red before
+implementation:
+
+```text
+2 failed, 10 passed in 0.07s
+```
+
+After the minimal boundary fixes:
+
+```text
+12 passed in 0.03s
+```
+
+The final runner result after this follow-up was:
+
+```text
+mlx=/Users/shaanp/.cache/uv/archive-v0/DD4lPkGabhq7gIuUlQUdL/mlx/core.cpython-313-darwin.so mlx_lm=/Users/shaanp/.cache/uv/archive-v0/oDCUdaF3CoZQZwAVwTpox/mlx_lm/__init__.py
+155 passed in 0.96s
+```
+
 No network, installation, download, model execution, training, adaptive tuning,
 assessment rerun, retuning, or restricted V19/V22–V25 material reuse occurred.
 
