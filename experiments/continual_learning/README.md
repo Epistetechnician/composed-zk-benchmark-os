@@ -84,5 +84,14 @@ Its preflight record is:
 V29 produced a targeted positive local signal on the frozen second V27 tie
 cell; the next gate is one V29 confirmation on the other `20260812` tie cell.
 No H100 is authorized.
+V29 confirmation protocol for the other frozen tie cell:
+
+`docs/research/continual-learning/65-v29-replay-anchored-temporal-confirmation-protocol.md`.
+
+Its preflight record is:
+
+`docs/research/continual-learning/66-v29-replay-anchored-temporal-confirmation-record.md`.
+Both V29 `20260812` tie-cell confirmations passed; the next gate is the
+frozen seven-cell V29 replication matrix excluding those two executions.
 Outputs must stay outside the repository because adapter weights and raw run
 logs are generated artifacts, not source fixtures.
