@@ -64,5 +64,15 @@ V28 task-stratified microbatch protocol:
 V28 corrected local preflight record:
 
 `docs/research/continual-learning/60-v28-task-stratified-microbatch-preflight-record.md`.
+V28 second-cell confirmation protocol:
+
+`docs/research/continual-learning/61-v28-task-stratified-microbatch-confirmation-protocol.md`.
+
+V28 second-cell confirmation record:
+
+`docs/research/continual-learning/62-v28-task-stratified-microbatch-confirmation-record.md`.
+V28 confirmation tied on the second frozen `20260812` order cell; the
+task-stratified retention repair is rejected and the next object is a new
+task/update protocol design. No H100 is authorized.
 Outputs must stay outside the repository because adapter weights and raw run
 logs are generated artifacts, not source fixtures.
