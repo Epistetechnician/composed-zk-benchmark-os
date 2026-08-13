@@ -93,5 +93,15 @@ Its preflight record is:
 `docs/research/continual-learning/66-v29-replay-anchored-temporal-confirmation-record.md`.
 Both V29 `20260812` tie-cell confirmations passed; the next gate is the
 frozen seven-cell V29 replication matrix excluding those two executions.
+V29 replication protocol:
+
+`docs/research/continual-learning/67-v29-replay-anchored-temporal-replication-protocol.md`.
+
+Its replication record is:
+
+`docs/research/continual-learning/68-v29-replay-anchored-temporal-replication-record.md`.
+V29 passes the strict local nine-cell gate, including both validated anchors;
+the claim ceiling remains local replication-matrix evidence. The next step is
+independent review and replication, not H100 allocation.
 Outputs must stay outside the repository because adapter weights and raw run
 logs are generated artifacts, not source fixtures.
