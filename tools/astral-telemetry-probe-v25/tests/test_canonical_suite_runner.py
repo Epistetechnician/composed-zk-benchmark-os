@@ -130,6 +130,60 @@ def test_discover_layout_rejects_mismatched_native_mlx_library(tmp_path):
         RUNNER.discover_layout(cache, site_packages, torch_stub, python)
 
 
+@pytest.mark.parametrize(
+    ("metadata_kind", "expected_message"),
+    (
+        ("missing", "metadata is missing or ambiguous"),
+        ("malformed", "metadata is malformed"),
+        ("duplicate", "metadata is missing or ambiguous"),
+    ),
+)
+def test_discover_layout_rejects_invalid_mlx_metadata(tmp_path, metadata_kind, expected_message):
+    cache = tmp_path / "archive-v0"
+    cache.mkdir()
+    mlx = _fake_archive(cache, "mlx-archive", ("mlx/core.cpython-313-darwin.so",))
+    if metadata_kind == "malformed":
+        _write_metadata(mlx, "mlx", "0.31.2")
+        next(mlx.glob("*.dist-info/METADATA")).write_bytes(b"Name: mlx\nVersion: \xff\n")
+    elif metadata_kind == "duplicate":
+        _write_metadata(mlx, "mlx", "0.31.2")
+        _write_metadata(mlx, "mlx", "0.31.3")
+    native = _fake_archive(cache, "mlx-native", ("mlx/lib/libmlx.dylib",))
+    _write_metadata(native, "mlx-metal", "0.31.2")
+    site_packages = tmp_path / "site-packages"
+    site_packages.mkdir()
+    torch_stub = tmp_path / "torch.py"
+    torch_stub.write_text("nn = object()\n")
+    python = tmp_path / "python3.13"
+    python.write_text("placeholder")
+
+    if metadata_kind == "missing":
+        with pytest.raises(RuntimeError, match=expected_message):
+            RUNNER.discover_layout(cache, site_packages, torch_stub, python)
+    else:
+        with pytest.raises(RuntimeError, match=expected_message):
+            RUNNER.discover_layout(cache, site_packages, torch_stub, python)
+
+
+def test_discover_layout_rejects_multiple_matching_mlx_metal_pairs(tmp_path):
+    cache = tmp_path / "archive-v0"
+    cache.mkdir()
+    mlx = _fake_archive(cache, "mlx-archive", ("mlx/core.cpython-313-darwin.so",))
+    _write_metadata(mlx, "mlx", "0.31.2")
+    for name in ("mlx-native-a", "mlx-native-b"):
+        native = _fake_archive(cache, name, ("mlx/lib/libmlx.dylib",))
+        _write_metadata(native, "mlx-metal", "0.31.2")
+    site_packages = tmp_path / "site-packages"
+    site_packages.mkdir()
+    torch_stub = tmp_path / "torch.py"
+    torch_stub.write_text("nn = object()\n")
+    python = tmp_path / "python3.13"
+    python.write_text("placeholder")
+
+    with pytest.raises(RuntimeError, match="missing unique cached MLX native library"):
+        RUNNER.discover_layout(cache, site_packages, torch_stub, python)
+
+
 def test_discover_layout_rejects_tokenizers_archive_without_native_extension(tmp_path):
     cache = tmp_path / "archive-v0"
     cache.mkdir()
@@ -214,3 +268,20 @@ def test_run_canonical_suite_scrubs_ambient_pytest_controls(monkeypatch, tmp_pat
         assert "PYTEST_ADDOPTS" not in env
         assert "PYTEST_PLUGINS" not in env
         assert env["PYTEST_DISABLE_PLUGIN_AUTOLOAD"] == "1"
+
+
+def test_run_canonical_suite_rejects_extra_args_before_subprocess(monkeypatch, tmp_path):
+    layout = RUNNER.RuntimeLayout(
+        python=tmp_path / "python3.13",
+        pythonpath=(),
+        dyld_library_path=tmp_path / "lib",
+        torch_stub=tmp_path / "torch.py",
+    )
+    monkeypatch.setattr(
+        RUNNER.subprocess,
+        "run",
+        lambda *args, **kwargs: pytest.fail("subprocess must not run for extra arguments"),
+    )
+
+    with pytest.raises(ValueError, match="exact canonical suite"):
+        RUNNER.run_canonical_suite(layout, tmp_path, ("-k", "only_one_test"))

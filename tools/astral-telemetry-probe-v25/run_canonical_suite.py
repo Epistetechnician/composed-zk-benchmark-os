@@ -54,7 +54,11 @@ def _distribution_version(archive: Path, distribution: str) -> str:
     matches: list[str] = []
     for metadata_path in sorted(archive.glob("*.dist-info/METADATA")):
         fields: dict[str, str] = {}
-        for line in metadata_path.read_text(encoding="utf-8").splitlines():
+        try:
+            metadata_lines = metadata_path.read_text(encoding="utf-8").splitlines()
+        except UnicodeDecodeError as exc:
+            raise RuntimeError(f"cached {distribution} metadata is malformed: {archive}") from exc
+        for line in metadata_lines:
             name, separator, value = line.partition(":")
             if separator:
                 fields[name.strip().lower()] = value.strip()
@@ -194,12 +198,13 @@ def run_canonical_suite(
     repo_root: Path,
     extra_args: tuple[str, ...] = (),
 ) -> int:
+    canonical_test_command = canonical_command(layout, extra_args)
     env = build_env(layout)
     preflight = subprocess.run(_preflight_command(layout), cwd=repo_root, env=env, check=False)
     if preflight.returncode:
         return preflight.returncode
     return subprocess.run(
-        canonical_command(layout, extra_args),
+        canonical_test_command,
         cwd=repo_root,
         env=env,
         check=False,
