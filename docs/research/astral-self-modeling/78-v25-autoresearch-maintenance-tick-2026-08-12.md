@@ -123,6 +123,28 @@ The complete focused runner test file then passed `13 passed in 0.07s`, and the
 canonical runner passed `156 passed in 0.97s`. The CLI emitted exit code `2`, no
 stdout, and the expected `offline canonical preflight blocked: ...` stderr.
 
+## Optimization-environment follow-up
+
+An additional delayed independent review found a confirmed false-green path:
+an ambient `PYTHONOPTIMIZE=1` caused Python to strip test assertions while
+pytest still returned success and warned that assertions were ignored. The
+reproduction was observed directly:
+
+```text
+PYTHONOPTIMIZE=1 ... test_build_env_is_explicit_and_does_not_write_bytecode
+1 passed, 1 warning
+```
+
+The runner now forces `PYTHONOPTIMIZE=0` in both child subprocesses. The new
+regression was first red with a `KeyError: PYTHONOPTIMIZE`, then passed after
+the minimal environment fix. Under hostile `PYTHONOPTIMIZE=1`,
+`PYTEST_ADDOPTS`, `PYTEST_PLUGINS`, and plugin-autoload settings, the real
+canonical runner completed:
+
+```text
+156 passed in 0.98s
+```
+
 No network, installation, download, model execution, training, adaptive tuning,
 assessment rerun, retuning, or restricted V19/V22–V25 material reuse occurred.
 

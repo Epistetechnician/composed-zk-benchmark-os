@@ -166,6 +166,7 @@ def build_env(layout: RuntimeLayout, base_env: dict[str, str] | None = None) -> 
     env["PYTHONNOUSERSITE"] = "1"
     env["PYTHONDONTWRITEBYTECODE"] = "1"
     env["PYTHONHASHSEED"] = "0"
+    env["PYTHONOPTIMIZE"] = "0"
     env["HF_HUB_OFFLINE"] = "1"
     env["TRANSFORMERS_OFFLINE"] = "1"
     env["PYTEST_DISABLE_PLUGIN_AUTOLOAD"] = "1"
