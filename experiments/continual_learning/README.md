@@ -74,5 +74,15 @@ V28 second-cell confirmation record:
 V28 confirmation tied on the second frozen `20260812` order cell; the
 task-stratified retention repair is rejected and the next object is a new
 task/update protocol design. No H100 is authorized.
+V29 replay-anchored temporal microbatch protocol:
+
+`docs/research/continual-learning/63-v29-replay-anchored-temporal-microbatch-protocol.md`.
+
+Its preflight record is:
+
+`docs/research/continual-learning/64-v29-replay-anchored-temporal-microbatch-preflight-record.md`.
+V29 produced a targeted positive local signal on the frozen second V27 tie
+cell; the next gate is one V29 confirmation on the other `20260812` tie cell.
+No H100 is authorized.
 Outputs must stay outside the repository because adapter weights and raw run
 logs are generated artifacts, not source fixtures.
