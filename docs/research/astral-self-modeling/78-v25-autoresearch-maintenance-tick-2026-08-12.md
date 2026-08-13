@@ -110,6 +110,19 @@ mlx=/Users/shaanp/.cache/uv/archive-v0/DD4lPkGabhq7gIuUlQUdL/mlx/core.cpython-31
 155 passed in 0.96s
 ```
 
+The delayed independent review also recommended a CLI-level regression for the
+controlled malformed-metadata failure. The first fixture run was intentionally
+red because it reached the earlier missing-native-library gate; after adding
+the matching fixture runtime, the exact CLI assertion passed:
+
+```text
+1 passed in 0.06s
+```
+
+The complete focused runner test file then passed `13 passed in 0.07s`, and the
+canonical runner passed `156 passed in 0.97s`. The CLI emitted exit code `2`, no
+stdout, and the expected `offline canonical preflight blocked: ...` stderr.
+
 No network, installation, download, model execution, training, adaptive tuning,
 assessment rerun, retuning, or restricted V19/V22–V25 material reuse occurred.
 
