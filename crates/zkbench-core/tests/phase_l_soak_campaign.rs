@@ -1009,6 +1009,55 @@ fn soak_report_bundle_write_rejects_symlinked_root() {
     assert!(!real_root.join("soak_report_bundle.json").exists());
 }
 
+#[cfg(unix)]
+#[test]
+fn soak_report_bundle_write_rejects_symlinked_parent() {
+    let bundle = campaign_bundle("campaign_symlinked_bundle_parent_write", 1);
+    let dir = tempdir().expect("tempdir should be available");
+    let real_parent = dir.path().join("real-parent");
+    fs::create_dir(&real_parent).expect("real parent should create");
+    let symlinked_parent = dir.path().join("symlinked-parent");
+    symlink(&real_parent, &symlinked_parent).expect("parent symlink should create");
+    let output_root = symlinked_parent.join("bundle-output");
+
+    let error = write_soak_report_bundle(&output_root, &bundle)
+        .expect_err("symlinked report bundle parent should reject before writing");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert!(!real_parent
+        .join("bundle-output/soak_report_bundle.json")
+        .exists());
+}
+
+#[cfg(unix)]
+#[test]
+fn soak_json_writer_rejects_symlinked_target() {
+    let dir = tempdir().expect("tempdir should be available");
+    let artifact_root = dir.path().join("artifact-root");
+    fs::create_dir(&artifact_root).expect("artifact root should create");
+    let campaign_root = artifact_root.join("campaign_symlinked_json_target");
+    fs::create_dir(&campaign_root).expect("campaign root should create");
+    let outside_target = dir.path().join("outside.json");
+    fs::write(&outside_target, b"protected").expect("outside target should write");
+    symlink(&outside_target, campaign_root.join("soak_run_config.json"))
+        .expect("JSON target symlink should create");
+
+    let soak_config = build_smoke_soak_config()
+        .with_families(vec![FamilyKind::BaselineFsm])
+        .with_mutation_passes(vec![MutationClass::MissingConstraints])
+        .with_seed_range(0..1)
+        .with_shard_count(1);
+    let plan = plan_soak_shards(soak_config).expect("plan should build");
+    let config = approved_config("campaign_symlinked_json_target", artifact_root);
+
+    let error = run_soak_campaign(&config, plan)
+        .expect_err("symlinked JSON target should reject before writing");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert_eq!(
+        fs::read(&outside_target).expect("outside target should read"),
+        b"protected"
+    );
+}
+
 #[test]
 fn campaign_refuses_to_run_without_approval() {
     let dir = tempdir().expect("tempdir should be available");

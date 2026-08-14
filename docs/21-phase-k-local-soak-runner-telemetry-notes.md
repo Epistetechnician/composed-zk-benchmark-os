@@ -157,8 +157,9 @@ materialized campaign directory.
 contract after JSON deserialization and rejects semantically invalid
 readback, undeclared output entries, symlinked roots/files, and malformed JSON.
 
-`write_soak_report_bundle` rejects an existing symlinked, non-directory, or
-non-empty output root before materializing the bundle.
+`write_soak_report_bundle` and the shared soak JSON writer reject existing
+symlinked path components, non-directory parents, symlinked roots, and
+non-empty bundle roots before materializing output.
 
 Bundle artifact manifests also require SHA-256, lowercase 64-character
 hexadecimal digests with the expected `Other`/`Manifest` metadata.
