@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::error::{Result, ZkBenchError};
 use crate::evidence::{
-    compute_artifact_digest, ArtifactDigest, ArtifactKind, ArtifactRole, ClaimBoundary,
+    compute_artifact_digest_bytes, ArtifactDigest, ArtifactKind, ArtifactRole, ClaimBoundary,
 };
 
 use super::config::{validate_soak_run_config, SoakRunConfig};
@@ -491,7 +491,7 @@ pub fn read_soak_report_bundle(root: impl AsRef<Path>) -> Result<SoakReportBundl
     })
 }
 
-/// Build an artifact manifest with a deterministic digest.
+/// Build an artifact manifest with a digest over the emitted pretty-JSON bytes.
 pub fn soak_artifact_manifest<T: Serialize>(
     artifact_id: impl Into<String>,
     role: SoakArtifactRole,
@@ -512,15 +512,18 @@ pub fn soak_artifact_manifest<T: Serialize>(
             "soak artifact paths must be portable and relative",
         ));
     }
+    let serialized = serde_json::to_vec_pretty(value).map_err(|error| {
+        ZkBenchError::serialization("soak.artifact_manifest", error.to_string())
+    })?;
     Ok(SoakArtifactManifest {
         artifact_id,
         role,
         relative_path,
-        digest: Some(compute_artifact_digest(
-            value,
+        digest: Some(compute_artifact_digest_bytes(
+            &serialized,
             Some(ArtifactKind::Other),
             Some(ArtifactRole::Manifest),
-        )?),
+        )),
         claim_boundary: ClaimBoundary::Level0DesignNote,
         notes: vec!["Soak artifact manifest is local-only.".to_string()],
     })

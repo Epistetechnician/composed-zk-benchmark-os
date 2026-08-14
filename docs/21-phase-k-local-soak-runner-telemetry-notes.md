@@ -13,6 +13,8 @@ Phase K adds local-only soak infrastructure for the benchmark OS:
 - Failure corpus indexes, reproduction manifests, and minimization metadata.
 - Local soak artifact layout and report bundle schemas.
 - Deterministic JSON serialization helpers.
+- Artifact manifests hash the exact pretty-JSON bytes emitted to the declared
+  artifact paths.
 
 ## Why Local Soak Is Valuable
 
@@ -145,6 +147,11 @@ The local layout is:
 ```
 
 Tests use tempdirs. Future long soak output should live outside the repository or under an ignored artifact directory unless explicitly requested.
+
+Every artifact digest in a soak report bundle is computed over the exact
+pretty-JSON bytes written to that artifact's declared relative path. This
+keeps the recorded SHA-256 and byte length directly verifiable from the
+materialized campaign directory.
 
 ## Validation Summary
 

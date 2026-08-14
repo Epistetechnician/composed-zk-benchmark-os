@@ -3,15 +3,17 @@ use std::fs;
 use tempfile::tempdir;
 use zkbench_core::{
     attach_reproduction_bundle_to_pack, build_failure_corpus_entry, build_smoke_soak_config,
-    generate_instance, plan_soak_shards, read_reproduction_bundle_from_pack,
-    read_soak_report_bundle, run_soak_campaign, run_soak_campaign_with_local_json_adapter,
-    soak_artifact_manifest, validate_reproduction_bundle, validate_soak_campaign_config,
-    validate_soak_report_bundle, write_soak_report_bundle, BenchmarkPackReader,
-    BenchmarkPackWriter, ClaimBoundary, FailureCorpusEntryInput, FailureCorpusKind, FamilyKind,
-    GeneratorConfig, GeneratorTunables, InstanceParams, LocalJsonAdapter, LocalJsonAdapterConfig,
-    LocalSoakRunnerConfig, MutationClass, ReproductionBundle, SoakArtifactLayout, SoakArtifactRole,
-    SoakCampaignApproval, SoakCampaignArtifactRootPolicy, SoakCampaignConfig, SoakCaseStatus,
-    SoakOutputPolicy, SoakReportBundle, SoakRunnerErrorPolicy, SoakShardId,
+    compute_artifact_digest_bytes, generate_instance, plan_soak_shards,
+    read_reproduction_bundle_from_pack, read_soak_report_bundle, run_soak_campaign,
+    run_soak_campaign_with_local_json_adapter, soak_artifact_manifest,
+    validate_reproduction_bundle, validate_soak_campaign_config, validate_soak_report_bundle,
+    write_soak_report_bundle, ArtifactKind, ArtifactRole as EvidenceArtifactRole,
+    BenchmarkPackReader, BenchmarkPackWriter, ClaimBoundary, FailureCorpusEntryInput,
+    FailureCorpusKind, FamilyKind, GeneratorConfig, GeneratorTunables, InstanceParams,
+    LocalJsonAdapter, LocalJsonAdapterConfig, LocalSoakRunnerConfig, MutationClass,
+    ReproductionBundle, SoakArtifactLayout, SoakArtifactRole, SoakCampaignApproval,
+    SoakCampaignArtifactRootPolicy, SoakCampaignConfig, SoakCaseStatus, SoakOutputPolicy,
+    SoakReportBundle, SoakRunnerErrorPolicy, SoakShardId,
 };
 
 fn sample_entry(case_id: &str) -> zkbench_core::FailureCorpusEntry {
@@ -332,6 +334,17 @@ fn small_campaign_runs_all_shards_and_aggregates_reports() {
     assert!(campaign_root
         .join("aggregate/report_bundle/soak_report_bundle.json")
         .exists());
+
+    for artifact in &result.report_bundle.artifact_digest_set.artifacts {
+        let bytes = fs::read(campaign_root.join(&artifact.relative_path))
+            .expect("declared campaign artifact should exist");
+        let actual_digest = compute_artifact_digest_bytes(
+            &bytes,
+            Some(ArtifactKind::Other),
+            Some(EvidenceArtifactRole::Manifest),
+        );
+        assert_eq!(artifact.digest.as_ref(), Some(&actual_digest));
+    }
 }
 
 #[test]
