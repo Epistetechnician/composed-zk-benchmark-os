@@ -505,18 +505,7 @@ fn push_missing_expected_report_artifact(
 /// Write a report bundle to a local directory.
 pub fn write_soak_report_bundle(root: impl AsRef<Path>, bundle: &SoakReportBundle) -> Result<()> {
     let root = root.as_ref();
-    if root.exists() && !root.is_dir() {
-        return Err(ZkBenchError::soak(
-            root.display().to_string(),
-            "report bundle root exists and is not a directory",
-        ));
-    }
-    if root.exists() && directory_has_entries(root)? {
-        return Err(ZkBenchError::soak(
-            root.display().to_string(),
-            "report bundle root is non-empty",
-        ));
-    }
+    validate_report_bundle_write_root(root)?;
     let validation = validate_soak_report_bundle(bundle);
     if !validation.valid {
         return Err(ZkBenchError::soak(
@@ -527,6 +516,39 @@ pub fn write_soak_report_bundle(root: impl AsRef<Path>, bundle: &SoakReportBundl
     fs::create_dir_all(root)
         .map_err(|error| ZkBenchError::soak(root.display().to_string(), error.to_string()))?;
     write_json(root.join(SOAK_REPORT_BUNDLE_FILENAME), bundle)
+}
+
+fn validate_report_bundle_write_root(root: &Path) -> Result<()> {
+    match fs::symlink_metadata(root) {
+        Ok(metadata) => {
+            if metadata.file_type().is_symlink() {
+                return Err(ZkBenchError::soak(
+                    root.display().to_string(),
+                    "report bundle root must not be a symlink",
+                ));
+            }
+            if !metadata.is_dir() {
+                return Err(ZkBenchError::soak(
+                    root.display().to_string(),
+                    "report bundle root exists and is not a directory",
+                ));
+            }
+            if directory_has_entries(root)? {
+                return Err(ZkBenchError::soak(
+                    root.display().to_string(),
+                    "report bundle root is non-empty",
+                ));
+            }
+        }
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+        Err(error) => {
+            return Err(ZkBenchError::soak(
+                root.display().to_string(),
+                error.to_string(),
+            ));
+        }
+    }
+    Ok(())
 }
 
 /// Read a report bundle from a local directory.

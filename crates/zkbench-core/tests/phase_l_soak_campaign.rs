@@ -993,6 +993,22 @@ fn soak_report_bundle_readback_rejects_symlinked_roots_and_files() {
     assert!(error.to_string().contains("must not contain symlinks"));
 }
 
+#[cfg(unix)]
+#[test]
+fn soak_report_bundle_write_rejects_symlinked_root() {
+    let bundle = campaign_bundle("campaign_symlinked_bundle_write", 1);
+    let dir = tempdir().expect("tempdir should be available");
+    let real_root = dir.path().join("real-root");
+    fs::create_dir(&real_root).expect("real root should create");
+    let symlinked_root = dir.path().join("symlinked-root");
+    symlink(&real_root, &symlinked_root).expect("root symlink should create");
+
+    let error = write_soak_report_bundle(&symlinked_root, &bundle)
+        .expect_err("symlinked report bundle root should reject before writing");
+    assert!(error.to_string().contains("root must not be a symlink"));
+    assert!(!real_root.join("soak_report_bundle.json").exists());
+}
+
 #[test]
 fn campaign_refuses_to_run_without_approval() {
     let dir = tempdir().expect("tempdir should be available");
