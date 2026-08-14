@@ -1,5 +1,8 @@
 use std::fs;
 
+#[cfg(unix)]
+use std::os::unix::fs::symlink;
+
 use tempfile::tempdir;
 use zkbench_core::{
     attach_reproduction_bundle_to_pack, build_failure_corpus_entry, build_smoke_soak_config,
@@ -572,6 +575,20 @@ fn report_bundle_validation_rejects_artifact_path_and_boundary_drift() {
 }
 
 #[test]
+fn report_bundle_validation_rejects_unexpected_artifact_roles() {
+    let mut bundle = campaign_bundle("campaign_unexpected_artifact_role", 1);
+    bundle.artifact_digest_set.artifacts[0].role = SoakArtifactRole::SampledPack;
+
+    let validation = validate_soak_report_bundle(&bundle);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("unexpected report bundle artifact role")));
+}
+
+#[test]
 fn report_bundle_validation_rejects_report_artifact_role_drift() {
     let dir = tempdir().expect("tempdir should be available");
     let soak_config = build_smoke_soak_config()
@@ -907,6 +924,39 @@ fn soak_report_bundle_io_round_trips_and_rejects_missing_or_malformed_json() {
     let read_back = read_soak_report_bundle(&output_root).expect("bundle should read");
     assert_eq!(read_back, bundle);
 
+    fs::write(output_root.join("undeclared.txt"), b"unexpected")
+        .expect("undeclared bundle entry should write");
+    let error = read_soak_report_bundle(&output_root)
+        .expect_err("undeclared bundle entry should reject on readback");
+    assert!(error
+        .to_string()
+        .contains("unexpected report bundle output entry"));
+    fs::remove_file(output_root.join("undeclared.txt")).expect("undeclared entry should remove");
+
+    let mut invalid_digest_bundle = bundle.clone();
+    invalid_digest_bundle.artifact_digest_set.artifacts[0]
+        .digest
+        .as_mut()
+        .expect("campaign artifact should have a digest")
+        .hex_digest = "not-a-sha256".to_string();
+    let validation = validate_soak_report_bundle(&invalid_digest_bundle);
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("lowercase 64-character hexadecimal")));
+
+    let mut tampered = serde_json::to_value(&bundle).expect("bundle should serialize");
+    tampered["bundle_id"] = serde_json::Value::String(String::new());
+    fs::write(
+        output_root.join("soak_report_bundle.json"),
+        serde_json::to_vec_pretty(&tampered).expect("tampered bundle should serialize"),
+    )
+    .expect("tampered bundle should write");
+    let error = read_soak_report_bundle(&output_root)
+        .expect_err("semantically invalid bundle should reject on readback");
+    assert!(error.to_string().contains("invalid bundle"));
+
     let missing_root = dir.path().join("missing-output");
     let error = read_soak_report_bundle(&missing_root).expect_err("missing bundle should reject");
     assert!(error.to_string().contains("soak_report_bundle.json"));
@@ -915,6 +965,32 @@ fn soak_report_bundle_io_round_trips_and_rejects_missing_or_malformed_json() {
         .expect("malformed bundle JSON should write");
     let error = read_soak_report_bundle(&output_root).expect_err("malformed JSON should reject");
     assert!(error.to_string().contains("read_soak_report_bundle"));
+}
+
+#[cfg(unix)]
+#[test]
+fn soak_report_bundle_readback_rejects_symlinked_roots_and_files() {
+    let bundle = campaign_bundle("campaign_symlinked_bundle_readback", 1);
+    let dir = tempdir().expect("tempdir should be available");
+    let output_root = dir.path().join("bundle-output");
+    write_soak_report_bundle(&output_root, &bundle).expect("bundle should write");
+
+    let symlinked_root = dir.path().join("symlinked-root");
+    symlink(&output_root, &symlinked_root).expect("root symlink should create");
+    let error = read_soak_report_bundle(&symlinked_root)
+        .expect_err("symlinked report bundle root should reject");
+    assert!(error.to_string().contains("root must not be a symlink"));
+
+    let symlinked_file_root = dir.path().join("symlinked-file-root");
+    fs::create_dir(&symlinked_file_root).expect("symlinked file root should create");
+    symlink(
+        output_root.join("soak_report_bundle.json"),
+        symlinked_file_root.join("soak_report_bundle.json"),
+    )
+    .expect("manifest symlink should create");
+    let error = read_soak_report_bundle(&symlinked_file_root)
+        .expect_err("symlinked report bundle manifest should reject");
+    assert!(error.to_string().contains("must not contain symlinks"));
 }
 
 #[test]

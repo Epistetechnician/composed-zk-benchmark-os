@@ -153,6 +153,13 @@ pretty-JSON bytes written to that artifact's declared relative path. This
 keeps the recorded SHA-256 and byte length directly verifiable from the
 materialized campaign directory.
 
+`read_soak_report_bundle` revalidates the complete `Level0DesignNote` bundle
+contract after JSON deserialization and rejects semantically invalid
+readback, undeclared output entries, symlinked roots/files, and malformed JSON.
+
+Bundle artifact manifests also require SHA-256, lowercase 64-character
+hexadecimal digests with the expected `Other`/`Manifest` metadata.
+
 ## Validation Summary
 
 Phase K tests cover config validation, deterministic shard planning, runner smoke execution, checkpoint resume, telemetry labels and JSON round-trips, health report validation, failure corpus extraction, and claim-boundary preservation.
