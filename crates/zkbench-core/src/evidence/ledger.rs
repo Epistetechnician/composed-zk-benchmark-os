@@ -124,6 +124,7 @@ impl EvidenceLedger {
 
     /// Save ledger as pretty JSON.
     pub fn save_json(&self, path: impl AsRef<Path>) -> Result<()> {
+        validate_ledger_path_components(path.as_ref())?;
         let json = serde_json::to_string_pretty(self).map_err(|error| {
             ZkBenchError::serialization("evidence_ledger.save_json", error.to_string())
         })?;
@@ -134,6 +135,7 @@ impl EvidenceLedger {
 
     /// Load ledger from JSON.
     pub fn load_json(path: impl AsRef<Path>) -> Result<Self> {
+        validate_ledger_path_components(path.as_ref())?;
         let json = fs::read_to_string(path.as_ref()).map_err(|error| {
             ZkBenchError::evidence_ledger(path.as_ref().display().to_string(), error.to_string())
         })?;
@@ -232,6 +234,51 @@ impl EvidenceLedger {
             summary,
         }
     }
+}
+
+fn validate_ledger_path_components(path: &Path) -> Result<()> {
+    let mut candidate = path;
+    let mut is_leaf = true;
+    loop {
+        let (candidate_exists, candidate_is_directory) = match fs::symlink_metadata(candidate) {
+            Ok(metadata) => {
+                if metadata.file_type().is_symlink() {
+                    return Err(ZkBenchError::evidence_ledger(
+                        candidate.display().to_string(),
+                        "evidence ledger path must not be a symlink",
+                    ));
+                }
+                if !is_leaf && !metadata.is_dir() {
+                    return Err(ZkBenchError::evidence_ledger(
+                        candidate.display().to_string(),
+                        "evidence ledger parent must be a directory",
+                    ));
+                }
+                (true, metadata.is_dir())
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => (false, false),
+            Err(error) => {
+                return Err(ZkBenchError::evidence_ledger(
+                    candidate.display().to_string(),
+                    error.to_string(),
+                ));
+            }
+        };
+
+        if candidate_is_directory || (candidate_exists && !is_leaf) {
+            break;
+        }
+
+        let Some(parent) = candidate.parent() else {
+            break;
+        };
+        if parent == candidate || parent.as_os_str().is_empty() {
+            break;
+        }
+        candidate = parent;
+        is_leaf = false;
+    }
+    Ok(())
 }
 
 /// Evidence ledger entry.

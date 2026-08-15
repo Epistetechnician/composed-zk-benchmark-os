@@ -17,6 +17,7 @@ The current Rust foundation must pass:
 - replay manifest JSON round-trips,
 - replay result JSON round-trips,
 - evidence ledger digest chains validate,
+- evidence ledger readers and writers reject symlinked paths,
 - benchmark pack file digests validate,
 - benchmark pack writer and readers reject symlinked roots, parents, declared files, reproduction sidecars, and readiness metadata,
 - zk-Harness manifest JSON round-trips,

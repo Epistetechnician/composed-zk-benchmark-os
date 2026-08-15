@@ -95,6 +95,10 @@ Each entry records:
 
 The digest chain is computed from sequence number, previous digest, and canonical evidence record JSON. Ledger validation recomputes the chain and verifies summary counts. This is a local integrity check only. It is not tamper-proof, not a Merkle proof, and not independent reproduction.
 
+Direct ledger persistence rejects symlinked path components before writing or
+reading the JSON file. This protects the caller-selected local ledger path but
+does not make the digest chain tamper-proof or race-free.
+
 Actual Phase F entries are rejected when their claim boundary exceeds `Level1LocalReplay`.
 
 ## Artifact Digest Behavior
