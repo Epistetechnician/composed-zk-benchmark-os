@@ -276,6 +276,29 @@ fn official_submission_output_rejects_output_root_shape_preconditions() {
     assert!(overwrite_error
         .to_string()
         .contains("explicit overwrite is required"));
+
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::symlink;
+
+        let dir = tempfile::tempdir().expect("tempdir should be available");
+        let ledger_path = dir.path().join("accepted-ledger.json");
+        let (_, package) = write_accepted_ledger(&ledger_path);
+        let real_parent = dir.path().join("real-output-parent");
+        fs::create_dir(&real_parent).expect("real output parent should create");
+        let symlinked_parent = dir.path().join("symlinked-output-parent");
+        symlink(&real_parent, &symlinked_parent).expect("symlinked output parent should create");
+
+        let error = write_official_submission_package_outputs(&request(
+            symlinked_parent.join("output"),
+            ledger_path,
+            package,
+            false,
+        ))
+        .expect_err("symlinked output parent should reject before writing");
+        assert!(error.to_string().contains("symlink"));
+        assert!(!real_parent.join("output").exists());
+    }
 }
 
 #[test]

@@ -395,6 +395,10 @@ fn validate_output_root(output_root: &Path, protected_paths: &[PathBuf]) -> Resu
         ));
     }
     validate_no_parent_components(output_root, "output root")?;
+    if let Some(parent) = output_root.parent() {
+        validate_output_root_path_components(parent)?;
+    }
+    validate_output_root_path_components(output_root)?;
     let normalized_output = normalize_path(output_root)?;
     let resolved_output = resolve_existing_prefix(output_root)?;
     for protected in protected_paths {
@@ -412,6 +416,51 @@ fn validate_output_root(output_root: &Path, protected_paths: &[PathBuf]) -> Resu
                 ),
             ));
         }
+    }
+    Ok(())
+}
+
+fn validate_output_root_path_components(path: &Path) -> Result<()> {
+    let mut candidate = path;
+    let mut is_leaf = true;
+    loop {
+        let (candidate_exists, candidate_is_directory) = match fs::symlink_metadata(candidate) {
+            Ok(metadata) => {
+                if metadata.file_type().is_symlink() {
+                    return Err(package_error(
+                        candidate.display().to_string(),
+                        "official-submission package output path must not be a symlink",
+                    ));
+                }
+                if !is_leaf && !metadata.is_dir() {
+                    return Err(package_error(
+                        candidate.display().to_string(),
+                        "official-submission package output parent must be a directory",
+                    ));
+                }
+                (true, metadata.is_dir())
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => (false, false),
+            Err(error) => {
+                return Err(package_error(
+                    candidate.display().to_string(),
+                    error.to_string(),
+                ));
+            }
+        };
+
+        if candidate_is_directory || (candidate_exists && !is_leaf) {
+            break;
+        }
+
+        let Some(parent) = candidate.parent() else {
+            break;
+        };
+        if parent == candidate || parent.as_os_str().is_empty() {
+            break;
+        }
+        candidate = parent;
+        is_leaf = false;
     }
     Ok(())
 }
