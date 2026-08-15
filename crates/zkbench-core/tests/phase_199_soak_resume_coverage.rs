@@ -251,6 +251,24 @@ fn write_checkpoint_rejects_symlinked_parent() {
 
 #[cfg(unix)]
 #[test]
+fn write_checkpoint_rejects_symlinked_ancestor() {
+    let dir = tempdir().expect("tempdir should be available");
+    let (checkpoint, _expected_digest, _expected_token) = baseline_triple();
+    let real_parent = dir.path().join("real-checkpoints");
+    let real_child = real_parent.join("child");
+    std::fs::create_dir_all(&real_child).expect("real checkpoint child should create");
+    let symlinked_parent = dir.path().join("linked-checkpoints");
+    symlink(&real_parent, &symlinked_parent).expect("checkpoint ancestor symlink should create");
+
+    let path = symlinked_parent.join("child/checkpoint.json");
+    let error = write_soak_shard_checkpoint(&path, &checkpoint)
+        .expect_err("symlinked checkpoint ancestor should reject before writing");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert!(!real_child.join("checkpoint.json").exists());
+}
+
+#[cfg(unix)]
+#[test]
 fn read_checkpoint_rejects_symlinked_target() {
     let dir = tempdir().expect("tempdir should be available");
     let (checkpoint, _expected_digest, _expected_token) = baseline_triple();

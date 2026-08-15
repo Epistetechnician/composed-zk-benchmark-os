@@ -704,38 +704,30 @@ pub(crate) fn validate_soak_path_components(path: &Path) -> Result<()> {
     let mut candidate = path;
     let mut is_leaf = true;
     loop {
-        let (candidate_exists, candidate_is_directory) = match fs::symlink_metadata(candidate) {
+        match fs::symlink_metadata(candidate) {
             Ok(metadata) => {
-                if metadata.file_type().is_symlink() {
+                let platform_symlink =
+                    metadata.file_type().is_symlink() && is_platform_provided_symlink(candidate);
+                if metadata.file_type().is_symlink() && !platform_symlink {
                     return Err(ZkBenchError::soak(
                         candidate.display().to_string(),
                         "soak output path must not be a symlink",
                     ));
                 }
-                if !is_leaf && !metadata.is_dir() {
+                if !is_leaf && !metadata.is_dir() && !platform_symlink {
                     return Err(ZkBenchError::soak(
                         candidate.display().to_string(),
                         "soak output parent must be a directory",
                     ));
                 }
-                (true, metadata.is_dir())
             }
-            Err(error) if error.kind() == std::io::ErrorKind::NotFound => (false, false),
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
             Err(error) => {
                 return Err(ZkBenchError::soak(
                     candidate.display().to_string(),
                     error.to_string(),
                 ));
             }
-        };
-
-        // Once a missing path reaches its first existing directory, or an
-        // existing path reaches an existing directory, higher ancestors are
-        // the caller's established base path. This avoids rejecting
-        // platform-provided symlinks such as macOS /var while still checking
-        // every output-path component we may create or write through.
-        if candidate_is_directory || (candidate_exists && !is_leaf) {
-            break;
         }
 
         let Some(parent) = candidate.parent() else {
@@ -748,6 +740,20 @@ pub(crate) fn validate_soak_path_components(path: &Path) -> Result<()> {
         is_leaf = false;
     }
     Ok(())
+}
+
+#[cfg(target_os = "macos")]
+fn is_platform_provided_symlink(path: &Path) -> bool {
+    matches!(path.parent(), Some(parent) if parent == Path::new("/"))
+        && matches!(
+            path.file_name().and_then(|name| name.to_str()),
+            Some("etc" | "home" | "tmp" | "var")
+        )
+}
+
+#[cfg(not(target_os = "macos"))]
+fn is_platform_provided_symlink(_path: &Path) -> bool {
+    false
 }
 
 fn directory_has_entries(path: &Path) -> Result<bool> {

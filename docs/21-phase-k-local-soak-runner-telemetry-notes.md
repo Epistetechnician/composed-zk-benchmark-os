@@ -159,7 +159,8 @@ readback, undeclared output entries, symlinked roots/files, and malformed JSON.
 
 `write_soak_report_bundle` and the shared soak JSON writer reject existing
 symlinked path components, non-directory parents, symlinked roots, and
-non-empty bundle roots before materializing output.
+non-empty bundle roots before materializing output. Standard macOS root aliases
+are treated as platform paths.
 
 `read_soak_report_bundle` also rejects symlinked parent components before
 opening the declared bundle file, so readback cannot be redirected through a
