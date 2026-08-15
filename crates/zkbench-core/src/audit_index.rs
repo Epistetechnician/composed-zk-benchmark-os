@@ -865,6 +865,7 @@ pub fn write_local_audit_index_outputs(
 ) -> Result<LocalAuditIndexOutput> {
     let output_root = output_root.as_ref();
     validate_output_root(output_root)?;
+    validate_output_root_path_components(output_root)?;
     if output_root.exists() && !output_root.is_dir() {
         return Err(audit_index_io_error(
             output_root.display().to_string(),
@@ -932,6 +933,7 @@ pub fn read_local_audit_index_outputs(
 ) -> Result<LocalAuditIndexOutput> {
     let output_root = output_root.as_ref();
     validate_output_root(output_root)?;
+    validate_output_root_path_components(output_root)?;
     reject_unexpected_existing_files(output_root, &audit_index_target_paths())?;
 
     let manifest_bytes = read_relative_bytes(output_root, AUDIT_INDEX_MANIFEST_PATH)?;
@@ -1139,6 +1141,7 @@ pub fn write_local_audit_index_ergonomics_outputs(
     let output_root = output_root.as_ref();
     validate_output_root(output_root)?;
     reject_protected_path_overlap(output_root, protected_paths)?;
+    validate_output_root_path_components(output_root)?;
     if output_root.exists() && !output_root.is_dir() {
         return Err(audit_index_io_error(
             output_root.display().to_string(),
@@ -1235,6 +1238,7 @@ pub fn read_local_audit_index_ergonomics_outputs(
     let output_root = output_root.as_ref();
     validate_output_root(output_root)?;
     reject_protected_path_overlap(output_root, protected_paths)?;
+    validate_output_root_path_components(output_root)?;
     reject_unexpected_existing_files(output_root, &audit_index_ergonomics_target_paths())?;
 
     let view_bytes = read_relative_bytes(output_root, AUDIT_INDEX_ERGONOMICS_VIEW_PATH)?;
@@ -1538,6 +1542,7 @@ pub fn write_local_audit_index_cross_bundle_outputs(
     let output_root = output_root.as_ref();
     validate_output_root(output_root)?;
     reject_protected_path_overlap(output_root, protected_paths)?;
+    validate_output_root_path_components(output_root)?;
     if output_root.exists() && !output_root.is_dir() {
         return Err(audit_index_io_error(
             output_root.display().to_string(),
@@ -1628,6 +1633,7 @@ pub fn read_local_audit_index_cross_bundle_outputs(
     let output_root = output_root.as_ref();
     validate_output_root(output_root)?;
     reject_protected_path_overlap(output_root, protected_paths)?;
+    validate_output_root_path_components(output_root)?;
     reject_unexpected_existing_files(output_root, &audit_index_cross_bundle_target_paths())?;
 
     let view_bytes = read_relative_bytes(output_root, AUDIT_INDEX_CROSS_BUNDLE_VIEW_PATH)?;
@@ -2730,6 +2736,60 @@ fn validate_output_root(root: &Path) -> Result<()> {
         ));
     }
     Ok(())
+}
+
+fn validate_output_root_path_components(path: &Path) -> Result<()> {
+    let normalized = comparable_output_path(path)?;
+    let mut candidate = normalized.as_path();
+    let mut is_leaf = true;
+    loop {
+        match fs::symlink_metadata(candidate) {
+            Ok(metadata) => {
+                let platform_symlink =
+                    metadata.file_type().is_symlink() && is_platform_provided_symlink(candidate);
+                if metadata.file_type().is_symlink() && !platform_symlink {
+                    return Err(audit_index_io_error(
+                        candidate.display().to_string(),
+                        "audit-index output path must not be a symlink",
+                    ));
+                }
+                if !is_leaf && !metadata.is_dir() && !platform_symlink {
+                    return Err(audit_index_io_error(
+                        candidate.display().to_string(),
+                        "audit-index output parent must be a directory",
+                    ));
+                }
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+            Err(error) => {
+                return Err(audit_index_io_error(candidate.display().to_string(), error));
+            }
+        }
+
+        let Some(parent) = candidate.parent() else {
+            break;
+        };
+        if parent == candidate || parent.as_os_str().is_empty() {
+            break;
+        }
+        candidate = parent;
+        is_leaf = false;
+    }
+    Ok(())
+}
+
+#[cfg(target_os = "macos")]
+fn is_platform_provided_symlink(path: &Path) -> bool {
+    matches!(path.parent(), Some(parent) if parent == Path::new("/"))
+        && matches!(
+            path.file_name().and_then(|name| name.to_str()),
+            Some("etc" | "home" | "tmp" | "var")
+        )
+}
+
+#[cfg(not(target_os = "macos"))]
+fn is_platform_provided_symlink(_path: &Path) -> bool {
+    false
 }
 
 fn reject_protected_path_overlap(root: &Path, protected_paths: &[impl AsRef<Path>]) -> Result<()> {

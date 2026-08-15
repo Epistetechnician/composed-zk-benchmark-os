@@ -321,6 +321,37 @@ fn audit_index_ergonomics_outputs_write_and_read_declared_files_only() {
     assert_eq!(fs::read(source_file).expect("source after"), source_before);
 }
 
+#[cfg(unix)]
+#[test]
+fn audit_index_ergonomics_outputs_reject_nested_symlinked_output_root_ancestor() {
+    use std::os::unix::fs::symlink;
+
+    let manifest = valid_manifest();
+    let request = LocalAuditIndexErgonomicsRequest::default();
+    let view = build_local_audit_index_ergonomics_view(&manifest, &request)
+        .expect("valid ergonomics view");
+    let dir = tempfile::tempdir().expect("tempdir");
+    let real_parent = dir.path().join("real-output-parent");
+    let real_nested_parent = real_parent.join("existing-child");
+    fs::create_dir_all(&real_nested_parent).expect("real nested output parent");
+    let symlinked_parent = dir.path().join("symlinked-output-parent");
+    symlink(&real_parent, &symlinked_parent).expect("symlinked output parent");
+    let output_root = symlinked_parent.join("existing-child").join("output");
+    let protected_paths: &[&std::path::Path] = &[];
+
+    let error = write_local_audit_index_ergonomics_outputs(
+        &output_root,
+        &manifest,
+        &request,
+        &view,
+        false,
+        protected_paths,
+    )
+    .expect_err("nested symlinked output ancestor should fail before writing");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert!(!real_nested_parent.join("output").exists());
+}
+
 #[test]
 fn audit_index_ergonomics_outputs_reject_invalid_and_drifted_views() {
     let manifest = valid_manifest();

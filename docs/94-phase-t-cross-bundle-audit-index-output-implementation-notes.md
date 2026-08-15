@@ -59,6 +59,7 @@ claim boundary.
 The implementation fails closed for:
 
 - invalid output roots;
+- caller-controlled symlinked output-root ancestor components;
 - protected-path overlap before writes;
 - symlink-resolved protected-path overlap before writes;
 - output roots that are existing files;
@@ -98,6 +99,7 @@ It verifies:
 - relative/absolute protected-path overlap equivalence;
 - symlink-resolved protected-path overlap rejection;
 - symlink rejection;
+- nested caller-controlled symlinked output-root ancestor rejection;
 - source immutability;
 - duplicate/conflict signal preservation through the existing Phase T view
   tests;
