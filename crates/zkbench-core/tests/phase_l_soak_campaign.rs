@@ -114,6 +114,28 @@ fn attach_reproduction_bundle_round_trips_and_keeps_pack_valid() {
     assert!(validation.valid, "pack invalid: {:?}", validation.errors);
 }
 
+#[cfg(unix)]
+#[test]
+fn reproduction_bundle_read_rejects_symlinked_sidecar() {
+    let dir = tempdir().expect("tempdir should be available");
+    let pack_root = dir.path().join("pack");
+    write_sample_pack(&pack_root);
+    let entries = vec![sample_entry("case_symlinked_reproduction")];
+    attach_reproduction_bundle_to_pack(&pack_root, &entries)
+        .expect("bundle should attach before symlink replacement");
+
+    let sidecar_path = pack_root.join("reproduction/reproduction_bundle.json");
+    let outside_path = dir.path().join("outside-reproduction.json");
+    let sidecar_bytes = fs::read(&sidecar_path).expect("sidecar should read");
+    fs::write(&outside_path, sidecar_bytes).expect("outside sidecar should write");
+    fs::remove_file(&sidecar_path).expect("real sidecar should remove");
+    symlink(&outside_path, &sidecar_path).expect("sidecar symlink should create");
+
+    let error = read_reproduction_bundle_from_pack(&pack_root)
+        .expect_err("symlinked reproduction sidecar should reject before reading");
+    assert!(error.to_string().contains("must not be a symlink"));
+}
+
 #[test]
 fn attach_rejects_empty_entries() {
     let dir = tempdir().expect("tempdir should be available");
