@@ -62,7 +62,7 @@ The implementation rejects:
 - incomplete redaction policies;
 - repository-root and protected-path overlap;
 - parent-directory path components;
-- symlink roots and bundle files;
+- symlink roots, parent path components, and bundle files;
 - non-empty output roots without explicit overwrite;
 - repair overwrite when the existing bundle does not match supplied inputs;
 - partial, unexpected, stale-digest, or tampered outputs;

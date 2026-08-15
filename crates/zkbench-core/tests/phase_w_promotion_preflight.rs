@@ -1050,6 +1050,20 @@ fn external_replay_preflight_outputs_reject_file_repo_parent_and_symlink_roots()
         let symlink = write_external_replay_submission_preflight_outputs(&request)
             .expect_err("symlink output root should reject");
         assert!(symlink.to_string().contains("symlink"));
+
+        let real_parent = dir.path().join("real-output-parent");
+        fs::create_dir(&real_parent).expect("real output parent should create");
+        let symlinked_parent = dir.path().join("symlinked-output-parent");
+        std::os::unix::fs::symlink(&real_parent, &symlinked_parent)
+            .expect("symlinked output parent should create");
+        request.output_root = symlinked_parent.join("output");
+        request.preflight_request.future_output_root = request.output_root.clone();
+        request.preflight_report =
+            build_external_replay_submission_preflight_report(&request.preflight_request);
+        let symlinked_parent_error = write_external_replay_submission_preflight_outputs(&request)
+            .expect_err("symlinked output parent should reject before writing");
+        assert!(symlinked_parent_error.to_string().contains("symlink"));
+        assert!(!real_parent.join("output").exists());
     }
 }
 
