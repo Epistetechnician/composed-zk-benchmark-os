@@ -2,6 +2,12 @@
 
 Status: local validation report only.
 
+The current local hardening pass also verifies that shared
+`hsai-agent-admission` materializers reject caller-controlled symlinked and
+non-directory output-root ancestors before staged filesystem writes. This is
+local filesystem-safety evidence only; it does not elevate benchmark,
+attestation, production, or external-evidence claims.
+
 This report records the end-to-end local validation run after Phase S
 audit-index ergonomics output plumbing, protected-path overlap hardening, the
 Phase 102 opt-in Phala provider-client implementation, the Phase 105

@@ -38477,6 +38477,7 @@ fn validate_output_root(
     if output_root.as_os_str().is_empty() {
         return Err(AdmissionJournalMaterializationError::EmptyOutputRoot);
     }
+    validate_output_root_path_components(output_root)?;
     if output_root.exists() {
         let metadata = fs::symlink_metadata(output_root).map_err(materialization_io_error)?;
         if metadata.file_type().is_symlink() {
@@ -38500,6 +38501,65 @@ fn validate_output_root(
         }
     }
     Ok(())
+}
+
+fn validate_output_root_path_components(
+    path: &Path,
+) -> Result<(), AdmissionJournalMaterializationError> {
+    let mut candidate = path;
+    let mut is_leaf = true;
+    loop {
+        match fs::symlink_metadata(candidate) {
+            Ok(metadata) => {
+                let platform_symlink =
+                    metadata.file_type().is_symlink() && is_platform_provided_symlink(candidate);
+                if !is_leaf && metadata.file_type().is_symlink() && !platform_symlink {
+                    return Err(AdmissionJournalMaterializationError::Io(format!(
+                        "output root path must not be a symlink: {}",
+                        candidate.display()
+                    )));
+                }
+                if !is_leaf && !metadata.is_dir() && !platform_symlink {
+                    return Err(AdmissionJournalMaterializationError::Io(format!(
+                        "output root parent must be a directory: {}",
+                        candidate.display()
+                    )));
+                }
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+            Err(error) if error.kind() == std::io::ErrorKind::NotADirectory => {
+                return Err(AdmissionJournalMaterializationError::Io(format!(
+                    "output root parent must be a directory: {}",
+                    candidate.display()
+                )));
+            }
+            Err(error) => return Err(materialization_io_error(error)),
+        }
+
+        let Some(parent) = candidate.parent() else {
+            break;
+        };
+        if parent == candidate || parent.as_os_str().is_empty() {
+            break;
+        }
+        candidate = parent;
+        is_leaf = false;
+    }
+    Ok(())
+}
+
+#[cfg(target_os = "macos")]
+fn is_platform_provided_symlink(path: &Path) -> bool {
+    path.parent() == Some(Path::new("/"))
+        && matches!(
+            path.file_name().and_then(|name| name.to_str()),
+            Some("etc" | "home" | "tmp" | "var")
+        )
+}
+
+#[cfg(not(target_os = "macos"))]
+fn is_platform_provided_symlink(_path: &Path) -> bool {
+    false
 }
 
 fn validate_pcsm_clean_source_reconciliation_materialization_request(
@@ -216306,6 +216366,51 @@ mod tests {
         );
         fs::remove_file(&symlink_output).expect("output symlink cleanup succeeds");
         fs::remove_dir_all(&target).expect("output symlink target cleanup succeeds");
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn admission_journal_materialization_rejects_output_root_ancestor_edges() {
+        use std::os::unix::fs::symlink;
+
+        let journal = two_entry_journal();
+
+        let file_parent = temp_output_root("output-file-parent");
+        fs::write(&file_parent, b"not a directory").expect("file parent writes");
+        let file_child = file_parent.join("child-output");
+        let file_error = materialize_admission_journal_bundle(
+            &file_child,
+            &journal,
+            &materialization_request("output-file-parent", &file_child),
+        )
+        .expect_err("file ancestor must reject before materialization");
+        assert!(matches!(
+            file_error,
+            AdmissionJournalMaterializationError::Io(message)
+                if message.contains("output root parent must be a directory")
+        ));
+        assert!(!file_child.exists());
+        fs::remove_file(&file_parent).expect("file parent cleanup succeeds");
+
+        let symlink_target = temp_output_root("output-symlink-parent-target");
+        let symlink_parent = temp_output_root("output-symlink-parent");
+        fs::create_dir_all(&symlink_target).expect("symlink target creates");
+        symlink(&symlink_target, &symlink_parent).expect("symlink parent creates");
+        let symlink_child = symlink_parent.join("child-output");
+        let symlink_error = materialize_admission_journal_bundle(
+            &symlink_child,
+            &journal,
+            &materialization_request("output-symlink-parent", &symlink_child),
+        )
+        .expect_err("symlink ancestor must reject before materialization");
+        assert!(matches!(
+            symlink_error,
+            AdmissionJournalMaterializationError::Io(message)
+                if message.contains("output root path must not be a symlink")
+        ));
+        assert!(!symlink_target.join("child-output").exists());
+        fs::remove_file(&symlink_parent).expect("symlink parent cleanup succeeds");
+        fs::remove_dir_all(&symlink_target).expect("symlink target cleanup succeeds");
     }
 
     #[test]
