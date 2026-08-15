@@ -722,6 +722,15 @@ fn validate_future_output_root(
             return;
         }
     };
+    if let Err(message) = validate_future_output_root_non_directory_ancestors(&normalized_output) {
+        push_issue(
+            issues,
+            ExternalReplaySubmissionPreflightIssueKind::UnsafeOutputRoot,
+            "request.future_output_root",
+            message,
+        );
+        return;
+    }
     let resolved_output = match resolve_existing_prefix(&request.future_output_root) {
         Ok(path) => path,
         Err(message) => {
@@ -821,17 +830,34 @@ fn validate_future_output_root(
 
 fn validate_future_output_root_path_components(path: &Path) -> std::result::Result<(), String> {
     let normalized = normalize_path(path)?;
-    let mut candidate = normalized.as_path();
+    validate_future_output_root_ancestors(&normalized, true)
+}
+
+fn validate_future_output_root_non_directory_ancestors(
+    path: &Path,
+) -> std::result::Result<(), String> {
+    validate_future_output_root_ancestors(path, false)
+}
+
+fn validate_future_output_root_ancestors(
+    path: &Path,
+    reject_symlinks: bool,
+) -> std::result::Result<(), String> {
+    let mut candidate = path;
     let mut is_leaf = true;
     loop {
         match fs::symlink_metadata(candidate) {
             Ok(metadata) => {
                 let platform_symlink =
                     metadata.file_type().is_symlink() && is_platform_provided_symlink(candidate);
-                if metadata.file_type().is_symlink() && !platform_symlink {
+                if reject_symlinks && metadata.file_type().is_symlink() && !platform_symlink {
                     return Err(format!("{} must not be a symlink", candidate.display()));
                 }
-                if !is_leaf && !metadata.is_dir() && !platform_symlink {
+                if !is_leaf
+                    && !metadata.is_dir()
+                    && !metadata.file_type().is_symlink()
+                    && !platform_symlink
+                {
                     return Err(format!(
                         "{} must be a directory parent",
                         candidate.display()
@@ -839,6 +865,12 @@ fn validate_future_output_root_path_components(path: &Path) -> std::result::Resu
                 }
             }
             Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+            Err(error) if error.kind() == std::io::ErrorKind::NotADirectory => {
+                return Err(format!(
+                    "{} must be a directory parent",
+                    candidate.display()
+                ));
+            }
             Err(error) => return Err(error.to_string()),
         }
 

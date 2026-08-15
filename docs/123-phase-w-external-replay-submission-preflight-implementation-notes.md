@@ -61,6 +61,7 @@ Focused tests cover:
 - Local-only promotion and score-axis rejection.
 - Endpoint-attempt and protected-root rejection.
 - Nested caller-controlled symlinked future-output-root ancestor rejection.
+- Non-directory future-output-root ancestor rejection.
 - Source scans proving no process, network, credential, endpoint submission, or
   score-axis population runtime surface exists.
 

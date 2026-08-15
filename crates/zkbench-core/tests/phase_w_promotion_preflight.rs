@@ -909,6 +909,25 @@ fn external_replay_submission_preflight_rejects_nested_symlinked_future_output_r
 }
 
 #[test]
+fn external_replay_submission_preflight_rejects_non_directory_future_output_root_ancestor() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let mut request = valid_external_replay_submission_preflight_request(&dir);
+    let file_parent = dir.path().join("future-output-file");
+    std::fs::write(&file_parent, b"not a directory").expect("future output file should write");
+    request.future_output_root = file_parent.join("child-output");
+
+    let validation = validate_external_replay_submission_preflight_request(&request);
+
+    assert!(!validation.valid);
+    assert!(validation.issues.iter().any(|issue| {
+        issue.kind == ExternalReplaySubmissionPreflightIssueKind::UnsafeOutputRoot
+            && issue.path == "request.future_output_root"
+            && issue.message.contains("must be a directory parent")
+    }));
+    assert!(!request.future_output_root.exists());
+}
+
+#[test]
 fn external_replay_submission_preflight_source_scan_exposes_no_live_runtime_surface() {
     let source_path = Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("src")
