@@ -1053,17 +1053,19 @@ fn external_replay_preflight_outputs_reject_file_repo_parent_and_symlink_roots()
 
         let real_parent = dir.path().join("real-output-parent");
         fs::create_dir(&real_parent).expect("real output parent should create");
+        let real_nested_parent = real_parent.join("existing-child");
+        fs::create_dir(&real_nested_parent).expect("real nested output parent should create");
         let symlinked_parent = dir.path().join("symlinked-output-parent");
         std::os::unix::fs::symlink(&real_parent, &symlinked_parent)
             .expect("symlinked output parent should create");
-        request.output_root = symlinked_parent.join("output");
+        request.output_root = symlinked_parent.join("existing-child").join("output");
         request.preflight_request.future_output_root = request.output_root.clone();
         request.preflight_report =
             build_external_replay_submission_preflight_report(&request.preflight_request);
         let symlinked_parent_error = write_external_replay_submission_preflight_outputs(&request)
             .expect_err("symlinked output parent should reject before writing");
         assert!(symlinked_parent_error.to_string().contains("symlink"));
-        assert!(!real_parent.join("output").exists());
+        assert!(!real_nested_parent.join("output").exists());
     }
 }
 
