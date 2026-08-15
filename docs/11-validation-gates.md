@@ -47,7 +47,7 @@ The current Rust foundation must pass:
 - review ledgers persist separately from `EvidenceLedger`,
 - review ledgers reject forbidden official/formal/performance claim text in top-level and entry notes,
 - proposal ledgers persist separately from `EvidenceLedger`,
-- proposal ledger readers and writers reject symlinked paths,
+- proposal ledger readers and writers reject caller-controlled symlinked path components,
 - proposal ledgers reject forbidden official/formal/performance claim text in top-level and entry notes,
 - relative-file artifact resolvers reject symlinked path components before reading declared bytes,
 - external replay preflight output roots reject symlinked path components before writing,

@@ -50,7 +50,7 @@ Referenced existing local replay artifacts remain `Level1LocalReplay` at most. P
 ## Known Limitations
 
 - Digest validation is local integrity validation over supplied bytes, not independent reproduction.
-- Direct proposal-ledger persistence rejects symlinked path components before reading or writing JSON, but this remains local path validation rather than race-free storage.
+- Direct proposal-ledger persistence rejects caller-controlled symlinked path components before reading or writing JSON; standard macOS root aliases are treated as platform paths. This remains local path validation rather than race-free storage.
 - Metric candidates are metadata only and do not become score inputs.
 - Proposal ledgers are review ledgers and do not mutate the accepted Evidence Ledger.
 - Proposal review policy is intentionally minimal; reviewed acceptance, supersession, and future append eligibility are deferred to Phase J.

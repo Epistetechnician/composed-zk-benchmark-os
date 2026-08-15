@@ -104,6 +104,25 @@ fn proposal_ledger_save_rejects_symlinked_parent() {
 
 #[cfg(unix)]
 #[test]
+fn proposal_ledger_save_rejects_symlinked_ancestor() {
+    let dir = tempdir().expect("tempdir should be available for proposal persistence");
+    let ledger = EvidenceAppendProposalLedger::new();
+    let real_parent = dir.path().join("real-proposals");
+    let real_child = real_parent.join("child");
+    std::fs::create_dir_all(&real_child).expect("real proposal child should create");
+    let symlinked_parent = dir.path().join("linked-proposals");
+    symlink(&real_parent, &symlinked_parent).expect("proposal ancestor symlink should create");
+
+    let path = symlinked_parent.join("child/proposal-ledger.json");
+    let error = ledger
+        .save_json(&path)
+        .expect_err("symlinked proposal ancestor should reject before writing");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert!(!real_child.join("proposal-ledger.json").exists());
+}
+
+#[cfg(unix)]
+#[test]
 fn proposal_ledger_load_rejects_symlinked_target() {
     let dir = tempdir().expect("tempdir should be available for proposal persistence");
     let ledger = EvidenceAppendProposalLedger::new();
