@@ -995,6 +995,25 @@ fn soak_report_bundle_readback_rejects_symlinked_roots_and_files() {
 
 #[cfg(unix)]
 #[test]
+fn soak_report_bundle_readback_rejects_symlinked_parent() {
+    let bundle = campaign_bundle("campaign_symlinked_bundle_parent_readback", 1);
+    let dir = tempdir().expect("tempdir should be available");
+    let real_parent = dir.path().join("real-parent");
+    fs::create_dir(&real_parent).expect("real parent should create");
+    let real_root = real_parent.join("bundle-output");
+    write_soak_report_bundle(&real_root, &bundle).expect("bundle should write");
+
+    let symlinked_parent = dir.path().join("symlinked-parent");
+    symlink(&real_parent, &symlinked_parent).expect("parent symlink should create");
+    let redirected_root = symlinked_parent.join("bundle-output");
+
+    let error = read_soak_report_bundle(&redirected_root)
+        .expect_err("symlinked report bundle parent should reject before reading");
+    assert!(error.to_string().contains("must not be a symlink"));
+}
+
+#[cfg(unix)]
+#[test]
 fn soak_report_bundle_write_rejects_symlinked_root() {
     let bundle = campaign_bundle("campaign_symlinked_bundle_write", 1);
     let dir = tempdir().expect("tempdir should be available");

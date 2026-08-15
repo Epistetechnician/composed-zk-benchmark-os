@@ -231,6 +231,7 @@ The Rust tests currently cover:
 - report bundle unexpected artifact-role rejection,
 - report bundle writer symlink-root rejection,
 - shared soak JSON writer symlink-path rejection,
+- report bundle reader symlink-parent rejection,
 - report bundle aggregate-report artifact identity and path consistency,
 - report bundle identity and config consistency validation,
 - report bundle report-artifact identity and path consistency validation,

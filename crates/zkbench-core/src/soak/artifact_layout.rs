@@ -520,7 +520,7 @@ pub fn write_soak_report_bundle(root: impl AsRef<Path>, bundle: &SoakReportBundl
 
 fn validate_report_bundle_write_root(root: &Path) -> Result<()> {
     if let Some(parent) = root.parent() {
-        validate_soak_write_path(parent)?;
+        validate_soak_path_components(parent)?;
     }
     match fs::symlink_metadata(root) {
         Ok(metadata) => {
@@ -575,6 +575,9 @@ pub fn read_soak_report_bundle(root: impl AsRef<Path>) -> Result<SoakReportBundl
 }
 
 fn validate_report_bundle_read_root(root: &Path) -> Result<()> {
+    if let Some(parent) = root.parent() {
+        validate_soak_path_components(parent)?;
+    }
     let metadata = fs::symlink_metadata(root).map_err(|error| {
         ZkBenchError::soak(
             root.join(SOAK_REPORT_BUNDLE_FILENAME).display().to_string(),
@@ -686,7 +689,7 @@ pub(crate) fn relative_path_is_portable(path: &str) -> bool {
 
 pub(crate) fn write_json<T: Serialize>(path: impl AsRef<Path>, value: &T) -> Result<()> {
     let path = path.as_ref();
-    validate_soak_write_path(path)?;
+    validate_soak_path_components(path)?;
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent)
             .map_err(|error| ZkBenchError::soak(parent.display().to_string(), error.to_string()))?;
@@ -697,11 +700,11 @@ pub(crate) fn write_json<T: Serialize>(path: impl AsRef<Path>, value: &T) -> Res
         .map_err(|error| ZkBenchError::soak(path.display().to_string(), error.to_string()))
 }
 
-fn validate_soak_write_path(path: &Path) -> Result<()> {
+fn validate_soak_path_components(path: &Path) -> Result<()> {
     let mut candidate = path;
     let mut is_leaf = true;
     loop {
-        let candidate_exists = match fs::symlink_metadata(candidate) {
+        let (candidate_exists, candidate_is_directory) = match fs::symlink_metadata(candidate) {
             Ok(metadata) => {
                 if metadata.file_type().is_symlink() {
                     return Err(ZkBenchError::soak(
@@ -715,9 +718,9 @@ fn validate_soak_write_path(path: &Path) -> Result<()> {
                         "soak output parent must be a directory",
                     ));
                 }
-                true
+                (true, metadata.is_dir())
             }
-            Err(error) if error.kind() == std::io::ErrorKind::NotFound => false,
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => (false, false),
             Err(error) => {
                 return Err(ZkBenchError::soak(
                     candidate.display().to_string(),
@@ -727,11 +730,11 @@ fn validate_soak_write_path(path: &Path) -> Result<()> {
         };
 
         // Once a missing path reaches its first existing directory, or an
-        // existing leaf reaches its first existing parent, higher ancestors
-        // are the caller's established base path. This avoids rejecting
+        // existing path reaches an existing directory, higher ancestors are
+        // the caller's established base path. This avoids rejecting
         // platform-provided symlinks such as macOS /var while still checking
         // every output-path component we may create or write through.
-        if candidate_exists && !is_leaf {
+        if candidate_is_directory || (candidate_exists && !is_leaf) {
             break;
         }
 

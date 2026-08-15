@@ -161,6 +161,10 @@ readback, undeclared output entries, symlinked roots/files, and malformed JSON.
 symlinked path components, non-directory parents, symlinked roots, and
 non-empty bundle roots before materializing output.
 
+`read_soak_report_bundle` also rejects symlinked parent components before
+opening the declared bundle file, so readback cannot be redirected through a
+symlinked directory ancestor.
+
 Bundle artifact manifests also require SHA-256, lowercase 64-character
 hexadecimal digests with the expected `Other`/`Manifest` metadata.
 
