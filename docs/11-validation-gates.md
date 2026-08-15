@@ -51,6 +51,7 @@ The current Rust foundation must pass:
 - relative-file artifact resolvers reject symlinked path components before reading declared bytes,
 - external replay preflight output roots reject symlinked path components before writing,
 - official-submission package output roots reject symlinked path components before writing,
+- accepted-ledger materialization rejects symlinked path components before atomic writing,
 - soak config JSON round-trips,
 - deterministic shard planning,
 - smoke runner tests,

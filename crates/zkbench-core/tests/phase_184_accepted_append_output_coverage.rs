@@ -197,6 +197,24 @@ fn materialized_append_rejects_symlink_parent_directory() {
 
 #[cfg(unix)]
 #[test]
+fn materialized_append_rejects_symlinked_ancestor_directory() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let real_parent = dir.path().join("real-parent");
+    let real_child = real_parent.join("child");
+    let symlink_parent = dir.path().join("symlink-parent");
+    std::fs::create_dir_all(&real_child).expect("real child should create");
+    std::os::unix::fs::symlink(&real_parent, &symlink_parent)
+        .expect("ancestor symlink should create");
+
+    let request = request_for_path(symlink_parent.join("child/accepted-ledger.json"), true);
+    let error = apply_materialized_accepted_ledger_append_transaction(&request)
+        .expect_err("symlinked ancestor should reject before atomic write");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert!(!real_child.join("accepted-ledger.json").exists());
+}
+
+#[cfg(unix)]
+#[test]
 fn materialized_append_rejects_non_utf8_file_name_without_writing() {
     use std::os::unix::ffi::OsStringExt;
 
@@ -227,7 +245,7 @@ fn materialized_append_source_scan_keeps_atomic_json_only_boundary_visible() {
         "fs::remove_file(&temp_path)",
         "ledger.save_json(&temp_path)?",
         "fs::rename(&temp_path, path)",
-        "reject_symlink(parent)?",
+        "validate_ledger_path_components(path)?",
     ] {
         assert!(
             source.contains(required),
