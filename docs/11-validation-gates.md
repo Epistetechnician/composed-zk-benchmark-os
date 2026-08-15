@@ -42,6 +42,7 @@ The current Rust foundation must pass:
 - evidence acceptance policies block Level2+ actual evidence,
 - evidence-record candidates remain candidate-only metadata,
 - append previews remain preview-only and do not mutate `EvidenceLedger`,
+- direct `EvidenceLedger` persistence rejects caller-controlled symlinked path components before reading or writing JSON,
 - Level2 eligibility reports remain `Level0DesignNote` metadata and do not create Level2 evidence,
 - review ledgers persist separately from `EvidenceLedger`,
 - review ledgers reject forbidden official/formal/performance claim text in top-level and entry notes,
