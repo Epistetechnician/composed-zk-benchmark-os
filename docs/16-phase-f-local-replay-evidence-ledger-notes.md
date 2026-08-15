@@ -18,10 +18,11 @@ Implemented concepts:
 
 This is still Level1LocalReplay at most. A benchmark pass is not proof. Local replay is not official benchmark evidence. A recursion proof is not semantic proof.
 
-Pack materialization and validation reject symlinked pack roots, parent
+Pack materialization and validation reject caller-controlled symlinked path
 components, declared artifact files, reproduction sidecars, and pack-readiness
 outputs before writing or reading them. This keeps local pack paths bound to
-the caller's selected directory tree.
+the caller's selected directory tree; standard macOS root aliases are treated
+as platform paths.
 
 ## Local JSON Adapter Behavior
 

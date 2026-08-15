@@ -19,7 +19,7 @@ The current Rust foundation must pass:
 - evidence ledger digest chains validate,
 - evidence ledger readers and writers reject symlinked paths,
 - benchmark pack file digests validate,
-- benchmark pack writer and readers reject symlinked roots, parents, declared files, reproduction sidecars, and readiness metadata,
+- benchmark pack writer and readers reject caller-controlled symlinked path components, declared files, reproduction sidecars, and readiness metadata,
 - zk-Harness manifest JSON round-trips,
 - zk-Harness dry-run plan JSON round-trips,
 - zk-Harness dry-run plan execution policy is disabled,

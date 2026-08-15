@@ -290,6 +290,30 @@ fn benchmark_pack_writer_rejects_symlinked_roots_and_parents() {
 
 #[cfg(unix)]
 #[test]
+fn benchmark_pack_writer_rejects_symlinked_artifact_ancestor() {
+    let dir = tempdir().expect("tempdir should be available");
+    let pack_root = dir.path().join("pack");
+    std::fs::create_dir(&pack_root).expect("pack root should create");
+    let real_specs = dir.path().join("real-specs");
+    std::fs::create_dir(&real_specs).expect("real specs directory should create");
+    symlink(&real_specs, pack_root.join("specs")).expect("specs symlink should create");
+
+    let instance = generate_instance(
+        GeneratorConfig::baseline_fsm().seed(63),
+        InstanceParams::default(),
+    )
+    .expect("baseline instance should generate");
+    let error = BenchmarkPackWriter::new("phase_f_symlinked_artifact_ancestor")
+        .with_generated_instance(instance)
+        .overwrite(true)
+        .write_to(&pack_root)
+        .expect_err("symlinked artifact ancestor should reject before writing");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert!(!real_specs.join("generated_instance.json").exists());
+}
+
+#[cfg(unix)]
+#[test]
 fn benchmark_pack_reader_rejects_symlinked_declared_files() {
     let dir = tempdir().expect("tempdir should be available");
     BenchmarkPackWriter::new("phase_f_symlinked_declared_file")
