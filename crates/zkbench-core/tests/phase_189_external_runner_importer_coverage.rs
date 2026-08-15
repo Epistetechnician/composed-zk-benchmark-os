@@ -108,6 +108,29 @@ fn relative_file_resolver_rejects_symlinked_parent() {
 
 #[cfg(unix)]
 #[test]
+fn relative_file_resolver_rejects_symlinked_ancestor() {
+    let root = tempdir().expect("tempdir should be available");
+    let real_artifacts = root.path().join("real-artifacts");
+    let real_child = real_artifacts.join("child");
+    fs::create_dir_all(&real_child).expect("real artifact child should be created");
+    fs::write(
+        real_child.join("source.json"),
+        b"synthetic metric source v1\n",
+    )
+    .expect("fixture artifact should be written");
+    symlink(&real_artifacts, root.path().join("linked-artifacts"))
+        .expect("artifact ancestor symlink should create");
+
+    let error = ResultCandidateArtifactResolver::from_relative_files(
+        root.path(),
+        &["linked-artifacts/child/source.json".to_string()],
+    )
+    .expect_err("symlinked artifact ancestor should reject before reading");
+    assert!(error.to_string().contains("must not be a symlink"));
+}
+
+#[cfg(unix)]
+#[test]
 fn relative_file_resolver_rejects_symlinked_target() {
     let root = tempdir().expect("tempdir should be available");
     fs::write(
