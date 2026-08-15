@@ -824,7 +824,64 @@ fn validate_output_root(output_root: &Path, protected_paths: &[PathBuf]) -> Resu
             ));
         }
     }
+    validate_output_root_path_components(&normalized_output)?;
     Ok(())
+}
+
+fn validate_output_root_path_components(path: &Path) -> Result<()> {
+    let mut candidate = path;
+    let mut is_leaf = true;
+    loop {
+        match fs::symlink_metadata(candidate) {
+            Ok(metadata) => {
+                let platform_symlink =
+                    metadata.file_type().is_symlink() && is_platform_provided_symlink(candidate);
+                if metadata.file_type().is_symlink() && !platform_symlink {
+                    return Err(campaign_error(
+                        candidate.display().to_string(),
+                        "local artifact campaign output path must not be a symlink",
+                    ));
+                }
+                if !is_leaf && !metadata.is_dir() && !platform_symlink {
+                    return Err(campaign_error(
+                        candidate.display().to_string(),
+                        "local artifact campaign output parent must be a directory",
+                    ));
+                }
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+            Err(error) => {
+                return Err(campaign_error(
+                    candidate.display().to_string(),
+                    error.to_string(),
+                ));
+            }
+        }
+
+        let Some(parent) = candidate.parent() else {
+            break;
+        };
+        if parent == candidate || parent.as_os_str().is_empty() {
+            break;
+        }
+        candidate = parent;
+        is_leaf = false;
+    }
+    Ok(())
+}
+
+#[cfg(target_os = "macos")]
+fn is_platform_provided_symlink(path: &Path) -> bool {
+    path.parent() == Some(Path::new("/"))
+        && matches!(
+            path.file_name().and_then(|name| name.to_str()),
+            Some("etc" | "home" | "tmp" | "var")
+        )
+}
+
+#[cfg(not(target_os = "macos"))]
+fn is_platform_provided_symlink(_path: &Path) -> bool {
+    false
 }
 
 fn resolve_existing_prefix(path: &Path) -> Result<PathBuf> {

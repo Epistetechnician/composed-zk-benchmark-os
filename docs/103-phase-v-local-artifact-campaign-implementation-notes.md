@@ -94,6 +94,7 @@ The output-root helpers preserve the established local-output rules:
 - protected-path overlap rejection, including symlink-resolved overlap;
 - existing file-root rejection;
 - symlink rejection;
+- nested caller-controlled symlinked output-root ancestor rejection;
 - unexpected-file rejection;
 - partial-campaign rejection;
 - stale digest rejection;

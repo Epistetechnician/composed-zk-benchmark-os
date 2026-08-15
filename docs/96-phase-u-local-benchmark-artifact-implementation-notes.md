@@ -66,7 +66,8 @@ digests/local-benchmark-artifact-markdown.sha256
 The digest sidecars bind the exact materialized JSON and Markdown bytes.
 `read_local_benchmark_artifact_outputs` rejects stale sidecars, Markdown drift,
 missing files, unexpected files, symlinks, invalid manifests, and protected-path
-overlap, including symlink-resolved overlap.
+overlap, including symlink-resolved overlap. Both read and write paths reject
+caller-controlled symlinked output-root ancestors before materialization.
 
 ## Safety Behavior
 
@@ -112,6 +113,7 @@ The focused test file covers:
 - partial-bundle rejection;
 - unexpected-file rejection;
 - symlink rejection;
+- nested caller-controlled symlinked output-root ancestor rejection;
 - source scan for process/network/package/runtime and claim-elevation strings.
 
 This is local regression evidence only. It is not a generated official

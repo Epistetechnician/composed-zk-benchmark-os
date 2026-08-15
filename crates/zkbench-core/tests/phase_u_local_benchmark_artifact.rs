@@ -270,6 +270,25 @@ fn local_benchmark_artifact_outputs_reject_symlink_parent_into_protected_root() 
     assert!(!output_root.exists());
 }
 
+#[cfg(unix)]
+#[test]
+fn local_benchmark_artifact_outputs_reject_nested_symlinked_output_root_ancestor() {
+    use std::os::unix::fs::symlink;
+
+    let dir = tempdir().expect("tempdir");
+    let real_parent = dir.path().join("real-output-parent");
+    let real_nested_parent = real_parent.join("existing-child");
+    fs::create_dir_all(&real_nested_parent).expect("real nested output parent");
+    let symlinked_parent = dir.path().join("symlinked-output-parent");
+    symlink(&real_parent, &symlinked_parent).expect("symlinked output parent");
+    let output_root = symlinked_parent.join("existing-child").join("output");
+
+    let error = write_local_benchmark_artifact_outputs(&output_root, &valid_manifest(), false, &[])
+        .expect_err("nested symlinked output ancestor should fail before writing");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert!(!real_nested_parent.join("output").exists());
+}
+
 #[test]
 fn local_benchmark_artifact_source_scan_exposes_no_runtime_surface() {
     let source = fs::read_to_string("src/local_benchmark_artifact.rs").expect("source");

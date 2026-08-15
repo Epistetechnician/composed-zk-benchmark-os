@@ -1111,7 +1111,71 @@ fn validate_output_root(root: &Path) -> Result<()> {
             "report-bundle output root must not contain parent-directory components",
         ));
     }
+    let normalized = if root.is_absolute() {
+        root.to_path_buf()
+    } else {
+        std::env::current_dir()
+            .map_err(|error| report_bundle_io_error("cwd", error))?
+            .join(root)
+    };
+    validate_output_root_path_components(&normalized)?;
     Ok(())
+}
+
+fn validate_output_root_path_components(path: &Path) -> Result<()> {
+    let mut candidate = path;
+    let mut is_leaf = true;
+    loop {
+        match fs::symlink_metadata(candidate) {
+            Ok(metadata) => {
+                let platform_symlink =
+                    metadata.file_type().is_symlink() && is_platform_provided_symlink(candidate);
+                if metadata.file_type().is_symlink() && !platform_symlink {
+                    return Err(report_bundle_io_error(
+                        candidate.display().to_string(),
+                        "report-bundle output path must not be a symlink",
+                    ));
+                }
+                if !is_leaf && !metadata.is_dir() && !platform_symlink {
+                    return Err(report_bundle_io_error(
+                        candidate.display().to_string(),
+                        "report-bundle output parent must be a directory",
+                    ));
+                }
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+            Err(error) => {
+                return Err(report_bundle_io_error(
+                    candidate.display().to_string(),
+                    error,
+                ));
+            }
+        }
+
+        let Some(parent) = candidate.parent() else {
+            break;
+        };
+        if parent == candidate || parent.as_os_str().is_empty() {
+            break;
+        }
+        candidate = parent;
+        is_leaf = false;
+    }
+    Ok(())
+}
+
+#[cfg(target_os = "macos")]
+fn is_platform_provided_symlink(path: &Path) -> bool {
+    path.parent() == Some(Path::new("/"))
+        && matches!(
+            path.file_name().and_then(|name| name.to_str()),
+            Some("etc" | "home" | "tmp" | "var")
+        )
+}
+
+#[cfg(not(target_os = "macos"))]
+fn is_platform_provided_symlink(_path: &Path) -> bool {
+    false
 }
 
 fn validate_rendered_markdown_path(relative_path: &str) -> Result<()> {
