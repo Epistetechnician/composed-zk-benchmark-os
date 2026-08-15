@@ -7,6 +7,7 @@ Phase I adds a local/synthetic result import prototype to `zkbench-core`.
 - JSON parsing for synthetic `ExternalResultCandidate` values.
 - `SyntheticResultImporter` and `SyntheticResultImportBundle`.
 - `ResultCandidateArtifactResolver` for explicit caller-provided local bytes or declared relative files.
+- Relative-file artifact resolution rejects symlinked path components before reading declared bytes.
 - Artifact digest validation for synthetic artifact refs.
 - Provenance contract validation for candidate provenance drafts.
 - Metric candidate validation for units, source refs, and non-negative numeric values.

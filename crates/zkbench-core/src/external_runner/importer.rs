@@ -145,6 +145,7 @@ impl ResultCandidateArtifactResolver {
                 ));
             }
             let path = root.join(artifact_ref);
+            validate_artifact_resolver_path_components(&path)?;
             let bytes = fs::read(&path).map_err(|error| {
                 ZkBenchError::synthetic_import(path.display().to_string(), error.to_string())
             })?;
@@ -177,6 +178,51 @@ impl ResultCandidateArtifactResolver {
             .iter()
             .find(|lookup| lookup.artifact_ref == artifact_ref)
     }
+}
+
+fn validate_artifact_resolver_path_components(path: &Path) -> Result<()> {
+    let mut candidate = path;
+    let mut is_leaf = true;
+    loop {
+        let (candidate_exists, candidate_is_directory) = match fs::symlink_metadata(candidate) {
+            Ok(metadata) => {
+                if metadata.file_type().is_symlink() {
+                    return Err(ZkBenchError::synthetic_import(
+                        candidate.display().to_string(),
+                        "artifact resolver path must not be a symlink",
+                    ));
+                }
+                if !is_leaf && !metadata.is_dir() {
+                    return Err(ZkBenchError::synthetic_import(
+                        candidate.display().to_string(),
+                        "artifact resolver parent must be a directory",
+                    ));
+                }
+                (true, metadata.is_dir())
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => (false, false),
+            Err(error) => {
+                return Err(ZkBenchError::synthetic_import(
+                    candidate.display().to_string(),
+                    error.to_string(),
+                ));
+            }
+        };
+
+        if candidate_is_directory || (candidate_exists && !is_leaf) {
+            break;
+        }
+
+        let Some(parent) = candidate.parent() else {
+            break;
+        };
+        if parent == candidate || parent.as_os_str().is_empty() {
+            break;
+        }
+        candidate = parent;
+        is_leaf = false;
+    }
+    Ok(())
 }
 
 /// Synthetic import configuration.

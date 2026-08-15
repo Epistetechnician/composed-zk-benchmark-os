@@ -48,6 +48,7 @@ The current Rust foundation must pass:
 - proposal ledgers persist separately from `EvidenceLedger`,
 - proposal ledger readers and writers reject symlinked paths,
 - proposal ledgers reject forbidden official/formal/performance claim text in top-level and entry notes,
+- relative-file artifact resolvers reject symlinked path components before reading declared bytes,
 - soak config JSON round-trips,
 - deterministic shard planning,
 - smoke runner tests,

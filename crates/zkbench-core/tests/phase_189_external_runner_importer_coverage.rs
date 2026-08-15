@@ -1,5 +1,8 @@
 use std::fs;
 
+#[cfg(unix)]
+use std::os::unix::fs::symlink;
+
 use tempfile::tempdir;
 use zkbench_core::{
     build_default_artifact_capture_contract, compute_artifact_digest_bytes,
@@ -79,6 +82,51 @@ fn relative_file_resolver_reads_declared_files_and_rejects_unsafe_refs() {
         ZkBenchError::SyntheticImport { ref path, .. }
             if path.ends_with("artifacts/missing.json")
     ));
+}
+
+#[cfg(unix)]
+#[test]
+fn relative_file_resolver_rejects_symlinked_parent() {
+    let root = tempdir().expect("tempdir should be available");
+    let real_artifacts = root.path().join("real-artifacts");
+    fs::create_dir(&real_artifacts).expect("real artifact dir should be created");
+    fs::write(
+        real_artifacts.join("source.json"),
+        b"synthetic metric source v1\n",
+    )
+    .expect("fixture artifact should be written");
+    symlink(&real_artifacts, root.path().join("linked-artifacts"))
+        .expect("artifact parent symlink should create");
+
+    let error = ResultCandidateArtifactResolver::from_relative_files(
+        root.path(),
+        &["linked-artifacts/source.json".to_string()],
+    )
+    .expect_err("symlinked artifact parent should reject before reading");
+    assert!(error.to_string().contains("must not be a symlink"));
+}
+
+#[cfg(unix)]
+#[test]
+fn relative_file_resolver_rejects_symlinked_target() {
+    let root = tempdir().expect("tempdir should be available");
+    fs::write(
+        root.path().join("source.json"),
+        b"synthetic metric source v1\n",
+    )
+    .expect("fixture artifact should be written");
+    symlink(
+        root.path().join("source.json"),
+        root.path().join("linked-source.json"),
+    )
+    .expect("artifact target symlink should create");
+
+    let error = ResultCandidateArtifactResolver::from_relative_files(
+        root.path(),
+        &["linked-source.json".to_string()],
+    )
+    .expect_err("symlinked artifact target should reject before reading");
+    assert!(error.to_string().contains("must not be a symlink"));
 }
 
 #[test]
