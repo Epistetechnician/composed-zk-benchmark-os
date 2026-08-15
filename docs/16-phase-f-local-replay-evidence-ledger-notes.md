@@ -18,6 +18,10 @@ Implemented concepts:
 
 This is still Level1LocalReplay at most. A benchmark pass is not proof. Local replay is not official benchmark evidence. A recursion proof is not semantic proof.
 
+Pack materialization and validation reject symlinked pack roots, parent
+components, and declared artifact files before writing or reading them. This
+keeps local pack paths bound to the caller's selected directory tree.
+
 ## Local JSON Adapter Behavior
 
 `LocalJsonAdapter` is the first concrete adapter, but it is not a real ZK backend adapter. It consumes embedded local generated or mutated benchmark subjects from a `ReplayManifest`, evaluates selected traces with the local oracle, and emits `ReplayResult` values.

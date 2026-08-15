@@ -98,6 +98,10 @@ impl BenchmarkPackWriter {
     /// Write a local pack into the supplied directory.
     pub fn write_to(&self, root: impl AsRef<Path>) -> Result<BenchmarkPackManifest> {
         let root = root.as_ref();
+        if let Some(parent) = root.parent() {
+            validate_pack_path_components(parent)?;
+        }
+        validate_pack_path_components(root)?;
         if root.exists() && !root.is_dir() {
             return Err(ZkBenchError::benchmark_pack(
                 root.display().to_string(),
@@ -351,6 +355,7 @@ pub(crate) fn validate_relative_path(relative_path: &str) -> Result<()> {
 }
 
 fn write_bytes(path: PathBuf, bytes: &[u8]) -> Result<()> {
+    validate_pack_path_components(&path)?;
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent).map_err(|error| {
             ZkBenchError::benchmark_pack(parent.display().to_string(), error.to_string())
@@ -359,6 +364,51 @@ fn write_bytes(path: PathBuf, bytes: &[u8]) -> Result<()> {
     fs::write(&path, bytes).map_err(|error| {
         ZkBenchError::benchmark_pack(path.display().to_string(), error.to_string())
     })
+}
+
+pub(crate) fn validate_pack_path_components(path: &Path) -> Result<()> {
+    let mut candidate = path;
+    let mut is_leaf = true;
+    loop {
+        let (candidate_exists, candidate_is_directory) = match fs::symlink_metadata(candidate) {
+            Ok(metadata) => {
+                if metadata.file_type().is_symlink() {
+                    return Err(ZkBenchError::benchmark_pack(
+                        candidate.display().to_string(),
+                        "pack output path must not be a symlink",
+                    ));
+                }
+                if !is_leaf && !metadata.is_dir() {
+                    return Err(ZkBenchError::benchmark_pack(
+                        candidate.display().to_string(),
+                        "pack output parent must be a directory",
+                    ));
+                }
+                (true, metadata.is_dir())
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => (false, false),
+            Err(error) => {
+                return Err(ZkBenchError::benchmark_pack(
+                    candidate.display().to_string(),
+                    error.to_string(),
+                ));
+            }
+        };
+
+        if candidate_is_directory || (candidate_exists && !is_leaf) {
+            break;
+        }
+
+        let Some(parent) = candidate.parent() else {
+            break;
+        };
+        if parent == candidate || parent.as_os_str().is_empty() {
+            break;
+        }
+        candidate = parent;
+        is_leaf = false;
+    }
+    Ok(())
 }
 
 fn directory_has_entries(path: &Path) -> Result<bool> {

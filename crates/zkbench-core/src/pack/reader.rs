@@ -10,7 +10,7 @@ use crate::scoring::{validate_score_report, ScoreReport};
 
 use super::manifest::{BenchmarkPackFileRole, BenchmarkPackManifest};
 use super::validation::{BenchmarkPackValidation, BenchmarkPackValidationError};
-use super::writer::{digest_for_bytes, validate_relative_path};
+use super::writer::{digest_for_bytes, validate_pack_path_components, validate_relative_path};
 
 /// Reader for an on-disk local benchmark pack.
 #[derive(Debug, Clone)]
@@ -24,6 +24,11 @@ impl BenchmarkPackReader {
     pub fn read(root: impl AsRef<Path>) -> Result<Self> {
         let root = root.as_ref().to_path_buf();
         let manifest_path = root.join("pack.json");
+        if let Some(parent) = root.parent() {
+            validate_pack_path_components(parent)?;
+        }
+        validate_pack_path_components(&root)?;
+        validate_pack_path_components(&manifest_path)?;
         let json = fs::read_to_string(&manifest_path).map_err(|error| {
             ZkBenchError::benchmark_pack(manifest_path.display().to_string(), error.to_string())
         })?;
@@ -55,6 +60,7 @@ impl BenchmarkPackReader {
         };
         validate_relative_path(&file.relative_path)?;
         let path = self.root.join(&file.relative_path);
+        validate_pack_path_components(&path)?;
         let json = fs::read_to_string(&path).map_err(|error| {
             ZkBenchError::evidence_ledger(path.display().to_string(), error.to_string())
         })?;
@@ -76,6 +82,7 @@ impl BenchmarkPackReader {
         };
         validate_relative_path(&file.relative_path)?;
         let path = self.root.join(&file.relative_path);
+        validate_pack_path_components(&path)?;
         let json = fs::read_to_string(&path).map_err(|error| {
             ZkBenchError::benchmark_pack(path.display().to_string(), error.to_string())
         })?;
@@ -123,6 +130,13 @@ impl BenchmarkPackReader {
                 );
             }
             let path = self.root.join(&file.relative_path);
+            if let Err(error) = validate_pack_path_components(&path) {
+                errors.push(BenchmarkPackValidationError {
+                    path: file.relative_path.clone(),
+                    message: error.to_string(),
+                });
+                continue;
+            }
             let bytes = match fs::read(&path) {
                 Ok(bytes) => bytes,
                 Err(error) => {
@@ -284,6 +298,13 @@ impl BenchmarkPackReader {
                 continue;
             }
             let path = self.root.join(&file.relative_path);
+            if let Err(error) = validate_pack_path_components(&path) {
+                errors.push(BenchmarkPackValidationError {
+                    path: file.relative_path.clone(),
+                    message: error.to_string(),
+                });
+                continue;
+            }
             let json = match fs::read_to_string(&path) {
                 Ok(json) => json,
                 Err(error) => {
