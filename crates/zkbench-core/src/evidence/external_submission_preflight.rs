@@ -782,16 +782,16 @@ fn validate_future_output_root(
             );
         }
     }
+    if let Err(message) = validate_future_output_root_path_components(&request.future_output_root) {
+        push_issue(
+            issues,
+            ExternalReplaySubmissionPreflightIssueKind::UnsafeOutputRoot,
+            "request.future_output_root",
+            message,
+        );
+        return;
+    }
     if request.future_output_root.exists() {
-        if let Err(message) = reject_symlink(&request.future_output_root) {
-            push_issue(
-                issues,
-                ExternalReplaySubmissionPreflightIssueKind::UnsafeOutputRoot,
-                "request.future_output_root",
-                message,
-            );
-            return;
-        }
         if request.future_output_root.is_file() {
             push_issue(
                 issues,
@@ -817,6 +817,41 @@ fn validate_future_output_root(
             ),
         }
     }
+}
+
+fn validate_future_output_root_path_components(path: &Path) -> std::result::Result<(), String> {
+    let normalized = normalize_path(path)?;
+    let mut candidate = normalized.as_path();
+    let mut is_leaf = true;
+    loop {
+        match fs::symlink_metadata(candidate) {
+            Ok(metadata) => {
+                let platform_symlink =
+                    metadata.file_type().is_symlink() && is_platform_provided_symlink(candidate);
+                if metadata.file_type().is_symlink() && !platform_symlink {
+                    return Err(format!("{} must not be a symlink", candidate.display()));
+                }
+                if !is_leaf && !metadata.is_dir() && !platform_symlink {
+                    return Err(format!(
+                        "{} must be a directory parent",
+                        candidate.display()
+                    ));
+                }
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+            Err(error) => return Err(error.to_string()),
+        }
+
+        let Some(parent) = candidate.parent() else {
+            break;
+        };
+        if parent == candidate || parent.as_os_str().is_empty() {
+            break;
+        }
+        candidate = parent;
+        is_leaf = false;
+    }
+    Ok(())
 }
 
 fn validate_existing_file_path(path: &Path) -> std::result::Result<(), String> {
@@ -984,6 +1019,20 @@ fn resolve_existing_prefix(path: &Path) -> std::result::Result<PathBuf, String> 
             Err(error) => return Err(error.to_string()),
         }
     }
+}
+
+#[cfg(target_os = "macos")]
+fn is_platform_provided_symlink(path: &Path) -> bool {
+    path.parent() == Some(Path::new("/"))
+        && matches!(
+            path.file_name().and_then(|name| name.to_str()),
+            Some("etc" | "home" | "tmp" | "var")
+        )
+}
+
+#[cfg(not(target_os = "macos"))]
+fn is_platform_provided_symlink(_path: &Path) -> bool {
+    false
 }
 
 fn paths_overlap(left: &Path, right: &Path) -> bool {

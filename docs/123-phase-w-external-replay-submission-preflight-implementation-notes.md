@@ -39,7 +39,8 @@ The local preflight path:
 - Requires non-secret benchmark target metadata.
 - Requires external replay provenance and source artifact digests.
 - Requires explicit operator acknowledgement.
-- Validates a future output root without writing it.
+- Validates a future output root without writing it, including every existing
+  ancestor component and non-directory parent rejection.
 - Requires a redaction policy.
 - Rejects local-only evidence promotion.
 - Rejects score-axis population.
@@ -59,6 +60,7 @@ Focused tests cover:
 - Missing operator acknowledgement rejection.
 - Local-only promotion and score-axis rejection.
 - Endpoint-attempt and protected-root rejection.
+- Nested caller-controlled symlinked future-output-root ancestor rejection.
 - Source scans proving no process, network, credential, endpoint submission, or
   score-axis population runtime surface exists.
 
