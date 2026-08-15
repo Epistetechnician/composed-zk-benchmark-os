@@ -46,6 +46,7 @@ The current Rust foundation must pass:
 - review ledgers persist separately from `EvidenceLedger`,
 - review ledgers reject forbidden official/formal/performance claim text in top-level and entry notes,
 - proposal ledgers persist separately from `EvidenceLedger`,
+- proposal ledger readers and writers reject symlinked paths,
 - proposal ledgers reject forbidden official/formal/performance claim text in top-level and entry notes,
 - soak config JSON round-trips,
 - deterministic shard planning,

@@ -1,3 +1,6 @@
+#[cfg(unix)]
+use std::os::unix::fs::symlink;
+
 use tempfile::tempdir;
 use zkbench_core::{
     create_evidence_append_proposal, deserialize_evidence_append_proposal_ledger_json,
@@ -79,6 +82,41 @@ fn proposal_ledger_default_matches_new_and_chains_multiple_entries() {
         ledger.entries[1].previous_digest,
         Some(ledger.entries[0].entry_digest.clone())
     );
+}
+
+#[cfg(unix)]
+#[test]
+fn proposal_ledger_save_rejects_symlinked_parent() {
+    let dir = tempdir().expect("tempdir should be available for proposal persistence");
+    let ledger = EvidenceAppendProposalLedger::new();
+    let real_parent = dir.path().join("real-proposals");
+    std::fs::create_dir(&real_parent).expect("real proposal parent should create");
+    let symlinked_parent = dir.path().join("linked-proposals");
+    symlink(&real_parent, &symlinked_parent).expect("proposal parent symlink should create");
+
+    let path = symlinked_parent.join("proposal-ledger.json");
+    let error = ledger
+        .save_json(&path)
+        .expect_err("symlinked proposal parent should reject before writing");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert!(!real_parent.join("proposal-ledger.json").exists());
+}
+
+#[cfg(unix)]
+#[test]
+fn proposal_ledger_load_rejects_symlinked_target() {
+    let dir = tempdir().expect("tempdir should be available for proposal persistence");
+    let ledger = EvidenceAppendProposalLedger::new();
+    let real_path = dir.path().join("real-proposal-ledger.json");
+    ledger
+        .save_json(&real_path)
+        .expect("real proposal ledger should save");
+    let symlinked_path = dir.path().join("linked-proposal-ledger.json");
+    symlink(&real_path, &symlinked_path).expect("proposal target symlink should create");
+
+    let error = EvidenceAppendProposalLedger::load_json(&symlinked_path)
+        .expect_err("symlinked proposal target should reject before reading");
+    assert!(error.to_string().contains("must not be a symlink"));
 }
 
 #[test]
