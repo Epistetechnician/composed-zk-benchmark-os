@@ -18,7 +18,7 @@ use crate::evidence::{
 use super::manifest::{BenchmarkPackFileRole, BenchmarkPackManifest};
 use super::reader::BenchmarkPackReader;
 use super::validation::BenchmarkPackValidation;
-use super::writer::validate_relative_path;
+use super::writer::{validate_pack_path_components, validate_relative_path};
 
 /// Relative location for the local pack validation report emitted by Phase O-D.
 pub const PACK_VALIDATION_REPORT_PATH: &str = "readiness/pack-validation-report.json";
@@ -349,6 +349,7 @@ pub fn write_pack_readiness_outputs_for_pack(
 /// Read the adjacent local pack-readiness report from a pack root.
 pub fn read_pack_readiness_report(pack_root: impl AsRef<Path>) -> Result<PackReadinessReport> {
     let path = pack_root.as_ref().join(PACK_READINESS_REPORT_PATH);
+    validate_pack_path_components(&path)?;
     let json = fs::read_to_string(&path).map_err(|error| {
         ZkBenchError::benchmark_pack(path.display().to_string(), error.to_string())
     })?;
@@ -360,6 +361,7 @@ pub fn read_pack_readiness_validation(
     pack_root: impl AsRef<Path>,
 ) -> Result<PackReadinessValidation> {
     let path = pack_root.as_ref().join(PACK_READINESS_VALIDATION_PATH);
+    validate_pack_path_components(&path)?;
     let json = fs::read_to_string(&path).map_err(|error| {
         ZkBenchError::benchmark_pack(path.display().to_string(), error.to_string())
     })?;
@@ -968,6 +970,7 @@ fn push_issue(
 fn write_relative_bytes(root: &Path, relative_path: &str, bytes: &[u8]) -> Result<()> {
     validate_relative_path(relative_path)?;
     let path = root.join(relative_path);
+    validate_pack_path_components(&path)?;
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent).map_err(|error| {
             ZkBenchError::benchmark_pack(parent.display().to_string(), error.to_string())
