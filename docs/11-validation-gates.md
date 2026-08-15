@@ -50,6 +50,7 @@ The current Rust foundation must pass:
 - deterministic shard planning,
 - smoke runner tests,
 - resume checkpoint tests,
+- resumable soak checkpoint writers and readers reject symlinked paths,
 - telemetry label validation,
 - telemetry identity validation,
 - telemetry metric classification validation,

@@ -6,6 +6,9 @@
 //! API behavior. Serializer-wrapper error closures over `#[derive(Serialize,
 //! Deserialize)]` leaf structs remain capped and are intentionally not forced.
 
+#[cfg(unix)]
+use std::os::unix::fs::symlink;
+
 use tempfile::tempdir;
 use zkbench_core::{
     build_smoke_soak_config, read_soak_shard_checkpoint, validate_soak_shard_checkpoint,
@@ -227,6 +230,38 @@ fn write_then_read_checkpoint_round_trip_with_parent_creation() {
     write_soak_shard_checkpoint(&nested, &checkpoint).expect("write should create parent dirs");
     let round_trip = read_soak_shard_checkpoint(&nested).expect("read should round-trip");
     assert_eq!(round_trip, checkpoint);
+}
+
+#[cfg(unix)]
+#[test]
+fn write_checkpoint_rejects_symlinked_parent() {
+    let dir = tempdir().expect("tempdir should be available");
+    let (checkpoint, _expected_digest, _expected_token) = baseline_triple();
+    let real_parent = dir.path().join("real-checkpoints");
+    std::fs::create_dir(&real_parent).expect("real checkpoint parent should create");
+    let symlinked_parent = dir.path().join("linked-checkpoints");
+    symlink(&real_parent, &symlinked_parent).expect("checkpoint parent symlink should create");
+
+    let path = symlinked_parent.join("checkpoint.json");
+    let error = write_soak_shard_checkpoint(&path, &checkpoint)
+        .expect_err("symlinked checkpoint parent should reject before writing");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert!(!real_parent.join("checkpoint.json").exists());
+}
+
+#[cfg(unix)]
+#[test]
+fn read_checkpoint_rejects_symlinked_target() {
+    let dir = tempdir().expect("tempdir should be available");
+    let (checkpoint, _expected_digest, _expected_token) = baseline_triple();
+    let real_path = dir.path().join("real-checkpoint.json");
+    write_soak_shard_checkpoint(&real_path, &checkpoint).expect("checkpoint should write");
+    let symlinked_path = dir.path().join("linked-checkpoint.json");
+    symlink(&real_path, &symlinked_path).expect("checkpoint target symlink should create");
+
+    let error = read_soak_shard_checkpoint(&symlinked_path)
+        .expect_err("symlinked checkpoint target should reject before reading");
+    assert!(error.to_string().contains("must not be a symlink"));
 }
 
 #[test]

@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 use crate::error::{Result, ZkBenchError};
 use crate::evidence::ClaimBoundary;
 
+use super::artifact_layout::validate_soak_path_components;
 use super::failure_corpus::{FailureArtifactRef, FailureCorpusEntryId};
 use super::shard::{SoakCaseId, SoakShardId, SoakShardResumeToken};
 use super::telemetry::SoakTelemetryCounters;
@@ -230,6 +231,7 @@ pub fn write_soak_shard_checkpoint(
     checkpoint: &SoakShardCheckpoint,
 ) -> Result<()> {
     let path = path.as_ref();
+    validate_soak_path_components(path)?;
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent)
             .map_err(|error| ZkBenchError::soak(parent.display().to_string(), error.to_string()))?;
@@ -244,6 +246,7 @@ pub fn write_soak_shard_checkpoint(
 /// Read a checkpoint from JSON.
 pub fn read_soak_shard_checkpoint(path: impl AsRef<Path>) -> Result<SoakShardCheckpoint> {
     let path = path.as_ref();
+    validate_soak_path_components(path)?;
     let bytes = fs::read(path)
         .map_err(|error| ZkBenchError::soak(path.display().to_string(), error.to_string()))?;
     serde_json::from_slice(&bytes).map_err(|error| {

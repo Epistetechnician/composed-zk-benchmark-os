@@ -700,7 +700,7 @@ pub(crate) fn write_json<T: Serialize>(path: impl AsRef<Path>, value: &T) -> Res
         .map_err(|error| ZkBenchError::soak(path.display().to_string(), error.to_string()))
 }
 
-fn validate_soak_path_components(path: &Path) -> Result<()> {
+pub(crate) fn validate_soak_path_components(path: &Path) -> Result<()> {
     let mut candidate = path;
     let mut is_leaf = true;
     loop {
