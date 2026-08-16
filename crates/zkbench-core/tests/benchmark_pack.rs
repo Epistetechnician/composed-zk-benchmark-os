@@ -1,6 +1,8 @@
 #[cfg(unix)]
 use std::os::unix::fs::symlink;
 
+use std::path::Path;
+
 use tempfile::tempdir;
 use zkbench_core::{
     apply_mutation_pass, build_local_replay_manifest_for_instance,
@@ -132,6 +134,24 @@ fn benchmark_pack_writer_and_reader_reject_parent_directory_root_components() {
     assert!(read_error
         .to_string()
         .contains("parent-directory components"));
+}
+
+#[test]
+fn benchmark_pack_writer_and_reader_reject_empty_root() {
+    let empty_root = Path::new("");
+
+    let write_error = BenchmarkPackWriter::new("phase_f_empty_root")
+        .write_to(empty_root)
+        .expect_err("writer should reject empty root before creating pack files");
+    let read_error =
+        BenchmarkPackReader::read(empty_root).expect_err("reader should reject empty root");
+
+    assert!(write_error
+        .to_string()
+        .contains("pack root must be non-empty"));
+    assert!(read_error
+        .to_string()
+        .contains("pack root must be non-empty"));
 }
 
 #[test]

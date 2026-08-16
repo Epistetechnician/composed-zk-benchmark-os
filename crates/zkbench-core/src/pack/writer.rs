@@ -98,10 +98,7 @@ impl BenchmarkPackWriter {
     /// Write a local pack into the supplied directory.
     pub fn write_to(&self, root: impl AsRef<Path>) -> Result<BenchmarkPackManifest> {
         let root = root.as_ref();
-        if let Some(parent) = root.parent() {
-            validate_pack_path_components(parent)?;
-        }
-        validate_pack_path_components(root)?;
+        validate_pack_root(root)?;
         if root.exists() && !root.is_dir() {
             return Err(ZkBenchError::benchmark_pack(
                 root.display().to_string(),
@@ -416,6 +413,16 @@ pub(crate) fn validate_pack_path_components(path: &Path) -> Result<()> {
         is_leaf = false;
     }
     Ok(())
+}
+
+pub(crate) fn validate_pack_root(path: &Path) -> Result<()> {
+    if path.as_os_str().is_empty() {
+        return Err(ZkBenchError::benchmark_pack(
+            "benchmark_pack.root",
+            "pack root must be non-empty",
+        ));
+    }
+    validate_pack_path_components(path)
 }
 
 #[cfg(target_os = "macos")]

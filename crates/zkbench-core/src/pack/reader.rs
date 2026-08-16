@@ -10,7 +10,9 @@ use crate::scoring::{validate_score_report, ScoreReport};
 
 use super::manifest::{BenchmarkPackFileRole, BenchmarkPackManifest};
 use super::validation::{BenchmarkPackValidation, BenchmarkPackValidationError};
-use super::writer::{digest_for_bytes, validate_pack_path_components, validate_relative_path};
+use super::writer::{
+    digest_for_bytes, validate_pack_path_components, validate_pack_root, validate_relative_path,
+};
 
 /// Reader for an on-disk local benchmark pack.
 #[derive(Debug, Clone)]
@@ -23,11 +25,8 @@ impl BenchmarkPackReader {
     /// Read a benchmark pack manifest from a root directory.
     pub fn read(root: impl AsRef<Path>) -> Result<Self> {
         let root = root.as_ref().to_path_buf();
+        validate_pack_root(&root)?;
         let manifest_path = root.join("pack.json");
-        if let Some(parent) = root.parent() {
-            validate_pack_path_components(parent)?;
-        }
-        validate_pack_path_components(&root)?;
         validate_pack_path_components(&manifest_path)?;
         let json = fs::read_to_string(&manifest_path).map_err(|error| {
             ZkBenchError::benchmark_pack(manifest_path.display().to_string(), error.to_string())
