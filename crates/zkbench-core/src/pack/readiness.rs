@@ -294,6 +294,7 @@ pub fn write_pack_readiness_outputs_for_pack(
     pack_root: impl AsRef<Path>,
 ) -> Result<PackReadinessOutput> {
     let pack_root = pack_root.as_ref();
+    validate_pack_readiness_root(pack_root)?;
     let reader = BenchmarkPackReader::read(pack_root)?;
     let pack_validation = reader.validate();
     let report = build_pack_readiness_report_from_reader(&reader, &pack_validation)?;
@@ -348,7 +349,9 @@ pub fn write_pack_readiness_outputs_for_pack(
 
 /// Read the adjacent local pack-readiness report from a pack root.
 pub fn read_pack_readiness_report(pack_root: impl AsRef<Path>) -> Result<PackReadinessReport> {
-    let path = pack_root.as_ref().join(PACK_READINESS_REPORT_PATH);
+    let pack_root = pack_root.as_ref();
+    validate_pack_readiness_root(pack_root)?;
+    let path = pack_root.join(PACK_READINESS_REPORT_PATH);
     validate_pack_path_components(&path)?;
     let json = fs::read_to_string(&path).map_err(|error| {
         ZkBenchError::benchmark_pack(path.display().to_string(), error.to_string())
@@ -360,7 +363,9 @@ pub fn read_pack_readiness_report(pack_root: impl AsRef<Path>) -> Result<PackRea
 pub fn read_pack_readiness_validation(
     pack_root: impl AsRef<Path>,
 ) -> Result<PackReadinessValidation> {
-    let path = pack_root.as_ref().join(PACK_READINESS_VALIDATION_PATH);
+    let pack_root = pack_root.as_ref();
+    validate_pack_readiness_root(pack_root)?;
+    let path = pack_root.join(PACK_READINESS_VALIDATION_PATH);
     validate_pack_path_components(&path)?;
     let json = fs::read_to_string(&path).map_err(|error| {
         ZkBenchError::benchmark_pack(path.display().to_string(), error.to_string())
@@ -979,6 +984,16 @@ fn write_relative_bytes(root: &Path, relative_path: &str, bytes: &[u8]) -> Resul
     fs::write(&path, bytes).map_err(|error| {
         ZkBenchError::benchmark_pack(path.display().to_string(), error.to_string())
     })
+}
+
+fn validate_pack_readiness_root(root: &Path) -> Result<()> {
+    if root.as_os_str().is_empty() {
+        return Err(ZkBenchError::benchmark_pack(
+            "pack_readiness.pack_root",
+            "pack-readiness pack root must be non-empty",
+        ));
+    }
+    validate_pack_path_components(root)
 }
 
 fn digest_output_bytes(bytes: &[u8], kind: ArtifactKind, role: ArtifactRole) -> ArtifactDigest {

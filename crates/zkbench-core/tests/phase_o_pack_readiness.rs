@@ -272,6 +272,24 @@ fn pack_readiness_readback_reports_missing_and_malformed_validation_files() {
 }
 
 #[test]
+fn pack_readiness_roots_reject_empty_paths_before_filesystem_access() {
+    let empty_root = Path::new("");
+
+    let write_error = write_pack_readiness_outputs_for_pack(empty_root)
+        .expect_err("empty pack root should reject before reading pack metadata");
+    let report_error = read_pack_readiness_report(empty_root)
+        .expect_err("empty pack root should reject before reading readiness report");
+    let validation_error = read_pack_readiness_validation(empty_root)
+        .expect_err("empty pack root should reject before reading readiness validation");
+
+    for error in [write_error, report_error, validation_error] {
+        assert!(error
+            .to_string()
+            .contains("pack-readiness pack root must be non-empty"));
+    }
+}
+
+#[test]
 fn pack_readiness_outputs_write_adjacent_metadata_without_manifest_mutation() {
     let dir = write_sample_pack("phase_o_readiness_output_pack");
     let output = write_pack_readiness_outputs_for_pack(dir.path())

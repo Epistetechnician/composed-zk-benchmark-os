@@ -53,6 +53,11 @@ materialization. This remains local filesystem-safety regression evidence
 only; it does not elevate benchmark, proof, production, or external-evidence
 claims.
 
+The `zkbench-core` pack-readiness root state slice now rejects empty or unsafe
+caller-supplied pack roots before adjacent readiness report reads or writes.
+This remains local filesystem-safety regression evidence only; it does not
+elevate benchmark, proof, production, or external-evidence claims.
+
 This report records the end-to-end local validation run after Phase S
 audit-index ergonomics output plumbing, protected-path overlap hardening, the
 Phase 102 opt-in Phala provider-client implementation, the Phase 105
