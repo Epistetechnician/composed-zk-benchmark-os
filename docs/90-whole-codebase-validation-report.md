@@ -21,6 +21,11 @@ write. This closes a deterministic lexical path escape in the local JSON
 proposal-ledger boundary and remains local filesystem-safety evidence only; it
 does not elevate benchmark, proof, production, or external-evidence claims.
 
+The `zkbench-core` evidence-ledger persistence state slice applies the same
+parent-directory rejection to its public JSON save/load boundary. This is
+local filesystem-safety regression evidence only and does not elevate
+benchmark, proof, production, or external-evidence claims.
+
 This report records the end-to-end local validation run after Phase S
 audit-index ergonomics output plumbing, protected-path overlap hardening, the
 Phase 102 opt-in Phala provider-client implementation, the Phase 105

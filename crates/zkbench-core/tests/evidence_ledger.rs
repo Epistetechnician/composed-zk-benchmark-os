@@ -38,6 +38,30 @@ fn default_evidence_ledger_matches_new() {
 }
 
 #[test]
+fn evidence_ledger_save_and_load_reject_parent_directory_components() {
+    let dir = tempdir().expect("tempdir should be available for ledger persistence");
+    let ledger = EvidenceLedger::new();
+    let nested = dir.path().join("nested");
+    std::fs::create_dir(&nested).expect("nested ledger parent should create");
+    let path = nested.join("../ledger.json");
+    let target = dir.path().join("ledger.json");
+
+    let save_error = ledger
+        .save_json(&path)
+        .expect_err("parent-directory component should reject before writing");
+    assert!(save_error
+        .to_string()
+        .contains("parent-directory components"));
+    assert!(!target.exists());
+
+    let load_error = EvidenceLedger::load_json(&path)
+        .expect_err("parent-directory component should reject before reading");
+    assert!(load_error
+        .to_string()
+        .contains("parent-directory components"));
+}
+
+#[test]
 fn evidence_ledger_persists_replay_records_and_validates_chain() {
     let instance = generate_instance(
         GeneratorConfig::baseline_fsm().seed(41),
