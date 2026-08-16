@@ -107,6 +107,34 @@ fn benchmark_pack_writer_refuses_non_empty_directory_without_overwrite() {
 }
 
 #[test]
+fn benchmark_pack_writer_and_reader_reject_parent_directory_root_components() {
+    let dir = tempdir().expect("tempdir should be available");
+    let nested = dir.path().join("nested");
+    std::fs::create_dir(&nested).expect("nested pack parent should create");
+    let escaped_root = nested.join("../pack");
+    let writer = BenchmarkPackWriter::new("phase_f_parent_component");
+
+    let write_error = writer
+        .write_to(&escaped_root)
+        .expect_err("parent-directory component should reject before writing");
+    assert!(write_error
+        .to_string()
+        .contains("parent-directory components"));
+    assert!(!dir.path().join("pack").exists());
+
+    let valid_root = dir.path().join("valid-pack");
+    writer
+        .write_to(&valid_root)
+        .expect("valid pack root should write");
+    let read_path = nested.join("../valid-pack");
+    let read_error = BenchmarkPackReader::read(&read_path)
+        .expect_err("parent-directory component should reject before reading");
+    assert!(read_error
+        .to_string()
+        .contains("parent-directory components"));
+}
+
+#[test]
 fn benchmark_pack_writer_rejects_file_root_and_dynamic_artifact_path_drift() {
     let instance = generate_instance(
         GeneratorConfig::baseline_fsm().seed(61),

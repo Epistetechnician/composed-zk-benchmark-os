@@ -1,7 +1,7 @@
 //! Benchmark pack writer.
 
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::{Component, Path, PathBuf};
 
 use serde::Serialize;
 
@@ -367,6 +367,16 @@ fn write_bytes(path: PathBuf, bytes: &[u8]) -> Result<()> {
 }
 
 pub(crate) fn validate_pack_path_components(path: &Path) -> Result<()> {
+    if path
+        .components()
+        .any(|component| matches!(component, Component::ParentDir))
+    {
+        return Err(ZkBenchError::benchmark_pack(
+            path.display().to_string(),
+            "pack output path must not contain parent-directory components",
+        ));
+    }
+
     let mut candidate = path;
     let mut is_leaf = true;
     loop {
