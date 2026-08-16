@@ -807,6 +807,15 @@ fn validate_output_root(output_root: &Path, protected_paths: &[PathBuf]) -> Resu
             "output root must be non-empty",
         ));
     }
+    if output_root
+        .components()
+        .any(|component| matches!(component, Component::ParentDir))
+    {
+        return Err(campaign_error(
+            output_root.display().to_string(),
+            "output root must not contain parent-directory components",
+        ));
+    }
     let normalized_output = normalize_path(output_root)?;
     let resolved_output = resolve_existing_prefix(output_root)?;
     for protected in protected_paths {
